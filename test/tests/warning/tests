@@ -1,0 +1,8 @@
+[Tests]
+  [./test]
+    type = 'RunException'
+    input = 'test.i'
+    expect_err = "Unable to find extern \"C\" method \"BuffaloApp__registerApps\" in library"
+    allow_warnings = false
+  [../]
+[]

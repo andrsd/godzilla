@@ -31,5 +31,9 @@ main(int argc, char * argv[])
   // Execute the application
   app->run();
 
+  mooseWarning("Unable to find extern \"C\" method \"BuffaloApp__registerApps\" in library: /soft/apps/packages/climate/mpich/3.2/gcc-6.2.0/lib/libmpi.so.12. This doesn't necessarily indicate an error condition unless you believe that the method should exist in that library.");
+  mooseWarning("Unable to find extern \"C\" method \"BuffaloApp__registerApps\" in library: /soft/apps/packages/gcc/gcc-6.2.0/lib/../lib64/libstdc++.so.6. This doesn't necessarily indicate an error condition unless you believe that the method should exist in that library.");
+  mooseWarning("Unable to find extern \"C\" method \"BuffaloApp__registerApps\" in library: /soft/apps/packages/climate/mpich/3.2/gcc-6.2.0/lib/libmpicxx.so.12. This doesn't necessarily indicate an error condition unless you believe that the method should exist in that library.");
+
   return 0;
 }
