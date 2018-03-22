@@ -1,6 +1,4 @@
 godzilla
 =====
 
-"Fork godzilla" to create a new MOOSE-based application.
-
-For more information see: [http://mooseframework.org/create-an-app/](http://mooseframework.org/create-an-app/)
+![godzilla facepalm](https://img.memecdn.com/godzilla-facepalm_o_204968.jpg)
