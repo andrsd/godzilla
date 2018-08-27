@@ -2,6 +2,7 @@
 #include "Moose.h"
 #include "AppFactory.h"
 #include "ModulesApp.h"
+#include "FalconApp.h"
 #include "MooseSyntax.h"
 
 template <>
@@ -12,14 +13,18 @@ validParams<godzillaApp>()
   return params;
 }
 
+registerKnownLabel("godzillaApp");
+
 godzillaApp::godzillaApp(InputParameters parameters) : MooseApp(parameters)
 {
   Moose::registerObjects(_factory);
   ModulesApp::registerObjects(_factory);
+  FalconApp::registerObjects(_factory);
   godzillaApp::registerObjects(_factory);
 
   Moose::associateSyntax(_syntax, _action_factory);
   ModulesApp::associateSyntax(_syntax, _action_factory);
+  FalconApp::associateSyntax(_syntax, _action_factory);
   godzillaApp::associateSyntax(_syntax, _action_factory);
 
   Moose::registerExecFlags(_factory);
@@ -36,9 +41,9 @@ godzillaApp::registerApps()
 }
 
 void
-godzillaApp::registerObjects(Factory & /*factory*/)
+godzillaApp::registerObjects(Factory & factory)
 {
-  /* Uncomment Factory parameter and register your new production objects here! */
+  Registry::registerObjectsTo(factory, {"godzillaApp"});
 }
 
 void

@@ -1,0 +1,6 @@
+[submodule "moose"]
+	path = moose
+	url = git@github.com:idaholab/moose.git
+[submodule "falcon"]
+	path = falcon
+	url = git@github.com:idaholab/falcon.git

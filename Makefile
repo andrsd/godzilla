@@ -3,7 +3,7 @@
 ###############################################################################
 #
 # Optional Environment variables
-# MOOSE_DIR        - Root directory of the MOOSE project 
+# MOOSE_DIR        - Root directory of the MOOSE project
 #
 ###############################################################################
 # Use the MOOSE submodule if it exists and MOOSE_DIR is not set
@@ -40,10 +40,16 @@ STOCHASTIC_TOOLS    := no
 TENSOR_MECHANICS    := no
 WATER_STEAM_EOS     := no
 XFEM                := no
-POROUS_FLOW         := no
+POROUS_FLOW         := yes
 
 include $(MOOSE_DIR)/modules/modules.mk
 ###############################################################################
+
+# FALCON
+FALCON_DIR         ?= $(CURDIR)/falcon
+APPLICATION_DIR    := $(FALCON_DIR)
+APPLICATION_NAME   := falcon
+include            $(FRAMEWORK_DIR)/app.mk
 
 # dep apps
 APPLICATION_DIR    := $(CURDIR)
