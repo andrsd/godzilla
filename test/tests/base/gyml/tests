@@ -1,0 +1,12 @@
+[Tests]
+    [test]
+        type = RunApp
+        input = 'text.gyml'
+    []
+
+    [non_existing_file]
+        type = RunApp
+        input = 'asdf.gyml'
+        expect_err = "ERROR: Unable to open 'asdf.gyml' for reading. Make it exists and you have read permissions."
+    []
+[]

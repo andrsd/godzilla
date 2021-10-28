@@ -56,3 +56,6 @@ include            $(APPLICATION_DIR)/app.mk
 
 ###############################################################################
 # Additional special case targets should be added here
+
+# LIBS
+ADDITIONAL_LIBS += -lyaml-cpp

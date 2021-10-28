@@ -2,6 +2,8 @@
 #include "GodzillaRevision.h"
 #include "CommandLine.h"
 #include "AppFactory.h"
+#include "GodzillaError.h"
+#include "GYMLParser.h"
 
 InputParameters
 GodzillaApp::validParams()
@@ -11,7 +13,7 @@ GodzillaApp::validParams()
         "display_version", "-v --version", false, "Print application version");
     params.addCommandLineParam<bool>("help", "-h --help", false, "Displays CLI usage statement.");
 
-    params.addCommandLineParam<std::string>("input_file", "file", "Input file to run.");
+    params.addCommandLineParam<std::string>("input_file", "-i file", "Input file to run.");
 
 
     // for the MooseApp::ctor
@@ -87,6 +89,13 @@ GodzillaApp::run()
 void
 GodzillaApp::executeInputFile()
 {
+    if (MooseUtils::pathExists(_input_file_name))
+    {
+        GYMLParser parser(*this);
+        parser.load(_input_file_name);
+    }
+    else
+        godzillaError("Unable to open '", _input_file_name, "' for reading. Make it exists and you have read permissions.");
 }
 
 void

@@ -1,0 +1,8 @@
+mesh:
+    type: GMesh
+
+problem:
+    type: GPetscFeProblem
+
+executioner:
+    type: GExecutioner
