@@ -1,13 +1,15 @@
 [Tests]
     [version]
         type = RunApp
-        command = '--version'
+        input = ''
+        cli_args = '--version'
         expect_out = "godzilla version"
     []
 
     [help]
         type = RunApp
-        command = '--help'
-        expect_out = "usage"
+        input = ''
+        cli_args = '--help'
+        expect_out = "Usage"
     []
 []
