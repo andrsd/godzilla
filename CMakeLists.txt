@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
+include(ProcessorCount)
+ProcessorCount(PROCS)
 
 project(godzilla VERSION 0.1)
 
@@ -99,7 +101,7 @@ set(GODZILLA_INCLUDE_DIRS
     include/problems
 )
 
-add_executable(godzilla
+add_executable(godzilla-${METHOD}
     src/base/GodzillaApp.cpp
     src/base/GodzillaError.cpp
     src/executioners/GExecutioner.cpp
@@ -110,15 +112,30 @@ add_executable(godzilla
     src/main.cpp
 )
 
-set_target_properties(godzilla PROPERTIES UNITY_BUILD_MODE BATCH)
+set_target_properties(godzilla-${METHOD} PROPERTIES UNITY_BUILD_MODE BATCH)
 
-target_include_directories(godzilla PRIVATE ${LIBMESH_INCLUDE_DIR})
-target_include_directories(godzilla PRIVATE ${MOOSE_INCLUDE_DIRS})
-target_include_directories(godzilla PRIVATE ${PROJECT_BINARY_DIR})
-target_include_directories(godzilla PRIVATE ${GODZILLA_INCLUDE_DIRS})
+target_include_directories(godzilla-${METHOD} PRIVATE ${LIBMESH_INCLUDE_DIR})
+target_include_directories(godzilla-${METHOD} PRIVATE ${MOOSE_INCLUDE_DIRS})
+target_include_directories(godzilla-${METHOD} PRIVATE ${PROJECT_BINARY_DIR})
+target_include_directories(godzilla-${METHOD} PRIVATE ${GODZILLA_INCLUDE_DIRS})
 
-target_link_libraries(godzilla PUBLIC yaml-cpp)
-target_link_libraries(godzilla PUBLIC ${LIBMESH_LIB})
-target_link_libraries(godzilla PUBLIC ${TIMPI_LIB})
-target_link_libraries(godzilla PUBLIC ${MOOSE_LIB})
-target_link_libraries(godzilla PUBLIC ${MOOSE_HIT_LIB})
+target_link_libraries(godzilla-${METHOD} PUBLIC yaml-cpp)
+target_link_libraries(godzilla-${METHOD} PUBLIC ${LIBMESH_LIB})
+target_link_libraries(godzilla-${METHOD} PUBLIC ${TIMPI_LIB})
+target_link_libraries(godzilla-${METHOD} PUBLIC ${MOOSE_LIB})
+target_link_libraries(godzilla-${METHOD} PUBLIC ${MOOSE_HIT_LIB})
+
+# test
+set(TEST_DIR ${PROJECT_SOURCE_DIR})
+
+if(NOT PROCS EQUAL 0)
+    set(N ${PROCS})
+else()
+    set(N 1)
+endif()
+
+add_custom_target(test)
+add_custom_command(
+  TARGET   test
+  COMMAND  ${TEST_DIR}/run_tests -C ${TEST_DIR} -j${N}
+)
