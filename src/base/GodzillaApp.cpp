@@ -95,7 +95,7 @@ GodzillaApp::executeInputFile()
         parser.load(_input_file_name);
     }
     else
-        godzillaError("Unable to open '", _input_file_name, "' for reading. Make it exists and you have read permissions.");
+        godzillaError("Unable to open '", _input_file_name, "' for reading. Make sure it exists and you have read permissions.");
 }
 
 void

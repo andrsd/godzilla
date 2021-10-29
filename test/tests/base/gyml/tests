@@ -5,8 +5,8 @@
     []
 
     [non_existing_file]
-        type = RunApp
+        type = RunException
         input = 'asdf.gyml'
-        expect_err = "ERROR: Unable to open 'asdf.gyml' for reading. Make it exists and you have read permissions."
+        expect_err = "ERROR: Unable to open 'asdf.gyml' for reading. Make sure it exists and you have read permissions."
     []
 []
