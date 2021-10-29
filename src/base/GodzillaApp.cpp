@@ -62,7 +62,7 @@ GodzillaApp::processCommandLine()
     }
     else if (getParam<bool>("display_version"))
     {
-        _command = PrintHelp;
+        _command = PrintVersion;
         return;
     }
 
