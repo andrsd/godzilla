@@ -3,6 +3,8 @@
 #include "parser/CommandLine.h"
 #include "base/AppFactory.h"
 #include "input/GYMLFile.h"
+#include "mesh/GMesh.h"
+#include "problems/GProblem.h"
 #include "executioners/GExecutioner.h"
 #include "base/CallStack.h"
 
@@ -117,15 +119,22 @@ GodzillaApp::buildFromGYML()
     GYMLFile file(*this, _factory);
     file.parse(input_file_name);
     file.build();
-    executioner = file.getExecutioner();
+    this->mesh = file.getMesh();
+    this->problem = file.getProblem();
+    this->executioner = file.getExecutioner();
 }
 
 void
 GodzillaApp::executeInputFile()
 {
-    _F_
+    _F_;
+
+    this->mesh->create();
+    this->problem->create();
+    this->executioner->create();
+
     godzillaPrint(9, "Running '", input_file_name, "'...");
-    executioner->execute();
+    this->executioner->execute();
 }
 
 void

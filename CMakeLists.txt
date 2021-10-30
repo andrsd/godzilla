@@ -60,6 +60,7 @@ add_library(godzilla SHARED
     src/executioners/GExecutioner.cpp
     src/input/GYMLFile.cpp
     src/mesh/GMesh.cpp
+    src/mesh/GExodusIIMesh.cpp
     src/problems/GProblem.cpp
 )
 

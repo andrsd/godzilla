@@ -4,6 +4,8 @@
 #include "base/GPrintInterface.h"
 
 
+class GMesh;
+class GProblem;
 class GExecutioner;
 
 
@@ -41,6 +43,10 @@ protected:
     /// verbosity level
     const unsigned int verbosity_level;
 
+    /// Mesh
+    std::shared_ptr<GMesh> mesh;
+    /// Problem
+    std::shared_ptr<GProblem> problem;
     /// Executioner
     std::shared_ptr<GExecutioner> executioner;
 

@@ -28,6 +28,20 @@ GYMLFile::parse(const std::string & file_name)
   root = YAML::LoadFile(file_name);
 }
 
+std::shared_ptr<GMesh>
+GYMLFile::getMesh()
+{
+    _F_;
+    return this->mesh;
+}
+
+std::shared_ptr<GProblem>
+GYMLFile::getProblem()
+{
+    _F_;
+    return this->problem;
+}
+
 std::shared_ptr<GExecutioner>
 GYMLFile::getExecutioner()
 {

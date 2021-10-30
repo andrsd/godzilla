@@ -13,6 +13,7 @@ class GExecutioner : public MooseObject,
 public:
     GExecutioner(const InputParameters & parameters);
 
+    virtual void create();
     virtual void execute();
 
 protected:

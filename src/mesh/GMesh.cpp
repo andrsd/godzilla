@@ -1,8 +1,6 @@
 #include "mesh/GMesh.h"
 #include "base/CallStack.h"
 
-registerMooseObject("GodzillaApp", GMesh);
-
 InputParameters
 GMesh::validParams()
 {

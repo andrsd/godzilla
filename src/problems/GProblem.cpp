@@ -22,10 +22,15 @@ GProblem::GProblem(const InputParameters & parameters) :
 }
 
 void
+GProblem::create()
+{
+    _F_;
+}
+
+void
 GProblem::init()
 {
     _F_
-    godzillaPrint(5, "Initialize...");
 }
 
 void

@@ -23,6 +23,8 @@ public:
     /// build the simulation
     virtual void build();
 
+    virtual std::shared_ptr<GMesh> getMesh();
+    virtual std::shared_ptr<GProblem> getProblem();
     virtual std::shared_ptr<GExecutioner> getExecutioner();
 
 protected:

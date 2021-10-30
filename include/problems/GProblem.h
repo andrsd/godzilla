@@ -13,6 +13,7 @@ class GProblem : public Problem,
 public:
     GProblem(const InputParameters & parameters);
 
+    virtual void create();
     virtual void init();
     virtual void solve();
     virtual bool converged();
