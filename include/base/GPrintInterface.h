@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include "CallStack.h"
 
 
 namespace godzilla
@@ -29,7 +30,7 @@ std::string
 godzillaMsgFmt(const std::string & msg, const std::string & title, const std::string & color);
 
 [[noreturn]] void
-godzillaErrorRaw(std::string msg);
+godzillaErrorRaw(std::string msg, bool call_stack = false);
 
 } // namespace internal
 } // namespace godzilla
@@ -65,6 +66,15 @@ public:
         std::ostringstream oss;
         godzilla::internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
         godzilla::internal::godzillaErrorRaw(oss.str());
+    }
+
+    template <typename... Args>
+    [[noreturn]] void
+    godzillaErrorWithCallStack(Args &&... args)
+    {
+        std::ostringstream oss;
+        godzilla::internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
+        godzilla::internal::godzillaErrorRaw(oss.str(), true);
     }
 
 private:

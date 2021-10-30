@@ -1,4 +1,5 @@
 #include "GProblem.h"
+#include "CallStack.h"
 
 registerMooseObject("GodzillaApp", GProblem);
 
@@ -17,22 +18,26 @@ GProblem::GProblem(const InputParameters & parameters) :
     GPrintInterface(*getParam<const GodzillaApp *>("_gapp")),
     mesh(*getParam<GMesh *>("_gmesh"))
 {
+    _F_
 }
 
 void
 GProblem::init()
 {
+    _F_
     godzillaPrint(5, "Initialize...");
 }
 
 void
 GProblem::solve()
 {
+    _F_
     godzillaPrint(5, "Solving...");
 }
 
 bool
 GProblem::converged()
 {
+    _F_
     return false;
 }

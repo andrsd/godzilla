@@ -1,4 +1,5 @@
 #include "GMesh.h"
+#include "CallStack.h"
 
 registerMooseObject("GodzillaApp", GMesh);
 
@@ -15,4 +16,5 @@ GMesh::GMesh(const InputParameters & parameters) :
     MooseObject(parameters),
     GPrintInterface(*getParam<const GodzillaApp *>("_gapp"))
 {
+    _F_
 }

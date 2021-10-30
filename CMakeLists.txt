@@ -102,6 +102,7 @@ set(GODZILLA_INCLUDE_DIRS
 )
 
 add_executable(godzilla-${METHOD}
+    src/base/CallStack.cpp
     src/base/GodzillaApp.cpp
     src/base/GPrintInterface.cpp
     src/executioners/GExecutioner.cpp

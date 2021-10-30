@@ -5,6 +5,7 @@
 #include "GMesh.h"
 #include "GProblem.h"
 #include "GExecutioner.h"
+#include "CallStack.h"
 
 template<typename T>
 std::string type_name()
@@ -18,23 +19,27 @@ GYMLFile::GYMLFile(const GodzillaApp & app, Factory & factory) :
     app(app),
     factory(factory)
 {
+    _F_
 }
 
 void
 GYMLFile::parse(const std::string & file_name)
 {
+    _F_
   root = YAML::LoadFile(file_name);
 }
 
 std::shared_ptr<GExecutioner>
 GYMLFile::getExecutioner()
 {
+    _F_
     return executioner;
 }
 
 void
 GYMLFile::build()
 {
+    _F_
     buildMesh();
     buildProblem();
     buildExecutioner();
@@ -43,6 +48,7 @@ GYMLFile::build()
 void
 GYMLFile::buildMesh()
 {
+    _F_
     InputParameters params = buildParams(root, "mesh");
     const std::string & class_name = params.get<std::string>("_type");
     mesh = factory.create<GMesh>(class_name, "mesh", params);
@@ -51,6 +57,7 @@ GYMLFile::buildMesh()
 void
 GYMLFile::buildProblem()
 {
+    _F_
     InputParameters params = buildParams(root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<GMesh *>("_gmesh") = mesh.get();
@@ -60,6 +67,7 @@ GYMLFile::buildProblem()
 void
 GYMLFile::buildExecutioner()
 {
+    _F_
     InputParameters params = buildParams(root, "executioner");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<GProblem *>("_gproblem") = problem.get();
@@ -69,6 +77,7 @@ GYMLFile::buildExecutioner()
 InputParameters
 GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 {
+    _F_
     YAML::Node node = root[name];
     if (!node)
         godzillaError("Missing '", name, "' block.");
@@ -97,6 +106,7 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 void
 GYMLFile::setParameterFromYML(InputParameters & params, const YAML::Node & node, const std::string & param_name)
 {
+    _F_
     YAML::Node val = node[param_name];
     if (val) {
         const std::string & param_type = params.type(param_name);

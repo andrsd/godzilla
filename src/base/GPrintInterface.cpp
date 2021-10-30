@@ -1,6 +1,7 @@
 #include "GPrintInterface.h"
 #include "MooseUtils.h"
 #include "GodzillaApp.h"
+#include "CallStack.h"
 
 
 namespace godzilla
@@ -31,12 +32,17 @@ godzillaStreamAll(std::ostringstream &)
 static Threads::spin_mutex godzilla_err_lock;
 
 [[noreturn]] void
-godzillaErrorRaw(std::string msg)
+godzillaErrorRaw(std::string msg, bool call_stack)
 {
     msg = godzillaMsgFmt(msg, "ERROR", COLOR_RED);
 
     Threads::spin_mutex::scoped_lock lock(godzilla_err_lock);
     Moose::err << msg << std::flush;
+
+    if (call_stack) {
+        Moose::err << std::endl;
+        getCallstack().dump();
+    }
 
     // we should call MPI_Finalize, but it throws "yaksa: 7 leaked handle pool objects"
     // MPI_Finalize();
@@ -51,4 +57,5 @@ godzillaErrorRaw(std::string msg)
 GPrintInterface::GPrintInterface(const GodzillaApp & app) :
     verbosity_level(app.getVerbosityLevel())
 {
+    _F_
 }

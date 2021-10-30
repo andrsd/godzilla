@@ -4,6 +4,7 @@
 #include "AppFactory.h"
 #include "GYMLFile.h"
 #include "GExecutioner.h"
+#include "CallStack.h"
 
 InputParameters
 GodzillaApp::validParams()
@@ -37,6 +38,7 @@ GodzillaApp::GodzillaApp(InputParameters parameters) :
     command(None),
     verbosity_level(getParam<unsigned int>("verbosity_level"))
 {
+    _F_
     GodzillaApp::registerObjects(_factory);
     GodzillaApp::associateSyntax(_syntax, _action_factory);
     GodzillaApp::registerExecFlags(_factory);
@@ -57,12 +59,14 @@ GodzillaApp::getApplicationVersion() const
 const unsigned int &
 GodzillaApp::getVerbosityLevel() const
 {
+    _F_
     return verbosity_level;
 }
 
 void
 GodzillaApp::processCommandLine()
 {
+    _F_
     std::shared_ptr<CommandLine> cmd_line = commandLine();
 
     if ((cmd_line->getArguments().size() <= 1) || getParam<bool>("help")) {
@@ -83,6 +87,7 @@ GodzillaApp::processCommandLine()
 void
 GodzillaApp::run()
 {
+    _F_
     processCommandLine();
 
     if (command == Execute)
@@ -96,6 +101,7 @@ GodzillaApp::run()
 void
 GodzillaApp::execute()
 {
+    _F_
     if (MooseUtils::pathExists(input_file_name)) {
         buildFromGYML();
         executeInputFile();
@@ -107,6 +113,7 @@ GodzillaApp::execute()
 void
 GodzillaApp::buildFromGYML()
 {
+    _F_
     GYMLFile file(*this, _factory);
     file.parse(input_file_name);
     file.build();
@@ -116,6 +123,7 @@ GodzillaApp::buildFromGYML()
 void
 GodzillaApp::executeInputFile()
 {
+    _F_
     godzillaPrint(9, "Running '", input_file_name, "'...");
     executioner->execute();
 }
@@ -123,33 +131,39 @@ GodzillaApp::executeInputFile()
 void
 GodzillaApp::registerApps()
 {
+    _F_
     registerApp(GodzillaApp);
 }
 
 void
 GodzillaApp::registerObjects(Factory & factory)
 {
+    _F_
     Registry::registerObjectsTo(factory, {"GodzillaApp"});
 }
 
 void
 GodzillaApp::associateSyntax(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
 {
+    _F_
 }
 
 void
 GodzillaApp::registerObjectDepends(Factory & /*factory*/)
 {
+    _F_
 }
 
 void
 GodzillaApp::associateSyntaxDepends(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
 {
+    _F_
 }
 
 void
 GodzillaApp::registerExecFlags(Factory & /*factory*/)
 {
+    _F_
 }
 
 //  Dynamic Library Entry Points - DO NOT MODIFY

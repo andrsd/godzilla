@@ -1,5 +1,6 @@
 #include "GExecutioner.h"
 #include "GProblem.h"
+#include "CallStack.h"
 
 registerMooseObject("GodzillaApp", GExecutioner);
 
@@ -18,11 +19,13 @@ GExecutioner::GExecutioner(const InputParameters & parameters) :
     GPrintInterface(*getParam<const GodzillaApp *>("_gapp")),
     problem(*getParam<GProblem *>("_gproblem"))
 {
+    _F_
 }
 
 void
 GExecutioner::execute()
 {
+    _F_
     godzillaPrint(5, "Executing...");
 
     problem.solve();
