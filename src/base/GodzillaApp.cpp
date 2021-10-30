@@ -65,19 +65,16 @@ GodzillaApp::processCommandLine()
 {
     std::shared_ptr<CommandLine> cmd_line = commandLine();
 
-    if ((cmd_line->getArguments().size() <= 1) || getParam<bool>("help"))
-    {
+    if ((cmd_line->getArguments().size() <= 1) || getParam<bool>("help")) {
         _command = PrintHelp;
         return;
     }
-    else if (getParam<bool>("display_version"))
-    {
+    else if (getParam<bool>("display_version")) {
         _command = PrintVersion;
         return;
     }
 
-    if (isParamValid("input_file"))
-    {
+    if (isParamValid("input_file")) {
         _command = Execute;
         _input_file_name = getParam<std::string>("input_file");
     }
@@ -99,8 +96,7 @@ GodzillaApp::run()
 void
 GodzillaApp::execute()
 {
-    if (MooseUtils::pathExists(_input_file_name))
-    {
+    if (MooseUtils::pathExists(_input_file_name)) {
         buildFromGYML();
         executeInputFile();
     }

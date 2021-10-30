@@ -48,8 +48,7 @@ public:
     void
     godzillaPrint(unsigned int level, Args &&... args)
     {
-        if (level < _verbosity_level)
-        {
+        if (level < _verbosity_level) {
             std::ostringstream oss;
             godzilla::internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
             godzilla::internal::godzillaMsgRaw(oss.str());
