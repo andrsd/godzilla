@@ -107,7 +107,7 @@ add_executable(godzilla-${METHOD}
     src/executioners/GExecutioner.cpp
     src/input/GYMLFile.cpp
     src/mesh/GMesh.cpp
-    src/problems/GPetscFeProblem.cpp
+    src/problems/GProblem.cpp
     #
     src/main.cpp
 )

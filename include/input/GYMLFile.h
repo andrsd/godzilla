@@ -1,18 +1,39 @@
 #pragma once
 
 #include <string>
+#include "yaml-cpp/yaml.h"
 
-/**
- * YML parser for input files
- */
+class GodzillaApp;
+class Factory;
+class GMesh;
+class GProblem;
+class GExecutioner;
+
+/// YML parser for input files
+///
 class GYMLFile
 {
 public:
-    GYMLFile(const std::string & file_name);
+    GYMLFile(const GodzillaApp & app, Factory & factory);
 
     /// parse the YML file
-    virtual void parse();
+    virtual void parse(const std::string & file_name);
+    /// build the simulation
+    virtual void build();
+
+    virtual std::shared_ptr<GExecutioner> getExecutioner();
 
 protected:
-    const std::string & _file_name;
+    void buildMesh();
+    void buildProblem();
+    void buildExecutioner();
+
+    const GodzillaApp & _app;
+    Factory & _factory;
+
+    YAML::Node _root;
+
+    std::shared_ptr<GMesh> _mesh;
+    std::shared_ptr<GProblem> _problem;
+    std::shared_ptr<GExecutioner> _executioner;
 };

@@ -4,6 +4,9 @@
 #include "GPrintInterface.h"
 
 
+class GExecutioner;
+
+
 class GodzillaApp : public MooseApp,
                     public GPrintInterface
 {
@@ -37,6 +40,9 @@ protected:
     std::string _input_file_name;
     /// verbosity level
     const unsigned int _verbosity_level;
+
+    /// Executioner
+    std::shared_ptr<GExecutioner> _executioner;
 
 public:
     static InputParameters validParams();

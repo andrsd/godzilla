@@ -39,7 +39,7 @@ class GodzillaApp;
 
 class GPrintInterface {
 public:
-    GPrintInterface(GodzillaApp & app);
+    GPrintInterface(const GodzillaApp & app);
 
     /// Print a message on a terminal
     /// Inside static functions, you will need to explicitly scope your mooseError

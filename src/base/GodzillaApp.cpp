@@ -3,6 +3,7 @@
 #include "CommandLine.h"
 #include "AppFactory.h"
 #include "GYMLFile.h"
+#include "GExecutioner.h"
 
 InputParameters
 GodzillaApp::validParams()
@@ -110,14 +111,17 @@ GodzillaApp::execute()
 void
 GodzillaApp::buildFromGYML()
 {
-    GYMLFile file(_input_file_name);
-    file.parse();
+    GYMLFile file(*this, _factory);
+    file.parse(_input_file_name);
+    file.build();
+    _executioner = file.getExecutioner();
 }
 
 void
 GodzillaApp::executeInputFile()
 {
     godzillaPrint(9, "Running '", _input_file_name, "'...");
+    _executioner->execute();
 }
 
 void
@@ -127,8 +131,9 @@ GodzillaApp::registerApps()
 }
 
 void
-GodzillaApp::registerObjects(Factory & /*factory*/)
+GodzillaApp::registerObjects(Factory & factory)
 {
+    Registry::registerObjectsTo(factory, {"GodzillaApp"});
 }
 
 void

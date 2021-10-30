@@ -48,7 +48,7 @@ godzillaErrorRaw(std::string msg)
 } // namespace godzilla
 
 
-GPrintInterface::GPrintInterface(GodzillaApp & app) :
+GPrintInterface::GPrintInterface(const GodzillaApp & app) :
     _verbosity_level(app.getVerbosityLevel())
 {
 }

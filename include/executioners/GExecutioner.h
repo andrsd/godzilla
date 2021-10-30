@@ -1,11 +1,23 @@
 #pragma once
 
 #include "MooseObject.h"
+#include "GPrintInterface.h"
 
-class GExecutioner : public MooseObject
+class GProblem;
+
+/// Executioner
+///
+class GExecutioner : public MooseObject,
+                     public GPrintInterface
 {
 public:
     GExecutioner(const InputParameters & parameters);
 
-    virtual void execute() = 0;
+    virtual void execute();
+
+protected:
+    GProblem & _problem;
+
+public:
+    static InputParameters validParams();
 };
