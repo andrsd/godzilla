@@ -19,7 +19,7 @@ GExecutioner::GExecutioner(const InputParameters & parameters) :
     GPrintInterface(*getParam<const GodzillaApp *>("_gapp")),
     problem(*getParam<GProblem *>("_gproblem"))
 {
-    _F_
+    _F_;
 }
 
 void
@@ -31,7 +31,7 @@ GExecutioner::create()
 void
 GExecutioner::execute()
 {
-    _F_
+    _F_;
     godzillaPrint(5, "Executing...");
 
     problem.solve();

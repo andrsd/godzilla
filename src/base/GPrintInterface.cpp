@@ -57,5 +57,5 @@ godzillaErrorRaw(std::string msg, bool call_stack)
 GPrintInterface::GPrintInterface(const GodzillaApp & app) :
     verbosity_level(app.getVerbosityLevel())
 {
-    _F_
+    _F_;
 }

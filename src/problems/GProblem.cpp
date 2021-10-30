@@ -18,7 +18,7 @@ GProblem::GProblem(const InputParameters & parameters) :
     GPrintInterface(*getParam<const GodzillaApp *>("_gapp")),
     mesh(*getParam<GMesh *>("_gmesh"))
 {
-    _F_
+    _F_;
 }
 
 void
@@ -30,19 +30,19 @@ GProblem::create()
 void
 GProblem::init()
 {
-    _F_
+    _F_;
 }
 
 void
 GProblem::solve()
 {
-    _F_
+    _F_;
     godzillaPrint(5, "Solving...");
 }
 
 bool
 GProblem::converged()
 {
-    _F_
+    _F_;
     return false;
 }

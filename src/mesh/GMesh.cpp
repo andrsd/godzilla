@@ -14,5 +14,5 @@ GMesh::GMesh(const InputParameters & parameters) :
     MooseObject(parameters),
     GPrintInterface(*getParam<const GodzillaApp *>("_gapp"))
 {
-    _F_
+    _F_;
 }
