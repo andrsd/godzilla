@@ -8,6 +8,7 @@
 
 
 GYMLFile::GYMLFile(const GodzillaApp & app, Factory & factory) :
+    GPrintInterface(app),
     _app(app),
     _factory(factory)
 {
@@ -36,7 +37,18 @@ GYMLFile::build()
 void
 GYMLFile::buildMesh()
 {
-    const std::string class_name = "GMesh";
+    if (!_root["mesh"])
+        godzillaError("Missing 'mesh' block.");
+
+    YAML::Node mesh_node = _root["mesh"];
+    if (!mesh_node["type"])
+        godzillaError("No 'type' specified in the 'mesh' block in the input file.");
+
+    const std::string class_name = mesh_node["type"].as<std::string>();
+
+    if (!Registry::isRegisteredObj(class_name))
+        godzillaError("Type '", class_name, "' is not a registered object.");
+
     InputParameters params = _factory.getValidParams(class_name);
     params.set<const GodzillaApp *>("_gapp") = &_app;
     _mesh = _factory.create<GMesh>(class_name, "mesh", params);
@@ -45,7 +57,18 @@ GYMLFile::buildMesh()
 void
 GYMLFile::buildProblem()
 {
-    const std::string class_name = "GProblem";
+    if (!_root["problem"])
+        godzillaError("Missing 'problem' block.");
+
+    YAML::Node problem_node = _root["problem"];
+    if (!problem_node["type"])
+        godzillaError("No 'type' specified in the 'problem' block in the input file.");
+
+    const std::string class_name = problem_node["type"].as<std::string>();
+
+    if (!Registry::isRegisteredObj(class_name))
+        godzillaError("Type '", class_name, "' is not a registered object.");
+
     InputParameters params = _factory.getValidParams(class_name);
     params.set<const GodzillaApp *>("_gapp") = &_app;
     params.set<GMesh *>("_gmesh") = _mesh.get();
@@ -56,7 +79,18 @@ GYMLFile::buildProblem()
 void
 GYMLFile::buildExecutioner()
 {
-    const std::string class_name = "GExecutioner";
+    if (!_root["executioner"])
+        godzillaError("Missing 'executioner' block.");
+
+    YAML::Node executioner_node = _root["executioner"];
+    if (!executioner_node["type"])
+        godzillaError("No 'type' specified in the 'executioner' block in the input file.");
+
+    const std::string class_name = executioner_node["type"].as<std::string>();
+
+    if (!Registry::isRegisteredObj(class_name))
+        godzillaError("Type '", class_name, "' is not a registered object.");
+
     InputParameters params = _factory.getValidParams(class_name);
     params.set<const GodzillaApp *>("_gapp") = &_app;
     params.set<GProblem *>("_gproblem") = _problem.get();

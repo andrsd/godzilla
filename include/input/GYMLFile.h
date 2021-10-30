@@ -2,6 +2,7 @@
 
 #include <string>
 #include "yaml-cpp/yaml.h"
+#include "GPrintInterface.h"
 
 class GodzillaApp;
 class Factory;
@@ -11,7 +12,7 @@ class GExecutioner;
 
 /// YML parser for input files
 ///
-class GYMLFile
+class GYMLFile : public GPrintInterface
 {
 public:
     GYMLFile(const GodzillaApp & app, Factory & factory);
