@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Problem.h"
-#include "GPrintInterface.h"
+#include "problems/Problem.h"
+#include "base/GPrintInterface.h"
 
 class GMesh;
 

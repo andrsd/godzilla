@@ -1,5 +1,5 @@
-#include "GMesh.h"
-#include "CallStack.h"
+#include "mesh/GMesh.h"
+#include "base/CallStack.h"
 
 registerMooseObject("GodzillaApp", GMesh);
 

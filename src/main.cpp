@@ -1,4 +1,4 @@
-#include "GodzillaApp.h"
+#include "base/GodzillaApp.h"
 #include "MooseInit.h"
 #include "Moose.h"
 #include "MooseApp.h"

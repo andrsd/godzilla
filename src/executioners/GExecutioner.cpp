@@ -1,6 +1,6 @@
-#include "GExecutioner.h"
-#include "GProblem.h"
-#include "CallStack.h"
+#include "executioners/GExecutioner.h"
+#include "problems/GProblem.h"
+#include "base/CallStack.h"
 
 registerMooseObject("GodzillaApp", GExecutioner);
 

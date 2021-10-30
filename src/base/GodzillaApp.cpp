@@ -1,10 +1,10 @@
-#include "GodzillaApp.h"
+#include "base/GodzillaApp.h"
 #include "GodzillaRevision.h"
-#include "CommandLine.h"
-#include "AppFactory.h"
-#include "GYMLFile.h"
-#include "GExecutioner.h"
-#include "CallStack.h"
+#include "parser/CommandLine.h"
+#include "base/AppFactory.h"
+#include "input/GYMLFile.h"
+#include "executioners/GExecutioner.h"
+#include "base/CallStack.h"
 
 InputParameters
 GodzillaApp::validParams()

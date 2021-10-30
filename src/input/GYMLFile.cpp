@@ -1,11 +1,10 @@
-#include "GYMLFile.h"
-#include "InputParameters.h"
-#include "GodzillaApp.h"
+#include "input/GYMLFile.h"
+#include "base/GodzillaApp.h"
 #include "Factory.h"
-#include "GMesh.h"
-#include "GProblem.h"
-#include "GExecutioner.h"
-#include "CallStack.h"
+#include "mesh/GMesh.h"
+#include "problems/GProblem.h"
+#include "executioners/GExecutioner.h"
+#include "base/CallStack.h"
 
 template<typename T>
 std::string type_name()

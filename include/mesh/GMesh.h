@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MooseObject.h"
-#include "GPrintInterface.h"
+#include "base/MooseObject.h"
+#include "base/GPrintInterface.h"
 
 /// Mesh
 ///

@@ -2,8 +2,8 @@
 
 #include <string>
 #include "yaml-cpp/yaml.h"
-#include "InputParameters.h"
-#include "GPrintInterface.h"
+#include "utils/InputParameters.h"
+#include "base/GPrintInterface.h"
 
 class GodzillaApp;
 class Factory;

@@ -1,5 +1,5 @@
-#include "GProblem.h"
-#include "CallStack.h"
+#include "problems/GProblem.h"
+#include "base/CallStack.h"
 
 registerMooseObject("GodzillaApp", GProblem);
 

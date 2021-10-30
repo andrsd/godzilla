@@ -1,7 +1,7 @@
 #pragma once
 
-#include "MooseApp.h"
-#include "GPrintInterface.h"
+#include "base/MooseApp.h"
+#include "base/GPrintInterface.h"
 
 
 class GExecutioner;
