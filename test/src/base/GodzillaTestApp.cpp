@@ -1,9 +1,9 @@
-#include "GodzillaTestApp.h"
-#include "GodzillaApp.h"
-#include "Moose.h"
-#include "AppFactory.h"
-#include "MooseSyntax.h"
-#include "ModulesApp.h"
+#include "base/GodzillaTestApp.h"
+#include "base/GodzillaApp.h"
+// #include "Moose.h"
+#include "base/AppFactory.h"
+// #include "MooseSyntax.h"
+// #include "ModulesApp.h"
 
 InputParameters
 GodzillaTestApp::validParams()
@@ -12,51 +12,36 @@ GodzillaTestApp::validParams()
     return params;
 }
 
-GodzillaTestApp::GodzillaTestApp(InputParameters parameters) : MooseApp(parameters)
+GodzillaTestApp::GodzillaTestApp(InputParameters parameters) : GodzillaApp(parameters)
 {
-    Moose::registerObjects(_factory);
-    GodzillaApp::registerObjectDepends(_factory);
+    _F_
     GodzillaApp::registerObjects(_factory);
-
-    Moose::associateSyntax(_syntax, _action_factory);
-    GodzillaApp::associateSyntaxDepends(_syntax, _action_factory);
-    GodzillaApp::associateSyntax(_syntax, _action_factory);
-
-    Moose::registerExecFlags(_factory);
-    GodzillaApp::registerExecFlags(_factory);
-
-    bool use_test_objs = getParam<bool>("allow_test_objects");
-    if (use_test_objs)
-    {
-        GodzillaTestApp::registerObjects(_factory);
-        GodzillaTestApp::associateSyntax(_syntax, _action_factory);
-        GodzillaTestApp::registerExecFlags(_factory);
-    }
+    GodzillaTestApp::registerObjects(_factory);
 }
 
 void
 GodzillaTestApp::registerApps()
 {
-    registerApp(GodzillaApp);
+    _F_
     registerApp(GodzillaTestApp);
 }
 
 void
 GodzillaTestApp::registerObjects(Factory & /*factory*/)
 {
-    /* Uncomment Factory parameter and register your new test objects here! */
+    _F_
 }
 
 void
 GodzillaTestApp::associateSyntax(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
 {
-    /* Uncomment Syntax and ActionFactory parameters and register your new test objects here! */
+    _F_
 }
 
 void
 GodzillaTestApp::registerExecFlags(Factory & /*factory*/)
 {
-    /* Uncomment Factory parameter and register your new execute flags here! */
+    _F_
 }
 
 /***************************************************************************************************

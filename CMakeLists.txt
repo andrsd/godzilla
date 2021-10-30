@@ -55,7 +55,7 @@ configure_file(include/base/GodzillaRevision.h.in GodzillaRevision.h)
 
 set(GODZILLA_INCLUDE_DIRS include)
 
-add_executable(godzilla-${METHOD}
+add_library(godzilla SHARED
     src/base/CallStack.cpp
     src/base/GodzillaApp.cpp
     src/base/GPrintInterface.cpp
@@ -63,24 +63,36 @@ add_executable(godzilla-${METHOD}
     src/input/GYMLFile.cpp
     src/mesh/GMesh.cpp
     src/problems/GProblem.cpp
-    #
-    src/main.cpp
 )
 
-set_target_properties(godzilla-${METHOD} PROPERTIES UNITY_BUILD_MODE BATCH)
+set_target_properties(godzilla PROPERTIES UNITY_BUILD_MODE BATCH)
 
-target_include_directories(godzilla-${METHOD} PRIVATE ${LIBMESH_INCLUDE_DIR})
-target_include_directories(godzilla-${METHOD} PRIVATE ${MOOSE_INCLUDE_DIRS})
-target_include_directories(godzilla-${METHOD} PRIVATE ${PROJECT_BINARY_DIR})
-target_include_directories(godzilla-${METHOD} PRIVATE ${GODZILLA_INCLUDE_DIRS})
+target_include_directories(godzilla PRIVATE ${LIBMESH_INCLUDE_DIR})
+target_include_directories(godzilla PRIVATE ${MOOSE_INCLUDE_DIRS})
+target_include_directories(godzilla PRIVATE ${PROJECT_BINARY_DIR})
+target_include_directories(godzilla PRIVATE ${GODZILLA_INCLUDE_DIRS})
 
-target_link_libraries(godzilla-${METHOD} PUBLIC yaml-cpp)
-target_link_libraries(godzilla-${METHOD} PUBLIC ${LIBMESH_LIB})
-target_link_libraries(godzilla-${METHOD} PUBLIC ${TIMPI_LIB})
-target_link_libraries(godzilla-${METHOD} PUBLIC ${MOOSE_LIB})
-target_link_libraries(godzilla-${METHOD} PUBLIC ${MOOSE_HIT_LIB})
+target_link_libraries(godzilla PUBLIC yaml-cpp)
+target_link_libraries(godzilla PUBLIC ${LIBMESH_LIB})
+target_link_libraries(godzilla PUBLIC ${TIMPI_LIB})
+target_link_libraries(godzilla PUBLIC ${MOOSE_LIB})
+target_link_libraries(godzilla PUBLIC ${MOOSE_HIT_LIB})
 
 # test
+
+add_executable(godzilla-test-${METHOD}
+    test/src/base/GodzillaTestApp.cpp
+    test/src/main.cpp
+)
+
+target_include_directories(godzilla-test-${METHOD} PRIVATE ${LIBMESH_INCLUDE_DIR})
+target_include_directories(godzilla-test-${METHOD} PRIVATE ${MOOSE_INCLUDE_DIRS})
+target_include_directories(godzilla-test-${METHOD} PRIVATE ${GODZILLA_INCLUDE_DIRS})
+target_include_directories(godzilla-test-${METHOD} PRIVATE test/include)
+
+target_link_libraries(godzilla-test-${METHOD} PUBLIC godzilla)
+
+
 set(TEST_DIR ${PROJECT_SOURCE_DIR})
 
 if(NOT PROCS EQUAL 0)

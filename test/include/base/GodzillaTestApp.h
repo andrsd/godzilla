@@ -1,8 +1,8 @@
 #pragma once
 
-#include "MooseApp.h"
+#include "base/GodzillaApp.h"
 
-class GodzillaTestApp : public MooseApp
+class GodzillaTestApp : public GodzillaApp
 {
 public:
     GodzillaTestApp(InputParameters parameters);
