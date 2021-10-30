@@ -9,7 +9,7 @@ GExecutioner::validParams()
     InputParameters params = MooseObject::validParams();
     params.addPrivateParam<const GodzillaApp *>("_gapp");
     params.addPrivateParam<GProblem *>("_gproblem");
-    params.set<std::string>("_moose_base") = "gexecutioner";
+    params.addPrivateParam<std::string>("_moose_base", "gexecutioner");
     return params;
 }
 

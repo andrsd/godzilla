@@ -2,7 +2,7 @@ mesh:
     type: GMesh
 
 problem:
-    type: GPetscFeProblem
+    type: GProblem
 
 executioner:
     type: GExecutioner

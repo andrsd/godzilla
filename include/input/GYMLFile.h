@@ -2,6 +2,7 @@
 
 #include <string>
 #include "yaml-cpp/yaml.h"
+#include "InputParameters.h"
 #include "GPrintInterface.h"
 
 class GodzillaApp;
@@ -28,6 +29,8 @@ protected:
     void buildMesh();
     void buildProblem();
     void buildExecutioner();
+    InputParameters buildParams(const YAML::Node & root, const std::string & name);
+    void setParameterFromYML(InputParameters & params, const YAML::Node & node, const std::string & param_name);
 
     const GodzillaApp & _app;
     Factory & _factory;

@@ -8,7 +8,7 @@ GProblem::validParams()
     InputParameters params = Problem::validParams();
     params.addPrivateParam<const GodzillaApp *>("_gapp");
     params.addPrivateParam<GMesh *>("_gmesh");
-    params.set<std::string>("_moose_base") = "gproblem";
+    params.addPrivateParam<std::string>("_moose_base", "gproblem");
     return params;
 }
 
