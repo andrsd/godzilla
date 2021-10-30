@@ -2,18 +2,19 @@
 #include "GodzillaRevision.h"
 #include "CommandLine.h"
 #include "AppFactory.h"
-#include "GodzillaError.h"
-#include "GYMLParser.h"
+#include "GYMLFile.h"
 
 InputParameters
 GodzillaApp::validParams()
 {
     InputParameters params = emptyInputParameters();
     params.addCommandLineParam<bool>(
-        "display_version", "-v --version", false, "Print application version");
+        "display_version", "--version", false, "Print application version");
     params.addCommandLineParam<bool>("help", "-h --help", false, "Displays CLI usage statement.");
 
     params.addCommandLineParam<std::string>("input_file", "-i file", "Input file to run.");
+    params.addCommandLineParam<unsigned int>(
+        "verbosity_level", "--verbose", 1, "Verbosity level");
 
 
     // for the MooseApp::ctor
@@ -31,7 +32,9 @@ GodzillaApp::validParams()
 
 GodzillaApp::GodzillaApp(InputParameters parameters) :
     MooseApp(parameters),
-    _command(None)
+    GPrintInterface(*this),
+    _command(None),
+    _verbosity_level(getParam<unsigned int>("verbosity_level"))
 {
     GodzillaApp::registerObjects(_factory);
     GodzillaApp::associateSyntax(_syntax, _action_factory);
@@ -48,6 +51,12 @@ std::string
 GodzillaApp::getApplicationVersion() const
 {
   return GODZILLA_VERSION;
+}
+
+const unsigned int &
+GodzillaApp::getVerbosityLevel() const
+{
+    return _verbosity_level;
 }
 
 void
@@ -79,7 +88,7 @@ GodzillaApp::run()
     processCommandLine();
 
     if (_command == Execute)
-        executeInputFile();
+        execute();
     else if (_command == PrintHelp)
         _command_line->printUsage();
     else if (_command == PrintVersion)
@@ -87,15 +96,28 @@ GodzillaApp::run()
 }
 
 void
-GodzillaApp::executeInputFile()
+GodzillaApp::execute()
 {
     if (MooseUtils::pathExists(_input_file_name))
     {
-        GYMLParser parser(*this);
-        parser.load(_input_file_name);
+        buildFromGYML();
+        executeInputFile();
     }
     else
         godzillaError("Unable to open '", _input_file_name, "' for reading. Make sure it exists and you have read permissions.");
+}
+
+void
+GodzillaApp::buildFromGYML()
+{
+    GYMLFile file(_input_file_name);
+    file.parse();
+}
+
+void
+GodzillaApp::executeInputFile()
+{
+    godzillaPrint(9, "Running '", _input_file_name, "'...");
 }
 
 void

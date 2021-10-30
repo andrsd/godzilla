@@ -1,5 +1,6 @@
-#include "GodzillaError.h"
+#include "GPrintInterface.h"
 #include "MooseUtils.h"
+#include "GodzillaApp.h"
 
 
 namespace godzilla
@@ -8,12 +9,23 @@ namespace godzilla
 namespace internal
 {
 
+void
+godzillaMsgRaw(const std::string & msg)
+{
+    Moose::out << msg << std::endl;
+}
+
 std::string
 godzillaMsgFmt(const std::string & msg, const std::string & title, const std::string & color)
 {
     std::ostringstream oss;
     oss << color << title << ": " << msg << COLOR_DEFAULT << std::endl;
     return oss.str();
+}
+
+void
+godzillaStreamAll(std::ostringstream &)
+{
 }
 
 static Threads::spin_mutex godzilla_err_lock;
@@ -31,11 +43,12 @@ godzillaErrorRaw(std::string msg)
     exit(-1);
 }
 
-void
-godzillaStreamAll(std::ostringstream &)
-{
-}
-
 
 } // namespace internal
-} // namespace moose
+} // namespace godzilla
+
+
+GPrintInterface::GPrintInterface(GodzillaApp & app) :
+    _verbosity_level(app.getVerbosityLevel())
+{
+}

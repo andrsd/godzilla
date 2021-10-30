@@ -103,9 +103,9 @@ set(GODZILLA_INCLUDE_DIRS
 
 add_executable(godzilla-${METHOD}
     src/base/GodzillaApp.cpp
-    src/base/GodzillaError.cpp
+    src/base/GPrintInterface.cpp
     src/executioners/GExecutioner.cpp
-    src/input/GYMLParser.cpp
+    src/input/GYMLFile.cpp
     src/mesh/GMesh.cpp
     src/problems/GPetscFeProblem.cpp
     #

@@ -1,19 +1,30 @@
 #pragma once
 
 #include "MooseApp.h"
+#include "GPrintInterface.h"
 
-class GodzillaApp : public MooseApp
+
+class GodzillaApp : public MooseApp,
+                    public GPrintInterface
 {
 public:
     GodzillaApp(InputParameters parameters);
 
     virtual void run();
 
+    virtual const unsigned int & getVerbosityLevel() const;
+
 protected:
     virtual std::string getApplicationName() const;
     virtual std::string getApplicationVersion() const;
+    /// Process command line
     virtual void processCommandLine();
+    /// Run the execute command
+    virtual void execute();
+    /// Run the input file
     virtual void executeInputFile();
+    ///
+    virtual void buildFromGYML();
 
     enum {
         None,
@@ -22,7 +33,10 @@ protected:
         Execute
     } _command;
 
+    /// Input file to run
     std::string _input_file_name;
+    /// verbosity level
+    const unsigned int _verbosity_level;
 
 public:
     static InputParameters validParams();
