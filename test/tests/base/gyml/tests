@@ -1,7 +1,7 @@
 [Tests]
     [test]
         type = RunApp
-        input = 'text.gyml'
+        input = 'test.gyml'
     []
 
     [non_existing_file]
