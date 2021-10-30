@@ -1,4 +1,4 @@
-#include "base/GodzillaApp.h"
+#include "base/GodzillaTestApp.h"
 #include "MooseInit.h"
 #include "Moose.h"
 #include "MooseApp.h"
@@ -11,9 +11,9 @@ main(int argc, char * argv[])
 {
     MooseInit init(argc, argv);
 
-    GodzillaApp::registerApps();
+    GodzillaTestApp::registerApps();
 
-    std::shared_ptr<MooseApp> app = AppFactory::createAppShared("GodzillaApp", argc, argv);
+    std::shared_ptr<MooseApp> app = AppFactory::createAppShared("GodzillaTestApp", argc, argv);
 
     app->run();
 

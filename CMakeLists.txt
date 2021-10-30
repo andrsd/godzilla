@@ -1,6 +1,4 @@
 cmake_minimum_required(VERSION 3.16)
-include(ProcessorCount)
-ProcessorCount(PROCS)
 
 project(godzilla VERSION 0.1)
 
@@ -53,7 +51,7 @@ find_library(MOOSE_HIT_LIB hit-${METHOD} ${MOOSE_FRAMEWORK_DIR}/contrib/hit)
 # godzilla
 configure_file(include/base/GodzillaRevision.h.in GodzillaRevision.h)
 
-set(GODZILLA_INCLUDE_DIRS include)
+set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 add_library(godzilla SHARED
     src/base/CallStack.cpp
@@ -70,7 +68,7 @@ set_target_properties(godzilla PROPERTIES UNITY_BUILD_MODE BATCH)
 target_include_directories(godzilla PRIVATE ${LIBMESH_INCLUDE_DIR})
 target_include_directories(godzilla PRIVATE ${MOOSE_INCLUDE_DIRS})
 target_include_directories(godzilla PRIVATE ${PROJECT_BINARY_DIR})
-target_include_directories(godzilla PRIVATE ${GODZILLA_INCLUDE_DIRS})
+target_include_directories(godzilla PRIVATE ${GODZILLA_INCLUDE_DIR})
 
 target_link_libraries(godzilla PUBLIC yaml-cpp)
 target_link_libraries(godzilla PUBLIC ${LIBMESH_LIB})
@@ -78,31 +76,13 @@ target_link_libraries(godzilla PUBLIC ${TIMPI_LIB})
 target_link_libraries(godzilla PUBLIC ${MOOSE_LIB})
 target_link_libraries(godzilla PUBLIC ${MOOSE_HIT_LIB})
 
-# test
 
-add_executable(godzilla-test-${METHOD}
-    test/src/base/GodzillaTestApp.cpp
-    test/src/main.cpp
-)
+# TESTING
 
-target_include_directories(godzilla-test-${METHOD} PRIVATE ${LIBMESH_INCLUDE_DIR})
-target_include_directories(godzilla-test-${METHOD} PRIVATE ${MOOSE_INCLUDE_DIRS})
-target_include_directories(godzilla-test-${METHOD} PRIVATE ${GODZILLA_INCLUDE_DIRS})
-target_include_directories(godzilla-test-${METHOD} PRIVATE test/include)
-
-target_link_libraries(godzilla-test-${METHOD} PUBLIC godzilla)
-
-
-set(TEST_DIR ${PROJECT_SOURCE_DIR})
-
-if(NOT PROCS EQUAL 0)
-    set(N ${PROCS})
-else()
-    set(N 1)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include(CTest)
 endif()
 
-add_custom_target(test)
-add_custom_command(
-  TARGET   test
-  COMMAND  ${TEST_DIR}/run_tests -C ${TEST_DIR} -j${N}
-)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+    add_subdirectory(test)
+endif()
