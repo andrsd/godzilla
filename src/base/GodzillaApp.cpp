@@ -34,8 +34,8 @@ GodzillaApp::validParams()
 GodzillaApp::GodzillaApp(InputParameters parameters) :
     MooseApp(parameters),
     GPrintInterface(*this),
-    _command(None),
-    _verbosity_level(getParam<unsigned int>("verbosity_level"))
+    command(None),
+    verbosity_level(getParam<unsigned int>("verbosity_level"))
 {
     GodzillaApp::registerObjects(_factory);
     GodzillaApp::associateSyntax(_syntax, _action_factory);
@@ -57,7 +57,7 @@ GodzillaApp::getApplicationVersion() const
 const unsigned int &
 GodzillaApp::getVerbosityLevel() const
 {
-    return _verbosity_level;
+    return verbosity_level;
 }
 
 void
@@ -66,17 +66,17 @@ GodzillaApp::processCommandLine()
     std::shared_ptr<CommandLine> cmd_line = commandLine();
 
     if ((cmd_line->getArguments().size() <= 1) || getParam<bool>("help")) {
-        _command = PrintHelp;
+        command = PrintHelp;
         return;
     }
     else if (getParam<bool>("display_version")) {
-        _command = PrintVersion;
+        command = PrintVersion;
         return;
     }
 
     if (isParamValid("input_file")) {
-        _command = Execute;
-        _input_file_name = getParam<std::string>("input_file");
+        command = Execute;
+        input_file_name = getParam<std::string>("input_file");
     }
 }
 
@@ -85,39 +85,39 @@ GodzillaApp::run()
 {
     processCommandLine();
 
-    if (_command == Execute)
+    if (command == Execute)
         execute();
-    else if (_command == PrintHelp)
+    else if (command == PrintHelp)
         _command_line->printUsage();
-    else if (_command == PrintVersion)
+    else if (command == PrintVersion)
         Moose::out << getApplicationName() << " version " << getVersion() << std::endl;
 }
 
 void
 GodzillaApp::execute()
 {
-    if (MooseUtils::pathExists(_input_file_name)) {
+    if (MooseUtils::pathExists(input_file_name)) {
         buildFromGYML();
         executeInputFile();
     }
     else
-        godzillaError("Unable to open '", _input_file_name, "' for reading. Make sure it exists and you have read permissions.");
+        godzillaError("Unable to open '", input_file_name, "' for reading. Make sure it exists and you have read permissions.");
 }
 
 void
 GodzillaApp::buildFromGYML()
 {
     GYMLFile file(*this, _factory);
-    file.parse(_input_file_name);
+    file.parse(input_file_name);
     file.build();
-    _executioner = file.getExecutioner();
+    executioner = file.getExecutioner();
 }
 
 void
 GodzillaApp::executeInputFile()
 {
-    godzillaPrint(9, "Running '", _input_file_name, "'...");
-    _executioner->execute();
+    godzillaPrint(9, "Running '", input_file_name, "'...");
+    executioner->execute();
 }
 
 void

@@ -18,7 +18,7 @@ public:
     virtual bool converged();
 
 protected:
-    GMesh & _mesh;
+    GMesh & mesh;
 
 public:
     static InputParameters validParams();

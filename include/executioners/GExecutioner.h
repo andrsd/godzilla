@@ -16,7 +16,7 @@ public:
     virtual void execute();
 
 protected:
-    GProblem & _problem;
+    GProblem & problem;
 
 public:
     static InputParameters validParams();

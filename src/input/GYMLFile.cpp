@@ -15,21 +15,21 @@ std::string type_name()
 
 GYMLFile::GYMLFile(const GodzillaApp & app, Factory & factory) :
     GPrintInterface(app),
-    _app(app),
-    _factory(factory)
+    app(app),
+    factory(factory)
 {
 }
 
 void
 GYMLFile::parse(const std::string & file_name)
 {
-  _root = YAML::LoadFile(file_name);
+  root = YAML::LoadFile(file_name);
 }
 
 std::shared_ptr<GExecutioner>
 GYMLFile::getExecutioner()
 {
-    return _executioner;
+    return executioner;
 }
 
 void
@@ -43,27 +43,27 @@ GYMLFile::build()
 void
 GYMLFile::buildMesh()
 {
-    InputParameters params = buildParams(_root, "mesh");
+    InputParameters params = buildParams(root, "mesh");
     const std::string & class_name = params.get<std::string>("_type");
-    _mesh = _factory.create<GMesh>(class_name, "mesh", params);
+    mesh = factory.create<GMesh>(class_name, "mesh", params);
 }
 
 void
 GYMLFile::buildProblem()
 {
-    InputParameters params = buildParams(_root, "problem");
+    InputParameters params = buildParams(root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<GMesh *>("_gmesh") = _mesh.get();
-    _problem = _factory.create<GProblem>(class_name, "problem", params);
+    params.set<GMesh *>("_gmesh") = mesh.get();
+    problem = factory.create<GProblem>(class_name, "problem", params);
 }
 
 void
 GYMLFile::buildExecutioner()
 {
-    InputParameters params = buildParams(_root, "executioner");
+    InputParameters params = buildParams(root, "executioner");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<GProblem *>("_gproblem") = _problem.get();
-    _executioner = _factory.create<GExecutioner>(class_name, "problem", params);
+    params.set<GProblem *>("_gproblem") = problem.get();
+    executioner = factory.create<GExecutioner>(class_name, "problem", params);
 }
 
 InputParameters
@@ -81,9 +81,9 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
     if (!Registry::isRegisteredObj(class_name))
         godzillaError(name, ": Type '", class_name, "' is not a registered object.");
 
-    InputParameters params = _factory.getValidParams(class_name);
+    InputParameters params = factory.getValidParams(class_name);
     params.set<std::string>("_type") = class_name;
-    params.set<const GodzillaApp *>("_gapp") = &_app;
+    params.set<const GodzillaApp *>("_gapp") = &app;
 
     for (auto & kv : params) {
         const std::string & param_name = kv.first;

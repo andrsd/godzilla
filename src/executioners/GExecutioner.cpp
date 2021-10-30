@@ -16,7 +16,7 @@ GExecutioner::validParams()
 GExecutioner::GExecutioner(const InputParameters & parameters) :
     MooseObject(parameters),
     GPrintInterface(*getParam<const GodzillaApp *>("_gapp")),
-    _problem(*getParam<GProblem *>("_gproblem"))
+    problem(*getParam<GProblem *>("_gproblem"))
 {
 }
 
@@ -25,5 +25,5 @@ GExecutioner::execute()
 {
     godzillaPrint(5, "Executing...");
 
-    _problem.solve();
+    problem.solve();
 }

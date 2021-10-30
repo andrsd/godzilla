@@ -34,15 +34,15 @@ protected:
         PrintHelp,
         PrintVersion,
         Execute
-    } _command;
+    } command;
 
     /// Input file to run
-    std::string _input_file_name;
+    std::string input_file_name;
     /// verbosity level
-    const unsigned int _verbosity_level;
+    const unsigned int verbosity_level;
 
     /// Executioner
-    std::shared_ptr<GExecutioner> _executioner;
+    std::shared_ptr<GExecutioner> executioner;
 
 public:
     static InputParameters validParams();

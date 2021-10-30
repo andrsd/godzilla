@@ -32,12 +32,12 @@ protected:
     InputParameters buildParams(const YAML::Node & root, const std::string & name);
     void setParameterFromYML(InputParameters & params, const YAML::Node & node, const std::string & param_name);
 
-    const GodzillaApp & _app;
-    Factory & _factory;
+    const GodzillaApp & app;
+    Factory & factory;
 
-    YAML::Node _root;
+    YAML::Node root;
 
-    std::shared_ptr<GMesh> _mesh;
-    std::shared_ptr<GProblem> _problem;
-    std::shared_ptr<GExecutioner> _executioner;
+    std::shared_ptr<GMesh> mesh;
+    std::shared_ptr<GProblem> problem;
+    std::shared_ptr<GExecutioner> executioner;
 };

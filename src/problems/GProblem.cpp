@@ -15,7 +15,7 @@ GProblem::validParams()
 GProblem::GProblem(const InputParameters & parameters) :
     Problem(parameters),
     GPrintInterface(*getParam<const GodzillaApp *>("_gapp")),
-    _mesh(*getParam<GMesh *>("_gmesh"))
+    mesh(*getParam<GMesh *>("_gmesh"))
 {
 }
 
