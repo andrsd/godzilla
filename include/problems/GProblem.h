@@ -3,8 +3,6 @@
 #include "problems/Problem.h"
 #include "base/GPrintInterface.h"
 
-class GMesh;
-
 /// Problem
 ///
 class GProblem : public Problem,
@@ -13,13 +11,15 @@ class GProblem : public Problem,
 public:
     GProblem(const InputParameters & parameters);
 
-    virtual void create();
+    /// Build the problem to solve
+    virtual void create() = 0;
     virtual void init();
-    virtual void solve();
-    virtual bool converged();
-
-protected:
-    GMesh & mesh;
+    /// Solve the problem
+    virtual void solve() = 0;
+    /// true if solve converged, otherwise false
+    virtual bool converged() = 0;
+    /// output
+    virtual void out() = 0;
 
 public:
     static InputParameters validParams();

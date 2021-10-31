@@ -15,7 +15,7 @@ protected:
     /// Minimum in the x direction
     const PetscReal & xmin;
     /// Maximum in the x direction
-    const PetscReal & xmin;
+    const PetscReal & xmax;
     /// Number of grid point in the x direction
     const PetscInt & nx;
     /// True for simplices, False for tensor cells

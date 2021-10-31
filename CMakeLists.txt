@@ -5,6 +5,8 @@ project(godzilla VERSION 0.1)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+option(BUILD_EXAMPLES "Build examples" NO)
+
 
 # PETSc
 
@@ -79,6 +81,8 @@ add_library(godzilla SHARED
     src/mesh/GMesh.cpp
     src/mesh/GExodusIIMesh.cpp
     src/problems/GProblem.cpp
+    src/problems/GPetscNonlinearProblem.cpp
+    src/problems/GPetscFENonlinearProblem.cpp
 )
 
 set_target_properties(godzilla PROPERTIES UNITY_BUILD_MODE BATCH)
@@ -96,6 +100,10 @@ target_link_libraries(godzilla PUBLIC ${TIMPI_LIB})
 target_link_libraries(godzilla PUBLIC ${MOOSE_LIB})
 target_link_libraries(godzilla PUBLIC ${MOOSE_HIT_LIB})
 
+
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 # TESTING
 

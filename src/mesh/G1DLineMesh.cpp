@@ -1,5 +1,8 @@
 #include "mesh/G1DLineMesh.h"
 #include "base/CallStack.h"
+#include "petscdm.h"
+
+registerMooseObject("GodzillaApp", G1DLineMesh);
 
 InputParameters
 G1DLineMesh::validParams()

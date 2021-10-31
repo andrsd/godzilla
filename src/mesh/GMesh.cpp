@@ -21,3 +21,9 @@ GMesh::~GMesh()
     _F_;
     DMDestroy(&this->dm);
 }
+
+const DM &
+GMesh::getDM() const
+{
+    return this->dm;
+}
