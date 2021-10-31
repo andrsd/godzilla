@@ -19,7 +19,7 @@ TODO
 
 Install dependencies
 ```
-conda install python clang gfortran zlib autoconf cmake openmp
+conda install python clang gfortran zlib autoconf automake libtool cmake openmp
 ```
 
 Build MPICH
@@ -34,7 +34,7 @@ Build PETSc
 ./configure --prefix=$CONDA_PREFIX --shared-libraries --with-debugging=no --with-cxx-dialect=C++11 --with-pic=yes --with-ssl=no --download-hypre=yes --download-fblaslapack=yes --download-metis=yes --download-parmetis=yes --download-superlu_dist=yes --download-scalapack=yes --download-mumps=yes --download-exodusii --download-hdf5 --download-netcdf --download-pnetcdf --with-zlib-dir=$CONDA_PREFIX CC=$CC CXX=$CXX FC=$FC LDFLAGS=$LDFLAGS PETSC_DIR=`pwd`
 ```
 
-Build llibMesh
+Build libMesh
 ```
 cd <path/to/lib>
 mkdir build
@@ -42,6 +42,12 @@ cd build
 ../configure
 make
 make install
+```
+
+Build MOOSE:
+```
+cd <path/to/moose>/framework
+make
 ```
 
 Set env vars:
