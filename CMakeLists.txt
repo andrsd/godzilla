@@ -74,6 +74,8 @@ add_library(godzilla SHARED
     src/base/GPrintInterface.cpp
     src/executioners/GExecutioner.cpp
     src/input/GYMLFile.cpp
+    src/mesh/G1DLineMesh.cpp
+    src/mesh/G2DRectangleMesh.cpp
     src/mesh/GMesh.cpp
     src/mesh/GExodusIIMesh.cpp
     src/problems/GProblem.cpp
