@@ -33,6 +33,7 @@ protected:
     void buildExecutioner();
     InputParameters buildParams(const YAML::Node & root, const std::string & name);
     void setParameterFromYML(InputParameters & params, const YAML::Node & node, const std::string & param_name);
+    void checkParams(const InputParameters & params, const std::string & name);
 
     const GodzillaApp & app;
     Factory & factory;

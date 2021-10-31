@@ -112,6 +112,8 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
             setParameterFromYML(params, node, param_name);
     }
 
+    checkParams(params, name);
+
     return params;
 }
 
@@ -132,4 +134,20 @@ GYMLFile::setParameterFromYML(InputParameters & params, const YAML::Node & node,
         else if (param_type == type_name<unsigned int>())
             params.set<unsigned int>(param_name) = val.as<unsigned int>();
     }
+}
+
+void
+GYMLFile::checkParams(const InputParameters & params, const std::string & name)
+{
+    std::ostringstream oss;
+
+    for (const auto & it : params)
+    {
+        const auto & param_name = it.first;
+        if (!params.isParamValid(param_name) && params.isParamRequired(param_name))
+            oss << std::endl << "- '" << param_name << "': " << params.getDocString(param_name);
+    }
+
+    if (!oss.str().empty())
+        godzillaError(name, ": Missing required parameters:", oss.str());
 }
