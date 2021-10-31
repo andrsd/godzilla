@@ -1,7 +1,6 @@
 #pragma once
 
 #include "mesh/GMesh.h"
-#include "libmesh/distributed_mesh.h"
 
 /// Mesh loaded from a ExodusII file
 ///
@@ -14,9 +13,9 @@ public:
 
 protected:
     /// File name with the ExodusII mesh
-    const std::string file_name;
-    /// libMesh mesh
-    libMesh::DistributedMesh mesh;
+    const std::string & file_name;
+    /// Create faces and edges in the mesh
+    const PetscBool interpolate;
 
 public:
     static InputParameters validParams();

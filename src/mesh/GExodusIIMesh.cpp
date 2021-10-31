@@ -1,8 +1,7 @@
 #include "mesh/GExodusIIMesh.h"
 #include "base/CallStack.h"
-#include "libmesh/exodusII_io.h"
-#include "libmesh/exodusII_io_helper.h"
 #include "base/MooseApp.h"
+#include "petscdmplex.h"
 
 registerMooseObject("GodzillaApp", GExodusIIMesh);
 
@@ -17,7 +16,7 @@ GExodusIIMesh::validParams()
 GExodusIIMesh::GExodusIIMesh(const InputParameters & parameters) :
     GMesh(parameters),
     file_name(getParam<std::string>("file")),
-    mesh(_app.comm())
+    interpolate(PETSC_TRUE)
 {
     _F_;
 
@@ -29,12 +28,11 @@ void
 GExodusIIMesh::create()
 {
     _F_;
+    PetscErrorCode ierr;
 
-    ExodusII_IO exio(this->mesh);
-    exio.read(this->file_name);
-
-    ExodusII_IO_Helper & helper = exio.get_exio_helper();
-    godzillaPrint(5, "Mesh: ", this->file_name);
-    godzillaPrint(5, "- nodes: ", helper.num_nodes);
-    godzillaPrint(5, "- elements: ", helper.num_elem);
+    ierr = DMPlexCreateExodusFromFile(this->comm().get(),
+        this->file_name.c_str(),
+        this->interpolate,
+        &this->dm);
+    ierr = DMSetUp(this->dm);
 }
