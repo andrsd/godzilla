@@ -37,10 +37,12 @@ godzillaErrorRaw(std::string msg, bool call_stack = false);
 
 
 class GodzillaApp;
+class MooseObject;
 
 class GPrintInterface {
 public:
     GPrintInterface(const GodzillaApp & app);
+    GPrintInterface(const MooseObject * obj);
 
     /// Print a message on a terminal
     /// Inside static functions, you will need to explicitly scope your mooseError
@@ -51,7 +53,7 @@ public:
     {
         if (level < verbosity_level) {
             std::ostringstream oss;
-            godzilla::internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
+            godzilla::internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
             godzilla::internal::godzillaMsgRaw(oss.str());
         }
     }
@@ -64,7 +66,7 @@ public:
     godzillaError(Args &&... args)
     {
         std::ostringstream oss;
-        godzilla::internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
+        godzilla::internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
         godzilla::internal::godzillaErrorRaw(oss.str());
     }
 
@@ -73,10 +75,12 @@ public:
     godzillaErrorWithCallStack(Args &&... args)
     {
         std::ostringstream oss;
-        godzilla::internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
+        godzilla::internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
         godzilla::internal::godzillaErrorRaw(oss.str(), true);
     }
 
 private:
     const unsigned int & verbosity_level;
+    /// Prefix to print
+    const std::string prefix;
 };

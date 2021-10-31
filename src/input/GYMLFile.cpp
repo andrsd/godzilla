@@ -105,7 +105,6 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 
     InputParameters params = factory.getValidParams(class_name);
     params.set<std::string>("_type") = class_name;
-    params.set<const GodzillaApp *>("_gapp") = &app;
 
     for (auto & kv : params) {
         const std::string & param_name = kv.first;

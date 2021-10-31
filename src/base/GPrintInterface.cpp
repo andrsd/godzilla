@@ -1,5 +1,6 @@
 #include "base/GPrintInterface.h"
 #include "utils/MooseUtils.h"
+#include "base/MooseObject.h"
 #include "base/GodzillaApp.h"
 #include "base/CallStack.h"
 
@@ -35,9 +36,9 @@ static Threads::spin_mutex godzilla_err_lock;
 godzillaErrorRaw(std::string msg, bool call_stack)
 {
     msg = godzillaMsgFmt(msg, "ERROR", COLOR_RED);
+    Moose::err << msg << std::flush;
 
     Threads::spin_mutex::scoped_lock lock(godzilla_err_lock);
-    Moose::err << msg << std::flush;
 
     if (call_stack) {
         Moose::err << std::endl;
@@ -55,7 +56,16 @@ godzillaErrorRaw(std::string msg, bool call_stack)
 
 
 GPrintInterface::GPrintInterface(const GodzillaApp & app) :
-    verbosity_level(app.getVerbosityLevel())
+    verbosity_level(app.getVerbosityLevel()),
+    prefix("")
 {
     _F_;
+}
+
+GPrintInterface::GPrintInterface(const MooseObject * obj) :
+    verbosity_level(dynamic_cast<GodzillaApp &>(obj->getMooseApp()).getVerbosityLevel()),
+    prefix(obj->name() + ": ")
+{
+    _F_;
+
 }
