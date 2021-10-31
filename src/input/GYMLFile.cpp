@@ -25,7 +25,7 @@ void
 GYMLFile::parse(const std::string & file_name)
 {
     _F_;
-    root = YAML::LoadFile(file_name);
+    this->root = YAML::LoadFile(file_name);
 }
 
 std::shared_ptr<GMesh>
@@ -46,7 +46,7 @@ std::shared_ptr<GExecutioner>
 GYMLFile::getExecutioner()
 {
     _F_;
-    return executioner;
+    return this->executioner;
 }
 
 void
@@ -64,7 +64,7 @@ GYMLFile::buildMesh()
     _F_;
     InputParameters params = buildParams(root, "mesh");
     const std::string & class_name = params.get<std::string>("_type");
-    mesh = factory.create<GMesh>(class_name, "mesh", params);
+    this->mesh = factory.create<GMesh>(class_name, "mesh", params);
 }
 
 void
@@ -74,7 +74,7 @@ GYMLFile::buildProblem()
     InputParameters params = buildParams(root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<GMesh *>("_gmesh") = mesh.get();
-    problem = factory.create<GProblem>(class_name, "problem", params);
+    this->problem = factory.create<GProblem>(class_name, "problem", params);
 }
 
 void
@@ -84,7 +84,7 @@ GYMLFile::buildExecutioner()
     InputParameters params = buildParams(root, "executioner");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<GProblem *>("_gproblem") = problem.get();
-    executioner = factory.create<GExecutioner>(class_name, "problem", params);
+    this->executioner = factory.create<GExecutioner>(class_name, "problem", params);
 }
 
 InputParameters

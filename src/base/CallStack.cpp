@@ -76,16 +76,16 @@ CallStack::CallStack(int max_size)
 
 CallStack::~CallStack()
 {
-    delete [] stack;
+    delete [] this->stack;
 }
 
 void
 CallStack::dump()
 {
-    if (size > 0) {
+    if (this->size > 0) {
         Moose::err << "Call stack:" << std::endl;
-        for (int i = size - 1; i >= 0; i--)
-            Moose::err << "  " << stack[i]->file << ":" << stack[i]->line << ": " << stack[i]->func << std::endl;
+        for (int i = this->size - 1; i >= 0; i--)
+            Moose::err << "  " << this->stack[i]->file << ":" << this->stack[i]->line << ": " << this->stack[i]->func << std::endl;
     }
     else {
         Moose::err << "No call stack available." << std::endl;

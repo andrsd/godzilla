@@ -67,5 +67,4 @@ GPrintInterface::GPrintInterface(const MooseObject * obj) :
     prefix(obj->name() + ": ")
 {
     _F_;
-
 }

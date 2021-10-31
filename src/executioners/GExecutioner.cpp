@@ -33,5 +33,5 @@ GExecutioner::execute()
     _F_;
     godzillaPrint(5, "Executing...");
 
-    problem.solve();
+    this->problem.solve();
 }

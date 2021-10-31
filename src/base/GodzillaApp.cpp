@@ -62,7 +62,7 @@ const unsigned int &
 GodzillaApp::getVerbosityLevel() const
 {
     _F_;
-    return verbosity_level;
+    return this->verbosity_level;
 }
 
 void
@@ -72,17 +72,17 @@ GodzillaApp::processCommandLine()
     std::shared_ptr<CommandLine> cmd_line = commandLine();
 
     if ((cmd_line->getArguments().size() <= 1) || getParam<bool>("help")) {
-        command = PrintHelp;
+        this->command = PrintHelp;
         return;
     }
     else if (getParam<bool>("display_version")) {
-        command = PrintVersion;
+        this->command = PrintVersion;
         return;
     }
 
     if (isParamValid("input_file")) {
-        command = Execute;
-        input_file_name = getParam<std::string>("input_file");
+        this->command = Execute;
+        this->input_file_name = getParam<std::string>("input_file");
     }
 }
 
@@ -92,11 +92,11 @@ GodzillaApp::run()
     _F_;
     processCommandLine();
 
-    if (command == Execute)
+    if (this->command == Execute)
         execute();
-    else if (command == PrintHelp)
+    else if (this->command == PrintHelp)
         _command_line->printUsage();
-    else if (command == PrintVersion)
+    else if (this->command == PrintVersion)
         Moose::out << getApplicationName() << " version " << getVersion() << std::endl;
 }
 
@@ -104,12 +104,12 @@ void
 GodzillaApp::execute()
 {
     _F_;
-    if (MooseUtils::pathExists(input_file_name)) {
+    if (MooseUtils::pathExists(this->input_file_name)) {
         buildFromGYML();
         executeInputFile();
     }
     else
-        godzillaError("Unable to open '", input_file_name, "' for reading. Make sure it exists and you have read permissions.");
+        godzillaError("Unable to open '", this->input_file_name, "' for reading. Make sure it exists and you have read permissions.");
 }
 
 void
@@ -117,7 +117,7 @@ GodzillaApp::buildFromGYML()
 {
     _F_;
     GYMLFile file(*this, _factory);
-    file.parse(input_file_name);
+    file.parse(this->input_file_name);
     file.build();
     this->mesh = file.getMesh();
     this->problem = file.getProblem();
@@ -133,7 +133,7 @@ GodzillaApp::executeInputFile()
     this->problem->create();
     this->executioner->create();
 
-    godzillaPrint(9, "Running '", input_file_name, "'...");
+    godzillaPrint(9, "Running '", this->input_file_name, "'...");
     this->executioner->execute();
 }
 
