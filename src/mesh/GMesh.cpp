@@ -15,3 +15,9 @@ GMesh::GMesh(const InputParameters & parameters) :
 {
     _F_;
 }
+
+GMesh::~GMesh()
+{
+    _F_;
+    DMDestroy(&this->dm);
+}
