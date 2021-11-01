@@ -62,9 +62,12 @@ void
 GYMLFile::buildMesh()
 {
     _F_;
-    InputParameters params = buildParams(root, "mesh");
-    const std::string & class_name = params.get<std::string>("_type");
-    this->mesh = factory.create<GMesh>(class_name, "mesh", params);
+
+    if (this->root["mesh"]) {
+        InputParameters params = buildParams(root, "mesh");
+        const std::string & class_name = params.get<std::string>("_type");
+        this->mesh = factory.create<GMesh>(class_name, "mesh", params);
+    }
 }
 
 void
@@ -73,7 +76,8 @@ GYMLFile::buildProblem()
     _F_;
     InputParameters params = buildParams(root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<GMesh *>("_gmesh") = mesh.get();
+    if (params.have_parameter<GMesh *>("_gmesh"))
+        params.set<GMesh *>("_gmesh") = mesh.get();
     this->problem = factory.create<GProblem>(class_name, "problem", params);
 }
 

@@ -129,7 +129,8 @@ GodzillaApp::executeInputFile()
 {
     _F_;
 
-    this->mesh->create();
+    if (this->mesh != nullptr)
+        this->mesh->create();
     this->problem->create();
     this->executioner->create();
 
