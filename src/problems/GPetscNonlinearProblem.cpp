@@ -8,14 +8,14 @@ PetscErrorCode
 __compute_residual(SNES snes, Vec x, Vec f, void *ctx)
 {
     GPetscNonlinearProblem * problem = static_cast<GPetscNonlinearProblem *>(ctx);
-    return problem->computeResidualCallback(f, x);
+    return problem->computeResidualCallback(x, f);
 }
 
 PetscErrorCode
-__compute_jacobian(SNES snes, Vec x, Mat jac, Mat B, void *ctx)
+__compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void *ctx)
 {
     GPetscNonlinearProblem * problem = static_cast<GPetscNonlinearProblem *>(ctx);
-    return problem->computeJacobianCallback(jac, x);
+    return problem->computeJacobianCallback(x, J, Jp);
 }
 
 PetscErrorCode
@@ -71,8 +71,8 @@ GPetscNonlinearProblem::~GPetscNonlinearProblem()
     SNESDestroy(&this->snes);
     VecDestroy(&this->r);
     VecDestroy(&this->x);
-    if (this->A != this->J)
-        MatDestroy(&this->A);
+    if (this->Jp != this->J)
+        MatDestroy(&this->Jp);
     MatDestroy(&this->J);
 }
 
@@ -87,34 +87,29 @@ GPetscNonlinearProblem::create()
 {
     _F_;
     PetscErrorCode ierr;
-
     const DM & dm = getDM();
+
     ierr = SNESCreate(comm().get(), &this->snes);
     ierr = SNESSetDM(this->snes, dm);
     ierr = DMSetApplicationContext(dm, this);
 
-    SNESSetTolerances(this->snes,
-        this->nl_abs_tol, this->nl_rel_tol, this->nl_step_tol,
-        this->nl_max_iter, -1);
-    setupLineSearch();
-    ierr = SNESSetFromOptions(this->snes);
-    KSP ksp;
-    SNESGetKSP(this->snes, &ksp);
-    KSPSetTolerances(ksp, this->lin_rel_tol, this->lin_abs_tol, PETSC_DEFAULT,
-        this->lin_max_iter);
-    ierr = KSPSetFromOptions(ksp);
-
-    setupMonitors();
-
     setupProblem();
-
     allocateObjects();
-    ierr = DMCreateGlobalVector(dm, &this->x);
-    ierr = PetscObjectSetName((PetscObject) this->x, "");
 
+    setupSolverParameters();
+    setupLineSearch();
+    setupMonitors();
     setupCallbacks();
 
     setInitialGuess();
+}
+
+void
+GPetscNonlinearProblem::setInitialGuess()
+{
+    _F_;
+    PetscErrorCode ierr;
+    ierr = VecSet(this->x, 0.);
 }
 
 void
@@ -122,20 +117,25 @@ GPetscNonlinearProblem::allocateObjects()
 {
     _F_;
     PetscErrorCode ierr;
-
     const DM & dm = getDM();
+
     ierr = DMCreateGlobalVector(dm, &this->r);
     ierr = PetscObjectSetName((PetscObject) this->r, "");
+
     ierr = DMCreateMatrix(dm, &this->J);
+    ierr = PetscObjectSetName((PetscObject) this->J, "");
+
     // full newton
-    this->A = this->J;
+    this->Jp = this->J;
+
+    ierr = DMCreateGlobalVector(dm, &this->x);
+    ierr = PetscObjectSetName((PetscObject) this->x, "");
 }
 
 void
 GPetscNonlinearProblem::setupLineSearch()
 {
     _F_;
-
     SNESLineSearch line_search;
     SNESGetLineSearch(this->snes, &line_search);
     if (this->line_search_type.compare("basic") == 0)
@@ -159,9 +159,8 @@ GPetscNonlinearProblem::setupCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
-
     ierr = SNESSetFunction(this->snes, this->r, __compute_residual, this);
-    ierr = SNESSetJacobian(this->snes, this->A, this->J, __compute_jacobian, this);
+    ierr = SNESSetJacobian(this->snes, this->J, this->Jp, __compute_jacobian, this);
 }
 
 void
@@ -175,29 +174,35 @@ GPetscNonlinearProblem::setupMonitors()
     KSPMonitorSet(ksp, __ksp_monitor, this, 0);
 }
 
-PetscErrorCode
-GPetscNonlinearProblem::computeResidualCallback(Vec f, Vec x)
+void
+GPetscNonlinearProblem::setupSolverParameters()
 {
-    return 0;
-}
+    _F_;
+    PetscErrorCode ierr;
+    ierr = SNESSetTolerances(this->snes,
+        this->nl_abs_tol, this->nl_rel_tol, this->nl_step_tol,
+        this->nl_max_iter, -1);
+    ierr = SNESSetFromOptions(this->snes);
 
-PetscErrorCode
-GPetscNonlinearProblem::computeJacobianCallback(Mat jac, Vec x)
-{
-    return 0;
+    KSP ksp;
+    ierr = SNESGetKSP(this->snes, &ksp);
+    ierr = KSPSetTolerances(ksp,
+        this->lin_rel_tol, this->lin_abs_tol, PETSC_DEFAULT,
+        this->lin_max_iter);
+    ierr = KSPSetFromOptions(ksp);
 }
 
 PetscErrorCode
 GPetscNonlinearProblem::snesMonitorCallback(PetscInt it, PetscReal norm)
 {
-    godzillaPrint(8, it, " Non-linear residual: ", norm);
+    godzillaPrint(7, it, " Non-linear residual: ", std::scientific, norm);
     return 0;
 }
 
 PetscErrorCode
 GPetscNonlinearProblem::kspMonitorCallback(PetscInt it, PetscReal rnorm)
 {
-    godzillaPrint(8, "    ", it, " Linear residual: ", rnorm);
+    godzillaPrint(8, "    ", it, " Linear residual: ", std::scientific, rnorm);
     return 0;
 }
 
@@ -206,10 +211,8 @@ GPetscNonlinearProblem::solve()
 {
     _F_;
     PetscErrorCode ierr;
-
     ierr = SNESSolve(this->snes, NULL, this->x);
     ierr = SNESGetConvergedReason(this->snes, &this->converged_reason);
-    ierr = SNESGetSolution(this->snes, &this->x);
 }
 
 bool

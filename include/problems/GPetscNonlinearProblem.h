@@ -23,7 +23,7 @@ protected:
     /// setup the problem to be solved
     virtual void setupProblem() = 0;
     /// setup initial guess
-    virtual void setInitialGuess() = 0;
+    virtual void setInitialGuess();
     /// Allocate Jacobian/residual objects
     virtual void allocateObjects();
     /// setup line search
@@ -32,12 +32,14 @@ protected:
     virtual void setupCallbacks();
     /// Setup monitors
     virtual void setupMonitors();
+    /// Setup solver parameters
+    virtual void setupSolverParameters();
     /// output
     virtual void out() override;
     /// Method to compute residual. Called from the PETsc callback
-    PetscErrorCode computeResidualCallback(Vec f, Vec x);
+    virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) = 0;
     /// Method to compute Jacobian. Called from the PETsc callback
-    PetscErrorCode computeJacobianCallback(Mat jac, Vec x);
+    virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) = 0;
     /// SNES monitor
     PetscErrorCode snesMonitorCallback(PetscInt it, PetscReal norm);
     /// KSP monitor
@@ -54,7 +56,7 @@ protected:
     /// Jacobian matrix
     Mat J;
     /// Preconditioning matrix
-    Mat A;
+    Mat Jp;
     /// Converged reason
     SNESConvergedReason converged_reason;
 
@@ -79,7 +81,7 @@ public:
     static InputParameters validParams();
 
     friend PetscErrorCode __compute_residual(SNES snes, Vec x, Vec f, void *ctx);
-    friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat jac, Mat B, void *ctx);
+    friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat A, Mat B, void *ctx);
     friend PetscErrorCode __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx);
     friend PetscErrorCode __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void *ctx);
 };
