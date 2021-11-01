@@ -1,0 +1,6 @@
+problem:
+    type: PoissonLinearProblem
+    lin_rel_tol: 1e-2
+
+executioner:
+    type: GExecutioner
