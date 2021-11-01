@@ -81,6 +81,7 @@ add_library(godzilla SHARED
     src/mesh/GMesh.cpp
     src/mesh/GExodusIIMesh.cpp
     src/problems/GProblem.cpp
+    src/problems/GPetscLinearProblem.cpp
     src/problems/GPetscNonlinearProblem.cpp
     src/problems/GPetscFENonlinearProblem.cpp
 )
