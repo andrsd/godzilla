@@ -5,6 +5,13 @@
 #include "petscds.h"
 
 PetscErrorCode
+__compute_residual(SNES snes, Vec x, Vec f, void *ctx)
+{
+    GPetscNonlinearProblem * problem = static_cast<GPetscNonlinearProblem *>(ctx);
+    return problem->computeResidualCallback(f, x);
+}
+
+PetscErrorCode
 __compute_jacobian(SNES snes, Vec x, Mat jac, Mat B, void *ctx)
 {
     GPetscNonlinearProblem * problem = static_cast<GPetscNonlinearProblem *>(ctx);
@@ -60,6 +67,7 @@ GPetscNonlinearProblem::~GPetscNonlinearProblem()
 {
     _F_;
     SNESDestroy(&this->snes);
+    VecDestroy(&this->r);
     VecDestroy(&this->x);
     if (this->A != this->J)
         MatDestroy(&this->A);
@@ -76,24 +84,11 @@ GPetscNonlinearProblem::create()
     ierr = SNESCreate(comm().get(), &this->snes);
     ierr = SNESSetDM(this->snes, dm);
     ierr = DMSetApplicationContext(dm, this);
+
     SNESSetTolerances(this->snes,
         this->nl_abs_tol, this->nl_rel_tol, this->nl_step_tol,
         this->nl_max_iter, -1);
     setupLineSearch();
-    SNESSetFromOptions(snes);
-
-    setupMonitors();
-
-    setupProblem();
-
-    ierr = DMCreateGlobalVector(dm, &this->x);
-    ierr = PetscObjectSetName((PetscObject) this->x, "");
-
-    ierr = DMCreateMatrix(dm, &this->J);
-    // full newton
-    this->A = this->J;
-
-    setupJacobian();
     ierr = SNESSetFromOptions(this->snes);
     KSP ksp;
     SNESGetKSP(this->snes, &ksp);
@@ -101,7 +96,31 @@ GPetscNonlinearProblem::create()
         this->lin_max_iter);
     ierr = KSPSetFromOptions(ksp);
 
+    setupMonitors();
+
+    setupProblem();
+
+    allocateObjects();
+    ierr = DMCreateGlobalVector(dm, &this->x);
+    ierr = PetscObjectSetName((PetscObject) this->x, "");
+
+    setupCallbacks();
+
     setInitialGuess();
+}
+
+void
+GPetscNonlinearProblem::allocateObjects()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    const DM & dm = getDM();
+    ierr = DMCreateGlobalVector(dm, &this->r);
+    ierr = PetscObjectSetName((PetscObject) this->r, "");
+    ierr = DMCreateMatrix(dm, &this->J);
+    // full newton
+    this->A = this->J;
 }
 
 void
@@ -128,11 +147,12 @@ GPetscNonlinearProblem::setupLineSearch()
 }
 
 void
-GPetscNonlinearProblem::setupJacobian()
+GPetscNonlinearProblem::setupCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
 
+    ierr = SNESSetFunction(this->snes, this->r, __compute_residual, this);
     ierr = SNESSetJacobian(this->snes, this->A, this->J, __compute_jacobian, this);
 }
 
@@ -145,6 +165,12 @@ GPetscNonlinearProblem::setupMonitors()
     KSP ksp;
     SNESGetKSP(this->snes, &ksp);
     KSPMonitorSet(ksp, __ksp_monitor, this, 0);
+}
+
+PetscErrorCode
+GPetscNonlinearProblem::computeResidualCallback(Vec f, Vec x)
+{
+    return 0;
 }
 
 PetscErrorCode

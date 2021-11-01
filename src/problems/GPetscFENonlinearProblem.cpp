@@ -135,12 +135,19 @@ GPetscFENonlinearProblem::setupProblem()
 }
 
 void
-GPetscFENonlinearProblem::setupJacobian()
+GPetscFENonlinearProblem::setupCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
 
+    ierr = SNESSetFunction(this->snes, this->r, NULL, NULL);
     ierr = SNESSetJacobian(this->snes, this->A, this->J, NULL, NULL);
+}
+
+void
+GPetscFENonlinearProblem::allocateObjects()
+{
+    _F_;
 }
 
 void

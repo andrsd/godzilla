@@ -17,7 +17,8 @@ public:
 protected:
     virtual const DM & getDM() override;
     virtual void setupProblem() override;
-    virtual void setupJacobian() override;
+    virtual void setupCallbacks() override;
+    virtual void allocateObjects() override;
     virtual void setInitialGuess() override;
     virtual void out() override;
     /// Mesh
