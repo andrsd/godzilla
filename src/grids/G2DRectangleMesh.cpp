@@ -1,4 +1,4 @@
-#include "mesh/G2DRectangleMesh.h"
+#include "grids/G2DRectangleMesh.h"
 #include "base/CallStack.h"
 #include "petscdmplex.h"
 

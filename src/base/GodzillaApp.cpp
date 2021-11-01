@@ -3,7 +3,7 @@
 #include "parser/CommandLine.h"
 #include "base/AppFactory.h"
 #include "input/GYMLFile.h"
-#include "mesh/GMesh.h"
+#include "grids/GMesh.h"
 #include "problems/GProblem.h"
 #include "executioners/GExecutioner.h"
 #include "base/CallStack.h"

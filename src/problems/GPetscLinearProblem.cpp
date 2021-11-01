@@ -1,6 +1,6 @@
 #include "problems/GPetscLinearProblem.h"
 #include "base/CallStack.h"
-#include "mesh/GMesh.h"
+#include "grids/GMesh.h"
 #include "utils/MooseUtils.h"
 
 PetscErrorCode

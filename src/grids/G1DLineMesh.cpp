@@ -1,4 +1,4 @@
-#include "mesh/G1DLineMesh.h"
+#include "grids/G1DLineMesh.h"
 #include "base/CallStack.h"
 #include "petscdm.h"
 

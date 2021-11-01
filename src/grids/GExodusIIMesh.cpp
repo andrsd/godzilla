@@ -1,4 +1,4 @@
-#include "mesh/GExodusIIMesh.h"
+#include "grids/GExodusIIMesh.h"
 #include "base/CallStack.h"
 #include "base/MooseApp.h"
 #include "petscdmplex.h"

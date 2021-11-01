@@ -1,6 +1,6 @@
 #include "problems/GPetscFENonlinearProblem.h"
 #include "base/CallStack.h"
-#include "mesh/GMesh.h"
+#include "grids/GMesh.h"
 
 #include "petscdm.h"
 #include "petscdmlabel.h"

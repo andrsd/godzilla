@@ -76,10 +76,10 @@ add_library(godzilla SHARED
     src/base/GPrintInterface.cpp
     src/executioners/GExecutioner.cpp
     src/input/GYMLFile.cpp
-    src/mesh/G1DLineMesh.cpp
-    src/mesh/G2DRectangleMesh.cpp
-    src/mesh/GMesh.cpp
-    src/mesh/GExodusIIMesh.cpp
+    src/grids/G1DLineMesh.cpp
+    src/grids/G2DRectangleMesh.cpp
+    src/grids/GMesh.cpp
+    src/grids/GExodusIIMesh.cpp
     src/problems/GProblem.cpp
     src/problems/GPetscLinearProblem.cpp
     src/problems/GPetscNonlinearProblem.cpp

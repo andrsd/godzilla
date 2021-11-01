@@ -1,7 +1,7 @@
 #include "input/GYMLFile.h"
 #include "base/GodzillaApp.h"
 #include "Factory.h"
-#include "mesh/GMesh.h"
+#include "grids/GMesh.h"
 #include "problems/GProblem.h"
 #include "executioners/GExecutioner.h"
 #include "base/CallStack.h"

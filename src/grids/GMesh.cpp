@@ -1,4 +1,4 @@
-#include "mesh/GMesh.h"
+#include "grids/GMesh.h"
 #include "base/CallStack.h"
 
 InputParameters

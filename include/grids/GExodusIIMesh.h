@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mesh/GMesh.h"
+#include "grids/GMesh.h"
 
 /// Mesh loaded from a ExodusII file
 ///

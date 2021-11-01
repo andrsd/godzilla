@@ -1,6 +1,5 @@
 #include "problems/GPetscNonlinearProblem.h"
 #include "base/CallStack.h"
-#include "mesh/GMesh.h"
 #include "utils/MooseUtils.h"
 #include "petscds.h"
 
