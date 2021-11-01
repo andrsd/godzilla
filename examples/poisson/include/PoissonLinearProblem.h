@@ -21,24 +21,20 @@ class PoissonLinearProblem : public GPetscLinearProblem
 {
 public:
     PoissonLinearProblem(const InputParameters & parameters);
-    ~PoissonLinearProblem();
 
 protected:
-    virtual const DM & getDM() override;
     virtual void setupProblem() override;
     virtual PetscErrorCode computeRhsCallback(Vec b) override;
     virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) override;
 
-    /// Structured grid
-    DM da;
-    ///
-    PetscReal uu;
-    ///
-    PetscReal tt;
+    /// Coefficient in the forcing term
+    PetscReal m;
+    /// Coefficient in the forcing term
+    PetscReal n;
     /// Number of grid points in x diretion
-    PetscInt M;
+    PetscInt nx;
     /// Number of grid points in y diretion
-    PetscInt N;
+    PetscInt ny;
     /// Number of DOFs per node
     PetscInt dofs;
     /// Stencil width

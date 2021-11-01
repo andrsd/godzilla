@@ -1,11 +1,10 @@
 grid:
-    type: G2DRectangularGrid
-    M: 11
-    N: 11
+    type: G2DStructuredGrid
+    nx: 4
+    ny: 4
 
 problem:
     type: PoissonLinearProblem
-    lin_rel_tol: 1e-2
 
 executioner:
     type: GExecutioner
