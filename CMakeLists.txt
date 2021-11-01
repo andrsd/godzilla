@@ -78,6 +78,7 @@ add_library(godzilla SHARED
     src/input/GYMLFile.cpp
     src/grids/G1DLineMesh.cpp
     src/grids/G2DRectangleMesh.cpp
+    src/grids/G2DStructuredGrid.cpp
     src/grids/GExodusIIMesh.cpp
     src/grids/GGrid.cpp
     src/grids/GUnstructuredMesh.cpp
