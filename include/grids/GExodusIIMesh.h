@@ -1,10 +1,10 @@
 #pragma once
 
-#include "grids/GMesh.h"
+#include "grids/GUnstructuredMesh.h"
 
 /// Mesh loaded from a ExodusII file
 ///
-class GExodusIIMesh : public GMesh
+class GExodusIIMesh : public GUnstructuredMesh
 {
 public:
     GExodusIIMesh(const InputParameters & parameters);

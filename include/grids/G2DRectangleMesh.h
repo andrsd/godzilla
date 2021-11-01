@@ -1,10 +1,10 @@
 #pragma once
 
-#include "grids/GMesh.h"
+#include "grids/GUnstructuredMesh.h"
 
 /// 2D rectangular mesh
 ///
-class G2DRectangleMesh : public GMesh
+class G2DRectangleMesh : public GUnstructuredMesh
 {
 public:
     G2DRectangleMesh(const InputParameters & parameters);

@@ -7,7 +7,7 @@
 
 class GodzillaApp;
 class Factory;
-class GMesh;
+class GGrid;
 class GProblem;
 class GExecutioner;
 
@@ -23,12 +23,12 @@ public:
     /// build the simulation
     virtual void build();
 
-    virtual std::shared_ptr<GMesh> getMesh();
+    virtual std::shared_ptr<GGrid> getGrid();
     virtual std::shared_ptr<GProblem> getProblem();
     virtual std::shared_ptr<GExecutioner> getExecutioner();
 
 protected:
-    void buildMesh();
+    void buildGrid();
     void buildProblem();
     void buildExecutioner();
     InputParameters buildParams(const YAML::Node & root, const std::string & name);
@@ -40,7 +40,7 @@ protected:
 
     YAML::Node root;
 
-    std::shared_ptr<GMesh> mesh;
+    std::shared_ptr<GGrid> grid;
     std::shared_ptr<GProblem> problem;
     std::shared_ptr<GExecutioner> executioner;
 };

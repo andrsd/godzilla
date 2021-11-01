@@ -4,24 +4,24 @@
 #include "base/GPrintInterface.h"
 #include "petscdm.h"
 
-/// Base class for meshes
+/// Base class for grids
 ///
-class GMesh : public MooseObject,
+class GGrid : public MooseObject,
               public GPrintInterface
 {
 public:
-    GMesh(const InputParameters & parameters);
-    virtual ~GMesh();
+    GGrid(const InputParameters & parameters);
+    virtual ~GGrid();
 
     const DM & getDM() const;
 
-    /// Create the mesh
+    /// Create the grid
     ///
     /// This should create the `dm` object which should be of the DMPLEX type
     virtual void create() = 0;
 
 protected:
-    // DMPLEX object
+    // DM object
     DM dm;
 
 public:

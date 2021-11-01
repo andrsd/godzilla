@@ -1,6 +1,6 @@
 #include "problems/GPetscLinearProblem.h"
 #include "base/CallStack.h"
-#include "grids/GMesh.h"
+#include "grids/GGrid.h"
 #include "utils/MooseUtils.h"
 
 PetscErrorCode
@@ -29,6 +29,7 @@ InputParameters
 GPetscLinearProblem::validParams()
 {
     InputParameters params = GProblem::validParams();
+    params.addPrivateParam<GGrid *>("_ggrid");
     params.addParam<PetscReal>("lin_rel_tol", 1e-5, "Relative convergence tolerance for the linear solver");
     params.addParam<PetscReal>("lin_abs_tol", 1e-50, "Absolute convergence tolerance for the linear solver");
     params.addParam<PetscInt>("lin_max_iter", 10000, "Maximum number of iterations for the linear solver");
@@ -37,6 +38,7 @@ GPetscLinearProblem::validParams()
 
 GPetscLinearProblem::GPetscLinearProblem(const InputParameters & parameters) :
     GProblem(parameters),
+    grid(*getParam<GGrid *>("_ggrid")),
     lin_rel_tol(getParam<PetscReal>("lin_rel_tol")),
     lin_abs_tol(getParam<PetscReal>("lin_abs_tol")),
     lin_max_iter(getParam<PetscInt>("lin_max_iter"))
@@ -53,6 +55,12 @@ GPetscLinearProblem::~GPetscLinearProblem()
     if (this->A != this->B)
         MatDestroy(&this->B);
     MatDestroy(&this->A);
+}
+
+const DM &
+GPetscLinearProblem::getDM()
+{
+    return this->grid.getDM();
 }
 
 void

@@ -7,7 +7,7 @@ registerMooseObject("GodzillaApp", G2DRectangleMesh);
 InputParameters
 G2DRectangleMesh::validParams()
 {
-    InputParameters params = GMesh::validParams();
+    InputParameters params = GUnstructuredMesh::validParams();
     params.addParam<PetscReal>("xmin", 0., "Minimum in the x direction");
     params.addParam<PetscReal>("xmax", 1., "Maximum in the x direction");
     params.addParam<PetscReal>("ymin", 0., "Minimum in the y direction");
@@ -18,7 +18,7 @@ G2DRectangleMesh::validParams()
 }
 
 G2DRectangleMesh::G2DRectangleMesh(const InputParameters & parameters) :
-    GMesh(parameters),
+    GUnstructuredMesh(parameters),
     xmin(getParam<PetscReal>("xmin")),
     xmax(getParam<PetscReal>("xmax")),
     ymin(getParam<PetscReal>("ymin")),

@@ -3,6 +3,8 @@
 #include "problems/GProblem.h"
 #include "petscksp.h"
 
+class GGrid;
+
 /// PETSc Linear problem
 ///
 class GPetscLinearProblem : public GProblem
@@ -17,7 +19,7 @@ public:
 
 protected:
     /// provide DM for the underlying KSP object
-    virtual const DM & getDM() = 0;
+    virtual const DM & getDM();
     /// setup the problem to be solved
     virtual void setupProblem() = 0;
     /// Allocate Jacobian/residual objects
@@ -37,6 +39,8 @@ protected:
     /// KSP monitor
     PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
 
+    /// Grid
+    GGrid & grid;
     /// KSP object
     KSP ksp;
     /// The solution vector

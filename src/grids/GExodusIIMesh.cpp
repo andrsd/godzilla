@@ -8,13 +8,13 @@ registerMooseObject("GodzillaApp", GExodusIIMesh);
 InputParameters
 GExodusIIMesh::validParams()
 {
-    InputParameters params = GMesh::validParams();
+    InputParameters params = GUnstructuredMesh::validParams();
     params.addRequiredParam<std::string>("file", "The name of the ExodusII file.");
     return params;
 }
 
 GExodusIIMesh::GExodusIIMesh(const InputParameters & parameters) :
-    GMesh(parameters),
+    GUnstructuredMesh(parameters),
     file_name(getParam<std::string>("file")),
     interpolate(PETSC_TRUE)
 {

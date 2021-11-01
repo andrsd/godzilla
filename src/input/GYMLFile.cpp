@@ -1,7 +1,7 @@
 #include "input/GYMLFile.h"
 #include "base/GodzillaApp.h"
 #include "Factory.h"
-#include "grids/GMesh.h"
+#include "grids/GGrid.h"
 #include "problems/GProblem.h"
 #include "executioners/GExecutioner.h"
 #include "base/CallStack.h"
@@ -28,11 +28,11 @@ GYMLFile::parse(const std::string & file_name)
     this->root = YAML::LoadFile(file_name);
 }
 
-std::shared_ptr<GMesh>
-GYMLFile::getMesh()
+std::shared_ptr<GGrid>
+GYMLFile::getGrid()
 {
     _F_;
-    return this->mesh;
+    return this->grid;
 }
 
 std::shared_ptr<GProblem>
@@ -53,21 +53,19 @@ void
 GYMLFile::build()
 {
     _F_;
-    buildMesh();
+    buildGrid();
     buildProblem();
     buildExecutioner();
 }
 
 void
-GYMLFile::buildMesh()
+GYMLFile::buildGrid()
 {
     _F_;
 
-    if (this->root["mesh"]) {
-        InputParameters params = buildParams(root, "mesh");
-        const std::string & class_name = params.get<std::string>("_type");
-        this->mesh = factory.create<GMesh>(class_name, "mesh", params);
-    }
+    InputParameters params = buildParams(root, "grid");
+    const std::string & class_name = params.get<std::string>("_type");
+    this->grid = factory.create<GGrid>(class_name, "grid", params);
 }
 
 void
@@ -76,8 +74,7 @@ GYMLFile::buildProblem()
     _F_;
     InputParameters params = buildParams(root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
-    if (params.have_parameter<GMesh *>("_gmesh"))
-        params.set<GMesh *>("_gmesh") = mesh.get();
+    params.set<GGrid *>("_ggrid") = this->grid.get();
     this->problem = factory.create<GProblem>(class_name, "problem", params);
 }
 

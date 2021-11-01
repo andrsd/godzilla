@@ -1,10 +1,10 @@
 #pragma once
 
-#include "grids/GMesh.h"
+#include "grids/GUnstructuredMesh.h"
 
 /// 1D line
 ///
-class G1DLineMesh : public GMesh
+class G1DLineMesh : public GUnstructuredMesh
 {
 public:
     G1DLineMesh(const InputParameters & parameters);

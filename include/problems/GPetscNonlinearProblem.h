@@ -3,6 +3,8 @@
 #include "problems/GProblem.h"
 #include "petscsnes.h"
 
+class GGrid;
+
 /// PETSc non-linear problem
 ///
 class GPetscNonlinearProblem : public GProblem
@@ -17,7 +19,7 @@ public:
 
 protected:
     /// provide DM for the underlying SNES object
-    virtual const DM & getDM() = 0;
+    virtual const DM & getDM();
     /// setup the problem to be solved
     virtual void setupProblem() = 0;
     /// setup initial guess
@@ -41,7 +43,9 @@ protected:
     /// KSP monitor
     PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
 
-    /// SNES objects
+    /// Grid
+    GGrid & grid;
+    /// SNES object
     SNES snes;
     /// The solution vector
     Vec x;

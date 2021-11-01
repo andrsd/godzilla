@@ -1,3 +1,8 @@
+grid:
+    type: G2DRectangularGrid
+    M: 11
+    N: 11
+
 problem:
     type: PoissonLinearProblem
     lin_rel_tol: 1e-2

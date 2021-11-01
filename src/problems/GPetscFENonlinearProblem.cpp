@@ -1,6 +1,6 @@
 #include "problems/GPetscFENonlinearProblem.h"
 #include "base/CallStack.h"
-#include "grids/GMesh.h"
+#include "grids/GGrid.h"
 
 #include "petscdm.h"
 #include "petscdmlabel.h"
@@ -64,13 +64,11 @@ InputParameters
 GPetscFENonlinearProblem::validParams()
 {
     InputParameters params = GPetscNonlinearProblem::validParams();
-    params.addPrivateParam<GMesh *>("_gmesh");
     return params;
 }
 
 GPetscFENonlinearProblem::GPetscFENonlinearProblem(const InputParameters & parameters) :
-    GPetscNonlinearProblem(parameters),
-    mesh(*getParam<GMesh *>("_gmesh"))
+    GPetscNonlinearProblem(parameters)
 {
     _F_;
 }
@@ -79,12 +77,6 @@ GPetscFENonlinearProblem::~GPetscFENonlinearProblem()
 {
     _F_;
     PetscFEDestroy(&this->fe);
-}
-
-const DM &
-GPetscFENonlinearProblem::getDM()
-{
-    return this->mesh.getDM();
 }
 
 void

@@ -3,7 +3,7 @@
 #include "problems/GPetscNonlinearProblem.h"
 #include "petscsnes.h"
 
-class GMesh;
+class GGrid;
 
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system
@@ -15,14 +15,11 @@ public:
     virtual ~GPetscFENonlinearProblem();
 
 protected:
-    virtual const DM & getDM() override;
     virtual void setupProblem() override;
     virtual void setupCallbacks() override;
     virtual void allocateObjects() override;
     virtual void setInitialGuess() override;
     virtual void out() override;
-    /// Mesh
-    GMesh & mesh;
     /// Spatial dimension of the discrete problem
     PetscInt dim;
     /// FE object

@@ -1,29 +1,29 @@
-#include "grids/GMesh.h"
+#include "grids/GGrid.h"
 #include "base/CallStack.h"
 
 InputParameters
-GMesh::validParams()
+GGrid::validParams()
 {
     InputParameters params = MooseObject::validParams();
-    params.addPrivateParam<std::string>("_moose_base", "gmesh");
+    params.addPrivateParam<std::string>("_moose_base", "GGrid");
     return params;
 }
 
-GMesh::GMesh(const InputParameters & parameters) :
+GGrid::GGrid(const InputParameters & parameters) :
     MooseObject(parameters),
     GPrintInterface(this)
 {
     _F_;
 }
 
-GMesh::~GMesh()
+GGrid::~GGrid()
 {
     _F_;
     DMDestroy(&this->dm);
 }
 
 const DM &
-GMesh::getDM() const
+GGrid::getDM() const
 {
     return this->dm;
 }

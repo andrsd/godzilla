@@ -3,7 +3,7 @@
 #include "parser/CommandLine.h"
 #include "base/AppFactory.h"
 #include "input/GYMLFile.h"
-#include "grids/GMesh.h"
+#include "grids/GGrid.h"
 #include "problems/GProblem.h"
 #include "executioners/GExecutioner.h"
 #include "base/CallStack.h"
@@ -119,7 +119,7 @@ GodzillaApp::buildFromGYML()
     GYMLFile file(*this, _factory);
     file.parse(this->input_file_name);
     file.build();
-    this->mesh = file.getMesh();
+    this->grid = file.getGrid();
     this->problem = file.getProblem();
     this->executioner = file.getExecutioner();
 }
@@ -129,8 +129,7 @@ GodzillaApp::executeInputFile()
 {
     _F_;
 
-    if (this->mesh != nullptr)
-        this->mesh->create();
+    this->grid->create();
     this->problem->create();
     this->executioner->create();
 

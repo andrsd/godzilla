@@ -1,6 +1,7 @@
 #include "problems/GPetscNonlinearProblem.h"
 #include "base/CallStack.h"
 #include "utils/MooseUtils.h"
+#include "grids/GGrid.h"
 #include "petscds.h"
 
 PetscErrorCode
@@ -36,6 +37,7 @@ InputParameters
 GPetscNonlinearProblem::validParams()
 {
     InputParameters params = GProblem::validParams();
+    params.addPrivateParam<GGrid *>("_ggrid");
     params.addParam<std::string>("line_search", "bt", "The type of line search to be used");
     params.addParam<PetscReal>("nl_rel_tol", 1e-8, "Relative convergence tolerance for the non-linear solver");
     params.addParam<PetscReal>("nl_abs_tol", 1e-15, "Absolute convergence tolerance for the non-linear solver");
@@ -49,6 +51,7 @@ GPetscNonlinearProblem::validParams()
 
 GPetscNonlinearProblem::GPetscNonlinearProblem(const InputParameters & parameters) :
     GProblem(parameters),
+    grid(*getParam<GGrid *>("_ggrid")),
     line_search_type(getParam<std::string>("line_search")),
     nl_rel_tol(getParam<PetscReal>("nl_rel_tol")),
     nl_abs_tol(getParam<PetscReal>("nl_abs_tol")),
@@ -71,6 +74,12 @@ GPetscNonlinearProblem::~GPetscNonlinearProblem()
     if (this->A != this->J)
         MatDestroy(&this->A);
     MatDestroy(&this->J);
+}
+
+const DM &
+GPetscNonlinearProblem::getDM()
+{
+    return this->grid.getDM();
 }
 
 void

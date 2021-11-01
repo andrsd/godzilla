@@ -7,7 +7,7 @@ registerMooseObject("GodzillaApp", G1DLineMesh);
 InputParameters
 G1DLineMesh::validParams()
 {
-    InputParameters params = GMesh::validParams();
+    InputParameters params = GUnstructuredMesh::validParams();
     params.addParam<PetscReal>("xmin", 0., "Minimum in the x direction");
     params.addParam<PetscReal>("xmax", 1., "Maximum in the x direction");
     params.addRequiredParam<PetscInt>("nx", "Number of grid points in the x direction");
@@ -15,7 +15,7 @@ G1DLineMesh::validParams()
 }
 
 G1DLineMesh::G1DLineMesh(const InputParameters & parameters) :
-    GMesh(parameters),
+    GUnstructuredMesh(parameters),
     xmin(getParam<PetscReal>("xmin")),
     xmax(getParam<PetscReal>("xmax")),
     nx(getParam<PetscInt>("nx")),
