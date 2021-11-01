@@ -1,0 +1,10 @@
+grid:
+    type: G2DStructuredGrid
+    nx: 4
+    ny: 4
+
+problem:
+    type: PoissonNonlinearProblem
+
+executioner:
+    type: GExecutioner

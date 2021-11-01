@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
     src/PoissonLinearProblem.cpp
+    src/PoissonNonlinearProblem.cpp
     src/main.cpp
 )
 
