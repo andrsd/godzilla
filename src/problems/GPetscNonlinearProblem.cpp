@@ -1,6 +1,7 @@
 #include "problems/GPetscNonlinearProblem.h"
 #include "base/CallStack.h"
 #include "mesh/GMesh.h"
+#include "utils/MooseUtils.h"
 #include "petscds.h"
 
 PetscErrorCode
@@ -29,13 +30,30 @@ InputParameters
 GPetscNonlinearProblem::validParams()
 {
     InputParameters params = GProblem::validParams();
+    params.addParam<std::string>("line_search", "bt", "The type of line search to be used");
+    params.addParam<PetscReal>("nl_rel_tol", 1e-8, "Relative convergence tolerance for the non-linear solver");
+    params.addParam<PetscReal>("nl_abs_tol", 1e-15, "Absolute convergence tolerance for the non-linear solver");
+    params.addParam<PetscReal>("nl_step_tol", 1e-15, "Convergence tolerance in terms of the norm of the change in the solution between steps");
+    params.addParam<PetscInt>("nl_max_iter", 40, "Maximum number of iterations for the non-linear solver");
+    params.addParam<PetscReal>("lin_rel_tol", 1e-5, "Relative convergence tolerance for the linear solver");
+    params.addParam<PetscReal>("lin_abs_tol", 1e-50, "Absolute convergence tolerance for the linear solver");
+    params.addParam<PetscInt>("lin_max_iter", 10000, "Maximum number of iterations for the linear solver");
     return params;
 }
 
 GPetscNonlinearProblem::GPetscNonlinearProblem(const InputParameters & parameters) :
-    GProblem(parameters)
+    GProblem(parameters),
+    line_search_type(getParam<std::string>("line_search")),
+    nl_rel_tol(getParam<PetscReal>("nl_rel_tol")),
+    nl_abs_tol(getParam<PetscReal>("nl_abs_tol")),
+    nl_step_tol(getParam<PetscReal>("nl_step_tol")),
+    nl_max_iter(getParam<PetscInt>("nl_max_iter")),
+    lin_rel_tol(getParam<PetscReal>("lin_rel_tol")),
+    lin_abs_tol(getParam<PetscReal>("lin_abs_tol")),
+    lin_max_iter(getParam<PetscInt>("lin_max_iter"))
 {
     _F_;
+    line_search_type = MooseUtils::toLower(line_search_type);
 }
 
 GPetscNonlinearProblem::~GPetscNonlinearProblem()
@@ -58,6 +76,11 @@ GPetscNonlinearProblem::create()
     ierr = SNESCreate(comm().get(), &this->snes);
     ierr = SNESSetDM(this->snes, dm);
     ierr = DMSetApplicationContext(dm, this);
+    SNESSetTolerances(this->snes,
+        this->nl_abs_tol, this->nl_rel_tol, this->nl_step_tol,
+        this->nl_max_iter, -1);
+    setupLineSearch();
+    SNESSetFromOptions(snes);
 
     setupMonitors();
 
@@ -72,8 +95,36 @@ GPetscNonlinearProblem::create()
 
     setupJacobian();
     ierr = SNESSetFromOptions(this->snes);
+    KSP ksp;
+    SNESGetKSP(this->snes, &ksp);
+    KSPSetTolerances(ksp, this->lin_rel_tol, this->lin_abs_tol, PETSC_DEFAULT,
+        this->lin_max_iter);
+    ierr = KSPSetFromOptions(ksp);
 
     setInitialGuess();
+}
+
+void
+GPetscNonlinearProblem::setupLineSearch()
+{
+    _F_;
+
+    SNESLineSearch line_search;
+    SNESGetLineSearch(this->snes, &line_search);
+    if (this->line_search_type.compare("basic") == 0)
+        SNESLineSearchSetType(line_search, SNESLINESEARCHBASIC);
+    else if (this->line_search_type.compare("l2") == 0)
+        SNESLineSearchSetType(line_search, SNESLINESEARCHL2);
+    else if (this->line_search_type.compare("cp") == 0)
+        SNESLineSearchSetType(line_search, SNESLINESEARCHCP);
+    else if (this->line_search_type.compare("nleqerr") == 0)
+        SNESLineSearchSetType(line_search, SNESLINESEARCHNLEQERR);
+    else if (this->line_search_type.compare("shell") == 0)
+        SNESLineSearchSetType(line_search, SNESLINESEARCHSHELL);
+    else
+        SNESLineSearchSetType(line_search, SNESLINESEARCHBT);
+    SNESSetLineSearch(this->snes, line_search);
+    SNESLineSearchSetFromOptions(line_search);
 }
 
 void
