@@ -16,3 +16,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${MOOSE_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC godzilla)
+
+
+add_test(${PROJECT_NAME}-linear ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/linear_poisson_2d.gyml)
+add_test(${PROJECT_NAME}-nl     ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/nl_poisson_2d.gyml)
+add_test(${PROJECT_NAME}-nl-fem ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/nl_poisson_2d_fe.gyml)

@@ -1,8 +1,0 @@
-mesh:
-    type: GMesh
-
-problem:
-    type: GProblem
-
-executioner:
-    type: GExecutioner

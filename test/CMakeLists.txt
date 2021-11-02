@@ -21,5 +21,3 @@ set(TESTS_DIR ${CMAKE_SOURCE_DIR}/test/tests)
 
 add_test(cmd-line-version ${PROJECT_NAME} --version)
 add_test(cmd-line-help ${PROJECT_NAME} --help)
-
-add_test(input ${PROJECT_NAME} -i ${TESTS_DIR}/base/gyml/test.gyml)
