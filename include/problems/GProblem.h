@@ -11,6 +11,9 @@ class GProblem : public Problem,
 public:
     GProblem(const InputParameters & parameters);
 
+    /// Get the MPI comm this object works on
+    MPI_Comm comm();
+
     /// Build the problem to solve
     virtual void create() = 0;
     virtual void init();

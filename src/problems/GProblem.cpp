@@ -16,6 +16,12 @@ GProblem::GProblem(const InputParameters & parameters) :
     _F_;
 }
 
+MPI_Comm
+GProblem::comm()
+{
+    return libMesh::ParallelObject::comm().get();
+}
+
 void
 GProblem::init()
 {

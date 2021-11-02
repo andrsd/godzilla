@@ -70,7 +70,7 @@ GPetscLinearProblem::create()
     PetscErrorCode ierr;
     const DM & dm = getDM();
 
-    ierr = KSPCreate(comm().get(), &this->ksp);
+    ierr = KSPCreate(comm(), &this->ksp);
     ierr = KSPSetDM(this->ksp, dm);
     ierr = DMSetApplicationContext(dm, this);
 

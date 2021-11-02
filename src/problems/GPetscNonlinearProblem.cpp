@@ -89,7 +89,7 @@ GPetscNonlinearProblem::create()
     PetscErrorCode ierr;
     const DM & dm = getDM();
 
-    ierr = SNESCreate(comm().get(), &this->snes);
+    ierr = SNESCreate(comm(), &this->snes);
     ierr = SNESSetDM(this->snes, dm);
     ierr = DMSetApplicationContext(dm, this);
 
@@ -101,11 +101,11 @@ GPetscNonlinearProblem::create()
     setupMonitors();
     setupCallbacks();
 
-    setInitialGuess();
+    setupInitialGuess();
 }
 
 void
-GPetscNonlinearProblem::setInitialGuess()
+GPetscNonlinearProblem::setupInitialGuess()
 {
     _F_;
     PetscErrorCode ierr;

@@ -23,7 +23,7 @@ protected:
     /// setup the problem to be solved
     virtual void setupProblem() = 0;
     /// setup initial guess
-    virtual void setInitialGuess();
+    virtual void setupInitialGuess();
     /// Allocate Jacobian/residual objects
     virtual void allocateObjects();
     /// setup line search
