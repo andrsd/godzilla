@@ -61,7 +61,7 @@ PoissonLinearProblem::computeRhsCallback(Vec b)
     // force right hand side to be consistent for singular matrix
     // note this is really a hack, normally the model would provide you with a consistent right handside
     MatNullSpace nullspace;
-    MatNullSpaceCreate(comm().get(), PETSC_TRUE, 0, 0, &nullspace);
+    MatNullSpaceCreate(comm(), PETSC_TRUE, 0, 0, &nullspace);
     MatNullSpaceRemove(nullspace, b);
     MatNullSpaceDestroy(&nullspace);
 

@@ -3,8 +3,6 @@
 
 #include "petscdm.h"
 #include "petscdmlabel.h"
-#include "petscds.h"
-#include "petscviewerhdf5.h"
 
 registerMooseObject("GodzillaApp", PoissonFENonlinearProblem);
 
@@ -74,31 +72,27 @@ PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & par
 
 PoissonFENonlinearProblem::~PoissonFENonlinearProblem()
 {
-    PetscFEDestroy(&this->fe);
 }
 
 void
-PoissonFENonlinearProblem::setupProblem()
+PoissonFENonlinearProblem::onSetFields()
 {
     _F_;
-    PetscErrorCode ierr;
+    PetscInt order = 1;
+    this->u_id = addField("u", 1, order);
+}
 
-    const DM & dm = this->getDM();
+void
+PoissonFENonlinearProblem::onSetWeakForm()
+{
+    setResidualBlock(this->u_id, f0_u, f1_u);
+    setJacobianBlock(this->u_id, this->u_id, NULL, NULL, NULL, g3_uu);
+}
 
-    DMGetDimension(dm, &this->dim);
-
-    // setup discretization
-    ierr = PetscFECreateLagrange(comm().get(),
-        this->dim, 1, PETSC_FALSE, 1, PETSC_DETERMINE,
-        &this->fe);
-    ierr = DMSetField(dm, 0, NULL, (PetscObject) this->fe);
-    PetscFESetName(this->fe, "u");
-
-    ierr = DMCreateDS(dm);
-    ierr = DMGetDS(dm, &this->ds);
-
-    PetscDSSetResidual(this->ds, 0, f0_u, f1_u);
-    PetscDSSetJacobian(this->ds, 0, 0, NULL, NULL, NULL, g3_uu);
+void
+PoissonFENonlinearProblem::setupBoundaryConditions()
+{
+    const DM & dm = getDM();
 
     PetscFunc *exact_funcs[1];
     exact_funcs[0] = quadratic_u_2d;
@@ -123,18 +117,11 @@ PoissonFENonlinearProblem::setupProblem()
 }
 
 void
-PoissonFENonlinearProblem::setInitialGuess()
+PoissonFENonlinearProblem::onSetInitialConditions()
 {
     _F_;
     PetscErrorCode ierr;
-
-    // const DM & dm = this->getDM();
-    // this->initial_guess[0] = quadratic_u_2d;
-    // ierr = DMProjectFunction(dm, 0.0, this->initial_guess, NULL, INSERT_VALUES, this->x);
-
-    const DM & dm = this->getDM();
-    this->initial_guess[0] = zero_fn;
-    ierr = DMProjectFunction(dm, 0.0, this->initial_guess, NULL, INSERT_VALUES, this->x);
+    setInitialCondition(zero_fn);
 }
 
 void

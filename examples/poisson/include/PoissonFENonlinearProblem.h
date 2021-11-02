@@ -1,7 +1,6 @@
 #pragma once
 
 #include "problems/GPetscFENonlinearProblem.h"
-#include "petscsnes.h"
 
 class GGrid;
 
@@ -15,21 +14,15 @@ public:
     virtual ~PoissonFENonlinearProblem();
 
 protected:
-    virtual void setupProblem() override;
-    virtual void setInitialGuess() override;
+    virtual void onSetFields() override;
+    virtual void onSetWeakForm() override;
+    virtual void onSetInitialConditions() override;
     virtual void out() override;
 
-    /// Spatial dimension of the discrete problem
-    PetscInt dim;
-    /// FE object
-    PetscFE fe;
-    /// Object that manages a discrete system
-    PetscDS ds;
+    virtual void setupBoundaryConditions() override;
 
-typedef
-    PetscErrorCode PetscFunc(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
-
-    PetscFunc *initial_guess[1];
+    /// ID for the "u" field
+    PetscInt u_id;
 
 public:
     static InputParameters validParams();
