@@ -20,6 +20,7 @@ set(EXCLUDE_REGEX
     --ignore-filename-regex=/include/yaml-cpp/*
     --ignore-filename-regex=/include/gtest/*
     --ignore-filename-regex=/include/gmock/*
+    --ignore-filename-regex=test/*
 )
 
 set(CODE_COVERAGE_BINS
