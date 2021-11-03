@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_executable(${PROJECT_NAME}
     src/base/GodzillaApp_test.cpp
     src/base/GPrintInterface_test.cpp
+    src/executioners/GExecutioner_test.cpp
     src/grids/G1DLineMesh_test.cpp
     src/grids/G2DRectangleMesh_test.cpp
     src/grids/GExodusIIMesh_test.cpp
