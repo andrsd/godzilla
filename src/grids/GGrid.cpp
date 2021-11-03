@@ -11,7 +11,8 @@ GGrid::validParams()
 
 GGrid::GGrid(const InputParameters & parameters) :
     MooseObject(parameters),
-    GPrintInterface(this)
+    GPrintInterface(this),
+    dm(NULL)
 {
     _F_;
 }
@@ -19,7 +20,8 @@ GGrid::GGrid(const InputParameters & parameters) :
 GGrid::~GGrid()
 {
     _F_;
-    DMDestroy(&this->dm);
+    if (this->dm)
+        DMDestroy(&this->dm);
 }
 
 const DM &
