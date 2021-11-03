@@ -1,5 +1,5 @@
 #include "base/GodzillaApp.h"
-#include "GodzillaRevision.h"
+#include "GodzillaConfig.h"
 #include "parser/CommandLine.h"
 #include "base/AppFactory.h"
 #include "input/GYMLFile.h"

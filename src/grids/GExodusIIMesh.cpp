@@ -24,6 +24,12 @@ GExodusIIMesh::GExodusIIMesh(const InputParameters & parameters) :
         godzillaError("Unable to open '", this->file_name, "' for reading. Make sure it exists and you have read permissions.");
 }
 
+const std::string
+GExodusIIMesh::getFileName() const
+{
+    return this->file_name;
+}
+
 void
 GExodusIIMesh::create()
 {

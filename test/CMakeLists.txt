@@ -7,6 +7,7 @@ add_executable(${PROJECT_NAME}
     src/base/GodzillaApp_test.cpp
     src/grids/G1DLineMesh_test.cpp
     src/grids/G2DRectangleMesh_test.cpp
+    src/grids/GExodusIIMesh_test.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
@@ -16,6 +17,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${LIBMESH_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${MOOSE_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/test/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR})
 
 
 target_link_libraries(${PROJECT_NAME} PUBLIC

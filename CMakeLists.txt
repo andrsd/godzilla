@@ -12,7 +12,6 @@ include(${CMAKE_SOURCE_DIR}/cmake/AddressSanitization.cmake)
 option(BUILD_EXAMPLES "Build examples" NO)
 option(BUILD_TESTS "Build tests" NO)
 
-
 # PETSc
 
 if(DEFINED ENV{PETSC_DIR})
@@ -71,7 +70,6 @@ find_library(MOOSE_LIB moose-${METHOD} ${MOOSE_FRAMEWORK_DIR})
 find_library(MOOSE_HIT_LIB hit-${METHOD} ${MOOSE_FRAMEWORK_DIR}/contrib/hit)
 
 # godzilla
-configure_file(include/base/GodzillaRevision.h.in GodzillaRevision.h)
 
 set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
@@ -122,4 +120,7 @@ if (BUILD_TESTS)
     find_package(GTest REQUIRED)
     find_package(GMock REQUIRED)
     add_subdirectory(test)
+    set(UNIT_TESTS_ROOT ${CMAKE_SOURCE_DIR}/test)
 endif()
+
+configure_file(include/base/GodzillaConfig.h.in GodzillaConfig.h)

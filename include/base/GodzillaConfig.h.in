@@ -1,3 +1,5 @@
 #pragma once
 
 #define GODZILLA_VERSION "@godzilla_VERSION@"
+
+#define UNIT_TESTS_ROOT "@UNIT_TESTS_ROOT@"

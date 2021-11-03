@@ -9,6 +9,8 @@ class GExodusIIMesh : public GUnstructuredMesh
 public:
     GExodusIIMesh(const InputParameters & parameters);
 
+    const std::string getFileName() const;
+
     virtual void create();
 
 protected:
