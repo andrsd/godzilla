@@ -52,6 +52,11 @@ GPetscNonlinearProblem::validParams()
 GPetscNonlinearProblem::GPetscNonlinearProblem(const InputParameters & parameters) :
     GProblem(parameters),
     grid(*getParam<GGrid *>("_ggrid")),
+    snes(NULL),
+    x(NULL),
+    r(NULL),
+    J(NULL),
+    Jp(NULL),
     line_search_type(getParam<std::string>("line_search")),
     nl_rel_tol(getParam<PetscReal>("nl_rel_tol")),
     nl_abs_tol(getParam<PetscReal>("nl_abs_tol")),
@@ -68,12 +73,16 @@ GPetscNonlinearProblem::GPetscNonlinearProblem(const InputParameters & parameter
 GPetscNonlinearProblem::~GPetscNonlinearProblem()
 {
     _F_;
-    SNESDestroy(&this->snes);
-    VecDestroy(&this->r);
-    VecDestroy(&this->x);
-    if (this->Jp != this->J)
+    if (this->snes)
+        SNESDestroy(&this->snes);
+    if (this->r)
+        VecDestroy(&this->r);
+    if (this->x)
+        VecDestroy(&this->x);
+    if ((this->Jp != this->J) && (this->Jp))
         MatDestroy(&this->Jp);
-    MatDestroy(&this->J);
+    if (this->J)
+        MatDestroy(&this->J);
 }
 
 const DM &

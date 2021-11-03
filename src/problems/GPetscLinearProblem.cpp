@@ -39,6 +39,11 @@ GPetscLinearProblem::validParams()
 GPetscLinearProblem::GPetscLinearProblem(const InputParameters & parameters) :
     GProblem(parameters),
     grid(*getParam<GGrid *>("_ggrid")),
+    ksp(NULL),
+    x(NULL),
+    b(NULL),
+    A(NULL),
+    B(NULL),
     lin_rel_tol(getParam<PetscReal>("lin_rel_tol")),
     lin_abs_tol(getParam<PetscReal>("lin_abs_tol")),
     lin_max_iter(getParam<PetscInt>("lin_max_iter"))
@@ -49,12 +54,16 @@ GPetscLinearProblem::GPetscLinearProblem(const InputParameters & parameters) :
 GPetscLinearProblem::~GPetscLinearProblem()
 {
     _F_;
-    KSPDestroy(&this->ksp);
-    VecDestroy(&this->b);
-    VecDestroy(&this->x);
-    if (this->A != this->B)
+    if (this->ksp)
+        KSPDestroy(&this->ksp);
+    if (this->b)
+        VecDestroy(&this->b);
+    if (this->x)
+        VecDestroy(&this->x);
+    if ((this->A != this->B) && (this->B))
         MatDestroy(&this->B);
-    MatDestroy(&this->A);
+    if (this->A)
+        MatDestroy(&this->A);
 }
 
 const DM &
