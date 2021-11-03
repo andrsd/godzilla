@@ -21,6 +21,18 @@ G2DStructuredGrid::G2DStructuredGrid(const InputParameters & parameters) :
     _F_;
 }
 
+PetscInt
+G2DStructuredGrid::getNx() const
+{
+    return this->nx;
+}
+
+PetscInt
+G2DStructuredGrid::getNy() const
+{
+    return this->ny;
+}
+
 void
 G2DStructuredGrid::create()
 {
@@ -39,16 +51,4 @@ G2DStructuredGrid::create()
         NULL, NULL,
         &this->dm);
     ierr = DMSetUp(this->dm);
-}
-
-PetscInt
-G2DStructuredGrid::getNx() const
-{
-    return this->nx;
-}
-
-PetscInt
-G2DStructuredGrid::getNy() const
-{
-    return this->ny;
 }

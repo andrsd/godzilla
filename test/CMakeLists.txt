@@ -9,6 +9,7 @@ add_executable(${PROJECT_NAME}
     src/executioners/GExecutioner_test.cpp
     src/grids/G1DLineMesh_test.cpp
     src/grids/G2DRectangleMesh_test.cpp
+    src/grids/G2DStructuredGrid_test.cpp
     src/grids/GExodusIIMesh_test.cpp
     src/main.cpp
 )
