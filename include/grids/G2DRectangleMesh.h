@@ -9,6 +9,17 @@ class G2DRectangleMesh : public GUnstructuredMesh
 public:
     G2DRectangleMesh(const InputParameters & parameters);
 
+    ///
+    PetscInt getXMin() const;
+    PetscInt getXMax() const;
+    /// Get the number of grid points in x direction
+    PetscInt getNx() const;
+    ///
+    PetscInt getYMin() const;
+    PetscInt getYMax() const;
+    /// Get the number of grid points in y direction
+    PetscInt getNy() const;
+
     virtual void create();
 
 protected:

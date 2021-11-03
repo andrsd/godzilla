@@ -35,6 +35,42 @@ G2DRectangleMesh::G2DRectangleMesh(const InputParameters & parameters) :
         godzillaError("Parameter 'ymax' must be larger than 'ymin'.");
 }
 
+PetscInt
+G2DRectangleMesh::getXMin() const
+{
+    return this->xmin;
+}
+
+PetscInt
+G2DRectangleMesh::getXMax() const
+{
+    return this->xmax;
+}
+
+PetscInt
+G2DRectangleMesh::getNx() const
+{
+    return this->nx;
+}
+
+PetscInt
+G2DRectangleMesh::getYMin() const
+{
+    return this->ymin;
+}
+
+PetscInt
+G2DRectangleMesh::getYMax() const
+{
+    return this->ymax;
+}
+
+PetscInt
+G2DRectangleMesh::getNy() const
+{
+    return this->ny;
+}
+
 void
 G2DRectangleMesh::create()
 {
