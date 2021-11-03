@@ -24,7 +24,6 @@ set(EXCLUDE_REGEX
 
 set(CODE_COVERAGE_BINS
     --object=${PROJECT_BINARY_DIR}/test/godzilla-test
-    --object=${PROJECT_BINARY_DIR}/examples/poisson/poisson
     --object=${PROJECT_BINARY_DIR}/libgodzilla.dylib
 )
 

@@ -4,8 +4,9 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
-    src/base/GodzillaAppTest.cpp
-    src/grids/G1DLineMeshTest.cpp
+    src/base/GodzillaApp_test.cpp
+    src/grids/G1DLineMesh_test.cpp
+    src/grids/G2DRectangleMesh_test.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})

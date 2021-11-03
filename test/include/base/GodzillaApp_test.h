@@ -2,10 +2,6 @@
 #include "base/GodzillaApp.h"
 #include "base/AppFactory.h"
 
-namespace godzilla {
-namespace test {
-namespace {
-
 class GodzillaAppTest : public ::testing::Test {
 protected:
     void SetUp() override
@@ -25,7 +21,3 @@ protected:
 
     std::shared_ptr<MooseApp> app;
 };
-
-}
-}
-}

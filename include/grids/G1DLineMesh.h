@@ -11,6 +11,10 @@ public:
 
     virtual void create();
 
+    PetscReal getXMin();
+    PetscReal getXMax();
+    PetscInt getNx();
+
 protected:
     /// Minimum in the x direction
     const PetscReal & xmin;

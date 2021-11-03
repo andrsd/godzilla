@@ -26,6 +26,24 @@ G1DLineMesh::G1DLineMesh(const InputParameters & parameters) :
         godzillaError("Parameter 'xmax' must be larger than 'xmin'.");
 }
 
+PetscReal
+G1DLineMesh::getXMin()
+{
+    return this->xmin;
+}
+
+PetscReal
+G1DLineMesh::getXMax()
+{
+    return this->xmax;
+}
+
+PetscInt
+G1DLineMesh::getNx()
+{
+    return this->nx;
+}
+
 void
 G1DLineMesh::create()
 {
