@@ -21,7 +21,7 @@ TODO
 
 Install dependencies
 ```
-conda install python clang gfortran zlib autoconf automake libtool cmake openmp
+conda install python clang gfortran zlib autoconf automake libtool cmake openmp lcov
 ```
 
 Build MPICH

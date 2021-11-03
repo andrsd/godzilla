@@ -7,6 +7,7 @@ add_executable(${PROJECT_NAME}
     src/base/GodzillaTestApp.cpp
     src/main.cpp
 )
+target_code_coverage(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${LIBMESH_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${MOOSE_INCLUDE_DIRS})
@@ -21,3 +22,8 @@ set(TESTS_DIR ${CMAKE_SOURCE_DIR}/test/tests)
 
 add_test(cmd-line-version ${PROJECT_NAME} --version)
 add_test(cmd-line-help ${PROJECT_NAME} --help)
+
+if(CODE_COVERAGE)
+    set_tests_properties(cmd-line-version PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=cmd-line-version.profraw)
+    set_tests_properties(cmd-line-help PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=cmd-line-help.profraw)
+endif()

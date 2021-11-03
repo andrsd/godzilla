@@ -5,6 +5,7 @@ project(godzilla VERSION 0.1)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+include(cmake/CodeCoverage.cmake)
 option(BUILD_EXAMPLES "Build examples" NO)
 
 
@@ -70,7 +71,7 @@ configure_file(include/base/GodzillaRevision.h.in GodzillaRevision.h)
 
 set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
-add_library(godzilla SHARED
+add_library(${PROJECT_NAME} SHARED
     src/base/CallStack.cpp
     src/base/GodzillaApp.cpp
     src/base/GPrintInterface.cpp
@@ -87,21 +88,22 @@ add_library(godzilla SHARED
     src/problems/GPetscNonlinearProblem.cpp
     src/problems/GPetscFENonlinearProblem.cpp
 )
+target_code_coverage(${PROJECT_NAME})
 
-set_target_properties(godzilla PROPERTIES UNITY_BUILD_MODE BATCH)
+set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD_MODE BATCH)
 
-target_include_directories(godzilla PRIVATE ${PETSC_INCLUDE_DIR})
-target_include_directories(godzilla PRIVATE ${LIBMESH_INCLUDE_DIR})
-target_include_directories(godzilla PRIVATE ${MOOSE_INCLUDE_DIRS})
-target_include_directories(godzilla PRIVATE ${PROJECT_BINARY_DIR})
-target_include_directories(godzilla PRIVATE ${GODZILLA_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${LIBMESH_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${MOOSE_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 
-target_link_libraries(godzilla PUBLIC yaml-cpp)
-target_link_libraries(godzilla PUBLIC ${PETSC_LIB})
-target_link_libraries(godzilla PUBLIC ${LIBMESH_LIB})
-target_link_libraries(godzilla PUBLIC ${TIMPI_LIB})
-target_link_libraries(godzilla PUBLIC ${MOOSE_LIB})
-target_link_libraries(godzilla PUBLIC ${MOOSE_HIT_LIB})
+target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBMESH_LIB})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${TIMPI_LIB})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${MOOSE_LIB})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${MOOSE_HIT_LIB})
 
 
 if (BUILD_EXAMPLES)
