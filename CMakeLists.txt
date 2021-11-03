@@ -5,8 +5,11 @@ project(godzilla VERSION 0.1)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-include(cmake/CodeCoverage.cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
+include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
 option(BUILD_EXAMPLES "Build examples" NO)
+option(BUILD_TESTS "Build tests" NO)
 
 
 # PETSc
@@ -112,10 +115,9 @@ endif()
 
 # TESTING
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    include(CTest)
-endif()
-
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+enable_testing()
+if (BUILD_TESTS)
+    find_package(GTest REQUIRED)
+    find_package(GMock REQUIRED)
     add_subdirectory(test)
 endif()

@@ -4,7 +4,8 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
-    src/base/GodzillaTestApp.cpp
+    src/base/GodzillaAppTest.cpp
+    src/grids/G1DLineMeshTest.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
@@ -14,16 +15,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${MOOSE_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/test/include)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC godzilla)
 
-# Tests
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    godzilla
+    ${GTEST_BOTH_LIBRARIES}
+    ${GMOCK_BOTH_LIBRARIES}
+)
 
-set(TESTS_DIR ${CMAKE_SOURCE_DIR}/test/tests)
-
-add_test(cmd-line-version ${PROJECT_NAME} --version)
-add_test(cmd-line-help ${PROJECT_NAME} --help)
-
-if(CODE_COVERAGE)
-    set_tests_properties(cmd-line-version PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=cmd-line-version.profraw)
-    set_tests_properties(cmd-line-help PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=cmd-line-help.profraw)
-endif()
+add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})

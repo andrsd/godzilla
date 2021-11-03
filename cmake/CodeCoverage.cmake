@@ -12,21 +12,14 @@ mark_as_advanced(FORCE LCOV_PATH GENHTML_PATH)
 file(GLOB_RECURSE CODE_COVERAGE_PROFRAWS ${CMAKE_BINARY_DIR} "*.profraw")
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${CODE_COVERAGE_PROFRAWS}")
 
-set(COVERAGE_EXCLUDES
-    '/libmesh/'
-    '/moose/framework/'
-    '/include/petsc*'
-    '/include/mpi*'
-    '/include/yaml-cpp/'
-)
-
-# TODO: build this from COVERAGE_EXCLUDES
 set(EXCLUDE_REGEX
     --ignore-filename-regex=/libmesh/
     --ignore-filename-regex=/moose/framework/
     --ignore-filename-regex=/include/petsc*
     --ignore-filename-regex=/include/mpi*
     --ignore-filename-regex=/include/yaml-cpp/*
+    --ignore-filename-regex=/include/gtest/*
+    --ignore-filename-regex=/include/gmock/*
 )
 
 set(CODE_COVERAGE_BINS
