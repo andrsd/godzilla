@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
+target_address_sanitization(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${LIBMESH_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${MOOSE_INCLUDE_DIRS})
