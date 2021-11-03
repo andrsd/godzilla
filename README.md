@@ -1,6 +1,8 @@
 godzilla
 =====
 
+[![codecov](https://codecov.io/gh/andrsd/godzilla/branch/godzilla/graph/badge.svg?token=7KL45W9Z4G)](https://codecov.io/gh/andrsd/godzilla)
+
 ![godzilla facepalm](https://img.memecdn.com/godzilla-facepalm_o_204968.jpg)
 
 
