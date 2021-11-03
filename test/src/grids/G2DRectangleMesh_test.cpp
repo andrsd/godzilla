@@ -5,27 +5,9 @@
 
 registerMooseObject("GodzillaApp", MockG2DRectangleMesh);
 
-std::shared_ptr<MockG2DRectangleMesh>
-g2dRectangleMesh(
-        Factory & factory,
-        const std::vector<PetscReal> & xmin,
-        const std::vector<PetscReal> & xmax)
+TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh)
 {
-    const std::string class_name = "MockG2DRectangleMesh";
-    InputParameters params = factory.getValidParams(class_name);
-    params.set<PetscReal>("xmin") = xmin[0];
-    params.set<PetscReal>("xmax") = xmax[0];
-    params.set<PetscInt>("nx") = 9;
-    params.set<PetscReal>("ymin") = xmin[1];
-    params.set<PetscReal>("ymax") = xmax[1];
-    params.set<PetscInt>("ny") = 8;
-    return factory.create<MockG2DRectangleMesh>(class_name, "obj", params);
-}
-
-
-TEST_F(GodzillaAppTest, g2d_rectangle_mesh)
-{
-    auto obj = g2dRectangleMesh(factory(), {1, 2}, {3, 4});
+    auto obj = g2dRectangleMesh({1, 2}, {3, 4});
 
     EXPECT_EQ(obj->getXMin(), 1);
     EXPECT_EQ(obj->getXMax(), 3);
@@ -36,22 +18,22 @@ TEST_F(GodzillaAppTest, g2d_rectangle_mesh)
     EXPECT_EQ(obj->getNy(), 8);
 }
 
-TEST_F(GodzillaAppTest, g2d_rectangle_mesh_incorrect_dims)
+TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh_incorrect_dims)
 {
     EXPECT_DEATH(
-        g2dRectangleMesh(factory(), {2, 1}, {1, 2}),
+        g2dRectangleMesh({2, 1}, {1, 2}),
         "ERROR: obj: Parameter 'xmax' must be larger than 'xmin'."
     );
 
     EXPECT_DEATH(
-        g2dRectangleMesh(factory(), {1, 2}, {2, 1}),
+        g2dRectangleMesh({1, 2}, {2, 1}),
         "ERROR: obj: Parameter 'ymax' must be larger than 'ymin'."
     );
 }
 
-TEST_F(GodzillaAppTest, g2d_rectangle_mesh_create)
+TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh_create)
 {
-    auto obj = g2dRectangleMesh(factory(), {1, 2}, {3, 4});
+    auto obj = g2dRectangleMesh({1, 2}, {3, 4});
     obj->create();
     const DM & dm = obj->getDM();
 
