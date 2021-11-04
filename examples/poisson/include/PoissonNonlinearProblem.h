@@ -3,6 +3,8 @@
 #include "problems/GPetscNonlinearProblem.h"
 #include "petscsnes.h"
 
+using namespace godzilla;
+
 /// Non-linear Poisson solver in 2D
 ///
 /// Based on PETSc example 35[0]

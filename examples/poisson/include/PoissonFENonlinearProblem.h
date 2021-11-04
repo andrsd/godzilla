@@ -2,7 +2,7 @@
 
 #include "problems/GPetscFENonlinearProblem.h"
 
-class GGrid;
+using namespace godzilla;
 
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system

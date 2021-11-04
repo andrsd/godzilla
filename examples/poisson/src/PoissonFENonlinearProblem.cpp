@@ -1,10 +1,13 @@
+#include "Godzilla.h"
 #include "PoissonFENonlinearProblem.h"
 #include "base/CallStack.h"
-
 #include "petscdm.h"
 #include "petscdmlabel.h"
 
-registerMooseObject("GodzillaApp", PoissonFENonlinearProblem);
+using namespace godzilla;
+
+
+registerObject(PoissonFENonlinearProblem);
 
 
 static PetscErrorCode

@@ -1,6 +1,9 @@
 #pragma once
 
+#include "Godzilla.h"
 #include "problems/GPetscLinearProblem.h"
+
+using namespace godzilla;
 
 /// Linear Poisson solver in 2D
 ///

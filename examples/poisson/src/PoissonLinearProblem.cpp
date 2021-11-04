@@ -1,7 +1,11 @@
 #include "PoissonLinearProblem.h"
 #include "grids/G2DStructuredGrid.h"
+#include "petscdmda.h"
 
-registerMooseObject("GodzillaApp", PoissonLinearProblem);
+
+registerObject(PoissonLinearProblem);
+
+using namespace godzilla;
 
 InputParameters
 PoissonLinearProblem::validParams()

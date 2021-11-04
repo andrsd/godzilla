@@ -1,21 +1,16 @@
-#include "base/GodzillaApp.h"
-#include "base/GodzillaInit.h"
-#include "Moose.h"
-#include "MooseApp.h"
-#include "AppFactory.h"
-
-PerfLog Moose::perf_log("poisson");
+#include "base/App.h"
+#include "base/Init.h"
 
 int
 main(int argc, char * argv[])
 {
-    GodzillaInit init(argc, argv);
+    MPI_Comm comm = MPI_COMM_WORLD;
+    godzilla::Init init(argc, argv, comm);
 
-    GodzillaApp::registerApps();
-
-    std::shared_ptr<MooseApp> app = AppFactory::createAppShared("GodzillaApp", argc, argv);
-
-    app->run();
+    godzilla::App app("poisson", comm);
+    app.create();
+    app.parseCommandLine(argc, argv);
+    app.run();
 
     return 0;
 }

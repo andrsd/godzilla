@@ -1,9 +1,13 @@
+#include "Godzilla.h"
 #include "PoissonNonlinearProblem.h"
 #include "base/CallStack.h"
-#include "petscdm.h"
+#include "petscdmda.h"
 #include "petscvec.h"
 
-registerMooseObject("GodzillaApp", PoissonNonlinearProblem);
+
+using namespace godzilla;
+
+registerObject(PoissonNonlinearProblem);
 
 InputParameters
 PoissonNonlinearProblem::validParams()
