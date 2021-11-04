@@ -49,6 +49,12 @@ GYMLFile::getExecutioner()
     return this->executioner;
 }
 
+const YAML::Node &
+GYMLFile::getYml()
+{
+    return this->root;
+}
+
 void
 GYMLFile::build()
 {
@@ -63,7 +69,7 @@ GYMLFile::buildGrid()
 {
     _F_;
 
-    InputParameters params = buildParams(root, "grid");
+    InputParameters params = buildParams(this->root, "grid");
     const std::string & class_name = params.get<std::string>("_type");
     this->grid = factory.create<GGrid>(class_name, "grid", params);
 }
@@ -72,7 +78,7 @@ void
 GYMLFile::buildProblem()
 {
     _F_;
-    InputParameters params = buildParams(root, "problem");
+    InputParameters params = buildParams(this->root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<GGrid *>("_ggrid") = this->grid.get();
     this->problem = factory.create<GProblem>(class_name, "problem", params);
@@ -82,7 +88,7 @@ void
 GYMLFile::buildExecutioner()
 {
     _F_;
-    InputParameters params = buildParams(root, "executioner");
+    InputParameters params = buildParams(this->root, "executioner");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<GProblem *>("_gproblem") = problem.get();
     this->executioner = factory.create<GExecutioner>(class_name, "problem", params);
@@ -92,7 +98,7 @@ InputParameters
 GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 {
     _F_;
-    YAML::Node node = root[name];
+    YAML::Node node = this->root[name];
     if (!node)
         godzillaError("Missing '", name, "' block.");
 

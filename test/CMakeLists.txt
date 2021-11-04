@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME}
     src/grids/G2DRectangleMesh_test.cpp
     src/grids/G2DStructuredGrid_test.cpp
     src/grids/GExodusIIMesh_test.cpp
+    src/input/GYMLFile_test.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})

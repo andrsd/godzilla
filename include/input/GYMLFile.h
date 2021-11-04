@@ -27,6 +27,8 @@ public:
     virtual std::shared_ptr<GProblem> getProblem();
     virtual std::shared_ptr<GExecutioner> getExecutioner();
 
+    virtual const YAML::Node & getYml();
+
 protected:
     void buildGrid();
     void buildProblem();
