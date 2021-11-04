@@ -42,8 +42,6 @@ GodzillaApp::GodzillaApp(InputParameters parameters) :
 {
     _F_;
     GodzillaApp::registerObjects(_factory);
-    GodzillaApp::associateSyntax(_syntax, _action_factory);
-    GodzillaApp::registerExecFlags(_factory);
 }
 
 std::string
@@ -97,7 +95,7 @@ GodzillaApp::run()
     else if (this->command == PrintHelp)
         _command_line->printUsage();
     else if (this->command == PrintVersion)
-        Moose::out << getApplicationName() << " version " << getVersion() << std::endl;
+        Moose::out << getApplicationName() << " version " << getApplicationVersion() << std::endl;
 }
 
 void
@@ -149,53 +147,4 @@ GodzillaApp::registerObjects(Factory & factory)
 {
     _F_;
     Registry::registerObjectsTo(factory, {"GodzillaApp"});
-}
-
-void
-GodzillaApp::associateSyntax(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
-{
-    _F_;
-}
-
-void
-GodzillaApp::registerObjectDepends(Factory & /*factory*/)
-{
-    _F_;
-}
-
-void
-GodzillaApp::associateSyntaxDepends(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
-{
-    _F_;
-}
-
-void
-GodzillaApp::registerExecFlags(Factory & /*factory*/)
-{
-    _F_;
-}
-
-//  Dynamic Library Entry Points - DO NOT MODIFY
-extern "C" void
-GodzillaApp__registerApps()
-{
-    GodzillaApp::registerApps();
-}
-
-extern "C" void
-GodzillaApp__registerObjects(Factory & factory)
-{
-    GodzillaApp::registerObjects(factory);
-}
-
-extern "C" void
-GodzillaApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory)
-{
-    GodzillaApp::associateSyntax(syntax, action_factory);
-}
-
-extern "C" void
-GodzillaApp__registerExecFlags(Factory & factory)
-{
-    GodzillaApp::registerExecFlags(factory);
 }
