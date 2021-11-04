@@ -30,12 +30,10 @@ protected:
     virtual void setupMonitors();
     /// Setup solver parameters
     virtual void setupSolverParameters();
-    /// output
-    virtual void out() override;
     /// Method to compute right-hand side. Called from the PETsc callback
-    virtual PetscErrorCode computeRhsCallback(Vec b);
+    virtual PetscErrorCode computeRhsCallback(Vec b) = 0;
     /// Method to compute operators. Called from the PETsc callback
-    virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B);
+    virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) = 0;
     /// KSP monitor
     PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
 

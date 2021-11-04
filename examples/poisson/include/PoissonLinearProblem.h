@@ -26,6 +26,7 @@ protected:
     virtual void setupProblem() override;
     virtual PetscErrorCode computeRhsCallback(Vec b) override;
     virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) override;
+    virtual void out() override;
 
     /// Coefficient in the forcing term
     PetscReal m;

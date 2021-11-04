@@ -142,20 +142,6 @@ GPetscLinearProblem::setupSolverParameters()
 }
 
 PetscErrorCode
-GPetscLinearProblem::computeRhsCallback(Vec b)
-{
-    _F_;
-    return 0;
-}
-
-PetscErrorCode
-GPetscLinearProblem::computeOperatorsCallback(Mat A, Mat B)
-{
-    _F_;
-    return 0;
-}
-
-PetscErrorCode
 GPetscLinearProblem::kspMonitorCallback(PetscInt it, PetscReal rnorm)
 {
     _F_;
@@ -188,10 +174,4 @@ GPetscLinearProblem::converged()
         this->converged_reason == KSP_CONVERGED_STEP_LENGTH ||
         this->converged_reason == KSP_CONVERGED_HAPPY_BREAKDOWN;
     return conv;
-}
-
-void
-GPetscLinearProblem::out()
-{
-    _F_;
 }
