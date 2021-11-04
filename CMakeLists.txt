@@ -75,6 +75,7 @@ set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 
 add_library(${PROJECT_NAME} SHARED
     src/base/CallStack.cpp
+    src/base/GodzillaInit.cpp
     src/base/GodzillaApp.cpp
     src/base/GPrintInterface.cpp
     src/executioners/GExecutioner.cpp

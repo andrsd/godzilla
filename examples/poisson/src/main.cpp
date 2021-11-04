@@ -1,5 +1,5 @@
 #include "base/GodzillaApp.h"
-#include "MooseInit.h"
+#include "base/GodzillaInit.h"
 #include "Moose.h"
 #include "MooseApp.h"
 #include "AppFactory.h"
@@ -9,7 +9,7 @@ PerfLog Moose::perf_log("poisson");
 int
 main(int argc, char * argv[])
 {
-    MooseInit init(argc, argv);
+    GodzillaInit init(argc, argv);
 
     GodzillaApp::registerApps();
 
