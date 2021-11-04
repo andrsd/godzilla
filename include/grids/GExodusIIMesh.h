@@ -2,6 +2,8 @@
 
 #include "grids/GUnstructuredMesh.h"
 
+namespace godzilla {
+
 /// Mesh loaded from a ExodusII file
 ///
 class GExodusIIMesh : public GUnstructuredMesh
@@ -22,3 +24,5 @@ protected:
 public:
     static InputParameters validParams();
 };
+
+}

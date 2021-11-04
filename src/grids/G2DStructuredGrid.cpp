@@ -1,8 +1,12 @@
+#include "Godzilla.h"
 #include "grids/G2DStructuredGrid.h"
 #include "base/CallStack.h"
 #include "petscdmda.h"
 
-registerMooseObject("GodzillaApp", G2DStructuredGrid);
+
+namespace godzilla {
+
+registerObject(G2DStructuredGrid);
 
 InputParameters
 G2DStructuredGrid::validParams()
@@ -43,7 +47,7 @@ G2DStructuredGrid::create()
     PetscInt dofs = 1;
     PetscInt stencil_width = 1;
 
-    ierr = DMDACreate2d(comm().get(),
+    ierr = DMDACreate2d(comm(),
         DM_BOUNDARY_NONE, DM_BOUNDARY_NONE,
         DMDA_STENCIL_STAR,
         this->nx, this->ny, PETSC_DECIDE, PETSC_DECIDE,
@@ -51,4 +55,6 @@ G2DStructuredGrid::create()
         NULL, NULL,
         &this->dm);
     ierr = DMSetUp(this->dm);
+}
+
 }

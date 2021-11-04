@@ -2,6 +2,8 @@
 
 #include "grids/GUnstructuredMesh.h"
 
+namespace godzilla {
+
 /// 1D line
 ///
 class G1DLineMesh : public GUnstructuredMesh
@@ -30,3 +32,5 @@ protected:
 public:
     static InputParameters validParams();
 };
+
+}

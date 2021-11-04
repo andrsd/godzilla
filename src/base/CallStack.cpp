@@ -1,6 +1,8 @@
 #include "base/CallStack.h"
-#include "utils/MooseUtils.h"
 #include <signal.h>
+#include <stdlib.h>
+#include <iostream>
+
 
 // global instance of the call stack object
 static CallStack callstack(256);
@@ -39,8 +41,8 @@ void sighandler(int signo)
     sig_name[SIGABRT] = "Abort";
     sig_name[SIGSEGV] = "Segmentation violation";
 
-    Moose::err << "Caught signal " << signo << " (" << sig_name[signo] << ")" << std::endl;
-    Moose::err << std::endl;
+    std::cerr << "Caught signal " << signo << " (" << sig_name[signo] << ")" << std::endl;
+    std::cerr << std::endl;
     callstack.dump();
     exit(-2);
 }
@@ -83,11 +85,11 @@ void
 CallStack::dump()
 {
     if (this->size > 0) {
-        Moose::err << "Call stack:" << std::endl;
+        std::cerr << "Call stack:" << std::endl;
         for (int i = this->size - 1; i >= 0; i--)
-            Moose::err << "  " << this->stack[i]->file << ":" << this->stack[i]->line << ": " << this->stack[i]->func << std::endl;
+            std::cerr << "  " << this->stack[i]->file << ":" << this->stack[i]->line << ": " << this->stack[i]->func << std::endl;
     }
     else {
-        Moose::err << "No call stack available." << std::endl;
+        std::cerr << "No call stack available." << std::endl;
     }
 }

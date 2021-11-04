@@ -1,8 +1,11 @@
 #include "problems/GPetscNonlinearProblem.h"
 #include "base/CallStack.h"
-#include "utils/MooseUtils.h"
+#include "utils/Utils.h"
 #include "grids/GGrid.h"
 #include "petscds.h"
+
+
+namespace godzilla {
 
 PetscErrorCode
 __compute_residual(SNES snes, Vec x, Vec f, void *ctx)
@@ -67,7 +70,7 @@ GPetscNonlinearProblem::GPetscNonlinearProblem(const InputParameters & parameter
     lin_max_iter(getParam<PetscInt>("lin_max_iter"))
 {
     _F_;
-    line_search_type = MooseUtils::toLower(line_search_type);
+    line_search_type = utils::toLower(line_search_type);
 }
 
 GPetscNonlinearProblem::~GPetscNonlinearProblem()
@@ -239,4 +242,6 @@ GPetscNonlinearProblem::converged()
 void
 GPetscNonlinearProblem::out()
 {
+}
+
 }

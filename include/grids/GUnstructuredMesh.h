@@ -2,6 +2,8 @@
 
 #include "grids/GGrid.h"
 
+namespace godzilla {
+
 /// Base class for unstructured meshes
 ///
 class GUnstructuredMesh : public GGrid
@@ -12,3 +14,5 @@ public:
 public:
     static InputParameters validParams();
 };
+
+}

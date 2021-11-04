@@ -1,29 +1,27 @@
 #include "problems/GProblem.h"
 #include "base/CallStack.h"
 
+
+namespace godzilla {
+
 InputParameters
 GProblem::validParams()
 {
-    InputParameters params = Problem::validParams();
-    params.addPrivateParam<std::string>("_moose_base", "gproblem");
+    InputParameters params = Object::validParams();
     return params;
 }
 
 GProblem::GProblem(const InputParameters & parameters) :
-    Problem(parameters),
+    Object(parameters),
     GPrintInterface(this)
 {
     _F_;
-}
-
-MPI_Comm
-GProblem::comm()
-{
-    return libMesh::ParallelObject::comm().get();
 }
 
 void
 GProblem::init()
 {
     _F_;
+}
+
 }

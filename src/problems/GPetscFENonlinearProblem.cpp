@@ -1,11 +1,13 @@
 #include "problems/GPetscFENonlinearProblem.h"
 #include "base/CallStack.h"
 #include "grids/GGrid.h"
-
 #include "petscdm.h"
+#include "petscdmplex.h"
 #include "petscdmlabel.h"
 #include "petscviewerhdf5.h"
 
+
+namespace godzilla {
 
 InputParameters
 GPetscFENonlinearProblem::validParams()
@@ -175,4 +177,6 @@ void
 GPetscFENonlinearProblem::out()
 {
     _F_;
+}
+
 }

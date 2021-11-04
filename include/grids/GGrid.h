@@ -1,12 +1,14 @@
 #pragma once
 
-#include "base/MooseObject.h"
+#include "base/Object.h"
 #include "base/GPrintInterface.h"
 #include "petscdm.h"
 
+namespace godzilla {
+
 /// Base class for grids
 ///
-class GGrid : public MooseObject,
+class GGrid : public Object,
               public GPrintInterface
 {
 public:
@@ -27,3 +29,5 @@ protected:
 public:
     static InputParameters validParams();
 };
+
+}

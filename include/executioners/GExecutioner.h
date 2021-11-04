@@ -1,13 +1,16 @@
 #pragma once
 
-#include "base/MooseObject.h"
+#include "base/Object.h"
 #include "base/GPrintInterface.h"
+
+
+namespace godzilla {
 
 class GProblem;
 
 /// Executioner
 ///
-class GExecutioner : public MooseObject,
+class GExecutioner : public Object,
                      public GPrintInterface
 {
 public:
@@ -22,3 +25,5 @@ protected:
 public:
     static InputParameters validParams();
 };
+
+}

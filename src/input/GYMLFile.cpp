@@ -1,6 +1,6 @@
 #include "input/GYMLFile.h"
-#include "base/GodzillaApp.h"
-#include "Factory.h"
+#include "base/App.h"
+#include "base/Factory.h"
 #include "grids/GGrid.h"
 #include "problems/GProblem.h"
 #include "executioners/GExecutioner.h"
@@ -9,14 +9,17 @@
 template<typename T>
 std::string type_name()
 {
-    return demangle(typeid(T).name());
+    return typeid(T).name();
 }
 
+namespace godzilla {
 
-GYMLFile::GYMLFile(const GodzillaApp & app, Factory & factory) :
+GYMLFile::GYMLFile(const App & app) :
     GPrintInterface(app),
     app(app),
-    factory(factory)
+    grid(nullptr),
+    problem(nullptr),
+    executioner(nullptr)
 {
     _F_;
 }
@@ -28,21 +31,21 @@ GYMLFile::parse(const std::string & file_name)
     this->root = YAML::LoadFile(file_name);
 }
 
-std::shared_ptr<GGrid>
+GGrid *
 GYMLFile::getGrid()
 {
     _F_;
     return this->grid;
 }
 
-std::shared_ptr<GProblem>
+GProblem *
 GYMLFile::getProblem()
 {
     _F_;
     return this->problem;
 }
 
-std::shared_ptr<GExecutioner>
+GExecutioner *
 GYMLFile::getExecutioner()
 {
     _F_;
@@ -71,7 +74,7 @@ GYMLFile::buildGrid()
 
     InputParameters params = buildParams(this->root, "grid");
     const std::string & class_name = params.get<std::string>("_type");
-    this->grid = factory.create<GGrid>(class_name, "grid", params);
+    this->grid = Factory::create<GGrid>(class_name, "grid", params);
 }
 
 void
@@ -80,8 +83,8 @@ GYMLFile::buildProblem()
     _F_;
     InputParameters params = buildParams(this->root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<GGrid *>("_ggrid") = this->grid.get();
-    this->problem = factory.create<GProblem>(class_name, "problem", params);
+    params.set<GGrid *>("_ggrid") = this->grid;
+    this->problem = Factory::create<GProblem>(class_name, "problem", params);
 }
 
 void
@@ -90,8 +93,8 @@ GYMLFile::buildExecutioner()
     _F_;
     InputParameters params = buildParams(this->root, "executioner");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<GProblem *>("_gproblem") = problem.get();
-    this->executioner = factory.create<GExecutioner>(class_name, "problem", params);
+    params.set<GProblem *>("_gproblem") = this->problem;
+    this->executioner = Factory::create<GExecutioner>(class_name, "problem", params);
 }
 
 InputParameters
@@ -107,11 +110,13 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
         godzillaError(name, ": No 'type' specified.");
 
     const std::string & class_name = type.as<std::string>();
-    if (!Registry::isRegisteredObj(class_name))
+    if (!Factory::isRegistered(class_name))
         godzillaError(name, ": Type '", class_name, "' is not a registered object.");
 
-    InputParameters params = factory.getValidParams(class_name);
+    InputParameters params = Factory::getValidParams(class_name);
     params.set<std::string>("_type") = class_name;
+    params.set<std::string>("_name") = name;
+    params.set<const App *>("_app") = &this->app;
 
     for (auto & kv : params) {
         const std::string & param_name = kv.first;
@@ -134,8 +139,8 @@ GYMLFile::setParameterFromYML(InputParameters & params, const YAML::Node & node,
 
         if (param_type == type_name<std::string>())
             params.set<std::string>(param_name) = val.as<std::string>();
-        else if (param_type == type_name<Real>())
-            params.set<Real>(param_name) = val.as<double>();
+        else if (param_type == type_name<PetscReal>())
+            params.set<PetscReal>(param_name) = val.as<double>();
         else if (param_type == type_name<int>())
             params.set<int>(param_name) = val.as<int>();
         else if (param_type == type_name<unsigned int>())
@@ -157,4 +162,6 @@ GYMLFile::checkParams(const InputParameters & params, const std::string & name)
 
     if (!oss.str().empty())
         godzillaError(name, ": Missing required parameters:", oss.str());
+}
+
 }

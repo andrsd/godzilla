@@ -1,9 +1,13 @@
+#include "Godzilla.h"
 #include "grids/GExodusIIMesh.h"
 #include "base/CallStack.h"
-#include "base/MooseApp.h"
+#include "utils/Utils.h"
 #include "petscdmplex.h"
 
-registerMooseObject("GodzillaApp", GExodusIIMesh);
+
+namespace godzilla {
+
+registerObject(GExodusIIMesh);
 
 InputParameters
 GExodusIIMesh::validParams()
@@ -20,7 +24,7 @@ GExodusIIMesh::GExodusIIMesh(const InputParameters & parameters) :
 {
     _F_;
 
-    if (!MooseUtils::pathExists(this->file_name))
+    if (!utils::pathExists(this->file_name))
         godzillaError("Unable to open '", this->file_name, "' for reading. Make sure it exists and you have read permissions.");
 }
 
@@ -36,9 +40,11 @@ GExodusIIMesh::create()
     _F_;
     PetscErrorCode ierr;
 
-    ierr = DMPlexCreateExodusFromFile(this->comm().get(),
+    ierr = DMPlexCreateExodusFromFile(comm(),
         this->file_name.c_str(),
         this->interpolate,
         &this->dm);
     ierr = DMSetUp(this->dm);
+}
+
 }

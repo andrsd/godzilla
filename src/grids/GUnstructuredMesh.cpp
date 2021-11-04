@@ -1,5 +1,9 @@
+#include "Godzilla.h"
 #include "grids/GUnstructuredMesh.h"
 #include "base/CallStack.h"
+
+
+namespace godzilla {
 
 InputParameters
 GUnstructuredMesh::validParams()
@@ -12,4 +16,6 @@ GUnstructuredMesh::GUnstructuredMesh(const InputParameters & parameters) :
     GGrid(parameters)
 {
     _F_;
+}
+
 }

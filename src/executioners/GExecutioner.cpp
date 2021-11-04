@@ -1,20 +1,23 @@
+#include "Godzilla.h"
 #include "executioners/GExecutioner.h"
 #include "problems/GProblem.h"
 #include "base/CallStack.h"
 
-registerMooseObject("GodzillaApp", GExecutioner);
+
+namespace godzilla {
+
+registerObject(GExecutioner);
 
 InputParameters
 GExecutioner::validParams()
 {
-    InputParameters params = MooseObject::validParams();
+    InputParameters params = Object::validParams();
     params.addPrivateParam<GProblem *>("_gproblem");
-    params.addPrivateParam<std::string>("_moose_base", "gexecutioner");
     return params;
 }
 
 GExecutioner::GExecutioner(const InputParameters & parameters) :
-    MooseObject(parameters),
+    Object(parameters),
     GPrintInterface(this),
     problem(*getParam<GProblem *>("_gproblem"))
 {
@@ -35,4 +38,6 @@ GExecutioner::execute()
 
     this->problem.solve();
     this->problem.out();
+}
+
 }

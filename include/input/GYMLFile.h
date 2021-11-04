@@ -5,7 +5,9 @@
 #include "utils/InputParameters.h"
 #include "base/GPrintInterface.h"
 
-class GodzillaApp;
+namespace godzilla {
+
+class App;
 class Factory;
 class GGrid;
 class GProblem;
@@ -16,16 +18,16 @@ class GExecutioner;
 class GYMLFile : public GPrintInterface
 {
 public:
-    GYMLFile(const GodzillaApp & app, Factory & factory);
+    GYMLFile(const App & app);
 
     /// parse the YML file
     virtual void parse(const std::string & file_name);
     /// build the simulation
     virtual void build();
 
-    virtual std::shared_ptr<GGrid> getGrid();
-    virtual std::shared_ptr<GProblem> getProblem();
-    virtual std::shared_ptr<GExecutioner> getExecutioner();
+    virtual GGrid * getGrid();
+    virtual GProblem * getProblem();
+    virtual GExecutioner * getExecutioner();
 
     virtual const YAML::Node & getYml();
 
@@ -37,12 +39,13 @@ protected:
     void setParameterFromYML(InputParameters & params, const YAML::Node & node, const std::string & param_name);
     void checkParams(const InputParameters & params, const std::string & name);
 
-    const GodzillaApp & app;
-    Factory & factory;
+    const godzilla::App & app;
 
     YAML::Node root;
 
-    std::shared_ptr<GGrid> grid;
-    std::shared_ptr<GProblem> problem;
-    std::shared_ptr<GExecutioner> executioner;
+    GGrid * grid;
+    GProblem * problem;
+    GExecutioner * executioner;
 };
+
+}

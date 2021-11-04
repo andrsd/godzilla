@@ -1,20 +1,26 @@
 #include "base/GPrintInterface.h"
-#include "utils/MooseUtils.h"
-#include "base/MooseObject.h"
-#include "base/GodzillaApp.h"
+#include "base/Object.h"
+#include "base/App.h"
 #include "base/CallStack.h"
 
+#define COLOR_BLACK "\33[30m"
+#define COLOR_RED "\33[31m"
+#define COLOR_GREEN "\33[32m"
+#define COLOR_YELLOW "\33[33m"
+#define COLOR_BLUE "\33[34m"
+#define COLOR_MAGENTA "\33[35m"
+#define COLOR_CYAN "\33[36m"
+#define COLOR_WHITE "\33[37m"
+#define COLOR_DEFAULT "\33[39m"
 
-namespace godzilla
-{
 
-namespace internal
-{
+namespace godzilla {
+namespace internal {
 
 void
 godzillaMsgRaw(const std::string & msg)
 {
-    Moose::out << msg << std::endl;
+    std::cout << msg << std::endl;
 }
 
 std::string
@@ -30,18 +36,14 @@ godzillaStreamAll(std::ostringstream &)
 {
 }
 
-static Threads::spin_mutex godzilla_err_lock;
-
 [[noreturn]] void
 godzillaErrorRaw(std::string msg, bool call_stack)
 {
     msg = godzillaMsgFmt(msg, "ERROR", COLOR_RED);
-    Moose::err << msg << std::flush;
-
-    Threads::spin_mutex::scoped_lock lock(godzilla_err_lock);
+    std::cerr << msg << std::flush;
 
     if (call_stack) {
-        Moose::err << std::endl;
+        std::cerr << std::endl;
         getCallstack().dump();
     }
 
@@ -50,21 +52,21 @@ godzillaErrorRaw(std::string msg, bool call_stack)
     exit(-1);
 }
 
-
 } // namespace internal
-} // namespace godzilla
 
 
-GPrintInterface::GPrintInterface(const GodzillaApp & app) :
+GPrintInterface::GPrintInterface(const App & app) :
     verbosity_level(app.getVerbosityLevel()),
     prefix("")
 {
     _F_;
 }
 
-GPrintInterface::GPrintInterface(const MooseObject * obj) :
-    verbosity_level(dynamic_cast<GodzillaApp &>(obj->getMooseApp()).getVerbosityLevel()),
-    prefix(obj->name() + ": ")
+GPrintInterface::GPrintInterface(const Object * obj) :
+    verbosity_level(dynamic_cast<const App &>(obj->getApp()).getVerbosityLevel()),
+    prefix(obj->getName() + ": ")
 {
     _F_;
+}
+
 }

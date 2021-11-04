@@ -1,18 +1,17 @@
 #pragma once
 
-#include "problems/Problem.h"
+#include "base/Object.h"
 #include "base/GPrintInterface.h"
+
+namespace godzilla {
 
 /// Problem
 ///
-class GProblem : public Problem,
+class GProblem : public Object,
                  public GPrintInterface
 {
 public:
     GProblem(const InputParameters & parameters);
-
-    /// Get the MPI comm this object works on
-    MPI_Comm comm();
 
     /// Build the problem to solve
     virtual void create() = 0;
@@ -27,3 +26,5 @@ public:
 public:
     static InputParameters validParams();
 };
+
+}

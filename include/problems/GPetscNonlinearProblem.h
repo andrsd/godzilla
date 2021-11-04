@@ -3,6 +3,8 @@
 #include "problems/GProblem.h"
 #include "petscsnes.h"
 
+namespace godzilla {
+
 class GGrid;
 
 /// PETSc non-linear problem
@@ -85,3 +87,5 @@ public:
     friend PetscErrorCode __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx);
     friend PetscErrorCode __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void *ctx);
 };
+
+}

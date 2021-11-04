@@ -5,6 +5,8 @@
 #include "petscfe.h"
 #include "petscds.h"
 
+namespace godzilla {
+
 class GGrid;
 
 /// PETSc non-linear problem that arises from a finite element discretization
@@ -119,3 +121,5 @@ protected:
 public:
     static InputParameters validParams();
 };
+
+}

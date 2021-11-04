@@ -2,6 +2,8 @@
 
 #include "grids/GUnstructuredMesh.h"
 
+namespace godzilla {
+
 /// 2D rectangular mesh
 ///
 class G2DRectangleMesh : public GUnstructuredMesh
@@ -43,3 +45,5 @@ protected:
 public:
     static InputParameters validParams();
 };
+
+}

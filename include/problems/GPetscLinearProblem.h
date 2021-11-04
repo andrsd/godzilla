@@ -3,6 +3,8 @@
 #include "problems/GProblem.h"
 #include "petscksp.h"
 
+namespace godzilla {
+
 class GGrid;
 
 /// PETSc Linear problem
@@ -66,3 +68,5 @@ public:
     friend PetscErrorCode __compute_operators(KSP ksp, Mat A, Mat B, void *ctx);
     friend PetscErrorCode __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx);
 };
+
+}

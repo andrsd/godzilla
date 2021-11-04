@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 #include "base/CallStack.h"
-
+#include <iostream>
 
 namespace godzilla
 {
@@ -33,16 +33,14 @@ godzillaMsgFmt(const std::string & msg, const std::string & title, const std::st
 godzillaErrorRaw(std::string msg, bool call_stack = false);
 
 } // namespace internal
-} // namespace godzilla
 
-
-class GodzillaApp;
-class MooseObject;
+class App;
+class Object;
 
 class GPrintInterface {
 public:
-    GPrintInterface(const GodzillaApp & app);
-    GPrintInterface(const MooseObject * obj);
+    GPrintInterface(const App & app);
+    GPrintInterface(const Object * obj);
 
     /// Print a message on a terminal
     /// Inside static functions, you will need to explicitly scope your mooseError
@@ -51,10 +49,10 @@ public:
     void
     godzillaPrint(unsigned int level, Args &&... args)
     {
-        if (level < this->verbosity_level) {
+        if (level <= this->verbosity_level) {
             std::ostringstream oss;
-            godzilla::internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
-            godzilla::internal::godzillaMsgRaw(oss.str());
+            internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
+            internal::godzillaMsgRaw(oss.str());
         }
     }
 
@@ -66,8 +64,8 @@ public:
     godzillaError(Args &&... args)
     {
         std::ostringstream oss;
-        godzilla::internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
-        godzilla::internal::godzillaErrorRaw(oss.str());
+        internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
+        internal::godzillaErrorRaw(oss.str());
     }
 
     template <typename... Args>
@@ -75,8 +73,8 @@ public:
     godzillaErrorWithCallStack(Args &&... args)
     {
         std::ostringstream oss;
-        godzilla::internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
-        godzilla::internal::godzillaErrorRaw(oss.str(), true);
+        internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
+        internal::godzillaErrorRaw(oss.str(), true);
     }
 
 private:
@@ -84,3 +82,5 @@ private:
     /// Prefix to print
     const std::string prefix;
 };
+
+} // namespace godzilla

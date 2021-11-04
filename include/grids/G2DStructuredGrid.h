@@ -2,6 +2,8 @@
 
 #include "grids/GGrid.h"
 
+namespace godzilla {
+
 /// 2D structured grid
 ///
 class G2DStructuredGrid : public GGrid
@@ -25,3 +27,5 @@ protected:
 public:
     static InputParameters validParams();
 };
+
+}

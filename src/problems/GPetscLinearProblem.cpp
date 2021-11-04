@@ -1,7 +1,10 @@
 #include "problems/GPetscLinearProblem.h"
 #include "base/CallStack.h"
 #include "grids/GGrid.h"
-#include "utils/MooseUtils.h"
+#include "utils/Utils.h"
+
+
+namespace godzilla {
 
 PetscErrorCode
 __compute_rhs(KSP ksp, Vec b, void *ctx)
@@ -174,4 +177,6 @@ GPetscLinearProblem::converged()
         this->converged_reason == KSP_CONVERGED_STEP_LENGTH ||
         this->converged_reason == KSP_CONVERGED_HAPPY_BREAKDOWN;
     return conv;
+}
+
 }

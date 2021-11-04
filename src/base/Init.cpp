@@ -1,7 +1,10 @@
-#include "base/GodzillaInit.h"
+#include "base/Init.h"
 #include "petscsys.h"
 
-GodzillaInit::GodzillaInit(int argc, char * argv[], MPI_Comm COMM_WORLD_IN)
+
+namespace godzilla {
+
+Init::Init(int argc, char * argv[], MPI_Comm COMM_WORLD_IN)
 {
     PetscErrorCode ierr;
     ierr = PetscInitialize(&argc, &argv, NULL, NULL);
@@ -9,7 +12,9 @@ GodzillaInit::GodzillaInit(int argc, char * argv[], MPI_Comm COMM_WORLD_IN)
     PetscPopSignalHandler();
 }
 
-GodzillaInit::~GodzillaInit()
+Init::~Init()
 {
     PetscFinalize();
+}
+
 }

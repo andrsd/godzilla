@@ -1,8 +1,12 @@
+#include "Godzilla.h"
 #include "grids/G2DRectangleMesh.h"
 #include "base/CallStack.h"
 #include "petscdmplex.h"
 
-registerMooseObject("GodzillaApp", G2DRectangleMesh);
+
+namespace godzilla {
+
+registerObject(G2DRectangleMesh);
 
 InputParameters
 G2DRectangleMesh::validParams()
@@ -82,7 +86,7 @@ G2DRectangleMesh::create()
     PetscInt faces[2] = { this->nx, this->ny };
     DMBoundaryType periodicity[2] = { DM_BOUNDARY_GHOSTED, DM_BOUNDARY_GHOSTED };
 
-    ierr = DMPlexCreateBoxMesh(comm().get(),
+    ierr = DMPlexCreateBoxMesh(comm(),
         2,
         this->simplex,
         faces,
@@ -92,4 +96,6 @@ G2DRectangleMesh::create()
         interpolate,
         &this->dm);
     ierr = DMSetUp(this->dm);
+}
+
 }

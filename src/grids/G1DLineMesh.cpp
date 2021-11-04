@@ -1,8 +1,13 @@
+#include "Godzilla.h"
 #include "grids/G1DLineMesh.h"
 #include "base/CallStack.h"
 #include "petscdm.h"
+#include "petscdmplex.h"
 
-registerMooseObject("GodzillaApp", G1DLineMesh);
+
+namespace godzilla {
+
+registerObject(G1DLineMesh);
 
 InputParameters
 G1DLineMesh::validParams()
@@ -54,7 +59,7 @@ G1DLineMesh::create()
     PetscInt faces[1] = { this->nx };
     DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
-    ierr = DMPlexCreateBoxMesh(comm().get(),
+    ierr = DMPlexCreateBoxMesh(comm(),
         1,
         PETSC_TRUE,
         faces,
@@ -64,4 +69,6 @@ G1DLineMesh::create()
         interpolate,
         &this->dm);
     ierr = DMSetUp(this->dm);
+}
+
 }

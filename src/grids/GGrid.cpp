@@ -1,16 +1,19 @@
+#include "Godzilla.h"
 #include "grids/GGrid.h"
 #include "base/CallStack.h"
+
+
+namespace godzilla {
 
 InputParameters
 GGrid::validParams()
 {
-    InputParameters params = MooseObject::validParams();
-    params.addPrivateParam<std::string>("_moose_base", "GGrid");
+    InputParameters params = Object::validParams();
     return params;
 }
 
 GGrid::GGrid(const InputParameters & parameters) :
-    MooseObject(parameters),
+    Object(parameters),
     GPrintInterface(this),
     dm(NULL)
 {
@@ -28,4 +31,6 @@ const DM &
 GGrid::getDM() const
 {
     return this->dm;
+}
+
 }

@@ -23,63 +23,21 @@ endif()
 set(PETSC_INCLUDE_DIR ${PETSC_DIR}/include)
 find_library(PETSC_LIB petsc ${PETSC_DIR}/lib)
 
-
-# libMesh
-
-if(NOT METHOD)
-    set(METHOD opt)
-endif()
-
-if(DEFINED ENV{LIBMESH_DIR})
-    set(LIBMESH_DIR $ENV{LIBMESH_DIR})
-else()
-    set(LIBMESH_DIR ../moose)
-endif()
-set(LIBMESH_INCLUDE_DIR ${LIBMESH_DIR}/include)
-find_library(LIBMESH_LIB mesh_${METHOD} ${LIBMESH_DIR}/lib)
-find_library(TIMPI_LIB timpi_${METHOD} ${LIBMESH_DIR}/lib)
-
-
-# MOOSE
-if(DEFINED ENV{MOOSE_DIR})
-    set(MOOSE_DIR $ENV{MOOSE_DIR})
-else()
-    set(MOOSE_DIR ../moose)
-endif()
-set(MOOSE_FRAMEWORK_DIR ${MOOSE_DIR}/framework)
-
-set(MOOSE_INCLUDE_DIRS
-    ${MOOSE_FRAMEWORK_DIR}/include
-    # necessary MOOSE include evil
-    ${MOOSE_FRAMEWORK_DIR}/include/actions
-    ${MOOSE_FRAMEWORK_DIR}/include/base
-    ${MOOSE_FRAMEWORK_DIR}/include/interfaces
-    ${MOOSE_FRAMEWORK_DIR}/include/outputs
-    ${MOOSE_FRAMEWORK_DIR}/include/parser
-    ${MOOSE_FRAMEWORK_DIR}/include/reporters
-    ${MOOSE_FRAMEWORK_DIR}/include/restart
-    ${MOOSE_FRAMEWORK_DIR}/include/utils
-    ${MOOSE_FRAMEWORK_DIR}/include/vectorpostprocessors
-
-    ${MOOSE_FRAMEWORK_DIR}/contrib/boost/include
-    ${MOOSE_FRAMEWORK_DIR}/contrib/json/include
-    ${MOOSE_FRAMEWORK_DIR}/contrib/hit
-)
-
-find_library(MOOSE_LIB moose-${METHOD} ${MOOSE_FRAMEWORK_DIR})
-find_library(MOOSE_HIT_LIB hit-${METHOD} ${MOOSE_FRAMEWORK_DIR}/contrib/hit)
-
 # godzilla
 
 set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+set(GODZILLA_CONTRIB_DIR ${CMAKE_SOURCE_DIR}/contrib)
 
 add_library(${PROJECT_NAME} SHARED
+    src/base/App.cpp
     src/base/CallStack.cpp
-    src/base/GodzillaInit.cpp
-    src/base/GodzillaApp.cpp
+    src/base/Factory.cpp
     src/base/GPrintInterface.cpp
+    src/base/Init.cpp
+    src/base/Object.cpp
     src/executioners/GExecutioner.cpp
     src/input/GYMLFile.cpp
+    src/input/CmdLineArgParser.cpp
     src/grids/G1DLineMesh.cpp
     src/grids/G2DRectangleMesh.cpp
     src/grids/G2DStructuredGrid.cpp
@@ -90,6 +48,8 @@ add_library(${PROJECT_NAME} SHARED
     src/problems/GPetscLinearProblem.cpp
     src/problems/GPetscNonlinearProblem.cpp
     src/problems/GPetscFENonlinearProblem.cpp
+    src/utils/InputParameters.cpp
+    src/utils/Utils.cpp
 )
 target_code_coverage(${PROJECT_NAME})
 target_address_sanitization(${PROJECT_NAME})
@@ -97,17 +57,13 @@ target_address_sanitization(${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD_MODE BATCH)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${LIBMESH_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${MOOSE_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${LIBMESH_LIB})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${TIMPI_LIB})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${MOOSE_LIB})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${MOOSE_HIT_LIB})
 
 
 if (BUILD_EXAMPLES)
