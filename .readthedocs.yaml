@@ -6,11 +6,11 @@ build:
         python: "3.8"
 
 sphinx:
-    configuration: doc/conf.py
+    configuration: docs/conf.py
 
 python:
     install:
-        - requirements: doc/rtd-requirements.txt
+        - requirements: docs/rtd-requirements.txt
 
 conda:
     environment: docs/environment.yml
