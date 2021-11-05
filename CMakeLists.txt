@@ -91,8 +91,8 @@ if(DOXYGEN_FOUND)
     find_program(DOXYREST doxyrest)
     find_program(SPHINX_BUILD sphinx-build)
 
-    configure_file(doc/doxyrest-config.lua.in doxyrest-config.lua)
-    configure_file(doc/conf.py rst/conf.py)
+    configure_file(docs/doxyrest-config.lua.in doxyrest-config.lua)
+    configure_file(docs/conf.py rst/conf.py)
 
     add_custom_target(doc DEPENDS ${PROJECT_BINARY_DIR}/html/index.html)
 
