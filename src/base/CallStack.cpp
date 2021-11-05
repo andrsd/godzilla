@@ -4,6 +4,8 @@
 #include <iostream>
 
 
+namespace godzilla {
+
 // global instance of the call stack object
 static CallStack callstack(256);
 
@@ -92,4 +94,6 @@ CallStack::dump()
     else {
         std::cerr << "No call stack available." << std::endl;
     }
+}
+
 }

@@ -22,6 +22,7 @@ else()
 endif()
 set(PETSC_INCLUDE_DIR ${PETSC_DIR}/include)
 find_library(PETSC_LIB petsc ${PETSC_DIR}/lib)
+find_package(Doxygen)
 
 # godzilla
 
@@ -68,6 +69,62 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${TIMPI_LIB})
 
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
+endif()
+
+# Documentation
+
+if(DOXYGEN_FOUND)
+    set(DOXYREST_PATH $ENV{DOXYREST_PATH})
+    set(DOXYGEN_GENERATE_HTML NO)
+    set(DOXYGEN_GENERATE_XML YES)
+    set(DOXYGEN_STRIP_FROM_INC_PATH ${PROJECT_SOURCE_DIR})
+    set(DOXYGEN_STRIP_FROM_PATH ${PROJECT_SOURCE_DIR})
+
+    doxygen_add_docs(
+        doxygen
+        ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/src
+        STRIP_FROM_PATH
+        COMMENT "Generate doxygen XML"
+    )
+
+    find_program(DOXYREST doxyrest)
+    find_program(SPHINX_BUILD sphinx-build)
+
+    configure_file(doc/doxyrest-config.lua.in doxyrest-config.lua)
+    configure_file(doc/conf.py rst/conf.py)
+
+    add_custom_target(doc DEPENDS ${PROJECT_BINARY_DIR}/html/index.html)
+
+    add_custom_command(
+        OUTPUT
+            ${PROJECT_BINARY_DIR}/html/index.html
+        COMMAND
+            ${SPHINX_BUILD} -b html rst html
+        DEPENDS
+            ${PROJECT_BINARY_DIR}/rst/index.rst
+    )
+
+    add_custom_command(
+        OUTPUT
+            ${PROJECT_BINARY_DIR}/rst/index.rst
+        COMMAND
+            ${DOXYREST} -c doxyrest-config.lua
+        DEPENDS
+            ${PROJECT_BINARY_DIR}/xml/index.xml
+    )
+
+    add_custom_command(
+        OUTPUT
+            ${PROJECT_BINARY_DIR}/xml/index.xml
+        COMMAND
+            doxygen Doxyfile.doxygen
+        DEPENDS
+            ${PROJECT_BINARY_DIR}/Doxyfile.doxygen
+            ${PROJECT_SOURCE_DIR}/include
+            ${PROJECT_SOURCE_DIR}/src
+    )
+
 endif()
 
 # TESTING
