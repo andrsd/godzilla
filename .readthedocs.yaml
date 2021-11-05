@@ -6,7 +6,7 @@ build:
         python: "3.9"
 
 sphinx:
-    configuration: docs/rtd-conf.py
+    configuration: doc/conf.py
 
 python:
     install:
@@ -14,4 +14,4 @@ python:
           path: doxyrest
 
 conda:
-    environment: docs/rtd-conda-env.yml
+    environment: doc/rtd-conda-env.yml
