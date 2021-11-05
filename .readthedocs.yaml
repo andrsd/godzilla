@@ -14,4 +14,4 @@ python:
           path: doxyrest
 
 conda:
-    environment: doc/rtd-conda-env.yml
+    environment: doc/environment.yml
