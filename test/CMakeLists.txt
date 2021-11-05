@@ -13,14 +13,14 @@ add_executable(${PROJECT_NAME}
     src/grids/GExodusIIMesh_test.cpp
     src/input/GYMLFile_test.cpp
     src/problems/GPetscLinearProblem_test.cpp
+    src/utils/Utils_test.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
 target_address_sanitization(${PROJECT_NAME})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${LIBMESH_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${MOOSE_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/test/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR})
 

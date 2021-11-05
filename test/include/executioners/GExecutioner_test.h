@@ -1,5 +1,6 @@
 #pragma once
 
+#include "base/Factory.h"
 #include "gmock/gmock.h"
 #include "executioners/GExecutioner.h"
 #include "problems/GProblem.h"
@@ -26,20 +27,22 @@ public:
 
 class GExecutionerTest : public GodzillaAppTest {
 protected:
-    std::shared_ptr<MockGProblem>
+    MockGProblem *
     gProblem()
     {
         const std::string class_name = "MockGProblem";
-        InputParameters params = factory().getValidParams(class_name);
-        return factory().create<MockGProblem>(class_name, "problem", params);
+        InputParameters params = Factory::getValidParams(class_name);
+        params.set<const App *>("_app") = this->app;
+        return Factory::create<MockGProblem>(class_name, "problem", params);
     }
 
-    std::shared_ptr<MockGExecutioner>
-    gExecutioner(std::shared_ptr<MockGProblem> problem)
+    MockGExecutioner *
+    gExecutioner(MockGProblem * problem)
     {
         const std::string class_name = "MockGExecutioner";
-        InputParameters params = factory().getValidParams(class_name);
-        params.set<GProblem *>("_gproblem") = problem.get();
-        return factory().create<MockGExecutioner>(class_name, "obj", params);
+        InputParameters params = Factory::getValidParams(class_name);
+        params.set<const App *>("_app") = this->app;
+        params.set<GProblem *>("_gproblem") = problem;
+        return Factory::create<MockGExecutioner>(class_name, "obj", params);
     }
 };

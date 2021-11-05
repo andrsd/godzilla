@@ -102,6 +102,9 @@ public:
             exit(-100);
         }
         else {
+            parameters.set<std::string>("_type") = class_name;
+            parameters.set<std::string>("_name") = name;
+
             auto entry = it->second;
             T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
             return object;

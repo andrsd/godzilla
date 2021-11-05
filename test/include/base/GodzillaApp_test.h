@@ -1,25 +1,23 @@
 #pragma once
 
 #include "gtest/gtest.h"
-#include "base/GodzillaApp.h"
-#include "base/AppFactory.h"
+#include "base/App.h"
+
+
+using namespace godzilla;
 
 class GodzillaAppTest : public ::testing::Test {
 protected:
     void SetUp() override
     {
-        this->app = AppFactory::createAppShared("GodzillaApp", 0, NULL);
+        this->app = new App("godzilla", MPI_COMM_WORLD);
     }
 
     void TearDown() override
     {
-        this->app.reset();
+        delete this->app;
+        this->app = nullptr;
     }
 
-    Factory & factory()
-    {
-        return this->app->getFactory();
-    }
-
-    std::shared_ptr<MooseApp> app;
+    App * app;
 };

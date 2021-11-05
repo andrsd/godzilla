@@ -4,10 +4,11 @@
 #include "base/GodzillaApp_test.h"
 
 
+using namespace godzilla;
+
 class GPetscLinearProblemTest : public GodzillaAppTest {
 protected:
 };
-
 
 
 class GTestPetscLinearProblem : public GPetscLinearProblem {

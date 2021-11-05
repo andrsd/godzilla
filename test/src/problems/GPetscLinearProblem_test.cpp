@@ -1,18 +1,22 @@
+#include "base/Factory.h"
 #include "base/GodzillaApp_test.h"
 #include "problems/GPetscLinearProblem_test.h"
 #include "utils/InputParameters.h"
 #include "petsc.h"
 #include "petscmat.h"
 
-registerMooseObject("GodzillaApp", GTestPetscLinearProblem);
 
+using namespace godzilla;
+
+registerObject(GTestPetscLinearProblem);
 
 TEST_F(GPetscLinearProblemTest, solve)
 {
     const std::string class_name = "GTestPetscLinearProblem";
-    InputParameters params = factory().getValidParams(class_name);
+    InputParameters params = Factory::getValidParams(class_name);
+    params.set<const App *>("_app") = this->app;
     params.set<GGrid *>("_ggrid") = nullptr;
-    auto prob = factory().create<GTestPetscLinearProblem>(class_name, "obj", params);
+    auto prob = Factory::create<GTestPetscLinearProblem>(class_name, "obj", params);
     prob->create();
     prob->solve();
 
@@ -20,6 +24,7 @@ TEST_F(GPetscLinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     // TODO: extract the soluiton and make sure it is [2, 3]
+    delete prob;
 }
 
 

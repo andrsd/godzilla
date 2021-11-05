@@ -5,7 +5,9 @@
 #include "grids/G1DLineMesh.h"
 
 
-registerMooseObject("GodzillaApp", GTestProblem);
+using namespace godzilla;
+
+registerObject(GTestProblem);
 
 InputParameters
 GTestProblem::validParams()
@@ -22,7 +24,7 @@ GTestProblem::validParams()
 
 TEST_F(GYMLFileTest, parse_empty)
 {
-    GYMLFile file(dynamic_cast<GodzillaApp &>(*this->app), factory());
+    GYMLFile file(*this->app);
 
     std::string file_name =
         std::string(UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
@@ -35,7 +37,7 @@ TEST_F(GYMLFileTest, parse_empty)
 
 TEST_F(GYMLFileTest, build_empty)
 {
-    GYMLFile file(dynamic_cast<GodzillaApp &>(*this->app), factory());
+    GYMLFile file(*this->app);
 
     std::string file_name =
         std::string(UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
@@ -49,7 +51,7 @@ TEST_F(GYMLFileTest, build_empty)
 
 TEST_F(GYMLFileTest, build_grid_no_type)
 {
-    GYMLFile file(dynamic_cast<GodzillaApp &>(*this->app), factory());
+    GYMLFile file(*this->app);
 
     std::string file_name =
         std::string(UNIT_TESTS_ROOT) + std::string("/assets/grid_no_type.yml");
@@ -63,7 +65,7 @@ TEST_F(GYMLFileTest, build_grid_no_type)
 
 TEST_F(GYMLFileTest, build_grid_unreg_type)
 {
-    GYMLFile file(dynamic_cast<GodzillaApp &>(*this->app), factory());
+    GYMLFile file(*this->app);
 
     std::string file_name =
         std::string(UNIT_TESTS_ROOT) + std::string("/assets/grid_unreg_type.yml");
@@ -77,7 +79,7 @@ TEST_F(GYMLFileTest, build_grid_unreg_type)
 
 TEST_F(GYMLFileTest, build_missing_req_param)
 {
-    GYMLFile file(dynamic_cast<GodzillaApp &>(*this->app), factory());
+    GYMLFile file(*this->app);
 
     std::string file_name =
         std::string(UNIT_TESTS_ROOT) + std::string("/assets/grid_missing_req_param.yml");
@@ -91,7 +93,7 @@ TEST_F(GYMLFileTest, build_missing_req_param)
 
 TEST_F(GYMLFileTest, build)
 {
-    GYMLFile file(dynamic_cast<GodzillaApp &>(*this->app), factory());
+    GYMLFile file(*this->app);
 
     std::string file_name =
         std::string(UNIT_TESTS_ROOT) + std::string("/assets/simple.yml");
@@ -99,7 +101,7 @@ TEST_F(GYMLFileTest, build)
     file.parse(file_name);
     file.build();
 
-    auto grid = std::dynamic_pointer_cast<G1DLineMesh>(file.getGrid());
+    auto grid = dynamic_cast<G1DLineMesh *>(file.getGrid());
     EXPECT_NE(grid, nullptr);
 
     auto problem = file.getProblem();

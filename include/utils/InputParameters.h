@@ -143,24 +143,6 @@ public:
         return this->params.count(name) > 0 && this->params.at(name)->is_private;
     }
 
-    /// This method returns true if all of the parameters in this object are valid
-    /// (i.e. isParamValid(name) == true - for all parameters)
-    bool areAllRequiredParamsValid() const
-    {
-        for (const auto & it : *this)
-            if (isParamRequired(it.first) && !isParamValid(it.first))
-            return false;
-            return true;
-    }
-
-    /// Copy operators for the InputParameters object
-    InputParameters & operator=(const InputParameters & rhs)
-    {
-        this->params.clear();
-        this->params = rhs.params;
-        return *this;
-    }
-
     ///
     std::string type(const std::string & name) const
     {
@@ -170,18 +152,11 @@ public:
     ///
     std::string getDocString(const std::string & name) const
     {
-        std::string doc_string;
         auto it = this->params.find(name);
         if (it != this->params.end())
-        for (const auto & ch : it->second->doc_string)
-        {
-            if (ch == '\n')
-                doc_string += " ... ";
-            else
-                doc_string += ch;
-        }
-
-        return doc_string;
+            return it->second->doc_string;
+        else
+            return std::string();
     }
 
     /// Parameter map iterator.

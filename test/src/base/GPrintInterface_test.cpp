@@ -3,11 +3,12 @@
 #include "base/CallStack.h"
 
 
+using namespace godzilla;
+
 TEST_F(GPrintInterfaceTest, print)
 {
     testing::internal::CaptureStdout();
-    auto app = std::dynamic_pointer_cast<GodzillaApp>(this->app);
-    app->godzillaPrint(0, "Message");
+    this->app->godzillaPrint(0, "Message");
 
     EXPECT_EQ(
         testing::internal::GetCapturedStdout(),
@@ -17,9 +18,8 @@ TEST_F(GPrintInterfaceTest, print)
 
 TEST_F(GPrintInterfaceTest, error)
 {
-    auto app = std::dynamic_pointer_cast<GodzillaApp>(this->app);
     EXPECT_DEATH(
-        app->godzillaError("Error"),
+        this->app->godzillaError("Error"),
         "ERROR: Error"
     );
 }
@@ -27,9 +27,8 @@ TEST_F(GPrintInterfaceTest, error)
 TEST_F(GPrintInterfaceTest, error_with_callstack)
 {
     _F_;
-    auto app = std::dynamic_pointer_cast<GodzillaApp>(this->app);
     EXPECT_DEATH(
-        app->godzillaErrorWithCallStack("Error"),
+        this->app->godzillaErrorWithCallStack("Error"),
         "ERROR: Error"
     );
 }

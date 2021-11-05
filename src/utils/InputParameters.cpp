@@ -15,9 +15,4 @@ InputParameters::InputParameters()
 {
 }
 
-InputParameters::InputParameters(const InputParameters & rhs)
-{
-    *this = rhs;
-}
-
 }

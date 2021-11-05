@@ -1,9 +1,12 @@
 #pragma once
 
+#include "base/Factory.h"
 #include "gmock/gmock.h"
 #include "grids/G1DLineMesh.h"
 #include "base/GodzillaApp_test.h"
 
+
+using namespace godzilla;
 
 class MockG1DLineMesh : public G1DLineMesh
 {
@@ -14,14 +17,15 @@ public:
 
 class G1DLineMeshTest : public GodzillaAppTest {
 protected:
-    std::shared_ptr<MockG1DLineMesh>
+    MockG1DLineMesh *
     g1dLineMesh(PetscReal xmin, PetscReal xmax)
     {
         const std::string class_name = "MockG1DLineMesh";
-        InputParameters params = factory().getValidParams(class_name);
+        InputParameters params = Factory::getValidParams(class_name);
+        params.set<const App *>("_app") = this->app;
         params.set<PetscReal>("xmin") = xmin;
         params.set<PetscReal>("xmax") = xmax;
         params.set<PetscInt>("nx") = 10;
-        return factory().create<MockG1DLineMesh>(class_name, "obj", params);
+        return Factory::create<MockG1DLineMesh>(class_name, "obj", params);
     }
 };

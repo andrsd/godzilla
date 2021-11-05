@@ -3,9 +3,9 @@
 #include "utils/InputParameters.h"
 #include "petsc.h"
 
-registerMooseObject("GodzillaApp", MockGExecutioner);
-registerMooseObject("GodzillaApp", MockGProblem);
 
+registerObject(MockGExecutioner);
+registerObject(MockGProblem);
 
 TEST_F(GExecutionerTest, create)
 {
@@ -21,4 +21,7 @@ TEST_F(GExecutionerTest, execute)
     EXPECT_CALL(*prob, solve());
     EXPECT_CALL(*prob, out());
     exec->execute();
+
+    delete prob;
+    delete exec;
 }

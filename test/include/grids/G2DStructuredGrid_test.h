@@ -1,9 +1,12 @@
 #pragma once
 
+#include "base/Factory.h"
 #include "gmock/gmock.h"
 #include "grids/G2DStructuredGrid.h"
 #include "base/GodzillaApp_test.h"
 
+
+using namespace godzilla;
 
 class MockG2DStructuredGrid : public G2DStructuredGrid
 {
@@ -14,13 +17,14 @@ public:
 
 class G2DStructuredGridTest : public GodzillaAppTest {
 protected:
-    std::shared_ptr<MockG2DStructuredGrid>
+    MockG2DStructuredGrid *
     gMesh(PetscInt nx, PetscInt ny)
     {
         const std::string class_name = "MockG2DStructuredGrid";
-        InputParameters params = factory().getValidParams(class_name);
+        InputParameters params = Factory::getValidParams(class_name);
+        params.set<const App *>("_app") = this->app;
         params.set<PetscInt>("nx") = nx;
         params.set<PetscInt>("ny") = ny;
-        return factory().create<MockG2DStructuredGrid>(class_name, "obj", params);
+        return Factory::create<MockG2DStructuredGrid>(class_name, "obj", params);
     }
 };

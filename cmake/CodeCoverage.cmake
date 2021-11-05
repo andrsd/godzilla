@@ -13,8 +13,7 @@ file(GLOB_RECURSE CODE_COVERAGE_PROFRAWS ${CMAKE_BINARY_DIR} "*.profraw")
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${CODE_COVERAGE_PROFRAWS}")
 
 set(EXCLUDE_REGEX
-    --ignore-filename-regex=/libmesh/
-    --ignore-filename-regex=/moose/framework/
+    --ignore-filename-regex=/contrib/
     --ignore-filename-regex=/include/petsc*
     --ignore-filename-regex=/include/mpi*
     --ignore-filename-regex=/include/yaml-cpp/*
