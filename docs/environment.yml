@@ -1,8 +1,8 @@
 name: readthedocs
 channels:
-- conda-forge
-- defaults
+    - conda-forge
+    - defaults
 dependencies:
-- cmake
-- doxygen
-- doxyrest
+    - cmake
+    - doxygen
+    - doxyrest
