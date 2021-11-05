@@ -43,6 +43,7 @@ add_custom_command(
         ${CODE_COVERAGE_BINS}
         -instr-profile=${MERGED_PROFDATA}
         -format="lcov"
+        ${EXCLUDE_REGEX}
         > ${COVERAGE_INFO}
     DEPENDS
         ${MERGED_PROFDATA}
