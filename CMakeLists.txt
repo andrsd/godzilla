@@ -9,6 +9,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
+
 option(BUILD_EXAMPLES "Build examples" NO)
 option(BUILD_TESTS "Build tests" NO)
 
@@ -22,6 +23,8 @@ else()
 endif()
 set(PETSC_INCLUDE_DIR ${PETSC_DIR}/include)
 find_library(PETSC_LIB petsc ${PETSC_DIR}/lib)
+find_library(YAML_CPP_LIB yaml-cpp ${CONDA_LIB_DIR})
+
 find_package(Doxygen)
 
 # godzilla
@@ -66,12 +69,14 @@ target_sanitization(${PROJECT_NAME})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD_MODE BATCH)
 
+target_include_directories(${PROJECT_NAME} PRIVATE ${CONDA_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${HDF5_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${YAML_CPP_LIB})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${TIMPI_LIB})
 

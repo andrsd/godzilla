@@ -29,6 +29,8 @@ target_sanitization(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${CONDA_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/test/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR})
 
