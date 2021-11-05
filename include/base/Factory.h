@@ -4,6 +4,7 @@
 #include <vector>
 #include <ctime>
 #include "Object.h"
+#include "GPrintInterface.h"
 
 
 #define combineNames1(X, Y) X##Y
@@ -50,8 +51,6 @@ class InputParameters;
 class Factory
 {
 public:
-    Factory() {}
-
     struct Entry {
         BuildPtr build_ptr;
         ParamsPtr params_ptr;
@@ -76,10 +75,8 @@ public:
     InputParameters getValidParams(const std::string & class_name)
     {
         auto it = objects.find(class_name);
-        if (it == objects.end()) {
-            // FIXME: use godzillaError
-            std::cerr << "Unknown object " << class_name << std::endl;
-        }
+        if (it == objects.end())
+            error("Getting validParams for object '", class_name, "' failed.  Object is not registred.");
 
         Entry & entry = it->second;
         InputParameters params = (*entry.params_ptr)();
@@ -96,11 +93,8 @@ public:
     T *create(const std::string & class_name, const std::string & name, InputParameters & parameters)
     {
         auto it = objects.find(class_name);
-        if (it == objects.end()) {
-            // FIXME: Use godzillaError
-            std::cerr << "Trying to create object of unregistered type '" << class_name <<"'." << std::endl;
-            exit(-100);
-        }
+        if (it == objects.end())
+            error("Trying to create object of unregistered type '", class_name, "'.");
         else {
             parameters.set<std::string>("_type") = class_name;
             parameters.set<std::string>("_name") = name;

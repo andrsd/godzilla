@@ -83,4 +83,13 @@ private:
     const std::string prefix;
 };
 
+template <typename... Args>
+[[noreturn]] void
+error(Args &&... args)
+{
+    std::ostringstream oss;
+    internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
+    internal::godzillaErrorRaw(oss.str());
+}
+
 } // namespace godzilla

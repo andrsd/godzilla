@@ -17,19 +17,19 @@ public:
      * Get the type of this object.
      * @return the name of the type of this object
      */
-    const std::string & getType() const { return this->type; }
+    const std::string & getType() const;
 
     /**
      * Get the name of the object
      * @return The name of the object
      */
-    virtual const std::string & getName() const { return this->name; }
+    virtual const std::string & getName() const;
 
     /**
      * Get the parameters of the object
      * @return The parameters of the object
      */
-    const InputParameters & getParameters() const { return this->pars; }
+    const InputParameters & getParameters() const;
 
     /**
      * Retrieve a parameter for the object
@@ -43,12 +43,12 @@ public:
      * Test if the supplied parameter is valid
      * @param name The name of the parameter to test
      */
-    inline bool isParamValid(const std::string & name) const { return this->pars.isParamValid(name); }
+    bool isParamValid(const std::string & name) const;
 
     /**
      * Get the MooseApp this object is associated with.
      */
-    const App & getApp() const { return this->app; }
+    const App & getApp() const;
 
     /// Get the MPI comm this object works on
     MPI_Comm comm();

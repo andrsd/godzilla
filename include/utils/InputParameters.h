@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include "base/GPrintInterface.h"
 
 
 namespace godzilla {
@@ -74,10 +75,7 @@ public:
     const T & get(const std::string & name) const
     {
         if (!this->has<T>(name))
-        {
-            std::cerr << "No parameter '" << name << "' found." << std::endl;
-            exit(-200);
-        }
+            error("No parameter '", name, "' found.");
 
         auto it = this->params.find(name);
         return dynamic_cast<Parameter<T> *>(it->second)->get();

@@ -94,8 +94,6 @@ App::startExecutioner()
     _F_;
     if (this->executioner)
         this->executioner->execute();
-    else
-        godzillaError("Missing an executioner.");
 }
 
 }

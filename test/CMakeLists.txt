@@ -4,8 +4,10 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
+    src/base/Factory_test.cpp
     src/base/GodzillaApp_test.cpp
     src/base/GPrintInterface_test.cpp
+    src/base/Object_test.cpp
     src/executioners/GExecutioner_test.cpp
     src/grids/G1DLineMesh_test.cpp
     src/grids/G2DRectangleMesh_test.cpp
@@ -13,7 +15,9 @@ add_executable(${PROJECT_NAME}
     src/grids/GExodusIIMesh_test.cpp
     src/input/GYMLFile_test.cpp
     src/problems/GPetscLinearProblem_test.cpp
+    src/problems/GPetscNonlinearProblem_test.cpp
     src/utils/Utils_test.cpp
+    src/utils/InputParameters_test.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})

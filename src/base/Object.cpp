@@ -20,6 +20,36 @@ Object::Object(const InputParameters & parameters) :
 {
 }
 
+const std::string &
+Object::getType() const
+{
+    return this->type;
+}
+
+const std::string &
+Object::getName() const
+{
+    return this->name;
+}
+
+const InputParameters &
+Object::getParameters() const
+{
+    return this->pars;
+}
+
+bool
+Object::isParamValid(const std::string & name) const
+{
+    return this->pars.isParamValid(name);
+}
+
+const App &
+Object::getApp() const
+{
+    return this->app;
+}
+
 MPI_Comm
 Object::comm()
 {
