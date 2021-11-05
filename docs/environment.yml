@@ -1,0 +1,8 @@
+name: readthedocs
+channels:
+- conda-forge
+- defaults
+dependencies:
+- cmake
+- doxygen
+- doxyrest

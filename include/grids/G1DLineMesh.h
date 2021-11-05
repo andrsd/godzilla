@@ -13,8 +13,19 @@ public:
 
     virtual void create();
 
+    /// Get the lower bound in x-direction
+    ///
+    /// @return Lower bound in x-direction
     PetscReal getXMin();
+
+    /// Get the upper bound in x-direction
+    ///
+    /// @return Upper bound in x-direction
     PetscReal getXMax();
+
+    /// Get the number of divisions in the x-direction
+    ///
+    /// @return Number of divisions in the x-direction
     PetscInt getNx();
 
 protected:

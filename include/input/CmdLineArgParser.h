@@ -4,9 +4,8 @@
 
 namespace godzilla {
 
-/// Wrapper class arounf TCLAP (Templated Command Line Argument Parser)[0]
+/// Wrapper class around [TCLAP](https://sourceforge.net/projects/tclap/) (Templated Command Line Argument Parser)
 ///
-/// [0] https://sourceforge.net/projects/tclap/
 ///
 class CmdLineArgParser
 {

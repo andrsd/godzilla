@@ -18,12 +18,10 @@ public:
     const DM & getDM() const;
 
     /// Create the grid
-    ///
-    /// This should create the `dm` object which should be of the DMPLEX type
     virtual void create() = 0;
 
 protected:
-    // DM object
+    /// DM object
     DM dm;
 
 public:

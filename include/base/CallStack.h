@@ -1,13 +1,19 @@
 #pragma once
 
+
+namespace godzilla {
+namespace internal {
+
 /// Place at the begining of a method/function
 ///
+/// @code
 /// void Class::method()
 /// {
 ///   _F_
 ///  ...your code here...
 /// }
-#define _F_ CallStackObj __call_stack_obj(__LINE__, __PRETTY_FUNCTION__, __FILE__);
+/// @endcode
+#define _F_ godzilla::internal::CallStackObj __call_stack_obj(__LINE__, __PRETTY_FUNCTION__, __FILE__);
 
 /// Holds data for one call stack object
 ///
@@ -42,3 +48,6 @@ protected:
 };
 
 CallStack &getCallstack();
+
+} // internal
+} // godzilla

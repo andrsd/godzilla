@@ -4,6 +4,9 @@
 #include <iostream>
 
 
+namespace godzilla {
+namespace internal {
+
 // global instance of the call stack object
 static CallStack callstack(256);
 
@@ -93,3 +96,6 @@ CallStack::dump()
         std::cerr << "No call stack available." << std::endl;
     }
 }
+
+} // internal
+} // godzilla

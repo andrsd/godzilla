@@ -72,3 +72,17 @@ mkdir build
 cmake ..
 make
 ```
+
+Documentation
+-------------
+
+For documentation, you will also need
+```
+conda install doxygen doxyrest sphinx
+pip install sphinx-rtd-theme
+```
+
+Environement
+```
+export DOXYREST_PATH=/path/to/doxyrest
+```

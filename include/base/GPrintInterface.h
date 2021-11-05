@@ -43,8 +43,6 @@ public:
     GPrintInterface(const Object * obj);
 
     /// Print a message on a terminal
-    /// Inside static functions, you will need to explicitly scope your mooseError
-    /// call - i.e. do "::mooseError(arg1, ...);".
     template <typename... Args>
     void
     godzillaPrint(unsigned int level, Args &&... args)
@@ -57,8 +55,7 @@ public:
     }
 
     /// Emit an error message with the given stringified, concatenated args and
-    /// terminate the application.  Inside static functions, you will need to
-    /// explicitly scope your mooseError call - i.e. do "::mooseError(arg1, ...);".
+    /// terminate the application.
     template <typename... Args>
     [[noreturn]] void
     godzillaError(Args &&... args)
