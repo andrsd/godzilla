@@ -101,6 +101,8 @@ public:
 
             auto entry = it->second;
             T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
+            if (object == nullptr)
+                error("Instantiation of object '", name, ":[", class_name, "]' failed.");
             objects.push_back(object);
             return object;
         }
