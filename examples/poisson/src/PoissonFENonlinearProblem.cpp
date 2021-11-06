@@ -123,7 +123,6 @@ void
 PoissonFENonlinearProblem::onSetInitialConditions()
 {
     _F_;
-    PetscErrorCode ierr;
     setInitialCondition(zero_fn);
 }
 

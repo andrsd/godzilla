@@ -22,8 +22,8 @@ public:
 protected:
     /// provide DM for the underlying KSP object
     virtual const DM & getDM();
-    /// setup the problem to be solved
-    virtual void setupProblem() = 0;
+    /// Initialize the problem
+    virtual void init();
     /// Allocate Jacobian/residual objects
     virtual void allocateObjects();
     /// Setup computation of residual and Jacobian callbacks

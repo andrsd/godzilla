@@ -18,7 +18,7 @@ public:
     virtual ~PoissonNonlinearProblem();
 
 protected:
-    virtual void setupProblem() override;
+    virtual void allocateObjects() override;
     virtual void solve() override;
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
     virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;

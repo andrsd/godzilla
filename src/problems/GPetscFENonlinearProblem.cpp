@@ -40,14 +40,15 @@ GPetscFENonlinearProblem::create()
 }
 
 void
-GPetscFENonlinearProblem::setupProblem()
+GPetscFENonlinearProblem::init()
 {
     _F_;
-    PetscErrorCode ierr;
+    GPetscNonlinearProblem::init();
 
     onSetFields();
 
     const DM & dm = this->getDM();
+    PetscErrorCode ierr;
     ierr = DMCreateDS(dm);
     ierr = DMGetDS(dm, &this->ds);
 

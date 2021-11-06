@@ -29,12 +29,14 @@ PoissonNonlinearProblem::~PoissonNonlinearProblem()
 }
 
 void
-PoissonNonlinearProblem::setupProblem()
+PoissonNonlinearProblem::allocateObjects()
 {
     _F_;
+    GPetscNonlinearProblem::allocateObjects();
+
     const DM dm = getDM();
     PetscErrorCode ierr;
-    ierr = DMCreateGlobalVector(dm, &this->b);
+    ierr = VecDuplicate(this->x, &this->b);
     ierr = VecSet(this->b, 1.0);
     ierr = DMCreateMatrix(dm, &this->Jr);
 }

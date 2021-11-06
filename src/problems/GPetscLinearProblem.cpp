@@ -79,19 +79,24 @@ void
 GPetscLinearProblem::create()
 {
     _F_;
+    init();
+    allocateObjects();
+
+    setupSolverParameters();
+    setupMonitors();
+    setupCallbacks();
+}
+
+void
+GPetscLinearProblem::init()
+{
+    _F_;
     PetscErrorCode ierr;
     const DM & dm = getDM();
 
     ierr = KSPCreate(comm(), &this->ksp);
     ierr = KSPSetDM(this->ksp, dm);
     ierr = DMSetApplicationContext(dm, this);
-
-    setupProblem();
-    allocateObjects();
-
-    setupSolverParameters();
-    setupMonitors();
-    setupCallbacks();
 }
 
 void

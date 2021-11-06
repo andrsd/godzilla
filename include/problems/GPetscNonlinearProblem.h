@@ -22,8 +22,8 @@ public:
 protected:
     /// provide DM for the underlying SNES object
     virtual const DM & getDM();
-    /// setup the problem to be solved
-    virtual void setupProblem() = 0;
+    /// Initialize the problem
+    virtual void init();
     /// setup initial guess
     virtual void setupInitialGuess();
     /// Allocate Jacobian/residual objects

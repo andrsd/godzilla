@@ -26,8 +26,11 @@ PoissonLinearProblem::PoissonLinearProblem(const InputParameters & parameters) :
 }
 
 void
-PoissonLinearProblem::setupProblem()
+PoissonLinearProblem::init()
 {
+    _F_;
+    GPetscLinearProblem::init();
+
     G2DStructuredGrid * grid_2d = dynamic_cast<G2DStructuredGrid *>(&this->grid);
     if (grid_2d != nullptr) {
         this->nx = grid_2d->getNx();

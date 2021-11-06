@@ -18,10 +18,4 @@ GProblem::GProblem(const InputParameters & parameters) :
     _F_;
 }
 
-void
-GProblem::init()
-{
-    _F_;
-}
-
 }

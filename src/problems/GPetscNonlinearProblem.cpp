@@ -98,14 +98,7 @@ void
 GPetscNonlinearProblem::create()
 {
     _F_;
-    PetscErrorCode ierr;
-    const DM & dm = getDM();
-
-    ierr = SNESCreate(comm(), &this->snes);
-    ierr = SNESSetDM(this->snes, dm);
-    ierr = DMSetApplicationContext(dm, this);
-
-    setupProblem();
+    init();
     allocateObjects();
 
     setupSolverParameters();
@@ -114,6 +107,18 @@ GPetscNonlinearProblem::create()
     setupCallbacks();
 
     setupInitialGuess();
+}
+
+void
+GPetscNonlinearProblem::init()
+{
+    _F_;
+    PetscErrorCode ierr;
+    const DM & dm = getDM();
+
+    ierr = SNESCreate(comm(), &this->snes);
+    ierr = SNESSetDM(this->snes, dm);
+    ierr = DMSetApplicationContext(dm, this);
 }
 
 void
@@ -131,7 +136,10 @@ GPetscNonlinearProblem::allocateObjects()
     PetscErrorCode ierr;
     const DM & dm = getDM();
 
-    ierr = DMCreateGlobalVector(dm, &this->r);
+    ierr = DMCreateGlobalVector(dm, &this->x);
+    ierr = PetscObjectSetName((PetscObject) this->x, "");
+
+    ierr = VecDuplicate(this->x, &this->r);
     ierr = PetscObjectSetName((PetscObject) this->r, "");
 
     ierr = DMCreateMatrix(dm, &this->J);
@@ -139,9 +147,6 @@ GPetscNonlinearProblem::allocateObjects()
 
     // full newton
     this->Jp = this->J;
-
-    ierr = DMCreateGlobalVector(dm, &this->x);
-    ierr = PetscObjectSetName((PetscObject) this->x, "");
 }
 
 void

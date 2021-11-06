@@ -21,7 +21,7 @@ public:
     virtual void create() override;
 
 protected:
-    virtual void setupProblem() override;
+    virtual void init() override;
     virtual void setupCallbacks() override;
     virtual void setupInitialGuess() override;
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;

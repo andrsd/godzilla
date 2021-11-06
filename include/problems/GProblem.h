@@ -15,7 +15,6 @@ public:
 
     /// Build the problem to solve
     virtual void create() = 0;
-    virtual void init();
     /// Solve the problem
     virtual void solve() = 0;
     /// true if solve converged, otherwise false
