@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "base/Object.h"
 #include "base/GPrintInterface.h"
 

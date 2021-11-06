@@ -15,6 +15,7 @@ class App : public GPrintInterface
 {
 public:
     App(const std::string & app_name, MPI_Comm comm);
+    virtual ~App();
     ///
     virtual void create();
     /// Parse command line arguments

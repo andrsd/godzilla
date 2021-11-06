@@ -1,4 +1,5 @@
 #include "base/App.h"
+#include "base/Factory.h"
 #include "GodzillaConfig.h"
 #include "input/GYMLFile.h"
 #include "grids/GGrid.h"
@@ -24,6 +25,11 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     _F_;
     this->args.add(this->input_file_arg);
     this->args.add(this->verbose_arg);
+}
+
+App::~App()
+{
+    Factory::destroy();
 }
 
 void

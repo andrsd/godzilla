@@ -13,8 +13,6 @@ TEST_F(G2DStructuredGridTest, ctor)
     auto obj = gMesh(3, 4);
     EXPECT_EQ(obj->getNx(), 3);
     EXPECT_EQ(obj->getNy(), 4);
-
-    delete obj;
 }
 
 TEST_F(G2DStructuredGridTest, create)
@@ -26,6 +24,4 @@ TEST_F(G2DStructuredGridTest, create)
     PetscInt dim;
     DMGetDimension(dm, &dim);
     EXPECT_EQ(dim, 2);
-
-    delete obj;
 }

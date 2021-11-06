@@ -21,9 +21,6 @@ TEST_F(GExecutionerTest, execute)
     auto exec = gExecutioner(prob);
     EXPECT_CALL(*prob, solve()).Times(1);
     exec->execute();
-
-    delete prob;
-    delete exec;
 }
 
 TEST_F(GExecutionerTest, output)
@@ -40,9 +37,4 @@ TEST_F(GExecutionerTest, output)
     EXPECT_CALL(*out1, output()).Times(1);
     EXPECT_CALL(*out2, output()).Times(1);
     exec->output();
-
-    delete prob;
-    delete exec;
-    delete out1;
-    delete out2;
 }

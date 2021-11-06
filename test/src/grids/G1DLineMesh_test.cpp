@@ -15,8 +15,6 @@ TEST_F(G1DLineMeshTest, g1d_line_mesh)
     EXPECT_EQ(o->getXMin(), 1);
     EXPECT_EQ(o->getXMax(), 2);
     EXPECT_EQ(o->getNx(), 10);
-
-    delete o;
 }
 
 TEST_F(G1DLineMeshTest, g1d_line_mesh_incorrect_dims)
@@ -47,6 +45,4 @@ TEST_F(G1DLineMeshTest, g1d_line_mesh_create)
     PetscInt nx;
     VecGetSize(coords, &nx);
     EXPECT_EQ(nx, 11);
-
-    delete obj;
 }

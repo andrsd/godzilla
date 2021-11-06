@@ -35,8 +35,6 @@ TEST(GPetscNonlinearProblemTest, solve)
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);
-
-    delete prob;
 }
 
 

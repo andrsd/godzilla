@@ -57,6 +57,4 @@ TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh_create)
     PetscInt n;
     VecGetSize(coords, &n);
     EXPECT_EQ(n, 180);
-
-    delete obj;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <set>
-#include <vector>
+#include <list>
 #include <ctime>
 #include "Object.h"
 #include "GPrintInterface.h"
@@ -64,7 +64,7 @@ public:
         Entry entry;
         entry.build_ptr = &buildObj<T>;
         entry.params_ptr = &callValidParams<T>;
-        objects[class_name] = entry;
+        classes[class_name] = entry;
         return '\0';
     }
 
@@ -74,8 +74,8 @@ public:
     static
     InputParameters getValidParams(const std::string & class_name)
     {
-        auto it = objects.find(class_name);
-        if (it == objects.end())
+        auto it = classes.find(class_name);
+        if (it == classes.end())
             error("Getting validParams for object '", class_name, "' failed.  Object is not registred.");
 
         Entry & entry = it->second;
@@ -92,8 +92,8 @@ public:
     static
     T *create(const std::string & class_name, const std::string & name, InputParameters & parameters)
     {
-        auto it = objects.find(class_name);
-        if (it == objects.end())
+        auto it = classes.find(class_name);
+        if (it == classes.end())
             error("Trying to create object of unregistered type '", class_name, "'.");
         else {
             parameters.set<std::string>("_type") = class_name;
@@ -101,6 +101,7 @@ public:
 
             auto entry = it->second;
             T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
+            objects.push_back(object);
             return object;
         }
     }
@@ -109,12 +110,17 @@ public:
     bool
     isRegistered(const std::string & class_name)
     {
-        auto it = objects.find(class_name);
-        return it != objects.end();
+        auto it = classes.find(class_name);
+        return it != classes.end();
     }
 
+    static void destroy();
+
 protected:
-    static std::map<std::string, Entry> objects;
+    /// All registered classes that this factory can build
+    static std::map<std::string, Entry> classes;
+    /// All objects built by this factory
+    static std::list<Object *> objects;
 };
 
 } // namespace godzilla

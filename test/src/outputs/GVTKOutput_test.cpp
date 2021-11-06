@@ -17,8 +17,4 @@ TEST_F(GVTKOutputTest, output)
     // uses DA and the VTK ouputer does not work with that. That's why we see
     // PETSc ERROR
     out1->output();
-
-    delete prob;
-    delete exec;
-    delete out1;
 }

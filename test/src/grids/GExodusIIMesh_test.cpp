@@ -16,8 +16,6 @@ TEST_F(GExodusIIMeshTest, gexodus_mesh)
     auto obj = gExodusMesh(file_name);
 
     EXPECT_EQ(obj->getFileName(), file_name);
-
-    delete obj;
 }
 
 TEST_F(GExodusIIMeshTest, gexodus_mesh_nonexitent_file)
@@ -53,6 +51,4 @@ TEST_F(GExodusIIMeshTest, gexodus_mesh_create)
     PetscInt n;
     VecGetSize(coords, &n);
     EXPECT_EQ(n, 18);
-
-    delete obj;
 }
