@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Godzilla.h"
-#include "problems/GLinearProblem.h"
+#include "GLinearProblem.h"
 
 using namespace godzilla;
 

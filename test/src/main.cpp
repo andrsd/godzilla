@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "base/Init.h"
-#include "base/App.h"
+#include "Init.h"
+#include "App.h"
 
 int main(int argc, char **argv)
 {

@@ -1,5 +1,5 @@
 #include "PoissonLinearProblem.h"
-#include "grids/G2DStructuredGrid.h"
+#include "G2DStructuredGrid.h"
 #include "petscdmda.h"
 
 

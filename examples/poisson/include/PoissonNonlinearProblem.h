@@ -1,6 +1,6 @@
 #pragma once
 
-#include "problems/GNonlinearProblem.h"
+#include "GNonlinearProblem.h"
 #include "petscsnes.h"
 
 using namespace godzilla;

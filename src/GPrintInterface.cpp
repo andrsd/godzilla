@@ -1,0 +1,72 @@
+#include "GPrintInterface.h"
+#include "Object.h"
+#include "App.h"
+#include "CallStack.h"
+
+#define COLOR_BLACK "\33[30m"
+#define COLOR_RED "\33[31m"
+#define COLOR_GREEN "\33[32m"
+#define COLOR_YELLOW "\33[33m"
+#define COLOR_BLUE "\33[34m"
+#define COLOR_MAGENTA "\33[35m"
+#define COLOR_CYAN "\33[36m"
+#define COLOR_WHITE "\33[37m"
+#define COLOR_DEFAULT "\33[39m"
+
+
+namespace godzilla {
+namespace internal {
+
+void
+godzillaMsgRaw(const std::string & msg)
+{
+    std::cout << msg << std::endl;
+}
+
+std::string
+godzillaMsgFmt(const std::string & msg, const std::string & title, const std::string & color)
+{
+    std::ostringstream oss;
+    oss << color << title << ": " << msg << COLOR_DEFAULT << std::endl;
+    return oss.str();
+}
+
+void
+godzillaStreamAll(std::ostringstream &)
+{
+}
+
+[[noreturn]] void
+godzillaErrorRaw(std::string msg, bool call_stack)
+{
+    msg = godzillaMsgFmt(msg, "ERROR", COLOR_RED);
+    std::cerr << msg << std::flush;
+
+    if (call_stack) {
+        std::cerr << std::endl;
+        getCallstack().dump();
+    }
+
+    // we should call MPI_Finalize, but it throws "yaksa: 7 leaked handle pool objects"
+    // MPI_Finalize();
+    exit(-1);
+}
+
+} // namespace internal
+
+
+GPrintInterface::GPrintInterface(const App & app) :
+    verbosity_level(app.getVerbosityLevel()),
+    prefix("")
+{
+    _F_;
+}
+
+GPrintInterface::GPrintInterface(const Object * obj) :
+    verbosity_level(dynamic_cast<const App &>(obj->getApp()).getVerbosityLevel()),
+    prefix(obj->getName() + ": ")
+{
+    _F_;
+}
+
+}

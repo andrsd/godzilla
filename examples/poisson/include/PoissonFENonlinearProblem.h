@@ -1,6 +1,6 @@
 #pragma once
 
-#include "problems/GFENonlinearProblem.h"
+#include "GFENonlinearProblem.h"
 
 using namespace godzilla;
 

@@ -4,21 +4,21 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
-    src/base/Factory_test.cpp
-    src/base/GodzillaApp_test.cpp
-    src/base/GPrintInterface_test.cpp
-    src/base/Object_test.cpp
-    src/executioners/GExecutioner_test.cpp
-    src/grids/G1DLineMesh_test.cpp
-    src/grids/G2DRectangleMesh_test.cpp
-    src/grids/G2DStructuredGrid_test.cpp
-    src/grids/GExodusIIMesh_test.cpp
-    src/input/GYMLFile_test.cpp
-    src/outputs/GVTKOutput_test.cpp
-    src/problems/GLinearProblem_test.cpp
-    src/problems/GNonlinearProblem_test.cpp
-    src/utils/Utils_test.cpp
-    src/utils/InputParameters_test.cpp
+    src/Factory_test.cpp
+    src/GodzillaApp_test.cpp
+    src/GPrintInterface_test.cpp
+    src/Object_test.cpp
+    src/GExecutioner_test.cpp
+    src/G1DLineMesh_test.cpp
+    src/G2DRectangleMesh_test.cpp
+    src/G2DStructuredGrid_test.cpp
+    src/GExodusIIMesh_test.cpp
+    src/GYMLFile_test.cpp
+    src/GVTKOutput_test.cpp
+    src/GLinearProblem_test.cpp
+    src/GNonlinearProblem_test.cpp
+    src/Utils_test.cpp
+    src/InputParameters_test.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})

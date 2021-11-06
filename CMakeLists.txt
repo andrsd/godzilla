@@ -30,30 +30,30 @@ set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(GODZILLA_CONTRIB_DIR ${CMAKE_SOURCE_DIR}/contrib)
 
 add_library(${PROJECT_NAME} SHARED
-    src/base/App.cpp
-    src/base/CallStack.cpp
-    src/base/Factory.cpp
-    src/base/GFunctionInterface.cpp
-    src/base/GPrintInterface.cpp
-    src/base/Init.cpp
-    src/base/Object.cpp
-    src/executioners/GExecutioner.cpp
-    src/input/GYMLFile.cpp
-    src/input/CmdLineArgParser.cpp
-    src/grids/G1DLineMesh.cpp
-    src/grids/G2DRectangleMesh.cpp
-    src/grids/G2DStructuredGrid.cpp
-    src/grids/GExodusIIMesh.cpp
-    src/grids/GGrid.cpp
-    src/grids/GUnstructuredMesh.cpp
-    src/outputs/GOutput.cpp
-    src/outputs/GVTKOutput.cpp
-    src/problems/GFENonlinearProblem.cpp
-    src/problems/GLinearProblem.cpp
-    src/problems/GNonlinearProblem.cpp
-    src/problems/GProblem.cpp
-    src/utils/InputParameters.cpp
-    src/utils/Utils.cpp
+    src/App.cpp
+    src/CallStack.cpp
+    src/Factory.cpp
+    src/GFunctionInterface.cpp
+    src/GPrintInterface.cpp
+    src/Init.cpp
+    src/Object.cpp
+    src/GExecutioner.cpp
+    src/GYMLFile.cpp
+    src/CmdLineArgParser.cpp
+    src/G1DLineMesh.cpp
+    src/G2DRectangleMesh.cpp
+    src/G2DStructuredGrid.cpp
+    src/GExodusIIMesh.cpp
+    src/GGrid.cpp
+    src/GUnstructuredMesh.cpp
+    src/GOutput.cpp
+    src/GVTKOutput.cpp
+    src/GFENonlinearProblem.cpp
+    src/GLinearProblem.cpp
+    src/GNonlinearProblem.cpp
+    src/GProblem.cpp
+    src/InputParameters.cpp
+    src/Utils.cpp
 )
 target_code_coverage(${PROJECT_NAME})
 target_address_sanitization(${PROJECT_NAME})
@@ -153,4 +153,4 @@ if (BUILD_TESTS)
     set(UNIT_TESTS_ROOT ${CMAKE_SOURCE_DIR}/test)
 endif()
 
-configure_file(include/base/GodzillaConfig.h.in GodzillaConfig.h)
+configure_file(include/GodzillaConfig.h.in GodzillaConfig.h)

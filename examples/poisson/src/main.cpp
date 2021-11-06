@@ -1,5 +1,5 @@
-#include "base/App.h"
-#include "base/Init.h"
+#include "App.h"
+#include "Init.h"
 
 int
 main(int argc, char * argv[])
