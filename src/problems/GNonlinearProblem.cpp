@@ -1,4 +1,4 @@
-#include "problems/GPetscNonlinearProblem.h"
+#include "problems/GNonlinearProblem.h"
 #include "base/CallStack.h"
 #include "utils/Utils.h"
 #include "grids/GGrid.h"
@@ -10,34 +10,34 @@ namespace godzilla {
 PetscErrorCode
 __compute_residual(SNES snes, Vec x, Vec f, void *ctx)
 {
-    GPetscNonlinearProblem * problem = static_cast<GPetscNonlinearProblem *>(ctx);
+    GNonlinearProblem * problem = static_cast<GNonlinearProblem *>(ctx);
     return problem->computeResidualCallback(x, f);
 }
 
 PetscErrorCode
 __compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void *ctx)
 {
-    GPetscNonlinearProblem * problem = static_cast<GPetscNonlinearProblem *>(ctx);
+    GNonlinearProblem * problem = static_cast<GNonlinearProblem *>(ctx);
     return problem->computeJacobianCallback(x, J, Jp);
 }
 
 PetscErrorCode
 __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx)
 {
-    GPetscNonlinearProblem * problem = static_cast<GPetscNonlinearProblem *>(ctx);
+    GNonlinearProblem * problem = static_cast<GNonlinearProblem *>(ctx);
     return problem->kspMonitorCallback(it, rnorm);
 }
 
 PetscErrorCode
 __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void *ctx)
 {
-    GPetscNonlinearProblem * problem = static_cast<GPetscNonlinearProblem *>(ctx);
+    GNonlinearProblem * problem = static_cast<GNonlinearProblem *>(ctx);
     return problem->snesMonitorCallback(it, norm);
 }
 
 
 InputParameters
-GPetscNonlinearProblem::validParams()
+GNonlinearProblem::validParams()
 {
     InputParameters params = GProblem::validParams();
     params.addParam<std::string>("line_search", "bt", "The type of line search to be used");
@@ -51,7 +51,7 @@ GPetscNonlinearProblem::validParams()
     return params;
 }
 
-GPetscNonlinearProblem::GPetscNonlinearProblem(const InputParameters & parameters) :
+GNonlinearProblem::GNonlinearProblem(const InputParameters & parameters) :
     GProblem(parameters),
     snes(NULL),
     x(NULL),
@@ -71,7 +71,7 @@ GPetscNonlinearProblem::GPetscNonlinearProblem(const InputParameters & parameter
     line_search_type = utils::toLower(line_search_type);
 }
 
-GPetscNonlinearProblem::~GPetscNonlinearProblem()
+GNonlinearProblem::~GNonlinearProblem()
 {
     _F_;
     if (this->snes)
@@ -87,19 +87,19 @@ GPetscNonlinearProblem::~GPetscNonlinearProblem()
 }
 
 const DM &
-GPetscNonlinearProblem::getDM() const
+GNonlinearProblem::getDM() const
 {
     return this->grid.getDM();
 }
 
 const Vec &
-GPetscNonlinearProblem::getSolutionVector() const
+GNonlinearProblem::getSolutionVector() const
 {
     return this->x;
 }
 
 void
-GPetscNonlinearProblem::create()
+GNonlinearProblem::create()
 {
     _F_;
     init();
@@ -114,7 +114,7 @@ GPetscNonlinearProblem::create()
 }
 
 void
-GPetscNonlinearProblem::init()
+GNonlinearProblem::init()
 {
     _F_;
     PetscErrorCode ierr;
@@ -126,7 +126,7 @@ GPetscNonlinearProblem::init()
 }
 
 void
-GPetscNonlinearProblem::setupInitialGuess()
+GNonlinearProblem::setupInitialGuess()
 {
     _F_;
     PetscErrorCode ierr;
@@ -134,7 +134,7 @@ GPetscNonlinearProblem::setupInitialGuess()
 }
 
 void
-GPetscNonlinearProblem::allocateObjects()
+GNonlinearProblem::allocateObjects()
 {
     _F_;
     PetscErrorCode ierr;
@@ -154,7 +154,7 @@ GPetscNonlinearProblem::allocateObjects()
 }
 
 void
-GPetscNonlinearProblem::setupLineSearch()
+GNonlinearProblem::setupLineSearch()
 {
     _F_;
     SNESLineSearch line_search;
@@ -176,7 +176,7 @@ GPetscNonlinearProblem::setupLineSearch()
 }
 
 void
-GPetscNonlinearProblem::setupCallbacks()
+GNonlinearProblem::setupCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
@@ -185,7 +185,7 @@ GPetscNonlinearProblem::setupCallbacks()
 }
 
 void
-GPetscNonlinearProblem::setupMonitors()
+GNonlinearProblem::setupMonitors()
 {
     _F_;
     SNESMonitorSet(this->snes, __snes_monitor, this, 0);
@@ -196,7 +196,7 @@ GPetscNonlinearProblem::setupMonitors()
 }
 
 void
-GPetscNonlinearProblem::setupSolverParameters()
+GNonlinearProblem::setupSolverParameters()
 {
     _F_;
     PetscErrorCode ierr;
@@ -214,21 +214,21 @@ GPetscNonlinearProblem::setupSolverParameters()
 }
 
 PetscErrorCode
-GPetscNonlinearProblem::snesMonitorCallback(PetscInt it, PetscReal norm)
+GNonlinearProblem::snesMonitorCallback(PetscInt it, PetscReal norm)
 {
     godzillaPrint(7, it, " Non-linear residual: ", std::scientific, norm);
     return 0;
 }
 
 PetscErrorCode
-GPetscNonlinearProblem::kspMonitorCallback(PetscInt it, PetscReal rnorm)
+GNonlinearProblem::kspMonitorCallback(PetscInt it, PetscReal rnorm)
 {
     godzillaPrint(8, "    ", it, " Linear residual: ", std::scientific, rnorm);
     return 0;
 }
 
 void
-GPetscNonlinearProblem::solve()
+GNonlinearProblem::solve()
 {
     _F_;
     PetscErrorCode ierr;
@@ -237,7 +237,7 @@ GPetscNonlinearProblem::solve()
 }
 
 bool
-GPetscNonlinearProblem::converged()
+GNonlinearProblem::converged()
 {
     _F_;
     bool conv =

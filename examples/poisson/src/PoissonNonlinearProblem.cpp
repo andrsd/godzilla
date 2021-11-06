@@ -12,12 +12,12 @@ registerObject(PoissonNonlinearProblem);
 InputParameters
 PoissonNonlinearProblem::validParams()
 {
-    InputParameters params = GPetscNonlinearProblem::validParams();
+    InputParameters params = GNonlinearProblem::validParams();
     return params;
 }
 
 PoissonNonlinearProblem::PoissonNonlinearProblem(const InputParameters & parameters) :
-    GPetscNonlinearProblem(parameters)
+    GNonlinearProblem(parameters)
 {
     _F_;
 }
@@ -32,7 +32,7 @@ void
 PoissonNonlinearProblem::allocateObjects()
 {
     _F_;
-    GPetscNonlinearProblem::allocateObjects();
+    GNonlinearProblem::allocateObjects();
 
     const DM dm = getDM();
     PetscErrorCode ierr;

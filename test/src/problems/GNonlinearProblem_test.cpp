@@ -1,6 +1,6 @@
 #include "base/Factory.h"
 #include "base/GodzillaApp_test.h"
-#include "problems/GPetscNonlinearProblem_test.h"
+#include "problems/GNonlinearProblem_test.h"
 #include "utils/InputParameters.h"
 #include "petsc.h"
 #include "petscvec.h"
@@ -11,7 +11,7 @@ using namespace godzilla;
 
 registerObject(GTestPetscNonlinearProblem);
 
-TEST(GPetscNonlinearProblemTest, solve)
+TEST(GNonlinearProblemTest, solve)
 {
     App app("test", MPI_COMM_WORLD);
 
@@ -40,7 +40,7 @@ TEST(GPetscNonlinearProblemTest, solve)
 
 
 GTestPetscNonlinearProblem::GTestPetscNonlinearProblem(const InputParameters & params) :
-    GPetscNonlinearProblem(params)
+    GNonlinearProblem(params)
 {
     DMDACreate1d(comm(), DM_BOUNDARY_NONE, 2, 1, 1, NULL, &this->dm);
     DMSetUp(this->dm);

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "problems/GPetscFENonlinearProblem.h"
+#include "problems/GFENonlinearProblem.h"
 
 using namespace godzilla;
 
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system
 ///
-class PoissonFENonlinearProblem : public GPetscFENonlinearProblem
+class PoissonFENonlinearProblem : public GFENonlinearProblem
 {
 public:
     PoissonFENonlinearProblem(const InputParameters & parameters);

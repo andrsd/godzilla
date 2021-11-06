@@ -1,17 +1,17 @@
 #pragma once
 
-#include "problems/GPetscLinearProblem.h"
+#include "problems/GLinearProblem.h"
 #include "base/GodzillaApp_test.h"
 
 
 using namespace godzilla;
 
-class GPetscLinearProblemTest : public GodzillaAppTest {
+class GLinearProblemTest : public GodzillaAppTest {
 protected:
 };
 
 
-class GTestPetscLinearProblem : public GPetscLinearProblem {
+class GTestPetscLinearProblem : public GLinearProblem {
 public:
     GTestPetscLinearProblem(const InputParameters & params);
     virtual ~GTestPetscLinearProblem();

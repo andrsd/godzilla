@@ -1,6 +1,6 @@
 #pragma once
 
-#include "problems/GPetscNonlinearProblem.h"
+#include "problems/GNonlinearProblem.h"
 #include "petscsnes.h"
 
 using namespace godzilla;
@@ -11,7 +11,7 @@ using namespace godzilla;
 ///
 /// References:
 /// - [0] https://petsc.org/release/src/snes/tutorials/ex35.c.html
-class PoissonNonlinearProblem : public GPetscNonlinearProblem
+class PoissonNonlinearProblem : public GNonlinearProblem
 {
 public:
     PoissonNonlinearProblem(const InputParameters & parameters);

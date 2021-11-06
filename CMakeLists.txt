@@ -47,10 +47,10 @@ add_library(${PROJECT_NAME} SHARED
     src/grids/GUnstructuredMesh.cpp
     src/outputs/GOutput.cpp
     src/outputs/GVTKOutput.cpp
+    src/problems/GFENonlinearProblem.cpp
+    src/problems/GLinearProblem.cpp
+    src/problems/GNonlinearProblem.cpp
     src/problems/GProblem.cpp
-    src/problems/GPetscLinearProblem.cpp
-    src/problems/GPetscNonlinearProblem.cpp
-    src/problems/GPetscFENonlinearProblem.cpp
     src/utils/InputParameters.cpp
     src/utils/Utils.cpp
 )

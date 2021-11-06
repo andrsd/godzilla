@@ -1,4 +1,4 @@
-#include "problems/GPetscFENonlinearProblem.h"
+#include "problems/GFENonlinearProblem.h"
 #include "base/CallStack.h"
 #include "grids/GGrid.h"
 #include "petscdm.h"
@@ -10,19 +10,19 @@
 namespace godzilla {
 
 InputParameters
-GPetscFENonlinearProblem::validParams()
+GFENonlinearProblem::validParams()
 {
-    InputParameters params = GPetscNonlinearProblem::validParams();
+    InputParameters params = GNonlinearProblem::validParams();
     return params;
 }
 
-GPetscFENonlinearProblem::GPetscFENonlinearProblem(const InputParameters & parameters) :
-    GPetscNonlinearProblem(parameters)
+GFENonlinearProblem::GFENonlinearProblem(const InputParameters & parameters) :
+    GNonlinearProblem(parameters)
 {
     _F_;
 }
 
-GPetscFENonlinearProblem::~GPetscFENonlinearProblem()
+GFENonlinearProblem::~GFENonlinearProblem()
 {
     _F_;
     for (auto & kv : this->fields) {
@@ -32,18 +32,18 @@ GPetscFENonlinearProblem::~GPetscFENonlinearProblem()
 }
 
 void
-GPetscFENonlinearProblem::create()
+GFENonlinearProblem::create()
 {
     _F_;
     DMGetDimension(this->grid.getDM(), &this->dim);
-    GPetscNonlinearProblem::create();
+    GNonlinearProblem::create();
 }
 
 void
-GPetscFENonlinearProblem::init()
+GFENonlinearProblem::init()
 {
     _F_;
-    GPetscNonlinearProblem::init();
+    GNonlinearProblem::init();
 
     onSetFields();
 
@@ -57,13 +57,13 @@ GPetscFENonlinearProblem::init()
 }
 
 void
-GPetscFENonlinearProblem::setupBoundaryConditions()
+GFENonlinearProblem::setupBoundaryConditions()
 {
     _F_;
 }
 
 void
-GPetscFENonlinearProblem::setupCallbacks()
+GFENonlinearProblem::setupCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
@@ -73,7 +73,7 @@ GPetscFENonlinearProblem::setupCallbacks()
 }
 
 void
-GPetscFENonlinearProblem::setupInitialGuess()
+GFENonlinearProblem::setupInitialGuess()
 {
     _F_;
     PetscErrorCode ierr;
@@ -95,19 +95,19 @@ GPetscFENonlinearProblem::setupInitialGuess()
 }
 
 PetscErrorCode
-GPetscFENonlinearProblem::computeResidualCallback(Vec x, Vec f)
+GFENonlinearProblem::computeResidualCallback(Vec x, Vec f)
 {
     return 0;
 }
 
 PetscErrorCode
-GPetscFENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
+GFENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
 {
     return 0;
 }
 
 PetscInt
-GPetscFENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
+GFENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
 {
     _F_;
     PetscErrorCode ierr;
@@ -137,7 +137,7 @@ GPetscFENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscI
 }
 
 void
-GPetscFENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFunc *f0, PetscFEResidualFunc *f1)
+GFENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFunc *f0, PetscFEResidualFunc *f1)
 {
     _F_;
     PetscErrorCode ierr;
@@ -145,7 +145,7 @@ GPetscFENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFun
 }
 
 void
-GPetscFENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJacobianFunc *g0, PetscFEJacobianFunc *g1, PetscFEJacobianFunc *g2, PetscFEJacobianFunc *g3)
+GFENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJacobianFunc *g0, PetscFEJacobianFunc *g1, PetscFEJacobianFunc *g2, PetscFEJacobianFunc *g3)
 {
     _F_;
     PetscErrorCode ierr;
@@ -153,7 +153,7 @@ GPetscFENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJa
 }
 
 void
-GPetscFENonlinearProblem::setInitialCondition(PetscFunc *ic)
+GFENonlinearProblem::setInitialCondition(PetscFunc *ic)
 {
     _F_;
     // TODO: the actual projection should happen in setupInitialGuess()
@@ -164,7 +164,7 @@ GPetscFENonlinearProblem::setInitialCondition(PetscFunc *ic)
 }
 
 void
-GPetscFENonlinearProblem::setInitialCondition(PetscInt fid, PetscFieldFunc *ic)
+GFENonlinearProblem::setInitialCondition(PetscInt fid, PetscFieldFunc *ic)
 {
     _F_;
     const auto it = this->fields.find(fid);

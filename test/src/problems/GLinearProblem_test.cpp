@@ -1,6 +1,6 @@
 #include "base/Factory.h"
 #include "base/GodzillaApp_test.h"
-#include "problems/GPetscLinearProblem_test.h"
+#include "problems/GLinearProblem_test.h"
 #include "utils/InputParameters.h"
 #include "petsc.h"
 #include "petscmat.h"
@@ -10,7 +10,7 @@ using namespace godzilla;
 
 registerObject(GTestPetscLinearProblem);
 
-TEST_F(GPetscLinearProblemTest, solve)
+TEST_F(GLinearProblemTest, solve)
 {
     const std::string class_name = "GTestPetscLinearProblem";
     InputParameters params = Factory::getValidParams(class_name);
@@ -37,7 +37,7 @@ TEST_F(GPetscLinearProblemTest, solve)
 
 
 GTestPetscLinearProblem::GTestPetscLinearProblem(const InputParameters & params) :
-    GPetscLinearProblem(params)
+    GLinearProblem(params)
 {
     DMDACreate1d(comm(), DM_BOUNDARY_NONE, 2, 1, 1, NULL, &this->dm);
     DMSetUp(this->dm);

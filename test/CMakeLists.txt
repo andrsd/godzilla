@@ -15,8 +15,8 @@ add_executable(${PROJECT_NAME}
     src/grids/GExodusIIMesh_test.cpp
     src/input/GYMLFile_test.cpp
     src/outputs/GVTKOutput_test.cpp
-    src/problems/GPetscLinearProblem_test.cpp
-    src/problems/GPetscNonlinearProblem_test.cpp
+    src/problems/GLinearProblem_test.cpp
+    src/problems/GNonlinearProblem_test.cpp
     src/utils/Utils_test.cpp
     src/utils/InputParameters_test.cpp
     src/main.cpp
