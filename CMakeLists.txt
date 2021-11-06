@@ -33,6 +33,7 @@ add_library(${PROJECT_NAME} SHARED
     src/base/App.cpp
     src/base/CallStack.cpp
     src/base/Factory.cpp
+    src/base/GFunctionInterface.cpp
     src/base/GPrintInterface.cpp
     src/base/Init.cpp
     src/base/Object.cpp
