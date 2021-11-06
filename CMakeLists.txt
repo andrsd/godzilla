@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION VERSION 3.16)
 
 project(godzilla VERSION 0.1)
 
@@ -137,10 +137,17 @@ endif()
 
 # TESTING
 
-enable_testing()
 if (BUILD_TESTS)
-    find_package(GTest REQUIRED)
-    find_package(GMock REQUIRED)
+    include(FetchContent)
+    FetchContent_Declare(
+      googletest
+      GIT_REPOSITORY https://github.com/google/googletest.git
+      # version 1.10
+      GIT_TAG        703bd9caab50b139428cea1aaff9974ebee5742e
+    )
+    FetchContent_MakeAvailable(googletest)
+
+    enable_testing()
     add_subdirectory(test)
     set(UNIT_TESTS_ROOT ${CMAKE_SOURCE_DIR}/test)
 endif()

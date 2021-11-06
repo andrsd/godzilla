@@ -74,7 +74,6 @@ void
 GYMLFile::buildGrid()
 {
     _F_;
-
     InputParameters params = buildParams(this->root, "grid");
     const std::string & class_name = params.get<std::string>("_type");
     this->grid = Factory::create<GGrid>(class_name, "grid", params);

@@ -7,7 +7,7 @@
 #include "executioners/GExecutioner.h"
 #include "base/CallStack.h"
 #include "utils/Utils.h"
-
+#include <assert.h>
 
 namespace godzilla {
 
@@ -92,8 +92,11 @@ App::buildFromGYML(const std::string & file_name)
     file.parse(file_name);
     file.build();
     this->grid = file.getGrid();
+    assert(this->grid != nullptr);
     this->problem = file.getProblem();
+    assert(this->problem != nullptr);
     this->executioner = file.getExecutioner();
+    assert(this->executioner != nullptr);
 
     this->grid->create();
     this->problem->create();
@@ -104,8 +107,7 @@ void
 App::startExecutioner()
 {
     _F_;
-    if (this->executioner)
-        this->executioner->execute();
+    this->executioner->execute();
 }
 
 }
