@@ -77,15 +77,15 @@ protected:
     void setInitialCondition(PetscFunc *ic);
     void setInitialCondition(PetscInt fid, PetscFieldFunc *ic);
 
-    /// Setup boudary conditions
+    /// Setup boundary conditions
     virtual void setupBoundaryConditions();
 
-    /// Seup field varaibles
+    /// Seup field variables
     virtual void onSetFields() = 0;
     /// Setup volumetric weak form terms
     /// FIXME: This needs a better name
     virtual void onSetWeakForm() = 0;
-    /// Setup boudary conditions
+    /// Setup boundary conditions
     virtual void onSetInitialConditions() = 0;
 
 
