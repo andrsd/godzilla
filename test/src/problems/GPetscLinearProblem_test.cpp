@@ -47,16 +47,6 @@ GTestPetscLinearProblem::getDM()
     return this->dm;
 }
 
-void
-GTestPetscLinearProblem::setupProblem()
-{
-}
-
-void
-GTestPetscLinearProblem::out()
-{
-}
-
 PetscErrorCode
 GTestPetscLinearProblem::computeRhsCallback(Vec b)
 {

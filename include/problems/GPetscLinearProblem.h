@@ -5,8 +5,6 @@
 
 namespace godzilla {
 
-class GGrid;
-
 /// PETSc Linear problem
 ///
 class GPetscLinearProblem : public GProblem
@@ -21,7 +19,7 @@ public:
 
 protected:
     /// provide DM for the underlying KSP object
-    virtual const DM & getDM();
+    virtual const DM & getDM() override;
     /// Initialize the problem
     virtual void init();
     /// Allocate Jacobian/residual objects
@@ -39,8 +37,6 @@ protected:
     /// KSP monitor
     PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
 
-    /// Grid
-    GGrid & grid;
     /// KSP object
     KSP ksp;
     /// The solution vector

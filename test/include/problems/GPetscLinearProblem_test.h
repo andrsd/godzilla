@@ -20,8 +20,6 @@ protected:
     DM dm;
 
     virtual const DM &getDM() override;
-    virtual void setupProblem() override;
-    virtual void out() override;
     virtual PetscErrorCode computeRhsCallback(Vec b) override;
     virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) override;
 };

@@ -50,16 +50,6 @@ GTestPetscNonlinearProblem::getDM()
     return this->dm;
 }
 
-void
-GTestPetscNonlinearProblem::setupProblem()
-{
-}
-
-void
-GTestPetscNonlinearProblem::out()
-{
-}
-
 PetscErrorCode
 GTestPetscNonlinearProblem::computeResidualCallback(Vec x, Vec f)
 {

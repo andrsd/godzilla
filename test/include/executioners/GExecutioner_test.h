@@ -21,7 +21,7 @@ public:
     MOCK_METHOD(void, create, (), (override));
     MOCK_METHOD(void, solve, (), (override));
     MOCK_METHOD(bool, converged, (), (override));
-    MOCK_METHOD(void, out, (), (override));
+    MOCK_METHOD((const DM &), getDM, (), (override));
 };
 
 

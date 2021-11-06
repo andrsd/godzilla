@@ -34,12 +34,15 @@ protected:
 class GTestProblem : public GProblem
 {
 public:
-    GTestProblem(const InputParameters & params) : GProblem(params) {}
+    GTestProblem(const InputParameters & params) : GProblem(params), dm(nullptr) {}
 
+    const DM & getDM() override { return this->dm; }
     void create() override {}
     void solve() override {}
     bool converged() override { return false; }
-    void out() override {}
+
+protected:
+    const DM dm;
 
 public:
     static InputParameters validParams();

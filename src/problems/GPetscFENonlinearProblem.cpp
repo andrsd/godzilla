@@ -174,10 +174,4 @@ GPetscFENonlinearProblem::setInitialCondition(PetscInt fid, PetscFieldFunc *ic)
         this->field_ics[fid] = ic;
 }
 
-void
-GPetscFENonlinearProblem::out()
-{
-    _F_;
-}
-
 }

@@ -5,8 +5,6 @@
 
 namespace godzilla {
 
-class GGrid;
-
 /// PETSc non-linear problem
 ///
 class GPetscNonlinearProblem : public GProblem
@@ -21,7 +19,7 @@ public:
 
 protected:
     /// provide DM for the underlying SNES object
-    virtual const DM & getDM();
+    virtual const DM & getDM() override;
     /// Initialize the problem
     virtual void init();
     /// setup initial guess
@@ -36,8 +34,6 @@ protected:
     virtual void setupMonitors();
     /// Setup solver parameters
     virtual void setupSolverParameters();
-    /// output
-    virtual void out() override;
     /// Method to compute residual. Called from the PETsc callback
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) = 0;
     /// Method to compute Jacobian. Called from the PETsc callback
@@ -47,8 +43,6 @@ protected:
     /// KSP monitor
     PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
 
-    /// Grid
-    GGrid & grid;
     /// SNES object
     SNES snes;
     /// The solution vector

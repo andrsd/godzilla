@@ -157,8 +157,3 @@ PoissonLinearProblem::computeOperatorsCallback(Mat A, Mat B)
 
     return 0;
 }
-
-void
-PoissonLinearProblem::out()
-{
-}

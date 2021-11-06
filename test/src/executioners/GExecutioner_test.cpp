@@ -19,7 +19,6 @@ TEST_F(GExecutionerTest, execute)
     auto prob = gProblem();
     auto exec = gExecutioner(prob);
     EXPECT_CALL(*prob, solve());
-    EXPECT_CALL(*prob, out());
     exec->execute();
 
     delete prob;

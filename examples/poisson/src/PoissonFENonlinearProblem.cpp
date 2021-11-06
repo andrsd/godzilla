@@ -125,25 +125,3 @@ PoissonFENonlinearProblem::onSetInitialConditions()
     _F_;
     setInitialCondition(zero_fn);
 }
-
-void
-PoissonFENonlinearProblem::out()
-{
-    _F_;
-    const DM & dm = getDM();
-
-    // PetscViewer viewer;
-    // PetscViewerCreate(PETSC_COMM_SELF, &viewer);
-    // PetscViewerSetType(viewer, PETSCVIEWERVTK);
-    // PetscViewerFileSetMode(viewer, FILE_MODE_WRITE);
-    // PetscViewerFileSetName(viewer, "out.vtk");
-    // DMView(dm, viewer);
-    // VecView(this->x, viewer);
-    // PetscViewerDestroy(&viewer);
-
-    PetscFunc *exact_funcs[1];
-    exact_funcs[0] = quadratic_u_2d;
-    PetscReal error;
-    DMComputeL2Diff(dm, 0.0, exact_funcs, NULL, this->x, &error);
-    std::cerr << "error = " << std::scientific << error << std::endl;
-}

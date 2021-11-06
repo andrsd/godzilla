@@ -7,8 +7,6 @@
 
 namespace godzilla {
 
-class GGrid;
-
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system
 ///
@@ -26,7 +24,6 @@ protected:
     virtual void setupInitialGuess() override;
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
     virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;
-    virtual void out() override;
 
     typedef
     PetscErrorCode PetscFunc(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);

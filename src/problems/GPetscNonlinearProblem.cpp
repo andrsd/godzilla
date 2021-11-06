@@ -40,7 +40,6 @@ InputParameters
 GPetscNonlinearProblem::validParams()
 {
     InputParameters params = GProblem::validParams();
-    params.addPrivateParam<GGrid *>("_ggrid");
     params.addParam<std::string>("line_search", "bt", "The type of line search to be used");
     params.addParam<PetscReal>("nl_rel_tol", 1e-8, "Relative convergence tolerance for the non-linear solver");
     params.addParam<PetscReal>("nl_abs_tol", 1e-15, "Absolute convergence tolerance for the non-linear solver");
@@ -54,7 +53,6 @@ GPetscNonlinearProblem::validParams()
 
 GPetscNonlinearProblem::GPetscNonlinearProblem(const InputParameters & parameters) :
     GProblem(parameters),
-    grid(*getParam<GGrid *>("_ggrid")),
     snes(NULL),
     x(NULL),
     r(NULL),
@@ -242,11 +240,6 @@ GPetscNonlinearProblem::converged()
         (this->converged_reason == SNES_CONVERGED_SNORM_RELATIVE) ||
         (this->converged_reason == SNES_CONVERGED_ITS);
     return conv;
-}
-
-void
-GPetscNonlinearProblem::out()
-{
 }
 
 }
