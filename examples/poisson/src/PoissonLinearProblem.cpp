@@ -46,8 +46,9 @@ PoissonLinearProblem::computeRhsCallback(Vec b)
     PetscScalar Hx = 1.0 / this->nx;
     PetscScalar Hy = 1.0 / this->ny;
 
+    // Fine grid
     PetscInt xm, ym, xs, ys;
-    DMDAGetCorners(dm, &xs, &ys, 0, &xm, &ym, 0); /* Fine grid */
+    DMDAGetCorners(dm, &xs, &ys, 0, &xm, &ym, 0);
 
     PetscScalar **array;
     DMDAVecGetArray(dm, b, &array);
