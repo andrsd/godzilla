@@ -22,4 +22,6 @@ TEST(Object, api)
     const auto & p = obj->getParameters();
 
     EXPECT_TRUE(obj->isParamValid("_name"));
+
+    EXPECT_EQ(obj->processorId(), 0);
 }
