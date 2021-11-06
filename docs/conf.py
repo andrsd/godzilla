@@ -36,10 +36,10 @@ project = 'godzilla'
 copyright = '2021, David Andrs'
 author = 'David Andrs'
 
-# extensions = [
-#     'doxyrest',
-#     'cpplexer'
-# ]
+extensions = [
+    'doxyrest',
+    'cpplexer'
+]
 
 templates_path = ['_templates']
 
