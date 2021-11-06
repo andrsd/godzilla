@@ -14,6 +14,7 @@ class Object
 {
 public:
     Object(const InputParameters & parameters);
+    virtual ~Object();
 
     /// Get the type of this object.
     /// @return the name of the type of this object

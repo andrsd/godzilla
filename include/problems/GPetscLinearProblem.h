@@ -16,10 +16,11 @@ public:
     virtual void create() override;
     virtual void solve() override;
     virtual bool converged() override;
+    virtual const Vec & getSolutionVector() const override;
 
 protected:
     /// provide DM for the underlying KSP object
-    virtual const DM & getDM() override;
+    virtual const DM & getDM() const override;
     /// Initialize the problem
     virtual void init();
     /// Allocate Jacobian/residual objects

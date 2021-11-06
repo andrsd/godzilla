@@ -45,6 +45,8 @@ add_library(${PROJECT_NAME} SHARED
     src/grids/GExodusIIMesh.cpp
     src/grids/GGrid.cpp
     src/grids/GUnstructuredMesh.cpp
+    src/outputs/GOutput.cpp
+    src/outputs/GVTKOutput.cpp
     src/problems/GProblem.cpp
     src/problems/GPetscLinearProblem.cpp
     src/problems/GPetscNonlinearProblem.cpp

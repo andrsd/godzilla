@@ -213,7 +213,7 @@ InputParameters::addRequiredParam(const std::string & name, const std::string & 
         param->required = true;
         param->is_private = false;
         param->doc_string = doc_string;
-        param->set_by_add_param = true;
+        param->set_by_add_param = false;
         param->valid = false;
         this->params[name] = param;
     }
@@ -228,7 +228,7 @@ InputParameters::addParam(const std::string & name, const std::string & doc_stri
         param->required = false;
         param->is_private = false;
         param->doc_string = doc_string;
-        param->set_by_add_param = true;
+        param->set_by_add_param = false;
         param->valid = false;
         this->params[name] = param;
     }

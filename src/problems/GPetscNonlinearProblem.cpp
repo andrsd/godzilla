@@ -87,9 +87,15 @@ GPetscNonlinearProblem::~GPetscNonlinearProblem()
 }
 
 const DM &
-GPetscNonlinearProblem::getDM()
+GPetscNonlinearProblem::getDM() const
 {
     return this->grid.getDM();
+}
+
+const Vec &
+GPetscNonlinearProblem::getSolutionVector() const
+{
+    return this->x;
 }
 
 void

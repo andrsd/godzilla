@@ -4,7 +4,9 @@
 #include "grids/GGrid.h"
 #include "problems/GProblem.h"
 #include "executioners/GExecutioner.h"
+#include "outputs/GOutput.h"
 #include "base/CallStack.h"
+#include "assert.h"
 
 template<typename T>
 std::string type_name()
@@ -65,6 +67,7 @@ GYMLFile::build()
     buildGrid();
     buildProblem();
     buildExecutioner();
+    buildOutputs();
 }
 
 void
@@ -97,11 +100,32 @@ GYMLFile::buildExecutioner()
     this->executioner = Factory::create<GExecutioner>(class_name, "problem", params);
 }
 
+void
+GYMLFile::buildOutputs()
+{
+    _F_;
+    YAML::Node output_root_node = this->root["output"];
+    if (!output_root_node)
+        return;
+
+    for (const auto & it : output_root_node) {
+        YAML::Node output_node = it.first;
+        std::string name = output_node.as<std::string>();
+
+        InputParameters params = buildParams(output_root_node, name);
+        const std::string & class_name = params.get<std::string>("_type");
+        params.set<GProblem *>("_gproblem") = this->problem;
+        auto output = Factory::create<GOutput>(class_name, name, params);
+        assert(this->executioner != nullptr);
+        this->executioner->addOutput(output);
+    }
+}
+
 InputParameters
 GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 {
     _F_;
-    YAML::Node node = this->root[name];
+    YAML::Node node = root[name];
     if (!node)
         godzillaError("Missing '", name, "' block.");
 

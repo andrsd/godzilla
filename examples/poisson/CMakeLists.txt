@@ -17,12 +17,12 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC godzilla)
 
-# add_test(${PROJECT_NAME}-linear ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/linear_poisson_2d.gyml)
-# add_test(${PROJECT_NAME}-nl     ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/nl_poisson_2d.gyml)
-# add_test(${PROJECT_NAME}-nl-fem ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/nl_poisson_2d_fe.gyml)
-#
-# if(CODE_COVERAGE)
-#     set_tests_properties(${PROJECT_NAME}-linear PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}-linear.profraw)
-#     set_tests_properties(${PROJECT_NAME}-nl PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}-nl.profraw)
-#     set_tests_properties(${PROJECT_NAME}-nl-fem PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}-nl-fem.profraw)
-# endif()
+add_test(${PROJECT_NAME}-linear ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/linear_poisson_2d.gyml)
+add_test(${PROJECT_NAME}-nl     ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/nl_poisson_2d.gyml)
+add_test(${PROJECT_NAME}-nl-fem ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/nl_poisson_2d_fe.gyml)
+
+if(CODE_COVERAGE)
+    set_tests_properties(${PROJECT_NAME}-linear PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}-linear.profraw)
+    set_tests_properties(${PROJECT_NAME}-nl PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}-nl.profraw)
+    set_tests_properties(${PROJECT_NAME}-nl-fem PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}-nl-fem.profraw)
+endif()

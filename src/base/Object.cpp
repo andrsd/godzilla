@@ -22,6 +22,10 @@ Object::Object(const InputParameters & parameters) :
     MPI_Comm_rank(comm(), &this->rank);
 }
 
+Object::~Object()
+{
+}
+
 const std::string &
 Object::getType() const
 {

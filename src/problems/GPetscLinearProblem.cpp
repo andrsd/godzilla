@@ -68,9 +68,15 @@ GPetscLinearProblem::~GPetscLinearProblem()
 }
 
 const DM &
-GPetscLinearProblem::getDM()
+GPetscLinearProblem::getDM() const
 {
     return this->grid.getDM();
+}
+
+const Vec &
+GPetscLinearProblem::getSolutionVector() const
+{
+    return this->x;
 }
 
 void

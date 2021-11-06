@@ -19,7 +19,7 @@ public:
 protected:
     DM dm;
 
-    virtual const DM &getDM() override;
+    virtual const DM & getDM() const override;
     virtual PetscErrorCode computeRhsCallback(Vec b) override;
     virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) override;
 };

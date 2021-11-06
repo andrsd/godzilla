@@ -2,6 +2,7 @@
 #include "executioners/GExecutioner.h"
 #include "problems/GProblem.h"
 #include "base/CallStack.h"
+#include "outputs/GOutput.h"
 
 
 namespace godzilla {
@@ -37,6 +38,20 @@ GExecutioner::execute()
     godzillaPrint(5, "Executing...");
 
     this->problem.solve();
+    output();
+}
+
+void
+GExecutioner::addOutput(const GOutput * output)
+{
+    this->outputs.push_back(output);
+}
+
+void
+GExecutioner::output()
+{
+    for (auto & o : this->outputs)
+        o->output();
 }
 
 }

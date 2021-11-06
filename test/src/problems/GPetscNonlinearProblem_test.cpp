@@ -26,7 +26,16 @@ TEST(GPetscNonlinearProblemTest, solve)
     bool conv = prob->converged();
     EXPECT_EQ(conv, true);
 
-    // TODO: extract the soluiton and make sure it is [2, 3]
+    // extract the solution and make sure it is [2, 3]
+    const Vec x = prob->getSolutionVector();
+    PetscInt ni = 2;
+    PetscInt ix[2] = { 0, 1 };
+    PetscScalar xx[2];
+    VecGetValues(x, ni, ix, xx);
+
+    EXPECT_DOUBLE_EQ(xx[0], 2.);
+    EXPECT_DOUBLE_EQ(xx[1], 3.);
+
     delete prob;
 }
 
@@ -45,7 +54,7 @@ GTestPetscNonlinearProblem::~GTestPetscNonlinearProblem()
 }
 
 const DM &
-GTestPetscNonlinearProblem::getDM()
+GTestPetscNonlinearProblem::getDM() const
 {
     return this->dm;
 }

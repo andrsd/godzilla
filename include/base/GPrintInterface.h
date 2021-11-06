@@ -45,7 +45,7 @@ public:
     /// Print a message on a terminal
     template <typename... Args>
     void
-    godzillaPrint(unsigned int level, Args &&... args)
+    godzillaPrint(unsigned int level, Args &&... args) const
     {
         if (level <= this->verbosity_level) {
             std::ostringstream oss;
@@ -58,7 +58,7 @@ public:
     /// terminate the application.
     template <typename... Args>
     [[noreturn]] void
-    godzillaError(Args &&... args)
+    godzillaError(Args &&... args) const
     {
         std::ostringstream oss;
         internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
@@ -67,7 +67,7 @@ public:
 
     template <typename... Args>
     [[noreturn]] void
-    godzillaErrorWithCallStack(Args &&... args)
+    godzillaErrorWithCallStack(Args &&... args) const
     {
         std::ostringstream oss;
         internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
