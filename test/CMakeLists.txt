@@ -30,6 +30,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/test/incl
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR})
 
 
+# To supress linking warning from gtest
+target_compile_options(${PROJECT_NAME} PUBLIC -fvisibility=hidden)
+
 target_link_libraries(${PROJECT_NAME} PUBLIC
     godzilla
     ${GTEST_BOTH_LIBRARIES}
