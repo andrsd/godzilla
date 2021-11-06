@@ -2,6 +2,9 @@ godzilla
 =====
 
 [![codecov](https://codecov.io/gh/andrsd/godzilla/branch/godzilla/graph/badge.svg?token=7KL45W9Z4G)](https://codecov.io/gh/andrsd/godzilla)
+[![License](http://img.shields.io/:license-mit-blue.svg)](https://andrsd.mit-license.org/)
+[![PETSc](https://img.shields.io/badge/PETSc-3.16-red)](https://petsc.org/)
+
 
 ![godzilla facepalm](https://img.memecdn.com/godzilla-facepalm_o_204968.jpg)
 
@@ -16,7 +19,8 @@ conda create -n godzilla
 
 Setup conda forge
 ```
-TODO
+conda config --add channels conda-forge
+conda config --set channel_priority strict
 ```
 
 Install dependencies
@@ -36,22 +40,6 @@ Build PETSc
 ./configure --prefix=$CONDA_PREFIX --shared-libraries --with-debugging=no --with-cxx-dialect=C++11 --with-pic=yes --with-ssl=no --download-hypre=yes --download-fblaslapack=yes --download-metis=yes --download-parmetis=yes --download-superlu_dist=yes --download-scalapack=yes --download-mumps=yes --download-exodusii --download-hdf5 --download-netcdf --download-pnetcdf --with-zlib-dir=$CONDA_PREFIX CC=$CC CXX=$CXX FC=$FC LDFLAGS=$LDFLAGS PETSC_DIR=`pwd`
 ```
 
-Build libMesh
-```
-cd <path/to/lib>
-mkdir build
-cd build
-../configure
-make
-make install
-```
-
-Build MOOSE:
-```
-cd <path/to/moose>/framework
-make
-```
-
 Set env vars:
 ```
 CC=mpicc
@@ -59,8 +47,6 @@ CXX=mpicxx
 LDFLAGS="-Wl,-rpath,$CONDA_PREFIX/lib -L$CONDA_PREFIX/lib"
 FC=mpif90
 PETSC_DIR=$CONDA_PREFIX
-LIBMESH_DIR=<path/to/libmesh>/installed
-MOOSE_DIR=<path/to/moose>/moose
 ```
 
 Build
@@ -69,6 +55,7 @@ Build
 ```
 cd <path/to/godzilla>
 mkdir build
+cd build
 cmake ..
 make
 ```
@@ -84,5 +71,5 @@ pip install sphinx-rtd-theme
 
 Environement
 ```
-export DOXYREST_PATH=/path/to/doxyrest
+export DOXYREST_PATH=$CONDA_PREFIX/share/doxyrest
 ```
