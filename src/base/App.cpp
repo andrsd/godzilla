@@ -44,6 +44,12 @@ App::getVerbosityLevel() const
     return this->verbosity_level;
 }
 
+const MPI_Comm &
+App::getComm() const
+{
+    return this->comm;
+}
+
 void
 App::run()
 {

@@ -1,4 +1,5 @@
 #include "base/Object.h"
+#include "base/App.h"
 
 
 namespace godzilla {
@@ -18,6 +19,7 @@ Object::Object(const InputParameters & parameters) :
     type(getParam<std::string>("_type")),
     name(getParam<std::string>("_name"))
 {
+    MPI_Comm_rank(comm(), &this->rank);
 }
 
 const std::string &
@@ -50,10 +52,16 @@ Object::getApp() const
     return this->app;
 }
 
-MPI_Comm
-Object::comm()
+const MPI_Comm &
+Object::comm() const
 {
-    return MPI_COMM_WORLD;
+    return this->app.getComm();
+}
+
+const int &
+Object::processorId() const
+{
+    return this->rank;
 }
 
 }

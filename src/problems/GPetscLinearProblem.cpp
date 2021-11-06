@@ -101,7 +101,10 @@ GPetscLinearProblem::allocateObjects()
     PetscErrorCode ierr;
     const DM & dm = getDM();
 
-    ierr = DMCreateGlobalVector(dm, &this->b);
+    ierr = DMCreateGlobalVector(dm, &this->x);
+    ierr = PetscObjectSetName((PetscObject) this->x, "");
+
+    ierr = VecDuplicate(this->x, &this->b);
     ierr = PetscObjectSetName((PetscObject) this->b, "");
 
     ierr = DMCreateMatrix(dm, &this->A);
@@ -109,8 +112,6 @@ GPetscLinearProblem::allocateObjects()
     // TODO: Add API for setting up preconditioners
     this->A = this->B;
 
-    ierr = DMCreateGlobalVector(dm, &this->x);
-    ierr = PetscObjectSetName((PetscObject) this->x, "");
 }
 
 void

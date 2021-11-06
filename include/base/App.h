@@ -25,6 +25,8 @@ public:
     /// Get level of verbosity
     virtual const unsigned int & getVerbosityLevel() const;
 
+    virtual const MPI_Comm & getComm() const;
+
 protected:
     ///
     virtual void buildFromGYML(const std::string & file_name);
