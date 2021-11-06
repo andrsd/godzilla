@@ -1,9 +1,0 @@
-mesh:
-    type: GExodusIIMesh
-    file: square.e
-
-problem:
-    type: GProblem
-
-executioner:
-    type: GExecutioner
