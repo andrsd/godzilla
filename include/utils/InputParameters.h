@@ -211,7 +211,10 @@ InputParameters::addRequiredParam(const std::string & name, const std::string & 
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;
         param->required = true;
+        param->is_private = false;
         param->doc_string = doc_string;
+        param->set_by_add_param = true;
+        param->valid = false;
         this->params[name] = param;
     }
 }
