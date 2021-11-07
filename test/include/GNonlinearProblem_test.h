@@ -12,9 +12,6 @@ public:
     virtual ~GTestPetscNonlinearProblem();
 
 protected:
-    DM dm;
-
-    virtual const DM & getDM() const override;
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
     virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;
 };

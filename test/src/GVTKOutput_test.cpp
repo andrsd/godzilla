@@ -7,7 +7,9 @@ TEST_F(GVTKOutputTest, output)
 {
     testing::internal::CaptureStderr();
 
-    auto prob = gProblem();
+    auto grid = gGrid();
+    grid->create();
+    auto prob = gProblem(grid);
     prob->create();
     auto exec = gExecutioner(prob);
 

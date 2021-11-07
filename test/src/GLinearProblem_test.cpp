@@ -1,5 +1,5 @@
 #include "Factory.h"
-#include "GodzillaApp_test.h"
+#include "GGrid.h"
 #include "GLinearProblem_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
@@ -10,13 +10,26 @@ using namespace godzilla;
 
 registerObject(GTestPetscLinearProblem);
 
-TEST_F(GLinearProblemTest, solve)
+TEST(GLinearProblemTest, solve)
 {
+    App app("test", MPI_COMM_WORLD);
+
+    GGrid * grid;
+    {
+        const std::string class_name = "G1DStructuredGrid";
+        InputParameters params = Factory::getValidParams(class_name);
+        params.set<const App *>("_app") = &app;
+        params.set<PetscInt>("nx") = 2;
+        grid = Factory::create<GGrid>(class_name, "grid", params);
+    }
+
     const std::string class_name = "GTestPetscLinearProblem";
     InputParameters params = Factory::getValidParams(class_name);
-    params.set<const App *>("_app") = this->app;
-    params.set<GGrid *>("_ggrid") = nullptr;
+    params.set<const App *>("_app") = &app;
+    params.set<GGrid *>("_ggrid") = grid;
     auto prob = Factory::create<GTestPetscLinearProblem>(class_name, "obj", params);
+
+    grid->create();
     prob->create();
     prob->solve();
 
@@ -39,19 +52,10 @@ TEST_F(GLinearProblemTest, solve)
 GTestPetscLinearProblem::GTestPetscLinearProblem(const InputParameters & params) :
     GLinearProblem(params)
 {
-    DMDACreate1d(comm(), DM_BOUNDARY_NONE, 2, 1, 1, NULL, &this->dm);
-    DMSetUp(this->dm);
 }
 
 GTestPetscLinearProblem::~GTestPetscLinearProblem()
 {
-    DMDestroy(&this->dm);
-}
-
-const DM &
-GTestPetscLinearProblem::getDM() const
-{
-    return this->dm;
 }
 
 PetscErrorCode
