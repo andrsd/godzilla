@@ -10,6 +10,7 @@ namespace godzilla {
 PetscErrorCode
 __compute_residual(SNES snes, Vec x, Vec f, void *ctx)
 {
+    _F_;
     GNonlinearProblem * problem = static_cast<GNonlinearProblem *>(ctx);
     return problem->computeResidualCallback(x, f);
 }
@@ -17,6 +18,7 @@ __compute_residual(SNES snes, Vec x, Vec f, void *ctx)
 PetscErrorCode
 __compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void *ctx)
 {
+    _F_;
     GNonlinearProblem * problem = static_cast<GNonlinearProblem *>(ctx);
     return problem->computeJacobianCallback(x, J, Jp);
 }
@@ -24,6 +26,7 @@ __compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void *ctx)
 PetscErrorCode
 __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx)
 {
+    _F_;
     GNonlinearProblem * problem = static_cast<GNonlinearProblem *>(ctx);
     return problem->kspMonitorCallback(it, rnorm);
 }
@@ -31,6 +34,7 @@ __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx)
 PetscErrorCode
 __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void *ctx)
 {
+    _F_;
     GNonlinearProblem * problem = static_cast<GNonlinearProblem *>(ctx);
     return problem->snesMonitorCallback(it, norm);
 }
@@ -89,12 +93,14 @@ GNonlinearProblem::~GNonlinearProblem()
 const DM &
 GNonlinearProblem::getDM() const
 {
+    _F_;
     return this->grid.getDM();
 }
 
 const Vec &
 GNonlinearProblem::getSolutionVector() const
 {
+    _F_;
     return this->x;
 }
 
@@ -121,8 +127,11 @@ GNonlinearProblem::init()
     const DM & dm = getDM();
 
     ierr = SNESCreate(comm(), &this->snes);
+    checkPetscError(ierr);
     ierr = SNESSetDM(this->snes, dm);
+    checkPetscError(ierr);
     ierr = DMSetApplicationContext(dm, this);
+    checkPetscError(ierr);
 }
 
 void
@@ -131,6 +140,7 @@ GNonlinearProblem::setupInitialGuess()
     _F_;
     PetscErrorCode ierr;
     ierr = VecSet(this->x, 0.);
+    checkPetscError(ierr);
 }
 
 void
@@ -141,13 +151,19 @@ GNonlinearProblem::allocateObjects()
     const DM & dm = getDM();
 
     ierr = DMCreateGlobalVector(dm, &this->x);
+    checkPetscError(ierr);
     ierr = PetscObjectSetName((PetscObject) this->x, "");
+    checkPetscError(ierr);
 
     ierr = VecDuplicate(this->x, &this->r);
+    checkPetscError(ierr);
     ierr = PetscObjectSetName((PetscObject) this->r, "");
+    checkPetscError(ierr);
 
     ierr = DMCreateMatrix(dm, &this->J);
+    checkPetscError(ierr);
     ierr = PetscObjectSetName((PetscObject) this->J, "");
+    checkPetscError(ierr);
 
     // full newton
     this->Jp = this->J;
@@ -181,7 +197,9 @@ GNonlinearProblem::setupCallbacks()
     _F_;
     PetscErrorCode ierr;
     ierr = SNESSetFunction(this->snes, this->r, __compute_residual, this);
+    checkPetscError(ierr);
     ierr = SNESSetJacobian(this->snes, this->J, this->Jp, __compute_jacobian, this);
+    checkPetscError(ierr);
 }
 
 void
@@ -203,14 +221,19 @@ GNonlinearProblem::setupSolverParameters()
     ierr = SNESSetTolerances(this->snes,
         this->nl_abs_tol, this->nl_rel_tol, this->nl_step_tol,
         this->nl_max_iter, -1);
+    checkPetscError(ierr);
     ierr = SNESSetFromOptions(this->snes);
+    checkPetscError(ierr);
 
     KSP ksp;
     ierr = SNESGetKSP(this->snes, &ksp);
+    checkPetscError(ierr);
     ierr = KSPSetTolerances(ksp,
         this->lin_rel_tol, this->lin_abs_tol, PETSC_DEFAULT,
         this->lin_max_iter);
+    checkPetscError(ierr);
     ierr = KSPSetFromOptions(ksp);
+    checkPetscError(ierr);
 }
 
 PetscErrorCode
@@ -233,7 +256,9 @@ GNonlinearProblem::solve()
     _F_;
     PetscErrorCode ierr;
     ierr = SNESSolve(this->snes, NULL, this->x);
+    checkPetscError(ierr);
     ierr = SNESGetConvergedReason(this->snes, &this->converged_reason);
+    checkPetscError(ierr);
 }
 
 bool

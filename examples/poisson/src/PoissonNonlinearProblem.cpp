@@ -32,19 +32,23 @@ void
 PoissonNonlinearProblem::allocateObjects()
 {
     _F_;
+    PetscErrorCode ierr;
     GNonlinearProblem::allocateObjects();
 
     const DM dm = getDM();
-    PetscErrorCode ierr;
     ierr = VecDuplicate(this->x, &this->b);
+    checkPetscError(ierr);
     ierr = VecSet(this->b, 1.0);
+    checkPetscError(ierr);
     ierr = DMCreateMatrix(dm, &this->Jr);
+    checkPetscError(ierr);
 }
 
 PetscErrorCode
 PoissonNonlinearProblem::formMatrix(Mat jac)
 {
     _F_;
+    PetscErrorCode ierr;
     const DM dm = getDM();
 
     const PetscInt STENCIL_SIZE = 5;
@@ -55,14 +59,16 @@ PoissonNonlinearProblem::formMatrix(Mat jac)
     PetscScalar v[STENCIL_SIZE];
 
     DMDALocalInfo  info;
-    DMDAGetLocalInfo(dm, &info);
+    ierr = DMDAGetLocalInfo(dm, &info);
+    checkPetscError(ierr);
     PetscScalar hx = 1.0 / (PetscReal) (info.mx - 1);
     PetscScalar hy = 1.0 / (PetscReal) (info.my - 1);
     PetscScalar hxdhy = hx / hy;
     PetscScalar hydhx = hy / hx;
 
     MatStencil *rows;
-    PetscMalloc1(info.ym * info.xm, &rows);
+    ierr = PetscMalloc1(info.ym * info.xm, &rows);
+    checkPetscError(ierr);
 
     // Compute entries for the locally owned part of the Jacobian.
     //  - Currently, all PETSc parallel matrix formats are partitioned by
@@ -80,7 +86,8 @@ PoissonNonlinearProblem::formMatrix(Mat jac)
             if (i == 0 || j == 0 || i == info.mx - 1 || j == info.my - 1) {
                 // boundary points
                 v[0] = 2.0 * (hydhx + hxdhy);
-                MatSetValuesStencil(jac, 1, &row, 1, &row, v, INSERT_VALUES);
+                ierr = MatSetValuesStencil(jac, 1, &row, 1, &row, v, INSERT_VALUES);
+                checkPetscError(ierr);
                 rows[nrows].i = i;
                 rows[nrows++].j = j;
             }
@@ -91,21 +98,27 @@ PoissonNonlinearProblem::formMatrix(Mat jac)
                 v[2] = 2.0 * (hydhx + hxdhy); col[2].j = row.j; col[2].i = row.i;
                 v[3] = -hydhx;                col[3].j = j;     col[3].i = i + 1;
                 v[4] = -hxdhy;                col[4].j = j + 1; col[4].i = i;
-                MatSetValuesStencil(jac, 1, &row, STENCIL_SIZE, col, v, INSERT_VALUES);
+                ierr = MatSetValuesStencil(jac, 1, &row, STENCIL_SIZE, col, v, INSERT_VALUES);
+                checkPetscError(ierr);
             }
         }
     }
 
     // Assemble matrix
-    MatAssemblyBegin(jac, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(jac, MAT_FINAL_ASSEMBLY);
+    ierr = MatAssemblyBegin(jac, MAT_FINAL_ASSEMBLY);
+    checkPetscError(ierr);
+    ierr = MatAssemblyEnd(jac, MAT_FINAL_ASSEMBLY);
+    checkPetscError(ierr);
 
-    MatZeroRowsColumnsStencil(jac, nrows, rows, 2.0 * (hydhx + hxdhy), NULL, NULL);
-    PetscFree(rows);
+    ierr = MatZeroRowsColumnsStencil(jac, nrows, rows, 2.0 * (hydhx + hxdhy), NULL, NULL);
+    checkPetscError(ierr);
+    ierr = PetscFree(rows);
+    checkPetscError(ierr);
 
     // Tell the matrix we will never add a new nonzero location to the matrix.
     // If we do, it will generate an error.
-    MatSetOption(jac, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    ierr = MatSetOption(jac, MAT_NEW_NONZERO_LOCATION_ERR, PETSC_TRUE);
+    checkPetscError(ierr);
     return 0;
 }
 
@@ -132,5 +145,7 @@ PoissonNonlinearProblem::solve()
     _F_;
     PetscErrorCode ierr;
     ierr = SNESSolve(this->snes, this->b, this->x);
+    checkPetscError(ierr);
     ierr = SNESGetConvergedReason(this->snes, &this->converged_reason);
+    checkPetscError(ierr);
 }

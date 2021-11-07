@@ -57,6 +57,7 @@ GYMLFile::getExecutioner()
 const YAML::Node &
 GYMLFile::getYml()
 {
+    _F_;
     return this->root;
 }
 
@@ -174,6 +175,7 @@ GYMLFile::setParameterFromYML(InputParameters & params, const YAML::Node & node,
 void
 GYMLFile::checkParams(const InputParameters & params, const std::string & name)
 {
+    _F_;
     std::ostringstream oss;
 
     for (const auto & it : params)

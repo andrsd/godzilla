@@ -4,6 +4,8 @@
 #include <sstream>
 #include "CallStack.h"
 #include <iostream>
+#include "mpi.h"
+#include "petscsys.h"
 
 namespace godzilla
 {
@@ -74,10 +76,25 @@ public:
         internal::godzillaErrorRaw(oss.str(), true);
     }
 
+    /// Check PETSc error
+    ///
+    /// @param ierr Error code returned by PETSc
+    void
+    checkPetscError(PetscErrorCode ierr) const
+    {
+        if (ierr) {
+            std::ostringstream oss;
+            internal::godzillaStreamAll(oss, this->prefix, "PETSc error: ", ierr);
+            internal::godzillaErrorRaw(oss.str(), true);
+        }
+    }
+
 private:
     const unsigned int & verbosity_level;
     /// Prefix to print
     const std::string prefix;
+    ///
+    const MPI_Comm & pi_comm;
 };
 
 template <typename... Args>

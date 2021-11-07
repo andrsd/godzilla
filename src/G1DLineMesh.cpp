@@ -34,24 +34,28 @@ G1DLineMesh::G1DLineMesh(const InputParameters & parameters) :
 PetscReal
 G1DLineMesh::getXMin()
 {
+    _F_;
     return this->xmin;
 }
 
 PetscReal
 G1DLineMesh::getXMax()
 {
+    _F_;
     return this->xmax;
 }
 
 PetscInt
 G1DLineMesh::getNx()
 {
+    _F_;
     return this->nx;
 }
 
 void
 G1DLineMesh::create()
 {
+    _F_;
     PetscErrorCode ierr;
 
     PetscReal lower[1] = { this->xmin };
@@ -68,7 +72,9 @@ G1DLineMesh::create()
         periodicity,
         interpolate,
         &this->dm);
+    checkPetscError(ierr);
     ierr = DMSetUp(this->dm);
+    checkPetscError(ierr);
 }
 
 }

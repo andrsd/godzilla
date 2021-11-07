@@ -15,6 +15,7 @@ GOutput::GOutput(const InputParameters & params) :
     GPrintInterface(this),
     problem(*getParam<GProblem *>("_gproblem"))
 {
+    _F_;
 }
 
 } // godzilla

@@ -50,7 +50,9 @@ GFENonlinearProblem::init()
     const DM & dm = this->getDM();
     PetscErrorCode ierr;
     ierr = DMCreateDS(dm);
+    checkPetscError(ierr);
     ierr = DMGetDS(dm, &this->ds);
+    checkPetscError(ierr);
 
     onSetWeakForm();
     setupBoundaryConditions();
@@ -69,7 +71,9 @@ GFENonlinearProblem::setupCallbacks()
     PetscErrorCode ierr;
     const DM & dm = this->getDM();
     ierr = DMPlexSetSNESLocalFEM(dm, this, this, this);
+    checkPetscError(ierr);
     ierr = SNESSetJacobian(this->snes, this->J, this->Jp, NULL, NULL);
+    checkPetscError(ierr);
 }
 
 void
@@ -90,6 +94,7 @@ GFENonlinearProblem::setupInitialGuess()
             for (unsigned int i = 0; i < fields.size(); i++)
                 ic_funcs[i] = field_ics[i];
             ierr = DMProjectField(getDM(), 0.0, this->x, ic_funcs, INSERT_VALUES, this->x);
+            checkPetscError(ierr);
         }
     }
 }
@@ -97,12 +102,14 @@ GFENonlinearProblem::setupInitialGuess()
 PetscErrorCode
 GFENonlinearProblem::computeResidualCallback(Vec x, Vec f)
 {
+    _F_;
     return 0;
 }
 
 PetscErrorCode
 GFENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
 {
+    _F_;
     return 0;
 }
 
@@ -126,9 +133,12 @@ GFENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
     ierr = PetscFECreateLagrange(comm(),
         this->dim, fi.nc, is_simplex, fi.k, qorder,
         &fi.fe);
+    checkPetscError(ierr);
 
     ierr = DMSetField(getDM(), this->field_id, fi.block, (PetscObject) fi.fe);
+    checkPetscError(ierr);
     ierr = PetscFESetName(fi.fe, fi.name.c_str());
+    checkPetscError(ierr);
 
     this->fields[fi.id] = fi;
     this->field_id++;
@@ -142,6 +152,7 @@ GFENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFunc *f0
     _F_;
     PetscErrorCode ierr;
     ierr = PetscDSSetResidual(this->ds, field_id, f0, f1);
+    checkPetscError(ierr);
 }
 
 void
@@ -150,6 +161,7 @@ GFENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJacobia
     _F_;
     PetscErrorCode ierr;
     ierr = PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3);
+    checkPetscError(ierr);
 }
 
 void
@@ -161,6 +173,7 @@ GFENonlinearProblem::setInitialCondition(PetscFunc *ic)
     PetscErrorCode ierr;
     PetscFunc *initial_guess[1] = { ic };
     ierr = DMProjectFunction(getDM(), 0.0, initial_guess, NULL, INSERT_VALUES, this->x);
+    checkPetscError(ierr);
 }
 
 void

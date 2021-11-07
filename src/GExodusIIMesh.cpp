@@ -31,6 +31,7 @@ GExodusIIMesh::GExodusIIMesh(const InputParameters & parameters) :
 const std::string
 GExodusIIMesh::getFileName() const
 {
+    _F_;
     return this->file_name;
 }
 
@@ -44,7 +45,9 @@ GExodusIIMesh::create()
         this->file_name.c_str(),
         this->interpolate,
         &this->dm);
+    checkPetscError(ierr);
     ierr = DMSetUp(this->dm);
+    checkPetscError(ierr);
 }
 
 }

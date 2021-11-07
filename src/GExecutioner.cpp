@@ -44,12 +44,14 @@ GExecutioner::execute()
 void
 GExecutioner::addOutput(const GOutput * output)
 {
+    _F_;
     this->outputs.push_back(output);
 }
 
 void
 GExecutioner::output()
 {
+    _F_;
     for (auto & o : this->outputs)
         o->output();
 }

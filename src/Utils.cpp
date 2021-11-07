@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "CallStack.h"
 #include <unistd.h>
 #include <sys/stat.h>
 
@@ -8,24 +9,27 @@ namespace utils {
 bool
 pathExists(const std::string & path)
 {
-  struct stat buffer;
-  return (stat(path.c_str(), &buffer) == 0);
+    _F_;
+    struct stat buffer;
+    return (stat(path.c_str(), &buffer) == 0);
 }
 
 std::string
 toUpper(const std::string & name)
 {
-  std::string upper(name);
-  std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
-  return upper;
+    _F_;
+    std::string upper(name);
+    std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+    return upper;
 }
 
 std::string
 toLower(const std::string & name)
 {
-  std::string lower(name);
-  std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-  return lower;
+    _F_;
+    std::string lower(name);
+    std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+    return lower;
 }
 
 }

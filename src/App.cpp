@@ -29,17 +29,20 @@ App::App(const std::string & app_name, MPI_Comm comm) :
 
 App::~App()
 {
+    _F_;
     Factory::destroy();
 }
 
 void
 App::create()
 {
+    _F_;
 }
 
 void
 App::parseCommandLine(int argc, char *argv[])
 {
+    _F_;
     this->args.parse(argc, argv);
 }
 
@@ -53,12 +56,14 @@ App::getVerbosityLevel() const
 const MPI_Comm &
 App::getComm() const
 {
+    _F_;
     return this->comm;
 }
 
 void
 App::run()
 {
+    _F_;
     if (this->verbose_arg.isSet()) {
         this->verbosity_level = this->verbose_arg.getValue();
     }

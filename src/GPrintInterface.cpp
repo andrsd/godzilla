@@ -57,14 +57,16 @@ godzillaErrorRaw(std::string msg, bool call_stack)
 
 GPrintInterface::GPrintInterface(const App & app) :
     verbosity_level(app.getVerbosityLevel()),
-    prefix("")
+    prefix(""),
+    pi_comm(app.getComm())
 {
     _F_;
 }
 
 GPrintInterface::GPrintInterface(const Object * obj) :
     verbosity_level(dynamic_cast<const App &>(obj->getApp()).getVerbosityLevel()),
-    prefix(obj->getName() + ": ")
+    prefix(obj->getName() + ": "),
+    pi_comm(obj->comm())
 {
     _F_;
 }

@@ -30,6 +30,7 @@ GGrid::~GGrid()
 const DM &
 GGrid::getDM() const
 {
+    _F_;
     return this->dm;
 }
 

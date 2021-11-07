@@ -28,12 +28,14 @@ G2DStructuredGrid::G2DStructuredGrid(const InputParameters & parameters) :
 PetscInt
 G2DStructuredGrid::getNx() const
 {
+    _F_;
     return this->nx;
 }
 
 PetscInt
 G2DStructuredGrid::getNy() const
 {
+    _F_;
     return this->ny;
 }
 
@@ -54,7 +56,9 @@ G2DStructuredGrid::create()
         dofs, stencil_width,
         NULL, NULL,
         &this->dm);
+    checkPetscError(ierr);
     ierr = DMSetUp(this->dm);
+    checkPetscError(ierr);
 }
 
 }

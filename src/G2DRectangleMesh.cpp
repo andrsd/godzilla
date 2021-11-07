@@ -42,36 +42,42 @@ G2DRectangleMesh::G2DRectangleMesh(const InputParameters & parameters) :
 PetscInt
 G2DRectangleMesh::getXMin() const
 {
+    _F_;
     return this->xmin;
 }
 
 PetscInt
 G2DRectangleMesh::getXMax() const
 {
+    _F_;
     return this->xmax;
 }
 
 PetscInt
 G2DRectangleMesh::getNx() const
 {
+    _F_;
     return this->nx;
 }
 
 PetscInt
 G2DRectangleMesh::getYMin() const
 {
+    _F_;
     return this->ymin;
 }
 
 PetscInt
 G2DRectangleMesh::getYMax() const
 {
+    _F_;
     return this->ymax;
 }
 
 PetscInt
 G2DRectangleMesh::getNy() const
 {
+    _F_;
     return this->ny;
 }
 
@@ -95,7 +101,9 @@ G2DRectangleMesh::create()
         periodicity,
         interpolate,
         &this->dm);
+    checkPetscError(ierr);
     ierr = DMSetUp(this->dm);
+    checkPetscError(ierr);
 }
 
 }

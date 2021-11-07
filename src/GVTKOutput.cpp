@@ -30,6 +30,7 @@ GVTKOutput::GVTKOutput(const InputParameters & params) :
 
 GVTKOutput::~GVTKOutput()
 {
+    _F_;
     PetscViewerDestroy(&viewer);
 }
 
