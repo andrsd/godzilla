@@ -89,8 +89,8 @@ CallStack::dump()
 {
     if (this->size > 0) {
         std::cerr << "Call stack:" << std::endl;
-        for (int i = this->size - 1; i >= 0; i--)
-            std::cerr << "  " << this->stack[i]->file << ":" << this->stack[i]->line << ": " << this->stack[i]->func << std::endl;
+        for (int n = 0, i = this->size - 1; i >= 0; i--, n++)
+            std::cerr << "  #" << n << ": " << this->stack[i]->file << ":" << this->stack[i]->line << ": " << this->stack[i]->func << std::endl;
     }
     else {
         std::cerr << "No call stack available." << std::endl;
