@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
-include(${CMAKE_SOURCE_DIR}/cmake/AddressSanitization.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 option(BUILD_EXAMPLES "Build examples" NO)
 option(BUILD_TESTS "Build tests" NO)
 
@@ -56,7 +56,7 @@ add_library(${PROJECT_NAME} SHARED
     src/Utils.cpp
 )
 target_code_coverage(${PROJECT_NAME})
-target_address_sanitization(${PROJECT_NAME})
+target_sanitization(${PROJECT_NAME})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD_MODE BATCH)
 

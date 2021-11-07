@@ -22,7 +22,7 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
-target_address_sanitization(${PROJECT_NAME})
+target_sanitization(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
