@@ -17,6 +17,13 @@
 namespace godzilla {
 namespace internal {
 
+[[noreturn]] void
+terminate()
+{
+    MPI_Finalize();
+    exit(1);
+}
+
 void
 godzillaMsgRaw(const std::string & msg)
 {
@@ -36,7 +43,7 @@ godzillaStreamAll(std::ostringstream &)
 {
 }
 
-[[noreturn]] void
+void
 godzillaErrorRaw(std::string msg, bool call_stack)
 {
     msg = godzillaMsgFmt(msg, "ERROR", COLOR_RED);
@@ -46,10 +53,6 @@ godzillaErrorRaw(std::string msg, bool call_stack)
         std::cerr << std::endl;
         getCallstack().dump();
     }
-
-    // we should call MPI_Finalize, but it throws "yaksa: 7 leaked handle pool objects"
-    // MPI_Finalize();
-    exit(-1);
 }
 
 } // namespace internal

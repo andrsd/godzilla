@@ -1,4 +1,5 @@
 #include "Init.h"
+#include "CallStack.h"
 #include "petscsys.h"
 
 
@@ -10,6 +11,8 @@ Init::Init(int argc, char * argv[], MPI_Comm COMM_WORLD_IN)
     ierr = PetscInitialize(&argc, &argv, NULL, NULL);
     // get rid of PETSc error handler
     PetscPopSignalHandler();
+    PetscPopErrorHandler();
+    internal::CallStack::initialize();
 }
 
 Init::~Init()

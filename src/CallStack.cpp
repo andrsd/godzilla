@@ -50,17 +50,6 @@ void sighandler(int signo)
     exit(-2);
 }
 
-void callstack_initialize()
-{
-    // install our signal handlers
-    signal(SIGSEGV, sighandler);
-    signal(SIGABRT, sighandler);
-}
-
-void callstack_finalize()
-{
-}
-
 // Call Stack
 
 CallStack &
@@ -74,9 +63,6 @@ CallStack::CallStack(int max_size)
     this->max_size = max_size;
     this->size = 0;
     this->stack = new CallStackObj *[max_size];
-
-    // initialize signals
-    callstack_initialize();
 }
 
 CallStack::~CallStack()
@@ -95,6 +81,14 @@ CallStack::dump()
     else {
         std::cerr << "No call stack available." << std::endl;
     }
+}
+
+void
+CallStack::initialize()
+{
+    // install our signal handlers
+    signal(SIGSEGV, sighandler);
+    signal(SIGABRT, sighandler);
 }
 
 } // internal

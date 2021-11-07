@@ -31,14 +31,18 @@ godzillaMsgRaw(const std::string & msg);
 std::string
 godzillaMsgFmt(const std::string & msg, const std::string & title, const std::string & color);
 
-[[noreturn]] void
+void
 godzillaErrorRaw(std::string msg, bool call_stack = false);
+
+[[noreturn]] void terminate();
 
 } // namespace internal
 
 class App;
 class Object;
 
+/// Interface for printing on terminal
+///
 class GPrintInterface {
 public:
     GPrintInterface(const App & app);
@@ -65,6 +69,7 @@ public:
         std::ostringstream oss;
         internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
         internal::godzillaErrorRaw(oss.str());
+        internal::terminate();
     }
 
     template <typename... Args>
@@ -74,6 +79,7 @@ public:
         std::ostringstream oss;
         internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
         internal::godzillaErrorRaw(oss.str(), true);
+        internal::terminate();
     }
 
     /// Check PETSc error
@@ -86,6 +92,7 @@ public:
             std::ostringstream oss;
             internal::godzillaStreamAll(oss, this->prefix, "PETSc error: ", ierr);
             internal::godzillaErrorRaw(oss.str(), true);
+            internal::terminate();
         }
     }
 
@@ -104,6 +111,7 @@ error(Args &&... args)
     std::ostringstream oss;
     internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
     internal::godzillaErrorRaw(oss.str());
+    internal::terminate();
 }
 
 } // namespace godzilla

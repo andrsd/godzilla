@@ -45,6 +45,9 @@ protected:
     int max_size;
 
     friend class CallStackObj;
+
+public:
+    static void initialize();
 };
 
 CallStack &getCallstack();
