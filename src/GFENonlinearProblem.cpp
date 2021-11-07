@@ -17,7 +17,10 @@ GFENonlinearProblem::validParams()
 }
 
 GFENonlinearProblem::GFENonlinearProblem(const InputParameters & parameters) :
-    GNonlinearProblem(parameters)
+    GNonlinearProblem(parameters),
+    dim(-1),
+    field_id(0),
+    ds(nullptr)
 {
     _F_;
 }
