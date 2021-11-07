@@ -5,6 +5,7 @@
 #include "GYMLFile.h"
 #include "GProblem.h"
 #include "GodzillaApp_test.h"
+#include "petsc.h"
 
 
 using namespace godzilla;
@@ -34,8 +35,12 @@ protected:
 class GTestProblem : public GProblem
 {
 public:
-    GTestProblem(const InputParameters & params) : GProblem(params),
-        dm(nullptr), x(nullptr) {}
+    GTestProblem(const InputParameters & params) : GProblem(params)
+    {
+        DMPlexCreateBoxMesh(comm(), 1, PETSC_TRUE, NULL, NULL, NULL, NULL, PETSC_FALSE, &this->dm);
+        DMSetUp(this->dm);
+        DMCreateGlobalVector(this->dm, &this->x);
+    }
 
     const DM & getDM() const override { return this->dm; }
     const Vec & getSolutionVector() const override { return this->x; }
@@ -44,8 +49,8 @@ public:
     bool converged() override { return false; }
 
 protected:
-    const DM dm;
-    const Vec x;
+    DM dm;
+    Vec x;
 
 public:
     static InputParameters validParams();

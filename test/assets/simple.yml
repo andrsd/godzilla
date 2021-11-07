@@ -9,3 +9,7 @@ problem:
     d: 34.567
 executioner:
     type: GExecutioner
+output:
+    vtk:
+        type: GVTKOutput
+        file: 'a.vtk'
