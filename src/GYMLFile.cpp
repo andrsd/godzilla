@@ -4,6 +4,8 @@
 #include "GGrid.h"
 #include "GProblem.h"
 #include "GExecutioner.h"
+#include "InitialCondition.h"
+#include "FEProblemInterface.h"
 #include "GOutput.h"
 #include "CallStack.h"
 #include "assert.h"
@@ -68,6 +70,7 @@ GYMLFile::build()
     buildGrid();
     buildProblem();
     buildExecutioner();
+    buildInitialConditons();
     buildOutputs();
 }
 
@@ -98,6 +101,30 @@ GYMLFile::buildExecutioner()
     const std::string & class_name = params.get<std::string>("_type");
     params.set<GProblem *>("_gproblem") = this->problem;
     this->executioner = Factory::create<GExecutioner>(class_name, "problem", params);
+}
+
+void
+GYMLFile::buildInitialConditons()
+{
+    _F_;
+    YAML::Node ics_root_node = this->root["ics"];
+    if (!ics_root_node)
+        return;
+
+    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
+    if (fepface == nullptr)
+        godzillaError("Supplied problem type '", this->problem->getType(), "' does not support initial conditions.");
+    else {
+        for (const auto & it : ics_root_node) {
+            YAML::Node ic_node = it.first;
+            std::string name = ic_node.as<std::string>();
+
+            InputParameters params = buildParams(ics_root_node, name);
+            const std::string & class_name = params.get<std::string>("_type");
+            auto ic = Factory::create<InitialCondition>(class_name, name, params);
+            fepface->addInitialCondition(ic);
+        }
+    }
 }
 
 void

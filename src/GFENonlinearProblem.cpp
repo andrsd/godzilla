@@ -1,6 +1,7 @@
 #include "GFENonlinearProblem.h"
 #include "CallStack.h"
 #include "GGrid.h"
+#include "InitialCondition.h"
 #include "petscdm.h"
 #include "petscdmplex.h"
 #include "petscdmlabel.h"
@@ -8,6 +9,18 @@
 
 
 namespace godzilla {
+
+namespace internal {
+
+static PetscErrorCode
+zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar *u, void *ctx)
+{
+    u[0] = 0.0;
+    return 0;
+}
+
+} //internal
+
 
 InputParameters
 GFENonlinearProblem::validParams()
@@ -19,7 +32,7 @@ GFENonlinearProblem::validParams()
 GFENonlinearProblem::GFENonlinearProblem(const InputParameters & parameters) :
     GNonlinearProblem(parameters),
     dim(-1),
-    field_id(0),
+    n_fields(0),
     ds(nullptr)
 {
     _F_;
@@ -39,7 +52,45 @@ GFENonlinearProblem::create()
 {
     _F_;
     DMGetDimension(this->grid.getDM(), &this->dim);
+    onSetFields();
+
     GNonlinearProblem::create();
+}
+
+const std::string &
+GFENonlinearProblem::getFieldName(PetscInt fid)
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end())
+        return it->second.name;
+    else
+        godzillaError("Field with id = '", fid, "' does not exist.");
+}
+
+PetscInt
+GFENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
+{
+    _F_;
+    FieldInfo fi = { name, this->n_fields, nullptr, nullptr, nc, k };
+
+    this->fields[fi.id] = fi;
+    this->n_fields++;
+
+    return fi.id;
+}
+
+void
+GFENonlinearProblem::addInitialCondition(const InitialCondition *ic)
+{
+    _F_;
+    PetscInt fid = ic->getFieldId();
+    const auto & it = this->ics.find(fid);
+    if (it == this->ics.end())
+        this->ics[fid].ic = ic;
+    else
+        // TODO: improve this error message
+        godzillaError("Initial condition '", ic->getName(), "' is being applied to a field that already has an initial condition.");
 }
 
 void
@@ -48,7 +99,7 @@ GFENonlinearProblem::init()
     _F_;
     GNonlinearProblem::init();
 
-    onSetFields();
+    setupFields();
 
     const DM & dm = this->getDM();
     PetscErrorCode ierr;
@@ -83,23 +134,39 @@ void
 GFENonlinearProblem::setupInitialGuess()
 {
     _F_;
-    PetscErrorCode ierr;
-
-    onSetInitialConditions();
-    // project field ICs if we have them
-    if (field_ics.size() > 0)
-    {
-        if (field_ics.size() != fields.size())
-            godzillaError("Provided ", fields.size(), " fields, but ", field_ics.size(), " initial conditions.");
+    PetscInt n_ics = this->ics.size();
+    if (n_ics > 0) {
+        if (n_ics != fields.size())
+            godzillaError("Provided ", fields.size(), " field(s), but ", n_ics, " initial condition(s).");
         else {
-            std::size_t n = field_ics.size();
-            PetscFieldFunc *ic_funcs[n];
-            for (unsigned int i = 0; i < fields.size(); i++)
-                ic_funcs[i] = field_ics[i];
-            ierr = DMProjectField(getDM(), 0.0, this->x, ic_funcs, INSERT_VALUES, this->x);
+            PetscErrorCode ierr;
+            PetscFunc *ic_funcs[n_ics];
+            void * ic_ctxs[n_ics];
+            for (auto & it : this->ics) {
+                PetscInt fid = it.first;
+                const ICInfo & ic_info = it.second;
+                const InitialCondition * ic = ic_info.ic;
+
+                PetscInt ic_nc = ic->getNumComponents();
+                PetscInt field_nc = this->fields[fid].nc;
+                if (ic_nc != field_nc)
+                    godzillaError("Initial condition '", ic->getName(), "' operates on ", ic_nc, " components, but is set on a field with ", field_nc, " components.");
+
+                ic_funcs[fid] = __initial_condition_function;
+                ic_ctxs[fid] = (void *) ic;
+            }
+            ierr = DMProjectFunction(getDM(), 0.0, ic_funcs, ic_ctxs, INSERT_VALUES, this->x);
             checkPetscError(ierr);
         }
     }
+    else {
+        // no boundary conditions -> use zero
+        PetscErrorCode ierr;
+        PetscFunc *initial_guess[1] = { internal::zero_fn };
+        ierr = DMProjectFunction(getDM(), 0.0, initial_guess, NULL, INSERT_VALUES, this->x);
+        checkPetscError(ierr);
+    }
+
 }
 
 PetscErrorCode
@@ -116,37 +183,27 @@ GFENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
     return 0;
 }
 
-PetscInt
-GFENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
+void
+GFENonlinearProblem::setupFields()
 {
     _F_;
     PetscErrorCode ierr;
+    for (auto & it : this->fields) {
+        FieldInfo & fi = it.second;
 
-    FieldInfo fi;
-    fi.name = name;
-    fi.id = this->field_id;
-    // entire mesh
-    fi.block = NULL;
-    fi.nc = nc;
-    fi.k = k;
+        // FIXME: determine if the mesh is made of simplex elements
+        PetscBool is_simplex = PETSC_FALSE;
+        PetscInt qorder = PETSC_DETERMINE;
+        ierr = PetscFECreateLagrange(comm(),
+            this->dim, fi.nc, is_simplex, fi.k, qorder,
+            &fi.fe);
+        checkPetscError(ierr);
 
-    // FIXME: determine if the mesh is made of simplex elements
-    PetscBool is_simplex = PETSC_FALSE;
-    PetscInt qorder = PETSC_DETERMINE;
-    ierr = PetscFECreateLagrange(comm(),
-        this->dim, fi.nc, is_simplex, fi.k, qorder,
-        &fi.fe);
-    checkPetscError(ierr);
-
-    ierr = DMSetField(getDM(), this->field_id, fi.block, (PetscObject) fi.fe);
-    checkPetscError(ierr);
-    ierr = PetscFESetName(fi.fe, fi.name.c_str());
-    checkPetscError(ierr);
-
-    this->fields[fi.id] = fi;
-    this->field_id++;
-
-    return fi.id;
+        ierr = DMSetField(getDM(), fi.id, fi.block, (PetscObject) fi.fe);
+        checkPetscError(ierr);
+        ierr = PetscFESetName(fi.fe, fi.name.c_str());
+        checkPetscError(ierr);
+    }
 }
 
 void
@@ -165,29 +222,6 @@ GFENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJacobia
     PetscErrorCode ierr;
     ierr = PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3);
     checkPetscError(ierr);
-}
-
-void
-GFENonlinearProblem::setInitialCondition(PetscFunc *ic)
-{
-    _F_;
-    // TODO: the actual projection should happen in setupInitialGuess()
-    // Here we just need to store info and check that this was called only once
-    PetscErrorCode ierr;
-    PetscFunc *initial_guess[1] = { ic };
-    ierr = DMProjectFunction(getDM(), 0.0, initial_guess, NULL, INSERT_VALUES, this->x);
-    checkPetscError(ierr);
-}
-
-void
-GFENonlinearProblem::setInitialCondition(PetscInt fid, PetscFieldFunc *ic)
-{
-    _F_;
-    const auto it = this->fields.find(fid);
-    if (it == this->fields.end())
-        godzillaError("Trying to set initial condition for an non-exiting field (", fid, ").");
-    else
-        this->field_ics[fid] = ic;
 }
 
 }

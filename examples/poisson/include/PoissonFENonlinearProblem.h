@@ -16,7 +16,6 @@ public:
 protected:
     virtual void onSetFields() override;
     virtual void onSetWeakForm() override;
-    virtual void onSetInitialConditions() override;
 
     virtual void setupBoundaryConditions() override;
 

@@ -6,30 +6,42 @@ namespace godzilla {
 
 /// Function interface
 ///
-/// This is used to interface with the PETSc API that accepts functions
 class GFunctionInterface
 {
 public:
     GFunctionInterface();
 
-    /// This is the API that we hand to PETSc for fields.
-    void petscFieldFunc(PetscInt dim, PetscInt Nf, PetscInt NfAux,
-        const PetscInt uOff[], const PetscInt uOff_x[], const PetscScalar u[], const PetscScalar u_t[], const PetscScalar u_x[],
-        const PetscInt aOff[], const PetscInt aOff_x[], const PetscScalar a[], const PetscScalar a_t[], const PetscScalar a_x[],
-        PetscReal t, const PetscReal x[], PetscInt numConstants, const PetscScalar constants[], PetscScalar f[]);
-
-    /// This is the API that we hand to PETSc for functions
-    PetscErrorCode petscFunc(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
-
+protected:
 };
 
+
+/// This is the API that we hand to PETSc for fields.
+///
+/// @param dim The spatial dimension
+/// @param Nf The number of input fields
+/// @param NfAux The number of input auxiliary fields
+/// @param uOff The offset of each field in u[]
+/// @param uOff_x The offset of each field in u_x[]
+/// @param u The field values at this point in space
+/// @param u_t The field time derivative at this point in space (or NULL)
+/// @param u_x The field derivatives at this point in space
+/// @param aOff The offset of each auxiliary field in u[]
+/// @param aOff_x The offset of each auxiliary field in u_x[]
+/// @param a The auxiliary field values at this point in space
+/// @param a_t The auxiliary field time derivative at this point in space (or NULL)
+/// @param a_x The auxiliary field derivatives at this point in space
+/// @param t The current time
+/// @param x The coordinates of this point
+/// @param numConstants The number of constants
+/// @param constants The value of each constant
+/// @param f The value of the function at this point in space
 typedef
-void (GFunctionInterface::*PetscFieldFuncPtr)(PetscInt dim, PetscInt Nf, PetscInt NfAux,
+void PetscFieldFunc(PetscInt dim, PetscInt Nf, PetscInt NfAux,
     const PetscInt uOff[], const PetscInt uOff_x[], const PetscScalar u[], const PetscScalar u_t[], const PetscScalar u_x[],
     const PetscInt aOff[], const PetscInt aOff_x[], const PetscScalar a[], const PetscScalar a_t[], const PetscScalar a_x[],
     PetscReal t, const PetscReal x[], PetscInt numConstants, const PetscScalar constants[], PetscScalar f[]);
 
 typedef
-PetscErrorCode (GFunctionInterface::*PetscFuncPtr)(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
+PetscErrorCode PetscFunc(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
 
 } // godzilla

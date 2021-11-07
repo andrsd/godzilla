@@ -33,9 +33,11 @@ add_library(${PROJECT_NAME} SHARED
     src/App.cpp
     src/CallStack.cpp
     src/Factory.cpp
+    src/FEProblemInterface.cpp
     src/GFunctionInterface.cpp
     src/GPrintInterface.cpp
     src/Init.cpp
+    src/InitialCondition.cpp
     src/Object.cpp
     src/GExecutioner.cpp
     src/GYMLFile.cpp

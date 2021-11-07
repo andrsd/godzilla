@@ -1,4 +1,5 @@
 #include "Godzilla.h"
+#include "GFunctionInterface.h"
 #include "PoissonFENonlinearProblem.h"
 #include "CallStack.h"
 #include "petscdm.h"
@@ -8,14 +9,6 @@ using namespace godzilla;
 
 
 registerObject(PoissonFENonlinearProblem);
-
-
-static PetscErrorCode
-zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar *u, void *ctx)
-{
-  u[0] = 0.0;
-  return 0;
-}
 
 static PetscErrorCode
 quadratic_u_2d(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar *u, void *ctx)
@@ -97,7 +90,7 @@ PoissonFENonlinearProblem::setupBoundaryConditions()
 {
     const DM & dm = getDM();
 
-    PetscFunc *exact_funcs[1];
+    godzilla::PetscFunc *exact_funcs[1];
     exact_funcs[0] = quadratic_u_2d;
 
     DMLabel label;
@@ -117,11 +110,4 @@ PoissonFENonlinearProblem::setupBoundaryConditions()
         (void (*)(void)) exact_funcs[0],
         NULL, this,
         NULL);
-}
-
-void
-PoissonFENonlinearProblem::onSetInitialConditions()
-{
-    _F_;
-    setInitialCondition(zero_fn);
 }

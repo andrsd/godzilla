@@ -19,6 +19,7 @@ add_executable(${PROJECT_NAME}
     src/GNonlinearProblem_test.cpp
     src/Utils_test.cpp
     src/InputParameters_test.cpp
+    src/ConstantIC_test.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
