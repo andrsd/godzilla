@@ -7,6 +7,7 @@ problem:
     i: -4321
     ui: 7890
     d: 34.567
+    arr_d: [1., 2., 4.]
 executioner:
     type: GExecutioner
 output:

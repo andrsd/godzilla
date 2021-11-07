@@ -17,6 +17,7 @@ GTestProblem::validParams()
     params.addParam<double>("d", 1.234, "d doco");
     params.addParam<int>("i", -1234, "i doco");
     params.addParam<unsigned int>("ui", 1234, "ui doco");
+    params.addParam<std::vector<double>>("arr_d", "vec<d> doco");
     params.addPrivateParam<GGrid *>("_ggrid");
     return params;
 }
@@ -105,6 +106,7 @@ TEST_F(GYMLFileTest, build)
     EXPECT_NE(grid, nullptr);
 
     auto problem = file.getProblem();
-    auto exec = file.getExecutioner();
+    EXPECT_NE(problem, nullptr);
 
+    auto exec = file.getExecutioner();
 }

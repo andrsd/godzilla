@@ -32,3 +32,11 @@ TEST_F(GPrintInterfaceTest, error_with_callstack)
         "ERROR: Error"
     );
 }
+
+TEST_F(GPrintInterfaceTest, check_petsc_error)
+{
+    EXPECT_DEATH(
+        this->app->checkPetscError(123),
+        "ERROR: PETSc error: 123"
+    );
+}
