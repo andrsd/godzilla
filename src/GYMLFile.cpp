@@ -196,6 +196,9 @@ GYMLFile::setParameterFromYML(InputParameters & params, const YAML::Node & node,
             params.set<int>(param_name) = val.as<int>();
         else if (param_type == type_name<unsigned int>())
             params.set<unsigned int>(param_name) = val.as<unsigned int>();
+        // vector values
+        else if (param_type == type_name<std::vector<PetscReal>>())
+            params.set<std::vector<PetscReal>>(param_name) = val.as<std::vector<double>>();
     }
 }
 

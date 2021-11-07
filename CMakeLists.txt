@@ -54,6 +54,7 @@ add_library(${PROJECT_NAME} SHARED
     src/GLinearProblem.cpp
     src/GNonlinearProblem.cpp
     src/GProblem.cpp
+    src/ConstantIC.cpp
     src/InputParameters.cpp
     src/Utils.cpp
 )
