@@ -57,6 +57,7 @@ add_library(${PROJECT_NAME} SHARED
     src/GProblem.cpp
     src/ConstantIC.cpp
     src/InputParameters.cpp
+    src/BoundaryCondition.cpp
     src/Utils.cpp
 )
 target_code_coverage(${PROJECT_NAME})

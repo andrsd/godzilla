@@ -6,6 +6,7 @@
 namespace godzilla {
 
 class InitialCondition;
+class BoundaryCondition;
 
 /// Interface for FE problems
 ///
@@ -28,6 +29,11 @@ public:
     ///
     /// @param ic Initial condition object to add
     virtual void addInitialCondition(const InitialCondition *ic) = 0;
+
+    /// Add essental boundary condition
+    ///
+    /// @param bc Boundary condition object to add
+    virtual void addBoundaryCondition(const BoundaryCondition * bc) = 0;
 };
 
 } // godzilla

@@ -1,11 +1,12 @@
 #include "GFENonlinearProblem.h"
 #include "CallStack.h"
 #include "GGrid.h"
+#include "GFunctionInterface.h"
 #include "InitialCondition.h"
+#include "BoundaryCondition.h"
 #include "petscdm.h"
 #include "petscdmplex.h"
 #include "petscdmlabel.h"
-#include "petscviewerhdf5.h"
 
 
 namespace godzilla {
@@ -94,6 +95,20 @@ GFENonlinearProblem::addInitialCondition(const InitialCondition *ic)
 }
 
 void
+GFENonlinearProblem::addBoundaryCondition(const BoundaryCondition *bc)
+{
+    _F_;
+    const std::vector<std::string> & bnd_names = bc->getBoundary();
+    for (auto & bname : bnd_names) {
+        BCInfo bc_info;
+        bc_info.bnd_name = bname;
+        bc_info.bc = bc;
+
+        this->bcs.push_back(bc_info);
+    }
+}
+
+void
 GFENonlinearProblem::init()
 {
     _F_;
@@ -116,6 +131,54 @@ void
 GFENonlinearProblem::setupBoundaryConditions()
 {
     _F_;
+    const DM & dm = getDM();
+    PetscErrorCode ierr;
+
+    for (auto & bcinfo : this->bcs) {
+        const BoundaryCondition * bc = bcinfo.bc;
+        const std::string & bnd_name = bcinfo.bnd_name;
+
+        PetscBool exists = PETSC_FALSE;
+        ierr = DMHasLabel(dm, bnd_name.c_str(), &exists);
+        checkPetscError(ierr);
+        if (exists)
+        {
+            PetscInt nc = bc->getNumComponents();
+
+            DMLabel label;
+            ierr = DMGetLabel(dm, bnd_name.c_str(), &label);
+            checkPetscError(ierr);
+
+            IS is;
+            ierr = DMGetLabelIdIS(dm, bnd_name.c_str(), &is);
+            checkPetscError(ierr);
+
+            PetscInt n_ids;
+            ierr = ISGetSize(is, &n_ids);
+            checkPetscError(ierr);
+
+            const PetscInt *ids = nullptr;
+            ierr = ISGetIndices(is, &ids);
+            checkPetscError(ierr);
+
+            ierr = PetscDSAddBoundary(this->ds,
+                DM_BC_ESSENTIAL,
+                bc->getName().c_str(),
+                label,
+                n_ids, ids,
+                bc->getFieldId(),
+                0, NULL,
+                (void (*)(void)) &__boundary_condition_function, NULL,
+                (void *) bc,
+                NULL);
+
+            ierr = ISRestoreIndices(is, &ids);
+            checkPetscError(ierr);
+
+        }
+        else
+            godzillaError("Boundary condition '", bc->getName(), "' is set on boundary '", bnd_name, "' which does not exist in the mesh.");
+    }
 }
 
 void

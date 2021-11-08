@@ -5,6 +5,7 @@
 #include "GProblem.h"
 #include "GExecutioner.h"
 #include "InitialCondition.h"
+#include "BoundaryCondition.h"
 #include "FEProblemInterface.h"
 #include "GOutput.h"
 #include "CallStack.h"
@@ -71,6 +72,7 @@ GYMLFile::build()
     buildProblem();
     buildExecutioner();
     buildInitialConditons();
+    buildBoundaryConditons();
     buildOutputs();
 }
 
@@ -123,6 +125,30 @@ GYMLFile::buildInitialConditons()
             const std::string & class_name = params.get<std::string>("_type");
             auto ic = Factory::create<InitialCondition>(class_name, name, params);
             fepface->addInitialCondition(ic);
+        }
+    }
+}
+
+void
+GYMLFile::buildBoundaryConditons()
+{
+    _F_;
+    YAML::Node bcs_root_node = this->root["bcs"];
+    if (!bcs_root_node)
+        return;
+
+    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
+    if (fepface == nullptr)
+        godzillaError("Supplied problem type '", this->problem->getType(), "' does not support boundary conditions.");
+    else {
+        for (const auto & it : bcs_root_node) {
+            YAML::Node bc_node = it.first;
+            std::string name = bc_node.as<std::string>();
+
+            InputParameters params = buildParams(bcs_root_node, name);
+            const std::string & class_name = params.get<std::string>("_type");
+            auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
+            fepface->addBoundaryCondition(bc);
         }
     }
 }
@@ -199,6 +225,10 @@ GYMLFile::setParameterFromYML(InputParameters & params, const YAML::Node & node,
         // vector values
         else if (param_type == type_name<std::vector<PetscReal>>())
             params.set<std::vector<PetscReal>>(param_name) = val.as<std::vector<double>>();
+        else if (param_type == type_name<std::vector<int>>())
+            params.set<std::vector<int>>(param_name) = val.as<std::vector<int>>();
+        else if (param_type == type_name<std::vector<std::string>>())
+            params.set<std::vector<std::string>>(param_name) = val.as<std::vector<std::string>>();
     }
 }
 

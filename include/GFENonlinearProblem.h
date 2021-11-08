@@ -5,6 +5,7 @@
 #include "petscsnes.h"
 #include "petscfe.h"
 #include "petscds.h"
+#include <vector>
 
 namespace godzilla {
 
@@ -22,6 +23,7 @@ public:
     virtual const std::string & getFieldName(PetscInt fid) override;
     virtual PetscInt addField(const std::string & name, PetscInt nc, PetscInt k) override;
     virtual void addInitialCondition(const InitialCondition *ic) override;
+    virtual void addBoundaryCondition(const BoundaryCondition * bc) override;
 
 protected:
     virtual void init() override;
@@ -100,6 +102,15 @@ protected:
     };
     /// Initial conditions in the problem
     std::map<PetscInt, ICInfo> ics;
+    /// Boundary condition information
+    struct BCInfo {
+        /// Boundary name (from mesh)
+        std::string bnd_name;
+        /// Boundary condition
+        const BoundaryCondition * bc;
+    };
+    ///
+    std::vector<BCInfo> bcs;
     /// Object that manages a discrete system
     PetscDS ds;
 
