@@ -10,13 +10,6 @@ using namespace godzilla;
 
 registerObject(PoissonFENonlinearProblem);
 
-static PetscErrorCode
-quadratic_u_2d(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar *u, void *ctx)
-{
-  *u = x[0] * x[0] + x[1] * x[1];
-  return 0;
-}
-
 static void
 f0_u(PetscInt dim, PetscInt Nf, PetscInt NfAux,
      const PetscInt uOff[], const PetscInt uOff_x[], const PetscScalar u[], const PetscScalar u_t[], const PetscScalar u_x[],
@@ -83,31 +76,4 @@ PoissonFENonlinearProblem::onSetWeakForm()
 {
     setResidualBlock(this->u_id, f0_u, f1_u);
     setJacobianBlock(this->u_id, this->u_id, NULL, NULL, NULL, g3_uu);
-}
-
-void
-PoissonFENonlinearProblem::setupBoundaryConditions()
-{
-    const DM & dm = getDM();
-
-    godzilla::PetscFunc *exact_funcs[1];
-    exact_funcs[0] = quadratic_u_2d;
-
-    DMLabel label;
-    DMGetLabel(dm, "marker", &label);
-    const PetscInt id = 1;
-
-    // DMLabel label;
-    // DMGetLabel(dm, "Face Sets", &label);
-    // const PetscInt ids[] = { 0, 1, 2, 3 };
-
-    PetscDSAddBoundary(this->ds,
-        DM_BC_ESSENTIAL,
-        "1", label,
-        1, &id,
-        // 4, ids,
-        0, 0, NULL,
-        (void (*)(void)) exact_funcs[0],
-        NULL, this,
-        NULL);
 }

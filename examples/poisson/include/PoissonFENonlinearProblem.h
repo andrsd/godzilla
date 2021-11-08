@@ -17,8 +17,6 @@ protected:
     virtual void onSetFields() override;
     virtual void onSetWeakForm() override;
 
-    virtual void setupBoundaryConditions() override;
-
     /// ID for the "u" field
     PetscInt u_id;
 

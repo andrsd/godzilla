@@ -7,6 +7,7 @@ add_executable(${PROJECT_NAME}
     src/PoissonFENonlinearProblem.cpp
     src/PoissonLinearProblem.cpp
     src/PoissonNonlinearProblem.cpp
+    src/X2Y2BC.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
