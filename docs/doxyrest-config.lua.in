@@ -1,9 +1,9 @@
 FRAME_DIR_LIST = { "@DOXYREST_PATH@/frame/cfamily", "@DOXYREST_PATH@/frame/common" }
 INPUT_FILE = "xml/index.xml"
+OUTPUT_FILE = "rst/devel/index.rst"
 FORCE_INCLUDE_FILE = nil
 EXTRA_PAGE_LIST = {}
 INDEX_TITLE = "godzilla Documentation"
-INTRO_FILE = "page_index.rst"
 SORT_GROUPS_BY = "title"
 GLOBAL_AUX_COMPOUND_ID = "group_global"
 FOOTNOTE_MEMBER_PREFIX = nil

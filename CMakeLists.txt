@@ -117,15 +117,38 @@ if(DOXYGEN_FOUND)
             ${SPHINX_BUILD} -b html rst html
         DEPENDS
             ${PROJECT_BINARY_DIR}/rst/index.rst
+            ${PROJECT_BINARY_DIR}/rst/getting-started
+            ${PROJECT_BINARY_DIR}/rst/examples
+            ${PROJECT_BINARY_DIR}/rst/devel/index.rst
+            ${PROJECT_BINARY_DIR}/rst/conf.py
     )
 
     add_custom_command(
         OUTPUT
-            ${PROJECT_BINARY_DIR}/rst/index.rst
+            ${PROJECT_BINARY_DIR}/rst/devel/index.rst
         COMMAND
             ${DOXYREST} -c doxyrest-config.lua
         DEPENDS
             ${PROJECT_BINARY_DIR}/xml/index.xml
+    )
+
+    add_custom_command(
+        OUTPUT
+            ${PROJECT_BINARY_DIR}/rst/getting-started
+        COMMAND
+            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/getting-started ${PROJECT_BINARY_DIR}/rst/getting-started
+    )
+    add_custom_command(
+        OUTPUT
+            ${PROJECT_BINARY_DIR}/rst/examples
+        COMMAND
+            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/examples ${PROJECT_BINARY_DIR}/rst/examples
+    )
+    add_custom_command(
+        OUTPUT
+            ${PROJECT_BINARY_DIR}/rst/index.rst
+        COMMAND
+            cmake -E copy ${PROJECT_SOURCE_DIR}/docs/index.rst ${PROJECT_BINARY_DIR}/rst
     )
 
     add_custom_command(

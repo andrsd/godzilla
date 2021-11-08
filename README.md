@@ -67,7 +67,7 @@ Documentation
 For documentation, you will also need
 ```
 conda install doxygen doxyrest sphinx
-pip install sphinx-rtd-theme
+pip install sphinx-rtd-theme sphinx-tabs
 ```
 
 Environement
