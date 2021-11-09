@@ -49,12 +49,12 @@ g3_uu(PetscInt dim, PetscInt Nf, PetscInt NfAux,
 InputParameters
 PoissonFENonlinearProblem::validParams()
 {
-    InputParameters params = GFENonlinearProblem::validParams();
+    InputParameters params = FENonlinearProblem::validParams();
     return params;
 }
 
 PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & parameters) :
-    GFENonlinearProblem(parameters)
+    FENonlinearProblem(parameters)
 {
     _F_;
 }

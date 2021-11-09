@@ -12,12 +12,12 @@ namespace godzilla {
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system
 ///
-class GFENonlinearProblem : public NonlinearProblem,
-                            public FEProblemInterface
+class FENonlinearProblem : public NonlinearProblem,
+                           public FEProblemInterface
 {
 public:
-    GFENonlinearProblem(const InputParameters & parameters);
-    virtual ~GFENonlinearProblem();
+    FENonlinearProblem(const InputParameters & parameters);
+    virtual ~FENonlinearProblem();
 
     virtual void create() override;
     virtual const std::string & getFieldName(PetscInt fid) override;

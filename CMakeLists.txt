@@ -51,7 +51,7 @@ add_library(${PROJECT_NAME} SHARED
     src/GUnstructuredMesh.cpp
     src/GOutput.cpp
     src/VTKOutput.cpp
-    src/GFENonlinearProblem.cpp
+    src/FENonlinearProblem.cpp
     src/LinearProblem.cpp
     src/NonlinearProblem.cpp
     src/GProblem.cpp

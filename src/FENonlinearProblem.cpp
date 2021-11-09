@@ -1,4 +1,4 @@
-#include "GFENonlinearProblem.h"
+#include "FENonlinearProblem.h"
 #include "CallStack.h"
 #include "GGrid.h"
 #include "GFunctionInterface.h"
@@ -24,13 +24,13 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 
 InputParameters
-GFENonlinearProblem::validParams()
+FENonlinearProblem::validParams()
 {
     InputParameters params = NonlinearProblem::validParams();
     return params;
 }
 
-GFENonlinearProblem::GFENonlinearProblem(const InputParameters & parameters) :
+FENonlinearProblem::FENonlinearProblem(const InputParameters & parameters) :
     NonlinearProblem(parameters),
     dim(-1),
     n_fields(0),
@@ -39,7 +39,7 @@ GFENonlinearProblem::GFENonlinearProblem(const InputParameters & parameters) :
     _F_;
 }
 
-GFENonlinearProblem::~GFENonlinearProblem()
+FENonlinearProblem::~FENonlinearProblem()
 {
     _F_;
     for (auto & kv : this->fields) {
@@ -49,7 +49,7 @@ GFENonlinearProblem::~GFENonlinearProblem()
 }
 
 void
-GFENonlinearProblem::create()
+FENonlinearProblem::create()
 {
     _F_;
     DMGetDimension(this->grid.getDM(), &this->dim);
@@ -59,7 +59,7 @@ GFENonlinearProblem::create()
 }
 
 const std::string &
-GFENonlinearProblem::getFieldName(PetscInt fid)
+FENonlinearProblem::getFieldName(PetscInt fid)
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -70,7 +70,7 @@ GFENonlinearProblem::getFieldName(PetscInt fid)
 }
 
 PetscInt
-GFENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
+FENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
 {
     _F_;
     FieldInfo fi = { name, this->n_fields, nullptr, nullptr, nc, k };
@@ -82,7 +82,7 @@ GFENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
 }
 
 void
-GFENonlinearProblem::addInitialCondition(const InitialCondition *ic)
+FENonlinearProblem::addInitialCondition(const InitialCondition *ic)
 {
     _F_;
     PetscInt fid = ic->getFieldId();
@@ -95,7 +95,7 @@ GFENonlinearProblem::addInitialCondition(const InitialCondition *ic)
 }
 
 void
-GFENonlinearProblem::addBoundaryCondition(const BoundaryCondition *bc)
+FENonlinearProblem::addBoundaryCondition(const BoundaryCondition *bc)
 {
     _F_;
     const std::vector<std::string> & bnd_names = bc->getBoundary();
@@ -109,7 +109,7 @@ GFENonlinearProblem::addBoundaryCondition(const BoundaryCondition *bc)
 }
 
 void
-GFENonlinearProblem::init()
+FENonlinearProblem::init()
 {
     _F_;
     NonlinearProblem::init();
@@ -128,7 +128,7 @@ GFENonlinearProblem::init()
 }
 
 void
-GFENonlinearProblem::setupBoundaryConditions()
+FENonlinearProblem::setupBoundaryConditions()
 {
     _F_;
     const DM & dm = getDM();
@@ -182,7 +182,7 @@ GFENonlinearProblem::setupBoundaryConditions()
 }
 
 void
-GFENonlinearProblem::setupCallbacks()
+FENonlinearProblem::setupCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
@@ -194,7 +194,7 @@ GFENonlinearProblem::setupCallbacks()
 }
 
 void
-GFENonlinearProblem::setupInitialGuess()
+FENonlinearProblem::setupInitialGuess()
 {
     _F_;
     PetscInt n_ics = this->ics.size();
@@ -233,21 +233,21 @@ GFENonlinearProblem::setupInitialGuess()
 }
 
 PetscErrorCode
-GFENonlinearProblem::computeResidualCallback(Vec x, Vec f)
+FENonlinearProblem::computeResidualCallback(Vec x, Vec f)
 {
     _F_;
     return 0;
 }
 
 PetscErrorCode
-GFENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
+FENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
 {
     _F_;
     return 0;
 }
 
 void
-GFENonlinearProblem::setupFields()
+FENonlinearProblem::setupFields()
 {
     _F_;
     PetscErrorCode ierr;
@@ -270,7 +270,7 @@ GFENonlinearProblem::setupFields()
 }
 
 void
-GFENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFunc *f0, PetscFEResidualFunc *f1)
+FENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFunc *f0, PetscFEResidualFunc *f1)
 {
     _F_;
     PetscErrorCode ierr;
@@ -279,7 +279,7 @@ GFENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFunc *f0
 }
 
 void
-GFENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJacobianFunc *g0, PetscFEJacobianFunc *g1, PetscFEJacobianFunc *g2, PetscFEJacobianFunc *g3)
+FENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJacobianFunc *g0, PetscFEJacobianFunc *g1, PetscFEJacobianFunc *g2, PetscFEJacobianFunc *g3)
 {
     _F_;
     PetscErrorCode ierr;
