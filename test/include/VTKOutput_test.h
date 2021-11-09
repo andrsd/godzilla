@@ -5,11 +5,11 @@
 #include "GGrid.h"
 #include "GExecutioner.h"
 #include "GProblem.h"
-#include "GVTKOutput.h"
+#include "VTKOutput.h"
 #include "GodzillaApp_test.h"
 
 
-class GVTKOutputTest : public GodzillaAppTest {
+class VTKOutputTest : public GodzillaAppTest {
 protected:
     GGrid *
     gGrid()
@@ -41,14 +41,14 @@ protected:
         return Factory::create<GExecutioner>(class_name, "obj", params);
     }
 
-    GVTKOutput *
+    VTKOutput *
     gOutput(GProblem * problem, const std::string & file_name)
     {
-        const std::string class_name = "GVTKOutput";
+        const std::string class_name = "VTKOutput";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<GProblem *>("_gproblem") = problem;
         params.set<std::string>("file") = file_name;
-        return Factory::create<GVTKOutput>(class_name, "out", params);
+        return Factory::create<VTKOutput>(class_name, "out", params);
     }
 };

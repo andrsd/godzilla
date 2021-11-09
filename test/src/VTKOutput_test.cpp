@@ -1,9 +1,9 @@
 #include "GodzillaApp_test.h"
-#include "GVTKOutput_test.h"
+#include "VTKOutput_test.h"
 #include "petsc.h"
 
 
-TEST_F(GVTKOutputTest, output)
+TEST_F(VTKOutputTest, output)
 {
     testing::internal::CaptureStderr();
 

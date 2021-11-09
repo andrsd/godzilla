@@ -1,21 +1,21 @@
 #include "Godzilla.h"
-#include "GVTKOutput.h"
+#include "VTKOutput.h"
 #include "GProblem.h"
 
 namespace godzilla {
 
-registerObject(GVTKOutput);
+registerObject(VTKOutput);
 
 static const int MAX_PATH = 1024;
 
 InputParameters
-GVTKOutput::validParams() {
+VTKOutput::validParams() {
     InputParameters params = GOutput::validParams();
     params.addRequiredParam<std::string>("file", "The name of the output file.");
     return params;
 }
 
-GVTKOutput::GVTKOutput(const InputParameters & params) :
+VTKOutput::VTKOutput(const InputParameters & params) :
     GOutput(params),
     file_name(getParam<std::string>("file"))
 {
@@ -28,14 +28,14 @@ GVTKOutput::GVTKOutput(const InputParameters & params) :
 
 }
 
-GVTKOutput::~GVTKOutput()
+VTKOutput::~VTKOutput()
 {
     _F_;
     PetscViewerDestroy(&viewer);
 }
 
 void
-GVTKOutput::output() const
+VTKOutput::output() const
 {
     _F_;
     char fn[MAX_PATH];

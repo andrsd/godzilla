@@ -13,13 +13,13 @@ namespace godzilla {
 /// ```
 /// output:
 ///   vtk:
-///     type: GVTKOutput
+///     type: VTKOutput
 ///     file: 'out.vtk'
 /// ```
-class GVTKOutput : public GOutput {
+class VTKOutput : public GOutput {
 public:
-    GVTKOutput(const InputParameters & params);
-    virtual ~GVTKOutput();
+    VTKOutput(const InputParameters & params);
+    virtual ~VTKOutput();
 
     virtual void output() const override;
 

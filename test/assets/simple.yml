@@ -12,5 +12,5 @@ executioner:
     type: GExecutioner
 output:
     vtk:
-        type: GVTKOutput
+        type: VTKOutput
         file: 'a.vtk'
