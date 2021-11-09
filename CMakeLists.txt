@@ -34,7 +34,7 @@ add_library(${PROJECT_NAME} SHARED
     src/CallStack.cpp
     src/Factory.cpp
     src/FEProblemInterface.cpp
-    src/GFunctionInterface.cpp
+    src/FunctionInterface.cpp
     src/GPrintInterface.cpp
     src/Init.cpp
     src/InitialCondition.cpp

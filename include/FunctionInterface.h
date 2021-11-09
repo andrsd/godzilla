@@ -6,10 +6,10 @@ namespace godzilla {
 
 /// Function interface
 ///
-class GFunctionInterface
+class FunctionInterface
 {
 public:
-    GFunctionInterface();
+    FunctionInterface();
 
 protected:
 };

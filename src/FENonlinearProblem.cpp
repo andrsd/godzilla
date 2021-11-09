@@ -1,7 +1,7 @@
 #include "FENonlinearProblem.h"
 #include "CallStack.h"
 #include "GGrid.h"
-#include "GFunctionInterface.h"
+#include "FunctionInterface.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "petscdm.h"

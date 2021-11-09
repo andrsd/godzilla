@@ -1,5 +1,5 @@
 #include "Godzilla.h"
-#include "GFunctionInterface.h"
+#include "FunctionInterface.h"
 #include "PoissonFENonlinearProblem.h"
 #include "CallStack.h"
 #include "petscdm.h"
