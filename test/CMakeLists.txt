@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
+    src/BoundaryCondition_test.cpp
     src/Factory_test.cpp
     src/GodzillaApp_test.cpp
     src/PrintInterface_test.cpp
