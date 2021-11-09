@@ -1,14 +1,14 @@
 #include "GodzillaApp_test.h"
-#include "G2DRectangleMesh_test.h"
+#include "RectangleMesh_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
 
 
 using namespace godzilla;
 
-registerObject(MockG2DRectangleMesh);
+registerObject(MockRectangleMesh);
 
-TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh)
+TEST_F(RectangleMeshTest, g2d_rectangle_mesh)
 {
     auto obj = g2dRectangleMesh({1, 2}, {3, 4});
 
@@ -21,7 +21,7 @@ TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh)
     EXPECT_EQ(obj->getNy(), 8);
 }
 
-TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh_incorrect_dims)
+TEST_F(RectangleMeshTest, g2d_rectangle_mesh_incorrect_dims)
 {
     EXPECT_DEATH(
         g2dRectangleMesh({2, 1}, {1, 2}),
@@ -34,7 +34,7 @@ TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh_incorrect_dims)
     );
 }
 
-TEST_F(G2DRectangleMeshTest, g2d_rectangle_mesh_create)
+TEST_F(RectangleMeshTest, g2d_rectangle_mesh_create)
 {
     auto obj = g2dRectangleMesh({1, 2}, {3, 4});
     obj->create();

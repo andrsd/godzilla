@@ -2,27 +2,27 @@
 
 #include "Factory.h"
 #include "gmock/gmock.h"
-#include "G2DRectangleMesh.h"
+#include "RectangleMesh.h"
 #include "GodzillaApp_test.h"
 
 
 using namespace godzilla;
 
-class MockG2DRectangleMesh : public G2DRectangleMesh
+class MockRectangleMesh : public RectangleMesh
 {
 public:
-    MockG2DRectangleMesh(const InputParameters & params) : G2DRectangleMesh(params) {}
+    MockRectangleMesh(const InputParameters & params) : RectangleMesh(params) {}
 };
 
 
-class G2DRectangleMeshTest : public GodzillaAppTest {
+class RectangleMeshTest : public GodzillaAppTest {
 protected:
-    MockG2DRectangleMesh *
+    MockRectangleMesh *
     g2dRectangleMesh(
             const std::vector<PetscReal> & xmin,
             const std::vector<PetscReal> & xmax)
     {
-        const std::string class_name = "MockG2DRectangleMesh";
+        const std::string class_name = "MockRectangleMesh";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<PetscReal>("xmin") = xmin[0];
@@ -31,6 +31,6 @@ protected:
         params.set<PetscReal>("ymin") = xmin[1];
         params.set<PetscReal>("ymax") = xmax[1];
         params.set<PetscInt>("ny") = 8;
-        return Factory::create<MockG2DRectangleMesh>(class_name, "obj", params);
+        return Factory::create<MockRectangleMesh>(class_name, "obj", params);
     }
 };

@@ -1,15 +1,15 @@
 #include "Godzilla.h"
-#include "G2DRectangleMesh.h"
+#include "RectangleMesh.h"
 #include "CallStack.h"
 #include "petscdmplex.h"
 
 
 namespace godzilla {
 
-registerObject(G2DRectangleMesh);
+registerObject(RectangleMesh);
 
 InputParameters
-G2DRectangleMesh::validParams()
+RectangleMesh::validParams()
 {
     InputParameters params = UnstructuredMesh::validParams();
     params.addParam<PetscReal>("xmin", 0., "Minimum in the x direction");
@@ -21,7 +21,7 @@ G2DRectangleMesh::validParams()
     return params;
 }
 
-G2DRectangleMesh::G2DRectangleMesh(const InputParameters & parameters) :
+RectangleMesh::RectangleMesh(const InputParameters & parameters) :
     UnstructuredMesh(parameters),
     xmin(getParam<PetscReal>("xmin")),
     xmax(getParam<PetscReal>("xmax")),
@@ -40,49 +40,49 @@ G2DRectangleMesh::G2DRectangleMesh(const InputParameters & parameters) :
 }
 
 PetscInt
-G2DRectangleMesh::getXMin() const
+RectangleMesh::getXMin() const
 {
     _F_;
     return this->xmin;
 }
 
 PetscInt
-G2DRectangleMesh::getXMax() const
+RectangleMesh::getXMax() const
 {
     _F_;
     return this->xmax;
 }
 
 PetscInt
-G2DRectangleMesh::getNx() const
+RectangleMesh::getNx() const
 {
     _F_;
     return this->nx;
 }
 
 PetscInt
-G2DRectangleMesh::getYMin() const
+RectangleMesh::getYMin() const
 {
     _F_;
     return this->ymin;
 }
 
 PetscInt
-G2DRectangleMesh::getYMax() const
+RectangleMesh::getYMax() const
 {
     _F_;
     return this->ymax;
 }
 
 PetscInt
-G2DRectangleMesh::getNy() const
+RectangleMesh::getNy() const
 {
     _F_;
     return this->ny;
 }
 
 void
-G2DRectangleMesh::create()
+RectangleMesh::create()
 {
     _F_;
     PetscErrorCode ierr;

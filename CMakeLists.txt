@@ -44,7 +44,7 @@ add_library(${PROJECT_NAME} SHARED
     src/CmdLineArgParser.cpp
     src/LineMesh.cpp
     src/StructuredGrid1D.cpp
-    src/G2DRectangleMesh.cpp
+    src/RectangleMesh.cpp
     src/StructuredGrid2D.cpp
     src/ExodusIIMesh.cpp
     src/Grid.cpp

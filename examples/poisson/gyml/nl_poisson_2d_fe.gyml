@@ -1,5 +1,5 @@
 grid:
-    type: G2DRectangleMesh
+    type: RectangleMesh
     nx: 2
     ny: 2
     xmin: 0

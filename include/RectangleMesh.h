@@ -6,10 +6,10 @@ namespace godzilla {
 
 /// 2D rectangular mesh
 ///
-class G2DRectangleMesh : public UnstructuredMesh
+class RectangleMesh : public UnstructuredMesh
 {
 public:
-    G2DRectangleMesh(const InputParameters & parameters);
+    RectangleMesh(const InputParameters & parameters);
 
     ///
     PetscInt getXMin() const;
