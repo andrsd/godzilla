@@ -8,12 +8,12 @@ namespace godzilla {
 InputParameters
 UnstructuredMesh::validParams()
 {
-    InputParameters params = GGrid::validParams();
+    InputParameters params = Grid::validParams();
     return params;
 }
 
 UnstructuredMesh::UnstructuredMesh(const InputParameters & parameters) :
-    GGrid(parameters)
+    Grid(parameters)
 {
     _F_;
 }

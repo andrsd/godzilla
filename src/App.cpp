@@ -2,7 +2,7 @@
 #include "Factory.h"
 #include "GodzillaConfig.h"
 #include "GYMLFile.h"
-#include "GGrid.h"
+#include "Grid.h"
 #include "Problem.h"
 #include "Executioner.h"
 #include "CallStack.h"

@@ -11,14 +11,14 @@ registerObject(G2DStructuredGrid);
 InputParameters
 G2DStructuredGrid::validParams()
 {
-    InputParameters params = GGrid::validParams();
+    InputParameters params = Grid::validParams();
     params.addRequiredParam<PetscInt>("nx", "Number of grid points in the x direction");
     params.addRequiredParam<PetscInt>("ny", "Number of grid points in the y direction");
     return params;
 }
 
 G2DStructuredGrid::G2DStructuredGrid(const InputParameters & parameters) :
-    GGrid(parameters),
+    Grid(parameters),
     nx(getParam<PetscInt>("nx")),
     ny(getParam<PetscInt>("ny"))
 {

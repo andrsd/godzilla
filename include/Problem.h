@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-class GGrid;
+class Grid;
 
 /// Problem
 ///
@@ -29,7 +29,7 @@ public:
 
 protected:
     /// Grid
-    GGrid & grid;
+    Grid & grid;
 
 public:
     static InputParameters validParams();

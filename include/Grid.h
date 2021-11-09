@@ -8,12 +8,12 @@ namespace godzilla {
 
 /// Base class for grids
 ///
-class GGrid : public Object,
+class Grid : public Object,
               public PrintInterface
 {
 public:
-    GGrid(const InputParameters & parameters);
-    virtual ~GGrid();
+    Grid(const InputParameters & parameters);
+    virtual ~Grid();
 
     const DM & getDM() const;
 

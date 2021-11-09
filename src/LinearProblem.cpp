@@ -1,6 +1,6 @@
 #include "LinearProblem.h"
 #include "CallStack.h"
-#include "GGrid.h"
+#include "Grid.h"
 #include "Utils.h"
 
 

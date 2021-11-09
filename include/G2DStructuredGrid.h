@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GGrid.h"
+#include "Grid.h"
 
 namespace godzilla {
 
 /// 2D structured grid
 ///
-class G2DStructuredGrid : public GGrid
+class G2DStructuredGrid : public Grid
 {
 public:
     G2DStructuredGrid(const InputParameters & parameters);

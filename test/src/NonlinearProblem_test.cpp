@@ -1,5 +1,5 @@
 #include "Factory.h"
-#include "GGrid.h"
+#include "Grid.h"
 #include "NonlinearProblem_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
@@ -15,19 +15,19 @@ TEST(NonlinearProblemTest, solve)
 {
     App app("test", MPI_COMM_WORLD);
 
-    GGrid * grid;
+    Grid * grid;
     {
         const std::string class_name = "G1DStructuredGrid";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = &app;
         params.set<PetscInt>("nx") = 2;
-        grid = Factory::create<GGrid>(class_name, "grid", params);
+        grid = Factory::create<Grid>(class_name, "grid", params);
     }
 
     const std::string class_name = "GTestPetscNonlinearProblem";
     InputParameters params = Factory::getValidParams(class_name);
     params.set<const App *>("_app") = &app;
-    params.set<GGrid *>("_ggrid") = grid;
+    params.set<Grid *>("_ggrid") = grid;
     auto prob = Factory::create<GTestPetscNonlinearProblem>(class_name, "obj", params);
 
     grid->create();

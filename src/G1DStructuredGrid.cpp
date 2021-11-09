@@ -11,13 +11,13 @@ registerObject(G1DStructuredGrid);
 InputParameters
 G1DStructuredGrid::validParams()
 {
-    InputParameters params = GGrid::validParams();
+    InputParameters params = Grid::validParams();
     params.addRequiredParam<PetscInt>("nx", "Number of grid points in the x direction");
     return params;
 }
 
 G1DStructuredGrid::G1DStructuredGrid(const InputParameters & parameters) :
-    GGrid(parameters),
+    Grid(parameters),
     nx(getParam<PetscInt>("nx"))
 {
     _F_;

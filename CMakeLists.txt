@@ -47,7 +47,7 @@ add_library(${PROJECT_NAME} SHARED
     src/G2DRectangleMesh.cpp
     src/G2DStructuredGrid.cpp
     src/ExodusIIMesh.cpp
-    src/GGrid.cpp
+    src/Grid.cpp
     src/UnstructuredMesh.cpp
     src/Output.cpp
     src/VTKOutput.cpp

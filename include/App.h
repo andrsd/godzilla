@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-class GGrid;
+class Grid;
 class Problem;
 class Executioner;
 
@@ -46,7 +46,7 @@ protected:
     unsigned int verbosity_level;
 
     /// Grid
-    GGrid * grid;
+    Grid * grid;
     /// Problem
     Problem * problem;
     /// Executioner

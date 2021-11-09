@@ -1,7 +1,7 @@
 #include "GYMLFile.h"
 #include "App.h"
 #include "Factory.h"
-#include "GGrid.h"
+#include "Grid.h"
 #include "Problem.h"
 #include "Executioner.h"
 #include "InitialCondition.h"
@@ -36,7 +36,7 @@ GYMLFile::parse(const std::string & file_name)
     this->root = YAML::LoadFile(file_name);
 }
 
-GGrid *
+Grid *
 GYMLFile::getGrid()
 {
     _F_;
@@ -82,7 +82,7 @@ GYMLFile::buildGrid()
     _F_;
     InputParameters params = buildParams(this->root, "grid");
     const std::string & class_name = params.get<std::string>("_type");
-    this->grid = Factory::create<GGrid>(class_name, "grid", params);
+    this->grid = Factory::create<Grid>(class_name, "grid", params);
 }
 
 void
@@ -91,7 +91,7 @@ GYMLFile::buildProblem()
     _F_;
     InputParameters params = buildParams(this->root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<GGrid *>("_ggrid") = this->grid;
+    params.set<Grid *>("_ggrid") = this->grid;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
 }
 

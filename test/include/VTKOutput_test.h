@@ -2,7 +2,7 @@
 
 #include "Factory.h"
 #include "gmock/gmock.h"
-#include "GGrid.h"
+#include "Grid.h"
 #include "Executioner.h"
 #include "Problem.h"
 #include "VTKOutput.h"
@@ -11,23 +11,23 @@
 
 class VTKOutputTest : public GodzillaAppTest {
 protected:
-    GGrid *
+    Grid *
     gGrid()
     {
         const std::string class_name = "G1DLineMesh";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<PetscInt>("nx") = 2;
-        return Factory::create<GGrid>(class_name, "grid", params);
+        return Factory::create<Grid>(class_name, "grid", params);
     }
 
     Problem *
-    gProblem(GGrid *grid)
+    gProblem(Grid *grid)
     {
         const std::string class_name = "GTestPetscLinearProblem";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<GGrid *>("_ggrid") = grid;
+        params.set<Grid *>("_ggrid") = grid;
         return Factory::create<Problem>(class_name, "problem", params);
     }
 

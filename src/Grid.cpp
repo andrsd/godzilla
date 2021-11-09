@@ -1,18 +1,18 @@
 #include "Godzilla.h"
-#include "GGrid.h"
+#include "Grid.h"
 #include "CallStack.h"
 
 
 namespace godzilla {
 
 InputParameters
-GGrid::validParams()
+Grid::validParams()
 {
     InputParameters params = Object::validParams();
     return params;
 }
 
-GGrid::GGrid(const InputParameters & parameters) :
+Grid::Grid(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
     dm(NULL)
@@ -20,7 +20,7 @@ GGrid::GGrid(const InputParameters & parameters) :
     _F_;
 }
 
-GGrid::~GGrid()
+Grid::~Grid()
 {
     _F_;
     if (this->dm)
@@ -28,7 +28,7 @@ GGrid::~GGrid()
 }
 
 const DM &
-GGrid::getDM() const
+Grid::getDM() const
 {
     _F_;
     return this->dm;

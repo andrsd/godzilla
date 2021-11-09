@@ -9,7 +9,7 @@ namespace godzilla {
 
 class App;
 class Factory;
-class GGrid;
+class Grid;
 class Problem;
 class Executioner;
 
@@ -25,7 +25,7 @@ public:
     /// build the simulation
     virtual void build();
 
-    virtual GGrid * getGrid();
+    virtual Grid * getGrid();
     virtual Problem * getProblem();
     virtual Executioner * getExecutioner();
 
@@ -46,7 +46,7 @@ protected:
 
     YAML::Node root;
 
-    GGrid * grid;
+    Grid * grid;
     Problem * problem;
     Executioner * executioner;
 };
