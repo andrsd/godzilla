@@ -6,10 +6,10 @@ namespace godzilla {
 
 /// Base class for unstructured meshes
 ///
-class GUnstructuredMesh : public GGrid
+class UnstructuredMesh : public GGrid
 {
 public:
-    GUnstructuredMesh(const InputParameters & parameters);
+    UnstructuredMesh(const InputParameters & parameters);
 
 public:
     static InputParameters validParams();

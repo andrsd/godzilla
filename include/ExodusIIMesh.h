@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GUnstructuredMesh.h"
+#include "UnstructuredMesh.h"
 
 namespace godzilla {
 
 /// Mesh loaded from a ExodusII file
 ///
-class ExodusIIMesh : public GUnstructuredMesh
+class ExodusIIMesh : public UnstructuredMesh
 {
 public:
     ExodusIIMesh(const InputParameters & parameters);

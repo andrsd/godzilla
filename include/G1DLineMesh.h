@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GUnstructuredMesh.h"
+#include "UnstructuredMesh.h"
 
 namespace godzilla {
 
 /// 1D line
 ///
-class G1DLineMesh : public GUnstructuredMesh
+class G1DLineMesh : public UnstructuredMesh
 {
 public:
     G1DLineMesh(const InputParameters & parameters);

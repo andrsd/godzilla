@@ -48,7 +48,7 @@ add_library(${PROJECT_NAME} SHARED
     src/G2DStructuredGrid.cpp
     src/ExodusIIMesh.cpp
     src/GGrid.cpp
-    src/GUnstructuredMesh.cpp
+    src/UnstructuredMesh.cpp
     src/Output.cpp
     src/VTKOutput.cpp
     src/FENonlinearProblem.cpp

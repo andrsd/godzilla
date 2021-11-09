@@ -1,18 +1,18 @@
 #include "Godzilla.h"
-#include "GUnstructuredMesh.h"
+#include "UnstructuredMesh.h"
 #include "CallStack.h"
 
 
 namespace godzilla {
 
 InputParameters
-GUnstructuredMesh::validParams()
+UnstructuredMesh::validParams()
 {
     InputParameters params = GGrid::validParams();
     return params;
 }
 
-GUnstructuredMesh::GUnstructuredMesh(const InputParameters & parameters) :
+UnstructuredMesh::UnstructuredMesh(const InputParameters & parameters) :
     GGrid(parameters)
 {
     _F_;

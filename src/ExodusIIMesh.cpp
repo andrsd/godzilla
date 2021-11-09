@@ -12,13 +12,13 @@ registerObject(ExodusIIMesh);
 InputParameters
 ExodusIIMesh::validParams()
 {
-    InputParameters params = GUnstructuredMesh::validParams();
+    InputParameters params = UnstructuredMesh::validParams();
     params.addRequiredParam<std::string>("file", "The name of the ExodusII file.");
     return params;
 }
 
 ExodusIIMesh::ExodusIIMesh(const InputParameters & parameters) :
-    GUnstructuredMesh(parameters),
+    UnstructuredMesh(parameters),
     file_name(getParam<std::string>("file")),
     interpolate(PETSC_TRUE)
 {
