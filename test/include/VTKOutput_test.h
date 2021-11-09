@@ -27,7 +27,7 @@ protected:
         const std::string class_name = "GTestPetscLinearProblem";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<Grid *>("_ggrid") = grid;
+        params.set<Grid *>("_grid") = grid;
         return Factory::create<Problem>(class_name, "problem", params);
     }
 
@@ -37,7 +37,7 @@ protected:
         const std::string class_name = "Executioner";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<Problem *>("_Problem") = problem;
+        params.set<Problem *>("_problem") = problem;
         return Factory::create<Executioner>(class_name, "obj", params);
     }
 
@@ -47,7 +47,7 @@ protected:
         const std::string class_name = "VTKOutput";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<Problem *>("_Problem") = problem;
+        params.set<Problem *>("_problem") = problem;
         params.set<std::string>("file") = file_name;
         return Factory::create<VTKOutput>(class_name, "out", params);
     }

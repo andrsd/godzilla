@@ -91,7 +91,7 @@ GYMLFile::buildProblem()
     _F_;
     InputParameters params = buildParams(this->root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<Grid *>("_ggrid") = this->grid;
+    params.set<Grid *>("_grid") = this->grid;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
 }
 
@@ -101,7 +101,7 @@ GYMLFile::buildExecutioner()
     _F_;
     InputParameters params = buildParams(this->root, "executioner");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<Problem *>("_Problem") = this->problem;
+    params.set<Problem *>("_problem") = this->problem;
     this->executioner = Factory::create<Executioner>(class_name, "problem", params);
 }
 
@@ -167,7 +167,7 @@ GYMLFile::buildOutputs()
 
         InputParameters params = buildParams(output_root_node, name);
         const std::string & class_name = params.get<std::string>("_type");
-        params.set<Problem *>("_Problem") = this->problem;
+        params.set<Problem *>("_problem") = this->problem;
         auto output = Factory::create<Output>(class_name, name, params);
         assert(this->executioner != nullptr);
         this->executioner->addOutput(output);

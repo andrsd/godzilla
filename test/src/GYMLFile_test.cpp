@@ -18,7 +18,7 @@ GTestProblem::validParams()
     params.addParam<int>("i", -1234, "i doco");
     params.addParam<unsigned int>("ui", 1234, "ui doco");
     params.addParam<std::vector<double>>("arr_d", "vec<d> doco");
-    params.addPrivateParam<Grid *>("_ggrid");
+    params.addPrivateParam<Grid *>("_grid");
     return params;
 }
 

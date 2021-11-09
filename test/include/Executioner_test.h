@@ -52,7 +52,7 @@ protected:
         const std::string class_name = "MockExecutioner";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<Problem *>("_Problem") = problem;
+        params.set<Problem *>("_problem") = problem;
         return Factory::create<MockExecutioner>(class_name, "obj", params);
     }
 
@@ -62,7 +62,7 @@ protected:
         const std::string class_name = "MockOutput";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<Problem *>("_Problem") = problem;
+        params.set<Problem *>("_problem") = problem;
         return Factory::create<MockOutput>(class_name, name, params);
     }
 };

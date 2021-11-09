@@ -26,7 +26,7 @@ TEST(LinearProblemTest, solve)
     const std::string class_name = "GTestPetscLinearProblem";
     InputParameters params = Factory::getValidParams(class_name);
     params.set<const App *>("_app") = &app;
-    params.set<Grid *>("_ggrid") = grid;
+    params.set<Grid *>("_grid") = grid;
     auto prob = Factory::create<GTestPetscLinearProblem>(class_name, "obj", params);
 
     grid->create();

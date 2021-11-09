@@ -27,7 +27,7 @@ TEST(NonlinearProblemTest, solve)
     const std::string class_name = "GTestPetscNonlinearProblem";
     InputParameters params = Factory::getValidParams(class_name);
     params.set<const App *>("_app") = &app;
-    params.set<Grid *>("_ggrid") = grid;
+    params.set<Grid *>("_grid") = grid;
     auto prob = Factory::create<GTestPetscNonlinearProblem>(class_name, "obj", params);
 
     grid->create();

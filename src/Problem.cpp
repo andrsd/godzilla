@@ -8,14 +8,14 @@ InputParameters
 Problem::validParams()
 {
     InputParameters params = Object::validParams();
-    params.addPrivateParam<Grid *>("_ggrid");
+    params.addPrivateParam<Grid *>("_grid");
     return params;
 }
 
 Problem::Problem(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    grid(*getParam<Grid *>("_ggrid"))
+    grid(*getParam<Grid *>("_grid"))
 {
     _F_;
 }

@@ -13,14 +13,14 @@ InputParameters
 Executioner::validParams()
 {
     InputParameters params = Object::validParams();
-    params.addPrivateParam<Problem *>("_Problem");
+    params.addPrivateParam<Problem *>("_problem");
     return params;
 }
 
 Executioner::Executioner(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    problem(*getParam<Problem *>("_Problem"))
+    problem(*getParam<Problem *>("_problem"))
 {
     _F_;
 }
