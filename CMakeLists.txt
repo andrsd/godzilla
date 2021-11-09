@@ -30,35 +30,36 @@ set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(GODZILLA_CONTRIB_DIR ${CMAKE_SOURCE_DIR}/contrib)
 
 add_library(${PROJECT_NAME} SHARED
-    src/App.cpp
-    src/CallStack.cpp
+    # factory must be first
     src/Factory.cpp
+    src/App.cpp
+    src/BoundaryCondition.cpp
+    src/CallStack.cpp
+    src/CmdLineArgParser.cpp
+    src/ConstantIC.cpp
+    src/Executioner.cpp
+    src/ExodusIIMesh.cpp
+    src/FENonlinearProblem.cpp
     src/FEProblemInterface.cpp
     src/FunctionInterface.cpp
-    src/PrintInterface.cpp
+    src/Grid.cpp
+    src/GYMLFile.cpp
     src/Init.cpp
     src/InitialCondition.cpp
-    src/Object.cpp
-    src/Executioner.cpp
-    src/GYMLFile.cpp
-    src/CmdLineArgParser.cpp
-    src/LineMesh.cpp
-    src/StructuredGrid1D.cpp
-    src/RectangleMesh.cpp
-    src/StructuredGrid2D.cpp
-    src/ExodusIIMesh.cpp
-    src/Grid.cpp
-    src/UnstructuredMesh.cpp
-    src/Output.cpp
-    src/VTKOutput.cpp
-    src/FENonlinearProblem.cpp
-    src/LinearProblem.cpp
-    src/NonlinearProblem.cpp
-    src/Problem.cpp
-    src/ConstantIC.cpp
     src/InputParameters.cpp
-    src/BoundaryCondition.cpp
+    src/LinearProblem.cpp
+    src/LineMesh.cpp
+    src/NonlinearProblem.cpp
+    src/Object.cpp
+    src/Output.cpp
+    src/PrintInterface.cpp
+    src/Problem.cpp
+    src/RectangleMesh.cpp
+    src/StructuredGrid1D.cpp
+    src/StructuredGrid2D.cpp
+    src/UnstructuredMesh.cpp
     src/Utils.cpp
+    src/VTKOutput.cpp
 )
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
