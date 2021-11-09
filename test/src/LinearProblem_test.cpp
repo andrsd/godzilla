@@ -16,7 +16,7 @@ TEST(LinearProblemTest, solve)
 
     Grid * grid;
     {
-        const std::string class_name = "G1DStructuredGrid";
+        const std::string class_name = "StructuredGrid1D";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = &app;
         params.set<PetscInt>("nx") = 2;

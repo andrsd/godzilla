@@ -1,20 +1,20 @@
 #include "GodzillaApp_test.h"
-#include "G1DStructuredGrid_test.h"
+#include "StructuredGrid1D_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
 
 
 using namespace godzilla;
 
-registerObject(MockG1DStructuredGrid);
+registerObject(MockStructuredGrid1D);
 
-TEST_F(G1DStructuredGridTest, ctor)
+TEST_F(StructuredGrid1DTest, ctor)
 {
     auto obj = gMesh(3);
     EXPECT_EQ(obj->getNx(), 3);
 }
 
-TEST_F(G1DStructuredGridTest, create)
+TEST_F(StructuredGrid1DTest, create)
 {
     auto obj = gMesh(3);
     obj->create();

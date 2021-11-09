@@ -1,22 +1,22 @@
 #include "Godzilla.h"
-#include "G1DStructuredGrid.h"
+#include "StructuredGrid1D.h"
 #include "CallStack.h"
 #include "petscdmda.h"
 
 
 namespace godzilla {
 
-registerObject(G1DStructuredGrid);
+registerObject(StructuredGrid1D);
 
 InputParameters
-G1DStructuredGrid::validParams()
+StructuredGrid1D::validParams()
 {
     InputParameters params = Grid::validParams();
     params.addRequiredParam<PetscInt>("nx", "Number of grid points in the x direction");
     return params;
 }
 
-G1DStructuredGrid::G1DStructuredGrid(const InputParameters & parameters) :
+StructuredGrid1D::StructuredGrid1D(const InputParameters & parameters) :
     Grid(parameters),
     nx(getParam<PetscInt>("nx"))
 {
@@ -24,14 +24,14 @@ G1DStructuredGrid::G1DStructuredGrid(const InputParameters & parameters) :
 }
 
 PetscInt
-G1DStructuredGrid::getNx() const
+StructuredGrid1D::getNx() const
 {
     _F_;
     return this->nx;
 }
 
 void
-G1DStructuredGrid::create()
+StructuredGrid1D::create()
 {
     _F_;
     PetscErrorCode ierr;

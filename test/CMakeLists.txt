@@ -10,7 +10,7 @@ add_executable(${PROJECT_NAME}
     src/Object_test.cpp
     src/Executioner_test.cpp
     src/G1DLineMesh_test.cpp
-    src/G1DStructuredGrid_test.cpp
+    src/StructuredGrid1D_test.cpp
     src/G2DRectangleMesh_test.cpp
     src/G2DStructuredGrid_test.cpp
     src/ExodusIIMesh_test.cpp

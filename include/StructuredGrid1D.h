@@ -6,10 +6,10 @@ namespace godzilla {
 
 /// 1D structured grid
 ///
-class G1DStructuredGrid : public Grid
+class StructuredGrid1D : public Grid
 {
 public:
-    G1DStructuredGrid(const InputParameters & parameters);
+    StructuredGrid1D(const InputParameters & parameters);
 
     /// Get the number of grid points in x direction
     PetscInt getNx() const;
