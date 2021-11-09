@@ -4,7 +4,7 @@
 #include "gmock/gmock.h"
 #include "Executioner.h"
 #include "Problem.h"
-#include "GOutput.h"
+#include "Output.h"
 #include "GodzillaApp_test.h"
 
 class MockExecutioner : public Executioner
@@ -26,10 +26,10 @@ public:
     MOCK_METHOD((const Vec &), getSolutionVector, (), (const, override));
 };
 
-class MockGOutput : public GOutput
+class MockOutput : public Output
 {
 public:
-    MockGOutput(const InputParameters & params) : GOutput(params) {}
+    MockOutput(const InputParameters & params) : Output(params) {}
 
     MOCK_METHOD(void, output, (), (const, override));
 };
@@ -56,13 +56,13 @@ protected:
         return Factory::create<MockExecutioner>(class_name, "obj", params);
     }
 
-    MockGOutput *
+    MockOutput *
     gOutput(MockProblem * problem, const std::string & name)
     {
-        const std::string class_name = "MockGOutput";
+        const std::string class_name = "MockOutput";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<Problem *>("_Problem") = problem;
-        return Factory::create<MockGOutput>(class_name, name, params);
+        return Factory::create<MockOutput>(class_name, name, params);
     }
 };

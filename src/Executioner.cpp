@@ -2,7 +2,7 @@
 #include "Executioner.h"
 #include "Problem.h"
 #include "CallStack.h"
-#include "GOutput.h"
+#include "Output.h"
 
 
 namespace godzilla {
@@ -42,7 +42,7 @@ Executioner::execute()
 }
 
 void
-Executioner::addOutput(const GOutput * output)
+Executioner::addOutput(const Output * output)
 {
     _F_;
     this->outputs.push_back(output);

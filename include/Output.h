@@ -11,11 +11,11 @@ class Problem;
 ///
 /// Inherit from this class and override `output()` where you can implement your
 /// own output code
-class GOutput : public Object,
-                public GPrintInterface
+class Output : public Object,
+               public GPrintInterface
 {
 public:
-    GOutput(const InputParameters & params);
+    Output(const InputParameters & params);
 
     /// Implement this method to do the desired output
     virtual void output() const = 0;

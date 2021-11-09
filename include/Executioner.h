@@ -8,7 +8,7 @@
 namespace godzilla {
 
 class Problem;
-class GOutput;
+class Output;
 
 /// Executioner
 ///
@@ -24,7 +24,7 @@ public:
     /// Add and output object
     ///
     /// @param output Output object to add
-    virtual void addOutput(const GOutput * output);
+    virtual void addOutput(const Output * output);
 
     /// Execute all output object so they can produce their outputs
     virtual void output();
@@ -32,7 +32,7 @@ public:
 protected:
     Problem & problem;
     /// List of output objects
-    std::vector<const GOutput *> outputs;
+    std::vector<const Output *> outputs;
 
 public:
     static InputParameters validParams();

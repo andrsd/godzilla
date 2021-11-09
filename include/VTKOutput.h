@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GOutput.h"
+#include "Output.h"
 #include "petscviewer.h"
 
 namespace godzilla {
@@ -16,7 +16,7 @@ namespace godzilla {
 ///     type: VTKOutput
 ///     file: 'out.vtk'
 /// ```
-class VTKOutput : public GOutput {
+class VTKOutput : public Output {
 public:
     VTKOutput(const InputParameters & params);
     virtual ~VTKOutput();

@@ -6,7 +6,7 @@
 
 registerObject(MockExecutioner);
 registerObject(MockProblem);
-registerObject(MockGOutput);
+registerObject(MockOutput);
 
 TEST_F(ExecutionerTest, create)
 {

@@ -7,7 +7,7 @@
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "FEProblemInterface.h"
-#include "GOutput.h"
+#include "Output.h"
 #include "CallStack.h"
 #include "assert.h"
 
@@ -168,7 +168,7 @@ GYMLFile::buildOutputs()
         InputParameters params = buildParams(output_root_node, name);
         const std::string & class_name = params.get<std::string>("_type");
         params.set<Problem *>("_Problem") = this->problem;
-        auto output = Factory::create<GOutput>(class_name, name, params);
+        auto output = Factory::create<Output>(class_name, name, params);
         assert(this->executioner != nullptr);
         this->executioner->addOutput(output);
     }

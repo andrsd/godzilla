@@ -49,7 +49,7 @@ add_library(${PROJECT_NAME} SHARED
     src/ExodusIIMesh.cpp
     src/GGrid.cpp
     src/GUnstructuredMesh.cpp
-    src/GOutput.cpp
+    src/Output.cpp
     src/VTKOutput.cpp
     src/FENonlinearProblem.cpp
     src/LinearProblem.cpp

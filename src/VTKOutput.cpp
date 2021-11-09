@@ -10,13 +10,13 @@ static const int MAX_PATH = 1024;
 
 InputParameters
 VTKOutput::validParams() {
-    InputParameters params = GOutput::validParams();
+    InputParameters params = Output::validParams();
     params.addRequiredParam<std::string>("file", "The name of the output file.");
     return params;
 }
 
 VTKOutput::VTKOutput(const InputParameters & params) :
-    GOutput(params),
+    Output(params),
     file_name(getParam<std::string>("file"))
 {
     _F_;
