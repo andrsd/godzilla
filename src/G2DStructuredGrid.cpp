@@ -45,7 +45,7 @@ G2DStructuredGrid::create()
     _F_;
     PetscErrorCode ierr;
 
-    // TODO: get this from GProblem
+    // TODO: get this from Problem
     PetscInt dofs = 1;
     PetscInt stencil_width = 1;
 

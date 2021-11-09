@@ -43,7 +43,7 @@ __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void *ctx)
 InputParameters
 NonlinearProblem::validParams()
 {
-    InputParameters params = GProblem::validParams();
+    InputParameters params = Problem::validParams();
     params.addParam<std::string>("line_search", "bt", "The type of line search to be used");
     params.addParam<PetscReal>("nl_rel_tol", 1e-8, "Relative convergence tolerance for the non-linear solver");
     params.addParam<PetscReal>("nl_abs_tol", 1e-15, "Absolute convergence tolerance for the non-linear solver");
@@ -56,7 +56,7 @@ NonlinearProblem::validParams()
 }
 
 NonlinearProblem::NonlinearProblem(const InputParameters & parameters) :
-    GProblem(parameters),
+    Problem(parameters),
     snes(NULL),
     x(NULL),
     r(NULL),

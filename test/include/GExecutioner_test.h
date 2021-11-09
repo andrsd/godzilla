@@ -3,7 +3,7 @@
 #include "Factory.h"
 #include "gmock/gmock.h"
 #include "GExecutioner.h"
-#include "GProblem.h"
+#include "Problem.h"
 #include "GOutput.h"
 #include "GodzillaApp_test.h"
 
@@ -14,10 +14,10 @@ public:
 };
 
 
-class MockGProblem : public GProblem
+class MockProblem : public Problem
 {
 public:
-    MockGProblem(const InputParameters & params) : GProblem(params) {}
+    MockProblem(const InputParameters & params) : Problem(params) {}
 
     MOCK_METHOD(void, create, (), (override));
     MOCK_METHOD(void, solve, (), (override));
@@ -37,32 +37,32 @@ public:
 
 class GExecutionerTest : public GodzillaAppTest {
 protected:
-    MockGProblem *
+    MockProblem *
     gProblem()
     {
-        const std::string class_name = "MockGProblem";
+        const std::string class_name = "MockProblem";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        return Factory::create<MockGProblem>(class_name, "problem", params);
+        return Factory::create<MockProblem>(class_name, "problem", params);
     }
 
     MockGExecutioner *
-    gExecutioner(MockGProblem * problem)
+    gExecutioner(MockProblem * problem)
     {
         const std::string class_name = "MockGExecutioner";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<GProblem *>("_gproblem") = problem;
+        params.set<Problem *>("_Problem") = problem;
         return Factory::create<MockGExecutioner>(class_name, "obj", params);
     }
 
     MockGOutput *
-    gOutput(MockGProblem * problem, const std::string & name)
+    gOutput(MockProblem * problem, const std::string & name)
     {
         const std::string class_name = "MockGOutput";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<GProblem *>("_gproblem") = problem;
+        params.set<Problem *>("_Problem") = problem;
         return Factory::create<MockGOutput>(class_name, name, params);
     }
 };

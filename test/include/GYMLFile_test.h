@@ -3,7 +3,7 @@
 #include "Factory.h"
 #include "gmock/gmock.h"
 #include "GYMLFile.h"
-#include "GProblem.h"
+#include "Problem.h"
 #include "GodzillaApp_test.h"
 #include "petsc.h"
 
@@ -32,10 +32,10 @@ protected:
 };
 
 
-class GTestProblem : public GProblem
+class GTestProblem : public Problem
 {
 public:
-    GTestProblem(const InputParameters & params) : GProblem(params)
+    GTestProblem(const InputParameters & params) : Problem(params)
     {
         DMPlexCreateBoxMesh(comm(), 1, PETSC_TRUE, NULL, NULL, NULL, NULL, PETSC_FALSE, &this->dm);
         DMSetUp(this->dm);

@@ -12,7 +12,7 @@ registerObject(GTestProblem);
 InputParameters
 GTestProblem::validParams()
 {
-    InputParameters params = GProblem::validParams();
+    InputParameters params = Problem::validParams();
     params.addParam<std::string>("str", "empty", "str doco");
     params.addParam<double>("d", 1.234, "d doco");
     params.addParam<int>("i", -1234, "i doco");

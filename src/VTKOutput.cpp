@@ -1,6 +1,6 @@
 #include "Godzilla.h"
 #include "VTKOutput.h"
-#include "GProblem.h"
+#include "Problem.h"
 
 namespace godzilla {
 

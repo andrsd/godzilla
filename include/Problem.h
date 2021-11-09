@@ -10,11 +10,11 @@ class GGrid;
 
 /// Problem
 ///
-class GProblem : public Object,
-                 public GPrintInterface
+class Problem : public Object,
+                public GPrintInterface
 {
 public:
-    GProblem(const InputParameters & parameters);
+    Problem(const InputParameters & parameters);
 
     /// Build the problem to solve
     virtual void create() = 0;

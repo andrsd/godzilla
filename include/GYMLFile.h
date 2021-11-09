@@ -10,7 +10,7 @@ namespace godzilla {
 class App;
 class Factory;
 class GGrid;
-class GProblem;
+class Problem;
 class GExecutioner;
 
 /// YML parser for input files
@@ -26,7 +26,7 @@ public:
     virtual void build();
 
     virtual GGrid * getGrid();
-    virtual GProblem * getProblem();
+    virtual Problem * getProblem();
     virtual GExecutioner * getExecutioner();
 
     virtual const YAML::Node & getYml();
@@ -47,7 +47,7 @@ protected:
     YAML::Node root;
 
     GGrid * grid;
-    GProblem * problem;
+    Problem * problem;
     GExecutioner * executioner;
 };
 

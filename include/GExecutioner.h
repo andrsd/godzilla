@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-class GProblem;
+class Problem;
 class GOutput;
 
 /// Executioner
@@ -30,7 +30,7 @@ public:
     virtual void output();
 
 protected:
-    GProblem & problem;
+    Problem & problem;
     /// List of output objects
     std::vector<const GOutput *> outputs;
 

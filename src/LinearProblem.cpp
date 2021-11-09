@@ -34,7 +34,7 @@ __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx)
 InputParameters
 LinearProblem::validParams()
 {
-    InputParameters params = GProblem::validParams();
+    InputParameters params = Problem::validParams();
     params.addParam<PetscReal>("lin_rel_tol", 1e-5, "Relative convergence tolerance for the linear solver");
     params.addParam<PetscReal>("lin_abs_tol", 1e-50, "Absolute convergence tolerance for the linear solver");
     params.addParam<PetscInt>("lin_max_iter", 10000, "Maximum number of iterations for the linear solver");
@@ -42,7 +42,7 @@ LinearProblem::validParams()
 }
 
 LinearProblem::LinearProblem(const InputParameters & parameters) :
-    GProblem(parameters),
+    Problem(parameters),
     ksp(NULL),
     x(NULL),
     b(NULL),

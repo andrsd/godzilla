@@ -3,7 +3,7 @@
 #include "GodzillaConfig.h"
 #include "GYMLFile.h"
 #include "GGrid.h"
-#include "GProblem.h"
+#include "Problem.h"
 #include "GExecutioner.h"
 #include "CallStack.h"
 #include "Utils.h"

@@ -5,7 +5,7 @@
 
 
 registerObject(MockGExecutioner);
-registerObject(MockGProblem);
+registerObject(MockProblem);
 registerObject(MockGOutput);
 
 TEST_F(GExecutionerTest, create)

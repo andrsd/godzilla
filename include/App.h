@@ -7,7 +7,7 @@
 namespace godzilla {
 
 class GGrid;
-class GProblem;
+class Problem;
 class GExecutioner;
 
 
@@ -48,7 +48,7 @@ protected:
     /// Grid
     GGrid * grid;
     /// Problem
-    GProblem * problem;
+    Problem * problem;
     /// Executioner
     GExecutioner * executioner;
 };

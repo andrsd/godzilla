@@ -2,7 +2,7 @@
 #include "App.h"
 #include "Factory.h"
 #include "GGrid.h"
-#include "GProblem.h"
+#include "Problem.h"
 #include "GExecutioner.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
@@ -43,7 +43,7 @@ GYMLFile::getGrid()
     return this->grid;
 }
 
-GProblem *
+Problem *
 GYMLFile::getProblem()
 {
     _F_;
@@ -92,7 +92,7 @@ GYMLFile::buildProblem()
     InputParameters params = buildParams(this->root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<GGrid *>("_ggrid") = this->grid;
-    this->problem = Factory::create<GProblem>(class_name, "problem", params);
+    this->problem = Factory::create<Problem>(class_name, "problem", params);
 }
 
 void
@@ -101,7 +101,7 @@ GYMLFile::buildExecutioner()
     _F_;
     InputParameters params = buildParams(this->root, "executioner");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<GProblem *>("_gproblem") = this->problem;
+    params.set<Problem *>("_Problem") = this->problem;
     this->executioner = Factory::create<GExecutioner>(class_name, "problem", params);
 }
 
@@ -167,7 +167,7 @@ GYMLFile::buildOutputs()
 
         InputParameters params = buildParams(output_root_node, name);
         const std::string & class_name = params.get<std::string>("_type");
-        params.set<GProblem *>("_gproblem") = this->problem;
+        params.set<Problem *>("_Problem") = this->problem;
         auto output = Factory::create<GOutput>(class_name, name, params);
         assert(this->executioner != nullptr);
         this->executioner->addOutput(output);

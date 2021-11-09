@@ -1,13 +1,13 @@
 #pragma once
 
-#include "GProblem.h"
+#include "Problem.h"
 #include "petscksp.h"
 
 namespace godzilla {
 
 /// PETSc Linear problem
 ///
-class LinearProblem : public GProblem
+class LinearProblem : public Problem
 {
 public:
     LinearProblem(const InputParameters & parameters);

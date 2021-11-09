@@ -54,7 +54,7 @@ add_library(${PROJECT_NAME} SHARED
     src/FENonlinearProblem.cpp
     src/LinearProblem.cpp
     src/NonlinearProblem.cpp
-    src/GProblem.cpp
+    src/Problem.cpp
     src/ConstantIC.cpp
     src/InputParameters.cpp
     src/BoundaryCondition.cpp

@@ -1,6 +1,6 @@
 #include "Godzilla.h"
 #include "GExecutioner.h"
-#include "GProblem.h"
+#include "Problem.h"
 #include "CallStack.h"
 #include "GOutput.h"
 
@@ -13,14 +13,14 @@ InputParameters
 GExecutioner::validParams()
 {
     InputParameters params = Object::validParams();
-    params.addPrivateParam<GProblem *>("_gproblem");
+    params.addPrivateParam<Problem *>("_Problem");
     return params;
 }
 
 GExecutioner::GExecutioner(const InputParameters & parameters) :
     Object(parameters),
     GPrintInterface(this),
-    problem(*getParam<GProblem *>("_gproblem"))
+    problem(*getParam<Problem *>("_Problem"))
 {
     _F_;
 }

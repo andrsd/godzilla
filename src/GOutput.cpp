@@ -1,19 +1,19 @@
 #include "GOutput.h"
-#include "GProblem.h"
+#include "Problem.h"
 
 namespace godzilla {
 
 InputParameters
 GOutput::validParams() {
     InputParameters params = Object::validParams();
-    params.addPrivateParam<GProblem *>("_gproblem");
+    params.addPrivateParam<Problem *>("_Problem");
     return params;
 }
 
 GOutput::GOutput(const InputParameters & params) :
     Object(params),
     GPrintInterface(this),
-    problem(*getParam<GProblem *>("_gproblem"))
+    problem(*getParam<Problem *>("_Problem"))
 {
     _F_;
 }

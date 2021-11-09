@@ -5,7 +5,7 @@
 
 namespace godzilla {
 
-class GProblem;
+class Problem;
 
 /// Base class for doing output
 ///
@@ -21,8 +21,8 @@ public:
     virtual void output() const = 0;
 
 protected:
-    /// GProblem to get data from
-    const GProblem & problem;
+    /// Problem to get data from
+    const Problem & problem;
 
 public:
     static InputParameters validParams();
