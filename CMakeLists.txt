@@ -52,7 +52,7 @@ add_library(${PROJECT_NAME} SHARED
     src/GOutput.cpp
     src/VTKOutput.cpp
     src/GFENonlinearProblem.cpp
-    src/GLinearProblem.cpp
+    src/LinearProblem.cpp
     src/GNonlinearProblem.cpp
     src/GProblem.cpp
     src/ConstantIC.cpp

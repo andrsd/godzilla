@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Godzilla.h"
-#include "GLinearProblem.h"
+#include "LinearProblem.h"
 
 using namespace godzilla;
 
@@ -20,7 +20,7 @@ using namespace godzilla;
 ///
 /// References
 /// - [0] https://petsc.org/release/src/ksp/ksp/tutorials/ex50.c.html
-class PoissonLinearProblem : public GLinearProblem
+class PoissonLinearProblem : public LinearProblem
 {
 public:
     PoissonLinearProblem(const InputParameters & parameters);

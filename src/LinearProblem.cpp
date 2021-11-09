@@ -1,4 +1,4 @@
-#include "GLinearProblem.h"
+#include "LinearProblem.h"
 #include "CallStack.h"
 #include "GGrid.h"
 #include "Utils.h"
@@ -10,7 +10,7 @@ PetscErrorCode
 __compute_rhs(KSP ksp, Vec b, void *ctx)
 {
     _F_;
-    GLinearProblem * problem = static_cast<GLinearProblem *>(ctx);
+    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
     return problem->computeRhsCallback(b);
 }
 
@@ -18,7 +18,7 @@ PetscErrorCode
 __compute_operators(KSP ksp, Mat A, Mat B, void *ctx)
 {
     _F_;
-    GLinearProblem * problem = static_cast<GLinearProblem *>(ctx);
+    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
     return problem->computeOperatorsCallback(A, B);
 }
 
@@ -26,13 +26,13 @@ PetscErrorCode
 __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx)
 {
     _F_;
-    GLinearProblem * problem = static_cast<GLinearProblem *>(ctx);
+    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
     return problem->kspMonitorCallback(it, rnorm);
 }
 
 
 InputParameters
-GLinearProblem::validParams()
+LinearProblem::validParams()
 {
     InputParameters params = GProblem::validParams();
     params.addParam<PetscReal>("lin_rel_tol", 1e-5, "Relative convergence tolerance for the linear solver");
@@ -41,7 +41,7 @@ GLinearProblem::validParams()
     return params;
 }
 
-GLinearProblem::GLinearProblem(const InputParameters & parameters) :
+LinearProblem::LinearProblem(const InputParameters & parameters) :
     GProblem(parameters),
     ksp(NULL),
     x(NULL),
@@ -55,7 +55,7 @@ GLinearProblem::GLinearProblem(const InputParameters & parameters) :
     _F_;
 }
 
-GLinearProblem::~GLinearProblem()
+LinearProblem::~LinearProblem()
 {
     _F_;
     if (this->ksp)
@@ -71,21 +71,21 @@ GLinearProblem::~GLinearProblem()
 }
 
 const DM &
-GLinearProblem::getDM() const
+LinearProblem::getDM() const
 {
     _F_;
     return this->grid.getDM();
 }
 
 const Vec &
-GLinearProblem::getSolutionVector() const
+LinearProblem::getSolutionVector() const
 {
     _F_;
     return this->x;
 }
 
 void
-GLinearProblem::create()
+LinearProblem::create()
 {
     _F_;
     init();
@@ -97,7 +97,7 @@ GLinearProblem::create()
 }
 
 void
-GLinearProblem::init()
+LinearProblem::init()
 {
     _F_;
     PetscErrorCode ierr;
@@ -112,7 +112,7 @@ GLinearProblem::init()
 }
 
 void
-GLinearProblem::allocateObjects()
+LinearProblem::allocateObjects()
 {
     _F_;
     PetscErrorCode ierr;
@@ -138,7 +138,7 @@ GLinearProblem::allocateObjects()
 }
 
 void
-GLinearProblem::setupCallbacks()
+LinearProblem::setupCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
@@ -150,7 +150,7 @@ GLinearProblem::setupCallbacks()
 }
 
 void
-GLinearProblem::setupMonitors()
+LinearProblem::setupMonitors()
 {
     _F_;
     PetscErrorCode ierr;
@@ -160,7 +160,7 @@ GLinearProblem::setupMonitors()
 }
 
 void
-GLinearProblem::setupSolverParameters()
+LinearProblem::setupSolverParameters()
 {
     _F_;
     PetscErrorCode ierr;
@@ -174,7 +174,7 @@ GLinearProblem::setupSolverParameters()
 }
 
 PetscErrorCode
-GLinearProblem::kspMonitorCallback(PetscInt it, PetscReal rnorm)
+LinearProblem::kspMonitorCallback(PetscInt it, PetscReal rnorm)
 {
     _F_;
     godzillaPrint(8, it, " Linear residual: ", std::scientific, rnorm);
@@ -182,7 +182,7 @@ GLinearProblem::kspMonitorCallback(PetscInt it, PetscReal rnorm)
 }
 
 void
-GLinearProblem::solve()
+LinearProblem::solve()
 {
     _F_;
     PetscErrorCode ierr;
@@ -194,7 +194,7 @@ GLinearProblem::solve()
 }
 
 bool
-GLinearProblem::converged()
+LinearProblem::converged()
 {
     _F_;
     bool conv =

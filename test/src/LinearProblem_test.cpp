@@ -1,6 +1,6 @@
 #include "Factory.h"
 #include "GGrid.h"
-#include "GLinearProblem_test.h"
+#include "LinearProblem_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
 #include "petscmat.h"
@@ -10,7 +10,7 @@ using namespace godzilla;
 
 registerObject(GTestPetscLinearProblem);
 
-TEST(GLinearProblemTest, solve)
+TEST(LinearProblemTest, solve)
 {
     App app("test", MPI_COMM_WORLD);
 
@@ -50,7 +50,7 @@ TEST(GLinearProblemTest, solve)
 
 
 GTestPetscLinearProblem::GTestPetscLinearProblem(const InputParameters & params) :
-    GLinearProblem(params)
+    LinearProblem(params)
 {
 }
 

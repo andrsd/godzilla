@@ -10,14 +10,14 @@ using namespace godzilla;
 InputParameters
 PoissonLinearProblem::validParams()
 {
-    InputParameters params = GLinearProblem::validParams();
+    InputParameters params = LinearProblem::validParams();
     params.addParam<PetscReal>("m", 1., "Coefficient in the forcing term");
     params.addParam<PetscReal>("n", 1., "Coefficient in the forcing term");
     return params;
 }
 
 PoissonLinearProblem::PoissonLinearProblem(const InputParameters & parameters) :
-    GLinearProblem(parameters),
+    LinearProblem(parameters),
     m(getParam<PetscReal>("m")),
     n(getParam<PetscReal>("n")),
     dofs(1),
@@ -29,7 +29,7 @@ void
 PoissonLinearProblem::init()
 {
     _F_;
-    GLinearProblem::init();
+    LinearProblem::init();
 
     G2DStructuredGrid * grid_2d = dynamic_cast<G2DStructuredGrid *>(&this->grid);
     if (grid_2d != nullptr) {
