@@ -1,15 +1,15 @@
 #include "GodzillaConfig.h"
 #include "GodzillaApp_test.h"
-#include "GExodusIIMesh_test.h"
+#include "ExodusIIMesh_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
 
 
 using namespace godzilla;
 
-registerObject(MockGExodusIIMesh);
+registerObject(MockExodusIIMesh);
 
-TEST_F(GExodusIIMeshTest, gexodus_mesh)
+TEST_F(ExodusIIMeshTest, gexodus_mesh)
 {
     std::string file_name =
         std::string(UNIT_TESTS_ROOT) + std::string("/assets/square.e");
@@ -18,7 +18,7 @@ TEST_F(GExodusIIMeshTest, gexodus_mesh)
     EXPECT_EQ(obj->getFileName(), file_name);
 }
 
-TEST_F(GExodusIIMeshTest, gexodus_mesh_nonexitent_file)
+TEST_F(ExodusIIMeshTest, gexodus_mesh_nonexitent_file)
 {
     EXPECT_DEATH(
         gExodusMesh("asdf.e"),
@@ -26,7 +26,7 @@ TEST_F(GExodusIIMeshTest, gexodus_mesh_nonexitent_file)
     );
 }
 
-TEST_F(GExodusIIMeshTest, gexodus_mesh_create)
+TEST_F(ExodusIIMeshTest, gexodus_mesh_create)
 {
     std::string file_name =
         std::string(UNIT_TESTS_ROOT) + std::string("/assets/square.e");

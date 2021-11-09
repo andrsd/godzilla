@@ -6,10 +6,10 @@ namespace godzilla {
 
 /// Mesh loaded from a ExodusII file
 ///
-class GExodusIIMesh : public GUnstructuredMesh
+class ExodusIIMesh : public GUnstructuredMesh
 {
 public:
-    GExodusIIMesh(const InputParameters & parameters);
+    ExodusIIMesh(const InputParameters & parameters);
 
     const std::string getFileName() const;
 

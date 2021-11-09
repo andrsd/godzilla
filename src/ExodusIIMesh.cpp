@@ -1,5 +1,5 @@
 #include "Godzilla.h"
-#include "GExodusIIMesh.h"
+#include "ExodusIIMesh.h"
 #include "CallStack.h"
 #include "Utils.h"
 #include "petscdmplex.h"
@@ -7,17 +7,17 @@
 
 namespace godzilla {
 
-registerObject(GExodusIIMesh);
+registerObject(ExodusIIMesh);
 
 InputParameters
-GExodusIIMesh::validParams()
+ExodusIIMesh::validParams()
 {
     InputParameters params = GUnstructuredMesh::validParams();
     params.addRequiredParam<std::string>("file", "The name of the ExodusII file.");
     return params;
 }
 
-GExodusIIMesh::GExodusIIMesh(const InputParameters & parameters) :
+ExodusIIMesh::ExodusIIMesh(const InputParameters & parameters) :
     GUnstructuredMesh(parameters),
     file_name(getParam<std::string>("file")),
     interpolate(PETSC_TRUE)
@@ -29,14 +29,14 @@ GExodusIIMesh::GExodusIIMesh(const InputParameters & parameters) :
 }
 
 const std::string
-GExodusIIMesh::getFileName() const
+ExodusIIMesh::getFileName() const
 {
     _F_;
     return this->file_name;
 }
 
 void
-GExodusIIMesh::create()
+ExodusIIMesh::create()
 {
     _F_;
     PetscErrorCode ierr;

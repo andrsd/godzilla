@@ -12,5 +12,5 @@ Input file:
 .. code-block:: yaml
 
     mesh:
-        type: GExodusIIMesh
+        type: ExodusIIMesh
         file: square.e
