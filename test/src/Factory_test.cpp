@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "Factory.h"
 #include "App.h"
-#include "G1DLineMesh.h"
+#include "LineMesh.h"
 #include "petsc.h"
 
 
@@ -28,8 +28,8 @@ TEST(Factory, create_reg_obj)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = Factory::getValidParams("G1DLineMesh");
+    InputParameters params = Factory::getValidParams("LineMesh");
     params.set<PetscInt>("nx") = 1;
     params.set<const App *>("_app") = &app;
-    auto obj = Factory::create<G1DLineMesh>("G1DLineMesh", "name", params);
+    auto obj = Factory::create<LineMesh>("LineMesh", "name", params);
 }

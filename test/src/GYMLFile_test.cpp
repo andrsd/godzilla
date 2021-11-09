@@ -2,7 +2,7 @@
 #include "GYMLFile_test.h"
 #include "yaml-cpp/yaml.h"
 #include "GodzillaConfig.h"
-#include "G1DLineMesh.h"
+#include "LineMesh.h"
 
 
 using namespace godzilla;
@@ -102,7 +102,7 @@ TEST_F(GYMLFileTest, build)
     file.parse(file_name);
     file.build();
 
-    auto grid = dynamic_cast<G1DLineMesh *>(file.getGrid());
+    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
     EXPECT_NE(grid, nullptr);
 
     auto problem = file.getProblem();

@@ -1,5 +1,5 @@
 grid:
-    type: G1DLineMesh
+    type: LineMesh
     nx: 2
 problem:
     type: GTestProblem

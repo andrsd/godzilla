@@ -1,2 +1,2 @@
 grid:
-    type: G1DLineMesh
+    type: LineMesh

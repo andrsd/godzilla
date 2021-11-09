@@ -1,5 +1,5 @@
 #include "Godzilla.h"
-#include "G1DLineMesh.h"
+#include "LineMesh.h"
 #include "CallStack.h"
 #include "petscdm.h"
 #include "petscdmplex.h"
@@ -7,10 +7,10 @@
 
 namespace godzilla {
 
-registerObject(G1DLineMesh);
+registerObject(LineMesh);
 
 InputParameters
-G1DLineMesh::validParams()
+LineMesh::validParams()
 {
     InputParameters params = UnstructuredMesh::validParams();
     params.addParam<PetscReal>("xmin", 0., "Minimum in the x direction");
@@ -19,7 +19,7 @@ G1DLineMesh::validParams()
     return params;
 }
 
-G1DLineMesh::G1DLineMesh(const InputParameters & parameters) :
+LineMesh::LineMesh(const InputParameters & parameters) :
     UnstructuredMesh(parameters),
     xmin(getParam<PetscReal>("xmin")),
     xmax(getParam<PetscReal>("xmax")),
@@ -32,28 +32,28 @@ G1DLineMesh::G1DLineMesh(const InputParameters & parameters) :
 }
 
 PetscReal
-G1DLineMesh::getXMin()
+LineMesh::getXMin()
 {
     _F_;
     return this->xmin;
 }
 
 PetscReal
-G1DLineMesh::getXMax()
+LineMesh::getXMax()
 {
     _F_;
     return this->xmax;
 }
 
 PetscInt
-G1DLineMesh::getNx()
+LineMesh::getNx()
 {
     _F_;
     return this->nx;
 }
 
 void
-G1DLineMesh::create()
+LineMesh::create()
 {
     _F_;
     PetscErrorCode ierr;

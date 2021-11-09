@@ -1,14 +1,14 @@
 #include "GodzillaApp_test.h"
-#include "G1DLineMesh_test.h"
+#include "LineMesh_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
 
 
 using namespace godzilla;
 
-registerObject(MockG1DLineMesh);
+registerObject(MockLineMesh);
 
-TEST_F(G1DLineMeshTest, g1d_line_mesh)
+TEST_F(LineMeshTest, g1d_line_mesh)
 {
     auto o = g1dLineMesh(1, 2);
 
@@ -17,7 +17,7 @@ TEST_F(G1DLineMeshTest, g1d_line_mesh)
     EXPECT_EQ(o->getNx(), 10);
 }
 
-TEST_F(G1DLineMeshTest, g1d_line_mesh_incorrect_dims)
+TEST_F(LineMeshTest, g1d_line_mesh_incorrect_dims)
 {
     EXPECT_DEATH(
         g1dLineMesh(2, 1),
@@ -25,7 +25,7 @@ TEST_F(G1DLineMeshTest, g1d_line_mesh_incorrect_dims)
     );
 }
 
-TEST_F(G1DLineMeshTest, g1d_line_mesh_create)
+TEST_F(LineMeshTest, g1d_line_mesh_create)
 {
     auto obj = g1dLineMesh(1, 2);
     obj->create();

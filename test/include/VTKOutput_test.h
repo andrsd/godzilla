@@ -14,7 +14,7 @@ protected:
     Grid *
     gGrid()
     {
-        const std::string class_name = "G1DLineMesh";
+        const std::string class_name = "LineMesh";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<PetscInt>("nx") = 2;

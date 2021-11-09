@@ -9,7 +9,7 @@ add_executable(${PROJECT_NAME}
     src/PrintInterface_test.cpp
     src/Object_test.cpp
     src/Executioner_test.cpp
-    src/G1DLineMesh_test.cpp
+    src/LineMesh_test.cpp
     src/StructuredGrid1D_test.cpp
     src/G2DRectangleMesh_test.cpp
     src/StructuredGrid2D_test.cpp

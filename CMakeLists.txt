@@ -42,7 +42,7 @@ add_library(${PROJECT_NAME} SHARED
     src/Executioner.cpp
     src/GYMLFile.cpp
     src/CmdLineArgParser.cpp
-    src/G1DLineMesh.cpp
+    src/LineMesh.cpp
     src/StructuredGrid1D.cpp
     src/G2DRectangleMesh.cpp
     src/StructuredGrid2D.cpp

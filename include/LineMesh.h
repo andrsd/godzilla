@@ -6,10 +6,10 @@ namespace godzilla {
 
 /// 1D line
 ///
-class G1DLineMesh : public UnstructuredMesh
+class LineMesh : public UnstructuredMesh
 {
 public:
-    G1DLineMesh(const InputParameters & parameters);
+    LineMesh(const InputParameters & parameters);
 
     virtual void create();
 
