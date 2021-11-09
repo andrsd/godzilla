@@ -2,15 +2,15 @@
 
 #include "Factory.h"
 #include "gmock/gmock.h"
-#include "GExecutioner.h"
+#include "Executioner.h"
 #include "Problem.h"
 #include "GOutput.h"
 #include "GodzillaApp_test.h"
 
-class MockGExecutioner : public GExecutioner
+class MockExecutioner : public Executioner
 {
 public:
-    MockGExecutioner(const InputParameters & params) : GExecutioner(params) {}
+    MockExecutioner(const InputParameters & params) : Executioner(params) {}
 };
 
 
@@ -35,7 +35,7 @@ public:
 };
 
 
-class GExecutionerTest : public GodzillaAppTest {
+class ExecutionerTest : public GodzillaAppTest {
 protected:
     MockProblem *
     gProblem()
@@ -46,14 +46,14 @@ protected:
         return Factory::create<MockProblem>(class_name, "problem", params);
     }
 
-    MockGExecutioner *
+    MockExecutioner *
     gExecutioner(MockProblem * problem)
     {
-        const std::string class_name = "MockGExecutioner";
+        const std::string class_name = "MockExecutioner";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<Problem *>("_Problem") = problem;
-        return Factory::create<MockGExecutioner>(class_name, "obj", params);
+        return Factory::create<MockExecutioner>(class_name, "obj", params);
     }
 
     MockGOutput *

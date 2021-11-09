@@ -39,7 +39,7 @@ add_library(${PROJECT_NAME} SHARED
     src/Init.cpp
     src/InitialCondition.cpp
     src/Object.cpp
-    src/GExecutioner.cpp
+    src/Executioner.cpp
     src/GYMLFile.cpp
     src/CmdLineArgParser.cpp
     src/G1DLineMesh.cpp

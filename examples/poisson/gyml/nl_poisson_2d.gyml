@@ -7,4 +7,4 @@ problem:
     type: PoissonNonlinearProblem
 
 executioner:
-    type: GExecutioner
+    type: Executioner

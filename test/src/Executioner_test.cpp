@@ -1,21 +1,21 @@
 #include "GodzillaApp_test.h"
-#include "GExecutioner_test.h"
+#include "Executioner_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
 
 
-registerObject(MockGExecutioner);
+registerObject(MockExecutioner);
 registerObject(MockProblem);
 registerObject(MockGOutput);
 
-TEST_F(GExecutionerTest, create)
+TEST_F(ExecutionerTest, create)
 {
     auto prob = gProblem();
     auto exec = gExecutioner(prob);
     exec->create();
 }
 
-TEST_F(GExecutionerTest, execute)
+TEST_F(ExecutionerTest, execute)
 {
     auto prob = gProblem();
     auto exec = gExecutioner(prob);
@@ -23,7 +23,7 @@ TEST_F(GExecutionerTest, execute)
     exec->execute();
 }
 
-TEST_F(GExecutionerTest, output)
+TEST_F(ExecutionerTest, output)
 {
     auto prob = gProblem();
     auto exec = gExecutioner(prob);

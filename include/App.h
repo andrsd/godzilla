@@ -8,7 +8,7 @@ namespace godzilla {
 
 class GGrid;
 class Problem;
-class GExecutioner;
+class Executioner;
 
 
 class App : public GPrintInterface
@@ -50,7 +50,7 @@ protected:
     /// Problem
     Problem * problem;
     /// Executioner
-    GExecutioner * executioner;
+    Executioner * executioner;
 };
 
 }

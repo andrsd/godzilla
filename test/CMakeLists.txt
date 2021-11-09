@@ -8,7 +8,7 @@ add_executable(${PROJECT_NAME}
     src/GodzillaApp_test.cpp
     src/GPrintInterface_test.cpp
     src/Object_test.cpp
-    src/GExecutioner_test.cpp
+    src/Executioner_test.cpp
     src/G1DLineMesh_test.cpp
     src/G1DStructuredGrid_test.cpp
     src/G2DRectangleMesh_test.cpp

@@ -3,7 +3,7 @@
 #include "Factory.h"
 #include "gmock/gmock.h"
 #include "GGrid.h"
-#include "GExecutioner.h"
+#include "Executioner.h"
 #include "Problem.h"
 #include "VTKOutput.h"
 #include "GodzillaApp_test.h"
@@ -31,14 +31,14 @@ protected:
         return Factory::create<Problem>(class_name, "problem", params);
     }
 
-    GExecutioner *
+    Executioner *
     gExecutioner(Problem * problem)
     {
-        const std::string class_name = "GExecutioner";
+        const std::string class_name = "Executioner";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<Problem *>("_Problem") = problem;
-        return Factory::create<GExecutioner>(class_name, "obj", params);
+        return Factory::create<Executioner>(class_name, "obj", params);
     }
 
     VTKOutput *

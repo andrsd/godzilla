@@ -12,11 +12,11 @@ class GOutput;
 
 /// Executioner
 ///
-class GExecutioner : public Object,
-                     public GPrintInterface
+class Executioner : public Object,
+                    public GPrintInterface
 {
 public:
-    GExecutioner(const InputParameters & parameters);
+    Executioner(const InputParameters & parameters);
 
     virtual void create();
     virtual void execute();

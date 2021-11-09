@@ -11,7 +11,7 @@ class App;
 class Factory;
 class GGrid;
 class Problem;
-class GExecutioner;
+class Executioner;
 
 /// YML parser for input files
 ///
@@ -27,7 +27,7 @@ public:
 
     virtual GGrid * getGrid();
     virtual Problem * getProblem();
-    virtual GExecutioner * getExecutioner();
+    virtual Executioner * getExecutioner();
 
     virtual const YAML::Node & getYml();
 
@@ -48,7 +48,7 @@ protected:
 
     GGrid * grid;
     Problem * problem;
-    GExecutioner * executioner;
+    Executioner * executioner;
 };
 
 }

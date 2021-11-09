@@ -3,7 +3,7 @@
 #include "Factory.h"
 #include "GGrid.h"
 #include "Problem.h"
-#include "GExecutioner.h"
+#include "Executioner.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "FEProblemInterface.h"
@@ -50,7 +50,7 @@ GYMLFile::getProblem()
     return this->problem;
 }
 
-GExecutioner *
+Executioner *
 GYMLFile::getExecutioner()
 {
     _F_;
@@ -102,7 +102,7 @@ GYMLFile::buildExecutioner()
     InputParameters params = buildParams(this->root, "executioner");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<Problem *>("_Problem") = this->problem;
-    this->executioner = Factory::create<GExecutioner>(class_name, "problem", params);
+    this->executioner = Factory::create<Executioner>(class_name, "problem", params);
 }
 
 void

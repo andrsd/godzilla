@@ -1,5 +1,5 @@
 #include "Godzilla.h"
-#include "GExecutioner.h"
+#include "Executioner.h"
 #include "Problem.h"
 #include "CallStack.h"
 #include "GOutput.h"
@@ -7,17 +7,17 @@
 
 namespace godzilla {
 
-registerObject(GExecutioner);
+registerObject(Executioner);
 
 InputParameters
-GExecutioner::validParams()
+Executioner::validParams()
 {
     InputParameters params = Object::validParams();
     params.addPrivateParam<Problem *>("_Problem");
     return params;
 }
 
-GExecutioner::GExecutioner(const InputParameters & parameters) :
+Executioner::Executioner(const InputParameters & parameters) :
     Object(parameters),
     GPrintInterface(this),
     problem(*getParam<Problem *>("_Problem"))
@@ -26,13 +26,13 @@ GExecutioner::GExecutioner(const InputParameters & parameters) :
 }
 
 void
-GExecutioner::create()
+Executioner::create()
 {
     _F_;
 }
 
 void
-GExecutioner::execute()
+Executioner::execute()
 {
     _F_;
     godzillaPrint(5, "Executing...");
@@ -42,14 +42,14 @@ GExecutioner::execute()
 }
 
 void
-GExecutioner::addOutput(const GOutput * output)
+Executioner::addOutput(const GOutput * output)
 {
     _F_;
     this->outputs.push_back(output);
 }
 
 void
-GExecutioner::output()
+Executioner::output()
 {
     _F_;
     for (auto & o : this->outputs)

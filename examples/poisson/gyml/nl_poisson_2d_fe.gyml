@@ -11,4 +11,4 @@ problem:
     type: PoissonFENonlinearProblem
 
 executioner:
-    type: GExecutioner
+    type: Executioner
