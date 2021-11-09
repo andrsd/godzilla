@@ -1,6 +1,6 @@
 #include "Factory.h"
 #include "GGrid.h"
-#include "GNonlinearProblem_test.h"
+#include "NonlinearProblem_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
 #include "petscvec.h"
@@ -11,7 +11,7 @@ using namespace godzilla;
 
 registerObject(GTestPetscNonlinearProblem);
 
-TEST(GNonlinearProblemTest, solve)
+TEST(NonlinearProblemTest, solve)
 {
     App app("test", MPI_COMM_WORLD);
 
@@ -51,7 +51,7 @@ TEST(GNonlinearProblemTest, solve)
 
 
 GTestPetscNonlinearProblem::GTestPetscNonlinearProblem(const InputParameters & params) :
-    GNonlinearProblem(params)
+    NonlinearProblem(params)
 {
 }
 

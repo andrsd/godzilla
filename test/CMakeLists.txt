@@ -17,7 +17,7 @@ add_executable(${PROJECT_NAME}
     src/GYMLFile_test.cpp
     src/VTKOutput_test.cpp
     src/LinearProblem_test.cpp
-    src/GNonlinearProblem_test.cpp
+    src/NonlinearProblem_test.cpp
     src/Utils_test.cpp
     src/InputParameters_test.cpp
     src/ConstantIC_test.cpp

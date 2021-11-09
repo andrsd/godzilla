@@ -12,12 +12,12 @@ registerObject(PoissonNonlinearProblem);
 InputParameters
 PoissonNonlinearProblem::validParams()
 {
-    InputParameters params = GNonlinearProblem::validParams();
+    InputParameters params = NonlinearProblem::validParams();
     return params;
 }
 
 PoissonNonlinearProblem::PoissonNonlinearProblem(const InputParameters & parameters) :
-    GNonlinearProblem(parameters)
+    NonlinearProblem(parameters)
 {
     _F_;
 }
@@ -33,7 +33,7 @@ PoissonNonlinearProblem::allocateObjects()
 {
     _F_;
     PetscErrorCode ierr;
-    GNonlinearProblem::allocateObjects();
+    NonlinearProblem::allocateObjects();
 
     const DM dm = getDM();
     ierr = VecDuplicate(this->x, &this->b);

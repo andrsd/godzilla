@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GNonlinearProblem.h"
+#include "NonlinearProblem.h"
 #include "GodzillaApp_test.h"
 
 
 using namespace godzilla;
 
-class GTestPetscNonlinearProblem : public GNonlinearProblem {
+class GTestPetscNonlinearProblem : public NonlinearProblem {
 public:
     GTestPetscNonlinearProblem(const InputParameters & params);
     virtual ~GTestPetscNonlinearProblem();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GNonlinearProblem.h"
+#include "NonlinearProblem.h"
 #include "FEProblemInterface.h"
 #include "petscsnes.h"
 #include "petscfe.h"
@@ -12,7 +12,7 @@ namespace godzilla {
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system
 ///
-class GFENonlinearProblem : public GNonlinearProblem,
+class GFENonlinearProblem : public NonlinearProblem,
                             public FEProblemInterface
 {
 public:

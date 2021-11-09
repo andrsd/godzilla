@@ -26,12 +26,12 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 InputParameters
 GFENonlinearProblem::validParams()
 {
-    InputParameters params = GNonlinearProblem::validParams();
+    InputParameters params = NonlinearProblem::validParams();
     return params;
 }
 
 GFENonlinearProblem::GFENonlinearProblem(const InputParameters & parameters) :
-    GNonlinearProblem(parameters),
+    NonlinearProblem(parameters),
     dim(-1),
     n_fields(0),
     ds(nullptr)
@@ -55,7 +55,7 @@ GFENonlinearProblem::create()
     DMGetDimension(this->grid.getDM(), &this->dim);
     onSetFields();
 
-    GNonlinearProblem::create();
+    NonlinearProblem::create();
 }
 
 const std::string &
@@ -112,7 +112,7 @@ void
 GFENonlinearProblem::init()
 {
     _F_;
-    GNonlinearProblem::init();
+    NonlinearProblem::init();
 
     setupFields();
 

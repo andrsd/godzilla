@@ -7,11 +7,11 @@ namespace godzilla {
 
 /// PETSc non-linear problem
 ///
-class GNonlinearProblem : public GProblem
+class NonlinearProblem : public GProblem
 {
 public:
-    GNonlinearProblem(const InputParameters & parameters);
-    virtual ~GNonlinearProblem();
+    NonlinearProblem(const InputParameters & parameters);
+    virtual ~NonlinearProblem();
 
     virtual void create() override;
     virtual void solve() override;
