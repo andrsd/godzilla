@@ -1,21 +1,21 @@
 #include "GodzillaApp_test.h"
-#include "G2DStructuredGrid_test.h"
+#include "StructuredGrid2D_test.h"
 #include "InputParameters.h"
 #include "petsc.h"
 
 
 using namespace godzilla;
 
-registerObject(MockG2DStructuredGrid);
+registerObject(MockStructuredGrid2D);
 
-TEST_F(G2DStructuredGridTest, ctor)
+TEST_F(StructuredGrid2DTest, ctor)
 {
     auto obj = gMesh(3, 4);
     EXPECT_EQ(obj->getNx(), 3);
     EXPECT_EQ(obj->getNy(), 4);
 }
 
-TEST_F(G2DStructuredGridTest, create)
+TEST_F(StructuredGrid2DTest, create)
 {
     auto obj = gMesh(3, 4);
     obj->create();

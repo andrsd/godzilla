@@ -1,5 +1,5 @@
 grid:
-    type: G2DStructuredGrid
+    type: StructuredGrid2D
     nx: 4
     ny: 4
 

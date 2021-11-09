@@ -6,10 +6,10 @@ namespace godzilla {
 
 /// 2D structured grid
 ///
-class G2DStructuredGrid : public Grid
+class StructuredGrid2D : public Grid
 {
 public:
-    G2DStructuredGrid(const InputParameters & parameters);
+    StructuredGrid2D(const InputParameters & parameters);
 
     /// Get the number of grid points in x direction
     PetscInt getNx() const;

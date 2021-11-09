@@ -1,5 +1,5 @@
 #include "PoissonLinearProblem.h"
-#include "G2DStructuredGrid.h"
+#include "StructuredGrid2D.h"
 #include "petscdmda.h"
 
 
@@ -31,7 +31,7 @@ PoissonLinearProblem::init()
     _F_;
     LinearProblem::init();
 
-    G2DStructuredGrid * grid_2d = dynamic_cast<G2DStructuredGrid *>(&this->grid);
+    StructuredGrid2D * grid_2d = dynamic_cast<StructuredGrid2D *>(&this->grid);
     if (grid_2d != nullptr) {
         this->nx = grid_2d->getNx();
         this->ny = grid_2d->getNy();

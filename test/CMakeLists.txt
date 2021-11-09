@@ -12,7 +12,7 @@ add_executable(${PROJECT_NAME}
     src/G1DLineMesh_test.cpp
     src/StructuredGrid1D_test.cpp
     src/G2DRectangleMesh_test.cpp
-    src/G2DStructuredGrid_test.cpp
+    src/StructuredGrid2D_test.cpp
     src/ExodusIIMesh_test.cpp
     src/GYMLFile_test.cpp
     src/VTKOutput_test.cpp

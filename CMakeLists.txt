@@ -45,7 +45,7 @@ add_library(${PROJECT_NAME} SHARED
     src/G1DLineMesh.cpp
     src/StructuredGrid1D.cpp
     src/G2DRectangleMesh.cpp
-    src/G2DStructuredGrid.cpp
+    src/StructuredGrid2D.cpp
     src/ExodusIIMesh.cpp
     src/Grid.cpp
     src/UnstructuredMesh.cpp
