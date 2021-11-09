@@ -38,5 +38,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     gmock_main
 )
 
-include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME})
+add_test(NAME test COMMAND ${PROJECT_NAME})
+if(CODE_COVERAGE)
+    set_tests_properties(test PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}.profraw)
+endif()

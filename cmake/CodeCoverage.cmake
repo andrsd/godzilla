@@ -10,7 +10,7 @@ find_program(GENHTML_PATH genhtml)
 mark_as_advanced(FORCE LCOV_PATH GENHTML_PATH)
 
 set(CODE_COVERAGE_PROFRAWS
-    ${CMAKE_BINARY_DIR}/test/default.profraw
+    ${CMAKE_BINARY_DIR}/test/godzilla-test.profraw
 )
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${CODE_COVERAGE_PROFRAWS}")
 
