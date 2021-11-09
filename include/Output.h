@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Object.h"
-#include "GPrintInterface.h"
+#include "PrintInterface.h"
 
 namespace godzilla {
 
@@ -12,7 +12,7 @@ class Problem;
 /// Inherit from this class and override `output()` where you can implement your
 /// own output code
 class Output : public Object,
-               public GPrintInterface
+               public PrintInterface
 {
 public:
     Output(const InputParameters & params);

@@ -14,7 +14,7 @@ Problem::validParams()
 
 Problem::Problem(const InputParameters & parameters) :
     Object(parameters),
-    GPrintInterface(this),
+    PrintInterface(this),
     grid(*getParam<GGrid *>("_ggrid"))
 {
     _F_;

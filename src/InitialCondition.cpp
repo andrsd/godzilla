@@ -24,7 +24,7 @@ InitialCondition::validParams()
 
 InitialCondition::InitialCondition(const InputParameters & params) :
     Object(params),
-    GPrintInterface(this)
+    PrintInterface(this)
 {
     _F_;
 }

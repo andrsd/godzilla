@@ -12,7 +12,7 @@ Output::validParams() {
 
 Output::Output(const InputParameters & params) :
     Object(params),
-    GPrintInterface(this),
+    PrintInterface(this),
     problem(*getParam<Problem *>("_Problem"))
 {
     _F_;

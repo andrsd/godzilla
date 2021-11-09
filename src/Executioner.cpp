@@ -19,7 +19,7 @@ Executioner::validParams()
 
 Executioner::Executioner(const InputParameters & parameters) :
     Object(parameters),
-    GPrintInterface(this),
+    PrintInterface(this),
     problem(*getParam<Problem *>("_Problem"))
 {
     _F_;

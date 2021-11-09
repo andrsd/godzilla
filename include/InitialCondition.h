@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Object.h"
-#include "GPrintInterface.h"
+#include "PrintInterface.h"
 
 namespace godzilla {
 
 /// Base class for initial conditions
 ///
 class InitialCondition : public Object,
-                         public GPrintInterface
+                         public PrintInterface
 {
 public:
     InitialCondition(const InputParameters & params);

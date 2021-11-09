@@ -1,4 +1,4 @@
-#include "GPrintInterface.h"
+#include "PrintInterface.h"
 #include "Object.h"
 #include "App.h"
 #include "CallStack.h"
@@ -58,7 +58,7 @@ godzillaErrorRaw(std::string msg, bool call_stack)
 } // namespace internal
 
 
-GPrintInterface::GPrintInterface(const App & app) :
+PrintInterface::PrintInterface(const App & app) :
     verbosity_level(app.getVerbosityLevel()),
     prefix(""),
     pi_comm(app.getComm())
@@ -66,7 +66,7 @@ GPrintInterface::GPrintInterface(const App & app) :
     _F_;
 }
 
-GPrintInterface::GPrintInterface(const Object * obj) :
+PrintInterface::PrintInterface(const Object * obj) :
     verbosity_level(dynamic_cast<const App &>(obj->getApp()).getVerbosityLevel()),
     prefix(obj->getName() + ": "),
     pi_comm(obj->comm())

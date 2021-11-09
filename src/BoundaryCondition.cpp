@@ -25,7 +25,7 @@ BoundaryCondition::validParams()
 
 BoundaryCondition::BoundaryCondition(const InputParameters & params) :
     Object(params),
-    GPrintInterface(this),
+    PrintInterface(this),
     boundary(getParam<std::vector<std::string>>("boundary"))
 {
     _F_;

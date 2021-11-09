@@ -14,7 +14,7 @@ GGrid::validParams()
 
 GGrid::GGrid(const InputParameters & parameters) :
     Object(parameters),
-    GPrintInterface(this),
+    PrintInterface(this),
     dm(NULL)
 {
     _F_;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Object.h"
-#include "GPrintInterface.h"
+#include "PrintInterface.h"
 #include "petscdm.h"
 
 namespace godzilla {
@@ -9,7 +9,7 @@ namespace godzilla {
 /// Base class for grids
 ///
 class GGrid : public Object,
-              public GPrintInterface
+              public PrintInterface
 {
 public:
     GGrid(const InputParameters & parameters);

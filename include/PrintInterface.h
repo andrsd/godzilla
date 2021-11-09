@@ -43,10 +43,10 @@ class Object;
 
 /// Interface for printing on terminal
 ///
-class GPrintInterface {
+class PrintInterface {
 public:
-    GPrintInterface(const App & app);
-    GPrintInterface(const Object * obj);
+    PrintInterface(const App & app);
+    PrintInterface(const Object * obj);
 
     /// Print a message on a terminal
     template <typename... Args>

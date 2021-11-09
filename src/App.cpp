@@ -12,7 +12,7 @@
 namespace godzilla {
 
 App::App(const std::string & app_name, MPI_Comm comm) :
-    GPrintInterface(*this),
+    PrintInterface(*this),
     comm(comm),
     args(app_name),
     input_file_arg("i", "input-file", "Input file to execute", false, "", "string"),

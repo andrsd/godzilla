@@ -35,7 +35,7 @@ add_library(${PROJECT_NAME} SHARED
     src/Factory.cpp
     src/FEProblemInterface.cpp
     src/FunctionInterface.cpp
-    src/GPrintInterface.cpp
+    src/PrintInterface.cpp
     src/Init.cpp
     src/InitialCondition.cpp
     src/Object.cpp

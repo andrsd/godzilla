@@ -4,7 +4,7 @@
 #include <list>
 #include <ctime>
 #include "Object.h"
-#include "GPrintInterface.h"
+#include "PrintInterface.h"
 
 
 #define combineNames1(X, Y) X##Y

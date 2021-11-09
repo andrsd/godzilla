@@ -20,7 +20,7 @@ std::string type_name()
 namespace godzilla {
 
 GYMLFile::GYMLFile(const App & app) :
-    GPrintInterface(app),
+    PrintInterface(app),
     app(app),
     grid(nullptr),
     problem(nullptr),

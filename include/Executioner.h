@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "Object.h"
-#include "GPrintInterface.h"
+#include "PrintInterface.h"
 
 
 namespace godzilla {
@@ -13,7 +13,7 @@ class Output;
 /// Executioner
 ///
 class Executioner : public Object,
-                    public GPrintInterface
+                    public PrintInterface
 {
 public:
     Executioner(const InputParameters & parameters);

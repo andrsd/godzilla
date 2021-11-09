@@ -1,7 +1,7 @@
 #pragma once
 
 #include <mpi.h>
-#include "GPrintInterface.h"
+#include "PrintInterface.h"
 #include "CmdLineArgParser.h"
 
 namespace godzilla {
@@ -11,7 +11,7 @@ class Problem;
 class Executioner;
 
 
-class App : public GPrintInterface
+class App : public PrintInterface
 {
 public:
     App(const std::string & app_name, MPI_Comm comm);

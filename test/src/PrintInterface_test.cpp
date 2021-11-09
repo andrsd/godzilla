@@ -1,11 +1,11 @@
 #include "GodzillaApp_test.h"
-#include "GPrintInterface_test.h"
+#include "PrintInterface_test.h"
 #include "CallStack.h"
 
 
 using namespace godzilla;
 
-TEST_F(GPrintInterfaceTest, print)
+TEST_F(PrintInterfaceTest, print)
 {
     testing::internal::CaptureStdout();
     this->app->godzillaPrint(0, "Message");
@@ -16,7 +16,7 @@ TEST_F(GPrintInterfaceTest, print)
     );
 }
 
-TEST_F(GPrintInterfaceTest, error)
+TEST_F(PrintInterfaceTest, error)
 {
     EXPECT_DEATH(
         this->app->godzillaError("Error"),
@@ -24,7 +24,7 @@ TEST_F(GPrintInterfaceTest, error)
     );
 }
 
-TEST_F(GPrintInterfaceTest, error_with_callstack)
+TEST_F(PrintInterfaceTest, error_with_callstack)
 {
     _F_;
     EXPECT_DEATH(
@@ -33,7 +33,7 @@ TEST_F(GPrintInterfaceTest, error_with_callstack)
     );
 }
 
-TEST_F(GPrintInterfaceTest, check_petsc_error)
+TEST_F(PrintInterfaceTest, check_petsc_error)
 {
     EXPECT_DEATH(
         this->app->checkPetscError(123),

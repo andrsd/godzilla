@@ -3,7 +3,7 @@
 #include <string>
 #include "yaml-cpp/yaml.h"
 #include "InputParameters.h"
-#include "GPrintInterface.h"
+#include "PrintInterface.h"
 
 namespace godzilla {
 
@@ -15,7 +15,7 @@ class Executioner;
 
 /// YML parser for input files
 ///
-class GYMLFile : public GPrintInterface
+class GYMLFile : public PrintInterface
 {
 public:
     GYMLFile(const App & app);

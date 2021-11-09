@@ -5,7 +5,7 @@
 
 using namespace godzilla;
 
-class GPrintInterfaceTest : public ::testing::Test {
+class PrintInterfaceTest : public ::testing::Test {
 protected:
     void SetUp() override
     {
