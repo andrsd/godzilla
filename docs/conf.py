@@ -3,16 +3,23 @@ import sys
 import subprocess
 
 
-if "DOXYREST_PATH" in os.environ:
-    DOXYREST_PATH = os.environ["DOXYREST_PATH"]
+read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+if read_the_docs_build:
+    # Wish this was set by readthedocs
+    DOXYREST_PATH = "/home/docs/checkouts/readthedocs.org/user_builds/{}/conda/{}/share/doxyrest".format(
+        os.environ["READTHEDOCS_PROJECT"],
+        os.environ["READTHEDOCS_VERSION"])
     sys.path.append(os.path.join(DOXYREST_PATH, 'sphinx'))
+    os.environ["DOXYREST_PATH"] = DOXYREST_PATH
+elif "DOXYREST_PATH" in os.environ:
+    sys.path.append(os.path.join(os.environ["DOXYREST_PATH"], 'sphinx'))
 
 
 def build_devel(folder):
     """Build the devel section of the doco"""
 
     try:
-        retcode = subprocess.call("cmake .. -DPROJECT_RST_DIR=.", shell=True)
+        retcode = subprocess.call("cmake .. -DPROJECT_RST_DIR={} -DDOXYREST_PATH={}".format(folder, DOXYREST_PATH), shell=True)
         retcode = subprocess.call("doxygen Doxyfile.doxygen", shell=True)
         retcode = subprocess.call("doxyrest -c doxyrest-config.lua", shell=True)
         if retcode < 0:
@@ -25,7 +32,6 @@ def generate_devel_rst(app):
     build_devel(".")
 
 def setup(app):
-    read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
     if read_the_docs_build:
         app.connect("builder-inited", generate_devel_rst)
 
