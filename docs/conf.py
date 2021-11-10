@@ -8,28 +8,26 @@ if "DOXYREST_PATH" in os.environ:
     sys.path.append(os.path.join(DOXYREST_PATH, 'sphinx'))
 
 
-def run_doxygen(folder):
-    """Run the doxygen make command in the designated folder"""
+def build_devel(folder):
+    """Build the devel section of the doco"""
 
     try:
-        retcode = subprocess.call("cd %s; cmake .. ; make doc " % folder, shell=True)
+        retcode = subprocess.call("cmake .. -DPROJECT_RST_DIR=.", shell=True)
+        retcode = subprocess.call("doxygen Doxyfile.doxygen", shell=True)
+        retcode = subprocess.call("doxyrest -c doxyrest-config.lua", shell=True)
         if retcode < 0:
-            sys.stderr.write("doxygen terminated by signal %s" % (-retcode))
+            sys.stderr.write("Terminated by signal %s" % (-retcode))
     except OSError as e:
-        sys.stderr.write("doxygen execution failed: %s" % e)
+        sys.stderr.write("Execution failed: %s" % e)
 
-
-def generate_doxygen_xml(app):
-    """Run the doxygen make commands if we're on the ReadTheDocs server"""
-
-    read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
-
-    if read_the_docs_build:
-        run_doxygen(".")
+def generate_devel_rst(app):
+    # we build in `/docs` dir so we don't have to worry about moving the rest of the .rst files
+    build_devel(".")
 
 def setup(app):
-    # Add hook for building doxygen xml when needed
-    app.connect("builder-inited", generate_doxygen_xml)
+    read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+    if read_the_docs_build:
+        app.connect("builder-inited", generate_devel_rst)
 
 
 project = 'godzilla'

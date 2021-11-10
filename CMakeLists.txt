@@ -88,6 +88,9 @@ endif()
 # Documentation
 
 if(DOXYGEN_FOUND)
+    if (NOT PROJECT_RST_DIR)
+        set(PROJECT_RST_DIR ${PROJECT_BINARY_DIR}/rst)
+    endif()
     set(DOXYREST_PATH $ENV{DOXYREST_PATH})
     set(DOXYGEN_GENERATE_HTML NO)
     set(DOXYGEN_GENERATE_XML YES)
@@ -122,16 +125,16 @@ if(DOXYGEN_FOUND)
         COMMAND
             ${SPHINX_BUILD} -b html rst html
         DEPENDS
-            ${PROJECT_BINARY_DIR}/rst/index.rst
-            ${PROJECT_BINARY_DIR}/rst/getting-started
-            ${PROJECT_BINARY_DIR}/rst/examples
-            ${PROJECT_BINARY_DIR}/rst/devel/index.rst
-            ${PROJECT_BINARY_DIR}/rst/conf.py
+            ${PROJECT_RST_DIR}/index.rst
+            ${PROJECT_RST_DIR}/getting-started
+            ${PROJECT_RST_DIR}/examples
+            ${PROJECT_RST_DIR}/devel/index.rst
+            ${PROJECT_RST_DIR}/conf.py
     )
 
     add_custom_command(
         OUTPUT
-            ${PROJECT_BINARY_DIR}/rst/devel/index.rst
+            ${PROJECT_RST_DIR}/devel/index.rst
         COMMAND
             ${DOXYREST} -c doxyrest-config.lua
         DEPENDS
@@ -140,21 +143,21 @@ if(DOXYGEN_FOUND)
 
     add_custom_command(
         OUTPUT
-            ${PROJECT_BINARY_DIR}/rst/getting-started
+            ${PROJECT_RST_DIR}/getting-started
         COMMAND
-            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/getting-started ${PROJECT_BINARY_DIR}/rst/getting-started
+            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/getting-started ${PROJECT_RST_DIR}/getting-started
     )
     add_custom_command(
         OUTPUT
-            ${PROJECT_BINARY_DIR}/rst/examples
+            ${PROJECT_RST_DIR}/examples
         COMMAND
-            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/examples ${PROJECT_BINARY_DIR}/rst/examples
+            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/examples ${PROJECT_RST_DIR}/examples
     )
     add_custom_command(
         OUTPUT
-            ${PROJECT_BINARY_DIR}/rst/index.rst
+            ${PROJECT_RST_DIR}/index.rst
         COMMAND
-            cmake -E copy ${PROJECT_SOURCE_DIR}/docs/index.rst ${PROJECT_BINARY_DIR}/rst
+            cmake -E copy ${PROJECT_SOURCE_DIR}/docs/index.rst ${PROJECT_RST_DIR}
     )
 
     add_custom_command(
@@ -188,3 +191,5 @@ if (BUILD_TESTS)
 endif()
 
 configure_file(include/GodzillaConfig.h.in GodzillaConfig.h)
+
+unset(PROJECT_RST_DIR CACHE)

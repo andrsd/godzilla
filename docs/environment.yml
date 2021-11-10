@@ -3,6 +3,11 @@ channels:
 - conda-forge
 - defaults
 dependencies:
+- python
 - cmake
 - doxygen
 - doxyrest
+- pip>=20.1
+- pip:
+    - sphinx-tabs
+prefix: /home/docs/.conda/envs/readthedocs

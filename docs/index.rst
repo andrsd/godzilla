@@ -24,4 +24,3 @@ Godzilla is a simple library that is wrapping PETSc API.
    :caption: Developers
 
    devel/global
-   devel/page_index
