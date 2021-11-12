@@ -3,10 +3,10 @@ name: lint
 on:
   push:
     branches:
-      - godzilla
+      - main
   pull_request:
     branches:
-      - godzilla
+      - main
 
 jobs:
   formatting-check:

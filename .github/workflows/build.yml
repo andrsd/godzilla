@@ -3,10 +3,10 @@ name: build
 on:
   push:
     branches:
-      - godzilla
+      - main
   pull_request:
     branches:
-      - godzilla
+      - main
 
 jobs:
   linux:
