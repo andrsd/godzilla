@@ -1,10 +1,10 @@
 grid:
-    type: StructuredGrid2D
-    nx: 4
-    ny: 4
+  type: StructuredGrid2D
+  nx: 4
+  ny: 4
 
 problem:
-    type: PoissonLinearProblem
+  type: PoissonLinearProblem
 
 executioner:
-    type: Executioner
+  type: Executioner

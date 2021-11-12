@@ -1,14 +1,14 @@
 grid:
-    type: RectangleMesh
-    nx: 2
-    ny: 2
-    xmin: 0
-    xmax: 2
-    ymin: 0
-    ymax: 2
+  type: RectangleMesh
+  nx: 2
+  ny: 2
+  xmin: 0
+  xmax: 2
+  ymin: 0
+  ymax: 2
 
 problem:
-    type: PoissonFENonlinearProblem
+  type: PoissonFENonlinearProblem
 
 executioner:
-    type: Executioner
+  type: Executioner
