@@ -10,3 +10,9 @@ insert_final_newline = true
 
 [*.py]
 indent_size = 4
+
+[*.rst]
+indent_size = 3
+
+[*.gyml]
+indent_size = 2
