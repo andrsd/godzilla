@@ -146,18 +146,24 @@ if(DOXYGEN_FOUND)
             ${PROJECT_RST_DIR}/getting-started
         COMMAND
             cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/getting-started ${PROJECT_RST_DIR}/getting-started
+        DEPENDS
+            ${PROJECT_SOURCE_DIR}/docs/getting-started
     )
     add_custom_command(
         OUTPUT
             ${PROJECT_RST_DIR}/examples
         COMMAND
             cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/examples ${PROJECT_RST_DIR}/examples
+        DEPENDS
+            ${PROJECT_SOURCE_DIR}/docs/examples
     )
     add_custom_command(
         OUTPUT
             ${PROJECT_RST_DIR}/index.rst
         COMMAND
             cmake -E copy ${PROJECT_SOURCE_DIR}/docs/index.rst ${PROJECT_RST_DIR}
+        DEPENDS
+            ${PROJECT_SOURCE_DIR}/docs/index.rst
     )
 
     add_custom_command(
