@@ -5,15 +5,12 @@
 #include "ExodusIIMesh.h"
 #include "GodzillaApp_test.h"
 
-
 using namespace godzilla;
 
-class MockExodusIIMesh : public ExodusIIMesh
-{
+class MockExodusIIMesh : public ExodusIIMesh {
 public:
     MockExodusIIMesh(const InputParameters & params) : ExodusIIMesh(params) {}
 };
-
 
 class ExodusIIMeshTest : public GodzillaAppTest {
 protected:

@@ -3,7 +3,6 @@
 #include "App.h"
 #include "Object.h"
 
-
 using namespace godzilla;
 
 registerObject(Object);

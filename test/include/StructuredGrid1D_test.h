@@ -5,15 +5,12 @@
 #include "StructuredGrid1D.h"
 #include "GodzillaApp_test.h"
 
-
 using namespace godzilla;
 
-class MockStructuredGrid1D : public StructuredGrid1D
-{
+class MockStructuredGrid1D : public StructuredGrid1D {
 public:
     MockStructuredGrid1D(const InputParameters & params) : StructuredGrid1D(params) {}
 };
-
 
 class StructuredGrid1DTest : public GodzillaAppTest {
 protected:

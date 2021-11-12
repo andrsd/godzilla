@@ -5,15 +5,12 @@
 #include "LineMesh.h"
 #include "GodzillaApp_test.h"
 
-
 using namespace godzilla;
 
-class MockLineMesh : public LineMesh
-{
+class MockLineMesh : public LineMesh {
 public:
     MockLineMesh(const InputParameters & params) : LineMesh(params) {}
 };
-
 
 class LineMeshTest : public GodzillaAppTest {
 protected:

@@ -3,7 +3,6 @@
 #include "InputParameters.h"
 #include "petsc.h"
 
-
 using namespace godzilla;
 
 registerObject(MockStructuredGrid2D);

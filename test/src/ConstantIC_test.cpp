@@ -3,7 +3,6 @@
 #include "App.h"
 #include "ConstantIC.h"
 
-
 using namespace godzilla;
 
 TEST(ConstantIC, api)
@@ -12,7 +11,7 @@ TEST(ConstantIC, api)
 
     InputParameters params = Factory::getValidParams("ConstantIC");
     params.set<const App *>("_app") = &app;
-    params.set<std::vector<PetscReal>>("value") = { 3, 4, 5};
+    params.set<std::vector<PetscReal>>("value") = { 3, 4, 5 };
     auto obj = Factory::create<InitialCondition>("ConstantIC", "name", params);
 
     EXPECT_EQ(obj->getFieldId(), 0);
@@ -22,7 +21,7 @@ TEST(ConstantIC, api)
     PetscReal time = 0.;
     PetscReal x[] = { 0 };
     PetscInt Nc = 3;
-    PetscScalar u[] = { 0, 0, 0};
+    PetscScalar u[] = { 0, 0, 0 };
     __initial_condition_function(dim, time, x, Nc, u, obj);
 
     EXPECT_EQ(u[0], 3);

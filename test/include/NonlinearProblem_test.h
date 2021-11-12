@@ -3,7 +3,6 @@
 #include "NonlinearProblem.h"
 #include "GodzillaApp_test.h"
 
-
 using namespace godzilla;
 
 class GTestPetscNonlinearProblem : public NonlinearProblem {

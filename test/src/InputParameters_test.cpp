@@ -17,8 +17,5 @@ TEST(InputParameters, empty_doc_str)
 {
     InputParameters params = Factory::getValidParams("Object");
 
-    EXPECT_EQ(
-        params.getDocString("i"),
-        std::string("")
-    );
+    EXPECT_EQ(params.getDocString("i"), std::string(""));
 }

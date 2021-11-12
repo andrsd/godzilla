@@ -3,7 +3,6 @@
 #include "InputParameters.h"
 #include "petsc.h"
 
-
 registerObject(MockExecutioner);
 registerObject(MockProblem);
 registerObject(MockOutput);

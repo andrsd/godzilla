@@ -5,22 +5,17 @@
 #include "RectangleMesh.h"
 #include "GodzillaApp_test.h"
 
-
 using namespace godzilla;
 
-class MockRectangleMesh : public RectangleMesh
-{
+class MockRectangleMesh : public RectangleMesh {
 public:
     MockRectangleMesh(const InputParameters & params) : RectangleMesh(params) {}
 };
 
-
 class RectangleMeshTest : public GodzillaAppTest {
 protected:
     MockRectangleMesh *
-    g2dRectangleMesh(
-            const std::vector<PetscReal> & xmin,
-            const std::vector<PetscReal> & xmax)
+    g2dRectangleMesh(const std::vector<PetscReal> & xmin, const std::vector<PetscReal> & xmax)
     {
         const std::string class_name = "MockRectangleMesh";
         InputParameters params = Factory::getValidParams(class_name);

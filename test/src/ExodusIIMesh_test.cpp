@@ -4,15 +4,13 @@
 #include "InputParameters.h"
 #include "petsc.h"
 
-
 using namespace godzilla;
 
 registerObject(MockExodusIIMesh);
 
 TEST_F(ExodusIIMeshTest, gexodus_mesh)
 {
-    std::string file_name =
-        std::string(UNIT_TESTS_ROOT) + std::string("/assets/square.e");
+    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/square.e");
     auto obj = gExodusMesh(file_name);
 
     EXPECT_EQ(obj->getFileName(), file_name);
@@ -20,16 +18,14 @@ TEST_F(ExodusIIMeshTest, gexodus_mesh)
 
 TEST_F(ExodusIIMeshTest, gexodus_mesh_nonexitent_file)
 {
-    EXPECT_DEATH(
-        gExodusMesh("asdf.e"),
-        "ERROR: obj: Unable to open 'asdf.e' for reading. Make sure it exists and you have read permissions."
-    );
+    EXPECT_DEATH(gExodusMesh("asdf.e"),
+                 "ERROR: obj: Unable to open 'asdf.e' for reading. Make sure it exists and you "
+                 "have read permissions.");
 }
 
 TEST_F(ExodusIIMeshTest, gexodus_mesh_create)
 {
-    std::string file_name =
-        std::string(UNIT_TESTS_ROOT) + std::string("/assets/square.e");
+    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/square.e");
     auto obj = gExodusMesh(file_name);
     obj->create();
     const DM & dm = obj->getDM();

@@ -3,7 +3,6 @@
 #include "InputParameters.h"
 #include "petsc.h"
 
-
 using namespace godzilla;
 
 registerObject(MockBoundaryCondition);
@@ -25,7 +24,7 @@ TEST_F(BoundaryConditionTest, evaluate)
     PetscReal time = 0.;
     PetscReal x[] = { 0 };
     PetscInt Nc = 3;
-    PetscScalar u[] = { 0, 0, 0};
+    PetscScalar u[] = { 0, 0, 0 };
     EXPECT_CALL(*bc, evaluate(dim, time, x, Nc, u)).Times(1);
     __boundary_condition_function(dim, time, x, Nc, u, bc);
 }

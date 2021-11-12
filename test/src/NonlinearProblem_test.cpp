@@ -6,7 +6,6 @@
 #include "petscvec.h"
 #include "petscmat.h"
 
-
 using namespace godzilla;
 
 registerObject(GTestPetscNonlinearProblem);
@@ -48,22 +47,18 @@ TEST(NonlinearProblemTest, solve)
     EXPECT_DOUBLE_EQ(xx[1], 3.);
 }
 
-
-
 GTestPetscNonlinearProblem::GTestPetscNonlinearProblem(const InputParameters & params) :
     NonlinearProblem(params)
 {
 }
 
-GTestPetscNonlinearProblem::~GTestPetscNonlinearProblem()
-{
-}
+GTestPetscNonlinearProblem::~GTestPetscNonlinearProblem() {}
 
 PetscErrorCode
 GTestPetscNonlinearProblem::computeResidualCallback(Vec x, Vec f)
 {
     PetscInt ni = 2;
-    PetscInt ix[] = {0, 1};
+    PetscInt ix[] = { 0, 1 };
     PetscScalar y[2];
     VecGetValues(x, ni, ix, y);
 

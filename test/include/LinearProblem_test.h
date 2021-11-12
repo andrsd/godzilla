@@ -3,7 +3,6 @@
 #include "LinearProblem.h"
 #include "GodzillaApp_test.h"
 
-
 using namespace godzilla;
 
 class GTestPetscLinearProblem : public LinearProblem {

@@ -3,14 +3,13 @@
 #include "InputParameters.h"
 #include "petsc.h"
 
-
 using namespace godzilla;
 
 registerObject(MockRectangleMesh);
 
 TEST_F(RectangleMeshTest, g2d_rectangle_mesh)
 {
-    auto obj = g2dRectangleMesh({1, 2}, {3, 4});
+    auto obj = g2dRectangleMesh({ 1, 2 }, { 3, 4 });
 
     EXPECT_EQ(obj->getXMin(), 1);
     EXPECT_EQ(obj->getXMax(), 3);
@@ -23,20 +22,16 @@ TEST_F(RectangleMeshTest, g2d_rectangle_mesh)
 
 TEST_F(RectangleMeshTest, g2d_rectangle_mesh_incorrect_dims)
 {
-    EXPECT_DEATH(
-        g2dRectangleMesh({2, 1}, {1, 2}),
-        "ERROR: obj: Parameter 'xmax' must be larger than 'xmin'."
-    );
+    EXPECT_DEATH(g2dRectangleMesh({ 2, 1 }, { 1, 2 }),
+                 "ERROR: obj: Parameter 'xmax' must be larger than 'xmin'.");
 
-    EXPECT_DEATH(
-        g2dRectangleMesh({1, 2}, {2, 1}),
-        "ERROR: obj: Parameter 'ymax' must be larger than 'ymin'."
-    );
+    EXPECT_DEATH(g2dRectangleMesh({ 1, 2 }, { 2, 1 }),
+                 "ERROR: obj: Parameter 'ymax' must be larger than 'ymin'.");
 }
 
 TEST_F(RectangleMeshTest, g2d_rectangle_mesh_create)
 {
-    auto obj = g2dRectangleMesh({1, 2}, {3, 4});
+    auto obj = g2dRectangleMesh({ 1, 2 }, { 3, 4 });
     obj->create();
     const DM & dm = obj->getDM();
 

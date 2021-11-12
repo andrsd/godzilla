@@ -3,7 +3,6 @@
 #include "InputParameters.h"
 #include "petsc.h"
 
-
 using namespace godzilla;
 
 registerObject(MockLineMesh);
@@ -19,10 +18,7 @@ TEST_F(LineMeshTest, g1d_line_mesh)
 
 TEST_F(LineMeshTest, g1d_line_mesh_incorrect_dims)
 {
-    EXPECT_DEATH(
-        g1dLineMesh(2, 1),
-        "ERROR: obj: Parameter 'xmax' must be larger than 'xmin'."
-    );
+    EXPECT_DEATH(g1dLineMesh(2, 1), "ERROR: obj: Parameter 'xmax' must be larger than 'xmin'.");
 }
 
 TEST_F(LineMeshTest, g1d_line_mesh_create)

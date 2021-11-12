@@ -5,7 +5,6 @@
 #include "petsc.h"
 #include "petscmat.h"
 
-
 using namespace godzilla;
 
 registerObject(GTestPetscLinearProblem);
@@ -47,16 +46,12 @@ TEST(LinearProblemTest, solve)
     EXPECT_DOUBLE_EQ(xx[1], 3.);
 }
 
-
-
 GTestPetscLinearProblem::GTestPetscLinearProblem(const InputParameters & params) :
     LinearProblem(params)
 {
 }
 
-GTestPetscLinearProblem::~GTestPetscLinearProblem()
-{
-}
+GTestPetscLinearProblem::~GTestPetscLinearProblem() {}
 
 PetscErrorCode
 GTestPetscLinearProblem::computeRhsCallback(Vec b)

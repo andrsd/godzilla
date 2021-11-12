@@ -7,15 +7,12 @@
 #include "Output.h"
 #include "GodzillaApp_test.h"
 
-class MockExecutioner : public Executioner
-{
+class MockExecutioner : public Executioner {
 public:
     MockExecutioner(const InputParameters & params) : Executioner(params) {}
 };
 
-
-class MockProblem : public Problem
-{
+class MockProblem : public Problem {
 public:
     MockProblem(const InputParameters & params) : Problem(params) {}
 
@@ -26,14 +23,12 @@ public:
     MOCK_METHOD((const Vec &), getSolutionVector, (), (const, override));
 };
 
-class MockOutput : public Output
-{
+class MockOutput : public Output {
 public:
     MockOutput(const InputParameters & params) : Output(params) {}
 
     MOCK_METHOD(void, output, (), (const, override));
 };
-
 
 class ExecutionerTest : public GodzillaAppTest {
 protected:

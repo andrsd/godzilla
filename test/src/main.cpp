@@ -2,7 +2,8 @@
 #include "Init.h"
 #include "App.h"
 
-int main(int argc, char **argv)
+int
+main(int argc, char ** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
     godzilla::Init init(argc, argv);

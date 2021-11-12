@@ -8,7 +8,6 @@
 #include "VTKOutput.h"
 #include "GodzillaApp_test.h"
 
-
 class VTKOutputTest : public GodzillaAppTest {
 protected:
     Grid *
@@ -22,7 +21,7 @@ protected:
     }
 
     Problem *
-    gProblem(Grid *grid)
+    gProblem(Grid * grid)
     {
         const std::string class_name = "GTestPetscLinearProblem";
         InputParameters params = Factory::getValidParams(class_name);

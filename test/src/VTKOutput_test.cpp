@@ -2,7 +2,6 @@
 #include "VTKOutput_test.h"
 #include "petsc.h"
 
-
 TEST_F(VTKOutputTest, output)
 {
     testing::internal::CaptureStderr();
