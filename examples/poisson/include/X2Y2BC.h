@@ -6,8 +6,7 @@ namespace godzilla {
 
 /// x^2 + y^2 boundary conditions
 ///
-class X2Y2BC : public BoundaryCondition
-{
+class X2Y2BC : public BoundaryCondition {
 public:
     X2Y2BC(const InputParameters & params);
 
@@ -22,10 +21,11 @@ protected:
     /// @param x The coordinates
     /// @param Nc The number of components
     /// @param u  The output field values
-    virtual void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]);
+    virtual void
+    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]);
 
 public:
     static InputParameters validParams();
 };
 
-} // godzilla
+} // namespace godzilla

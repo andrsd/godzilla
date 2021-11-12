@@ -12,8 +12,7 @@ X2Y2BC::validParams()
     return params;
 }
 
-X2Y2BC::X2Y2BC(const InputParameters & params) :
-    BoundaryCondition(params)
+X2Y2BC::X2Y2BC(const InputParameters & params) : BoundaryCondition(params)
 {
     _F_;
 }
@@ -39,4 +38,4 @@ X2Y2BC::evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc,
     *u = x[0] * x[0] + x[1] * x[1];
 }
 
-} // godzilla
+} // namespace godzilla

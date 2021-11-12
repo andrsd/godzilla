@@ -2,7 +2,6 @@
 #include "StructuredGrid2D.h"
 #include "petscdmda.h"
 
-
 registerObject(PoissonLinearProblem);
 
 using namespace godzilla;
@@ -53,13 +52,12 @@ PoissonLinearProblem::computeRhsCallback(Vec b)
     PetscInt xm, ym, xs, ys;
     DMDAGetCorners(dm, &xs, &ys, 0, &xm, &ym, 0);
 
-    PetscScalar **array;
+    PetscScalar ** array;
     DMDAVecGetArray(dm, b, &array);
     for (PetscInt j = ys; j < ys + ym; j++) {
         for (PetscInt i = xs; i < xs + xm; i++) {
-            array[j][i] =
-                -PetscCosScalar(this->m * pi * (i + 0.5) * Hx) *
-                +PetscCosScalar(this->n * pi * (j + 0.5) * Hy) * Hx * Hy;
+            array[j][i] = -PetscCosScalar(this->m * pi * (i + 0.5) * Hx) *
+                          +PetscCosScalar(this->n * pi * (j + 0.5) * Hy) * Hx * Hy;
         }
     }
     DMDAVecRestoreArray(dm, b, &array);
@@ -67,7 +65,8 @@ PoissonLinearProblem::computeRhsCallback(Vec b)
     VecAssemblyEnd(b);
 
     // force right hand side to be consistent for singular matrix
-    // note this is really a hack, normally the model would provide you with a consistent right handside
+    // note this is really a hack, normally the model would provide you with a consistent right
+    // handside
     MatNullSpace nullspace;
     MatNullSpaceCreate(comm(), PETSC_TRUE, 0, 0, &nullspace);
     MatNullSpaceRemove(nullspace, b);
@@ -130,18 +129,20 @@ PoissonLinearProblem::computeOperatorsCallback(Mat A, Mat B)
                     num++;
                     numj++;
                 }
-                v[num] = ((PetscReal) (numj) * HxdHy + (PetscReal) (numi) * HydHx);
+                v[num] = ((PetscReal) (numj) *HxdHy + (PetscReal) (numi) *HydHx);
                 col[num].i = i;
                 col[num].j = j;
                 num++;
                 MatSetValuesStencil(B, 1, &row, num, col, v, INSERT_VALUES);
             }
             else {
+                // clang-format off
                 v[0] = -HxdHy;                col[0].i = i;     col[0].j = j - 1;
                 v[1] = -HydHx;                col[1].i = i - 1; col[1].j = j;
                 v[2] = 2.0 * (HxdHy + HydHx); col[2].i = i;     col[2].j = j;
                 v[3] = -HydHx;                col[3].i = i + 1; col[3].j = j;
                 v[4] = -HxdHy;                col[4].i = i;     col[4].j = j + 1;
+                // clang-format on
                 MatSetValuesStencil(B, 1, &row, STENCIL_SIZE, col, v, INSERT_VALUES);
             }
         }

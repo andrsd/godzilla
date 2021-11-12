@@ -7,41 +7,83 @@
 
 using namespace godzilla;
 
-
 registerObject(PoissonFENonlinearProblem);
 
 static void
-f0_u(PetscInt dim, PetscInt Nf, PetscInt NfAux,
-     const PetscInt uOff[], const PetscInt uOff_x[], const PetscScalar u[], const PetscScalar u_t[], const PetscScalar u_x[],
-     const PetscInt aOff[], const PetscInt aOff_x[], const PetscScalar a[], const PetscScalar a_t[], const PetscScalar a_x[],
-     PetscReal t, const PetscReal x[], PetscInt numConstants, const PetscScalar constants[], PetscScalar f0[])
+f0_u(PetscInt dim,
+     PetscInt Nf,
+     PetscInt NfAux,
+     const PetscInt uOff[],
+     const PetscInt uOff_x[],
+     const PetscScalar u[],
+     const PetscScalar u_t[],
+     const PetscScalar u_x[],
+     const PetscInt aOff[],
+     const PetscInt aOff_x[],
+     const PetscScalar a[],
+     const PetscScalar a_t[],
+     const PetscScalar a_x[],
+     PetscReal t,
+     const PetscReal x[],
+     PetscInt numConstants,
+     const PetscScalar constants[],
+     PetscScalar f0[])
 {
-  f0[0] = 4.0;
+    f0[0] = 4.0;
 }
 
 /* gradU[comp*dim+d] = {u_x, u_y} or {u_x, u_y, u_z} */
 static void
-f1_u(PetscInt dim, PetscInt Nf, PetscInt NfAux,
-     const PetscInt uOff[], const PetscInt uOff_x[], const PetscScalar u[], const PetscScalar u_t[], const PetscScalar u_x[],
-     const PetscInt aOff[], const PetscInt aOff_x[], const PetscScalar a[], const PetscScalar a_t[], const PetscScalar a_x[],
-     PetscReal t, const PetscReal x[], PetscInt numConstants, const PetscScalar constants[], PetscScalar f1[])
+f1_u(PetscInt dim,
+     PetscInt Nf,
+     PetscInt NfAux,
+     const PetscInt uOff[],
+     const PetscInt uOff_x[],
+     const PetscScalar u[],
+     const PetscScalar u_t[],
+     const PetscScalar u_x[],
+     const PetscInt aOff[],
+     const PetscInt aOff_x[],
+     const PetscScalar a[],
+     const PetscScalar a_t[],
+     const PetscScalar a_x[],
+     PetscReal t,
+     const PetscReal x[],
+     PetscInt numConstants,
+     const PetscScalar constants[],
+     PetscScalar f1[])
 {
-  PetscInt d;
-  for (d = 0; d < dim; ++d)
-    f1[d] = u_x[d];
+    PetscInt d;
+    for (d = 0; d < dim; ++d)
+        f1[d] = u_x[d];
 }
 
 /* < \nabla v, \nabla u + {\nabla u}^T >
    This just gives \nabla u, give the perdiagonal for the transpose */
 static void
-g3_uu(PetscInt dim, PetscInt Nf, PetscInt NfAux,
-      const PetscInt uOff[], const PetscInt uOff_x[], const PetscScalar u[], const PetscScalar u_t[], const PetscScalar u_x[],
-      const PetscInt aOff[], const PetscInt aOff_x[], const PetscScalar a[], const PetscScalar a_t[], const PetscScalar a_x[],
-      PetscReal t, PetscReal u_tShift, const PetscReal x[], PetscInt numConstants, const PetscScalar constants[], PetscScalar g3[])
+g3_uu(PetscInt dim,
+      PetscInt Nf,
+      PetscInt NfAux,
+      const PetscInt uOff[],
+      const PetscInt uOff_x[],
+      const PetscScalar u[],
+      const PetscScalar u_t[],
+      const PetscScalar u_x[],
+      const PetscInt aOff[],
+      const PetscInt aOff_x[],
+      const PetscScalar a[],
+      const PetscScalar a_t[],
+      const PetscScalar a_x[],
+      PetscReal t,
+      PetscReal u_tShift,
+      const PetscReal x[],
+      PetscInt numConstants,
+      const PetscScalar constants[],
+      PetscScalar g3[])
 {
-  PetscInt d;
-  for (d = 0; d < dim; ++d)
-    g3[d * dim + d] = 1.0;
+    PetscInt d;
+    for (d = 0; d < dim; ++d)
+        g3[d * dim + d] = 1.0;
 }
 
 ///
@@ -59,9 +101,7 @@ PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & par
     _F_;
 }
 
-PoissonFENonlinearProblem::~PoissonFENonlinearProblem()
-{
-}
+PoissonFENonlinearProblem::~PoissonFENonlinearProblem() {}
 
 void
 PoissonFENonlinearProblem::onSetFields()

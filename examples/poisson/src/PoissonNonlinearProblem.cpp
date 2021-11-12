@@ -4,7 +4,6 @@
 #include "petscdmda.h"
 #include "petscvec.h"
 
-
 using namespace godzilla;
 
 registerObject(PoissonNonlinearProblem);
@@ -58,7 +57,7 @@ PoissonNonlinearProblem::formMatrix(Mat jac)
     MatStencil col[STENCIL_SIZE];
     PetscScalar v[STENCIL_SIZE];
 
-    DMDALocalInfo  info;
+    DMDALocalInfo info;
     ierr = DMDAGetLocalInfo(dm, &info);
     checkPetscError(ierr);
     PetscScalar hx = 1.0 / (PetscReal) (info.mx - 1);
@@ -66,7 +65,7 @@ PoissonNonlinearProblem::formMatrix(Mat jac)
     PetscScalar hxdhy = hx / hy;
     PetscScalar hydhx = hy / hx;
 
-    MatStencil *rows;
+    MatStencil * rows;
     ierr = PetscMalloc1(info.ym * info.xm, &rows);
     checkPetscError(ierr);
 
@@ -92,12 +91,14 @@ PoissonNonlinearProblem::formMatrix(Mat jac)
                 rows[nrows++].j = j;
             }
             else {
+                // clang-format off
                 // interior grid points
                 v[0] = -hxdhy;                col[0].j = j - 1; col[0].i = i;
                 v[1] = -hydhx;                col[1].j = j;     col[1].i = i - 1;
                 v[2] = 2.0 * (hydhx + hxdhy); col[2].j = row.j; col[2].i = row.i;
                 v[3] = -hydhx;                col[3].j = j;     col[3].i = i + 1;
                 v[4] = -hxdhy;                col[4].j = j + 1; col[4].i = i;
+                // clang-format on
                 ierr = MatSetValuesStencil(jac, 1, &row, STENCIL_SIZE, col, v, INSERT_VALUES);
                 checkPetscError(ierr);
             }

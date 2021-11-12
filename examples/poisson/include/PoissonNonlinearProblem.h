@@ -11,8 +11,7 @@ using namespace godzilla;
 ///
 /// References:
 /// - [0] https://petsc.org/release/src/snes/tutorials/ex35.c.html
-class PoissonNonlinearProblem : public NonlinearProblem
-{
+class PoissonNonlinearProblem : public NonlinearProblem {
 public:
     PoissonNonlinearProblem(const InputParameters & parameters);
     virtual ~PoissonNonlinearProblem();

@@ -20,8 +20,7 @@ using namespace godzilla;
 ///
 /// References
 /// - [0] https://petsc.org/release/src/ksp/ksp/tutorials/ex50.c.html
-class PoissonLinearProblem : public LinearProblem
-{
+class PoissonLinearProblem : public LinearProblem {
 public:
     PoissonLinearProblem(const InputParameters & parameters);
 

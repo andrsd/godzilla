@@ -7,8 +7,7 @@ using namespace godzilla;
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system
 ///
-class PoissonFENonlinearProblem : public FENonlinearProblem
-{
+class PoissonFENonlinearProblem : public FENonlinearProblem {
 public:
     PoissonFENonlinearProblem(const InputParameters & parameters);
     virtual ~PoissonFENonlinearProblem();
