@@ -1,0 +1,22 @@
+name: lint
+
+on:
+  push:
+    branches:
+      - godzilla
+  pull_request:
+    branches:
+      - godzilla
+
+jobs:
+  formatting-check:
+    name: Check formatting
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Clang-format style check
+      uses: jidicula/clang-format-action@v4.3.0
+      with:
+        clang-format-version: '12'
+        check-path: .
+        exclude-regex: './contrib/'
