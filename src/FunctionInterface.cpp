@@ -2,8 +2,6 @@
 
 namespace godzilla {
 
-FunctionInterface::FunctionInterface()
-{
-}
+FunctionInterface::FunctionInterface() {}
 
-} // godzilla
+} // namespace godzilla

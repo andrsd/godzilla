@@ -8,9 +8,7 @@ namespace godzilla {
 
 /// Base class for boundary conditions
 ///
-class BoundaryCondition : public Object,
-                          public PrintInterface
-{
+class BoundaryCondition : public Object, public PrintInterface {
 public:
     BoundaryCondition(const InputParameters & params);
 
@@ -31,7 +29,8 @@ protected:
     /// @param x The coordinates
     /// @param Nc The number of components
     /// @param u  The output field values
-    virtual void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
+    virtual void
+    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
 
     /// List of boundary names
     const std::vector<std::string> & boundary;
@@ -39,9 +38,19 @@ protected:
 public:
     static InputParameters validParams();
 
-    friend PetscErrorCode __boundary_condition_function(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
+    friend PetscErrorCode __boundary_condition_function(PetscInt dim,
+                                                        PetscReal time,
+                                                        const PetscReal x[],
+                                                        PetscInt Nc,
+                                                        PetscScalar u[],
+                                                        void * ctx);
 };
 
-PetscErrorCode __boundary_condition_function(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
+PetscErrorCode __boundary_condition_function(PetscInt dim,
+                                             PetscReal time,
+                                             const PetscReal x[],
+                                             PetscInt Nc,
+                                             PetscScalar u[],
+                                             void * ctx);
 
-} // godzilla
+} // namespace godzilla

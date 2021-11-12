@@ -5,7 +5,12 @@
 namespace godzilla {
 
 PetscErrorCode
-__boundary_condition_function(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx)
+__boundary_condition_function(PetscInt dim,
+                              PetscReal time,
+                              const PetscReal x[],
+                              PetscInt Nc,
+                              PetscScalar u[],
+                              void * ctx)
 {
     _F_;
     BoundaryCondition * bc = static_cast<BoundaryCondition *>(ctx);
@@ -13,7 +18,6 @@ __boundary_condition_function(PetscInt dim, PetscReal time, const PetscReal x[],
     bc->evaluate(dim, time, x, Nc, u);
     return 0;
 }
-
 
 InputParameters
 BoundaryCondition::validParams()
@@ -45,4 +49,4 @@ BoundaryCondition::getFieldId() const
     return 0;
 }
 
-} // godzilla
+} // namespace godzilla

@@ -6,8 +6,7 @@ namespace godzilla {
 
 /// 1D line
 ///
-class LineMesh : public UnstructuredMesh
-{
+class LineMesh : public UnstructuredMesh {
 public:
     LineMesh(const InputParameters & parameters);
 
@@ -44,4 +43,4 @@ public:
     static InputParameters validParams();
 };
 
-}
+} // namespace godzilla

@@ -4,7 +4,6 @@
 #include "Utils.h"
 #include "petscdmplex.h"
 
-
 namespace godzilla {
 
 registerObject(ExodusIIMesh);
@@ -25,7 +24,9 @@ ExodusIIMesh::ExodusIIMesh(const InputParameters & parameters) :
     _F_;
 
     if (!utils::pathExists(this->file_name))
-        godzillaError("Unable to open '", this->file_name, "' for reading. Make sure it exists and you have read permissions.");
+        godzillaError("Unable to open '",
+                      this->file_name,
+                      "' for reading. Make sure it exists and you have read permissions.");
 }
 
 const std::string
@@ -41,13 +42,11 @@ ExodusIIMesh::create()
     _F_;
     PetscErrorCode ierr;
 
-    ierr = DMPlexCreateExodusFromFile(comm(),
-        this->file_name.c_str(),
-        this->interpolate,
-        &this->dm);
+    ierr =
+        DMPlexCreateExodusFromFile(comm(), this->file_name.c_str(), this->interpolate, &this->dm);
     checkPetscError(ierr);
     ierr = DMSetUp(this->dm);
     checkPetscError(ierr);
 }
 
-}
+} // namespace godzilla

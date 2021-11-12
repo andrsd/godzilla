@@ -2,7 +2,6 @@
 #include "CallStack.h"
 #include "petscsys.h"
 
-
 namespace godzilla {
 
 Init::Init(int argc, char * argv[], MPI_Comm COMM_WORLD_IN)
@@ -20,4 +19,4 @@ Init::~Init()
     PetscFinalize();
 }
 
-}
+} // namespace godzilla

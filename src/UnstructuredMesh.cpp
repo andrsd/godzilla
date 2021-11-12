@@ -2,7 +2,6 @@
 #include "UnstructuredMesh.h"
 #include "CallStack.h"
 
-
 namespace godzilla {
 
 InputParameters
@@ -12,10 +11,9 @@ UnstructuredMesh::validParams()
     return params;
 }
 
-UnstructuredMesh::UnstructuredMesh(const InputParameters & parameters) :
-    Grid(parameters)
+UnstructuredMesh::UnstructuredMesh(const InputParameters & parameters) : Grid(parameters)
 {
     _F_;
 }
 
-}
+} // namespace godzilla

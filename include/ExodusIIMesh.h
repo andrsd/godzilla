@@ -6,8 +6,7 @@ namespace godzilla {
 
 /// Mesh loaded from a ExodusII file
 ///
-class ExodusIIMesh : public UnstructuredMesh
-{
+class ExodusIIMesh : public UnstructuredMesh {
 public:
     ExodusIIMesh(const InputParameters & parameters);
 
@@ -25,4 +24,4 @@ public:
     static InputParameters validParams();
 };
 
-}
+} // namespace godzilla

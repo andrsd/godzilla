@@ -10,8 +10,7 @@ class App;
 /// The base class for objects that can be created by Factory
 ///
 /// @see Factory
-class Object
-{
+class Object {
 public:
     Object(const InputParameters & parameters);
     virtual ~Object();
@@ -70,4 +69,4 @@ Object::getParam(const std::string & name) const
     return this->pars.get<T>(name);
 }
 
-}
+} // namespace godzilla

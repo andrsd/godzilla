@@ -28,7 +28,7 @@ public:
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
-    virtual void addInitialCondition(const InitialCondition *ic) = 0;
+    virtual void addInitialCondition(const InitialCondition * ic) = 0;
 
     /// Add essental boundary condition
     ///
@@ -36,4 +36,4 @@ public:
     virtual void addBoundaryCondition(const BoundaryCondition * bc) = 0;
 };
 
-} // godzilla
+} // namespace godzilla

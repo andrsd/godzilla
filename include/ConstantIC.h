@@ -10,15 +10,18 @@ namespace godzilla {
 /// Use to set the initial condition of a field to constant values
 /// Note that if the field has multiple components, you can provide a single
 /// value for each component
-class ConstantIC : public InitialCondition
-{
+class ConstantIC : public InitialCondition {
 public:
     ConstantIC(const InputParameters & params);
 
     virtual PetscInt getNumComponents() const override;
 
 protected:
-    virtual void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) override;
+    virtual void evaluate(PetscInt dim,
+                          PetscReal time,
+                          const PetscReal x[],
+                          PetscInt Nc,
+                          PetscScalar u[]) override;
 
     /// Constant values -- one for each component
     const std::vector<PetscReal> & values;
@@ -27,4 +30,4 @@ public:
     static InputParameters validParams();
 };
 
-} // godzilla
+} // namespace godzilla

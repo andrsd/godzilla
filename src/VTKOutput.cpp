@@ -9,7 +9,8 @@ registerObject(VTKOutput);
 static const int MAX_PATH = 1024;
 
 InputParameters
-VTKOutput::validParams() {
+VTKOutput::validParams()
+{
     InputParameters params = Output::validParams();
     params.addRequiredParam<std::string>("file", "The name of the output file.");
     return params;
@@ -25,7 +26,6 @@ VTKOutput::VTKOutput(const InputParameters & params) :
     PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE);
     // TODO: check that DM we are using is DMPLEX. if not, we need to tell
     // users that this does not work.
-
 }
 
 VTKOutput::~VTKOutput()
@@ -48,7 +48,6 @@ VTKOutput::output() const
     DMView(dm, this->viewer);
     const Vec & sln = this->problem.getSolutionVector();
     VecView(sln, this->viewer);
-
 }
 
-} // godzilla
+} // namespace godzilla

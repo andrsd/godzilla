@@ -1,7 +1,6 @@
 #include "InputParameters.h"
 #include <cmath>
 
-
 namespace godzilla {
 
 InputParameters
@@ -11,8 +10,6 @@ emptyInputParameters()
     return params;
 }
 
-InputParameters::InputParameters()
-{
-}
+InputParameters::InputParameters() {}
 
-}
+} // namespace godzilla

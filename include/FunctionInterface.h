@@ -6,14 +6,12 @@ namespace godzilla {
 
 /// Function interface
 ///
-class FunctionInterface
-{
+class FunctionInterface {
 public:
     FunctionInterface();
 
 protected:
 };
-
 
 /// This is the API that we hand to PETSc for fields.
 ///
@@ -35,13 +33,30 @@ protected:
 /// @param numConstants The number of constants
 /// @param constants The value of each constant
 /// @param f The value of the function at this point in space
-typedef
-void PetscFieldFunc(PetscInt dim, PetscInt Nf, PetscInt NfAux,
-    const PetscInt uOff[], const PetscInt uOff_x[], const PetscScalar u[], const PetscScalar u_t[], const PetscScalar u_x[],
-    const PetscInt aOff[], const PetscInt aOff_x[], const PetscScalar a[], const PetscScalar a_t[], const PetscScalar a_x[],
-    PetscReal t, const PetscReal x[], PetscInt numConstants, const PetscScalar constants[], PetscScalar f[]);
+typedef void PetscFieldFunc(PetscInt dim,
+                            PetscInt Nf,
+                            PetscInt NfAux,
+                            const PetscInt uOff[],
+                            const PetscInt uOff_x[],
+                            const PetscScalar u[],
+                            const PetscScalar u_t[],
+                            const PetscScalar u_x[],
+                            const PetscInt aOff[],
+                            const PetscInt aOff_x[],
+                            const PetscScalar a[],
+                            const PetscScalar a_t[],
+                            const PetscScalar a_x[],
+                            PetscReal t,
+                            const PetscReal x[],
+                            PetscInt numConstants,
+                            const PetscScalar constants[],
+                            PetscScalar f[]);
 
-typedef
-PetscErrorCode PetscFunc(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
+typedef PetscErrorCode PetscFunc(PetscInt dim,
+                                 PetscReal time,
+                                 const PetscReal x[],
+                                 PetscInt Nc,
+                                 PetscScalar u[],
+                                 void * ctx);
 
-} // godzilla
+} // namespace godzilla

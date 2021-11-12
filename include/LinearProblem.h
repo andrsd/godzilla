@@ -7,8 +7,7 @@ namespace godzilla {
 
 /// PETSc Linear problem
 ///
-class LinearProblem : public Problem
-{
+class LinearProblem : public Problem {
 public:
     LinearProblem(const InputParameters & parameters);
     virtual ~LinearProblem();
@@ -61,9 +60,9 @@ protected:
 public:
     static InputParameters validParams();
 
-    friend PetscErrorCode __compute_rhs(KSP ksp, Vec b, void *ctx);
-    friend PetscErrorCode __compute_operators(KSP ksp, Mat A, Mat B, void *ctx);
-    friend PetscErrorCode __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx);
+    friend PetscErrorCode __compute_rhs(KSP ksp, Vec b, void * ctx);
+    friend PetscErrorCode __compute_operators(KSP ksp, Mat A, Mat B, void * ctx);
+    friend PetscErrorCode __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx);
 };
 
-}
+} // namespace godzilla

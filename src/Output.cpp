@@ -4,7 +4,8 @@
 namespace godzilla {
 
 InputParameters
-Output::validParams() {
+Output::validParams()
+{
     InputParameters params = Object::validParams();
     params.addPrivateParam<Problem *>("_problem");
     return params;
@@ -18,4 +19,4 @@ Output::Output(const InputParameters & params) :
     _F_;
 }
 
-} // godzilla
+} // namespace godzilla

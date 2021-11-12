@@ -15,8 +15,7 @@ class Executioner;
 
 /// YML parser for input files
 ///
-class GYMLFile : public PrintInterface
-{
+class GYMLFile : public PrintInterface {
 public:
     GYMLFile(const App & app);
 
@@ -39,7 +38,9 @@ protected:
     void buildBoundaryConditons();
     void buildOutputs();
     InputParameters buildParams(const YAML::Node & root, const std::string & name);
-    void setParameterFromYML(InputParameters & params, const YAML::Node & node, const std::string & param_name);
+    void setParameterFromYML(InputParameters & params,
+                             const YAML::Node & node,
+                             const std::string & param_name);
     void checkParams(const InputParameters & params, const std::string & name);
 
     const godzilla::App & app;
@@ -51,4 +52,4 @@ protected:
     Executioner * executioner;
 };
 
-}
+} // namespace godzilla

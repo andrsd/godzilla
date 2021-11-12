@@ -3,11 +3,10 @@
 #include "Grid.h"
 #include "Utils.h"
 
-
 namespace godzilla {
 
 PetscErrorCode
-__compute_rhs(KSP ksp, Vec b, void *ctx)
+__compute_rhs(KSP ksp, Vec b, void * ctx)
 {
     _F_;
     LinearProblem * problem = static_cast<LinearProblem *>(ctx);
@@ -15,7 +14,7 @@ __compute_rhs(KSP ksp, Vec b, void *ctx)
 }
 
 PetscErrorCode
-__compute_operators(KSP ksp, Mat A, Mat B, void *ctx)
+__compute_operators(KSP ksp, Mat A, Mat B, void * ctx)
 {
     _F_;
     LinearProblem * problem = static_cast<LinearProblem *>(ctx);
@@ -23,21 +22,26 @@ __compute_operators(KSP ksp, Mat A, Mat B, void *ctx)
 }
 
 PetscErrorCode
-__ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx)
+__ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
     LinearProblem * problem = static_cast<LinearProblem *>(ctx);
     return problem->kspMonitorCallback(it, rnorm);
 }
 
-
 InputParameters
 LinearProblem::validParams()
 {
     InputParameters params = Problem::validParams();
-    params.addParam<PetscReal>("lin_rel_tol", 1e-5, "Relative convergence tolerance for the linear solver");
-    params.addParam<PetscReal>("lin_abs_tol", 1e-50, "Absolute convergence tolerance for the linear solver");
-    params.addParam<PetscInt>("lin_max_iter", 10000, "Maximum number of iterations for the linear solver");
+    params.addParam<PetscReal>("lin_rel_tol",
+                               1e-5,
+                               "Relative convergence tolerance for the linear solver");
+    params.addParam<PetscReal>("lin_abs_tol",
+                               1e-50,
+                               "Absolute convergence tolerance for the linear solver");
+    params.addParam<PetscInt>("lin_max_iter",
+                              10000,
+                              "Maximum number of iterations for the linear solver");
     return params;
 }
 
@@ -134,7 +138,6 @@ LinearProblem::allocateObjects()
     checkPetscError(ierr);
     // TODO: Add API for setting up preconditioners
     this->A = this->B;
-
 }
 
 void
@@ -166,8 +169,10 @@ LinearProblem::setupSolverParameters()
     PetscErrorCode ierr;
 
     ierr = KSPSetTolerances(this->ksp,
-        this->lin_rel_tol, this->lin_abs_tol, PETSC_DEFAULT,
-        this->lin_max_iter);
+                            this->lin_rel_tol,
+                            this->lin_abs_tol,
+                            PETSC_DEFAULT,
+                            this->lin_max_iter);
     checkPetscError(ierr);
     ierr = KSPSetFromOptions(ksp);
     checkPetscError(ierr);
@@ -197,17 +202,16 @@ bool
 LinearProblem::converged()
 {
     _F_;
-    bool conv =
-        this->converged_reason == KSP_CONVERGED_RTOL_NORMAL ||
-        this->converged_reason == KSP_CONVERGED_ATOL_NORMAL ||
-        this->converged_reason == KSP_CONVERGED_RTOL ||
-        this->converged_reason == KSP_CONVERGED_ATOL ||
-        this->converged_reason == KSP_CONVERGED_ITS ||
-        this->converged_reason == KSP_CONVERGED_CG_NEG_CURVE ||
-        this->converged_reason == KSP_CONVERGED_CG_CONSTRAINED ||
-        this->converged_reason == KSP_CONVERGED_STEP_LENGTH ||
-        this->converged_reason == KSP_CONVERGED_HAPPY_BREAKDOWN;
+    bool conv = this->converged_reason == KSP_CONVERGED_RTOL_NORMAL ||
+                this->converged_reason == KSP_CONVERGED_ATOL_NORMAL ||
+                this->converged_reason == KSP_CONVERGED_RTOL ||
+                this->converged_reason == KSP_CONVERGED_ATOL ||
+                this->converged_reason == KSP_CONVERGED_ITS ||
+                this->converged_reason == KSP_CONVERGED_CG_NEG_CURVE ||
+                this->converged_reason == KSP_CONVERGED_CG_CONSTRAINED ||
+                this->converged_reason == KSP_CONVERGED_STEP_LENGTH ||
+                this->converged_reason == KSP_CONVERGED_HAPPY_BREAKDOWN;
     return conv;
 }
 
-}
+} // namespace godzilla

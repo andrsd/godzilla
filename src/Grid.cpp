@@ -2,7 +2,6 @@
 #include "Grid.h"
 #include "CallStack.h"
 
-
 namespace godzilla {
 
 InputParameters
@@ -12,10 +11,7 @@ Grid::validParams()
     return params;
 }
 
-Grid::Grid(const InputParameters & parameters) :
-    Object(parameters),
-    PrintInterface(this),
-    dm(NULL)
+Grid::Grid(const InputParameters & parameters) : Object(parameters), PrintInterface(this), dm(NULL)
 {
     _F_;
 }
@@ -34,4 +30,4 @@ Grid::getDM() const
     return this->dm;
 }
 
-}
+} // namespace godzilla

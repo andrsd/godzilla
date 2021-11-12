@@ -6,19 +6,16 @@
 #include "Object.h"
 #include "PrintInterface.h"
 
-
 #define combineNames1(X, Y) X##Y
 #define combineNames(X, Y) combineNames1(X, Y)
 
-
-#define registerObject(classname)                                                    \
-    static char combineNames(dummyvar_for_registering_obj_##classname, __LINE__) =   \
+#define registerObject(classname)                                                  \
+    static char combineNames(dummyvar_for_registering_obj_##classname, __LINE__) = \
         godzilla::Factory::reg<classname>(#classname)
 
-#define registerObjectAlias(classname, alias)                                        \
-    static char combineNames(dummyvar_for_registering_obj_##classname, __LINE__) =   \
+#define registerObjectAlias(classname, alias)                                      \
+    static char combineNames(dummyvar_for_registering_obj_##classname, __LINE__) = \
         godzilla::Factory::reg<classname>(#alias)
-
 
 namespace godzilla {
 
@@ -28,28 +25,25 @@ using ParamsPtr = InputParameters (*)();
 
 using BuildPtr = ObjectPtr (*)(const InputParameters & parameters);
 
-
 template <typename T>
 ObjectPtr
 buildObj(const InputParameters & parameters)
 {
-  return new T(parameters);
+    return new T(parameters);
 }
 
 template <typename T>
 auto
 callValidParams() -> decltype(T::validParams(), emptyInputParameters())
 {
-  return T::validParams();
+    return T::validParams();
 }
-
 
 class InputParameters;
 
 /// Generic factory class for building objects
 ///
-class Factory
-{
+class Factory {
 public:
     struct Entry {
         BuildPtr build_ptr;
@@ -59,7 +53,8 @@ public:
     /// Register an object
     /// @param class_name Name of the object to register
     template <typename T>
-    static char reg(const std::string & class_name)
+    static char
+    reg(const std::string & class_name)
     {
         Entry entry;
         entry.build_ptr = &buildObj<T>;
@@ -71,12 +66,14 @@ public:
     /// Get valid parameters for the object
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
-    static
-    InputParameters getValidParams(const std::string & class_name)
+    static InputParameters
+    getValidParams(const std::string & class_name)
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
-            error("Getting validParams for object '", class_name, "' failed.  Object is not registred.");
+            error("Getting validParams for object '",
+                  class_name,
+                  "' failed.  Object is not registred.");
 
         Entry & entry = it->second;
         InputParameters params = (*entry.params_ptr)();
@@ -89,8 +86,8 @@ public:
     /// @param parameters Parameters this object should have
     /// @return The created object
     template <typename T>
-    static
-    T *create(const std::string & class_name, const std::string & name, InputParameters & parameters)
+    static T *
+    create(const std::string & class_name, const std::string & name, InputParameters & parameters)
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
@@ -108,8 +105,7 @@ public:
         }
     }
 
-    static
-    bool
+    static bool
     isRegistered(const std::string & class_name)
     {
         auto it = classes.find(class_name);

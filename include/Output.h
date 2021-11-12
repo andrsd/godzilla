@@ -11,9 +11,7 @@ class Problem;
 ///
 /// Inherit from this class and override `output()` where you can implement your
 /// own output code
-class Output : public Object,
-               public PrintInterface
-{
+class Output : public Object, public PrintInterface {
 public:
     Output(const InputParameters & params);
 
@@ -28,4 +26,4 @@ public:
     static InputParameters validParams();
 };
 
-} // godzilla
+} // namespace godzilla

@@ -6,8 +6,7 @@ namespace godzilla {
 
 /// 1D structured grid
 ///
-class StructuredGrid1D : public Grid
-{
+class StructuredGrid1D : public Grid {
 public:
     StructuredGrid1D(const InputParameters & parameters);
 
@@ -24,4 +23,4 @@ public:
     static InputParameters validParams();
 };
 
-}
+} // namespace godzilla

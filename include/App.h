@@ -10,16 +10,14 @@ class Grid;
 class Problem;
 class Executioner;
 
-
-class App : public PrintInterface
-{
+class App : public PrintInterface {
 public:
     App(const std::string & app_name, MPI_Comm comm);
     virtual ~App();
     ///
     virtual void create();
     /// Parse command line arguments
-    virtual void parseCommandLine(int argc, char *argv[]);
+    virtual void parseCommandLine(int argc, char * argv[]);
 
     ///
     virtual void run();
@@ -53,4 +51,4 @@ protected:
     Executioner * executioner;
 };
 
-}
+} // namespace godzilla

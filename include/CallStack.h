@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace godzilla {
 namespace internal {
 
@@ -13,20 +12,21 @@ namespace internal {
 ///  ...your code here...
 /// }
 /// @endcode
-#define _F_ godzilla::internal::CallStackObj __call_stack_obj(__LINE__, __PRETTY_FUNCTION__, __FILE__);
+#define _F_ \
+    godzilla::internal::CallStackObj __call_stack_obj(__LINE__, __PRETTY_FUNCTION__, __FILE__);
 
 /// Holds data for one call stack object
 ///
 struct CallStackObj {
-    CallStackObj(int ln, const char *func, const char *file);
+    CallStackObj(int ln, const char * func, const char * file);
     ~CallStackObj();
 
     /// line number in the file
     int line;
     /// file
-    const char *file;
+    const char * file;
     /// function name
-    const char *func;
+    const char * func;
 };
 
 /// Call stack object
@@ -40,7 +40,7 @@ public:
     void dump();
 
 protected:
-    CallStackObj **stack;
+    CallStackObj ** stack;
     int size;
     int max_size;
 
@@ -50,7 +50,7 @@ public:
     static void initialize();
 };
 
-CallStack &getCallstack();
+CallStack & getCallstack();
 
-} // internal
-} // godzilla
+} // namespace internal
+} // namespace godzilla

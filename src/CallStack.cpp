@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <iostream>
 
-
 namespace godzilla {
 namespace internal {
 
@@ -12,7 +11,7 @@ static CallStack callstack(256);
 
 // Call Stack Object ////
 
-CallStackObj::CallStackObj(int ln, const char *func, const char *file)
+CallStackObj::CallStackObj(int ln, const char * func, const char * file)
 {
     this->line = ln;
     this->func = func;
@@ -36,10 +35,10 @@ CallStackObj::~CallStackObj()
 
 // Signals ////
 
-static
-void sighandler(int signo)
+static void
+sighandler(int signo)
 {
-    const char *sig_name[64];
+    const char * sig_name[64];
 
     sig_name[SIGABRT] = "Abort";
     sig_name[SIGSEGV] = "Segmentation violation";
@@ -67,7 +66,7 @@ CallStack::CallStack(int max_size)
 
 CallStack::~CallStack()
 {
-    delete [] this->stack;
+    delete[] this->stack;
 }
 
 void
@@ -76,7 +75,8 @@ CallStack::dump()
     if (this->size > 0) {
         std::cerr << "Call stack:" << std::endl;
         for (int n = 0, i = this->size - 1; i >= 0; i--, n++)
-            std::cerr << "  #" << n << ": " << this->stack[i]->file << ":" << this->stack[i]->line << ": " << this->stack[i]->func << std::endl;
+            std::cerr << "  #" << n << ": " << this->stack[i]->file << ":" << this->stack[i]->line
+                      << ": " << this->stack[i]->func << std::endl;
     }
     else {
         std::cerr << "No call stack available." << std::endl;
@@ -91,5 +91,5 @@ CallStack::initialize()
     signal(SIGABRT, sighandler);
 }
 
-} // internal
-} // godzilla
+} // namespace internal
+} // namespace godzilla

@@ -4,7 +4,6 @@
 #include "petscdm.h"
 #include "petscdmplex.h"
 
-
 namespace godzilla {
 
 registerObject(LineMesh);
@@ -64,17 +63,17 @@ LineMesh::create()
     DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
     ierr = DMPlexCreateBoxMesh(comm(),
-        1,
-        PETSC_TRUE,
-        faces,
-        lower,
-        upper,
-        periodicity,
-        interpolate,
-        &this->dm);
+                               1,
+                               PETSC_TRUE,
+                               faces,
+                               lower,
+                               upper,
+                               periodicity,
+                               interpolate,
+                               &this->dm);
     checkPetscError(ierr);
     ierr = DMSetUp(this->dm);
     checkPetscError(ierr);
 }
 
-}
+} // namespace godzilla

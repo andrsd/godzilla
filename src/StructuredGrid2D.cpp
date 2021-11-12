@@ -3,7 +3,6 @@
 #include "CallStack.h"
 #include "petscdmda.h"
 
-
 namespace godzilla {
 
 registerObject(StructuredGrid2D);
@@ -50,15 +49,21 @@ StructuredGrid2D::create()
     PetscInt stencil_width = 1;
 
     ierr = DMDACreate2d(comm(),
-        DM_BOUNDARY_NONE, DM_BOUNDARY_NONE,
-        DMDA_STENCIL_STAR,
-        this->nx, this->ny, PETSC_DECIDE, PETSC_DECIDE,
-        dofs, stencil_width,
-        NULL, NULL,
-        &this->dm);
+                        DM_BOUNDARY_NONE,
+                        DM_BOUNDARY_NONE,
+                        DMDA_STENCIL_STAR,
+                        this->nx,
+                        this->ny,
+                        PETSC_DECIDE,
+                        PETSC_DECIDE,
+                        dofs,
+                        stencil_width,
+                        NULL,
+                        NULL,
+                        &this->dm);
     checkPetscError(ierr);
     ierr = DMSetUp(this->dm);
     checkPetscError(ierr);
 }
 
-}
+} // namespace godzilla

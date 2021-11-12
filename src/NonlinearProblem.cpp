@@ -4,11 +4,10 @@
 #include "Grid.h"
 #include "petscds.h"
 
-
 namespace godzilla {
 
 PetscErrorCode
-__compute_residual(SNES snes, Vec x, Vec f, void *ctx)
+__compute_residual(SNES snes, Vec x, Vec f, void * ctx)
 {
     _F_;
     NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
@@ -16,7 +15,7 @@ __compute_residual(SNES snes, Vec x, Vec f, void *ctx)
 }
 
 PetscErrorCode
-__compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void *ctx)
+__compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void * ctx)
 {
     _F_;
     NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
@@ -24,7 +23,7 @@ __compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void *ctx)
 }
 
 PetscErrorCode
-__ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx)
+__ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
     NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
@@ -32,26 +31,40 @@ __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx)
 }
 
 PetscErrorCode
-__snes_monitor(SNES snes, PetscInt it, PetscReal norm, void *ctx)
+__snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx)
 {
     _F_;
     NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->snesMonitorCallback(it, norm);
 }
 
-
 InputParameters
 NonlinearProblem::validParams()
 {
     InputParameters params = Problem::validParams();
     params.addParam<std::string>("line_search", "bt", "The type of line search to be used");
-    params.addParam<PetscReal>("nl_rel_tol", 1e-8, "Relative convergence tolerance for the non-linear solver");
-    params.addParam<PetscReal>("nl_abs_tol", 1e-15, "Absolute convergence tolerance for the non-linear solver");
-    params.addParam<PetscReal>("nl_step_tol", 1e-15, "Convergence tolerance in terms of the norm of the change in the solution between steps");
-    params.addParam<PetscInt>("nl_max_iter", 40, "Maximum number of iterations for the non-linear solver");
-    params.addParam<PetscReal>("lin_rel_tol", 1e-5, "Relative convergence tolerance for the linear solver");
-    params.addParam<PetscReal>("lin_abs_tol", 1e-50, "Absolute convergence tolerance for the linear solver");
-    params.addParam<PetscInt>("lin_max_iter", 10000, "Maximum number of iterations for the linear solver");
+    params.addParam<PetscReal>("nl_rel_tol",
+                               1e-8,
+                               "Relative convergence tolerance for the non-linear solver");
+    params.addParam<PetscReal>("nl_abs_tol",
+                               1e-15,
+                               "Absolute convergence tolerance for the non-linear solver");
+    params.addParam<PetscReal>(
+        "nl_step_tol",
+        1e-15,
+        "Convergence tolerance in terms of the norm of the change in the solution between steps");
+    params.addParam<PetscInt>("nl_max_iter",
+                              40,
+                              "Maximum number of iterations for the non-linear solver");
+    params.addParam<PetscReal>("lin_rel_tol",
+                               1e-5,
+                               "Relative convergence tolerance for the linear solver");
+    params.addParam<PetscReal>("lin_abs_tol",
+                               1e-50,
+                               "Absolute convergence tolerance for the linear solver");
+    params.addParam<PetscInt>("lin_max_iter",
+                              10000,
+                              "Maximum number of iterations for the linear solver");
     return params;
 }
 
@@ -219,8 +232,11 @@ NonlinearProblem::setupSolverParameters()
     _F_;
     PetscErrorCode ierr;
     ierr = SNESSetTolerances(this->snes,
-        this->nl_abs_tol, this->nl_rel_tol, this->nl_step_tol,
-        this->nl_max_iter, -1);
+                             this->nl_abs_tol,
+                             this->nl_rel_tol,
+                             this->nl_step_tol,
+                             this->nl_max_iter,
+                             -1);
     checkPetscError(ierr);
     ierr = SNESSetFromOptions(this->snes);
     checkPetscError(ierr);
@@ -229,8 +245,10 @@ NonlinearProblem::setupSolverParameters()
     ierr = SNESGetKSP(this->snes, &ksp);
     checkPetscError(ierr);
     ierr = KSPSetTolerances(ksp,
-        this->lin_rel_tol, this->lin_abs_tol, PETSC_DEFAULT,
-        this->lin_max_iter);
+                            this->lin_rel_tol,
+                            this->lin_abs_tol,
+                            PETSC_DEFAULT,
+                            this->lin_max_iter);
     checkPetscError(ierr);
     ierr = KSPSetFromOptions(ksp);
     checkPetscError(ierr);
@@ -265,12 +283,11 @@ bool
 NonlinearProblem::converged()
 {
     _F_;
-    bool conv =
-        (this->converged_reason == SNES_CONVERGED_FNORM_ABS) ||
-        (this->converged_reason == SNES_CONVERGED_FNORM_RELATIVE) ||
-        (this->converged_reason == SNES_CONVERGED_SNORM_RELATIVE) ||
-        (this->converged_reason == SNES_CONVERGED_ITS);
+    bool conv = (this->converged_reason == SNES_CONVERGED_FNORM_ABS) ||
+                (this->converged_reason == SNES_CONVERGED_FNORM_RELATIVE) ||
+                (this->converged_reason == SNES_CONVERGED_SNORM_RELATIVE) ||
+                (this->converged_reason == SNES_CONVERGED_ITS);
     return conv;
 }
 
-}
+} // namespace godzilla

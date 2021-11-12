@@ -4,7 +4,6 @@
 #include "Object.h"
 #include "PrintInterface.h"
 
-
 namespace godzilla {
 
 class Problem;
@@ -12,9 +11,7 @@ class Output;
 
 /// Executioner
 ///
-class Executioner : public Object,
-                    public PrintInterface
-{
+class Executioner : public Object, public PrintInterface {
 public:
     Executioner(const InputParameters & parameters);
 
@@ -38,4 +35,4 @@ public:
     static InputParameters validParams();
 };
 
-}
+} // namespace godzilla

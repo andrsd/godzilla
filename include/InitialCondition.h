@@ -7,9 +7,7 @@ namespace godzilla {
 
 /// Base class for initial conditions
 ///
-class InitialCondition : public Object,
-                         public PrintInterface
-{
+class InitialCondition : public Object, public PrintInterface {
 public:
     InitialCondition(const InputParameters & params);
 
@@ -24,14 +22,25 @@ protected:
     /// @param x The coordinates
     /// @param Nc The number of components
     /// @param u  The output field values
-    virtual void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
+    virtual void
+    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
 
 public:
     static InputParameters validParams();
 
-    friend PetscErrorCode __initial_condition_function(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
+    friend PetscErrorCode __initial_condition_function(PetscInt dim,
+                                                       PetscReal time,
+                                                       const PetscReal x[],
+                                                       PetscInt Nc,
+                                                       PetscScalar u[],
+                                                       void * ctx);
 };
 
-PetscErrorCode __initial_condition_function(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[], void *ctx);
+PetscErrorCode __initial_condition_function(PetscInt dim,
+                                            PetscReal time,
+                                            const PetscReal x[],
+                                            PetscInt Nc,
+                                            PetscScalar u[],
+                                            void * ctx);
 
-} // godzilla
+} // namespace godzilla

@@ -6,17 +6,14 @@
 #include <vector>
 #include "PrintInterface.h"
 
-
 namespace godzilla {
 
 /// Class for user-defined parameters
 ///
-class InputParameters
-{
+class InputParameters {
 protected:
     /// Base class for parameter values
-    class Value
-    {
+    class Value {
     public:
         virtual std::string type() const = 0;
 
@@ -34,17 +31,24 @@ protected:
 
     /// Parameter value
     template <typename T>
-    class Parameter : public Value
-    {
+    class Parameter : public Value {
     public:
         /// @returns A read-only reference to the parameter value.
-        const T & get() const { return this->value; }
+        const T &
+        get() const
+        {
+            return this->value;
+        }
 
         /// @returns A writable reference to the parameter value.
-        T & set() { return this->value; }
+        T &
+        set()
+        {
+            return this->value;
+        }
 
-        inline
-        std::string type() const
+        inline std::string
+        type() const
         {
             return std::string(typeid(T).name());
         }
@@ -72,8 +76,8 @@ public:
 
     /// Get parameter value
     template <typename T>
-    inline
-    const T & get(const std::string & name) const
+    inline const T &
+    get(const std::string & name) const
     {
         if (!this->has<T>(name))
             error("No parameter '", name, "' found.");
@@ -84,8 +88,8 @@ public:
 
     /// Set parameter
     template <typename T>
-    inline
-    T & set(const std::string & name)
+    inline T &
+    set(const std::string & name)
     {
         if (!this->has<T>(name))
             this->params[name] = new Parameter<T>;
@@ -101,10 +105,10 @@ public:
     void addRequiredParam(const std::string & name, const std::string & doc_string);
 
     ///@{
-    /// These methods add an option parameter and a documentation string to the InputParameters object.
-    /// The first version of this function takes a default value which is used if the parameter is not
-    /// found in the input file. The second method will leave the parameter uninitialized but can be
-    /// checked with "isParamValid" before use.
+    /// These methods add an option parameter and a documentation string to the InputParameters
+    /// object. The first version of this function takes a default value which is used if the
+    /// parameter is not found in the input file. The second method will leave the parameter
+    /// uninitialized but can be checked with "isParamValid" before use.
     template <typename T, typename S>
     void addParam(const std::string & name, const S & value, const std::string & doc_string);
     template <typename T>
@@ -114,8 +118,8 @@ public:
     ///@{
     /// These methods add a parameter to the InputParameters object which can be retrieved like any
     /// other parameter. This parameter however is not printed in the Input file syntax dump or web
-    /// page dump so does not take a documentation string.  The first version of this function takes an
-    /// optional default value.
+    /// page dump so does not take a documentation string.  The first version of this function takes
+    /// an optional default value.
     template <typename T>
     void addPrivateParam(const std::string & name, const T & value);
     template <typename T>
@@ -123,15 +127,17 @@ public:
     ///@}
 
     /// Returns a boolean indicating whether the specified parameter is required or not
-    bool isParamRequired(const std::string & name) const
+    bool
+    isParamRequired(const std::string & name) const
     {
-      return this->params.count(name) > 0 && this->params.at(name)->required;
+        return this->params.count(name) > 0 && this->params.at(name)->required;
     }
 
     /// This method returns parameters that have been initialized in one fashion or another,
     /// i.e. The value was supplied as a default argument or read and properly converted from
     /// the input file
-    bool isParamValid(const std::string & name) const
+    bool
+    isParamValid(const std::string & name) const
     {
         return this->params.count(name) > 0 && this->params.at(name)->valid;
     }
@@ -143,13 +149,15 @@ public:
     }
 
     ///
-    std::string type(const std::string & name) const
+    std::string
+    type(const std::string & name) const
     {
         return this->params.at(name)->type();
     }
 
     ///
-    std::string getDocString(const std::string & name) const
+    std::string
+    getDocString(const std::string & name) const
     {
         auto it = this->params.find(name);
         if (it != this->params.end())
@@ -165,25 +173,29 @@ public:
     typedef std::map<std::string, InputParameters::Value *>::const_iterator const_iterator;
 
     /// Iterator pointing to the beginning of the set of parameters.
-    InputParameters::iterator begin()
+    InputParameters::iterator
+    begin()
     {
         return this->params.begin();
     }
 
     /// Iterator pointing to the beginning of the set of parameters.
-    InputParameters::const_iterator begin() const
+    InputParameters::const_iterator
+    begin() const
     {
         return this->params.begin();
     }
 
     /// Iterator pointing to the end of the set of parameters
-    InputParameters::iterator end()
+    InputParameters::iterator
+    end()
     {
         return this->params.end();
     }
 
     /// Iterator pointing to the end of the set of parameters
-    InputParameters::const_iterator end() const
+    InputParameters::const_iterator
+    end() const
     {
         return this->params.end();
     }
@@ -280,4 +292,4 @@ InputParameters::addPrivateParam(const std::string & name, const T & value)
 
 InputParameters emptyInputParameters();
 
-}
+} // namespace godzilla

@@ -13,7 +13,6 @@
 #define COLOR_WHITE "\33[37m"
 #define COLOR_DEFAULT "\33[39m"
 
-
 namespace godzilla {
 namespace internal {
 
@@ -57,7 +56,6 @@ godzillaErrorRaw(std::string msg, bool call_stack)
 
 } // namespace internal
 
-
 PrintInterface::PrintInterface(const App & app) :
     verbosity_level(app.getVerbosityLevel()),
     prefix(""),
@@ -74,4 +72,4 @@ PrintInterface::PrintInterface(const Object * obj) :
     _F_;
 }
 
-}
+} // namespace godzilla

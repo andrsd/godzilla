@@ -6,8 +6,7 @@ namespace godzilla {
 
 /// 2D rectangular mesh
 ///
-class RectangleMesh : public UnstructuredMesh
-{
+class RectangleMesh : public UnstructuredMesh {
 public:
     RectangleMesh(const InputParameters & parameters);
 
@@ -46,4 +45,4 @@ public:
     static InputParameters validParams();
 };
 
-}
+} // namespace godzilla

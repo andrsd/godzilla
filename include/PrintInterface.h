@@ -7,11 +7,9 @@
 #include "mpi.h"
 #include "petscsys.h"
 
-namespace godzilla
-{
+namespace godzilla {
 
-namespace internal
-{
+namespace internal {
 
 /// All of the following are not meant to be called directly - they are called by the normal macros
 /// (godzillaError(), etc.) down below
@@ -25,14 +23,12 @@ godzillaStreamAll(std::ostringstream & ss, T && val, Args &&... args)
     godzillaStreamAll(ss, std::forward<Args>(args)...);
 }
 
-void
-godzillaMsgRaw(const std::string & msg);
+void godzillaMsgRaw(const std::string & msg);
 
 std::string
 godzillaMsgFmt(const std::string & msg, const std::string & title, const std::string & color);
 
-void
-godzillaErrorRaw(std::string msg, bool call_stack = false);
+void godzillaErrorRaw(std::string msg, bool call_stack = false);
 
 [[noreturn]] void terminate();
 

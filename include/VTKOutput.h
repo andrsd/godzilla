@@ -33,4 +33,4 @@ public:
     static InputParameters validParams();
 };
 
-} // godzilla
+} // namespace godzilla

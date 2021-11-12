@@ -4,7 +4,6 @@
 #include "CallStack.h"
 #include "Output.h"
 
-
 namespace godzilla {
 
 registerObject(Executioner);
@@ -56,4 +55,4 @@ Executioner::output()
         o->output();
 }
 
-}
+} // namespace godzilla

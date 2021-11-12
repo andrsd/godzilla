@@ -2,4 +2,4 @@
 
 namespace godzilla {
 
-} // godzilla
+} // namespace godzilla

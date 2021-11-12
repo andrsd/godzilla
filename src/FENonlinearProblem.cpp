@@ -8,20 +8,18 @@
 #include "petscdmplex.h"
 #include "petscdmlabel.h"
 
-
 namespace godzilla {
 
 namespace internal {
 
 static PetscErrorCode
-zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar *u, void *ctx)
+zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar * u, void * ctx)
 {
     u[0] = 0.0;
     return 0;
 }
 
-} //internal
-
+} // namespace internal
 
 InputParameters
 FENonlinearProblem::validParams()
@@ -82,7 +80,7 @@ FENonlinearProblem::addField(const std::string & name, PetscInt nc, PetscInt k)
 }
 
 void
-FENonlinearProblem::addInitialCondition(const InitialCondition *ic)
+FENonlinearProblem::addInitialCondition(const InitialCondition * ic)
 {
     _F_;
     PetscInt fid = ic->getFieldId();
@@ -91,11 +89,13 @@ FENonlinearProblem::addInitialCondition(const InitialCondition *ic)
         this->ics[fid].ic = ic;
     else
         // TODO: improve this error message
-        godzillaError("Initial condition '", ic->getName(), "' is being applied to a field that already has an initial condition.");
+        godzillaError("Initial condition '",
+                      ic->getName(),
+                      "' is being applied to a field that already has an initial condition.");
 }
 
 void
-FENonlinearProblem::addBoundaryCondition(const BoundaryCondition *bc)
+FENonlinearProblem::addBoundaryCondition(const BoundaryCondition * bc)
 {
     _F_;
     const std::vector<std::string> & bnd_names = bc->getBoundary();
@@ -141,8 +141,7 @@ FENonlinearProblem::setupBoundaryConditions()
         PetscBool exists = PETSC_FALSE;
         ierr = DMHasLabel(dm, bnd_name.c_str(), &exists);
         checkPetscError(ierr);
-        if (exists)
-        {
+        if (exists) {
             PetscInt nc = bc->getNumComponents();
 
             DMLabel label;
@@ -157,27 +156,33 @@ FENonlinearProblem::setupBoundaryConditions()
             ierr = ISGetSize(is, &n_ids);
             checkPetscError(ierr);
 
-            const PetscInt *ids = nullptr;
+            const PetscInt * ids = nullptr;
             ierr = ISGetIndices(is, &ids);
             checkPetscError(ierr);
 
             ierr = PetscDSAddBoundary(this->ds,
-                DM_BC_ESSENTIAL,
-                bc->getName().c_str(),
-                label,
-                n_ids, ids,
-                bc->getFieldId(),
-                0, NULL,
-                (void (*)(void)) &__boundary_condition_function, NULL,
-                (void *) bc,
-                NULL);
+                                      DM_BC_ESSENTIAL,
+                                      bc->getName().c_str(),
+                                      label,
+                                      n_ids,
+                                      ids,
+                                      bc->getFieldId(),
+                                      0,
+                                      NULL,
+                                      (void (*)(void)) & __boundary_condition_function,
+                                      NULL,
+                                      (void *) bc,
+                                      NULL);
 
             ierr = ISRestoreIndices(is, &ids);
             checkPetscError(ierr);
-
         }
         else
-            godzillaError("Boundary condition '", bc->getName(), "' is set on boundary '", bnd_name, "' which does not exist in the mesh.");
+            godzillaError("Boundary condition '",
+                          bc->getName(),
+                          "' is set on boundary '",
+                          bnd_name,
+                          "' which does not exist in the mesh.");
     }
 }
 
@@ -200,10 +205,14 @@ FENonlinearProblem::setupInitialGuess()
     PetscInt n_ics = this->ics.size();
     if (n_ics > 0) {
         if (n_ics != fields.size())
-            godzillaError("Provided ", fields.size(), " field(s), but ", n_ics, " initial condition(s).");
+            godzillaError("Provided ",
+                          fields.size(),
+                          " field(s), but ",
+                          n_ics,
+                          " initial condition(s).");
         else {
             PetscErrorCode ierr;
-            PetscFunc *ic_funcs[n_ics];
+            PetscFunc * ic_funcs[n_ics];
             void * ic_ctxs[n_ics];
             for (auto & it : this->ics) {
                 PetscInt fid = it.first;
@@ -213,7 +222,13 @@ FENonlinearProblem::setupInitialGuess()
                 PetscInt ic_nc = ic->getNumComponents();
                 PetscInt field_nc = this->fields[fid].nc;
                 if (ic_nc != field_nc)
-                    godzillaError("Initial condition '", ic->getName(), "' operates on ", ic_nc, " components, but is set on a field with ", field_nc, " components.");
+                    godzillaError("Initial condition '",
+                                  ic->getName(),
+                                  "' operates on ",
+                                  ic_nc,
+                                  " components, but is set on a field with ",
+                                  field_nc,
+                                  " components.");
 
                 ic_funcs[fid] = __initial_condition_function;
                 ic_ctxs[fid] = (void *) ic;
@@ -225,11 +240,10 @@ FENonlinearProblem::setupInitialGuess()
     else {
         // no boundary conditions -> use zero
         PetscErrorCode ierr;
-        PetscFunc *initial_guess[1] = { internal::zero_fn };
+        PetscFunc * initial_guess[1] = { internal::zero_fn };
         ierr = DMProjectFunction(getDM(), 0.0, initial_guess, NULL, INSERT_VALUES, this->x);
         checkPetscError(ierr);
     }
-
 }
 
 PetscErrorCode
@@ -257,9 +271,7 @@ FENonlinearProblem::setupFields()
         // FIXME: determine if the mesh is made of simplex elements
         PetscBool is_simplex = PETSC_FALSE;
         PetscInt qorder = PETSC_DETERMINE;
-        ierr = PetscFECreateLagrange(comm(),
-            this->dim, fi.nc, is_simplex, fi.k, qorder,
-            &fi.fe);
+        ierr = PetscFECreateLagrange(comm(), this->dim, fi.nc, is_simplex, fi.k, qorder, &fi.fe);
         checkPetscError(ierr);
 
         ierr = DMSetField(getDM(), fi.id, fi.block, (PetscObject) fi.fe);
@@ -270,7 +282,9 @@ FENonlinearProblem::setupFields()
 }
 
 void
-FENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFunc *f0, PetscFEResidualFunc *f1)
+FENonlinearProblem::setResidualBlock(PetscInt field_id,
+                                     PetscFEResidualFunc * f0,
+                                     PetscFEResidualFunc * f1)
 {
     _F_;
     PetscErrorCode ierr;
@@ -279,7 +293,12 @@ FENonlinearProblem::setResidualBlock(PetscInt field_id, PetscFEResidualFunc *f0,
 }
 
 void
-FENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJacobianFunc *g0, PetscFEJacobianFunc *g1, PetscFEJacobianFunc *g2, PetscFEJacobianFunc *g3)
+FENonlinearProblem::setJacobianBlock(PetscInt fid,
+                                     PetscInt gid,
+                                     PetscFEJacobianFunc * g0,
+                                     PetscFEJacobianFunc * g1,
+                                     PetscFEJacobianFunc * g2,
+                                     PetscFEJacobianFunc * g3)
 {
     _F_;
     PetscErrorCode ierr;
@@ -287,4 +306,4 @@ FENonlinearProblem::setJacobianBlock(PetscInt fid, PetscInt gid, PetscFEJacobian
     checkPetscError(ierr);
 }
 
-}
+} // namespace godzilla

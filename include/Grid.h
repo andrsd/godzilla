@@ -8,9 +8,7 @@ namespace godzilla {
 
 /// Base class for grids
 ///
-class Grid : public Object,
-              public PrintInterface
-{
+class Grid : public Object, public PrintInterface {
 public:
     Grid(const InputParameters & parameters);
     virtual ~Grid();
@@ -28,4 +26,4 @@ public:
     static InputParameters validParams();
 };
 
-}
+} // namespace godzilla

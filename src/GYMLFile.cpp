@@ -11,8 +11,9 @@
 #include "CallStack.h"
 #include "assert.h"
 
-template<typename T>
-std::string type_name()
+template <typename T>
+std::string
+type_name()
 {
     return typeid(T).name();
 }
@@ -115,7 +116,9 @@ GYMLFile::buildInitialConditons()
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
-        godzillaError("Supplied problem type '", this->problem->getType(), "' does not support initial conditions.");
+        godzillaError("Supplied problem type '",
+                      this->problem->getType(),
+                      "' does not support initial conditions.");
     else {
         for (const auto & it : ics_root_node) {
             YAML::Node ic_node = it.first;
@@ -139,7 +142,9 @@ GYMLFile::buildBoundaryConditons()
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
-        godzillaError("Supplied problem type '", this->problem->getType(), "' does not support boundary conditions.");
+        godzillaError("Supplied problem type '",
+                      this->problem->getType(),
+                      "' does not support boundary conditions.");
     else {
         for (const auto & it : bcs_root_node) {
             YAML::Node bc_node = it.first;
@@ -207,7 +212,9 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 }
 
 void
-GYMLFile::setParameterFromYML(InputParameters & params, const YAML::Node & node, const std::string & param_name)
+GYMLFile::setParameterFromYML(InputParameters & params,
+                              const YAML::Node & node,
+                              const std::string & param_name)
 {
     _F_;
     YAML::Node val = node[param_name];
@@ -238,8 +245,7 @@ GYMLFile::checkParams(const InputParameters & params, const std::string & name)
     _F_;
     std::ostringstream oss;
 
-    for (const auto & it : params)
-    {
+    for (const auto & it : params) {
         const auto & param_name = it.first;
         if (!params.isParamValid(param_name) && params.isParamRequired(param_name))
             oss << std::endl << "- '" << param_name << "': " << params.getDocString(param_name);
@@ -249,4 +255,4 @@ GYMLFile::checkParams(const InputParameters & params, const std::string & name)
         godzillaError(name, ": Missing required parameters:", oss.str());
 }
 
-}
+} // namespace godzilla

@@ -3,7 +3,6 @@
 #include "CallStack.h"
 #include "petscdmplex.h"
 
-
 namespace godzilla {
 
 registerObject(RectangleMesh);
@@ -93,17 +92,17 @@ RectangleMesh::create()
     DMBoundaryType periodicity[2] = { DM_BOUNDARY_GHOSTED, DM_BOUNDARY_GHOSTED };
 
     ierr = DMPlexCreateBoxMesh(comm(),
-        2,
-        this->simplex,
-        faces,
-        lower,
-        upper,
-        periodicity,
-        interpolate,
-        &this->dm);
+                               2,
+                               this->simplex,
+                               faces,
+                               lower,
+                               upper,
+                               periodicity,
+                               interpolate,
+                               &this->dm);
     checkPetscError(ierr);
     ierr = DMSetUp(this->dm);
     checkPetscError(ierr);
 }
 
-}
+} // namespace godzilla

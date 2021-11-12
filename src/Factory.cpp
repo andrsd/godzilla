@@ -16,4 +16,4 @@ Factory::destroy()
     }
 }
 
-}
+} // namespace godzilla

@@ -33,5 +33,5 @@ toLower(const std::string & name)
     return lower;
 }
 
-}
-}
+} // namespace utils
+} // namespace godzilla

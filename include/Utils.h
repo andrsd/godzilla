@@ -19,5 +19,5 @@ std::string toUpper(const std::string & name);
  */
 std::string toLower(const std::string & name);
 
-}
-}
+} // namespace utils
+} // namespace godzilla

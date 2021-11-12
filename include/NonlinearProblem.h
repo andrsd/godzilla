@@ -7,8 +7,7 @@ namespace godzilla {
 
 /// PETSc non-linear problem
 ///
-class NonlinearProblem : public Problem
-{
+class NonlinearProblem : public Problem {
 public:
     NonlinearProblem(const InputParameters & parameters);
     virtual ~NonlinearProblem();
@@ -77,10 +76,10 @@ protected:
 public:
     static InputParameters validParams();
 
-    friend PetscErrorCode __compute_residual(SNES snes, Vec x, Vec f, void *ctx);
-    friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat A, Mat B, void *ctx);
-    friend PetscErrorCode __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void *ctx);
-    friend PetscErrorCode __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void *ctx);
+    friend PetscErrorCode __compute_residual(SNES snes, Vec x, Vec f, void * ctx);
+    friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat A, Mat B, void * ctx);
+    friend PetscErrorCode __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx);
+    friend PetscErrorCode __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx);
 };
 
-}
+} // namespace godzilla

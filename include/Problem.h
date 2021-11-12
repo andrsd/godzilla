@@ -10,9 +10,7 @@ class Grid;
 
 /// Problem
 ///
-class Problem : public Object,
-                public PrintInterface
-{
+class Problem : public Object, public PrintInterface {
 public:
     Problem(const InputParameters & parameters);
 
@@ -35,4 +33,4 @@ public:
     static InputParameters validParams();
 };
 
-}
+} // namespace godzilla

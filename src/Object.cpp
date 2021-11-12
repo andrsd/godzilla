@@ -1,16 +1,15 @@
 #include "Object.h"
 #include "App.h"
 
-
 namespace godzilla {
 
 InputParameters
 Object::validParams()
 {
-  InputParameters params = emptyInputParameters();
-  params.addPrivateParam<std::string>("_type");
-  params.addPrivateParam<std::string>("_name");
-  return params;
+    InputParameters params = emptyInputParameters();
+    params.addPrivateParam<std::string>("_type");
+    params.addPrivateParam<std::string>("_name");
+    return params;
 }
 
 Object::Object(const InputParameters & parameters) :
@@ -77,4 +76,4 @@ Object::processorId() const
     return this->rank;
 }
 
-}
+} // namespace godzilla

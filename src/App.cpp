@@ -40,7 +40,7 @@ App::create()
 }
 
 void
-App::parseCommandLine(int argc, char *argv[])
+App::parseCommandLine(int argc, char * argv[])
 {
     _F_;
     this->args.parse(argc, argv);
@@ -86,7 +86,9 @@ App::runInputFile(const std::string & file_name)
         startExecutioner();
     }
     else
-        godzillaError("Unable to open '", file_name, "' for reading. Make sure it exists and you have read permissions.");
+        godzillaError("Unable to open '",
+                      file_name,
+                      "' for reading. Make sure it exists and you have read permissions.");
 }
 
 void
@@ -115,4 +117,4 @@ App::startExecutioner()
     this->executioner->execute();
 }
 
-}
+} // namespace godzilla
