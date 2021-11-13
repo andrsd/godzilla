@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+include(FetchContent)
 include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 
@@ -26,6 +27,22 @@ find_library(PETSC_LIB petsc ${PETSC_DIR}/lib)
 find_library(YAML_CPP_LIB yaml-cpp ${CONDA_LIB_DIR})
 
 find_package(Doxygen)
+
+# muparser
+
+FetchContent_Declare(
+    muparser
+    GIT_REPOSITORY https://github.com/beltoforion/muparser.git
+    # version 2.3.2
+    GIT_TAG        207d5b77c05c9111ff51ab91082701221220c477
+)
+if(NOT muparser_POPULATED)
+    FetchContent_Populate(muparser )
+    set(ENABLE_SAMPLES OFF CACHE INTERNAL "Build samples")
+    add_subdirectory(${muparser_SOURCE_DIR} ${muparser_BINARY_DIR})
+    set(muparser_INCLUDE_DIR ${muparser_SOURCE_DIR}/include)
+    find_library(muparser_LIB muParser ${muparser_BINARY_DIR})
+endif()
 
 # godzilla
 
@@ -75,10 +92,12 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${muparser_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${YAML_CPP_LIB})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${TIMPI_LIB})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${muparser_LIB})
+
 
 
 if (BUILD_EXAMPLES)
@@ -182,7 +201,6 @@ endif()
 # TESTING
 
 if (BUILD_TESTS)
-    include(FetchContent)
     FetchContent_Declare(
       googletest
       GIT_REPOSITORY https://github.com/google/googletest.git

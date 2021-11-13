@@ -1,16 +1,36 @@
 #pragma once
 
 #include "petsc.h"
+#include "muParser.h"
+#include "InputParameters.h"
 
 namespace godzilla {
 
-/// Function interface
+/// Interface for parsed function
 ///
 class FunctionInterface {
 public:
-    FunctionInterface();
+    FunctionInterface(const InputParameters & params);
+
+    /// Evaluate parsed function
+    ///
+    /// @return the result of evaluation
+    /// @param idx The index of the parsed expression. Ranges from 0..`num_comps`
+    /// @param dim Spatial dimension of the evaluated function
+    /// @param time Time of the time-dependent function
+    /// @param x Spatial coordinate where we evaluate the function (has size of `dim`)
+    PetscReal evaluateFunction(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[]);
 
 protected:
+    /// Array of function expressions - one per component
+    const std::vector<std::string> & function_expr;
+    /// Number of parsed function expressions
+    const unsigned int num_comps;
+    /// Parser objects - one per component
+    std::vector<mu::Parser> parser;
+
+public:
+    static InputParameters validParams();
 };
 
 /// This is the API that we hand to PETSc for fields.

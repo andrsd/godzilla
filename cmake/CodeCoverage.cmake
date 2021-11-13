@@ -23,6 +23,7 @@ set(EXCLUDE_REGEX
     --ignore-filename-regex=/include/gmock/*
     --ignore-filename-regex=test/*
     --ignore-filename-regex=src/base/CallStack.cpp
+    --ignore-filename-regex=/muparser/*
 )
 
 set(CODE_COVERAGE_BINS
