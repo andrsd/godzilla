@@ -37,11 +37,10 @@ FetchContent_Declare(
     GIT_TAG        207d5b77c05c9111ff51ab91082701221220c477
 )
 if(NOT muparser_POPULATED)
-    FetchContent_Populate(muparser )
+    FetchContent_Populate(muparser)
     set(ENABLE_SAMPLES OFF CACHE INTERNAL "Build samples")
     add_subdirectory(${muparser_SOURCE_DIR} ${muparser_BINARY_DIR})
     set(muparser_INCLUDE_DIR ${muparser_SOURCE_DIR}/include)
-    find_library(muparser_LIB muParser ${muparser_BINARY_DIR})
 endif()
 
 # godzilla
@@ -97,7 +96,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${muparser_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC ${YAML_CPP_LIB})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${muparser_LIB})
+target_link_libraries(${PROJECT_NAME} PUBLIC muparser)
 
 
 
