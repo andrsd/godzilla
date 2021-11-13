@@ -26,7 +26,11 @@ FunctionIC::getNumComponents() const
 }
 
 void
-FunctionIC::evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[])
+FunctionIC::evaluate(PetscInt dim,
+                     PetscReal time,
+                     const PetscReal x[],
+                     PetscInt Nc,
+                     PetscScalar u[])
 {
     for (PetscInt i = 0; i < Nc; i++)
         u[i] = evaluateFunction(i, dim, time, x);

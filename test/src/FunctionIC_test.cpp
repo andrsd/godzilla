@@ -11,9 +11,7 @@ TEST(FunctionIC, api)
 
     InputParameters params = Factory::getValidParams("FunctionIC");
     params.set<const App *>("_app") = &app;
-    params.set<std::vector<std::string>>("function") = {
-        "t * (x + y + z)"
-    };
+    params.set<std::vector<std::string>>("function") = { "t * (x + y + z)" };
     auto obj = Factory::create<InitialCondition>("FunctionIC", "name", params);
 
     EXPECT_EQ(obj->getFieldId(), 0);

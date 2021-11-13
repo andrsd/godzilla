@@ -26,9 +26,12 @@ FunctionInterface::FunctionInterface(const InputParameters & params) :
 }
 
 PetscReal
-FunctionInterface::evaluateFunction(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[])
+FunctionInterface::evaluateFunction(unsigned int idx,
+                                    PetscInt dim,
+                                    PetscReal time,
+                                    const PetscReal x[])
 {
-    PetscReal *xx = const_cast<PetscReal *>(x);
+    PetscReal * xx = const_cast<PetscReal *>(x);
     try {
         auto & fp = this->parser[idx];
         fp.DefineVar("t", &time);
@@ -42,7 +45,7 @@ FunctionInterface::evaluateFunction(unsigned int idx, PetscInt dim, PetscReal ti
         PetscReal v = this->parser[idx].Eval();
         return v;
     }
-    catch (mu::Parser::exception_type &e) {
+    catch (mu::Parser::exception_type & e) {
         return std::nan("");
     }
 }
