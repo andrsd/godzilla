@@ -39,6 +39,7 @@ FetchContent_Declare(
 if(NOT muparser_POPULATED)
     FetchContent_Populate(muparser)
     set(ENABLE_SAMPLES OFF CACHE INTERNAL "Build samples")
+    set(ENABLE_OPENMP OFF CACHE INTERNAL "Build with OpenMP")
     add_subdirectory(${muparser_SOURCE_DIR} ${muparser_BINARY_DIR})
     set(muparser_INCLUDE_DIR ${muparser_SOURCE_DIR}/include)
 endif()
