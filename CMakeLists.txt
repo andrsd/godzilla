@@ -61,6 +61,7 @@ add_library(${PROJECT_NAME} SHARED
     src/ExodusIIMesh.cpp
     src/FENonlinearProblem.cpp
     src/FEProblemInterface.cpp
+    src/FunctionIC.cpp
     src/FunctionInterface.cpp
     src/Grid.cpp
     src/GYMLFile.cpp
