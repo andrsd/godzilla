@@ -13,4 +13,4 @@ bcs:
     boundary: ['marker']
     value: ['0.2']
 executioner:
-  type: Executioner
+  type: Steady

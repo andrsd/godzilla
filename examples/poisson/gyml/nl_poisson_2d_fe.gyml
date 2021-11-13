@@ -22,4 +22,4 @@ bcs:
     value: [ 'x*x + y*y' ]
 
 executioner:
-  type: Executioner
+  type: Steady

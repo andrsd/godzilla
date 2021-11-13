@@ -16,7 +16,7 @@ public:
     Executioner(const InputParameters & parameters);
 
     virtual void create();
-    virtual void execute();
+    virtual void execute() = 0;
 
     /// Add and output object
     ///
