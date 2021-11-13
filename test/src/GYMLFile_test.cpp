@@ -93,3 +93,22 @@ TEST_F(GYMLFileTest, build)
 
     auto exec = file.getExecutioner();
 }
+
+TEST_F(GYMLFileTest, build_fe)
+{
+    GYMLFile file(*this->app);
+
+    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/simple_fe.yml");
+
+    file.parse(file_name);
+    file.build();
+
+    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
+    EXPECT_NE(grid, nullptr);
+
+    auto problem = file.getProblem();
+    EXPECT_NE(problem, nullptr);
+
+    auto exec = file.getExecutioner();
+    EXPECT_NE(exec, nullptr);
+}

@@ -1,0 +1,16 @@
+grid:
+  type: LineMesh
+  nx: 2
+problem:
+  type: GTestFENonlinearProblem
+ics:
+  all:
+    type: ConstantIC
+    value: [0.1]
+bcs:
+  all:
+    type: DirichletBC
+    boundary: ['marker']
+    value: ['0.2']
+executioner:
+  type: Executioner
