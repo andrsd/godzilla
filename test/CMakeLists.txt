@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
     src/BoundaryCondition_test.cpp
+    src/DirichletBC_test.cpp
     src/Factory_test.cpp
     src/FunctionIC_test.cpp
     src/GodzillaApp_test.cpp

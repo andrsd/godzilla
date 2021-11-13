@@ -57,6 +57,7 @@ add_library(${PROJECT_NAME} SHARED
     src/CallStack.cpp
     src/CmdLineArgParser.cpp
     src/ConstantIC.cpp
+    src/DirichletBC.cpp
     src/Executioner.cpp
     src/ExodusIIMesh.cpp
     src/FENonlinearProblem.cpp

@@ -7,14 +7,12 @@ InputParameters
 FunctionInterface::validParams()
 {
     InputParameters params = emptyInputParameters();
-    params.addRequiredParam<std::vector<std::string>>(
-        "function",
-        "Function expression used to evaluate the initial condition.");
+    params.addRequiredParam<std::vector<std::string>>("value", "Function expression to evaluate.");
     return params;
 }
 
 FunctionInterface::FunctionInterface(const InputParameters & params) :
-    function_expr(params.get<std::vector<std::string>>("function")),
+    function_expr(params.get<std::vector<std::string>>("value")),
     num_comps(function_expr.size())
 {
     assert(num_comps >= 1);

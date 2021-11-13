@@ -1,28 +1,29 @@
 #include "gtest/gtest.h"
 #include "Factory.h"
 #include "App.h"
-#include "FunctionIC.h"
+#include "DirichletBC.h"
 
 using namespace godzilla;
 
-TEST(FunctionIC, api)
+TEST(DirichletBC, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = Factory::getValidParams("FunctionIC");
+    InputParameters params = Factory::getValidParams("DirichletBC");
     params.set<const App *>("_app") = &app;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
-    auto obj = Factory::create<InitialCondition>("FunctionIC", "name", params);
+    auto obj = Factory::create<BoundaryCondition>("DirichletBC", "name", params);
 
     EXPECT_EQ(obj->getFieldId(), 0);
     EXPECT_EQ(obj->getNumComponents(), 1);
+    EXPECT_EQ(obj->getBcType()[0], DM_BC_ESSENTIAL);
 
     PetscInt dim = 3;
-    PetscReal time = 2.;
-    PetscReal x[] = { 1, 2, 3 };
+    PetscReal time = 2.5;
+    PetscReal x[] = { 3, 5, 7 };
     PetscInt Nc = 1;
     PetscScalar u[] = { 0 };
-    __initial_condition_function(dim, time, x, Nc, u, obj);
+    __boundary_condition_function(dim, time, x, Nc, u, obj);
 
-    EXPECT_EQ(u[0], 12);
+    EXPECT_EQ(u[0], 37.5);
 }
