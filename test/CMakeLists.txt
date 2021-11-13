@@ -16,6 +16,7 @@ add_executable(${PROJECT_NAME}
     src/LineMesh_test.cpp
     src/StructuredGrid1D_test.cpp
     src/RectangleMesh_test.cpp
+    src/Steady_test.cpp
     src/StructuredGrid2D_test.cpp
     src/ExodusIIMesh_test.cpp
     src/GYMLFile_test.cpp

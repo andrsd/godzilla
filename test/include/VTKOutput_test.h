@@ -33,7 +33,7 @@ protected:
     Executioner *
     gExecutioner(Problem * problem)
     {
-        const std::string class_name = "Executioner";
+        const std::string class_name = "Steady";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<Problem *>("_problem") = problem;

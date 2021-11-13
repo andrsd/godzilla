@@ -14,14 +14,6 @@ TEST_F(ExecutionerTest, create)
     exec->create();
 }
 
-TEST_F(ExecutionerTest, execute)
-{
-    auto prob = gProblem();
-    auto exec = gExecutioner(prob);
-    EXPECT_CALL(*prob, solve()).Times(1);
-    exec->execute();
-}
-
 TEST_F(ExecutionerTest, output)
 {
     auto prob = gProblem();

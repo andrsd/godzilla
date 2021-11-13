@@ -77,6 +77,7 @@ add_library(${PROJECT_NAME} SHARED
     src/PrintInterface.cpp
     src/Problem.cpp
     src/RectangleMesh.cpp
+    src/Steady.cpp
     src/StructuredGrid1D.cpp
     src/StructuredGrid2D.cpp
     src/UnstructuredMesh.cpp

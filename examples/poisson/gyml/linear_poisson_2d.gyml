@@ -7,4 +7,4 @@ problem:
   type: PoissonLinearProblem
 
 executioner:
-  type: Executioner
+  type: Steady

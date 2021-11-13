@@ -6,8 +6,6 @@
 
 namespace godzilla {
 
-registerObject(Executioner);
-
 InputParameters
 Executioner::validParams()
 {
@@ -28,16 +26,6 @@ void
 Executioner::create()
 {
     _F_;
-}
-
-void
-Executioner::execute()
-{
-    _F_;
-    godzillaPrint(5, "Executing...");
-
-    this->problem.solve();
-    output();
 }
 
 void

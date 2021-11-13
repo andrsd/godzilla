@@ -2,14 +2,14 @@
 
 #include "Factory.h"
 #include "gmock/gmock.h"
-#include "Executioner.h"
+#include "Steady.h"
 #include "Problem.h"
 #include "Output.h"
 #include "GodzillaApp_test.h"
 
-class MockExecutioner : public Executioner {
+class MockSteady : public Steady {
 public:
-    MockExecutioner(const InputParameters & params) : Executioner(params) {}
+    MockSteady(const InputParameters & params) : Steady(params) {}
 
     MOCK_METHOD(void, execute, (), (override));
 };
@@ -32,7 +32,7 @@ public:
     MOCK_METHOD(void, output, (), (const, override));
 };
 
-class ExecutionerTest : public GodzillaAppTest {
+class SteadyTest : public GodzillaAppTest {
 protected:
     MockProblem *
     gProblem()
@@ -43,14 +43,14 @@ protected:
         return Factory::create<MockProblem>(class_name, "problem", params);
     }
 
-    MockExecutioner *
+    Steady *
     gExecutioner(MockProblem * problem)
     {
-        const std::string class_name = "MockExecutioner";
+        const std::string class_name = "Steady";
         InputParameters params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<Problem *>("_problem") = problem;
-        return Factory::create<MockExecutioner>(class_name, "obj", params);
+        return Factory::create<Steady>(class_name, "obj", params);
     }
 
     MockOutput *

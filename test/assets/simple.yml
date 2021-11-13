@@ -11,7 +11,7 @@ problem:
   arr_i: [3, 5, 7]
   arr_str: ["abc", "xyz"]
 executioner:
-  type: Executioner
+  type: Steady
 output:
   vtk:
     type: VTKOutput
