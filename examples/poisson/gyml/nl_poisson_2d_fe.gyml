@@ -10,5 +10,16 @@ grid:
 problem:
   type: PoissonFENonlinearProblem
 
+ics:
+  all:
+    type: ConstantIC
+    value: [ 0 ]
+
+bcs:
+  all:
+    type: DirichletBC
+    boundary: [ 'marker' ]
+    value: [ 'x*x + y*y' ]
+
 executioner:
   type: Executioner
