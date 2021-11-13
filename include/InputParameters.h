@@ -200,6 +200,15 @@ public:
         return this->params.end();
     }
 
+    /// Add `rhs` InputParameters into this InputParameters object
+    InputParameters &
+    operator+=(const InputParameters & rhs)
+    {
+        for (auto it = rhs.begin(); it != rhs.end(); ++it)
+            this->params[it->first] = it->second;
+        return *this;
+    }
+
 private:
     /// Private constructor so that InputParameters can only be created in certain places.
     InputParameters();
