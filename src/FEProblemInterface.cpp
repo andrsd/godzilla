@@ -20,7 +20,6 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 } // namespace internal
 
 FEProblemInterface::FEProblemInterface(const InputParameters & params) :
-    grid(*params.get<Grid *>("_grid")),
     dim(-1),
     n_fields(0),
     ds(nullptr)
@@ -36,27 +35,20 @@ FEProblemInterface::~FEProblemInterface()
     }
 }
 
-const DM &
-FEProblemInterface::_getDM() const
-{
-    return this->grid.getDM();
-}
-
 void
-FEProblemInterface::create()
+FEProblemInterface::create(DM dm)
 {
     _F_;
-    DMGetDimension(_getDM(), &this->dim);
+    DMGetDimension(dm, &this->dim);
     onSetFields();
 }
 
 void
-FEProblemInterface::init()
+FEProblemInterface::init(MPI_Comm comm, DM dm)
 {
     _F_;
-    setupFields();
+    setupFields(comm, dm);
 
-    const DM & dm = _getDM();
     PetscErrorCode ierr;
     ierr = DMCreateDS(dm);
     checkPetscError(ierr);
@@ -64,7 +56,7 @@ FEProblemInterface::init()
     checkPetscError(ierr);
 
     onSetWeakForm();
-    setupBoundaryConditions();
+    setupBoundaryConditions(dm);
 }
 
 const std::string &
@@ -120,10 +112,9 @@ FEProblemInterface::addBoundaryCondition(const BoundaryCondition * bc)
 }
 
 void
-FEProblemInterface::setupBoundaryConditions()
+FEProblemInterface::setupBoundaryConditions(DM dm)
 {
     _F_;
-    const DM & dm = _getDM();
     PetscErrorCode ierr;
 
     for (auto & bcinfo : this->bcs) {
@@ -179,7 +170,7 @@ FEProblemInterface::setupBoundaryConditions()
 }
 
 void
-FEProblemInterface::setupInitialGuess(Vec x)
+FEProblemInterface::setupInitialGuess(DM dm, Vec x)
 {
     _F_;
     PetscInt n_ics = this->ics.size();
@@ -209,7 +200,7 @@ FEProblemInterface::setupInitialGuess(Vec x)
                 ic_funcs[fid] = __initial_condition_function;
                 ic_ctxs[fid] = (void *) ic;
             }
-            ierr = DMProjectFunction(_getDM(), 0.0, ic_funcs, ic_ctxs, INSERT_VALUES, x);
+            ierr = DMProjectFunction(dm, 0.0, ic_funcs, ic_ctxs, INSERT_VALUES, x);
             checkPetscError(ierr);
         }
     }
@@ -217,13 +208,13 @@ FEProblemInterface::setupInitialGuess(Vec x)
         // no initial conditions -> use zero
         PetscErrorCode ierr;
         PetscFunc * initial_guess[1] = { internal::zero_fn };
-        ierr = DMProjectFunction(_getDM(), 0.0, initial_guess, NULL, INSERT_VALUES, x);
+        ierr = DMProjectFunction(dm, 0.0, initial_guess, NULL, INSERT_VALUES, x);
         checkPetscError(ierr);
     }
 }
 
 void
-FEProblemInterface::setupFields()
+FEProblemInterface::setupFields(MPI_Comm comm, DM dm)
 {
     _F_;
     PetscErrorCode ierr;
@@ -233,11 +224,10 @@ FEProblemInterface::setupFields()
         // FIXME: determine if the mesh is made of simplex elements
         PetscBool is_simplex = PETSC_FALSE;
         PetscInt qorder = PETSC_DETERMINE;
-        MPI_Comm comm = this->grid.comm();
         ierr = PetscFECreateLagrange(comm, this->dim, fi.nc, is_simplex, fi.k, qorder, &fi.fe);
         checkPetscError(ierr);
 
-        ierr = DMSetField(_getDM(), fi.id, fi.block, (PetscObject) fi.fe);
+        ierr = DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe);
         checkPetscError(ierr);
         ierr = PetscFESetName(fi.fe, fi.name.c_str());
         checkPetscError(ierr);

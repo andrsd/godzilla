@@ -44,11 +44,11 @@ public:
 
 protected:
     /// Initialize the FE system
-    virtual void init();
+    virtual void init(MPI_Comm comm, DM dm);
 
-    virtual void create();
+    virtual void create(DM dm);
 
-    virtual void setupInitialGuess(Vec x);
+    virtual void setupInitialGuess(DM dm, Vec x);
 
     typedef void PetscFEResidualFunc(PetscInt dim,
                                      PetscInt Nf,
@@ -90,7 +90,7 @@ protected:
                                      PetscScalar g3[]);
 
     /// Inform PETSc to about all fields in this problem
-    void setupFields();
+    void setupFields(MPI_Comm comm, DM dm);
 
     /// Setup residual statement for a field variable
     ///
@@ -115,7 +115,7 @@ protected:
                           PetscFEJacobianFunc * g3);
 
     /// Setup boundary conditions
-    virtual void setupBoundaryConditions();
+    virtual void setupBoundaryConditions(DM dm);
 
     /// Seup field variables
     virtual void onSetFields() = 0;
@@ -123,8 +123,6 @@ protected:
     /// FIXME: This needs a better name
     virtual void onSetWeakForm() = 0;
 
-    /// Grid of the underlying problem
-    const Grid & grid;
     /// Spatial dimension of the discrete problem
     PetscInt dim;
     /// Number fo fields
@@ -163,9 +161,6 @@ protected:
     std::vector<BCInfo> bcs;
     /// Object that manages a discrete system
     PetscDS ds;
-
-private:
-    const DM & _getDM() const;
 };
 
 } // namespace godzilla
