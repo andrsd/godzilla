@@ -25,5 +25,5 @@ TEST_F(PrintInterfaceTest, error_with_callstack)
 
 TEST_F(PrintInterfaceTest, check_petsc_error)
 {
-    // EXPECT_DEATH(this->app->checkPetscError(123), "ERROR: PETSc error: 123");
+    EXPECT_DEATH(checkPetscError(123), "ERROR: PETSc error: 123");
 }
