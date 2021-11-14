@@ -8,7 +8,6 @@ namespace godzilla {
 
 class Grid;
 class Problem;
-class Executioner;
 
 class App : public PrintInterface {
 public:
@@ -31,8 +30,8 @@ protected:
     virtual void buildFromGYML(const std::string & file_name);
     /// Run the input file
     virtual void runInputFile(const std::string & file_name);
-    /// Start the executioner
-    virtual void startExecutioner();
+    /// Run the problem
+    virtual void runProblem();
 
     MPI_Comm comm;
 
@@ -47,8 +46,6 @@ protected:
     Grid * grid;
     /// Problem
     Problem * problem;
-    /// Executioner
-    Executioner * executioner;
 };
 
 } // namespace godzilla

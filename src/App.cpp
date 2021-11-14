@@ -4,7 +4,6 @@
 #include "GYMLFile.h"
 #include "Grid.h"
 #include "Problem.h"
-#include "Executioner.h"
 #include "CallStack.h"
 #include "Utils.h"
 #include <assert.h>
@@ -19,8 +18,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
     verbosity_level(1),
     grid(nullptr),
-    problem(nullptr),
-    executioner(nullptr)
+    problem(nullptr)
 {
     _F_;
     this->args.add(this->input_file_arg);
@@ -83,7 +81,7 @@ App::runInputFile(const std::string & file_name)
         buildFromGYML(file_name);
 
         godzillaPrint(9, "Running '", file_name, "'...");
-        startExecutioner();
+        runProblem();
     }
     else
         godzillaError("Unable to open '",
@@ -102,19 +100,16 @@ App::buildFromGYML(const std::string & file_name)
     assert(this->grid != nullptr);
     this->problem = file.getProblem();
     assert(this->problem != nullptr);
-    this->executioner = file.getExecutioner();
-    assert(this->executioner != nullptr);
 
     this->grid->create();
     this->problem->create();
-    this->executioner->create();
 }
 
 void
-App::startExecutioner()
+App::runProblem()
 {
     _F_;
-    this->executioner->execute();
+    this->problem->run();
 }
 
 } // namespace godzilla

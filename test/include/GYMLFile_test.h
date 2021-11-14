@@ -15,7 +15,6 @@ public:
 
     MOCK_METHOD(void, buildGrid, (), ());
     MOCK_METHOD(void, buildProblem, (), ());
-    MOCK_METHOD(void, buildExecutioner, (), ());
 };
 
 class GYMLFileTest : public GodzillaAppTest {
@@ -53,6 +52,10 @@ public:
     }
     void
     solve() override
+    {
+    }
+    void
+    run() override
     {
     }
     bool

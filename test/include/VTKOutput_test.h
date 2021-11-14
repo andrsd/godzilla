@@ -3,7 +3,6 @@
 #include "Factory.h"
 #include "gmock/gmock.h"
 #include "Grid.h"
-#include "Executioner.h"
 #include "Problem.h"
 #include "VTKOutput.h"
 #include "GodzillaApp_test.h"
@@ -28,16 +27,6 @@ protected:
         params.set<const App *>("_app") = this->app;
         params.set<Grid *>("_grid") = grid;
         return Factory::create<Problem>(class_name, "problem", params);
-    }
-
-    Executioner *
-    gExecutioner(Problem * problem)
-    {
-        const std::string class_name = "Steady";
-        InputParameters params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
-        params.set<Problem *>("_problem") = problem;
-        return Factory::create<Executioner>(class_name, "obj", params);
     }
 
     VTKOutput *

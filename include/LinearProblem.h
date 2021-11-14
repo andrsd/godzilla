@@ -14,6 +14,7 @@ public:
 
     virtual void create() override;
     virtual void solve() override;
+    virtual void run() override;
     virtual bool converged() override;
     virtual const Vec & getSolutionVector() const override;
 
@@ -36,6 +37,8 @@ protected:
     virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) = 0;
     /// KSP monitor
     PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
+    /// Output
+    virtual void output();
 
     /// KSP object
     KSP ksp;

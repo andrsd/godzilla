@@ -2,6 +2,7 @@
 #include "CallStack.h"
 #include "Grid.h"
 #include "Utils.h"
+#include "Output.h"
 
 namespace godzilla {
 
@@ -212,6 +213,25 @@ LinearProblem::converged()
                 this->converged_reason == KSP_CONVERGED_STEP_LENGTH ||
                 this->converged_reason == KSP_CONVERGED_HAPPY_BREAKDOWN;
     return conv;
+}
+
+void
+LinearProblem::run()
+{
+    _F_;
+    solve();
+    if (converged())
+        output();
+}
+
+void
+LinearProblem::output()
+{
+    _F_;
+    for (auto & o : this->outputs) {
+        o->setFileName();
+        o->output();
+    }
 }
 
 } // namespace godzilla

@@ -11,7 +11,6 @@ class App;
 class Factory;
 class Grid;
 class Problem;
-class Executioner;
 
 /// YML parser for input files
 ///
@@ -26,14 +25,12 @@ public:
 
     virtual Grid * getGrid();
     virtual Problem * getProblem();
-    virtual Executioner * getExecutioner();
 
     virtual const YAML::Node & getYml();
 
 protected:
     void buildGrid();
     void buildProblem();
-    void buildExecutioner();
     void buildInitialConditons();
     void buildBoundaryConditons();
     void buildOutputs();
@@ -49,7 +46,6 @@ protected:
 
     Grid * grid;
     Problem * problem;
-    Executioner * executioner;
 };
 
 } // namespace godzilla
