@@ -1,10 +1,7 @@
 #include "FENonlinearProblem.h"
 #include "CallStack.h"
 #include "Grid.h"
-#include "FunctionInterface.h"
 #include "petscdm.h"
-#include "petscdmplex.h"
-#include "petscdmlabel.h"
 
 namespace godzilla {
 
@@ -28,7 +25,7 @@ void
 FENonlinearProblem::create()
 {
     _F_;
-    FEProblemInterface::create();
+    FEProblemInterface::create(getDM());
     NonlinearProblem::create();
 }
 
@@ -37,7 +34,7 @@ FENonlinearProblem::init()
 {
     _F_;
     NonlinearProblem::init();
-    FEProblemInterface::init();
+    FEProblemInterface::init(comm(), getDM());
 }
 
 void
@@ -56,7 +53,7 @@ void
 FENonlinearProblem::setupInitialGuess()
 {
     _F_;
-    FEProblemInterface::setupInitialGuess(this->x);
+    FEProblemInterface::setupInitialGuess(getDM(), this->x);
 }
 
 PetscErrorCode

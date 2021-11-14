@@ -65,6 +65,7 @@ add_library(${PROJECT_NAME} SHARED
     src/FunctionInterface.cpp
     src/Grid.cpp
     src/GYMLFile.cpp
+    src/ImplicitFENonlinearProblem.cpp
     src/Init.cpp
     src/InitialCondition.cpp
     src/InputParameters.cpp
@@ -78,6 +79,7 @@ add_library(${PROJECT_NAME} SHARED
     src/RectangleMesh.cpp
     src/StructuredGrid1D.cpp
     src/StructuredGrid2D.cpp
+    src/TransientInterface.cpp
     src/UnstructuredMesh.cpp
     src/Utils.cpp
     src/VTKOutput.cpp
