@@ -72,4 +72,18 @@ PrintInterface::PrintInterface(const Object * obj) :
     _F_;
 }
 
+/// Check PETSc error
+///
+/// @param ierr Error code returned by PETSc
+void
+checkPetscError(PetscErrorCode ierr)
+{
+    if (ierr) {
+        std::ostringstream oss;
+        internal::godzillaStreamAll(oss, "PETSc error: ", ierr);
+        internal::godzillaErrorRaw(oss.str(), true);
+        internal::terminate();
+    }
+}
+
 } // namespace godzilla
