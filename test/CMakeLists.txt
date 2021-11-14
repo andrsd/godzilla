@@ -5,27 +5,25 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(${PROJECT_NAME}
     src/BoundaryCondition_test.cpp
+    src/ConstantIC_test.cpp
     src/DirichletBC_test.cpp
+    src/ExodusIIMesh_test.cpp
     src/Factory_test.cpp
     src/FENonlinearProblem_test.cpp
     src/FunctionIC_test.cpp
     src/GodzillaApp_test.cpp
-    src/PrintInterface_test.cpp
-    src/Object_test.cpp
-    src/Executioner_test.cpp
-    src/LineMesh_test.cpp
-    src/StructuredGrid1D_test.cpp
-    src/RectangleMesh_test.cpp
-    src/Steady_test.cpp
-    src/StructuredGrid2D_test.cpp
-    src/ExodusIIMesh_test.cpp
     src/GYMLFile_test.cpp
-    src/VTKOutput_test.cpp
-    src/LinearProblem_test.cpp
-    src/NonlinearProblem_test.cpp
-    src/Utils_test.cpp
     src/InputParameters_test.cpp
-    src/ConstantIC_test.cpp
+    src/LinearProblem_test.cpp
+    src/LineMesh_test.cpp
+    src/NonlinearProblem_test.cpp
+    src/Object_test.cpp
+    src/PrintInterface_test.cpp
+    src/RectangleMesh_test.cpp
+    src/StructuredGrid1D_test.cpp
+    src/StructuredGrid2D_test.cpp
+    src/Utils_test.cpp
+    src/VTKOutput_test.cpp
     src/main.cpp
 )
 target_code_coverage(${PROJECT_NAME})

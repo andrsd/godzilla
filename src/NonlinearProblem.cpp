@@ -2,6 +2,7 @@
 #include "CallStack.h"
 #include "Utils.h"
 #include "Grid.h"
+#include "Output.h"
 #include "petscds.h"
 
 namespace godzilla {
@@ -288,6 +289,25 @@ NonlinearProblem::converged()
                 (this->converged_reason == SNES_CONVERGED_SNORM_RELATIVE) ||
                 (this->converged_reason == SNES_CONVERGED_ITS);
     return conv;
+}
+
+void
+NonlinearProblem::run()
+{
+    _F_;
+    solve();
+    if (converged())
+        output();
+}
+
+void
+NonlinearProblem::output()
+{
+    _F_;
+    for (auto & o : this->outputs) {
+        o->setFileName();
+        o->output();
+    }
 }
 
 } // namespace godzilla

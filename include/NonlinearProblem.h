@@ -13,6 +13,7 @@ public:
     virtual ~NonlinearProblem();
 
     virtual void create() override;
+    virtual void run() override;
     virtual void solve() override;
     virtual bool converged() override;
     const Vec & getSolutionVector() const override;
@@ -42,6 +43,8 @@ protected:
     PetscErrorCode snesMonitorCallback(PetscInt it, PetscReal norm);
     /// KSP monitor
     PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
+    /// Output
+    virtual void output();
 
     /// SNES object
     SNES snes;

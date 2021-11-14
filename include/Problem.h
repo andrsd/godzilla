@@ -7,6 +7,7 @@
 namespace godzilla {
 
 class Grid;
+class Output;
 
 /// Problem
 ///
@@ -16,6 +17,8 @@ public:
 
     /// Build the problem to solve
     virtual void create() = 0;
+    /// Run the problem
+    virtual void run() = 0;
     /// Solve the problem
     virtual void solve() = 0;
     /// true if solve converged, otherwise false
@@ -25,9 +28,16 @@ public:
     /// Return solution vector
     virtual const Vec & getSolutionVector() const = 0;
 
+    /// Add and output object
+    ///
+    /// @param output Output object to add
+    virtual void addOutput(const Output * output);
+
 protected:
     /// Grid
     Grid & grid;
+    /// List of output objects
+    std::vector<const Output *> outputs;
 
 public:
     static InputParameters validParams();

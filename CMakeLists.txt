@@ -58,7 +58,6 @@ add_library(${PROJECT_NAME} SHARED
     src/CmdLineArgParser.cpp
     src/ConstantIC.cpp
     src/DirichletBC.cpp
-    src/Executioner.cpp
     src/ExodusIIMesh.cpp
     src/FENonlinearProblem.cpp
     src/FEProblemInterface.cpp
@@ -77,7 +76,6 @@ add_library(${PROJECT_NAME} SHARED
     src/PrintInterface.cpp
     src/Problem.cpp
     src/RectangleMesh.cpp
-    src/Steady.cpp
     src/StructuredGrid1D.cpp
     src/StructuredGrid2D.cpp
     src/UnstructuredMesh.cpp

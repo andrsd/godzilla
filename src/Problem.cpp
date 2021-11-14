@@ -20,4 +20,11 @@ Problem::Problem(const InputParameters & parameters) :
     _F_;
 }
 
+void
+Problem::addOutput(const Output * output)
+{
+    _F_;
+    this->outputs.push_back(output);
+}
+
 } // namespace godzilla

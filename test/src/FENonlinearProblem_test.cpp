@@ -97,7 +97,7 @@ TEST_F(FENonlinearProblemTest, getFieldName)
     prob->create();
 
     EXPECT_EQ(prob->getFieldName(0), "u");
-    EXPECT_DEATH(prob->getFieldName(1), "ERROR: prob: Field with id = '1' does not exist.");
+    EXPECT_DEATH(prob->getFieldName(1), "ERROR: Field with id = '1' does not exist.");
 }
 
 TEST_F(FENonlinearProblemTest, solve)
@@ -177,8 +177,8 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
     grid->create();
 
     EXPECT_DEATH(prob->create(),
-                 "ERROR: prob: Initial condition 'ic' operates on 2 components, but is set on a "
-                 "field with 1 components.");
+                 "ERROR: Initial condition 'ic' operates on 2 components, but is set on a field "
+                 "with 1 components.");
 }
 
 TEST_F(FENonlinearProblemTest, err_duplicate_ics)
@@ -198,8 +198,8 @@ TEST_F(FENonlinearProblemTest, err_duplicate_ics)
     params.set<std::vector<PetscReal>>("value") = { 0.2 };
     auto ic = Factory::create<InitialCondition>(class_name, "ic2", params);
     EXPECT_DEATH(prob->addInitialCondition(ic),
-                 "ERROR: prob: Initial condition 'ic2' is being applied to a field that already "
-                 "has an initial condition.");
+                 "ERROR: Initial condition 'ic2' is being applied to a field that already has an "
+                 "initial condition.");
 }
 
 TEST(TwoFieldFENonlinearProblemTest, err_no_enough_ics)
@@ -233,8 +233,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_no_enough_ics)
     }
 
     grid->create();
-    EXPECT_DEATH(prob->create(),
-                 "ERROR: prob: Provided 2 field\\(s\\), but 1 initial condition\\(s\\).");
+    EXPECT_DEATH(prob->create(), "ERROR: Provided 2 field\\(s\\), but 1 initial condition\\(s\\).");
 }
 
 TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
@@ -251,8 +250,8 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 
     grid->create();
     EXPECT_DEATH(prob->create(),
-                 "ERROR: prob: Boundary condition 'bc1' is set on boundary 'asdf' which does not "
-                 "exist in the mesh.");
+                 "ERROR: Boundary condition 'bc1' is set on boundary 'asdf' which does not exist "
+                 "in the mesh.");
 }
 
 // GTestFENonlinearProblem

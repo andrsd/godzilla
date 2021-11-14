@@ -44,6 +44,7 @@ public:
     PrintInterface(const App & app);
     PrintInterface(const Object * obj);
 
+protected:
     /// Print a message on a terminal
     template <typename... Args>
     void
@@ -78,20 +79,6 @@ public:
         internal::terminate();
     }
 
-    /// Check PETSc error
-    ///
-    /// @param ierr Error code returned by PETSc
-    void
-    checkPetscError(PetscErrorCode ierr) const
-    {
-        if (ierr) {
-            std::ostringstream oss;
-            internal::godzillaStreamAll(oss, this->prefix, "PETSc error: ", ierr);
-            internal::godzillaErrorRaw(oss.str(), true);
-            internal::terminate();
-        }
-    }
-
 private:
     const unsigned int & verbosity_level;
     /// Prefix to print
@@ -109,5 +96,10 @@ error(Args &&... args)
     internal::godzillaErrorRaw(oss.str());
     internal::terminate();
 }
+
+/// Check PETSc error
+///
+/// @param ierr Error code returned by PETSc
+void checkPetscError(PetscErrorCode ierr);
 
 } // namespace godzilla

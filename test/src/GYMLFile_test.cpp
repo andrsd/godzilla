@@ -90,8 +90,6 @@ TEST_F(GYMLFileTest, build)
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
-
-    auto exec = file.getExecutioner();
 }
 
 TEST_F(GYMLFileTest, build_fe)
@@ -108,7 +106,4 @@ TEST_F(GYMLFileTest, build_fe)
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
-
-    auto exec = file.getExecutioner();
-    EXPECT_NE(exec, nullptr);
 }
