@@ -1,0 +1,29 @@
+grid:
+  type: ExodusIIMesh
+  file: square.e
+
+problem:
+  type: HeatEquationProblem
+  start_time: 0
+  end_time: 0.1
+  dt: 0.001
+
+ics:
+  all:
+    type: ConstantIC
+    value: [ 300 ]
+
+bcs:
+  left:
+    type: DirichletBC
+    boundary: [ 'left' ]
+    value: [ '310' ]
+  right:
+    type: DirichletBC
+    boundary: [ 'right' ]
+    value: [ '300' ]
+
+output:
+  vtk:
+    type: VTKOutput
+    file: 'out'
