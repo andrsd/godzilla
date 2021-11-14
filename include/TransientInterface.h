@@ -20,14 +20,6 @@ protected:
     virtual void create(DM dm);
     /// Called before the time step solve
     virtual void setupTimeScheme();
-    /// Called before the time step solve
-    virtual PetscErrorCode onPreStep();
-    /// Called after the time step is done solving
-    virtual PetscErrorCode onPostStep();
-    /// TS monitor callback
-    virtual PetscErrorCode tsMonitorCallback(PetscInt stepi, PetscReal time, Vec X);
-    /// Setup monitors
-    virtual void setupMonitors();
     /// Solve
     virtual void solve(Vec x);
 
@@ -42,11 +34,6 @@ protected:
 
 public:
     static InputParameters validParams();
-
-    friend PetscErrorCode __transient_pre_step(TS ts);
-    friend PetscErrorCode __transient_post_step(TS ts);
-    friend PetscErrorCode
-    __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec X, void * ctx);
 };
 
 } // namespace godzilla

@@ -7,34 +7,6 @@
 
 namespace godzilla {
 
-PetscErrorCode
-__transient_pre_step(TS ts)
-{
-    _F_;
-    void * ctx;
-    TSGetApplicationContext(ts, &ctx);
-    TransientInterface * tr = static_cast<TransientInterface *>(ctx);
-    return tr->onPreStep();
-}
-
-PetscErrorCode
-__transient_post_step(TS ts)
-{
-    _F_;
-    void * ctx;
-    TSGetApplicationContext(ts, &ctx);
-    TransientInterface * tr = static_cast<TransientInterface *>(ctx);
-    return tr->onPostStep();
-}
-
-PetscErrorCode
-__transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec X, void * ctx)
-{
-    _F_;
-    TransientInterface * tr = static_cast<TransientInterface *>(ctx);
-    return tr->tsMonitorCallback(stepi, time, X);
-}
-
 InputParameters
 TransientInterface::validParams()
 {
@@ -67,8 +39,6 @@ TransientInterface::init(const MPI_Comm & comm)
     PetscErrorCode ierr;
     ierr = TSCreate(comm, &this->ts);
     checkPetscError(ierr);
-    ierr = TSSetApplicationContext(this->ts, this);
-    checkPetscError(ierr);
 }
 
 void
@@ -81,8 +51,6 @@ TransientInterface::create(DM dm)
 
     ierr = TSSetDM(this->ts, dm);
     checkPetscError(ierr);
-
-    setupMonitors();
 
     ierr = TSSetTime(this->ts, this->start_time);
     checkPetscError(ierr);
@@ -99,43 +67,6 @@ TransientInterface::setupTimeScheme()
     PetscErrorCode ierr;
     // TODO: allow other schemes
     ierr = TSSetType(this->ts, TSBEULER);
-    checkPetscError(ierr);
-}
-
-PetscErrorCode
-TransientInterface::onPreStep()
-{
-    _F_;
-    return 0;
-}
-
-PetscErrorCode
-TransientInterface::onPostStep()
-{
-    _F_;
-    Vec x;
-    TSGetSolution(this->ts, &x);
-    VecView(x, PETSC_VIEWER_STDOUT_SELF);
-    return 0;
-}
-
-PetscErrorCode
-TransientInterface::tsMonitorCallback(PetscInt stepi, PetscReal time, Vec X)
-{
-    _F_;
-    return 0;
-}
-
-void
-TransientInterface::setupMonitors()
-{
-    _F_;
-    PetscErrorCode ierr;
-    ierr = TSSetPreStep(this->ts, __transient_pre_step);
-    checkPetscError(ierr);
-    ierr = TSSetPostStep(this->ts, __transient_post_step);
-    checkPetscError(ierr);
-    ierr = TSMonitorSet(this->ts, __transient_monitor, this, NULL);
     checkPetscError(ierr);
 }
 
