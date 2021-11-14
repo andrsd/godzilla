@@ -18,3 +18,27 @@ TEST_F(VTKOutputTest, output)
     // PETSc ERROR
     out1->output(grid->getDM(), prob->getSolutionVector());
 }
+
+TEST_F(VTKOutputTest, set_file_name)
+{
+    auto grid = gGrid();
+    grid->create();
+    auto prob = gProblem(grid);
+    prob->create();
+
+    auto out1 = gOutput(prob, "out");
+    out1->setFileName();
+    // TODO: check that the file name was actually set
+}
+
+TEST_F(VTKOutputTest, set_seq_file_name)
+{
+    auto grid = gGrid();
+    grid->create();
+    auto prob = gProblem(grid);
+    prob->create();
+
+    auto out1 = gOutput(prob, "out");
+    out1->setSequenceFileName(2);
+    // TODO: check that the file name was actually set
+}

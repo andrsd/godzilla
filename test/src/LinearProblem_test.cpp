@@ -30,7 +30,7 @@ TEST(LinearProblemTest, solve)
 
     grid->create();
     prob->create();
-    prob->solve();
+    prob->run();
 
     bool conv = prob->converged();
     EXPECT_EQ(conv, true);
