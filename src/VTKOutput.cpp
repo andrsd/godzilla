@@ -31,23 +31,37 @@ VTKOutput::VTKOutput(const InputParameters & params) :
 VTKOutput::~VTKOutput()
 {
     _F_;
-    PetscViewerDestroy(&viewer);
+    PetscViewerDestroy(&this->viewer);
 }
 
 void
-VTKOutput::output() const
+VTKOutput::setFileName() const
 {
     _F_;
     char fn[MAX_PATH];
-    snprintf(fn, MAX_PATH, "%s", this->file_name.c_str());
+    snprintf(fn, MAX_PATH, "%s.vtk", this->file_name.c_str());
     PetscViewerFileSetName(this->viewer, fn);
+}
 
+void
+VTKOutput::setSequenceFileName(unsigned int stepi) const
+{
+    _F_;
+    char fn[MAX_PATH];
+    snprintf(fn, MAX_PATH, "%s.%d.vtk", this->file_name.c_str(), stepi);
+    PetscViewerFileSetName(this->viewer, fn);
+}
+
+void
+VTKOutput::output(DM dm, Vec vec) const
+{
+    _F_;
+    const char * fn;
+    PetscViewerFileGetName(this->viewer, &fn);
     godzillaPrint(9, "Output to file: ", fn);
 
-    const DM & dm = this->problem.getDM();
     DMView(dm, this->viewer);
-    const Vec & sln = this->problem.getSolutionVector();
-    VecView(sln, this->viewer);
+    VecView(vec, this->viewer);
 }
 
 } // namespace godzilla

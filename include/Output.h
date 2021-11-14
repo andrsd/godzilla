@@ -2,6 +2,7 @@
 
 #include "Object.h"
 #include "PrintInterface.h"
+#include "petscdm.h"
 
 namespace godzilla {
 
@@ -15,8 +16,14 @@ class Output : public Object, public PrintInterface {
 public:
     Output(const InputParameters & params);
 
+    /// Set the file name for single output
+    virtual void setFileName() const = 0;
+    /// Set the file name for a sequence of outputs
+    ///
+    /// @param stepi Step number
+    virtual void setSequenceFileName(unsigned int stepi) const = 0;
     /// Implement this method to do the desired output
-    virtual void output() const = 0;
+    virtual void output(DM dm, Vec vec) const = 0;
 
 protected:
     /// Problem to get data from

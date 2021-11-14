@@ -21,7 +21,9 @@ public:
     VTKOutput(const InputParameters & params);
     virtual ~VTKOutput();
 
-    virtual void output() const override;
+    virtual void setFileName() const override;
+    virtual void setSequenceFileName(unsigned int step) const override;
+    virtual void output(DM dm, Vec vec) const override;
 
 protected:
     /// Viewer for VTK output

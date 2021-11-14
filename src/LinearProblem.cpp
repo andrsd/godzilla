@@ -230,7 +230,7 @@ LinearProblem::output()
     _F_;
     for (auto & o : this->outputs) {
         o->setFileName();
-        o->output();
+        o->output(getDM(), this->x);
     }
 }
 
