@@ -31,13 +31,13 @@ public:
     /// Add and output object
     ///
     /// @param output Output object to add
-    virtual void addOutput(const Output * output);
+    virtual void addOutput(Output * output);
 
 protected:
     /// Grid
     Grid & grid;
     /// List of output objects
-    std::vector<const Output *> outputs;
+    std::vector<Output *> outputs;
 
 public:
     static InputParameters validParams();

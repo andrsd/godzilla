@@ -66,6 +66,7 @@ add_library(${PROJECT_NAME} SHARED
     src/FunctionInterface.cpp
     src/Grid.cpp
     src/GYMLFile.cpp
+    src/HDF5Output.cpp
     src/ImplicitFENonlinearProblem.cpp
     src/Init.cpp
     src/InitialCondition.cpp

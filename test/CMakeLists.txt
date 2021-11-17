@@ -14,6 +14,7 @@ add_executable(${PROJECT_NAME}
     src/FunctionIC_test.cpp
     src/GodzillaApp_test.cpp
     src/GYMLFile_test.cpp
+    src/HDF5Output_test.cpp
     src/ImplicitFENonlinearProblem_test.cpp
     src/InputParameters_test.cpp
     src/LinearProblem_test.cpp

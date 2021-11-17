@@ -21,7 +21,7 @@ Problem::Problem(const InputParameters & parameters) :
 }
 
 void
-Problem::addOutput(const Output * output)
+Problem::addOutput(Output * output)
 {
     _F_;
     this->outputs.push_back(output);

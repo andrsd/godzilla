@@ -21,8 +21,8 @@ public:
     VTKOutput(const InputParameters & params);
     virtual ~VTKOutput();
 
-    virtual void setFileName() const override;
-    virtual void setSequenceFileName(unsigned int step) const override;
+    virtual void setFileName() override;
+    virtual void setSequenceFileName(unsigned int step) override;
     virtual void output(DM dm, Vec vec) const override;
 
 protected:
