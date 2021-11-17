@@ -1,6 +1,7 @@
 grid:
-  type: ExodusIIMesh
-  file: square.e
+  type: RectangleMesh
+  nx: 2
+  ny: 2
 
 problem:
   type: HeatEquationProblem
