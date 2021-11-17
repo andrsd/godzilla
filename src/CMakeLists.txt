@@ -13,6 +13,7 @@ add_library(godzilla
         DirichletBC.cpp
         EssentialBC.cpp
         ExodusIIMesh.cpp
+        ExodusIIOutput.cpp
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
         Function.cpp
