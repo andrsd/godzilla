@@ -14,6 +14,7 @@ jobs:
     name: ubuntu
     env:
       PETSC_VERSION: 3.16.1
+      PETSC_CACHE_NUM: 0
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -26,9 +27,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{github.workspace}}/petsc
-          key: ${{ runner.os }}-petsc-cache-${{ hashFiles('**/petsc-*/PKG-INFO') }}
+          key: ${{ runner.os }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
           restore-keys: |
-            ${{ runner.os }}-petsc-cache-
+            ${{ runner.os }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Build PETSc
         if: steps.cache-petsc.outputs.cache-hit != 'true'
         run: |
@@ -39,20 +40,38 @@ jobs:
             --prefix=${{github.workspace}}/petsc \
             --shared-libraries \
             --with-debugging=no \
-            --with-cxx-dialect=C++11 \
+            --with-cxx-dialect=cxx14 \
             --with-pic=yes \
             --with-ssl=no \
             --download-mpich=yes \
-            --download-zlib
+            --download-chaco=yes \
+            --download-ptscotch=yes \
+            --download-ml=yes \
+            --download-hypre=yes \
+            --download-fblaslapack=yes \
+            --download-metis=yes \
+            --download-parmetis=yes \
+            --download-superlu=yes \
+            --download-superlu_dist=yes \
+            --download-scalapack=yes \
+            --download-mumps=yes \
+            --download-exodusii=yes \
+            --download-hdf5=yes \
+            --download-netcdf=yes \
+            --download-pnetcdf=yes \
+            --download-zlib=yes \
             PETSC_DIR=`pwd`
-          make PETSC_DIR=`pwd`
+          make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt all
           make install
       - name: Configure
         env:
           CC: ${{github.workspace}}/petsc/bin/mpicc
           CXX: ${{github.workspace}}/petsc/bin/mpicxx
           PETSC_DIR: ${{github.workspace}}/petsc
-        run: cmake -S . -B ${{github.workspace}}/build -DBUILD_EXAMPLES=YES -DBUILD_TESTS=YES
+        run: |
+          cmake -S . -B ${{github.workspace}}/build \
+            -DBUILD_EXAMPLES=YES \
+            -DBUILD_TESTS=YES
       - name: Build
         run: make -C ${{github.workspace}}/build
 
@@ -61,6 +80,7 @@ jobs:
     name: macos
     env:
       PETSC_VERSION: 3.16.1
+      PETSC_CACHE_NUM: 0
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -82,9 +102,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{github.workspace}}/petsc
-          key: ${{ runner.os }}-petsc-cache-${{ hashFiles('**/petsc-*/PKG-INFO') }}
+          key: ${{ runner.os }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
           restore-keys: |
-            ${{ runner.os }}-petsc-cache-
+            ${{ runner.os }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Build PETSc
         if: steps.cache-petsc.outputs.cache-hit != 'true'
         run: |
@@ -95,10 +115,25 @@ jobs:
             --prefix=${{github.workspace}}/petsc \
             --shared-libraries \
             --with-debugging=no \
-            --with-cxx-dialect=C++11 \
+            --with-cxx-dialect=cxx14 \
             --with-pic=yes \
             --with-ssl=no \
             --download-mpich=yes \
+            --download-chaco=yes \
+            --download-ptscotch=yes \
+            --download-ml=yes \
+            --download-hypre=yes \
+            --download-fblaslapack=yes \
+            --download-metis=yes \
+            --download-parmetis=yes \
+            --download-superlu=yes \
+            --download-superlu_dist=yes \
+            --download-scalapack=yes \
+            --download-mumps=yes \
+            --download-exodusii=yes \
+            --download-hdf5=yes \
+            --download-netcdf=yes \
+            --download-pnetcdf=yes \
             --download-zlib=yes \
             PETSC_DIR=`pwd`
           make PETSC_DIR=`pwd`
