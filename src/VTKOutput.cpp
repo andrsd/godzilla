@@ -18,7 +18,7 @@ VTKOutput::validParams()
 
 VTKOutput::VTKOutput(const InputParameters & params) :
     Output(params),
-    file_name(getParam<std::string>("file"))
+    file_base(getParam<std::string>("file"))
 {
     _F_;
     PetscErrorCode ierr;
@@ -40,15 +40,23 @@ VTKOutput::~VTKOutput()
     checkPetscError(ierr);
 }
 
+const std::string &
+VTKOutput::getFileName() const
+{
+    _F_;
+    return this->file_name;
+}
+
 void
 VTKOutput::setFileName()
 {
     _F_;
     PetscErrorCode ierr;
     char fn[MAX_PATH];
-    snprintf(fn, MAX_PATH, "%s.vtk", this->file_name.c_str());
+    snprintf(fn, MAX_PATH, "%s.vtk", this->file_base.c_str());
     ierr = PetscViewerFileSetName(this->viewer, fn);
     checkPetscError(ierr);
+    this->file_name = std::string(fn);
 }
 
 void
@@ -57,9 +65,10 @@ VTKOutput::setSequenceFileName(unsigned int stepi)
     _F_;
     PetscErrorCode ierr;
     char fn[MAX_PATH];
-    snprintf(fn, MAX_PATH, "%s.%d.vtk", this->file_name.c_str(), stepi);
+    snprintf(fn, MAX_PATH, "%s.%d.vtk", this->file_base.c_str(), stepi);
     ierr = PetscViewerFileSetName(this->viewer, fn);
     checkPetscError(ierr);
+    this->file_name = std::string(fn);
 }
 
 void
@@ -67,11 +76,7 @@ VTKOutput::output(DM dm, Vec vec) const
 {
     _F_;
     PetscErrorCode ierr;
-    const char * fn;
-    ierr = PetscViewerFileGetName(this->viewer, &fn);
-    checkPetscError(ierr);
-    godzillaPrint(9, "Output to file: ", fn);
-
+    godzillaPrint(9, "Output to file: ", this->file_name);
     ierr = DMView(dm, this->viewer);
     checkPetscError(ierr);
     ierr = VecView(vec, this->viewer);

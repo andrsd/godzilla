@@ -31,7 +31,7 @@ public:
     HDF5Output(const InputParameters & params);
     virtual ~HDF5Output();
 
-    virtual const std::string & getFileName() const;
+    virtual const std::string & getFileName() const override;
     virtual void setFileName() override;
     virtual void setSequenceFileName(unsigned int step) override;
     virtual void output(DM dm, Vec vec) const override;

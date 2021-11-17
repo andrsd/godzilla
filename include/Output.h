@@ -16,6 +16,10 @@ class Output : public Object, public PrintInterface {
 public:
     Output(const InputParameters & params);
 
+    /// Get the file name with the output file produced by this outputter
+    ///
+    /// @return The file name with the output
+    virtual const std::string & getFileName() const = 0;
     /// Set the file name for single output
     virtual void setFileName() = 0;
     /// Set the file name for a sequence of outputs

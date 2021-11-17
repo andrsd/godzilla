@@ -1,6 +1,7 @@
 #include "GodzillaApp_test.h"
 #include "VTKOutput_test.h"
 #include "petsc.h"
+#include "petscviewer.h"
 
 TEST_F(VTKOutputTest, output)
 {
@@ -18,6 +19,20 @@ TEST_F(VTKOutputTest, output)
     // PETSc ERROR
     out1->setFileName();
     out1->output(grid->getDM(), prob->getSolutionVector());
+
+    const std::string file_name = out1->getFileName();
+    PetscViewer viewer;
+    Vec sln;
+    PetscReal diff;
+    DMCreateGlobalVector(grid->getDM(), &sln);
+    PetscObjectSetName((PetscObject) sln, "sln");
+    PetscViewerVTKOpen(PETSC_COMM_WORLD, file_name.c_str(), FILE_MODE_READ, &viewer);
+    VecLoad(sln, viewer);
+    VecAXPY(sln, -1.0, prob->getSolutionVector());
+    VecNorm(sln, NORM_INFINITY, &diff);
+    EXPECT_LT(diff, PETSC_MACHINE_EPSILON);
+    PetscViewerDestroy(&viewer);
+    VecDestroy(&sln);
 }
 
 TEST_F(VTKOutputTest, set_file_name)
@@ -29,7 +44,7 @@ TEST_F(VTKOutputTest, set_file_name)
 
     auto out1 = gOutput(prob, "out");
     out1->setFileName();
-    // TODO: check that the file name was actually set
+    EXPECT_EQ(out1->getFileName(), "out.vtk");
 }
 
 TEST_F(VTKOutputTest, set_seq_file_name)
@@ -41,5 +56,5 @@ TEST_F(VTKOutputTest, set_seq_file_name)
 
     auto out1 = gOutput(prob, "out");
     out1->setSequenceFileName(2);
-    // TODO: check that the file name was actually set
+    EXPECT_EQ(out1->getFileName(), "out.2.vtk");
 }

@@ -21,6 +21,7 @@ public:
     VTKOutput(const InputParameters & params);
     virtual ~VTKOutput();
 
+    virtual const std::string & getFileName() const override;
     virtual void setFileName() override;
     virtual void setSequenceFileName(unsigned int step) override;
     virtual void output(DM dm, Vec vec) const override;
@@ -28,8 +29,10 @@ public:
 protected:
     /// Viewer for VTK output
     PetscViewer viewer;
-    ///
-    const std::string file_name;
+    /// The file base of the output file
+    const std::string file_base;
+    /// The file name of the output file
+    std::string file_name;
 
 public:
     static InputParameters validParams();
