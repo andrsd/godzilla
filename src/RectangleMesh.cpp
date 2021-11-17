@@ -101,6 +101,31 @@ RectangleMesh::create()
                                interpolate,
                                &this->dm);
     checkPetscError(ierr);
+
+    // create user-friendly names for sides
+    DMLabel face_sets_label;
+    ierr = DMGetLabel(this->dm, "Face Sets", &face_sets_label);
+
+    const char * side_name[] = { "bottom", "right", "top", "left" };
+    for (unsigned int i = 0; i < 4; i++) {
+        IS is;
+        ierr = DMLabelGetStratumIS(face_sets_label, i + 1, &is);
+        checkPetscError(ierr);
+
+        ierr = DMCreateLabel(this->dm, side_name[i]);
+        checkPetscError(ierr);
+
+        DMLabel label;
+        ierr = DMGetLabel(this->dm, side_name[i], &label);
+        checkPetscError(ierr);
+
+        ierr = DMLabelSetStratumIS(label, i + 1, is);
+        checkPetscError(ierr);
+
+        ierr = ISDestroy(&is);
+        checkPetscError(ierr);
+    }
+
     ierr = DMSetUp(this->dm);
     checkPetscError(ierr);
 }
