@@ -54,6 +54,7 @@ add_library(${PROJECT_NAME} SHARED
     src/Factory.cpp
     src/App.cpp
     src/BoundaryCondition.cpp
+    src/BoxMesh.cpp
     src/CallStack.cpp
     src/CmdLineArgParser.cpp
     src/ConstantIC.cpp
