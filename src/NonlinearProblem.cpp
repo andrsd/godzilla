@@ -166,17 +166,17 @@ NonlinearProblem::allocateObjects()
 
     ierr = DMCreateGlobalVector(dm, &this->x);
     checkPetscError(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->x, "");
+    ierr = PetscObjectSetName((PetscObject) this->x, "sln");
     checkPetscError(ierr);
 
     ierr = VecDuplicate(this->x, &this->r);
     checkPetscError(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->r, "");
+    ierr = PetscObjectSetName((PetscObject) this->r, "res");
     checkPetscError(ierr);
 
     ierr = DMCreateMatrix(dm, &this->J);
     checkPetscError(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->J, "");
+    ierr = PetscObjectSetName((PetscObject) this->J, "Jac");
     checkPetscError(ierr);
 
     // full newton

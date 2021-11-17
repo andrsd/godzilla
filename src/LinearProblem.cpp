@@ -125,17 +125,17 @@ LinearProblem::allocateObjects()
 
     ierr = DMCreateGlobalVector(dm, &this->x);
     checkPetscError(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->x, "");
+    ierr = PetscObjectSetName((PetscObject) this->x, "sln");
     checkPetscError(ierr);
 
     ierr = VecDuplicate(this->x, &this->b);
     checkPetscError(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->b, "");
+    ierr = PetscObjectSetName((PetscObject) this->b, "rhs");
     checkPetscError(ierr);
 
     ierr = DMCreateMatrix(dm, &this->A);
     checkPetscError(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->A, "");
+    ierr = PetscObjectSetName((PetscObject) this->A, "A");
     checkPetscError(ierr);
     // TODO: Add API for setting up preconditioners
     this->A = this->B;
