@@ -11,11 +11,12 @@ TEST_F(VTKOutputTest, output)
     auto prob = gProblem(grid);
     prob->create();
 
-    auto out1 = gOutput(prob, "out.vtk");
+    auto out1 = gOutput(prob, "out");
     // TODO: when we have simple FE testing problem, we need to use it here
     // FE problem uses DMPLEX and the output will work. GTestPetscLinearProblem
     // uses DA and the VTK ouputer does not work with that. That's why we see
     // PETSc ERROR
+    out1->setFileName();
     out1->output(grid->getDM(), prob->getSolutionVector());
 }
 
