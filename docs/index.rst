@@ -17,6 +17,7 @@ Godzilla is a simple library that is wrapping PETSc API.
    :caption: Examples
 
    examples/poisson
+   examples/heat-eqn
 
 .. toctree::
    :maxdepth: 1
