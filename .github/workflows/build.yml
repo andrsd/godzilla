@@ -76,7 +76,7 @@ jobs:
         run: make -C ${{github.workspace}}/build
 
   macosx:
-    runs-on: macos-latest
+    runs-on:  macos-10.15
     name: macos
     env:
       PETSC_VERSION: 3.16.1
@@ -148,6 +148,27 @@ jobs:
             -DCONDA_INCLUDE_DIR=/usr/local/miniconda/include \
             -DCONDA_LIB_DIR=/usr/local/miniconda/lib \
             -DBUILD_EXAMPLES=YES \
-            -DBUILD_TESTS=YES
+            -DBUILD_TESTS=YES \
+            -DCODE_COVERAGE=YES
       - name: Build
         run: make -C ${{github.workspace}}/build
+      - name: Run tests
+        run: make -C ${{github.workspace}}/build test
+      - name: Generate code coverage
+        run: make -C ${{github.workspace}}/build coverage
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: macosx-coverage
+          path: ${{github.workspace}}/build/coverage.info
+
+  upload-to-codecov:
+    needs: [macosx]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v2
