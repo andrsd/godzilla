@@ -39,7 +39,7 @@ Installation
             --disable-opencl \
             CC=clang CXX=clang++ FC=gfortran
 
-      Build PETSc 3.16.0
+      Build PETSc 3.16.1
 
       .. code-block::
 
@@ -60,13 +60,18 @@ Installation
             --download-superlu_dist=yes \
             --download-scalapack=yes \
             --download-mumps=yes \
-            --download-exodusii \
-            --download-hdf5 \
-            --download-netcdf \
-            --download-pnetcdf \
+            --download-exodusii=yes \
+            --download-hdf5=yes \
+            --download-netcdf=yes \
+            --download-pnetcdf=yes \
             --with-zlib-dir=$CONDA_PREFIX \
             CC=mpicc CXX=mpicxx FC=mpif90 \
             PETSC_DIR=`pwd`
+
+      .. note::
+
+         If you installed HDF5 via some other means, do not specify ``--download-hdf5=yes``.
+         You can use ``--with-hdf=/path/to/hdf5``, if the library is installed in a non-standard location.
 
       Set environment variables
 
