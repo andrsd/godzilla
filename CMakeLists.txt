@@ -33,8 +33,7 @@ endif()
 FetchContent_Declare(
     muparser
     GIT_REPOSITORY https://github.com/beltoforion/muparser.git
-    # version 2.3.2
-    GIT_TAG        207d5b77c05c9111ff51ab91082701221220c477
+    GIT_TAG        v2.3.2
 )
 set(ENABLE_SAMPLES OFF CACHE BOOL "" FORCE)
 set(ENABLE_OPENMP OFF CACHE BOOL "" FORCE)
@@ -44,8 +43,7 @@ set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(
     yaml_cpp
     GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-    # version 0.7.0
-    GIT_TAG        0579ae3d976091d7d664aa9d2527e0d0cff25763
+    GIT_TAG        yaml-cpp-0.7.0
 )
 set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
@@ -54,8 +52,7 @@ set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
-  # version 1.10.0
-  GIT_TAG        703bd9caab50b139428cea1aaff9974ebee5742e
+  GIT_TAG        release-1.10.0
 )
 set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 
