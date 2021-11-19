@@ -61,7 +61,7 @@ jobs:
             --download-pnetcdf=yes \
             --download-zlib=yes \
             --download-cmake=yes \
-            CC=clang-12 CXX=clang++-12 CXXFLAGS=-stdlib=libc++ FC=gfortran-10 \
+            CC=clang-12 CXX=clang++-12 CXXFLAGS="-stdlib=libc++" FC=gfortran-10 \
             PETSC_DIR=`pwd`
           make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt all
       - name: Configure
