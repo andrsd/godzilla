@@ -14,8 +14,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${muparser_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${yaml_cpp_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC godzilla)
 target_link_libraries(${PROJECT_NAME} PUBLIC muparser)
+target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
 
 add_test(${PROJECT_NAME}-2d ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/2d.gyml)

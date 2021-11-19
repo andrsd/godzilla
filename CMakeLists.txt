@@ -48,6 +48,23 @@ if(NOT muparser_POPULATED)
     set(muparser_INCLUDE_DIR ${muparser_SOURCE_DIR}/include)
 endif()
 
+# yamp-cpp
+
+FetchContent_Declare(
+    yaml_cpp
+    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+    # version 0.7.0
+    GIT_TAG        0579ae3d976091d7d664aa9d2527e0d0cff25763
+)
+if(NOT yaml_cpp_POPULATED)
+    FetchContent_Populate(yaml_cpp)
+    #set(ENABLE_SAMPLES OFF CACHE INTERNAL "Build samples")
+    #set(ENABLE_OPENMP OFF CACHE INTERNAL "Build with OpenMP")
+    add_subdirectory(${yaml_cpp_SOURCE_DIR} ${yaml_cpp_BINARY_DIR})
+    set(yaml_cpp_INCLUDE_DIR ${yaml_cpp_SOURCE_DIR}/include)
+endif()
+
+
 # godzilla
 
 set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
@@ -102,10 +119,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${muparser_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${yaml_cpp_INCLUDE_DIR})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${YAML_CPP_LIB})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
 target_link_libraries(${PROJECT_NAME} PUBLIC muparser)
+target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
 
 
 
