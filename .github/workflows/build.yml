@@ -14,14 +14,14 @@ jobs:
     name: ubuntu
     env:
       PETSC_VERSION: 3.16.1
-      PETSC_CACHE_NUM: 0
+      PETSC_CACHE_NUM: 1
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install cmake llvm-12 gfortran-10
+          sudo apt install llvm-12 gfortran-10
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -33,11 +33,11 @@ jobs:
       - name: Build PETSc
         if: steps.cache-petsc.outputs.cache-hit != 'true'
         run: |
+          cd ${{github.workspace}}
           wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
           tar -xzf petsc-${PETSC_VERSION}.tar.gz
           cd petsc-${PETSC_VERSION}
           ./configure \
-            --prefix=${{github.workspace}}/petsc \
             --shared-libraries \
             --with-debugging=no \
             --with-cxx-dialect=cxx14 \
@@ -60,15 +60,18 @@ jobs:
             --download-netcdf=yes \
             --download-pnetcdf=yes \
             --download-zlib=yes \
+            --download-cmake=yes \
+            CC=clang-12 CXX=clang++-12 CXXFLAGS=-stdlib=libc++ FC=gfortran-10 \
             PETSC_DIR=`pwd`
           make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt all
-          make install
       - name: Configure
         env:
-          CC: ${{github.workspace}}/petsc/bin/mpicc
-          CXX: ${{github.workspace}}/petsc/bin/mpicxx
-          PETSC_DIR: ${{github.workspace}}/petsc
+          CC: mpicc
+          CXX: mpicxx
+          PETSC_DIR: ${{github.workspace}}/petsc-${PETSC_VERSION}
+          PETSC_ARCH: arch-linux-c-opt
         run: |
+          echo "${{github.workspace}}/petsc-${PETSC_VERSION}/${PETSC_ARCH}/bin" >> $GITHUB_PATH
           cmake -S . -B ${{github.workspace}}/build \
             -DBUILD_EXAMPLES=YES \
             -DBUILD_TESTS=YES \
@@ -91,7 +94,7 @@ jobs:
     env:
       CONDA_CACHE_NUM: 0
       PETSC_VERSION: 3.16.1
-      PETSC_CACHE_NUM: 0
+      PETSC_CACHE_NUM: 1
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -107,7 +110,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
       - name: Install dependencies
-        run: conda install python clang gfortran autoconf automake libtool cmake
+        run: conda install python clang gfortran autoconf automake libtool
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -119,11 +122,11 @@ jobs:
       - name: Build PETSc
         if: steps.cache-petsc.outputs.cache-hit != 'true'
         run: |
+          cd ${{github.workspace}}
           wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
           tar -xzf petsc-${PETSC_VERSION}.tar.gz
           cd petsc-${PETSC_VERSION}
           ./configure \
-            --prefix=${{github.workspace}}/petsc \
             --shared-libraries \
             --with-debugging=no \
             --with-cxx-dialect=cxx14 \
@@ -146,25 +149,26 @@ jobs:
             --download-netcdf=yes \
             --download-pnetcdf=yes \
             --download-zlib=yes \
+            --download-cmake=yes \
+            CC=clang CXX=clang++ FC=gfortran \
             PETSC_DIR=`pwd`
-          make PETSC_DIR=`pwd`
-          make install
+          make PETSC_DIR=`pwd` PETSC_ARCH=arch-darwin-c-opt all
       - name: Configure
         env:
-          CC: ${{github.workspace}}/petsc/bin/mpicc
-          CXX: ${{github.workspace}}/petsc/bin/mpicxx
-          PETSC_DIR: ${{github.workspace}}/petsc
+          CC: mpicc
+          CXX: mpicxx
+          PETSC_DIR: ${{github.workspace}}/petsc-${PETSC_VERSION}
+          PETSC_ARCH: arch-darwin-c-opt
         run: |
+          echo "${{github.workspace}}/petsc-${PETSC_VERSION}/${PETSC_ARCH}/bin" >> $GITHUB_PATH
           cmake -S . -B ${{github.workspace}}/build \
-            -DCONDA_INCLUDE_DIR=/usr/local/miniconda/include \
-            -DCONDA_LIB_DIR=/usr/local/miniconda/lib \
             -DBUILD_EXAMPLES=YES \
             -DBUILD_TESTS=YES \
             -DCODE_COVERAGE=YES
       - name: Build
         run: make -C ${{github.workspace}}/build
       - name: Run tests
-        run: make -C ${{github.workspace}}/build test
+        run: ctest --test-dir ${{github.workspace}}/build -VV
       - name: Generate code coverage
         run: make -C ${{github.workspace}}/build coverage
       - name: Upload coverage artifact
