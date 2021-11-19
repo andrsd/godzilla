@@ -111,6 +111,11 @@ jobs:
             ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
       - name: Install dependencies
         run: conda install python clang gfortran autoconf automake libtool
+      - name: echo
+        run: |
+          which clang
+          which clang++
+          which gfortran
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
