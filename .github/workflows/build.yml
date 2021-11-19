@@ -89,6 +89,7 @@ jobs:
     runs-on:  macos-10.15
     name: macos
     env:
+      CONDA_CACHE_NUM: 0
       PETSC_VERSION: 3.16.1
       PETSC_CACHE_NUM: 0
     steps:
@@ -102,9 +103,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /usr/local/miniconda
-          key: ${{ runner.os }}-miniconda-cache-${{ hashFiles('**/conda-meta/*.json') }}
+          key: ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
           restore-keys: |
-            ${{ runner.os }}-miniconda-cache-
+            ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
       - name: Install dependencies
         run: conda install python clang gfortran autoconf automake libtool cmake
       - name: Cache PETSc
