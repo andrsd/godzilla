@@ -7,6 +7,7 @@ InputParameters
 Object::validParams()
 {
     InputParameters params = emptyInputParameters();
+    params.addPrivateParam<const App *>("_app", nullptr);
     params.addPrivateParam<std::string>("_type");
     params.addPrivateParam<std::string>("_name");
     return params;
