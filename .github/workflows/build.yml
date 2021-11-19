@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install cmake llvm-12 libyaml-cpp-dev gfortran-10
+          sudo apt install cmake llvm-12 gfortran-10
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -71,9 +71,19 @@ jobs:
         run: |
           cmake -S . -B ${{github.workspace}}/build \
             -DBUILD_EXAMPLES=YES \
-            -DBUILD_TESTS=YES
+            -DBUILD_TESTS=YES \
+            -DCODE_COVERAGE=YES
       - name: Build
         run: make -C ${{github.workspace}}/build
+      - name: Run tests
+        run: make -C ${{github.workspace}}/build test
+      - name: Generate code coverage
+        run: make -C ${{github.workspace}}/build coverage
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux-coverage
+          path: ${{github.workspace}}/build/coverage.info
 
   macosx:
     runs-on:  macos-10.15
@@ -96,7 +106,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-miniconda-cache-
       - name: Install dependencies
-        run: conda install python clang gfortran autoconf automake libtool cmake yaml-cpp
+        run: conda install python clang gfortran autoconf automake libtool cmake
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -163,7 +173,7 @@ jobs:
           path: ${{github.workspace}}/build/coverage.info
 
   upload-to-codecov:
-    needs: [macosx]
+    needs: [macosx, linux]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
