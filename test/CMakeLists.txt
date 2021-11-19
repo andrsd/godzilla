@@ -38,17 +38,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CONDA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/test/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${muparser_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${yaml_cpp_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${MUPARSER_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${YAML_CPP_INCLUDE_DIR})
 
-
-target_link_libraries(${PROJECT_NAME} PUBLIC
-    godzilla
-    muparser
-    yaml-cpp
-    gtest_main
-    gmock_main
-)
+target_link_libraries(${PROJECT_NAME} PUBLIC godzilla)
+target_link_libraries(${PROJECT_NAME} PUBLIC muparser)
+target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC gtest_main)
+target_link_libraries(${PROJECT_NAME} PUBLIC gmock_main)
 
 add_test(NAME test COMMAND ${PROJECT_NAME})
 if(CODE_COVERAGE)
