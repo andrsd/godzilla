@@ -63,6 +63,7 @@ jobs:
             --download-cmake=yes \
             CC=clang-12 CXX=clang++-12 CXXFLAGS="-stdlib=libc++" FC=gfortran-10 \
             PETSC_DIR=`pwd`
+          cat configure.log
           make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt all
       - name: Configure
         env:
@@ -157,6 +158,7 @@ jobs:
             --download-cmake=yes \
             CC=clang CXX=clang++ FC=gfortran \
             PETSC_DIR=`pwd`
+          cat configure.log
           make PETSC_DIR=`pwd` PETSC_ARCH=arch-darwin-c-opt all
       - name: Configure
         env:
