@@ -28,42 +28,43 @@ if(DEFINED ENV{PETSC_ARCH})
 else()
     find_library(PETSC_LIB petsc ${PETSC_DIR}/lib)
 endif()
-find_library(YAML_CPP_LIB yaml-cpp ${CONDA_LIB_DIR})
 
-find_package(Doxygen)
-
-# muparser
-
+# muParser
 FetchContent_Declare(
     muparser
     GIT_REPOSITORY https://github.com/beltoforion/muparser.git
     # version 2.3.2
     GIT_TAG        207d5b77c05c9111ff51ab91082701221220c477
 )
-if(NOT muparser_POPULATED)
-    FetchContent_Populate(muparser)
-    set(ENABLE_SAMPLES OFF CACHE INTERNAL "Build samples")
-    set(ENABLE_OPENMP OFF CACHE INTERNAL "Build with OpenMP")
-    add_subdirectory(${muparser_SOURCE_DIR} ${muparser_BINARY_DIR})
-    set(muparser_INCLUDE_DIR ${muparser_SOURCE_DIR}/include)
-endif()
+set(ENABLE_SAMPLES OFF CACHE BOOL "" FORCE)
+set(ENABLE_OPENMP OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
 # yamp-cpp
-
 FetchContent_Declare(
     yaml_cpp
     GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
     # version 0.7.0
     GIT_TAG        0579ae3d976091d7d664aa9d2527e0d0cff25763
 )
-if(NOT yaml_cpp_POPULATED)
-    FetchContent_Populate(yaml_cpp)
-    #set(ENABLE_SAMPLES OFF CACHE INTERNAL "Build samples")
-    #set(ENABLE_OPENMP OFF CACHE INTERNAL "Build with OpenMP")
-    add_subdirectory(${yaml_cpp_SOURCE_DIR} ${yaml_cpp_BINARY_DIR})
-    set(yaml_cpp_INCLUDE_DIR ${yaml_cpp_SOURCE_DIR}/include)
-endif()
+set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
+set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 
+# Google test
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  # version 1.10.0
+  GIT_TAG        703bd9caab50b139428cea1aaff9974ebee5742e
+)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+
+# external deps
+
+FetchContent_MakeAvailable(muparser yaml_cpp googletest)
+
+set(MUPARSER_INCLUDE_DIR ${muparser_SOURCE_DIR}/include)
+set(YAML_CPP_INCLUDE_DIR ${yaml_cpp_SOURCE_DIR}/include)
 
 # godzilla
 
@@ -118,20 +119,33 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${muparser_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${yaml_cpp_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${MUPARSER_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${YAML_CPP_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC muparser)
 target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
 
+configure_file(include/GodzillaConfig.h.in GodzillaConfig.h)
 
+# Tests
+
+if (BUILD_TESTS)
+    set(UNIT_TESTS_ROOT ${CMAKE_SOURCE_DIR}/test CACHE PATH "" FORCE)
+
+    enable_testing()
+    add_subdirectory(test)
+endif()
+
+# Examples
 
 if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
 # Documentation
+
+find_package(Doxygen QUIET)
 
 if(DOXYGEN_FOUND)
     if (NOT PROJECT_RST_DIR)
@@ -224,23 +238,5 @@ if(DOXYGEN_FOUND)
     )
 
 endif()
-
-# TESTING
-
-if (BUILD_TESTS)
-    FetchContent_Declare(
-      googletest
-      GIT_REPOSITORY https://github.com/google/googletest.git
-      # version 1.10
-      GIT_TAG        703bd9caab50b139428cea1aaff9974ebee5742e
-    )
-    FetchContent_MakeAvailable(googletest)
-
-    enable_testing()
-    add_subdirectory(test)
-    set(UNIT_TESTS_ROOT ${CMAKE_SOURCE_DIR}/test)
-endif()
-
-configure_file(include/GodzillaConfig.h.in GodzillaConfig.h)
 
 unset(PROJECT_RST_DIR CACHE)
