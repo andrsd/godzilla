@@ -11,11 +11,22 @@ namespace godzilla {
 /// Class for user-defined parameters
 ///
 class InputParameters {
+public:
+    InputParameters();
+    InputParameters(const InputParameters & p);
+    virtual ~InputParameters();
+
 protected:
     /// Base class for parameter values
     class Value {
     public:
+        virtual ~Value() {}
+
+        /// Return the type of this value as a string
         virtual std::string type() const = 0;
+
+        /// Create a copy of this value
+        virtual Value * copy() const = 0;
 
         /// Is required
         bool required;
@@ -48,9 +59,22 @@ protected:
         }
 
         inline std::string
-        type() const
+        type() const override
         {
             return std::string(typeid(T).name());
+        }
+
+        virtual Value *
+        copy() const override
+        {
+            Parameter<T> * copy = new Parameter<T>;
+            copy->value = this->value;
+            copy->required = this->required;
+            copy->doc_string = this->doc_string;
+            copy->valid = this->valid;
+            copy->is_private = this->is_private;
+            copy->set_by_add_param = this->set_by_add_param;
+            return copy;
         }
 
         /// Parameter value
@@ -58,8 +82,6 @@ protected:
     };
 
 public:
-    InputParameters(const InputParameters & rhs);
-
     /// Check if parameter exist
     template <typename T>
     bool
@@ -200,19 +222,31 @@ public:
         return this->params.end();
     }
 
+    /// Assignment operator
+    InputParameters & operator=(const InputParameters & rhs);
+
     /// Add `rhs` InputParameters into this InputParameters object
     InputParameters &
     operator+=(const InputParameters & rhs)
     {
-        for (auto it = rhs.begin(); it != rhs.end(); ++it)
-            this->params[it->first] = it->second;
+        for (auto it = rhs.begin(); it != rhs.end(); ++it) {
+            auto jt = this->params.find(it->first);
+            if (jt != this->params.end())
+                delete jt->second;
+            this->params[it->first] = it->second->copy();
+        }
         return *this;
     }
 
-private:
-    /// Private constructor so that InputParameters can only be created in certain places.
-    InputParameters();
+    void
+    clear()
+    {
+        for (auto & it : this->params)
+            delete it.second;
+        this->params.clear();
+    }
 
+private:
     /// This method is called when adding a Parameter with a default value, can be specialized for
     /// non-matching types.
     template <typename T, typename S>
@@ -221,9 +255,6 @@ private:
     /// The actual parameter data. Each Metadata object contains attributes for the corresponding
     /// parameter.
     std::map<std::string, Value *> params;
-
-    // These are the only objects allowed to _create_ InputParameters
-    friend InputParameters emptyInputParameters();
 };
 
 template <typename T>
