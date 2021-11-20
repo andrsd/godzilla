@@ -138,7 +138,7 @@ LinearProblem::allocateObjects()
     ierr = PetscObjectSetName((PetscObject) this->A, "A");
     checkPetscError(ierr);
     // TODO: Add API for setting up preconditioners
-    this->A = this->B;
+    this->B = this->A;
 }
 
 void
