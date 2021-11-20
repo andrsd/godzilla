@@ -5,8 +5,6 @@
 
 TEST_F(VTKOutputTest, output)
 {
-    testing::internal::CaptureStderr();
-
     auto grid = gGrid();
     grid->create();
     auto prob = gProblem(grid);
