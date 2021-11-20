@@ -159,6 +159,8 @@ FEProblemInterface::setupBoundaryConditions(DM dm)
 
             ierr = ISRestoreIndices(is, &ids);
             checkPetscError(ierr);
+            ierr = ISDestroy(&is);
+            checkPetscError(ierr);
         }
         else
             error("Boundary condition '",
