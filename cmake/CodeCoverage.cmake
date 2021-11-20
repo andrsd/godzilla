@@ -4,8 +4,24 @@ option(CODE_COVERAGE "Builds targets with code coverage instrumentation. (Requir
 if(CODE_COVERAGE)
 
 find_program(LCOV_PATH lcov)
-find_program(LLVM_COV_PATH llvm-cov)
-find_program(LLVM_PROFDATA_PATH llvm-profdata)
+find_program(
+    LLVM_COV_PATH
+    NAMES
+        llvm-cov
+        llvm-cov-10
+        llvm-cov-11
+        llvm-cov-12
+        llvm-cov-13
+)
+find_program(
+    LLVM_PROFDATA_PATH
+    NAMES
+        llvm-profdata
+        llvm-profdata-10
+        llvm-profdata-11
+        llvm-profdata-12
+        llvm-profdata-13
+)
 find_program(GENHTML_PATH genhtml)
 mark_as_advanced(FORCE LCOV_PATH GENHTML_PATH)
 
