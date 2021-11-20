@@ -1,0 +1,133 @@
+name: build-env
+
+on: [workflow_dispatch]
+
+jobs:
+  linux-clang:
+    runs-on: ubuntu-20.04
+    name: ubuntu-clang
+    env:
+      PETSC_VERSION: 3.16.1
+      PETSC_CACHE_NUM: 1
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt install cmake llvm-12 gfortran-10
+      - name: Cache PETSc
+        id: cache-petsc
+        uses: actions/cache@v2
+        with:
+          path: ${{github.workspace}}/petsc-${PETSC_VERSION}
+          key: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+      - name: Build PETSc
+        run: |
+          cd ${{github.workspace}}
+          wget -q https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
+          tar -xzf petsc-${PETSC_VERSION}.tar.gz
+          cd petsc-${PETSC_VERSION}
+          echo "::group::configure"
+          ./configure \
+            --shared-libraries \
+            --with-debugging=no \
+            --with-cxx-dialect=cxx14 \
+            --with-pic=yes \
+            --with-ssl=no \
+            --download-mpich=yes \
+            --download-chaco=yes \
+            --download-ptscotch=yes \
+            --download-ml=yes \
+            --download-hypre=yes \
+            --download-fblaslapack=yes \
+            --download-metis=yes \
+            --download-parmetis=yes \
+            --download-superlu=yes \
+            --download-superlu_dist=yes \
+            --download-scalapack=yes \
+            --download-mumps=yes \
+            --download-exodusii=yes \
+            --download-hdf5=yes \
+            --download-netcdf=yes \
+            --download-pnetcdf=yes \
+            --download-zlib=yes \
+            CC=clang-12 CXX=clang++-12 FC=gfortran-10 \
+            PETSC_DIR=`pwd`
+          echo "::endgroup::"
+          echo "::group::make"
+          make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt all
+          echo "::endgroup::"
+      - name: Upload configure.log
+        if: always()
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{github.job}}-configure.log
+          path: ${{github.workspace}}/petsc-${{env.PETSC_VERSION}}/configure.log
+
+  macosx-clang:
+    runs-on:  macos-10.15
+    name: macosx-clang
+    env:
+      CONDA_CACHE_NUM: 1
+      PETSC_VERSION: 3.16.1
+      PETSC_CACHE_NUM: 1
+      SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+    steps:
+      - name: Install conda
+        uses: s-weigand/setup-conda@v1
+        with:
+          conda-channels: conda-forge
+      - name: Cache conda env
+        uses: actions/cache@v2
+        with:
+          path: /usr/local/miniconda
+          key: ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
+      - name: Install dependencies
+        run: conda install python cmake clang gfortran autoconf automake libtool
+      - name: Cache PETSc
+        id: cache-petsc
+        uses: actions/cache@v2
+        with:
+          path: ${{github.workspace}}/petsc-${PETSC_VERSION}
+          key: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+      - name: Build PETSc
+        run: |
+          cd ${{github.workspace}}
+          wget -q https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
+          tar -xzf petsc-${PETSC_VERSION}.tar.gz
+          cd petsc-${PETSC_VERSION}
+          echo "::group::configure"
+          ./configure \
+            --shared-libraries \
+            --with-debugging=no \
+            --with-cxx-dialect=cxx14 \
+            --with-pic=yes \
+            --with-ssl=no \
+            --download-mpich=yes \
+            --download-chaco=yes \
+            --download-ptscotch=yes \
+            --download-ml=yes \
+            --download-hypre=yes \
+            --download-fblaslapack=yes \
+            --download-metis=yes \
+            --download-parmetis=yes \
+            --download-superlu=yes \
+            --download-superlu_dist=yes \
+            --download-scalapack=yes \
+            --download-mumps=yes \
+            --download-exodusii=yes \
+            --download-hdf5=yes \
+            --download-netcdf=yes \
+            --download-pnetcdf=yes \
+            --download-zlib=yes \
+            CC=clang CXX=clang++ FC=gfortran \
+            PETSC_DIR=`pwd`
+          echo "::endgroup::"
+          echo "::group::make"
+          make PETSC_DIR=`pwd` PETSC_ARCH=arch-darwin-c-opt all
+          echo "::endgroup::"
+      - name: Upload configure.log
+        if: always()
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{github.job}}-configure.log
+          path: ${{github.workspace}}/petsc-${{env.PETSC_VERSION}}/configure.log
