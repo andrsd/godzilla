@@ -14,74 +14,55 @@ jobs:
     name: ubuntu
     env:
       PETSC_VERSION: 3.16.1
-      PETSC_CACHE_NUM: 0
+      PETSC_CACHE_NUM: 2
+      PETSC_ARCH: arch-linux-c-opt
+      CC: mpicc
+      CXX: mpicxx
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install cmake llvm-12 libyaml-cpp-dev gfortran-10
-      - name: Cache PETSc
-        id: cache-petsc
+          sudo apt install llvm-12 gfortran-10
+      - name: Setup env
+        run: |
+          echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
+          echo "PETSC_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}" >> $GITHUB_ENV
+      - name: Load PETSc
         uses: actions/cache@v2
         with:
-          path: ${{github.workspace}}/petsc
-          key: ${{ runner.os }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-          restore-keys: |
-            ${{ runner.os }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-      - name: Build PETSc
-        if: steps.cache-petsc.outputs.cache-hit != 'true'
-        run: |
-          wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
-          tar -xzf petsc-${PETSC_VERSION}.tar.gz
-          cd petsc-${PETSC_VERSION}
-          ./configure \
-            --prefix=${{github.workspace}}/petsc \
-            --shared-libraries \
-            --with-debugging=no \
-            --with-cxx-dialect=cxx14 \
-            --with-pic=yes \
-            --with-ssl=no \
-            --download-mpich=yes \
-            --download-chaco=yes \
-            --download-ptscotch=yes \
-            --download-ml=yes \
-            --download-hypre=yes \
-            --download-fblaslapack=yes \
-            --download-metis=yes \
-            --download-parmetis=yes \
-            --download-superlu=yes \
-            --download-superlu_dist=yes \
-            --download-scalapack=yes \
-            --download-mumps=yes \
-            --download-exodusii=yes \
-            --download-hdf5=yes \
-            --download-netcdf=yes \
-            --download-pnetcdf=yes \
-            --download-zlib=yes \
-            PETSC_DIR=`pwd`
-          make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt all
-          make install
+          path: ${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}
+          key: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          restore-keys: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Configure
-        env:
-          CC: ${{github.workspace}}/petsc/bin/mpicc
-          CXX: ${{github.workspace}}/petsc/bin/mpicxx
-          PETSC_DIR: ${{github.workspace}}/petsc
         run: |
-          cmake -S . -B ${{github.workspace}}/build \
+          cmake -S . -B ${{ github.workspace }}/build \
             -DBUILD_EXAMPLES=YES \
-            -DBUILD_TESTS=YES
+            -DBUILD_TESTS=YES \
+            -DCODE_COVERAGE=YES
       - name: Build
-        run: make -C ${{github.workspace}}/build
+        run: make -C ${{ github.workspace }}/build
+      - name: Run tests
+        run: make -C ${{ github.workspace }}/build test ARGS='-V'
+      - name: Generate code coverage
+        run: make -C ${{ github.workspace }}/build coverage
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-${{ github.job }}
+          path: ${{ github.workspace }}/build/coverage.info
 
   macosx:
-    runs-on:  macos-10.15
+    runs-on: macos-10.15
     name: macos
     env:
-      CONDA_CACHE_NUM: 0
+      CONDA_CACHE_NUM: 1
       PETSC_VERSION: 3.16.1
-      PETSC_CACHE_NUM: 0
+      PETSC_CACHE_NUM: 2
+      PETSC_ARCH: arch-darwin-c-opt
+      CC: mpicc
+      CXX: mpicxx
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -96,75 +77,36 @@ jobs:
           key: ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
           restore-keys: |
             ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
-      - name: Install dependencies
-        run: conda install python clang gfortran autoconf automake libtool cmake yaml-cpp
-      - name: Cache PETSc
-        id: cache-petsc
+      - name: Setup env
+        run: |
+          echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
+          echo "PETSC_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}" >> $GITHUB_ENV
+      - name: Load PETSc
         uses: actions/cache@v2
         with:
-          path: ${{github.workspace}}/petsc
-          key: ${{ runner.os }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-          restore-keys: |
-            ${{ runner.os }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-      - name: Build PETSc
-        if: steps.cache-petsc.outputs.cache-hit != 'true'
-        run: |
-          wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
-          tar -xzf petsc-${PETSC_VERSION}.tar.gz
-          cd petsc-${PETSC_VERSION}
-          ./configure \
-            --prefix=${{github.workspace}}/petsc \
-            --shared-libraries \
-            --with-debugging=no \
-            --with-cxx-dialect=cxx14 \
-            --with-pic=yes \
-            --with-ssl=no \
-            --download-mpich=yes \
-            --download-chaco=yes \
-            --download-ptscotch=yes \
-            --download-ml=yes \
-            --download-hypre=yes \
-            --download-fblaslapack=yes \
-            --download-metis=yes \
-            --download-parmetis=yes \
-            --download-superlu=yes \
-            --download-superlu_dist=yes \
-            --download-scalapack=yes \
-            --download-mumps=yes \
-            --download-exodusii=yes \
-            --download-hdf5=yes \
-            --download-netcdf=yes \
-            --download-pnetcdf=yes \
-            --download-zlib=yes \
-            PETSC_DIR=`pwd`
-          make PETSC_DIR=`pwd`
-          make install
+          path: ${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}
+          key: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          restore-keys: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Configure
-        env:
-          CC: ${{github.workspace}}/petsc/bin/mpicc
-          CXX: ${{github.workspace}}/petsc/bin/mpicxx
-          PETSC_DIR: ${{github.workspace}}/petsc
         run: |
-          cmake -S . -B ${{github.workspace}}/build \
-            -DCONDA_INCLUDE_DIR=/usr/local/miniconda/include \
-            -DCONDA_LIB_DIR=/usr/local/miniconda/lib \
+          cmake -S . -B ${{ github.workspace }}/build \
             -DBUILD_EXAMPLES=YES \
             -DBUILD_TESTS=YES \
             -DCODE_COVERAGE=YES
       - name: Build
-        run: make -C ${{github.workspace}}/build
+        run: make -C ${{ github.workspace }}/build
       - name: Run tests
-        run: make -C ${{github.workspace}}/build test
+        run: make -C ${{ github.workspace }}/build test ARGS='-V'
       - name: Generate code coverage
-        run: make -C ${{github.workspace}}/build coverage
+        run: make -C ${{ github.workspace }}/build coverage
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v2
         with:
-          name: macosx-coverage
-          path: ${{github.workspace}}/build/coverage.info
+          name: coverage-${{ github.job }}
+          path: ${{ github.workspace }}/build/coverage.info
 
   upload-to-codecov:
-    needs: [macosx]
+    needs: [macosx, linux]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
