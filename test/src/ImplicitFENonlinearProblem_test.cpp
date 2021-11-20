@@ -114,7 +114,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 {
     {
         const std::string class_name = "ConstantIC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<std::vector<PetscReal>>("value") = { 0 };
         auto ic = Factory::create<InitialCondition>(class_name, "ic", params);
@@ -123,7 +123,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<std::vector<std::string>>("boundary") = { "marker" };
         params.set<std::vector<std::string>>("value") = { "x*x" };

@@ -11,7 +11,7 @@ TEST(Object, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = Factory::getValidParams("Object");
+    InputParameters & params = Factory::getValidParams("Object");
     params.set<const App *>("_app") = &app;
     auto obj = Factory::create<Object>("Object", "name", params);
 

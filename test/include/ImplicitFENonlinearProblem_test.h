@@ -18,14 +18,14 @@ public:
 
         {
             const std::string class_name = "LineMesh";
-            InputParameters params = Factory::getValidParams(class_name);
+            InputParameters & params = Factory::getValidParams(class_name);
             params.set<const App *>("_app") = this->app;
             params.set<PetscInt>("nx") = 2;
             this->grid = Factory::create<Grid>(class_name, "grid", params);
         }
         {
             const std::string class_name = "GTestImplicitFENonlinearProblem";
-            InputParameters params = Factory::getValidParams(class_name);
+            InputParameters & params = Factory::getValidParams(class_name);
             params.set<const App *>("_app") = this->app;
             params.set<Grid *>("_grid") = this->grid;
             params.set<PetscReal>("start_time") = 0.;

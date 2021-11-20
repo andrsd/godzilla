@@ -17,14 +17,14 @@ TEST(NonlinearProblemTest, solve)
     Grid * grid;
     {
         const std::string class_name = "StructuredGrid1D";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = &app;
         params.set<PetscInt>("nx") = 2;
         grid = Factory::create<Grid>(class_name, "grid", params);
     }
 
     const std::string class_name = "GTestPetscNonlinearProblem";
-    InputParameters params = Factory::getValidParams(class_name);
+    InputParameters & params = Factory::getValidParams(class_name);
     params.set<const App *>("_app") = &app;
     params.set<Grid *>("_grid") = grid;
     auto prob = Factory::create<GTestPetscNonlinearProblem>(class_name, "obj", params);

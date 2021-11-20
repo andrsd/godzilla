@@ -66,7 +66,7 @@ public:
     /// Get valid parameters for the object
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
-    static InputParameters
+    static InputParameters &
     getValidParams(const std::string & class_name)
     {
         auto it = classes.find(class_name);
@@ -76,8 +76,9 @@ public:
                   "' failed.  Object is not registred.");
 
         Entry & entry = it->second;
-        InputParameters params = (*entry.params_ptr)();
-        return params;
+        InputParameters * ips = new InputParameters((*entry.params_ptr)());
+        params.push_back(ips);
+        return *ips;
     }
 
     /// Build an object (must be registered)
@@ -119,6 +120,8 @@ protected:
     static std::map<std::string, Entry> classes;
     /// All objects built by this factory
     static std::list<Object *> objects;
+    /// All InputParameters objects built by this factory
+    static std::list<InputParameters *> params;
 };
 
 } // namespace godzilla

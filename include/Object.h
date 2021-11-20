@@ -48,7 +48,7 @@ public:
 
 protected:
     /// Parameters of this object
-    InputParameters pars;
+    const InputParameters & pars;
     /// Reference to the aplpication owning this object
     const App & app;
     /// MPI rank, aka processor number

@@ -104,7 +104,7 @@ TEST_F(FENonlinearProblemTest, solve)
 {
     {
         const std::string class_name = "ConstantIC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = Factory::create<InitialCondition>(class_name, "ic", params);
@@ -113,7 +113,7 @@ TEST_F(FENonlinearProblemTest, solve)
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<std::vector<std::string>>("boundary") = { "marker" };
         params.set<std::vector<std::string>>("value") = { "x*x" };
@@ -143,7 +143,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
     {
         const std::string class_name = "DirichletBC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<std::vector<std::string>>("boundary") = { "marker" };
         params.set<std::vector<std::string>>("value") = { "x*x" };
@@ -168,7 +168,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 {
     {
         const std::string class_name = "GTest2CompIC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         auto ic = Factory::create<InitialCondition>(class_name, "ic", params);
         prob->addInitialCondition(ic);
@@ -185,7 +185,7 @@ TEST_F(FENonlinearProblemTest, err_duplicate_ics)
 {
     {
         const std::string class_name = "ConstantIC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = Factory::create<InitialCondition>(class_name, "ic1", params);
@@ -193,7 +193,7 @@ TEST_F(FENonlinearProblemTest, err_duplicate_ics)
     }
 
     const std::string class_name = "ConstantIC";
-    InputParameters params = Factory::getValidParams(class_name);
+    InputParameters & params = Factory::getValidParams(class_name);
     params.set<const App *>("_app") = this->app;
     params.set<std::vector<PetscReal>>("value") = { 0.2 };
     auto ic = Factory::create<InitialCondition>(class_name, "ic2", params);
@@ -210,14 +210,14 @@ TEST(TwoFieldFENonlinearProblemTest, err_no_enough_ics)
 
     {
         const std::string class_name = "LineMesh";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = &app;
         params.set<PetscInt>("nx") = 2;
         grid = Factory::create<Grid>(class_name, "grid", params);
     }
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = &app;
         params.set<Grid *>("_grid") = grid;
         prob = Factory::create<FENonlinearProblem>(class_name, "prob", params);
@@ -225,7 +225,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_no_enough_ics)
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = &app;
         params.set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = Factory::create<InitialCondition>(class_name, "ic1", params);
@@ -240,7 +240,7 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 {
     {
         const std::string class_name = "DirichletBC";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<std::vector<std::string>>("boundary") = { "asdf" };
         params.set<std::vector<std::string>>("value") = { "0.1" };

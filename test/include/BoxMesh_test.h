@@ -18,7 +18,7 @@ protected:
     g3dBoxMesh(const std::vector<PetscReal> & xmin, const std::vector<PetscReal> & xmax)
     {
         const std::string class_name = "MockBoxMesh";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<PetscReal>("xmin") = xmin[0];
         params.set<PetscReal>("xmax") = xmax[0];

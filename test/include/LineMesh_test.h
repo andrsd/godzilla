@@ -18,7 +18,7 @@ protected:
     g1dLineMesh(PetscReal xmin, PetscReal xmax)
     {
         const std::string class_name = "MockLineMesh";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<PetscReal>("xmin") = xmin;
         params.set<PetscReal>("xmax") = xmax;

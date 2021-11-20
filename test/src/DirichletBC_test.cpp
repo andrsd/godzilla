@@ -9,7 +9,7 @@ TEST(DirichletBC, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = Factory::getValidParams("DirichletBC");
+    InputParameters & params = Factory::getValidParams("DirichletBC");
     params.set<const App *>("_app") = &app;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     auto obj = Factory::create<BoundaryCondition>("DirichletBC", "name", params);

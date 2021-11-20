@@ -18,7 +18,7 @@ protected:
     gExodusMesh(const std::string & file_name)
     {
         const std::string class_name = "MockExodusIIMesh";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<std::string>("file") = file_name;
         return Factory::create<MockExodusIIMesh>(class_name, "obj", params);

@@ -67,7 +67,7 @@ void
 GYMLFile::buildGrid()
 {
     _F_;
-    InputParameters params = buildParams(this->root, "grid");
+    InputParameters & params = buildParams(this->root, "grid");
     const std::string & class_name = params.get<std::string>("_type");
     this->grid = Factory::create<Grid>(class_name, "grid", params);
 }
@@ -76,7 +76,7 @@ void
 GYMLFile::buildProblem()
 {
     _F_;
-    InputParameters params = buildParams(this->root, "problem");
+    InputParameters & params = buildParams(this->root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
     params.set<Grid *>("_grid") = this->grid;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
@@ -100,7 +100,7 @@ GYMLFile::buildInitialConditons()
             YAML::Node ic_node = it.first;
             std::string name = ic_node.as<std::string>();
 
-            InputParameters params = buildParams(ics_root_node, name);
+            InputParameters & params = buildParams(ics_root_node, name);
             const std::string & class_name = params.get<std::string>("_type");
             auto ic = Factory::create<InitialCondition>(class_name, name, params);
             fepface->addInitialCondition(ic);
@@ -126,7 +126,7 @@ GYMLFile::buildBoundaryConditons()
             YAML::Node bc_node = it.first;
             std::string name = bc_node.as<std::string>();
 
-            InputParameters params = buildParams(bcs_root_node, name);
+            InputParameters & params = buildParams(bcs_root_node, name);
             const std::string & class_name = params.get<std::string>("_type");
             auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
             fepface->addBoundaryCondition(bc);
@@ -146,7 +146,7 @@ GYMLFile::buildOutputs()
         YAML::Node output_node = it.first;
         std::string name = output_node.as<std::string>();
 
-        InputParameters params = buildParams(output_root_node, name);
+        InputParameters & params = buildParams(output_root_node, name);
         const std::string & class_name = params.get<std::string>("_type");
         params.set<Problem *>("_problem") = this->problem;
         auto output = Factory::create<Output>(class_name, name, params);
@@ -155,7 +155,7 @@ GYMLFile::buildOutputs()
     }
 }
 
-InputParameters
+InputParameters &
 GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 {
     _F_;
@@ -171,7 +171,7 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
     if (!Factory::isRegistered(class_name))
         godzillaError(name, ": Type '", class_name, "' is not a registered object.");
 
-    InputParameters params = Factory::getValidParams(class_name);
+    InputParameters & params = Factory::getValidParams(class_name);
     params.set<std::string>("_type") = class_name;
     params.set<std::string>("_name") = name;
     params.set<const App *>("_app") = &this->app;

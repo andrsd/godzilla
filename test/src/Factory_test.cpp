@@ -8,7 +8,7 @@ using namespace godzilla;
 
 TEST(Factory, valid_params_unreg_obj)
 {
-    EXPECT_DEATH(InputParameters params = Factory::getValidParams("ASDF"),
+    EXPECT_DEATH(InputParameters & params = Factory::getValidParams("ASDF"),
                  "Getting validParams for object 'ASDF' failed.  Object is not registred.");
 }
 
@@ -23,7 +23,7 @@ TEST(Factory, create_reg_obj)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = Factory::getValidParams("LineMesh");
+    InputParameters & params = Factory::getValidParams("LineMesh");
     params.set<PetscInt>("nx") = 1;
     params.set<const App *>("_app") = &app;
     auto obj = Factory::create<LineMesh>("LineMesh", "name", params);

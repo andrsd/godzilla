@@ -9,7 +9,7 @@ TEST(ConstantIC, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = Factory::getValidParams("ConstantIC");
+    InputParameters & params = Factory::getValidParams("ConstantIC");
     params.set<const App *>("_app") = &app;
     params.set<std::vector<PetscReal>>("value") = { 3, 4, 5 };
     auto obj = Factory::create<InitialCondition>("ConstantIC", "name", params);

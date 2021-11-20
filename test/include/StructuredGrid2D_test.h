@@ -18,7 +18,7 @@ protected:
     gMesh(PetscInt nx, PetscInt ny)
     {
         const std::string class_name = "MockStructuredGrid2D";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
         params.set<PetscInt>("nx") = nx;
         params.set<PetscInt>("ny") = ny;

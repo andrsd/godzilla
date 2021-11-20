@@ -16,14 +16,14 @@ TEST(LinearProblemTest, solve)
     Grid * grid;
     {
         const std::string class_name = "StructuredGrid1D";
-        InputParameters params = Factory::getValidParams(class_name);
+        InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = &app;
         params.set<PetscInt>("nx") = 2;
         grid = Factory::create<Grid>(class_name, "grid", params);
     }
 
     const std::string class_name = "GTestPetscLinearProblem";
-    InputParameters params = Factory::getValidParams(class_name);
+    InputParameters & params = Factory::getValidParams(class_name);
     params.set<const App *>("_app") = &app;
     params.set<Grid *>("_grid") = grid;
     auto prob = Factory::create<GTestPetscLinearProblem>(class_name, "obj", params);
