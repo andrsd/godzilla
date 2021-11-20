@@ -36,6 +36,12 @@ public:
         DMCreateGlobalVector(this->dm, &this->x);
     }
 
+    virtual ~GTestProblem()
+    {
+        VecDestroy(&this->x);
+        DMDestroy(&this->dm);
+    }
+
     const DM &
     getDM() const override
     {
