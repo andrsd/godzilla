@@ -39,7 +39,8 @@ jobs:
         run: |
           cmake -S . -B ${{ github.workspace }}/build \
             -DBUILD_EXAMPLES=YES \
-            -DBUILD_TESTS=YES
+            -DBUILD_TESTS=YES \
+            -DCODE_COVERAGE=YES
       - name: Build
         run: make -C ${{ github.workspace }}/build
       - name: Run tests
