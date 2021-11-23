@@ -11,8 +11,8 @@ include(FetchContent)
 include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 
-option(BUILD_EXAMPLES "Build examples" NO)
-option(BUILD_TESTS "Build tests" NO)
+option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
+option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
 # PETSc
 
@@ -125,8 +125,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
 
 # Tests
 
-if (BUILD_TESTS)
-    set(UNIT_TESTS_ROOT ${CMAKE_SOURCE_DIR}/test CACHE PATH "" FORCE)
+if (GODZILLA_BUILD_TESTS)
+    set(GODZILLA_UNIT_TESTS_ROOT ${CMAKE_SOURCE_DIR}/test CACHE PATH "" FORCE)
 
     enable_testing()
     add_subdirectory(test)
@@ -134,7 +134,7 @@ endif()
 
 # Examples
 
-if (BUILD_EXAMPLES)
+if (GODZILLA_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
@@ -147,8 +147,8 @@ configure_file(include/GodzillaConfig.h.in GodzillaConfig.h)
 find_package(Doxygen QUIET)
 
 if(DOXYGEN_FOUND)
-    if (NOT PROJECT_RST_DIR)
-        set(PROJECT_RST_DIR ${PROJECT_BINARY_DIR}/rst)
+    if (NOT GODZILLA_RST_DIR)
+        set(GODZILLA_RST_DIR ${PROJECT_BINARY_DIR}/rst)
     endif()
     set(DOXYREST_PATH $ENV{DOXYREST_PATH})
     set(DOXYGEN_GENERATE_HTML NO)
@@ -184,16 +184,16 @@ if(DOXYGEN_FOUND)
         COMMAND
             ${SPHINX_BUILD} -b html rst html
         DEPENDS
-            ${PROJECT_RST_DIR}/index.rst
-            ${PROJECT_RST_DIR}/getting-started
-            ${PROJECT_RST_DIR}/examples
-            ${PROJECT_RST_DIR}/devel/index.rst
-            ${PROJECT_RST_DIR}/conf.py
+            ${GODZILLA_RST_DIR}/index.rst
+            ${GODZILLA_RST_DIR}/getting-started
+            ${GODZILLA_RST_DIR}/examples
+            ${GODZILLA_RST_DIR}/devel/index.rst
+            ${GODZILLA_RST_DIR}/conf.py
     )
 
     add_custom_command(
         OUTPUT
-            ${PROJECT_RST_DIR}/devel/index.rst
+            ${GODZILLA_RST_DIR}/devel/index.rst
         COMMAND
             ${DOXYREST} -c doxyrest-config.lua
         DEPENDS
@@ -202,25 +202,25 @@ if(DOXYGEN_FOUND)
 
     add_custom_command(
         OUTPUT
-            ${PROJECT_RST_DIR}/getting-started
+            ${GODZILLA_RST_DIR}/getting-started
         COMMAND
-            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/getting-started ${PROJECT_RST_DIR}/getting-started
+            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/getting-started ${GODZILLA_RST_DIR}/getting-started
         DEPENDS
             ${PROJECT_SOURCE_DIR}/docs/getting-started
     )
     add_custom_command(
         OUTPUT
-            ${PROJECT_RST_DIR}/examples
+            ${GODZILLA_RST_DIR}/examples
         COMMAND
-            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/examples ${PROJECT_RST_DIR}/examples
+            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/examples ${GODZILLA_RST_DIR}/examples
         DEPENDS
             ${PROJECT_SOURCE_DIR}/docs/examples
     )
     add_custom_command(
         OUTPUT
-            ${PROJECT_RST_DIR}/index.rst
+            ${GODZILLA_RST_DIR}/index.rst
         COMMAND
-            cmake -E copy ${PROJECT_SOURCE_DIR}/docs/index.rst ${PROJECT_RST_DIR}
+            cmake -E copy ${PROJECT_SOURCE_DIR}/docs/index.rst ${GODZILLA_RST_DIR}
         DEPENDS
             ${PROJECT_SOURCE_DIR}/docs/index.rst
     )
@@ -238,4 +238,4 @@ if(DOXYGEN_FOUND)
 
 endif()
 
-unset(PROJECT_RST_DIR CACHE)
+unset(GODZILLA_RST_DIR CACHE)

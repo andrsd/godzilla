@@ -19,7 +19,7 @@ def build_devel(folder):
     """Build the devel section of the doco"""
 
     try:
-        retcode = subprocess.call("cmake .. -DPROJECT_RST_DIR={} -DDOXYREST_PATH={}".format(folder, DOXYREST_PATH), shell=True)
+        retcode = subprocess.call("cmake .. -DGODZILLA_RST_DIR={} -DDOXYREST_PATH={}".format(folder, DOXYREST_PATH), shell=True)
         retcode = subprocess.call("doxygen Doxyfile.doxygen", shell=True)
         retcode = subprocess.call("doxyrest -c doxyrest-config.lua", shell=True)
         if retcode < 0:

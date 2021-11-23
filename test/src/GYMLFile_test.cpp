@@ -27,7 +27,8 @@ TEST_F(GYMLFileTest, parse_empty)
 {
     GYMLFile file(*this->app);
 
-    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
 
     file.parse(file_name);
     auto yml = file.getYml();
@@ -38,7 +39,8 @@ TEST_F(GYMLFileTest, build_empty)
 {
     GYMLFile file(*this->app);
 
-    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
 
     file.parse(file_name);
     EXPECT_DEATH(file.build(), "ERROR: Missing 'grid' block.");
@@ -48,7 +50,8 @@ TEST_F(GYMLFileTest, build_grid_no_type)
 {
     GYMLFile file(*this->app);
 
-    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/grid_no_type.yml");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_no_type.yml");
 
     file.parse(file_name);
     EXPECT_DEATH(file.build(), "ERROR: grid: No 'type' specified.");
@@ -59,7 +62,7 @@ TEST_F(GYMLFileTest, build_grid_unreg_type)
     GYMLFile file(*this->app);
 
     std::string file_name =
-        std::string(UNIT_TESTS_ROOT) + std::string("/assets/grid_unreg_type.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_unreg_type.yml");
 
     file.parse(file_name);
     EXPECT_DEATH(file.build(), "ERROR: grid: Type 'ASDF' is not a registered object.");
@@ -70,7 +73,7 @@ TEST_F(GYMLFileTest, build_missing_req_param)
     GYMLFile file(*this->app);
 
     std::string file_name =
-        std::string(UNIT_TESTS_ROOT) + std::string("/assets/grid_missing_req_param.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_missing_req_param.yml");
 
     file.parse(file_name);
     EXPECT_DEATH(file.build(), "ERROR: grid: Missing required parameters:");
@@ -80,7 +83,8 @@ TEST_F(GYMLFileTest, build)
 {
     GYMLFile file(*this->app);
 
-    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/simple.yml");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple.yml");
 
     file.parse(file_name);
     file.build();
@@ -96,7 +100,8 @@ TEST_F(GYMLFileTest, build_fe)
 {
     GYMLFile file(*this->app);
 
-    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/simple_fe.yml");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe.yml");
 
     file.parse(file_name);
     file.build();

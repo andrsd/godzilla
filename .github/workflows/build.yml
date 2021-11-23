@@ -38,9 +38,9 @@ jobs:
       - name: Configure
         run: |
           cmake -S . -B ${{ github.workspace }}/build \
-            -DBUILD_EXAMPLES=YES \
-            -DBUILD_TESTS=YES \
-            -DCODE_COVERAGE=YES
+            -DGODZILLA_BUILD_EXAMPLES=YES \
+            -GODZILLA_DBUILD_TESTS=YES \
+            -DGODZILLA_CODE_COVERAGE=YES
       - name: Build
         run: make -C ${{ github.workspace }}/build
       - name: Run tests
@@ -83,9 +83,9 @@ jobs:
       - name: Configure
         run: |
           cmake -S . -B ${{ github.workspace }}/build \
-            -DBUILD_EXAMPLES=YES \
-            -DBUILD_TESTS=YES \
-            -DCODE_COVERAGE=YES
+            -DGODZILLA_BUILD_EXAMPLES=YES \
+            -DGODZILLA_BUILD_TESTS=YES \
+            -DGODZILLA_CODE_COVERAGE=YES
       - name: Build
         run: make -C ${{ github.workspace }}/build
       - name: Run tests

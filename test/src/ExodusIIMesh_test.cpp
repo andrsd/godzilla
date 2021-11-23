@@ -10,7 +10,7 @@ registerObject(MockExodusIIMesh);
 
 TEST_F(ExodusIIMeshTest, gexodus_mesh)
 {
-    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/square.e");
+    std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/square.e");
     auto obj = gExodusMesh(file_name);
 
     EXPECT_EQ(obj->getFileName(), file_name);
@@ -25,7 +25,7 @@ TEST_F(ExodusIIMeshTest, gexodus_mesh_nonexitent_file)
 
 TEST_F(ExodusIIMeshTest, gexodus_mesh_create)
 {
-    std::string file_name = std::string(UNIT_TESTS_ROOT) + std::string("/assets/square.e");
+    std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/square.e");
     auto obj = gExodusMesh(file_name);
     obj->create();
     const DM & dm = obj->getDM();

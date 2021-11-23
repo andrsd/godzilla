@@ -1,6 +1,6 @@
 FRAME_DIR_LIST = { "@DOXYREST_PATH@/frame/cfamily", "@DOXYREST_PATH@/frame/common" }
 INPUT_FILE = "xml/index.xml"
-OUTPUT_FILE = "@PROJECT_RST_DIR@/devel/index.rst"
+OUTPUT_FILE = "@GODZILLA_RST_DIR@/devel/index.rst"
 FORCE_INCLUDE_FILE = nil
 EXTRA_PAGE_LIST = {}
 INDEX_TITLE = "godzilla Documentation"

@@ -1,7 +1,7 @@
 
-option(CODE_COVERAGE "Builds targets with code coverage instrumentation. (Requires Clang)" OFF)
+option(GODZILLA_CODE_COVERAGE "Builds targets with code coverage instrumentation. (Requires Clang)" OFF)
 
-if(CODE_COVERAGE)
+if(GODZILLA_CODE_COVERAGE)
 
 find_program(LCOV_PATH lcov)
 find_program(

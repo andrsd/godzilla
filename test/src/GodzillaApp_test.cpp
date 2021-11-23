@@ -9,7 +9,7 @@ TEST_F(GodzillaAppTest, run_input)
     int argc = 3;
     char * argv[] = { (char *) "godzilla",
                       (char *) "-i",
-                      (char *) UNIT_TESTS_ROOT "/assets/simple.yml",
+                      (char *) GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml",
                       NULL };
 
     App app("godzilla", MPI_COMM_WORLD);
@@ -25,7 +25,7 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
     int argc = 3;
     char * argv[] = { (char *) "godzilla",
                       (char *) "-i",
-                      (char *) UNIT_TESTS_ROOT "/assets/non_existent_file.yml",
+                      (char *) GODZILLA_UNIT_TESTS_ROOT "/assets/non_existent_file.yml",
                       NULL };
 
     App app("godzilla", MPI_COMM_WORLD);
