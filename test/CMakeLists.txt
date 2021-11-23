@@ -48,6 +48,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC gtest_main)
 target_link_libraries(${PROJECT_NAME} PUBLIC gmock_main)
 
 add_test(NAME test COMMAND ${PROJECT_NAME})
-if(CODE_COVERAGE)
+if(GODZILLA_CODE_COVERAGE)
     set_tests_properties(test PROPERTIES ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}.profraw)
 endif()
