@@ -96,6 +96,35 @@ TEST_F(GYMLFileTest, build)
     EXPECT_NE(problem, nullptr);
 }
 
+TEST_F(GYMLFileTest, build_vec_as_scalars)
+{
+    GYMLFile file(*this->app);
+
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_vec_as_scalars.yml");
+
+    file.parse(file_name);
+    file.build();
+
+    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
+    EXPECT_NE(grid, nullptr);
+
+    auto problem = file.getProblem();
+    EXPECT_NE(problem, nullptr);
+}
+
+TEST_F(GYMLFileTest, wrong_param_type)
+{
+    GYMLFile file(*this->app);
+
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/wrong_param_type.yml");
+
+    file.parse(file_name);
+    EXPECT_DEATH(file.build(),
+                 "ERROR: Parameter 'arr_d' must be either a single value or a vector of values.");
+}
+
 TEST_F(GYMLFileTest, build_fe)
 {
     GYMLFile file(*this->app);

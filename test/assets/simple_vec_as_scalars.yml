@@ -7,9 +7,9 @@ problem:
   i: -4321
   ui: 7890
   d: 34.567
-  arr_d: 2.
-  arr_i: 5
-  arr_str: "xyz"
+  arr_d: [1., 2., 4.]
+  arr_i: [3, 5, 7]
+  arr_str: ["abc", "xyz"]
 executioner:
   type: Steady
 output:

@@ -207,12 +207,34 @@ GYMLFile::setParameterFromYML(InputParameters & params,
             params.set<unsigned int>(param_name) = val.as<unsigned int>();
         // vector values
         else if (param_type == type_name<std::vector<PetscReal>>())
-            params.set<std::vector<PetscReal>>(param_name) = val.as<std::vector<double>>();
+            params.set<std::vector<PetscReal>>(param_name) =
+                readVectorValue<double>(param_name, val);
         else if (param_type == type_name<std::vector<int>>())
-            params.set<std::vector<int>>(param_name) = val.as<std::vector<int>>();
+            params.set<std::vector<int>>(param_name) = readVectorValue<int>(param_name, val);
         else if (param_type == type_name<std::vector<std::string>>())
-            params.set<std::vector<std::string>>(param_name) = val.as<std::vector<std::string>>();
+            params.set<std::vector<std::string>>(param_name) =
+                readVectorValue<std::string>(param_name, val);
     }
+}
+
+template <typename T>
+std::vector<T>
+GYMLFile::readVectorValue(const std::string & param_name, const YAML::Node & val_node)
+{
+    _F_;
+    std::vector<T> vec;
+    if (val_node.IsScalar()) {
+        vec.push_back(val_node.as<T>());
+    }
+    else if (val_node.IsSequence()) {
+        vec = val_node.as<std::vector<T>>();
+    }
+    else
+        godzillaError("Parameter '",
+                      param_name,
+                      "' must be either a single value or a vector of values.");
+
+    return vec;
 }
 
 void
