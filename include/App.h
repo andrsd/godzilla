@@ -6,6 +6,7 @@
 
 namespace godzilla {
 
+class Function;
 class Grid;
 class Problem;
 
@@ -46,6 +47,10 @@ protected:
     Grid * grid;
     /// Problem
     Problem * problem;
+    /// List of functions within this application
+    std::vector<Function *> functions;
+
+    friend class FunctionInterface;
 };
 
 } // namespace godzilla

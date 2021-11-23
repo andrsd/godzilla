@@ -3,6 +3,7 @@
 #include "Factory.h"
 #include "Grid.h"
 #include "Problem.h"
+#include "Function.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "FEProblemInterface.h"
@@ -52,15 +53,42 @@ GYMLFile::getYml()
     return this->root;
 }
 
+const std::vector<Function *> &
+GYMLFile::getFunctions()
+{
+    _F_;
+    return this->functions;
+}
+
 void
 GYMLFile::build()
 {
     _F_;
+    buildFunctions();
     buildGrid();
     buildProblem();
     buildInitialConditons();
     buildBoundaryConditons();
     buildOutputs();
+}
+
+void
+GYMLFile::buildFunctions()
+{
+    _F_;
+    YAML::Node funcs_node = this->root["functions"];
+    if (!funcs_node)
+        return;
+
+    for (const auto & it : funcs_node) {
+        YAML::Node fn_node = it.first;
+        std::string name = fn_node.as<std::string>();
+
+        InputParameters params = buildParams(funcs_node, name);
+        const std::string & class_name = params.get<std::string>("_type");
+        auto fn = Factory::create<Function>(class_name, name, params);
+        this->functions.push_back(fn);
+    }
 }
 
 void

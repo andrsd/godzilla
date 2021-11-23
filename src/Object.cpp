@@ -77,4 +77,10 @@ Object::processorId() const
     return this->rank;
 }
 
+void
+Object::create()
+{
+    _F_;
+}
+
 } // namespace godzilla

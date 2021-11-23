@@ -11,11 +11,15 @@ class FunctionIC : public InitialCondition, public FunctionInterface {
 public:
     FunctionIC(const InputParameters & params);
 
-    virtual PetscInt getNumComponents() const;
+    virtual void create() override;
+    virtual PetscInt getNumComponents() const override;
 
 protected:
-    virtual void
-    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]);
+    virtual void evaluate(PetscInt dim,
+                          PetscReal time,
+                          const PetscReal x[],
+                          PetscInt Nc,
+                          PetscScalar u[]) override;
 
 public:
     static InputParameters validParams();

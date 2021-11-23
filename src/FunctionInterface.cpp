@@ -1,4 +1,5 @@
 #include "FunctionInterface.h"
+#include "App.h"
 #include <assert.h>
 
 namespace godzilla {
@@ -12,15 +13,20 @@ FunctionInterface::validParams()
 }
 
 FunctionInterface::FunctionInterface(const InputParameters & params) :
-    function_expr(params.get<std::vector<std::string>>("value")),
-    num_comps(function_expr.size())
+    fi_app(*params.get<const App *>("_app")),
+    expression(params.get<std::vector<std::string>>("value"))
 {
-    assert(num_comps >= 1);
-    this->parser.resize(this->num_comps);
-    for (auto & p : this->parser) {
-        p.DefineConst("pi", 3.14159265359);
-        p.DefineConst("e", 2.71828182846);
-    }
+    this->num_comps = this->expression.size();
+    assert(this->num_comps >= 1);
+    this->evalr.resize(this->num_comps);
+}
+
+void
+FunctionInterface::create()
+{
+    _F_;
+    for (unsigned int i = 0; i < this->num_comps; i++)
+        this->evalr[i].create(this->expression[i], this->fi_app.functions);
 }
 
 PetscReal
@@ -29,23 +35,7 @@ FunctionInterface::evaluateFunction(unsigned int idx,
                                     PetscReal time,
                                     const PetscReal x[])
 {
-    PetscReal * xx = const_cast<PetscReal *>(x);
-    try {
-        auto & fp = this->parser[idx];
-        fp.DefineVar("t", &time);
-        fp.DefineVar("x", &(xx[0]));
-        if (dim >= 2)
-            fp.DefineVar("y", &(xx[1]));
-        if (dim >= 3)
-            fp.DefineVar("z", &(xx[2]));
-        fp.SetExpr(this->function_expr[idx]);
-
-        PetscReal v = this->parser[idx].Eval();
-        return v;
-    }
-    catch (mu::Parser::exception_type & e) {
-        return std::nan("");
-    }
+    return this->evalr[idx].evaluate(dim, time, x);
 }
 
 } // namespace godzilla

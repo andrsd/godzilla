@@ -13,6 +13,7 @@ TEST(FunctionIC, api)
     params.set<const App *>("_app") = &app;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     auto obj = Factory::create<InitialCondition>("FunctionIC", "name", params);
+    obj->create();
 
     EXPECT_EQ(obj->getFieldId(), 0);
     EXPECT_EQ(obj->getNumComponents(), 1);

@@ -2,6 +2,7 @@
 #include "Factory.h"
 #include "GodzillaConfig.h"
 #include "GYMLFile.h"
+#include "Function.h"
 #include "Grid.h"
 #include "Problem.h"
 #include "CallStack.h"
@@ -101,6 +102,9 @@ App::buildFromGYML(const std::string & file_name)
     this->problem = file.getProblem();
     assert(this->problem != nullptr);
 
+    this->functions = file.getFunctions();
+    for (auto & f : this->functions)
+        f->create();
     this->grid->create();
     this->problem->create();
 }

@@ -35,12 +35,12 @@ public:
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
-    virtual void addInitialCondition(const InitialCondition * ic);
+    virtual void addInitialCondition(InitialCondition * ic);
 
     /// Add essential boundary condition
     ///
     /// @param bc Boundary condition object to add
-    virtual void addBoundaryCondition(const BoundaryCondition * bc);
+    virtual void addBoundaryCondition(BoundaryCondition * bc);
 
 protected:
     /// Initialize the FE system
@@ -146,7 +146,7 @@ protected:
     std::map<PetscInt, FieldInfo> fields;
     struct ICInfo {
         /// Initial condition
-        const InitialCondition * ic;
+        InitialCondition * ic;
     };
     /// Initial conditions in the problem
     std::map<PetscInt, ICInfo> ics;
@@ -155,7 +155,7 @@ protected:
         /// Boundary name (from mesh)
         std::string bnd_name;
         /// Boundary condition
-        const BoundaryCondition * bc;
+        BoundaryCondition * bc;
     };
     ///
     std::vector<BCInfo> bcs;

@@ -19,6 +19,13 @@ FunctionIC::FunctionIC(const InputParameters & params) :
 {
 }
 
+void
+FunctionIC::create()
+{
+    _F_;
+    FunctionInterface::create();
+}
+
 PetscInt
 FunctionIC::getNumComponents() const
 {

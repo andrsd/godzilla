@@ -11,6 +11,7 @@ class App;
 class Factory;
 class Grid;
 class Problem;
+class Function;
 
 /// YML parser for input files
 ///
@@ -25,10 +26,12 @@ public:
 
     virtual Grid * getGrid();
     virtual Problem * getProblem();
+    const std::vector<Function *> & getFunctions();
 
     virtual const YAML::Node & getYml();
 
 protected:
+    void buildFunctions();
     void buildGrid();
     void buildProblem();
     void buildInitialConditons();
@@ -54,6 +57,8 @@ protected:
 
     Grid * grid;
     Problem * problem;
+    /// List of functions defined in the input file
+    std::vector<Function *> functions;
 };
 
 } // namespace godzilla

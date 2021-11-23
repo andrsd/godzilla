@@ -33,7 +33,7 @@ endif()
 FetchContent_Declare(
     muparser
     GIT_REPOSITORY https://github.com/beltoforion/muparser.git
-    GIT_TAG        v2.3.2
+    GIT_TAG        11410c968cb5ecf20f9a898b83af91984e8307d4
 )
 set(ENABLE_SAMPLES OFF CACHE BOOL "" FORCE)
 set(ENABLE_OPENMP OFF CACHE BOOL "" FORCE)
@@ -81,6 +81,8 @@ add_library(${PROJECT_NAME} SHARED
     src/ExodusIIMesh.cpp
     src/FENonlinearProblem.cpp
     src/FEProblemInterface.cpp
+    src/Function.cpp
+    src/FunctionEvaluator.cpp
     src/FunctionIC.cpp
     src/FunctionInterface.cpp
     src/Grid.cpp

@@ -20,6 +20,13 @@ DirichletBC::DirichletBC(const InputParameters & params) :
     _F_;
 }
 
+void
+DirichletBC::create()
+{
+    _F_;
+    FunctionInterface::create();
+}
+
 PetscInt
 DirichletBC::getNumComponents() const
 {

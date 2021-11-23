@@ -41,6 +41,11 @@ FEProblemInterface::create(DM dm)
     _F_;
     DMGetDimension(dm, &this->dim);
     onSetFields();
+
+    for (auto & it : this->ics)
+        it.second.ic->create();
+    for (auto & info : this->bcs)
+        info.bc->create();
 }
 
 void
@@ -83,7 +88,7 @@ FEProblemInterface::addField(const std::string & name, PetscInt nc, PetscInt k)
 }
 
 void
-FEProblemInterface::addInitialCondition(const InitialCondition * ic)
+FEProblemInterface::addInitialCondition(InitialCondition * ic)
 {
     _F_;
     PetscInt fid = ic->getFieldId();
@@ -98,7 +103,7 @@ FEProblemInterface::addInitialCondition(const InitialCondition * ic)
 }
 
 void
-FEProblemInterface::addBoundaryCondition(const BoundaryCondition * bc)
+FEProblemInterface::addBoundaryCondition(BoundaryCondition * bc)
 {
     _F_;
     const std::vector<std::string> & bnd_names = bc->getBoundary();

@@ -46,6 +46,9 @@ public:
     /// Get processor ID (aka MPI rank) this object is running at
     const int & processorId() const;
 
+    /// Called to construct the object
+    virtual void create();
+
 protected:
     /// Parameters of this object
     const InputParameters & pars;

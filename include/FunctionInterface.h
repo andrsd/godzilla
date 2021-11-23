@@ -1,8 +1,8 @@
 #pragma once
 
 #include "petsc.h"
-#include "muParser.h"
 #include "InputParameters.h"
+#include "FunctionEvaluator.h"
 
 namespace godzilla {
 
@@ -11,6 +11,9 @@ namespace godzilla {
 class FunctionInterface {
 public:
     FunctionInterface(const InputParameters & params);
+
+    /// Build the evaluator
+    void create();
 
     /// Evaluate parsed function
     ///
@@ -22,12 +25,14 @@ public:
     PetscReal evaluateFunction(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[]);
 
 protected:
-    /// Array of function expressions - one per component
-    const std::vector<std::string> & function_expr;
+    /// Reference to the application
+    const App & fi_app;
+    /// Function expressions
+    const std::vector<std::string> & expression;
     /// Number of parsed function expressions
-    const unsigned int num_comps;
-    /// Parser objects - one per component
-    std::vector<mu::Parser> parser;
+    unsigned int num_comps;
+    /// Function evaluators
+    std::vector<FunctionEvaluator> evalr;
 
 public:
     static InputParameters validParams();
