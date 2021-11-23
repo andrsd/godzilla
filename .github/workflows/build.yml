@@ -39,7 +39,7 @@ jobs:
         run: |
           cmake -S . -B ${{ github.workspace }}/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
-            -GODZILLA_DBUILD_TESTS=YES \
+            -DGODZILLA_BUILD_TESTS=YES \
             -DGODZILLA_CODE_COVERAGE=YES
       - name: Build
         run: make -C ${{ github.workspace }}/build
