@@ -18,6 +18,7 @@ add_executable(${PROJECT_NAME}
     src/HDF5Output_test.cpp
     src/ImplicitFENonlinearProblem_test.cpp
     src/InputParameters_test.cpp
+    src/LinearInterpolation_test.cpp
     src/LinearProblem_test.cpp
     src/LineMesh_test.cpp
     src/NonlinearProblem_test.cpp

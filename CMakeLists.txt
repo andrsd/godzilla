@@ -90,6 +90,7 @@ add_library(${PROJECT_NAME} SHARED
     src/Init.cpp
     src/InitialCondition.cpp
     src/InputParameters.cpp
+    src/LinearInterpolation.cpp
     src/LinearProblem.cpp
     src/LineMesh.cpp
     src/NonlinearProblem.cpp
