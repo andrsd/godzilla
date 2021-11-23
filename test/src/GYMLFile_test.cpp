@@ -141,3 +141,29 @@ TEST_F(GYMLFileTest, build_fe)
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
 }
+
+TEST_F(GYMLFileTest, nonfe_problem_with_ics)
+{
+    GYMLFile file(*this->app);
+
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_ics.yml");
+
+    file.parse(file_name);
+    EXPECT_DEATH(
+        file.build(),
+        "ERROR: Supplied problem type 'GTestProblem' does not support initial conditions.");
+}
+
+TEST_F(GYMLFileTest, nonfe_problem_with_bcs)
+{
+    GYMLFile file(*this->app);
+
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_bcs.yml");
+
+    file.parse(file_name);
+    EXPECT_DEATH(
+        file.build(),
+        "ERROR: Supplied problem type 'GTestProblem' does not support boundary conditions.");
+}

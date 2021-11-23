@@ -1,0 +1,10 @@
+grid:
+  type: LineMesh
+  nx: 2
+problem:
+  type: GTestProblem
+  str: "input_str"
+bcs:
+  all:
+    type: DirichletBC
+    value: 1.0
