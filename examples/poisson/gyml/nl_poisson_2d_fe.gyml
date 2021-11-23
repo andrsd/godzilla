@@ -20,6 +20,3 @@ bcs:
     type: DirichletBC
     boundary: [ 'marker' ]
     value: [ 'x*x + y*y' ]
-
-executioner:
-  type: Steady

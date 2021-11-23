@@ -5,6 +5,3 @@ grid:
 
 problem:
   type: PoissonNonlinearProblem
-
-executioner:
-  type: Steady

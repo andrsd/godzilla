@@ -12,5 +12,3 @@ bcs:
     type: DirichletBC
     boundary: ['marker']
     value: ['0.2']
-executioner:
-  type: Steady

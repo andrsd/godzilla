@@ -10,8 +10,6 @@ problem:
   arr_d: 2.
   arr_i: 5
   arr_str: "xyz"
-executioner:
-  type: Steady
 output:
   vtk:
     type: VTKOutput

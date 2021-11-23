@@ -10,8 +10,6 @@ problem:
   arr_d: [1., 2., 4.]
   arr_i: [3, 5, 7]
   arr_str: ["abc", "xyz"]
-executioner:
-  type: Steady
 output:
   vtk:
     type: VTKOutput

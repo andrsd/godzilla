@@ -5,8 +5,6 @@ problem:
   type: GTestProblem
   arr_d:
     key: 1.
-executioner:
-  type: Steady
 output:
   vtk:
     type: VTKOutput
