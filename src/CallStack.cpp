@@ -11,7 +11,7 @@ static CallStack callstack(256);
 
 // Call Stack Object ////
 
-CallStackObj::CallStackObj(int ln, const char * func, const char * file)
+CallStack::Obj::Obj(int ln, const char * func, const char * file)
 {
     this->line = ln;
     this->func = func;
@@ -24,7 +24,7 @@ CallStackObj::CallStackObj(int ln, const char * func, const char * file)
     }
 }
 
-CallStackObj::~CallStackObj()
+CallStack::Obj::~Obj()
 {
     // remove the object only if it is on the top of the call stack
     if (callstack.size > 0 && callstack.stack[callstack.size - 1] == this) {
@@ -61,7 +61,7 @@ CallStack::CallStack(int max_size)
 {
     this->max_size = max_size;
     this->size = 0;
-    this->stack = new CallStackObj *[max_size];
+    this->stack = new Obj *[max_size];
 }
 
 CallStack::~CallStack()

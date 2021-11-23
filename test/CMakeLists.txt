@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_executable(${PROJECT_NAME}
     src/BoundaryCondition_test.cpp
     src/BoxMesh_test.cpp
+    src/CallStack_test.cpp
     src/ConstantIC_test.cpp
     src/DirichletBC_test.cpp
     src/ExodusIIMesh_test.cpp
