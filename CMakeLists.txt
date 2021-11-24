@@ -98,6 +98,7 @@ add_library(${PROJECT_NAME} SHARED
     src/NonlinearProblem.cpp
     src/Object.cpp
     src/Output.cpp
+    src/PiecewiseLinear.cpp
     src/PrintInterface.cpp
     src/Problem.cpp
     src/RectangleMesh.cpp

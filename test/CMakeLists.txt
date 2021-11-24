@@ -23,6 +23,7 @@ add_executable(${PROJECT_NAME}
     src/LineMesh_test.cpp
     src/NonlinearProblem_test.cpp
     src/Object_test.cpp
+    src/PiecewiseLinear_test.cpp
     src/PrintInterface_test.cpp
     src/RectangleMesh_test.cpp
     src/StructuredGrid1D_test.cpp
