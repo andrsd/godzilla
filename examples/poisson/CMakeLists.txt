@@ -22,6 +22,12 @@ target_link_libraries(${PROJECT_NAME} PUBLIC godzilla)
 target_link_libraries(${PROJECT_NAME} PUBLIC muparser)
 target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
 
+# Tests
+
+if (GODZILLA_BUILD_TESTS)
+    add_subdirectory(test)
+endif()
+
 add_test(${PROJECT_NAME}-lin ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/lin_2d.gyml)
 add_test(${PROJECT_NAME}-nl  ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/nl_2d.gyml)
 add_test(${PROJECT_NAME}-fem-1d ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/fe_1d.gyml)
