@@ -1,8 +1,10 @@
 #pragma once
 
+#include "gmock/gmock.h"
 #include "FENonlinearProblem.h"
 #include "InitialCondition.h"
 #include "GodzillaApp_test.h"
+#include "petsc.h"
 
 namespace godzilla {
 class Grid;
@@ -47,6 +49,9 @@ class GTestFENonlinearProblem : public FENonlinearProblem {
 public:
     GTestFENonlinearProblem(const InputParameters & params);
     virtual ~GTestFENonlinearProblem();
+
+    virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
+    virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;
 
 protected:
     virtual void onSetFields() override;

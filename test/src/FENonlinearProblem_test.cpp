@@ -8,6 +8,7 @@
 #include "petsc.h"
 #include "petscvec.h"
 
+using namespace ::testing;
 namespace godzilla {
 
 registerObject(GTestFENonlinearProblem);
@@ -254,6 +255,20 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
                  "in the mesh.");
 }
 
+TEST_F(FENonlinearProblemTest, compute_residual_callback)
+{
+    Vec x = nullptr;
+    Vec f = nullptr;
+    EXPECT_EQ(this->prob->computeResidualCallback(x, f), 0);
+}
+
+TEST_F(FENonlinearProblemTest, compute_jacobian_callback)
+{
+    Vec x = nullptr;
+    Mat J = nullptr;
+    EXPECT_EQ(this->prob->computeJacobianCallback(x, J, J), 0);
+}
+
 // GTestFENonlinearProblem
 
 GTestFENonlinearProblem::GTestFENonlinearProblem(const InputParameters & params) :
@@ -277,6 +292,18 @@ GTestFENonlinearProblem::onSetWeakForm()
 {
     setResidualBlock(this->u_id, f0_u, f1_u);
     setJacobianBlock(this->u_id, this->u_id, NULL, NULL, NULL, g3_uu);
+}
+
+PetscErrorCode
+GTestFENonlinearProblem::computeResidualCallback(Vec x, Vec f)
+{
+    return FENonlinearProblem::computeResidualCallback(x, f);
+}
+
+PetscErrorCode
+GTestFENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
+{
+    return FENonlinearProblem::computeJacobianCallback(x, J, Jp);
 }
 
 //
