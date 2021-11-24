@@ -4,14 +4,11 @@
 
 using namespace godzilla;
 
-// TEST(InputParameters, get)
-// {
-//     InputParameters params = Factory::getValidParams("Object");
-//     EXPECT_DEATH(
-//         params.get<int>("i"),
-//         "No parameter 'i' found."
-//     );
-// }
+TEST(InputParameters, get)
+{
+    InputParameters params = Factory::getValidParams("Object");
+    EXPECT_DEATH(params.get<int>("i"), "No parameter 'i' found.");
+}
 
 TEST(InputParameters, param_value)
 {
