@@ -16,6 +16,9 @@ protected:
     virtual void onSetFields() override;
     virtual void onSetWeakForm() override;
 
+    /// Constant forcing function
+    PetscReal ffn;
+
     /// ID for the "u" field
     PetscInt u_id;
 

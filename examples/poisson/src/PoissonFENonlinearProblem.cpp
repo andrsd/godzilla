@@ -29,7 +29,7 @@ f0_u(PetscInt dim,
      const PetscScalar constants[],
      PetscScalar f0[])
 {
-    f0[0] = 4.0;
+    f0[0] = -constants[0];
 }
 
 /* gradU[comp*dim+d] = {u_x, u_y} or {u_x, u_y, u_z} */
@@ -92,11 +92,13 @@ InputParameters
 PoissonFENonlinearProblem::validParams()
 {
     InputParameters params = FENonlinearProblem::validParams();
+    params.addRequiredParam<PetscReal>("forcing_fn", "Forcing function.");
     return params;
 }
 
 PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & parameters) :
-    FENonlinearProblem(parameters)
+    FENonlinearProblem(parameters),
+    ffn(getParam<PetscReal>("forcing_fn"))
 {
     _F_;
 }
@@ -116,4 +118,6 @@ PoissonFENonlinearProblem::onSetWeakForm()
 {
     setResidualBlock(this->u_id, f0_u, f1_u);
     setJacobianBlock(this->u_id, this->u_id, NULL, NULL, NULL, g3_uu);
+
+    addConstant(this->ffn);
 }

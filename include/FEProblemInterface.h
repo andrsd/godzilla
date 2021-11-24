@@ -32,6 +32,11 @@ public:
     /// @param k The degree k of the space
     virtual PetscInt addField(const std::string & name, PetscInt nc, PetscInt k);
 
+    /// Add a constant
+    ///
+    /// @param k Constant to add
+    virtual void addConstant(PetscReal k);
+
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
@@ -117,6 +122,9 @@ protected:
     /// Setup boundary conditions
     virtual void setupBoundaryConditions(DM dm);
 
+    /// Set up constants
+    virtual void setupConstants();
+
     /// Seup field variables
     virtual void onSetFields() = 0;
     /// Setup volumetric weak form terms
@@ -161,6 +169,8 @@ protected:
     std::vector<BCInfo> bcs;
     /// Object that manages a discrete system
     PetscDS ds;
+    /// List of constants
+    std::vector<PetscReal> consts;
 };
 
 } // namespace godzilla

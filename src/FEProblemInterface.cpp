@@ -62,6 +62,7 @@ FEProblemInterface::init(MPI_Comm comm, DM dm)
 
     onSetWeakForm();
     setupBoundaryConditions(dm);
+    setupConstants();
 }
 
 const std::string &
@@ -85,6 +86,13 @@ FEProblemInterface::addField(const std::string & name, PetscInt nc, PetscInt k)
     this->n_fields++;
 
     return fi.id;
+}
+
+void
+FEProblemInterface::addConstant(PetscReal k)
+{
+    _F_;
+    this->consts.push_back(k);
 }
 
 void
@@ -239,6 +247,18 @@ FEProblemInterface::setupFields(MPI_Comm comm, DM dm)
         ierr = PetscFESetName(fi.fe, fi.name.c_str());
         checkPetscError(ierr);
     }
+}
+
+void
+FEProblemInterface::setupConstants()
+{
+    _F_;
+    if (this->consts.size() == 0)
+        return;
+
+    PetscErrorCode ierr;
+    ierr = PetscDSSetConstants(this->ds, this->consts.size(), this->consts.data());
+    checkPetscError(ierr);
 }
 
 void
