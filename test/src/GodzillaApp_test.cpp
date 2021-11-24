@@ -34,3 +34,30 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
 
     EXPECT_DEATH(app.run(), "ERROR: Unable to open");
 }
+
+TEST_F(GodzillaAppTest, verbose_level)
+{
+    testing::internal::CaptureStdout();
+
+    class TestApp : public App {
+    public:
+        TestApp(const std::string & app_name, MPI_Comm comm) : App(app_name, comm) {}
+
+        void
+        run()
+        {
+            App::run();
+            godzillaPrint(1, "Print");
+        }
+    };
+
+    int argc = 3;
+    char * argv[] = { (char *) "godzilla", (char *) "--verbose", (char *) "2", NULL };
+
+    TestApp app("godzilla", MPI_COMM_WORLD);
+    app.create();
+    app.parseCommandLine(argc, argv);
+    app.run();
+
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "Print\n");
+}
