@@ -9,6 +9,8 @@ add_executable(${PROJECT_NAME}
     src/PoissonNonlinearProblem.cpp
     src/main.cpp
 )
+target_code_coverage(${PROJECT_NAME})
+target_sanitization(${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CONDA_INCLUDE_DIR})

@@ -27,6 +27,7 @@ mark_as_advanced(FORCE LCOV_PATH GENHTML_PATH)
 
 set(CODE_COVERAGE_PROFRAWS
     ${CMAKE_BINARY_DIR}/test/godzilla-test.profraw
+    ${CMAKE_BINARY_DIR}/examples/poisson/test/poisson-test.profraw
 )
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${CODE_COVERAGE_PROFRAWS}")
 
@@ -38,13 +39,13 @@ set(EXCLUDE_REGEX
     --ignore-filename-regex=/include/gtest/*
     --ignore-filename-regex=/include/gmock/*
     --ignore-filename-regex=test/*
-    --ignore-filename-regex=src/base/CallStack.cpp
     --ignore-filename-regex=/muparser/*
 )
 
 set(CODE_COVERAGE_BINS
     --object=${PROJECT_BINARY_DIR}/test/godzilla-test
     --object=${PROJECT_BINARY_DIR}/libgodzilla${CMAKE_SHARED_LIBRARY_SUFFIX}
+    --object=${PROJECT_BINARY_DIR}/examples/poisson/test/poisson-test
 )
 
 set(COVERAGE_INFO ${PROJECT_BINARY_DIR}/coverage.info)
