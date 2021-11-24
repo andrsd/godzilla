@@ -92,12 +92,14 @@ InputParameters
 PoissonFENonlinearProblem::validParams()
 {
     InputParameters params = FENonlinearProblem::validParams();
+    params.addParam<PetscInt>("p_order", 1., "Polynomial order of the FE space.");
     params.addRequiredParam<PetscReal>("forcing_fn", "Forcing function.");
     return params;
 }
 
 PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & parameters) :
     FENonlinearProblem(parameters),
+    p_order(getParam<PetscInt>("p_order")),
     ffn(getParam<PetscReal>("forcing_fn"))
 {
     _F_;
@@ -109,8 +111,7 @@ void
 PoissonFENonlinearProblem::onSetFields()
 {
     _F_;
-    PetscInt order = 1;
-    this->u_id = addField("u", 1, order);
+    this->u_id = addField("u", 1, this->p_order);
 }
 
 void

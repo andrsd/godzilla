@@ -16,6 +16,9 @@ protected:
     virtual void onSetFields() override;
     virtual void onSetWeakForm() override;
 
+    /// Polynomial order of the FE space
+    PetscInt p_order;
+
     /// Constant forcing function
     PetscReal ffn;
 
