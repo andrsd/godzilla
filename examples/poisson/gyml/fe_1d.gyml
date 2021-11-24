@@ -1,15 +1,12 @@
 grid:
-  type: RectangleMesh
+  type: LineMesh
   nx: 2
-  ny: 2
   xmin: 0
   xmax: 2
-  ymin: 0
-  ymax: 2
 
 problem:
   type: PoissonFENonlinearProblem
-  forcing_fn: -4
+  forcing_fn: -2
 
 ics:
   all:
@@ -20,4 +17,4 @@ bcs:
   all:
     type: DirichletBC
     boundary: [ 'marker' ]
-    value: [ 'x*x + y*y' ]
+    value: [ 'x*x' ]
