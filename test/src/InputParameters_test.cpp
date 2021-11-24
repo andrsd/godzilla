@@ -75,3 +75,11 @@ TEST(InputParameters, empty_doc_str)
 
     EXPECT_EQ(params.getDocString("i"), std::string(""));
 }
+
+TEST(InputParameters, set_non_existing_param)
+{
+    InputParameters & params = Factory::getValidParams("Object");
+    params.set<double>("d") = 1.23;
+
+    EXPECT_EQ(params.get<double>("d"), 1.23);
+}
