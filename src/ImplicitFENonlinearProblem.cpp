@@ -65,7 +65,7 @@ ImplicitFENonlinearProblem::init()
     ierr = TSGetSNES(this->ts, &this->snes);
     checkPetscError(ierr);
 
-    FEProblemInterface::init(comm(), getDM());
+    FEProblemInterface::init(getDM());
 }
 
 void

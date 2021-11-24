@@ -10,17 +10,21 @@ grid:
   zmin: 0
   zmax: 2
 
+auxs:
+  forcing_fn:
+    type: FunctionAuxiliaryField
+    value: '-6'
+
 problem:
   type: PoissonFENonlinearProblem
-  forcing_fn: -6
 
 ics:
   all:
     type: ConstantIC
-    value: [ 0 ]
+    value: 0
 
 bcs:
   all:
     type: DirichletBC
     boundary: 'marker'
-    value: [ 'x*x + y*y + z*z' ]
+    value: 'x*x + y*y + z*z'

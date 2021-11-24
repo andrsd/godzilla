@@ -7,9 +7,13 @@ grid:
   ymin: 0
   ymax: 2
 
+auxs:
+  forcing_fn:
+    type: FunctionAuxiliaryField
+    value: '-4'
+
 problem:
   type: PoissonFENonlinearProblem
-  forcing_fn: -4
 
 ics:
   all:

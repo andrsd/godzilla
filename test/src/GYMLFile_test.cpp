@@ -206,3 +206,19 @@ TEST_F(GYMLFileTest, nonfe_problem_with_bcs)
                 testing::HasSubstr(
                     "Supplied problem type 'GTestProblem' does not support boundary conditions."));
 }
+
+TEST_F(GYMLFileTest, nonfe_problem_with_auxs)
+{
+    testing::internal::CaptureStderr();
+
+    GYMLFile file(*this->app);
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_auxs.yml");
+    file.parse(file_name);
+    file.build();
+    this->app->checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr(
+                    "Supplied problem type 'GTestProblem' does not support auxiliary fields."));
+}

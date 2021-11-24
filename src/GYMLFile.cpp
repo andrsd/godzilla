@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "Problem.h"
 #include "Function.h"
+#include "AuxiliaryField.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "FEProblemInterface.h"
@@ -72,6 +73,7 @@ GYMLFile::build()
     buildFunctions();
     buildGrid();
     buildProblem();
+    buildAuxiliaryFields();
     buildInitialConditions();
     buildBoundaryConditions();
     buildOutputs();
@@ -113,6 +115,33 @@ GYMLFile::buildProblem()
     const std::string & class_name = params.get<std::string>("_type");
     params.set<Grid *>("_grid") = this->grid;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
+}
+
+void
+GYMLFile::buildAuxiliaryFields()
+{
+    _F_;
+    YAML::Node auxs_root_node = this->root["auxs"];
+    if (!auxs_root_node)
+        return;
+
+    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
+    if (fepface == nullptr)
+        logError("Supplied problem type '",
+                 this->problem->getType(),
+                 "' does not support auxiliary fields.");
+    else {
+        for (const auto & it : auxs_root_node) {
+            YAML::Node aux_node = it.first;
+            std::string name = aux_node.as<std::string>();
+
+            InputParameters & params = buildParams(auxs_root_node, name);
+            params.set<FEProblemInterface *>("_fepi") = fepface;
+            const std::string & class_name = params.get<std::string>("_type");
+            auto aux = Factory::create<AuxiliaryField>(class_name, name, params);
+            fepface->addAuxiliaryField(aux);
+        }
+    }
 }
 
 void

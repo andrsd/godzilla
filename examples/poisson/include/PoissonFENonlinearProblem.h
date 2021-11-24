@@ -19,11 +19,11 @@ protected:
     /// Polynomial order of the FE space
     PetscInt p_order;
 
-    /// Constant forcing function
-    PetscReal ffn;
-
     /// ID for the "u" field
     const PetscInt iu;
+
+    /// ID for the forcing function field
+    const PetscInt affn;
 
 public:
     static InputParameters validParams();

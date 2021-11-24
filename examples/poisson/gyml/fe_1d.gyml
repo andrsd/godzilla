@@ -4,9 +4,13 @@ grid:
   xmin: 0
   xmax: 2
 
+auxs:
+  forcing_fn:
+    type: FunctionAuxiliaryField
+    value: '-2'
+
 problem:
   type: PoissonFENonlinearProblem
-  forcing_fn: -2
 
 ics:
   all:

@@ -108,6 +108,31 @@ TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
                  "error: Cannot add field 'second' with ID = 0. ID already exists.");
 }
 
+TEST_F(FENonlinearProblemTest, get_aux_fields)
+{
+    grid->create();
+    prob->addAuxFE(0, "aux_one", 1, 1);
+    prob->create();
+
+    EXPECT_EQ(prob->getAuxFieldName(0), "aux_one");
+    EXPECT_EQ(prob->getAuxFieldID("aux_one"), 0);
+    EXPECT_EQ(prob->hasAuxFieldByID(0), true);
+    EXPECT_EQ(prob->hasAuxFieldByName("aux_one"), true);
+
+    EXPECT_DEATH(prob->getAuxFieldName(1), "error: Auxiliary field with id = '1' does not exist.");
+    EXPECT_DEATH(prob->getAuxFieldID("aux_two"),
+                 "error: Auxiliary field 'aux_two' does not exist\\. Typo\\?");
+    EXPECT_EQ(prob->hasAuxFieldByID(1), false);
+    EXPECT_EQ(prob->hasAuxFieldByName("aux_two"), false);
+}
+
+TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
+{
+    prob->addAuxFE(0, "first", 1, 1);
+    EXPECT_DEATH(prob->addAuxFE(0, "second", 1, 1),
+                 "error: Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
+}
+
 TEST_F(FENonlinearProblemTest, solve)
 {
     {
@@ -292,6 +317,17 @@ TEST_F(FENonlinearProblemTest, compute_jacobian_callback)
     Vec x = nullptr;
     Mat J = nullptr;
     EXPECT_EQ(this->prob->computeJacobianCallback(x, J, J), 0);
+}
+
+TEST_F(FENonlinearProblemTest, set_constant)
+{
+    std::vector<PetscReal> consts = { 5, 3, 1 };
+    this->prob->setConstants(consts);
+
+    auto & k = this->prob->getConstants();
+    EXPECT_EQ(k[0], 5);
+    EXPECT_EQ(k[1], 3);
+    EXPECT_EQ(k[2], 1);
 }
 
 // GTestFENonlinearProblem

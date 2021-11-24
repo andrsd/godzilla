@@ -51,6 +51,11 @@ public:
 
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
     virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;
+    const std::vector<PetscReal> &
+    getConstants()
+    {
+        return this->consts;
+    }
 
 protected:
     virtual void onSetFields() override;

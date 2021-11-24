@@ -12,6 +12,7 @@ class Logger;
 class Grid;
 class InitialCondition;
 class BoundaryCondition;
+class AuxiliaryField;
 
 /// Interface for FE problems
 ///
@@ -24,7 +25,31 @@ public:
     /// Get field name
     ///
     /// @param fid Field Id
-    virtual const std::string & getFieldName(PetscInt fid);
+    virtual const std::string & getFieldName(PetscInt fid) const;
+
+    /// Get auxiliary field name
+    ///
+    /// @param fid Auxiliary field ID
+    /// @return Auxiliary field name
+    virtual const std::string & getAuxFieldName(PetscInt fid) const;
+
+    /// Get auxiliary field ID
+    ///
+    /// @param name Auxiliary field name
+    /// @param Auxiliary field ID
+    virtual PetscInt getAuxFieldID(const std::string & name) const;
+
+    /// Do we have auxiliary field with specified ID
+    ///
+    /// @param id The ID of the auxiliary field
+    /// @return True if the auxiliary field exists, otherwise False
+    virtual bool hasAuxFieldByID(PetscInt fid) const;
+
+    /// Do we have auxiliary field with specified name
+    ///
+    /// @param name The name of the auxiliary field
+    /// @return True if the auxiliary field exists, otherwise False
+    virtual bool hasAuxFieldByName(const std::string & name) const;
 
     /// Adds a volumetric field
     ///
@@ -33,6 +58,14 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     virtual void addField(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+
+    /// Adds a volumetric auxiliary field
+    ///
+    /// @param id The field ID
+    /// @param name The name of the field
+    /// @param nc The number of components
+    /// @param k The degree k of the space
+    virtual void addAuxFE(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
 
     /// Set problem constants
     ///
@@ -50,9 +83,14 @@ public:
     /// @param bc Boundary condition object to add
     virtual void addBoundaryCondition(BoundaryCondition * bc);
 
+    /// Add auxiliary field
+    ///
+    /// @param aux Auxiliary field object to add
+    virtual void addAuxiliaryField(AuxiliaryField * aux);
+
 protected:
     /// Initialize the FE system
-    virtual void init(MPI_Comm comm, DM dm);
+    virtual void init(DM dm);
 
     virtual void create(DM dm);
 
@@ -97,17 +135,20 @@ protected:
                                      const PetscScalar constants[],
                                      PetscScalar g3[]);
 
-    /// Inform PETSc to about all fields in this problem
-    void setupFields(MPI_Comm comm, DM dm);
+    /// Set up finite element objects
+    void setUpFEs(DM dm);
 
-    /// Setup residual statement for a field variable
+    /// Inform PETSc to about all fields in this problem
+    void setUpProblem(DM dm);
+
+    /// Set up residual statement for a field variable
     ///
     /// @param fid Field number returned by addField()
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
     void setResidualBlock(PetscInt fid, PetscFEResidualFunc * f0, PetscFEResidualFunc * f1);
 
-    /// Setup residual statement for a field variable
+    /// Set up residual statement for a field variable
     ///
     /// @param fid Test field number
     /// @param gid Field number
@@ -122,49 +163,79 @@ protected:
                           PetscFEJacobianFunc * g2,
                           PetscFEJacobianFunc * g3);
 
-    /// Setup boundary conditions
+    /// Set up boundary conditions
     virtual void setUpBoundaryConditions(DM dm);
 
-    /// Set up constants
-    void setupConstants();
+    /// Set up auxiliary DM
+    virtual void setUpAuxiliaryDM(DM dm);
 
-    /// Seup field variables
+    /// Set up constants
+    void setUpConstants();
+
+    /// Set up field variables
     virtual void onSetFields() = 0;
+
     /// Setup volumetric weak form terms
     /// FIXME: This needs a better name
     virtual void onSetWeakForm() = 0;
 
     /// Logger object
     Logger & logger;
+
     /// Spatial dimension of the discrete problem
     PetscInt dim;
+
+    /// Quadrature order
+    PetscInt qorder;
+
     /// Field information
     struct FieldInfo {
         /// The name of the field
         std::string name;
+
         /// Field number
         PetscInt id;
+
         /// FE object
         PetscFE fe;
+
         /// Mesh support
         DMLabel block;
+
         /// The number of components
         PetscInt nc;
+
         /// The degree k of the space
         PetscInt k;
     };
+
     /// Fields in the problem
     std::map<PetscInt, FieldInfo> fields;
+
+    /// Initial condition information
     struct ICInfo {
-        /// Initial condition
+        /// Initial condition object
         InitialCondition * ic;
     };
+
     /// Initial conditions in the problem
     std::map<PetscInt, ICInfo> ics;
+
     /// List of boundary conditions
     std::vector<BoundaryCondition *> bcs;
+
+    /// Auxiliary fields in the problem
+    std::map<PetscInt, FieldInfo> aux_fields;
+
+    /// Map from auxiliary field name to auxiliary field ID
+    std::map<std::string, PetscInt> aux_fields_by_name;
+
+    /// List of auxiliary field objects
+    std::vector<AuxiliaryField *> auxs;
+
     /// Object that manages a discrete system
     PetscDS ds;
+
     /// List of constants
     std::vector<PetscReal> consts;
 };

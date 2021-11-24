@@ -34,7 +34,7 @@ FENonlinearProblem::init()
 {
     _F_;
     NonlinearProblem::init();
-    FEProblemInterface::init(comm(), getDM());
+    FEProblemInterface::init(getDM());
 }
 
 void

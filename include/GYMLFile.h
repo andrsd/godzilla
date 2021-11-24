@@ -35,6 +35,7 @@ protected:
     void buildFunctions();
     void buildGrid();
     void buildProblem();
+    void buildAuxiliaryFields();
     void buildInitialConditions();
     void buildBoundaryConditions();
     void buildOutputs();

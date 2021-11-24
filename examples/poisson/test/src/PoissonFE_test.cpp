@@ -3,6 +3,7 @@
 #include "App.h"
 #include "LineMesh.h"
 #include "PoissonFENonlinearProblem.h"
+#include "FunctionAuxiliaryField.h"
 #include "DirichletBC.h"
 
 using namespace godzilla;
@@ -34,8 +35,17 @@ TEST(PoissonFENonlinearProblem, solve)
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<Grid *>("_grid") = grid;
         params.set<PetscInt>("p_order") = 2;
-        params.set<PetscReal>("forcing_fn") = -2;
         problem = app.buildObject<PoissonFENonlinearProblem>(class_name, "problem", params);
+    }
+
+    AuxiliaryField * ffn = nullptr;
+    {
+        const std::string class_name = "FunctionAuxiliaryField";
+        InputParameters & params = Factory::getValidParams(class_name);
+        params.set<FEProblemInterface *>("_fepi") = problem;
+        params.set<std::vector<std::string>>("value") = { "-2" };
+        ffn = app.buildObject<FunctionAuxiliaryField>(class_name, "forcing_fn", params);
+        problem->addAuxiliaryField(ffn);
     }
 
     DirichletBC * bc = nullptr;

@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
+#include "AuxiliaryField.h"
 #include "FunctionInterface.h"
 #include "App.h"
 #include "Logger.h"
@@ -24,6 +25,7 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 FEProblemInterface::FEProblemInterface(const InputParameters & params) :
     logger(const_cast<Logger &>(params.get<const App *>("_app")->getLogger())),
     dim(-1),
+    qorder(PETSC_DETERMINE),
     ds(nullptr)
 {
 }
@@ -32,6 +34,10 @@ FEProblemInterface::~FEProblemInterface()
 {
     _F_;
     for (auto & kv : this->fields) {
+        FieldInfo & fi = kv.second;
+        PetscFEDestroy(&fi.fe);
+    }
+    for (auto & kv : this->aux_fields) {
         FieldInfo & fi = kv.second;
         PetscFEDestroy(&fi.fe);
     }
@@ -44,6 +50,8 @@ FEProblemInterface::create(DM dm)
     DMGetDimension(dm, &this->dim);
     onSetFields();
 
+    for (auto & aux : this->auxs)
+        aux->create();
     for (auto & it : this->ics)
         it.second.ic->create();
     for (auto & bc : this->bcs)
@@ -51,24 +59,15 @@ FEProblemInterface::create(DM dm)
 }
 
 void
-FEProblemInterface::init(MPI_Comm comm, DM dm)
+FEProblemInterface::init(DM dm)
 {
     _F_;
-    setupFields(comm, dm);
-
-    PetscErrorCode ierr;
-    ierr = DMCreateDS(dm);
-    checkPetscError(ierr);
-    ierr = DMGetDS(dm, &this->ds);
-    checkPetscError(ierr);
-
-    onSetWeakForm();
-    setUpBoundaryConditions(dm);
-    setupConstants();
+    setUpFEs(dm);
+    setUpProblem(dm);
 }
 
 const std::string &
-FEProblemInterface::getFieldName(PetscInt fid)
+FEProblemInterface::getFieldName(PetscInt fid) const
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -76,6 +75,44 @@ FEProblemInterface::getFieldName(PetscInt fid)
         return it->second.name;
     else
         error("Field with id = '", fid, "' does not exist.");
+}
+
+const std::string &
+FEProblemInterface::getAuxFieldName(PetscInt fid) const
+{
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end())
+        return it->second.name;
+    else
+        error("Auxiliary field with id = '", fid, "' does not exist.");
+}
+
+PetscInt
+FEProblemInterface::getAuxFieldID(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->aux_fields_by_name.find(name);
+    if (it != this->aux_fields_by_name.end())
+        return it->second;
+    else
+        error("Auxiliary field '", name, "' does not exist. Typo?");
+}
+
+bool
+FEProblemInterface::hasAuxFieldByID(PetscInt fid) const
+{
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    return it != this->aux_fields.end();
+}
+
+bool
+FEProblemInterface::hasAuxFieldByName(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->aux_fields_by_name.find(name);
+    return it != this->aux_fields_by_name.end();
 }
 
 void
@@ -89,6 +126,20 @@ FEProblemInterface::addField(PetscInt id, const std::string & name, PetscInt nc,
     }
     else
         error("Cannot add field '", name, "' with ID = ", id, ". ID already exists.");
+}
+
+void
+FEProblemInterface::addAuxFE(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
+{
+    _F_;
+    auto it = this->aux_fields.find(id);
+    if (it == this->aux_fields.end()) {
+        FieldInfo fi = { name, id, nullptr, nullptr, nc, k };
+        this->aux_fields[id] = fi;
+        this->aux_fields_by_name[name] = id;
+    }
+    else
+        error("Cannot add auxiliary field '", name, "' with ID = ", id, ". ID is already taken.");
 }
 
 void
@@ -118,6 +169,13 @@ FEProblemInterface::addBoundaryCondition(BoundaryCondition * bc)
 {
     _F_;
     this->bcs.push_back(bc);
+}
+
+void
+FEProblemInterface::addAuxiliaryField(AuxiliaryField * aux)
+{
+    _F_;
+    this->auxs.push_back(aux);
 }
 
 void
@@ -202,20 +260,29 @@ FEProblemInterface::setupInitialGuess(DM dm, Vec x)
 }
 
 void
-FEProblemInterface::setupFields(MPI_Comm comm, DM dm)
+FEProblemInterface::setUpFEs(DM dm)
 {
     _F_;
+    MPI_Comm comm;
+    PetscObjectGetComm((PetscObject) dm, &comm);
+
     PetscErrorCode ierr;
+    // FIXME: determine if the mesh is made of simplex elements
+    PetscBool is_simplex = PETSC_FALSE;
+
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
-
-        // FIXME: determine if the mesh is made of simplex elements
-        PetscBool is_simplex = PETSC_FALSE;
-        PetscInt qorder = PETSC_DETERMINE;
-        ierr = PetscFECreateLagrange(comm, this->dim, fi.nc, is_simplex, fi.k, qorder, &fi.fe);
+        ierr =
+            PetscFECreateLagrange(comm, this->dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
         checkPetscError(ierr);
+        ierr = PetscFESetName(fi.fe, fi.name.c_str());
+        checkPetscError(ierr);
+    }
 
-        ierr = DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe);
+    for (auto & it : this->aux_fields) {
+        FieldInfo & fi = it.second;
+        ierr =
+            PetscFECreateLagrange(comm, this->dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
         checkPetscError(ierr);
         ierr = PetscFESetName(fi.fe, fi.name.c_str());
         checkPetscError(ierr);
@@ -223,7 +290,97 @@ FEProblemInterface::setupFields(MPI_Comm comm, DM dm)
 }
 
 void
-FEProblemInterface::setupConstants()
+FEProblemInterface::setUpProblem(DM dm)
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    for (auto & it : this->fields) {
+        FieldInfo & fi = it.second;
+        ierr = DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe);
+        checkPetscError(ierr);
+    }
+
+    ierr = DMCreateDS(dm);
+    checkPetscError(ierr);
+
+    ierr = DMGetDS(dm, &this->ds);
+    checkPetscError(ierr);
+
+    onSetWeakForm();
+    setUpBoundaryConditions(dm);
+    setUpConstants();
+
+    DM cdm = dm;
+    while (cdm) {
+        setUpAuxiliaryDM(cdm);
+
+        ierr = DMCopyDisc(dm, cdm);
+        checkPetscError(ierr);
+
+        ierr = DMGetCoarseDM(cdm, &cdm);
+        checkPetscError(ierr);
+    }
+}
+
+void
+FEProblemInterface::setUpAuxiliaryDM(DM dm)
+{
+    _F_;
+    if (this->aux_fields.size() == 0)
+        return;
+
+    PetscErrorCode ierr;
+
+    DM dm_aux;
+    ierr = DMClone(dm, &dm_aux);
+    checkPetscError(ierr);
+
+    for (auto & it : this->aux_fields) {
+        FieldInfo & fi = it.second;
+        ierr = DMSetField(dm_aux, fi.id, fi.block, (PetscObject) fi.fe);
+        checkPetscError(ierr);
+    }
+
+    ierr = DMCreateDS(dm_aux);
+    checkPetscError(ierr);
+
+    bool no_errors = true;
+    for (auto & aux : this->auxs) {
+        PetscInt fid = aux->getFieldID();
+        if (hasAuxFieldByID(fid)) {
+            PetscInt aux_nc = aux->getNumComponents();
+            PetscInt field_nc = this->aux_fields[fid].nc;
+            if (aux_nc != field_nc) {
+                no_errors = false;
+                this->logger.error("Auxiliary field '",
+                                   aux->getName(),
+                                   "' has ",
+                                   aux_nc,
+                                   " component(s), but is set on a field with ",
+                                   field_nc,
+                                   " component(s).");
+            }
+        }
+        else {
+            no_errors = false;
+            this->logger.error("Auxiliary field '",
+                               aux->getName(),
+                               "' is set on auxiliary field with ID '",
+                               fid,
+                               "', but such ID does not exist.");
+        }
+    }
+    if (no_errors)
+        for (auto & aux : this->auxs) {
+            aux->setUp(dm, dm_aux);
+        }
+
+    ierr = DMDestroy(&dm_aux);
+}
+
+void
+FEProblemInterface::setUpConstants()
 {
     _F_;
     if (this->consts.size() == 0)

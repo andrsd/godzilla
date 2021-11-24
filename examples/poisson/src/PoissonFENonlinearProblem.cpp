@@ -11,45 +11,44 @@ registerObject(PoissonFENonlinearProblem);
 
 static void
 f0_u(PetscInt dim,
-     PetscInt Nf,
-     PetscInt NfAux,
-     const PetscInt uOff[],
-     const PetscInt uOff_x[],
+     PetscInt nf,
+     PetscInt nf_aux,
+     const PetscInt u_off[],
+     const PetscInt u_off_x[],
      const PetscScalar u[],
      const PetscScalar u_t[],
      const PetscScalar u_x[],
-     const PetscInt aOff[],
-     const PetscInt aOff_x[],
+     const PetscInt a_off[],
+     const PetscInt a_off_x[],
      const PetscScalar a[],
      const PetscScalar a_t[],
      const PetscScalar a_x[],
      PetscReal t,
      const PetscReal x[],
-     PetscInt numConstants,
+     PetscInt num_constants,
      const PetscScalar constants[],
      PetscScalar f0[])
 {
-    f0[0] = -constants[0];
+    f0[0] = -a[0];
 }
 
-/* gradU[comp*dim+d] = {u_x, u_y} or {u_x, u_y, u_z} */
 static void
 f1_u(PetscInt dim,
-     PetscInt Nf,
-     PetscInt NfAux,
-     const PetscInt uOff[],
-     const PetscInt uOff_x[],
+     PetscInt nf,
+     PetscInt nf_aux,
+     const PetscInt u_off[],
+     const PetscInt u_off_x[],
      const PetscScalar u[],
      const PetscScalar u_t[],
      const PetscScalar u_x[],
-     const PetscInt aOff[],
-     const PetscInt aOff_x[],
+     const PetscInt a_off[],
+     const PetscInt a_off_x[],
      const PetscScalar a[],
      const PetscScalar a_t[],
      const PetscScalar a_x[],
      PetscReal t,
      const PetscReal x[],
-     PetscInt numConstants,
+     PetscInt num_constants,
      const PetscScalar constants[],
      PetscScalar f1[])
 {
@@ -58,26 +57,24 @@ f1_u(PetscInt dim,
         f1[d] = u_x[d];
 }
 
-/* < \nabla v, \nabla u + {\nabla u}^T >
-   This just gives \nabla u, give the perdiagonal for the transpose */
 static void
 g3_uu(PetscInt dim,
-      PetscInt Nf,
-      PetscInt NfAux,
-      const PetscInt uOff[],
-      const PetscInt uOff_x[],
+      PetscInt nf,
+      PetscInt nf_aux,
+      const PetscInt u_off[],
+      const PetscInt u_off_x[],
       const PetscScalar u[],
       const PetscScalar u_t[],
       const PetscScalar u_x[],
-      const PetscInt aOff[],
-      const PetscInt aOff_x[],
+      const PetscInt a_off[],
+      const PetscInt a_off_x[],
       const PetscScalar a[],
       const PetscScalar a_t[],
       const PetscScalar a_x[],
       PetscReal t,
-      PetscReal u_tShift,
+      PetscReal u_t_shift,
       const PetscReal x[],
-      PetscInt numConstants,
+      PetscInt num_constants,
       const PetscScalar constants[],
       PetscScalar g3[])
 {
@@ -93,15 +90,14 @@ PoissonFENonlinearProblem::validParams()
 {
     InputParameters params = FENonlinearProblem::validParams();
     params.addParam<PetscInt>("p_order", 1., "Polynomial order of the FE space.");
-    params.addRequiredParam<PetscReal>("forcing_fn", "Forcing function.");
     return params;
 }
 
 PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & parameters) :
     FENonlinearProblem(parameters),
     p_order(getParam<PetscInt>("p_order")),
-    ffn(getParam<PetscReal>("forcing_fn")),
-    iu(0)
+    iu(0),
+    affn(0)
 {
     _F_;
 }
@@ -113,14 +109,13 @@ PoissonFENonlinearProblem::onSetFields()
 {
     _F_;
     addField(this->iu, "u", 1, this->p_order);
+    addAuxFE(this->affn, "forcing_fn", 1, this->p_order);
 }
 
 void
 PoissonFENonlinearProblem::onSetWeakForm()
 {
+    _F_;
     setResidualBlock(this->iu, f0_u, f1_u);
     setJacobianBlock(this->iu, this->iu, NULL, NULL, NULL, g3_uu);
-
-    std::vector<PetscReal> consts = { this->ffn };
-    setConstants(consts);
 }

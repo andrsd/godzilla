@@ -5,6 +5,7 @@ add_library(godzilla
         # factory must be first
         Factory.cpp
         App.cpp
+        AuxiliaryField.cpp
         BoundaryCondition.cpp
         BoxMesh.cpp
         CallStack.cpp
@@ -17,6 +18,7 @@ add_library(godzilla
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
         Function.cpp
+        FunctionAuxiliaryField.cpp
         FunctionEvaluator.cpp
         FunctionIC.cpp
         FunctionInterface.cpp
