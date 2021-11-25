@@ -15,18 +15,9 @@ option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
 # PETSc
-
-if(DEFINED ENV{PETSC_DIR})
-    set(PETSC_DIR $ENV{PETSC_DIR})
-    message(STATUS "PETSC_DIR: " ${PETSC_DIR})
-else()
-    message(FATAL_ERROR "Environment variable PETSC_DIR not set.  Set the variable in your environment to point to your PETSc installation.")
-endif()
-set(PETSC_INCLUDE_DIR ${PETSC_DIR}/include)
-if(DEFINED ENV{PETSC_ARCH})
-    find_library(PETSC_LIB petsc ${PETSC_DIR}/$ENV{PETSC_ARCH}/lib)
-else()
-    find_library(PETSC_LIB petsc ${PETSC_DIR}/lib)
+find_package(PETSc)
+if (NOT ${PETSC_FOUND})
+    message(STATUS "Try to set environemnt variable PETSC_DIR to point to your PETSc installation.")
 endif()
 
 # muParser
@@ -125,7 +116,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${YAML_CPP_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC muparser)
 target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIB})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${PETSC_LIBRARY})
 
 # Tests
 
