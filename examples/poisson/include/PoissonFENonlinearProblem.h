@@ -23,7 +23,7 @@ protected:
     PetscReal ffn;
 
     /// ID for the "u" field
-    PetscInt u_id;
+    const PetscInt iu;
 
 public:
     static InputParameters validParams();

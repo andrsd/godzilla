@@ -101,6 +101,13 @@ TEST_F(FENonlinearProblemTest, getFieldName)
     EXPECT_DEATH(prob->getFieldName(1), "ERROR: Field with id = '1' does not exist.");
 }
 
+TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
+{
+    prob->addField(0, "first", 1, 1);
+    EXPECT_DEATH(prob->addField(0, "second", 1, 1),
+                 "ERROR: Cannot add field 'second' with ID = 0. ID already exists.");
+}
+
 TEST_F(FENonlinearProblemTest, solve)
 {
     {
@@ -273,7 +280,7 @@ TEST_F(FENonlinearProblemTest, compute_jacobian_callback)
 
 GTestFENonlinearProblem::GTestFENonlinearProblem(const InputParameters & params) :
     FENonlinearProblem(params),
-    u_id(-1)
+    iu(0)
 {
 }
 
@@ -284,14 +291,14 @@ GTestFENonlinearProblem::onSetFields()
 {
     _F_;
     PetscInt order = 1;
-    this->u_id = addField("u", 1, order);
+    addField(this->iu, "u", 1, order);
 }
 
 void
 GTestFENonlinearProblem::onSetWeakForm()
 {
-    setResidualBlock(this->u_id, f0_u, f1_u);
-    setJacobianBlock(this->u_id, this->u_id, NULL, NULL, NULL, g3_uu);
+    setResidualBlock(this->iu, f0_u, f1_u);
+    setJacobianBlock(this->iu, this->iu, NULL, NULL, NULL, g3_uu);
 }
 
 PetscErrorCode
@@ -309,7 +316,8 @@ GTestFENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
 //
 
 GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const InputParameters & params) :
-    GTestFENonlinearProblem(params)
+    GTestFENonlinearProblem(params),
+    iv(1)
 {
 }
 
@@ -317,7 +325,7 @@ void
 GTest2FieldsFENonlinearProblem::onSetFields()
 {
     GTestFENonlinearProblem::onSetFields();
-    this->v_id = addField("v", 1, 1);
+    addField(this->iv, "v", 1, 1);
 }
 
 } // namespace godzilla

@@ -111,7 +111,8 @@ HeatEquationProblem::validParams()
 }
 
 HeatEquationProblem::HeatEquationProblem(const InputParameters & parameters) :
-    ImplicitFENonlinearProblem(parameters)
+    ImplicitFENonlinearProblem(parameters),
+    itemp(0)
 {
     _F_;
 }
@@ -123,13 +124,13 @@ HeatEquationProblem::onSetFields()
 {
     _F_;
     PetscInt order = 1;
-    this->temp_id = addField("temp", 1, order);
+    addField(this->itemp, "temp", 1, order);
 }
 
 void
 HeatEquationProblem::onSetWeakForm()
 {
     _F_;
-    setResidualBlock(this->temp_id, f0_temp, f1_temp);
-    setJacobianBlock(this->temp_id, this->temp_id, g0_temp, NULL, NULL, g3_temp);
+    setResidualBlock(this->itemp, f0_temp, f1_temp);
+    setJacobianBlock(this->itemp, this->itemp, g0_temp, NULL, NULL, g3_temp);
 }

@@ -58,7 +58,7 @@ protected:
     virtual void onSetWeakForm() override;
 
     /// ID for the "u" field
-    PetscInt u_id;
+    const PetscInt iu;
 };
 
 /// Test problem for simple FE solver with 2 fields
@@ -70,7 +70,7 @@ protected:
     virtual void onSetFields() override;
 
     /// ID for the "v" field
-    PetscInt v_id;
+    const PetscInt iv;
 };
 
 /// Test IC with 2 components

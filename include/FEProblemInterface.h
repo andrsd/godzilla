@@ -27,10 +27,11 @@ public:
 
     /// Adds a volumetric field
     ///
+    /// @param id The field ID
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual PetscInt addField(const std::string & name, PetscInt nc, PetscInt k);
+    virtual void addField(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
 
     /// Set problem constants
     ///
@@ -134,8 +135,6 @@ protected:
 
     /// Spatial dimension of the discrete problem
     PetscInt dim;
-    /// Number fo fields
-    PetscInt n_fields;
     /// Field information
     struct FieldInfo {
         /// The name of the field

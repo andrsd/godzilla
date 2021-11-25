@@ -16,7 +16,7 @@ protected:
     virtual void onSetWeakForm() override;
 
     /// ID for the 'temperature' field
-    PetscInt temp_id;
+    const PetscInt itemp;
 
 public:
     static InputParameters validParams();

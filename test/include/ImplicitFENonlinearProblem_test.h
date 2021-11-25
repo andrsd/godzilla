@@ -57,7 +57,7 @@ protected:
     virtual void onSetWeakForm() override;
 
     /// ID for the "u" field
-    PetscInt u_id;
+    const PetscInt iu;
 };
 
 } // namespace godzilla

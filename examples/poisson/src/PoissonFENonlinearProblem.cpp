@@ -100,7 +100,8 @@ PoissonFENonlinearProblem::validParams()
 PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & parameters) :
     FENonlinearProblem(parameters),
     p_order(getParam<PetscInt>("p_order")),
-    ffn(getParam<PetscReal>("forcing_fn"))
+    ffn(getParam<PetscReal>("forcing_fn")),
+    iu(0)
 {
     _F_;
 }
@@ -111,14 +112,14 @@ void
 PoissonFENonlinearProblem::onSetFields()
 {
     _F_;
-    this->u_id = addField("u", 1, this->p_order);
+    addField(this->iu, "u", 1, this->p_order);
 }
 
 void
 PoissonFENonlinearProblem::onSetWeakForm()
 {
-    setResidualBlock(this->u_id, f0_u, f1_u);
-    setJacobianBlock(this->u_id, this->u_id, NULL, NULL, NULL, g3_uu);
+    setResidualBlock(this->iu, f0_u, f1_u);
+    setJacobianBlock(this->iu, this->iu, NULL, NULL, NULL, g3_uu);
 
     std::vector<PetscReal> consts = { this->ffn };
     setConstants(consts);

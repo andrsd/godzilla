@@ -150,7 +150,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
 GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const InputParameters & params) :
     ImplicitFENonlinearProblem(params),
-    u_id(-1)
+    iu(0)
 {
 }
 
@@ -161,14 +161,14 @@ GTestImplicitFENonlinearProblem::onSetFields()
 {
     _F_;
     PetscInt order = 1;
-    this->u_id = addField("u", 1, order);
+    addField(this->iu, "u", 1, order);
 }
 
 void
 GTestImplicitFENonlinearProblem::onSetWeakForm()
 {
-    setResidualBlock(this->u_id, f0_u, f1_u);
-    setJacobianBlock(this->u_id, this->u_id, g0_uu, NULL, NULL, g3_uu);
+    setResidualBlock(this->iu, f0_u, f1_u);
+    setJacobianBlock(this->iu, this->iu, g0_uu, NULL, NULL, g3_uu);
 }
 
 } // namespace godzilla

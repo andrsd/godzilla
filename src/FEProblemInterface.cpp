@@ -19,12 +19,7 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 } // namespace internal
 
-FEProblemInterface::FEProblemInterface(const InputParameters & params) :
-    dim(-1),
-    n_fields(0),
-    ds(nullptr)
-{
-}
+FEProblemInterface::FEProblemInterface(const InputParameters & params) : dim(-1), ds(nullptr) {}
 
 FEProblemInterface::~FEProblemInterface()
 {
@@ -76,16 +71,17 @@ FEProblemInterface::getFieldName(PetscInt fid)
         error("Field with id = '", fid, "' does not exist.");
 }
 
-PetscInt
-FEProblemInterface::addField(const std::string & name, PetscInt nc, PetscInt k)
+void
+FEProblemInterface::addField(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
 {
     _F_;
-    FieldInfo fi = { name, this->n_fields, nullptr, nullptr, nc, k };
-
-    this->fields[fi.id] = fi;
-    this->n_fields++;
-
-    return fi.id;
+    auto it = this->fields.find(id);
+    if (it == this->fields.end()) {
+        FieldInfo fi = { name, id, nullptr, nullptr, nc, k };
+        this->fields[id] = fi;
+    }
+    else
+        error("Cannot add field '", name, "' with ID = ", id, ". ID already exists.");
 }
 
 void
