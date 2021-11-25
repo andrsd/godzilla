@@ -10,6 +10,7 @@ namespace godzilla {
 ///
 class BoundaryCondition : public Object, public PrintInterface {
 public:
+    /// Constructor for building the object via Factory
     BoundaryCondition(const InputParameters & params);
 
     /// Get the boundary names this BC is active on
@@ -17,8 +18,19 @@ public:
     /// @return Array of boundary names
     virtual const std::vector<std::string> & getBoundary() const;
 
+    /// Get the ID of the field this boundary condition operates on
+    ///
+    /// @return ID of the field
     virtual PetscInt getFieldId() const;
+
+    /// Get the number of components of this boundary condition
+    ///
+    /// @return The number of components
     virtual PetscInt getNumComponents() const = 0;
+
+    /// Get the type of this boundary condition (per component)
+    ///
+    /// @return Vector of boundary condition types (one per component)
     virtual std::vector<DMBoundaryConditionType> getBcType() const = 0;
 
 protected:
@@ -36,6 +48,7 @@ protected:
     const std::vector<std::string> & boundary;
 
 public:
+    /// Method for building InputParameters for this class
     static InputParameters validParams();
 
     friend PetscErrorCode __boundary_condition_function(PetscInt dim,
@@ -46,6 +59,7 @@ public:
                                                         void * ctx);
 };
 
+/// C callback passed into PETSc that can call the evaluate method on the BoundaryCondition class
 PetscErrorCode __boundary_condition_function(PetscInt dim,
                                              PetscReal time,
                                              const PetscReal x[],
