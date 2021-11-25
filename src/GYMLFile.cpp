@@ -67,8 +67,8 @@ GYMLFile::build()
     buildFunctions();
     buildGrid();
     buildProblem();
-    buildInitialConditons();
-    buildBoundaryConditons();
+    buildInitialConditions();
+    buildBoundaryConditions();
     buildOutputs();
 }
 
@@ -111,7 +111,7 @@ GYMLFile::buildProblem()
 }
 
 void
-GYMLFile::buildInitialConditons()
+GYMLFile::buildInitialConditions()
 {
     _F_;
     YAML::Node ics_root_node = this->root["ics"];
@@ -137,7 +137,7 @@ GYMLFile::buildInitialConditons()
 }
 
 void
-GYMLFile::buildBoundaryConditons()
+GYMLFile::buildBoundaryConditions()
 {
     _F_;
     YAML::Node bcs_root_node = this->root["bcs"];

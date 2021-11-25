@@ -34,8 +34,8 @@ protected:
     void buildFunctions();
     void buildGrid();
     void buildProblem();
-    void buildInitialConditons();
-    void buildBoundaryConditons();
+    void buildInitialConditions();
+    void buildBoundaryConditions();
     void buildOutputs();
     InputParameters & buildParams(const YAML::Node & root, const std::string & name);
     void setParameterFromYML(InputParameters & params,
