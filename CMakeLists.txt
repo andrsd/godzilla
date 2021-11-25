@@ -58,6 +58,7 @@ set(YAML_CPP_INCLUDE_DIR ${yaml_cpp_SOURCE_DIR}/include)
 
 set(GODZILLA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(GODZILLA_CONTRIB_DIR ${CMAKE_SOURCE_DIR}/contrib)
+set(GODZILLA_BINARY_DIR ${CMAKE_BINARY_DIR})
 
 add_library(${PROJECT_NAME} SHARED
     # factory must be first

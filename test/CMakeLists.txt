@@ -3,6 +3,8 @@ project(godzilla-test)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+find_package(Godzilla)
+
 add_executable(${PROJECT_NAME}
     src/BoundaryCondition_test.cpp
     src/BoxMesh_test.cpp
@@ -35,18 +37,12 @@ add_executable(${PROJECT_NAME}
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_CONTRIB_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${GODZILLA_INCLUDE_DIRS})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CONDA_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${PETSC_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/test/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_BINARY_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${MUPARSER_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} PRIVATE ${YAML_CPP_INCLUDE_DIR})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC godzilla)
-target_link_libraries(${PROJECT_NAME} PUBLIC muparser)
-target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${GODZILLA_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PUBLIC gtest_main)
 target_link_libraries(${PROJECT_NAME} PUBLIC gmock_main)
 
