@@ -227,8 +227,7 @@ if(DOXYGEN_FOUND)
             doxygen Doxyfile.doxygen
         DEPENDS
             ${PROJECT_BINARY_DIR}/Doxyfile.doxygen
-            ${PROJECT_SOURCE_DIR}/include
-            ${PROJECT_SOURCE_DIR}/src
+            ${PROJECT_SOURCE_DIR}/include/*.h
     )
 
 endif()
