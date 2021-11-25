@@ -120,5 +120,6 @@ PoissonFENonlinearProblem::onSetWeakForm()
     setResidualBlock(this->u_id, f0_u, f1_u);
     setJacobianBlock(this->u_id, this->u_id, NULL, NULL, NULL, g3_uu);
 
-    addConstant(this->ffn);
+    std::vector<PetscReal> consts = { this->ffn };
+    setConstants(consts);
 }

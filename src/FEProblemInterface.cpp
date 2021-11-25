@@ -89,10 +89,10 @@ FEProblemInterface::addField(const std::string & name, PetscInt nc, PetscInt k)
 }
 
 void
-FEProblemInterface::addConstant(PetscReal k)
+FEProblemInterface::setConstants(std::vector<PetscReal> & consts)
 {
     _F_;
-    this->consts.push_back(k);
+    this->consts = consts;
 }
 
 void

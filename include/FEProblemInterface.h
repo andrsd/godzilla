@@ -32,10 +32,11 @@ public:
     /// @param k The degree k of the space
     virtual PetscInt addField(const std::string & name, PetscInt nc, PetscInt k);
 
-    /// Add a constant
+    /// Set problem constants
     ///
-    /// @param k Constant to add
-    virtual void addConstant(PetscReal k);
+    /// These constants will be available in the weak form via `constants` parameter.
+    /// @param consts Constants to add to the problem
+    virtual void setConstants(std::vector<PetscReal> & consts);
 
     /// Add initial condition
     ///
@@ -123,7 +124,7 @@ protected:
     virtual void setupBoundaryConditions(DM dm);
 
     /// Set up constants
-    virtual void setupConstants();
+    void setupConstants();
 
     /// Seup field variables
     virtual void onSetFields() = 0;
