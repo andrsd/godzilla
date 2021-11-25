@@ -17,38 +17,56 @@ namespace internal {
 
 /// Call stack object
 ///
+/// The allocation of the stack must be static to prevent problems during out-of-memory scenario.
+/// That's why we should not be using `std::vector` or similar.
 class CallStack {
 public:
+    /// Build the call stack object with defined size
+    ///
+    /// @param max_size The maximum number of call stack objects to handle
     CallStack(int max_size = 32);
     virtual ~CallStack();
 
-    /// dump the call stack objects to standard error
+    /// Dump the call stack objects to standard error
     void dump();
 
 public:
     /// Holds data for one call stack object
-    ///
     struct Obj {
+        /// Construct call stack object
+        ///
+        /// @param ln Line number
+        /// @param func Function name
+        /// @param file File name
         Obj(int ln, const char * func, const char * file);
         ~Obj();
 
-        /// line number in the file
+        /// Line number in the file
         int line;
-        /// file
+        /// File name
         const char * file;
-        /// function name
+        /// Function name
         const char * func;
     };
 
 protected:
+    /// The object storing call stack objects
     Obj ** stack;
+    /// Actual size of the stack
     int size;
+    /// Maximum size of the stack
     int max_size;
 
 public:
+    /// Initialize the call stack capability
+    ///
+    /// This hooks to SIGABRT and SIGSEGV signals
     static void initialize();
 };
 
+/// Get the call stack object
+///
+/// @return Call stack object
 CallStack & getCallstack();
 
 } // namespace internal
