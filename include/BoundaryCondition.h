@@ -10,7 +10,6 @@ namespace godzilla {
 ///
 class BoundaryCondition : public Object, public PrintInterface {
 public:
-    /// Constructor for building the object via Factory
     BoundaryCondition(const InputParameters & params);
 
     /// Get the boundary names this BC is active on
@@ -21,20 +20,24 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    virtual PetscInt getFieldId() const;
+    virtual PetscInt getFieldID() const = 0;
 
-    /// Get the number of components of this boundary condition
+    /// Get the number of constrained components
     ///
-    /// @return The number of components
+    /// @return The number of constrained components
     virtual PetscInt getNumComponents() const = 0;
 
-    /// Get the type of this boundary condition (per component)
+    /// Get the type of this boundary condition
     ///
-    /// @return Vector of boundary condition types (one per component)
-    virtual std::vector<DMBoundaryConditionType> getBcType() const = 0;
+    /// @return Type of boundary condition
+    virtual DMBoundaryConditionType getBcType() const = 0;
 
-protected:
-    /// Evaluate the initial condition
+    /// Get the component numbers this boundary condition is constraining
+    ///
+    /// @return Vector of component numbers
+    virtual std::vector<PetscInt> getComponents() const = 0;
+
+    /// Evaluate the boundary condition
     ///
     /// @param dim The spatial dimension
     /// @param time The time at which to sample
@@ -44,27 +47,18 @@ protected:
     virtual void
     evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
 
+    /// Set up this boundary condition
+    ///
+    /// @param dm DM of problem (should have PetscDS)
+    virtual void setUp(DM dm);
+
+protected:
     /// List of boundary names
     const std::vector<std::string> & boundary;
 
 public:
     /// Method for building InputParameters for this class
     static InputParameters validParams();
-
-    friend PetscErrorCode __boundary_condition_function(PetscInt dim,
-                                                        PetscReal time,
-                                                        const PetscReal x[],
-                                                        PetscInt Nc,
-                                                        PetscScalar u[],
-                                                        void * ctx);
 };
-
-/// C callback passed into PETSc that can call the evaluate method on the BoundaryCondition class
-PetscErrorCode __boundary_condition_function(PetscInt dim,
-                                             PetscReal time,
-                                             const PetscReal x[],
-                                             PetscInt Nc,
-                                             PetscScalar u[],
-                                             void * ctx);
 
 } // namespace godzilla

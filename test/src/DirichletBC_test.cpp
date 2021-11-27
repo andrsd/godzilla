@@ -16,16 +16,16 @@ TEST(DirichletBC, api)
     auto obj = Factory::create<BoundaryCondition>("DirichletBC", "name", params);
     obj->create();
 
-    EXPECT_EQ(obj->getFieldId(), 0);
+    EXPECT_EQ(obj->getFieldID(), 0);
     EXPECT_EQ(obj->getNumComponents(), 1);
-    EXPECT_EQ(obj->getBcType()[0], DM_BC_ESSENTIAL);
+    EXPECT_EQ(obj->getBcType(), DM_BC_ESSENTIAL);
 
     PetscInt dim = 3;
     PetscReal time = 2.5;
     PetscReal x[] = { 3, 5, 7 };
     PetscInt Nc = 1;
     PetscScalar u[] = { 0 };
-    __boundary_condition_function(dim, time, x, Nc, u, obj);
+    obj->evaluate(dim, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 37.5);
 }
@@ -70,7 +70,7 @@ TEST(DirichletBC, with_user_defined_fn)
     PetscReal x[] = { 0.5 };
     PetscInt Nc = 1;
     PetscScalar u[] = { 0 };
-    __boundary_condition_function(dim, time, x, Nc, u, bc);
+    bc->evaluate(dim, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 1.5);
 }

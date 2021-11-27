@@ -28,21 +28,34 @@ DirichletBC::create()
 }
 
 PetscInt
+DirichletBC::getFieldID() const
+{
+    _F_;
+    return 0;
+}
+
+PetscInt
 DirichletBC::getNumComponents() const
 {
     _F_;
     return this->num_comps;
 }
 
-std::vector<DMBoundaryConditionType>
+DMBoundaryConditionType
 DirichletBC::getBcType() const
 {
     _F_;
-    std::vector<DMBoundaryConditionType> bc_type;
-    bc_type.resize(this->num_comps);
-    for (unsigned int i = 0; i < this->num_comps; i++)
-        bc_type[i] = DM_BC_ESSENTIAL;
-    return bc_type;
+    return DM_BC_ESSENTIAL;
+}
+
+std::vector<PetscInt>
+DirichletBC::getComponents() const
+{
+    PetscInt nc = getNumComponents();
+    std::vector<PetscInt> comps(nc);
+    for (PetscInt i = 0; i < nc; i++)
+        comps[i] = i;
+    return comps;
 }
 
 void

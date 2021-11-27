@@ -11,12 +11,14 @@ class MockBoundaryCondition : public BoundaryCondition {
 public:
     MockBoundaryCondition(const InputParameters & params) : BoundaryCondition(params) {}
 
+    MOCK_METHOD(PetscInt, getFieldID, (), (const));
     MOCK_METHOD(PetscInt, getNumComponents, (), (const));
-    MOCK_METHOD((std::vector<DMBoundaryConditionType>), getBcType, (), (const));
+    MOCK_METHOD((DMBoundaryConditionType), getBcType, (), (const));
     MOCK_METHOD(void,
                 evaluate,
                 (PetscInt, PetscReal, const PetscReal x[], PetscInt Nc, PetscScalar u[]),
                 ());
+    MOCK_METHOD(std::vector<PetscInt>, getComponents, (), (const));
 };
 
 class BoundaryConditionTest : public GodzillaAppTest {

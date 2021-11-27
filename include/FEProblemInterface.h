@@ -122,7 +122,7 @@ protected:
                           PetscFEJacobianFunc * g3);
 
     /// Setup boundary conditions
-    virtual void setupBoundaryConditions(DM dm);
+    virtual void setUpBoundaryConditions(DM dm);
 
     /// Set up constants
     void setupConstants();
@@ -158,15 +158,8 @@ protected:
     };
     /// Initial conditions in the problem
     std::map<PetscInt, ICInfo> ics;
-    /// Boundary condition information
-    struct BCInfo {
-        /// Boundary name (from mesh)
-        std::string bnd_name;
-        /// Boundary condition
-        BoundaryCondition * bc;
-    };
-    ///
-    std::vector<BCInfo> bcs;
+    /// List of boundary conditions
+    std::vector<BoundaryCondition *> bcs;
     /// Object that manages a discrete system
     PetscDS ds;
     /// List of constants
