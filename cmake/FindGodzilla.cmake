@@ -12,12 +12,13 @@ find_path(
         ${GODZILLA_INCLUDE_DIR}
 )
 
-find_library(
-    GODZILLA_LIBRARY
-        godzilla
-    PATHS
-        ${GODZILLA_BINARY_DIR}
-)
+# # TODO: this should be used by external apps using godzilla
+# find_library(
+#     GODZILLA_LIBRARY
+#         godzilla
+#     PATHS
+#         ${GODZILLA_BINARY_DIR}
+# )
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
