@@ -95,6 +95,7 @@ LinearProblem::create()
     _F_;
     init();
     allocateObjects();
+    onSetMatrixProperties();
 
     setupSolverParameters();
     setupMonitors();
@@ -232,6 +233,11 @@ LinearProblem::output()
         o->setFileName();
         o->output(getDM(), this->x);
     }
+}
+
+void
+LinearProblem::onSetMatrixProperties()
+{
 }
 
 } // namespace godzilla

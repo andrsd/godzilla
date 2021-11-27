@@ -40,6 +40,9 @@ protected:
     /// Output
     virtual void output();
 
+    /// Method for setting matrix properties
+    virtual void onSetMatrixProperties();
+
     /// KSP object
     KSP ksp;
     /// The solution vector

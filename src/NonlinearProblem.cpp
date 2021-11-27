@@ -124,6 +124,7 @@ NonlinearProblem::create()
     _F_;
     init();
     allocateObjects();
+    onSetMatrixProperties();
 
     setupSolverParameters();
     setupLineSearch();
@@ -308,6 +309,11 @@ NonlinearProblem::output()
         o->setFileName();
         o->output(getDM(), this->x);
     }
+}
+
+void
+NonlinearProblem::onSetMatrixProperties()
+{
 }
 
 } // namespace godzilla

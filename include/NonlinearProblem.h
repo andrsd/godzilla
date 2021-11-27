@@ -46,6 +46,9 @@ protected:
     /// Output
     virtual void output();
 
+    /// Method for setting matrix properties
+    virtual void onSetMatrixProperties();
+
     /// SNES object
     SNES snes;
     /// The solution vector
