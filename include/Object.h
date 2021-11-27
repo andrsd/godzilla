@@ -12,6 +12,7 @@ class App;
 /// @see Factory
 class Object {
 public:
+    /// Constructor for building the object via Factory
     Object(const InputParameters & parameters);
     virtual ~Object();
 
@@ -52,16 +53,21 @@ public:
 protected:
     /// Parameters of this object
     const InputParameters & pars;
+
     /// Reference to the aplpication owning this object
     const App & app;
+
     /// MPI rank, aka processor number
     int rank;
+
     /// The type of this object
     const std::string & type;
+
     /// The name of this object
     const std::string & name;
 
 public:
+    /// Method for building InputParameters for this class
     static InputParameters validParams();
 };
 
