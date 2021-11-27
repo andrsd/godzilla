@@ -1,23 +1,7 @@
 #include "Godzilla.h"
 #include "BoundaryCondition.h"
-#include <assert.h>
 
 namespace godzilla {
-
-PetscErrorCode
-__boundary_condition_function(PetscInt dim,
-                              PetscReal time,
-                              const PetscReal x[],
-                              PetscInt nc,
-                              PetscScalar u[],
-                              void * ctx)
-{
-    _F_;
-    BoundaryCondition * bc = static_cast<BoundaryCondition *>(ctx);
-    assert(bc != nullptr);
-    bc->evaluate(dim, time, x, nc, u);
-    return 0;
-}
 
 InputParameters
 BoundaryCondition::validParams()
@@ -68,20 +52,7 @@ BoundaryCondition::setUp(DM dm)
         ierr = ISGetIndices(is, &ids);
         checkPetscError(ierr);
 
-        ierr = PetscDSAddBoundary(ds,
-                                  getBcType(),
-                                  getName().c_str(),
-                                  label,
-                                  n_ids,
-                                  ids,
-                                  getFieldID(),
-                                  getNumComponents(),
-                                  getComponents().size() == 0 ? NULL : getComponents().data(),
-                                  (void (*)(void)) & __boundary_condition_function,
-                                  NULL,
-                                  (void *) this,
-                                  NULL);
-        checkPetscError(ierr);
+        setUpCallback(ds, label, n_ids, ids);
 
         ierr = ISRestoreIndices(is, &ids);
         checkPetscError(ierr);

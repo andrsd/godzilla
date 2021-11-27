@@ -37,22 +37,20 @@ public:
     /// @return Vector of component numbers
     virtual std::vector<PetscInt> getComponents() const = 0;
 
-    /// Evaluate the boundary condition
-    ///
-    /// @param dim The spatial dimension
-    /// @param time The time at which to sample
-    /// @param x The coordinates
-    /// @param Nc The number of components
-    /// @param u  The output field values
-    virtual void
-    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
-
     /// Set up this boundary condition
     ///
     /// @param dm DM of problem (should have PetscDS)
     virtual void setUp(DM dm);
 
 protected:
+    /// Set up the PETSc callback
+    ///
+    /// @param ds PetscDS object
+    /// @param label Label to put this boundary conditon on
+    /// @param n_ids Number of IDs in `ids`
+    /// @params ids IDs associated with label
+    virtual void setUpCallback(PetscDS ds, DMLabel label, PetscInt n_ids, const PetscInt ids[]) = 0;
+
     /// List of boundary names
     const std::vector<std::string> & boundary;
 

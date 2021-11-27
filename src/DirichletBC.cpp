@@ -8,13 +8,13 @@ registerObject(DirichletBC);
 InputParameters
 DirichletBC::validParams()
 {
-    InputParameters params = BoundaryCondition::validParams();
+    InputParameters params = EssentialBC::validParams();
     params += FunctionInterface::validParams();
     return params;
 }
 
 DirichletBC::DirichletBC(const InputParameters & params) :
-    BoundaryCondition(params),
+    EssentialBC(params),
     FunctionInterface(params)
 {
     _F_;
@@ -39,13 +39,6 @@ DirichletBC::getNumComponents() const
 {
     _F_;
     return this->num_comps;
-}
-
-DMBoundaryConditionType
-DirichletBC::getBcType() const
-{
-    _F_;
-    return DM_BC_ESSENTIAL;
 }
 
 std::vector<PetscInt>

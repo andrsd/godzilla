@@ -13,7 +13,7 @@ TEST(DirichletBC, api)
     InputParameters & params = Factory::getValidParams("DirichletBC");
     params.set<const App *>("_app") = &app;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
-    auto obj = Factory::create<BoundaryCondition>("DirichletBC", "name", params);
+    auto obj = Factory::create<DirichletBC>("DirichletBC", "name", params);
     obj->create();
 
     EXPECT_EQ(obj->getFieldID(), 0);
@@ -44,7 +44,7 @@ TEST(DirichletBC, with_user_defined_fn)
     } app;
 
     Function * fn;
-    BoundaryCondition * bc;
+    DirichletBC * bc;
     {
         std::vector<PetscReal> x = { 0., 1. };
         std::vector<PetscReal> y = { 1., 2. };
@@ -61,7 +61,7 @@ TEST(DirichletBC, with_user_defined_fn)
         InputParameters & params = Factory::getValidParams("DirichletBC");
         params.set<const App *>("_app") = &app;
         params.set<std::vector<std::string>>("value") = { "ipol(x)" };
-        bc = Factory::create<BoundaryCondition>("DirichletBC", "name", params);
+        bc = Factory::create<DirichletBC>("DirichletBC", "name", params);
     }
     bc->create();
 

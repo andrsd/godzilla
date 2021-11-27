@@ -71,6 +71,7 @@ add_library(${GODZILLA_LIBRARY} SHARED
     src/CmdLineArgParser.cpp
     src/ConstantIC.cpp
     src/DirichletBC.cpp
+    src/EssentialBC.cpp
     src/ExodusIIMesh.cpp
     src/FENonlinearProblem.cpp
     src/FEProblemInterface.cpp

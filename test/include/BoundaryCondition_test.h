@@ -19,6 +19,9 @@ public:
                 (PetscInt, PetscReal, const PetscReal x[], PetscInt Nc, PetscScalar u[]),
                 ());
     MOCK_METHOD(std::vector<PetscInt>, getComponents, (), (const));
+    MOCK_METHOD(void,
+                setUpCallback,
+                (PetscDS ds, DMLabel label, PetscInt n_ids, const PetscInt ids[]));
 };
 
 class BoundaryConditionTest : public GodzillaAppTest {
