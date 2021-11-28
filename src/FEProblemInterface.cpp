@@ -119,19 +119,17 @@ FEProblemInterface::setUpBoundaryConditions(DM dm)
     _F_;
     /// TODO: refactor this into a method
     for (auto & bc : this->bcs) {
-        const std::vector<std::string> & bnd_names = bc->getBoundary();
-        for (auto & bname : bnd_names) {
-            PetscErrorCode ierr;
-            PetscBool exists = PETSC_FALSE;
-            ierr = DMHasLabel(dm, bname.c_str(), &exists);
-            checkPetscError(ierr);
-            if (!exists)
-                error("Boundary condition '",
-                      bc->getName(),
-                      "' is set on boundary '",
-                      bname,
-                      "' which does not exist in the mesh.");
-        }
+        const std::string & bnd_name = bc->getBoundary();
+        PetscErrorCode ierr;
+        PetscBool exists = PETSC_FALSE;
+        ierr = DMHasLabel(dm, bnd_name.c_str(), &exists);
+        checkPetscError(ierr);
+        if (!exists)
+            error("Boundary condition '",
+                  bc->getName(),
+                  "' is set on boundary '",
+                  bnd_name,
+                  "' which does not exist in the mesh.");
     }
 
     for (auto & bc : this->bcs)

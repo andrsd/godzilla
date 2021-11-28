@@ -19,9 +19,7 @@ public:
                 (PetscInt, PetscReal, const PetscReal x[], PetscInt Nc, PetscScalar u[]),
                 ());
     MOCK_METHOD(std::vector<PetscInt>, getComponents, (), (const));
-    MOCK_METHOD(void,
-                setUpCallback,
-                (PetscDS ds, DMLabel label, PetscInt n_ids, const PetscInt ids[]));
+    MOCK_METHOD(void, setUpCallback, ());
 };
 
 class BoundaryConditionTest : public GodzillaAppTest {
@@ -32,7 +30,7 @@ protected:
         const std::string class_name = "MockBoundaryCondition";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<std::vector<std::string>>("boundary") = { "side1" };
+        params.set<std::string>("boundary") = "side1";
         return Factory::create<MockBoundaryCondition>(class_name, "obj", params);
     }
 };

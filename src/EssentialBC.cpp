@@ -38,19 +38,19 @@ EssentialBC::getBcType() const
 }
 
 void
-EssentialBC::setUpCallback(PetscDS ds, DMLabel label, PetscInt n_ids, const PetscInt ids[])
+EssentialBC::setUpCallback()
 {
     _F_;
     PetscErrorCode ierr;
-    ierr = PetscDSAddBoundary(ds,
+    ierr = PetscDSAddBoundary(this->ds,
                               getBcType(),
                               getName().c_str(),
-                              label,
-                              n_ids,
-                              ids,
+                              this->label,
+                              this->n_ids,
+                              this->ids,
                               getFieldID(),
                               getNumComponents(),
-                              getComponents().size() == 0 ? NULL : getComponents().data(),
+                              getNumComponents() == 0 ? NULL : getComponents().data(),
                               (void (*)(void)) & __essential_boundary_condition_function,
                               NULL,
                               (void *) this,

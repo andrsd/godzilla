@@ -10,5 +10,5 @@ ics:
 bcs:
   all:
     type: DirichletBC
-    boundary: ['marker']
+    boundary: 'marker'
     value: ['0.2']

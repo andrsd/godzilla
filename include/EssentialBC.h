@@ -10,7 +10,7 @@ class EssentialBC : public BoundaryCondition {
 public:
     EssentialBC(const InputParameters & params);
 
-    virtual DMBoundaryConditionType getBcType() const;
+    virtual DMBoundaryConditionType getBcType() const override;
 
     /// Evaluate the boundary condition
     ///
@@ -23,7 +23,7 @@ public:
     evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
 
 protected:
-    virtual void setUpCallback(PetscDS ds, DMLabel label, PetscInt n_ids, const PetscInt ids[]);
+    virtual void setUpCallback() override;
 
 public:
     static InputParameters validParams();

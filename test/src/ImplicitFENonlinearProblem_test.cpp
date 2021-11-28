@@ -125,7 +125,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         const std::string class_name = "DirichletBC";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = this->app;
-        params.set<std::vector<std::string>>("boundary") = { "marker" };
+        params.set<std::string>("boundary") = "marker";
         params.set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = Factory::create<BoundaryCondition>(class_name, "bc", params);
         prob->addBoundaryCondition(bc);

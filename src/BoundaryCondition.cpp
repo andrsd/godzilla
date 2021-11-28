@@ -7,19 +7,24 @@ InputParameters
 BoundaryCondition::validParams()
 {
     InputParameters params = Object::validParams();
-    params.addRequiredParam<std::vector<std::string>>("boundary", "Boundary names");
+    params.addRequiredParam<std::string>("boundary", "Boundary name");
     return params;
 }
 
 BoundaryCondition::BoundaryCondition(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
-    boundary(getParam<std::vector<std::string>>("boundary"))
+    dm(nullptr),
+    ds(nullptr),
+    label(nullptr),
+    n_ids(0),
+    ids(nullptr),
+    boundary(getParam<std::string>("boundary"))
 {
     _F_;
 }
 
-const std::vector<std::string> &
+const std::string &
 BoundaryCondition::getBoundary() const
 {
     return this->boundary;
@@ -31,34 +36,32 @@ BoundaryCondition::setUp(DM dm)
     _F_;
     PetscErrorCode ierr;
 
-    PetscDS ds;
-    ierr = DMGetDS(dm, &ds);
+    this->dm = dm;
+
+    ierr = DMGetDS(dm, &this->ds);
     checkPetscError(ierr);
 
-    for (auto & bnd_name : getBoundary()) {
-        DMLabel label;
-        ierr = DMGetLabel(dm, bnd_name.c_str(), &label);
-        checkPetscError(ierr);
+    IS is;
+    ierr = DMGetLabelIdIS(dm, this->boundary.c_str(), &is);
+    checkPetscError(ierr);
 
-        IS is;
-        ierr = DMGetLabelIdIS(dm, bnd_name.c_str(), &is);
-        checkPetscError(ierr);
+    ierr = DMGetLabel(dm, this->boundary.c_str(), &this->label);
+    checkPetscError(ierr);
 
-        PetscInt n_ids;
-        ierr = ISGetSize(is, &n_ids);
-        checkPetscError(ierr);
+    ierr = ISGetSize(is, &this->n_ids);
+    checkPetscError(ierr);
 
-        const PetscInt * ids = nullptr;
-        ierr = ISGetIndices(is, &ids);
-        checkPetscError(ierr);
+    ierr = ISGetIndices(is, &this->ids);
+    checkPetscError(ierr);
 
-        setUpCallback(ds, label, n_ids, ids);
+    setUpCallback();
 
-        ierr = ISRestoreIndices(is, &ids);
-        checkPetscError(ierr);
-        ierr = ISDestroy(&is);
-        checkPetscError(ierr);
-    }
+    ierr = ISRestoreIndices(is, &this->ids);
+    checkPetscError(ierr);
+    this->ids = nullptr;
+
+    ierr = ISDestroy(&is);
+    checkPetscError(ierr);
 }
 
 } // namespace godzilla

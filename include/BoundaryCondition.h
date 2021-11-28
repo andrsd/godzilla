@@ -12,10 +12,10 @@ class BoundaryCondition : public Object, public PrintInterface {
 public:
     BoundaryCondition(const InputParameters & params);
 
-    /// Get the boundary names this BC is active on
+    /// Get the boundary name this BC is active on
     ///
-    /// @return Array of boundary names
-    virtual const std::vector<std::string> & getBoundary() const;
+    /// @return The boundary name
+    virtual const std::string & getBoundary() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
@@ -44,15 +44,25 @@ public:
 
 protected:
     /// Set up the PETSc callback
-    ///
-    /// @param ds PetscDS object
-    /// @param label Label to put this boundary conditon on
-    /// @param n_ids Number of IDs in `ids`
-    /// @params ids IDs associated with label
-    virtual void setUpCallback(PetscDS ds, DMLabel label, PetscInt n_ids, const PetscInt ids[]) = 0;
+    virtual void setUpCallback() = 0;
+
+    /// DM object
+    DM dm;
+
+    /// DS object
+    PetscDS ds;
+
+    /// DMLabel associated with the boundary name this boundary condition acts on
+    DMLabel label;
+
+    /// Number of IDs in the label
+    PetscInt n_ids;
+
+    /// IDs of the label
+    const PetscInt * ids;
 
     /// List of boundary names
-    const std::vector<std::string> & boundary;
+    const std::string & boundary;
 
 public:
     /// Method for building InputParameters for this class
