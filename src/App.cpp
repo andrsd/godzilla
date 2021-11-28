@@ -6,6 +6,7 @@
 #include "Problem.h"
 #include "CallStack.h"
 #include "Utils.h"
+#include "Terminal.h"
 #include <assert.h>
 
 namespace godzilla {
@@ -27,6 +28,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     args(app_name),
     input_file_arg("i", "input-file", "Input file to execute", false, "", "string"),
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
+    no_colors_switch("", "no-colors", "Do not use terminal colors", false),
     verbosity_level(1),
     grid(nullptr),
     problem(nullptr)
@@ -34,6 +36,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     _F_;
     this->args.add(this->input_file_arg);
     this->args.add(this->verbose_arg);
+    this->args.add(this->no_colors_switch);
 }
 
 App::~App()
@@ -80,6 +83,9 @@ void
 App::run()
 {
     _F_;
+    if (this->no_colors_switch.getValue())
+        Terminal::num_colors = 1;
+
     if (this->verbose_arg.isSet()) {
         this->verbosity_level = this->verbose_arg.getValue();
     }

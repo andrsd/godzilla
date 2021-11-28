@@ -104,6 +104,9 @@ protected:
     /// Command line argument passed via `--verbose` parameter
     TCLAP::ValueArg<unsigned int> verbose_arg;
 
+    /// Command line switch to turn terminal colors off (passed via `--no-colors`)
+    TCLAP::SwitchArg no_colors_switch;
+
     /// Verbosity level
     unsigned int verbosity_level;
 

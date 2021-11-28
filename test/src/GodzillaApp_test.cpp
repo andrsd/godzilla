@@ -59,6 +59,19 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
     EXPECT_DEATH(app.run(), "ERROR: Unable to open");
 }
 
+TEST_F(GodzillaAppTest, no_colors)
+{
+    int argc = 2;
+    char * argv[] = { (char *) "godzilla", (char *) "--no-colors", NULL };
+
+    App app("godzilla", MPI_COMM_WORLD);
+    app.create();
+    app.parseCommandLine(argc, argv);
+
+    app.run();
+    EXPECT_EQ(Terminal::num_colors, 1);
+}
+
 TEST_F(GodzillaAppTest, verbose_level)
 {
     testing::internal::CaptureStdout();
