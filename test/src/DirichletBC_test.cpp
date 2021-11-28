@@ -11,9 +11,8 @@ TEST(DirichletBC, api)
     App app("test", MPI_COMM_WORLD);
 
     InputParameters & params = Factory::getValidParams("DirichletBC");
-    params.set<const App *>("_app") = &app;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
-    auto obj = Factory::create<DirichletBC>("DirichletBC", "name", params);
+    auto obj = app.buildObject<DirichletBC>("DirichletBC", "name", params);
     obj->create();
 
     EXPECT_EQ(obj->getFieldID(), 0);
@@ -50,18 +49,16 @@ TEST(DirichletBC, with_user_defined_fn)
         std::vector<PetscReal> y = { 1., 2. };
         std::string class_name = "PiecewiseLinear";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = &app;
         params.set<std::vector<PetscReal>>("x") = x;
         params.set<std::vector<PetscReal>>("y") = y;
-        fn = Factory::create<PiecewiseLinear>(class_name, "ipol", params);
+        fn = app.buildObject<PiecewiseLinear>(class_name, "ipol", params);
         app.addFunction(fn);
     }
 
     {
         InputParameters & params = Factory::getValidParams("DirichletBC");
-        params.set<const App *>("_app") = &app;
         params.set<std::vector<std::string>>("value") = { "ipol(x)" };
-        bc = Factory::create<DirichletBC>("DirichletBC", "name", params);
+        bc = app.buildObject<DirichletBC>("DirichletBC", "name", params);
     }
     bc->create();
 

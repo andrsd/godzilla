@@ -1,5 +1,4 @@
 #include "App.h"
-#include "Factory.h"
 #include "GodzillaConfig.h"
 #include "GYMLFile.h"
 #include "Function.h"

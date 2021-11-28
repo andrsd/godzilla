@@ -19,9 +19,8 @@ protected:
     {
         const std::string class_name = "MockStructuredGrid2D";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
         params.set<PetscInt>("nx") = nx;
         params.set<PetscInt>("ny") = ny;
-        return Factory::create<MockStructuredGrid2D>(class_name, "obj", params);
+        return this->app->buildObject<MockStructuredGrid2D>(class_name, "obj", params);
     }
 };

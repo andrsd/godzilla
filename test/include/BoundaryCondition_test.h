@@ -29,8 +29,7 @@ protected:
     {
         const std::string class_name = "MockBoundaryCondition";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
         params.set<std::string>("boundary") = "side1";
-        return Factory::create<MockBoundaryCondition>(class_name, "obj", params);
+        return this->app->buildObject<MockBoundaryCondition>(class_name, "obj", params);
     }
 };

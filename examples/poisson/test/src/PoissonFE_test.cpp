@@ -22,32 +22,29 @@ TEST(PoissonFENonlinearProblem, solve)
     {
         const std::string class_name = "LineMesh";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = &app;
         params.set<PetscReal>("xmin") = 0.;
         params.set<PetscReal>("xmax") = 2.;
         params.set<PetscInt>("nx") = 20;
-        grid = Factory::create<LineMesh>(class_name, "grid", params);
+        grid = app.buildObject<LineMesh>(class_name, "grid", params);
     }
 
     PoissonFENonlinearProblem * problem = nullptr;
     {
         const std::string class_name = "PoissonFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = &app;
         params.set<Grid *>("_grid") = grid;
         params.set<PetscInt>("p_order") = 2;
         params.set<PetscReal>("forcing_fn") = -2;
-        problem = Factory::create<PoissonFENonlinearProblem>(class_name, "problem", params);
+        problem = app.buildObject<PoissonFENonlinearProblem>(class_name, "problem", params);
     }
 
     DirichletBC * bc = nullptr;
     {
         const std::string class_name = "DirichletBC";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = &app;
         params.set<std::string>("boundary") = "marker";
         params.set<std::vector<std::string>>("value") = { "x*x" };
-        bc = Factory::create<DirichletBC>(class_name, "dirichlet", params);
+        bc = app.buildObject<DirichletBC>(class_name, "dirichlet", params);
         problem->addBoundaryCondition(bc);
     }
 

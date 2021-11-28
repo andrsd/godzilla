@@ -3,6 +3,8 @@
 #include "mpi.h"
 #include "PrintInterface.h"
 #include "CmdLineArgParser.h"
+#include "InputParameters.h"
+#include "Factory.h"
 
 namespace godzilla {
 
@@ -43,6 +45,20 @@ public:
     ///
     /// @return MPI communicator
     virtual const MPI_Comm & getComm() const;
+
+    /// Build object using the Factory
+    ///
+    /// This is convenience API for building object with having the `_app` parameter set to this
+    /// application object.
+    ///
+    /// @param class_name C++ class name of the object to build
+    /// @param name Name of the object
+    /// @param parameters Input parameters
+    /// @return The constructed object
+    template <typename T>
+    T * buildObject(const std::string & class_name,
+                    const std::string & name,
+                    InputParameters & parameters);
 
 protected:
     /// Build application objects from a GYML file
@@ -86,5 +102,15 @@ protected:
 
     friend class FunctionInterface;
 };
+
+template <typename T>
+T *
+App::buildObject(const std::string & class_name,
+                 const std::string & name,
+                 InputParameters & parameters)
+{
+    parameters.set<const App *>("_app") = this;
+    return Factory::create<T>(class_name, name, parameters);
+}
 
 } // namespace godzilla

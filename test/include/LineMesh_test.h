@@ -19,10 +19,9 @@ protected:
     {
         const std::string class_name = "MockLineMesh";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
         params.set<PetscReal>("xmin") = xmin;
         params.set<PetscReal>("xmax") = xmax;
         params.set<PetscInt>("nx") = 10;
-        return Factory::create<MockLineMesh>(class_name, "obj", params);
+        return this->app->buildObject<MockLineMesh>(class_name, "obj", params);
     }
 };

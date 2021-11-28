@@ -19,7 +19,6 @@ protected:
     {
         const std::string class_name = "MockBoxMesh";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
         params.set<PetscReal>("xmin") = xmin[0];
         params.set<PetscReal>("xmax") = xmax[0];
         params.set<PetscInt>("nx") = 9;
@@ -29,6 +28,6 @@ protected:
         params.set<PetscReal>("zmin") = xmin[2];
         params.set<PetscReal>("zmax") = xmax[2];
         params.set<PetscInt>("nz") = 7;
-        return Factory::create<MockBoxMesh>(class_name, "obj", params);
+        return this->app->buildObject<MockBoxMesh>(class_name, "obj", params);
     }
 };

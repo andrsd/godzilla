@@ -14,9 +14,8 @@ protected:
     {
         const std::string class_name = "LineMesh";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
         params.set<PetscInt>("nx") = 2;
-        return Factory::create<Grid>(class_name, "grid", params);
+        return this->app->buildObject<Grid>(class_name, "grid", params);
     }
 
     Problem *
@@ -24,9 +23,8 @@ protected:
     {
         const std::string class_name = "GTestPetscLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
         params.set<Grid *>("_grid") = grid;
-        return Factory::create<Problem>(class_name, "problem", params);
+        return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 
     HDF5Output *
@@ -34,9 +32,8 @@ protected:
     {
         const std::string class_name = "HDF5Output";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
         params.set<Problem *>("_problem") = problem;
         params.set<std::string>("file") = file_name;
-        return Factory::create<HDF5Output>(class_name, "out", params);
+        return this->app->buildObject<HDF5Output>(class_name, "out", params);
     }
 };

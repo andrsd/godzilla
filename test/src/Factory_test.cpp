@@ -25,6 +25,5 @@ TEST(Factory, create_reg_obj)
 
     InputParameters & params = Factory::getValidParams("LineMesh");
     params.set<PetscInt>("nx") = 1;
-    params.set<const App *>("_app") = &app;
-    auto obj = Factory::create<LineMesh>("LineMesh", "name", params);
+    auto obj = app.buildObject<LineMesh>("LineMesh", "name", params);
 }
