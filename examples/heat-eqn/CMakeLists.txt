@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 find_package(Godzilla)
 
 add_executable(${PROJECT_NAME}
+    src/ConvectiveHeatFluxConstBC.cpp
     src/HeatEquationProblem.cpp
     src/main.cpp
 )

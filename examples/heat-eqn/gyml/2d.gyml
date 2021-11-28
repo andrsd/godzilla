@@ -17,12 +17,13 @@ ics:
 bcs:
   left:
     type: DirichletBC
-    boundary: [ 'left' ]
+    boundary: 'left'
     value: [ '310' ]
   right:
-    type: DirichletBC
-    boundary: [ 'right' ]
-    value: [ '300' ]
+    type: ConvectiveHeatFluxConstBC
+    boundary: 'right'
+    htc: 100
+    T_infinity: 400
 
 output:
   vtk:
