@@ -100,6 +100,7 @@ add_library(${GODZILLA_LIBRARY} SHARED
     src/RectangleMesh.cpp
     src/StructuredGrid1D.cpp
     src/StructuredGrid2D.cpp
+    src/Terminal.cpp
     src/TransientInterface.cpp
     src/UnstructuredMesh.cpp
     src/Utils.cpp

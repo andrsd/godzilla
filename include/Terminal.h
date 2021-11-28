@@ -1,11 +1,44 @@
 #pragma once
 
-#define COLOR_BLACK "\33[30m"
-#define COLOR_RED "\33[31m"
-#define COLOR_GREEN "\33[32m"
-#define COLOR_YELLOW "\33[33m"
-#define COLOR_BLUE "\33[34m"
-#define COLOR_MAGENTA "\33[35m"
-#define COLOR_CYAN "\33[36m"
-#define COLOR_WHITE "\33[37m"
-#define COLOR_DEFAULT "\33[39m"
+#include <iostream>
+
+namespace godzilla {
+
+/// Utility class for tracking terminal capabilities (like colors)
+///
+class Terminal {
+public:
+    /// Terminal color as a class
+    ///
+    /// Classes can be namespaced to avoid name collisions with other packages (like googletest)
+    /// We can detect that this is being put into a stream and potentially strip it
+    struct Color {
+        Color(const std::string & aclr) : str(aclr) {}
+
+        std::string str;
+
+    public:
+        static Color black;
+        static Color red;
+        static Color green;
+        static Color yellow;
+        static Color blue;
+        static Color magenta;
+        static Color cyan;
+        static Color white;
+        static Color normal;
+    };
+
+    /// Query if terminal has colors
+    ///
+    /// @return true if terminal supports colors
+    static bool hasColors();
+
+    /// Number of colors supported by the terminal
+    static unsigned int num_colors;
+};
+
+} // namespace godzilla
+
+/// Operator to print the color to the terminal
+std::ostream & operator<<(std::ostream & os, const godzilla::Terminal::Color & clr);
