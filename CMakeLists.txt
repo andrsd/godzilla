@@ -89,6 +89,7 @@ add_library(${GODZILLA_LIBRARY} SHARED
     src/LinearInterpolation.cpp
     src/LinearProblem.cpp
     src/LineMesh.cpp
+    src/Logger.cpp
     src/NaturalBC.cpp
     src/NonlinearProblem.cpp
     src/Object.cpp

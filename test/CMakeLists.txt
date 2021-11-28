@@ -23,6 +23,7 @@ add_executable(${PROJECT_NAME}
     src/LinearInterpolation_test.cpp
     src/LinearProblem_test.cpp
     src/LineMesh_test.cpp
+    src/Logger_test.cpp
     src/NonlinearProblem_test.cpp
     src/Object_test.cpp
     src/PiecewiseLinear_test.cpp
