@@ -2,6 +2,7 @@
 
 #include "mpi.h"
 #include "InputParameters.h"
+#include "LoggingInterface.h"
 
 namespace godzilla {
 
@@ -10,7 +11,7 @@ class App;
 /// The base class for objects that can be created by Factory
 ///
 /// @see Factory
-class Object {
+class Object : public LoggingInterface {
 public:
     /// Constructor for building the object via Factory
     Object(const InputParameters & parameters);
@@ -49,6 +50,9 @@ public:
 
     /// Called to construct the object
     virtual void create();
+
+    /// Called to check object's integrity
+    virtual void check();
 
 protected:
     /// Parameters of this object

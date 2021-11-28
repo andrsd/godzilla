@@ -10,6 +10,17 @@
 
 namespace godzilla {
 
+namespace internal {
+
+[[noreturn]] void
+terminate()
+{
+    MPI_Finalize();
+    exit(1);
+}
+
+} // namespace internal
+
 App::App(const std::string & app_name, MPI_Comm comm) :
     PrintInterface(*this),
     comm(comm),
@@ -29,6 +40,13 @@ App::~App()
 {
     _F_;
     Factory::destroy();
+}
+
+const Logger &
+App::getLogger() const
+{
+    _F_;
+    return this->log;
 }
 
 void
@@ -80,6 +98,9 @@ App::runInputFile(const std::string & file_name)
         godzillaPrint(9, "Reading '", file_name, "'...");
         buildFromGYML(file_name);
 
+        godzillaPrint(9, "Checking integrity...");
+        checkIntegrity();
+
         godzillaPrint(9, "Running '", file_name, "'...");
         runProblem();
     }
@@ -106,6 +127,19 @@ App::buildFromGYML(const std::string & file_name)
         f->create();
     this->grid->create();
     this->problem->create();
+}
+
+void
+App::checkIntegrity()
+{
+    _F_;
+    this->grid->check();
+    this->problem->check();
+
+    if (this->log.getNumEntries() > 0) {
+        this->log.print();
+        godzilla::internal::terminate();
+    }
 }
 
 void

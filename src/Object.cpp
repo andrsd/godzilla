@@ -14,6 +14,8 @@ Object::validParams()
 }
 
 Object::Object(const InputParameters & parameters) :
+    LoggingInterface(const_cast<Logger &>(parameters.get<const App *>("_app")->getLogger()),
+                     parameters.get<std::string>("_name")),
     pars(parameters),
     app(*getParam<const App *>("_app")),
     type(getParam<std::string>("_type")),
@@ -79,6 +81,12 @@ Object::processorId() const
 
 void
 Object::create()
+{
+    _F_;
+}
+
+void
+Object::check()
 {
     _F_;
 }

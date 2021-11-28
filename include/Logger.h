@@ -19,7 +19,11 @@ public:
     error(Args &&... args)
     {
         std::ostringstream oss;
-        streamAll(oss, COLOR_RED, "error: ", COLOR_DEFAULT, std::forward<Args>(args)...);
+        streamAll(oss,
+                  Terminal::Color::red,
+                  "error: ",
+                  Terminal::Color::normal,
+                  std::forward<Args>(args)...);
         this->entries.push_back(oss.str());
         this->num_errors++;
     }
@@ -30,7 +34,11 @@ public:
     warning(Args &&... args)
     {
         std::ostringstream oss;
-        streamAll(oss, COLOR_MAGENTA, "warning: ", COLOR_DEFAULT, std::forward<Args>(args)...);
+        streamAll(oss,
+                  Terminal::Color::magenta,
+                  "warning: ",
+                  Terminal::Color::normal,
+                  std::forward<Args>(args)...);
         this->entries.push_back(oss.str());
         this->num_warnings++;
     }

@@ -2,10 +2,10 @@
 
 #include <string>
 #include <sstream>
-#include "CallStack.h"
 #include <iostream>
 #include "mpi.h"
 #include "petscsys.h"
+#include "CallStack.h"
 
 namespace godzilla {
 
@@ -30,6 +30,7 @@ godzillaMsgFmt(const std::string & msg, const std::string & title, const std::st
 
 void godzillaErrorRaw(std::string msg, bool call_stack = false);
 
+/// Terminate the run
 [[noreturn]] void terminate();
 
 } // namespace internal

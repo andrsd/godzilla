@@ -1,18 +1,10 @@
 #include "PrintInterface.h"
 #include "Object.h"
 #include "App.h"
-#include "CallStack.h"
 #include "Terminal.h"
 
 namespace godzilla {
 namespace internal {
-
-[[noreturn]] void
-terminate()
-{
-    MPI_Finalize();
-    exit(1);
-}
 
 void
 godzillaMsgRaw(const std::string & msg)
@@ -21,10 +13,10 @@ godzillaMsgRaw(const std::string & msg)
 }
 
 std::string
-godzillaMsgFmt(const std::string & msg, const std::string & title, const std::string & color)
+godzillaMsgFmt(const std::string & msg, const std::string & title, const Terminal::Color & color)
 {
     std::ostringstream oss;
-    oss << color << title << ": " << msg << COLOR_DEFAULT << std::endl;
+    oss << color << title << ": " << msg << Terminal::Color::normal << std::endl;
     return oss.str();
 }
 
@@ -36,7 +28,7 @@ godzillaStreamAll(std::ostringstream &)
 void
 godzillaErrorRaw(std::string msg, bool call_stack)
 {
-    msg = godzillaMsgFmt(msg, "ERROR", COLOR_RED);
+    msg = godzillaMsgFmt(msg, "ERROR", Terminal::Color::red);
     std::cerr << msg << std::flush;
 
     if (call_stack) {

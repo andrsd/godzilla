@@ -27,7 +27,7 @@ LineMesh::LineMesh(const InputParameters & parameters) :
 {
     _F_;
     if (this->xmax <= this->xmin)
-        godzillaError("Parameter 'xmax' must be larger than 'xmin'.");
+        logError("Parameter 'xmax' must be larger than 'xmin'.");
 }
 
 PetscReal

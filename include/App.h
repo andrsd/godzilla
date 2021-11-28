@@ -5,8 +5,16 @@
 #include "CmdLineArgParser.h"
 #include "InputParameters.h"
 #include "Factory.h"
+#include "Logger.h"
 
 namespace godzilla {
+
+namespace internal {
+
+/// Terminate the run
+[[noreturn]] void terminate();
+
+} // namespace internal
 
 class Function;
 class Grid;
@@ -20,6 +28,8 @@ public:
     /// @param comm MPI communicator
     App(const std::string & app_name, MPI_Comm comm);
     virtual ~App();
+
+    const Logger & getLogger() const;
 
     /// Create method can be used to additional object allocation, etc. needed before the
     /// application runs
@@ -66,6 +76,9 @@ protected:
     /// @param file_name The GYML file name
     virtual void buildFromGYML(const std::string & file_name);
 
+    /// Check integrity of the application
+    virtual void checkIntegrity();
+
     /// Run the input file
     ///
     /// This is the method that will be called wehn user specify -i command line parameter
@@ -78,6 +91,9 @@ protected:
 
     /// MPI communicators
     MPI_Comm comm;
+
+    /// Log with errors and/or warnings
+    Logger log;
 
     /// Command line parser
     CmdLineArgParser args;

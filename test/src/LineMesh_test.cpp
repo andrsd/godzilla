@@ -18,7 +18,13 @@ TEST_F(LineMeshTest, g1d_line_mesh)
 
 TEST_F(LineMeshTest, g1d_line_mesh_incorrect_dims)
 {
-    EXPECT_DEATH(g1dLineMesh(2, 1), "ERROR: obj: Parameter 'xmax' must be larger than 'xmin'.");
+    testing::internal::CaptureStderr();
+
+    g1dLineMesh(2, 1);
+    this->app->checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));
 }
 
 TEST_F(LineMeshTest, g1d_line_mesh_create)
