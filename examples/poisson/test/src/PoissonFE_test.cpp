@@ -45,7 +45,7 @@ TEST(PoissonFENonlinearProblem, solve)
         const std::string class_name = "DirichletBC";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<const App *>("_app") = &app;
-        params.set<std::vector<std::string>>("boundary") = { "marker" };
+        params.set<std::string>("boundary") = "marker";
         params.set<std::vector<std::string>>("value") = { "x*x" };
         bc = Factory::create<DirichletBC>(class_name, "dirichlet", params);
         problem->addBoundaryCondition(bc);

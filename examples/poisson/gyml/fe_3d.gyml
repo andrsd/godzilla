@@ -22,5 +22,5 @@ ics:
 bcs:
   all:
     type: DirichletBC
-    boundary: [ 'marker' ]
+    boundary: 'marker'
     value: [ 'x*x + y*y + z*z' ]
