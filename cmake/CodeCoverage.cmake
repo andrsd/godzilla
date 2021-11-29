@@ -43,8 +43,8 @@ set(EXCLUDE_REGEX
 )
 
 set(CODE_COVERAGE_BINS
-    --object=${PROJECT_BINARY_DIR}/test/godzilla-test
-    --object=${PROJECT_BINARY_DIR}/libgodzilla${CMAKE_SHARED_LIBRARY_SUFFIX}
+    --object=${PROJECT_BINARY_DIR}/test/src/godzilla-test
+    --object=${PROJECT_BINARY_DIR}/src/libgodzilla${CMAKE_SHARED_LIBRARY_SUFFIX}
     --object=${PROJECT_BINARY_DIR}/examples/poisson/test/poisson-test
 )
 
