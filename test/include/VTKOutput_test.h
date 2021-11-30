@@ -1,32 +1,11 @@
 #pragma once
 
-#include "Factory.h"
-#include "gmock/gmock.h"
-#include "Grid.h"
 #include "Problem.h"
 #include "VTKOutput.h"
-#include "GodzillaApp_test.h"
+#include "LinearProblem_test.h"
 
-class VTKOutputTest : public GodzillaAppTest {
+class VTKOutputTest : public LinearProblemTest {
 protected:
-    Grid *
-    gGrid()
-    {
-        const std::string class_name = "LineMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 1;
-        return this->app->buildObject<Grid>(class_name, "grid", params);
-    }
-
-    Problem *
-    gProblem(Grid * grid)
-    {
-        const std::string class_name = "G1DTestPetscLinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
-        return this->app->buildObject<Problem>(class_name, "problem", params);
-    }
-
     VTKOutput *
     gOutput(Problem * problem, const std::string & file_name)
     {

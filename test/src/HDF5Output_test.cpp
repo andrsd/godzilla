@@ -5,9 +5,9 @@
 
 TEST_F(HDF5OutputTest, output)
 {
-    auto grid = gGrid();
+    auto grid = gGrid1d();
     grid->create();
-    auto prob = gProblem(grid);
+    auto prob = gProblem1d(grid);
     prob->create();
 
     auto out1 = gOutput(prob, "out");
@@ -31,9 +31,9 @@ TEST_F(HDF5OutputTest, output)
 
 TEST_F(HDF5OutputTest, set_file_name)
 {
-    auto grid = gGrid();
+    auto grid = gGrid1d();
     grid->create();
-    auto prob = gProblem(grid);
+    auto prob = gProblem1d(grid);
     prob->create();
 
     auto out1 = gOutput(prob, "out");
@@ -43,9 +43,9 @@ TEST_F(HDF5OutputTest, set_file_name)
 
 TEST_F(HDF5OutputTest, set_seq_file_name)
 {
-    auto grid = gGrid();
+    auto grid = gGrid1d();
     grid->create();
-    auto prob = gProblem(grid);
+    auto prob = gProblem1d(grid);
     prob->create();
 
     auto out1 = gOutput(prob, "out");

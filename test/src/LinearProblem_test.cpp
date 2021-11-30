@@ -1,7 +1,9 @@
+#include "gmock/gmock.h"
 #include "Factory.h"
 #include "Grid.h"
 #include "LinearProblem_test.h"
 #include "InputParameters.h"
+#include "Output.h"
 #include "petsc.h"
 #include "petscmat.h"
 
@@ -11,24 +13,13 @@ registerObject(G1DTestPetscLinearProblem);
 registerObject(G2DTestPetscLinearProblem);
 registerObject(G3DTestPetscLinearProblem);
 
-TEST(LinearProblemTest, solve)
+//
+
+TEST_F(LinearProblemTest, solve)
 {
-    App app("test", MPI_COMM_WORLD);
-
-    Grid * grid;
-    {
-        const std::string class_name = "LineMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 1;
-        grid = app.buildObject<Grid>(class_name, "grid", params);
-    }
-
-    const std::string class_name = "G1DTestPetscLinearProblem";
-    InputParameters & params = Factory::getValidParams(class_name);
-    params.set<Grid *>("_grid") = grid;
-    auto prob = app.buildObject<G1DTestPetscLinearProblem>(class_name, "obj", params);
-
+    auto grid = gGrid1d();
     grid->create();
+    auto prob = gProblem1d(grid);
     prob->create();
     prob->solve();
 
@@ -44,6 +35,82 @@ TEST(LinearProblemTest, solve)
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);
+}
+
+TEST_F(LinearProblemTest, run)
+{
+    class MockLinearProblem : public LinearProblem {
+    public:
+        MockLinearProblem(const InputParameters & params) : LinearProblem(params) {}
+
+        MOCK_METHOD(void, solve, ());
+        virtual bool
+        converged()
+        {
+            return true;
+        }
+        MOCK_METHOD(void, output, ());
+        MOCK_METHOD(PetscErrorCode, computeRhsCallback, (Vec b));
+        MOCK_METHOD(PetscErrorCode, computeOperatorsCallback, (Mat A, Mat B));
+    };
+
+    auto grid = gGrid1d();
+    grid->create();
+
+    InputParameters prob_pars = LinearProblem::validParams();
+    prob_pars.set<const App *>("_app") = this->app;
+    prob_pars.set<Grid *>("_grid") = grid;
+    MockLinearProblem prob(prob_pars);
+
+    EXPECT_CALL(prob, solve);
+    EXPECT_CALL(prob, output);
+    prob.run();
+}
+
+TEST_F(LinearProblemTest, output)
+{
+    class MockLinearProblem : public LinearProblem {
+    public:
+        MockLinearProblem(const InputParameters & params) : LinearProblem(params) {}
+
+        virtual void
+        output()
+        {
+            LinearProblem::output();
+        }
+        MOCK_METHOD(PetscErrorCode, computeRhsCallback, (Vec b));
+        MOCK_METHOD(PetscErrorCode, computeOperatorsCallback, (Mat A, Mat B));
+    };
+
+    class MockOutput : public Output {
+    public:
+        MockOutput(const InputParameters & params) : Output(params) {}
+
+        MOCK_METHOD(const std::string &, getFileName, (), (const));
+        MOCK_METHOD(void, setFileName, ());
+        MOCK_METHOD(void, setSequenceFileName, (unsigned int stepi));
+        MOCK_METHOD(void, output, (DM dm, Vec vec), (const));
+    };
+
+    auto grid = gGrid1d();
+    grid->create();
+
+    InputParameters prob_pars = LinearProblem::validParams();
+    prob_pars.set<const App *>("_app") = this->app;
+    prob_pars.set<Grid *>("_grid") = grid;
+    MockLinearProblem prob(prob_pars);
+
+    InputParameters out_pars = Output::validParams();
+    out_pars.set<const App *>("_app") = this->app;
+    out_pars.set<Problem *>("_problem") = &prob;
+    MockOutput out(out_pars);
+
+    prob.addOutput(&out);
+
+    EXPECT_CALL(out, setFileName);
+    EXPECT_CALL(out, output);
+
+    prob.output();
 }
 
 // 1D

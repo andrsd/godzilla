@@ -2,9 +2,9 @@
 
 #include "Problem.h"
 #include "ExodusIIOutput.h"
-#include "Output_test.h"
+#include "LinearProblem_test.h"
 
-class ExodusIIOutputTest : public OutputTest {
+class ExodusIIOutputTest : public LinearProblemTest {
 protected:
     ExodusIIOutput *
     gOutput(Problem * problem, const std::string & file_name)
