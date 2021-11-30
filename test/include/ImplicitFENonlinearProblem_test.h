@@ -8,41 +8,33 @@ namespace godzilla {
 class Grid;
 class GTestImplicitFENonlinearProblem;
 
-/// Test fixture
+//
+
 class ImplicitFENonlinearProblemTest : public GodzillaAppTest {
 public:
-    void
-    SetUp() override
+    Grid *
+    gGrid1d()
     {
-        GodzillaAppTest::SetUp();
-
-        {
-            const std::string class_name = "LineMesh";
-            InputParameters & params = Factory::getValidParams(class_name);
-            params.set<PetscInt>("nx") = 2;
-            this->grid = this->app->buildObject<Grid>(class_name, "grid", params);
-        }
-        {
-            const std::string class_name = "GTestImplicitFENonlinearProblem";
-            InputParameters & params = Factory::getValidParams(class_name);
-            params.set<Grid *>("_grid") = this->grid;
-            params.set<PetscReal>("start_time") = 0.;
-            params.set<PetscReal>("end_time") = 20;
-            params.set<PetscReal>("dt") = 5;
-            this->prob =
-                this->app->buildObject<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
-        }
+        const std::string class_name = "LineMesh";
+        InputParameters & params = Factory::getValidParams(class_name);
+        params.set<PetscInt>("nx") = 2;
+        return this->app->buildObject<Grid>(class_name, "grid", params);
     }
 
-    void
-    TearDown() override
+    GTestImplicitFENonlinearProblem *
+    gProblem1d(Grid * grid)
     {
-        GodzillaAppTest::TearDown();
+        const std::string class_name = "GTestImplicitFENonlinearProblem";
+        InputParameters & params = Factory::getValidParams(class_name);
+        params.set<Grid *>("_grid") = grid;
+        params.set<PetscReal>("start_time") = 0.;
+        params.set<PetscReal>("end_time") = 20;
+        params.set<PetscReal>("dt") = 5;
+        return this->app->buildObject<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
     }
-
-    godzilla::Grid * grid;
-    GTestImplicitFENonlinearProblem * prob;
 };
+
+//
 
 /// Test problem for simple FE solver
 class GTestImplicitFENonlinearProblem : public ImplicitFENonlinearProblem {
