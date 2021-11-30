@@ -15,8 +15,10 @@ class Problem : public Object, public PrintInterface {
 public:
     Problem(const InputParameters & parameters);
 
+    virtual void check() override;
+
     /// Build the problem to solve
-    virtual void create() = 0;
+    virtual void create() override = 0;
     /// Run the problem
     virtual void run() = 0;
     /// Solve the problem

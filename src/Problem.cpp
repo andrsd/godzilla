@@ -1,6 +1,7 @@
 #include "Problem.h"
 #include "CallStack.h"
 #include "Grid.h"
+#include "Output.h"
 
 namespace godzilla {
 
@@ -18,6 +19,15 @@ Problem::Problem(const InputParameters & parameters) :
     grid(*getParam<Grid *>("_grid"))
 {
     _F_;
+}
+
+void
+Problem::check()
+{
+    _F_;
+    for (auto & out : this->outputs) {
+        out->check();
+    }
 }
 
 void
