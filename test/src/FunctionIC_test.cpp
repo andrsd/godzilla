@@ -5,7 +5,7 @@
 
 using namespace godzilla;
 
-TEST(FunctionIC, api)
+TEST(FunctionICTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 

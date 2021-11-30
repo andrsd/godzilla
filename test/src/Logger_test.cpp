@@ -5,7 +5,7 @@
 
 using namespace godzilla;
 
-TEST(Logger, ctor)
+TEST(LoggerTest, ctor)
 {
     Logger log;
 
@@ -14,7 +14,7 @@ TEST(Logger, ctor)
     EXPECT_EQ(log.getNumWarnings(), 0);
 }
 
-TEST(Logger, log_error)
+TEST(LoggerTest, log_error)
 {
     testing::internal::CaptureStderr();
     Logger log;
@@ -30,7 +30,7 @@ TEST(Logger, log_error)
     EXPECT_THAT(output, testing::HasSubstr("1 error(s) found."));
 }
 
-TEST(Logger, log_warning)
+TEST(LoggerTest, log_warning)
 {
     testing::internal::CaptureStderr();
     Logger log;
@@ -46,7 +46,7 @@ TEST(Logger, log_warning)
     EXPECT_THAT(output, testing::HasSubstr("1 warning(s) found."));
 }
 
-TEST(Logger, log_err_warning)
+TEST(LoggerTest, log_err_warning)
 {
     testing::internal::CaptureStderr();
     Logger log;

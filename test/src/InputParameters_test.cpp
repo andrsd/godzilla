@@ -4,13 +4,13 @@
 
 using namespace godzilla;
 
-TEST(InputParameters, get)
+TEST(InputParametersTest, get)
 {
     InputParameters params = Factory::getValidParams("Object");
     EXPECT_DEATH(params.get<int>("i"), "No parameter 'i' found.");
 }
 
-TEST(InputParameters, param_value)
+TEST(InputParametersTest, param_value)
 {
     InputParameters params = emptyInputParameters();
     params.addParam<PetscReal>("param", 12.34, "doco");
@@ -18,7 +18,7 @@ TEST(InputParameters, param_value)
     EXPECT_EQ(params.getDocString("param"), std::string("doco"));
 }
 
-TEST(InputParameters, has_value)
+TEST(InputParametersTest, has_value)
 {
     InputParameters params = emptyInputParameters();
     params.addParam<PetscReal>("param", 12.34, "doco");
@@ -27,7 +27,7 @@ TEST(InputParameters, has_value)
     EXPECT_EQ(params.has<PetscReal>("param"), false);
 }
 
-TEST(InputParameters, assign)
+TEST(InputParametersTest, assign)
 {
     InputParameters params1 = emptyInputParameters();
     params1.addParam<PetscReal>("param", 12.34, "doco");
@@ -38,7 +38,7 @@ TEST(InputParameters, assign)
     EXPECT_EQ(params2.getDocString("param"), std::string("doco"));
 }
 
-TEST(InputParameters, add_params)
+TEST(InputParametersTest, add_params)
 {
     InputParameters params1 = emptyInputParameters();
     params1.addParam<PetscReal>("p1", 12.34, "doco1");
@@ -62,21 +62,21 @@ validParams1()
     return params;
 }
 
-TEST(InputParameters, valid_params)
+TEST(InputParametersTest, valid_params)
 {
     InputParameters params1 = validParams1();
     EXPECT_EQ(params1.get<PetscReal>("p"), 78.56);
     EXPECT_EQ(params1.getDocString("p"), std::string("doco p"));
 }
 
-TEST(InputParameters, empty_doc_str)
+TEST(InputParametersTest, empty_doc_str)
 {
     InputParameters & params = Factory::getValidParams("Object");
 
     EXPECT_EQ(params.getDocString("i"), std::string(""));
 }
 
-TEST(InputParameters, set_non_existing_param)
+TEST(InputParametersTest, set_non_existing_param)
 {
     InputParameters & params = Factory::getValidParams("Object");
     params.set<double>("d") = 1.23;

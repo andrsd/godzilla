@@ -7,7 +7,7 @@
 
 using namespace godzilla;
 
-TEST(CallStack, abort)
+TEST(CallStackTest, abort)
 {
     _F_;
 
@@ -17,7 +17,7 @@ TEST(CallStack, abort)
                 "Caught signal 6 \\(Abort\\)");
 }
 
-TEST(CallStack, dump)
+TEST(CallStackTest, dump)
 {
     _F_;
 
@@ -28,7 +28,7 @@ TEST(CallStack, dump)
                 ::testing::StartsWith("Call stack:\n  #0:"));
 }
 
-TEST(CallStack, alloc)
+TEST(CallStackTest, alloc)
 {
     _F_;
 

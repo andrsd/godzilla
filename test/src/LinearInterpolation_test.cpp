@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-TEST(LinearInterpolation, sample)
+TEST(LinearInterpolationTest, sample)
 {
     std::vector<PetscReal> x = { 1, 2, 3 };
     std::vector<PetscReal> y = { 0, 4, 2 };
@@ -19,7 +19,7 @@ TEST(LinearInterpolation, sample)
     EXPECT_EQ(lipol.sample(4.0), 2.);
 }
 
-TEST(LinearInterpolation, ctor_empty)
+TEST(LinearInterpolationTest, ctor_empty)
 {
     LinearInterpolation lipol;
     std::vector<PetscReal> x = { 1, 2, 3, 4 };
@@ -37,7 +37,7 @@ TEST(LinearInterpolation, ctor_empty)
     EXPECT_EQ(lipol.sample(4.5), 3.);
 }
 
-TEST(LinearInterpolation, single_interval)
+TEST(LinearInterpolationTest, single_interval)
 {
     std::vector<PetscReal> x = { 1, 2 };
     std::vector<PetscReal> y = { 0, 4 };
@@ -50,7 +50,7 @@ TEST(LinearInterpolation, single_interval)
     EXPECT_EQ(lipol.sample(2.5), 4.);
 }
 
-TEST(LinearInterpolation, single_point)
+TEST(LinearInterpolationTest, single_point)
 {
     std::vector<PetscReal> x = { 1 };
     std::vector<PetscReal> y = { 0 };
@@ -58,7 +58,7 @@ TEST(LinearInterpolation, single_point)
                  "ERROR: LinearInterpolation: Size of 'x' is 1. It must be 2 or more.");
 }
 
-TEST(LinearInterpolation, unequal_sizes)
+TEST(LinearInterpolationTest, unequal_sizes)
 {
     std::vector<PetscReal> x = { 1, 2 };
     std::vector<PetscReal> y = { 0, 2, 3 };
@@ -67,7 +67,7 @@ TEST(LinearInterpolation, unequal_sizes)
         "ERROR: LinearInterpolation: size of 'x' \\(2\\) does not match size of 'y' \\(3\\)");
 }
 
-TEST(LinearInterpolation, non_increasing)
+TEST(LinearInterpolationTest, non_increasing)
 {
     std::vector<PetscReal> x = { 1, 2, 1 };
     std::vector<PetscReal> y = { 0, 2, 3 };

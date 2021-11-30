@@ -7,7 +7,7 @@ using namespace godzilla;
 
 registerObject(Object);
 
-TEST(Object, api)
+TEST(ObjectTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 

@@ -6,7 +6,7 @@
 
 using namespace godzilla;
 
-TEST(DirichletBC, api)
+TEST(DirichletBCTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 
@@ -29,7 +29,7 @@ TEST(DirichletBC, api)
     EXPECT_EQ(u[0], 37.5);
 }
 
-TEST(DirichletBC, with_user_defined_fn)
+TEST(DirichletBCTest, with_user_defined_fn)
 {
     class TestApp : public App {
     public:
