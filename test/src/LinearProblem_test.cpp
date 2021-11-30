@@ -9,9 +9,9 @@
 
 using namespace godzilla;
 
-registerObject(G1DTestPetscLinearProblem);
-registerObject(G2DTestPetscLinearProblem);
-registerObject(G3DTestPetscLinearProblem);
+registerObject(G1DTestLinearProblem);
+registerObject(G2DTestLinearProblem);
+registerObject(G3DTestLinearProblem);
 
 //
 
@@ -115,19 +115,19 @@ TEST_F(LinearProblemTest, output)
 
 // 1D
 
-G1DTestPetscLinearProblem::G1DTestPetscLinearProblem(const InputParameters & params) :
+G1DTestLinearProblem::G1DTestLinearProblem(const InputParameters & params) :
     LinearProblem(params),
     s(nullptr)
 {
 }
 
-G1DTestPetscLinearProblem::~G1DTestPetscLinearProblem()
+G1DTestLinearProblem::~G1DTestLinearProblem()
 {
     PetscSectionDestroy(&this->s);
 }
 
 void
-G1DTestPetscLinearProblem::create()
+G1DTestLinearProblem::create()
 {
     const DM & dm = getDM();
     PetscInt nc[1] = { 1 };
@@ -139,7 +139,7 @@ G1DTestPetscLinearProblem::create()
 }
 
 PetscErrorCode
-G1DTestPetscLinearProblem::computeRhsCallback(Vec b)
+G1DTestLinearProblem::computeRhsCallback(Vec b)
 {
     VecSetValue(b, 0, 2, INSERT_VALUES);
     VecSetValue(b, 1, 3, INSERT_VALUES);
@@ -151,7 +151,7 @@ G1DTestPetscLinearProblem::computeRhsCallback(Vec b)
 }
 
 PetscErrorCode
-G1DTestPetscLinearProblem::computeOperatorsCallback(Mat A, Mat B)
+G1DTestLinearProblem::computeOperatorsCallback(Mat A, Mat B)
 {
     MatSetValue(A, 0, 0, 1, INSERT_VALUES);
     MatSetValue(A, 1, 1, 1, INSERT_VALUES);
@@ -164,19 +164,19 @@ G1DTestPetscLinearProblem::computeOperatorsCallback(Mat A, Mat B)
 
 // 2D
 
-G2DTestPetscLinearProblem::G2DTestPetscLinearProblem(const InputParameters & params) :
+G2DTestLinearProblem::G2DTestLinearProblem(const InputParameters & params) :
     LinearProblem(params),
     s(nullptr)
 {
 }
 
-G2DTestPetscLinearProblem::~G2DTestPetscLinearProblem()
+G2DTestLinearProblem::~G2DTestLinearProblem()
 {
     PetscSectionDestroy(&this->s);
 }
 
 void
-G2DTestPetscLinearProblem::create()
+G2DTestLinearProblem::create()
 {
     const DM & dm = getDM();
     PetscInt nc[1] = { 1 };
@@ -188,7 +188,7 @@ G2DTestPetscLinearProblem::create()
 }
 
 PetscErrorCode
-G2DTestPetscLinearProblem::computeRhsCallback(Vec b)
+G2DTestLinearProblem::computeRhsCallback(Vec b)
 {
     VecSetValue(b, 0, 2, INSERT_VALUES);
     VecSetValue(b, 1, 3, INSERT_VALUES);
@@ -202,7 +202,7 @@ G2DTestPetscLinearProblem::computeRhsCallback(Vec b)
 }
 
 PetscErrorCode
-G2DTestPetscLinearProblem::computeOperatorsCallback(Mat A, Mat B)
+G2DTestLinearProblem::computeOperatorsCallback(Mat A, Mat B)
 {
     for (PetscInt i = 0; i < 4; i++)
         MatSetValue(A, i, i, 1, INSERT_VALUES);
@@ -215,19 +215,19 @@ G2DTestPetscLinearProblem::computeOperatorsCallback(Mat A, Mat B)
 
 // 3D
 
-G3DTestPetscLinearProblem::G3DTestPetscLinearProblem(const InputParameters & params) :
+G3DTestLinearProblem::G3DTestLinearProblem(const InputParameters & params) :
     LinearProblem(params),
     s(nullptr)
 {
 }
 
-G3DTestPetscLinearProblem::~G3DTestPetscLinearProblem()
+G3DTestLinearProblem::~G3DTestLinearProblem()
 {
     PetscSectionDestroy(&this->s);
 }
 
 void
-G3DTestPetscLinearProblem::create()
+G3DTestLinearProblem::create()
 {
     const DM & dm = getDM();
     PetscInt nc[1] = { 1 };
@@ -239,7 +239,7 @@ G3DTestPetscLinearProblem::create()
 }
 
 PetscErrorCode
-G3DTestPetscLinearProblem::computeRhsCallback(Vec b)
+G3DTestLinearProblem::computeRhsCallback(Vec b)
 {
     VecSetValue(b, 0, 2, INSERT_VALUES);
     VecSetValue(b, 1, 3, INSERT_VALUES);
@@ -257,7 +257,7 @@ G3DTestPetscLinearProblem::computeRhsCallback(Vec b)
 }
 
 PetscErrorCode
-G3DTestPetscLinearProblem::computeOperatorsCallback(Mat A, Mat B)
+G3DTestLinearProblem::computeOperatorsCallback(Mat A, Mat B)
 {
     for (PetscInt i = 0; i < 8; i++)
         MatSetValue(A, i, i, 1, INSERT_VALUES);

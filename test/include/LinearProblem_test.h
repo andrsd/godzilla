@@ -41,7 +41,7 @@ protected:
     Problem *
     gProblem1d(Grid * grid)
     {
-        const std::string class_name = "G1DTestPetscLinearProblem";
+        const std::string class_name = "G1DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<Grid *>("_grid") = grid;
         return this->app->buildObject<Problem>(class_name, "problem", params);
@@ -50,7 +50,7 @@ protected:
     Problem *
     gProblem2d(Grid * grid)
     {
-        const std::string class_name = "G2DTestPetscLinearProblem";
+        const std::string class_name = "G2DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<Grid *>("_grid") = grid;
         return this->app->buildObject<Problem>(class_name, "problem", params);
@@ -59,7 +59,7 @@ protected:
     Problem *
     gProblem3d(Grid * grid)
     {
-        const std::string class_name = "G3DTestPetscLinearProblem";
+        const std::string class_name = "G3DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<Grid *>("_grid") = grid;
         return this->app->buildObject<Problem>(class_name, "problem", params);
@@ -68,10 +68,10 @@ protected:
 
 //
 
-class G1DTestPetscLinearProblem : public LinearProblem {
+class G1DTestLinearProblem : public LinearProblem {
 public:
-    G1DTestPetscLinearProblem(const InputParameters & params);
-    virtual ~G1DTestPetscLinearProblem();
+    G1DTestLinearProblem(const InputParameters & params);
+    virtual ~G1DTestLinearProblem();
     virtual void create() override;
 
 protected:
@@ -83,10 +83,10 @@ protected:
 
 //
 
-class G2DTestPetscLinearProblem : public LinearProblem {
+class G2DTestLinearProblem : public LinearProblem {
 public:
-    G2DTestPetscLinearProblem(const InputParameters & params);
-    virtual ~G2DTestPetscLinearProblem();
+    G2DTestLinearProblem(const InputParameters & params);
+    virtual ~G2DTestLinearProblem();
     virtual void create() override;
 
 protected:
@@ -98,10 +98,10 @@ protected:
 
 //
 
-class G3DTestPetscLinearProblem : public LinearProblem {
+class G3DTestLinearProblem : public LinearProblem {
 public:
-    G3DTestPetscLinearProblem(const InputParameters & params);
-    virtual ~G3DTestPetscLinearProblem();
+    G3DTestLinearProblem(const InputParameters & params);
+    virtual ~G3DTestLinearProblem();
     virtual void create() override;
 
 protected:
