@@ -1,3 +1,4 @@
+#include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "ExodusIIOutput_test.h"
 #include "petsc.h"
