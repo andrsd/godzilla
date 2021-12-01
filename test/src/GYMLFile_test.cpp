@@ -3,6 +3,7 @@
 #include "yaml-cpp/yaml.h"
 #include "GodzillaConfig.h"
 #include "LineMesh.h"
+#include "PiecewiseLinear.h"
 
 using namespace godzilla;
 
@@ -98,6 +99,29 @@ TEST_F(GYMLFileTest, build)
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
+}
+
+TEST_F(GYMLFileTest, funcs)
+{
+    class TestGYMLFile : public GYMLFile {
+    public:
+        TestGYMLFile(const App & app) : GYMLFile(app) {}
+        void
+        buildFunctions()
+        {
+            GYMLFile::buildFunctions();
+        }
+    } file(*this->app);
+
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/funcs.yml");
+
+    file.parse(file_name);
+    file.buildFunctions();
+
+    const std::vector<Function *> & funcs = file.getFunctions();
+    EXPECT_EQ(funcs.size(), 1);
+    EXPECT_NE(dynamic_cast<PiecewiseLinear *>(funcs[0]), nullptr);
 }
 
 TEST_F(GYMLFileTest, build_vec_as_scalars)
