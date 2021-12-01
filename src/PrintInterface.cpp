@@ -28,7 +28,7 @@ godzillaStreamAll(std::ostringstream &)
 void
 godzillaErrorRaw(std::string msg, bool call_stack)
 {
-    msg = godzillaMsgFmt(msg, "ERROR", Terminal::Color::red);
+    msg = godzillaMsgFmt(msg, "error", Terminal::Color::red);
     std::cerr << msg << std::flush;
 
     if (call_stack) {

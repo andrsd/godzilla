@@ -55,7 +55,7 @@ TEST(LinearInterpolationTest, single_point)
     std::vector<PetscReal> x = { 1 };
     std::vector<PetscReal> y = { 0 };
     EXPECT_DEATH(LinearInterpolation(x, y),
-                 "ERROR: LinearInterpolation: Size of 'x' is 1. It must be 2 or more.");
+                 "error: LinearInterpolation: Size of 'x' is 1. It must be 2 or more.");
 }
 
 TEST(LinearInterpolationTest, unequal_sizes)
@@ -64,7 +64,7 @@ TEST(LinearInterpolationTest, unequal_sizes)
     std::vector<PetscReal> y = { 0, 2, 3 };
     EXPECT_DEATH(
         LinearInterpolation(x, y),
-        "ERROR: LinearInterpolation: size of 'x' \\(2\\) does not match size of 'y' \\(3\\)");
+        "error: LinearInterpolation: size of 'x' \\(2\\) does not match size of 'y' \\(3\\)");
 }
 
 TEST(LinearInterpolationTest, non_increasing)
@@ -73,7 +73,7 @@ TEST(LinearInterpolationTest, non_increasing)
     std::vector<PetscReal> y = { 0, 2, 3 };
     EXPECT_DEATH(
         LinearInterpolation(x, y),
-        "ERROR: LinearInterpolation: Values in 'x' must be increasing. Failed at index '2'.");
+        "error: LinearInterpolation: Values in 'x' must be increasing. Failed at index '2'.");
 }
 
 } // namespace godzilla

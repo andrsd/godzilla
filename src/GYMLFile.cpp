@@ -20,7 +20,12 @@ type_name()
 
 namespace godzilla {
 
-GYMLFile::GYMLFile(const App & app) : PrintInterface(app), app(app), grid(nullptr), problem(nullptr)
+GYMLFile::GYMLFile(const App & app) :
+    PrintInterface(app),
+    LoggingInterface(const_cast<Logger &>(app.getLogger())),
+    app(app),
+    grid(nullptr),
+    problem(nullptr)
 {
     _F_;
 }
@@ -120,9 +125,9 @@ GYMLFile::buildInitialConditions()
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
-        godzillaError("Supplied problem type '",
-                      this->problem->getType(),
-                      "' does not support initial conditions.");
+        logError("Supplied problem type '",
+                 this->problem->getType(),
+                 "' does not support initial conditions.");
     else {
         for (const auto & it : ics_root_node) {
             YAML::Node ic_node = it.first;
@@ -146,9 +151,9 @@ GYMLFile::buildBoundaryConditions()
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
-        godzillaError("Supplied problem type '",
-                      this->problem->getType(),
-                      "' does not support boundary conditions.");
+        logError("Supplied problem type '",
+                 this->problem->getType(),
+                 "' does not support boundary conditions.");
     else {
         for (const auto & it : bcs_root_node) {
             YAML::Node bc_node = it.first;
@@ -189,15 +194,15 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
     _F_;
     YAML::Node node = root[name];
     if (!node)
-        godzillaError("Missing '", name, "' block.");
+        error("Missing '", name, "' block.");
 
     YAML::Node type = node["type"];
     if (!type)
-        godzillaError(name, ": No 'type' specified.");
+        error(name, ": No 'type' specified.");
 
     const std::string & class_name = type.as<std::string>();
     if (!Factory::isRegistered(class_name))
-        godzillaError(name, ": Type '", class_name, "' is not a registered object.");
+        error(name, ": Type '", class_name, "' is not a registered object.");
 
     InputParameters & params = Factory::getValidParams(class_name);
     params.set<std::string>("_type") = class_name;
@@ -251,16 +256,14 @@ GYMLFile::readVectorValue(const std::string & param_name, const YAML::Node & val
 {
     _F_;
     std::vector<T> vec;
-    if (val_node.IsScalar()) {
+    if (val_node.IsScalar())
         vec.push_back(val_node.as<T>());
-    }
-    else if (val_node.IsSequence()) {
+    else if (val_node.IsSequence())
         vec = val_node.as<std::vector<T>>();
-    }
     else
-        godzillaError("Parameter '",
-                      param_name,
-                      "' must be either a single value or a vector of values.");
+        logError("Parameter '",
+                 param_name,
+                 "' must be either a single value or a vector of values.");
 
     return vec;
 }
@@ -278,7 +281,7 @@ GYMLFile::checkParams(const InputParameters & params, const std::string & name)
     }
 
     if (!oss.str().empty())
-        godzillaError(name, ": Missing required parameters:", oss.str());
+        logError(name, ": Missing required parameters:", oss.str());
 }
 
 } // namespace godzilla

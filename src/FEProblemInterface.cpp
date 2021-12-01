@@ -5,6 +5,8 @@
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "FunctionInterface.h"
+#include "App.h"
+#include "Logger.h"
 
 namespace godzilla {
 
@@ -19,7 +21,12 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 } // namespace internal
 
-FEProblemInterface::FEProblemInterface(const InputParameters & params) : dim(-1), ds(nullptr) {}
+FEProblemInterface::FEProblemInterface(const InputParameters & params) :
+    logger(const_cast<Logger &>(params.get<const App *>("_app")->getLogger())),
+    dim(-1),
+    ds(nullptr)
+{
+}
 
 FEProblemInterface::~FEProblemInterface()
 {
@@ -101,9 +108,9 @@ FEProblemInterface::addInitialCondition(InitialCondition * ic)
         this->ics[fid].ic = ic;
     else
         // TODO: improve this error message
-        error("Initial condition '",
-              ic->getName(),
-              "' is being applied to a field that already has an initial condition.");
+        this->logger.error("Initial condition '",
+                           ic->getName(),
+                           "' is being applied to a field that already has an initial condition.");
 }
 
 void
@@ -118,22 +125,26 @@ FEProblemInterface::setUpBoundaryConditions(DM dm)
 {
     _F_;
     /// TODO: refactor this into a method
+    bool no_errors = true;
     for (auto & bc : this->bcs) {
         const std::string & bnd_name = bc->getBoundary();
         PetscErrorCode ierr;
         PetscBool exists = PETSC_FALSE;
         ierr = DMHasLabel(dm, bnd_name.c_str(), &exists);
         checkPetscError(ierr);
-        if (!exists)
-            error("Boundary condition '",
-                  bc->getName(),
-                  "' is set on boundary '",
-                  bnd_name,
-                  "' which does not exist in the mesh.");
+        if (!exists) {
+            no_errors = false;
+            this->logger.error("Boundary condition '",
+                               bc->getName(),
+                               "' is set on boundary '",
+                               bnd_name,
+                               "' which does not exist in the mesh.");
+        }
     }
 
-    for (auto & bc : this->bcs)
-        bc->setUp(dm);
+    if (no_errors)
+        for (auto & bc : this->bcs)
+            bc->setUp(dm);
 }
 
 void
@@ -143,8 +154,13 @@ FEProblemInterface::setupInitialGuess(DM dm, Vec x)
     PetscInt n_ics = this->ics.size();
     if (n_ics > 0) {
         if (n_ics != fields.size())
-            error("Provided ", fields.size(), " field(s), but ", n_ics, " initial condition(s).");
+            this->logger.error("Provided ",
+                               fields.size(),
+                               " field(s), but ",
+                               n_ics,
+                               " initial condition(s).");
         else {
+            bool no_errors = true;
             PetscErrorCode ierr;
             PetscFunc * ic_funcs[n_ics];
             void * ic_ctxs[n_ics];
@@ -155,20 +171,25 @@ FEProblemInterface::setupInitialGuess(DM dm, Vec x)
 
                 PetscInt ic_nc = ic->getNumComponents();
                 PetscInt field_nc = this->fields[fid].nc;
-                if (ic_nc != field_nc)
-                    error("Initial condition '",
-                          ic->getName(),
-                          "' operates on ",
-                          ic_nc,
-                          " components, but is set on a field with ",
-                          field_nc,
-                          " components.");
+                if (ic_nc != field_nc) {
+                    no_errors = false;
+                    this->logger.error("Initial condition '",
+                                       ic->getName(),
+                                       "' operates on ",
+                                       ic_nc,
+                                       " components, but is set on a field with ",
+                                       field_nc,
+                                       " components.");
+                }
 
                 ic_funcs[fid] = __initial_condition_function;
                 ic_ctxs[fid] = (void *) ic;
             }
-            ierr = DMProjectFunction(dm, 0.0, ic_funcs, ic_ctxs, INSERT_VALUES, x);
-            checkPetscError(ierr);
+
+            if (no_errors) {
+                ierr = DMProjectFunction(dm, 0.0, ic_funcs, ic_ctxs, INSERT_VALUES, x);
+                checkPetscError(ierr);
+            }
         }
     }
     else {

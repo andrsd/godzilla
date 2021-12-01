@@ -4,6 +4,7 @@
 #include "yaml-cpp/yaml.h"
 #include "InputParameters.h"
 #include "PrintInterface.h"
+#include "LoggingInterface.h"
 
 namespace godzilla {
 
@@ -15,7 +16,7 @@ class Function;
 
 /// YML parser for input files
 ///
-class GYMLFile : public PrintInterface {
+class GYMLFile : public PrintInterface, public LoggingInterface {
 public:
     GYMLFile(const App & app);
 

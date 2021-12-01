@@ -8,6 +8,7 @@
 
 namespace godzilla {
 
+class Logger;
 class Grid;
 class InitialCondition;
 class BoundaryCondition;
@@ -133,6 +134,8 @@ protected:
     /// FIXME: This needs a better name
     virtual void onSetWeakForm() = 0;
 
+    /// Logger object
+    Logger & logger;
     /// Spatial dimension of the discrete problem
     PetscInt dim;
     /// Field information

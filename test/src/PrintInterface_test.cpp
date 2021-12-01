@@ -14,16 +14,10 @@ TEST_F(PrintInterfaceTest, print)
 
 TEST_F(PrintInterfaceTest, error)
 {
-    // EXPECT_DEATH(this->app->godzillaError("Error"), "ERROR: Error");
-}
-
-TEST_F(PrintInterfaceTest, error_with_callstack)
-{
-    // _F_;
-    // EXPECT_DEATH(this->app->godzillaErrorWithCallStack("Error"), "ERROR: Error");
+    // EXPECT_DEATH(this->app->godzillaError("Error"), "error: Error");
 }
 
 TEST_F(PrintInterfaceTest, check_petsc_error)
 {
-    EXPECT_DEATH(checkPetscError(123), "ERROR: PETSc error: 123");
+    EXPECT_DEATH(checkPetscError(123), "error: PETSc error: 123");
 }

@@ -1,2 +1,5 @@
 grid:
   type: LineMesh
+problem:
+  type: GTestProblem
+  str: "input_str"

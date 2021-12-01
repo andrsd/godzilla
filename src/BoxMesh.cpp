@@ -39,11 +39,11 @@ BoxMesh::BoxMesh(const InputParameters & parameters) :
 {
     _F_;
     if (this->xmax <= this->xmin)
-        godzillaError("Parameter 'xmax' must be larger than 'xmin'.");
+        logError("Parameter 'xmax' must be larger than 'xmin'.");
     if (this->ymax <= this->ymin)
-        godzillaError("Parameter 'ymax' must be larger than 'ymin'.");
+        logError("Parameter 'ymax' must be larger than 'ymin'.");
     if (this->zmax <= this->zmin)
-        godzillaError("Parameter 'zmax' must be larger than 'zmin'.");
+        logError("Parameter 'zmax' must be larger than 'zmin'.");
 }
 
 PetscInt

@@ -56,7 +56,7 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
     app.create();
     app.parseCommandLine(argc, argv);
 
-    EXPECT_DEATH(app.run(), "ERROR: Unable to open");
+    EXPECT_DEATH(app.run(), "error: Unable to open");
 }
 
 TEST_F(GodzillaAppTest, no_colors)

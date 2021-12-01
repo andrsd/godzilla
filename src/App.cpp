@@ -111,9 +111,9 @@ App::runInputFile(const std::string & file_name)
         runProblem();
     }
     else
-        godzillaError("Unable to open '",
-                      file_name,
-                      "' for reading. Make sure it exists and you have read permissions.");
+        error("Unable to open '",
+              file_name,
+              "' for reading. Make sure it exists and you have read permissions.");
 }
 
 void

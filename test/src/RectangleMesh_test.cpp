@@ -22,11 +22,15 @@ TEST_F(RectangleMeshTest, g2d_rectangle_mesh)
 
 TEST_F(RectangleMeshTest, g2d_rectangle_mesh_incorrect_dims)
 {
-    EXPECT_DEATH(g2dRectangleMesh({ 2, 1 }, { 1, 2 }),
-                 "ERROR: obj: Parameter 'xmax' must be larger than 'xmin'.");
+    testing::internal::CaptureStderr();
 
-    EXPECT_DEATH(g2dRectangleMesh({ 1, 2 }, { 2, 1 }),
-                 "ERROR: obj: Parameter 'ymax' must be larger than 'ymin'.");
+    g2dRectangleMesh({ 2, 1 }, { 1, 2 });
+    g2dRectangleMesh({ 1, 2 }, { 2, 1 });
+    this->app->checkIntegrity();
+
+    auto output = testing::internal::GetCapturedStderr();
+    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));
+    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'ymax' must be larger than 'ymin'."));
 }
 
 TEST_F(RectangleMeshTest, g2d_rectangle_mesh_create)

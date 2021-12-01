@@ -98,14 +98,14 @@ TEST_F(FENonlinearProblemTest, getFieldName)
     prob->create();
 
     EXPECT_EQ(prob->getFieldName(0), "u");
-    EXPECT_DEATH(prob->getFieldName(1), "ERROR: Field with id = '1' does not exist.");
+    EXPECT_DEATH(prob->getFieldName(1), "error: Field with id = '1' does not exist.");
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
     prob->addField(0, "first", 1, 1);
     EXPECT_DEATH(prob->addField(0, "second", 1, 1),
-                 "ERROR: Cannot add field 'second' with ID = 0. ID already exists.");
+                 "error: Cannot add field 'second' with ID = 0. ID already exists.");
 }
 
 TEST_F(FENonlinearProblemTest, solve)
@@ -137,12 +137,10 @@ TEST_F(FENonlinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     const Vec x = prob->getSolutionVector();
-
     PetscInt ni = 1;
     PetscInt ix[1] = { 0 };
     PetscScalar xx[1];
     VecGetValues(x, ni, ix, xx);
-
     EXPECT_DOUBLE_EQ(xx[0], 0.25);
 }
 
@@ -161,33 +159,37 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
     prob->create();
 
     const Vec x = prob->getSolutionVector();
-
     PetscInt ni = 1;
     PetscInt ix[1] = { 0 };
     PetscScalar xx[1];
     VecGetValues(x, ni, ix, xx);
-
     EXPECT_DOUBLE_EQ(xx[0], 0.);
 }
 
 TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 {
+    testing::internal::CaptureStderr();
+
     {
         const std::string class_name = "GTest2CompIC";
         InputParameters & params = Factory::getValidParams(class_name);
         auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
         prob->addInitialCondition(ic);
     }
-
     grid->create();
+    prob->create();
+    this->app->checkIntegrity();
 
-    EXPECT_DEATH(prob->create(),
-                 "ERROR: Initial condition 'ic' operates on 2 components, but is set on a field "
-                 "with 1 components.");
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::HasSubstr("Initial condition 'ic' operates on 2 components, but is set on a field "
+                           "with 1 components."));
 }
 
 TEST_F(FENonlinearProblemTest, err_duplicate_ics)
 {
+    testing::internal::CaptureStderr();
+
     {
         const std::string class_name = "ConstantIC";
         InputParameters & params = Factory::getValidParams(class_name);
@@ -195,19 +197,34 @@ TEST_F(FENonlinearProblemTest, err_duplicate_ics)
         auto ic = this->app->buildObject<InitialCondition>(class_name, "ic1", params);
         prob->addInitialCondition(ic);
     }
-
     const std::string class_name = "ConstantIC";
     InputParameters & params = Factory::getValidParams(class_name);
     params.set<std::vector<PetscReal>>("value") = { 0.2 };
     auto ic = this->app->buildObject<InitialCondition>(class_name, "ic2", params);
-    EXPECT_DEATH(prob->addInitialCondition(ic),
-                 "ERROR: Initial condition 'ic2' is being applied to a field that already has an "
-                 "initial condition.");
+    prob->addInitialCondition(ic);
+    this->app->checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr(
+                    "Initial condition 'ic2' is being applied to a field that already has an "
+                    "initial condition."));
 }
 
-TEST(TwoFieldFENonlinearProblemTest, err_no_enough_ics)
+TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 {
-    App app("godzilla", MPI_COMM_WORLD);
+    testing::internal::CaptureStderr();
+
+    class TestApp : public App {
+    public:
+        TestApp() : App("godzilla", MPI_COMM_WORLD) {}
+
+        virtual void
+        checkIntegrity()
+        {
+            if (this->log.getNumEntries() > 0)
+                this->log.print();
+        }
+    } app;
     Grid * grid;
     FENonlinearProblem * prob;
 
@@ -233,11 +250,17 @@ TEST(TwoFieldFENonlinearProblemTest, err_no_enough_ics)
     }
 
     grid->create();
-    EXPECT_DEATH(prob->create(), "ERROR: Provided 2 field\\(s\\), but 1 initial condition\\(s\\).");
+    prob->create();
+    app.checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("Provided 2 field(s), but 1 initial condition(s)."));
 }
 
 TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 {
+    testing::internal::CaptureStderr();
+
     {
         const std::string class_name = "DirichletBC";
         InputParameters & params = Factory::getValidParams(class_name);
@@ -248,9 +271,13 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
     }
 
     grid->create();
-    EXPECT_DEATH(prob->create(),
-                 "ERROR: Boundary condition 'bc1' is set on boundary 'asdf' which does not exist "
-                 "in the mesh.");
+    prob->create();
+    this->app->checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr(
+                    "Boundary condition 'bc1' is set on boundary 'asdf' which does not exist "
+                    "in the mesh."));
 }
 
 TEST_F(FENonlinearProblemTest, compute_residual_callback)

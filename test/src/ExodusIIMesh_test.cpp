@@ -18,9 +18,15 @@ TEST_F(ExodusIIMeshTest, gexodus_mesh)
 
 TEST_F(ExodusIIMeshTest, gexodus_mesh_nonexitent_file)
 {
-    EXPECT_DEATH(gExodusMesh("asdf.e"),
-                 "ERROR: obj: Unable to open 'asdf.e' for reading. Make sure it exists and you "
-                 "have read permissions.");
+    testing::internal::CaptureStderr();
+
+    gExodusMesh("asdf.e");
+    this->app->checkIntegrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::HasSubstr("obj: Unable to open 'asdf.e' for reading. Make sure it exists and you "
+                           "have read permissions."));
 }
 
 TEST_F(ExodusIIMeshTest, gexodus_mesh_create)

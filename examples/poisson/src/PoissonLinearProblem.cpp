@@ -36,7 +36,7 @@ PoissonLinearProblem::init()
         this->ny = grid_2d->getNy();
     }
     else
-        godzillaError("'PoissonLinearProblem' object works only on structured 2D grids.");
+        logError("'PoissonLinearProblem' object works only on structured 2D grids.");
 }
 
 PetscErrorCode
@@ -129,7 +129,7 @@ PoissonLinearProblem::computeOperatorsCallback(Mat A, Mat B)
                     num++;
                     numj++;
                 }
-                v[num] = ((PetscReal) (numj) *HxdHy + (PetscReal) (numi) *HydHx);
+                v[num] = ((PetscReal)(numj) *HxdHy + (PetscReal)(numi) *HydHx);
                 col[num].i = i;
                 col[num].j = j;
                 num++;

@@ -43,7 +43,7 @@ TEST_F(GYMLFileTest, build_empty)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "ERROR: Missing 'grid' block.");
+    EXPECT_DEATH(file.build(), "error: Missing 'grid' block.");
 }
 
 TEST_F(GYMLFileTest, build_grid_no_type)
@@ -54,7 +54,7 @@ TEST_F(GYMLFileTest, build_grid_no_type)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_no_type.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "ERROR: grid: No 'type' specified.");
+    EXPECT_DEATH(file.build(), "error: grid: No 'type' specified.");
 }
 
 TEST_F(GYMLFileTest, build_grid_unreg_type)
@@ -65,18 +65,22 @@ TEST_F(GYMLFileTest, build_grid_unreg_type)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_unreg_type.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "ERROR: grid: Type 'ASDF' is not a registered object.");
+    EXPECT_DEATH(file.build(), "error: grid: Type 'ASDF' is not a registered object.");
 }
 
 TEST_F(GYMLFileTest, build_missing_req_param)
 {
-    GYMLFile file(*this->app);
+    testing::internal::CaptureStderr();
 
+    GYMLFile file(*this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_missing_req_param.yml");
-
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "ERROR: grid: Missing required parameters:");
+    file.build();
+    this->app->checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("grid: Missing required parameters:"));
 }
 
 TEST_F(GYMLFileTest, build)
@@ -115,14 +119,19 @@ TEST_F(GYMLFileTest, build_vec_as_scalars)
 
 TEST_F(GYMLFileTest, wrong_param_type)
 {
-    GYMLFile file(*this->app);
+    testing::internal::CaptureStderr();
 
+    GYMLFile file(*this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/wrong_param_type.yml");
-
     file.parse(file_name);
-    EXPECT_DEATH(file.build(),
-                 "ERROR: Parameter 'arr_d' must be either a single value or a vector of values.");
+    file.build();
+    this->app->checkIntegrity();
+
+    auto output = testing::internal::GetCapturedStderr();
+    EXPECT_THAT(output,
+                testing::HasSubstr(
+                    "Parameter 'arr_d' must be either a single value or a vector of values."));
 }
 
 TEST_F(GYMLFileTest, build_fe)
@@ -144,26 +153,32 @@ TEST_F(GYMLFileTest, build_fe)
 
 TEST_F(GYMLFileTest, nonfe_problem_with_ics)
 {
-    GYMLFile file(*this->app);
+    testing::internal::CaptureStderr();
 
+    GYMLFile file(*this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_ics.yml");
-
     file.parse(file_name);
-    EXPECT_DEATH(
-        file.build(),
-        "ERROR: Supplied problem type 'GTestProblem' does not support initial conditions.");
+    file.build();
+    this->app->checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr(
+                    "Supplied problem type 'GTestProblem' does not support initial conditions."));
 }
 
 TEST_F(GYMLFileTest, nonfe_problem_with_bcs)
 {
-    GYMLFile file(*this->app);
+    testing::internal::CaptureStderr();
 
+    GYMLFile file(*this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_bcs.yml");
-
     file.parse(file_name);
-    EXPECT_DEATH(
-        file.build(),
-        "ERROR: Supplied problem type 'GTestProblem' does not support boundary conditions.");
+    file.build();
+    this->app->checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr(
+                    "Supplied problem type 'GTestProblem' does not support boundary conditions."));
 }

@@ -26,14 +26,18 @@ TEST_F(BoxMeshTest, g2d_rectangle_mesh)
 
 TEST_F(BoxMeshTest, g3d_rectangle_mesh_incorrect_dims)
 {
-    EXPECT_DEATH(g3dBoxMesh({ 2, 1, 0 }, { 1, 2, 1 }),
-                 "ERROR: obj: Parameter 'xmax' must be larger than 'xmin'.");
+    testing::internal::CaptureStderr();
 
-    EXPECT_DEATH(g3dBoxMesh({ 1, 2, 0 }, { 2, 1, 1 }),
-                 "ERROR: obj: Parameter 'ymax' must be larger than 'ymin'.");
+    g3dBoxMesh({ 2, 1, 0 }, { 1, 2, 1 });
+    g3dBoxMesh({ 1, 2, 0 }, { 2, 1, 1 });
+    g3dBoxMesh({ 0, 0, 2 }, { 1, 1, 1 });
 
-    EXPECT_DEATH(g3dBoxMesh({ 0, 0, 2 }, { 1, 1, 1 }),
-                 "ERROR: obj: Parameter 'zmax' must be larger than 'zmin'.");
+    this->app->checkIntegrity();
+
+    auto output = testing::internal::GetCapturedStderr();
+    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));
+    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'ymax' must be larger than 'ymin'."));
+    EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'zmax' must be larger than 'zmin'."));
 }
 
 TEST_F(BoxMeshTest, g3d_rectangle_mesh_create)

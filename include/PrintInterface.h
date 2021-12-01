@@ -58,28 +58,6 @@ protected:
         }
     }
 
-    /// Emit an error message with the given stringified, concatenated args and
-    /// terminate the application.
-    template <typename... Args>
-    [[noreturn]] void
-    godzillaError(Args &&... args) const
-    {
-        std::ostringstream oss;
-        internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
-        internal::godzillaErrorRaw(oss.str());
-        internal::terminate();
-    }
-
-    template <typename... Args>
-    [[noreturn]] void
-    godzillaErrorWithCallStack(Args &&... args) const
-    {
-        std::ostringstream oss;
-        internal::godzillaStreamAll(oss, this->prefix, std::forward<Args>(args)...);
-        internal::godzillaErrorRaw(oss.str(), true);
-        internal::terminate();
-    }
-
 private:
     const unsigned int & verbosity_level;
     /// Prefix to print
