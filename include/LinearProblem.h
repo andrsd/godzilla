@@ -26,11 +26,11 @@ protected:
     /// Allocate Jacobian/residual objects
     virtual void allocateObjects();
     /// Setup computation of residual and Jacobian callbacks
-    virtual void setupCallbacks();
+    virtual void setUpCallbacks();
     /// Setup monitors
-    virtual void setupMonitors();
+    virtual void setUpMonitors();
     /// Setup solver parameters
-    virtual void setupSolverParameters();
+    virtual void setUpSolverParameters();
     /// Method to compute right-hand side. Called from the PETsc callback
     virtual PetscErrorCode computeRhsCallback(Vec b) = 0;
     /// Method to compute operators. Called from the PETsc callback

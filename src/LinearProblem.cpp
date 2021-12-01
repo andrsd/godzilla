@@ -97,9 +97,9 @@ LinearProblem::create()
     allocateObjects();
     onSetMatrixProperties();
 
-    setupSolverParameters();
-    setupMonitors();
-    setupCallbacks();
+    setUpSolverParameters();
+    setUpMonitors();
+    setUpCallbacks();
 }
 
 void
@@ -143,7 +143,7 @@ LinearProblem::allocateObjects()
 }
 
 void
-LinearProblem::setupCallbacks()
+LinearProblem::setUpCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
@@ -155,7 +155,7 @@ LinearProblem::setupCallbacks()
 }
 
 void
-LinearProblem::setupMonitors()
+LinearProblem::setUpMonitors()
 {
     _F_;
     PetscErrorCode ierr;
@@ -165,7 +165,7 @@ LinearProblem::setupMonitors()
 }
 
 void
-LinearProblem::setupSolverParameters()
+LinearProblem::setUpSolverParameters()
 {
     _F_;
     PetscErrorCode ierr;

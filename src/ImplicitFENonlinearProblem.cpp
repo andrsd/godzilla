@@ -123,7 +123,7 @@ ImplicitFENonlinearProblem::run()
 }
 
 void
-ImplicitFENonlinearProblem::setupCallbacks()
+ImplicitFENonlinearProblem::setUpCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
@@ -138,10 +138,10 @@ ImplicitFENonlinearProblem::setupCallbacks()
 }
 
 void
-ImplicitFENonlinearProblem::setupMonitors()
+ImplicitFENonlinearProblem::setUpMonitors()
 {
     _F_;
-    FENonlinearProblem::setupMonitors();
+    FENonlinearProblem::setUpMonitors();
 
     PetscErrorCode ierr;
     ierr = TSSetPreStep(this->ts, __transient_pre_step);

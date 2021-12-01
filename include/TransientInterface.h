@@ -19,7 +19,7 @@ protected:
     /// Create
     virtual void create(DM dm);
     /// Called before the time step solve
-    virtual void setupTimeScheme();
+    virtual void setUpTimeScheme();
     /// Solve
     virtual void solve(Vec x);
 

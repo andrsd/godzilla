@@ -17,8 +17,8 @@ public:
 
 protected:
     virtual void init() override;
-    virtual void setupCallbacks() override;
-    virtual void setupInitialGuess() override;
+    virtual void setUpCallbacks() override;
+    virtual void setUpInitialGuess() override;
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
     virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;
 

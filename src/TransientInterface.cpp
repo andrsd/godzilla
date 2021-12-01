@@ -47,7 +47,7 @@ TransientInterface::create(DM dm)
     _F_;
     PetscErrorCode ierr;
 
-    setupTimeScheme();
+    setUpTimeScheme();
 
     ierr = TSSetDM(this->ts, dm);
     checkPetscError(ierr);
@@ -61,7 +61,7 @@ TransientInterface::create(DM dm)
 }
 
 void
-TransientInterface::setupTimeScheme()
+TransientInterface::setUpTimeScheme()
 {
     _F_;
     PetscErrorCode ierr;

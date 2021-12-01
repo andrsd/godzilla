@@ -16,7 +16,7 @@ public:
 
 protected:
     virtual void init() override;
-    virtual void setupCallbacks() override;
+    virtual void setUpCallbacks() override;
     /// Called before the time step solve
     virtual PetscErrorCode onPreStep();
     /// Called after the time step is done solving
@@ -24,7 +24,7 @@ protected:
     /// TS monitor callback
     virtual PetscErrorCode tsMonitorCallback(PetscInt stepi, PetscReal time, Vec X);
     /// Setup monitors
-    virtual void setupMonitors() override;
+    virtual void setUpMonitors() override;
     /// Output vector
     virtual void output(DM dm, Vec vec);
 

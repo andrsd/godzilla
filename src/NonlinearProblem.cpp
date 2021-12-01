@@ -126,12 +126,12 @@ NonlinearProblem::create()
     allocateObjects();
     onSetMatrixProperties();
 
-    setupSolverParameters();
-    setupLineSearch();
-    setupMonitors();
-    setupCallbacks();
+    setUpSolverParameters();
+    setUpLineSearch();
+    setUpMonitors();
+    setUpCallbacks();
 
-    setupInitialGuess();
+    setUpInitialGuess();
 }
 
 void
@@ -150,7 +150,7 @@ NonlinearProblem::init()
 }
 
 void
-NonlinearProblem::setupInitialGuess()
+NonlinearProblem::setUpInitialGuess()
 {
     _F_;
     PetscErrorCode ierr;
@@ -185,7 +185,7 @@ NonlinearProblem::allocateObjects()
 }
 
 void
-NonlinearProblem::setupLineSearch()
+NonlinearProblem::setUpLineSearch()
 {
     _F_;
     SNESLineSearch line_search;
@@ -207,7 +207,7 @@ NonlinearProblem::setupLineSearch()
 }
 
 void
-NonlinearProblem::setupCallbacks()
+NonlinearProblem::setUpCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
@@ -218,7 +218,7 @@ NonlinearProblem::setupCallbacks()
 }
 
 void
-NonlinearProblem::setupMonitors()
+NonlinearProblem::setUpMonitors()
 {
     _F_;
     SNESMonitorSet(this->snes, __snes_monitor, this, 0);
@@ -229,7 +229,7 @@ NonlinearProblem::setupMonitors()
 }
 
 void
-NonlinearProblem::setupSolverParameters()
+NonlinearProblem::setUpSolverParameters()
 {
     _F_;
     PetscErrorCode ierr;

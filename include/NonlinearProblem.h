@@ -23,18 +23,18 @@ protected:
     virtual const DM & getDM() const override;
     /// Initialize the problem
     virtual void init();
-    /// setup initial guess
-    virtual void setupInitialGuess();
+    /// Set up initial guess
+    virtual void setUpInitialGuess();
     /// Allocate Jacobian/residual objects
     virtual void allocateObjects();
-    /// setup line search
-    virtual void setupLineSearch();
-    /// Setup computation of residual and Jacobian callbacks
-    virtual void setupCallbacks();
-    /// Setup monitors
-    virtual void setupMonitors();
-    /// Setup solver parameters
-    virtual void setupSolverParameters();
+    /// Set up line search
+    virtual void setUpLineSearch();
+    /// Set up computation of residual and Jacobian callbacks
+    virtual void setUpCallbacks();
+    /// Set up monitors
+    virtual void setUpMonitors();
+    /// Set up solver parameters
+    virtual void setUpSolverParameters();
     /// Method to compute residual. Called from the PETsc callback
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) = 0;
     /// Method to compute Jacobian. Called from the PETsc callback

@@ -38,7 +38,7 @@ FENonlinearProblem::init()
 }
 
 void
-FENonlinearProblem::setupCallbacks()
+FENonlinearProblem::setUpCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
@@ -50,10 +50,10 @@ FENonlinearProblem::setupCallbacks()
 }
 
 void
-FENonlinearProblem::setupInitialGuess()
+FENonlinearProblem::setUpInitialGuess()
 {
     _F_;
-    FEProblemInterface::setupInitialGuess(getDM(), this->x);
+    FEProblemInterface::setUpInitialGuess(getDM(), this->x);
 }
 
 PetscErrorCode

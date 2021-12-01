@@ -94,7 +94,7 @@ protected:
 
     virtual void create(DM dm);
 
-    virtual void setupInitialGuess(DM dm, Vec x);
+    virtual void setUpInitialGuess(DM dm, Vec x);
 
     typedef void PetscFEResidualFunc(PetscInt dim,
                                      PetscInt Nf,

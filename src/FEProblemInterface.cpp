@@ -206,7 +206,7 @@ FEProblemInterface::setUpBoundaryConditions(DM dm)
 }
 
 void
-FEProblemInterface::setupInitialGuess(DM dm, Vec x)
+FEProblemInterface::setUpInitialGuess(DM dm, Vec x)
 {
     _F_;
     PetscInt n_ics = this->ics.size();
