@@ -129,7 +129,7 @@ PoissonLinearProblem::computeOperatorsCallback(Mat A, Mat B)
                     num++;
                     numj++;
                 }
-                v[num] = ((PetscReal)(numj) *HxdHy + (PetscReal)(numi) *HydHx);
+                v[num] = ((PetscReal) numj * HxdHy + (PetscReal) numi * HydHx);
                 col[num].i = i;
                 col[num].j = j;
                 num++;
