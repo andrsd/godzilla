@@ -8,6 +8,7 @@ add_executable(${PROJECT_NAME}
     ExodusIIOutput_test.cpp
     Factory_test.cpp
     FENonlinearProblem_test.cpp
+    FunctionEvaluator_test.cpp
     FunctionIC_test.cpp
     GodzillaApp_test.cpp
     GYMLFile_test.cpp
