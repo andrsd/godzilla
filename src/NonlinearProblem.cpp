@@ -104,7 +104,7 @@ NonlinearProblem::~NonlinearProblem()
         MatDestroy(&this->J);
 }
 
-const DM &
+DM
 NonlinearProblem::getDM() const
 {
     _F_;
@@ -139,7 +139,7 @@ NonlinearProblem::init()
 {
     _F_;
     PetscErrorCode ierr;
-    const DM & dm = getDM();
+    DM dm = getDM();
 
     ierr = SNESCreate(comm(), &this->snes);
     checkPetscError(ierr);
@@ -163,7 +163,7 @@ NonlinearProblem::allocateObjects()
 {
     _F_;
     PetscErrorCode ierr;
-    const DM & dm = getDM();
+    DM dm = getDM();
 
     ierr = DMCreateGlobalVector(dm, &this->x);
     checkPetscError(ierr);

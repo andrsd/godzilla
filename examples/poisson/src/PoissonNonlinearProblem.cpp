@@ -34,7 +34,7 @@ PoissonNonlinearProblem::allocateObjects()
     PetscErrorCode ierr;
     NonlinearProblem::allocateObjects();
 
-    const DM dm = getDM();
+    DM dm = getDM();
     ierr = VecDuplicate(this->x, &this->b);
     checkPetscError(ierr);
     ierr = VecSet(this->b, 1.0);
@@ -48,7 +48,7 @@ PoissonNonlinearProblem::formMatrix(Mat jac)
 {
     _F_;
     PetscErrorCode ierr;
-    const DM dm = getDM();
+    DM dm = getDM();
 
     const PetscInt STENCIL_SIZE = 5;
 

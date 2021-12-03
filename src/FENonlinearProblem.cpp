@@ -42,7 +42,7 @@ FENonlinearProblem::setUpCallbacks()
 {
     _F_;
     PetscErrorCode ierr;
-    const DM & dm = this->getDM();
+    DM dm = this->getDM();
     ierr = DMPlexSetSNESLocalFEM(dm, this, this, this);
     checkPetscError(ierr);
     ierr = SNESSetJacobian(this->snes, this->J, this->Jp, NULL, NULL);

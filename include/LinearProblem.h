@@ -20,7 +20,7 @@ public:
 
 protected:
     /// provide DM for the underlying KSP object
-    virtual const DM & getDM() const override;
+    virtual DM getDM() const override;
     /// Initialize the problem
     virtual void init();
     /// Allocate Jacobian/residual objects

@@ -73,7 +73,7 @@ void
 ExodusIIOutput::check()
 {
     _F_;
-    const DM & dm = this->problem.getDM();
+    DM dm = this->problem.getDM();
     PetscInt dim;
     DMGetDimension(dm, &dim);
     if (dim == 1)

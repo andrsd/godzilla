@@ -129,7 +129,7 @@ G1DTestLinearProblem::~G1DTestLinearProblem()
 void
 G1DTestLinearProblem::create()
 {
-    const DM & dm = getDM();
+    DM dm = getDM();
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[2] = { 1, 0 };
     DMSetNumFields(dm, 1);
@@ -178,7 +178,7 @@ G2DTestLinearProblem::~G2DTestLinearProblem()
 void
 G2DTestLinearProblem::create()
 {
-    const DM & dm = getDM();
+    DM dm = getDM();
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[3] = { 1, 0, 0 };
     DMSetNumFields(dm, 1);
@@ -229,7 +229,7 @@ G3DTestLinearProblem::~G3DTestLinearProblem()
 void
 G3DTestLinearProblem::create()
 {
-    const DM & dm = getDM();
+    DM dm = getDM();
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[4] = { 1, 0, 0, 0 };
     DMSetNumFields(dm, 1);

@@ -23,7 +23,7 @@ Grid::~Grid()
         DMDestroy(&this->dm);
 }
 
-const DM &
+DM
 Grid::getDM() const
 {
     _F_;

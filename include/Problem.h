@@ -26,7 +26,7 @@ public:
     /// true if solve converged, otherwise false
     virtual bool converged() = 0;
     /// provide DM for the underlying KSP object
-    virtual const DM & getDM() const = 0;
+    virtual DM getDM() const = 0;
     /// Return solution vector
     virtual const Vec & getSolutionVector() const = 0;
 

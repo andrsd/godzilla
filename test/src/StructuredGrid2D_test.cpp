@@ -18,7 +18,7 @@ TEST_F(StructuredGrid2DTest, create)
 {
     auto obj = gMesh(3, 4);
     obj->create();
-    const DM & dm = obj->getDM();
+    DM dm = obj->getDM();
 
     PetscInt dim;
     DMGetDimension(dm, &dim);

@@ -21,7 +21,7 @@ public:
     MOCK_METHOD(void, run, ());
     MOCK_METHOD(void, solve, ());
     MOCK_METHOD(bool, converged, ());
-    MOCK_METHOD(const DM &, getDM, (), (const));
+    MOCK_METHOD(DM, getDM, (), (const));
     MOCK_METHOD(const Vec &, getSolutionVector, (), (const));
 };
 

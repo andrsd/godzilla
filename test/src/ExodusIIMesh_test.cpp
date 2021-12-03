@@ -34,7 +34,7 @@ TEST_F(ExodusIIMeshTest, gexodus_mesh_create)
     std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/square.e");
     auto obj = gExodusMesh(file_name);
     obj->create();
-    const DM & dm = obj->getDM();
+    DM dm = obj->getDM();
 
     PetscInt dim;
     DMGetDimension(dm, &dim);

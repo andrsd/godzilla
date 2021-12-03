@@ -37,7 +37,7 @@ TEST_F(RectangleMeshTest, g2d_rectangle_mesh_create)
 {
     auto obj = g2dRectangleMesh({ 1, 2 }, { 3, 4 });
     obj->create();
-    const DM & dm = obj->getDM();
+    DM dm = obj->getDM();
 
     PetscInt dim;
     DMGetDimension(dm, &dim);

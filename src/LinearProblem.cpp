@@ -75,7 +75,7 @@ LinearProblem::~LinearProblem()
         MatDestroy(&this->A);
 }
 
-const DM &
+DM
 LinearProblem::getDM() const
 {
     _F_;
@@ -107,7 +107,7 @@ LinearProblem::init()
 {
     _F_;
     PetscErrorCode ierr;
-    const DM & dm = getDM();
+    DM dm = getDM();
 
     ierr = KSPCreate(comm(), &this->ksp);
     checkPetscError(ierr);
@@ -122,7 +122,7 @@ LinearProblem::allocateObjects()
 {
     _F_;
     PetscErrorCode ierr;
-    const DM & dm = getDM();
+    DM dm = getDM();
 
     ierr = DMCreateGlobalVector(dm, &this->x);
     checkPetscError(ierr);

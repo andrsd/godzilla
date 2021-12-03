@@ -13,7 +13,7 @@ public:
     Grid(const InputParameters & parameters);
     virtual ~Grid();
 
-    const DM & getDM() const;
+    DM getDM() const;
 
     /// Create the grid
     virtual void create() = 0;

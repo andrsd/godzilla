@@ -44,7 +44,7 @@ TEST_F(BoxMeshTest, g3d_rectangle_mesh_create)
 {
     auto obj = g3dBoxMesh({ 1, 2, 3 }, { 4, 5, 6 });
     obj->create();
-    const DM & dm = obj->getDM();
+    DM dm = obj->getDM();
 
     PetscInt dim;
     DMGetDimension(dm, &dim);

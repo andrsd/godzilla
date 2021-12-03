@@ -31,7 +31,7 @@ TEST_F(LineMeshTest, g1d_line_mesh_create)
 {
     auto obj = g1dLineMesh(1, 2);
     obj->create();
-    const DM & dm = obj->getDM();
+    DM dm = obj->getDM();
 
     PetscInt dim;
     DMGetDimension(dm, &dim);

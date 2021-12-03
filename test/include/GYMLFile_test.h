@@ -42,7 +42,7 @@ public:
         DMDestroy(&this->dm);
     }
 
-    const DM &
+    DM
     getDM() const override
     {
         return this->dm;

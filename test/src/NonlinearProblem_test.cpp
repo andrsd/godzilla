@@ -126,7 +126,7 @@ G1DTestNonlinearProblem::~G1DTestNonlinearProblem()
 void
 G1DTestNonlinearProblem::create()
 {
-    const DM & dm = getDM();
+    DM dm = getDM();
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[2] = { 1, 0 };
     DMSetNumFields(dm, 1);

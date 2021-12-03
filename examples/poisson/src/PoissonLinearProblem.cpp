@@ -42,7 +42,7 @@ PoissonLinearProblem::init()
 PetscErrorCode
 PoissonLinearProblem::computeRhsCallback(Vec b)
 {
-    const DM & dm = this->grid.getDM();
+    DM dm = this->grid.getDM();
 
     PetscScalar pi = 4 * std::atan(1.0);
     PetscScalar Hx = 1.0 / this->nx;
@@ -78,7 +78,7 @@ PoissonLinearProblem::computeRhsCallback(Vec b)
 PetscErrorCode
 PoissonLinearProblem::computeOperatorsCallback(Mat A, Mat B)
 {
-    const DM & dm = this->grid.getDM();
+    DM dm = this->grid.getDM();
 
     PetscScalar Hx = 1.0 / this->nx;
     PetscScalar Hy = 1.0 / this->ny;
