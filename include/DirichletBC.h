@@ -13,7 +13,7 @@ public:
     DirichletBC(const InputParameters & params);
 
     virtual void create();
-    virtual PetscInt getFieldID() const;
+    virtual PetscInt getFieldId() const;
     virtual PetscInt getNumComponents() const;
     virtual std::vector<PetscInt> getComponents() const;
     virtual void

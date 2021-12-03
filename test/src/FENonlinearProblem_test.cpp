@@ -98,7 +98,7 @@ TEST_F(FENonlinearProblemTest, getFieldName)
     prob->create();
 
     EXPECT_EQ(prob->getFieldName(0), "u");
-    EXPECT_DEATH(prob->getFieldName(1), "error: Field with id = '1' does not exist.");
+    EXPECT_DEATH(prob->getFieldName(1), "error: Field with ID = '1' does not exist.");
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
@@ -115,14 +115,14 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
     prob->create();
 
     EXPECT_EQ(prob->getAuxFieldName(0), "aux_one");
-    EXPECT_EQ(prob->getAuxFieldID("aux_one"), 0);
-    EXPECT_EQ(prob->hasAuxFieldByID(0), true);
+    EXPECT_EQ(prob->getAuxFieldId("aux_one"), 0);
+    EXPECT_EQ(prob->hasAuxFieldById(0), true);
     EXPECT_EQ(prob->hasAuxFieldByName("aux_one"), true);
 
-    EXPECT_DEATH(prob->getAuxFieldName(1), "error: Auxiliary field with id = '1' does not exist.");
-    EXPECT_DEATH(prob->getAuxFieldID("aux_two"),
+    EXPECT_DEATH(prob->getAuxFieldName(1), "error: Auxiliary field with ID = '1' does not exist.");
+    EXPECT_DEATH(prob->getAuxFieldId("aux_two"),
                  "error: Auxiliary field 'aux_two' does not exist\\. Typo\\?");
-    EXPECT_EQ(prob->hasAuxFieldByID(1), false);
+    EXPECT_EQ(prob->hasAuxFieldById(1), false);
     EXPECT_EQ(prob->hasAuxFieldByName("aux_two"), false);
 }
 

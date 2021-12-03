@@ -11,7 +11,7 @@ class MockBoundaryCondition : public BoundaryCondition {
 public:
     MockBoundaryCondition(const InputParameters & params) : BoundaryCondition(params) {}
 
-    MOCK_METHOD(PetscInt, getFieldID, (), (const));
+    MOCK_METHOD(PetscInt, getFieldId, (), (const));
     MOCK_METHOD(PetscInt, getNumComponents, (), (const));
     MOCK_METHOD((DMBoundaryConditionType), getBcType, (), (const));
     MOCK_METHOD(void,

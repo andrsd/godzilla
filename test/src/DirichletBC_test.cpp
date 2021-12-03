@@ -15,7 +15,7 @@ TEST(DirichletBCTest, api)
     auto obj = app.buildObject<DirichletBC>("DirichletBC", "name", params);
     obj->create();
 
-    EXPECT_EQ(obj->getFieldID(), 0);
+    EXPECT_EQ(obj->getFieldId(), 0);
     EXPECT_EQ(obj->getNumComponents(), 1);
     EXPECT_EQ(obj->getBcType(), DM_BC_ESSENTIAL);
 

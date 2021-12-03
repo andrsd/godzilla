@@ -76,7 +76,7 @@ ConvectiveHeatFluxConstBC::ConvectiveHeatFluxConstBC(const InputParameters & par
 }
 
 PetscInt
-ConvectiveHeatFluxConstBC::getFieldID() const
+ConvectiveHeatFluxConstBC::getFieldId() const
 {
     return 0;
 }
@@ -99,7 +99,7 @@ ConvectiveHeatFluxConstBC::onSetWeakForm()
 {
     _F_;
     setResidualBlock(__f0_convective_heat_flux_const_bc, nullptr);
-    setJacobianBlock(getFieldID(), __g0_convective_heat_flux_const_bc, nullptr, nullptr, nullptr);
+    setJacobianBlock(getFieldId(), __g0_convective_heat_flux_const_bc, nullptr, nullptr, nullptr);
 }
 
 } // namespace godzilla

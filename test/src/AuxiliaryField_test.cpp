@@ -34,7 +34,7 @@ TEST(AuxiliaryFieldTest, non_existent_id)
     public:
         TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
         virtual PetscInt
-        getFieldID() const
+        getFieldId() const
         {
             return 1;
         }
@@ -91,7 +91,7 @@ TEST(AuxiliaryFieldTest, inconsistent_comp_number)
     public:
         TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
         virtual PetscInt
-        getFieldID() const
+        getFieldId() const
         {
             return 0;
         }

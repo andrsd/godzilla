@@ -24,7 +24,7 @@ public:
 
     /// Get field name
     ///
-    /// @param fid Field Id
+    /// @param fid Field ID
     virtual const std::string & getFieldName(PetscInt fid) const;
 
     /// Get auxiliary field name
@@ -37,13 +37,13 @@ public:
     ///
     /// @param name Auxiliary field name
     /// @param Auxiliary field ID
-    virtual PetscInt getAuxFieldID(const std::string & name) const;
+    virtual PetscInt getAuxFieldId(const std::string & name) const;
 
     /// Do we have auxiliary field with specified ID
     ///
-    /// @param id The ID of the auxiliary field
+    /// @param fid The ID of the auxiliary field
     /// @return True if the auxiliary field exists, otherwise False
-    virtual bool hasAuxFieldByID(PetscInt fid) const;
+    virtual bool hasAuxFieldById(PetscInt fid) const;
 
     /// Do we have auxiliary field with specified name
     ///

@@ -28,7 +28,7 @@ DirichletBC::create()
 }
 
 PetscInt
-DirichletBC::getFieldID() const
+DirichletBC::getFieldId() const
 {
     _F_;
     return 0;

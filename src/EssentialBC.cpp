@@ -48,7 +48,7 @@ EssentialBC::setUpCallback()
                               this->label,
                               this->n_ids,
                               this->ids,
-                              getFieldID(),
+                              getFieldId(),
                               getNumComponents(),
                               getNumComponents() == 0 ? NULL : getComponents().data(),
                               (void (*)(void)) & __essential_boundary_condition_function,

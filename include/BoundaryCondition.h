@@ -20,7 +20,7 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    virtual PetscInt getFieldID() const = 0;
+    virtual PetscInt getFieldId() const = 0;
 
     /// Get the number of constrained components
     ///

@@ -8,7 +8,7 @@ class ConvectiveHeatFluxConstBC : public NaturalBC {
 public:
     ConvectiveHeatFluxConstBC(const InputParameters & params);
 
-    virtual PetscInt getFieldID() const;
+    virtual PetscInt getFieldId() const;
     virtual PetscInt getNumComponents() const;
     virtual std::vector<PetscInt> getComponents() const;
 

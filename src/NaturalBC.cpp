@@ -36,7 +36,7 @@ NaturalBC::setUpCallback()
                               this->label,
                               this->n_ids,
                               this->ids,
-                              getFieldID(),
+                              getFieldId(),
                               getNumComponents(),
                               getNumComponents() == 0 ? nullptr : getComponents().data(),
                               nullptr,
@@ -70,7 +70,7 @@ NaturalBC::setResidualBlock(PetscFEBndResidualFunc * f0, PetscFEBndResidualFunc 
     _F_;
     for (PetscInt i = 0; i < this->n_ids; i++) {
         PetscInt id = this->ids[i];
-        PetscWeakFormSetIndexBdResidual(this->wf, this->label, id, getFieldID(), 0, 0, f0, 0, f1);
+        PetscWeakFormSetIndexBdResidual(this->wf, this->label, id, getFieldId(), 0, 0, f0, 0, f1);
     }
 }
 
@@ -87,7 +87,7 @@ NaturalBC::setJacobianBlock(PetscInt gid,
         PetscWeakFormSetIndexBdJacobian(this->wf,
                                         this->label,
                                         id,
-                                        getFieldID(),
+                                        getFieldId(),
                                         gid,
                                         0,
                                         0,

@@ -74,7 +74,7 @@ FEProblemInterface::getFieldName(PetscInt fid) const
     if (it != this->fields.end())
         return it->second.name;
     else
-        error("Field with id = '", fid, "' does not exist.");
+        error("Field with ID = '", fid, "' does not exist.");
 }
 
 const std::string &
@@ -85,11 +85,11 @@ FEProblemInterface::getAuxFieldName(PetscInt fid) const
     if (it != this->aux_fields.end())
         return it->second.name;
     else
-        error("Auxiliary field with id = '", fid, "' does not exist.");
+        error("Auxiliary field with ID = '", fid, "' does not exist.");
 }
 
 PetscInt
-FEProblemInterface::getAuxFieldID(const std::string & name) const
+FEProblemInterface::getAuxFieldId(const std::string & name) const
 {
     _F_;
     const auto & it = this->aux_fields_by_name.find(name);
@@ -100,7 +100,7 @@ FEProblemInterface::getAuxFieldID(const std::string & name) const
 }
 
 bool
-FEProblemInterface::hasAuxFieldByID(PetscInt fid) const
+FEProblemInterface::hasAuxFieldById(PetscInt fid) const
 {
     _F_;
     const auto & it = this->aux_fields.find(fid);
@@ -347,8 +347,8 @@ FEProblemInterface::setUpAuxiliaryDM(DM dm)
 
     bool no_errors = true;
     for (auto & aux : this->auxs) {
-        PetscInt fid = aux->getFieldID();
-        if (hasAuxFieldByID(fid)) {
+        PetscInt fid = aux->getFieldId();
+        if (hasAuxFieldById(fid)) {
             PetscInt aux_nc = aux->getNumComponents();
             PetscInt field_nc = this->aux_fields[fid].nc;
             if (aux_nc != field_nc) {

@@ -30,10 +30,10 @@ AuxiliaryField::~AuxiliaryField()
 }
 
 PetscInt
-AuxiliaryField::getFieldID() const
+AuxiliaryField::getFieldId() const
 {
     _F_;
-    return this->fepi.getAuxFieldID(this->getName());
+    return this->fepi.getAuxFieldId(this->getName());
 }
 
 } // namespace godzilla
