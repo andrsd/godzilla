@@ -22,7 +22,7 @@ public:
     MOCK_METHOD(void, solve, ());
     MOCK_METHOD(bool, converged, ());
     MOCK_METHOD(DM, getDM, (), (const));
-    MOCK_METHOD(const Vec &, getSolutionVector, (), (const));
+    MOCK_METHOD(Vec, getSolutionVector, (), (const));
 };
 
 registerObject(MockGrid);

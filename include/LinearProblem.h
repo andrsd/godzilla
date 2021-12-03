@@ -16,7 +16,7 @@ public:
     virtual void solve() override;
     virtual void run() override;
     virtual bool converged() override;
-    virtual const Vec & getSolutionVector() const override;
+    virtual Vec getSolutionVector() const override;
 
 protected:
     /// provide DM for the underlying KSP object

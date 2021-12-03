@@ -111,7 +111,7 @@ NonlinearProblem::getDM() const
     return this->grid.getDM();
 }
 
-const Vec &
+Vec
 NonlinearProblem::getSolutionVector() const
 {
     _F_;

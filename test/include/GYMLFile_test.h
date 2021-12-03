@@ -47,7 +47,7 @@ public:
     {
         return this->dm;
     }
-    const Vec &
+    Vec
     getSolutionVector() const override
     {
         return this->x;

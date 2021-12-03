@@ -27,7 +27,7 @@ TEST_F(LinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     // extract the solution and make sure it is [2, 3]
-    const Vec & x = prob->getSolutionVector();
+    Vec x = prob->getSolutionVector();
     PetscInt ni = 2;
     PetscInt ix[2] = { 0, 1 };
     PetscScalar xx[2];

@@ -28,7 +28,7 @@ public:
     /// provide DM for the underlying KSP object
     virtual DM getDM() const = 0;
     /// Return solution vector
-    virtual const Vec & getSolutionVector() const = 0;
+    virtual Vec getSolutionVector() const = 0;
 
     /// Add and output object
     ///

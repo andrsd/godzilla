@@ -16,7 +16,7 @@ public:
     virtual void run() override;
     virtual void solve() override;
     virtual bool converged() override;
-    const Vec & getSolutionVector() const override;
+    Vec getSolutionVector() const override;
 
 protected:
     /// provide DM for the underlying SNES object

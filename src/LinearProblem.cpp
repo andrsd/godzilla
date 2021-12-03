@@ -82,7 +82,7 @@ LinearProblem::getDM() const
     return this->grid.getDM();
 }
 
-const Vec &
+Vec
 LinearProblem::getSolutionVector() const
 {
     _F_;
