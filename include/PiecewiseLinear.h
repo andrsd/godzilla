@@ -7,7 +7,7 @@ namespace godzilla {
 
 /// User-defined piecewise linear function
 ///
-/// The independent varaible 'x' has to be increasing.
+/// The independent variable 'x' has to be increasing.
 /// User have to specify at least 2 points
 class PiecewiseLinear : public Function {
 public:
