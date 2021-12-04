@@ -330,6 +330,23 @@ TEST_F(FENonlinearProblemTest, set_constant)
     EXPECT_EQ(k[2], 1);
 }
 
+TEST_F(FENonlinearProblemTest, set_constant_2)
+{
+    this->grid->create();
+    this->prob->create();
+    std::vector<PetscReal> consts = { 5, 3, 1 };
+    this->prob->setConstants(consts);
+    this->prob->setUpConstants();
+    PetscDS ds = this->prob->getPetscDS();
+    PetscInt n_consts;
+    const PetscReal * cs;
+    PetscDSGetConstants(ds, &n_consts, &cs);
+    EXPECT_EQ(n_consts, 3);
+    EXPECT_EQ(cs[0], 5);
+    EXPECT_EQ(cs[1], 3);
+    EXPECT_EQ(cs[2], 1);
+}
+
 // GTestFENonlinearProblem
 
 GTestFENonlinearProblem::GTestFENonlinearProblem(const InputParameters & params) :
