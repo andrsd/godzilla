@@ -21,7 +21,8 @@ TEST_F(ExodusIIOutputTest, create)
     auto prob = gProblem1d(grid);
     prob->create();
     auto out = gOutput(prob, "out");
-    out->create();
+    prob->addOutput(out);
+    prob->create();
 }
 
 TEST_F(ExodusIIOutputTest, check)

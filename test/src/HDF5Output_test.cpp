@@ -20,9 +20,9 @@ TEST_F(HDF5OutputTest, create)
     grid->create();
     auto prob = gProblem1d(grid);
     prob->create();
-
     auto out = gOutput(prob, "out");
-    out->create();
+    prob->addOutput(out);
+    prob->create();
 }
 
 TEST_F(HDF5OutputTest, check)

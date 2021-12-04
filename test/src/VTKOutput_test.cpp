@@ -20,9 +20,9 @@ TEST_F(VTKOutputTest, create)
     grid->create();
     auto prob = gProblem1d(grid);
     prob->create();
-
     auto out = gOutput(prob, "out");
-    out->create();
+    prob->addOutput(out);
+    prob->create();
 }
 
 TEST_F(VTKOutputTest, check)
@@ -34,4 +34,20 @@ TEST_F(VTKOutputTest, check)
 
     auto out = gOutput(prob, "out");
     out->check();
+}
+
+TEST_F(VTKOutputTest, output_1d_step)
+{
+    auto grid = gGrid1d();
+    grid->create();
+    auto prob = gProblem1d(grid);
+    prob->create();
+    auto out = gOutput(prob, "out");
+    out->create();
+    out->check();
+    this->app->checkIntegrity();
+
+    prob->solve();
+    EXPECT_EQ(prob->converged(), true);
+    out->outputStep(0, grid->getDM(), prob->getSolutionVector());
 }
