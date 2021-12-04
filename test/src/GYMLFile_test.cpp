@@ -4,6 +4,7 @@
 #include "GodzillaConfig.h"
 #include "LineMesh.h"
 #include "PiecewiseLinear.h"
+#include "FEProblemInterface.h"
 
 using namespace godzilla;
 
@@ -173,6 +174,24 @@ TEST_F(GYMLFileTest, build_fe)
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
+}
+
+TEST_F(GYMLFileTest, build_fe_w_aux)
+{
+    GYMLFile file(*this->app);
+
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe_w_aux.yml");
+
+    file.parse(file_name);
+    file.build();
+
+    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
+    EXPECT_NE(grid, nullptr);
+
+    auto problem = dynamic_cast<FEProblemInterface *>(file.getProblem());
+    EXPECT_NE(problem, nullptr);
+    // TODO: test that the 'aux1' object from the input file was actually added
 }
 
 TEST_F(GYMLFileTest, nonfe_problem_with_ics)
