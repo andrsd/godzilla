@@ -89,7 +89,9 @@ TEST_F(LinearProblemTest, output)
         MOCK_METHOD(const std::string &, getFileName, (), (const));
         MOCK_METHOD(void, setFileName, ());
         MOCK_METHOD(void, setSequenceFileName, (unsigned int stepi));
-        MOCK_METHOD(void, output, (DM dm, Vec vec), (const));
+        MOCK_METHOD(void, outputMesh, (DM dm));
+        MOCK_METHOD(void, outputSolution, (Vec vec));
+        MOCK_METHOD(void, outputStep, (PetscInt stepi, DM dm, Vec vec));
     };
 
     auto grid = gGrid1d();
@@ -107,8 +109,7 @@ TEST_F(LinearProblemTest, output)
 
     prob.addOutput(&out);
 
-    EXPECT_CALL(out, setFileName);
-    EXPECT_CALL(out, output);
+    EXPECT_CALL(out, outputStep);
 
     prob.output();
 }

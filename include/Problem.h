@@ -18,7 +18,7 @@ public:
     virtual void check() override;
 
     /// Build the problem to solve
-    virtual void create() override = 0;
+    virtual void create() override;
     /// Run the problem
     virtual void run() = 0;
     /// Solve the problem

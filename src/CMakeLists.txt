@@ -17,6 +17,7 @@ add_library(godzilla
         ExodusIIOutput.cpp
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
+        FileOutput.cpp
         Function.cpp
         FunctionAuxiliaryField.cpp
         FunctionEvaluator.cpp

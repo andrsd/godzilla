@@ -25,8 +25,10 @@ protected:
     virtual PetscErrorCode tsMonitorCallback(PetscInt stepi, PetscReal time, Vec X);
     /// Setup monitors
     virtual void setUpMonitors() override;
-    /// Output vector
-    virtual void output(DM dm, Vec vec);
+    /// Output
+    virtual void output() override;
+    /// Output time step
+    virtual void outputStep(Vec vec);
 
 public:
     static InputParameters validParams();

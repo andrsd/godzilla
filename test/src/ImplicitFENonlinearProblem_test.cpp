@@ -151,6 +151,32 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
 TEST_F(ImplicitFENonlinearProblemTest, output)
 {
+    class TestProblem : public GTestImplicitFENonlinearProblem {
+    public:
+        TestProblem(const InputParameters & params) : GTestImplicitFENonlinearProblem(params) {}
+        virtual void
+        output()
+        {
+            ImplicitFENonlinearProblem::output();
+        }
+    };
+
+    auto grid = gGrid1d();
+
+    InputParameters & params = Factory::getValidParams("GTestImplicitFENonlinearProblem");
+    params.set<const App *>("_app") = this->app;
+    params.set<Grid *>("_grid") = grid;
+    params.set<PetscReal>("start_time") = 0.;
+    params.set<PetscReal>("end_time") = 20;
+    params.set<PetscReal>("dt") = 5;
+    TestProblem prob(params);
+
+    /// TOOD: make sure output() does not do anything
+    prob.output();
+}
+
+TEST_F(ImplicitFENonlinearProblemTest, output_step)
+{
     class MockImplicitFENonlinearProblem : public ImplicitFENonlinearProblem {
     public:
         MockImplicitFENonlinearProblem(const InputParameters & params) :
@@ -159,9 +185,9 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
         }
 
         virtual void
-        output(DM dm, Vec vec)
+        outputStep(Vec vec)
         {
-            ImplicitFENonlinearProblem::output(dm, vec);
+            ImplicitFENonlinearProblem::outputStep(vec);
         }
 
         MOCK_METHOD(void, onSetFields, ());
@@ -175,7 +201,9 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
         MOCK_METHOD(const std::string &, getFileName, (), (const));
         MOCK_METHOD(void, setFileName, ());
         MOCK_METHOD(void, setSequenceFileName, (unsigned int stepi));
-        MOCK_METHOD(void, output, (DM dm, Vec vec), (const));
+        MOCK_METHOD(void, outputMesh, (DM dm));
+        MOCK_METHOD(void, outputSolution, (Vec vec));
+        MOCK_METHOD(void, outputStep, (PetscInt stepi, DM dm, Vec vec));
     };
 
     auto grid = gGrid1d();
@@ -193,10 +221,9 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
 
     prob.addOutput(&out);
 
-    EXPECT_CALL(out, setSequenceFileName);
-    EXPECT_CALL(out, output);
+    EXPECT_CALL(out, outputStep);
 
-    prob.output(grid->getDM(), prob.getSolutionVector());
+    prob.outputStep(prob.getSolutionVector());
 }
 
 // GTestImplicitFENonlinearProblem

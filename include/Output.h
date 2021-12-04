@@ -10,24 +10,26 @@ class Problem;
 
 /// Base class for doing output
 ///
-/// Inherit from this class and override `output()` where you can implement your
-/// own output code
 class Output : public Object, public PrintInterface {
 public:
     Output(const InputParameters & params);
 
-    /// Get the file name with the output file produced by this outputter
+    /// Store the mesh
     ///
-    /// @return The file name with the output
-    virtual const std::string & getFileName() const = 0;
-    /// Set the file name for single output
-    virtual void setFileName() = 0;
-    /// Set the file name for a sequence of outputs
+    /// @param dm DM holding the mesh to store into the file
+    virtual void outputMesh(DM dm) = 0;
+
+    /// Store the solution vector
     ///
-    /// @param stepi Step number
-    virtual void setSequenceFileName(unsigned int stepi) = 0;
-    /// Implement this method to do the desired output
-    virtual void output(DM dm, Vec vec) const = 0;
+    /// @param vec Solution vector to store into the file
+    virtual void outputSolution(Vec vec) = 0;
+
+    /// Output a step of a multi-step simulation
+    ///
+    /// @param stepi Index of a step, -1 indicates no sequence
+    /// @param dm DM with the mesh
+    /// @param vec Solution vector
+    virtual void outputStep(PetscInt stepi, DM dm, Vec vec) = 0;
 
 protected:
     /// Problem to get data from

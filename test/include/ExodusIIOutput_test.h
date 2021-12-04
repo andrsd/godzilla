@@ -15,4 +15,13 @@ protected:
         params.set<std::string>("file") = file_name;
         return this->app->buildObject<ExodusIIOutput>(class_name, "out", params);
     }
+
+    Problem *
+    gFEProblem1d(Grid * grid)
+    {
+        const std::string class_name = "GTestFENonlinearProblem";
+        InputParameters & params = Factory::getValidParams(class_name);
+        params.set<Grid *>("_grid") = grid;
+        return this->app->buildObject<Problem>(class_name, "problem", params);
+    }
 };

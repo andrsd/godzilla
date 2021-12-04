@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Output.h"
-#include "petscviewer.h"
+#include "FileOutput.h"
 
 namespace godzilla {
 
@@ -16,23 +15,14 @@ namespace godzilla {
 ///     type: VTKOutput
 ///     file: 'out.vtk'
 /// ```
-class VTKOutput : public Output {
+class VTKOutput : public FileOutput {
 public:
     VTKOutput(const InputParameters & params);
-    virtual ~VTKOutput();
 
-    virtual const std::string & getFileName() const override;
-    virtual void setFileName() override;
-    virtual void setSequenceFileName(unsigned int step) override;
-    virtual void output(DM dm, Vec vec) const override;
-
-protected:
-    /// Viewer for VTK output
-    PetscViewer viewer;
-    /// The file base of the output file
-    const std::string file_base;
-    /// The file name of the output file
-    std::string file_name;
+    virtual std::string getFileExt() const override;
+    virtual void create() override;
+    virtual void check() override;
+    // void outputSolution(Vec v) override;
 
 public:
     static InputParameters validParams();

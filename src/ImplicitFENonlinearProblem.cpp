@@ -91,7 +91,7 @@ ImplicitFENonlinearProblem::onPostStep()
     Vec sln;
     ierr = TSGetSolution(this->ts, &sln);
     checkPetscError(ierr);
-    output(getDM(), sln);
+    outputStep(sln);
     return 0;
 }
 
@@ -153,18 +153,24 @@ ImplicitFENonlinearProblem::setUpMonitors()
 }
 
 void
-ImplicitFENonlinearProblem::output(DM dm, Vec vec)
+ImplicitFENonlinearProblem::output()
 {
     _F_;
-    PetscInt num;
+}
+
+void
+ImplicitFENonlinearProblem::outputStep(Vec vec)
+{
+    _F_;
     PetscErrorCode ierr;
-    ierr = DMGetOutputSequenceNumber(getDM(), &num, NULL);
+    DM dm = getDM();
+
+    PetscInt num;
+    ierr = DMGetOutputSequenceNumber(dm, &num, NULL);
     checkPetscError(ierr);
 
-    for (auto & o : this->outputs) {
-        o->setSequenceFileName(num);
-        o->output(dm, vec);
-    }
+    for (auto & o : this->outputs)
+        o->outputStep(num, dm, vec);
 }
 
 } // namespace godzilla

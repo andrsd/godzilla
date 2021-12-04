@@ -3,18 +3,77 @@
 #include "petsc.h"
 #include "petscviewerhdf5.h"
 
-TEST_F(HDF5OutputTest, output)
+TEST_F(HDF5OutputTest, get_file_ext)
 {
     auto grid = gGrid1d();
     grid->create();
     auto prob = gProblem1d(grid);
     prob->create();
 
-    auto out1 = gOutput(prob, "out");
-    out1->setFileName();
-    out1->output(grid->getDM(), prob->getSolutionVector());
+    auto out = gOutput(prob, "out");
+    EXPECT_EQ(out->getFileExt(), "h5");
+}
 
-    const std::string file_name = out1->getFileName();
+TEST_F(HDF5OutputTest, create)
+{
+    auto grid = gGrid1d();
+    grid->create();
+    auto prob = gProblem1d(grid);
+    prob->create();
+
+    auto out = gOutput(prob, "out");
+    out->create();
+}
+
+TEST_F(HDF5OutputTest, check)
+{
+    auto grid = gGrid1d();
+    grid->create();
+    auto prob = gProblem1d(grid);
+    prob->create();
+
+    auto out = gOutput(prob, "out");
+    out->check();
+}
+
+TEST_F(HDF5OutputTest, set_file_name)
+{
+    auto grid = gGrid1d();
+    grid->create();
+    auto prob = gProblem1d(grid);
+    prob->create();
+
+    auto out = gOutput(prob, "out");
+    out->create();
+    out->setFileName();
+    EXPECT_EQ(out->getFileName(), "out.h5");
+}
+
+TEST_F(HDF5OutputTest, set_seq_file_name)
+{
+    auto grid = gGrid1d();
+    grid->create();
+    auto prob = gProblem1d(grid);
+    prob->create();
+
+    auto out = gOutput(prob, "out");
+    out->create();
+    out->setSequenceFileName(2);
+    EXPECT_EQ(out->getFileName(), "out.2.h5");
+}
+
+TEST_F(HDF5OutputTest, output)
+{
+    auto grid = gGrid1d();
+    grid->create();
+    auto prob = gProblem1d(grid);
+    prob->create();
+    auto out = gOutput(prob, "out");
+    out->create();
+    out->setFileName();
+    out->outputStep(-1, grid->getDM(), prob->getSolutionVector());
+
+    const std::string file_name = out->getFileName();
     PetscViewer viewer;
     Vec sln;
     PetscReal diff;
@@ -29,26 +88,4 @@ TEST_F(HDF5OutputTest, output)
     VecDestroy(&sln);
 }
 
-TEST_F(HDF5OutputTest, set_file_name)
-{
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
-    prob->create();
-
-    auto out1 = gOutput(prob, "out");
-    out1->setFileName();
-    EXPECT_EQ(out1->getFileName(), "out.h5");
-}
-
-TEST_F(HDF5OutputTest, set_seq_file_name)
-{
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
-    prob->create();
-
-    auto out1 = gOutput(prob, "out");
-    out1->setSequenceFileName(2);
-    EXPECT_EQ(out1->getFileName(), "out.2.h5");
-}
+// TODO: write a test for output of sequence

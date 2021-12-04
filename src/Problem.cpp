@@ -31,6 +31,14 @@ Problem::check()
 }
 
 void
+Problem::create()
+{
+    _F_;
+    for (auto & out : this->outputs)
+        out->create();
+}
+
+void
 Problem::addOutput(Output * output)
 {
     _F_;

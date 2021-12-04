@@ -132,6 +132,8 @@ NonlinearProblem::create()
     setUpCallbacks();
 
     setUpInitialGuess();
+
+    Problem::create();
 }
 
 void
@@ -305,10 +307,8 @@ void
 NonlinearProblem::output()
 {
     _F_;
-    for (auto & o : this->outputs) {
-        o->setFileName();
-        o->output(getDM(), this->x);
-    }
+    for (auto & o : this->outputs)
+        o->outputStep(-1, getDM(), this->x);
 }
 
 void
