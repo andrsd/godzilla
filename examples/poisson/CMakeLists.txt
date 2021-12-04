@@ -3,18 +3,20 @@ project(poisson)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(POISSON_BIN ${PROJECT_NAME})
+
 add_executable(
-    ${PROJECT_NAME}
+    ${POISSON_BIN}
         src/PoissonFENonlinearProblem.cpp
         src/PoissonLinearProblem.cpp
         src/PoissonNonlinearProblem.cpp
         src/main.cpp
 )
-target_code_coverage(${PROJECT_NAME})
-target_sanitization(${PROJECT_NAME})
+# target_code_coverage(${POISSON_BIN})
+target_sanitization(${POISSON_BIN})
 
 target_include_directories(
-    ${PROJECT_NAME}
+    ${POISSON_BIN}
     PRIVATE
         ${PROJECT_SOURCE_DIR}/include
         ${CONDA_INCLUDE_DIR}
@@ -22,7 +24,7 @@ target_include_directories(
 )
 
 target_link_libraries(
-    ${PROJECT_NAME}
+    ${POISSON_BIN}
     PUBLIC
         ${GODZILLA_LIBRARIES}
 )
@@ -32,9 +34,3 @@ target_link_libraries(
 if (GODZILLA_BUILD_TESTS)
     add_subdirectory(test)
 endif()
-
-add_test(${PROJECT_NAME}-lin ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/lin_2d.gyml)
-add_test(${PROJECT_NAME}-nl  ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/nl_2d.gyml)
-add_test(${PROJECT_NAME}-fem-1d ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/fe_1d.gyml)
-add_test(${PROJECT_NAME}-fem-2d ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/fe_2d.gyml)
-add_test(${PROJECT_NAME}-fem-3d ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/fe_3d.gyml)

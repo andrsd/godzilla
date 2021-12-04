@@ -5,3 +5,8 @@ grid:
 
 problem:
   type: PoissonNonlinearProblem
+
+output:
+  hdf5:
+    type: HDF5Output
+    file: nl_2d

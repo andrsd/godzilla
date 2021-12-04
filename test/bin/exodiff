@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# TODO:
-# run the binary
-# compare using exodiff
-
-exit 0

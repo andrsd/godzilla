@@ -5,3 +5,8 @@ grid:
 
 problem:
   type: PoissonLinearProblem
+
+output:
+  hdf5:
+    type: HDF5Output
+    file: lin_2d
