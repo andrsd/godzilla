@@ -64,7 +64,7 @@ public:
     }
 
     PetscDS
-    getPetscDS()
+    getDS()
     {
         return this->ds;
     }

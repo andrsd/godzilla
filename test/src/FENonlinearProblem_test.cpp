@@ -337,7 +337,7 @@ TEST_F(FENonlinearProblemTest, set_constant_2)
     std::vector<PetscReal> consts = { 5, 3, 1 };
     this->prob->setConstants(consts);
     this->prob->setUpConstants();
-    PetscDS ds = this->prob->getPetscDS();
+    PetscDS ds = this->prob->getDS();
     PetscInt n_consts;
     const PetscReal * cs;
     PetscDSGetConstants(ds, &n_consts, &cs);

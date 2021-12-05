@@ -21,6 +21,7 @@ add_executable(${PROJECT_NAME}
     LinearProblem_test.cpp
     LineMesh_test.cpp
     Logger_test.cpp
+    NaturalBC_test.cpp
     NonlinearProblem_test.cpp
     Object_test.cpp
     PiecewiseLinear_test.cpp
