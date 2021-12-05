@@ -143,7 +143,7 @@ FEProblemInterface::hasAuxFieldByName(const std::string & name) const
 }
 
 void
-FEProblemInterface::addField(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
+FEProblemInterface::addFE(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
 {
     _F_;
     auto it = this->fields.find(id);

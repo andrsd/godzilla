@@ -124,7 +124,7 @@ HeatEquationProblem::onSetFields()
 {
     _F_;
     PetscInt order = 1;
-    addField(this->itemp, "temp", 1, order);
+    addFE(this->itemp, "temp", 1, order);
 }
 
 void

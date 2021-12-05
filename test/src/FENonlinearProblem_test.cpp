@@ -111,8 +111,8 @@ TEST_F(FENonlinearProblemTest, fields)
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
-    prob->addField(0, "first", 1, 1);
-    EXPECT_DEATH(prob->addField(0, "second", 1, 1),
+    prob->addFE(0, "first", 1, 1);
+    EXPECT_DEATH(prob->addFE(0, "second", 1, 1),
                  "error: Cannot add field 'second' with ID = 0. ID already exists.");
 }
 
@@ -370,7 +370,7 @@ GTestFENonlinearProblem::onSetFields()
 {
     _F_;
     PetscInt order = 1;
-    addField(this->iu, "u", 1, order);
+    addFE(this->iu, "u", 1, order);
 }
 
 void
@@ -404,7 +404,7 @@ void
 GTest2FieldsFENonlinearProblem::onSetFields()
 {
     GTestFENonlinearProblem::onSetFields();
-    addField(this->iv, "v", 1, 1);
+    addFE(this->iv, "v", 1, 1);
 }
 
 } // namespace godzilla

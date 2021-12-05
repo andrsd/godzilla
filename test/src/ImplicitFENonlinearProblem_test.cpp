@@ -241,7 +241,7 @@ GTestImplicitFENonlinearProblem::onSetFields()
 {
     _F_;
     PetscInt order = 1;
-    addField(this->iu, "u", 1, order);
+    addFE(this->iu, "u", 1, order);
 }
 
 void

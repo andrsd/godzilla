@@ -108,7 +108,7 @@ void
 PoissonFENonlinearProblem::onSetFields()
 {
     _F_;
-    addField(this->iu, "u", 1, this->p_order);
+    addFE(this->iu, "u", 1, this->p_order);
     addAuxFE(this->affn, "forcing_fn", 1, this->p_order);
 }
 

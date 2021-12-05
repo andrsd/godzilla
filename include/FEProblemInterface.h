@@ -75,7 +75,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void addField(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+    virtual void addFE(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
 
     /// Adds a volumetric auxiliary field
     ///
@@ -161,7 +161,7 @@ protected:
 
     /// Set up residual statement for a field variable
     ///
-    /// @param fid Field number returned by addField()
+    /// @param fid Field ID
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
     void setResidualBlock(PetscInt fid, PetscFEResidualFunc * f0, PetscFEResidualFunc * f1);
