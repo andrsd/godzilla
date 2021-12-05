@@ -111,6 +111,43 @@ TEST_F(NonlinearProblemTest, output)
     prob.output();
 }
 
+TEST_F(NonlinearProblemTest, line_search_type)
+{
+    class MockNonlinearProblem : public NonlinearProblem {
+    public:
+        MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
+
+        MOCK_METHOD(PetscErrorCode, computeResidualCallback, (Vec x, Vec f));
+        MOCK_METHOD(PetscErrorCode, computeJacobianCallback, (Vec x, Mat J, Mat Jp));
+
+        SNES
+        getSNES()
+        {
+            return this->snes;
+        }
+    };
+
+    auto grid = gGrid1d();
+    grid->create();
+
+    std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
+    for (auto & lst : ls_type) {
+        InputParameters prob_pars = NonlinearProblem::validParams();
+        prob_pars.set<const App *>("_app") = this->app;
+        prob_pars.set<Grid *>("_grid") = grid;
+        prob_pars.set<std::string>("line_search") = lst;
+        MockNonlinearProblem prob(prob_pars);
+        prob.create();
+
+        SNES snes = prob.getSNES();
+        SNESLineSearch ls;
+        SNESGetLineSearch(snes, &ls);
+        SNESLineSearchType tp;
+        SNESLineSearchGetType(ls, &tp);
+        EXPECT_STREQ(tp, lst.c_str());
+    }
+}
+
 //
 
 G1DTestNonlinearProblem::G1DTestNonlinearProblem(const InputParameters & params) :
