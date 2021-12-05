@@ -27,6 +27,24 @@ public:
     /// @param fid Field ID
     virtual const std::string & getFieldName(PetscInt fid) const;
 
+    /// Get field ID
+    ///
+    /// @param name Field name
+    /// @param Field ID
+    virtual PetscInt getFieldId(const std::string & name) const;
+
+    /// Do we have field with specified ID
+    ///
+    /// @param fid The ID of the field
+    /// @return True if the field exists, otherwise False
+    virtual bool hasFieldById(PetscInt fid) const;
+
+    /// Do we have field with specified name
+    ///
+    /// @param name The name of the field
+    /// @return True if the field exists, otherwise False
+    virtual bool hasFieldByName(const std::string & name) const;
+
     /// Get auxiliary field name
     ///
     /// @param fid Auxiliary field ID
@@ -211,6 +229,9 @@ protected:
 
     /// Fields in the problem
     std::map<PetscInt, FieldInfo> fields;
+
+    /// Map from field name to field ID
+    std::map<std::string, PetscInt> fields_by_name;
 
     /// Initial condition information
     struct ICInfo {

@@ -92,13 +92,21 @@ g3_uu(PetscInt dim,
         g3[d * dim + d] = 1.0;
 }
 
-TEST_F(FENonlinearProblemTest, getFieldName)
+TEST_F(FENonlinearProblemTest, fields)
 {
     grid->create();
     prob->create();
 
     EXPECT_EQ(prob->getFieldName(0), "u");
-    EXPECT_DEATH(prob->getFieldName(1), "error: Field with ID = '1' does not exist.");
+    EXPECT_EQ(prob->getFieldId("u"), 0);
+    EXPECT_EQ(prob->hasFieldById(0), true);
+    EXPECT_EQ(prob->hasFieldByName("u"), true);
+
+    EXPECT_DEATH(prob->getFieldName(65536), "error: Field with ID = '65536' does not exist.");
+    EXPECT_DEATH(prob->getFieldId("nonexistent"),
+                 "error: Field 'nonexistent' does not exist\\. Typo\\?");
+    EXPECT_EQ(prob->hasFieldById(65536), false);
+    EXPECT_EQ(prob->hasFieldByName("nonexistent"), false);
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)

@@ -77,6 +77,33 @@ FEProblemInterface::getFieldName(PetscInt fid) const
         error("Field with ID = '", fid, "' does not exist.");
 }
 
+PetscInt
+FEProblemInterface::getFieldId(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->fields_by_name.find(name);
+    if (it != this->fields_by_name.end())
+        return it->second;
+    else
+        error("Field '", name, "' does not exist. Typo?");
+}
+
+bool
+FEProblemInterface::hasFieldById(PetscInt fid) const
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    return it != this->fields.end();
+}
+
+bool
+FEProblemInterface::hasFieldByName(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->fields_by_name.find(name);
+    return it != this->fields_by_name.end();
+}
+
 const std::string &
 FEProblemInterface::getAuxFieldName(PetscInt fid) const
 {
@@ -123,6 +150,7 @@ FEProblemInterface::addField(PetscInt id, const std::string & name, PetscInt nc,
     if (it == this->fields.end()) {
         FieldInfo fi = { name, id, nullptr, nullptr, nc, k };
         this->fields[id] = fi;
+        this->fields_by_name[name] = id;
     }
     else
         error("Cannot add field '", name, "' with ID = ", id, ". ID already exists.");
