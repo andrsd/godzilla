@@ -1,24 +1,26 @@
 #include "GodzillaApp_test.h"
-#include "StructuredGrid2D_test.h"
+#include "StructuredGrid2D.h"
 #include "InputParameters.h"
 #include "petsc.h"
 
 using namespace godzilla;
 
-registerObject(MockStructuredGrid2D);
-
-TEST_F(StructuredGrid2DTest, ctor)
+TEST(StructuredGrid2DTest, ctor)
 {
-    auto obj = gMesh(3, 4);
-    EXPECT_EQ(obj->getNx(), 3);
-    EXPECT_EQ(obj->getNy(), 4);
-}
+    TestApp app;
 
-TEST_F(StructuredGrid2DTest, create)
-{
-    auto obj = gMesh(3, 4);
-    obj->create();
-    DM dm = obj->getDM();
+    InputParameters params = StructuredGrid2D::validParams();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<PetscInt>("nx") = 3;
+    params.set<PetscInt>("ny") = 4;
+    StructuredGrid2D obj(params);
+
+    EXPECT_EQ(obj.getNx(), 3);
+    EXPECT_EQ(obj.getNy(), 4);
+
+    obj.create();
+    DM dm = obj.getDM();
 
     PetscInt dim;
     DMGetDimension(dm, &dim);
