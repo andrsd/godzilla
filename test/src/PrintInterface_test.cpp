@@ -1,23 +1,41 @@
 #include "GodzillaApp_test.h"
-#include "PrintInterface_test.h"
+#include "PrintInterface.h"
 #include "CallStack.h"
 
 using namespace godzilla;
 
-TEST_F(PrintInterfaceTest, print)
+TEST(PrintInterfaceTest, print)
 {
-    // testing::internal::CaptureStdout();
-    // this->app->godzillaPrint(0, "Message");
-    //
-    // EXPECT_EQ(testing::internal::GetCapturedStdout(), "Message\n");
+    testing::internal::CaptureStdout();
+
+    class PrintTestApp : public TestApp {
+    public:
+        void
+        test()
+        {
+            godzillaPrint(0, "Message");
+        }
+    } app;
+
+    app.test();
+    EXPECT_EQ(testing::internal::GetCapturedStdout(), "Message\n");
 }
 
-TEST_F(PrintInterfaceTest, error)
+TEST(PrintInterfaceTest, error)
 {
-    // EXPECT_DEATH(this->app->godzillaError("Error"), "error: Error");
+    class PrintTestApp : public TestApp {
+    public:
+        void
+        test()
+        {
+            error("Error");
+        }
+    } app;
+
+    EXPECT_DEATH(app.test(), "error: Error");
 }
 
-TEST_F(PrintInterfaceTest, check_petsc_error)
+TEST(PrintInterfaceTest, check_petsc_error)
 {
     EXPECT_DEATH(checkPetscError(123), "error: PETSc error: 123");
 }
