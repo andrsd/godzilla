@@ -1,37 +1,30 @@
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "LineMesh_test.h"
 #include "InputParameters.h"
+#include "LineMesh.h"
 #include "petsc.h"
 
 using namespace godzilla;
 
-registerObject(MockLineMesh);
-
-TEST_F(LineMeshTest, g1d_line_mesh)
+TEST(LineMeshTest, api)
 {
-    auto o = g1dLineMesh(1, 2);
+    TestApp app;
 
-    EXPECT_EQ(o->getXMin(), 1);
-    EXPECT_EQ(o->getXMax(), 2);
-    EXPECT_EQ(o->getNx(), 10);
-}
+    InputParameters params = LineMesh::validParams();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "line_mesh";
+    params.set<PetscReal>("xmin") = 1;
+    params.set<PetscReal>("xmax") = 2;
+    params.set<PetscInt>("nx") = 10;
+    LineMesh mesh(params);
 
-TEST_F(LineMeshTest, g1d_line_mesh_incorrect_dims)
-{
-    testing::internal::CaptureStderr();
+    EXPECT_EQ(mesh.getXMin(), 1);
+    EXPECT_EQ(mesh.getXMax(), 2);
+    EXPECT_EQ(mesh.getNx(), 10);
 
-    g1dLineMesh(2, 1);
-    this->app->checkIntegrity();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));
-}
-
-TEST_F(LineMeshTest, g1d_line_mesh_create)
-{
-    auto obj = g1dLineMesh(1, 2);
-    obj->create();
-    DM dm = obj->getDM();
+    mesh.create();
+    DM dm = mesh.getDM();
 
     PetscInt dim;
     DMGetDimension(dm, &dim);
@@ -47,4 +40,50 @@ TEST_F(LineMeshTest, g1d_line_mesh_create)
     PetscInt nx;
     VecGetSize(coords, &nx);
     EXPECT_EQ(nx, 11);
+}
+
+TEST(LineMeshTest, incorrect_dims)
+{
+    testing::internal::CaptureStderr();
+
+    TestApp app;
+
+    InputParameters params = LineMesh::validParams();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "line_mesh";
+    params.set<PetscReal>("xmin") = 2;
+    params.set<PetscReal>("xmax") = 1;
+    params.set<PetscInt>("nx") = 2;
+    LineMesh mesh(params);
+
+    app.checkIntegrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("line_mesh: Parameter 'xmax' must be larger than 'xmin'."));
+}
+
+TEST(LineMeshTest, distribute)
+{
+    PetscMPIInt sz;
+    MPI_Comm_size(PETSC_COMM_WORLD, &sz);
+
+    TestApp app;
+
+    InputParameters params = LineMesh::validParams();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "line_mesh";
+    params.set<PetscReal>("xmin") = 0;
+    params.set<PetscReal>("xmax") = 1;
+    params.set<PetscInt>("nx") = 4;
+    LineMesh mesh(params);
+    mesh.create();
+
+    mesh.distribute();
+
+    PetscBool distr;
+    DMPlexIsDistributed(mesh.getDM(), &distr);
+    if (sz > 1)
+        EXPECT_EQ(distr, 1);
+    else
+        EXPECT_EQ(distr, 0);
 }
