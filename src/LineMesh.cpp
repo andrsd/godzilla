@@ -90,10 +90,15 @@ LineMesh::create()
         ierr = DMGetLabel(this->dm, side_name[i], &label);
         checkPetscError(ierr);
 
-        ierr = DMLabelSetStratumIS(label, i + 1, is);
-        checkPetscError(ierr);
+        if (is != nullptr) {
+            ierr = DMLabelSetStratumIS(label, i + 1, is);
+            checkPetscError(ierr);
+        }
 
         ierr = ISDestroy(&is);
+        checkPetscError(ierr);
+
+        ierr = DMPlexLabelComplete(this->dm, label);
         checkPetscError(ierr);
     }
 
