@@ -22,7 +22,6 @@ Object::Object(const InputParameters & parameters) :
     name(getParam<std::string>("_name"))
 {
     _F_;
-    MPI_Comm_rank(comm(), &this->rank);
 }
 
 Object::~Object()
@@ -72,11 +71,18 @@ Object::comm() const
     return this->app.getComm();
 }
 
-const int &
+const PetscMPIInt &
 Object::processorId() const
 {
     _F_;
-    return this->rank;
+    return this->app.getCommRank();
+}
+
+const PetscMPIInt &
+Object::commSize() const
+{
+    _F_;
+    return this->app.getCommSize();
 }
 
 void

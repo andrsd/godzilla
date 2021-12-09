@@ -34,6 +34,9 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     problem(nullptr)
 {
     _F_;
+    MPI_Comm_size(comm, &this->comm_size);
+    MPI_Comm_rank(comm, &this->comm_rank);
+
     this->args.add(this->input_file_arg);
     this->args.add(this->verbose_arg);
     this->args.add(this->no_colors_switch);
@@ -77,6 +80,20 @@ App::getComm() const
 {
     _F_;
     return this->comm;
+}
+
+const PetscMPIInt &
+App::getCommRank() const
+{
+    _F_;
+    return this->comm_rank;
+}
+
+const PetscMPIInt &
+App::getCommSize() const
+{
+    _F_;
+    return this->comm_size;
 }
 
 void

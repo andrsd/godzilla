@@ -46,7 +46,10 @@ public:
     const MPI_Comm & comm() const;
 
     /// Get processor ID (aka MPI rank) this object is running at
-    const int & processorId() const;
+    const PetscMPIInt & processorId() const;
+
+    /// Get communicator size
+    const PetscMPIInt & commSize() const;
 
     /// Called to construct the object
     virtual void create();
@@ -60,9 +63,6 @@ protected:
 
     /// Reference to the aplpication owning this object
     const App & app;
-
-    /// MPI rank, aka processor number
-    int rank;
 
     /// The type of this object
     const std::string & type;

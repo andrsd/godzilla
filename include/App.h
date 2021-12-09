@@ -56,6 +56,16 @@ public:
     /// @return MPI communicator
     virtual const MPI_Comm & getComm() const;
 
+    /// Get communicator rank
+    ///
+    /// @return The rank of the calling process in the application communicator
+    virtual const PetscMPIInt & getCommRank() const;
+
+    /// Get communicator size
+    ///
+    /// @return Size of the group associated with the application communicator
+    virtual const PetscMPIInt & getCommSize() const;
+
     /// Build object using the Factory
     ///
     /// This is convenience API for building object with having the `_app` parameter set to this
@@ -91,6 +101,12 @@ protected:
 
     /// MPI communicators
     MPI_Comm comm;
+
+    /// Size of the MPI communicator
+    PetscMPIInt comm_size;
+
+    /// MPI rank (aka processor ID) of this application
+    PetscMPIInt comm_rank;
 
     /// Log with errors and/or warnings
     Logger log;
