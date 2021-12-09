@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Grid.h"
+#include "petscpartitioner.h"
 
 namespace godzilla {
 
@@ -9,6 +10,11 @@ namespace godzilla {
 class UnstructuredMesh : public Grid {
 public:
     UnstructuredMesh(const InputParameters & parameters);
+
+    /// Set partitioner
+    ///
+    /// @param partitioner The partitioner
+    virtual void setPartitioner(PetscPartitioner partitioner);
 
     /// Distribute mesh over processes
     ///

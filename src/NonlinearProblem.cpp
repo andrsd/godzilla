@@ -122,6 +122,7 @@ void
 NonlinearProblem::create()
 {
     _F_;
+    setUpPartitioning();
     init();
     allocateObjects();
     onSetMatrixProperties();

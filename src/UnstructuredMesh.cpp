@@ -18,6 +18,15 @@ UnstructuredMesh::UnstructuredMesh(const InputParameters & parameters) : Grid(pa
 }
 
 void
+UnstructuredMesh::setPartitioner(PetscPartitioner partitioner)
+{
+    _F_;
+    PetscErrorCode ierr;
+    ierr = DMPlexSetPartitioner(this->dm, partitioner);
+    checkPetscError(ierr);
+}
+
+void
 UnstructuredMesh::distribute(PetscInt overlap)
 {
     _F_;

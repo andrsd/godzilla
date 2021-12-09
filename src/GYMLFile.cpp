@@ -73,6 +73,7 @@ GYMLFile::build()
     buildFunctions();
     buildGrid();
     buildProblem();
+    buildPartitioner();
     buildAuxiliaryFields();
     buildInitialConditions();
     buildBoundaryConditions();
@@ -115,6 +116,26 @@ GYMLFile::buildProblem()
     const std::string & class_name = params.get<std::string>("_type");
     params.set<Grid *>("_grid") = this->grid;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
+}
+
+void
+GYMLFile::buildPartitioner()
+{
+    _F_;
+    if (!this->problem)
+        return;
+
+    YAML::Node part_node = this->root["partitioner"];
+    if (!part_node)
+        return;
+
+    YAML::Node name = part_node["name"];
+    if (name)
+        this->problem->setPartitionerType(name.as<std::string>());
+
+    YAML::Node overlap = part_node["overlap"];
+    if (overlap)
+        this->problem->setPartitionOverlap(overlap.as<PetscInt>());
 }
 
 void

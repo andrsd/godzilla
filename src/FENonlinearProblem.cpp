@@ -1,6 +1,7 @@
 #include "FENonlinearProblem.h"
 #include "CallStack.h"
 #include "Grid.h"
+#include "UnstructuredMesh.h"
 #include "petscdm.h"
 
 namespace godzilla {
@@ -68,6 +69,22 @@ FENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
 {
     _F_;
     return 0;
+}
+
+void
+FENonlinearProblem::setUpPartitioning()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    ierr = PetscPartitionerSetType(this->partitioner, this->partitioner_info.type.c_str());
+    checkPetscError(ierr);
+    ierr = PetscPartitionerSetUp(this->partitioner);
+    checkPetscError(ierr);
+
+    UnstructuredMesh & mesh = dynamic_cast<UnstructuredMesh &>(grid);
+    mesh.setPartitioner(this->partitioner);
+    mesh.distribute(this->partitioner_info.overlap);
 }
 
 } // namespace godzilla

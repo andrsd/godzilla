@@ -93,6 +93,7 @@ void
 LinearProblem::create()
 {
     _F_;
+    setUpPartitioning();
     init();
     allocateObjects();
     onSetMatrixProperties();

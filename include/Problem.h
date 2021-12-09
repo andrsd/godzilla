@@ -3,6 +3,7 @@
 #include "Object.h"
 #include "PrintInterface.h"
 #include "petscdm.h"
+#include "petscpartitioner.h"
 
 namespace godzilla {
 
@@ -14,6 +15,7 @@ class Output;
 class Problem : public Object, public PrintInterface {
 public:
     Problem(const InputParameters & parameters);
+    virtual ~Problem();
 
     virtual void check() override;
 
@@ -35,9 +37,30 @@ public:
     /// @param output Output object to add
     virtual void addOutput(Output * output);
 
+    /// Set partitioner type
+    ///
+    /// @param type Type of the partitioner
+    virtual void setPartitionerType(const std::string & type);
+
+    /// Set partition overlap
+    ///
+    /// @param overlap Set the partition overlap
+    virtual void setPartitionOverlap(PetscInt overlap);
+
 protected:
+    virtual void setUpPartitioning();
+
     /// Grid
     Grid & grid;
+    /// Partitioner information
+    struct PartitionerInfo {
+        /// Type of partitioner
+        std::string type;
+        /// The overlap of partitions
+        PetscInt overlap;
+    } partitioner_info;
+    /// Mesh partitioner
+    PetscPartitioner partitioner;
     /// List of output objects
     std::vector<Output *> outputs;
 
