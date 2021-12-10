@@ -39,9 +39,7 @@ TEST(BoxMeshTest, api)
     mesh.create();
     DM dm = mesh.getDM();
 
-    PetscInt dim;
-    DMGetDimension(dm, &dim);
-    EXPECT_EQ(dim, 3);
+    EXPECT_EQ(mesh.getDimension(), 3);
 
     PetscReal gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);

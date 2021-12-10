@@ -23,9 +23,7 @@ TEST(ExodusIIMeshTest, api)
     mesh.create();
     DM dm = mesh.getDM();
 
-    PetscInt dim;
-    DMGetDimension(dm, &dim);
-    EXPECT_EQ(dim, 2);
+    EXPECT_EQ(mesh.getDimension(), 2);
 
     PetscReal gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);

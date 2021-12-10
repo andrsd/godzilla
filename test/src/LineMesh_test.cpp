@@ -4,6 +4,7 @@
 #include "InputParameters.h"
 #include "LineMesh.h"
 #include "petsc.h"
+#include "petscviewerhdf5.h"
 
 using namespace godzilla;
 
@@ -26,9 +27,7 @@ TEST(LineMeshTest, api)
     mesh.create();
     DM dm = mesh.getDM();
 
-    PetscInt dim;
-    DMGetDimension(dm, &dim);
-    EXPECT_EQ(dim, 1);
+    EXPECT_EQ(mesh.getDimension(), 1);
 
     PetscReal gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
@@ -84,4 +83,34 @@ TEST(LineMeshTest, distribute)
         EXPECT_EQ(distr, 1);
     else
         EXPECT_EQ(distr, 0);
+}
+
+TEST(LineMeshTest, output_partitioning)
+{
+    TestApp app;
+
+    InputParameters params = LineMesh::validParams();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "line_mesh";
+    params.set<PetscReal>("xmin") = 0;
+    params.set<PetscReal>("xmax") = 1;
+    params.set<PetscInt>("nx") = 4;
+    LineMesh mesh(params);
+    mesh.create();
+
+    PetscViewer viewer;
+    PetscViewerHDF5Open(app.getComm(), "part.h5", FILE_MODE_WRITE, &viewer);
+    mesh.outputPartitioning(viewer);
+    PetscViewerDestroy(&viewer);
+
+    Vec p;
+    VecCreate(app.getComm(), &p);
+    PetscObjectSetName((PetscObject) p, "fields/partitioning");
+    PetscViewerHDF5Open(app.getComm(), "part.h5", FILE_MODE_READ, &viewer);
+    VecLoad(p, viewer);
+    PetscReal l2_norm;
+    VecNorm(p, NORM_2, &l2_norm);
+    EXPECT_NEAR(l2_norm, 0, 1e-10);
+    VecDestroy(&p);
+    PetscViewerDestroy(&viewer);
 }

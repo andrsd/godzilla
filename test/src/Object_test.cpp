@@ -22,4 +22,8 @@ TEST(ObjectTest, api)
     EXPECT_TRUE(obj->isParamValid("_name"));
 
     EXPECT_EQ(obj->processorId(), 0);
+
+    PetscMPIInt sz;
+    MPI_Comm_size(app.getComm(), &sz);
+    EXPECT_EQ(obj->commSize(), sz);
 }

@@ -85,6 +85,31 @@ TEST_F(GYMLFileTest, build_missing_req_param)
                 testing::HasSubstr("grid: Missing required parameters:"));
 }
 
+TEST_F(GYMLFileTest, grid_partitioner)
+{
+    PetscMPIInt sz;
+    MPI_Comm_size(PETSC_COMM_WORLD, &sz);
+    GYMLFile file(*this->app);
+
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_partitioner.yml");
+
+    file.parse(file_name);
+    file.build();
+
+    Grid * grid = file.getGrid();
+    EXPECT_NE(grid, nullptr);
+    grid->create();
+
+    DM dm = grid->getDM();
+    PetscBool distr;
+    DMPlexIsDistributed(dm, &distr);
+    if (sz > 1)
+        EXPECT_EQ(distr, 1);
+    else
+        EXPECT_EQ(distr, 0);
+}
+
 TEST_F(GYMLFileTest, build)
 {
     GYMLFile file(*this->app);

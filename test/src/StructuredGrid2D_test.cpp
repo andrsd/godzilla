@@ -20,9 +20,6 @@ TEST(StructuredGrid2DTest, ctor)
     EXPECT_EQ(obj.getNy(), 4);
 
     obj.create();
-    DM dm = obj.getDM();
 
-    PetscInt dim;
-    DMGetDimension(dm, &dim);
-    EXPECT_EQ(dim, 2);
+    EXPECT_EQ(obj.getDimension(), 2);
 }
