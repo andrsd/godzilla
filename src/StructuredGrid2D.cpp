@@ -39,7 +39,7 @@ StructuredGrid2D::getNy() const
 }
 
 void
-StructuredGrid2D::create()
+StructuredGrid2D::createDM()
 {
     _F_;
     PetscErrorCode ierr;
@@ -62,8 +62,12 @@ StructuredGrid2D::create()
                         NULL,
                         &this->dm);
     checkPetscError(ierr);
-    ierr = DMSetUp(this->dm);
-    checkPetscError(ierr);
+}
+
+void
+StructuredGrid2D::distribute()
+{
+    // FIXME: implement this
 }
 
 } // namespace godzilla

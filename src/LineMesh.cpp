@@ -52,7 +52,7 @@ LineMesh::getNx()
 }
 
 void
-LineMesh::create()
+LineMesh::createDM()
 {
     _F_;
     PetscErrorCode ierr;
@@ -101,9 +101,6 @@ LineMesh::create()
         ierr = DMPlexLabelComplete(this->dm, label);
         checkPetscError(ierr);
     }
-
-    ierr = DMSetUp(this->dm);
-    checkPetscError(ierr);
 }
 
 } // namespace godzilla

@@ -81,7 +81,7 @@ RectangleMesh::getNy() const
 }
 
 void
-RectangleMesh::create()
+RectangleMesh::createDM()
 {
     _F_;
     PetscErrorCode ierr;
@@ -130,9 +130,6 @@ RectangleMesh::create()
         ierr = DMPlexLabelComplete(this->dm, label);
         checkPetscError(ierr);
     }
-
-    ierr = DMSetUp(this->dm);
-    checkPetscError(ierr);
 }
 
 } // namespace godzilla

@@ -18,25 +18,9 @@ Problem::Problem(const InputParameters & parameters) :
     PrintInterface(this),
     grid(*getParam<Grid *>("_grid"))
 {
-    _F_;
-    PetscErrorCode ierr;
-
-    ierr = PetscPartitionerCreate(comm(), &this->partitioner);
-    checkPetscError(ierr);
-    if (commSize() == 1)
-        this->partitioner_info.type = PETSCPARTITIONERSIMPLE;
-    else
-        this->partitioner_info.type = PETSCPARTITIONERPARMETIS;
-    this->partitioner_info.overlap = 0;
 }
 
-Problem::~Problem()
-{
-    _F_;
-    PetscErrorCode ierr;
-    ierr = PetscPartitionerDestroy(&this->partitioner);
-    checkPetscError(ierr);
-}
+Problem::~Problem() {}
 
 void
 Problem::check()
@@ -60,26 +44,6 @@ Problem::addOutput(Output * output)
 {
     _F_;
     this->outputs.push_back(output);
-}
-
-void
-Problem::setPartitionerType(const std::string & type)
-{
-    _F_;
-    this->partitioner_info.type = type;
-}
-
-void
-Problem::setPartitionOverlap(PetscInt overlap)
-{
-    _F_;
-    this->partitioner_info.overlap = overlap;
-}
-
-void
-Problem::setUpPartitioning()
-{
-    _F_;
 }
 
 } // namespace godzilla

@@ -110,7 +110,7 @@ BoxMesh::getNz() const
 }
 
 void
-BoxMesh::create()
+BoxMesh::createDM()
 {
     _F_;
     PetscErrorCode ierr;
@@ -161,9 +161,6 @@ BoxMesh::create()
         ierr = DMPlexLabelComplete(this->dm, label);
         checkPetscError(ierr);
     }
-
-    ierr = DMSetUp(this->dm);
-    checkPetscError(ierr);
 }
 
 } // namespace godzilla

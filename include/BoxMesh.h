@@ -38,9 +38,9 @@ public:
     /// Get the number of grid points in z direction
     PetscInt getNz() const;
 
-    virtual void create();
-
 protected:
+    virtual void createDM() override;
+
     /// Minimum in the x direction
     const PetscReal & xmin;
 

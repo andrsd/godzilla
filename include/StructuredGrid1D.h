@@ -13,9 +13,10 @@ public:
     /// Get the number of grid points in x direction
     PetscInt getNx() const;
 
-    virtual void create();
-
 protected:
+    virtual void createDM() override;
+    virtual void distribute() override;
+
     /// Number of grid point in the x direction
     const PetscInt & nx;
 

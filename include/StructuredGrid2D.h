@@ -15,9 +15,10 @@ public:
     /// Get the number of grid points in y direction
     PetscInt getNy() const;
 
-    virtual void create();
-
 protected:
+    virtual void createDM() override;
+    virtual void distribute() override;
+
     /// Number of grid point in the x direction
     const PetscInt & nx;
     /// Number of grid point in the y direction

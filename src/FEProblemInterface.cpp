@@ -24,7 +24,6 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 FEProblemInterface::FEProblemInterface(const InputParameters & params) :
     logger(const_cast<Logger &>(params.get<const App *>("_app")->getLogger())),
-    dim(-1),
     qorder(PETSC_DETERMINE),
     ds(nullptr)
 {
@@ -47,7 +46,6 @@ void
 FEProblemInterface::create(DM dm)
 {
     _F_;
-    DMGetDimension(dm, &this->dim);
     onSetFields();
 
     for (auto & aux : this->auxs)
@@ -295,13 +293,17 @@ FEProblemInterface::setUpFEs(DM dm)
     PetscObjectGetComm((PetscObject) dm, &comm);
 
     PetscErrorCode ierr;
+
+    // FIXME: pull this from UnstructuredMesh
+    PetscInt dim;
+    DMGetDimension(dm, &dim);
+
     // FIXME: determine if the mesh is made of simplex elements
     PetscBool is_simplex = PETSC_FALSE;
 
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
-        ierr =
-            PetscFECreateLagrange(comm, this->dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
+        ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
         checkPetscError(ierr);
         ierr = PetscFESetName(fi.fe, fi.name.c_str());
         checkPetscError(ierr);
@@ -309,8 +311,7 @@ FEProblemInterface::setUpFEs(DM dm)
 
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
-        ierr =
-            PetscFECreateLagrange(comm, this->dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
+        ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
         checkPetscError(ierr);
         ierr = PetscFESetName(fi.fe, fi.name.c_str());
         checkPetscError(ierr);

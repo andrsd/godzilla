@@ -10,7 +10,16 @@ using namespace godzilla;
 class MockGrid : public Grid {
 public:
     MockGrid(const InputParameters & params) : Grid(params) {}
-    MOCK_METHOD(void, create, ());
+
+protected:
+    virtual void
+    distribute()
+    {
+    }
+    virtual void
+    createDM()
+    {
+    }
 };
 
 class MockProblem : public Problem {

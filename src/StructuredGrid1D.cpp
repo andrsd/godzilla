@@ -30,7 +30,7 @@ StructuredGrid1D::getNx() const
 }
 
 void
-StructuredGrid1D::create()
+StructuredGrid1D::createDM()
 {
     _F_;
     PetscErrorCode ierr;
@@ -41,8 +41,12 @@ StructuredGrid1D::create()
 
     ierr = DMDACreate1d(comm(), DM_BOUNDARY_NONE, this->nx, dofs, stencil_width, NULL, &this->dm);
     checkPetscError(ierr);
-    ierr = DMSetUp(this->dm);
-    checkPetscError(ierr);
+}
+
+void
+StructuredGrid1D::distribute()
+{
+    // FIXME: implement this
 }
 
 } // namespace godzilla

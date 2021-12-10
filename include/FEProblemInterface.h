@@ -200,9 +200,6 @@ protected:
     /// Logger object
     Logger & logger;
 
-    /// Spatial dimension of the discrete problem
-    PetscInt dim;
-
     /// Quadrature order
     PetscInt qorder;
 

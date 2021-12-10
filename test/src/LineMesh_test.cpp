@@ -78,8 +78,6 @@ TEST(LineMeshTest, distribute)
     LineMesh mesh(params);
     mesh.create();
 
-    mesh.distribute();
-
     PetscBool distr;
     DMPlexIsDistributed(mesh.getDM(), &distr);
     if (sz > 1)

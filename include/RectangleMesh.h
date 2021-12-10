@@ -21,9 +21,9 @@ public:
     /// Get the number of grid points in y direction
     PetscInt getNy() const;
 
-    virtual void create();
-
 protected:
+    virtual void createDM() override;
+
     /// Minimum in the x direction
     const PetscReal & xmin;
     /// Maximum in the x direction

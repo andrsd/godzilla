@@ -37,15 +37,13 @@ ExodusIIMesh::getFileName() const
 }
 
 void
-ExodusIIMesh::create()
+ExodusIIMesh::createDM()
 {
     _F_;
     PetscErrorCode ierr;
 
     ierr =
         DMPlexCreateExodusFromFile(comm(), this->file_name.c_str(), this->interpolate, &this->dm);
-    checkPetscError(ierr);
-    ierr = DMSetUp(this->dm);
     checkPetscError(ierr);
 }
 

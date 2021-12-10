@@ -15,7 +15,7 @@ problem:
 ics:
   all:
     type: ConstantIC
-    value: [ 0 ]
+    value: 0
 
 bcs:
   all:

@@ -21,7 +21,6 @@ protected:
     virtual void setUpInitialGuess() override;
     virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
     virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;
-    virtual void setUpPartitioning() override;
 
 public:
     static InputParameters validParams();

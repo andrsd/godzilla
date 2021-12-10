@@ -2,6 +2,7 @@
 #include "App.h"
 #include "Factory.h"
 #include "Grid.h"
+#include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "Function.h"
 #include "AuxiliaryField.h"
@@ -122,7 +123,11 @@ void
 GYMLFile::buildPartitioner()
 {
     _F_;
-    if (!this->problem)
+    if (!this->grid)
+        return;
+
+    UnstructuredMesh * mesh = dynamic_cast<UnstructuredMesh *>(this->grid);
+    if (!mesh)
         return;
 
     YAML::Node part_node = this->root["partitioner"];
@@ -131,11 +136,11 @@ GYMLFile::buildPartitioner()
 
     YAML::Node name = part_node["name"];
     if (name)
-        this->problem->setPartitionerType(name.as<std::string>());
+        mesh->setPartitionerType(name.as<std::string>());
 
     YAML::Node overlap = part_node["overlap"];
     if (overlap)
-        this->problem->setPartitionOverlap(overlap.as<PetscInt>());
+        mesh->setPartitionOverlap(overlap.as<PetscInt>());
 }
 
 void

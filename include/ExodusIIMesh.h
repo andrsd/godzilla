@@ -12,9 +12,9 @@ public:
 
     const std::string getFileName() const;
 
-    virtual void create();
-
 protected:
+    virtual void createDM() override;
+
     /// File name with the ExodusII mesh
     const std::string & file_name;
     /// Create faces and edges in the mesh

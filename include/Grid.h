@@ -15,12 +15,26 @@ public:
 
     DM getDM() const;
 
+    /// Get the grid spatial dimension
+    ///
+    /// @return Grid spatial dimension
+    PetscInt getDimension() const;
+
     /// Create the grid
-    virtual void create() = 0;
+    virtual void create();
 
 protected:
+    /// Method that builds DM for the mesh
+    virtual void createDM() = 0;
+
+    /// Distribute mesh over processes
+    virtual void distribute() = 0;
+
     /// DM object
     DM dm;
+
+    /// Spatial dimension of the mesh
+    PetscInt dim;
 
 public:
     static InputParameters validParams();

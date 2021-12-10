@@ -11,16 +11,22 @@ Grid::validParams()
     return params;
 }
 
-Grid::Grid(const InputParameters & parameters) : Object(parameters), PrintInterface(this), dm(NULL)
+Grid::Grid(const InputParameters & parameters) :
+    Object(parameters),
+    PrintInterface(this),
+    dm(NULL),
+    dim(-1)
 {
-    _F_;
 }
 
 Grid::~Grid()
 {
     _F_;
-    if (this->dm)
-        DMDestroy(&this->dm);
+    if (this->dm) {
+        PetscErrorCode ierr;
+        ierr = DMDestroy(&this->dm);
+        checkPetscError(ierr);
+    }
 }
 
 DM
@@ -28,6 +34,27 @@ Grid::getDM() const
 {
     _F_;
     return this->dm;
+}
+
+PetscInt
+Grid::getDimension() const
+{
+    _F_;
+    return this->dim;
+}
+
+void
+Grid::create()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    createDM();
+    ierr = DMSetUp(this->dm);
+    checkPetscError(ierr);
+    ierr = DMGetDimension(this->dm, &this->dim);
+    checkPetscError(ierr);
+    distribute();
 }
 
 } // namespace godzilla
