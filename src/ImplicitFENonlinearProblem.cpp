@@ -91,6 +91,7 @@ ImplicitFENonlinearProblem::onPostStep()
     Vec sln;
     ierr = TSGetSolution(this->ts, &sln);
     checkPetscError(ierr);
+    computePostprocessors();
     outputStep(sln);
     return 0;
 }

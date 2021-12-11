@@ -39,6 +39,7 @@ protected:
     void buildAuxiliaryFields();
     void buildInitialConditions();
     void buildBoundaryConditions();
+    void buildPostprocessors();
     void buildOutputs();
     InputParameters & buildParams(const YAML::Node & root, const std::string & name);
     void setParameterFromYML(InputParameters & params,

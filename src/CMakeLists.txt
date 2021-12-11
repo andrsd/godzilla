@@ -30,6 +30,7 @@ add_library(godzilla
         Init.cpp
         InitialCondition.cpp
         InputParameters.cpp
+        L2Diff.cpp
         LinearInterpolation.cpp
         LinearProblem.cpp
         LineMesh.cpp
@@ -39,6 +40,7 @@ add_library(godzilla
         Object.cpp
         Output.cpp
         PiecewiseLinear.cpp
+        Postprocessor.cpp
         PrintInterface.cpp
         Problem.cpp
         RectangleMesh.cpp

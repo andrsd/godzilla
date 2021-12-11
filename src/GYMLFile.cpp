@@ -9,6 +9,7 @@
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "FEProblemInterface.h"
+#include "Postprocessor.h"
 #include "Output.h"
 #include "CallStack.h"
 #include "assert.h"
@@ -78,6 +79,7 @@ GYMLFile::build()
     buildAuxiliaryFields();
     buildInitialConditions();
     buildBoundaryConditions();
+    buildPostprocessors();
     buildOutputs();
 }
 
@@ -219,6 +221,26 @@ GYMLFile::buildBoundaryConditions()
             auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
             fepface->addBoundaryCondition(bc);
         }
+    }
+}
+
+void
+GYMLFile::buildPostprocessors()
+{
+    _F_;
+    YAML::Node pps_root_node = this->root["pps"];
+    if (!pps_root_node)
+        return;
+
+    for (const auto & it : pps_root_node) {
+        YAML::Node pps_node = it.first;
+        std::string name = pps_node.as<std::string>();
+
+        InputParameters & params = buildParams(pps_root_node, name);
+        const std::string & class_name = params.get<std::string>("_type");
+        params.set<Problem *>("_problem") = this->problem;
+        auto pp = Factory::create<Postprocessor>(class_name, name, params);
+        problem->addPostprocessor(pp);
     }
 }
 

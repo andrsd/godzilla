@@ -223,6 +223,7 @@ LinearProblem::run()
 {
     _F_;
     solve();
+    computePostprocessors();
     if (converged())
         output();
 }

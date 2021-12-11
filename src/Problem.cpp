@@ -1,6 +1,7 @@
 #include "Problem.h"
 #include "CallStack.h"
 #include "Grid.h"
+#include "Postprocessor.h"
 #include "Output.h"
 
 namespace godzilla {
@@ -26,6 +27,8 @@ void
 Problem::check()
 {
     _F_;
+    for (auto & pp : this->pps)
+        pp->check();
     for (auto & out : this->outputs) {
         out->check();
     }
@@ -35,6 +38,8 @@ void
 Problem::create()
 {
     _F_;
+    for (auto & pp : this->pps)
+        pp->create();
     for (auto & out : this->outputs)
         out->create();
 }
@@ -44,6 +49,21 @@ Problem::addOutput(Output * output)
 {
     _F_;
     this->outputs.push_back(output);
+}
+
+void
+Problem::addPostprocessor(Postprocessor * pp)
+{
+    _F_;
+    this->pps.push_back(pp);
+}
+
+void
+Problem::computePostprocessors()
+{
+    _F_;
+    for (auto & pp : this->pps)
+        pp->compute();
 }
 
 } // namespace godzilla

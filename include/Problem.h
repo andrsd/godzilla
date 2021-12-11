@@ -8,6 +8,7 @@
 namespace godzilla {
 
 class Grid;
+class Postprocessor;
 class Output;
 
 /// Problem
@@ -37,11 +38,23 @@ public:
     /// @param output Output object to add
     virtual void addOutput(Output * output);
 
+    /// Add a postprocessor object
+    ///
+    /// @param pp Postprocessor object to add
+    virtual void addPostprocessor(Postprocessor * pp);
+
 protected:
+    /// Compute all postprocessors
+    virtual void computePostprocessors();
+
     /// Grid
     Grid & grid;
+
     /// List of output objects
     std::vector<Output *> outputs;
+
+    /// List of postprocessor objects
+    std::vector<Postprocessor *> pps;
 
 public:
     static InputParameters validParams();
