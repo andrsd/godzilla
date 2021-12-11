@@ -4,6 +4,7 @@
 #include "GodzillaConfig.h"
 #include "LineMesh.h"
 #include "PiecewiseLinear.h"
+#include "Postprocessor.h"
 #include "FEProblemInterface.h"
 
 using namespace godzilla;
@@ -199,6 +200,27 @@ TEST_F(GYMLFileTest, build_fe)
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
+}
+
+TEST_F(GYMLFileTest, simple_fe_pps)
+{
+    GYMLFile file(*this->app);
+
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe_pps.yml");
+
+    file.parse(file_name);
+    file.build();
+
+    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
+    EXPECT_NE(grid, nullptr);
+
+    auto problem = file.getProblem();
+    EXPECT_NE(problem, nullptr);
+
+    Postprocessor * pp = problem->getPostprocessor("l2_err");
+    EXPECT_NE(pp, nullptr);
+    EXPECT_EQ(pp->getName(), "l2_err");
 }
 
 TEST_F(GYMLFileTest, build_fe_w_aux)

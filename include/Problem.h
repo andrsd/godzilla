@@ -43,6 +43,12 @@ public:
     /// @param pp Postprocessor object to add
     virtual void addPostprocessor(Postprocessor * pp);
 
+    /// Get postprocessor by name
+    ///
+    /// @param name The name of the postprocessor
+    /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
+    virtual Postprocessor * getPostprocessor(const std::string & name) const;
+
 protected:
     /// Compute all postprocessors
     virtual void computePostprocessors();
@@ -54,7 +60,7 @@ protected:
     std::vector<Output *> outputs;
 
     /// List of postprocessor objects
-    std::vector<Postprocessor *> pps;
+    std::map<std::string, Postprocessor *> pps;
 
 public:
     static InputParameters validParams();

@@ -17,6 +17,7 @@ add_executable(${PROJECT_NAME}
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp
     InputParameters_test.cpp
+    L2Diff_test.cpp
     LinearInterpolation_test.cpp
     LinearProblem_test.cpp
     LineMesh_test.cpp
@@ -26,6 +27,7 @@ add_executable(${PROJECT_NAME}
     Object_test.cpp
     PiecewiseLinear_test.cpp
     PrintInterface_test.cpp
+    Problem_test.cpp
     RectangleMesh_test.cpp
     StructuredGrid1D_test.cpp
     StructuredGrid2D_test.cpp
