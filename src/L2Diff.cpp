@@ -47,11 +47,10 @@ L2Diff::compute()
 {
     _F_;
     PetscErrorCode ierr;
-    PetscReal time = 0;
     PetscFunc * funcs[1] = { __l2_diff };
     void * ctxs[1] = { this };
     ierr = DMComputeL2Diff(this->problem.getDM(),
-                           time,
+                           this->problem.getTime(),
                            funcs,
                            ctxs,
                            this->problem.getSolutionVector(),

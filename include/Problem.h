@@ -33,6 +33,11 @@ public:
     /// Return solution vector
     virtual Vec getSolutionVector() const = 0;
 
+    /// Get simulation time. For steady-state simulations, time is always 0
+    ///
+    /// @return Simulation time
+    virtual const PetscReal & getTime() const;
+
     /// Add and output object
     ///
     /// @param output Output object to add
@@ -61,6 +66,9 @@ protected:
 
     /// List of postprocessor objects
     std::map<std::string, Postprocessor *> pps;
+
+    /// Simulation time
+    PetscReal time;
 
 public:
     static InputParameters validParams();

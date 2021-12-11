@@ -10,6 +10,7 @@ namespace godzilla {
 
 class Logger;
 class Grid;
+class Problem;
 class InitialCondition;
 class BoundaryCondition;
 class AuxiliaryField;
@@ -19,7 +20,7 @@ class AuxiliaryField;
 /// Any problem using PetscFE should inherit from this for unified API
 class FEProblemInterface {
 public:
-    FEProblemInterface(const InputParameters & params);
+    FEProblemInterface(Problem & problem, const InputParameters & params);
     virtual ~FEProblemInterface();
 
     /// Get field name
@@ -105,6 +106,11 @@ public:
     ///
     /// @param aux Auxiliary field object to add
     virtual void addAuxiliaryField(AuxiliaryField * aux);
+
+    /// Get the simulation time (the time is pulled from the linked Problem class)
+    ///
+    /// @return The simulation time
+    virtual const PetscReal & getTime() const;
 
 protected:
     /// Initialize the FE system
@@ -196,6 +202,9 @@ protected:
     /// Setup volumetric weak form terms
     /// FIXME: This needs a better name
     virtual void onSetWeakForm() = 0;
+
+    /// Reference to the the problem this interface is part of
+    Problem & problem;
 
     /// Logger object
     Logger & logger;

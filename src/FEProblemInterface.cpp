@@ -2,6 +2,7 @@
 #include "CallStack.h"
 #include "FEProblemInterface.h"
 #include "Grid.h"
+#include "Problem.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "AuxiliaryField.h"
@@ -22,7 +23,8 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 } // namespace internal
 
-FEProblemInterface::FEProblemInterface(const InputParameters & params) :
+FEProblemInterface::FEProblemInterface(Problem & problem, const InputParameters & params) :
+    problem(problem),
     logger(const_cast<Logger &>(params.get<const App *>("_app")->getLogger())),
     qorder(PETSC_DETERMINE),
     ds(nullptr)
@@ -271,7 +273,7 @@ FEProblemInterface::setUpInitialGuess(DM dm, Vec x)
             }
 
             if (no_errors) {
-                ierr = DMProjectFunction(dm, 0.0, ic_funcs, ic_ctxs, INSERT_VALUES, x);
+                ierr = DMProjectFunction(dm, getTime(), ic_funcs, ic_ctxs, INSERT_VALUES, x);
                 checkPetscError(ierr);
             }
         }
@@ -280,7 +282,7 @@ FEProblemInterface::setUpInitialGuess(DM dm, Vec x)
         // no initial conditions -> use zero
         PetscErrorCode ierr;
         PetscFunc * initial_guess[1] = { internal::zero_fn };
-        ierr = DMProjectFunction(dm, 0.0, initial_guess, NULL, INSERT_VALUES, x);
+        ierr = DMProjectFunction(dm, getTime(), initial_guess, NULL, INSERT_VALUES, x);
         checkPetscError(ierr);
     }
 }
@@ -443,6 +445,12 @@ FEProblemInterface::setJacobianBlock(PetscInt fid,
     PetscErrorCode ierr;
     ierr = PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3);
     checkPetscError(ierr);
+}
+
+const PetscReal &
+FEProblemInterface::getTime() const
+{
+    return this->problem.getTime();
 }
 
 } // namespace godzilla

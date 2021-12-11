@@ -135,7 +135,7 @@ ExodusIIOutput::outputStep(PetscInt stepi, DM dm, Vec vec)
         writeVariableInfo(exoid, vec);
 
     if (stepi == -1) {
-        PetscReal time = 0;
+        PetscReal time = this->problem.getTime();
         PetscInt num_step = 0;
         ierr = DMSetOutputSequenceNumber(dm, num_step, time);
         checkPetscError(ierr);

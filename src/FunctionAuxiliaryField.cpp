@@ -1,6 +1,7 @@
 #include "Godzilla.h"
 #include "FunctionAuxiliaryField.h"
 #include "CallStack.h"
+#include "FEProblemInterface.h"
 
 namespace godzilla {
 
@@ -58,7 +59,12 @@ FunctionAuxiliaryField::setUp(DM dm, DM dm_aux)
     ierr = DMCreateLocalVector(dm_aux, &this->a);
     checkPetscError(ierr);
 
-    ierr = DMProjectFunctionLocal(dm_aux, 0.0, func, ctxs, INSERT_ALL_VALUES, this->a);
+    ierr = DMProjectFunctionLocal(dm_aux,
+                                  this->fepi.getTime(),
+                                  func,
+                                  ctxs,
+                                  INSERT_ALL_VALUES,
+                                  this->a);
     checkPetscError(ierr);
 
     ierr = DMSetAuxiliaryVec(dm, this->block, 0, this->a);

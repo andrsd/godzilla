@@ -17,7 +17,8 @@ Problem::validParams()
 Problem::Problem(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    grid(*getParam<Grid *>("_grid"))
+    grid(*getParam<Grid *>("_grid")),
+    time(0.)
 {
 }
 
@@ -42,6 +43,13 @@ Problem::create()
         pp.second->create();
     for (auto & out : this->outputs)
         out->create();
+}
+
+const PetscReal &
+Problem::getTime() const
+{
+    _F_;
+    return this->time;
 }
 
 void

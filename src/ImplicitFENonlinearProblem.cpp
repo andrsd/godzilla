@@ -97,14 +97,15 @@ ImplicitFENonlinearProblem::onPostStep()
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::tsMonitorCallback(PetscInt stepi, PetscReal time, Vec X)
+ImplicitFENonlinearProblem::tsMonitorCallback(PetscInt stepi, PetscReal t, Vec X)
 {
     _F_;
     PetscErrorCode ierr;
     PetscReal dt;
     ierr = TSGetTimeStep(this->ts, &dt);
     checkPetscError(ierr);
-    godzillaPrint(6, stepi, " Time ", time, ", dt = ", dt);
+    this->time = t;
+    godzillaPrint(6, stepi, " Time ", t, ", dt = ", dt);
     return 0;
 }
 
