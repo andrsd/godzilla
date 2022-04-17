@@ -1,4 +1,4 @@
-name: lint
+name: qa
 
 on:
   push:
