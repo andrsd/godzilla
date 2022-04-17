@@ -1,6 +1,7 @@
 godzilla
 =====
 
+[![qa](https://github.com/andrsd/godzilla/actions/workflows/qa.yml/badge.svg)](https://github.com/andrsd/godzilla/actions/workflows/qa.yml)
 [![build](https://github.com/andrsd/godzilla/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/andrsd/godzilla/actions/workflows/build.yml)
 [![Documentation Status](https://readthedocs.org/projects/godzilla-fem/badge/?version=latest)](https://godzilla-fem.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/andrsd/godzilla/branch/main/graph/badge.svg?token=7KL45W9Z4G)](https://codecov.io/gh/andrsd/godzilla)
