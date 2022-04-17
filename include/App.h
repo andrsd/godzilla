@@ -125,17 +125,6 @@ protected:
 
     /// Verbosity level
     unsigned int verbosity_level;
-
-    /// Grid object
-    Grid * grid;
-
-    /// Problem object
-    Problem * problem;
-
-    /// List of functions within this application
-    std::vector<Function *> functions;
-
-    friend class FunctionInterface;
 };
 
 template <typename T>

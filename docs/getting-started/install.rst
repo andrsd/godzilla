@@ -24,7 +24,7 @@ Installation
 
          conda install python clang gfortran zlib autoconf automake libtool cmake openmp lcov
 
-      Build MPICH 3.4.2
+      Build MPICH 4.0.2
 
       .. code-block::
 
@@ -38,8 +38,10 @@ Installation
             --enable-g=meminit \
             --disable-opencl \
             CC=clang CXX=clang++ FC=gfortran
+         make
+         make install
 
-      Build PETSc 3.16.1
+      Build PETSc 3.17.0
 
       .. code-block::
 
@@ -72,6 +74,8 @@ Installation
 
          If you installed HDF5 via some other means, do not specify ``--download-hdf5=yes``.
          You can use ``--with-hdf=/path/to/hdf5``, if the library is installed in a non-standard location.
+
+         For example, if HDF5 was installed via conda, you would say: ``--with-hdf=$CONDA_PREFIX``.
 
       Set environment variables
 

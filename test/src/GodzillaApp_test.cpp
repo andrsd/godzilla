@@ -1,57 +1,9 @@
 #include "GodzillaConfig.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "Grid.h"
-#include "Problem.h"
 #include "petsc.h"
 
 using namespace godzilla;
-
-class MockGrid : public Grid {
-public:
-    MockGrid(const InputParameters & params) : Grid(params) {}
-
-protected:
-    virtual void
-    distribute()
-    {
-    }
-    virtual void
-    createDM()
-    {
-    }
-};
-
-class MockProblem : public Problem {
-public:
-    MockProblem(const InputParameters & params) : Problem(params) {}
-
-    MOCK_METHOD(void, create, ());
-    MOCK_METHOD(void, run, ());
-    MOCK_METHOD(void, solve, ());
-    MOCK_METHOD(bool, converged, ());
-    MOCK_METHOD(DM, getDM, (), (const));
-    MOCK_METHOD(Vec, getSolutionVector, (), (const));
-};
-
-registerObject(MockGrid);
-registerObject(MockProblem);
-
-TEST_F(GodzillaAppTest, run_input)
-{
-    int argc = 3;
-    char * argv[] = { (char *) "godzilla",
-                      (char *) "-i",
-                      (char *) GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml",
-                      NULL };
-
-    App app("godzilla", MPI_COMM_WORLD);
-    app.create();
-    app.parseCommandLine(argc, argv);
-    app.run();
-
-    // TODO: build a MockGodzillaApp and make sure methods get called
-}
 
 TEST_F(GodzillaAppTest, run_input_non_existent_file)
 {
@@ -106,30 +58,4 @@ TEST_F(GodzillaAppTest, verbose_level)
     app.run();
 
     EXPECT_EQ(testing::internal::GetCapturedStdout(), "Print\n");
-}
-
-TEST_F(GodzillaAppTest, check_integrity)
-{
-    class TestApp : public App {
-    public:
-        TestApp() : App("godzilla", MPI_COMM_WORLD) {}
-
-        void
-        run()
-        {
-            {
-                InputParameters & params = Factory::getValidParams("MockGrid");
-                this->grid = buildObject<MockGrid>("MockGrid", "o1", params);
-            }
-            {
-                InputParameters & params = Factory::getValidParams("MockProblem");
-                this->problem = buildObject<MockProblem>("MockProblem", "o2", params);
-            }
-
-            this->log.error("error1");
-            checkIntegrity();
-        }
-    } app;
-
-    EXPECT_DEATH(app.run(), "error1");
 }

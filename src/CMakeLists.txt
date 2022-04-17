@@ -5,52 +5,16 @@ add_library(godzilla
         # factory must be first
         Factory.cpp
         App.cpp
-        AuxiliaryField.cpp
-        BoundaryCondition.cpp
-        BoxMesh.cpp
         CallStack.cpp
         CmdLineArgParser.cpp
-        ConstantIC.cpp
-        DirichletBC.cpp
-        EssentialBC.cpp
-        ExodusIIMesh.cpp
-        ExodusIIOutput.cpp
-        FENonlinearProblem.cpp
-        FEProblemInterface.cpp
-        FileOutput.cpp
-        Function.cpp
-        FunctionAuxiliaryField.cpp
-        FunctionEvaluator.cpp
-        FunctionIC.cpp
-        FunctionInterface.cpp
-        Grid.cpp
         GYMLFile.cpp
-        HDF5Output.cpp
-        ImplicitFENonlinearProblem.cpp
         Init.cpp
-        InitialCondition.cpp
         InputParameters.cpp
-        L2Diff.cpp
-        LinearInterpolation.cpp
-        LinearProblem.cpp
-        LineMesh.cpp
         Logger.cpp
-        NaturalBC.cpp
-        NonlinearProblem.cpp
         Object.cpp
-        Output.cpp
-        PiecewiseLinear.cpp
-        Postprocessor.cpp
         PrintInterface.cpp
-        Problem.cpp
-        RectangleMesh.cpp
-        StructuredGrid1D.cpp
-        StructuredGrid2D.cpp
         Terminal.cpp
-        TransientInterface.cpp
-        UnstructuredMesh.cpp
         Utils.cpp
-        VTKOutput.cpp
 )
 target_code_coverage(godzilla)
 target_sanitization(godzilla)

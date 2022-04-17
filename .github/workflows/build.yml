@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     name: ubuntu
     env:
-      PETSC_VERSION: 3.16.1
-      PETSC_CACHE_NUM: 2
+      PETSC_VERSION: 3.17.0
+      PETSC_CACHE_NUM: 3
       PETSC_ARCH: arch-linux-c-opt
       CC: mpicc
       CXX: mpicxx
@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install llvm-12 gfortran-10
+          sudo apt install llvm-13 gfortran-10
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
@@ -51,8 +51,8 @@ jobs:
     name: macos
     env:
       CONDA_CACHE_NUM: 1
-      PETSC_VERSION: 3.16.1
-      PETSC_CACHE_NUM: 2
+      PETSC_VERSION: 3.17.0
+      PETSC_CACHE_NUM: 3
       PETSC_ARCH: arch-darwin-c-opt
       CC: mpicc
       CXX: mpicxx

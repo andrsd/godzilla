@@ -1,16 +1,6 @@
 #include "GYMLFile.h"
 #include "App.h"
 #include "Factory.h"
-#include "Grid.h"
-#include "UnstructuredMesh.h"
-#include "Problem.h"
-#include "Function.h"
-#include "AuxiliaryField.h"
-#include "InitialCondition.h"
-#include "BoundaryCondition.h"
-#include "FEProblemInterface.h"
-#include "Postprocessor.h"
-#include "Output.h"
 #include "CallStack.h"
 #include "assert.h"
 
@@ -26,9 +16,7 @@ namespace godzilla {
 GYMLFile::GYMLFile(const App & app) :
     PrintInterface(app),
     LoggingInterface(const_cast<Logger &>(app.getLogger())),
-    app(app),
-    grid(nullptr),
-    problem(nullptr)
+    app(app)
 {
     _F_;
 }
@@ -40,20 +28,6 @@ GYMLFile::parse(const std::string & file_name)
     this->root = YAML::LoadFile(file_name);
 }
 
-Grid *
-GYMLFile::getGrid()
-{
-    _F_;
-    return this->grid;
-}
-
-Problem *
-GYMLFile::getProblem()
-{
-    _F_;
-    return this->problem;
-}
-
 const YAML::Node &
 GYMLFile::getYml()
 {
@@ -61,208 +35,10 @@ GYMLFile::getYml()
     return this->root;
 }
 
-const std::vector<Function *> &
-GYMLFile::getFunctions()
-{
-    _F_;
-    return this->functions;
-}
-
 void
 GYMLFile::build()
 {
     _F_;
-    buildFunctions();
-    buildGrid();
-    buildProblem();
-    buildPartitioner();
-    buildAuxiliaryFields();
-    buildInitialConditions();
-    buildBoundaryConditions();
-    buildPostprocessors();
-    buildOutputs();
-}
-
-void
-GYMLFile::buildFunctions()
-{
-    _F_;
-    YAML::Node funcs_node = this->root["functions"];
-    if (!funcs_node)
-        return;
-
-    for (const auto & it : funcs_node) {
-        YAML::Node fn_node = it.first;
-        std::string name = fn_node.as<std::string>();
-
-        InputParameters params = buildParams(funcs_node, name);
-        const std::string & class_name = params.get<std::string>("_type");
-        auto fn = Factory::create<Function>(class_name, name, params);
-        this->functions.push_back(fn);
-    }
-}
-
-void
-GYMLFile::buildGrid()
-{
-    _F_;
-    InputParameters & params = buildParams(this->root, "grid");
-    const std::string & class_name = params.get<std::string>("_type");
-    this->grid = Factory::create<Grid>(class_name, "grid", params);
-}
-
-void
-GYMLFile::buildProblem()
-{
-    _F_;
-    InputParameters & params = buildParams(this->root, "problem");
-    const std::string & class_name = params.get<std::string>("_type");
-    params.set<Grid *>("_grid") = this->grid;
-    this->problem = Factory::create<Problem>(class_name, "problem", params);
-}
-
-void
-GYMLFile::buildPartitioner()
-{
-    _F_;
-    if (!this->grid)
-        return;
-
-    UnstructuredMesh * mesh = dynamic_cast<UnstructuredMesh *>(this->grid);
-    if (!mesh)
-        return;
-
-    YAML::Node part_node = this->root["partitioner"];
-    if (!part_node)
-        return;
-
-    YAML::Node name = part_node["name"];
-    if (name)
-        mesh->setPartitionerType(name.as<std::string>());
-
-    YAML::Node overlap = part_node["overlap"];
-    if (overlap)
-        mesh->setPartitionOverlap(overlap.as<PetscInt>());
-}
-
-void
-GYMLFile::buildAuxiliaryFields()
-{
-    _F_;
-    YAML::Node auxs_root_node = this->root["auxs"];
-    if (!auxs_root_node)
-        return;
-
-    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
-    if (fepface == nullptr)
-        logError("Supplied problem type '",
-                 this->problem->getType(),
-                 "' does not support auxiliary fields.");
-    else {
-        for (const auto & it : auxs_root_node) {
-            YAML::Node aux_node = it.first;
-            std::string name = aux_node.as<std::string>();
-
-            InputParameters & params = buildParams(auxs_root_node, name);
-            params.set<FEProblemInterface *>("_fepi") = fepface;
-            const std::string & class_name = params.get<std::string>("_type");
-            auto aux = Factory::create<AuxiliaryField>(class_name, name, params);
-            fepface->addAuxiliaryField(aux);
-        }
-    }
-}
-
-void
-GYMLFile::buildInitialConditions()
-{
-    _F_;
-    YAML::Node ics_root_node = this->root["ics"];
-    if (!ics_root_node)
-        return;
-
-    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
-    if (fepface == nullptr)
-        logError("Supplied problem type '",
-                 this->problem->getType(),
-                 "' does not support initial conditions.");
-    else {
-        for (const auto & it : ics_root_node) {
-            YAML::Node ic_node = it.first;
-            std::string name = ic_node.as<std::string>();
-
-            InputParameters & params = buildParams(ics_root_node, name);
-            const std::string & class_name = params.get<std::string>("_type");
-            auto ic = Factory::create<InitialCondition>(class_name, name, params);
-            fepface->addInitialCondition(ic);
-        }
-    }
-}
-
-void
-GYMLFile::buildBoundaryConditions()
-{
-    _F_;
-    YAML::Node bcs_root_node = this->root["bcs"];
-    if (!bcs_root_node)
-        return;
-
-    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
-    if (fepface == nullptr)
-        logError("Supplied problem type '",
-                 this->problem->getType(),
-                 "' does not support boundary conditions.");
-    else {
-        for (const auto & it : bcs_root_node) {
-            YAML::Node bc_node = it.first;
-            std::string name = bc_node.as<std::string>();
-
-            InputParameters & params = buildParams(bcs_root_node, name);
-            const std::string & class_name = params.get<std::string>("_type");
-            auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
-            fepface->addBoundaryCondition(bc);
-        }
-    }
-}
-
-void
-GYMLFile::buildPostprocessors()
-{
-    _F_;
-    YAML::Node pps_root_node = this->root["pps"];
-    if (!pps_root_node)
-        return;
-
-    for (const auto & it : pps_root_node) {
-        YAML::Node pps_node = it.first;
-        std::string name = pps_node.as<std::string>();
-
-        InputParameters & params = buildParams(pps_root_node, name);
-        const std::string & class_name = params.get<std::string>("_type");
-        params.set<Problem *>("_problem") = this->problem;
-        auto pp = Factory::create<Postprocessor>(class_name, name, params);
-        problem->addPostprocessor(pp);
-    }
-}
-
-void
-GYMLFile::buildOutputs()
-{
-    _F_;
-    YAML::Node output_root_node = this->root["output"];
-    if (!output_root_node)
-        return;
-
-    for (const auto & it : output_root_node) {
-        YAML::Node output_node = it.first;
-        std::string name = output_node.as<std::string>();
-
-        InputParameters & params = buildParams(output_root_node, name);
-        const std::string & class_name = params.get<std::string>("_type");
-        params.set<Problem *>("_problem") = this->problem;
-        auto output = Factory::create<Output>(class_name, name, params);
-        assert(this->problem != nullptr);
-        this->problem->addOutput(output);
-    }
 }
 
 InputParameters &

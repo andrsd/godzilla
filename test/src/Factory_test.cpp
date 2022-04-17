@@ -1,8 +1,6 @@
 #include "gtest/gtest.h"
 #include "Factory.h"
 #include "App.h"
-#include "LineMesh.h"
-#include "RectangleMesh.h"
 #include "petsc.h"
 
 using namespace godzilla;
@@ -23,18 +21,9 @@ TEST(FactoryTest, create_unreg_obj)
 TEST(FactoryTest, create_reg_obj)
 {
     App app("test", MPI_COMM_WORLD);
-
-    InputParameters & params = Factory::getValidParams("LineMesh");
-    params.set<PetscInt>("nx") = 1;
-    auto obj = app.buildObject<LineMesh>("LineMesh", "name", params);
 }
 
 TEST(FactoryTest, create_wrong_type)
 {
     App app("test", MPI_COMM_WORLD);
-
-    InputParameters & params = Factory::getValidParams("LineMesh");
-    params.set<PetscInt>("nx") = 1;
-    EXPECT_DEATH(app.buildObject<RectangleMesh>("LineMesh", "name", params),
-                 "error: Instantiation of object 'name:\\[LineMesh\\]' failed\\.");
 }

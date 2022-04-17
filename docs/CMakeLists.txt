@@ -42,7 +42,6 @@ if(DOXYGEN_FOUND)
         DEPENDS
             ${GODZILLA_RST_DIR}/index.rst
             ${GODZILLA_RST_DIR}/getting-started
-            ${GODZILLA_RST_DIR}/examples
             ${GODZILLA_RST_DIR}/devel/index.rst
             ${GODZILLA_RST_DIR}/conf.py
     )
@@ -63,14 +62,6 @@ if(DOXYGEN_FOUND)
             cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/getting-started ${GODZILLA_RST_DIR}/getting-started
         DEPENDS
             ${PROJECT_SOURCE_DIR}/docs/getting-started
-    )
-    add_custom_command(
-        OUTPUT
-            ${GODZILLA_RST_DIR}/examples
-        COMMAND
-            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/examples ${GODZILLA_RST_DIR}/examples
-        DEPENDS
-            ${PROJECT_SOURCE_DIR}/docs/examples
     )
     add_custom_command(
         OUTPUT

@@ -1,9 +1,6 @@
 #include "App.h"
 #include "GodzillaConfig.h"
 #include "GYMLFile.h"
-#include "Function.h"
-#include "Grid.h"
-#include "Problem.h"
 #include "CallStack.h"
 #include "Utils.h"
 #include "Terminal.h"
@@ -29,9 +26,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     input_file_arg("i", "input-file", "Input file to execute", false, "", "string"),
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
     no_colors_switch("", "no-colors", "Do not use terminal colors", false),
-    verbosity_level(1),
-    grid(nullptr),
-    problem(nullptr)
+    verbosity_level(1)
 {
     _F_;
     MPI_Comm_size(comm, &this->comm_size);
@@ -140,25 +135,12 @@ App::buildFromGYML(const std::string & file_name)
     GYMLFile file(*this);
     file.parse(file_name);
     file.build();
-    this->grid = file.getGrid();
-    assert(this->grid != nullptr);
-    this->problem = file.getProblem();
-    assert(this->problem != nullptr);
-
-    this->functions = file.getFunctions();
-    for (auto & f : this->functions)
-        f->create();
-    this->grid->create();
-    this->problem->create();
 }
 
 void
 App::checkIntegrity()
 {
     _F_;
-    this->grid->check();
-    this->problem->check();
-
     if (this->log.getNumEntries() > 0) {
         this->log.print();
         godzilla::internal::terminate();
@@ -169,7 +151,6 @@ void
 App::runProblem()
 {
     _F_;
-    this->problem->run();
 }
 
 } // namespace godzilla

@@ -10,9 +10,6 @@ namespace godzilla {
 
 class App;
 class Factory;
-class Grid;
-class Problem;
-class Function;
 
 /// YML parser for input files
 ///
@@ -25,22 +22,9 @@ public:
     /// build the simulation
     virtual void build();
 
-    virtual Grid * getGrid();
-    virtual Problem * getProblem();
-    const std::vector<Function *> & getFunctions();
-
     virtual const YAML::Node & getYml();
 
 protected:
-    void buildFunctions();
-    void buildGrid();
-    void buildProblem();
-    void buildPartitioner();
-    void buildAuxiliaryFields();
-    void buildInitialConditions();
-    void buildBoundaryConditions();
-    void buildPostprocessors();
-    void buildOutputs();
     InputParameters & buildParams(const YAML::Node & root, const std::string & name);
     void setParameterFromYML(InputParameters & params,
                              const YAML::Node & node,
@@ -58,11 +42,6 @@ protected:
     const godzilla::App & app;
 
     YAML::Node root;
-
-    Grid * grid;
-    Problem * problem;
-    /// List of functions defined in the input file
-    std::vector<Function *> functions;
 };
 
 } // namespace godzilla
