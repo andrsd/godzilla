@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install llvm-13 gfortran-10
+          sudo apt install llvm-12 gfortran-10
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH

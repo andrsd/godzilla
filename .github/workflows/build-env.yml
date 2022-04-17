@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install cmake llvm-13 gfortran-10
+          sudo apt install cmake llvm-12 gfortran-10
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -50,7 +50,7 @@ jobs:
             --download-netcdf=yes \
             --download-pnetcdf=yes \
             --download-zlib=yes \
-            CC=clang-13 CXX=clang++-13 FC=gfortran-10 \
+            CC=clang-12 CXX=clang++-12 FC=gfortran-10 \
             PETSC_DIR=`pwd`
           echo "::endgroup::"
           echo "::group::make"
