@@ -3,6 +3,8 @@
 #include "Mesh.h"
 #include "Vertex.h"
 #include "Error.h"
+#include "Edge.h"
+#include "Tri.h"
 #include "Tetra.h"
 #include "Hex.h"
 #include <exodusII.h>
@@ -21,13 +23,35 @@ loadCoordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
     int err;
     double * x = new double[n_nodes];
     MEM_CHECK(x);
-    double * y = new double[n_nodes];
-    MEM_CHECK(y);
-    double * z = new double[n_nodes];
-    MEM_CHECK(z);
-    err = ex_get_coord(exoid, x, y, z);
-    for (int i = 0; i < n_nodes; i++)
-        mesh.setVertex(i + 1, new Vertex3D(x[i], y[i], z[i]));
+
+    double * y = nullptr;
+    if (dim > 1) {
+        y = new double[n_nodes];
+        MEM_CHECK(y);
+    }
+
+    double * z = nullptr;
+    if (dim > 2) {
+        z = new double[n_nodes];
+        MEM_CHECK(z);
+    }
+
+    if (dim == 1) {
+        err = ex_get_coord(exoid, x, NULL, NULL);
+        for (int i = 0; i < n_nodes; i++)
+            mesh.setVertex(i + 1, new Vertex1D(x[i]));
+    }
+    else if (dim == 2) {
+        err = ex_get_coord(exoid, x, y, NULL);
+        for (int i = 0; i < n_nodes; i++)
+            mesh.setVertex(i + 1, new Vertex2D(x[i], y[i]));
+    }
+    else if (dim == 3) {
+        err = ex_get_coord(exoid, x, y, z);
+        for (int i = 0; i < n_nodes; i++)
+            mesh.setVertex(i + 1, new Vertex3D(x[i], y[i], z[i]));
+    }
+
     delete[] x;
     delete[] y;
     delete[] z;
@@ -53,7 +77,11 @@ loadBlock(int exoid, Mesh & mesh, int blk_id, int & elem_id)
                        &n_attrs);
 
     EElemType elem_type = INVALID;
-    if (strncmp(elem_type_str, "HEX", 3) == 0)
+    if (strncmp(elem_type_str, "BAR", 3) == 0)
+        elem_type = EDGE;
+    else if (strncmp(elem_type_str, "TRI", 3) == 0)
+        elem_type = TRIANGLE;
+    else if (strncmp(elem_type_str, "HEX", 3) == 0)
         elem_type = HEX;
     else if (strncmp(elem_type_str, "TET", 3) == 0)
         elem_type = TETRA;
@@ -74,6 +102,12 @@ loadBlock(int exoid, Mesh & mesh, int blk_id, int & elem_id)
 
         Element * elem = nullptr;
         switch (elem_type) {
+        case EDGE:
+            elem = new Edge(vtcs);
+            break;
+        case TRIANGLE:
+            elem = new Tri(vtcs);
+            break;
         case TETRA:
             elem = new Tetra(vtcs);
             break;
@@ -116,8 +150,6 @@ ExodusIO::load(const std::string & file_name)
                       &n_eblocks,
                       &n_nodesets,
                       &n_sidesets);
-    if (n_dims != 3)
-        error("File '%s' does not contain 3D mesh", file_name);
 
     loadCoordinates(exoid, mesh, n_dims, n_nodes);
 

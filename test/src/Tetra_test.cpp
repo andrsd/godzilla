@@ -20,7 +20,7 @@ TEST(TetraTest, ctor)
 
 TEST(TetraTest, id)
 {
-    Hex tet;
+    Tetra tet;
     EXPECT_EQ(tet.getId(), INVALID_IDX);
 }
 

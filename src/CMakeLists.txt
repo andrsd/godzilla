@@ -7,6 +7,7 @@ add_library(godzilla
         App.cpp
         CallStack.cpp
         CmdLineArgParser.cpp
+        Edge.cpp
         Element.cpp
         Error.cpp
         ExodusIO.cpp
@@ -20,6 +21,7 @@ add_library(godzilla
         PrintInterface.cpp
         Terminal.cpp
         Tetra.cpp
+        Tri.cpp
         Utils.cpp
         Vertex.cpp
 )

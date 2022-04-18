@@ -5,6 +5,7 @@ endif()
 add_executable(${PROJECT_NAME}
     Array_test.cpp
     CallStack_test.cpp
+    Edge_test.cpp
     Error_test.cpp
     ExodusII_test.cpp
     Factory_test.cpp
@@ -16,6 +17,7 @@ add_executable(${PROJECT_NAME}
     Object_test.cpp
     PrintInterface_test.cpp
     Tetra_test.cpp
+    Tri_test.cpp
     Utils_test.cpp
     main.cpp
 )
