@@ -39,6 +39,8 @@ set(EXCLUDE_REGEX
     --ignore-filename-regex=/include/gmock/*
     --ignore-filename-regex=test/*
     --ignore-filename-regex=/muparser/*
+    --ignore-filename-regex=/include/Judy.h
+    --ignore-filename-regex=/include/exodusII.h
 )
 
 set(CODE_COVERAGE_BINS
