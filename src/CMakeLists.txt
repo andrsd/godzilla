@@ -34,6 +34,7 @@ target_include_directories(
     PRIVATE
         ${CONDA_INCLUDE_DIR}
         ${HDF5_INCLUDE_DIR}
+        ${JUDY_INCLUDE_DIR}
         ${PETSC_INCLUDE_DIR}
         ${PROJECT_BINARY_DIR}
         ${MUPARSER_INCLUDE_DIR}
@@ -47,5 +48,6 @@ target_link_libraries(
     PUBLIC
         muparser
         yaml-cpp
+        ${JUDY_LIBRARY}
         ${PETSC_LIBRARY}
 )

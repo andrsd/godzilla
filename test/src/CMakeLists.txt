@@ -1,4 +1,9 @@
+if (DEFINED ENV{CONDA_PREFIX})
+    set(CMAKE_BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
+endif()
+
 add_executable(${PROJECT_NAME}
+    Array_test.cpp
     CallStack_test.cpp
     Factory_test.cpp
     GodzillaApp_test.cpp

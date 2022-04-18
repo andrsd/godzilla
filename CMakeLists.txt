@@ -17,6 +17,12 @@ include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
+# Judy
+find_package(Judy)
+if (NOT ${JUDY_FOUND})
+    message(STATUS "Try to set environemnt variable JUDY_DIR to point to your Judy installation.")
+endif()
+
 # PETSc
 find_package(PETSc)
 if (NOT ${PETSC_FOUND})
@@ -60,6 +66,7 @@ set(YAML_CPP_INCLUDE_DIR ${yaml_cpp_SOURCE_DIR}/include)
 # Godzilla
 
 set(GODZILLA_LIBRARIES
+    ${JUDY_LIBRARY}
     ${PETSC_LIBRARY}
     godzilla
     muparser
@@ -68,6 +75,7 @@ set(GODZILLA_LIBRARIES
 set(GODZILLA_INCLUDE_DIRS
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/contrib
+    ${JUDY_INCLUDE_DIR}
     ${PETSC_INCLUDE_DIR}
     ${MUPARSER_INCLUDE_DIR}
     ${YAML_CPP_INCLUDE_DIR}
