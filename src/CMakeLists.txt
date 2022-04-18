@@ -7,14 +7,18 @@ add_library(godzilla
         App.cpp
         CallStack.cpp
         CmdLineArgParser.cpp
+        Element.cpp
         GYMLFile.cpp
         Init.cpp
         InputParameters.cpp
         Logger.cpp
+        Mesh.cpp
         Object.cpp
         PrintInterface.cpp
         Terminal.cpp
+        Tetra.cpp
         Utils.cpp
+        Vertex.cpp
 )
 target_code_coverage(godzilla)
 target_sanitization(godzilla)
