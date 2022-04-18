@@ -8,6 +8,7 @@ add_library(godzilla
         CallStack.cpp
         CmdLineArgParser.cpp
         Element.cpp
+        Error.cpp
         GYMLFile.cpp
         Init.cpp
         InputParameters.cpp
