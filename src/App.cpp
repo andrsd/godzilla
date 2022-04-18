@@ -34,7 +34,7 @@ App::~App()
 }
 
 const Logger &
-App::getLogger() const
+App::get_logger() const
 {
     _F_;
     return this->log;
@@ -47,35 +47,35 @@ App::create()
 }
 
 void
-App::parseCommandLine(int argc, char * argv[])
+App::parse_command_line(int argc, char * argv[])
 {
     _F_;
     this->args.parse(argc, argv);
 }
 
 const unsigned int &
-App::getVerbosityLevel() const
+App::get_verbosity_level() const
 {
     _F_;
     return this->verbosity_level;
 }
 
 const MPI_Comm &
-App::getComm() const
+App::get_comm() const
 {
     _F_;
     return this->comm;
 }
 
 const PetscMPIInt &
-App::getCommRank() const
+App::get_comm_rank() const
 {
     _F_;
     return this->comm_rank;
 }
 
 const PetscMPIInt &
-App::getCommSize() const
+App::get_comm_size() const
 {
     _F_;
     return this->comm_size;
@@ -94,23 +94,23 @@ App::run()
 
     if (this->input_file_arg.isSet()) {
         std::string file_name = this->input_file_arg.getValue();
-        runInputFile(file_name);
+        run_input_file(file_name);
     }
 }
 
 void
-App::runInputFile(const std::string & file_name)
+App::run_input_file(const std::string & file_name)
 {
     _F_;
-    if (utils::pathExists(file_name)) {
-        godzillaPrint(9, "Reading '", file_name, "'...");
-        buildFromGYML(file_name);
+    if (utils::path_exists(file_name)) {
+        godzilla_print(9, "Reading '", file_name, "'...");
+        build_from_gyml(file_name);
 
-        godzillaPrint(9, "Checking integrity...");
-        checkIntegrity();
+        godzilla_print(9, "Checking integrity...");
+        check_integrity();
 
-        godzillaPrint(9, "Running '", file_name, "'...");
-        runProblem();
+        godzilla_print(9, "Running '", file_name, "'...");
+        run_problem();
     }
     else
         error("Unable to open '",
@@ -119,7 +119,7 @@ App::runInputFile(const std::string & file_name)
 }
 
 void
-App::buildFromGYML(const std::string & file_name)
+App::build_from_gyml(const std::string & file_name)
 {
     _F_;
     GYMLFile file(*this);
@@ -128,17 +128,17 @@ App::buildFromGYML(const std::string & file_name)
 }
 
 void
-App::checkIntegrity()
+App::check_integrity()
 {
     _F_;
-    if (this->log.getNumEntries() > 0) {
+    if (this->log.get_num_entries() > 0) {
         this->log.print();
         godzilla::internal::terminate();
     }
 }
 
 void
-App::runProblem()
+App::run_problem()
 {
     _F_;
 }

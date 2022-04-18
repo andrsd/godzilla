@@ -22,7 +22,7 @@ public:
     App(const std::string & app_name, MPI_Comm comm);
     virtual ~App();
 
-    const Logger & getLogger() const;
+    const Logger & get_logger() const;
 
     /// Create method can be used to additional object allocation, etc. needed before the
     /// application runs
@@ -32,7 +32,7 @@ public:
     ///
     /// @param argc Number of command line arguments
     /// @param argv Command line argumnts
-    virtual void parseCommandLine(int argc, char * argv[]);
+    virtual void parse_command_line(int argc, char * argv[]);
 
     /// Run the application
     ///
@@ -42,22 +42,22 @@ public:
     /// Get level of verbosity
     ///
     /// @return The verbosity level
-    virtual const unsigned int & getVerbosityLevel() const;
+    virtual const unsigned int & get_verbosity_level() const;
 
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    virtual const MPI_Comm & getComm() const;
+    virtual const MPI_Comm & get_comm() const;
 
     /// Get communicator rank
     ///
     /// @return The rank of the calling process in the application communicator
-    virtual const PetscMPIInt & getCommRank() const;
+    virtual const PetscMPIInt & get_comm_rank() const;
 
     /// Get communicator size
     ///
     /// @return Size of the group associated with the application communicator
-    virtual const PetscMPIInt & getCommSize() const;
+    virtual const PetscMPIInt & get_comm_size() const;
 
     /// Build object using the Factory
     ///
@@ -69,28 +69,28 @@ public:
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    T * buildObject(const std::string & class_name,
-                    const std::string & name,
-                    InputParameters & parameters);
+    T * build_object(const std::string & class_name,
+                     const std::string & name,
+                     InputParameters & parameters);
 
 protected:
     /// Build application objects from a GYML file
     ///
     /// @param file_name The GYML file name
-    virtual void buildFromGYML(const std::string & file_name);
+    virtual void build_from_gyml(const std::string & file_name);
 
     /// Check integrity of the application
-    virtual void checkIntegrity();
+    virtual void check_integrity();
 
     /// Run the input file
     ///
     /// This is the method that will be called wehn user specify -i command line parameter
     ///
     /// @param file_name The name of the file specified via `-i` parameter
-    virtual void runInputFile(const std::string & file_name);
+    virtual void run_input_file(const std::string & file_name);
 
-    /// Run the problem build via `buildFromGYML`
-    virtual void runProblem();
+    /// Run the problem build via `build_from_gyml`
+    virtual void run_problem();
 
     /// MPI communicators
     MPI_Comm comm;
@@ -122,7 +122,7 @@ protected:
 
 template <typename T>
 T *
-App::buildObject(const std::string & class_name,
+App::build_object(const std::string & class_name,
                  const std::string & name,
                  InputParameters & parameters)
 {

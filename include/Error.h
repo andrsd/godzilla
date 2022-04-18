@@ -11,17 +11,17 @@ namespace internal {
 
 /// All of the following are not meant to be called directly - they are called by the normal macros
 /// (godzillaError(), etc.) down below
-void godzillaStreamAll(std::ostringstream & ss);
+void godzilla_stream_all(std::ostringstream & ss);
 
 template <typename T, typename... Args>
 void
-godzillaStreamAll(std::ostringstream & ss, T && val, Args &&... args)
+godzilla_stream_all(std::ostringstream & ss, T && val, Args &&... args)
 {
     ss << val;
-    godzillaStreamAll(ss, std::forward<Args>(args)...);
+    godzilla_stream_all(ss, std::forward<Args>(args)...);
 }
 
-void godzillaMsgRaw(const std::string & msg);
+void godzilla_msg_raw(const std::string & msg);
 
 std::string
 godzillaMsgFmt(const std::string & msg, const std::string & title, const std::string & color);
@@ -40,7 +40,7 @@ template <typename... Args>
 error(Args &&... args)
 {
     std::ostringstream oss;
-    internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
+    internal::godzilla_stream_all(oss, std::forward<Args>(args)...);
     internal::godzillaErrorRaw(oss.str());
     internal::terminate();
 }

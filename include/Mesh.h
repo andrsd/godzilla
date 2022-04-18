@@ -17,11 +17,11 @@ public:
     void free();
 
     /// Returns the total number of elements stored.
-    uint getNumElements() const;
+    uint get_num_elements() const;
 
-    void setVertex(const Index & id, const Vertex * vertex);
+    void set_vertex(const Index & id, const Vertex * vertex);
 
-    void setElement(const Index & id, const Element * elem);
+    void set_element(const Index & id, const Element * elem);
 
 protected:
     /// Mesh vertices

@@ -37,7 +37,7 @@ public:
 
     /// Test if the supplied parameter is valid
     /// @param name The name of the parameter to test
-    bool isParamValid(const std::string & name) const;
+    bool is_param_valid(const std::string & name) const;
 
     /// Get the App this object is associated with
     const App & getApp() const;

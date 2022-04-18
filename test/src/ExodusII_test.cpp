@@ -13,7 +13,7 @@ TEST(ExodusIOTest, load_hex)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/box-2x2x2.e");
 
     Mesh mesh = ExodusIO::load(file_name);
-    EXPECT_EQ(mesh.getNumElements(), 8);
+    EXPECT_EQ(mesh.get_num_elements(), 8);
 }
 
 TEST(ExodusIOTest, load_tri)
@@ -22,7 +22,7 @@ TEST(ExodusIOTest, load_tri)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/square-tri.e");
 
     Mesh mesh = ExodusIO::load(file_name);
-    EXPECT_EQ(mesh.getNumElements(), 4);
+    EXPECT_EQ(mesh.get_num_elements(), 4);
 }
 
 TEST(ExodusIOTest, load_edge)
@@ -31,5 +31,5 @@ TEST(ExodusIOTest, load_edge)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/line-2.e");
 
     Mesh mesh = ExodusIO::load(file_name);
-    EXPECT_EQ(mesh.getNumElements(), 2);
+    EXPECT_EQ(mesh.get_num_elements(), 2);
 }

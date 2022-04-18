@@ -21,12 +21,12 @@ TEST(HexTest, ctor)
 TEST(HexTest, id)
 {
     Hex hex;
-    EXPECT_EQ(hex.getId(), INVALID_IDX);
+    EXPECT_EQ(hex.get_id(), INVALID_IDX);
 }
 
 TEST(HexTest, marker)
 {
     Hex hex;
-    hex.setMarker(1234);
-    EXPECT_EQ(hex.getMarker(), 1234);
+    hex.set_marker(1234);
+    EXPECT_EQ(hex.get_marker(), 1234);
 }

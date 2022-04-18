@@ -21,21 +21,21 @@ Mesh::free()
 }
 
 uint
-Mesh::getNumElements() const
+Mesh::get_num_elements() const
 {
     _F_;
     return this->elements.count();
 }
 
 void
-Mesh::setVertex(const Index & id, const Vertex * vertex)
+Mesh::set_vertex(const Index & id, const Vertex * vertex)
 {
     _F_;
     this->vertices[id] = vertex;
 }
 
 void
-Mesh::setElement(const Index & id, const Element * elem)
+Mesh::set_element(const Index & id, const Element * elem)
 {
     _F_;
     this->elements[id] = elem;

@@ -17,7 +17,7 @@ public:
     /// Log an error
     template <typename... Args>
     void
-    logError(Args &&... args)
+    log_error(Args &&... args)
     {
         this->logger.error(this->prefix, std::forward<Args>(args)...);
     }
@@ -25,7 +25,7 @@ public:
     /// Log a warning
     template <typename... Args>
     void
-    logWarning(Args &&... args)
+    log_warning(Args &&... args)
     {
         this->logger.warning(this->prefix, std::forward<Args>(args)...);
     }

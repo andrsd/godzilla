@@ -10,9 +10,9 @@ public:
     TestApp() : App("godzilla", MPI_COMM_WORLD) {}
 
     virtual void
-    checkIntegrity()
+    check_integrity()
     {
-        if (this->log.getNumEntries() > 0)
+        if (this->log.get_num_entries() > 0)
             this->log.print();
     }
 };

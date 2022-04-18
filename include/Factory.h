@@ -67,7 +67,7 @@ public:
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
     static InputParameters &
-    getValidParams(const std::string & class_name)
+    get_valid_params(const std::string & class_name)
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
@@ -107,7 +107,7 @@ public:
     }
 
     static bool
-    isRegistered(const std::string & class_name)
+    is_registered(const std::string & class_name)
     {
         auto it = classes.find(class_name);
         return it != classes.end();

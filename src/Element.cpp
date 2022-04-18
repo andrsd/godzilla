@@ -18,19 +18,19 @@ Element::Element(const Element & o)
 }
 
 const Index &
-Element::getId() const
+Element::get_id() const
 {
     return id;
 }
 
 const uint &
-Element::getMarker() const
+Element::get_marker() const
 {
     return marker;
 }
 
 void
-Element::setMarker(const uint & marker)
+Element::set_marker(const uint & marker)
 {
     this->marker = marker;
 }

@@ -16,7 +16,7 @@ namespace godzilla {
 enum EElemType { INVALID, EDGE, TRIANGLE, QUAD, HEX, TETRA, PRISM, PYRAMID };
 
 static void
-loadCoordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
+load_coordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
 {
     _F_;
 
@@ -39,17 +39,17 @@ loadCoordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
     if (dim == 1) {
         err = ex_get_coord(exoid, x, NULL, NULL);
         for (int i = 0; i < n_nodes; i++)
-            mesh.setVertex(i + 1, new Vertex1D(x[i]));
+            mesh.set_vertex(i + 1, new Vertex1D(x[i]));
     }
     else if (dim == 2) {
         err = ex_get_coord(exoid, x, y, NULL);
         for (int i = 0; i < n_nodes; i++)
-            mesh.setVertex(i + 1, new Vertex2D(x[i], y[i]));
+            mesh.set_vertex(i + 1, new Vertex2D(x[i], y[i]));
     }
     else if (dim == 3) {
         err = ex_get_coord(exoid, x, y, z);
         for (int i = 0; i < n_nodes; i++)
-            mesh.setVertex(i + 1, new Vertex3D(x[i], y[i], z[i]));
+            mesh.set_vertex(i + 1, new Vertex3D(x[i], y[i], z[i]));
     }
 
     delete[] x;
@@ -58,7 +58,7 @@ loadCoordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
 }
 
 static void
-loadBlock(int exoid, Mesh & mesh, int blk_id, int & elem_id)
+load_block(int exoid, Mesh & mesh, int blk_id, int & elem_id)
 {
     _F_;
 
@@ -118,8 +118,8 @@ loadBlock(int exoid, Mesh & mesh, int blk_id, int & elem_id)
             break;
         }
 
-        elem->setMarker((uint) blk_id);
-        mesh.setElement(elem_id, elem);
+        elem->set_marker((uint) blk_id);
+        mesh.set_element(elem_id, elem);
         elem_id++;
     }
     delete[] connect;
@@ -151,7 +151,7 @@ ExodusIO::load(const std::string & file_name)
                       &n_nodesets,
                       &n_sidesets);
 
-    loadCoordinates(exoid, mesh, n_dims, n_nodes);
+    load_coordinates(exoid, mesh, n_dims, n_nodes);
 
     int elem_id = 0;
     // load elements block by block
@@ -160,7 +160,7 @@ ExodusIO::load(const std::string & file_name)
     err = ex_get_ids(exoid, EX_ELEM_BLOCK, eid_blocks);
     for (int i = 0; i < n_eblocks; i++) {
         int id = eid_blocks[i];
-        loadBlock(exoid, mesh, id, elem_id);
+        load_block(exoid, mesh, id, elem_id);
     }
     delete[] eid_blocks;
 

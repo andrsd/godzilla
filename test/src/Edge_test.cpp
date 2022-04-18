@@ -21,12 +21,12 @@ TEST(EdgeTest, ctor)
 TEST(EdgeTest, id)
 {
     Edge edge;
-    EXPECT_EQ(edge.getId(), INVALID_IDX);
+    EXPECT_EQ(edge.get_id(), INVALID_IDX);
 }
 
 TEST(EdgeTest, marker)
 {
     Edge edge;
-    edge.setMarker(1234);
-    EXPECT_EQ(edge.getMarker(), 1234);
+    edge.set_marker(1234);
+    EXPECT_EQ(edge.get_marker(), 1234);
 }

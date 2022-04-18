@@ -15,7 +15,7 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
 
     App app("godzilla", MPI_COMM_WORLD);
     app.create();
-    app.parseCommandLine(argc, argv);
+    app.parse_command_line(argc, argv);
 
     EXPECT_DEATH(app.run(), "error: Unable to open");
 }
@@ -27,7 +27,7 @@ TEST_F(GodzillaAppTest, no_colors)
 
     App app("godzilla", MPI_COMM_WORLD);
     app.create();
-    app.parseCommandLine(argc, argv);
+    app.parse_command_line(argc, argv);
 
     app.run();
     EXPECT_EQ(Terminal::num_colors, 1);
@@ -45,7 +45,7 @@ TEST_F(GodzillaAppTest, verbose_level)
         run()
         {
             App::run();
-            godzillaPrint(1, "Print");
+            godzilla_print(1, "Print");
         }
     };
 
@@ -54,7 +54,7 @@ TEST_F(GodzillaAppTest, verbose_level)
 
     TestApp app("godzilla", MPI_COMM_WORLD);
     app.create();
-    app.parseCommandLine(argc, argv);
+    app.parse_command_line(argc, argv);
     app.run();
 
     EXPECT_EQ(testing::internal::GetCapturedStdout(), "Print\n");

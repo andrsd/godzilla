@@ -12,11 +12,11 @@ public:
     Element(const Element & o);
 
     /// Get element ID
-    const Index & getId() const;
+    const Index & get_id() const;
     /// Get element marker
-    const uint & getMarker() const;
+    const uint & get_marker() const;
     /// Set element marker
-    void setMarker(const uint & marker);
+    void set_marker(const uint & marker);
 
 protected:
     /// Element ID

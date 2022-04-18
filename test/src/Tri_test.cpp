@@ -21,12 +21,12 @@ TEST(TriTest, ctor)
 TEST(TriTest, id)
 {
     Tri tet;
-    EXPECT_EQ(tet.getId(), INVALID_IDX);
+    EXPECT_EQ(tet.get_id(), INVALID_IDX);
 }
 
 TEST(TriTest, marker)
 {
     Tri tet;
-    tet.setMarker(1234);
-    EXPECT_EQ(tet.getMarker(), 1234);
+    tet.set_marker(1234);
+    EXPECT_EQ(tet.get_marker(), 1234);
 }

@@ -6,7 +6,7 @@ namespace godzilla {
 namespace internal {
 
 void
-godzillaMsgRaw(const std::string & msg)
+godzilla_msg_raw(const std::string & msg)
 {
     std::cout << msg << std::endl;
 }
@@ -20,7 +20,7 @@ godzillaMsgFmt(const std::string & msg, const std::string & title, const Termina
 }
 
 void
-godzillaStreamAll(std::ostringstream &)
+godzilla_stream_all(std::ostringstream &)
 {
 }
 
@@ -32,7 +32,7 @@ godzillaErrorRaw(std::string msg, bool call_stack)
 
     if (call_stack) {
         std::cerr << std::endl;
-        getCallstack().dump();
+        get_callstack().dump();
     }
 }
 
@@ -49,9 +49,9 @@ memCheck(int line, const char * func, const char * file, void * var)
 {
     if (var == nullptr) {
         std::ostringstream oss;
-        internal::godzillaStreamAll(oss, "Out of memory");
+        internal::godzilla_stream_all(oss, "Out of memory");
         oss << std::endl;
-        internal::godzillaStreamAll(oss, "  Location: ", file, ":", line);
+        internal::godzilla_stream_all(oss, "  Location: ", file, ":", line);
         internal::godzillaErrorRaw(oss.str(), true);
         terminate();
     }
@@ -64,7 +64,7 @@ checkPetscError(PetscErrorCode ierr)
 {
     if (ierr) {
         std::ostringstream oss;
-        internal::godzillaStreamAll(oss, "PETSc error: ", ierr);
+        internal::godzilla_stream_all(oss, "PETSc error: ", ierr);
         internal::godzillaErrorRaw(oss.str(), true);
         internal::terminate();
     }
