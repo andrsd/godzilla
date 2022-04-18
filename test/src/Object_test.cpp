@@ -23,7 +23,15 @@ TEST(ObjectTest, api)
 
     EXPECT_EQ(obj->processorId(), 0);
 
+    EXPECT_EQ(obj->comm(), MPI_COMM_WORLD);
+
     PetscMPIInt sz;
     MPI_Comm_size(app.getComm(), &sz);
     EXPECT_EQ(obj->commSize(), sz);
+
+    EXPECT_EQ(&obj->getApp(), &app);
+
+    // for code coverage
+    obj->create();
+    obj->check();
 }

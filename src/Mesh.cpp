@@ -20,10 +20,25 @@ Mesh::free()
     _F_;
 }
 
-inline uint
-Mesh::get_num_elements() const
+uint
+Mesh::getNumElements() const
 {
-    return 0;
+    _F_;
+    return this->elements.count();
+}
+
+void
+Mesh::setVertex(const Index & id, const Vertex * vertex)
+{
+    _F_;
+    this->vertices[id] = vertex;
+}
+
+void
+Mesh::setElement(const Index & id, const Element * elem)
+{
+    _F_;
+    this->elements[id] = elem;
 }
 
 } // namespace godzilla

@@ -17,16 +17,22 @@ Element::Element(const Element & o)
     this->marker = o.marker;
 }
 
-inline const Index &
-Element::get_id() const
+const Index &
+Element::getId() const
 {
     return id;
 }
 
-inline const uint &
-Element::get_marker() const
+const uint &
+Element::getMarker() const
 {
     return marker;
+}
+
+void
+Element::setMarker(const uint & marker)
+{
+    this->marker = marker;
 }
 
 } // namespace godzilla

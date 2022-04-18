@@ -10,20 +10,13 @@ class Element {
 public:
     Element();
     Element(const Element & o);
-    /// Create a copy of this element
-    virtual Element * copy() = 0;
 
     /// Get element ID
-    const Index & get_id() const;
+    const Index & getId() const;
     /// Get element marker
-    const uint & get_marker() const;
-
-    /// Get number of vertices
-    virtual uint get_num_vertices() const = 0;
-    /// Get number of edges
-    virtual uint get_num_edges() const = 0;
-    /// Get number of faces
-    virtual uint get_num_faces() const = 0;
+    const uint & getMarker() const;
+    /// Set element marker
+    void setMarker(const uint & marker);
 
 protected:
     /// Element ID

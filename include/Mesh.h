@@ -1,6 +1,9 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Array.h"
+#include "Vertex.h"
+#include "Element.h"
 
 namespace godzilla {
 
@@ -14,9 +17,17 @@ public:
     void free();
 
     /// Returns the total number of elements stored.
-    uint get_num_elements() const;
+    uint getNumElements() const;
+
+    void setVertex(const Index & id, const Vertex * vertex);
+
+    void setElement(const Index & id, const Element * elem);
 
 protected:
+    /// Mesh vertices
+    Array<const Vertex *> vertices;
+    /// Mesh elements
+    Array<const Element *> elements;
 };
 
 } // namespace godzilla

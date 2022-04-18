@@ -2,13 +2,16 @@
 
 namespace godzilla {
 
-/// Represents a vertex in 3D
 class Vertex {
+};
+
+/// Represents a Vertex in 3D
+class Vertex3D : public Vertex {
 public:
-    Vertex();
-    Vertex(double x, double y = 0., double z = 0.);
-    Vertex(const Vertex & o);
-    virtual Vertex * copy();
+    Vertex3D();
+    Vertex3D(double x, double y = 0., double z = 0.);
+    Vertex3D(const Vertex3D & o);
+    virtual Vertex3D * copy();
 
 protected:
     /// x-, y-, z-coordinates

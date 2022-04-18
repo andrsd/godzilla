@@ -6,13 +6,16 @@ add_executable(${PROJECT_NAME}
     Array_test.cpp
     CallStack_test.cpp
     Error_test.cpp
+    ExodusII_test.cpp
     Factory_test.cpp
     GodzillaApp_test.cpp
     GYMLFile_test.cpp
+    Hex_test.cpp
     InputParameters_test.cpp
     Logger_test.cpp
     Object_test.cpp
     PrintInterface_test.cpp
+    Tetra_test.cpp
     Utils_test.cpp
     main.cpp
 )

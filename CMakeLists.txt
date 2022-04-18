@@ -23,6 +23,12 @@ if (NOT ${JUDY_FOUND})
     message(STATUS "Try to set environemnt variable JUDY_DIR to point to your Judy installation.")
 endif()
 
+# ExodusII
+find_package(ExodusII)
+if (NOT ${EXODUSII_FOUND})
+    message(STATUS "Try to set environemnt variable EXODUSII_DIR to point to your ExodusII installation.")
+endif()
+
 # PETSc
 find_package(PETSc)
 if (NOT ${PETSC_FOUND})
@@ -67,6 +73,9 @@ set(YAML_CPP_INCLUDE_DIR ${yaml_cpp_SOURCE_DIR}/include)
 
 set(GODZILLA_LIBRARIES
     ${JUDY_LIBRARY}
+    ${NETCDF_LIBRARY}
+    ${HDF5_LIBRARY}
+    ${EXODUSII_LIBRARY}
     ${PETSC_LIBRARY}
     godzilla
     muparser
@@ -76,6 +85,7 @@ set(GODZILLA_INCLUDE_DIRS
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/contrib
     ${JUDY_INCLUDE_DIR}
+    ${EXODUSII_INCLUDE_DIR}
     ${PETSC_INCLUDE_DIR}
     ${MUPARSER_INCLUDE_DIR}
     ${YAML_CPP_INCLUDE_DIR}

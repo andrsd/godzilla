@@ -9,7 +9,9 @@ add_library(godzilla
         CmdLineArgParser.cpp
         Element.cpp
         Error.cpp
+        ExodusIO.cpp
         GYMLFile.cpp
+        Hex.cpp
         Init.cpp
         InputParameters.cpp
         Logger.cpp
@@ -50,5 +52,8 @@ target_link_libraries(
         muparser
         yaml-cpp
         ${JUDY_LIBRARY}
+        ${HDF5_LIBRARY}
+        ${NETCDF_LIBRARY}
+        ${EXODUSII_LIBRARY}
         ${PETSC_LIBRARY}
 )
