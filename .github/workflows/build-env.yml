@@ -67,7 +67,7 @@ jobs:
     runs-on:  macos-10.15
     name: macosx-clang
     env:
-      CONDA_CACHE_NUM: 1
+      CONDA_CACHE_NUM: 2
       PETSC_VERSION: 3.17.0
       PETSC_CACHE_NUM: 4
       SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
