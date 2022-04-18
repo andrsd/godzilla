@@ -37,6 +37,9 @@ jobs:
           restore-keys: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Configure
         run: |
+          NETCDF_DIR=${{ env.PETSC_DIR }}/${{ env.PETSC_ARCH }} \
+          EXODUSII_DIR=${{ env.PETSC_DIR }}/${{ env.PETSC_ARCH }} \
+          HDF5_DIR=${{ env.PETSC_DIR }}/${{ env.PETSC_ARCH }} \
           cmake -S . -B ${{ github.workspace }}/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
@@ -82,6 +85,9 @@ jobs:
           restore-keys: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Configure
         run: |
+          NETCDF_DIR=${{ env.PETSC_DIR }}/${{ env.PETSC_ARCH }} \
+          EXODUSII_DIR=${{ env.PETSC_DIR }}/${{ env.PETSC_ARCH }} \
+          HDF5_DIR=${{ env.PETSC_DIR }}/${{ env.PETSC_ARCH }} \
           cmake -S . -B ${{ github.workspace }}/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
