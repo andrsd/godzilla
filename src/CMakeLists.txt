@@ -12,6 +12,7 @@ add_library(godzilla
         CmdLineArgParser.cpp
         ConstantIC.cpp
         DirichletBC.cpp
+        Error.cpp
         EssentialBC.cpp
         ExodusIIMesh.cpp
         ExodusIIOutput.cpp

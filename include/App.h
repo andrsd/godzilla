@@ -9,13 +9,6 @@
 
 namespace godzilla {
 
-namespace internal {
-
-/// Terminate the run
-[[noreturn]] void terminate();
-
-} // namespace internal
-
 class Function;
 class Grid;
 class Problem;

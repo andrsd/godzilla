@@ -5,6 +5,7 @@ add_executable(${PROJECT_NAME}
     CallStack_test.cpp
     ConstantIC_test.cpp
     DirichletBC_test.cpp
+    Error_test.cpp
     ExodusIIMesh_test.cpp
     ExodusIIOutput_test.cpp
     Factory_test.cpp

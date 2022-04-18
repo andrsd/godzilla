@@ -5,22 +5,12 @@
 #include "Grid.h"
 #include "Problem.h"
 #include "CallStack.h"
+#include "Error.h"
 #include "Utils.h"
 #include "Terminal.h"
 #include <assert.h>
 
 namespace godzilla {
-
-namespace internal {
-
-[[noreturn]] void
-terminate()
-{
-    MPI_Finalize();
-    exit(1);
-}
-
-} // namespace internal
 
 App::App(const std::string & app_name, MPI_Comm comm) :
     PrintInterface(*this),
