@@ -1,7 +1,7 @@
 #include "GodzillaApp_test.h"
 #include "GYMLFile_test.h"
 #include "yaml-cpp/yaml.h"
-#include "GodzillaConfig.h"
+#include "Common.h"
 
 using namespace godzilla;
 

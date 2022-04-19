@@ -19,6 +19,10 @@ add_library(godzilla
         Mesh.cpp
         Object.cpp
         PrintInterface.cpp
+        QuadratureGauss1D.cpp
+        QuadratureGauss2DTri.cpp
+        QuadratureGauss3DTetra.cpp
+        RefDomain.cpp
         Terminal.cpp
         Tetra.cpp
         Tri.cpp

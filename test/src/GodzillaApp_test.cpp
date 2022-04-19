@@ -1,4 +1,4 @@
-#include "GodzillaConfig.h"
+#include "Common.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "petsc.h"

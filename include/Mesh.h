@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GodzillaConfig.h"
+#include "Common.h"
 #include "Array.h"
 #include "Vertex.h"
 #include "Element.h"

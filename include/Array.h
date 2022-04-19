@@ -1,7 +1,7 @@
 #pragma once
 
 #include <assert.h>
-#include "GodzillaConfig.h"
+#include "Common.h"
 
 namespace godzilla {
 

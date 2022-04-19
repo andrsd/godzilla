@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GodzillaConfig.h"
+#include "Common.h"
 #include "Element.h"
 
 namespace godzilla {
@@ -16,6 +16,7 @@ public:
 
 public:
     static const uint NUM_VERTICES = 3;
+    static const uint NUM_EDGES = 3;
 
 protected:
     /// Array of vertex indices that build up the triangle

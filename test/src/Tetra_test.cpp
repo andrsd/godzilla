@@ -1,4 +1,4 @@
-#include "GodzillaConfig.h"
+#include "Common.h"
 #include "Error.h"
 #include "CallStack.h"
 #include "Tetra.h"

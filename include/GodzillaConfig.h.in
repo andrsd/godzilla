@@ -4,19 +4,9 @@
 
 #define GODZILLA_UNIT_TESTS_ROOT "@GODZILLA_UNIT_TESTS_ROOT@"
 
-#include <Judy.h>
-
 namespace godzilla {
 
 /// Representation of a real number
 typedef double Real;
-
-/// For all indexing
-typedef Word_t Index;
-
-const Index INVALID_IDX = (Index) -1;
-
-/// Convenience alias to 'unsigned int'
-typedef unsigned int uint;
 
 } // namespace godzilla

@@ -1,5 +1,5 @@
 #include "App.h"
-#include "GodzillaConfig.h"
+#include "Common.h"
 #include "GYMLFile.h"
 #include "CallStack.h"
 #include "Error.h"
