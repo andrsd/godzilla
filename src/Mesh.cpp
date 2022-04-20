@@ -34,6 +34,12 @@ Mesh::set_vertex(const Index & id, const Vertex * vertex)
     this->vertices[id] = vertex;
 }
 
+const Vertex *
+Mesh::get_vertex(const Index & id) const
+{
+    return this->vertices[id];
+}
+
 void
 Mesh::set_element(const Index & id, const Element * elem)
 {

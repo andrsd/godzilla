@@ -69,7 +69,7 @@ public:
     static const uint FN_COMPONENT_0 = FN_VAL_0 | FN_DX_0 | FN_DXX_0;
 
 public:
-    Function1D();
+    Function1D(uint num_components);
     virtual ~Function1D();
 
     /// @return The polynomial degree of the function currently being represented by the class.
@@ -91,13 +91,13 @@ public:
     /// In Solution it selects the element to retrieve solution values for, etc.
     /// @param[in] element - Element associated with the function being represented by the class.
     virtual void
-    set_active_element(Element1D * element)
+    set_active_element(const Element1D * element)
     {
         this->element = element;
     }
 
     /// @return The element associated with the function being represented by the class.
-    Element1D *
+    const Element1D *
     get_active_element() const
     {
         return this->element;
@@ -154,7 +154,7 @@ protected:
     static const uint QUAD_COUNT = 8;
 
     /// Active element
-    Element1D *element;
+    const Element1D *element;
     /// current function polynomial order
     uint order;
     /// number of vector components
@@ -190,13 +190,15 @@ protected:
 };
 
 template <typename TYPE>
-Function1D<TYPE>::Function1D()
+Function1D<TYPE>::Function1D(uint num_components)
 {
     _F_;
     this->order = 0;
+    this->num_components = num_components;
     this->cur_node = NULL;
     memset(this->quads, 0, sizeof(this->quads));
     this->cur_quad = 0;
+    assert(this->num_components == 1);
 }
 
 template <typename TYPE>

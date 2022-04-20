@@ -21,6 +21,9 @@ public:
 
     void set_vertex(const Index & id, const Vertex * vertex);
 
+    /// Get vertex with index `id`
+    const Vertex * get_vertex(const Index & id) const;
+
     void set_element(const Index & id, const Element * elem);
 
 protected:

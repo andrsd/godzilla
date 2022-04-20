@@ -34,6 +34,11 @@ class Element1D : public Element {
 public:
     /// Get number of element vertices
     virtual uint get_num_vertices() const = 0;
+
+    /// Get vertex index (use that to get the actual vertex from Mesh)
+    ///
+    /// @param[in] local Local vertex number
+    virtual Index get_vertex(uint local) const = 0;
 };
 
 /// Base class for 2D elements

@@ -17,6 +17,8 @@ include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
+find_package(BLAS)
+
 # Judy
 find_package(Judy)
 if (NOT ${JUDY_FOUND})
@@ -72,6 +74,7 @@ set(YAML_CPP_INCLUDE_DIR ${yaml_cpp_SOURCE_DIR}/include)
 # Godzilla
 
 set(GODZILLA_LIBRARIES
+    ${BLAS_LIBRARIES}
     ${JUDY_LIBRARY}
     ${NETCDF_LIBRARY}
     ${HDF5_LIBRARY}

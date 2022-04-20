@@ -4,6 +4,14 @@ add_library(godzilla
     SHARED
         # factory must be first
         Factory.cpp
+        # then units with global variables
+        RefMapShapeset1D.cpp
+        H1LobattoShapesetEdge.cpp
+        H1LobattoShapesetTetra.cpp
+        QuadratureGauss1D.cpp
+        QuadratureGauss2DTri.cpp
+        QuadratureGauss3DTetra.cpp
+        # and then the rest
         App.cpp
         CallStack.cpp
         CmdLineArgParser.cpp
@@ -12,8 +20,6 @@ add_library(godzilla
         Error.cpp
         ExodusIO.cpp
         GYMLFile.cpp
-        H1LobattoShapesetEdge.cpp
-        H1LobattoShapesetTetra.cpp
         Hex.cpp
         Init.cpp
         InputParameters.cpp
@@ -22,10 +28,9 @@ add_library(godzilla
         Object.cpp
         PrintInterface.cpp
         Quad.cpp
-        QuadratureGauss1D.cpp
-        QuadratureGauss2DTri.cpp
-        QuadratureGauss3DTetra.cpp
         RefDomain.cpp
+        RefMap1D.cpp
+        ShapeFunction1D.cpp
         Shapeset1D.cpp
         Shapeset2D.cpp
         Shapeset3D.cpp
@@ -63,6 +68,7 @@ target_link_libraries(
     PUBLIC
         muparser
         yaml-cpp
+        ${BLAS_LIBRARIES}
         ${JUDY_LIBRARY}
         ${HDF5_LIBRARY}
         ${NETCDF_LIBRARY}

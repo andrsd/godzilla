@@ -15,6 +15,7 @@ public:
     Edge(const Edge & o);
 
     virtual uint get_num_vertices() const { return NUM_VERTICES; }
+    virtual Index get_vertex(uint local) const { return this->vertices[local]; }
 
 public:
     static const uint NUM_VERTICES = 2;

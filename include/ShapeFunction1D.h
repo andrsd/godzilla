@@ -6,24 +6,20 @@
 
 namespace godzilla {
 
-// Represents a shape function on a ref. domain
-//
+// Represents a shape function on a ref. domain in 1D
 //
 class ShapeFunction1D : public RealFunction1D {
 public:
     /// Constructs a standard precalculated shapeset class.
-    /// @param shapeset [in] Pointer to the shapeset to be precalculated.
-    ShapeFunction1D(Shapeset1D * shapeset);
-    ShapeFunction1D();
-
-    /// Destructor.
+    /// @param shapeset [in] Reference to the shapeset to be precalculated.
+    ShapeFunction1D(const Shapeset1D * shapeset);
     virtual ~ShapeFunction1D();
 
     void free();
 
     /// Ensures subsequent calls to get_active_element() will be returning 'e'.
     /// Switches the class to the appropriate mode (triangle, quad).
-    virtual void set_active_element(Element1D * e);
+    virtual void set_active_element(const Element1D * e);
 
     /// Activates a shape function given by its index. The values of the shape function
     /// can then be obtained by setting the required integration rule order by calling
@@ -39,19 +35,17 @@ public:
     };
 
     /// @return Pointer to the shapeset which is being precalculated.
-    Shapeset1D *
+    const Shapeset1D *
     get_shapeset() const
     {
         return this->shapeset;
     }
 
-    void set_shapeset(Shapeset1D * ss);
-
     virtual void precalculate(const uint np, const QPoint1D * pt, uint mask);
 
 protected:
-    /// Spaheset used for evaluation
-    Shapeset1D * shapeset;
+    /// Shapeset used for evaluation
+    const Shapeset1D * shapeset;
     /// index of active shape function
     uint index;
 };

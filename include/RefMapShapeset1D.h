@@ -1,16 +1,15 @@
 #pragma once
 
 #include "Shapeset1D.h"
-#include "Function1D.h"
 
 namespace godzilla {
 
-/// H1 shapeset for a 1D edge element
+/// Shapeset for a reference mapping
 ///
-class H1LobattoShapesetEdge : public Shapeset1D {
+class RefMapShapesetEdge : public Shapeset1D {
 public:
-    H1LobattoShapesetEdge();
-    virtual ~H1LobattoShapesetEdge();
+    RefMapShapesetEdge();
+    virtual ~RefMapShapesetEdge();
 
     virtual uint
     get_vertex_index(uint vertex) const
@@ -19,15 +18,15 @@ public:
     }
 
     virtual uint *
-    get_bubble_indices(uint order) const
+    get_bubble_indices(uint /*order*/) const
     {
-        return this->bubble_indices[order];
+        return nullptr;
     }
 
     virtual uint
-    get_num_bubble_fns(uint order) const
+    get_num_bubble_fns(uint /*order*/) const
     {
-        return (order > 1) ? (order - 1) : 0;
+        return 0;
     }
 
     virtual uint get_order(uint index) const;
@@ -46,13 +45,13 @@ public:
     }
 
 protected:
-    shape_fn_1d_t ** shape_table[RealFunction1D::NUM_VALUE_TYPES];
+    /// Shape function tables
+    shape_fn_1d_t ** shape_table[NUM_VALUE_TYPES];
     /// Indices of vertex shape functions on reference element, indexing: []
     uint * vertex_indices;
-    /// Indices of bubble functions on reference element, indexing: [order][]
-    uint ** bubble_indices;
-    /// Number of bubble functions on reference element, indexing: [order]
-    uint * bubble_count;
+
+public:
+    static const RefMapShapesetEdge * get();
 };
 
 } // namespace godzilla

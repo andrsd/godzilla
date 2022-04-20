@@ -13,7 +13,6 @@ public:
     Vertex1D(const Vertex1D & o);
     virtual Vertex1D * copy();
 
-protected:
     /// x-coordinate
     double x;
 };
@@ -26,7 +25,6 @@ public:
     Vertex2D(const Vertex2D & o);
     virtual Vertex2D * copy();
 
-protected:
     /// x-, y-coordinates
     double x, y;
 };
@@ -39,7 +37,6 @@ public:
     Vertex3D(const Vertex3D & o);
     virtual Vertex3D * copy();
 
-protected:
     /// x-, y-, z-coordinates
     double x, y, z;
 };

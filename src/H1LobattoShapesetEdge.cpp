@@ -46,10 +46,9 @@ static shape_fn_1d_t * lobatto_edge_dx_table[] = { lobatto_edge_dx };
 
 H1LobattoShapesetEdge::H1LobattoShapesetEdge() : Shapeset1D(MODE_EDGE, 1)
 {
-    _F_;
-
-    this->shape_table[FN] = lobatto_edge_fn_table;
-    this->shape_table[DX] = lobatto_edge_dx_table;
+    this->shape_table[RealFunction1D::FN] = lobatto_edge_fn_table;
+    this->shape_table[RealFunction1D::DX] = lobatto_edge_dx_table;
+    // TODO: this->shape_table[RealFunction1D::DXX]
 
     this->vertex_indices = lobatto_edge_vertex_indices;
     this->bubble_indices = lobatto_edge_bubble_indices;
@@ -57,7 +56,6 @@ H1LobattoShapesetEdge::H1LobattoShapesetEdge() : Shapeset1D(MODE_EDGE, 1)
 
 H1LobattoShapesetEdge::~H1LobattoShapesetEdge()
 {
-    _F_;
 }
 
 uint

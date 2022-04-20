@@ -2,6 +2,7 @@
 
 #include "Common.h"
 #include "Quadrature1D.h"
+#include "Function1D.h"
 
 namespace godzilla {
 
@@ -27,7 +28,7 @@ public:
 
     /// @return indices of bubble functions
     /// @param order - order of the bubble function
-    virtual uint * get_bubble_indices(uint order) = 0;
+    virtual uint * get_bubble_indices(uint order) const = 0;
 
     virtual uint get_num_bubble_fns(uint order) const = 0;
 
@@ -45,45 +46,45 @@ public:
     /// @param[in] component - The number of component of the evaluated function
     /// @param[out] vals - The array of vakues (caller is responsible for freeing this memory)
     virtual void
-    get_values(uint n, uint index, uint np, const QPoint1D * pt, uint component, Real * vals) = 0;
+    get_values(uint n, uint index, uint np, const QPoint1D * pt, uint component, Real * vals) const = 0;
 
     /// Evaluate function 'index' in points 'pt'
-    virtual Real get_value(uint n, uint index, Real x, uint component) = 0;
+    virtual Real get_value(uint n, uint index, Real x, uint component) const = 0;
 
     void
-    get_fn_values(uint index, uint np, const QPoint1D * pt, uint component, Real * vals)
+    get_fn_values(uint index, uint np, const QPoint1D * pt, uint component, Real * vals) const
     {
-        get_values(FN, index, np, pt, component, vals);
-    }
-
-    void
-    get_dx_values(uint index, uint np, const QPoint1D * pt, uint component, Real * vals)
-    {
-        get_values(DX, index, np, pt, component, vals);
+        get_values(RealFunction1D::FN, index, np, pt, component, vals);
     }
 
     void
-    get_dxx_values(uint index, uint np, const QPoint1D * pt, uint component, Real * vals)
+    get_dx_values(uint index, uint np, const QPoint1D * pt, uint component, Real * vals) const
     {
-        get_values(DXX, index, np, pt, component, vals);
+        get_values(RealFunction1D::DX, index, np, pt, component, vals);
+    }
+
+    void
+    get_dxx_values(uint index, uint np, const QPoint1D * pt, uint component, Real * vals) const
+    {
+        get_values(RealFunction1D::DXX, index, np, pt, component, vals);
     }
 
     Real
-    get_fn_value(uint index, Real x, uint component)
+    get_fn_value(uint index, Real x, uint component) const
     {
-        return get_value(FN, index, x, component);
+        return get_value(RealFunction1D::FN, index, x, component);
     }
 
     Real
-    get_dx_value(uint index, Real x, uint component)
+    get_dx_value(uint index, Real x, uint component) const
     {
-        return get_value(DX, index, x, component);
+        return get_value(RealFunction1D::DX, index, x, component);
     }
 
     Real
-    get_dxx_value(uint index, Real x, uint component)
+    get_dxx_value(uint index, Real x, uint component) const
     {
-        return get_value(DXX, index, x, component);
+        return get_value(RealFunction1D::DXX, index, x, component);
     }
 
 protected:
