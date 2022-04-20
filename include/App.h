@@ -123,8 +123,8 @@ protected:
 template <typename T>
 T *
 App::build_object(const std::string & class_name,
-                 const std::string & name,
-                 InputParameters & parameters)
+                  const std::string & name,
+                  InputParameters & parameters)
 {
     parameters.set<const App *>("_app") = this;
     return Factory::create<T>(class_name, name, parameters);

@@ -20,10 +20,10 @@ public:
     {
         std::ostringstream oss;
         stream_all(oss,
-                  Terminal::Color::red,
-                  "error: ",
-                  Terminal::Color::normal,
-                  std::forward<Args>(args)...);
+                   Terminal::Color::red,
+                   "error: ",
+                   Terminal::Color::normal,
+                   std::forward<Args>(args)...);
         this->entries.push_back(oss.str());
         this->num_errors++;
     }
@@ -35,10 +35,10 @@ public:
     {
         std::ostringstream oss;
         stream_all(oss,
-                  Terminal::Color::magenta,
-                  "warning: ",
-                  Terminal::Color::normal,
-                  std::forward<Args>(args)...);
+                   Terminal::Color::magenta,
+                   "warning: ",
+                   Terminal::Color::normal,
+                   std::forward<Args>(args)...);
         this->entries.push_back(oss.str());
         this->num_warnings++;
     }

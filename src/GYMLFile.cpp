@@ -75,8 +75,8 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
 
 void
 GYMLFile::set_parameter_from_yml(InputParameters & params,
-                              const YAML::Node & node,
-                              const std::string & param_name)
+                                 const YAML::Node & node,
+                                 const std::string & param_name)
 {
     _F_;
     YAML::Node val = node[param_name];
@@ -115,8 +115,8 @@ GYMLFile::read_vector_value(const std::string & param_name, const YAML::Node & v
         vec = val_node.as<std::vector<T>>();
     else
         log_error("Parameter '",
-                 param_name,
-                 "' must be either a single value or a vector of values.");
+                  param_name,
+                  "' must be either a single value or a vector of values.");
 
     return vec;
 }
