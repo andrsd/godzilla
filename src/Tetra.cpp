@@ -3,19 +3,19 @@
 
 namespace godzilla {
 
-Tetra::Tetra() : Element()
+Tetra::Tetra() : Element3D()
 {
     _F_;
 }
 
-Tetra::Tetra(Index v[]) : Element()
+Tetra::Tetra(Index v[]) : Element3D()
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Tetra::Tetra(Index v1, Index v2, Index v3, Index v4) : Element()
+Tetra::Tetra(Index v1, Index v2, Index v3, Index v4) : Element3D()
 {
     _F_;
     this->vertices[0] = v1;
@@ -24,7 +24,7 @@ Tetra::Tetra(Index v1, Index v2, Index v3, Index v4) : Element()
     this->vertices[3] = v4;
 }
 
-Tetra::Tetra(const Tetra & o) : Element(o)
+Tetra::Tetra(const Tetra & o) : Element3D(o)
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)

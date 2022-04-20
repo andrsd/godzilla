@@ -30,3 +30,11 @@ TEST(HexTest, marker)
     hex.set_marker(1234);
     EXPECT_EQ(hex.get_marker(), 1234);
 }
+
+TEST(HexTest, geom)
+{
+    Hex hex;
+    EXPECT_EQ(hex.get_num_vertices(), 8);
+    EXPECT_EQ(hex.get_num_edges(), 12);
+    EXPECT_EQ(hex.get_num_faces(), 6);
+}

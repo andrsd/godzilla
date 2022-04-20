@@ -30,3 +30,11 @@ TEST(TetraTest, marker)
     tet.set_marker(1234);
     EXPECT_EQ(tet.get_marker(), 1234);
 }
+
+TEST(TetraTest, geom)
+{
+    Tetra tet;
+    EXPECT_EQ(tet.get_num_vertices(), 4);
+    EXPECT_EQ(tet.get_num_edges(), 6);
+    EXPECT_EQ(tet.get_num_faces(), 4);
+}

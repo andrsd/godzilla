@@ -7,12 +7,14 @@ namespace godzilla {
 
 /// Represents an edge
 ///
-class Edge : public Element {
+class Edge : public Element1D {
 public:
     Edge();
     Edge(Index v[]);
     Edge(Index v1, Index v2);
     Edge(const Edge & o);
+
+    virtual uint get_num_vertices() const { return NUM_VERTICES; }
 
 public:
     static const uint NUM_VERTICES = 2;

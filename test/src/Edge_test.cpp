@@ -30,3 +30,9 @@ TEST(EdgeTest, marker)
     edge.set_marker(1234);
     EXPECT_EQ(edge.get_marker(), 1234);
 }
+
+TEST(EdgeTest, geom)
+{
+    Edge edge;
+    EXPECT_EQ(edge.get_num_vertices(), 2);
+}

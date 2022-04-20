@@ -30,3 +30,10 @@ TEST(TriTest, marker)
     tet.set_marker(1234);
     EXPECT_EQ(tet.get_marker(), 1234);
 }
+
+TEST(TriTest, geom)
+{
+    Tri tri;
+    EXPECT_EQ(tri.get_num_vertices(), 3);
+    EXPECT_EQ(tri.get_num_edges(), 3);
+}

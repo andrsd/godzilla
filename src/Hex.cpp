@@ -3,19 +3,19 @@
 
 namespace godzilla {
 
-Hex::Hex() : Element()
+Hex::Hex() : Element3D()
 {
     _F_;
 }
 
-Hex::Hex(Index v[]) : Element()
+Hex::Hex(Index v[]) : Element3D()
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Hex::Hex(Index v1, Index v2, Index v3, Index v4, Index v5, Index v6, Index v7, Index v8) : Element()
+Hex::Hex(Index v1, Index v2, Index v3, Index v4, Index v5, Index v6, Index v7, Index v8) : Element3D()
 {
     _F_;
     this->vertices[0] = v1;
@@ -28,7 +28,7 @@ Hex::Hex(Index v1, Index v2, Index v3, Index v4, Index v5, Index v6, Index v7, I
     this->vertices[7] = v8;
 }
 
-Hex::Hex(const Hex & o) : Element(o)
+Hex::Hex(const Hex & o) : Element3D(o)
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
