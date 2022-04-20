@@ -17,6 +17,7 @@ add_executable(${PROJECT_NAME}
     Logger_test.cpp
     Object_test.cpp
     PrintInterface_test.cpp
+    Quad_test.cpp
     QuadratureGauss1D_test.cpp
     QuadratureGauss2DTri_test.cpp
     QuadratureGauss3DTetra_test.cpp

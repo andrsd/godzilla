@@ -5,6 +5,7 @@
 #include "Error.h"
 #include "Edge.h"
 #include "Tri.h"
+#include "Quad.h"
 #include "Tetra.h"
 #include "Hex.h"
 #include <exodusII.h>
@@ -81,6 +82,8 @@ load_block(int exoid, Mesh & mesh, int blk_id, int & elem_id)
         elem_type = EDGE;
     else if (strncmp(elem_type_str, "TRI", 3) == 0)
         elem_type = TRIANGLE;
+    else if (strncmp(elem_type_str, "QUAD", 3) == 0)
+        elem_type = QUAD;
     else if (strncmp(elem_type_str, "HEX", 3) == 0)
         elem_type = HEX;
     else if (strncmp(elem_type_str, "TET", 3) == 0)
@@ -107,6 +110,9 @@ load_block(int exoid, Mesh & mesh, int blk_id, int & elem_id)
             break;
         case TRIANGLE:
             elem = new Tri(vtcs);
+            break;
+        case QUAD:
+            elem = new Quad(vtcs);
             break;
         case TETRA:
             elem = new Tetra(vtcs);
