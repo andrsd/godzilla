@@ -117,8 +117,6 @@ static QuadratureGauss1D quad_std_1d;
 
 QuadratureGauss1D::QuadratureGauss1D() : Quadrature1D()
 {
-    _F_;
-
     this->max_order = MAX_ORDER;
     this->np = gauss_np_1d;
     this->tables = gauss_tables_1d;

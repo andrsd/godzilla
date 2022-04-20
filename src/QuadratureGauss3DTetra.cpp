@@ -3158,8 +3158,6 @@ static QuadratureGauss3DTetra quad_gauss_3d_tetra;
 
 QuadratureGauss3DTetra::QuadratureGauss3DTetra()
 {
-    _F_;
-
     this->max_order = MAX_ORDER;
     this->max_edge_order = MAX_ORDER;
     this->max_face_order = MAX_ORDER;
@@ -3251,8 +3249,6 @@ QuadratureGauss3DTetra::QuadratureGauss3DTetra()
 
 QuadratureGauss3DTetra::~QuadratureGauss3DTetra()
 {
-    _F_;
-
     for (int iface = 0; iface < Tetra::NUM_FACES; iface++) {
         for (Index idx = this->face_tables[iface].first(); idx != INVALID_IDX;
              idx = this->face_tables[iface].next(idx))

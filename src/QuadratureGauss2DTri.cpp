@@ -718,8 +718,6 @@ static QuadratureGauss2DTri quad_gauss_2d_tri;
 
 QuadratureGauss2DTri::QuadratureGauss2DTri()
 {
-    _F_;
-
     this->max_order = MAX_ORDER;
     this->np = gauss_np_2d_tri;
     this->tables = gauss_tables_2d_tri;
@@ -754,8 +752,6 @@ QuadratureGauss2DTri::QuadratureGauss2DTri()
 
 QuadratureGauss2DTri::~QuadratureGauss2DTri()
 {
-    _F_;
-
     for (uint edge = 0; edge < Tri::NUM_EDGES; edge++) {
         for (uint order = 0; order <= MAX_ORDER; order++)
             delete[] this->edge_tables[edge][order];

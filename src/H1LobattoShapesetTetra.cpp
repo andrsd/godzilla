@@ -2766,8 +2766,6 @@ static shape_fn_3d_t * lobatto_tetra_dz_table[] = { lobatto_tetra_dz };
 
 H1LobattoShapesetTetra::H1LobattoShapesetTetra() : Shapeset3D(MODE_TETRAHEDRON, 1)
 {
-    _F_;
-
     // fn values are calculated by the tables
     this->shape_table[FN] = lobatto_tetra_fn_table;
     this->shape_table[DX] = lobatto_tetra_dx_table;
@@ -2791,7 +2789,6 @@ H1LobattoShapesetTetra::H1LobattoShapesetTetra() : Shapeset3D(MODE_TETRAHEDRON, 
 
 H1LobattoShapesetTetra::~H1LobattoShapesetTetra()
 {
-    _F_;
 }
 
 uint
