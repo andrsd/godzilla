@@ -29,6 +29,7 @@ add_executable(${PROJECT_NAME}
     Tetra_test.cpp
     Tri_test.cpp
     Utils_test.cpp
+    Vertex_test.cpp
     main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
