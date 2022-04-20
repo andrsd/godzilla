@@ -14,6 +14,22 @@ enum EMode2D { MODE_TRIANGLE = 0, MODE_QUAD = 1 };
 // 3D element modes
 enum EMode3D { MODE_TETRAHEDRON = 0, MODE_HEXAHEDRON = 1, MODE_PRISM = 2 };
 
+/// number of types of values in EValueType
+static const unsigned int NUM_VALUE_TYPES = 10;
+
+enum EValueType {
+    FN = 0,
+    DX = 1,
+    DY = 2,
+    DZ = 3,
+    DXX = 4,
+    DYY = 5,
+    DZZ = 6,
+    DXY = 7,
+    DYZ = 8,
+    DXZ = 9
+};
+
 /// 1D point
 struct Point1D {
     /// coordinates of a point

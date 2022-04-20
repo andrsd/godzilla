@@ -12,6 +12,8 @@ add_library(godzilla
         Error.cpp
         ExodusIO.cpp
         GYMLFile.cpp
+        H1LobattoShapesetEdge.cpp
+        H1LobattoShapesetTetra.cpp
         Hex.cpp
         Init.cpp
         InputParameters.cpp
@@ -23,6 +25,9 @@ add_library(godzilla
         QuadratureGauss2DTri.cpp
         QuadratureGauss3DTetra.cpp
         RefDomain.cpp
+        Shapeset1D.cpp
+        Shapeset2D.cpp
+        Shapeset3D.cpp
         Terminal.cpp
         Tetra.cpp
         Tri.cpp

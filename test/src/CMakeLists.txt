@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME}
     Factory_test.cpp
     GodzillaApp_test.cpp
     GYMLFile_test.cpp
+    H1LobattoShapesetEdge_test.cpp
     Hex_test.cpp
     InputParameters_test.cpp
     Logger_test.cpp
