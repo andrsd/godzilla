@@ -54,6 +54,15 @@ public:
     /// Create internal structures
     void create();
 
+    uint get_cone_size(const Index & id) const;
+
+    void get_cone(const Index & id, const PetscInt * cone[]) const;
+
+    /// Get type of a cell
+    ///
+    /// @param cell[in] Cell number (vertex, edge, face, element)
+    DMPolytopeType get_cell_type(PetscInt cell) const;
+
     void set_vertex(const Index & id, const Vertex * vertex);
 
     /// Get vertex with index `id`

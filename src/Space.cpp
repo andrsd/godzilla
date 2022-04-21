@@ -1,5 +1,6 @@
 #include "Space.h"
 #include "CallStack.h"
+#include <iostream>
 
 namespace godzilla {
 
@@ -33,7 +34,6 @@ Space::assign_dofs(uint first_dof, uint stride)
     _F_;
     this->first_dof = this->next_dof = first_dof;
     this->stride = stride;
-    free_data_tables();
 
     enforce_minimum_rule();
     set_bc_information();
@@ -75,13 +75,25 @@ void
 Space::enforce_minimum_rule()
 {
     _F_;
+
+    FOR_ALL_ELEMENTS(eid, mesh)
+    {
+        const Element * elem = this->mesh->get_element(eid);
+
+        // TODO: handle edges and faces in 2D and 3D
+        // TODO: allocate EdgeData and FaceData, based on the determined order
+
+        const uint nv = elem->get_num_vertices();
+        const Index * vtx_idxs = elem->get_vertices();
+        for (uint i = 0; i < nv; i++)
+            this->vertex_data[vtx_idxs[i]] = new VertexData();
+    }
 }
 
 void
-Space::assign_vertex_dofs(Index vid)
+Space::assign_vertex_dofs(VertexData * node)
 {
     _F_;
-    VertexData * node = this->vertex_data[vid];
     uint ndofs = get_vertex_ndofs();
     if (node->bc_type == BC_ESSENTIAL) {
         node->dof = DIRICHLET_DOF;
@@ -94,10 +106,9 @@ Space::assign_vertex_dofs(Index vid)
 }
 
 void
-Space::assign_edge_dofs(Index idx)
+Space::assign_edge_dofs(EdgeData * node)
 {
     _F_;
-    EdgeData * node = this->edge_data[idx];
     uint ndofs = get_edge_ndofs(node->order);
     if (node->bc_type == BC_ESSENTIAL) {
         node->dof = DIRICHLET_DOF;
@@ -110,10 +121,9 @@ Space::assign_edge_dofs(Index idx)
 }
 
 void
-Space::assign_face_dofs(Index idx)
+Space::assign_face_dofs(FaceData * node)
 {
     _F_;
-    FaceData * node = this->face_data[idx];
     int ndofs = get_face_ndofs(node->order);
     if (node->bc_type == BC_ESSENTIAL) {
         node->dof = DIRICHLET_DOF;
@@ -126,10 +136,9 @@ Space::assign_face_dofs(Index idx)
 }
 
 void
-Space::assign_bubble_dofs(Index idx)
+Space::assign_bubble_dofs(ElementData * node)
 {
     _F_;
-    ElementData * node = this->elem_data[idx];
     int ndofs = get_element_ndofs(node->order);
     node->n = ndofs;
     node->dof = this->next_dof;

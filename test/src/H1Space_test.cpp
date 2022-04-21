@@ -17,16 +17,16 @@ TEST(H1SpaceTest, first_order_1d)
         Edge * edge = new Edge(i, i + 1);
         mesh.set_element(i, edge);
     }
-    // mesh.set_boundary(0, 0, 1);
-    // mesh.set_boundary(1, 1, 2);
+    mesh.set_boundary(0, 0, 1);
+    mesh.set_boundary(1, 1, 2);
     mesh.set_dimension(1);
     mesh.create();
 
     H1LobattoShapesetEdge ss;
 
     H1Space sp(&mesh, &ss);
-    sp.set_uniform_order(1);
+    sp.set_uniform_order(2);
 
     sp.assign_dofs();
-    // EXPECT_EQ(sp.get_dof_count(), 3);
+    EXPECT_EQ(sp.get_dof_count(), 5);
 }

@@ -50,35 +50,6 @@ public:
     }
 
 protected:
-    /// Initialize data tables
-    void init_data_tables();
-
-    /// Free data tables
-    void free_data_tables();
-
-    /// Enforce minimum rule
-    void enforce_minimum_rule();
-
-    /// Set boundary condition inromation
-    void set_bc_information();
-
-    /// Implement this to assign DoFs
-    virtual void assign_dofs_internal() = 0;
-
-    /// Get number of vertex DoFs
-    virtual uint get_vertex_ndofs() = 0;
-    /// Get number of edge DoFs
-    virtual uint get_edge_ndofs(uint order) = 0;
-    /// Get number of face DoFs
-    virtual uint get_face_ndofs(uint order) = 0;
-    /// Get number of element DoFs
-    virtual uint get_element_ndofs(uint order) = 0;
-
-    virtual void assign_vertex_dofs(Index vid);
-    virtual void assign_edge_dofs(Index eid);
-    virtual void assign_face_dofs(Index fid);
-    virtual void assign_bubble_dofs(Index eid);
-
     /// Data associated with a node (vertex, edge, face, interior)
     struct NodeData {
         /// boundary condition marker
@@ -138,6 +109,35 @@ protected:
 
         ElementData(uint order) : order(order), dof(DOF_NOT_ANALYZED), n(0) {}
     };
+
+    /// Initialize data tables
+    void init_data_tables();
+
+    /// Free data tables
+    void free_data_tables();
+
+    /// Enforce minimum rule
+    void enforce_minimum_rule();
+
+    /// Set boundary condition inromation
+    void set_bc_information();
+
+    /// Implement this to assign DoFs
+    virtual void assign_dofs_internal() = 0;
+
+    /// Get number of vertex DoFs
+    virtual uint get_vertex_ndofs() = 0;
+    /// Get number of edge DoFs
+    virtual uint get_edge_ndofs(uint order) = 0;
+    /// Get number of face DoFs
+    virtual uint get_face_ndofs(uint order) = 0;
+    /// Get number of element DoFs
+    virtual uint get_element_ndofs(uint order) = 0;
+
+    virtual void assign_vertex_dofs(VertexData * node);
+    virtual void assign_edge_dofs(EdgeData * node);
+    virtual void assign_face_dofs(FaceData * node);
+    virtual void assign_bubble_dofs(ElementData * node);
 
     /// Mesh
     const Mesh * mesh;

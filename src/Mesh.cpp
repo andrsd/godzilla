@@ -113,6 +113,37 @@ Mesh::create()
     this->dm = idm;
 }
 
+uint
+Mesh::get_cone_size(const Index & id) const
+{
+    _F_;
+    PetscErrorCode ierr;
+    PetscInt sz;
+    ierr = DMPlexGetConeSize(this->dm, id, &sz);
+    checkPetscError(ierr);
+    return sz;
+}
+
+void
+Mesh::get_cone(const Index & id, const PetscInt * cone[]) const
+{
+    _F_;
+    PetscErrorCode ierr;
+    ierr = DMPlexGetCone(this->dm, id, cone);
+    checkPetscError(ierr);
+}
+
+DMPolytopeType
+Mesh::get_cell_type(PetscInt cell) const
+{
+    _F_;
+    PetscErrorCode ierr;
+    DMPolytopeType cell_type;
+    ierr = DMPlexGetCellType(this->dm, cell, &cell_type);
+    checkPetscError(ierr);
+    return cell_type;
+}
+
 void
 Mesh::set_vertex(const Index & id, const Vertex * vertex)
 {
