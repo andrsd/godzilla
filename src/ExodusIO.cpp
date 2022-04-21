@@ -40,17 +40,17 @@ load_coordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
     if (dim == 1) {
         err = ex_get_coord(exoid, x, NULL, NULL);
         for (int i = 0; i < n_nodes; i++)
-            mesh.set_vertex(i + 1, new Vertex1D(x[i]));
+            mesh.set_vertex(i, new Vertex1D(x[i]));
     }
     else if (dim == 2) {
         err = ex_get_coord(exoid, x, y, NULL);
         for (int i = 0; i < n_nodes; i++)
-            mesh.set_vertex(i + 1, new Vertex2D(x[i], y[i]));
+            mesh.set_vertex(i, new Vertex2D(x[i], y[i]));
     }
     else if (dim == 3) {
         err = ex_get_coord(exoid, x, y, z);
         for (int i = 0; i < n_nodes; i++)
-            mesh.set_vertex(i + 1, new Vertex3D(x[i], y[i], z[i]));
+            mesh.set_vertex(i, new Vertex3D(x[i], y[i], z[i]));
     }
 
     delete[] x;
@@ -101,7 +101,7 @@ load_block(int exoid, Mesh & mesh, int blk_id, int & elem_id)
     for (int j = 0; j < n_elems_in_blk; j++) {
         Index vtcs[n_elem_nodes];
         for (int k = 0; k < n_elem_nodes; k++, ic++)
-            vtcs[k] = connect[ic];
+            vtcs[k] = connect[ic] - 1;
 
         Element * elem = nullptr;
         switch (elem_type) {
@@ -156,7 +156,6 @@ ExodusIO::load(const std::string & file_name)
                       &n_eblocks,
                       &n_nodesets,
                       &n_sidesets);
-
     load_coordinates(exoid, mesh, n_dims, n_nodes);
 
     int elem_id = 0;
@@ -171,6 +170,9 @@ ExodusIO::load(const std::string & file_name)
     delete[] eid_blocks;
 
     err = ex_close(exoid);
+
+    mesh.set_dimension(n_dims);
+    mesh.create();
 
     return mesh;
 }

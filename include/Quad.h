@@ -14,7 +14,10 @@ public:
     Quad(Index v1, Index v2, Index v3, Index v4);
     Quad(const Quad & o);
 
+    virtual const DMPolytopeType get_potytope_type() const { return DM_POLYTOPE_QUADRILATERAL; }
     virtual uint get_num_vertices() const { return NUM_VERTICES; }
+    virtual Index get_vertex(uint local) const { return this->vertices[local]; }
+    virtual const Index * get_vertices() const { return &(this->vertices[0]); }
     virtual uint get_num_edges() const { return NUM_EDGES; }
 
 public:

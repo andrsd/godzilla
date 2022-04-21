@@ -14,8 +14,10 @@ public:
     Edge(Index v1, Index v2);
     Edge(const Edge & o);
 
+    virtual const DMPolytopeType get_potytope_type() const { return DM_POLYTOPE_SEGMENT; }
     virtual uint get_num_vertices() const { return NUM_VERTICES; }
     virtual Index get_vertex(uint local) const { return this->vertices[local]; }
+    virtual const Index * get_vertices() const { return &(this->vertices[0]); }
 
 public:
     static const uint NUM_VERTICES = 2;

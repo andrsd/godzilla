@@ -19,6 +19,9 @@ TEST(RefMap1DTest, base)
     Edge edge(0, 1);
     mesh.set_element(0, &edge);
 
+    mesh.set_dimension(1);
+    mesh.create();
+
     RefMap1D ref_map(&mesh);
     ref_map.set_active_element(&edge);
 

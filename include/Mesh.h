@@ -1,5 +1,6 @@
 #pragma once
 
+#include "petsc.h"
 #include "Common.h"
 #include "Array.h"
 #include "Vertex.h"
@@ -32,13 +33,26 @@ struct SideBoundary {
 ///
 class Mesh {
 public:
-    Mesh();
+    Mesh(const MPI_Comm & comm = MPI_COMM_WORLD);
     virtual ~Mesh();
+
+    /// Get the MPI comm
+    const MPI_Comm & get_comm() const;
+
     /// Frees all data associated with the mesh.
     void free();
 
+    /// Get the mesh dimension
+    const uint & get_dimension() const;
+
+    /// Set the mesh dimension
+    void set_dimension(const uint & dim);
+
     /// Returns the total number of elements stored.
     uint get_num_elements() const;
+
+    /// Create internal structures
+    void create();
 
     void set_vertex(const Index & id, const Vertex * vertex);
 
@@ -72,6 +86,12 @@ public:
     }
 
 protected:
+    /// MPI communicator
+    MPI_Comm comm;
+    /// DM for the unstructured mesh
+    DM dm;
+    /// Spatial dimension
+    uint dim;
     /// Mesh vertices
     Array<const Vertex *> vertices;
     /// Mesh elements
