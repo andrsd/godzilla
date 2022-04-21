@@ -20,6 +20,7 @@ add_library(godzilla
         Error.cpp
         ExodusIO.cpp
         GYMLFile.cpp
+        H1Space.cpp
         Hex.cpp
         Init.cpp
         InputParameters.cpp
@@ -31,9 +32,11 @@ add_library(godzilla
         RefDomain.cpp
         RefMap1D.cpp
         ShapeFunction1D.cpp
+        Shapeset.cpp
         Shapeset1D.cpp
         Shapeset2D.cpp
         Shapeset3D.cpp
+        Space.cpp
         Terminal.cpp
         Tetra.cpp
         Tri.cpp

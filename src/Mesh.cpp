@@ -47,4 +47,19 @@ Mesh::set_element(const Index & id, const Element * elem)
     this->elements[id] = elem;
 }
 
+const Element *
+Mesh::get_element(const Index & id) const
+{
+    _F_;
+    return this->elements[id];
+}
+
+void
+Mesh::set_boundary(const Index & eid, const uint & local_side, const uint & marker)
+{
+    _F_;
+    SideBoundary * bnd = new SideBoundary(eid, local_side, marker);
+    this->boundaries.add(bnd);
+}
+
 } // namespace godzilla

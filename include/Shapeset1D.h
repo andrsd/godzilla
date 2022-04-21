@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "Shapeset.h"
 #include "Quadrature1D.h"
 #include "Function1D.h"
 
@@ -11,7 +12,7 @@ typedef Real (*shape_fn_1d_t)(Real);
 
 /// Base class for 1D shapesets
 ///
-class Shapeset1D {
+class Shapeset1D : public Shapeset {
 public:
     Shapeset1D(EMode1D mode, uint n_components);
     virtual ~Shapeset1D();
