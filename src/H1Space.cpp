@@ -5,14 +5,30 @@
 
 namespace godzilla {
 
+static Scalar
+default_bc_value_by_coord(uint marker, double x, double y, double z)
+{
+    return 0.0;
+}
+
 H1Space::H1Space(Mesh * mesh, Shapeset * ss) : Space(mesh, ss)
 {
     _F_;
+    this->bc_value_callback_by_coord = default_bc_value_by_coord;
 }
 
 H1Space::~H1Space()
 {
     _F_;
+}
+
+void H1Space::set_bc_values(Scalar (*fn)(uint, double, double, double))
+{
+    _F_;
+    if (fn == nullptr)
+        this->bc_value_callback_by_coord = default_bc_value_by_coord;
+    else
+        this->bc_value_callback_by_coord = fn;
 }
 
 void
@@ -90,6 +106,36 @@ H1Space::get_element_ndofs(uint order)
     // }
 
     return order - 1;
+}
+
+void
+H1Space::calc_vertex_boundary_projection(const Element * elem, uint ivertex)
+{
+    _F_;
+    Index vtx_idx = this->mesh->get_vertex_id(elem, ivertex);
+    assert(this->vertex_data.exists(vtx_idx));
+    VertexData * vnode = this->vertex_data[vtx_idx];
+    const Vertex * vertex = this->mesh->get_vertex(vtx_idx);
+    if (vnode->bc_type == BC_ESSENTIAL) {
+        /// FIXME: would be nice if we did not have to do this downcast
+        const Vertex1D * v = static_cast<const Vertex1D *>(vertex);
+        vnode->bc_proj = bc_value_callback_by_coord(vnode->marker, v->x, 0., 0.);
+        // TODO: handle 2D and 3D case
+    }
+}
+
+void
+H1Space::calc_edge_boundary_projection(const Element * elem, uint iedge)
+{
+    _F_;
+    error("Not implemented");
+}
+
+void
+H1Space::calc_face_boundary_projection(const Element * elem, uint iface)
+{
+    _F_;
+    error("Not implemented");
 }
 
 } // namespace godzilla

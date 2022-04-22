@@ -49,6 +49,18 @@ public:
         return this->next_dof - this->stride;
     }
 
+    /// Set the callback for determining the type of boundary conditions
+    ///
+    /// @param[in] bc_type_callback The free function that determinesthe type of BC based on its
+    /// parameter
+    void set_bc_types(EBCType (*bc_type_callback)(uint));
+
+    /// Get type of boundary condition
+    ///
+    /// @param[in] marker Marker assiciated with the boundary
+    /// @return Type of boundary condition
+    virtual EBCType get_bc_type(uint marker) const;
+
 protected:
     /// Data associated with a node (vertex, edge, face, interior)
     struct NodeData {
@@ -119,8 +131,36 @@ protected:
     /// Enforce minimum rule
     void enforce_minimum_rule();
 
-    /// Set boundary condition inromation
+    /// Set boundary condition information
     void set_bc_information();
+
+    /// Set boundary condition information at a node
+    ///
+    /// @param[in] node Node data to modify
+    /// @param[in] bc_type Type of the boundary condition
+    /// @param[in] marker Marker associated with the boundary
+    void set_bc_info(NodeData *node, EBCType bc_type, uint marker);
+
+    /// Update constraints
+    void update_constraints();
+
+    /// Calculate boundary condition projection at a vertex
+    ///
+    /// @param[in] elem Element
+    /// @param[in] ivertex Local vertex number of a element `elem`
+    virtual void calc_vertex_boundary_projection(const Element * elem, uint ivertex) = 0;
+
+    /// Calculate boundary condition projection on an edge
+    ///
+    /// @param[in] elem Element
+    /// @param[in] iedge Local vertex number of a element `elem`
+    virtual void calc_edge_boundary_projection(const Element * elem, uint iedge) = 0;
+
+    /// Calculate boundary condition projection on a face
+    ///
+    /// @param[in] elem Element
+    /// @param[in] iface Local face number of a element `elem`
+    virtual void calc_face_boundary_projection(const Element * elem, uint iface) = 0;
 
     /// Implement this to assign DoFs
     virtual void assign_dofs_internal() = 0;
@@ -175,7 +215,7 @@ protected:
     uint first_dof;
     /// Next degree of freedom
     uint next_dof;
-    ///  degree of freedom stride
+    /// Degree of freedom stride
     uint stride;
 
     /// Vertex node data
@@ -186,6 +226,9 @@ protected:
     Array<FaceData *> face_data;
     /// Element node data
     Array<ElementData *> elem_data;
+
+    /// Callback for determining the type of a boundary condition
+    EBCType (*bc_type_callback)(uint);
 };
 
 } // namespace godzilla

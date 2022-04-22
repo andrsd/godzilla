@@ -1,10 +1,20 @@
 #include "Space.h"
 #include "CallStack.h"
+#include <assert.h>
 #include <iostream>
 
 namespace godzilla {
 
-Space::Space(Mesh * mesh, Shapeset * shapeset) : mesh(mesh), shapeset(shapeset)
+static EBCType
+default_bc_type(uint marker)
+{
+    return BC_NONE;
+}
+
+Space::Space(Mesh * mesh, Shapeset * shapeset) :
+    mesh(mesh),
+    shapeset(shapeset),
+    bc_type_callback(default_bc_type)
 {
     _F_;
     // TODO: check that shapeset is compatible with the space
@@ -38,6 +48,7 @@ Space::assign_dofs(uint first_dof, uint stride)
     enforce_minimum_rule();
     set_bc_information();
     assign_dofs_internal();
+    update_constraints();
 }
 
 void
@@ -69,6 +80,64 @@ void
 Space::set_bc_information()
 {
     _F_;
+    FOR_EACH_SIDE_BOUNDARY(idx, this->mesh)
+    {
+        const SideBoundary * bnd = this->mesh->get_side_boundary(idx);
+        const uint & marker = bnd->marker;
+        EBCType bc_type = get_bc_type(marker);
+
+        // 1D
+        const Element * e = this->mesh->get_element(bnd->elem_id);
+        Index vtx_idx = this->mesh->get_vertex_id(e, bnd->side);
+        assert(this->vertex_data.exists(vtx_idx));
+        set_bc_info(this->vertex_data[vtx_idx], bc_type, marker);
+
+        // TODO: handle 2D
+        // TODO: handle 3D
+    }
+}
+
+void
+Space::set_bc_info(NodeData * node, EBCType bc_type, uint marker)
+{
+    _F_;
+    if (bc_type == BC_ESSENTIAL || (bc_type == BC_NATURAL && node->bc_type == BC_NONE)) {
+        node->bc_type = bc_type;
+        node->marker = marker;
+    }
+}
+
+void
+Space::update_constraints()
+{
+    _F_;
+    FOR_EACH_SIDE_BOUNDARY(idx, this->mesh)
+    {
+        const SideBoundary * bnd = this->mesh->get_side_boundary(idx);
+        const Element * e = this->mesh->get_element(bnd->elem_id);
+
+        // 1D
+        calc_vertex_boundary_projection(e, bnd->side);
+
+        // TODO: handle 2D
+        // TODO: handle 3D
+    }
+}
+
+void Space::set_bc_types(EBCType (*bc_type_callback)(uint))
+{
+    _F_;
+    if (bc_type_callback == nullptr)
+        this->bc_type_callback = default_bc_type;
+    else
+        this->bc_type_callback = bc_type_callback;
+}
+
+EBCType
+Space::get_bc_type(uint marker) const
+{
+    _F_;
+    return bc_type_callback(marker);
 }
 
 void
@@ -124,7 +193,7 @@ void
 Space::assign_face_dofs(FaceData * node)
 {
     _F_;
-    int ndofs = get_face_ndofs(node->order);
+    uint ndofs = get_face_ndofs(node->order);
     if (node->bc_type == BC_ESSENTIAL) {
         node->dof = DIRICHLET_DOF;
     }
@@ -139,7 +208,7 @@ void
 Space::assign_bubble_dofs(ElementData * node)
 {
     _F_;
-    int ndofs = get_element_ndofs(node->order);
+    uint ndofs = get_element_ndofs(node->order);
     node->n = ndofs;
     node->dof = this->next_dof;
     this->next_dof += ndofs * this->stride;
@@ -153,7 +222,8 @@ Space::get_vertex_assembly_list(Element * e, uint ivertex, AssemblyList * al)
     VertexData * vnode = this->vertex_data[vtx_id];
     uint index = shapeset->get_vertex_index(ivertex);
     Scalar coef = vnode->dof == DIRICHLET_DOF ? vnode->bc_proj : 1.0;
-    assert(vnode->dof == DIRICHLET_DOF || (vnode->dof >= this->first_dof && vnode->dof < this->next_dof));
+    assert(vnode->dof == DIRICHLET_DOF ||
+           (vnode->dof >= this->first_dof && vnode->dof < this->next_dof));
     al->add(index, vnode->dof, coef);
 }
 
@@ -197,7 +267,7 @@ Space::get_face_assembly_list(Element * elem, uint iface, AssemblyList * al)
             }
         }
         else if (fnode->bc_proj != NULL) {
-            for (int j = 0; j < fnode->n; j++) {
+            for (uint j = 0; j < fnode->n; j++) {
                 Scalar coef = fnode->bc_proj[j];
                 al->add(indices[j], DIRICHLET_DOF, coef);
             }

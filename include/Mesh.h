@@ -12,7 +12,11 @@ namespace godzilla {
     for (Index(idx) = (mesh)->get_elements().first(); (idx) != INVALID_IDX; \
          (idx) = (mesh)->get_elements().next(idx))
 
-/// Information about a boundary
+#define FOR_EACH_SIDE_BOUNDARY(idx, mesh)                                     \
+    for (Index(idx) = (mesh)->get_side_boundaries().first(); (idx) != INVALID_IDX; \
+         (idx) = (mesh)->get_side_boundaries().next(idx))
+
+/// Information about a side boundary (element, local side)
 struct SideBoundary {
     SideBoundary(const Index & eid, const uint side, const uint & marker) :
         elem_id(eid),
@@ -82,6 +86,11 @@ public:
     /// @param[in] marker Marker associated with the boundary
     void set_boundary(const Index & eid, const uint & local_side, const uint & marker);
 
+    /// Get an side boundary using its ID
+    ///
+    /// @param[in] idx Index returned by iterating over Array returned by get_side_boundaries()
+    const SideBoundary * get_side_boundary(const Index & idx) const;
+
     const Array<const Element *> &
     get_elements() const
     {
@@ -89,22 +98,28 @@ public:
     }
 
     const Array<const SideBoundary *> &
-    get_boundaries() const
+    get_side_boundaries() const
     {
-        return this->boundaries;
+        return this->side_boundaries;
     }
+
+    /// Get vertex ID
+    ///
+    /// @param[in] e Element
+    /// @param[in] vertex Local edge number
+    virtual Index get_vertex_id(const Element * e, uint vertex) const;
 
     /// Get edge ID
     ///
     /// @param[in] e Element
     /// @param[in] edge Local edge number
-    virtual Index get_edge_id(Element * e, uint edge) const;
+    virtual Index get_edge_id(const Element * e, uint edge) const;
 
     /// Get face ID
     ///
     /// @param[in] e Element
     /// @param[in] face Local face number
-    virtual Index get_face_id(Element * e, uint face) const;
+    virtual Index get_face_id(const Element * e, uint face) const;
 
 protected:
     /// MPI communicator
@@ -117,8 +132,8 @@ protected:
     Array<const Vertex *> vertices;
     /// Mesh elements
     Array<const Element *> elements;
-    /// Boundaries
-    Array<const SideBoundary *> boundaries;
+    /// Side boundaries
+    Array<const SideBoundary *> side_boundaries;
 };
 
 } // namespace godzilla

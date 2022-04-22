@@ -176,11 +176,25 @@ Mesh::set_boundary(const Index & eid, const uint & local_side, const uint & mark
 {
     _F_;
     SideBoundary * bnd = new SideBoundary(eid, local_side, marker);
-    this->boundaries.add(bnd);
+    this->side_boundaries.add(bnd);
+}
+
+const SideBoundary *
+Mesh::get_side_boundary(const Index & idx) const
+{
+    _F_;
+    return this->side_boundaries[idx];
 }
 
 Index
-Mesh::get_edge_id(Element * e, uint edge) const
+Mesh::get_vertex_id(const Element * e, uint vertex) const
+{
+    _F_;
+    return e->get_vertex(vertex);
+}
+
+Index
+Mesh::get_edge_id(const Element * e, uint edge) const
 {
     _F_;
     error("Not implemented.");
@@ -188,7 +202,7 @@ Mesh::get_edge_id(Element * e, uint edge) const
 }
 
 Index
-Mesh::get_face_id(Element * e, uint face) const
+Mesh::get_face_id(const Element * e, uint face) const
 {
     _F_;
     error("Not implemented.");
