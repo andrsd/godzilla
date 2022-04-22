@@ -17,21 +17,10 @@ public:
     Shapeset1D(EMode1D mode, uint n_components);
     virtual ~Shapeset1D();
 
-    uint
-    get_num_components() const
-    {
-        return num_components;
-    }
-
-    // @return index of a vertex shape function for a vertex
-    // @param [in] vertex - index of the vertex
-    virtual uint get_vertex_index(uint vertex) const = 0;
-
-    /// @return indices of bubble functions
-    /// @param order - order of the bubble function
-    virtual uint * get_bubble_indices(uint order) const = 0;
-
-    virtual uint get_num_bubble_fns(uint order) const = 0;
+    virtual uint get_num_edge_fns(uint order) const { return 0; }
+    virtual uint * get_edge_indices(uint edge, uint ori, uint order) const;
+    virtual uint get_num_face_fns(uint order) const { return 0; }
+    virtual uint * get_face_indices(uint face, uint ori, uint order) const;
 
     /// Get order of s shape function with index `index`
     ///
@@ -91,8 +80,6 @@ public:
 protected:
     /// Shapeset mode
     EMode1D mode;
-    /// Number of components
-    uint num_components;
 };
 
 } // namespace godzilla

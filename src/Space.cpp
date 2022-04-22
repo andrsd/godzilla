@@ -145,4 +145,78 @@ Space::assign_bubble_dofs(ElementData * node)
     this->next_dof += ndofs * this->stride;
 }
 
+void
+Space::get_vertex_assembly_list(Element * e, uint ivertex, AssemblyList * al)
+{
+    _F_;
+    Index vtx_id = e->get_vertex(ivertex);
+    VertexData * vnode = this->vertex_data[vtx_id];
+    uint index = shapeset->get_vertex_index(ivertex);
+    Scalar coef = vnode->dof == DIRICHLET_DOF ? vnode->bc_proj : 1.0;
+    assert(vnode->dof == DIRICHLET_DOF || (vnode->dof >= this->first_dof && vnode->dof < this->next_dof));
+    al->add(index, vnode->dof, coef);
+}
+
+void
+Space::get_edge_assembly_list(Element * elem, uint iedge, AssemblyList * al)
+{
+    _F_;
+    Index edge_id = mesh->get_edge_id(elem, iedge);
+    EdgeData * enode = this->edge_data[edge_id];
+    uint ori = elem->get_edge_orientation(iedge);
+    if (enode->n > 0) {
+        uint * indices = shapeset->get_edge_indices(iedge, ori, enode->order);
+        if (enode->dof != DIRICHLET_DOF) {
+            for (uint j = 0, dof = enode->dof; j < enode->n; j++, dof += this->stride) {
+                assert(dof >= this->first_dof && dof < this->next_dof);
+                al->add(indices[j], dof, 1.0);
+            }
+        }
+        else if (enode->bc_proj != NULL) {
+            for (uint j = 0; j < enode->n; j++) {
+                Scalar coef = enode->bc_proj[j];
+                al->add(indices[j], DIRICHLET_DOF, coef);
+            }
+        }
+    }
+}
+
+void
+Space::get_face_assembly_list(Element * elem, uint iface, AssemblyList * al)
+{
+    _F_;
+    Index face_id = mesh->get_face_id(elem, iface);
+    FaceData * fnode = this->face_data[face_id];
+    uint ori = elem->get_face_orientation(iface);
+    if (fnode->n > 0) {
+        uint * indices = shapeset->get_face_indices(iface, ori, fnode->order);
+        if (fnode->dof != DIRICHLET_DOF) {
+            for (uint j = 0, dof = fnode->dof; j < fnode->n; j++, dof += this->stride) {
+                assert(dof >= this->first_dof && dof < this->next_dof);
+                al->add(indices[j], dof, 1.0);
+            }
+        }
+        else if (fnode->bc_proj != NULL) {
+            for (int j = 0; j < fnode->n; j++) {
+                Scalar coef = fnode->bc_proj[j];
+                al->add(indices[j], DIRICHLET_DOF, coef);
+            }
+        }
+    }
+}
+
+void
+Space::get_bubble_assembly_list(Element * e, AssemblyList * al)
+{
+    _F_;
+    ElementData * enode = this->elem_data[e->get_id()];
+    if (enode->n > 0) {
+        uint * indices = shapeset->get_bubble_indices(enode->order);
+        for (uint j = 0, dof = enode->dof; j < enode->n; j++, dof += this->stride) {
+            assert(dof >= this->first_dof && dof < this->next_dof);
+            al->add(indices[j], dof, 1.0);
+        }
+    }
+}
+
 } // namespace godzilla

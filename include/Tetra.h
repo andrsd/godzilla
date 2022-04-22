@@ -21,6 +21,9 @@ public:
     virtual uint get_num_edges() const { return NUM_EDGES; }
     virtual uint get_num_faces() const { return NUM_FACES; }
 
+    virtual uint get_edge_orientation(uint edge) const;
+    virtual uint get_face_orientation(uint face) const;
+
 public:
     static const uint NUM_VERTICES = 4;
     static const uint NUM_FACES = 4;

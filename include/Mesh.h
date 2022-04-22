@@ -94,6 +94,18 @@ public:
         return this->boundaries;
     }
 
+    /// Get edge ID
+    ///
+    /// @param[in] e Element
+    /// @param[in] edge Local edge number
+    virtual Index get_edge_id(Element * e, uint edge) const;
+
+    /// Get face ID
+    ///
+    /// @param[in] e Element
+    /// @param[in] face Local face number
+    virtual Index get_face_id(Element * e, uint face) const;
+
 protected:
     /// MPI communicator
     MPI_Comm comm;

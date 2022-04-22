@@ -2,6 +2,7 @@
 
 #include "Mesh.h"
 #include "Shapeset.h"
+#include "AssemblyList.h"
 
 namespace godzilla {
 
@@ -14,7 +15,6 @@ enum EBCType {
     /// Do-nothing BC
     BC_NONE
 };
-
 
 /// Base class for function spaces
 class Space {
@@ -138,6 +138,33 @@ protected:
     virtual void assign_edge_dofs(EdgeData * node);
     virtual void assign_face_dofs(FaceData * node);
     virtual void assign_bubble_dofs(ElementData * node);
+
+    /// Build assembly list associated with a vertex
+    ///
+    /// @param[in] e Element
+    /// @param[in] ivertex Local vertex number
+    /// @param[out] al Assembly list
+    virtual void get_vertex_assembly_list(Element * e, uint ivertex, AssemblyList * al);
+
+    /// Build assembly list associated with an edge
+    ///
+    /// @param[in] e Element
+    /// @param[in] iedge Local edge number
+    /// @param[out] al Assembly list
+    virtual void get_edge_assembly_list(Element * e, uint iedge, AssemblyList * al);
+
+    /// Build assembly list associated with a face
+    ///
+    /// @param[in] e Element
+    /// @param[in] iface Local face number
+    /// @param[out] al Assembly list
+    virtual void get_face_assembly_list(Element * e, uint iface, AssemblyList * al);
+
+    /// Build assembly list associated with an element
+    ///
+    /// @param[in] e Element
+    /// @param[out] al Assembly list
+    virtual void get_bubble_assembly_list(Element * e, AssemblyList * al);
 
     /// Mesh
     const Mesh * mesh;

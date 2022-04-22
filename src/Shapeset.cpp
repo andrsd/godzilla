@@ -2,7 +2,7 @@
 
 namespace godzilla {
 
-Shapeset::Shapeset() {}
+Shapeset::Shapeset(uint n_components) : num_components(n_components) {}
 
 Shapeset::~Shapeset() {}
 

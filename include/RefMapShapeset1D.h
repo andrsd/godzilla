@@ -17,6 +17,10 @@ public:
         return this->vertex_indices[vertex];
     }
 
+    virtual uint get_num_edge_fns(uint order) const { return 0; }
+
+    virtual uint get_num_face_fns(uint order) const { return 0; }
+
     virtual uint *
     get_bubble_indices(uint /*order*/) const
     {

@@ -179,4 +179,20 @@ Mesh::set_boundary(const Index & eid, const uint & local_side, const uint & mark
     this->boundaries.add(bnd);
 }
 
+Index
+Mesh::get_edge_id(Element * e, uint edge) const
+{
+    _F_;
+    error("Not implemented.");
+    return 0;
+}
+
+Index
+Mesh::get_face_id(Element * e, uint face) const
+{
+    _F_;
+    error("Not implemented.");
+    return 0;
+}
+
 } // namespace godzilla

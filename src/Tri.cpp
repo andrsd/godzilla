@@ -1,5 +1,6 @@
 #include "Tri.h"
 #include "CallStack.h"
+#include "Error.h"
 
 namespace godzilla {
 
@@ -28,6 +29,22 @@ Tri::Tri(const Tri & o) : Element2D(o)
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = o.vertices[i];
+}
+
+uint
+Tri::get_edge_orientation(uint edge) const
+{
+    _F_;
+    error("Not implemented");
+    return 0;
+}
+
+uint
+Tri::get_face_orientation(uint face) const
+{
+    _F_;
+    error("2D triangle has no face functions");
+    return 0;
 }
 
 } // namespace godzilla

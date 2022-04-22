@@ -20,6 +20,9 @@ public:
     virtual const Index * get_vertices() const { return &(this->vertices[0]); }
     virtual uint get_num_edges() const { return NUM_EDGES; }
 
+    virtual uint get_edge_orientation(uint edge) const;
+    virtual uint get_face_orientation(uint face) const;
+
 public:
     static const uint NUM_VERTICES = 3;
     static const uint NUM_EDGES = 3;

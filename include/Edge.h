@@ -19,6 +19,9 @@ public:
     virtual Index get_vertex(uint local) const { return this->vertices[local]; }
     virtual const Index * get_vertices() const { return &(this->vertices[0]); }
 
+    virtual uint get_edge_orientation(uint edge) const;
+    virtual uint get_face_orientation(uint face) const;
+
 public:
     static const uint NUM_VERTICES = 2;
 

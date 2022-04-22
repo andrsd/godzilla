@@ -1,5 +1,6 @@
 #include "Quad.h"
 #include "CallStack.h"
+#include "Error.h"
 
 namespace godzilla {
 
@@ -29,6 +30,22 @@ Quad::Quad(const Quad & o) : Element2D(o)
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = o.vertices[i];
+}
+
+uint
+Quad::get_edge_orientation(uint edge) const
+{
+    _F_;
+    error("Not implemented");
+    return 0;
+}
+
+uint
+Quad::get_face_orientation(uint face) const
+{
+    _F_;
+    error("2D quadrilateral has no face functions");
+    return 0;
 }
 
 } // namespace godzilla

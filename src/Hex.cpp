@@ -1,5 +1,6 @@
 #include "Hex.h"
 #include "CallStack.h"
+#include "Error.h"
 
 namespace godzilla {
 
@@ -33,6 +34,22 @@ Hex::Hex(const Hex & o) : Element3D(o)
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = o.vertices[i];
+}
+
+uint
+Hex::get_edge_orientation(uint edge) const
+{
+    _F_;
+    error("Not implemented");
+    return 0;
+}
+
+uint
+Hex::get_face_orientation(uint face) const
+{
+    _F_;
+    error("Not implemented");
+    return 0;
 }
 
 } // namespace godzilla

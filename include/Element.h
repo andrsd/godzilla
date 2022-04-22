@@ -39,6 +39,18 @@ public:
     ///
     virtual const Index * get_vertices() const = 0;
 
+    /// Get edge orientation
+    ///
+    /// @param[in] edge Local edge number
+    /// @return Edge orientation
+    virtual uint get_edge_orientation(uint edge) const = 0;
+
+    /// Get face orientation
+    ///
+    /// @param[in] face Local edge number
+    /// @return Face orientation
+    virtual uint get_face_orientation(uint face) const = 0;
+
 protected:
     /// Element ID
     Index id;

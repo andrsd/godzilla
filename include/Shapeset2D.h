@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Shapeset.h"
 #include "Common.h"
 #include "Quadrature2D.h"
 
@@ -10,43 +11,12 @@ typedef Real (*shape_fn_2d_t)(Real, Real);
 
 /// Base class for 2D shapesets
 ///
-class Shapeset2D {
+class Shapeset2D : public Shapeset {
 public:
     Shapeset2D(EMode2D mode, uint n_components);
     virtual ~Shapeset2D();
 
-    uint
-    get_num_components() const
-    {
-        return num_components;
-    }
-
-    // @return index of a vertex shape function for a vertex
-    // @param [in] vertex - index of the vertex
-    virtual uint get_vertex_index(uint vertex) const = 0;
-
-    /// @return indices of edge shape functions
-    /// @param [in] edge - edge number (local)
-    /// @param [in] ori - orientation of the edge (0 or 1)
-    /// @param [in] order - order on the edge
-    virtual uint * get_edge_indices(uint edge, uint ori, uint order) = 0;
-
-    /// @return indices of bubble functions
-    /// @param order - order of the bubble function
-    virtual uint * get_bubble_indices(uint order) = 0;
-
-    virtual uint get_num_edge_fns(uint order) const = 0;
-
-    virtual uint get_num_bubble_fns(uint order) const = 0;
-
-    /// Get the number of possible orientations on an edge
-    ///
-    /// @return The number of possbile orientations on an edge
-    virtual uint get_edge_orientations() const = 0;
-
-    virtual uint get_order(uint index) const = 0;
-
-    virtual int get_shape_type(uint index) const = 0;
+    virtual uint * get_face_indices(uint face, uint ori, uint order) const;
 
     /// Evaluate function in the set of points
     /// @param[in] n
