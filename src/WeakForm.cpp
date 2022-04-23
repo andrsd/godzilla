@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-WeakForm::WeakForm(uint neq) : neq(neq)
+WeakForm::WeakForm() : neq(0)
 {
     _F_;
 }

@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Problem.h"
+#include "WeakForm.h"
 #include "petscsnes.h"
 
 namespace godzilla {
 
 class Mesh;
+class Shapeset;
 
 /// Nonlinear finite element problem
 class FENonlinearProblem : public Problem {
@@ -44,6 +46,14 @@ protected:
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
 
+    /// Add a variable
+    ///
+    /// @param[in] name Name of the variable
+    /// @param[in] nc Number of components
+    /// @param[in] p Polynomial order
+    virtual void add_variable(const std::string & name, uint nc, uint p);
+    /// Assigne DoFs
+    virtual void assign_dofs();
     /// Set up field variables
     virtual void on_set_fields() = 0;
     /// setup wek form
@@ -52,7 +62,15 @@ protected:
     virtual void on_set_matrix_properties();
 
     /// Unstructured mesh
-    Mesh & mesh;
+    Mesh * mesh;
+    /// Shapeset
+    Shapeset * shapeset;
+    /// Spaces
+    std::vector<Space *> spaces;
+    /// Map from varaible name to an index into the `spaces` array
+    std::map<std::string, std::size_t> space_names;
+    /// Weak form
+    WeakForm wf;
     /// SNES object
     SNES snes;
     /// The solution vector

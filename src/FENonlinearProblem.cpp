@@ -1,5 +1,7 @@
 #include "FENonlinearProblem.h"
 #include "Mesh.h"
+#include "H1Space.h"
+#include "H1LobattoShapesetEdge.h"
 #include "Utils.h"
 #include "CallStack.h"
 #include "petscdm.h"
@@ -46,33 +48,34 @@ FENonlinearProblem::validParams()
     params.add_private_param<Mesh *>("_mesh");
     params.add_param<std::string>("line_search", "bt", "The type of line search to be used");
     params.add_param<PetscReal>("nl_rel_tol",
-                               1e-8,
-                               "Relative convergence tolerance for the non-linear solver");
+                                1e-8,
+                                "Relative convergence tolerance for the non-linear solver");
     params.add_param<PetscReal>("nl_abs_tol",
-                               1e-15,
-                               "Absolute convergence tolerance for the non-linear solver");
+                                1e-15,
+                                "Absolute convergence tolerance for the non-linear solver");
     params.add_param<PetscReal>(
         "nl_step_tol",
         1e-15,
         "Convergence tolerance in terms of the norm of the change in the solution between steps");
     params.add_param<PetscInt>("nl_max_iter",
-                              40,
-                              "Maximum number of iterations for the non-linear solver");
+                               40,
+                               "Maximum number of iterations for the non-linear solver");
     params.add_param<PetscReal>("lin_rel_tol",
-                               1e-5,
-                               "Relative convergence tolerance for the linear solver");
+                                1e-5,
+                                "Relative convergence tolerance for the linear solver");
     params.add_param<PetscReal>("lin_abs_tol",
-                               1e-50,
-                               "Absolute convergence tolerance for the linear solver");
+                                1e-50,
+                                "Absolute convergence tolerance for the linear solver");
     params.add_param<PetscInt>("lin_max_iter",
-                              10000,
-                              "Maximum number of iterations for the linear solver");
+                               10000,
+                               "Maximum number of iterations for the linear solver");
     return params;
 }
 
 FENonlinearProblem::FENonlinearProblem(const InputParameters & parameters) :
     Problem(parameters),
-    mesh(*get_param<Mesh *>("_mesh")),
+    mesh(get_param<Mesh *>("_mesh")),
+    shapeset(nullptr),
     snes(NULL),
     x(NULL),
     r(NULL),
@@ -110,9 +113,8 @@ DM
 FENonlinearProblem::get_dm() const
 {
     _F_;
-    return this->mesh.get_dm();
+    return this->mesh->get_dm();
 }
-
 
 void
 FENonlinearProblem::create()
@@ -129,6 +131,11 @@ FENonlinearProblem::create()
 
     setup_initial_guess();
     Problem::create();
+
+    on_set_fields();
+    assign_dofs();
+    // TOOD: create ICs
+    // TOOD: create BCs
 }
 
 void
@@ -315,6 +322,35 @@ FENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
 {
     _F_;
     return 0;
+}
+
+void
+FENonlinearProblem::add_variable(const std::string & name, uint nc, uint p)
+{
+    _F_;
+
+    if (this->shapeset == nullptr) {
+        this->shapeset = new H1LobattoShapesetEdge();
+    }
+
+    H1Space * spc = new H1Space(this->mesh, this->shapeset);
+    spc->set_uniform_order(p);
+
+    auto idx = this->spaces.size();
+    this->spaces.push_back(spc);
+    this->space_names[name] = idx;
+}
+
+void
+FENonlinearProblem::assign_dofs()
+{
+    _F_;
+    uint ndofs = 0;
+    for (auto & sp : this->spaces) {
+        sp->assign_dofs(ndofs);
+        ndofs += sp->get_dof_count();
+    }
+    godzilla_print(9, "Number of DoFs: ", ndofs);
 }
 
 void

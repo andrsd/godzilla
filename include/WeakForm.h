@@ -36,8 +36,7 @@ class WeakForm {
                                     UserData *);
 
 public:
-    /// @param[in] neq Number of equations in the weak form
-    WeakForm(uint neq);
+    WeakForm();
     virtual ~WeakForm();
 
     void add_jacobian_block(uint i,
