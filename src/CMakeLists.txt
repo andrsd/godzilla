@@ -18,10 +18,12 @@ add_library(godzilla
         Edge.cpp
         Element.cpp
         Error.cpp
-        ExodusIO.cpp
+        ExodusIIMesh.cpp
+        FENonlinearProblem.cpp
         GYMLFile.cpp
         H1Space.cpp
         Hex.cpp
+        ImplicitFENonlinearProblem.cpp
         Init.cpp
         InputParameters.cpp
         Logger.cpp
@@ -29,6 +31,7 @@ add_library(godzilla
         MeshFunction1D.cpp
         Object.cpp
         PrintInterface.cpp
+        Problem.cpp
         Quad.cpp
         RefDomain.cpp
         RefMap1D.cpp
@@ -40,6 +43,7 @@ add_library(godzilla
         Space.cpp
         Terminal.cpp
         Tetra.cpp
+        TransientInterface.cpp
         Tri.cpp
         Utils.cpp
         Vertex.cpp

@@ -13,6 +13,6 @@ TEST_F(GYMLFileTest, parse_empty)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
 
     file.parse(file_name);
-    auto yml = file.getYml();
+    auto yml = file.get_yml();
     EXPECT_EQ(yml.size(), 0);
 }

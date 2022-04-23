@@ -6,11 +6,10 @@
 #include "InputParameters.h"
 #include "Factory.h"
 #include "Logger.h"
+#include "GYMLFile.h"
 
 namespace godzilla {
 
-class Function;
-class Grid;
 class Problem;
 
 class App : public PrintInterface {
@@ -118,6 +117,9 @@ protected:
 
     /// Verbosity level
     unsigned int verbosity_level;
+
+    /// YML file with application config
+    GYMLFile gyml;
 };
 
 template <typename T>

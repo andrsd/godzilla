@@ -9,7 +9,7 @@ add_executable(${PROJECT_NAME}
     Determinant_test.cpp
     Edge_test.cpp
     Error_test.cpp
-    ExodusII_test.cpp
+    ExodusIIMesh_test.cpp
     Factory_test.cpp
     GodzillaApp_test.cpp
     GYMLFile_test.cpp

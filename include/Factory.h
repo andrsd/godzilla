@@ -3,6 +3,7 @@
 #include <set>
 #include <list>
 #include <ctime>
+#include "Error.h"
 #include "Object.h"
 #include "PrintInterface.h"
 
@@ -34,7 +35,7 @@ buildObj(const InputParameters & parameters)
 
 template <typename T>
 auto
-callValidParams() -> decltype(T::validParams(), emptyInputParameters())
+callValidParams() -> decltype(T::validParams(), empty_input_parameters())
 {
     return T::validParams();
 }
@@ -77,6 +78,7 @@ public:
 
         Entry & entry = it->second;
         InputParameters * ips = new InputParameters((*entry.params_ptr)());
+        MEM_CHECK(ips);
         params.push_back(ips);
         return *ips;
     }
@@ -98,11 +100,13 @@ public:
             parameters.set<std::string>("_name") = name;
 
             auto entry = it->second;
-            T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
-            if (object == nullptr)
+            ObjectPtr op = entry.build_ptr(parameters);
+            MEM_CHECK(op);
+            T * obj = dynamic_cast<T *>(op);
+            if (obj == nullptr)
                 error("Instantiation of object '", name, ":[", class_name, "]' failed.");
-            objects.push_back(object);
-            return object;
+            objects.push_back(obj);
+            return obj;
         }
     }
 

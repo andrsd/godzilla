@@ -1,4 +1,5 @@
-#include "ExodusIO.h"
+#include "Godzilla.h"
+#include "ExodusIIMesh.h"
 #include "CallStack.h"
 #include "Mesh.h"
 #include "Vertex.h"
@@ -8,6 +9,7 @@
 #include "Quad.h"
 #include "Tetra.h"
 #include "Hex.h"
+#include "Utils.h"
 #include <exodusII.h>
 
 // TODO: error checking on all exodusII functions
@@ -16,8 +18,47 @@ namespace godzilla {
 
 enum EElemType { INVALID, EDGE, TRIANGLE, QUAD, HEX, TETRA, PRISM, PYRAMID };
 
-static void
-load_coordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
+registerObject(ExodusIIMesh);
+
+InputParameters
+ExodusIIMesh::validParams()
+{
+    InputParameters params = Mesh::validParams();
+    params.add_required_param<std::string>("file", "The name of the ExodusII file.");
+    return params;
+}
+
+ExodusIIMesh::ExodusIIMesh(const InputParameters & params) :
+    Mesh(params),
+    file_name(get_param<std::string>("file")),
+    exoid(-1)
+{
+    _F_;
+}
+
+const std::string &
+ExodusIIMesh::get_file_name() const
+{
+    _F_;
+    return this->file_name;
+}
+
+void
+ExodusIIMesh::create()
+{
+    _F_;
+    if (utils::path_exists(this->file_name)) {
+        load(this->file_name);
+        Mesh::create();
+    }
+    else
+        log_error("Unable to open '",
+                  this->file_name,
+                  "' for reading. Make sure it exists and you have read permissions.");
+}
+
+void
+ExodusIIMesh::load_coordinates(int n_nodes)
 {
     _F_;
 
@@ -26,31 +67,31 @@ load_coordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
     MEM_CHECK(x);
 
     double * y = nullptr;
-    if (dim > 1) {
+    if (this->dim > 1) {
         y = new double[n_nodes];
         MEM_CHECK(y);
     }
 
     double * z = nullptr;
-    if (dim > 2) {
+    if (this->dim > 2) {
         z = new double[n_nodes];
         MEM_CHECK(z);
     }
 
-    if (dim == 1) {
-        err = ex_get_coord(exoid, x, NULL, NULL);
+    if (this->dim == 1) {
+        err = ex_get_coord(this->exoid, x, NULL, NULL);
         for (int i = 0; i < n_nodes; i++)
-            mesh.set_vertex(i, new Vertex1D(x[i]));
+            set_vertex(i, new Vertex1D(x[i]));
     }
-    else if (dim == 2) {
-        err = ex_get_coord(exoid, x, y, NULL);
+    else if (this->dim == 2) {
+        err = ex_get_coord(this->exoid, x, y, NULL);
         for (int i = 0; i < n_nodes; i++)
-            mesh.set_vertex(i, new Vertex2D(x[i], y[i]));
+            set_vertex(i, new Vertex2D(x[i], y[i]));
     }
-    else if (dim == 3) {
-        err = ex_get_coord(exoid, x, y, z);
+    else if (this->dim == 3) {
+        err = ex_get_coord(this->exoid, x, y, z);
         for (int i = 0; i < n_nodes; i++)
-            mesh.set_vertex(i, new Vertex3D(x[i], y[i], z[i]));
+            set_vertex(i, new Vertex3D(x[i], y[i], z[i]));
     }
 
     delete[] x;
@@ -58,16 +99,15 @@ load_coordinates(int exoid, Mesh & mesh, int dim, int n_nodes)
     delete[] z;
 }
 
-static void
-load_block(int exoid, Mesh & mesh, int blk_id, int & elem_id)
+void
+ExodusIIMesh::load_block(int blk_id, int & elem_id)
 {
     _F_;
-
     int err;
     // get block info
     char elem_type_str[MAX_STR_LENGTH + 1];
     int n_elems_in_blk, n_elem_nodes, n_attrs;
-    err = ex_get_block(exoid,
+    err = ex_get_block(this->exoid,
                        EX_ELEM_BLOCK,
                        blk_id,
                        elem_type_str,
@@ -94,7 +134,7 @@ load_block(int exoid, Mesh & mesh, int blk_id, int & elem_id)
     // read connectivity array
     int * connect = new int[n_elem_nodes * n_elems_in_blk];
     MEM_CHECK(connect);
-    err = ex_get_conn(exoid, EX_ELEM_BLOCK, blk_id, connect, 0, 0);
+    err = ex_get_conn(this->exoid, EX_ELEM_BLOCK, blk_id, connect, 0, 0);
 
     // add elements into mesh
     int ic = 0;
@@ -125,30 +165,29 @@ load_block(int exoid, Mesh & mesh, int blk_id, int & elem_id)
         }
 
         elem->set_marker((uint) blk_id);
-        mesh.set_element(elem_id, elem);
+        set_element(elem_id, elem);
         elem_id++;
     }
     delete[] connect;
 }
 
-Mesh
-ExodusIO::load(const std::string & file_name)
+void
+ExodusIIMesh::load(const std::string & file_name)
 {
     _F_;
 
-    Mesh mesh;
     int err;
     // use float or double
     int cpu_ws = sizeof(double);
     // store variables as doubles
     int io_ws = 8;
     float version;
-    int exoid = ex_open(file_name.c_str(), EX_READ, &cpu_ws, &io_ws, &version);
+    this->exoid = ex_open(file_name.c_str(), EX_READ, &cpu_ws, &io_ws, &version);
 
     // read initialization parameters
     int n_dims, n_nodes, n_elems, n_eblocks, n_nodesets, n_sidesets;
     char title[MAX_LINE_LENGTH + 1];
-    err = ex_get_init(exoid,
+    err = ex_get_init(this->exoid,
                       title,
                       &n_dims,
                       &n_nodes,
@@ -156,25 +195,23 @@ ExodusIO::load(const std::string & file_name)
                       &n_eblocks,
                       &n_nodesets,
                       &n_sidesets);
-    load_coordinates(exoid, mesh, n_dims, n_nodes);
+    this->dim = n_dims;
+    load_coordinates(n_nodes);
 
     int elem_id = 0;
     // load elements block by block
     int * eid_blocks = new int[n_eblocks];
     MEM_CHECK(eid_blocks);
-    err = ex_get_ids(exoid, EX_ELEM_BLOCK, eid_blocks);
+    err = ex_get_ids(this->exoid, EX_ELEM_BLOCK, eid_blocks);
     for (int i = 0; i < n_eblocks; i++) {
         int id = eid_blocks[i];
-        load_block(exoid, mesh, id, elem_id);
+        load_block(id, elem_id);
     }
     delete[] eid_blocks;
 
-    err = ex_close(exoid);
+    err = ex_close(this->exoid);
 
-    mesh.set_dimension(n_dims);
-    mesh.create();
-
-    return mesh;
+    set_dimension(this->dim);
 }
 
 } // namespace godzilla

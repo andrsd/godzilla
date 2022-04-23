@@ -4,7 +4,7 @@
 namespace godzilla {
 
 InputParameters
-emptyInputParameters()
+empty_input_parameters()
 {
     InputParameters params;
     return params;

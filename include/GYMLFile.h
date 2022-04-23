@@ -10,6 +10,8 @@ namespace godzilla {
 
 class App;
 class Factory;
+class Mesh;
+class Problem;
 
 /// YML parser for input files
 ///
@@ -17,12 +19,19 @@ class GYMLFile : public PrintInterface, public LoggingInterface {
 public:
     GYMLFile(const App & app);
 
-    /// parse the YML file
+    /// Retrieve the problem
+    virtual Problem * get_problem() const;
+    /// Get the YML root node
+    const YAML::Node & get_yml() const;
+    /// Parse the YML file
     virtual void parse(const std::string & file_name);
-    /// build the simulation
+    /// Instantiate objects found in the YML file
+    /// TODO: needs a better name
     virtual void build();
-
-    virtual const YAML::Node & getYml();
+    /// Call `create` on objects that built up the simulation
+    virtual void create();
+    /// Call `check` on objects that built up the simulation
+    virtual void check();
 
 protected:
     InputParameters & build_params(const YAML::Node & root, const std::string & name);
@@ -37,11 +46,27 @@ protected:
     template <typename T>
     std::vector<T> read_vector_value(const std::string & param_name, const YAML::Node & val_node);
 
-    void check_arams(const InputParameters & params, const std::string & name);
+    void check_params(const InputParameters & params, const std::string & name);
 
+    /// Build mesh-derived object
+    void build_mesh();
+
+    /// Build Problem-derived object
+    void build_problem();
+
+    /// All built objects has to be added by calling this method
+    void add_object(Object * obj);
+
+    /// Application this file belongs to
     const godzilla::App & app;
-
+    /// Root node of the YML file
     YAML::Node root;
+    /// Mesh
+    Mesh * mesh;
+    /// Problem
+    Problem * problem;
+    /// List of all objects built from the input file
+    std::vector<Object *> objects;
 };
 
 } // namespace godzilla

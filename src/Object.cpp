@@ -6,7 +6,7 @@ namespace godzilla {
 InputParameters
 Object::validParams()
 {
-    InputParameters params = emptyInputParameters();
+    InputParameters params = empty_input_parameters();
     params.add_private_param<const App *>("_app", nullptr);
     params.add_private_param<std::string>("_type");
     params.add_private_param<std::string>("_name");
@@ -17,9 +17,9 @@ Object::Object(const InputParameters & parameters) :
     LoggingInterface(const_cast<Logger &>(parameters.get<const App *>("_app")->get_logger()),
                      parameters.get<std::string>("_name")),
     pars(parameters),
-    app(*getParam<const App *>("_app")),
-    type(getParam<std::string>("_type")),
-    name(getParam<std::string>("_name"))
+    app(*get_param<const App *>("_app")),
+    type(get_param<std::string>("_type")),
+    name(get_param<std::string>("_name"))
 {
     _F_;
 }
@@ -30,21 +30,21 @@ Object::~Object()
 }
 
 const std::string &
-Object::getType() const
+Object::get_type() const
 {
     _F_;
     return this->type;
 }
 
 const std::string &
-Object::getName() const
+Object::get_name() const
 {
     _F_;
     return this->name;
 }
 
 const InputParameters &
-Object::getParameters() const
+Object::get_parameters() const
 {
     _F_;
     return this->pars;
@@ -58,7 +58,7 @@ Object::is_param_valid(const std::string & name) const
 }
 
 const App &
-Object::getApp() const
+Object::get_app() const
 {
     _F_;
     return this->app;
@@ -72,14 +72,14 @@ Object::comm() const
 }
 
 const PetscMPIInt &
-Object::processorId() const
+Object::processor_id() const
 {
     _F_;
     return this->app.get_comm_rank();
 }
 
 const PetscMPIInt &
-Object::commSize() const
+Object::comm_size() const
 {
     _F_;
     return this->app.get_comm_size();

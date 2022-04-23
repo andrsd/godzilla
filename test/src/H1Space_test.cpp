@@ -1,3 +1,4 @@
+#include "GodzillaApp_test.h"
 #include "Common.h"
 #include "Mesh.h"
 #include "Edge.h"
@@ -9,8 +10,13 @@ using namespace godzilla;
 
 TEST(H1SpaceTest, first_order_1d)
 {
+    TestApp app;
+
+    InputParameters params = Mesh::validParams();
+    params.set<const App *>("_app") = &app;
+    Mesh mesh(params);
+
     Vertex1D vtcs[] = { Vertex1D(0.), Vertex1D(1.), Vertex1D(2.) };
-    Mesh mesh;
     for (uint i = 0; i < countof(vtcs); i++)
         mesh.set_vertex(i, &vtcs[i]);
     for (uint i = 0; i < countof(vtcs) - 1; i++) {

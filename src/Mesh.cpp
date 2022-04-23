@@ -5,24 +5,47 @@
 
 namespace godzilla {
 
-Mesh::Mesh(const MPI_Comm & comm) : comm(comm)
+InputParameters
+Mesh::validParams()
+{
+    InputParameters params = Object::validParams();
+    params.set<std::string>("_name") = "mesh";
+    return params;
+}
+
+Mesh::Mesh(const InputParameters & parameters) :
+    Object(parameters),
+    PrintInterface(this),
+    dm(nullptr),
+    dim(-1),
+    partition_overlap(0)
 {
     _F_;
-    DMPlexCreate(get_comm(), &this->dm);
+    PetscErrorCode ierr;
+    ierr = DMPlexCreate(comm(), &this->dm);
+    checkPetscError(ierr);
+    ierr = PetscPartitionerCreate(comm(), &this->partitioner);
+    checkPetscError(ierr);
 }
 
 Mesh::~Mesh()
 {
     _F_;
     free();
-    DMDestroy(&this->dm);
-}
 
-const MPI_Comm &
-Mesh::get_comm() const
+    PetscErrorCode ierr;
+    if (this->dm) {
+        ierr = DMDestroy(&this->dm);
+        checkPetscError(ierr);
+    }
+    ierr = PetscPartitionerDestroy(&this->partitioner);
+    checkPetscError(ierr);}
+
+DM
+Mesh::get_dm() const
 {
     _F_;
-    return this->comm;
+    return this->dm;
 }
 
 void
@@ -31,7 +54,7 @@ Mesh::free()
     _F_;
 }
 
-const uint &
+const int &
 Mesh::get_dimension() const
 {
     _F_;
@@ -39,13 +62,29 @@ Mesh::get_dimension() const
 }
 
 void
-Mesh::set_dimension(const uint & dim)
+Mesh::set_dimension(const int & dim)
 {
     _F_;
     PetscErrorCode ierr;
     ierr = DMSetDimension(this->dm, dim);
     checkPetscError(ierr);
     this->dim = dim;
+}
+
+void
+Mesh::set_partitioner_type(const std::string & type)
+{
+    _F_;
+    PetscErrorCode ierr;
+    ierr = PetscPartitionerSetType(this->partitioner, type.c_str());
+    checkPetscError(ierr);
+}
+
+void
+Mesh::set_partition_overlap(int overlap)
+{
+    _F_;
+    this->partition_overlap = overlap;
 }
 
 uint
@@ -111,6 +150,8 @@ Mesh::create()
     checkPetscError(ierr);
     ierr = DMDestroy(&this->dm);
     this->dm = idm;
+
+    distribute();
 }
 
 uint
@@ -207,6 +248,27 @@ Mesh::get_face_id(const Element * e, uint face) const
     _F_;
     error("Not implemented.");
     return 0;
+}
+
+void
+Mesh::distribute()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    ierr = PetscPartitionerSetUp(this->partitioner);
+    checkPetscError(ierr);
+
+    ierr = DMPlexSetPartitioner(this->dm, this->partitioner);
+    checkPetscError(ierr);
+
+    DM dm_dist = nullptr;
+    ierr = DMPlexDistribute(this->dm, this->partition_overlap, NULL, &dm_dist);
+    checkPetscError(ierr);
+    if (dm_dist) {
+        DMDestroy(&this->dm);
+        this->dm = dm_dist;
+    }
 }
 
 } // namespace godzilla

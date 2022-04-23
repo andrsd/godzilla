@@ -2,6 +2,8 @@
 #include "App.h"
 #include "Factory.h"
 #include "CallStack.h"
+#include "Mesh.h"
+#include "Problem.h"
 #include "assert.h"
 
 template <typename T>
@@ -16,9 +18,18 @@ namespace godzilla {
 GYMLFile::GYMLFile(const App & app) :
     PrintInterface(app),
     LoggingInterface(const_cast<Logger &>(app.get_logger())),
-    app(app)
+    app(app),
+    mesh(nullptr),
+    problem(nullptr)
 {
     _F_;
+}
+
+Problem *
+GYMLFile::get_problem() const
+{
+    _F_;
+    return this->problem;
 }
 
 void
@@ -29,7 +40,7 @@ GYMLFile::parse(const std::string & file_name)
 }
 
 const YAML::Node &
-GYMLFile::getYml()
+GYMLFile::get_yml() const
 {
     _F_;
     return this->root;
@@ -39,6 +50,53 @@ void
 GYMLFile::build()
 {
     _F_;
+    build_mesh();
+    build_problem();
+}
+
+void
+GYMLFile::create()
+{
+    _F_;
+    for (auto & obj : this->objects)
+        obj->create();
+}
+
+void
+GYMLFile::check()
+{
+    _F_;
+    for (auto & obj : this->objects)
+        obj->check();
+}
+
+void
+GYMLFile::add_object(Object * obj)
+{
+    _F_;
+    if (obj != nullptr)
+        this->objects.push_back(obj);
+}
+
+void
+GYMLFile::build_mesh()
+{
+    _F_;
+    InputParameters & params = build_params(this->root, "mesh");
+    const std::string & class_name = params.get<std::string>("_type");
+    this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
+    add_object(this->mesh);
+}
+
+void
+GYMLFile::build_problem()
+{
+    _F_;
+    InputParameters & params = build_params(this->root, "problem");
+    const std::string & class_name = params.get<std::string>("_type");
+    params.set<Mesh *>("_mesh") = this->mesh;
+    this->problem = Factory::create<Problem>(class_name, "problem", params);
+    add_object(this->problem);
 }
 
 InputParameters &
@@ -68,7 +126,7 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
             set_parameter_from_yml(params, node, param_name);
     }
 
-    check_arams(params, name);
+    check_params(params, name);
 
     return params;
 }
@@ -122,7 +180,7 @@ GYMLFile::read_vector_value(const std::string & param_name, const YAML::Node & v
 }
 
 void
-GYMLFile::check_arams(const InputParameters & params, const std::string & name)
+GYMLFile::check_params(const InputParameters & params, const std::string & name)
 {
     _F_;
     std::ostringstream oss;

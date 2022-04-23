@@ -330,6 +330,6 @@ InputParameters::add_private_param(const std::string & name, const T & value)
     this->params[name] = param;
 }
 
-InputParameters emptyInputParameters();
+InputParameters empty_input_parameters();
 
 } // namespace godzilla

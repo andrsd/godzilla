@@ -1,3 +1,4 @@
+#include "GodzillaApp_test.h"
 #include "Common.h"
 #include "Mesh.h"
 #include "Edge.h"
@@ -10,10 +11,15 @@ using namespace godzilla;
 
 TEST(ShapeFunction1DTest, base)
 {
+    TestApp app;
+
+    InputParameters params = Mesh::validParams();
+    params.set<const App *>("_app") = &app;
+    Mesh mesh(params);
+
     Vertex1D v1(0.);
     Vertex1D v2(1.);
 
-    Mesh mesh;
     mesh.set_vertex(0, &v1);
     mesh.set_vertex(1, &v2);
 

@@ -2,6 +2,8 @@
 
 #include "petsc.h"
 #include "Common.h"
+#include "Object.h"
+#include "PrintInterface.h"
 #include "Array.h"
 #include "Vertex.h"
 #include "Element.h"
@@ -33,39 +35,30 @@ struct SideBoundary {
     uint marker;
 };
 
-/// Represents the geometry
+/// Unstructured mesh
 ///
-class Mesh {
+/// TODO: rename this to UnstructuredMesh
+class Mesh : public Object, public PrintInterface {
 public:
-    Mesh(const MPI_Comm & comm = MPI_COMM_WORLD);
+    Mesh(const InputParameters & parameters);
     virtual ~Mesh();
 
-    /// Get the MPI comm
-    const MPI_Comm & get_comm() const;
+    /// Get the DM object
+    DM get_dm() const;
 
     /// Frees all data associated with the mesh.
     void free();
 
     /// Get the mesh dimension
-    const uint & get_dimension() const;
+    const int & get_dimension() const;
 
     /// Set the mesh dimension
-    void set_dimension(const uint & dim);
+    void set_dimension(const int & dim);
 
     /// Returns the total number of elements stored.
     uint get_num_elements() const;
 
-    /// Create internal structures
-    void create();
-
-    uint get_cone_size(const Index & id) const;
-
-    void get_cone(const Index & id, const PetscInt * cone[]) const;
-
-    /// Get type of a cell
-    ///
-    /// @param cell[in] Cell number (vertex, edge, face, element)
-    DMPolytopeType get_cell_type(PetscInt cell) const;
+    virtual void create() override;
 
     void set_vertex(const Index & id, const Vertex * vertex);
 
@@ -121,19 +114,46 @@ public:
     /// @param[in] face Local face number
     virtual Index get_face_id(const Element * e, uint face) const;
 
+    /// Set partitioner type
+    ///
+    /// @param type Type of the partitioner
+    virtual void set_partitioner_type(const std::string & type);
+
+    /// Set partitioner type
+    ///
+    /// @param type Type of the partitioner
+    virtual void set_partition_overlap(int overlap);
+
 protected:
-    /// MPI communicator
-    MPI_Comm comm;
+    uint get_cone_size(const Index & id) const;
+
+    void get_cone(const Index & id, const PetscInt * cone[]) const;
+
+    /// Get type of a cell
+    ///
+    /// @param cell[in] Cell number (vertex, edge, face, element)
+    DMPolytopeType get_cell_type(PetscInt cell) const;
+
+    /// Distribute mesh over processes
+    virtual void distribute();
+
     /// DM for the unstructured mesh
     DM dm;
     /// Spatial dimension
-    uint dim;
+    int dim;
     /// Mesh vertices
     Array<const Vertex *> vertices;
     /// Mesh elements
     Array<const Element *> elements;
     /// Side boundaries
     Array<const SideBoundary *> side_boundaries;
+    /// Mesh partitioner
+    PetscPartitioner partitioner;
+    /// Partition overlap for mesh partitioning
+    PetscInt partition_overlap;
+
+public:
+    static InputParameters validParams();
 };
 
 } // namespace godzilla

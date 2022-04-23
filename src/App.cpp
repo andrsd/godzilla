@@ -5,6 +5,7 @@
 #include "Error.h"
 #include "Utils.h"
 #include "Terminal.h"
+#include "Problem.h"
 #include <assert.h>
 
 namespace godzilla {
@@ -16,7 +17,8 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     input_file_arg("i", "input-file", "Input file to execute", false, "", "string"),
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
     no_colors_switch("", "no-colors", "Do not use terminal colors", false),
-    verbosity_level(1)
+    verbosity_level(1),
+    gyml(*this)
 {
     _F_;
     MPI_Comm_size(comm, &this->comm_size);
@@ -44,6 +46,7 @@ void
 App::create()
 {
     _F_;
+    this->gyml.create();
 }
 
 void
@@ -105,6 +108,7 @@ App::run_input_file(const std::string & file_name)
     if (utils::path_exists(file_name)) {
         godzilla_print(9, "Reading '", file_name, "'...");
         build_from_gyml(file_name);
+        create();
 
         godzilla_print(9, "Checking integrity...");
         check_integrity();
@@ -122,15 +126,16 @@ void
 App::build_from_gyml(const std::string & file_name)
 {
     _F_;
-    GYMLFile file(*this);
-    file.parse(file_name);
-    file.build();
+    this->gyml.parse(file_name);
+    this->gyml.build();
 }
 
 void
 App::check_integrity()
 {
     _F_;
+    this->gyml.check();
+
     if (this->log.get_num_entries() > 0) {
         this->log.print();
         godzilla::internal::terminate();
@@ -141,6 +146,9 @@ void
 App::run_problem()
 {
     _F_;
+    Problem * p = this->gyml.get_problem();
+    assert(p != nullptr);
+    p->run();
 }
 
 } // namespace godzilla
