@@ -10,14 +10,14 @@ namespace godzilla {
 class Tetra : public Element3D {
 public:
     Tetra();
-    Tetra(Index v[]);
-    Tetra(Index v1, Index v2, Index v3, Index v4);
+    Tetra(PetscInt v[]);
+    Tetra(PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4);
     Tetra(const Tetra & o);
 
     virtual const DMPolytopeType get_potytope_type() const { return DM_POLYTOPE_TETRAHEDRON; }
     virtual uint get_num_vertices() const { return NUM_VERTICES; }
-    virtual Index get_vertex(uint local) const { return this->vertices[local]; }
-    virtual const Index * get_vertices() const { return &(this->vertices[0]); }
+    virtual PetscInt get_vertex(uint local) const { return this->vertices[local]; }
+    virtual const PetscInt * get_vertices() const { return &(this->vertices[0]); }
     virtual uint get_num_edges() const { return NUM_EDGES; }
     virtual uint get_num_faces() const { return NUM_FACES; }
 
@@ -31,7 +31,7 @@ public:
 
 protected:
     /// Array of vertex indices that build up the tetrahedron
-    Index vertices[NUM_VERTICES];
+    PetscInt vertices[NUM_VERTICES];
 };
 
 } // namespace godzilla

@@ -10,7 +10,7 @@ TEST(TetraTest, ctor)
 {
     Tetra tet_empty;
 
-    Index vs[] = { 1, 2, 3, 4 };
+    PetscInt vs[] = { 1, 2, 3, 4 };
     Tetra tet_1(vs);
 
     Tetra tet_2(1, 2, 3, 4);

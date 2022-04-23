@@ -153,7 +153,7 @@ Space::enforce_minimum_rule()
         // TODO: allocate EdgeData and FaceData, based on the determined order
 
         const uint nv = elem->get_num_vertices();
-        const Index * vtx_idxs = elem->get_vertices();
+        const PetscInt * vtx_idxs = elem->get_vertices();
         for (uint i = 0; i < nv; i++)
             this->vertex_data[vtx_idxs[i]] = new VertexData();
     }

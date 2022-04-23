@@ -1,6 +1,6 @@
 #include "GodzillaApp_test.h"
 #include "Common.h"
-#include "Mesh.h"
+#include "LineMesh.h"
 #include "Edge.h"
 #include "H1LobattoShapesetEdge.h"
 #include "ShapeFunction1D.h"
@@ -13,26 +13,24 @@ TEST(ShapeFunction1DTest, base)
 {
     TestApp app;
 
-    InputParameters params = Mesh::validParams();
+    InputParameters params = LineMesh::validParams();
     params.set<const App *>("_app") = &app;
-    Mesh mesh(params);
+    params.set<uint>("nx") = 1;
+    LineMesh mesh(params);
 
-    Vertex1D v1(0.);
-    Vertex1D v2(1.);
+    mesh.create();
 
-    mesh.set_vertex(0, &v1);
-    mesh.set_vertex(1, &v2);
-
-    Edge edge(0, 1);
-    mesh.set_element(0, &edge);
+    const Element * e = mesh.get_element(0);
+    const Edge * edge = dynamic_cast<const Edge *>(e);
+    assert(edge != nullptr);
 
     H1LobattoShapesetEdge ss;
 
     ShapeFunction1D sh_fn(&ss);
     EXPECT_EQ(sh_fn.get_shapeset(), &ss);
 
-    sh_fn.set_active_element(&edge);
-    EXPECT_EQ(sh_fn.get_active_element(), &edge);
+    sh_fn.set_active_element(edge);
+    EXPECT_EQ(sh_fn.get_active_element(), edge);
 
     sh_fn.set_active_shape(0);
     EXPECT_EQ(sh_fn.get_active_shape(), 0);

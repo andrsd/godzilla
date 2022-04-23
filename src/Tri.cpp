@@ -9,14 +9,14 @@ Tri::Tri() : Element2D()
     _F_;
 }
 
-Tri::Tri(Index v[]) : Element2D()
+Tri::Tri(PetscInt v[]) : Element2D()
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Tri::Tri(Index v1, Index v2, Index v3) : Element2D()
+Tri::Tri(PetscInt v1, PetscInt v2, PetscInt v3) : Element2D()
 {
     _F_;
     this->vertices[0] = v1;

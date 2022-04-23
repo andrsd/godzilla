@@ -33,11 +33,11 @@ public:
     ///
     /// @param[in] local Local vertex number
     /// @return Vertex index of a given local vertex number
-    virtual Index get_vertex(uint local) const = 0;
+    virtual PetscInt get_vertex(uint local) const = 0;
 
     /// Get vertex indices
     ///
-    virtual const Index * get_vertices() const = 0;
+    virtual const PetscInt * get_vertices() const = 0;
 
     /// Get edge orientation
     ///

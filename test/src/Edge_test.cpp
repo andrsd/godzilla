@@ -10,7 +10,7 @@ TEST(EdgeTest, ctor)
 {
     Edge edge_empty;
 
-    Index vs[] = { 1, 2 };
+    PetscInt vs[] = { 1, 2 };
     Edge edge_1(vs);
 
     Edge edge_2(1, 2);

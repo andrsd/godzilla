@@ -1,6 +1,6 @@
 #include "GodzillaApp_test.h"
 #include "Common.h"
-#include "Mesh.h"
+#include "LineMesh.h"
 #include "Edge.h"
 #include "RefMap1D.h"
 #include "QuadratureGauss1D.h"
@@ -12,24 +12,20 @@ TEST(RefMap1DTest, base)
 {
     TestApp app;
 
-    InputParameters params = Mesh::validParams();
+    InputParameters params = LineMesh::validParams();
     params.set<const App *>("_app") = &app;
-    Mesh mesh(params);
+    params.set<Real>("xmax") = 2.;
+    params.set<uint>("nx") = 2;
+    LineMesh mesh(params);
 
-    Vertex1D v1(0.);
-    Vertex1D v2(1.);
-
-    mesh.set_vertex(0, &v1);
-    mesh.set_vertex(1, &v2);
-
-    Edge edge(0, 1);
-    mesh.set_element(0, &edge);
-
-    mesh.set_dimension(1);
     mesh.create();
 
+    const Element * e = mesh.get_element(0);
+    const Edge * edge = dynamic_cast<const Edge *>(e);
+    assert(edge != nullptr);
+
     RefMap1D ref_map(&mesh);
-    ref_map.set_active_element(&edge);
+    ref_map.set_active_element(edge);
 
     EXPECT_EQ(ref_map.get_ref_order(), 0);
     EXPECT_EQ(ref_map.get_inv_ref_order(), 0);

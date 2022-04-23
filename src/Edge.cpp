@@ -9,14 +9,14 @@ Edge::Edge() : Element1D()
     _F_;
 }
 
-Edge::Edge(Index v[]) : Element1D()
+Edge::Edge(PetscInt v[]) : Element1D()
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Edge::Edge(Index v1, Index v2) : Element1D()
+Edge::Edge(PetscInt v1, PetscInt v2) : Element1D()
 {
     _F_;
     this->vertices[0] = v1;

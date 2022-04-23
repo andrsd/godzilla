@@ -9,14 +9,22 @@ Hex::Hex() : Element3D()
     _F_;
 }
 
-Hex::Hex(Index v[]) : Element3D()
+Hex::Hex(PetscInt v[]) : Element3D()
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Hex::Hex(Index v1, Index v2, Index v3, Index v4, Index v5, Index v6, Index v7, Index v8) : Element3D()
+Hex::Hex(PetscInt v1,
+         PetscInt v2,
+         PetscInt v3,
+         PetscInt v4,
+         PetscInt v5,
+         PetscInt v6,
+         PetscInt v7,
+         PetscInt v8) :
+    Element3D()
 {
     _F_;
     this->vertices[0] = v1;

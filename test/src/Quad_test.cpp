@@ -10,7 +10,7 @@ TEST(QuadTest, ctor)
 {
     Quad tet_empty;
 
-    Index vs[] = { 1, 2, 3, 4 };
+    PetscInt vs[] = { 1, 2, 3, 4 };
     Quad quad_1(vs);
 
     Quad quad_2(1, 2, 3, 4);

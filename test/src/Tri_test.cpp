@@ -10,7 +10,7 @@ TEST(TriTest, ctor)
 {
     Tri tet_empty;
 
-    Index vs[] = { 1, 2, 3 };
+    PetscInt vs[] = { 1, 2, 3 };
     Tri tri_1(vs);
 
     Tri tri_2(1, 2, 3);

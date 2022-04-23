@@ -10,7 +10,7 @@ TEST(HexTest, ctor)
 {
     Hex hex_empty;
 
-    Index vs[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    PetscInt vs[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
     Hex hex_1(vs);
 
     Hex hex_2(1, 2, 3, 4, 5, 6, 7, 8);

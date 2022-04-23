@@ -62,8 +62,6 @@ public:
     /// Get vertex with index `id`
     const Vertex * get_vertex(const Index & id) const;
 
-    void set_element(const Index & id, const Element * elem);
-
     /// Get an element using its ID
     ///
     /// @param[in] id ID of an element
@@ -123,6 +121,9 @@ public:
 
 protected:
     virtual void create_dm() = 0;
+
+    void create_elements();
+    void create_vertices();
 
     uint get_cone_size(const Index & id) const;
 

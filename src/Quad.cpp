@@ -9,14 +9,14 @@ Quad::Quad() : Element2D()
     _F_;
 }
 
-Quad::Quad(Index v[]) : Element2D()
+Quad::Quad(PetscInt v[]) : Element2D()
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Quad::Quad(Index v1, Index v2, Index v3, Index v4) : Element2D()
+Quad::Quad(PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4) : Element2D()
 {
     _F_;
     this->vertices[0] = v1;

@@ -1,6 +1,6 @@
 #include "GodzillaApp_test.h"
 #include "Common.h"
-#include "Mesh.h"
+#include "LineMesh.h"
 #include "Edge.h"
 #include "H1LobattoShapesetEdge.h"
 #include "H1Space.h"
@@ -12,20 +12,12 @@ TEST(H1SpaceTest, first_order_1d)
 {
     TestApp app;
 
-    InputParameters params = Mesh::validParams();
+    InputParameters params = LineMesh::validParams();
     params.set<const App *>("_app") = &app;
-    Mesh mesh(params);
+    params.set<Real>("xmax") = 2.;
+    params.set<uint>("nx") = 2;
+    LineMesh mesh(params);
 
-    Vertex1D vtcs[] = { Vertex1D(0.), Vertex1D(1.), Vertex1D(2.) };
-    for (uint i = 0; i < countof(vtcs); i++)
-        mesh.set_vertex(i, &vtcs[i]);
-    for (uint i = 0; i < countof(vtcs) - 1; i++) {
-        Edge * edge = new Edge(i, i + 1);
-        mesh.set_element(i, edge);
-    }
-    mesh.set_boundary(0, 0, 1);
-    mesh.set_boundary(1, 1, 2);
-    mesh.set_dimension(1);
     mesh.create();
 
     H1LobattoShapesetEdge ss;
