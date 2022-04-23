@@ -13,19 +13,11 @@ public:
 
     const std::string & get_file_name() const;
 
-    virtual void create() override;
-
 protected:
-    void load(const std::string & file_name);
-
-    void load_coordinates(int n_nodes);
-
-    void load_block(int blk_id, int & elem_id);
+    virtual void create_dm() override;
 
     /// File name with the ExodusII mesh
     const std::string & file_name;
-    /// ExodusII file handle
-    int exoid;
 
 public:
     static InputParameters validParams();

@@ -45,22 +45,3 @@ TEST(ExodusIIMeshTest, load_tri)
 
     EXPECT_EQ(mesh.get_dimension(), 2);
 }
-
-TEST(ExodusIIMeshTest, load_edge)
-{
-    TestApp app;
-    std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/line-2.e");
-
-    InputParameters params = ExodusIIMesh::validParams();
-    params.set<const App *>("_app") = &app;
-    params.set<std::string>("file") = file_name;
-    ExodusIIMesh mesh(params);
-
-    EXPECT_EQ(mesh.get_file_name(), file_name);
-
-    mesh.create();
-    EXPECT_EQ(mesh.get_num_elements(), 2);
-
-    EXPECT_EQ(mesh.get_dimension(), 1);
-}

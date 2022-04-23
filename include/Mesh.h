@@ -52,9 +52,6 @@ public:
     /// Get the mesh dimension
     const int & get_dimension() const;
 
-    /// Set the mesh dimension
-    void set_dimension(const int & dim);
-
     /// Returns the total number of elements stored.
     uint get_num_elements() const;
 
@@ -125,6 +122,8 @@ public:
     virtual void set_partition_overlap(int overlap);
 
 protected:
+    virtual void create_dm() = 0;
+
     uint get_cone_size(const Index & id) const;
 
     void get_cone(const Index & id, const PetscInt * cone[]) const;
