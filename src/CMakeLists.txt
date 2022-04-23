@@ -26,6 +26,7 @@ add_library(godzilla
         InputParameters.cpp
         Logger.cpp
         Mesh.cpp
+        MeshFunction1D.cpp
         Object.cpp
         PrintInterface.cpp
         Quad.cpp
@@ -42,6 +43,7 @@ add_library(godzilla
         Tri.cpp
         Utils.cpp
         Vertex.cpp
+        WeakForm.cpp
 )
 target_code_coverage(godzilla)
 target_sanitization(godzilla)

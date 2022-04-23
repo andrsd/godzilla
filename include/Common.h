@@ -105,4 +105,6 @@ blas_copy(int n, double * x, int incx, double * y, int incy)
     dcopy_(&n, x, &incx, y, &incx);
 }
 
+const uint ANY = (uint) -1;
+
 } // namespace godzilla

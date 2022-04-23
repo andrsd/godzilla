@@ -38,11 +38,7 @@ public:
 
     static const int NUM_VALUE_TYPES = 3;
 
-    enum EValueType {
-        FN = 0,
-        DX = 1,
-        DXX = 2
-    };
+    enum EValueType { FN = 0, DX = 1, DXX = 2 };
 
     // Precalculation masks
     enum {
@@ -154,7 +150,7 @@ protected:
     static const uint QUAD_COUNT = 8;
 
     /// Active element
-    const Element1D *element;
+    const Element1D * element;
     /// current function polynomial order
     uint order;
     /// number of vector components
@@ -261,5 +257,7 @@ template <typename TYPE>
 uint Function1D<TYPE>::idx2mask[][NUM_COMPONENTS] = { { FN_VAL_0 }, { FN_DX_0 }, { FN_DXX_0 } };
 
 typedef Function1D<Real> RealFunction1D;
+
+typedef Function1D<Scalar> ScalarFunction1D;
 
 } // namespace godzilla
