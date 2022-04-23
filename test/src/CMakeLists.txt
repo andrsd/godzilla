@@ -17,6 +17,7 @@ add_executable(${PROJECT_NAME}
     H1Space_test.cpp
     Hex_test.cpp
     InputParameters_test.cpp
+    LineMesh_test.cpp
     Logger_test.cpp
     Object_test.cpp
     PrintInterface_test.cpp

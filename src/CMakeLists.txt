@@ -26,6 +26,7 @@ add_library(godzilla
         ImplicitFENonlinearProblem.cpp
         Init.cpp
         InputParameters.cpp
+        LineMesh.cpp
         Logger.cpp
         Mesh.cpp
         MeshFunction1D.cpp
