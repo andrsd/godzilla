@@ -75,7 +75,11 @@ GYMLFile::add_object(Object * obj)
 {
     _F_;
     if (obj != nullptr)
-        this->objects.push_back(obj);
+    {
+        // only add objects with valid parameters
+        if (this->valid_param_object_names.count(obj->get_name()) == 1)
+            this->objects.push_back(obj);
+    }
 }
 
 void
@@ -193,6 +197,8 @@ GYMLFile::check_params(const InputParameters & params, const std::string & name)
 
     if (!oss.str().empty())
         log_error(name, ": Missing required parameters:", oss.str());
+    else
+        this->valid_param_object_names.insert(name);
 }
 
 } // namespace godzilla

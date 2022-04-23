@@ -67,6 +67,8 @@ protected:
     Problem * problem;
     /// List of all objects built from the input file
     std::vector<Object *> objects;
+    /// Names of object with correct parameters
+    std::set<std::string> valid_param_object_names;
 };
 
 } // namespace godzilla
