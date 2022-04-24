@@ -22,13 +22,15 @@ public:
     static const uint MARKER_UNDEFINED = (uint) -1;
 
     // Dirichlet lift is a special DOF with nubmer -1
-    static const uint DIRICHLET_DOF = (uint) -1;
-    static const uint DOF_UNASSIGNED = (uint) -2;
-    static const uint DOF_NOT_ANALYZED = (uint) -3;
+    static const PetscInt DIRICHLET_DOF = (PetscInt) -1;
+    static const PetscInt DOF_UNASSIGNED = (PetscInt) -2;
+    static const PetscInt DOF_NOT_ANALYZED = (PetscInt) -3;
 
 public:
     Space(Mesh * mesh, Shapeset * shapeset);
     virtual ~Space();
+
+    const Shapeset * get_shapeset() const;
 
     /// Set order on all elements
     void set_uniform_order(uint order);
@@ -61,6 +63,12 @@ public:
     /// @return Type of boundary condition
     virtual EBCType get_bc_type(uint marker) const;
 
+    virtual PetscInt assign_vertex_dofs(PetscInt vertex_id);
+
+    virtual void set_vertex_bc_info(PetscInt vertex_id) = 0;
+
+    virtual void get_element_assembly_list(const Element * e, AssemblyList * al) = 0;
+
 protected:
     /// Data associated with a node (vertex, edge, face, interior)
     struct NodeData {
@@ -74,11 +82,11 @@ protected:
 
     struct VertexData : public NodeData {
         /// Number of first degree of freedom
-        uint dof;
+        PetscInt dof;
         /// Number of DOFs
         uint n;
         /// Projection of boundary condition
-        Scalar bc_proj;
+        PetscScalar bc_proj;
 
         VertexData() : dof(DOF_NOT_ANALYZED), n(0), bc_proj(0.) {}
     };
@@ -87,11 +95,11 @@ protected:
         /// Polynomial order
         uint order;
         /// Number of first degree of freedom
-        uint dof;
+        PetscInt dof;
         /// Number of DOFs
         uint n;
         /// Projection of boundary condition
-        Scalar * bc_proj;
+        PetscScalar * bc_proj;
 
         EdgeData(uint order) : order(order), dof(DOF_NOT_ANALYZED), n(0), bc_proj(nullptr) {}
         virtual ~EdgeData() { delete[] this->bc_proj; }
@@ -101,11 +109,11 @@ protected:
         /// Polynomial order
         uint order;
         /// Number of first degree of freedom
-        uint dof;
+        PetscInt dof;
         /// Number of DOFs
         uint n;
         /// Projection of boundary condition
-        Scalar * bc_proj;
+        PetscScalar * bc_proj;
 
         FaceData(uint order) : order(order), dof(DOF_NOT_ANALYZED), n(0), bc_proj(nullptr) {}
         virtual ~FaceData() { delete[] this->bc_proj; }
@@ -115,7 +123,7 @@ protected:
         /// Polynomial degree associated to the element node (interior).
         uint order;
         /// The number of the first degree of freedom belonging to the node.
-        uint dof;
+        PetscInt dof;
         /// Total number of degrees of freedom belonging to the node.
         uint n;
 
@@ -174,7 +182,6 @@ protected:
     /// Get number of element DoFs
     virtual uint get_element_ndofs(uint order) = 0;
 
-    virtual void assign_vertex_dofs(VertexData * node);
     virtual void assign_edge_dofs(EdgeData * node);
     virtual void assign_face_dofs(FaceData * node);
     virtual void assign_bubble_dofs(ElementData * node);
@@ -184,27 +191,27 @@ protected:
     /// @param[in] e Element
     /// @param[in] ivertex Local vertex number
     /// @param[out] al Assembly list
-    virtual void get_vertex_assembly_list(Element * e, uint ivertex, AssemblyList * al);
+    virtual void get_vertex_assembly_list(const Element * e, uint ivertex, AssemblyList * al);
 
     /// Build assembly list associated with an edge
     ///
     /// @param[in] e Element
     /// @param[in] iedge Local edge number
     /// @param[out] al Assembly list
-    virtual void get_edge_assembly_list(Element * e, uint iedge, AssemblyList * al);
+    virtual void get_edge_assembly_list(const Element * e, uint iedge, AssemblyList * al);
 
     /// Build assembly list associated with a face
     ///
     /// @param[in] e Element
     /// @param[in] iface Local face number
     /// @param[out] al Assembly list
-    virtual void get_face_assembly_list(Element * e, uint iface, AssemblyList * al);
+    virtual void get_face_assembly_list(const Element * e, uint iface, AssemblyList * al);
 
     /// Build assembly list associated with an element
     ///
     /// @param[in] e Element
     /// @param[out] al Assembly list
-    virtual void get_bubble_assembly_list(Element * e, AssemblyList * al);
+    virtual void get_bubble_assembly_list(const Element * e, AssemblyList * al);
 
     /// Mesh
     const Mesh * mesh;

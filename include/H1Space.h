@@ -13,6 +13,10 @@ public:
 
     void set_bc_values(Scalar (*fn)(uint marker, double x, double y, double z));
 
+    virtual void set_vertex_bc_info(PetscInt vertex_id);
+
+    virtual void get_element_assembly_list(const Element * e, AssemblyList * al);
+
 protected:
     virtual void calc_vertex_boundary_projection(const Element * elem, uint ivertex);
     virtual void calc_edge_boundary_projection(const Element * elem, uint iedge);

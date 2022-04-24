@@ -19,6 +19,7 @@ add_library(godzilla
         Element.cpp
         Error.cpp
         ExodusIIMesh.cpp
+        FELinearProblem.cpp
         FENonlinearProblem.cpp
         GYMLFile.cpp
         H1Space.cpp

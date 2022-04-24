@@ -19,12 +19,21 @@ Space::Space(Mesh * mesh, Shapeset * shapeset) :
     _F_;
     // TODO: check that shapeset is compatible with the space
     // init_data_tables();
+    this->first_dof = this->next_dof = 0;
+    this->stride = 1;
 }
 
 Space::~Space()
 {
     _F_;
     free_data_tables();
+}
+
+const Shapeset *
+Space::get_shapeset() const
+{
+    _F_;
+    return this->shapeset;
 }
 
 void
@@ -159,10 +168,13 @@ Space::enforce_minimum_rule()
     }
 }
 
-void
-Space::assign_vertex_dofs(VertexData * node)
+PetscInt
+Space::assign_vertex_dofs(PetscInt vertex_id)
 {
     _F_;
+    VertexData * node = new VertexData();
+    MEM_CHECK(node);
+    this->vertex_data[vertex_id] = node;
     uint ndofs = get_vertex_ndofs();
     if (node->bc_type == BC_ESSENTIAL) {
         node->dof = DIRICHLET_DOF;
@@ -172,6 +184,7 @@ Space::assign_vertex_dofs(VertexData * node)
         this->next_dof += ndofs * this->stride;
     }
     node->n = ndofs;
+    return ndofs;
 }
 
 void
@@ -215,20 +228,20 @@ Space::assign_bubble_dofs(ElementData * node)
 }
 
 void
-Space::get_vertex_assembly_list(Element * e, uint ivertex, AssemblyList * al)
+Space::get_vertex_assembly_list(const Element * e, uint ivertex, AssemblyList * al)
 {
     _F_;
     Index vtx_id = e->get_vertex(ivertex);
     VertexData * vnode = this->vertex_data[vtx_id];
     uint index = shapeset->get_vertex_index(ivertex);
-    Scalar coef = vnode->dof == DIRICHLET_DOF ? vnode->bc_proj : 1.0;
+    PetscScalar coef = vnode->dof == DIRICHLET_DOF ? vnode->bc_proj : 1.0;
     assert(vnode->dof == DIRICHLET_DOF ||
            (vnode->dof >= this->first_dof && vnode->dof < this->next_dof));
     al->add(index, vnode->dof, coef);
 }
 
 void
-Space::get_edge_assembly_list(Element * elem, uint iedge, AssemblyList * al)
+Space::get_edge_assembly_list(const Element * elem, uint iedge, AssemblyList * al)
 {
     _F_;
     Index edge_id = mesh->get_edge_id(elem, iedge);
@@ -244,7 +257,7 @@ Space::get_edge_assembly_list(Element * elem, uint iedge, AssemblyList * al)
         }
         else if (enode->bc_proj != NULL) {
             for (uint j = 0; j < enode->n; j++) {
-                Scalar coef = enode->bc_proj[j];
+                PetscScalar coef = enode->bc_proj[j];
                 al->add(indices[j], DIRICHLET_DOF, coef);
             }
         }
@@ -252,7 +265,7 @@ Space::get_edge_assembly_list(Element * elem, uint iedge, AssemblyList * al)
 }
 
 void
-Space::get_face_assembly_list(Element * elem, uint iface, AssemblyList * al)
+Space::get_face_assembly_list(const Element * elem, uint iface, AssemblyList * al)
 {
     _F_;
     Index face_id = mesh->get_face_id(elem, iface);
@@ -268,7 +281,7 @@ Space::get_face_assembly_list(Element * elem, uint iface, AssemblyList * al)
         }
         else if (fnode->bc_proj != NULL) {
             for (uint j = 0; j < fnode->n; j++) {
-                Scalar coef = fnode->bc_proj[j];
+                PetscScalar coef = fnode->bc_proj[j];
                 al->add(indices[j], DIRICHLET_DOF, coef);
             }
         }
@@ -276,7 +289,7 @@ Space::get_face_assembly_list(Element * elem, uint iface, AssemblyList * al)
 }
 
 void
-Space::get_bubble_assembly_list(Element * e, AssemblyList * al)
+Space::get_bubble_assembly_list(const Element * e, AssemblyList * al)
 {
     _F_;
     ElementData * enode = this->elem_data[e->get_id()];

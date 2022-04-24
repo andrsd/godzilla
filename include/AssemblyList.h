@@ -11,17 +11,20 @@ namespace godzilla {
 /// automatically by the class.
 class AssemblyList {
 public:
-    long unsigned int * idx;
-    uint * dof;
-    Scalar * coef;
+    /// Shape function indices
+    uint * idx;
+    /// DoF indices
+    PetscInt * dof;
+    /// Coefficient associated with the shape function
+    PetscScalar * coef;
 
     uint cnt, cap;
 
     AssemblyList()
     {
-        idx = NULL;
-        dof = NULL;
-        coef = NULL;
+        idx = nullptr;
+        dof = nullptr;
+        coef = nullptr;
         cnt = cap = 0;
     }
 
@@ -39,7 +42,7 @@ public:
     }
 
     inline void
-    add(long unsigned int idx, uint dof, Scalar coef)
+    add(uint idx, PetscInt dof, PetscScalar coef)
     {
         if (coef == 0.0)
             return;
@@ -58,11 +61,11 @@ protected:
     {
         cap = !cap ? 256 : cap * 2;
 
-        idx = (long unsigned int *) realloc(idx, sizeof(long unsigned int) * cap);
+        idx = (uint *) realloc(idx, sizeof(uint) * cap);
         MEM_CHECK(idx);
-        dof = (uint *) realloc(dof, sizeof(uint) * cap);
+        dof = (PetscInt *) realloc(dof, sizeof(PetscInt) * cap);
         MEM_CHECK(dof);
-        coef = (Scalar *) realloc(coef, sizeof(Scalar) * cap);
+        coef = (PetscScalar *) realloc(coef, sizeof(PetscScalar) * cap);
         MEM_CHECK(coef);
     }
 };

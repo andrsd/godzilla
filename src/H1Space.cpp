@@ -37,25 +37,25 @@ H1Space::assign_dofs_internal()
     _F_;
     Set vtx_init;
 
-    FOR_ALL_ELEMENTS(elem_id, mesh)
-    {
-        const Element * elem = mesh->get_element(elem_id);
-        for (uint i = 0; i < elem->get_num_vertices(); i++) {
-            Index vtx_id = elem->get_vertex(i);
-            VertexData * node_data = this->vertex_data[vtx_id];
-            assert(node_data != NULL);
-            if (!vtx_init.has(vtx_id)) {
-                assign_vertex_dofs(node_data);
-                vtx_init.set(vtx_id);
-            }
-        }
-
-        // TODO: go over edges, if in 2D and 3D
-        // TODO: go over faces, if in 3D
-
-        ElementData * node_data = this->elem_data[elem_id];
-        assign_bubble_dofs(node_data);
-    }
+    // FOR_ALL_ELEMENTS(elem_id, mesh)
+    // {
+    //     const Element * elem = mesh->get_element(elem_id);
+    //     for (uint i = 0; i < elem->get_num_vertices(); i++) {
+    //         Index vtx_id = elem->get_vertex(i);
+    //         VertexData * node_data = this->vertex_data[vtx_id];
+    //         assert(node_data != NULL);
+    //         if (!vtx_init.has(vtx_id)) {
+    //             assign_vertex_dofs(node_data);
+    //             vtx_init.set(vtx_id);
+    //         }
+    //     }
+    //
+    //     // TODO: go over edges, if in 2D and 3D
+    //     // TODO: go over faces, if in 3D
+    //
+    //     ElementData * node_data = this->elem_data[elem_id];
+    //     assign_bubble_dofs(node_data);
+    // }
 }
 
 uint
@@ -106,6 +106,35 @@ H1Space::get_element_ndofs(uint order)
     // }
 
     return order - 1;
+}
+
+void
+H1Space::set_vertex_bc_info(PetscInt vertex_id)
+{
+    _F_;
+    assert(this->vertex_data.exists(vertex_id));
+    VertexData * vnode = this->vertex_data[vertex_id];
+    const Vertex * vertex = this->mesh->get_vertex(vertex_id);
+    if (vnode->bc_type == BC_ESSENTIAL) {
+        /// FIXME: would be nice if we did not have to do this downcast
+        const Vertex1D * v = static_cast<const Vertex1D *>(vertex);
+        vnode->bc_proj = bc_value_callback_by_coord(vnode->marker, v->x, 0., 0.);
+        // TODO: handle 2D and 3D case
+    }
+}
+
+void
+H1Space::get_element_assembly_list(const Element * e, AssemblyList * al)
+{
+    _F_;
+    al->clear();
+    for (uint i = 0; i < e->get_num_vertices(); i++)
+        get_vertex_assembly_list(e, i, al);
+    // for (uint i = 0; i < e->get_num_edges(); i++)
+    //     get_edge_assembly_list(e, i, al);
+    // for (uint i = 0; i < e->get_num_faces(); i++)
+    //     get_face_assembly_list(e, i, al);
+    // get_bubble_assembly_list(e, al);
 }
 
 void

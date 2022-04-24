@@ -104,6 +104,7 @@ Mesh::create()
 
     create_elements();
     create_vertices();
+    create_side_boundaries();
 }
 
 void
@@ -212,6 +213,12 @@ Mesh::create_vertices()
     }
 }
 
+void
+Mesh::create_side_boundaries()
+{
+    _F_;
+}
+
 uint
 Mesh::get_cone_size(const Index & id) const
 {
@@ -278,7 +285,7 @@ Mesh::get_side_boundary(const Index & idx) const
     return this->side_boundaries[idx];
 }
 
-Index
+PetscInt
 Mesh::get_vertex_id(const Element * e, uint vertex) const
 {
     _F_;
