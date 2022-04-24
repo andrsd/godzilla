@@ -32,7 +32,7 @@ set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${CODE_COVERAGE_P
 
 set(EXCLUDE_REGEX
     --ignore-filename-regex=/contrib/
-    --ignore-filename-regex=/include/petsc*
+    --ignore-filename-regex=/miniconda*
     --ignore-filename-regex=/include/mpi*
     --ignore-filename-regex=/include/yaml-cpp/*
     --ignore-filename-regex=/include/gtest/*
