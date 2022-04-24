@@ -37,9 +37,9 @@ H1Space::assign_dofs_internal()
     _F_;
     Set vtx_init;
 
-    // FOR_ALL_ELEMENTS(elem_id, mesh)
+    // for (auto & elem : this->mesh->get_elements())
     // {
-    //     const Element * elem = mesh->get_element(elem_id);
+    //     PetscInt elem_id = elem->get_id();
     //     for (uint i = 0; i < elem->get_num_vertices(); i++) {
     //         Index vtx_id = elem->get_vertex(i);
     //         VertexData * node_data = this->vertex_data[vtx_id];

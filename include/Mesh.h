@@ -10,11 +10,6 @@
 
 namespace godzilla {
 
-// TODO: remove these macros and use range-based for-loops
-#define FOR_ALL_ELEMENTS(idx, mesh)                                         \
-    for (Index(idx) = (mesh)->get_elements().first(); (idx) != INVALID_IDX; \
-         (idx) = (mesh)->get_elements().next(idx))
-
 /// Information about a side boundary (element, local side)
 struct SideBoundary {
     SideBoundary(const Index & eid, const uint side, const uint & marker) :

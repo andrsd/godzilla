@@ -40,9 +40,9 @@ void
 Space::set_uniform_order(uint order)
 {
     _F_;
-    FOR_ALL_ELEMENTS(eid, mesh)
+    for (auto & elem : this->mesh->get_elements())
     {
-        const Element * elem = this->mesh->get_element(eid);
+        PetscInt eid = elem->get_id();
         this->elem_data[eid] = new ElementData(order);
     }
 }
@@ -152,10 +152,8 @@ Space::enforce_minimum_rule()
 {
     _F_;
 
-    FOR_ALL_ELEMENTS(eid, mesh)
+    for (auto & elem : this->mesh->get_elements())
     {
-        const Element * elem = this->mesh->get_element(eid);
-
         // TODO: handle edges and faces in 2D and 3D
         // TODO: allocate EdgeData and FaceData, based on the determined order
 
