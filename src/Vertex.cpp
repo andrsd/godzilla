@@ -4,12 +4,12 @@ namespace godzilla {
 
 // Vertex1D
 
-Vertex1D::Vertex1D() : Vertex()
+Vertex1D::Vertex1D(PetscInt id) : Vertex(id)
 {
     this->x = 0.0;
 }
 
-Vertex1D::Vertex1D(double x) : Vertex()
+Vertex1D::Vertex1D(PetscInt id, double x) : Vertex(id)
 {
     this->x = x;
 }
@@ -27,12 +27,12 @@ Vertex1D::copy()
 
 // Vertex2D
 
-Vertex2D::Vertex2D() : Vertex()
+Vertex2D::Vertex2D(PetscInt id) : Vertex(id)
 {
     this->x = this->y = 0.0;
 }
 
-Vertex2D::Vertex2D(double x, double y) : Vertex()
+Vertex2D::Vertex2D(PetscInt id, double x, double y) : Vertex(id)
 {
     this->x = x;
     this->y = y;
@@ -52,12 +52,12 @@ Vertex2D::copy()
 
 // Vertex3D
 
-Vertex3D::Vertex3D() : Vertex()
+Vertex3D::Vertex3D(PetscInt id) : Vertex(id)
 {
     this->x = this->y = this->z = 0.0;
 }
 
-Vertex3D::Vertex3D(double x, double y, double z) : Vertex()
+Vertex3D::Vertex3D(PetscInt id, double x, double y, double z) : Vertex(id)
 {
     this->x = x;
     this->y = y;

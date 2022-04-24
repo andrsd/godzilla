@@ -184,13 +184,13 @@ Mesh::create_vertices()
         Vertex * vtx;
         switch (cdim) {
         case 1:
-            vtx = new Vertex1D(ccoords[0]);
+            vtx = new Vertex1D(vtx_id, ccoords[0]);
             break;
         case 2:
-            vtx = new Vertex2D(ccoords[0], ccoords[1]);
+            vtx = new Vertex2D(vtx_id, ccoords[0], ccoords[1]);
             break;
         case 3:
-            vtx = new Vertex3D(ccoords[0], ccoords[1], ccoords[2]);
+            vtx = new Vertex3D(vtx_id, ccoords[0], ccoords[1], ccoords[2]);
             break;
         default:
             error("Dimension ", cdim, " is not supported.");

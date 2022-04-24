@@ -79,6 +79,12 @@ public:
     /// @param[in] idx Index returned by iterating over Array returned by get_side_boundaries()
     const SideBoundary * get_side_boundary(const Index & idx) const;
 
+    const Array<const Vertex *> &
+    get_vertices() const
+    {
+        return this->vertices;
+    }
+
     const Array<const Element *> &
     get_elements() const
     {

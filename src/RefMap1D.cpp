@@ -48,7 +48,7 @@ RefMap1D::set_active_element(const Element1D * e)
     // straight element
     for (uint i = 0; i < nvertices; i++)
         /// FIMXE: remove the static_cast
-        this->vertex[i] = *static_cast<const Vertex1D *>(this->mesh->get_vertex(e->get_vertex(i)));
+        this->vertex[i] = static_cast<const Vertex1D *>(this->mesh->get_vertex(e->get_vertex(i)));
     this->coefs = vertex;
     this->n_coefs = nvertices;
 
@@ -116,7 +116,7 @@ RefMap1D::get_phys_x(const uint np, const QPoint1D * pt)
     for (uint i = 0; i < this->n_coefs; i++) {
         this->pss->set_active_shape(this->indices[i]);
         this->pss->precalculate(np, pt, RealFunction1D::FN_DEFAULT);
-        blas_axpy(np, this->coefs[i].x, this->pss->get_fn_values(), 1, x, 1);
+        blas_axpy(np, this->coefs[i]->x, this->pss->get_fn_values(), 1, x, 1);
     }
 
     return x;
@@ -126,7 +126,7 @@ void
 RefMap1D::calc_const_inv_ref_map()
 {
     _F_;
-    Real1x1 m = { { (this->vertex[1].x - this->vertex[0].x) / 2 } };
+    Real1x1 m = { { (this->vertex[1]->x - this->vertex[0]->x) / 2 } };
     memcpy(&this->const_ref_map, &m, sizeof(Real1x1));
 
     this->const_jacobian = m[0][0];

@@ -73,9 +73,9 @@ protected:
     int n_coefs;
     int indices[2];
     /// Coefficients
-    Vertex1D * coefs;
+    const Vertex1D ** coefs;
     // 2 = max number of vertices
-    Vertex1D vertex[2];
+    const Vertex1D * vertex[2];
 
     void calc_const_inv_ref_map();
     Real calc_face_const_jacobian(uint face);
