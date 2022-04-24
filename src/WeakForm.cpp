@@ -15,13 +15,7 @@ WeakForm::~WeakForm()
 }
 
 void
-WeakForm::add_jacobian_block(uint i,
-                             uint j,
-                             jacform_val_t fn,
-                             SymFlag sym,
-                             uint area,
-                             uint nx,
-                             ...)
+WeakForm::add_jacobian_block(uint i, uint j, jacform_val_t fn, SymFlag sym, uint area, uint nx, ...)
 {
     _F_;
     assert(i < this->neq);

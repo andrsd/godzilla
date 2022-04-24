@@ -11,15 +11,7 @@ det2(Real a11, Real a12, Real a21, Real a22)
 }
 
 inline Real
-det3(Real a11,
-     Real a12,
-     Real a13,
-     Real a21,
-     Real a22,
-     Real a23,
-     Real a31,
-     Real a32,
-     Real a33)
+det3(Real a11, Real a12, Real a13, Real a21, Real a22, Real a23, Real a31, Real a32, Real a33)
 {
     return a11 * det2(a22, a23, a32, a33) - a12 * det2(a21, a23, a31, a33) +
            a13 * det2(a21, a22, a31, a32);

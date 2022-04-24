@@ -139,7 +139,7 @@ protected:
     /// @param[in] node Node data to modify
     /// @param[in] bc_type Type of the boundary condition
     /// @param[in] marker Marker associated with the boundary
-    void set_bc_info(NodeData *node, EBCType bc_type, uint marker);
+    void set_bc_info(NodeData * node, EBCType bc_type, uint marker);
 
     /// Update constraints
     void update_constraints();

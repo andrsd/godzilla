@@ -9,8 +9,7 @@ static const RefMapShapesetEdge * ss_edge = RefMapShapesetEdge::get();
 static ShapeFunction1D pss_edge(ss_edge);
 static ShapeFunction1D * ref_map_pss[] = { &pss_edge };
 
-RefMap1D::RefMap1D(const Mesh * mesh) :
-    mesh(mesh)
+RefMap1D::RefMap1D(const Mesh * mesh) : mesh(mesh)
 {
     _F_;
     this->element = nullptr;

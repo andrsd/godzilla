@@ -17,9 +17,17 @@ public:
     Shapeset1D(EMode1D mode, uint n_components);
     virtual ~Shapeset1D();
 
-    virtual uint get_num_edge_fns(uint order) const { return 0; }
+    virtual uint
+    get_num_edge_fns(uint order) const
+    {
+        return 0;
+    }
     virtual uint * get_edge_indices(uint edge, uint ori, uint order) const;
-    virtual uint get_num_face_fns(uint order) const { return 0; }
+    virtual uint
+    get_num_face_fns(uint order) const
+    {
+        return 0;
+    }
     virtual uint * get_face_indices(uint face, uint ori, uint order) const;
 
     /// Get order of s shape function with index `index`
@@ -35,8 +43,12 @@ public:
     /// @param[in] pt - Points where the function is evaluated
     /// @param[in] component - The number of component of the evaluated function
     /// @param[out] vals - The array of vakues (caller is responsible for freeing this memory)
-    virtual void
-    get_values(uint n, uint index, uint np, const QPoint1D * pt, uint component, Real * vals) const = 0;
+    virtual void get_values(uint n,
+                            uint index,
+                            uint np,
+                            const QPoint1D * pt,
+                            uint component,
+                            Real * vals) const = 0;
 
     /// Evaluate function 'index' in points 'pt'
     virtual Real get_value(uint n, uint index, Real x, uint component) const = 0;

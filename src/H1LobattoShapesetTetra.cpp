@@ -2787,9 +2787,7 @@ H1LobattoShapesetTetra::H1LobattoShapesetTetra() : Shapeset3D(MODE_TETRAHEDRON, 
     this->bubble_count = lobatto_tetra_bubble_count;
 }
 
-H1LobattoShapesetTetra::~H1LobattoShapesetTetra()
-{
-}
+H1LobattoShapesetTetra::~H1LobattoShapesetTetra() {}
 
 uint
 H1LobattoShapesetTetra::get_order(uint index) const

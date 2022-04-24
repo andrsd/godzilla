@@ -54,9 +54,7 @@ H1LobattoShapesetEdge::H1LobattoShapesetEdge() : Shapeset1D(MODE_EDGE, 1)
     this->bubble_indices = lobatto_edge_bubble_indices;
 }
 
-H1LobattoShapesetEdge::~H1LobattoShapesetEdge()
-{
-}
+H1LobattoShapesetEdge::~H1LobattoShapesetEdge() {}
 
 uint
 H1LobattoShapesetEdge::get_order(uint index) const

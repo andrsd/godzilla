@@ -144,7 +144,15 @@ Mesh::create_elements()
             e = new Tetra(cell_id, cone[0], cone[1], cone[2], cone[3]);
             break;
         case DM_POLYTOPE_HEXAHEDRON:
-            e = new Hex(cell_id, cone[0], cone[1], cone[2], cone[3], cone[4], cone[5], cone[6], cone[7]);
+            e = new Hex(cell_id,
+                        cone[0],
+                        cone[1],
+                        cone[2],
+                        cone[3],
+                        cone[4],
+                        cone[5],
+                        cone[6],
+                        cone[7]);
             break;
         default:
             error("Polytope type ", cell_type, " not supported.");

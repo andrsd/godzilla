@@ -11,7 +11,8 @@ class Hex : public Element3D {
 public:
     Hex(PetscInt id);
     Hex(PetscInt id, PetscInt v[]);
-    Hex(PetscInt id, PetscInt v1,
+    Hex(PetscInt id,
+        PetscInt v1,
         PetscInt v2,
         PetscInt v3,
         PetscInt v4,

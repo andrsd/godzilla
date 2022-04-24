@@ -289,7 +289,9 @@ InputParameters::add_param(const std::string & name, const std::string & doc_str
 
 template <typename T, typename S>
 void
-InputParameters::add_param(const std::string & name, const S & value, const std::string & doc_string)
+InputParameters::add_param(const std::string & name,
+                           const S & value,
+                           const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;

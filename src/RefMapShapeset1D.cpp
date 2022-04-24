@@ -37,9 +37,7 @@ RefMapShapesetEdge::RefMapShapesetEdge() : Shapeset1D(MODE_EDGE, 1)
     this->vertex_indices = lobatto_edge_vertex_indices;
 }
 
-RefMapShapesetEdge::~RefMapShapesetEdge()
-{
-}
+RefMapShapesetEdge::~RefMapShapesetEdge() {}
 
 uint
 RefMapShapesetEdge::get_order(uint index) const

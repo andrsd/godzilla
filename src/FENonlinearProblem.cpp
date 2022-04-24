@@ -277,13 +277,13 @@ FENonlinearProblem::ksp_monitor_callback(PetscInt it, PetscReal rnorm)
 }
 
 void
-FENonlinearProblem::assemble_residual(const PetscVector *x, PetscVector *rhs)
+FENonlinearProblem::assemble_residual(const PetscVector * x, PetscVector * rhs)
 {
     _F_;
 }
 
 void
-FENonlinearProblem::assemble_jacobian(const PetscVector *x, PetscMatrix *jac)
+FENonlinearProblem::assemble_jacobian(const PetscVector * x, PetscMatrix * jac)
 {
     _F_;
 }

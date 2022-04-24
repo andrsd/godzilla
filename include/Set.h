@@ -198,4 +198,4 @@ public:
     }
 };
 
-}
+} // namespace godzilla

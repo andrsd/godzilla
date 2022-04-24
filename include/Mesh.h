@@ -14,7 +14,7 @@ namespace godzilla {
     for (Index(idx) = (mesh)->get_elements().first(); (idx) != INVALID_IDX; \
          (idx) = (mesh)->get_elements().next(idx))
 
-#define FOR_EACH_SIDE_BOUNDARY(idx, mesh)                                     \
+#define FOR_EACH_SIDE_BOUNDARY(idx, mesh)                                          \
     for (Index(idx) = (mesh)->get_side_boundaries().first(); (idx) != INVALID_IDX; \
          (idx) = (mesh)->get_side_boundaries().next(idx))
 

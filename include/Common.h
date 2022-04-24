@@ -5,7 +5,7 @@
 
 namespace godzilla {
 
-#define countof(a) (sizeof(a)/sizeof(a[0]))
+#define countof(a) (sizeof(a) / sizeof(a[0]))
 
 // 1D element modes
 enum EMode1D { MODE_EDGE = 0 };

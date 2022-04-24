@@ -48,9 +48,9 @@ protected:
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
     ///
-    void assemble_residual(const PetscVector *x, PetscVector *rhs);
+    void assemble_residual(const PetscVector * x, PetscVector * rhs);
     ///
-    void assemble_jacobian(const PetscVector *x, PetscMatrix *jac);
+    void assemble_jacobian(const PetscVector * x, PetscMatrix * jac);
 
     /// Add a variable
     ///
@@ -116,4 +116,4 @@ public:
     friend PetscErrorCode __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx);
 };
 
-}
+} // namespace godzilla

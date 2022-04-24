@@ -3,11 +3,7 @@
 
 namespace godzilla {
 
-Shapeset1D::Shapeset1D(EMode1D mode, uint n_components) :
-    Shapeset(n_components),
-    mode(mode)
-{
-}
+Shapeset1D::Shapeset1D(EMode1D mode, uint n_components) : Shapeset(n_components), mode(mode) {}
 
 Shapeset1D::~Shapeset1D() {}
 

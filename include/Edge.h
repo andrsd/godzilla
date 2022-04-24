@@ -14,10 +14,26 @@ public:
     Edge(PetscInt id, PetscInt v1, PetscInt v2);
     Edge(const Edge & o);
 
-    virtual const DMPolytopeType get_potytope_type() const { return DM_POLYTOPE_SEGMENT; }
-    virtual uint get_num_vertices() const { return NUM_VERTICES; }
-    virtual PetscInt get_vertex(uint local) const { return this->vertices[local]; }
-    virtual const PetscInt * get_vertices() const { return &(this->vertices[0]); }
+    virtual const DMPolytopeType
+    get_potytope_type() const
+    {
+        return DM_POLYTOPE_SEGMENT;
+    }
+    virtual uint
+    get_num_vertices() const
+    {
+        return NUM_VERTICES;
+    }
+    virtual PetscInt
+    get_vertex(uint local) const
+    {
+        return this->vertices[local];
+    }
+    virtual const PetscInt *
+    get_vertices() const
+    {
+        return &(this->vertices[0]);
+    }
 
     virtual uint get_edge_orientation(uint edge) const;
     virtual uint get_face_orientation(uint face) const;
