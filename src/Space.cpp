@@ -89,9 +89,8 @@ void
 Space::set_bc_information()
 {
     _F_;
-    FOR_EACH_SIDE_BOUNDARY(idx, this->mesh)
+    for (auto & bnd : this->mesh->get_side_boundaries())
     {
-        const SideBoundary * bnd = this->mesh->get_side_boundary(idx);
         const uint & marker = bnd->marker;
         EBCType bc_type = get_bc_type(marker);
 
@@ -120,9 +119,8 @@ void
 Space::update_constraints()
 {
     _F_;
-    FOR_EACH_SIDE_BOUNDARY(idx, this->mesh)
+    for (auto & bnd : this->mesh->get_side_boundaries())
     {
-        const SideBoundary * bnd = this->mesh->get_side_boundary(idx);
         const Element * e = this->mesh->get_element(bnd->elem_id);
 
         // 1D
