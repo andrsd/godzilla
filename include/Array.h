@@ -258,4 +258,69 @@ Array<TYPE>::prev(Index idx /* = (Index) -1*/) const
     return pval ? idx : INVALID_IDX;
 }
 
+//
+
+template <typename T, typename C>
+class ArrayIteratorType {
+public:
+    ArrayIteratorType(C & collection, Index const index) : index(index), collection(collection) {}
+
+    bool
+    operator!=(ArrayIteratorType const & other) const
+    {
+        return this->index != other.index;
+    }
+
+    T const &
+    operator*() const
+    {
+        return this->collection.get(this->index);
+    }
+
+    ArrayIteratorType const &
+    operator++()
+    {
+        this->index = this->collection.next(this->index);
+        return *this;
+    }
+
+private:
+    Index index;
+    C & collection;
+};
+
+template <typename T>
+using ArrayIterator = ArrayIteratorType<T, Array<T>>;
+
+template <typename T>
+using ArrayConstIterator = ArrayIteratorType<T, Array<T> const>;
+
+template <typename T>
+inline ArrayIterator<T>
+begin(Array<T> & collection)
+{
+    return ArrayIterator<T>(collection, collection.first());
+}
+
+template <typename T>
+inline ArrayIterator<T>
+end(Array<T> & collection)
+{
+    return ArrayIterator<T>(collection, INVALID_IDX);
+}
+
+template <typename T>
+inline ArrayConstIterator<T>
+begin(Array<T> const & collection)
+{
+    return ArrayConstIterator<T>(collection, collection.first());
+}
+
+template <typename T>
+inline ArrayConstIterator<T>
+end(Array<T> const & collection)
+{
+    return ArrayConstIterator<T>(collection, INVALID_IDX);
+}
+
 } // namespace godzilla
