@@ -4,19 +4,19 @@
 
 namespace godzilla {
 
-Tri::Tri() : Element2D()
+Tri::Tri(PetscInt id) : Element2D(id)
 {
     _F_;
 }
 
-Tri::Tri(PetscInt v[]) : Element2D()
+Tri::Tri(PetscInt id, PetscInt v[]) : Element2D(id)
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Tri::Tri(PetscInt v1, PetscInt v2, PetscInt v3) : Element2D()
+Tri::Tri(PetscInt id, PetscInt v1, PetscInt v2, PetscInt v3) : Element2D(id)
 {
     _F_;
     this->vertices[0] = v1;

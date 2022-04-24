@@ -4,19 +4,19 @@
 
 namespace godzilla {
 
-Edge::Edge() : Element1D()
+Edge::Edge(PetscInt id) : Element1D(id)
 {
     _F_;
 }
 
-Edge::Edge(PetscInt v[]) : Element1D()
+Edge::Edge(PetscInt id, PetscInt v[]) : Element1D(id)
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Edge::Edge(PetscInt v1, PetscInt v2) : Element1D()
+Edge::Edge(PetscInt id, PetscInt v1, PetscInt v2) : Element1D(id)
 {
     _F_;
     this->vertices[0] = v1;

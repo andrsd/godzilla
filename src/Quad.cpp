@@ -4,19 +4,19 @@
 
 namespace godzilla {
 
-Quad::Quad() : Element2D()
+Quad::Quad(PetscInt id) : Element2D(id)
 {
     _F_;
 }
 
-Quad::Quad(PetscInt v[]) : Element2D()
+Quad::Quad(PetscInt id, PetscInt v[]) : Element2D(id)
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Quad::Quad(PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4) : Element2D()
+Quad::Quad(PetscInt id, PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4) : Element2D(id)
 {
     _F_;
     this->vertices[0] = v1;

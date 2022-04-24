@@ -4,19 +4,19 @@
 
 namespace godzilla {
 
-Tetra::Tetra() : Element3D()
+Tetra::Tetra(PetscInt id) : Element3D(id)
 {
     _F_;
 }
 
-Tetra::Tetra(PetscInt v[]) : Element3D()
+Tetra::Tetra(PetscInt id, PetscInt v[]) : Element3D(id)
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Tetra::Tetra(PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4) : Element3D()
+Tetra::Tetra(PetscInt id, PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4) : Element3D(id)
 {
     _F_;
     this->vertices[0] = v1;

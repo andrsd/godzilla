@@ -4,19 +4,20 @@
 
 namespace godzilla {
 
-Hex::Hex() : Element3D()
+Hex::Hex(PetscInt id) : Element3D(id)
 {
     _F_;
 }
 
-Hex::Hex(PetscInt v[]) : Element3D()
+Hex::Hex(PetscInt id, PetscInt v[]) : Element3D(id)
 {
     _F_;
     for (uint i = 0; i < NUM_VERTICES; i++)
         this->vertices[i] = v[i];
 }
 
-Hex::Hex(PetscInt v1,
+Hex::Hex(PetscInt id,
+         PetscInt v1,
          PetscInt v2,
          PetscInt v3,
          PetscInt v4,
@@ -24,7 +25,7 @@ Hex::Hex(PetscInt v1,
          PetscInt v6,
          PetscInt v7,
          PetscInt v8) :
-    Element3D()
+    Element3D(id)
 {
     _F_;
     this->vertices[0] = v1;

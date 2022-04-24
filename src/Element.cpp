@@ -3,10 +3,10 @@
 
 namespace godzilla {
 
-Element::Element()
+Element::Element(PetscInt id)
 {
     _F_;
-    this->id = INVALID_IDX;
+    this->id = id;
     this->marker = 0;
 }
 
@@ -17,7 +17,7 @@ Element::Element(const Element & o)
     this->marker = o.marker;
 }
 
-const Index &
+const PetscInt &
 Element::get_id() const
 {
     return id;

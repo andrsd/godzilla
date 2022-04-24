@@ -9,9 +9,9 @@ namespace godzilla {
 ///
 class Quad : public Element2D {
 public:
-    Quad();
-    Quad(PetscInt v[]);
-    Quad(PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4);
+    Quad(PetscInt id);
+    Quad(PetscInt id, PetscInt v[]);
+    Quad(PetscInt id, PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4);
     Quad(const Quad & o);
 
     virtual const DMPolytopeType get_potytope_type() const { return DM_POLYTOPE_QUADRILATERAL; }

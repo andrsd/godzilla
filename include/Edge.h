@@ -9,9 +9,9 @@ namespace godzilla {
 ///
 class Edge : public Element1D {
 public:
-    Edge();
-    Edge(PetscInt v[]);
-    Edge(PetscInt v1, PetscInt v2);
+    Edge(PetscInt id);
+    Edge(PetscInt id, PetscInt v[]);
+    Edge(PetscInt id, PetscInt v1, PetscInt v2);
     Edge(const Edge & o);
 
     virtual const DMPolytopeType get_potytope_type() const { return DM_POLYTOPE_SEGMENT; }

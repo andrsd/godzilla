@@ -132,19 +132,19 @@ Mesh::create_elements()
         const Element * e = nullptr;
         switch (cell_type) {
         case DM_POLYTOPE_SEGMENT:
-            e = new Edge(cone[0], cone[1]);
+            e = new Edge(cell_id, cone[0], cone[1]);
             break;
         case DM_POLYTOPE_TRIANGLE:
-            e = new Tri(cone[0], cone[1], cone[2]);
+            e = new Tri(cell_id, cone[0], cone[1], cone[2]);
             break;
         case DM_POLYTOPE_QUADRILATERAL:
-            e = new Quad(cone[0], cone[1], cone[2], cone[3]);
+            e = new Quad(cell_id, cone[0], cone[1], cone[2], cone[3]);
             break;
         case DM_POLYTOPE_TETRAHEDRON:
-            e = new Tetra(cone[0], cone[1], cone[2], cone[3]);
+            e = new Tetra(cell_id, cone[0], cone[1], cone[2], cone[3]);
             break;
         case DM_POLYTOPE_HEXAHEDRON:
-            e = new Hex(cone[0], cone[1], cone[2], cone[3], cone[4], cone[5], cone[6], cone[7]);
+            e = new Hex(cell_id, cone[0], cone[1], cone[2], cone[3], cone[4], cone[5], cone[6], cone[7]);
             break;
         default:
             error("Polytope type ", cell_type, " not supported.");

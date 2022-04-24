@@ -9,9 +9,9 @@ namespace godzilla {
 ///
 class Tetra : public Element3D {
 public:
-    Tetra();
-    Tetra(PetscInt v[]);
-    Tetra(PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4);
+    Tetra(PetscInt id);
+    Tetra(PetscInt id, PetscInt v[]);
+    Tetra(PetscInt id, PetscInt v1, PetscInt v2, PetscInt v3, PetscInt v4);
     Tetra(const Tetra & o);
 
     virtual const DMPolytopeType get_potytope_type() const { return DM_POLYTOPE_TETRAHEDRON; }

@@ -9,9 +9,9 @@ namespace godzilla {
 ///
 class Tri : public Element2D {
 public:
-    Tri();
-    Tri(PetscInt v[]);
-    Tri(PetscInt v1, PetscInt v2, PetscInt v3);
+    Tri(PetscInt id);
+    Tri(PetscInt id, PetscInt v[]);
+    Tri(PetscInt id, PetscInt v1, PetscInt v2, PetscInt v3);
     Tri(const Tri & o);
 
     virtual const DMPolytopeType get_potytope_type() const { return DM_POLYTOPE_TRIANGLE; }

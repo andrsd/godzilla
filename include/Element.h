@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class Element {
 public:
-    Element();
+    Element(PetscInt id);
     Element(const Element & o);
 
     /// Return polytope type
@@ -18,7 +18,7 @@ public:
     virtual const DMPolytopeType get_potytope_type() const = 0;
 
     /// Get element ID
-    const Index & get_id() const;
+    const PetscInt & get_id() const;
 
     /// Get element marker
     const uint & get_marker() const;
@@ -53,7 +53,7 @@ public:
 
 protected:
     /// Element ID
-    Index id;
+    PetscInt id;
 
     /// Marker
     uint marker;
@@ -63,12 +63,15 @@ protected:
 ///
 class Element1D : public Element {
 public:
+    Element1D(PetscInt id) : Element(id) {}
 };
 
 /// Base class for 2D elements
 ///
 class Element2D : public Element {
 public:
+    Element2D(PetscInt id) : Element(id) {}
+
     virtual uint get_num_edges() const = 0;
 };
 
@@ -76,6 +79,8 @@ public:
 ///
 class Element3D : public Element {
 public:
+    Element3D(PetscInt id) : Element(id) {}
+
     virtual uint get_num_edges() const = 0;
     virtual uint get_num_faces() const = 0;
 };
