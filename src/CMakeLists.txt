@@ -31,6 +31,7 @@ add_library(godzilla
         Mesh.cpp
         MeshFunction1D.cpp
         Object.cpp
+        PetscVector.cpp
         PrintInterface.cpp
         Problem.cpp
         Quad.cpp

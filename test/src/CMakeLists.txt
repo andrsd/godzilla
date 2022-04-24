@@ -20,6 +20,7 @@ add_executable(${PROJECT_NAME}
     LineMesh_test.cpp
     Logger_test.cpp
     Object_test.cpp
+    PetscVector_test.cpp
     PrintInterface_test.cpp
     Quad_test.cpp
     QuadratureGauss1D_test.cpp
