@@ -63,6 +63,16 @@ public:
         return this->data[m];
     }
 
+    const T *
+    operator[](uint m) const
+    {
+        return this->data[m];
+    }
+
+    const uint & rows() const { return m; }
+
+    const uint & cols() const { return n; }
+
 protected:
     /// Number of rows
     uint m;
