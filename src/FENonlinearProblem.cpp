@@ -4,6 +4,8 @@
 #include "H1LobattoShapesetEdge.h"
 #include "Utils.h"
 #include "CallStack.h"
+#include "PetscVector.h"
+#include "PetscMatrix.h"
 #include "petscdm.h"
 
 namespace godzilla {
@@ -275,6 +277,18 @@ FENonlinearProblem::ksp_monitor_callback(PetscInt it, PetscReal rnorm)
 }
 
 void
+FENonlinearProblem::assemble_residual(const PetscVector *x, PetscVector *rhs)
+{
+    _F_;
+}
+
+void
+FENonlinearProblem::assemble_jacobian(const PetscVector *x, PetscMatrix *jac)
+{
+    _F_;
+}
+
+void
 FENonlinearProblem::solve()
 {
     _F_;
@@ -314,13 +328,19 @@ PetscErrorCode
 FENonlinearProblem::compute_residual_callback(Vec x, Vec f)
 {
     _F_;
+    PetscVector xx(x);
+    PetscVector ff(f);
+    assemble_residual(&xx, &ff);
     return 0;
 }
 
 PetscErrorCode
-FENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
+FENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat /*Jp*/)
 {
     _F_;
+    PetscVector xx(x);
+    PetscMatrix JJ(J);
+    assemble_jacobian(&xx, &JJ);
     return 0;
 }
 

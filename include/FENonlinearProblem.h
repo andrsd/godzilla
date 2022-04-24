@@ -8,6 +8,8 @@ namespace godzilla {
 
 class Mesh;
 class Shapeset;
+class PetscVector;
+class PetscMatrix;
 
 /// Nonlinear finite element problem
 class FENonlinearProblem : public Problem {
@@ -45,6 +47,10 @@ protected:
     PetscErrorCode snes_monitor_callback(PetscInt it, PetscReal norm);
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
+    ///
+    void assemble_residual(const PetscVector *x, PetscVector *rhs);
+    ///
+    void assemble_jacobian(const PetscVector *x, PetscMatrix *jac);
 
     /// Add a variable
     ///
