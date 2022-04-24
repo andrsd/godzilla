@@ -372,8 +372,8 @@ FELinearProblem::assemble(PetscMatrix * matrix, PetscVector * rhs)
     ShapeFunction1D * base_fn[neq];
     ShapeFunction1D * test_fn[neq];
     ShapeFunction1D *fu, *fv;
-    // FIXME: there should be just one refmap (everything is on a single element)
-    RefMap1D * refmap[neq];
+    RefMap1D * refmap = new RefMap1D(this->mesh);
+    MEM_CHECK(refmap);
     for (int i = 0; i < neq; i++) {
         const Shapeset1D * ss = dynamic_cast<const Shapeset1D *>(spaces[i]->get_shapeset());
         assert(ss != nullptr);
@@ -381,8 +381,6 @@ FELinearProblem::assemble(PetscMatrix * matrix, PetscVector * rhs)
         MEM_CHECK(base_fn[i]);
         test_fn[i] = new ShapeFunction1D(ss);
         MEM_CHECK(test_fn[i]);
-        refmap[i] = new RefMap1D(this->mesh);
-        MEM_CHECK(refmap[i]);
     }
 
     for (auto & e : this->mesh->get_elements()) {
@@ -393,7 +391,17 @@ FELinearProblem::assemble(PetscMatrix * matrix, PetscVector * rhs)
         spaces[j]->get_element_assembly_list(elem, &(al[j]));
         base_fn[j]->set_active_element(elem);
         test_fn[j]->set_active_element(elem);
-        refmap[j]->set_active_element(elem);
+        refmap->set_active_element(elem);
+
+        // pre-compute everything that will be needed by the weak form
+
+        // FIXME: Determine quadrature order
+        uint qorder = refmap->get_inv_ref_order() + 2;
+
+        const Quadrature1D & quad = QuadratureGauss1D::get();
+        uint np = quad.get_num_points(qorder);
+        QPoint1D * pts = quad.get_points(qorder);
+        Real * jxw = refmap->get_jacobian(np, pts);
 
         // assemble bilinear form (volumetric)
 
@@ -413,16 +421,23 @@ FELinearProblem::assemble(PetscMatrix * matrix, PetscVector * rhs)
         for (int i = 0; i < am->cnt; i++) {
             int k = am->dof[i];
             fv->set_active_shape(am->idx[i]);
+            SFn1D * v = get_fn(fv, refmap, np, pts);
 
             for (int j = 0; j < an->cnt; j++) {
                 fu->set_active_shape(an->idx[j]);
-                Scalar v = eval_bilin_form(fu, fv, refmap[0]);
-                Scalar bi = v * an->coef[j] * am->coef[i];
+                SFn1D * u = get_fn(fu, refmap, np, pts);
+
+                Scalar val = eval_bilin_form(np, jxw, u, v);
+                Scalar bi = val * an->coef[j] * am->coef[i];
                 if (an->dof[j] == Space::DIRICHLET_DOF)
                     rhs->add(k, -bi);
                 else
                     mat[i][j] = bi;
+
+                delete u;
             }
+
+            delete v;
         }
         // insert the local matrix into the global one
         matrix->add(mat, am->dof, an->dof);
@@ -432,17 +447,21 @@ FELinearProblem::assemble(PetscMatrix * matrix, PetscVector * rhs)
             if (am->dof[i] == Space::DIRICHLET_DOF)
                 continue;
             fv->set_active_shape(am->idx[i]);
+            SFn1D * v = get_fn(fv, refmap, np, pts);
 
-            Scalar val = eval_lin_form(fv, refmap[0]);
+            Scalar val = eval_lin_form(np, jxw, v);
             rhs->add(am->dof[i], val * am->coef[i]);
+
+            delete v;
         }
+
     }
 
     for (uint i = 0; i < neq; i++) {
         delete base_fn[i];
         delete test_fn[i];
-        delete refmap[i];
     }
+    delete refmap;
 
     matrix->finish();
     rhs->finish();
@@ -475,49 +494,22 @@ FELinearProblem::get_fn(ShapeFunction1D * shfn, RefMap1D * rm, const uint np, co
 }
 
 PetscScalar
-FELinearProblem::eval_bilin_form(ShapeFunction1D * fu, ShapeFunction1D * fv, RefMap1D * rm)
+FELinearProblem::eval_bilin_form(uint np, Real *jxw, SFn1D *u, SFn1D * v)
 {
     _F_;
-    // TODO: pre-computing the stuff needed for bilin/lin form evaluation needs go outside of this
-    // method
-
-    uint order = rm->get_inv_ref_order() + 2;
-    const Quadrature1D & quad = QuadratureGauss1D::get();
-    uint np = quad.get_num_points(order);
-    QPoint1D * pts = quad.get_points(order);
-    Real * jxw = rm->get_jacobian(np, pts);
-
-    SFn1D * u = get_fn(fu, rm, np, pts);
-    SFn1D * v = get_fn(fv, rm, np, pts);
-
     PetscScalar res = 0.0;
     for (uint i = 0; i < np; i++)
         res += jxw[i] * (u->dx[i] * v->dx[i]);
-
-    delete u;
-    delete v;
-
     return res;
 }
 
 PetscScalar
-FELinearProblem::eval_lin_form(ShapeFunction1D * fv, RefMap1D * rm)
+FELinearProblem::eval_lin_form(uint np, Real * jxw, SFn1D * v)
 {
     _F_;
-    uint order = rm->get_inv_ref_order() + 2;
-    const Quadrature1D & quad = QuadratureGauss1D::get();
-    uint np = quad.get_num_points(order);
-    QPoint1D * pts = quad.get_points(order);
-    Real * jxw = rm->get_jacobian(np, pts);
-
-    SFn1D * v = get_fn(fv, rm, np, pts);
-
     PetscScalar res = 0.0;
     for (uint i = 0; i < np; i++)
         res += jxw[i] * (-2. * v->fn[i]);
-
-    delete v;
-
     return res;
 }
 

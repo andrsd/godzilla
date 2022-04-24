@@ -103,8 +103,8 @@ protected:
 
     SFn1D * get_fn(ShapeFunction1D * shfn, RefMap1D * rm, const uint np, const QPoint1D * pts);
 
-    PetscScalar eval_bilin_form(ShapeFunction1D * fu, ShapeFunction1D * fv, RefMap1D * rm);
-    PetscScalar eval_lin_form(ShapeFunction1D * fv, RefMap1D * rm);
+    PetscScalar eval_bilin_form(uint np, Real *jxw, SFn1D *u, SFn1D * v);
+    PetscScalar eval_lin_form(uint np, Real * jxw, SFn1D * v);
 
 public:
     static InputParameters validParams();
