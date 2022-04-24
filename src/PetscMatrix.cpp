@@ -1,6 +1,7 @@
 #include "PetscMatrix.h"
 #include "CallStack.h"
 #include "Error.h"
+#include "Space.h"
 #include "petsc.h"
 
 namespace godzilla {
@@ -48,8 +49,23 @@ PetscMatrix::add(PetscInt m, PetscInt n, PetscScalar v)
 {
     _F_;
     PetscErrorCode ierr;
-    ierr = MatSetValue(this->mat, m, n, v, ADD_VALUES);
-    checkPetscError(ierr);
+    // ignore Dirichlet DoF
+    // TODO: Make it so that we never pass dirichlet DoFs here, so we can remove this if-statement
+    if (m != Space::DIRICHLET_DOF && n != Space::DIRICHLET_DOF) {
+        ierr = MatSetValue(this->mat, m, n, v, ADD_VALUES);
+        checkPetscError(ierr);
+    }
+}
+
+void
+PetscMatrix::add(const DenseMatrix<PetscScalar> & mat,
+                 PetscInt * rows,
+                 PetscInt * cols)
+{
+    _F_;
+    for (uint i = 0; i < mat.rows(); i++)
+        for (int j = 0; j < mat.cols(); j++)
+            add(rows[i], cols[j], mat[i][j]);
 }
 
 } // namespace godzilla

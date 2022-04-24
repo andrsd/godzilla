@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "DenseMatrix.h"
 #include "petsc.h"
 
 namespace godzilla {
@@ -16,6 +17,7 @@ public:
     virtual Scalar get(PetscInt m, PetscInt n);
     virtual void zero();
     virtual void add(PetscInt m, PetscInt n, PetscScalar v);
+    virtual void add(const DenseMatrix<PetscScalar> & mat, PetscInt *rows, PetscInt *cols);
 
 protected:
     Mat mat;
