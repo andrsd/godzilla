@@ -2,6 +2,7 @@
 
 #include "Problem.h"
 #include "Forms.h"
+#include "AssemblyList.h"
 #include "petscksp.h"
 
 namespace godzilla {
@@ -14,6 +15,8 @@ class PetscMatrix;
 class ShapeFunction1D;
 class RefMap1D;
 class QPoint1D;
+class Fn1D;
+class Gradient1D;
 
 /// PETSc Linear problem
 ///
@@ -27,6 +30,43 @@ public:
     virtual void run() override;
     virtual bool converged() override;
     virtual Vec get_solution_vector() const override;
+
+    const uint
+    get_num_points() const
+    {
+        return this->np;
+    }
+    const Real *
+    get_jxw() const
+    {
+        return this->jxw;
+    }
+    const Real *
+    get_u(uint idx) const
+    {
+        return this->u[idx].get_values();
+    }
+    const Real *
+    get_v(uint idx) const
+    {
+        return this->v[idx].get_values();
+    }
+    const RealVector1D *
+    get_grad_u(uint idx) const
+    {
+        return this->grad_u[idx].get_values();
+    }
+    const RealVector1D *
+    get_grad_v(uint idx) const
+    {
+        return this->grad_v[idx].get_values();
+    }
+
+    const AssemblyList *
+    get_assembly_list(uint idx) const
+    {
+        return this->al + idx;
+    }
 
 protected:
     /// provide DM for the underlying KSP object
@@ -77,6 +117,23 @@ protected:
     std::vector<Space *> spaces;
     /// Map from varaible name to an index into the `spaces` array
     std::map<std::string, std::size_t> space_names;
+    /// Reference map
+    RefMap1D * refmap;
+    /// Number of equations
+    uint neq;
+    /// Assembly lists
+    AssemblyList * al;
+    /// Base functions (one per equation/space)
+    ShapeFunction1D ** base_fn;
+    /// Test functions (one per equation/space)
+    ShapeFunction1D ** test_fn;
+    //
+    uint np;
+    Real * jxw;
+    Fn1D * u;
+    Gradient1D * grad_u;
+    Fn1D * v;
+    Gradient1D * grad_v;
 
     /// PETSc section
     // TODO: better name
@@ -100,11 +157,6 @@ protected:
     PetscReal lin_abs_tol;
     /// Maximum number of iterations for the linear solver
     PetscInt lin_max_iter;
-
-    SFn1D * get_fn(ShapeFunction1D * shfn, RefMap1D * rm, const uint np, const QPoint1D * pts);
-
-    PetscScalar eval_bilin_form(uint np, Real *jxw, SFn1D *u, SFn1D * v);
-    PetscScalar eval_lin_form(uint np, Real * jxw, SFn1D * v);
 
 public:
     static InputParameters validParams();

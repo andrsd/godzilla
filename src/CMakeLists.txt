@@ -21,6 +21,7 @@ add_library(godzilla
         ExodusIIMesh.cpp
         FELinearProblem.cpp
         FENonlinearProblem.cpp
+        Forms.cpp
         GYMLFile.cpp
         H1Space.cpp
         Hex.cpp

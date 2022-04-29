@@ -3,87 +3,157 @@
 #include "Common.h"
 #include "Quadrature1D.h"
 #include "RefMap1D.h"
+#include "RealVector.h"
 
 namespace godzilla {
 
-// Function
+class FELinearProblem;
+class AssemblyList;
+class PetscMatrix;
+class PetscVector;
+
+// Template for functions computed on elements at points
 template <typename T>
-class Fn1D {
+class Fn1DTempl {
 public:
-    /// number of components
-    uint nc;
-    /// function values
-    T * fn;
-    /// derivatives
-    T * dx;
+    Fn1DTempl() : val(nullptr) {}
+    virtual ~Fn1DTempl() { delete this->val; }
 
-    Fn1D()
+    virtual void
+    allocate(uint np)
     {
-        this->fn = nullptr;
-        this->dx = nullptr;
-    }
-};
-
-/// used for transformed shape functions
-typedef Fn1D<Real> SFn1D;
-/// used for transformed mesh functions
-typedef Fn1D<Scalar> MFn1D;
-
-/// Geometry of the element in 1D used in Residual/Jacobian forms
-class Geom1D {
-public:
-    /// Init element geometry for volumetric integration
-    Geom1D(uint marker, RefMap1D * rm, const uint np, const QPoint1D * pt)
-    {
-        this->marker = marker;
-        this->x = rm->get_phys_x(np, pt);
+        delete[] this->val;
+        this->val = new T[np];
+        MEM_CHECK(this->val);
     }
 
-    /// Init element geometry for surface integration
-    Geom1D(uint marker, RefMap1D * rm, uint iface, const uint np, const QPoint1D * pt)
+    const T &
+    operator[](uint idx) const
     {
-        this->marker = marker;
-        this->x = rm->get_phys_x(np, pt);
-        // TODO: calc normals
+        return this->val[idx];
     }
 
-    virtual ~Geom1D()
+    const T *
+    get_values() const
     {
-        delete[] this->x;
-        delete[] this->nx;
+        return this->val;
     }
-
-public:
-    /// Element/boundary marker
-    uint marker;
-    /// coordinates
-    Real * x;
-    /// normals
-    Real * nx;
-};
-
-//
-
-/// User defined data associated with Residual/Jacobian forms.
-///
-/// It holds arbitraty number of functions. Typically, these functions are solutions from
-/// the previous time levels.
-class UserData {
-public:
-    UserData()
-    {
-        this->nf = 0;
-        this->ext = nullptr;
-    }
-    // TODO: ctor like UserData(uint nf, ...)
-
-    ~UserData() { delete[] this->ext; }
 
 protected:
-    /// number of functions in 'fn' array
-    uint nf;
-    /// array of pointers to functions
-    Fn1D<Scalar> * ext;
+    /// Values
+    T * val;
+};
+
+class Fn1D : public Fn1DTempl<Real> {
+public:
+    /// For values of a shape function
+    ///
+    /// @param[in] np Number of quadrature points
+    /// @param[in] shfn Shape function
+    void
+    set(uint np, ShapeFunction1D * shfn)
+    {
+        allocate(np);
+        Real * fn = shfn->get_fn_values();
+        for (uint i = 0; i < np; i++) {
+            this->val[i] = fn[i];
+        }
+    }
+
+    void
+    set(uint np, Fn1D *fn)
+    {
+        allocate(np);
+        for (uint i = 0; i < np; i++)
+            this->val[i] = (*fn)[i];
+    }
+};
+
+class VecFn1D : public Fn1DTempl<RealVector1D> {
+public:
+};
+
+class Gradient1D : public VecFn1D {
+public:
+    /// For a gradient of a shape function
+    ///
+    /// @param[in] np Number of quadrature points
+    /// @param[in] shfn Shape function
+    /// @param[in] m Inverse reference map
+    void
+    set(uint np, ShapeFunction1D * shfn, Real1x1 * m)
+    {
+        allocate(np);
+        Real * dx = shfn->get_dx_values();
+        for (uint i = 0; i < np; i++)
+            this->val[i][0] = dx[i] * m[i][0][0];
+    }
+
+    void
+    set(uint np, Gradient1D *grad)
+    {
+        allocate(np);
+        for (uint i = 0; i < np; i++)
+            this->val[i] = (*grad)[i];
+    }
+};
+
+/// Base class for weak form statements
+///
+class FormBase {
+public:
+    FormBase(const FELinearProblem * fep);
+
+    /// Return the order of the weak statement
+    uint get_order();
+
+    /// Precalculate values needed for evaluation
+    virtual void precalculate() = 0;
+
+protected:
+    virtual Scalar integrate() = 0;
+
+    /// FELinearProblem that we feed values into
+    const FELinearProblem * fep;
+
+    uint np;
+};
+
+class BilinearForm : public FormBase {
+public:
+    BilinearForm(const FELinearProblem * fep, uint m, uint n);
+
+    ///
+    virtual void precalculate();
+
+    /// Assemble the bilinear form
+    virtual void assemble(PetscMatrix * matrix, PetscVector * rhs);
+
+protected:
+    virtual Scalar integrate();
+
+    uint m, n;
+
+    const Real * jxw;
+    const RealVector1D * grad_u;
+    const RealVector1D * grad_v;
+};
+
+class LinearForm : public FormBase {
+public:
+    LinearForm(const FELinearProblem * fep, uint m);
+
+    virtual void precalculate();
+
+    /// Assemble the bilinear form
+    virtual void assemble(PetscVector * rhs);
+
+protected:
+    virtual Scalar integrate();
+
+    uint m;
+    const Real * jxw;
+    const Real * v;
 };
 
 } // namespace godzilla

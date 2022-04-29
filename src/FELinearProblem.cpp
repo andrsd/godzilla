@@ -59,6 +59,16 @@ FELinearProblem::FELinearProblem(const InputParameters & parameters) :
     Problem(parameters),
     mesh(get_param<Mesh *>("_mesh")),
     shapeset(nullptr),
+    refmap(nullptr),
+    al(nullptr),
+    base_fn(nullptr),
+    test_fn(nullptr),
+    jxw(nullptr),
+    np(0),
+    u(nullptr),
+    grad_u(nullptr),
+    v(nullptr),
+    grad_v(nullptr),
     section(nullptr),
     ksp(NULL),
     x(NULL),
@@ -87,6 +97,15 @@ FELinearProblem::~FELinearProblem()
         MatDestroy(&this->A);
     if (this->section)
         PetscSectionDestroy(&this->section);
+    delete this->refmap;
+    delete[] this->al;
+
+    for (uint i = 0; i < this->neq; i++) {
+        delete this->base_fn[i];
+        delete this->test_fn[i];
+    }
+    delete[] this->base_fn;
+    delete[] this->test_fn;
 }
 
 DM
@@ -113,6 +132,26 @@ FELinearProblem::create()
     // setup_callbacks();
 
     on_set_fields();
+
+    // FIXME: pull this from a weak form
+    this->neq = 1;
+    this->al = new AssemblyList[this->neq];
+    MEM_CHECK(this->al);
+    this->base_fn = new ShapeFunction1D *[this->neq];
+    MEM_CHECK(this->base_fn);
+    this->test_fn = new ShapeFunction1D *[this->neq];
+    MEM_CHECK(this->test_fn);
+    for (uint i = 0; i < this->neq; i++) {
+        const Shapeset1D * ss = dynamic_cast<const Shapeset1D *>(this->spaces[i]->get_shapeset());
+        assert(ss != nullptr);
+        this->base_fn[i] = new ShapeFunction1D(ss);
+        MEM_CHECK(this->base_fn[i]);
+        this->test_fn[i] = new ShapeFunction1D(ss);
+        MEM_CHECK(this->test_fn[i]);
+    }
+    this->refmap = new RefMap1D(this->mesh);
+    MEM_CHECK(refmap);
+
     set_bc_information();
     assign_dofs();
     update_constraints();
@@ -233,6 +272,8 @@ FELinearProblem::solve()
     PetscMatrix A_mat(this->A);
     PetscVector b_vec(this->b);
     assemble(&A_mat, &b_vec);
+    A_mat.finish();
+    b_vec.finish();
 
     PetscErrorCode ierr;
     ierr = KSPSolve(this->ksp, this->b, this->x);
@@ -366,151 +407,77 @@ void
 FELinearProblem::assemble(PetscMatrix * matrix, PetscVector * rhs)
 {
     _F_;
-    uint neq = 1;
-    AssemblyList al[neq];
-    AssemblyList *am, *an;
-    ShapeFunction1D * base_fn[neq];
-    ShapeFunction1D * test_fn[neq];
-    ShapeFunction1D *fu, *fv;
-    RefMap1D * refmap = new RefMap1D(this->mesh);
-    MEM_CHECK(refmap);
-    for (int i = 0; i < neq; i++) {
-        const Shapeset1D * ss = dynamic_cast<const Shapeset1D *>(spaces[i]->get_shapeset());
-        assert(ss != nullptr);
-        base_fn[i] = new ShapeFunction1D(ss);
-        MEM_CHECK(base_fn[i]);
-        test_fn[i] = new ShapeFunction1D(ss);
-        MEM_CHECK(test_fn[i]);
-    }
+    // these things will be sitting the WeakForm class
+    BilinearForm laplace(this, 0, 0);
+    LinearForm ffn(this, 0);
 
     for (auto & e : this->mesh->get_elements()) {
         const Element1D * elem = dynamic_cast<const Element1D *>(e);
         assert(elem != nullptr);
 
-        uint j = 0;
-        spaces[j]->get_element_assembly_list(elem, &(al[j]));
-        base_fn[j]->set_active_element(elem);
-        test_fn[j]->set_active_element(elem);
-        refmap->set_active_element(elem);
-
-        // pre-compute everything that will be needed by the weak form
+        for (uint j = 0; j < this->neq; j++) {
+            this->spaces[j]->get_element_assembly_list(elem, &(this->al[j]));
+            this->base_fn[j]->set_active_element(elem);
+            this->test_fn[j]->set_active_element(elem);
+        }
+        this->refmap->set_active_element(elem);
 
         // FIXME: Determine quadrature order
-        uint qorder = refmap->get_inv_ref_order() + 2;
+        uint qorder = this->refmap->get_inv_ref_order() + 2;
 
         const Quadrature1D & quad = QuadratureGauss1D::get();
-        uint np = quad.get_num_points(qorder);
+        this->np = quad.get_num_points(qorder);
         QPoint1D * pts = quad.get_points(qorder);
-        Real * jxw = refmap->get_jacobian(np, pts);
+        this->jxw = this->refmap->get_jacobian(np, pts);
+        Real1x1 * irm = this->refmap->get_inv_ref_map(np, pts);
+
+        // pre-compute everything that will be needed by the weak form
+        uint m = 0;
+        uint n = 0;
+
+        AssemblyList * am = this->al + m;
+        AssemblyList * an = this->al + n;
+
+        this->u = new Fn1D[an->cnt];
+        this->grad_u = new Gradient1D[an->cnt];
+        this->v = new Fn1D[am->cnt];
+        this->grad_v = new Gradient1D[am->cnt];
+
+        ShapeFunction1D * fv = this->test_fn[m];
+        for (int i = 0; i < am->cnt; i++) {
+            fv->set_active_shape(am->idx[i]);
+            fv->precalculate(np, pts, ShapeFunction1D::FN_DEFAULT);
+            this->v[i].set(np, fv);
+            this->grad_v[i].set(np, fv, irm);
+        }
+
+        ShapeFunction1D * fu = this->base_fn[n];
+        for (int j = 0; j < an->cnt; j++) {
+            if (this->spaces[m]->get_shapeset() == this->spaces[n]->get_shapeset()) {
+                this->u[j].set(np, this->v + j);
+                this->grad_u[j].set(np, this->grad_v + j);
+            }
+            else {
+                fu->set_active_shape(an->idx[j]);
+                fu->precalculate(np, pts, ShapeFunction1D::FN_DEFAULT);
+                this->u[j].set(np, fu);
+                this->grad_u[j].set(np, fu, irm);
+            }
+        }
 
         // assemble bilinear form (volumetric)
+        laplace.assemble(matrix, rhs);
+        // assemble linear form (volumetric)
+        ffn.assemble(rhs);
 
-        // FIXME: block row
-        int m = 0;
-        fv = test_fn[m];
-        am = al + m;
+        delete[] this->u;
+        delete[] this->grad_u;
+        delete[] this->v;
+        delete[] this->grad_v;
 
-        // FIXME: block column
-        int n = 0;
-        fu = base_fn[n];
-        an = al + n;
-
-        DenseMatrix<Scalar> mat(am->cnt, an->cnt);
-        mat.zero();
-
-        for (int i = 0; i < am->cnt; i++) {
-            int k = am->dof[i];
-            fv->set_active_shape(am->idx[i]);
-            SFn1D * v = get_fn(fv, refmap, np, pts);
-
-            for (int j = 0; j < an->cnt; j++) {
-                fu->set_active_shape(an->idx[j]);
-                SFn1D * u = get_fn(fu, refmap, np, pts);
-
-                Scalar val = eval_bilin_form(np, jxw, u, v);
-                Scalar bi = val * an->coef[j] * am->coef[i];
-                if (an->dof[j] == Space::DIRICHLET_DOF)
-                    rhs->add(k, -bi);
-                else
-                    mat[i][j] = bi;
-
-                delete u;
-            }
-
-            delete v;
-        }
-        // insert the local matrix into the global one
-        matrix->add(mat, am->dof, an->dof);
-
-        // assemble linear forms (volumetric)
-        for (int i = 0; i < am->cnt; i++) {
-            if (am->dof[i] == Space::DIRICHLET_DOF)
-                continue;
-            fv->set_active_shape(am->idx[i]);
-            SFn1D * v = get_fn(fv, refmap, np, pts);
-
-            Scalar val = eval_lin_form(np, jxw, v);
-            rhs->add(am->dof[i], val * am->coef[i]);
-
-            delete v;
-        }
-
+        delete[] this->jxw;
+        delete[] irm;
     }
-
-    for (uint i = 0; i < neq; i++) {
-        delete base_fn[i];
-        delete test_fn[i];
-    }
-    delete refmap;
-
-    matrix->finish();
-    rhs->finish();
-}
-
-SFn1D *
-FELinearProblem::get_fn(ShapeFunction1D * shfn, RefMap1D * rm, const uint np, const QPoint1D * pts)
-{
-    _F_;
-    SFn1D * u = new SFn1D;
-    MEM_CHECK(u);
-    u->nc = shfn->get_num_components();
-    shfn->precalculate(np, pts, ShapeFunction1D::FN_DEFAULT);
-    if (u->nc == 1) {
-        u->fn = new PetscReal[np];
-        MEM_CHECK(u->fn);
-        u->dx = new PetscReal[np];
-        MEM_CHECK(u->dx);
-
-        Real * fn = shfn->get_fn_values();
-        Real * dx = shfn->get_dx_values();
-        Real1x1 * m = rm->get_inv_ref_map(np, pts);
-        for (uint i = 0; i < np; i++) {
-            u->fn[i] = fn[i];
-            u->dx[i] = dx[i] * m[i][0][0];
-        }
-        delete[] m;
-    }
-    return u;
-}
-
-PetscScalar
-FELinearProblem::eval_bilin_form(uint np, Real *jxw, SFn1D *u, SFn1D * v)
-{
-    _F_;
-    PetscScalar res = 0.0;
-    for (uint i = 0; i < np; i++)
-        res += jxw[i] * (u->dx[i] * v->dx[i]);
-    return res;
-}
-
-PetscScalar
-FELinearProblem::eval_lin_form(uint np, Real * jxw, SFn1D * v)
-{
-    _F_;
-    PetscScalar res = 0.0;
-    for (uint i = 0; i < np; i++)
-        res += jxw[i] * (-2. * v->fn[i]);
-    return res;
 }
 
 } // namespace godzilla
