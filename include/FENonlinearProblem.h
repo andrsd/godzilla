@@ -93,17 +93,17 @@ protected:
     /// The type of line search to be used
     std::string line_search_type;
     /// Relative convergence tolerance for the non-linear solver
-    PetscReal nl_rel_tol;
+    Real nl_rel_tol;
     /// Absolute convergence tolerance for the non-linear solver
-    PetscReal nl_abs_tol;
+    Real nl_abs_tol;
     /// Convergence tolerance in terms of the norm of the change in the solution between steps
-    PetscReal nl_step_tol;
+    Real nl_step_tol;
     /// Maximum number of iterations for the non-linear solver
     PetscInt nl_max_iter;
     /// Relative convergence tolerance for the linear solver
-    PetscReal lin_rel_tol;
+    Real lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver
-    PetscReal lin_abs_tol;
+    Real lin_abs_tol;
     /// Maximum number of iterations for the linear solver
     PetscInt lin_max_iter;
 

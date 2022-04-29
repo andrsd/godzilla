@@ -49,23 +49,23 @@ FENonlinearProblem::validParams()
 
     params.add_private_param<Mesh *>("_mesh");
     params.add_param<std::string>("line_search", "bt", "The type of line search to be used");
-    params.add_param<PetscReal>("nl_rel_tol",
+    params.add_param<Real>("nl_rel_tol",
                                 1e-8,
                                 "Relative convergence tolerance for the non-linear solver");
-    params.add_param<PetscReal>("nl_abs_tol",
+    params.add_param<Real>("nl_abs_tol",
                                 1e-15,
                                 "Absolute convergence tolerance for the non-linear solver");
-    params.add_param<PetscReal>(
+    params.add_param<Real>(
         "nl_step_tol",
         1e-15,
         "Convergence tolerance in terms of the norm of the change in the solution between steps");
     params.add_param<PetscInt>("nl_max_iter",
                                40,
                                "Maximum number of iterations for the non-linear solver");
-    params.add_param<PetscReal>("lin_rel_tol",
+    params.add_param<Real>("lin_rel_tol",
                                 1e-5,
                                 "Relative convergence tolerance for the linear solver");
-    params.add_param<PetscReal>("lin_abs_tol",
+    params.add_param<Real>("lin_abs_tol",
                                 1e-50,
                                 "Absolute convergence tolerance for the linear solver");
     params.add_param<PetscInt>("lin_max_iter",
@@ -84,12 +84,12 @@ FENonlinearProblem::FENonlinearProblem(const InputParameters & parameters) :
     J(NULL),
     Jp(NULL),
     line_search_type(get_param<std::string>("line_search")),
-    nl_rel_tol(get_param<PetscReal>("nl_rel_tol")),
-    nl_abs_tol(get_param<PetscReal>("nl_abs_tol")),
-    nl_step_tol(get_param<PetscReal>("nl_step_tol")),
+    nl_rel_tol(get_param<Real>("nl_rel_tol")),
+    nl_abs_tol(get_param<Real>("nl_abs_tol")),
+    nl_step_tol(get_param<Real>("nl_step_tol")),
     nl_max_iter(get_param<PetscInt>("nl_max_iter")),
-    lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
-    lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
+    lin_rel_tol(get_param<Real>("lin_rel_tol")),
+    lin_abs_tol(get_param<Real>("lin_abs_tol")),
     lin_max_iter(get_param<PetscInt>("lin_max_iter"))
 {
     _F_;

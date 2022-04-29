@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Object.h"
 #include "PrintInterface.h"
 #include "petscdm.h"
@@ -33,11 +34,11 @@ public:
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
     /// @return Simulation time
-    virtual const PetscReal & get_time() const;
+    virtual const Real & get_time() const;
 
 protected:
     /// Simulation time
-    PetscReal time;
+    Real time;
 
 public:
     static InputParameters validParams();

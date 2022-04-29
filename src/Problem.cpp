@@ -31,7 +31,7 @@ Problem::create()
     _F_;
 }
 
-const PetscReal &
+const Real &
 Problem::get_time() const
 {
     _F_;

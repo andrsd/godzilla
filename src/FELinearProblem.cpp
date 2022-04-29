@@ -43,12 +43,12 @@ InputParameters
 FELinearProblem::validParams()
 {
     InputParameters params = Problem::validParams();
-    params.add_param<PetscReal>("lin_rel_tol",
-                                1e-5,
-                                "Relative convergence tolerance for the linear solver");
-    params.add_param<PetscReal>("lin_abs_tol",
-                                1e-50,
-                                "Absolute convergence tolerance for the linear solver");
+    params.add_param<Real>("lin_rel_tol",
+                           1e-5,
+                           "Relative convergence tolerance for the linear solver");
+    params.add_param<Real>("lin_abs_tol",
+                           1e-50,
+                           "Absolute convergence tolerance for the linear solver");
     params.add_param<PetscInt>("lin_max_iter",
                                10000,
                                "Maximum number of iterations for the linear solver");

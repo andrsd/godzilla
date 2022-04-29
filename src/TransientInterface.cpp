@@ -9,17 +9,17 @@ InputParameters
 TransientInterface::validParams()
 {
     InputParameters params = empty_input_parameters();
-    params.add_param<PetscReal>("start_time", 0., "Start time of the simulation");
-    params.add_required_param<PetscReal>("end_time", "Simulation end time");
-    params.add_required_param<PetscReal>("dt", "Time step size");
+    params.add_param<Real>("start_time", 0., "Start time of the simulation");
+    params.add_required_param<Real>("end_time", "Simulation end time");
+    params.add_required_param<Real>("dt", "Time step size");
     return params;
 }
 
 TransientInterface::TransientInterface(const InputParameters & params) :
     ts(nullptr),
-    start_time(params.get<PetscReal>("start_time")),
-    end_time(params.get<PetscReal>("end_time")),
-    dt(params.get<PetscReal>("dt"))
+    start_time(params.get<Real>("start_time")),
+    end_time(params.get<Real>("end_time")),
+    dt(params.get<Real>("dt"))
 {
     _F_;
 }

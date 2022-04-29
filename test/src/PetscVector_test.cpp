@@ -33,7 +33,7 @@ TEST(PetscVectorTest, test)
     EXPECT_EQ(v.get(1), 2.);
 
     const PetscInt ni[] = { 0, 2 };
-    const PetscScalar y[] = { 3., 4. };
+    const Scalar y[] = { 3., 4. };
     v.add(2, ni, y);
     EXPECT_EQ(v.get(0), 3.);
     EXPECT_EQ(v.get(2), 4.);

@@ -29,7 +29,7 @@ PetscMatrix::get(PetscInt m, PetscInt n)
 {
     _F_;
     PetscErrorCode ierr;
-    PetscScalar v = 0.0;
+    Scalar v = 0.0;
     ierr = MatGetValue(this->mat, m, n, &v);
     checkPetscError(ierr);
     return v;
@@ -45,7 +45,7 @@ PetscMatrix::zero()
 }
 
 void
-PetscMatrix::add(PetscInt m, PetscInt n, PetscScalar v)
+PetscMatrix::add(PetscInt m, PetscInt n, Scalar v)
 {
     _F_;
     PetscErrorCode ierr;
@@ -58,7 +58,7 @@ PetscMatrix::add(PetscInt m, PetscInt n, PetscScalar v)
 }
 
 void
-PetscMatrix::add(const DenseMatrix<PetscScalar> & mat,
+PetscMatrix::add(const DenseMatrix<Scalar> & mat,
                  PetscInt * rows,
                  PetscInt * cols)
 {

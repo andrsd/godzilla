@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "petscts.h"
 
 namespace godzilla {
@@ -26,11 +27,11 @@ protected:
     /// PETSc TS object
     TS ts;
     /// Simulation start time
-    const PetscReal & start_time;
+    const Real & start_time;
     /// Simulation end time
-    const PetscReal & end_time;
+    const Real & end_time;
     /// Time step size
-    const PetscReal & dt;
+    const Real & dt;
 
 public:
     static InputParameters validParams();

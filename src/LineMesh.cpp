@@ -56,8 +56,8 @@ LineMesh::create_dm()
     _F_;
     PetscErrorCode ierr;
 
-    PetscReal lower[1] = { this->xmin };
-    PetscReal upper[1] = { this->xmax };
+    Real lower[1] = { this->xmin };
+    Real upper[1] = { this->xmax };
     PetscInt faces[1] = { (PetscInt) this->nx };
     DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 

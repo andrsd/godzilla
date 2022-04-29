@@ -16,7 +16,7 @@ public:
     /// DoF indices
     PetscInt * dof;
     /// Coefficient associated with the shape function
-    PetscScalar * coef;
+    Scalar * coef;
 
     uint cnt, cap;
 
@@ -42,7 +42,7 @@ public:
     }
 
     inline void
-    add(uint idx, PetscInt dof, PetscScalar coef)
+    add(uint idx, PetscInt dof, Scalar coef)
     {
         if (coef == 0.0)
             return;
@@ -65,7 +65,7 @@ protected:
         MEM_CHECK(idx);
         dof = (PetscInt *) realloc(dof, sizeof(PetscInt) * cap);
         MEM_CHECK(dof);
-        coef = (PetscScalar *) realloc(coef, sizeof(PetscScalar) * cap);
+        coef = (Scalar *) realloc(coef, sizeof(Scalar) * cap);
         MEM_CHECK(coef);
     }
 };

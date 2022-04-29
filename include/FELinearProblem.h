@@ -152,9 +152,9 @@ protected:
     KSPConvergedReason converged_reason;
 
     /// Relative convergence tolerance for the linear solver
-    PetscReal lin_rel_tol;
+    Real lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver
-    PetscReal lin_abs_tol;
+    Real lin_abs_tol;
     /// Maximum number of iterations for the linear solver
     PetscInt lin_max_iter;
 

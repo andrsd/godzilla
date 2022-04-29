@@ -1,3 +1,4 @@
+#include "GodzillaConfig.h"
 #include "gtest/gtest.h"
 #include "InputParameters.h"
 #include "Factory.h"
@@ -13,44 +14,44 @@ TEST(InputParametersTest, get)
 TEST(InputParametersTest, param_value)
 {
     InputParameters params = empty_input_parameters();
-    params.add_param<PetscReal>("param", 12.34, "doco");
-    EXPECT_EQ(params.get<PetscReal>("param"), 12.34);
+    params.add_param<Real>("param", 12.34, "doco");
+    EXPECT_EQ(params.get<Real>("param"), 12.34);
     EXPECT_EQ(params.get_doc_string("param"), std::string("doco"));
 }
 
 TEST(InputParametersTest, has_value)
 {
     InputParameters params = empty_input_parameters();
-    params.add_param<PetscReal>("param", 12.34, "doco");
-    EXPECT_EQ(params.has<PetscReal>("param"), true);
+    params.add_param<Real>("param", 12.34, "doco");
+    EXPECT_EQ(params.has<Real>("param"), true);
     params.clear();
-    EXPECT_EQ(params.has<PetscReal>("param"), false);
+    EXPECT_EQ(params.has<Real>("param"), false);
 }
 
 TEST(InputParametersTest, assign)
 {
     InputParameters params1 = empty_input_parameters();
-    params1.add_param<PetscReal>("param", 12.34, "doco");
+    params1.add_param<Real>("param", 12.34, "doco");
 
     InputParameters params2 = params1;
-    EXPECT_EQ(params2.has<PetscReal>("param"), true);
-    EXPECT_EQ(params2.get<PetscReal>("param"), 12.34);
+    EXPECT_EQ(params2.has<Real>("param"), true);
+    EXPECT_EQ(params2.get<Real>("param"), 12.34);
     EXPECT_EQ(params2.get_doc_string("param"), std::string("doco"));
 }
 
 TEST(InputParametersTest, add_params)
 {
     InputParameters params1 = empty_input_parameters();
-    params1.add_param<PetscReal>("p1", 12.34, "doco1");
+    params1.add_param<Real>("p1", 12.34, "doco1");
 
     InputParameters params2 = empty_input_parameters();
-    params1.add_param<PetscReal>("p2", "doco2");
+    params1.add_param<Real>("p2", "doco2");
 
     params1 += params2;
-    EXPECT_EQ(params1.has<PetscReal>("p1"), true);
-    EXPECT_EQ(params1.get<PetscReal>("p1"), 12.34);
+    EXPECT_EQ(params1.has<Real>("p1"), true);
+    EXPECT_EQ(params1.get<Real>("p1"), 12.34);
     EXPECT_EQ(params1.get_doc_string("p1"), std::string("doco1"));
-    EXPECT_EQ(params1.has<PetscReal>("p2"), true);
+    EXPECT_EQ(params1.has<Real>("p2"), true);
     EXPECT_EQ(params1.get_doc_string("p2"), std::string("doco2"));
 }
 
@@ -58,14 +59,14 @@ InputParameters
 validParams1()
 {
     InputParameters params = empty_input_parameters();
-    params.add_param<PetscReal>("p", 78.56, "doco p");
+    params.add_param<Real>("p", 78.56, "doco p");
     return params;
 }
 
 TEST(InputParametersTest, valid_params)
 {
     InputParameters params1 = validParams1();
-    EXPECT_EQ(params1.get<PetscReal>("p"), 78.56);
+    EXPECT_EQ(params1.get<Real>("p"), 78.56);
     EXPECT_EQ(params1.get_doc_string("p"), std::string("doco p"));
 }
 

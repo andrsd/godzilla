@@ -48,7 +48,7 @@ PetscVector::zero()
 }
 
 void
-PetscVector::set(PetscInt idx, PetscScalar y)
+PetscVector::set(PetscInt idx, Scalar y)
 {
     _F_;
     PetscErrorCode ierr;
@@ -57,16 +57,16 @@ PetscVector::set(PetscInt idx, PetscScalar y)
 }
 
 void
-PetscVector::add(PetscInt idx, PetscScalar y)
+PetscVector::add(PetscInt idx, Scalar y)
 {
     _F_;
     PetscErrorCode ierr;
-    ierr = VecSetValue(this->vec, idx, (PetscScalar) y, ADD_VALUES);
+    ierr = VecSetValue(this->vec, idx, (Scalar) y, ADD_VALUES);
     checkPetscError(ierr);
 }
 
 void
-PetscVector::add(PetscInt n, const PetscInt * idx, const PetscScalar * y)
+PetscVector::add(PetscInt n, const PetscInt * idx, const Scalar * y)
 {
     _F_;
     PetscErrorCode ierr;
@@ -75,7 +75,7 @@ PetscVector::add(PetscInt n, const PetscInt * idx, const PetscScalar * y)
 }
 
 void
-PetscVector::add(const DenseVector<PetscScalar> & v, PetscInt *idx)
+PetscVector::add(const DenseVector<Scalar> & v, PetscInt *idx)
 {
     _F_;
     PetscErrorCode ierr;

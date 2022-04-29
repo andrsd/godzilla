@@ -186,7 +186,7 @@ Mesh::create_vertices()
     checkPetscError(ierr);
     for (PetscInt vtx_id = v_start; vtx_id < v_end; vtx_id++) {
         PetscInt nc;
-        PetscScalar * ccoords = nullptr;
+        Scalar * ccoords = nullptr;
         ierr = DMPlexVecGetClosure(cdm, nullptr, coordinates, vtx_id, &nc, &ccoords);
         checkPetscError(ierr);
 

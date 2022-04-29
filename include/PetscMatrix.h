@@ -16,8 +16,8 @@ public:
     virtual void finish();
     virtual Scalar get(PetscInt m, PetscInt n);
     virtual void zero();
-    virtual void add(PetscInt m, PetscInt n, PetscScalar v);
-    virtual void add(const DenseMatrix<PetscScalar> & mat, PetscInt *rows, PetscInt *cols);
+    virtual void add(PetscInt m, PetscInt n, Scalar v);
+    virtual void add(const DenseMatrix<Scalar> & mat, PetscInt *rows, PetscInt *cols);
 
 protected:
     Mat mat;

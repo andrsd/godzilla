@@ -86,7 +86,7 @@ protected:
         /// Number of DOFs
         uint n;
         /// Projection of boundary condition
-        PetscScalar bc_proj;
+        Scalar bc_proj;
 
         VertexData() : dof(DOF_NOT_ANALYZED), n(0), bc_proj(0.) {}
     };
@@ -99,7 +99,7 @@ protected:
         /// Number of DOFs
         uint n;
         /// Projection of boundary condition
-        PetscScalar * bc_proj;
+        Scalar * bc_proj;
 
         EdgeData(uint order) : order(order), dof(DOF_NOT_ANALYZED), n(0), bc_proj(nullptr) {}
         virtual ~EdgeData() { delete[] this->bc_proj; }
@@ -113,7 +113,7 @@ protected:
         /// Number of DOFs
         uint n;
         /// Projection of boundary condition
-        PetscScalar * bc_proj;
+        Scalar * bc_proj;
 
         FaceData(uint order) : order(order), dof(DOF_NOT_ANALYZED), n(0), bc_proj(nullptr) {}
         virtual ~FaceData() { delete[] this->bc_proj; }

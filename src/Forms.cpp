@@ -57,7 +57,7 @@ BilinearForm::assemble(PetscMatrix * matrix, PetscVector * rhs)
 Scalar
 BilinearForm::integrate()
 {
-    PetscScalar integral = 0.0;
+    Scalar integral = 0.0;
     for (uint i = 0; i < this->np; i++)
         integral += this->jxw[i] * (this->grad_u[i] * this->grad_v[i]);
     return integral;
@@ -98,7 +98,7 @@ LinearForm::assemble(PetscVector * rhs)
 Scalar
 LinearForm::integrate()
 {
-    PetscScalar integral = 0.0;
+    Scalar integral = 0.0;
     for (uint qp = 0; qp < this->np; qp++)
         integral += this->jxw[qp] * (-2. * this->v[qp]);
     return integral;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "petsc.h"
+
 #define GODZILLA_VERSION "@godzilla_VERSION@"
 
 #define GODZILLA_UNIT_TESTS_ROOT "@GODZILLA_UNIT_TESTS_ROOT@"
@@ -7,9 +9,9 @@
 namespace godzilla {
 
 /// Representation of a real number
-typedef double Real;
+typedef PetscReal Real;
 
 /// Scalar
-typedef Real Scalar;
+typedef PetscScalar Scalar;
 
 } // namespace godzilla

@@ -230,7 +230,7 @@ Space::get_vertex_assembly_list(const Element * e, uint ivertex, AssemblyList * 
     Index vtx_id = e->get_vertex(ivertex);
     VertexData * vnode = this->vertex_data[vtx_id];
     uint index = shapeset->get_vertex_index(ivertex);
-    PetscScalar coef = vnode->dof == DIRICHLET_DOF ? vnode->bc_proj : 1.0;
+    Scalar coef = vnode->dof == DIRICHLET_DOF ? vnode->bc_proj : 1.0;
     assert(vnode->dof == DIRICHLET_DOF ||
            (vnode->dof >= this->first_dof && vnode->dof < this->next_dof));
     al->add(index, vnode->dof, coef);
@@ -253,7 +253,7 @@ Space::get_edge_assembly_list(const Element * elem, uint iedge, AssemblyList * a
         }
         else if (enode->bc_proj != NULL) {
             for (uint j = 0; j < enode->n; j++) {
-                PetscScalar coef = enode->bc_proj[j];
+                Scalar coef = enode->bc_proj[j];
                 al->add(indices[j], DIRICHLET_DOF, coef);
             }
         }
@@ -277,7 +277,7 @@ Space::get_face_assembly_list(const Element * elem, uint iface, AssemblyList * a
         }
         else if (fnode->bc_proj != NULL) {
             for (uint j = 0; j < fnode->n; j++) {
-                PetscScalar coef = fnode->bc_proj[j];
+                Scalar coef = fnode->bc_proj[j];
                 al->add(indices[j], DIRICHLET_DOF, coef);
             }
         }
