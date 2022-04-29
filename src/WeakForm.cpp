@@ -4,6 +4,8 @@
 
 namespace godzilla {
 
+#if 0
+
 WeakForm::WeakForm() : neq(0)
 {
     _F_;
@@ -202,5 +204,7 @@ WeakForm::get_blocks()
 
     return blocks;
 }
+
+#endif
 
 } // namespace godzilla

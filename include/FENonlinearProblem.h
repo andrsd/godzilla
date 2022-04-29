@@ -76,7 +76,7 @@ protected:
     /// Map from varaible name to an index into the `spaces` array
     std::map<std::string, std::size_t> space_names;
     /// Weak form
-    WeakForm wf;
+    // WeakForm wf;
     /// SNES object
     SNES snes;
     /// The solution vector

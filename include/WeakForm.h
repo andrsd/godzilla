@@ -10,6 +10,8 @@
 
 namespace godzilla {
 
+#if 0
+
 // Bilinear form symmetry flag, see WeakForm::add_biform
 enum SymFlag { ANTISYM = -1, UNSYM = 0, SYM = 1 };
 
@@ -138,5 +140,7 @@ protected:
                        Mesh * m2,
                        std::vector<MeshFunction1D *> & ext);
 };
+
+#endif
 
 } // namespace godzilla
