@@ -1,6 +1,7 @@
 #pragma once
 
 #include "petsc.h"
+#include "DenseVector.h"
 #include "Common.h"
 
 namespace godzilla {
@@ -18,6 +19,7 @@ public:
     virtual void set(PetscInt idx, PetscScalar y);
     virtual void add(PetscInt idx, PetscScalar y);
     virtual void add(PetscInt n, const PetscInt * idx, const PetscScalar * y);
+    virtual void add(const DenseVector<PetscScalar> & mat, PetscInt *idx);
 
 protected:
     Vec vec;

@@ -74,4 +74,16 @@ PetscVector::add(PetscInt n, const PetscInt * idx, const PetscScalar * y)
     checkPetscError(ierr);
 }
 
+void
+PetscVector::add(const DenseVector<PetscScalar> & v, PetscInt *idx)
+{
+    _F_;
+    PetscErrorCode ierr;
+    for (uint i = 0; i < v.rows(); i++) {
+        ierr = VecSetValue(this->vec, idx[i], v[i], ADD_VALUES);
+        checkPetscError(ierr);
+    }
+}
+
+
 } // namespace godzilla
