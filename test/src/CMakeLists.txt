@@ -24,6 +24,7 @@ add_executable(${PROJECT_NAME}
     PetscVector_test.cpp
     PetscMatrix_test.cpp
     PrintInterface_test.cpp
+    Problem_test.cpp
     Quad_test.cpp
     QuadratureGauss1D_test.cpp
     QuadratureGauss2DTri_test.cpp
