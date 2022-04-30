@@ -84,3 +84,21 @@ TEST(InputParametersTest, set_non_existing_param)
 
     EXPECT_EQ(params.get<double>("d"), 1.23);
 }
+
+TEST(InputParametersTest, iterators)
+{
+    InputParameters params = InputParameters::empty();
+    params.add_param<Real>("a", "doco");
+    for (auto & p : params) {
+    }
+}
+
+TEST(InputParametersTest, param)
+{
+    InputParameters params = InputParameters::empty();
+    params.add_required_param<Real>("a", "doco");
+
+    EXPECT_EQ(params.is_param_required("a"), true);
+    EXPECT_EQ(params.type("a"), std::string("d"));
+    EXPECT_EQ(params.is_private("a"), false);
+}
