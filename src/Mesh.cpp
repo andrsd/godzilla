@@ -12,9 +12,9 @@
 namespace godzilla {
 
 InputParameters
-Mesh::validParams()
+Mesh::valid_params()
 {
-    InputParameters params = Object::validParams();
+    InputParameters params = Object::valid_params();
     params.set<std::string>("_name") = "mesh";
     return params;
 }

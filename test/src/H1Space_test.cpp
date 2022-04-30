@@ -12,7 +12,7 @@ TEST(H1SpaceTest, first_order_1d)
 {
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<Real>("xmax") = 2.;
     params.set<uint>("nx") = 2;

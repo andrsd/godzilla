@@ -72,7 +72,7 @@ protected:
 
 public:
     /// Method for building InputParameters for this class
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 template <typename T>

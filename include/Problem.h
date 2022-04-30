@@ -41,7 +41,7 @@ protected:
     Real time;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

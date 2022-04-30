@@ -34,10 +34,10 @@ __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec X, void * ctx)
 }
 
 InputParameters
-ImplicitFENonlinearProblem::validParams()
+ImplicitFENonlinearProblem::valid_params()
 {
-    InputParameters params = FENonlinearProblem::validParams();
-    params += TransientInterface::validParams();
+    InputParameters params = FENonlinearProblem::valid_params();
+    params += TransientInterface::valid_params();
     return params;
 }
 

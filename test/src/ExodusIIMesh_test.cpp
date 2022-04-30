@@ -14,7 +14,7 @@ TEST(ExodusIIMeshTest, load_hex)
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/box-2x2x2.e");
 
-    InputParameters params = ExodusIIMesh::validParams();
+    InputParameters params = ExodusIIMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("file") = file_name;
     ExodusIIMesh mesh(params);
@@ -33,7 +33,7 @@ TEST(ExodusIIMeshTest, load_tri)
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/square-tri.e");
 
-    InputParameters params = ExodusIIMesh::validParams();
+    InputParameters params = ExodusIIMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("file") = file_name;
     ExodusIIMesh mesh(params);

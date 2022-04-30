@@ -13,7 +13,7 @@ TEST(ShapeFunction1DTest, base)
 {
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<uint>("nx") = 1;
     LineMesh mesh(params);

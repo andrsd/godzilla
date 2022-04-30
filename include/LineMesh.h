@@ -36,7 +36,7 @@ protected:
     const uint & nx;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

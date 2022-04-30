@@ -9,9 +9,9 @@ namespace godzilla {
 registerObject(LineMesh);
 
 InputParameters
-LineMesh::validParams()
+LineMesh::valid_params()
 {
-    InputParameters params = Mesh::validParams();
+    InputParameters params = Mesh::valid_params();
     params.add_param<Real>("xmin", 0., "Minimum in the x direction");
     params.add_param<Real>("xmax", 1., "Maximum in the x direction");
     params.add_required_param<uint>("nx", "Number of grid points in the x direction");

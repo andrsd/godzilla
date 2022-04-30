@@ -6,10 +6,10 @@ namespace godzilla {
 registerObject(DirichletBC);
 
 InputParameters
-DirichletBC::validParams()
+DirichletBC::valid_params()
 {
-    InputParameters params = EssentialBC::validParams();
-    params += ParsedFunctionInterface::validParams();
+    InputParameters params = EssentialBC::valid_params();
+    params += ParsedFunctionInterface::valid_params();
     return params;
 }
 

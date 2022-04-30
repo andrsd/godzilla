@@ -5,7 +5,7 @@
 namespace godzilla {
 
 InputParameters
-ParsedFunctionInterface::validParams()
+ParsedFunctionInterface::valid_params()
 {
     InputParameters params = InputParameters::empty();
     params.add_required_param<std::vector<std::string>>("value", "Function expression.");

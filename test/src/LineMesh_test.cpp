@@ -11,7 +11,7 @@ TEST(LineMeshTest, api)
 {
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<Real>("xmin") = 1;
@@ -46,7 +46,7 @@ TEST(LineMeshTest, incorrect_dims)
 
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<Real>("xmin") = 2;
@@ -67,7 +67,7 @@ TEST(LineMeshTest, distribute)
 
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<Real>("xmin") = 0;

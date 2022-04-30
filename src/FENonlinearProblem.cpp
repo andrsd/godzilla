@@ -43,9 +43,9 @@ __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx)
 }
 
 InputParameters
-FENonlinearProblem::validParams()
+FENonlinearProblem::valid_params()
 {
-    InputParameters params = Problem::validParams();
+    InputParameters params = Problem::valid_params();
 
     params.add_private_param<Mesh *>("_mesh");
     params.add_param<std::string>("line_search", "bt", "The type of line search to be used");

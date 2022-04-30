@@ -4,9 +4,9 @@
 namespace godzilla {
 
 InputParameters
-BoundaryCondition::validParams()
+BoundaryCondition::valid_params()
 {
-    InputParameters params = Object::validParams();
+    InputParameters params = Object::valid_params();
     params.add_required_param<std::string>("boundary", "Boundary name");
     return params;
 }

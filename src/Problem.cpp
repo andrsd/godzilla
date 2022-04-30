@@ -4,9 +4,9 @@
 namespace godzilla {
 
 InputParameters
-Problem::validParams()
+Problem::valid_params()
 {
-    InputParameters params = Object::validParams();
+    InputParameters params = Object::valid_params();
     return params;
 }
 

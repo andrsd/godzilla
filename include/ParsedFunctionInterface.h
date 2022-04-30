@@ -35,7 +35,7 @@ protected:
     std::vector<ParsedFunctionEvaluator> evalr;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

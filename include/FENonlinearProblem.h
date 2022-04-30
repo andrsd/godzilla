@@ -108,7 +108,7 @@ protected:
     PetscInt lin_max_iter;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 
     friend PetscErrorCode __compute_residual(SNES snes, Vec x, Vec f, void * ctx);
     friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat A, Mat B, void * ctx);

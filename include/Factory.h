@@ -35,9 +35,9 @@ buildObj(const InputParameters & parameters)
 
 template <typename T>
 auto
-callValidParams() -> decltype(T::validParams(), InputParameters::empty())
+callValidParams() -> decltype(T::valid_params(), InputParameters::empty())
 {
-    return T::validParams();
+    return T::valid_params();
 }
 
 class InputParameters;
@@ -72,7 +72,7 @@ public:
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
-            error("Getting validParams for object '",
+            error("Getting valid_params for object '",
                   class_name,
                   "' failed.  Object is not registred.");
 

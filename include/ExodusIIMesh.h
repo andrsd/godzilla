@@ -20,7 +20,7 @@ protected:
     const std::string & file_name;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

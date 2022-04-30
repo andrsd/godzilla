@@ -17,7 +17,7 @@ public:
     virtual Scalar evaluate(Real time, Real x, Real y, Real z) = 0;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

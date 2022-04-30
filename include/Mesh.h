@@ -118,7 +118,7 @@ protected:
     std::map<std::string, uint> bnd_name_to_marker;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

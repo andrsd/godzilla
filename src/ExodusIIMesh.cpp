@@ -21,9 +21,9 @@ enum EElemType { INVALID, EDGE, TRIANGLE, QUAD, HEX, TETRA, PRISM, PYRAMID };
 registerObject(ExodusIIMesh);
 
 InputParameters
-ExodusIIMesh::validParams()
+ExodusIIMesh::valid_params()
 {
-    InputParameters params = Mesh::validParams();
+    InputParameters params = Mesh::valid_params();
     params.add_required_param<std::string>("file", "The name of the ExodusII file.");
     return params;
 }

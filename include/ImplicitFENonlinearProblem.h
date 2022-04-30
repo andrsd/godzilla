@@ -29,7 +29,7 @@ protected:
     virtual void setup_monitors() override;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 
     friend PetscErrorCode __transient_pre_step(TS ts);
     friend PetscErrorCode __transient_post_step(TS ts);

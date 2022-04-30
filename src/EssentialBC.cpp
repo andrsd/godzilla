@@ -4,9 +4,9 @@
 namespace godzilla {
 
 InputParameters
-EssentialBC::validParams()
+EssentialBC::valid_params()
 {
-    InputParameters params = BoundaryCondition::validParams();
+    InputParameters params = BoundaryCondition::valid_params();
     return params;
 }
 
