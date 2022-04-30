@@ -1,20 +1,18 @@
 #include "Space.h"
 #include "CallStack.h"
+#include "BoundaryCondition.h"
 #include <assert.h>
 #include <iostream>
 
 namespace godzilla {
 
-static EBCType
+static BoundaryConditionType
 default_bc_type(uint marker)
 {
     return BC_NONE;
 }
 
-Space::Space(Mesh * mesh, Shapeset * shapeset) :
-    mesh(mesh),
-    shapeset(shapeset),
-    bc_type_callback(default_bc_type)
+Space::Space(Mesh * mesh, Shapeset * shapeset) : mesh(mesh), shapeset(shapeset)
 {
     _F_;
     // TODO: check that shapeset is compatible with the space
@@ -40,8 +38,7 @@ void
 Space::set_uniform_order(uint order)
 {
     _F_;
-    for (auto & elem : this->mesh->get_elements())
-    {
+    for (auto & elem : this->mesh->get_elements()) {
         PetscInt eid = elem->get_id();
         this->elem_data[eid] = new ElementData(order);
     }
@@ -86,19 +83,78 @@ Space::free_data_tables()
 }
 
 void
+Space::add_boundary_condition(const BoundaryCondition * bc)
+{
+    _F_;
+
+    const std::string & bnd_name = bc->get_boundary_name();
+    uint marker = this->mesh->get_marker_by_name(bnd_name);
+    if (!this->marker_to_bcs.exists(marker)) {
+        this->marker_to_bcs[marker] = bc;
+
+        PetscErrorCode ierr;
+        DM dm = this->mesh->get_dm();
+        IS is;
+        PetscInt n_ids;
+        const PetscInt * ids;
+
+        DMLabel label;
+        ierr = DMGetLabel(dm, bnd_name.c_str(), &label);
+        checkPetscError(ierr);
+
+        ierr = DMLabelGetValueIS(label, &is);
+        checkPetscError(ierr);
+        ierr = ISGetSize(is, &n_ids);
+        assert(n_ids == 1);
+        checkPetscError(ierr);
+        ierr = ISGetIndices(is, &ids);
+        checkPetscError(ierr);
+        PetscInt bnd_stratum = ids[0];
+        ierr = ISRestoreIndices(is, &ids);
+        checkPetscError(ierr);
+        ierr = ISDestroy(&is);
+        checkPetscError(ierr);
+
+        ierr = DMLabelGetStratumIS(label, bnd_stratum, &is);
+        checkPetscError(ierr);
+        ierr = ISGetSize(is, &n_ids);
+        checkPetscError(ierr);
+        ierr = ISGetIndices(is, &ids);
+        checkPetscError(ierr);
+
+        for (PetscInt i = 0; i < n_ids; i++) {
+            BoundaryInfo * info = new BoundaryInfo(ids[i], marker);
+            this->side_boundaries.add(info);
+        }
+
+        ierr = ISRestoreIndices(is, &ids);
+        checkPetscError(ierr);
+        ierr = ISDestroy(&is);
+        checkPetscError(ierr);
+    }
+    else
+        // TODO: add variable/field name into the error message
+        error("Unable to add boundary condition '",
+              bc->get_name(),
+              "'. Boundary condition on boundary '",
+              bnd_name,
+              "' already exists.");
+}
+
+void
 Space::set_bc_information()
 {
     _F_;
-    for (auto & bnd : this->mesh->get_side_boundaries())
-    {
+    for (auto & bnd : this->side_boundaries) {
         const uint & marker = bnd->marker;
-        EBCType bc_type = get_bc_type(marker);
+
+        const BoundaryCondition * bc = this->marker_to_bcs[marker];
+        assert(bc != nullptr);
 
         // 1D
-        const Element * e = this->mesh->get_element(bnd->elem_id);
-        Index vtx_idx = this->mesh->get_vertex_id(e, bnd->side);
+        Index vtx_idx = bnd->id;
         assert(this->vertex_data.exists(vtx_idx));
-        set_bc_info(this->vertex_data[vtx_idx], bc_type, marker);
+        set_bc_info(this->vertex_data[vtx_idx], bc->get_bc_type(), marker);
 
         // TODO: handle 2D
         // TODO: handle 3D
@@ -106,7 +162,7 @@ Space::set_bc_information()
 }
 
 void
-Space::set_bc_info(NodeData * node, EBCType bc_type, uint marker)
+Space::set_bc_info(NodeData * node, BoundaryConditionType bc_type, uint marker)
 {
     _F_;
     if (bc_type == BC_ESSENTIAL || (bc_type == BC_NATURAL && node->bc_type == BC_NONE)) {
@@ -119,32 +175,13 @@ void
 Space::update_constraints()
 {
     _F_;
-    for (auto & bnd : this->mesh->get_side_boundaries())
-    {
-        const Element * e = this->mesh->get_element(bnd->elem_id);
-
+    for (auto & bnd : this->side_boundaries) {
         // 1D
-        calc_vertex_boundary_projection(e, bnd->side);
+        calc_vertex_boundary_projection(bnd->id);
 
         // TODO: handle 2D
         // TODO: handle 3D
     }
-}
-
-void Space::set_bc_types(EBCType (*bc_type_callback)(uint))
-{
-    _F_;
-    if (bc_type_callback == nullptr)
-        this->bc_type_callback = default_bc_type;
-    else
-        this->bc_type_callback = bc_type_callback;
-}
-
-EBCType
-Space::get_bc_type(uint marker) const
-{
-    _F_;
-    return bc_type_callback(marker);
 }
 
 void
@@ -162,7 +199,7 @@ void
 Space::assign_vertex_dofs(PetscInt vertex_id)
 {
     _F_;
-    VertexData *node = this->vertex_data[vertex_id];
+    VertexData * node = this->vertex_data[vertex_id];
     uint ndofs = get_vertex_ndofs();
     if (node->bc_type == BC_ESSENTIAL) {
         node->dof = DIRICHLET_DOF;

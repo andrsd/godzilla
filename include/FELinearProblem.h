@@ -10,6 +10,7 @@ namespace godzilla {
 class Mesh;
 class Shapeset;
 class Space;
+class BoundaryCondition;
 class PetscVector;
 class PetscMatrix;
 class ShapeFunction1D;
@@ -68,6 +69,8 @@ public:
         return this->al + idx;
     }
 
+    virtual void add_boundary_condition(BoundaryCondition * bc);
+
 protected:
     /// provide DM for the underlying KSP object
     virtual DM get_dm() const override;
@@ -115,6 +118,8 @@ protected:
     std::vector<Space *> spaces;
     /// Map from varaible name to an index into the `spaces` array
     std::map<std::string, std::size_t> space_names;
+    /// List of boundary condition objects
+    std::vector<BoundaryCondition *> bcs;
     /// Number of degrees of freedom in the system
     uint n_dofs;
     ///
@@ -137,9 +142,6 @@ protected:
     Fn1D * v;
     Gradient1D * grad_v;
 
-    /// PETSc section
-    // TODO: better name
-    PetscSection section;
     /// KSP object
     KSP ksp;
     /// The solution vector

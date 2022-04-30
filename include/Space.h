@@ -6,8 +6,10 @@
 
 namespace godzilla {
 
+class BoundaryCondition;
+
 /// Boundary condition types
-enum EBCType {
+enum BoundaryConditionType {
     /// Essential (Dirichlet) BC
     BC_ESSENTIAL,
     /// Natural (Neumann, Newton) BC
@@ -51,19 +53,9 @@ public:
         return this->next_dof - this->stride;
     }
 
-    /// Set the callback for determining the type of boundary conditions
-    ///
-    /// @param[in] bc_type_callback The free function that determinesthe type of BC based on its
-    /// parameter
-    void set_bc_types(EBCType (*bc_type_callback)(uint));
-
-    /// Get type of boundary condition
-    ///
-    /// @param[in] marker Marker assiciated with the boundary
-    /// @return Type of boundary condition
-    virtual EBCType get_bc_type(uint marker) const;
-
     virtual void get_element_assembly_list(const Element * e, AssemblyList * al) = 0;
+
+    virtual void add_boundary_condition(const BoundaryCondition * bc);
 
 protected:
     /// Data associated with a node (vertex, edge, face, interior)
@@ -71,7 +63,7 @@ protected:
         /// boundary condition marker
         uint marker;
         /// boundary condition type
-        EBCType bc_type;
+        BoundaryConditionType bc_type;
 
         NodeData() : marker(MARKER_UNDEFINED), bc_type(BC_NONE) {}
     };
@@ -126,6 +118,20 @@ protected:
         ElementData(uint order) : order(order), dof(DOF_NOT_ANALYZED), n(0) {}
     };
 
+    /// Information about a side boundary
+    struct BoundaryInfo {
+        BoundaryInfo(const Index & id, const uint & marker) :
+            id(id),
+            marker(marker)
+        {
+        }
+
+        /// ID (vertex, edge or face)
+        Index id;
+        /// Marker
+        uint marker;
+    };
+
     /// Initialize data tables
     void init_data_tables();
 
@@ -143,16 +149,15 @@ protected:
     /// @param[in] node Node data to modify
     /// @param[in] bc_type Type of the boundary condition
     /// @param[in] marker Marker associated with the boundary
-    void set_bc_info(NodeData * node, EBCType bc_type, uint marker);
+    void set_bc_info(NodeData * node, BoundaryConditionType bc_type, uint marker);
 
     /// Update constraints
     void update_constraints();
 
     /// Calculate boundary condition projection at a vertex
     ///
-    /// @param[in] elem Element
-    /// @param[in] ivertex Local vertex number of a element `elem`
-    virtual void calc_vertex_boundary_projection(const Element * elem, uint ivertex) = 0;
+    /// @param[in] ivertex Vertex ID
+    virtual void calc_vertex_boundary_projection(Index vtx_idx) = 0;
 
     /// Calculate boundary condition projection on an edge
     ///
@@ -231,8 +236,10 @@ protected:
     /// Element node data
     Array<ElementData *> elem_data;
 
-    /// Callback for determining the type of a boundary condition
-    EBCType (*bc_type_callback)(uint);
+    /// Boundary info
+    Array<const BoundaryInfo *> side_boundaries;
+    /// Map from markers to boundary condition objects
+    Array<const BoundaryCondition *> marker_to_bcs;
 };
 
 } // namespace godzilla

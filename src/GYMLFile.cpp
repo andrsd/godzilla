@@ -4,6 +4,8 @@
 #include "CallStack.h"
 #include "Mesh.h"
 #include "Problem.h"
+#include "FELinearProblem.h"
+#include "BoundaryCondition.h"
 #include "assert.h"
 
 template <typename T>
@@ -52,6 +54,7 @@ GYMLFile::build()
     _F_;
     build_mesh();
     build_problem();
+    build_boundary_conditions();
 }
 
 void
@@ -100,6 +103,32 @@ GYMLFile::build_problem()
     params.set<Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
     add_object(this->problem);
+}
+
+void
+GYMLFile::build_boundary_conditions()
+{
+    _F_;
+    YAML::Node bcs_root_node = this->root["bcs"];
+    if (!bcs_root_node)
+        return;
+
+    FELinearProblem * fep = dynamic_cast<FELinearProblem *>(this->problem);
+    if (fep == nullptr)
+        log_error("Supplied problem type '",
+                 this->problem->get_type(),
+                 "' does not support boundary conditions.");
+    else {
+        for (const auto & it : bcs_root_node) {
+            YAML::Node bc_node = it.first;
+            std::string name = bc_node.as<std::string>();
+
+            InputParameters & params = build_params(bcs_root_node, name);
+            const std::string & class_name = params.get<std::string>("_type");
+            auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
+            fep->add_boundary_condition(bc);
+        }
+    }
 }
 
 InputParameters &

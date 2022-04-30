@@ -104,7 +104,6 @@ Mesh::create()
 
     create_elements();
     create_vertices();
-    create_side_boundaries();
 }
 
 void
@@ -213,12 +212,6 @@ Mesh::create_vertices()
     }
 }
 
-void
-Mesh::create_side_boundaries()
-{
-    _F_;
-}
-
 uint
 Mesh::get_cone_size(const Index & id) const
 {
@@ -270,21 +263,6 @@ Mesh::get_element(const Index & id) const
     return this->elements[id];
 }
 
-void
-Mesh::set_boundary(const Index & eid, const uint & local_side, const uint & marker)
-{
-    _F_;
-    SideBoundary * bnd = new SideBoundary(eid, local_side, marker);
-    this->side_boundaries.add(bnd);
-}
-
-const SideBoundary *
-Mesh::get_side_boundary(const Index & idx) const
-{
-    _F_;
-    return this->side_boundaries[idx];
-}
-
 PetscInt
 Mesh::get_vertex_id(const Element * e, uint vertex) const
 {
@@ -306,6 +284,16 @@ Mesh::get_face_id(const Element * e, uint face) const
     _F_;
     error("Not implemented.");
     return 0;
+}
+
+uint
+Mesh::get_marker_by_name(const std::string & bnd_name) const
+{
+    const auto & it = this->bnd_name_to_marker.find(bnd_name);
+    if (it != this->bnd_name_to_marker.end())
+        return it->second;
+    else
+        error("No marker associated with boundary '", bnd_name, "'.");
 }
 
 void

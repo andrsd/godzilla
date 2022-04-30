@@ -5,6 +5,7 @@
 #include "AssemblyList.h"
 #include "H1Space.h"
 #include "H1LobattoShapesetEdge.h"
+#include "BoundaryCondition.h"
 #include "ShapeFunction1D.h"
 #include "RefMap1D.h"
 #include "QuadratureGauss1D.h"
@@ -71,7 +72,6 @@ FELinearProblem::FELinearProblem(const InputParameters & parameters) :
     grad_u(nullptr),
     v(nullptr),
     grad_v(nullptr),
-    section(nullptr),
     ksp(NULL),
     x(NULL),
     b(NULL),
@@ -97,8 +97,6 @@ FELinearProblem::~FELinearProblem()
         MatDestroy(&this->B);
     if (this->A)
         MatDestroy(&this->A);
-    if (this->section)
-        PetscSectionDestroy(&this->section);
     delete this->refmap;
     delete[] this->al;
 
@@ -153,6 +151,13 @@ FELinearProblem::create()
     }
     this->refmap = new RefMap1D(this->mesh);
     MEM_CHECK(refmap);
+
+    for (auto & bc : this->bcs) {
+        bc->create();
+        // FIXME: get the index of space the BC is applied to
+        uint space_idx = 0;
+        this->spaces[space_idx]->add_boundary_condition(bc);
+    }
 
     assign_dofs();
     update_constraints();
@@ -336,6 +341,13 @@ FELinearProblem::add_variable(const std::string & name, uint nc, uint p)
     auto idx = this->spaces.size();
     this->spaces.push_back(spc);
     this->space_names[name] = idx;
+}
+
+void
+FELinearProblem::add_boundary_condition(BoundaryCondition * bc)
+{
+    _F_;
+    this->bcs.push_back(bc);
 }
 
 void

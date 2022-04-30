@@ -10,23 +10,6 @@
 
 namespace godzilla {
 
-/// Information about a side boundary (element, local side)
-struct SideBoundary {
-    SideBoundary(const Index & eid, const uint side, const uint & marker) :
-        elem_id(eid),
-        side(side),
-        marker(marker)
-    {
-    }
-
-    /// Element ID
-    Index elem_id;
-    /// Local element side this boundary is associated with
-    uint side;
-    /// Marker
-    uint marker;
-};
-
 /// Unstructured mesh
 ///
 /// TODO: rename this to UnstructuredMesh
@@ -59,18 +42,6 @@ public:
     /// @param[in] id ID of an element
     const Element * get_element(const Index & id) const;
 
-    /// Set a boundary
-    ///
-    /// @param[in] eid Element ID
-    /// @param[in] local_side Local element side
-    /// @param[in] marker Marker associated with the boundary
-    void set_boundary(const Index & eid, const uint & local_side, const uint & marker);
-
-    /// Get an side boundary using its ID
-    ///
-    /// @param[in] idx Index returned by iterating over Array returned by get_side_boundaries()
-    const SideBoundary * get_side_boundary(const Index & idx) const;
-
     const Array<const Vertex *> &
     get_vertices() const
     {
@@ -81,12 +52,6 @@ public:
     get_elements() const
     {
         return this->elements;
-    }
-
-    const Array<const SideBoundary *> &
-    get_side_boundaries() const
-    {
-        return this->side_boundaries;
     }
 
     /// Get vertex ID
@@ -107,6 +72,8 @@ public:
     /// @param[in] face Local face number
     virtual Index get_face_id(const Element * e, uint face) const;
 
+    virtual uint get_marker_by_name(const std::string & bnd_name) const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
@@ -122,7 +89,6 @@ protected:
 
     void create_elements();
     void create_vertices();
-    void create_side_boundaries();
 
     uint get_cone_size(const Index & id) const;
 
@@ -144,12 +110,12 @@ protected:
     Array<const Vertex *> vertices;
     /// Mesh elements
     Array<const Element *> elements;
-    /// Side boundaries
-    Array<const SideBoundary *> side_boundaries;
     /// Mesh partitioner
     PetscPartitioner partitioner;
     /// Partition overlap for mesh partitioning
     PetscInt partition_overlap;
+    /// Map from boundary name to marker
+    std::map<std::string, uint> bnd_name_to_marker;
 
 public:
     static InputParameters validParams();

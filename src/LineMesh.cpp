@@ -72,6 +72,8 @@ LineMesh::create_dm()
                                &this->dm);
     checkPetscError(ierr);
 
+    this->bnd_name_to_marker["marker"] = 0;
+
     // create user-friendly names for sides
     DMLabel face_sets_label;
     ierr = DMGetLabel(this->dm, "Face Sets", &face_sets_label);
@@ -90,6 +92,8 @@ LineMesh::create_dm()
         checkPetscError(ierr);
 
         if (is != nullptr) {
+            this->bnd_name_to_marker[side_name[i]] = i + 1;
+
             ierr = DMLabelSetStratumIS(label, i + 1, is);
             checkPetscError(ierr);
         }

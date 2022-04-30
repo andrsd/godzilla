@@ -50,6 +50,8 @@ ExodusIIMesh::create_dm()
         PetscErrorCode ierr;
         ierr = DMPlexCreateExodusFromFile(comm(), this->file_name.c_str(), PETSC_TRUE, &this->dm);
         checkPetscError(ierr);
+
+        // TODO: create mapping from side_set names to markers
     }
     else
         log_error("Unable to open '",

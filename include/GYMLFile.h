@@ -54,6 +54,9 @@ protected:
     /// Build Problem-derived object
     void build_problem();
 
+    /// Build boundary condition objects
+    void build_boundary_conditions();
+
     /// All built objects has to be added by calling this method
     void add_object(Object * obj);
 

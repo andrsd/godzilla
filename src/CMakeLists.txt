@@ -13,11 +13,14 @@ add_library(godzilla
         QuadratureGauss3DTetra.cpp
         # and then the rest
         App.cpp
+        BoundaryCondition.cpp
         CallStack.cpp
         CmdLineArgParser.cpp
+        DirichletBC.cpp
         Edge.cpp
         Element.cpp
         Error.cpp
+        EssentialBC.cpp
         ExodusIIMesh.cpp
         FELinearProblem.cpp
         FENonlinearProblem.cpp
