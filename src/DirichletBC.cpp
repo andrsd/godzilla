@@ -9,11 +9,13 @@ InputParameters
 DirichletBC::validParams()
 {
     InputParameters params = EssentialBC::validParams();
+    params += ParsedFunctionInterface::validParams();
     return params;
 }
 
 DirichletBC::DirichletBC(const InputParameters & params) :
-    EssentialBC(params)
+    EssentialBC(params),
+    ParsedFunctionInterface(params)
 {
     _F_;
 }
@@ -22,13 +24,16 @@ void
 DirichletBC::create()
 {
     _F_;
+    ParsedFunctionInterface::create();
 }
 
 Scalar
-DirichletBC::evaluate(Real x, Real y, Real z) const
+DirichletBC::evaluate(Real time, Real x, Real y, Real z)
 {
     _F_;
-    return x * x;
+    // FIXME: set this to the dimension of the FEProblem
+    uint dim = 1;
+    return evaluateFunction(0, dim, time, x, y, z);
 }
 
 } // namespace godzilla

@@ -55,7 +55,7 @@ public:
 
     virtual void get_element_assembly_list(const Element * e, AssemblyList * al) = 0;
 
-    virtual void add_boundary_condition(const BoundaryCondition * bc);
+    virtual void add_boundary_condition(BoundaryCondition * bc);
 
 protected:
     /// Data associated with a node (vertex, edge, face, interior)
@@ -239,7 +239,7 @@ protected:
     /// Boundary info
     Array<const BoundaryInfo *> side_boundaries;
     /// Map from markers to boundary condition objects
-    Array<const BoundaryCondition *> marker_to_bcs;
+    Array<BoundaryCondition *> marker_to_bcs;
 };
 
 } // namespace godzilla

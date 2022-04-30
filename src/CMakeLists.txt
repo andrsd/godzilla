@@ -36,6 +36,8 @@ add_library(godzilla
         Mesh.cpp
         MeshFunction1D.cpp
         Object.cpp
+        ParsedFunctionEvaluator.cpp
+        ParsedFunctionInterface.cpp
         PetscMatrix.cpp
         PetscVector.cpp
         PrintInterface.cpp

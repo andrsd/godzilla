@@ -83,7 +83,7 @@ Space::free_data_tables()
 }
 
 void
-Space::add_boundary_condition(const BoundaryCondition * bc)
+Space::add_boundary_condition(BoundaryCondition * bc)
 {
     _F_;
 

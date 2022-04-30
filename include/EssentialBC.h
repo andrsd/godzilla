@@ -14,7 +14,7 @@ public:
 
     /// Evaluate the boundary condition
     ///
-    virtual Scalar evaluate(Real x, Real y, Real z) const = 0;
+    virtual Scalar evaluate(Real time, Real x, Real y, Real z) = 0;
 
 public:
     static InputParameters validParams();

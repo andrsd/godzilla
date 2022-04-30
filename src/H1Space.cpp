@@ -99,10 +99,10 @@ H1Space::calc_vertex_boundary_projection(Index vtx_idx)
         /// FIXME: would be nice if we did not have to do this downcast
         const Vertex1D * v = static_cast<const Vertex1D *>(vertex);
         /// FIXME: remove this down_cast
-        const EssentialBC * bc =
-            dynamic_cast<const EssentialBC *>(this->marker_to_bcs[vnode->marker]);
+        EssentialBC * bc =
+            dynamic_cast<EssentialBC *>(this->marker_to_bcs[vnode->marker]);
         assert(bc != nullptr);
-        vnode->bc_proj = bc->evaluate(v->x, 0., 0.);
+        vnode->bc_proj = bc->evaluate(0., v->x, 0., 0.);
 
         // TODO: handle 2D and 3D case
     }
