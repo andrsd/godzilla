@@ -38,6 +38,17 @@ TEST(PetscVectorTest, test)
     EXPECT_EQ(v.get(0), 3.);
     EXPECT_EQ(v.get(2), 4.);
 
+    v.zero();
+    DenseVector<Scalar> dv(2);
+    dv.zero();
+    dv[0] = 2.;
+    dv[1] = 7.;
+    PetscInt idx[] = { 0, 2 };
+    v.add(dv, idx);
+    EXPECT_EQ(v.get(0), 2.);
+    EXPECT_EQ(v.get(1), 0.);
+    EXPECT_EQ(v.get(2), 7.);
+
     v.finish();
 
     VecDestroy(&vec);
