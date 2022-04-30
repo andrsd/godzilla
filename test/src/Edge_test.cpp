@@ -36,3 +36,29 @@ TEST(EdgeTest, geom)
     Edge edge(0);
     EXPECT_EQ(edge.get_num_vertices(), 2);
 }
+
+TEST(EdgeTest, vtcs)
+{
+    Edge edge(0, 3, 4);
+    const PetscInt * vtcs = edge.get_vertices();
+    EXPECT_EQ(vtcs[0], 3);
+    EXPECT_EQ(vtcs[1], 4);
+}
+
+TEST(EdgeTest, polytope_type)
+{
+    Edge edge(0);
+    EXPECT_EQ(edge.get_potytope_type(), DM_POLYTOPE_SEGMENT);
+}
+
+TEST(EdgeTest, edge_oris)
+{
+    Edge edge(0);
+    EXPECT_DEATH(edge.get_edge_orientation(0), "1D edge has no edge functions");
+}
+
+TEST(EdgeTest, face_oris)
+{
+    Edge edge(0);
+    EXPECT_DEATH(edge.get_face_orientation(0), "1D edge has no face functions");
+}

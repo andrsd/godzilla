@@ -37,3 +37,34 @@ TEST(QuadTest, geom)
     EXPECT_EQ(quad.get_num_vertices(), 4);
     EXPECT_EQ(quad.get_num_edges(), 4);
 }
+
+TEST(QuadTest, vtcs)
+{
+    Quad quad(2, 1, 2, 3, 4);
+    const PetscInt * vtcs = quad.get_vertices();
+    EXPECT_EQ(vtcs[0], 1);
+    EXPECT_EQ(vtcs[1], 2);
+    EXPECT_EQ(vtcs[2], 3);
+    EXPECT_EQ(vtcs[3], 4);
+
+    for (uint i = 0; i < Quad::NUM_VERTICES; i++)
+        EXPECT_EQ(quad.get_vertex(i), i + 1);
+}
+
+TEST(QuadTest, polytope_type)
+{
+    Quad quad(0);
+    EXPECT_EQ(quad.get_potytope_type(), DM_POLYTOPE_QUADRILATERAL);
+}
+
+TEST(QuadTest, edge_oris)
+{
+    Quad quad(0);
+    EXPECT_DEATH(quad.get_edge_orientation(0), "Not implemented");
+}
+
+TEST(QuadTest, face_oris)
+{
+    Quad quad(0);
+    EXPECT_DEATH(quad.get_face_orientation(0), "2D quadrilateral has no face functions");
+}

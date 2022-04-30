@@ -37,3 +37,33 @@ TEST(TriTest, geom)
     EXPECT_EQ(tri.get_num_vertices(), 3);
     EXPECT_EQ(tri.get_num_edges(), 3);
 }
+
+TEST(TriTest, vtcs)
+{
+    Tri tri(2, 1, 2, 3);
+    const PetscInt * vtcs = tri.get_vertices();
+    EXPECT_EQ(vtcs[0], 1);
+    EXPECT_EQ(vtcs[1], 2);
+    EXPECT_EQ(vtcs[2], 3);
+
+    for (uint i = 0; i < Tri::NUM_VERTICES; i++)
+        EXPECT_EQ(tri.get_vertex(i), i + 1);
+}
+
+TEST(TriTest, polytope_type)
+{
+    Tri tri(0);
+    EXPECT_EQ(tri.get_potytope_type(), DM_POLYTOPE_TRIANGLE);
+}
+
+TEST(TriTest, edge_oris)
+{
+    Tri tri(0);
+    EXPECT_DEATH(tri.get_edge_orientation(0), "Not implemented");
+}
+
+TEST(TriTest, face_oris)
+{
+    Tri tri(0);
+    EXPECT_DEATH(tri.get_face_orientation(0), "2D triangle has no face functions");
+}
