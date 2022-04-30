@@ -96,8 +96,6 @@ protected:
     /// @param[in] nc Number of components
     /// @param[in] p Polynomial order
     virtual void add_variable(const std::string & name, uint nc, uint p);
-    /// Set boundary condition information
-    virtual void set_bc_information();
     /// Assign DoFs
     virtual void assign_dofs();
     /// Update constraints
@@ -117,6 +115,10 @@ protected:
     std::vector<Space *> spaces;
     /// Map from varaible name to an index into the `spaces` array
     std::map<std::string, std::size_t> space_names;
+    /// Number of degrees of freedom in the system
+    uint n_dofs;
+    ///
+    uint dof_stride;
     /// Reference map
     RefMap1D * refmap;
     /// Number of equations

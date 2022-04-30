@@ -35,27 +35,8 @@ void
 H1Space::assign_dofs_internal()
 {
     _F_;
-    Set vtx_init;
-
-    // for (auto & elem : this->mesh->get_elements())
-    // {
-    //     PetscInt elem_id = elem->get_id();
-    //     for (uint i = 0; i < elem->get_num_vertices(); i++) {
-    //         Index vtx_id = elem->get_vertex(i);
-    //         VertexData * node_data = this->vertex_data[vtx_id];
-    //         assert(node_data != NULL);
-    //         if (!vtx_init.has(vtx_id)) {
-    //             assign_vertex_dofs(node_data);
-    //             vtx_init.set(vtx_id);
-    //         }
-    //     }
-    //
-    //     // TODO: go over edges, if in 2D and 3D
-    //     // TODO: go over faces, if in 3D
-    //
-    //     ElementData * node_data = this->elem_data[elem_id];
-    //     assign_bubble_dofs(node_data);
-    // }
+    for (auto & vtx : this->mesh->get_vertices())
+        assign_vertex_dofs(vtx->id);
 }
 
 uint
@@ -106,21 +87,6 @@ H1Space::get_element_ndofs(uint order)
     // }
 
     return order - 1;
-}
-
-void
-H1Space::set_vertex_bc_info(PetscInt vertex_id)
-{
-    _F_;
-    assert(this->vertex_data.exists(vertex_id));
-    VertexData * vnode = this->vertex_data[vertex_id];
-    const Vertex * vertex = this->mesh->get_vertex(vertex_id);
-    if (vnode->bc_type == BC_ESSENTIAL) {
-        /// FIXME: would be nice if we did not have to do this downcast
-        const Vertex1D * v = static_cast<const Vertex1D *>(vertex);
-        vnode->bc_proj = bc_value_callback_by_coord(vnode->marker, v->x, 0., 0.);
-        // TODO: handle 2D and 3D case
-    }
 }
 
 void

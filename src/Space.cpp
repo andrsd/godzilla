@@ -151,26 +151,18 @@ void
 Space::enforce_minimum_rule()
 {
     _F_;
-
-    for (auto & elem : this->mesh->get_elements())
-    {
-        // TODO: handle edges and faces in 2D and 3D
-        // TODO: allocate EdgeData and FaceData, based on the determined order
-
-        const uint nv = elem->get_num_vertices();
-        const PetscInt * vtx_idxs = elem->get_vertices();
-        for (uint i = 0; i < nv; i++)
-            this->vertex_data[vtx_idxs[i]] = new VertexData();
+    for (auto * vtx : this->mesh->get_vertices()) {
+        VertexData * node = new VertexData();
+        MEM_CHECK(node);
+        this->vertex_data[vtx->id] = node;
     }
 }
 
-PetscInt
+void
 Space::assign_vertex_dofs(PetscInt vertex_id)
 {
     _F_;
-    VertexData * node = new VertexData();
-    MEM_CHECK(node);
-    this->vertex_data[vertex_id] = node;
+    VertexData *node = this->vertex_data[vertex_id];
     uint ndofs = get_vertex_ndofs();
     if (node->bc_type == BC_ESSENTIAL) {
         node->dof = DIRICHLET_DOF;
@@ -180,7 +172,6 @@ Space::assign_vertex_dofs(PetscInt vertex_id)
         this->next_dof += ndofs * this->stride;
     }
     node->n = ndofs;
-    return ndofs;
 }
 
 void

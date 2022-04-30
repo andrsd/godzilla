@@ -63,10 +63,6 @@ public:
     /// @return Type of boundary condition
     virtual EBCType get_bc_type(uint marker) const;
 
-    virtual PetscInt assign_vertex_dofs(PetscInt vertex_id);
-
-    virtual void set_vertex_bc_info(PetscInt vertex_id) = 0;
-
     virtual void get_element_assembly_list(const Element * e, AssemblyList * al) = 0;
 
 protected:
@@ -182,6 +178,7 @@ protected:
     /// Get number of element DoFs
     virtual uint get_element_ndofs(uint order) = 0;
 
+    virtual void assign_vertex_dofs(PetscInt vertex_id);
     virtual void assign_edge_dofs(EdgeData * node);
     virtual void assign_face_dofs(FaceData * node);
     virtual void assign_bubble_dofs(ElementData * node);

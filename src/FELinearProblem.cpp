@@ -59,6 +59,8 @@ FELinearProblem::FELinearProblem(const InputParameters & parameters) :
     Problem(parameters),
     mesh(get_param<Mesh *>("_mesh")),
     shapeset(nullptr),
+    n_dofs(0),
+    dof_stride(1),
     refmap(nullptr),
     al(nullptr),
     base_fn(nullptr),
@@ -152,7 +154,6 @@ FELinearProblem::create()
     this->refmap = new RefMap1D(this->mesh);
     MEM_CHECK(refmap);
 
-    set_bc_information();
     assign_dofs();
     update_constraints();
 
@@ -176,7 +177,7 @@ FELinearProblem::allocate_objects()
     PetscErrorCode ierr;
     DM dm = get_dm();
 
-    ierr = DMCreateGlobalVector(dm, &this->x);
+    ierr = VecCreateMPI(comm(), PETSC_DECIDE, this->n_dofs, &this->x);
     checkPetscError(ierr);
     ierr = PetscObjectSetName((PetscObject) this->x, "sln");
     checkPetscError(ierr);
@@ -186,7 +187,16 @@ FELinearProblem::allocate_objects()
     ierr = PetscObjectSetName((PetscObject) this->b, "rhs");
     checkPetscError(ierr);
 
-    ierr = DMCreateMatrix(dm, &this->A);
+    ierr = MatCreateAIJ(comm(),
+                        PETSC_DECIDE,
+                        PETSC_DECIDE,
+                        this->n_dofs,
+                        this->n_dofs,
+                        3,
+                        nullptr,
+                        0,
+                        nullptr,
+                        &this->A);
     checkPetscError(ierr);
     ierr = PetscObjectSetName((PetscObject) this->A, "A");
     checkPetscError(ierr);
@@ -329,72 +339,16 @@ FELinearProblem::add_variable(const std::string & name, uint nc, uint p)
 }
 
 void
-FELinearProblem::set_bc_information()
-{
-    _F_;
-    for (auto & bnd : this->mesh->get_side_boundaries()) {
-        const uint & marker = bnd->marker;
-        for (auto & sp : this->spaces) {
-            // 1D
-            const Element * e = this->mesh->get_element(bnd->elem_id);
-            PetscInt vtx_id = this->mesh->get_vertex_id(e, bnd->side);
-            sp->set_vertex_bc_info(vtx_id);
-        }
-    }
-}
-
-void
 FELinearProblem::assign_dofs()
 {
     _F_;
 
-    // std::cerr << "n_elems = " << this->mesh->get_elements().count() << std::endl;
-    // for (auto & elem : this->mesh->get_elements()) {
-    //     // std::cerr << "idx = " << idx << std:::endl;
-    //     std::cerr << "elem = " << elem->get_id() << std::endl;
-    // }
-
-    PetscErrorCode ierr;
-    DM dm = this->mesh->get_dm();
-
-    PetscInt p_start, p_end;
-    ierr = DMPlexGetChart(dm, &p_start, &p_end);
-    checkPetscError(ierr);
-
-    ierr = PetscSectionCreate(comm(), &this->section);
-    checkPetscError(ierr);
-
-    ierr = PetscSectionSetNumFields(this->section, this->spaces.size());
-    checkPetscError(ierr);
-
-    // TODO: should be done by the space
-    ierr = PetscSectionSetFieldComponents(this->section, 0, 1);
-    checkPetscError(ierr);
-
-    ierr = PetscSectionSetChart(this->section, p_start, p_end);
-    checkPetscError(ierr);
-
-    // std::cerr << "n_verts = " << this->mesh->get_vertices().count() << std::endl;
-    for (auto & vtx : this->mesh->get_vertices()) {
-        // std::cerr << "vtx = " << vtx->id << std::endl;
-        PetscInt ndofs = 0;
-        for (auto & sp : this->spaces) {
-            ndofs += sp->assign_vertex_dofs(vtx->id);
-        }
-        ierr = PetscSectionSetDof(this->section, vtx->id, ndofs);
-        checkPetscError(ierr);
+    this->n_dofs = 0;
+    for (auto & sp : this->spaces) {
+        sp->assign_dofs(this->n_dofs, this->dof_stride);
+        this->n_dofs += sp->get_dof_count();
     }
-
-    ierr = PetscSectionSetUp(this->section);
-    checkPetscError(ierr);
-
-    ierr = DMSetLocalSection(dm, this->section);
-    checkPetscError(ierr);
-
-    ierr = DMSetAdjacency(dm, 0, PETSC_FALSE, PETSC_TRUE);
-    checkPetscError(ierr);
-
-    // godzilla_print(9, "Number of DoFs: ", ndofs);
+    godzilla_print(9, "Number of DoFs: ", this->n_dofs);
 }
 
 void
