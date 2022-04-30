@@ -246,6 +246,8 @@ public:
         this->params.clear();
     }
 
+    static InputParameters empty();
+
 private:
     /// This method is called when adding a Parameter with a default value, can be specialized for
     /// non-matching types.
@@ -331,7 +333,5 @@ InputParameters::add_private_param(const std::string & name, const T & value)
     param->valid = true;
     this->params[name] = param;
 }
-
-InputParameters empty_input_parameters();
 
 } // namespace godzilla

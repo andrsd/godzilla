@@ -8,7 +8,7 @@ namespace godzilla {
 InputParameters
 TransientInterface::validParams()
 {
-    InputParameters params = empty_input_parameters();
+    InputParameters params = InputParameters::empty();
     params.add_param<Real>("start_time", 0., "Start time of the simulation");
     params.add_required_param<Real>("end_time", "Simulation end time");
     params.add_required_param<Real>("dt", "Time step size");

@@ -6,7 +6,7 @@ namespace godzilla {
 InputParameters
 Object::validParams()
 {
-    InputParameters params = empty_input_parameters();
+    InputParameters params = InputParameters::empty();
     params.add_private_param<const App *>("_app", nullptr);
     params.add_private_param<std::string>("_type");
     params.add_private_param<std::string>("_name");

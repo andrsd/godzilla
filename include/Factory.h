@@ -35,7 +35,7 @@ buildObj(const InputParameters & parameters)
 
 template <typename T>
 auto
-callValidParams() -> decltype(T::validParams(), empty_input_parameters())
+callValidParams() -> decltype(T::validParams(), InputParameters::empty())
 {
     return T::validParams();
 }

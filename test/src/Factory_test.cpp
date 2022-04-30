@@ -13,7 +13,7 @@ TEST(FactoryTest, valid_params_unreg_obj)
 
 TEST(FactoryTest, create_unreg_obj)
 {
-    InputParameters params = empty_input_parameters();
+    InputParameters params = InputParameters::empty();
     EXPECT_DEATH(Factory::create<Object>("ASDF", "name", params),
                  "Trying to create object of unregistered type 'ASDF'.");
 }
