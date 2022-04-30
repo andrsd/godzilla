@@ -9,6 +9,7 @@ add_executable(${PROJECT_NAME}
     CallStack_test.cpp
     DenseMatrix_test.cpp
     Determinant_test.cpp
+    DirichletBC_test.cpp
     Edge_test.cpp
     Error_test.cpp
     ExodusIIMesh_test.cpp
