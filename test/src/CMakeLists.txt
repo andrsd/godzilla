@@ -29,6 +29,7 @@ add_executable(${PROJECT_NAME}
     QuadratureGauss1D_test.cpp
     QuadratureGauss2DTri_test.cpp
     QuadratureGauss3DTetra_test.cpp
+    RealVector_test.cpp
     RefDomain_test.cpp
     RefMap1D_test.cpp
     RefMapShapesetEdge_test.cpp
