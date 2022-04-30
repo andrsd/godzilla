@@ -21,6 +21,7 @@ add_executable(${PROJECT_NAME}
     LineMesh_test.cpp
     Logger_test.cpp
     Object_test.cpp
+    ParsedFunctionEvaluator_test.cpp
     PetscVector_test.cpp
     PetscMatrix_test.cpp
     PrintInterface_test.cpp
