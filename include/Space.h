@@ -186,7 +186,7 @@ protected:
     virtual void assign_vertex_dofs(PetscInt vertex_id);
     virtual void assign_edge_dofs(EdgeData * node);
     virtual void assign_face_dofs(FaceData * node);
-    virtual void assign_bubble_dofs(ElementData * node);
+    virtual void assign_bubble_dofs(PetscInt elem_id);
 
     /// Build assembly list associated with a vertex
     ///

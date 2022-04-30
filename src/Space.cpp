@@ -242,9 +242,10 @@ Space::assign_face_dofs(FaceData * node)
 }
 
 void
-Space::assign_bubble_dofs(ElementData * node)
+Space::assign_bubble_dofs(PetscInt elem_id)
 {
     _F_;
+    ElementData * node = this->elem_data[elem_id];
     uint ndofs = get_element_ndofs(node->order);
     node->n = ndofs;
     node->dof = this->next_dof;

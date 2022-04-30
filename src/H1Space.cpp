@@ -22,6 +22,9 @@ H1Space::assign_dofs_internal()
     _F_;
     for (auto & vtx : this->mesh->get_vertices())
         assign_vertex_dofs(vtx->id);
+
+    for (auto & elem : this->mesh->get_elements())
+        assign_bubble_dofs(elem->get_id());
 }
 
 uint
@@ -99,8 +102,7 @@ H1Space::calc_vertex_boundary_projection(Index vtx_idx)
         /// FIXME: would be nice if we did not have to do this downcast
         const Vertex1D * v = static_cast<const Vertex1D *>(vertex);
         /// FIXME: remove this down_cast
-        EssentialBC * bc =
-            dynamic_cast<EssentialBC *>(this->marker_to_bcs[vnode->marker]);
+        EssentialBC * bc = dynamic_cast<EssentialBC *>(this->marker_to_bcs[vnode->marker]);
         assert(bc != nullptr);
         vnode->bc_proj = bc->evaluate(0., v->x, 0., 0.);
 
