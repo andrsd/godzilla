@@ -69,3 +69,15 @@ TEST(H1LobattoShapesetEdgeTest, qpt)
     EXPECT_DOUBLE_EQ(vals[0], -0.5);
     EXPECT_DOUBLE_EQ(vals[1], -0.5);
 }
+
+TEST(H1LobattoShapesetEdgeTest, edge_indices)
+{
+    H1LobattoShapesetEdge ss;
+    EXPECT_DEATH(ss.get_edge_indices(0, 0, 0), "1D shapesets have no edge functions");
+}
+
+TEST(H1LobattoShapesetEdgeTest, face_indices)
+{
+    H1LobattoShapesetEdge ss;
+    EXPECT_DEATH(ss.get_face_indices(0, 0, 0), "1D shapesets have no face functions");
+}
