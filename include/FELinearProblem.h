@@ -31,6 +31,7 @@ public:
     virtual void solve() override;
     virtual void run() override;
     virtual bool converged() override;
+    virtual const Mesh * get_mesh() const;
     virtual Vec get_solution_vector() const override;
 
     virtual Solution1D * get_solution(const std::string & name) const;

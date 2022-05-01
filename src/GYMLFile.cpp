@@ -6,6 +6,7 @@
 #include "Problem.h"
 #include "FELinearProblem.h"
 #include "BoundaryCondition.h"
+#include "Output.h"
 #include "assert.h"
 
 template <typename T>
@@ -55,6 +56,7 @@ GYMLFile::build()
     build_mesh();
     build_problem();
     build_boundary_conditions();
+    build_outputs();
 }
 
 void
@@ -128,6 +130,27 @@ GYMLFile::build_boundary_conditions()
             auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
             fep->add_boundary_condition(bc);
         }
+    }
+}
+
+void
+GYMLFile::build_outputs()
+{
+    _F_;
+    YAML::Node output_root_node = this->root["output"];
+    if (!output_root_node)
+        return;
+
+    for (const auto & it : output_root_node) {
+        YAML::Node output_node = it.first;
+        std::string name = output_node.as<std::string>();
+
+        InputParameters & params = build_params(output_root_node, name);
+        const std::string & class_name = params.get<std::string>("_type");
+        params.set<Problem *>("_problem") = this->problem;
+        auto output = Factory::create<Output>(class_name, name, params);
+        assert(this->problem != nullptr);
+        this->problem->add_output(output);
     }
 }
 
