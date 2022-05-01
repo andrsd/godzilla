@@ -90,6 +90,8 @@ protected:
     virtual PetscErrorCode compute_operators_callback(Mat A, Mat B);
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
+    /// FIXME: better name
+    PetscInt * pre_alloc();
     ///
     virtual void assemble(PetscMatrix * matrix, PetscVector * rhs);
 

@@ -13,6 +13,7 @@
 #include "PetscVector.h"
 #include "PetscMatrix.h"
 #include "DenseMatrix.h"
+#include "Set.h"
 
 namespace godzilla {
 
@@ -192,19 +193,21 @@ FELinearProblem::allocate_objects()
     ierr = PetscObjectSetName((PetscObject) this->b, "rhs");
     checkPetscError(ierr);
 
+    PetscInt * nnz = pre_alloc();
     ierr = MatCreateAIJ(comm(),
                         PETSC_DECIDE,
                         PETSC_DECIDE,
                         this->n_dofs,
                         this->n_dofs,
-                        3,
-                        nullptr,
+                        0,
+                        nnz,
                         0,
                         nullptr,
                         &this->A);
     checkPetscError(ierr);
     ierr = PetscObjectSetName((PetscObject) this->A, "A");
     checkPetscError(ierr);
+    delete[] nnz;
 
     // TODO: Add API for setting up preconditioners
     this->B = this->A;
@@ -281,9 +284,6 @@ void
 FELinearProblem::solve()
 {
     _F_;
-    /// FIXME: implement preallocation and remove this
-    MatSetOption(this->A, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_FALSE);
-
     PetscMatrix A_mat(this->A);
     PetscVector b_vec(this->b);
     assemble(&A_mat, &b_vec);
@@ -367,6 +367,42 @@ void
 FELinearProblem::update_constraints()
 {
     _F_;
+}
+
+PetscInt *
+FELinearProblem::pre_alloc()
+{
+    _F_;
+
+    Array<Set> ms;
+    for (Index i = 0; i < this->n_dofs; i++)
+        ms[i] = Set();
+
+    for (auto & e : this->mesh->get_elements()) {
+        const Element1D * elem = dynamic_cast<const Element1D *>(e);
+        assert(elem != nullptr);
+
+        for (uint i = 0; i < this->neq; i++)
+            this->spaces[i]->get_element_assembly_list(elem, &(this->al[i]));
+
+        uint m = 0;
+        uint n = 0;
+
+        AssemblyList * am = this->al + m;
+        AssemblyList * an = this->al + n;
+
+        for (uint i = 0; i < am->cnt; i++)
+            if (am->dof[i] != Space::DIRICHLET_DOF)
+                for (uint j = 0; j < an->cnt; j++)
+                    if (an->dof[j] != Space::DIRICHLET_DOF)
+                        ms[am->dof[i]].set(an->dof[j]);
+    }
+
+    PetscInt * nnz = new PetscInt[this->n_dofs];
+    MEM_CHECK(nnz);
+    for (Index i = 0; i < this->n_dofs; i++)
+        nnz[i] = ms[i].count();
+    return nnz;
 }
 
 void
