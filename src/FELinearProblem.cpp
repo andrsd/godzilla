@@ -117,6 +117,13 @@ FELinearProblem::get_dm() const
     return this->mesh->get_dm();
 }
 
+const Mesh *
+FELinearProblem::get_mesh() const
+{
+    _F_;
+    return this->mesh;
+}
+
 Vec
 FELinearProblem::get_solution_vector() const
 {
@@ -342,6 +349,7 @@ FELinearProblem::run()
 {
     _F_;
     solve();
+    output();
 }
 
 void

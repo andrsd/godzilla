@@ -8,6 +8,8 @@
 
 namespace godzilla {
 
+class Output;
+
 /// Problem
 ///
 class Problem : public Object, public PrintInterface {
@@ -36,9 +38,20 @@ public:
     /// @return Simulation time
     virtual const Real & get_time() const;
 
+    /// Add an output object
+    ///
+    /// @param output Output object to add
+    virtual void add_output(Output * output);
+
+    /// Produce output
+    virtual void output();
+
 protected:
     /// Simulation time
     Real time;
+
+    /// List of output objects
+    std::vector<Output *> outputs;
 
 public:
     static InputParameters valid_params();

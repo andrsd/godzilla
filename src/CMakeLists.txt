@@ -11,6 +11,7 @@ add_library(godzilla
         QuadratureGauss1D.cpp
         QuadratureGauss2DTri.cpp
         QuadratureGauss3DTetra.cpp
+        QuadratureOutput1D.cpp
         # and then the rest
         App.cpp
         BoundaryCondition.cpp
@@ -24,6 +25,7 @@ add_library(godzilla
         ExodusIIMesh.cpp
         FELinearProblem.cpp
         FENonlinearProblem.cpp
+        FileOutput.cpp
         Forms.cpp
         GYMLFile.cpp
         H1Space.cpp
@@ -36,6 +38,7 @@ add_library(godzilla
         Mesh.cpp
         MeshFunction1D.cpp
         Object.cpp
+        Output.cpp
         ParsedFunctionEvaluator.cpp
         ParsedFunctionInterface.cpp
         PetscMatrix.cpp
@@ -58,6 +61,7 @@ add_library(godzilla
         Tri.cpp
         Utils.cpp
         Vertex.cpp
+        VTKOutput.cpp
         WeakForm.cpp
 )
 target_code_coverage(godzilla)
