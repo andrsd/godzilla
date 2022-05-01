@@ -6,12 +6,6 @@
 
 namespace godzilla {
 
-static BoundaryConditionType
-default_bc_type(uint marker)
-{
-    return BC_NONE;
-}
-
 Space::Space(Mesh * mesh, Shapeset * shapeset) : mesh(mesh), shapeset(shapeset)
 {
     _F_;
