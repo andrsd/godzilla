@@ -12,10 +12,7 @@ TEST(BoundaryConditionTest, api)
         MockBoundaryCondition(const InputParameters & params) : BoundaryCondition(params) {}
 
         MOCK_METHOD((BoundaryConditionType), get_bc_type, (), (const));
-        MOCK_METHOD(void,
-                    evaluate,
-                    (uint, Real, Real, Real, Real, Real),
-                    ());
+        MOCK_METHOD(void, evaluate, (uint, Real, Real, Real, Real, Real), ());
     };
 
     TestApp app;

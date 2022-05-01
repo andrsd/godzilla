@@ -40,10 +40,26 @@ TEST(H1SpaceTest, n_dofs)
     class MockH1Space : public H1Space {
     public:
         MockH1Space(Mesh * mesh, Shapeset * ss) : H1Space(mesh, ss) {}
-        virtual uint get_vertex_ndofs() { return H1Space::get_vertex_ndofs(); }
-        virtual uint get_edge_ndofs(uint order) { return H1Space::get_edge_ndofs(order); }
-        virtual uint get_face_ndofs(uint order) { return H1Space::get_face_ndofs(order); }
-        virtual uint get_element_ndofs(uint order) { return H1Space::get_element_ndofs(order); }
+        virtual uint
+        get_vertex_ndofs()
+        {
+            return H1Space::get_vertex_ndofs();
+        }
+        virtual uint
+        get_edge_ndofs(uint order)
+        {
+            return H1Space::get_edge_ndofs(order);
+        }
+        virtual uint
+        get_face_ndofs(uint order)
+        {
+            return H1Space::get_face_ndofs(order);
+        }
+        virtual uint
+        get_element_ndofs(uint order)
+        {
+            return H1Space::get_element_ndofs(order);
+        }
     };
 
     TestApp app;
@@ -85,14 +101,26 @@ TEST(H1SpaceTest, bc_proj)
         {
             H1Space::calc_face_boundary_projection(elem, iface);
         }
-        uint get_vertex_data_n(Index idx) { return this->vertex_data[idx]->n; }
-        Scalar get_vertex_data_bc_proj(Index idx) { return this->vertex_data[idx]->bc_proj; }
+        uint
+        get_vertex_data_n(Index idx)
+        {
+            return this->vertex_data[idx]->n;
+        }
+        Scalar
+        get_vertex_data_bc_proj(Index idx)
+        {
+            return this->vertex_data[idx]->bc_proj;
+        }
     };
 
     class MockDirichletBC : public EssentialBC {
     public:
         MockDirichletBC(const InputParameters & params) : EssentialBC(params) {}
-        virtual Scalar evaluate(Real time, Real x, Real y, Real z) { return 1234.; }
+        virtual Scalar
+        evaluate(Real time, Real x, Real y, Real z)
+        {
+            return 1234.;
+        }
     };
 
     TestApp app;

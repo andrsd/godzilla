@@ -52,6 +52,7 @@ public:
 protected:
     DM dm;
     Vec x;
+
 public:
     static InputParameters valid_params();
 };

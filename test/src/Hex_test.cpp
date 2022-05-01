@@ -62,7 +62,6 @@ TEST(HexTest, polytope_type)
     EXPECT_EQ(hex.get_potytope_type(), DM_POLYTOPE_HEXAHEDRON);
 }
 
-
 TEST(HexTest, edge_oris)
 {
     Hex hex(0);
