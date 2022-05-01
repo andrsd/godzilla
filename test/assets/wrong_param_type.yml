@@ -1,0 +1,7 @@
+mesh:
+  type: LineMesh
+  nx: 2
+problem:
+  type: GTestProblem
+  arr_d:
+    key: 1.
