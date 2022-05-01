@@ -50,6 +50,7 @@ add_library(godzilla
         Shapeset1D.cpp
         Shapeset2D.cpp
         Shapeset3D.cpp
+        Solution1D.cpp
         Space.cpp
         Terminal.cpp
         Tetra.cpp

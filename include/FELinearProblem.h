@@ -18,6 +18,7 @@ class RefMap1D;
 class QPoint1D;
 class Fn1D;
 class Gradient1D;
+class Solution1D;
 
 /// PETSc Linear problem
 ///
@@ -31,6 +32,8 @@ public:
     virtual void run() override;
     virtual bool converged() override;
     virtual Vec get_solution_vector() const override;
+
+    virtual Solution1D * get_solution(const std::string & name) const;
 
     const uint
     get_num_points() const
@@ -143,6 +146,8 @@ protected:
     Gradient1D * grad_u;
     Fn1D * v;
     Gradient1D * grad_v;
+
+    std::vector<Solution1D *> solutions;
 
     /// KSP object
     KSP ksp;

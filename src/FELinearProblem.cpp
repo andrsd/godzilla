@@ -7,6 +7,7 @@
 #include "H1LobattoShapesetEdge.h"
 #include "BoundaryCondition.h"
 #include "ShapeFunction1D.h"
+#include "Solution1D.h"
 #include "RefMap1D.h"
 #include "QuadratureGauss1D.h"
 #include "Forms.h"
@@ -123,6 +124,17 @@ FELinearProblem::get_solution_vector() const
     return this->x;
 }
 
+Solution1D *
+FELinearProblem::get_solution(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->space_names.find(name);
+    if (it != this->space_names.end())
+        return this->solutions[it->second];
+    else
+        error("Variable with name '", name, "' does not exist in the problem.");
+}
+
 void
 FELinearProblem::create()
 {
@@ -165,6 +177,12 @@ FELinearProblem::create()
 
     allocate_objects();
     on_set_matrix_properties();
+
+    for (uint i = 0; i < this->spaces.size(); i++) {
+        Space * spc = this->spaces[i];
+        Solution1D * sln = this->solutions[i];
+        sln->set_fe_solution(spc, get_solution_vector());
+    }
 }
 
 void
@@ -341,6 +359,9 @@ FELinearProblem::add_variable(const std::string & name, uint nc, uint p)
     auto idx = this->spaces.size();
     this->spaces.push_back(spc);
     this->space_names[name] = idx;
+
+    Solution1D * sln = new Solution1D(this->mesh);
+    this->solutions.push_back(sln);
 }
 
 void
