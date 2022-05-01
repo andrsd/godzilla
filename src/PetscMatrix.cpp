@@ -58,9 +58,7 @@ PetscMatrix::add(PetscInt m, PetscInt n, Scalar v)
 }
 
 void
-PetscMatrix::add(const DenseMatrix<Scalar> & mat,
-                 PetscInt * rows,
-                 PetscInt * cols)
+PetscMatrix::add(const DenseMatrix<Scalar> & mat, PetscInt * rows, PetscInt * cols)
 {
     _F_;
     for (uint i = 0; i < mat.rows(); i++)

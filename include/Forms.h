@@ -61,7 +61,7 @@ public:
     }
 
     void
-    set(uint np, Fn1D *fn)
+    set(uint np, Fn1D * fn)
     {
         allocate(np);
         for (uint i = 0; i < np; i++)
@@ -90,7 +90,7 @@ public:
     }
 
     void
-    set(uint np, Gradient1D *grad)
+    set(uint np, Gradient1D * grad)
     {
         allocate(np);
         for (uint i = 0; i < np; i++)

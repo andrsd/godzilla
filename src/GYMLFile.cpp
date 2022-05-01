@@ -116,8 +116,8 @@ GYMLFile::build_boundary_conditions()
     FELinearProblem * fep = dynamic_cast<FELinearProblem *>(this->problem);
     if (fep == nullptr)
         log_error("Supplied problem type '",
-                 this->problem->get_type(),
-                 "' does not support boundary conditions.");
+                  this->problem->get_type(),
+                  "' does not support boundary conditions.");
     else {
         for (const auto & it : bcs_root_node) {
             YAML::Node bc_node = it.first;
@@ -183,8 +183,7 @@ GYMLFile::set_parameter_from_yml(InputParameters & params,
             params.set<unsigned int>(param_name) = val.as<unsigned int>();
         // vector values
         else if (param_type == type_name<std::vector<Real>>())
-            params.set<std::vector<Real>>(param_name) =
-                read_vector_value<double>(param_name, val);
+            params.set<std::vector<Real>>(param_name) = read_vector_value<double>(param_name, val);
         else if (param_type == type_name<std::vector<int>>())
             params.set<std::vector<int>>(param_name) = read_vector_value<int>(param_name, val);
         else if (param_type == type_name<std::vector<std::string>>())

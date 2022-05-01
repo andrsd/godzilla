@@ -29,9 +29,17 @@ public:
         return 0;
     }
 
-    virtual uint * get_bubble_indices(uint /*order*/) const { return nullptr; }
+    virtual uint *
+    get_bubble_indices(uint /*order*/) const
+    {
+        return nullptr;
+    }
 
-    virtual uint get_num_bubble_fns(uint /*order*/) const { return 0; }
+    virtual uint
+    get_num_bubble_fns(uint /*order*/) const
+    {
+        return 0;
+    }
 
     virtual uint get_order(uint index) const;
 

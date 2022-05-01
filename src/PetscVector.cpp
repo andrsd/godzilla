@@ -75,7 +75,7 @@ PetscVector::add(PetscInt n, const PetscInt * idx, const Scalar * y)
 }
 
 void
-PetscVector::add(const DenseVector<Scalar> & v, PetscInt *idx)
+PetscVector::add(const DenseVector<Scalar> & v, PetscInt * idx)
 {
     _F_;
     PetscErrorCode ierr;
@@ -84,6 +84,5 @@ PetscVector::add(const DenseVector<Scalar> & v, PetscInt *idx)
         checkPetscError(ierr);
     }
 }
-
 
 } // namespace godzilla

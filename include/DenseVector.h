@@ -4,19 +4,16 @@ namespace godzilla {
 
 /// Dense vector
 ///
-template<typename T>
+template <typename T>
 class DenseVector {
 public:
     DenseVector(uint m) : m(m)
     {
-        this->data = new T [this->m];
+        this->data = new T[this->m];
         MEM_CHECK(this->data);
     }
 
-    virtual ~DenseVector()
-    {
-        delete[] this->data;
-    }
+    virtual ~DenseVector() { delete[] this->data; }
 
     void
     zero()
@@ -38,7 +35,11 @@ public:
     }
 
     /// Number of rows
-    const uint & rows() const { return m; }
+    const uint &
+    rows() const
+    {
+        return m;
+    }
 
 protected:
     /// Number of rows

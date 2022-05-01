@@ -120,11 +120,7 @@ protected:
 
     /// Information about a side boundary
     struct BoundaryInfo {
-        BoundaryInfo(const Index & id, const uint & marker) :
-            id(id),
-            marker(marker)
-        {
-        }
+        BoundaryInfo(const Index & id, const uint & marker) : id(id), marker(marker) {}
 
         /// ID (vertex, edge or face)
         Index id;

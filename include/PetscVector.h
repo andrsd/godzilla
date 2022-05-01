@@ -19,7 +19,7 @@ public:
     virtual void set(PetscInt idx, Scalar y);
     virtual void add(PetscInt idx, Scalar y);
     virtual void add(PetscInt n, const PetscInt * idx, const Scalar * y);
-    virtual void add(const DenseVector<Scalar> & mat, PetscInt *idx);
+    virtual void add(const DenseVector<Scalar> & mat, PetscInt * idx);
 
 protected:
     Vec vec;

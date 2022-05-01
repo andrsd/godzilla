@@ -50,11 +50,11 @@ FENonlinearProblem::valid_params()
     params.add_private_param<Mesh *>("_mesh");
     params.add_param<std::string>("line_search", "bt", "The type of line search to be used");
     params.add_param<Real>("nl_rel_tol",
-                                1e-8,
-                                "Relative convergence tolerance for the non-linear solver");
+                           1e-8,
+                           "Relative convergence tolerance for the non-linear solver");
     params.add_param<Real>("nl_abs_tol",
-                                1e-15,
-                                "Absolute convergence tolerance for the non-linear solver");
+                           1e-15,
+                           "Absolute convergence tolerance for the non-linear solver");
     params.add_param<Real>(
         "nl_step_tol",
         1e-15,
@@ -63,11 +63,11 @@ FENonlinearProblem::valid_params()
                                40,
                                "Maximum number of iterations for the non-linear solver");
     params.add_param<Real>("lin_rel_tol",
-                                1e-5,
-                                "Relative convergence tolerance for the linear solver");
+                           1e-5,
+                           "Relative convergence tolerance for the linear solver");
     params.add_param<Real>("lin_abs_tol",
-                                1e-50,
-                                "Absolute convergence tolerance for the linear solver");
+                           1e-50,
+                           "Absolute convergence tolerance for the linear solver");
     params.add_param<PetscInt>("lin_max_iter",
                                10000,
                                "Maximum number of iterations for the linear solver");
