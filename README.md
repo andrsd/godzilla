@@ -9,5 +9,4 @@ godzilla
 [![PETSc](https://img.shields.io/badge/PETSc-3.17-red)](https://petsc.org/)
 [![Scc Count Badge](https://sloc.xyz/github/andrsd/godzilla/)](https://github.com/andrsd/godzilla/)
 
-
 ![godzilla facepalm](https://img.memecdn.com/godzilla-facepalm_o_204968.jpg)
