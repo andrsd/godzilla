@@ -23,7 +23,16 @@ TEST(QuadratureGauss3DTetraTest, test)
     EXPECT_DOUBLE_EQ(qp.w, 0.3333333333333330);
 
     auto edge_pts = q.get_edge_points(0, p_order);
+    EXPECT_DOUBLE_EQ(edge_pts[0].x, -0.57735026918962995);
+    EXPECT_DOUBLE_EQ(edge_pts[0].y, -1.);
+    EXPECT_DOUBLE_EQ(edge_pts[0].z, -1.);
+    EXPECT_DOUBLE_EQ(edge_pts[0].w, 1.);
+
     auto face_pts = q.get_face_points(0, p_order);
+    EXPECT_DOUBLE_EQ(face_pts[0].x, -0.66666666666666663);
+    EXPECT_DOUBLE_EQ(face_pts[0].y, -1.);
+    EXPECT_DOUBLE_EQ(face_pts[0].z, -0.66666666666666663);
+    EXPECT_DOUBLE_EQ(face_pts[0].w, 0.66666666666666663);
 
     auto edge_order = q.get_edge_max_order(0);
     EXPECT_EQ(edge_order, 20);

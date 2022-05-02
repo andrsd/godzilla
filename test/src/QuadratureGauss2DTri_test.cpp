@@ -18,6 +18,9 @@ TEST(QuadratureGauss2DTriTest, test)
     EXPECT_DOUBLE_EQ(qp.w, 2. / 3.);
 
     auto edge_pts = q.get_edge_points(0, p_order);
+    EXPECT_DOUBLE_EQ(edge_pts[0].x, -0.57735026918962995);
+    EXPECT_DOUBLE_EQ(edge_pts[0].y, -1.);
+    EXPECT_DOUBLE_EQ(edge_pts[0].w, 1.);
 
     auto order = q.get_max_order();
     EXPECT_EQ(order, 20);
