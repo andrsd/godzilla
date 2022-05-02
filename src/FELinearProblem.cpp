@@ -206,7 +206,6 @@ FELinearProblem::allocate_objects()
 {
     _F_;
     PetscErrorCode ierr;
-    DM dm = get_dm();
 
     ierr = VecCreateMPI(comm(), PETSC_DECIDE, this->n_dofs, &this->x);
     checkPetscError(ierr);

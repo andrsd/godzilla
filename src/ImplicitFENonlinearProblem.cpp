@@ -123,9 +123,9 @@ void
 ImplicitFENonlinearProblem::setup_callbacks()
 {
     _F_;
-    PetscErrorCode ierr;
-    DM dm = get_dm();
-
+    // PetscErrorCode ierr;
+    // DM dm = get_dm();
+    //
     // ierr = DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this);
     // checkPetscError(ierr);
     // ierr = DMTSSetIFunctionLocal(dm, DMPlexTSComputeIFunctionFEM, this);
