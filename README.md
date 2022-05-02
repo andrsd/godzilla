@@ -1,6 +1,7 @@
 godzilla
 =====
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2653432b7e6a487fb6263b970ecb5a5c)](https://www.codacy.com/gh/andrsd/godzilla/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=andrsd/godzilla&amp;utm_campaign=Badge_Grade)
 [![qa](https://github.com/andrsd/godzilla/actions/workflows/qa.yml/badge.svg)](https://github.com/andrsd/godzilla/actions/workflows/qa.yml)
 [![build](https://github.com/andrsd/godzilla/actions/workflows/build.yml/badge.svg?branch=main&event=push)](https://github.com/andrsd/godzilla/actions/workflows/build.yml)
 [![Documentation Status](https://readthedocs.org/projects/godzilla-fem/badge/?version=latest)](https://godzilla-fem.readthedocs.io/en/latest/?badge=latest)
