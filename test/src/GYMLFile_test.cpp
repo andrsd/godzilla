@@ -8,7 +8,7 @@ using namespace godzilla;
 
 class GTestProblem : public Problem {
 public:
-    GTestProblem(const InputParameters & params) : Problem(params)
+    explicit GTestProblem(const InputParameters & params) : Problem(params)
     {
         DMPlexCreateBoxMesh(comm(), 1, PETSC_TRUE, NULL, NULL, NULL, NULL, PETSC_FALSE, &this->dm);
         DMSetUp(this->dm);
@@ -121,7 +121,7 @@ TEST_F(GYMLFileTest, objects)
 {
     class MockGYMLFile : public GYMLFile {
     public:
-        MockGYMLFile(const App & app) : GYMLFile(app) {}
+        explicit MockGYMLFile(const App & app) : GYMLFile(app) {}
         void
         add_object(Object * obj)
         {
@@ -136,7 +136,7 @@ TEST_F(GYMLFileTest, objects)
 
     class MockObject : public Object {
     public:
-        MockObject(const InputParameters & params) : Object(params) {}
+        explicit MockObject(const InputParameters & params) : Object(params) {}
         MOCK_METHOD(void, create, (), (override));
         MOCK_METHOD(void, check, (), (override));
     };
