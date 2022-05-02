@@ -115,7 +115,7 @@ TEST(H1SpaceTest, bc_proj)
 
     class MockDirichletBC : public EssentialBC {
     public:
-        MockDirichletBC(const InputParameters & params) : EssentialBC(params) {}
+        explicit MockDirichletBC(const InputParameters & params) : EssentialBC(params) {}
         virtual Scalar
         evaluate(Real time, Real x, Real y, Real z)
         {

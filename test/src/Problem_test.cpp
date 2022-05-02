@@ -10,7 +10,7 @@ TEST(ProblemTest, test)
 
     class TestProblem : public Problem {
     public:
-        TestProblem(const InputParameters & params) : Problem(params) {}
+        explicit TestProblem(const InputParameters & params) : Problem(params) {}
 
         virtual void
         run()

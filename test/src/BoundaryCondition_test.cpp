@@ -9,7 +9,7 @@ TEST(BoundaryConditionTest, api)
 {
     class MockBoundaryCondition : public BoundaryCondition {
     public:
-        MockBoundaryCondition(const InputParameters & params) : BoundaryCondition(params) {}
+        explicit MockBoundaryCondition(const InputParameters & params) : BoundaryCondition(params) {}
 
         MOCK_METHOD((BoundaryConditionType), get_bc_type, (), (const));
         MOCK_METHOD(void, evaluate, (uint, Real, Real, Real, Real, Real), ());
