@@ -27,6 +27,9 @@ public:
     /// Get the mesh dimension
     const int & get_dimension() const;
 
+    /// Returns the total number of vertices stored.
+    uint get_num_vertices() const;
+
     /// Returns the total number of elements stored.
     uint get_num_elements() const;
 

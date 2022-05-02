@@ -89,6 +89,13 @@ Mesh::get_num_elements() const
     return this->elements.count();
 }
 
+uint
+Mesh::get_num_vertices() const
+{
+    _F_;
+    return this->vertices.count();
+}
+
 void
 Mesh::create()
 {

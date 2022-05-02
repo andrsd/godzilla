@@ -23,6 +23,7 @@ add_library(godzilla
         Error.cpp
         EssentialBC.cpp
         ExodusIIMesh.cpp
+        ExodusIIOutput.cpp
         FELinearProblem.cpp
         FENonlinearProblem.cpp
         FileOutput.cpp
