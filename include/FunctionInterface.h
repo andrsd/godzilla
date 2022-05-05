@@ -6,6 +6,8 @@
 
 namespace godzilla {
 
+class App;
+
 /// Interface for parsed function
 ///
 class FunctionInterface {

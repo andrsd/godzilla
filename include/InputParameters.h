@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "PrintInterface.h"
+#include "Error.h"
 
 namespace godzilla {
 
