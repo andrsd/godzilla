@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaConfig.h"
 #include "Factory.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "ImplicitFENonlinearProblem_test.h"
 #include "InputParameters.h"
 #include "InitialCondition.h"
@@ -114,8 +114,8 @@ g3_uu(PetscInt dim,
 
 TEST_F(ImplicitFENonlinearProblemTest, run)
 {
-    auto grid = gGrid1d();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    auto prob = gProblem1d(mesh);
 
     {
         const std::string class_name = "ConstantIC";
@@ -134,7 +134,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         prob->addBoundaryCondition(bc);
     }
 
-    grid->create();
+    mesh->create();
     prob->create();
 
     prob->run();
@@ -161,11 +161,11 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
         }
     };
 
-    auto grid = gGrid1d();
+    auto mesh = gMesh1d();
 
     InputParameters & params = Factory::getValidParams("GTestImplicitFENonlinearProblem");
     params.set<const App *>("_app") = this->app;
-    params.set<Grid *>("_grid") = grid;
+    params.set<Mesh *>("_mesh") = mesh;
     params.set<PetscReal>("start_time") = 0.;
     params.set<PetscReal>("end_time") = 20;
     params.set<PetscReal>("dt") = 5;
@@ -206,12 +206,12 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
         MOCK_METHOD(void, outputStep, (PetscInt stepi, DM dm, Vec vec));
     };
 
-    auto grid = gGrid1d();
-    grid->create();
+    auto mesh = gMesh1d();
+    mesh->create();
 
     InputParameters prob_pars = ImplicitFENonlinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Grid *>("_grid") = grid;
+    prob_pars.set<Mesh *>("_mesh") = mesh;
     MockImplicitFENonlinearProblem prob(prob_pars);
 
     InputParameters out_pars = Output::validParams();

@@ -1,15 +1,15 @@
 #include "GodzillaConfig.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "Problem.h"
 #include "petsc.h"
 
 using namespace godzilla;
 
-class MockGrid : public Grid {
+class MockMesh : public Mesh {
 public:
-    MockGrid(const InputParameters & params) : Grid(params) {}
+    explicit MockMesh(const InputParameters & params) : Mesh(params) {}
 
 protected:
     virtual void
@@ -24,7 +24,7 @@ protected:
 
 class MockProblem : public Problem {
 public:
-    MockProblem(const InputParameters & params) : Problem(params) {}
+    explicit MockProblem(const InputParameters & params) : Problem(params) {}
 
     MOCK_METHOD(void, create, ());
     MOCK_METHOD(void, run, ());
@@ -34,7 +34,7 @@ public:
     MOCK_METHOD(Vec, getSolutionVector, (), (const));
 };
 
-registerObject(MockGrid);
+registerObject(MockMesh);
 registerObject(MockProblem);
 
 TEST_F(GodzillaAppTest, run_input)
@@ -46,7 +46,6 @@ TEST_F(GodzillaAppTest, run_input)
                       NULL };
 
     App app("godzilla", MPI_COMM_WORLD);
-    app.create();
     app.parseCommandLine(argc, argv);
     app.run();
 
@@ -62,7 +61,6 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
                       NULL };
 
     App app("godzilla", MPI_COMM_WORLD);
-    app.create();
     app.parseCommandLine(argc, argv);
 
     EXPECT_DEATH(app.run(), "error: Unable to open");
@@ -74,7 +72,6 @@ TEST_F(GodzillaAppTest, no_colors)
     char * argv[] = { (char *) "godzilla", (char *) "--no-colors", NULL };
 
     App app("godzilla", MPI_COMM_WORLD);
-    app.create();
     app.parseCommandLine(argc, argv);
 
     app.run();
@@ -101,7 +98,6 @@ TEST_F(GodzillaAppTest, verbose_level)
     char * argv[] = { (char *) "godzilla", (char *) "--verbose", (char *) "2", NULL };
 
     TestApp app("godzilla", MPI_COMM_WORLD);
-    app.create();
     app.parseCommandLine(argc, argv);
     app.run();
 
@@ -117,15 +113,6 @@ TEST_F(GodzillaAppTest, check_integrity)
         void
         run()
         {
-            {
-                InputParameters & params = Factory::getValidParams("MockGrid");
-                this->grid = buildObject<MockGrid>("MockGrid", "o1", params);
-            }
-            {
-                InputParameters & params = Factory::getValidParams("MockProblem");
-                this->problem = buildObject<MockProblem>("MockProblem", "o2", params);
-            }
-
             this->log.error("error1");
             checkIntegrity();
         }

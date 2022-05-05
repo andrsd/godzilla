@@ -86,6 +86,7 @@ ExodusIIOutput::createCellSets()
         // This works for simple meshes
         PetscInt elem_start, elem_end;
         ierr = DMPlexGetDepthStratum(dm, dim, &elem_start, &elem_end);
+        checkPetscError(ierr);
         PetscInt num_elems = elem_end - elem_start;
         PetscInt * elem_ids = new PetscInt[num_elems];
         for (PetscInt i = 0; i < num_elems; i++)

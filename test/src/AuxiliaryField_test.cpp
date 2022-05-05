@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "App.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "FENonlinearProblem.h"
 #include "AuxiliaryField.h"
 #include "FENonlinearProblem_test.h"
@@ -13,26 +13,26 @@ TEST(AuxiliaryFieldTest, non_existent_id)
 
     TestApp app;
 
-    Grid * grid = nullptr;
+    Mesh * mesh = nullptr;
     {
         const std::string class_name = "LineMesh";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<PetscInt>("nx") = 2;
-        grid = app.buildObject<Grid>(class_name, "grid", params);
+        mesh = app.buildObject<Mesh>(class_name, "mesh", params);
     }
-    grid->create();
+    mesh->create();
     GTestFENonlinearProblem * prob = nullptr;
     {
         const std::string class_name = "GTestFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
+        params.set<Mesh *>("_mesh") = mesh;
         prob = app.buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
     }
     prob->addAuxFE(0, "aux1", 1, 1);
 
     class TestAuxFld : public AuxiliaryField {
     public:
-        TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
+        explicit TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
         virtual PetscInt
         getFieldId() const
         {
@@ -70,19 +70,19 @@ TEST(AuxiliaryFieldTest, inconsistent_comp_number)
 
     TestApp app;
 
-    Grid * grid = nullptr;
+    Mesh * mesh = nullptr;
     {
         const std::string class_name = "LineMesh";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<PetscInt>("nx") = 2;
-        grid = app.buildObject<Grid>(class_name, "grid", params);
+        mesh = app.buildObject<Mesh>(class_name, "mesh", params);
     }
-    grid->create();
+    mesh->create();
     GTestFENonlinearProblem * prob = nullptr;
     {
         const std::string class_name = "GTestFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
+        params.set<Mesh *>("_mesh") = mesh;
         prob = app.buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
     }
     prob->addAuxFE(0, "aux1", 1, 1);

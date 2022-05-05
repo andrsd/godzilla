@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Grid.h"
+#include "Mesh.h"
 #include "LinearProblem.h"
 #include "GodzillaApp_test.h"
 
@@ -8,60 +8,60 @@ using namespace godzilla;
 
 class LinearProblemTest : public GodzillaAppTest {
 protected:
-    Grid *
-    gGrid1d()
+    Mesh *
+    gMesh1d()
     {
         const std::string class_name = "LineMesh";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<PetscInt>("nx") = 1;
-        return this->app->buildObject<Grid>(class_name, "grid", params);
+        return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
-    Grid *
-    gGrid2d()
+    Mesh *
+    gMesh2d()
     {
         const std::string class_name = "RectangleMesh";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<PetscInt>("nx") = 1;
         params.set<PetscInt>("ny") = 1;
-        return this->app->buildObject<Grid>(class_name, "grid", params);
+        return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
-    Grid *
-    gGrid3d()
+    Mesh *
+    gMesh3d()
     {
         const std::string class_name = "BoxMesh";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<PetscInt>("nx") = 1;
         params.set<PetscInt>("ny") = 1;
         params.set<PetscInt>("nz") = 1;
-        return this->app->buildObject<Grid>(class_name, "grid", params);
+        return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
     Problem *
-    gProblem1d(Grid * grid)
+    gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "G1DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
+        params.set<Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 
     Problem *
-    gProblem2d(Grid * grid)
+    gProblem2d(Mesh * mesh)
     {
         const std::string class_name = "G2DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
+        params.set<Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 
     Problem *
-    gProblem3d(Grid * grid)
+    gProblem3d(Mesh * mesh)
     {
         const std::string class_name = "G3DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
+        params.set<Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 };

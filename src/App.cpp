@@ -2,7 +2,7 @@
 #include "GodzillaConfig.h"
 #include "GYMLFile.h"
 #include "Function.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "Problem.h"
 #include "CallStack.h"
 #include "Error.h"
@@ -20,8 +20,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
     no_colors_switch("", "no-colors", "Do not use terminal colors", false),
     verbosity_level(1),
-    grid(nullptr),
-    problem(nullptr)
+    gyml(new GYMLFile(*this))
 {
     _F_;
     MPI_Comm_size(comm, &this->comm_size);
@@ -35,6 +34,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
 App::~App()
 {
     _F_;
+    delete this->gyml;
     Factory::destroy();
 }
 
@@ -49,6 +49,7 @@ void
 App::create()
 {
     _F_;
+    this->gyml->create();
 }
 
 void
@@ -110,6 +111,7 @@ App::runInputFile(const std::string & file_name)
     if (utils::pathExists(file_name)) {
         godzillaPrint(9, "Reading '", file_name, "'...");
         buildFromGYML(file_name);
+        create();
 
         godzillaPrint(9, "Checking integrity...");
         checkIntegrity();
@@ -127,28 +129,15 @@ void
 App::buildFromGYML(const std::string & file_name)
 {
     _F_;
-    GYMLFile file(*this);
-    file.parse(file_name);
-    file.build();
-    this->grid = file.getGrid();
-    assert(this->grid != nullptr);
-    this->problem = file.getProblem();
-    assert(this->problem != nullptr);
-
-    this->functions = file.getFunctions();
-    for (auto & f : this->functions)
-        f->create();
-    this->grid->create();
-    this->problem->create();
+    this->gyml->parse(file_name);
+    this->gyml->build();
 }
 
 void
 App::checkIntegrity()
 {
     _F_;
-    this->grid->check();
-    this->problem->check();
-
+    this->gyml->check();
     if (this->log.getNumEntries() > 0) {
         this->log.print();
         godzilla::internal::terminate();
@@ -159,7 +148,9 @@ void
 App::runProblem()
 {
     _F_;
-    this->problem->run();
+    Problem * p = this->gyml->getProblem();
+    assert(p != nullptr);
+    p->run();
 }
 
 } // namespace godzilla

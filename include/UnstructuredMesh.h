@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Grid.h"
+#include "Mesh.h"
 #include "petscpartitioner.h"
 
 namespace godzilla {
 
 /// Base class for unstructured meshes
 ///
-class UnstructuredMesh : public Grid {
+class UnstructuredMesh : public Mesh {
 public:
     UnstructuredMesh(const InputParameters & parameters);
     virtual ~UnstructuredMesh();

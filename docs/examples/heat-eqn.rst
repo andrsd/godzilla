@@ -11,7 +11,7 @@ Input file:
 
 .. code-block:: yaml
 
-   grid:
+   mesh:
      type: RectangleMesh
      nx: 2
      ny: 2

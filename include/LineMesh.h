@@ -32,7 +32,7 @@ protected:
     const PetscReal & xmin;
     /// Maximum in the x direction
     const PetscReal & xmax;
-    /// Number of grid point in the x direction
+    /// Number of mesh point in the x direction
     const PetscInt & nx;
     /// True for simplices, False for tensor cells
     PetscBool simplex;

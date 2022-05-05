@@ -10,7 +10,9 @@ TEST(BoundaryConditionTest, api)
 {
     class MockBoundaryCondition : public BoundaryCondition {
     public:
-        MockBoundaryCondition(const InputParameters & params) : BoundaryCondition(params) {}
+        explicit MockBoundaryCondition(const InputParameters & params) : BoundaryCondition(params)
+        {
+        }
 
         MOCK_METHOD(PetscInt, getFieldId, (), (const));
         MOCK_METHOD(PetscInt, getNumComponents, (), (const));

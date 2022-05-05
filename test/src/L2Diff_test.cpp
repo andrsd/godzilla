@@ -9,14 +9,14 @@ TEST(L2DiffTest, compute)
 {
     TestApp app;
 
-    InputParameters grid_params = LineMesh::validParams();
-    grid_params.set<const App *>("_app") = &app;
-    grid_params.set<PetscInt>("nx") = 2;
-    LineMesh grid(grid_params);
+    InputParameters mesh_params = LineMesh::validParams();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_params);
 
     InputParameters prob_params = GTestFENonlinearProblem::validParams();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<Grid *>("_grid") = &grid;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
 
     InputParameters bc_params = DirichletBC::validParams();
@@ -34,7 +34,7 @@ TEST(L2DiffTest, compute)
     prob.addBoundaryCondition(&bc);
     prob.addPostprocessor(&ps);
 
-    grid.create();
+    mesh.create();
     prob.create();
 
     prob.solve();

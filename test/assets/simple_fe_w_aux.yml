@@ -1,4 +1,4 @@
-grid:
+mesh:
   type: LineMesh
   nx: 2
 auxs:

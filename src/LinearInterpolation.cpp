@@ -44,7 +44,6 @@ LinearInterpolation::check()
                         ". It must be 2 or more.");
     else {
         // check monotonicity
-        bool increasing = true;
         PetscReal a = this->x[0];
         for (std::size_t i = 1; i < this->x.size(); i++) {
             if (this->x[i] <= a)
@@ -66,7 +65,6 @@ LinearInterpolation::sample(PetscReal x)
     else if (x > this->x[sz - 1])
         return this->y[sz - 1];
     else {
-        bool found = false;
         std::size_t lo_idx = 0;
         std::size_t hi_idx = sz - 1;
         while (true) {

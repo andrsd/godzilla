@@ -11,7 +11,7 @@ TEST(NaturalBCTest, api)
 
     class MockNaturalBC : public NaturalBC {
     public:
-        MockNaturalBC(const InputParameters & params) : NaturalBC(params) {}
+        explicit MockNaturalBC(const InputParameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
         getFieldId() const
@@ -106,7 +106,7 @@ TEST(NaturalBCTest, fe)
 {
     class TestNaturalBC : public NaturalBC {
     public:
-        TestNaturalBC(const InputParameters & params) : NaturalBC(params) {}
+        explicit TestNaturalBC(const InputParameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
         getFieldId() const
@@ -143,14 +143,14 @@ TEST(NaturalBCTest, fe)
 
     TestApp app;
 
-    InputParameters grid_params = LineMesh::validParams();
-    grid_params.set<const App *>("_app") = &app;
-    grid_params.set<PetscInt>("nx") = 2;
-    LineMesh grid(grid_params);
+    InputParameters mesh_params = LineMesh::validParams();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_params);
 
     InputParameters prob_params = GTestFENonlinearProblem::validParams();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<Grid *>("_grid") = &grid;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     prob.addAuxFE(0, "aux1", 1, 1);
 
@@ -161,7 +161,7 @@ TEST(NaturalBCTest, fe)
     TestNaturalBC bc(bc_params);
     prob.addBoundaryCondition(&bc);
 
-    grid.create();
+    mesh.create();
     prob.create();
 
     PetscDS ds = prob.getDS();

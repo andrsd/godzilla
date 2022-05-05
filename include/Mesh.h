@@ -6,21 +6,21 @@
 
 namespace godzilla {
 
-/// Base class for grids
+/// Base class for meshes
 ///
-class Grid : public Object, public PrintInterface {
+class Mesh : public Object, public PrintInterface {
 public:
-    Grid(const InputParameters & parameters);
-    virtual ~Grid();
+    Mesh(const InputParameters & parameters);
+    virtual ~Mesh();
 
     DM getDM() const;
 
-    /// Get the grid spatial dimension
+    /// Get the mesh spatial dimension
     ///
-    /// @return Grid spatial dimension
+    /// @return Mesh spatial dimension
     PetscInt getDimension() const;
 
-    /// Create the grid
+    /// Create the mesh
     virtual void create();
 
 protected:

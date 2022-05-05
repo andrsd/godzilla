@@ -17,7 +17,7 @@ public:
     /// Get upper limit in x-direction
     PetscInt getXMax() const;
 
-    /// Get the number of grid points in x direction
+    /// Get the number of mesh points in x direction
     PetscInt getNx() const;
 
     /// Get lower limit in y-direction
@@ -26,7 +26,7 @@ public:
     /// Get upper limit in y-direction
     PetscInt getYMax() const;
 
-    /// Get the number of grid points in y-direction
+    /// Get the number of mesh points in y-direction
     PetscInt getNy() const;
 
     /// Get lower limit in z-direction
@@ -35,7 +35,7 @@ public:
     /// Get upper limit in z-direction
     PetscInt getZMax() const;
 
-    /// Get the number of grid points in z direction
+    /// Get the number of mesh points in z direction
     PetscInt getNz() const;
 
 protected:
@@ -59,13 +59,13 @@ protected:
     /// Maximum in the z direction
     const PetscReal & zmax;
 
-    /// Number of grid point in the x direction
+    /// Number of mesh point in the x direction
     const PetscInt & nx;
 
-    /// Number of grid point in the y direction
+    /// Number of mesh point in the y direction
     const PetscInt & ny;
 
-    /// Number of grid point in the z direction
+    /// Number of mesh point in the z direction
     const PetscInt & nz;
 
     /// True for simplices, False for tensor cells

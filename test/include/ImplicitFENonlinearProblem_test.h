@@ -5,28 +5,28 @@
 #include "GodzillaApp_test.h"
 
 namespace godzilla {
-class Grid;
+class Mesh;
 class GTestImplicitFENonlinearProblem;
 
 //
 
 class ImplicitFENonlinearProblemTest : public GodzillaAppTest {
 public:
-    Grid *
-    gGrid1d()
+    Mesh *
+    gMesh1d()
     {
         const std::string class_name = "LineMesh";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<PetscInt>("nx") = 2;
-        return this->app->buildObject<Grid>(class_name, "grid", params);
+        return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
     GTestImplicitFENonlinearProblem *
-    gProblem1d(Grid * grid)
+    gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
+        params.set<Mesh *>("_mesh") = mesh;
         params.set<PetscReal>("start_time") = 0.;
         params.set<PetscReal>("end_time") = 20;
         params.set<PetscReal>("dt") = 5;

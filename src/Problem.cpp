@@ -1,6 +1,6 @@
 #include "Problem.h"
 #include "CallStack.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "Postprocessor.h"
 #include "Output.h"
 
@@ -10,14 +10,14 @@ InputParameters
 Problem::validParams()
 {
     InputParameters params = Object::validParams();
-    params.addPrivateParam<Grid *>("_grid");
+    params.addPrivateParam<Mesh *>("_mesh");
     return params;
 }
 
 Problem::Problem(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    grid(*getParam<Grid *>("_grid")),
+    mesh(*getParam<Mesh *>("_mesh")),
     time(0.)
 {
 }

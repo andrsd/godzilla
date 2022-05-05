@@ -16,9 +16,7 @@ public:
     /// Build the evaluator object
     ///
     /// @param expr Function expression to be evaluated
-    /// @param storage Function storage with all external functions that can be used by the
-    /// evaluator
-    void create(const std::string & expr, const std::vector<Function *> & storage);
+    void create(const std::string & expr);
 
     /// Evaluate the function expression at time `time` and spatial position `x`
     ///

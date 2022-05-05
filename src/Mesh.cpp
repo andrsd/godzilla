@@ -1,17 +1,17 @@
 #include "Godzilla.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "CallStack.h"
 
 namespace godzilla {
 
 InputParameters
-Grid::validParams()
+Mesh::validParams()
 {
     InputParameters params = Object::validParams();
     return params;
 }
 
-Grid::Grid(const InputParameters & parameters) :
+Mesh::Mesh(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
     dm(NULL),
@@ -19,7 +19,7 @@ Grid::Grid(const InputParameters & parameters) :
 {
 }
 
-Grid::~Grid()
+Mesh::~Mesh()
 {
     _F_;
     if (this->dm) {
@@ -30,21 +30,21 @@ Grid::~Grid()
 }
 
 DM
-Grid::getDM() const
+Mesh::getDM() const
 {
     _F_;
     return this->dm;
 }
 
 PetscInt
-Grid::getDimension() const
+Mesh::getDimension() const
 {
     _F_;
     return this->dim;
 }
 
 void
-Grid::create()
+Mesh::create()
 {
     _F_;
     PetscErrorCode ierr;

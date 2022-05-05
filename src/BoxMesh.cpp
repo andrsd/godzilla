@@ -17,9 +17,9 @@ BoxMesh::validParams()
     params.addParam<PetscReal>("ymax", 1., "Maximum in the y direction");
     params.addParam<PetscReal>("zmin", 0., "Minimum in the z direction");
     params.addParam<PetscReal>("zmax", 1., "Maximum in the z direction");
-    params.addRequiredParam<PetscInt>("nx", "Number of grid points in the x direction");
-    params.addRequiredParam<PetscInt>("ny", "Number of grid points in the y direction");
-    params.addRequiredParam<PetscInt>("nz", "Number of grid points in the z direction");
+    params.addRequiredParam<PetscInt>("nx", "Number of mesh points in the x direction");
+    params.addRequiredParam<PetscInt>("ny", "Number of mesh points in the y direction");
+    params.addRequiredParam<PetscInt>("nz", "Number of mesh points in the z direction");
     return params;
 }
 

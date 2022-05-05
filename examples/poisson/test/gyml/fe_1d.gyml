@@ -1,4 +1,4 @@
-grid:
+mesh:
   type: LineMesh
   nx: 2
   xmin: 0
@@ -10,7 +10,7 @@ auxs:
     value: '-2'
 
 problem:
-  type: PoissonFENonlinearProblem
+  type: PoissonEquation
 
 ics:
   all:

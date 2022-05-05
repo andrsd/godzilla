@@ -1,4 +1,4 @@
-grid:
+mesh:
   type: LineMesh
 problem:
   type: GTestProblem

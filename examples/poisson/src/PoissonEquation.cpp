@@ -1,13 +1,13 @@
 #include "Godzilla.h"
 #include "FunctionInterface.h"
-#include "PoissonFENonlinearProblem.h"
+#include "PoissonEquation.h"
 #include "CallStack.h"
 #include "petscdm.h"
 #include "petscdmlabel.h"
 
 using namespace godzilla;
 
-registerObject(PoissonFENonlinearProblem);
+registerObject(PoissonEquation);
 
 static void
 f0_u(PetscInt dim,
@@ -86,14 +86,14 @@ g3_uu(PetscInt dim,
 ///
 
 InputParameters
-PoissonFENonlinearProblem::validParams()
+PoissonEquation::validParams()
 {
     InputParameters params = FENonlinearProblem::validParams();
     params.addParam<PetscInt>("p_order", 1., "Polynomial order of the FE space.");
     return params;
 }
 
-PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & parameters) :
+PoissonEquation::PoissonEquation(const InputParameters & parameters) :
     FENonlinearProblem(parameters),
     p_order(getParam<PetscInt>("p_order")),
     iu(0),
@@ -102,10 +102,10 @@ PoissonFENonlinearProblem::PoissonFENonlinearProblem(const InputParameters & par
     _F_;
 }
 
-PoissonFENonlinearProblem::~PoissonFENonlinearProblem() {}
+PoissonEquation::~PoissonEquation() {}
 
 void
-PoissonFENonlinearProblem::onSetFields()
+PoissonEquation::onSetFields()
 {
     _F_;
     addFE(this->iu, "u", 1, this->p_order);
@@ -113,7 +113,7 @@ PoissonFENonlinearProblem::onSetFields()
 }
 
 void
-PoissonFENonlinearProblem::onSetWeakForm()
+PoissonEquation::onSetWeakForm()
 {
     _F_;
     setResidualBlock(this->iu, f0_u, f1_u);

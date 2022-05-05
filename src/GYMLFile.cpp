@@ -1,7 +1,7 @@
 #include "GYMLFile.h"
 #include "App.h"
 #include "Factory.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "Function.h"
@@ -27,7 +27,7 @@ GYMLFile::GYMLFile(const App & app) :
     PrintInterface(app),
     LoggingInterface(const_cast<Logger &>(app.getLogger())),
     app(app),
-    grid(nullptr),
+    mesh(nullptr),
     problem(nullptr)
 {
     _F_;
@@ -40,11 +40,11 @@ GYMLFile::parse(const std::string & file_name)
     this->root = YAML::LoadFile(file_name);
 }
 
-Grid *
-GYMLFile::getGrid()
+Mesh *
+GYMLFile::getMesh()
 {
     _F_;
-    return this->grid;
+    return this->mesh;
 }
 
 Problem *
@@ -69,11 +69,38 @@ GYMLFile::getFunctions()
 }
 
 void
+GYMLFile::create()
+{
+    _F_;
+    for (auto & obj : this->objects)
+        obj->create();
+}
+
+void
+GYMLFile::check()
+{
+    _F_;
+    for (auto & obj : this->objects)
+        obj->check();
+}
+
+void
+GYMLFile::addObject(Object * obj)
+{
+    _F_;
+    if (obj != nullptr) {
+        // only add objects with valid parameters
+        if (this->valid_param_object_names.count(obj->getName()) == 1)
+            this->objects.push_back(obj);
+    }
+}
+
+void
 GYMLFile::build()
 {
     _F_;
     buildFunctions();
-    buildGrid();
+    buildMesh();
     buildProblem();
     buildPartitioner();
     buildAuxiliaryFields();
@@ -103,12 +130,13 @@ GYMLFile::buildFunctions()
 }
 
 void
-GYMLFile::buildGrid()
+GYMLFile::buildMesh()
 {
     _F_;
-    InputParameters & params = buildParams(this->root, "grid");
+    InputParameters & params = buildParams(this->root, "mesh");
     const std::string & class_name = params.get<std::string>("_type");
-    this->grid = Factory::create<Grid>(class_name, "grid", params);
+    this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
+    addObject(this->mesh);
 }
 
 void
@@ -117,18 +145,19 @@ GYMLFile::buildProblem()
     _F_;
     InputParameters & params = buildParams(this->root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<Grid *>("_grid") = this->grid;
+    params.set<Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
+    addObject(this->problem);
 }
 
 void
 GYMLFile::buildPartitioner()
 {
     _F_;
-    if (!this->grid)
+    if (!this->mesh)
         return;
 
-    UnstructuredMesh * mesh = dynamic_cast<UnstructuredMesh *>(this->grid);
+    UnstructuredMesh * mesh = dynamic_cast<UnstructuredMesh *>(this->mesh);
     if (!mesh)
         return;
 
@@ -359,6 +388,8 @@ GYMLFile::checkParams(const InputParameters & params, const std::string & name)
 
     if (!oss.str().empty())
         logError(name, ": Missing required parameters:", oss.str());
+    else
+        this->valid_param_object_names.insert(name);
 }
 
 } // namespace godzilla
