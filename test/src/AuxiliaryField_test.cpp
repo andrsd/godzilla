@@ -89,7 +89,7 @@ TEST(AuxiliaryFieldTest, inconsistent_comp_number)
 
     class TestAuxFld : public AuxiliaryField {
     public:
-        TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
+        explicit TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
         virtual PetscInt
         getFieldId() const
         {

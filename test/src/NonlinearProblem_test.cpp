@@ -68,7 +68,7 @@ TEST_F(NonlinearProblemTest, output)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
 
         virtual void
         output()

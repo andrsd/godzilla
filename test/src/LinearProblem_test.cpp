@@ -71,7 +71,7 @@ TEST_F(LinearProblemTest, output)
 {
     class MockLinearProblem : public LinearProblem {
     public:
-        MockLinearProblem(const InputParameters & params) : LinearProblem(params) {}
+        explicit MockLinearProblem(const InputParameters & params) : LinearProblem(params) {}
 
         virtual void
         output()
