@@ -4,13 +4,12 @@
 
 using namespace godzilla;
 
-/// PETSc non-linear problem that arises from a finite element discretization
-/// using the PetscFE system
+/// Solves Poisson equation using finite element method
 ///
-class PoissonFENonlinearProblem : public FENonlinearProblem {
+class PoissonEquation : public FENonlinearProblem {
 public:
-    PoissonFENonlinearProblem(const InputParameters & parameters);
-    virtual ~PoissonFENonlinearProblem();
+    PoissonEquation(const InputParameters & parameters);
+    virtual ~PoissonEquation();
 
 protected:
     virtual void onSetFields() override;

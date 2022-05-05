@@ -10,7 +10,7 @@ auxs:
     value: '-2'
 
 problem:
-  type: PoissonFENonlinearProblem
+  type: PoissonEquation
 
 ics:
   all:

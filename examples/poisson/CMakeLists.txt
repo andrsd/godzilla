@@ -7,7 +7,7 @@ set(POISSON_BIN ${PROJECT_NAME})
 
 add_executable(
     ${POISSON_BIN}
-        src/PoissonFENonlinearProblem.cpp
+        src/PoissonEquation.cpp
         src/main.cpp
 )
 # target_code_coverage(${POISSON_BIN})

@@ -16,7 +16,7 @@ auxs:
     value: '-6'
 
 problem:
-  type: PoissonFENonlinearProblem
+  type: PoissonEquation
 
 ics:
   all:
