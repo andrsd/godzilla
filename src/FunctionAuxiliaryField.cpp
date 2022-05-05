@@ -67,7 +67,7 @@ FunctionAuxiliaryField::setUp(DM dm, DM dm_aux)
                                   this->a);
     checkPetscError(ierr);
 
-    ierr = DMSetAuxiliaryVec(dm, this->block, 0, this->a);
+    ierr = DMSetAuxiliaryVec(dm, this->block, 0, 0, this->a);
     checkPetscError(ierr);
 }
 

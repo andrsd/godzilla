@@ -148,21 +148,23 @@ void
 ExodusIIOutput::writeVariableInfo(int exoid, Vec vec)
 {
     _F_;
-    PetscErrorCode ierr;
-    DM dm = this->problem.getDM();
-
-    PetscInt num_nodal_vars = 1;
-    const char * vec_name;
-    PetscObjectGetName((PetscObject) vec, &vec_name);
-
-    char * nodal_var_name[1];
-    // nodal_var_name[0] = (char *) vec_name;
-    nodal_var_name[0] = (char *) "U";
-
-    ierr = ex_put_variable_param(exoid, EX_NODAL, num_nodal_vars);
-    checkPetscError(ierr);
-    ierr = ex_put_variable_names(exoid, EX_NODAL, num_nodal_vars, nodal_var_name);
-    checkPetscError(ierr);
+    // PetscErrorCode ierr;
+    // DM dm = this->problem.getDM();
+    //
+    // PetscInt num_nodal_vars = 1;
+    // const char * vec_name;
+    // PetscObjectGetName((PetscObject) vec, &vec_name);
+    //
+    // char * nodal_var_name[1];
+    // // nodal_var_name[0] = (char *) vec_name;
+    // nodal_var_name[0] = (char *) "U";
+    //
+    // FIXME: this produces a liner error, most likely missing netcdf + exodusII libs in the linker
+    // line.
+    // ierr = ex_put_variable_param(exoid, EX_NODAL, num_nodal_vars);
+    // checkPetscError(ierr);
+    // ierr = ex_put_variable_names(exoid, EX_NODAL, num_nodal_vars, nodal_var_name);
+    // checkPetscError(ierr);
 }
 
 } // namespace godzilla
