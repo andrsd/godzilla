@@ -10,15 +10,12 @@ FunctionEvaluator::FunctionEvaluator()
 }
 
 void
-FunctionEvaluator::create(const std::string & expr, const std::vector<Function *> & storage)
+FunctionEvaluator::create(const std::string & expr)
 {
     _F_;
     this->parser.SetExpr(expr);
     this->parser.DefineConst("pi", 3.14159265359);
     this->parser.DefineConst("e", 2.71828182846);
-    for (auto & f : storage) {
-        f->registerCallback(this->parser);
-    }
 }
 
 PetscReal

@@ -10,8 +10,7 @@
 namespace godzilla {
 
 class Function;
-class Mesh;
-class Problem;
+class GYMLFile;
 
 class App : public PrintInterface {
 public:
@@ -23,10 +22,6 @@ public:
     virtual ~App();
 
     const Logger & getLogger() const;
-
-    /// Create method can be used to additional object allocation, etc. needed before the
-    /// application runs
-    virtual void create();
 
     /// Parse command line arguments
     ///
@@ -74,6 +69,10 @@ public:
                     InputParameters & parameters);
 
 protected:
+    /// Create method can be used to additional object allocation, etc. needed before the
+    /// application runs
+    virtual void create();
+
     /// Build application objects from a GYML file
     ///
     /// @param file_name The GYML file name
@@ -119,16 +118,8 @@ protected:
     /// Verbosity level
     unsigned int verbosity_level;
 
-    /// Mesh object
-    Mesh * mesh;
-
-    /// Problem object
-    Problem * problem;
-
-    /// List of functions within this application
-    std::vector<Function *> functions;
-
-    friend class FunctionInterface;
+    /// YML file with application config
+    GYMLFile * gyml;
 };
 
 template <typename T>

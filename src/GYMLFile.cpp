@@ -69,6 +69,33 @@ GYMLFile::getFunctions()
 }
 
 void
+GYMLFile::create()
+{
+    _F_;
+    for (auto & obj : this->objects)
+        obj->create();
+}
+
+void
+GYMLFile::check()
+{
+    _F_;
+    for (auto & obj : this->objects)
+        obj->check();
+}
+
+void
+GYMLFile::addObject(Object * obj)
+{
+    _F_;
+    if (obj != nullptr) {
+        // only add objects with valid parameters
+        if (this->valid_param_object_names.count(obj->getName()) == 1)
+            this->objects.push_back(obj);
+    }
+}
+
+void
 GYMLFile::build()
 {
     _F_;
@@ -109,6 +136,7 @@ GYMLFile::buildMesh()
     InputParameters & params = buildParams(this->root, "mesh");
     const std::string & class_name = params.get<std::string>("_type");
     this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
+    addObject(this->mesh);
 }
 
 void
@@ -119,6 +147,7 @@ GYMLFile::buildProblem()
     const std::string & class_name = params.get<std::string>("_type");
     params.set<Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
+    addObject(this->problem);
 }
 
 void
@@ -359,6 +388,8 @@ GYMLFile::checkParams(const InputParameters & params, const std::string & name)
 
     if (!oss.str().empty())
         logError(name, ": Missing required parameters:", oss.str());
+    else
+        this->valid_param_object_names.insert(name);
 }
 
 } // namespace godzilla

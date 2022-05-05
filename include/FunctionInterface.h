@@ -27,8 +27,6 @@ public:
     PetscReal evaluateFunction(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[]);
 
 protected:
-    /// Reference to the application
-    const App & fi_app;
     /// Function expressions
     const std::vector<std::string> & expression;
     /// Number of parsed function expressions

@@ -22,6 +22,10 @@ public:
 
     /// parse the YML file
     virtual void parse(const std::string & file_name);
+    /// create
+    virtual void create();
+    /// check
+    virtual void check();
     /// build the simulation
     virtual void build();
 
@@ -32,6 +36,7 @@ public:
     virtual const YAML::Node & getYml();
 
 protected:
+    void addObject(Object * obj);
     void buildFunctions();
     void buildMesh();
     void buildProblem();
@@ -55,14 +60,20 @@ protected:
 
     void checkParams(const InputParameters & params, const std::string & name);
 
+    /// Application object
     const godzilla::App & app;
-
+    /// Root node of the YML file
     YAML::Node root;
-
+    /// Mesh object
     Mesh * mesh;
+    /// Problem object
     Problem * problem;
     /// List of functions defined in the input file
     std::vector<Function *> functions;
+    /// List of all objects built from the input file
+    std::vector<Object *> objects;
+    /// Names of object with correct parameters
+    std::set<std::string> valid_param_object_names;
 };
 
 } // namespace godzilla
