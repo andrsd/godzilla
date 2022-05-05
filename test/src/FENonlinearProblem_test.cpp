@@ -1,6 +1,6 @@
 #include "GodzillaConfig.h"
 #include "Factory.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "FENonlinearProblem_test.h"
 #include "InputParameters.h"
 #include "InitialCondition.h"
@@ -94,7 +94,7 @@ g3_uu(PetscInt dim,
 
 TEST_F(FENonlinearProblemTest, fields)
 {
-    grid->create();
+    mesh->create();
     prob->create();
 
     EXPECT_EQ(prob->getFieldName(0), "u");
@@ -118,7 +118,7 @@ TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 
 TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
-    grid->create();
+    mesh->create();
     prob->addAuxFE(0, "aux_one", 1, 1);
     prob->create();
 
@@ -161,7 +161,7 @@ TEST_F(FENonlinearProblemTest, solve)
         prob->addBoundaryCondition(bc);
     }
 
-    grid->create();
+    mesh->create();
     prob->create();
 
     prob->solve();
@@ -188,7 +188,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
         prob->addBoundaryCondition(bc);
     }
 
-    grid->create();
+    mesh->create();
     prob->create();
 
     const Vec x = prob->getSolutionVector();
@@ -209,7 +209,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
         auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
         prob->addInitialCondition(ic);
     }
-    grid->create();
+    mesh->create();
     prob->create();
     this->app->checkIntegrity();
 
@@ -258,19 +258,19 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
                 this->log.print();
         }
     } app;
-    Grid * grid;
+    Mesh * mesh;
     FENonlinearProblem * prob;
 
     {
         const std::string class_name = "LineMesh";
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<PetscInt>("nx") = 2;
-        grid = app.buildObject<Grid>(class_name, "grid", params);
+        mesh = app.buildObject<Mesh>(class_name, "mesh", params);
     }
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
+        params.set<Mesh *>("_mesh") = mesh;
         prob = app.buildObject<FENonlinearProblem>(class_name, "prob", params);
     }
 
@@ -282,7 +282,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
         prob->addInitialCondition(ic);
     }
 
-    grid->create();
+    mesh->create();
     prob->create();
     app.checkIntegrity();
 
@@ -303,7 +303,7 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
         prob->addBoundaryCondition(bc);
     }
 
-    grid->create();
+    mesh->create();
     prob->create();
     this->app->checkIntegrity();
 
@@ -340,7 +340,7 @@ TEST_F(FENonlinearProblemTest, set_constant)
 
 TEST_F(FENonlinearProblemTest, set_constant_2)
 {
-    this->grid->create();
+    this->mesh->create();
     this->prob->create();
     std::vector<PetscReal> consts = { 5, 3, 1 };
     this->prob->setConstants(consts);

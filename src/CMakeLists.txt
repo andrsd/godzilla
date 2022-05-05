@@ -24,7 +24,6 @@ add_library(godzilla
         FunctionEvaluator.cpp
         FunctionIC.cpp
         FunctionInterface.cpp
-        Grid.cpp
         GYMLFile.cpp
         HDF5Output.cpp
         ImplicitFENonlinearProblem.cpp
@@ -36,6 +35,7 @@ add_library(godzilla
         LinearProblem.cpp
         LineMesh.cpp
         Logger.cpp
+        Mesh.cpp
         NaturalBC.cpp
         NonlinearProblem.cpp
         Object.cpp

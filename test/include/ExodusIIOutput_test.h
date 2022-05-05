@@ -17,11 +17,11 @@ protected:
     }
 
     Problem *
-    gFEProblem1d(Grid * grid)
+    gFEProblem1d(Mesh * mesh)
     {
         const std::string class_name = "GTestFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Grid *>("_grid") = grid;
+        params.set<Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 };

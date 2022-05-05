@@ -1,15 +1,15 @@
 #include "GodzillaConfig.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "Problem.h"
 #include "petsc.h"
 
 using namespace godzilla;
 
-class MockGrid : public Grid {
+class MockMesh : public Mesh {
 public:
-    MockGrid(const InputParameters & params) : Grid(params) {}
+    MockMesh(const InputParameters & params) : Mesh(params) {}
 
 protected:
     virtual void
@@ -34,7 +34,7 @@ public:
     MOCK_METHOD(Vec, getSolutionVector, (), (const));
 };
 
-registerObject(MockGrid);
+registerObject(MockMesh);
 registerObject(MockProblem);
 
 TEST_F(GodzillaAppTest, run_input)
@@ -118,8 +118,8 @@ TEST_F(GodzillaAppTest, check_integrity)
         run()
         {
             {
-                InputParameters & params = Factory::getValidParams("MockGrid");
-                this->grid = buildObject<MockGrid>("MockGrid", "o1", params);
+                InputParameters & params = Factory::getValidParams("MockMesh");
+                this->mesh = buildObject<MockMesh>("MockMesh", "o1", params);
             }
             {
                 InputParameters & params = Factory::getValidParams("MockProblem");

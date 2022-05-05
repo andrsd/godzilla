@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 #include "Factory.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "LinearProblem_test.h"
 #include "InputParameters.h"
 #include "Output.h"
@@ -17,9 +17,9 @@ registerObject(G3DTestLinearProblem);
 
 TEST_F(LinearProblemTest, solve)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
     prob->solve();
 
@@ -54,12 +54,12 @@ TEST_F(LinearProblemTest, run)
         MOCK_METHOD(PetscErrorCode, computeOperatorsCallback, (Mat A, Mat B));
     };
 
-    auto grid = gGrid1d();
-    grid->create();
+    auto mesh = gMesh1d();
+    mesh->create();
 
     InputParameters prob_pars = LinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Grid *>("_grid") = grid;
+    prob_pars.set<Mesh *>("_mesh") = mesh;
     MockLinearProblem prob(prob_pars);
 
     EXPECT_CALL(prob, solve);
@@ -94,12 +94,12 @@ TEST_F(LinearProblemTest, output)
         MOCK_METHOD(void, outputStep, (PetscInt stepi, DM dm, Vec vec));
     };
 
-    auto grid = gGrid1d();
-    grid->create();
+    auto mesh = gMesh1d();
+    mesh->create();
 
     InputParameters prob_pars = LinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Grid *>("_grid") = grid;
+    prob_pars.set<Mesh *>("_mesh") = mesh;
     MockLinearProblem prob(prob_pars);
 
     InputParameters out_pars = Output::validParams();

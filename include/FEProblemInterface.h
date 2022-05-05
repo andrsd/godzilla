@@ -9,7 +9,7 @@
 namespace godzilla {
 
 class Logger;
-class Grid;
+class Mesh;
 class Problem;
 class InitialCondition;
 class BoundaryCondition;

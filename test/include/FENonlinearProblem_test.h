@@ -7,7 +7,7 @@
 #include "petsc.h"
 
 namespace godzilla {
-class Grid;
+class Mesh;
 class GTestFENonlinearProblem;
 
 /// Test fixture
@@ -22,12 +22,12 @@ public:
             const std::string class_name = "LineMesh";
             InputParameters & params = Factory::getValidParams(class_name);
             params.set<PetscInt>("nx") = 2;
-            this->grid = this->app->buildObject<Grid>(class_name, "grid", params);
+            this->mesh = this->app->buildObject<Mesh>(class_name, "mesh", params);
         }
         {
             const std::string class_name = "GTestFENonlinearProblem";
             InputParameters & params = Factory::getValidParams(class_name);
-            params.set<Grid *>("_grid") = this->grid;
+            params.set<Mesh *>("_mesh") = this->mesh;
             this->prob =
                 this->app->buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
         }
@@ -39,7 +39,7 @@ public:
         GodzillaAppTest::TearDown();
     }
 
-    godzilla::Grid * grid;
+    godzilla::Mesh * mesh;
     GTestFENonlinearProblem * prob;
 };
 

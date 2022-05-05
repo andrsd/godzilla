@@ -1,7 +1,7 @@
 #include "NonlinearProblem.h"
 #include "CallStack.h"
 #include "Utils.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "Output.h"
 #include "petscds.h"
 
@@ -108,7 +108,7 @@ DM
 NonlinearProblem::getDM() const
 {
     _F_;
-    return this->grid.getDM();
+    return this->mesh.getDM();
 }
 
 Vec

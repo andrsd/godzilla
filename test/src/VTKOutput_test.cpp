@@ -5,9 +5,9 @@
 
 TEST_F(VTKOutputTest, get_file_ext)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
 
     auto out = gOutput(prob, "out");
@@ -16,9 +16,9 @@ TEST_F(VTKOutputTest, get_file_ext)
 
 TEST_F(VTKOutputTest, create)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
     prob->addOutput(out);
@@ -27,9 +27,9 @@ TEST_F(VTKOutputTest, create)
 
 TEST_F(VTKOutputTest, check)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
 
     auto out = gOutput(prob, "out");
@@ -38,9 +38,9 @@ TEST_F(VTKOutputTest, check)
 
 TEST_F(VTKOutputTest, output_1d_step)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
     out->create();
@@ -49,5 +49,5 @@ TEST_F(VTKOutputTest, output_1d_step)
 
     prob->solve();
     EXPECT_EQ(prob->converged(), true);
-    out->outputStep(0, grid->getDM(), prob->getSolutionVector());
+    out->outputStep(0, mesh->getDM(), prob->getSolutionVector());
 }

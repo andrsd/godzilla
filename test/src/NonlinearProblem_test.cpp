@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 #include "Factory.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "NonlinearProblem_test.h"
 #include "InputParameters.h"
 #include "Output.h"
@@ -14,9 +14,9 @@ registerObject(G1DTestNonlinearProblem);
 
 TEST_F(NonlinearProblemTest, solve)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
     prob->solve();
 
@@ -51,12 +51,12 @@ TEST_F(NonlinearProblemTest, run)
         MOCK_METHOD(PetscErrorCode, computeJacobianCallback, (Vec x, Mat J, Mat Jp));
     };
 
-    auto grid = gGrid1d();
-    grid->create();
+    auto mesh = gMesh1d();
+    mesh->create();
 
     InputParameters prob_pars = NonlinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Grid *>("_grid") = grid;
+    prob_pars.set<Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
 
     EXPECT_CALL(prob, solve);
@@ -91,12 +91,12 @@ TEST_F(NonlinearProblemTest, output)
         MOCK_METHOD(void, outputStep, (PetscInt stepi, DM dm, Vec vec));
     };
 
-    auto grid = gGrid1d();
-    grid->create();
+    auto mesh = gMesh1d();
+    mesh->create();
 
     InputParameters prob_pars = NonlinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Grid *>("_grid") = grid;
+    prob_pars.set<Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
 
     InputParameters out_pars = Output::validParams();
@@ -127,14 +127,14 @@ TEST_F(NonlinearProblemTest, line_search_type)
         }
     };
 
-    auto grid = gGrid1d();
-    grid->create();
+    auto mesh = gMesh1d();
+    mesh->create();
 
     std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
         InputParameters prob_pars = NonlinearProblem::validParams();
         prob_pars.set<const App *>("_app") = this->app;
-        prob_pars.set<Grid *>("_grid") = grid;
+        prob_pars.set<Mesh *>("_mesh") = mesh;
         prob_pars.set<std::string>("line_search") = lst;
         MockNonlinearProblem prob(prob_pars);
         prob.create();

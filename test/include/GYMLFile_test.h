@@ -13,7 +13,7 @@ class MockGYMLFile : public GYMLFile {
 public:
     MockGYMLFile(const App & app) : GYMLFile(app) {}
 
-    MOCK_METHOD(void, buildGrid, (), ());
+    MOCK_METHOD(void, buildMesh, (), ());
     MOCK_METHOD(void, buildProblem, (), ());
 };
 

@@ -5,9 +5,9 @@
 
 TEST_F(HDF5OutputTest, get_file_ext)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
 
     auto out = gOutput(prob, "out");
@@ -16,9 +16,9 @@ TEST_F(HDF5OutputTest, get_file_ext)
 
 TEST_F(HDF5OutputTest, create)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
     prob->addOutput(out);
@@ -27,9 +27,9 @@ TEST_F(HDF5OutputTest, create)
 
 TEST_F(HDF5OutputTest, check)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
 
     auto out = gOutput(prob, "out");
@@ -38,9 +38,9 @@ TEST_F(HDF5OutputTest, check)
 
 TEST_F(HDF5OutputTest, set_file_name)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
 
     auto out = gOutput(prob, "out");
@@ -51,9 +51,9 @@ TEST_F(HDF5OutputTest, set_file_name)
 
 TEST_F(HDF5OutputTest, set_seq_file_name)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
 
     auto out = gOutput(prob, "out");
@@ -64,20 +64,20 @@ TEST_F(HDF5OutputTest, set_seq_file_name)
 
 TEST_F(HDF5OutputTest, output)
 {
-    auto grid = gGrid1d();
-    grid->create();
-    auto prob = gProblem1d(grid);
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
     out->create();
     out->setFileName();
-    out->outputStep(-1, grid->getDM(), prob->getSolutionVector());
+    out->outputStep(-1, mesh->getDM(), prob->getSolutionVector());
 
     const std::string file_name = out->getFileName();
     PetscViewer viewer;
     Vec sln;
     PetscReal diff;
-    DMCreateGlobalVector(grid->getDM(), &sln);
+    DMCreateGlobalVector(mesh->getDM(), &sln);
     PetscObjectSetName((PetscObject) sln, "sln");
     PetscViewerHDF5Open(PETSC_COMM_WORLD, file_name.c_str(), FILE_MODE_READ, &viewer);
     VecLoad(sln, viewer);

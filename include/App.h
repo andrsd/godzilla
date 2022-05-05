@@ -10,7 +10,7 @@
 namespace godzilla {
 
 class Function;
-class Grid;
+class Mesh;
 class Problem;
 
 class App : public PrintInterface {
@@ -119,8 +119,8 @@ protected:
     /// Verbosity level
     unsigned int verbosity_level;
 
-    /// Grid object
-    Grid * grid;
+    /// Mesh object
+    Mesh * mesh;
 
     /// Problem object
     Problem * problem;

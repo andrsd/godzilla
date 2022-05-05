@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-class Grid;
+class Mesh;
 class Postprocessor;
 class Output;
 
@@ -58,8 +58,8 @@ protected:
     /// Compute all postprocessors
     virtual void computePostprocessors();
 
-    /// Grid
-    Grid & grid;
+    /// Mesh
+    Mesh & mesh;
 
     /// List of output objects
     std::vector<Output *> outputs;

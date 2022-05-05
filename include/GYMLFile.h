@@ -10,7 +10,7 @@ namespace godzilla {
 
 class App;
 class Factory;
-class Grid;
+class Mesh;
 class Problem;
 class Function;
 
@@ -25,7 +25,7 @@ public:
     /// build the simulation
     virtual void build();
 
-    virtual Grid * getGrid();
+    virtual Mesh * getMesh();
     virtual Problem * getProblem();
     const std::vector<Function *> & getFunctions();
 
@@ -33,7 +33,7 @@ public:
 
 protected:
     void buildFunctions();
-    void buildGrid();
+    void buildMesh();
     void buildProblem();
     void buildPartitioner();
     void buildAuxiliaryFields();
@@ -59,7 +59,7 @@ protected:
 
     YAML::Node root;
 
-    Grid * grid;
+    Mesh * mesh;
     Problem * problem;
     /// List of functions defined in the input file
     std::vector<Function *> functions;

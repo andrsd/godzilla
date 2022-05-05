@@ -8,12 +8,12 @@ namespace godzilla {
 InputParameters
 UnstructuredMesh::validParams()
 {
-    InputParameters params = Grid::validParams();
+    InputParameters params = Mesh::validParams();
     return params;
 }
 
 UnstructuredMesh::UnstructuredMesh(const InputParameters & parameters) :
-    Grid(parameters),
+    Mesh(parameters),
     partition_overlap(0)
 {
     _F_;

@@ -2,7 +2,7 @@
 #include "GodzillaConfig.h"
 #include "GYMLFile.h"
 #include "Function.h"
-#include "Grid.h"
+#include "Mesh.h"
 #include "Problem.h"
 #include "CallStack.h"
 #include "Error.h"
@@ -20,7 +20,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
     no_colors_switch("", "no-colors", "Do not use terminal colors", false),
     verbosity_level(1),
-    grid(nullptr),
+    mesh(nullptr),
     problem(nullptr)
 {
     _F_;
@@ -130,15 +130,15 @@ App::buildFromGYML(const std::string & file_name)
     GYMLFile file(*this);
     file.parse(file_name);
     file.build();
-    this->grid = file.getGrid();
-    assert(this->grid != nullptr);
+    this->mesh = file.getMesh();
+    assert(this->mesh != nullptr);
     this->problem = file.getProblem();
     assert(this->problem != nullptr);
 
     this->functions = file.getFunctions();
     for (auto & f : this->functions)
         f->create();
-    this->grid->create();
+    this->mesh->create();
     this->problem->create();
 }
 
@@ -146,7 +146,7 @@ void
 App::checkIntegrity()
 {
     _F_;
-    this->grid->check();
+    this->mesh->check();
     this->problem->check();
 
     if (this->log.getNumEntries() > 0) {

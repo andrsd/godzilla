@@ -22,7 +22,7 @@ GTestProblem::validParams()
     params.addParam<std::vector<double>>("arr_d", "vec<d> doco");
     params.addParam<std::vector<int>>("arr_i", "vec<i> doco");
     params.addParam<std::vector<std::string>>("arr_str", "vec<str> doco");
-    params.addPrivateParam<Grid *>("_grid");
+    params.addPrivateParam<Mesh *>("_mesh");
     return params;
 }
 
@@ -46,29 +46,29 @@ TEST_F(GYMLFileTest, build_empty)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "error: Missing 'grid' block.");
+    EXPECT_DEATH(file.build(), "error: Missing 'mesh' block.");
 }
 
-TEST_F(GYMLFileTest, build_grid_no_type)
+TEST_F(GYMLFileTest, build_mesh_no_type)
 {
     GYMLFile file(*this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_no_type.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_no_type.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "error: grid: No 'type' specified.");
+    EXPECT_DEATH(file.build(), "error: mesh: No 'type' specified.");
 }
 
-TEST_F(GYMLFileTest, build_grid_unreg_type)
+TEST_F(GYMLFileTest, build_mesh_unreg_type)
 {
     GYMLFile file(*this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_unreg_type.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_unreg_type.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "error: grid: Type 'ASDF' is not a registered object.");
+    EXPECT_DEATH(file.build(), "error: mesh: Type 'ASDF' is not a registered object.");
 }
 
 TEST_F(GYMLFileTest, build_missing_req_param)
@@ -77,32 +77,32 @@ TEST_F(GYMLFileTest, build_missing_req_param)
 
     GYMLFile file(*this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_missing_req_param.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_missing_req_param.yml");
     file.parse(file_name);
     file.build();
     this->app->checkIntegrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("grid: Missing required parameters:"));
+                testing::HasSubstr("mesh: Missing required parameters:"));
 }
 
-TEST_F(GYMLFileTest, grid_partitioner)
+TEST_F(GYMLFileTest, mesh_partitioner)
 {
     PetscMPIInt sz;
     MPI_Comm_size(PETSC_COMM_WORLD, &sz);
     GYMLFile file(*this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/grid_partitioner.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_partitioner.yml");
 
     file.parse(file_name);
     file.build();
 
-    Grid * grid = file.getGrid();
-    EXPECT_NE(grid, nullptr);
-    grid->create();
+    Mesh * mesh = file.getMesh();
+    EXPECT_NE(mesh, nullptr);
+    mesh->create();
 
-    DM dm = grid->getDM();
+    DM dm = mesh->getDM();
     PetscBool distr;
     DMPlexIsDistributed(dm, &distr);
     if (sz > 1)
@@ -121,8 +121,8 @@ TEST_F(GYMLFileTest, build)
     file.parse(file_name);
     file.build();
 
-    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
-    EXPECT_NE(grid, nullptr);
+    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    EXPECT_NE(mesh, nullptr);
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
@@ -161,8 +161,8 @@ TEST_F(GYMLFileTest, build_vec_as_scalars)
     file.parse(file_name);
     file.build();
 
-    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
-    EXPECT_NE(grid, nullptr);
+    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    EXPECT_NE(mesh, nullptr);
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
@@ -195,8 +195,8 @@ TEST_F(GYMLFileTest, build_fe)
     file.parse(file_name);
     file.build();
 
-    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
-    EXPECT_NE(grid, nullptr);
+    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    EXPECT_NE(mesh, nullptr);
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
@@ -212,8 +212,8 @@ TEST_F(GYMLFileTest, simple_fe_pps)
     file.parse(file_name);
     file.build();
 
-    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
-    EXPECT_NE(grid, nullptr);
+    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    EXPECT_NE(mesh, nullptr);
 
     auto problem = file.getProblem();
     EXPECT_NE(problem, nullptr);
@@ -233,8 +233,8 @@ TEST_F(GYMLFileTest, build_fe_w_aux)
     file.parse(file_name);
     file.build();
 
-    auto grid = dynamic_cast<LineMesh *>(file.getGrid());
-    EXPECT_NE(grid, nullptr);
+    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    EXPECT_NE(mesh, nullptr);
 
     auto problem = dynamic_cast<FEProblemInterface *>(file.getProblem());
     EXPECT_NE(problem, nullptr);
