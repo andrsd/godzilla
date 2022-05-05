@@ -30,8 +30,6 @@ add_executable(${PROJECT_NAME}
     PrintInterface_test.cpp
     Problem_test.cpp
     RectangleMesh_test.cpp
-    StructuredGrid1D_test.cpp
-    StructuredGrid2D_test.cpp
     Utils_test.cpp
     VTKOutput_test.cpp
     main.cpp

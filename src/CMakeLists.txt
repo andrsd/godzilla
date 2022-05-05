@@ -45,8 +45,6 @@ add_library(godzilla
         PrintInterface.cpp
         Problem.cpp
         RectangleMesh.cpp
-        StructuredGrid1D.cpp
-        StructuredGrid2D.cpp
         Terminal.cpp
         TransientInterface.cpp
         UnstructuredMesh.cpp
