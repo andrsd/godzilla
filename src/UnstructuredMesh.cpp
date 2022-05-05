@@ -75,6 +75,7 @@ UnstructuredMesh::outputPartitioning(PetscViewer viewer)
 
     DM dm_part;
     ierr = DMClone(this->dm, &dm_part);
+    checkPetscError(ierr);
 
     DMSetNumFields(dm_part, 1);
     PetscSection s;

@@ -11,7 +11,7 @@ TEST(NaturalBCTest, api)
 
     class MockNaturalBC : public NaturalBC {
     public:
-        MockNaturalBC(const InputParameters & params) : NaturalBC(params) {}
+        explicit MockNaturalBC(const InputParameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
         getFieldId() const
@@ -106,7 +106,7 @@ TEST(NaturalBCTest, fe)
 {
     class TestNaturalBC : public NaturalBC {
     public:
-        TestNaturalBC(const InputParameters & params) : NaturalBC(params) {}
+        explicit TestNaturalBC(const InputParameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
         getFieldId() const

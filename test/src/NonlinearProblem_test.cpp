@@ -38,7 +38,7 @@ TEST_F(NonlinearProblemTest, run)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
 
         MOCK_METHOD(void, solve, ());
         virtual bool
@@ -81,7 +81,7 @@ TEST_F(NonlinearProblemTest, output)
 
     class MockOutput : public Output {
     public:
-        MockOutput(const InputParameters & params) : Output(params) {}
+        explicit MockOutput(const InputParameters & params) : Output(params) {}
 
         MOCK_METHOD(const std::string &, getFileName, (), (const));
         MOCK_METHOD(void, setFileName, ());

@@ -11,7 +11,7 @@ TEST(ProblemTest, add_pp)
 
     class TestProblem : public Problem {
     public:
-        TestProblem(const InputParameters & params) : Problem(params) {}
+        explicit TestProblem(const InputParameters & params) : Problem(params) {}
 
         virtual void
         run()
@@ -41,7 +41,7 @@ TEST(ProblemTest, add_pp)
 
     class TestPostprocessor : public Postprocessor {
     public:
-        TestPostprocessor(const InputParameters & params) : Postprocessor(params) {}
+        explicit TestPostprocessor(const InputParameters & params) : Postprocessor(params) {}
 
         virtual void
         compute()

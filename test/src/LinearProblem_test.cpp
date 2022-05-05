@@ -41,7 +41,7 @@ TEST_F(LinearProblemTest, run)
 {
     class MockLinearProblem : public LinearProblem {
     public:
-        MockLinearProblem(const InputParameters & params) : LinearProblem(params) {}
+        explicit MockLinearProblem(const InputParameters & params) : LinearProblem(params) {}
 
         MOCK_METHOD(void, solve, ());
         virtual bool
@@ -84,7 +84,7 @@ TEST_F(LinearProblemTest, output)
 
     class MockOutput : public Output {
     public:
-        MockOutput(const InputParameters & params) : Output(params) {}
+        explicit MockOutput(const InputParameters & params) : Output(params) {}
 
         MOCK_METHOD(const std::string &, getFileName, (), (const));
         MOCK_METHOD(void, setFileName, ());

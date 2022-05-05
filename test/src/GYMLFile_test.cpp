@@ -132,7 +132,7 @@ TEST_F(GYMLFileTest, funcs)
 {
     class TestGYMLFile : public GYMLFile {
     public:
-        TestGYMLFile(const App & app) : GYMLFile(app) {}
+        explicit TestGYMLFile(const App & app) : GYMLFile(app) {}
         void
         buildFunctions()
         {

@@ -32,7 +32,7 @@ TEST(AuxiliaryFieldTest, non_existent_id)
 
     class TestAuxFld : public AuxiliaryField {
     public:
-        TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
+        explicit TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
         virtual PetscInt
         getFieldId() const
         {

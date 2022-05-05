@@ -9,7 +9,7 @@ using namespace godzilla;
 
 class MockMesh : public Mesh {
 public:
-    MockMesh(const InputParameters & params) : Mesh(params) {}
+    explicit MockMesh(const InputParameters & params) : Mesh(params) {}
 
 protected:
     virtual void
@@ -24,7 +24,7 @@ protected:
 
 class MockProblem : public Problem {
 public:
-    MockProblem(const InputParameters & params) : Problem(params) {}
+    explicit MockProblem(const InputParameters & params) : Problem(params) {}
 
     MOCK_METHOD(void, create, ());
     MOCK_METHOD(void, run, ());

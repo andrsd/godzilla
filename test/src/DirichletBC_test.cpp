@@ -36,7 +36,6 @@ TEST(DirichletBCTest, DISABLED_with_user_defined_fn)
         TestApp() : App("test", MPI_COMM_WORLD) {}
     } app;
 
-    Function * fn;
     DirichletBC * bc;
     {
         std::vector<PetscReal> x = { 0., 1. };
@@ -45,7 +44,7 @@ TEST(DirichletBCTest, DISABLED_with_user_defined_fn)
         InputParameters & params = Factory::getValidParams(class_name);
         params.set<std::vector<PetscReal>>("x") = x;
         params.set<std::vector<PetscReal>>("y") = y;
-        fn = app.buildObject<PiecewiseLinear>(class_name, "ipol", params);
+        app.buildObject<PiecewiseLinear>(class_name, "ipol", params);
     }
 
     {
