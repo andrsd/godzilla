@@ -171,7 +171,7 @@ FEProblemInterface::addAuxFE(PetscInt id, const std::string & name, PetscInt nc,
 }
 
 void
-FEProblemInterface::setConstants(std::vector<PetscReal> & consts)
+FEProblemInterface::setConstants(const std::vector<PetscReal> & consts)
 {
     _F_;
     this->consts = consts;

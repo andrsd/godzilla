@@ -90,7 +90,7 @@ public:
     ///
     /// These constants will be available in the weak form via `constants` parameter.
     /// @param consts Constants to add to the problem
-    virtual void setConstants(std::vector<PetscReal> & consts);
+    virtual void setConstants(const std::vector<PetscReal> & consts);
 
     /// Add initial condition
     ///
