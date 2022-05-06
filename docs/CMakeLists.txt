@@ -87,7 +87,7 @@ if(DOXYGEN_FOUND)
         COMMAND
             doxygen Doxyfile.doxygen
         DEPENDS
-            ${PROJECT_BINARY_DIR}/Doxyfile.doxygen
+            ${PROJECT_BINARY_DIR}/docs/Doxyfile.doxygen
             ${PROJECT_SOURCE_DIR}/include/*.h
     )
 
