@@ -9,7 +9,7 @@ using namespace godzilla;
 
 TEST(FactoryTest, valid_params_unreg_obj)
 {
-    EXPECT_DEATH(InputParameters & params = Factory::getValidParams("ASDF"),
+    EXPECT_DEATH(InputParameters * params = Factory::getValidParams("ASDF"),
                  "Getting validParams for object 'ASDF' failed.  Object is not registred.");
 }
 
@@ -24,8 +24,8 @@ TEST(FactoryTest, create_reg_obj)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters & params = Factory::getValidParams("LineMesh");
-    params.set<PetscInt>("nx") = 1;
+    InputParameters * params = Factory::getValidParams("LineMesh");
+    params->set<PetscInt>("nx") = 1;
     app.buildObject<LineMesh>("LineMesh", "name", params);
 }
 
@@ -33,8 +33,8 @@ TEST(FactoryTest, create_wrong_type)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters & params = Factory::getValidParams("LineMesh");
-    params.set<PetscInt>("nx") = 1;
+    InputParameters * params = Factory::getValidParams("LineMesh");
+    params->set<PetscInt>("nx") = 1;
     EXPECT_DEATH(app.buildObject<RectangleMesh>("LineMesh", "name", params),
                  "error: Instantiation of object 'name:\\[LineMesh\\]' failed\\.");
 }

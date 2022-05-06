@@ -66,7 +66,7 @@ public:
     /// Get valid parameters for the object
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
-    static InputParameters &
+    static InputParameters *
     getValidParams(const std::string & class_name)
     {
         auto it = classes.find(class_name);
@@ -78,7 +78,7 @@ public:
         Entry & entry = it->second;
         InputParameters * ips = new InputParameters((*entry.params_ptr)());
         params.push_back(ips);
-        return *ips;
+        return ips;
     }
 
     /// Build an object (must be registered)
@@ -104,6 +104,13 @@ public:
             objects.push_back(object);
             return object;
         }
+    }
+
+    template <typename T>
+    static T *
+    create(const std::string & class_name, const std::string & name, InputParameters * parameters)
+    {
+        return create<T>(class_name, name, *parameters);
     }
 
     static bool

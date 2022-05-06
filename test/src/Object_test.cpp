@@ -11,7 +11,7 @@ TEST(ObjectTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters & params = Factory::getValidParams("Object");
+    InputParameters params = Object::validParams();
     auto obj = app.buildObject<Object>("Object", "name", params);
 
     EXPECT_EQ(obj->getName(), "name");

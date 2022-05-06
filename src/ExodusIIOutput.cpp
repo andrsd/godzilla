@@ -61,11 +61,8 @@ ExodusIIOutput::createCellSets()
     _F_;
     PetscErrorCode ierr;
 
+    PetscInt dim = this->problem.getDimension();
     DM dm = this->problem.getDM();
-
-    PetscInt dim;
-    DMGetDimension(dm, &dim);
-
     DMLabel cs_label = nullptr;
     ierr = DMGetLabel(dm, "Cell Sets", &cs_label);
     checkPetscError(ierr);
@@ -108,9 +105,7 @@ void
 ExodusIIOutput::check()
 {
     _F_;
-    DM dm = this->problem.getDM();
-    PetscInt dim;
-    DMGetDimension(dm, &dim);
+    PetscInt dim = this->problem.getDimension();
     if (dim == 1)
         logError("PETSc viewer does not support ExodusII output for 1D problems.");
     if (this->fepi != nullptr)

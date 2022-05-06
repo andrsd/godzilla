@@ -31,7 +31,6 @@ public:
 
     virtual Mesh * getMesh();
     virtual Problem * getProblem();
-    const std::vector<Function *> & getFunctions();
 
     virtual const YAML::Node & getYml();
 
@@ -46,8 +45,8 @@ protected:
     void buildBoundaryConditions();
     void buildPostprocessors();
     void buildOutputs();
-    InputParameters & buildParams(const YAML::Node & root, const std::string & name);
-    void setParameterFromYML(InputParameters & params,
+    InputParameters * buildParams(const YAML::Node & root, const std::string & name);
+    void setParameterFromYML(InputParameters * params,
                              const YAML::Node & node,
                              const std::string & param_name);
 
@@ -58,7 +57,7 @@ protected:
     template <typename T>
     std::vector<T> readVectorValue(const std::string & param_name, const YAML::Node & val_node);
 
-    void checkParams(const InputParameters & params, const std::string & name);
+    void checkParams(const InputParameters * params, const std::string & name);
 
     /// Application object
     const godzilla::App & app;
@@ -68,8 +67,6 @@ protected:
     Mesh * mesh;
     /// Problem object
     Problem * problem;
-    /// List of functions defined in the input file
-    std::vector<Function *> functions;
     /// List of all objects built from the input file
     std::vector<Object *> objects;
     /// Names of object with correct parameters

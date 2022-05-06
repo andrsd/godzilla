@@ -61,13 +61,6 @@ GYMLFile::getYml()
     return this->root;
 }
 
-const std::vector<Function *> &
-GYMLFile::getFunctions()
-{
-    _F_;
-    return this->functions;
-}
-
 void
 GYMLFile::create()
 {
@@ -99,9 +92,9 @@ void
 GYMLFile::build()
 {
     _F_;
-    buildFunctions();
     buildMesh();
     buildProblem();
+    buildFunctions();
     buildPartitioner();
     buildAuxiliaryFields();
     buildInitialConditions();
@@ -122,10 +115,11 @@ GYMLFile::buildFunctions()
         YAML::Node fn_node = it.first;
         std::string name = fn_node.as<std::string>();
 
-        InputParameters params = buildParams(funcs_node, name);
-        const std::string & class_name = params.get<std::string>("_type");
+        InputParameters * params = buildParams(funcs_node, name);
+        const std::string & class_name = params->get<std::string>("_type");
         auto fn = Factory::create<Function>(class_name, name, params);
-        this->functions.push_back(fn);
+        assert(this->problem != nullptr);
+        this->problem->addFunction(fn);
     }
 }
 
@@ -133,8 +127,8 @@ void
 GYMLFile::buildMesh()
 {
     _F_;
-    InputParameters & params = buildParams(this->root, "mesh");
-    const std::string & class_name = params.get<std::string>("_type");
+    InputParameters * params = buildParams(this->root, "mesh");
+    const std::string & class_name = params->get<std::string>("_type");
     this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
     addObject(this->mesh);
 }
@@ -143,9 +137,9 @@ void
 GYMLFile::buildProblem()
 {
     _F_;
-    InputParameters & params = buildParams(this->root, "problem");
-    const std::string & class_name = params.get<std::string>("_type");
-    params.set<Mesh *>("_mesh") = this->mesh;
+    InputParameters * params = buildParams(this->root, "problem");
+    const std::string & class_name = params->get<std::string>("_type");
+    params->set<const Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
     addObject(this->problem);
 }
@@ -192,9 +186,9 @@ GYMLFile::buildAuxiliaryFields()
             YAML::Node aux_node = it.first;
             std::string name = aux_node.as<std::string>();
 
-            InputParameters & params = buildParams(auxs_root_node, name);
-            params.set<FEProblemInterface *>("_fepi") = fepface;
-            const std::string & class_name = params.get<std::string>("_type");
+            InputParameters * params = buildParams(auxs_root_node, name);
+            params->set<FEProblemInterface *>("_fepi") = fepface;
+            const std::string & class_name = params->get<std::string>("_type");
             auto aux = Factory::create<AuxiliaryField>(class_name, name, params);
             fepface->addAuxiliaryField(aux);
         }
@@ -219,8 +213,8 @@ GYMLFile::buildInitialConditions()
             YAML::Node ic_node = it.first;
             std::string name = ic_node.as<std::string>();
 
-            InputParameters & params = buildParams(ics_root_node, name);
-            const std::string & class_name = params.get<std::string>("_type");
+            InputParameters * params = buildParams(ics_root_node, name);
+            const std::string & class_name = params->get<std::string>("_type");
             auto ic = Factory::create<InitialCondition>(class_name, name, params);
             fepface->addInitialCondition(ic);
         }
@@ -245,8 +239,8 @@ GYMLFile::buildBoundaryConditions()
             YAML::Node bc_node = it.first;
             std::string name = bc_node.as<std::string>();
 
-            InputParameters & params = buildParams(bcs_root_node, name);
-            const std::string & class_name = params.get<std::string>("_type");
+            InputParameters * params = buildParams(bcs_root_node, name);
+            const std::string & class_name = params->get<std::string>("_type");
             auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
             fepface->addBoundaryCondition(bc);
         }
@@ -265,9 +259,9 @@ GYMLFile::buildPostprocessors()
         YAML::Node pps_node = it.first;
         std::string name = pps_node.as<std::string>();
 
-        InputParameters & params = buildParams(pps_root_node, name);
-        const std::string & class_name = params.get<std::string>("_type");
-        params.set<Problem *>("_problem") = this->problem;
+        InputParameters * params = buildParams(pps_root_node, name);
+        const std::string & class_name = params->get<std::string>("_type");
+        params->set<Problem *>("_problem") = this->problem;
         auto pp = Factory::create<Postprocessor>(class_name, name, params);
         problem->addPostprocessor(pp);
     }
@@ -285,16 +279,16 @@ GYMLFile::buildOutputs()
         YAML::Node output_node = it.first;
         std::string name = output_node.as<std::string>();
 
-        InputParameters & params = buildParams(output_root_node, name);
-        const std::string & class_name = params.get<std::string>("_type");
-        params.set<Problem *>("_problem") = this->problem;
+        InputParameters * params = buildParams(output_root_node, name);
+        const std::string & class_name = params->get<std::string>("_type");
+        params->set<Problem *>("_problem") = this->problem;
         auto output = Factory::create<Output>(class_name, name, params);
         assert(this->problem != nullptr);
         this->problem->addOutput(output);
     }
 }
 
-InputParameters &
+InputParameters *
 GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 {
     _F_;
@@ -310,14 +304,14 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
     if (!Factory::isRegistered(class_name))
         error(name, ": Type '", class_name, "' is not a registered object.");
 
-    InputParameters & params = Factory::getValidParams(class_name);
-    params.set<std::string>("_type") = class_name;
-    params.set<std::string>("_name") = name;
-    params.set<const App *>("_app") = &this->app;
+    InputParameters * params = Factory::getValidParams(class_name);
+    params->set<std::string>("_type") = class_name;
+    params->set<std::string>("_name") = name;
+    params->set<const App *>("_app") = &this->app;
 
-    for (auto & kv : params) {
+    for (auto & kv : *params) {
         const std::string & param_name = kv.first;
-        if (!params.isPrivate(param_name))
+        if (!params->isPrivate(param_name))
             setParameterFromYML(params, node, param_name);
     }
 
@@ -327,31 +321,31 @@ GYMLFile::buildParams(const YAML::Node & root, const std::string & name)
 }
 
 void
-GYMLFile::setParameterFromYML(InputParameters & params,
+GYMLFile::setParameterFromYML(InputParameters * params,
                               const YAML::Node & node,
                               const std::string & param_name)
 {
     _F_;
     YAML::Node val = node[param_name];
     if (val) {
-        const std::string & param_type = params.type(param_name);
+        const std::string & param_type = params->type(param_name);
 
         if (param_type == type_name<std::string>())
-            params.set<std::string>(param_name) = val.as<std::string>();
+            params->set<std::string>(param_name) = val.as<std::string>();
         else if (param_type == type_name<PetscReal>())
-            params.set<PetscReal>(param_name) = val.as<double>();
+            params->set<PetscReal>(param_name) = val.as<double>();
         else if (param_type == type_name<int>())
-            params.set<int>(param_name) = val.as<int>();
+            params->set<int>(param_name) = val.as<int>();
         else if (param_type == type_name<unsigned int>())
-            params.set<unsigned int>(param_name) = val.as<unsigned int>();
+            params->set<unsigned int>(param_name) = val.as<unsigned int>();
         // vector values
         else if (param_type == type_name<std::vector<PetscReal>>())
-            params.set<std::vector<PetscReal>>(param_name) =
+            params->set<std::vector<PetscReal>>(param_name) =
                 readVectorValue<double>(param_name, val);
         else if (param_type == type_name<std::vector<int>>())
-            params.set<std::vector<int>>(param_name) = readVectorValue<int>(param_name, val);
+            params->set<std::vector<int>>(param_name) = readVectorValue<int>(param_name, val);
         else if (param_type == type_name<std::vector<std::string>>())
-            params.set<std::vector<std::string>>(param_name) =
+            params->set<std::vector<std::string>>(param_name) =
                 readVectorValue<std::string>(param_name, val);
     }
 }
@@ -375,15 +369,15 @@ GYMLFile::readVectorValue(const std::string & param_name, const YAML::Node & val
 }
 
 void
-GYMLFile::checkParams(const InputParameters & params, const std::string & name)
+GYMLFile::checkParams(const InputParameters * params, const std::string & name)
 {
     _F_;
     std::ostringstream oss;
 
-    for (const auto & it : params) {
+    for (const auto & it : *params) {
         const auto & param_name = it.first;
-        if (!params.isParamValid(param_name) && params.isParamRequired(param_name))
-            oss << std::endl << "- '" << param_name << "': " << params.getDocString(param_name);
+        if (!params->isParamValid(param_name) && params->isParamRequired(param_name))
+            oss << std::endl << "- '" << param_name << "': " << params->getDocString(param_name);
     }
 
     if (!oss.str().empty())

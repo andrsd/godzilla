@@ -171,7 +171,7 @@ FEProblemInterface::addAuxFE(PetscInt id, const std::string & name, PetscInt nc,
 }
 
 void
-FEProblemInterface::setConstants(std::vector<PetscReal> & consts)
+FEProblemInterface::setConstants(const std::vector<PetscReal> & consts)
 {
     _F_;
     this->consts = consts;
@@ -296,9 +296,7 @@ FEProblemInterface::setUpFEs(DM dm)
 
     PetscErrorCode ierr;
 
-    // FIXME: pull this from UnstructuredMesh
-    PetscInt dim;
-    DMGetDimension(dm, &dim);
+    PetscInt dim = this->problem.getDimension();
 
     // FIXME: determine if the mesh is made of simplex elements
     PetscBool is_simplex = PETSC_FALSE;
@@ -358,9 +356,6 @@ void
 FEProblemInterface::setUpAuxiliaryDM(DM dm)
 {
     _F_;
-    if (this->aux_fields.size() == 0)
-        return;
-
     PetscErrorCode ierr;
 
     DM dm_aux;

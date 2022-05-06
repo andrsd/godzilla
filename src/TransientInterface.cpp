@@ -21,7 +21,8 @@ TransientInterface::TransientInterface(const InputParameters & params) :
     ts(nullptr),
     start_time(params.get<PetscReal>("start_time")),
     end_time(params.get<PetscReal>("end_time")),
-    dt(params.get<PetscReal>("dt"))
+    dt(params.get<PetscReal>("dt")),
+    step_num(0)
 {
     _F_;
 }
@@ -57,6 +58,8 @@ TransientInterface::create(DM dm)
     ierr = TSSetMaxTime(this->ts, this->end_time);
     checkPetscError(ierr);
     ierr = TSSetTimeStep(this->ts, this->dt);
+    checkPetscError(ierr);
+    ierr = TSSetStepNumber(this->ts, 1);
     checkPetscError(ierr);
 }
 

@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-class Function;
+class Problem;
 class GYMLFile;
 
 class App : public PrintInterface {
@@ -22,6 +22,9 @@ public:
     virtual ~App();
 
     const Logger & getLogger() const;
+
+    /// @return Get problem this application is representing
+    virtual Problem * getProblem() const;
 
     /// Parse command line arguments
     ///
@@ -67,6 +70,11 @@ public:
     T * buildObject(const std::string & class_name,
                     const std::string & name,
                     InputParameters & parameters);
+
+    template <typename T>
+    T * buildObject(const std::string & class_name,
+                    const std::string & name,
+                    InputParameters * parameters);
 
 protected:
     /// Create method can be used to additional object allocation, etc. needed before the
@@ -129,6 +137,16 @@ App::buildObject(const std::string & class_name,
                  InputParameters & parameters)
 {
     parameters.set<const App *>("_app") = this;
+    return Factory::create<T>(class_name, name, parameters);
+}
+
+template <typename T>
+T *
+App::buildObject(const std::string & class_name,
+                 const std::string & name,
+                 InputParameters * parameters)
+{
+    parameters->set<const App *>("_app") = this;
     return Factory::create<T>(class_name, name, parameters);
 }
 

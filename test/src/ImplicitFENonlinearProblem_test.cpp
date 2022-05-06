@@ -1,7 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaConfig.h"
 #include "Factory.h"
-#include "Mesh.h"
 #include "ImplicitFENonlinearProblem_test.h"
 #include "InputParameters.h"
 #include "InitialCondition.h"
@@ -10,7 +9,7 @@
 #include "petsc.h"
 #include "petscvec.h"
 
-namespace godzilla {
+using namespace godzilla;
 
 registerObject(GTestImplicitFENonlinearProblem);
 
@@ -119,17 +118,17 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::vector<PetscReal>>("value") = { 0 };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::vector<PetscReal>>("value") = { 0 };
         auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
         prob->addInitialCondition(ic);
     }
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::string>("boundary") = "marker";
-        params.set<std::vector<std::string>>("value") = { "x*x" };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::string>("boundary") = "marker";
+        params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc", params);
         prob->addBoundaryCondition(bc);
     }
@@ -153,7 +152,10 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
 {
     class TestProblem : public GTestImplicitFENonlinearProblem {
     public:
-        TestProblem(const InputParameters & params) : GTestImplicitFENonlinearProblem(params) {}
+        explicit TestProblem(const InputParameters & params) :
+            GTestImplicitFENonlinearProblem(params)
+        {
+        }
         virtual void
         output()
         {
@@ -163,9 +165,9 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
 
     auto mesh = gMesh1d();
 
-    InputParameters & params = Factory::getValidParams("GTestImplicitFENonlinearProblem");
+    InputParameters params = GTestImplicitFENonlinearProblem::validParams();
     params.set<const App *>("_app") = this->app;
-    params.set<Mesh *>("_mesh") = mesh;
+    params.set<const Mesh *>("_mesh") = mesh;
     params.set<PetscReal>("start_time") = 0.;
     params.set<PetscReal>("end_time") = 20;
     params.set<PetscReal>("dt") = 5;
@@ -179,7 +181,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
 {
     class MockImplicitFENonlinearProblem : public ImplicitFENonlinearProblem {
     public:
-        MockImplicitFENonlinearProblem(const InputParameters & params) :
+        explicit MockImplicitFENonlinearProblem(const InputParameters & params) :
             ImplicitFENonlinearProblem(params)
         {
         }
@@ -196,7 +198,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
 
     class MockOutput : public Output {
     public:
-        MockOutput(const InputParameters & params) : Output(params) {}
+        explicit MockOutput(const InputParameters & params) : Output(params) {}
 
         MOCK_METHOD(const std::string &, getFileName, (), (const));
         MOCK_METHOD(void, setFileName, ());
@@ -211,7 +213,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
 
     InputParameters prob_pars = ImplicitFENonlinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Mesh *>("_mesh") = mesh;
+    prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockImplicitFENonlinearProblem prob(prob_pars);
 
     InputParameters out_pars = Output::validParams();
@@ -250,5 +252,3 @@ GTestImplicitFENonlinearProblem::onSetWeakForm()
     setResidualBlock(this->iu, f0_u, f1_u);
     setJacobianBlock(this->iu, this->iu, g0_uu, NULL, NULL, g3_uu);
 }
-
-} // namespace godzilla

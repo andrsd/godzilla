@@ -1,5 +1,6 @@
 #include "FunctionInterface.h"
 #include "App.h"
+#include "Problem.h"
 #include <assert.h>
 
 namespace godzilla {
@@ -13,6 +14,7 @@ FunctionInterface::validParams()
 }
 
 FunctionInterface::FunctionInterface(const InputParameters & params) :
+    fi_app(params.get<const App *>("_app")),
     expression(params.get<std::vector<std::string>>("value"))
 {
     this->num_comps = this->expression.size();
@@ -26,6 +28,16 @@ FunctionInterface::create()
     _F_;
     for (unsigned int i = 0; i < this->num_comps; i++)
         this->evalr[i].create(this->expression[i]);
+
+    assert(this->fi_app != nullptr);
+    Problem * p = this->fi_app->getProblem();
+    if (p) {
+        const auto & funcs = p->getFunctions();
+        for (unsigned int i = 0; i < this->num_comps; i++) {
+            for (auto & f : funcs)
+                this->evalr[i].registerFunction(f);
+        }
+    }
 }
 
 PetscReal

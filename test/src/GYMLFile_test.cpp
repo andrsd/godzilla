@@ -22,7 +22,7 @@ GTestProblem::validParams()
     params.addParam<std::vector<double>>("arr_d", "vec<d> doco");
     params.addParam<std::vector<int>>("arr_i", "vec<i> doco");
     params.addParam<std::vector<std::string>>("arr_str", "vec<str> doco");
-    params.addPrivateParam<Mesh *>("_mesh");
+    params.addPrivateParam<const Mesh *>("_mesh");
     return params;
 }
 
@@ -134,8 +134,9 @@ TEST_F(GYMLFileTest, funcs)
     public:
         explicit TestGYMLFile(const App & app) : GYMLFile(app) {}
         void
-        buildFunctions()
+        build()
         {
+            GYMLFile::buildProblem();
             GYMLFile::buildFunctions();
         }
     } file(*this->app);
@@ -144,9 +145,10 @@ TEST_F(GYMLFileTest, funcs)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/funcs.yml");
 
     file.parse(file_name);
-    file.buildFunctions();
+    file.build();
 
-    const std::vector<Function *> & funcs = file.getFunctions();
+    auto * problem = file.getProblem();
+    const std::vector<Function *> & funcs = problem->getFunctions();
     EXPECT_EQ(funcs.size(), 1);
     EXPECT_NE(dynamic_cast<PiecewiseLinear *>(funcs[0]), nullptr);
 }

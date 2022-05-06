@@ -82,11 +82,11 @@ void
 FileOutput::outputStep(PetscInt stepi, DM dm, Vec vec)
 {
     _F_;
-    godzillaPrint(9, "Output to file: ", this->file_name);
     if (stepi == -1)
         setFileName();
     else
         setSequenceFileName(stepi);
+    godzillaPrint(9, "Output to file: ", this->file_name);
     outputMesh(dm);
     outputSolution(vec);
 }
