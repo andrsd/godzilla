@@ -45,6 +45,13 @@ Problem::create()
         out->create();
 }
 
+PetscInt
+Problem::getDimension() const
+{
+    _F_;
+    return this->mesh->getDimension();
+}
+
 const PetscReal &
 Problem::getTime() const
 {

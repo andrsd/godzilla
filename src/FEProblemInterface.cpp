@@ -296,9 +296,7 @@ FEProblemInterface::setUpFEs(DM dm)
 
     PetscErrorCode ierr;
 
-    // FIXME: pull this from UnstructuredMesh
-    PetscInt dim;
-    DMGetDimension(dm, &dim);
+    PetscInt dim = this->problem.getDimension();
 
     // FIXME: determine if the mesh is made of simplex elements
     PetscBool is_simplex = PETSC_FALSE;

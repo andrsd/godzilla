@@ -32,6 +32,8 @@ public:
     virtual DM getDM() const = 0;
     /// Return solution vector
     virtual Vec getSolutionVector() const = 0;
+    /// Get problem spatial dimension
+    virtual PetscInt getDimension() const;
 
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
