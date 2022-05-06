@@ -105,6 +105,7 @@ ImplicitFENonlinearProblem::tsMonitorCallback(PetscInt stepi, PetscReal t, Vec X
     ierr = TSGetTimeStep(this->ts, &dt);
     checkPetscError(ierr);
     this->time = t;
+    this->step_num = stepi;
     godzillaPrint(6, stepi, " Time ", t, ", dt = ", dt);
     return 0;
 }
@@ -121,6 +122,8 @@ ImplicitFENonlinearProblem::run()
 {
     _F_;
     godzillaPrint(5, "Executing...");
+    // output initial condition
+    outputStep(this->x);
     solve();
 }
 
@@ -167,12 +170,8 @@ ImplicitFENonlinearProblem::outputStep(Vec vec)
     PetscErrorCode ierr;
     DM dm = getDM();
 
-    PetscInt num;
-    ierr = DMGetOutputSequenceNumber(dm, &num, NULL);
-    checkPetscError(ierr);
-
     for (auto & o : this->outputs)
-        o->outputStep(num, dm, vec);
+        o->outputStep(this->step_num, dm, vec);
 }
 
 } // namespace godzilla

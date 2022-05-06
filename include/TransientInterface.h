@@ -31,6 +31,8 @@ protected:
     const PetscReal & end_time;
     /// Time step size
     const PetscReal & dt;
+    /// Number of the time step
+    PetscInt step_num;
 
 public:
     static InputParameters validParams();
