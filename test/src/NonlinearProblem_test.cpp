@@ -115,7 +115,7 @@ TEST_F(NonlinearProblemTest, line_search_type)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
 
         MOCK_METHOD(PetscErrorCode, computeResidualCallback, (Vec x, Vec f));
         MOCK_METHOD(PetscErrorCode, computeJacobianCallback, (Vec x, Mat J, Mat Jp));

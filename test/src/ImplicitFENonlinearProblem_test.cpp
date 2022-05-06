@@ -152,7 +152,10 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
 {
     class TestProblem : public GTestImplicitFENonlinearProblem {
     public:
-        TestProblem(const InputParameters & params) : GTestImplicitFENonlinearProblem(params) {}
+        explicit TestProblem(const InputParameters & params) :
+            GTestImplicitFENonlinearProblem(params)
+        {
+        }
         virtual void
         output()
         {
@@ -178,7 +181,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
 {
     class MockImplicitFENonlinearProblem : public ImplicitFENonlinearProblem {
     public:
-        MockImplicitFENonlinearProblem(const InputParameters & params) :
+        explicit MockImplicitFENonlinearProblem(const InputParameters & params) :
             ImplicitFENonlinearProblem(params)
         {
         }
@@ -195,7 +198,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
 
     class MockOutput : public Output {
     public:
-        MockOutput(const InputParameters & params) : Output(params) {}
+        explicit MockOutput(const InputParameters & params) : Output(params) {}
 
         MOCK_METHOD(const std::string &, getFileName, (), (const));
         MOCK_METHOD(void, setFileName, ());
