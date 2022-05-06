@@ -12,8 +12,8 @@ protected:
     gMesh1d()
     {
         const std::string class_name = "LineMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 1;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<PetscInt>("nx") = 1;
         return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
@@ -21,9 +21,9 @@ protected:
     gMesh2d()
     {
         const std::string class_name = "RectangleMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 1;
-        params.set<PetscInt>("ny") = 1;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<PetscInt>("nx") = 1;
+        params->set<PetscInt>("ny") = 1;
         return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
@@ -31,10 +31,10 @@ protected:
     gMesh3d()
     {
         const std::string class_name = "BoxMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 1;
-        params.set<PetscInt>("ny") = 1;
-        params.set<PetscInt>("nz") = 1;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<PetscInt>("nx") = 1;
+        params->set<PetscInt>("ny") = 1;
+        params->set<PetscInt>("nz") = 1;
         return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
@@ -42,8 +42,8 @@ protected:
     gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "G1DTestLinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const Mesh *>("_mesh") = mesh;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 
@@ -51,8 +51,8 @@ protected:
     gProblem2d(Mesh * mesh)
     {
         const std::string class_name = "G2DTestLinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const Mesh *>("_mesh") = mesh;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 
@@ -60,8 +60,8 @@ protected:
     gProblem3d(Mesh * mesh)
     {
         const std::string class_name = "G3DTestLinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const Mesh *>("_mesh") = mesh;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 };

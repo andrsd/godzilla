@@ -15,8 +15,8 @@ public:
     gMesh1d()
     {
         const std::string class_name = "LineMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 2;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<PetscInt>("nx") = 2;
         return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
@@ -24,11 +24,11 @@ public:
     gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const Mesh *>("_mesh") = mesh;
-        params.set<PetscReal>("start_time") = 0.;
-        params.set<PetscReal>("end_time") = 20;
-        params.set<PetscReal>("dt") = 5;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<PetscReal>("start_time") = 0.;
+        params->set<PetscReal>("end_time") = 20;
+        params->set<PetscReal>("dt") = 5;
         return this->app->buildObject<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
     }
 };

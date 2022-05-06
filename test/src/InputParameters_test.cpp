@@ -6,7 +6,7 @@ using namespace godzilla;
 
 TEST(InputParametersTest, get)
 {
-    InputParameters params = Factory::getValidParams("Object");
+    InputParameters params = Object::validParams();
     EXPECT_DEATH(params.get<int>("i"), "No parameter 'i' found.");
 }
 
@@ -71,14 +71,14 @@ TEST(InputParametersTest, valid_params)
 
 TEST(InputParametersTest, empty_doc_str)
 {
-    InputParameters & params = Factory::getValidParams("Object");
+    InputParameters params = Object::validParams();
 
     EXPECT_EQ(params.getDocString("i"), std::string(""));
 }
 
 TEST(InputParametersTest, set_non_existing_param)
 {
-    InputParameters & params = Factory::getValidParams("Object");
+    InputParameters params = Object::validParams();
     params.set<double>("d") = 1.23;
 
     EXPECT_EQ(params.get<double>("d"), 1.23);

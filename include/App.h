@@ -71,6 +71,11 @@ public:
                     const std::string & name,
                     InputParameters & parameters);
 
+    template <typename T>
+    T * buildObject(const std::string & class_name,
+                    const std::string & name,
+                    InputParameters * parameters);
+
 protected:
     /// Create method can be used to additional object allocation, etc. needed before the
     /// application runs
@@ -132,6 +137,16 @@ App::buildObject(const std::string & class_name,
                  InputParameters & parameters)
 {
     parameters.set<const App *>("_app") = this;
+    return Factory::create<T>(class_name, name, parameters);
+}
+
+template <typename T>
+T *
+App::buildObject(const std::string & class_name,
+                 const std::string & name,
+                 InputParameters * parameters)
+{
+    parameters->set<const App *>("_app") = this;
     return Factory::create<T>(class_name, name, parameters);
 }
 

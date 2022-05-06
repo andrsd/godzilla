@@ -90,14 +90,14 @@ public:
 
         {
             const std::string class_name = "LineMesh";
-            InputParameters & params = Factory::getValidParams(class_name);
-            params.set<PetscInt>("nx") = 2;
+            InputParameters * params = Factory::getValidParams(class_name);
+            params->set<PetscInt>("nx") = 2;
             this->mesh = this->app->buildObject<Mesh>(class_name, "mesh", params);
         }
         {
             const std::string class_name = "GTestFENonlinearProblem";
-            InputParameters & params = Factory::getValidParams(class_name);
-            params.set<const Mesh *>("_mesh") = this->mesh;
+            InputParameters * params = Factory::getValidParams(class_name);
+            params->set<const Mesh *>("_mesh") = this->mesh;
             this->prob =
                 this->app->buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
         }

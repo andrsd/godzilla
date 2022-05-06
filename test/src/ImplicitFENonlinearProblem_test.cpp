@@ -118,17 +118,17 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::vector<PetscReal>>("value") = { 0 };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::vector<PetscReal>>("value") = { 0 };
         auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
         prob->addInitialCondition(ic);
     }
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::string>("boundary") = "marker";
-        params.set<std::vector<std::string>>("value") = { "x*x" };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::string>("boundary") = "marker";
+        params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc", params);
         prob->addBoundaryCondition(bc);
     }
@@ -162,7 +162,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
 
     auto mesh = gMesh1d();
 
-    InputParameters & params = Factory::getValidParams("GTestImplicitFENonlinearProblem");
+    InputParameters params = GTestImplicitFENonlinearProblem::validParams();
     params.set<const App *>("_app") = this->app;
     params.set<const Mesh *>("_mesh") = mesh;
     params.set<PetscReal>("start_time") = 0.;

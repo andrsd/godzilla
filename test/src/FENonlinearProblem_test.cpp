@@ -144,18 +144,18 @@ TEST_F(FENonlinearProblemTest, solve)
 {
     {
         const std::string class_name = "ConstantIC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::vector<PetscReal>>("value") = { 0.1 };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
         prob->addInitialCondition(ic);
     }
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const App *>("_app") = this->app;
-        params.set<std::string>("boundary") = "marker";
-        params.set<std::vector<std::string>>("value") = { "x*x" };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<const App *>("_app") = this->app;
+        params->set<std::string>("boundary") = "marker";
+        params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc", params);
         prob->addBoundaryCondition(bc);
     }
@@ -180,9 +180,9 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
     {
         const std::string class_name = "DirichletBC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::string>("boundary") = "marker";
-        params.set<std::vector<std::string>>("value") = { "x*x" };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::string>("boundary") = "marker";
+        params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc", params);
         prob->addBoundaryCondition(bc);
     }
@@ -204,7 +204,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 
     {
         const std::string class_name = "GTest2CompIC";
-        InputParameters & params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::getValidParams(class_name);
         auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
         prob->addInitialCondition(ic);
     }
@@ -224,14 +224,14 @@ TEST_F(FENonlinearProblemTest, err_duplicate_ics)
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::vector<PetscReal>>("value") = { 0.1 };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = this->app->buildObject<InitialCondition>(class_name, "ic1", params);
         prob->addInitialCondition(ic);
     }
     const std::string class_name = "ConstantIC";
-    InputParameters & params = Factory::getValidParams(class_name);
-    params.set<std::vector<PetscReal>>("value") = { 0.2 };
+    InputParameters * params = Factory::getValidParams(class_name);
+    params->set<std::vector<PetscReal>>("value") = { 0.2 };
     auto ic = this->app->buildObject<InitialCondition>(class_name, "ic2", params);
     prob->addInitialCondition(ic);
     this->app->checkIntegrity();
@@ -262,21 +262,21 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 
     {
         const std::string class_name = "LineMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 2;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<PetscInt>("nx") = 2;
         mesh = app.buildObject<Mesh>(class_name, "mesh", params);
     }
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const Mesh *>("_mesh") = mesh;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
         prob = app.buildObject<FENonlinearProblem>(class_name, "prob", params);
     }
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::vector<PetscReal>>("value") = { 0.1 };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = app.buildObject<InitialCondition>(class_name, "ic1", params);
         prob->addInitialCondition(ic);
     }
@@ -295,9 +295,9 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<std::string>("boundary") = "asdf";
-        params.set<std::vector<std::string>>("value") = { "0.1" };
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<std::string>("boundary") = "asdf";
+        params->set<std::vector<std::string>>("value") = { "0.1" };
         auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc1", params);
         prob->addBoundaryCondition(bc);
     }

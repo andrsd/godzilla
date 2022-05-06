@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "App.h"
-#include "Mesh.h"
+#include "LineMesh.h"
 #include "FENonlinearProblem.h"
 #include "AuxiliaryField.h"
 #include "FENonlinearProblem_test.h"
@@ -13,22 +13,17 @@ TEST(AuxiliaryFieldTest, non_existent_id)
 
     TestApp app;
 
-    Mesh * mesh = nullptr;
-    {
-        const std::string class_name = "LineMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 2;
-        mesh = app.buildObject<Mesh>(class_name, "mesh", params);
-    }
-    mesh->create();
-    GTestFENonlinearProblem * prob = nullptr;
-    {
-        const std::string class_name = "GTestFENonlinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const Mesh *>("_mesh") = mesh;
-        prob = app.buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
-    }
-    prob->addAuxFE(0, "aux1", 1, 1);
+    InputParameters mesh_pars = LineMesh::validParams();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
+
+    InputParameters prob_pars = GTestFENonlinearProblem::validParams();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    GTestFENonlinearProblem prob(prob_pars);
+    prob.addAuxFE(0, "aux1", 1, 1);
 
     class TestAuxFld : public AuxiliaryField {
     public:
@@ -52,10 +47,10 @@ TEST(AuxiliaryFieldTest, non_existent_id)
     InputParameters params = AuxiliaryField::validParams();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "aux";
-    params.set<FEProblemInterface *>("_fepi") = prob;
+    params.set<FEProblemInterface *>("_fepi") = &prob;
     auto aux = TestAuxFld(params);
-    prob->addAuxiliaryField(&aux);
-    prob->create();
+    prob.addAuxiliaryField(&aux);
+    prob.create();
 
     app.checkIntegrity();
 
@@ -70,22 +65,17 @@ TEST(AuxiliaryFieldTest, inconsistent_comp_number)
 
     TestApp app;
 
-    Mesh * mesh = nullptr;
-    {
-        const std::string class_name = "LineMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 2;
-        mesh = app.buildObject<Mesh>(class_name, "mesh", params);
-    }
-    mesh->create();
-    GTestFENonlinearProblem * prob = nullptr;
-    {
-        const std::string class_name = "GTestFENonlinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const Mesh *>("_mesh") = mesh;
-        prob = app.buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
-    }
-    prob->addAuxFE(0, "aux1", 1, 1);
+    InputParameters mesh_pars = LineMesh::validParams();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
+
+    InputParameters prob_pars = GTestFENonlinearProblem::validParams();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    GTestFENonlinearProblem prob(prob_pars);
+    prob.addAuxFE(0, "aux1", 1, 1);
 
     class TestAuxFld : public AuxiliaryField {
     public:
@@ -109,10 +99,10 @@ TEST(AuxiliaryFieldTest, inconsistent_comp_number)
     InputParameters params = AuxiliaryField::validParams();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "aux";
-    params.set<FEProblemInterface *>("_fepi") = prob;
+    params.set<FEProblemInterface *>("_fepi") = &prob;
     auto aux = TestAuxFld(params);
-    prob->addAuxiliaryField(&aux);
-    prob->create();
+    prob.addAuxiliaryField(&aux);
+    prob.create();
 
     app.checkIntegrity();
 

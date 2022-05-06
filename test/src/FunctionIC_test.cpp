@@ -9,7 +9,7 @@ TEST(FunctionICTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters & params = Factory::getValidParams("FunctionIC");
+    InputParameters params = FunctionIC::validParams();
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     auto obj = app.buildObject<InitialCondition>("FunctionIC", "name", params);
     obj->create();

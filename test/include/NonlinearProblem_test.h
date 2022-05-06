@@ -11,8 +11,8 @@ protected:
     gMesh1d()
     {
         const std::string class_name = "LineMesh";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<PetscInt>("nx") = 1;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<PetscInt>("nx") = 1;
         return this->app->buildObject<Mesh>(class_name, "mesh", params);
     }
 
@@ -20,8 +20,8 @@ protected:
     gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "G1DTestNonlinearProblem";
-        InputParameters & params = Factory::getValidParams(class_name);
-        params.set<const Mesh *>("_mesh") = mesh;
+        InputParameters * params = Factory::getValidParams(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 };
