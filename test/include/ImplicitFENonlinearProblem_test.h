@@ -26,7 +26,7 @@ public:
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Mesh *>("_mesh") = mesh;
+        params.set<const Mesh *>("_mesh") = mesh;
         params.set<PetscReal>("start_time") = 0.;
         params.set<PetscReal>("end_time") = 20;
         params.set<PetscReal>("dt") = 5;

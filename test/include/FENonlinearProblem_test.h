@@ -27,7 +27,7 @@ public:
         {
             const std::string class_name = "GTestFENonlinearProblem";
             InputParameters & params = Factory::getValidParams(class_name);
-            params.set<Mesh *>("_mesh") = this->mesh;
+            params.set<const Mesh *>("_mesh") = this->mesh;
             this->prob =
                 this->app->buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
         }

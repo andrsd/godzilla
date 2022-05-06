@@ -21,7 +21,7 @@ protected:
     {
         const std::string class_name = "G1DTestNonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Mesh *>("_mesh") = mesh;
+        params.set<const Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 };

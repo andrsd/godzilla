@@ -270,7 +270,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Mesh *>("_mesh") = mesh;
+        params.set<const Mesh *>("_mesh") = mesh;
         prob = app.buildObject<FENonlinearProblem>(class_name, "prob", params);
     }
 

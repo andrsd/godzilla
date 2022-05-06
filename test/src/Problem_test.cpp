@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "GodzillaApp_test.h"
+#include "LineMesh.h"
 #include "Problem.h"
 #include "Postprocessor.h"
 
@@ -55,8 +56,14 @@ TEST(ProblemTest, add_pp)
         }
     };
 
+    InputParameters mesh_params = LineMesh::validParams();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_params);
+
     InputParameters prob_params = Problem::validParams();
     prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
 
     InputParameters pp_params = Postprocessor::validParams();

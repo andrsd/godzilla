@@ -43,7 +43,7 @@ protected:
     {
         const std::string class_name = "G1DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Mesh *>("_mesh") = mesh;
+        params.set<const Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 
@@ -52,7 +52,7 @@ protected:
     {
         const std::string class_name = "G2DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Mesh *>("_mesh") = mesh;
+        params.set<const Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 
@@ -61,7 +61,7 @@ protected:
     {
         const std::string class_name = "G3DTestLinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Mesh *>("_mesh") = mesh;
+        params.set<const Mesh *>("_mesh") = mesh;
         return this->app->buildObject<Problem>(class_name, "problem", params);
     }
 };

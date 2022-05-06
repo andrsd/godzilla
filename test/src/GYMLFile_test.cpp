@@ -22,7 +22,7 @@ GTestProblem::validParams()
     params.addParam<std::vector<double>>("arr_d", "vec<d> doco");
     params.addParam<std::vector<int>>("arr_i", "vec<i> doco");
     params.addParam<std::vector<std::string>>("arr_str", "vec<str> doco");
-    params.addPrivateParam<Mesh *>("_mesh");
+    params.addPrivateParam<const Mesh *>("_mesh");
     return params;
 }
 

@@ -56,7 +56,7 @@ TEST_F(NonlinearProblemTest, run)
 
     InputParameters prob_pars = NonlinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Mesh *>("_mesh") = mesh;
+    prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
 
     EXPECT_CALL(prob, solve);
@@ -96,7 +96,7 @@ TEST_F(NonlinearProblemTest, output)
 
     InputParameters prob_pars = NonlinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Mesh *>("_mesh") = mesh;
+    prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
 
     InputParameters out_pars = Output::validParams();
@@ -134,7 +134,7 @@ TEST_F(NonlinearProblemTest, line_search_type)
     for (auto & lst : ls_type) {
         InputParameters prob_pars = NonlinearProblem::validParams();
         prob_pars.set<const App *>("_app") = this->app;
-        prob_pars.set<Mesh *>("_mesh") = mesh;
+        prob_pars.set<const Mesh *>("_mesh") = mesh;
         prob_pars.set<std::string>("line_search") = lst;
         MockNonlinearProblem prob(prob_pars);
         prob.create();

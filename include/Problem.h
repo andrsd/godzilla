@@ -59,7 +59,7 @@ protected:
     virtual void computePostprocessors();
 
     /// Mesh
-    Mesh & mesh;
+    const Mesh * mesh;
 
     /// List of output objects
     std::vector<Output *> outputs;

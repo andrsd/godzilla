@@ -10,14 +10,14 @@ InputParameters
 Problem::validParams()
 {
     InputParameters params = Object::validParams();
-    params.addPrivateParam<Mesh *>("_mesh");
+    params.addPrivateParam<const Mesh *>("_mesh");
     return params;
 }
 
 Problem::Problem(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    mesh(*getParam<Mesh *>("_mesh")),
+    mesh(getParam<const Mesh *>("_mesh")),
     time(0.)
 {
 }

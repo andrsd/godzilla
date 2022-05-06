@@ -25,7 +25,7 @@ TEST(AuxiliaryFieldTest, non_existent_id)
     {
         const std::string class_name = "GTestFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Mesh *>("_mesh") = mesh;
+        params.set<const Mesh *>("_mesh") = mesh;
         prob = app.buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
     }
     prob->addAuxFE(0, "aux1", 1, 1);
@@ -82,7 +82,7 @@ TEST(AuxiliaryFieldTest, inconsistent_comp_number)
     {
         const std::string class_name = "GTestFENonlinearProblem";
         InputParameters & params = Factory::getValidParams(class_name);
-        params.set<Mesh *>("_mesh") = mesh;
+        params.set<const Mesh *>("_mesh") = mesh;
         prob = app.buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
     }
     prob->addAuxFE(0, "aux1", 1, 1);

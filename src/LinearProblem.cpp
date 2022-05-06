@@ -79,7 +79,7 @@ DM
 LinearProblem::getDM() const
 {
     _F_;
-    return this->mesh.getDM();
+    return this->mesh->getDM();
 }
 
 Vec

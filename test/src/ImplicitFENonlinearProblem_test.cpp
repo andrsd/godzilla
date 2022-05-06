@@ -165,7 +165,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
 
     InputParameters & params = Factory::getValidParams("GTestImplicitFENonlinearProblem");
     params.set<const App *>("_app") = this->app;
-    params.set<Mesh *>("_mesh") = mesh;
+    params.set<const Mesh *>("_mesh") = mesh;
     params.set<PetscReal>("start_time") = 0.;
     params.set<PetscReal>("end_time") = 20;
     params.set<PetscReal>("dt") = 5;
@@ -211,7 +211,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
 
     InputParameters prob_pars = ImplicitFENonlinearProblem::validParams();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<Mesh *>("_mesh") = mesh;
+    prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockImplicitFENonlinearProblem prob(prob_pars);
 
     InputParameters out_pars = Output::validParams();

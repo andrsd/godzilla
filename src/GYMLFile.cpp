@@ -145,7 +145,7 @@ GYMLFile::buildProblem()
     _F_;
     InputParameters & params = buildParams(this->root, "problem");
     const std::string & class_name = params.get<std::string>("_type");
-    params.set<Mesh *>("_mesh") = this->mesh;
+    params.set<const Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
     addObject(this->problem);
 }
