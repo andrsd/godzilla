@@ -134,8 +134,9 @@ TEST_F(GYMLFileTest, funcs)
     public:
         explicit TestGYMLFile(const App & app) : GYMLFile(app) {}
         void
-        buildFunctions()
+        build()
         {
+            GYMLFile::buildProblem();
             GYMLFile::buildFunctions();
         }
     } file(*this->app);
@@ -144,9 +145,10 @@ TEST_F(GYMLFileTest, funcs)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/funcs.yml");
 
     file.parse(file_name);
-    file.buildFunctions();
+    file.build();
 
-    const std::vector<Function *> & funcs = file.getFunctions();
+    auto * problem = file.getProblem();
+    const std::vector<Function *> & funcs = problem->getFunctions();
     EXPECT_EQ(funcs.size(), 1);
     EXPECT_NE(dynamic_cast<PiecewiseLinear *>(funcs[0]), nullptr);
 }

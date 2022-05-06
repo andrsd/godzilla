@@ -61,13 +61,6 @@ GYMLFile::getYml()
     return this->root;
 }
 
-const std::vector<Function *> &
-GYMLFile::getFunctions()
-{
-    _F_;
-    return this->functions;
-}
-
 void
 GYMLFile::create()
 {
@@ -99,9 +92,9 @@ void
 GYMLFile::build()
 {
     _F_;
-    buildFunctions();
     buildMesh();
     buildProblem();
+    buildFunctions();
     buildPartitioner();
     buildAuxiliaryFields();
     buildInitialConditions();
@@ -122,10 +115,11 @@ GYMLFile::buildFunctions()
         YAML::Node fn_node = it.first;
         std::string name = fn_node.as<std::string>();
 
-        InputParameters params = buildParams(funcs_node, name);
+        InputParameters & params = buildParams(funcs_node, name);
         const std::string & class_name = params.get<std::string>("_type");
         auto fn = Factory::create<Function>(class_name, name, params);
-        this->functions.push_back(fn);
+        assert(this->problem != nullptr);
+        this->problem->addFunction(fn);
     }
 }
 

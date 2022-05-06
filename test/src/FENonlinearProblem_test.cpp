@@ -1,6 +1,5 @@
 #include "GodzillaConfig.h"
 #include "Factory.h"
-#include "Mesh.h"
 #include "FENonlinearProblem_test.h"
 #include "InputParameters.h"
 #include "InitialCondition.h"
@@ -9,7 +8,7 @@
 #include "petscvec.h"
 
 using namespace ::testing;
-namespace godzilla {
+using namespace godzilla;
 
 registerObject(GTestFENonlinearProblem);
 registerObject(GTest2FieldsFENonlinearProblem);
@@ -406,5 +405,3 @@ GTest2FieldsFENonlinearProblem::onSetFields()
     GTestFENonlinearProblem::onSetFields();
     addFE(this->iv, "v", 1, 1);
 }
-
-} // namespace godzilla

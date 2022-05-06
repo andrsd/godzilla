@@ -1,11 +1,10 @@
 #pragma once
 
 #include "ImplicitFENonlinearProblem.h"
+#include "Mesh.h"
 #include "InitialCondition.h"
 #include "GodzillaApp_test.h"
 
-namespace godzilla {
-class Mesh;
 class GTestImplicitFENonlinearProblem;
 
 //
@@ -49,5 +48,3 @@ protected:
     /// ID for the "u" field
     const PetscInt iu;
 };
-
-} // namespace godzilla

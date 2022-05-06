@@ -8,6 +8,7 @@
 namespace godzilla {
 
 class Mesh;
+class Function;
 class Postprocessor;
 class Output;
 
@@ -40,6 +41,16 @@ public:
     /// @return Simulation time
     virtual const PetscReal & getTime() const;
 
+    /// Get list of functions
+    ///
+    /// @return List of functions
+    const std::vector<Function *> & getFunctions() const;
+
+    /// Add a function object
+    ///
+    /// @param fn Function object to add
+    virtual void addFunction(Function * fn);
+
     /// Add and output object
     ///
     /// @param output Output object to add
@@ -62,6 +73,9 @@ protected:
 
     /// Mesh
     const Mesh * mesh;
+
+    /// List of functions
+    std::vector<Function *> functions;
 
     /// List of output objects
     std::vector<Output *> outputs;

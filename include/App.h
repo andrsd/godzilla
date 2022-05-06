@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-class Function;
+class Problem;
 class GYMLFile;
 
 class App : public PrintInterface {
@@ -22,6 +22,9 @@ public:
     virtual ~App();
 
     const Logger & getLogger() const;
+
+    /// @return Get problem this application is representing
+    virtual Problem * getProblem() const;
 
     /// Parse command line arguments
     ///

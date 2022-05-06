@@ -31,7 +31,6 @@ public:
 
     virtual Mesh * getMesh();
     virtual Problem * getProblem();
-    const std::vector<Function *> & getFunctions();
 
     virtual const YAML::Node & getYml();
 
@@ -68,8 +67,6 @@ protected:
     Mesh * mesh;
     /// Problem object
     Problem * problem;
-    /// List of functions defined in the input file
-    std::vector<Function *> functions;
     /// List of all objects built from the input file
     std::vector<Object *> objects;
     /// Names of object with correct parameters

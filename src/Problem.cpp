@@ -1,6 +1,7 @@
 #include "Problem.h"
 #include "CallStack.h"
 #include "Mesh.h"
+#include "Function.h"
 #include "Postprocessor.h"
 #include "Output.h"
 
@@ -28,6 +29,8 @@ void
 Problem::check()
 {
     _F_;
+    for (auto & f : this->functions)
+        f->create();
     for (auto & pp : this->pps)
         pp.second->check();
     for (auto & out : this->outputs) {
@@ -57,6 +60,20 @@ Problem::getTime() const
 {
     _F_;
     return this->time;
+}
+
+const std::vector<Function *> &
+Problem::getFunctions() const
+{
+    _F_;
+    return this->functions;
+}
+
+void
+Problem::addFunction(Function * fn)
+{
+    _F_;
+    this->functions.push_back(fn);
 }
 
 void

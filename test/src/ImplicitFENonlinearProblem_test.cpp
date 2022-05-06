@@ -1,7 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaConfig.h"
 #include "Factory.h"
-#include "Mesh.h"
 #include "ImplicitFENonlinearProblem_test.h"
 #include "InputParameters.h"
 #include "InitialCondition.h"
@@ -10,7 +9,7 @@
 #include "petsc.h"
 #include "petscvec.h"
 
-namespace godzilla {
+using namespace godzilla;
 
 registerObject(GTestImplicitFENonlinearProblem);
 
@@ -250,5 +249,3 @@ GTestImplicitFENonlinearProblem::onSetWeakForm()
     setResidualBlock(this->iu, f0_u, f1_u);
     setJacobianBlock(this->iu, this->iu, g0_uu, NULL, NULL, g3_uu);
 }
-
-} // namespace godzilla

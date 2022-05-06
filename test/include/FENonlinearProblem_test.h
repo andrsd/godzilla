@@ -1,47 +1,13 @@
 #pragma once
 
 #include "gmock/gmock.h"
+#include "Mesh.h"
 #include "FENonlinearProblem.h"
 #include "InitialCondition.h"
 #include "GodzillaApp_test.h"
 #include "petsc.h"
 
-namespace godzilla {
-class Mesh;
-class GTestFENonlinearProblem;
-
-/// Test fixture
-class FENonlinearProblemTest : public GodzillaAppTest {
-public:
-    void
-    SetUp() override
-    {
-        GodzillaAppTest::SetUp();
-
-        {
-            const std::string class_name = "LineMesh";
-            InputParameters & params = Factory::getValidParams(class_name);
-            params.set<PetscInt>("nx") = 2;
-            this->mesh = this->app->buildObject<Mesh>(class_name, "mesh", params);
-        }
-        {
-            const std::string class_name = "GTestFENonlinearProblem";
-            InputParameters & params = Factory::getValidParams(class_name);
-            params.set<const Mesh *>("_mesh") = this->mesh;
-            this->prob =
-                this->app->buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
-        }
-    }
-
-    void
-    TearDown() override
-    {
-        GodzillaAppTest::TearDown();
-    }
-
-    godzilla::Mesh * mesh;
-    GTestFENonlinearProblem * prob;
-};
+using namespace godzilla;
 
 /// Test problem for simple FE solver
 class GTestFENonlinearProblem : public FENonlinearProblem {
@@ -114,4 +80,36 @@ public:
     }
 };
 
-} // namespace godzilla
+/// Test fixture
+class FENonlinearProblemTest : public GodzillaAppTest {
+public:
+    void
+    SetUp() override
+    {
+        GodzillaAppTest::SetUp();
+
+        {
+            const std::string class_name = "LineMesh";
+            InputParameters & params = Factory::getValidParams(class_name);
+            params.set<PetscInt>("nx") = 2;
+            this->mesh = this->app->buildObject<Mesh>(class_name, "mesh", params);
+        }
+        {
+            const std::string class_name = "GTestFENonlinearProblem";
+            InputParameters & params = Factory::getValidParams(class_name);
+            params.set<const Mesh *>("_mesh") = this->mesh;
+            this->prob =
+                this->app->buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
+        }
+        this->app->problem = this->prob;
+    }
+
+    void
+    TearDown() override
+    {
+        GodzillaAppTest::TearDown();
+    }
+
+    Mesh * mesh;
+    GTestFENonlinearProblem * prob;
+};

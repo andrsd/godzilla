@@ -356,9 +356,6 @@ void
 FEProblemInterface::setUpAuxiliaryDM(DM dm)
 {
     _F_;
-    if (this->aux_fields.size() == 0)
-        return;
-
     PetscErrorCode ierr;
 
     DM dm_aux;

@@ -18,6 +18,11 @@ public:
     /// @param expr Function expression to be evaluated
     void create(const std::string & expr);
 
+    /// Register user function with function evaluator
+    ///
+    /// @param fn Fuction to register
+    void registerFunction(Function * fn);
+
     /// Evaluate the function expression at time `time` and spatial position `x`
     ///
     /// @param dim Spatial dimension

@@ -7,7 +7,13 @@ using namespace godzilla;
 
 class TestApp : public App {
 public:
-    TestApp() : App("godzilla", MPI_COMM_WORLD) {}
+    TestApp() : App("godzilla", MPI_COMM_WORLD), problem(nullptr) {}
+
+    virtual Problem *
+    getProblem() const
+    {
+        return this->problem;
+    }
 
     virtual void
     checkIntegrity()
@@ -15,6 +21,8 @@ public:
         if (this->log.getNumEntries() > 0)
             this->log.print();
     }
+
+    Problem * problem;
 };
 
 class GodzillaAppTest : public ::testing::Test {

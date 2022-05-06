@@ -1,7 +1,6 @@
 #include "App.h"
 #include "GodzillaConfig.h"
 #include "GYMLFile.h"
-#include "Function.h"
 #include "Mesh.h"
 #include "Problem.h"
 #include "CallStack.h"
@@ -43,6 +42,14 @@ App::getLogger() const
 {
     _F_;
     return this->log;
+}
+
+Problem *
+App::getProblem() const
+{
+    _F_;
+    assert(this->gyml != nullptr);
+    return this->gyml->getProblem();
 }
 
 void

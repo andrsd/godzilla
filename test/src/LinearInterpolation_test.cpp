@@ -2,7 +2,7 @@
 #include "Godzilla.h"
 #include "LinearInterpolation.h"
 
-namespace godzilla {
+using namespace godzilla;
 
 TEST(LinearInterpolationTest, sample)
 {
@@ -75,5 +75,3 @@ TEST(LinearInterpolationTest, non_increasing)
         LinearInterpolation(x, y),
         "error: LinearInterpolation: Values in 'x' must be increasing. Failed at index '2'.");
 }
-
-} // namespace godzilla

@@ -18,6 +18,13 @@ FunctionEvaluator::create(const std::string & expr)
     this->parser.DefineConst("e", 2.71828182846);
 }
 
+void
+FunctionEvaluator::registerFunction(Function * fn)
+{
+    _F_;
+    fn->registerCallback(this->parser);
+}
+
 PetscReal
 FunctionEvaluator::evaluate(PetscInt dim, PetscReal time, const PetscReal x[])
 {
