@@ -7,23 +7,23 @@ namespace godzilla {
 registerObject(ConstantIC);
 
 InputParameters
-ConstantIC::validParams()
+ConstantIC::valid_params()
 {
-    InputParameters params = InitialCondition::validParams();
-    params.addRequiredParam<std::vector<PetscReal>>("value",
-                                                    "Constant values for each field component");
+    InputParameters params = InitialCondition::valid_params();
+    params.add_required_param<std::vector<PetscReal>>("value",
+                                                      "Constant values for each field component");
     return params;
 }
 
 ConstantIC::ConstantIC(const InputParameters & params) :
     InitialCondition(params),
-    values(getParam<std::vector<PetscReal>>("value"))
+    values(get_param<std::vector<PetscReal>>("value"))
 {
     _F_;
 }
 
 PetscInt
-ConstantIC::getNumComponents() const
+ConstantIC::get_num_components() const
 {
     _F_;
     return this->values.size();

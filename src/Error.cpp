@@ -6,13 +6,13 @@ namespace godzilla {
 namespace internal {
 
 void
-godzillaMsgRaw(const std::string & msg)
+godzilla_msg_raw(const std::string & msg)
 {
     std::cout << msg << std::endl;
 }
 
 std::string
-godzillaMsgFmt(const std::string & msg, const std::string & title, const Terminal::Color & color)
+godzilla_msg_fmt(const std::string & msg, const std::string & title, const Terminal::Color & color)
 {
     std::ostringstream oss;
     oss << color << title << ": " << msg << Terminal::Color::normal << std::endl;
@@ -20,19 +20,19 @@ godzillaMsgFmt(const std::string & msg, const std::string & title, const Termina
 }
 
 void
-godzillaStreamAll(std::ostringstream &)
+godzilla_stream_all(std::ostringstream &)
 {
 }
 
 void
-godzillaErrorRaw(std::string msg, bool call_stack)
+godzilla_error_raw(std::string msg, bool call_stack)
 {
-    msg = godzillaMsgFmt(msg, "error", Terminal::Color::red);
+    msg = godzilla_msg_fmt(msg, "error", Terminal::Color::red);
     std::cerr << msg << std::flush;
 
     if (call_stack) {
         std::cerr << std::endl;
-        getCallstack().dump();
+        get_callstack().dump();
     }
 }
 
@@ -45,14 +45,14 @@ terminate(int status)
 }
 
 void
-memCheck(int line, const char * func, const char * file, void * var)
+mem_check(int line, const char * func, const char * file, void * var)
 {
     if (var == nullptr) {
         std::ostringstream oss;
-        internal::godzillaStreamAll(oss, "Out of memory");
+        internal::godzilla_stream_all(oss, "Out of memory");
         oss << std::endl;
-        internal::godzillaStreamAll(oss, "  Location: ", file, ":", line);
-        internal::godzillaErrorRaw(oss.str(), true);
+        internal::godzilla_stream_all(oss, "  Location: ", file, ":", line);
+        internal::godzilla_error_raw(oss.str(), true);
         terminate();
     }
 }
@@ -60,12 +60,12 @@ memCheck(int line, const char * func, const char * file, void * var)
 } // namespace internal
 
 void
-checkPetscError(PetscErrorCode ierr)
+check_petsc_error(PetscErrorCode ierr)
 {
     if (ierr) {
         std::ostringstream oss;
-        internal::godzillaStreamAll(oss, "PETSc error: ", ierr);
-        internal::godzillaErrorRaw(oss.str(), true);
+        internal::godzilla_stream_all(oss, "PETSc error: ", ierr);
+        internal::godzilla_error_raw(oss.str(), true);
         internal::terminate();
     }
 }

@@ -86,16 +86,16 @@ g3_uu(PetscInt dim,
 ///
 
 InputParameters
-PoissonEquation::validParams()
+PoissonEquation::valid_params()
 {
-    InputParameters params = FENonlinearProblem::validParams();
-    params.addParam<PetscInt>("p_order", 1., "Polynomial order of the FE space.");
+    InputParameters params = FENonlinearProblem::valid_params();
+    params.add_param<PetscInt>("p_order", 1., "Polynomial order of the FE space.");
     return params;
 }
 
 PoissonEquation::PoissonEquation(const InputParameters & parameters) :
     FENonlinearProblem(parameters),
-    p_order(getParam<PetscInt>("p_order")),
+    p_order(get_param<PetscInt>("p_order")),
     iu(0),
     affn(0)
 {
@@ -105,17 +105,17 @@ PoissonEquation::PoissonEquation(const InputParameters & parameters) :
 PoissonEquation::~PoissonEquation() {}
 
 void
-PoissonEquation::onSetFields()
+PoissonEquation::on_set_fields()
 {
     _F_;
-    addFE(this->iu, "u", 1, this->p_order);
-    addAuxFE(this->affn, "forcing_fn", 1, this->p_order);
+    add_fe(this->iu, "u", 1, this->p_order);
+    add_aux_fe(this->affn, "forcing_fn", 1, this->p_order);
 }
 
 void
-PoissonEquation::onSetWeakForm()
+PoissonEquation::on_set_weak_form()
 {
     _F_;
-    setResidualBlock(this->iu, f0_u, f1_u);
-    setJacobianBlock(this->iu, this->iu, NULL, NULL, NULL, g3_uu);
+    set_residual_block(this->iu, f0_u, f1_u);
+    set_jacobian_block(this->iu, this->iu, NULL, NULL, NULL, g3_uu);
 }

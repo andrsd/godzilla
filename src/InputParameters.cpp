@@ -3,13 +3,6 @@
 
 namespace godzilla {
 
-InputParameters
-emptyInputParameters()
-{
-    InputParameters params;
-    return params;
-}
-
 InputParameters::InputParameters() {}
 
 InputParameters::InputParameters(const InputParameters & p)

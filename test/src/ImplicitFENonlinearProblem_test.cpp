@@ -118,19 +118,19 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::vector<PetscReal>>("value") = { 0 };
-        auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
-        prob->addInitialCondition(ic);
+        auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
+        prob->add_initial_condition(ic);
     }
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
-        auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc", params);
-        prob->addBoundaryCondition(bc);
+        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
+        prob->add_boundary_condition(bc);
     }
 
     mesh->create();
@@ -138,7 +138,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     prob->run();
 
-    const Vec x = prob->getSolutionVector();
+    const Vec x = prob->get_solution_vector();
 
     PetscInt ni = 1;
     PetscInt ix[1] = { 0 };
@@ -165,7 +165,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output)
 
     auto mesh = gMesh1d();
 
-    InputParameters params = GTestImplicitFENonlinearProblem::validParams();
+    InputParameters params = GTestImplicitFENonlinearProblem::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Mesh *>("_mesh") = mesh;
     params.set<PetscReal>("start_time") = 0.;
@@ -187,45 +187,45 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
         }
 
         virtual void
-        outputStep(Vec vec)
+        output_step(Vec vec)
         {
-            ImplicitFENonlinearProblem::outputStep(vec);
+            ImplicitFENonlinearProblem::output_step(vec);
         }
 
-        MOCK_METHOD(void, onSetFields, ());
-        MOCK_METHOD(void, onSetWeakForm, ());
+        MOCK_METHOD(void, on_set_fields, ());
+        MOCK_METHOD(void, on_set_weak_form, ());
     };
 
     class MockOutput : public Output {
     public:
         explicit MockOutput(const InputParameters & params) : Output(params) {}
 
-        MOCK_METHOD(const std::string &, getFileName, (), (const));
-        MOCK_METHOD(void, setFileName, ());
-        MOCK_METHOD(void, setSequenceFileName, (unsigned int stepi));
-        MOCK_METHOD(void, outputMesh, (DM dm));
-        MOCK_METHOD(void, outputSolution, (Vec vec));
-        MOCK_METHOD(void, outputStep, (PetscInt stepi, DM dm, Vec vec));
+        MOCK_METHOD(const std::string &, get_file_name, (), (const));
+        MOCK_METHOD(void, set_file_name, ());
+        MOCK_METHOD(void, set_sequence_file_name, (unsigned int stepi));
+        MOCK_METHOD(void, output_mesh, (DM dm));
+        MOCK_METHOD(void, output_solution, (Vec vec));
+        MOCK_METHOD(void, output_step, (PetscInt stepi, DM dm, Vec vec));
     };
 
     auto mesh = gMesh1d();
     mesh->create();
 
-    InputParameters prob_pars = ImplicitFENonlinearProblem::validParams();
+    InputParameters prob_pars = ImplicitFENonlinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockImplicitFENonlinearProblem prob(prob_pars);
 
-    InputParameters out_pars = Output::validParams();
+    InputParameters out_pars = Output::valid_params();
     out_pars.set<const App *>("_app") = this->app;
     out_pars.set<Problem *>("_problem") = &prob;
     MockOutput out(out_pars);
 
-    prob.addOutput(&out);
+    prob.add_output(&out);
 
-    EXPECT_CALL(out, outputStep);
+    EXPECT_CALL(out, output_step);
 
-    prob.outputStep(prob.getSolutionVector());
+    prob.output_step(prob.get_solution_vector());
 }
 
 // GTestImplicitFENonlinearProblem
@@ -239,16 +239,16 @@ GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const InputPara
 GTestImplicitFENonlinearProblem::~GTestImplicitFENonlinearProblem() {}
 
 void
-GTestImplicitFENonlinearProblem::onSetFields()
+GTestImplicitFENonlinearProblem::on_set_fields()
 {
     _F_;
     PetscInt order = 1;
-    addFE(this->iu, "u", 1, order);
+    add_fe(this->iu, "u", 1, order);
 }
 
 void
-GTestImplicitFENonlinearProblem::onSetWeakForm()
+GTestImplicitFENonlinearProblem::on_set_weak_form()
 {
-    setResidualBlock(this->iu, f0_u, f1_u);
-    setJacobianBlock(this->iu, this->iu, g0_uu, NULL, NULL, g3_uu);
+    set_residual_block(this->iu, f0_u, f1_u);
+    set_jacobian_block(this->iu, this->iu, g0_uu, NULL, NULL, g3_uu);
 }

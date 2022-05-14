@@ -12,7 +12,7 @@ TEST(PrintInterfaceTest, print)
         void
         test()
         {
-            godzillaPrint(0, "Message");
+            godzilla_print(0, "Message");
         }
     } app;
 

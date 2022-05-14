@@ -14,7 +14,7 @@ class ConstantIC : public InitialCondition {
 public:
     ConstantIC(const InputParameters & params);
 
-    virtual PetscInt getNumComponents() const override;
+    virtual PetscInt get_num_components() const override;
 
 protected:
     virtual void evaluate(PetscInt dim,
@@ -27,7 +27,7 @@ protected:
     const std::vector<PetscReal> & values;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

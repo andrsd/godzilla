@@ -13,7 +13,7 @@ class PiecewiseLinear : public Function {
 public:
     PiecewiseLinear(const InputParameters & params);
 
-    virtual void registerCallback(mu::Parser & parser);
+    virtual void register_callback(mu::Parser & parser);
 
     /// Evaluate this function at point 'x'
     PetscReal evaluate(PetscReal x);
@@ -23,7 +23,7 @@ protected:
     LinearInterpolation linpol;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

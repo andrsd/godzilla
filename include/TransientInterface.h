@@ -19,7 +19,7 @@ protected:
     /// Create
     virtual void create(DM dm);
     /// Called before the time step solve
-    virtual void setUpTimeScheme();
+    virtual void set_up_time_scheme();
     /// Solve
     virtual void solve(Vec x);
 
@@ -35,7 +35,7 @@ protected:
     PetscInt step_num;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

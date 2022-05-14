@@ -16,22 +16,22 @@ public:
 
 protected:
     virtual void init() override;
-    virtual void setUpCallbacks() override;
+    virtual void set_up_callbacks() override;
     /// Called before the time step solve
-    virtual PetscErrorCode onPreStep();
+    virtual PetscErrorCode on_pre_step();
     /// Called after the time step is done solving
-    virtual PetscErrorCode onPostStep();
+    virtual PetscErrorCode on_post_step();
     /// TS monitor callback
-    virtual PetscErrorCode tsMonitorCallback(PetscInt stepi, PetscReal time, Vec X);
+    virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec X);
     /// Setup monitors
-    virtual void setUpMonitors() override;
+    virtual void set_up_monitors() override;
     /// Output
     virtual void output() override;
     /// Output time step
-    virtual void outputStep(Vec vec);
+    virtual void output_step(Vec vec);
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 
     friend PetscErrorCode __transient_pre_step(TS ts);
     friend PetscErrorCode __transient_post_step(TS ts);

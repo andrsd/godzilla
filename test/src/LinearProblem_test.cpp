@@ -27,7 +27,7 @@ TEST_F(LinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     // extract the solution and make sure it is [2, 3]
-    Vec x = prob->getSolutionVector();
+    Vec x = prob->get_solution_vector();
     PetscInt ni = 2;
     PetscInt ix[2] = { 0, 1 };
     PetscScalar xx[2];
@@ -50,14 +50,14 @@ TEST_F(LinearProblemTest, run)
             return true;
         }
         MOCK_METHOD(void, output, ());
-        MOCK_METHOD(PetscErrorCode, computeRhsCallback, (Vec b));
-        MOCK_METHOD(PetscErrorCode, computeOperatorsCallback, (Mat A, Mat B));
+        MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vec b));
+        MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Mat A, Mat B));
     };
 
     auto mesh = gMesh1d();
     mesh->create();
 
-    InputParameters prob_pars = LinearProblem::validParams();
+    InputParameters prob_pars = LinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockLinearProblem prob(prob_pars);
@@ -78,38 +78,38 @@ TEST_F(LinearProblemTest, output)
         {
             LinearProblem::output();
         }
-        MOCK_METHOD(PetscErrorCode, computeRhsCallback, (Vec b));
-        MOCK_METHOD(PetscErrorCode, computeOperatorsCallback, (Mat A, Mat B));
+        MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vec b));
+        MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Mat A, Mat B));
     };
 
     class MockOutput : public Output {
     public:
         explicit MockOutput(const InputParameters & params) : Output(params) {}
 
-        MOCK_METHOD(const std::string &, getFileName, (), (const));
-        MOCK_METHOD(void, setFileName, ());
-        MOCK_METHOD(void, setSequenceFileName, (unsigned int stepi));
-        MOCK_METHOD(void, outputMesh, (DM dm));
-        MOCK_METHOD(void, outputSolution, (Vec vec));
-        MOCK_METHOD(void, outputStep, (PetscInt stepi, DM dm, Vec vec));
+        MOCK_METHOD(const std::string &, get_file_name, (), (const));
+        MOCK_METHOD(void, set_file_name, ());
+        MOCK_METHOD(void, set_sequence_file_name, (unsigned int stepi));
+        MOCK_METHOD(void, output_mesh, (DM dm));
+        MOCK_METHOD(void, output_solution, (Vec vec));
+        MOCK_METHOD(void, output_step, (PetscInt stepi, DM dm, Vec vec));
     };
 
     auto mesh = gMesh1d();
     mesh->create();
 
-    InputParameters prob_pars = LinearProblem::validParams();
+    InputParameters prob_pars = LinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockLinearProblem prob(prob_pars);
 
-    InputParameters out_pars = Output::validParams();
+    InputParameters out_pars = Output::valid_params();
     out_pars.set<const App *>("_app") = this->app;
     out_pars.set<Problem *>("_problem") = &prob;
     MockOutput out(out_pars);
 
-    prob.addOutput(&out);
+    prob.add_output(&out);
 
-    EXPECT_CALL(out, outputStep);
+    EXPECT_CALL(out, output_step);
 
     prob.output();
 }
@@ -130,7 +130,7 @@ G1DTestLinearProblem::~G1DTestLinearProblem()
 void
 G1DTestLinearProblem::create()
 {
-    DM dm = getDM();
+    DM dm = get_dm();
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[2] = { 1, 0 };
     DMSetNumFields(dm, 1);
@@ -140,7 +140,7 @@ G1DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G1DTestLinearProblem::computeRhsCallback(Vec b)
+G1DTestLinearProblem::compute_rhs_callback(Vec b)
 {
     VecSetValue(b, 0, 2, INSERT_VALUES);
     VecSetValue(b, 1, 3, INSERT_VALUES);
@@ -152,7 +152,7 @@ G1DTestLinearProblem::computeRhsCallback(Vec b)
 }
 
 PetscErrorCode
-G1DTestLinearProblem::computeOperatorsCallback(Mat A, Mat B)
+G1DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
 {
     MatSetValue(A, 0, 0, 1, INSERT_VALUES);
     MatSetValue(A, 1, 1, 1, INSERT_VALUES);
@@ -179,7 +179,7 @@ G2DTestLinearProblem::~G2DTestLinearProblem()
 void
 G2DTestLinearProblem::create()
 {
-    DM dm = getDM();
+    DM dm = get_dm();
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[3] = { 1, 0, 0 };
     DMSetNumFields(dm, 1);
@@ -189,7 +189,7 @@ G2DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G2DTestLinearProblem::computeRhsCallback(Vec b)
+G2DTestLinearProblem::compute_rhs_callback(Vec b)
 {
     VecSetValue(b, 0, 2, INSERT_VALUES);
     VecSetValue(b, 1, 3, INSERT_VALUES);
@@ -203,7 +203,7 @@ G2DTestLinearProblem::computeRhsCallback(Vec b)
 }
 
 PetscErrorCode
-G2DTestLinearProblem::computeOperatorsCallback(Mat A, Mat B)
+G2DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
 {
     for (PetscInt i = 0; i < 4; i++)
         MatSetValue(A, i, i, 1, INSERT_VALUES);
@@ -230,7 +230,7 @@ G3DTestLinearProblem::~G3DTestLinearProblem()
 void
 G3DTestLinearProblem::create()
 {
-    DM dm = getDM();
+    DM dm = get_dm();
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[4] = { 1, 0, 0, 0 };
     DMSetNumFields(dm, 1);
@@ -240,7 +240,7 @@ G3DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G3DTestLinearProblem::computeRhsCallback(Vec b)
+G3DTestLinearProblem::compute_rhs_callback(Vec b)
 {
     VecSetValue(b, 0, 2, INSERT_VALUES);
     VecSetValue(b, 1, 3, INSERT_VALUES);
@@ -258,7 +258,7 @@ G3DTestLinearProblem::computeRhsCallback(Vec b)
 }
 
 PetscErrorCode
-G3DTestLinearProblem::computeOperatorsCallback(Mat A, Mat B)
+G3DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
 {
     for (PetscInt i = 0; i < 8; i++)
         MatSetValue(A, i, i, 1, INSERT_VALUES);

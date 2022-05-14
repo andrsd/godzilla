@@ -59,47 +59,51 @@ __g0_convective_heat_flux_const_bc(PetscInt dim,
 }
 
 InputParameters
-ConvectiveHeatFluxConstBC::validParams()
+ConvectiveHeatFluxConstBC::valid_params()
 {
-    InputParameters params = NaturalBC::validParams();
-    params.addRequiredParam<PetscReal>("htc", "Convective heat transfer coefficient");
-    params.addRequiredParam<PetscReal>("T_infinity", "Ambient temperature");
+    InputParameters params = NaturalBC::valid_params();
+    params.add_required_param<PetscReal>("htc", "Convective heat transfer coefficient");
+    params.add_required_param<PetscReal>("T_infinity", "Ambient temperature");
     return params;
 }
 
 ConvectiveHeatFluxConstBC::ConvectiveHeatFluxConstBC(const InputParameters & params) :
     NaturalBC(params),
-    htc(getParam<PetscReal>("htc")),
-    T_infinity(getParam<PetscReal>("T_infinity"))
+    htc(get_param<PetscReal>("htc")),
+    T_infinity(get_param<PetscReal>("T_infinity"))
 {
     _F_;
 }
 
 PetscInt
-ConvectiveHeatFluxConstBC::getFieldId() const
+ConvectiveHeatFluxConstBC::get_field_id() const
 {
     return 0;
 }
 
 PetscInt
-ConvectiveHeatFluxConstBC::getNumComponents() const
+ConvectiveHeatFluxConstBC::get_num_components() const
 {
     return 1;
 }
 
 std::vector<PetscInt>
-ConvectiveHeatFluxConstBC::getComponents() const
+ConvectiveHeatFluxConstBC::get_components() const
 {
     std::vector<PetscInt> comps = { 0 };
     return comps;
 }
 
 void
-ConvectiveHeatFluxConstBC::onSetWeakForm()
+ConvectiveHeatFluxConstBC::on_set_weak_form()
 {
     _F_;
-    setResidualBlock(__f0_convective_heat_flux_const_bc, nullptr);
-    setJacobianBlock(getFieldId(), __g0_convective_heat_flux_const_bc, nullptr, nullptr, nullptr);
+    set_residual_block(__f0_convective_heat_flux_const_bc, nullptr);
+    set_jacobian_block(get_field_id(),
+                       __g0_convective_heat_flux_const_bc,
+                       nullptr,
+                       nullptr,
+                       nullptr);
 }
 
 } // namespace godzilla

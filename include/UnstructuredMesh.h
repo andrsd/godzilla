@@ -15,17 +15,17 @@ public:
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
-    virtual void setPartitionerType(const std::string & type);
+    virtual void set_partitioner_type(const std::string & type);
 
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
-    virtual void setPartitionOverlap(PetscInt overlap);
+    virtual void set_partition_overlap(PetscInt overlap);
 
     /// Output partitioning
     ///
     /// @param viewer PetscViewer to store the partitioning
-    virtual void outputPartitioning(PetscViewer viewer);
+    virtual void output_partitioning(PetscViewer viewer);
 
 protected:
     virtual void distribute() override;
@@ -37,7 +37,7 @@ protected:
     PetscInt partition_overlap;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

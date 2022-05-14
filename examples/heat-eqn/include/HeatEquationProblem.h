@@ -12,12 +12,12 @@ public:
     virtual ~HeatEquationProblem();
 
 protected:
-    virtual void onSetFields() override;
-    virtual void onSetWeakForm() override;
+    virtual void on_set_fields() override;
+    virtual void on_set_weak_form() override;
 
     /// ID for the 'temperature' field
     const PetscInt itemp;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };

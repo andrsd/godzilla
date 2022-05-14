@@ -6,10 +6,11 @@
 namespace godzilla {
 
 InputParameters
-FunctionInterface::validParams()
+FunctionInterface::valid_params()
 {
-    InputParameters params = emptyInputParameters();
-    params.addRequiredParam<std::vector<std::string>>("value", "Function expression to evaluate.");
+    InputParameters params;
+    params.add_required_param<std::vector<std::string>>("value",
+                                                        "Function expression to evaluate.");
     return params;
 }
 
@@ -30,21 +31,18 @@ FunctionInterface::create()
         this->evalr[i].create(this->expression[i]);
 
     assert(this->fi_app != nullptr);
-    Problem * p = this->fi_app->getProblem();
+    Problem * p = this->fi_app->get_problem();
     if (p) {
-        const auto & funcs = p->getFunctions();
+        const auto & funcs = p->get_functions();
         for (unsigned int i = 0; i < this->num_comps; i++) {
             for (auto & f : funcs)
-                this->evalr[i].registerFunction(f);
+                this->evalr[i].register_function(f);
         }
     }
 }
 
 PetscReal
-FunctionInterface::evaluateFunction(unsigned int idx,
-                                    PetscInt dim,
-                                    PetscReal time,
-                                    const PetscReal x[])
+FunctionInterface::evaluate(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[])
 {
     return this->evalr[idx].evaluate(dim, time, x);
 }

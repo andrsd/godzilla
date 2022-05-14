@@ -12,8 +12,8 @@ public:
     virtual ~PoissonEquation();
 
 protected:
-    virtual void onSetFields() override;
-    virtual void onSetWeakForm() override;
+    virtual void on_set_fields() override;
+    virtual void on_set_weak_form() override;
 
     /// Polynomial order of the FE space
     PetscInt p_order;
@@ -25,5 +25,5 @@ protected:
     const PetscInt affn;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };

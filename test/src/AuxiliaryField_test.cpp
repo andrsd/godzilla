@@ -13,46 +13,46 @@ TEST(AuxiliaryFieldTest, non_existent_id)
 
     TestApp app;
 
-    InputParameters mesh_pars = LineMesh::validParams();
+    InputParameters mesh_pars = LineMesh::valid_params();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
-    InputParameters prob_pars = GTestFENonlinearProblem::validParams();
+    InputParameters prob_pars = GTestFENonlinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
-    prob.addAuxFE(0, "aux1", 1, 1);
+    prob.add_aux_fe(0, "aux1", 1, 1);
 
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
         virtual PetscInt
-        getFieldId() const
+        get_field_id() const
         {
             return 1;
         }
         virtual void
-        setUp(DM dm, DM dm_aux)
+        set_up(DM dm, DM dm_aux)
         {
         }
         virtual PetscInt
-        getNumComponents() const
+        get_num_components() const
         {
             return 2;
         }
     };
 
-    InputParameters params = AuxiliaryField::validParams();
+    InputParameters params = AuxiliaryField::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "aux";
     params.set<FEProblemInterface *>("_fepi") = &prob;
     auto aux = TestAuxFld(params);
-    prob.addAuxiliaryField(&aux);
+    prob.add_auxiliary_field(&aux);
     prob.create();
 
-    app.checkIntegrity();
+    app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Auxiliary field 'aux' is set on auxiliary field with ID '1', "
@@ -65,46 +65,46 @@ TEST(AuxiliaryFieldTest, inconsistent_comp_number)
 
     TestApp app;
 
-    InputParameters mesh_pars = LineMesh::validParams();
+    InputParameters mesh_pars = LineMesh::valid_params();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
-    InputParameters prob_pars = GTestFENonlinearProblem::validParams();
+    InputParameters prob_pars = GTestFENonlinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
-    prob.addAuxFE(0, "aux1", 1, 1);
+    prob.add_aux_fe(0, "aux1", 1, 1);
 
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
         virtual PetscInt
-        getFieldId() const
+        get_field_id() const
         {
             return 0;
         }
         virtual void
-        setUp(DM dm, DM dm_aux)
+        set_up(DM dm, DM dm_aux)
         {
         }
         virtual PetscInt
-        getNumComponents() const
+        get_num_components() const
         {
             return 2;
         }
     };
 
-    InputParameters params = AuxiliaryField::validParams();
+    InputParameters params = AuxiliaryField::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "aux";
     params.set<FEProblemInterface *>("_fepi") = &prob;
     auto aux = TestAuxFld(params);
-    prob.addAuxiliaryField(&aux);
+    prob.add_auxiliary_field(&aux);
     prob.create();
 
-    app.checkIntegrity();
+    app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Auxiliary field 'aux' has 2 component(s), but is set on a "

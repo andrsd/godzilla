@@ -13,8 +13,8 @@ class MockGYMLFile : public GYMLFile {
 public:
     MockGYMLFile(const App & app) : GYMLFile(app) {}
 
-    MOCK_METHOD(void, buildMesh, (), ());
-    MOCK_METHOD(void, buildProblem, (), ());
+    MOCK_METHOD(void, build_mesh, (), ());
+    MOCK_METHOD(void, build_problem, (), ());
 };
 
 class GYMLFileTest : public GodzillaAppTest {
@@ -31,7 +31,15 @@ class GTestProblem : public Problem {
 public:
     GTestProblem(const InputParameters & params) : Problem(params)
     {
-        DMPlexCreateBoxMesh(comm(), 1, PETSC_TRUE, NULL, NULL, NULL, NULL, PETSC_FALSE, &this->dm);
+        DMPlexCreateBoxMesh(get_comm(),
+                            1,
+                            PETSC_TRUE,
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL,
+                            PETSC_FALSE,
+                            &this->dm);
         DMSetUp(this->dm);
         DMCreateGlobalVector(this->dm, &this->x);
     }
@@ -43,12 +51,12 @@ public:
     }
 
     DM
-    getDM() const override
+    get_dm() const override
     {
         return this->dm;
     }
     Vec
-    getSolutionVector() const override
+    get_solution_vector() const override
     {
         return this->x;
     }
@@ -75,5 +83,5 @@ protected:
     Vec x;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };

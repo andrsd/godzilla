@@ -19,11 +19,11 @@ public:
     error(Args &&... args)
     {
         std::ostringstream oss;
-        streamAll(oss,
-                  Terminal::Color::red,
-                  "error: ",
-                  Terminal::Color::normal,
-                  std::forward<Args>(args)...);
+        stream_all(oss,
+                   Terminal::Color::red,
+                   "error: ",
+                   Terminal::Color::normal,
+                   std::forward<Args>(args)...);
         this->entries.push_back(oss.str());
         this->num_errors++;
     }
@@ -34,11 +34,11 @@ public:
     warning(Args &&... args)
     {
         std::ostringstream oss;
-        streamAll(oss,
-                  Terminal::Color::magenta,
-                  "warning: ",
-                  Terminal::Color::normal,
-                  std::forward<Args>(args)...);
+        stream_all(oss,
+                   Terminal::Color::magenta,
+                   "warning: ",
+                   Terminal::Color::normal,
+                   std::forward<Args>(args)...);
         this->entries.push_back(oss.str());
         this->num_warnings++;
     }
@@ -46,33 +46,33 @@ public:
     /// Get the number of logged errors/warnings
     ///
     /// @return Number of logger errors/warnings
-    std::size_t getNumEntries() const;
+    std::size_t get_num_entries() const;
 
     /// Get the number of errors
     ///
     /// @return Number of errors
-    std::size_t getNumErrors() const;
+    std::size_t get_num_errors() const;
 
     /// Get the number of warnings
     ///
     /// @return Number of warnings
-    std::size_t getNumWarnings() const;
+    std::size_t get_num_warnings() const;
 
     /// Print logged errors and warnings
     void print() const;
 
 protected:
     void
-    streamAll(std::ostringstream & ss)
+    stream_all(std::ostringstream & ss)
     {
     }
 
     template <typename T, typename... Args>
     void
-    streamAll(std::ostringstream & ss, T && val, Args &&... args)
+    stream_all(std::ostringstream & ss, T && val, Args &&... args)
     {
         ss << val;
-        streamAll(ss, std::forward<Args>(args)...);
+        stream_all(ss, std::forward<Args>(args)...);
     }
 
     /// List of logged errors/warnings

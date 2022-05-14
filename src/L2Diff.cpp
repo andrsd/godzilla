@@ -21,10 +21,10 @@ __l2_diff(PetscInt dim,
 }
 
 InputParameters
-L2Diff::validParams()
+L2Diff::valid_params()
 {
-    InputParameters params = Postprocessor::validParams();
-    params += FunctionInterface::validParams();
+    InputParameters params = Postprocessor::valid_params();
+    params += FunctionInterface::valid_params();
     return params;
 }
 
@@ -49,17 +49,17 @@ L2Diff::compute()
     PetscErrorCode ierr;
     PetscFunc * funcs[1] = { __l2_diff };
     void * ctxs[1] = { this };
-    ierr = DMComputeL2Diff(this->problem.getDM(),
-                           this->problem.getTime(),
+    ierr = DMComputeL2Diff(this->problem.get_dm(),
+                           this->problem.get_time(),
                            funcs,
                            ctxs,
-                           this->problem.getSolutionVector(),
+                           this->problem.get_solution_vector(),
                            &this->l2_diff);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 PetscReal
-L2Diff::getValue()
+L2Diff::get_value()
 {
     _F_;
     return this->l2_diff;
@@ -70,7 +70,7 @@ L2Diff::evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc,
 {
     _F_;
     for (PetscInt i = 0; i < nc; i++)
-        u[i] = evaluateFunction(i, dim, time, x);
+        u[i] = FunctionInterface::evaluate(i, dim, time, x);
 }
 
 } // namespace godzilla

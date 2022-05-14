@@ -9,7 +9,7 @@ TEST(PiecewiseLinearTest, eval)
 {
     TestApp app;
 
-    InputParameters params = PiecewiseLinear::validParams();
+    InputParameters params = PiecewiseLinear::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "ipol";
     params.set<std::vector<PetscReal>>("x") = { 1., 2., 3. };
@@ -17,7 +17,7 @@ TEST(PiecewiseLinearTest, eval)
     PiecewiseLinear obj(params);
 
     mu::Parser parser;
-    obj.registerCallback(parser);
+    obj.register_callback(parser);
 
     parser.SetExpr("ipol(0)");
     EXPECT_EQ(parser.Eval(), 3.);

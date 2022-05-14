@@ -9,9 +9,9 @@ registerObject(VTKOutput);
 static const int MAX_PATH = 1024;
 
 InputParameters
-VTKOutput::validParams()
+VTKOutput::valid_params()
 {
-    InputParameters params = FileOutput::validParams();
+    InputParameters params = FileOutput::valid_params();
     return params;
 }
 
@@ -21,7 +21,7 @@ VTKOutput::VTKOutput(const InputParameters & params) : FileOutput(params)
 }
 
 std::string
-VTKOutput::getFileExt() const
+VTKOutput::get_file_ext() const
 {
     return std::string("vtk");
 }
@@ -31,12 +31,12 @@ VTKOutput::create()
 {
     _F_;
     PetscErrorCode ierr;
-    ierr = PetscViewerCreate(comm(), &this->viewer);
-    checkPetscError(ierr);
+    ierr = PetscViewerCreate(get_comm(), &this->viewer);
+    check_petsc_error(ierr);
     ierr = PetscViewerSetType(this->viewer, PETSCVIEWERVTK);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void

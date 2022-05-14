@@ -8,17 +8,17 @@
 namespace godzilla {
 
 InputParameters
-Problem::validParams()
+Problem::valid_params()
 {
-    InputParameters params = Object::validParams();
-    params.addPrivateParam<const Mesh *>("_mesh");
+    InputParameters params = Object::valid_params();
+    params.add_private_param<const Mesh *>("_mesh");
     return params;
 }
 
 Problem::Problem(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    mesh(getParam<const Mesh *>("_mesh")),
+    mesh(get_param<const Mesh *>("_mesh")),
     time(0.)
 {
 }
@@ -49,49 +49,49 @@ Problem::create()
 }
 
 PetscInt
-Problem::getDimension() const
+Problem::get_dimension() const
 {
     _F_;
-    return this->mesh->getDimension();
+    return this->mesh->get_dimension();
 }
 
 const PetscReal &
-Problem::getTime() const
+Problem::get_time() const
 {
     _F_;
     return this->time;
 }
 
 const std::vector<Function *> &
-Problem::getFunctions() const
+Problem::get_functions() const
 {
     _F_;
     return this->functions;
 }
 
 void
-Problem::addFunction(Function * fn)
+Problem::add_function(Function * fn)
 {
     _F_;
     this->functions.push_back(fn);
 }
 
 void
-Problem::addOutput(Output * output)
+Problem::add_output(Output * output)
 {
     _F_;
     this->outputs.push_back(output);
 }
 
 void
-Problem::addPostprocessor(Postprocessor * pp)
+Problem::add_postprocessor(Postprocessor * pp)
 {
     _F_;
-    this->pps[pp->getName()] = pp;
+    this->pps[pp->get_name()] = pp;
 }
 
 void
-Problem::computePostprocessors()
+Problem::compute_postprocessors()
 {
     _F_;
     for (auto & pp : this->pps)
@@ -99,7 +99,7 @@ Problem::computePostprocessors()
 }
 
 Postprocessor *
-Problem::getPostprocessor(const std::string & name) const
+Problem::get_postprocessor(const std::string & name) const
 {
     _F_;
     const auto & it = this->pps.find(name);

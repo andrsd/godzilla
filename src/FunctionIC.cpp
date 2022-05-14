@@ -6,10 +6,10 @@ namespace godzilla {
 registerObject(FunctionIC);
 
 InputParameters
-FunctionIC::validParams()
+FunctionIC::valid_params()
 {
-    InputParameters params = InitialCondition::validParams();
-    params += FunctionInterface::validParams();
+    InputParameters params = InitialCondition::valid_params();
+    params += FunctionInterface::valid_params();
     return params;
 }
 
@@ -27,7 +27,7 @@ FunctionIC::create()
 }
 
 PetscInt
-FunctionIC::getNumComponents() const
+FunctionIC::get_num_components() const
 {
     return this->num_comps;
 }
@@ -40,7 +40,7 @@ FunctionIC::evaluate(PetscInt dim,
                      PetscScalar u[])
 {
     for (PetscInt i = 0; i < Nc; i++)
-        u[i] = evaluateFunction(i, dim, time, x);
+        u[i] = FunctionInterface::evaluate(i, dim, time, x);
 }
 
 } // namespace godzilla

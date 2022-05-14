@@ -21,7 +21,7 @@ TEST(CallStackTest, dump)
     _F_;
 
     testing::internal::CaptureStderr();
-    godzilla::internal::getCallstack().dump();
+    godzilla::internal::get_callstack().dump();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 ::testing::StartsWith("Call stack:\n  #0:"));

@@ -19,10 +19,10 @@ FunctionEvaluator::create(const std::string & expr)
 }
 
 void
-FunctionEvaluator::registerFunction(Function * fn)
+FunctionEvaluator::register_function(Function * fn)
 {
     _F_;
-    fn->registerCallback(this->parser);
+    fn->register_callback(this->parser);
 }
 
 PetscReal

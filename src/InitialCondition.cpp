@@ -21,9 +21,9 @@ __initial_condition_function(PetscInt dim,
 }
 
 InputParameters
-InitialCondition::validParams()
+InitialCondition::valid_params()
 {
-    InputParameters params = Object::validParams();
+    InputParameters params = Object::valid_params();
     return params;
 }
 
@@ -35,7 +35,7 @@ InitialCondition::InitialCondition(const InputParameters & params) :
 }
 
 PetscInt
-InitialCondition::getFieldId() const
+InitialCondition::get_field_id() const
 {
     _F_;
     // FIXME: when we have support for multiple-fields, this needs to tell us where it belongs

@@ -23,17 +23,17 @@ class ExodusIIOutput : public FileOutput {
 public:
     ExodusIIOutput(const InputParameters & params);
 
-    virtual std::string getFileExt() const override;
+    virtual std::string get_file_ext() const override;
     virtual void create() override;
     virtual void check() override;
-    virtual void outputStep(PetscInt stepi, DM dm, Vec vec) override;
+    virtual void output_step(PetscInt stepi, DM dm, Vec vec) override;
 
 protected:
     /// Create "Cell Sets" label if it does not exist
-    void createCellSets();
+    void create_cell_sets();
 
     /// Write variable info into the ExodusII file
-    void writeVariableInfo(int exoid, Vec vec);
+    void write_variable_info(int exoid, Vec vec);
 
     /// FE problem interface (convenience pointer)
     const FEProblemInterface * fepi;
@@ -43,7 +43,7 @@ protected:
     int file_seq_no;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

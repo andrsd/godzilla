@@ -11,8 +11,8 @@ class InitialCondition : public Object, public PrintInterface {
 public:
     InitialCondition(const InputParameters & params);
 
-    virtual PetscInt getFieldId() const;
-    virtual PetscInt getNumComponents() const = 0;
+    virtual PetscInt get_field_id() const;
+    virtual PetscInt get_num_components() const = 0;
 
 protected:
     /// Evaluate the initial condition
@@ -26,7 +26,7 @@ protected:
     evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 
     friend PetscErrorCode __initial_condition_function(PetscInt dim,
                                                        PetscReal time,

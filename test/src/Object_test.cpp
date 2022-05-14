@@ -11,19 +11,19 @@ TEST(ObjectTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = Object::validParams();
-    auto obj = app.buildObject<Object>("Object", "name", params);
+    InputParameters params = Object::valid_params();
+    auto obj = app.build_object<Object>("Object", "name", params);
 
-    EXPECT_EQ(obj->getName(), "name");
-    EXPECT_EQ(obj->getType(), "Object");
+    EXPECT_EQ(obj->get_name(), "name");
+    EXPECT_EQ(obj->get_type(), "Object");
 
-    const auto & p = obj->getParameters();
+    const auto & p = obj->get_parameters();
 
-    EXPECT_TRUE(obj->isParamValid("_name"));
+    EXPECT_TRUE(obj->is_param_valid("_name"));
 
-    EXPECT_EQ(obj->processorId(), 0);
+    EXPECT_EQ(obj->get_processor_id(), 0);
 
     PetscMPIInt sz;
-    MPI_Comm_size(app.getComm(), &sz);
-    EXPECT_EQ(obj->commSize(), sz);
+    MPI_Comm_size(app.get_comm(), &sz);
+    EXPECT_EQ(obj->get_comm_size(), sz);
 }

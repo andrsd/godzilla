@@ -9,7 +9,7 @@ class NaturalBC : public BoundaryCondition {
 public:
     NaturalBC(const InputParameters & params);
 
-    virtual DMBoundaryConditionType getBcType() const override;
+    virtual DMBoundaryConditionType get_bc_type() const override;
 
 protected:
     typedef void PetscFEBndResidualFunc(PetscInt dim,
@@ -57,7 +57,7 @@ protected:
     ///
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
-    void setResidualBlock(PetscFEBndResidualFunc * f0, PetscFEBndResidualFunc * f1);
+    void set_residual_block(PetscFEBndResidualFunc * f0, PetscFEBndResidualFunc * f1);
 
     /// Set Jacobian statement for the boundary integral
     ///
@@ -66,16 +66,16 @@ protected:
     /// @param g1 Integrand for the test function and basis function gradient term
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
-    void setJacobianBlock(PetscInt gid,
-                          PetscFEBndJacobianFunc * g0,
-                          PetscFEBndJacobianFunc * g1,
-                          PetscFEBndJacobianFunc * g2,
-                          PetscFEBndJacobianFunc * g3);
+    void set_jacobian_block(PetscInt gid,
+                            PetscFEBndJacobianFunc * g0,
+                            PetscFEBndJacobianFunc * g1,
+                            PetscFEBndJacobianFunc * g2,
+                            PetscFEBndJacobianFunc * g3);
 
-    virtual void setUpCallback() override;
+    virtual void set_up_callback() override;
 
     /// Set up the weak form for the boundary integral of this boundary condition
-    virtual void onSetWeakForm() = 0;
+    virtual void on_set_weak_form() = 0;
 
     /// WeakForm object
     PetscWeakForm wf;
@@ -84,7 +84,7 @@ protected:
     PetscInt bd;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

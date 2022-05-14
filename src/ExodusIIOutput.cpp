@@ -12,9 +12,9 @@ registerObject(ExodusIIOutput);
 static const int MAX_PATH = 1024;
 
 InputParameters
-ExodusIIOutput::validParams()
+ExodusIIOutput::valid_params()
 {
-    InputParameters params = FileOutput::validParams();
+    InputParameters params = FileOutput::valid_params();
     return params;
 }
 
@@ -27,7 +27,7 @@ ExodusIIOutput::ExodusIIOutput(const InputParameters & params) :
 }
 
 std::string
-ExodusIIOutput::getFileExt() const
+ExodusIIOutput::get_file_ext() const
 {
     _F_;
     return std::string("exo");
@@ -39,63 +39,63 @@ ExodusIIOutput::create()
     _F_;
     PetscErrorCode ierr;
 
-    ierr = PetscViewerCreate(comm(), &this->viewer);
-    checkPetscError(ierr);
+    ierr = PetscViewerCreate(get_comm(), &this->viewer);
+    check_petsc_error(ierr);
     ierr = PetscViewerSetType(this->viewer, PETSCVIEWEREXODUSII);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     PetscInt order = 1;
     ierr = PetscViewerExodusIISetOrder(this->viewer, order);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
-    createCellSets();
+    create_cell_sets();
 
     this->fepi = dynamic_cast<const FEProblemInterface *>(&this->problem);
 }
 
 void
-ExodusIIOutput::createCellSets()
+ExodusIIOutput::create_cell_sets()
 {
     _F_;
     PetscErrorCode ierr;
 
-    PetscInt dim = this->problem.getDimension();
-    DM dm = this->problem.getDM();
+    PetscInt dim = this->problem.get_dimension();
+    DM dm = this->problem.get_dm();
     DMLabel cs_label = nullptr;
     ierr = DMGetLabel(dm, "Cell Sets", &cs_label);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     if (cs_label == nullptr) {
         ierr = DMCreateLabel(dm, "Cell Sets");
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         ierr = DMGetLabel(dm, "Cell Sets", &cs_label);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         // NOTE: Right now we only have a single block in the mesh, unless we load ExodusII mesh.
         // When we have support for multiple blocks, this will need to be changed
         PetscInt block_id = 1;
         ierr = DMLabelAddStratum(cs_label, block_id);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         // This works for simple meshes
         PetscInt elem_start, elem_end;
         ierr = DMPlexGetDepthStratum(dm, dim, &elem_start, &elem_end);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
         PetscInt num_elems = elem_end - elem_start;
         PetscInt * elem_ids = new PetscInt[num_elems];
         for (PetscInt i = 0; i < num_elems; i++)
             elem_ids[i] = i + elem_start;
 
         IS is;
-        ierr = ISCreateGeneral(comm(), num_elems, elem_ids, PETSC_COPY_VALUES, &is);
-        checkPetscError(ierr);
+        ierr = ISCreateGeneral(get_comm(), num_elems, elem_ids, PETSC_COPY_VALUES, &is);
+        check_petsc_error(ierr);
         ierr = DMLabelSetStratumIS(cs_label, block_id, is);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
         ierr = ISDestroy(&is);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         delete[] elem_ids;
     }
@@ -105,47 +105,47 @@ void
 ExodusIIOutput::check()
 {
     _F_;
-    PetscInt dim = this->problem.getDimension();
+    PetscInt dim = this->problem.get_dimension();
     if (dim == 1)
-        logError("PETSc viewer does not support ExodusII output for 1D problems.");
+        log_error("PETSc viewer does not support ExodusII output for 1D problems.");
     if (this->fepi != nullptr)
-        logError("ExodusII output does not support finite element problems yet.");
+        log_error("ExodusII output does not support finite element problems yet.");
 }
 
 void
-ExodusIIOutput::outputStep(PetscInt stepi, DM dm, Vec vec)
+ExodusIIOutput::output_step(PetscInt stepi, DM dm, Vec vec)
 {
     _F_;
     PetscErrorCode ierr;
 
-    setFileName();
+    set_file_name();
 
     if (this->file_seq_no == 0)
-        outputMesh(dm);
+        output_mesh(dm);
 
     int exoid;
     ierr = PetscViewerExodusIIGetId(this->viewer, &exoid);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     if (this->file_seq_no == 0)
-        writeVariableInfo(exoid, vec);
+        write_variable_info(exoid, vec);
 
     if (stepi == -1) {
-        PetscReal time = this->problem.getTime();
+        PetscReal time = this->problem.get_time();
         PetscInt num_step = 0;
         ierr = DMSetOutputSequenceNumber(dm, num_step, time);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 
     this->file_seq_no++;
 }
 
 void
-ExodusIIOutput::writeVariableInfo(int exoid, Vec vec)
+ExodusIIOutput::write_variable_info(int exoid, Vec vec)
 {
     _F_;
     // PetscErrorCode ierr;
-    // DM dm = this->problem.getDM();
+    // DM dm = this->problem.get_dm();
     //
     // PetscInt num_nodal_vars = 1;
     // const char * vec_name;
@@ -158,9 +158,9 @@ ExodusIIOutput::writeVariableInfo(int exoid, Vec vec)
     // FIXME: this produces a liner error, most likely missing netcdf + exodusII libs in the linker
     // line.
     // ierr = ex_put_variable_param(exoid, EX_NODAL, num_nodal_vars);
-    // checkPetscError(ierr);
+    // check_petsc_error(ierr);
     // ierr = ex_put_variable_names(exoid, EX_NODAL, num_nodal_vars, nodal_var_name);
-    // checkPetscError(ierr);
+    // check_petsc_error(ierr);
 }
 
 } // namespace godzilla

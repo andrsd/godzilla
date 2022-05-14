@@ -4,22 +4,22 @@
 namespace godzilla {
 
 InputParameters
-Object::validParams()
+Object::valid_params()
 {
-    InputParameters params = emptyInputParameters();
-    params.addPrivateParam<const App *>("_app", nullptr);
-    params.addPrivateParam<std::string>("_type");
-    params.addPrivateParam<std::string>("_name");
+    InputParameters params;
+    params.add_private_param<const App *>("_app", nullptr);
+    params.add_private_param<std::string>("_type");
+    params.add_private_param<std::string>("_name");
     return params;
 }
 
 Object::Object(const InputParameters & parameters) :
-    LoggingInterface(const_cast<Logger &>(parameters.get<const App *>("_app")->getLogger()),
+    LoggingInterface(const_cast<Logger &>(parameters.get<const App *>("_app")->get_logger()),
                      parameters.get<std::string>("_name")),
     pars(parameters),
-    app(*getParam<const App *>("_app")),
-    type(getParam<std::string>("_type")),
-    name(getParam<std::string>("_name"))
+    app(*get_param<const App *>("_app")),
+    type(get_param<std::string>("_type")),
+    name(get_param<std::string>("_name"))
 {
     _F_;
 }
@@ -30,59 +30,59 @@ Object::~Object()
 }
 
 const std::string &
-Object::getType() const
+Object::get_type() const
 {
     _F_;
     return this->type;
 }
 
 const std::string &
-Object::getName() const
+Object::get_name() const
 {
     _F_;
     return this->name;
 }
 
 const InputParameters &
-Object::getParameters() const
+Object::get_parameters() const
 {
     _F_;
     return this->pars;
 }
 
 bool
-Object::isParamValid(const std::string & name) const
+Object::is_param_valid(const std::string & name) const
 {
     _F_;
-    return this->pars.isParamValid(name);
+    return this->pars.is_param_valid(name);
 }
 
 const App &
-Object::getApp() const
+Object::get_app() const
 {
     _F_;
     return this->app;
 }
 
 const MPI_Comm &
-Object::comm() const
+Object::get_comm() const
 {
     _F_;
-    return this->app.getComm();
+    return this->app.get_comm();
 }
 
 const PetscMPIInt &
-Object::processorId() const
+Object::get_processor_id() const
 {
     _F_;
-    return this->app.getCommRank();
+    return this->app.get_comm_rank();
 }
 
 const PetscMPIInt &
-Object::commSize() const
+Object::get_comm_size() const
 {
     _F_;
-    return this->app.getCommSize();
+    return this->app.get_comm_size();
 }
 
 void

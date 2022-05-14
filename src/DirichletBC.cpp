@@ -6,10 +6,10 @@ namespace godzilla {
 registerObject(DirichletBC);
 
 InputParameters
-DirichletBC::validParams()
+DirichletBC::valid_params()
 {
-    InputParameters params = EssentialBC::validParams();
-    params += FunctionInterface::validParams();
+    InputParameters params = EssentialBC::valid_params();
+    params += FunctionInterface::valid_params();
     return params;
 }
 
@@ -28,23 +28,23 @@ DirichletBC::create()
 }
 
 PetscInt
-DirichletBC::getFieldId() const
+DirichletBC::get_field_id() const
 {
     _F_;
     return 0;
 }
 
 PetscInt
-DirichletBC::getNumComponents() const
+DirichletBC::get_num_components() const
 {
     _F_;
     return this->num_comps;
 }
 
 std::vector<PetscInt>
-DirichletBC::getComponents() const
+DirichletBC::get_components() const
 {
-    PetscInt nc = getNumComponents();
+    PetscInt nc = get_num_components();
     std::vector<PetscInt> comps(nc);
     for (PetscInt i = 0; i < nc; i++)
         comps[i] = i;
@@ -60,7 +60,7 @@ DirichletBC::evaluate(PetscInt dim,
 {
     _F_;
     for (PetscInt i = 0; i < Nc; i++)
-        u[i] = evaluateFunction(i, dim, time, x);
+        u[i] = FunctionInterface::evaluate(i, dim, time, x);
 }
 
 } // namespace godzilla

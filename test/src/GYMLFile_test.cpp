@@ -12,17 +12,17 @@ using namespace godzilla;
 registerObject(GTestProblem);
 
 InputParameters
-GTestProblem::validParams()
+GTestProblem::valid_params()
 {
-    InputParameters params = Problem::validParams();
-    params.addParam<std::string>("str", "empty", "str doco");
-    params.addParam<double>("d", 1.234, "d doco");
-    params.addParam<int>("i", -1234, "i doco");
-    params.addParam<unsigned int>("ui", 1234, "ui doco");
-    params.addParam<std::vector<double>>("arr_d", "vec<d> doco");
-    params.addParam<std::vector<int>>("arr_i", "vec<i> doco");
-    params.addParam<std::vector<std::string>>("arr_str", "vec<str> doco");
-    params.addPrivateParam<const Mesh *>("_mesh");
+    InputParameters params = Problem::valid_params();
+    params.add_param<std::string>("str", "empty", "str doco");
+    params.add_param<double>("d", 1.234, "d doco");
+    params.add_param<int>("i", -1234, "i doco");
+    params.add_param<unsigned int>("ui", 1234, "ui doco");
+    params.add_param<std::vector<double>>("arr_d", "vec<d> doco");
+    params.add_param<std::vector<int>>("arr_i", "vec<i> doco");
+    params.add_param<std::vector<std::string>>("arr_str", "vec<str> doco");
+    params.add_private_param<const Mesh *>("_mesh");
     return params;
 }
 
@@ -34,7 +34,7 @@ TEST_F(GYMLFileTest, parse_empty)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
 
     file.parse(file_name);
-    auto yml = file.getYml();
+    auto yml = file.get_yml();
     EXPECT_EQ(yml.size(), 0);
 }
 
@@ -80,7 +80,7 @@ TEST_F(GYMLFileTest, build_missing_req_param)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_missing_req_param.yml");
     file.parse(file_name);
     file.build();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("mesh: Missing required parameters:"));
@@ -98,11 +98,11 @@ TEST_F(GYMLFileTest, mesh_partitioner)
     file.parse(file_name);
     file.build();
 
-    Mesh * mesh = file.getMesh();
+    Mesh * mesh = file.get_mesh();
     EXPECT_NE(mesh, nullptr);
     mesh->create();
 
-    DM dm = mesh->getDM();
+    DM dm = mesh->get_dm();
     PetscBool distr;
     DMPlexIsDistributed(dm, &distr);
     if (sz > 1)
@@ -121,10 +121,10 @@ TEST_F(GYMLFileTest, build)
     file.parse(file_name);
     file.build();
 
-    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
     EXPECT_NE(mesh, nullptr);
 
-    auto problem = file.getProblem();
+    auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
 }
 
@@ -136,8 +136,8 @@ TEST_F(GYMLFileTest, funcs)
         void
         build()
         {
-            GYMLFile::buildProblem();
-            GYMLFile::buildFunctions();
+            GYMLFile::build_problem();
+            GYMLFile::build_functions();
         }
     } file(*this->app);
 
@@ -147,8 +147,8 @@ TEST_F(GYMLFileTest, funcs)
     file.parse(file_name);
     file.build();
 
-    auto * problem = file.getProblem();
-    const std::vector<Function *> & funcs = problem->getFunctions();
+    auto * problem = file.get_problem();
+    const std::vector<Function *> & funcs = problem->get_functions();
     EXPECT_EQ(funcs.size(), 1);
     EXPECT_NE(dynamic_cast<PiecewiseLinear *>(funcs[0]), nullptr);
 }
@@ -163,10 +163,10 @@ TEST_F(GYMLFileTest, build_vec_as_scalars)
     file.parse(file_name);
     file.build();
 
-    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
     EXPECT_NE(mesh, nullptr);
 
-    auto problem = file.getProblem();
+    auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
 }
 
@@ -179,7 +179,7 @@ TEST_F(GYMLFileTest, wrong_param_type)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/wrong_param_type.yml");
     file.parse(file_name);
     file.build();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     auto output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output,
@@ -197,10 +197,10 @@ TEST_F(GYMLFileTest, build_fe)
     file.parse(file_name);
     file.build();
 
-    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
     EXPECT_NE(mesh, nullptr);
 
-    auto problem = file.getProblem();
+    auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
 }
 
@@ -214,15 +214,15 @@ TEST_F(GYMLFileTest, simple_fe_pps)
     file.parse(file_name);
     file.build();
 
-    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
     EXPECT_NE(mesh, nullptr);
 
-    auto problem = file.getProblem();
+    auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
 
-    Postprocessor * pp = problem->getPostprocessor("l2_err");
+    Postprocessor * pp = problem->get_postprocessor("l2_err");
     EXPECT_NE(pp, nullptr);
-    EXPECT_EQ(pp->getName(), "l2_err");
+    EXPECT_EQ(pp->get_name(), "l2_err");
 }
 
 TEST_F(GYMLFileTest, build_fe_w_aux)
@@ -235,10 +235,10 @@ TEST_F(GYMLFileTest, build_fe_w_aux)
     file.parse(file_name);
     file.build();
 
-    auto mesh = dynamic_cast<LineMesh *>(file.getMesh());
+    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
     EXPECT_NE(mesh, nullptr);
 
-    auto problem = dynamic_cast<FEProblemInterface *>(file.getProblem());
+    auto problem = dynamic_cast<FEProblemInterface *>(file.get_problem());
     EXPECT_NE(problem, nullptr);
     // TODO: test that the 'aux1' object from the input file was actually added
 }
@@ -252,7 +252,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_ics)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_ics.yml");
     file.parse(file_name);
     file.build();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -268,7 +268,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_bcs)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_bcs.yml");
     file.parse(file_name);
     file.build();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -284,7 +284,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_auxs)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_auxs.yml");
     file.parse(file_name);
     file.build();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(

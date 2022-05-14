@@ -19,9 +19,9 @@ __essential_boundary_condition_function(PetscInt dim,
 }
 
 InputParameters
-EssentialBC::validParams()
+EssentialBC::valid_params()
 {
-    InputParameters params = BoundaryCondition::validParams();
+    InputParameters params = BoundaryCondition::valid_params();
     return params;
 }
 
@@ -31,31 +31,31 @@ EssentialBC::EssentialBC(const InputParameters & params) : BoundaryCondition(par
 }
 
 DMBoundaryConditionType
-EssentialBC::getBcType() const
+EssentialBC::get_bc_type() const
 {
     _F_;
     return DM_BC_ESSENTIAL;
 }
 
 void
-EssentialBC::setUpCallback()
+EssentialBC::set_up_callback()
 {
     _F_;
     PetscErrorCode ierr;
     ierr = PetscDSAddBoundary(this->ds,
-                              getBcType(),
-                              getName().c_str(),
+                              get_bc_type(),
+                              get_name().c_str(),
                               this->label,
                               this->n_ids,
                               this->ids,
-                              getFieldId(),
-                              getNumComponents(),
-                              getNumComponents() == 0 ? NULL : getComponents().data(),
+                              get_field_id(),
+                              get_num_components(),
+                              get_num_components() == 0 ? NULL : get_components().data(),
                               (void (*)(void)) & __essential_boundary_condition_function,
                               NULL,
                               (void *) this,
                               NULL);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 } // namespace godzilla

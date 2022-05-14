@@ -8,80 +8,80 @@ namespace godzilla {
 registerObject(RectangleMesh);
 
 InputParameters
-RectangleMesh::validParams()
+RectangleMesh::valid_params()
 {
-    InputParameters params = UnstructuredMesh::validParams();
-    params.addParam<PetscReal>("xmin", 0., "Minimum in the x direction");
-    params.addParam<PetscReal>("xmax", 1., "Maximum in the x direction");
-    params.addParam<PetscReal>("ymin", 0., "Minimum in the y direction");
-    params.addParam<PetscReal>("ymax", 1., "Maximum in the y direction");
-    params.addRequiredParam<PetscInt>("nx", "Number of mesh points in the x direction");
-    params.addRequiredParam<PetscInt>("ny", "Number of mesh points in the y direction");
+    InputParameters params = UnstructuredMesh::valid_params();
+    params.add_param<PetscReal>("xmin", 0., "Minimum in the x direction");
+    params.add_param<PetscReal>("xmax", 1., "Maximum in the x direction");
+    params.add_param<PetscReal>("ymin", 0., "Minimum in the y direction");
+    params.add_param<PetscReal>("ymax", 1., "Maximum in the y direction");
+    params.add_required_param<PetscInt>("nx", "Number of mesh points in the x direction");
+    params.add_required_param<PetscInt>("ny", "Number of mesh points in the y direction");
     return params;
 }
 
 RectangleMesh::RectangleMesh(const InputParameters & parameters) :
     UnstructuredMesh(parameters),
-    xmin(getParam<PetscReal>("xmin")),
-    xmax(getParam<PetscReal>("xmax")),
-    ymin(getParam<PetscReal>("ymin")),
-    ymax(getParam<PetscReal>("ymax")),
-    nx(getParam<PetscInt>("nx")),
-    ny(getParam<PetscInt>("ny")),
+    xmin(get_param<PetscReal>("xmin")),
+    xmax(get_param<PetscReal>("xmax")),
+    ymin(get_param<PetscReal>("ymin")),
+    ymax(get_param<PetscReal>("ymax")),
+    nx(get_param<PetscInt>("nx")),
+    ny(get_param<PetscInt>("ny")),
     simplex(PETSC_FALSE),
     interpolate(PETSC_TRUE)
 {
     _F_;
     if (this->xmax <= this->xmin)
-        logError("Parameter 'xmax' must be larger than 'xmin'.");
+        log_error("Parameter 'xmax' must be larger than 'xmin'.");
     if (this->ymax <= this->ymin)
-        logError("Parameter 'ymax' must be larger than 'ymin'.");
+        log_error("Parameter 'ymax' must be larger than 'ymin'.");
 }
 
 PetscInt
-RectangleMesh::getXMin() const
+RectangleMesh::get_x_min() const
 {
     _F_;
     return this->xmin;
 }
 
 PetscInt
-RectangleMesh::getXMax() const
+RectangleMesh::get_x_max() const
 {
     _F_;
     return this->xmax;
 }
 
 PetscInt
-RectangleMesh::getNx() const
+RectangleMesh::get_nx() const
 {
     _F_;
     return this->nx;
 }
 
 PetscInt
-RectangleMesh::getYMin() const
+RectangleMesh::get_y_min() const
 {
     _F_;
     return this->ymin;
 }
 
 PetscInt
-RectangleMesh::getYMax() const
+RectangleMesh::get_y_max() const
 {
     _F_;
     return this->ymax;
 }
 
 PetscInt
-RectangleMesh::getNy() const
+RectangleMesh::get_ny() const
 {
     _F_;
     return this->ny;
 }
 
 void
-RectangleMesh::createDM()
+RectangleMesh::create_dm()
 {
     _F_;
     PetscErrorCode ierr;
@@ -91,7 +91,7 @@ RectangleMesh::createDM()
     PetscInt faces[2] = { this->nx, this->ny };
     DMBoundaryType periodicity[2] = { DM_BOUNDARY_GHOSTED, DM_BOUNDARY_GHOSTED };
 
-    ierr = DMPlexCreateBoxMesh(comm(),
+    ierr = DMPlexCreateBoxMesh(get_comm(),
                                2,
                                this->simplex,
                                faces,
@@ -100,7 +100,7 @@ RectangleMesh::createDM()
                                periodicity,
                                interpolate,
                                &this->dm);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     // create user-friendly names for sides
     DMLabel face_sets_label;
@@ -110,25 +110,25 @@ RectangleMesh::createDM()
     for (unsigned int i = 0; i < 4; i++) {
         IS is;
         ierr = DMLabelGetStratumIS(face_sets_label, i + 1, &is);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         ierr = DMCreateLabel(this->dm, side_name[i]);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         DMLabel label;
         ierr = DMGetLabel(this->dm, side_name[i], &label);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         if (is) {
             ierr = DMLabelSetStratumIS(label, i + 1, is);
-            checkPetscError(ierr);
+            check_petsc_error(ierr);
         }
 
         ierr = ISDestroy(&is);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         ierr = DMPlexLabelComplete(this->dm, label);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 }
 

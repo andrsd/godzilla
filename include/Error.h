@@ -11,27 +11,27 @@ namespace internal {
 
 /// All of the following are not meant to be called directly - they are called by the normal macros
 /// (godzillaError(), etc.) down below
-void godzillaStreamAll(std::ostringstream & ss);
+void godzilla_stream_all(std::ostringstream & ss);
 
 template <typename T, typename... Args>
 void
-godzillaStreamAll(std::ostringstream & ss, T && val, Args &&... args)
+godzilla_stream_all(std::ostringstream & ss, T && val, Args &&... args)
 {
     ss << val;
-    godzillaStreamAll(ss, std::forward<Args>(args)...);
+    godzilla_stream_all(ss, std::forward<Args>(args)...);
 }
 
-void godzillaMsgRaw(const std::string & msg);
+void godzilla_msg_raw(const std::string & msg);
 
 std::string
-godzillaMsgFmt(const std::string & msg, const std::string & title, const std::string & color);
+godzilla_msg_fmt(const std::string & msg, const std::string & title, const std::string & color);
 
-void godzillaErrorRaw(std::string msg, bool call_stack = false);
+void godzilla_error_raw(std::string msg, bool call_stack = false);
 
 /// Terminate the run
 [[noreturn]] void terminate(int status = 1);
 
-void memCheck(int line, const char * func, const char * file, void * var);
+void mem_check(int line, const char * func, const char * file, void * var);
 
 } // namespace internal
 
@@ -40,18 +40,18 @@ template <typename... Args>
 error(Args &&... args)
 {
     std::ostringstream oss;
-    internal::godzillaStreamAll(oss, std::forward<Args>(args)...);
-    internal::godzillaErrorRaw(oss.str());
+    internal::godzilla_stream_all(oss, std::forward<Args>(args)...);
+    internal::godzilla_error_raw(oss.str());
     internal::terminate();
 }
 
 /// Check PETSc error
 ///
 /// @param ierr Error code returned by PETSc
-void checkPetscError(PetscErrorCode ierr);
+void check_petsc_error(PetscErrorCode ierr);
 
 /// Check that memory allocation was ok. If not, report an error (also dump call stack) and
 /// terminate
-#define MEM_CHECK(var) godzilla::internal::memCheck(__LINE__, __PRETTY_FUNCTION__, __FILE__, var)
+#define MEM_CHECK(var) godzilla::internal::mem_check(__LINE__, __PRETTY_FUNCTION__, __FILE__, var)
 
 } // namespace godzilla

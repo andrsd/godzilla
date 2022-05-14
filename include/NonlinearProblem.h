@@ -16,38 +16,38 @@ public:
     virtual void run() override;
     virtual void solve() override;
     virtual bool converged() override;
-    Vec getSolutionVector() const override;
+    Vec get_solution_vector() const override;
 
 protected:
     /// provide DM for the underlying SNES object
-    virtual DM getDM() const override;
+    virtual DM get_dm() const override;
     /// Initialize the problem
     virtual void init();
     /// Set up initial guess
-    virtual void setUpInitialGuess();
+    virtual void set_up_initial_guess();
     /// Allocate Jacobian/residual objects
-    virtual void allocateObjects();
+    virtual void allocate_objects();
     /// Set up line search
-    virtual void setUpLineSearch();
+    virtual void set_up_line_search();
     /// Set up computation of residual and Jacobian callbacks
-    virtual void setUpCallbacks();
+    virtual void set_up_callbacks();
     /// Set up monitors
-    virtual void setUpMonitors();
+    virtual void set_up_monitors();
     /// Set up solver parameters
-    virtual void setUpSolverParameters();
+    virtual void set_up_solver_parameters();
     /// Method to compute residual. Called from the PETsc callback
-    virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) = 0;
+    virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) = 0;
     /// Method to compute Jacobian. Called from the PETsc callback
-    virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) = 0;
+    virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) = 0;
     /// SNES monitor
-    PetscErrorCode snesMonitorCallback(PetscInt it, PetscReal norm);
+    PetscErrorCode snes_monitor_callback(PetscInt it, PetscReal norm);
     /// KSP monitor
-    PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
+    PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
     /// Output
     virtual void output();
 
     /// Method for setting matrix properties
-    virtual void onSetMatrixProperties();
+    virtual void on_set_matrix_properties();
 
     /// SNES object
     SNES snes;
@@ -80,7 +80,7 @@ protected:
     PetscInt lin_max_iter;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 
     friend PetscErrorCode __compute_residual(SNES snes, Vec x, Vec f, void * ctx);
     friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat A, Mat B, void * ctx);

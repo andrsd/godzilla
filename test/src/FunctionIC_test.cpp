@@ -9,13 +9,13 @@ TEST(FunctionICTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = FunctionIC::validParams();
+    InputParameters params = FunctionIC::valid_params();
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
-    auto obj = app.buildObject<InitialCondition>("FunctionIC", "name", params);
+    auto obj = app.build_object<InitialCondition>("FunctionIC", "name", params);
     obj->create();
 
-    EXPECT_EQ(obj->getFieldId(), 0);
-    EXPECT_EQ(obj->getNumComponents(), 1);
+    EXPECT_EQ(obj->get_field_id(), 0);
+    EXPECT_EQ(obj->get_num_components(), 1);
 
     PetscInt dim = 3;
     PetscReal time = 2.;

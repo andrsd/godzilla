@@ -27,16 +27,16 @@ using BuildPtr = ObjectPtr (*)(const InputParameters & parameters);
 
 template <typename T>
 ObjectPtr
-buildObj(const InputParameters & parameters)
+build_obj(const InputParameters & parameters)
 {
     return new T(parameters);
 }
 
 template <typename T>
 auto
-callValidParams() -> decltype(T::validParams(), emptyInputParameters())
+call_valid_params() -> decltype(T::valid_params(), InputParameters())
 {
-    return T::validParams();
+    return T::valid_params();
 }
 
 class InputParameters;
@@ -57,8 +57,8 @@ public:
     reg(const std::string & class_name)
     {
         Entry entry;
-        entry.build_ptr = &buildObj<T>;
-        entry.params_ptr = &callValidParams<T>;
+        entry.build_ptr = &build_obj<T>;
+        entry.params_ptr = &call_valid_params<T>;
         classes[class_name] = entry;
         return '\0';
     }
@@ -67,11 +67,11 @@ public:
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
     static InputParameters *
-    getValidParams(const std::string & class_name)
+    get_valid_params(const std::string & class_name)
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
-            error("Getting validParams for object '",
+            error("Getting valid_params for object '",
                   class_name,
                   "' failed.  Object is not registred.");
 
@@ -114,7 +114,7 @@ public:
     }
 
     static bool
-    isRegistered(const std::string & class_name)
+    is_registered(const std::string & class_name)
     {
         auto it = classes.find(class_name);
         return it != classes.end();

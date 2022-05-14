@@ -19,37 +19,37 @@ public:
 
     /// Get the type of this object.
     /// @return the name of the type of this object
-    const std::string & getType() const;
+    const std::string & get_type() const;
 
     /// Get the name of the object
     /// @return The name of the object
-    virtual const std::string & getName() const;
+    virtual const std::string & get_name() const;
 
     /// Get the parameters of the object
     /// @return The parameters of the object
-    const InputParameters & getParameters() const;
+    const InputParameters & get_parameters() const;
 
     /// Retrieve a parameter for the object
     /// @param name The name of the parameter
     /// @return The value of the parameter
     template <typename T>
-    const T & getParam(const std::string & name) const;
+    const T & get_param(const std::string & name) const;
 
     /// Test if the supplied parameter is valid
     /// @param name The name of the parameter to test
-    bool isParamValid(const std::string & name) const;
+    bool is_param_valid(const std::string & name) const;
 
     /// Get the App this object is associated with
-    const App & getApp() const;
+    const App & get_app() const;
 
     /// Get the MPI comm this object works on
-    const MPI_Comm & comm() const;
+    const MPI_Comm & get_comm() const;
 
     /// Get processor ID (aka MPI rank) this object is running at
-    const PetscMPIInt & processorId() const;
+    const PetscMPIInt & get_processor_id() const;
 
     /// Get communicator size
-    const PetscMPIInt & commSize() const;
+    const PetscMPIInt & get_comm_size() const;
 
     /// Called to construct the object
     virtual void create();
@@ -72,12 +72,12 @@ protected:
 
 public:
     /// Method for building InputParameters for this class
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 template <typename T>
 const T &
-Object::getParam(const std::string & name) const
+Object::get_param(const std::string & name) const
 {
     return this->pars.get<T>(name);
 }

@@ -14,26 +14,26 @@ __piecewise_linear_function_eval(void * ctx, double x)
 }
 
 InputParameters
-PiecewiseLinear::validParams()
+PiecewiseLinear::valid_params()
 {
-    InputParameters params = Function::validParams();
-    params.addRequiredParam<std::vector<PetscReal>>("x", "Independent variable");
-    params.addRequiredParam<std::vector<PetscReal>>("y", "Dependent variable");
+    InputParameters params = Function::valid_params();
+    params.add_required_param<std::vector<PetscReal>>("x", "Independent variable");
+    params.add_required_param<std::vector<PetscReal>>("y", "Dependent variable");
     return params;
 }
 
 PiecewiseLinear::PiecewiseLinear(const InputParameters & params) :
     Function(params),
-    linpol(getParam<std::vector<PetscReal>>("x"), getParam<std::vector<PetscReal>>("y"))
+    linpol(get_param<std::vector<PetscReal>>("x"), get_param<std::vector<PetscReal>>("y"))
 {
     _F_;
 }
 
 void
-PiecewiseLinear::registerCallback(mu::Parser & parser)
+PiecewiseLinear::register_callback(mu::Parser & parser)
 {
     _F_;
-    parser.DefineFunUserData(getName(), __piecewise_linear_function_eval, this);
+    parser.DefineFunUserData(get_name(), __piecewise_linear_function_eval, this);
 }
 
 PetscReal

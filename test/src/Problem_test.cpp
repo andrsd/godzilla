@@ -28,13 +28,13 @@ TEST(ProblemTest, add_pp)
             return false;
         }
         virtual DM
-        getDM() const
+        get_dm() const
         {
             return nullptr;
         }
 
         virtual Vec
-        getSolutionVector() const
+        get_solution_vector() const
         {
             return nullptr;
         }
@@ -50,31 +50,31 @@ TEST(ProblemTest, add_pp)
         }
 
         virtual PetscReal
-        getValue()
+        get_value()
         {
             return 0;
         }
     };
 
-    InputParameters mesh_params = LineMesh::validParams();
+    InputParameters mesh_params = LineMesh::valid_params();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    InputParameters prob_params = Problem::validParams();
+    InputParameters prob_params = Problem::valid_params();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
 
-    InputParameters pp_params = Postprocessor::validParams();
+    InputParameters pp_params = Postprocessor::valid_params();
     pp_params.set<const App *>("_app") = &app;
     pp_params.set<Problem *>("_problem") = &problem;
     pp_params.set<std::string>("_name") = "pp";
     TestPostprocessor pp(pp_params);
 
-    problem.addPostprocessor(&pp);
+    problem.add_postprocessor(&pp);
     problem.check();
 
-    EXPECT_EQ(problem.getPostprocessor("pp"), &pp);
-    EXPECT_EQ(problem.getPostprocessor("asdf"), nullptr);
+    EXPECT_EQ(problem.get_postprocessor("pp"), &pp);
+    EXPECT_EQ(problem.get_postprocessor("asdf"), nullptr);
 }

@@ -11,7 +11,7 @@ TEST_F(HDF5OutputTest, get_file_ext)
     prob->create();
 
     auto out = gOutput(prob, "out");
-    EXPECT_EQ(out->getFileExt(), "h5");
+    EXPECT_EQ(out->get_file_ext(), "h5");
 }
 
 TEST_F(HDF5OutputTest, create)
@@ -21,7 +21,7 @@ TEST_F(HDF5OutputTest, create)
     auto prob = gProblem1d(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
-    prob->addOutput(out);
+    prob->add_output(out);
     prob->create();
 }
 
@@ -45,8 +45,8 @@ TEST_F(HDF5OutputTest, set_file_name)
 
     auto out = gOutput(prob, "out");
     out->create();
-    out->setFileName();
-    EXPECT_EQ(out->getFileName(), "out.h5");
+    out->set_file_name();
+    EXPECT_EQ(out->get_file_name(), "out.h5");
 }
 
 TEST_F(HDF5OutputTest, set_seq_file_name)
@@ -58,8 +58,8 @@ TEST_F(HDF5OutputTest, set_seq_file_name)
 
     auto out = gOutput(prob, "out");
     out->create();
-    out->setSequenceFileName(2);
-    EXPECT_EQ(out->getFileName(), "out.2.h5");
+    out->set_sequence_file_name(2);
+    EXPECT_EQ(out->get_file_name(), "out.2.h5");
 }
 
 TEST_F(HDF5OutputTest, output)
@@ -70,18 +70,18 @@ TEST_F(HDF5OutputTest, output)
     prob->create();
     auto out = gOutput(prob, "out");
     out->create();
-    out->setFileName();
-    out->outputStep(-1, mesh->getDM(), prob->getSolutionVector());
+    out->set_file_name();
+    out->output_step(-1, mesh->get_dm(), prob->get_solution_vector());
 
-    const std::string file_name = out->getFileName();
+    const std::string file_name = out->get_file_name();
     PetscViewer viewer;
     Vec sln;
     PetscReal diff;
-    DMCreateGlobalVector(mesh->getDM(), &sln);
+    DMCreateGlobalVector(mesh->get_dm(), &sln);
     PetscObjectSetName((PetscObject) sln, "sln");
     PetscViewerHDF5Open(PETSC_COMM_WORLD, file_name.c_str(), FILE_MODE_READ, &viewer);
     VecLoad(sln, viewer);
-    VecAXPY(sln, -1.0, prob->getSolutionVector());
+    VecAXPY(sln, -1.0, prob->get_solution_vector());
     VecNorm(sln, NORM_INFINITY, &diff);
     EXPECT_LT(diff, PETSC_MACHINE_EPSILON);
     PetscViewerDestroy(&viewer);

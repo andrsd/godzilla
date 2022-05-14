@@ -9,21 +9,21 @@ Logger::Logger() : num_errors(0), num_warnings(0)
 }
 
 std::size_t
-Logger::getNumEntries() const
+Logger::get_num_entries() const
 {
     _F_;
     return this->entries.size();
 }
 
 std::size_t
-Logger::getNumErrors() const
+Logger::get_num_errors() const
 {
     _F_;
     return this->num_errors;
 }
 
 std::size_t
-Logger::getNumWarnings() const
+Logger::get_num_warnings() const
 {
     _F_;
     return this->num_warnings;

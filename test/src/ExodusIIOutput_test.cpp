@@ -11,7 +11,7 @@ TEST_F(ExodusIIOutputTest, get_file_ext)
     auto prob = gProblem1d(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
-    EXPECT_EQ(out->getFileExt(), "exo");
+    EXPECT_EQ(out->get_file_ext(), "exo");
 }
 
 TEST_F(ExodusIIOutputTest, create)
@@ -21,7 +21,7 @@ TEST_F(ExodusIIOutputTest, create)
     auto prob = gProblem1d(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
-    prob->addOutput(out);
+    prob->add_output(out);
     prob->create();
 }
 
@@ -46,7 +46,7 @@ TEST_F(ExodusIIOutputTest, no_fe)
     auto out = gOutput(prob, "out");
     out->create();
     out->check();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
@@ -64,7 +64,7 @@ TEST_F(ExodusIIOutputTest, output_1d)
     auto out = gOutput(prob, "out");
     out->create();
     out->check();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
@@ -80,11 +80,11 @@ TEST_F(ExodusIIOutputTest, output_2d)
     auto out = gOutput(prob, "out");
     out->create();
     out->check();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     prob->solve();
     EXPECT_EQ(prob->converged(), true);
-    out->outputStep(-1, mesh->getDM(), prob->getSolutionVector());
+    out->output_step(-1, mesh->get_dm(), prob->get_solution_vector());
 }
 
 TEST_F(ExodusIIOutputTest, output_3d)
@@ -96,12 +96,12 @@ TEST_F(ExodusIIOutputTest, output_3d)
     auto out = gOutput(prob, "out");
     out->create();
     out->check();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     prob->solve();
     EXPECT_EQ(prob->converged(), true);
 
-    out->outputStep(-1, mesh->getDM(), prob->getSolutionVector());
+    out->output_step(-1, mesh->get_dm(), prob->get_solution_vector());
 }
 
 TEST_F(ExodusIIOutputTest, set_file_name)
@@ -113,8 +113,8 @@ TEST_F(ExodusIIOutputTest, set_file_name)
     auto out = gOutput(prob, "out");
     out->create();
 
-    out->setFileName();
-    EXPECT_EQ(out->getFileName(), "out.exo");
+    out->set_file_name();
+    EXPECT_EQ(out->get_file_name(), "out.exo");
 }
 
 TEST_F(ExodusIIOutputTest, set_seq_file_name)
@@ -126,6 +126,6 @@ TEST_F(ExodusIIOutputTest, set_seq_file_name)
     auto out = gOutput(prob, "out");
     out->create();
 
-    out->setSequenceFileName(2);
-    EXPECT_EQ(out->getFileName(), "out.2.exo");
+    out->set_sequence_file_name(2);
+    EXPECT_EQ(out->get_file_name(), "out.2.exo");
 }

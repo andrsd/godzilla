@@ -10,7 +10,7 @@ TEST(RectangleMeshTest, api)
 {
     TestApp app;
 
-    InputParameters params = RectangleMesh::validParams();
+    InputParameters params = RectangleMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "rect_mesh";
     params.set<PetscReal>("xmin") = 1;
@@ -21,18 +21,18 @@ TEST(RectangleMeshTest, api)
     params.set<PetscInt>("ny") = 8;
     RectangleMesh mesh(params);
 
-    EXPECT_EQ(mesh.getXMin(), 1);
-    EXPECT_EQ(mesh.getXMax(), 3);
-    EXPECT_EQ(mesh.getNx(), 9);
+    EXPECT_EQ(mesh.get_x_min(), 1);
+    EXPECT_EQ(mesh.get_x_max(), 3);
+    EXPECT_EQ(mesh.get_nx(), 9);
 
-    EXPECT_EQ(mesh.getYMin(), 2);
-    EXPECT_EQ(mesh.getYMax(), 4);
-    EXPECT_EQ(mesh.getNy(), 8);
+    EXPECT_EQ(mesh.get_y_min(), 2);
+    EXPECT_EQ(mesh.get_y_max(), 4);
+    EXPECT_EQ(mesh.get_ny(), 8);
 
     mesh.create();
-    DM dm = mesh.getDM();
+    DM dm = mesh.get_dm();
 
-    EXPECT_EQ(mesh.getDimension(), 2);
+    EXPECT_EQ(mesh.get_dimension(), 2);
 
     PetscReal gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
@@ -55,7 +55,7 @@ TEST(RectangleMeshTest, incorrect_dims)
 
     TestApp app;
 
-    InputParameters params = RectangleMesh::validParams();
+    InputParameters params = RectangleMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<PetscReal>("xmin") = 2;
@@ -66,7 +66,7 @@ TEST(RectangleMeshTest, incorrect_dims)
     params.set<PetscInt>("ny") = 8;
     RectangleMesh mesh(params);
 
-    app.checkIntegrity();
+    app.check_integrity();
 
     auto output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));

@@ -8,12 +8,12 @@ class ConvectiveHeatFluxConstBC : public NaturalBC {
 public:
     ConvectiveHeatFluxConstBC(const InputParameters & params);
 
-    virtual PetscInt getFieldId() const;
-    virtual PetscInt getNumComponents() const;
-    virtual std::vector<PetscInt> getComponents() const;
+    virtual PetscInt get_field_id() const;
+    virtual PetscInt get_num_components() const;
+    virtual std::vector<PetscInt> get_components() const;
 
 protected:
-    virtual void onSetWeakForm();
+    virtual void on_set_weak_form();
 
     /// Convective heat transfer coefficient
     const PetscReal & htc;
@@ -22,7 +22,7 @@ protected:
     const PetscReal & T_infinity;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

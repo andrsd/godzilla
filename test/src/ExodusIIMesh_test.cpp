@@ -12,18 +12,18 @@ TEST(ExodusIIMeshTest, api)
     TestApp app;
     std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/square.e");
 
-    InputParameters params = ExodusIIMesh::validParams();
+    InputParameters params = ExodusIIMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("file") = file_name;
     ExodusIIMesh mesh(params);
 
-    EXPECT_EQ(mesh.getFileName(), file_name);
+    EXPECT_EQ(mesh.get_file_name(), file_name);
 
     mesh.create();
-    DM dm = mesh.getDM();
+    DM dm = mesh.get_dm();
 
-    EXPECT_EQ(mesh.getDimension(), 2);
+    EXPECT_EQ(mesh.get_dimension(), 2);
 
     PetscReal gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
@@ -46,13 +46,13 @@ TEST(ExodusIIMeshTest, nonexitent_file)
 
     TestApp app;
 
-    InputParameters params = ExodusIIMesh::validParams();
+    InputParameters params = ExodusIIMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("file") = "asdf.e";
     ExodusIIMesh mesh(params);
 
-    app.checkIntegrity();
+    app.check_integrity();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),

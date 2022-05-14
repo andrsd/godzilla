@@ -10,9 +10,9 @@ registerObject(HDF5Output);
 static const int MAX_PATH = 1024;
 
 InputParameters
-HDF5Output::validParams()
+HDF5Output::valid_params()
 {
-    InputParameters params = FileOutput::validParams();
+    InputParameters params = FileOutput::valid_params();
     return params;
 }
 
@@ -22,7 +22,7 @@ HDF5Output::HDF5Output(const InputParameters & params) : FileOutput(params)
 }
 
 std::string
-HDF5Output::getFileExt() const
+HDF5Output::get_file_ext() const
 {
     return std::string("h5");
 }
@@ -31,12 +31,12 @@ void
 HDF5Output::create()
 {
     PetscErrorCode ierr;
-    ierr = PetscViewerCreate(comm(), &this->viewer);
-    checkPetscError(ierr);
+    ierr = PetscViewerCreate(get_comm(), &this->viewer);
+    check_petsc_error(ierr);
     ierr = PetscViewerSetType(this->viewer, PETSCVIEWERHDF5);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void

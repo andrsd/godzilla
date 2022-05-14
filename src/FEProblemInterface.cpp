@@ -25,7 +25,7 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 FEProblemInterface::FEProblemInterface(Problem & problem, const InputParameters & params) :
     problem(problem),
-    logger(const_cast<Logger &>(params.get<const App *>("_app")->getLogger())),
+    logger(const_cast<Logger &>(params.get<const App *>("_app")->get_logger())),
     qorder(PETSC_DETERMINE),
     ds(nullptr)
 {
@@ -48,7 +48,7 @@ void
 FEProblemInterface::create(DM dm)
 {
     _F_;
-    onSetFields();
+    on_set_fields();
 
     for (auto & aux : this->auxs)
         aux->create();
@@ -62,12 +62,12 @@ void
 FEProblemInterface::init(DM dm)
 {
     _F_;
-    setUpFEs(dm);
-    setUpProblem(dm);
+    set_up_fes(dm);
+    set_up_problem(dm);
 }
 
 const std::string &
-FEProblemInterface::getFieldName(PetscInt fid) const
+FEProblemInterface::get_field_name(PetscInt fid) const
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -78,7 +78,7 @@ FEProblemInterface::getFieldName(PetscInt fid) const
 }
 
 PetscInt
-FEProblemInterface::getFieldId(const std::string & name) const
+FEProblemInterface::get_field_id(const std::string & name) const
 {
     _F_;
     const auto & it = this->fields_by_name.find(name);
@@ -89,7 +89,7 @@ FEProblemInterface::getFieldId(const std::string & name) const
 }
 
 bool
-FEProblemInterface::hasFieldById(PetscInt fid) const
+FEProblemInterface::has_field_by_id(PetscInt fid) const
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -97,7 +97,7 @@ FEProblemInterface::hasFieldById(PetscInt fid) const
 }
 
 bool
-FEProblemInterface::hasFieldByName(const std::string & name) const
+FEProblemInterface::has_field_by_name(const std::string & name) const
 {
     _F_;
     const auto & it = this->fields_by_name.find(name);
@@ -105,7 +105,7 @@ FEProblemInterface::hasFieldByName(const std::string & name) const
 }
 
 const std::string &
-FEProblemInterface::getAuxFieldName(PetscInt fid) const
+FEProblemInterface::get_aux_field_name(PetscInt fid) const
 {
     _F_;
     const auto & it = this->aux_fields.find(fid);
@@ -116,7 +116,7 @@ FEProblemInterface::getAuxFieldName(PetscInt fid) const
 }
 
 PetscInt
-FEProblemInterface::getAuxFieldId(const std::string & name) const
+FEProblemInterface::get_aux_field_id(const std::string & name) const
 {
     _F_;
     const auto & it = this->aux_fields_by_name.find(name);
@@ -127,7 +127,7 @@ FEProblemInterface::getAuxFieldId(const std::string & name) const
 }
 
 bool
-FEProblemInterface::hasAuxFieldById(PetscInt fid) const
+FEProblemInterface::has_aux_field_by_id(PetscInt fid) const
 {
     _F_;
     const auto & it = this->aux_fields.find(fid);
@@ -135,7 +135,7 @@ FEProblemInterface::hasAuxFieldById(PetscInt fid) const
 }
 
 bool
-FEProblemInterface::hasAuxFieldByName(const std::string & name) const
+FEProblemInterface::has_aux_field_by_name(const std::string & name) const
 {
     _F_;
     const auto & it = this->aux_fields_by_name.find(name);
@@ -143,7 +143,7 @@ FEProblemInterface::hasAuxFieldByName(const std::string & name) const
 }
 
 void
-FEProblemInterface::addFE(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
+FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
 {
     _F_;
     auto it = this->fields.find(id);
@@ -157,7 +157,7 @@ FEProblemInterface::addFE(PetscInt id, const std::string & name, PetscInt nc, Pe
 }
 
 void
-FEProblemInterface::addAuxFE(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
+FEProblemInterface::add_aux_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
 {
     _F_;
     auto it = this->aux_fields.find(id);
@@ -171,57 +171,57 @@ FEProblemInterface::addAuxFE(PetscInt id, const std::string & name, PetscInt nc,
 }
 
 void
-FEProblemInterface::setConstants(const std::vector<PetscReal> & consts)
+FEProblemInterface::set_constants(const std::vector<PetscReal> & consts)
 {
     _F_;
     this->consts = consts;
 }
 
 void
-FEProblemInterface::addInitialCondition(InitialCondition * ic)
+FEProblemInterface::add_initial_condition(InitialCondition * ic)
 {
     _F_;
-    PetscInt fid = ic->getFieldId();
+    PetscInt fid = ic->get_field_id();
     const auto & it = this->ics.find(fid);
     if (it == this->ics.end())
         this->ics[fid].ic = ic;
     else
         // TODO: improve this error message
         this->logger.error("Initial condition '",
-                           ic->getName(),
+                           ic->get_name(),
                            "' is being applied to a field that already has an initial condition.");
 }
 
 void
-FEProblemInterface::addBoundaryCondition(BoundaryCondition * bc)
+FEProblemInterface::add_boundary_condition(BoundaryCondition * bc)
 {
     _F_;
     this->bcs.push_back(bc);
 }
 
 void
-FEProblemInterface::addAuxiliaryField(AuxiliaryField * aux)
+FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 {
     _F_;
     this->auxs.push_back(aux);
 }
 
 void
-FEProblemInterface::setUpBoundaryConditions(DM dm)
+FEProblemInterface::set_up_boundary_conditions(DM dm)
 {
     _F_;
     /// TODO: refactor this into a method
     bool no_errors = true;
     for (auto & bc : this->bcs) {
-        const std::string & bnd_name = bc->getBoundary();
+        const std::string & bnd_name = bc->get_boundary();
         PetscErrorCode ierr;
         PetscBool exists = PETSC_FALSE;
         ierr = DMHasLabel(dm, bnd_name.c_str(), &exists);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
         if (!exists) {
             no_errors = false;
             this->logger.error("Boundary condition '",
-                               bc->getName(),
+                               bc->get_name(),
                                "' is set on boundary '",
                                bnd_name,
                                "' which does not exist in the mesh.");
@@ -230,11 +230,11 @@ FEProblemInterface::setUpBoundaryConditions(DM dm)
 
     if (no_errors)
         for (auto & bc : this->bcs)
-            bc->setUp(dm);
+            bc->set_up(dm);
 }
 
 void
-FEProblemInterface::setUpInitialGuess(DM dm, Vec x)
+FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
 {
     _F_;
     PetscInt n_ics = this->ics.size();
@@ -255,12 +255,12 @@ FEProblemInterface::setUpInitialGuess(DM dm, Vec x)
                 const ICInfo & ic_info = it.second;
                 const InitialCondition * ic = ic_info.ic;
 
-                PetscInt ic_nc = ic->getNumComponents();
+                PetscInt ic_nc = ic->get_num_components();
                 PetscInt field_nc = this->fields[fid].nc;
                 if (ic_nc != field_nc) {
                     no_errors = false;
                     this->logger.error("Initial condition '",
-                                       ic->getName(),
+                                       ic->get_name(),
                                        "' operates on ",
                                        ic_nc,
                                        " components, but is set on a field with ",
@@ -273,8 +273,8 @@ FEProblemInterface::setUpInitialGuess(DM dm, Vec x)
             }
 
             if (no_errors) {
-                ierr = DMProjectFunction(dm, getTime(), ic_funcs, ic_ctxs, INSERT_VALUES, x);
-                checkPetscError(ierr);
+                ierr = DMProjectFunction(dm, get_time(), ic_funcs, ic_ctxs, INSERT_VALUES, x);
+                check_petsc_error(ierr);
             }
         }
     }
@@ -282,13 +282,13 @@ FEProblemInterface::setUpInitialGuess(DM dm, Vec x)
         // no initial conditions -> use zero
         PetscErrorCode ierr;
         PetscFunc * initial_guess[1] = { internal::zero_fn };
-        ierr = DMProjectFunction(dm, getTime(), initial_guess, NULL, INSERT_VALUES, x);
-        checkPetscError(ierr);
+        ierr = DMProjectFunction(dm, get_time(), initial_guess, NULL, INSERT_VALUES, x);
+        check_petsc_error(ierr);
     }
 }
 
 void
-FEProblemInterface::setUpFEs(DM dm)
+FEProblemInterface::set_up_fes(DM dm)
 {
     _F_;
     MPI_Comm comm;
@@ -296,7 +296,7 @@ FEProblemInterface::setUpFEs(DM dm)
 
     PetscErrorCode ierr;
 
-    PetscInt dim = this->problem.getDimension();
+    PetscInt dim = this->problem.get_dimension();
 
     // FIXME: determine if the mesh is made of simplex elements
     PetscBool is_simplex = PETSC_FALSE;
@@ -304,22 +304,22 @@ FEProblemInterface::setUpFEs(DM dm)
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
         ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
         ierr = PetscFESetName(fi.fe, fi.name.c_str());
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
         ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
         ierr = PetscFESetName(fi.fe, fi.name.c_str());
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 }
 
 void
-FEProblemInterface::setUpProblem(DM dm)
+FEProblemInterface::set_up_problem(DM dm)
 {
     _F_;
     PetscErrorCode ierr;
@@ -327,60 +327,60 @@ FEProblemInterface::setUpProblem(DM dm)
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
         ierr = DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 
     ierr = DMCreateDS(dm);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = DMGetDS(dm, &this->ds);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
-    onSetWeakForm();
-    setUpBoundaryConditions(dm);
-    setUpConstants();
+    on_set_weak_form();
+    set_up_boundary_conditions(dm);
+    set_up_constants();
 
     DM cdm = dm;
     while (cdm) {
-        setUpAuxiliaryDM(cdm);
+        set_up_auxiliary_dm(cdm);
 
         ierr = DMCopyDisc(dm, cdm);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         ierr = DMGetCoarseDM(cdm, &cdm);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 }
 
 void
-FEProblemInterface::setUpAuxiliaryDM(DM dm)
+FEProblemInterface::set_up_auxiliary_dm(DM dm)
 {
     _F_;
     PetscErrorCode ierr;
 
     DM dm_aux;
     ierr = DMClone(dm, &dm_aux);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
         ierr = DMSetField(dm_aux, fi.id, fi.block, (PetscObject) fi.fe);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 
     ierr = DMCreateDS(dm_aux);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     bool no_errors = true;
     for (auto & aux : this->auxs) {
-        PetscInt fid = aux->getFieldId();
-        if (hasAuxFieldById(fid)) {
-            PetscInt aux_nc = aux->getNumComponents();
+        PetscInt fid = aux->get_field_id();
+        if (has_aux_field_by_id(fid)) {
+            PetscInt aux_nc = aux->get_num_components();
             PetscInt field_nc = this->aux_fields[fid].nc;
             if (aux_nc != field_nc) {
                 no_errors = false;
                 this->logger.error("Auxiliary field '",
-                                   aux->getName(),
+                                   aux->get_name(),
                                    "' has ",
                                    aux_nc,
                                    " component(s), but is set on a field with ",
@@ -391,7 +391,7 @@ FEProblemInterface::setUpAuxiliaryDM(DM dm)
         else {
             no_errors = false;
             this->logger.error("Auxiliary field '",
-                               aux->getName(),
+                               aux->get_name(),
                                "' is set on auxiliary field with ID '",
                                fid,
                                "', but such ID does not exist.");
@@ -399,14 +399,14 @@ FEProblemInterface::setUpAuxiliaryDM(DM dm)
     }
     if (no_errors)
         for (auto & aux : this->auxs) {
-            aux->setUp(dm, dm_aux);
+            aux->set_up(dm, dm_aux);
         }
 
     ierr = DMDestroy(&dm_aux);
 }
 
 void
-FEProblemInterface::setUpConstants()
+FEProblemInterface::set_up_constants()
 {
     _F_;
     if (this->consts.size() == 0)
@@ -414,38 +414,38 @@ FEProblemInterface::setUpConstants()
 
     PetscErrorCode ierr;
     ierr = PetscDSSetConstants(this->ds, this->consts.size(), this->consts.data());
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-FEProblemInterface::setResidualBlock(PetscInt field_id,
-                                     PetscFEResidualFunc * f0,
-                                     PetscFEResidualFunc * f1)
+FEProblemInterface::set_residual_block(PetscInt field_id,
+                                       PetscFEResidualFunc * f0,
+                                       PetscFEResidualFunc * f1)
 {
     _F_;
     PetscErrorCode ierr;
     ierr = PetscDSSetResidual(this->ds, field_id, f0, f1);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-FEProblemInterface::setJacobianBlock(PetscInt fid,
-                                     PetscInt gid,
-                                     PetscFEJacobianFunc * g0,
-                                     PetscFEJacobianFunc * g1,
-                                     PetscFEJacobianFunc * g2,
-                                     PetscFEJacobianFunc * g3)
+FEProblemInterface::set_jacobian_block(PetscInt fid,
+                                       PetscInt gid,
+                                       PetscFEJacobianFunc * g0,
+                                       PetscFEJacobianFunc * g1,
+                                       PetscFEJacobianFunc * g2,
+                                       PetscFEJacobianFunc * g3)
 {
     _F_;
     PetscErrorCode ierr;
     ierr = PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 const PetscReal &
-FEProblemInterface::getTime() const
+FEProblemInterface::get_time() const
 {
-    return this->problem.getTime();
+    return this->problem.get_time();
 }
 
 } // namespace godzilla

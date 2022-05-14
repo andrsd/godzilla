@@ -5,17 +5,17 @@
 namespace godzilla {
 
 InputParameters
-AuxiliaryField::validParams()
+AuxiliaryField::valid_params()
 {
-    InputParameters params = Object::validParams();
-    params.addPrivateParam<const FEProblemInterface *>("_fepi", nullptr);
+    InputParameters params = Object::valid_params();
+    params.add_private_param<const FEProblemInterface *>("_fepi", nullptr);
     return params;
 }
 
 AuxiliaryField::AuxiliaryField(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
-    fepi(*getParam<FEProblemInterface *>("_fepi")),
+    fepi(*get_param<FEProblemInterface *>("_fepi")),
     a(nullptr),
     // TODO: set to the block where this aux field lives (nullptr => everywhere)
     block(nullptr)
@@ -30,10 +30,10 @@ AuxiliaryField::~AuxiliaryField()
 }
 
 PetscInt
-AuxiliaryField::getFieldId() const
+AuxiliaryField::get_field_id() const
 {
     _F_;
-    return this->fepi.getAuxFieldId(this->getName());
+    return this->fepi.get_aux_field_id(this->get_name());
 }
 
 } // namespace godzilla
