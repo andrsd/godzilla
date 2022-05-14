@@ -91,7 +91,7 @@ RectangleMesh::create_dm()
     PetscInt faces[2] = { this->nx, this->ny };
     DMBoundaryType periodicity[2] = { DM_BOUNDARY_GHOSTED, DM_BOUNDARY_GHOSTED };
 
-    ierr = DMPlexCreateBoxMesh(comm(),
+    ierr = DMPlexCreateBoxMesh(get_comm(),
                                2,
                                this->simplex,
                                faces,

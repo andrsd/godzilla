@@ -31,7 +31,7 @@ VTKOutput::create()
 {
     _F_;
     PetscErrorCode ierr;
-    ierr = PetscViewerCreate(comm(), &this->viewer);
+    ierr = PetscViewerCreate(get_comm(), &this->viewer);
     check_petsc_error(ierr);
     ierr = PetscViewerSetType(this->viewer, PETSCVIEWERVTK);
     check_petsc_error(ierr);

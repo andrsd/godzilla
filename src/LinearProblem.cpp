@@ -111,7 +111,7 @@ LinearProblem::init()
     PetscErrorCode ierr;
     DM dm = get_dm();
 
-    ierr = KSPCreate(comm(), &this->ksp);
+    ierr = KSPCreate(get_comm(), &this->ksp);
     check_petsc_error(ierr);
     ierr = KSPSetDM(this->ksp, dm);
     check_petsc_error(ierr);

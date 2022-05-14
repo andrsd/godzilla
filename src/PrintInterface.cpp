@@ -15,7 +15,7 @@ PrintInterface::PrintInterface(const App & app) :
 PrintInterface::PrintInterface(const Object * obj) :
     verbosity_level(dynamic_cast<const App &>(obj->get_app()).get_verbosity_level()),
     prefix(obj->get_name() + ": "),
-    pi_comm(obj->comm())
+    pi_comm(obj->get_comm())
 {
     _F_;
 }

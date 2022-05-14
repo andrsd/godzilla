@@ -59,7 +59,7 @@ ImplicitFENonlinearProblem::init()
 {
     _F_;
     PetscErrorCode ierr;
-    TransientInterface::init(comm());
+    TransientInterface::init(get_comm());
     ierr = TSSetApplicationContext(this->ts, this);
     check_petsc_error(ierr);
     ierr = TSGetSNES(this->ts, &this->snes);

@@ -43,7 +43,7 @@ public:
     const App & get_app() const;
 
     /// Get the MPI comm this object works on
-    const MPI_Comm & comm() const;
+    const MPI_Comm & get_comm() const;
 
     /// Get processor ID (aka MPI rank) this object is running at
     const PetscMPIInt & processor_id() const;

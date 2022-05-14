@@ -39,7 +39,7 @@ ExodusIIOutput::create()
     _F_;
     PetscErrorCode ierr;
 
-    ierr = PetscViewerCreate(comm(), &this->viewer);
+    ierr = PetscViewerCreate(get_comm(), &this->viewer);
     check_petsc_error(ierr);
     ierr = PetscViewerSetType(this->viewer, PETSCVIEWEREXODUSII);
     check_petsc_error(ierr);
@@ -90,7 +90,7 @@ ExodusIIOutput::create_cell_sets()
             elem_ids[i] = i + elem_start;
 
         IS is;
-        ierr = ISCreateGeneral(comm(), num_elems, elem_ids, PETSC_COPY_VALUES, &is);
+        ierr = ISCreateGeneral(get_comm(), num_elems, elem_ids, PETSC_COPY_VALUES, &is);
         check_petsc_error(ierr);
         ierr = DMLabelSetStratumIS(cs_label, block_id, is);
         check_petsc_error(ierr);

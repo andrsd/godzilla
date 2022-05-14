@@ -31,7 +31,7 @@ void
 HDF5Output::create()
 {
     PetscErrorCode ierr;
-    ierr = PetscViewerCreate(comm(), &this->viewer);
+    ierr = PetscViewerCreate(get_comm(), &this->viewer);
     check_petsc_error(ierr);
     ierr = PetscViewerSetType(this->viewer, PETSCVIEWERHDF5);
     check_petsc_error(ierr);

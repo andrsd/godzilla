@@ -31,7 +31,15 @@ class GTestProblem : public Problem {
 public:
     GTestProblem(const InputParameters & params) : Problem(params)
     {
-        DMPlexCreateBoxMesh(comm(), 1, PETSC_TRUE, NULL, NULL, NULL, NULL, PETSC_FALSE, &this->dm);
+        DMPlexCreateBoxMesh(get_comm(),
+                            1,
+                            PETSC_TRUE,
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL,
+                            PETSC_FALSE,
+                            &this->dm);
         DMSetUp(this->dm);
         DMCreateGlobalVector(this->dm, &this->x);
     }

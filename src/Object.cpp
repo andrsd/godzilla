@@ -65,7 +65,7 @@ Object::get_app() const
 }
 
 const MPI_Comm &
-Object::comm() const
+Object::get_comm() const
 {
     _F_;
     return this->app.get_comm();

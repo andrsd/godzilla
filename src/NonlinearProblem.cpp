@@ -143,7 +143,7 @@ NonlinearProblem::init()
     PetscErrorCode ierr;
     DM dm = get_dm();
 
-    ierr = SNESCreate(comm(), &this->snes);
+    ierr = SNESCreate(get_comm(), &this->snes);
     check_petsc_error(ierr);
     ierr = SNESSetDM(this->snes, dm);
     check_petsc_error(ierr);

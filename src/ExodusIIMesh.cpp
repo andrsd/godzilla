@@ -42,8 +42,10 @@ ExodusIIMesh::create_dm()
     _F_;
     PetscErrorCode ierr;
 
-    ierr =
-        DMPlexCreateExodusFromFile(comm(), this->file_name.c_str(), this->interpolate, &this->dm);
+    ierr = DMPlexCreateExodusFromFile(get_comm(),
+                                      this->file_name.c_str(),
+                                      this->interpolate,
+                                      &this->dm);
     check_petsc_error(ierr);
 }
 

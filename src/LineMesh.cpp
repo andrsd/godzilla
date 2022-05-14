@@ -62,7 +62,7 @@ LineMesh::create_dm()
     PetscInt faces[1] = { this->nx };
     DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
-    ierr = DMPlexCreateBoxMesh(comm(),
+    ierr = DMPlexCreateBoxMesh(get_comm(),
                                1,
                                PETSC_TRUE,
                                faces,

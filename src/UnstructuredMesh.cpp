@@ -18,7 +18,7 @@ UnstructuredMesh::UnstructuredMesh(const InputParameters & parameters) :
 {
     _F_;
     PetscErrorCode ierr;
-    ierr = PetscPartitionerCreate(comm(), &this->partitioner);
+    ierr = PetscPartitionerCreate(get_comm(), &this->partitioner);
     check_petsc_error(ierr);
 }
 

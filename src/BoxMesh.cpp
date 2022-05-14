@@ -122,7 +122,7 @@ BoxMesh::create_dm()
                                       DM_BOUNDARY_GHOSTED,
                                       DM_BOUNDARY_GHOSTED };
 
-    ierr = DMPlexCreateBoxMesh(comm(),
+    ierr = DMPlexCreateBoxMesh(get_comm(),
                                3,
                                this->simplex,
                                faces,
