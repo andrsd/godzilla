@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install llvm-12 gfortran-10
+          sudo apt install cmake llvm-12 gfortran-10
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
@@ -50,9 +50,9 @@ jobs:
     runs-on: macos-10.15
     name: macos
     env:
-      CONDA_CACHE_NUM: 2
       PETSC_VERSION: 3.17.0
       PETSC_CACHE_NUM: 4
+      SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
       PETSC_ARCH: arch-darwin-c-opt
       CC: mpicc
       CXX: mpicxx
@@ -63,13 +63,8 @@ jobs:
         uses: s-weigand/setup-conda@v1
         with:
           conda-channels: conda-forge
-      - name: Cache conda env
-        uses: actions/cache@v2
-        with:
-          path: /usr/local/miniconda
-          key: ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
-          restore-keys: |
-            ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
+      - name: Install dependencies
+        run: conda install python cmake clang gfortran autoconf automake libtool
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
