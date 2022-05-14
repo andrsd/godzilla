@@ -59,12 +59,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
-      - name: Install conda
-        uses: s-weigand/setup-conda@v1
-        with:
-          conda-channels: conda-forge
       - name: Install dependencies
-        run: conda install python cmake clang gfortran autoconf automake libtool
+        run: brew install cmake autoconf automake libtool
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
