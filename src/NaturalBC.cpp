@@ -4,9 +4,9 @@
 namespace godzilla {
 
 InputParameters
-NaturalBC::validParams()
+NaturalBC::valid_params()
 {
-    InputParameters params = BoundaryCondition::validParams();
+    InputParameters params = BoundaryCondition::valid_params();
     return params;
 }
 
@@ -19,31 +19,31 @@ NaturalBC::NaturalBC(const InputParameters & params) :
 }
 
 DMBoundaryConditionType
-NaturalBC::getBcType() const
+NaturalBC::get_bc_type() const
 {
     _F_;
     return DM_BC_NATURAL;
 }
 
 void
-NaturalBC::setUpCallback()
+NaturalBC::set_up_callback()
 {
     _F_;
     PetscErrorCode ierr;
     ierr = PetscDSAddBoundary(this->ds,
-                              getBcType(),
-                              getName().c_str(),
+                              get_bc_type(),
+                              get_name().c_str(),
                               this->label,
                               this->n_ids,
                               this->ids,
-                              getFieldId(),
-                              getNumComponents(),
-                              getNumComponents() == 0 ? nullptr : getComponents().data(),
+                              get_field_id(),
+                              get_num_components(),
+                              get_num_components() == 0 ? nullptr : get_components().data(),
                               nullptr,
                               nullptr,
                               (void *) this,
                               &this->bd);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = PetscDSGetBoundary(ds,
                               this->bd,
@@ -59,27 +59,27 @@ NaturalBC::setUpCallback()
                               nullptr,
                               nullptr,
                               nullptr);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
-    onSetWeakForm();
+    on_set_weak_form();
 }
 
 void
-NaturalBC::setResidualBlock(PetscFEBndResidualFunc * f0, PetscFEBndResidualFunc * f1)
+NaturalBC::set_residual_block(PetscFEBndResidualFunc * f0, PetscFEBndResidualFunc * f1)
 {
     _F_;
     for (PetscInt i = 0; i < this->n_ids; i++) {
         PetscInt id = this->ids[i];
-        PetscWeakFormSetIndexBdResidual(this->wf, this->label, id, getFieldId(), 0, 0, f0, 0, f1);
+        PetscWeakFormSetIndexBdResidual(this->wf, this->label, id, get_field_id(), 0, 0, f0, 0, f1);
     }
 }
 
 void
-NaturalBC::setJacobianBlock(PetscInt gid,
-                            PetscFEBndJacobianFunc * g0,
-                            PetscFEBndJacobianFunc * g1,
-                            PetscFEBndJacobianFunc * g2,
-                            PetscFEBndJacobianFunc * g3)
+NaturalBC::set_jacobian_block(PetscInt gid,
+                              PetscFEBndJacobianFunc * g0,
+                              PetscFEBndJacobianFunc * g1,
+                              PetscFEBndJacobianFunc * g2,
+                              PetscFEBndJacobianFunc * g3)
 {
     _F_;
     for (PetscInt i = 0; i < this->n_ids; i++) {
@@ -87,7 +87,7 @@ NaturalBC::setJacobianBlock(PetscInt gid,
         PetscWeakFormSetIndexBdJacobian(this->wf,
                                         this->label,
                                         id,
-                                        getFieldId(),
+                                        get_field_id(),
                                         gid,
                                         0,
                                         0,

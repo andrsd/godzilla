@@ -67,7 +67,7 @@ public:
 /// Get the call stack object
 ///
 /// @return Call stack object
-CallStack & getCallstack();
+CallStack & get_callstack();
 
 } // namespace internal
 } // namespace godzilla

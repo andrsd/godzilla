@@ -9,13 +9,13 @@ TEST(ConstantICTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    InputParameters params = ConstantIC::validParams();
+    InputParameters params = ConstantIC::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::vector<PetscReal>>("value") = { 3, 4, 5 };
     ConstantIC obj(params);
 
-    EXPECT_EQ(obj.getFieldId(), 0);
-    EXPECT_EQ(obj.getNumComponents(), 3);
+    EXPECT_EQ(obj.get_field_id(), 0);
+    EXPECT_EQ(obj.get_num_components(), 3);
 
     PetscInt dim = 2;
     PetscReal time = 0.;

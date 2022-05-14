@@ -24,7 +24,8 @@ public:
     /// @param dim Spatial dimension of the evaluated function
     /// @param time Time of the time-dependent function
     /// @param x Spatial coordinate where we evaluate the function (has size of `dim`)
-    PetscReal evaluateFunction(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[]);
+    PetscReal
+    evaluate_function(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[]);
 
 protected:
     /// Reference to the application
@@ -37,7 +38,7 @@ protected:
     std::vector<FunctionEvaluator> evalr;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 /// This is the API that we hand to PETSc for fields.

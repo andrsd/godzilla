@@ -9,50 +9,50 @@ namespace godzilla {
 registerObject(LineMesh);
 
 InputParameters
-LineMesh::validParams()
+LineMesh::valid_params()
 {
-    InputParameters params = UnstructuredMesh::validParams();
-    params.addParam<PetscReal>("xmin", 0., "Minimum in the x direction");
-    params.addParam<PetscReal>("xmax", 1., "Maximum in the x direction");
-    params.addRequiredParam<PetscInt>("nx", "Number of mesh points in the x direction");
+    InputParameters params = UnstructuredMesh::valid_params();
+    params.add_param<PetscReal>("xmin", 0., "Minimum in the x direction");
+    params.add_param<PetscReal>("xmax", 1., "Maximum in the x direction");
+    params.add_required_param<PetscInt>("nx", "Number of mesh points in the x direction");
     return params;
 }
 
 LineMesh::LineMesh(const InputParameters & parameters) :
     UnstructuredMesh(parameters),
-    xmin(getParam<PetscReal>("xmin")),
-    xmax(getParam<PetscReal>("xmax")),
-    nx(getParam<PetscInt>("nx")),
+    xmin(get_param<PetscReal>("xmin")),
+    xmax(get_param<PetscReal>("xmax")),
+    nx(get_param<PetscInt>("nx")),
     interpolate(PETSC_TRUE)
 {
     _F_;
     if (this->xmax <= this->xmin)
-        logError("Parameter 'xmax' must be larger than 'xmin'.");
+        log_error("Parameter 'xmax' must be larger than 'xmin'.");
 }
 
 PetscReal
-LineMesh::getXMin()
+LineMesh::get_x_min()
 {
     _F_;
     return this->xmin;
 }
 
 PetscReal
-LineMesh::getXMax()
+LineMesh::get_x_max()
 {
     _F_;
     return this->xmax;
 }
 
 PetscInt
-LineMesh::getNx()
+LineMesh::get_nx()
 {
     _F_;
     return this->nx;
 }
 
 void
-LineMesh::createDM()
+LineMesh::create_dm()
 {
     _F_;
     PetscErrorCode ierr;
@@ -71,7 +71,7 @@ LineMesh::createDM()
                                periodicity,
                                interpolate,
                                &this->dm);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     // create user-friendly names for sides
     DMLabel face_sets_label;
@@ -81,25 +81,25 @@ LineMesh::createDM()
     for (unsigned int i = 0; i < 2; i++) {
         IS is;
         ierr = DMLabelGetStratumIS(face_sets_label, i + 1, &is);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         ierr = DMCreateLabel(this->dm, side_name[i]);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         DMLabel label;
         ierr = DMGetLabel(this->dm, side_name[i], &label);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         if (is != nullptr) {
             ierr = DMLabelSetStratumIS(label, i + 1, is);
-            checkPetscError(ierr);
+            check_petsc_error(ierr);
         }
 
         ierr = ISDestroy(&is);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         ierr = DMPlexLabelComplete(this->dm, label);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 }
 

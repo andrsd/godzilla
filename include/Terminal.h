@@ -32,7 +32,7 @@ public:
     /// Query if terminal has colors
     ///
     /// @return true if terminal supports colors
-    static bool hasColors();
+    static bool has_colors();
 
     /// Number of colors supported by the terminal
     static unsigned int num_colors;

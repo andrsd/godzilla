@@ -4,17 +4,17 @@
 namespace godzilla {
 
 InputParameters
-Output::validParams()
+Output::valid_params()
 {
-    InputParameters params = Object::validParams();
-    params.addPrivateParam<Problem *>("_problem");
+    InputParameters params = Object::valid_params();
+    params.add_private_param<Problem *>("_problem");
     return params;
 }
 
 Output::Output(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
-    problem(*getParam<Problem *>("_problem"))
+    problem(*get_param<Problem *>("_problem"))
 {
     _F_;
 }

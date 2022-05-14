@@ -52,7 +52,7 @@ sighandler(int signo)
 // Call Stack
 
 CallStack &
-getCallstack()
+get_callstack()
 {
     return callstack;
 }

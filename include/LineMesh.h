@@ -13,20 +13,20 @@ public:
     /// Get the lower bound in x-direction
     ///
     /// @return Lower bound in x-direction
-    PetscReal getXMin();
+    PetscReal get_x_min();
 
     /// Get the upper bound in x-direction
     ///
     /// @return Upper bound in x-direction
-    PetscReal getXMax();
+    PetscReal get_x_max();
 
     /// Get the number of divisions in the x-direction
     ///
     /// @return Number of divisions in the x-direction
-    PetscInt getNx();
+    PetscInt get_nx();
 
 protected:
-    virtual void createDM() override;
+    virtual void create_dm() override;
 
     /// Minimum in the x direction
     const PetscReal & xmin;
@@ -40,7 +40,7 @@ protected:
     PetscBool interpolate;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

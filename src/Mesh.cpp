@@ -5,9 +5,9 @@
 namespace godzilla {
 
 InputParameters
-Mesh::validParams()
+Mesh::valid_params()
 {
-    InputParameters params = Object::validParams();
+    InputParameters params = Object::valid_params();
     return params;
 }
 
@@ -25,19 +25,19 @@ Mesh::~Mesh()
     if (this->dm) {
         PetscErrorCode ierr;
         ierr = DMDestroy(&this->dm);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 }
 
 DM
-Mesh::getDM() const
+Mesh::get_dm() const
 {
     _F_;
     return this->dm;
 }
 
 PetscInt
-Mesh::getDimension() const
+Mesh::get_dimension() const
 {
     _F_;
     return this->dim;
@@ -49,11 +49,11 @@ Mesh::create()
     _F_;
     PetscErrorCode ierr;
 
-    createDM();
+    create_dm();
     ierr = DMSetUp(this->dm);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = DMGetDimension(this->dm, &this->dim);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     distribute();
 }
 

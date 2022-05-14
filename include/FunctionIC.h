@@ -12,7 +12,7 @@ public:
     FunctionIC(const InputParameters & params);
 
     virtual void create() override;
-    virtual PetscInt getNumComponents() const override;
+    virtual PetscInt get_num_components() const override;
 
 protected:
     virtual void evaluate(PetscInt dim,
@@ -22,7 +22,7 @@ protected:
                           PetscScalar u[]) override;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

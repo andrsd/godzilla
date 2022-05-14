@@ -11,7 +11,7 @@ __compute_rhs(KSP ksp, Vec b, void * ctx)
 {
     _F_;
     LinearProblem * problem = static_cast<LinearProblem *>(ctx);
-    return problem->computeRhsCallback(b);
+    return problem->compute_rhs_callback(b);
 }
 
 PetscErrorCode
@@ -19,7 +19,7 @@ __compute_operators(KSP ksp, Mat A, Mat B, void * ctx)
 {
     _F_;
     LinearProblem * problem = static_cast<LinearProblem *>(ctx);
-    return problem->computeOperatorsCallback(A, B);
+    return problem->compute_operators_callback(A, B);
 }
 
 PetscErrorCode
@@ -27,22 +27,22 @@ __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
     LinearProblem * problem = static_cast<LinearProblem *>(ctx);
-    return problem->kspMonitorCallback(it, rnorm);
+    return problem->ksp_monitor_callback(it, rnorm);
 }
 
 InputParameters
-LinearProblem::validParams()
+LinearProblem::valid_params()
 {
-    InputParameters params = Problem::validParams();
-    params.addParam<PetscReal>("lin_rel_tol",
-                               1e-5,
-                               "Relative convergence tolerance for the linear solver");
-    params.addParam<PetscReal>("lin_abs_tol",
-                               1e-50,
-                               "Absolute convergence tolerance for the linear solver");
-    params.addParam<PetscInt>("lin_max_iter",
-                              10000,
-                              "Maximum number of iterations for the linear solver");
+    InputParameters params = Problem::valid_params();
+    params.add_param<PetscReal>("lin_rel_tol",
+                                1e-5,
+                                "Relative convergence tolerance for the linear solver");
+    params.add_param<PetscReal>("lin_abs_tol",
+                                1e-50,
+                                "Absolute convergence tolerance for the linear solver");
+    params.add_param<PetscInt>("lin_max_iter",
+                               10000,
+                               "Maximum number of iterations for the linear solver");
     return params;
 }
 
@@ -53,9 +53,9 @@ LinearProblem::LinearProblem(const InputParameters & parameters) :
     b(NULL),
     A(NULL),
     B(NULL),
-    lin_rel_tol(getParam<PetscReal>("lin_rel_tol")),
-    lin_abs_tol(getParam<PetscReal>("lin_abs_tol")),
-    lin_max_iter(getParam<PetscInt>("lin_max_iter"))
+    lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
+    lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
+    lin_max_iter(get_param<PetscInt>("lin_max_iter"))
 {
     _F_;
 }
@@ -76,14 +76,14 @@ LinearProblem::~LinearProblem()
 }
 
 DM
-LinearProblem::getDM() const
+LinearProblem::get_dm() const
 {
     _F_;
-    return this->mesh->getDM();
+    return this->mesh->get_dm();
 }
 
 Vec
-LinearProblem::getSolutionVector() const
+LinearProblem::get_solution_vector() const
 {
     _F_;
     return this->x;
@@ -94,12 +94,12 @@ LinearProblem::create()
 {
     _F_;
     init();
-    allocateObjects();
-    onSetMatrixProperties();
+    allocate_objects();
+    on_set_matrix_properties();
 
-    setUpSolverParameters();
-    setUpMonitors();
-    setUpCallbacks();
+    set_up_solver_parameters();
+    set_up_monitors();
+    set_up_callbacks();
 
     Problem::create();
 }
@@ -109,65 +109,65 @@ LinearProblem::init()
 {
     _F_;
     PetscErrorCode ierr;
-    DM dm = getDM();
+    DM dm = get_dm();
 
     ierr = KSPCreate(comm(), &this->ksp);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = KSPSetDM(this->ksp, dm);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = DMSetApplicationContext(dm, this);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-LinearProblem::allocateObjects()
+LinearProblem::allocate_objects()
 {
     _F_;
     PetscErrorCode ierr;
-    DM dm = getDM();
+    DM dm = get_dm();
 
     ierr = DMCreateGlobalVector(dm, &this->x);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = PetscObjectSetName((PetscObject) this->x, "sln");
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = VecDuplicate(this->x, &this->b);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = PetscObjectSetName((PetscObject) this->b, "rhs");
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = DMCreateMatrix(dm, &this->A);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = PetscObjectSetName((PetscObject) this->A, "A");
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     // TODO: Add API for setting up preconditioners
     this->B = this->A;
 }
 
 void
-LinearProblem::setUpCallbacks()
+LinearProblem::set_up_callbacks()
 {
     _F_;
     PetscErrorCode ierr;
 
     ierr = KSPSetComputeRHS(this->ksp, __compute_rhs, this);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = KSPSetComputeOperators(this->ksp, __compute_operators, this);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-LinearProblem::setUpMonitors()
+LinearProblem::set_up_monitors()
 {
     _F_;
     PetscErrorCode ierr;
 
     ierr = KSPMonitorSet(this->ksp, __ksp_monitor_linear, this, 0);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-LinearProblem::setUpSolverParameters()
+LinearProblem::set_up_solver_parameters()
 {
     _F_;
     PetscErrorCode ierr;
@@ -177,16 +177,16 @@ LinearProblem::setUpSolverParameters()
                             this->lin_abs_tol,
                             PETSC_DEFAULT,
                             this->lin_max_iter);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = KSPSetFromOptions(ksp);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 PetscErrorCode
-LinearProblem::kspMonitorCallback(PetscInt it, PetscReal rnorm)
+LinearProblem::ksp_monitor_callback(PetscInt it, PetscReal rnorm)
 {
     _F_;
-    godzillaPrint(8, it, " Linear residual: ", std::scientific, rnorm);
+    godzilla_print(8, it, " Linear residual: ", std::scientific, rnorm);
     return 0;
 }
 
@@ -197,9 +197,9 @@ LinearProblem::solve()
     PetscErrorCode ierr;
 
     ierr = KSPSolve(this->ksp, this->b, this->x);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = KSPGetConvergedReason(this->ksp, &this->converged_reason);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 bool
@@ -223,7 +223,7 @@ LinearProblem::run()
 {
     _F_;
     solve();
-    computePostprocessors();
+    compute_postprocessors();
     if (converged())
         output();
 }
@@ -233,11 +233,11 @@ LinearProblem::output()
 {
     _F_;
     for (auto & o : this->outputs)
-        o->outputStep(-1, getDM(), this->x);
+        o->output_step(-1, get_dm(), this->x);
 }
 
 void
-LinearProblem::onSetMatrixProperties()
+LinearProblem::on_set_matrix_properties()
 {
 }
 

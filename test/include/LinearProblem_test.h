@@ -12,57 +12,57 @@ protected:
     gMesh1d()
     {
         const std::string class_name = "LineMesh";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<PetscInt>("nx") = 1;
-        return this->app->buildObject<Mesh>(class_name, "mesh", params);
+        return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
 
     Mesh *
     gMesh2d()
     {
         const std::string class_name = "RectangleMesh";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<PetscInt>("nx") = 1;
         params->set<PetscInt>("ny") = 1;
-        return this->app->buildObject<Mesh>(class_name, "mesh", params);
+        return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
 
     Mesh *
     gMesh3d()
     {
         const std::string class_name = "BoxMesh";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<PetscInt>("nx") = 1;
         params->set<PetscInt>("ny") = 1;
         params->set<PetscInt>("nz") = 1;
-        return this->app->buildObject<Mesh>(class_name, "mesh", params);
+        return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
 
     Problem *
     gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "G1DTestLinearProblem";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        return this->app->buildObject<Problem>(class_name, "problem", params);
+        return this->app->build_object<Problem>(class_name, "problem", params);
     }
 
     Problem *
     gProblem2d(Mesh * mesh)
     {
         const std::string class_name = "G2DTestLinearProblem";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        return this->app->buildObject<Problem>(class_name, "problem", params);
+        return this->app->build_object<Problem>(class_name, "problem", params);
     }
 
     Problem *
     gProblem3d(Mesh * mesh)
     {
         const std::string class_name = "G3DTestLinearProblem";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        return this->app->buildObject<Problem>(class_name, "problem", params);
+        return this->app->build_object<Problem>(class_name, "problem", params);
     }
 };
 
@@ -75,8 +75,8 @@ public:
     virtual void create() override;
 
 protected:
-    virtual PetscErrorCode computeRhsCallback(Vec b) override;
-    virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) override;
+    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
+    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
 
     PetscSection s;
 };
@@ -90,8 +90,8 @@ public:
     virtual void create() override;
 
 protected:
-    virtual PetscErrorCode computeRhsCallback(Vec b) override;
-    virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) override;
+    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
+    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
 
     PetscSection s;
 };
@@ -105,8 +105,8 @@ public:
     virtual void create() override;
 
 protected:
-    virtual PetscErrorCode computeRhsCallback(Vec b) override;
-    virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) override;
+    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
+    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
 
     PetscSection s;
 };

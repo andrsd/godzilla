@@ -9,9 +9,9 @@ TEST(LoggerTest, ctor)
 {
     Logger log;
 
-    EXPECT_EQ(log.getNumEntries(), 0);
-    EXPECT_EQ(log.getNumErrors(), 0);
-    EXPECT_EQ(log.getNumWarnings(), 0);
+    EXPECT_EQ(log.get_num_entries(), 0);
+    EXPECT_EQ(log.get_num_errors(), 0);
+    EXPECT_EQ(log.get_num_warnings(), 0);
 }
 
 TEST(LoggerTest, log_error)
@@ -20,9 +20,9 @@ TEST(LoggerTest, log_error)
     Logger log;
 
     log.error("error1");
-    EXPECT_EQ(log.getNumEntries(), 1);
-    EXPECT_EQ(log.getNumErrors(), 1);
-    EXPECT_EQ(log.getNumWarnings(), 0);
+    EXPECT_EQ(log.get_num_entries(), 1);
+    EXPECT_EQ(log.get_num_errors(), 1);
+    EXPECT_EQ(log.get_num_warnings(), 0);
 
     log.print();
     std::string output = testing::internal::GetCapturedStderr();
@@ -36,9 +36,9 @@ TEST(LoggerTest, log_warning)
     Logger log;
 
     log.warning("warn1");
-    EXPECT_EQ(log.getNumEntries(), 1);
-    EXPECT_EQ(log.getNumErrors(), 0);
-    EXPECT_EQ(log.getNumWarnings(), 1);
+    EXPECT_EQ(log.get_num_entries(), 1);
+    EXPECT_EQ(log.get_num_errors(), 0);
+    EXPECT_EQ(log.get_num_warnings(), 1);
 
     log.print();
     std::string output = testing::internal::GetCapturedStderr();
@@ -53,9 +53,9 @@ TEST(LoggerTest, log_err_warning)
 
     log.error("error1");
     log.warning("warn1");
-    EXPECT_EQ(log.getNumEntries(), 2);
-    EXPECT_EQ(log.getNumErrors(), 1);
-    EXPECT_EQ(log.getNumWarnings(), 1);
+    EXPECT_EQ(log.get_num_entries(), 2);
+    EXPECT_EQ(log.get_num_errors(), 1);
+    EXPECT_EQ(log.get_num_warnings(), 1);
 
     log.print();
     std::string output = testing::internal::GetCapturedStderr();

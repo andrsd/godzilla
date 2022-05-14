@@ -12,34 +12,34 @@ public:
     BoxMesh(const InputParameters & parameters);
 
     /// Get lower limit in x-direction
-    PetscInt getXMin() const;
+    PetscInt get_x_min() const;
 
     /// Get upper limit in x-direction
-    PetscInt getXMax() const;
+    PetscInt get_x_max() const;
 
     /// Get the number of mesh points in x direction
-    PetscInt getNx() const;
+    PetscInt get_nx() const;
 
     /// Get lower limit in y-direction
-    PetscInt getYMin() const;
+    PetscInt get_y_min() const;
 
     /// Get upper limit in y-direction
-    PetscInt getYMax() const;
+    PetscInt get_y_max() const;
 
     /// Get the number of mesh points in y-direction
-    PetscInt getNy() const;
+    PetscInt get_ny() const;
 
     /// Get lower limit in z-direction
-    PetscInt getZMin() const;
+    PetscInt get_z_min() const;
 
     /// Get upper limit in z-direction
-    PetscInt getZMax() const;
+    PetscInt get_z_max() const;
 
     /// Get the number of mesh points in z direction
-    PetscInt getNz() const;
+    PetscInt get_nz() const;
 
 protected:
-    virtual void createDM() override;
+    virtual void create_dm() override;
 
     /// Minimum in the x direction
     const PetscReal & xmin;
@@ -76,7 +76,7 @@ protected:
 
 public:
     /// Method for building InputParameters for this class
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

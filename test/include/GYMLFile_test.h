@@ -13,8 +13,8 @@ class MockGYMLFile : public GYMLFile {
 public:
     MockGYMLFile(const App & app) : GYMLFile(app) {}
 
-    MOCK_METHOD(void, buildMesh, (), ());
-    MOCK_METHOD(void, buildProblem, (), ());
+    MOCK_METHOD(void, build_mesh, (), ());
+    MOCK_METHOD(void, build_problem, (), ());
 };
 
 class GYMLFileTest : public GodzillaAppTest {
@@ -43,12 +43,12 @@ public:
     }
 
     DM
-    getDM() const override
+    get_dm() const override
     {
         return this->dm;
     }
     Vec
-    getSolutionVector() const override
+    get_solution_vector() const override
     {
         return this->x;
     }
@@ -75,5 +75,5 @@ protected:
     Vec x;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };

@@ -14,41 +14,41 @@ TEST(NaturalBCTest, api)
         explicit MockNaturalBC(const InputParameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
-        getFieldId() const
+        get_field_id() const
         {
             return 0;
         }
 
         virtual PetscInt
-        getNumComponents() const
+        get_num_components() const
         {
             return 2;
         }
 
         virtual std::vector<PetscInt>
-        getComponents() const
+        get_components() const
         {
             std::vector<PetscInt> comps = { 3, 5 };
             return comps;
         }
 
         virtual void
-        onSetWeakForm()
+        on_set_weak_form()
         {
         }
     };
 
-    InputParameters params = NaturalBC::validParams();
+    InputParameters params = NaturalBC::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("boundary") = "left";
     MockNaturalBC bc(params);
     bc.create();
 
-    EXPECT_EQ(bc.getFieldId(), 0);
-    EXPECT_EQ(bc.getNumComponents(), 2);
-    EXPECT_EQ(bc.getBcType(), DM_BC_NATURAL);
+    EXPECT_EQ(bc.get_field_id(), 0);
+    EXPECT_EQ(bc.get_num_components(), 2);
+    EXPECT_EQ(bc.get_bc_type(), DM_BC_NATURAL);
 
-    std::vector<PetscInt> comps = bc.getComponents();
+    std::vector<PetscInt> comps = bc.get_components();
     EXPECT_EQ(comps[0], 3);
     EXPECT_EQ(comps[1], 5);
 }
@@ -109,29 +109,29 @@ TEST(NaturalBCTest, fe)
         explicit TestNaturalBC(const InputParameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
-        getFieldId() const
+        get_field_id() const
         {
             return 0;
         }
 
         virtual PetscInt
-        getNumComponents() const
+        get_num_components() const
         {
             return 1;
         }
 
         virtual std::vector<PetscInt>
-        getComponents() const
+        get_components() const
         {
             std::vector<PetscInt> comps = { 0 };
             return comps;
         }
 
         virtual void
-        onSetWeakForm()
+        on_set_weak_form()
         {
-            setResidualBlock(__f0_test_natural_bc, nullptr);
-            setJacobianBlock(getFieldId(), __g0_test_natural_bc, nullptr, nullptr, nullptr);
+            set_residual_block(__f0_test_natural_bc, nullptr);
+            set_jacobian_block(get_field_id(), __g0_test_natural_bc, nullptr, nullptr, nullptr);
         }
 
         PetscInt
@@ -143,23 +143,23 @@ TEST(NaturalBCTest, fe)
 
     TestApp app;
 
-    InputParameters mesh_params = LineMesh::validParams();
+    InputParameters mesh_params = LineMesh::valid_params();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    InputParameters prob_params = GTestFENonlinearProblem::validParams();
+    InputParameters prob_params = GTestFENonlinearProblem::valid_params();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
-    prob.addAuxFE(0, "aux1", 1, 1);
+    prob.add_aux_fe(0, "aux1", 1, 1);
 
-    InputParameters bc_params = TestNaturalBC::validParams();
+    InputParameters bc_params = TestNaturalBC::valid_params();
     bc_params.set<const App *>("_app") = &app;
     bc_params.set<std::string>("_name") = "bc1";
     bc_params.set<std::string>("boundary") = "left";
     TestNaturalBC bc(bc_params);
-    prob.addBoundaryCondition(&bc);
+    prob.add_boundary_condition(&bc);
 
     mesh.create();
     prob.create();

@@ -13,7 +13,7 @@ __transient_pre_step(TS ts)
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     ImplicitFENonlinearProblem * prob = static_cast<ImplicitFENonlinearProblem *>(ctx);
-    return prob->onPreStep();
+    return prob->on_pre_step();
 }
 
 PetscErrorCode
@@ -23,7 +23,7 @@ __transient_post_step(TS ts)
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     ImplicitFENonlinearProblem * prob = static_cast<ImplicitFENonlinearProblem *>(ctx);
-    return prob->onPostStep();
+    return prob->on_post_step();
 }
 
 PetscErrorCode
@@ -31,14 +31,14 @@ __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec X, void * ctx)
 {
     _F_;
     ImplicitFENonlinearProblem * prob = static_cast<ImplicitFENonlinearProblem *>(ctx);
-    return prob->tsMonitorCallback(stepi, time, X);
+    return prob->ts_monitor_callback(stepi, time, X);
 }
 
 InputParameters
-ImplicitFENonlinearProblem::validParams()
+ImplicitFENonlinearProblem::valid_params()
 {
-    InputParameters params = FENonlinearProblem::validParams();
-    params += TransientInterface::validParams();
+    InputParameters params = FENonlinearProblem::valid_params();
+    params += TransientInterface::valid_params();
     return params;
 }
 
@@ -61,11 +61,11 @@ ImplicitFENonlinearProblem::init()
     PetscErrorCode ierr;
     TransientInterface::init(comm());
     ierr = TSSetApplicationContext(this->ts, this);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = TSGetSNES(this->ts, &this->snes);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
-    FEProblemInterface::init(getDM());
+    FEProblemInterface::init(get_dm());
 }
 
 void
@@ -73,40 +73,40 @@ ImplicitFENonlinearProblem::create()
 {
     _F_;
     FENonlinearProblem::create();
-    TransientInterface::create(getDM());
+    TransientInterface::create(get_dm());
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::onPreStep()
+ImplicitFENonlinearProblem::on_pre_step()
 {
     _F_;
     return 0;
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::onPostStep()
+ImplicitFENonlinearProblem::on_post_step()
 {
     _F_;
     PetscErrorCode ierr;
     Vec sln;
     ierr = TSGetSolution(this->ts, &sln);
-    checkPetscError(ierr);
-    computePostprocessors();
-    outputStep(sln);
+    check_petsc_error(ierr);
+    compute_postprocessors();
+    output_step(sln);
     return 0;
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::tsMonitorCallback(PetscInt stepi, PetscReal t, Vec X)
+ImplicitFENonlinearProblem::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec X)
 {
     _F_;
     PetscErrorCode ierr;
     PetscReal dt;
     ierr = TSGetTimeStep(this->ts, &dt);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     this->time = t;
     this->step_num = stepi;
-    godzillaPrint(6, stepi, " Time ", t, ", dt = ", dt);
+    godzilla_print(6, stepi, " Time ", t, ", dt = ", dt);
     return 0;
 }
 
@@ -121,40 +121,40 @@ void
 ImplicitFENonlinearProblem::run()
 {
     _F_;
-    godzillaPrint(5, "Executing...");
+    godzilla_print(5, "Executing...");
     // output initial condition
-    outputStep(this->x);
+    output_step(this->x);
     solve();
 }
 
 void
-ImplicitFENonlinearProblem::setUpCallbacks()
+ImplicitFENonlinearProblem::set_up_callbacks()
 {
     _F_;
     PetscErrorCode ierr;
-    DM dm = getDM();
+    DM dm = get_dm();
 
     ierr = DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = DMTSSetIFunctionLocal(dm, DMPlexTSComputeIFunctionFEM, this);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = DMTSSetIJacobianLocal(dm, DMPlexTSComputeIJacobianFEM, this);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-ImplicitFENonlinearProblem::setUpMonitors()
+ImplicitFENonlinearProblem::set_up_monitors()
 {
     _F_;
-    FENonlinearProblem::setUpMonitors();
+    FENonlinearProblem::set_up_monitors();
 
     PetscErrorCode ierr;
     ierr = TSSetPreStep(this->ts, __transient_pre_step);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = TSSetPostStep(this->ts, __transient_post_step);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = TSMonitorSet(this->ts, __transient_monitor, this, NULL);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
@@ -164,14 +164,14 @@ ImplicitFENonlinearProblem::output()
 }
 
 void
-ImplicitFENonlinearProblem::outputStep(Vec vec)
+ImplicitFENonlinearProblem::output_step(Vec vec)
 {
     _F_;
     PetscErrorCode ierr;
-    DM dm = getDM();
+    DM dm = get_dm();
 
     for (auto & o : this->outputs)
-        o->outputStep(this->step_num, dm, vec);
+        o->output_step(this->step_num, dm, vec);
 }
 
 } // namespace godzilla

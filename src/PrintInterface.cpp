@@ -5,16 +5,16 @@
 namespace godzilla {
 
 PrintInterface::PrintInterface(const App & app) :
-    verbosity_level(app.getVerbosityLevel()),
+    verbosity_level(app.get_verbosity_level()),
     prefix(""),
-    pi_comm(app.getComm())
+    pi_comm(app.get_comm())
 {
     _F_;
 }
 
 PrintInterface::PrintInterface(const Object * obj) :
-    verbosity_level(dynamic_cast<const App &>(obj->getApp()).getVerbosityLevel()),
-    prefix(obj->getName() + ": "),
+    verbosity_level(dynamic_cast<const App &>(obj->get_app()).get_verbosity_level()),
+    prefix(obj->get_name() + ": "),
     pi_comm(obj->comm())
 {
     _F_;

@@ -6,9 +6,9 @@
 namespace godzilla {
 
 InputParameters
-UnstructuredMesh::validParams()
+UnstructuredMesh::valid_params()
 {
-    InputParameters params = Mesh::validParams();
+    InputParameters params = Mesh::valid_params();
     return params;
 }
 
@@ -19,7 +19,7 @@ UnstructuredMesh::UnstructuredMesh(const InputParameters & parameters) :
     _F_;
     PetscErrorCode ierr;
     ierr = PetscPartitionerCreate(comm(), &this->partitioner);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 UnstructuredMesh::~UnstructuredMesh()
@@ -27,20 +27,20 @@ UnstructuredMesh::~UnstructuredMesh()
     _F_;
     PetscErrorCode ierr;
     ierr = PetscPartitionerDestroy(&this->partitioner);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-UnstructuredMesh::setPartitionerType(const std::string & type)
+UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
     _F_;
     PetscErrorCode ierr;
     ierr = PetscPartitionerSetType(this->partitioner, type.c_str());
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-UnstructuredMesh::setPartitionOverlap(PetscInt overlap)
+UnstructuredMesh::set_partition_overlap(PetscInt overlap)
 {
     _F_;
     this->partition_overlap = overlap;
@@ -53,14 +53,14 @@ UnstructuredMesh::distribute()
     PetscErrorCode ierr;
 
     ierr = PetscPartitionerSetUp(this->partitioner);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = DMPlexSetPartitioner(this->dm, this->partitioner);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     DM dm_dist = nullptr;
     ierr = DMPlexDistribute(this->dm, this->partition_overlap, NULL, &dm_dist);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     if (dm_dist) {
         DMDestroy(&this->dm);
         this->dm = dm_dist;
@@ -68,14 +68,14 @@ UnstructuredMesh::distribute()
 }
 
 void
-UnstructuredMesh::outputPartitioning(PetscViewer viewer)
+UnstructuredMesh::output_partitioning(PetscViewer viewer)
 {
     _F_;
     PetscErrorCode ierr;
 
     DM dm_part;
     ierr = DMClone(this->dm, &dm_part);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     DMSetNumFields(dm_part, 1);
     PetscSection s;
@@ -99,7 +99,7 @@ UnstructuredMesh::outputPartitioning(PetscViewer viewer)
 
     DMGlobalToLocalBegin(dm_part, global, INSERT_VALUES, local);
     DMGlobalToLocalEnd(dm_part, global, INSERT_VALUES, local);
-    VecScale(local, processorId());
+    VecScale(local, processor_id());
 
     DMLocalToGlobalBegin(dm_part, local, INSERT_VALUES, global);
     DMLocalToGlobalEnd(dm_part, local, INSERT_VALUES, global);

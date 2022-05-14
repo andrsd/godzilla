@@ -6,9 +6,9 @@
 namespace godzilla {
 
 InputParameters
-FENonlinearProblem::validParams()
+FENonlinearProblem::valid_params()
 {
-    InputParameters params = NonlinearProblem::validParams();
+    InputParameters params = NonlinearProblem::valid_params();
     return params;
 }
 
@@ -25,7 +25,7 @@ void
 FENonlinearProblem::create()
 {
     _F_;
-    FEProblemInterface::create(getDM());
+    FEProblemInterface::create(get_dm());
     NonlinearProblem::create();
 }
 
@@ -34,37 +34,37 @@ FENonlinearProblem::init()
 {
     _F_;
     NonlinearProblem::init();
-    FEProblemInterface::init(getDM());
+    FEProblemInterface::init(get_dm());
 }
 
 void
-FENonlinearProblem::setUpCallbacks()
+FENonlinearProblem::set_up_callbacks()
 {
     _F_;
     PetscErrorCode ierr;
-    DM dm = this->getDM();
+    DM dm = this->get_dm();
     ierr = DMPlexSetSNESLocalFEM(dm, this, this, this);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = SNESSetJacobian(this->snes, this->J, this->Jp, NULL, NULL);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-FENonlinearProblem::setUpInitialGuess()
+FENonlinearProblem::set_up_initial_guess()
 {
     _F_;
-    FEProblemInterface::setUpInitialGuess(getDM(), this->x);
+    FEProblemInterface::set_up_initial_guess(get_dm(), this->x);
 }
 
 PetscErrorCode
-FENonlinearProblem::computeResidualCallback(Vec x, Vec f)
+FENonlinearProblem::compute_residual_callback(Vec x, Vec f)
 {
     _F_;
     return 0;
 }
 
 PetscErrorCode
-FENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
+FENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
 {
     _F_;
     return 0;

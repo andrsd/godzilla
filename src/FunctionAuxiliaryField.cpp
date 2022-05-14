@@ -21,10 +21,10 @@ __function_auxiliary_field(PetscInt dim,
 }
 
 InputParameters
-FunctionAuxiliaryField::validParams()
+FunctionAuxiliaryField::valid_params()
 {
-    InputParameters params = AuxiliaryField::validParams();
-    params += FunctionInterface::validParams();
+    InputParameters params = AuxiliaryField::valid_params();
+    params += FunctionInterface::valid_params();
     return params;
 }
 
@@ -43,13 +43,13 @@ FunctionAuxiliaryField::create()
 }
 
 PetscInt
-FunctionAuxiliaryField::getNumComponents() const
+FunctionAuxiliaryField::get_num_components() const
 {
     return this->num_comps;
 }
 
 void
-FunctionAuxiliaryField::setUp(DM dm, DM dm_aux)
+FunctionAuxiliaryField::set_up(DM dm, DM dm_aux)
 {
     _F_;
     PetscErrorCode ierr;
@@ -57,18 +57,18 @@ FunctionAuxiliaryField::setUp(DM dm, DM dm_aux)
     void * ctxs[1] = { this };
 
     ierr = DMCreateLocalVector(dm_aux, &this->a);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = DMProjectFunctionLocal(dm_aux,
-                                  this->fepi.getTime(),
+                                  this->fepi.get_time(),
                                   func,
                                   ctxs,
                                   INSERT_ALL_VALUES,
                                   this->a);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = DMSetAuxiliaryVec(dm, this->block, 0, 0, this->a);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
@@ -80,7 +80,7 @@ FunctionAuxiliaryField::evaluate(PetscInt dim,
 {
     _F_;
     for (PetscInt i = 0; i < nc; i++)
-        u[i] = evaluateFunction(i, dim, time, x);
+        u[i] = evaluate_function(i, dim, time, x);
 }
 
 } // namespace godzilla

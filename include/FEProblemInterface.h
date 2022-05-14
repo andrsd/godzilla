@@ -26,49 +26,49 @@ public:
     /// Get field name
     ///
     /// @param fid Field ID
-    virtual const std::string & getFieldName(PetscInt fid) const;
+    virtual const std::string & get_field_name(PetscInt fid) const;
 
     /// Get field ID
     ///
     /// @param name Field name
     /// @param Field ID
-    virtual PetscInt getFieldId(const std::string & name) const;
+    virtual PetscInt get_field_id(const std::string & name) const;
 
     /// Do we have field with specified ID
     ///
     /// @param fid The ID of the field
     /// @return True if the field exists, otherwise False
-    virtual bool hasFieldById(PetscInt fid) const;
+    virtual bool has_field_by_id(PetscInt fid) const;
 
     /// Do we have field with specified name
     ///
     /// @param name The name of the field
     /// @return True if the field exists, otherwise False
-    virtual bool hasFieldByName(const std::string & name) const;
+    virtual bool has_field_by_name(const std::string & name) const;
 
     /// Get auxiliary field name
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field name
-    virtual const std::string & getAuxFieldName(PetscInt fid) const;
+    virtual const std::string & get_aux_field_name(PetscInt fid) const;
 
     /// Get auxiliary field ID
     ///
     /// @param name Auxiliary field name
     /// @param Auxiliary field ID
-    virtual PetscInt getAuxFieldId(const std::string & name) const;
+    virtual PetscInt get_aux_field_id(const std::string & name) const;
 
     /// Do we have auxiliary field with specified ID
     ///
     /// @param fid The ID of the auxiliary field
     /// @return True if the auxiliary field exists, otherwise False
-    virtual bool hasAuxFieldById(PetscInt fid) const;
+    virtual bool has_aux_field_by_id(PetscInt fid) const;
 
     /// Do we have auxiliary field with specified name
     ///
     /// @param name The name of the auxiliary field
     /// @return True if the auxiliary field exists, otherwise False
-    virtual bool hasAuxFieldByName(const std::string & name) const;
+    virtual bool has_aux_field_by_name(const std::string & name) const;
 
     /// Adds a volumetric field
     ///
@@ -76,7 +76,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void addFE(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+    virtual void add_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
 
     /// Adds a volumetric auxiliary field
     ///
@@ -84,33 +84,33 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void addAuxFE(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+    virtual void add_aux_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
 
     /// Set problem constants
     ///
     /// These constants will be available in the weak form via `constants` parameter.
     /// @param consts Constants to add to the problem
-    virtual void setConstants(const std::vector<PetscReal> & consts);
+    virtual void set_constants(const std::vector<PetscReal> & consts);
 
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
-    virtual void addInitialCondition(InitialCondition * ic);
+    virtual void add_initial_condition(InitialCondition * ic);
 
     /// Add essential boundary condition
     ///
     /// @param bc Boundary condition object to add
-    virtual void addBoundaryCondition(BoundaryCondition * bc);
+    virtual void add_boundary_condition(BoundaryCondition * bc);
 
     /// Add auxiliary field
     ///
     /// @param aux Auxiliary field object to add
-    virtual void addAuxiliaryField(AuxiliaryField * aux);
+    virtual void add_auxiliary_field(AuxiliaryField * aux);
 
     /// Get the simulation time (the time is pulled from the linked Problem class)
     ///
     /// @return The simulation time
-    virtual const PetscReal & getTime() const;
+    virtual const PetscReal & get_time() const;
 
 protected:
     /// Initialize the FE system
@@ -118,7 +118,7 @@ protected:
 
     virtual void create(DM dm);
 
-    virtual void setUpInitialGuess(DM dm, Vec x);
+    virtual void set_up_initial_guess(DM dm, Vec x);
 
     typedef void PetscFEResidualFunc(PetscInt dim,
                                      PetscInt Nf,
@@ -160,17 +160,17 @@ protected:
                                      PetscScalar g3[]);
 
     /// Set up finite element objects
-    void setUpFEs(DM dm);
+    void set_up_fes(DM dm);
 
     /// Inform PETSc to about all fields in this problem
-    void setUpProblem(DM dm);
+    void set_up_problem(DM dm);
 
     /// Set up residual statement for a field variable
     ///
     /// @param fid Field ID
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
-    void setResidualBlock(PetscInt fid, PetscFEResidualFunc * f0, PetscFEResidualFunc * f1);
+    void set_residual_block(PetscInt fid, PetscFEResidualFunc * f0, PetscFEResidualFunc * f1);
 
     /// Set up residual statement for a field variable
     ///
@@ -180,28 +180,28 @@ protected:
     /// @param g1 Integrand for the test function and basis function gradient term
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
-    void setJacobianBlock(PetscInt fid,
-                          PetscInt gid,
-                          PetscFEJacobianFunc * g0,
-                          PetscFEJacobianFunc * g1,
-                          PetscFEJacobianFunc * g2,
-                          PetscFEJacobianFunc * g3);
+    void set_jacobian_block(PetscInt fid,
+                            PetscInt gid,
+                            PetscFEJacobianFunc * g0,
+                            PetscFEJacobianFunc * g1,
+                            PetscFEJacobianFunc * g2,
+                            PetscFEJacobianFunc * g3);
 
     /// Set up boundary conditions
-    virtual void setUpBoundaryConditions(DM dm);
+    virtual void set_up_boundary_conditions(DM dm);
 
     /// Set up auxiliary DM
-    virtual void setUpAuxiliaryDM(DM dm);
+    virtual void set_up_auxiliary_dm(DM dm);
 
     /// Set up constants
-    void setUpConstants();
+    void set_up_constants();
 
     /// Set up field variables
-    virtual void onSetFields() = 0;
+    virtual void on_set_fields() = 0;
 
     /// Setup volumetric weak form terms
     /// FIXME: This needs a better name
-    virtual void onSetWeakForm() = 0;
+    virtual void on_set_weak_form() = 0;
 
     /// Reference to the the problem this interface is part of
     Problem & problem;

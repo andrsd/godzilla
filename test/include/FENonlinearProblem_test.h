@@ -15,8 +15,8 @@ public:
     GTestFENonlinearProblem(const InputParameters & params);
     virtual ~GTestFENonlinearProblem();
 
-    virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
-    virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;
+    virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
+    virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
     const std::vector<PetscReal> &
     getConstants()
     {
@@ -24,9 +24,9 @@ public:
     }
 
     virtual void
-    setUpConstants()
+    set_up_constants()
     {
-        FENonlinearProblem::setUpConstants();
+        FENonlinearProblem::set_up_constants();
     }
 
     PetscDS
@@ -36,14 +36,14 @@ public:
     }
 
     void
-    computePostprocessors() override
+    compute_postprocessors() override
     {
-        FENonlinearProblem::computePostprocessors();
+        FENonlinearProblem::compute_postprocessors();
     }
 
 protected:
-    virtual void onSetFields() override;
-    virtual void onSetWeakForm() override;
+    virtual void on_set_fields() override;
+    virtual void on_set_weak_form() override;
 
     /// ID for the "u" field
     const PetscInt iu;
@@ -55,7 +55,7 @@ public:
     GTest2FieldsFENonlinearProblem(const InputParameters & params);
 
 protected:
-    virtual void onSetFields() override;
+    virtual void on_set_fields() override;
 
     /// ID for the "v" field
     const PetscInt iv;
@@ -67,7 +67,7 @@ public:
     GTest2CompIC(const InputParameters & params) : InitialCondition(params) {}
 
     virtual PetscInt
-    getNumComponents() const
+    get_num_components() const
     {
         return 2;
     }
@@ -90,16 +90,16 @@ public:
 
         {
             const std::string class_name = "LineMesh";
-            InputParameters * params = Factory::getValidParams(class_name);
+            InputParameters * params = Factory::get_valid_params(class_name);
             params->set<PetscInt>("nx") = 2;
-            this->mesh = this->app->buildObject<Mesh>(class_name, "mesh", params);
+            this->mesh = this->app->build_object<Mesh>(class_name, "mesh", params);
         }
         {
             const std::string class_name = "GTestFENonlinearProblem";
-            InputParameters * params = Factory::getValidParams(class_name);
+            InputParameters * params = Factory::get_valid_params(class_name);
             params->set<const Mesh *>("_mesh") = this->mesh;
             this->prob =
-                this->app->buildObject<GTestFENonlinearProblem>(class_name, "prob", params);
+                this->app->build_object<GTestFENonlinearProblem>(class_name, "prob", params);
         }
         this->app->problem = this->prob;
     }

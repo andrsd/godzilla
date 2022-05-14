@@ -124,17 +124,17 @@ public:
     /// object that will be extracted from the input file.  If the parameter is
     /// missing in the input file, and error will be thrown
     template <typename T>
-    void addRequiredParam(const std::string & name, const std::string & doc_string);
+    void add_required_param(const std::string & name, const std::string & doc_string);
 
     ///@{
     /// These methods add an option parameter and a documentation string to the InputParameters
     /// object. The first version of this function takes a default value which is used if the
     /// parameter is not found in the input file. The second method will leave the parameter
-    /// uninitialized but can be checked with "isParamValid" before use.
+    /// uninitialized but can be checked with "is_param_valid" before use.
     template <typename T, typename S>
-    void addParam(const std::string & name, const S & value, const std::string & doc_string);
+    void add_param(const std::string & name, const S & value, const std::string & doc_string);
     template <typename T>
-    void addParam(const std::string & name, const std::string & doc_string);
+    void add_param(const std::string & name, const std::string & doc_string);
     ///@}
 
     ///@{
@@ -143,14 +143,14 @@ public:
     /// page dump so does not take a documentation string.  The first version of this function takes
     /// an optional default value.
     template <typename T>
-    void addPrivateParam(const std::string & name, const T & value);
+    void add_private_param(const std::string & name, const T & value);
     template <typename T>
-    void addPrivateParam(const std::string & name);
+    void add_private_param(const std::string & name);
     ///@}
 
     /// Returns a boolean indicating whether the specified parameter is required or not
     bool
-    isParamRequired(const std::string & name) const
+    is_param_required(const std::string & name) const
     {
         return this->params.count(name) > 0 && this->params.at(name)->required;
     }
@@ -159,13 +159,13 @@ public:
     /// i.e. The value was supplied as a default argument or read and properly converted from
     /// the input file
     bool
-    isParamValid(const std::string & name) const
+    is_param_valid(const std::string & name) const
     {
         return this->params.count(name) > 0 && this->params.at(name)->valid;
     }
 
     bool
-    isPrivate(const std::string & name) const
+    is_private(const std::string & name) const
     {
         return this->params.count(name) > 0 && this->params.at(name)->is_private;
     }
@@ -179,7 +179,7 @@ public:
 
     ///
     std::string
-    getDocString(const std::string & name) const
+    get_doc_string(const std::string & name) const
     {
         auto it = this->params.find(name);
         if (it != this->params.end())
@@ -250,7 +250,7 @@ private:
     /// This method is called when adding a Parameter with a default value, can be specialized for
     /// non-matching types.
     template <typename T, typename S>
-    void setParamHelper(const std::string & name, T & l_value, const S & r_value);
+    void set_param_helper(const std::string & name, T & l_value, const S & r_value);
 
     /// The actual parameter data. Each Metadata object contains attributes for the corresponding
     /// parameter.
@@ -259,7 +259,7 @@ private:
 
 template <typename T>
 void
-InputParameters::addRequiredParam(const std::string & name, const std::string & doc_string)
+InputParameters::add_required_param(const std::string & name, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;
@@ -274,7 +274,7 @@ InputParameters::addRequiredParam(const std::string & name, const std::string & 
 
 template <typename T>
 void
-InputParameters::addParam(const std::string & name, const std::string & doc_string)
+InputParameters::add_param(const std::string & name, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;
@@ -289,7 +289,9 @@ InputParameters::addParam(const std::string & name, const std::string & doc_stri
 
 template <typename T, typename S>
 void
-InputParameters::addParam(const std::string & name, const S & value, const std::string & doc_string)
+InputParameters::add_param(const std::string & name,
+                           const S & value,
+                           const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;
@@ -305,7 +307,7 @@ InputParameters::addParam(const std::string & name, const S & value, const std::
 
 template <typename T>
 void
-InputParameters::addPrivateParam(const std::string & name)
+InputParameters::add_private_param(const std::string & name)
 {
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;
@@ -319,7 +321,7 @@ InputParameters::addPrivateParam(const std::string & name)
 
 template <typename T>
 void
-InputParameters::addPrivateParam(const std::string & name, const T & value)
+InputParameters::add_private_param(const std::string & name, const T & value)
 {
     Parameter<T> * param = new Parameter<T>;
     param->value = value;

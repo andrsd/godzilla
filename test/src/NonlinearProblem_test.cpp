@@ -24,7 +24,7 @@ TEST_F(NonlinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     // extract the solution and make sure it is [2, 3]
-    const Vec x = prob->getSolutionVector();
+    const Vec x = prob->get_solution_vector();
     PetscInt ni = 2;
     PetscInt ix[2] = { 0, 1 };
     PetscScalar xx[2];
@@ -47,14 +47,14 @@ TEST_F(NonlinearProblemTest, run)
             return true;
         }
         MOCK_METHOD(void, output, ());
-        MOCK_METHOD(PetscErrorCode, computeResidualCallback, (Vec x, Vec f));
-        MOCK_METHOD(PetscErrorCode, computeJacobianCallback, (Vec x, Mat J, Mat Jp));
+        MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
+        MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
     };
 
     auto mesh = gMesh1d();
     mesh->create();
 
-    InputParameters prob_pars = NonlinearProblem::validParams();
+    InputParameters prob_pars = NonlinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
@@ -75,38 +75,38 @@ TEST_F(NonlinearProblemTest, output)
         {
             NonlinearProblem::output();
         }
-        MOCK_METHOD(PetscErrorCode, computeResidualCallback, (Vec x, Vec f));
-        MOCK_METHOD(PetscErrorCode, computeJacobianCallback, (Vec x, Mat J, Mat Jp));
+        MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
+        MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
     };
 
     class MockOutput : public Output {
     public:
         explicit MockOutput(const InputParameters & params) : Output(params) {}
 
-        MOCK_METHOD(const std::string &, getFileName, (), (const));
-        MOCK_METHOD(void, setFileName, ());
-        MOCK_METHOD(void, setSequenceFileName, (unsigned int stepi));
-        MOCK_METHOD(void, outputMesh, (DM dm));
-        MOCK_METHOD(void, outputSolution, (Vec vec));
-        MOCK_METHOD(void, outputStep, (PetscInt stepi, DM dm, Vec vec));
+        MOCK_METHOD(const std::string &, get_file_name, (), (const));
+        MOCK_METHOD(void, set_file_name, ());
+        MOCK_METHOD(void, set_sequence_file_name, (unsigned int stepi));
+        MOCK_METHOD(void, output_mesh, (DM dm));
+        MOCK_METHOD(void, output_solution, (Vec vec));
+        MOCK_METHOD(void, output_step, (PetscInt stepi, DM dm, Vec vec));
     };
 
     auto mesh = gMesh1d();
     mesh->create();
 
-    InputParameters prob_pars = NonlinearProblem::validParams();
+    InputParameters prob_pars = NonlinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
 
-    InputParameters out_pars = Output::validParams();
+    InputParameters out_pars = Output::valid_params();
     out_pars.set<const App *>("_app") = this->app;
     out_pars.set<Problem *>("_problem") = &prob;
     MockOutput out(out_pars);
 
-    prob.addOutput(&out);
+    prob.add_output(&out);
 
-    EXPECT_CALL(out, outputStep);
+    EXPECT_CALL(out, output_step);
 
     prob.output();
 }
@@ -117,8 +117,8 @@ TEST_F(NonlinearProblemTest, line_search_type)
     public:
         explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
 
-        MOCK_METHOD(PetscErrorCode, computeResidualCallback, (Vec x, Vec f));
-        MOCK_METHOD(PetscErrorCode, computeJacobianCallback, (Vec x, Mat J, Mat Jp));
+        MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
+        MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
 
         SNES
         getSNES()
@@ -132,7 +132,7 @@ TEST_F(NonlinearProblemTest, line_search_type)
 
     std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
-        InputParameters prob_pars = NonlinearProblem::validParams();
+        InputParameters prob_pars = NonlinearProblem::valid_params();
         prob_pars.set<const App *>("_app") = this->app;
         prob_pars.set<const Mesh *>("_mesh") = mesh;
         prob_pars.set<std::string>("line_search") = lst;
@@ -164,7 +164,7 @@ G1DTestNonlinearProblem::~G1DTestNonlinearProblem()
 void
 G1DTestNonlinearProblem::create()
 {
-    DM dm = getDM();
+    DM dm = get_dm();
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[2] = { 1, 0 };
     DMSetNumFields(dm, 1);
@@ -174,7 +174,7 @@ G1DTestNonlinearProblem::create()
 }
 
 PetscErrorCode
-G1DTestNonlinearProblem::computeResidualCallback(Vec x, Vec f)
+G1DTestNonlinearProblem::compute_residual_callback(Vec x, Vec f)
 {
     PetscInt ni = 2;
     PetscInt ix[] = { 0, 1 };
@@ -191,7 +191,7 @@ G1DTestNonlinearProblem::computeResidualCallback(Vec x, Vec f)
 }
 
 PetscErrorCode
-G1DTestNonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
+G1DTestNonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
 {
     MatSetValue(J, 0, 0, 1, INSERT_VALUES);
     MatSetValue(J, 1, 1, 1, INSERT_VALUES);

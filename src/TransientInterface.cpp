@@ -8,12 +8,12 @@
 namespace godzilla {
 
 InputParameters
-TransientInterface::validParams()
+TransientInterface::valid_params()
 {
     InputParameters params = emptyInputParameters();
-    params.addParam<PetscReal>("start_time", 0., "Start time of the simulation");
-    params.addRequiredParam<PetscReal>("end_time", "Simulation end time");
-    params.addRequiredParam<PetscReal>("dt", "Time step size");
+    params.add_param<PetscReal>("start_time", 0., "Start time of the simulation");
+    params.add_required_param<PetscReal>("end_time", "Simulation end time");
+    params.add_required_param<PetscReal>("dt", "Time step size");
     return params;
 }
 
@@ -39,7 +39,7 @@ TransientInterface::init(const MPI_Comm & comm)
     _F_;
     PetscErrorCode ierr;
     ierr = TSCreate(comm, &this->ts);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
@@ -48,29 +48,29 @@ TransientInterface::create(DM dm)
     _F_;
     PetscErrorCode ierr;
 
-    setUpTimeScheme();
+    set_up_time_scheme();
 
     ierr = TSSetDM(this->ts, dm);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = TSSetTime(this->ts, this->start_time);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = TSSetMaxTime(this->ts, this->end_time);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = TSSetTimeStep(this->ts, this->dt);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     ierr = TSSetStepNumber(this->ts, 1);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void
-TransientInterface::setUpTimeScheme()
+TransientInterface::set_up_time_scheme()
 {
     _F_;
     PetscErrorCode ierr;
     // TODO: allow other schemes
     ierr = TSSetType(this->ts, TSBEULER);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 void

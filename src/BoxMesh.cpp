@@ -8,109 +8,109 @@ namespace godzilla {
 registerObject(BoxMesh);
 
 InputParameters
-BoxMesh::validParams()
+BoxMesh::valid_params()
 {
-    InputParameters params = UnstructuredMesh::validParams();
-    params.addParam<PetscReal>("xmin", 0., "Minimum in the x direction");
-    params.addParam<PetscReal>("xmax", 1., "Maximum in the x direction");
-    params.addParam<PetscReal>("ymin", 0., "Minimum in the y direction");
-    params.addParam<PetscReal>("ymax", 1., "Maximum in the y direction");
-    params.addParam<PetscReal>("zmin", 0., "Minimum in the z direction");
-    params.addParam<PetscReal>("zmax", 1., "Maximum in the z direction");
-    params.addRequiredParam<PetscInt>("nx", "Number of mesh points in the x direction");
-    params.addRequiredParam<PetscInt>("ny", "Number of mesh points in the y direction");
-    params.addRequiredParam<PetscInt>("nz", "Number of mesh points in the z direction");
+    InputParameters params = UnstructuredMesh::valid_params();
+    params.add_param<PetscReal>("xmin", 0., "Minimum in the x direction");
+    params.add_param<PetscReal>("xmax", 1., "Maximum in the x direction");
+    params.add_param<PetscReal>("ymin", 0., "Minimum in the y direction");
+    params.add_param<PetscReal>("ymax", 1., "Maximum in the y direction");
+    params.add_param<PetscReal>("zmin", 0., "Minimum in the z direction");
+    params.add_param<PetscReal>("zmax", 1., "Maximum in the z direction");
+    params.add_required_param<PetscInt>("nx", "Number of mesh points in the x direction");
+    params.add_required_param<PetscInt>("ny", "Number of mesh points in the y direction");
+    params.add_required_param<PetscInt>("nz", "Number of mesh points in the z direction");
     return params;
 }
 
 BoxMesh::BoxMesh(const InputParameters & parameters) :
     UnstructuredMesh(parameters),
-    xmin(getParam<PetscReal>("xmin")),
-    xmax(getParam<PetscReal>("xmax")),
-    ymin(getParam<PetscReal>("ymin")),
-    ymax(getParam<PetscReal>("ymax")),
-    zmin(getParam<PetscReal>("zmin")),
-    zmax(getParam<PetscReal>("zmax")),
-    nx(getParam<PetscInt>("nx")),
-    ny(getParam<PetscInt>("ny")),
-    nz(getParam<PetscInt>("nz")),
+    xmin(get_param<PetscReal>("xmin")),
+    xmax(get_param<PetscReal>("xmax")),
+    ymin(get_param<PetscReal>("ymin")),
+    ymax(get_param<PetscReal>("ymax")),
+    zmin(get_param<PetscReal>("zmin")),
+    zmax(get_param<PetscReal>("zmax")),
+    nx(get_param<PetscInt>("nx")),
+    ny(get_param<PetscInt>("ny")),
+    nz(get_param<PetscInt>("nz")),
     simplex(PETSC_FALSE),
     interpolate(PETSC_TRUE)
 {
     _F_;
     if (this->xmax <= this->xmin)
-        logError("Parameter 'xmax' must be larger than 'xmin'.");
+        log_error("Parameter 'xmax' must be larger than 'xmin'.");
     if (this->ymax <= this->ymin)
-        logError("Parameter 'ymax' must be larger than 'ymin'.");
+        log_error("Parameter 'ymax' must be larger than 'ymin'.");
     if (this->zmax <= this->zmin)
-        logError("Parameter 'zmax' must be larger than 'zmin'.");
+        log_error("Parameter 'zmax' must be larger than 'zmin'.");
 }
 
 PetscInt
-BoxMesh::getXMin() const
+BoxMesh::get_x_min() const
 {
     _F_;
     return this->xmin;
 }
 
 PetscInt
-BoxMesh::getXMax() const
+BoxMesh::get_x_max() const
 {
     _F_;
     return this->xmax;
 }
 
 PetscInt
-BoxMesh::getNx() const
+BoxMesh::get_nx() const
 {
     _F_;
     return this->nx;
 }
 
 PetscInt
-BoxMesh::getYMin() const
+BoxMesh::get_y_min() const
 {
     _F_;
     return this->ymin;
 }
 
 PetscInt
-BoxMesh::getYMax() const
+BoxMesh::get_y_max() const
 {
     _F_;
     return this->ymax;
 }
 
 PetscInt
-BoxMesh::getNy() const
+BoxMesh::get_ny() const
 {
     _F_;
     return this->ny;
 }
 
 PetscInt
-BoxMesh::getZMin() const
+BoxMesh::get_z_min() const
 {
     _F_;
     return this->zmin;
 }
 
 PetscInt
-BoxMesh::getZMax() const
+BoxMesh::get_z_max() const
 {
     _F_;
     return this->zmax;
 }
 
 PetscInt
-BoxMesh::getNz() const
+BoxMesh::get_nz() const
 {
     _F_;
     return this->nz;
 }
 
 void
-BoxMesh::createDM()
+BoxMesh::create_dm()
 {
     _F_;
     PetscErrorCode ierr;
@@ -131,7 +131,7 @@ BoxMesh::createDM()
                                periodicity,
                                interpolate,
                                &this->dm);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     // create user-friendly names for sides
     DMLabel face_sets_label;
@@ -141,25 +141,25 @@ BoxMesh::createDM()
     for (unsigned int i = 0; i < 6; i++) {
         IS is;
         ierr = DMLabelGetStratumIS(face_sets_label, i + 1, &is);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         ierr = DMCreateLabel(this->dm, side_name[i]);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         DMLabel label;
         ierr = DMGetLabel(this->dm, side_name[i], &label);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         if (is) {
             ierr = DMLabelSetStratumIS(label, i + 1, is);
-            checkPetscError(ierr);
+            check_petsc_error(ierr);
         }
 
         ierr = ISDestroy(&is);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
 
         ierr = DMPlexLabelComplete(this->dm, label);
-        checkPetscError(ierr);
+        check_petsc_error(ierr);
     }
 }
 

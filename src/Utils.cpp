@@ -8,7 +8,7 @@ namespace godzilla {
 namespace utils {
 
 bool
-pathExists(const std::string & path)
+path_exists(const std::string & path)
 {
     _F_;
     struct stat buffer;
@@ -16,7 +16,7 @@ pathExists(const std::string & path)
 }
 
 std::string
-toUpper(const std::string & name)
+to_upper(const std::string & name)
 {
     _F_;
     std::string upper(name);
@@ -25,7 +25,7 @@ toUpper(const std::string & name)
 }
 
 std::string
-toLower(const std::string & name)
+to_lower(const std::string & name)
 {
     _F_;
     std::string lower(name);

@@ -12,15 +12,15 @@ TEST(DirichletBCTest, api)
 {
     TestApp app;
 
-    InputParameters params = DirichletBC::validParams();
+    InputParameters params = DirichletBC::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     DirichletBC obj(params);
     obj.create();
 
-    EXPECT_EQ(obj.getFieldId(), 0);
-    EXPECT_EQ(obj.getNumComponents(), 1);
-    EXPECT_EQ(obj.getBcType(), DM_BC_ESSENTIAL);
+    EXPECT_EQ(obj.get_field_id(), 0);
+    EXPECT_EQ(obj.get_num_components(), 1);
+    EXPECT_EQ(obj.get_bc_type(), DM_BC_ESSENTIAL);
 
     PetscInt dim = 3;
     PetscReal time = 2.5;
@@ -36,28 +36,28 @@ TEST(DirichletBCTest, with_user_defined_fn)
 {
     TestApp app;
 
-    InputParameters mesh_pars = LineMesh::validParams();
+    InputParameters mesh_pars = LineMesh::valid_params();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = GTestProblem::validParams();
+    InputParameters prob_pars = GTestProblem::valid_params();
     prob_pars.set<const App *>("_app") = &app;
     GTestProblem problem(prob_pars);
     app.problem = &problem;
 
     std::string class_name = "PiecewiseLinear";
-    InputParameters * fn_pars = Factory::getValidParams(class_name);
+    InputParameters * fn_pars = Factory::get_valid_params(class_name);
     fn_pars->set<const App *>("_app") = &app;
     fn_pars->set<std::vector<PetscReal>>("x") = { 0., 1. };
     fn_pars->set<std::vector<PetscReal>>("y") = { 1., 2. };
-    Function * fn = app.buildObject<PiecewiseLinear>(class_name, "ipol", fn_pars);
-    problem.addFunction(fn);
+    Function * fn = app.build_object<PiecewiseLinear>(class_name, "ipol", fn_pars);
+    problem.add_function(fn);
 
-    InputParameters * bc_pars = Factory::getValidParams("DirichletBC");
+    InputParameters * bc_pars = Factory::get_valid_params("DirichletBC");
     bc_pars->set<const App *>("_app") = &app;
     bc_pars->set<std::vector<std::string>>("value") = { "ipol(x)" };
-    DirichletBC * bc = app.buildObject<DirichletBC>("DirichletBC", "name", bc_pars);
+    DirichletBC * bc = app.build_object<DirichletBC>("DirichletBC", "name", bc_pars);
     bc->create();
 
     PetscInt dim = 1;

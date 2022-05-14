@@ -13,7 +13,7 @@ public:
 
     virtual void create() override;
     virtual void compute() override;
-    virtual PetscReal getValue() override;
+    virtual PetscReal get_value() override;
 
     /// Evaluate the function 'u'
     ///
@@ -30,7 +30,7 @@ protected:
     PetscReal l2_diff;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

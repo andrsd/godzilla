@@ -8,7 +8,7 @@ main(int argc, char * argv[])
     godzilla::Init init(argc, argv, comm);
 
     godzilla::App app("poisson", comm);
-    app.parseCommandLine(argc, argv);
+    app.parse_command_line(argc, argv);
     app.run();
 
     return 0;

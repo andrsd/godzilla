@@ -12,7 +12,7 @@ TEST(LineMeshTest, api)
 {
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 1;
@@ -20,14 +20,14 @@ TEST(LineMeshTest, api)
     params.set<PetscInt>("nx") = 10;
     LineMesh mesh(params);
 
-    EXPECT_EQ(mesh.getXMin(), 1);
-    EXPECT_EQ(mesh.getXMax(), 2);
-    EXPECT_EQ(mesh.getNx(), 10);
+    EXPECT_EQ(mesh.get_x_min(), 1);
+    EXPECT_EQ(mesh.get_x_max(), 2);
+    EXPECT_EQ(mesh.get_nx(), 10);
 
     mesh.create();
-    DM dm = mesh.getDM();
+    DM dm = mesh.get_dm();
 
-    EXPECT_EQ(mesh.getDimension(), 1);
+    EXPECT_EQ(mesh.get_dimension(), 1);
 
     PetscReal gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
@@ -47,7 +47,7 @@ TEST(LineMeshTest, incorrect_dims)
 
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 2;
@@ -55,7 +55,7 @@ TEST(LineMeshTest, incorrect_dims)
     params.set<PetscInt>("nx") = 2;
     LineMesh mesh(params);
 
-    app.checkIntegrity();
+    app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("line_mesh: Parameter 'xmax' must be larger than 'xmin'."));
@@ -68,7 +68,7 @@ TEST(LineMeshTest, distribute)
 
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 0;
@@ -78,7 +78,7 @@ TEST(LineMeshTest, distribute)
     mesh.create();
 
     PetscBool distr;
-    DMPlexIsDistributed(mesh.getDM(), &distr);
+    DMPlexIsDistributed(mesh.get_dm(), &distr);
     if (sz > 1)
         EXPECT_EQ(distr, 1);
     else
@@ -89,7 +89,7 @@ TEST(LineMeshTest, output_partitioning)
 {
     TestApp app;
 
-    InputParameters params = LineMesh::validParams();
+    InputParameters params = LineMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 0;
@@ -99,14 +99,14 @@ TEST(LineMeshTest, output_partitioning)
     mesh.create();
 
     PetscViewer viewer;
-    PetscViewerHDF5Open(app.getComm(), "part.h5", FILE_MODE_WRITE, &viewer);
-    mesh.outputPartitioning(viewer);
+    PetscViewerHDF5Open(app.get_comm(), "part.h5", FILE_MODE_WRITE, &viewer);
+    mesh.output_partitioning(viewer);
     PetscViewerDestroy(&viewer);
 
     Vec p;
-    VecCreate(app.getComm(), &p);
+    VecCreate(app.get_comm(), &p);
     PetscObjectSetName((PetscObject) p, "fields/partitioning");
-    PetscViewerHDF5Open(app.getComm(), "part.h5", FILE_MODE_READ, &viewer);
+    PetscViewerHDF5Open(app.get_comm(), "part.h5", FILE_MODE_READ, &viewer);
     VecLoad(p, viewer);
     PetscReal l2_norm;
     VecNorm(p, NORM_2, &l2_norm);

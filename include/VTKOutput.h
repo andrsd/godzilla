@@ -19,13 +19,13 @@ class VTKOutput : public FileOutput {
 public:
     VTKOutput(const InputParameters & params);
 
-    virtual std::string getFileExt() const override;
+    virtual std::string get_file_ext() const override;
     virtual void create() override;
     virtual void check() override;
-    // void outputSolution(Vec v) override;
+    // void output_solution(Vec v) override;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

@@ -9,42 +9,42 @@ namespace godzilla {
 registerObject(ExodusIIMesh);
 
 InputParameters
-ExodusIIMesh::validParams()
+ExodusIIMesh::valid_params()
 {
-    InputParameters params = UnstructuredMesh::validParams();
-    params.addRequiredParam<std::string>("file", "The name of the ExodusII file.");
+    InputParameters params = UnstructuredMesh::valid_params();
+    params.add_required_param<std::string>("file", "The name of the ExodusII file.");
     return params;
 }
 
 ExodusIIMesh::ExodusIIMesh(const InputParameters & parameters) :
     UnstructuredMesh(parameters),
-    file_name(getParam<std::string>("file")),
+    file_name(get_param<std::string>("file")),
     interpolate(PETSC_TRUE)
 {
     _F_;
 
-    if (!utils::pathExists(this->file_name))
-        logError("Unable to open '",
-                 this->file_name,
-                 "' for reading. Make sure it exists and you have read permissions.");
+    if (!utils::path_exists(this->file_name))
+        log_error("Unable to open '",
+                  this->file_name,
+                  "' for reading. Make sure it exists and you have read permissions.");
 }
 
 const std::string
-ExodusIIMesh::getFileName() const
+ExodusIIMesh::get_file_name() const
 {
     _F_;
     return this->file_name;
 }
 
 void
-ExodusIIMesh::createDM()
+ExodusIIMesh::create_dm()
 {
     _F_;
     PetscErrorCode ierr;
 
     ierr =
         DMPlexCreateExodusFromFile(comm(), this->file_name.c_str(), this->interpolate, &this->dm);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 } // namespace godzilla

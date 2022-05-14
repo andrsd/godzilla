@@ -17,13 +17,13 @@ public:
 
 protected:
     virtual void init() override;
-    virtual void setUpCallbacks() override;
-    virtual void setUpInitialGuess() override;
-    virtual PetscErrorCode computeResidualCallback(Vec x, Vec f) override;
-    virtual PetscErrorCode computeJacobianCallback(Vec x, Mat J, Mat Jp) override;
+    virtual void set_up_callbacks() override;
+    virtual void set_up_initial_guess() override;
+    virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
+    virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

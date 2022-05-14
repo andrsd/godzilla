@@ -23,14 +23,14 @@ public:
     /// Get the computed value
     ///
     /// @return The value computed by the postprocessor
-    virtual PetscReal getValue() = 0;
+    virtual PetscReal get_value() = 0;
 
 protected:
     /// Problem this object is part of
     const Problem & problem;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

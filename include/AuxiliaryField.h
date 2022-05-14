@@ -19,17 +19,17 @@ public:
     ///
     /// @param dm The main DM
     /// @param dm_aux DM for the auxiliary fields
-    virtual void setUp(DM dm, DM dm_aux) = 0;
+    virtual void set_up(DM dm, DM dm_aux) = 0;
 
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    virtual PetscInt getFieldId() const;
+    virtual PetscInt get_field_id() const;
 
     /// Get the number of constrained components
     ///
     /// @return The number of constrained components
-    virtual PetscInt getNumComponents() const = 0;
+    virtual PetscInt get_num_components() const = 0;
 
 protected:
     /// FE problem this object is part of
@@ -42,7 +42,7 @@ protected:
     DMLabel block;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

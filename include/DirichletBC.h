@@ -13,14 +13,14 @@ public:
     DirichletBC(const InputParameters & params);
 
     virtual void create();
-    virtual PetscInt getFieldId() const;
-    virtual PetscInt getNumComponents() const;
-    virtual std::vector<PetscInt> getComponents() const;
+    virtual PetscInt get_field_id() const;
+    virtual PetscInt get_num_components() const;
+    virtual std::vector<PetscInt> get_components() const;
     virtual void
     evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]);
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

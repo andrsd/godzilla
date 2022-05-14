@@ -11,7 +11,7 @@ TEST_F(VTKOutputTest, get_file_ext)
     prob->create();
 
     auto out = gOutput(prob, "out");
-    EXPECT_EQ(out->getFileExt(), "vtk");
+    EXPECT_EQ(out->get_file_ext(), "vtk");
 }
 
 TEST_F(VTKOutputTest, create)
@@ -21,7 +21,7 @@ TEST_F(VTKOutputTest, create)
     auto prob = gProblem1d(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
-    prob->addOutput(out);
+    prob->add_output(out);
     prob->create();
 }
 
@@ -45,9 +45,9 @@ TEST_F(VTKOutputTest, output_1d_step)
     auto out = gOutput(prob, "out");
     out->create();
     out->check();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     prob->solve();
     EXPECT_EQ(prob->converged(), true);
-    out->outputStep(0, mesh->getDM(), prob->getSolutionVector());
+    out->output_step(0, mesh->get_dm(), prob->get_solution_vector());
 }

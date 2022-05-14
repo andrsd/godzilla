@@ -13,7 +13,7 @@ Terminal::Color Terminal::Color::white("\33[37m");
 Terminal::Color Terminal::Color::normal("\33[39m");
 
 bool
-Terminal::hasColors()
+Terminal::has_colors()
 {
     return num_colors > 1;
 }
@@ -25,7 +25,7 @@ unsigned int Terminal::num_colors = 256;
 std::ostream &
 operator<<(std::ostream & os, const godzilla::Terminal::Color & clr)
 {
-    if (godzilla::Terminal::hasColors())
+    if (godzilla::Terminal::has_colors())
         os << clr.str;
     return os;
 }

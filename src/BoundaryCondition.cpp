@@ -4,10 +4,10 @@
 namespace godzilla {
 
 InputParameters
-BoundaryCondition::validParams()
+BoundaryCondition::valid_params()
 {
-    InputParameters params = Object::validParams();
-    params.addRequiredParam<std::string>("boundary", "Boundary name");
+    InputParameters params = Object::valid_params();
+    params.add_required_param<std::string>("boundary", "Boundary name");
     return params;
 }
 
@@ -19,19 +19,19 @@ BoundaryCondition::BoundaryCondition(const InputParameters & params) :
     label(nullptr),
     n_ids(0),
     ids(nullptr),
-    boundary(getParam<std::string>("boundary"))
+    boundary(get_param<std::string>("boundary"))
 {
     _F_;
 }
 
 const std::string &
-BoundaryCondition::getBoundary() const
+BoundaryCondition::get_boundary() const
 {
     return this->boundary;
 }
 
 void
-BoundaryCondition::setUp(DM dm)
+BoundaryCondition::set_up(DM dm)
 {
     _F_;
     PetscErrorCode ierr;
@@ -39,29 +39,29 @@ BoundaryCondition::setUp(DM dm)
     this->dm = dm;
 
     ierr = DMGetDS(dm, &this->ds);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     IS is;
     ierr = DMGetLabelIdIS(dm, this->boundary.c_str(), &is);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = DMGetLabel(dm, this->boundary.c_str(), &this->label);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = ISGetSize(is, &this->n_ids);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
     ierr = ISGetIndices(is, &this->ids);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 
-    setUpCallback();
+    set_up_callback();
 
     ierr = ISRestoreIndices(is, &this->ids);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
     this->ids = nullptr;
 
     ierr = ISDestroy(&is);
-    checkPetscError(ierr);
+    check_petsc_error(ierr);
 }
 
 } // namespace godzilla

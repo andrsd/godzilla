@@ -96,47 +96,48 @@ TEST_F(FENonlinearProblemTest, fields)
     mesh->create();
     prob->create();
 
-    EXPECT_EQ(prob->getFieldName(0), "u");
-    EXPECT_EQ(prob->getFieldId("u"), 0);
-    EXPECT_EQ(prob->hasFieldById(0), true);
-    EXPECT_EQ(prob->hasFieldByName("u"), true);
+    EXPECT_EQ(prob->get_field_name(0), "u");
+    EXPECT_EQ(prob->get_field_id("u"), 0);
+    EXPECT_EQ(prob->has_field_by_id(0), true);
+    EXPECT_EQ(prob->has_field_by_name("u"), true);
 
-    EXPECT_DEATH(prob->getFieldName(65536), "error: Field with ID = '65536' does not exist.");
-    EXPECT_DEATH(prob->getFieldId("nonexistent"),
+    EXPECT_DEATH(prob->get_field_name(65536), "error: Field with ID = '65536' does not exist.");
+    EXPECT_DEATH(prob->get_field_id("nonexistent"),
                  "error: Field 'nonexistent' does not exist\\. Typo\\?");
-    EXPECT_EQ(prob->hasFieldById(65536), false);
-    EXPECT_EQ(prob->hasFieldByName("nonexistent"), false);
+    EXPECT_EQ(prob->has_field_by_id(65536), false);
+    EXPECT_EQ(prob->has_field_by_name("nonexistent"), false);
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
-    prob->addFE(0, "first", 1, 1);
-    EXPECT_DEATH(prob->addFE(0, "second", 1, 1),
+    prob->add_fe(0, "first", 1, 1);
+    EXPECT_DEATH(prob->add_fe(0, "second", 1, 1),
                  "error: Cannot add field 'second' with ID = 0. ID already exists.");
 }
 
 TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
     mesh->create();
-    prob->addAuxFE(0, "aux_one", 1, 1);
+    prob->add_aux_fe(0, "aux_one", 1, 1);
     prob->create();
 
-    EXPECT_EQ(prob->getAuxFieldName(0), "aux_one");
-    EXPECT_EQ(prob->getAuxFieldId("aux_one"), 0);
-    EXPECT_EQ(prob->hasAuxFieldById(0), true);
-    EXPECT_EQ(prob->hasAuxFieldByName("aux_one"), true);
+    EXPECT_EQ(prob->get_aux_field_name(0), "aux_one");
+    EXPECT_EQ(prob->get_aux_field_id("aux_one"), 0);
+    EXPECT_EQ(prob->has_aux_field_by_id(0), true);
+    EXPECT_EQ(prob->has_aux_field_by_name("aux_one"), true);
 
-    EXPECT_DEATH(prob->getAuxFieldName(1), "error: Auxiliary field with ID = '1' does not exist.");
-    EXPECT_DEATH(prob->getAuxFieldId("aux_two"),
+    EXPECT_DEATH(prob->get_aux_field_name(1),
+                 "error: Auxiliary field with ID = '1' does not exist.");
+    EXPECT_DEATH(prob->get_aux_field_id("aux_two"),
                  "error: Auxiliary field 'aux_two' does not exist\\. Typo\\?");
-    EXPECT_EQ(prob->hasAuxFieldById(1), false);
-    EXPECT_EQ(prob->hasAuxFieldByName("aux_two"), false);
+    EXPECT_EQ(prob->has_aux_field_by_id(1), false);
+    EXPECT_EQ(prob->has_aux_field_by_name("aux_two"), false);
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
-    prob->addAuxFE(0, "first", 1, 1);
-    EXPECT_DEATH(prob->addAuxFE(0, "second", 1, 1),
+    prob->add_aux_fe(0, "first", 1, 1);
+    EXPECT_DEATH(prob->add_aux_fe(0, "second", 1, 1),
                  "error: Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
 }
 
@@ -144,20 +145,20 @@ TEST_F(FENonlinearProblemTest, solve)
 {
     {
         const std::string class_name = "ConstantIC";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
-        auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
-        prob->addInitialCondition(ic);
+        auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
+        prob->add_initial_condition(ic);
     }
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<const App *>("_app") = this->app;
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
-        auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc", params);
-        prob->addBoundaryCondition(bc);
+        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
+        prob->add_boundary_condition(bc);
     }
 
     mesh->create();
@@ -168,7 +169,7 @@ TEST_F(FENonlinearProblemTest, solve)
     bool conv = prob->converged();
     EXPECT_EQ(conv, true);
 
-    const Vec x = prob->getSolutionVector();
+    const Vec x = prob->get_solution_vector();
     PetscInt ni = 1;
     PetscInt ix[1] = { 0 };
     PetscScalar xx[1];
@@ -180,17 +181,17 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
     {
         const std::string class_name = "DirichletBC";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
-        auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc", params);
-        prob->addBoundaryCondition(bc);
+        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
+        prob->add_boundary_condition(bc);
     }
 
     mesh->create();
     prob->create();
 
-    const Vec x = prob->getSolutionVector();
+    const Vec x = prob->get_solution_vector();
     PetscInt ni = 1;
     PetscInt ix[1] = { 0 };
     PetscScalar xx[1];
@@ -204,13 +205,13 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 
     {
         const std::string class_name = "GTest2CompIC";
-        InputParameters * params = Factory::getValidParams(class_name);
-        auto ic = this->app->buildObject<InitialCondition>(class_name, "ic", params);
-        prob->addInitialCondition(ic);
+        InputParameters * params = Factory::get_valid_params(class_name);
+        auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
+        prob->add_initial_condition(ic);
     }
     mesh->create();
     prob->create();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
@@ -224,17 +225,17 @@ TEST_F(FENonlinearProblemTest, err_duplicate_ics)
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
-        auto ic = this->app->buildObject<InitialCondition>(class_name, "ic1", params);
-        prob->addInitialCondition(ic);
+        auto ic = this->app->build_object<InitialCondition>(class_name, "ic1", params);
+        prob->add_initial_condition(ic);
     }
     const std::string class_name = "ConstantIC";
-    InputParameters * params = Factory::getValidParams(class_name);
+    InputParameters * params = Factory::get_valid_params(class_name);
     params->set<std::vector<PetscReal>>("value") = { 0.2 };
-    auto ic = this->app->buildObject<InitialCondition>(class_name, "ic2", params);
-    prob->addInitialCondition(ic);
-    this->app->checkIntegrity();
+    auto ic = this->app->build_object<InitialCondition>(class_name, "ic2", params);
+    prob->add_initial_condition(ic);
+    this->app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -251,9 +252,9 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
         TestApp() : App("godzilla", MPI_COMM_WORLD) {}
 
         virtual void
-        checkIntegrity()
+        check_integrity()
         {
-            if (this->log.getNumEntries() > 0)
+            if (this->log.get_num_entries() > 0)
                 this->log.print();
         }
     } app;
@@ -262,28 +263,28 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 
     {
         const std::string class_name = "LineMesh";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<PetscInt>("nx") = 2;
-        mesh = app.buildObject<Mesh>(class_name, "mesh", params);
+        mesh = app.build_object<Mesh>(class_name, "mesh", params);
     }
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        prob = app.buildObject<FENonlinearProblem>(class_name, "prob", params);
+        prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
     }
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
-        auto ic = app.buildObject<InitialCondition>(class_name, "ic1", params);
-        prob->addInitialCondition(ic);
+        auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
+        prob->add_initial_condition(ic);
     }
 
     mesh->create();
     prob->create();
-    app.checkIntegrity();
+    app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Provided 2 field(s), but 1 initial condition(s)."));
@@ -295,16 +296,16 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters * params = Factory::getValidParams(class_name);
+        InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::string>("boundary") = "asdf";
         params->set<std::vector<std::string>>("value") = { "0.1" };
-        auto bc = this->app->buildObject<BoundaryCondition>(class_name, "bc1", params);
-        prob->addBoundaryCondition(bc);
+        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc1", params);
+        prob->add_boundary_condition(bc);
     }
 
     mesh->create();
     prob->create();
-    this->app->checkIntegrity();
+    this->app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -316,20 +317,20 @@ TEST_F(FENonlinearProblemTest, compute_residual_callback)
 {
     Vec x = nullptr;
     Vec f = nullptr;
-    EXPECT_EQ(this->prob->computeResidualCallback(x, f), 0);
+    EXPECT_EQ(this->prob->compute_residual_callback(x, f), 0);
 }
 
 TEST_F(FENonlinearProblemTest, compute_jacobian_callback)
 {
     Vec x = nullptr;
     Mat J = nullptr;
-    EXPECT_EQ(this->prob->computeJacobianCallback(x, J, J), 0);
+    EXPECT_EQ(this->prob->compute_jacobian_callback(x, J, J), 0);
 }
 
 TEST_F(FENonlinearProblemTest, set_constant)
 {
     std::vector<PetscReal> consts = { 5, 3, 1 };
-    this->prob->setConstants(consts);
+    this->prob->set_constants(consts);
 
     auto & k = this->prob->getConstants();
     EXPECT_EQ(k[0], 5);
@@ -342,8 +343,8 @@ TEST_F(FENonlinearProblemTest, set_constant_2)
     this->mesh->create();
     this->prob->create();
     std::vector<PetscReal> consts = { 5, 3, 1 };
-    this->prob->setConstants(consts);
-    this->prob->setUpConstants();
+    this->prob->set_constants(consts);
+    this->prob->set_up_constants();
     PetscDS ds = this->prob->getDS();
     PetscInt n_consts;
     const PetscReal * cs;
@@ -365,30 +366,30 @@ GTestFENonlinearProblem::GTestFENonlinearProblem(const InputParameters & params)
 GTestFENonlinearProblem::~GTestFENonlinearProblem() {}
 
 void
-GTestFENonlinearProblem::onSetFields()
+GTestFENonlinearProblem::on_set_fields()
 {
     _F_;
     PetscInt order = 1;
-    addFE(this->iu, "u", 1, order);
+    add_fe(this->iu, "u", 1, order);
 }
 
 void
-GTestFENonlinearProblem::onSetWeakForm()
+GTestFENonlinearProblem::on_set_weak_form()
 {
-    setResidualBlock(this->iu, f0_u, f1_u);
-    setJacobianBlock(this->iu, this->iu, NULL, NULL, NULL, g3_uu);
+    set_residual_block(this->iu, f0_u, f1_u);
+    set_jacobian_block(this->iu, this->iu, NULL, NULL, NULL, g3_uu);
 }
 
 PetscErrorCode
-GTestFENonlinearProblem::computeResidualCallback(Vec x, Vec f)
+GTestFENonlinearProblem::compute_residual_callback(Vec x, Vec f)
 {
-    return FENonlinearProblem::computeResidualCallback(x, f);
+    return FENonlinearProblem::compute_residual_callback(x, f);
 }
 
 PetscErrorCode
-GTestFENonlinearProblem::computeJacobianCallback(Vec x, Mat J, Mat Jp)
+GTestFENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
 {
-    return FENonlinearProblem::computeJacobianCallback(x, J, Jp);
+    return FENonlinearProblem::compute_jacobian_callback(x, J, Jp);
 }
 
 //
@@ -400,8 +401,8 @@ GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const InputParame
 }
 
 void
-GTest2FieldsFENonlinearProblem::onSetFields()
+GTest2FieldsFENonlinearProblem::on_set_fields()
 {
-    GTestFENonlinearProblem::onSetFields();
-    addFE(this->iv, "v", 1, 1);
+    GTestFENonlinearProblem::on_set_fields();
+    add_fe(this->iv, "v", 1, 1);
 }

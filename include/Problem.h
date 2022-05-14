@@ -30,46 +30,46 @@ public:
     /// true if solve converged, otherwise false
     virtual bool converged() = 0;
     /// provide DM for the underlying KSP object
-    virtual DM getDM() const = 0;
+    virtual DM get_dm() const = 0;
     /// Return solution vector
-    virtual Vec getSolutionVector() const = 0;
+    virtual Vec get_solution_vector() const = 0;
     /// Get problem spatial dimension
-    virtual PetscInt getDimension() const;
+    virtual PetscInt get_dimension() const;
 
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
     /// @return Simulation time
-    virtual const PetscReal & getTime() const;
+    virtual const PetscReal & get_time() const;
 
     /// Get list of functions
     ///
     /// @return List of functions
-    const std::vector<Function *> & getFunctions() const;
+    const std::vector<Function *> & get_functions() const;
 
     /// Add a function object
     ///
     /// @param fn Function object to add
-    virtual void addFunction(Function * fn);
+    virtual void add_function(Function * fn);
 
     /// Add and output object
     ///
     /// @param output Output object to add
-    virtual void addOutput(Output * output);
+    virtual void add_output(Output * output);
 
     /// Add a postprocessor object
     ///
     /// @param pp Postprocessor object to add
-    virtual void addPostprocessor(Postprocessor * pp);
+    virtual void add_postprocessor(Postprocessor * pp);
 
     /// Get postprocessor by name
     ///
     /// @param name The name of the postprocessor
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
-    virtual Postprocessor * getPostprocessor(const std::string & name) const;
+    virtual Postprocessor * get_postprocessor(const std::string & name) const;
 
 protected:
     /// Compute all postprocessors
-    virtual void computePostprocessors();
+    virtual void compute_postprocessors();
 
     /// Mesh
     const Mesh * mesh;
@@ -87,7 +87,7 @@ protected:
     PetscReal time;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

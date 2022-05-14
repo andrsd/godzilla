@@ -10,10 +10,10 @@ class ExodusIIMesh : public UnstructuredMesh {
 public:
     ExodusIIMesh(const InputParameters & parameters);
 
-    const std::string getFileName() const;
+    const std::string get_file_name() const;
 
 protected:
-    virtual void createDM() override;
+    virtual void create_dm() override;
 
     /// File name with the ExodusII mesh
     const std::string & file_name;
@@ -21,7 +21,7 @@ protected:
     const PetscBool interpolate;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

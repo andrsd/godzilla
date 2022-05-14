@@ -16,32 +16,32 @@ public:
     virtual void solve() override;
     virtual void run() override;
     virtual bool converged() override;
-    virtual Vec getSolutionVector() const override;
+    virtual Vec get_solution_vector() const override;
 
 protected:
     /// provide DM for the underlying KSP object
-    virtual DM getDM() const override;
+    virtual DM get_dm() const override;
     /// Initialize the problem
     virtual void init();
     /// Allocate Jacobian/residual objects
-    virtual void allocateObjects();
+    virtual void allocate_objects();
     /// Setup computation of residual and Jacobian callbacks
-    virtual void setUpCallbacks();
+    virtual void set_up_callbacks();
     /// Setup monitors
-    virtual void setUpMonitors();
+    virtual void set_up_monitors();
     /// Setup solver parameters
-    virtual void setUpSolverParameters();
+    virtual void set_up_solver_parameters();
     /// Method to compute right-hand side. Called from the PETsc callback
-    virtual PetscErrorCode computeRhsCallback(Vec b) = 0;
+    virtual PetscErrorCode compute_rhs_callback(Vec b) = 0;
     /// Method to compute operators. Called from the PETsc callback
-    virtual PetscErrorCode computeOperatorsCallback(Mat A, Mat B) = 0;
+    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) = 0;
     /// KSP monitor
-    PetscErrorCode kspMonitorCallback(PetscInt it, PetscReal rnorm);
+    PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
     /// Output
     virtual void output();
 
     /// Method for setting matrix properties
-    virtual void onSetMatrixProperties();
+    virtual void on_set_matrix_properties();
 
     /// KSP object
     KSP ksp;
@@ -64,7 +64,7 @@ protected:
     PetscInt lin_max_iter;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 
     friend PetscErrorCode __compute_rhs(KSP ksp, Vec b, void * ctx);
     friend PetscErrorCode __compute_operators(KSP ksp, Mat A, Mat B, void * ctx);

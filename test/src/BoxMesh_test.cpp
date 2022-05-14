@@ -10,7 +10,7 @@ TEST(BoxMeshTest, api)
 {
     TestApp app;
 
-    InputParameters params = BoxMesh::validParams();
+    InputParameters params = BoxMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "box_mesh";
     params.set<PetscReal>("xmin") = 1;
@@ -24,22 +24,22 @@ TEST(BoxMeshTest, api)
     params.set<PetscInt>("nz") = 7;
     BoxMesh mesh(params);
 
-    EXPECT_EQ(mesh.getXMin(), 1);
-    EXPECT_EQ(mesh.getXMax(), 4);
-    EXPECT_EQ(mesh.getNx(), 9);
+    EXPECT_EQ(mesh.get_x_min(), 1);
+    EXPECT_EQ(mesh.get_x_max(), 4);
+    EXPECT_EQ(mesh.get_nx(), 9);
 
-    EXPECT_EQ(mesh.getYMin(), 2);
-    EXPECT_EQ(mesh.getYMax(), 5);
-    EXPECT_EQ(mesh.getNy(), 8);
+    EXPECT_EQ(mesh.get_y_min(), 2);
+    EXPECT_EQ(mesh.get_y_max(), 5);
+    EXPECT_EQ(mesh.get_ny(), 8);
 
-    EXPECT_EQ(mesh.getZMin(), 3);
-    EXPECT_EQ(mesh.getZMax(), 6);
-    EXPECT_EQ(mesh.getNz(), 7);
+    EXPECT_EQ(mesh.get_z_min(), 3);
+    EXPECT_EQ(mesh.get_z_max(), 6);
+    EXPECT_EQ(mesh.get_nz(), 7);
 
     mesh.create();
-    DM dm = mesh.getDM();
+    DM dm = mesh.get_dm();
 
-    EXPECT_EQ(mesh.getDimension(), 3);
+    EXPECT_EQ(mesh.get_dimension(), 3);
 
     PetscReal gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
@@ -65,7 +65,7 @@ TEST(BoxMeshTest, incorrect_dims)
 
     TestApp app;
 
-    InputParameters params = BoxMesh::validParams();
+    InputParameters params = BoxMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<PetscReal>("xmin") = 4;
@@ -79,7 +79,7 @@ TEST(BoxMeshTest, incorrect_dims)
     params.set<PetscInt>("nz") = 7;
     BoxMesh mesh(params);
 
-    app.checkIntegrity();
+    app.check_integrity();
 
     auto output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));

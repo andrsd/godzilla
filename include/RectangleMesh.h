@@ -11,18 +11,18 @@ public:
     RectangleMesh(const InputParameters & parameters);
 
     ///
-    PetscInt getXMin() const;
-    PetscInt getXMax() const;
+    PetscInt get_x_min() const;
+    PetscInt get_x_max() const;
     /// Get the number of mesh points in x direction
-    PetscInt getNx() const;
+    PetscInt get_nx() const;
     ///
-    PetscInt getYMin() const;
-    PetscInt getYMax() const;
+    PetscInt get_y_min() const;
+    PetscInt get_y_max() const;
     /// Get the number of mesh points in y direction
-    PetscInt getNy() const;
+    PetscInt get_ny() const;
 
 protected:
-    virtual void createDM() override;
+    virtual void create_dm() override;
 
     /// Minimum in the x direction
     const PetscReal & xmin;
@@ -42,7 +42,7 @@ protected:
     PetscBool interpolate;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

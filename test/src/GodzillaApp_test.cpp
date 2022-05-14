@@ -17,7 +17,7 @@ protected:
     {
     }
     virtual void
-    createDM()
+    create_dm()
     {
     }
 };
@@ -30,8 +30,8 @@ public:
     MOCK_METHOD(void, run, ());
     MOCK_METHOD(void, solve, ());
     MOCK_METHOD(bool, converged, ());
-    MOCK_METHOD(DM, getDM, (), (const));
-    MOCK_METHOD(Vec, getSolutionVector, (), (const));
+    MOCK_METHOD(DM, get_dm, (), (const));
+    MOCK_METHOD(Vec, get_solution_vector, (), (const));
 };
 
 registerObject(MockMesh);
@@ -46,7 +46,7 @@ TEST_F(GodzillaAppTest, run_input)
                       NULL };
 
     App app("godzilla", MPI_COMM_WORLD);
-    app.parseCommandLine(argc, argv);
+    app.parse_command_line(argc, argv);
     app.run();
 
     // TODO: build a MockGodzillaApp and make sure methods get called
@@ -61,7 +61,7 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
                       NULL };
 
     App app("godzilla", MPI_COMM_WORLD);
-    app.parseCommandLine(argc, argv);
+    app.parse_command_line(argc, argv);
 
     EXPECT_DEATH(app.run(), "error: Unable to open");
 }
@@ -72,7 +72,7 @@ TEST_F(GodzillaAppTest, no_colors)
     char * argv[] = { (char *) "godzilla", (char *) "--no-colors", NULL };
 
     App app("godzilla", MPI_COMM_WORLD);
-    app.parseCommandLine(argc, argv);
+    app.parse_command_line(argc, argv);
 
     app.run();
     EXPECT_EQ(Terminal::num_colors, 1);
@@ -90,7 +90,7 @@ TEST_F(GodzillaAppTest, verbose_level)
         run()
         {
             App::run();
-            godzillaPrint(1, "Print");
+            godzilla_print(1, "Print");
         }
     };
 
@@ -98,7 +98,7 @@ TEST_F(GodzillaAppTest, verbose_level)
     char * argv[] = { (char *) "godzilla", (char *) "--verbose", (char *) "2", NULL };
 
     TestApp app("godzilla", MPI_COMM_WORLD);
-    app.parseCommandLine(argc, argv);
+    app.parse_command_line(argc, argv);
     app.run();
 
     EXPECT_EQ(testing::internal::GetCapturedStdout(), "Print\n");
@@ -114,7 +114,7 @@ TEST_F(GodzillaAppTest, check_integrity)
         run()
         {
             this->log.error("error1");
-            checkIntegrity();
+            check_integrity();
         }
     } app;
 

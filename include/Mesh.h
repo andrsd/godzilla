@@ -13,19 +13,19 @@ public:
     Mesh(const InputParameters & parameters);
     virtual ~Mesh();
 
-    DM getDM() const;
+    DM get_dm() const;
 
     /// Get the mesh spatial dimension
     ///
     /// @return Mesh spatial dimension
-    PetscInt getDimension() const;
+    PetscInt get_dimension() const;
 
     /// Create the mesh
     virtual void create();
 
 protected:
     /// Method that builds DM for the mesh
-    virtual void createDM() = 0;
+    virtual void create_dm() = 0;
 
     /// Distribute mesh over processes
     virtual void distribute() = 0;
@@ -37,7 +37,7 @@ protected:
     PetscInt dim;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla

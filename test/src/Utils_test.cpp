@@ -5,10 +5,10 @@ using namespace godzilla;
 
 TEST(UtilsTest, to_lower)
 {
-    EXPECT_EQ(utils::toLower("ASDF"), "asdf");
+    EXPECT_EQ(utils::to_lower("ASDF"), "asdf");
 }
 
 TEST(UtilsTest, to_upper)
 {
-    EXPECT_EQ(utils::toUpper("asdf"), "ASDF");
+    EXPECT_EQ(utils::to_upper("asdf"), "ASDF");
 }

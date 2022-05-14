@@ -5,17 +5,17 @@
 namespace godzilla {
 
 InputParameters
-Postprocessor::validParams()
+Postprocessor::valid_params()
 {
-    InputParameters params = Object::validParams();
-    params.addPrivateParam<const Problem *>("_problem", nullptr);
+    InputParameters params = Object::valid_params();
+    params.add_private_param<const Problem *>("_problem", nullptr);
     return params;
 }
 
 Postprocessor::Postprocessor(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
-    problem(*getParam<Problem *>("_problem"))
+    problem(*get_param<Problem *>("_problem"))
 {
 }
 

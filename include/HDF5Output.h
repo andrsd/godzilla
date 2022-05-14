@@ -29,12 +29,12 @@ class HDF5Output : public FileOutput {
 public:
     HDF5Output(const InputParameters & params);
 
-    virtual std::string getFileExt() const override;
+    virtual std::string get_file_ext() const override;
     virtual void create() override;
     virtual void check() override;
 
 public:
-    static InputParameters validParams();
+    static InputParameters valid_params();
 };
 
 } // namespace godzilla
