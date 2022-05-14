@@ -70,7 +70,7 @@ L2Diff::evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc,
 {
     _F_;
     for (PetscInt i = 0; i < nc; i++)
-        u[i] = evaluate_function(i, dim, time, x);
+        u[i] = FunctionInterface::evaluate(i, dim, time, x);
 }
 
 } // namespace godzilla

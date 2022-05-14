@@ -60,7 +60,7 @@ DirichletBC::evaluate(PetscInt dim,
 {
     _F_;
     for (PetscInt i = 0; i < Nc; i++)
-        u[i] = evaluate_function(i, dim, time, x);
+        u[i] = FunctionInterface::evaluate(i, dim, time, x);
 }
 
 } // namespace godzilla

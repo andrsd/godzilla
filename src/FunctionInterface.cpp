@@ -9,7 +9,8 @@ InputParameters
 FunctionInterface::valid_params()
 {
     InputParameters params;
-    params.add_required_param<std::vector<std::string>>("value", "Function expression to evaluate.");
+    params.add_required_param<std::vector<std::string>>("value",
+                                                        "Function expression to evaluate.");
     return params;
 }
 
@@ -41,10 +42,7 @@ FunctionInterface::create()
 }
 
 PetscReal
-FunctionInterface::evaluate_function(unsigned int idx,
-                                    PetscInt dim,
-                                    PetscReal time,
-                                    const PetscReal x[])
+FunctionInterface::evaluate(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[])
 {
     return this->evalr[idx].evaluate(dim, time, x);
 }
