@@ -75,6 +75,64 @@ set(GODZILLA_INCLUDE_DIRS
 
 add_subdirectory(src)
 
+# Install
+
+include(GNUInstallDirs)
+install(
+    TARGETS
+        godzilla
+        yaml-cpp
+    EXPORT
+        GodzillaTargets
+    LIBRARY DESTINATION
+        lib
+    ARCHIVE DESTINATION
+        lib
+    RUNTIME DESTINATION
+        bin
+    INCLUDES DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+    PUBLIC_HEADER DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+)
+
+install(
+    DIRECTORY
+        include/
+    TYPE
+        INCLUDE
+    FILES_MATCHING
+        PATTERN "*.h"
+)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    GodzillaConfigVersion.cmake
+    VERSION
+        ${PROJECT_VERSION}
+    COMPATIBILITY
+        AnyNewerVersion
+)
+
+install(
+    EXPORT
+        GodzillaTargets
+    FILE
+        GodzillaTargets.cmake
+    NAMESPACE
+        Godzilla::
+    DESTINATION
+        lib/cmake/godzilla
+)
+
+install(
+    FILES
+        "${PROJECT_SOURCE_DIR}/cmake/GodzillaConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/GodzillaConfigVersion.cmake"
+    DESTINATION
+        lib/cmake/godzilla
+)
+
 # Tests
 
 if (GODZILLA_BUILD_TESTS)

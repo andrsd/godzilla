@@ -39,8 +39,7 @@ jobs:
         run: |
           cmake -S . -B ${{ github.workspace }}/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
-            -DGODZILLA_BUILD_TESTS=YES \
-            -DGODZILLA_CODE_COVERAGE=YES
+            -DGODZILLA_BUILD_TESTS=YES
       - name: Build
         run: make -C ${{ github.workspace }}/build
       - name: Run tests
@@ -75,32 +74,8 @@ jobs:
         run: |
           cmake -S . -B ${{ github.workspace }}/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
-            -DGODZILLA_BUILD_TESTS=YES \
-            -DGODZILLA_CODE_COVERAGE=YES
+            -DGODZILLA_BUILD_TESTS=YES
       - name: Build
         run: make -C ${{ github.workspace }}/build
       - name: Run tests
         run: make -C ${{ github.workspace }}/build test ARGS='-V'
-      - name: Generate code coverage
-        run: make -C ${{ github.workspace }}/build coverage
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-${{ github.job }}
-          path: ${{ github.workspace }}/build/coverage.info
-
-  upload-to-codecov:
-    needs: [macosx, linux]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v2
-      - name: Run codacy-coverage-reporter
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage-macosx/coverage.info
