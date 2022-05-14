@@ -21,7 +21,7 @@ TEST(ObjectTest, api)
 
     EXPECT_TRUE(obj->is_param_valid("_name"));
 
-    EXPECT_EQ(obj->processor_id(), 0);
+    EXPECT_EQ(obj->get_processor_id(), 0);
 
     PetscMPIInt sz;
     MPI_Comm_size(app.get_comm(), &sz);

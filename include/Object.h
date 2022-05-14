@@ -46,7 +46,7 @@ public:
     const MPI_Comm & get_comm() const;
 
     /// Get processor ID (aka MPI rank) this object is running at
-    const PetscMPIInt & processor_id() const;
+    const PetscMPIInt & get_processor_id() const;
 
     /// Get communicator size
     const PetscMPIInt & get_comm_size() const;

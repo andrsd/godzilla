@@ -99,7 +99,7 @@ UnstructuredMesh::output_partitioning(PetscViewer viewer)
 
     DMGlobalToLocalBegin(dm_part, global, INSERT_VALUES, local);
     DMGlobalToLocalEnd(dm_part, global, INSERT_VALUES, local);
-    VecScale(local, processor_id());
+    VecScale(local, get_processor_id());
 
     DMLocalToGlobalBegin(dm_part, local, INSERT_VALUES, global);
     DMLocalToGlobalEnd(dm_part, local, INSERT_VALUES, global);

@@ -72,7 +72,7 @@ Object::get_comm() const
 }
 
 const PetscMPIInt &
-Object::processor_id() const
+Object::get_processor_id() const
 {
     _F_;
     return this->app.get_comm_rank();
