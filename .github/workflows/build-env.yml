@@ -67,22 +67,12 @@ jobs:
     runs-on:  macos-10.15
     name: macosx-clang
     env:
-      CONDA_CACHE_NUM: 2
       PETSC_VERSION: 3.17.0
       PETSC_CACHE_NUM: 4
       SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
     steps:
-      - name: Install conda
-        uses: s-weigand/setup-conda@v1
-        with:
-          conda-channels: conda-forge
-      - name: Cache conda env
-        uses: actions/cache@v2
-        with:
-          path: /usr/local/miniconda
-          key: ${{ runner.os }}-miniconda-cache-${{ env.CONDA_CACHE_NUM }}
       - name: Install dependencies
-        run: conda install python cmake clang gfortran autoconf automake libtool
+        run: brew install cmake autoconf automake libtool
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -119,7 +109,7 @@ jobs:
             --download-netcdf=yes \
             --download-pnetcdf=yes \
             --download-zlib=yes \
-            CC=clang CXX=clang++ FC=gfortran \
+            CC=clang CXX=clang++ FC=gfortran-10 \
             PETSC_DIR=`pwd`
           echo "::endgroup::"
           echo "::group::make"
