@@ -12,7 +12,7 @@ TEST(InputParametersTest, get)
 
 TEST(InputParametersTest, param_value)
 {
-    InputParameters params = emptyInputParameters();
+    InputParameters params;
     params.add_param<PetscReal>("param", 12.34, "doco");
     EXPECT_EQ(params.get<PetscReal>("param"), 12.34);
     EXPECT_EQ(params.get_doc_string("param"), std::string("doco"));
@@ -20,7 +20,7 @@ TEST(InputParametersTest, param_value)
 
 TEST(InputParametersTest, has_value)
 {
-    InputParameters params = emptyInputParameters();
+    InputParameters params;
     params.add_param<PetscReal>("param", 12.34, "doco");
     EXPECT_EQ(params.has<PetscReal>("param"), true);
     params.clear();
@@ -29,7 +29,7 @@ TEST(InputParametersTest, has_value)
 
 TEST(InputParametersTest, assign)
 {
-    InputParameters params1 = emptyInputParameters();
+    InputParameters params1;
     params1.add_param<PetscReal>("param", 12.34, "doco");
 
     InputParameters params2 = params1;
@@ -40,10 +40,10 @@ TEST(InputParametersTest, assign)
 
 TEST(InputParametersTest, add_params)
 {
-    InputParameters params1 = emptyInputParameters();
+    InputParameters params1;
     params1.add_param<PetscReal>("p1", 12.34, "doco1");
 
-    InputParameters params2 = emptyInputParameters();
+    InputParameters params2;
     params1.add_param<PetscReal>("p2", "doco2");
 
     params1 += params2;
@@ -57,7 +57,7 @@ TEST(InputParametersTest, add_params)
 InputParameters
 validParams1()
 {
-    InputParameters params = emptyInputParameters();
+    InputParameters params;
     params.add_param<PetscReal>("p", 78.56, "doco p");
     return params;
 }

@@ -8,7 +8,7 @@ namespace godzilla {
 InputParameters
 FunctionInterface::valid_params()
 {
-    InputParameters params = emptyInputParameters();
+    InputParameters params;
     params.add_required_param<std::vector<std::string>>("value", "Function expression to evaluate.");
     return params;
 }
