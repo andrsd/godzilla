@@ -79,7 +79,7 @@ Object::processor_id() const
 }
 
 const PetscMPIInt &
-Object::comm_size() const
+Object::get_comm_size() const
 {
     _F_;
     return this->app.get_comm_size();

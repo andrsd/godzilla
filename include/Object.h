@@ -49,7 +49,7 @@ public:
     const PetscMPIInt & processor_id() const;
 
     /// Get communicator size
-    const PetscMPIInt & comm_size() const;
+    const PetscMPIInt & get_comm_size() const;
 
     /// Called to construct the object
     virtual void create();
