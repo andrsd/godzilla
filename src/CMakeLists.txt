@@ -60,6 +60,13 @@ set_target_properties(
         UNITY_BUILD_MODE BATCH
 )
 
+set_target_properties(
+    godzilla
+    PROPERTIES
+        VERSION ${PROJECT_VERSION}
+        SOVERSION ${PROJECT_VERSION_MAJOR}
+)
+
 target_include_directories(
     godzilla
     PRIVATE
