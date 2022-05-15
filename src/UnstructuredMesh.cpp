@@ -30,6 +30,28 @@ UnstructuredMesh::~UnstructuredMesh()
     check_petsc_error(ierr);
 }
 
+PetscInt
+UnstructuredMesh::get_num_vertices() const
+{
+    _F_;
+    PetscErrorCode ierr;
+    PetscInt first, last;
+    ierr = DMPlexGetHeightStratum(this->dm, this->dim, &first, &last);
+    check_petsc_error(ierr);
+    return last - first;
+}
+
+PetscInt
+UnstructuredMesh::get_num_elements() const
+{
+    _F_;
+    PetscErrorCode ierr;
+    PetscInt first, last;
+    ierr = DMPlexGetHeightStratum(this->dm, 0, &first, &last);
+    check_petsc_error(ierr);
+    return last - first;
+}
+
 void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {

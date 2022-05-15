@@ -33,6 +33,8 @@ public:
     virtual DM get_dm() const = 0;
     /// Return solution vector
     virtual Vec get_solution_vector() const = 0;
+    /// Get mesh this problem is using
+    virtual const Mesh * get_mesh() const;
     /// Get problem spatial dimension
     virtual PetscInt get_dimension() const;
 

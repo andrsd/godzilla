@@ -12,6 +12,12 @@ public:
     UnstructuredMesh(const InputParameters & parameters);
     virtual ~UnstructuredMesh();
 
+    /// Return the number of mesh vertices
+    virtual PetscInt get_num_vertices() const;
+
+    /// Return the number of mesh elements
+    virtual PetscInt get_num_elements() const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner

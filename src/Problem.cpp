@@ -48,6 +48,13 @@ Problem::create()
         out->create();
 }
 
+const Mesh *
+Problem::get_mesh() const
+{
+    _F_;
+    return this->mesh;
+}
+
 PetscInt
 Problem::get_dimension() const
 {
