@@ -109,9 +109,9 @@ ExodusIIOutput::write_mesh()
     ierr = DMGetLabelSize(dm, "Vertex Sets", &n_node_sets);
     check_petsc_error(ierr);
 
-    // TODO: store side sets
-    int n_side_sets = 0;
-    // DMGetLabelSize(dm, "Face Sets", &n_side_sets)
+    int n_side_sets;
+    ierr = DMGetLabelSize(dm, "Face Sets", &n_side_sets);
+    check_petsc_error(ierr);
 
     int exo_dim = this->mesh->get_dimension();
     // Visualization SW based on VTK have problems showing 1D, so we cast it like a 2D problem with
@@ -388,14 +388,97 @@ void
 ExodusIIOutput::write_face_sets()
 {
     _F_;
-    // PetscErrorCode ierr;
-    // DM dm = this->mesh->get_dm();
-    //
-    // PetscBool has_label;
-    // ierr = DMHasLabel(dm, "Face Sets", &has_label) if (!has_label) return;
-    //
-    // DMLabel face_sets_label;
-    // ierr = DMGetLabel(dm, "Face Sets", &face_sets_label);
+    PetscErrorCode ierr;
+    DM dm = this->mesh->get_dm();
+
+    PetscBool has_label;
+    ierr = DMHasLabel(dm, "Face Sets", &has_label);
+    check_petsc_error(ierr);
+    if (!has_label)
+        return;
+
+    DMLabel face_sets_label;
+    ierr = DMGetLabel(dm, "Face Sets", &face_sets_label);
+    check_petsc_error(ierr);
+
+    int n_side_sets;
+    ierr = DMGetLabelSize(dm, "Face Sets", &n_side_sets);
+    check_petsc_error(ierr);
+
+    IS face_sets_is;
+    ierr = DMLabelGetValueIS(face_sets_label, &face_sets_is);
+    check_petsc_error(ierr);
+
+    const PetscInt * face_set_idx;
+    ierr = ISGetIndices(face_sets_is, &face_set_idx);
+    check_petsc_error(ierr);
+
+    for (PetscInt fs = 0; fs < n_side_sets; ++fs) {
+        IS stratum_is;
+        ierr = DMLabelGetStratumIS(face_sets_label, face_set_idx[fs], &stratum_is);
+        check_petsc_error(ierr);
+
+        const PetscInt * faces;
+        ierr = ISGetIndices(stratum_is, &faces);
+        check_petsc_error(ierr);
+
+        PetscInt face_set_size;
+        ierr = ISGetSize(stratum_is, &face_set_size);
+        check_petsc_error(ierr);
+
+        ex_put_set_param(this->exoid, EX_SIDE_SET, face_set_idx[fs], face_set_size, 0);
+
+        PetscInt * elem_list = new PetscInt[face_set_size];
+        MEM_CHECK(elem_list);
+
+        PetscInt * side_list = new PetscInt[face_set_size];
+        MEM_CHECK(side_list);
+
+        for (PetscInt i = 0; i < face_set_size; ++i) {
+            // Element
+            PetscInt num_points;
+            PetscInt * points = NULL;
+            ierr = DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points);
+            check_petsc_error(ierr);
+
+            PetscInt el = points[2];
+            elem_list[i] = el + 1;
+
+            ierr = DMPlexRestoreTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points);
+            check_petsc_error(ierr);
+
+            // Side
+            points = NULL;
+            ierr = DMPlexGetTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points);
+            check_petsc_error(ierr);
+
+            for (PetscInt j = 1; j < num_points; ++j) {
+                if (points[j * 2] == faces[i]) {
+                    side_list[i] = j;
+                    break;
+                }
+            }
+
+            ierr = DMPlexRestoreTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points);
+            check_petsc_error(ierr);
+        }
+
+        ex_put_set(this->exoid, EX_SIDE_SET, face_set_idx[fs], elem_list, side_list);
+
+        delete[] side_list;
+        delete[] elem_list;
+
+        ierr = ISRestoreIndices(stratum_is, &faces);
+        check_petsc_error(ierr);
+        ierr = ISDestroy(&stratum_is);
+        check_petsc_error(ierr);
+
+        // TODO: set the face name
+    }
+    ierr = ISRestoreIndices(face_sets_is, &face_set_idx);
+    check_petsc_error(ierr);
+    ierr = ISDestroy(&face_sets_is);
+    check_petsc_error(ierr);
 }
 
 void
