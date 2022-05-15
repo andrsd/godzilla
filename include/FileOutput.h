@@ -30,11 +30,19 @@ public:
     /// @return File extension
     virtual std::string get_file_ext() const = 0;
 
-    virtual void output_mesh(DM dm) override;
-    virtual void output_solution(Vec vec) override;
-    virtual void output_step(PetscInt stepi, DM dm, Vec vec) override;
+    virtual void output_step(PetscInt stepi) override;
 
 protected:
+    /// Store the mesh
+    ///
+    /// @param dm DM holding the mesh to store into the file
+    virtual void output_mesh(DM dm);
+
+    /// Store the solution vector
+    ///
+    /// @param vec Solution vector to store into the file
+    virtual void output_solution(Vec vec);
+
     /// The file base of the output file
     const std::string file_base;
 

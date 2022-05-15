@@ -1,5 +1,6 @@
 #include "Godzilla.h"
 #include "FileOutput.h"
+#include "Problem.h"
 
 namespace godzilla {
 
@@ -40,11 +41,8 @@ void
 FileOutput::set_file_name()
 {
     _F_;
-    PetscErrorCode ierr;
     char fn[MAX_PATH];
     snprintf(fn, MAX_PATH, "%s.%s", this->file_base.c_str(), this->get_file_ext().c_str());
-    ierr = PetscViewerFileSetName(this->viewer, fn);
-    check_petsc_error(ierr);
     this->file_name = std::string(fn);
 }
 
@@ -52,7 +50,6 @@ void
 FileOutput::set_sequence_file_name(unsigned int stepi)
 {
     _F_;
-    PetscErrorCode ierr;
     char fn[MAX_PATH];
     snprintf(fn,
              MAX_PATH,
@@ -60,8 +57,6 @@ FileOutput::set_sequence_file_name(unsigned int stepi)
              this->file_base.c_str(),
              stepi,
              this->get_file_ext().c_str());
-    ierr = PetscViewerFileSetName(this->viewer, fn);
-    check_petsc_error(ierr);
     this->file_name = std::string(fn);
 }
 
@@ -84,15 +79,22 @@ FileOutput::output_solution(Vec vec)
 }
 
 void
-FileOutput::output_step(PetscInt stepi, DM dm, Vec vec)
+FileOutput::output_step(PetscInt stepi)
 {
     _F_;
+    PetscErrorCode ierr;
+
     if (stepi == -1)
         set_file_name();
     else
         set_sequence_file_name(stepi);
+    ierr = PetscViewerFileSetName(this->viewer, this->file_name.c_str());
+    check_petsc_error(ierr);
+
     godzilla_print(9, "Output to file: ", this->file_name);
+    DM dm = this->problem->get_dm();
     output_mesh(dm);
+    Vec vec = this->problem->get_solution_vector();
     output_solution(vec);
 }
 

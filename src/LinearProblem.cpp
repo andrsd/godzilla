@@ -233,7 +233,7 @@ LinearProblem::output()
 {
     _F_;
     for (auto & o : this->outputs)
-        o->output_step(-1, get_dm(), this->x);
+        o->output_step(-1);
 }
 
 void

@@ -1,5 +1,6 @@
 #include "Output.h"
 #include "Problem.h"
+#include <assert.h>
 
 namespace godzilla {
 
@@ -14,9 +15,10 @@ Output::valid_params()
 Output::Output(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
-    problem(*get_param<Problem *>("_problem"))
+    problem(get_param<Problem *>("_problem"))
 {
     _F_;
+    assert(this->problem != nullptr);
 }
 
 } // namespace godzilla

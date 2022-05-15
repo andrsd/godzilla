@@ -49,5 +49,5 @@ TEST_F(VTKOutputTest, output_1d_step)
 
     prob->solve();
     EXPECT_EQ(prob->converged(), true);
-    out->output_step(0, mesh->get_dm(), prob->get_solution_vector());
+    out->output_step(0);
 }

@@ -167,11 +167,8 @@ void
 ImplicitFENonlinearProblem::output_step(Vec vec)
 {
     _F_;
-    PetscErrorCode ierr;
-    DM dm = get_dm();
-
     for (auto & o : this->outputs)
-        o->output_step(this->step_num, dm, vec);
+        o->output_step(this->step_num);
 }
 
 } // namespace godzilla
