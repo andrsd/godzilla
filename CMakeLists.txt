@@ -82,6 +82,7 @@ install(
     TARGETS
         godzilla
         yaml-cpp
+        muparser
     EXPORT
         GodzillaTargets
     LIBRARY DESTINATION
@@ -99,11 +100,21 @@ install(
 install(
     DIRECTORY
         include/
-    TYPE
-        INCLUDE
+    DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
     FILES_MATCHING
         PATTERN "*.h"
 )
+
+install(
+    DIRECTORY
+        contrib/tclap
+    DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+    FILES_MATCHING
+        PATTERN "*.h"
+)
+
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
