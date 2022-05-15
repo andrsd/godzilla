@@ -1,5 +1,9 @@
 project(poisson)
 
+if (DEFINED ENV{CONDA_PREFIX})
+    set(CMAKE_BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
+endif()
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
