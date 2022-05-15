@@ -105,9 +105,9 @@ ExodusIIOutput::write_mesh()
     if (n_elem_blk == 0)
         n_elem_blk = 1;
 
-    // TODO: store node sets
-    int n_node_sets = 0;
-    // DMGetLabelSize(dm, "Vertex Sets", &n_node_sets));
+    int n_node_sets;
+    ierr = DMGetLabelSize(dm, "Vertex Sets", &n_node_sets);
+    check_petsc_error(ierr);
 
     // TODO: store side sets
     int n_side_sets = 0;
@@ -315,12 +315,87 @@ void
 ExodusIIOutput::write_node_sets()
 {
     _F_;
+    PetscErrorCode ierr;
+    DM dm = this->mesh->get_dm();
+
+    PetscBool has_label;
+    ierr = DMHasLabel(dm, "Vertex Sets", &has_label);
+    check_petsc_error(ierr);
+    if (!has_label)
+        return;
+
+    PetscInt elem_first, elem_last;
+    ierr = DMPlexGetHeightStratum(dm, 0, &elem_first, &elem_last);
+    check_petsc_error(ierr);
+    int n_elems_in_block = elem_last - elem_first;
+
+    int n_node_sets;
+    ierr = DMGetLabelSize(dm, "Vertex Sets", &n_node_sets);
+    check_petsc_error(ierr);
+
+    DMLabel vertex_sets_label;
+    ierr = DMGetLabel(dm, "Vertex Sets", &vertex_sets_label);
+    check_petsc_error(ierr);
+
+    IS vertex_sets_is;
+    ierr = DMLabelGetValueIS(vertex_sets_label, &vertex_sets_is);
+    check_petsc_error(ierr);
+
+    const PetscInt * vertex_set_idx;
+    ierr = ISGetIndices(vertex_sets_is, &vertex_set_idx);
+    check_petsc_error(ierr);
+
+    for (PetscInt i = 0; i < n_node_sets; ++i) {
+        IS stratum_is;
+        ierr = DMLabelGetStratumIS(vertex_sets_label, vertex_set_idx[i], &stratum_is);
+        check_petsc_error(ierr);
+
+        const PetscInt * vertices;
+        ierr = ISGetIndices(stratum_is, &vertices);
+        check_petsc_error(ierr);
+
+        PetscInt n_nodes_in_set;
+        ierr = ISGetSize(stratum_is, &n_nodes_in_set);
+        check_petsc_error(ierr);
+
+        PetscInt * node_set = new PetscInt[n_nodes_in_set];
+        MEM_CHECK(node_set);
+
+        for (PetscInt j = 0; j < n_nodes_in_set; j++)
+            node_set[j] = vertices[j] - n_elems_in_block + 1;
+
+        ex_put_set_param(this->exoid, EX_NODE_SET, vertex_set_idx[i], n_nodes_in_set, 0);
+        ex_put_set(this->exoid, EX_NODE_SET, vertex_set_idx[i], node_set, nullptr);
+
+        delete[] node_set;
+
+        ierr = ISRestoreIndices(stratum_is, &vertices);
+        check_petsc_error(ierr);
+
+        ierr = ISDestroy(&stratum_is);
+        check_petsc_error(ierr);
+
+        // TODO: set the face name
+    }
+    ierr = ISRestoreIndices(vertex_sets_is, &vertex_set_idx);
+    check_petsc_error(ierr);
+
+    ierr = ISDestroy(&vertex_sets_is);
+    check_petsc_error(ierr);
 }
 
 void
 ExodusIIOutput::write_face_sets()
 {
     _F_;
+    // PetscErrorCode ierr;
+    // DM dm = this->mesh->get_dm();
+    //
+    // PetscBool has_label;
+    // ierr = DMHasLabel(dm, "Face Sets", &has_label) if (!has_label) return;
+    //
+    // DMLabel face_sets_label;
+    // ierr = DMGetLabel(dm, "Face Sets", &face_sets_label);
 }
 
 void
