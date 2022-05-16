@@ -24,6 +24,6 @@ bcs:
     value: [ 'x*x' ]
 
 output:
-  hdf5:
-    type: HDF5Output
+  out:
+    type: ExodusIIOutput
     file: fe_1d
