@@ -29,6 +29,9 @@ jobs:
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
           echo "PETSC_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}" >> $GITHUB_ENV
+          echo "NETCDF_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}" >> $GITHUB_ENV
+          echo "EXODUSII_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}" >> $GITHUB_ENV
+          echo "HDF5_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}" >> $GITHUB_ENV
       - name: Load PETSc
         uses: actions/cache@v2
         with:
@@ -64,6 +67,9 @@ jobs:
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
           echo "PETSC_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}" >> $GITHUB_ENV
+          echo "NETCDF_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}" >> $GITHUB_ENV
+          echo "EXODUSII_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}" >> $GITHUB_ENV
+          echo "HDF5_DIR=${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}" >> $GITHUB_ENV
       - name: Load PETSc
         uses: actions/cache@v2
         with:
