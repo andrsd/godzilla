@@ -23,10 +23,27 @@ public:
     FEProblemInterface(Problem & problem, const InputParameters & params);
     virtual ~FEProblemInterface();
 
+    /// Get list of all field names
+    ///
+    /// @return List of field names
+    virtual std::vector<std::string> get_field_names() const;
+
     /// Get field name
     ///
     /// @param fid Field ID
     virtual const std::string & get_field_name(PetscInt fid) const;
+
+    /// Get field order
+    ///
+    /// @param fid Field ID
+    /// @return Field order
+    virtual PetscInt get_field_order(PetscInt fid) const;
+
+    /// Get field number of components
+    ///
+    /// @param fid Field ID
+    /// @return Number of components
+    virtual PetscInt get_field_num_components(PetscInt fid) const;
 
     /// Get field ID
     ///

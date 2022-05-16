@@ -41,6 +41,9 @@ protected:
     void write_elements();
     void write_node_sets();
     void write_face_sets();
+    void write_all_variable_names();
+    void write_variables(PetscInt stepi);
+    void write_nodal_variables(PetscInt stepi, const PetscScalar * sln);
 
     /// FE problem interface (convenience pointer)
     const FEProblemInterface * fepi;
@@ -48,8 +51,12 @@ protected:
     const UnstructuredMesh * mesh;
     /// ExodusII file handle
     int exoid;
-    /// Flag indicating if we need to store mesh durong `output_step`
+    /// Flag indicating if we need to store mesh during `output_step`
     bool mesh_stored;
+    /// List of nodal variable field IDs
+    std::vector<PetscInt> nodal_var_fids;
+    /// List of nodal elemental variable field IDs
+    std::vector<PetscInt> elem_var_fids;
 
 public:
     static InputParameters valid_params();

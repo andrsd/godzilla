@@ -5,12 +5,29 @@
 #include "FEProblemInterface.h"
 #include "UnstructuredMesh.h"
 #include "exodusII.h"
+#include <assert.h>
 
 namespace godzilla {
 
 static const unsigned int MAX_DATE_TIME = 255;
 
 registerObject(ExodusIIOutput);
+
+static void
+write_variable_names(int exoid, ex_entity_type obj_type, const std::vector<std::string> & var_names)
+{
+    _F_;
+
+    int n_vars = var_names.size();
+    if (n_vars == 0)
+        return;
+
+    ex_put_variable_param(exoid, obj_type, n_vars);
+    const char * names[n_vars];
+    for (int i = 0; i < n_vars; i++)
+        names[i] = var_names[i].c_str();
+    ex_put_variable_names(exoid, obj_type, n_vars, (char **) names);
+}
 
 InputParameters
 ExodusIIOutput::valid_params()
@@ -73,7 +90,12 @@ ExodusIIOutput::output_step(PetscInt stepi)
     if (!this->mesh_stored) {
         write_info();
         write_mesh();
+        write_all_variable_names();
     }
+
+    if (stepi == -1)
+        stepi = 1;
+    write_variables(stepi);
 }
 
 void
@@ -479,6 +501,109 @@ ExodusIIOutput::write_face_sets()
     check_petsc_error(ierr);
     ierr = ISDestroy(&face_sets_is);
     check_petsc_error(ierr);
+}
+
+void
+ExodusIIOutput::write_all_variable_names()
+{
+    _F_;
+
+    this->nodal_var_fids.clear();
+    this->elem_var_fids.clear();
+    std::vector<std::string> field_names = this->fepi->get_field_names();
+    std::vector<std::string> nodal_var_names;
+    std::vector<std::string> elem_var_names;
+    for (auto & name : field_names) {
+        PetscInt fid = this->fepi->get_field_id(name);
+        PetscInt nc = this->fepi->get_field_num_components(fid);
+        // Only single component fields now
+        assert(nc == 1);
+        PetscInt order = this->fepi->get_field_order(fid);
+        if (order == 0) {
+            elem_var_names.push_back(name);
+            this->elem_var_fids.push_back(fid);
+        }
+        else {
+            nodal_var_names.push_back(name);
+            this->nodal_var_fids.push_back(fid);
+        }
+    }
+    write_variable_names(this->exoid, EX_NODAL, nodal_var_names);
+    write_variable_names(this->exoid, EX_ELEM_BLOCK, elem_var_names);
+
+    // TODO: write global variable names
+}
+
+void
+ExodusIIOutput::write_variables(PetscInt stepi)
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    int whole_time_step = stepi;
+    PetscReal time = this->problem->get_time();
+    ex_put_time(this->exoid, whole_time_step, &time);
+
+    DM dm = this->problem->get_dm();
+    Vec sln;
+    ierr = DMGetLocalVector(dm, &sln);
+    check_petsc_error(ierr);
+    ierr = DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln);
+    check_petsc_error(ierr);
+    ierr = DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, NULL, NULL, NULL);
+    check_petsc_error(ierr);
+
+    const PetscScalar * sln_vals;
+    ierr = VecGetArrayRead(sln, &sln_vals);
+    check_petsc_error(ierr);
+
+    write_nodal_variables(stepi, sln_vals);
+    // TODO: write elemental variables
+    // TODO: write postprocesors as global variables
+
+    ierr = VecRestoreArrayRead(sln, &sln_vals);
+    check_petsc_error(ierr);
+
+    ierr = DMRestoreLocalVector(dm, &sln);
+    check_petsc_error(ierr);
+
+    ex_update(this->exoid);
+}
+
+void
+ExodusIIOutput::write_nodal_variables(PetscInt stepi, const PetscScalar * sln)
+{
+    _F_;
+
+    PetscErrorCode ierr;
+    DM dm = this->problem->get_dm();
+    PetscInt n_elems = this->mesh->get_num_elements();
+    PetscInt first, last;
+    ierr = DMPlexGetHeightStratum(dm, this->mesh->get_dimension(), &first, &last);
+    check_petsc_error(ierr);
+
+    PetscSection section;
+    ierr = DMGetLocalSection(dm, &section);
+    check_petsc_error(ierr);
+
+    for (std::size_t i = 0; i < this->nodal_var_fids.size(); i++) {
+        PetscInt fid = this->nodal_var_fids[i];
+        for (PetscInt n = first; n < last; n++) {
+#ifndef NDEBUG
+            PetscInt n_dofs;
+            ierr = PetscSectionGetFieldDof(section, n, fid, &n_dofs);
+            check_petsc_error(ierr);
+            assert(n_dofs == 1);
+#endif
+
+            PetscInt offset;
+            ierr = PetscSectionGetFieldOffset(section, n, fid, &offset);
+            check_petsc_error(ierr);
+
+            int exo_idx = n - n_elems + 1;
+            ex_put_partial_var(this->exoid, stepi, EX_NODAL, i + 1, 1, exo_idx, 1, sln + offset);
+        }
+    }
 }
 
 void

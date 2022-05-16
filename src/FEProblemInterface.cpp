@@ -66,6 +66,17 @@ FEProblemInterface::init(DM dm)
     set_up_problem(dm);
 }
 
+std::vector<std::string>
+FEProblemInterface::get_field_names() const
+{
+    _F_;
+    std::vector<std::string> infos;
+    for (const auto & it : this->fields)
+        infos.push_back(it.second.name);
+
+    return infos;
+}
+
 const std::string &
 FEProblemInterface::get_field_name(PetscInt fid) const
 {
@@ -73,6 +84,28 @@ FEProblemInterface::get_field_name(PetscInt fid) const
     const auto & it = this->fields.find(fid);
     if (it != this->fields.end())
         return it->second.name;
+    else
+        error("Field with ID = '", fid, "' does not exist.");
+}
+
+PetscInt
+FEProblemInterface::get_field_order(PetscInt fid) const
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end())
+        return it->second.k;
+    else
+        error("Field with ID = '", fid, "' does not exist.");
+}
+
+PetscInt
+FEProblemInterface::get_field_num_components(PetscInt fid) const
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end())
+        return it->second.nc;
     else
         error("Field with ID = '", fid, "' does not exist.");
 }
