@@ -8,12 +8,12 @@ jobs:
     name: ubuntu-clang
     env:
       PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 4
+      PETSC_CACHE_NUM: 6
     steps:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install cmake llvm-12 gfortran-10
+          sudo apt install cmake llvm-12 mpich libmpich-dev libblas-dev liblapack-dev zlib1g
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -33,24 +33,13 @@ jobs:
             --with-cxx-dialect=cxx14 \
             --with-pic=yes \
             --with-ssl=no \
-            --download-mpich=yes \
-            --download-chaco=yes \
-            --download-ptscotch=yes \
-            --download-ml=yes \
-            --download-hypre=yes \
-            --download-fblaslapack=yes \
-            --download-metis=yes \
-            --download-parmetis=yes \
-            --download-superlu=yes \
-            --download-superlu_dist=yes \
-            --download-scalapack=yes \
-            --download-mumps=yes \
-            --download-exodusii=yes \
-            --download-hdf5=yes \
-            --download-netcdf=yes \
-            --download-pnetcdf=yes \
-            --download-zlib=yes \
-            CC=clang-12 CXX=clang++-12 FC=gfortran-10 \
+            --with-mpich=yes \
+            --download-exodusii \
+            --download-netcdf \
+            --download-pnetcdf \
+            --download-hdf5 \
+            --with-zlib=yes \
+            CC=mpicc.mpich CXX=mpicxx.mpich FC=mpif90.mpich \
             PETSC_DIR=`pwd`
           echo "::endgroup::"
           echo "::group::make"
@@ -68,11 +57,11 @@ jobs:
     name: macosx-clang
     env:
       PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 4
+      PETSC_CACHE_NUM: 6
       SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
     steps:
       - name: Install dependencies
-        run: brew install cmake autoconf automake libtool
+        run: brew install cmake automake mpich gfortran
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -92,24 +81,13 @@ jobs:
             --with-cxx-dialect=cxx14 \
             --with-pic=yes \
             --with-ssl=no \
-            --download-mpich=yes \
-            --download-chaco=yes \
-            --download-ptscotch=yes \
-            --download-ml=yes \
-            --download-hypre=yes \
-            --download-fblaslapack=yes \
-            --download-metis=yes \
-            --download-parmetis=yes \
-            --download-superlu=yes \
-            --download-superlu_dist=yes \
-            --download-scalapack=yes \
-            --download-mumps=yes \
-            --download-exodusii=yes \
-            --download-hdf5=yes \
-            --download-netcdf=yes \
-            --download-pnetcdf=yes \
-            --download-zlib=yes \
-            CC=clang CXX=clang++ FC=gfortran-10 \
+            --with-mpich=yes \
+            --download-exodusii \
+            --download-netcdf \
+            --download-pnetcdf \
+            --download-hdf5 \
+            --download-zlib \
+            CC=mpicc CXX=mpicxx FC=mpif90 \
             PETSC_DIR=`pwd`
           echo "::endgroup::"
           echo "::group::make"
