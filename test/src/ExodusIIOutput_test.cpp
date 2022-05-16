@@ -35,73 +35,18 @@ TEST_F(ExodusIIOutputTest, check)
     out->check();
 }
 
-TEST_F(ExodusIIOutputTest, no_fe)
+TEST_F(ExodusIIOutputTest, output)
 {
-    testing::internal::CaptureStderr();
-
     auto mesh = gMesh1d();
     mesh->create();
-    auto prob = gFEProblem1d(mesh);
+    auto prob = gFEProblem(mesh);
     prob->create();
     auto out = gOutput(prob, "out");
     out->create();
     out->check();
     this->app->check_integrity();
 
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr("out: ExodusII output does not support finite element problems yet."));
-}
-
-TEST_F(ExodusIIOutputTest, output_1d)
-{
-    testing::internal::CaptureStderr();
-
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-    auto out = gOutput(prob, "out");
-    out->create();
-    out->check();
-    this->app->check_integrity();
-
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr("out: PETSc viewer does not support ExodusII output for 1D problems."));
-}
-
-TEST_F(ExodusIIOutputTest, output_2d)
-{
-    auto mesh = gMesh2d();
-    mesh->create();
-    auto prob = gProblem2d(mesh);
-    prob->create();
-    auto out = gOutput(prob, "out");
-    out->create();
-    out->check();
-    this->app->check_integrity();
-
-    prob->solve();
-    EXPECT_EQ(prob->converged(), true);
-    out->output_step(-1, mesh->get_dm(), prob->get_solution_vector());
-}
-
-TEST_F(ExodusIIOutputTest, output_3d)
-{
-    auto mesh = gMesh3d();
-    mesh->create();
-    auto prob = gProblem3d(mesh);
-    prob->create();
-    auto out = gOutput(prob, "out");
-    out->create();
-    out->check();
-    this->app->check_integrity();
-
-    prob->solve();
-    EXPECT_EQ(prob->converged(), true);
-
-    out->output_step(-1, mesh->get_dm(), prob->get_solution_vector());
+    out->output_step(-1);
 }
 
 TEST_F(ExodusIIOutputTest, set_file_name)

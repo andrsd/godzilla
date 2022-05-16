@@ -22,7 +22,6 @@ public:
     virtual std::string get_file_ext() const override;
     virtual void create() override;
     virtual void check() override;
-    // void output_solution(Vec v) override;
 
 public:
     static InputParameters valid_params();

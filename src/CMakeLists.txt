@@ -85,5 +85,8 @@ target_link_libraries(
     PUBLIC
         muparser
         yaml-cpp
+        ${NETCDF_LIBRARY}
+        ${HDF5_LIBRARY}
+        ${EXODUSII_LIBRARY}
         ${PETSC_LIBRARY}
 )

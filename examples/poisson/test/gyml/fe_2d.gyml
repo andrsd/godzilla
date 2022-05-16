@@ -27,6 +27,6 @@ bcs:
     value: [ 'x*x + y*y' ]
 
 output:
-  hdf5:
-    type: HDF5Output
+  out:
+    type: ExodusIIOutput
     file: fe_2d

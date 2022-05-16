@@ -17,7 +17,7 @@ protected:
     }
 
     Problem *
-    gFEProblem1d(Mesh * mesh)
+    gFEProblem(Mesh * mesh)
     {
         const std::string class_name = "GTestFENonlinearProblem";
         InputParameters * params = Factory::get_valid_params(class_name);

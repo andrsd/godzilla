@@ -1,3 +1,7 @@
+if (DEFINED ENV{CONDA_PREFIX})
+    set(CMAKE_BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
+endif()
+
 add_executable(${PROJECT_NAME}
     AuxiliaryField_test.cpp
     BoundaryCondition_test.cpp

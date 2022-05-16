@@ -89,9 +89,7 @@ TEST_F(LinearProblemTest, output)
         MOCK_METHOD(const std::string &, get_file_name, (), (const));
         MOCK_METHOD(void, set_file_name, ());
         MOCK_METHOD(void, set_sequence_file_name, (unsigned int stepi));
-        MOCK_METHOD(void, output_mesh, (DM dm));
-        MOCK_METHOD(void, output_solution, (Vec vec));
-        MOCK_METHOD(void, output_step, (PetscInt stepi, DM dm, Vec vec));
+        MOCK_METHOD(void, output_step, (PetscInt stepi));
     };
 
     auto mesh = gMesh1d();

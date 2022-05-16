@@ -30,6 +30,6 @@ bcs:
     value: 'x*x + y*y + z*z'
 
 output:
-  hdf5:
-    type: HDF5Output
+  out:
+    type: ExodusIIOutput
     file: fe_3d
