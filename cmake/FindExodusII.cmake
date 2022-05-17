@@ -25,6 +25,9 @@ find_path(
         hdf5.h
     PATHS
         $ENV{HDF5_DIR}/include
+    PATH_SUFFIXES
+        hdf5/openmpi
+        hdf5/mpich
 )
 
 find_library(
@@ -32,6 +35,9 @@ find_library(
         hdf5
     PATHS
         $ENV{HDF5_DIR}/lib
+    PATH_SUFFIXES
+        hdf5/openmpi
+        hdf5/mpich
 )
 
 find_path(
