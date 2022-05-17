@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include "mpi.h"
+#include "petsc.h"
 #include "CallStack.h"
 #include "Error.h"
 

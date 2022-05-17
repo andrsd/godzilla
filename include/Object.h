@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mpi.h"
+#include "petsc.h"
 #include "InputParameters.h"
 #include "LoggingInterface.h"
 

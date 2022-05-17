@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mpi.h"
+#include "petsc.h"
 #include "PrintInterface.h"
 #include "CmdLineArgParser.h"
 #include "InputParameters.h"
