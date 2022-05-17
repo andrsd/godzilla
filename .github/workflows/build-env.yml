@@ -96,7 +96,7 @@ jobs:
           echo "::endgroup::"
           echo "::group::make"
           make PETSC_DIR=`pwd` PETSC_ARCH=arch-darwin-c-opt all
-          make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt install
+          make PETSC_DIR=`pwd` PETSC_ARCH=arch-darwin-c-opt install
           echo "::endgroup::"
       - name: Upload configure.log
         if: always()
