@@ -9,9 +9,9 @@ on:
       - main
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
-    name: ubuntu
+  linux-clang:
+    runs-on: ubuntu-20.04
+    name: ubuntu-clang
     env:
       PETSC_VERSION: 3.17.0
       PETSC_CACHE_NUM: 8
@@ -28,9 +28,6 @@ jobs:
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
           echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "NETCDF_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "EXODUSII_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "HDF5_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
       - name: Load PETSc
         uses: actions/cache@v2
         with:
@@ -47,9 +44,44 @@ jobs:
       - name: Run tests
         run: make -C ${{ github.workspace }}/build test ARGS='-V'
 
-  macosx:
+  linux-gcc:
+    runs-on: ubuntu-20.04
+    name: ubuntu-gcc
+    env:
+      PETSC_VERSION: 3.17.0
+      PETSC_CACHE_NUM: 8
+      CC: mpicc
+      CXX: mpicxx
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt install libblas-dev liblapack-dev
+      - name: Setup env
+        run: |
+          echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
+          echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
+      - name: Load PETSc
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/petsc
+          key: ${{ runner.os }}-gcc-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          restore-keys: ${{ runner.os }}-gcc-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+      - name: Configure
+        run: |
+          cmake -S . -B ${{ github.workspace }}/build \
+            -DGODZILLA_BUILD_EXAMPLES=YES \
+            -DGODZILLA_BUILD_TESTS=YES
+      - name: Build
+        run: make -C ${{ github.workspace }}/build
+      - name: Run tests
+        run: make -C ${{ github.workspace }}/build test ARGS='-V'
+
+  macosx-clang:
     runs-on: macos-10.15
-    name: macos
+    name: macosx-clang
     env:
       PETSC_VERSION: 3.17.0
       PETSC_CACHE_NUM: 8
@@ -65,9 +97,6 @@ jobs:
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
           echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "NETCDF_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "EXODUSII_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "HDF5_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
       - name: Load PETSc
         uses: actions/cache@v2
         with:
