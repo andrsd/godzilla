@@ -28,6 +28,7 @@ find_path(
     PATH_SUFFIXES
         hdf5/openmpi
         hdf5/mpich
+        hdf5/serial
 )
 
 find_library(
@@ -38,6 +39,7 @@ find_library(
     PATH_SUFFIXES
         hdf5/openmpi
         hdf5/mpich
+        hdf5/serial
 )
 
 find_path(
