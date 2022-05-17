@@ -8,12 +8,12 @@ jobs:
     name: ubuntu-clang
     env:
       PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 6
+      PETSC_CACHE_NUM: 7
     steps:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install cmake llvm-12 mpich libmpich-dev libblas-dev liblapack-dev zlib1g
+          sudo apt install cmake llvm-12 libblas-dev liblapack-dev
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -33,13 +33,13 @@ jobs:
             --with-cxx-dialect=cxx14 \
             --with-pic=yes \
             --with-ssl=no \
-            --with-mpich=yes \
+            --download-mpich \
             --download-exodusii \
             --download-netcdf \
             --download-pnetcdf \
             --download-hdf5 \
-            --with-zlib=yes \
-            CC=mpicc.mpich CXX=mpicxx.mpich FC=mpif90.mpich \
+            --download-zlib \
+            CC=clang-12 CXX=clang++-12 FC=gfortran-10 \
             PETSC_DIR=`pwd`
           echo "::endgroup::"
           echo "::group::make"
@@ -57,11 +57,11 @@ jobs:
     name: macosx-clang
     env:
       PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 6
+      PETSC_CACHE_NUM: 7
       SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
     steps:
       - name: Install dependencies
-        run: brew install cmake automake mpich gfortran
+        run: brew install cmake automake
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
@@ -81,13 +81,13 @@ jobs:
             --with-cxx-dialect=cxx14 \
             --with-pic=yes \
             --with-ssl=no \
-            --with-mpich=yes \
+            --download-mpich \
             --download-exodusii \
             --download-netcdf \
             --download-pnetcdf \
             --download-hdf5 \
             --download-zlib \
-            CC=mpicc CXX=mpicxx FC=mpif90 \
+            CC=clang CXX=clang++ FC=gfortran-10 \
             PETSC_DIR=`pwd`
           echo "::endgroup::"
           echo "::group::make"
