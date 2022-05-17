@@ -8,17 +8,17 @@ jobs:
     name: ubuntu-clang
     env:
       PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 7
+      PETSC_CACHE_NUM: 8
     steps:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install cmake llvm-12 libblas-dev liblapack-dev
+          sudo apt install llvm-12 libblas-dev liblapack-dev
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v2
         with:
-          path: ${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}
+          path: ${{ github.workspace }}/petsc
           key: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Build PETSc
         run: |
@@ -28,11 +28,13 @@ jobs:
           cd petsc-${PETSC_VERSION}
           echo "::group::configure"
           ./configure \
+            --prefix=${{ github.workspace }}/petsc \
             --shared-libraries \
             --with-debugging=no \
             --with-cxx-dialect=cxx14 \
             --with-pic=yes \
             --with-ssl=no \
+            --download-cmake \
             --download-mpich \
             --download-exodusii \
             --download-netcdf \
@@ -44,6 +46,7 @@ jobs:
           echo "::endgroup::"
           echo "::group::make"
           make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt all
+          make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt install
           echo "::endgroup::"
       - name: Upload configure.log
         if: always()
@@ -57,7 +60,7 @@ jobs:
     name: macosx-clang
     env:
       PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 7
+      PETSC_CACHE_NUM: 8
       SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
     steps:
       - name: Install dependencies
@@ -66,7 +69,7 @@ jobs:
         id: cache-petsc
         uses: actions/cache@v2
         with:
-          path: ${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}
+          path: ${{ github.workspace }}/petsc
           key: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Build PETSc
         run: |
@@ -76,6 +79,7 @@ jobs:
           cd petsc-${PETSC_VERSION}
           echo "::group::configure"
           ./configure \
+            --prefix=${{ github.workspace }}/petsc \
             --shared-libraries \
             --with-debugging=no \
             --with-cxx-dialect=cxx14 \
@@ -92,6 +96,7 @@ jobs:
           echo "::endgroup::"
           echo "::group::make"
           make PETSC_DIR=`pwd` PETSC_ARCH=arch-darwin-c-opt all
+          make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt install
           echo "::endgroup::"
       - name: Upload configure.log
         if: always()
