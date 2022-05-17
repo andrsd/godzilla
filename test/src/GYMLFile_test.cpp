@@ -28,7 +28,7 @@ GTestProblem::valid_params()
 
 TEST_F(GYMLFileTest, parse_empty)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
@@ -40,7 +40,7 @@ TEST_F(GYMLFileTest, parse_empty)
 
 TEST_F(GYMLFileTest, build_empty)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
@@ -51,7 +51,7 @@ TEST_F(GYMLFileTest, build_empty)
 
 TEST_F(GYMLFileTest, build_mesh_no_type)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_no_type.yml");
@@ -62,7 +62,7 @@ TEST_F(GYMLFileTest, build_mesh_no_type)
 
 TEST_F(GYMLFileTest, build_mesh_unreg_type)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_unreg_type.yml");
@@ -75,7 +75,7 @@ TEST_F(GYMLFileTest, build_missing_req_param)
 {
     testing::internal::CaptureStderr();
 
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_missing_req_param.yml");
     file.parse(file_name);
@@ -90,7 +90,7 @@ TEST_F(GYMLFileTest, mesh_partitioner)
 {
     PetscMPIInt sz;
     MPI_Comm_size(PETSC_COMM_WORLD, &sz);
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_partitioner.yml");
@@ -113,7 +113,7 @@ TEST_F(GYMLFileTest, mesh_partitioner)
 
 TEST_F(GYMLFileTest, build)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple.yml");
@@ -132,14 +132,14 @@ TEST_F(GYMLFileTest, funcs)
 {
     class TestGYMLFile : public GYMLFile {
     public:
-        explicit TestGYMLFile(const App & app) : GYMLFile(app) {}
+        explicit TestGYMLFile(const App * app) : GYMLFile(app) {}
         void
         build()
         {
             GYMLFile::build_problem();
             GYMLFile::build_functions();
         }
-    } file(*this->app);
+    } file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/funcs.yml");
@@ -155,7 +155,7 @@ TEST_F(GYMLFileTest, funcs)
 
 TEST_F(GYMLFileTest, build_vec_as_scalars)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_vec_as_scalars.yml");
@@ -174,7 +174,7 @@ TEST_F(GYMLFileTest, wrong_param_type)
 {
     testing::internal::CaptureStderr();
 
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/wrong_param_type.yml");
     file.parse(file_name);
@@ -189,7 +189,7 @@ TEST_F(GYMLFileTest, wrong_param_type)
 
 TEST_F(GYMLFileTest, build_fe)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe.yml");
@@ -206,7 +206,7 @@ TEST_F(GYMLFileTest, build_fe)
 
 TEST_F(GYMLFileTest, simple_fe_pps)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe_pps.yml");
@@ -227,7 +227,7 @@ TEST_F(GYMLFileTest, simple_fe_pps)
 
 TEST_F(GYMLFileTest, build_fe_w_aux)
 {
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe_w_aux.yml");
@@ -247,7 +247,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_ics)
 {
     testing::internal::CaptureStderr();
 
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_ics.yml");
     file.parse(file_name);
@@ -263,7 +263,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_bcs)
 {
     testing::internal::CaptureStderr();
 
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_bcs.yml");
     file.parse(file_name);
@@ -279,7 +279,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_auxs)
 {
     testing::internal::CaptureStderr();
 
-    GYMLFile file(*this->app);
+    GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_auxs.yml");
     file.parse(file_name);

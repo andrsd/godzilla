@@ -9,14 +9,12 @@
 
 namespace godzilla {
 
-class App;
 class Object;
 
 /// Interface for printing on terminal
 ///
 class PrintInterface {
 public:
-    PrintInterface(const App & app);
     PrintInterface(const Object * obj);
 
 protected:
@@ -33,11 +31,10 @@ protected:
     }
 
 private:
+    /// Verbosity level
     const unsigned int & verbosity_level;
     /// Prefix to print
     const std::string prefix;
-    ///
-    const MPI_Comm & pi_comm;
 };
 
 } // namespace godzilla

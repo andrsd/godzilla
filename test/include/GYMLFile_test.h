@@ -11,7 +11,7 @@ using namespace godzilla;
 
 class MockGYMLFile : public GYMLFile {
 public:
-    MockGYMLFile(const App & app) : GYMLFile(app) {}
+    MockGYMLFile(const App * app) : GYMLFile(app) {}
 
     MOCK_METHOD(void, build_mesh, (), ());
     MOCK_METHOD(void, build_problem, (), ());
@@ -22,7 +22,7 @@ protected:
     MockGYMLFile *
     gymlFile()
     {
-        auto f = new MockGYMLFile(*this->app);
+        auto f = new MockGYMLFile(this->app);
         return f;
     }
 };

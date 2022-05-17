@@ -12,14 +12,13 @@
 namespace godzilla {
 
 App::App(const std::string & app_name, MPI_Comm comm) :
-    PrintInterface(*this),
     comm(comm),
     args(app_name),
     input_file_arg("i", "input-file", "Input file to execute", false, "", "string"),
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
     no_colors_switch("", "no-colors", "Do not use terminal colors", false),
     verbosity_level(1),
-    gyml(new GYMLFile(*this))
+    gyml(nullptr)
 {
     _F_;
     MPI_Comm_size(comm, &this->comm_size);
@@ -28,6 +27,8 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     this->args.add(this->input_file_arg);
     this->args.add(this->verbose_arg);
     this->args.add(this->no_colors_switch);
+
+    this->gyml = new GYMLFile(this);
 }
 
 App::~App()
@@ -116,14 +117,9 @@ App::run_input_file(const std::string & file_name)
 {
     _F_;
     if (utils::path_exists(file_name)) {
-        godzilla_print(9, "Reading '", file_name, "'...");
         build_from_gyml(file_name);
         create();
-
-        godzilla_print(9, "Checking integrity...");
         check_integrity();
-
-        godzilla_print(9, "Running '", file_name, "'...");
         run_problem();
     }
     else

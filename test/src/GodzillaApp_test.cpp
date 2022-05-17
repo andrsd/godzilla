@@ -78,32 +78,6 @@ TEST_F(GodzillaAppTest, no_colors)
     EXPECT_EQ(Terminal::num_colors, 1);
 }
 
-TEST_F(GodzillaAppTest, verbose_level)
-{
-    testing::internal::CaptureStdout();
-
-    class TestApp : public App {
-    public:
-        TestApp(const std::string & app_name, MPI_Comm comm) : App(app_name, comm) {}
-
-        void
-        run()
-        {
-            App::run();
-            godzilla_print(1, "Print");
-        }
-    };
-
-    int argc = 3;
-    char * argv[] = { (char *) "godzilla", (char *) "--verbose", (char *) "2", NULL };
-
-    TestApp app("godzilla", MPI_COMM_WORLD);
-    app.parse_command_line(argc, argv);
-    app.run();
-
-    EXPECT_EQ(testing::internal::GetCapturedStdout(), "Print\n");
-}
-
 TEST_F(GodzillaAppTest, check_integrity)
 {
     class TestApp : public App {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "petsc.h"
-#include "PrintInterface.h"
 #include "CmdLineArgParser.h"
 #include "InputParameters.h"
 #include "Factory.h"
@@ -12,7 +11,7 @@ namespace godzilla {
 class Problem;
 class GYMLFile;
 
-class App : public PrintInterface {
+class App {
 public:
     /// Build and application object
     ///
