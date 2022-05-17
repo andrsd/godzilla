@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install cmake llvm-12 libblas-dev liblapack-dev
+          sudo apt install cmake llvm-12 mpich libmpich-dev libblas-dev liblapack-dev zlib1g
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
@@ -62,7 +62,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: brew install cmake automake
+        run: brew install cmake automake mpich gfortran
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc-${{ env.PETSC_VERSION }}/${{ env.PETSC_ARCH }}/bin" >> $GITHUB_PATH
