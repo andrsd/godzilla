@@ -17,16 +17,16 @@ include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
-# ExodusII
-find_package(ExodusII)
-if (NOT ${EXODUSII_FOUND})
-    message(STATUS "Try to set environemnt variable EXODUSII_DIR to point to your ExodusII installation.")
-endif()
-
 # PETSc
 find_package(PETSc)
 if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environemnt variable PETSC_DIR to point to your PETSc installation.")
+endif()
+
+# ExodusII
+find_package(ExodusII)
+if (NOT ${EXODUSII_FOUND})
+    message(STATUS "Try to set environemnt variable EXODUSII_DIR to point to your ExodusII installation.")
 endif()
 
 # muParser

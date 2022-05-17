@@ -10,6 +10,7 @@ find_path(
         netcdf.h
     PATHS
         $ENV{NETCDF_DIR}/include
+        $ENV{PETSC_DIR}/include
 )
 
 find_library(
@@ -17,6 +18,7 @@ find_library(
         netcdf
     PATHS
         $ENV{NETCDF_DIR}/lib
+        $ENV{PETSC_DIR}/lib
 )
 
 # The HDF5 bit may be moved into its own FindHDF5.cmake
@@ -25,6 +27,7 @@ find_path(
         hdf5.h
     PATHS
         $ENV{HDF5_DIR}/include
+        $ENV{PETSC_DIR}/include
     PATH_SUFFIXES
         hdf5/openmpi
         hdf5/mpich
@@ -36,6 +39,7 @@ find_library(
         hdf5
     PATHS
         $ENV{HDF5_DIR}/lib
+        $ENV{PETSC_DIR}/lib
     PATH_SUFFIXES
         hdf5/openmpi
         hdf5/mpich
@@ -47,6 +51,7 @@ find_path(
         exodusII.h
     PATHS
         $ENV{EXODUSII_DIR}/include
+        $ENV{PETSC_DIR}/include
 )
 
 find_library(
@@ -54,6 +59,7 @@ find_library(
         exoIIv2c
     PATHS
         $ENV{EXODUSII_DIR}/lib
+        $ENV{PETSC_DIR}/lib
 )
 
 include(FindPackageHandleStandardArgs)
