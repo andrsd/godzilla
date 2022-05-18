@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Error.h"
 #include "petscsys.h"
 
 namespace godzilla {
@@ -20,7 +21,16 @@ protected:
     ///              message will be printed.
     /// @param format String specifying how to interpret the data
     /// @param ... Arguments specifying data to print
-    void godzilla_print(unsigned int level, const char * format, ...) const;
+    template <typename... Args>
+    void
+    godzilla_print(unsigned int level, const char * format, Args &&... args) const
+    {
+        if (level <= this->verbosity_level && this->proc_id == 0) {
+            internal::fprintf(std::cout, "%s: ", this->prefix);
+            internal::fprintf(std::cout, format, std::forward<Args>(args)...);
+            internal::fprintf(std::cout, "\n");
+        }
+    }
 
 private:
     /// Processor ID

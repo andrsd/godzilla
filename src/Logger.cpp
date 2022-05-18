@@ -37,7 +37,7 @@ Logger::print() const
     for (auto & s : this->entries)
         internal::fprintf(std::cerr, "%s\n", s);
 
-    internal::fprintf(std::cerr, Terminal::color::red);
+    internal::fprintf(std::cerr, "%s", Terminal::Color::red);
     if (this->num_errors > 0)
         internal::fprintf(std::cerr, "%d error(s)", this->num_errors);
 
@@ -47,8 +47,7 @@ Logger::print() const
 
         internal::fprintf(std::cerr, "%d warning(s)", this->num_warnings);
     }
-    internal::fprintf(std::cerr, " found.\n");
-    internal::fprintf(std::cerr, Terminal::color::normal);
+    internal::fprintf(std::cerr, " found.%s\n", Terminal::Color::normal);
 }
 
 } // namespace godzilla
