@@ -15,7 +15,13 @@ public:
     ///
     /// @param aclr Control characters representing the color
     struct Color {
-        Color(const char * aclr) : str(aclr) {}
+        Color(const char * aclr) : str(nullptr)
+        {
+            if (has_colors())
+                this->str = aclr;
+            else
+                this->str = "";
+        }
 
         const char * str;
 

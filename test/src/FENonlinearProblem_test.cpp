@@ -255,8 +255,8 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
         virtual void
         check_integrity()
         {
-            if (this->log.get_num_entries() > 0)
-                this->log.print();
+            if (this->log->get_num_entries() > 0)
+                this->log->print();
         }
     } app;
     Mesh * mesh;

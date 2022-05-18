@@ -15,7 +15,7 @@ Object::valid_params()
 }
 
 Object::Object(const InputParameters & parameters) :
-    LoggingInterface(const_cast<Logger &>(parameters.get<const App *>("_app")->get_logger()),
+    LoggingInterface(parameters.get<const App *>("_app")->get_logger(),
                      parameters.get<std::string>("_name")),
     pars(parameters),
     app(*get_param<const App *>("_app")),

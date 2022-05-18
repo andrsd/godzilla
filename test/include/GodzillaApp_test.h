@@ -18,8 +18,8 @@ public:
     virtual void
     check_integrity()
     {
-        if (this->log.get_num_entries() > 0)
-            this->log.print();
+        if (this->log->get_num_entries() > 0)
+            this->log->print();
     }
 
     Problem * problem;

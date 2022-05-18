@@ -87,7 +87,7 @@ TEST_F(GodzillaAppTest, check_integrity)
         void
         run()
         {
-            this->log.error("error1");
+            this->log->error("error1");
             check_integrity();
         }
     } app;

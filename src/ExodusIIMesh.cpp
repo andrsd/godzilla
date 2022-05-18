@@ -24,9 +24,9 @@ ExodusIIMesh::ExodusIIMesh(const InputParameters & parameters) :
     _F_;
 
     if (!utils::path_exists(this->file_name))
-        log_error("Unable to open '",
-                  this->file_name,
-                  "' for reading. Make sure it exists and you have read permissions.");
+        log_error(
+            "Unable to open '%s' for reading. Make sure it exists and you have read permissions.",
+            this->file_name);
 }
 
 const std::string
