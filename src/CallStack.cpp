@@ -1,7 +1,6 @@
 #include "CallStack.h"
 #include <signal.h>
-#include <stdlib.h>
-#include <iostream>
+#include "petscsys.h"
 
 namespace godzilla {
 namespace internal {
@@ -43,8 +42,11 @@ sighandler(int signo)
     sig_name[SIGABRT] = "Abort";
     sig_name[SIGSEGV] = "Segmentation violation";
 
-    std::cerr << "Caught signal " << signo << " (" << sig_name[signo] << ")" << std::endl;
-    std::cerr << std::endl;
+    PetscFPrintf(PETSC_COMM_WORLD,
+                 PETSC_STDERR,
+                 "Caught signal %d (%s)\n\n",
+                 signo,
+                 sig_name[signo]);
     callstack.dump();
     exit(-2);
 }
@@ -73,14 +75,20 @@ void
 CallStack::dump()
 {
     if (this->size > 0) {
-        std::cerr << "Call stack:" << std::endl;
-        for (int n = 0, i = this->size - 1; i >= 0; i--, n++)
-            std::cerr << "  #" << n << ": " << this->stack[i]->file << ":" << this->stack[i]->line
-                      << ": " << this->stack[i]->func << std::endl;
+        PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "Call stack:\n");
+        for (int n = 0, i = this->size - 1; i >= 0; i--, n++) {
+            Obj * o = this->stack[i];
+            PetscFPrintf(PETSC_COMM_WORLD,
+                         PETSC_STDERR,
+                         "  #%d: %s:%d: %s\n",
+                         n,
+                         o->file,
+                         o->line,
+                         o->func);
+        }
     }
-    else {
-        std::cerr << "No call stack available." << std::endl;
-    }
+    else
+        PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "No call stack available.\n");
 }
 
 void
