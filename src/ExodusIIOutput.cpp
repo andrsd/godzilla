@@ -107,7 +107,7 @@ ExodusIIOutput::open_file()
     int io_word_size = sizeof(PetscReal);
     this->exoid = ex_create(this->file_name.c_str(), EX_CLOBBER, &cpu_word_size, &io_word_size);
     if (exoid == -1)
-        error("Could not open file '", get_file_name(), "' for writing.");
+        error("Could not open file '%s' for writing.", get_file_name());
 }
 
 void

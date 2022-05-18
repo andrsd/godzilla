@@ -293,15 +293,15 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
     _F_;
     YAML::Node node = root[name];
     if (!node)
-        error("Missing '", name, "' block.");
+        error("Missing '%s' block.", name);
 
     YAML::Node type = node["type"];
     if (!type)
-        error(name, ": No 'type' specified.");
+        error("%s: No 'type' specified.", name);
 
     const std::string & class_name = type.as<std::string>();
     if (!Factory::is_registered(class_name))
-        error(name, ": Type '", class_name, "' is not a registered object.");
+        error("%s: Type '%s' is not a registered object.", name, class_name);
 
     InputParameters * params = Factory::get_valid_params(class_name);
     params->set<std::string>("_type") = class_name;

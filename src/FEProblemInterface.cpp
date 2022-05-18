@@ -85,7 +85,7 @@ FEProblemInterface::get_field_name(PetscInt fid) const
     if (it != this->fields.end())
         return it->second.name;
     else
-        error("Field with ID = '", fid, "' does not exist.");
+        error("Field with ID = '%d' does not exist.", fid);
 }
 
 PetscInt
@@ -96,7 +96,7 @@ FEProblemInterface::get_field_order(PetscInt fid) const
     if (it != this->fields.end())
         return it->second.k;
     else
-        error("Field with ID = '", fid, "' does not exist.");
+        error("Field with ID = '%d' does not exist.", fid);
 }
 
 PetscInt
@@ -107,7 +107,7 @@ FEProblemInterface::get_field_num_components(PetscInt fid) const
     if (it != this->fields.end())
         return it->second.nc;
     else
-        error("Field with ID = '", fid, "' does not exist.");
+        error("Field with ID = '%d' does not exist.", fid);
 }
 
 PetscInt
@@ -118,7 +118,7 @@ FEProblemInterface::get_field_id(const std::string & name) const
     if (it != this->fields_by_name.end())
         return it->second;
     else
-        error("Field '", name, "' does not exist. Typo?");
+        error("Field '%s' does not exist. Typo?", name);
 }
 
 bool
@@ -145,7 +145,7 @@ FEProblemInterface::get_aux_field_name(PetscInt fid) const
     if (it != this->aux_fields.end())
         return it->second.name;
     else
-        error("Auxiliary field with ID = '", fid, "' does not exist.");
+        error("Auxiliary field with ID = '%d' does not exist.", fid);
 }
 
 PetscInt
@@ -156,7 +156,7 @@ FEProblemInterface::get_aux_field_id(const std::string & name) const
     if (it != this->aux_fields_by_name.end())
         return it->second;
     else
-        error("Auxiliary field '", name, "' does not exist. Typo?");
+        error("Auxiliary field '%s' does not exist. Typo?", name);
 }
 
 bool
@@ -186,7 +186,7 @@ FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, P
         this->fields_by_name[name] = id;
     }
     else
-        error("Cannot add field '", name, "' with ID = ", id, ". ID already exists.");
+        error("Cannot add field '%s' with ID = %d. ID already exists.", name, id);
 }
 
 void
@@ -200,7 +200,7 @@ FEProblemInterface::add_aux_fe(PetscInt id, const std::string & name, PetscInt n
         this->aux_fields_by_name[name] = id;
     }
     else
-        error("Cannot add auxiliary field '", name, "' with ID = ", id, ". ID is already taken.");
+        error("Cannot add auxiliary field '%s' with ID = %d. ID is already taken.", name, id);
 }
 
 void

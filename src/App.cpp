@@ -123,9 +123,8 @@ App::run_input_file(const std::string & file_name)
         run_problem();
     }
     else
-        error("Unable to open '",
-              file_name,
-              "' for reading. Make sure it exists and you have read permissions.");
+        error("Unable to open '%s' for reading. Make sure it exists and you have read permissions.",
+              file_name);
 }
 
 void
