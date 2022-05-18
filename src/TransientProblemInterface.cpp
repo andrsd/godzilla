@@ -1,6 +1,6 @@
 #include "Godzilla.h"
 #include "CallStack.h"
-#include "TransientInterface.h"
+#include "TransientProblemInterface.h"
 #include "NonlinearProblem.h"
 #include "Output.h"
 #include "petscdmplex.h"
@@ -8,7 +8,7 @@
 namespace godzilla {
 
 InputParameters
-TransientInterface::valid_params()
+TransientProblemInterface::valid_params()
 {
     InputParameters params;
     params.add_param<PetscReal>("start_time", 0., "Start time of the simulation");
@@ -17,7 +17,7 @@ TransientInterface::valid_params()
     return params;
 }
 
-TransientInterface::TransientInterface(const InputParameters & params) :
+TransientProblemInterface::TransientProblemInterface(const InputParameters & params) :
     ts(nullptr),
     start_time(params.get<PetscReal>("start_time")),
     end_time(params.get<PetscReal>("end_time")),
@@ -27,14 +27,14 @@ TransientInterface::TransientInterface(const InputParameters & params) :
     _F_;
 }
 
-TransientInterface::~TransientInterface()
+TransientProblemInterface::~TransientProblemInterface()
 {
     _F_;
     TSDestroy(&this->ts);
 }
 
 void
-TransientInterface::init(const MPI_Comm & comm)
+TransientProblemInterface::init(const MPI_Comm & comm)
 {
     _F_;
     PetscErrorCode ierr;
@@ -43,7 +43,7 @@ TransientInterface::init(const MPI_Comm & comm)
 }
 
 void
-TransientInterface::create(DM dm)
+TransientProblemInterface::create(DM dm)
 {
     _F_;
     PetscErrorCode ierr;
@@ -64,7 +64,7 @@ TransientInterface::create(DM dm)
 }
 
 void
-TransientInterface::set_up_time_scheme()
+TransientProblemInterface::set_up_time_scheme()
 {
     _F_;
     PetscErrorCode ierr;
@@ -74,7 +74,7 @@ TransientInterface::set_up_time_scheme()
 }
 
 void
-TransientInterface::solve(Vec x)
+TransientProblemInterface::solve(Vec x)
 {
     _F_;
     TSSolve(this->ts, x);

@@ -46,7 +46,7 @@ add_library(godzilla
         Problem.cpp
         RectangleMesh.cpp
         Terminal.cpp
-        TransientInterface.cpp
+        TransientProblemInterface.cpp
         UnstructuredMesh.cpp
         Utils.cpp
         VTKOutput.cpp

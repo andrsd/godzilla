@@ -1,11 +1,11 @@
 #pragma once
 
 #include "FENonlinearProblem.h"
-#include "TransientInterface.h"
+#include "TransientProblemInterface.h"
 
 namespace godzilla {
 
-class ImplicitFENonlinearProblem : public FENonlinearProblem, public TransientInterface {
+class ImplicitFENonlinearProblem : public FENonlinearProblem, public TransientProblemInterface {
 public:
     ImplicitFENonlinearProblem(const InputParameters & params);
     virtual ~ImplicitFENonlinearProblem();
