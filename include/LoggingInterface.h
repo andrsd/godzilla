@@ -8,31 +8,29 @@ namespace godzilla {
 ///
 class LoggingInterface {
 public:
-    LoggingInterface(Logger & alogger, std::string aprefix = "") : logger(alogger), prefix(aprefix)
+    LoggingInterface(Logger * alogger, std::string aprefix = "") : logger(alogger), prefix(aprefix)
     {
-        if (this->prefix.size() > 0)
-            this->prefix += ": ";
     }
 
     /// Log an error
     template <typename... Args>
     void
-    log_error(Args &&... args)
+    log_error(const char * s, Args... args)
     {
-        this->logger.error(this->prefix, std::forward<Args>(args)...);
+        this->logger->error(this->prefix, s, std::forward<Args>(args)...);
     }
 
     /// Log a warning
     template <typename... Args>
     void
-    log_warning(Args &&... args)
+    log_warning(const char * s, Args... args)
     {
-        this->logger.warning(this->prefix, std::forward<Args>(args)...);
+        this->logger->warning(this->prefix, s, std::forward<Args>(args)...);
     }
 
 protected:
     /// Logger object
-    Logger & logger;
+    Logger * logger;
 
     /// Prefix for each logger line
     std::string prefix;

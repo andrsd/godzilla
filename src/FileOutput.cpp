@@ -1,4 +1,5 @@
 #include "Godzilla.h"
+#include "CallStack.h"
 #include "FileOutput.h"
 #include "Problem.h"
 
@@ -91,7 +92,7 @@ FileOutput::output_step(PetscInt stepi)
     ierr = PetscViewerFileSetName(this->viewer, this->file_name.c_str());
     check_petsc_error(ierr);
 
-    godzilla_print(9, "Output to file: ", this->file_name);
+    godzilla_print(9, "Output to file: %s", this->file_name);
     DM dm = this->problem->get_dm();
     output_mesh(dm);
     Vec vec = this->problem->get_solution_vector();

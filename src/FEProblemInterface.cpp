@@ -25,7 +25,7 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 FEProblemInterface::FEProblemInterface(Problem & problem, const InputParameters & params) :
     problem(problem),
-    logger(const_cast<Logger &>(params.get<const App *>("_app")->get_logger())),
+    logger(params.get<const App *>("_app")->get_logger()),
     qorder(PETSC_DETERMINE),
     ds(nullptr)
 {
@@ -85,7 +85,7 @@ FEProblemInterface::get_field_name(PetscInt fid) const
     if (it != this->fields.end())
         return it->second.name;
     else
-        error("Field with ID = '", fid, "' does not exist.");
+        error("Field with ID = '%d' does not exist.", fid);
 }
 
 PetscInt
@@ -96,7 +96,7 @@ FEProblemInterface::get_field_order(PetscInt fid) const
     if (it != this->fields.end())
         return it->second.k;
     else
-        error("Field with ID = '", fid, "' does not exist.");
+        error("Field with ID = '%d' does not exist.", fid);
 }
 
 PetscInt
@@ -107,7 +107,7 @@ FEProblemInterface::get_field_num_components(PetscInt fid) const
     if (it != this->fields.end())
         return it->second.nc;
     else
-        error("Field with ID = '", fid, "' does not exist.");
+        error("Field with ID = '%d' does not exist.", fid);
 }
 
 PetscInt
@@ -118,7 +118,7 @@ FEProblemInterface::get_field_id(const std::string & name) const
     if (it != this->fields_by_name.end())
         return it->second;
     else
-        error("Field '", name, "' does not exist. Typo?");
+        error("Field '%s' does not exist. Typo?", name);
 }
 
 bool
@@ -145,7 +145,7 @@ FEProblemInterface::get_aux_field_name(PetscInt fid) const
     if (it != this->aux_fields.end())
         return it->second.name;
     else
-        error("Auxiliary field with ID = '", fid, "' does not exist.");
+        error("Auxiliary field with ID = '%d' does not exist.", fid);
 }
 
 PetscInt
@@ -156,7 +156,7 @@ FEProblemInterface::get_aux_field_id(const std::string & name) const
     if (it != this->aux_fields_by_name.end())
         return it->second;
     else
-        error("Auxiliary field '", name, "' does not exist. Typo?");
+        error("Auxiliary field '%s' does not exist. Typo?", name);
 }
 
 bool
@@ -186,7 +186,7 @@ FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, P
         this->fields_by_name[name] = id;
     }
     else
-        error("Cannot add field '", name, "' with ID = ", id, ". ID already exists.");
+        error("Cannot add field '%s' with ID = %d. ID already exists.", name, id);
 }
 
 void
@@ -200,7 +200,7 @@ FEProblemInterface::add_aux_fe(PetscInt id, const std::string & name, PetscInt n
         this->aux_fields_by_name[name] = id;
     }
     else
-        error("Cannot add auxiliary field '", name, "' with ID = ", id, ". ID is already taken.");
+        error("Cannot add auxiliary field '%s' with ID = %d. ID is already taken.", name, id);
 }
 
 void
@@ -220,9 +220,9 @@ FEProblemInterface::add_initial_condition(InitialCondition * ic)
         this->ics[fid].ic = ic;
     else
         // TODO: improve this error message
-        this->logger.error("Initial condition '",
-                           ic->get_name(),
-                           "' is being applied to a field that already has an initial condition.");
+        this->logger->error("Initial condition '%s' is being applied to a field that already has "
+                            "an initial condition.",
+                            ic->get_name());
 }
 
 void
@@ -253,11 +253,10 @@ FEProblemInterface::set_up_boundary_conditions(DM dm)
         check_petsc_error(ierr);
         if (!exists) {
             no_errors = false;
-            this->logger.error("Boundary condition '",
-                               bc->get_name(),
-                               "' is set on boundary '",
-                               bnd_name,
-                               "' which does not exist in the mesh.");
+            this->logger->error(
+                "Boundary condition '%s' is set on boundary '%s' which does not exist in the mesh.",
+                bc->get_name().c_str(),
+                bnd_name.c_str());
         }
     }
 
@@ -273,11 +272,9 @@ FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
     PetscInt n_ics = this->ics.size();
     if (n_ics > 0) {
         if (n_ics != fields.size())
-            this->logger.error("Provided ",
-                               fields.size(),
-                               " field(s), but ",
-                               n_ics,
-                               " initial condition(s).");
+            this->logger->error("Provided %d field(s), but %d initial condition(s).",
+                                fields.size(),
+                                n_ics);
         else {
             bool no_errors = true;
             PetscErrorCode ierr;
@@ -292,13 +289,11 @@ FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
                 PetscInt field_nc = this->fields[fid].nc;
                 if (ic_nc != field_nc) {
                     no_errors = false;
-                    this->logger.error("Initial condition '",
-                                       ic->get_name(),
-                                       "' operates on ",
-                                       ic_nc,
-                                       " components, but is set on a field with ",
-                                       field_nc,
-                                       " components.");
+                    this->logger->error("Initial condition '%s' operates on %d components, but is "
+                                        "set on a field with %d components.",
+                                        ic->get_name(),
+                                        ic_nc,
+                                        field_nc);
                 }
 
                 ic_funcs[fid] = __initial_condition_function;
@@ -412,22 +407,19 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
             PetscInt field_nc = this->aux_fields[fid].nc;
             if (aux_nc != field_nc) {
                 no_errors = false;
-                this->logger.error("Auxiliary field '",
-                                   aux->get_name(),
-                                   "' has ",
-                                   aux_nc,
-                                   " component(s), but is set on a field with ",
-                                   field_nc,
-                                   " component(s).");
+                this->logger->error("Auxiliary field '%s' has %d component(s), but is set on a "
+                                    "field with %d component(s).",
+                                    aux->get_name(),
+                                    aux_nc,
+                                    field_nc);
             }
         }
         else {
             no_errors = false;
-            this->logger.error("Auxiliary field '",
-                               aux->get_name(),
-                               "' is set on auxiliary field with ID '",
-                               fid,
-                               "', but such ID does not exist.");
+            this->logger->error("Auxiliary field '%s' is set on auxiliary field with ID '%d', but "
+                                "such ID does not exist.",
+                                aux->get_name(),
+                                fid);
         }
     }
     if (no_errors)

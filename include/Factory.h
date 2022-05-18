@@ -71,9 +71,8 @@ public:
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
-            error("Getting valid_params for object '",
-                  class_name,
-                  "' failed.  Object is not registred.");
+            error("Getting valid_params for object '%s' failed.  Object is not registred.",
+                  class_name);
 
         Entry & entry = it->second;
         InputParameters * ips = new InputParameters((*entry.params_ptr)());
@@ -92,7 +91,7 @@ public:
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
-            error("Trying to create object of unregistered type '", class_name, "'.");
+            error("Trying to create object of unregistered type '%s'.", class_name);
         else {
             parameters.set<std::string>("_type") = class_name;
             parameters.set<std::string>("_name") = name;
@@ -100,7 +99,7 @@ public:
             auto entry = it->second;
             T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
             if (object == nullptr)
-                error("Instantiation of object '", name, ":[", class_name, "]' failed.");
+                error("Instantiation of object '%s:[%s]' failed.", name, class_name);
             objects.push_back(object);
             return object;
         }

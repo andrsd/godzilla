@@ -2,13 +2,12 @@
 
 #include <vector>
 #include <string>
-#include <sstream>
-#include <iostream>
 #include "Terminal.h"
+#include "Error.h"
 
 namespace godzilla {
 
-/// Class for loggin errors and warnings
+/// Class for logging errors and warnings
 class Logger {
 public:
     Logger();
@@ -16,30 +15,39 @@ public:
     /// Log an error
     template <typename... Args>
     void
-    error(Args &&... args)
+    error(const char * s, Args... args)
     {
-        std::ostringstream oss;
-        stream_all(oss,
-                   Terminal::Color::red,
-                   "error: ",
-                   Terminal::Color::normal,
-                   std::forward<Args>(args)...);
-        this->entries.push_back(oss.str());
+        error(std::string(""), s, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    void
+    error(const std::string & prefix, const char * s, Args... args)
+    {
+        std::string str =
+            format_msg(Terminal::Color::red, "[ERROR]", prefix, s, std::forward<Args>(args)...);
+        this->entries.push_back(str);
         this->num_errors++;
     }
 
     /// Log a warning
     template <typename... Args>
     void
-    warning(Args &&... args)
+    warning(const char * s, Args... args)
     {
-        std::ostringstream oss;
-        stream_all(oss,
-                   Terminal::Color::magenta,
-                   "warning: ",
-                   Terminal::Color::normal,
-                   std::forward<Args>(args)...);
-        this->entries.push_back(oss.str());
+        warning(std::string(""), s, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    void
+    warning(const std::string & prefix, const char * s, Args... args)
+    {
+        std::string str = format_msg(Terminal::Color::yellow,
+                                     "[WARNING]",
+                                     prefix,
+                                     s,
+                                     std::forward<Args>(args)...);
+        this->entries.push_back(str);
         this->num_warnings++;
     }
 
@@ -62,17 +70,21 @@ public:
     void print() const;
 
 protected:
-    void
-    stream_all(std::ostringstream & ss)
+    template <typename... Args>
+    std::string
+    format_msg(const Terminal::Color & color,
+               const char * title,
+               const std::string & prefix,
+               const char * format,
+               Args... args)
     {
-    }
-
-    template <typename T, typename... Args>
-    void
-    stream_all(std::ostringstream & ss, T && val, Args &&... args)
-    {
-        ss << val;
-        stream_all(ss, std::forward<Args>(args)...);
+        std::ostringstream oss;
+        oss << color << title << " ";
+        if (prefix.length() > 0)
+            oss << prefix << ": ";
+        internal::fprintf(oss, format, std::forward<Args>(args)...);
+        oss << Terminal::Color::normal;
+        return oss.str();
     }
 
     /// List of logged errors/warnings

@@ -20,7 +20,7 @@ public:
     App(const std::string & app_name, MPI_Comm comm);
     virtual ~App();
 
-    const Logger & get_logger() const;
+    Logger * get_logger() const;
 
     /// @return Get problem this application is representing
     virtual Problem * get_problem() const;
@@ -108,7 +108,7 @@ protected:
     PetscMPIInt comm_rank;
 
     /// Log with errors and/or warnings
-    Logger log;
+    Logger * log;
 
     /// Command line parser
     CmdLineArgParser args;

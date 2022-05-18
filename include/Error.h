@@ -3,30 +3,38 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "Terminal.h"
 #include "petsc.h"
 
 namespace godzilla {
 
 namespace internal {
 
-/// All of the following are not meant to be called directly - they are called by the normal macros
-/// (godzillaError(), etc.) down below
-void godzilla_stream_all(std::ostringstream & ss);
+void fprintf(std::ostream & os, const char * s);
 
 template <typename T, typename... Args>
 void
-godzilla_stream_all(std::ostringstream & ss, T && val, Args &&... args)
+fprintf(std::ostream & os, const char * s, T value, Args... args)
 {
-    ss << val;
-    godzilla_stream_all(ss, std::forward<Args>(args)...);
+    while (s && *s) {
+        if (*s == '%' && *++s != '%') {
+            os << value;
+            return fprintf(os, ++s, args...);
+        }
+        os << *s++;
+    }
+    throw std::runtime_error("extra arguments provided to fprintf");
 }
 
-void godzilla_msg_raw(const std::string & msg);
-
-std::string
-godzilla_msg_fmt(const std::string & msg, const std::string & title, const std::string & color);
-
-void godzilla_error_raw(std::string msg, bool call_stack = false);
+template <typename... Args>
+void
+error_printf(const char * s, Args... args)
+{
+    fprintf(std::cerr, "%s", Terminal::Color::red);
+    fprintf(std::cerr, "[ERROR] ");
+    fprintf(std::cerr, s, std::forward<Args>(args)...);
+    fprintf(std::cerr, "%s\n", Terminal::Color::normal);
+}
 
 /// Terminate the run
 [[noreturn]] void terminate(int status = 1);
@@ -37,11 +45,9 @@ void mem_check(int line, const char * func, const char * file, void * var);
 
 template <typename... Args>
 [[noreturn]] void
-error(Args &&... args)
+error(const char * format, Args &&... args)
 {
-    std::ostringstream oss;
-    internal::godzilla_stream_all(oss, std::forward<Args>(args)...);
-    internal::godzilla_error_raw(oss.str());
+    internal::error_printf(format, std::forward<Args>(args)...);
     internal::terminate();
 }
 

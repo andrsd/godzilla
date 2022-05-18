@@ -21,6 +21,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     gyml(nullptr)
 {
     _F_;
+    this->log = new Logger();
     MPI_Comm_size(comm, &this->comm_size);
     MPI_Comm_rank(comm, &this->comm_rank);
 
@@ -35,10 +36,11 @@ App::~App()
 {
     _F_;
     delete this->gyml;
+    delete this->log;
     Factory::destroy();
 }
 
-const Logger &
+Logger *
 App::get_logger() const
 {
     _F_;
@@ -118,14 +120,14 @@ App::run_input_file(const std::string & file_name)
     _F_;
     if (utils::path_exists(file_name)) {
         build_from_gyml(file_name);
-        create();
+        if (this->log->get_num_errors() == 0)
+            create();
         check_integrity();
         run_problem();
     }
     else
-        error("Unable to open '",
-              file_name,
-              "' for reading. Make sure it exists and you have read permissions.");
+        error("Unable to open '%s' for reading. Make sure it exists and you have read permissions.",
+              file_name);
 }
 
 void
@@ -141,8 +143,8 @@ App::check_integrity()
 {
     _F_;
     this->gyml->check();
-    if (this->log.get_num_entries() > 0) {
-        this->log.print();
+    if (this->log->get_num_entries() > 0) {
+        this->log->print();
         godzilla::internal::terminate();
     }
 }

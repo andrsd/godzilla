@@ -1,4 +1,5 @@
 #include "GodzillaConfig.h"
+#include "CallStack.h"
 #include "Factory.h"
 #include "FENonlinearProblem_test.h"
 #include "InputParameters.h"
@@ -101,9 +102,10 @@ TEST_F(FENonlinearProblemTest, fields)
     EXPECT_EQ(prob->has_field_by_id(0), true);
     EXPECT_EQ(prob->has_field_by_name("u"), true);
 
-    EXPECT_DEATH(prob->get_field_name(65536), "error: Field with ID = '65536' does not exist.");
+    EXPECT_DEATH(prob->get_field_name(65536),
+                 "\\[ERROR\\] Field with ID = '65536' does not exist.");
     EXPECT_DEATH(prob->get_field_id("nonexistent"),
-                 "error: Field 'nonexistent' does not exist\\. Typo\\?");
+                 "\\[ERROR\\] Field 'nonexistent' does not exist\\. Typo\\?");
     EXPECT_EQ(prob->has_field_by_id(65536), false);
     EXPECT_EQ(prob->has_field_by_name("nonexistent"), false);
 }
@@ -112,7 +114,7 @@ TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
     prob->add_fe(0, "first", 1, 1);
     EXPECT_DEATH(prob->add_fe(0, "second", 1, 1),
-                 "error: Cannot add field 'second' with ID = 0. ID already exists.");
+                 "\\[ERROR\\] Cannot add field 'second' with ID = 0. ID already exists.");
 }
 
 TEST_F(FENonlinearProblemTest, get_aux_fields)
@@ -127,9 +129,9 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
     EXPECT_EQ(prob->has_aux_field_by_name("aux_one"), true);
 
     EXPECT_DEATH(prob->get_aux_field_name(1),
-                 "error: Auxiliary field with ID = '1' does not exist.");
+                 "\\[ERROR\\] Auxiliary field with ID = '1' does not exist.");
     EXPECT_DEATH(prob->get_aux_field_id("aux_two"),
-                 "error: Auxiliary field 'aux_two' does not exist\\. Typo\\?");
+                 "\\[ERROR\\] Auxiliary field 'aux_two' does not exist\\. Typo\\?");
     EXPECT_EQ(prob->has_aux_field_by_id(1), false);
     EXPECT_EQ(prob->has_aux_field_by_name("aux_two"), false);
 }
@@ -137,8 +139,9 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
     prob->add_aux_fe(0, "first", 1, 1);
-    EXPECT_DEATH(prob->add_aux_fe(0, "second", 1, 1),
-                 "error: Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
+    EXPECT_DEATH(
+        prob->add_aux_fe(0, "second", 1, 1),
+        "\\[ERROR\\] Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
 }
 
 TEST_F(FENonlinearProblemTest, solve)
@@ -254,8 +257,8 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
         virtual void
         check_integrity()
         {
-            if (this->log.get_num_entries() > 0)
-                this->log.print();
+            if (this->log->get_num_entries() > 0)
+                this->log->print();
         }
     } app;
     Mesh * mesh;

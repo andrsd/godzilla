@@ -14,5 +14,5 @@ TEST(PrintInterfaceTest, error)
         }
     } app;
 
-    EXPECT_DEATH(app.test(), "error: Error");
+    EXPECT_DEATH(app.test(), "\\[ERROR\\] Error");
 }

@@ -224,7 +224,7 @@ protected:
     Problem & problem;
 
     /// Logger object
-    Logger & logger;
+    Logger * logger;
 
     /// Quadrature order
     PetscInt qorder;

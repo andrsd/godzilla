@@ -1,11 +1,8 @@
 #pragma once
 
 #include <string>
-#include <sstream>
-#include <iostream>
-#include "petsc.h"
-#include "CallStack.h"
 #include "Error.h"
+#include "petscsys.h"
 
 namespace godzilla {
 
@@ -19,18 +16,25 @@ public:
 
 protected:
     /// Print a message on a terminal
+    ///
+    /// @param level Verbosity level. If application verbose level is higher than this number, the
+    ///              message will be printed.
+    /// @param format String specifying how to interpret the data
+    /// @param ... Arguments specifying data to print
     template <typename... Args>
     void
-    godzilla_print(unsigned int level, Args &&... args) const
+    godzilla_print(unsigned int level, const char * format, Args &&... args) const
     {
-        if (level <= this->verbosity_level) {
-            std::ostringstream oss;
-            internal::godzilla_stream_all(oss, this->prefix, std::forward<Args>(args)...);
-            internal::godzilla_msg_raw(oss.str());
+        if (level <= this->verbosity_level && this->proc_id == 0) {
+            internal::fprintf(std::cout, "%s: ", this->prefix);
+            internal::fprintf(std::cout, format, std::forward<Args>(args)...);
+            internal::fprintf(std::cout, "\n");
         }
     }
 
 private:
+    /// Processor ID
+    const PetscMPIInt & proc_id;
     /// Verbosity level
     const unsigned int & verbosity_level;
     /// Prefix to print

@@ -24,7 +24,7 @@ type_name()
 namespace godzilla {
 
 GYMLFile::GYMLFile(const App * app) :
-    LoggingInterface(const_cast<Logger &>(app->get_logger())),
+    LoggingInterface(const_cast<App *>(app)->get_logger()),
     app(app),
     mesh(nullptr),
     problem(nullptr)
@@ -177,9 +177,8 @@ GYMLFile::build_auxiliary_fields()
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
-        log_error("Supplied problem type '",
-                  this->problem->get_type(),
-                  "' does not support auxiliary fields.");
+        log_error("Supplied problem type '%s' does not support auxiliary fields.",
+                  this->problem->get_type());
     else {
         for (const auto & it : auxs_root_node) {
             YAML::Node aux_node = it.first;
@@ -204,9 +203,8 @@ GYMLFile::build_initial_conditions()
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
-        log_error("Supplied problem type '",
-                  this->problem->get_type(),
-                  "' does not support initial conditions.");
+        log_error("Supplied problem type '%s' does not support initial conditions.",
+                  this->problem->get_type());
     else {
         for (const auto & it : ics_root_node) {
             YAML::Node ic_node = it.first;
@@ -230,9 +228,8 @@ GYMLFile::build_boundary_conditions()
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
-        log_error("Supplied problem type '",
-                  this->problem->get_type(),
-                  "' does not support boundary conditions.");
+        log_error("Supplied problem type '%s' does not support boundary conditions.",
+                  this->problem->get_type());
     else {
         for (const auto & it : bcs_root_node) {
             YAML::Node bc_node = it.first;
@@ -293,15 +290,15 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
     _F_;
     YAML::Node node = root[name];
     if (!node)
-        error("Missing '", name, "' block.");
+        error("Missing '%s' block.", name);
 
     YAML::Node type = node["type"];
     if (!type)
-        error(name, ": No 'type' specified.");
+        error("%s: No 'type' specified.", name);
 
     const std::string & class_name = type.as<std::string>();
     if (!Factory::is_registered(class_name))
-        error(name, ": Type '", class_name, "' is not a registered object.");
+        error("%s: Type '%s' is not a registered object.", name, class_name);
 
     InputParameters * params = Factory::get_valid_params(class_name);
     params->set<std::string>("_type") = class_name;
@@ -360,9 +357,8 @@ GYMLFile::read_vector_value(const std::string & param_name, const YAML::Node & v
     else if (val_node.IsSequence())
         vec = val_node.as<std::vector<T>>();
     else
-        log_error("Parameter '",
-                  param_name,
-                  "' must be either a single value or a vector of values.");
+        log_error("Parameter '%s' must be either a single value or a vector of values.",
+                  param_name);
 
     return vec;
 }
@@ -380,7 +376,7 @@ GYMLFile::check_params(const InputParameters * params, const std::string & name)
     }
 
     if (!oss.str().empty())
-        log_error(name, ": Missing required parameters:", oss.str());
+        log_error("%s: Missing required parameters:%s", name, oss.str());
     else
         this->valid_param_object_names.insert(name);
 }

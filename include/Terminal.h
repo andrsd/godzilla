@@ -12,10 +12,18 @@ public:
     ///
     /// Classes can be namespaced to avoid name collisions with other packages (like googletest)
     /// We can detect that this is being put into a stream and potentially strip it
+    ///
+    /// @param aclr Control characters representing the color
     struct Color {
-        Color(const std::string & aclr) : str(aclr) {}
+        Color(const char * aclr) : str(nullptr)
+        {
+            if (has_colors())
+                this->str = aclr;
+            else
+                this->str = "";
+        }
 
-        std::string str;
+        const char * str;
 
     public:
         static Color black;

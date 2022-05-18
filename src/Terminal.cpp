@@ -25,7 +25,6 @@ unsigned int Terminal::num_colors = 256;
 std::ostream &
 operator<<(std::ostream & os, const godzilla::Terminal::Color & clr)
 {
-    if (godzilla::Terminal::has_colors())
-        os << clr.str;
+    os << clr.str;
     return os;
 }

@@ -111,7 +111,7 @@ ImplicitFENonlinearProblem::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec
     PetscReal dt;
     ierr = TSGetTimeStep(this->ts, &dt);
     check_petsc_error(ierr);
-    godzilla_print(6, stepi, " Time ", t, ", dt = ", dt);
+    godzilla_print(6, "%d Time %g dt = %g", stepi, t, dt);
     return 0;
 }
 

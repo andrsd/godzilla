@@ -32,25 +32,21 @@ LinearInterpolation::check()
 {
     _F_;
     if (this->x.size() != this->y.size())
-        godzilla::error("LinearInterpolation: size of 'x' (",
+        godzilla::error("LinearInterpolation: size of 'x' (%d) does not match size of 'y' (%d).",
                         this->x.size(),
-                        ") does not match size of 'y' (",
-                        this->y.size(),
-                        ")");
+                        this->y.size());
 
     if (this->x.size() < 2)
-        godzilla::error("LinearInterpolation: Size of 'x' is ",
-                        this->x.size(),
-                        ". It must be 2 or more.");
+        godzilla::error("LinearInterpolation: Size of 'x' is %d. It must be 2 or more.",
+                        this->x.size());
     else {
         // check monotonicity
         PetscReal a = this->x[0];
         for (std::size_t i = 1; i < this->x.size(); i++) {
             if (this->x[i] <= a)
                 godzilla::error(
-                    "LinearInterpolation: Values in 'x' must be increasing. Failed at index '",
-                    i,
-                    "'.");
+                    "LinearInterpolation: Values in 'x' must be increasing. Failed at index '%d'.",
+                    i);
         }
     }
 }
