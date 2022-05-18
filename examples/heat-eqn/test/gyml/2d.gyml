@@ -7,7 +7,7 @@ problem:
   type: HeatEquationProblem
   start_time: 0
   end_time: 0.1
-  dt: 0.001
+  dt: 0.01
 
 ics:
   all:
@@ -18,7 +18,7 @@ bcs:
   left:
     type: DirichletBC
     boundary: 'left'
-    value: [ '310' ]
+    value: [ '300' ]
   right:
     type: ConvectiveHeatFluxConstBC
     boundary: 'right'
@@ -27,5 +27,5 @@ bcs:
 
 output:
   vtk:
-    type: VTKOutput
-    file: 'out'
+    type: ExodusIIOutput
+    file: '2d'

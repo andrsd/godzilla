@@ -6,10 +6,10 @@ namespace godzilla {
 
 /// Interface for transient simulations
 ///
-class TransientInterface {
+class TransientProblemInterface {
 public:
-    TransientInterface(const InputParameters & params);
-    virtual ~TransientInterface();
+    TransientProblemInterface(const InputParameters & params);
+    virtual ~TransientProblemInterface();
 
 protected:
     /// Initialize

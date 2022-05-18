@@ -187,9 +187,9 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
         }
 
         virtual void
-        output_step(Vec vec)
+        output()
         {
-            ImplicitFENonlinearProblem::output_step(vec);
+            ImplicitFENonlinearProblem::output();
         }
 
         MOCK_METHOD(void, on_set_fields, ());
@@ -223,7 +223,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
 
     EXPECT_CALL(out, output_step);
 
-    prob.output_step(prob.get_solution_vector());
+    prob.output();
 }
 
 // GTestImplicitFENonlinearProblem
