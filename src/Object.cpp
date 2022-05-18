@@ -1,5 +1,6 @@
 #include "Object.h"
 #include "App.h"
+#include "CallStack.h"
 
 namespace godzilla {
 

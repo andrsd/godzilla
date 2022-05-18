@@ -3,22 +3,22 @@
 #include <string>
 #include "yaml-cpp/yaml.h"
 #include "InputParameters.h"
-#include "PrintInterface.h"
 #include "LoggingInterface.h"
 
 namespace godzilla {
 
 class App;
 class Factory;
+class Object;
 class Mesh;
 class Problem;
 class Function;
 
 /// YML parser for input files
 ///
-class GYMLFile : public PrintInterface, public LoggingInterface {
+class GYMLFile : public LoggingInterface {
 public:
-    GYMLFile(const App & app);
+    GYMLFile(const App * app);
 
     /// parse the YML file
     virtual void parse(const std::string & file_name);
@@ -60,7 +60,7 @@ protected:
     void check_params(const InputParameters * params, const std::string & name);
 
     /// Application object
-    const godzilla::App & app;
+    const godzilla::App * app;
     /// Root node of the YML file
     YAML::Node root;
     /// Mesh object

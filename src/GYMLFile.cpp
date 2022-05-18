@@ -23,9 +23,8 @@ type_name()
 
 namespace godzilla {
 
-GYMLFile::GYMLFile(const App & app) :
-    PrintInterface(app),
-    LoggingInterface(const_cast<Logger &>(app.get_logger())),
+GYMLFile::GYMLFile(const App * app) :
+    LoggingInterface(const_cast<Logger &>(app->get_logger())),
     app(app),
     mesh(nullptr),
     problem(nullptr)
@@ -307,7 +306,7 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
     InputParameters * params = Factory::get_valid_params(class_name);
     params->set<std::string>("_type") = class_name;
     params->set<std::string>("_name") = name;
-    params->set<const App *>("_app") = &this->app;
+    params->set<const App *>("_app") = this->app;
 
     for (auto & kv : *params) {
         const std::string & param_name = kv.first;
