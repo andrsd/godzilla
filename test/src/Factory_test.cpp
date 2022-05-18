@@ -36,5 +36,5 @@ TEST(FactoryTest, create_wrong_type)
     InputParameters * params = Factory::get_valid_params("LineMesh");
     params->set<PetscInt>("nx") = 1;
     EXPECT_DEATH(app.build_object<RectangleMesh>("LineMesh", "name", params),
-                 "error: Instantiation of object 'name:\\[LineMesh\\]' failed\\.");
+                 "\\[ERROR\\] Instantiation of object 'name:\\[LineMesh\\]' failed\\.");
 }

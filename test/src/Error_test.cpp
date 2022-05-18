@@ -15,5 +15,5 @@ TEST(ErrorTest, mem_check)
 
 TEST(ErrorTest, check_petsc_error)
 {
-    EXPECT_DEATH(check_petsc_error(123), "error: PETSc error: 123");
+    EXPECT_DEATH(check_petsc_error(123), "\\[ERROR\\] PETSc error: 123");
 }

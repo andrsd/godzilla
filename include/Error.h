@@ -31,7 +31,7 @@ void
 error_printf(const char * s, Args... args)
 {
     fprintf(std::cerr, "%s", Terminal::Color::red);
-    fprintf(std::cerr, "error: ");
+    fprintf(std::cerr, "[ERROR] ");
     fprintf(std::cerr, s, std::forward<Args>(args)...);
     fprintf(std::cerr, "%s\n", Terminal::Color::normal);
 }
