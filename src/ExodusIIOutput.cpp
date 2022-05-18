@@ -1,5 +1,6 @@
 #include "Godzilla.h"
 #include "GodzillaConfig.h"
+#include "CallStack.h"
 #include "ExodusIIOutput.h"
 #include "Problem.h"
 #include "FEProblemInterface.h"
@@ -83,7 +84,7 @@ ExodusIIOutput::output_step(PetscInt stepi)
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
     set_file_name();
-    godzilla_print(9, "Output to file: ", this->file_name);
+    godzilla_print(9, "Output to file: %s", this->file_name.c_str());
 
     if (this->exoid == -1)
         open_file();

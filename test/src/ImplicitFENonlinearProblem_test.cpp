@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaConfig.h"
+#include "CallStack.h"
 #include "Factory.h"
 #include "ImplicitFENonlinearProblem_test.h"
 #include "InputParameters.h"

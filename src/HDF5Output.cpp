@@ -1,4 +1,5 @@
 #include "Godzilla.h"
+#include "CallStack.h"
 #include "HDF5Output.h"
 #include "Problem.h"
 #include "petscviewerhdf5.h"
