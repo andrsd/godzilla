@@ -28,4 +28,8 @@ target_link_libraries(
         ${GODZILLA_LIBRARIES}
 )
 
-add_test(${PROJECT_NAME}-2d ${PROJECT_NAME} -i ${PROJECT_SOURCE_DIR}/gyml/2d.gyml)
+# Tests
+
+if (GODZILLA_BUILD_TESTS)
+    add_subdirectory(test)
+endif()

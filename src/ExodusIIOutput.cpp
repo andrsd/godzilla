@@ -94,7 +94,7 @@ ExodusIIOutput::output_step(PetscInt stepi)
     }
 
     if (stepi == -1)
-        stepi = 1;
+        stepi = 0;
     write_variables(stepi);
 }
 
@@ -540,7 +540,7 @@ ExodusIIOutput::write_variables(PetscInt stepi)
     _F_;
     PetscErrorCode ierr;
 
-    int whole_time_step = stepi;
+    int whole_time_step = stepi + 1;
     PetscReal time = this->problem->get_time();
     ex_put_time(this->exoid, whole_time_step, &time);
 
@@ -557,7 +557,7 @@ ExodusIIOutput::write_variables(PetscInt stepi)
     ierr = VecGetArrayRead(sln, &sln_vals);
     check_petsc_error(ierr);
 
-    write_nodal_variables(stepi, sln_vals);
+    write_nodal_variables(whole_time_step, sln_vals);
     // TODO: write elemental variables
     // TODO: write postprocesors as global variables
 
@@ -571,7 +571,7 @@ ExodusIIOutput::write_variables(PetscInt stepi)
 }
 
 void
-ExodusIIOutput::write_nodal_variables(PetscInt stepi, const PetscScalar * sln)
+ExodusIIOutput::write_nodal_variables(int time_step, const PetscScalar * sln)
 {
     _F_;
 
@@ -601,7 +601,14 @@ ExodusIIOutput::write_nodal_variables(PetscInt stepi, const PetscScalar * sln)
             check_petsc_error(ierr);
 
             int exo_idx = n - n_elems + 1;
-            ex_put_partial_var(this->exoid, stepi, EX_NODAL, i + 1, 1, exo_idx, 1, sln + offset);
+            ex_put_partial_var(this->exoid,
+                               time_step,
+                               EX_NODAL,
+                               i + 1,
+                               1,
+                               exo_idx,
+                               1,
+                               sln + offset);
         }
     }
 }

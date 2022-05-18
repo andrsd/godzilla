@@ -43,7 +43,7 @@ protected:
     void write_face_sets();
     void write_all_variable_names();
     void write_variables(PetscInt stepi);
-    void write_nodal_variables(PetscInt stepi, const PetscScalar * sln);
+    void write_nodal_variables(int time_step, const PetscScalar * sln);
 
     /// FE problem interface (convenience pointer)
     const FEProblemInterface * fepi;

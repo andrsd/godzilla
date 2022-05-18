@@ -27,11 +27,11 @@ __transient_post_step(TS ts)
 }
 
 PetscErrorCode
-__transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec X, void * ctx)
+__transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx)
 {
     _F_;
     ImplicitFENonlinearProblem * prob = static_cast<ImplicitFENonlinearProblem *>(ctx);
-    return prob->ts_monitor_callback(stepi, time, X);
+    return prob->ts_monitor_callback(stepi, time, x);
 }
 
 InputParameters
@@ -88,24 +88,29 @@ ImplicitFENonlinearProblem::on_post_step()
 {
     _F_;
     PetscErrorCode ierr;
+
+    ierr = TSGetTime(this->ts, &this->time);
+    check_petsc_error(ierr);
+    ierr = TSGetStepNumber(this->ts, &this->step_num);
+    check_petsc_error(ierr);
     Vec sln;
     ierr = TSGetSolution(this->ts, &sln);
     check_petsc_error(ierr);
+    ierr = VecCopy(sln, this->x);
+    check_petsc_error(ierr);
     compute_postprocessors();
-    output_step(sln);
+    output();
     return 0;
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec X)
+ImplicitFENonlinearProblem::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec x)
 {
     _F_;
     PetscErrorCode ierr;
     PetscReal dt;
     ierr = TSGetTimeStep(this->ts, &dt);
     check_petsc_error(ierr);
-    this->time = t;
-    this->step_num = stepi;
     godzilla_print(6, stepi, " Time ", t, ", dt = ", dt);
     return 0;
 }
@@ -123,7 +128,7 @@ ImplicitFENonlinearProblem::run()
     _F_;
     godzilla_print(5, "Executing...");
     // output initial condition
-    output_step(this->x);
+    output();
     solve();
 }
 
@@ -159,12 +164,6 @@ ImplicitFENonlinearProblem::set_up_monitors()
 
 void
 ImplicitFENonlinearProblem::output()
-{
-    _F_;
-}
-
-void
-ImplicitFENonlinearProblem::output_step(Vec vec)
 {
     _F_;
     for (auto & o : this->outputs)

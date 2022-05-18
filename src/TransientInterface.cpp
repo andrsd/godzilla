@@ -59,7 +59,7 @@ TransientInterface::create(DM dm)
     check_petsc_error(ierr);
     ierr = TSSetTimeStep(this->ts, this->dt);
     check_petsc_error(ierr);
-    ierr = TSSetStepNumber(this->ts, 1);
+    ierr = TSSetStepNumber(this->ts, this->step_num);
     check_petsc_error(ierr);
 }
 

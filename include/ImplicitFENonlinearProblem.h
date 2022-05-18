@@ -22,13 +22,11 @@ protected:
     /// Called after the time step is done solving
     virtual PetscErrorCode on_post_step();
     /// TS monitor callback
-    virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec X);
+    virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
     /// Setup monitors
     virtual void set_up_monitors() override;
     /// Output
     virtual void output() override;
-    /// Output time step
-    virtual void output_step(Vec vec);
 
 public:
     static InputParameters valid_params();
@@ -36,7 +34,7 @@ public:
     friend PetscErrorCode __transient_pre_step(TS ts);
     friend PetscErrorCode __transient_post_step(TS ts);
     friend PetscErrorCode
-    __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec X, void * ctx);
+    __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx);
 };
 
 } // namespace godzilla
