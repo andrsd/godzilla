@@ -60,8 +60,8 @@ FEProblemInterface::create()
 
     for (auto & aux : this->auxs)
         aux->create();
-    for (auto & it : this->ics)
-        it.second.ic->create();
+    for (auto & ic : this->ics)
+        ic->create();
     for (auto & bc : this->bcs)
         bc->create();
 }
@@ -229,15 +229,7 @@ void
 FEProblemInterface::add_initial_condition(InitialCondition * ic)
 {
     _F_;
-    PetscInt fid = ic->get_field_id();
-    const auto & it = this->ics.find(fid);
-    if (it == this->ics.end())
-        this->ics[fid].ic = ic;
-    else
-        // TODO: improve this error message
-        this->logger->error("Initial condition '%s' is being applied to a field that already has "
-                            "an initial condition.",
-                            ic->get_name());
+    this->ics.push_back(ic);
 }
 
 void
@@ -252,6 +244,45 @@ FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 {
     _F_;
     this->auxs.push_back(aux);
+}
+
+void
+FEProblemInterface::set_up_initial_conditions()
+{
+    _F_;
+
+    PetscInt n_ics = this->ics.size();
+    if (n_ics == 0)
+        return;
+    if (n_ics == fields.size()) {
+        std::map<PetscInt, InitialCondition *> ics_by_fields;
+        for (auto & ic : this->ics) {
+            PetscInt fid = ic->get_field_id();
+            const auto & it = ics_by_fields.find(fid);
+            if (it == ics_by_fields.end()) {
+                PetscInt ic_nc = ic->get_num_components();
+                PetscInt field_nc = this->fields[fid].nc;
+                if (ic_nc == field_nc)
+                    ics_by_fields[fid] = ic;
+                else
+                    this->logger->error("Initial condition '%s' operates on %d components, but is "
+                                        "set on a field with %d components.",
+                                        ic->get_name(),
+                                        ic_nc,
+                                        field_nc);
+            }
+            else
+                // TODO: improve this error message
+                this->logger->error(
+                    "Initial condition '%s' is being applied to a field that already "
+                    "has an initial condition.",
+                    ic->get_name());
+        }
+    }
+    else
+        this->logger->error("Provided %d field(s), but %d initial condition(s).",
+                            fields.size(),
+                            n_ics);
 }
 
 void
@@ -296,47 +327,24 @@ void
 FEProblemInterface::set_initial_guess_from_ics()
 {
     _F_;
-    DM dm = this->unstr_mesh->get_dm();
     PetscInt n_ics = this->ics.size();
-    if (n_ics != fields.size())
-        this->logger->error("Provided %d field(s), but %d initial condition(s).",
-                            fields.size(),
-                            n_ics);
-    else {
-        bool no_errors = true;
-        PetscErrorCode ierr;
-        PetscFunc * ic_funcs[n_ics];
-        void * ic_ctxs[n_ics];
-        for (auto & it : this->ics) {
-            PetscInt fid = it.first;
-            const ICInfo & ic_info = it.second;
-            const InitialCondition * ic = ic_info.ic;
-
-            PetscInt ic_nc = ic->get_num_components();
-            PetscInt field_nc = this->fields[fid].nc;
-            if (ic_nc != field_nc) {
-                no_errors = false;
-                this->logger->error("Initial condition '%s' operates on %d components, but is set "
-                                    "on a field with %d components.",
-                                    ic->get_name(),
-                                    ic_nc,
-                                    field_nc);
-            }
-
-            ic_funcs[fid] = __initial_condition_function;
-            ic_ctxs[fid] = (void *) ic;
-        }
-
-        if (no_errors) {
-            ierr = DMProjectFunction(dm,
-                                     get_time(),
-                                     ic_funcs,
-                                     ic_ctxs,
-                                     INSERT_VALUES,
-                                     this->problem->get_solution_vector());
-            check_petsc_error(ierr);
-        }
+    PetscFunc * ic_funcs[n_ics];
+    void * ic_ctxs[n_ics];
+    for (auto & ic : this->ics) {
+        PetscInt fid = ic->get_field_id();
+        ic_funcs[fid] = __initial_condition_function;
+        ic_ctxs[fid] = (void *) ic;
     }
+
+    PetscErrorCode ierr;
+    DM dm = this->unstr_mesh->get_dm();
+    ierr = DMProjectFunction(dm,
+                             get_time(),
+                             ic_funcs,
+                             ic_ctxs,
+                             INSERT_VALUES,
+                             this->problem->get_solution_vector());
+    check_petsc_error(ierr);
 }
 
 void
@@ -395,6 +403,7 @@ FEProblemInterface::set_up_problem()
     check_petsc_error(ierr);
 
     on_set_weak_form();
+    set_up_initial_conditions();
     set_up_boundary_conditions();
     set_up_constants();
 

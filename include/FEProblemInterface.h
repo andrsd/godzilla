@@ -220,6 +220,9 @@ protected:
                             PetscFEJacobianFunc * g2,
                             PetscFEJacobianFunc * g3);
 
+    /// Set up initial conditions
+    virtual void set_up_initial_conditions();
+
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
 
@@ -282,14 +285,8 @@ protected:
     /// Map from field name to field ID
     std::map<std::string, PetscInt> fields_by_name;
 
-    /// Initial condition information
-    struct ICInfo {
-        /// Initial condition object
-        InitialCondition * ic;
-    };
-
     /// Initial conditions in the problem
-    std::map<PetscInt, ICInfo> ics;
+    std::vector<InitialCondition *> ics;
 
     /// List of boundary conditions
     std::vector<BoundaryCondition *> bcs;

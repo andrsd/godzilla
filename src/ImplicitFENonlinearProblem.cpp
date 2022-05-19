@@ -127,6 +127,7 @@ ImplicitFENonlinearProblem::run()
 {
     _F_;
     godzilla_print(5, "Executing...");
+    set_up_initial_guess();
     // output initial condition
     output();
     solve();

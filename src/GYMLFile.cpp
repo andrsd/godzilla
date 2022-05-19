@@ -211,6 +211,7 @@ GYMLFile::build_initial_conditions()
             std::string name = ic_node.as<std::string>();
 
             InputParameters * params = build_params(ics_root_node, name);
+            params->set<const FEProblemInterface *>("_fepi") = fepface;
             const std::string & class_name = params->get<std::string>("_type");
             auto ic = Factory::create<InitialCondition>(class_name, name, params);
             fepface->add_initial_condition(ic);

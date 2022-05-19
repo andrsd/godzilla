@@ -146,11 +146,13 @@ TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 
 TEST_F(FENonlinearProblemTest, solve)
 {
+    InitialCondition * ic = nullptr;
     {
         const std::string class_name = "ConstantIC";
         InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const FEProblemInterface *>("_fepi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
-        auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
+        ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
     }
 
@@ -209,6 +211,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
     {
         const std::string class_name = "GTest2CompIC";
         InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const FEProblemInterface *>("_fepi") = prob;
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
     }
@@ -222,23 +225,55 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
                            "with 1 components."));
 }
 
-TEST_F(FENonlinearProblemTest, err_duplicate_ics)
+TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
 {
     testing::internal::CaptureStderr();
 
+    class TestApp : public App {
+    public:
+        TestApp() : App("godzilla", MPI_COMM_WORLD) {}
+
+        virtual void
+        check_integrity()
+        {
+            if (this->log->get_num_entries() > 0)
+                this->log->print();
+        }
+    } app;
+
+    Mesh * mesh;
+    {
+        const std::string class_name = "LineMesh";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<PetscInt>("nx") = 2;
+        mesh = app.build_object<Mesh>(class_name, "mesh", params);
+    }
+    FENonlinearProblem * prob;
+    {
+        const std::string class_name = "GTest2FieldsFENonlinearProblem";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
+        prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
+    }
     {
         const std::string class_name = "ConstantIC";
         InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<std::string>("field") = "u";
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
-        auto ic = this->app->build_object<InitialCondition>(class_name, "ic1", params);
+        auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
         prob->add_initial_condition(ic);
     }
     const std::string class_name = "ConstantIC";
     InputParameters * params = Factory::get_valid_params(class_name);
+    params->set<const FEProblemInterface *>("_fepi") = prob;
+    params->set<std::string>("field") = "u";
     params->set<std::vector<PetscReal>>("value") = { 0.2 };
-    auto ic = this->app->build_object<InitialCondition>(class_name, "ic2", params);
+    auto ic = app.build_object<InitialCondition>(class_name, "ic2", params);
     prob->add_initial_condition(ic);
-    this->app->check_integrity();
+    mesh->create();
+    prob->create();
+    app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -261,6 +296,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
                 this->log->print();
         }
     } app;
+
     Mesh * mesh;
     FENonlinearProblem * prob;
 
@@ -280,6 +316,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     {
         const std::string class_name = "ConstantIC";
         InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const FEProblemInterface *>("_fepi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
         prob->add_initial_condition(ic);

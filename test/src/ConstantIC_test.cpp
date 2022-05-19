@@ -14,7 +14,7 @@ TEST(ConstantICTest, api)
     params.set<std::vector<PetscReal>>("value") = { 3, 4, 5 };
     ConstantIC obj(params);
 
-    EXPECT_EQ(obj.get_field_id(), 0);
+    EXPECT_EQ(obj.get_field_id(), -1);
     EXPECT_EQ(obj.get_num_components(), 3);
 
     PetscInt dim = 2;

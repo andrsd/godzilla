@@ -121,6 +121,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     {
         const std::string class_name = "ConstantIC";
         InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const FEProblemInterface *>("_fepi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0 };
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
