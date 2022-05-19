@@ -49,7 +49,7 @@ FEProblemInterface::~FEProblemInterface()
 }
 
 void
-FEProblemInterface::create(DM dm)
+FEProblemInterface::create()
 {
     _F_;
     on_set_fields();
@@ -63,11 +63,11 @@ FEProblemInterface::create(DM dm)
 }
 
 void
-FEProblemInterface::init(DM dm)
+FEProblemInterface::init()
 {
     _F_;
-    set_up_fes(dm);
-    set_up_problem(dm);
+    set_up_fes();
+    set_up_problem();
 }
 
 std::vector<std::string>
@@ -244,9 +244,10 @@ FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 }
 
 void
-FEProblemInterface::set_up_boundary_conditions(DM dm)
+FEProblemInterface::set_up_boundary_conditions()
 {
     _F_;
+    DM dm = this->unstr_mesh->get_dm();
     /// TODO: refactor this into a method
     bool no_errors = true;
     for (auto & bc : this->bcs) {
@@ -320,11 +321,10 @@ FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
 }
 
 void
-FEProblemInterface::set_up_fes(DM dm)
+FEProblemInterface::set_up_fes()
 {
     _F_;
-    MPI_Comm comm;
-    PetscObjectGetComm((PetscObject) dm, &comm);
+    const MPI_Comm & comm = this->unstr_mesh->get_comm();
 
     PetscErrorCode ierr;
 
@@ -351,10 +351,11 @@ FEProblemInterface::set_up_fes(DM dm)
 }
 
 void
-FEProblemInterface::set_up_problem(DM dm)
+FEProblemInterface::set_up_problem()
 {
     _F_;
     PetscErrorCode ierr;
+    DM dm = this->unstr_mesh->get_dm();
 
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
@@ -369,7 +370,7 @@ FEProblemInterface::set_up_problem(DM dm)
     check_petsc_error(ierr);
 
     on_set_weak_form();
-    set_up_boundary_conditions(dm);
+    set_up_boundary_conditions();
     set_up_constants();
 
     DM cdm = dm;

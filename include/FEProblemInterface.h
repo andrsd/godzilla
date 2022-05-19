@@ -131,9 +131,9 @@ public:
 
 protected:
     /// Initialize the FE system
-    virtual void init(DM dm);
+    virtual void init();
 
-    virtual void create(DM dm);
+    virtual void create();
 
     virtual void set_up_initial_guess(DM dm, Vec x);
 
@@ -177,10 +177,10 @@ protected:
                                      PetscScalar g3[]);
 
     /// Set up finite element objects
-    void set_up_fes(DM dm);
+    void set_up_fes();
 
     /// Inform PETSc to about all fields in this problem
-    void set_up_problem(DM dm);
+    void set_up_problem();
 
     /// Set up residual statement for a field variable
     ///
@@ -205,7 +205,7 @@ protected:
                             PetscFEJacobianFunc * g3);
 
     /// Set up boundary conditions
-    virtual void set_up_boundary_conditions(DM dm);
+    virtual void set_up_boundary_conditions();
 
     /// Set up auxiliary DM
     virtual void set_up_auxiliary_dm(DM dm);

@@ -25,7 +25,7 @@ void
 FENonlinearProblem::create()
 {
     _F_;
-    FEProblemInterface::create(get_dm());
+    FEProblemInterface::create();
     NonlinearProblem::create();
 }
 
@@ -34,7 +34,7 @@ FENonlinearProblem::init()
 {
     _F_;
     NonlinearProblem::init();
-    FEProblemInterface::init(get_dm());
+    FEProblemInterface::init();
 }
 
 void
