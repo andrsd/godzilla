@@ -14,7 +14,7 @@ FENonlinearProblem::valid_params()
 
 FENonlinearProblem::FENonlinearProblem(const InputParameters & parameters) :
     NonlinearProblem(parameters),
-    FEProblemInterface(*this, parameters)
+    FEProblemInterface(this, parameters)
 {
     _F_;
 }

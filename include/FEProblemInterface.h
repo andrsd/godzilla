@@ -9,7 +9,7 @@
 namespace godzilla {
 
 class Logger;
-class Mesh;
+class UnstructuredMesh;
 class Problem;
 class InitialCondition;
 class BoundaryCondition;
@@ -20,7 +20,7 @@ class AuxiliaryField;
 /// Any problem using PetscFE should inherit from this for unified API
 class FEProblemInterface {
 public:
-    FEProblemInterface(Problem & problem, const InputParameters & params);
+    FEProblemInterface(Problem * problem, const InputParameters & params);
     virtual ~FEProblemInterface();
 
     /// Get list of all field names
@@ -220,8 +220,11 @@ protected:
     /// FIXME: This needs a better name
     virtual void on_set_weak_form() = 0;
 
-    /// Reference to the the problem this interface is part of
-    Problem & problem;
+    /// Problem this interface is part of
+    Problem * problem;
+
+    /// Unstructured mesh
+    const UnstructuredMesh * unstr_mesh;
 
     /// Logger object
     Logger * logger;

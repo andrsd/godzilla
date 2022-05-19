@@ -1,7 +1,7 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "FEProblemInterface.h"
-#include "Mesh.h"
+#include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
@@ -9,6 +9,7 @@
 #include "FunctionInterface.h"
 #include "App.h"
 #include "Logger.h"
+#include <assert.h>
 
 namespace godzilla {
 
@@ -23,12 +24,15 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 } // namespace internal
 
-FEProblemInterface::FEProblemInterface(Problem & problem, const InputParameters & params) :
+FEProblemInterface::FEProblemInterface(Problem * problem, const InputParameters & params) :
     problem(problem),
+    unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
     logger(params.get<const App *>("_app")->get_logger()),
     qorder(PETSC_DETERMINE),
     ds(nullptr)
 {
+    assert(this->problem != nullptr);
+    assert(this->unstr_mesh != nullptr);
 }
 
 FEProblemInterface::~FEProblemInterface()
@@ -324,7 +328,7 @@ FEProblemInterface::set_up_fes(DM dm)
 
     PetscErrorCode ierr;
 
-    PetscInt dim = this->problem.get_dimension();
+    PetscInt dim = this->problem->get_dimension();
 
     // FIXME: determine if the mesh is made of simplex elements
     PetscBool is_simplex = PETSC_FALSE;
@@ -470,7 +474,7 @@ FEProblemInterface::set_jacobian_block(PetscInt fid,
 const PetscReal &
 FEProblemInterface::get_time() const
 {
-    return this->problem.get_time();
+    return this->problem->get_time();
 }
 
 } // namespace godzilla
