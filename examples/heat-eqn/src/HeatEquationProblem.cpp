@@ -125,6 +125,9 @@ HeatEquationProblem::on_set_fields()
     _F_;
     PetscInt order = 1;
     add_fe(this->itemp, "temp", 1, order);
+
+    add_aux_fe(htc_aux_id, "htc", 1, 1);
+    add_aux_fe(T_ambient_aux_id, "T_ambient", 1, 1);
 }
 
 void

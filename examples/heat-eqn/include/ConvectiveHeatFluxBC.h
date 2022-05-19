@@ -4,9 +4,9 @@
 
 namespace godzilla {
 
-class ConvectiveHeatFluxConstBC : public NaturalBC {
+class ConvectiveHeatFluxBC : public NaturalBC {
 public:
-    ConvectiveHeatFluxConstBC(const InputParameters & params);
+    ConvectiveHeatFluxBC(const InputParameters & params);
 
     virtual PetscInt get_field_id() const;
     virtual PetscInt get_num_components() const;
@@ -14,12 +14,6 @@ public:
 
 protected:
     virtual void on_set_weak_form();
-
-    /// Convective heat transfer coefficient
-    const PetscReal & htc;
-
-    /// Ambient temperature
-    const PetscReal & T_infinity;
 
 public:
     static InputParameters valid_params();

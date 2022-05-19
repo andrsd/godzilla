@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(
     ${PROJECT_NAME}
-        src/ConvectiveHeatFluxConstBC.cpp
+        src/ConvectiveHeatFluxBC.cpp
         src/HeatEquationProblem.cpp
         src/main.cpp
 )

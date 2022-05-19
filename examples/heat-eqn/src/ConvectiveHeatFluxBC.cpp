@@ -1,10 +1,11 @@
 #include "Godzilla.h"
-#include "ConvectiveHeatFluxConstBC.h"
+#include "HeatEquationProblem.h"
+#include "ConvectiveHeatFluxBC.h"
 #include "CallStack.h"
 
 namespace godzilla {
 
-registerObject(ConvectiveHeatFluxConstBC);
+registerObject(ConvectiveHeatFluxBC);
 
 void
 __f0_convective_heat_flux_const_bc(PetscInt dim,
@@ -27,8 +28,8 @@ __f0_convective_heat_flux_const_bc(PetscInt dim,
                                    const PetscScalar constants[],
                                    PetscScalar f0[])
 {
-    PetscReal htc = 100;
-    PetscReal T_infinity = 400;
+    PetscReal htc = a[a_off[HeatEquationProblem::htc_aux_id]];
+    PetscReal T_infinity = a[a_off[HeatEquationProblem::T_ambient_aux_id]];
     f0[0] = htc * (u[0] - T_infinity);
 }
 
@@ -59,43 +60,38 @@ __g0_convective_heat_flux_const_bc(PetscInt dim,
 }
 
 InputParameters
-ConvectiveHeatFluxConstBC::valid_params()
+ConvectiveHeatFluxBC::valid_params()
 {
     InputParameters params = NaturalBC::valid_params();
-    params.add_required_param<PetscReal>("htc", "Convective heat transfer coefficient");
-    params.add_required_param<PetscReal>("T_infinity", "Ambient temperature");
     return params;
 }
 
-ConvectiveHeatFluxConstBC::ConvectiveHeatFluxConstBC(const InputParameters & params) :
-    NaturalBC(params),
-    htc(get_param<PetscReal>("htc")),
-    T_infinity(get_param<PetscReal>("T_infinity"))
+ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const InputParameters & params) : NaturalBC(params)
 {
     _F_;
 }
 
 PetscInt
-ConvectiveHeatFluxConstBC::get_field_id() const
+ConvectiveHeatFluxBC::get_field_id() const
 {
     return 0;
 }
 
 PetscInt
-ConvectiveHeatFluxConstBC::get_num_components() const
+ConvectiveHeatFluxBC::get_num_components() const
 {
     return 1;
 }
 
 std::vector<PetscInt>
-ConvectiveHeatFluxConstBC::get_components() const
+ConvectiveHeatFluxBC::get_components() const
 {
     std::vector<PetscInt> comps = { 0 };
     return comps;
 }
 
 void
-ConvectiveHeatFluxConstBC::on_set_weak_form()
+ConvectiveHeatFluxBC::on_set_weak_form()
 {
     _F_;
     set_residual_block(__f0_convective_heat_flux_const_bc, nullptr);
