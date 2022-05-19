@@ -53,7 +53,7 @@ void
 FENonlinearProblem::set_up_initial_guess()
 {
     _F_;
-    FEProblemInterface::set_up_initial_guess(get_dm(), this->x);
+    FEProblemInterface::set_up_initial_guess();
 }
 
 PetscErrorCode

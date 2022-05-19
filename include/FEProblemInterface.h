@@ -137,7 +137,7 @@ protected:
 
     virtual void create();
 
-    virtual void set_up_initial_guess(DM dm, Vec x);
+    virtual void set_up_initial_guess();
 
     typedef void PetscFEResidualFunc(PetscInt dim,
                                      PetscInt Nf,

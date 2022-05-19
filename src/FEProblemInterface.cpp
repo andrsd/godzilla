@@ -267,9 +267,10 @@ FEProblemInterface::set_up_boundary_conditions()
 }
 
 void
-FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
+FEProblemInterface::set_up_initial_guess()
 {
     _F_;
+    DM dm = this->unstr_mesh->get_dm();
     PetscInt n_ics = this->ics.size();
     if (n_ics > 0) {
         if (n_ics != fields.size())
@@ -302,7 +303,12 @@ FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
             }
 
             if (no_errors) {
-                ierr = DMProjectFunction(dm, get_time(), ic_funcs, ic_ctxs, INSERT_VALUES, x);
+                ierr = DMProjectFunction(dm,
+                                         get_time(),
+                                         ic_funcs,
+                                         ic_ctxs,
+                                         INSERT_VALUES,
+                                         this->problem->get_solution_vector());
                 check_petsc_error(ierr);
             }
         }
@@ -311,7 +317,12 @@ FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
         // no initial conditions -> use zero
         PetscErrorCode ierr;
         PetscFunc * initial_guess[1] = { internal::zero_fn };
-        ierr = DMProjectFunction(dm, get_time(), initial_guess, NULL, INSERT_VALUES, x);
+        ierr = DMProjectFunction(dm,
+                                 get_time(),
+                                 initial_guess,
+                                 NULL,
+                                 INSERT_VALUES,
+                                 this->problem->get_solution_vector());
         check_petsc_error(ierr);
     }
 }
