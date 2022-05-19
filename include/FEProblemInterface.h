@@ -137,6 +137,10 @@ protected:
 
     virtual void create();
 
+    void set_zero_initial_guess();
+
+    void set_initial_guess_from_ics();
+
     virtual void set_up_initial_guess();
 
     typedef void PetscFEResidualFunc(PetscInt dim,

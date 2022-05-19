@@ -267,64 +267,75 @@ FEProblemInterface::set_up_boundary_conditions()
 }
 
 void
-FEProblemInterface::set_up_initial_guess()
+FEProblemInterface::set_zero_initial_guess()
+{
+    _F_;
+    DM dm = this->unstr_mesh->get_dm();
+    PetscFunc * initial_guess[1] = { internal::zero_fn };
+    PetscErrorCode ierr = DMProjectFunction(dm,
+                                            get_time(),
+                                            initial_guess,
+                                            NULL,
+                                            INSERT_VALUES,
+                                            this->problem->get_solution_vector());
+    check_petsc_error(ierr);
+}
+
+void
+FEProblemInterface::set_initial_guess_from_ics()
 {
     _F_;
     DM dm = this->unstr_mesh->get_dm();
     PetscInt n_ics = this->ics.size();
-    if (n_ics > 0) {
-        if (n_ics != fields.size())
-            this->logger->error("Provided %d field(s), but %d initial condition(s).",
-                                fields.size(),
-                                n_ics);
-        else {
-            bool no_errors = true;
-            PetscErrorCode ierr;
-            PetscFunc * ic_funcs[n_ics];
-            void * ic_ctxs[n_ics];
-            for (auto & it : this->ics) {
-                PetscInt fid = it.first;
-                const ICInfo & ic_info = it.second;
-                const InitialCondition * ic = ic_info.ic;
+    if (n_ics != fields.size())
+        this->logger->error("Provided %d field(s), but %d initial condition(s).",
+                            fields.size(),
+                            n_ics);
+    else {
+        bool no_errors = true;
+        PetscErrorCode ierr;
+        PetscFunc * ic_funcs[n_ics];
+        void * ic_ctxs[n_ics];
+        for (auto & it : this->ics) {
+            PetscInt fid = it.first;
+            const ICInfo & ic_info = it.second;
+            const InitialCondition * ic = ic_info.ic;
 
-                PetscInt ic_nc = ic->get_num_components();
-                PetscInt field_nc = this->fields[fid].nc;
-                if (ic_nc != field_nc) {
-                    no_errors = false;
-                    this->logger->error("Initial condition '%s' operates on %d components, but is "
-                                        "set on a field with %d components.",
-                                        ic->get_name(),
-                                        ic_nc,
-                                        field_nc);
-                }
-
-                ic_funcs[fid] = __initial_condition_function;
-                ic_ctxs[fid] = (void *) ic;
+            PetscInt ic_nc = ic->get_num_components();
+            PetscInt field_nc = this->fields[fid].nc;
+            if (ic_nc != field_nc) {
+                no_errors = false;
+                this->logger->error("Initial condition '%s' operates on %d components, but is set "
+                                    "on a field with %d components.",
+                                    ic->get_name(),
+                                    ic_nc,
+                                    field_nc);
             }
 
-            if (no_errors) {
-                ierr = DMProjectFunction(dm,
-                                         get_time(),
-                                         ic_funcs,
-                                         ic_ctxs,
-                                         INSERT_VALUES,
-                                         this->problem->get_solution_vector());
-                check_petsc_error(ierr);
-            }
+            ic_funcs[fid] = __initial_condition_function;
+            ic_ctxs[fid] = (void *) ic;
+        }
+
+        if (no_errors) {
+            ierr = DMProjectFunction(dm,
+                                     get_time(),
+                                     ic_funcs,
+                                     ic_ctxs,
+                                     INSERT_VALUES,
+                                     this->problem->get_solution_vector());
+            check_petsc_error(ierr);
         }
     }
-    else {
-        // no initial conditions -> use zero
-        PetscErrorCode ierr;
-        PetscFunc * initial_guess[1] = { internal::zero_fn };
-        ierr = DMProjectFunction(dm,
-                                 get_time(),
-                                 initial_guess,
-                                 NULL,
-                                 INSERT_VALUES,
-                                 this->problem->get_solution_vector());
-        check_petsc_error(ierr);
-    }
+}
+
+void
+FEProblemInterface::set_up_initial_guess()
+{
+    _F_;
+    if (this->ics.size() > 0)
+        set_initial_guess_from_ics();
+    else
+        set_zero_initial_guess();
 }
 
 void
