@@ -89,6 +89,16 @@ UnstructuredMesh::distribute()
     }
 }
 
+bool
+UnstructuredMesh::is_simplex() const
+{
+    _F_;
+    PetscBool simplex;
+    PetscErrorCode ierr = DMPlexIsSimplex(this->dm, &simplex);
+    check_petsc_error(ierr);
+    return simplex == PETSC_TRUE;
+}
+
 void
 UnstructuredMesh::output_partitioning(PetscViewer viewer)
 {

@@ -320,14 +320,11 @@ void
 FEProblemInterface::set_up_fes()
 {
     _F_;
-    const MPI_Comm & comm = this->unstr_mesh->get_comm();
-
     PetscErrorCode ierr;
 
+    const MPI_Comm & comm = this->unstr_mesh->get_comm();
     PetscInt dim = this->problem->get_dimension();
-
-    // FIXME: determine if the mesh is made of simplex elements
-    PetscBool is_simplex = PETSC_FALSE;
+    PetscBool is_simplex = this->unstr_mesh->is_simplex();
 
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
