@@ -4,25 +4,29 @@
 
 namespace godzilla {
 
+class Problem;
+
 /// Interface for transient simulations
 ///
 class TransientProblemInterface {
 public:
-    TransientProblemInterface(const InputParameters & params);
+    TransientProblemInterface(Problem * problem, const InputParameters & params);
     virtual ~TransientProblemInterface();
 
 protected:
     /// Initialize
     ///
     /// @param comm MPI communicator
-    virtual void init(const MPI_Comm & comm);
+    virtual void init();
     /// Create
-    virtual void create(DM dm);
+    virtual void create();
     /// Called before the time step solve
     virtual void set_up_time_scheme();
     /// Solve
     virtual void solve(Vec x);
 
+    /// Problem this interface is part of
+    Problem * problem;
     /// PETSc TS object
     TS ts;
     /// Simulation start time
