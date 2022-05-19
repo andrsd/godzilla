@@ -257,8 +257,8 @@ FEProblemInterface::set_up_boundary_conditions()
             no_errors = false;
             this->logger->error(
                 "Boundary condition '%s' is set on boundary '%s' which does not exist in the mesh.",
-                bc->get_name().c_str(),
-                bnd_name.c_str());
+                bc->get_name(),
+                bnd_name);
         }
     }
 
