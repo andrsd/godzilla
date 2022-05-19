@@ -1,0 +1,20 @@
+extraction:
+  cpp:
+    prepare:
+      packages:
+      - libblas-dev
+      - liblapack-dev
+    after_prepare:
+    - export PETSC_VERSION=3.17.0
+    - wget -q https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
+    - tar -xzf petsc-${PETSC_VERSION}.tar.gz
+    - cd petsc-${PETSC_VERSION}
+    - ./configure --prefix=/opt/src/petsc --shared-libraries --with-debugging=no --with-pic=yes --with-ssl=no --download-cmake --download-mpich --download-hdf5 --download-zlib PETSC_DIR=`pwd`
+    - make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt all
+    - make PETSC_DIR=`pwd` PETSC_ARCH=arch-linux-c-opt install
+    - export PETSC_DIR=/opt/src/petsc
+    - export PETSC_ARCH=arch-linux-c-opt
+    configure:
+      command: cmake -S . -B ./build 
+    index:
+      build_command: make -C ./build
