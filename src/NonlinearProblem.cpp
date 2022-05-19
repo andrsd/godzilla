@@ -131,8 +131,6 @@ NonlinearProblem::create()
     set_up_monitors();
     set_up_callbacks();
 
-    set_up_initial_guess();
-
     Problem::create();
 }
 
@@ -298,6 +296,7 @@ void
 NonlinearProblem::run()
 {
     _F_;
+    set_up_initial_guess();
     solve();
     compute_postprocessors();
     if (converged())

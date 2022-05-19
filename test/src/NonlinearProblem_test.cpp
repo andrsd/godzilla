@@ -40,6 +40,7 @@ TEST_F(NonlinearProblemTest, run)
     public:
         explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
 
+        MOCK_METHOD(void, set_up_initial_guess, ());
         MOCK_METHOD(void, solve, ());
         virtual bool
         converged()
@@ -59,6 +60,7 @@ TEST_F(NonlinearProblemTest, run)
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
 
+    EXPECT_CALL(prob, set_up_initial_guess);
     EXPECT_CALL(prob, solve);
     EXPECT_CALL(prob, output);
     prob.run();

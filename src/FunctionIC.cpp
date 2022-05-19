@@ -24,6 +24,7 @@ void
 FunctionIC::create()
 {
     _F_;
+    InitialCondition::create();
     FunctionInterface::create();
 }
 
