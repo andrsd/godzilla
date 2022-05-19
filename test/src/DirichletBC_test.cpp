@@ -12,8 +12,14 @@ TEST(DirichletBCTest, api)
 {
     TestApp app;
 
+    InputParameters mesh_pars = LineMesh::valid_params();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+
     InputParameters prob_pars = GTestProblem::valid_params();
     prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
     GTestProblem problem(prob_pars);
     app.problem = &problem;
 
@@ -21,6 +27,9 @@ TEST(DirichletBCTest, api)
     params.set<const App *>("_app") = &app;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     DirichletBC obj(params);
+
+    mesh.create();
+    problem.create();
     obj.create();
 
     EXPECT_EQ(obj.get_field_id(), 0);
@@ -48,6 +57,7 @@ TEST(DirichletBCTest, with_user_defined_fn)
 
     InputParameters prob_pars = GTestProblem::valid_params();
     prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
     GTestProblem problem(prob_pars);
     app.problem = &problem;
 
@@ -63,6 +73,9 @@ TEST(DirichletBCTest, with_user_defined_fn)
     bc_pars->set<const App *>("_app") = &app;
     bc_pars->set<std::vector<std::string>>("value") = { "ipol(x)" };
     DirichletBC * bc = app.build_object<DirichletBC>("DirichletBC", "name", bc_pars);
+
+    mesh.create();
+    problem.create();
     bc->create();
 
     PetscInt dim = 1;

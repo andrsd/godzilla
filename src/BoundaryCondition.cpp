@@ -1,6 +1,7 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "App.h"
+#include "Mesh.h"
 #include "Problem.h"
 #include "BoundaryCondition.h"
 #include <assert.h>
@@ -36,6 +37,9 @@ BoundaryCondition::create()
     assert(problem != nullptr);
     this->dm = problem->get_dm();
     assert(this->dm != nullptr);
+
+    const Mesh * mesh = problem->get_mesh();
+    this->label = mesh->get_label(this->boundary);
 }
 
 const std::string &
@@ -55,9 +59,6 @@ BoundaryCondition::set_up()
 
     IS is;
     ierr = DMGetLabelIdIS(this->dm, this->boundary.c_str(), &is);
-    check_petsc_error(ierr);
-
-    ierr = DMGetLabel(this->dm, this->boundary.c_str(), &this->label);
     check_petsc_error(ierr);
 
     ierr = ISGetSize(is, &this->n_ids);
