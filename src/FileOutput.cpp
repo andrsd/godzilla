@@ -5,8 +5,6 @@
 
 namespace godzilla {
 
-static const int MAX_PATH = 1024;
-
 InputParameters
 FileOutput::valid_params()
 {
@@ -42,23 +40,18 @@ void
 FileOutput::set_file_name()
 {
     _F_;
-    char fn[MAX_PATH];
-    snprintf(fn, MAX_PATH, "%s.%s", this->file_base.c_str(), this->get_file_ext().c_str());
-    this->file_name = std::string(fn);
+    std::ostringstream oss;
+    internal::fprintf(oss, "%s.%s", this->file_base, this->get_file_ext());
+    this->file_name = oss.str();
 }
 
 void
 FileOutput::set_sequence_file_name(unsigned int stepi)
 {
     _F_;
-    char fn[MAX_PATH];
-    snprintf(fn,
-             MAX_PATH,
-             "%s.%d.%s",
-             this->file_base.c_str(),
-             stepi,
-             this->get_file_ext().c_str());
-    this->file_name = std::string(fn);
+    std::ostringstream oss;
+    internal::fprintf(oss, "%s.%d.%s", this->file_base, stepi, this->get_file_ext());
+    this->file_name = oss.str();
 }
 
 void
