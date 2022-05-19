@@ -338,14 +338,11 @@ void
 ExodusIIOutput::write_node_sets()
 {
     _F_;
+    if (!this->mesh->has_label("Vertex Sets"))
+        return;
+
     PetscErrorCode ierr;
     DM dm = this->mesh->get_dm();
-
-    PetscBool has_label;
-    ierr = DMHasLabel(dm, "Vertex Sets", &has_label);
-    check_petsc_error(ierr);
-    if (!has_label)
-        return;
 
     PetscInt elem_first, elem_last;
     ierr = DMPlexGetHeightStratum(dm, 0, &elem_first, &elem_last);
@@ -411,14 +408,11 @@ void
 ExodusIIOutput::write_face_sets()
 {
     _F_;
+    if (!this->mesh->has_label("Face Sets"))
+        return;
+
     PetscErrorCode ierr;
     DM dm = this->mesh->get_dm();
-
-    PetscBool has_label;
-    ierr = DMHasLabel(dm, "Face Sets", &has_label);
-    check_petsc_error(ierr);
-    if (!has_label)
-        return;
 
     DMLabel face_sets_label;
     ierr = DMGetLabel(dm, "Face Sets", &face_sets_label);

@@ -23,6 +23,12 @@ public:
     /// Create the mesh
     virtual void create();
 
+    /// Check if mesh has label with a name
+    ///
+    /// @param name The name of the label
+    /// @return true if label exists, otherwise false
+    virtual bool has_label(const std::string & name) const;
+
 protected:
     /// Method that builds DM for the mesh
     virtual void create_dm() = 0;

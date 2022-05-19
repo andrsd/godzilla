@@ -57,4 +57,15 @@ Mesh::create()
     distribute();
 }
 
+bool
+Mesh::has_label(const std::string & name) const
+{
+    _F_;
+    PetscErrorCode ierr;
+    PetscBool exists = PETSC_FALSE;
+    ierr = DMHasLabel(this->dm, name.c_str(), &exists);
+    check_petsc_error(ierr);
+    return exists == PETSC_TRUE;
+}
+
 } // namespace godzilla

@@ -252,10 +252,7 @@ FEProblemInterface::set_up_boundary_conditions()
     bool no_errors = true;
     for (auto & bc : this->bcs) {
         const std::string & bnd_name = bc->get_boundary();
-        PetscErrorCode ierr;
-        PetscBool exists = PETSC_FALSE;
-        ierr = DMHasLabel(dm, bnd_name.c_str(), &exists);
-        check_petsc_error(ierr);
+        bool exists = this->unstr_mesh->has_label(bnd_name);
         if (!exists) {
             no_errors = false;
             this->logger->error(
