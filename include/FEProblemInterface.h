@@ -130,6 +130,8 @@ public:
     virtual const PetscReal & get_time() const;
 
 protected:
+    struct FieldInfo;
+
     /// Initialize the FE system
     virtual void init();
 
@@ -175,6 +177,11 @@ protected:
                                      PetscInt numConstants,
                                      const PetscScalar constants[],
                                      PetscScalar g3[]);
+
+    /// Create FE object from FieldInfo
+    ///
+    /// @param fi Field description
+    void create_fe(FieldInfo & fi);
 
     /// Set up finite element objects
     void set_up_fes();

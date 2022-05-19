@@ -317,30 +317,29 @@ FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
 }
 
 void
-FEProblemInterface::set_up_fes()
+FEProblemInterface::create_fe(FieldInfo & fi)
 {
     _F_;
     PetscErrorCode ierr;
 
     const MPI_Comm & comm = this->unstr_mesh->get_comm();
     PetscInt dim = this->problem->get_dimension();
-    PetscBool is_simplex = this->unstr_mesh->is_simplex();
+    PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
 
-    for (auto & it : this->fields) {
-        FieldInfo & fi = it.second;
-        ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
-        check_petsc_error(ierr);
-        ierr = PetscFESetName(fi.fe, fi.name.c_str());
-        check_petsc_error(ierr);
-    }
+    ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
+    check_petsc_error(ierr);
+    ierr = PetscFESetName(fi.fe, fi.name.c_str());
+    check_petsc_error(ierr);
+}
 
-    for (auto & it : this->aux_fields) {
-        FieldInfo & fi = it.second;
-        ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
-        check_petsc_error(ierr);
-        ierr = PetscFESetName(fi.fe, fi.name.c_str());
-        check_petsc_error(ierr);
-    }
+void
+FEProblemInterface::set_up_fes()
+{
+    _F_;
+    for (auto & it : this->fields)
+        create_fe(it.second);
+    for (auto & it : this->aux_fields)
+        create_fe(it.second);
 }
 
 void
