@@ -33,14 +33,15 @@ TEST(AuxiliaryFieldTest, non_existent_id)
         {
             return 1;
         }
-        virtual void
-        set_up(DM dm, DM dm_aux)
-        {
-        }
         virtual PetscInt
         get_num_components() const
         {
             return 2;
+        }
+        virtual PetscFunc *
+        get_func() const
+        {
+            return nullptr;
         }
     };
 
@@ -85,14 +86,15 @@ TEST(AuxiliaryFieldTest, inconsistent_comp_number)
         {
             return 0;
         }
-        virtual void
-        set_up(DM dm, DM dm_aux)
-        {
-        }
         virtual PetscInt
         get_num_components() const
         {
             return 2;
+        }
+        virtual PetscFunc *
+        get_func() const
+        {
+            return nullptr;
         }
     };
 

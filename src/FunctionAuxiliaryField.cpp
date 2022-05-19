@@ -39,6 +39,7 @@ void
 FunctionAuxiliaryField::create()
 {
     _F_;
+    AuxiliaryField::create();
     FunctionInterface::create();
 }
 
@@ -48,27 +49,10 @@ FunctionAuxiliaryField::get_num_components() const
     return this->num_comps;
 }
 
-void
-FunctionAuxiliaryField::set_up(DM dm, DM dm_aux)
+PetscFunc *
+FunctionAuxiliaryField::get_func() const
 {
-    _F_;
-    PetscErrorCode ierr;
-    PetscFunc * func[1] = { __function_auxiliary_field };
-    void * ctxs[1] = { this };
-
-    ierr = DMCreateLocalVector(dm_aux, &this->a);
-    check_petsc_error(ierr);
-
-    ierr = DMProjectFunctionLocal(dm_aux,
-                                  this->fepi.get_time(),
-                                  func,
-                                  ctxs,
-                                  INSERT_ALL_VALUES,
-                                  this->a);
-    check_petsc_error(ierr);
-
-    ierr = DMSetAuxiliaryVec(dm, this->block, 0, 0, this->a);
-    check_petsc_error(ierr);
+    return __function_auxiliary_field;
 }
 
 void

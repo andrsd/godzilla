@@ -29,7 +29,8 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const InputParameters 
     unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
     logger(params.get<const App *>("_app")->get_logger()),
     qorder(PETSC_DETERMINE),
-    ds(nullptr)
+    ds(nullptr),
+    a(nullptr)
 {
     assert(this->problem != nullptr);
     assert(this->unstr_mesh != nullptr);
@@ -46,6 +47,9 @@ FEProblemInterface::~FEProblemInterface()
         FieldInfo & fi = kv.second;
         PetscFEDestroy(&fi.fe);
     }
+
+    if (this->a)
+        VecDestroy(&this->a);
 }
 
 void
@@ -68,6 +72,13 @@ FEProblemInterface::init()
     _F_;
     set_up_fes();
     set_up_problem();
+}
+
+const UnstructuredMesh *
+FEProblemInterface::get_mesh() const
+{
+    _F_;
+    return this->unstr_mesh;
 }
 
 std::vector<std::string>
@@ -400,6 +411,64 @@ FEProblemInterface::set_up_problem()
 }
 
 void
+FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
+{
+    _F_;
+    PetscInt n_auxs = this->auxs.size();
+    PetscFunc ** func = new PetscFunc *[n_auxs];
+    void ** ctxs = new void *[n_auxs];
+    for (std::size_t i = 0; i < n_auxs; i++) {
+        auto & aux = this->auxs[i];
+        if (aux->get_label() == label)
+            func[i] = aux->get_func();
+        else
+            func[i] = nullptr;
+        ctxs[i] = aux;
+    }
+
+    PetscErrorCode ierr;
+    if (label == nullptr) {
+        ierr = DMProjectFunctionLocal(dm_aux, get_time(), func, ctxs, INSERT_ALL_VALUES, a);
+        check_petsc_error(ierr);
+    }
+    else {
+        IS is;
+        ierr = DMLabelGetValueIS(label, &is);
+        check_petsc_error(ierr);
+
+        PetscInt n_ids;
+        ierr = ISGetSize(is, &n_ids);
+        check_petsc_error(ierr);
+
+        const PetscInt * ids;
+        ierr = ISGetIndices(is, &ids);
+        check_petsc_error(ierr);
+
+        ierr = DMProjectFunctionLabelLocal(dm_aux,
+                                           get_time(),
+                                           label,
+                                           n_ids,
+                                           ids,
+                                           PETSC_DETERMINE,
+                                           nullptr,
+                                           func,
+                                           ctxs,
+                                           INSERT_ALL_VALUES,
+                                           a);
+        check_petsc_error(ierr);
+
+        ierr = ISRestoreIndices(is, &ids);
+        check_petsc_error(ierr);
+
+        ierr = ISDestroy(&is);
+        check_petsc_error(ierr);
+    }
+
+    delete[] func;
+    delete[] ctxs;
+}
+
+void
 FEProblemInterface::set_up_auxiliary_dm(DM dm)
 {
     _F_;
@@ -441,10 +510,15 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
                                 fid);
         }
     }
-    if (no_errors)
-        for (auto & aux : this->auxs) {
-            aux->set_up(dm, dm_aux);
+    if (no_errors) {
+        if (this->auxs.size() > 0) {
+            ierr = DMCreateLocalVector(dm_aux, &this->a);
+            check_petsc_error(ierr);
+            compute_aux_fields(dm_aux, nullptr, this->a);
+            ierr = DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a);
+            check_petsc_error(ierr);
         }
+    }
 
     ierr = DMDestroy(&dm_aux);
 }

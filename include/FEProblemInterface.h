@@ -23,6 +23,11 @@ public:
     FEProblemInterface(Problem * problem, const InputParameters & params);
     virtual ~FEProblemInterface();
 
+    /// Get the unstructured mesh
+    ///
+    /// @return Pointer to the unstructured mesh this problem is using
+    virtual const UnstructuredMesh * get_mesh() const;
+
     /// Get list of all field names
     ///
     /// @return List of field names
@@ -218,6 +223,13 @@ protected:
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
 
+    /// Compute auxiliary fields
+    ///
+    /// @param dm_aux DM for auxiliary fields
+    /// @param label Label to which the fields are restricted
+    /// @param a Auxiliary vector associate with the label
+    void compute_aux_fields(DM dm_aux, DMLabel label, Vec a);
+
     /// Set up auxiliary DM
     virtual void set_up_auxiliary_dm(DM dm);
 
@@ -293,6 +305,9 @@ protected:
 
     /// Object that manages a discrete system
     PetscDS ds;
+
+    /// Auxiliary vector
+    Vec a;
 
     /// List of constants
     std::vector<PetscReal> consts;
