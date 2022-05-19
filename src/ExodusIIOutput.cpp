@@ -353,9 +353,7 @@ ExodusIIOutput::write_node_sets()
     ierr = DMGetLabelSize(dm, "Vertex Sets", &n_node_sets);
     check_petsc_error(ierr);
 
-    DMLabel vertex_sets_label;
-    ierr = DMGetLabel(dm, "Vertex Sets", &vertex_sets_label);
-    check_petsc_error(ierr);
+    DMLabel vertex_sets_label = this->mesh->get_label("Vertex Sets");
 
     IS vertex_sets_is;
     ierr = DMLabelGetValueIS(vertex_sets_label, &vertex_sets_is);

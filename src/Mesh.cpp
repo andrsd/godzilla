@@ -68,4 +68,14 @@ Mesh::has_label(const std::string & name) const
     return exists == PETSC_TRUE;
 }
 
+DMLabel
+Mesh::get_label(const std::string & name) const
+{
+    _F_;
+    DMLabel label;
+    PetscErrorCode ierr = DMGetLabel(this->dm, name.c_str(), &label);
+    check_petsc_error(ierr);
+    return label;
+}
+
 } // namespace godzilla
