@@ -1,9 +1,11 @@
 #include "Godzilla.h"
 #include "CallStack.h"
+#include "Problem.h"
 #include "TransientProblemInterface.h"
 #include "NonlinearProblem.h"
 #include "Output.h"
 #include "petscdmplex.h"
+#include <assert.h>
 
 namespace godzilla {
 
@@ -17,7 +19,9 @@ TransientProblemInterface::valid_params()
     return params;
 }
 
-TransientProblemInterface::TransientProblemInterface(const InputParameters & params) :
+TransientProblemInterface::TransientProblemInterface(Problem * problem,
+                                                     const InputParameters & params) :
+    problem(problem),
     ts(nullptr),
     start_time(params.get<PetscReal>("start_time")),
     end_time(params.get<PetscReal>("end_time")),
@@ -25,6 +29,7 @@ TransientProblemInterface::TransientProblemInterface(const InputParameters & par
     step_num(0)
 {
     _F_;
+    assert(this->problem != nullptr);
 }
 
 TransientProblemInterface::~TransientProblemInterface()
@@ -34,23 +39,23 @@ TransientProblemInterface::~TransientProblemInterface()
 }
 
 void
-TransientProblemInterface::init(const MPI_Comm & comm)
+TransientProblemInterface::init()
 {
     _F_;
     PetscErrorCode ierr;
-    ierr = TSCreate(comm, &this->ts);
+    ierr = TSCreate(this->problem->get_comm(), &this->ts);
     check_petsc_error(ierr);
 }
 
 void
-TransientProblemInterface::create(DM dm)
+TransientProblemInterface::create()
 {
     _F_;
     PetscErrorCode ierr;
 
     set_up_time_scheme();
 
-    ierr = TSSetDM(this->ts, dm);
+    ierr = TSSetDM(this->ts, this->problem->get_dm());
     check_petsc_error(ierr);
 
     ierr = TSSetTime(this->ts, this->start_time);

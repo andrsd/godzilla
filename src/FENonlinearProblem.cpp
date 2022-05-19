@@ -14,7 +14,7 @@ FENonlinearProblem::valid_params()
 
 FENonlinearProblem::FENonlinearProblem(const InputParameters & parameters) :
     NonlinearProblem(parameters),
-    FEProblemInterface(*this, parameters)
+    FEProblemInterface(this, parameters)
 {
     _F_;
 }
@@ -25,7 +25,7 @@ void
 FENonlinearProblem::create()
 {
     _F_;
-    FEProblemInterface::create(get_dm());
+    FEProblemInterface::create();
     NonlinearProblem::create();
 }
 
@@ -34,7 +34,7 @@ FENonlinearProblem::init()
 {
     _F_;
     NonlinearProblem::init();
-    FEProblemInterface::init(get_dm());
+    FEProblemInterface::init();
 }
 
 void
@@ -53,7 +53,7 @@ void
 FENonlinearProblem::set_up_initial_guess()
 {
     _F_;
-    FEProblemInterface::set_up_initial_guess(get_dm(), this->x);
+    FEProblemInterface::set_up_initial_guess();
 }
 
 PetscErrorCode

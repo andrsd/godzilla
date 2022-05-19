@@ -1,7 +1,7 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "FEProblemInterface.h"
-#include "Mesh.h"
+#include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
@@ -9,6 +9,7 @@
 #include "FunctionInterface.h"
 #include "App.h"
 #include "Logger.h"
+#include <assert.h>
 
 namespace godzilla {
 
@@ -23,12 +24,16 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 } // namespace internal
 
-FEProblemInterface::FEProblemInterface(Problem & problem, const InputParameters & params) :
+FEProblemInterface::FEProblemInterface(Problem * problem, const InputParameters & params) :
     problem(problem),
+    unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
     logger(params.get<const App *>("_app")->get_logger()),
     qorder(PETSC_DETERMINE),
-    ds(nullptr)
+    ds(nullptr),
+    a(nullptr)
 {
+    assert(this->problem != nullptr);
+    assert(this->unstr_mesh != nullptr);
 }
 
 FEProblemInterface::~FEProblemInterface()
@@ -42,10 +47,13 @@ FEProblemInterface::~FEProblemInterface()
         FieldInfo & fi = kv.second;
         PetscFEDestroy(&fi.fe);
     }
+
+    if (this->a)
+        VecDestroy(&this->a);
 }
 
 void
-FEProblemInterface::create(DM dm)
+FEProblemInterface::create()
 {
     _F_;
     on_set_fields();
@@ -59,11 +67,18 @@ FEProblemInterface::create(DM dm)
 }
 
 void
-FEProblemInterface::init(DM dm)
+FEProblemInterface::init()
 {
     _F_;
-    set_up_fes(dm);
-    set_up_problem(dm);
+    set_up_fes();
+    set_up_problem();
+}
+
+const UnstructuredMesh *
+FEProblemInterface::get_mesh() const
+{
+    _F_;
+    return this->unstr_mesh;
 }
 
 std::vector<std::string>
@@ -240,117 +255,132 @@ FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 }
 
 void
-FEProblemInterface::set_up_boundary_conditions(DM dm)
+FEProblemInterface::set_up_boundary_conditions()
 {
     _F_;
     /// TODO: refactor this into a method
     bool no_errors = true;
     for (auto & bc : this->bcs) {
         const std::string & bnd_name = bc->get_boundary();
-        PetscErrorCode ierr;
-        PetscBool exists = PETSC_FALSE;
-        ierr = DMHasLabel(dm, bnd_name.c_str(), &exists);
-        check_petsc_error(ierr);
+        bool exists = this->unstr_mesh->has_label(bnd_name);
         if (!exists) {
             no_errors = false;
             this->logger->error(
                 "Boundary condition '%s' is set on boundary '%s' which does not exist in the mesh.",
-                bc->get_name().c_str(),
-                bnd_name.c_str());
+                bc->get_name(),
+                bnd_name);
         }
     }
 
     if (no_errors)
         for (auto & bc : this->bcs)
-            bc->set_up(dm);
+            bc->set_up();
 }
 
 void
-FEProblemInterface::set_up_initial_guess(DM dm, Vec x)
+FEProblemInterface::set_zero_initial_guess()
 {
     _F_;
+    DM dm = this->unstr_mesh->get_dm();
+    PetscFunc * initial_guess[1] = { internal::zero_fn };
+    PetscErrorCode ierr = DMProjectFunction(dm,
+                                            get_time(),
+                                            initial_guess,
+                                            NULL,
+                                            INSERT_VALUES,
+                                            this->problem->get_solution_vector());
+    check_petsc_error(ierr);
+}
+
+void
+FEProblemInterface::set_initial_guess_from_ics()
+{
+    _F_;
+    DM dm = this->unstr_mesh->get_dm();
     PetscInt n_ics = this->ics.size();
-    if (n_ics > 0) {
-        if (n_ics != fields.size())
-            this->logger->error("Provided %d field(s), but %d initial condition(s).",
-                                fields.size(),
-                                n_ics);
-        else {
-            bool no_errors = true;
-            PetscErrorCode ierr;
-            PetscFunc * ic_funcs[n_ics];
-            void * ic_ctxs[n_ics];
-            for (auto & it : this->ics) {
-                PetscInt fid = it.first;
-                const ICInfo & ic_info = it.second;
-                const InitialCondition * ic = ic_info.ic;
+    if (n_ics != fields.size())
+        this->logger->error("Provided %d field(s), but %d initial condition(s).",
+                            fields.size(),
+                            n_ics);
+    else {
+        bool no_errors = true;
+        PetscErrorCode ierr;
+        PetscFunc * ic_funcs[n_ics];
+        void * ic_ctxs[n_ics];
+        for (auto & it : this->ics) {
+            PetscInt fid = it.first;
+            const ICInfo & ic_info = it.second;
+            const InitialCondition * ic = ic_info.ic;
 
-                PetscInt ic_nc = ic->get_num_components();
-                PetscInt field_nc = this->fields[fid].nc;
-                if (ic_nc != field_nc) {
-                    no_errors = false;
-                    this->logger->error("Initial condition '%s' operates on %d components, but is "
-                                        "set on a field with %d components.",
-                                        ic->get_name(),
-                                        ic_nc,
-                                        field_nc);
-                }
-
-                ic_funcs[fid] = __initial_condition_function;
-                ic_ctxs[fid] = (void *) ic;
+            PetscInt ic_nc = ic->get_num_components();
+            PetscInt field_nc = this->fields[fid].nc;
+            if (ic_nc != field_nc) {
+                no_errors = false;
+                this->logger->error("Initial condition '%s' operates on %d components, but is set "
+                                    "on a field with %d components.",
+                                    ic->get_name(),
+                                    ic_nc,
+                                    field_nc);
             }
 
-            if (no_errors) {
-                ierr = DMProjectFunction(dm, get_time(), ic_funcs, ic_ctxs, INSERT_VALUES, x);
-                check_petsc_error(ierr);
-            }
+            ic_funcs[fid] = __initial_condition_function;
+            ic_ctxs[fid] = (void *) ic;
+        }
+
+        if (no_errors) {
+            ierr = DMProjectFunction(dm,
+                                     get_time(),
+                                     ic_funcs,
+                                     ic_ctxs,
+                                     INSERT_VALUES,
+                                     this->problem->get_solution_vector());
+            check_petsc_error(ierr);
         }
     }
-    else {
-        // no initial conditions -> use zero
-        PetscErrorCode ierr;
-        PetscFunc * initial_guess[1] = { internal::zero_fn };
-        ierr = DMProjectFunction(dm, get_time(), initial_guess, NULL, INSERT_VALUES, x);
-        check_petsc_error(ierr);
-    }
 }
 
 void
-FEProblemInterface::set_up_fes(DM dm)
+FEProblemInterface::set_up_initial_guess()
 {
     _F_;
-    MPI_Comm comm;
-    PetscObjectGetComm((PetscObject) dm, &comm);
-
-    PetscErrorCode ierr;
-
-    PetscInt dim = this->problem.get_dimension();
-
-    // FIXME: determine if the mesh is made of simplex elements
-    PetscBool is_simplex = PETSC_FALSE;
-
-    for (auto & it : this->fields) {
-        FieldInfo & fi = it.second;
-        ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
-        check_petsc_error(ierr);
-        ierr = PetscFESetName(fi.fe, fi.name.c_str());
-        check_petsc_error(ierr);
-    }
-
-    for (auto & it : this->aux_fields) {
-        FieldInfo & fi = it.second;
-        ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
-        check_petsc_error(ierr);
-        ierr = PetscFESetName(fi.fe, fi.name.c_str());
-        check_petsc_error(ierr);
-    }
+    if (this->ics.size() > 0)
+        set_initial_guess_from_ics();
+    else
+        set_zero_initial_guess();
 }
 
 void
-FEProblemInterface::set_up_problem(DM dm)
+FEProblemInterface::create_fe(FieldInfo & fi)
 {
     _F_;
     PetscErrorCode ierr;
+
+    const MPI_Comm & comm = this->unstr_mesh->get_comm();
+    PetscInt dim = this->problem->get_dimension();
+    PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
+
+    ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
+    check_petsc_error(ierr);
+    ierr = PetscFESetName(fi.fe, fi.name.c_str());
+    check_petsc_error(ierr);
+}
+
+void
+FEProblemInterface::set_up_fes()
+{
+    _F_;
+    for (auto & it : this->fields)
+        create_fe(it.second);
+    for (auto & it : this->aux_fields)
+        create_fe(it.second);
+}
+
+void
+FEProblemInterface::set_up_problem()
+{
+    _F_;
+    PetscErrorCode ierr;
+    DM dm = this->unstr_mesh->get_dm();
 
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
@@ -365,7 +395,7 @@ FEProblemInterface::set_up_problem(DM dm)
     check_petsc_error(ierr);
 
     on_set_weak_form();
-    set_up_boundary_conditions(dm);
+    set_up_boundary_conditions();
     set_up_constants();
 
     DM cdm = dm;
@@ -378,6 +408,64 @@ FEProblemInterface::set_up_problem(DM dm)
         ierr = DMGetCoarseDM(cdm, &cdm);
         check_petsc_error(ierr);
     }
+}
+
+void
+FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
+{
+    _F_;
+    PetscInt n_auxs = this->auxs.size();
+    PetscFunc ** func = new PetscFunc *[n_auxs];
+    void ** ctxs = new void *[n_auxs];
+    for (std::size_t i = 0; i < n_auxs; i++) {
+        auto & aux = this->auxs[i];
+        if (aux->get_label() == label)
+            func[i] = aux->get_func();
+        else
+            func[i] = nullptr;
+        ctxs[i] = aux;
+    }
+
+    PetscErrorCode ierr;
+    if (label == nullptr) {
+        ierr = DMProjectFunctionLocal(dm_aux, get_time(), func, ctxs, INSERT_ALL_VALUES, a);
+        check_petsc_error(ierr);
+    }
+    else {
+        IS is;
+        ierr = DMLabelGetValueIS(label, &is);
+        check_petsc_error(ierr);
+
+        PetscInt n_ids;
+        ierr = ISGetSize(is, &n_ids);
+        check_petsc_error(ierr);
+
+        const PetscInt * ids;
+        ierr = ISGetIndices(is, &ids);
+        check_petsc_error(ierr);
+
+        ierr = DMProjectFunctionLabelLocal(dm_aux,
+                                           get_time(),
+                                           label,
+                                           n_ids,
+                                           ids,
+                                           PETSC_DETERMINE,
+                                           nullptr,
+                                           func,
+                                           ctxs,
+                                           INSERT_ALL_VALUES,
+                                           a);
+        check_petsc_error(ierr);
+
+        ierr = ISRestoreIndices(is, &ids);
+        check_petsc_error(ierr);
+
+        ierr = ISDestroy(&is);
+        check_petsc_error(ierr);
+    }
+
+    delete[] func;
+    delete[] ctxs;
 }
 
 void
@@ -422,10 +510,15 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
                                 fid);
         }
     }
-    if (no_errors)
-        for (auto & aux : this->auxs) {
-            aux->set_up(dm, dm_aux);
+    if (no_errors) {
+        if (this->auxs.size() > 0) {
+            ierr = DMCreateLocalVector(dm_aux, &this->a);
+            check_petsc_error(ierr);
+            compute_aux_fields(dm_aux, nullptr, this->a);
+            ierr = DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a);
+            check_petsc_error(ierr);
         }
+    }
 
     ierr = DMDestroy(&dm_aux);
 }
@@ -470,7 +563,7 @@ FEProblemInterface::set_jacobian_block(PetscInt fid,
 const PetscReal &
 FEProblemInterface::get_time() const
 {
-    return this->problem.get_time();
+    return this->problem->get_time();
 }
 
 } // namespace godzilla

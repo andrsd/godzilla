@@ -44,7 +44,7 @@ ImplicitFENonlinearProblem::valid_params()
 
 ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const InputParameters & params) :
     FENonlinearProblem(params),
-    TransientProblemInterface(params)
+    TransientProblemInterface(this, params)
 {
     _F_;
 }
@@ -59,13 +59,13 @@ ImplicitFENonlinearProblem::init()
 {
     _F_;
     PetscErrorCode ierr;
-    TransientProblemInterface::init(get_comm());
+    TransientProblemInterface::init();
     ierr = TSSetApplicationContext(this->ts, this);
     check_petsc_error(ierr);
     ierr = TSGetSNES(this->ts, &this->snes);
     check_petsc_error(ierr);
 
-    FEProblemInterface::init(get_dm());
+    FEProblemInterface::init();
 }
 
 void
@@ -73,7 +73,7 @@ ImplicitFENonlinearProblem::create()
 {
     _F_;
     FENonlinearProblem::create();
-    TransientProblemInterface::create(get_dm());
+    TransientProblemInterface::create();
 }
 
 PetscErrorCode

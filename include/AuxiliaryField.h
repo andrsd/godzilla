@@ -2,6 +2,7 @@
 
 #include "Object.h"
 #include "PrintInterface.h"
+#include "FunctionInterface.h"
 #include "petsc.h"
 
 namespace godzilla {
@@ -15,11 +16,9 @@ public:
     AuxiliaryField(const InputParameters & params);
     virtual ~AuxiliaryField();
 
-    /// Set up the auxiliary field
-    ///
-    /// @param dm The main DM
-    /// @param dm_aux DM for the auxiliary fields
-    virtual void set_up(DM dm, DM dm_aux) = 0;
+    virtual void create() override;
+
+    virtual DMLabel get_label() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
@@ -31,15 +30,17 @@ public:
     /// @return The number of constrained components
     virtual PetscInt get_num_components() const = 0;
 
+    virtual PetscFunc * get_func() const = 0;
+
 protected:
     /// FE problem this object is part of
     const FEProblemInterface & fepi;
 
-    /// Auxiliary vector
-    Vec a;
+    /// Region name this auxiliary field is defined on
+    const std::string & region;
 
     /// Block here the auxiliary field lives
-    DMLabel block;
+    DMLabel label;
 
 public:
     static InputParameters valid_params();

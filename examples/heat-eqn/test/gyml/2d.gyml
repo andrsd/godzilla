@@ -14,13 +14,22 @@ ics:
     type: ConstantIC
     value: [ 300 ]
 
+auxs:
+  htc:
+    type: FunctionAuxiliaryField
+    value: '100'
+
+  T_ambient:
+    type: FunctionAuxiliaryField
+    value: '400'
+
 bcs:
   left:
     type: DirichletBC
     boundary: 'left'
     value: [ '300' ]
   right:
-    type: ConvectiveHeatFluxConstBC
+    type: ConvectiveHeatFluxBC
     boundary: 'right'
     htc: 100
     T_infinity: 400

@@ -9,7 +9,7 @@
 namespace godzilla {
 
 class Logger;
-class Mesh;
+class UnstructuredMesh;
 class Problem;
 class InitialCondition;
 class BoundaryCondition;
@@ -20,8 +20,13 @@ class AuxiliaryField;
 /// Any problem using PetscFE should inherit from this for unified API
 class FEProblemInterface {
 public:
-    FEProblemInterface(Problem & problem, const InputParameters & params);
+    FEProblemInterface(Problem * problem, const InputParameters & params);
     virtual ~FEProblemInterface();
+
+    /// Get the unstructured mesh
+    ///
+    /// @return Pointer to the unstructured mesh this problem is using
+    virtual const UnstructuredMesh * get_mesh() const;
 
     /// Get list of all field names
     ///
@@ -130,12 +135,18 @@ public:
     virtual const PetscReal & get_time() const;
 
 protected:
+    struct FieldInfo;
+
     /// Initialize the FE system
-    virtual void init(DM dm);
+    virtual void init();
 
-    virtual void create(DM dm);
+    virtual void create();
 
-    virtual void set_up_initial_guess(DM dm, Vec x);
+    void set_zero_initial_guess();
+
+    void set_initial_guess_from_ics();
+
+    virtual void set_up_initial_guess();
 
     typedef void PetscFEResidualFunc(PetscInt dim,
                                      PetscInt Nf,
@@ -176,11 +187,16 @@ protected:
                                      const PetscScalar constants[],
                                      PetscScalar g3[]);
 
+    /// Create FE object from FieldInfo
+    ///
+    /// @param fi Field description
+    void create_fe(FieldInfo & fi);
+
     /// Set up finite element objects
-    void set_up_fes(DM dm);
+    void set_up_fes();
 
     /// Inform PETSc to about all fields in this problem
-    void set_up_problem(DM dm);
+    void set_up_problem();
 
     /// Set up residual statement for a field variable
     ///
@@ -205,7 +221,14 @@ protected:
                             PetscFEJacobianFunc * g3);
 
     /// Set up boundary conditions
-    virtual void set_up_boundary_conditions(DM dm);
+    virtual void set_up_boundary_conditions();
+
+    /// Compute auxiliary fields
+    ///
+    /// @param dm_aux DM for auxiliary fields
+    /// @param label Label to which the fields are restricted
+    /// @param a Auxiliary vector associate with the label
+    void compute_aux_fields(DM dm_aux, DMLabel label, Vec a);
 
     /// Set up auxiliary DM
     virtual void set_up_auxiliary_dm(DM dm);
@@ -220,8 +243,11 @@ protected:
     /// FIXME: This needs a better name
     virtual void on_set_weak_form() = 0;
 
-    /// Reference to the the problem this interface is part of
-    Problem & problem;
+    /// Problem this interface is part of
+    Problem * problem;
+
+    /// Unstructured mesh
+    const UnstructuredMesh * unstr_mesh;
 
     /// Logger object
     Logger * logger;
@@ -279,6 +305,9 @@ protected:
 
     /// Object that manages a discrete system
     PetscDS ds;
+
+    /// Auxiliary vector
+    Vec a;
 
     /// List of constants
     std::vector<PetscReal> consts;

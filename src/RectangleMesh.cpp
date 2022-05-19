@@ -103,8 +103,7 @@ RectangleMesh::create_dm()
     check_petsc_error(ierr);
 
     // create user-friendly names for sides
-    DMLabel face_sets_label;
-    ierr = DMGetLabel(this->dm, "Face Sets", &face_sets_label);
+    DMLabel face_sets_label = get_label("Face Sets");
 
     const char * side_name[] = { "bottom", "right", "top", "left" };
     for (unsigned int i = 0; i < 4; i++) {
@@ -115,9 +114,7 @@ RectangleMesh::create_dm()
         ierr = DMCreateLabel(this->dm, side_name[i]);
         check_petsc_error(ierr);
 
-        DMLabel label;
-        ierr = DMGetLabel(this->dm, side_name[i], &label);
-        check_petsc_error(ierr);
+        DMLabel label = get_label(side_name[i]);
 
         if (is) {
             ierr = DMLabelSetStratumIS(label, i + 1, is);

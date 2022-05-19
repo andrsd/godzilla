@@ -33,6 +33,11 @@ public:
     /// @param viewer PetscViewer to store the partitioning
     virtual void output_partitioning(PetscViewer viewer);
 
+    /// Is the first cell in the mesh a simplex?
+    ///
+    /// @return true if cell is a simplex, otherwise false
+    virtual bool is_simplex() const;
+
 protected:
     virtual void distribute() override;
 

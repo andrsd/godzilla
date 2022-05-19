@@ -1,5 +1,6 @@
 #include "AuxiliaryField.h"
 #include "CallStack.h"
+#include "UnstructuredMesh.h"
 #include "FEProblemInterface.h"
 
 namespace godzilla {
@@ -9,6 +10,9 @@ AuxiliaryField::valid_params()
 {
     InputParameters params = Object::valid_params();
     params.add_private_param<const FEProblemInterface *>("_fepi", nullptr);
+    params.add_param<std::string>("region",
+                                  "",
+                                  "Label name where this auxiliary field is defined.");
     return params;
 }
 
@@ -16,17 +20,34 @@ AuxiliaryField::AuxiliaryField(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
     fepi(*get_param<FEProblemInterface *>("_fepi")),
-    a(nullptr),
-    // TODO: set to the block where this aux field lives (nullptr => everywhere)
-    block(nullptr)
+    region(get_param<std::string>("region")),
+    label(nullptr)
 {
 }
 
 AuxiliaryField::~AuxiliaryField()
 {
     _F_;
-    if (this->a)
-        VecDestroy(&this->a);
+}
+
+void
+AuxiliaryField::create()
+{
+    _F_;
+    if (this->region.length() > 0) {
+        const UnstructuredMesh * mesh = this->fepi.get_mesh();
+        if (mesh->has_label(this->region))
+            this->label = mesh->get_label(this->region);
+        else
+            log_error("Region '%s' does not exists. Typo?", this->region);
+    }
+}
+
+DMLabel
+AuxiliaryField::get_label() const
+{
+    _F_;
+    return this->label;
 }
 
 PetscInt

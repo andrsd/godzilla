@@ -7,7 +7,18 @@ using namespace godzilla;
 
 TEST(NaturalBCTest, api)
 {
-    App app("test", MPI_COMM_WORLD);
+    TestApp app;
+
+    InputParameters mesh_params = LineMesh::valid_params();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_params);
+
+    InputParameters prob_params = GTestFENonlinearProblem::valid_params();
+    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    GTestFENonlinearProblem prob(prob_params);
+    app.problem = &prob;
 
     class MockNaturalBC : public NaturalBC {
     public:
@@ -42,6 +53,9 @@ TEST(NaturalBCTest, api)
     params.set<const App *>("_app") = &app;
     params.set<std::string>("boundary") = "left";
     MockNaturalBC bc(params);
+
+    mesh.create();
+    prob.create();
     bc.create();
 
     EXPECT_EQ(bc.get_field_id(), 0);
@@ -152,6 +166,7 @@ TEST(NaturalBCTest, fe)
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
+    app.problem = &prob;
     prob.add_aux_fe(0, "aux1", 1, 1);
 
     InputParameters bc_params = TestNaturalBC::valid_params();

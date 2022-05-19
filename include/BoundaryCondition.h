@@ -12,6 +12,8 @@ class BoundaryCondition : public Object, public PrintInterface {
 public:
     BoundaryCondition(const InputParameters & params);
 
+    virtual void create() override;
+
     /// Get the boundary name this BC is active on
     ///
     /// @return The boundary name
@@ -38,9 +40,7 @@ public:
     virtual std::vector<PetscInt> get_components() const = 0;
 
     /// Set up this boundary condition
-    ///
-    /// @param dm DM of problem (should have PetscDS)
-    virtual void set_up(DM dm);
+    virtual void set_up();
 
 protected:
     /// Set up the PETSc callback
