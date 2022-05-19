@@ -12,6 +12,11 @@ TEST(DirichletBCTest, api)
 {
     TestApp app;
 
+    InputParameters prob_pars = GTestProblem::valid_params();
+    prob_pars.set<const App *>("_app") = &app;
+    GTestProblem problem(prob_pars);
+    app.problem = &problem;
+
     InputParameters params = DirichletBC::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };

@@ -1,6 +1,9 @@
 #include "Godzilla.h"
 #include "CallStack.h"
+#include "App.h"
+#include "Problem.h"
 #include "BoundaryCondition.h"
+#include <assert.h>
 
 namespace godzilla {
 
@@ -25,6 +28,16 @@ BoundaryCondition::BoundaryCondition(const InputParameters & params) :
     _F_;
 }
 
+void
+BoundaryCondition::create()
+{
+    _F_;
+    Problem * problem = this->app.get_problem();
+    assert(problem != nullptr);
+    this->dm = problem->get_dm();
+    assert(this->dm != nullptr);
+}
+
 const std::string &
 BoundaryCondition::get_boundary() const
 {
@@ -32,21 +45,19 @@ BoundaryCondition::get_boundary() const
 }
 
 void
-BoundaryCondition::set_up(DM dm)
+BoundaryCondition::set_up()
 {
     _F_;
     PetscErrorCode ierr;
 
-    this->dm = dm;
-
-    ierr = DMGetDS(dm, &this->ds);
+    ierr = DMGetDS(this->dm, &this->ds);
     check_petsc_error(ierr);
 
     IS is;
-    ierr = DMGetLabelIdIS(dm, this->boundary.c_str(), &is);
+    ierr = DMGetLabelIdIS(this->dm, this->boundary.c_str(), &is);
     check_petsc_error(ierr);
 
-    ierr = DMGetLabel(dm, this->boundary.c_str(), &this->label);
+    ierr = DMGetLabel(this->dm, this->boundary.c_str(), &this->label);
     check_petsc_error(ierr);
 
     ierr = ISGetSize(is, &this->n_ids);

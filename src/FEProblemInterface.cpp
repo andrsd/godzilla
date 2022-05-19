@@ -247,7 +247,6 @@ void
 FEProblemInterface::set_up_boundary_conditions()
 {
     _F_;
-    DM dm = this->unstr_mesh->get_dm();
     /// TODO: refactor this into a method
     bool no_errors = true;
     for (auto & bc : this->bcs) {
@@ -264,7 +263,7 @@ FEProblemInterface::set_up_boundary_conditions()
 
     if (no_errors)
         for (auto & bc : this->bcs)
-            bc->set_up(dm);
+            bc->set_up();
 }
 
 void

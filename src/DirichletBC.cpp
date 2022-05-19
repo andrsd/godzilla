@@ -25,6 +25,7 @@ void
 DirichletBC::create()
 {
     _F_;
+    EssentialBC::create();
     FunctionInterface::create();
 }
 
