@@ -17,7 +17,12 @@ void
 fprintf(std::ostream & os, const char * s, T value, Args... args)
 {
     while (s && *s) {
-        if (*s == '%' && *++s != '%') {
+        if (*s == '%' && *(s + 1) != '%') {
+            if (*(s + 1) == 'e')
+                os << std::scientific;
+            else if (*(s + 1) == 'f')
+                os << std::defaultfloat;
+            ++s;
             os << value;
             return fprintf(os, ++s, args...);
         }
