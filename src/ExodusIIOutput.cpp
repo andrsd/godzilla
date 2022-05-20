@@ -84,7 +84,7 @@ ExodusIIOutput::output_step(PetscInt stepi)
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
     set_file_name();
-    godzilla_print(9, "Output to file: %s", this->file_name);
+    lprintf(9, "Output to file: %s", this->file_name);
 
     if (this->exoid == -1)
         open_file();

@@ -111,7 +111,7 @@ ImplicitFENonlinearProblem::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec
     PetscReal dt;
     ierr = TSGetTimeStep(this->ts, &dt);
     check_petsc_error(ierr);
-    godzilla_print(6, "%d Time %g dt = %g", stepi, t, dt);
+    lprintf(6, "%d Time %f dt = %f", stepi, t, dt);
     return 0;
 }
 
@@ -126,7 +126,7 @@ void
 ImplicitFENonlinearProblem::run()
 {
     _F_;
-    godzilla_print(5, "Executing...");
+    lprintf(5, "Executing...");
     set_up_initial_guess();
     // output initial condition
     output();
