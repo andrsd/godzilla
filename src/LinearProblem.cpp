@@ -186,7 +186,7 @@ PetscErrorCode
 LinearProblem::ksp_monitor_callback(PetscInt it, PetscReal rnorm)
 {
     _F_;
-    godzilla_print(8, "%d Linear residual: %e", it, rnorm);
+    lprintf(8, "%d Linear residual: %e", it, rnorm);
     return 0;
 }
 

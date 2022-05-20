@@ -23,7 +23,7 @@ protected:
     /// @param ... Arguments specifying data to print
     template <typename... Args>
     void
-    godzilla_print(unsigned int level, const char * format, Args &&... args) const
+    lprintf(unsigned int level, const char * format, Args &&... args) const
     {
         if (level <= this->verbosity_level && this->proc_id == 0) {
             internal::fprintf(std::cout, "%s: ", this->prefix);
