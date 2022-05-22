@@ -258,6 +258,8 @@ FEProblemInterface::set_up_initial_conditions()
         std::map<PetscInt, InitialCondition *> ics_by_fields;
         for (auto & ic : this->ics) {
             PetscInt fid = ic->get_field_id();
+            if (fid == -1)
+                continue;
             const auto & it = ics_by_fields.find(fid);
             if (it == ics_by_fields.end()) {
                 PetscInt ic_nc = ic->get_num_components();
