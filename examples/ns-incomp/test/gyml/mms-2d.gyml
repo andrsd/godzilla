@@ -1,0 +1,53 @@
+mesh:
+  type: RectangleMesh
+  nx: 2
+  ny: 2
+  xmin: -1
+  xmax: 1
+  ymin: -1
+  ymax: 1
+
+problem:
+  type: NSIncompressibleProblem
+  start_time: 0
+  end_time: 1
+  dt: 0.2
+  Re: 400
+
+auxs:
+  ffn:
+    type: FunctionAuxiliaryField
+    value: [
+      # 400 in the denominator is the Re number
+      '2*t*(x + y) - 2*x*y*y + 4*x*x*y + 2*x*x*x - 4.0/400 + 1.0',
+      '2*t*x       - 2*y*y*y + 4*x*y*y + 2*x*x*y - 4.0/400 + 1.0'
+    ]
+
+ics:
+  velocity:
+    type: FunctionIC
+    field: 'velocity'
+    value: [
+      't + x * x + y * y',
+      't + 2.0 * x * x - 2.0 * x * y'
+    ]
+
+  pressure:
+    type: FunctionIC
+    field: 'pressure'
+    value: 'x + y - 1'
+
+bcs:
+  vel_bc:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'marker'
+    value: [
+      't + x * x + y * y',
+      't + 2.0 * x * x - 2.0 * x * y'
+    ]
+    value_t: ['1', '1']
+
+output:
+  out:
+    type: ExodusIIOutput

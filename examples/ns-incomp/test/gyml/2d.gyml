@@ -1,0 +1,59 @@
+mesh:
+  type: RectangleMesh
+  nx: 15
+  ny: 3
+  xmax: 15
+  ymax: 3
+
+problem:
+  type: NSIncompressibleProblem
+  start_time: 0
+  end_time: 0.1
+  dt: 0.05
+  Re: 1
+
+auxs:
+  ffn:
+    type: FunctionAuxiliaryField
+    value: [ 0, -9.81 ]
+
+ics:
+  velocity:
+    type: ConstantIC
+    field: 'velocity'
+    value: [ 0, 0 ]
+
+  pressure:
+    type: ConstantIC
+    field: 'pressure'
+    value: [ 0.1 ]
+
+bcs:
+  inlet:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'left'
+    # value: [ '-0.1/2.25*y*(y-3)+1.5', 0 ]
+    value: [ 0, 0 ]
+
+  top:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'top'
+    value: [0, 0]
+
+  bottom:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'bottom'
+    value: [0, 0]
+
+  outlet:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'right'
+    value: [0, 0]
+
+output:
+  out:
+    type: ExodusIIOutput
