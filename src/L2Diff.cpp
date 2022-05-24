@@ -49,11 +49,11 @@ L2Diff::compute()
     PetscErrorCode ierr;
     PetscFunc * funcs[1] = { __l2_diff };
     void * ctxs[1] = { this };
-    ierr = DMComputeL2Diff(this->problem.get_dm(),
-                           this->problem.get_time(),
+    ierr = DMComputeL2Diff(this->problem->get_dm(),
+                           this->problem->get_time(),
                            funcs,
                            ctxs,
-                           this->problem.get_solution_vector(),
+                           this->problem->get_solution_vector(),
                            &this->l2_diff);
     check_petsc_error(ierr);
 }

@@ -27,7 +27,7 @@ public:
 
 protected:
     /// Problem this object is part of
-    const Problem & problem;
+    const Problem * problem;
 
 public:
     static InputParameters valid_params();
