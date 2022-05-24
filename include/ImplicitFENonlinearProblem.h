@@ -20,7 +20,7 @@ protected:
     /// Called before the time step solve
     virtual PetscErrorCode pre_step();
     /// Called after the time step is done solving
-    virtual PetscErrorCode on_post_step();
+    virtual PetscErrorCode post_step();
     /// TS monitor callback
     virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
     /// Setup monitors
