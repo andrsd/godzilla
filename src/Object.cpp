@@ -58,11 +58,11 @@ Object::is_param_valid(const std::string & name) const
     return this->pars.is_param_valid(name);
 }
 
-const App &
+const App *
 Object::get_app() const
 {
     _F_;
-    return *this->app;
+    return this->app;
 }
 
 const MPI_Comm &

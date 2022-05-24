@@ -40,7 +40,7 @@ public:
     bool is_param_valid(const std::string & name) const;
 
     /// Get the App this object is associated with
-    const App & get_app() const;
+    const App * get_app() const;
 
     /// Get the MPI comm this object works on
     const MPI_Comm & get_comm() const;
