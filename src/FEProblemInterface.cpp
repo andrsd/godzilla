@@ -71,6 +71,7 @@ FEProblemInterface::init()
 {
     _F_;
     set_up_fes();
+    set_up_quadrature();
     set_up_problem();
 }
 
@@ -383,6 +384,28 @@ FEProblemInterface::set_up_fes()
         create_fe(it.second);
     for (auto & it : this->aux_fields)
         create_fe(it.second);
+}
+
+void
+FEProblemInterface::set_up_quadrature()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    assert(this->fields.size() > 0);
+    PetscQuadrature q = nullptr;
+    for (auto & it : this->fields) {
+        FieldInfo & fi = it.second;
+        if (!q)
+            PetscFEGetQuadrature(fi.fe, &q);
+        ierr = PetscFESetQuadrature(fi.fe, q);
+        check_petsc_error(ierr);
+    }
+    for (auto & it : this->aux_fields) {
+        FieldInfo & fi = it.second;
+        ierr = PetscFESetQuadrature(fi.fe, q);
+        check_petsc_error(ierr);
+    }
 }
 
 void

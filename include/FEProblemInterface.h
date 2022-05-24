@@ -190,6 +190,9 @@ protected:
     /// Set up finite element objects
     void set_up_fes();
 
+    /// Set up quadrature
+    virtual void set_up_quadrature();
+
     /// Inform PETSc to about all fields in this problem
     void set_up_problem();
 
