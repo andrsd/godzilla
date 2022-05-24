@@ -195,7 +195,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
             ImplicitFENonlinearProblem::output();
         }
 
-        MOCK_METHOD(void, on_set_fields, ());
+        MOCK_METHOD(void, set_up_fields, ());
         MOCK_METHOD(void, on_set_weak_form, ());
     };
 
@@ -240,7 +240,7 @@ GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const InputPara
 GTestImplicitFENonlinearProblem::~GTestImplicitFENonlinearProblem() {}
 
 void
-GTestImplicitFENonlinearProblem::on_set_fields()
+GTestImplicitFENonlinearProblem::set_up_fields()
 {
     _F_;
     PetscInt order = 1;

@@ -406,7 +406,7 @@ GTestFENonlinearProblem::GTestFENonlinearProblem(const InputParameters & params)
 GTestFENonlinearProblem::~GTestFENonlinearProblem() {}
 
 void
-GTestFENonlinearProblem::on_set_fields()
+GTestFENonlinearProblem::set_up_fields()
 {
     _F_;
     PetscInt order = 1;
@@ -441,8 +441,8 @@ GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const InputParame
 }
 
 void
-GTest2FieldsFENonlinearProblem::on_set_fields()
+GTest2FieldsFENonlinearProblem::set_up_fields()
 {
-    GTestFENonlinearProblem::on_set_fields();
+    GTestFENonlinearProblem::set_up_fields();
     add_fe(this->iv, "v", 1, 1);
 }

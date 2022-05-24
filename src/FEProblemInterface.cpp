@@ -56,7 +56,7 @@ void
 FEProblemInterface::create()
 {
     _F_;
-    on_set_fields();
+    set_up_fields();
 
     for (auto & aux : this->auxs)
         aux->create();

@@ -120,7 +120,7 @@ HeatEquationProblem::HeatEquationProblem(const InputParameters & parameters) :
 HeatEquationProblem::~HeatEquationProblem() {}
 
 void
-HeatEquationProblem::on_set_fields()
+HeatEquationProblem::set_up_fields()
 {
     _F_;
     PetscInt order = 1;

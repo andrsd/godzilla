@@ -105,7 +105,7 @@ PoissonEquation::PoissonEquation(const InputParameters & parameters) :
 PoissonEquation::~PoissonEquation() {}
 
 void
-PoissonEquation::on_set_fields()
+PoissonEquation::set_up_fields()
 {
     _F_;
     add_fe(this->iu, "u", 1, this->p_order);

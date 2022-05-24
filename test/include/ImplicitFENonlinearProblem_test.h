@@ -42,7 +42,7 @@ public:
     virtual ~GTestImplicitFENonlinearProblem();
 
 protected:
-    virtual void on_set_fields() override;
+    virtual void set_up_fields() override;
     virtual void on_set_weak_form() override;
 
     /// ID for the "u" field

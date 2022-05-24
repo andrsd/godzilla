@@ -238,7 +238,7 @@ protected:
     void set_up_constants();
 
     /// Set up field variables
-    virtual void on_set_fields() = 0;
+    virtual void set_up_fields() = 0;
 
     /// Setup volumetric weak form terms
     /// FIXME: This needs a better name
