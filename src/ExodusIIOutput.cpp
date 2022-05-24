@@ -30,6 +30,41 @@ write_variable_names(int exoid, ex_entity_type obj_type, const std::vector<std::
     ex_put_variable_names(exoid, obj_type, n_vars, (char **) names);
 }
 
+/// Add variable names into the list of names
+///
+/// @param nc Number of components
+/// @param name Field name
+/// @param nums If `true`, component names will be numbers, otherwise they will be 'x', 'y', 'z'
+/// @param var_names Vector of variable names that will be added into
+static void
+add_var_names(PetscInt nc,
+              const std::string & name,
+              bool nums,
+              std::vector<std::string> & var_names)
+{
+    _F_;
+    if (nc == 1)
+        var_names.push_back(name);
+    else {
+        if (nums) {
+            for (PetscInt c = 0; c < nc; c++) {
+                std::ostringstream oss;
+                internal::fprintf(oss, "%s_%d", name, c);
+                var_names.push_back(oss.str());
+            }
+        }
+        else {
+            assert(nc <= 3);
+            const char * comp_name[] = { "x", "y", "z" };
+            for (PetscInt c = 0; c < nc; c++) {
+                std::ostringstream oss;
+                internal::fprintf(oss, "%s_%s", name, comp_name[c]);
+                var_names.push_back(oss.str());
+            }
+        }
+    }
+}
+
 InputParameters
 ExodusIIOutput::valid_params()
 {
@@ -509,15 +544,13 @@ ExodusIIOutput::write_all_variable_names()
     for (auto & name : field_names) {
         PetscInt fid = this->fepi->get_field_id(name);
         PetscInt nc = this->fepi->get_field_num_components(fid);
-        // Only single component fields now
-        assert(nc == 1);
         PetscInt order = this->fepi->get_field_order(fid);
         if (order == 0) {
-            elem_var_names.push_back(name);
+            add_var_names(nc, name, nc > 3, elem_var_names);
             this->elem_var_fids.push_back(fid);
         }
         else {
-            nodal_var_names.push_back(name);
+            add_var_names(nc, name, nc > 3, nodal_var_names);
             this->nodal_var_fids.push_back(fid);
         }
     }
@@ -579,29 +612,27 @@ ExodusIIOutput::write_nodal_variables(int time_step, const PetscScalar * sln)
     ierr = DMGetLocalSection(dm, &section);
     check_petsc_error(ierr);
 
-    for (std::size_t i = 0; i < this->nodal_var_fids.size(); i++) {
-        PetscInt fid = this->nodal_var_fids[i];
-        for (PetscInt n = first; n < last; n++) {
-#ifndef NDEBUG
-            PetscInt n_dofs;
-            ierr = PetscSectionGetFieldDof(section, n, fid, &n_dofs);
-            check_petsc_error(ierr);
-            assert(n_dofs == 1);
-#endif
+    for (PetscInt n = first; n < last; n++) {
+        int exo_var_id = 1;
+        for (std::size_t i = 0; i < this->nodal_var_fids.size(); i++) {
+            PetscInt fid = this->nodal_var_fids[i];
 
             PetscInt offset;
             ierr = PetscSectionGetFieldOffset(section, n, fid, &offset);
             check_petsc_error(ierr);
 
-            int exo_idx = n - n_elems + 1;
-            ex_put_partial_var(this->exoid,
-                               time_step,
-                               EX_NODAL,
-                               i + 1,
-                               1,
-                               exo_idx,
-                               1,
-                               sln + offset);
+            PetscInt nc = this->fepi->get_field_num_components(fid);
+            for (PetscInt c = 0; c <= nc; c++, exo_var_id++) {
+                int exo_idx = n - n_elems + 1;
+                ex_put_partial_var(this->exoid,
+                                   time_step,
+                                   EX_NODAL,
+                                   exo_var_id,
+                                   1,
+                                   exo_idx,
+                                   1,
+                                   sln + offset + c);
+            }
         }
     }
 }

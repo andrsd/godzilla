@@ -129,11 +129,6 @@ public:
     /// @param aux Auxiliary field object to add
     virtual void add_auxiliary_field(AuxiliaryField * aux);
 
-    /// Get the simulation time (the time is pulled from the linked Problem class)
-    ///
-    /// @return The simulation time
-    virtual const PetscReal & get_time() const;
-
 protected:
     struct FieldInfo;
 
@@ -194,6 +189,9 @@ protected:
 
     /// Set up finite element objects
     void set_up_fes();
+
+    /// Set up quadrature
+    virtual void set_up_quadrature();
 
     /// Inform PETSc to about all fields in this problem
     void set_up_problem();

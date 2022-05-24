@@ -49,8 +49,8 @@ InitialCondition::create()
         this->fid = this->fepi->get_field_id(field_names[0]);
     }
     else if (field_names.size() > 1) {
-        if (is_param_valid("field")) {
-            const std::string & field_name = get_param<std::string>("field");
+        const std::string & field_name = get_param<std::string>("field");
+        if (field_name.length() > 0) {
             if (this->fepi->has_field_by_name(field_name))
                 this->fid = this->fepi->get_field_id(field_name);
             else

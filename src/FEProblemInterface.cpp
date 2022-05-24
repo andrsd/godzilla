@@ -71,6 +71,7 @@ FEProblemInterface::init()
 {
     _F_;
     set_up_fes();
+    set_up_quadrature();
     set_up_problem();
 }
 
@@ -258,6 +259,8 @@ FEProblemInterface::set_up_initial_conditions()
         std::map<PetscInt, InitialCondition *> ics_by_fields;
         for (auto & ic : this->ics) {
             PetscInt fid = ic->get_field_id();
+            if (fid == -1)
+                continue;
             const auto & it = ics_by_fields.find(fid);
             if (it == ics_by_fields.end()) {
                 PetscInt ic_nc = ic->get_num_components();
@@ -315,7 +318,7 @@ FEProblemInterface::set_zero_initial_guess()
     DM dm = this->unstr_mesh->get_dm();
     PetscFunc * initial_guess[1] = { internal::zero_fn };
     PetscErrorCode ierr = DMProjectFunction(dm,
-                                            get_time(),
+                                            this->problem->get_time(),
                                             initial_guess,
                                             NULL,
                                             INSERT_VALUES,
@@ -339,7 +342,7 @@ FEProblemInterface::set_initial_guess_from_ics()
     PetscErrorCode ierr;
     DM dm = this->unstr_mesh->get_dm();
     ierr = DMProjectFunction(dm,
-                             get_time(),
+                             this->problem->get_time(),
                              ic_funcs,
                              ic_ctxs,
                              INSERT_VALUES,
@@ -381,6 +384,28 @@ FEProblemInterface::set_up_fes()
         create_fe(it.second);
     for (auto & it : this->aux_fields)
         create_fe(it.second);
+}
+
+void
+FEProblemInterface::set_up_quadrature()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    assert(this->fields.size() > 0);
+    PetscQuadrature q = nullptr;
+    for (auto & it : this->fields) {
+        FieldInfo & fi = it.second;
+        if (!q)
+            PetscFEGetQuadrature(fi.fe, &q);
+        ierr = PetscFESetQuadrature(fi.fe, q);
+        check_petsc_error(ierr);
+    }
+    for (auto & it : this->aux_fields) {
+        FieldInfo & fi = it.second;
+        ierr = PetscFESetQuadrature(fi.fe, q);
+        check_petsc_error(ierr);
+    }
 }
 
 void
@@ -437,7 +462,12 @@ FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
 
     PetscErrorCode ierr;
     if (label == nullptr) {
-        ierr = DMProjectFunctionLocal(dm_aux, get_time(), func, ctxs, INSERT_ALL_VALUES, a);
+        ierr = DMProjectFunctionLocal(dm_aux,
+                                      this->problem->get_time(),
+                                      func,
+                                      ctxs,
+                                      INSERT_ALL_VALUES,
+                                      a);
         check_petsc_error(ierr);
     }
     else {
@@ -454,7 +484,7 @@ FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
         check_petsc_error(ierr);
 
         ierr = DMProjectFunctionLabelLocal(dm_aux,
-                                           get_time(),
+                                           this->problem->get_time(),
                                            label,
                                            n_ids,
                                            ids,
@@ -567,12 +597,6 @@ FEProblemInterface::set_jacobian_block(PetscInt fid,
     PetscErrorCode ierr;
     ierr = PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3);
     check_petsc_error(ierr);
-}
-
-const PetscReal &
-FEProblemInterface::get_time() const
-{
-    return this->problem->get_time();
 }
 
 } // namespace godzilla
