@@ -129,11 +129,6 @@ public:
     /// @param aux Auxiliary field object to add
     virtual void add_auxiliary_field(AuxiliaryField * aux);
 
-    /// Get the simulation time (the time is pulled from the linked Problem class)
-    ///
-    /// @return The simulation time
-    virtual const PetscReal & get_time() const;
-
 protected:
     struct FieldInfo;
 
