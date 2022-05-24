@@ -47,7 +47,7 @@ protected:
     virtual void output();
 
     /// Method for setting matrix properties
-    virtual void on_set_matrix_properties();
+    virtual void set_up_matrix_properties();
 
     /// SNES object
     SNES snes;
