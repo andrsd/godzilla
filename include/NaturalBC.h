@@ -75,7 +75,7 @@ protected:
     virtual void set_up_callback() override;
 
     /// Set up the weak form for the boundary integral of this boundary condition
-    virtual void on_set_weak_form() = 0;
+    virtual void set_up_weak_form() = 0;
 
     /// WeakForm object
     PetscWeakForm wf;

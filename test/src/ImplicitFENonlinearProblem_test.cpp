@@ -196,7 +196,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
         }
 
         MOCK_METHOD(void, set_up_fields, ());
-        MOCK_METHOD(void, on_set_weak_form, ());
+        MOCK_METHOD(void, set_up_weak_form, ());
     };
 
     class MockOutput : public Output {
@@ -248,7 +248,7 @@ GTestImplicitFENonlinearProblem::set_up_fields()
 }
 
 void
-GTestImplicitFENonlinearProblem::on_set_weak_form()
+GTestImplicitFENonlinearProblem::set_up_weak_form()
 {
     set_residual_block(this->iu, f0_u, f1_u);
     set_jacobian_block(this->iu, this->iu, g0_uu, NULL, NULL, g3_uu);

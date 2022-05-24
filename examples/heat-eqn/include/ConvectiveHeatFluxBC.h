@@ -13,7 +13,7 @@ public:
     virtual std::vector<PetscInt> get_components() const;
 
 protected:
-    virtual void on_set_weak_form();
+    virtual void set_up_weak_form();
 
 public:
     static InputParameters valid_params();

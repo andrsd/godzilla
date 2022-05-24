@@ -414,7 +414,7 @@ GTestFENonlinearProblem::set_up_fields()
 }
 
 void
-GTestFENonlinearProblem::on_set_weak_form()
+GTestFENonlinearProblem::set_up_weak_form()
 {
     set_residual_block(this->iu, f0_u, f1_u);
     set_jacobian_block(this->iu, this->iu, NULL, NULL, NULL, g3_uu);

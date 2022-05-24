@@ -113,7 +113,7 @@ PoissonEquation::set_up_fields()
 }
 
 void
-PoissonEquation::on_set_weak_form()
+PoissonEquation::set_up_weak_form()
 {
     _F_;
     set_residual_block(this->iu, f0_u, f1_u);
