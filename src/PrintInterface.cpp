@@ -7,7 +7,7 @@ namespace godzilla {
 
 PrintInterface::PrintInterface(const Object * obj) :
     proc_id(obj->get_processor_id()),
-    verbosity_level(obj->get_app().get_verbosity_level()),
+    verbosity_level(obj->get_app()->get_verbosity_level()),
     prefix(obj->get_name())
 {
     _F_;

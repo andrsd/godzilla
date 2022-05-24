@@ -91,7 +91,7 @@ ConvectiveHeatFluxBC::get_components() const
 }
 
 void
-ConvectiveHeatFluxBC::on_set_weak_form()
+ConvectiveHeatFluxBC::set_up_weak_form()
 {
     _F_;
     set_residual_block(__f0_convective_heat_flux_const_bc, nullptr);

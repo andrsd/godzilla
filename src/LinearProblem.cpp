@@ -95,7 +95,7 @@ LinearProblem::create()
     _F_;
     init();
     allocate_objects();
-    on_set_matrix_properties();
+    set_up_matrix_properties();
 
     set_up_solver_parameters();
     set_up_monitors();
@@ -237,7 +237,7 @@ LinearProblem::output()
 }
 
 void
-LinearProblem::on_set_matrix_properties()
+LinearProblem::set_up_matrix_properties()
 {
 }
 

@@ -15,7 +15,7 @@ Postprocessor::valid_params()
 Postprocessor::Postprocessor(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
-    problem(*get_param<Problem *>("_problem"))
+    problem(get_param<const Problem *>("_problem"))
 {
 }
 

@@ -33,7 +33,7 @@ void
 BoundaryCondition::create()
 {
     _F_;
-    Problem * problem = this->app.get_problem();
+    Problem * problem = this->app->get_problem();
     assert(problem != nullptr);
     this->dm = problem->get_dm();
     assert(this->dm != nullptr);

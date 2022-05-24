@@ -56,7 +56,7 @@ void
 FEProblemInterface::create()
 {
     _F_;
-    on_set_fields();
+    set_up_fields();
 
     for (auto & aux : this->auxs)
         aux->create();
@@ -427,7 +427,7 @@ FEProblemInterface::set_up_problem()
     ierr = DMGetDS(dm, &this->ds);
     check_petsc_error(ierr);
 
-    on_set_weak_form();
+    set_up_weak_form();
     set_up_initial_conditions();
     set_up_boundary_conditions();
     set_up_constants();

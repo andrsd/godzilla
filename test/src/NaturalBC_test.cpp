@@ -44,7 +44,7 @@ TEST(NaturalBCTest, api)
         }
 
         virtual void
-        on_set_weak_form()
+        set_up_weak_form()
         {
         }
     };
@@ -142,7 +142,7 @@ TEST(NaturalBCTest, fe)
         }
 
         virtual void
-        on_set_weak_form()
+        set_up_weak_form()
         {
             set_residual_block(__f0_test_natural_bc, nullptr);
             set_jacobian_block(get_field_id(), __g0_test_natural_bc, nullptr, nullptr, nullptr);

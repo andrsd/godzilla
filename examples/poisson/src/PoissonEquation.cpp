@@ -105,7 +105,7 @@ PoissonEquation::PoissonEquation(const InputParameters & parameters) :
 PoissonEquation::~PoissonEquation() {}
 
 void
-PoissonEquation::on_set_fields()
+PoissonEquation::set_up_fields()
 {
     _F_;
     add_fe(this->iu, "u", 1, this->p_order);
@@ -113,7 +113,7 @@ PoissonEquation::on_set_fields()
 }
 
 void
-PoissonEquation::on_set_weak_form()
+PoissonEquation::set_up_weak_form()
 {
     _F_;
     set_residual_block(this->iu, f0_u, f1_u);

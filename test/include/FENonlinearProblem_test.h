@@ -42,8 +42,8 @@ public:
     }
 
 protected:
-    virtual void on_set_fields() override;
-    virtual void on_set_weak_form() override;
+    virtual void set_up_fields() override;
+    virtual void set_up_weak_form() override;
 
     /// ID for the "u" field
     const PetscInt iu;
@@ -55,7 +55,7 @@ public:
     GTest2FieldsFENonlinearProblem(const InputParameters & params);
 
 protected:
-    virtual void on_set_fields() override;
+    virtual void set_up_fields() override;
 
     /// ID for the "v" field
     const PetscInt iv;

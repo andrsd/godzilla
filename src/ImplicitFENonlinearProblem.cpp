@@ -13,7 +13,7 @@ __transient_pre_step(TS ts)
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     ImplicitFENonlinearProblem * prob = static_cast<ImplicitFENonlinearProblem *>(ctx);
-    return prob->on_pre_step();
+    return prob->pre_step();
 }
 
 PetscErrorCode
@@ -23,7 +23,7 @@ __transient_post_step(TS ts)
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     ImplicitFENonlinearProblem * prob = static_cast<ImplicitFENonlinearProblem *>(ctx);
-    return prob->on_post_step();
+    return prob->post_step();
 }
 
 PetscErrorCode
@@ -77,14 +77,14 @@ ImplicitFENonlinearProblem::create()
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::on_pre_step()
+ImplicitFENonlinearProblem::pre_step()
 {
     _F_;
     return 0;
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::on_post_step()
+ImplicitFENonlinearProblem::post_step()
 {
     _F_;
     PetscErrorCode ierr;

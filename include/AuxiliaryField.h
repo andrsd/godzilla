@@ -34,7 +34,7 @@ public:
 
 protected:
     /// FE problem this object is part of
-    const FEProblemInterface & fepi;
+    const FEProblemInterface * fepi;
 
     /// Region name this auxiliary field is defined on
     const std::string & region;

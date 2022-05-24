@@ -61,7 +61,7 @@ NaturalBC::set_up_callback()
                               nullptr);
     check_petsc_error(ierr);
 
-    on_set_weak_form();
+    set_up_weak_form();
 }
 
 void

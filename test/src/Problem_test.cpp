@@ -68,7 +68,7 @@ TEST(ProblemTest, add_pp)
 
     InputParameters pp_params = Postprocessor::valid_params();
     pp_params.set<const App *>("_app") = &app;
-    pp_params.set<Problem *>("_problem") = &problem;
+    pp_params.set<const Problem *>("_problem") = &problem;
     pp_params.set<std::string>("_name") = "pp";
     TestPostprocessor pp(pp_params);
 

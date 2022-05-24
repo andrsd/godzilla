@@ -120,7 +120,7 @@ HeatEquationProblem::HeatEquationProblem(const InputParameters & parameters) :
 HeatEquationProblem::~HeatEquationProblem() {}
 
 void
-HeatEquationProblem::on_set_fields()
+HeatEquationProblem::set_up_fields()
 {
     _F_;
     PetscInt order = 1;
@@ -131,7 +131,7 @@ HeatEquationProblem::on_set_fields()
 }
 
 void
-HeatEquationProblem::on_set_weak_form()
+HeatEquationProblem::set_up_weak_form()
 {
     _F_;
     set_residual_block(this->itemp, f0_temp, f1_temp);

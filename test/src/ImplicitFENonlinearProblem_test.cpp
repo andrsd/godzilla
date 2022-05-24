@@ -195,8 +195,8 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
             ImplicitFENonlinearProblem::output();
         }
 
-        MOCK_METHOD(void, on_set_fields, ());
-        MOCK_METHOD(void, on_set_weak_form, ());
+        MOCK_METHOD(void, set_up_fields, ());
+        MOCK_METHOD(void, set_up_weak_form, ());
     };
 
     class MockOutput : public Output {
@@ -219,7 +219,7 @@ TEST_F(ImplicitFENonlinearProblemTest, output_step)
 
     InputParameters out_pars = Output::valid_params();
     out_pars.set<const App *>("_app") = this->app;
-    out_pars.set<Problem *>("_problem") = &prob;
+    out_pars.set<const Problem *>("_problem") = &prob;
     MockOutput out(out_pars);
 
     prob.add_output(&out);
@@ -240,7 +240,7 @@ GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const InputPara
 GTestImplicitFENonlinearProblem::~GTestImplicitFENonlinearProblem() {}
 
 void
-GTestImplicitFENonlinearProblem::on_set_fields()
+GTestImplicitFENonlinearProblem::set_up_fields()
 {
     _F_;
     PetscInt order = 1;
@@ -248,7 +248,7 @@ GTestImplicitFENonlinearProblem::on_set_fields()
 }
 
 void
-GTestImplicitFENonlinearProblem::on_set_weak_form()
+GTestImplicitFENonlinearProblem::set_up_weak_form()
 {
     set_residual_block(this->iu, f0_u, f1_u);
     set_jacobian_block(this->iu, this->iu, g0_uu, NULL, NULL, g3_uu);

@@ -40,7 +40,7 @@ public:
     bool is_param_valid(const std::string & name) const;
 
     /// Get the App this object is associated with
-    const App & get_app() const;
+    const App * get_app() const;
 
     /// Get the MPI comm this object works on
     const MPI_Comm & get_comm() const;
@@ -61,8 +61,8 @@ protected:
     /// Parameters of this object
     const InputParameters & pars;
 
-    /// Reference to the aplpication owning this object
-    const App & app;
+    /// The application owning this object
+    const App * app;
 
     /// The type of this object
     const std::string & type;

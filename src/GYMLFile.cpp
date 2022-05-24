@@ -258,7 +258,7 @@ GYMLFile::build_postprocessors()
 
         InputParameters * params = build_params(pps_root_node, name);
         const std::string & class_name = params->get<std::string>("_type");
-        params->set<Problem *>("_problem") = this->problem;
+        params->set<const Problem *>("_problem") = this->problem;
         auto pp = Factory::create<Postprocessor>(class_name, name, params);
         problem->add_postprocessor(pp);
     }
@@ -278,7 +278,7 @@ GYMLFile::build_outputs()
 
         InputParameters * params = build_params(output_root_node, name);
         const std::string & class_name = params->get<std::string>("_type");
-        params->set<Problem *>("_problem") = this->problem;
+        params->set<const Problem *>("_problem") = this->problem;
         auto output = Factory::create<Output>(class_name, name, params);
         assert(this->problem != nullptr);
         this->problem->add_output(output);

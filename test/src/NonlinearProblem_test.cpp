@@ -101,7 +101,7 @@ TEST_F(NonlinearProblemTest, output)
 
     InputParameters out_pars = Output::valid_params();
     out_pars.set<const App *>("_app") = this->app;
-    out_pars.set<Problem *>("_problem") = &prob;
+    out_pars.set<const Problem *>("_problem") = &prob;
     MockOutput out(out_pars);
 
     prob.add_output(&out);

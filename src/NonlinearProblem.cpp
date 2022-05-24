@@ -124,7 +124,7 @@ NonlinearProblem::create()
     _F_;
     init();
     allocate_objects();
-    on_set_matrix_properties();
+    set_up_matrix_properties();
 
     set_up_solver_parameters();
     set_up_line_search();
@@ -312,7 +312,7 @@ NonlinearProblem::output()
 }
 
 void
-NonlinearProblem::on_set_matrix_properties()
+NonlinearProblem::set_up_matrix_properties()
 {
 }
 
