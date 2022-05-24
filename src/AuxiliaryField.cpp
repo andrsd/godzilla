@@ -19,7 +19,7 @@ AuxiliaryField::valid_params()
 AuxiliaryField::AuxiliaryField(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
-    fepi(*get_param<FEProblemInterface *>("_fepi")),
+    fepi(get_param<FEProblemInterface *>("_fepi")),
     region(get_param<std::string>("region")),
     label(nullptr)
 {
@@ -35,7 +35,7 @@ AuxiliaryField::create()
 {
     _F_;
     if (this->region.length() > 0) {
-        const UnstructuredMesh * mesh = this->fepi.get_mesh();
+        const UnstructuredMesh * mesh = this->fepi->get_mesh();
         if (mesh->has_label(this->region))
             this->label = mesh->get_label(this->region);
         else
@@ -54,7 +54,7 @@ PetscInt
 AuxiliaryField::get_field_id() const
 {
     _F_;
-    return this->fepi.get_aux_field_id(this->get_name());
+    return this->fepi->get_aux_field_id(this->get_name());
 }
 
 } // namespace godzilla
