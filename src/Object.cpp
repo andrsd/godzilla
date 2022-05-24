@@ -18,7 +18,7 @@ Object::Object(const InputParameters & parameters) :
     LoggingInterface(parameters.get<const App *>("_app")->get_logger(),
                      parameters.get<std::string>("_name")),
     pars(parameters),
-    app(*get_param<const App *>("_app")),
+    app(get_param<const App *>("_app")),
     type(get_param<std::string>("_type")),
     name(get_param<std::string>("_name"))
 {
@@ -62,28 +62,28 @@ const App &
 Object::get_app() const
 {
     _F_;
-    return this->app;
+    return *this->app;
 }
 
 const MPI_Comm &
 Object::get_comm() const
 {
     _F_;
-    return this->app.get_comm();
+    return this->app->get_comm();
 }
 
 const PetscMPIInt &
 Object::get_processor_id() const
 {
     _F_;
-    return this->app.get_comm_rank();
+    return this->app->get_comm_rank();
 }
 
 const PetscMPIInt &
 Object::get_comm_size() const
 {
     _F_;
-    return this->app.get_comm_size();
+    return this->app->get_comm_size();
 }
 
 void

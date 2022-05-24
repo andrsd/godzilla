@@ -61,8 +61,8 @@ protected:
     /// Parameters of this object
     const InputParameters & pars;
 
-    /// Reference to the aplpication owning this object
-    const App & app;
+    /// The application owning this object
+    const App * app;
 
     /// The type of this object
     const std::string & type;
