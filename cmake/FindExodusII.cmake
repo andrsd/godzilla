@@ -6,22 +6,6 @@
 #  EXODUSII_LIBRARY - The ExodusII library
 
 find_path(
-    NETCDF_INCLUDE_DIR
-        netcdf.h
-    PATHS
-        $ENV{NETCDF_DIR}/include
-        $ENV{PETSC_DIR}/include
-)
-
-find_library(
-    NETCDF_LIBRARY
-        netcdf
-    PATHS
-        $ENV{NETCDF_DIR}/lib
-        $ENV{PETSC_DIR}/lib
-)
-
-find_path(
     EXODUSII_INCLUDE_DIR
         exodusII.h
     PATHS

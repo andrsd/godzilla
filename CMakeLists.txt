@@ -30,6 +30,12 @@ if (NOT ${HDF5_FOUND})
     message(STATUS "HDF5 was not found.")
 endif()
 
+# NetCDF
+find_package(NetCDF)
+if (NOT ${NETCDF_FOUND})
+    message(STATUS "Try to set environemnt variable NETCDF_DIR to point to your NetCDF installation.")
+endif()
+
 # ExodusII
 find_package(ExodusII)
 if (NOT ${EXODUSII_FOUND})
