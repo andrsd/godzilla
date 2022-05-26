@@ -115,9 +115,9 @@ install(
     RUNTIME DESTINATION
         bin
     INCLUDES DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+        ${CMAKE_INSTALL_INCLUDEDIR}
     PUBLIC_HEADER DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+        ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 install(
@@ -133,7 +133,7 @@ install(
     DIRECTORY
         contrib/tclap
     DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+        ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING
         PATTERN "*.h"
 )
