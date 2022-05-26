@@ -71,7 +71,7 @@ target_include_directories(
     godzilla
     PRIVATE
         ${CONDA_INCLUDE_DIR}
-        ${HDF5_INCLUDE_DIR}
+        ${HDF5_INCLUDE_DIRS}
         ${PETSC_INCLUDE_DIR}
         ${PROJECT_BINARY_DIR}
         ${MUPARSER_INCLUDE_DIR}
@@ -86,7 +86,7 @@ target_link_libraries(
         muparser
         yaml-cpp
         ${NETCDF_LIBRARY}
-        ${HDF5_LIBRARY}
+        ${HDF5_LIBRARIES}
         ${EXODUSII_LIBRARY}
         ${PETSC_LIBRARY}
 )

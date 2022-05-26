@@ -6,47 +6,6 @@
 #  EXODUSII_LIBRARY - The ExodusII library
 
 find_path(
-    NETCDF_INCLUDE_DIR
-        netcdf.h
-    PATHS
-        $ENV{NETCDF_DIR}/include
-        $ENV{PETSC_DIR}/include
-)
-
-find_library(
-    NETCDF_LIBRARY
-        netcdf
-    PATHS
-        $ENV{NETCDF_DIR}/lib
-        $ENV{PETSC_DIR}/lib
-)
-
-# The HDF5 bit may be moved into its own FindHDF5.cmake
-find_path(
-    HDF5_INCLUDE_DIR
-        hdf5.h
-    PATHS
-        $ENV{HDF5_DIR}/include
-        $ENV{PETSC_DIR}/include
-    PATH_SUFFIXES
-        hdf5/openmpi
-        hdf5/mpich
-        hdf5/serial
-)
-
-find_library(
-    HDF5_LIBRARY
-        hdf5
-    PATHS
-        $ENV{HDF5_DIR}/lib
-        $ENV{PETSC_DIR}/lib
-    PATH_SUFFIXES
-        hdf5/openmpi
-        hdf5/mpich
-        hdf5/serial
-)
-
-find_path(
     EXODUSII_INCLUDE_DIR
         exodusII.h
     PATHS
