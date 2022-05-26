@@ -3,6 +3,7 @@
 #include "App.h"
 #include "Mesh.h"
 #include "Problem.h"
+#include "FEProblemInterface.h"
 #include "BoundaryCondition.h"
 #include <assert.h>
 
@@ -12,16 +13,20 @@ InputParameters
 BoundaryCondition::valid_params()
 {
     InputParameters params = Object::valid_params();
+    params.add_param<std::string>("field", "", "Field name");
     params.add_required_param<std::string>("boundary", "Boundary name");
+    params.add_private_param<const FEProblemInterface *>("_fepi", nullptr);
     return params;
 }
 
 BoundaryCondition::BoundaryCondition(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
+    fepi(get_param<const FEProblemInterface *>("_fepi")),
     dm(nullptr),
     ds(nullptr),
     label(nullptr),
+    fid(-1),
     n_ids(0),
     ids(nullptr),
     boundary(get_param<std::string>("boundary"))
@@ -40,12 +45,37 @@ BoundaryCondition::create()
 
     const Mesh * mesh = problem->get_mesh();
     this->label = mesh->get_label(this->boundary);
+
+    assert(this->fepi != nullptr);
+    std::vector<std::string> field_names = this->fepi->get_field_names();
+    if (field_names.size() == 1) {
+        this->fid = this->fepi->get_field_id(field_names[0]);
+    }
+    else if (field_names.size() > 1) {
+        const std::string & field_name = get_param<std::string>("field");
+        if (field_name.length() > 0) {
+            if (this->fepi->has_field_by_name(field_name))
+                this->fid = this->fepi->get_field_id(field_name);
+            else
+                log_error("Field '%s' does not exists. Typo?", field_name);
+        }
+        else
+            log_error("Use the 'field' parameter to assign this boundary condition to an existing "
+                      "field.");
+    }
 }
 
 const std::string &
 BoundaryCondition::get_boundary() const
 {
     return this->boundary;
+}
+
+PetscInt
+BoundaryCondition::get_field_id() const
+{
+    _F_;
+    return this->fid;
 }
 
 void

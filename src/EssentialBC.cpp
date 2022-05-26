@@ -49,7 +49,7 @@ EssentialBC::set_up_callback()
                               this->label,
                               this->n_ids,
                               this->ids,
-                              get_field_id(),
+                              this->fid,
                               get_num_components(),
                               get_num_components() == 0 ? NULL : get_components().data(),
                               (void (*)(void)) & __essential_boundary_condition_function,

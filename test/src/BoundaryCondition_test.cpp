@@ -1,5 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "LineMesh.h"
+#include "FENonlinearProblem_test.h"
 #include "BoundaryCondition.h"
 #include "InputParameters.h"
 #include "petsc.h"
@@ -14,7 +16,6 @@ TEST(BoundaryConditionTest, api)
         {
         }
 
-        MOCK_METHOD(PetscInt, get_field_id, (), (const));
         MOCK_METHOD(PetscInt, get_num_components, (), (const));
         MOCK_METHOD((DMBoundaryConditionType), get_bc_type, (), (const));
         MOCK_METHOD(void,
@@ -27,11 +28,24 @@ TEST(BoundaryConditionTest, api)
 
     TestApp app;
 
+    InputParameters mesh_pars = LineMesh::valid_params();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+
+    InputParameters prob_pars = GTestFENonlinearProblem::valid_params();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    GTestFENonlinearProblem problem(prob_pars);
+    app.problem = &problem;
+
     InputParameters params = BoundaryCondition::valid_params();
     params.set<const App *>("_app") = &app;
+    params.set<const FEProblemInterface *>("_fepi") = &problem;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("boundary") = "side1";
     MockBoundaryCondition bc(params);
 
     EXPECT_EQ(bc.get_boundary(), "side1");
+    EXPECT_EQ(bc.get_field_id(), -1);
 }

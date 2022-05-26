@@ -30,13 +30,6 @@ DirichletBC::create()
 }
 
 PetscInt
-DirichletBC::get_field_id() const
-{
-    _F_;
-    return 0;
-}
-
-PetscInt
 DirichletBC::get_num_components() const
 {
     _F_;

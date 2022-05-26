@@ -6,6 +6,8 @@
 
 namespace godzilla {
 
+class FEProblemInterface;
+
 /// Base class for boundary conditions
 ///
 class BoundaryCondition : public Object, public PrintInterface {
@@ -22,7 +24,7 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    virtual PetscInt get_field_id() const = 0;
+    virtual PetscInt get_field_id() const;
 
     /// Get the number of constrained components
     ///
@@ -46,6 +48,9 @@ protected:
     /// Set up the PETSc callback
     virtual void set_up_callback() = 0;
 
+    /// FE problem this object is part of
+    const FEProblemInterface * fepi;
+
     /// DM object
     DM dm;
 
@@ -54,6 +59,9 @@ protected:
 
     /// DMLabel associated with the boundary name this boundary condition acts on
     DMLabel label;
+
+    /// Field ID this boundary condition is attached to
+    PetscInt fid;
 
     /// Number of IDs in the label
     PetscInt n_ids;

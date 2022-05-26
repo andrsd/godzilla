@@ -72,12 +72,6 @@ ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const InputParameters & params) : Nat
 }
 
 PetscInt
-ConvectiveHeatFluxBC::get_field_id() const
-{
-    return 0;
-}
-
-PetscInt
 ConvectiveHeatFluxBC::get_num_components() const
 {
     return 1;
