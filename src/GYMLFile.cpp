@@ -237,6 +237,7 @@ GYMLFile::build_boundary_conditions()
             std::string name = bc_node.as<std::string>();
 
             InputParameters * params = build_params(bcs_root_node, name);
+            params->set<const FEProblemInterface *>("_fepi") = fepface;
             const std::string & class_name = params->get<std::string>("_type");
             auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
             fepface->add_boundary_condition(bc);

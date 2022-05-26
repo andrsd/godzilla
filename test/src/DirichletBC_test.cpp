@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "GodzillaApp_test.h"
-#include "GYMLFile_test.h"
+#include "FENonlinearProblem_test.h"
 #include "Factory.h"
 #include "LineMesh.h"
 #include "DirichletBC.h"
@@ -17,14 +17,15 @@ TEST(DirichletBCTest, api)
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = GTestProblem::valid_params();
+    InputParameters prob_pars = GTestFENonlinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    GTestProblem problem(prob_pars);
+    GTestFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     InputParameters params = DirichletBC::valid_params();
     params.set<const App *>("_app") = &app;
+    params.set<const FEProblemInterface *>("_fepi") = &problem;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     DirichletBC obj(params);
 
@@ -32,7 +33,6 @@ TEST(DirichletBCTest, api)
     problem.create();
     obj.create();
 
-    EXPECT_EQ(obj.get_field_id(), 0);
     EXPECT_EQ(obj.get_num_components(), 1);
     EXPECT_EQ(obj.get_bc_type(), DM_BC_ESSENTIAL);
 
@@ -55,10 +55,10 @@ TEST(DirichletBCTest, with_user_defined_fn)
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = GTestProblem::valid_params();
+    InputParameters prob_pars = GTestFENonlinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    GTestProblem problem(prob_pars);
+    GTestFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     std::string class_name = "PiecewiseLinear";
@@ -71,6 +71,7 @@ TEST(DirichletBCTest, with_user_defined_fn)
 
     InputParameters * bc_pars = Factory::get_valid_params("DirichletBC");
     bc_pars->set<const App *>("_app") = &app;
+    bc_pars->set<const FEProblemInterface *>("_fepi") = &problem;
     bc_pars->set<std::vector<std::string>>("value") = { "ipol(x)" };
     DirichletBC * bc = app.build_object<DirichletBC>("DirichletBC", "name", bc_pars);
 

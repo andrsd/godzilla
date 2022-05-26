@@ -160,6 +160,7 @@ TEST_F(FENonlinearProblemTest, solve)
         const std::string class_name = "DirichletBC";
         InputParameters * params = Factory::get_valid_params(class_name);
         params->set<const App *>("_app") = this->app;
+        params->set<const FEProblemInterface *>("_fepi") = prob;
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
@@ -187,6 +188,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
     {
         const std::string class_name = "DirichletBC";
         InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const FEProblemInterface *>("_fepi") = prob;
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
@@ -337,6 +339,7 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
     {
         const std::string class_name = "DirichletBC";
         InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const FEProblemInterface *>("_fepi") = prob;
         params->set<std::string>("boundary") = "asdf";
         params->set<std::vector<std::string>>("value") = { "0.1" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc1", params);

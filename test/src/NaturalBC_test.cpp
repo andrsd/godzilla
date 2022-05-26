@@ -25,12 +25,6 @@ TEST(NaturalBCTest, api)
         explicit MockNaturalBC(const InputParameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
-        get_field_id() const
-        {
-            return 0;
-        }
-
-        virtual PetscInt
         get_num_components() const
         {
             return 2;
@@ -51,6 +45,7 @@ TEST(NaturalBCTest, api)
 
     InputParameters params = NaturalBC::valid_params();
     params.set<const App *>("_app") = &app;
+    params.set<const FEProblemInterface *>("_fepi") = &prob;
     params.set<std::string>("boundary") = "left";
     MockNaturalBC bc(params);
 
@@ -58,7 +53,6 @@ TEST(NaturalBCTest, api)
     prob.create();
     bc.create();
 
-    EXPECT_EQ(bc.get_field_id(), 0);
     EXPECT_EQ(bc.get_num_components(), 2);
     EXPECT_EQ(bc.get_bc_type(), DM_BC_NATURAL);
 
@@ -123,12 +117,6 @@ TEST(NaturalBCTest, fe)
         explicit TestNaturalBC(const InputParameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
-        get_field_id() const
-        {
-            return 0;
-        }
-
-        virtual PetscInt
         get_num_components() const
         {
             return 1;
@@ -145,7 +133,7 @@ TEST(NaturalBCTest, fe)
         set_up_weak_form()
         {
             set_residual_block(__f0_test_natural_bc, nullptr);
-            set_jacobian_block(get_field_id(), __g0_test_natural_bc, nullptr, nullptr, nullptr);
+            set_jacobian_block(this->fid, __g0_test_natural_bc, nullptr, nullptr, nullptr);
         }
 
         PetscInt
@@ -171,6 +159,7 @@ TEST(NaturalBCTest, fe)
 
     InputParameters bc_params = TestNaturalBC::valid_params();
     bc_params.set<const App *>("_app") = &app;
+    bc_params.set<const FEProblemInterface *>("_fepi") = &prob;
     bc_params.set<std::string>("_name") = "bc1";
     bc_params.set<std::string>("boundary") = "left";
     TestNaturalBC bc(bc_params);

@@ -132,6 +132,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
+        params->set<const FEProblemInterface *>("_fepi") = prob;
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
         prob->add_boundary_condition(bc);
     }
