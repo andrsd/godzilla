@@ -5,6 +5,8 @@ project(
     VERSION 0.1
     LANGUAGES CXX)
 
+enable_language(C)
+
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -21,6 +23,11 @@ option(GODZILLA_BUILD_TESTS "Build tests" NO)
 find_package(PETSc)
 if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environemnt variable PETSC_DIR to point to your PETSc installation.")
+endif()
+
+find_package(HDF5 COMPONENTS C)
+if (NOT ${HDF5_FOUND})
+    message(STATUS "HDF5 was not found.")
 endif()
 
 # ExodusII
@@ -67,7 +74,7 @@ set(YAML_CPP_INCLUDE_DIR ${yaml_cpp_SOURCE_DIR}/include)
 
 set(GODZILLA_LIBRARIES
     ${NETCDF_LIBRARY}
-    ${HDF5_LIBRARY}
+    ${HDF5_LIBRARIES}
     ${EXODUSII_LIBRARY}
     ${PETSC_LIBRARY}
     godzilla
