@@ -1,9 +1,9 @@
-#include "gtest/gtest.h"
-#include "App.h"
+#include "gmock/gmock.h"
+#include "TestApp.h"
 #include "LineMesh.h"
 #include "FENonlinearProblem.h"
 #include "AuxiliaryField.h"
-#include "FENonlinearProblem_test.h"
+#include "GTestFENonlinearProblem.h"
 
 using namespace godzilla;
 

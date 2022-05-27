@@ -2,7 +2,7 @@
 #include "GodzillaApp_test.h"
 #include "LineMesh.h"
 #include "DirichletBC.h"
-#include "FENonlinearProblem_test.h"
+#include "GTestFENonlinearProblem.h"
 #include "L2Diff.h"
 
 TEST(L2DiffTest, compute)

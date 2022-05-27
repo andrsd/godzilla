@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
-#include "FENonlinearProblem_test.h"
+#include "TestApp.h"
+#include "GTestFENonlinearProblem.h"
 #include "LineMesh.h"
 #include "NaturalBC.h"
 

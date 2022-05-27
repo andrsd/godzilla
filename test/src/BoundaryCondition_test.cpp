@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "LineMesh.h"
-#include "FENonlinearProblem_test.h"
+#include "GTestFENonlinearProblem.h"
 #include "BoundaryCondition.h"
 #include "InputParameters.h"
 #include "petsc.h"
