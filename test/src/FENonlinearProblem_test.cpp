@@ -6,6 +6,7 @@
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
 #include "InputParameters.h"
+#include "UnstructuredMesh.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "petsc.h"
@@ -36,6 +37,13 @@ public:
 
 registerObject(GTest2CompIC);
 
+
+TEST_F(FENonlinearProblemTest, get_fepi_mesh)
+{
+    FEProblemInterface * fepi = dynamic_cast<FEProblemInterface *>(prob);
+    UnstructuredMesh * unstr_mesh = dynamic_cast<UnstructuredMesh *>(mesh);
+    EXPECT_EQ(fepi->get_mesh(), unstr_mesh);
+}
 
 TEST_F(FENonlinearProblemTest, fields)
 {
