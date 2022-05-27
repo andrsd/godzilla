@@ -3,6 +3,7 @@
 #include "GodzillaApp_test.h"
 #include "Mesh.h"
 #include "Problem.h"
+#include "GYMLFile.h"
 #include "petsc.h"
 
 using namespace godzilla;
@@ -78,6 +79,18 @@ TEST_F(GodzillaAppTest, no_colors)
     EXPECT_EQ(Terminal::num_colors, 1);
 }
 
+TEST_F(GodzillaAppTest, verbose)
+{
+    int argc = 3;
+    char * argv[] = { (char *) "godzilla", (char *) "--verbose", (char *) "2", NULL };
+
+    App app("godzilla", MPI_COMM_WORLD);
+    app.parse_command_line(argc, argv);
+
+    app.run();
+    EXPECT_EQ(app.get_verbosity_level(), 2);
+}
+
 TEST_F(GodzillaAppTest, check_integrity)
 {
     class TestApp : public App {
@@ -87,10 +100,46 @@ TEST_F(GodzillaAppTest, check_integrity)
         void
         run()
         {
+            this->gyml = allocate_gyml();
             this->log->error("error1");
             check_integrity();
         }
     } app;
 
     EXPECT_DEATH(app.run(), "error1");
+}
+
+TEST_F(GodzillaAppTest, run_problem)
+{
+    class TestFile : public GYMLFile {
+    public:
+        TestFile(App * app, Problem * prob) : GYMLFile(app) { this->problem = prob; }
+    };
+
+    class TestApp : public App {
+    public:
+        TestApp() : App("godzilla", MPI_COMM_WORLD) {}
+
+        void
+        set_problem(Problem * prob)
+        {
+            this->gyml = new TestFile(this, prob);
+        }
+
+        void
+        run()
+        {
+            run_problem();
+        }
+    } app;
+
+    const std::string & class_name = "MockProblem";
+    InputParameters * pars = Factory::get_valid_params(class_name);
+    MockProblem * prob = app.build_object<MockProblem>(class_name, "prob", pars);
+
+    app.set_problem(prob);
+
+    EXPECT_EQ(app.get_problem(), prob);
+    EXPECT_CALL(*prob, run);
+    app.run();
 }
