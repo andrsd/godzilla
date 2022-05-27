@@ -76,6 +76,9 @@ public:
                      InputParameters * parameters);
 
 protected:
+    /// Builds a GYMLFile instance
+    virtual GYMLFile * allocate_gyml();
+
     /// Create method can be used to additional object allocation, etc. needed before the
     /// application runs
     virtual void create();

@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "GodzillaApp_test.h"
-#include "FENonlinearProblem_test.h"
+#include "GTestFENonlinearProblem.h"
 #include "Factory.h"
 #include "LineMesh.h"
 #include "DirichletBC.h"

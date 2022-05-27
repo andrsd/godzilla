@@ -18,6 +18,8 @@ add_executable(${PROJECT_NAME}
     FunctionEvaluator_test.cpp
     FunctionIC_test.cpp
     GodzillaApp_test.cpp
+    GTestFENonlinearProblem.cpp
+    GTest2FieldsFENonlinearProblem.cpp
     GYMLFile_test.cpp
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp

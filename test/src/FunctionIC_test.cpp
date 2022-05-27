@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "Factory.h"
-#include "App.h"
+#include "TestApp.h"
 #include "LineMesh.h"
-#include "FENonlinearProblem_test.h"
+#include "GTestFENonlinearProblem.h"
 #include "FunctionIC.h"
 
 using namespace godzilla;

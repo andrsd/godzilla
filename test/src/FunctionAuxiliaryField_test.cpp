@@ -1,5 +1,5 @@
 #include "GodzillaApp_test.h"
-#include "FENonlinearProblem_test.h"
+#include "GTestFENonlinearProblem.h"
 #include "InputParameters.h"
 #include "LineMesh.h"
 #include "FunctionAuxiliaryField.h"

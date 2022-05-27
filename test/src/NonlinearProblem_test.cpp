@@ -12,6 +12,20 @@ using namespace godzilla;
 
 registerObject(G1DTestNonlinearProblem);
 
+TEST_F(NonlinearProblemTest, initial_guess)
+{
+    auto mesh = gMesh1d();
+    mesh->create();
+    auto prob = gProblem1d(mesh);
+    prob->create();
+    prob->call_initial_guess();
+
+    const Vec x = prob->get_solution_vector();
+    PetscReal l2_norm = 0;
+    VecNorm(x, NORM_2, &l2_norm);
+    EXPECT_DOUBLE_EQ(l2_norm, 0.);
+}
+
 TEST_F(NonlinearProblemTest, solve)
 {
     auto mesh = gMesh1d();
@@ -171,6 +185,12 @@ G1DTestNonlinearProblem::create()
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
     NonlinearProblem::create();
+}
+
+void
+G1DTestNonlinearProblem::call_initial_guess()
+{
+    NonlinearProblem::set_up_initial_guess();
 }
 
 PetscErrorCode
