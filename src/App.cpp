@@ -28,8 +28,6 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     this->args.add(this->input_file_arg);
     this->args.add(this->verbose_arg);
     this->args.add(this->no_colors_switch);
-
-    this->gyml = new GYMLFile(this);
 }
 
 App::~App()
@@ -97,6 +95,13 @@ App::get_comm_size() const
     return this->comm_size;
 }
 
+GYMLFile *
+App::allocate_gyml()
+{
+    _F_;
+    return new GYMLFile(this);
+}
+
 void
 App::run()
 {
@@ -109,6 +114,7 @@ App::run()
     }
 
     if (this->input_file_arg.isSet()) {
+        this->gyml = allocate_gyml();
         std::string file_name = this->input_file_arg.getValue();
         run_input_file(file_name);
     }
