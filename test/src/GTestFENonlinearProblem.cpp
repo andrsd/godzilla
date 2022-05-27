@@ -107,6 +107,12 @@ GTestFENonlinearProblem::getConstants()
 }
 
 void
+GTestFENonlinearProblem::set_up_initial_guess()
+{
+    FENonlinearProblem::set_up_initial_guess();
+}
+
+void
 GTestFENonlinearProblem::set_up_constants()
 {
     FENonlinearProblem::set_up_constants();

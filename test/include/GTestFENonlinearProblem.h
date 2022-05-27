@@ -16,6 +16,7 @@ public:
     virtual void set_up_constants();
     PetscDS getDS();
     void compute_postprocessors() override;
+    void set_up_initial_guess() override;
 
 protected:
     virtual void set_up_fields() override;

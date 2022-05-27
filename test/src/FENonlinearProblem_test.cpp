@@ -6,8 +6,10 @@
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
 #include "InputParameters.h"
+#include "LineMesh.h"
 #include "UnstructuredMesh.h"
 #include "InitialCondition.h"
+#include "ConstantIC.h"
 #include "BoundaryCondition.h"
 #include "petsc.h"
 #include "petscvec.h"
@@ -34,9 +36,7 @@ public:
     }
 };
 
-
 registerObject(GTest2CompIC);
-
 
 TEST_F(FENonlinearProblemTest, get_fepi_mesh)
 {
@@ -95,6 +95,38 @@ TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
     EXPECT_DEATH(
         prob->add_aux_fe(0, "second", 1, 1),
         "\\[ERROR\\] Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
+}
+
+TEST_F(FENonlinearProblemTest, set_up_initial_guess)
+{
+    InputParameters ic_pars = ConstantIC::valid_params();
+    ic_pars.set<const App *>("_app") = app;
+    ic_pars.set<const FEProblemInterface *>("_fepi") = prob;
+    ic_pars.set<std::vector<PetscReal>>("value") = { 0 };
+    ConstantIC ic(ic_pars);
+    prob->add_initial_condition(&ic);
+
+    mesh->create();
+    prob->create();
+
+    prob->set_up_initial_guess();
+
+    Vec x = prob->get_solution_vector();
+    PetscReal l2_norm = 0;
+    VecNorm(x, NORM_2, &l2_norm);
+    EXPECT_DOUBLE_EQ(l2_norm, 0.);
+}
+
+TEST_F(FENonlinearProblemTest, zero_initial_guess)
+{
+    mesh->create();
+    prob->create();
+    prob->set_up_initial_guess();
+
+    Vec x = prob->get_solution_vector();
+    PetscReal l2_norm = 0;
+    VecNorm(x, NORM_2, &l2_norm);
+    EXPECT_DOUBLE_EQ(l2_norm, 0.);
 }
 
 TEST_F(FENonlinearProblemTest, solve)
