@@ -75,7 +75,9 @@ public:
     virtual void compute_postprocessors();
 
     /// Output
-    virtual void output() = 0;
+    ///
+    /// @param stepi Time step number. For problem with no time this parameter should be -1.
+    virtual void output(PetscInt stepi);
 
 protected:
     /// Mesh

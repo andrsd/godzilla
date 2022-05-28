@@ -17,7 +17,6 @@ public:
     virtual void run() override;
     virtual bool converged() override;
     virtual Vec get_solution_vector() const override;
-    virtual void output() override;
 
 protected:
     /// provide DM for the underlying KSP object

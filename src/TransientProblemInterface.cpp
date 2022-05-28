@@ -144,7 +144,7 @@ TransientProblemInterface::post_step()
     ierr = VecCopy(sln, this->problem->get_solution_vector());
     check_petsc_error(ierr);
     this->problem->compute_postprocessors();
-    this->problem->output();
+    this->problem->output(this->step_num);
     return 0;
 }
 
@@ -165,14 +165,6 @@ TransientProblemInterface::solve(Vec x)
 {
     _F_;
     TSSolve(this->ts, x);
-}
-
-void
-TransientProblemInterface::output(const std::vector<Output *> & outputs)
-{
-    _F_;
-    for (auto & o : outputs)
-        o->output_step(this->step_num);
 }
 
 } // namespace godzilla

@@ -18,8 +18,8 @@ protected:
     virtual void set_up_callbacks() override;
     /// Setup monitors
     virtual void set_up_monitors() override;
-    /// Output
-    virtual void output() override;
+    virtual void output_initial() override;
+    virtual void output_final() override;
 
 public:
     static InputParameters valid_params();

@@ -297,23 +297,29 @@ NonlinearProblem::run()
 {
     _F_;
     set_up_initial_guess();
+    output_initial();
     solve();
     compute_postprocessors();
     if (converged())
-        output();
-}
-
-void
-NonlinearProblem::output()
-{
-    _F_;
-    for (auto & o : this->outputs)
-        o->output_step(-1);
+        output_final();
 }
 
 void
 NonlinearProblem::set_up_matrix_properties()
 {
+}
+
+void
+NonlinearProblem::output_initial()
+{
+    _F_;
+}
+
+void
+NonlinearProblem::output_final()
+{
+    _F_;
+    output(-1);
 }
 
 } // namespace godzilla

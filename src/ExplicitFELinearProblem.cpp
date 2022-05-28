@@ -98,10 +98,16 @@ ExplicitFELinearProblem::set_up_monitors()
 }
 
 void
-ExplicitFELinearProblem::output()
+ExplicitFELinearProblem::output_initial()
 {
     _F_;
-    TransientProblemInterface::output(this->outputs);
+    output(0);
+}
+
+void
+ExplicitFELinearProblem::output_final()
+{
+    _F_;
 }
 
 } // namespace godzilla

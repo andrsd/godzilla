@@ -76,10 +76,16 @@ ImplicitFENonlinearProblem::set_up_monitors()
 }
 
 void
-ImplicitFENonlinearProblem::output()
+ImplicitFENonlinearProblem::output_initial()
 {
     _F_;
-    TransientProblemInterface::output(this->outputs);
+    output(0);
+}
+
+void
+ImplicitFENonlinearProblem::output_final()
+{
+    _F_;
 }
 
 } // namespace godzilla

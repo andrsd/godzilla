@@ -17,7 +17,6 @@ public:
     virtual void solve() override;
     virtual bool converged() override;
     Vec get_solution_vector() const override;
-    virtual void output() override;
 
 protected:
     /// provide DM for the underlying SNES object
@@ -47,6 +46,10 @@ protected:
 
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
+    /// Method for outputing after initial conditions are computed
+    virtual void output_initial();
+    /// Method for outputing final solution
+    virtual void output_final();
 
     /// SNES object
     SNES snes;

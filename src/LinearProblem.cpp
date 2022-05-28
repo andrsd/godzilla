@@ -225,15 +225,7 @@ LinearProblem::run()
     solve();
     compute_postprocessors();
     if (converged())
-        output();
-}
-
-void
-LinearProblem::output()
-{
-    _F_;
-    for (auto & o : this->outputs)
-        o->output_step(-1);
+        output(-1);
 }
 
 void

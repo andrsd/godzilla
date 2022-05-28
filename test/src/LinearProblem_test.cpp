@@ -49,7 +49,7 @@ TEST_F(LinearProblemTest, run)
         {
             return true;
         }
-        MOCK_METHOD(void, output, ());
+        MOCK_METHOD(void, output, (PetscInt stepi));
         MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vec b));
         MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Mat A, Mat B));
     };
@@ -63,53 +63,8 @@ TEST_F(LinearProblemTest, run)
     MockLinearProblem prob(prob_pars);
 
     EXPECT_CALL(prob, solve);
-    EXPECT_CALL(prob, output);
+    EXPECT_CALL(prob, output(-1));
     prob.run();
-}
-
-TEST_F(LinearProblemTest, output)
-{
-    class MockLinearProblem : public LinearProblem {
-    public:
-        explicit MockLinearProblem(const InputParameters & params) : LinearProblem(params) {}
-
-        virtual void
-        output()
-        {
-            LinearProblem::output();
-        }
-        MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vec b));
-        MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Mat A, Mat B));
-    };
-
-    class MockOutput : public Output {
-    public:
-        explicit MockOutput(const InputParameters & params) : Output(params) {}
-
-        MOCK_METHOD(const std::string &, get_file_name, (), (const));
-        MOCK_METHOD(void, set_file_name, ());
-        MOCK_METHOD(void, set_sequence_file_name, (unsigned int stepi));
-        MOCK_METHOD(void, output_step, (PetscInt stepi));
-    };
-
-    auto mesh = gMesh1d();
-    mesh->create();
-
-    InputParameters prob_pars = LinearProblem::valid_params();
-    prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<const Mesh *>("_mesh") = mesh;
-    MockLinearProblem prob(prob_pars);
-
-    InputParameters out_pars = Output::valid_params();
-    out_pars.set<const App *>("_app") = this->app;
-    out_pars.set<const Problem *>("_problem") = &prob;
-    MockOutput out(out_pars);
-
-    prob.add_output(&out);
-
-    EXPECT_CALL(out, output_step);
-
-    prob.output();
 }
 
 // 1D

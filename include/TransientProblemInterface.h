@@ -30,8 +30,6 @@ protected:
     virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
     /// Solve
     virtual void solve(Vec x);
-    /// Output
-    virtual void output(const std::vector<Output *> & outputs);
 
     /// Problem this interface is part of
     Problem * problem;
