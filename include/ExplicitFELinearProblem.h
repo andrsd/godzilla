@@ -5,10 +5,10 @@
 
 namespace godzilla {
 
-class ImplicitFENonlinearProblem : public FENonlinearProblem, public TransientProblemInterface {
+class ExplicitFELinearProblem : public FENonlinearProblem, public TransientProblemInterface {
 public:
-    ImplicitFENonlinearProblem(const InputParameters & params);
-    virtual ~ImplicitFENonlinearProblem();
+    ExplicitFELinearProblem(const InputParameters & params);
+    virtual ~ExplicitFELinearProblem();
 
     virtual void create() override;
     virtual void solve() override;
@@ -16,6 +16,7 @@ public:
 protected:
     virtual void init() override;
     virtual void set_up_callbacks() override;
+    virtual void set_up_time_scheme() override;
     /// Setup monitors
     virtual void set_up_monitors() override;
     /// Output

@@ -69,6 +69,13 @@ Problem::get_time() const
     return this->time;
 }
 
+PetscReal &
+Problem::get_time()
+{
+    _F_;
+    return this->time;
+}
+
 const std::vector<Function *> &
 Problem::get_functions() const
 {

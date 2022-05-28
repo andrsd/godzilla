@@ -17,6 +17,7 @@ public:
     virtual void solve() override;
     virtual bool converged() override;
     Vec get_solution_vector() const override;
+    virtual void output() override;
 
 protected:
     /// provide DM for the underlying SNES object
@@ -43,8 +44,6 @@ protected:
     PetscErrorCode snes_monitor_callback(PetscInt it, PetscReal norm);
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
-    /// Output
-    virtual void output();
 
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();

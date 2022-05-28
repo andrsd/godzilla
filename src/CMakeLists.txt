@@ -16,6 +16,7 @@ add_library(godzilla
         EssentialBC.cpp
         ExodusIIMesh.cpp
         ExodusIIOutput.cpp
+        ExplicitFELinearProblem.cpp
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
         FileOutput.cpp
