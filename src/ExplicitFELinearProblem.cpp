@@ -110,4 +110,15 @@ ExplicitFELinearProblem::output_final()
     _F_;
 }
 
+void
+ExplicitFELinearProblem::set_residual_block(PetscInt field_id,
+                                            PetscFEResidualFunc * f0,
+                                            PetscFEResidualFunc * f1)
+{
+    _F_;
+    PetscErrorCode ierr;
+    ierr = PetscDSSetRHSResidual(this->ds, field_id, f0, f1);
+    check_petsc_error(ierr);
+}
+
 } // namespace godzilla
