@@ -55,7 +55,6 @@ f1_temp(PetscInt dim,
         f1[d] = -u_x[d];
 }
 
-
 InputParameters
 HeatEquationExplicit::valid_params()
 {
