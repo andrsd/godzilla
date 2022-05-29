@@ -96,6 +96,8 @@ TransientProblemInterface::create()
     check_petsc_error(ierr);
     ierr = TSSetStepNumber(this->ts, this->step_num);
     check_petsc_error(ierr);
+    ierr = TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP);
+    check_petsc_error(ierr);
 }
 
 void
