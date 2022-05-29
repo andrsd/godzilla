@@ -11,6 +11,7 @@ add_executable(
     ${PROJECT_NAME}
         src/ConvectiveHeatFluxBC.cpp
         src/HeatEquationProblem.cpp
+        src/HeatEquationExplicit.cpp
         src/main.cpp
 )
 
