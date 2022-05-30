@@ -61,6 +61,12 @@ TEST_F(FENonlinearProblemTest, fields)
                  "\\[ERROR\\] Field 'nonexistent' does not exist\\. Typo\\?");
     EXPECT_EQ(prob->has_field_by_id(65536), false);
     EXPECT_EQ(prob->has_field_by_name("nonexistent"), false);
+
+    EXPECT_DEATH(prob->get_field_order(65536),
+                 "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
+
+    EXPECT_DEATH(prob->get_field_num_components(65536),
+                 "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
