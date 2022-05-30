@@ -20,10 +20,11 @@ function(add_test_exodiff)
         EXODIFFT
         ""
         "NAME;BIN;INPUT;OUTPUT;GOLD"
-        ""
+        "ARGS"
         ${ARGN}
     )
 
+    string(JOIN "\;" ARG_STR ${EXODIFFT_ARGS})
     add_test(
         NAME
             ${EXODIFFT_NAME}
@@ -33,6 +34,7 @@ function(add_test_exodiff)
             -DINPUT=${EXODIFFT_INPUT}
             -DOUTPUT=${EXODIFFT_OUTPUT}
             -DGOLD=${EXODIFFT_GOLD}
+            -DARGS=${ARG_STR}
             -P ${CMAKE_SOURCE_DIR}/cmake/TesterExodusII.cmake
     )
 endfunction()
@@ -46,7 +48,8 @@ if(
     DEFINED BIN AND
     DEFINED INPUT AND
     DEFINED OUTPUT AND
-    DEFINED GOLD
+    DEFINED GOLD AND
+    DEFINED ARGS
 )
     execute_process(
         COMMAND ${BIN} -i ${INPUT}
@@ -58,7 +61,7 @@ if(
         message(FATAL_ERROR ${CMD_RESULT})
     endif()
     execute_process(
-        COMMAND ${EXODIFF} ${GOLD} ${OUTPUT}
+        COMMAND ${EXODIFF} ${ARGS} ${GOLD} ${OUTPUT}
         RESULT_VARIABLE CMD_RESULT
         OUTPUT_VARIABLE DIFF_OUT
     )
