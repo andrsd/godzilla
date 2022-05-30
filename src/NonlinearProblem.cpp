@@ -300,9 +300,10 @@ NonlinearProblem::run()
     set_up_initial_guess();
     output_initial();
     solve();
-    compute_postprocessors();
-    if (converged())
+    if (converged()) {
+        compute_postprocessors();
         output_final();
+    }
 }
 
 void
