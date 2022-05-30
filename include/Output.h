@@ -43,10 +43,10 @@ protected:
 public:
     static InputParameters valid_params();
 
-    static const unsigned int ON_NONE = 0x0;
-    static const unsigned int ON_INITIAL = 0x1;
-    static const unsigned int ON_TIMESTEP = 0x2;
-    static const unsigned int ON_FINAL = 0x4;
+    static const unsigned int ON_NONE;
+    static const unsigned int ON_INITIAL;
+    static const unsigned int ON_TIMESTEP;
+    static const unsigned int ON_FINAL;
 };
 
 } // namespace godzilla

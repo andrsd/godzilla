@@ -6,6 +6,11 @@
 
 namespace godzilla {
 
+const unsigned int Output::ON_NONE = 0x0;
+const unsigned int Output::ON_INITIAL = 0x1;
+const unsigned int Output::ON_TIMESTEP = 0x2;
+const unsigned int Output::ON_FINAL = 0x4;
+
 InputParameters
 Output::valid_params()
 {

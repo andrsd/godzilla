@@ -32,6 +32,7 @@ add_executable(${PROJECT_NAME}
     NaturalBC_test.cpp
     NonlinearProblem_test.cpp
     Object_test.cpp
+    Output_test.cpp
     PiecewiseLinear_test.cpp
     PrintInterface_test.cpp
     Problem_test.cpp
