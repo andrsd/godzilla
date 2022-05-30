@@ -50,6 +50,19 @@ templates_path = ['_templates']
 
 exclude_patterns = []
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_material'
+html_theme_options = {
+    'nav_title': 'GODZILLA',
+    'base_url': 'https://godzilla-fem.readthedocs.io',
+    'color_primary': 'indigo',
+    'color_accent': 'indigo',
+    'repo_url': 'https://github.com/andrsd/godzilla',
+    'repo_name': 'godzilla',
+    'globaltoc_depth': 3,
+    'master_doc': False
+}
+html_sidebars = {
+    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+}
 html_static_path = ['_static']
 html_show_sourcelink = False

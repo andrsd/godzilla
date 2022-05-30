@@ -10,4 +10,5 @@ dependencies:
 - pip>=20.1
 - pip:
     - sphinx-tabs
+    - sphinx-material
 prefix: /home/docs/.conda/envs/readthedocs
