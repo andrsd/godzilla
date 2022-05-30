@@ -35,3 +35,4 @@ output:
   vtk:
     type: ExodusIIOutput
     file: '2d-explicit'
+    on: ['initial', 'final']

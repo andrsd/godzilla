@@ -31,3 +31,4 @@ output:
   out:
     type: ExodusIIOutput
     file: burgers
+    on: ['initial', 'final']
