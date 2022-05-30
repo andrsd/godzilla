@@ -43,11 +43,13 @@ protected:
     PetscErrorCode snes_monitor_callback(PetscInt it, PetscReal norm);
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
-    /// Output
-    virtual void output();
 
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
+    /// Method for outputing after initial conditions are computed
+    virtual void output_initial();
+    /// Method for outputing final solution
+    virtual void output_final();
 
     /// SNES object
     SNES snes;

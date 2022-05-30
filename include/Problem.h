@@ -41,7 +41,9 @@ public:
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
     /// @return Simulation time
-    virtual const PetscReal & get_time() const;
+    const PetscReal & get_time() const;
+
+    PetscReal & get_time();
 
     /// Get list of functions
     ///
@@ -69,10 +71,15 @@ public:
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
     virtual Postprocessor * get_postprocessor(const std::string & name) const;
 
-protected:
     /// Compute all postprocessors
     virtual void compute_postprocessors();
 
+    /// Output
+    ///
+    /// @param stepi Time step number. For problem with no time this parameter should be -1.
+    virtual void output(PetscInt stepi);
+
+protected:
     /// Mesh
     const Mesh * mesh;
 

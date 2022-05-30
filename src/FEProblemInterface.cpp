@@ -574,29 +574,4 @@ FEProblemInterface::set_up_constants()
     check_petsc_error(ierr);
 }
 
-void
-FEProblemInterface::set_residual_block(PetscInt field_id,
-                                       PetscFEResidualFunc * f0,
-                                       PetscFEResidualFunc * f1)
-{
-    _F_;
-    PetscErrorCode ierr;
-    ierr = PetscDSSetResidual(this->ds, field_id, f0, f1);
-    check_petsc_error(ierr);
-}
-
-void
-FEProblemInterface::set_jacobian_block(PetscInt fid,
-                                       PetscInt gid,
-                                       PetscFEJacobianFunc * g0,
-                                       PetscFEJacobianFunc * g1,
-                                       PetscFEJacobianFunc * g2,
-                                       PetscFEJacobianFunc * g3)
-{
-    _F_;
-    PetscErrorCode ierr;
-    ierr = PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3);
-    check_petsc_error(ierr);
-}
-
 } // namespace godzilla

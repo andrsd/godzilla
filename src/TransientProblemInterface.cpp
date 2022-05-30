@@ -9,6 +9,34 @@
 
 namespace godzilla {
 
+PetscErrorCode
+__transient_pre_step(TS ts)
+{
+    _F_;
+    void * ctx;
+    TSGetApplicationContext(ts, &ctx);
+    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    return tpi->pre_step();
+}
+
+PetscErrorCode
+__transient_post_step(TS ts)
+{
+    _F_;
+    void * ctx;
+    TSGetApplicationContext(ts, &ctx);
+    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    return tpi->post_step();
+}
+
+PetscErrorCode
+__transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx)
+{
+    _F_;
+    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    return tpi->ts_monitor_callback(stepi, time, x);
+}
+
 InputParameters
 TransientProblemInterface::valid_params()
 {
@@ -45,6 +73,8 @@ TransientProblemInterface::init()
     PetscErrorCode ierr;
     ierr = TSCreate(this->problem->get_comm(), &this->ts);
     check_petsc_error(ierr);
+    ierr = TSSetApplicationContext(this->ts, this);
+    check_petsc_error(ierr);
 }
 
 void
@@ -66,6 +96,21 @@ TransientProblemInterface::create()
     check_petsc_error(ierr);
     ierr = TSSetStepNumber(this->ts, this->step_num);
     check_petsc_error(ierr);
+    ierr = TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP);
+    check_petsc_error(ierr);
+}
+
+void
+TransientProblemInterface::set_up_monitors()
+{
+    _F_;
+    PetscErrorCode ierr;
+    ierr = TSSetPreStep(this->ts, __transient_pre_step);
+    check_petsc_error(ierr);
+    ierr = TSSetPostStep(this->ts, __transient_post_step);
+    check_petsc_error(ierr);
+    ierr = TSMonitorSet(this->ts, __transient_monitor, this, NULL);
+    check_petsc_error(ierr);
 }
 
 void
@@ -76,6 +121,45 @@ TransientProblemInterface::set_up_time_scheme()
     // TODO: allow other schemes
     ierr = TSSetType(this->ts, TSBEULER);
     check_petsc_error(ierr);
+}
+
+PetscErrorCode
+TransientProblemInterface::pre_step()
+{
+    _F_;
+    return 0;
+}
+
+PetscErrorCode
+TransientProblemInterface::post_step()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    ierr = TSGetTime(this->ts, &this->problem->get_time());
+    check_petsc_error(ierr);
+    ierr = TSGetStepNumber(this->ts, &this->step_num);
+    check_petsc_error(ierr);
+    Vec sln;
+    ierr = TSGetSolution(this->ts, &sln);
+    check_petsc_error(ierr);
+    ierr = VecCopy(sln, this->problem->get_solution_vector());
+    check_petsc_error(ierr);
+    this->problem->compute_postprocessors();
+    this->problem->output(this->step_num);
+    return 0;
+}
+
+PetscErrorCode
+TransientProblemInterface::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec x)
+{
+    _F_;
+    PetscErrorCode ierr;
+    PetscReal dt;
+    ierr = TSGetTimeStep(this->ts, &dt);
+    check_petsc_error(ierr);
+    // lprintf(6, "%d Time %f dt = %f", stepi, t, dt);
+    return 0;
 }
 
 void

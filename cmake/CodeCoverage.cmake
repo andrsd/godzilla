@@ -27,6 +27,9 @@ mark_as_advanced(FORCE LCOV_PATH GENHTML_PATH)
 
 set(CODE_COVERAGE_PROFRAWS
     ${CMAKE_BINARY_DIR}/test/godzilla-test.profraw
+    ${CMAKE_BINARY_DIR}/examples/poisson/test/default.profraw
+    ${CMAKE_BINARY_DIR}/examples/heat-eqn/test/default.profraw
+    ${CMAKE_BINARY_DIR}/examples/burgers-eqn/test/default.profraw
 )
 set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${CODE_COVERAGE_PROFRAWS}")
 

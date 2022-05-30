@@ -1,0 +1,33 @@
+mesh:
+  type: LineMesh
+  nx: 100
+  xmin: 0
+  xmax: 1
+
+problem:
+  type: BurgersEquation
+  start_time: 0
+  end_time: 0.01
+  dt: 0.002
+  viscosity: 0.005
+
+ics:
+  all:
+    type: ConstantIC
+    value: 0
+
+bcs:
+  left:
+    type: DirichletBC
+    boundary: 'left'
+    value: 1
+
+  right:
+    type: DirichletBC
+    boundary: 'right'
+    value: -1
+
+output:
+  out:
+    type: ExodusIIOutput
+    file: burgers

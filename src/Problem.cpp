@@ -69,6 +69,13 @@ Problem::get_time() const
     return this->time;
 }
 
+PetscReal &
+Problem::get_time()
+{
+    _F_;
+    return this->time;
+}
+
 const std::vector<Function *> &
 Problem::get_functions() const
 {
@@ -114,6 +121,14 @@ Problem::get_postprocessor(const std::string & name) const
         return it->second;
     else
         return nullptr;
+}
+
+void
+Problem::output(PetscInt stepi)
+{
+    _F_;
+    for (auto & o : this->outputs)
+        o->output_step(stepi);
 }
 
 } // namespace godzilla

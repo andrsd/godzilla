@@ -37,8 +37,6 @@ protected:
     virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) = 0;
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
-    /// Output
-    virtual void output();
 
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();

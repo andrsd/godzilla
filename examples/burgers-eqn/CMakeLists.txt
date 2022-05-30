@@ -1,4 +1,4 @@
-project(poisson)
+project(burgers-eqn)
 
 add_subdirectory(src)
 

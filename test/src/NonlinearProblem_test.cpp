@@ -61,7 +61,8 @@ TEST_F(NonlinearProblemTest, run)
         {
             return true;
         }
-        MOCK_METHOD(void, output, ());
+        MOCK_METHOD(void, output_initial, ());
+        MOCK_METHOD(void, output, (PetscInt stepi));
         MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
         MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
     };
@@ -76,53 +77,9 @@ TEST_F(NonlinearProblemTest, run)
 
     EXPECT_CALL(prob, set_up_initial_guess);
     EXPECT_CALL(prob, solve);
-    EXPECT_CALL(prob, output);
+    EXPECT_CALL(prob, output_initial);
+    EXPECT_CALL(prob, output(-1));
     prob.run();
-}
-
-TEST_F(NonlinearProblemTest, output)
-{
-    class MockNonlinearProblem : public NonlinearProblem {
-    public:
-        explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
-
-        virtual void
-        output()
-        {
-            NonlinearProblem::output();
-        }
-        MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
-        MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
-    };
-
-    class MockOutput : public Output {
-    public:
-        explicit MockOutput(const InputParameters & params) : Output(params) {}
-
-        MOCK_METHOD(const std::string &, get_file_name, (), (const));
-        MOCK_METHOD(void, set_file_name, ());
-        MOCK_METHOD(void, set_sequence_file_name, (unsigned int stepi));
-        MOCK_METHOD(void, output_step, (PetscInt stepi));
-    };
-
-    auto mesh = gMesh1d();
-    mesh->create();
-
-    InputParameters prob_pars = NonlinearProblem::valid_params();
-    prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<const Mesh *>("_mesh") = mesh;
-    MockNonlinearProblem prob(prob_pars);
-
-    InputParameters out_pars = Output::valid_params();
-    out_pars.set<const App *>("_app") = this->app;
-    out_pars.set<const Problem *>("_problem") = &prob;
-    MockOutput out(out_pars);
-
-    prob.add_output(&out);
-
-    EXPECT_CALL(out, output_step);
-
-    prob.output();
 }
 
 TEST_F(NonlinearProblemTest, line_search_type)
