@@ -8,19 +8,11 @@ find_program(
     LLVM_COV_PATH
     NAMES
         llvm-cov
-        llvm-cov-10
-        llvm-cov-11
-        llvm-cov-12
-        llvm-cov-13
 )
 find_program(
     LLVM_PROFDATA_PATH
     NAMES
         llvm-profdata
-        llvm-profdata-10
-        llvm-profdata-11
-        llvm-profdata-12
-        llvm-profdata-13
 )
 find_program(GENHTML_PATH genhtml)
 mark_as_advanced(FORCE LCOV_PATH GENHTML_PATH)
