@@ -11,6 +11,7 @@ public:
     virtual ~ImplicitFENonlinearProblem();
 
     virtual void create() override;
+    virtual bool converged() override;
     virtual void solve() override;
 
 protected:

@@ -165,7 +165,18 @@ void
 TransientProblemInterface::solve(Vec x)
 {
     _F_;
-    TSSolve(this->ts, x);
+    PetscErrorCode ierr;
+    ierr = TSSolve(this->ts, x);
+    check_petsc_error(ierr);
+    ierr = TSGetConvergedReason(this->ts, &this->converged_reason);
+    check_petsc_error(ierr);
+}
+
+bool
+TransientProblemInterface::converged() const
+{
+    _F_;
+    return this->converged_reason > 0;
 }
 
 } // namespace godzilla

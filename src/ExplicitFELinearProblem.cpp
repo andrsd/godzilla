@@ -57,6 +57,13 @@ ExplicitFELinearProblem::create()
     TransientProblemInterface::create();
 }
 
+bool
+ExplicitFELinearProblem::converged()
+{
+    _F_;
+    return TransientProblemInterface::converged();
+}
+
 void
 ExplicitFELinearProblem::solve()
 {

@@ -11,6 +11,7 @@ public:
     virtual ~ExplicitFELinearProblem();
 
     virtual void create() override;
+    virtual bool converged() override;
     virtual void solve() override;
 
 protected:

@@ -47,6 +47,13 @@ ImplicitFENonlinearProblem::create()
     TransientProblemInterface::create();
 }
 
+bool
+ImplicitFENonlinearProblem::converged()
+{
+    _F_;
+    return TransientProblemInterface::converged();
+}
+
 void
 ImplicitFENonlinearProblem::solve()
 {
