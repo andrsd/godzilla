@@ -1,6 +1,7 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "ImplicitFENonlinearProblem.h"
+#include "Output.h"
 #include "petscts.h"
 
 namespace godzilla {
@@ -18,6 +19,7 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const InputParameters & p
     TransientProblemInterface(this, params)
 {
     _F_;
+    this->default_output_on = Output::ON_INITIAL | Output::ON_TIMESTEP;
 }
 
 ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
@@ -73,19 +75,6 @@ ImplicitFENonlinearProblem::set_up_monitors()
     _F_;
     FENonlinearProblem::set_up_monitors();
     TransientProblemInterface::set_up_monitors();
-}
-
-void
-ImplicitFENonlinearProblem::output_initial()
-{
-    _F_;
-    output(0);
-}
-
-void
-ImplicitFENonlinearProblem::output_final()
-{
-    _F_;
 }
 
 } // namespace godzilla

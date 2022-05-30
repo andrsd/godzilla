@@ -86,6 +86,7 @@ NonlinearProblem::NonlinearProblem(const InputParameters & parameters) :
     lin_max_iter(get_param<PetscInt>("lin_max_iter"))
 {
     _F_;
+    this->default_output_on = Output::ON_FINAL;
     line_search_type = utils::to_lower(line_search_type);
 }
 
@@ -307,19 +308,6 @@ NonlinearProblem::run()
 void
 NonlinearProblem::set_up_matrix_properties()
 {
-}
-
-void
-NonlinearProblem::output_initial()
-{
-    _F_;
-}
-
-void
-NonlinearProblem::output_final()
-{
-    _F_;
-    output(-1);
 }
 
 } // namespace godzilla

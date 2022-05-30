@@ -31,6 +31,9 @@ HDF5Output::get_file_ext() const
 void
 HDF5Output::create()
 {
+    _F_;
+    FileOutput::create();
+
     PetscErrorCode ierr;
     ierr = PetscViewerCreate(get_comm(), &this->viewer);
     check_petsc_error(ierr);

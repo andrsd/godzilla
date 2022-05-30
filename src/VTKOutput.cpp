@@ -31,6 +31,8 @@ void
 VTKOutput::create()
 {
     _F_;
+    FileOutput::create();
+
     PetscErrorCode ierr;
     ierr = PetscViewerCreate(get_comm(), &this->viewer);
     check_petsc_error(ierr);

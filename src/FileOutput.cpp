@@ -73,15 +73,12 @@ FileOutput::output_solution(Vec vec)
 }
 
 void
-FileOutput::output_step(PetscInt stepi)
+FileOutput::output_step()
 {
     _F_;
     PetscErrorCode ierr;
 
-    if (stepi == -1)
-        set_file_name();
-    else
-        set_sequence_file_name(stepi);
+    set_sequence_file_name(this->problem->get_step_num());
     ierr = PetscViewerFileSetName(this->viewer, this->file_name.c_str());
     check_petsc_error(ierr);
 

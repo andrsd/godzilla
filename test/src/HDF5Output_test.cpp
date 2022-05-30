@@ -71,7 +71,7 @@ TEST_F(HDF5OutputTest, output)
     auto out = gOutput(prob, "out");
     out->create();
     out->set_file_name();
-    out->output_step(-1);
+    out->output_step();
 
     const std::string file_name = out->get_file_name();
     PetscViewer viewer;

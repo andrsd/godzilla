@@ -62,7 +62,7 @@ TEST_F(NonlinearProblemTest, run)
             return true;
         }
         MOCK_METHOD(void, output_initial, ());
-        MOCK_METHOD(void, output, (PetscInt stepi));
+        MOCK_METHOD(void, output_final, ());
         MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
         MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
     };
@@ -78,7 +78,7 @@ TEST_F(NonlinearProblemTest, run)
     EXPECT_CALL(prob, set_up_initial_guess);
     EXPECT_CALL(prob, solve);
     EXPECT_CALL(prob, output_initial);
-    EXPECT_CALL(prob, output(-1));
+    EXPECT_CALL(prob, output_final);
     prob.run();
 }
 

@@ -43,7 +43,10 @@ public:
     /// @return Simulation time
     const PetscReal & get_time() const;
 
-    PetscReal & get_time();
+    /// Get time step number
+    ///
+    /// @return Time step number
+    const PetscInt & get_step_num() const;
 
     /// Get list of functions
     ///
@@ -76,10 +79,15 @@ public:
 
     /// Output
     ///
-    /// @param stepi Time step number. For problem with no time this parameter should be -1.
-    virtual void output(PetscInt stepi);
+    /// @param mask Bit mask for an output event, see `Output` for valid options.
+    virtual void output(unsigned int mask);
 
 protected:
+    /// Method for outputing after initial conditions are computed
+    virtual void output_initial();
+    /// Method for outputing final solution
+    virtual void output_final();
+
     /// Mesh
     const Mesh * mesh;
 
@@ -89,14 +97,22 @@ protected:
     /// List of output objects
     std::vector<Output *> outputs;
 
+    /// Default output execute mask
+    unsigned int default_output_on;
+
     /// List of postprocessor objects
     std::map<std::string, Postprocessor *> pps;
 
     /// Simulation time
     PetscReal time;
 
+    /// Time step number
+    PetscInt step_num;
+
 public:
     static InputParameters valid_params();
+
+    friend class TransientProblemInterface;
 };
 
 } // namespace godzilla
