@@ -30,7 +30,7 @@ public:
     /// @return File extension
     virtual std::string get_file_ext() const = 0;
 
-    virtual void output_step(PetscInt stepi) override;
+    virtual void output_step() override;
 
 protected:
     /// Store the mesh

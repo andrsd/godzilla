@@ -53,8 +53,7 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem,
     ts(nullptr),
     start_time(params.get<PetscReal>("start_time")),
     end_time(params.get<PetscReal>("end_time")),
-    dt(params.get<PetscReal>("dt")),
-    step_num(0)
+    dt(params.get<PetscReal>("dt"))
 {
     _F_;
     assert(this->problem != nullptr);
@@ -94,7 +93,7 @@ TransientProblemInterface::create()
     check_petsc_error(ierr);
     ierr = TSSetTimeStep(this->ts, this->dt);
     check_petsc_error(ierr);
-    ierr = TSSetStepNumber(this->ts, this->step_num);
+    ierr = TSSetStepNumber(this->ts, this->problem->get_step_num());
     check_petsc_error(ierr);
     ierr = TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP);
     check_petsc_error(ierr);
@@ -136,9 +135,9 @@ TransientProblemInterface::post_step()
     _F_;
     PetscErrorCode ierr;
 
-    ierr = TSGetTime(this->ts, &this->problem->get_time());
+    ierr = TSGetTime(this->ts, &this->problem->time);
     check_petsc_error(ierr);
-    ierr = TSGetStepNumber(this->ts, &this->step_num);
+    ierr = TSGetStepNumber(this->ts, &this->problem->step_num);
     check_petsc_error(ierr);
     Vec sln;
     ierr = TSGetSolution(this->ts, &sln);
@@ -146,7 +145,7 @@ TransientProblemInterface::post_step()
     ierr = VecCopy(sln, this->problem->get_solution_vector());
     check_petsc_error(ierr);
     this->problem->compute_postprocessors();
-    this->problem->output(this->step_num);
+    this->problem->output(Output::ON_TIMESTEP);
     return 0;
 }
 
@@ -158,7 +157,7 @@ TransientProblemInterface::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec 
     PetscReal dt;
     ierr = TSGetTimeStep(this->ts, &dt);
     check_petsc_error(ierr);
-    // lprintf(6, "%d Time %f dt = %f", stepi, t, dt);
+    this->problem->lprintf(6, "%d Time %f dt = %f", stepi, t, dt);
     return 0;
 }
 
@@ -166,7 +165,18 @@ void
 TransientProblemInterface::solve(Vec x)
 {
     _F_;
-    TSSolve(this->ts, x);
+    PetscErrorCode ierr;
+    ierr = TSSolve(this->ts, x);
+    check_petsc_error(ierr);
+    ierr = TSGetConvergedReason(this->ts, &this->converged_reason);
+    check_petsc_error(ierr);
+}
+
+bool
+TransientProblemInterface::converged() const
+{
+    _F_;
+    return this->converged_reason > 0;
 }
 
 } // namespace godzilla

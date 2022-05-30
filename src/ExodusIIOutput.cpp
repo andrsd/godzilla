@@ -78,6 +78,7 @@ ExodusIIOutput::ExodusIIOutput(const InputParameters & params) :
     mesh(this->problem ? dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh())
                        : nullptr),
     exoid(-1),
+    step_num(1),
     mesh_stored(false)
 {
     _F_;
@@ -98,12 +99,6 @@ ExodusIIOutput::get_file_ext() const
 }
 
 void
-ExodusIIOutput::create()
-{
-    _F_;
-}
-
-void
 ExodusIIOutput::check()
 {
     _F_;
@@ -114,7 +109,7 @@ ExodusIIOutput::check()
 }
 
 void
-ExodusIIOutput::output_step(PetscInt stepi)
+ExodusIIOutput::output_step()
 {
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
@@ -129,9 +124,8 @@ ExodusIIOutput::output_step(PetscInt stepi)
         write_all_variable_names();
     }
 
-    if (stepi == -1)
-        stepi = 0;
-    write_variables(stepi);
+    write_variables();
+    this->step_num++;
 }
 
 void
@@ -561,14 +555,13 @@ ExodusIIOutput::write_all_variable_names()
 }
 
 void
-ExodusIIOutput::write_variables(PetscInt stepi)
+ExodusIIOutput::write_variables()
 {
     _F_;
     PetscErrorCode ierr;
 
-    int whole_time_step = stepi + 1;
     PetscReal time = this->problem->get_time();
-    ex_put_time(this->exoid, whole_time_step, &time);
+    ex_put_time(this->exoid, this->step_num, &time);
 
     DM dm = this->problem->get_dm();
     Vec sln;
@@ -583,7 +576,7 @@ ExodusIIOutput::write_variables(PetscInt stepi)
     ierr = VecGetArrayRead(sln, &sln_vals);
     check_petsc_error(ierr);
 
-    write_nodal_variables(whole_time_step, sln_vals);
+    write_nodal_variables(this->step_num, sln_vals);
     // TODO: write elemental variables
     // TODO: write postprocesors as global variables
 

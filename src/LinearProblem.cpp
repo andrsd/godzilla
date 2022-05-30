@@ -58,6 +58,7 @@ LinearProblem::LinearProblem(const InputParameters & parameters) :
     lin_max_iter(get_param<PetscInt>("lin_max_iter"))
 {
     _F_;
+    this->default_output_on = Output::ON_FINAL;
 }
 
 LinearProblem::~LinearProblem()
@@ -223,9 +224,10 @@ LinearProblem::run()
 {
     _F_;
     solve();
-    compute_postprocessors();
-    if (converged())
-        output(-1);
+    if (converged()) {
+        compute_postprocessors();
+        output_final();
+    }
 }
 
 void

@@ -11,6 +11,7 @@ public:
     virtual ~ImplicitFENonlinearProblem();
 
     virtual void create() override;
+    virtual bool converged() override;
     virtual void solve() override;
 
 protected:
@@ -18,8 +19,6 @@ protected:
     virtual void set_up_callbacks() override;
     /// Setup monitors
     virtual void set_up_monitors() override;
-    virtual void output_initial() override;
-    virtual void output_final() override;
 
 public:
     static InputParameters valid_params();

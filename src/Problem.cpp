@@ -19,7 +19,9 @@ Problem::Problem(const InputParameters & parameters) :
     Object(parameters),
     PrintInterface(this),
     mesh(get_param<const Mesh *>("_mesh")),
-    time(0.)
+    default_output_on(Output::ON_NONE),
+    time(0.),
+    step_num(0)
 {
 }
 
@@ -69,11 +71,11 @@ Problem::get_time() const
     return this->time;
 }
 
-PetscReal &
-Problem::get_time()
+const PetscInt &
+Problem::get_step_num() const
 {
     _F_;
-    return this->time;
+    return this->step_num;
 }
 
 const std::vector<Function *> &
@@ -94,6 +96,8 @@ void
 Problem::add_output(Output * output)
 {
     _F_;
+    if (!output->is_param_valid("on"))
+        output->set_exec_mask(this->default_output_on);
     this->outputs.push_back(output);
 }
 
@@ -124,11 +128,26 @@ Problem::get_postprocessor(const std::string & name) const
 }
 
 void
-Problem::output(PetscInt stepi)
+Problem::output(unsigned int mask)
 {
     _F_;
     for (auto & o : this->outputs)
-        o->output_step(stepi);
+        if (o->should_output(mask))
+            o->output_step();
+}
+
+void
+Problem::output_initial()
+{
+    _F_;
+    output(Output::ON_INITIAL);
+}
+
+void
+Problem::output_final()
+{
+    _F_;
+    output(Output::ON_FINAL);
 }
 
 } // namespace godzilla

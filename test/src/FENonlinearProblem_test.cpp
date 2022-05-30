@@ -20,7 +20,7 @@ using namespace godzilla;
 /// Test IC with 2 components
 class GTest2CompIC : public InitialCondition {
 public:
-    GTest2CompIC(const InputParameters & params) : InitialCondition(params) {}
+    explicit GTest2CompIC(const InputParameters & params) : InitialCondition(params) {}
 
     virtual PetscInt
     get_num_components() const

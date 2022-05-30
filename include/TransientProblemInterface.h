@@ -28,6 +28,10 @@ protected:
     virtual PetscErrorCode post_step();
     /// TS monitor callback
     virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
+    /// Check if problem converged
+    ///
+    /// @return `true` if solve converged, otherwise `false`
+    virtual bool converged() const;
     /// Solve
     virtual void solve(Vec x);
 
@@ -41,8 +45,8 @@ protected:
     const PetscReal & end_time;
     /// Time step size
     const PetscReal & dt;
-    /// Number of the time step
-    PetscInt step_num;
+    /// Converged reason
+    TSConvergedReason converged_reason;
 
 public:
     static InputParameters valid_params();

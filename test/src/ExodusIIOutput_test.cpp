@@ -46,7 +46,7 @@ TEST_F(ExodusIIOutputTest, output)
     out->check();
     this->app->check_integrity();
 
-    out->output_step(-1);
+    out->output_step();
 }
 
 TEST_F(ExodusIIOutputTest, set_file_name)
