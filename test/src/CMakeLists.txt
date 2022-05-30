@@ -23,6 +23,7 @@ add_executable(${PROJECT_NAME}
     GYMLFile_test.cpp
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp
+    InitialCondition_test.cpp
     InputParameters_test.cpp
     L2Diff_test.cpp
     LinearInterpolation_test.cpp
@@ -32,10 +33,12 @@ add_executable(${PROJECT_NAME}
     NaturalBC_test.cpp
     NonlinearProblem_test.cpp
     Object_test.cpp
+    Output_test.cpp
     PiecewiseLinear_test.cpp
     PrintInterface_test.cpp
     Problem_test.cpp
     RectangleMesh_test.cpp
+    Terminal_test.cpp
     Utils_test.cpp
     VTKOutput_test.cpp
     main.cpp
