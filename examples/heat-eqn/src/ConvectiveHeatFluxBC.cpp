@@ -55,7 +55,7 @@ __g0_convective_heat_flux_const_bc(PetscInt dim,
                                    const PetscScalar constants[],
                                    PetscScalar g0[])
 {
-    PetscReal htc = 100;
+    PetscReal htc = a[a_off[HeatEquationProblem::htc_aux_id]];
     g0[0] = htc;
 }
 
