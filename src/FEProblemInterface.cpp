@@ -393,17 +393,16 @@ FEProblemInterface::set_up_quadrature()
     PetscErrorCode ierr;
 
     assert(this->fields.size() > 0);
-    PetscQuadrature q = nullptr;
-    for (auto & it : this->fields) {
-        FieldInfo & fi = it.second;
-        if (!q)
-            PetscFEGetQuadrature(fi.fe, &q);
-        ierr = PetscFESetQuadrature(fi.fe, q);
+    auto first = this->fields.begin();
+    FieldInfo & first_fi = first->second;
+    for (auto it = ++first; it != this->fields.end(); ++it) {
+        FieldInfo & fi = it->second;
+        ierr = PetscFECopyQuadrature(first_fi.fe, fi.fe);
         check_petsc_error(ierr);
     }
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
-        ierr = PetscFESetQuadrature(fi.fe, q);
+        ierr = PetscFECopyQuadrature(first_fi.fe, fi.fe);
         check_petsc_error(ierr);
     }
 }
