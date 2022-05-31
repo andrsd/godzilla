@@ -448,16 +448,20 @@ void
 FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
 {
     _F_;
-    PetscInt n_auxs = this->auxs.size();
+    PetscInt n_auxs = this->aux_fields.size();
     PetscFunc ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
-    for (std::size_t i = 0; i < n_auxs; i++) {
-        auto & aux = this->auxs[i];
+    for (PetscInt i = 0; i < n_auxs; i++) {
+        func[i] = nullptr;
+        ctxs[i] = nullptr;
+    }
+    for (const auto & aux : this->auxs) {
+        PetscInt fid = aux->get_field_id();
         if (aux->get_label() == label)
-            func[i] = aux->get_func();
+            func[fid] = aux->get_func();
         else
-            func[i] = nullptr;
-        ctxs[i] = aux;
+            func[fid] = nullptr;
+        ctxs[fid] = aux;
     }
 
     PetscErrorCode ierr;
