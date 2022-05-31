@@ -21,6 +21,7 @@ protected:
 public:
     static InputParameters valid_params();
 
-    static const PetscInt htc_aux_id = 0;
-    static const PetscInt T_ambient_aux_id = 1;
+    static const PetscInt qppp_id = 0;
+    static const PetscInt htc_aux_id = 1;
+    static const PetscInt T_ambient_aux_id = 2;
 };
