@@ -298,6 +298,7 @@ NonlinearProblem::run()
 {
     _F_;
     set_up_initial_guess();
+    compute_postprocessors();
     output_initial();
     solve();
     if (converged()) {
