@@ -41,6 +41,11 @@ public:
     /// @return The verbosity level
     virtual const unsigned int & get_verbosity_level() const;
 
+    /// Get the input file name
+    ///
+    /// @return The input file name
+    virtual const std::string & get_input_file_name() const;
+
     /// Get MPI communicator
     ///
     /// @return MPI communicator
@@ -86,7 +91,7 @@ protected:
     /// Build application objects from a GYML file
     ///
     /// @param file_name The GYML file name
-    virtual void build_from_gyml(const std::string & file_name);
+    virtual void build_from_gyml();
 
     /// Check integrity of the application
     virtual void check_integrity();
@@ -94,9 +99,7 @@ protected:
     /// Run the input file
     ///
     /// This is the method that will be called wehn user specify -i command line parameter
-    ///
-    /// @param file_name The name of the file specified via `-i` parameter
-    virtual void run_input_file(const std::string & file_name);
+    virtual void run_input_file();
 
     /// Run the problem build via `build_from_gyml`
     virtual void run_problem();
@@ -127,6 +130,9 @@ protected:
 
     /// Verbosity level
     unsigned int verbosity_level;
+
+    /// Input file name
+    std::string input_file_name;
 
     /// YML file with application config
     GYMLFile * gyml;

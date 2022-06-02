@@ -2,6 +2,8 @@
 #include "CallStack.h"
 #include "FileOutput.h"
 #include "Problem.h"
+#include "App.h"
+#include <boost/filesystem.hpp>
 
 namespace godzilla {
 
@@ -9,7 +11,7 @@ InputParameters
 FileOutput::valid_params()
 {
     InputParameters params = Output::valid_params();
-    params.add_required_param<std::string>("file", "The name of the output file.");
+    params.add_param<std::string>("file", "", "The name of the output file.");
     return params;
 }
 
@@ -27,6 +29,17 @@ FileOutput::~FileOutput()
     PetscErrorCode ierr;
     ierr = PetscViewerDestroy(&this->viewer);
     check_petsc_error(ierr);
+}
+
+void
+FileOutput::create()
+{
+    _F_;
+    Output::create();
+    if (this->file_base.length() == 0) {
+        const std::string & input_file_name = get_app()->get_input_file_name();
+        this->file_base = boost::filesystem::path(input_file_name).stem().c_str();
+    }
 }
 
 const std::string &

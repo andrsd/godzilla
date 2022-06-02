@@ -87,6 +87,7 @@ target_link_libraries(
     PUBLIC
         muparser
         yaml-cpp
+        Boost::filesystem
         ${NETCDF_LIBRARY}
         ${HDF5_LIBRARIES}
         ${EXODUSII_LIBRARY}

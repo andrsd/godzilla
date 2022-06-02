@@ -74,6 +74,13 @@ App::get_verbosity_level() const
     return this->verbosity_level;
 }
 
+const std::string &
+App::get_input_file_name() const
+{
+    _F_;
+    return this->input_file_name;
+}
+
 const MPI_Comm &
 App::get_comm() const
 {
@@ -115,17 +122,17 @@ App::run()
 
     if (this->input_file_arg.isSet()) {
         this->gyml = allocate_gyml();
-        std::string file_name = this->input_file_arg.getValue();
-        run_input_file(file_name);
+        this->input_file_name = this->input_file_arg.getValue();
+        run_input_file();
     }
 }
 
 void
-App::run_input_file(const std::string & file_name)
+App::run_input_file()
 {
     _F_;
-    if (utils::path_exists(file_name)) {
-        build_from_gyml(file_name);
+    if (utils::path_exists(this->input_file_name)) {
+        build_from_gyml();
         if (this->log->get_num_errors() == 0)
             create();
         check_integrity();
@@ -133,14 +140,14 @@ App::run_input_file(const std::string & file_name)
     }
     else
         error("Unable to open '%s' for reading. Make sure it exists and you have read permissions.",
-              file_name);
+              this->input_file_name);
 }
 
 void
-App::build_from_gyml(const std::string & file_name)
+App::build_from_gyml()
 {
     _F_;
-    this->gyml->parse(file_name);
+    this->gyml->parse(this->input_file_name);
     this->gyml->build();
 }
 
