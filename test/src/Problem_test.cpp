@@ -77,4 +77,8 @@ TEST(ProblemTest, add_pp)
 
     EXPECT_EQ(problem.get_postprocessor("pp"), &pp);
     EXPECT_EQ(problem.get_postprocessor("asdf"), nullptr);
+
+    auto & pps_names = problem.get_postprocessor_names();
+    EXPECT_EQ(pps_names.size(), 1);
+    EXPECT_EQ(pps_names[0], "pp");
 }
