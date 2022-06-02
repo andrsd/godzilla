@@ -15,13 +15,15 @@ protected:
     virtual void set_up_fields() override;
     virtual void set_up_weak_form() override;
 
-    /// ID for the 'temperature' field
-    const PetscInt itemp;
+    /// Polynomial order of the FE space
+    const PetscInt & p_order;
 
 public:
     static InputParameters valid_params();
 
-    static const PetscInt qppp_id = 0;
+    static const PetscInt temp_id = 0;
+
+    static const PetscInt q_ppp_id = 0;
     static const PetscInt htc_aux_id = 1;
     static const PetscInt T_ambient_aux_id = 2;
 };
