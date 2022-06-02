@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME}
     CSVOutput_test.cpp
     DirichletBC_test.cpp
     Error_test.cpp
+    EssentialBC_test.cpp
     ExodusIIMesh_test.cpp
     ExodusIIOutput_test.cpp
     Factory_test.cpp

@@ -16,7 +16,12 @@ public:
     virtual PetscInt get_num_components() const;
     virtual std::vector<PetscInt> get_components() const;
     virtual void
-    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]);
+    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+    virtual void
+    evaluate_t(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+
+protected:
+    virtual void set_up_callback();
 
 public:
     static InputParameters valid_params();
