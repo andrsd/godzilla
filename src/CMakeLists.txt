@@ -11,6 +11,7 @@ add_library(godzilla
         CallStack.cpp
         CmdLineArgParser.cpp
         ConstantIC.cpp
+        CSVOutput.cpp
         DirichletBC.cpp
         Error.cpp
         EssentialBC.cpp

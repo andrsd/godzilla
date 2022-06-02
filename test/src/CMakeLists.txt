@@ -8,6 +8,7 @@ add_executable(${PROJECT_NAME}
     BoxMesh_test.cpp
     CallStack_test.cpp
     ConstantIC_test.cpp
+    CSVOutput_test.cpp
     DirichletBC_test.cpp
     Error_test.cpp
     ExodusIIMesh_test.cpp
