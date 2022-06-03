@@ -1,7 +1,8 @@
-#include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "LineMesh.h"
 #include "Problem.h"
+#include "Function.h"
 #include "Postprocessor.h"
 
 using namespace godzilla;
@@ -54,6 +55,20 @@ TEST(ProblemTest, add_pp)
         {
             return 0;
         }
+
+        MOCK_METHOD(void, check, ());
+    };
+
+    class TestFunction : public Function {
+    public:
+        explicit TestFunction(const InputParameters & params) : Function(params) {}
+
+        virtual void
+        register_callback(mu::Parser & parser)
+        {
+        }
+
+        MOCK_METHOD(void, check, ());
     };
 
     InputParameters mesh_params = LineMesh::valid_params();
@@ -71,10 +86,23 @@ TEST(ProblemTest, add_pp)
     pp_params.set<const Problem *>("_problem") = &problem;
     pp_params.set<std::string>("_name") = "pp";
     TestPostprocessor pp(pp_params);
-
     problem.add_postprocessor(&pp);
+
+    InputParameters fn_params = Function::valid_params();
+    fn_params.set<const App *>("_app") = &app;
+    fn_params.set<const Problem *>("_problem") = &problem;
+    fn_params.set<std::string>("_name") = "fn";
+    TestFunction fn(fn_params);
+    problem.add_function(&fn);
+
+    EXPECT_CALL(fn, check);
+    EXPECT_CALL(pp, check);
     problem.check();
 
     EXPECT_EQ(problem.get_postprocessor("pp"), &pp);
     EXPECT_EQ(problem.get_postprocessor("asdf"), nullptr);
+
+    auto & pps_names = problem.get_postprocessor_names();
+    EXPECT_EQ(pps_names.size(), 1);
+    EXPECT_EQ(pps_names[0], "pp");
 }

@@ -22,7 +22,7 @@ TEST_F(VTKOutputTest, create)
     prob->create();
     auto out = gOutput(prob, "out");
     prob->add_output(out);
-    prob->create();
+    out->create();
 }
 
 TEST_F(VTKOutputTest, check)

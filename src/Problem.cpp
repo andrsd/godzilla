@@ -32,7 +32,7 @@ Problem::check()
 {
     _F_;
     for (auto & f : this->functions)
-        f->create();
+        f->check();
     for (auto & pp : this->pps)
         pp.second->check();
     for (auto & out : this->outputs) {
@@ -44,6 +44,8 @@ void
 Problem::create()
 {
     _F_;
+    for (auto & f : this->functions)
+        f->create();
     for (auto & pp : this->pps)
         pp.second->create();
     for (auto & out : this->outputs)
@@ -105,6 +107,7 @@ void
 Problem::add_postprocessor(Postprocessor * pp)
 {
     _F_;
+    this->pps_names.push_back(pp->get_name());
     this->pps[pp->get_name()] = pp;
 }
 
@@ -125,6 +128,13 @@ Problem::get_postprocessor(const std::string & name) const
         return it->second;
     else
         return nullptr;
+}
+
+const std::vector<std::string> &
+Problem::get_postprocessor_names() const
+{
+    _F_;
+    return this->pps_names;
 }
 
 void

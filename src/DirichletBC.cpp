@@ -11,6 +11,7 @@ DirichletBC::valid_params()
 {
     InputParameters params = EssentialBC::valid_params();
     params += FunctionInterface::valid_params();
+    params += FunctionInterface::valid_params_t();
     return params;
 }
 
@@ -50,12 +51,47 @@ void
 DirichletBC::evaluate(PetscInt dim,
                       PetscReal time,
                       const PetscReal x[],
-                      PetscInt Nc,
+                      PetscInt nc,
                       PetscScalar u[])
 {
     _F_;
-    for (PetscInt i = 0; i < Nc; i++)
+    for (PetscInt i = 0; i < nc; i++)
         u[i] = FunctionInterface::evaluate(i, dim, time, x);
+}
+
+void
+DirichletBC::evaluate_t(PetscInt dim,
+                        PetscReal time,
+                        const PetscReal x[],
+                        PetscInt nc,
+                        PetscScalar u[])
+{
+    _F_;
+    for (PetscInt i = 0; i < nc; i++)
+        u[i] = FunctionInterface::evaluate_t(i, dim, time, x);
+}
+
+void
+DirichletBC::set_up_callback()
+{
+    _F_;
+    PetscErrorCode ierr;
+    ierr = PetscDSAddBoundary(this->ds,
+                              get_bc_type(),
+                              get_name().c_str(),
+                              this->label,
+                              this->n_ids,
+                              this->ids,
+                              this->fid,
+                              get_num_components(),
+                              get_num_components() == 0 ? NULL : get_components().data(),
+                              (void (*)(void)) __essential_boundary_condition_function,
+                              this->evalr_t.size() > 0
+                                  ? (void (*)(void)) __essential_boundary_condition_function_t
+                                  : nullptr,
+                              (void *) this,
+                              NULL);
+    check_petsc_error(ierr);
 }
 
 } // namespace godzilla

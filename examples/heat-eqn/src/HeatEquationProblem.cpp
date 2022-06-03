@@ -9,44 +9,45 @@ registerObject(HeatEquationProblem);
 
 static void
 f0_temp(PetscInt dim,
-        PetscInt Nf,
-        PetscInt NfAux,
-        const PetscInt uOff[],
-        const PetscInt uOff_x[],
+        PetscInt nf,
+        PetscInt nf_aux,
+        const PetscInt u_off[],
+        const PetscInt u_off_x[],
         const PetscScalar u[],
         const PetscScalar u_t[],
         const PetscScalar u_x[],
-        const PetscInt aOff[],
-        const PetscInt aOff_x[],
+        const PetscInt a_off[],
+        const PetscInt a_off_x[],
         const PetscScalar a[],
         const PetscScalar a_t[],
         const PetscScalar a_x[],
         PetscReal t,
         const PetscReal x[],
-        PetscInt numConstants,
+        PetscInt num_constants,
         const PetscScalar constants[],
         PetscScalar f0[])
 {
-    f0[0] = u_t[0];
+    PetscReal q_ppp = a[a_off[HeatEquationProblem::q_ppp_id]];
+    f0[0] = u_t[0] - q_ppp;
 }
 
 static void
 f1_temp(PetscInt dim,
-        PetscInt Nf,
-        PetscInt NfAux,
-        const PetscInt uOff[],
-        const PetscInt uOff_x[],
+        PetscInt nf,
+        PetscInt nf_aux,
+        const PetscInt u_off[],
+        const PetscInt u_off_x[],
         const PetscScalar u[],
         const PetscScalar u_t[],
         const PetscScalar u_x[],
-        const PetscInt aOff[],
-        const PetscInt aOff_x[],
+        const PetscInt a_off[],
+        const PetscInt a_off_x[],
         const PetscScalar a[],
         const PetscScalar a_t[],
         const PetscScalar a_x[],
         PetscReal t,
         const PetscReal x[],
-        PetscInt numConstants,
+        PetscInt num_constants,
         const PetscScalar constants[],
         PetscScalar f1[])
 {
@@ -56,22 +57,22 @@ f1_temp(PetscInt dim,
 
 static void
 g3_temp(PetscInt dim,
-        PetscInt Nf,
-        PetscInt NfAux,
-        const PetscInt uOff[],
-        const PetscInt uOff_x[],
+        PetscInt nf,
+        PetscInt nf_aux,
+        const PetscInt u_off[],
+        const PetscInt u_off_x[],
         const PetscScalar u[],
         const PetscScalar u_t[],
         const PetscScalar u_x[],
-        const PetscInt aOff[],
-        const PetscInt aOff_x[],
+        const PetscInt a_off[],
+        const PetscInt a_off_x[],
         const PetscScalar a[],
         const PetscScalar a_t[],
         const PetscScalar a_x[],
         PetscReal t,
-        PetscReal u_tShift,
+        PetscReal u_t_shift,
         const PetscReal x[],
-        PetscInt numConstants,
+        PetscInt num_constants,
         const PetscScalar constants[],
         PetscScalar g3[])
 {
@@ -81,38 +82,39 @@ g3_temp(PetscInt dim,
 
 static void
 g0_temp(PetscInt dim,
-        PetscInt Nf,
-        PetscInt NfAux,
-        const PetscInt uOff[],
-        const PetscInt uOff_x[],
+        PetscInt nf,
+        PetscInt nf_aux,
+        const PetscInt u_off[],
+        const PetscInt u_off_x[],
         const PetscScalar u[],
         const PetscScalar u_t[],
         const PetscScalar u_x[],
-        const PetscInt aOff[],
-        const PetscInt aOff_x[],
+        const PetscInt a_off[],
+        const PetscInt a_off_x[],
         const PetscScalar a[],
         const PetscScalar a_t[],
         const PetscScalar a_x[],
         PetscReal t,
-        PetscReal u_tShift,
+        PetscReal u_t_shift,
         const PetscReal x[],
-        PetscInt numConstants,
+        PetscInt num_constants,
         const PetscScalar constants[],
         PetscScalar g0[])
 {
-    g0[0] = u_tShift * 1.0;
+    g0[0] = u_t_shift * 1.0;
 }
 
 InputParameters
 HeatEquationProblem::valid_params()
 {
     InputParameters params = ImplicitFENonlinearProblem::valid_params();
+    params.add_param<PetscInt>("p_order", 1, "Polynomial order of FE space");
     return params;
 }
 
 HeatEquationProblem::HeatEquationProblem(const InputParameters & parameters) :
     ImplicitFENonlinearProblem(parameters),
-    itemp(0)
+    p_order(get_param<PetscInt>("p_order"))
 {
     _F_;
 }
@@ -123,17 +125,17 @@ void
 HeatEquationProblem::set_up_fields()
 {
     _F_;
-    PetscInt order = 1;
-    add_fe(this->itemp, "temp", 1, order);
+    add_fe(temp_id, "temp", 1, this->p_order);
 
-    add_aux_fe(htc_aux_id, "htc", 1, 1);
-    add_aux_fe(T_ambient_aux_id, "T_ambient", 1, 1);
+    add_aux_fe(q_ppp_id, "q_ppp", 1, 0);
+    add_aux_fe(htc_aux_id, "htc", 1, this->p_order);
+    add_aux_fe(T_ambient_aux_id, "T_ambient", 1, this->p_order);
 }
 
 void
 HeatEquationProblem::set_up_weak_form()
 {
     _F_;
-    set_residual_block(this->itemp, f0_temp, f1_temp);
-    set_jacobian_block(this->itemp, this->itemp, g0_temp, NULL, NULL, g3_temp);
+    set_residual_block(temp_id, f0_temp, f1_temp);
+    set_jacobian_block(temp_id, temp_id, g0_temp, NULL, NULL, g3_temp);
 }

@@ -393,17 +393,16 @@ FEProblemInterface::set_up_quadrature()
     PetscErrorCode ierr;
 
     assert(this->fields.size() > 0);
-    PetscQuadrature q = nullptr;
-    for (auto & it : this->fields) {
-        FieldInfo & fi = it.second;
-        if (!q)
-            PetscFEGetQuadrature(fi.fe, &q);
-        ierr = PetscFESetQuadrature(fi.fe, q);
+    auto first = this->fields.begin();
+    FieldInfo & first_fi = first->second;
+    for (auto it = ++first; it != this->fields.end(); ++it) {
+        FieldInfo & fi = it->second;
+        ierr = PetscFECopyQuadrature(first_fi.fe, fi.fe);
         check_petsc_error(ierr);
     }
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
-        ierr = PetscFESetQuadrature(fi.fe, q);
+        ierr = PetscFECopyQuadrature(first_fi.fe, fi.fe);
         check_petsc_error(ierr);
     }
 }
@@ -448,16 +447,20 @@ void
 FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
 {
     _F_;
-    PetscInt n_auxs = this->auxs.size();
+    PetscInt n_auxs = this->aux_fields.size();
     PetscFunc ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
-    for (std::size_t i = 0; i < n_auxs; i++) {
-        auto & aux = this->auxs[i];
+    for (PetscInt i = 0; i < n_auxs; i++) {
+        func[i] = nullptr;
+        ctxs[i] = nullptr;
+    }
+    for (const auto & aux : this->auxs) {
+        PetscInt fid = aux->get_field_id();
         if (aux->get_label() == label)
-            func[i] = aux->get_func();
+            func[fid] = aux->get_func();
         else
-            func[i] = nullptr;
-        ctxs[i] = aux;
+            func[fid] = nullptr;
+        ctxs[fid] = aux;
     }
 
     PetscErrorCode ierr;

@@ -50,6 +50,8 @@ TEST_F(GodzillaAppTest, run_input)
     app.parse_command_line(argc, argv);
     app.run();
 
+    EXPECT_EQ(app.get_input_file_name(), GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml");
+
     // TODO: build a MockGodzillaApp and make sure methods get called
 }
 

@@ -1,0 +1,38 @@
+mesh:
+  type: LineMesh
+  nx: 2
+  xmax: 2
+
+problem:
+  type: HeatEquationProblem
+  order: 2
+  start_time: 0
+  end_time: 1
+  dt: 0.5
+
+ics:
+  all:
+    type: FunctionIC
+    value: [ 't + x*x' ]
+
+auxs:
+  q_ppp:
+    type: FunctionAuxiliaryField
+    value: '-1'
+
+bcs:
+  left:
+    type: DirichletBC
+    boundary: 'marker'
+    value: [ 't + x*x' ]
+    value_t: [ '1' ]
+
+pps:
+  l2_err:
+    type: L2Diff
+    value: 't + x*x'
+
+output:
+  csv:
+    type: CSVOutput
+    on: ['initial', 'final']

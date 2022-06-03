@@ -74,6 +74,11 @@ public:
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
     virtual Postprocessor * get_postprocessor(const std::string & name) const;
 
+    /// Get postprocessor names
+    ///
+    /// @return List of postprocessor names
+    virtual const std::vector<std::string> & get_postprocessor_names() const;
+
     /// Compute all postprocessors
     virtual void compute_postprocessors();
 
@@ -102,6 +107,9 @@ protected:
 
     /// List of postprocessor objects
     std::map<std::string, Postprocessor *> pps;
+
+    /// List of postprocesso names
+    std::vector<std::string> pps_names;
 
     /// Simulation time
     PetscReal time;

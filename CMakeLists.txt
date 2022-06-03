@@ -19,6 +19,13 @@ include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
+# BOOST
+find_package(Boost
+    REQUIRED
+    COMPONENTS
+        filesystem
+)
+
 # PETSc
 find_package(PETSc)
 if (NOT ${PETSC_FOUND})
@@ -86,6 +93,7 @@ set(GODZILLA_LIBRARIES
     godzilla
     muparser
     yaml-cpp
+    Boost::filesystem
 )
 set(GODZILLA_INCLUDE_DIRS
     ${PROJECT_SOURCE_DIR}/include
@@ -94,6 +102,7 @@ set(GODZILLA_INCLUDE_DIRS
     ${PETSC_INCLUDE_DIR}
     ${MUPARSER_INCLUDE_DIR}
     ${YAML_CPP_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
 
 add_subdirectory(src)

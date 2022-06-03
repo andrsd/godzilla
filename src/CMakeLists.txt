@@ -11,6 +11,7 @@ add_library(godzilla
         CallStack.cpp
         CmdLineArgParser.cpp
         ConstantIC.cpp
+        CSVOutput.cpp
         DirichletBC.cpp
         Error.cpp
         EssentialBC.cpp
@@ -86,6 +87,7 @@ target_link_libraries(
     PUBLIC
         muparser
         yaml-cpp
+        Boost::filesystem
         ${NETCDF_LIBRARY}
         ${HDF5_LIBRARIES}
         ${EXODUSII_LIBRARY}

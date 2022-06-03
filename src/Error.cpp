@@ -18,7 +18,7 @@ fprintf(std::ostream & os, const char * s)
 void
 print_call_stack()
 {
-    error_printf("");
+    fprintf(std::cerr, "\n");
     get_callstack().dump();
 }
 

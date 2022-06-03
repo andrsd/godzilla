@@ -27,6 +27,7 @@ TEST(DirichletBCTest, api)
     params.set<const App *>("_app") = &app;
     params.set<const FEProblemInterface *>("_fepi") = &problem;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
+    params.set<std::vector<std::string>>("value_t") = { "1" };
     DirichletBC obj(params);
 
     mesh.create();
@@ -41,9 +42,12 @@ TEST(DirichletBCTest, api)
     PetscReal x[] = { 3, 5, 7 };
     PetscInt Nc = 1;
     PetscScalar u[] = { 0 };
-    obj.evaluate(dim, time, x, Nc, u);
 
+    obj.evaluate(dim, time, x, Nc, u);
     EXPECT_EQ(u[0], 37.5);
+
+    obj.evaluate_t(dim, time, x, Nc, u);
+    EXPECT_EQ(u[0], 1.);
 }
 
 TEST(DirichletBCTest, with_user_defined_fn)

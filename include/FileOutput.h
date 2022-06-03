@@ -12,6 +12,8 @@ public:
     FileOutput(const InputParameters & params);
     virtual ~FileOutput();
 
+    virtual void create() override;
+
     /// Get the file name with the output file produced by this outputter
     ///
     /// @return The file name with the output
@@ -44,7 +46,7 @@ protected:
     virtual void output_solution(Vec vec);
 
     /// The file base of the output file
-    const std::string file_base;
+    std::string file_base;
 
     /// The file name of the output file
     std::string file_name;
