@@ -32,7 +32,7 @@ Problem::check()
 {
     _F_;
     for (auto & f : this->functions)
-        f->create();
+        f->check();
     for (auto & pp : this->pps)
         pp.second->check();
     for (auto & out : this->outputs) {
@@ -44,6 +44,8 @@ void
 Problem::create()
 {
     _F_;
+    for (auto & f : this->functions)
+        f->create();
     for (auto & pp : this->pps)
         pp.second->create();
     for (auto & out : this->outputs)
