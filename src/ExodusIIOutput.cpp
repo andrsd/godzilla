@@ -5,6 +5,7 @@
 #include "Problem.h"
 #include "FEProblemInterface.h"
 #include "UnstructuredMesh.h"
+#include "Postprocessor.h"
 #include "exodusII.h"
 #include <assert.h>
 
@@ -551,7 +552,11 @@ ExodusIIOutput::write_all_variable_names()
     write_variable_names(this->exoid, EX_NODAL, nodal_var_names);
     write_variable_names(this->exoid, EX_ELEM_BLOCK, elem_var_names);
 
-    // TODO: write global variable names
+    std::vector<std::string> global_var_names;
+    auto & pp_names = this->problem->get_postprocessor_names();
+    for (auto & name : pp_names)
+        global_var_names.push_back(name);
+    write_variable_names(this->exoid, EX_GLOBAL, global_var_names);
 }
 
 void
@@ -562,6 +567,7 @@ ExodusIIOutput::write_variables()
     ex_put_time(this->exoid, this->step_num, &time);
 
     write_field_variables();
+    write_global_variables();
 
     ex_update(this->exoid);
 }
@@ -634,6 +640,21 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
                                    sln + offset + c);
             }
         }
+    }
+}
+
+void
+ExodusIIOutput::write_global_variables()
+{
+    _F_;
+
+    int exo_var_id = 1;
+    auto & pp_names = this->problem->get_postprocessor_names();
+    for (auto & name : pp_names) {
+        Postprocessor * pp = this->problem->get_postprocessor(name);
+        PetscReal val = pp->get_value();
+        ex_put_var(this->exoid, this->step_num, EX_GLOBAL, exo_var_id, 0, 1, &val);
+        exo_var_id++;
     }
 }
 

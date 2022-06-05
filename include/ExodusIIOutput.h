@@ -44,6 +44,7 @@ protected:
     void write_variables();
     void write_field_variables();
     void write_nodal_variables(const PetscScalar * sln);
+    void write_global_variables();
 
     /// FE problem interface (convenience pointer)
     const FEProblemInterface * fepi;
