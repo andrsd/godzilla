@@ -70,11 +70,15 @@ InputParameters
 ExodusIIOutput::valid_params()
 {
     InputParameters params = FileOutput::valid_params();
+    params.add_param<std::vector<std::string>>(
+        "variables",
+        "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
 
 ExodusIIOutput::ExodusIIOutput(const InputParameters & params) :
     FileOutput(params),
+    variable_names(get_param<std::vector<std::string>>("variables")),
     fepi(dynamic_cast<const FEProblemInterface *>(this->problem)),
     mesh(this->problem ? dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh())
                        : nullptr),
@@ -97,6 +101,35 @@ ExodusIIOutput::get_file_ext() const
 {
     _F_;
     return std::string("exo");
+}
+
+void
+ExodusIIOutput::create()
+{
+    _F_;
+    FileOutput::create();
+
+    auto flds = this->fepi->get_field_names();
+    auto & pps = this->problem->get_postprocessor_names();
+
+    if (this->variable_names.size() == 0) {
+        this->field_var_names = flds;
+        this->global_var_names = pps;
+    }
+    else {
+        std::set<std::string> field_names(flds.begin(), flds.end());
+        std::set<std::string> pp_names(pps.begin(), pps.end());
+
+        for (auto & name : this->variable_names) {
+            if (field_names.count(name) == 1)
+                this->field_var_names.push_back(name);
+            else if (pp_names.count(name) == 1)
+                this->global_var_names.push_back(name);
+            else
+                log_error("Variable '%s' specified in 'variables' parameter does not exist. Typo?",
+                          name);
+        }
+    }
 }
 
 void
@@ -533,10 +566,9 @@ ExodusIIOutput::write_all_variable_names()
 
     this->nodal_var_fids.clear();
     this->elem_var_fids.clear();
-    std::vector<std::string> field_names = this->fepi->get_field_names();
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
-    for (auto & name : field_names) {
+    for (auto & name : this->field_var_names) {
         PetscInt fid = this->fepi->get_field_id(name);
         PetscInt nc = this->fepi->get_field_num_components(fid);
         PetscInt order = this->fepi->get_field_order(fid);
@@ -553,8 +585,7 @@ ExodusIIOutput::write_all_variable_names()
     write_variable_names(this->exoid, EX_ELEM_BLOCK, elem_var_names);
 
     std::vector<std::string> global_var_names;
-    auto & pp_names = this->problem->get_postprocessor_names();
-    for (auto & name : pp_names)
+    for (auto & name : this->global_var_names)
         global_var_names.push_back(name);
     write_variable_names(this->exoid, EX_GLOBAL, global_var_names);
 }
@@ -649,8 +680,7 @@ ExodusIIOutput::write_global_variables()
     _F_;
 
     int exo_var_id = 1;
-    auto & pp_names = this->problem->get_postprocessor_names();
-    for (auto & name : pp_names) {
+    for (auto & name : this->global_var_names) {
         Postprocessor * pp = this->problem->get_postprocessor(name);
         PetscReal val = pp->get_value();
         ex_put_var(this->exoid, this->step_num, EX_GLOBAL, exo_var_id, 0, 1, &val);
