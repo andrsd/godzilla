@@ -558,11 +558,21 @@ void
 ExodusIIOutput::write_variables()
 {
     _F_;
-    PetscErrorCode ierr;
-
     PetscReal time = this->problem->get_time();
     ex_put_time(this->exoid, this->step_num, &time);
 
+    write_field_variables();
+
+    ex_update(this->exoid);
+}
+
+void
+ExodusIIOutput::write_field_variables()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    PetscReal time = this->problem->get_time();
     DM dm = this->problem->get_dm();
     Vec sln;
     ierr = DMGetLocalVector(dm, &sln);
@@ -576,21 +586,18 @@ ExodusIIOutput::write_variables()
     ierr = VecGetArrayRead(sln, &sln_vals);
     check_petsc_error(ierr);
 
-    write_nodal_variables(this->step_num, sln_vals);
+    write_nodal_variables(sln_vals);
     // TODO: write elemental variables
-    // TODO: write postprocesors as global variables
 
     ierr = VecRestoreArrayRead(sln, &sln_vals);
     check_petsc_error(ierr);
 
     ierr = DMRestoreLocalVector(dm, &sln);
     check_petsc_error(ierr);
-
-    ex_update(this->exoid);
 }
 
 void
-ExodusIIOutput::write_nodal_variables(int time_step, const PetscScalar * sln)
+ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
 {
     _F_;
 
@@ -618,7 +625,7 @@ ExodusIIOutput::write_nodal_variables(int time_step, const PetscScalar * sln)
             for (PetscInt c = 0; c <= nc; c++, exo_var_id++) {
                 int exo_idx = n - n_elems + 1;
                 ex_put_partial_var(this->exoid,
-                                   time_step,
+                                   this->step_num,
                                    EX_NODAL,
                                    exo_var_id,
                                    1,
