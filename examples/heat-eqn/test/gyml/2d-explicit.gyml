@@ -36,3 +36,4 @@ output:
     type: ExodusIIOutput
     file: '2d-explicit'
     on: ['initial', 'final']
+    variables: 'temp'

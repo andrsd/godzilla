@@ -26,6 +26,7 @@ public:
     virtual ~ExodusIIOutput();
 
     virtual std::string get_file_ext() const override;
+    virtual void create() override;
     virtual void check() override;
     virtual void output_step() override;
 
@@ -42,8 +43,12 @@ protected:
     void write_face_sets();
     void write_all_variable_names();
     void write_variables();
-    void write_nodal_variables(int time_step, const PetscScalar * sln);
+    void write_field_variables();
+    void write_nodal_variables(const PetscScalar * sln);
+    void write_global_variables();
 
+    /// Variable names to be stored
+    const std::vector<std::string> & variable_names;
     /// FE problem interface (convenience pointer)
     const FEProblemInterface * fepi;
     /// Unstructured mesh
@@ -54,6 +59,10 @@ protected:
     int step_num;
     /// Flag indicating if we need to store mesh during `output_step`
     bool mesh_stored;
+    /// List of field variable names to output
+    std::vector<std::string> field_var_names;
+    /// List of global variable names to output
+    std::vector<std::string> global_var_names;
     /// List of nodal variable field IDs
     std::vector<PetscInt> nodal_var_fids;
     /// List of nodal elemental variable field IDs

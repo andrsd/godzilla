@@ -5,6 +5,7 @@
 #include "Problem.h"
 #include "FEProblemInterface.h"
 #include "UnstructuredMesh.h"
+#include "Postprocessor.h"
 #include "exodusII.h"
 #include <assert.h>
 
@@ -69,11 +70,15 @@ InputParameters
 ExodusIIOutput::valid_params()
 {
     InputParameters params = FileOutput::valid_params();
+    params.add_param<std::vector<std::string>>(
+        "variables",
+        "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
 
 ExodusIIOutput::ExodusIIOutput(const InputParameters & params) :
     FileOutput(params),
+    variable_names(get_param<std::vector<std::string>>("variables")),
     fepi(dynamic_cast<const FEProblemInterface *>(this->problem)),
     mesh(this->problem ? dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh())
                        : nullptr),
@@ -96,6 +101,35 @@ ExodusIIOutput::get_file_ext() const
 {
     _F_;
     return std::string("exo");
+}
+
+void
+ExodusIIOutput::create()
+{
+    _F_;
+    FileOutput::create();
+
+    auto flds = this->fepi->get_field_names();
+    auto & pps = this->problem->get_postprocessor_names();
+
+    if (this->variable_names.size() == 0) {
+        this->field_var_names = flds;
+        this->global_var_names = pps;
+    }
+    else {
+        std::set<std::string> field_names(flds.begin(), flds.end());
+        std::set<std::string> pp_names(pps.begin(), pps.end());
+
+        for (auto & name : this->variable_names) {
+            if (field_names.count(name) == 1)
+                this->field_var_names.push_back(name);
+            else if (pp_names.count(name) == 1)
+                this->global_var_names.push_back(name);
+            else
+                log_error("Variable '%s' specified in 'variables' parameter does not exist. Typo?",
+                          name);
+        }
+    }
 }
 
 void
@@ -532,10 +566,9 @@ ExodusIIOutput::write_all_variable_names()
 
     this->nodal_var_fids.clear();
     this->elem_var_fids.clear();
-    std::vector<std::string> field_names = this->fepi->get_field_names();
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
-    for (auto & name : field_names) {
+    for (auto & name : this->field_var_names) {
         PetscInt fid = this->fepi->get_field_id(name);
         PetscInt nc = this->fepi->get_field_num_components(fid);
         PetscInt order = this->fepi->get_field_order(fid);
@@ -551,18 +584,32 @@ ExodusIIOutput::write_all_variable_names()
     write_variable_names(this->exoid, EX_NODAL, nodal_var_names);
     write_variable_names(this->exoid, EX_ELEM_BLOCK, elem_var_names);
 
-    // TODO: write global variable names
+    std::vector<std::string> global_var_names;
+    for (auto & name : this->global_var_names)
+        global_var_names.push_back(name);
+    write_variable_names(this->exoid, EX_GLOBAL, global_var_names);
 }
 
 void
 ExodusIIOutput::write_variables()
 {
     _F_;
-    PetscErrorCode ierr;
-
     PetscReal time = this->problem->get_time();
     ex_put_time(this->exoid, this->step_num, &time);
 
+    write_field_variables();
+    write_global_variables();
+
+    ex_update(this->exoid);
+}
+
+void
+ExodusIIOutput::write_field_variables()
+{
+    _F_;
+    PetscErrorCode ierr;
+
+    PetscReal time = this->problem->get_time();
     DM dm = this->problem->get_dm();
     Vec sln;
     ierr = DMGetLocalVector(dm, &sln);
@@ -576,21 +623,18 @@ ExodusIIOutput::write_variables()
     ierr = VecGetArrayRead(sln, &sln_vals);
     check_petsc_error(ierr);
 
-    write_nodal_variables(this->step_num, sln_vals);
+    write_nodal_variables(sln_vals);
     // TODO: write elemental variables
-    // TODO: write postprocesors as global variables
 
     ierr = VecRestoreArrayRead(sln, &sln_vals);
     check_petsc_error(ierr);
 
     ierr = DMRestoreLocalVector(dm, &sln);
     check_petsc_error(ierr);
-
-    ex_update(this->exoid);
 }
 
 void
-ExodusIIOutput::write_nodal_variables(int time_step, const PetscScalar * sln)
+ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
 {
     _F_;
 
@@ -618,7 +662,7 @@ ExodusIIOutput::write_nodal_variables(int time_step, const PetscScalar * sln)
             for (PetscInt c = 0; c <= nc; c++, exo_var_id++) {
                 int exo_idx = n - n_elems + 1;
                 ex_put_partial_var(this->exoid,
-                                   time_step,
+                                   this->step_num,
                                    EX_NODAL,
                                    exo_var_id,
                                    1,
@@ -627,6 +671,20 @@ ExodusIIOutput::write_nodal_variables(int time_step, const PetscScalar * sln)
                                    sln + offset + c);
             }
         }
+    }
+}
+
+void
+ExodusIIOutput::write_global_variables()
+{
+    _F_;
+
+    int exo_var_id = 1;
+    for (auto & name : this->global_var_names) {
+        Postprocessor * pp = this->problem->get_postprocessor(name);
+        PetscReal val = pp->get_value();
+        ex_put_var(this->exoid, this->step_num, EX_GLOBAL, exo_var_id, 0, 1, &val);
+        exo_var_id++;
     }
 }
 
