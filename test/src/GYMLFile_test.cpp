@@ -290,3 +290,18 @@ TEST_F(GYMLFileTest, nonfe_problem_with_auxs)
                 testing::HasSubstr(
                     "Supplied problem type 'GTestProblem' does not support auxiliary fields."));
 }
+
+TEST_F(GYMLFileTest, unused_param)
+{
+    testing::internal::CaptureStderr();
+
+    GYMLFile file(this->app);
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/unused_param.yml");
+    file.parse(file_name);
+    file.build();
+    this->app->check_integrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("mesh: Following parameters were not used: ny"));
+}

@@ -31,8 +31,6 @@ bcs:
   right:
     type: ConvectiveHeatFluxBC
     boundary: 'right'
-    htc: 100
-    T_infinity: 400
 
 output:
   vtk:
