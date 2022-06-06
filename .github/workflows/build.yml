@@ -68,7 +68,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install libblas-dev liblapack-dev libboost-all-dev
+          sudo apt install libblas-dev liblapack-dev libboost-all-dev lcov
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
@@ -83,11 +83,19 @@ jobs:
         run: |
           cmake -S . -B ${{ github.workspace }}/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
-            -DGODZILLA_BUILD_TESTS=YES
+            -DGODZILLA_BUILD_TESTS=YES \
+            -DGODZILLA_CODE_COVERAGE=YES \
       - name: Build
         run: make -C ${{ github.workspace }}/build
       - name: Run tests
         run: make -C ${{ github.workspace }}/build test ARGS='-V'
+      - name: Generate code coverage
+        run: make -C ${{ github.workspace }}/build coverage
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-${{ github.job }}
+          path: ${{ github.workspace }}/build/coverage.info
 
   macosx-clang:
     runs-on: macos-10.15
@@ -134,7 +142,7 @@ jobs:
           path: ${{ github.workspace }}/build/coverage.info
 
   upload-to-codecov:
-    needs: [macosx-clang, linux-clang]
+    needs: [macosx-clang, linux-clang, linux-gcc]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -147,4 +155,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: 'coverage-macosx-clang/coverage.info,coverage-linux-clang/coverage.info'
+          coverage-reports: 'coverage-macosx-clang/coverage.info,coverage-linux-clang/coverage.info,coverage-linux-gcc/coverage.info'
