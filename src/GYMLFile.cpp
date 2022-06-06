@@ -13,6 +13,7 @@
 #include "Output.h"
 #include "CallStack.h"
 #include "assert.h"
+#include "boost/algorithm/string/join.hpp"
 
 template <typename T>
 std::string
@@ -294,13 +295,19 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
     if (!node)
         error("Missing '%s' block.", name);
 
+    std::set<std::string> unused_param_names;
+    if (node.IsMap()) {
+        for (auto it = node.begin(); it != node.end(); ++it)
+            unused_param_names.insert(it->first.as<std::string>());
+    }
+
     YAML::Node type = node["type"];
     if (!type)
         error("%s: No 'type' specified.", name);
-
     const std::string & class_name = type.as<std::string>();
     if (!Factory::is_registered(class_name))
         error("%s: Type '%s' is not a registered object.", name, class_name);
+    unused_param_names.erase("type");
 
     InputParameters * params = Factory::get_valid_params(class_name);
     params->set<std::string>("_type") = class_name;
@@ -309,11 +316,13 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
 
     for (auto & kv : *params) {
         const std::string & param_name = kv.first;
-        if (!params->is_private(param_name))
+        if (!params->is_private(param_name)) {
             set_parameter_from_yml(params, node, param_name);
+            unused_param_names.erase(param_name);
+        }
     }
 
-    check_params(params, name);
+    check_params(params, name, unused_param_names);
 
     return params;
 }
@@ -366,7 +375,9 @@ GYMLFile::read_vector_value(const std::string & param_name, const YAML::Node & v
 }
 
 void
-GYMLFile::check_params(const InputParameters * params, const std::string & name)
+GYMLFile::check_params(const InputParameters * params,
+                       const std::string & name,
+                       std::set<std::string> & unused_param_names)
 {
     _F_;
     std::ostringstream oss;
@@ -381,6 +392,11 @@ GYMLFile::check_params(const InputParameters * params, const std::string & name)
         log_error("%s: Missing required parameters:%s", name, oss.str());
     else
         this->valid_param_object_names.insert(name);
+
+    if (unused_param_names.size() > 0)
+        log_warning("%s: Following parameters were not used: %s",
+                    name,
+                    boost::algorithm::join(unused_param_names, ", "));
 }
 
 } // namespace godzilla
