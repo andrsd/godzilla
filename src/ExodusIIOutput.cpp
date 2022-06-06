@@ -354,8 +354,7 @@ ExodusIIOutput::write_elements()
         int blk_id = 0;
 
         PetscInt elem_first, elem_last;
-        ierr = DMPlexGetHeightStratum(dm, 0, &elem_first, &elem_last);
-        check_petsc_error(ierr);
+        this->mesh->get_element_idx_range(elem_first, elem_last);
         int n_elems_in_block = elem_last - elem_first;
 
         DMPolytopeType polytope_type;
@@ -408,8 +407,7 @@ ExodusIIOutput::write_node_sets()
     DM dm = this->mesh->get_dm();
 
     PetscInt elem_first, elem_last;
-    ierr = DMPlexGetHeightStratum(dm, 0, &elem_first, &elem_last);
-    check_petsc_error(ierr);
+    this->mesh->get_element_idx_range(elem_first, elem_last);
     int n_elems_in_block = elem_last - elem_first;
 
     int n_node_sets;

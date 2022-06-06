@@ -45,11 +45,18 @@ PetscInt
 UnstructuredMesh::get_num_elements() const
 {
     _F_;
-    PetscErrorCode ierr;
     PetscInt first, last;
+    get_element_idx_range(first, last);
+    return last - first;
+}
+
+void
+UnstructuredMesh::get_element_idx_range(PetscInt & first, PetscInt & last) const
+{
+    _F_;
+    PetscErrorCode ierr;
     ierr = DMPlexGetHeightStratum(this->dm, 0, &first, &last);
     check_petsc_error(ierr);
-    return last - first;
 }
 
 void
