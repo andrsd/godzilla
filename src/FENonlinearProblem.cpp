@@ -95,4 +95,11 @@ FENonlinearProblem::set_jacobian_block(PetscInt fid,
     check_petsc_error(ierr);
 }
 
+void
+FENonlinearProblem::on_initial()
+{
+    _F_;
+    NonlinearProblem::on_initial();
+}
+
 } // namespace godzilla

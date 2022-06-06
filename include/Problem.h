@@ -88,10 +88,10 @@ public:
     virtual void output(unsigned int mask);
 
 protected:
-    /// Method for outputing after initial conditions are computed
-    virtual void output_initial();
-    /// Method for outputing final solution
-    virtual void output_final();
+    /// Called before solving starts
+    virtual void on_initial();
+    /// Called after solve has successfully finished
+    virtual void on_final();
 
     /// Mesh
     const Mesh * mesh;

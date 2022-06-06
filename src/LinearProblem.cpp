@@ -224,10 +224,8 @@ LinearProblem::run()
 {
     _F_;
     solve();
-    if (converged()) {
-        compute_postprocessors();
-        output_final();
-    }
+    if (converged())
+        on_final();
 }
 
 void

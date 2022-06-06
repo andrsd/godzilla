@@ -45,6 +45,8 @@ protected:
                                     PetscFEJacobianFunc * g2,
                                     PetscFEJacobianFunc * g3);
 
+    virtual void on_initial() override;
+
 public:
     static InputParameters valid_params();
 };
