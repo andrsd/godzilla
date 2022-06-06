@@ -37,7 +37,7 @@ Logger::print() const
     for (auto & s : this->entries)
         internal::fprintf(std::cerr, "%s\n", s);
 
-    internal::fprintf(std::cerr, "%s", Terminal::Color::red);
+    internal::fprintf(std::cerr, "%s", Terminal::Color::magenta);
     if (this->num_errors > 0)
         internal::fprintf(std::cerr, "%d error(s)", this->num_errors);
 
