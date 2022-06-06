@@ -176,6 +176,15 @@ install(
         lib/cmake/godzilla
 )
 
+configure_file(godzilla.pc.in godzilla.pc @ONLY)
+
+install(
+    FILES
+        "${PROJECT_BINARY_DIR}/godzilla.pc"
+    DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+)
+
 # Tests
 
 if (GODZILLA_BUILD_TESTS)
