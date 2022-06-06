@@ -1,0 +1,6 @@
+mesh:
+  type: LineMesh
+  nx: 2
+  ny: 2
+problem:
+  type: GTestProblem
