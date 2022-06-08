@@ -54,13 +54,6 @@ GYMLFile::get_problem()
     return this->problem;
 }
 
-const YAML::Node &
-GYMLFile::get_yml()
-{
-    _F_;
-    return this->root;
-}
-
 void
 GYMLFile::create()
 {

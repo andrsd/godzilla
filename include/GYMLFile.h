@@ -32,8 +32,6 @@ public:
     virtual Mesh * get_mesh();
     virtual Problem * get_problem();
 
-    virtual const YAML::Node & get_yml();
-
 protected:
     void add_object(Object * obj);
     void build_functions();
