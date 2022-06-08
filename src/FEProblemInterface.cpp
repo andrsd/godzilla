@@ -6,7 +6,7 @@
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "AuxiliaryField.h"
-#include "FunctionInterface.h"
+#include "Types.h"
 #include "App.h"
 #include "Logger.h"
 #include <assert.h>

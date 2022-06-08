@@ -49,7 +49,7 @@ TEST_F(LinearProblemTest, run)
         {
             return true;
         }
-        MOCK_METHOD(void, output_final, ());
+        MOCK_METHOD(void, on_final, ());
         MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vec b));
         MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Mat A, Mat B));
     };
@@ -63,7 +63,7 @@ TEST_F(LinearProblemTest, run)
     MockLinearProblem prob(prob_pars);
 
     EXPECT_CALL(prob, solve);
-    EXPECT_CALL(prob, output_final);
+    EXPECT_CALL(prob, on_final);
     prob.run();
 }
 

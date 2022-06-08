@@ -18,6 +18,12 @@ public:
     /// Return the number of mesh elements
     virtual PetscInt get_num_elements() const;
 
+    /// Get range of element indices
+    ///
+    /// @param first First element index
+    /// @param last Last element index plus one
+    void get_element_idx_range(PetscInt & first, PetscInt & last) const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner

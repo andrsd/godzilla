@@ -2,6 +2,7 @@
 #include "L2Diff.h"
 #include "CallStack.h"
 #include "Problem.h"
+#include "Types.h"
 
 namespace godzilla {
 

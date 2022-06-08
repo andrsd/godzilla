@@ -147,16 +147,18 @@ Problem::output(unsigned int mask)
 }
 
 void
-Problem::output_initial()
+Problem::on_initial()
 {
     _F_;
+    compute_postprocessors();
     output(Output::ON_INITIAL);
 }
 
 void
-Problem::output_final()
+Problem::on_final()
 {
     _F_;
+    compute_postprocessors();
     output(Output::ON_FINAL);
 }
 

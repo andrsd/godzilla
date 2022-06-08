@@ -28,7 +28,18 @@ GTestProblem::valid_params()
 
 TEST_F(GYMLFileTest, parse_empty)
 {
-    GYMLFile file(this->app);
+    class TestGYMLFile : public GYMLFile {
+    public:
+        explicit TestGYMLFile(const App * app) : GYMLFile(app) {}
+
+        const YAML::Node &
+        get_yml()
+        {
+            return this->root;
+        }
+    };
+
+    TestGYMLFile file(this->app);
 
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
