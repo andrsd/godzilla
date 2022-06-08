@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Types.h"
 #include "NonlinearProblem.h"
 #include "FEProblemInterface.h"
 
