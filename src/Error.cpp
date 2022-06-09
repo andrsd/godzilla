@@ -56,14 +56,4 @@ check_petsc_error(PetscErrorCode ierr, const char * file, int line)
 
 } // namespace internal
 
-void
-check_petsc_error(PetscErrorCode ierr)
-{
-    if (ierr) {
-        internal::error_printf("PETSc error: %d", ierr);
-        internal::print_call_stack();
-        internal::terminate();
-    }
-}
-
 } // namespace godzilla

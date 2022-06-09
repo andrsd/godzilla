@@ -139,47 +139,32 @@ void
 NonlinearProblem::init()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = get_dm();
-
-    ierr = SNESCreate(get_comm(), &this->snes);
-    check_petsc_error(ierr);
-    ierr = SNESSetDM(this->snes, dm);
-    check_petsc_error(ierr);
-    ierr = DMSetApplicationContext(dm, this);
-    check_petsc_error(ierr);
+    PETSC_CHECK(SNESCreate(get_comm(), &this->snes));
+    PETSC_CHECK(SNESSetDM(this->snes, dm));
+    PETSC_CHECK(DMSetApplicationContext(dm, this));
 }
 
 void
 NonlinearProblem::set_up_initial_guess()
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = VecSet(this->x, 0.);
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecSet(this->x, 0.));
 }
 
 void
 NonlinearProblem::allocate_objects()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = get_dm();
+    PETSC_CHECK(DMCreateGlobalVector(dm, &this->x));
+    PETSC_CHECK(PetscObjectSetName((PetscObject) this->x, "sln"));
 
-    ierr = DMCreateGlobalVector(dm, &this->x);
-    check_petsc_error(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->x, "sln");
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecDuplicate(this->x, &this->r));
+    PETSC_CHECK(PetscObjectSetName((PetscObject) this->r, "res"));
 
-    ierr = VecDuplicate(this->x, &this->r);
-    check_petsc_error(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->r, "res");
-    check_petsc_error(ierr);
-
-    ierr = DMCreateMatrix(dm, &this->J);
-    check_petsc_error(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->J, "Jac");
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMCreateMatrix(dm, &this->J));
+    PETSC_CHECK(PetscObjectSetName((PetscObject) this->J, "Jac"));
 
     // full newton
     this->Jp = this->J;
@@ -190,71 +175,62 @@ NonlinearProblem::set_up_line_search()
 {
     _F_;
     SNESLineSearch line_search;
-    SNESGetLineSearch(this->snes, &line_search);
+    PETSC_CHECK(SNESGetLineSearch(this->snes, &line_search));
     if (this->line_search_type.compare("basic") == 0)
-        SNESLineSearchSetType(line_search, SNESLINESEARCHBASIC);
+        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHBASIC));
     else if (this->line_search_type.compare("l2") == 0)
-        SNESLineSearchSetType(line_search, SNESLINESEARCHL2);
+        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHL2));
     else if (this->line_search_type.compare("cp") == 0)
-        SNESLineSearchSetType(line_search, SNESLINESEARCHCP);
+        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHCP));
     else if (this->line_search_type.compare("nleqerr") == 0)
-        SNESLineSearchSetType(line_search, SNESLINESEARCHNLEQERR);
+        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHNLEQERR));
     else if (this->line_search_type.compare("shell") == 0)
-        SNESLineSearchSetType(line_search, SNESLINESEARCHSHELL);
+        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHSHELL));
     else
-        SNESLineSearchSetType(line_search, SNESLINESEARCHBT);
-    SNESSetLineSearch(this->snes, line_search);
-    SNESLineSearchSetFromOptions(line_search);
+        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHBT));
+    PETSC_CHECK(SNESSetLineSearch(this->snes, line_search));
+    PETSC_CHECK(SNESLineSearchSetFromOptions(line_search));
 }
 
 void
 NonlinearProblem::set_up_callbacks()
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = SNESSetFunction(this->snes, this->r, __compute_residual, this);
-    check_petsc_error(ierr);
-    ierr = SNESSetJacobian(this->snes, this->J, this->Jp, __compute_jacobian, this);
-    check_petsc_error(ierr);
+    PETSC_CHECK(SNESSetFunction(this->snes, this->r, __compute_residual, this));
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->Jp, __compute_jacobian, this));
 }
 
 void
 NonlinearProblem::set_up_monitors()
 {
     _F_;
-    SNESMonitorSet(this->snes, __snes_monitor, this, 0);
+    PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, 0));
 
     KSP ksp;
-    SNESGetKSP(this->snes, &ksp);
-    KSPMonitorSet(ksp, __ksp_monitor, this, 0);
+    PETSC_CHECK(SNESGetKSP(this->snes, &ksp));
+    PETSC_CHECK(KSPMonitorSet(ksp, __ksp_monitor, this, 0));
 }
 
 void
 NonlinearProblem::set_up_solver_parameters()
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = SNESSetTolerances(this->snes,
-                             this->nl_abs_tol,
-                             this->nl_rel_tol,
-                             this->nl_step_tol,
-                             this->nl_max_iter,
-                             -1);
-    check_petsc_error(ierr);
-    ierr = SNESSetFromOptions(this->snes);
-    check_petsc_error(ierr);
+    PETSC_CHECK(SNESSetTolerances(this->snes,
+                                  this->nl_abs_tol,
+                                  this->nl_rel_tol,
+                                  this->nl_step_tol,
+                                  this->nl_max_iter,
+                                  -1));
+    PETSC_CHECK(SNESSetFromOptions(this->snes));
 
     KSP ksp;
-    ierr = SNESGetKSP(this->snes, &ksp);
-    check_petsc_error(ierr);
-    ierr = KSPSetTolerances(ksp,
-                            this->lin_rel_tol,
-                            this->lin_abs_tol,
-                            PETSC_DEFAULT,
-                            this->lin_max_iter);
-    check_petsc_error(ierr);
-    ierr = KSPSetFromOptions(ksp);
-    check_petsc_error(ierr);
+    PETSC_CHECK(SNESGetKSP(this->snes, &ksp));
+    PETSC_CHECK(KSPSetTolerances(ksp,
+                                 this->lin_rel_tol,
+                                 this->lin_abs_tol,
+                                 PETSC_DEFAULT,
+                                 this->lin_max_iter));
+    PETSC_CHECK(KSPSetFromOptions(ksp));
 }
 
 PetscErrorCode
@@ -275,11 +251,8 @@ void
 NonlinearProblem::solve()
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = SNESSolve(this->snes, NULL, this->x);
-    check_petsc_error(ierr);
-    ierr = SNESGetConvergedReason(this->snes, &this->converged_reason);
-    check_petsc_error(ierr);
+    PETSC_CHECK(SNESSolve(this->snes, NULL, this->x));
+    PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }
 
 bool

@@ -69,47 +69,32 @@ void
 TransientProblemInterface::init()
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = TSCreate(this->problem->get_comm(), &this->ts);
-    check_petsc_error(ierr);
-    ierr = TSSetApplicationContext(this->ts, this);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
+    PETSC_CHECK(TSSetApplicationContext(this->ts, this));
 }
 
 void
 TransientProblemInterface::create()
 {
     _F_;
-    PetscErrorCode ierr;
-
     set_up_time_scheme();
 
-    ierr = TSSetDM(this->ts, this->problem->get_dm());
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
 
-    ierr = TSSetTime(this->ts, this->start_time);
-    check_petsc_error(ierr);
-    ierr = TSSetMaxTime(this->ts, this->end_time);
-    check_petsc_error(ierr);
-    ierr = TSSetTimeStep(this->ts, this->dt);
-    check_petsc_error(ierr);
-    ierr = TSSetStepNumber(this->ts, this->problem->get_step_num());
-    check_petsc_error(ierr);
-    ierr = TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSSetTime(this->ts, this->start_time));
+    PETSC_CHECK(TSSetMaxTime(this->ts, this->end_time));
+    PETSC_CHECK(TSSetTimeStep(this->ts, this->dt));
+    PETSC_CHECK(TSSetStepNumber(this->ts, this->problem->get_step_num()));
+    PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
 }
 
 void
 TransientProblemInterface::set_up_monitors()
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = TSSetPreStep(this->ts, __transient_pre_step);
-    check_petsc_error(ierr);
-    ierr = TSSetPostStep(this->ts, __transient_post_step);
-    check_petsc_error(ierr);
-    ierr = TSMonitorSet(this->ts, __transient_monitor, this, NULL);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSSetPreStep(this->ts, __transient_pre_step));
+    PETSC_CHECK(TSSetPostStep(this->ts, __transient_post_step));
+    PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, NULL));
 }
 
 PetscErrorCode
@@ -123,17 +108,11 @@ PetscErrorCode
 TransientProblemInterface::post_step()
 {
     _F_;
-    PetscErrorCode ierr;
-
-    ierr = TSGetTime(this->ts, &this->problem->time);
-    check_petsc_error(ierr);
-    ierr = TSGetStepNumber(this->ts, &this->problem->step_num);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSGetTime(this->ts, &this->problem->time));
+    PETSC_CHECK(TSGetStepNumber(this->ts, &this->problem->step_num));
     Vec sln;
-    ierr = TSGetSolution(this->ts, &sln);
-    check_petsc_error(ierr);
-    ierr = VecCopy(sln, this->problem->get_solution_vector());
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSGetSolution(this->ts, &sln));
+    PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
     this->problem->compute_postprocessors();
     this->problem->output(Output::ON_TIMESTEP);
     return 0;
@@ -143,10 +122,8 @@ PetscErrorCode
 TransientProblemInterface::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec x)
 {
     _F_;
-    PetscErrorCode ierr;
     PetscReal dt;
-    ierr = TSGetTimeStep(this->ts, &dt);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
     this->problem->lprintf(6, "%d Time %f dt = %f", stepi, t, dt);
     return 0;
 }
@@ -155,11 +132,8 @@ void
 TransientProblemInterface::solve(Vec x)
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = TSSolve(this->ts, x);
-    check_petsc_error(ierr);
-    ierr = TSGetConvergedReason(this->ts, &this->converged_reason);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSSolve(this->ts, x));
+    PETSC_CHECK(TSGetConvergedReason(this->ts, &this->converged_reason));
 }
 
 bool

@@ -317,13 +317,12 @@ FEProblemInterface::set_zero_initial_guess()
     _F_;
     DM dm = this->unstr_mesh->get_dm();
     PetscFunc * initial_guess[1] = { internal::zero_fn };
-    PetscErrorCode ierr = DMProjectFunction(dm,
-                                            this->problem->get_time(),
-                                            initial_guess,
-                                            NULL,
-                                            INSERT_VALUES,
-                                            this->problem->get_solution_vector());
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMProjectFunction(dm,
+                                  this->problem->get_time(),
+                                  initial_guess,
+                                  NULL,
+                                  INSERT_VALUES,
+                                  this->problem->get_solution_vector()));
 }
 
 void
@@ -339,15 +338,13 @@ FEProblemInterface::set_initial_guess_from_ics()
         ic_ctxs[fid] = (void *) ic;
     }
 
-    PetscErrorCode ierr;
     DM dm = this->unstr_mesh->get_dm();
-    ierr = DMProjectFunction(dm,
-                             this->problem->get_time(),
-                             ic_funcs,
-                             ic_ctxs,
-                             INSERT_VALUES,
-                             this->problem->get_solution_vector());
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMProjectFunction(dm,
+                                  this->problem->get_time(),
+                                  ic_funcs,
+                                  ic_ctxs,
+                                  INSERT_VALUES,
+                                  this->problem->get_solution_vector()));
 }
 
 void
@@ -364,16 +361,12 @@ void
 FEProblemInterface::create_fe(FieldInfo & fi)
 {
     _F_;
-    PetscErrorCode ierr;
-
     const MPI_Comm & comm = this->unstr_mesh->get_comm();
     PetscInt dim = this->problem->get_dimension();
     PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
 
-    ierr = PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe);
-    check_petsc_error(ierr);
-    ierr = PetscFESetName(fi.fe, fi.name.c_str());
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe));
+    PETSC_CHECK(PetscFESetName(fi.fe, fi.name.c_str()));
 }
 
 void
@@ -390,20 +383,16 @@ void
 FEProblemInterface::set_up_quadrature()
 {
     _F_;
-    PetscErrorCode ierr;
-
     assert(this->fields.size() > 0);
     auto first = this->fields.begin();
     FieldInfo & first_fi = first->second;
     for (auto it = ++first; it != this->fields.end(); ++it) {
         FieldInfo & fi = it->second;
-        ierr = PetscFECopyQuadrature(first_fi.fe, fi.fe);
-        check_petsc_error(ierr);
+        PETSC_CHECK(PetscFECopyQuadrature(first_fi.fe, fi.fe));
     }
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
-        ierr = PetscFECopyQuadrature(first_fi.fe, fi.fe);
-        check_petsc_error(ierr);
+        PETSC_CHECK(PetscFECopyQuadrature(first_fi.fe, fi.fe));
     }
 }
 
@@ -411,20 +400,16 @@ void
 FEProblemInterface::set_up_problem()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = this->unstr_mesh->get_dm();
 
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
-        ierr = DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe));
     }
 
-    ierr = DMCreateDS(dm);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMCreateDS(dm));
 
-    ierr = DMGetDS(dm, &this->ds);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetDS(dm, &this->ds));
 
     set_up_weak_form();
     set_up_initial_conditions();
@@ -435,11 +420,8 @@ FEProblemInterface::set_up_problem()
     while (cdm) {
         set_up_auxiliary_dm(cdm);
 
-        ierr = DMCopyDisc(dm, cdm);
-        check_petsc_error(ierr);
-
-        ierr = DMGetCoarseDM(cdm, &cdm);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMCopyDisc(dm, cdm));
+        PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
     }
 }
 
@@ -463,47 +445,38 @@ FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
         ctxs[fid] = aux;
     }
 
-    PetscErrorCode ierr;
-    if (label == nullptr) {
-        ierr = DMProjectFunctionLocal(dm_aux,
-                                      this->problem->get_time(),
-                                      func,
-                                      ctxs,
-                                      INSERT_ALL_VALUES,
-                                      a);
-        check_petsc_error(ierr);
-    }
-    else {
-        IS is;
-        ierr = DMLabelGetValueIS(label, &is);
-        check_petsc_error(ierr);
-
-        PetscInt n_ids;
-        ierr = ISGetSize(is, &n_ids);
-        check_petsc_error(ierr);
-
-        const PetscInt * ids;
-        ierr = ISGetIndices(is, &ids);
-        check_petsc_error(ierr);
-
-        ierr = DMProjectFunctionLabelLocal(dm_aux,
+    if (label == nullptr)
+        PETSC_CHECK(DMProjectFunctionLocal(dm_aux,
                                            this->problem->get_time(),
-                                           label,
-                                           n_ids,
-                                           ids,
-                                           PETSC_DETERMINE,
-                                           nullptr,
                                            func,
                                            ctxs,
                                            INSERT_ALL_VALUES,
-                                           a);
-        check_petsc_error(ierr);
+                                           a));
+    else {
+        IS is;
+        PETSC_CHECK(DMLabelGetValueIS(label, &is));
 
-        ierr = ISRestoreIndices(is, &ids);
-        check_petsc_error(ierr);
+        PetscInt n_ids;
+        PETSC_CHECK(ISGetSize(is, &n_ids));
 
-        ierr = ISDestroy(&is);
-        check_petsc_error(ierr);
+        const PetscInt * ids;
+        PETSC_CHECK(ISGetIndices(is, &ids));
+
+        PETSC_CHECK(DMProjectFunctionLabelLocal(dm_aux,
+                                                this->problem->get_time(),
+                                                label,
+                                                n_ids,
+                                                ids,
+                                                PETSC_DETERMINE,
+                                                nullptr,
+                                                func,
+                                                ctxs,
+                                                INSERT_ALL_VALUES,
+                                                a));
+
+        PETSC_CHECK(ISRestoreIndices(is, &ids));
+
+        PETSC_CHECK(ISDestroy(&is));
     }
 
     delete[] func;
@@ -514,20 +487,15 @@ void
 FEProblemInterface::set_up_auxiliary_dm(DM dm)
 {
     _F_;
-    PetscErrorCode ierr;
-
     DM dm_aux;
-    ierr = DMClone(dm, &dm_aux);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMClone(dm, &dm_aux));
 
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
-        ierr = DMSetField(dm_aux, fi.id, fi.block, (PetscObject) fi.fe);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMSetField(dm_aux, fi.id, fi.block, (PetscObject) fi.fe));
     }
 
-    ierr = DMCreateDS(dm_aux);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMCreateDS(dm_aux));
 
     bool no_errors = true;
     for (auto & aux : this->auxs) {
@@ -554,15 +522,13 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
     }
     if (no_errors) {
         if (this->auxs.size() > 0) {
-            ierr = DMCreateLocalVector(dm_aux, &this->a);
-            check_petsc_error(ierr);
+            PETSC_CHECK(DMCreateLocalVector(dm_aux, &this->a));
             compute_aux_fields(dm_aux, nullptr, this->a);
-            ierr = DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a);
-            check_petsc_error(ierr);
+            PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
         }
     }
 
-    ierr = DMDestroy(&dm_aux);
+    PETSC_CHECK(DMDestroy(&dm_aux));
 }
 
 void
@@ -572,9 +538,7 @@ FEProblemInterface::set_up_constants()
     if (this->consts.size() == 0)
         return;
 
-    PetscErrorCode ierr;
-    ierr = PetscDSSetConstants(this->ds, this->consts.size(), this->consts.data());
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscDSSetConstants(this->ds, this->consts.size(), this->consts.data()));
 }
 
 } // namespace godzilla

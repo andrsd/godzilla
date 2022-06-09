@@ -82,29 +82,15 @@ void
 BoundaryCondition::set_up()
 {
     _F_;
-    PetscErrorCode ierr;
-
-    ierr = DMGetDS(this->dm, &this->ds);
-    check_petsc_error(ierr);
-
+    PETSC_CHECK(DMGetDS(this->dm, &this->ds));
     IS is;
-    ierr = DMGetLabelIdIS(this->dm, this->boundary.c_str(), &is);
-    check_petsc_error(ierr);
-
-    ierr = ISGetSize(is, &this->n_ids);
-    check_petsc_error(ierr);
-
-    ierr = ISGetIndices(is, &this->ids);
-    check_petsc_error(ierr);
-
+    PETSC_CHECK(DMGetLabelIdIS(this->dm, this->boundary.c_str(), &is));
+    PETSC_CHECK(ISGetSize(is, &this->n_ids));
+    PETSC_CHECK(ISGetIndices(is, &this->ids));
     set_up_callback();
-
-    ierr = ISRestoreIndices(is, &this->ids);
-    check_petsc_error(ierr);
+    PETSC_CHECK(ISRestoreIndices(is, &this->ids));
     this->ids = nullptr;
-
-    ierr = ISDestroy(&is);
-    check_petsc_error(ierr);
+    PETSC_CHECK(ISDestroy(&is));
 }
 
 } // namespace godzilla

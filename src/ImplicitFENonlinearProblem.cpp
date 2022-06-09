@@ -31,10 +31,8 @@ void
 ImplicitFENonlinearProblem::init()
 {
     _F_;
-    PetscErrorCode ierr;
     TransientProblemInterface::init();
-    ierr = TSGetSNES(this->ts, &this->snes);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSGetSNES(this->ts, &this->snes));
 
     FEProblemInterface::init();
 }
@@ -65,25 +63,18 @@ void
 ImplicitFENonlinearProblem::set_up_callbacks()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = get_dm();
-
-    ierr = DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this);
-    check_petsc_error(ierr);
-    ierr = DMTSSetIFunctionLocal(dm, DMPlexTSComputeIFunctionFEM, this);
-    check_petsc_error(ierr);
-    ierr = DMTSSetIJacobianLocal(dm, DMPlexTSComputeIJacobianFEM, this);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this));
+    PETSC_CHECK(DMTSSetIFunctionLocal(dm, DMPlexTSComputeIFunctionFEM, this));
+    PETSC_CHECK(DMTSSetIJacobianLocal(dm, DMPlexTSComputeIJacobianFEM, this));
 }
 
 void
 ImplicitFENonlinearProblem::set_up_time_scheme()
 {
     _F_;
-    PetscErrorCode ierr;
     // TODO: allow other schemes
-    ierr = TSSetType(this->ts, TSBEULER);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSSetType(this->ts, TSBEULER));
 }
 
 void

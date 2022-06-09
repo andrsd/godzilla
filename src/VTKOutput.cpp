@@ -25,9 +25,7 @@ VTKOutput::VTKOutput(const InputParameters & params) : FileOutput(params), viewe
 VTKOutput::~VTKOutput()
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = PetscViewerDestroy(&this->viewer);
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscViewerDestroy(&this->viewer));
 }
 
 std::string
@@ -42,13 +40,9 @@ VTKOutput::create()
     _F_;
     FileOutput::create();
 
-    PetscErrorCode ierr;
-    ierr = PetscViewerCreate(get_comm(), &this->viewer);
-    check_petsc_error(ierr);
-    ierr = PetscViewerSetType(this->viewer, PETSCVIEWERVTK);
-    check_petsc_error(ierr);
-    ierr = PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE);
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscViewerCreate(get_comm(), &this->viewer));
+    PETSC_CHECK(PetscViewerSetType(this->viewer, PETSCVIEWERVTK));
+    PETSC_CHECK(PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE));
 }
 
 void
@@ -65,19 +59,14 @@ void
 VTKOutput::output_step()
 {
     _F_;
-    PetscErrorCode ierr;
-
     set_sequence_file_name(this->problem->get_step_num());
-    ierr = PetscViewerFileSetName(this->viewer, this->file_name.c_str());
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscViewerFileSetName(this->viewer, this->file_name.c_str()));
 
     lprintf(9, "Output to file: %s", this->file_name);
     DM dm = this->problem->get_dm();
-    ierr = DMView(dm, this->viewer);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMView(dm, this->viewer));
     Vec vec = this->problem->get_solution_vector();
-    ierr = VecView(vec, this->viewer);
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecView(vec, this->viewer));
 }
 
 } // namespace godzilla

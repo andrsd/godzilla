@@ -41,12 +41,9 @@ void
 FENonlinearProblem::set_up_callbacks()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = this->get_dm();
-    ierr = DMPlexSetSNESLocalFEM(dm, this, this, this);
-    check_petsc_error(ierr);
-    ierr = SNESSetJacobian(this->snes, this->J, this->Jp, NULL, NULL);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMPlexSetSNESLocalFEM(dm, this, this, this));
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->Jp, NULL, NULL));
 }
 
 void
@@ -76,9 +73,7 @@ FENonlinearProblem::set_residual_block(PetscInt field_id,
                                        PetscFEResidualFunc * f1)
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = PetscDSSetResidual(this->ds, field_id, f0, f1);
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscDSSetResidual(this->ds, field_id, f0, f1));
 }
 
 void
@@ -90,9 +85,7 @@ FENonlinearProblem::set_jacobian_block(PetscInt fid,
                                        PetscFEJacobianFunc * g3)
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3);
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3));
 }
 
 void

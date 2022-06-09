@@ -13,9 +13,9 @@ TEST(ErrorTest, mem_check)
     EXPECT_DEATH(MEM_CHECK(var), "Out of memory");
 }
 
-TEST(ErrorTest, check_petsc_error)
+TEST(ErrorTest, petsc_check_macro)
 {
-    EXPECT_DEATH(check_petsc_error(123), "\\[ERROR\\] PETSc error: 123");
+    EXPECT_DEATH(PETSC_CHECK(123), "\\[ERROR\\] PETSc error: 123");
 }
 
 // fprint tests

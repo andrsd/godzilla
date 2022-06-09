@@ -109,38 +109,26 @@ void
 LinearProblem::init()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = get_dm();
-
-    ierr = KSPCreate(get_comm(), &this->ksp);
-    check_petsc_error(ierr);
-    ierr = KSPSetDM(this->ksp, dm);
-    check_petsc_error(ierr);
-    ierr = DMSetApplicationContext(dm, this);
-    check_petsc_error(ierr);
+    PETSC_CHECK(KSPCreate(get_comm(), &this->ksp));
+    PETSC_CHECK(KSPSetDM(this->ksp, dm));
+    PETSC_CHECK(DMSetApplicationContext(dm, this));
 }
 
 void
 LinearProblem::allocate_objects()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = get_dm();
 
-    ierr = DMCreateGlobalVector(dm, &this->x);
-    check_petsc_error(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->x, "sln");
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMCreateGlobalVector(dm, &this->x));
+    PETSC_CHECK(PetscObjectSetName((PetscObject) this->x, "sln"));
 
-    ierr = VecDuplicate(this->x, &this->b);
-    check_petsc_error(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->b, "rhs");
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecDuplicate(this->x, &this->b));
+    PETSC_CHECK(PetscObjectSetName((PetscObject) this->b, "rhs"));
 
-    ierr = DMCreateMatrix(dm, &this->A);
-    check_petsc_error(ierr);
-    ierr = PetscObjectSetName((PetscObject) this->A, "A");
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMCreateMatrix(dm, &this->A));
+    PETSC_CHECK(PetscObjectSetName((PetscObject) this->A, "A"));
     // TODO: Add API for setting up preconditioners
     this->B = this->A;
 }
@@ -149,38 +137,27 @@ void
 LinearProblem::set_up_callbacks()
 {
     _F_;
-    PetscErrorCode ierr;
-
-    ierr = KSPSetComputeRHS(this->ksp, __compute_rhs, this);
-    check_petsc_error(ierr);
-    ierr = KSPSetComputeOperators(this->ksp, __compute_operators, this);
-    check_petsc_error(ierr);
+    PETSC_CHECK(KSPSetComputeRHS(this->ksp, __compute_rhs, this));
+    PETSC_CHECK(KSPSetComputeOperators(this->ksp, __compute_operators, this));
 }
 
 void
 LinearProblem::set_up_monitors()
 {
     _F_;
-    PetscErrorCode ierr;
-
-    ierr = KSPMonitorSet(this->ksp, __ksp_monitor_linear, this, 0);
-    check_petsc_error(ierr);
+    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor_linear, this, 0));
 }
 
 void
 LinearProblem::set_up_solver_parameters()
 {
     _F_;
-    PetscErrorCode ierr;
-
-    ierr = KSPSetTolerances(this->ksp,
-                            this->lin_rel_tol,
-                            this->lin_abs_tol,
-                            PETSC_DEFAULT,
-                            this->lin_max_iter);
-    check_petsc_error(ierr);
-    ierr = KSPSetFromOptions(ksp);
-    check_petsc_error(ierr);
+    PETSC_CHECK(KSPSetTolerances(this->ksp,
+                                 this->lin_rel_tol,
+                                 this->lin_abs_tol,
+                                 PETSC_DEFAULT,
+                                 this->lin_max_iter));
+    PETSC_CHECK(KSPSetFromOptions(ksp));
 }
 
 PetscErrorCode
@@ -195,12 +172,8 @@ void
 LinearProblem::solve()
 {
     _F_;
-    PetscErrorCode ierr;
-
-    ierr = KSPSolve(this->ksp, this->b, this->x);
-    check_petsc_error(ierr);
-    ierr = KSPGetConvergedReason(this->ksp, &this->converged_reason);
-    check_petsc_error(ierr);
+    PETSC_CHECK(KSPSolve(this->ksp, this->b, this->x));
+    PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
 }
 
 bool
