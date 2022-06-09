@@ -38,6 +38,7 @@ add_library(godzilla
         LineMesh.cpp
         Logger.cpp
         Mesh.cpp
+        MeshPartitioningOutput.cpp
         NaturalBC.cpp
         NonlinearProblem.cpp
         Object.cpp
