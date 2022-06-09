@@ -21,7 +21,7 @@ protected:
     /// Set up monitors
     virtual void set_up_monitors();
     /// Set up time integration scheme
-    virtual void set_up_time_scheme();
+    virtual void set_up_time_scheme() = 0;
     /// Called before the time step solve
     virtual PetscErrorCode pre_step();
     /// Called after the time step is done solving

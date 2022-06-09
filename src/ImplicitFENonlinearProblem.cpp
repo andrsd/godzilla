@@ -77,6 +77,16 @@ ImplicitFENonlinearProblem::set_up_callbacks()
 }
 
 void
+ImplicitFENonlinearProblem::set_up_time_scheme()
+{
+    _F_;
+    PetscErrorCode ierr;
+    // TODO: allow other schemes
+    ierr = TSSetType(this->ts, TSBEULER);
+    check_petsc_error(ierr);
+}
+
+void
 ImplicitFENonlinearProblem::set_up_monitors()
 {
     _F_;

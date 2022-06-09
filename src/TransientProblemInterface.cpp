@@ -112,16 +112,6 @@ TransientProblemInterface::set_up_monitors()
     check_petsc_error(ierr);
 }
 
-void
-TransientProblemInterface::set_up_time_scheme()
-{
-    _F_;
-    PetscErrorCode ierr;
-    // TODO: allow other schemes
-    ierr = TSSetType(this->ts, TSBEULER);
-    check_petsc_error(ierr);
-}
-
 PetscErrorCode
 TransientProblemInterface::pre_step()
 {
