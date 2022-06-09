@@ -106,47 +106,4 @@ UnstructuredMesh::is_simplex() const
     return simplex == PETSC_TRUE;
 }
 
-void
-UnstructuredMesh::output_partitioning(PetscViewer viewer)
-{
-    _F_;
-    PetscErrorCode ierr;
-
-    DM dm_part;
-    ierr = DMClone(this->dm, &dm_part);
-    check_petsc_error(ierr);
-
-    DMSetNumFields(dm_part, 1);
-    PetscSection s;
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[this->dim + 1];
-    for (PetscInt i = 0; i < this->dim + 1; i++)
-        if (i == this->dim)
-            n_dofs[i] = 1;
-        else
-            n_dofs[i] = 0;
-    DMPlexCreateSection(dm_part, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &s);
-    PetscSectionSetFieldName(s, 0, "");
-    DMSetLocalSection(dm_part, s);
-
-    Vec local, global;
-    DMCreateLocalVector(dm_part, &local);
-    PetscObjectSetName((PetscObject) local, "partitioning");
-    DMCreateGlobalVector(dm_part, &global);
-    PetscObjectSetName((PetscObject) global, "partitioning");
-    VecSet(global, 1.0);
-
-    DMGlobalToLocalBegin(dm_part, global, INSERT_VALUES, local);
-    DMGlobalToLocalEnd(dm_part, global, INSERT_VALUES, local);
-    VecScale(local, get_processor_id());
-
-    DMLocalToGlobalBegin(dm_part, local, INSERT_VALUES, global);
-    DMLocalToGlobalEnd(dm_part, local, INSERT_VALUES, global);
-
-    DMView(dm_part, viewer);
-    VecView(global, viewer);
-
-    DMDestroy(&dm_part);
-}
-
 } // namespace godzilla

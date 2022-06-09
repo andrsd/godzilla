@@ -34,11 +34,6 @@ public:
     /// @param type Type of the partitioner
     virtual void set_partition_overlap(PetscInt overlap);
 
-    /// Output partitioning
-    ///
-    /// @param viewer PetscViewer to store the partitioning
-    virtual void output_partitioning(PetscViewer viewer);
-
     /// Is the first cell in the mesh a simplex?
     ///
     /// @return true if cell is a simplex, otherwise false

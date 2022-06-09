@@ -84,33 +84,3 @@ TEST(LineMeshTest, distribute)
     else
         EXPECT_EQ(distr, 0);
 }
-
-TEST(LineMeshTest, output_partitioning)
-{
-    TestApp app;
-
-    InputParameters params = LineMesh::valid_params();
-    params.set<const App *>("_app") = &app;
-    params.set<std::string>("_name") = "line_mesh";
-    params.set<PetscReal>("xmin") = 0;
-    params.set<PetscReal>("xmax") = 1;
-    params.set<PetscInt>("nx") = 4;
-    LineMesh mesh(params);
-    mesh.create();
-
-    PetscViewer viewer;
-    PetscViewerHDF5Open(app.get_comm(), "part.h5", FILE_MODE_WRITE, &viewer);
-    mesh.output_partitioning(viewer);
-    PetscViewerDestroy(&viewer);
-
-    Vec p;
-    VecCreate(app.get_comm(), &p);
-    PetscObjectSetName((PetscObject) p, "fields/partitioning");
-    PetscViewerHDF5Open(app.get_comm(), "part.h5", FILE_MODE_READ, &viewer);
-    VecLoad(p, viewer);
-    PetscReal l2_norm;
-    VecNorm(p, NORM_2, &l2_norm);
-    EXPECT_NEAR(l2_norm, 0, 1e-10);
-    VecDestroy(&p);
-    PetscViewerDestroy(&viewer);
-}
