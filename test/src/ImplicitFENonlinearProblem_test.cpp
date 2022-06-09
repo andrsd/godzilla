@@ -152,6 +152,34 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     EXPECT_NEAR(xx[0], 0.5, 1e-7);
 }
 
+TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
+{
+    testing::internal::CaptureStderr();
+
+    auto mesh = gMesh1d();
+
+    GTestImplicitFENonlinearProblem * prob;
+    {
+        const std::string class_name = "GTestImplicitFENonlinearProblem";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<PetscReal>("start_time") = 0.;
+        params->set<PetscReal>("end_time") = 20;
+        params->set<PetscReal>("dt") = 5;
+        params->set<std::string>("scheme") = "asdf";
+        prob = this->app->build_object<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
+    }
+
+    mesh->create();
+    prob->create();
+    prob->check();
+
+    this->app->check_integrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("prob: The 'scheme' parameter can be either 'beuler' or 'cn'."));
+}
+
 // GTestImplicitFENonlinearProblem
 
 GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const InputParameters & params) :

@@ -14,6 +14,7 @@ add_executable(${PROJECT_NAME}
     EssentialBC_test.cpp
     ExodusIIMesh_test.cpp
     ExodusIIOutput_test.cpp
+    ExplicitFENonlinearProblem_test.cpp
     Factory_test.cpp
     FENonlinearProblem_test.cpp
     FunctionAuxiliaryField_test.cpp
@@ -43,6 +44,7 @@ add_executable(${PROJECT_NAME}
     RectangleMesh_test.cpp
     Terminal_test.cpp
     Utils_test.cpp
+    Validation_test.cpp
     VTKOutput_test.cpp
     main.cpp
 )

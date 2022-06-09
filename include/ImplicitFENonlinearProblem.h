@@ -11,6 +11,7 @@ public:
     virtual ~ImplicitFENonlinearProblem();
 
     virtual void create() override;
+    virtual void check() override;
     virtual bool converged() override;
     virtual void solve() override;
 
@@ -19,6 +20,9 @@ protected:
     virtual void set_up_callbacks() override;
     virtual void set_up_time_scheme() override;
     virtual void set_up_monitors() override;
+
+    /// Time stepping scheme
+    const std::string & scheme;
 
 public:
     static InputParameters valid_params();

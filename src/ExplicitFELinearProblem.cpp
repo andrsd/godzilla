@@ -2,6 +2,8 @@
 #include "CallStack.h"
 #include "ExplicitFELinearProblem.h"
 #include "Output.h"
+#include "Validation.h"
+#include "Utils.h"
 #include "petscts.h"
 
 namespace godzilla {
@@ -11,12 +13,14 @@ ExplicitFELinearProblem::valid_params()
 {
     InputParameters params = FENonlinearProblem::valid_params();
     params += TransientProblemInterface::valid_params();
+    params.add_param<std::string>("scheme", "euler", "Time stepping scheme: [euler, ssp, rk]");
     return params;
 }
 
 ExplicitFELinearProblem::ExplicitFELinearProblem(const InputParameters & params) :
     FENonlinearProblem(params),
-    TransientProblemInterface(this, params)
+    TransientProblemInterface(this, params),
+    scheme(get_param<std::string>("scheme"))
 {
     _F_;
     this->default_output_on = Output::ON_INITIAL | Output::ON_TIMESTEP;
@@ -54,6 +58,16 @@ ExplicitFELinearProblem::create()
     TransientProblemInterface::create();
 }
 
+void
+ExplicitFELinearProblem::check()
+{
+    _F_;
+    FENonlinearProblem::check();
+
+    if (!validation::in(this->scheme, { "euler", "ssp", "rk" }))
+        log_error("The 'scheme' parameter can be either 'euler', 'ssp' or 'rk'.");
+}
+
 bool
 ExplicitFELinearProblem::converged()
 {
@@ -84,8 +98,13 @@ void
 ExplicitFELinearProblem::set_up_time_scheme()
 {
     _F_;
-    // TODO: allow other schemes
-    PETSC_CHECK(TSSetType(this->ts, TSEULER));
+    std::string sch = utils::to_lower(this->scheme);
+    if (sch.compare("beuler") == 0)
+        PETSC_CHECK(TSSetType(this->ts, TSEULER));
+    else if (sch.compare("ssp") == 0)
+        PETSC_CHECK(TSSetType(this->ts, TSSSP));
+    else if (sch.compare("rk") == 0)
+        PETSC_CHECK(TSSetType(this->ts, TSRK));
 }
 
 void
