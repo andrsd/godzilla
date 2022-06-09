@@ -1,6 +1,7 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "HDF5Output.h"
+#include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "petscviewerhdf5.h"
 
@@ -47,8 +48,10 @@ void
 HDF5Output::check()
 {
     _F_;
-    // TODO: check that DM we are using is DMPLEX. if not, we need to tell
-    // users that this does not work.
+    const UnstructuredMesh * mesh =
+        dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh());
+    if (mesh == nullptr)
+        log_error("HDF5 output works only with unstructured meshes.");
 }
 
 } // namespace godzilla
