@@ -1,40 +1,62 @@
 #include "gmock/gmock.h"
-#include "GTestFENonlinearProblem.h"
-#include "VTKOutput_test.h"
+#include "GodzillaApp_test.h"
+#include "LinearProblem_test.h"
+#include "LineMesh.h"
+#include "Problem.h"
+#include "VTKOutput.h"
 #include "petsc.h"
 #include "petscviewer.h"
 
+class VTKOutputTest : public GodzillaAppTest {
+protected:
+    void
+    SetUp() override
+    {
+        GodzillaAppTest::SetUp();
+
+        {
+            const std::string class_name = "LineMesh";
+            InputParameters * params = Factory::get_valid_params(class_name);
+            params->set<PetscInt>("nx") = 1;
+            this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
+        }
+
+        {
+            const std::string class_name = "G1DTestLinearProblem";
+            InputParameters * params = Factory::get_valid_params(class_name);
+            params->set<const Mesh *>("_mesh") = mesh;
+            this->prob = this->app->build_object<Problem>(class_name, "problem", params);
+        }
+    }
+
+    void
+    create()
+    {
+        this->mesh->create();
+        this->prob->create();
+    }
+
+    VTKOutput *
+    build_output(const std::string & file_name = "")
+    {
+        const std::string class_name = "VTKOutput";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const Problem *>("_problem") = this->prob;
+        if (file_name.length() > 0)
+            params->set<std::string>("file") = file_name;
+        VTKOutput * out = this->app->build_object<VTKOutput>(class_name, "out", params);
+        this->prob->add_output(out);
+        return out;
+    }
+
+    LineMesh * mesh;
+    Problem * prob;
+};
+
 TEST_F(VTKOutputTest, get_file_ext)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-
-    auto out = gOutput(prob, "out");
+    auto out = build_output("out");
     EXPECT_EQ(out->get_file_ext(), "vtk");
-}
-
-TEST_F(VTKOutputTest, create)
-{
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-    auto out = gOutput(prob, "out");
-    prob->add_output(out);
-    out->create();
-}
-
-TEST_F(VTKOutputTest, check)
-{
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-
-    auto out = gOutput(prob, "out");
-    out->check();
 }
 
 TEST_F(VTKOutputTest, wrong_mesh_type)
@@ -76,7 +98,7 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
 
     testing::internal::CaptureStderr();
 
-    InputParameters mesh_pars = Mesh::valid_params();
+    InputParameters mesh_pars = TestMesh::valid_params();
     mesh_pars.set<const App *>("_app") = this->app;
     mesh_pars.set<PetscInt>("nx") = 1;
     TestMesh mesh(mesh_pars);
@@ -98,23 +120,19 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
     out.check();
     this->app->check_integrity();
 
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr("VTK output works only with unstructured meshes."));
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("VTK output works only with unstructured meshes."));
 }
 
 TEST_F(VTKOutputTest, output_1d_step)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-    auto out = gOutput(prob, "out");
-    out->create();
+    auto out = build_output("out");
+    create();
+
     out->check();
     this->app->check_integrity();
 
-    prob->solve();
-    EXPECT_EQ(prob->converged(), true);
+    this->prob->solve();
+    EXPECT_EQ(this->prob->converged(), true);
     out->output_step();
 }
