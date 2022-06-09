@@ -10,7 +10,6 @@ namespace godzilla {
 class FileOutput : public Output {
 public:
     FileOutput(const InputParameters & params);
-    virtual ~FileOutput();
 
     virtual void create() override;
 
@@ -32,27 +31,12 @@ public:
     /// @return File extension
     virtual std::string get_file_ext() const = 0;
 
-    virtual void output_step() override;
-
 protected:
-    /// Store the mesh
-    ///
-    /// @param dm DM holding the mesh to store into the file
-    virtual void output_mesh(DM dm);
-
-    /// Store the solution vector
-    ///
-    /// @param vec Solution vector to store into the file
-    virtual void output_solution(Vec vec);
-
     /// The file base of the output file
     std::string file_base;
 
     /// The file name of the output file
     std::string file_name;
-
-    /// Viewer for the output
-    PetscViewer viewer;
 
 public:
     static InputParameters valid_params();
