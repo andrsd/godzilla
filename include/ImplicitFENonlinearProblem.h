@@ -17,7 +17,7 @@ public:
 protected:
     virtual void init() override;
     virtual void set_up_callbacks() override;
-    /// Setup monitors
+    virtual void set_up_time_scheme() override;
     virtual void set_up_monitors() override;
 
 public:

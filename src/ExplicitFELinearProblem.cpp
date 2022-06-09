@@ -35,17 +35,14 @@ void
 ExplicitFELinearProblem::init()
 {
     _F_;
-    PetscErrorCode ierr;
     TransientProblemInterface::init();
-    ierr = TSGetSNES(this->ts, &this->snes);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSGetSNES(this->ts, &this->snes));
 
     FEProblemInterface::init();
 
     for (auto & f : this->fields) {
         PetscInt fid = f.second.id;
-        ierr = PetscDSSetImplicit(this->ds, fid, PETSC_FALSE);
-        check_petsc_error(ierr);
+        PETSC_CHECK(PetscDSSetImplicit(this->ds, fid, PETSC_FALSE));
     }
 }
 
@@ -75,27 +72,20 @@ void
 ExplicitFELinearProblem::set_up_callbacks()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = get_dm();
-
-    ierr = DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this);
-    check_petsc_error(ierr);
-    ierr = DMTSSetRHSFunctionLocal(dm, DMPlexTSComputeRHSFunctionFEM, this);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this));
+    PETSC_CHECK(DMTSSetRHSFunctionLocal(dm, DMPlexTSComputeRHSFunctionFEM, this));
     // NOTE: this may need to be eventually in a virtual method for cases when people want to use
     // lumped mass matrix
-    ierr = DMTSCreateRHSMassMatrix(dm);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMTSCreateRHSMassMatrix(dm));
 }
 
 void
 ExplicitFELinearProblem::set_up_time_scheme()
 {
     _F_;
-    PetscErrorCode ierr;
     // TODO: allow other schemes
-    ierr = TSSetType(this->ts, TSEULER);
-    check_petsc_error(ierr);
+    PETSC_CHECK(TSSetType(this->ts, TSEULER));
 }
 
 void
@@ -112,9 +102,7 @@ ExplicitFELinearProblem::set_residual_block(PetscInt field_id,
                                             PetscFEResidualFunc * f1)
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = PetscDSSetRHSResidual(this->ds, field_id, f0, f1);
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscDSSetRHSResidual(this->ds, field_id, f0, f1));
 }
 
 } // namespace godzilla

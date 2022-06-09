@@ -46,6 +46,8 @@ error_printf(const char * s, Args... args)
 
 void mem_check(int line, const char * func, const char * file, void * var);
 
+void check_petsc_error(PetscErrorCode ierr, const char * file, int line);
+
 } // namespace internal
 
 template <typename... Args>
@@ -56,13 +58,12 @@ error(const char * format, Args &&... args)
     internal::terminate();
 }
 
-/// Check PETSc error
-///
-/// @param ierr Error code returned by PETSc
-void check_petsc_error(PetscErrorCode ierr);
-
 /// Check that memory allocation was ok. If not, report an error (also dump call stack) and
 /// terminate
 #define MEM_CHECK(var) godzilla::internal::mem_check(__LINE__, __PRETTY_FUNCTION__, __FILE__, var)
+
+/// Check that PETSc call was successful . If not, report an error (also dump call stack) and
+/// terminate
+#define PETSC_CHECK(ierr) godzilla::internal::check_petsc_error(ierr, __FILE__, __LINE__)
 
 } // namespace godzilla

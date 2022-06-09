@@ -22,11 +22,8 @@ Mesh::Mesh(const InputParameters & parameters) :
 Mesh::~Mesh()
 {
     _F_;
-    if (this->dm) {
-        PetscErrorCode ierr;
-        ierr = DMDestroy(&this->dm);
-        check_petsc_error(ierr);
-    }
+    if (this->dm)
+        PETSC_CHECK(DMDestroy(&this->dm));
 }
 
 DM
@@ -47,13 +44,9 @@ void
 Mesh::create()
 {
     _F_;
-    PetscErrorCode ierr;
-
     create_dm();
-    ierr = DMSetUp(this->dm);
-    check_petsc_error(ierr);
-    ierr = DMGetDimension(this->dm, &this->dim);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMSetUp(this->dm));
+    PETSC_CHECK(DMGetDimension(this->dm, &this->dim));
     distribute();
 }
 
@@ -61,10 +54,8 @@ bool
 Mesh::has_label(const std::string & name) const
 {
     _F_;
-    PetscErrorCode ierr;
     PetscBool exists = PETSC_FALSE;
-    ierr = DMHasLabel(this->dm, name.c_str(), &exists);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMHasLabel(this->dm, name.c_str(), &exists));
     return exists == PETSC_TRUE;
 }
 
@@ -73,8 +64,7 @@ Mesh::get_label(const std::string & name) const
 {
     _F_;
     DMLabel label;
-    PetscErrorCode ierr = DMGetLabel(this->dm, name.c_str(), &label);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
     return label;
 }
 

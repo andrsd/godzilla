@@ -91,16 +91,15 @@ RectangleMesh::create_dm()
     PetscInt faces[2] = { this->nx, this->ny };
     DMBoundaryType periodicity[2] = { DM_BOUNDARY_GHOSTED, DM_BOUNDARY_GHOSTED };
 
-    ierr = DMPlexCreateBoxMesh(get_comm(),
-                               2,
-                               this->simplex,
-                               faces,
-                               lower,
-                               upper,
-                               periodicity,
-                               interpolate,
-                               &this->dm);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                    2,
+                                    this->simplex,
+                                    faces,
+                                    lower,
+                                    upper,
+                                    periodicity,
+                                    interpolate,
+                                    &this->dm));
 
     // create user-friendly names for sides
     DMLabel face_sets_label = get_label("Face Sets");
@@ -108,24 +107,18 @@ RectangleMesh::create_dm()
     const char * side_name[] = { "bottom", "right", "top", "left" };
     for (unsigned int i = 0; i < 4; i++) {
         IS is;
-        ierr = DMLabelGetStratumIS(face_sets_label, i + 1, &is);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMLabelGetStratumIS(face_sets_label, i + 1, &is));
 
-        ierr = DMCreateLabel(this->dm, side_name[i]);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMCreateLabel(this->dm, side_name[i]));
 
         DMLabel label = get_label(side_name[i]);
 
-        if (is) {
-            ierr = DMLabelSetStratumIS(label, i + 1, is);
-            check_petsc_error(ierr);
-        }
+        if (is)
+            PETSC_CHECK(DMLabelSetStratumIS(label, i + 1, is));
 
-        ierr = ISDestroy(&is);
-        check_petsc_error(ierr);
+        PETSC_CHECK(ISDestroy(&is));
 
-        ierr = DMPlexLabelComplete(this->dm, label);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
     }
 }
 

@@ -177,7 +177,6 @@ void
 ExodusIIOutput::write_mesh()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = this->mesh->get_dm();
 
     int n_nodes = this->mesh->get_num_vertices();
@@ -185,19 +184,16 @@ ExodusIIOutput::write_mesh()
 
     // number of element blocks
     int n_elem_blk = 0;
-    ierr = DMGetLabelSize(dm, "Cell Sets", &n_elem_blk);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_elem_blk));
     // no cell sets defined, therefore we have one element block
     if (n_elem_blk == 0)
         n_elem_blk = 1;
 
     int n_node_sets;
-    ierr = DMGetLabelSize(dm, "Vertex Sets", &n_node_sets);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLabelSize(dm, "Vertex Sets", &n_node_sets));
 
     int n_side_sets;
-    ierr = DMGetLabelSize(dm, "Face Sets", &n_side_sets);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_side_sets));
 
     int exo_dim = this->mesh->get_dimension();
     // Visualization SW based on VTK have problems showing 1D, so we cast it like a 2D problem with
@@ -218,19 +214,14 @@ void
 ExodusIIOutput::write_coords(int exo_dim)
 {
     _F_;
-    PetscErrorCode ierr;
-
     DM dm = this->mesh->get_dm();
     PetscInt dim = this->mesh->get_dimension();
     Vec coord;
-    ierr = DMGetCoordinatesLocal(dm, &coord);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetCoordinatesLocal(dm, &coord));
     PetscInt coord_size;
-    ierr = VecGetSize(coord, &coord_size);
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecGetSize(coord, &coord_size));
     PetscScalar * xyz;
-    ierr = VecGetArray(coord, &xyz);
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecGetArray(coord, &xyz));
 
     int n_nodes = coord_size / dim;
     PetscReal * x = new PetscReal[n_nodes];
@@ -261,8 +252,7 @@ ExodusIIOutput::write_coords(int exo_dim)
     delete[] y;
     delete[] z;
 
-    ierr = VecRestoreArray(coord, &xyz);
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecRestoreArray(coord, &xyz));
 
     const char * coord_names[3] = { "x", "y", "z" };
     ex_put_coord_names(this->exoid, (char **) coord_names);
@@ -339,12 +329,10 @@ void
 ExodusIIOutput::write_elements()
 {
     _F_;
-    PetscErrorCode ierr;
     DM dm = this->mesh->get_dm();
 
     int n_cells_sets = 0;
-    ierr = DMGetLabelSize(dm, "Cell Sets", &n_cells_sets);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
 
     if (n_cells_sets > 0) {
         // TODO: write element blocks
@@ -358,8 +346,7 @@ ExodusIIOutput::write_elements()
         int n_elems_in_block = elem_last - elem_first;
 
         DMPolytopeType polytope_type;
-        ierr = DMPlexGetCellType(dm, elem_first, &polytope_type);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMPlexGetCellType(dm, elem_first, &polytope_type));
         const char * elem_type = get_elem_type(polytope_type);
         int n_nodes_per_elem = get_num_elem_nodes(polytope_type);
         const PetscInt * ordering = get_elem_node_ordering(polytope_type);
@@ -380,14 +367,12 @@ ExodusIIOutput::write_elements()
         for (PetscInt e = elem_first, j = 0; e < elem_last; e++) {
             PetscInt closure_size;
             PetscInt * closure = NULL;
-            ierr = DMPlexGetTransitiveClosure(dm, e, PETSC_TRUE, &closure_size, &closure);
-            check_petsc_error(ierr);
+            PETSC_CHECK(DMPlexGetTransitiveClosure(dm, e, PETSC_TRUE, &closure_size, &closure));
             for (PetscInt i = 0; i < n_nodes_per_elem; i++, j++) {
                 PetscInt k = 2 * (closure_size - n_nodes_per_elem + ordering[i]);
                 connect[j] = closure[k] - n_elems_in_block + 1;
             }
-            ierr = DMPlexRestoreTransitiveClosure(dm, e, PETSC_TRUE, &closure_size, &closure);
-            check_petsc_error(ierr);
+            PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, e, PETSC_TRUE, &closure_size, &closure));
         }
 
         ex_put_conn(this->exoid, EX_ELEM_BLOCK, blk_id, connect, nullptr, nullptr);
@@ -403,7 +388,6 @@ ExodusIIOutput::write_node_sets()
     if (!this->mesh->has_label("Vertex Sets"))
         return;
 
-    PetscErrorCode ierr;
     DM dm = this->mesh->get_dm();
 
     PetscInt elem_first, elem_last;
@@ -411,31 +395,25 @@ ExodusIIOutput::write_node_sets()
     int n_elems_in_block = elem_last - elem_first;
 
     int n_node_sets;
-    ierr = DMGetLabelSize(dm, "Vertex Sets", &n_node_sets);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLabelSize(dm, "Vertex Sets", &n_node_sets));
 
     DMLabel vertex_sets_label = this->mesh->get_label("Vertex Sets");
 
     IS vertex_sets_is;
-    ierr = DMLabelGetValueIS(vertex_sets_label, &vertex_sets_is);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMLabelGetValueIS(vertex_sets_label, &vertex_sets_is));
 
     const PetscInt * vertex_set_idx;
-    ierr = ISGetIndices(vertex_sets_is, &vertex_set_idx);
-    check_petsc_error(ierr);
+    PETSC_CHECK(ISGetIndices(vertex_sets_is, &vertex_set_idx));
 
     for (PetscInt i = 0; i < n_node_sets; ++i) {
         IS stratum_is;
-        ierr = DMLabelGetStratumIS(vertex_sets_label, vertex_set_idx[i], &stratum_is);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMLabelGetStratumIS(vertex_sets_label, vertex_set_idx[i], &stratum_is));
 
         const PetscInt * vertices;
-        ierr = ISGetIndices(stratum_is, &vertices);
-        check_petsc_error(ierr);
+        PETSC_CHECK(ISGetIndices(stratum_is, &vertices));
 
         PetscInt n_nodes_in_set;
-        ierr = ISGetSize(stratum_is, &n_nodes_in_set);
-        check_petsc_error(ierr);
+        PETSC_CHECK(ISGetSize(stratum_is, &n_nodes_in_set));
 
         PetscInt * node_set = new PetscInt[n_nodes_in_set];
         MEM_CHECK(node_set);
@@ -448,19 +426,15 @@ ExodusIIOutput::write_node_sets()
 
         delete[] node_set;
 
-        ierr = ISRestoreIndices(stratum_is, &vertices);
-        check_petsc_error(ierr);
+        PETSC_CHECK(ISRestoreIndices(stratum_is, &vertices));
 
-        ierr = ISDestroy(&stratum_is);
-        check_petsc_error(ierr);
+        PETSC_CHECK(ISDestroy(&stratum_is));
 
         // TODO: set the face name
     }
-    ierr = ISRestoreIndices(vertex_sets_is, &vertex_set_idx);
-    check_petsc_error(ierr);
+    PETSC_CHECK(ISRestoreIndices(vertex_sets_is, &vertex_set_idx));
 
-    ierr = ISDestroy(&vertex_sets_is);
-    check_petsc_error(ierr);
+    PETSC_CHECK(ISDestroy(&vertex_sets_is));
 }
 
 void
@@ -470,37 +444,29 @@ ExodusIIOutput::write_face_sets()
     if (!this->mesh->has_label("Face Sets"))
         return;
 
-    PetscErrorCode ierr;
     DM dm = this->mesh->get_dm();
 
     DMLabel face_sets_label;
-    ierr = DMGetLabel(dm, "Face Sets", &face_sets_label);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLabel(dm, "Face Sets", &face_sets_label));
 
     int n_side_sets;
-    ierr = DMGetLabelSize(dm, "Face Sets", &n_side_sets);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_side_sets));
 
     IS face_sets_is;
-    ierr = DMLabelGetValueIS(face_sets_label, &face_sets_is);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMLabelGetValueIS(face_sets_label, &face_sets_is));
 
     const PetscInt * face_set_idx;
-    ierr = ISGetIndices(face_sets_is, &face_set_idx);
-    check_petsc_error(ierr);
+    PETSC_CHECK(ISGetIndices(face_sets_is, &face_set_idx));
 
     for (PetscInt fs = 0; fs < n_side_sets; ++fs) {
         IS stratum_is;
-        ierr = DMLabelGetStratumIS(face_sets_label, face_set_idx[fs], &stratum_is);
-        check_petsc_error(ierr);
+        PETSC_CHECK(DMLabelGetStratumIS(face_sets_label, face_set_idx[fs], &stratum_is));
 
         const PetscInt * faces;
-        ierr = ISGetIndices(stratum_is, &faces);
-        check_petsc_error(ierr);
+        PETSC_CHECK(ISGetIndices(stratum_is, &faces));
 
         PetscInt face_set_size;
-        ierr = ISGetSize(stratum_is, &face_set_size);
-        check_petsc_error(ierr);
+        PETSC_CHECK(ISGetSize(stratum_is, &face_set_size));
 
         ex_put_set_param(this->exoid, EX_SIDE_SET, face_set_idx[fs], face_set_size, 0);
 
@@ -514,19 +480,18 @@ ExodusIIOutput::write_face_sets()
             // Element
             PetscInt num_points;
             PetscInt * points = NULL;
-            ierr = DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points);
-            check_petsc_error(ierr);
+            PETSC_CHECK(
+                DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
             PetscInt el = points[2];
             elem_list[i] = el + 1;
 
-            ierr = DMPlexRestoreTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points);
-            check_petsc_error(ierr);
+            PETSC_CHECK(
+                DMPlexRestoreTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
             // Side
             points = NULL;
-            ierr = DMPlexGetTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points);
-            check_petsc_error(ierr);
+            PETSC_CHECK(DMPlexGetTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points));
 
             for (PetscInt j = 1; j < num_points; ++j) {
                 if (points[j * 2] == faces[i]) {
@@ -535,8 +500,7 @@ ExodusIIOutput::write_face_sets()
                 }
             }
 
-            ierr = DMPlexRestoreTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points);
-            check_petsc_error(ierr);
+            PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points));
         }
 
         ex_put_set(this->exoid, EX_SIDE_SET, face_set_idx[fs], elem_list, side_list);
@@ -544,17 +508,13 @@ ExodusIIOutput::write_face_sets()
         delete[] side_list;
         delete[] elem_list;
 
-        ierr = ISRestoreIndices(stratum_is, &faces);
-        check_petsc_error(ierr);
-        ierr = ISDestroy(&stratum_is);
-        check_petsc_error(ierr);
+        PETSC_CHECK(ISRestoreIndices(stratum_is, &faces));
+        PETSC_CHECK(ISDestroy(&stratum_is));
 
         // TODO: set the face name
     }
-    ierr = ISRestoreIndices(face_sets_is, &face_set_idx);
-    check_petsc_error(ierr);
-    ierr = ISDestroy(&face_sets_is);
-    check_petsc_error(ierr);
+    PETSC_CHECK(ISRestoreIndices(face_sets_is, &face_set_idx));
+    PETSC_CHECK(ISDestroy(&face_sets_is));
 }
 
 void
@@ -605,30 +565,22 @@ void
 ExodusIIOutput::write_field_variables()
 {
     _F_;
-    PetscErrorCode ierr;
-
     PetscReal time = this->problem->get_time();
     DM dm = this->problem->get_dm();
     Vec sln;
-    ierr = DMGetLocalVector(dm, &sln);
-    check_petsc_error(ierr);
-    ierr = DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln);
-    check_petsc_error(ierr);
-    ierr = DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, NULL, NULL, NULL);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLocalVector(dm, &sln));
+    PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
+    PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, NULL, NULL, NULL));
 
     const PetscScalar * sln_vals;
-    ierr = VecGetArrayRead(sln, &sln_vals);
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecGetArrayRead(sln, &sln_vals));
 
     write_nodal_variables(sln_vals);
     // TODO: write elemental variables
 
-    ierr = VecRestoreArrayRead(sln, &sln_vals);
-    check_petsc_error(ierr);
+    PETSC_CHECK(VecRestoreArrayRead(sln, &sln_vals));
 
-    ierr = DMRestoreLocalVector(dm, &sln);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMRestoreLocalVector(dm, &sln));
 }
 
 void
@@ -640,12 +592,10 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
     DM dm = this->problem->get_dm();
     PetscInt n_elems = this->mesh->get_num_elements();
     PetscInt first, last;
-    ierr = DMPlexGetHeightStratum(dm, this->mesh->get_dimension(), &first, &last);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMPlexGetHeightStratum(dm, this->mesh->get_dimension(), &first, &last));
 
     PetscSection section;
-    ierr = DMGetLocalSection(dm, &section);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetLocalSection(dm, &section));
 
     for (PetscInt n = first; n < last; n++) {
         int exo_var_id = 1;
@@ -653,8 +603,7 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
             PetscInt fid = this->nodal_var_fids[i];
 
             PetscInt offset;
-            ierr = PetscSectionGetFieldOffset(section, n, fid, &offset);
-            check_petsc_error(ierr);
+            PETSC_CHECK(PetscSectionGetFieldOffset(section, n, fid, &offset));
 
             PetscInt nc = this->fepi->get_field_num_components(fid);
             for (PetscInt c = 0; c <= nc; c++, exo_var_id++) {

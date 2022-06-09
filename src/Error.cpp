@@ -42,16 +42,18 @@ mem_check(int line, const char * func, const char * file, void * var)
     }
 }
 
-} // namespace internal
-
 void
-check_petsc_error(PetscErrorCode ierr)
+check_petsc_error(PetscErrorCode ierr, const char * file, int line)
 {
     if (ierr) {
-        internal::error_printf("PETSc error: %d", ierr);
-        internal::print_call_stack();
-        internal::terminate();
+        error_printf("PETSc error: %d", ierr);
+        error_printf("");
+        error_printf("  Location: %s:%d", file, line);
+        print_call_stack();
+        terminate();
     }
 }
+
+} // namespace internal
 
 } // namespace godzilla

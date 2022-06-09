@@ -75,23 +75,21 @@ void
 DirichletBC::set_up_callback()
 {
     _F_;
-    PetscErrorCode ierr;
-    ierr = PetscDSAddBoundary(this->ds,
-                              get_bc_type(),
-                              get_name().c_str(),
-                              this->label,
-                              this->n_ids,
-                              this->ids,
-                              this->fid,
-                              get_num_components(),
-                              get_num_components() == 0 ? NULL : get_components().data(),
-                              (void (*)(void)) __essential_boundary_condition_function,
-                              this->evalr_t.size() > 0
-                                  ? (void (*)(void)) __essential_boundary_condition_function_t
-                                  : nullptr,
-                              (void *) this,
-                              NULL);
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscDSAddBoundary(this->ds,
+                                   get_bc_type(),
+                                   get_name().c_str(),
+                                   this->label,
+                                   this->n_ids,
+                                   this->ids,
+                                   this->fid,
+                                   get_num_components(),
+                                   get_num_components() == 0 ? NULL : get_components().data(),
+                                   (void (*)(void)) __essential_boundary_condition_function,
+                                   this->evalr_t.size() > 0
+                                       ? (void (*)(void)) __essential_boundary_condition_function_t
+                                       : nullptr,
+                                   (void *) this,
+                                   NULL));
 }
 
 } // namespace godzilla

@@ -32,24 +32,18 @@ void
 MeshPartitioningOutput::output_step()
 {
     _F_;
-    PetscErrorCode ierr;
-
     set_file_name();
 
     PetscViewer viewer;
-    ierr = PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer);
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 
     DM dmp;
-    ierr = DMClone(this->problem->get_dm(), &dmp);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMClone(this->problem->get_dm(), &dmp));
 
     PetscInt dim;
-    ierr = DMGetDimension(dmp, &dim);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGetDimension(dmp, &dim));
 
-    ierr = DMSetNumFields(dmp, 1);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMSetNumFields(dmp, 1));
     PetscSection s;
     PetscInt nc[1] = { 1 };
     PetscInt n_dofs[dim + 1];
@@ -58,47 +52,30 @@ MeshPartitioningOutput::output_step()
             n_dofs[i] = 1;
         else
             n_dofs[i] = 0;
-    ierr = DMPlexCreateSection(dmp, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &s);
-    check_petsc_error(ierr);
-    ierr = PetscSectionSetFieldName(s, 0, "");
-    check_petsc_error(ierr);
-    ierr = DMSetLocalSection(dmp, s);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMPlexCreateSection(dmp, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &s));
+    PETSC_CHECK(PetscSectionSetFieldName(s, 0, ""));
+    PETSC_CHECK(DMSetLocalSection(dmp, s));
 
     Vec local, global;
-    ierr = DMCreateLocalVector(dmp, &local);
-    check_petsc_error(ierr);
-    ierr = PetscObjectSetName((PetscObject) local, "partitioning");
-    check_petsc_error(ierr);
-    ierr = DMCreateGlobalVector(dmp, &global);
-    check_petsc_error(ierr);
-    ierr = PetscObjectSetName((PetscObject) global, "partitioning");
-    check_petsc_error(ierr);
-    ierr = VecSet(global, 1.0);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMCreateLocalVector(dmp, &local));
+    PETSC_CHECK(PetscObjectSetName((PetscObject) local, "partitioning"));
+    PETSC_CHECK(DMCreateGlobalVector(dmp, &global));
+    PETSC_CHECK(PetscObjectSetName((PetscObject) global, "partitioning"));
+    PETSC_CHECK(VecSet(global, 1.0));
 
-    ierr = DMGlobalToLocalBegin(dmp, global, INSERT_VALUES, local);
-    check_petsc_error(ierr);
-    ierr = DMGlobalToLocalEnd(dmp, global, INSERT_VALUES, local);
-    check_petsc_error(ierr);
-    ierr = VecScale(local, get_processor_id());
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMGlobalToLocalBegin(dmp, global, INSERT_VALUES, local));
+    PETSC_CHECK(DMGlobalToLocalEnd(dmp, global, INSERT_VALUES, local));
+    PETSC_CHECK(VecScale(local, get_processor_id()));
 
-    ierr = DMLocalToGlobalBegin(dmp, local, INSERT_VALUES, global);
-    check_petsc_error(ierr);
-    ierr = DMLocalToGlobalEnd(dmp, local, INSERT_VALUES, global);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMLocalToGlobalBegin(dmp, local, INSERT_VALUES, global));
+    PETSC_CHECK(DMLocalToGlobalEnd(dmp, local, INSERT_VALUES, global));
 
-    ierr = DMView(dmp, viewer);
-    check_petsc_error(ierr);
-    ierr = VecView(global, viewer);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMView(dmp, viewer));
+    PETSC_CHECK(VecView(global, viewer));
 
-    ierr = DMDestroy(&dmp);
-    check_petsc_error(ierr);
+    PETSC_CHECK(DMDestroy(&dmp));
 
-    ierr = PetscViewerDestroy(&viewer);
-    check_petsc_error(ierr);
+    PETSC_CHECK(PetscViewerDestroy(&viewer));
 }
 
 } // namespace godzilla
