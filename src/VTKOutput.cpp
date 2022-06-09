@@ -1,6 +1,7 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "VTKOutput.h"
+#include "UnstructuredMesh.h"
 #include "Problem.h"
 
 namespace godzilla {
@@ -46,8 +47,10 @@ void
 VTKOutput::check()
 {
     _F_;
-    // TODO: check that DM we are using is DMPLEX. if not, we need to tell
-    // users that this does not work.
+    const UnstructuredMesh * mesh =
+        dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh());
+    if (mesh == nullptr)
+        log_error("VTK output works only with unstructured meshes.");
 }
 
 } // namespace godzilla
