@@ -1,75 +1,149 @@
+#include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "HDF5Output_test.h"
+#include "LinearProblem_test.h"
+#include "LineMesh.h"
+#include "Problem.h"
+#include "HDF5Output.h"
 #include "petsc.h"
 #include "petscviewerhdf5.h"
 
+class HDF5OutputTest : public GodzillaAppTest {
+protected:
+    void
+    SetUp() override
+    {
+        GodzillaAppTest::SetUp();
+
+        {
+            const std::string class_name = "LineMesh";
+            InputParameters * params = Factory::get_valid_params(class_name);
+            params->set<PetscInt>("nx") = 1;
+            this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
+        }
+
+        {
+            const std::string class_name = "G1DTestLinearProblem";
+            InputParameters * params = Factory::get_valid_params(class_name);
+            params->set<const Mesh *>("_mesh") = mesh;
+            this->prob = this->app->build_object<Problem>(class_name, "problem", params);
+        }
+    }
+
+    void
+    create()
+    {
+        this->mesh->create();
+        this->prob->create();
+    }
+
+    HDF5Output *
+    build_output(const std::string & file_name = "")
+    {
+        const std::string class_name = "HDF5Output";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const Problem *>("_problem") = this->prob;
+        if (file_name.length() > 0)
+            params->set<std::string>("file") = file_name;
+        HDF5Output * out = this->app->build_object<HDF5Output>(class_name, "out", params);
+        this->prob->add_output(out);
+        return out;
+    }
+
+    LineMesh * mesh;
+    Problem * prob;
+};
+
 TEST_F(HDF5OutputTest, get_file_ext)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-
-    auto out = gOutput(prob, "out");
+    auto out = build_output("out");
     EXPECT_EQ(out->get_file_ext(), "h5");
 }
 
-TEST_F(HDF5OutputTest, create)
+TEST_F(HDF5OutputTest, wrong_mesh_type)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-    auto out = gOutput(prob, "out");
-    prob->add_output(out);
-    out->create();
-}
+    class TestMesh : public Mesh {
+    public:
+        explicit TestMesh(const InputParameters & params) : Mesh(params) {}
 
-TEST_F(HDF5OutputTest, check)
-{
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
+    protected:
+        virtual void
+        create_dm()
+        {
+            DMDACreate1d(get_comm(), DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &this->dm);
+            DMSetUp(this->dm);
+        }
 
-    auto out = gOutput(prob, "out");
-    out->check();
+        virtual void
+        distribute()
+        {
+        }
+    };
+
+    class TestProblem : public LinearProblem {
+    public:
+        explicit TestProblem(const InputParameters & params) : LinearProblem(params) {}
+
+    protected:
+        virtual PetscErrorCode
+        compute_rhs_callback(Vec b) override
+        {
+            return 0;
+        }
+        virtual PetscErrorCode
+        compute_operators_callback(Mat A, Mat B) override
+        {
+            return 0;
+        }
+    };
+
+    testing::internal::CaptureStderr();
+
+    InputParameters mesh_pars = TestMesh::valid_params();
+    mesh_pars.set<const App *>("_app") = this->app;
+    mesh_pars.set<PetscInt>("nx") = 1;
+    TestMesh mesh(mesh_pars);
+
+    InputParameters prob_pars = TestProblem::valid_params();
+    prob_pars.set<const App *>("_app") = this->app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    TestProblem prob(prob_pars);
+
+    InputParameters pars = HDF5Output::valid_params();
+    pars.set<const App *>("_app") = this->app;
+    pars.set<const Problem *>("_problem") = &prob;
+    HDF5Output out(pars);
+    prob.add_output(&out);
+
+    mesh.create();
+    prob.create();
+
+    out.check();
+    this->app->check_integrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("HDF5 output works only with unstructured meshes."));
 }
 
 TEST_F(HDF5OutputTest, set_file_name)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-
-    auto out = gOutput(prob, "out");
-    out->create();
+    auto out = build_output("out");
+    create();
     out->set_file_name();
     EXPECT_EQ(out->get_file_name(), "out.h5");
 }
 
 TEST_F(HDF5OutputTest, set_seq_file_name)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-
-    auto out = gOutput(prob, "out");
-    out->create();
+    auto out = build_output("out");
+    create();
     out->set_sequence_file_name(2);
     EXPECT_EQ(out->get_file_name(), "out.2.h5");
 }
 
 TEST_F(HDF5OutputTest, output)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-    auto out = gOutput(prob, "out");
-    out->create();
+    auto out = build_output("out");
+    create();
     out->set_file_name();
     out->output_step();
 
@@ -87,5 +161,3 @@ TEST_F(HDF5OutputTest, output)
     PetscViewerDestroy(&viewer);
     VecDestroy(&sln);
 }
-
-// TODO: write a test for output of sequence
