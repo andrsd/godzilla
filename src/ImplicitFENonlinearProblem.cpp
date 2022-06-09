@@ -2,6 +2,8 @@
 #include "CallStack.h"
 #include "ImplicitFENonlinearProblem.h"
 #include "Output.h"
+#include "Validation.h"
+#include "Utils.h"
 #include "petscts.h"
 
 namespace godzilla {
@@ -11,12 +13,14 @@ ImplicitFENonlinearProblem::valid_params()
 {
     InputParameters params = FENonlinearProblem::valid_params();
     params += TransientProblemInterface::valid_params();
+    params.add_param<std::string>("scheme", "beuler", "Time stepping scheme: [beuler, cn]");
     return params;
 }
 
 ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const InputParameters & params) :
     FENonlinearProblem(params),
-    TransientProblemInterface(this, params)
+    TransientProblemInterface(this, params),
+    scheme(get_param<std::string>("scheme"))
 {
     _F_;
     this->default_output_on = Output::ON_INITIAL | Output::ON_TIMESTEP;
@@ -43,6 +47,16 @@ ImplicitFENonlinearProblem::create()
     _F_;
     FENonlinearProblem::create();
     TransientProblemInterface::create();
+}
+
+void
+ImplicitFENonlinearProblem::check()
+{
+    _F_;
+    FENonlinearProblem::check();
+
+    if (!validation::in(this->scheme, {"beuler", "cn"}))
+        log_error("The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }
 
 bool
@@ -73,8 +87,11 @@ void
 ImplicitFENonlinearProblem::set_up_time_scheme()
 {
     _F_;
-    // TODO: allow other schemes
-    PETSC_CHECK(TSSetType(this->ts, TSBEULER));
+    std::string sch = utils::to_lower(this->scheme);
+    if (sch.compare("beuler") == 0)
+        PETSC_CHECK(TSSetType(this->ts, TSBEULER));
+    else if (sch.compare("cn") == 0)
+        PETSC_CHECK(TSSetType(this->ts, TSCN));
 }
 
 void

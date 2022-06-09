@@ -52,6 +52,7 @@ add_library(godzilla
         TransientProblemInterface.cpp
         UnstructuredMesh.cpp
         Utils.cpp
+        Validation.cpp
         VTKOutput.cpp
 )
 target_code_coverage(godzilla)
