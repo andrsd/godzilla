@@ -70,9 +70,21 @@ void
 FEProblemInterface::init()
 {
     _F_;
-    set_up_fes();
-    set_up_quadrature();
-    set_up_problem();
+    set_up_ds();
+    set_up_weak_form();
+    set_up_initial_conditions();
+    set_up_boundary_conditions();
+    set_up_constants();
+
+    DM dm = this->unstr_mesh->get_dm();
+    DM cdm = dm;
+    while (cdm) {
+        set_up_auxiliary_dm(cdm);
+        set_up_field_null_space(cdm);
+
+        PETSC_CHECK(DMCopyDisc(dm, cdm));
+        PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
+    }
 }
 
 const UnstructuredMesh *
@@ -312,6 +324,11 @@ FEProblemInterface::set_up_boundary_conditions()
 }
 
 void
+FEProblemInterface::set_up_field_null_space(DM dm)
+{
+}
+
+void
 FEProblemInterface::set_zero_initial_guess()
 {
     _F_;
@@ -373,13 +390,23 @@ FEProblemInterface::create_fe(FieldInfo & fi)
 }
 
 void
-FEProblemInterface::set_up_fes()
+FEProblemInterface::set_up_ds()
 {
     _F_;
     for (auto & it : this->fields)
         create_fe(it.second);
     for (auto & it : this->aux_fields)
         create_fe(it.second);
+
+    set_up_quadrature();
+
+    DM dm = this->unstr_mesh->get_dm();
+    for (auto & it : this->fields) {
+        FieldInfo & fi = it.second;
+        PETSC_CHECK(DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe));
+    }
+    PETSC_CHECK(DMCreateDS(dm));
+    PETSC_CHECK(DMGetDS(dm, &this->ds));
 }
 
 void
@@ -396,35 +423,6 @@ FEProblemInterface::set_up_quadrature()
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
         PETSC_CHECK(PetscFECopyQuadrature(first_fi.fe, fi.fe));
-    }
-}
-
-void
-FEProblemInterface::set_up_problem()
-{
-    _F_;
-    DM dm = this->unstr_mesh->get_dm();
-
-    for (auto & it : this->fields) {
-        FieldInfo & fi = it.second;
-        PETSC_CHECK(DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe));
-    }
-
-    PETSC_CHECK(DMCreateDS(dm));
-
-    PETSC_CHECK(DMGetDS(dm, &this->ds));
-
-    set_up_weak_form();
-    set_up_initial_conditions();
-    set_up_boundary_conditions();
-    set_up_constants();
-
-    DM cdm = dm;
-    while (cdm) {
-        set_up_auxiliary_dm(cdm);
-
-        PETSC_CHECK(DMCopyDisc(dm, cdm));
-        PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
     }
 }
 
