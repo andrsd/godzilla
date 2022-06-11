@@ -72,6 +72,7 @@ NonlinearProblem::valid_params()
 NonlinearProblem::NonlinearProblem(const InputParameters & parameters) :
     Problem(parameters),
     snes(NULL),
+    ksp(NULL),
     x(NULL),
     r(NULL),
     J(NULL),
@@ -141,6 +142,7 @@ NonlinearProblem::init()
     PETSC_CHECK(SNESCreate(get_comm(), &this->snes));
     PETSC_CHECK(SNESSetDM(this->snes, dm));
     PETSC_CHECK(DMSetApplicationContext(dm, this));
+    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
 }
 
 void
@@ -200,10 +202,7 @@ NonlinearProblem::set_up_monitors()
 {
     _F_;
     PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, 0));
-
-    KSP ksp;
-    PETSC_CHECK(SNESGetKSP(this->snes, &ksp));
-    PETSC_CHECK(KSPMonitorSet(ksp, __ksp_monitor, this, 0));
+    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor, this, 0));
 }
 
 void
@@ -218,14 +217,12 @@ NonlinearProblem::set_up_solver_parameters()
                                   -1));
     PETSC_CHECK(SNESSetFromOptions(this->snes));
 
-    KSP ksp;
-    PETSC_CHECK(SNESGetKSP(this->snes, &ksp));
-    PETSC_CHECK(KSPSetTolerances(ksp,
+    PETSC_CHECK(KSPSetTolerances(this->ksp,
                                  this->lin_rel_tol,
                                  this->lin_abs_tol,
                                  PETSC_DEFAULT,
                                  this->lin_max_iter));
-    PETSC_CHECK(KSPSetFromOptions(ksp));
+    PETSC_CHECK(KSPSetFromOptions(this->ksp));
 }
 
 PetscErrorCode

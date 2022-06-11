@@ -33,6 +33,7 @@ ExplicitFELinearProblem::~ExplicitFELinearProblem()
     // DMTSDestroyRHSMassMatrix(dm);
 
     this->snes = nullptr;
+    this->ksp = nullptr;
 }
 
 void
@@ -41,6 +42,7 @@ ExplicitFELinearProblem::init()
     _F_;
     TransientProblemInterface::init();
     PETSC_CHECK(TSGetSNES(this->ts, &this->snes));
+    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
 
     FEProblemInterface::init();
 

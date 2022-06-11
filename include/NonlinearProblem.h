@@ -50,6 +50,8 @@ protected:
 
     /// SNES object
     SNES snes;
+    /// KSP object
+    KSP ksp;
     /// The solution vector
     Vec x;
     /// The residual vector
