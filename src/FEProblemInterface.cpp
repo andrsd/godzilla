@@ -316,11 +316,14 @@ FEProblemInterface::set_zero_initial_guess()
 {
     _F_;
     DM dm = this->unstr_mesh->get_dm();
-    PetscFunc * initial_guess[1] = { internal::zero_fn };
+    auto n_fields = this->fields.size();
+    PetscFunc * initial_guess[n_fields];
+    for (PetscInt i = 0; i < n_fields; i++)
+        initial_guess[i] = internal::zero_fn;
     PETSC_CHECK(DMProjectFunction(dm,
                                   this->problem->get_time(),
                                   initial_guess,
-                                  NULL,
+                                  nullptr,
                                   INSERT_VALUES,
                                   this->problem->get_solution_vector()));
 }
