@@ -43,7 +43,7 @@ FENonlinearProblem::set_up_callbacks()
     _F_;
     DM dm = this->get_dm();
     PETSC_CHECK(DMPlexSetSNESLocalFEM(dm, this, this, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->Jp, NULL, NULL));
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, NULL, NULL));
 }
 
 void

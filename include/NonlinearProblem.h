@@ -43,9 +43,10 @@ protected:
     PetscErrorCode snes_monitor_callback(PetscInt it, PetscReal norm);
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
-
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
+    /// Method for setting preconditioning
+    virtual void set_up_preconditioning();
 
     /// SNES object
     SNES snes;
@@ -55,8 +56,6 @@ protected:
     Vec r;
     /// Jacobian matrix
     Mat J;
-    /// Preconditioning matrix
-    Mat Jp;
     /// Converged reason
     SNESConvergedReason converged_reason;
 

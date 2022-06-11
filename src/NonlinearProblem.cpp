@@ -75,7 +75,6 @@ NonlinearProblem::NonlinearProblem(const InputParameters & parameters) :
     x(NULL),
     r(NULL),
     J(NULL),
-    Jp(NULL),
     line_search_type(get_param<std::string>("line_search")),
     nl_rel_tol(get_param<PetscReal>("nl_rel_tol")),
     nl_abs_tol(get_param<PetscReal>("nl_abs_tol")),
@@ -99,8 +98,6 @@ NonlinearProblem::~NonlinearProblem()
         VecDestroy(&this->r);
     if (this->x)
         VecDestroy(&this->x);
-    if ((this->Jp != this->J) && (this->Jp))
-        MatDestroy(&this->Jp);
     if (this->J)
         MatDestroy(&this->J);
 }
@@ -126,6 +123,7 @@ NonlinearProblem::create()
     init();
     allocate_objects();
     set_up_matrix_properties();
+    set_up_preconditioning();
 
     set_up_solver_parameters();
     set_up_line_search();
@@ -165,9 +163,6 @@ NonlinearProblem::allocate_objects()
 
     PETSC_CHECK(DMCreateMatrix(dm, &this->J));
     PETSC_CHECK(PetscObjectSetName((PetscObject) this->J, "Jac"));
-
-    // full newton
-    this->Jp = this->J;
 }
 
 void
@@ -197,7 +192,7 @@ NonlinearProblem::set_up_callbacks()
 {
     _F_;
     PETSC_CHECK(SNESSetFunction(this->snes, this->r, __compute_residual, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->Jp, __compute_jacobian, this));
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, __compute_jacobian, this));
 }
 
 void
@@ -279,6 +274,11 @@ NonlinearProblem::run()
 
 void
 NonlinearProblem::set_up_matrix_properties()
+{
+}
+
+void
+NonlinearProblem::set_up_preconditioning()
 {
 }
 
