@@ -14,6 +14,7 @@
 #include "CallStack.h"
 #include "assert.h"
 #include "boost/algorithm/string/join.hpp"
+#include "yaml-cpp/node/iterator.h"
 
 template <typename T>
 std::string
@@ -354,6 +355,13 @@ GYMLFile::set_parameter_from_yml(InputParameters * params,
         else if (param_type == type_name<std::vector<std::string>>())
             params->set<std::vector<std::string>>(param_name) =
                 read_vector_value<std::string>(param_name, val);
+        // maps
+        else if (param_type == type_name<std::map<std::string, std::vector<std::string>>>())
+            params->set<std::map<std::string, std::vector<std::string>>>(param_name) =
+                read_map_value<std::string, std::vector<std::string>>(param_name, val);
+        else if (param_type == type_name<std::map<std::string, PetscReal>>())
+            params->set<std::map<std::string, PetscReal>>(param_name) =
+                read_map_value<std::string, PetscReal>(param_name, val);
     }
 }
 
@@ -372,6 +380,25 @@ GYMLFile::read_vector_value(const std::string & param_name, const YAML::Node & v
                   param_name);
 
     return vec;
+}
+
+template <typename K, typename V>
+std::map<K, V>
+GYMLFile::read_map_value(const std::string & param_name, const YAML::Node & val_node)
+{
+    _F_;
+    std::map<K, V> map;
+    if (val_node.IsMap()) {
+        for (YAML::const_iterator it = val_node.begin(); it != val_node.end(); ++it) {
+            K key = it->first.as<K>();
+            V val = it->second.as<V>();
+            map.insert(std::pair<K, V>(key, val));
+        }
+    }
+    else
+        log_error("Parameter '%s' must be a map.", param_name);
+
+    return map;
 }
 
 void

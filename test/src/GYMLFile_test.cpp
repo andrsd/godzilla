@@ -22,6 +22,9 @@ GTestProblem::valid_params()
     params.add_param<std::vector<double>>("arr_d", "vec<d> doco");
     params.add_param<std::vector<int>>("arr_i", "vec<i> doco");
     params.add_param<std::vector<std::string>>("arr_str", "vec<str> doco");
+    params.add_param<std::map<std::string, PetscReal>>("consts", "map<str, real> doco");
+    params.add_param<std::map<std::string, std::vector<std::string>>>("fns",
+                                                                      "map<str, vec<str>> doco");
     params.add_private_param<const Mesh *>("_mesh");
     return params;
 }
@@ -129,7 +132,7 @@ TEST_F(GYMLFileTest, build)
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple.yml");
 
-    file.parse(file_name);
+    EXPECT_TRUE(file.parse(file_name));
     file.build();
 
     auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());

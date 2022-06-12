@@ -57,6 +57,11 @@ protected:
     template <typename T>
     std::vector<T> read_vector_value(const std::string & param_name, const YAML::Node & val_node);
 
+    /// Read a map from a YAML file
+    ///
+    template <typename K, typename V>
+    std::map<K, V> read_map_value(const std::string & param_name, const YAML::Node & val_node);
+
     void check_params(const InputParameters * params,
                       const std::string & name,
                       std::set<std::string> & unused_param_names);
