@@ -43,6 +43,7 @@ add_library(godzilla
         NonlinearProblem.cpp
         Object.cpp
         Output.cpp
+        ParsedFunction.cpp
         PiecewiseLinear.cpp
         Postprocessor.cpp
         PrintInterface.cpp

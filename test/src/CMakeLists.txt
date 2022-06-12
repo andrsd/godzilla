@@ -38,6 +38,7 @@ add_executable(${PROJECT_NAME}
     NonlinearProblem_test.cpp
     Object_test.cpp
     Output_test.cpp
+    ParsedFunction_test.cpp
     PiecewiseLinear_test.cpp
     PrintInterface_test.cpp
     Problem_test.cpp

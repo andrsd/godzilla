@@ -41,8 +41,6 @@ public:
 protected:
     /// Underlying muParser object
     mu::Parser parser;
-    /// Function expression to be evaluated
-    std::string fn_expression;
 };
 
 } // namespace godzilla
