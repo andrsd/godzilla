@@ -19,6 +19,13 @@ FunctionEvaluator::create(const std::string & expr)
 }
 
 void
+FunctionEvaluator::define_constant(const std::string & name, PetscReal value)
+{
+    _F_;
+    this->parser.DefineConst(name, value);
+}
+
+void
 FunctionEvaluator::register_function(Function * fn)
 {
     _F_;

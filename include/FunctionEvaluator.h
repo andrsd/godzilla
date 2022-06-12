@@ -18,6 +18,12 @@ public:
     /// @param expr Function expression to be evaluated
     void create(const std::string & expr);
 
+    /// Define a constant
+    ///
+    /// @param name Name of the constant
+    /// @param value Value
+    void define_constant(const std::string & name, PetscReal value);
+
     /// Register user function with function evaluator
     ///
     /// @param fn Fuction to register
