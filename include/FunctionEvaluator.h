@@ -18,6 +18,11 @@ public:
     /// @param expr Function expression to be evaluated
     void create(const std::string & expr);
 
+    /// Build the evaluator object
+    ///
+    /// @param expressions Function expressions (one per component) to be evaluated
+    void create(const std::vector<std::string> & expressions);
+
     /// Define a constant
     ///
     /// @param name Name of the constant

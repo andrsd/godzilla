@@ -19,21 +19,23 @@ public:
 
     /// Evaluate parsed function
     ///
-    /// @return the result of evaluation
-    /// @param idx The index of the parsed expression. Ranges from 0..`num_comps`
+    /// @return 'true' if evaluation was successful, `false` otherwise
     /// @param dim Spatial dimension of the evaluated function
     /// @param time Time of the time-dependent function
     /// @param x Spatial coordinate where we evaluate the function (has size of `dim`)
-    PetscReal evaluate(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[]);
+    /// @param nc Number of components
+    /// @param u The result of evaluation (one per component)
+    bool evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscReal u[]);
 
     /// Evaluate parsed time derivative function
     ///
-    /// @return the result of evaluation
-    /// @param idx The index of the parsed expression. Ranges from 0..`num_comps`
+    /// @return 'true' if evaluation was successful, `false` otherwise
     /// @param dim Spatial dimension of the evaluated function
     /// @param time Time of the time-dependent function
     /// @param x Spatial coordinate where we evaluate the function (has size of `dim`)
-    PetscReal evaluate_t(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[]);
+    /// @param nc Number of components
+    /// @param u The result of evaluation (one per component)
+    bool evaluate_t(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscReal u[]);
 
 protected:
     /// Application
@@ -44,10 +46,10 @@ protected:
     const std::vector<std::string> expression_t;
     /// Number of parsed function expressions
     unsigned int num_comps;
-    /// Function evaluators
-    std::vector<FunctionEvaluator> evalr;
-    /// Time derivative evaluators
-    std::vector<FunctionEvaluator> evalr_t;
+    /// Function evaluator
+    FunctionEvaluator evalr;
+    /// Time derivative evaluator
+    FunctionEvaluator evalr_t;
 
 public:
     static InputParameters valid_params();

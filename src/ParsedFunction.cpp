@@ -47,8 +47,7 @@ ParsedFunction::ParsedFunction(const InputParameters & params) :
     constants(get_param<std::map<std::string, PetscReal>>("constants"))
 {
     _F_;
-    std::string fn_str = boost::algorithm::join(this->function, ",");
-    this->evalr.create(fn_str);
+    this->evalr.create(this->function);
     for (const auto & it : constants)
         this->evalr.define_constant(it.first, it.second);
 }
