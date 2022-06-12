@@ -20,8 +20,10 @@ class GYMLFile : public LoggingInterface {
 public:
     GYMLFile(const App * app);
 
-    /// parse the YML file
-    virtual void parse(const std::string & file_name);
+    /// Parse the YML file
+    ///
+    /// @return `true` if successful, otherwise `false`
+    virtual bool parse(const std::string & file_name);
     /// create
     virtual void create();
     /// check

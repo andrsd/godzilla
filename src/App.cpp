@@ -147,8 +147,8 @@ void
 App::build_from_gyml()
 {
     _F_;
-    this->gyml->parse(this->input_file_name);
-    this->gyml->build();
+    if (this->gyml->parse(this->input_file_name))
+        this->gyml->build();
 }
 
 void

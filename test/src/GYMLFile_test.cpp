@@ -316,3 +316,18 @@ TEST_F(GYMLFileTest, unused_param)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("mesh: Following parameters were not used: ny"));
 }
+
+TEST_F(GYMLFileTest, malformed)
+{
+    testing::internal::CaptureStderr();
+
+    GYMLFile file(this->app);
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/malformed.yml");
+    EXPECT_FALSE(file.parse(file_name));
+    this->app->check_integrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("Failed to parse the input file: error at line 9, column 7: "
+                                   "end of map flow not found"));
+}

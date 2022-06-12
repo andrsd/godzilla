@@ -33,11 +33,18 @@ GYMLFile::GYMLFile(const App * app) :
     _F_;
 }
 
-void
+bool
 GYMLFile::parse(const std::string & file_name)
 {
     _F_;
-    this->root = YAML::LoadFile(file_name);
+    try {
+        this->root = YAML::LoadFile(file_name);
+        return true;
+    }
+    catch (YAML::ParserException & e) {
+        log_error("Failed to parse the input file: %s", e.what() + 10);
+        return false;
+    }
 }
 
 Mesh *
