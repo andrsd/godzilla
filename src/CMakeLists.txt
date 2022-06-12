@@ -33,6 +33,7 @@ add_library(godzilla
         InitialCondition.cpp
         InputParameters.cpp
         L2Diff.cpp
+        L2FieldDiff.cpp
         LinearInterpolation.cpp
         LinearProblem.cpp
         LineMesh.cpp
