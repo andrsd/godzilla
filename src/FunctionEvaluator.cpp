@@ -1,6 +1,7 @@
 #include "FunctionEvaluator.h"
 #include "CallStack.h"
 #include "Function.h"
+#include <assert.h>
 
 namespace godzilla {
 
@@ -48,6 +49,35 @@ FunctionEvaluator::evaluate(PetscInt dim, PetscReal time, const PetscReal x[])
     }
     catch (mu::Parser::exception_type & e) {
         return std::nan("");
+    }
+}
+
+bool
+FunctionEvaluator::evaluate(PetscInt dim,
+                            PetscReal time,
+                            const PetscReal x[],
+                            PetscInt nc,
+                            PetscReal u[])
+{
+    _F_;
+    PetscReal * xx = const_cast<PetscReal *>(x);
+    try {
+        this->parser.DefineVar("t", &time);
+        this->parser.DefineVar("x", &(xx[0]));
+        if (dim >= 2)
+            this->parser.DefineVar("y", &(xx[1]));
+        if (dim >= 3)
+            this->parser.DefineVar("z", &(xx[2]));
+
+        int n_num;
+        mu::value_type * val = this->parser.Eval(n_num);
+        assert(nc == n_num);
+        for (int i = 0; i < n_num; i++)
+            u[i] = val[i];
+        return true;
+    }
+    catch (mu::Parser::exception_type & e) {
+        return false;
     }
 }
 

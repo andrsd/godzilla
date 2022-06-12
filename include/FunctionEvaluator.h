@@ -36,6 +36,8 @@ public:
     /// @param x Spatial location
     PetscReal evaluate(PetscInt dim, PetscReal time, const PetscReal x[]);
 
+    bool evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscReal u[]);
+
 protected:
     /// Underlying muParser object
     mu::Parser parser;
