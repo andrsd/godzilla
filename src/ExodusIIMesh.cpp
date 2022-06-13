@@ -3,6 +3,7 @@
 #include "CallStack.h"
 #include "Utils.h"
 #include "petscdmplex.h"
+#include "exodusII.h"
 
 namespace godzilla {
 
@@ -44,6 +45,51 @@ ExodusIIMesh::create_dm()
                                            this->file_name.c_str(),
                                            this->interpolate,
                                            &this->dm));
+
+    int cpu_word_size = sizeof(PetscReal);
+    int io_word_size = 0;
+    float version;
+    int exoid = -1;
+
+    exoid = ex_open(this->file_name.c_str(), EX_READ, &cpu_word_size, &io_word_size, &version);
+    if (exoid != -1) {
+        // Ideally we would like to use DMPlexCreateExodus here and get rid of the above
+        // DMPlexCreateExodusFromFile, so that we don't open the same file twice. For some reason,
+        // that just doesn't work even though this is just exactly what DMPlexCreateExodusFromFile
+        // is doing :confused:
+
+        char title[MAX_LINE_LENGTH + 1];
+        memset(title, 0, sizeof(title));
+        int n_dim, n_nodes, n_elem, n_elem_blk, n_node_sets, n_side_sets;
+        ex_get_init(exoid,
+                    title,
+                    &n_dim,
+                    &n_nodes,
+                    &n_elem,
+                    &n_elem_blk,
+                    &n_node_sets,
+                    &n_side_sets);
+
+        read_side_sets(exoid, n_side_sets);
+
+        ex_close(exoid);
+    }
+}
+
+void
+ExodusIIMesh::read_side_sets(int exoid, int n_side_sets)
+{
+    _F_;
+    int * ids = new int[n_side_sets];
+    ex_get_ids(exoid, EX_SIDE_SET, ids);
+
+    char name[MAX_STR_LENGTH + 1];
+    for (int i = 0; i < n_side_sets; i++) {
+        ex_get_name(exoid, EX_SIDE_SET, ids[i], name);
+        this->face_set_names[ids[i]] = name;
+    }
+
+    delete[] ids;
 }
 
 } // namespace godzilla

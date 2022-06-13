@@ -103,6 +103,18 @@ UnstructuredMesh::create_face_set(PetscInt id, const std::string & name)
         PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
     PETSC_CHECK(ISDestroy(&is));
     PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
+    this->face_set_names[id] = name;
+}
+
+const std::string &
+UnstructuredMesh::get_face_set_name(PetscInt id) const
+{
+    _F_;
+    const auto & it = this->face_set_names.find(id);
+    if (it != this->face_set_names.end())
+        return it->second;
+    else
+        error("Face id '%d' does not exist.", id);
 }
 
 } // namespace godzilla
