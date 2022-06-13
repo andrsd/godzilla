@@ -374,7 +374,7 @@ ExodusIIOutput::write_elements()
     int n_cells_sets = 0;
     PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
 
-    if (n_cells_sets > 0) {
+    if (n_cells_sets > 1) {
         // TODO: write element blocks
         error("Support for mesh blocks is not implemented yet.");
     }
