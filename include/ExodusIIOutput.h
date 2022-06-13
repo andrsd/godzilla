@@ -38,6 +38,7 @@ protected:
     const char * get_elem_type(DMPolytopeType elem_type) const;
     int get_num_elem_nodes(DMPolytopeType elem_type) const;
     const PetscInt * get_elem_node_ordering(DMPolytopeType elem_type) const;
+    const PetscInt * get_elem_side_ordering(DMPolytopeType elem_type) const;
     void write_elements();
     void write_node_sets();
     void write_face_sets();

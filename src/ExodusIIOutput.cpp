@@ -340,6 +340,31 @@ ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type) const
     }
 }
 
+const PetscInt *
+ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type) const
+{
+    static const PetscInt seg_ordering[] = { 1, 2 };
+    static const PetscInt tri_ordering[] = { 1, 2, 3 };
+    static const PetscInt quad_ordering[] = { 1, 2, 3, 4 };
+    static const PetscInt tet_ordering[] = { 1, 2, 3, 4 };
+    static const PetscInt hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
+
+    switch (elem_type) {
+    case DM_POLYTOPE_SEGMENT:
+        return seg_ordering;
+    case DM_POLYTOPE_TRIANGLE:
+        return tri_ordering;
+    case DM_POLYTOPE_QUADRILATERAL:
+        return quad_ordering;
+    case DM_POLYTOPE_TETRAHEDRON:
+        return tet_ordering;
+    case DM_POLYTOPE_HEXAHEDRON:
+        return hex_ordering;
+    default:
+        error("Unsupported type.");
+    }
+}
+
 void
 ExodusIIOutput::write_elements()
 {
@@ -501,6 +526,9 @@ ExodusIIOutput::write_face_sets()
                 DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
             PetscInt el = points[2];
+            DMPolytopeType polytope_type;
+            PETSC_CHECK(DMPlexGetCellType(dm, el, &polytope_type));
+            const PetscInt * side_ordering = get_elem_side_ordering(polytope_type);
             elem_list[i] = el + 1;
 
             PETSC_CHECK(
@@ -512,7 +540,7 @@ ExodusIIOutput::write_face_sets()
 
             for (PetscInt j = 1; j < num_points; ++j) {
                 if (points[j * 2] == faces[i]) {
-                    side_list[i] = j;
+                    side_list[i] = side_ordering[j - 1];
                     break;
                 }
             }
