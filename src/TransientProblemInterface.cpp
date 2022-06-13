@@ -70,6 +70,7 @@ TransientProblemInterface::init()
 {
     _F_;
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
+    PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
 }
 
@@ -78,9 +79,6 @@ TransientProblemInterface::create()
 {
     _F_;
     set_up_time_scheme();
-
-    PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
-
     PETSC_CHECK(TSSetTime(this->ts, this->start_time));
     PETSC_CHECK(TSSetMaxTime(this->ts, this->end_time));
     PETSC_CHECK(TSSetTimeStep(this->ts, this->dt));

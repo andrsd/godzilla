@@ -3,6 +3,11 @@ mesh:
   nx: 2
   xmax: 2
 
+functions:
+  exact_fn:
+    type: ParsedFunction
+    function: 't + x*x'
+
 problem:
   type: HeatEquationProblem
   p_order: 2
@@ -13,7 +18,7 @@ problem:
 ics:
   all:
     type: FunctionIC
-    value: [ 't + x*x' ]
+    value: 'exact_fn(t,x,y,z)'
 
 auxs:
   q_ppp:
@@ -24,13 +29,13 @@ bcs:
   left:
     type: DirichletBC
     boundary: 'marker'
-    value: [ 't + x*x' ]
+    value: [ 'exact_fn(t,x,y,z)' ]
     value_t: [ '1' ]
 
 pps:
   l2_err:
     type: L2Diff
-    value: 't + x*x'
+    value: 'exact_fn(t,x,y,z)'
 
 output:
   exo:

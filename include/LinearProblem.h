@@ -37,9 +37,10 @@ protected:
     virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) = 0;
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
-
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
+    /// Method for setting preconditioning
+    virtual void set_up_preconditioning();
 
     /// KSP object
     KSP ksp;
@@ -49,8 +50,6 @@ protected:
     Vec b;
     /// Linear operator matrix
     Mat A;
-    /// Preconditioning matrix
-    Mat B;
     /// Converged reason
     KSPConvergedReason converged_reason;
 

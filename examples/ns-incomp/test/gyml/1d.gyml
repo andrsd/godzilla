@@ -1,0 +1,34 @@
+mesh:
+  type: LineMesh
+  nx: 2
+
+problem:
+  type: NSIncompressibleProblem
+  start_time: 0
+  end_time: 0.1
+  dt: 0.01
+  Re: 1
+  order_pressure: 2
+
+ics:
+  velocity:
+    type: ConstantIC
+    field: 'velocity'
+    value: [ 0 ]
+
+  pressure:
+    type: ConstantIC
+    field: 'pressure'
+    value: [ 0.1 ]
+
+bcs:
+  inlet:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'left'
+    value: 0.1
+
+output:
+  out:
+    type: ExodusIIOutput
+    file: '1d'

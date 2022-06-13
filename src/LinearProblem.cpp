@@ -52,7 +52,6 @@ LinearProblem::LinearProblem(const InputParameters & parameters) :
     x(NULL),
     b(NULL),
     A(NULL),
-    B(NULL),
     lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
     lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
     lin_max_iter(get_param<PetscInt>("lin_max_iter"))
@@ -70,8 +69,6 @@ LinearProblem::~LinearProblem()
         VecDestroy(&this->b);
     if (this->x)
         VecDestroy(&this->x);
-    if ((this->A != this->B) && (this->B))
-        MatDestroy(&this->B);
     if (this->A)
         MatDestroy(&this->A);
 }
@@ -97,6 +94,7 @@ LinearProblem::create()
     init();
     allocate_objects();
     set_up_matrix_properties();
+    set_up_preconditioning();
 
     set_up_solver_parameters();
     set_up_monitors();
@@ -129,8 +127,6 @@ LinearProblem::allocate_objects()
 
     PETSC_CHECK(DMCreateMatrix(dm, &this->A));
     PETSC_CHECK(PetscObjectSetName((PetscObject) this->A, "A"));
-    // TODO: Add API for setting up preconditioners
-    this->B = this->A;
 }
 
 void
@@ -203,6 +199,11 @@ LinearProblem::run()
 
 void
 LinearProblem::set_up_matrix_properties()
+{
+}
+
+void
+LinearProblem::set_up_preconditioning()
 {
 }
 

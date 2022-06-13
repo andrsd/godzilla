@@ -148,20 +148,19 @@ protected:
     /// @param fi Field description
     void create_fe(FieldInfo & fi);
 
-    /// Set up finite element objects
-    void set_up_fes();
+    /// Set up discretization system
+    void set_up_ds();
 
     /// Set up quadrature
     virtual void set_up_quadrature();
-
-    /// Inform PETSc to about all fields in this problem
-    void set_up_problem();
 
     /// Set up initial conditions
     virtual void set_up_initial_conditions();
 
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
+
+    virtual void set_up_field_null_space(DM dm);
 
     /// Compute auxiliary fields
     ///

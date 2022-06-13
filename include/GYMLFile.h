@@ -20,8 +20,10 @@ class GYMLFile : public LoggingInterface {
 public:
     GYMLFile(const App * app);
 
-    /// parse the YML file
-    virtual void parse(const std::string & file_name);
+    /// Parse the YML file
+    ///
+    /// @return `true` if successful, otherwise `false`
+    virtual bool parse(const std::string & file_name);
     /// create
     virtual void create();
     /// check
@@ -54,6 +56,11 @@ protected:
     /// but convert it into a vector with one element.
     template <typename T>
     std::vector<T> read_vector_value(const std::string & param_name, const YAML::Node & val_node);
+
+    /// Read a map from a YAML file
+    ///
+    template <typename K, typename V>
+    std::map<K, V> read_map_value(const std::string & param_name, const YAML::Node & val_node);
 
     void check_params(const InputParameters * params,
                       const std::string & name,

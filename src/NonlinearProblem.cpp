@@ -72,10 +72,10 @@ NonlinearProblem::valid_params()
 NonlinearProblem::NonlinearProblem(const InputParameters & parameters) :
     Problem(parameters),
     snes(NULL),
+    ksp(NULL),
     x(NULL),
     r(NULL),
     J(NULL),
-    Jp(NULL),
     line_search_type(get_param<std::string>("line_search")),
     nl_rel_tol(get_param<PetscReal>("nl_rel_tol")),
     nl_abs_tol(get_param<PetscReal>("nl_abs_tol")),
@@ -99,8 +99,6 @@ NonlinearProblem::~NonlinearProblem()
         VecDestroy(&this->r);
     if (this->x)
         VecDestroy(&this->x);
-    if ((this->Jp != this->J) && (this->Jp))
-        MatDestroy(&this->Jp);
     if (this->J)
         MatDestroy(&this->J);
 }
@@ -126,6 +124,7 @@ NonlinearProblem::create()
     init();
     allocate_objects();
     set_up_matrix_properties();
+    set_up_preconditioning();
 
     set_up_solver_parameters();
     set_up_line_search();
@@ -143,6 +142,7 @@ NonlinearProblem::init()
     PETSC_CHECK(SNESCreate(get_comm(), &this->snes));
     PETSC_CHECK(SNESSetDM(this->snes, dm));
     PETSC_CHECK(DMSetApplicationContext(dm, this));
+    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
 }
 
 void
@@ -165,9 +165,6 @@ NonlinearProblem::allocate_objects()
 
     PETSC_CHECK(DMCreateMatrix(dm, &this->J));
     PETSC_CHECK(PetscObjectSetName((PetscObject) this->J, "Jac"));
-
-    // full newton
-    this->Jp = this->J;
 }
 
 void
@@ -197,7 +194,7 @@ NonlinearProblem::set_up_callbacks()
 {
     _F_;
     PETSC_CHECK(SNESSetFunction(this->snes, this->r, __compute_residual, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->Jp, __compute_jacobian, this));
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, __compute_jacobian, this));
 }
 
 void
@@ -205,10 +202,7 @@ NonlinearProblem::set_up_monitors()
 {
     _F_;
     PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, 0));
-
-    KSP ksp;
-    PETSC_CHECK(SNESGetKSP(this->snes, &ksp));
-    PETSC_CHECK(KSPMonitorSet(ksp, __ksp_monitor, this, 0));
+    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor, this, 0));
 }
 
 void
@@ -223,14 +217,12 @@ NonlinearProblem::set_up_solver_parameters()
                                   -1));
     PETSC_CHECK(SNESSetFromOptions(this->snes));
 
-    KSP ksp;
-    PETSC_CHECK(SNESGetKSP(this->snes, &ksp));
-    PETSC_CHECK(KSPSetTolerances(ksp,
+    PETSC_CHECK(KSPSetTolerances(this->ksp,
                                  this->lin_rel_tol,
                                  this->lin_abs_tol,
                                  PETSC_DEFAULT,
                                  this->lin_max_iter));
-    PETSC_CHECK(KSPSetFromOptions(ksp));
+    PETSC_CHECK(KSPSetFromOptions(this->ksp));
 }
 
 PetscErrorCode
@@ -279,6 +271,11 @@ NonlinearProblem::run()
 
 void
 NonlinearProblem::set_up_matrix_properties()
+{
+}
+
+void
+NonlinearProblem::set_up_preconditioning()
 {
 }
 

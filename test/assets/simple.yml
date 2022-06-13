@@ -10,6 +10,14 @@ problem:
   arr_d: 2.
   arr_i: 5
   arr_str: "xyz"
+  consts: {
+    c1: 2,
+    c2: 1
+  }
+  fns: {
+    f1: [ 'x^2', 'y + 1' ],
+    f2: [ 'x' ]
+  }
 output:
   vtk:
     type: VTKOutput

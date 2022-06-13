@@ -68,8 +68,7 @@ void
 L2Diff::evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[])
 {
     _F_;
-    for (PetscInt i = 0; i < nc; i++)
-        u[i] = FunctionInterface::evaluate(i, dim, time, x);
+    FunctionInterface::evaluate(dim, time, x, nc, u);
 }
 
 } // namespace godzilla

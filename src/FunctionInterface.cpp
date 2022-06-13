@@ -33,45 +33,44 @@ FunctionInterface::FunctionInterface(const InputParameters & params) :
 {
     this->num_comps = this->expression.size();
     assert(this->num_comps >= 1);
-    this->evalr.resize(this->num_comps);
-    this->evalr_t.resize(this->expression_t.size());
 }
 
 void
 FunctionInterface::create()
 {
     _F_;
-    for (unsigned int i = 0; i < this->num_comps; i++)
-        this->evalr[i].create(this->expression[i]);
-    for (unsigned int i = 0; i < this->evalr_t.size(); i++)
-        this->evalr_t[i].create(this->expression_t[i]);
+    this->evalr.create(this->expression);
+    this->evalr_t.create(this->expression_t);
 
     assert(this->fi_app != nullptr);
     Problem * p = this->fi_app->get_problem();
     if (p) {
         const auto & funcs = p->get_functions();
-        for (unsigned int i = 0; i < this->num_comps; i++) {
-            for (auto & f : funcs)
-                this->evalr[i].register_function(f);
-        }
-        for (unsigned int i = 0; i < this->evalr_t.size(); i++) {
-            for (auto & f : funcs)
-                this->evalr_t[i].register_function(f);
+        for (auto & f : funcs) {
+            this->evalr.register_function(f);
+            this->evalr_t.register_function(f);
         }
     }
 }
 
-PetscReal
-FunctionInterface::evaluate(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[])
+bool
+FunctionInterface::evaluate(PetscInt dim,
+                            PetscReal time,
+                            const PetscReal x[],
+                            PetscInt nc,
+                            PetscReal u[])
 {
-    return this->evalr[idx].evaluate(dim, time, x);
+    return this->evalr.evaluate(dim, time, x, nc, u);
 }
 
-PetscReal
-FunctionInterface::evaluate_t(unsigned int idx, PetscInt dim, PetscReal time, const PetscReal x[])
+bool
+FunctionInterface::evaluate_t(PetscInt dim,
+                              PetscReal time,
+                              const PetscReal x[],
+                              PetscInt nc,
+                              PetscReal u[])
 {
-    assert(idx < this->evalr_t.size());
-    return this->evalr_t[idx].evaluate(dim, time, x);
+    return this->evalr_t.evaluate(dim, time, x, nc, u);
 }
 
 } // namespace godzilla

@@ -29,6 +29,7 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const InputParameters & p
 ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
 {
     this->snes = nullptr;
+    this->ksp = nullptr;
 }
 
 void
@@ -37,6 +38,7 @@ ImplicitFENonlinearProblem::init()
     _F_;
     TransientProblemInterface::init();
     PETSC_CHECK(TSGetSNES(this->ts, &this->snes));
+    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
 
     FEProblemInterface::init();
 }

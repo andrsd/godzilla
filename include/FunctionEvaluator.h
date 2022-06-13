@@ -18,6 +18,17 @@ public:
     /// @param expr Function expression to be evaluated
     void create(const std::string & expr);
 
+    /// Build the evaluator object
+    ///
+    /// @param expressions Function expressions (one per component) to be evaluated
+    void create(const std::vector<std::string> & expressions);
+
+    /// Define a constant
+    ///
+    /// @param name Name of the constant
+    /// @param value Value
+    void define_constant(const std::string & name, PetscReal value);
+
     /// Register user function with function evaluator
     ///
     /// @param fn Fuction to register
@@ -30,11 +41,11 @@ public:
     /// @param x Spatial location
     PetscReal evaluate(PetscInt dim, PetscReal time, const PetscReal x[]);
 
+    bool evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscReal u[]);
+
 protected:
     /// Underlying muParser object
     mu::Parser parser;
-    /// Function expression to be evaluated
-    std::string fn_expression;
 };
 
 } // namespace godzilla

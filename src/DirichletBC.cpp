@@ -55,8 +55,7 @@ DirichletBC::evaluate(PetscInt dim,
                       PetscScalar u[])
 {
     _F_;
-    for (PetscInt i = 0; i < nc; i++)
-        u[i] = FunctionInterface::evaluate(i, dim, time, x);
+    FunctionInterface::evaluate(dim, time, x, nc, u);
 }
 
 void
@@ -67,8 +66,7 @@ DirichletBC::evaluate_t(PetscInt dim,
                         PetscScalar u[])
 {
     _F_;
-    for (PetscInt i = 0; i < nc; i++)
-        u[i] = FunctionInterface::evaluate_t(i, dim, time, x);
+    FunctionInterface::evaluate_t(dim, time, x, nc, u);
 }
 
 void
@@ -85,7 +83,7 @@ DirichletBC::set_up_callback()
                                    get_num_components(),
                                    get_num_components() == 0 ? NULL : get_components().data(),
                                    (void (*)(void)) __essential_boundary_condition_function,
-                                   this->evalr_t.size() > 0
+                                   this->expression_t.size() > 0
                                        ? (void (*)(void)) __essential_boundary_condition_function_t
                                        : nullptr,
                                    (void *) this,

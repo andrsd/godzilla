@@ -38,11 +38,10 @@ void
 FunctionIC::evaluate(PetscInt dim,
                      PetscReal time,
                      const PetscReal x[],
-                     PetscInt Nc,
+                     PetscInt nc,
                      PetscScalar u[])
 {
-    for (PetscInt i = 0; i < Nc; i++)
-        u[i] = FunctionInterface::evaluate(i, dim, time, x);
+    FunctionInterface::evaluate(dim, time, x, nc, u);
 }
 
 } // namespace godzilla
