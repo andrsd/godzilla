@@ -42,6 +42,8 @@ public:
 protected:
     virtual void distribute() override;
 
+    void create_face_set(PetscInt id, const std::string & name);
+
     /// Mesh partitioner
     PetscPartitioner partitioner;
 

@@ -90,4 +90,19 @@ UnstructuredMesh::is_simplex() const
     return simplex == PETSC_TRUE;
 }
 
+void
+UnstructuredMesh::create_face_set(PetscInt id, const std::string & name)
+{
+    _F_;
+    DMLabel face_sets_label = get_label("Face Sets");
+    IS is;
+    PETSC_CHECK(DMLabelGetStratumIS(face_sets_label, id, &is));
+    PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
+    DMLabel label = get_label(name);
+    if (is)
+        PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
+    PETSC_CHECK(ISDestroy(&is));
+    PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
+}
+
 } // namespace godzilla

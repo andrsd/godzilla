@@ -71,24 +71,9 @@ LineMesh::create_dm()
                                     &this->dm));
 
     // create user-friendly names for sides
-    DMLabel face_sets_label = get_label("Face Sets");
-
     const char * side_name[] = { "left", "right" };
-    for (unsigned int i = 0; i < 2; i++) {
-        IS is;
-        PETSC_CHECK(DMLabelGetStratumIS(face_sets_label, i + 1, &is));
-
-        PETSC_CHECK(DMCreateLabel(this->dm, side_name[i]));
-
-        DMLabel label = get_label(side_name[i]);
-
-        if (is != nullptr)
-            PETSC_CHECK(DMLabelSetStratumIS(label, i + 1, is));
-
-        PETSC_CHECK(ISDestroy(&is));
-
-        PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
-    }
+    for (unsigned int i = 0; i < 2; i++)
+        create_face_set(i + 1, side_name[i]);
 }
 
 } // namespace godzilla
