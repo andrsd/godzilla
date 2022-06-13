@@ -16,7 +16,9 @@ static const unsigned int MAX_DATE_TIME = 255;
 registerObject(ExodusIIOutput);
 
 static void
-write_variable_names(int exoid, ex_entity_type obj_type, const std::vector<std::string> & var_names)
+exo_write_variable_names(int exoid,
+                         ex_entity_type obj_type,
+                         const std::vector<std::string> & var_names)
 {
     _F_;
 
@@ -29,6 +31,19 @@ write_variable_names(int exoid, ex_entity_type obj_type, const std::vector<std::
     for (int i = 0; i < n_vars; i++)
         names[i] = var_names[i].c_str();
     ex_put_variable_names(exoid, obj_type, n_vars, (char **) names);
+}
+
+static void
+exo_write_side_set_names(int exoid, const std::vector<std::string> & sset_names)
+{
+    int n_sset = sset_names.size();
+    if (n_sset == 0)
+        return;
+
+    const char * names[n_sset];
+    for (int i = 0; i < n_sset; i++)
+        names[i] = sset_names[i].c_str();
+    ex_put_names(exoid, EX_SIDE_SET, (char **) names);
 }
 
 /// Add variable names into the list of names
@@ -325,6 +340,31 @@ ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type) const
     }
 }
 
+const PetscInt *
+ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type) const
+{
+    static const PetscInt seg_ordering[] = { 1, 2 };
+    static const PetscInt tri_ordering[] = { 1, 2, 3 };
+    static const PetscInt quad_ordering[] = { 1, 2, 3, 4 };
+    static const PetscInt tet_ordering[] = { 1, 2, 3, 4 };
+    static const PetscInt hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
+
+    switch (elem_type) {
+    case DM_POLYTOPE_SEGMENT:
+        return seg_ordering;
+    case DM_POLYTOPE_TRIANGLE:
+        return tri_ordering;
+    case DM_POLYTOPE_QUADRILATERAL:
+        return quad_ordering;
+    case DM_POLYTOPE_TETRAHEDRON:
+        return tet_ordering;
+    case DM_POLYTOPE_HEXAHEDRON:
+        return hex_ordering;
+    default:
+        error("Unsupported type.");
+    }
+}
+
 void
 ExodusIIOutput::write_elements()
 {
@@ -334,7 +374,7 @@ ExodusIIOutput::write_elements()
     int n_cells_sets = 0;
     PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
 
-    if (n_cells_sets > 0) {
+    if (n_cells_sets > 1) {
         // TODO: write element blocks
         error("Support for mesh blocks is not implemented yet.");
     }
@@ -445,12 +485,14 @@ ExodusIIOutput::write_face_sets()
         return;
 
     DM dm = this->mesh->get_dm();
+    std::vector<std::string> fs_names;
 
     DMLabel face_sets_label;
     PETSC_CHECK(DMGetLabel(dm, "Face Sets", &face_sets_label));
 
     int n_side_sets;
     PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_side_sets));
+    fs_names.resize(n_side_sets);
 
     IS face_sets_is;
     PETSC_CHECK(DMLabelGetValueIS(face_sets_label, &face_sets_is));
@@ -484,6 +526,9 @@ ExodusIIOutput::write_face_sets()
                 DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
             PetscInt el = points[2];
+            DMPolytopeType polytope_type;
+            PETSC_CHECK(DMPlexGetCellType(dm, el, &polytope_type));
+            const PetscInt * side_ordering = get_elem_side_ordering(polytope_type);
             elem_list[i] = el + 1;
 
             PETSC_CHECK(
@@ -495,7 +540,7 @@ ExodusIIOutput::write_face_sets()
 
             for (PetscInt j = 1; j < num_points; ++j) {
                 if (points[j * 2] == faces[i]) {
-                    side_list[i] = j;
+                    side_list[i] = side_ordering[j - 1];
                     break;
                 }
             }
@@ -511,10 +556,12 @@ ExodusIIOutput::write_face_sets()
         PETSC_CHECK(ISRestoreIndices(stratum_is, &faces));
         PETSC_CHECK(ISDestroy(&stratum_is));
 
-        // TODO: set the face name
+        fs_names[fs] = this->mesh->get_face_set_name(face_set_idx[fs]);
     }
     PETSC_CHECK(ISRestoreIndices(face_sets_is, &face_set_idx));
     PETSC_CHECK(ISDestroy(&face_sets_is));
+
+    exo_write_side_set_names(this->exoid, fs_names);
 }
 
 void
@@ -539,13 +586,13 @@ ExodusIIOutput::write_all_variable_names()
             this->nodal_var_fids.push_back(fid);
         }
     }
-    write_variable_names(this->exoid, EX_NODAL, nodal_var_names);
-    write_variable_names(this->exoid, EX_ELEM_BLOCK, elem_var_names);
+    exo_write_variable_names(this->exoid, EX_NODAL, nodal_var_names);
+    exo_write_variable_names(this->exoid, EX_ELEM_BLOCK, elem_var_names);
 
     std::vector<std::string> global_var_names;
     for (auto & name : this->global_var_names)
         global_var_names.push_back(name);
-    write_variable_names(this->exoid, EX_GLOBAL, global_var_names);
+    exo_write_variable_names(this->exoid, EX_GLOBAL, global_var_names);
 }
 
 void

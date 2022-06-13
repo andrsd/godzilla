@@ -39,14 +39,25 @@ public:
     /// @return true if cell is a simplex, otherwise false
     virtual bool is_simplex() const;
 
+    /// Get face set name
+    ///
+    /// @param id The id of the face set
+    /// @return Facet name
+    const std::string & get_face_set_name(PetscInt id) const;
+
 protected:
     virtual void distribute() override;
+
+    void create_face_set(PetscInt id, const std::string & name);
 
     /// Mesh partitioner
     PetscPartitioner partitioner;
 
     /// Partition overlap for mesh partitioning
     PetscInt partition_overlap;
+
+    /// Face set names
+    std::map<PetscInt, std::string> face_set_names;
 
 public:
     static InputParameters valid_params();
