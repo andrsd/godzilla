@@ -50,6 +50,7 @@ void
 FENonlinearProblem::set_up_initial_guess()
 {
     _F_;
+    lprintf(9, "Setting initial guess");
     FEProblemInterface::set_up_initial_guess();
 }
 

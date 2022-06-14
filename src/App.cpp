@@ -164,6 +164,7 @@ void
 App::check_integrity()
 {
     _F_;
+    lprintf(9, "Checking integrity");
     this->gyml->check();
     if (this->log->get_num_entries() > 0) {
         this->log->print();
@@ -175,6 +176,7 @@ void
 App::run_problem()
 {
     _F_;
+    lprintf(9, "Running");
     Problem * p = this->gyml->get_problem();
     assert(p != nullptr);
     p->run();
