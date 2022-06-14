@@ -7,12 +7,15 @@
 namespace godzilla {
 
 class Object;
+class App;
 
 /// Interface for printing on terminal
 ///
 class PrintInterface {
 public:
     PrintInterface(const Object * obj);
+    PrintInterface(const App * app);
+    PrintInterface(MPI_Comm comm, const unsigned int & verbosity_level, const std::string & prefix);
 
 protected:
     /// Print a message on a terminal
@@ -34,7 +37,7 @@ protected:
 
 private:
     /// Processor ID
-    const PetscMPIInt & proc_id;
+    PetscMPIInt proc_id;
     /// Verbosity level
     const unsigned int & verbosity_level;
     /// Prefix to print

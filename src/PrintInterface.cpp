@@ -13,4 +13,21 @@ PrintInterface::PrintInterface(const Object * obj) :
     _F_;
 }
 
+PrintInterface::PrintInterface(const App * app) :
+    proc_id(app->get_comm_rank()),
+    verbosity_level(app->get_verbosity_level()),
+    prefix(app->get_name())
+{
+    _F_;
+}
+
+PrintInterface::PrintInterface(MPI_Comm comm,
+                               const unsigned int & verbosity_level,
+                               const std::string & prefix) :
+    verbosity_level(verbosity_level),
+    prefix(prefix)
+{
+    MPI_Comm_rank(comm, &this->proc_id);
+}
+
 } // namespace godzilla

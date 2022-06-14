@@ -26,6 +26,7 @@ type_name()
 namespace godzilla {
 
 GYMLFile::GYMLFile(const App * app) :
+    PrintInterface(app),
     LoggingInterface(const_cast<App *>(app)->get_logger()),
     app(app),
     mesh(nullptr),

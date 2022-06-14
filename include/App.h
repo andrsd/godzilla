@@ -5,13 +5,14 @@
 #include "InputParameters.h"
 #include "Factory.h"
 #include "Logger.h"
+#include "PrintInterface.h"
 
 namespace godzilla {
 
 class Problem;
 class GYMLFile;
 
-class App {
+class App : public PrintInterface {
 public:
     /// Build and application object
     ///
@@ -21,6 +22,11 @@ public:
     virtual ~App();
 
     Logger * get_logger() const;
+
+    /// Get Application name
+    ///
+    /// @return Application name
+    virtual const std::string & get_name() const;
 
     /// @return Get problem this application is representing
     virtual Problem * get_problem() const;
@@ -103,6 +109,9 @@ protected:
 
     /// Run the problem build via `build_from_gyml`
     virtual void run_problem();
+
+    /// Application name
+    std::string name;
 
     /// MPI communicators
     MPI_Comm comm;
