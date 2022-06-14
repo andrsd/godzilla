@@ -17,6 +17,8 @@ protected:
     virtual void set_up_matrix_properties() override;
     virtual void set_up_field_null_space(DM dm) override;
     virtual void set_up_preconditioning() override;
+    void set_up_pc_fieldsplit(PC pc);
+    void set_up_pc_lu(PC pc);
 
     /// Reynolds number
     const PetscReal & Re;

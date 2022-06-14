@@ -350,6 +350,14 @@ NSIncompressibleProblem::set_up_preconditioning()
 
     PC pc;
     PETSC_CHECK(KSPGetPC(this->ksp, &pc));
+    // set_up_pc_fieldsplit(pc);
+    set_up_pc_lu(pc);
+}
+
+void
+NSIncompressibleProblem::set_up_pc_fieldsplit(PC pc)
+{
+    _F_;
 
     PETSC_CHECK(PCSetType(pc, PCFIELDSPLIT));
     PETSC_CHECK(PCFieldSplitSetType(pc, PC_COMPOSITE_SCHUR));
@@ -395,4 +403,14 @@ NSIncompressibleProblem::set_up_preconditioning()
     PETSC_CHECK(PCSetType(pc_press, PCJACOBI));
 
     PetscFree(sub_ksp);
+}
+
+void
+NSIncompressibleProblem::set_up_pc_lu(PC pc)
+{
+    _F_;
+
+    PETSC_CHECK(PCSetType(pc, PCLU));
+    PETSC_CHECK(PCFactorSetShiftType(pc, MAT_SHIFT_NONZERO));
+    PETSC_CHECK(PCFactorSetShiftAmount(pc, 1e-8));
 }
