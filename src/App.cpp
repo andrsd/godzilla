@@ -12,6 +12,8 @@
 namespace godzilla {
 
 App::App(const std::string & app_name, MPI_Comm comm) :
+    PrintInterface(comm, this->verbosity_level, app_name),
+    name(app_name),
     comm(comm),
     args(app_name),
     input_file_arg("i", "input-file", "Input file to execute", false, "", "string"),
@@ -36,6 +38,13 @@ App::~App()
     delete this->gyml;
     delete this->log;
     Factory::destroy();
+}
+
+const std::string &
+App::get_name() const
+{
+    _F_;
+    return this->name;
 }
 
 Logger *
@@ -155,6 +164,7 @@ void
 App::check_integrity()
 {
     _F_;
+    lprintf(9, "Checking integrity");
     this->gyml->check();
     if (this->log->get_num_entries() > 0) {
         this->log->print();
@@ -166,6 +176,7 @@ void
 App::run_problem()
 {
     _F_;
+    lprintf(9, "Running");
     Problem * p = this->gyml->get_problem();
     assert(p != nullptr);
     p->run();

@@ -72,6 +72,7 @@ void
 ImplicitFENonlinearProblem::solve()
 {
     _F_;
+    lprintf(9, "Solving");
     TransientProblemInterface::solve(this->x);
 }
 

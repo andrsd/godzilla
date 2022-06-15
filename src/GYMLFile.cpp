@@ -26,6 +26,7 @@ type_name()
 namespace godzilla {
 
 GYMLFile::GYMLFile(const App * app) :
+    PrintInterface(app),
     LoggingInterface(const_cast<App *>(app)->get_logger()),
     app(app),
     mesh(nullptr),
@@ -38,6 +39,7 @@ bool
 GYMLFile::parse(const std::string & file_name)
 {
     _F_;
+    lprintf(9, "Parsing input file '%s'", file_name);
     try {
         this->root = YAML::LoadFile(file_name);
         return true;
@@ -66,6 +68,7 @@ void
 GYMLFile::create()
 {
     _F_;
+    lprintf(9, "Creating objects");
     for (auto & obj : this->objects)
         obj->create();
 }
@@ -93,6 +96,7 @@ void
 GYMLFile::build()
 {
     _F_;
+    lprintf(9, "Allocating objects");
     build_mesh();
     build_problem();
     build_functions();
@@ -112,6 +116,8 @@ GYMLFile::build_functions()
     if (!funcs_node)
         return;
 
+    lprintf(9, "- functions");
+
     for (const auto & it : funcs_node) {
         YAML::Node fn_node = it.first;
         std::string name = fn_node.as<std::string>();
@@ -128,6 +134,7 @@ void
 GYMLFile::build_mesh()
 {
     _F_;
+    lprintf(9, "- mesh");
     InputParameters * params = build_params(this->root, "mesh");
     const std::string & class_name = params->get<std::string>("_type");
     this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
@@ -138,6 +145,7 @@ void
 GYMLFile::build_problem()
 {
     _F_;
+    lprintf(9, "- problem");
     InputParameters * params = build_params(this->root, "problem");
     const std::string & class_name = params->get<std::string>("_type");
     params->set<const Mesh *>("_mesh") = this->mesh;
@@ -160,6 +168,8 @@ GYMLFile::build_partitioner()
     if (!part_node)
         return;
 
+    lprintf(9, "- partitioner");
+
     YAML::Node name = part_node["name"];
     if (name)
         mesh->set_partitioner_type(name.as<std::string>());
@@ -176,6 +186,8 @@ GYMLFile::build_auxiliary_fields()
     YAML::Node auxs_root_node = this->root["auxs"];
     if (!auxs_root_node)
         return;
+
+    lprintf(9, "- auxiliary fields");
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
@@ -203,6 +215,8 @@ GYMLFile::build_initial_conditions()
     if (!ics_root_node)
         return;
 
+    lprintf(9, "- initial conditions");
+
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
         log_error("Supplied problem type '%s' does not support initial conditions.",
@@ -228,6 +242,8 @@ GYMLFile::build_boundary_conditions()
     YAML::Node bcs_root_node = this->root["bcs"];
     if (!bcs_root_node)
         return;
+
+    lprintf(9, "- boundary conditions");
 
     FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
@@ -255,6 +271,8 @@ GYMLFile::build_postprocessors()
     if (!pps_root_node)
         return;
 
+    lprintf(9, "- post-processors");
+
     for (const auto & it : pps_root_node) {
         YAML::Node pps_node = it.first;
         std::string name = pps_node.as<std::string>();
@@ -274,6 +292,8 @@ GYMLFile::build_outputs()
     YAML::Node output_root_node = this->root["output"];
     if (!output_root_node)
         return;
+
+    lprintf(9, "- outputs");
 
     for (const auto & it : output_root_node) {
         YAML::Node output_node = it.first;

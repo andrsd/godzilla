@@ -149,6 +149,7 @@ void
 NonlinearProblem::set_up_initial_guess()
 {
     _F_;
+    lprintf(9, "Setting initial guess");
     PETSC_CHECK(VecSet(this->x, 0.));
 }
 
@@ -243,6 +244,7 @@ void
 NonlinearProblem::solve()
 {
     _F_;
+    lprintf(9, "Solving");
     PETSC_CHECK(SNESSolve(this->snes, NULL, this->x));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }

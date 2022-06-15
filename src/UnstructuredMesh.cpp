@@ -26,6 +26,16 @@ UnstructuredMesh::~UnstructuredMesh()
     PETSC_CHECK(PetscPartitionerDestroy(&this->partitioner));
 }
 
+void
+UnstructuredMesh::create()
+{
+    _F_;
+    Mesh::create();
+    lprintf(9, "Information:");
+    lprintf(9, "- vertices: %d", get_num_vertices());
+    lprintf(9, "- elements: %d", get_num_elements());
+}
+
 PetscInt
 UnstructuredMesh::get_num_vertices() const
 {
