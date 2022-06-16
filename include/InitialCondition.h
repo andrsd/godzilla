@@ -2,6 +2,7 @@
 
 #include "Object.h"
 #include "PrintInterface.h"
+#include "Types.h"
 
 namespace godzilla {
 
@@ -17,7 +18,12 @@ public:
     virtual PetscInt get_field_id() const;
     virtual PetscInt get_num_components() const = 0;
 
-protected:
+    /// Get pointer to the C function that will be passed into PETSc API
+    virtual PetscFunc * get_function();
+
+    /// Get the pointer to the context that will be passed into PETSc API
+    virtual void * get_context();
+
     /// Evaluate the initial condition
     ///
     /// @param dim The spatial dimension
@@ -28,6 +34,7 @@ protected:
     virtual void
     evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
 
+protected:
     /// FE problem this object is part of
     const FEProblemInterface * fepi;
 
@@ -36,20 +43,6 @@ protected:
 
 public:
     static InputParameters valid_params();
-
-    friend PetscErrorCode __initial_condition_function(PetscInt dim,
-                                                       PetscReal time,
-                                                       const PetscReal x[],
-                                                       PetscInt Nc,
-                                                       PetscScalar u[],
-                                                       void * ctx);
 };
-
-PetscErrorCode __initial_condition_function(PetscInt dim,
-                                            PetscReal time,
-                                            const PetscReal x[],
-                                            PetscInt Nc,
-                                            PetscScalar u[],
-                                            void * ctx);
 
 } // namespace godzilla

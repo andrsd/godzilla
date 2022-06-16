@@ -39,7 +39,7 @@ TEST(FunctionICTest, api)
     PetscReal x[] = { 1, 2, 3 };
     PetscInt Nc = 1;
     PetscScalar u[] = { 0 };
-    __initial_condition_function(dim, time, x, Nc, u, &obj);
+    obj.evaluate(dim, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 12);
 }

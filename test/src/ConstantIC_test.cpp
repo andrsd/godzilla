@@ -22,7 +22,7 @@ TEST(ConstantICTest, api)
     PetscReal x[] = { 0 };
     PetscInt Nc = 3;
     PetscScalar u[] = { 0, 0, 0 };
-    __initial_condition_function(dim, time, x, Nc, u, &obj);
+    obj.evaluate(dim, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 3);
     EXPECT_EQ(u[1], 4);
