@@ -18,6 +18,8 @@ problem:
     f1: [ 'x^2', 'y + 1' ],
     f2: [ 'x' ]
   }
+  bool1: yes
+  bool2: false
 output:
   vtk:
     type: VTKOutput

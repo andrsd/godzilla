@@ -1,13 +1,84 @@
+#include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "GYMLFile_test.h"
 #include "yaml-cpp/yaml.h"
 #include "GodzillaConfig.h"
 #include "LineMesh.h"
 #include "PiecewiseLinear.h"
 #include "Postprocessor.h"
 #include "FEProblemInterface.h"
+#include "GYMLFile.h"
+#include "Problem.h"
 
 using namespace godzilla;
+
+class MockGYMLFile : public GYMLFile {
+public:
+    explicit MockGYMLFile(const App * app) : GYMLFile(app) {}
+
+    MOCK_METHOD(void, build_mesh, (), ());
+    MOCK_METHOD(void, build_problem, (), ());
+};
+
+///
+
+class GTestProblem : public Problem {
+public:
+    explicit GTestProblem(const InputParameters & params) : Problem(params)
+    {
+        DMPlexCreateBoxMesh(get_comm(),
+                            1,
+                            PETSC_TRUE,
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL,
+                            PETSC_FALSE,
+                            &this->dm);
+        DMSetUp(this->dm);
+        DMCreateGlobalVector(this->dm, &this->x);
+    }
+
+    virtual ~GTestProblem()
+    {
+        VecDestroy(&this->x);
+        DMDestroy(&this->dm);
+    }
+
+    DM
+    get_dm() const override
+    {
+        return this->dm;
+    }
+    Vec
+    get_solution_vector() const override
+    {
+        return this->x;
+    }
+    void
+    create() override
+    {
+    }
+    void
+    solve() override
+    {
+    }
+    void
+    run() override
+    {
+    }
+    bool
+    converged() override
+    {
+        return false;
+    }
+
+protected:
+    DM dm;
+    Vec x;
+
+public:
+    static InputParameters valid_params();
+};
 
 registerObject(GTestProblem);
 
@@ -25,9 +96,23 @@ GTestProblem::valid_params()
     params.add_param<std::map<std::string, PetscReal>>("consts", "map<str, real> doco");
     params.add_param<std::map<std::string, std::vector<std::string>>>("fns",
                                                                       "map<str, vec<str>> doco");
+    params.add_param<bool>("bool1", false, "False bool param");
+    params.add_param<bool>("bool2", true, "True bool param");
     params.add_private_param<const Mesh *>("_mesh", nullptr);
     return params;
 }
+
+///
+
+class GYMLFileTest : public GodzillaAppTest {
+protected:
+    MockGYMLFile *
+    gymlFile()
+    {
+        auto f = new MockGYMLFile(this->app);
+        return f;
+    }
+};
 
 TEST_F(GYMLFileTest, parse_empty)
 {
@@ -140,6 +225,17 @@ TEST_F(GYMLFileTest, build)
 
     auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
+
+    EXPECT_EQ(problem->get_param<std::string>("str"), "input_str");
+    EXPECT_EQ(problem->get_param<int>("i"), -4321);
+    EXPECT_EQ(problem->get_param<unsigned int>("ui"), 7890);
+    EXPECT_EQ(problem->get_param<double>("d"), 34.567);
+    EXPECT_THAT(problem->get_param<std::vector<double>>("arr_d"), testing::ElementsAre(2.));
+    EXPECT_THAT(problem->get_param<std::vector<int>>("arr_i"), testing::ElementsAre(5));
+    EXPECT_THAT(problem->get_param<std::vector<std::string>>("arr_str"),
+                testing::ElementsAre("xyz"));
+    EXPECT_EQ(problem->get_param<bool>("bool1"), true);
+    EXPECT_EQ(problem->get_param<bool>("bool2"), false);
 }
 
 TEST_F(GYMLFileTest, funcs)
@@ -333,4 +429,24 @@ TEST_F(GYMLFileTest, malformed)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Failed to parse the input file: error at line 9, column 7: "
                                    "end of map flow not found"));
+}
+
+TEST_F(GYMLFileTest, wrong_type_bool)
+{
+    testing::internal::CaptureStderr();
+
+    GYMLFile file(this->app);
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/wrong_type_bool.yml");
+    EXPECT_TRUE(file.parse(file_name));
+    file.build();
+    this->app->check_integrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::AllOf(
+            testing::HasSubstr(
+                "Parameter 'bool1' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'."),
+            testing::HasSubstr(
+                "Parameter 'bool2' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.")));
 }

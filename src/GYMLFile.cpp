@@ -12,6 +12,8 @@
 #include "Postprocessor.h"
 #include "Output.h"
 #include "CallStack.h"
+#include "Validation.h"
+#include "Utils.h"
 #include "assert.h"
 #include "boost/algorithm/string/join.hpp"
 #include "yaml-cpp/node/iterator.h"
@@ -382,7 +384,32 @@ GYMLFile::set_parameter_from_yml(InputParameters * params,
         else if (param_type == type_name<std::map<std::string, PetscReal>>())
             params->set<std::map<std::string, PetscReal>>(param_name) =
                 read_map_value<std::string, PetscReal>(param_name, val);
+        // bools
+        else if (param_type == type_name<bool>())
+            params->set<bool>(param_name) = read_bool_value(param_name, val);
     }
+}
+
+bool
+GYMLFile::read_bool_value(const std::string & param_name, const YAML::Node & val_node)
+{
+    _F_;
+    bool val;
+    if (val_node.IsScalar()) {
+        std::string str = utils::to_lower(val_node.as<std::string>());
+        if (validation::in(str, { "on", "true", "yes" }))
+            val = true;
+        else if (validation::in(str, { "off", "false", "no" }))
+            val = false;
+        else
+            log_error("Parameter '%s' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.",
+                      param_name);
+    }
+    else
+        log_error("Parameter '%s' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.",
+                  param_name);
+
+    return val;
 }
 
 template <typename T>
