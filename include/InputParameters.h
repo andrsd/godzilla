@@ -144,8 +144,6 @@ public:
     /// an optional default value.
     template <typename T>
     void add_private_param(const std::string & name, const T & value);
-    template <typename T>
-    void add_private_param(const std::string & name);
     ///@}
 
     /// Returns a boolean indicating whether the specified parameter is required or not
@@ -301,20 +299,6 @@ InputParameters::add_param(const std::string & name,
         param->doc_string = doc_string;
         param->set_by_add_param = true;
         param->valid = true;
-        this->params[name] = param;
-    }
-}
-
-template <typename T>
-void
-InputParameters::add_private_param(const std::string & name)
-{
-    if (!this->has<T>(name)) {
-        Parameter<T> * param = new Parameter<T>;
-        param->required = false;
-        param->is_private = true;
-        param->set_by_add_param = false;
-        param->valid = false;
         this->params[name] = param;
     }
 }

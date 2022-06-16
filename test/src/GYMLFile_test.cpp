@@ -25,7 +25,7 @@ GTestProblem::valid_params()
     params.add_param<std::map<std::string, PetscReal>>("consts", "map<str, real> doco");
     params.add_param<std::map<std::string, std::vector<std::string>>>("fns",
                                                                       "map<str, vec<str>> doco");
-    params.add_private_param<const Mesh *>("_mesh");
+    params.add_private_param<const Mesh *>("_mesh", nullptr);
     return params;
 }
 
