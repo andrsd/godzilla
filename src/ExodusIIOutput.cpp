@@ -124,6 +124,9 @@ ExodusIIOutput::create()
     _F_;
     FileOutput::create();
 
+    assert(this->fepi != nullptr);
+    assert(this->problem != nullptr);
+
     auto flds = this->fepi->get_field_names();
     auto & pps = this->problem->get_postprocessor_names();
 

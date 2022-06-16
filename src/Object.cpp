@@ -9,8 +9,8 @@ Object::valid_params()
 {
     InputParameters params;
     params.add_private_param<const App *>("_app", nullptr);
-    params.add_private_param<std::string>("_type");
-    params.add_private_param<std::string>("_name");
+    params.add_private_param<std::string>("_type", "");
+    params.add_private_param<std::string>("_name", "");
     return params;
 }
 

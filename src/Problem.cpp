@@ -11,7 +11,7 @@ InputParameters
 Problem::valid_params()
 {
     InputParameters params = Object::valid_params();
-    params.add_private_param<const Mesh *>("_mesh");
+    params.add_private_param<const Mesh *>("_mesh", nullptr);
     return params;
 }
 

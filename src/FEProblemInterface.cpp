@@ -32,8 +32,6 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const InputParameters 
     ds(nullptr),
     a(nullptr)
 {
-    assert(this->problem != nullptr);
-    assert(this->unstr_mesh != nullptr);
 }
 
 FEProblemInterface::~FEProblemInterface()
@@ -56,6 +54,9 @@ void
 FEProblemInterface::create()
 {
     _F_;
+    assert(this->problem != nullptr);
+    assert(this->unstr_mesh != nullptr);
+
     set_up_fields();
 
     for (auto & aux : this->auxs)

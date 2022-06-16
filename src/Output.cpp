@@ -16,7 +16,7 @@ Output::valid_params()
 {
     InputParameters params = Object::valid_params();
     params.add_param<std::vector<std::string>>("on", "When output should happen");
-    params.add_private_param<const Problem *>("_problem");
+    params.add_private_param<const Problem *>("_problem", nullptr);
     return params;
 }
 
@@ -27,7 +27,6 @@ Output::Output(const InputParameters & params) :
     on(ON_NONE)
 {
     _F_;
-    assert(this->problem != nullptr);
 }
 
 void
