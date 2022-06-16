@@ -25,6 +25,8 @@ GTestProblem::valid_params()
     params.add_param<std::map<std::string, PetscReal>>("consts", "map<str, real> doco");
     params.add_param<std::map<std::string, std::vector<std::string>>>("fns",
                                                                       "map<str, vec<str>> doco");
+    params.add_param<bool>("bool1", false, "False bool param");
+    params.add_param<bool>("bool2", true, "True bool param");
     params.add_private_param<const Mesh *>("_mesh", nullptr);
     return params;
 }
@@ -333,4 +335,24 @@ TEST_F(GYMLFileTest, malformed)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Failed to parse the input file: error at line 9, column 7: "
                                    "end of map flow not found"));
+}
+
+TEST_F(GYMLFileTest, wrong_type_bool)
+{
+    testing::internal::CaptureStderr();
+
+    GYMLFile file(this->app);
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/wrong_type_bool.yml");
+    EXPECT_TRUE(file.parse(file_name));
+    file.build();
+    this->app->check_integrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::AllOf(
+            testing::HasSubstr(
+                "Parameter 'bool1' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'."),
+            testing::HasSubstr(
+                "Parameter 'bool2' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.")));
 }

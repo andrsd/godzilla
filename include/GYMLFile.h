@@ -51,6 +51,9 @@ protected:
                                 const YAML::Node & node,
                                 const std::string & param_name);
 
+    /// Read a boolean parameter from a YAML file
+    bool read_bool_value(const std::string & param_name, const YAML::Node & val_node);
+
     /// Read a vector-valued parameter from a YAML file
     ///
     /// If users specify a vector-valued parameter as a single value, we read in the single value
