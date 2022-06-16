@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BoundaryCondition.h"
+#include "Types.h"
 
 namespace godzilla {
 
@@ -32,21 +33,17 @@ public:
     virtual void
     evaluate_t(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]) = 0;
 
+    /// Get pointer to the C function that will be passed into PETSc API
+    virtual PetscFunc * get_function();
+
+    /// Get pointer to the C function that will be passed into PETSc API for time derivatives
+    virtual PetscFunc * get_function_t();
+
+    /// Get the pointer to the context that will be passed into PETSc API
+    virtual void * get_context();
+
 public:
     static InputParameters valid_params();
 };
-
-PetscErrorCode __essential_boundary_condition_function(PetscInt dim,
-                                                       PetscReal time,
-                                                       const PetscReal x[],
-                                                       PetscInt nc,
-                                                       PetscScalar u[],
-                                                       void * ctx);
-PetscErrorCode __essential_boundary_condition_function_t(PetscInt dim,
-                                                         PetscReal time,
-                                                         const PetscReal x[],
-                                                         PetscInt nc,
-                                                         PetscScalar u[],
-                                                         void * ctx);
 
 } // namespace godzilla
