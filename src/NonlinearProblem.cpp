@@ -135,6 +135,16 @@ NonlinearProblem::create()
 }
 
 void
+NonlinearProblem::check()
+{
+    _F_;
+    Problem::check();
+    if (!validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }))
+        log_error("The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
+                  "or 'shell'.");
+}
+
+void
 NonlinearProblem::init()
 {
     _F_;
