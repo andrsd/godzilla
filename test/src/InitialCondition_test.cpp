@@ -43,7 +43,8 @@ TEST_F(InitialConditionTest, api)
     PetscReal x[1] = { 0. };
     PetscReal u[1] = { 0. };
     EXPECT_CALL(ic, evaluate);
-    EXPECT_EQ(godzilla::__initial_condition_function(1, 0., x, 1, u, &ic), 0);
+    PetscFunc * fn = ic.get_function();
+    EXPECT_EQ((*fn)(1, 0., x, 1, u, &ic), 0);
 }
 
 TEST_F(InitialConditionTest, test)

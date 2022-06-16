@@ -16,13 +16,13 @@ public:
 
     virtual PetscInt get_num_components() const override;
 
-protected:
     virtual void evaluate(PetscInt dim,
                           PetscReal time,
                           const PetscReal x[],
                           PetscInt Nc,
                           PetscScalar u[]) override;
 
+protected:
     /// Constant values -- one for each component
     const std::vector<PetscReal> & values;
 

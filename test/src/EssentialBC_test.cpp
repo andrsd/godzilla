@@ -73,8 +73,10 @@ TEST(EssentialBCTest, api)
     PetscScalar u[] = { 0 };
 
     EXPECT_CALL(bc, evaluate);
-    __essential_boundary_condition_function(1, 0, x, 1, u, &bc);
+    PetscFunc * fn = bc.get_function();
+    (*fn)(1, 0, x, 1, u, &bc);
 
     EXPECT_CALL(bc, evaluate_t);
-    __essential_boundary_condition_function_t(1, 0, x, 1, u, &bc);
+    PetscFunc * fn_t = bc.get_function_t();
+    (*fn_t)(1, 0, x, 1, u, &bc);
 }

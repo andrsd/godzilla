@@ -354,8 +354,8 @@ FEProblemInterface::set_initial_guess_from_ics()
     void * ic_ctxs[n_ics];
     for (auto & ic : this->ics) {
         PetscInt fid = ic->get_field_id();
-        ic_funcs[fid] = __initial_condition_function;
-        ic_ctxs[fid] = (void *) ic;
+        ic_funcs[fid] = ic->get_function();
+        ic_ctxs[fid] = ic->get_context();
     }
 
     DM dm = this->unstr_mesh->get_dm();

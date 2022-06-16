@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BoundaryCondition.h"
+#include "Types.h"
 
 namespace godzilla {
 
@@ -12,47 +13,6 @@ public:
     virtual DMBoundaryConditionType get_bc_type() const override;
 
 protected:
-    typedef void PetscFEBndResidualFunc(PetscInt dim,
-                                        PetscInt nf,
-                                        PetscInt nf_aux,
-                                        const PetscInt u_off[],
-                                        const PetscInt u_off_x[],
-                                        const PetscScalar u[],
-                                        const PetscScalar u_t[],
-                                        const PetscScalar u_x[],
-                                        const PetscInt a_off[],
-                                        const PetscInt a_off_x[],
-                                        const PetscScalar a[],
-                                        const PetscScalar a_t[],
-                                        const PetscScalar a_x[],
-                                        PetscReal t,
-                                        const PetscReal x[],
-                                        const PetscReal n[],
-                                        PetscInt num_constants,
-                                        const PetscScalar constants[],
-                                        PetscScalar f[]);
-
-    typedef void PetscFEBndJacobianFunc(PetscInt dim,
-                                        PetscInt nf,
-                                        PetscInt nf_aux,
-                                        const PetscInt u_off[],
-                                        const PetscInt u_off_x[],
-                                        const PetscScalar u[],
-                                        const PetscScalar u_t[],
-                                        const PetscScalar u_x[],
-                                        const PetscInt a_off[],
-                                        const PetscInt a_off_x[],
-                                        const PetscScalar a[],
-                                        const PetscScalar a_t[],
-                                        const PetscScalar a_x[],
-                                        PetscReal t,
-                                        PetscReal u_t_shift,
-                                        const PetscReal x[],
-                                        const PetscReal n[],
-                                        PetscInt num_constants,
-                                        const PetscScalar constants[],
-                                        PetscScalar g[]);
-
     /// Set residual statement for the boundary integral
     ///
     /// @param f0 Integrand for the test function term

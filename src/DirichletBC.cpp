@@ -82,11 +82,10 @@ DirichletBC::set_up_callback()
                                    this->fid,
                                    get_num_components(),
                                    get_num_components() == 0 ? NULL : get_components().data(),
-                                   (void (*)(void)) __essential_boundary_condition_function,
-                                   this->expression_t.size() > 0
-                                       ? (void (*)(void)) __essential_boundary_condition_function_t
-                                       : nullptr,
-                                   (void *) this,
+                                   (void (*)(void)) get_function(),
+                                   this->expression_t.size() > 0 ? (void (*)(void)) get_function_t()
+                                                                 : nullptr,
+                                   (void *) get_context(),
                                    NULL));
 }
 

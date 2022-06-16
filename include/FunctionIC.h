@@ -14,7 +14,6 @@ public:
     virtual void create() override;
     virtual PetscInt get_num_components() const override;
 
-protected:
     virtual void evaluate(PetscInt dim,
                           PetscReal time,
                           const PetscReal x[],

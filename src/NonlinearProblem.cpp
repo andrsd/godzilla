@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Mesh.h"
 #include "Output.h"
+#include "Validation.h"
 #include "petscds.h"
 
 namespace godzilla {
@@ -132,6 +133,16 @@ NonlinearProblem::create()
     set_up_callbacks();
 
     Problem::create();
+}
+
+void
+NonlinearProblem::check()
+{
+    _F_;
+    Problem::check();
+    if (!validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }))
+        log_error("The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
+                  "or 'shell'.");
 }
 
 void

@@ -13,6 +13,7 @@ public:
     virtual ~NonlinearProblem();
 
     virtual void create() override;
+    virtual void check() override;
     virtual void run() override;
     virtual void solve() override;
     virtual bool converged() override;

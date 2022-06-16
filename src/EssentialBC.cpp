@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-PetscErrorCode
+static PetscErrorCode
 __essential_boundary_condition_function(PetscInt dim,
                                         PetscReal time,
                                         const PetscReal x[],
@@ -19,7 +19,7 @@ __essential_boundary_condition_function(PetscInt dim,
     return 0;
 }
 
-PetscErrorCode
+static PetscErrorCode
 __essential_boundary_condition_function_t(PetscInt dim,
                                           PetscReal time,
                                           const PetscReal x[],
@@ -51,6 +51,27 @@ EssentialBC::get_bc_type() const
 {
     _F_;
     return DM_BC_ESSENTIAL;
+}
+
+PetscFunc *
+EssentialBC::get_function()
+{
+    _F_;
+    return __essential_boundary_condition_function;
+}
+
+PetscFunc *
+EssentialBC::get_function_t()
+{
+    _F_;
+    return __essential_boundary_condition_function_t;
+}
+
+void *
+EssentialBC::get_context()
+{
+    _F_;
+    return this;
 }
 
 } // namespace godzilla

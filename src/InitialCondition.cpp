@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-PetscErrorCode
+static PetscErrorCode
 __initial_condition_function(PetscInt dim,
                              PetscReal time,
                              const PetscReal x[],
@@ -67,6 +67,19 @@ InitialCondition::get_field_id() const
 {
     _F_;
     return this->fid;
+}
+
+PetscFunc *
+InitialCondition::get_function()
+{
+    _F_;
+    return __initial_condition_function;
+}
+
+void *
+InitialCondition::get_context()
+{
+    return this;
 }
 
 } // namespace godzilla
