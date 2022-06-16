@@ -1,8 +1,8 @@
 #include "gmock/gmock.h"
+#include "GodzillaApp_test.h"
 #include "Factory.h"
 #include "Mesh.h"
-#include "NonlinearProblem_test.h"
-#include "InputParameters.h"
+#include "NonlinearProblem.h"
 #include "Output.h"
 #include "petsc.h"
 #include "petscvec.h"
@@ -10,7 +10,102 @@
 
 using namespace godzilla;
 
+class G1DTestNonlinearProblem : public NonlinearProblem {
+public:
+    explicit G1DTestNonlinearProblem(const InputParameters & params);
+    virtual ~G1DTestNonlinearProblem();
+    virtual void create() override;
+    void call_initial_guess();
+
+protected:
+    virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
+    virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
+
+    PetscSection s;
+};
+
 registerObject(G1DTestNonlinearProblem);
+
+G1DTestNonlinearProblem::G1DTestNonlinearProblem(const InputParameters & params) :
+    NonlinearProblem(params),
+    s(nullptr)
+{
+}
+
+G1DTestNonlinearProblem::~G1DTestNonlinearProblem()
+{
+    PetscSectionDestroy(&this->s);
+}
+
+void
+G1DTestNonlinearProblem::create()
+{
+    DM dm = get_dm();
+    PetscInt nc[1] = { 1 };
+    PetscInt n_dofs[2] = { 1, 0 };
+    DMSetNumFields(dm, 1);
+    DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
+    DMSetLocalSection(dm, this->s);
+    NonlinearProblem::create();
+}
+
+void
+G1DTestNonlinearProblem::call_initial_guess()
+{
+    NonlinearProblem::set_up_initial_guess();
+}
+
+PetscErrorCode
+G1DTestNonlinearProblem::compute_residual_callback(Vec x, Vec f)
+{
+    PetscInt ni = 2;
+    PetscInt ix[] = { 0, 1 };
+    PetscScalar y[2];
+    VecGetValues(x, ni, ix, y);
+
+    VecSetValue(f, 0, y[0] - 2, INSERT_VALUES);
+    VecSetValue(f, 1, y[1] - 3, INSERT_VALUES);
+
+    VecAssemblyBegin(f);
+    VecAssemblyEnd(f);
+
+    return 0;
+}
+
+PetscErrorCode
+G1DTestNonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
+{
+    MatSetValue(J, 0, 0, 1, INSERT_VALUES);
+    MatSetValue(J, 1, 1, 1, INSERT_VALUES);
+
+    MatAssemblyBegin(J, MAT_FINAL_ASSEMBLY);
+    MatAssemblyEnd(J, MAT_FINAL_ASSEMBLY);
+
+    return 0;
+}
+
+// Test fixture
+
+class NonlinearProblemTest : public GodzillaAppTest {
+protected:
+    Mesh *
+    gMesh1d()
+    {
+        const std::string class_name = "LineMesh";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<PetscInt>("nx") = 1;
+        return this->app->build_object<Mesh>(class_name, "mesh", params);
+    }
+
+    G1DTestNonlinearProblem *
+    gProblem1d(Mesh * mesh)
+    {
+        const std::string class_name = "G1DTestNonlinearProblem";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
+        return this->app->build_object<G1DTestNonlinearProblem>(class_name, "problem", params);
+    }
+};
 
 TEST_F(NonlinearProblemTest, initial_guess)
 {
@@ -119,62 +214,33 @@ TEST_F(NonlinearProblemTest, line_search_type)
     }
 }
 
-//
-
-G1DTestNonlinearProblem::G1DTestNonlinearProblem(const InputParameters & params) :
-    NonlinearProblem(params),
-    s(nullptr)
+TEST_F(NonlinearProblemTest, invalid_line_search_type)
 {
-}
+    testing::internal::CaptureStderr();
 
-G1DTestNonlinearProblem::~G1DTestNonlinearProblem()
-{
-    PetscSectionDestroy(&this->s);
-}
+    class MockNonlinearProblem : public NonlinearProblem {
+    public:
+        explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
 
-void
-G1DTestNonlinearProblem::create()
-{
-    DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[2] = { 1, 0 };
-    DMSetNumFields(dm, 1);
-    DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
-    DMSetLocalSection(dm, this->s);
-    NonlinearProblem::create();
-}
+        MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
+        MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
+    };
 
-void
-G1DTestNonlinearProblem::call_initial_guess()
-{
-    NonlinearProblem::set_up_initial_guess();
-}
+    auto mesh = gMesh1d();
+    mesh->create();
 
-PetscErrorCode
-G1DTestNonlinearProblem::compute_residual_callback(Vec x, Vec f)
-{
-    PetscInt ni = 2;
-    PetscInt ix[] = { 0, 1 };
-    PetscScalar y[2];
-    VecGetValues(x, ni, ix, y);
+    InputParameters prob_pars = NonlinearProblem::valid_params();
+    prob_pars.set<const App *>("_app") = this->app;
+    prob_pars.set<const Mesh *>("_mesh") = mesh;
+    prob_pars.set<std::string>("line_search") = "asdf";
+    MockNonlinearProblem prob(prob_pars);
+    prob.create();
 
-    VecSetValue(f, 0, y[0] - 2, INSERT_VALUES);
-    VecSetValue(f, 1, y[1] - 3, INSERT_VALUES);
+    prob.check();
 
-    VecAssemblyBegin(f);
-    VecAssemblyEnd(f);
+    this->app->check_integrity();
 
-    return 0;
-}
-
-PetscErrorCode
-G1DTestNonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
-{
-    MatSetValue(J, 0, 0, 1, INSERT_VALUES);
-    MatSetValue(J, 1, 1, 1, INSERT_VALUES);
-
-    MatAssemblyBegin(J, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(J, MAT_FINAL_ASSEMBLY);
-
-    return 0;
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("The 'line_search' parameter can be either 'bt', 'basic', 'l2', "
+                                   "'cp', 'nleqerr' or 'shell'."));
 }

@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Mesh.h"
 #include "Output.h"
+#include "Validation.h"
 #include "petscds.h"
 
 namespace godzilla {
