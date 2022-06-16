@@ -56,7 +56,6 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem,
     dt(params.get<PetscReal>("dt"))
 {
     _F_;
-    assert(this->problem != nullptr);
 }
 
 TransientProblemInterface::~TransientProblemInterface()
@@ -69,6 +68,7 @@ void
 TransientProblemInterface::init()
 {
     _F_;
+    assert(this->problem != nullptr);
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));

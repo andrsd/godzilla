@@ -27,7 +27,6 @@ Output::Output(const InputParameters & params) :
     on(ON_NONE)
 {
     _F_;
-    assert(this->problem != nullptr);
 }
 
 void
