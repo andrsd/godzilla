@@ -1,13 +1,84 @@
+#include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "GYMLFile_test.h"
 #include "yaml-cpp/yaml.h"
 #include "GodzillaConfig.h"
 #include "LineMesh.h"
 #include "PiecewiseLinear.h"
 #include "Postprocessor.h"
 #include "FEProblemInterface.h"
+#include "GYMLFile.h"
+#include "Problem.h"
 
 using namespace godzilla;
+
+class MockGYMLFile : public GYMLFile {
+public:
+    explicit MockGYMLFile(const App * app) : GYMLFile(app) {}
+
+    MOCK_METHOD(void, build_mesh, (), ());
+    MOCK_METHOD(void, build_problem, (), ());
+};
+
+///
+
+class GTestProblem : public Problem {
+public:
+    explicit GTestProblem(const InputParameters & params) : Problem(params)
+    {
+        DMPlexCreateBoxMesh(get_comm(),
+                            1,
+                            PETSC_TRUE,
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL,
+                            PETSC_FALSE,
+                            &this->dm);
+        DMSetUp(this->dm);
+        DMCreateGlobalVector(this->dm, &this->x);
+    }
+
+    virtual ~GTestProblem()
+    {
+        VecDestroy(&this->x);
+        DMDestroy(&this->dm);
+    }
+
+    DM
+    get_dm() const override
+    {
+        return this->dm;
+    }
+    Vec
+    get_solution_vector() const override
+    {
+        return this->x;
+    }
+    void
+    create() override
+    {
+    }
+    void
+    solve() override
+    {
+    }
+    void
+    run() override
+    {
+    }
+    bool
+    converged() override
+    {
+        return false;
+    }
+
+protected:
+    DM dm;
+    Vec x;
+
+public:
+    static InputParameters valid_params();
+};
 
 registerObject(GTestProblem);
 
@@ -30,6 +101,18 @@ GTestProblem::valid_params()
     params.add_private_param<const Mesh *>("_mesh", nullptr);
     return params;
 }
+
+///
+
+class GYMLFileTest : public GodzillaAppTest {
+protected:
+    MockGYMLFile *
+    gymlFile()
+    {
+        auto f = new MockGYMLFile(this->app);
+        return f;
+    }
+};
 
 TEST_F(GYMLFileTest, parse_empty)
 {
