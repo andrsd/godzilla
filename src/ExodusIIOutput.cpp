@@ -349,7 +349,7 @@ ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type) const
     static const PetscInt seg_ordering[] = { 1, 2 };
     static const PetscInt tri_ordering[] = { 1, 2, 3 };
     static const PetscInt quad_ordering[] = { 1, 2, 3, 4 };
-    static const PetscInt tet_ordering[] = { 1, 2, 3, 4 };
+    static const PetscInt tet_ordering[] = { 4, 1, 2, 3 };
     static const PetscInt hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
 
     switch (elem_type) {
