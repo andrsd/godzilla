@@ -127,4 +127,31 @@ UnstructuredMesh::get_face_set_name(PetscInt id) const
         error("Face id '%d' does not exist.", id);
 }
 
+void
+UnstructuredMesh::create_cell_set(PetscInt id, const std::string & name)
+{
+    _F_;
+    DMLabel cell_sets_label = get_label("Cell Sets");
+    IS is;
+    PETSC_CHECK(DMLabelGetStratumIS(cell_sets_label, id, &is));
+    PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
+    DMLabel label = get_label(name);
+    if (is)
+        PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
+    PETSC_CHECK(ISDestroy(&is));
+    PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
+    this->cell_set_names[id] = name;
+}
+
+const std::string &
+UnstructuredMesh::get_cell_set_name(PetscInt id) const
+{
+    _F_;
+    const auto & it = this->cell_set_names.find(id);
+    if (it != this->cell_set_names.end())
+        return it->second;
+    else
+        error("Cell set ID '%d' does not exist.", id);
+}
+
 } // namespace godzilla

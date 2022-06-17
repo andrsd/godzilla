@@ -131,6 +131,7 @@ public:
 
 protected:
     struct FieldInfo;
+    struct AuxInfo;
 
     /// Initialize the FE system
     virtual void init();
@@ -164,10 +165,15 @@ protected:
 
     /// Compute auxiliary fields
     ///
-    /// @param dm_aux DM for auxiliary fields
-    /// @param label Label to which the fields are restricted
-    /// @param a Auxiliary vector associate with the label
-    void compute_aux_fields(DM dm_aux, DMLabel label, Vec a);
+    /// @param dm DM for auxiliary fields
+    void compute_aux_fields(DM dm);
+
+    void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vec a);
+
+    void compute_label_aux_fields(DM dm,
+                                  DMLabel label,
+                                  const std::vector<AuxiliaryField *> & auxs,
+                                  Vec a);
 
     /// Set up auxiliary DM
     virtual void set_up_auxiliary_dm(DM dm);
@@ -235,11 +241,19 @@ protected:
     /// List of auxiliary field objects
     std::vector<AuxiliaryField *> auxs;
 
+    struct AuxInfo {
+        /// List of auxiliary field objects
+        std::vector<AuxiliaryField *> auxs;
+
+        /// Auxiliary vector
+        Vec a;
+    };
+
+    /// Map from region to list of auxiliary field IDs
+    std::map<std::string, AuxInfo> auxs_by_region;
+
     /// Object that manages a discrete system
     PetscDS ds;
-
-    /// Auxiliary vector
-    Vec a;
 
     /// List of constants
     std::vector<PetscReal> consts;

@@ -41,6 +41,12 @@ public:
     /// @return true if cell is a simplex, otherwise false
     virtual bool is_simplex() const;
 
+    /// Get cell set name
+    ///
+    /// @param id The ID of the cell set
+    /// @return Cell set name
+    const std::string & get_cell_set_name(PetscInt id) const;
+
     /// Get face set name
     ///
     /// @param id The id of the face set
@@ -50,6 +56,8 @@ public:
 protected:
     virtual void distribute() override;
 
+    void create_cell_set(PetscInt id, const std::string & name);
+
     void create_face_set(PetscInt id, const std::string & name);
 
     /// Mesh partitioner
@@ -57,6 +65,9 @@ protected:
 
     /// Partition overlap for mesh partitioning
     PetscInt partition_overlap;
+
+    /// Cell set names
+    std::map<PetscInt, std::string> cell_set_names;
 
     /// Face set names
     std::map<PetscInt, std::string> face_set_names;

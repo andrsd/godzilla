@@ -29,8 +29,7 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const InputParameters 
     unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
     logger(params.get<const App *>("_app")->get_logger()),
     qorder(PETSC_DETERMINE),
-    ds(nullptr),
-    a(nullptr)
+    ds(nullptr)
 {
 }
 
@@ -46,8 +45,10 @@ FEProblemInterface::~FEProblemInterface()
         PetscFEDestroy(&fi.fe);
     }
 
-    if (this->a)
-        VecDestroy(&this->a);
+    for (auto & it : this->auxs_by_region) {
+        AuxInfo & aux_nfo = it.second;
+        VecDestroy(&aux_nfo.a);
+    }
 }
 
 void
@@ -225,6 +226,7 @@ FEProblemInterface::add_aux_fe(PetscInt id, const std::string & name, PetscInt n
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
         FieldInfo fi = { name, id, nullptr, nullptr, nc, k };
+        // fi.block = this->unstr_mesh->get_label("right");
         this->aux_fields[id] = fi;
         this->aux_fields_by_name[name] = id;
     }
@@ -428,7 +430,9 @@ FEProblemInterface::set_up_quadrature()
 }
 
 void
-FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
+FEProblemInterface::compute_global_aux_fields(DM dm,
+                                              const std::vector<AuxiliaryField *> & auxs,
+                                              Vec a)
 {
     _F_;
     PetscInt n_auxs = this->aux_fields.size();
@@ -438,51 +442,81 @@ FEProblemInterface::compute_aux_fields(DM dm_aux, DMLabel label, Vec a)
         func[i] = nullptr;
         ctxs[i] = nullptr;
     }
-    for (const auto & aux : this->auxs) {
+
+    for (const auto & aux : auxs) {
         PetscInt fid = aux->get_field_id();
-        if (aux->get_label() == label)
-            func[fid] = aux->get_func();
-        else
-            func[fid] = nullptr;
-        ctxs[fid] = aux;
+        func[fid] = aux->get_func();
+        ctxs[fid] = aux->get_context();
     }
 
-    if (label == nullptr)
-        PETSC_CHECK(DMProjectFunctionLocal(dm_aux,
-                                           this->problem->get_time(),
-                                           func,
-                                           ctxs,
-                                           INSERT_ALL_VALUES,
-                                           a));
-    else {
-        IS is;
-        PETSC_CHECK(DMLabelGetValueIS(label, &is));
-
-        PetscInt n_ids;
-        PETSC_CHECK(ISGetSize(is, &n_ids));
-
-        const PetscInt * ids;
-        PETSC_CHECK(ISGetIndices(is, &ids));
-
-        PETSC_CHECK(DMProjectFunctionLabelLocal(dm_aux,
-                                                this->problem->get_time(),
-                                                label,
-                                                n_ids,
-                                                ids,
-                                                PETSC_DETERMINE,
-                                                nullptr,
-                                                func,
-                                                ctxs,
-                                                INSERT_ALL_VALUES,
-                                                a));
-
-        PETSC_CHECK(ISRestoreIndices(is, &ids));
-
-        PETSC_CHECK(ISDestroy(&is));
-    }
+    PETSC_CHECK(
+        DMProjectFunctionLocal(dm, this->problem->get_time(), func, ctxs, INSERT_ALL_VALUES, a));
 
     delete[] func;
     delete[] ctxs;
+}
+
+void
+FEProblemInterface::compute_label_aux_fields(DM dm,
+                                             DMLabel label,
+                                             const std::vector<AuxiliaryField *> & auxs,
+                                             Vec a)
+{
+    _F_;
+    PetscInt n_auxs = this->aux_fields.size();
+    PetscFunc ** func = new PetscFunc *[n_auxs];
+    void ** ctxs = new void *[n_auxs];
+    for (PetscInt i = 0; i < n_auxs; i++) {
+        func[i] = nullptr;
+        ctxs[i] = nullptr;
+    }
+
+    for (const auto & aux : auxs) {
+        PetscInt fid = aux->get_field_id();
+        func[fid] = aux->get_func();
+        ctxs[fid] = aux->get_context();
+    }
+
+    IS is;
+    PETSC_CHECK(DMLabelGetValueIS(label, &is));
+    PetscInt n_ids;
+    PETSC_CHECK(ISGetSize(is, &n_ids));
+    const PetscInt * ids;
+    PETSC_CHECK(ISGetIndices(is, &ids));
+    PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
+                                            this->problem->get_time(),
+                                            label,
+                                            n_ids,
+                                            ids,
+                                            PETSC_DETERMINE,
+                                            nullptr,
+                                            func,
+                                            ctxs,
+                                            INSERT_ALL_VALUES,
+                                            a));
+    PETSC_CHECK(ISRestoreIndices(is, &ids));
+    PETSC_CHECK(ISDestroy(&is));
+
+    delete[] func;
+    delete[] ctxs;
+}
+
+void
+FEProblemInterface::compute_aux_fields(DM dm)
+{
+    _F_;
+    for (const auto & it : this->auxs_by_region) {
+        const std::string & region_name = it.first;
+        const AuxInfo & aux_nfo = it.second;
+        DMLabel label = nullptr;
+        if (region_name.length() > 0)
+            label = this->unstr_mesh->get_label(region_name);
+
+        if (label == nullptr)
+            compute_global_aux_fields(dm, aux_nfo.auxs, aux_nfo.a);
+        else
+            compute_label_aux_fields(dm, label, aux_nfo.auxs, aux_nfo.a);
+    }
 }
 
 void
@@ -505,7 +539,11 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         if (has_aux_field_by_id(fid)) {
             PetscInt aux_nc = aux->get_num_components();
             PetscInt field_nc = this->aux_fields[fid].nc;
-            if (aux_nc != field_nc) {
+            if (aux_nc == field_nc) {
+                const std::string & region_name = aux->get_region();
+                this->auxs_by_region[region_name].auxs.push_back(aux);
+            }
+            else {
                 no_errors = false;
                 this->logger->error("Auxiliary field '%s' has %d component(s), but is set on a "
                                     "field with %d component(s).",
@@ -523,11 +561,17 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         }
     }
     if (no_errors) {
-        if (this->auxs.size() > 0) {
-            PETSC_CHECK(DMCreateLocalVector(dm_aux, &this->a));
-            compute_aux_fields(dm_aux, nullptr, this->a);
-            PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
+        for (auto & it : this->auxs_by_region) {
+            const std::string & region_name = it.first;
+            AuxInfo & aux_nfo = it.second;
+            DMLabel label = nullptr;
+            if (region_name.length() > 0)
+                label = this->unstr_mesh->get_label(region_name);
+
+            PETSC_CHECK(DMCreateLocalVector(dm_aux, &aux_nfo.a));
+            PETSC_CHECK(DMSetAuxiliaryVec(dm, label, 0, 0, aux_nfo.a));
         }
+        compute_aux_fields(dm_aux);
     }
 
     PETSC_CHECK(DMDestroy(&dm_aux));
