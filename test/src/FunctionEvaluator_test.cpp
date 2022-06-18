@@ -42,3 +42,12 @@ TEST(FunctionEvaluatorTest, define_constant)
     PetscReal val = e.evaluate(1, 0., x);
     EXPECT_DOUBLE_EQ(1234., val);
 }
+
+TEST(FunctionEvaluatorTest, exception)
+{
+    FunctionEvaluator e;
+    e.create("");
+    PetscReal x[] = { 0. };
+    PetscReal u[] = { 0. };
+    EXPECT_FALSE(e.evaluate(1, 0., x, 1, u));
+}
