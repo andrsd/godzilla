@@ -124,7 +124,7 @@ UnstructuredMesh::get_face_set_name(PetscInt id) const
     if (it != this->face_set_names.end())
         return it->second;
     else
-        error("Face id '%d' does not exist.", id);
+        error("Face ID '%d' does not exist.", id);
 }
 
 void
