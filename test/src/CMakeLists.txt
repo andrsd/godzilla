@@ -44,6 +44,7 @@ add_executable(${PROJECT_NAME}
     Problem_test.cpp
     RectangleMesh_test.cpp
     Terminal_test.cpp
+    UnstructuredMesh_test.cpp
     Utils_test.cpp
     Validation_test.cpp
     VTKOutput_test.cpp

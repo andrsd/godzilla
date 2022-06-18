@@ -11,6 +11,47 @@ class AuxiliaryFieldTest : public FENonlinearProblemTest {
 public:
 };
 
+TEST_F(AuxiliaryFieldTest, api)
+{
+    class TestAuxFld : public AuxiliaryField {
+    public:
+        explicit TestAuxFld(const InputParameters & params) : AuxiliaryField(params) {}
+        virtual void
+        create() override
+        {
+        }
+        virtual PetscInt
+        get_num_components() const override
+        {
+            return 1;
+        }
+        virtual PetscFunc *
+        get_func() const override
+        {
+            return nullptr;
+        }
+    };
+
+    prob->add_aux_fe(0, "fld", 1, 1);
+
+    InputParameters params = AuxiliaryField::valid_params();
+    params.set<const App *>("_app") = app;
+    params.set<std::string>("_name") = "aux";
+    params.set<FEProblemInterface *>("_fepi") = prob;
+    params.set<std::string>("field") = "fld";
+    params.set<std::string>("region") = "rgn";
+    auto aux = TestAuxFld(params);
+    prob->add_auxiliary_field(&aux);
+
+    mesh->create();
+
+    EXPECT_EQ(aux.get_label(), nullptr);
+    EXPECT_EQ(aux.get_region(), "rgn");
+    EXPECT_EQ(aux.get_field_id(), 0);
+    EXPECT_EQ(aux.get_func(), nullptr);
+    EXPECT_EQ(aux.get_context(), &aux);
+}
+
 TEST_F(AuxiliaryFieldTest, non_existent_id)
 {
     class TestAuxFld : public AuxiliaryField {

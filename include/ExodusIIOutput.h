@@ -47,6 +47,9 @@ protected:
     void write_field_variables();
     void write_nodal_variables(const PetscScalar * sln);
     void write_global_variables();
+    void write_block_connectivity(int blk_id,
+                                  int n_elems_in_block = 0,
+                                  const PetscInt * cells = nullptr);
 
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;

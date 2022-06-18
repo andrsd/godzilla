@@ -5,6 +5,25 @@
 
 using namespace godzilla;
 
+TEST(ParsedFunctionTest, fn_eval)
+{
+    TestApp app;
+
+    InputParameters params = ParsedFunction::valid_params();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "fn1";
+    params.set<std::vector<std::string>>("function") = { "3421" };
+    ParsedFunction obj(params);
+
+    PetscFunc * fn = obj.get_function();
+    EXPECT_EQ(obj.get_context(), &obj);
+
+    PetscReal x[] = { 2. };
+    PetscReal u[] = { 0. };
+    EXPECT_EQ((*fn)(1, 0., x, 1, u, &obj), 0);
+    EXPECT_DOUBLE_EQ(u[0], 3421.);
+}
+
 TEST(ParsedFunctionTest, eval)
 {
     TestApp app;

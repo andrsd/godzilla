@@ -20,6 +20,8 @@ public:
 
     virtual DMLabel get_label() const;
 
+    virtual const std::string & get_region() const;
+
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
@@ -32,12 +34,20 @@ public:
 
     virtual PetscFunc * get_func() const = 0;
 
+    virtual void * get_context();
+
 protected:
     /// FE problem this object is part of
     const FEProblemInterface * fepi;
 
+    /// Field name
+    const std::string & field;
+
     /// Region name this auxiliary field is defined on
     const std::string & region;
+
+    /// Field ID
+    PetscInt fid;
 
     /// Block here the auxiliary field lives
     DMLabel label;
