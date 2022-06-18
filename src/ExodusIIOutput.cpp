@@ -378,8 +378,6 @@ ExodusIIOutput::write_elements()
     PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
 
     if (n_cells_sets > 1) {
-        int n_elems = this->mesh->get_num_elements();
-
         DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
 
         IS cell_sets_is;
@@ -397,40 +395,7 @@ ExodusIIOutput::write_elements()
             PetscInt n_elems_in_block;
             PETSC_CHECK(ISGetSize(stratum_is, &n_elems_in_block));
 
-            DMPolytopeType polytope_type;
-            PETSC_CHECK(DMPlexGetCellType(dm, cells[0], &polytope_type));
-            const char * elem_type = get_elem_type(polytope_type);
-            int n_nodes_per_elem = get_num_elem_nodes(polytope_type);
-            const PetscInt * ordering = get_elem_node_ordering(polytope_type);
-
-            ex_put_block(this->exoid,
-                         EX_ELEM_BLOCK,
-                         cell_set_idx[i],
-                         elem_type,
-                         n_elems_in_block,
-                         n_nodes_per_elem,
-                         0,
-                         0,
-                         1);
-
-            int * connect = new int[n_elems_in_block * n_nodes_per_elem];
-            MEM_CHECK(connect);
-
-            for (PetscInt i = 0, j = 0; i < n_elems_in_block; i++) {
-                PetscInt elem_id = cells[i];
-                PetscInt closure_size;
-                PetscInt * closure = NULL;
-                PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
-                for (PetscInt k = 0; k < n_nodes_per_elem; k++, j++) {
-                    PetscInt l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
-                    connect[j] = closure[l] - n_elems + 1;
-                }
-                PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
-            }
-
-            ex_put_conn(this->exoid, EX_ELEM_BLOCK, cell_set_idx[i], connect, nullptr, nullptr);
-
-            delete[] connect;
+            write_block_connectivity(cell_set_idx[i], n_elems_in_block, cells);
 
             PETSC_CHECK(ISRestoreIndices(stratum_is, &cells));
             PETSC_CHECK(ISDestroy(&stratum_is));
@@ -438,48 +403,8 @@ ExodusIIOutput::write_elements()
         PETSC_CHECK(ISRestoreIndices(cell_sets_is, &cell_set_idx));
         PETSC_CHECK(ISDestroy(&cell_sets_is));
     }
-    else {
-        int blk_id = 0;
-
-        PetscInt elem_first, elem_last;
-        this->mesh->get_element_idx_range(elem_first, elem_last);
-        int n_elems_in_block = elem_last - elem_first;
-        int n_elems = this->mesh->get_num_elements();
-
-        DMPolytopeType polytope_type;
-        PETSC_CHECK(DMPlexGetCellType(dm, elem_first, &polytope_type));
-        const char * elem_type = get_elem_type(polytope_type);
-        int n_nodes_per_elem = get_num_elem_nodes(polytope_type);
-        const PetscInt * ordering = get_elem_node_ordering(polytope_type);
-
-        ex_put_block(this->exoid,
-                     EX_ELEM_BLOCK,
-                     blk_id,
-                     elem_type,
-                     n_elems_in_block,
-                     n_nodes_per_elem,
-                     0,
-                     0,
-                     0);
-
-        int * connect = new int[n_elems_in_block * n_nodes_per_elem];
-        MEM_CHECK(connect);
-
-        for (PetscInt e = elem_first, j = 0; e < elem_last; e++) {
-            PetscInt closure_size;
-            PetscInt * closure = NULL;
-            PETSC_CHECK(DMPlexGetTransitiveClosure(dm, e, PETSC_TRUE, &closure_size, &closure));
-            for (PetscInt i = 0; i < n_nodes_per_elem; i++, j++) {
-                PetscInt k = 2 * (closure_size - n_nodes_per_elem + ordering[i]);
-                connect[j] = closure[k] - n_elems + 1;
-            }
-            PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, e, PETSC_TRUE, &closure_size, &closure));
-        }
-
-        ex_put_conn(this->exoid, EX_ELEM_BLOCK, blk_id, connect, nullptr, nullptr);
-
-        delete[] connect;
-    }
+    else
+        write_block_connectivity(0);
 }
 
 void
@@ -765,6 +690,58 @@ ExodusIIOutput::write_info()
     char * info[] = { created_by_info };
     int n_info = sizeof(info) / sizeof(char *);
     ex_put_info(this->exoid, n_info, info);
+}
+
+void
+ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const PetscInt * cells)
+{
+    _F_;
+    DM dm = this->mesh->get_dm();
+    int n_elems = this->mesh->get_num_elements();
+    PetscInt elem_first, elem_last;
+    DMPolytopeType polytope_type;
+
+    if (cells == nullptr) {
+        this->mesh->get_element_idx_range(elem_first, elem_last);
+        n_elems_in_block = n_elems;
+        PETSC_CHECK(DMPlexGetCellType(dm, elem_first, &polytope_type));
+    }
+    else
+        PETSC_CHECK(DMPlexGetCellType(dm, cells[0], &polytope_type));
+
+    const char * elem_type = get_elem_type(polytope_type);
+    int n_nodes_per_elem = get_num_elem_nodes(polytope_type);
+    const PetscInt * ordering = get_elem_node_ordering(polytope_type);
+    ex_put_block(this->exoid,
+                 EX_ELEM_BLOCK,
+                 blk_id,
+                 elem_type,
+                 n_elems_in_block,
+                 n_nodes_per_elem,
+                 0,
+                 0,
+                 0);
+
+    int * connect = new int[n_elems_in_block * n_nodes_per_elem];
+    MEM_CHECK(connect);
+    for (PetscInt i = 0, j = 0; i < n_elems_in_block; i++) {
+        PetscInt elem_id;
+        if (cells == nullptr)
+            elem_id = elem_first + i;
+        else
+            elem_id = cells[i];
+        PetscInt closure_size;
+        PetscInt * closure = NULL;
+        PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
+        for (PetscInt k = 0; k < n_nodes_per_elem; k++, j++) {
+            PetscInt l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
+            connect[j] = closure[l] - n_elems + 1;
+        }
+        PETSC_CHECK(
+            DMPlexRestoreTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
+    }
+    ex_put_conn(this->exoid, EX_ELEM_BLOCK, blk_id, connect, nullptr, nullptr);
+    delete[] connect;
 }
 
 } // namespace godzilla
