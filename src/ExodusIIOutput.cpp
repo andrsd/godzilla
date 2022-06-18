@@ -378,8 +378,65 @@ ExodusIIOutput::write_elements()
     PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
 
     if (n_cells_sets > 1) {
-        // TODO: write element blocks
-        error("Support for mesh blocks is not implemented yet.");
+        int n_elems = this->mesh->get_num_elements();
+
+        DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
+
+        IS cell_sets_is;
+        PETSC_CHECK(DMLabelGetValueIS(cell_sets_label, &cell_sets_is));
+        const PetscInt * cell_set_idx;
+        PETSC_CHECK(ISGetIndices(cell_sets_is, &cell_set_idx));
+
+        for (PetscInt i = 0; i < n_cells_sets; ++i) {
+            IS stratum_is;
+            PETSC_CHECK(DMLabelGetStratumIS(cell_sets_label, cell_set_idx[i], &stratum_is));
+
+            const PetscInt * cells;
+            PETSC_CHECK(ISGetIndices(stratum_is, &cells));
+
+            PetscInt n_elems_in_block;
+            PETSC_CHECK(ISGetSize(stratum_is, &n_elems_in_block));
+
+            DMPolytopeType polytope_type;
+            PETSC_CHECK(DMPlexGetCellType(dm, cells[0], &polytope_type));
+            const char * elem_type = get_elem_type(polytope_type);
+            int n_nodes_per_elem = get_num_elem_nodes(polytope_type);
+            const PetscInt * ordering = get_elem_node_ordering(polytope_type);
+
+            ex_put_block(this->exoid,
+                         EX_ELEM_BLOCK,
+                         cell_set_idx[i],
+                         elem_type,
+                         n_elems_in_block,
+                         n_nodes_per_elem,
+                         0,
+                         0,
+                         1);
+
+            int * connect = new int[n_elems_in_block * n_nodes_per_elem];
+            MEM_CHECK(connect);
+
+            for (PetscInt i = 0, j = 0; i < n_elems_in_block; i++) {
+                PetscInt elem_id = cells[i];
+                PetscInt closure_size;
+                PetscInt * closure = NULL;
+                PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
+                for (PetscInt k = 0; k < n_nodes_per_elem; k++, j++) {
+                    PetscInt l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
+                    connect[j] = closure[l] - n_elems + 1;
+                }
+                PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
+            }
+
+            ex_put_conn(this->exoid, EX_ELEM_BLOCK, cell_set_idx[i], connect, nullptr, nullptr);
+
+            delete[] connect;
+
+            PETSC_CHECK(ISRestoreIndices(stratum_is, &cells));
+            PETSC_CHECK(ISDestroy(&stratum_is));
+        }
+        PETSC_CHECK(ISRestoreIndices(cell_sets_is, &cell_set_idx));
+        PETSC_CHECK(ISDestroy(&cell_sets_is));
     }
     else {
         int blk_id = 0;
@@ -387,6 +444,7 @@ ExodusIIOutput::write_elements()
         PetscInt elem_first, elem_last;
         this->mesh->get_element_idx_range(elem_first, elem_last);
         int n_elems_in_block = elem_last - elem_first;
+        int n_elems = this->mesh->get_num_elements();
 
         DMPolytopeType polytope_type;
         PETSC_CHECK(DMPlexGetCellType(dm, elem_first, &polytope_type));
@@ -413,7 +471,7 @@ ExodusIIOutput::write_elements()
             PETSC_CHECK(DMPlexGetTransitiveClosure(dm, e, PETSC_TRUE, &closure_size, &closure));
             for (PetscInt i = 0; i < n_nodes_per_elem; i++, j++) {
                 PetscInt k = 2 * (closure_size - n_nodes_per_elem + ordering[i]);
-                connect[j] = closure[k] - n_elems_in_block + 1;
+                connect[j] = closure[k] - n_elems + 1;
             }
             PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, e, PETSC_TRUE, &closure_size, &closure));
         }
