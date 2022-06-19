@@ -5,6 +5,9 @@ find_program(
     EXODIFF exodiff
     DOC "exodiff executable"
 )
+mark_as_advanced(FORCE
+    EXODIFF
+)
 
 # Adds an EXODIFF test
 #

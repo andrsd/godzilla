@@ -5,6 +5,9 @@ find_program(
     H5DIFF h5diff
     DOC "h5diff executable"
 )
+mark_as_advanced(FORCE
+    H5DIFF
+)
 
 # Adds an HDF5DIFF test
 #
