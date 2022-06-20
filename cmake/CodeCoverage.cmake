@@ -4,6 +4,9 @@ option(GODZILLA_CODE_COVERAGE "Builds targets with code coverage instrumentation
 if(GODZILLA_CODE_COVERAGE)
 
     set(COVERAGE_INFO ${PROJECT_BINARY_DIR}/coverage.info)
+    mark_as_advanced(FORCE
+        COVERAGE_INFO
+    )
     set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${COVERAGE_INFO}")
 
     if(CMAKE_C_COMPILER_ID MATCHES "(Apple)?[Cc]lang" OR CMAKE_CXX_COMPILER_ID MATCHES "(Apple)?[Cc]lang")
@@ -16,6 +19,10 @@ if(GODZILLA_CODE_COVERAGE)
             LLVM_PROFDATA_PATH
             NAMES
                 llvm-profdata
+        )
+        mark_as_advanced(FORCE
+            LLVM_COV_PATH
+            LLVM_PROFDATA_PATH
         )
 
         set(CODE_COVERAGE_PROFRAWS
@@ -116,7 +123,11 @@ if(GODZILLA_CODE_COVERAGE)
         find_program(GCOV_PATH NAMES gcov)
         find_program(LCOV_PATH lcov)
         find_program(GENHTML_PATH genhtml)
-        mark_as_advanced(FORCE LCOV_PATH GENHTML_PATH)
+        mark_as_advanced(FORCE
+            GCOV_PATH
+            LCOV_PATH
+            GENHTML_PATH
+        )
 
         set(EXCLUDE_REGEX
             --exclude=*/contrib/*

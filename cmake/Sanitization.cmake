@@ -1,7 +1,9 @@
 # LLVM: Sanitization
 
-option(GODZILLA_ADDRESS_SANITIZATION "Build with address sanitizer (requires clang)" NO)
-option(GODZILLA_MEMORY_SANITIZATION "Build with memory sanitizer (requires clang)" NO)
+if(CMAKE_C_COMPILER_ID MATCHES "(Apple)?[Cc]lang" OR CMAKE_CXX_COMPILER_ID MATCHES "(Apple)?[Cc]lang")
+    option(GODZILLA_ADDRESS_SANITIZATION "Build with address sanitizer (requires clang)" NO)
+    option(GODZILLA_MEMORY_SANITIZATION "Build with memory sanitizer (requires clang)" NO)
+endif()
 
 function(target_sanitization TARGET_NAME)
     if (GODZILLA_ADDRESS_SANITIZATION)

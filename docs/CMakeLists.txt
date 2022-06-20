@@ -28,6 +28,10 @@ if(DOXYGEN_FOUND)
 
     find_program(DOXYREST doxyrest)
     find_program(SPHINX_BUILD sphinx-build)
+    mark_as_advanced(FORCE
+        DOXYREST
+        SPHINX_BUILD
+    )
 
     configure_file(doxyrest-config.lua.in doxyrest-config.lua)
     configure_file(conf.py rst/conf.py)
