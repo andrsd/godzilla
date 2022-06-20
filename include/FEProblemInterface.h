@@ -131,7 +131,6 @@ public:
 
 protected:
     struct FieldInfo;
-    struct AuxInfo;
 
     /// Initialize the FE system
     virtual void init();
@@ -166,7 +165,7 @@ protected:
     /// Compute auxiliary fields
     ///
     /// @param dm DM for auxiliary fields
-    void compute_aux_fields(DM dm);
+    void compute_aux_fields();
 
     void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vec a);
 
@@ -241,22 +240,20 @@ protected:
     /// List of auxiliary field objects
     std::vector<AuxiliaryField *> auxs;
 
-    struct AuxInfo {
-        /// List of auxiliary field objects
-        std::vector<AuxiliaryField *> auxs;
-
-        /// Auxiliary vector
-        Vec a;
-    };
-
-    /// Map from region to list of auxiliary field IDs
-    std::map<std::string, AuxInfo> auxs_by_region;
+    /// Map from region to list of auxiliary field objects
+    std::map<std::string, std::vector<AuxiliaryField *>> auxs_by_region;
 
     /// Object that manages a discrete system
     PetscDS ds;
 
     /// List of constants
     std::vector<PetscReal> consts;
+
+    /// DM for auxiliary fields
+    DM dm_aux;
+
+    /// Vector for auxiliary fields
+    Vec a;
 };
 
 } // namespace godzilla

@@ -94,6 +94,7 @@ FENonlinearProblem::on_initial()
 {
     _F_;
     NonlinearProblem::on_initial();
+    compute_aux_fields();
 }
 
 } // namespace godzilla

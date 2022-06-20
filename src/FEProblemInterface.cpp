@@ -29,7 +29,9 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const InputParameters 
     unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
     logger(params.get<const App *>("_app")->get_logger()),
     qorder(PETSC_DETERMINE),
-    ds(nullptr)
+    ds(nullptr),
+    dm_aux(nullptr),
+    a(nullptr)
 {
 }
 
@@ -45,10 +47,8 @@ FEProblemInterface::~FEProblemInterface()
         PetscFEDestroy(&fi.fe);
     }
 
-    for (auto & it : this->auxs_by_region) {
-        AuxInfo & aux_nfo = it.second;
-        VecDestroy(&aux_nfo.a);
-    }
+    VecDestroy(&this->a);
+    DMDestroy(&this->dm_aux);
 }
 
 void
@@ -226,7 +226,6 @@ FEProblemInterface::add_aux_fe(PetscInt id, const std::string & name, PetscInt n
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
         FieldInfo fi = { name, id, nullptr, nullptr, nc, k };
-        // fi.block = this->unstr_mesh->get_label("right");
         this->aux_fields[id] = fi;
         this->aux_fields_by_name[name] = id;
     }
@@ -502,20 +501,20 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
 }
 
 void
-FEProblemInterface::compute_aux_fields(DM dm)
+FEProblemInterface::compute_aux_fields()
 {
     _F_;
     for (const auto & it : this->auxs_by_region) {
         const std::string & region_name = it.first;
-        const AuxInfo & aux_nfo = it.second;
+        const std::vector<AuxiliaryField *> & auxs = it.second;
         DMLabel label = nullptr;
         if (region_name.length() > 0)
             label = this->unstr_mesh->get_label(region_name);
 
         if (label == nullptr)
-            compute_global_aux_fields(dm, aux_nfo.auxs, aux_nfo.a);
+            compute_global_aux_fields(this->dm_aux, auxs, this->a);
         else
-            compute_label_aux_fields(dm, label, aux_nfo.auxs, aux_nfo.a);
+            compute_label_aux_fields(this->dm_aux, label, auxs, this->a);
     }
 }
 
@@ -523,15 +522,17 @@ void
 FEProblemInterface::set_up_auxiliary_dm(DM dm)
 {
     _F_;
-    DM dm_aux;
-    PETSC_CHECK(DMClone(dm, &dm_aux));
+    if (this->aux_fields.size() == 0)
+        return;
+
+    PETSC_CHECK(DMClone(dm, &this->dm_aux));
 
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
-        PETSC_CHECK(DMSetField(dm_aux, fi.id, fi.block, (PetscObject) fi.fe));
+        PETSC_CHECK(DMSetField(this->dm_aux, fi.id, fi.block, (PetscObject) fi.fe));
     }
 
-    PETSC_CHECK(DMCreateDS(dm_aux));
+    PETSC_CHECK(DMCreateDS(this->dm_aux));
 
     bool no_errors = true;
     for (auto & aux : this->auxs) {
@@ -541,7 +542,7 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
             PetscInt field_nc = this->aux_fields[fid].nc;
             if (aux_nc == field_nc) {
                 const std::string & region_name = aux->get_region();
-                this->auxs_by_region[region_name].auxs.push_back(aux);
+                this->auxs_by_region[region_name].push_back(aux);
             }
             else {
                 no_errors = false;
@@ -561,20 +562,9 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         }
     }
     if (no_errors) {
-        for (auto & it : this->auxs_by_region) {
-            const std::string & region_name = it.first;
-            AuxInfo & aux_nfo = it.second;
-            DMLabel label = nullptr;
-            if (region_name.length() > 0)
-                label = this->unstr_mesh->get_label(region_name);
-
-            PETSC_CHECK(DMCreateLocalVector(dm_aux, &aux_nfo.a));
-            PETSC_CHECK(DMSetAuxiliaryVec(dm, label, 0, 0, aux_nfo.a));
-        }
-        compute_aux_fields(dm_aux);
+        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &this->a));
+        PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
     }
-
-    PETSC_CHECK(DMDestroy(&dm_aux));
 }
 
 void
