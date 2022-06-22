@@ -167,6 +167,7 @@ TEST_F(FENonlinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     const Vec x = prob->get_solution_vector();
+    VecView(x, PETSC_VIEWER_STDOUT_SELF);
     PetscInt ni = 1;
     PetscInt ix[1] = { 0 };
     PetscScalar xx[1];
@@ -345,20 +346,6 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
                 testing::HasSubstr(
                     "Boundary condition 'bc1' is set on boundary 'asdf' which does not exist "
                     "in the mesh."));
-}
-
-TEST_F(FENonlinearProblemTest, compute_residual_callback)
-{
-    Vec x = nullptr;
-    Vec f = nullptr;
-    EXPECT_EQ(this->prob->compute_residual_callback(x, f), 0);
-}
-
-TEST_F(FENonlinearProblemTest, compute_jacobian_callback)
-{
-    Vec x = nullptr;
-    Mat J = nullptr;
-    EXPECT_EQ(this->prob->compute_jacobian_callback(x, J, J), 0);
 }
 
 TEST_F(FENonlinearProblemTest, set_constant)
