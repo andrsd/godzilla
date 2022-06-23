@@ -46,6 +46,19 @@ exo_write_side_set_names(int exoid, const std::vector<std::string> & sset_names)
     ex_put_names(exoid, EX_SIDE_SET, (char **) names);
 }
 
+static void
+exo_write_block_names(int exoid, const std::vector<std::string> & block_names)
+{
+    int n_blocks = block_names.size();
+    if (n_blocks == 0)
+        return;
+
+    const char * names[n_blocks];
+    for (int i = 0; i < n_blocks; i++)
+        names[i] = block_names[i].c_str();
+    ex_put_names(exoid, EX_ELEM_BLOCK, (char **) names);
+}
+
 /// Add variable names into the list of names
 ///
 /// @param nc Number of components
@@ -373,11 +386,14 @@ ExodusIIOutput::write_elements()
 {
     _F_;
     DM dm = this->mesh->get_dm();
+    std::vector<std::string> block_names;
 
     int n_cells_sets = 0;
     PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
 
     if (n_cells_sets > 1) {
+        block_names.resize(n_cells_sets);
+
         DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
 
         IS cell_sets_is;
@@ -399,12 +415,16 @@ ExodusIIOutput::write_elements()
 
             PETSC_CHECK(ISRestoreIndices(stratum_is, &cells));
             PETSC_CHECK(ISDestroy(&stratum_is));
+
+            block_names[i] = this->mesh->get_cell_set_name(cell_set_idx[i]);
         }
         PETSC_CHECK(ISRestoreIndices(cell_sets_is, &cell_set_idx));
         PETSC_CHECK(ISDestroy(&cell_sets_is));
     }
     else
         write_block_connectivity(0);
+
+    exo_write_block_names(this->exoid, block_names);
 }
 
 void
