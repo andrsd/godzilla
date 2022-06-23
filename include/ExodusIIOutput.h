@@ -26,6 +26,7 @@ public:
     virtual ~ExodusIIOutput();
 
     virtual std::string get_file_ext() const override;
+    virtual void set_file_name() override;
     virtual void create() override;
     virtual void check() override;
     virtual void output_step() override;

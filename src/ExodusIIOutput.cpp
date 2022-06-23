@@ -132,6 +132,22 @@ ExodusIIOutput::get_file_ext() const
 }
 
 void
+ExodusIIOutput::set_file_name()
+{
+    _F_;
+    std::ostringstream oss;
+    if (get_comm_size() == 1)
+        internal::fprintf(oss, "%s.%s", this->file_base, this->get_file_ext());
+    else
+        internal::fprintf(oss,
+                          "%s.%d.%s",
+                          this->file_base,
+                          get_processor_id(),
+                          this->get_file_ext());
+    this->file_name = oss.str();
+}
+
+void
 ExodusIIOutput::create()
 {
     _F_;
