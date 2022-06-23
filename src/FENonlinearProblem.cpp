@@ -5,6 +5,24 @@
 
 namespace godzilla {
 
+PetscErrorCode
+__fep_compute_residual(DM dm, Vec x, Vec F, void * user)
+{
+    _F_;
+    FENonlinearProblem * fep = (FENonlinearProblem *) user;
+    fep->compute_residual_callback(x, F);
+    return 0;
+}
+
+PetscErrorCode
+__fep_compute_jacobian(DM dm, Vec x, Mat J, Mat Jp, void * user)
+{
+    _F_;
+    FENonlinearProblem * fep = (FENonlinearProblem *) user;
+    fep->compute_jacobian_callback(x, J, Jp);
+    return 0;
+}
+
 InputParameters
 FENonlinearProblem::valid_params()
 {
@@ -43,7 +61,9 @@ FENonlinearProblem::set_up_callbacks()
     _F_;
     DM dm = this->get_dm();
     PETSC_CHECK(DMPlexSetSNESLocalFEM(dm, this, this, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, NULL, NULL));
+    PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
+    PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, nullptr, nullptr));
 }
 
 void
@@ -58,14 +78,16 @@ PetscErrorCode
 FENonlinearProblem::compute_residual_callback(Vec x, Vec f)
 {
     _F_;
-    return 0;
+    DM dm = this->get_dm();
+    return DMPlexSNESComputeResidualFEM(dm, x, f, this);
 }
 
 PetscErrorCode
 FENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
 {
     _F_;
-    return 0;
+    DM dm = this->get_dm();
+    return DMPlexSNESComputeJacobianFEM(dm, x, J, Jp, this);
 }
 
 void
@@ -94,6 +116,7 @@ FENonlinearProblem::on_initial()
 {
     _F_;
     NonlinearProblem::on_initial();
+    compute_aux_fields();
 }
 
 } // namespace godzilla

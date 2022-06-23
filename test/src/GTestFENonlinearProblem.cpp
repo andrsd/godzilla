@@ -88,18 +88,6 @@ GTestFENonlinearProblem::GTestFENonlinearProblem(const InputParameters & params)
 
 GTestFENonlinearProblem::~GTestFENonlinearProblem() {}
 
-PetscErrorCode
-GTestFENonlinearProblem::compute_residual_callback(Vec x, Vec f)
-{
-    return FENonlinearProblem::compute_residual_callback(x, f);
-}
-
-PetscErrorCode
-GTestFENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
-{
-    return FENonlinearProblem::compute_jacobian_callback(x, J, Jp);
-}
-
 const std::vector<PetscReal> &
 GTestFENonlinearProblem::getConstants()
 {

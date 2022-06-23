@@ -10,8 +10,6 @@ public:
     GTestFENonlinearProblem(const InputParameters & params);
     virtual ~GTestFENonlinearProblem();
 
-    virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
-    virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
     const std::vector<PetscReal> & getConstants();
     virtual void set_up_constants();
     PetscDS getDS();
