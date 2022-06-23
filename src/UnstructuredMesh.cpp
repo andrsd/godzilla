@@ -41,8 +41,15 @@ UnstructuredMesh::get_num_vertices() const
 {
     _F_;
     PetscInt first, last;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, &first, &last));
+    get_vertex_idx_range(first, last);
     return last - first;
+}
+
+void
+UnstructuredMesh::get_vertex_idx_range(PetscInt & first, PetscInt & last) const
+{
+    _F_;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, &first, &last));
 }
 
 PetscInt
