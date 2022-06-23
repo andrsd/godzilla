@@ -1,25 +1,25 @@
 include(TesterExodusII)
 
 add_test_exodiff(
-    NAME   poisson-fem-1d
+    NAME   poisson-mms-1d
     BIN    ${PROJECT_NAME}
-    INPUT  ${PROJECT_SOURCE_DIR}/test/gyml/fe_1d.gyml
-    OUTPUT ${PROJECT_BINARY_DIR}/test/fe_1d.exo
-    GOLD   ${PROJECT_SOURCE_DIR}/test/gold/fe_1d.exo
+    INPUT  ${PROJECT_SOURCE_DIR}/test/gyml/mms-1d.gyml
+    OUTPUT ${PROJECT_BINARY_DIR}/test/mms-1d.exo
+    GOLD   ${PROJECT_SOURCE_DIR}/test/gold/mms-1d.exo
 )
 
 add_test_exodiff(
-    NAME   poisson-fem-2d
+    NAME   poisson-mms-2d
     BIN    ${PROJECT_NAME}
-    INPUT  ${PROJECT_SOURCE_DIR}/test/gyml/fe_2d.gyml
-    OUTPUT ${PROJECT_BINARY_DIR}/test/fe_2d.exo
-    GOLD   ${PROJECT_SOURCE_DIR}/test/gold/fe_2d.exo
+    INPUT  ${PROJECT_SOURCE_DIR}/test/gyml/mms-2d.gyml
+    OUTPUT ${PROJECT_BINARY_DIR}/test/mms-2d.exo
+    GOLD   ${PROJECT_SOURCE_DIR}/test/gold/mms-2d.exo
 )
 
 add_test_exodiff(
-    NAME   poisson-fem-3d
+    NAME   poisson-mms-3d
     BIN    ${PROJECT_NAME}
-    INPUT  ${PROJECT_SOURCE_DIR}/test/gyml/fe_3d.gyml
-    OUTPUT ${PROJECT_BINARY_DIR}/test/fe_3d.exo
-    GOLD   ${PROJECT_SOURCE_DIR}/test/gold/fe_3d.exo
+    INPUT  ${PROJECT_SOURCE_DIR}/test/gyml/mms-3d.gyml
+    OUTPUT ${PROJECT_BINARY_DIR}/test/mms-3d.exo
+    GOLD   ${PROJECT_SOURCE_DIR}/test/gold/mms-3d.exo
 )

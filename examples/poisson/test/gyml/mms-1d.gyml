@@ -1,19 +1,13 @@
 mesh:
-  type: BoxMesh
+  type: LineMesh
   nx: 2
-  ny: 2
-  nz: 2
   xmin: 0
   xmax: 2
-  ymin: 0
-  ymax: 2
-  zmin: 0
-  zmax: 2
 
 auxs:
   forcing_fn:
     type: FunctionAuxiliaryField
-    value: '-6'
+    value: '-2'
 
 problem:
   type: PoissonEquation
@@ -27,9 +21,8 @@ bcs:
   all:
     type: DirichletBC
     boundary: 'marker'
-    value: 'x*x + y*y + z*z'
+    value: [ 'x*x' ]
 
 output:
   out:
     type: ExodusIIOutput
-    file: fe_3d
