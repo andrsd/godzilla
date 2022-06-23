@@ -17,6 +17,12 @@ public:
     /// Return the number of mesh vertices
     virtual PetscInt get_num_vertices() const;
 
+    /// Get range of vertex indices
+    ///
+    /// @param first First vertex index
+    /// @param last Last vertex index plus one
+    void get_vertex_idx_range(PetscInt & first, PetscInt & last) const;
+
     /// Return the number of mesh elements
     virtual PetscInt get_num_elements() const;
 
