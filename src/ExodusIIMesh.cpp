@@ -106,10 +106,15 @@ ExodusIIMesh::read_side_sets(int exoid, int n_side_sets)
     int * ids = new int[n_side_sets];
     ex_get_ids(exoid, EX_SIDE_SET, ids);
 
+    std::string side_set_name;
     char name[MAX_STR_LENGTH + 1];
     for (int i = 0; i < n_side_sets; i++) {
         ex_get_name(exoid, EX_SIDE_SET, ids[i], name);
-        this->face_set_names[ids[i]] = name;
+        if (strnlen(name, MAX_STR_LENGTH) == 0)
+            side_set_name = std::to_string(ids[i]);
+        else
+            side_set_name = name;
+        this->face_set_names[ids[i]] = side_set_name;
     }
 
     delete[] ids;
