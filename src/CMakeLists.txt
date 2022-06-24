@@ -51,6 +51,7 @@ add_library(godzilla
         Problem.cpp
         RectangleMesh.cpp
         Terminal.cpp
+        TimeSteppingAdaptor.cpp
         TransientProblemInterface.cpp
         UnstructuredMesh.cpp
         Utils.cpp
