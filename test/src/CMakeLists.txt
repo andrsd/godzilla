@@ -23,6 +23,7 @@ add_executable(${PROJECT_NAME}
     GodzillaApp_test.cpp
     GTestFENonlinearProblem.cpp
     GTest2FieldsFENonlinearProblem.cpp
+    GTestImplicitFENonlinearProblem.cpp
     GYMLFile_test.cpp
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp

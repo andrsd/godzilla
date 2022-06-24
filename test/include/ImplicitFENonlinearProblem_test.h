@@ -4,10 +4,7 @@
 #include "Mesh.h"
 #include "InitialCondition.h"
 #include "GodzillaApp_test.h"
-
-class GTestImplicitFENonlinearProblem;
-
-//
+#include "GTestImplicitFENonlinearProblem.h"
 
 class ImplicitFENonlinearProblemTest : public GodzillaAppTest {
 public:
@@ -31,20 +28,4 @@ public:
         params->set<PetscReal>("dt") = 5;
         return this->app->build_object<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
     }
-};
-
-//
-
-/// Test problem for simple FE solver
-class GTestImplicitFENonlinearProblem : public ImplicitFENonlinearProblem {
-public:
-    GTestImplicitFENonlinearProblem(const InputParameters & params);
-    virtual ~GTestImplicitFENonlinearProblem();
-
-protected:
-    virtual void set_up_fields() override;
-    virtual void set_up_weak_form() override;
-
-    /// ID for the "u" field
-    const PetscInt iu;
 };
