@@ -104,6 +104,20 @@ TransientProblemInterface::set_time_stepping_scheme(TSAdaptType type)
     PETSC_CHECK(TSAdaptSetType(this->ts_adapt, type));
 }
 
+void
+TransientProblemInterface::set_step_limits(PetscReal hmin, PetscReal hmax)
+{
+    _F_;
+    PETSC_CHECK(TSAdaptSetStepLimits(this->ts_adapt, hmin, hmax));
+}
+
+void
+TransientProblemInterface::get_step_limits(PetscReal & hmin, PetscReal & hmax)
+{
+    _F_;
+    PETSC_CHECK(TSAdaptGetStepLimits(this->ts_adapt, &hmin, &hmax));
+}
+
 TSAdapt
 TransientProblemInterface::get_ts_adapt() const
 {

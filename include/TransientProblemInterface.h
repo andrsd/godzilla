@@ -24,6 +24,18 @@ public:
     /// @param type Time stepping scheme
     void set_time_stepping_scheme(TSAdaptType type);
 
+    /// Set the minimum and maximum step sizes
+    ///
+    /// @param hmin Minimum time step
+    /// @param hmax Maximum time step
+    void set_step_limits(PetscReal hmin, PetscReal hmax);
+
+    /// Get the minimum and maximum step sizes
+    ///
+    /// @param hmin Minimum time step
+    /// @param hmax Maximum time step
+    void get_step_limits(PetscReal & hmin, PetscReal & hmax);
+
     /// Get TSAdapt object
     TSAdapt get_ts_adapt() const;
 
