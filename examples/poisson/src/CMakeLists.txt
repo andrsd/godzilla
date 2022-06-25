@@ -1,7 +1,3 @@
-if (DEFINED ENV{CONDA_PREFIX})
-    set(CMAKE_BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
-endif()
-
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -14,14 +10,17 @@ target_sanitization(${PROJECT_NAME})
 
 target_include_directories(
     ${PROJECT_NAME}
-    PRIVATE
+    PUBLIC
         ${PROJECT_SOURCE_DIR}/include
-        ${CONDA_INCLUDE_DIR}
-        ${GODZILLA_INCLUDE_DIRS}
+        ${CMAKE_BINARY_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/contrib
 )
 
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
-        ${GODZILLA_LIBRARIES}
+        godzilla
 )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH ${Boost_LIBRARY_DIRS})
