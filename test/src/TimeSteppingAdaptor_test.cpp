@@ -9,6 +9,27 @@
 
 using namespace godzilla;
 
+static const char * TS_ADAPT_TEST = "test";
+
+static PetscErrorCode __ts_adapt_choose(TSAdapt adapt,
+                                        TS ts,
+                                        PetscReal h,
+                                        PetscInt * next_sc,
+                                        PetscReal * next_h,
+                                        PetscBool * accept,
+                                        PetscReal * wlte,
+                                        PetscReal * wltea,
+                                        PetscReal * wlter);
+
+PETSC_EXTERN PetscErrorCode
+TSAdaptCreate_test(TSAdapt adapt)
+{
+    adapt->ops->choose = __ts_adapt_choose;
+    return 0;
+}
+
+///
+
 class TestTSAdaptor : public TimeSteppingAdaptor {
 public:
     explicit TestTSAdaptor(const InputParameters & params);
@@ -24,6 +45,13 @@ public:
     std::vector<PetscReal> dts;
 
     static InputParameters valid_params();
+
+protected:
+    virtual void
+    set_type() override
+    {
+        PETSC_CHECK(TSAdaptSetType(this->ts_adapt, TS_ADAPT_TEST));
+    }
 };
 
 registerObject(TestTSAdaptor);
@@ -64,6 +92,26 @@ TestTSAdaptor::choose(PetscReal h,
     *wlter = -1;
 }
 
+static PetscErrorCode
+__ts_adapt_choose(TSAdapt adapt,
+                  TS ts,
+                  PetscReal h,
+                  PetscInt * next_sc,
+                  PetscReal * next_h,
+                  PetscBool * accept,
+                  PetscReal * wlte,
+                  PetscReal * wltea,
+                  PetscReal * wlter)
+{
+    void * ctx;
+    TSGetApplicationContext(ts, &ctx);
+    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    TestTSAdaptor * adaptor = dynamic_cast<TestTSAdaptor *>(tpi->get_time_stepping_adaptor());
+    assert(adaptor != nullptr);
+    adaptor->choose(h, next_sc, next_h, accept, wlte, wltea, wlter);
+    return 0;
+}
+
 ///
 
 class TestTSProblem : public GTestImplicitFENonlinearProblem {
@@ -95,10 +143,58 @@ TestTSProblem::ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x)
 
 ///
 
+TEST(TimeSteppingAdaptor, api)
+{
+    class MockTSAdaptor : public TimeSteppingAdaptor {
+    public:
+        explicit MockTSAdaptor(const InputParameters & params) : TimeSteppingAdaptor(params) {}
+
+        MOCK_METHOD((void), set_type, ());
+    };
+
+    TestApp app;
+
+    LineMesh * mesh;
+    {
+        const std::string class_name = "LineMesh";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<PetscInt>("nx") = 2;
+        mesh = app.build_object<LineMesh>(class_name, "mesh", params);
+    }
+
+    TestTSProblem * prob;
+    {
+        const std::string class_name = "TestTSProblem";
+        InputParameters * params = Factory::get_valid_params(class_name);
+        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<PetscReal>("start_time") = 0.;
+        params->set<PetscReal>("end_time") = 1;
+        params->set<PetscReal>("dt") = 0.1;
+        prob = app.build_object<TestTSProblem>(class_name, "prob", params);
+    }
+    app.problem = prob;
+    mesh->create();
+    prob->create();
+
+    InputParameters params = MockTSAdaptor::valid_params();
+    params.set<const App *>("_app") = &app;
+    params.set<const Problem *>("_problem") = prob;
+    params.set<const TransientProblemInterface *>("_tpi") = prob;
+    params.set<PetscReal>("dt_min") = 1e-3;
+    params.set<PetscReal>("dt_max") = 1e3;
+    MockTSAdaptor adaptor(params);
+
+    EXPECT_DOUBLE_EQ(adaptor.get_dt_min(), 1e-3);
+    EXPECT_DOUBLE_EQ(adaptor.get_dt_max(), 1e3);
+
+    EXPECT_CALL(adaptor, set_type);
+    adaptor.create();
+}
+
 TEST(TimeSteppingAdaptor, choose)
 {
     TestApp app;
-    TransientProblemInterface::register_types();
+    PETSC_CHECK(TSAdaptRegister(TS_ADAPT_TEST, TSAdaptCreate_test));
 
     LineMesh * mesh;
     {
@@ -130,58 +226,19 @@ TEST(TimeSteppingAdaptor, choose)
         prob->add_boundary_condition(bc);
     }
 
-    TestTSAdaptor * ts_adaptor;
     {
         const std::string class_name = "TestTSAdaptor";
         InputParameters * params = Factory::get_valid_params(class_name);
         params->set<const Problem *>("_problem") = prob;
         params->set<const TransientProblemInterface *>("_tpi") = prob;
-        ts_adaptor = app.build_object<TestTSAdaptor>(class_name, "ts_adapt", params);
+        auto * ts_adaptor = app.build_object<TestTSAdaptor>(class_name, "ts_adapt", params);
+        prob->set_time_stepping_adaptor(ts_adaptor);
     }
 
     mesh->create();
     prob->create();
-
-    prob->set_time_stepping_adaptor(ts_adaptor);
 
     prob->run();
 
     EXPECT_THAT(prob->dts, testing::ElementsAre(0.1, 0.2, 0.3, 0.4, 0.));
-}
-
-TEST(TimeSteppingAdaptor, set_time_stepping_scheme)
-{
-    TestApp app;
-
-    LineMesh * mesh;
-    {
-        const std::string class_name = "LineMesh";
-        InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<PetscInt>("nx") = 2;
-        mesh = app.build_object<LineMesh>(class_name, "mesh", params);
-    }
-
-    TestTSProblem * prob;
-    {
-        const std::string class_name = "TestTSProblem";
-        InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
-        params->set<PetscReal>("start_time") = 0.;
-        params->set<PetscReal>("end_time") = 1;
-        params->set<PetscReal>("dt") = 0.1;
-        prob = app.build_object<TestTSProblem>(class_name, "prob", params);
-    }
-    app.problem = prob;
-
-    mesh->create();
-    prob->create();
-
-    prob->set_time_stepping_scheme(TSADAPTBASIC);
-
-    TSAdapt ts_adapt = prob->get_ts_adapt();
-
-    TSAdaptType type;
-    TSAdaptGetType(ts_adapt, &type);
-
-    EXPECT_STREQ(type, TSADAPTBASIC);
 }

@@ -8,6 +8,7 @@
 #include "FEProblemInterface.h"
 #include "GYMLFile.h"
 #include "Problem.h"
+#include "TransientProblemInterface.h"
 
 using namespace godzilla;
 
@@ -21,9 +22,11 @@ public:
 
 ///
 
-class GTestProblem : public Problem {
+class GTestProblem : public Problem, public TransientProblemInterface {
 public:
-    explicit GTestProblem(const InputParameters & params) : Problem(params)
+    explicit GTestProblem(const InputParameters & params) :
+        Problem(params),
+        TransientProblemInterface(this, params)
     {
         DMPlexCreateBoxMesh(get_comm(),
                             1,
@@ -71,6 +74,10 @@ public:
     {
         return false;
     }
+    void
+    set_up_time_scheme() override
+    {
+    }
 
 protected:
     DM dm;
@@ -86,6 +93,7 @@ InputParameters
 GTestProblem::valid_params()
 {
     InputParameters params = Problem::valid_params();
+    params += TransientProblemInterface::valid_params();
     params.add_param<std::string>("str", "empty", "str doco");
     params.add_param<double>("d", 1.234, "d doco");
     params.add_param<int>("i", -1234, "i doco");
@@ -449,4 +457,20 @@ TEST_F(GYMLFileTest, wrong_type_bool)
                 "Parameter 'bool1' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'."),
             testing::HasSubstr(
                 "Parameter 'bool2' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.")));
+}
+
+TEST_F(GYMLFileTest, ts_adapt_with_steady)
+{
+    testing::internal::CaptureStderr();
+
+    GYMLFile file(this->app);
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/ss_with_ts_adapt.yml");
+    EXPECT_TRUE(file.parse(file_name));
+    file.build();
+    this->app->check_integrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::HasSubstr("Time stepping adaptivity can be used only with transient problems."));
 }

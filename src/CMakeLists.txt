@@ -10,6 +10,7 @@ add_library(${PROJECT_NAME}
         Factory.cpp
         App.cpp
         AuxiliaryField.cpp
+        BasicTSAdapt.cpp
         BoundaryCondition.cpp
         BoxMesh.cpp
         CallStack.cpp

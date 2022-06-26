@@ -46,6 +46,7 @@ protected:
     void build_boundary_conditions();
     void build_postprocessors();
     void build_outputs();
+    void build_ts_adapt(const YAML::Node & problem_node);
     InputParameters * build_params(const YAML::Node & root, const std::string & name);
     void set_parameter_from_yml(InputParameters * params,
                                 const YAML::Node & node,

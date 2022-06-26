@@ -9,6 +9,8 @@
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "FEProblemInterface.h"
+#include "TransientProblemInterface.h"
+#include "TimeSteppingAdaptor.h"
 #include "Postprocessor.h"
 #include "Output.h"
 #include "CallStack.h"
@@ -153,6 +155,29 @@ GYMLFile::build_problem()
     params->set<const Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
     add_object(this->problem);
+
+    YAML::Node problem_node = this->root["problem"];
+    if (this->problem && problem_node && problem_node["ts_adapt"])
+        build_ts_adapt(problem_node);
+}
+
+void
+GYMLFile::build_ts_adapt(const YAML::Node & problem_node)
+{
+    _F_;
+    TransientProblemInterface * tpi = dynamic_cast<TransientProblemInterface *>(this->problem);
+    if (tpi != nullptr) {
+        InputParameters * params = build_params(problem_node, "ts_adapt");
+        params->set<const Problem *>("_problem") = this->problem;
+        params->set<const TransientProblemInterface *>("_tpi") = tpi;
+
+        const std::string & class_name = params->get<std::string>("_type");
+        TimeSteppingAdaptor * ts_adaptor =
+            Factory::create<TimeSteppingAdaptor>(class_name, "ts_adapt", params);
+        tpi->set_time_stepping_adaptor(ts_adaptor);
+    }
+    else
+        log_error("Time stepping adaptivity can be used only with transient problems.");
 }
 
 void

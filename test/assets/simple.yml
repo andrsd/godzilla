@@ -20,6 +20,11 @@ problem:
   }
   bool1: yes
   bool2: false
+  dt: 0.1
+  end_time: 1
+  ts_adapt:
+    type: BasicTSAdapt
+    dt_min: 1e-3
 output:
   vtk:
     type: VTKOutput
