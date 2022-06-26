@@ -19,25 +19,15 @@ public:
     /// @param adaptor Time stepping adaptor object
     void set_time_stepping_adaptor(TimeSteppingAdaptor * adaptor);
 
-    /// Set time stepping adaptivity using a type
+    /// Get time stepping adaptor
     ///
-    /// @param type Time stepping scheme
-    void set_time_stepping_scheme(TSAdaptType type);
+    /// @return Time stepping adaptor
+    TimeSteppingAdaptor * get_time_stepping_adaptor() const;
 
-    /// Set the minimum and maximum step sizes
+    /// Get TS object
     ///
-    /// @param hmin Minimum time step
-    /// @param hmax Maximum time step
-    void set_step_limits(PetscReal hmin, PetscReal hmax);
-
-    /// Get the minimum and maximum step sizes
-    ///
-    /// @param hmin Minimum time step
-    /// @param hmax Maximum time step
-    void get_step_limits(PetscReal & hmin, PetscReal & hmax);
-
-    /// Get TSAdapt object
-    TSAdapt get_ts_adapt() const;
+    /// @return PETSc TS object
+    TS get_ts() const;
 
 protected:
     /// Initialize
@@ -54,14 +44,6 @@ protected:
     virtual PetscErrorCode post_step();
     /// TS monitor callback
     virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
-    /// TS adapt callback
-    virtual PetscErrorCode ts_adapt_choose(PetscReal h,
-                                           PetscInt * next_sc,
-                                           PetscReal * next_h,
-                                           PetscBool * accept,
-                                           PetscReal * wlte,
-                                           PetscReal * wltea,
-                                           PetscReal * wlter);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
@@ -73,8 +55,6 @@ protected:
     Problem * problem;
     /// PETSc TS object
     TS ts;
-    /// TSAdapt object
-    TSAdapt ts_adapt;
     /// Time-stepping adaptor
     TimeSteppingAdaptor * ts_adaptor;
     /// Simulation start time
@@ -89,21 +69,10 @@ protected:
 public:
     static InputParameters valid_params();
 
-    static void register_types();
-
     friend PetscErrorCode __transient_pre_step(TS ts);
     friend PetscErrorCode __transient_post_step(TS ts);
     friend PetscErrorCode
     __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx);
-    friend PetscErrorCode __ts_adapt_choose(TSAdapt adapt,
-                                            TS ts,
-                                            PetscReal h,
-                                            PetscInt * next_sc,
-                                            PetscReal * next_h,
-                                            PetscBool * accept,
-                                            PetscReal * wlte,
-                                            PetscReal * wltea,
-                                            PetscReal * wlter);
 };
 
 } // namespace godzilla
