@@ -1,7 +1,3 @@
-if (DEFINED ENV{CONDA_PREFIX})
-    set(CMAKE_BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
-endif()
-
 add_executable(${PROJECT_NAME}
     AuxiliaryField_test.cpp
     BoundaryCondition_test.cpp
@@ -23,6 +19,7 @@ add_executable(${PROJECT_NAME}
     GodzillaApp_test.cpp
     GTestFENonlinearProblem.cpp
     GTest2FieldsFENonlinearProblem.cpp
+    GTestImplicitFENonlinearProblem.cpp
     GYMLFile_test.cpp
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp
@@ -44,6 +41,7 @@ add_executable(${PROJECT_NAME}
     Problem_test.cpp
     RectangleMesh_test.cpp
     Terminal_test.cpp
+    TimeSteppingAdaptor_test.cpp
     UnstructuredMesh_test.cpp
     Utils_test.cpp
     Validation_test.cpp
@@ -55,17 +53,20 @@ target_sanitization(${PROJECT_NAME})
 
 target_include_directories(
     ${PROJECT_NAME}
-    PRIVATE
-        ${GODZILLA_INCLUDE_DIRS}
-        ${CONDA_INCLUDE_DIR}
-        ${CMAKE_SOURCE_DIR}/test/include
+    PUBLIC
+        ${PROJECT_SOURCE_DIR}/include
         ${CMAKE_BINARY_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/contrib
 )
 
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
-        ${GODZILLA_LIBRARIES}
+        godzilla
+        Boost::filesystem
         gtest_main
         gmock_main
 )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH ${Boost_LIBRARY_DIRS})

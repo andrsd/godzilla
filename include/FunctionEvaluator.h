@@ -1,6 +1,6 @@
 #pragma once
 
-#include "muParser.h"
+#include "muParser/muParser.h"
 #include "petsc.h"
 
 namespace godzilla {

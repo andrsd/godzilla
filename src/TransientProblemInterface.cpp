@@ -1,13 +1,19 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "Problem.h"
+#include "TimeSteppingAdaptor.h"
 #include "TransientProblemInterface.h"
 #include "NonlinearProblem.h"
 #include "Output.h"
 #include "petscdmplex.h"
 #include <assert.h>
+#include "petsc/private/tsimpl.h"
+
+PETSC_EXTERN PetscErrorCode TSAdaptCreate_godzilla(TSAdapt adapt);
 
 namespace godzilla {
+
+static const char * TS_ADAPT_GODZILLA = "godzilla";
 
 PetscErrorCode
 __transient_pre_step(TS ts)
@@ -37,6 +43,24 @@ __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx)
     return tpi->ts_monitor_callback(stepi, time, x);
 }
 
+PetscErrorCode
+__ts_adapt_choose(TSAdapt adapt,
+                  TS ts,
+                  PetscReal h,
+                  PetscInt * next_sc,
+                  PetscReal * next_h,
+                  PetscBool * accept,
+                  PetscReal * wlte,
+                  PetscReal * wltea,
+                  PetscReal * wlter)
+{
+    _F_;
+    void * ctx;
+    TSGetApplicationContext(ts, &ctx);
+    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    return tpi->ts_adapt_choose(h, next_sc, next_h, accept, wlte, wltea, wlter);
+}
+
 InputParameters
 TransientProblemInterface::valid_params()
 {
@@ -51,6 +75,7 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem,
                                                      const InputParameters & params) :
     problem(problem),
     ts(nullptr),
+    ts_adapt(nullptr),
     start_time(params.get<PetscReal>("start_time")),
     end_time(params.get<PetscReal>("end_time")),
     dt(params.get<PetscReal>("dt"))
@@ -65,6 +90,42 @@ TransientProblemInterface::~TransientProblemInterface()
 }
 
 void
+TransientProblemInterface::set_time_stepping_adaptor(TimeSteppingAdaptor * adaptor)
+{
+    _F_;
+    this->ts_adaptor = adaptor;
+    PETSC_CHECK(TSAdaptSetType(this->ts_adapt, TS_ADAPT_GODZILLA));
+}
+
+void
+TransientProblemInterface::set_time_stepping_scheme(TSAdaptType type)
+{
+    _F_;
+    PETSC_CHECK(TSAdaptSetType(this->ts_adapt, type));
+}
+
+void
+TransientProblemInterface::set_step_limits(PetscReal hmin, PetscReal hmax)
+{
+    _F_;
+    PETSC_CHECK(TSAdaptSetStepLimits(this->ts_adapt, hmin, hmax));
+}
+
+void
+TransientProblemInterface::get_step_limits(PetscReal & hmin, PetscReal & hmax)
+{
+    _F_;
+    PETSC_CHECK(TSAdaptGetStepLimits(this->ts_adapt, &hmin, &hmax));
+}
+
+TSAdapt
+TransientProblemInterface::get_ts_adapt() const
+{
+    _F_;
+    return this->ts_adapt;
+}
+
+void
 TransientProblemInterface::init()
 {
     _F_;
@@ -72,6 +133,7 @@ TransientProblemInterface::init()
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
+    PETSC_CHECK(TSGetAdapt(this->ts, &this->ts_adapt));
 }
 
 void
@@ -84,6 +146,13 @@ TransientProblemInterface::create()
     PETSC_CHECK(TSSetTimeStep(this->ts, this->dt));
     PETSC_CHECK(TSSetStepNumber(this->ts, this->problem->get_step_num()));
     PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
+}
+
+void
+TransientProblemInterface::register_types()
+{
+    _F_;
+    PETSC_CHECK(TSAdaptRegister(TS_ADAPT_GODZILLA, TSAdaptCreate_godzilla));
 }
 
 void
@@ -126,6 +195,21 @@ TransientProblemInterface::ts_monitor_callback(PetscInt stepi, PetscReal t, Vec 
     return 0;
 }
 
+PetscErrorCode
+TransientProblemInterface::ts_adapt_choose(PetscReal h,
+                                           PetscInt * next_sc,
+                                           PetscReal * next_h,
+                                           PetscBool * accept,
+                                           PetscReal * wlte,
+                                           PetscReal * wltea,
+                                           PetscReal * wlter)
+{
+    _F_;
+    assert(this->ts_adaptor != nullptr);
+    this->ts_adaptor->choose(h, next_sc, next_h, accept, wlte, wltea, wlter);
+    return 0;
+}
+
 void
 TransientProblemInterface::solve(Vec x)
 {
@@ -142,3 +226,10 @@ TransientProblemInterface::converged() const
 }
 
 } // namespace godzilla
+
+PETSC_EXTERN PetscErrorCode
+TSAdaptCreate_godzilla(TSAdapt adapt)
+{
+    adapt->ops->choose = godzilla::__ts_adapt_choose;
+    return 0;
+}

@@ -2,7 +2,7 @@
 
 #include "Function.h"
 #include "FunctionEvaluator.h"
-#include "muParser.h"
+#include "muParser/muParser.h"
 #include "Types.h"
 
 namespace godzilla {

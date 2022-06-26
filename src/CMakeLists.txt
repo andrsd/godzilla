@@ -1,6 +1,10 @@
-# Godzilla
+project(
+    godzilla
+        VERSION 0.1
+        LANGUAGES CXX
+)
 
-add_library(godzilla
+add_library(${PROJECT_NAME}
     SHARED
         # factory must be first
         Factory.cpp
@@ -51,49 +55,118 @@ add_library(godzilla
         Problem.cpp
         RectangleMesh.cpp
         Terminal.cpp
+        TimeSteppingAdaptor.cpp
         TransientProblemInterface.cpp
         UnstructuredMesh.cpp
         Utils.cpp
         Validation.cpp
         VTKOutput.cpp
 )
-target_code_coverage(godzilla)
-target_sanitization(godzilla)
+target_code_coverage(${PROJECT_NAME})
+target_sanitization(${PROJECT_NAME})
 
 set_target_properties(
-    godzilla
+    ${PROJECT_NAME}
     PROPERTIES
         UNITY_BUILD_MODE BATCH
 )
 
 set_target_properties(
-    godzilla
+    ${PROJECT_NAME}
     PROPERTIES
         VERSION ${PROJECT_VERSION}
         SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
 target_include_directories(
-    godzilla
+    ${PROJECT_NAME}
     PRIVATE
-        ${CONDA_INCLUDE_DIR}
-        ${HDF5_INCLUDE_DIRS}
         ${PETSC_INCLUDE_DIR}
-        ${PROJECT_BINARY_DIR}
-        ${MUPARSER_INCLUDE_DIR}
-        ${YAML_CPP_INCLUDE_DIR}
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/contrib
+        ${HDF5_INCLUDE_DIRS}
+        ${CMAKE_BINARY_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/contrib
 )
 
 target_link_libraries(
-    godzilla
+    ${PROJECT_NAME}
     PUBLIC
-        muparser
         yaml-cpp
         Boost::filesystem
         ${NETCDF_LIBRARY}
         ${HDF5_LIBRARIES}
         ${EXODUSII_LIBRARY}
         ${PETSC_LIBRARY}
+    PRIVATE
+        muParser
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH OFF)
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+# install
+
+install(
+    TARGETS
+        godzilla
+    EXPORT
+        GodzillaTargets
+    LIBRARY DESTINATION
+        lib
+    ARCHIVE DESTINATION
+        lib
+    RUNTIME DESTINATION
+        bin
+    INCLUDES DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}
+    PUBLIC_HEADER DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(
+    DIRECTORY
+        ${CMAKE_SOURCE_DIR}/include/
+    DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+    FILES_MATCHING
+        PATTERN "*.h"
+)
+
+install(
+    DIRECTORY
+        ${CMAKE_SOURCE_DIR}/contrib/tclap
+    DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}
+    FILES_MATCHING
+        PATTERN "*.h"
+)
+
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    GodzillaConfigVersion.cmake
+    VERSION
+        ${PROJECT_VERSION}
+    COMPATIBILITY
+        AnyNewerVersion
+)
+
+install(
+    EXPORT
+        GodzillaTargets
+    FILE
+        GodzillaTargets.cmake
+    NAMESPACE
+        Godzilla::
+    DESTINATION
+        lib/cmake/godzilla
+)
+
+install(
+    FILES
+        "${CMAKE_SOURCE_DIR}/cmake/GodzillaConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/GodzillaConfigVersion.cmake"
+    DESTINATION
+        lib/cmake/godzilla
 )
