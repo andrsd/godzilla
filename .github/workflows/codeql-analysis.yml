@@ -25,7 +25,6 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     env:
-      MUPARSER_VERSION: 2.3.3-1
       PETSC_VERSION: 3.17.0
       PETSC_CACHE_NUM: 8
     permissions:
@@ -76,15 +75,6 @@ jobs:
       run: |
         sudo apt-get update -qq
         sudo apt install llvm-12 libblas-dev liblapack-dev libboost-all-dev libyaml-cpp-dev
-    - name: Build muparser
-      run: |
-        cd ${{ github.workspace }}
-        wget -O muparser-${MUPARSER_VERSION}.tar.gz -q https://github.com/beltoforion/muparser/archive/refs/tags/v${MUPARSER_VERSION}.tar.gz
-        tar -xzf muparser-${MUPARSER_VERSION}.tar.gz
-        cd muparser-${MUPARSER_VERSION}
-        cmake . -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=ON -DENABLE_OPENMP=OFF
-        make
-        sudo make install
     - name: Setup env
       run: |
         echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH

@@ -22,7 +22,6 @@ find_package(Boost
     COMPONENTS
         filesystem
 )
-find_package(muparser REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 find_package(PETSc)
@@ -72,6 +71,7 @@ mark_as_advanced(FORCE
 
 include(GNUInstallDirs)
 
+add_subdirectory(contrib/muParser)
 add_subdirectory(src)
 
 # Install

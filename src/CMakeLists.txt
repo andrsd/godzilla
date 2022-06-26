@@ -91,13 +91,14 @@ target_include_directories(
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
-        muparser
         yaml-cpp
         Boost::filesystem
         ${NETCDF_LIBRARY}
         ${HDF5_LIBRARIES}
         ${EXODUSII_LIBRARY}
         ${PETSC_LIBRARY}
+    PRIVATE
+        muParser
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH OFF)

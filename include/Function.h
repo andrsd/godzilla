@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Object.h"
-#include "muParser.h"
+#include "muParser/muParser.h"
 
 namespace godzilla {
 

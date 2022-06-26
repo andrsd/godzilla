@@ -7,6 +7,5 @@ find_package(Boost
         filesystem
 )
 find_dependency(yaml-cpp REQUIRED)
-find_dependency(muparser REQUIRED)
 
 include("${CMAKE_CURRENT_LIST_DIR}/GodzillaTargets.cmake")
