@@ -94,7 +94,6 @@ target_link_libraries(
     PUBLIC
         fmt::fmt
         yaml-cpp
-        Boost::filesystem
         ${NETCDF_LIBRARY}
         ${HDF5_LIBRARIES}
         ${EXODUSII_LIBRARY}

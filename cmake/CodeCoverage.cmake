@@ -41,7 +41,6 @@ if(GODZILLA_CODE_COVERAGE)
             --ignore-filename-regex=/include/yaml-cpp/*
             --ignore-filename-regex=/include/gtest/*
             --ignore-filename-regex=/include/gmock/*
-            --ignore-filename-regex=/include/boost/*
             --ignore-filename-regex=test/*
             --ignore-filename-regex=/muparser/*
         )
