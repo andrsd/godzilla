@@ -1,7 +1,7 @@
 #include "FunctionEvaluator.h"
 #include "CallStack.h"
 #include "Function.h"
-#include "boost/algorithm/string/join.hpp"
+#include "fmt/format.h"
 #include <assert.h>
 
 namespace godzilla {
@@ -23,7 +23,7 @@ FunctionEvaluator::create(const std::string & expr)
 void
 FunctionEvaluator::create(const std::vector<std::string> & expressions)
 {
-    std::string expr = boost::algorithm::join(expressions, ",");
+    std::string expr = fmt::to_string(fmt::join(expressions, ","));
     create(expr);
 }
 

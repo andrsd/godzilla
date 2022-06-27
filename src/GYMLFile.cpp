@@ -17,7 +17,7 @@
 #include "Validation.h"
 #include "Utils.h"
 #include "assert.h"
-#include "boost/algorithm/string/join.hpp"
+#include "fmt/format.h"
 #include "yaml-cpp/node/iterator.h"
 
 template <typename T>
@@ -495,7 +495,7 @@ GYMLFile::check_params(const InputParameters * params,
     if (unused_param_names.size() > 0)
         log_warning("%s: Following parameters were not used: %s",
                     name,
-                    boost::algorithm::join(unused_param_names, ", "));
+                    fmt::to_string(fmt::join(unused_param_names, ", ")));
 }
 
 } // namespace godzilla

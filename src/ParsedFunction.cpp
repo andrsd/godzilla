@@ -1,7 +1,7 @@
 #include "Godzilla.h"
 #include "ParsedFunction.h"
 #include "CallStack.h"
-#include "boost/algorithm/string/join.hpp"
+#include "fmt/format.h"
 
 namespace godzilla {
 
