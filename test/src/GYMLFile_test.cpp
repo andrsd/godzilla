@@ -87,7 +87,7 @@ public:
     static InputParameters valid_params();
 };
 
-registerObject(GTestProblem);
+REGISTER_OBJECT(GTestProblem);
 
 InputParameters
 GTestProblem::valid_params()

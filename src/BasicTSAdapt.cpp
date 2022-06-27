@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-registerObject(BasicTSAdapt);
+REGISTER_OBJECT(BasicTSAdapt);
 
 InputParameters
 BasicTSAdapt::valid_params()

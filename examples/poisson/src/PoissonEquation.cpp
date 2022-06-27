@@ -7,7 +7,7 @@
 
 using namespace godzilla;
 
-registerObject(PoissonEquation);
+REGISTER_OBJECT(PoissonEquation);
 
 static void
 f0_u(PetscInt dim,

@@ -5,7 +5,7 @@
 
 namespace godzilla {
 
-registerObject(FunctionAuxiliaryField);
+REGISTER_OBJECT(FunctionAuxiliaryField);
 
 PetscErrorCode
 __function_auxiliary_field(PetscInt dim,

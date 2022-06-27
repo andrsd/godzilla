@@ -54,7 +54,7 @@ protected:
     }
 };
 
-registerObject(TestTSAdaptor);
+REGISTER_OBJECT(TestTSAdaptor);
 
 InputParameters
 TestTSAdaptor::valid_params()
@@ -124,7 +124,7 @@ protected:
     virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
 };
 
-registerObject(TestTSProblem);
+REGISTER_OBJECT(TestTSProblem);
 
 TestTSProblem::TestTSProblem(const InputParameters & params) :
     GTestImplicitFENonlinearProblem(params)

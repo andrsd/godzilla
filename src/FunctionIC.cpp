@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-registerObject(FunctionIC);
+REGISTER_OBJECT(FunctionIC);
 
 InputParameters
 FunctionIC::valid_params()

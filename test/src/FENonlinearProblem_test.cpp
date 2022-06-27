@@ -36,7 +36,7 @@ public:
     }
 };
 
-registerObject(GTest2CompIC);
+REGISTER_OBJECT(GTest2CompIC);
 
 TEST_F(FENonlinearProblemTest, get_fepi_mesh)
 {

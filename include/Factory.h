@@ -9,11 +9,11 @@
 #define combineNames1(X, Y) X##Y
 #define combineNames(X, Y) combineNames1(X, Y)
 
-#define registerObject(classname)                                                  \
+#define REGISTER_OBJECT(classname)                                                 \
     static char combineNames(dummyvar_for_registering_obj_##classname, __LINE__) = \
         godzilla::Factory::reg<classname>(#classname)
 
-#define registerObjectAlias(classname, alias)                                      \
+#define REGISTER_OBJECT_ALIAS(classname, alias)                                    \
     static char combineNames(dummyvar_for_registering_obj_##classname, __LINE__) = \
         godzilla::Factory::reg<classname>(#alias)
 

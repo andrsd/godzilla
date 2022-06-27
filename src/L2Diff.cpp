@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-registerObject(L2Diff);
+REGISTER_OBJECT(L2Diff);
 
 PetscErrorCode
 __l2_diff(PetscInt dim,

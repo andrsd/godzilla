@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-registerObject(ExodusIIMesh);
+REGISTER_OBJECT(ExodusIIMesh);
 
 InputParameters
 ExodusIIMesh::valid_params()

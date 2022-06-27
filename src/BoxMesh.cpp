@@ -5,7 +5,7 @@
 
 namespace godzilla {
 
-registerObject(BoxMesh);
+REGISTER_OBJECT(BoxMesh);
 
 InputParameters
 BoxMesh::valid_params()

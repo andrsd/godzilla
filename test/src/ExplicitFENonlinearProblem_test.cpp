@@ -28,7 +28,7 @@ protected:
     }
 };
 
-registerObject(TestExplicitFELinearProblem);
+REGISTER_OBJECT(TestExplicitFELinearProblem);
 
 TEST(ExplicitFELinearProblemTest, wrong_scheme)
 {
