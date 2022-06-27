@@ -71,9 +71,10 @@ LineMesh::create_dm()
                                     &this->dm));
 
     // create user-friendly names for sides
-    const char * side_name[] = { "left", "right" };
-    for (unsigned int i = 0; i < 2; i++)
-        create_face_set(i + 1, side_name[i]);
+    std::map<int, std::string> face_set_names;
+    face_set_names[1] = "left";
+    face_set_names[2] = "right";
+    create_face_set_labels(face_set_names);
 }
 
 } // namespace godzilla

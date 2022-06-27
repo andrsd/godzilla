@@ -7,6 +7,28 @@
 
 namespace godzilla {
 
+// NOTE: When there is an ExodusIO module, this method would go there
+static std::map<int, std::string>
+read_name_map(int exoid, int n, ex_entity_type obj_type)
+{
+    _F_;
+    std::map<int, std::string> map_names;
+    int * ids = new int[n];
+    ex_get_ids(exoid, obj_type, ids);
+    char name[MAX_STR_LENGTH + 1];
+    for (int i = 0; i < n; i++) {
+        ex_get_name(exoid, obj_type, ids[i], name);
+        std::string str_name;
+        if (strnlen(name, MAX_STR_LENGTH) == 0)
+            str_name = std::to_string(ids[i]);
+        else
+            str_name = name;
+        map_names[ids[i]] = str_name;
+    }
+    delete[] ids;
+    return map_names;
+}
+
 REGISTER_OBJECT(ExodusIIMesh);
 
 InputParameters
@@ -71,53 +93,17 @@ ExodusIIMesh::create_dm()
                     &n_node_sets,
                     &n_side_sets);
 
-        read_cell_sets(exoid, n_elem_blk);
-        read_side_sets(exoid, n_side_sets);
+        // cell sets
+        std::map<int, std::string> cell_set_names = read_name_map(exoid, n_elem_blk, EX_ELEM_BLOCK);
+        for (auto & it : cell_set_names)
+            create_cell_set(it.first, it.second);
+
+        // side sets
+        std::map<int, std::string> side_set_names = read_name_map(exoid, n_side_sets, EX_SIDE_SET);
+        create_face_set_labels(side_set_names);
 
         ex_close(exoid);
     }
-}
-
-void
-ExodusIIMesh::read_cell_sets(int exoid, int n_blk_sets)
-{
-    _F_;
-    int * ids = new int[n_blk_sets];
-    ex_get_ids(exoid, EX_ELEM_BLOCK, ids);
-
-    std::string cell_set_name;
-    char name[MAX_STR_LENGTH + 1];
-    for (int i = 0; i < n_blk_sets; i++) {
-        ex_get_name(exoid, EX_ELEM_BLOCK, ids[i], name);
-        if (strnlen(name, MAX_STR_LENGTH) == 0)
-            cell_set_name = std::to_string(ids[i]);
-        else
-            cell_set_name = name;
-        create_cell_set(ids[i], cell_set_name);
-    }
-
-    delete[] ids;
-}
-
-void
-ExodusIIMesh::read_side_sets(int exoid, int n_side_sets)
-{
-    _F_;
-    int * ids = new int[n_side_sets];
-    ex_get_ids(exoid, EX_SIDE_SET, ids);
-
-    std::string side_set_name;
-    char name[MAX_STR_LENGTH + 1];
-    for (int i = 0; i < n_side_sets; i++) {
-        ex_get_name(exoid, EX_SIDE_SET, ids[i], name);
-        if (strnlen(name, MAX_STR_LENGTH) == 0)
-            side_set_name = std::to_string(ids[i]);
-        else
-            side_set_name = name;
-        this->face_set_names[ids[i]] = side_set_name;
-    }
-
-    delete[] ids;
 }
 
 } // namespace godzilla

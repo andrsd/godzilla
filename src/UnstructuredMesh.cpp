@@ -108,19 +108,76 @@ UnstructuredMesh::is_simplex() const
 }
 
 void
-UnstructuredMesh::create_face_set(PetscInt id, const std::string & name)
+UnstructuredMesh::create_face_set_labels(const std::map<int, std::string> & names)
+{
+    _F_;
+    DMLabel fs_label;
+    PETSC_CHECK(DMGetLabel(dm, "Face Sets", &fs_label));
+    PetscInt n_fs;
+    PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_fs));
+    IS fs_is;
+    PETSC_CHECK(DMLabelGetValueIS(fs_label, &fs_is));
+    const PetscInt * fs_ids;
+    PETSC_CHECK(ISGetIndices(fs_is, &fs_ids));
+    for (PetscInt i = 0; i < n_fs; i++) {
+        PetscInt id = fs_ids[i];
+        create_face_set(id);
+        set_face_set_name(id, names.at(id));
+    }
+    PETSC_CHECK(ISRestoreIndices(fs_is, &fs_ids));
+    PETSC_CHECK(ISDestroy(&fs_is));
+}
+
+void
+UnstructuredMesh::create_face_set(PetscInt id)
 {
     _F_;
     DMLabel face_sets_label = get_label("Face Sets");
     IS is;
     PETSC_CHECK(DMLabelGetStratumIS(face_sets_label, id, &is));
-    PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
-    DMLabel label = get_label(name);
+    std::string id_str = std::to_string(id);
+    PETSC_CHECK(DMCreateLabel(this->dm, id_str.c_str()));
+    DMLabel label = get_label(id_str);
     if (is)
         PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
     PETSC_CHECK(ISDestroy(&is));
     PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
+}
+
+void
+UnstructuredMesh::set_face_set_name(PetscInt id, const std::string & name)
+{
+    _F_;
     this->face_set_names[id] = name;
+    this->face_set_ids[name] = id;
+}
+
+bool
+UnstructuredMesh::has_face_set(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->face_set_ids.find(name);
+    if (it != this->face_set_ids.end()) {
+        PetscInt id = it->second;
+        return has_label(std::to_string(id));
+    }
+    else
+        // assume `name` is an ID
+        return has_label(name);
+}
+
+DMLabel
+UnstructuredMesh::get_face_set_label(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->face_set_ids.find(name);
+    if (it != this->face_set_ids.end()) {
+        PetscInt id = it->second;
+        return get_label(std::to_string(id));
+    }
+    else
+        // assume `name` is an ID
+        return get_label(name);
 }
 
 const std::string &

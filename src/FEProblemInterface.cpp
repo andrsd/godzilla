@@ -310,7 +310,7 @@ FEProblemInterface::set_up_boundary_conditions()
     bool no_errors = true;
     for (auto & bc : this->bcs) {
         const std::string & bnd_name = bc->get_boundary();
-        bool exists = this->unstr_mesh->has_label(bnd_name);
+        bool exists = this->unstr_mesh->has_face_set(bnd_name);
         if (!exists) {
             no_errors = false;
             this->logger->error(
