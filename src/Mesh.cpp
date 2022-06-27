@@ -46,6 +46,7 @@ Mesh::create()
     _F_;
     create_dm();
     PETSC_CHECK(DMSetFromOptions(this->dm));
+    PETSC_CHECK(DMViewFromOptions(dm, NULL, "-dm_view"));
     PETSC_CHECK(DMSetUp(this->dm));
     PETSC_CHECK(DMGetDimension(this->dm, &this->dim));
     distribute();
