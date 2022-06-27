@@ -10,7 +10,7 @@ on:
 
 jobs:
   linux-clang:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: ubuntu-clang
     env:
       PETSC_VERSION: 3.17.0
@@ -55,7 +55,7 @@ jobs:
           path: ${{ github.workspace }}/build/coverage.info
 
   linux-gcc:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: ubuntu-gcc
     env:
       PETSC_VERSION: 3.17.0
