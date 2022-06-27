@@ -4,6 +4,9 @@
 #include "Problem.h"
 #include "Postprocessor.h"
 #include "Error.h"
+#include "fmt/printf.h"
+#include <string.h>
+#include <errno.h>
 
 namespace godzilla {
 
@@ -16,7 +19,12 @@ CSVOutput::valid_params()
     return params;
 }
 
-CSVOutput::CSVOutput(const InputParameters & params) : FileOutput(params), has_header(false) {}
+CSVOutput::CSVOutput(const InputParameters & params) :
+    FileOutput(params),
+    f(nullptr),
+    has_header(false)
+{
+}
 
 CSVOutput::~CSVOutput()
 {
@@ -64,40 +72,42 @@ void
 CSVOutput::open_file()
 {
     _F_;
-    this->f.open(this->file_name, std::ofstream::out);
-    if (!this->f.is_open())
-        log_error("Unable to open '%s' for writing.", this->file_name);
+    this->f = fopen(this->file_name.c_str(), "w");
+    if (this->f == nullptr)
+        log_error("Unable to open '%s' for writing: %s.", this->file_name, strerror(errno));
 }
 
 void
 CSVOutput::write_header()
 {
     _F_;
-    internal::fprintf(this->f, "time");
+    fmt::fprintf(this->f, "time");
     for (auto & name : this->pps_names)
-        internal::fprintf(this->f, ",%s", name);
-    internal::fprintf(this->f, "\n");
+        fmt::fprintf(this->f, ",%s", name);
+    fmt::fprintf(this->f, "\n");
 }
 
 void
 CSVOutput::write_values(PetscReal time)
 {
     _F_;
-    internal::fprintf(this->f, "%g", time);
+    fmt::fprintf(this->f, "%g", time);
     for (auto & name : this->pps_names) {
         auto * pps = this->problem->get_postprocessor(name);
         PetscReal val = pps->get_value();
-        internal::fprintf(this->f, ",%g", val);
+        fmt::fprintf(this->f, ",%g", val);
     }
-    internal::fprintf(this->f, "\n");
+    fmt::fprintf(this->f, "\n");
 }
 
 void
 CSVOutput::close_file()
 {
     _F_;
-    if (this->f.is_open())
-        this->f.close();
+    if (this->f != nullptr) {
+        fclose(this->f);
+        this->f = nullptr;
+    }
 }
 
 } // namespace godzilla

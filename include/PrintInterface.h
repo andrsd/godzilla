@@ -3,6 +3,7 @@
 #include <string>
 #include "Error.h"
 #include "petscsys.h"
+#include "fmt/printf.h"
 
 namespace godzilla {
 
@@ -29,9 +30,9 @@ protected:
     lprintf(unsigned int level, const char * format, Args &&... args) const
     {
         if (level <= this->verbosity_level && this->proc_id == 0) {
-            internal::fprintf(std::cout, "%s: ", this->prefix);
-            internal::fprintf(std::cout, format, std::forward<Args>(args)...);
-            internal::fprintf(std::cout, "\n");
+            fmt::fprintf(stdout, "%s: ", this->prefix);
+            fmt::fprintf(stdout, format, std::forward<Args>(args)...);
+            fmt::fprintf(stdout, "\n");
         }
     }
 

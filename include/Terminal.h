@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <fmt/format.h>
 
 namespace godzilla {
 
@@ -24,6 +25,8 @@ public:
         }
 
         const char * str;
+
+        operator const char *() const { return this->str; }
 
     public:
         static Color black;
@@ -50,3 +53,14 @@ public:
 
 /// Operator to print the color to the terminal
 std::ostream & operator<<(std::ostream & os, const godzilla::Terminal::Color & clr);
+
+// Formatter for {fmt} library
+template <>
+struct fmt::formatter<godzilla::Terminal::Color> : formatter<std::string> {
+    template <typename FormatContext>
+    auto
+    format(const godzilla::Terminal::Color & c, FormatContext & ctx)
+    {
+        return fmt::formatter<std::string>::format(c.str, ctx);
+    }
+};

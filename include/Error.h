@@ -5,40 +5,21 @@
 #include <iostream>
 #include "Terminal.h"
 #include "petsc.h"
+#include "fmt/printf.h"
+#include "fmt/color.h"
 
 namespace godzilla {
 
 namespace internal {
 
-void fprintf(std::ostream & os, const char * s);
-
-template <typename T, typename... Args>
-void
-fprintf(std::ostream & os, const char * s, T value, Args... args)
-{
-    while (s && *s) {
-        if (*s == '%' && *(s + 1) != '%') {
-            if (*(s + 1) == 'e')
-                os << std::scientific;
-            else if (*(s + 1) == 'f')
-                os << std::defaultfloat;
-            ++s;
-            os << value;
-            return fprintf(os, ++s, args...);
-        }
-        os << *s++;
-    }
-    throw std::runtime_error("extra arguments provided to fprintf");
-}
-
 template <typename... Args>
 void
 error_printf(const char * s, Args... args)
 {
-    fprintf(std::cerr, "%s", Terminal::Color::red);
-    fprintf(std::cerr, "[ERROR] ");
-    fprintf(std::cerr, s, std::forward<Args>(args)...);
-    fprintf(std::cerr, "%s\n", Terminal::Color::normal);
+    fmt::fprintf(stderr, "%s", Terminal::Color::red);
+    fmt::fprintf(stderr, "[ERROR] ");
+    fmt::fprintf(stderr, s, std::forward<Args>(args)...);
+    fmt::fprintf(stderr, "%s", Terminal::Color::normal);
 }
 
 /// Terminate the run

@@ -479,16 +479,17 @@ GYMLFile::check_params(const InputParameters * params,
                        std::set<std::string> & unused_param_names)
 {
     _F_;
-    std::ostringstream oss;
+    std::string missing_pars;
 
     for (const auto & it : *params) {
         const auto & param_name = it.first;
         if (!params->is_param_valid(param_name) && params->is_param_required(param_name))
-            oss << std::endl << "- '" << param_name << "': " << params->get_doc_string(param_name);
+            missing_pars +=
+                fmt::sprintf("\n- '%s': %s", param_name, params->get_doc_string(param_name));
     }
 
-    if (!oss.str().empty())
-        log_error("%s: Missing required parameters:%s", name, oss.str());
+    if (!missing_pars.empty())
+        log_error("%s: Missing required parameters:%s", name, missing_pars);
     else
         this->valid_param_object_names.insert(name);
 

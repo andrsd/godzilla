@@ -1,24 +1,15 @@
 #include "Error.h"
 #include "CallStack.h"
 #include <cstdio>
+#include "fmt/printf.h"
 
 namespace godzilla {
 namespace internal {
 
 void
-fprintf(std::ostream & os, const char * s)
-{
-    while (s && *s) {
-        if (*s == '%' && *++s != '%')
-            throw std::runtime_error("invalid format: missing arguments");
-        os << *s++;
-    }
-}
-
-void
 print_call_stack()
 {
-    fprintf(std::cerr, "\n");
+    fmt::fprintf(stderr, "\n");
     get_callstack().dump();
 }
 
