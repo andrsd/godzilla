@@ -74,7 +74,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update -qq
-        sudo apt install llvm-12 libblas-dev liblapack-dev libboost-all-dev libyaml-cpp-dev
+        sudo apt install llvm-12 libblas-dev liblapack-dev libboost-all-dev libyaml-cpp-dev libfmt-dev
     - name: Setup env
       run: |
         echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH

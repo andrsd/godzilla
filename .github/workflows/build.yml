@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install llvm-12 libblas-dev liblapack-dev libboost-all-dev libyaml-cpp-dev
+          sudo apt install llvm-12 libblas-dev liblapack-dev libboost-all-dev libyaml-cpp-dev libfmt-dev
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
@@ -66,7 +66,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install libblas-dev liblapack-dev libboost-all-dev lcov libyaml-cpp-dev
+          sudo apt install libblas-dev liblapack-dev libboost-all-dev lcov libyaml-cpp-dev libfmt-dev
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
@@ -108,7 +108,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: brew install cmake automake lcov llvm@12 boost yaml-cpp
+        run: brew install cmake automake lcov llvm@12 boost yaml-cpp fmt
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH

@@ -22,6 +22,7 @@ find_package(Boost
     COMPONENTS
         filesystem
 )
+find_package(fmt REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 find_package(PETSc)
