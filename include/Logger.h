@@ -4,6 +4,7 @@
 #include <string>
 #include "Terminal.h"
 #include "Error.h"
+#include "fmt/color.h"
 
 namespace godzilla {
 
@@ -78,13 +79,13 @@ protected:
                const char * format,
                Args... args)
     {
-        std::ostringstream oss;
-        oss << color << title << " ";
+        std::string str;
+        str += fmt::sprintf("%s%s ", color, title);
         if (prefix.length() > 0)
-            oss << prefix << ": ";
-        internal::fprintf(oss, format, std::forward<Args>(args)...);
-        oss << Terminal::Color::normal;
-        return oss.str();
+            str += fmt::sprintf("%s: ", prefix);
+        str += fmt::sprintf(format, std::forward<Args>(args)...);
+        str += fmt::sprintf("%s", Terminal::Color::normal);
+        return str;
     }
 
     /// List of logged errors/warnings

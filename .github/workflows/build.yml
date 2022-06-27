@@ -10,7 +10,7 @@ on:
 
 jobs:
   linux-clang:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: ubuntu-clang
     env:
       PETSC_VERSION: 3.17.0
@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install llvm-12 libblas-dev liblapack-dev libboost-all-dev libyaml-cpp-dev
+          sudo apt install llvm-12 libblas-dev liblapack-dev libyaml-cpp-dev libfmt-dev
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
@@ -55,7 +55,7 @@ jobs:
           path: ${{ github.workspace }}/build/coverage.info
 
   linux-gcc:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: ubuntu-gcc
     env:
       PETSC_VERSION: 3.17.0
@@ -66,7 +66,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt install libblas-dev liblapack-dev libboost-all-dev lcov libyaml-cpp-dev
+          sudo apt install libblas-dev liblapack-dev lcov libyaml-cpp-dev libfmt-dev
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
@@ -108,7 +108,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: brew install cmake automake lcov llvm@12 boost yaml-cpp
+        run: brew install cmake automake lcov llvm@12 yaml-cpp fmt
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH

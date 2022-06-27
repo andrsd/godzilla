@@ -37,10 +37,10 @@ if(GODZILLA_CODE_COVERAGE)
             --ignore-filename-regex=/contrib/
             --ignore-filename-regex=/include/petsc*
             --ignore-filename-regex=/include/mpi*
+            --ignore-filename-regex=/include/fmt/*
             --ignore-filename-regex=/include/yaml-cpp/*
             --ignore-filename-regex=/include/gtest/*
             --ignore-filename-regex=/include/gmock/*
-            --ignore-filename-regex=/include/boost/*
             --ignore-filename-regex=test/*
             --ignore-filename-regex=/muparser/*
         )
@@ -134,6 +134,7 @@ if(GODZILLA_CODE_COVERAGE)
             --exclude=*/include/petsc*
             --exclude=*/include/gtest/*
             --exclude=*/include/gmock/*
+            --exclude=*/include/fmt/*
             --exclude=*/include/yaml-cpp/*
             --exclude=/usr/include/*
             --exclude=*muparser*

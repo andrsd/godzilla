@@ -77,18 +77,16 @@ add_var_names(PetscInt nc,
     else {
         if (nums) {
             for (PetscInt c = 0; c < nc; c++) {
-                std::ostringstream oss;
-                internal::fprintf(oss, "%s_%d", name, c);
-                var_names.push_back(oss.str());
+                std::string s = fmt::sprintf("%s_%d", name, c);
+                var_names.push_back(s);
             }
         }
         else {
             assert(nc <= 3);
             const char * comp_name[] = { "x", "y", "z" };
             for (PetscInt c = 0; c < nc; c++) {
-                std::ostringstream oss;
-                internal::fprintf(oss, "%s_%s", name, comp_name[c]);
-                var_names.push_back(oss.str());
+                std::string s = fmt::sprintf("%s_%s", name, comp_name[c]);
+                var_names.push_back(s);
             }
         }
     }
@@ -135,16 +133,11 @@ void
 ExodusIIOutput::set_file_name()
 {
     _F_;
-    std::ostringstream oss;
     if (get_comm_size() == 1)
-        internal::fprintf(oss, "%s.%s", this->file_base, this->get_file_ext());
+        this->file_name = fmt::sprintf("%s.%s", this->file_base, this->get_file_ext());
     else
-        internal::fprintf(oss,
-                          "%s.%d.%s",
-                          this->file_base,
-                          get_processor_id(),
-                          this->get_file_ext());
-    this->file_name = oss.str();
+        this->file_name =
+            fmt::sprintf("%s.%d.%s", this->file_base, get_processor_id(), this->get_file_ext());
 }
 
 void

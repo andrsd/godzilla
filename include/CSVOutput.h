@@ -23,7 +23,7 @@ protected:
     void close_file();
 
     /// Output file
-    std::ofstream f;
+    std::FILE * f;
 
     /// Flag indicating if header was written
     bool has_header;

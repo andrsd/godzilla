@@ -3,7 +3,7 @@
 #include "FileOutput.h"
 #include "Problem.h"
 #include "App.h"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 namespace godzilla {
 
@@ -28,8 +28,8 @@ FileOutput::create()
     _F_;
     Output::create();
     if (this->file_base.length() == 0) {
-        const std::string & input_file_name = get_app()->get_input_file_name();
-        this->file_base = boost::filesystem::path(input_file_name).stem().c_str();
+        std::filesystem::path input_file_name(get_app()->get_input_file_name());
+        this->file_base = input_file_name.stem().u8string().c_str();
     }
 }
 
@@ -44,18 +44,14 @@ void
 FileOutput::set_file_name()
 {
     _F_;
-    std::ostringstream oss;
-    internal::fprintf(oss, "%s.%s", this->file_base, this->get_file_ext());
-    this->file_name = oss.str();
+    this->file_name = fmt::sprintf("%s.%s", this->file_base, this->get_file_ext());
 }
 
 void
 FileOutput::set_sequence_file_name(unsigned int stepi)
 {
     _F_;
-    std::ostringstream oss;
-    internal::fprintf(oss, "%s.%d.%s", this->file_base, stepi, this->get_file_ext());
-    this->file_name = oss.str();
+    this->file_name = fmt::sprintf("%s.%d.%s", this->file_base, stepi, this->get_file_ext());
 }
 
 } // namespace godzilla

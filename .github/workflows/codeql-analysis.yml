@@ -23,7 +23,7 @@ on:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       PETSC_VERSION: 3.17.0
       PETSC_CACHE_NUM: 8
@@ -74,7 +74,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update -qq
-        sudo apt install llvm-12 libblas-dev liblapack-dev libboost-all-dev libyaml-cpp-dev
+        sudo apt install llvm-12 libblas-dev liblapack-dev libyaml-cpp-dev libfmt-dev
     - name: Setup env
       run: |
         echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH

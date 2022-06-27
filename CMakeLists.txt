@@ -4,7 +4,7 @@ project(godzilla)
 
 enable_language(C)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
@@ -16,12 +16,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
-# BOOST
-find_package(Boost
-    REQUIRED
-    COMPONENTS
-        filesystem
-)
+find_package(fmt REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 find_package(PETSc)

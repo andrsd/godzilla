@@ -25,4 +25,6 @@ target_link_libraries(
         godzilla
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH ${Boost_LIBRARY_DIRS})
+if (DEFINED ENV{CONDA_PREFIX})
+    set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
+endif()

@@ -92,8 +92,8 @@ target_include_directories(
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
+        fmt::fmt
         yaml-cpp
-        Boost::filesystem
         ${NETCDF_LIBRARY}
         ${HDF5_LIBRARIES}
         ${EXODUSII_LIBRARY}

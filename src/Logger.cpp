@@ -1,6 +1,8 @@
 #include "Logger.h"
 #include "CallStack.h"
 #include "petscsys.h"
+#include "fmt/printf.h"
+#include "fmt/color.h"
 
 namespace godzilla {
 
@@ -35,19 +37,19 @@ Logger::print() const
 {
     _F_;
     for (auto & s : this->entries)
-        internal::fprintf(std::cerr, "%s\n", s);
+        fmt::fprintf(stderr, "%s\n", s);
 
-    internal::fprintf(std::cerr, "%s", Terminal::Color::magenta);
+    fmt::fprintf(stderr, "%s", Terminal::Color::magenta);
     if (this->num_errors > 0)
-        internal::fprintf(std::cerr, "%d error(s)", this->num_errors);
+        fmt::fprintf(stderr, "%d error(s)", this->num_errors);
 
     if (this->num_warnings > 0) {
         if (this->num_errors > 0)
-            internal::fprintf(std::cerr, ", ");
+            fmt::fprintf(stderr, ", ");
 
-        internal::fprintf(std::cerr, "%d warning(s)", this->num_warnings);
+        fmt::fprintf(stderr, "%d warning(s)", this->num_warnings);
     }
-    internal::fprintf(std::cerr, " found.%s\n", Terminal::Color::normal);
+    fmt::fprintf(stderr, " found.%s\n", Terminal::Color::normal);
 }
 
 } // namespace godzilla
