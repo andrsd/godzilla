@@ -5,7 +5,7 @@
 
 using namespace godzilla;
 
-registerObject(GTestImplicitFENonlinearProblem);
+REGISTER_OBJECT(GTestImplicitFENonlinearProblem);
 
 static void
 f0_u(PetscInt dim,

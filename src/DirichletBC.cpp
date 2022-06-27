@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-registerObject(DirichletBC);
+REGISTER_OBJECT(DirichletBC);
 
 InputParameters
 DirichletBC::valid_params()

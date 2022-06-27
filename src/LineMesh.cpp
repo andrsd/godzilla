@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-registerObject(LineMesh);
+REGISTER_OBJECT(LineMesh);
 
 InputParameters
 LineMesh::valid_params()

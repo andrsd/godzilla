@@ -7,7 +7,7 @@
 
 using namespace godzilla;
 
-registerObject(NSIncompressibleProblem);
+REGISTER_OBJECT(NSIncompressibleProblem);
 
 static void
 f0_veloc(PetscInt dim,

@@ -6,15 +6,15 @@
 #include "Object.h"
 #include "Error.h"
 
-#define combineNames1(X, Y) X##Y
-#define combineNames(X, Y) combineNames1(X, Y)
+#define COMBINE_NAMES1(X, Y) X##Y
+#define COMBINE_NAMES(X, Y) COMBINE_NAMES1(X, Y)
 
-#define registerObject(classname)                                                  \
-    static char combineNames(dummyvar_for_registering_obj_##classname, __LINE__) = \
+#define REGISTER_OBJECT(classname)                                                  \
+    static char COMBINE_NAMES(dummyvar_for_registering_obj_##classname, __LINE__) = \
         godzilla::Factory::reg<classname>(#classname)
 
-#define registerObjectAlias(classname, alias)                                      \
-    static char combineNames(dummyvar_for_registering_obj_##classname, __LINE__) = \
+#define REGISTER_OBJECT_ALIAS(classname, alias)                                     \
+    static char COMBINE_NAMES(dummyvar_for_registering_obj_##classname, __LINE__) = \
         godzilla::Factory::reg<classname>(#alias)
 
 namespace godzilla {

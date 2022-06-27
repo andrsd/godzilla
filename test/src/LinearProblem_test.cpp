@@ -9,9 +9,9 @@
 
 using namespace godzilla;
 
-registerObject(G1DTestLinearProblem);
-registerObject(G2DTestLinearProblem);
-registerObject(G3DTestLinearProblem);
+REGISTER_OBJECT(G1DTestLinearProblem);
+REGISTER_OBJECT(G2DTestLinearProblem);
+REGISTER_OBJECT(G3DTestLinearProblem);
 
 //
 

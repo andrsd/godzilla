@@ -5,7 +5,7 @@
 
 namespace godzilla {
 
-registerObject(ConvectiveHeatFluxBC);
+REGISTER_OBJECT(ConvectiveHeatFluxBC);
 
 void
 __f0_convective_heat_flux_const_bc(PetscInt dim,

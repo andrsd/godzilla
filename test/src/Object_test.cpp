@@ -5,7 +5,7 @@
 
 using namespace godzilla;
 
-registerObject(Object);
+REGISTER_OBJECT(Object);
 
 TEST(ObjectTest, api)
 {

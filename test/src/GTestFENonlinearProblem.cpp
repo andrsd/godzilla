@@ -1,7 +1,7 @@
 #include "GTestFENonlinearProblem.h"
 #include "Godzilla.h"
 
-registerObject(GTestFENonlinearProblem);
+REGISTER_OBJECT(GTestFENonlinearProblem);
 
 static void
 f0_u(PetscInt dim,

@@ -24,7 +24,7 @@ protected:
     PetscSection s;
 };
 
-registerObject(G1DTestNonlinearProblem);
+REGISTER_OBJECT(G1DTestNonlinearProblem);
 
 G1DTestNonlinearProblem::G1DTestNonlinearProblem(const InputParameters & params) :
     NonlinearProblem(params),

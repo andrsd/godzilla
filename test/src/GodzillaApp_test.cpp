@@ -35,8 +35,8 @@ public:
     MOCK_METHOD(Vec, get_solution_vector, (), (const));
 };
 
-registerObject(MockMesh);
-registerObject(MockProblem);
+REGISTER_OBJECT(MockMesh);
+REGISTER_OBJECT(MockProblem);
 
 TEST_F(GodzillaAppTest, run_input)
 {

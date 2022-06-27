@@ -5,7 +5,7 @@
 
 using namespace godzilla;
 
-registerObject(HeatEquationProblem);
+REGISTER_OBJECT(HeatEquationProblem);
 
 static void
 f0_temp(PetscInt dim,

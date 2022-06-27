@@ -7,7 +7,7 @@
 
 using namespace godzilla;
 
-registerObject(BurgersEquation);
+REGISTER_OBJECT(BurgersEquation);
 
 static void
 f0_u(PetscInt dim,

@@ -5,7 +5,7 @@
 
 namespace godzilla {
 
-registerObject(RectangleMesh);
+REGISTER_OBJECT(RectangleMesh);
 
 InputParameters
 RectangleMesh::valid_params()

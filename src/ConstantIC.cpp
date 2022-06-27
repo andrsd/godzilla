@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-registerObject(ConstantIC);
+REGISTER_OBJECT(ConstantIC);
 
 InputParameters
 ConstantIC::valid_params()

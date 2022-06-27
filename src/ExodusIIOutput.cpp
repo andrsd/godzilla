@@ -13,7 +13,7 @@ namespace godzilla {
 
 static const unsigned int MAX_DATE_TIME = 255;
 
-registerObject(ExodusIIOutput);
+REGISTER_OBJECT(ExodusIIOutput);
 
 static void
 exo_write_variable_names(int exoid,

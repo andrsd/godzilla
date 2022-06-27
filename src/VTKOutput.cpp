@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-registerObject(VTKOutput);
+REGISTER_OBJECT(VTKOutput);
 
 static const int MAX_PATH = 1024;
 

@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-registerObject(CSVOutput);
+REGISTER_OBJECT(CSVOutput);
 
 InputParameters
 CSVOutput::valid_params()

@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-registerObject(HDF5Output);
+REGISTER_OBJECT(HDF5Output);
 
 static const int MAX_PATH = 1024;
 
