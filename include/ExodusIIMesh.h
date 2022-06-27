@@ -14,8 +14,6 @@ public:
 
 protected:
     virtual void create_dm() override;
-    void read_cell_sets(int exoid, int n_blk_sets);
-    void read_side_sets(int exoid, int n_side_sets);
 
     /// File name with the ExodusII mesh
     const std::string & file_name;

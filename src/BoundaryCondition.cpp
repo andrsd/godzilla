@@ -1,7 +1,7 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "App.h"
-#include "Mesh.h"
+#include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "FEProblemInterface.h"
 #include "BoundaryCondition.h"
@@ -43,10 +43,10 @@ BoundaryCondition::create()
     this->dm = problem->get_dm();
     assert(this->dm != nullptr);
 
-    const Mesh * mesh = problem->get_mesh();
-    this->label = mesh->get_label(this->boundary);
-
     assert(this->fepi != nullptr);
+    const UnstructuredMesh * mesh = this->fepi->get_mesh();
+    this->label = mesh->get_face_set_label(this->boundary);
+
     std::vector<std::string> field_names = this->fepi->get_field_names();
     if (field_names.size() == 1) {
         this->fid = this->fepi->get_field_id(field_names[0]);
@@ -84,7 +84,7 @@ BoundaryCondition::set_up()
     _F_;
     PETSC_CHECK(DMGetDS(this->dm, &this->ds));
     IS is;
-    PETSC_CHECK(DMGetLabelIdIS(this->dm, this->boundary.c_str(), &is));
+    PETSC_CHECK(DMLabelGetValueIS(this->label, &is));
     PETSC_CHECK(ISGetSize(is, &this->n_ids));
     PETSC_CHECK(ISGetIndices(is, &this->ids));
     set_up_callback();

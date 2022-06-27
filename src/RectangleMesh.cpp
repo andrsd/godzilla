@@ -102,9 +102,12 @@ RectangleMesh::create_dm()
                                     &this->dm));
 
     // create user-friendly names for sides
-    const char * side_name[] = { "bottom", "right", "top", "left" };
-    for (unsigned int i = 0; i < 4; i++)
-        create_face_set(i + 1, side_name[i]);
+    std::map<int, std::string> face_set_names;
+    face_set_names[1] = "bottom";
+    face_set_names[2] = "right";
+    face_set_names[3] = "top";
+    face_set_names[4] = "left";
+    create_face_set_labels(face_set_names);
 }
 
 } // namespace godzilla

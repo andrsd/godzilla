@@ -55,16 +55,36 @@ public:
 
     /// Get face set name
     ///
-    /// @param id The id of the face set
+    /// @param id The ID of the face set
     /// @return Facet name
     const std::string & get_face_set_name(PetscInt id) const;
+
+    /// Set face set name
+    ///
+    /// @param id The ID of the face set
+    /// @param name The name of the face set
+    void set_face_set_name(PetscInt id, const std::string & name);
+
+    /// Check if mesh has a label corresponding to a face set name
+    ///
+    /// @param name The name of the face set
+    /// @return true if label exists, false otherwise
+    bool has_face_set(const std::string & name) const;
+
+    /// Get label corresponding to a face set name
+    ///
+    /// @param name The name of the face set
+    /// @return DMLabel associated with face set name
+    DMLabel get_face_set_label(const std::string & name) const;
 
 protected:
     virtual void distribute() override;
 
     void create_cell_set(PetscInt id, const std::string & name);
 
-    void create_face_set(PetscInt id, const std::string & name);
+    void create_face_set_labels(const std::map<int, std::string> & names);
+
+    void create_face_set(PetscInt id);
 
     /// Mesh partitioner
     PetscPartitioner partitioner;
@@ -77,6 +97,9 @@ protected:
 
     /// Face set names
     std::map<PetscInt, std::string> face_set_names;
+
+    /// Face set IDs
+    std::map<std::string, PetscInt> face_set_ids;
 
 public:
     static InputParameters valid_params();
