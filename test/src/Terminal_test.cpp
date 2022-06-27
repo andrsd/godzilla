@@ -19,3 +19,10 @@ TEST(TerminalTest, colors)
     // restore
     Terminal::num_colors = nc;
 }
+
+TEST(TerminalTest, ostream_operator)
+{
+    std::ostringstream oss;
+    oss << Terminal::Color::red;
+    EXPECT_STREQ(oss.str().c_str(), (const char *) Terminal::Color::red);
+}
