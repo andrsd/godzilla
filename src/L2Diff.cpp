@@ -16,7 +16,7 @@ __l2_diff(PetscInt dim,
           PetscScalar u[],
           void * ctx)
 {
-    L2Diff * l2_diff = (L2Diff *) ctx;
+    L2Diff * l2_diff = static_cast<L2Diff *>(ctx);
     l2_diff->evaluate(dim, time, x, nc, u);
     return 0;
 }

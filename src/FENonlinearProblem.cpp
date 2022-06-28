@@ -9,7 +9,7 @@ PetscErrorCode
 __fep_compute_residual(DM dm, Vec x, Vec F, void * user)
 {
     _F_;
-    FENonlinearProblem * fep = (FENonlinearProblem *) user;
+    FENonlinearProblem * fep = static_cast<FENonlinearProblem *>(user);
     fep->compute_residual_callback(x, F);
     return 0;
 }
@@ -18,7 +18,7 @@ PetscErrorCode
 __fep_compute_jacobian(DM dm, Vec x, Mat J, Mat Jp, void * user)
 {
     _F_;
-    FENonlinearProblem * fep = (FENonlinearProblem *) user;
+    FENonlinearProblem * fep = static_cast<FENonlinearProblem *>(user);
     fep->compute_jacobian_callback(x, J, Jp);
     return 0;
 }
