@@ -4,6 +4,7 @@
 #include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "Logger.h"
+#include <assert.h>
 
 namespace godzilla {
 
@@ -121,7 +122,7 @@ FVProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
 {
     _F_;
     if (fid == 0) {
-        const char *name;
+        const char * name;
         PETSC_CHECK(PetscFVGetComponentName(this->fvm, component, &name));
         return std::string(name);
     }
@@ -130,12 +131,36 @@ FVProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
 }
 
 void
+FVProblemInterface::set_field_component_name(PetscInt fid,
+                                             PetscInt component,
+                                             const std::string name)
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end()) {
+        if (it->second.nc > 1) {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            it->second.component_names[component] = name;
+        }
+        else
+            error("Unable to set component name for single-component field");
+    }
+    else
+        error("Field with ID = '%d' does not exist.", fid);
+}
+
+void
 FVProblemInterface::add_field(PetscInt id, const std::string & name, PetscInt nc)
 {
     _F_;
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
-        FieldInfo fi = { name, id, nc };
+        FieldInfo fi = { name, id, nc, {} };
+        if (nc > 1) {
+            fi.component_names.resize(nc);
+            for (unsigned int i = 0; i < nc; i++)
+                fi.component_names[i] = fmt::sprintf("%d", i);
+        }
         this->fields[id] = fi;
         this->fields_by_name[name] = id;
     }
@@ -174,7 +199,7 @@ FVProblemInterface::set_up_ds()
         }
         else {
             for (PetscInt i = 0; i < fi.nc; i++) {
-                std::string name = fmt::sprintf("%s_%d", fi.name, i);
+                std::string name = fmt::sprintf("%s_%s", fi.name, fi.component_names[i]);
                 PETSC_CHECK(PetscFVSetComponentName(this->fvm, c + i, name.c_str()));
             }
         }

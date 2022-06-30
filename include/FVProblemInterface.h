@@ -21,6 +21,8 @@ public:
     virtual bool has_field_by_name(const std::string & name) const override;
     virtual PetscInt get_field_order(PetscInt fid) const override;
     virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
+    virtual void
+    set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
 
     /// Adds a volumetric field
     ///
@@ -65,6 +67,9 @@ protected:
 
         /// The number of components
         PetscInt nc;
+
+        /// Component names
+        std::vector<std::string> component_names;
     };
 
     /// Fields in the problem

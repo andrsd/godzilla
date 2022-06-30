@@ -148,8 +148,29 @@ FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
         const FieldInfo & fi = it->second;
         if (fi.nc == 1)
             return std::string("");
+        else {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            return it->second.component_names.at(component);
+        }
+    }
+    else
+        error("Field with ID = '%d' does not exist.", fid);
+}
+
+void
+FEProblemInterface::set_field_component_name(PetscInt fid,
+                                             PetscInt component,
+                                             const std::string name)
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end()) {
+        if (it->second.nc > 1) {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            it->second.component_names[component] = name;
+        }
         else
-            return std::string("a");
+            error("Unable to set component name for single-component field");
     }
     else
         error("Field with ID = '%d' does not exist.", fid);
@@ -199,7 +220,12 @@ FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, P
     _F_;
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
-        FieldInfo fi = { name, id, nullptr, nullptr, nc, k };
+        FieldInfo fi = { name, id, nullptr, nullptr, nc, k, {} };
+        if (nc > 1) {
+            fi.component_names.resize(nc);
+            for (unsigned int i = 0; i < nc; i++)
+                fi.component_names[i] = fmt::sprintf("%d", i);
+        }
         this->fields[id] = fi;
         this->fields_by_name[name] = id;
     }

@@ -75,6 +75,14 @@ public:
     /// @return Component name
     virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const = 0;
 
+    /// Set the name of a component of afield variable
+    ///
+    /// @param fid Field ID
+    /// @param component Component index
+    /// @param name Component name
+    virtual void
+    set_field_component_name(PetscInt fid, PetscInt component, const std::string name) = 0;
+
     /// Set problem constants
     ///
     /// These constants will be available in the weak form via `constants` parameter.
