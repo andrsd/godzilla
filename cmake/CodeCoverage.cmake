@@ -27,6 +27,7 @@ if(GODZILLA_CODE_COVERAGE)
 
         set(CODE_COVERAGE_PROFRAWS
             ${CMAKE_BINARY_DIR}/test/godzilla-test.profraw
+            ${CMAKE_BINARY_DIR}/examples/advect-eqn/test/default.profraw
             ${CMAKE_BINARY_DIR}/examples/poisson/test/default.profraw
             ${CMAKE_BINARY_DIR}/examples/heat-eqn/test/default.profraw
             ${CMAKE_BINARY_DIR}/examples/burgers-eqn/test/default.profraw
