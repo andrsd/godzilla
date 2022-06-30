@@ -76,6 +76,9 @@ protected:
     /// List of nodal elemental variable field IDs
     std::vector<PetscInt> elem_var_fids;
 
+    /// Block ID used in ExodusII file whne there are not cell sets
+    static const int SINGLE_BLK_ID;
+
 public:
     static InputParameters valid_params();
 };

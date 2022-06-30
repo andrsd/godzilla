@@ -13,6 +13,8 @@ namespace godzilla {
 
 static const unsigned int MAX_DATE_TIME = 255;
 
+const int ExodusIIOutput::SINGLE_BLK_ID = 0;
+
 REGISTER_OBJECT(ExodusIIOutput);
 
 static void
@@ -398,7 +400,7 @@ ExodusIIOutput::write_elements()
         PETSC_CHECK(ISDestroy(&cell_sets_is));
     }
     else
-        write_block_connectivity(0);
+        write_block_connectivity(SINGLE_BLK_ID);
 
     exo_write_block_names(this->exoid, block_names);
 }
@@ -680,7 +682,7 @@ ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
         error("Block-restricted elemental variable output is not implemented, yet.");
     }
     else
-        write_block_elem_variables(0, sln);
+        write_block_elem_variables(SINGLE_BLK_ID, sln);
 }
 
 void
