@@ -18,11 +18,13 @@ add_library(${PROJECT_NAME}
         ConstantIC.cpp
         CSVOutput.cpp
         DirichletBC.cpp
+        DiscreteProblemInterface.cpp
         Error.cpp
         EssentialBC.cpp
         ExodusIIMesh.cpp
         ExodusIIOutput.cpp
         ExplicitFELinearProblem.cpp
+        ExplicitFVLinearProblem.cpp
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
         FileOutput.cpp
@@ -31,6 +33,7 @@ add_library(${PROJECT_NAME}
         FunctionEvaluator.cpp
         FunctionIC.cpp
         FunctionInterface.cpp
+        FVProblemInterface.cpp
         GYMLFile.cpp
         HDF5Output.cpp
         ImplicitFENonlinearProblem.cpp
@@ -46,6 +49,7 @@ add_library(${PROJECT_NAME}
         Mesh.cpp
         MeshPartitioningOutput.cpp
         NaturalBC.cpp
+        NaturalRiemannBC.cpp
         NonlinearProblem.cpp
         Object.cpp
         Output.cpp

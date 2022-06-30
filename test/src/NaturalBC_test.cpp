@@ -46,7 +46,7 @@ TEST(NaturalBCTest, api)
 
     InputParameters params = NaturalBC::valid_params();
     params.set<const App *>("_app") = &app;
-    params.set<const FEProblemInterface *>("_fepi") = &prob;
+    params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::string>("boundary") = "left";
     MockNaturalBC bc(params);
 
@@ -160,7 +160,7 @@ TEST(NaturalBCTest, fe)
 
     InputParameters bc_params = TestNaturalBC::valid_params();
     bc_params.set<const App *>("_app") = &app;
-    bc_params.set<const FEProblemInterface *>("_fepi") = &prob;
+    bc_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_params.set<std::string>("_name") = "bc1";
     bc_params.set<std::string>("boundary") = "left";
     TestNaturalBC bc(bc_params);

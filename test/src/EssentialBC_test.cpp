@@ -56,7 +56,7 @@ TEST(EssentialBCTest, api)
 
     InputParameters params = TestEssentialBC::valid_params();
     params.set<const App *>("_app") = &app;
-    params.set<const FEProblemInterface *>("_fepi") = &problem;
+    params.set<const DiscreteProblemInterface *>("_dpi") = &problem;
     TestEssentialBC bc(params);
 
     mesh.create();

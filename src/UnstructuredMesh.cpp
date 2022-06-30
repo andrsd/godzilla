@@ -218,4 +218,14 @@ UnstructuredMesh::get_cell_set_name(PetscInt id) const
         error("Cell set ID '%d' does not exist.", id);
 }
 
+void
+UnstructuredMesh::construct_ghost_cells()
+{
+    _F_;
+    DM gdm;
+    PETSC_CHECK(DMPlexConstructGhostCells(this->dm, NULL, NULL, &gdm));
+    PETSC_CHECK(DMDestroy(&this->dm));
+    this->dm = gdm;
+}
+
 } // namespace godzilla

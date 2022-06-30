@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-class FEProblemInterface;
+class DiscreteProblemInterface;
 
 /// Base class for boundary conditions
 ///
@@ -48,8 +48,8 @@ protected:
     /// Set up the PETSc callback
     virtual void set_up_callback() = 0;
 
-    /// FE problem this object is part of
-    const FEProblemInterface * fepi;
+    /// Discrete problem this object is part of
+    const DiscreteProblemInterface * dpi;
 
     /// DM object
     DM dm;

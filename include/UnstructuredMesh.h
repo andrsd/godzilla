@@ -79,6 +79,10 @@ public:
 
     virtual void distribute() override;
 
+    /// Construct ghost cells which connect to every boundary face
+    ///
+    virtual void construct_ghost_cells();
+
 protected:
     void create_cell_set(PetscInt id, const std::string & name);
 

@@ -21,7 +21,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     {
         const std::string class_name = "ConstantIC";
         InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0 };
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
@@ -32,7 +32,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         InputParameters * params = Factory::get_valid_params(class_name);
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
         prob->add_boundary_condition(bc);
     }

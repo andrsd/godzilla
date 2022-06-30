@@ -25,7 +25,7 @@ TEST(DirichletBCTest, api)
 
     InputParameters params = DirichletBC::valid_params();
     params.set<const App *>("_app") = &app;
-    params.set<const FEProblemInterface *>("_fepi") = &problem;
+    params.set<const DiscreteProblemInterface *>("_dpi") = &problem;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     params.set<std::vector<std::string>>("value_t") = { "1" };
     DirichletBC obj(params);
@@ -75,7 +75,7 @@ TEST(DirichletBCTest, with_user_defined_fn)
 
     InputParameters * bc_pars = Factory::get_valid_params("DirichletBC");
     bc_pars->set<const App *>("_app") = &app;
-    bc_pars->set<const FEProblemInterface *>("_fepi") = &problem;
+    bc_pars->set<const DiscreteProblemInterface *>("_dpi") = &problem;
     bc_pars->set<std::vector<std::string>>("value") = { "ipol(x)" };
     DirichletBC * bc = app.build_object<DirichletBC>("DirichletBC", "name", bc_pars);
 

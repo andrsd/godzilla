@@ -3,7 +3,7 @@
 #include "App.h"
 #include "UnstructuredMesh.h"
 #include "Problem.h"
-#include "FEProblemInterface.h"
+#include "DiscreteProblemInterface.h"
 #include "BoundaryCondition.h"
 #include <assert.h>
 
@@ -15,14 +15,14 @@ BoundaryCondition::valid_params()
     InputParameters params = Object::valid_params();
     params.add_param<std::string>("field", "", "Field name");
     params.add_required_param<std::string>("boundary", "Boundary name");
-    params.add_private_param<const FEProblemInterface *>("_fepi", nullptr);
+    params.add_private_param<const DiscreteProblemInterface *>("_dpi", nullptr);
     return params;
 }
 
 BoundaryCondition::BoundaryCondition(const InputParameters & params) :
     Object(params),
     PrintInterface(this),
-    fepi(get_param<const FEProblemInterface *>("_fepi")),
+    dpi(get_param<const DiscreteProblemInterface *>("_dpi")),
     dm(nullptr),
     ds(nullptr),
     label(nullptr),
@@ -43,19 +43,19 @@ BoundaryCondition::create()
     this->dm = problem->get_dm();
     assert(this->dm != nullptr);
 
-    assert(this->fepi != nullptr);
-    const UnstructuredMesh * mesh = this->fepi->get_mesh();
+    assert(this->dpi != nullptr);
+    const UnstructuredMesh * mesh = this->dpi->get_mesh();
     this->label = mesh->get_face_set_label(this->boundary);
 
-    std::vector<std::string> field_names = this->fepi->get_field_names();
+    std::vector<std::string> field_names = this->dpi->get_field_names();
     if (field_names.size() == 1) {
-        this->fid = this->fepi->get_field_id(field_names[0]);
+        this->fid = this->dpi->get_field_id(field_names[0]);
     }
     else if (field_names.size() > 1) {
         const std::string & field_name = get_param<std::string>("field");
         if (field_name.length() > 0) {
-            if (this->fepi->has_field_by_name(field_name))
-                this->fid = this->fepi->get_field_id(field_name);
+            if (this->dpi->has_field_by_name(field_name))
+                this->fid = this->dpi->get_field_id(field_name);
             else
                 log_error("Field '%s' does not exists. Typo?", field_name);
         }
