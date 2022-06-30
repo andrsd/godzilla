@@ -62,6 +62,19 @@ public:
     /// @return True if the field exists, otherwise False
     virtual bool has_field_by_name(const std::string & name) const = 0;
 
+    /// Get field order
+    ///
+    /// @param fid Field ID
+    /// @return Field order
+    virtual PetscInt get_field_order(PetscInt fid) const = 0;
+
+    /// Get component name of a field
+    ///
+    /// @param fid Field ID
+    /// @param component Component index
+    /// @return Component name
+    virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const = 0;
+
     /// Set problem constants
     ///
     /// These constants will be available in the weak form via `constants` parameter.

@@ -56,8 +56,14 @@ const std::string &
 FVProblemInterface::get_field_name(PetscInt fid) const
 {
     _F_;
-    if (fid == 0)
-        return empty_name;
+    if (fid == 0) {
+        PetscInt nc;
+        PETSC_CHECK(PetscFVGetNumComponents(this->fvm, &nc));
+        if (nc == 1)
+            return this->fields.at(0).name;
+        else
+            return empty_name;
+    }
     else
         error("Field with ID = '%d' does not exist.", fid);
 }
@@ -98,6 +104,29 @@ FVProblemInterface::has_field_by_name(const std::string & name) const
 {
     _F_;
     return false;
+}
+
+PetscInt
+FVProblemInterface::get_field_order(PetscInt fid) const
+{
+    _F_;
+    if (fid == 0)
+        return 0;
+    else
+        error("Multiple-field problems are not implemented");
+}
+
+std::string
+FVProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) const
+{
+    _F_;
+    if (fid == 0) {
+        const char *name;
+        PETSC_CHECK(PetscFVGetComponentName(this->fvm, component, &name));
+        return std::string(name);
+    }
+    else
+        error("Multiple-field problems are not implemented");
 }
 
 void

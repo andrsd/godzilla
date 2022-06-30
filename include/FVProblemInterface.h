@@ -19,6 +19,8 @@ public:
     virtual PetscInt get_field_id(const std::string & name) const override;
     virtual bool has_field_by_id(PetscInt fid) const override;
     virtual bool has_field_by_name(const std::string & name) const override;
+    virtual PetscInt get_field_order(PetscInt fid) const override;
+    virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
 
     /// Adds a volumetric field
     ///

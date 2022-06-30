@@ -139,6 +139,22 @@ FEProblemInterface::has_field_by_name(const std::string & name) const
     return it != this->fields_by_name.end();
 }
 
+std::string
+FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) const
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end()) {
+        const FieldInfo & fi = it->second;
+        if (fi.nc == 1)
+            return std::string("");
+        else
+            return std::string("a");
+    }
+    else
+        error("Field with ID = '%d' does not exist.", fid);
+}
+
 const std::string &
 FEProblemInterface::get_aux_field_name(PetscInt fid) const
 {
