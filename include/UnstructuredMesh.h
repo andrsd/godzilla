@@ -77,9 +77,9 @@ public:
     /// @return DMLabel associated with face set name
     DMLabel get_face_set_label(const std::string & name) const;
 
-protected:
     virtual void distribute() override;
 
+protected:
     void create_cell_set(PetscInt id, const std::string & name);
 
     void create_face_set_labels(const std::map<int, std::string> & names);

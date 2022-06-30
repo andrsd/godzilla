@@ -35,12 +35,12 @@ public:
     /// @return DMLabel associated with the `name`
     virtual DMLabel get_label(const std::string & name) const;
 
+    /// Distribute mesh over processes
+    virtual void distribute() = 0;
+
 protected:
     /// Method that builds DM for the mesh
     virtual void create_dm() = 0;
-
-    /// Distribute mesh over processes
-    virtual void distribute() = 0;
 
     /// DM object
     DM dm;
