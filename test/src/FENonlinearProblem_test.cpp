@@ -47,6 +47,8 @@ TEST_F(FENonlinearProblemTest, get_fepi_mesh)
 
 TEST_F(FENonlinearProblemTest, fields)
 {
+    prob->add_fe(1, "vec", 3, 1);
+
     mesh->create();
     prob->create();
 
@@ -62,10 +64,24 @@ TEST_F(FENonlinearProblemTest, fields)
     EXPECT_EQ(prob->has_field_by_id(65536), false);
     EXPECT_EQ(prob->has_field_by_name("nonexistent"), false);
 
+    EXPECT_EQ(prob->get_field_order(0), 1);
     EXPECT_DEATH(prob->get_field_order(65536),
                  "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
 
     EXPECT_DEATH(prob->get_field_num_components(65536),
+                 "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
+
+    EXPECT_EQ(prob->get_field_component_name(0, 0).compare(""), 0);
+    EXPECT_EQ(prob->get_field_component_name(1, 0).compare("0"), 0);
+    EXPECT_EQ(prob->get_field_component_name(1, 1).compare("1"), 0);
+    EXPECT_EQ(prob->get_field_component_name(1, 2).compare("2"), 0);
+    prob->set_field_component_name(1, 0, "x");
+    EXPECT_EQ(prob->get_field_component_name(1, 0).compare("x"), 0);
+    EXPECT_DEATH(prob->get_field_component_name(65536, 0),
+                 "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
+    EXPECT_DEATH(prob->set_field_component_name(0, 0, "x"),
+                 "\\[ERROR\\] Unable to set component name for single-component field");
+    EXPECT_DEATH(prob->set_field_component_name(65536, 0, "x"),
                  "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
 }
 
@@ -167,7 +183,6 @@ TEST_F(FENonlinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     const Vec x = prob->get_solution_vector();
-    VecView(x, PETSC_VIEWER_STDOUT_SELF);
     PetscInt ni = 1;
     PetscInt ix[1] = { 0 };
     PetscScalar xx[1];
