@@ -64,6 +64,36 @@ TEST(UnstructuredMeshTest, api)
     EXPECT_TRUE(mesh.is_simplex());
 }
 
+TEST(UnstructuredMeshTest, api_ghosted)
+{
+    TestApp app;
+
+    InputParameters params = TestUnstructuredMesh::valid_params();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+
+    mesh.set_partition_overlap(1);
+    mesh.create();
+    mesh.construct_ghost_cells();
+
+    EXPECT_EQ(mesh.get_num_vertices(), 3);
+    EXPECT_EQ(mesh.get_num_elements(), 2);
+    EXPECT_EQ(mesh.get_num_all_elements(), 4);
+
+    PetscInt first, last;
+    mesh.get_element_idx_range(first, last);
+    EXPECT_EQ(first, 0);
+    EXPECT_EQ(last, 2);
+    mesh.get_all_element_idx_range(first, last);
+    EXPECT_EQ(first, 0);
+    EXPECT_EQ(last, 4);
+
+    EXPECT_EQ(mesh.get_partition_overlap(), 1);
+
+    EXPECT_TRUE(mesh.is_simplex());
+}
+
 TEST(UnstructuredMeshTest, nonexistent_face_set)
 {
     TestApp app;
