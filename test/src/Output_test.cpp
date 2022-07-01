@@ -24,22 +24,51 @@ public:
     }
 };
 
-TEST_F(OutputTest, exec_masks)
+TEST_F(OutputTest, exec_masks_1)
 {
     InputParameters pars = Output::valid_params();
     pars.set<const App *>("_app") = app;
     pars.set<const Problem *>("_problem") = prob;
+    pars.set<std::vector<std::string>>("on") = { "none" };
     MockOutput out(pars);
+    out.create();
 
-    EXPECT_EQ(out.get_exec_mask(), Output::ON_NONE);
+    EXPECT_FALSE(out.should_output(Output::ON_FINAL));
+    EXPECT_FALSE(out.should_output(Output::ON_INITIAL));
+    EXPECT_FALSE(out.should_output(Output::ON_TIMESTEP));
+}
 
-    out.set_exec_mask(Output::ON_FINAL);
+TEST_F(OutputTest, exec_masks_2)
+{
+    InputParameters pars = Output::valid_params();
+    pars.set<const App *>("_app") = app;
+    pars.set<const Problem *>("_problem") = prob;
+    pars.set<std::vector<std::string>>("on") = { "final" };
+    MockOutput out(pars);
+    out.create();
+
     EXPECT_EQ(out.get_exec_mask(), Output::ON_FINAL);
+    EXPECT_TRUE(out.should_output(Output::ON_FINAL));
+    EXPECT_FALSE(out.should_output(Output::ON_INITIAL));
+    EXPECT_FALSE(out.should_output(Output::ON_TIMESTEP));
+}
 
-    out.set_exec_mask(Output::ON_FINAL | Output::ON_INITIAL | Output::ON_TIMESTEP);
+TEST_F(OutputTest, exec_masks_3)
+{
+    InputParameters pars = Output::valid_params();
+    pars.set<const App *>("_app") = app;
+    pars.set<const Problem *>("_problem") = prob;
+    pars.set<std::vector<std::string>>("on") = { "final", "initial", "timestep" };
+    MockOutput out(pars);
+    out.create();
+
     EXPECT_EQ(out.get_exec_mask() & Output::ON_FINAL, Output::ON_FINAL);
     EXPECT_EQ(out.get_exec_mask() & Output::ON_INITIAL, Output::ON_INITIAL);
     EXPECT_EQ(out.get_exec_mask() & Output::ON_TIMESTEP, Output::ON_TIMESTEP);
+
+    EXPECT_TRUE(out.should_output(Output::ON_FINAL));
+    EXPECT_TRUE(out.should_output(Output::ON_INITIAL));
+    EXPECT_TRUE(out.should_output(Output::ON_TIMESTEP));
 }
 
 TEST_F(OutputTest, empty_on)
