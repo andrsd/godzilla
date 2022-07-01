@@ -3,6 +3,7 @@
 #include "LineMesh.h"
 #include "Problem.h"
 #include "Function.h"
+#include "Output.h"
 #include "Postprocessor.h"
 
 using namespace godzilla;
@@ -71,6 +72,13 @@ TEST(ProblemTest, add_pp)
         MOCK_METHOD(void, check, ());
     };
 
+    class TestOutput : public Output {
+    public:
+        explicit TestOutput(const InputParameters & params) : Output(params) {}
+
+        MOCK_METHOD(void, output_step, ());
+    };
+
     InputParameters mesh_params = LineMesh::valid_params();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
@@ -95,6 +103,15 @@ TEST(ProblemTest, add_pp)
     TestFunction fn(fn_params);
     problem.add_function(&fn);
 
+    InputParameters out_params = Function::valid_params();
+    out_params.set<const App *>("_app") = &app;
+    out_params.set<const Problem *>("_problem") = &problem;
+    out_params.set<std::string>("_name") = "out";
+    out_params.set<std::vector<std::string>>("on") = { "initial" };
+    TestOutput out(out_params);
+    out.create();
+    problem.add_output(&out);
+
     EXPECT_CALL(fn, check);
     EXPECT_CALL(pp, check);
     problem.check();
@@ -105,4 +122,7 @@ TEST(ProblemTest, add_pp)
     auto & pps_names = problem.get_postprocessor_names();
     EXPECT_EQ(pps_names.size(), 1);
     EXPECT_EQ(pps_names[0], "pp");
+
+    EXPECT_CALL(out, output_step);
+    problem.output(Output::ON_INITIAL);
 }
