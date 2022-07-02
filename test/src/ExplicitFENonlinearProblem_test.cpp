@@ -3,6 +3,7 @@
 #include "CallStack.h"
 #include "Factory.h"
 #include "LineMesh.h"
+#include "DirichletBC.h"
 #include "ExplicitFELinearProblem.h"
 #include "InputParameters.h"
 #include "Output.h"
@@ -12,23 +13,139 @@
 
 using namespace godzilla;
 
+static void
+f1_u(PetscInt dim,
+     PetscInt nf,
+     PetscInt nf_aux,
+     const PetscInt u_off[],
+     const PetscInt u_off_x[],
+     const PetscScalar u[],
+     const PetscScalar u_t[],
+     const PetscScalar u_x[],
+     const PetscInt a_off[],
+     const PetscInt a_off_x[],
+     const PetscScalar a[],
+     const PetscScalar a_t[],
+     const PetscScalar a_x[],
+     PetscReal t,
+     const PetscReal x[],
+     PetscInt num_constants,
+     const PetscScalar constants[],
+     PetscScalar f1[])
+{
+    PetscReal visc = 1.;
+    f1[0] = -visc * u_x[0] + 0.5 * u[0] * u[0];
+}
+
 class TestExplicitFELinearProblem : public ExplicitFELinearProblem {
 public:
     TestExplicitFELinearProblem(const InputParameters & params) : ExplicitFELinearProblem(params) {}
 
+    virtual void
+    set_up_time_scheme() override
+    {
+        ExplicitFELinearProblem::set_up_time_scheme();
+    }
+
 protected:
     virtual void
-    set_up_fields()
+    set_up_fields() override
     {
         add_fe(0, "u", 1, 1);
     }
     virtual void
-    set_up_weak_form()
+    set_up_weak_form() override
     {
+        set_residual_block(0, nullptr, f1_u);
     }
 };
 
 REGISTER_OBJECT(TestExplicitFELinearProblem);
+
+TEST(ExplicitFELinearProblemTest, solve)
+{
+    TestApp app;
+
+    InputParameters mesh_pars = LineMesh::valid_params();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 3;
+    LineMesh mesh(mesh_pars);
+
+    InputParameters prob_pars = TestExplicitFELinearProblem::valid_params();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<PetscReal>("start_time") = 0.;
+    prob_pars.set<PetscReal>("end_time") = 1e-3;
+    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFELinearProblem prob(prob_pars);
+    app.problem = &prob;
+
+    InputParameters bc_left_pars = DirichletBC::valid_params();
+    bc_left_pars.set<const App *>("_app") = &app;
+    bc_left_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_left_pars.set<std::string>("boundary") = "left";
+    bc_left_pars.set<std::vector<std::string>>("value") = { "1" };
+    DirichletBC bc_left(bc_left_pars);
+    prob.add_boundary_condition(&bc_left);
+
+    InputParameters bc_right_pars = DirichletBC::valid_params();
+    bc_right_pars.set<const App *>("_app") = &app;
+    bc_right_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_right_pars.set<std::string>("boundary") = "right";
+    bc_right_pars.set<std::vector<std::string>>("value") = { "1" };
+    DirichletBC bc_right(bc_right_pars);
+    prob.add_boundary_condition(&bc_right);
+
+    mesh.create();
+    prob.create();
+    prob.check();
+
+    prob.run();
+
+    EXPECT_TRUE(prob.converged());
+
+    Vec sln = prob.get_solution_vector();
+    PetscInt ni = 2;
+    PetscInt ix[2] = { 0, 1 };
+    PetscScalar x[2];
+    VecGetValues(sln, ni, ix, x);
+    EXPECT_NEAR(x[0], 0.0118, 1e-15);
+    EXPECT_NEAR(x[1], 0.0098, 1e-15);
+}
+
+TEST(ExplicitFELinearProblemTest, set_schemes)
+{
+    TestApp app;
+
+    InputParameters mesh_pars = LineMesh::valid_params();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+
+    InputParameters prob_pars = TestExplicitFELinearProblem::valid_params();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<PetscReal>("start_time") = 0.;
+    prob_pars.set<PetscReal>("end_time") = 1e-3;
+    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFELinearProblem prob(prob_pars);
+
+    mesh.create();
+    prob.create();
+
+    TS ts = prob.get_ts();
+    TSType type;
+    std::vector<std::string> schemes = { "euler", "ssp", "rk" };
+    std::vector<TSType> types = { TSEULER, TSSSP, TSRK };
+    for (std::size_t i = 0; i < schemes.size(); i++) {
+        prob_pars.set<std::string>("scheme") = schemes[i];
+        prob.set_up_time_scheme();
+        TSGetType(ts, &type);
+        EXPECT_STREQ(type, types[i]);
+    }
+}
 
 TEST(ExplicitFELinearProblemTest, wrong_scheme)
 {
