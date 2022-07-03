@@ -39,7 +39,10 @@ f1_u(PetscInt dim,
 
 class TestExplicitFELinearProblem : public ExplicitFELinearProblem {
 public:
-    TestExplicitFELinearProblem(const InputParameters & params) : ExplicitFELinearProblem(params) {}
+    explicit TestExplicitFELinearProblem(const InputParameters & params) :
+        ExplicitFELinearProblem(params)
+    {
+    }
 
     virtual void
     set_up_time_scheme() override
