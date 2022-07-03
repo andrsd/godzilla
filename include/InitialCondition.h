@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-class FEProblemInterface;
+class DiscreteProblemInterface;
 
 /// Base class for initial conditions
 ///
@@ -35,8 +35,8 @@ public:
     evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
 
 protected:
-    /// FE problem this object is part of
-    const FEProblemInterface * fepi;
+    /// Discrete problem this object is part of
+    const DiscreteProblemInterface * dpi;
 
     /// Field ID this initial condition is attached to
     PetscInt fid;

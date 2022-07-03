@@ -11,7 +11,8 @@ add_executable(${PROJECT_NAME}
     EssentialBC_test.cpp
     ExodusIIMesh_test.cpp
     ExodusIIOutput_test.cpp
-    ExplicitFENonlinearProblem_test.cpp
+    ExplicitFELinearProblem_test.cpp
+    ExplicitFVLinearProblem_test.cpp
     Factory_test.cpp
     FENonlinearProblem_test.cpp
     FunctionAuxiliaryField_test.cpp
@@ -33,6 +34,7 @@ add_executable(${PROJECT_NAME}
     Logger_test.cpp
     MeshPartitioningOutput_test.cpp
     NaturalBC_test.cpp
+    NaturalRiemannBC_test.cpp
     NonlinearProblem_test.cpp
     Object_test.cpp
     Output_test.cpp

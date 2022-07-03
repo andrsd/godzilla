@@ -61,8 +61,28 @@ UnstructuredMesh::get_num_elements() const
     return last - first;
 }
 
+PetscInt
+UnstructuredMesh::get_num_all_elements() const
+{
+    _F_;
+    PetscInt first, last;
+    get_all_element_idx_range(first, last);
+    return last - first;
+}
+
 void
 UnstructuredMesh::get_element_idx_range(PetscInt & first, PetscInt & last) const
+{
+    _F_;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
+    PetscInt gc_first, gc_last;
+    PETSC_CHECK(DMPlexGetGhostCellStratum(this->dm, &gc_first, &gc_last));
+    if (gc_first != -1)
+        last = gc_first;
+}
+
+void
+UnstructuredMesh::get_all_element_idx_range(PetscInt & first, PetscInt & last) const
 {
     _F_;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
@@ -216,6 +236,16 @@ UnstructuredMesh::get_cell_set_name(PetscInt id) const
         return it->second;
     else
         error("Cell set ID '%d' does not exist.", id);
+}
+
+void
+UnstructuredMesh::construct_ghost_cells()
+{
+    _F_;
+    DM gdm;
+    PETSC_CHECK(DMPlexConstructGhostCells(this->dm, NULL, NULL, &gdm));
+    PETSC_CHECK(DMDestroy(&this->dm));
+    this->dm = gdm;
 }
 
 } // namespace godzilla

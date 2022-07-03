@@ -1,0 +1,30 @@
+mesh:
+  type: LineMesh
+  nx: 5
+  xmin: 0
+  xmax: 1
+
+ics:
+  all:
+    type: FunctionIC
+    value: '(x < 0.5) ? 1 : 0'
+
+bcs:
+  left:
+    type: InflowBC
+    boundary: left
+    vel: 1
+
+  right:
+    type: OutflowBC
+    boundary: right
+
+problem:
+  type: AdvectionEquation
+  dt: 1e-3
+  end_time: 5e-3
+  scheme: ssp
+
+output:
+  out:
+    type: ExodusIIOutput

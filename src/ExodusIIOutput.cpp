@@ -3,7 +3,7 @@
 #include "CallStack.h"
 #include "ExodusIIOutput.h"
 #include "Problem.h"
-#include "FEProblemInterface.h"
+#include "DiscreteProblemInterface.h"
 #include "UnstructuredMesh.h"
 #include "Postprocessor.h"
 #include "exodusII.h"
@@ -12,6 +12,8 @@
 namespace godzilla {
 
 static const unsigned int MAX_DATE_TIME = 255;
+
+const int ExodusIIOutput::SINGLE_BLK_ID = 0;
 
 REGISTER_OBJECT(ExodusIIOutput);
 
@@ -59,39 +61,6 @@ exo_write_block_names(int exoid, const std::vector<std::string> & block_names)
     ex_put_names(exoid, EX_ELEM_BLOCK, (char **) names);
 }
 
-/// Add variable names into the list of names
-///
-/// @param nc Number of components
-/// @param name Field name
-/// @param nums If `true`, component names will be numbers, otherwise they will be 'x', 'y', 'z'
-/// @param var_names Vector of variable names that will be added into
-static void
-add_var_names(PetscInt nc,
-              const std::string & name,
-              bool nums,
-              std::vector<std::string> & var_names)
-{
-    _F_;
-    if (nc == 1)
-        var_names.push_back(name);
-    else {
-        if (nums) {
-            for (PetscInt c = 0; c < nc; c++) {
-                std::string s = fmt::sprintf("%s_%d", name, c);
-                var_names.push_back(s);
-            }
-        }
-        else {
-            assert(nc <= 3);
-            const char * comp_name[] = { "x", "y", "z" };
-            for (PetscInt c = 0; c < nc; c++) {
-                std::string s = fmt::sprintf("%s_%s", name, comp_name[c]);
-                var_names.push_back(s);
-            }
-        }
-    }
-}
-
 InputParameters
 ExodusIIOutput::valid_params()
 {
@@ -105,7 +74,7 @@ ExodusIIOutput::valid_params()
 ExodusIIOutput::ExodusIIOutput(const InputParameters & params) :
     FileOutput(params),
     variable_names(get_param<std::vector<std::string>>("variables")),
-    fepi(dynamic_cast<const FEProblemInterface *>(this->problem)),
+    dpi(dynamic_cast<const DiscreteProblemInterface *>(this->problem)),
     mesh(this->problem ? dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh())
                        : nullptr),
     exoid(-1),
@@ -146,10 +115,10 @@ ExodusIIOutput::create()
     _F_;
     FileOutput::create();
 
-    assert(this->fepi != nullptr);
+    assert(this->dpi != nullptr);
     assert(this->problem != nullptr);
 
-    auto flds = this->fepi->get_field_names();
+    auto flds = this->dpi->get_field_names();
     auto & pps = this->problem->get_postprocessor_names();
 
     if (this->variable_names.size() == 0) {
@@ -176,7 +145,7 @@ void
 ExodusIIOutput::check()
 {
     _F_;
-    if (this->fepi == nullptr)
+    if (this->dpi == nullptr)
         log_error("ExodusII output can be only used with finite element problems.");
     if (this->mesh == nullptr)
         log_error("ExodusII output can be only used with unstructured meshes.");
@@ -431,7 +400,7 @@ ExodusIIOutput::write_elements()
         PETSC_CHECK(ISDestroy(&cell_sets_is));
     }
     else
-        write_block_connectivity(0);
+        write_block_connectivity(SINGLE_BLK_ID);
 
     exo_write_block_names(this->exoid, block_names);
 }
@@ -580,6 +549,26 @@ ExodusIIOutput::write_face_sets()
 }
 
 void
+ExodusIIOutput::add_var_names(PetscInt fid, std::vector<std::string> & var_names)
+{
+    const std::string & name = this->dpi->get_field_name(fid);
+    PetscInt nc = this->dpi->get_field_num_components(fid);
+    if (nc == 1)
+        var_names.push_back(name);
+    else {
+        for (PetscInt c = 0; c < nc; c++) {
+            std::string comp_name = this->dpi->get_field_component_name(fid, c);
+            std::string s;
+            if (comp_name.length() == 0)
+                s = fmt::sprintf("%s_%d", name, c);
+            else
+                s = fmt::sprintf("%s_%s", name, comp_name);
+            var_names.push_back(s);
+        }
+    }
+}
+
+void
 ExodusIIOutput::write_all_variable_names()
 {
     _F_;
@@ -589,15 +578,14 @@ ExodusIIOutput::write_all_variable_names()
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
     for (auto & name : this->field_var_names) {
-        PetscInt fid = this->fepi->get_field_id(name);
-        PetscInt nc = this->fepi->get_field_num_components(fid);
-        PetscInt order = this->fepi->get_field_order(fid);
+        PetscInt fid = this->dpi->get_field_id(name);
+        PetscInt order = this->dpi->get_field_order(fid);
         if (order == 0) {
-            add_var_names(nc, name, nc > 3, elem_var_names);
+            add_var_names(fid, elem_var_names);
             this->elem_var_fids.push_back(fid);
         }
         else {
-            add_var_names(nc, name, nc > 3, nodal_var_names);
+            add_var_names(fid, nodal_var_names);
             this->nodal_var_fids.push_back(fid);
         }
     }
@@ -638,7 +626,7 @@ ExodusIIOutput::write_field_variables()
     PETSC_CHECK(VecGetArrayRead(sln, &sln_vals));
 
     write_nodal_variables(sln_vals);
-    // TODO: write elemental variables
+    write_elem_variables(sln_vals);
 
     PETSC_CHECK(VecRestoreArrayRead(sln, &sln_vals));
 
@@ -650,9 +638,8 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
 {
     _F_;
 
-    PetscErrorCode ierr;
     DM dm = this->problem->get_dm();
-    PetscInt n_elems = this->mesh->get_num_elements();
+    PetscInt n_all_elems = this->mesh->get_num_all_elements();
     PetscInt first, last;
     PETSC_CHECK(DMPlexGetHeightStratum(dm, this->mesh->get_dimension(), &first, &last));
 
@@ -667,14 +654,64 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
             PetscInt offset;
             PETSC_CHECK(PetscSectionGetFieldOffset(section, n, fid, &offset));
 
-            PetscInt nc = this->fepi->get_field_num_components(fid);
+            PetscInt nc = this->dpi->get_field_num_components(fid);
             for (PetscInt c = 0; c <= nc; c++, exo_var_id++) {
-                int exo_idx = n - n_elems + 1;
+                int exo_idx = n - n_all_elems + 1;
                 ex_put_partial_var(this->exoid,
                                    this->step_num,
                                    EX_NODAL,
                                    exo_var_id,
                                    1,
+                                   exo_idx,
+                                   1,
+                                   sln + offset + c);
+            }
+        }
+    }
+}
+
+void
+ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
+{
+    _F_;
+    DM dm = this->problem->get_dm();
+    int n_cells_sets = 0;
+    PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
+    if (n_cells_sets > 1) {
+        // TODO: go block by block and save the elemental variables
+        error("Block-restricted elemental variable output is not implemented, yet.");
+    }
+    else
+        write_block_elem_variables(SINGLE_BLK_ID, sln);
+}
+
+void
+ExodusIIOutput::write_block_elem_variables(int blk_id, const PetscScalar * sln)
+{
+    _F_;
+    DM dm = this->problem->get_dm();
+    PetscInt first, last;
+    this->mesh->get_element_idx_range(first, last);
+
+    PetscSection section;
+    PETSC_CHECK(DMGetLocalSection(dm, &section));
+
+    for (PetscInt n = first; n < last; n++) {
+        int exo_var_id = 1;
+        for (std::size_t i = 0; i < this->elem_var_fids.size(); i++) {
+            PetscInt fid = this->elem_var_fids[i];
+
+            PetscInt offset;
+            PETSC_CHECK(PetscSectionGetFieldOffset(section, n, fid, &offset));
+
+            PetscInt nc = this->dpi->get_field_num_components(fid);
+            for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
+                int exo_idx = n - first + 1;
+                ex_put_partial_var(this->exoid,
+                                   this->step_num,
+                                   EX_ELEM_BLOCK,
+                                   exo_var_id,
+                                   blk_id,
                                    exo_idx,
                                    1,
                                    sln + offset + c);
@@ -726,13 +763,13 @@ ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const
 {
     _F_;
     DM dm = this->mesh->get_dm();
-    int n_elems = this->mesh->get_num_elements();
+    int n_all_elems = this->mesh->get_num_all_elements();
     PetscInt elem_first, elem_last;
     DMPolytopeType polytope_type;
 
     if (cells == nullptr) {
         this->mesh->get_element_idx_range(elem_first, elem_last);
-        n_elems_in_block = n_elems;
+        n_elems_in_block = this->mesh->get_num_elements();
         PETSC_CHECK(DMPlexGetCellType(dm, elem_first, &polytope_type));
     }
     else
@@ -764,7 +801,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const
         PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
         for (PetscInt k = 0; k < n_nodes_per_elem; k++, j++) {
             PetscInt l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
-            connect[j] = closure[l] - n_elems + 1;
+            connect[j] = closure[l] - n_all_elems + 1;
         }
         PETSC_CHECK(
             DMPlexRestoreTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));

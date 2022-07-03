@@ -8,6 +8,7 @@
 #include "AuxiliaryField.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
+#include "DiscreteProblemInterface.h"
 #include "FEProblemInterface.h"
 #include "TransientProblemInterface.h"
 #include "TimeSteppingAdaptor.h"
@@ -244,8 +245,8 @@ GYMLFile::build_initial_conditions()
 
     lprintf(9, "- initial conditions");
 
-    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
-    if (fepface == nullptr)
+    DiscreteProblemInterface * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
+    if (dpi == nullptr)
         log_error("Supplied problem type '%s' does not support initial conditions.",
                   this->problem->get_type());
     else {
@@ -254,10 +255,10 @@ GYMLFile::build_initial_conditions()
             std::string name = ic_node.as<std::string>();
 
             InputParameters * params = build_params(ics_root_node, name);
-            params->set<const FEProblemInterface *>("_fepi") = fepface;
+            params->set<const DiscreteProblemInterface *>("_dpi") = dpi;
             const std::string & class_name = params->get<std::string>("_type");
             auto ic = Factory::create<InitialCondition>(class_name, name, params);
-            fepface->add_initial_condition(ic);
+            dpi->add_initial_condition(ic);
         }
     }
 }
@@ -272,8 +273,8 @@ GYMLFile::build_boundary_conditions()
 
     lprintf(9, "- boundary conditions");
 
-    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
-    if (fepface == nullptr)
+    DiscreteProblemInterface * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
+    if (dpi == nullptr)
         log_error("Supplied problem type '%s' does not support boundary conditions.",
                   this->problem->get_type());
     else {
@@ -282,10 +283,10 @@ GYMLFile::build_boundary_conditions()
             std::string name = bc_node.as<std::string>();
 
             InputParameters * params = build_params(bcs_root_node, name);
-            params->set<const FEProblemInterface *>("_fepi") = fepface;
+            params->set<const DiscreteProblemInterface *>("_dpi") = dpi;
             const std::string & class_name = params->get<std::string>("_type");
             auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
-            fepface->add_boundary_condition(bc);
+            dpi->add_boundary_condition(bc);
         }
     }
 }

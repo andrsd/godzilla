@@ -25,7 +25,7 @@ __parsed_function(PetscInt dim,
                   PetscScalar u[],
                   void * ctx)
 {
-    ParsedFunction * fn = (ParsedFunction *) ctx;
+    ParsedFunction * fn = static_cast<ParsedFunction *>(ctx);
     fn->evaluate(dim, time, x, nc, u);
     return 0;
 }

@@ -36,7 +36,7 @@ TEST_F(BoundaryConditionTest, api)
 {
     InputParameters params = BoundaryCondition::valid_params();
     params.set<const App *>("_app") = this->app;
-    params.set<const FEProblemInterface *>("_fepi") = this->prob;
+    params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("boundary") = "side1";
     MockBoundaryCondition bc(params);
@@ -49,7 +49,7 @@ TEST_F(BoundaryCondition2FieldTest, test)
 {
     InputParameters params = BoundaryCondition::valid_params();
     params.set<const App *>("_app") = this->app;
-    params.set<const FEProblemInterface *>("_fepi") = this->prob;
+    params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("boundary") = "left";
     params.set<std::string>("field") = "u";
@@ -71,7 +71,7 @@ TEST_F(BoundaryCondition2FieldTest, no_field_param)
 
     InputParameters params = BoundaryCondition::valid_params();
     params.set<const App *>("_app") = this->app;
-    params.set<const FEProblemInterface *>("_fepi") = this->prob;
+    params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("boundary") = "left";
     MockBoundaryCondition bc(params);
@@ -95,7 +95,7 @@ TEST_F(BoundaryCondition2FieldTest, non_existing_field)
 
     InputParameters params = BoundaryCondition::valid_params();
     params.set<const App *>("_app") = this->app;
-    params.set<const FEProblemInterface *>("_fepi") = this->prob;
+    params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("boundary") = "left";
     params.set<std::string>("field") = "asdf";

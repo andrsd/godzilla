@@ -91,6 +91,7 @@ void
 LinearProblem::create()
 {
     _F_;
+    const_cast<Mesh *>(this->mesh)->distribute();
     init();
     allocate_objects();
     set_up_matrix_properties();

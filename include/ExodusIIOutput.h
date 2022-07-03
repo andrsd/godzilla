@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-class FEProblemInterface;
+class DiscreteProblemInterface;
 class UnstructuredMesh;
 
 /// ExodusII output
@@ -43,10 +43,13 @@ protected:
     void write_elements();
     void write_node_sets();
     void write_face_sets();
+    void add_var_names(PetscInt fid, std::vector<std::string> & var_names);
     void write_all_variable_names();
     void write_variables();
     void write_field_variables();
     void write_nodal_variables(const PetscScalar * sln);
+    void write_elem_variables(const PetscScalar * sln);
+    void write_block_elem_variables(int blk_id, const PetscScalar * sln);
     void write_global_variables();
     void write_block_connectivity(int blk_id,
                                   int n_elems_in_block = 0,
@@ -55,7 +58,7 @@ protected:
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
     /// FE problem interface (convenience pointer)
-    const FEProblemInterface * fepi;
+    const DiscreteProblemInterface * dpi;
     /// Unstructured mesh
     const UnstructuredMesh * mesh;
     /// ExodusII file handle
@@ -72,6 +75,9 @@ protected:
     std::vector<PetscInt> nodal_var_fids;
     /// List of nodal elemental variable field IDs
     std::vector<PetscInt> elem_var_fids;
+
+    /// Block ID used in ExodusII file whne there are not cell sets
+    static const int SINGLE_BLK_ID;
 
 public:
     static InputParameters valid_params();

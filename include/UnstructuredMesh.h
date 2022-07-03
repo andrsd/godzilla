@@ -23,14 +23,23 @@ public:
     /// @param last Last vertex index plus one
     void get_vertex_idx_range(PetscInt & first, PetscInt & last) const;
 
-    /// Return the number of mesh elements
+    /// Return the number of mesh elements (interior)
     virtual PetscInt get_num_elements() const;
 
-    /// Get range of element indices
+    /// Return the number of all mesh elements (interior + ghosted)
+    virtual PetscInt get_num_all_elements() const;
+
+    /// Get range of element indices (interior only)
     ///
     /// @param first First element index
     /// @param last Last element index plus one
     void get_element_idx_range(PetscInt & first, PetscInt & last) const;
+
+    /// Get range of all element indices (interior + ghosted)
+    ///
+    /// @param first First element index
+    /// @param last Last element index plus one
+    void get_all_element_idx_range(PetscInt & first, PetscInt & last) const;
 
     /// Set partitioner type
     ///
@@ -77,9 +86,13 @@ public:
     /// @return DMLabel associated with face set name
     DMLabel get_face_set_label(const std::string & name) const;
 
-protected:
     virtual void distribute() override;
 
+    /// Construct ghost cells which connect to every boundary face
+    ///
+    virtual void construct_ghost_cells();
+
+protected:
     void create_cell_set(PetscInt id, const std::string & name);
 
     void create_face_set_labels(const std::map<int, std::string> & names);

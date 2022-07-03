@@ -303,8 +303,12 @@ void
 NSIncompressibleProblem::set_up_fields()
 {
     _F_;
+    const char * comp_name[] = { "x", "y", "z" };
+
     PetscInt dim = this->get_dimension();
     add_fe(velocity_id, "velocity", dim, 2);
+    for (unsigned int i = 0; i < dim; i++)
+        set_field_component_name(velocity_id, i, comp_name[i]);
     add_fe(pressure_id, "pressure", 1, 1);
 
     add_aux_fe(ffn_aid, "ffn", dim, 2);

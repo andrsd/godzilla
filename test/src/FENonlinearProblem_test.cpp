@@ -47,6 +47,8 @@ TEST_F(FENonlinearProblemTest, get_fepi_mesh)
 
 TEST_F(FENonlinearProblemTest, fields)
 {
+    prob->add_fe(1, "vec", 3, 1);
+
     mesh->create();
     prob->create();
 
@@ -62,10 +64,24 @@ TEST_F(FENonlinearProblemTest, fields)
     EXPECT_EQ(prob->has_field_by_id(65536), false);
     EXPECT_EQ(prob->has_field_by_name("nonexistent"), false);
 
+    EXPECT_EQ(prob->get_field_order(0), 1);
     EXPECT_DEATH(prob->get_field_order(65536),
                  "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
 
     EXPECT_DEATH(prob->get_field_num_components(65536),
+                 "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
+
+    EXPECT_EQ(prob->get_field_component_name(0, 0).compare(""), 0);
+    EXPECT_EQ(prob->get_field_component_name(1, 0).compare("0"), 0);
+    EXPECT_EQ(prob->get_field_component_name(1, 1).compare("1"), 0);
+    EXPECT_EQ(prob->get_field_component_name(1, 2).compare("2"), 0);
+    prob->set_field_component_name(1, 0, "x");
+    EXPECT_EQ(prob->get_field_component_name(1, 0).compare("x"), 0);
+    EXPECT_DEATH(prob->get_field_component_name(65536, 0),
+                 "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
+    EXPECT_DEATH(prob->set_field_component_name(0, 0, "x"),
+                 "\\[ERROR\\] Unable to set component name for single-component field");
+    EXPECT_DEATH(prob->set_field_component_name(65536, 0, "x"),
                  "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
 }
 
@@ -107,7 +123,7 @@ TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 {
     InputParameters ic_pars = ConstantIC::valid_params();
     ic_pars.set<const App *>("_app") = app;
-    ic_pars.set<const FEProblemInterface *>("_fepi") = prob;
+    ic_pars.set<const DiscreteProblemInterface *>("_dpi") = prob;
     ic_pars.set<std::vector<PetscReal>>("value") = { 0 };
     ConstantIC ic(ic_pars);
     prob->add_initial_condition(&ic);
@@ -141,7 +157,7 @@ TEST_F(FENonlinearProblemTest, solve)
     {
         const std::string class_name = "ConstantIC";
         InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
         ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
@@ -151,7 +167,7 @@ TEST_F(FENonlinearProblemTest, solve)
         const std::string class_name = "DirichletBC";
         InputParameters * params = Factory::get_valid_params(class_name);
         params->set<const App *>("_app") = this->app;
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
@@ -167,7 +183,6 @@ TEST_F(FENonlinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     const Vec x = prob->get_solution_vector();
-    VecView(x, PETSC_VIEWER_STDOUT_SELF);
     PetscInt ni = 1;
     PetscInt ix[1] = { 0 };
     PetscScalar xx[1];
@@ -180,7 +195,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
     {
         const std::string class_name = "DirichletBC";
         InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
@@ -205,7 +220,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
     {
         const std::string class_name = "GTest2CompIC";
         InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
     }
@@ -252,7 +267,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     {
         const std::string class_name = "ConstantIC";
         InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("field") = "u";
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
@@ -260,7 +275,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     }
     const std::string class_name = "ConstantIC";
     InputParameters * params = Factory::get_valid_params(class_name);
-    params->set<const FEProblemInterface *>("_fepi") = prob;
+    params->set<const DiscreteProblemInterface *>("_dpi") = prob;
     params->set<std::string>("field") = "u";
     params->set<std::vector<PetscReal>>("value") = { 0.2 };
     auto ic = app.build_object<InitialCondition>(class_name, "ic2", params);
@@ -310,7 +325,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     {
         const std::string class_name = "ConstantIC";
         InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
         prob->add_initial_condition(ic);
@@ -331,7 +346,7 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
     {
         const std::string class_name = "DirichletBC";
         InputParameters * params = Factory::get_valid_params(class_name);
-        params->set<const FEProblemInterface *>("_fepi") = prob;
+        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("boundary") = "asdf";
         params->set<std::vector<std::string>>("value") = { "0.1" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc1", params);

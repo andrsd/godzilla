@@ -102,7 +102,7 @@ ExplicitFELinearProblem::set_up_time_scheme()
 {
     _F_;
     std::string sch = utils::to_lower(this->scheme);
-    if (sch.compare("beuler") == 0)
+    if (sch.compare("euler") == 0)
         PETSC_CHECK(TSSetType(this->ts, TSEULER));
     else if (sch.compare("ssp") == 0)
         PETSC_CHECK(TSSetType(this->ts, TSSSP));

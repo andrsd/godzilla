@@ -3,8 +3,6 @@
 #include "FEProblemInterface.h"
 #include "UnstructuredMesh.h"
 #include "Problem.h"
-#include "InitialCondition.h"
-#include "BoundaryCondition.h"
 #include "AuxiliaryField.h"
 #include "Types.h"
 #include "App.h"
@@ -13,23 +11,9 @@
 
 namespace godzilla {
 
-namespace internal {
-
-static PetscErrorCode
-zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar * u, void * ctx)
-{
-    u[0] = 0.0;
-    return 0;
-}
-
-} // namespace internal
-
 FEProblemInterface::FEProblemInterface(Problem * problem, const InputParameters & params) :
-    problem(problem),
-    unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
-    logger(params.get<const App *>("_app")->get_logger()),
+    DiscreteProblemInterface(problem, params),
     qorder(PETSC_DETERMINE),
-    ds(nullptr),
     dm_aux(nullptr),
     a(nullptr)
 {
@@ -55,28 +39,16 @@ void
 FEProblemInterface::create()
 {
     _F_;
-    assert(this->problem != nullptr);
-    assert(this->unstr_mesh != nullptr);
-
-    set_up_fields();
-
+    DiscreteProblemInterface::create();
     for (auto & aux : this->auxs)
         aux->create();
-    for (auto & ic : this->ics)
-        ic->create();
-    for (auto & bc : this->bcs)
-        bc->create();
 }
 
 void
 FEProblemInterface::init()
 {
     _F_;
-    set_up_ds();
-    set_up_weak_form();
-    set_up_initial_conditions();
-    set_up_boundary_conditions();
-    set_up_constants();
+    DiscreteProblemInterface::init();
 
     DM dm = this->unstr_mesh->get_dm();
     DM cdm = dm;
@@ -89,11 +61,11 @@ FEProblemInterface::init()
     }
 }
 
-const UnstructuredMesh *
-FEProblemInterface::get_mesh() const
+PetscInt
+FEProblemInterface::get_num_fields() const
 {
     _F_;
-    return this->unstr_mesh;
+    return this->fields.size();
 }
 
 std::vector<std::string>
@@ -167,6 +139,43 @@ FEProblemInterface::has_field_by_name(const std::string & name) const
     return it != this->fields_by_name.end();
 }
 
+std::string
+FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) const
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end()) {
+        const FieldInfo & fi = it->second;
+        if (fi.nc == 1)
+            return std::string("");
+        else {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            return it->second.component_names.at(component);
+        }
+    }
+    else
+        error("Field with ID = '%d' does not exist.", fid);
+}
+
+void
+FEProblemInterface::set_field_component_name(PetscInt fid,
+                                             PetscInt component,
+                                             const std::string name)
+{
+    _F_;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end()) {
+        if (it->second.nc > 1) {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            it->second.component_names[component] = name;
+        }
+        else
+            error("Unable to set component name for single-component field");
+    }
+    else
+        error("Field with ID = '%d' does not exist.", fid);
+}
+
 const std::string &
 FEProblemInterface::get_aux_field_name(PetscInt fid) const
 {
@@ -211,7 +220,12 @@ FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, P
     _F_;
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
-        FieldInfo fi = { name, id, nullptr, nullptr, nc, k };
+        FieldInfo fi = { name, id, nullptr, nullptr, nc, k, {} };
+        if (nc > 1) {
+            fi.component_names.resize(nc);
+            for (unsigned int i = 0; i < nc; i++)
+                fi.component_names[i] = fmt::sprintf("%d", i);
+        }
         this->fields[id] = fi;
         this->fields_by_name[name] = id;
     }
@@ -234,27 +248,6 @@ FEProblemInterface::add_aux_fe(PetscInt id, const std::string & name, PetscInt n
 }
 
 void
-FEProblemInterface::set_constants(const std::vector<PetscReal> & consts)
-{
-    _F_;
-    this->consts = consts;
-}
-
-void
-FEProblemInterface::add_initial_condition(InitialCondition * ic)
-{
-    _F_;
-    this->ics.push_back(ic);
-}
-
-void
-FEProblemInterface::add_boundary_condition(BoundaryCondition * bc)
-{
-    _F_;
-    this->bcs.push_back(bc);
-}
-
-void
 FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 {
     _F_;
@@ -262,121 +255,8 @@ FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 }
 
 void
-FEProblemInterface::set_up_initial_conditions()
-{
-    _F_;
-
-    PetscInt n_ics = this->ics.size();
-    if (n_ics == 0)
-        return;
-    if (n_ics == fields.size()) {
-        std::map<PetscInt, InitialCondition *> ics_by_fields;
-        for (auto & ic : this->ics) {
-            PetscInt fid = ic->get_field_id();
-            if (fid == -1)
-                continue;
-            const auto & it = ics_by_fields.find(fid);
-            if (it == ics_by_fields.end()) {
-                PetscInt ic_nc = ic->get_num_components();
-                PetscInt field_nc = this->fields[fid].nc;
-                if (ic_nc == field_nc)
-                    ics_by_fields[fid] = ic;
-                else
-                    this->logger->error("Initial condition '%s' operates on %d components, but is "
-                                        "set on a field with %d components.",
-                                        ic->get_name(),
-                                        ic_nc,
-                                        field_nc);
-            }
-            else
-                // TODO: improve this error message
-                this->logger->error(
-                    "Initial condition '%s' is being applied to a field that already "
-                    "has an initial condition.",
-                    ic->get_name());
-        }
-    }
-    else
-        this->logger->error("Provided %d field(s), but %d initial condition(s).",
-                            fields.size(),
-                            n_ics);
-}
-
-void
-FEProblemInterface::set_up_boundary_conditions()
-{
-    _F_;
-    /// TODO: refactor this into a method
-    bool no_errors = true;
-    for (auto & bc : this->bcs) {
-        const std::string & bnd_name = bc->get_boundary();
-        bool exists = this->unstr_mesh->has_face_set(bnd_name);
-        if (!exists) {
-            no_errors = false;
-            this->logger->error(
-                "Boundary condition '%s' is set on boundary '%s' which does not exist in the mesh.",
-                bc->get_name(),
-                bnd_name);
-        }
-    }
-
-    if (no_errors)
-        for (auto & bc : this->bcs)
-            bc->set_up();
-}
-
-void
 FEProblemInterface::set_up_field_null_space(DM dm)
 {
-}
-
-void
-FEProblemInterface::set_zero_initial_guess()
-{
-    _F_;
-    DM dm = this->unstr_mesh->get_dm();
-    auto n_fields = this->fields.size();
-    PetscFunc * initial_guess[n_fields];
-    for (PetscInt i = 0; i < n_fields; i++)
-        initial_guess[i] = internal::zero_fn;
-    PETSC_CHECK(DMProjectFunction(dm,
-                                  this->problem->get_time(),
-                                  initial_guess,
-                                  nullptr,
-                                  INSERT_VALUES,
-                                  this->problem->get_solution_vector()));
-}
-
-void
-FEProblemInterface::set_initial_guess_from_ics()
-{
-    _F_;
-    PetscInt n_ics = this->ics.size();
-    PetscFunc * ic_funcs[n_ics];
-    void * ic_ctxs[n_ics];
-    for (auto & ic : this->ics) {
-        PetscInt fid = ic->get_field_id();
-        ic_funcs[fid] = ic->get_function();
-        ic_ctxs[fid] = ic->get_context();
-    }
-
-    DM dm = this->unstr_mesh->get_dm();
-    PETSC_CHECK(DMProjectFunction(dm,
-                                  this->problem->get_time(),
-                                  ic_funcs,
-                                  ic_ctxs,
-                                  INSERT_VALUES,
-                                  this->problem->get_solution_vector()));
-}
-
-void
-FEProblemInterface::set_up_initial_guess()
-{
-    _F_;
-    if (this->ics.size() > 0)
-        set_initial_guess_from_ics();
-    else
-        set_zero_initial_guess();
 }
 
 void
@@ -409,6 +289,8 @@ FEProblemInterface::set_up_ds()
     }
     PETSC_CHECK(DMCreateDS(dm));
     PETSC_CHECK(DMGetDS(dm, &this->ds));
+
+    set_up_weak_form();
 }
 
 void
@@ -565,16 +447,6 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &this->a));
         PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
     }
-}
-
-void
-FEProblemInterface::set_up_constants()
-{
-    _F_;
-    if (this->consts.size() == 0)
-        return;
-
-    PETSC_CHECK(PetscDSSetConstants(this->ds, this->consts.size(), this->consts.data()));
 }
 
 } // namespace godzilla

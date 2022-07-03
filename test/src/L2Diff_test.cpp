@@ -22,7 +22,7 @@ TEST(L2DiffTest, compute)
 
     InputParameters bc_params = DirichletBC::valid_params();
     bc_params.set<const App *>("_app") = &app;
-    bc_params.set<const FEProblemInterface *>("_fepi") = &prob;
+    bc_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_params.set<std::vector<std::string>>("value") = { "x*x" };
     bc_params.set<std::string>("boundary") = "marker";
     DirichletBC bc(bc_params);
