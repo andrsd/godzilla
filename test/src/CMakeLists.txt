@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME}
     ExodusIIMesh_test.cpp
     ExodusIIOutput_test.cpp
     ExplicitFELinearProblem_test.cpp
+    ExplicitFVLinearProblem_test.cpp
     Factory_test.cpp
     FENonlinearProblem_test.cpp
     FunctionAuxiliaryField_test.cpp
