@@ -40,10 +40,10 @@ __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx)
     return problem->snes_monitor_callback(it, norm);
 }
 
-InputParameters
+Parameters
 NonlinearProblem::valid_params()
 {
-    InputParameters params = Problem::valid_params();
+    Parameters params = Problem::valid_params();
     params.add_param<std::string>("line_search", "bt", "The type of line search to be used");
     params.add_param<PetscReal>("nl_rel_tol",
                                 1e-8,
@@ -70,7 +70,7 @@ NonlinearProblem::valid_params()
     return params;
 }
 
-NonlinearProblem::NonlinearProblem(const InputParameters & parameters) :
+NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     Problem(parameters),
     snes(NULL),
     ksp(NULL),

@@ -8,7 +8,7 @@ using namespace godzilla;
 ///
 class NSIncompressibleProblem : public ImplicitFENonlinearProblem {
 public:
-    NSIncompressibleProblem(const InputParameters & parameters);
+    NSIncompressibleProblem(const Parameters & parameters);
     virtual ~NSIncompressibleProblem();
 
 protected:
@@ -22,7 +22,7 @@ protected:
     const PetscReal & Re;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 
     static const PetscInt velocity_id = 0;
     static const PetscInt pressure_id = 1;

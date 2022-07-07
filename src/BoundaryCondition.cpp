@@ -9,17 +9,17 @@
 
 namespace godzilla {
 
-InputParameters
+Parameters
 BoundaryCondition::valid_params()
 {
-    InputParameters params = Object::valid_params();
+    Parameters params = Object::valid_params();
     params.add_param<std::string>("field", "", "Field name");
     params.add_required_param<std::string>("boundary", "Boundary name");
     params.add_private_param<const DiscreteProblemInterface *>("_dpi", nullptr);
     return params;
 }
 
-BoundaryCondition::BoundaryCondition(const InputParameters & params) :
+BoundaryCondition::BoundaryCondition(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     dpi(get_param<const DiscreteProblemInterface *>("_dpi")),

@@ -55,15 +55,15 @@ f1_temp(PetscInt dim,
         f1[d] = -u_x[d];
 }
 
-InputParameters
+Parameters
 HeatEquationExplicit::valid_params()
 {
-    InputParameters params = ExplicitFELinearProblem::valid_params();
+    Parameters params = ExplicitFELinearProblem::valid_params();
     params.add_param<PetscInt>("order", 1, "Polynomial order of the FE space");
     return params;
 }
 
-HeatEquationExplicit::HeatEquationExplicit(const InputParameters & parameters) :
+HeatEquationExplicit::HeatEquationExplicit(const Parameters & parameters) :
     ExplicitFELinearProblem(parameters),
     order(get_param<PetscInt>("order"))
 {

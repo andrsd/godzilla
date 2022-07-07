@@ -8,7 +8,7 @@ using namespace godzilla;
 ///
 class BurgersEquation : public ExplicitFELinearProblem {
 public:
-    BurgersEquation(const InputParameters & parameters);
+    BurgersEquation(const Parameters & parameters);
     virtual ~BurgersEquation();
 
 protected:
@@ -18,7 +18,7 @@ protected:
     const PetscReal & viscosity;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 
     static const PetscInt u_id = 0;
 };

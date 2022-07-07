@@ -8,7 +8,7 @@ using namespace godzilla;
 ///
 class HeatEquationProblem : public ImplicitFENonlinearProblem {
 public:
-    HeatEquationProblem(const InputParameters & parameters);
+    HeatEquationProblem(const Parameters & parameters);
     virtual ~HeatEquationProblem();
 
 protected:
@@ -19,7 +19,7 @@ protected:
     const PetscInt & p_order;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 
     static const PetscInt temp_id = 0;
 

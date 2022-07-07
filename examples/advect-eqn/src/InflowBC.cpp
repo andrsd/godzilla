@@ -4,15 +4,15 @@
 
 REGISTER_OBJECT(InflowBC);
 
-InputParameters
+Parameters
 InflowBC::valid_params()
 {
-    InputParameters params = NaturalRiemannBC::valid_params();
+    Parameters params = NaturalRiemannBC::valid_params();
     params.add_required_param<PetscReal>("vel", "Inlet velocity");
     return params;
 }
 
-InflowBC::InflowBC(const InputParameters & params) :
+InflowBC::InflowBC(const Parameters & params) :
     NaturalRiemannBC(params),
     inlet_vel(get_param<PetscReal>("vel"))
 {

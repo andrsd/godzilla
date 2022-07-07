@@ -12,7 +12,7 @@ class DiscreteProblemInterface;
 ///
 class InitialCondition : public Object, public PrintInterface {
 public:
-    InitialCondition(const InputParameters & params);
+    InitialCondition(const Parameters & params);
 
     virtual void create();
     virtual PetscInt get_field_id() const;
@@ -42,7 +42,7 @@ protected:
     PetscInt fid;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

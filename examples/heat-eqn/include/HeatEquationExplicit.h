@@ -10,7 +10,7 @@ using namespace godzilla;
 ///
 class HeatEquationExplicit : public ExplicitFELinearProblem {
 public:
-    HeatEquationExplicit(const InputParameters & parameters);
+    HeatEquationExplicit(const Parameters & parameters);
     virtual ~HeatEquationExplicit();
 
 protected:
@@ -21,7 +21,7 @@ protected:
     PetscInt order;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 
     static const PetscInt temp_id = 0;
     static const PetscInt ffn_aux_id = 0;

@@ -24,8 +24,7 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 
 ///
 
-DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem,
-                                                   const InputParameters & params) :
+DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
     unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
     logger(params.get<const App *>("_app")->get_logger()),

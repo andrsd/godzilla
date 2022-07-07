@@ -4,14 +4,14 @@
 
 REGISTER_OBJECT(OutflowBC);
 
-InputParameters
+Parameters
 OutflowBC::valid_params()
 {
-    InputParameters params = NaturalRiemannBC::valid_params();
+    Parameters params = NaturalRiemannBC::valid_params();
     return params;
 }
 
-OutflowBC::OutflowBC(const InputParameters & params) : NaturalRiemannBC(params)
+OutflowBC::OutflowBC(const Parameters & params) : NaturalRiemannBC(params)
 {
     _F_;
 }

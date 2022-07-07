@@ -10,7 +10,7 @@ TEST(RectangleMeshTest, api)
 {
     TestApp app;
 
-    InputParameters params = RectangleMesh::valid_params();
+    Parameters params = RectangleMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "rect_mesh";
     params.set<PetscReal>("xmin") = 1;
@@ -55,7 +55,7 @@ TEST(RectangleMeshTest, incorrect_dims)
 
     TestApp app;
 
-    InputParameters params = RectangleMesh::valid_params();
+    Parameters params = RectangleMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<PetscReal>("xmin") = 2;

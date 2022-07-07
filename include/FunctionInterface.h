@@ -12,7 +12,7 @@ class App;
 ///
 class FunctionInterface {
 public:
-    FunctionInterface(const InputParameters & params);
+    FunctionInterface(const Parameters & params);
 
     /// Build the evaluator
     void create();
@@ -52,8 +52,8 @@ protected:
     FunctionEvaluator evalr_t;
 
 public:
-    static InputParameters valid_params();
-    static InputParameters valid_params_t();
+    static Parameters valid_params();
+    static Parameters valid_params_t();
 };
 
 } // namespace godzilla

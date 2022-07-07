@@ -27,7 +27,7 @@ namespace godzilla {
 ///
 class HDF5Output : public FileOutput {
 public:
-    HDF5Output(const InputParameters & params);
+    HDF5Output(const Parameters & params);
     virtual ~HDF5Output();
 
     virtual std::string get_file_ext() const override;
@@ -40,7 +40,7 @@ protected:
     PetscViewer viewer;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

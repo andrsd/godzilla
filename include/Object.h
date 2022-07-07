@@ -14,7 +14,7 @@ class App;
 class Object : public LoggingInterface {
 public:
     /// Constructor for building the object via Factory
-    Object(const InputParameters & parameters);
+    Object(const Parameters & parameters);
     virtual ~Object();
 
     /// Get the type of this object.
@@ -27,7 +27,7 @@ public:
 
     /// Get the parameters of the object
     /// @return The parameters of the object
-    const InputParameters & get_parameters() const;
+    const Parameters & get_parameters() const;
 
     /// Retrieve a parameter for the object
     /// @param name The name of the parameter
@@ -59,7 +59,7 @@ public:
 
 protected:
     /// Parameters of this object
-    const InputParameters & pars;
+    const Parameters & pars;
 
     /// The application owning this object
     const App * app;
@@ -71,8 +71,8 @@ protected:
     const std::string & name;
 
 public:
-    /// Method for building InputParameters for this class
-    static InputParameters valid_params();
+    /// Method for building Parameters for this class
+    static Parameters valid_params();
 };
 
 template <typename T>

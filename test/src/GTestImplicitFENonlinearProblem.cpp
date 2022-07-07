@@ -105,7 +105,7 @@ g3_uu(PetscInt dim,
         g3[d * dim + d] = 1.0;
 }
 
-GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const InputParameters & params) :
+GTestImplicitFENonlinearProblem::GTestImplicitFENonlinearProblem(const Parameters & params) :
     ImplicitFENonlinearProblem(params),
     iu(0)
 {

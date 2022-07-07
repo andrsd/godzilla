@@ -3,20 +3,20 @@
 
 namespace godzilla {
 
-InputParameters::InputParameters() {}
+Parameters::Parameters() {}
 
-InputParameters::InputParameters(const InputParameters & p)
+Parameters::Parameters(const Parameters & p)
 {
     *this = p;
 }
 
-InputParameters::~InputParameters()
+Parameters::~Parameters()
 {
     clear();
 }
 
-InputParameters &
-InputParameters::operator=(const InputParameters & rhs)
+Parameters &
+Parameters::operator=(const Parameters & rhs)
 {
     this->clear();
     for (auto it = rhs.begin(); it != rhs.end(); ++it)

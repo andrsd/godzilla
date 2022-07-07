@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class EssentialBC : public BoundaryCondition {
 public:
-    EssentialBC(const InputParameters & params);
+    EssentialBC(const Parameters & params);
 
     virtual DMBoundaryConditionType get_bc_type() const override;
 
@@ -43,7 +43,7 @@ public:
     virtual void * get_context();
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

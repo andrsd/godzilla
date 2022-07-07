@@ -17,7 +17,7 @@ namespace godzilla {
 /// ```
 class VTKOutput : public FileOutput {
 public:
-    VTKOutput(const InputParameters & params);
+    VTKOutput(const Parameters & params);
     virtual ~VTKOutput();
 
     virtual std::string get_file_ext() const override;
@@ -30,7 +30,7 @@ protected:
     PetscViewer viewer;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

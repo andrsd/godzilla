@@ -12,17 +12,14 @@ namespace godzilla {
 
 REGISTER_OBJECT(CSVOutput);
 
-InputParameters
+Parameters
 CSVOutput::valid_params()
 {
-    InputParameters params = FileOutput::valid_params();
+    Parameters params = FileOutput::valid_params();
     return params;
 }
 
-CSVOutput::CSVOutput(const InputParameters & params) :
-    FileOutput(params),
-    f(nullptr),
-    has_header(false)
+CSVOutput::CSVOutput(const Parameters & params) : FileOutput(params), f(nullptr), has_header(false)
 {
 }
 

@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class CSVOutput : public FileOutput {
 public:
-    CSVOutput(const InputParameters & params);
+    CSVOutput(const Parameters & params);
     virtual ~CSVOutput();
 
     virtual void create() override;
@@ -32,7 +32,7 @@ protected:
     std::vector<std::string> pps_names;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

@@ -7,7 +7,7 @@ namespace godzilla {
 
 class ImplicitFENonlinearProblem : public FENonlinearProblem, public TransientProblemInterface {
 public:
-    ImplicitFENonlinearProblem(const InputParameters & params);
+    ImplicitFENonlinearProblem(const Parameters & params);
     virtual ~ImplicitFENonlinearProblem();
 
     virtual void create() override;
@@ -25,7 +25,7 @@ protected:
     const std::string & scheme;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

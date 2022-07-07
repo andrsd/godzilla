@@ -26,7 +26,6 @@ add_executable(${PROJECT_NAME}
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp
     InitialCondition_test.cpp
-    InputParameters_test.cpp
     L2Diff_test.cpp
     LinearInterpolation_test.cpp
     LinearProblem_test.cpp
@@ -38,6 +37,7 @@ add_executable(${PROJECT_NAME}
     NonlinearProblem_test.cpp
     Object_test.cpp
     Output_test.cpp
+    Parameters_test.cpp
     ParsedFunction_test.cpp
     PiecewiseLinear_test.cpp
     PrintInterface_test.cpp

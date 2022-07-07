@@ -7,7 +7,7 @@ using namespace godzilla;
 /// Test problem for simple FE solver with 2 fields
 class GTest2FieldsFENonlinearProblem : public GTestFENonlinearProblem {
 public:
-    GTest2FieldsFENonlinearProblem(const InputParameters & params);
+    GTest2FieldsFENonlinearProblem(const Parameters & params);
 
 protected:
     virtual void set_up_fields() override;

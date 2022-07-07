@@ -5,10 +5,10 @@
 
 namespace godzilla {
 
-InputParameters
+Parameters
 AuxiliaryField::valid_params()
 {
-    InputParameters params = Object::valid_params();
+    Parameters params = Object::valid_params();
     params.add_private_param<const FEProblemInterface *>("_fepi", nullptr);
     params.add_param<std::string>("field", "", "Name of the field.");
     params.add_param<std::string>("region",
@@ -17,7 +17,7 @@ AuxiliaryField::valid_params()
     return params;
 }
 
-AuxiliaryField::AuxiliaryField(const InputParameters & params) :
+AuxiliaryField::AuxiliaryField(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     fepi(get_param<FEProblemInterface *>("_fepi")),

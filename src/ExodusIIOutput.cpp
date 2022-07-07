@@ -61,17 +61,17 @@ exo_write_block_names(int exoid, const std::vector<std::string> & block_names)
     ex_put_names(exoid, EX_ELEM_BLOCK, (char **) names);
 }
 
-InputParameters
+Parameters
 ExodusIIOutput::valid_params()
 {
-    InputParameters params = FileOutput::valid_params();
+    Parameters params = FileOutput::valid_params();
     params.add_param<std::vector<std::string>>(
         "variables",
         "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
 
-ExodusIIOutput::ExodusIIOutput(const InputParameters & params) :
+ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     FileOutput(params),
     variable_names(get_param<std::vector<std::string>>("variables")),
     dpi(dynamic_cast<const DiscreteProblemInterface *>(this->problem)),

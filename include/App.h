@@ -77,14 +77,12 @@ public:
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    T * build_object(const std::string & class_name,
-                     const std::string & name,
-                     InputParameters & parameters);
+    T *
+    build_object(const std::string & class_name, const std::string & name, Parameters & parameters);
 
     template <typename T>
-    T * build_object(const std::string & class_name,
-                     const std::string & name,
-                     InputParameters * parameters);
+    T *
+    build_object(const std::string & class_name, const std::string & name, Parameters * parameters);
 
 protected:
     /// Builds a GYMLFile instance
@@ -149,9 +147,7 @@ protected:
 
 template <typename T>
 T *
-App::build_object(const std::string & class_name,
-                  const std::string & name,
-                  InputParameters & parameters)
+App::build_object(const std::string & class_name, const std::string & name, Parameters & parameters)
 {
     parameters.set<const App *>("_app") = this;
     return Factory::create<T>(class_name, name, parameters);
@@ -159,9 +155,7 @@ App::build_object(const std::string & class_name,
 
 template <typename T>
 T *
-App::build_object(const std::string & class_name,
-                  const std::string & name,
-                  InputParameters * parameters)
+App::build_object(const std::string & class_name, const std::string & name, Parameters * parameters)
 {
     parameters->set<const App *>("_app") = this;
     return Factory::create<T>(class_name, name, parameters);

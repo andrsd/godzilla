@@ -11,7 +11,7 @@ namespace godzilla {
 ///
 class ParsedFunction : public Function {
 public:
-    ParsedFunction(const InputParameters & params);
+    ParsedFunction(const Parameters & params);
 
     /// Register this function with the function parser
     ///
@@ -43,7 +43,7 @@ protected:
     FunctionEvaluator evalr;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

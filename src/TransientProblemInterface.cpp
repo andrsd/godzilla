@@ -41,10 +41,10 @@ __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx)
     return tpi->ts_monitor_callback(stepi, time, x);
 }
 
-InputParameters
+Parameters
 TransientProblemInterface::valid_params()
 {
-    InputParameters params;
+    Parameters params;
     params.add_param<PetscReal>("start_time", 0., "Start time of the simulation");
     params.add_required_param<PetscReal>("end_time", "Simulation end time");
     params.add_required_param<PetscReal>("dt", "Time step size");
@@ -52,8 +52,7 @@ TransientProblemInterface::valid_params()
     return params;
 }
 
-TransientProblemInterface::TransientProblemInterface(Problem * problem,
-                                                     const InputParameters & params) :
+TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
     ts(nullptr),
     ts_adaptor(nullptr),

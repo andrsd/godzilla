@@ -41,7 +41,7 @@ TEST_F(LinearProblemTest, run)
 {
     class MockLinearProblem : public LinearProblem {
     public:
-        explicit MockLinearProblem(const InputParameters & params) : LinearProblem(params) {}
+        explicit MockLinearProblem(const Parameters & params) : LinearProblem(params) {}
 
         MOCK_METHOD(void, solve, ());
         virtual bool
@@ -57,7 +57,7 @@ TEST_F(LinearProblemTest, run)
     auto mesh = gMesh1d();
     mesh->create();
 
-    InputParameters prob_pars = LinearProblem::valid_params();
+    Parameters prob_pars = LinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockLinearProblem prob(prob_pars);
@@ -69,7 +69,7 @@ TEST_F(LinearProblemTest, run)
 
 // 1D
 
-G1DTestLinearProblem::G1DTestLinearProblem(const InputParameters & params) :
+G1DTestLinearProblem::G1DTestLinearProblem(const Parameters & params) :
     LinearProblem(params),
     s(nullptr)
 {
@@ -118,7 +118,7 @@ G1DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
 
 // 2D
 
-G2DTestLinearProblem::G2DTestLinearProblem(const InputParameters & params) :
+G2DTestLinearProblem::G2DTestLinearProblem(const Parameters & params) :
     LinearProblem(params),
     s(nullptr)
 {
@@ -169,7 +169,7 @@ G2DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
 
 // 3D
 
-G3DTestLinearProblem::G3DTestLinearProblem(const InputParameters & params) :
+G3DTestLinearProblem::G3DTestLinearProblem(const Parameters & params) :
     LinearProblem(params),
     s(nullptr)
 {

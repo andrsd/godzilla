@@ -11,17 +11,17 @@ TEST(FunctionICTest, api)
 {
     TestApp app;
 
-    InputParameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::valid_params();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = GTestFENonlinearProblem::valid_params();
+    Parameters prob_pars = GTestFENonlinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
-    InputParameters params = FunctionIC::valid_params();
+    Parameters params = FunctionIC::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };

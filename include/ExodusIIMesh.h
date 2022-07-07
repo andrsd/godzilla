@@ -8,7 +8,7 @@ namespace godzilla {
 ///
 class ExodusIIMesh : public UnstructuredMesh {
 public:
-    ExodusIIMesh(const InputParameters & parameters);
+    ExodusIIMesh(const Parameters & parameters);
 
     const std::string get_file_name() const;
 
@@ -21,7 +21,7 @@ protected:
     const PetscBool interpolate;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

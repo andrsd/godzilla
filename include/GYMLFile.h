@@ -47,8 +47,8 @@ protected:
     void build_postprocessors();
     void build_outputs();
     void build_ts_adapt(const YAML::Node & problem_node);
-    InputParameters * build_params(const YAML::Node & root, const std::string & name);
-    void set_parameter_from_yml(InputParameters * params,
+    Parameters * build_params(const YAML::Node & root, const std::string & name);
+    void set_parameter_from_yml(Parameters * params,
                                 const YAML::Node & node,
                                 const std::string & param_name);
 
@@ -67,7 +67,7 @@ protected:
     template <typename K, typename V>
     std::map<K, V> read_map_value(const std::string & param_name, const YAML::Node & val_node);
 
-    void check_params(const InputParameters * params,
+    void check_params(const Parameters * params,
                       const std::string & name,
                       std::set<std::string> & unused_param_names);
 

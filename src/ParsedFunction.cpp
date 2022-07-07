@@ -30,10 +30,10 @@ __parsed_function(PetscInt dim,
     return 0;
 }
 
-InputParameters
+Parameters
 ParsedFunction::valid_params()
 {
-    InputParameters params = Function::valid_params();
+    Parameters params = Function::valid_params();
     params.add_param<std::vector<std::string>>(
         "function",
         "Text representation of the function to evaluate (one per component)");
@@ -41,7 +41,7 @@ ParsedFunction::valid_params()
     return params;
 }
 
-ParsedFunction::ParsedFunction(const InputParameters & params) :
+ParsedFunction::ParsedFunction(const Parameters & params) :
     Function(params),
     function(get_param<std::vector<std::string>>("function")),
     constants(get_param<std::map<std::string, PetscReal>>("constants"))

@@ -11,7 +11,7 @@ namespace godzilla {
 /// User have to specify at least 2 points
 class PiecewiseLinear : public Function {
 public:
-    PiecewiseLinear(const InputParameters & params);
+    PiecewiseLinear(const Parameters & params);
 
     virtual void register_callback(mu::Parser & parser);
 
@@ -23,7 +23,7 @@ protected:
     LinearInterpolation linpol;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

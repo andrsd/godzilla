@@ -6,25 +6,25 @@
 
 namespace godzilla {
 
-InputParameters
+Parameters
 FunctionInterface::valid_params()
 {
-    InputParameters params;
+    Parameters params;
     params.add_required_param<std::vector<std::string>>("value",
                                                         "Function expression to evaluate.");
     return params;
 }
 
-InputParameters
+Parameters
 FunctionInterface::valid_params_t()
 {
-    InputParameters params;
+    Parameters params;
     params.add_param<std::vector<std::string>>("value_t",
                                                "Time derivative of the 'value' parameter.");
     return params;
 }
 
-FunctionInterface::FunctionInterface(const InputParameters & params) :
+FunctionInterface::FunctionInterface(const Parameters & params) :
     fi_app(params.get<const App *>("_app")),
     expression(params.get<std::vector<std::string>>("value")),
     expression_t(params.has<std::vector<std::string>>("value_t")

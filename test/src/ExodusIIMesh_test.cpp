@@ -12,7 +12,7 @@ TEST(ExodusIIMeshTest, api)
     TestApp app;
     std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/square.e");
 
-    InputParameters params = ExodusIIMesh::valid_params();
+    Parameters params = ExodusIIMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("file") = file_name;
@@ -44,7 +44,7 @@ TEST(ExodusIIMeshTest, two_block)
 {
     TestApp app;
     std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/2blk.exo");
-    InputParameters params = ExodusIIMesh::valid_params();
+    Parameters params = ExodusIIMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("file") = file_name;
@@ -59,7 +59,7 @@ TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
 {
     TestApp app;
     std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/2blk.exo");
-    InputParameters params = ExodusIIMesh::valid_params();
+    Parameters params = ExodusIIMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("file") = file_name;
@@ -75,7 +75,7 @@ TEST(ExodusIIMeshTest, nonexitent_file)
 
     TestApp app;
 
-    InputParameters params = ExodusIIMesh::valid_params();
+    Parameters params = ExodusIIMesh::valid_params();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("file") = "asdf.e";

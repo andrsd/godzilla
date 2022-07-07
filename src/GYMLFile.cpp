@@ -127,7 +127,7 @@ GYMLFile::build_functions()
         YAML::Node fn_node = it.first;
         std::string name = fn_node.as<std::string>();
 
-        InputParameters * params = build_params(funcs_node, name);
+        Parameters * params = build_params(funcs_node, name);
         const std::string & class_name = params->get<std::string>("_type");
         auto fn = Factory::create<Function>(class_name, name, params);
         assert(this->problem != nullptr);
@@ -140,7 +140,7 @@ GYMLFile::build_mesh()
 {
     _F_;
     lprintf(9, "- mesh");
-    InputParameters * params = build_params(this->root, "mesh");
+    Parameters * params = build_params(this->root, "mesh");
     const std::string & class_name = params->get<std::string>("_type");
     this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
     add_object(this->mesh);
@@ -151,7 +151,7 @@ GYMLFile::build_problem()
 {
     _F_;
     lprintf(9, "- problem");
-    InputParameters * params = build_params(this->root, "problem");
+    Parameters * params = build_params(this->root, "problem");
     const std::string & class_name = params->get<std::string>("_type");
     params->set<const Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
@@ -168,7 +168,7 @@ GYMLFile::build_ts_adapt(const YAML::Node & problem_node)
     _F_;
     TransientProblemInterface * tpi = dynamic_cast<TransientProblemInterface *>(this->problem);
     if (tpi != nullptr) {
-        InputParameters * params = build_params(problem_node, "ts_adapt");
+        Parameters * params = build_params(problem_node, "ts_adapt");
         params->set<const Problem *>("_problem") = this->problem;
         params->set<const TransientProblemInterface *>("_tpi") = tpi;
 
@@ -226,7 +226,7 @@ GYMLFile::build_auxiliary_fields()
             YAML::Node aux_node = it.first;
             std::string name = aux_node.as<std::string>();
 
-            InputParameters * params = build_params(auxs_root_node, name);
+            Parameters * params = build_params(auxs_root_node, name);
             params->set<FEProblemInterface *>("_fepi") = fepface;
             const std::string & class_name = params->get<std::string>("_type");
             auto aux = Factory::create<AuxiliaryField>(class_name, name, params);
@@ -254,7 +254,7 @@ GYMLFile::build_initial_conditions()
             YAML::Node ic_node = it.first;
             std::string name = ic_node.as<std::string>();
 
-            InputParameters * params = build_params(ics_root_node, name);
+            Parameters * params = build_params(ics_root_node, name);
             params->set<const DiscreteProblemInterface *>("_dpi") = dpi;
             const std::string & class_name = params->get<std::string>("_type");
             auto ic = Factory::create<InitialCondition>(class_name, name, params);
@@ -282,7 +282,7 @@ GYMLFile::build_boundary_conditions()
             YAML::Node bc_node = it.first;
             std::string name = bc_node.as<std::string>();
 
-            InputParameters * params = build_params(bcs_root_node, name);
+            Parameters * params = build_params(bcs_root_node, name);
             params->set<const DiscreteProblemInterface *>("_dpi") = dpi;
             const std::string & class_name = params->get<std::string>("_type");
             auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
@@ -305,7 +305,7 @@ GYMLFile::build_postprocessors()
         YAML::Node pps_node = it.first;
         std::string name = pps_node.as<std::string>();
 
-        InputParameters * params = build_params(pps_root_node, name);
+        Parameters * params = build_params(pps_root_node, name);
         const std::string & class_name = params->get<std::string>("_type");
         params->set<const Problem *>("_problem") = this->problem;
         auto pp = Factory::create<Postprocessor>(class_name, name, params);
@@ -327,7 +327,7 @@ GYMLFile::build_outputs()
         YAML::Node output_node = it.first;
         std::string name = output_node.as<std::string>();
 
-        InputParameters * params = build_params(output_root_node, name);
+        Parameters * params = build_params(output_root_node, name);
         const std::string & class_name = params->get<std::string>("_type");
         params->set<const Problem *>("_problem") = this->problem;
         auto output = Factory::create<Output>(class_name, name, params);
@@ -336,7 +336,7 @@ GYMLFile::build_outputs()
     }
 }
 
-InputParameters *
+Parameters *
 GYMLFile::build_params(const YAML::Node & root, const std::string & name)
 {
     _F_;
@@ -358,7 +358,7 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
         error("%s: Type '%s' is not a registered object.", name, class_name);
     unused_param_names.erase("type");
 
-    InputParameters * params = Factory::get_valid_params(class_name);
+    Parameters * params = Factory::get_valid_params(class_name);
     params->set<std::string>("_type") = class_name;
     params->set<std::string>("_name") = name;
     params->set<const App *>("_app") = this->app;
@@ -377,7 +377,7 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
 }
 
 void
-GYMLFile::set_parameter_from_yml(InputParameters * params,
+GYMLFile::set_parameter_from_yml(Parameters * params,
                                  const YAML::Node & node,
                                  const std::string & param_name)
 {
@@ -480,7 +480,7 @@ GYMLFile::read_map_value(const std::string & param_name, const YAML::Node & val_
 }
 
 void
-GYMLFile::check_params(const InputParameters * params,
+GYMLFile::check_params(const Parameters * params,
                        const std::string & name,
                        std::set<std::string> & unused_param_names)
 {

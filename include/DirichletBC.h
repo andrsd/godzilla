@@ -10,7 +10,7 @@ namespace godzilla {
 /// Can be used only on single-field problems
 class DirichletBC : public EssentialBC, public FunctionInterface {
 public:
-    DirichletBC(const InputParameters & params);
+    DirichletBC(const Parameters & params);
 
     virtual void create();
     virtual PetscInt get_num_components() const;
@@ -24,7 +24,7 @@ protected:
     virtual void set_up_callback();
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

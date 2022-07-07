@@ -9,14 +9,14 @@ namespace godzilla {
 
 REGISTER_OBJECT(MeshPartitioningOutput);
 
-InputParameters
+Parameters
 MeshPartitioningOutput::valid_params()
 {
-    InputParameters params = FileOutput::valid_params();
+    Parameters params = FileOutput::valid_params();
     return params;
 }
 
-MeshPartitioningOutput::MeshPartitioningOutput(const InputParameters & params) : FileOutput(params)
+MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & params) : FileOutput(params)
 {
     _F_;
     this->file_base = "part";

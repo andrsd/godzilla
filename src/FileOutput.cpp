@@ -7,15 +7,15 @@
 
 namespace godzilla {
 
-InputParameters
+Parameters
 FileOutput::valid_params()
 {
-    InputParameters params = Output::valid_params();
+    Parameters params = Output::valid_params();
     params.add_param<std::string>("file", "", "The name of the output file.");
     return params;
 }
 
-FileOutput::FileOutput(const InputParameters & params) :
+FileOutput::FileOutput(const Parameters & params) :
     Output(params),
     file_base(get_param<std::string>("file"))
 {

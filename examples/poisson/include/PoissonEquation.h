@@ -8,7 +8,7 @@ using namespace godzilla;
 ///
 class PoissonEquation : public FENonlinearProblem {
 public:
-    PoissonEquation(const InputParameters & parameters);
+    PoissonEquation(const Parameters & parameters);
     virtual ~PoissonEquation();
 
 protected:
@@ -25,5 +25,5 @@ protected:
     const PetscInt affn;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };

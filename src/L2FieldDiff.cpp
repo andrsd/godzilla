@@ -11,15 +11,15 @@ namespace godzilla {
 
 REGISTER_OBJECT(L2FieldDiff);
 
-InputParameters
+Parameters
 L2FieldDiff::valid_params()
 {
-    InputParameters params = Postprocessor::valid_params();
+    Parameters params = Postprocessor::valid_params();
     params.add_param<std::map<std::string, std::vector<std::string>>>("functions", "");
     return params;
 }
 
-L2FieldDiff::L2FieldDiff(const InputParameters & params) :
+L2FieldDiff::L2FieldDiff(const Parameters & params) :
     Postprocessor(params),
     fepi(dynamic_cast<const FEProblemInterface *>(this->problem))
 {
@@ -32,7 +32,7 @@ L2FieldDiff::L2FieldDiff(const InputParameters & params) :
             std::string nm = get_name() + "_" + field_name;
 
             const std::string class_name = "ParsedFunction";
-            InputParameters * params = Factory::get_valid_params(class_name);
+            Parameters * params = Factory::get_valid_params(class_name);
             params->set<const App *>("_app") = this->app;
             params->set<const Problem *>("_problem") = this->problem;
             params->set<std::vector<std::string>>("function") = it.second;

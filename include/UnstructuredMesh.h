@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class UnstructuredMesh : public Mesh {
 public:
-    UnstructuredMesh(const InputParameters & parameters);
+    UnstructuredMesh(const Parameters & parameters);
     virtual ~UnstructuredMesh();
 
     virtual void create() override;
@@ -115,7 +115,7 @@ protected:
     std::map<std::string, PetscInt> face_set_ids;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

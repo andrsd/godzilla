@@ -8,16 +8,16 @@
 
 namespace godzilla {
 
-InputParameters
+Parameters
 ExplicitFVLinearProblem::valid_params()
 {
-    InputParameters params = NonlinearProblem::valid_params();
+    Parameters params = NonlinearProblem::valid_params();
     params += TransientProblemInterface::valid_params();
     params.add_param<std::string>("scheme", "euler", "Time stepping scheme: [euler, ssp, rk]");
     return params;
 }
 
-ExplicitFVLinearProblem::ExplicitFVLinearProblem(const InputParameters & params) :
+ExplicitFVLinearProblem::ExplicitFVLinearProblem(const Parameters & params) :
     NonlinearProblem(params),
     FVProblemInterface(this, params),
     TransientProblemInterface(this, params),

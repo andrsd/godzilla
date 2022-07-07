@@ -20,15 +20,15 @@ __function_auxiliary_field(PetscInt dim,
     return 0;
 }
 
-InputParameters
+Parameters
 FunctionAuxiliaryField::valid_params()
 {
-    InputParameters params = AuxiliaryField::valid_params();
+    Parameters params = AuxiliaryField::valid_params();
     params += FunctionInterface::valid_params();
     return params;
 }
 
-FunctionAuxiliaryField::FunctionAuxiliaryField(const InputParameters & params) :
+FunctionAuxiliaryField::FunctionAuxiliaryField(const Parameters & params) :
     AuxiliaryField(params),
     FunctionInterface(params)
 {

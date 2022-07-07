@@ -27,7 +27,7 @@ __compute_flux(PetscInt dim,
     fvpi->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
 }
 
-FVProblemInterface::FVProblemInterface(Problem * problem, const InputParameters & params) :
+FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
     fvm(nullptr)
 {

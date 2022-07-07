@@ -13,7 +13,7 @@ class ParsedFunction;
 ///
 class L2FieldDiff : public Postprocessor {
 public:
-    L2FieldDiff(const InputParameters & params);
+    L2FieldDiff(const Parameters & params);
 
     virtual void create() override;
     virtual void compute() override;
@@ -30,7 +30,7 @@ protected:
     std::vector<PetscReal> l2_diff;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

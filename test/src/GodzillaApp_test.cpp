@@ -10,7 +10,7 @@ using namespace godzilla;
 
 class MockMesh : public Mesh {
 public:
-    explicit MockMesh(const InputParameters & params) : Mesh(params) {}
+    explicit MockMesh(const Parameters & params) : Mesh(params) {}
 
 protected:
     virtual void
@@ -25,7 +25,7 @@ protected:
 
 class MockProblem : public Problem {
 public:
-    explicit MockProblem(const InputParameters & params) : Problem(params) {}
+    explicit MockProblem(const Parameters & params) : Problem(params) {}
 
     MOCK_METHOD(void, create, ());
     MOCK_METHOD(void, run, ());
@@ -136,7 +136,7 @@ TEST_F(GodzillaAppTest, run_problem)
     } app;
 
     const std::string & class_name = "MockProblem";
-    InputParameters * pars = Factory::get_valid_params(class_name);
+    Parameters * pars = Factory::get_valid_params(class_name);
     MockProblem * prob = app.build_object<MockProblem>(class_name, "prob", pars);
 
     app.set_problem(prob);

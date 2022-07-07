@@ -8,7 +8,7 @@ using namespace godzilla;
 ///
 class InflowBC : public NaturalRiemannBC {
 public:
-    InflowBC(const InputParameters & params);
+    InflowBC(const Parameters & params);
 
     virtual PetscInt get_num_components() const override;
     virtual std::vector<PetscInt> get_components() const override;
@@ -23,5 +23,5 @@ protected:
     const PetscReal & inlet_vel;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };

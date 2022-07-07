@@ -21,25 +21,25 @@ namespace godzilla {
 
 using ObjectPtr = Object *;
 
-using ParamsPtr = InputParameters (*)();
+using ParamsPtr = Parameters (*)();
 
-using BuildPtr = ObjectPtr (*)(const InputParameters & parameters);
+using BuildPtr = ObjectPtr (*)(const Parameters & parameters);
 
 template <typename T>
 ObjectPtr
-build_obj(const InputParameters & parameters)
+build_obj(const Parameters & parameters)
 {
     return new T(parameters);
 }
 
 template <typename T>
 auto
-call_valid_params() -> decltype(T::valid_params(), InputParameters())
+call_valid_params() -> decltype(T::valid_params(), Parameters())
 {
     return T::valid_params();
 }
 
-class InputParameters;
+class Parameters;
 
 /// Generic factory class for building objects
 ///
@@ -66,7 +66,7 @@ public:
     /// Get valid parameters for the object
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
-    static InputParameters *
+    static Parameters *
     get_valid_params(const std::string & class_name)
     {
         auto it = classes.find(class_name);
@@ -75,7 +75,7 @@ public:
                   class_name);
 
         Entry & entry = it->second;
-        InputParameters * ips = new InputParameters((*entry.params_ptr)());
+        Parameters * ips = new Parameters((*entry.params_ptr)());
         params.push_back(ips);
         return ips;
     }
@@ -87,7 +87,7 @@ public:
     /// @return The created object
     template <typename T>
     static T *
-    create(const std::string & class_name, const std::string & name, InputParameters & parameters)
+    create(const std::string & class_name, const std::string & name, Parameters & parameters)
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
@@ -107,7 +107,7 @@ public:
 
     template <typename T>
     static T *
-    create(const std::string & class_name, const std::string & name, InputParameters * parameters)
+    create(const std::string & class_name, const std::string & name, Parameters * parameters)
     {
         return create<T>(class_name, name, *parameters);
     }
@@ -126,8 +126,8 @@ protected:
     static std::map<std::string, Entry> classes;
     /// All objects built by this factory
     static std::list<Object *> objects;
-    /// All InputParameters objects built by this factory
-    static std::list<InputParameters *> params;
+    /// All Parameters objects built by this factory
+    static std::list<Parameters *> params;
 };
 
 } // namespace godzilla

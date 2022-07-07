@@ -12,7 +12,7 @@ class ExodusIIOutputTest : public FENonlinearProblemTest {
 
 TEST_F(ExodusIIOutputTest, get_file_ext)
 {
-    InputParameters params = ExodusIIOutput::valid_params();
+    Parameters params = ExodusIIOutput::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "out";
@@ -23,7 +23,7 @@ TEST_F(ExodusIIOutputTest, get_file_ext)
 
 TEST_F(ExodusIIOutputTest, create)
 {
-    InputParameters params = ExodusIIOutput::valid_params();
+    Parameters params = ExodusIIOutput::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     ExodusIIOutput out(params);
@@ -36,7 +36,7 @@ TEST_F(ExodusIIOutputTest, non_existent_var)
 {
     testing::internal::CaptureStderr();
 
-    InputParameters params = ExodusIIOutput::valid_params();
+    Parameters params = ExodusIIOutput::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     params.set<std::vector<std::string>>("variables") = { "asdf" };
@@ -56,7 +56,7 @@ TEST_F(ExodusIIOutputTest, non_existent_var)
 
 TEST_F(ExodusIIOutputTest, check)
 {
-    InputParameters params = ExodusIIOutput::valid_params();
+    Parameters params = ExodusIIOutput::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     ExodusIIOutput out(params);
@@ -68,7 +68,7 @@ TEST_F(ExodusIIOutputTest, fe_check)
 {
     class TestMesh : public Mesh {
     public:
-        explicit TestMesh(const InputParameters & params) : Mesh(params) {}
+        explicit TestMesh(const Parameters & params) : Mesh(params) {}
 
     protected:
         virtual void
@@ -85,7 +85,7 @@ TEST_F(ExodusIIOutputTest, fe_check)
 
     class TestLinearProblem : public Problem {
     public:
-        explicit TestLinearProblem(const InputParameters & params) : Problem(params) {}
+        explicit TestLinearProblem(const Parameters & params) : Problem(params) {}
 
         void
         run()
@@ -116,16 +116,16 @@ TEST_F(ExodusIIOutputTest, fe_check)
 
     TestApp app;
 
-    InputParameters mesh_pars = Mesh::valid_params();
+    Parameters mesh_pars = Mesh::valid_params();
     mesh_pars.set<const App *>("_app") = this->app;
     TestMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = TestLinearProblem::valid_params();
+    Parameters prob_pars = TestLinearProblem::valid_params();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     TestLinearProblem prob(prob_pars);
 
-    InputParameters params = ExodusIIOutput::valid_params();
+    Parameters params = ExodusIIOutput::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = &prob;
     ExodusIIOutput out(params);
@@ -145,7 +145,7 @@ TEST_F(ExodusIIOutputTest, fe_check)
 
 TEST_F(ExodusIIOutputTest, output)
 {
-    InputParameters params = ExodusIIOutput::valid_params();
+    Parameters params = ExodusIIOutput::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     ExodusIIOutput out(params);
@@ -161,7 +161,7 @@ TEST_F(ExodusIIOutputTest, output)
 
 TEST_F(ExodusIIOutputTest, set_file_name)
 {
-    InputParameters params = ExodusIIOutput::valid_params();
+    Parameters params = ExodusIIOutput::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "out";
@@ -175,7 +175,7 @@ TEST_F(ExodusIIOutputTest, set_file_name)
 
 TEST_F(ExodusIIOutputTest, set_seq_file_name)
 {
-    InputParameters params = ExodusIIOutput::valid_params();
+    Parameters params = ExodusIIOutput::valid_params();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "out";

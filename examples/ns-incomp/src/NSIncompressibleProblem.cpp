@@ -282,15 +282,15 @@ g3_vv(PetscInt dim,
     }
 }
 
-InputParameters
+Parameters
 NSIncompressibleProblem::valid_params()
 {
-    InputParameters params = ImplicitFENonlinearProblem::valid_params();
+    Parameters params = ImplicitFENonlinearProblem::valid_params();
     params.add_required_param<PetscReal>("Re", "Reynolds number");
     return params;
 }
 
-NSIncompressibleProblem::NSIncompressibleProblem(const InputParameters & parameters) :
+NSIncompressibleProblem::NSIncompressibleProblem(const Parameters & parameters) :
     ImplicitFENonlinearProblem(parameters),
     Re(get_param<PetscReal>("Re"))
 {

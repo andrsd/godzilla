@@ -9,7 +9,7 @@ namespace godzilla {
 /// Any problem using PetscFV should inherit from this for unified API
 class FVProblemInterface : public DiscreteProblemInterface {
 public:
-    FVProblemInterface(Problem * problem, const InputParameters & params);
+    FVProblemInterface(Problem * problem, const Parameters & params);
     virtual ~FVProblemInterface();
 
     virtual PetscInt get_num_fields() const override;

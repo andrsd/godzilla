@@ -19,16 +19,14 @@ __natural_riemann_boundary_condition_function(PetscReal time,
     return 0;
 }
 
-InputParameters
+Parameters
 NaturalRiemannBC::valid_params()
 {
-    InputParameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::valid_params();
     return params;
 }
 
-NaturalRiemannBC::NaturalRiemannBC(const InputParameters & params) :
-    BoundaryCondition(params),
-    bd(-1)
+NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryCondition(params), bd(-1)
 {
     _F_;
 }

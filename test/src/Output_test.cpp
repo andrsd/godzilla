@@ -11,7 +11,7 @@ public:
 
 class MockOutput : public Output {
 public:
-    explicit MockOutput(const InputParameters & params) : Output(params) {}
+    explicit MockOutput(const Parameters & params) : Output(params) {}
     virtual void
     output_step()
     {
@@ -26,7 +26,7 @@ public:
 
 TEST_F(OutputTest, exec_masks_1)
 {
-    InputParameters pars = Output::valid_params();
+    Parameters pars = Output::valid_params();
     pars.set<const App *>("_app") = app;
     pars.set<const Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "none" };
@@ -40,7 +40,7 @@ TEST_F(OutputTest, exec_masks_1)
 
 TEST_F(OutputTest, exec_masks_2)
 {
-    InputParameters pars = Output::valid_params();
+    Parameters pars = Output::valid_params();
     pars.set<const App *>("_app") = app;
     pars.set<const Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "final" };
@@ -55,7 +55,7 @@ TEST_F(OutputTest, exec_masks_2)
 
 TEST_F(OutputTest, exec_masks_3)
 {
-    InputParameters pars = Output::valid_params();
+    Parameters pars = Output::valid_params();
     pars.set<const App *>("_app") = app;
     pars.set<const Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "final", "initial", "timestep" };
@@ -75,7 +75,7 @@ TEST_F(OutputTest, empty_on)
 {
     testing::internal::CaptureStderr();
 
-    InputParameters pars = Output::valid_params();
+    Parameters pars = Output::valid_params();
     pars.set<const App *>("_app") = app;
     pars.set<const Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = {};
@@ -94,7 +94,7 @@ TEST_F(OutputTest, none_plus_mask)
 {
     testing::internal::CaptureStderr();
 
-    InputParameters pars = Output::valid_params();
+    Parameters pars = Output::valid_params();
     pars.set<const App *>("_app") = app;
     pars.set<const Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "none", "final", "timestep" };

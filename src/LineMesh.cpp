@@ -8,17 +8,17 @@ namespace godzilla {
 
 REGISTER_OBJECT(LineMesh);
 
-InputParameters
+Parameters
 LineMesh::valid_params()
 {
-    InputParameters params = UnstructuredMesh::valid_params();
+    Parameters params = UnstructuredMesh::valid_params();
     params.add_param<PetscReal>("xmin", 0., "Minimum in the x direction");
     params.add_param<PetscReal>("xmax", 1., "Maximum in the x direction");
     params.add_required_param<PetscInt>("nx", "Number of mesh points in the x direction");
     return params;
 }
 
-LineMesh::LineMesh(const InputParameters & parameters) :
+LineMesh::LineMesh(const Parameters & parameters) :
     UnstructuredMesh(parameters),
     xmin(get_param<PetscReal>("xmin")),
     xmax(get_param<PetscReal>("xmax")),

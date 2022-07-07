@@ -3,7 +3,7 @@
 
 REGISTER_OBJECT(GTest2FieldsFENonlinearProblem);
 
-GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const InputParameters & params) :
+GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const Parameters & params) :
     GTestFENonlinearProblem(params),
     iv(1)
 {

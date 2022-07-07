@@ -7,10 +7,10 @@ namespace godzilla {
 
 REGISTER_OBJECT(RectangleMesh);
 
-InputParameters
+Parameters
 RectangleMesh::valid_params()
 {
-    InputParameters params = UnstructuredMesh::valid_params();
+    Parameters params = UnstructuredMesh::valid_params();
     params.add_param<PetscReal>("xmin", 0., "Minimum in the x direction");
     params.add_param<PetscReal>("xmax", 1., "Maximum in the x direction");
     params.add_param<PetscReal>("ymin", 0., "Minimum in the y direction");
@@ -20,7 +20,7 @@ RectangleMesh::valid_params()
     return params;
 }
 
-RectangleMesh::RectangleMesh(const InputParameters & parameters) :
+RectangleMesh::RectangleMesh(const Parameters & parameters) :
     UnstructuredMesh(parameters),
     xmin(get_param<PetscReal>("xmin")),
     xmax(get_param<PetscReal>("xmax")),

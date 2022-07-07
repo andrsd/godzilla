@@ -6,14 +6,14 @@ namespace godzilla {
 
 REGISTER_OBJECT(BasicTSAdapt);
 
-InputParameters
+Parameters
 BasicTSAdapt::valid_params()
 {
-    InputParameters params = TimeSteppingAdaptor::valid_params();
+    Parameters params = TimeSteppingAdaptor::valid_params();
     return params;
 }
 
-BasicTSAdapt::BasicTSAdapt(const InputParameters & params) : TimeSteppingAdaptor(params) {}
+BasicTSAdapt::BasicTSAdapt(const Parameters & params) : TimeSteppingAdaptor(params) {}
 
 void
 BasicTSAdapt::set_type()

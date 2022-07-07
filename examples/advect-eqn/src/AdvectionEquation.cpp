@@ -9,14 +9,14 @@ REGISTER_OBJECT(AdvectionEquation);
 
 ///
 
-InputParameters
+Parameters
 AdvectionEquation::valid_params()
 {
-    InputParameters params = ExplicitFVLinearProblem::valid_params();
+    Parameters params = ExplicitFVLinearProblem::valid_params();
     return params;
 }
 
-AdvectionEquation::AdvectionEquation(const InputParameters & parameters) :
+AdvectionEquation::AdvectionEquation(const Parameters & parameters) :
     ExplicitFVLinearProblem(parameters)
 {
     _F_;

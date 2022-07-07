@@ -8,7 +8,7 @@ namespace godzilla {
 /// Base class for natural boundary conditions
 class NaturalBC : public BoundaryCondition {
 public:
-    NaturalBC(const InputParameters & params);
+    NaturalBC(const Parameters & params);
 
     virtual DMBoundaryConditionType get_bc_type() const override;
 
@@ -44,7 +44,7 @@ protected:
     PetscInt bd;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

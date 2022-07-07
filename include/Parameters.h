@@ -10,11 +10,11 @@ namespace godzilla {
 
 /// Class for user-defined parameters
 ///
-class InputParameters {
+class Parameters {
 public:
-    InputParameters();
-    InputParameters(const InputParameters & p);
-    virtual ~InputParameters();
+    Parameters();
+    Parameters(const Parameters & p);
+    virtual ~Parameters();
 
 protected:
     /// Base class for parameter values
@@ -120,14 +120,14 @@ public:
         return dynamic_cast<Parameter<T> *>(this->params[name])->set();
     }
 
-    /// This method adds a parameter and documentation string to the InputParameters
+    /// This method adds a parameter and documentation string to the Parameters
     /// object that will be extracted from the input file.  If the parameter is
     /// missing in the input file, and error will be thrown
     template <typename T>
     void add_required_param(const std::string & name, const std::string & doc_string);
 
     ///@{
-    /// These methods add an option parameter and a documentation string to the InputParameters
+    /// These methods add an option parameter and a documentation string to the Parameters
     /// object. The first version of this function takes a default value which is used if the
     /// parameter is not found in the input file. The second method will leave the parameter
     /// uninitialized but can be checked with "is_param_valid" before use.
@@ -138,7 +138,7 @@ public:
     ///@}
 
     ///@{
-    /// These methods add a parameter to the InputParameters object which can be retrieved like any
+    /// These methods add a parameter to the Parameters object which can be retrieved like any
     /// other parameter. This parameter however is not printed in the Input file syntax dump or web
     /// page dump so does not take a documentation string.  The first version of this function takes
     /// an optional default value.
@@ -187,45 +187,45 @@ public:
     }
 
     /// Parameter map iterator.
-    typedef std::map<std::string, InputParameters::Value *>::iterator iterator;
+    typedef std::map<std::string, Parameters::Value *>::iterator iterator;
 
     /// Constant parameter map iterator.
-    typedef std::map<std::string, InputParameters::Value *>::const_iterator const_iterator;
+    typedef std::map<std::string, Parameters::Value *>::const_iterator const_iterator;
 
     /// Iterator pointing to the beginning of the set of parameters.
-    InputParameters::iterator
+    Parameters::iterator
     begin()
     {
         return this->params.begin();
     }
 
     /// Iterator pointing to the beginning of the set of parameters.
-    InputParameters::const_iterator
+    Parameters::const_iterator
     begin() const
     {
         return this->params.begin();
     }
 
     /// Iterator pointing to the end of the set of parameters
-    InputParameters::iterator
+    Parameters::iterator
     end()
     {
         return this->params.end();
     }
 
     /// Iterator pointing to the end of the set of parameters
-    InputParameters::const_iterator
+    Parameters::const_iterator
     end() const
     {
         return this->params.end();
     }
 
     /// Assignment operator
-    InputParameters & operator=(const InputParameters & rhs);
+    Parameters & operator=(const Parameters & rhs);
 
-    /// Add `rhs` InputParameters into this InputParameters object
-    InputParameters &
-    operator+=(const InputParameters & rhs)
+    /// Add `rhs` Parameters into this Parameters object
+    Parameters &
+    operator+=(const Parameters & rhs)
     {
         for (auto it = rhs.begin(); it != rhs.end(); ++it) {
             auto jt = this->params.find(it->first);
@@ -257,7 +257,7 @@ private:
 
 template <typename T>
 void
-InputParameters::add_required_param(const std::string & name, const std::string & doc_string)
+Parameters::add_required_param(const std::string & name, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;
@@ -272,7 +272,7 @@ InputParameters::add_required_param(const std::string & name, const std::string 
 
 template <typename T>
 void
-InputParameters::add_param(const std::string & name, const std::string & doc_string)
+Parameters::add_param(const std::string & name, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;
@@ -287,9 +287,7 @@ InputParameters::add_param(const std::string & name, const std::string & doc_str
 
 template <typename T, typename S>
 void
-InputParameters::add_param(const std::string & name,
-                           const S & value,
-                           const std::string & doc_string)
+Parameters::add_param(const std::string & name, const S & value, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
         Parameter<T> * param = new Parameter<T>;
@@ -305,7 +303,7 @@ InputParameters::add_param(const std::string & name,
 
 template <typename T>
 void
-InputParameters::add_private_param(const std::string & name, const T & value)
+Parameters::add_private_param(const std::string & name, const T & value)
 {
     Parameter<T> * param = new Parameter<T>;
     param->value = value;

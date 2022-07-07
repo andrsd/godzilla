@@ -11,7 +11,7 @@ class TransientProblemInterface;
 ///
 class TimeSteppingAdaptor : public Object {
 public:
-    TimeSteppingAdaptor(const InputParameters & params);
+    TimeSteppingAdaptor(const Parameters & params);
 
     virtual void create() override;
 
@@ -50,7 +50,7 @@ protected:
     const PetscReal & dt_max;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

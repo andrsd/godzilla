@@ -8,7 +8,7 @@ namespace godzilla {
 ///
 class LineMesh : public UnstructuredMesh {
 public:
-    LineMesh(const InputParameters & parameters);
+    LineMesh(const Parameters & parameters);
 
     /// Get the lower bound in x-direction
     ///
@@ -40,7 +40,7 @@ protected:
     PetscBool interpolate;
 
 public:
-    static InputParameters valid_params();
+    static Parameters valid_params();
 };
 
 } // namespace godzilla

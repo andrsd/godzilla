@@ -16,7 +16,7 @@ class AuxiliaryField;
 /// Any problem using PetscFE should inherit from this for unified API
 class FEProblemInterface : public DiscreteProblemInterface {
 public:
-    FEProblemInterface(Problem * problem, const InputParameters & params);
+    FEProblemInterface(Problem * problem, const Parameters & params);
     virtual ~FEProblemInterface();
 
     virtual PetscInt get_num_fields() const override;

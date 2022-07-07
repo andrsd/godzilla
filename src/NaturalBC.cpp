@@ -3,17 +3,14 @@
 
 namespace godzilla {
 
-InputParameters
+Parameters
 NaturalBC::valid_params()
 {
-    InputParameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::valid_params();
     return params;
 }
 
-NaturalBC::NaturalBC(const InputParameters & params) :
-    BoundaryCondition(params),
-    wf(nullptr),
-    bd(-1)
+NaturalBC::NaturalBC(const Parameters & params) : BoundaryCondition(params), wf(nullptr), bd(-1)
 {
     _F_;
 }
