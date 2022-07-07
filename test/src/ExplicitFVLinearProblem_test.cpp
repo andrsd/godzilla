@@ -4,7 +4,7 @@
 #include "LineMesh.h"
 #include "NaturalRiemannBC.h"
 #include "ExplicitFVLinearProblem.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "TestApp.h"
 
 using namespace godzilla;

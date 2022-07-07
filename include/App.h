@@ -2,7 +2,7 @@
 
 #include "petsc.h"
 #include "CmdLineArgParser.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "Factory.h"
 #include "Logger.h"
 #include "PrintInterface.h"

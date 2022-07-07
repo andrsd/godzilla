@@ -2,7 +2,7 @@
 #include "GodzillaConfig.h"
 #include "GodzillaApp_test.h"
 #include "UnstructuredMesh.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "petsc.h"
 
 using namespace godzilla;

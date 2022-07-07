@@ -2,7 +2,7 @@
 #include "GodzillaConfig.h"
 #include "GodzillaApp_test.h"
 #include "ExodusIIMesh.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "petsc.h"
 
 using namespace godzilla;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "petsc.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "LoggingInterface.h"
 
 namespace godzilla {

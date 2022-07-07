@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "LineMesh.h"
 #include "petsc.h"
 #include "petscviewerhdf5.h"

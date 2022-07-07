@@ -2,7 +2,7 @@
 #include "Factory.h"
 #include "Mesh.h"
 #include "LinearProblem_test.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "Output.h"
 #include "petsc.h"
 #include "petscmat.h"

@@ -5,7 +5,7 @@
 #include "Factory.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "LineMesh.h"
 #include "UnstructuredMesh.h"
 #include "InitialCondition.h"

@@ -3,7 +3,7 @@
 #include "CallStack.h"
 #include "Factory.h"
 #include "ImplicitFENonlinearProblem_test.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "Output.h"

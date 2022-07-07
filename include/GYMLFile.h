@@ -2,7 +2,7 @@
 
 #include <string>
 #include "yaml-cpp/yaml.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "LoggingInterface.h"
 #include "PrintInterface.h"
 

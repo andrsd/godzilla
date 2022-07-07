@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "Factory.h"
 
 using namespace godzilla;

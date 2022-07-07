@@ -5,7 +5,7 @@
 #include "LineMesh.h"
 #include "DirichletBC.h"
 #include "ExplicitFELinearProblem.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "Output.h"
 #include "TestApp.h"
 #include "petsc.h"

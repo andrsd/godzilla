@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "BoxMesh.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "petsc.h"
 
 using namespace godzilla;

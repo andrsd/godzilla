@@ -1,4 +1,4 @@
-#include "InputParameters.h"
+#include "Parameters.h"
 #include <cmath>
 
 namespace godzilla {
