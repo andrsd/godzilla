@@ -390,6 +390,8 @@ GYMLFile::set_parameter_from_yml(InputParameters * params,
             params->set<std::string>(param_name) = val.as<std::string>();
         else if (param_type == type_name<PetscReal>())
             params->set<PetscReal>(param_name) = val.as<double>();
+        else if (param_type == type_name<PetscInt>())
+            params->set<PetscInt>(param_name) = val.as<PetscInt>();
         else if (param_type == type_name<int>())
             params->set<int>(param_name) = val.as<int>();
         else if (param_type == type_name<unsigned int>())
@@ -398,6 +400,9 @@ GYMLFile::set_parameter_from_yml(InputParameters * params,
         else if (param_type == type_name<std::vector<PetscReal>>())
             params->set<std::vector<PetscReal>>(param_name) =
                 read_vector_value<double>(param_name, val);
+        else if (param_type == type_name<std::vector<PetscInt>>())
+            params->set<std::vector<PetscInt>>(param_name) =
+                read_vector_value<PetscInt>(param_name, val);
         else if (param_type == type_name<std::vector<int>>())
             params->set<std::vector<int>>(param_name) = read_vector_value<int>(param_name, val);
         else if (param_type == type_name<std::vector<std::string>>())

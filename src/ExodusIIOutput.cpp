@@ -192,16 +192,16 @@ ExodusIIOutput::write_mesh()
     int n_elems = this->mesh->get_num_elements();
 
     // number of element blocks
-    int n_elem_blk = 0;
+    PetscInt n_elem_blk = 0;
     PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_elem_blk));
     // no cell sets defined, therefore we have one element block
     if (n_elem_blk == 0)
         n_elem_blk = 1;
 
-    int n_node_sets;
+    PetscInt n_node_sets;
     PETSC_CHECK(DMGetLabelSize(dm, "Vertex Sets", &n_node_sets));
 
-    int n_side_sets;
+    PetscInt n_side_sets;
     PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_side_sets));
 
     int exo_dim = this->mesh->get_dimension();
@@ -366,7 +366,7 @@ ExodusIIOutput::write_elements()
     DM dm = this->mesh->get_dm();
     std::vector<std::string> block_names;
 
-    int n_cells_sets = 0;
+    PetscInt n_cells_sets = 0;
     PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
 
     if (n_cells_sets > 1) {
@@ -418,7 +418,7 @@ ExodusIIOutput::write_node_sets()
     this->mesh->get_element_idx_range(elem_first, elem_last);
     int n_elems_in_block = elem_last - elem_first;
 
-    int n_node_sets;
+    PetscInt n_node_sets;
     PETSC_CHECK(DMGetLabelSize(dm, "Vertex Sets", &n_node_sets));
 
     DMLabel vertex_sets_label = this->mesh->get_label("Vertex Sets");
@@ -474,7 +474,7 @@ ExodusIIOutput::write_face_sets()
     DMLabel face_sets_label;
     PETSC_CHECK(DMGetLabel(dm, "Face Sets", &face_sets_label));
 
-    int n_side_sets;
+    PetscInt n_side_sets;
     PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_side_sets));
     fs_names.resize(n_side_sets);
 
@@ -675,7 +675,7 @@ ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
 {
     _F_;
     DM dm = this->problem->get_dm();
-    int n_cells_sets = 0;
+    PetscInt n_cells_sets = 0;
     PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
     if (n_cells_sets > 1) {
         // TODO: go block by block and save the elemental variables
