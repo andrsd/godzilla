@@ -67,7 +67,7 @@ public:
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
     static Parameters *
-    get_valid_params(const std::string & class_name)
+    get_parameters(const std::string & class_name)
     {
         auto it = classes.find(class_name);
         if (it == classes.end())

@@ -156,7 +156,7 @@ TEST_F(FENonlinearProblemTest, solve)
     InitialCondition * ic = nullptr;
     {
         const std::string class_name = "ConstantIC";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
         ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
@@ -165,7 +165,7 @@ TEST_F(FENonlinearProblemTest, solve)
 
     {
         const std::string class_name = "DirichletBC";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const App *>("_app") = this->app;
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("boundary") = "marker";
@@ -194,7 +194,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
     {
         const std::string class_name = "DirichletBC";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
@@ -219,7 +219,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 
     {
         const std::string class_name = "GTest2CompIC";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
@@ -253,20 +253,20 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     Mesh * mesh;
     {
         const std::string class_name = "LineMesh";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<PetscInt>("nx") = 2;
         mesh = app.build_object<Mesh>(class_name, "mesh", params);
     }
     FENonlinearProblem * prob;
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
         prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
     }
     {
         const std::string class_name = "ConstantIC";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("field") = "u";
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
@@ -274,7 +274,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
         prob->add_initial_condition(ic);
     }
     const std::string class_name = "ConstantIC";
-    Parameters * params = Factory::get_valid_params(class_name);
+    Parameters * params = Factory::get_parameters(class_name);
     params->set<const DiscreteProblemInterface *>("_dpi") = prob;
     params->set<std::string>("field") = "u";
     params->set<std::vector<PetscReal>>("value") = { 0.2 };
@@ -311,20 +311,20 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 
     {
         const std::string class_name = "LineMesh";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<PetscInt>("nx") = 2;
         mesh = app.build_object<Mesh>(class_name, "mesh", params);
     }
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
         prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
     }
 
     {
         const std::string class_name = "ConstantIC";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0.1 };
         auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
@@ -345,7 +345,7 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 
     {
         const std::string class_name = "DirichletBC";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("boundary") = "asdf";
         params->set<std::vector<std::string>>("value") = { "0.1" };

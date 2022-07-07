@@ -136,7 +136,7 @@ TEST_F(GodzillaAppTest, run_problem)
     } app;
 
     const std::string & class_name = "MockProblem";
-    Parameters * pars = Factory::get_valid_params(class_name);
+    Parameters * pars = Factory::get_parameters(class_name);
     MockProblem * prob = app.build_object<MockProblem>(class_name, "prob", pars);
 
     app.set_problem(prob);

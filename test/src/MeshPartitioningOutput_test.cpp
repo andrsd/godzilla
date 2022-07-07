@@ -16,7 +16,7 @@ protected:
 
         {
             const std::string class_name = "LineMesh";
-            Parameters * params = Factory::get_valid_params(class_name);
+            Parameters * params = Factory::get_parameters(class_name);
             params->set<PetscReal>("xmin") = 0;
             params->set<PetscReal>("xmax") = 1;
             params->set<PetscInt>("nx") = 4;
@@ -25,7 +25,7 @@ protected:
 
         {
             const std::string class_name = "G1DTestLinearProblem";
-            Parameters * params = Factory::get_valid_params(class_name);
+            Parameters * params = Factory::get_parameters(class_name);
             params->set<const Mesh *>("_mesh") = mesh;
             this->prob = this->app->build_object<Problem>(class_name, "problem", params);
         }
@@ -42,7 +42,7 @@ protected:
     build_output()
     {
         const std::string class_name = "MeshPartitioningOutput";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Problem *>("_problem") = this->prob;
         MeshPartitioningOutput * out =
             this->app->build_object<MeshPartitioningOutput>(class_name, "out", params);

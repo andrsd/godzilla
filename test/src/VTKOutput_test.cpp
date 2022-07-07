@@ -16,14 +16,14 @@ protected:
 
         {
             const std::string class_name = "LineMesh";
-            Parameters * params = Factory::get_valid_params(class_name);
+            Parameters * params = Factory::get_parameters(class_name);
             params->set<PetscInt>("nx") = 1;
             this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
         }
 
         {
             const std::string class_name = "G1DTestLinearProblem";
-            Parameters * params = Factory::get_valid_params(class_name);
+            Parameters * params = Factory::get_parameters(class_name);
             params->set<const Mesh *>("_mesh") = mesh;
             this->prob = this->app->build_object<Problem>(class_name, "problem", params);
         }
@@ -40,7 +40,7 @@ protected:
     build_output(const std::string & file_name = "")
     {
         const std::string class_name = "VTKOutput";
-        Parameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Problem *>("_problem") = this->prob;
         if (file_name.length() > 0)
             params->set<std::string>("file") = file_name;

@@ -32,7 +32,7 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
             std::string nm = get_name() + "_" + field_name;
 
             const std::string class_name = "ParsedFunction";
-            Parameters * params = Factory::get_valid_params(class_name);
+            Parameters * params = Factory::get_parameters(class_name);
             params->set<const App *>("_app") = this->app;
             params->set<const Problem *>("_problem") = this->problem;
             params->set<std::vector<std::string>>("function") = it.second;

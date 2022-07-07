@@ -358,7 +358,7 @@ GYMLFile::build_params(const YAML::Node & root, const std::string & name)
         error("%s: Type '%s' is not a registered object.", name, class_name);
     unused_param_names.erase("type");
 
-    Parameters * params = Factory::get_valid_params(class_name);
+    Parameters * params = Factory::get_parameters(class_name);
     params->set<std::string>("_type") = class_name;
     params->set<std::string>("_name") = name;
     params->set<const App *>("_app") = this->app;
