@@ -39,7 +39,6 @@ add_library(${PROJECT_NAME}
         ImplicitFENonlinearProblem.cpp
         Init.cpp
         InitialCondition.cpp
-        InputParameters.cpp
         L2Diff.cpp
         L2FieldDiff.cpp
         LinearInterpolation.cpp
@@ -53,6 +52,7 @@ add_library(${PROJECT_NAME}
         NonlinearProblem.cpp
         Object.cpp
         Output.cpp
+        Parameters.cpp
         ParsedFunction.cpp
         PiecewiseLinear.cpp
         Postprocessor.cpp

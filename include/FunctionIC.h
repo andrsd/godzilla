@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class FunctionIC : public InitialCondition, public FunctionInterface {
 public:
-    FunctionIC(const InputParameters & params);
+    FunctionIC(const Parameters & params);
 
     virtual void create() override;
     virtual PetscInt get_num_components() const override;
@@ -21,7 +21,7 @@ public:
                           PetscScalar u[]) override;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

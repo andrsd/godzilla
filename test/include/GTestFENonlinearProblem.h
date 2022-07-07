@@ -7,7 +7,7 @@ using namespace godzilla;
 /// Test problem for simple FE solver
 class GTestFENonlinearProblem : public FENonlinearProblem {
 public:
-    GTestFENonlinearProblem(const InputParameters & params);
+    GTestFENonlinearProblem(const Parameters & params);
     virtual ~GTestFENonlinearProblem();
 
     const std::vector<PetscReal> & getConstants();

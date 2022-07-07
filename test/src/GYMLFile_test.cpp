@@ -24,7 +24,7 @@ public:
 
 class GTestProblem : public Problem, public TransientProblemInterface {
 public:
-    explicit GTestProblem(const InputParameters & params) :
+    explicit GTestProblem(const Parameters & params) :
         Problem(params),
         TransientProblemInterface(this, params)
     {
@@ -84,16 +84,16 @@ protected:
     Vec x;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 REGISTER_OBJECT(GTestProblem);
 
-InputParameters
-GTestProblem::valid_params()
+Parameters
+GTestProblem::parameters()
 {
-    InputParameters params = Problem::valid_params();
-    params += TransientProblemInterface::valid_params();
+    Parameters params = Problem::parameters();
+    params += TransientProblemInterface::parameters();
     params.add_param<std::string>("str", "empty", "str doco");
     params.add_param<double>("d", 1.234, "d doco");
     params.add_param<int>("i", -1234, "i doco");

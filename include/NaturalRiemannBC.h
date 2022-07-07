@@ -8,7 +8,7 @@ namespace godzilla {
 /// Base class for natural Riemann boundary conditions
 class NaturalRiemannBC : public BoundaryCondition {
 public:
-    NaturalRiemannBC(const InputParameters & params);
+    NaturalRiemannBC(const Parameters & params);
 
     virtual DMBoundaryConditionType get_bc_type() const override;
 
@@ -35,7 +35,7 @@ protected:
     PetscInt bd;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

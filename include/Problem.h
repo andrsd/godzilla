@@ -16,7 +16,7 @@ class Output;
 ///
 class Problem : public Object, public PrintInterface {
 public:
-    Problem(const InputParameters & parameters);
+    Problem(const Parameters & parameters);
     virtual ~Problem();
 
     virtual void check() override;
@@ -118,7 +118,7 @@ protected:
     PetscInt step_num;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 
     friend class TransientProblemInterface;
 };

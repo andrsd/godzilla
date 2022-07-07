@@ -31,15 +31,15 @@ read_name_map(int exoid, int n, ex_entity_type obj_type)
 
 REGISTER_OBJECT(ExodusIIMesh);
 
-InputParameters
-ExodusIIMesh::valid_params()
+Parameters
+ExodusIIMesh::parameters()
 {
-    InputParameters params = UnstructuredMesh::valid_params();
+    Parameters params = UnstructuredMesh::parameters();
     params.add_required_param<std::string>("file", "The name of the ExodusII file.");
     return params;
 }
 
-ExodusIIMesh::ExodusIIMesh(const InputParameters & parameters) :
+ExodusIIMesh::ExodusIIMesh(const Parameters & parameters) :
     UnstructuredMesh(parameters),
     file_name(get_param<std::string>("file")),
     interpolate(PETSC_TRUE)

@@ -6,7 +6,7 @@
 
 class TestCSVOutput : public CSVOutput {
 public:
-    TestCSVOutput(const InputParameters & pars) : CSVOutput(pars) {}
+    TestCSVOutput(const Parameters & pars) : CSVOutput(pars) {}
     void
     close()
     {
@@ -28,7 +28,7 @@ public:
 
 TEST_F(CSVOutputTest, get_file_ext)
 {
-    InputParameters params = CSVOutput::valid_params();
+    Parameters params = CSVOutput::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "asdf";
@@ -39,7 +39,7 @@ TEST_F(CSVOutputTest, get_file_ext)
 
 TEST_F(CSVOutputTest, create)
 {
-    InputParameters params = CSVOutput::valid_params();
+    Parameters params = CSVOutput::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "asdf";
@@ -59,7 +59,7 @@ TEST_F(CSVOutputTest, output)
 {
     class TestPostprocessor : public Postprocessor {
     public:
-        TestPostprocessor(const InputParameters & pars) : Postprocessor(pars) {}
+        TestPostprocessor(const Parameters & pars) : Postprocessor(pars) {}
         virtual void compute() {};
         virtual PetscReal
         get_value()
@@ -68,14 +68,14 @@ TEST_F(CSVOutputTest, output)
         }
     };
 
-    InputParameters pp_params = Postprocessor::valid_params();
+    Parameters pp_params = Postprocessor::parameters();
     pp_params.set<std::string>("_name") = "pp";
     pp_params.set<const App *>("_app") = this->app;
     pp_params.set<const Problem *>("_problem") = this->prob;
     TestPostprocessor pp(pp_params);
     this->prob->add_postprocessor(&pp);
 
-    InputParameters params = CSVOutput::valid_params();
+    Parameters params = CSVOutput::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "out";
@@ -110,7 +110,7 @@ TEST_F(CSVOutputTest, output)
 
 TEST_F(CSVOutputTest, set_file_name)
 {
-    InputParameters params = CSVOutput::valid_params();
+    Parameters params = CSVOutput::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "asdf";

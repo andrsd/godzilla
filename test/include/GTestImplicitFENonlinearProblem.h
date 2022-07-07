@@ -7,7 +7,7 @@ using namespace godzilla;
 /// Test problem for simple FE solver
 class GTestImplicitFENonlinearProblem : public ImplicitFENonlinearProblem {
 public:
-    GTestImplicitFENonlinearProblem(const InputParameters & params);
+    GTestImplicitFENonlinearProblem(const Parameters & params);
     virtual ~GTestImplicitFENonlinearProblem();
 
 protected:

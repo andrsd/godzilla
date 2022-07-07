@@ -34,14 +34,14 @@ __essential_boundary_condition_function_t(PetscInt dim,
     return 0;
 }
 
-InputParameters
-EssentialBC::valid_params()
+Parameters
+EssentialBC::parameters()
 {
-    InputParameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     return params;
 }
 
-EssentialBC::EssentialBC(const InputParameters & params) : BoundaryCondition(params)
+EssentialBC::EssentialBC(const Parameters & params) : BoundaryCondition(params)
 {
     _F_;
 }

@@ -2,7 +2,7 @@
 #include "LineMesh.h"
 #include "FENonlinearProblem_test.h"
 #include "BoundaryCondition.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "petsc.h"
 
 using namespace godzilla;
@@ -17,7 +17,7 @@ public:
 
 class MockBoundaryCondition : public BoundaryCondition {
 public:
-    explicit MockBoundaryCondition(const InputParameters & params) : BoundaryCondition(params) {}
+    explicit MockBoundaryCondition(const Parameters & params) : BoundaryCondition(params) {}
 
     MOCK_METHOD(PetscInt, get_num_components, (), (const));
     MOCK_METHOD((DMBoundaryConditionType), get_bc_type, (), (const));
@@ -34,7 +34,7 @@ public:
 
 TEST_F(BoundaryConditionTest, api)
 {
-    InputParameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -47,7 +47,7 @@ TEST_F(BoundaryConditionTest, api)
 
 TEST_F(BoundaryCondition2FieldTest, test)
 {
-    InputParameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -69,7 +69,7 @@ TEST_F(BoundaryCondition2FieldTest, no_field_param)
 {
     testing::internal::CaptureStderr();
 
-    InputParameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -93,7 +93,7 @@ TEST_F(BoundaryCondition2FieldTest, non_existing_field)
 {
     testing::internal::CaptureStderr();
 
-    InputParameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";

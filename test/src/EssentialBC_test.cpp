@@ -14,7 +14,7 @@ TEST(EssentialBCTest, api)
 
     class TestEssentialBC : public EssentialBC {
     public:
-        TestEssentialBC(const InputParameters & pars) : EssentialBC(pars) {}
+        TestEssentialBC(const Parameters & pars) : EssentialBC(pars) {}
 
         MOCK_METHOD(
             void,
@@ -43,18 +43,18 @@ TEST(EssentialBCTest, api)
         }
     };
 
-    InputParameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = GTestFENonlinearProblem::valid_params();
+    Parameters prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
-    InputParameters params = TestEssentialBC::valid_params();
+    Parameters params = TestEssentialBC::parameters();
     params.set<const App *>("_app") = &app;
     params.set<const DiscreteProblemInterface *>("_dpi") = &problem;
     TestEssentialBC bc(params);

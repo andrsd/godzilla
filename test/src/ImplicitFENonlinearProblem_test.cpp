@@ -3,7 +3,7 @@
 #include "CallStack.h"
 #include "Factory.h"
 #include "ImplicitFENonlinearProblem_test.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "Output.h"
@@ -20,7 +20,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     {
         const std::string class_name = "ConstantIC";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<PetscReal>>("value") = { 0 };
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
@@ -29,7 +29,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
@@ -61,7 +61,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
     GTestImplicitFENonlinearProblem * prob;
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
         params->set<PetscReal>("start_time") = 0.;
         params->set<PetscReal>("end_time") = 20;

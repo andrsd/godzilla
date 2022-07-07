@@ -16,14 +16,14 @@ protected:
 
         {
             const std::string class_name = "LineMesh";
-            InputParameters * params = Factory::get_valid_params(class_name);
+            Parameters * params = Factory::get_parameters(class_name);
             params->set<PetscInt>("nx") = 1;
             this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
         }
 
         {
             const std::string class_name = "G1DTestLinearProblem";
-            InputParameters * params = Factory::get_valid_params(class_name);
+            Parameters * params = Factory::get_parameters(class_name);
             params->set<const Mesh *>("_mesh") = mesh;
             this->prob = this->app->build_object<Problem>(class_name, "problem", params);
         }
@@ -40,7 +40,7 @@ protected:
     build_output(const std::string & file_name = "")
     {
         const std::string class_name = "HDF5Output";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Problem *>("_problem") = this->prob;
         if (file_name.length() > 0)
             params->set<std::string>("file") = file_name;
@@ -63,7 +63,7 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
 {
     class TestMesh : public Mesh {
     public:
-        explicit TestMesh(const InputParameters & params) : Mesh(params) {}
+        explicit TestMesh(const Parameters & params) : Mesh(params) {}
 
     protected:
         virtual void
@@ -81,7 +81,7 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
 
     class TestProblem : public LinearProblem {
     public:
-        explicit TestProblem(const InputParameters & params) : LinearProblem(params) {}
+        explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
 
     protected:
         virtual PetscErrorCode
@@ -98,17 +98,17 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
 
     testing::internal::CaptureStderr();
 
-    InputParameters mesh_pars = TestMesh::valid_params();
+    Parameters mesh_pars = TestMesh::parameters();
     mesh_pars.set<const App *>("_app") = this->app;
     mesh_pars.set<PetscInt>("nx") = 1;
     TestMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = TestProblem::valid_params();
+    Parameters prob_pars = TestProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     TestProblem prob(prob_pars);
 
-    InputParameters pars = HDF5Output::valid_params();
+    Parameters pars = HDF5Output::parameters();
     pars.set<const App *>("_app") = this->app;
     pars.set<const Problem *>("_problem") = &prob;
     HDF5Output out(pars);

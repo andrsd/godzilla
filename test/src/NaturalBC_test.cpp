@@ -10,12 +10,12 @@ TEST(NaturalBCTest, api)
 {
     TestApp app;
 
-    InputParameters mesh_params = LineMesh::valid_params();
+    Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    InputParameters prob_params = GTestFENonlinearProblem::valid_params();
+    Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
@@ -23,7 +23,7 @@ TEST(NaturalBCTest, api)
 
     class MockNaturalBC : public NaturalBC {
     public:
-        explicit MockNaturalBC(const InputParameters & params) : NaturalBC(params) {}
+        explicit MockNaturalBC(const Parameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
         get_num_components() const
@@ -44,7 +44,7 @@ TEST(NaturalBCTest, api)
         }
     };
 
-    InputParameters params = NaturalBC::valid_params();
+    Parameters params = NaturalBC::parameters();
     params.set<const App *>("_app") = &app;
     params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::string>("boundary") = "left";
@@ -115,7 +115,7 @@ TEST(NaturalBCTest, fe)
 {
     class TestNaturalBC : public NaturalBC {
     public:
-        explicit TestNaturalBC(const InputParameters & params) : NaturalBC(params) {}
+        explicit TestNaturalBC(const Parameters & params) : NaturalBC(params) {}
 
         virtual PetscInt
         get_num_components() const
@@ -146,19 +146,19 @@ TEST(NaturalBCTest, fe)
 
     TestApp app;
 
-    InputParameters mesh_params = LineMesh::valid_params();
+    Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    InputParameters prob_params = GTestFENonlinearProblem::valid_params();
+    Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     app.problem = &prob;
     prob.add_aux_fe(0, "aux1", 1, 1);
 
-    InputParameters bc_params = TestNaturalBC::valid_params();
+    Parameters bc_params = TestNaturalBC::parameters();
     bc_params.set<const App *>("_app") = &app;
     bc_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_params.set<std::string>("_name") = "bc1";

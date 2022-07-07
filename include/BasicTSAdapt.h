@@ -8,13 +8,13 @@ namespace godzilla {
 ///
 class BasicTSAdapt : public TimeSteppingAdaptor {
 public:
-    BasicTSAdapt(const InputParameters & params);
+    BasicTSAdapt(const Parameters & params);
 
 protected:
     virtual void set_type();
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

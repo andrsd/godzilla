@@ -8,16 +8,16 @@
 
 namespace godzilla {
 
-InputParameters
-ExplicitFELinearProblem::valid_params()
+Parameters
+ExplicitFELinearProblem::parameters()
 {
-    InputParameters params = FENonlinearProblem::valid_params();
-    params += TransientProblemInterface::valid_params();
+    Parameters params = FENonlinearProblem::parameters();
+    params += TransientProblemInterface::parameters();
     params.add_param<std::string>("scheme", "euler", "Time stepping scheme: [euler, ssp, rk]");
     return params;
 }
 
-ExplicitFELinearProblem::ExplicitFELinearProblem(const InputParameters & params) :
+ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & params) :
     FENonlinearProblem(params),
     TransientProblemInterface(this, params),
     scheme(get_param<std::string>("scheme"))

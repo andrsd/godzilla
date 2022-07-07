@@ -4,17 +4,17 @@
 
 namespace godzilla {
 
-InputParameters
-Object::valid_params()
+Parameters
+Object::parameters()
 {
-    InputParameters params;
+    Parameters params;
     params.add_private_param<const App *>("_app", nullptr);
     params.add_private_param<std::string>("_type", "");
     params.add_private_param<std::string>("_name", "");
     return params;
 }
 
-Object::Object(const InputParameters & parameters) :
+Object::Object(const Parameters & parameters) :
     LoggingInterface(parameters.get<const App *>("_app")->get_logger(),
                      parameters.get<std::string>("_name")),
     pars(parameters),
@@ -44,7 +44,7 @@ Object::get_name() const
     return this->name;
 }
 
-const InputParameters &
+const Parameters &
 Object::get_parameters() const
 {
     _F_;

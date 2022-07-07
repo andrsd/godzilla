@@ -11,7 +11,7 @@
 
 namespace godzilla {
 
-FEProblemInterface::FEProblemInterface(Problem * problem, const InputParameters & params) :
+FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),

@@ -11,16 +11,16 @@ const unsigned int Output::ON_INITIAL = 0x1;
 const unsigned int Output::ON_TIMESTEP = 0x2;
 const unsigned int Output::ON_FINAL = 0x4;
 
-InputParameters
-Output::valid_params()
+Parameters
+Output::parameters()
 {
-    InputParameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_param<std::vector<std::string>>("on", "When output should happen");
     params.add_private_param<const Problem *>("_problem", nullptr);
     return params;
 }
 
-Output::Output(const InputParameters & params) :
+Output::Output(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     problem(get_param<const Problem *>("_problem")),

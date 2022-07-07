@@ -12,7 +12,7 @@ class Problem;
 ///
 class Output : public Object, public PrintInterface {
 public:
-    Output(const InputParameters & params);
+    Output(const Parameters & params);
 
     virtual void create() override;
 
@@ -41,7 +41,7 @@ protected:
     unsigned int on;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 
     static const unsigned int ON_NONE;
     static const unsigned int ON_INITIAL;

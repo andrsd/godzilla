@@ -9,7 +9,7 @@ using namespace godzilla;
 
 class TestBC : public NaturalRiemannBC {
 public:
-    explicit TestBC(const InputParameters & params) : NaturalRiemannBC(params) {}
+    explicit TestBC(const Parameters & params) : NaturalRiemannBC(params) {}
 
     virtual PetscInt
     get_num_components() const override
@@ -34,17 +34,17 @@ public:
     }
 
 public:
-    static InputParameters
-    valid_params()
+    static Parameters
+    parameters()
     {
-        InputParameters params = NaturalRiemannBC::valid_params();
+        Parameters params = NaturalRiemannBC::parameters();
         return params;
     }
 };
 
 class TestExplicitFVLinearProblem : public ExplicitFVLinearProblem {
 public:
-    explicit TestExplicitFVLinearProblem(const InputParameters & params) :
+    explicit TestExplicitFVLinearProblem(const Parameters & params) :
         ExplicitFVLinearProblem(params)
     {
     }
@@ -73,12 +73,12 @@ TEST(NaturalRiemannBCTest, api)
 {
     TestApp app;
 
-    InputParameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = TestExplicitFVLinearProblem::valid_params();
+    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;
@@ -87,7 +87,7 @@ TEST(NaturalRiemannBCTest, api)
     TestExplicitFVLinearProblem prob(prob_pars);
     app.problem = &prob;
 
-    InputParameters bc_pars = TestBC::valid_params();
+    Parameters bc_pars = TestBC::parameters();
     bc_pars.set<const App *>("_app") = &app;
     bc_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_pars.set<std::string>("boundary") = "left";

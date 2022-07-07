@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class LinearProblem : public Problem {
 public:
-    LinearProblem(const InputParameters & parameters);
+    LinearProblem(const Parameters & parameters);
     virtual ~LinearProblem();
 
     virtual void create() override;
@@ -61,7 +61,7 @@ protected:
     PetscInt lin_max_iter;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 
     friend PetscErrorCode __compute_rhs(KSP ksp, Vec b, void * ctx);
     friend PetscErrorCode __compute_operators(KSP ksp, Mat A, Mat B, void * ctx);

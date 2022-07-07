@@ -22,7 +22,7 @@ class UnstructuredMesh;
 /// This output works only with finite element problems
 class ExodusIIOutput : public FileOutput {
 public:
-    ExodusIIOutput(const InputParameters & params);
+    ExodusIIOutput(const Parameters & params);
     virtual ~ExodusIIOutput();
 
     virtual std::string get_file_ext() const override;
@@ -80,7 +80,7 @@ protected:
     static const int SINGLE_BLK_ID;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

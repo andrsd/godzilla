@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class L2Diff : public Postprocessor, public FunctionInterface {
 public:
-    L2Diff(const InputParameters & params);
+    L2Diff(const Parameters & params);
 
     virtual void create() override;
     virtual void compute() override;
@@ -30,7 +30,7 @@ protected:
     PetscReal l2_diff;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

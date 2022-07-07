@@ -11,7 +11,7 @@ class TimeSteppingAdaptor;
 ///
 class TransientProblemInterface {
 public:
-    TransientProblemInterface(Problem * problem, const InputParameters & params);
+    TransientProblemInterface(Problem * problem, const Parameters & params);
     virtual ~TransientProblemInterface();
 
     /// Set time stepping adaptivity using an adaptor class
@@ -67,7 +67,7 @@ protected:
     TSConvergedReason converged_reason;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 
     friend PetscErrorCode __transient_pre_step(TS ts);
     friend PetscErrorCode __transient_post_step(TS ts);

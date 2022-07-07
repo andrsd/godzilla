@@ -7,7 +7,7 @@ namespace godzilla {
 
 class ExplicitFELinearProblem : public FENonlinearProblem, public TransientProblemInterface {
 public:
-    ExplicitFELinearProblem(const InputParameters & params);
+    ExplicitFELinearProblem(const Parameters & params);
     virtual ~ExplicitFELinearProblem();
 
     virtual void create() override;
@@ -28,7 +28,7 @@ protected:
     const std::string & scheme;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

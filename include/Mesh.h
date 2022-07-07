@@ -10,7 +10,7 @@ namespace godzilla {
 ///
 class Mesh : public Object, public PrintInterface {
 public:
-    Mesh(const InputParameters & parameters);
+    Mesh(const Parameters & parameters);
     virtual ~Mesh();
 
     DM get_dm() const;
@@ -49,7 +49,7 @@ protected:
     PetscInt dim;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

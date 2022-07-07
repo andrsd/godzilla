@@ -6,18 +6,16 @@ namespace godzilla {
 
 REGISTER_OBJECT(DirichletBC);
 
-InputParameters
-DirichletBC::valid_params()
+Parameters
+DirichletBC::parameters()
 {
-    InputParameters params = EssentialBC::valid_params();
-    params += FunctionInterface::valid_params();
+    Parameters params = EssentialBC::parameters();
+    params += FunctionInterface::parameters();
     params += FunctionInterface::valid_params_t();
     return params;
 }
 
-DirichletBC::DirichletBC(const InputParameters & params) :
-    EssentialBC(params),
-    FunctionInterface(params)
+DirichletBC::DirichletBC(const Parameters & params) : EssentialBC(params), FunctionInterface(params)
 {
     _F_;
 }

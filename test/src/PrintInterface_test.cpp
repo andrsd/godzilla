@@ -26,9 +26,7 @@ TEST(PrintInterfaceTest, lprintf)
 
     class TestObject : public Object, public PrintInterface {
     public:
-        explicit TestObject(const InputParameters & params) : Object(params), PrintInterface(this)
-        {
-        }
+        explicit TestObject(const Parameters & params) : Object(params), PrintInterface(this) {}
 
         virtual void
         create()
@@ -37,7 +35,7 @@ TEST(PrintInterfaceTest, lprintf)
         }
     };
 
-    InputParameters pars = TestObject::valid_params();
+    Parameters pars = TestObject::parameters();
     pars.set<const App *>("_app") = &app;
     TestObject obj(pars);
 

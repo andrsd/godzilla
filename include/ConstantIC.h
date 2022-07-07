@@ -12,7 +12,7 @@ namespace godzilla {
 /// value for each component
 class ConstantIC : public InitialCondition {
 public:
-    ConstantIC(const InputParameters & params);
+    ConstantIC(const Parameters & params);
 
     virtual PetscInt get_num_components() const override;
 
@@ -27,7 +27,7 @@ protected:
     const std::vector<PetscReal> & values;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

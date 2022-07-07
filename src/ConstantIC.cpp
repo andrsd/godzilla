@@ -6,16 +6,16 @@ namespace godzilla {
 
 REGISTER_OBJECT(ConstantIC);
 
-InputParameters
-ConstantIC::valid_params()
+Parameters
+ConstantIC::parameters()
 {
-    InputParameters params = InitialCondition::valid_params();
+    Parameters params = InitialCondition::parameters();
     params.add_required_param<std::vector<PetscReal>>("value",
                                                       "Constant values for each field component");
     return params;
 }
 
-ConstantIC::ConstantIC(const InputParameters & params) :
+ConstantIC::ConstantIC(const Parameters & params) :
     InitialCondition(params),
     values(get_param<std::vector<PetscReal>>("value"))
 {

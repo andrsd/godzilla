@@ -12,7 +12,7 @@ class DiscreteProblemInterface;
 ///
 class BoundaryCondition : public Object, public PrintInterface {
 public:
-    BoundaryCondition(const InputParameters & params);
+    BoundaryCondition(const Parameters & params);
 
     virtual void create() override;
 
@@ -73,8 +73,8 @@ protected:
     const std::string & boundary;
 
 public:
-    /// Method for building InputParameters for this class
-    static InputParameters valid_params();
+    /// Method for building Parameters for this class
+    static Parameters parameters();
 };
 
 } // namespace godzilla

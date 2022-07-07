@@ -13,7 +13,7 @@ class Problem;
 ///
 class Postprocessor : public Object, public PrintInterface {
 public:
-    Postprocessor(const InputParameters & params);
+    Postprocessor(const Parameters & params);
     virtual ~Postprocessor();
 
     /// Compute the postprocessor value
@@ -30,7 +30,7 @@ protected:
     const Problem * problem;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

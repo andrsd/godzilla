@@ -13,7 +13,7 @@ class FEProblemInterface;
 ///
 class AuxiliaryField : public Object, public PrintInterface {
 public:
-    AuxiliaryField(const InputParameters & params);
+    AuxiliaryField(const Parameters & params);
     virtual ~AuxiliaryField();
 
     virtual void create() override;
@@ -53,7 +53,7 @@ protected:
     DMLabel label;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

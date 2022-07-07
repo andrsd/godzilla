@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class NonlinearProblem : public Problem {
 public:
-    NonlinearProblem(const InputParameters & parameters);
+    NonlinearProblem(const Parameters & parameters);
     virtual ~NonlinearProblem();
 
     virtual void create() override;
@@ -80,7 +80,7 @@ protected:
     PetscInt lin_max_iter;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 
     friend PetscErrorCode __compute_residual(SNES snes, Vec x, Vec f, void * ctx);
     friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat A, Mat B, void * ctx);

@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class FileOutput : public Output {
 public:
-    FileOutput(const InputParameters & params);
+    FileOutput(const Parameters & params);
 
     virtual void create() override;
 
@@ -39,7 +39,7 @@ protected:
     std::string file_name;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

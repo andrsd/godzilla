@@ -7,15 +7,15 @@
 
 namespace godzilla {
 
-InputParameters
-Problem::valid_params()
+Parameters
+Problem::parameters()
 {
-    InputParameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_private_param<const Mesh *>("_mesh", nullptr);
     return params;
 }
 
-Problem::Problem(const InputParameters & parameters) :
+Problem::Problem(const Parameters & parameters) :
     Object(parameters),
     PrintInterface(this),
     mesh(get_param<const Mesh *>("_mesh")),

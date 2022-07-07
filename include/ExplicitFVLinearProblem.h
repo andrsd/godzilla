@@ -11,7 +11,7 @@ class ExplicitFVLinearProblem :
     public FVProblemInterface,
     public TransientProblemInterface {
 public:
-    ExplicitFVLinearProblem(const InputParameters & params);
+    ExplicitFVLinearProblem(const Parameters & params);
     virtual ~ExplicitFVLinearProblem();
 
     virtual void create() override;
@@ -34,7 +34,7 @@ protected:
     const std::string & scheme;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

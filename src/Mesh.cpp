@@ -4,14 +4,14 @@
 
 namespace godzilla {
 
-InputParameters
-Mesh::valid_params()
+Parameters
+Mesh::parameters()
 {
-    InputParameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     return params;
 }
 
-Mesh::Mesh(const InputParameters & parameters) :
+Mesh::Mesh(const Parameters & parameters) :
     Object(parameters),
     PrintInterface(this),
     dm(NULL),

@@ -12,7 +12,7 @@ using namespace godzilla;
 
 class G1DTestNonlinearProblem : public NonlinearProblem {
 public:
-    explicit G1DTestNonlinearProblem(const InputParameters & params);
+    explicit G1DTestNonlinearProblem(const Parameters & params);
     virtual ~G1DTestNonlinearProblem();
     virtual void create() override;
     void call_initial_guess();
@@ -26,7 +26,7 @@ protected:
 
 REGISTER_OBJECT(G1DTestNonlinearProblem);
 
-G1DTestNonlinearProblem::G1DTestNonlinearProblem(const InputParameters & params) :
+G1DTestNonlinearProblem::G1DTestNonlinearProblem(const Parameters & params) :
     NonlinearProblem(params),
     s(nullptr)
 {
@@ -92,7 +92,7 @@ protected:
     gMesh1d()
     {
         const std::string class_name = "LineMesh";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<PetscInt>("nx") = 1;
         return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
@@ -101,7 +101,7 @@ protected:
     gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "G1DTestNonlinearProblem";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
         return this->app->build_object<G1DTestNonlinearProblem>(class_name, "problem", params);
     }
@@ -147,7 +147,7 @@ TEST_F(NonlinearProblemTest, run)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
 
         MOCK_METHOD(void, set_up_initial_guess, ());
         MOCK_METHOD(void, solve, ());
@@ -165,7 +165,7 @@ TEST_F(NonlinearProblemTest, run)
     auto mesh = gMesh1d();
     mesh->create();
 
-    InputParameters prob_pars = NonlinearProblem::valid_params();
+    Parameters prob_pars = NonlinearProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
@@ -181,7 +181,7 @@ TEST_F(NonlinearProblemTest, line_search_type)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
 
         MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
         MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
@@ -198,7 +198,7 @@ TEST_F(NonlinearProblemTest, line_search_type)
 
     std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
-        InputParameters prob_pars = NonlinearProblem::valid_params();
+        Parameters prob_pars = NonlinearProblem::parameters();
         prob_pars.set<const App *>("_app") = this->app;
         prob_pars.set<const Mesh *>("_mesh") = mesh;
         prob_pars.set<std::string>("line_search") = lst;
@@ -220,7 +220,7 @@ TEST_F(NonlinearProblemTest, invalid_line_search_type)
 
     class MockNonlinearProblem : public NonlinearProblem {
     public:
-        explicit MockNonlinearProblem(const InputParameters & params) : NonlinearProblem(params) {}
+        explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
 
         MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
         MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
@@ -229,7 +229,7 @@ TEST_F(NonlinearProblemTest, invalid_line_search_type)
     auto mesh = gMesh1d();
     mesh->create();
 
-    InputParameters prob_pars = NonlinearProblem::valid_params();
+    Parameters prob_pars = NonlinearProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     prob_pars.set<std::string>("line_search") = "asdf";

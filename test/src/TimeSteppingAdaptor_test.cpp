@@ -32,7 +32,7 @@ TSAdaptCreate_test(TSAdapt adapt)
 
 class TestTSAdaptor : public TimeSteppingAdaptor {
 public:
-    explicit TestTSAdaptor(const InputParameters & params);
+    explicit TestTSAdaptor(const Parameters & params);
 
     virtual void choose(PetscReal h,
                         PetscInt * next_sc,
@@ -44,7 +44,7 @@ public:
 
     std::vector<PetscReal> dts;
 
-    static InputParameters valid_params();
+    static Parameters parameters();
 
 protected:
     virtual void
@@ -56,14 +56,14 @@ protected:
 
 REGISTER_OBJECT(TestTSAdaptor);
 
-InputParameters
-TestTSAdaptor::valid_params()
+Parameters
+TestTSAdaptor::parameters()
 {
-    InputParameters pars = TimeSteppingAdaptor::valid_params();
+    Parameters pars = TimeSteppingAdaptor::parameters();
     return pars;
 }
 
-TestTSAdaptor::TestTSAdaptor(const InputParameters & params) : TimeSteppingAdaptor(params)
+TestTSAdaptor::TestTSAdaptor(const Parameters & params) : TimeSteppingAdaptor(params)
 {
     this->dts = { 0.2, 0.3, 0.4, 1 };
 }
@@ -116,7 +116,7 @@ __ts_adapt_choose(TSAdapt adapt,
 
 class TestTSProblem : public GTestImplicitFENonlinearProblem {
 public:
-    explicit TestTSProblem(const InputParameters & params);
+    explicit TestTSProblem(const Parameters & params);
 
     std::vector<PetscReal> dts;
 
@@ -126,8 +126,7 @@ protected:
 
 REGISTER_OBJECT(TestTSProblem);
 
-TestTSProblem::TestTSProblem(const InputParameters & params) :
-    GTestImplicitFENonlinearProblem(params)
+TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonlinearProblem(params)
 {
     this->dts.resize(5);
 }
@@ -147,7 +146,7 @@ TEST(TimeSteppingAdaptor, api)
 {
     class MockTSAdaptor : public TimeSteppingAdaptor {
     public:
-        explicit MockTSAdaptor(const InputParameters & params) : TimeSteppingAdaptor(params) {}
+        explicit MockTSAdaptor(const Parameters & params) : TimeSteppingAdaptor(params) {}
 
         MOCK_METHOD((void), set_type, ());
     };
@@ -157,7 +156,7 @@ TEST(TimeSteppingAdaptor, api)
     LineMesh * mesh;
     {
         const std::string class_name = "LineMesh";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<PetscInt>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
@@ -165,7 +164,7 @@ TEST(TimeSteppingAdaptor, api)
     TestTSProblem * prob;
     {
         const std::string class_name = "TestTSProblem";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
         params->set<PetscReal>("start_time") = 0.;
         params->set<PetscReal>("end_time") = 1;
@@ -176,7 +175,7 @@ TEST(TimeSteppingAdaptor, api)
     mesh->create();
     prob->create();
 
-    InputParameters params = MockTSAdaptor::valid_params();
+    Parameters params = MockTSAdaptor::parameters();
     params.set<const App *>("_app") = &app;
     params.set<const Problem *>("_problem") = prob;
     params.set<const TransientProblemInterface *>("_tpi") = prob;
@@ -199,7 +198,7 @@ TEST(TimeSteppingAdaptor, choose)
     LineMesh * mesh;
     {
         const std::string class_name = "LineMesh";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<PetscInt>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
@@ -207,7 +206,7 @@ TEST(TimeSteppingAdaptor, choose)
     TestTSProblem * prob;
     {
         const std::string class_name = "TestTSProblem";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
         params->set<PetscReal>("start_time") = 0.;
         params->set<PetscReal>("end_time") = 1;
@@ -218,7 +217,7 @@ TEST(TimeSteppingAdaptor, choose)
 
     {
         const std::string class_name = "DirichletBC";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
@@ -228,7 +227,7 @@ TEST(TimeSteppingAdaptor, choose)
 
     {
         const std::string class_name = "TestTSAdaptor";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Problem *>("_problem") = prob;
         params->set<const TransientProblemInterface *>("_tpi") = prob;
         auto * ts_adaptor = app.build_object<TestTSAdaptor>(class_name, "ts_adapt", params);

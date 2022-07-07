@@ -6,15 +6,15 @@ namespace godzilla {
 
 REGISTER_OBJECT(FunctionIC);
 
-InputParameters
-FunctionIC::valid_params()
+Parameters
+FunctionIC::parameters()
 {
-    InputParameters params = InitialCondition::valid_params();
-    params += FunctionInterface::valid_params();
+    Parameters params = InitialCondition::parameters();
+    params += FunctionInterface::parameters();
     return params;
 }
 
-FunctionIC::FunctionIC(const InputParameters & params) :
+FunctionIC::FunctionIC(const Parameters & params) :
     InitialCondition(params),
     FunctionInterface(params)
 {

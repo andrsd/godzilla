@@ -11,14 +11,14 @@ REGISTER_OBJECT(HDF5Output);
 
 static const int MAX_PATH = 1024;
 
-InputParameters
-HDF5Output::valid_params()
+Parameters
+HDF5Output::parameters()
 {
-    InputParameters params = FileOutput::valid_params();
+    Parameters params = FileOutput::parameters();
     return params;
 }
 
-HDF5Output::HDF5Output(const InputParameters & params) : FileOutput(params), viewer(nullptr)
+HDF5Output::HDF5Output(const Parameters & params) : FileOutput(params), viewer(nullptr)
 {
     _F_;
 }

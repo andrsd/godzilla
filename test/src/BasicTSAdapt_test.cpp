@@ -14,7 +14,7 @@ TEST(BasicTSAdapt, api)
     LineMesh * mesh;
     {
         const std::string class_name = "LineMesh";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<PetscInt>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
@@ -22,7 +22,7 @@ TEST(BasicTSAdapt, api)
     GTestImplicitFENonlinearProblem * prob;
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
         params->set<PetscReal>("start_time") = 0.;
         params->set<PetscReal>("end_time") = 1;
@@ -31,7 +31,7 @@ TEST(BasicTSAdapt, api)
     }
     app.problem = prob;
 
-    InputParameters params = BasicTSAdapt::valid_params();
+    Parameters params = BasicTSAdapt::parameters();
     params.set<const App *>("_app") = &app;
     params.set<const Problem *>("_problem") = prob;
     params.set<const TransientProblemInterface *>("_tpi") = prob;

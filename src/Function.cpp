@@ -4,14 +4,14 @@
 
 namespace godzilla {
 
-InputParameters
-Function::valid_params()
+Parameters
+Function::parameters()
 {
-    InputParameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     return params;
 }
 
-Function::Function(const InputParameters & params) : Object(params)
+Function::Function(const Parameters & params) : Object(params)
 {
     _F_;
 }

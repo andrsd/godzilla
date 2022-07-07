@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class Function : public Object {
 public:
-    Function(const InputParameters & params);
+    Function(const Parameters & params);
 
     /// Register this function with the function parser
     ///
@@ -17,7 +17,7 @@ public:
     virtual void register_callback(mu::Parser & parser) = 0;
 
 public:
-    static InputParameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

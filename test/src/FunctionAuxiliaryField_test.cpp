@@ -1,6 +1,6 @@
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "LineMesh.h"
 #include "FunctionAuxiliaryField.h"
 
@@ -10,18 +10,18 @@ TEST(FunctionAuxiliaryFieldTest, create)
 {
     TestApp app;
 
-    InputParameters mesh_params = LineMesh::valid_params();
+    Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    InputParameters prob_params = GTestFENonlinearProblem::valid_params();
+    Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     prob.add_aux_fe(0, "aux1", 1, 1);
 
-    InputParameters aux_params = FunctionAuxiliaryField::valid_params();
+    Parameters aux_params = FunctionAuxiliaryField::parameters();
     aux_params.set<const App *>("_app") = &app;
     aux_params.set<std::string>("_name") = "aux1";
     aux_params.set<FEProblemInterface *>("_fepi") = &prob;
@@ -49,18 +49,18 @@ TEST(FunctionAuxiliaryFieldTest, evaluate)
 {
     TestApp app;
 
-    InputParameters mesh_params = LineMesh::valid_params();
+    Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    InputParameters prob_params = GTestFENonlinearProblem::valid_params();
+    Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     prob.add_aux_fe(0, "aux1", 1, 1);
 
-    InputParameters aux_params = FunctionAuxiliaryField::valid_params();
+    Parameters aux_params = FunctionAuxiliaryField::parameters();
     aux_params.set<const App *>("_app") = &app;
     aux_params.set<std::string>("_name") = "aux1";
     aux_params.set<FEProblemInterface *>("_fepi") = &prob;

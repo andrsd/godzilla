@@ -23,14 +23,14 @@ __fep_compute_jacobian(DM dm, Vec x, Mat J, Mat Jp, void * user)
     return 0;
 }
 
-InputParameters
-FENonlinearProblem::valid_params()
+Parameters
+FENonlinearProblem::parameters()
 {
-    InputParameters params = NonlinearProblem::valid_params();
+    Parameters params = NonlinearProblem::parameters();
     return params;
 }
 
-FENonlinearProblem::FENonlinearProblem(const InputParameters & parameters) :
+FENonlinearProblem::FENonlinearProblem(const Parameters & parameters) :
     NonlinearProblem(parameters),
     FEProblemInterface(this, parameters)
 {

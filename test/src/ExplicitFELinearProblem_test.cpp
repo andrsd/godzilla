@@ -5,7 +5,7 @@
 #include "LineMesh.h"
 #include "DirichletBC.h"
 #include "ExplicitFELinearProblem.h"
-#include "InputParameters.h"
+#include "Parameters.h"
 #include "Output.h"
 #include "TestApp.h"
 #include "petsc.h"
@@ -39,7 +39,7 @@ f1_u(PetscInt dim,
 
 class TestExplicitFELinearProblem : public ExplicitFELinearProblem {
 public:
-    explicit TestExplicitFELinearProblem(const InputParameters & params) :
+    explicit TestExplicitFELinearProblem(const Parameters & params) :
         ExplicitFELinearProblem(params)
     {
     }
@@ -69,12 +69,12 @@ TEST(ExplicitFELinearProblemTest, solve)
 {
     TestApp app;
 
-    InputParameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 3;
     LineMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = TestExplicitFELinearProblem::valid_params();
+    Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;
@@ -84,7 +84,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     TestExplicitFELinearProblem prob(prob_pars);
     app.problem = &prob;
 
-    InputParameters bc_left_pars = DirichletBC::valid_params();
+    Parameters bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<const App *>("_app") = &app;
     bc_left_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::string>("boundary") = "left";
@@ -92,7 +92,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     DirichletBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
 
-    InputParameters bc_right_pars = DirichletBC::valid_params();
+    Parameters bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<const App *>("_app") = &app;
     bc_right_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::string>("boundary") = "right";
@@ -121,12 +121,12 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
 {
     TestApp app;
 
-    InputParameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    InputParameters prob_pars = TestExplicitFELinearProblem::valid_params();
+    Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;
@@ -160,14 +160,14 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
 
     {
         const std::string class_name = "LineMesh";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<PetscInt>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
 
     {
         const std::string class_name = "TestExplicitFELinearProblem";
-        InputParameters * params = Factory::get_valid_params(class_name);
+        Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
         params->set<PetscReal>("start_time") = 0.;
         params->set<PetscReal>("end_time") = 20;
