@@ -7,9 +7,9 @@ namespace godzilla {
 REGISTER_OBJECT(BasicTSAdapt);
 
 Parameters
-BasicTSAdapt::valid_params()
+BasicTSAdapt::parameters()
 {
-    Parameters params = TimeSteppingAdaptor::valid_params();
+    Parameters params = TimeSteppingAdaptor::parameters();
     return params;
 }
 

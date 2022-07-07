@@ -23,5 +23,5 @@ protected:
                               PetscScalar flux[]) override;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };

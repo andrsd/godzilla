@@ -10,9 +10,9 @@
 namespace godzilla {
 
 Parameters
-BoundaryCondition::valid_params()
+BoundaryCondition::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_param<std::string>("field", "", "Field name");
     params.add_required_param<std::string>("boundary", "Boundary name");
     params.add_private_param<const DiscreteProblemInterface *>("_dpi", nullptr);

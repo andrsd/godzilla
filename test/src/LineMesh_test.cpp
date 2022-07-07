@@ -12,7 +12,7 @@ TEST(LineMeshTest, api)
 {
     TestApp app;
 
-    Parameters params = LineMesh::valid_params();
+    Parameters params = LineMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 1;
@@ -47,7 +47,7 @@ TEST(LineMeshTest, incorrect_dims)
 
     TestApp app;
 
-    Parameters params = LineMesh::valid_params();
+    Parameters params = LineMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 2;
@@ -68,7 +68,7 @@ TEST(LineMeshTest, distribute)
 
     TestApp app;
 
-    Parameters params = LineMesh::valid_params();
+    Parameters params = LineMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 0;

@@ -98,17 +98,17 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
 
     testing::internal::CaptureStderr();
 
-    Parameters mesh_pars = TestMesh::valid_params();
+    Parameters mesh_pars = TestMesh::parameters();
     mesh_pars.set<const App *>("_app") = this->app;
     mesh_pars.set<PetscInt>("nx") = 1;
     TestMesh mesh(mesh_pars);
 
-    Parameters prob_pars = TestProblem::valid_params();
+    Parameters prob_pars = TestProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     TestProblem prob(prob_pars);
 
-    Parameters pars = VTKOutput::valid_params();
+    Parameters pars = VTKOutput::parameters();
     pars.set<const App *>("_app") = this->app;
     pars.set<const Problem *>("_problem") = &prob;
     VTKOutput out(pars);

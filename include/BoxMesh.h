@@ -76,7 +76,7 @@ protected:
 
 public:
     /// Method for building Parameters for this class
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

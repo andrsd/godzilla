@@ -41,9 +41,9 @@ __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx)
 }
 
 Parameters
-NonlinearProblem::valid_params()
+NonlinearProblem::parameters()
 {
-    Parameters params = Problem::valid_params();
+    Parameters params = Problem::parameters();
     params.add_param<std::string>("line_search", "bt", "The type of line search to be used");
     params.add_param<PetscReal>("nl_rel_tol",
                                 1e-8,

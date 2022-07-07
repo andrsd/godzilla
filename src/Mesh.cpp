@@ -5,9 +5,9 @@
 namespace godzilla {
 
 Parameters
-Mesh::valid_params()
+Mesh::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     return params;
 }
 

@@ -41,7 +41,7 @@ protected:
     unsigned int on;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     static const unsigned int ON_NONE;
     static const unsigned int ON_INITIAL;

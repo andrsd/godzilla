@@ -35,7 +35,7 @@ TEST(PrintInterfaceTest, lprintf)
         }
     };
 
-    Parameters pars = TestObject::valid_params();
+    Parameters pars = TestObject::parameters();
     pars.set<const App *>("_app") = &app;
     TestObject obj(pars);
 

@@ -23,5 +23,5 @@ protected:
     const PetscReal & inlet_vel;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };

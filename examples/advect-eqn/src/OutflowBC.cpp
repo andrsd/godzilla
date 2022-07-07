@@ -5,9 +5,9 @@
 REGISTER_OBJECT(OutflowBC);
 
 Parameters
-OutflowBC::valid_params()
+OutflowBC::parameters()
 {
-    Parameters params = NaturalRiemannBC::valid_params();
+    Parameters params = NaturalRiemannBC::parameters();
     return params;
 }
 

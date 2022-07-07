@@ -49,7 +49,7 @@ protected:
     virtual void on_initial() override;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     friend PetscErrorCode __fep_compute_residual(DM dm, Vec x, Vec F, void * user);
     friend PetscErrorCode __fep_compute_jacobian(DM dm, Vec x, Mat J, Mat Jp, void * user);

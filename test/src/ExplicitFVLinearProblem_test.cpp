@@ -47,9 +47,9 @@ protected:
 
 public:
     static Parameters
-    valid_params()
+    parameters()
     {
-        Parameters params = NaturalRiemannBC::valid_params();
+        Parameters params = NaturalRiemannBC::parameters();
         params.add_required_param<bool>("inlet", "inlet?");
         return params;
     }
@@ -102,12 +102,12 @@ TEST(ExplicitFVLinearProblemTest, api)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::valid_params();
+    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;
@@ -155,12 +155,12 @@ TEST(ExplicitFVLinearProblemTest, fields)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::valid_params();
+    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;
@@ -196,12 +196,12 @@ TEST(ExplicitFVLinearProblemTest, solve)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::valid_params();
+    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;
@@ -211,7 +211,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     TestExplicitFVLinearProblem prob(prob_pars);
     app.problem = &prob;
 
-    Parameters bc_left_pars = TestBC::valid_params();
+    Parameters bc_left_pars = TestBC::parameters();
     bc_left_pars.set<const App *>("_app") = &app;
     bc_left_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::string>("boundary") = "left";
@@ -219,7 +219,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     TestBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
 
-    Parameters bc_right_pars = TestBC::valid_params();
+    Parameters bc_right_pars = TestBC::parameters();
     bc_right_pars.set<const App *>("_app") = &app;
     bc_right_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::string>("boundary") = "right";
@@ -248,12 +248,12 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::valid_params();
+    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;
@@ -283,12 +283,12 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
 
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::valid_params();
+    Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::valid_params();
+    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;

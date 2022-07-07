@@ -35,9 +35,9 @@ __essential_boundary_condition_function_t(PetscInt dim,
 }
 
 Parameters
-EssentialBC::valid_params()
+EssentialBC::parameters()
 {
-    Parameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     return params;
 }
 

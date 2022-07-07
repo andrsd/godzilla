@@ -13,9 +13,9 @@ namespace godzilla {
 REGISTER_OBJECT(CSVOutput);
 
 Parameters
-CSVOutput::valid_params()
+CSVOutput::parameters()
 {
-    Parameters params = FileOutput::valid_params();
+    Parameters params = FileOutput::parameters();
     return params;
 }
 

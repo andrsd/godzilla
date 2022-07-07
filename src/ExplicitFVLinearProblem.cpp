@@ -9,10 +9,10 @@
 namespace godzilla {
 
 Parameters
-ExplicitFVLinearProblem::valid_params()
+ExplicitFVLinearProblem::parameters()
 {
-    Parameters params = NonlinearProblem::valid_params();
-    params += TransientProblemInterface::valid_params();
+    Parameters params = NonlinearProblem::parameters();
+    params += TransientProblemInterface::parameters();
     params.add_param<std::string>("scheme", "euler", "Time stepping scheme: [euler, ssp, rk]");
     return params;
 }

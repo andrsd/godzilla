@@ -121,7 +121,7 @@ TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 
 TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 {
-    Parameters ic_pars = ConstantIC::valid_params();
+    Parameters ic_pars = ConstantIC::parameters();
     ic_pars.set<const App *>("_app") = app;
     ic_pars.set<const DiscreteProblemInterface *>("_dpi") = prob;
     ic_pars.set<std::vector<PetscReal>>("value") = { 0 };

@@ -6,9 +6,9 @@
 namespace godzilla {
 
 Parameters
-TimeSteppingAdaptor::valid_params()
+TimeSteppingAdaptor::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_private_param<const Problem *>("_problem", nullptr);
     params.add_private_param<const TransientProblemInterface *>("_tpi", nullptr);
     params.add_param<PetscReal>("dt_min", PETSC_DEFAULT, "Minimum time step");

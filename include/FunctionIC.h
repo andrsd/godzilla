@@ -21,7 +21,7 @@ public:
                           PetscScalar u[]) override;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

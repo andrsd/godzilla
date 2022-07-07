@@ -67,7 +67,7 @@ protected:
     TSConvergedReason converged_reason;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     friend PetscErrorCode __transient_pre_step(TS ts);
     friend PetscErrorCode __transient_post_step(TS ts);

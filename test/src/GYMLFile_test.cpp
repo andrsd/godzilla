@@ -84,16 +84,16 @@ protected:
     Vec x;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 REGISTER_OBJECT(GTestProblem);
 
 Parameters
-GTestProblem::valid_params()
+GTestProblem::parameters()
 {
-    Parameters params = Problem::valid_params();
-    params += TransientProblemInterface::valid_params();
+    Parameters params = Problem::parameters();
+    params += TransientProblemInterface::parameters();
     params.add_param<std::string>("str", "empty", "str doco");
     params.add_param<double>("d", 1.234, "d doco");
     params.add_param<int>("i", -1234, "i doco");

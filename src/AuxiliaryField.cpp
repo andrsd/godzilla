@@ -6,9 +6,9 @@
 namespace godzilla {
 
 Parameters
-AuxiliaryField::valid_params()
+AuxiliaryField::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_private_param<const FEProblemInterface *>("_fepi", nullptr);
     params.add_param<std::string>("field", "", "Name of the field.");
     params.add_param<std::string>("region",

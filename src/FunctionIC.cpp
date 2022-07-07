@@ -7,10 +7,10 @@ namespace godzilla {
 REGISTER_OBJECT(FunctionIC);
 
 Parameters
-FunctionIC::valid_params()
+FunctionIC::parameters()
 {
-    Parameters params = InitialCondition::valid_params();
-    params += FunctionInterface::valid_params();
+    Parameters params = InitialCondition::parameters();
+    params += FunctionInterface::parameters();
     return params;
 }
 

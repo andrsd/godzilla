@@ -52,7 +52,7 @@ protected:
     FunctionEvaluator evalr_t;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
     static Parameters valid_params_t();
 };
 

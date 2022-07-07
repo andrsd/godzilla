@@ -17,7 +17,7 @@ public:
     virtual void register_callback(mu::Parser & parser) = 0;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

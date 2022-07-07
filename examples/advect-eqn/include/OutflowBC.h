@@ -19,5 +19,5 @@ public:
                           PetscScalar * xG) override;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };

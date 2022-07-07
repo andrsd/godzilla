@@ -10,9 +10,9 @@ namespace godzilla {
 REGISTER_OBJECT(MeshPartitioningOutput);
 
 Parameters
-MeshPartitioningOutput::valid_params()
+MeshPartitioningOutput::parameters()
 {
-    Parameters params = FileOutput::valid_params();
+    Parameters params = FileOutput::parameters();
     return params;
 }
 

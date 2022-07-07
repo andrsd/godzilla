@@ -22,7 +22,7 @@ protected:
     const PetscReal & Re;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     static const PetscInt velocity_id = 0;
     static const PetscInt pressure_id = 1;

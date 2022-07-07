@@ -9,7 +9,7 @@ TEST(ConstantICTest, api)
 {
     App app("test", MPI_COMM_WORLD);
 
-    Parameters params = ConstantIC::valid_params();
+    Parameters params = ConstantIC::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::vector<PetscReal>>("value") = { 3, 4, 5 };
     ConstantIC obj(params);

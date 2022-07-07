@@ -9,25 +9,25 @@ TEST(L2DiffTest, compute)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::valid_params();
+    Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = GTestFENonlinearProblem::valid_params();
+    Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     app.problem = &prob;
 
-    Parameters bc_params = DirichletBC::valid_params();
+    Parameters bc_params = DirichletBC::parameters();
     bc_params.set<const App *>("_app") = &app;
     bc_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
     bc_params.set<std::vector<std::string>>("value") = { "x*x" };
     bc_params.set<std::string>("boundary") = "marker";
     DirichletBC bc(bc_params);
 
-    Parameters ps_params = L2Diff::valid_params();
+    Parameters ps_params = L2Diff::parameters();
     ps_params.set<const App *>("_app") = &app;
     ps_params.set<const Problem *>("_problem") = &prob;
     ps_params.set<std::vector<std::string>>("value") = { "x*x" };

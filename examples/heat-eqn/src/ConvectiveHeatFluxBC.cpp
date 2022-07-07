@@ -60,9 +60,9 @@ __g0_convective_heat_flux_const_bc(PetscInt dim,
 }
 
 Parameters
-ConvectiveHeatFluxBC::valid_params()
+ConvectiveHeatFluxBC::parameters()
 {
-    Parameters params = NaturalBC::valid_params();
+    Parameters params = NaturalBC::parameters();
     return params;
 }
 

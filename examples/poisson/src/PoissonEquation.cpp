@@ -86,9 +86,9 @@ g3_uu(PetscInt dim,
 ///
 
 Parameters
-PoissonEquation::valid_params()
+PoissonEquation::parameters()
 {
-    Parameters params = FENonlinearProblem::valid_params();
+    Parameters params = FENonlinearProblem::parameters();
     params.add_param<PetscInt>("p_order", 1., "Polynomial order of the FE space.");
     return params;
 }

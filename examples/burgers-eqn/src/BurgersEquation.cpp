@@ -59,9 +59,9 @@ f1_u(PetscInt dim,
 ///
 
 Parameters
-BurgersEquation::valid_params()
+BurgersEquation::parameters()
 {
-    Parameters params = ExplicitFELinearProblem::valid_params();
+    Parameters params = ExplicitFELinearProblem::parameters();
     params.add_param<PetscReal>("viscosity", "Viscosity");
     return params;
 }

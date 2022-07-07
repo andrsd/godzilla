@@ -12,9 +12,9 @@ const unsigned int Output::ON_TIMESTEP = 0x2;
 const unsigned int Output::ON_FINAL = 0x4;
 
 Parameters
-Output::valid_params()
+Output::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_param<std::vector<std::string>>("on", "When output should happen");
     params.add_private_param<const Problem *>("_problem", nullptr);
     return params;

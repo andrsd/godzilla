@@ -80,7 +80,7 @@ protected:
     static const int SINGLE_BLK_ID;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

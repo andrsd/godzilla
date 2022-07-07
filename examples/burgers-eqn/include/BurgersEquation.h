@@ -18,7 +18,7 @@ protected:
     const PetscReal & viscosity;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     static const PetscInt u_id = 0;
 };

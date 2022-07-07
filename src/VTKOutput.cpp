@@ -11,9 +11,9 @@ REGISTER_OBJECT(VTKOutput);
 static const int MAX_PATH = 1024;
 
 Parameters
-VTKOutput::valid_params()
+VTKOutput::parameters()
 {
-    Parameters params = FileOutput::valid_params();
+    Parameters params = FileOutput::parameters();
     return params;
 }
 

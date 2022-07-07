@@ -6,7 +6,7 @@ using namespace godzilla;
 
 TEST(ParametersTest, get)
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     EXPECT_DEATH(params.get<int>("i"), "No parameter 'i' found.");
 }
 
@@ -71,14 +71,14 @@ TEST(ParametersTest, valid_params)
 
 TEST(ParametersTest, empty_doc_str)
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
 
     EXPECT_EQ(params.get_doc_string("i"), std::string(""));
 }
 
 TEST(ParametersTest, set_non_existing_param)
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.set<double>("d") = 1.23;
 
     EXPECT_EQ(params.get<double>("d"), 1.23);

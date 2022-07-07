@@ -165,7 +165,7 @@ TEST_F(NonlinearProblemTest, run)
     auto mesh = gMesh1d();
     mesh->create();
 
-    Parameters prob_pars = NonlinearProblem::valid_params();
+    Parameters prob_pars = NonlinearProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockNonlinearProblem prob(prob_pars);
@@ -198,7 +198,7 @@ TEST_F(NonlinearProblemTest, line_search_type)
 
     std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
-        Parameters prob_pars = NonlinearProblem::valid_params();
+        Parameters prob_pars = NonlinearProblem::parameters();
         prob_pars.set<const App *>("_app") = this->app;
         prob_pars.set<const Mesh *>("_mesh") = mesh;
         prob_pars.set<std::string>("line_search") = lst;
@@ -229,7 +229,7 @@ TEST_F(NonlinearProblemTest, invalid_line_search_type)
     auto mesh = gMesh1d();
     mesh->create();
 
-    Parameters prob_pars = NonlinearProblem::valid_params();
+    Parameters prob_pars = NonlinearProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     prob_pars.set<std::string>("line_search") = "asdf";

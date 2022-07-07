@@ -42,7 +42,7 @@ __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx)
 }
 
 Parameters
-TransientProblemInterface::valid_params()
+TransientProblemInterface::parameters()
 {
     Parameters params;
     params.add_param<PetscReal>("start_time", 0., "Start time of the simulation");

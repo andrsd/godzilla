@@ -14,7 +14,7 @@ public:
     virtual void output_step() override;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

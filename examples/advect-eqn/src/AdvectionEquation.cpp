@@ -10,9 +10,9 @@ REGISTER_OBJECT(AdvectionEquation);
 ///
 
 Parameters
-AdvectionEquation::valid_params()
+AdvectionEquation::parameters()
 {
-    Parameters params = ExplicitFVLinearProblem::valid_params();
+    Parameters params = ExplicitFVLinearProblem::parameters();
     return params;
 }
 

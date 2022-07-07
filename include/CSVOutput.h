@@ -32,7 +32,7 @@ protected:
     std::vector<std::string> pps_names;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

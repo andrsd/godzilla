@@ -31,9 +31,9 @@ __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
 }
 
 Parameters
-LinearProblem::valid_params()
+LinearProblem::parameters()
 {
-    Parameters params = Problem::valid_params();
+    Parameters params = Problem::parameters();
     params.add_param<PetscReal>("lin_rel_tol",
                                 1e-5,
                                 "Relative convergence tolerance for the linear solver");

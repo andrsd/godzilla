@@ -5,9 +5,9 @@
 namespace godzilla {
 
 Parameters
-Function::valid_params()
+Function::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     return params;
 }
 

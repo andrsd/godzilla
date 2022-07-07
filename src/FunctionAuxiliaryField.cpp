@@ -21,10 +21,10 @@ __function_auxiliary_field(PetscInt dim,
 }
 
 Parameters
-FunctionAuxiliaryField::valid_params()
+FunctionAuxiliaryField::parameters()
 {
-    Parameters params = AuxiliaryField::valid_params();
-    params += FunctionInterface::valid_params();
+    Parameters params = AuxiliaryField::parameters();
+    params += FunctionInterface::parameters();
     return params;
 }
 

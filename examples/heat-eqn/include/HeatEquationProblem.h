@@ -19,7 +19,7 @@ protected:
     const PetscInt & p_order;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     static const PetscInt temp_id = 0;
 

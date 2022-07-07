@@ -5,9 +5,9 @@
 namespace godzilla {
 
 Parameters
-Postprocessor::valid_params()
+Postprocessor::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_private_param<const Problem *>("_problem", nullptr);
     return params;
 }

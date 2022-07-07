@@ -115,7 +115,7 @@ protected:
     std::map<std::string, PetscInt> face_set_ids;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

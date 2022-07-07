@@ -32,7 +32,7 @@ public:
 
 TEST_F(InitialConditionTest, api)
 {
-    Parameters params = InitialCondition::valid_params();
+    Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -49,7 +49,7 @@ TEST_F(InitialConditionTest, api)
 
 TEST_F(InitialConditionTest, test)
 {
-    Parameters params = InitialCondition::valid_params();
+    Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -70,7 +70,7 @@ TEST_F(InitialCondition2FieldTest, no_field_param)
 {
     testing::internal::CaptureStderr();
 
-    Parameters params = InitialCondition::valid_params();
+    Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -93,7 +93,7 @@ TEST_F(InitialCondition2FieldTest, non_existing_field)
 {
     testing::internal::CaptureStderr();
 
-    Parameters params = InitialCondition::valid_params();
+    Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";

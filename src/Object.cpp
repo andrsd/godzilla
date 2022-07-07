@@ -5,7 +5,7 @@
 namespace godzilla {
 
 Parameters
-Object::valid_params()
+Object::parameters()
 {
     Parameters params;
     params.add_private_param<const App *>("_app", nullptr);

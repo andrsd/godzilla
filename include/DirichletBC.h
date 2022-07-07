@@ -24,7 +24,7 @@ protected:
     virtual void set_up_callback();
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

@@ -34,7 +34,7 @@ TEST_F(AuxiliaryFieldTest, api)
 
     prob->add_aux_fe(0, "fld", 1, 1);
 
-    Parameters params = AuxiliaryField::valid_params();
+    Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<FEProblemInterface *>("_fepi") = prob;
@@ -78,7 +78,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
 
     prob->add_aux_fe(0, "aux1", 1, 1);
 
-    Parameters params = AuxiliaryField::valid_params();
+    Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<FEProblemInterface *>("_fepi") = prob;
@@ -121,7 +121,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
 
     prob->add_aux_fe(0, "aux1", 1, 1);
 
-    Parameters params = AuxiliaryField::valid_params();
+    Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<FEProblemInterface *>("_fepi") = prob;
@@ -164,7 +164,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
     prob->add_aux_fe(0, "aux1", 1, 1);
 
-    Parameters params = AuxiliaryField::valid_params();
+    Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<FEProblemInterface *>("_fepi") = prob;

@@ -57,7 +57,7 @@ TEST_F(LinearProblemTest, run)
     auto mesh = gMesh1d();
     mesh->create();
 
-    Parameters prob_pars = LinearProblem::valid_params();
+    Parameters prob_pars = LinearProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
     prob_pars.set<const Mesh *>("_mesh") = mesh;
     MockLinearProblem prob(prob_pars);

@@ -105,9 +105,9 @@ g0_temp(PetscInt dim,
 }
 
 Parameters
-HeatEquationProblem::valid_params()
+HeatEquationProblem::parameters()
 {
-    Parameters params = ImplicitFENonlinearProblem::valid_params();
+    Parameters params = ImplicitFENonlinearProblem::parameters();
     params.add_param<PetscInt>("p_order", 1, "Polynomial order of FE space");
     return params;
 }

@@ -6,9 +6,9 @@
 namespace godzilla {
 
 Parameters
-UnstructuredMesh::valid_params()
+UnstructuredMesh::parameters()
 {
-    Parameters params = Mesh::valid_params();
+    Parameters params = Mesh::parameters();
     return params;
 }
 

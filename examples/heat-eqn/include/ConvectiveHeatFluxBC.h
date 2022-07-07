@@ -15,7 +15,7 @@ protected:
     virtual void set_up_weak_form();
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

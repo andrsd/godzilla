@@ -43,7 +43,7 @@ TEST(UnstructuredMeshTest, api)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::valid_params();
+    Parameters params = TestUnstructuredMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);
@@ -68,7 +68,7 @@ TEST(UnstructuredMeshTest, api_ghosted)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::valid_params();
+    Parameters params = TestUnstructuredMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);
@@ -98,7 +98,7 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::valid_params();
+    Parameters params = TestUnstructuredMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);
@@ -111,7 +111,7 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::valid_params();
+    Parameters params = TestUnstructuredMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);

@@ -34,7 +34,7 @@ public:
 
 TEST_F(BoundaryConditionTest, api)
 {
-    Parameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -47,7 +47,7 @@ TEST_F(BoundaryConditionTest, api)
 
 TEST_F(BoundaryCondition2FieldTest, test)
 {
-    Parameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -69,7 +69,7 @@ TEST_F(BoundaryCondition2FieldTest, no_field_param)
 {
     testing::internal::CaptureStderr();
 
-    Parameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
@@ -93,7 +93,7 @@ TEST_F(BoundaryCondition2FieldTest, non_existing_field)
 {
     testing::internal::CaptureStderr();
 
-    Parameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";

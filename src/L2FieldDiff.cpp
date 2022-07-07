@@ -12,9 +12,9 @@ namespace godzilla {
 REGISTER_OBJECT(L2FieldDiff);
 
 Parameters
-L2FieldDiff::valid_params()
+L2FieldDiff::parameters()
 {
-    Parameters params = Postprocessor::valid_params();
+    Parameters params = Postprocessor::parameters();
     params.add_param<std::map<std::string, std::vector<std::string>>>("functions", "");
     return params;
 }

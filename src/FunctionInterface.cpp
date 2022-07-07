@@ -7,7 +7,7 @@
 namespace godzilla {
 
 Parameters
-FunctionInterface::valid_params()
+FunctionInterface::parameters()
 {
     Parameters params;
     params.add_required_param<std::vector<std::string>>("value",

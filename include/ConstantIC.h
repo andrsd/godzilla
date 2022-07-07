@@ -27,7 +27,7 @@ protected:
     const std::vector<PetscReal> & values;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

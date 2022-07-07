@@ -8,9 +8,9 @@
 namespace godzilla {
 
 Parameters
-Problem::valid_params()
+Problem::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_private_param<const Mesh *>("_mesh", nullptr);
     return params;
 }

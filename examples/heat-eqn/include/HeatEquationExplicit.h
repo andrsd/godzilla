@@ -21,7 +21,7 @@ protected:
     PetscInt order;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     static const PetscInt temp_id = 0;
     static const PetscInt ffn_aux_id = 0;

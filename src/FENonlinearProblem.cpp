@@ -24,9 +24,9 @@ __fep_compute_jacobian(DM dm, Vec x, Mat J, Mat Jp, void * user)
 }
 
 Parameters
-FENonlinearProblem::valid_params()
+FENonlinearProblem::parameters()
 {
-    Parameters params = NonlinearProblem::valid_params();
+    Parameters params = NonlinearProblem::parameters();
     return params;
 }
 

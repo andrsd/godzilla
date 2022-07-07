@@ -31,7 +31,7 @@ TEST(BasicTSAdapt, api)
     }
     app.problem = prob;
 
-    Parameters params = BasicTSAdapt::valid_params();
+    Parameters params = BasicTSAdapt::parameters();
     params.set<const App *>("_app") = &app;
     params.set<const Problem *>("_problem") = prob;
     params.set<const TransientProblemInterface *>("_tpi") = prob;

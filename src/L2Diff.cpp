@@ -22,10 +22,10 @@ __l2_diff(PetscInt dim,
 }
 
 Parameters
-L2Diff::valid_params()
+L2Diff::parameters()
 {
-    Parameters params = Postprocessor::valid_params();
-    params += FunctionInterface::valid_params();
+    Parameters params = Postprocessor::parameters();
+    params += FunctionInterface::parameters();
     return params;
 }
 

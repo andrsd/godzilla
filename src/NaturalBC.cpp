@@ -4,9 +4,9 @@
 namespace godzilla {
 
 Parameters
-NaturalBC::valid_params()
+NaturalBC::parameters()
 {
-    Parameters params = BoundaryCondition::valid_params();
+    Parameters params = BoundaryCondition::parameters();
     return params;
 }
 

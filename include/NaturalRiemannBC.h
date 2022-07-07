@@ -35,7 +35,7 @@ protected:
     PetscInt bd;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

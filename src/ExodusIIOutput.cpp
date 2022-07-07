@@ -62,9 +62,9 @@ exo_write_block_names(int exoid, const std::vector<std::string> & block_names)
 }
 
 Parameters
-ExodusIIOutput::valid_params()
+ExodusIIOutput::parameters()
 {
-    Parameters params = FileOutput::valid_params();
+    Parameters params = FileOutput::parameters();
     params.add_param<std::vector<std::string>>(
         "variables",
         "List of variables to be stored. If not specified, all variables will be stored.");

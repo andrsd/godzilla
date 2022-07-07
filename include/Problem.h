@@ -118,7 +118,7 @@ protected:
     PetscInt step_num;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     friend class TransientProblemInterface;
 };

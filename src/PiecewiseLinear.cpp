@@ -14,9 +14,9 @@ __piecewise_linear_function_eval(void * ctx, double x)
 }
 
 Parameters
-PiecewiseLinear::valid_params()
+PiecewiseLinear::parameters()
 {
-    Parameters params = Function::valid_params();
+    Parameters params = Function::parameters();
     params.add_required_param<std::vector<PetscReal>>("x", "Independent variable");
     params.add_required_param<std::vector<PetscReal>>("y", "Dependent variable");
     return params;

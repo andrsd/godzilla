@@ -22,9 +22,9 @@ __initial_condition_function(PetscInt dim,
 }
 
 Parameters
-InitialCondition::valid_params()
+InitialCondition::parameters()
 {
-    Parameters params = Object::valid_params();
+    Parameters params = Object::parameters();
     params.add_param<std::string>("field", "", "Field name");
     params.add_private_param<const DiscreteProblemInterface *>("_dpi", nullptr);
     return params;

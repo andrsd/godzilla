@@ -34,9 +34,9 @@ build_obj(const Parameters & parameters)
 
 template <typename T>
 auto
-call_valid_params() -> decltype(T::valid_params(), Parameters())
+call_parameters() -> decltype(T::parameters(), Parameters())
 {
-    return T::valid_params();
+    return T::parameters();
 }
 
 class Parameters;
@@ -58,7 +58,7 @@ public:
     {
         Entry entry;
         entry.build_ptr = &build_obj<T>;
-        entry.params_ptr = &call_valid_params<T>;
+        entry.params_ptr = &call_parameters<T>;
         classes[class_name] = entry;
         return '\0';
     }

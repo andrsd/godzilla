@@ -7,10 +7,10 @@ namespace godzilla {
 REGISTER_OBJECT(DirichletBC);
 
 Parameters
-DirichletBC::valid_params()
+DirichletBC::parameters()
 {
-    Parameters params = EssentialBC::valid_params();
-    params += FunctionInterface::valid_params();
+    Parameters params = EssentialBC::parameters();
+    params += FunctionInterface::parameters();
     params += FunctionInterface::valid_params_t();
     return params;
 }

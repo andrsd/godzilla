@@ -39,7 +39,7 @@ protected:
     std::string file_name;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 };
 
 } // namespace godzilla

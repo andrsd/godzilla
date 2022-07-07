@@ -9,10 +9,10 @@
 namespace godzilla {
 
 Parameters
-ImplicitFENonlinearProblem::valid_params()
+ImplicitFENonlinearProblem::parameters()
 {
-    Parameters params = FENonlinearProblem::valid_params();
-    params += TransientProblemInterface::valid_params();
+    Parameters params = FENonlinearProblem::parameters();
+    params += TransientProblemInterface::parameters();
     params.add_param<std::string>("scheme", "beuler", "Time stepping scheme: [beuler, cn]");
     return params;
 }

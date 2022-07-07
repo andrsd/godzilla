@@ -80,7 +80,7 @@ protected:
     PetscInt lin_max_iter;
 
 public:
-    static Parameters valid_params();
+    static Parameters parameters();
 
     friend PetscErrorCode __compute_residual(SNES snes, Vec x, Vec f, void * ctx);
     friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat A, Mat B, void * ctx);

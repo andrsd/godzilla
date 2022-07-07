@@ -8,9 +8,9 @@ namespace godzilla {
 REGISTER_OBJECT(BoxMesh);
 
 Parameters
-BoxMesh::valid_params()
+BoxMesh::parameters()
 {
-    Parameters params = UnstructuredMesh::valid_params();
+    Parameters params = UnstructuredMesh::parameters();
     params.add_param<PetscReal>("xmin", 0., "Minimum in the x direction");
     params.add_param<PetscReal>("xmax", 1., "Maximum in the x direction");
     params.add_param<PetscReal>("ymin", 0., "Minimum in the y direction");

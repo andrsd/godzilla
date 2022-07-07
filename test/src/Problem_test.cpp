@@ -79,31 +79,31 @@ TEST(ProblemTest, add_pp)
         MOCK_METHOD(void, output_step, ());
     };
 
-    Parameters mesh_params = LineMesh::valid_params();
+    Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = Problem::valid_params();
+    Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
 
-    Parameters pp_params = Postprocessor::valid_params();
+    Parameters pp_params = Postprocessor::parameters();
     pp_params.set<const App *>("_app") = &app;
     pp_params.set<const Problem *>("_problem") = &problem;
     pp_params.set<std::string>("_name") = "pp";
     TestPostprocessor pp(pp_params);
     problem.add_postprocessor(&pp);
 
-    Parameters fn_params = Function::valid_params();
+    Parameters fn_params = Function::parameters();
     fn_params.set<const App *>("_app") = &app;
     fn_params.set<const Problem *>("_problem") = &problem;
     fn_params.set<std::string>("_name") = "fn";
     TestFunction fn(fn_params);
     problem.add_function(&fn);
 
-    Parameters out_params = Function::valid_params();
+    Parameters out_params = Function::parameters();
     out_params.set<const App *>("_app") = &app;
     out_params.set<const Problem *>("_problem") = &problem;
     out_params.set<std::string>("_name") = "out";

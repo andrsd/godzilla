@@ -44,7 +44,7 @@ public:
 
     std::vector<PetscReal> dts;
 
-    static Parameters valid_params();
+    static Parameters parameters();
 
 protected:
     virtual void
@@ -57,9 +57,9 @@ protected:
 REGISTER_OBJECT(TestTSAdaptor);
 
 Parameters
-TestTSAdaptor::valid_params()
+TestTSAdaptor::parameters()
 {
-    Parameters pars = TimeSteppingAdaptor::valid_params();
+    Parameters pars = TimeSteppingAdaptor::parameters();
     return pars;
 }
 
@@ -175,7 +175,7 @@ TEST(TimeSteppingAdaptor, api)
     mesh->create();
     prob->create();
 
-    Parameters params = MockTSAdaptor::valid_params();
+    Parameters params = MockTSAdaptor::parameters();
     params.set<const App *>("_app") = &app;
     params.set<const Problem *>("_problem") = prob;
     params.set<const TransientProblemInterface *>("_tpi") = prob;
