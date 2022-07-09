@@ -30,6 +30,8 @@ TSAdaptCreate_test(TSAdapt adapt)
 
 ///
 
+namespace {
+
 class TestTSAdaptor : public TimeSteppingAdaptor {
 public:
     explicit TestTSAdaptor(const Parameters & params);
@@ -53,6 +55,8 @@ protected:
         PETSC_CHECK(TSAdaptSetType(this->ts_adapt, TS_ADAPT_TEST));
     }
 };
+
+} // namespace
 
 REGISTER_OBJECT(TestTSAdaptor);
 

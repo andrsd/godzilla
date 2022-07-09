@@ -7,6 +7,8 @@
 #include "petsc.h"
 #include "petscviewerhdf5.h"
 
+namespace {
+
 class HDF5OutputTest : public GodzillaAppTest {
 protected:
     void
@@ -52,6 +54,8 @@ protected:
     LineMesh * mesh;
     Problem * prob;
 };
+
+} // namespace
 
 TEST_F(HDF5OutputTest, get_file_ext)
 {

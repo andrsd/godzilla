@@ -9,6 +9,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class TestBC : public NaturalRiemannBC {
 public:
     explicit TestBC(const Parameters & params) :
@@ -95,6 +97,8 @@ protected:
         flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
     }
 };
+
+} // namespace
 
 REGISTER_OBJECT(TestExplicitFVLinearProblem);
 

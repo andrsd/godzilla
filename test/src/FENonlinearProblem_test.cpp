@@ -17,6 +17,8 @@
 using namespace ::testing;
 using namespace godzilla;
 
+namespace {
+
 /// Test IC with 2 components
 class GTest2CompIC : public InitialCondition {
 public:
@@ -35,6 +37,8 @@ public:
         u[1] = 10.;
     }
 };
+
+} // namespace
 
 REGISTER_OBJECT(GTest2CompIC);
 

@@ -7,6 +7,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class TestBC : public NaturalRiemannBC {
 public:
     explicit TestBC(const Parameters & params) : NaturalRiemannBC(params) {}
@@ -53,6 +55,7 @@ protected:
     virtual void
     set_up_fields() override
     {
+        add_field(0, "u", 1);
     }
 
     virtual void
@@ -68,6 +71,8 @@ protected:
     {
     }
 };
+
+} // namespace
 
 TEST(NaturalRiemannBCTest, api)
 {

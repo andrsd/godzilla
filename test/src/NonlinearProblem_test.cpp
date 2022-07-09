@@ -10,6 +10,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class G1DTestNonlinearProblem : public NonlinearProblem {
 public:
     explicit G1DTestNonlinearProblem(const Parameters & params);
@@ -23,6 +25,8 @@ protected:
 
     PetscSection s;
 };
+
+} // namespace
 
 REGISTER_OBJECT(G1DTestNonlinearProblem);
 

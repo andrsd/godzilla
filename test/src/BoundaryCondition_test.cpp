@@ -7,6 +7,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class BoundaryConditionTest : public FENonlinearProblemTest {
 public:
 };
@@ -31,6 +33,8 @@ public:
     {
     }
 };
+
+} // namespace
 
 TEST_F(BoundaryConditionTest, api)
 {

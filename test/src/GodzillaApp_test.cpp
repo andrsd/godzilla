@@ -8,6 +8,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class MockMesh : public Mesh {
 public:
     explicit MockMesh(const Parameters & params) : Mesh(params) {}
@@ -34,6 +36,8 @@ public:
     MOCK_METHOD(DM, get_dm, (), (const));
     MOCK_METHOD(Vec, get_solution_vector, (), (const));
 };
+
+} // namespace
 
 REGISTER_OBJECT(MockMesh);
 REGISTER_OBJECT(MockProblem);

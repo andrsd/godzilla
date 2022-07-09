@@ -4,6 +4,8 @@
 #include "Postprocessor.h"
 #include "petsc.h"
 
+namespace {
+
 class TestCSVOutput : public CSVOutput {
 public:
     TestCSVOutput(const Parameters & pars) : CSVOutput(pars) {}
@@ -25,6 +27,8 @@ public:
         return f;
     }
 };
+
+} // namespace
 
 TEST_F(CSVOutputTest, get_file_ext)
 {
