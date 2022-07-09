@@ -7,9 +7,13 @@
 
 using namespace godzilla;
 
+namespace {
+
 class AuxiliaryFieldTest : public FENonlinearProblemTest {
 public:
 };
+
+} // namespace
 
 TEST_F(AuxiliaryFieldTest, api)
 {

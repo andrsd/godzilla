@@ -7,6 +7,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class InitialConditionTest : public FENonlinearProblemTest {
 public:
 };
@@ -29,6 +31,8 @@ public:
                 (PetscInt, PetscReal, const PetscReal x[], PetscInt Nc, PetscScalar u[]),
                 ());
 };
+
+} // namespace
 
 TEST_F(InitialConditionTest, api)
 {

@@ -7,6 +7,8 @@
 #include "petsc.h"
 #include "petscviewer.h"
 
+namespace {
+
 class VTKOutputTest : public GodzillaAppTest {
 protected:
     void
@@ -52,6 +54,8 @@ protected:
     LineMesh * mesh;
     Problem * prob;
 };
+
+} // namespace
 
 TEST_F(VTKOutputTest, get_file_ext)
 {

@@ -5,6 +5,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class OutputTest : public FENonlinearProblemTest {
 public:
 };
@@ -23,6 +25,8 @@ public:
         return this->on;
     }
 };
+
+} // namespace
 
 TEST_F(OutputTest, exec_masks_1)
 {

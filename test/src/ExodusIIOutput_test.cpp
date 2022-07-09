@@ -7,8 +7,12 @@
 
 using namespace godzilla;
 
+namespace {
+
 class ExodusIIOutputTest : public FENonlinearProblemTest {
 };
+
+} // namespace
 
 TEST_F(ExodusIIOutputTest, get_file_ext)
 {

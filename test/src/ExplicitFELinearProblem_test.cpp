@@ -13,6 +13,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 static void
 f1_u(PetscInt dim,
      PetscInt nf,
@@ -62,6 +64,8 @@ protected:
         set_residual_block(0, nullptr, f1_u);
     }
 };
+
+} // namespace
 
 REGISTER_OBJECT(TestExplicitFELinearProblem);
 

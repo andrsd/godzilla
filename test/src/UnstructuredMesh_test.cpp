@@ -7,6 +7,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class TestUnstructuredMesh : public UnstructuredMesh {
 public:
     explicit TestUnstructuredMesh(const Parameters & params) : UnstructuredMesh(params) {}
@@ -36,6 +38,8 @@ public:
         return this->partition_overlap;
     }
 };
+
+} // namespace
 
 //
 

@@ -12,6 +12,8 @@
 
 using namespace godzilla;
 
+namespace {
+
 class MockGYMLFile : public GYMLFile {
 public:
     explicit MockGYMLFile(const App * app) : GYMLFile(app) {}
@@ -86,6 +88,8 @@ protected:
 public:
     static Parameters parameters();
 };
+
+} // namespace
 
 REGISTER_OBJECT(GTestProblem);
 

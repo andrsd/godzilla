@@ -7,6 +7,8 @@
 #include "petsc.h"
 #include "petscviewerhdf5.h"
 
+namespace {
+
 class MeshPartitioningOutputTest : public GodzillaAppTest {
 protected:
     void
@@ -53,6 +55,8 @@ protected:
     LineMesh * mesh;
     Problem * prob;
 };
+
+} // namespace
 
 TEST_F(MeshPartitioningOutputTest, get_file_ext)
 {
