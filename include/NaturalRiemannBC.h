@@ -28,9 +28,6 @@ public:
 protected:
     virtual void set_up_callback() override;
 
-    /// WeakForm object
-    PetscWeakForm wf;
-
     /// Boundary number
     PetscInt bd;
 
