@@ -9,76 +9,121 @@
 
 namespace {
 
-class MeshPartitioningOutputTest : public GodzillaAppTest {
-protected:
-    void
-    SetUp() override
+class EmptyProblem : public Problem {
+public:
+    explicit EmptyProblem(const Parameters & params) : Problem(params) {}
+
+    virtual void
+    run() override
     {
-        GodzillaAppTest::SetUp();
-
-        {
-            const std::string class_name = "LineMesh";
-            Parameters * params = Factory::get_parameters(class_name);
-            params->set<PetscReal>("xmin") = 0;
-            params->set<PetscReal>("xmax") = 1;
-            params->set<PetscInt>("nx") = 4;
-            this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
-        }
-
-        {
-            const std::string class_name = "G1DTestLinearProblem";
-            Parameters * params = Factory::get_parameters(class_name);
-            params->set<const Mesh *>("_mesh") = mesh;
-            this->prob = this->app->build_object<Problem>(class_name, "problem", params);
-        }
     }
-
-    void
-    create()
+    virtual void
+    solve() override
     {
-        this->mesh->create();
-        this->prob->create();
     }
-
-    MeshPartitioningOutput *
-    build_output()
+    virtual bool
+    converged() override
     {
-        const std::string class_name = "MeshPartitioningOutput";
-        Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Problem *>("_problem") = this->prob;
-        MeshPartitioningOutput * out =
-            this->app->build_object<MeshPartitioningOutput>(class_name, "out", params);
-        this->prob->add_output(out);
-        return out;
+        return false;
     }
-
-    LineMesh * mesh;
-    Problem * prob;
+    virtual DM
+    get_dm() const override
+    {
+        return nullptr;
+    }
+    virtual Vec
+    get_solution_vector() const override
+    {
+        return nullptr;
+    }
 };
 
 } // namespace
 
-TEST_F(MeshPartitioningOutputTest, get_file_ext)
+TEST(MeshPartitioningOutputTest, get_file_ext)
 {
-    auto out = build_output();
-    EXPECT_EQ(out->get_file_ext(), "h5");
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<PetscReal>("xmin") = 0;
+    mesh_params.set<PetscReal>("xmax") = 1;
+    mesh_params.set<PetscInt>("nx") = 4;
+    LineMesh mesh(mesh_params);
+
+    Parameters prob_params = G1DTestLinearProblem::parameters();
+    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    G1DTestLinearProblem prob(prob_params);
+
+    Parameters params = MeshPartitioningOutput::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<const Problem *>("_problem") = &prob;
+    MeshPartitioningOutput out(params);
+
+    EXPECT_EQ(out.get_file_ext(), "h5");
 }
 
-TEST_F(MeshPartitioningOutputTest, output)
+TEST(MeshPartitioningOutputTest, output)
 {
-    auto out = build_output();
-    create();
-    out->output_step();
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<PetscReal>("xmin") = 0;
+    mesh_params.set<PetscReal>("xmax") = 1;
+    mesh_params.set<PetscInt>("nx") = 4;
+    LineMesh mesh(mesh_params);
+
+    Parameters prob_params = G1DTestLinearProblem::parameters();
+    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    G1DTestLinearProblem prob(prob_params);
+
+    Parameters params = MeshPartitioningOutput::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<const Problem *>("_problem") = &prob;
+    MeshPartitioningOutput out(params);
+    prob.add_output(&out);
+
+    mesh.create();
+    prob.create();
+
+    out.output_step();
 
     PetscViewer viewer;
     Vec p;
-    VecCreate(this->app->get_comm(), &p);
+    VecCreate(app.get_comm(), &p);
     PetscObjectSetName((PetscObject) p, "fields/partitioning");
-    PetscViewerHDF5Open(this->app->get_comm(), "part.h5", FILE_MODE_READ, &viewer);
+    PetscViewerHDF5Open(app.get_comm(), "part.h5", FILE_MODE_READ, &viewer);
     VecLoad(p, viewer);
     PetscReal l2_norm;
     VecNorm(p, NORM_2, &l2_norm);
     EXPECT_NEAR(l2_norm, 0, 1e-10);
     VecDestroy(&p);
     PetscViewerDestroy(&viewer);
+}
+
+TEST(MeshPartitioningOutputTest, no_dm)
+{
+    testing::internal::CaptureStderr();
+
+    TestApp app;
+
+    Parameters prob_params = EmptyProblem::parameters();
+    prob_params.set<const App *>("_app") = &app;
+    EmptyProblem prob(prob_params);
+
+    Parameters params = MeshPartitioningOutput::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<const Problem *>("_problem") = &prob;
+    MeshPartitioningOutput out(params);
+
+    out.check();
+
+    app.check_integrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::HasSubstr("Mesh partitioning output works only with problems that provide DM."));
 }

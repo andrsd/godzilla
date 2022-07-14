@@ -10,6 +10,7 @@ class MeshPartitioningOutput : public FileOutput {
 public:
     MeshPartitioningOutput(const Parameters & params);
 
+    virtual void check() override;
     virtual std::string get_file_ext() const override;
     virtual void output_step() override;
 
