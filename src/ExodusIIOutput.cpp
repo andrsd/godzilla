@@ -197,8 +197,7 @@ ExodusIIOutput::write_mesh()
     if (n_elem_blk == 0)
         n_elem_blk = 1;
 
-    PetscInt n_node_sets;
-    PETSC_CHECK(DMGetLabelSize(dm, "Vertex Sets", &n_node_sets));
+    PetscInt n_node_sets = this->mesh->get_num_vertex_sets();
 
     PetscInt n_side_sets;
     PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_side_sets));
@@ -416,8 +415,7 @@ ExodusIIOutput::write_node_sets()
     this->mesh->get_element_idx_range(elem_first, elem_last);
     int n_elems_in_block = elem_last - elem_first;
 
-    PetscInt n_node_sets;
-    PETSC_CHECK(DMGetLabelSize(dm, "Vertex Sets", &n_node_sets));
+    PetscInt n_node_sets = this->mesh->get_num_vertex_sets();
 
     DMLabel vertex_sets_label = this->mesh->get_label("Vertex Sets");
 

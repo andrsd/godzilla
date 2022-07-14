@@ -247,6 +247,15 @@ UnstructuredMesh::get_num_cell_sets() const
     return n_cells_sets;
 }
 
+PetscInt
+UnstructuredMesh::get_num_vertex_sets() const
+{
+    _F_;
+    PetscInt n_vertex_sets;
+    PETSC_CHECK(DMGetLabelSize(this->dm, "Vertex Sets", &n_vertex_sets));
+    return n_vertex_sets;
+}
+
 void
 UnstructuredMesh::construct_ghost_cells()
 {
