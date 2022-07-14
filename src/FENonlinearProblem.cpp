@@ -74,6 +74,13 @@ FENonlinearProblem::set_up_initial_guess()
     FEProblemInterface::set_up_initial_guess();
 }
 
+void
+FENonlinearProblem::allocate_objects()
+{
+    NonlinearProblem::allocate_objects();
+    FEProblemInterface::allocate_objects();
+}
+
 PetscErrorCode
 FENonlinearProblem::compute_residual_callback(Vec x, Vec f)
 {

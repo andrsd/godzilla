@@ -29,12 +29,26 @@ __compute_flux(PetscInt dim,
 
 FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
-    fvm(nullptr)
+    section(nullptr),
+    fvm(nullptr),
+    sln(nullptr)
 {
     _F_;
 }
 
-FVProblemInterface::~FVProblemInterface() {}
+FVProblemInterface::~FVProblemInterface()
+{
+    VecDestroy(&this->sln);
+}
+
+void
+FVProblemInterface::init()
+{
+    DiscreteProblemInterface::init();
+
+    DM dm = this->unstr_mesh->get_dm();
+    PETSC_CHECK(DMGetLocalSection(dm, &this->section));
+}
 
 PetscInt
 FVProblemInterface::get_num_fields() const
@@ -149,6 +163,23 @@ FVProblemInterface::set_field_component_name(PetscInt fid,
         error("Field with ID = '%d' does not exist.", fid);
 }
 
+PetscInt
+FVProblemInterface::get_field_dof(PetscInt point, PetscInt fid) const
+{
+    _F_;
+    PetscInt offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
+    return offset;
+}
+
+Vec
+FVProblemInterface::get_solution_vector_local() const
+{
+    _F_;
+    build_local_solution_vector(this->sln);
+    return this->sln;
+}
+
 void
 FVProblemInterface::add_field(PetscInt id, const std::string & name, PetscInt nc)
 {
@@ -174,6 +205,13 @@ FVProblemInterface::create()
     _F_;
     const_cast<UnstructuredMesh *>(this->unstr_mesh)->construct_ghost_cells();
     DiscreteProblemInterface::create();
+}
+
+void
+FVProblemInterface::allocate_objects()
+{
+    DM dm = this->unstr_mesh->get_dm();
+    PETSC_CHECK(DMCreateLocalVector(dm, &this->sln));
 }
 
 void

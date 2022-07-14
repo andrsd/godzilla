@@ -20,6 +20,7 @@ protected:
     virtual void init() override;
     virtual void set_up_callbacks() override;
     virtual void set_up_initial_guess() override;
+    virtual void allocate_objects() override;
     virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
     virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
 

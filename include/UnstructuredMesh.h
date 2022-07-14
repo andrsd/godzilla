@@ -12,7 +12,20 @@ public:
     UnstructuredMesh(const Parameters & parameters);
     virtual ~UnstructuredMesh();
 
+    DM get_dm() const override;
     virtual void create() override;
+
+    /// Check if mesh has label with a name
+    ///
+    /// @param name The name of the label
+    /// @return true if label exists, otherwise false
+    virtual bool has_label(const std::string & name) const;
+
+    /// Get label associated with a name
+    ///
+    /// @param name Label name
+    /// @return DMLabel associated with the `name`
+    virtual DMLabel get_label(const std::string & name) const;
 
     /// Return the number of mesh vertices
     virtual PetscInt get_num_vertices() const;
@@ -41,6 +54,12 @@ public:
     /// @param last Last element index plus one
     void get_all_element_idx_range(PetscInt & first, PetscInt & last) const;
 
+    /// Get cell type
+    ///
+    /// @param el Element index
+    /// @return Cell type
+    virtual DMPolytopeType get_cell_type(PetscInt el) const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
@@ -62,11 +81,21 @@ public:
     /// @return Cell set name
     const std::string & get_cell_set_name(PetscInt id) const;
 
+    /// Get number of cell sets
+    ///
+    /// @return Number of cell sets
+    PetscInt get_num_cell_sets() const;
+
     /// Get face set name
     ///
     /// @param id The ID of the face set
     /// @return Facet name
     const std::string & get_face_set_name(PetscInt id) const;
+
+    /// Get number of face sets
+    ///
+    /// @return Number of face sets
+    PetscInt get_num_face_sets() const;
 
     /// Set face set name
     ///
@@ -86,6 +115,11 @@ public:
     /// @return DMLabel associated with face set name
     DMLabel get_face_set_label(const std::string & name) const;
 
+    /// Get number of vertex sets
+    ///
+    /// @return Number of vertex sets
+    PetscInt get_num_vertex_sets() const;
+
     virtual void distribute() override;
 
     /// Construct ghost cells which connect to every boundary face
@@ -93,11 +127,17 @@ public:
     virtual void construct_ghost_cells();
 
 protected:
+    /// Method that builds DM for the mesh
+    virtual void create_dm() = 0;
+
     void create_cell_set(PetscInt id, const std::string & name);
 
     void create_face_set_labels(const std::map<int, std::string> & names);
 
     void create_face_set(PetscInt id);
+
+    /// DM object
+    DM dm;
 
     /// Mesh partitioner
     PetscPartitioner partitioner;

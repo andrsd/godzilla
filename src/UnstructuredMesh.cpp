@@ -14,6 +14,7 @@ UnstructuredMesh::parameters()
 
 UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     Mesh(parameters),
+    dm(nullptr),
     partition_overlap(0)
 {
     _F_;
@@ -24,16 +25,48 @@ UnstructuredMesh::~UnstructuredMesh()
 {
     _F_;
     PETSC_CHECK(PetscPartitionerDestroy(&this->partitioner));
+    if (this->dm)
+        PETSC_CHECK(DMDestroy(&this->dm));
+}
+
+DM
+UnstructuredMesh::get_dm() const
+{
+    _F_;
+    return this->dm;
 }
 
 void
 UnstructuredMesh::create()
 {
     _F_;
-    Mesh::create();
+    create_dm();
+    PETSC_CHECK(DMSetFromOptions(this->dm));
+    PETSC_CHECK(DMViewFromOptions(dm, NULL, "-dm_view"));
+    PETSC_CHECK(DMSetUp(this->dm));
+    PETSC_CHECK(DMGetDimension(this->dm, &this->dim));
+
     lprintf(9, "Information:");
     lprintf(9, "- vertices: %d", get_num_vertices());
     lprintf(9, "- elements: %d", get_num_elements());
+}
+
+bool
+UnstructuredMesh::has_label(const std::string & name) const
+{
+    _F_;
+    PetscBool exists = PETSC_FALSE;
+    PETSC_CHECK(DMHasLabel(this->dm, name.c_str(), &exists));
+    return exists == PETSC_TRUE;
+}
+
+DMLabel
+UnstructuredMesh::get_label(const std::string & name) const
+{
+    _F_;
+    DMLabel label;
+    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
+    return label;
 }
 
 PetscInt
@@ -88,6 +121,14 @@ UnstructuredMesh::get_all_element_idx_range(PetscInt & first, PetscInt & last) c
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
 }
 
+DMPolytopeType
+UnstructuredMesh::get_cell_type(PetscInt el) const
+{
+    DMPolytopeType polytope_type;
+    PETSC_CHECK(DMPlexGetCellType(this->dm, el, &polytope_type));
+    return polytope_type;
+}
+
 void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
@@ -133,8 +174,7 @@ UnstructuredMesh::create_face_set_labels(const std::map<int, std::string> & name
     _F_;
     DMLabel fs_label;
     PETSC_CHECK(DMGetLabel(dm, "Face Sets", &fs_label));
-    PetscInt n_fs;
-    PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_fs));
+    PetscInt n_fs = get_num_face_sets();
     IS fs_is;
     PETSC_CHECK(DMLabelGetValueIS(fs_label, &fs_is));
     const PetscInt * fs_ids;
@@ -236,6 +276,32 @@ UnstructuredMesh::get_cell_set_name(PetscInt id) const
         return it->second;
     else
         error("Cell set ID '%d' does not exist.", id);
+}
+
+PetscInt
+UnstructuredMesh::get_num_cell_sets() const
+{
+    _F_;
+    PetscInt n_cells_sets;
+    PETSC_CHECK(DMGetLabelSize(this->dm, "Cell Sets", &n_cells_sets));
+    return n_cells_sets;
+}
+
+PetscInt
+UnstructuredMesh::get_num_face_sets() const
+{
+    PetscInt n_face_sets;
+    PETSC_CHECK(DMGetLabelSize(this->dm, "Face Sets", &n_face_sets));
+    return n_face_sets;
+}
+
+PetscInt
+UnstructuredMesh::get_num_vertex_sets() const
+{
+    _F_;
+    PetscInt n_vertex_sets;
+    PETSC_CHECK(DMGetLabelSize(this->dm, "Vertex Sets", &n_vertex_sets));
+    return n_vertex_sets;
 }
 
 void

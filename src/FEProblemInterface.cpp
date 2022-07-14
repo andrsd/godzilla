@@ -13,9 +13,11 @@ namespace godzilla {
 
 FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
+    section(nullptr),
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
-    a(nullptr)
+    a(nullptr),
+    sln(nullptr)
 {
 }
 
@@ -33,6 +35,8 @@ FEProblemInterface::~FEProblemInterface()
 
     VecDestroy(&this->a);
     DMDestroy(&this->dm_aux);
+
+    VecDestroy(&this->sln);
 }
 
 void
@@ -51,6 +55,7 @@ FEProblemInterface::init()
     DiscreteProblemInterface::init();
 
     DM dm = this->unstr_mesh->get_dm();
+    PETSC_CHECK(DMGetLocalSection(dm, &this->section));
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -59,6 +64,13 @@ FEProblemInterface::init()
         PETSC_CHECK(DMCopyDisc(dm, cdm));
         PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
     }
+}
+
+void
+FEProblemInterface::allocate_objects()
+{
+    DM dm = this->unstr_mesh->get_dm();
+    PETSC_CHECK(DMCreateLocalVector(dm, &this->sln));
 }
 
 PetscInt
@@ -123,6 +135,14 @@ FEProblemInterface::get_field_id(const std::string & name) const
         error("Field '%s' does not exist. Typo?", name);
 }
 
+Vec
+FEProblemInterface::get_solution_vector_local() const
+{
+    _F_;
+    build_local_solution_vector(this->sln);
+    return this->sln;
+}
+
 bool
 FEProblemInterface::has_field_by_id(PetscInt fid) const
 {
@@ -174,6 +194,15 @@ FEProblemInterface::set_field_component_name(PetscInt fid,
     }
     else
         error("Field with ID = '%d' does not exist.", fid);
+}
+
+PetscInt
+FEProblemInterface::get_field_dof(PetscInt point, PetscInt fid) const
+{
+    _F_;
+    PetscInt offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
+    return offset;
 }
 
 const std::string &

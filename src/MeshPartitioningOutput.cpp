@@ -22,6 +22,15 @@ MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & params) : File
     this->file_base = "part";
 }
 
+void
+MeshPartitioningOutput::check()
+{
+    _F_;
+    DM dm = this->problem->get_dm();
+    if (dm == nullptr)
+        log_error("Mesh partitioning output works only with problems that provide DM.");
+}
+
 std::string
 MeshPartitioningOutput::get_file_ext() const
 {

@@ -30,6 +30,8 @@ public:
     virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
     virtual void
     set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
+    virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
+    virtual Vec get_solution_vector_local() const override;
 
     /// Get auxiliary field name
     ///
@@ -81,6 +83,7 @@ protected:
 
     virtual void create() override;
     virtual void init() override;
+    virtual void allocate_objects();
 
     /// Create FE object from FieldInfo
     ///
@@ -112,6 +115,9 @@ protected:
 
     /// Setup volumetric weak form terms
     virtual void set_up_weak_form() = 0;
+
+    /// PETSc section
+    PetscSection section;
 
     /// Quadrature order
     PetscInt qorder;
@@ -163,6 +169,9 @@ protected:
 
     /// Vector for auxiliary fields
     Vec a;
+
+    /// Local solution vector
+    Vec sln;
 };
 
 } // namespace godzilla

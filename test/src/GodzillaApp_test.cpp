@@ -14,13 +14,15 @@ class MockMesh : public Mesh {
 public:
     explicit MockMesh(const Parameters & params) : Mesh(params) {}
 
+    virtual DM
+    get_dm() const
+    {
+        return nullptr;
+    }
+
 protected:
     virtual void
     distribute()
-    {
-    }
-    virtual void
-    create_dm()
     {
     }
 };

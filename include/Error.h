@@ -20,6 +20,7 @@ error_printf(const char * s, Args... args)
     fmt::fprintf(stderr, "[ERROR] ");
     fmt::fprintf(stderr, s, std::forward<Args>(args)...);
     fmt::fprintf(stderr, "%s", Terminal::Color::normal);
+    fmt::fprintf(stderr, "\n");
 }
 
 /// Terminate the run

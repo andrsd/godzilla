@@ -99,6 +99,23 @@ public:
     /// @param bc Boundary condition object to add
     virtual void add_boundary_condition(BoundaryCondition * bc);
 
+    /// Return the offset into an array or local Vec for the dof associated with the given point
+    ///
+    /// @param point Point
+    /// @param fid Field ID
+    /// @return The offset
+    virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const = 0;
+
+    /// Gets a local vector with the coordinates associated with this problem's mesh
+    ///
+    /// @return coordinate vector
+    Vec get_coordinates_local() const;
+
+    /// Get local solution vector
+    ///
+    /// @return Local solution vector
+    virtual Vec get_solution_vector_local() const = 0;
+
 protected:
     virtual void init();
     virtual void create();
@@ -122,6 +139,11 @@ protected:
 
     /// Set up constants
     void set_up_constants();
+
+    /// Build local solution vector
+    ///
+    /// @param sln Global solution vector
+    void build_local_solution_vector(Vec sln) const;
 
     /// Problem this interface is part of
     Problem * problem;
