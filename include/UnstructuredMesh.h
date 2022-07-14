@@ -62,6 +62,11 @@ public:
     /// @return Cell set name
     const std::string & get_cell_set_name(PetscInt id) const;
 
+    /// Get number of cell sets
+    ///
+    /// @return Number of cell sets
+    PetscInt get_num_cell_sets() const;
+
     /// Get face set name
     ///
     /// @param id The ID of the face set

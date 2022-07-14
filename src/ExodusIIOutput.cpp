@@ -192,8 +192,7 @@ ExodusIIOutput::write_mesh()
     int n_elems = this->mesh->get_num_elements();
 
     // number of element blocks
-    PetscInt n_elem_blk = 0;
-    PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_elem_blk));
+    PetscInt n_elem_blk = this->mesh->get_num_cell_sets();
     // no cell sets defined, therefore we have one element block
     if (n_elem_blk == 0)
         n_elem_blk = 1;
@@ -366,8 +365,7 @@ ExodusIIOutput::write_elements()
     DM dm = this->mesh->get_dm();
     std::vector<std::string> block_names;
 
-    PetscInt n_cells_sets = 0;
-    PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
+    PetscInt n_cells_sets = this->mesh->get_num_cell_sets();
 
     if (n_cells_sets > 1) {
         block_names.resize(n_cells_sets);
@@ -674,9 +672,7 @@ void
 ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
 {
     _F_;
-    DM dm = this->problem->get_dm();
-    PetscInt n_cells_sets = 0;
-    PETSC_CHECK(DMGetLabelSize(dm, "Cell Sets", &n_cells_sets));
+    PetscInt n_cells_sets = this->mesh->get_num_cell_sets();
     if (n_cells_sets > 1) {
         // TODO: go block by block and save the elemental variables
         error("Block-restricted elemental variable output is not implemented, yet.");

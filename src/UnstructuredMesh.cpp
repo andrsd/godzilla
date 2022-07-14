@@ -238,6 +238,15 @@ UnstructuredMesh::get_cell_set_name(PetscInt id) const
         error("Cell set ID '%d' does not exist.", id);
 }
 
+PetscInt
+UnstructuredMesh::get_num_cell_sets() const
+{
+    _F_;
+    PetscInt n_cells_sets;
+    PETSC_CHECK(DMGetLabelSize(this->dm, "Cell Sets", &n_cells_sets));
+    return n_cells_sets;
+}
+
 void
 UnstructuredMesh::construct_ghost_cells()
 {
