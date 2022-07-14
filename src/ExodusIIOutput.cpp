@@ -217,10 +217,8 @@ void
 ExodusIIOutput::write_coords(int exo_dim)
 {
     _F_;
-    DM dm = this->mesh->get_dm();
     PetscInt dim = this->mesh->get_dimension();
-    Vec coord;
-    PETSC_CHECK(DMGetCoordinatesLocal(dm, &coord));
+    Vec coord = this->dpi->get_coordinates_local();
     PetscInt coord_size;
     PETSC_CHECK(VecGetSize(coord, &coord_size));
     PetscScalar * xyz;

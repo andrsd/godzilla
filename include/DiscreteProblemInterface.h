@@ -106,6 +106,11 @@ public:
     /// @return The offset
     virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const = 0;
 
+    /// Gets a local vector with the coordinates associated with this problem's mesh
+    ///
+    /// @return coordinate vector
+    Vec get_coordinates_local() const;
+
 protected:
     virtual void init();
     virtual void create();

@@ -209,4 +209,14 @@ DiscreteProblemInterface::set_up_constants()
     PETSC_CHECK(PetscDSSetConstants(this->ds, this->consts.size(), this->consts.data()));
 }
 
+Vec
+DiscreteProblemInterface::get_coordinates_local() const
+{
+    _F_;
+    DM dm = this->unstr_mesh->get_dm();
+    Vec coord;
+    PETSC_CHECK(DMGetCoordinatesLocal(dm, &coord));
+    return coord;
+}
+
 } // namespace godzilla
