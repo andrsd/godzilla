@@ -54,6 +54,12 @@ public:
     /// @param last Last element index plus one
     void get_all_element_idx_range(PetscInt & first, PetscInt & last) const;
 
+    /// Get cell type
+    ///
+    /// @param el Element index
+    /// @return Cell type
+    virtual DMPolytopeType get_cell_type(PetscInt el) const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner

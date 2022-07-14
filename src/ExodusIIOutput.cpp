@@ -499,8 +499,7 @@ ExodusIIOutput::write_face_sets()
                 DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
             PetscInt el = points[2];
-            DMPolytopeType polytope_type;
-            PETSC_CHECK(DMPlexGetCellType(dm, el, &polytope_type));
+            DMPolytopeType polytope_type = this->mesh->get_cell_type(el);
             const PetscInt * side_ordering = get_elem_side_ordering(polytope_type);
             elem_list[i] = el + 1;
 
@@ -745,10 +744,10 @@ ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const
     if (cells == nullptr) {
         this->mesh->get_element_idx_range(elem_first, elem_last);
         n_elems_in_block = this->mesh->get_num_elements();
-        PETSC_CHECK(DMPlexGetCellType(dm, elem_first, &polytope_type));
+        polytope_type = this->mesh->get_cell_type(elem_first);
     }
     else
-        PETSC_CHECK(DMPlexGetCellType(dm, cells[0], &polytope_type));
+        polytope_type = this->mesh->get_cell_type(cells[0]);
 
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = get_num_elem_nodes(polytope_type);

@@ -121,6 +121,14 @@ UnstructuredMesh::get_all_element_idx_range(PetscInt & first, PetscInt & last) c
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
 }
 
+DMPolytopeType
+UnstructuredMesh::get_cell_type(PetscInt el) const
+{
+    DMPolytopeType polytope_type;
+    PETSC_CHECK(DMPlexGetCellType(this->dm, el, &polytope_type));
+    return polytope_type;
+}
+
 void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
