@@ -186,8 +186,6 @@ void
 ExodusIIOutput::write_mesh()
 {
     _F_;
-    DM dm = this->mesh->get_dm();
-
     int n_nodes = this->mesh->get_num_vertices();
     int n_elems = this->mesh->get_num_elements();
 
@@ -198,9 +196,7 @@ ExodusIIOutput::write_mesh()
         n_elem_blk = 1;
 
     PetscInt n_node_sets = this->mesh->get_num_vertex_sets();
-
-    PetscInt n_side_sets;
-    PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_side_sets));
+    PetscInt n_side_sets = this->mesh->get_num_face_sets();
 
     int exo_dim = this->mesh->get_dimension();
     // Visualization SW based on VTK have problems showing 1D, so we cast it like a 2D problem with
@@ -470,8 +466,7 @@ ExodusIIOutput::write_face_sets()
     DMLabel face_sets_label;
     PETSC_CHECK(DMGetLabel(dm, "Face Sets", &face_sets_label));
 
-    PetscInt n_side_sets;
-    PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_side_sets));
+    PetscInt n_side_sets = this->mesh->get_num_face_sets();
     fs_names.resize(n_side_sets);
 
     IS face_sets_is;

@@ -73,6 +73,11 @@ public:
     /// @return Facet name
     const std::string & get_face_set_name(PetscInt id) const;
 
+    /// Get number of face sets
+    ///
+    /// @return Number of face sets
+    PetscInt get_num_face_sets() const;
+
     /// Set face set name
     ///
     /// @param id The ID of the face set

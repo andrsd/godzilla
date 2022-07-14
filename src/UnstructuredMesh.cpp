@@ -133,8 +133,7 @@ UnstructuredMesh::create_face_set_labels(const std::map<int, std::string> & name
     _F_;
     DMLabel fs_label;
     PETSC_CHECK(DMGetLabel(dm, "Face Sets", &fs_label));
-    PetscInt n_fs;
-    PETSC_CHECK(DMGetLabelSize(dm, "Face Sets", &n_fs));
+    PetscInt n_fs = get_num_face_sets();
     IS fs_is;
     PETSC_CHECK(DMLabelGetValueIS(fs_label, &fs_is));
     const PetscInt * fs_ids;
@@ -245,6 +244,14 @@ UnstructuredMesh::get_num_cell_sets() const
     PetscInt n_cells_sets;
     PETSC_CHECK(DMGetLabelSize(this->dm, "Cell Sets", &n_cells_sets));
     return n_cells_sets;
+}
+
+PetscInt
+UnstructuredMesh::get_num_face_sets() const
+{
+    PetscInt n_face_sets;
+    PETSC_CHECK(DMGetLabelSize(this->dm, "Face Sets", &n_face_sets));
+    return n_face_sets;
 }
 
 PetscInt
