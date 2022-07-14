@@ -13,6 +13,7 @@ namespace godzilla {
 
 FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
+    section(nullptr),
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
     a(nullptr)
@@ -51,6 +52,7 @@ FEProblemInterface::init()
     DiscreteProblemInterface::init();
 
     DM dm = this->unstr_mesh->get_dm();
+    PETSC_CHECK(DMGetLocalSection(dm, &this->section));
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -174,6 +176,15 @@ FEProblemInterface::set_field_component_name(PetscInt fid,
     }
     else
         error("Field with ID = '%d' does not exist.", fid);
+}
+
+PetscInt
+FEProblemInterface::get_field_dof(PetscInt point, PetscInt fid) const
+{
+    _F_;
+    PetscInt offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
+    return offset;
 }
 
 const std::string &

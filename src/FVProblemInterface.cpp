@@ -29,12 +29,22 @@ __compute_flux(PetscInt dim,
 
 FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
+    section(nullptr),
     fvm(nullptr)
 {
     _F_;
 }
 
 FVProblemInterface::~FVProblemInterface() {}
+
+void
+FVProblemInterface::init()
+{
+    DiscreteProblemInterface::init();
+
+    DM dm = this->unstr_mesh->get_dm();
+    PETSC_CHECK(DMGetLocalSection(dm, &this->section));
+}
 
 PetscInt
 FVProblemInterface::get_num_fields() const
@@ -147,6 +157,15 @@ FVProblemInterface::set_field_component_name(PetscInt fid,
     }
     else
         error("Field with ID = '%d' does not exist.", fid);
+}
+
+PetscInt
+FVProblemInterface::get_field_dof(PetscInt point, PetscInt fid) const
+{
+    _F_;
+    PetscInt offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
+    return offset;
 }
 
 void

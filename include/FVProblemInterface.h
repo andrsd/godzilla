@@ -23,6 +23,7 @@ public:
     virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
     virtual void
     set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
+    virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
 
     /// Adds a volumetric field
     ///
@@ -33,6 +34,7 @@ public:
     virtual void add_field(PetscInt id, const std::string & name, PetscInt nc);
 
 protected:
+    virtual void init() override;
     virtual void create() override;
     virtual void set_up_ds() override;
 
@@ -56,6 +58,9 @@ protected:
                               PetscInt n_consts,
                               const PetscScalar constants[],
                               PetscScalar flux[]) = 0;
+
+    /// PETSc section
+    PetscSection section;
 
     /// Field information
     struct FieldInfo {

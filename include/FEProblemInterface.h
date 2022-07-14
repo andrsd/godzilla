@@ -30,6 +30,7 @@ public:
     virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
     virtual void
     set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
+    virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
 
     /// Get auxiliary field name
     ///
@@ -112,6 +113,9 @@ protected:
 
     /// Setup volumetric weak form terms
     virtual void set_up_weak_form() = 0;
+
+    /// PETSc section
+    PetscSection section;
 
     /// Quadrature order
     PetscInt qorder;
