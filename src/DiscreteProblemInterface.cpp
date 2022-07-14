@@ -219,4 +219,13 @@ DiscreteProblemInterface::get_coordinates_local() const
     return coord;
 }
 
+void
+DiscreteProblemInterface::build_local_solution_vector(Vec sln) const
+{
+    DM dm = this->unstr_mesh->get_dm();
+    PetscReal time = this->problem->get_time();
+    PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
+    PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, NULL, NULL, NULL));
+}
+
 } // namespace godzilla

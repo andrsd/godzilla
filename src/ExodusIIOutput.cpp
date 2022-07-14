@@ -603,12 +603,8 @@ void
 ExodusIIOutput::write_field_variables()
 {
     _F_;
-    PetscReal time = this->problem->get_time();
     DM dm = this->problem->get_dm();
-    Vec sln;
-    PETSC_CHECK(DMGetLocalVector(dm, &sln));
-    PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
-    PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, NULL, NULL, NULL));
+    Vec sln = this->dpi->get_solution_vector_local();
 
     const PetscScalar * sln_vals;
     PETSC_CHECK(VecGetArrayRead(sln, &sln_vals));
@@ -617,8 +613,6 @@ ExodusIIOutput::write_field_variables()
     write_elem_variables(sln_vals);
 
     PETSC_CHECK(VecRestoreArrayRead(sln, &sln_vals));
-
-    PETSC_CHECK(DMRestoreLocalVector(dm, &sln));
 }
 
 void

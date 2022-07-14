@@ -24,6 +24,7 @@ public:
     virtual void
     set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
     virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
+    virtual Vec get_solution_vector_local() const override;
 
     /// Adds a volumetric field
     ///
@@ -36,6 +37,7 @@ public:
 protected:
     virtual void init() override;
     virtual void create() override;
+    virtual void allocate_objects();
     virtual void set_up_ds() override;
 
     /// Compute flux
@@ -85,6 +87,9 @@ protected:
 
     /// PETSc finite volume object
     PetscFV fvm;
+
+    /// Local solution vector
+    Vec sln;
 
     friend void __compute_flux(PetscInt dim,
                                PetscInt nf,

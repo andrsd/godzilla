@@ -16,7 +16,8 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & par
     section(nullptr),
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
-    a(nullptr)
+    a(nullptr),
+    sln(nullptr)
 {
 }
 
@@ -34,6 +35,8 @@ FEProblemInterface::~FEProblemInterface()
 
     VecDestroy(&this->a);
     DMDestroy(&this->dm_aux);
+
+    VecDestroy(&this->sln);
 }
 
 void
@@ -61,6 +64,13 @@ FEProblemInterface::init()
         PETSC_CHECK(DMCopyDisc(dm, cdm));
         PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
     }
+}
+
+void
+FEProblemInterface::allocate_objects()
+{
+    DM dm = this->unstr_mesh->get_dm();
+    PETSC_CHECK(DMCreateLocalVector(dm, &this->sln));
 }
 
 PetscInt
@@ -123,6 +133,14 @@ FEProblemInterface::get_field_id(const std::string & name) const
         return it->second;
     else
         error("Field '%s' does not exist. Typo?", name);
+}
+
+Vec
+FEProblemInterface::get_solution_vector_local() const
+{
+    _F_;
+    build_local_solution_vector(this->sln);
+    return this->sln;
 }
 
 bool

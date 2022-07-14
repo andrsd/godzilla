@@ -111,6 +111,11 @@ public:
     /// @return coordinate vector
     Vec get_coordinates_local() const;
 
+    /// Get local solution vector
+    ///
+    /// @return Local solution vector
+    virtual Vec get_solution_vector_local() const = 0;
+
 protected:
     virtual void init();
     virtual void create();
@@ -134,6 +139,11 @@ protected:
 
     /// Set up constants
     void set_up_constants();
+
+    /// Build local solution vector
+    ///
+    /// @param sln Global solution vector
+    void build_local_solution_vector(Vec sln) const;
 
     /// Problem this interface is part of
     Problem * problem;

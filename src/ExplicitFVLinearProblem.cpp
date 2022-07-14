@@ -89,6 +89,7 @@ ExplicitFVLinearProblem::allocate_objects()
     DM dm = get_dm();
     PETSC_CHECK(DMCreateGlobalVector(dm, &this->x));
     PETSC_CHECK(PetscObjectSetName((PetscObject) this->x, "sln"));
+    FVProblemInterface::allocate_objects();
 }
 
 void
