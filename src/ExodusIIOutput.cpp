@@ -627,10 +627,9 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
 {
     _F_;
 
-    DM dm = this->problem->get_dm();
     PetscInt n_all_elems = this->mesh->get_num_all_elements();
     PetscInt first, last;
-    PETSC_CHECK(DMPlexGetHeightStratum(dm, this->mesh->get_dimension(), &first, &last));
+    this->mesh->get_vertex_idx_range(first, last);
 
     for (PetscInt n = first; n < last; n++) {
         int exo_var_id = 1;
