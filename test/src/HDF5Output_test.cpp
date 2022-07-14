@@ -69,18 +69,26 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
     public:
         explicit TestMesh(const Parameters & params) : Mesh(params) {}
 
-    protected:
-        virtual void
-        create_dm()
+        DM
+        get_dm() const override
+        {
+            return this->dm;
+        }
+
+        void
+        create() override
         {
             DMDACreate1d(get_comm(), DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &this->dm);
             DMSetUp(this->dm);
         }
 
+    protected:
         virtual void
-        distribute()
+        distribute() override
         {
         }
+
+        DM dm;
     };
 
     class TestProblem : public LinearProblem {

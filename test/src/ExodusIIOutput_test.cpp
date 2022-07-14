@@ -74,17 +74,25 @@ TEST_F(ExodusIIOutputTest, fe_check)
     public:
         explicit TestMesh(const Parameters & params) : Mesh(params) {}
 
-    protected:
-        virtual void
-        create_dm()
+        DM
+        get_dm() const override
+        {
+            return this->dm;
+        }
+
+        void
+        create() override
         {
             DMCreate(get_comm(), &this->dm);
         }
 
+    protected:
         virtual void
-        distribute()
+        distribute() override
         {
         }
+
+        DM dm;
     };
 
     class TestLinearProblem : public Problem {

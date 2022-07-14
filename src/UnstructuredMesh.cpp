@@ -14,6 +14,7 @@ UnstructuredMesh::parameters()
 
 UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     Mesh(parameters),
+    dm(nullptr),
     partition_overlap(0)
 {
     _F_;
@@ -24,16 +25,48 @@ UnstructuredMesh::~UnstructuredMesh()
 {
     _F_;
     PETSC_CHECK(PetscPartitionerDestroy(&this->partitioner));
+    if (this->dm)
+        PETSC_CHECK(DMDestroy(&this->dm));
+}
+
+DM
+UnstructuredMesh::get_dm() const
+{
+    _F_;
+    return this->dm;
 }
 
 void
 UnstructuredMesh::create()
 {
     _F_;
-    Mesh::create();
+    create_dm();
+    PETSC_CHECK(DMSetFromOptions(this->dm));
+    PETSC_CHECK(DMViewFromOptions(dm, NULL, "-dm_view"));
+    PETSC_CHECK(DMSetUp(this->dm));
+    PETSC_CHECK(DMGetDimension(this->dm, &this->dim));
+
     lprintf(9, "Information:");
     lprintf(9, "- vertices: %d", get_num_vertices());
     lprintf(9, "- elements: %d", get_num_elements());
+}
+
+bool
+UnstructuredMesh::has_label(const std::string & name) const
+{
+    _F_;
+    PetscBool exists = PETSC_FALSE;
+    PETSC_CHECK(DMHasLabel(this->dm, name.c_str(), &exists));
+    return exists == PETSC_TRUE;
+}
+
+DMLabel
+UnstructuredMesh::get_label(const std::string & name) const
+{
+    _F_;
+    DMLabel label;
+    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
+    return label;
 }
 
 PetscInt

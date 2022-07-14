@@ -12,7 +12,20 @@ public:
     UnstructuredMesh(const Parameters & parameters);
     virtual ~UnstructuredMesh();
 
+    DM get_dm() const override;
     virtual void create() override;
+
+    /// Check if mesh has label with a name
+    ///
+    /// @param name The name of the label
+    /// @return true if label exists, otherwise false
+    virtual bool has_label(const std::string & name) const;
+
+    /// Get label associated with a name
+    ///
+    /// @param name Label name
+    /// @return DMLabel associated with the `name`
+    virtual DMLabel get_label(const std::string & name) const;
 
     /// Return the number of mesh vertices
     virtual PetscInt get_num_vertices() const;
@@ -108,11 +121,17 @@ public:
     virtual void construct_ghost_cells();
 
 protected:
+    /// Method that builds DM for the mesh
+    virtual void create_dm() = 0;
+
     void create_cell_set(PetscInt id, const std::string & name);
 
     void create_face_set_labels(const std::map<int, std::string> & names);
 
     void create_face_set(PetscInt id);
+
+    /// DM object
+    DM dm;
 
     /// Mesh partitioner
     PetscPartitioner partitioner;
