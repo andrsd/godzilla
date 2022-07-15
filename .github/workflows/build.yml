@@ -1,5 +1,11 @@
 name: build
 
+env:
+  PETSC_VERSION: 3.17.0
+  PETSC_ARCH: arch-godzilla-c-opt
+  PETSC_CACHE_NUM: 9
+  SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+
 on:
   push:
     branches:
@@ -9,39 +15,61 @@ on:
       - main
 
 jobs:
-  linux-clang:
-    runs-on: ubuntu-22.04
-    name: ubuntu-clang
-    env:
-      PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 8
+  build:
+    name: ${{ matrix.os }}-${{ matrix.compiler }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            compiler: gcc
+          - os: ubuntu-22.04
+            compiler: clang
+          - os: macos-10.15
+            compiler: clang
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
-      - name: Install dependencies
+      - name: Install dependencies (linux)
+        if: startsWith(matrix.os, 'ubuntu')
         run: |
           sudo apt-get update -qq
-          sudo apt install llvm-12 libblas-dev liblapack-dev libyaml-cpp-dev libfmt-dev
+          sudo apt install llvm-12 libblas-dev liblapack-dev lcov libyaml-cpp-dev libfmt-dev
+      - name: Install dependencies (macos)
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew install cmake automake lcov llvm@12 yaml-cpp fmt
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
           echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
           echo "CC=mpicc" >> $GITHUB_ENV
           echo "CXX=mpicxx" >> $GITHUB_ENV
+      - name: Setup coverage cmake args (linux)
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          echo "LLVM_COV_PATH=/usr/bin/llvm-cov-12" >> $GITHUB_ENV
+          echo "LLVM_PROFDATA_PATH=/usr/bin/llvm-profdata-12" >> $GITHUB_ENV
+      - name: Setup coverage cmake args (macos)
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          echo "LLVM_COV_PATH=$(brew --prefix)/opt/llvm@12/bin/llvm-cov" >> $GITHUB_ENV
+          echo "LLVM_PROFDATA_PATH=$(brew --prefix)/opt/llvm@12/bin/llvm-profdata" >> $GITHUB_ENV
       - name: Load PETSc
         uses: actions/cache@v2
         with:
           path: ${{ github.workspace }}/petsc
-          key: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-          restore-keys: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          key: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          restore-keys: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
       - name: Configure
         run: |
           cmake -S . -B ${{ github.workspace }}/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
             -DGODZILLA_CODE_COVERAGE=YES \
-            -DLLVM_COV_PATH=/usr/bin/llvm-cov-12 \
-            -DLLVM_PROFDATA_PATH=/usr/bin/llvm-profdata-12
+            -DLLVM_COV_PATH=${LLVM_COV_PATH} \
+            -DLLVM_PROFDATA_PATH=${LLVM_PROFDATA_PATH}
       - name: Build
         run: make -C ${{ github.workspace }}/build
       - name: Run tests
@@ -51,98 +79,11 @@ jobs:
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v2
         with:
-          name: coverage-${{ github.job }}
-          path: ${{ github.workspace }}/build/coverage.info
-
-  linux-gcc:
-    runs-on: ubuntu-22.04
-    name: ubuntu-gcc
-    env:
-      PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 8
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          sudo apt-get update -qq
-          sudo apt install libblas-dev liblapack-dev lcov libyaml-cpp-dev libfmt-dev
-      - name: Setup env
-        run: |
-          echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
-          echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "CC=mpicc" >> $GITHUB_ENV
-          echo "CXX=mpicxx" >> $GITHUB_ENV
-      - name: Load PETSc
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/petsc
-          key: ${{ runner.os }}-gcc-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-          restore-keys: ${{ runner.os }}-gcc-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-      - name: Configure
-        run: |
-          cmake -S . -B ${{ github.workspace }}/build \
-            -DGODZILLA_BUILD_EXAMPLES=YES \
-            -DGODZILLA_BUILD_TESTS=YES \
-            -DGODZILLA_CODE_COVERAGE=YES \
-      - name: Build
-        run: make -C ${{ github.workspace }}/build
-      - name: Run tests
-        run: make -C ${{ github.workspace }}/build test ARGS='-V'
-      - name: Generate code coverage
-        run: make -C ${{ github.workspace }}/build coverage
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-${{ github.job }}
-          path: ${{ github.workspace }}/build/coverage.info
-
-  macosx-clang:
-    runs-on: macos-10.15
-    name: macosx-clang
-    env:
-      PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 8
-      SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-      - name: Install dependencies
-        run: brew install cmake automake lcov llvm@12 yaml-cpp fmt
-      - name: Setup env
-        run: |
-          echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
-          echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "CC=mpicc" >> $GITHUB_ENV
-          echo "CXX=mpicxx" >> $GITHUB_ENV
-      - name: Load PETSc
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/petsc
-          key: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-          restore-keys: ${{ runner.os }}-clang-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-      - name: Configure
-        run: |
-          cmake -S . -B ${{ github.workspace }}/build \
-            -DGODZILLA_BUILD_EXAMPLES=YES \
-            -DGODZILLA_BUILD_TESTS=YES \
-            -DGODZILLA_CODE_COVERAGE=YES \
-            -DLLVM_COV_PATH=$(brew --prefix)/opt/llvm@12/bin/llvm-cov \
-            -DLLVM_PROFDATA_PATH=$(brew --prefix)/opt/llvm@12/bin/llvm-profdata
-      - name: Build
-        run: make -C ${{ github.workspace }}/build
-      - name: Run tests
-        run: make -C ${{ github.workspace }}/build test ARGS='-V'
-      - name: Generate code coverage
-        run: make -C ${{ github.workspace }}/build coverage
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-${{ github.job }}
+          name: coverage-${{ matrix.os }}-${{ matrix.compiler }}
           path: ${{ github.workspace }}/build/coverage.info
 
   upload-to-codecov:
-    needs: [macosx-clang, linux-clang, linux-gcc]
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -155,4 +96,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: 'coverage-macosx-clang/coverage.info,coverage-linux-clang/coverage.info,coverage-linux-gcc/coverage.info'
+          coverage-reports: 'coverage-macos-10.15-clang/coverage.info,coverage-ubuntu-22.04-gcc/coverage.info,coverage-ubuntu-22.04-clang/coverage.info'

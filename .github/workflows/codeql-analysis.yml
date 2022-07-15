@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       PETSC_VERSION: 3.17.0
-      PETSC_CACHE_NUM: 8
+      PETSC_CACHE_NUM: 9
     permissions:
       actions: read
       contents: read
