@@ -39,6 +39,7 @@ add_library(${PROJECT_NAME}
         ImplicitFENonlinearProblem.cpp
         Init.cpp
         InitialCondition.cpp
+        InputFile.cpp
         L2Diff.cpp
         L2FieldDiff.cpp
         LinearInterpolation.cpp
