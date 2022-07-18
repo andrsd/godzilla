@@ -402,8 +402,6 @@ ExodusIIOutput::write_node_sets()
     if (!this->mesh->has_label("Vertex Sets"))
         return;
 
-    DM dm = this->mesh->get_dm();
-
     PetscInt elem_first, elem_last;
     this->mesh->get_element_idx_range(elem_first, elem_last);
     int n_elems_in_block = elem_last - elem_first;
