@@ -355,7 +355,6 @@ void
 ExodusIIOutput::write_elements()
 {
     _F_;
-    DM dm = this->mesh->get_dm();
     std::vector<std::string> block_names;
 
     PetscInt n_cells_sets = this->mesh->get_num_cell_sets();
@@ -603,7 +602,6 @@ void
 ExodusIIOutput::write_field_variables()
 {
     _F_;
-    DM dm = this->problem->get_dm();
     Vec sln = this->dpi->get_solution_vector_local();
 
     const PetscScalar * sln_vals;

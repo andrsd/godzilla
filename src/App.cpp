@@ -20,7 +20,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
     no_colors_switch("", "no-colors", "Do not use terminal colors", false),
     verbosity_level(1),
-    gyml(nullptr)
+    yml(nullptr)
 {
     _F_;
     this->log = new Logger();
@@ -35,7 +35,7 @@ App::App(const std::string & app_name, MPI_Comm comm) :
 App::~App()
 {
     _F_;
-    delete this->gyml;
+    delete this->yml;
     delete this->log;
     Factory::destroy();
 }
@@ -58,15 +58,15 @@ Problem *
 App::get_problem() const
 {
     _F_;
-    assert(this->gyml != nullptr);
-    return this->gyml->get_problem();
+    assert(this->yml != nullptr);
+    return this->yml->get_problem();
 }
 
 void
 App::create()
 {
     _F_;
-    this->gyml->create();
+    this->yml->create();
 }
 
 void
@@ -111,8 +111,8 @@ App::get_comm_size() const
     return this->comm_size;
 }
 
-GYMLFile *
-App::allocate_gyml()
+InputFile *
+App::allocate_input_file()
 {
     _F_;
     return new GYMLFile(this);
@@ -130,7 +130,7 @@ App::run()
     }
 
     if (this->input_file_arg.isSet()) {
-        this->gyml = allocate_gyml();
+        this->yml = allocate_input_file();
         this->input_file_name = this->input_file_arg.getValue();
         run_input_file();
     }
@@ -141,7 +141,7 @@ App::run_input_file()
 {
     _F_;
     if (utils::path_exists(this->input_file_name)) {
-        build_from_gyml();
+        build_from_yml();
         if (this->log->get_num_errors() == 0)
             create();
         check_integrity();
@@ -153,11 +153,11 @@ App::run_input_file()
 }
 
 void
-App::build_from_gyml()
+App::build_from_yml()
 {
     _F_;
-    if (this->gyml->parse(this->input_file_name))
-        this->gyml->build();
+    if (this->yml->parse(this->input_file_name))
+        this->yml->build();
 }
 
 void
@@ -165,7 +165,7 @@ App::check_integrity()
 {
     _F_;
     lprintf(9, "Checking integrity");
-    this->gyml->check();
+    this->yml->check();
     if (this->log->get_num_entries() > 0) {
         this->log->print();
         godzilla::internal::terminate();
@@ -177,7 +177,7 @@ App::run_problem()
 {
     _F_;
     lprintf(9, "Running");
-    Problem * p = this->gyml->get_problem();
+    Problem * p = this->yml->get_problem();
     assert(p != nullptr);
     p->run();
 }

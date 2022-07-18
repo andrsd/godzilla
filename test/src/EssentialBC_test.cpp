@@ -14,7 +14,7 @@ TEST(EssentialBCTest, api)
 
     class TestEssentialBC : public EssentialBC {
     public:
-        TestEssentialBC(const Parameters & pars) : EssentialBC(pars) {}
+        explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars) {}
 
         MOCK_METHOD(
             void,

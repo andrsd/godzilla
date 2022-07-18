@@ -10,7 +10,7 @@
 namespace godzilla {
 
 class Problem;
-class GYMLFile;
+class InputFile;
 
 class App : public PrintInterface {
 public:
@@ -85,17 +85,17 @@ public:
     build_object(const std::string & class_name, const std::string & name, Parameters * parameters);
 
 protected:
-    /// Builds a GYMLFile instance
-    virtual GYMLFile * allocate_gyml();
+    /// Builds an InputFile instance
+    virtual InputFile * allocate_input_file();
 
     /// Create method can be used to additional object allocation, etc. needed before the
     /// application runs
     virtual void create();
 
-    /// Build application objects from a GYML file
+    /// Build application objects from an input file
     ///
-    /// @param file_name The GYML file name
-    virtual void build_from_gyml();
+    /// @param file_name The input file name
+    virtual void build_from_yml();
 
     /// Check integrity of the application
     virtual void check_integrity();
@@ -105,7 +105,7 @@ protected:
     /// This is the method that will be called wehn user specify -i command line parameter
     virtual void run_input_file();
 
-    /// Run the problem build via `build_from_gyml`
+    /// Run the problem build via `build_from_yml`
     virtual void run_problem();
 
     /// Application name
@@ -141,8 +141,8 @@ protected:
     /// Input file name
     std::string input_file_name;
 
-    /// YML file with application config
-    GYMLFile * gyml;
+    /// YML file with application objects
+    InputFile * yml;
 };
 
 template <typename T>

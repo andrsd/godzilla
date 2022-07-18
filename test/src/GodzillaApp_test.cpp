@@ -108,7 +108,7 @@ TEST_F(GodzillaAppTest, check_integrity)
         void
         run()
         {
-            this->gyml = allocate_gyml();
+            this->yml = allocate_input_file();
             this->log->error("error1");
             check_integrity();
         }
@@ -131,7 +131,7 @@ TEST_F(GodzillaAppTest, run_problem)
         void
         set_problem(Problem * prob)
         {
-            this->gyml = new TestFile(this, prob);
+            this->yml = new TestFile(this, prob);
         }
 
         void

@@ -1,88 +1,29 @@
 #pragma once
 
-#include <string>
 #include "yaml-cpp/yaml.h"
-#include "Parameters.h"
-#include "LoggingInterface.h"
-#include "PrintInterface.h"
+#include "InputFile.h"
 
 namespace godzilla {
 
 class App;
-class Factory;
-class Object;
-class Mesh;
-class Problem;
-class Function;
 
-/// YML parser for input files
+/// Generic YML input file
 ///
-class GYMLFile : public PrintInterface, public LoggingInterface {
+class GYMLFile : public InputFile {
 public:
     GYMLFile(const App * app);
 
-    /// Parse the YML file
-    ///
-    /// @return `true` if successful, otherwise `false`
-    virtual bool parse(const std::string & file_name);
-    /// create
-    virtual void create();
-    /// check
-    virtual void check();
-    /// build the simulation
-    virtual void build();
-
-    virtual Mesh * get_mesh();
-    virtual Problem * get_problem();
+    virtual void build() override;
 
 protected:
-    void add_object(Object * obj);
     void build_functions();
-    void build_mesh();
     void build_problem();
     void build_partitioner();
     void build_auxiliary_fields();
     void build_initial_conditions();
     void build_boundary_conditions();
     void build_postprocessors();
-    void build_outputs();
     void build_ts_adapt(const YAML::Node & problem_node);
-    Parameters * build_params(const YAML::Node & root, const std::string & name);
-    void set_parameter_from_yml(Parameters * params,
-                                const YAML::Node & node,
-                                const std::string & param_name);
-
-    /// Read a boolean parameter from a YAML file
-    bool read_bool_value(const std::string & param_name, const YAML::Node & val_node);
-
-    /// Read a vector-valued parameter from a YAML file
-    ///
-    /// If users specify a vector-valued parameter as a single value, we read in the single value
-    /// but convert it into a vector with one element.
-    template <typename T>
-    std::vector<T> read_vector_value(const std::string & param_name, const YAML::Node & val_node);
-
-    /// Read a map from a YAML file
-    ///
-    template <typename K, typename V>
-    std::map<K, V> read_map_value(const std::string & param_name, const YAML::Node & val_node);
-
-    void check_params(const Parameters * params,
-                      const std::string & name,
-                      std::set<std::string> & unused_param_names);
-
-    /// Application object
-    const godzilla::App * app;
-    /// Root node of the YML file
-    YAML::Node root;
-    /// Mesh object
-    Mesh * mesh;
-    /// Problem object
-    Problem * problem;
-    /// List of all objects built from the input file
-    std::vector<Object *> objects;
-    /// Names of object with correct parameters
-    std::set<std::string> valid_param_object_names;
 };
 
 } // namespace godzilla
