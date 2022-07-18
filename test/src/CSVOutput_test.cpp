@@ -8,7 +8,7 @@ namespace {
 
 class TestCSVOutput : public CSVOutput {
 public:
-    TestCSVOutput(const Parameters & pars) : CSVOutput(pars) {}
+    explicit TestCSVOutput(const Parameters & pars) : CSVOutput(pars) {}
     void
     close()
     {
@@ -63,7 +63,7 @@ TEST_F(CSVOutputTest, output)
 {
     class TestPostprocessor : public Postprocessor {
     public:
-        TestPostprocessor(const Parameters & pars) : Postprocessor(pars) {}
+        explicit TestPostprocessor(const Parameters & pars) : Postprocessor(pars) {}
         virtual void compute() {};
         virtual PetscReal
         get_value()
