@@ -31,19 +31,12 @@ NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryConditio
     _F_;
 }
 
-DMBoundaryConditionType
-NaturalRiemannBC::get_bc_type() const
-{
-    _F_;
-    return DM_BC_NATURAL_RIEMANN;
-}
-
 void
 NaturalRiemannBC::set_up_callback()
 {
     _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   get_bc_type(),
+                                   DM_BC_NATURAL_RIEMANN,
                                    get_name().c_str(),
                                    this->label,
                                    this->n_ids,

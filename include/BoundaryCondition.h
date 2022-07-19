@@ -31,11 +31,6 @@ public:
     /// @return The number of constrained components
     virtual PetscInt get_num_components() const = 0;
 
-    /// Get the type of this boundary condition
-    ///
-    /// @return Type of boundary condition
-    virtual DMBoundaryConditionType get_bc_type() const = 0;
-
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers

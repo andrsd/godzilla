@@ -11,8 +11,6 @@ class EssentialBC : public BoundaryCondition {
 public:
     EssentialBC(const Parameters & params);
 
-    virtual DMBoundaryConditionType get_bc_type() const override;
-
     /// Evaluate the boundary condition
     ///
     /// @param dim The spatial dimension

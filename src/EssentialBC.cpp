@@ -46,13 +46,6 @@ EssentialBC::EssentialBC(const Parameters & params) : BoundaryCondition(params)
     _F_;
 }
 
-DMBoundaryConditionType
-EssentialBC::get_bc_type() const
-{
-    _F_;
-    return DM_BC_ESSENTIAL;
-}
-
 PetscFunc *
 EssentialBC::get_function()
 {

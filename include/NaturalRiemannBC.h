@@ -10,8 +10,6 @@ class NaturalRiemannBC : public BoundaryCondition {
 public:
     NaturalRiemannBC(const Parameters & params);
 
-    virtual DMBoundaryConditionType get_bc_type() const override;
-
     /// Evaluate the boundary condition
     ///
     /// @param time The time at which to sample

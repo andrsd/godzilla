@@ -10,8 +10,6 @@ class NaturalBC : public BoundaryCondition {
 public:
     NaturalBC(const Parameters & params);
 
-    virtual DMBoundaryConditionType get_bc_type() const override;
-
 protected:
     /// Set residual statement for the boundary integral
     ///

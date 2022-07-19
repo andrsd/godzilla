@@ -67,7 +67,6 @@ TEST(EssentialBCTest, api)
     auto comps = bc.get_components();
     EXPECT_EQ(comps.size(), 1);
     EXPECT_EQ(comps[0], 0);
-    EXPECT_EQ(bc.get_bc_type(), DM_BC_ESSENTIAL);
 
     PetscReal x[] = { 3 };
     PetscScalar u[] = { 0 };

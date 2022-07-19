@@ -55,7 +55,6 @@ TEST(NaturalBCTest, api)
     bc.create();
 
     EXPECT_EQ(bc.get_num_components(), 2);
-    EXPECT_EQ(bc.get_bc_type(), DM_BC_NATURAL);
 
     std::vector<PetscInt> comps = bc.get_components();
     EXPECT_EQ(comps[0], 3);
