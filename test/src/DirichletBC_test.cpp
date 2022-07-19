@@ -35,7 +35,6 @@ TEST(DirichletBCTest, api)
     obj.create();
 
     EXPECT_EQ(obj.get_num_components(), 1);
-    EXPECT_EQ(obj.get_bc_type(), DM_BC_ESSENTIAL);
 
     PetscInt dim = 3;
     PetscReal time = 2.5;

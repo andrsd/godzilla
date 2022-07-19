@@ -15,19 +15,12 @@ NaturalBC::NaturalBC(const Parameters & params) : BoundaryCondition(params), wf(
     _F_;
 }
 
-DMBoundaryConditionType
-NaturalBC::get_bc_type() const
-{
-    _F_;
-    return DM_BC_NATURAL;
-}
-
 void
 NaturalBC::set_up_callback()
 {
     _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   get_bc_type(),
+                                   DM_BC_NATURAL,
                                    get_name().c_str(),
                                    this->label,
                                    this->n_ids,

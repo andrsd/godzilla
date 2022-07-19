@@ -102,7 +102,6 @@ TEST(NaturalRiemannBCTest, api)
     mesh.create();
     prob.create();
 
-    EXPECT_EQ(bc.get_bc_type(), DM_BC_NATURAL_RIEMANN);
     EXPECT_EQ(bc.get_num_components(), 1);
     EXPECT_THAT(bc.get_components(), testing::ElementsAre(0));
 }

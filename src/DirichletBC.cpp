@@ -72,7 +72,7 @@ DirichletBC::set_up_callback()
 {
     _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   get_bc_type(),
+                                   DM_BC_ESSENTIAL,
                                    get_name().c_str(),
                                    this->label,
                                    this->n_ids,
