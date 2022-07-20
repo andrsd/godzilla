@@ -148,6 +148,14 @@ install(
         PATTERN "*.h"
 )
 
+install(
+    DIRECTORY
+        ${CMAKE_SOURCE_DIR}/contrib/h5pp
+    DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}
+    FILES_MATCHING
+        PATTERN "*.h"
+)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
