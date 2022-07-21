@@ -45,7 +45,10 @@ protected:
     void set_parameter_from_yml(Parameters * params,
                                 const YAML::Node & node,
                                 const std::string & param_name);
-
+    virtual void set_app_defined_param(Parameters * params,
+                                       const std::string & name,
+                                       const std::string & type,
+                                       const YAML::Node & val);
     /// Read a boolean parameter from a YAML file
     bool read_bool_value(const std::string & param_name, const YAML::Node & val_node);
 
