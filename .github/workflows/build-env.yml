@@ -3,7 +3,7 @@ name: build-env
 env:
   PETSC_VERSION: 3.17.0
   PETSC_ARCH: arch-godzilla-c-opt
-  PETSC_CACHE_NUM: 9
+  PETSC_CACHE_NUM: 10
 
 on: [workflow_dispatch]
 
@@ -18,7 +18,7 @@ jobs:
             compiler: gcc
           - os: ubuntu-22.04
             compiler: clang
-          - os: macos-10.15
+          - os: macos-11
             compiler: clang
     runs-on: ${{ matrix.os }}
     steps:
