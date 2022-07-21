@@ -19,5 +19,13 @@ std::string to_upper(const std::string & name);
  */
 std::string to_lower(const std::string & name);
 
+/**
+ * Check if string `str` ends with `suffix`
+ *
+ * @param str String to check
+ * @param suffix The expected suffix
+ */
+bool has_suffix(const std::string & str, const std::string & suffix);
+
 } // namespace utils
 } // namespace godzilla
