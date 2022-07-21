@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <typeinfo>
 
 namespace godzilla {
 namespace utils {
@@ -26,6 +27,13 @@ std::string to_lower(const std::string & name);
  * @param suffix The expected suffix
  */
 bool has_suffix(const std::string & str, const std::string & suffix);
+
+template <typename T>
+std::string
+type_name()
+{
+    return typeid(T).name();
+}
 
 } // namespace utils
 } // namespace godzilla

@@ -11,13 +11,6 @@
 #include "fmt/format.h"
 #include "yaml-cpp/node/iterator.h"
 
-template <typename T>
-std::string
-type_name()
-{
-    return typeid(T).name();
-}
-
 namespace godzilla {
 
 InputFile::InputFile(const App * app) :
@@ -185,39 +178,49 @@ InputFile::set_parameter_from_yml(Parameters * params,
     if (val) {
         const std::string & param_type = params->type(param_name);
 
-        if (param_type == type_name<std::string>())
+        if (param_type == utils::type_name<std::string>())
             params->set<std::string>(param_name) = val.as<std::string>();
-        else if (param_type == type_name<PetscReal>())
+        else if (param_type == utils::type_name<PetscReal>())
             params->set<PetscReal>(param_name) = val.as<double>();
-        else if (param_type == type_name<PetscInt>())
+        else if (param_type == utils::type_name<PetscInt>())
             params->set<PetscInt>(param_name) = val.as<PetscInt>();
-        else if (param_type == type_name<int>())
+        else if (param_type == utils::type_name<int>())
             params->set<int>(param_name) = val.as<int>();
-        else if (param_type == type_name<unsigned int>())
+        else if (param_type == utils::type_name<unsigned int>())
             params->set<unsigned int>(param_name) = val.as<unsigned int>();
         // vector values
-        else if (param_type == type_name<std::vector<PetscReal>>())
+        else if (param_type == utils::type_name<std::vector<PetscReal>>())
             params->set<std::vector<PetscReal>>(param_name) =
                 read_vector_value<double>(param_name, val);
-        else if (param_type == type_name<std::vector<PetscInt>>())
+        else if (param_type == utils::type_name<std::vector<PetscInt>>())
             params->set<std::vector<PetscInt>>(param_name) =
                 read_vector_value<PetscInt>(param_name, val);
-        else if (param_type == type_name<std::vector<int>>())
+        else if (param_type == utils::type_name<std::vector<int>>())
             params->set<std::vector<int>>(param_name) = read_vector_value<int>(param_name, val);
-        else if (param_type == type_name<std::vector<std::string>>())
+        else if (param_type == utils::type_name<std::vector<std::string>>())
             params->set<std::vector<std::string>>(param_name) =
                 read_vector_value<std::string>(param_name, val);
         // maps
-        else if (param_type == type_name<std::map<std::string, std::vector<std::string>>>())
+        else if (param_type == utils::type_name<std::map<std::string, std::vector<std::string>>>())
             params->set<std::map<std::string, std::vector<std::string>>>(param_name) =
                 read_map_value<std::string, std::vector<std::string>>(param_name, val);
-        else if (param_type == type_name<std::map<std::string, PetscReal>>())
+        else if (param_type == utils::type_name<std::map<std::string, PetscReal>>())
             params->set<std::map<std::string, PetscReal>>(param_name) =
                 read_map_value<std::string, PetscReal>(param_name, val);
         // bools
-        else if (param_type == type_name<bool>())
+        else if (param_type == utils::type_name<bool>())
             params->set<bool>(param_name) = read_bool_value(param_name, val);
+        else
+            set_app_defined_param(params, param_name, param_type, val);
     }
+}
+
+void
+InputFile::set_app_defined_param(Parameters * params,
+                                 const std::string & name,
+                                 const std::string & type,
+                                 const YAML::Node & val)
+{
 }
 
 bool
