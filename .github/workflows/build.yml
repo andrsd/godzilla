@@ -3,8 +3,7 @@ name: build
 env:
   PETSC_VERSION: 3.17.0
   PETSC_ARCH: arch-godzilla-c-opt
-  PETSC_CACHE_NUM: 9
-  SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk
+  PETSC_CACHE_NUM: 10
 
 on:
   push:
@@ -25,7 +24,7 @@ jobs:
             compiler: gcc
           - os: ubuntu-22.04
             compiler: clang
-          - os: macos-10.15
+          - os: macos-11
             compiler: clang
     runs-on: ${{ matrix.os }}
     steps:
@@ -39,7 +38,7 @@ jobs:
       - name: Install dependencies (macos)
         if: startsWith(matrix.os, 'macos')
         run: |
-          brew install cmake automake lcov llvm@12 yaml-cpp fmt
+          brew install automake lcov yaml-cpp fmt
       - name: Setup env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
@@ -54,8 +53,8 @@ jobs:
       - name: Setup coverage cmake args (macos)
         if: startsWith(matrix.os, 'macos')
         run: |
-          echo "LLVM_COV_PATH=$(brew --prefix)/opt/llvm@12/bin/llvm-cov" >> $GITHUB_ENV
-          echo "LLVM_PROFDATA_PATH=$(brew --prefix)/opt/llvm@12/bin/llvm-profdata" >> $GITHUB_ENV
+          echo "LLVM_COV_PATH=$(brew --cellar)/llvm/14.0.6_1/bin/llvm-cov" >> $GITHUB_ENV
+          echo "LLVM_PROFDATA_PATH=$(brew --cellar)/llvm/14.0.6_1/bin/llvm-profdata" >> $GITHUB_ENV
       - name: Load PETSc
         uses: actions/cache@v2
         with:
@@ -75,9 +74,11 @@ jobs:
       - name: Run tests
         run: make -C ${{ github.workspace }}/build test ARGS='-V'
       - name: Generate code coverage
+        if: startsWith(matrix.os, 'ubuntu')
         run: make -C ${{ github.workspace }}/build coverage
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v2
+        if: startsWith(matrix.os, 'ubuntu')
         with:
           name: coverage-${{ matrix.os }}-${{ matrix.compiler }}
           path: ${{ github.workspace }}/build/coverage.info
@@ -96,4 +97,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: 'coverage-macos-10.15-clang/coverage.info,coverage-ubuntu-22.04-gcc/coverage.info,coverage-ubuntu-22.04-clang/coverage.info'
+          coverage-reports: 'coverage-ubuntu-22.04-gcc/coverage.info,coverage-ubuntu-22.04-clang/coverage.info'
