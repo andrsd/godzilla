@@ -100,6 +100,9 @@ protected:
     /// Check integrity of the application
     virtual void check_integrity();
 
+    /// Process command line
+    virtual void process_command_line();
+
     /// Run the input file
     ///
     /// This is the method that will be called wehn user specify -i command line parameter
