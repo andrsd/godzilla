@@ -119,28 +119,32 @@ App::allocate_input_file()
 }
 
 void
-App::run()
+App::process_command_line()
 {
-    _F_;
     if (this->no_colors_switch.getValue())
         Terminal::num_colors = 1;
 
-    if (this->verbose_arg.isSet()) {
+    if (this->verbose_arg.isSet())
         this->verbosity_level = this->verbose_arg.getValue();
-    }
+}
 
-    if (this->input_file_arg.isSet()) {
-        this->yml = allocate_input_file();
-        this->input_file_name = this->input_file_arg.getValue();
+void
+App::run()
+{
+    _F_;
+    process_command_line();
+
+    if (this->input_file_arg.isSet())
         run_input_file();
-    }
 }
 
 void
 App::run_input_file()
 {
     _F_;
-    if (utils::path_exists(this->input_file_name)) {
+    if (utils::path_exists(this->input_file_arg.getValue())) {
+        this->yml = allocate_input_file();
+        this->input_file_name = this->input_file_arg.getValue();
         build_from_yml();
         if (this->log->get_num_errors() == 0)
             create();
