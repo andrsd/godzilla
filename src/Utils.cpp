@@ -40,5 +40,11 @@ has_suffix(const std::string & str, const std::string & suffix)
            str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
 }
 
+bool
+has_prefix(const std::string & str, const std::string & prefix)
+{
+    return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
+}
+
 } // namespace utils
 } // namespace godzilla

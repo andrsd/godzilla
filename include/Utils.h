@@ -28,6 +28,14 @@ std::string to_lower(const std::string & name);
  */
 bool has_suffix(const std::string & str, const std::string & suffix);
 
+/**
+ * Check if string `str` starts with `prefix`
+ *
+ * @param str String to check
+ * @param prefix The expected prefix
+ */
+bool has_prefix(const std::string & str, const std::string & prefix);
+
 template <typename T>
 std::string
 type_name()

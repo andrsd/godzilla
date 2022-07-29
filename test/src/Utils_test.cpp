@@ -19,3 +19,10 @@ TEST(UtilsTest, has_suffix)
     EXPECT_FALSE(utils::has_suffix("asdf", "long_string"));
     EXPECT_FALSE(utils::has_suffix("asdf", "as"));
 }
+
+TEST(UtilsTest, has_prefix)
+{
+    EXPECT_TRUE(utils::has_prefix("asdf", "as"));
+    EXPECT_FALSE(utils::has_prefix("asdf", "long_string"));
+    EXPECT_FALSE(utils::has_prefix("asdf", "df"));
+}
