@@ -8,6 +8,9 @@ find_program(
 mark_as_advanced(FORCE
     EXODIFF
 )
+if (${EXODIFF} STREQUAL EXODIFF-NOTFOUND)
+    message(FATAL_ERROR "Unable to find exodiff")
+endif()
 
 # Adds an EXODIFF test
 #
