@@ -1,9 +1,8 @@
 name: build
 
 env:
-  PETSC_VERSION: 3.17.0
-  PETSC_ARCH: arch-godzilla-c-opt
-  PETSC_CACHE_NUM: 10
+  SEACAS_VERSION: 2022-08-01
+  PETSC_VERSION: 3.18.0
 
 on:
   push:
@@ -15,137 +14,97 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.os }}-${{ matrix.compiler }}
+    name: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-22.04
-            compiler: gcc
-          - os: ubuntu-22.04
-            compiler: clang
+            compiler: gnu
           - os: macos-11
             compiler: clang
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-
-      - name: Install dependencies (linux)
-        if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          sudo apt-get update -qq
-          sudo apt install llvm-12 libblas-dev liblapack-dev lcov libyaml-cpp-dev libfmt-dev
-
-      - name: Install dependencies (macos)
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          brew install automake lcov yaml-cpp fmt
-
-      - name: Setup env
-        run: |
-          echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
-          echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-
-      - name: Setup env (C/C++)
-        if: startsWith(matrix.os, 'ubuntu') && matrix.compiler == 'clang'
-        run: |
-          echo "CC=clang-12" >> $GITHUB_ENV
-          echo "CXX=clang++-12" >> $GITHUB_ENV
-
-      - name: Setup env (C/C++)
-        if: startsWith(matrix.os, 'ubuntu') && matrix.compiler == 'gcc'
-        run: |
-          echo "CC=gcc" >> $GITHUB_ENV
-          echo "CXX=g++" >> $GITHUB_ENV
-
-      - name: Setup env (C/C++)
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          echo "CC=clang" >> $GITHUB_ENV
-          echo "CXX=clang++" >> $GITHUB_ENV
-
-      - name: Setup env (fortran)
-        run: |
-          echo "FC=gfortran-10" >> $GITHUB_ENV
-
-      - name: Setup coverage cmake args (linux)
-        if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          echo "LLVM_COV_PATH=/usr/bin/llvm-cov-12" >> $GITHUB_ENV
-          echo "LLVM_PROFDATA_PATH=/usr/bin/llvm-profdata-12" >> $GITHUB_ENV
-
-      - name: Setup coverage cmake args (macos)
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          echo "LLVM_COV_PATH=$(brew --cellar)/llvm/14.0.6_1/bin/llvm-cov" >> $GITHUB_ENV
-          echo "LLVM_PROFDATA_PATH=$(brew --cellar)/llvm/14.0.6_1/bin/llvm-profdata" >> $GITHUB_ENV
-
-      - name: Cache PETSc
-        id: cache-petsc
-        uses: actions/cache@v3
         with:
-          path: ${{ github.workspace }}/petsc
-          key: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-          restore-keys: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          path: main
 
-      - name: Build PETSc
-        if: steps.cache-petsc.outputs.cache-hit != 'true'
+      - name: Set up conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: 3.9
+          channels: conda-forge,defaults
+
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          conda install \
+            cmake \
+            make \
+            fmt \
+            clang-14 \
+            mpich-mpicc \
+            mpich-mpicxx \
+            mpich-mpifort \
+            netcdf4 \
+            petsc=${PETSC_VERSION} \
+            yaml-cpp
+
+      - name: Build exodusII
+        shell: bash -l {0}
         run: |
           cd ${{ github.workspace }}
-          wget -q https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
-          tar -xzf petsc-${PETSC_VERSION}.tar.gz
-          cd petsc-${PETSC_VERSION}
-          echo "::group::configure"
-          ./configure \
-            --prefix=${{ github.workspace }}/petsc \
-            --shared-libraries \
-            --with-debugging=no \
-            --with-cxx-dialect=cxx14 \
-            --with-pic=yes \
-            --with-ssl=no \
-            --download-cmake \
-            --download-mpich \
-            --download-exodusii \
-            --download-netcdf \
-            --download-pnetcdf \
-            --download-hdf5 \
-            --download-zlib \
-            --CC=$CC \
-            --CXX=$CXX \
-            --FC=$FC \
-            PETSC_DIR=`pwd`
+          echo "::group::download"
+          wget https://github.com/sandialabs/seacas/archive/v${SEACAS_VERSION}.tar.gz
+          tar -xzf v${SEACAS_VERSION}.tar.gz
           echo "::endgroup::"
-          echo "::group::make"
-          make PETSC_DIR=`pwd` all
-          make PETSC_DIR=`pwd` install
+          cd seacas-${SEACAS_VERSION}
+          echo "::group::configure"
+          export CMAKE_PREFIX_PATH=$CONDA_PREFIX
+          export ACCESS=${{ github.workspace }}/seacas-${SEACAS_VERSION}
+          export INSTALL_PATH=$CONDA_PREFIX
+          export SHARED=YES
+          export MPI=YES
+          export COMPILER=${{ matrix.compiler }}
+          ./cmake-exodus \
+            -DSeacas_ENABLE_SEACASExodiff=ON \
+            -DSeacas_ENABLE_SEACASExotxt=ON \
+            -DSeacas_ENABLE_TESTS=NO \
+            -B build -S
+          echo "::endgroup::"
+          echo "::group::make install"
+          make -C ${{ github.workspace }}/seacas-${SEACAS_VERSION}/build install
           echo "::endgroup::"
 
       - name: Configure
+        shell: bash -l {0}
+        env:
+          CC: mpicc
+          CXX: mpicxx
         run: |
-          cmake -S . -B ${{ github.workspace }}/build \
+          cmake -S ${{ github.workspace }}/main -B ${{ github.workspace }}/main/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
-            -DGODZILLA_CODE_COVERAGE=YES \
-            -DLLVM_COV_PATH=${LLVM_COV_PATH} \
-            -DLLVM_PROFDATA_PATH=${LLVM_PROFDATA_PATH}
+            -DGODZILLA_CODE_COVERAGE=YES
 
       - name: Build
-        run: make -C ${{ github.workspace }}/build
+        shell: bash -l {0}
+        run: make -C ${{ github.workspace }}/main/build
 
       - name: Run tests
-        run: make -C ${{ github.workspace }}/build test ARGS='-V'
+        shell: bash -l {0}
+        run: make -C ${{ github.workspace }}/main/build test ARGS='-V'
 
       - name: Generate code coverage
-        if: startsWith(matrix.os, 'ubuntu')
-        run: make -C ${{ github.workspace }}/build coverage
+        shell: bash -l {0}
+        run: make -C ${{ github.workspace }}/main/build coverage
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v2
-        if: startsWith(matrix.os, 'ubuntu')
         with:
-          name: coverage-${{ matrix.os }}-${{ matrix.compiler }}
-          path: ${{ github.workspace }}/build/coverage.info
+          name: coverage-${{ matrix.os }}
+          path: ${{ github.workspace }}/main/build/coverage.info
 
   upload-to-codecov:
     needs: [build]
@@ -164,4 +123,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: 'coverage-ubuntu-22.04-gcc/coverage.info,coverage-ubuntu-22.04-clang/coverage.info'
+          coverage-reports: 'coverage-ubuntu-22.04/coverage.info,coverage-macos-11/coverage.info'
