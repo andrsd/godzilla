@@ -1,8 +1,8 @@
 name: build
 
 env:
-  SEACAS_VERSION: 2022-08-01
-  PETSC_VERSION: 3.18.0
+  PETSC_VERSION: 3.17.0
+  PETSC_CACHE_NUM: 10
 
 on:
   push:
@@ -14,13 +14,12 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-22.04
-            compiler: gnu
+            compiler: gcc
           - os: macos-11
             compiler: clang
     runs-on: ${{ matrix.os }}
@@ -30,58 +29,92 @@ jobs:
         with:
           path: main
 
-      - name: Set up conda
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          python-version: 3.9
-          channels: conda-forge,defaults
+      - name: Install dependencies
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update -qq
+          sudo apt install \
+            cmake \
+            libblas-dev \
+            liblapack-dev \
+            libfmt-dev \
+            libyaml-cpp-dev \
+            zlib1g-dev
 
       - name: Install dependencies
-        shell: bash -l {0}
+        if: startsWith(matrix.os, 'macos')
         run: |
-          conda install \
+          brew install \
             cmake \
-            make \
+            automake \
             fmt \
-            clang-14 \
-            mpich-mpicc \
-            mpich-mpicxx \
-            mpich-mpifort \
-            netcdf4 \
-            petsc=${PETSC_VERSION} \
-            yaml-cpp
+            yaml-cpp \
+            zlib
 
-      - name: Build exodusII
-        shell: bash -l {0}
+      - name: Set up env (clang)
+        if: matrix.compiler == 'clang'
+        run: |
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+          echo "FC=gfortran-10" >> $GITHUB_ENV
+
+      - name: Set up env (gcc)
+        if: matrix.compiler == 'gcc'
+        run: |
+          echo "CC=gcc" >> $GITHUB_ENV
+          echo "CXX=g++" >> $GITHUB_ENV
+          echo "FC=gfortran-10" >> $GITHUB_ENV
+
+      - name: Cache PETSc
+        id: cache-petsc
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/petsc
+          key: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          restore-keys: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+
+      - name: Build PETSc
+        if: steps.cache-petsc.outputs.cache-hit != 'true'
         run: |
           cd ${{ github.workspace }}
           echo "::group::download"
-          wget https://github.com/sandialabs/seacas/archive/v${SEACAS_VERSION}.tar.gz
-          tar -xzf v${SEACAS_VERSION}.tar.gz
+          wget -q https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
+          tar -xzf petsc-${PETSC_VERSION}.tar.gz
           echo "::endgroup::"
-          cd seacas-${SEACAS_VERSION}
+          cd petsc-${PETSC_VERSION}
           echo "::group::configure"
-          export CMAKE_PREFIX_PATH=$CONDA_PREFIX
-          export ACCESS=${{ github.workspace }}/seacas-${SEACAS_VERSION}
-          export INSTALL_PATH=$CONDA_PREFIX
-          export SHARED=YES
-          export MPI=YES
-          export COMPILER=${{ matrix.compiler }}
-          ./cmake-exodus \
-            -DSeacas_ENABLE_SEACASExodiff=ON \
-            -DSeacas_ENABLE_SEACASExotxt=ON \
-            -DSeacas_ENABLE_TESTS=NO \
-            -B build -S
+          ./configure \
+            --prefix=${{ github.workspace }}/petsc \
+            --shared-libraries \
+            --with-debugging=no \
+            --with-cxx-dialect=cxx14 \
+            --with-pic=yes \
+            --with-ssl=no \
+            --with-zlib=yes \
+            --with-x=no \
+            --download-mpich \
+            --download-exodusii \
+            --download-netcdf \
+            --download-pnetcdf \
+            --download-hdf5 \
+            --CC=$CC \
+            --CXX=$CXX \
+            --FC=$FC \
+            PETSC_DIR=`pwd`
           echo "::endgroup::"
-          echo "::group::make install"
-          make -C ${{ github.workspace }}/seacas-${SEACAS_VERSION}/build install
+          echo "::group::make"
+          make PETSC_DIR=`pwd` all
+          make PETSC_DIR=`pwd` install
           echo "::endgroup::"
 
+      - name: Set up env
+        run: |
+          echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
+          echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
+          echo "CC=mpicc" >> $GITHUB_ENV
+          echo "CXX=mpicxx" >> $GITHUB_ENV
+
       - name: Configure
-        shell: bash -l {0}
-        env:
-          CC: mpicc
-          CXX: mpicxx
         run: |
           cmake -S ${{ github.workspace }}/main -B ${{ github.workspace }}/main/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
@@ -89,38 +122,7 @@ jobs:
             -DGODZILLA_CODE_COVERAGE=YES
 
       - name: Build
-        shell: bash -l {0}
         run: make -C ${{ github.workspace }}/main/build
 
       - name: Run tests
-        shell: bash -l {0}
         run: make -C ${{ github.workspace }}/main/build test ARGS='-V'
-
-      - name: Generate code coverage
-        shell: bash -l {0}
-        run: make -C ${{ github.workspace }}/main/build coverage
-
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage-${{ matrix.os }}
-          path: ${{ github.workspace }}/main/build/coverage.info
-
-  upload-to-codecov:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v2
-
-      - name: Run codacy-coverage-reporter
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: 'coverage-ubuntu-22.04/coverage.info,coverage-macos-11/coverage.info'
