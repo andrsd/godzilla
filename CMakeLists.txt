@@ -13,11 +13,15 @@ include(FetchContent)
 include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 
+option(GODZILLA_WITH_MPI "Build with MPI support" YES)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
 find_package(fmt REQUIRED)
 find_package(yaml-cpp REQUIRED)
+if (GODZILLA_WITH_MPI)
+    find_package(MPI REQUIRED)
+endif()
 
 find_package(PETSc)
 if (NOT ${PETSC_FOUND})

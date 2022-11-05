@@ -2,7 +2,6 @@ name: build
 
 env:
   PETSC_VERSION: 3.17.0
-  PETSC_ARCH: arch-godzilla-c-opt
   PETSC_CACHE_NUM: 10
 
 on:
@@ -15,86 +14,115 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.os }}-${{ matrix.compiler }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-22.04
             compiler: gcc
-          - os: ubuntu-22.04
-            compiler: clang
           - os: macos-11
             compiler: clang
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-      - name: Install dependencies (linux)
+        with:
+          path: main
+
+      - name: Install dependencies
         if: startsWith(matrix.os, 'ubuntu')
         run: |
           sudo apt-get update -qq
-          sudo apt install llvm-12 libblas-dev liblapack-dev lcov libyaml-cpp-dev libfmt-dev
-      - name: Install dependencies (macos)
+          sudo apt install \
+            cmake \
+            libblas-dev \
+            liblapack-dev \
+            libfmt-dev \
+            libyaml-cpp-dev \
+            zlib1g-dev
+
+      - name: Install dependencies
         if: startsWith(matrix.os, 'macos')
         run: |
-          brew install automake lcov yaml-cpp fmt
-      - name: Setup env
+          brew install \
+            cmake \
+            automake \
+            fmt \
+            yaml-cpp \
+            zlib
+
+      - name: Set up env (clang)
+        if: matrix.compiler == 'clang'
+        run: |
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
+          echo "FC=gfortran-10" >> $GITHUB_ENV
+
+      - name: Set up env (gcc)
+        if: matrix.compiler == 'gcc'
+        run: |
+          echo "CC=gcc" >> $GITHUB_ENV
+          echo "CXX=g++" >> $GITHUB_ENV
+          echo "FC=gfortran-10" >> $GITHUB_ENV
+
+      - name: Cache PETSc
+        id: cache-petsc
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/petsc
+          key: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          restore-keys: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+
+      - name: Build PETSc
+        if: steps.cache-petsc.outputs.cache-hit != 'true'
+        run: |
+          cd ${{ github.workspace }}
+          echo "::group::download"
+          wget -q https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
+          tar -xzf petsc-${PETSC_VERSION}.tar.gz
+          echo "::endgroup::"
+          cd petsc-${PETSC_VERSION}
+          echo "::group::configure"
+          ./configure \
+            --prefix=${{ github.workspace }}/petsc \
+            --shared-libraries \
+            --with-debugging=no \
+            --with-cxx-dialect=cxx14 \
+            --with-pic=yes \
+            --with-ssl=no \
+            --with-zlib=yes \
+            --with-x=no \
+            --download-mpich \
+            --download-exodusii \
+            --download-netcdf \
+            --download-pnetcdf \
+            --download-hdf5 \
+            --CC=$CC \
+            --CXX=$CXX \
+            --FC=$FC \
+            PETSC_DIR=`pwd`
+          echo "::endgroup::"
+          echo "::group::make"
+          make PETSC_DIR=`pwd` all
+          make PETSC_DIR=`pwd` install
+          echo "::endgroup::"
+
+      - name: Set up env
         run: |
           echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
           echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
           echo "CC=mpicc" >> $GITHUB_ENV
           echo "CXX=mpicxx" >> $GITHUB_ENV
-      - name: Setup coverage cmake args (linux)
-        if: startsWith(matrix.os, 'ubuntu')
-        run: |
-          echo "LLVM_COV_PATH=/usr/bin/llvm-cov-12" >> $GITHUB_ENV
-          echo "LLVM_PROFDATA_PATH=/usr/bin/llvm-profdata-12" >> $GITHUB_ENV
-      - name: Setup coverage cmake args (macos)
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          echo "LLVM_COV_PATH=$(brew --cellar)/llvm/14.0.6_1/bin/llvm-cov" >> $GITHUB_ENV
-          echo "LLVM_PROFDATA_PATH=$(brew --cellar)/llvm/14.0.6_1/bin/llvm-profdata" >> $GITHUB_ENV
-      - name: Load PETSc
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/petsc
-          key: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-          restore-keys: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+
       - name: Configure
         run: |
-          cmake -S . -B ${{ github.workspace }}/build \
+          cmake -S ${{ github.workspace }}/main -B ${{ github.workspace }}/main/build \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
-            -DGODZILLA_CODE_COVERAGE=YES \
-            -DLLVM_COV_PATH=${LLVM_COV_PATH} \
-            -DLLVM_PROFDATA_PATH=${LLVM_PROFDATA_PATH}
-      - name: Build
-        run: make -C ${{ github.workspace }}/build
-      - name: Run tests
-        run: make -C ${{ github.workspace }}/build test ARGS='-V'
-      - name: Generate code coverage
-        if: startsWith(matrix.os, 'ubuntu')
-        run: make -C ${{ github.workspace }}/build coverage
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v2
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          name: coverage-${{ matrix.os }}-${{ matrix.compiler }}
-          path: ${{ github.workspace }}/build/coverage.info
+            -DGODZILLA_CODE_COVERAGE=YES
 
-  upload-to-codecov:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Download artifacts
-        uses: actions/download-artifact@v2
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v2
-      - name: Run codacy-coverage-reporter
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: 'coverage-ubuntu-22.04-gcc/coverage.info,coverage-ubuntu-22.04-clang/coverage.info'
+      - name: Build
+        run: make -C ${{ github.workspace }}/main/build
+
+      - name: Run tests
+        run: make -C ${{ github.workspace }}/main/build test ARGS='-V'

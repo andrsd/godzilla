@@ -106,6 +106,10 @@ target_link_libraries(
     PRIVATE
         muParser
 )
+if (GODZILLA_WITH_MPI)
+    target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
+endif()
+
 
 set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH OFF)
 set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
