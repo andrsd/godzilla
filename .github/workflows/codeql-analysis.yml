@@ -31,11 +31,6 @@ jobs:
       with:
         path: main
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
-
     - name: Install dependencies
       run: |
         sudo apt-get update -qq
@@ -67,6 +62,11 @@ jobs:
         cmake -S ${{ github.workspace }}/main -B ${{ github.workspace }}/main/build \
           -DGODZILLA_BUILD_EXAMPLES=YES \
           -DGODZILLA_BUILD_TESTS=YES
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
 
     - name: Build
       run: make -C ${{ github.workspace }}/main/build
