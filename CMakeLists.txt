@@ -25,7 +25,7 @@ endif()
 
 find_package(PETSc)
 if (NOT ${PETSC_FOUND})
-    message(STATUS "Try to set environemnt variable PETSC_DIR to point to your PETSc installation.")
+    message(STATUS "Try to set environment variable PETSC_DIR to point to your PETSc installation.")
 endif()
 
 find_package(HDF5 COMPONENTS C)
@@ -35,12 +35,12 @@ endif()
 
 find_package(NetCDF)
 if (NOT ${NETCDF_FOUND})
-    message(STATUS "Try to set environemnt variable NETCDF_DIR to point to your NetCDF installation.")
+    message(STATUS "Try to set environment variable NETCDF_DIR to point to your NetCDF installation.")
 endif()
 
 find_package(ExodusII)
 if (NOT ${EXODUSII_FOUND})
-    message(STATUS "Try to set environemnt variable EXODUSII_DIR to point to your ExodusII installation.")
+    message(STATUS "Try to set environment variable EXODUSII_DIR to point to your ExodusII installation.")
 endif()
 
 
@@ -55,7 +55,6 @@ mark_as_advanced(FORCE
     INSTALL_GTEST
     FETCHCONTENT_SOURCE_DIR_GOOGLETEST
     FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
-
 )
 
 FetchContent_MakeAvailable(googletest)
