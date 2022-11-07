@@ -35,6 +35,13 @@ jobs:
             libyaml-cpp-dev \
             zlib1g-dev
 
+      - name: Set up env
+        run: |
+          echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
+          echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
+          echo "CC=mpicc" >> $GITHUB_ENV
+          echo "CXX=mpicxx" >> $GITHUB_ENV
+
       - name: Cache PETSc
         id: cache-petsc
         uses: actions/cache@v3
