@@ -1,0 +1,54 @@
+name: github-pages
+
+env:
+  PETSC_CACHE_NUM: 10
+
+on:
+  push:
+    branches: ["main"]
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt install \
+            doxygen \
+            python3-sphinx \ 
+            python3-sphinx-rtd-theme \
+            python3-breathe \
+            python3-sphinx-tabs \
+            libblas-dev \
+            liblapack-dev \
+            libfmt-dev \
+            libyaml-cpp-dev \
+            zlib1g-dev
+
+      - name: Cache PETSc
+        id: cache-petsc
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/petsc
+          key: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          restore-keys: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+
+      - name: Build doco
+        run: |
+          cmake -S . -B ${{ github.workspace }}/build
+          make -C ${{ github.workspace }}/build doc
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: ${{ github.workspace }}/build/docs/html

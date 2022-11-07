@@ -1,0 +1,23 @@
+import os
+import sys
+import subprocess
+
+project = 'godzilla'
+copyright = '2021, David Andrs'
+author = 'David Andrs'
+
+master_doc = 'index'
+templates_path = ['_templates']
+
+exclude_patterns = []
+
+html_theme = 'sphinx_rtd_theme'
+html_static_path = []
+html_show_sourcelink = False
+
+extensions = [
+    'breathe',
+    'sphinx_tabs.tabs'
+]
+breathe_projects = {"godzilla": "@PROJECT_BINARY_DIR@/docs/xml/"}
+breathe_default_project = "godzilla"

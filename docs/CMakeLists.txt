@@ -1,100 +1,65 @@
 # Documentation
 
 find_package(Doxygen QUIET)
+find_program(SPHINX_BUILD sphinx-build)
 
-if(DOXYGEN_FOUND)
-    if (NOT GODZILLA_RST_DIR)
-        set(GODZILLA_RST_DIR ${PROJECT_BINARY_DIR}/docs/rst)
-    endif()
-    set(DOXYREST_PATH $ENV{DOXYREST_PATH})
-    set(DOXYGEN_GENERATE_HTML NO)
-    set(DOXYGEN_GENERATE_XML YES)
-    set(DOXYGEN_STRIP_FROM_INC_PATH
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/src
-    )
-    set(DOXYGEN_STRIP_FROM_PATH
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/src
-    )
-
-    doxygen_add_docs(
-        doxygen
-        ${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/src
-        STRIP_FROM_PATH
-        COMMENT "Generate doxygen XML"
-    )
-
-    find_program(DOXYREST doxyrest)
+if(DOXYGEN_FOUND AND NOT ${SPHINX_BUILD} STREQUAL SPHINX_BUILD-NOTFOUND)
     find_program(SPHINX_BUILD sphinx-build)
-    mark_as_advanced(FORCE
-        DOXYREST
-        SPHINX_BUILD
-    )
+    mark_as_advanced(FORCE SPHINX_BUILD)
 
-    configure_file(doxyrest-config.lua.in doxyrest-config.lua)
-    configure_file(conf.py rst/conf.py)
+    configure_file(Doxyfile.in Doxyfile)
+    configure_file(conf.py.in conf.py)
 
     add_custom_target(doc DEPENDS ${PROJECT_BINARY_DIR}/html/index.html)
+
+    file(GLOB_RECURSE RST_FILES ${PROJECT_SOURCE_DIR}/docs/*.rst)
+    file(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*.h)
 
     add_custom_command(
         OUTPUT
             ${PROJECT_BINARY_DIR}/html/index.html
         COMMAND
-            ${SPHINX_BUILD} -b html rst html
+            ${SPHINX_BUILD} -c ${PROJECT_BINARY_DIR}/docs -b html -d ${PROJECT_BINARY_DIR}/docs/.doctrees ${PROJECT_SOURCE_DIR}/docs html
         DEPENDS
-            ${GODZILLA_RST_DIR}/index.rst
-            ${GODZILLA_RST_DIR}/getting-started
-            ${GODZILLA_RST_DIR}/examples
-            ${GODZILLA_RST_DIR}/devel/index.rst
-            ${GODZILLA_RST_DIR}/conf.py
+            ${PROJECT_BINARY_DIR}/docs/conf.py
+            ${PROJECT_BINARY_DIR}/docs/xml/index.xml
+            ${RST_FILES}
     )
 
     add_custom_command(
         OUTPUT
-            ${GODZILLA_RST_DIR}/devel/index.rst
+            ${PROJECT_BINARY_DIR}/docs/xml/index.xml
         COMMAND
-            ${DOXYREST} -c doxyrest-config.lua
+            doxygen Doxyfile
         DEPENDS
-            ${PROJECT_BINARY_DIR}/xml/index.xml
+            ${PROJECT_BINARY_DIR}/docs/Doxyfile
+            ${HEADER_FILES}
     )
 
     add_custom_command(
-        OUTPUT
-            ${GODZILLA_RST_DIR}/getting-started
-        COMMAND
-            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/getting-started ${GODZILLA_RST_DIR}/getting-started
-        DEPENDS
-            ${PROJECT_SOURCE_DIR}/docs/getting-started
-    )
-    add_custom_command(
-        OUTPUT
-            ${GODZILLA_RST_DIR}/examples
-        COMMAND
-            cmake -E copy_directory ${PROJECT_SOURCE_DIR}/docs/examples ${GODZILLA_RST_DIR}/examples
-        DEPENDS
-            ${PROJECT_SOURCE_DIR}/docs/examples
-    )
-    add_custom_command(
-        OUTPUT
-            ${GODZILLA_RST_DIR}/index.rst
-        COMMAND
-            cmake -E copy ${PROJECT_SOURCE_DIR}/docs/index.rst ${GODZILLA_RST_DIR}
-        DEPENDS
-            ${PROJECT_SOURCE_DIR}/docs/index.rst
+        TARGET doc
+        POST_BUILD
+        COMMAND echo "Open ${PROJECT_BINARY_DIR}/docs/html/index.html in your browser to view the documentation."
     )
 
-    add_custom_command(
-        OUTPUT
-            ${PROJECT_BINARY_DIR}/xml/index.xml
-        COMMAND
-            doxygen Doxyfile.doxygen
-        DEPENDS
-            ${PROJECT_BINARY_DIR}/docs/Doxyfile.doxygen
-            ${PROJECT_SOURCE_DIR}/include/*.h
-    )
+else()
+    add_custom_target(doc)
 
+    add_custom_command(
+        TARGET doc
+        COMMAND echo "Unable to generate documentation:"
+    )
+    if (NOT DOXYGEN_FOUND)
+        add_custom_command(
+            TARGET doc
+            COMMAND echo "- 'doxygen' is not installed."
+        )
+    endif()
+
+    if (${SPHINX_BUILD} STREQUAL SPHINX_BUILD-NOTFOUND)
+        add_custom_command(
+            TARGET doc
+            COMMAND echo "- 'sphinx-build' is not installed."
+        )
+    endif()
 endif()
-
-unset(GODZILLA_RST_DIR CACHE)
