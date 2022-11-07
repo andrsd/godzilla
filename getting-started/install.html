@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/tabs.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Poisson Equation" href="../examples/poisson.html" />
+    <link rel="prev" title="GODZILLA" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/constant-ic.html">ConstantIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/dirichlet-bc.html">DirichletBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/exodusii-mesh.html">ExodusIIMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/file-output.html">FileOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/function.html">Function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/function-evaluator.html">FunctionEvaluator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/function-ic.html">FunctionIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/function-interface.html">FunctionInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/gyml-file.html">GYMLFile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/hdf5-output.html">HDF5Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/input-file.html">InputFile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/linear-interpolation.html">LinearInterpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/object.html">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/parsed-function.html">ParsedFunction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../devel/classes/vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Q29uZGE=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-Q29uZGE=" name="Q29uZGE=" role="tab" tabindex="0">Conda</button><button aria-controls="panel-0-TGludXg=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-TGludXg=" name="TGludXg=" role="tab" tabindex="-1">Linux</button><button aria-controls="panel-0-TWFjT1MgWA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-TWFjT1MgWA==" name="TWFjT1MgWA==" role="tab" tabindex="-1">MacOS X</button><button aria-controls="panel-0-V2luZG93cw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-V2luZG93cw==" name="V2luZG93cw==" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-0-Q29uZGE=" class="sphinx-tabs-panel group-tab" id="panel-0-Q29uZGE=" name="Q29uZGE=" role="tabpanel" tabindex="0"><p>Create a new environment</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">godzilla</span>
+</pre></div>
+</div>
+<p>Setup conda forge</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="n">add</span> <span class="n">channels</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span>
+<span class="n">conda</span> <span class="n">config</span> <span class="o">--</span><span class="nb">set</span> <span class="n">channel_priority</span> <span class="n">strict</span>
+</pre></div>
+</div>
+<p>Install dependencies</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">python</span> <span class="n">clang</span> <span class="n">gfortran</span> <span class="n">zlib</span> <span class="n">autoconf</span> <span class="n">automake</span> <span class="n">libtool</span> <span class="n">cmake</span> <span class="n">openmp</span> <span class="n">lcov</span>
+</pre></div>
+</div>
+<p>Build MPICH 3.4.2</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>./configure --prefix=$CONDA_PREFIX \
+   --enable-shared \
+   --enable-sharedlibs=clang \
+   --enable-fast=O3 \
+   --with-pm=hydra \
+   --disable-java \
+   --with-device=ch3:nemesis \
+   --enable-g=meminit \
+   --disable-opencl \
+   CC=clang CXX=clang++ FC=gfortran
+</pre></div>
+</div>
+<p>Build PETSc 3.16.1</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>./configure --prefix=$CONDA_PREFIX \
+   --shared-libraries \
+   --with-debugging=no \
+   --with-cxx-dialect=cxx14 \
+   --with-pic=yes \
+   --with-ssl=no \
+   --download-chaco=yes \
+   --download-ptscotch=yes \
+   --download-ml=yes \
+   --download-hypre=yes \
+   --download-fblaslapack=yes \
+   --download-metis=yes \
+   --download-parmetis=yes \
+   --download-superlu=yes \
+   --download-superlu_dist=yes \
+   --download-scalapack=yes \
+   --download-mumps=yes \
+   --download-exodusii=yes \
+   --download-hdf5=yes \
+   --download-netcdf=yes \
+   --download-pnetcdf=yes \
+   --with-zlib-dir=$CONDA_PREFIX \
+   CC=mpicc CXX=mpicxx FC=mpif90 \
+   PETSC_DIR=`pwd`
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you installed HDF5 via some other means, do not specify <code class="docutils literal notranslate"><span class="pre">--download-hdf5=yes</span></code>.
+You can use <code class="docutils literal notranslate"><span class="pre">--with-hdf=/path/to/hdf5</span></code>, if the library is installed in a non-standard location.</p>
+</div>
+<p>Set environment variables</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">CC</span><span class="o">=</span><span class="n">mpicc</span>
+<span class="n">export</span> <span class="n">CXX</span><span class="o">=</span><span class="n">mpicxx</span>
+<span class="n">export</span> <span class="n">FC</span><span class="o">=</span><span class="n">mpif90</span>
+</pre></div>
+</div>
+<p>Build godzilla</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">godzilla</span><span class="o">&gt;</span>
+<span class="n">mkdir</span> <span class="n">build</span>
+<span class="n">cd</span> <span class="n">build</span>
+<span class="n">cmake</span> <span class="o">..</span>
+<span class="n">make</span>
+</pre></div>
+</div>
+<p><strong>Documentation</strong></p>
+<p>For documentation, you will also need</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">doxygen</span> <span class="n">doxyrest</span> <span class="n">sphinx</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">rtd</span><span class="o">-</span><span class="n">theme</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">tabs</span>
+</pre></div>
+</div>
+<p>Environment</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export DOXYREST_PATH=$CONDA_PREFIX/share/doxyrest
+</pre></div>
+</div>
+<p>Build the documentation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">doc</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-TGludXg=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-TGludXg=" name="TGludXg=" role="tabpanel" tabindex="0"><p>Instructions for linux</p>
+</div><div aria-labelledby="tab-0-TWFjT1MgWA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-TWFjT1MgWA==" name="TWFjT1MgWA==" role="tabpanel" tabindex="0"><p>Instrcutions for MacOS X</p>
+</div><div aria-labelledby="tab-0-V2luZG93cw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-V2luZG93cw==" name="V2luZG93cw==" role="tabpanel" tabindex="0"><p>Not supported</p>
+</div></div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="GODZILLA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../examples/poisson.html" class="btn btn-neutral float-right" title="Poisson Equation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

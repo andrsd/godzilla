@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FEProblemInterface &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FileOutput" href="file-output.html" />
+    <link rel="prev" title="FENonlinearProblem" href="fe-nonlinear-problem.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant-ic.html">ConstantIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dirichlet-bc.html">DirichletBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-mesh.html">ExodusIIMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-interface.html">FunctionInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gyml-file.html">GYMLFile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hdf5-output.html">HDF5Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input-file.html">InputFile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-interpolation.html">LinearInterpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsed-function.html">ParsedFunction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>FEProblemInterface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="feprobleminterface">
+<h1>FEProblemInterface<a class="headerlink" href="#feprobleminterface" title="Permalink to this headline"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FEProblemInterfaceE">
+<span id="_CPPv3N8godzilla18FEProblemInterfaceE"></span><span id="_CPPv2N8godzilla18FEProblemInterfaceE"></span><span id="godzilla::FEProblemInterface"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">FEProblemInterface</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterfaceE" title="godzilla::DiscreteProblemInterface"><span class="n"><span class="pre">DiscreteProblemInterface</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla18FEProblemInterfaceE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Interface for FE problems. </p>
+<p>Any problem using PetscFE should inherit from this for unified API </p>
+<p>Subclassed by <a class="reference internal" href="fe-nonlinear-problem.html#classgodzilla_1_1_f_e_nonlinear_problem"><span class="std std-ref">godzilla::FENonlinearProblem</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface14get_num_fieldsEv">
+<span id="_CPPv3NK8godzilla18FEProblemInterface14get_num_fieldsEv"></span><span id="_CPPv2NK8godzilla18FEProblemInterface14get_num_fieldsEv"></span><span id="godzilla::FEProblemInterface::get_num_fieldsC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1ac044e94f2ea185c8cc3ec554c9d0598f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_fields</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface14get_num_fieldsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get number of fields. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The number of fields </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface15get_field_namesEv">
+<span id="_CPPv3NK8godzilla18FEProblemInterface15get_field_namesEv"></span><span id="_CPPv2NK8godzilla18FEProblemInterface15get_field_namesEv"></span><span id="godzilla::FEProblemInterface::get_field_namesC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a648f7c06442f3d2b49fe045e815f03e0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_names</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface15get_field_namesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get list of all field names. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of field names </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface14get_field_nameE8PetscInt">
+<span id="_CPPv3NK8godzilla18FEProblemInterface14get_field_nameE8PetscInt"></span><span id="_CPPv2NK8godzilla18FEProblemInterface14get_field_nameE8PetscInt"></span><span id="godzilla::FEProblemInterface::get_field_name__PetscIntC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a4f0a31c6a3ebfa7184e4a3f9ea8189e1"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_field_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface14get_field_nameE8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get field name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fid</strong> – Field ID </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface24get_field_num_componentsE8PetscInt">
+<span id="_CPPv3NK8godzilla18FEProblemInterface24get_field_num_componentsE8PetscInt"></span><span id="_CPPv2NK8godzilla18FEProblemInterface24get_field_num_componentsE8PetscInt"></span><span id="godzilla::FEProblemInterface::get_field_num_components__PetscIntC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1aeb4717440852d4a7fa9c11b6afca51ef"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_num_components</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface24get_field_num_componentsE8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get number of field components. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fid</strong> – Field ID </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of components </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface12get_field_idERKNSt6stringE">
+<span id="_CPPv3NK8godzilla18FEProblemInterface12get_field_idERKNSt6stringE"></span><span id="_CPPv2NK8godzilla18FEProblemInterface12get_field_idERKNSt6stringE"></span><span id="godzilla::FEProblemInterface::get_field_id__ssCRC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a6f670be68c67c2e6d5f758606adab6c2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_id</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface12get_field_idERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get field ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Field name </p></li>
+<li><p><strong>Field</strong> – ID </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface15has_field_by_idE8PetscInt">
+<span id="_CPPv3NK8godzilla18FEProblemInterface15has_field_by_idE8PetscInt"></span><span id="_CPPv2NK8godzilla18FEProblemInterface15has_field_by_idE8PetscInt"></span><span id="godzilla::FEProblemInterface::has_field_by_id__PetscIntC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a6d64368ac39faf635b5a7522036dea70"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_field_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface15has_field_by_idE8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Do we have field with specified ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fid</strong> – The ID of the field </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the field exists, otherwise False </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface17has_field_by_nameERKNSt6stringE">
+<span id="_CPPv3NK8godzilla18FEProblemInterface17has_field_by_nameERKNSt6stringE"></span><span id="_CPPv2NK8godzilla18FEProblemInterface17has_field_by_nameERKNSt6stringE"></span><span id="godzilla::FEProblemInterface::has_field_by_name__ssCRC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a773b0fba7ec8d97a6d22dc883586b68f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_field_by_name</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface17has_field_by_nameERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Do we have field with specified name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of the field </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the field exists, otherwise False </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface15get_field_orderE8PetscInt">
+<span id="_CPPv3NK8godzilla18FEProblemInterface15get_field_orderE8PetscInt"></span><span id="_CPPv2NK8godzilla18FEProblemInterface15get_field_orderE8PetscInt"></span><span id="godzilla::FEProblemInterface::get_field_order__PetscIntC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1aee1354d680d4f4fccec32e3f7ac80a00"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_order</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface15get_field_orderE8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get field order. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fid</strong> – Field ID </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Field order </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface24get_field_component_nameE8PetscInt8PetscInt">
+<span id="_CPPv3NK8godzilla18FEProblemInterface24get_field_component_nameE8PetscInt8PetscInt"></span><span id="_CPPv2NK8godzilla18FEProblemInterface24get_field_component_nameE8PetscInt8PetscInt"></span><span id="godzilla::FEProblemInterface::get_field_component_name__PetscInt.PetscIntC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a5018b9f4398dc7e451d1907c462e263c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_component_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">component</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface24get_field_component_nameE8PetscInt8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get component name of a field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fid</strong> – Field ID </p></li>
+<li><p><strong>component</strong> – Component index </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Component name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FEProblemInterface24set_field_component_nameE8PetscInt8PetscIntKNSt6stringE">
+<span id="_CPPv3N8godzilla18FEProblemInterface24set_field_component_nameE8PetscInt8PetscIntKNSt6stringE"></span><span id="_CPPv2N8godzilla18FEProblemInterface24set_field_component_nameE8PetscInt8PetscIntKNSt6stringE"></span><span id="godzilla::FEProblemInterface::set_field_component_name__PetscInt.PetscInt.ssC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a24256035d8f452aea8ca991adfa039f2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_field_component_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">component</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FEProblemInterface24set_field_component_nameE8PetscInt8PetscIntKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Set the name of a component of afield variable. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fid</strong> – Field ID </p></li>
+<li><p><strong>component</strong> – Component index </p></li>
+<li><p><strong>name</strong> – Component name </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface13get_field_dofE8PetscInt8PetscInt">
+<span id="_CPPv3NK8godzilla18FEProblemInterface13get_field_dofE8PetscInt8PetscInt"></span><span id="_CPPv2NK8godzilla18FEProblemInterface13get_field_dofE8PetscInt8PetscInt"></span><span id="godzilla::FEProblemInterface::get_field_dof__PetscInt.PetscIntC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a485a8fe601aca4f0efa813fe4419ff61"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_dof</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">point</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface13get_field_dofE8PetscInt8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Return the offset into an array or local Vec for the dof associated with the given point. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point</strong> – Point </p></li>
+<li><p><strong>fid</strong> – Field ID </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The offset </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface25get_solution_vector_localEv">
+<span id="_CPPv3NK8godzilla18FEProblemInterface25get_solution_vector_localEv"></span><span id="_CPPv2NK8godzilla18FEProblemInterface25get_solution_vector_localEv"></span><span id="godzilla::FEProblemInterface::get_solution_vector_localC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a8692a2ecf9189f82ec2f4ec5ced4a523"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Vec</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_solution_vector_local</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface25get_solution_vector_localEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get local solution vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Local solution vector </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface18get_aux_field_nameE8PetscInt">
+<span id="_CPPv3NK8godzilla18FEProblemInterface18get_aux_field_nameE8PetscInt"></span><span id="_CPPv2NK8godzilla18FEProblemInterface18get_aux_field_nameE8PetscInt"></span><span id="godzilla::FEProblemInterface::get_aux_field_name__PetscIntC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1acaa5309219131b5314a6acc7a04f7756"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_field_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface18get_aux_field_nameE8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get auxiliary field name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fid</strong> – Auxiliary field ID </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Auxiliary field name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface16get_aux_field_idERKNSt6stringE">
+<span id="_CPPv3NK8godzilla18FEProblemInterface16get_aux_field_idERKNSt6stringE"></span><span id="_CPPv2NK8godzilla18FEProblemInterface16get_aux_field_idERKNSt6stringE"></span><span id="godzilla::FEProblemInterface::get_aux_field_id__ssCRC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a61c56d317682b73eac330fc2fc1e29c3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_field_id</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface16get_aux_field_idERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get auxiliary field ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Auxiliary field name </p></li>
+<li><p><strong>Auxiliary</strong> – field ID </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface19has_aux_field_by_idE8PetscInt">
+<span id="_CPPv3NK8godzilla18FEProblemInterface19has_aux_field_by_idE8PetscInt"></span><span id="_CPPv2NK8godzilla18FEProblemInterface19has_aux_field_by_idE8PetscInt"></span><span id="godzilla::FEProblemInterface::has_aux_field_by_id__PetscIntC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a8df02fd189857cb7972891652c9a4c2b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_aux_field_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface19has_aux_field_by_idE8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Do we have auxiliary field with specified ID. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fid</strong> – The ID of the auxiliary field </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the auxiliary field exists, otherwise False </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface21has_aux_field_by_nameERKNSt6stringE">
+<span id="_CPPv3NK8godzilla18FEProblemInterface21has_aux_field_by_nameERKNSt6stringE"></span><span id="_CPPv2NK8godzilla18FEProblemInterface21has_aux_field_by_nameERKNSt6stringE"></span><span id="godzilla::FEProblemInterface::has_aux_field_by_name__ssCRC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1afdf340be5e7465caae3c3f4322b7c316"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_aux_field_by_name</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface21has_aux_field_by_nameERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Do we have auxiliary field with specified name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of the auxiliary field </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the auxiliary field exists, otherwise False </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FEProblemInterface6add_feE8PetscIntRKNSt6stringE8PetscInt8PetscInt">
+<span id="_CPPv3N8godzilla18FEProblemInterface6add_feE8PetscIntRKNSt6stringE8PetscInt8PetscInt"></span><span id="_CPPv2N8godzilla18FEProblemInterface6add_feE8PetscIntRKNSt6stringE8PetscInt8PetscInt"></span><span id="godzilla::FEProblemInterface::add_fe__PetscInt.ssCR.PetscInt.PetscInt"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1aff38a0a0ab3c5c7f5d8dd1cea949f86e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_fe</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FEProblemInterface6add_feE8PetscIntRKNSt6stringE8PetscInt8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Adds a volumetric field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The field ID </p></li>
+<li><p><strong>name</strong> – The name of the field </p></li>
+<li><p><strong>nc</strong> – The number of components </p></li>
+<li><p><strong>k</strong> – The degree k of the space </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FEProblemInterface10add_aux_feE8PetscIntRKNSt6stringE8PetscInt8PetscInt">
+<span id="_CPPv3N8godzilla18FEProblemInterface10add_aux_feE8PetscIntRKNSt6stringE8PetscInt8PetscInt"></span><span id="_CPPv2N8godzilla18FEProblemInterface10add_aux_feE8PetscIntRKNSt6stringE8PetscInt8PetscInt"></span><span id="godzilla::FEProblemInterface::add_aux_fe__PetscInt.ssCR.PetscInt.PetscInt"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a037e4379e3fddd94000ebdb3d98067aa"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_aux_fe</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FEProblemInterface10add_aux_feE8PetscIntRKNSt6stringE8PetscInt8PetscInt" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Adds a volumetric auxiliary field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – The field ID </p></li>
+<li><p><strong>name</strong> – The name of the field </p></li>
+<li><p><strong>nc</strong> – The number of components </p></li>
+<li><p><strong>k</strong> – The degree k of the space </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField">
+<span id="_CPPv3N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField"></span><span id="_CPPv2N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField"></span><span id="godzilla::FEProblemInterface::add_auxiliary_field__AuxiliaryFieldP"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a28805fc1d97865a20726aaa69e42623a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_auxiliary_field</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="auxiliary-field.html#_CPPv4N8godzilla14AuxiliaryFieldE" title="godzilla::AuxiliaryField"><span class="n"><span class="pre">AuxiliaryField</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">aux</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Add auxiliary field. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>aux</strong> – Auxiliary field object to add </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fe-nonlinear-problem.html" class="btn btn-neutral float-left" title="FENonlinearProblem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="file-output.html" class="btn btn-neutral float-right" title="FileOutput" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

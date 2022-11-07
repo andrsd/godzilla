@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Object &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Output" href="output.html" />
+    <link rel="prev" title="NonlinearProblem" href="nonlinear-problem.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant-ic.html">ConstantIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dirichlet-bc.html">DirichletBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-mesh.html">ExodusIIMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-interface.html">FunctionInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gyml-file.html">GYMLFile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hdf5-output.html">HDF5Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input-file.html">InputFile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-interpolation.html">LinearInterpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsed-function.html">ParsedFunction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="problem.html">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Object</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="object">
+<h1>Object<a class="headerlink" href="#object" title="Permalink to this headline"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6ObjectE">
+<span id="_CPPv3N8godzilla6ObjectE"></span><span id="_CPPv2N8godzilla6ObjectE"></span><span id="godzilla::Object"></span><span class="target" id="classgodzilla_1_1_object"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Object</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">LoggingInterface</span></span><a class="headerlink" href="#_CPPv4N8godzilla6ObjectE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>The base class for objects that can be created by <a class="reference internal" href="factory.html#classgodzilla_1_1_factory"><span class="std std-ref">Factory</span></a>. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="factory.html#classgodzilla_1_1_factory"><span class="std std-ref">Factory</span></a> </p>
+</div>
+</p>
+<p>Subclassed by <a class="reference internal" href="auxiliary-field.html#classgodzilla_1_1_auxiliary_field"><span class="std std-ref">godzilla::AuxiliaryField</span></a>, <a class="reference internal" href="boundary-condition.html#classgodzilla_1_1_boundary_condition"><span class="std std-ref">godzilla::BoundaryCondition</span></a>, <a class="reference internal" href="function.html#classgodzilla_1_1_function"><span class="std std-ref">godzilla::Function</span></a>, <a class="reference internal" href="initial-condition.html#classgodzilla_1_1_initial_condition"><span class="std std-ref">godzilla::InitialCondition</span></a>, <a class="reference internal" href="mesh.html#classgodzilla_1_1_mesh"><span class="std std-ref">godzilla::Mesh</span></a>, <a class="reference internal" href="output.html#classgodzilla_1_1_output"><span class="std std-ref">godzilla::Output</span></a>, godzilla::Postprocessor, <a class="reference internal" href="problem.html#classgodzilla_1_1_problem"><span class="std std-ref">godzilla::Problem</span></a>, godzilla::TimeSteppingAdaptor</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Object6ObjectERK10Parameters">
+<span id="_CPPv3N8godzilla6Object6ObjectERK10Parameters"></span><span id="_CPPv2N8godzilla6Object6ObjectERK10Parameters"></span><span id="godzilla::Object::Object__ParametersCR"></span><span class="target" id="classgodzilla_1_1_object_1aca5e25f7182c3f8fa067847388b5cb91"></span><span class="sig-name descname"><span class="n"><span class="pre">Object</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Object6ObjectERK10Parameters" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Constructor for building the object via <a class="reference internal" href="factory.html#classgodzilla_1_1_factory"><span class="std std-ref">Factory</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object8get_typeEv">
+<span id="_CPPv3NK8godzilla6Object8get_typeEv"></span><span id="_CPPv2NK8godzilla6Object8get_typeEv"></span><span id="godzilla::Object::get_typeC"></span><span class="target" id="classgodzilla_1_1_object_1afd07d36fcc88dfb4e657fff587768046"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object8get_typeEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get the type of this object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the name of the type of this object </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object8get_nameEv">
+<span id="_CPPv3NK8godzilla6Object8get_nameEv"></span><span id="_CPPv2NK8godzilla6Object8get_nameEv"></span><span id="godzilla::Object::get_nameC"></span><span class="target" id="classgodzilla_1_1_object_1a1a5bc352566bb763a9c5a5d284613562"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object8get_nameEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get the name of the object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of the object </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object14get_parametersEv">
+<span id="_CPPv3NK8godzilla6Object14get_parametersEv"></span><span id="_CPPv2NK8godzilla6Object14get_parametersEv"></span><span id="godzilla::Object::get_parametersC"></span><span class="target" id="classgodzilla_1_1_object_1a90df5376e2778681be34c57dc8a0df80"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_parameters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object14get_parametersEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get the parameters of the object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The parameters of the object </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0ENK8godzilla6Object9get_paramERK1TRKNSt6stringE">
+<span id="_CPPv3I0ENK8godzilla6Object9get_paramERKNSt6stringE"></span><span id="_CPPv2I0ENK8godzilla6Object9get_paramERKNSt6stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_object_1a1c1e28cdb32cd260f8047c4f66a8dcc4"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK8godzilla6Object9get_paramERK1TRKNSt6stringE" title="godzilla::Object::get_param::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_param</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK8godzilla6Object9get_paramERK1TRKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Retrieve a parameter for the object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of the parameter </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The value of the parameter </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object14is_param_validERKNSt6stringE">
+<span id="_CPPv3NK8godzilla6Object14is_param_validERKNSt6stringE"></span><span id="_CPPv2NK8godzilla6Object14is_param_validERKNSt6stringE"></span><span id="godzilla::Object::is_param_valid__ssCRC"></span><span class="target" id="classgodzilla_1_1_object_1ab8335f8e2692fcf0b411d0ad2c9ec3d5"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_param_valid</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object14is_param_validERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Test if the supplied parameter is valid. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of the parameter to test </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object7get_appEv">
+<span id="_CPPv3NK8godzilla6Object7get_appEv"></span><span id="_CPPv2NK8godzilla6Object7get_appEv"></span><span id="godzilla::Object::get_appC"></span><span class="target" id="classgodzilla_1_1_object_1ad0be35663286b92cc7fe8da59e81f955"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="app.html#_CPPv4N8godzilla3AppE" title="godzilla::App"><span class="n"><span class="pre">App</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_app</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object7get_appEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get the <a class="reference internal" href="app.html#classgodzilla_1_1_app"><span class="std std-ref">App</span></a> this object is associated with. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object8get_commEv">
+<span id="_CPPv3NK8godzilla6Object8get_commEv"></span><span id="_CPPv2NK8godzilla6Object8get_commEv"></span><span id="godzilla::Object::get_commC"></span><span class="target" id="classgodzilla_1_1_object_1a6f4be7b07c8982657acdb90a23e797b7"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object8get_commEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get the MPI comm this object works on. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object16get_processor_idEv">
+<span id="_CPPv3NK8godzilla6Object16get_processor_idEv"></span><span id="_CPPv2NK8godzilla6Object16get_processor_idEv"></span><span id="godzilla::Object::get_processor_idC"></span><span class="target" id="classgodzilla_1_1_object_1aa42e331beded9e77108fe540dff38c18"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscMPIInt</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_processor_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object16get_processor_idEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get processor ID (aka MPI rank) this object is running at. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla6Object13get_comm_sizeEv">
+<span id="_CPPv3NK8godzilla6Object13get_comm_sizeEv"></span><span id="_CPPv2NK8godzilla6Object13get_comm_sizeEv"></span><span id="godzilla::Object::get_comm_sizeC"></span><span class="target" id="classgodzilla_1_1_object_1adb71e68caa8d89f0429a25578656b846"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscMPIInt</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla6Object13get_comm_sizeEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get communicator size. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Object6createEv">
+<span id="_CPPv3N8godzilla6Object6createEv"></span><span id="_CPPv2N8godzilla6Object6createEv"></span><span id="godzilla::Object::create"></span><span class="target" id="classgodzilla_1_1_object_1aea55d7dd105d8451d064ca47d16a968d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Object6createEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Called to construct the object. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Object5checkEv">
+<span id="_CPPv3N8godzilla6Object5checkEv"></span><span id="_CPPv2N8godzilla6Object5checkEv"></span><span id="godzilla::Object::check"></span><span class="target" id="classgodzilla_1_1_object_1a7a4f8bf9bda0ecf1db2cff0c389424b9"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Object5checkEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Called to check object’s integrity. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla6Object10parametersEv">
+<span id="_CPPv3N8godzilla6Object10parametersEv"></span><span id="_CPPv2N8godzilla6Object10parametersEv"></span><span id="godzilla::Object::parameters"></span><span class="target" id="classgodzilla_1_1_object_1a89638c96d58c89332a851aad02616272"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">parameters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla6Object10parametersEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Method for building <a class="reference internal" href="parameters.html#classgodzilla_1_1_parameters"><span class="std std-ref">Parameters</span></a> for this class. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nonlinear-problem.html" class="btn btn-neutral float-left" title="NonlinearProblem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="output.html" class="btn btn-neutral float-right" title="Output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

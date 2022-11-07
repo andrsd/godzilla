@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Problem &mdash; godzilla  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="RectangleMesh" href="rectangle-mesh.html" />
+    <link rel="prev" title="PrintInterface" href="print-interface.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> godzilla
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting-started/install.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/poisson.html">Poisson Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/heat-eqn.html">Heat Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="app.html">App</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constant-ic.html">ConstantIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dirichlet-bc.html">DirichletBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-mesh.html">ExodusIIMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-interface.html">FunctionInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gyml-file.html">GYMLFile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hdf5-output.html">HDF5Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init.html">Init</a></li>
+<li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input-file.html">InputFile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="line-mesh.html">LineMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-interpolation.html">LinearInterpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linear-problem.html">LinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger.html">Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nonlinear-problem.html">NonlinearProblem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsed-function.html">ParsedFunction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piecewise-linear.html">PiecewiseLinear</a></li>
+<li class="toctree-l1"><a class="reference internal" href="print-interface.html">PrintInterface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Problem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rectangle-mesh.html">RectangleMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transient-problem-interface.html">TransientProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="unstructured-mesh.html">UnstructuredMesh</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vtk-output.html">VTKOutput</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">godzilla</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Problem</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="problem">
+<h1>Problem<a class="headerlink" href="#problem" title="Permalink to this headline"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7ProblemE">
+<span id="_CPPv3N8godzilla7ProblemE"></span><span id="_CPPv2N8godzilla7ProblemE"></span><span id="godzilla::Problem"></span><span class="target" id="classgodzilla_1_1_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Problem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="object.html#_CPPv4N8godzilla6ObjectE" title="godzilla::Object"><span class="n"><span class="pre">Object</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="print-interface.html#_CPPv4N8godzilla14PrintInterfaceE" title="godzilla::PrintInterface"><span class="n"><span class="pre">PrintInterface</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla7ProblemE" title="Permalink to this definition"></a><br /></dt>
+<dd><p><a class="reference internal" href="#classgodzilla_1_1_problem"><span class="std std-ref">Problem</span></a>. </p>
+<p>Subclassed by <a class="reference internal" href="linear-problem.html#classgodzilla_1_1_linear_problem"><span class="std std-ref">godzilla::LinearProblem</span></a>, <a class="reference internal" href="nonlinear-problem.html#classgodzilla_1_1_nonlinear_problem"><span class="std std-ref">godzilla::NonlinearProblem</span></a></p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem5checkEv">
+<span id="_CPPv3N8godzilla7Problem5checkEv"></span><span id="_CPPv2N8godzilla7Problem5checkEv"></span><span id="godzilla::Problem::check"></span><span class="target" id="classgodzilla_1_1_problem_1a00ab20d4b58937afc3ab21ed809de50e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla7Problem5checkEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Called to check object’s integrity. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem6createEv">
+<span id="_CPPv3N8godzilla7Problem6createEv"></span><span id="_CPPv2N8godzilla7Problem6createEv"></span><span id="godzilla::Problem::create"></span><span class="target" id="classgodzilla_1_1_problem_1adaf9a99fc8ec61ab798889a2d81cef44"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla7Problem6createEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Build the problem to solve. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem3runEv">
+<span id="_CPPv3N8godzilla7Problem3runEv"></span><span id="_CPPv2N8godzilla7Problem3runEv"></span><span id="godzilla::Problem::run"></span><span class="target" id="classgodzilla_1_1_problem_1abde49500fc274db49433b387a4872c31"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla7Problem3runEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Run the problem. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem5solveEv">
+<span id="_CPPv3N8godzilla7Problem5solveEv"></span><span id="_CPPv2N8godzilla7Problem5solveEv"></span><span id="godzilla::Problem::solve"></span><span class="target" id="classgodzilla_1_1_problem_1aac4967ada2a4a3ee43bcc943b3eac115"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla7Problem5solveEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Solve the problem. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem9convergedEv">
+<span id="_CPPv3N8godzilla7Problem9convergedEv"></span><span id="_CPPv2N8godzilla7Problem9convergedEv"></span><span id="godzilla::Problem::converged"></span><span class="target" id="classgodzilla_1_1_problem_1a131e44843bb48b5c2aa22db862bc66a0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">converged</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla7Problem9convergedEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>true if solve converged, otherwise false </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem6get_dmEv">
+<span id="_CPPv3NK8godzilla7Problem6get_dmEv"></span><span id="_CPPv2NK8godzilla7Problem6get_dmEv"></span><span id="godzilla::Problem::get_dmC"></span><span class="target" id="classgodzilla_1_1_problem_1a60c25b5c2a576133966e6399ef6ec3a1"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">DM</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_dm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem6get_dmEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>provide DM for the underlying KSP object </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem19get_solution_vectorEv">
+<span id="_CPPv3NK8godzilla7Problem19get_solution_vectorEv"></span><span id="_CPPv2NK8godzilla7Problem19get_solution_vectorEv"></span><span id="godzilla::Problem::get_solution_vectorC"></span><span class="target" id="classgodzilla_1_1_problem_1a458f59d35edde5a5ef5f4f183aa5f2f1"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Vec</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_solution_vector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem19get_solution_vectorEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Return solution vector. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem8get_meshEv">
+<span id="_CPPv3NK8godzilla7Problem8get_meshEv"></span><span id="_CPPv2NK8godzilla7Problem8get_meshEv"></span><span id="godzilla::Problem::get_meshC"></span><span class="target" id="classgodzilla_1_1_problem_1a08a46b16207d409899090d4ebcf0f532"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="mesh.html#_CPPv4N8godzilla4MeshE" title="godzilla::Mesh"><span class="n"><span class="pre">Mesh</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_mesh</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem8get_meshEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get mesh this problem is using. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem13get_dimensionEv">
+<span id="_CPPv3NK8godzilla7Problem13get_dimensionEv"></span><span id="_CPPv2NK8godzilla7Problem13get_dimensionEv"></span><span id="godzilla::Problem::get_dimensionC"></span><span class="target" id="classgodzilla_1_1_problem_1abc9c99ff8a2bb378ae57bd413c1a8284"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_dimension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem13get_dimensionEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get problem spatial dimension. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem8get_timeEv">
+<span id="_CPPv3NK8godzilla7Problem8get_timeEv"></span><span id="_CPPv2NK8godzilla7Problem8get_timeEv"></span><span id="godzilla::Problem::get_timeC"></span><span class="target" id="classgodzilla_1_1_problem_1aca5b2b1f8b87766ad0fd3ac32fde0541"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscReal</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_time</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem8get_timeEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get simulation time. </p>
+<p>For steady-state simulations, time is always 0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Simulation time </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem12get_step_numEv">
+<span id="_CPPv3NK8godzilla7Problem12get_step_numEv"></span><span id="_CPPv2NK8godzilla7Problem12get_step_numEv"></span><span id="godzilla::Problem::get_step_numC"></span><span class="target" id="classgodzilla_1_1_problem_1acf309ea2c88e4e1e7187c97317230a8b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_step_num</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem12get_step_numEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get time step number. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Time step number </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem13get_functionsEv">
+<span id="_CPPv3NK8godzilla7Problem13get_functionsEv"></span><span id="_CPPv2NK8godzilla7Problem13get_functionsEv"></span><span id="godzilla::Problem::get_functionsC"></span><span class="target" id="classgodzilla_1_1_problem_1a379faed6cf5a33ed912a708c1a94252b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="function.html#_CPPv4N8godzilla8FunctionE" title="godzilla::Function"><span class="n"><span class="pre">Function</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_functions</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem13get_functionsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get list of functions. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of functions </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem12add_functionEP8Function">
+<span id="_CPPv3N8godzilla7Problem12add_functionEP8Function"></span><span id="_CPPv2N8godzilla7Problem12add_functionEP8Function"></span><span id="godzilla::Problem::add_function__FunctionP"></span><span class="target" id="classgodzilla_1_1_problem_1ab881d3ce48955b2e1e99131ac82b0d2a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_function</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="function.html#_CPPv4N8godzilla8FunctionE" title="godzilla::Function"><span class="n"><span class="pre">Function</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">fn</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem12add_functionEP8Function" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Add a function object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fn</strong> – <a class="reference internal" href="function.html#classgodzilla_1_1_function"><span class="std std-ref">Function</span></a> object to add </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem10add_outputEP6Output">
+<span id="_CPPv3N8godzilla7Problem10add_outputEP6Output"></span><span id="_CPPv2N8godzilla7Problem10add_outputEP6Output"></span><span id="godzilla::Problem::add_output__OutputP"></span><span class="target" id="classgodzilla_1_1_problem_1aa77300f0f83aded5fbc80cc004619d8e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_output</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="output.html#_CPPv4N8godzilla6OutputE" title="godzilla::Output"><span class="n"><span class="pre">Output</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">output</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem10add_outputEP6Output" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Add and output object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>output</strong> – <a class="reference internal" href="output.html#classgodzilla_1_1_output"><span class="std std-ref">Output</span></a> object to add </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem17add_postprocessorEP13Postprocessor">
+<span id="_CPPv3N8godzilla7Problem17add_postprocessorEP13Postprocessor"></span><span id="_CPPv2N8godzilla7Problem17add_postprocessorEP13Postprocessor"></span><span id="godzilla::Problem::add_postprocessor__PostprocessorP"></span><span class="target" id="classgodzilla_1_1_problem_1af64b7ff2e5cd004a1892e3d764ce089b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_postprocessor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Postprocessor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">pp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem17add_postprocessorEP13Postprocessor" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Add a postprocessor object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pp</strong> – Postprocessor object to add </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem17get_postprocessorERKNSt6stringE">
+<span id="_CPPv3NK8godzilla7Problem17get_postprocessorERKNSt6stringE"></span><span id="_CPPv2NK8godzilla7Problem17get_postprocessorERKNSt6stringE"></span><span id="godzilla::Problem::get_postprocessor__ssCRC"></span><span class="target" id="classgodzilla_1_1_problem_1a2a1b372bdc21137204ab81670baf9d3c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Postprocessor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_postprocessor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem17get_postprocessorERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get postprocessor by name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of the postprocessor </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pointer to the postprocessor with name ‘name’ if it exists, otherwise <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem23get_postprocessor_namesEv">
+<span id="_CPPv3NK8godzilla7Problem23get_postprocessor_namesEv"></span><span id="_CPPv2NK8godzilla7Problem23get_postprocessor_namesEv"></span><span id="godzilla::Problem::get_postprocessor_namesC"></span><span class="target" id="classgodzilla_1_1_problem_1a7d4b79a6a0c09c39d5234f321a16731a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_postprocessor_names</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem23get_postprocessor_namesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get postprocessor names. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of postprocessor names </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem22compute_postprocessorsEv">
+<span id="_CPPv3N8godzilla7Problem22compute_postprocessorsEv"></span><span id="_CPPv2N8godzilla7Problem22compute_postprocessorsEv"></span><span id="godzilla::Problem::compute_postprocessors"></span><span class="target" id="classgodzilla_1_1_problem_1ab5f5a82b660007873f1d0e30c88cf79e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_postprocessors</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem22compute_postprocessorsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Compute all postprocessors. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem6outputEj">
+<span id="_CPPv3N8godzilla7Problem6outputEj"></span><span id="_CPPv2N8godzilla7Problem6outputEj"></span><span id="godzilla::Problem::output__unsigned-i"></span><span class="target" id="classgodzilla_1_1_problem_1ac7da2b463693b3c84d7e0f254c7e880f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">output</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem6outputEj" title="Permalink to this definition"></a><br /></dt>
+<dd><p><a class="reference internal" href="output.html#classgodzilla_1_1_output"><span class="std std-ref">Output</span></a>. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mask</strong> – Bit mask for an output event, see <code class="docutils literal notranslate"><a class="reference internal" href="output.html#classgodzilla_1_1_output"><span class="std std-ref"><span class="pre">Output</span></span></a></code> for valid options. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="print-interface.html" class="btn btn-neutral float-left" title="PrintInterface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rectangle-mesh.html" class="btn btn-neutral float-right" title="RectangleMesh" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, David Andrs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
