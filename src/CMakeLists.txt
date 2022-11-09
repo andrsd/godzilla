@@ -99,12 +99,11 @@ target_link_libraries(
     PUBLIC
         fmt::fmt
         yaml-cpp
-        ${NETCDF_LIBRARY}
         ${HDF5_LIBRARIES}
-        ${EXODUSII_LIBRARY}
         ${PETSC_LIBRARY}
     PRIVATE
         muParser
+        exodusIIcpp
 )
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)

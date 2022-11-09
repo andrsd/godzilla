@@ -6,60 +6,17 @@
 #include "DiscreteProblemInterface.h"
 #include "UnstructuredMesh.h"
 #include "Postprocessor.h"
-#include "exodusII.h"
+#include "exodusIIcpp.h"
+#include "fmt/printf.h"
+#include "fmt/format.h"
+#include "fmt/chrono.h"
 #include <assert.h>
 
 namespace godzilla {
 
-static const unsigned int MAX_DATE_TIME = 255;
-
 const int ExodusIIOutput::SINGLE_BLK_ID = 0;
 
 REGISTER_OBJECT(ExodusIIOutput);
-
-static void
-exo_write_variable_names(int exoid,
-                         ex_entity_type obj_type,
-                         const std::vector<std::string> & var_names)
-{
-    _F_;
-
-    int n_vars = var_names.size();
-    if (n_vars == 0)
-        return;
-
-    ex_put_variable_param(exoid, obj_type, n_vars);
-    const char * names[n_vars];
-    for (int i = 0; i < n_vars; i++)
-        names[i] = var_names[i].c_str();
-    ex_put_variable_names(exoid, obj_type, n_vars, (char **) names);
-}
-
-static void
-exo_write_side_set_names(int exoid, const std::vector<std::string> & sset_names)
-{
-    int n_sset = sset_names.size();
-    if (n_sset == 0)
-        return;
-
-    const char * names[n_sset];
-    for (int i = 0; i < n_sset; i++)
-        names[i] = sset_names[i].c_str();
-    ex_put_names(exoid, EX_SIDE_SET, (char **) names);
-}
-
-static void
-exo_write_block_names(int exoid, const std::vector<std::string> & block_names)
-{
-    int n_blocks = block_names.size();
-    if (n_blocks == 0)
-        return;
-
-    const char * names[n_blocks];
-    for (int i = 0; i < n_blocks; i++)
-        names[i] = block_names[i].c_str();
-    ex_put_names(exoid, EX_ELEM_BLOCK, (char **) names);
-}
 
 Parameters
 ExodusIIOutput::parameters()
@@ -77,7 +34,7 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     dpi(dynamic_cast<const DiscreteProblemInterface *>(this->problem)),
     mesh(this->problem ? dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh())
                        : nullptr),
-    exoid(-1),
+    exo(nullptr),
     step_num(1),
     mesh_stored(false)
 {
@@ -87,8 +44,8 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
 ExodusIIOutput::~ExodusIIOutput()
 {
     _F_;
-    if (this->exoid != -1)
-        ex_close(this->exoid);
+    if (this->exo)
+        this->exo->close();
 }
 
 std::string
@@ -159,8 +116,9 @@ ExodusIIOutput::output_step()
     set_file_name();
     lprintf(9, "Output to file: %s", this->file_name);
 
-    if (this->exoid == -1)
+    if (this->exo == nullptr)
         open_file();
+
     if (!this->mesh_stored) {
         write_info();
         write_mesh();
@@ -175,10 +133,8 @@ void
 ExodusIIOutput::open_file()
 {
     _F_;
-    int cpu_word_size = sizeof(PetscReal);
-    int io_word_size = sizeof(PetscReal);
-    this->exoid = ex_create(this->file_name.c_str(), EX_CLOBBER, &cpu_word_size, &io_word_size);
-    if (exoid == -1)
+    this->exo = new exodusIIcpp::File(this->file_name, exodusIIcpp::FileAccess::WRITE);
+    if (!this->exo->is_opened())
         error("Could not open file '%s' for writing.", get_file_name());
 }
 
@@ -203,7 +159,7 @@ ExodusIIOutput::write_mesh()
     // y-coordinate equal to zero
     if (exo_dim == 1)
         exo_dim = 2;
-    ex_put_init(this->exoid, "", exo_dim, n_nodes, n_elems, n_elem_blk, n_node_sets, n_side_sets);
+    this->exo->init("", exo_dim, n_nodes, n_elems, n_elem_blk, n_node_sets, n_side_sets);
 
     write_coords(exo_dim);
     write_elements();
@@ -225,21 +181,14 @@ ExodusIIOutput::write_coords(int exo_dim)
     PETSC_CHECK(VecGetArray(coord, &xyz));
 
     int n_nodes = coord_size / dim;
-    PetscReal * x = new PetscReal[n_nodes];
-    MEM_CHECK(x);
-    memset(x, 0., sizeof(PetscReal) * n_nodes);
-    PetscReal * y = nullptr;
-    if (exo_dim >= 2) {
-        y = new PetscReal[n_nodes];
-        MEM_CHECK(y);
-        memset(y, 0., sizeof(PetscReal) * n_nodes);
-    }
-    PetscReal * z = nullptr;
-    if (exo_dim >= 3) {
-        z = new PetscReal[n_nodes];
-        MEM_CHECK(z);
-        memset(z, 0., sizeof(PetscReal) * n_nodes);
-    }
+    std::vector<double> x(n_nodes, 0.);
+    std::vector<double> y;
+    std::vector<double> z;
+
+    if (exo_dim >= 2)
+        y.resize(n_nodes);
+    if (exo_dim >= 3)
+        z.resize(n_nodes);
     for (PetscInt i = 0; i < n_nodes; i++) {
         x[i] = xyz[i * dim + 0];
         if (dim >= 2)
@@ -247,16 +196,17 @@ ExodusIIOutput::write_coords(int exo_dim)
         if (dim >= 3)
             z[i] = xyz[i * dim + 2];
     }
-    ex_put_coord(this->exoid, x, y, z);
 
-    delete[] x;
-    delete[] y;
-    delete[] z;
+    if (exo_dim == 1)
+        this->exo->write_coords(x);
+    else if (exo_dim == 2)
+        this->exo->write_coords(x, y);
+    else if (exo_dim == 3)
+        this->exo->write_coords(x, y, z);
 
     PETSC_CHECK(VecRestoreArray(coord, &xyz));
 
-    const char * coord_names[3] = { "x", "y", "z" };
-    ex_put_coord_names(this->exoid, (char **) coord_names);
+    this->exo->write_coord_names();
 }
 
 const char *
@@ -392,7 +342,7 @@ ExodusIIOutput::write_elements()
     else
         write_block_connectivity(SINGLE_BLK_ID);
 
-    exo_write_block_names(this->exoid, block_names);
+    this->exo->write_block_names(block_names);
 }
 
 void
@@ -426,16 +376,10 @@ ExodusIIOutput::write_node_sets()
         PetscInt n_nodes_in_set;
         PETSC_CHECK(ISGetSize(stratum_is, &n_nodes_in_set));
 
-        PetscInt * node_set = new PetscInt[n_nodes_in_set];
-        MEM_CHECK(node_set);
-
+        std::vector<int> node_set(n_nodes_in_set);
         for (PetscInt j = 0; j < n_nodes_in_set; j++)
             node_set[j] = vertices[j] - n_elems_in_block + 1;
-
-        ex_put_set_param(this->exoid, EX_NODE_SET, vertex_set_idx[i], n_nodes_in_set, 0);
-        ex_put_set(this->exoid, EX_NODE_SET, vertex_set_idx[i], node_set, nullptr);
-
-        delete[] node_set;
+        this->exo->write_node_set(vertex_set_idx[i], node_set);
 
         PETSC_CHECK(ISRestoreIndices(stratum_is, &vertices));
 
@@ -480,14 +424,8 @@ ExodusIIOutput::write_face_sets()
         PetscInt face_set_size;
         PETSC_CHECK(ISGetSize(stratum_is, &face_set_size));
 
-        ex_put_set_param(this->exoid, EX_SIDE_SET, face_set_idx[fs], face_set_size, 0);
-
-        PetscInt * elem_list = new PetscInt[face_set_size];
-        MEM_CHECK(elem_list);
-
-        PetscInt * side_list = new PetscInt[face_set_size];
-        MEM_CHECK(side_list);
-
+        std::vector<int> elem_list(face_set_size);
+        std::vector<int> side_list(face_set_size);
         for (PetscInt i = 0; i < face_set_size; ++i) {
             // Element
             PetscInt num_points;
@@ -517,10 +455,7 @@ ExodusIIOutput::write_face_sets()
             PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points));
         }
 
-        ex_put_set(this->exoid, EX_SIDE_SET, face_set_idx[fs], elem_list, side_list);
-
-        delete[] side_list;
-        delete[] elem_list;
+        this->exo->write_side_set(face_set_idx[fs], elem_list, side_list);
 
         PETSC_CHECK(ISRestoreIndices(stratum_is, &faces));
         PETSC_CHECK(ISDestroy(&stratum_is));
@@ -530,7 +465,7 @@ ExodusIIOutput::write_face_sets()
     PETSC_CHECK(ISRestoreIndices(face_sets_is, &face_set_idx));
     PETSC_CHECK(ISDestroy(&face_sets_is));
 
-    exo_write_side_set_names(this->exoid, fs_names);
+    this->exo->write_side_set_names(fs_names);
 }
 
 void
@@ -574,13 +509,13 @@ ExodusIIOutput::write_all_variable_names()
             this->nodal_var_fids.push_back(fid);
         }
     }
-    exo_write_variable_names(this->exoid, EX_NODAL, nodal_var_names);
-    exo_write_variable_names(this->exoid, EX_ELEM_BLOCK, elem_var_names);
+    this->exo->write_nodal_var_names(nodal_var_names);
+    this->exo->write_elem_var_names(elem_var_names);
 
     std::vector<std::string> global_var_names;
     for (auto & name : this->global_var_names)
         global_var_names.push_back(name);
-    exo_write_variable_names(this->exoid, EX_GLOBAL, global_var_names);
+    this->exo->write_global_var_names(global_var_names);
 }
 
 void
@@ -588,12 +523,12 @@ ExodusIIOutput::write_variables()
 {
     _F_;
     PetscReal time = this->problem->get_time();
-    ex_put_time(this->exoid, this->step_num, &time);
+    this->exo->write_time(this->step_num, time);
 
     write_field_variables();
     write_global_variables();
 
-    ex_update(this->exoid);
+    this->exo->update();
 }
 
 void
@@ -629,14 +564,11 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
             PetscInt nc = this->dpi->get_field_num_components(fid);
             for (PetscInt c = 0; c <= nc; c++, exo_var_id++) {
                 int exo_idx = n - n_all_elems + 1;
-                ex_put_partial_var(this->exoid,
-                                   this->step_num,
-                                   EX_NODAL,
-                                   exo_var_id,
-                                   1,
-                                   exo_idx,
-                                   1,
-                                   sln + offset + c);
+                this->exo->write_partial_nodal_var(this->step_num,
+                                                   exo_var_id,
+                                                   1,
+                                                   exo_idx,
+                                                   sln[offset + c]);
             }
         }
     }
@@ -671,14 +603,11 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, const PetscScalar * sln)
             PetscInt nc = this->dpi->get_field_num_components(fid);
             for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
                 int exo_idx = n - first + 1;
-                ex_put_partial_var(this->exoid,
-                                   this->step_num,
-                                   EX_ELEM_BLOCK,
-                                   exo_var_id,
-                                   blk_id,
-                                   exo_idx,
-                                   1,
-                                   sln + offset + c);
+                this->exo->write_partial_elem_var(this->step_num,
+                                                  exo_var_id,
+                                                  blk_id,
+                                                  exo_idx,
+                                                  sln[offset + c]);
             }
         }
     }
@@ -693,7 +622,7 @@ ExodusIIOutput::write_global_variables()
     for (auto & name : this->global_var_names) {
         Postprocessor * pp = this->problem->get_postprocessor(name);
         PetscReal val = pp->get_value();
-        ex_put_var(this->exoid, this->step_num, EX_GLOBAL, exo_var_id, 0, 1, &val);
+        this->exo->write_global_var(this->step_num, exo_var_id, val);
         exo_var_id++;
     }
 }
@@ -702,24 +631,14 @@ void
 ExodusIIOutput::write_info()
 {
     _F_;
+    std::time_t now = std::time(nullptr);
+    std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
+    std::string created_by =
+        fmt::format("Created by godzilla {}, on {}", GODZILLA_VERSION, datetime);
 
-    time_t rawtime;
-    time(&rawtime);
-    struct tm * now = localtime(&rawtime);
-
-    char datetime[MAX_DATE_TIME + 1];
-    strftime(datetime, MAX_DATE_TIME, "%d %b %Y, %H:%M:%S", now);
-
-    char created_by_info[MAX_LINE_LENGTH];
-    snprintf(created_by_info,
-             MAX_LINE_LENGTH,
-             "Created by godzilla %s, on %s",
-             GODZILLA_VERSION,
-             datetime);
-
-    char * info[] = { created_by_info };
-    int n_info = sizeof(info) / sizeof(char *);
-    ex_put_info(this->exoid, n_info, info);
+    std::vector<std::string> info;
+    info.push_back(created_by);
+    this->exo->write_info(info);
 }
 
 void
@@ -742,18 +661,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = get_num_elem_nodes(polytope_type);
     const PetscInt * ordering = get_elem_node_ordering(polytope_type);
-    ex_put_block(this->exoid,
-                 EX_ELEM_BLOCK,
-                 blk_id,
-                 elem_type,
-                 n_elems_in_block,
-                 n_nodes_per_elem,
-                 0,
-                 0,
-                 0);
-
-    int * connect = new int[n_elems_in_block * n_nodes_per_elem];
-    MEM_CHECK(connect);
+    std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
     for (PetscInt i = 0, j = 0; i < n_elems_in_block; i++) {
         PetscInt elem_id;
         if (cells == nullptr)
@@ -770,8 +678,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const
         PETSC_CHECK(
             DMPlexRestoreTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
     }
-    ex_put_conn(this->exoid, EX_ELEM_BLOCK, blk_id, connect, nullptr, nullptr);
-    delete[] connect;
+    this->exo->write_block(blk_id, elem_type, n_elems_in_block, connect);
 }
 
 } // namespace godzilla
