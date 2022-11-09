@@ -562,7 +562,7 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
 
             PetscInt offset = this->dpi->get_field_dof(n, fid);
             PetscInt nc = this->dpi->get_field_num_components(fid);
-            for (PetscInt c = 0; c <= nc; c++, exo_var_id++) {
+            for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
                 int exo_idx = n - n_all_elems + 1;
                 this->exo->write_partial_nodal_var(this->step_num,
                                                    exo_var_id,
