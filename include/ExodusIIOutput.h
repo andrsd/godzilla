@@ -2,6 +2,10 @@
 
 #include "FileOutput.h"
 
+namespace exodusIIcpp {
+class File;
+}
+
 namespace godzilla {
 
 class DiscreteProblemInterface;
@@ -61,8 +65,8 @@ protected:
     const DiscreteProblemInterface * dpi;
     /// Unstructured mesh
     const UnstructuredMesh * mesh;
-    /// ExodusII file handle
-    int exoid;
+    /// ExodusII file
+    exodusIIcpp::File * exo;
     /// Step number
     int step_num;
     /// Flag indicating if we need to store mesh during `output_step`

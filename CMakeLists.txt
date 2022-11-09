@@ -33,16 +33,15 @@ if (NOT ${HDF5_FOUND})
     message(STATUS "HDF5 was not found.")
 endif()
 
-find_package(NetCDF)
-if (NOT ${NETCDF_FOUND})
-    message(STATUS "Try to set environment variable NETCDF_DIR to point to your NetCDF installation.")
-endif()
-
-find_package(ExodusII)
-if (NOT ${EXODUSII_FOUND})
-    message(STATUS "Try to set environment variable EXODUSII_DIR to point to your ExodusII installation.")
-endif()
-
+FetchContent_Declare(
+    exodusIIcpp
+    GIT_REPOSITORY https://github.com/andrsd/exodusIIcpp.git
+    GIT_TAG        v1.1.0
+)
+mark_as_advanced(FORCE
+    FETCHCONTENT_SOURCE_DIR_EXODUSIICPP
+    FETCHCONTENT_UPDATES_DISCONNECTED_EXODUSIICPP
+)
 
 FetchContent_Declare(
   googletest
@@ -57,7 +56,7 @@ mark_as_advanced(FORCE
     FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
 )
 
-FetchContent_MakeAvailable(googletest)
+FetchContent_MakeAvailable(exodusIIcpp googletest)
 mark_as_advanced(FORCE
     FETCHCONTENT_BASE_DIR
     FETCHCONTENT_FULLY_DISCONNECTED
