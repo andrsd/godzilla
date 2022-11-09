@@ -145,8 +145,7 @@ if(GODZILLA_CODE_COVERAGE)
             COMMAND
                 ${LCOV_PATH}
                 --capture
-                --directory src
-                --directory test
+                --directory ${PROJECT_BINARY_DIR}
                 --output-file ${COVERAGE_INFO}
                 ${EXCLUDE_REGEX}
         )
