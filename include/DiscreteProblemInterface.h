@@ -5,6 +5,7 @@
 
 namespace godzilla {
 
+class Parameters;
 class Logger;
 class UnstructuredMesh;
 class Problem;

@@ -1,0 +1,27 @@
+#pragma once
+
+#include "petsc.h"
+
+namespace godzilla {
+namespace internal {
+
+/// Create PetscFE object for Lagrange FE
+///
+/// @param comm MPI communicator
+/// @param dim Spatial dimension
+/// @param Nc Number of components
+/// @param is_simplex `true` is simplex elements
+/// @param k Polynomial order
+/// @param qorder Quadrature order
+/// @param fem Created PetscFE object
+/// @return PETSC error code
+PetscErrorCode create_lagrange_petscfe(MPI_Comm comm,
+                                       PetscInt dim,
+                                       PetscInt Nc,
+                                       PetscBool is_simplex,
+                                       PetscInt k,
+                                       PetscInt qorder,
+                                       PetscFE * fem);
+
+} // namespace internal
+} // namespace godzilla

@@ -7,6 +7,7 @@
 #include "Types.h"
 #include "App.h"
 #include "Logger.h"
+#include "PetscFEGodzilla.h"
 #include <assert.h>
 
 namespace godzilla {
@@ -295,9 +296,13 @@ FEProblemInterface::create_fe(FieldInfo & fi)
     const MPI_Comm & comm = this->unstr_mesh->get_comm();
     PetscInt dim = this->problem->get_dimension();
     PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
-
-    PETSC_CHECK(PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe));
-    PETSC_CHECK(PetscFESetName(fi.fe, fi.name.c_str()));
+    PETSC_CHECK(internal::create_lagrange_petscfe(comm,
+                                                  dim,
+                                                  fi.nc,
+                                                  is_simplex,
+                                                  fi.k,
+                                                  this->qorder,
+                                                  &fi.fe));
 }
 
 void
@@ -318,6 +323,10 @@ FEProblemInterface::set_up_ds()
     }
     PETSC_CHECK(DMCreateDS(dm));
     PETSC_CHECK(DMGetDS(dm, &this->ds));
+    for (auto & it : this->fields) {
+        FieldInfo & fi = it.second;
+        PETSC_CHECK(PetscDSSetContext(this->ds, fi.id, this));
+    }
 
     set_up_weak_form();
 }
@@ -476,6 +485,96 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &this->a));
         PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
     }
+}
+
+PetscErrorCode
+FEProblemInterface::integrate(PetscDS ds,
+                              PetscInt field,
+                              PetscInt ne,
+                              PetscFEGeom * cgeom,
+                              const PetscScalar coefficients[],
+                              PetscDS ds_aux,
+                              const PetscScalar coefficients_aux[],
+                              PetscScalar integral[])
+{
+    return 0;
+}
+
+PetscErrorCode
+FEProblemInterface::integrate_bnd(PetscDS ds,
+                                  PetscInt field,
+                                  PetscBdPointFunc obj_func,
+                                  PetscInt ne,
+                                  PetscFEGeom * fgeom,
+                                  const PetscScalar coefficients[],
+                                  PetscDS ds_aux,
+                                  const PetscScalar coefficients_aux[],
+                                  PetscScalar integral[])
+{
+    return 0;
+}
+
+PetscErrorCode
+FEProblemInterface::integrate_residual(PetscDS ds,
+                                       PetscFormKey key,
+                                       PetscInt ne,
+                                       PetscFEGeom * cgeom,
+                                       const PetscScalar coefficients[],
+                                       const PetscScalar coefficients_t[],
+                                       PetscDS ds_aux,
+                                       const PetscScalar coefficients_aux[],
+                                       PetscReal t,
+                                       PetscScalar elem_vec[])
+{
+    return 0;
+}
+
+PetscErrorCode
+FEProblemInterface::integrate_bnd_residual(PetscDS ds,
+                                           PetscFormKey key,
+                                           PetscInt ne,
+                                           PetscFEGeom * fgeom,
+                                           const PetscScalar coefficients[],
+                                           const PetscScalar coefficients_t[],
+                                           PetscDS ds_aux,
+                                           const PetscScalar coefficients_aux[],
+                                           PetscReal t,
+                                           PetscScalar elemVec[])
+{
+    return 0;
+}
+
+PetscErrorCode
+FEProblemInterface::integrate_jacobian(PetscDS ds,
+                                       PetscFEJacobianType jtype,
+                                       PetscFormKey key,
+                                       PetscInt ne,
+                                       PetscFEGeom * cgeom,
+                                       const PetscScalar coefficients[],
+                                       const PetscScalar coefficients_t[],
+                                       PetscDS ds_aux,
+                                       const PetscScalar coefficients_aux[],
+                                       PetscReal t,
+                                       PetscReal u_tshift,
+                                       PetscScalar elem_mat[])
+{
+    return 0;
+}
+
+PetscErrorCode
+FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
+                                           PetscFormKey key,
+                                           PetscInt ne,
+                                           PetscFEGeom * fgeom,
+                                           const PetscScalar coefficients[],
+                                           const PetscScalar coefficients_t[],
+                                           PetscDS ds_aux,
+                                           const PetscScalar coefficients_aux[],
+                                           PetscReal t,
+                                           PetscReal u_tshift,
+                                           PetscScalar elem_mat[])
+{
+    return 0;
 }
 
 } // namespace godzilla

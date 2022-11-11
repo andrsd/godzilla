@@ -55,6 +55,7 @@ add_library(${PROJECT_NAME}
         Output.cpp
         Parameters.cpp
         ParsedFunction.cpp
+        PetscFEGodzilla.cpp
         PiecewiseLinear.cpp
         Postprocessor.cpp
         PrintInterface.cpp
@@ -104,6 +105,8 @@ target_link_libraries(
     PRIVATE
         muParser
         exodusIIcpp
+        blas
+        lapack
 )
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)

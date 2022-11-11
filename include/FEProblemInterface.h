@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "petsc.h"
 #include "petscfe.h"
 #include "DiscreteProblemInterface.h"
@@ -77,6 +78,78 @@ public:
     ///
     /// @param aux Auxiliary field object to add
     virtual void add_auxiliary_field(AuxiliaryField * aux);
+
+    /// Integrate
+    virtual PetscErrorCode integrate(PetscDS ds,
+                                     PetscInt field,
+                                     PetscInt ne,
+                                     PetscFEGeom * cgeom,
+                                     const PetscScalar coefficients[],
+                                     PetscDS ds_aux,
+                                     const PetscScalar coefficientsAux[],
+                                     PetscScalar integral[]);
+
+    /// Integrate field over a boundary
+    virtual PetscErrorCode integrate_bnd(PetscDS ds,
+                                         PetscInt field,
+                                         PetscBdPointFunc obj_func,
+                                         PetscInt ne,
+                                         PetscFEGeom * fgeom,
+                                         const PetscScalar coefficients[],
+                                         PetscDS ds_aux,
+                                         const PetscScalar coefficientsAux[],
+                                         PetscScalar integral[]);
+
+    /// Integrate residual
+    virtual PetscErrorCode integrate_residual(PetscDS ds,
+                                              PetscFormKey key,
+                                              PetscInt ne,
+                                              PetscFEGeom * cgeom,
+                                              const PetscScalar coefficients[],
+                                              const PetscScalar coefficients_t[],
+                                              PetscDS ds_aux,
+                                              const PetscScalar coefficients_aux[],
+                                              PetscReal t,
+                                              PetscScalar elem_vec[]);
+
+    /// Integrate residual over a boundary
+    virtual PetscErrorCode integrate_bnd_residual(PetscDS ds,
+                                                  PetscFormKey key,
+                                                  PetscInt ne,
+                                                  PetscFEGeom * fgeom,
+                                                  const PetscScalar coefficients[],
+                                                  const PetscScalar coefficients_t[],
+                                                  PetscDS ds_aux,
+                                                  const PetscScalar coefficients_aux[],
+                                                  PetscReal t,
+                                                  PetscScalar elem_vec[]);
+
+    /// Integrate Jacobian
+    virtual PetscErrorCode integrate_jacobian(PetscDS ds,
+                                              PetscFEJacobianType jtype,
+                                              PetscFormKey key,
+                                              PetscInt ne,
+                                              PetscFEGeom * cgeom,
+                                              const PetscScalar coefficients[],
+                                              const PetscScalar coefficients_t[],
+                                              PetscDS ds_aux,
+                                              const PetscScalar coefficients_aux[],
+                                              PetscReal t,
+                                              PetscReal u_tshift,
+                                              PetscScalar elem_mat[]);
+
+    // Integrate Jacobian over a boundary
+    virtual PetscErrorCode integrate_bnd_jacobian(PetscDS ds,
+                                                  PetscFormKey key,
+                                                  PetscInt ne,
+                                                  PetscFEGeom * fgeom,
+                                                  const PetscScalar coefficients[],
+                                                  const PetscScalar coefficients_t[],
+                                                  PetscDS ds_aux,
+                                                  const PetscScalar coefficients_aux[],
+                                                  PetscReal t,
+                                                  PetscReal u_tshift,
+                                                  PetscScalar elem_mat[]);
 
 protected:
     struct FieldInfo;
