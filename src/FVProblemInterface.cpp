@@ -31,7 +31,9 @@ FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & par
     DiscreteProblemInterface(problem, params),
     section(nullptr),
     fvm(nullptr),
-    sln(nullptr)
+    sln(nullptr),
+    ds(nullptr),
+    wf(nullptr)
 {
     _F_;
 }
@@ -54,7 +56,7 @@ PetscInt
 FVProblemInterface::get_num_fields() const
 {
     _F_;
-    // becuase there is one field with 'n' components which are the individual fields
+    // because there is one field with 'n' components which are the individual fields
     return 1;
 }
 
@@ -178,6 +180,13 @@ FVProblemInterface::get_solution_vector_local() const
     _F_;
     build_local_solution_vector(this->sln);
     return this->sln;
+}
+
+WeakForm *
+FVProblemInterface::get_weak_form() const
+{
+    _F_;
+    return wf;
 }
 
 void

@@ -26,12 +26,22 @@ BoundaryCondition::BoundaryCondition(const Parameters & params) :
     dm(nullptr),
     ds(nullptr),
     label(nullptr),
+    is(nullptr),
     fid(-1),
     n_ids(0),
     ids(nullptr),
     boundary(get_param<std::string>("boundary"))
 {
     _F_;
+}
+
+BoundaryCondition::~BoundaryCondition()
+{
+    _F_;
+    if (this->ids)
+        PETSC_CHECK(ISRestoreIndices(this->is, &this->ids));
+    if (this->is)
+        PETSC_CHECK(ISDestroy(&this->is));
 }
 
 void
@@ -78,19 +88,22 @@ BoundaryCondition::get_field_id() const
     return this->fid;
 }
 
+const DiscreteProblemInterface *
+BoundaryCondition::get_discrete_problem_interface() const
+{
+    _F_;
+    return this->dpi;
+}
+
 void
 BoundaryCondition::set_up()
 {
     _F_;
     PETSC_CHECK(DMGetDS(this->dm, &this->ds));
-    IS is;
-    PETSC_CHECK(DMLabelGetValueIS(this->label, &is));
+    PETSC_CHECK(DMLabelGetValueIS(this->label, &this->is));
     PETSC_CHECK(ISGetSize(is, &this->n_ids));
     PETSC_CHECK(ISGetIndices(is, &this->ids));
     set_up_callback();
-    PETSC_CHECK(ISRestoreIndices(is, &this->ids));
-    this->ids = nullptr;
-    PETSC_CHECK(ISDestroy(&is));
 }
 
 } // namespace godzilla

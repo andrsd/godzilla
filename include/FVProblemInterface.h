@@ -25,6 +25,7 @@ public:
     set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
     virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
     virtual Vec get_solution_vector_local() const override;
+    virtual WeakForm * get_weak_form() const override;
 
     /// Adds a volumetric field
     ///
@@ -90,6 +91,12 @@ protected:
 
     /// Local solution vector
     Vec sln;
+
+    /// Object that manages a discrete system
+    PetscDS ds;
+
+    /// Weak form
+    WeakForm * wf;
 
     friend void __compute_flux(PetscInt dim,
                                PetscInt nf,

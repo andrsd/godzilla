@@ -9,6 +9,7 @@ class Parameters;
 class Logger;
 class UnstructuredMesh;
 class Problem;
+class WeakForm;
 class InitialCondition;
 class BoundaryCondition;
 
@@ -84,12 +85,6 @@ public:
     virtual void
     set_field_component_name(PetscInt fid, PetscInt component, const std::string name) = 0;
 
-    /// Set problem constants
-    ///
-    /// These constants will be available in the weak form via `constants` parameter.
-    /// @param consts Constants to add to the problem
-    virtual void set_constants(const std::vector<PetscReal> & consts);
-
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
@@ -117,6 +112,11 @@ public:
     /// @return Local solution vector
     virtual Vec get_solution_vector_local() const = 0;
 
+    /// Get weak form associated with this problem
+    ///
+    /// @return The weak form associated with this problem
+    virtual WeakForm * get_weak_form() const = 0;
+
 protected:
     virtual void init();
     virtual void create();
@@ -138,9 +138,6 @@ protected:
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
 
-    /// Set up constants
-    void set_up_constants();
-
     /// Build local solution vector
     ///
     /// @param sln Global solution vector
@@ -160,12 +157,6 @@ protected:
 
     /// List of boundary conditions
     std::vector<BoundaryCondition *> bcs;
-
-    /// Object that manages a discrete system
-    PetscDS ds;
-
-    /// List of constants
-    std::vector<PetscReal> consts;
 };
 
 } // namespace godzilla

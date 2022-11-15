@@ -11,6 +11,8 @@ add_library(${PROJECT_NAME}
         App.cpp
         AuxiliaryField.cpp
         BasicTSAdapt.cpp
+        BndJacobianFunc.cpp
+        BndResidualFunc.cpp
         BoundaryCondition.cpp
         BoxMesh.cpp
         CallStack.cpp
@@ -40,6 +42,7 @@ add_library(${PROJECT_NAME}
         Init.cpp
         InitialCondition.cpp
         InputFile.cpp
+        JacobianFunc.cpp
         L2Diff.cpp
         L2FieldDiff.cpp
         LinearInterpolation.cpp
@@ -61,6 +64,7 @@ add_library(${PROJECT_NAME}
         PrintInterface.cpp
         Problem.cpp
         RectangleMesh.cpp
+        ResidualFunc.cpp
         Terminal.cpp
         TimeSteppingAdaptor.cpp
         TransientProblemInterface.cpp
@@ -68,6 +72,7 @@ add_library(${PROJECT_NAME}
         Utils.cpp
         Validation.cpp
         VTKOutput.cpp
+        WeakForm.cpp
 )
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})

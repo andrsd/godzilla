@@ -1,12 +1,38 @@
 #include "Godzilla.h"
 #include "CallStack.h"
 #include "ExplicitFELinearProblem.h"
+#include "WeakForm.h"
+#include "ResidualFunc.h"
+#include "JacobianFunc.h"
 #include "Output.h"
 #include "Validation.h"
 #include "Utils.h"
 #include "petscts.h"
 
 namespace godzilla {
+
+namespace {
+
+class G0Identity : public JacobianFunc {
+public:
+    explicit G0Identity(const ExplicitFELinearProblem * prob) :
+        JacobianFunc(prob),
+        n_comp(prob->get_field_num_components(0))
+    {
+    }
+
+    void
+    evaluate(PetscScalar * g) override
+    {
+        for (PetscInt c = 0; c < n_comp; ++c)
+            g[c * n_comp + c] = 1.0;
+    }
+
+protected:
+    PetscInt n_comp;
+};
+
+} // namespace
 
 Parameters
 ExplicitFELinearProblem::parameters()
@@ -28,7 +54,7 @@ ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & params) :
 
 ExplicitFELinearProblem::~ExplicitFELinearProblem()
 {
-    // we should be doing this, but DM is already gone when we try do this
+    // we should be doing this, but DM is already gone when we try to do this
     // DM dm = get_dm();
     // DMTSDestroyRHSMassMatrix(dm);
 
@@ -45,6 +71,8 @@ ExplicitFELinearProblem::init()
     PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
 
     FEProblemInterface::init();
+    // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
+    set_jacobian_block(0, 0, new G0Identity(this), nullptr, nullptr, nullptr);
 
     for (auto & f : this->fields) {
         PetscInt fid = f.second.id;
@@ -92,8 +120,6 @@ ExplicitFELinearProblem::set_up_callbacks()
     DM dm = get_dm();
     PETSC_CHECK(DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this));
     PETSC_CHECK(DMTSSetRHSFunctionLocal(dm, DMPlexTSComputeRHSFunctionFEM, this));
-    // NOTE: this may need to be eventually in a virtual method for cases when people want to use
-    // lumped mass matrix
     PETSC_CHECK(DMTSCreateRHSMassMatrix(dm));
 }
 
@@ -119,12 +145,13 @@ ExplicitFELinearProblem::set_up_monitors()
 }
 
 void
-ExplicitFELinearProblem::set_residual_block(PetscInt field_id,
-                                            PetscFEResidualFunc * f0,
-                                            PetscFEResidualFunc * f1)
+ExplicitFELinearProblem::set_residual_block(PetscInt field_id, ResidualFunc * f0, ResidualFunc * f1)
 {
     _F_;
-    PETSC_CHECK(PetscDSSetRHSResidual(this->ds, field_id, f0, f1));
+    // see PetscDSSetRHSResidual for explanation
+    PetscInt part = 100;
+    this->wf->add(PETSC_WF_F0, nullptr, 0, field_id, part, f0);
+    this->wf->add(PETSC_WF_F1, nullptr, 0, field_id, part, f1);
 }
 
 } // namespace godzilla

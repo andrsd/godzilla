@@ -11,6 +11,7 @@ namespace godzilla {
 
 class Problem;
 class AuxiliaryField;
+class WeakForm;
 
 /// Interface for FE problems
 ///
@@ -33,6 +34,12 @@ public:
     set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
     virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
     virtual Vec get_solution_vector_local() const override;
+    virtual WeakForm * get_weak_form() const override;
+
+    /// Get number of auxiliary fields
+    ///
+    /// @return The number of auxiliary fields
+    virtual PetscInt get_num_aux_fields() const;
 
     /// Get auxiliary field name
     ///
@@ -79,11 +86,27 @@ public:
     /// @param aux Auxiliary field object to add
     virtual void add_auxiliary_field(AuxiliaryField * aux);
 
+    const PetscInt & get_spatial_dimension() const;
+
+    const PetscScalar * get_field_value(const std::string & field_name) const;
+
+    const PetscScalar * get_field_gradient(const std::string & field_name) const;
+
+    const PetscScalar * get_field_dot(const std::string & field_name) const;
+
+    const PetscReal & get_time_shift() const;
+
+    const PetscReal & get_time() const;
+
+    PetscReal * const & get_normal() const;
+
+    PetscReal * const & get_xyz() const;
+
     /// Integrate
     virtual PetscErrorCode integrate(PetscDS ds,
                                      PetscInt field,
-                                     PetscInt ne,
-                                     PetscFEGeom * cgeom,
+                                     PetscInt n_elems,
+                                     PetscFEGeom * cell_geom,
                                      const PetscScalar coefficients[],
                                      PetscDS ds_aux,
                                      const PetscScalar coefficientsAux[],
@@ -93,8 +116,8 @@ public:
     virtual PetscErrorCode integrate_bnd(PetscDS ds,
                                          PetscInt field,
                                          PetscBdPointFunc obj_func,
-                                         PetscInt ne,
-                                         PetscFEGeom * fgeom,
+                                         PetscInt n_elems,
+                                         PetscFEGeom * face_geom,
                                          const PetscScalar coefficients[],
                                          PetscDS ds_aux,
                                          const PetscScalar coefficientsAux[],
@@ -103,8 +126,8 @@ public:
     /// Integrate residual
     virtual PetscErrorCode integrate_residual(PetscDS ds,
                                               PetscFormKey key,
-                                              PetscInt ne,
-                                              PetscFEGeom * cgeom,
+                                              PetscInt n_elems,
+                                              PetscFEGeom * cell_geom,
                                               const PetscScalar coefficients[],
                                               const PetscScalar coefficients_t[],
                                               PetscDS ds_aux,
@@ -115,8 +138,8 @@ public:
     /// Integrate residual over a boundary
     virtual PetscErrorCode integrate_bnd_residual(PetscDS ds,
                                                   PetscFormKey key,
-                                                  PetscInt ne,
-                                                  PetscFEGeom * fgeom,
+                                                  PetscInt n_elems,
+                                                  PetscFEGeom * face_geom,
                                                   const PetscScalar coefficients[],
                                                   const PetscScalar coefficients_t[],
                                                   PetscDS ds_aux,
@@ -128,8 +151,8 @@ public:
     virtual PetscErrorCode integrate_jacobian(PetscDS ds,
                                               PetscFEJacobianType jtype,
                                               PetscFormKey key,
-                                              PetscInt ne,
-                                              PetscFEGeom * cgeom,
+                                              PetscInt n_elems,
+                                              PetscFEGeom * cell_geom,
                                               const PetscScalar coefficients[],
                                               const PetscScalar coefficients_t[],
                                               PetscDS ds_aux,
@@ -141,8 +164,8 @@ public:
     // Integrate Jacobian over a boundary
     virtual PetscErrorCode integrate_bnd_jacobian(PetscDS ds,
                                                   PetscFormKey key,
-                                                  PetscInt ne,
-                                                  PetscFEGeom * fgeom,
+                                                  PetscInt n_elems,
+                                                  PetscFEGeom * face_geom,
                                                   const PetscScalar coefficients[],
                                                   const PetscScalar coefficients_t[],
                                                   PetscDS ds_aux,
@@ -188,6 +211,50 @@ protected:
 
     /// Setup volumetric weak form terms
     virtual void set_up_weak_form() = 0;
+
+    PetscErrorCode update_element_vec(PetscFE fe,
+                                      PetscTabulation tab,
+                                      PetscInt r,
+                                      PetscScalar tmp_basis[],
+                                      PetscScalar tmp_basis_der[],
+                                      PetscInt e,
+                                      PetscFEGeom * fe_geom,
+                                      PetscScalar f0[],
+                                      PetscScalar f1[],
+                                      PetscScalar elem_vec[]);
+
+    PetscErrorCode update_element_mat(PetscFE fe_i,
+                                      PetscFE fe_j,
+                                      PetscInt r,
+                                      PetscInt q,
+                                      PetscTabulation tab_i,
+                                      PetscScalar tmp_basis_i[],
+                                      PetscScalar tmp_basis_der_i[],
+                                      PetscTabulation tab_j,
+                                      PetscScalar tmp_basis_j[],
+                                      PetscScalar tmp_basis_der_j[],
+                                      PetscFEGeom * fe_geom,
+                                      const PetscScalar g0[],
+                                      const PetscScalar g1[],
+                                      const PetscScalar g2[],
+                                      const PetscScalar g3[],
+                                      PetscInt e_offset,
+                                      PetscInt tot_dim,
+                                      PetscInt offset_i,
+                                      PetscInt offset_j,
+                                      PetscScalar elem_mat[]);
+
+    PetscErrorCode evaluate_field_jets(PetscDS ds,
+                                       PetscInt nf,
+                                       PetscInt r,
+                                       PetscInt q,
+                                       PetscTabulation tab[],
+                                       PetscFEGeom * fe_geom,
+                                       const PetscScalar coefficients[],
+                                       const PetscScalar coefficients_t[],
+                                       PetscScalar u[],
+                                       PetscScalar u_x[],
+                                       PetscScalar u_t[]);
 
     /// PETSc section
     PetscSection section;
@@ -245,6 +312,34 @@ protected:
 
     /// Local solution vector
     Vec sln;
+
+    /// Object that manages a discrete system
+    PetscDS ds;
+
+    /// Object that manages a discrete system for aux variables
+    PetscDS ds_aux;
+
+    /// Weak formulation
+    WeakForm * wf;
+
+    /// Spatial dimension
+    PetscInt dim;
+
+    PetscScalar * u;
+    PetscScalar * u_t;
+    PetscScalar * u_x;
+    PetscInt * u_offset;
+    PetscInt * u_offset_x;
+    PetscReal * xyz;
+    PetscReal * normals;
+    PetscScalar * au;
+    PetscScalar * au_x;
+    PetscInt * au_offset;
+    PetscInt * au_offset_x;
+    /// Time at which are our forms evaluated (NOTE: this is not the simulation time)
+    PetscReal time;
+    /// the multiplier a for dF/dU_t
+    PetscReal u_t_shift;
 };
 
 } // namespace godzilla

@@ -111,24 +111,6 @@ integrate_bd_residual(PetscDS ds,
     PetscFunctionReturn(err);
 }
 
-static PetscErrorCode
-integrate_hybrid_residual(PetscDS /*ds*/,
-                          PetscFormKey /*key*/,
-                          PetscInt /*s*/,
-                          PetscInt /*ne*/,
-                          PetscFEGeom * /*fgeom*/,
-                          const PetscScalar /*coefficients*/[],
-                          const PetscScalar /*coefficients_t*/[],
-                          PetscDS /*ds_aux*/,
-                          const PetscScalar /*coefficients_aux*/[],
-                          PetscReal /*t*/,
-                          PetscScalar /*elem_vec*/[])
-{
-    PetscFunctionBegin;
-    godzilla::error("Not implemented.");
-    PetscFunctionReturn(0);
-}
-
 PetscErrorCode
 integrate_jacobian(PetscDS ds,
                    PetscFEJacobianType jtype,
@@ -144,8 +126,11 @@ integrate_jacobian(PetscDS ds,
                    PetscScalar elem_mat[])
 {
     PetscFunctionBegin;
+    PetscInt n_fields;
+    PetscCall(PetscDSGetNumFields(ds, &n_fields));
+    PetscInt field_i = key.field / n_fields;
     void * ctx;
-    PetscCall(PetscDSGetContext(ds, key.field, &ctx));
+    PetscCall(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
     PetscErrorCode err = fepi->integrate_jacobian(ds,
                                                   jtype,
@@ -177,8 +162,11 @@ integrate_bd_jacobian(PetscDS ds,
                       PetscScalar elem_mat[])
 {
     PetscFunctionBegin;
+    PetscInt n_fields;
+    PetscCall(PetscDSGetNumFields(ds, &n_fields));
+    PetscInt field_i = key.field / n_fields;
     void * ctx;
-    PetscCall(PetscDSGetContext(ds, key.field, &ctx));
+    PetscCall(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
     PetscErrorCode err = fepi->integrate_bnd_jacobian(ds,
                                                       key,
@@ -192,26 +180,6 @@ integrate_bd_jacobian(PetscDS ds,
                                                       u_tshift,
                                                       elem_mat);
     PetscFunctionReturn(err);
-}
-
-PetscErrorCode
-integrate_hybrid_jacobian(PetscDS /*ds*/,
-                          PetscFEJacobianType /*jtype*/,
-                          PetscFormKey /*key*/,
-                          PetscInt /*s*/,
-                          PetscInt /*ne*/,
-                          PetscFEGeom * /*fgeom*/,
-                          const PetscScalar /*coefficients*/[],
-                          const PetscScalar /*coefficients_t*/[],
-                          PetscDS /*ds_aux*/,
-                          const PetscScalar /*coefficients_aux*/[],
-                          PetscReal /*t*/,
-                          PetscReal /*u_tshift*/,
-                          PetscScalar /*elem_mat*/[])
-{
-    PetscFunctionBegin;
-    godzilla::error("Not implemented.");
-    PetscFunctionReturn(0);
 }
 
 PetscErrorCode
@@ -230,11 +198,11 @@ create_lagrange_petscfe(MPI_Comm comm,
     (*fem)->ops->integratebd = integrate_bd;
     (*fem)->ops->integrateresidual = integrate_residual;
     (*fem)->ops->integratebdresidual = integrate_bd_residual;
-    (*fem)->ops->integratehybridresidual = integrate_hybrid_residual;
-    (*fem)->ops->integratejacobianaction = NULL;
+    (*fem)->ops->integratehybridresidual = nullptr;
+    (*fem)->ops->integratejacobianaction = nullptr;
     (*fem)->ops->integratejacobian = integrate_jacobian;
     (*fem)->ops->integratebdjacobian = integrate_bd_jacobian;
-    (*fem)->ops->integratehybridjacobian = integrate_hybrid_jacobian;
+    (*fem)->ops->integratehybridjacobian = nullptr;
     PetscFunctionReturn(0);
 }
 

@@ -5,6 +5,8 @@
 
 namespace godzilla {
 
+class ResidualFunc;
+
 class ExplicitFELinearProblem : public FENonlinearProblem, public TransientProblemInterface {
 public:
     ExplicitFELinearProblem(const Parameters & params);
@@ -20,9 +22,8 @@ protected:
     virtual void set_up_callbacks() override;
     virtual void set_up_time_scheme() override;
     virtual void set_up_monitors() override;
-    virtual void set_residual_block(PetscInt field_id,
-                                    PetscFEResidualFunc * f0,
-                                    PetscFEResidualFunc * f1) override;
+    virtual void
+    set_residual_block(PetscInt field_id, ResidualFunc * f0, ResidualFunc * f1) override;
 
     /// Time stepping scheme
     const std::string & scheme;

@@ -28,8 +28,7 @@ zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscSca
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
     unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
-    logger(params.get<const App *>("_app")->get_logger()),
-    ds(nullptr)
+    logger(params.get<const App *>("_app")->get_logger())
 {
 }
 
@@ -40,13 +39,6 @@ DiscreteProblemInterface::get_mesh() const
 {
     _F_;
     return this->unstr_mesh;
-}
-
-void
-DiscreteProblemInterface::set_constants(const std::vector<PetscReal> & consts)
-{
-    _F_;
-    this->consts = consts;
 }
 
 void
@@ -70,7 +62,6 @@ DiscreteProblemInterface::init()
     set_up_ds();
     set_up_initial_conditions();
     set_up_boundary_conditions();
-    set_up_constants();
 }
 
 void
@@ -198,16 +189,6 @@ DiscreteProblemInterface::set_up_initial_guess()
         set_initial_guess_from_ics();
     else
         set_zero_initial_guess();
-}
-
-void
-DiscreteProblemInterface::set_up_constants()
-{
-    _F_;
-    if (this->consts.size() == 0)
-        return;
-
-    PETSC_CHECK(PetscDSSetConstants(this->ds, this->consts.size(), this->consts.data()));
 }
 
 Vec

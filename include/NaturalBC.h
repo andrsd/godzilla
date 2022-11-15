@@ -5,17 +5,24 @@
 
 namespace godzilla {
 
+class WeakForm;
+class BndResidualFunc;
+class BndJacobianFunc;
+
 /// Base class for natural boundary conditions
 class NaturalBC : public BoundaryCondition {
 public:
     NaturalBC(const Parameters & params);
+
+    /// Set up the weak form for the boundary integral of this boundary condition
+    virtual void set_up_weak_form() = 0;
 
 protected:
     /// Set residual statement for the boundary integral
     ///
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
-    void set_residual_block(PetscFEBndResidualFunc * f0, PetscFEBndResidualFunc * f1);
+    void set_residual_block(BndResidualFunc * f0, BndResidualFunc * f1);
 
     /// Set Jacobian statement for the boundary integral
     ///
@@ -25,18 +32,15 @@ protected:
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
     void set_jacobian_block(PetscInt gid,
-                            PetscFEBndJacobianFunc * g0,
-                            PetscFEBndJacobianFunc * g1,
-                            PetscFEBndJacobianFunc * g2,
-                            PetscFEBndJacobianFunc * g3);
+                            BndJacobianFunc * g0,
+                            BndJacobianFunc * g1,
+                            BndJacobianFunc * g2,
+                            BndJacobianFunc * g3);
 
     virtual void set_up_callback() override;
 
-    /// Set up the weak form for the boundary integral of this boundary condition
-    virtual void set_up_weak_form() = 0;
-
     /// WeakForm object
-    PetscWeakForm wf;
+    WeakForm * wf;
 
     /// Boundary number
     PetscInt bd;
