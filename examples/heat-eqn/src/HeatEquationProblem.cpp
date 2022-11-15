@@ -52,7 +52,11 @@ protected:
 
 class Jacobian0 : public JacobianFunc {
 public:
-    explicit Jacobian0(const FEProblemInterface * fepi) : JacobianFunc(fepi), T_t_shift(get_time_shift()) {}
+    explicit Jacobian0(const FEProblemInterface * fepi) :
+        JacobianFunc(fepi),
+        T_t_shift(get_time_shift())
+    {
+    }
 
     void
     evaluate(PetscScalar g[]) override
@@ -66,7 +70,11 @@ protected:
 
 class Jacobian3 : public JacobianFunc {
 public:
-    explicit Jacobian3(const FEProblemInterface * fepi) : JacobianFunc(fepi), dim(get_spatial_dimension()) {}
+    explicit Jacobian3(const FEProblemInterface * fepi) :
+        JacobianFunc(fepi),
+        dim(get_spatial_dimension())
+    {
+    }
 
     void
     evaluate(PetscScalar g[]) override

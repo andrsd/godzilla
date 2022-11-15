@@ -366,31 +366,3 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
                     "Boundary condition 'bc1' is set on boundary 'asdf' which does not exist "
                     "in the mesh."));
 }
-
-TEST_F(FENonlinearProblemTest, set_constant)
-{
-    std::vector<PetscReal> consts = { 5, 3, 1 };
-    this->prob->set_constants(consts);
-
-    auto & k = this->prob->getConstants();
-    EXPECT_EQ(k[0], 5);
-    EXPECT_EQ(k[1], 3);
-    EXPECT_EQ(k[2], 1);
-}
-
-TEST_F(FENonlinearProblemTest, set_constant_2)
-{
-    this->mesh->create();
-    this->prob->create();
-    std::vector<PetscReal> consts = { 5, 3, 1 };
-    this->prob->set_constants(consts);
-    this->prob->set_up_constants();
-    PetscDS ds = this->prob->getDS();
-    PetscInt n_consts;
-    const PetscReal * cs;
-    PetscDSGetConstants(ds, &n_consts, &cs);
-    EXPECT_EQ(n_consts, 3);
-    EXPECT_EQ(cs[0], 5);
-    EXPECT_EQ(cs[1], 3);
-    EXPECT_EQ(cs[2], 1);
-}

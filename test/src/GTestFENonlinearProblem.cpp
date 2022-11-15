@@ -1,84 +1,64 @@
 #include "GTestFENonlinearProblem.h"
+#include "ResidualFunc.h"
+#include "JacobianFunc.h"
 #include "Godzilla.h"
 
 REGISTER_OBJECT(GTestFENonlinearProblem);
 
-static void
-f0_u(PetscInt dim,
-     PetscInt Nf,
-     PetscInt NfAux,
-     const PetscInt uOff[],
-     const PetscInt uOff_x[],
-     const PetscScalar u[],
-     const PetscScalar u_t[],
-     const PetscScalar u_x[],
-     const PetscInt aOff[],
-     const PetscInt aOff_x[],
-     const PetscScalar a[],
-     const PetscScalar a_t[],
-     const PetscScalar a_x[],
-     PetscReal t,
-     const PetscReal x[],
-     PetscInt numConstants,
-     const PetscScalar constants[],
-     PetscScalar f0[])
-{
-    f0[0] = 2.0;
-}
+namespace {
 
-/* gradU[comp*dim+d] = {u_x, u_y} or {u_x, u_y, u_z} */
-static void
-f1_u(PetscInt dim,
-     PetscInt Nf,
-     PetscInt NfAux,
-     const PetscInt uOff[],
-     const PetscInt uOff_x[],
-     const PetscScalar u[],
-     const PetscScalar u_t[],
-     const PetscScalar u_x[],
-     const PetscInt aOff[],
-     const PetscInt aOff_x[],
-     const PetscScalar a[],
-     const PetscScalar a_t[],
-     const PetscScalar a_x[],
-     PetscReal t,
-     const PetscReal x[],
-     PetscInt numConstants,
-     const PetscScalar constants[],
-     PetscScalar f1[])
-{
-    PetscInt d;
-    for (d = 0; d < dim; ++d)
-        f1[d] = u_x[d];
-}
+class F0 : public ResidualFunc {
+public:
+    explicit F0(const GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
 
-/* < \nabla v, \nabla u + {\nabla u}^T >
-   This just gives \nabla u, give the perdiagonal for the transpose */
-static void
-g3_uu(PetscInt dim,
-      PetscInt Nf,
-      PetscInt NfAux,
-      const PetscInt uOff[],
-      const PetscInt uOff_x[],
-      const PetscScalar u[],
-      const PetscScalar u_t[],
-      const PetscScalar u_x[],
-      const PetscInt aOff[],
-      const PetscInt aOff_x[],
-      const PetscScalar a[],
-      const PetscScalar a_t[],
-      const PetscScalar a_x[],
-      PetscReal t,
-      PetscReal u_tShift,
-      const PetscReal x[],
-      PetscInt numConstants,
-      const PetscScalar constants[],
-      PetscScalar g3[])
-{
-    PetscInt d;
-    for (d = 0; d < dim; ++d)
-        g3[d * dim + d] = 1.0;
-}
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        f[0] = 2.0;
+    }
+};
+
+class F1 : public ResidualFunc {
+public:
+    explicit F1(const GTestFENonlinearProblem * prob) :
+        ResidualFunc(prob),
+        dim(get_spatial_dimension()),
+        u_x(get_field_gradient("u"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        for (PetscInt d = 0; d < this->dim; ++d)
+            f[d] = this->u_x[d];
+    }
+
+protected:
+    const PetscInt & dim;
+    const PetscScalar * u_x;
+};
+
+class G3 : public JacobianFunc {
+public:
+    explicit G3(const GTestFENonlinearProblem * prob) :
+        JacobianFunc(prob),
+        dim(get_spatial_dimension())
+    {
+    }
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        for (PetscInt d = 0; d < this->dim; ++d)
+            g[d * this->dim + d] = 1.;
+    }
+
+protected:
+    const PetscInt & dim;
+};
+
+} // namespace
 
 GTestFENonlinearProblem::GTestFENonlinearProblem(const Parameters & params) :
     FENonlinearProblem(params),
@@ -86,24 +66,10 @@ GTestFENonlinearProblem::GTestFENonlinearProblem(const Parameters & params) :
 {
 }
 
-GTestFENonlinearProblem::~GTestFENonlinearProblem() {}
-
-const std::vector<PetscReal> &
-GTestFENonlinearProblem::getConstants()
-{
-    return this->consts;
-}
-
 void
 GTestFENonlinearProblem::set_up_initial_guess()
 {
     FENonlinearProblem::set_up_initial_guess();
-}
-
-void
-GTestFENonlinearProblem::set_up_constants()
-{
-    FENonlinearProblem::set_up_constants();
 }
 
 PetscDS
@@ -128,6 +94,6 @@ GTestFENonlinearProblem::set_up_fields()
 void
 GTestFENonlinearProblem::set_up_weak_form()
 {
-    set_residual_block(this->iu, f0_u, f1_u);
-    set_jacobian_block(this->iu, this->iu, NULL, NULL, NULL, g3_uu);
+    set_residual_block(this->iu, new F0(this), new F1(this));
+    set_jacobian_block(this->iu, this->iu, nullptr, nullptr, nullptr, new G3(this));
 }

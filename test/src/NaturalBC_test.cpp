@@ -132,8 +132,9 @@ TEST(NaturalBCTest, fe)
         virtual void
         set_up_weak_form()
         {
-            set_residual_block(__f0_test_natural_bc, nullptr);
-            set_jacobian_block(this->fid, __g0_test_natural_bc, nullptr, nullptr, nullptr);
+            //            set_residual_block(__f0_test_natural_bc, nullptr);
+            //            set_jacobian_block(this->fid, __g0_test_natural_bc, nullptr, nullptr,
+            //            nullptr);
         }
 
         PetscInt
