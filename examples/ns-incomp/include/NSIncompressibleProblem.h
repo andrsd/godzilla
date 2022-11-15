@@ -8,15 +8,16 @@ using namespace godzilla;
 ///
 class NSIncompressibleProblem : public ImplicitFENonlinearProblem {
 public:
-    NSIncompressibleProblem(const Parameters & parameters);
-    virtual ~NSIncompressibleProblem();
+    explicit NSIncompressibleProblem(const Parameters & parameters);
+
+    const PetscReal & get_reynolds_number() const;
 
 protected:
-    virtual void set_up_fields() override;
-    virtual void set_up_weak_form() override;
-    virtual void set_up_matrix_properties() override;
-    virtual void set_up_field_null_space(DM dm) override;
-    virtual void set_up_preconditioning() override;
+    void set_up_fields() override;
+    void set_up_weak_form() override;
+    void set_up_matrix_properties() override;
+    void set_up_field_null_space(DM dm) override;
+    void set_up_preconditioning() override;
 
     /// Reynolds number
     const PetscReal & Re;
@@ -28,6 +29,4 @@ public:
     static const PetscInt pressure_id = 1;
 
     static const PetscInt ffn_aid = 0;
-
-    static const PetscInt Re_idx = 0;
 };
