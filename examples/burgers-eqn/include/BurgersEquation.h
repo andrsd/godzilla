@@ -8,12 +8,13 @@ using namespace godzilla;
 ///
 class BurgersEquation : public ExplicitFELinearProblem {
 public:
-    BurgersEquation(const Parameters & parameters);
-    virtual ~BurgersEquation();
+    explicit BurgersEquation(const Parameters & parameters);
+
+    const PetscReal & get_viscosity() const;
 
 protected:
-    virtual void set_up_fields() override;
-    virtual void set_up_weak_form() override;
+    void set_up_fields() override;
+    void set_up_weak_form() override;
 
     const PetscReal & viscosity;
 
