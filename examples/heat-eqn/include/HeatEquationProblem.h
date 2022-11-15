@@ -8,12 +8,11 @@ using namespace godzilla;
 ///
 class HeatEquationProblem : public ImplicitFENonlinearProblem {
 public:
-    HeatEquationProblem(const Parameters & parameters);
-    virtual ~HeatEquationProblem();
+    explicit HeatEquationProblem(const Parameters & parameters);
 
 protected:
-    virtual void set_up_fields() override;
-    virtual void set_up_weak_form() override;
+    void set_up_fields() override;
+    void set_up_weak_form() override;
 
     /// Polynomial order of the FE space
     const PetscInt & p_order;

@@ -4,18 +4,17 @@
 
 using namespace godzilla;
 
-/// Solvng heat equation using an explicit scheme:
+/// Solving heat equation using an explicit scheme:
 ///
 /// du/dt - \Delta u + f = 0
 ///
 class HeatEquationExplicit : public ExplicitFELinearProblem {
 public:
-    HeatEquationExplicit(const Parameters & parameters);
-    virtual ~HeatEquationExplicit();
+    explicit HeatEquationExplicit(const Parameters & parameters);
 
 protected:
-    virtual void set_up_fields() override;
-    virtual void set_up_weak_form() override;
+    void set_up_fields() override;
+    void set_up_weak_form() override;
 
     /// Polynomial order of the FE space
     PetscInt order;

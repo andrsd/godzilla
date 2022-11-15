@@ -1,59 +1,55 @@
 #include "Godzilla.h"
 #include "FunctionInterface.h"
 #include "HeatEquationExplicit.h"
+#include "ResidualFunc.h"
 #include "CallStack.h"
 
 using namespace godzilla;
 
+namespace {
+
+class Residual0 : public ResidualFunc {
+public:
+    explicit Residual0(const FEProblemInterface * fepi) :
+        ResidualFunc(fepi),
+        ffn(get_field_value("forcing_fn"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        f[0] = -this->ffn[0];
+    }
+
+protected:
+    const PetscScalar * ffn;
+};
+
+class Residual1 : public ResidualFunc {
+public:
+    explicit Residual1(const FEProblemInterface * fepi) :
+        ResidualFunc(fepi),
+        dim(get_spatial_dimension()),
+        T_x(get_field_gradient("temp"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        for (PetscInt d = 0; d < this->dim; ++d)
+            f[d] = -this->T_x[d];
+    }
+
+protected:
+    const PetscInt & dim;
+    const PetscScalar * T_x;
+};
+
+} // namespace
+
 REGISTER_OBJECT(HeatEquationExplicit);
-
-static void
-f0_temp(PetscInt dim,
-        PetscInt Nf,
-        PetscInt NfAux,
-        const PetscInt uOff[],
-        const PetscInt uOff_x[],
-        const PetscScalar u[],
-        const PetscScalar u_t[],
-        const PetscScalar u_x[],
-        const PetscInt aOff[],
-        const PetscInt aOff_x[],
-        const PetscScalar a[],
-        const PetscScalar a_t[],
-        const PetscScalar a_x[],
-        PetscReal t,
-        const PetscReal x[],
-        PetscInt numConstants,
-        const PetscScalar constants[],
-        PetscScalar f0[])
-{
-    PetscReal f = a[0];
-    f0[0] = -f;
-}
-
-static void
-f1_temp(PetscInt dim,
-        PetscInt Nf,
-        PetscInt NfAux,
-        const PetscInt uOff[],
-        const PetscInt uOff_x[],
-        const PetscScalar u[],
-        const PetscScalar u_t[],
-        const PetscScalar u_x[],
-        const PetscInt aOff[],
-        const PetscInt aOff_x[],
-        const PetscScalar a[],
-        const PetscScalar a_t[],
-        const PetscScalar a_x[],
-        PetscReal t,
-        const PetscReal x[],
-        PetscInt numConstants,
-        const PetscScalar constants[],
-        PetscScalar f1[])
-{
-    for (PetscInt d = 0; d < dim; ++d)
-        f1[d] = -u_x[d];
-}
 
 Parameters
 HeatEquationExplicit::parameters()
@@ -70,8 +66,6 @@ HeatEquationExplicit::HeatEquationExplicit(const Parameters & parameters) :
     _F_;
 }
 
-HeatEquationExplicit::~HeatEquationExplicit() {}
-
 void
 HeatEquationExplicit::set_up_fields()
 {
@@ -84,5 +78,5 @@ void
 HeatEquationExplicit::set_up_weak_form()
 {
     _F_;
-    set_residual_block(temp_id, f0_temp, f1_temp);
+    set_residual_block(temp_id, new Residual0(this), new Residual1(this));
 }

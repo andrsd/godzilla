@@ -1,108 +1,87 @@
 #include "Godzilla.h"
 #include "FunctionInterface.h"
 #include "HeatEquationProblem.h"
+#include "ResidualFunc.h"
+#include "JacobianFunc.h"
 #include "CallStack.h"
 
 using namespace godzilla;
 
+namespace {
+
+class Residual0 : public ResidualFunc {
+public:
+    explicit Residual0(const FEProblemInterface * fepi) :
+        ResidualFunc(fepi),
+        T_t(get_field_dot("temp")),
+        q_ppp(get_field_value("q_ppp"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        f[0] = this->T_t[0] - this->q_ppp[0];
+    }
+
+protected:
+    const PetscScalar * T_t;
+    const PetscScalar * q_ppp;
+};
+
+class Residual1 : public ResidualFunc {
+public:
+    explicit Residual1(const FEProblemInterface * fepi) :
+        ResidualFunc(fepi),
+        dim(get_spatial_dimension()),
+        T_x(get_field_gradient("temp"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        for (PetscInt d = 0; d < this->dim; ++d)
+            f[d] = this->T_x[d];
+    }
+
+protected:
+    const PetscInt & dim;
+    const PetscScalar * T_x;
+};
+
+class Jacobian0 : public JacobianFunc {
+public:
+    explicit Jacobian0(const FEProblemInterface * fepi) : JacobianFunc(fepi), T_t_shift(get_time_shift()) {}
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        g[0] = this->T_t_shift * 1.0;
+    }
+
+protected:
+    const PetscReal & T_t_shift;
+};
+
+class Jacobian3 : public JacobianFunc {
+public:
+    explicit Jacobian3(const FEProblemInterface * fepi) : JacobianFunc(fepi), dim(get_spatial_dimension()) {}
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        for (PetscInt d = 0; d < this->dim; ++d)
+            g[d * this->dim + d] = 1.0;
+    }
+
+protected:
+    const PetscInt & dim;
+};
+
+} // namespace
+
 REGISTER_OBJECT(HeatEquationProblem);
-
-static void
-f0_temp(PetscInt dim,
-        PetscInt nf,
-        PetscInt nf_aux,
-        const PetscInt u_off[],
-        const PetscInt u_off_x[],
-        const PetscScalar u[],
-        const PetscScalar u_t[],
-        const PetscScalar u_x[],
-        const PetscInt a_off[],
-        const PetscInt a_off_x[],
-        const PetscScalar a[],
-        const PetscScalar a_t[],
-        const PetscScalar a_x[],
-        PetscReal t,
-        const PetscReal x[],
-        PetscInt num_constants,
-        const PetscScalar constants[],
-        PetscScalar f0[])
-{
-    PetscReal q_ppp = a[a_off[HeatEquationProblem::q_ppp_id]];
-    f0[0] = u_t[0] - q_ppp;
-}
-
-static void
-f1_temp(PetscInt dim,
-        PetscInt nf,
-        PetscInt nf_aux,
-        const PetscInt u_off[],
-        const PetscInt u_off_x[],
-        const PetscScalar u[],
-        const PetscScalar u_t[],
-        const PetscScalar u_x[],
-        const PetscInt a_off[],
-        const PetscInt a_off_x[],
-        const PetscScalar a[],
-        const PetscScalar a_t[],
-        const PetscScalar a_x[],
-        PetscReal t,
-        const PetscReal x[],
-        PetscInt num_constants,
-        const PetscScalar constants[],
-        PetscScalar f1[])
-{
-    for (PetscInt d = 0; d < dim; ++d)
-        f1[d] = u_x[d];
-}
-
-static void
-g3_temp(PetscInt dim,
-        PetscInt nf,
-        PetscInt nf_aux,
-        const PetscInt u_off[],
-        const PetscInt u_off_x[],
-        const PetscScalar u[],
-        const PetscScalar u_t[],
-        const PetscScalar u_x[],
-        const PetscInt a_off[],
-        const PetscInt a_off_x[],
-        const PetscScalar a[],
-        const PetscScalar a_t[],
-        const PetscScalar a_x[],
-        PetscReal t,
-        PetscReal u_t_shift,
-        const PetscReal x[],
-        PetscInt num_constants,
-        const PetscScalar constants[],
-        PetscScalar g3[])
-{
-    for (PetscInt d = 0; d < dim; ++d)
-        g3[d * dim + d] = 1.0;
-}
-
-static void
-g0_temp(PetscInt dim,
-        PetscInt nf,
-        PetscInt nf_aux,
-        const PetscInt u_off[],
-        const PetscInt u_off_x[],
-        const PetscScalar u[],
-        const PetscScalar u_t[],
-        const PetscScalar u_x[],
-        const PetscInt a_off[],
-        const PetscInt a_off_x[],
-        const PetscScalar a[],
-        const PetscScalar a_t[],
-        const PetscScalar a_x[],
-        PetscReal t,
-        PetscReal u_t_shift,
-        const PetscReal x[],
-        PetscInt num_constants,
-        const PetscScalar constants[],
-        PetscScalar g0[])
-{
-    g0[0] = u_t_shift * 1.0;
-}
 
 Parameters
 HeatEquationProblem::parameters()
@@ -119,8 +98,6 @@ HeatEquationProblem::HeatEquationProblem(const Parameters & parameters) :
     _F_;
 }
 
-HeatEquationProblem::~HeatEquationProblem() {}
-
 void
 HeatEquationProblem::set_up_fields()
 {
@@ -136,6 +113,11 @@ void
 HeatEquationProblem::set_up_weak_form()
 {
     _F_;
-    set_residual_block(temp_id, f0_temp, f1_temp);
-    set_jacobian_block(temp_id, temp_id, g0_temp, NULL, NULL, g3_temp);
+    set_residual_block(temp_id, new Residual0(this), new Residual1(this));
+    set_jacobian_block(temp_id,
+                       temp_id,
+                       new Jacobian0(this),
+                       nullptr,
+                       nullptr,
+                       new Jacobian3(this));
 }
