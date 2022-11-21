@@ -15,6 +15,7 @@ add_library(${PROJECT_NAME}
         BoxMesh.cpp
         CallStack.cpp
         CmdLineArgParser.cpp
+        ConstantAuxiliaryField.cpp
         ConstantIC.cpp
         CSVOutput.cpp
         DirichletBC.cpp

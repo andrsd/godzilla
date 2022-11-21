@@ -4,6 +4,7 @@ add_executable(${PROJECT_NAME}
     BoundaryCondition_test.cpp
     BoxMesh_test.cpp
     CallStack_test.cpp
+    ConstantAuxiliaryField_test.cpp
     ConstantIC_test.cpp
     CSVOutput_test.cpp
     DirichletBC_test.cpp
