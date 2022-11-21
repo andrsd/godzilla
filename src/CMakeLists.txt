@@ -56,6 +56,7 @@ add_library(${PROJECT_NAME}
         Output.cpp
         Parameters.cpp
         ParsedFunction.cpp
+        PerfLog.cpp
         PiecewiseLinear.cpp
         Postprocessor.cpp
         PrintInterface.cpp
