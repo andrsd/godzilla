@@ -26,6 +26,7 @@ add_executable(${PROJECT_NAME}
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp
     InitialCondition_test.cpp
+    JacobianFunc_test.cpp
     L2Diff_test.cpp
     LinearInterpolation_test.cpp
     LinearProblem_test.cpp
@@ -43,6 +44,7 @@ add_executable(${PROJECT_NAME}
     PrintInterface_test.cpp
     Problem_test.cpp
     RectangleMesh_test.cpp
+    ResidualFunc_test.cpp
     Terminal_test.cpp
     TimeSteppingAdaptor_test.cpp
     UnstructuredMesh_test.cpp
