@@ -17,6 +17,7 @@ add_library(${PROJECT_NAME}
         BoxMesh.cpp
         CallStack.cpp
         CmdLineArgParser.cpp
+        ConstantAuxiliaryField.cpp
         ConstantIC.cpp
         CSVOutput.cpp
         DirichletBC.cpp
@@ -58,6 +59,7 @@ add_library(${PROJECT_NAME}
         Output.cpp
         Parameters.cpp
         ParsedFunction.cpp
+        PerfLog.cpp
         PetscFEGodzilla.cpp
         PiecewiseLinear.cpp
         Postprocessor.cpp

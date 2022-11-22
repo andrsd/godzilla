@@ -14,6 +14,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 
 option(GODZILLA_WITH_MPI "Build with MPI support" YES)
+option(GODZILLA_WITH_PERF_LOG "Build with performance logging" NO)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
@@ -28,6 +29,9 @@ if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environment variable PETSC_DIR to point to your PETSc installation.")
 endif()
 
+if (GODZILLA_WITH_MPI)
+    set(HDF5_PREFER_PARALLEL TRUE)
+endif()
 find_package(HDF5 COMPONENTS C)
 if (NOT ${HDF5_FOUND})
     message(STATUS "HDF5 was not found.")
@@ -41,6 +45,7 @@ FetchContent_Declare(
 mark_as_advanced(FORCE
     FETCHCONTENT_SOURCE_DIR_EXODUSIICPP
     FETCHCONTENT_UPDATES_DISCONNECTED_EXODUSIICPP
+    EXODUSIICPP_BUILD_TESTS
 )
 
 FetchContent_Declare(
