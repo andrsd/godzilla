@@ -167,6 +167,8 @@
 </li>
       <li><a href="devel/classes/boundary-condition.html#_CPPv4NK8godzilla17BoundaryCondition14get_componentsEv">godzilla::BoundaryCondition::get_components (C++ function)</a>
 </li>
+      <li><a href="devel/classes/boundary-condition.html#_CPPv4NK8godzilla17BoundaryCondition30get_discrete_problem_interfaceEv">godzilla::BoundaryCondition::get_discrete_problem_interface (C++ function)</a>
+</li>
       <li><a href="devel/classes/boundary-condition.html#_CPPv4NK8godzilla17BoundaryCondition12get_field_idEv">godzilla::BoundaryCondition::get_field_id (C++ function)</a>
 </li>
       <li><a href="devel/classes/boundary-condition.html#_CPPv4NK8godzilla17BoundaryCondition18get_num_componentsEv">godzilla::BoundaryCondition::get_num_components (C++ function)</a>
@@ -243,11 +245,11 @@
 </li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface25get_solution_vector_localEv">godzilla::DiscreteProblemInterface::get_solution_vector_local (C++ function)</a>
 </li>
+      <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface13get_weak_formEv">godzilla::DiscreteProblemInterface::get_weak_form (C++ function)</a>
+</li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface15has_field_by_idE8PetscInt">godzilla::DiscreteProblemInterface::has_field_by_id (C++ function)</a>
 </li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface17has_field_by_nameERKNSt6stringE">godzilla::DiscreteProblemInterface::has_field_by_name (C++ function)</a>
-</li>
-      <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterface13set_constantsERKNSt6vectorI9PetscRealEE">godzilla::DiscreteProblemInterface::set_constants (C++ function)</a>
 </li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterface24set_field_component_nameE8PetscInt8PetscIntKNSt6stringE">godzilla::DiscreteProblemInterface::set_field_component_name (C++ function)</a>
 </li>
@@ -331,9 +333,13 @@
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface15get_field_orderE8PetscInt">godzilla::FEProblemInterface::get_field_order (C++ function)</a>
 </li>
+      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface18get_num_aux_fieldsEv">godzilla::FEProblemInterface::get_num_aux_fields (C++ function)</a>
+</li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface14get_num_fieldsEv">godzilla::FEProblemInterface::get_num_fields (C++ function)</a>
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface25get_solution_vector_localEv">godzilla::FEProblemInterface::get_solution_vector_local (C++ function)</a>
+</li>
+      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface13get_weak_formEv">godzilla::FEProblemInterface::get_weak_form (C++ function)</a>
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface19has_aux_field_by_idE8PetscInt">godzilla::FEProblemInterface::has_aux_field_by_id (C++ function)</a>
 </li>
@@ -342,6 +348,16 @@
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface15has_field_by_idE8PetscInt">godzilla::FEProblemInterface::has_field_by_id (C++ function)</a>
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface17has_field_by_nameERKNSt6stringE">godzilla::FEProblemInterface::has_field_by_name (C++ function)</a>
+</li>
+      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface9integrateE7PetscDS8PetscInt8PetscIntP11PetscFEGeomA_K11PetscScalar7PetscDSA_K11PetscScalarA_11PetscScalar">godzilla::FEProblemInterface::integrate (C++ function)</a>
+</li>
+      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface13integrate_bndE7PetscDS8PetscInt16PetscBdPointFunc8PetscIntP11PetscFEGeomA_K11PetscScalar7PetscDSA_K11PetscScalarA_11PetscScalar">godzilla::FEProblemInterface::integrate_bnd (C++ function)</a>
+</li>
+      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface22integrate_bnd_residualE7PetscDS12PetscFormKey8PetscIntP11PetscFEGeomA_K11PetscScalarA_K11PetscScalar7PetscDSA_K11PetscScalar9PetscRealA_11PetscScalar">godzilla::FEProblemInterface::integrate_bnd_residual (C++ function)</a>
+</li>
+      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface18integrate_jacobianE7PetscDS19PetscFEJacobianType12PetscFormKey8PetscIntP11PetscFEGeomA_K11PetscScalarA_K11PetscScalar7PetscDSA_K11PetscScalar9PetscReal9PetscRealA_11PetscScalar">godzilla::FEProblemInterface::integrate_jacobian (C++ function)</a>
+</li>
+      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface18integrate_residualE7PetscDS12PetscFormKey8PetscIntP11PetscFEGeomA_K11PetscScalarA_K11PetscScalar7PetscDSA_K11PetscScalar9PetscRealA_11PetscScalar">godzilla::FEProblemInterface::integrate_residual (C++ function)</a>
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface24set_field_component_nameE8PetscInt8PetscIntKNSt6stringE">godzilla::FEProblemInterface::set_field_component_name (C++ function)</a>
 </li>
@@ -413,6 +429,8 @@
 </li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4NK8godzilla18FVProblemInterface25get_solution_vector_localEv">godzilla::FVProblemInterface::get_solution_vector_local (C++ function)</a>
 </li>
+      <li><a href="devel/classes/fv-problem-interface.html#_CPPv4NK8godzilla18FVProblemInterface13get_weak_formEv">godzilla::FVProblemInterface::get_weak_form (C++ function)</a>
+</li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4NK8godzilla18FVProblemInterface15has_field_by_idE8PetscInt">godzilla::FVProblemInterface::has_field_by_id (C++ function)</a>
 </li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4NK8godzilla18FVProblemInterface17has_field_by_nameERKNSt6stringE">godzilla::FVProblemInterface::has_field_by_name (C++ function)</a>
@@ -429,6 +447,8 @@
 </li>
       <li><a href="devel/classes/hdf5-output.html#_CPPv4N8godzilla10HDF5Output6createEv">godzilla::HDF5Output::create (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="devel/classes/hdf5-output.html#_CPPv4NK8godzilla10HDF5Output12get_file_extEv">godzilla::HDF5Output::get_file_ext (C++ function)</a>
 </li>
       <li><a href="devel/classes/hdf5-output.html#_CPPv4N8godzilla10HDF5Output11output_stepEv">godzilla::HDF5Output::output_step (C++ function)</a>
@@ -437,8 +457,6 @@
 </li>
       <li><a href="devel/classes/implicit-fe-nonlinear-problem.html#_CPPv4N8godzilla26ImplicitFENonlinearProblem5checkEv">godzilla::ImplicitFENonlinearProblem::check (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="devel/classes/implicit-fe-nonlinear-problem.html#_CPPv4N8godzilla26ImplicitFENonlinearProblem9convergedEv">godzilla::ImplicitFENonlinearProblem::converged (C++ function)</a>
 </li>
       <li><a href="devel/classes/implicit-fe-nonlinear-problem.html#_CPPv4N8godzilla26ImplicitFENonlinearProblem5solveEv">godzilla::ImplicitFENonlinearProblem::solve (C++ function)</a>
@@ -532,6 +550,8 @@
       <li><a href="devel/classes/mesh.html#_CPPv4NK8godzilla4Mesh13get_dimensionEv">godzilla::Mesh::get_dimension (C++ function)</a>
 </li>
       <li><a href="devel/classes/natural-bc.html#_CPPv4N8godzilla9NaturalBCE">godzilla::NaturalBC (C++ class)</a>
+</li>
+      <li><a href="devel/classes/natural-bc.html#_CPPv4N8godzilla9NaturalBC16set_up_weak_formEv">godzilla::NaturalBC::set_up_weak_form (C++ function)</a>
 </li>
       <li><a href="devel/classes/natural-riemann-bc.html#_CPPv4N8godzilla16NaturalRiemannBCE">godzilla::NaturalRiemannBC (C++ class)</a>
 </li>

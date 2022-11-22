@@ -275,18 +275,6 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla24DiscreteProblemInterface13set_constantsERKNSt6vectorI9PetscRealEE">
-<span id="_CPPv3N8godzilla24DiscreteProblemInterface13set_constantsERKNSt6vectorI9PetscRealEE"></span><span id="_CPPv2N8godzilla24DiscreteProblemInterface13set_constantsERKNSt6vectorI9PetscRealEE"></span><span id="godzilla::DiscreteProblemInterface::set_constants__std::vector:PetscReal:CR"></span><span class="target" id="classgodzilla_1_1_discrete_problem_interface_1a021280e6053bfa52876d6e6885d221b7"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_constants</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">PetscReal</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">consts</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla24DiscreteProblemInterface13set_constantsERKNSt6vectorI9PetscRealEE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Set problem constants. </p>
-<p>These constants will be available in the weak form via <code class="docutils literal notranslate"><span class="pre">constants</span></code> parameter. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>consts</strong> – Constants to add to the problem </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla24DiscreteProblemInterface21add_initial_conditionEP16InitialCondition">
 <span id="_CPPv3N8godzilla24DiscreteProblemInterface21add_initial_conditionEP16InitialCondition"></span><span id="_CPPv2N8godzilla24DiscreteProblemInterface21add_initial_conditionEP16InitialCondition"></span><span id="godzilla::DiscreteProblemInterface::add_initial_condition__InitialConditionP"></span><span class="target" id="classgodzilla_1_1_discrete_problem_interface_1afe8832ef034329ea3917fc598328dda8"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_initial_condition</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="initial-condition.html#_CPPv4N8godzilla16InitialConditionE" title="godzilla::InitialCondition"><span class="n"><span class="pre">InitialCondition</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">ic</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla24DiscreteProblemInterface21add_initial_conditionEP16InitialCondition" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Add initial condition. </p>
@@ -343,6 +331,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Local solution vector </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla24DiscreteProblemInterface13get_weak_formEv">
+<span id="_CPPv3NK8godzilla24DiscreteProblemInterface13get_weak_formEv"></span><span id="_CPPv2NK8godzilla24DiscreteProblemInterface13get_weak_formEv"></span><span id="godzilla::DiscreteProblemInterface::get_weak_formC"></span><span class="target" id="classgodzilla_1_1_discrete_problem_interface_1afbed7e4b59b973595f007accf370bb88"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">WeakForm</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_weak_form</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8godzilla24DiscreteProblemInterface13get_weak_formEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Get weak form associated with this problem. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The weak form associated with this problem </p>
 </dd>
 </dl>
 </dd></dl>
