@@ -40,6 +40,9 @@ public:
     /// Get the pointer to the context that will be passed into PETSc API
     virtual void * get_context();
 
+protected:
+    virtual void set_up_callback();
+
 public:
     static Parameters parameters();
 };

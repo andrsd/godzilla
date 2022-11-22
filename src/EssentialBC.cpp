@@ -67,4 +67,24 @@ EssentialBC::get_context()
     return this;
 }
 
+
+void
+EssentialBC::set_up_callback()
+{
+    _F_;
+    PETSC_CHECK(PetscDSAddBoundary(this->ds,
+                                   DM_BC_ESSENTIAL,
+                                   get_name().c_str(),
+                                   this->label,
+                                   this->n_ids,
+                                   this->ids,
+                                   this->fid,
+                                   get_num_components(),
+                                   get_num_components() == 0 ? nullptr : get_components().data(),
+                                   (void (*)(void)) get_function(),
+                                   (void (*)(void)) get_function_t(),
+                                   (void *) get_context(),
+                                   nullptr));
+}
+
 } // namespace godzilla

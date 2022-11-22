@@ -45,6 +45,15 @@ DirichletBC::get_components() const
     return comps;
 }
 
+PetscFunc *
+DirichletBC::get_function_t()
+{
+    if (this->expression_t.size() > 0)
+        return EssentialBC::get_function_t();
+    else
+        return nullptr;
+}
+
 void
 DirichletBC::evaluate(PetscInt dim,
                       PetscReal time,
@@ -65,26 +74,6 @@ DirichletBC::evaluate_t(PetscInt dim,
 {
     _F_;
     FunctionInterface::evaluate_t(dim, time, x, nc, u);
-}
-
-void
-DirichletBC::set_up_callback()
-{
-    _F_;
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_ESSENTIAL,
-                                   get_name().c_str(),
-                                   this->label,
-                                   this->n_ids,
-                                   this->ids,
-                                   this->fid,
-                                   get_num_components(),
-                                   get_num_components() == 0 ? NULL : get_components().data(),
-                                   (void (*)(void)) get_function(),
-                                   this->expression_t.size() > 0 ? (void (*)(void)) get_function_t()
-                                                                 : nullptr,
-                                   (void *) get_context(),
-                                   NULL));
 }
 
 } // namespace godzilla

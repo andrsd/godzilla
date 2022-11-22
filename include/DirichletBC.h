@@ -15,13 +15,11 @@ public:
     virtual void create();
     virtual PetscInt get_num_components() const;
     virtual std::vector<PetscInt> get_components() const;
+    virtual PetscFunc * get_function_t();
     virtual void
     evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
     virtual void
     evaluate_t(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
-
-protected:
-    virtual void set_up_callback();
 
 public:
     static Parameters parameters();
