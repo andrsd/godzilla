@@ -20,6 +20,7 @@ BoxMesh::parameters()
     params.add_required_param<PetscInt>("nx", "Number of mesh points in the x direction");
     params.add_required_param<PetscInt>("ny", "Number of mesh points in the y direction");
     params.add_required_param<PetscInt>("nz", "Number of mesh points in the z direction");
+    params.add_param<bool>("simplex", false, "Generate simplex elements");
     return params;
 }
 
@@ -34,7 +35,7 @@ BoxMesh::BoxMesh(const Parameters & parameters) :
     nx(get_param<PetscInt>("nx")),
     ny(get_param<PetscInt>("ny")),
     nz(get_param<PetscInt>("nz")),
-    simplex(PETSC_FALSE),
+    simplex(get_param<bool>("simplex") ? PETSC_TRUE : PETSC_FALSE),
     interpolate(PETSC_TRUE)
 {
     _F_;
