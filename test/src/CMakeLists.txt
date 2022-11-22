@@ -49,6 +49,7 @@ add_executable(${PROJECT_NAME}
     Utils_test.cpp
     Validation_test.cpp
     VTKOutput_test.cpp
+    WeakForm_test.cpp
     main.cpp
 )
 target_code_coverage(${PROJECT_NAME})
