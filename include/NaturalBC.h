@@ -37,7 +37,7 @@ protected:
                             BndJacobianFunc * g2,
                             BndJacobianFunc * g3);
 
-    virtual void set_up_callback() override;
+    virtual void add_boundary() override;
 
     /// WeakForm object
     WeakForm * wf;

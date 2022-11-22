@@ -103,7 +103,7 @@ BoundaryCondition::set_up()
     PETSC_CHECK(DMLabelGetValueIS(this->label, &this->is));
     PETSC_CHECK(ISGetSize(is, &this->n_ids));
     PETSC_CHECK(ISGetIndices(is, &this->ids));
-    set_up_callback();
+    add_boundary();
 }
 
 } // namespace godzilla

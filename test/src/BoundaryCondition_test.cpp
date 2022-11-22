@@ -29,7 +29,7 @@ public:
                 ());
     MOCK_METHOD(std::vector<PetscInt>, get_components, (), (const));
     virtual void
-    set_up_callback() override
+    add_boundary() override
     {
     }
 };

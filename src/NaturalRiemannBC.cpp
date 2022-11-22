@@ -32,7 +32,7 @@ NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryConditio
 }
 
 void
-NaturalRiemannBC::set_up_callback()
+NaturalRiemannBC::add_boundary()
 {
     _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,

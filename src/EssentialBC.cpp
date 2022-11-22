@@ -67,9 +67,8 @@ EssentialBC::get_context()
     return this;
 }
 
-
 void
-EssentialBC::set_up_callback()
+EssentialBC::add_boundary()
 {
     _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
