@@ -13,6 +13,7 @@ class DiscreteProblemInterface;
 class BoundaryCondition : public Object, public PrintInterface {
 public:
     BoundaryCondition(const Parameters & params);
+    virtual ~BoundaryCondition();
 
     virtual void create() override;
 
@@ -36,6 +37,11 @@ public:
     /// @return Vector of component numbers
     virtual std::vector<PetscInt> get_components() const = 0;
 
+    /// Get DiscreteProblemInterface
+    ///
+    /// @return Discrete problem this BC is part of
+    virtual const DiscreteProblemInterface * get_discrete_problem_interface() const;
+
     /// Set up this boundary condition
     virtual void set_up();
 
@@ -54,6 +60,8 @@ protected:
 
     /// DMLabel associated with the boundary name this boundary condition acts on
     DMLabel label;
+
+    IS is;
 
     /// Field ID this boundary condition is attached to
     PetscInt fid;

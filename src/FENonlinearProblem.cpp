@@ -1,9 +1,37 @@
 #include "FENonlinearProblem.h"
 #include "CallStack.h"
 #include "Mesh.h"
+#include "WeakForm.h"
 #include "petscdm.h"
 
 namespace godzilla {
+
+namespace internal {
+
+void
+__dummy_jacobian_func(PetscInt,
+                      PetscInt,
+                      PetscInt,
+                      const PetscInt[],
+                      const PetscInt[],
+                      const PetscScalar[],
+                      const PetscScalar[],
+                      const PetscScalar[],
+                      const PetscInt[],
+                      const PetscInt[],
+                      const PetscScalar[],
+                      const PetscScalar[],
+                      const PetscScalar[],
+                      PetscReal,
+                      PetscReal,
+                      const PetscReal[],
+                      PetscInt,
+                      const PetscScalar[],
+                      PetscScalar[])
+{
+}
+
+} // namespace internal
 
 PetscErrorCode
 __fep_compute_residual(DM dm, Vec x, Vec F, void * user)
@@ -98,24 +126,35 @@ FENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
 }
 
 void
-FENonlinearProblem::set_residual_block(PetscInt field_id,
-                                       PetscFEResidualFunc * f0,
-                                       PetscFEResidualFunc * f1)
+FENonlinearProblem::set_residual_block(PetscInt field_id, ResidualFunc * f0, ResidualFunc * f1)
 {
     _F_;
-    PETSC_CHECK(PetscDSSetResidual(this->ds, field_id, f0, f1));
+    this->wf->add(PETSC_WF_F0, nullptr, 0, field_id, 0, f0);
+    this->wf->add(PETSC_WF_F1, nullptr, 0, field_id, 0, f1);
 }
 
 void
 FENonlinearProblem::set_jacobian_block(PetscInt fid,
                                        PetscInt gid,
-                                       PetscFEJacobianFunc * g0,
-                                       PetscFEJacobianFunc * g1,
-                                       PetscFEJacobianFunc * g2,
-                                       PetscFEJacobianFunc * g3)
+                                       JacobianFunc * g0,
+                                       JacobianFunc * g1,
+                                       JacobianFunc * g2,
+                                       JacobianFunc * g3)
 {
     _F_;
-    PETSC_CHECK(PetscDSSetJacobian(this->ds, fid, gid, g0, g1, g2, g3));
+    this->wf->add(PETSC_WF_G0, nullptr, 0, fid, gid, 0, g0);
+    this->wf->add(PETSC_WF_G1, nullptr, 0, fid, gid, 0, g1);
+    this->wf->add(PETSC_WF_G2, nullptr, 0, fid, gid, 0, g2);
+    this->wf->add(PETSC_WF_G3, nullptr, 0, fid, gid, 0, g3);
+
+    // So that PETSc thinks we have a Jacobian
+    PetscDSSetJacobian(this->ds,
+                       fid,
+                       gid,
+                       g0 ? internal::__dummy_jacobian_func : nullptr,
+                       g1 ? internal::__dummy_jacobian_func : nullptr,
+                       g2 ? internal::__dummy_jacobian_func : nullptr,
+                       g3 ? internal::__dummy_jacobian_func : nullptr);
 }
 
 void

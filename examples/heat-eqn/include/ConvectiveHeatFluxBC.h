@@ -2,7 +2,7 @@
 
 #include "NaturalBC.h"
 
-namespace godzilla {
+using namespace godzilla;
 
 class ConvectiveHeatFluxBC : public NaturalBC {
 public:
@@ -17,5 +17,3 @@ protected:
 public:
     static Parameters parameters();
 };
-
-} // namespace godzilla

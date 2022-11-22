@@ -1,10 +1,9 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
-#include "CallStack.h"
 #include "Factory.h"
 #include "LineMesh.h"
 #include "DirichletBC.h"
 #include "ExplicitFELinearProblem.h"
+#include "ResidualFunc.h"
 #include "Parameters.h"
 #include "Output.h"
 #include "TestApp.h"
@@ -14,30 +13,6 @@
 using namespace godzilla;
 
 namespace {
-
-static void
-f1_u(PetscInt dim,
-     PetscInt nf,
-     PetscInt nf_aux,
-     const PetscInt u_off[],
-     const PetscInt u_off_x[],
-     const PetscScalar u[],
-     const PetscScalar u_t[],
-     const PetscScalar u_x[],
-     const PetscInt a_off[],
-     const PetscInt a_off_x[],
-     const PetscScalar a[],
-     const PetscScalar a_t[],
-     const PetscScalar a_x[],
-     PetscReal t,
-     const PetscReal x[],
-     PetscInt num_constants,
-     const PetscScalar constants[],
-     PetscScalar f1[])
-{
-    PetscReal visc = 1.;
-    f1[0] = -visc * u_x[0] + 0.5 * u[0] * u[0];
-}
 
 class TestExplicitFELinearProblem : public ExplicitFELinearProblem {
 public:
@@ -58,12 +33,35 @@ protected:
     {
         add_fe(0, "u", 1, 1);
     }
-    virtual void
-    set_up_weak_form() override
-    {
-        set_residual_block(0, nullptr, f1_u);
-    }
+    virtual void set_up_weak_form() override;
 };
+
+class TestF1 : public ResidualFunc {
+public:
+    explicit TestF1(const TestExplicitFELinearProblem * prob) :
+        ResidualFunc(prob),
+        u(get_field_value("u")),
+        u_x(get_field_gradient("u"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        PetscReal visc = 1.;
+        f[0] = -visc * this->u_x[0] + 0.5 * this->u[0] * this->u[0];
+    }
+
+protected:
+    const PetscScalar * u;
+    const PetscScalar * u_x;
+};
+
+void
+TestExplicitFELinearProblem::set_up_weak_form()
+{
+    set_residual_block(0, nullptr, new TestF1(this));
+}
 
 } // namespace
 

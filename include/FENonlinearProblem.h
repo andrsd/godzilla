@@ -6,6 +6,9 @@
 
 namespace godzilla {
 
+class ResidualFunc;
+class JacobianFunc;
+
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system
 ///
@@ -29,10 +32,9 @@ protected:
     /// @param fid Field ID
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
-    virtual void
-    set_residual_block(PetscInt fid, PetscFEResidualFunc * f0, PetscFEResidualFunc * f1);
+    virtual void set_residual_block(PetscInt fid, ResidualFunc * f0, ResidualFunc * f1);
 
-    /// Set up residual statement for a field variable
+    /// Set up Jacobian statement for a field variable
     ///
     /// @param fid Test field number
     /// @param gid Field number
@@ -42,10 +44,10 @@ protected:
     /// @param g3 Integrand for the test function gradient and basis function gradient term
     virtual void set_jacobian_block(PetscInt fid,
                                     PetscInt gid,
-                                    PetscFEJacobianFunc * g0,
-                                    PetscFEJacobianFunc * g1,
-                                    PetscFEJacobianFunc * g2,
-                                    PetscFEJacobianFunc * g3);
+                                    JacobianFunc * g0,
+                                    JacobianFunc * g1,
+                                    JacobianFunc * g2,
+                                    JacobianFunc * g3);
 
     virtual void on_initial() override;
 

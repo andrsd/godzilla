@@ -1,286 +1,255 @@
 #include "Godzilla.h"
 #include "FunctionInterface.h"
 #include "NSIncompressibleProblem.h"
+#include "ResidualFunc.h"
+#include "JacobianFunc.h"
 #include "CallStack.h"
-#include <assert.h>
+#include <cassert>
 #include "petscsys.h"
 
 using namespace godzilla;
 
 REGISTER_OBJECT(NSIncompressibleProblem);
 
-static void
-f0_veloc(PetscInt dim,
-         PetscInt nf,
-         PetscInt nf_aux,
-         const PetscInt u_off[],
-         const PetscInt u_off_x[],
-         const PetscScalar u[],
-         const PetscScalar u_t[],
-         const PetscScalar u_x[],
-         const PetscInt a_off[],
-         const PetscInt a_off_x[],
-         const PetscScalar a[],
-         const PetscScalar a_t[],
-         const PetscScalar a_x[],
-         PetscReal t,
-         const PetscReal x[],
-         PetscInt num_constants,
-         const PetscScalar constants[],
-         PetscScalar f0[])
-{
-    const PetscReal * vel = u + u_off[NSIncompressibleProblem::velocity_id];
-    const PetscReal * vel_t = u_t + u_off[NSIncompressibleProblem::velocity_id];
-    const PetscReal * vel_x = u_x + u_off_x[NSIncompressibleProblem::velocity_id];
-    const PetscInt n_comp = dim;
+namespace {
 
-    for (PetscInt c = 0; c < n_comp; ++c) {
-        f0[c] = vel_t[c];
-
-        for (PetscInt d = 0; d < dim; ++d)
-            f0[c] += vel[d] * vel_x[c * dim + d];
-
-        f0[c] -= a[c];
-    }
-}
-
-static void
-f1_veloc(PetscInt dim,
-         PetscInt nf,
-         PetscInt nf_aux,
-         const PetscInt u_off[],
-         const PetscInt u_off_x[],
-         const PetscScalar u[],
-         const PetscScalar u_t[],
-         const PetscScalar u_x[],
-         const PetscInt a_off[],
-         const PetscInt a_off_x[],
-         const PetscScalar a[],
-         const PetscScalar a_t[],
-         const PetscScalar a_x[],
-         PetscReal t,
-         const PetscReal x[],
-         PetscInt num_constants,
-         const PetscScalar constants[],
-         PetscScalar f1[])
-{
-    const PetscReal * vel_x = u_x + u_off_x[NSIncompressibleProblem::velocity_id];
-    const PetscReal * press = u + u_off[NSIncompressibleProblem::pressure_id];
-    const PetscReal Re = constants[NSIncompressibleProblem::Re_idx];
-    const PetscInt n_comp = dim;
-
-    for (PetscInt comp = 0; comp < n_comp; ++comp) {
-        for (PetscInt d = 0; d < dim; ++d) {
-            f1[comp * dim + d] = 1.0 / Re * vel_x[comp * dim + d];
-        }
-        f1[comp * dim + comp] -= press[0];
-    }
-}
-
-static void
-f0_press(PetscInt dim,
-         PetscInt nf,
-         PetscInt nf_aux,
-         const PetscInt u_off[],
-         const PetscInt u_off_x[],
-         const PetscScalar u[],
-         const PetscScalar u_t[],
-         const PetscScalar u_x[],
-         const PetscInt a_off[],
-         const PetscInt a_off_x[],
-         const PetscScalar a[],
-         const PetscScalar a_t[],
-         const PetscScalar a_x[],
-         PetscReal t,
-         const PetscReal x[],
-         PetscInt num_constants,
-         const PetscScalar constants[],
-         PetscScalar f0[])
-{
-    const PetscReal * vel_x = u_x + u_off_x[NSIncompressibleProblem::velocity_id];
-
-    f0[0] = 0.0;
-    for (PetscInt d = 0; d < dim; ++d)
-        f0[0] += vel_x[d * dim + d];
-}
-
-static void
-f1_press(PetscInt dim,
-         PetscInt nf,
-         PetscInt nf_aux,
-         const PetscInt u_off[],
-         const PetscInt u_off_x[],
-         const PetscScalar u[],
-         const PetscScalar u_t[],
-         const PetscScalar u_x[],
-         const PetscInt a_off[],
-         const PetscInt a_off_x[],
-         const PetscScalar a[],
-         const PetscScalar a_t[],
-         const PetscScalar a_x[],
-         PetscReal t,
-         const PetscReal x[],
-         PetscInt num_constants,
-         const PetscScalar constants[],
-         PetscScalar f1[])
-{
-    for (PetscInt d = 0; d < dim; ++d)
-        f1[d] = 0.0;
-}
-
-static void
-g0_vv(PetscInt dim,
-      PetscInt nf,
-      PetscInt nf_aux,
-      const PetscInt u_off[],
-      const PetscInt u_off_x[],
-      const PetscScalar u[],
-      const PetscScalar u_t[],
-      const PetscScalar u_x[],
-      const PetscInt a_off[],
-      const PetscInt a_off_x[],
-      const PetscScalar a[],
-      const PetscScalar a_t[],
-      const PetscScalar a_x[],
-      PetscReal t,
-      PetscReal u_t_shift,
-      const PetscReal x[],
-      PetscInt num_constants,
-      const PetscScalar constants[],
-      PetscScalar g0[])
-{
-    const PetscReal * vel_x = u_x + u_off_x[NSIncompressibleProblem::velocity_id];
-    PetscInt nc_i = dim;
-    PetscInt nc_j = dim;
-
-    for (PetscInt d = 0; d < dim; ++d) {
-        g0[d * dim + d] = u_t_shift;
+class ResidualVeloc0 : public ResidualFunc {
+public:
+    explicit ResidualVeloc0(const NSIncompressibleProblem * prob) :
+        ResidualFunc(prob),
+        n_comp(get_spatial_dimension()),
+        dim(get_spatial_dimension()),
+        vel(get_field_value("velocity")),
+        vel_t(get_field_dot("velocity")),
+        vel_x(get_field_gradient("velocity")),
+        ffn(get_field_value("ffn"))
+    {
     }
 
-    for (PetscInt fc = 0; fc < nc_i; ++fc) {
-        for (PetscInt gc = 0; gc < nc_j; ++gc) {
-            g0[fc * nc_j + gc] += vel_x[fc * nc_j + gc];
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        for (PetscInt c = 0; c < this->n_comp; ++c) {
+            f[c] = this->vel_t[c];
+
+            for (PetscInt d = 0; d < this->dim; ++d)
+                f[c] += this->vel[d] * this->vel_x[c * this->dim + d];
+
+            f[c] -= this->ffn[c];
         }
     }
-}
 
-static void
-g1_vv(PetscInt dim,
-      PetscInt nf,
-      PetscInt nf_aux,
-      const PetscInt u_off[],
-      const PetscInt u_off_x[],
-      const PetscScalar u[],
-      const PetscScalar u_t[],
-      const PetscScalar u_x[],
-      const PetscInt a_off[],
-      const PetscInt a_off_x[],
-      const PetscScalar a[],
-      const PetscScalar a_t[],
-      const PetscScalar a_x[],
-      PetscReal t,
-      PetscReal u_t_shift,
-      const PetscReal x[],
-      PetscInt num_constants,
-      const PetscScalar constants[],
-      PetscScalar g1[])
-{
-    const PetscReal * vel = u + u_off[NSIncompressibleProblem::velocity_id];
-    PetscInt nc_i = dim;
-    PetscInt nc_j = dim;
+protected:
+    const PetscInt & n_comp;
+    const PetscInt & dim;
+    const PetscScalar * vel;
+    const PetscScalar * vel_t;
+    const PetscScalar * vel_x;
+    const PetscScalar * ffn;
+};
 
-    for (PetscInt fc = 0; fc < nc_i; ++fc) {
-        for (PetscInt gc = 0; gc < nc_j; ++gc) {
-            for (PetscInt dg = 0; dg < dim; ++dg) {
-                // kronecker delta
-                if (fc == gc) {
-                    g1[(fc * nc_j + gc) * dim + dg] += vel[dg];
+class ResidualVeloc1 : public ResidualFunc {
+public:
+    explicit ResidualVeloc1(const NSIncompressibleProblem * prob) :
+        ResidualFunc(prob),
+        n_comp(get_spatial_dimension()),
+        dim(get_spatial_dimension()),
+        vel_x(get_field_gradient("velocity")),
+        press(get_field_value("pressure")),
+        Re(prob->get_reynolds_number())
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        for (PetscInt comp = 0; comp < this->n_comp; ++comp) {
+            for (PetscInt d = 0; d < this->dim; ++d) {
+                f[comp * this->dim + d] = 1.0 / this->Re * this->vel_x[comp * this->dim + d];
+            }
+            f[comp * this->dim + comp] -= this->press[0];
+        }
+    }
+
+protected:
+    const PetscInt & n_comp;
+    const PetscInt & dim;
+    const PetscScalar * vel_x;
+    const PetscScalar * press;
+    const PetscScalar & Re;
+};
+
+class ResidualPress0 : public ResidualFunc {
+public:
+    explicit ResidualPress0(const NSIncompressibleProblem * prob) :
+        ResidualFunc(prob),
+        dim(get_spatial_dimension()),
+        vel_x(get_field_gradient("velocity"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        f[0] = 0.0;
+        for (PetscInt d = 0; d < this->dim; ++d)
+            f[0] += this->vel_x[d * this->dim + d];
+    }
+
+protected:
+    const PetscInt & dim;
+    const PetscReal * vel_x;
+};
+
+class ResidualPress1 : public ResidualFunc {
+public:
+    explicit ResidualPress1(const NSIncompressibleProblem * prob) :
+        ResidualFunc(prob),
+        dim(get_spatial_dimension())
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        for (PetscInt d = 0; d < this->dim; ++d)
+            f[d] = 0.0;
+    }
+
+protected:
+    const PetscInt & dim;
+};
+
+class JacobianVV0 : public JacobianFunc {
+public:
+    explicit JacobianVV0(const NSIncompressibleProblem * prob) :
+        JacobianFunc(prob),
+        dim(get_spatial_dimension()),
+        vel_x(get_field_gradient("velocity")),
+        u_t_shift(get_time_shift())
+    {
+    }
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        PetscInt nc_i = this->dim;
+        PetscInt nc_j = this->dim;
+
+        for (PetscInt d = 0; d < this->dim; ++d) {
+            g[d * this->dim + d] = this->u_t_shift;
+        }
+
+        for (PetscInt fc = 0; fc < nc_i; ++fc) {
+            for (PetscInt gc = 0; gc < nc_j; ++gc) {
+                g[fc * nc_j + gc] += this->vel_x[fc * nc_j + gc];
+            }
+        }
+    }
+
+protected:
+    const PetscInt & dim;
+    const PetscReal * vel_x;
+    const PetscReal & u_t_shift;
+};
+
+class JacobianVV1 : public JacobianFunc {
+public:
+    explicit JacobianVV1(const NSIncompressibleProblem * prob) :
+        JacobianFunc(prob),
+        dim(get_spatial_dimension()),
+        vel(get_field_value("velocity"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        PetscInt nc_i = this->dim;
+        PetscInt nc_j = this->dim;
+
+        for (PetscInt fc = 0; fc < nc_i; ++fc) {
+            for (PetscInt gc = 0; gc < nc_j; ++gc) {
+                for (PetscInt dg = 0; dg < this->dim; ++dg) {
+                    // kronecker delta
+                    if (fc == gc)
+                        g[(fc * nc_j + gc) * this->dim + dg] += this->vel[dg];
                 }
             }
         }
     }
-}
 
-static void
-g1_pv(PetscInt dim,
-      PetscInt nf,
-      PetscInt nf_aux,
-      const PetscInt u_off[],
-      const PetscInt u_off_x[],
-      const PetscScalar u[],
-      const PetscScalar u_t[],
-      const PetscScalar u_x[],
-      const PetscInt a_off[],
-      const PetscInt a_off_x[],
-      const PetscScalar a[],
-      const PetscScalar a_t[],
-      const PetscScalar a_x[],
-      PetscReal t,
-      PetscReal u_t_shift,
-      const PetscReal x[],
-      PetscInt num_constants,
-      const PetscScalar constants[],
-      PetscScalar g1[])
-{
-    for (PetscInt d = 0; d < dim; ++d)
-        g1[d * dim + d] = 1.0;
-}
+protected:
+    const PetscInt & dim;
+    const PetscReal * vel;
+};
 
-static void
-g2_vp(PetscInt dim,
-      PetscInt nf,
-      PetscInt nf_aux,
-      const PetscInt u_off[],
-      const PetscInt u_off_x[],
-      const PetscScalar u[],
-      const PetscScalar u_t[],
-      const PetscScalar u_x[],
-      const PetscInt a_off[],
-      const PetscInt a_off_x[],
-      const PetscScalar a[],
-      const PetscScalar a_t[],
-      const PetscScalar a_x[],
-      PetscReal t,
-      PetscReal u_t_shift,
-      const PetscReal x[],
-      PetscInt num_constants,
-      const PetscScalar constants[],
-      PetscScalar g2[])
-{
-    for (PetscInt d = 0; d < dim; ++d)
-        g2[d * dim + d] = -1.0;
-}
+class JacobianPV1 : public JacobianFunc {
+public:
+    explicit JacobianPV1(const NSIncompressibleProblem * prob) :
+        JacobianFunc(prob),
+        dim(get_spatial_dimension())
+    {
+    }
 
-static void
-g3_vv(PetscInt dim,
-      PetscInt nf,
-      PetscInt nf_aux,
-      const PetscInt u_off[],
-      const PetscInt u_off_x[],
-      const PetscScalar u[],
-      const PetscScalar u_t[],
-      const PetscScalar u_x[],
-      const PetscInt a_off[],
-      const PetscInt a_off_x[],
-      const PetscScalar a[],
-      const PetscScalar a_t[],
-      const PetscScalar a_x[],
-      PetscReal t,
-      PetscReal u_t_shift,
-      const PetscReal x[],
-      PetscInt num_constants,
-      const PetscScalar constants[],
-      PetscScalar g3[])
-{
-    const PetscReal Re = constants[NSIncompressibleProblem::Re_idx];
-    const PetscInt n_comp = dim;
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        for (PetscInt d = 0; d < this->dim; ++d)
+            g[d * this->dim + d] = 1.0;
+    }
 
-    for (PetscInt comp_i = 0; comp_i < n_comp; ++comp_i) {
-        for (PetscInt d = 0; d < dim; ++d) {
-            g3[((comp_i * n_comp + comp_i) * dim + d) * dim + d] = 1.0 / Re;
+protected:
+    const PetscInt & dim;
+};
+
+class JacobianVP2 : public JacobianFunc {
+public:
+    explicit JacobianVP2(const NSIncompressibleProblem * prob) :
+        JacobianFunc(prob),
+        dim(get_spatial_dimension())
+    {
+    }
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        for (PetscInt d = 0; d < this->dim; ++d)
+            g[d * this->dim + d] = -1.0;
+    }
+
+protected:
+    const PetscInt & dim;
+};
+
+class JacobianVV3 : public JacobianFunc {
+public:
+    explicit JacobianVV3(const NSIncompressibleProblem * prob) :
+        JacobianFunc(prob),
+        n_comp(get_spatial_dimension()),
+        dim(get_spatial_dimension()),
+        Re(prob->get_reynolds_number())
+    {
+    }
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        for (PetscInt comp_i = 0; comp_i < this->n_comp; ++comp_i) {
+            for (PetscInt d = 0; d < this->dim; ++d) {
+                g[((comp_i * this->n_comp + comp_i) * this->dim + d) * this->dim + d] =
+                    1.0 / this->Re;
+            }
         }
     }
-}
+
+protected:
+    const PetscInt & n_comp;
+    const PetscInt & dim;
+    const PetscReal & Re;
+};
+
+} // namespace
 
 Parameters
 NSIncompressibleProblem::parameters()
@@ -297,7 +266,12 @@ NSIncompressibleProblem::NSIncompressibleProblem(const Parameters & parameters) 
     _F_;
 }
 
-NSIncompressibleProblem::~NSIncompressibleProblem() {}
+const PetscReal &
+NSIncompressibleProblem::get_reynolds_number() const
+{
+    _F_;
+    return this->Re;
+}
 
 void
 NSIncompressibleProblem::set_up_fields()
@@ -318,15 +292,17 @@ void
 NSIncompressibleProblem::set_up_weak_form()
 {
     _F_;
-    set_residual_block(velocity_id, f0_veloc, f1_veloc);
-    set_residual_block(pressure_id, f0_press, f1_press);
+    set_residual_block(velocity_id, new ResidualVeloc0(this), new ResidualVeloc1(this));
+    set_residual_block(pressure_id, new ResidualPress0(this), new ResidualPress1(this));
 
-    set_jacobian_block(velocity_id, velocity_id, g0_vv, g1_vv, nullptr, g3_vv);
-    set_jacobian_block(velocity_id, pressure_id, nullptr, nullptr, g2_vp, nullptr);
-    set_jacobian_block(pressure_id, velocity_id, nullptr, g1_pv, nullptr, nullptr);
-
-    std::vector<PetscReal> consts = { this->Re };
-    set_constants(consts);
+    set_jacobian_block(velocity_id,
+                       velocity_id,
+                       new JacobianVV0(this),
+                       new JacobianVV1(this),
+                       nullptr,
+                       new JacobianVV3(this));
+    set_jacobian_block(velocity_id, pressure_id, nullptr, nullptr, new JacobianVP2(this), nullptr);
+    set_jacobian_block(pressure_id, velocity_id, nullptr, new JacobianPV1(this), nullptr, nullptr);
 }
 
 void

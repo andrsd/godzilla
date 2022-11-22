@@ -1,63 +1,53 @@
 #include "Godzilla.h"
 #include "HeatEquationProblem.h"
 #include "ConvectiveHeatFluxBC.h"
+#include "BndResidualFunc.h"
+#include "BndJacobianFunc.h"
 #include "CallStack.h"
 
-namespace godzilla {
+using namespace godzilla;
 
 REGISTER_OBJECT(ConvectiveHeatFluxBC);
 
-void
-__f0_convective_heat_flux_const_bc(PetscInt dim,
-                                   PetscInt nf,
-                                   PetscInt nf_aux,
-                                   const PetscInt u_off[],
-                                   const PetscInt u_off_x[],
-                                   const PetscScalar u[],
-                                   const PetscScalar u_t[],
-                                   const PetscScalar u_x[],
-                                   const PetscInt a_off[],
-                                   const PetscInt a_off_x[],
-                                   const PetscScalar a[],
-                                   const PetscScalar a_t[],
-                                   const PetscScalar a_x[],
-                                   PetscReal t,
-                                   const PetscReal x[],
-                                   const PetscReal n[],
-                                   PetscInt num_constants,
-                                   const PetscScalar constants[],
-                                   PetscScalar f0[])
-{
-    PetscReal htc = a[a_off[HeatEquationProblem::htc_aux_id]];
-    PetscReal T_infinity = a[a_off[HeatEquationProblem::T_ambient_aux_id]];
-    f0[0] = htc * (u[0] - T_infinity);
-}
+namespace {
 
-void
-__g0_convective_heat_flux_const_bc(PetscInt dim,
-                                   PetscInt nf,
-                                   PetscInt nf_aux,
-                                   const PetscInt u_off[],
-                                   const PetscInt u_off_x[],
-                                   const PetscScalar u[],
-                                   const PetscScalar u_t[],
-                                   const PetscScalar u_x[],
-                                   const PetscInt a_off[],
-                                   const PetscInt a_off_x[],
-                                   const PetscScalar a[],
-                                   const PetscScalar a_t[],
-                                   const PetscScalar a_x[],
-                                   PetscReal t,
-                                   PetscReal u_t_shift,
-                                   const PetscReal x[],
-                                   const PetscReal n[],
-                                   PetscInt num_constants,
-                                   const PetscScalar constants[],
-                                   PetscScalar g0[])
-{
-    PetscReal htc = a[a_off[HeatEquationProblem::htc_aux_id]];
-    g0[0] = htc;
-}
+class Residual0 : public BndResidualFunc {
+public:
+    explicit Residual0(const NaturalBC * nbc) :
+        BndResidualFunc(nbc),
+        T(get_field_value("temp")),
+        htc(get_field_value("htc")),
+        T_infinity(get_field_value("T_ambient"))
+    {
+    }
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        f[0] = htc[0] * (T[0] - T_infinity[0]);
+    }
+
+protected:
+    const PetscScalar * T;
+    const PetscScalar * htc;
+    const PetscScalar * T_infinity;
+};
+
+class Jacobian0 : public BndJacobianFunc {
+public:
+    explicit Jacobian0(const NaturalBC * nbc) : BndJacobianFunc(nbc), htc(get_field_value("htc")) {}
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        g[0] = htc[0];
+    }
+
+protected:
+    const PetscScalar * htc;
+};
+
+} // namespace
 
 Parameters
 ConvectiveHeatFluxBC::parameters()
@@ -88,12 +78,6 @@ void
 ConvectiveHeatFluxBC::set_up_weak_form()
 {
     _F_;
-    set_residual_block(__f0_convective_heat_flux_const_bc, nullptr);
-    set_jacobian_block(get_field_id(),
-                       __g0_convective_heat_flux_const_bc,
-                       nullptr,
-                       nullptr,
-                       nullptr);
+    set_residual_block(new Residual0(this), nullptr);
+    set_jacobian_block(get_field_id(), new Jacobian0(this), nullptr, nullptr, nullptr);
 }
-
-} // namespace godzilla

@@ -7,18 +7,15 @@ using namespace godzilla;
 /// Test problem for simple FE solver
 class GTestFENonlinearProblem : public FENonlinearProblem {
 public:
-    GTestFENonlinearProblem(const Parameters & params);
-    virtual ~GTestFENonlinearProblem();
+    explicit GTestFENonlinearProblem(const Parameters & params);
 
-    const std::vector<PetscReal> & getConstants();
-    virtual void set_up_constants();
     PetscDS getDS();
     void compute_postprocessors() override;
     void set_up_initial_guess() override;
 
 protected:
-    virtual void set_up_fields() override;
-    virtual void set_up_weak_form() override;
+    void set_up_fields() override;
+    void set_up_weak_form() override;
 
     /// ID for the "u" field
     const PetscInt iu;

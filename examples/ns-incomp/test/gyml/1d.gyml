@@ -8,7 +8,6 @@ problem:
   end_time: 0.1
   dt: 0.01
   Re: 1
-  order_pressure: 2
 
 ics:
   velocity:
