@@ -21,7 +21,7 @@ NaturalBC::NaturalBC(const Parameters & params) :
 }
 
 void
-NaturalBC::set_up_callback()
+NaturalBC::add_boundary()
 {
     _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,

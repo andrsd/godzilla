@@ -24,7 +24,7 @@ public:
                           PetscScalar * xG) = 0;
 
 protected:
-    virtual void set_up_callback() override;
+    virtual void add_boundary() override;
 
     /// Boundary number
     PetscInt bd;

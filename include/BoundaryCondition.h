@@ -46,8 +46,8 @@ public:
     virtual void set_up();
 
 protected:
-    /// Set up the PETSc callback
-    virtual void set_up_callback() = 0;
+    /// Add boundary to the discretization object
+    virtual void add_boundary() = 0;
 
     /// Discrete problem this object is part of
     const DiscreteProblemInterface * dpi;
