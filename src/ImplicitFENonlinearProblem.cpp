@@ -91,9 +91,9 @@ ImplicitFENonlinearProblem::set_up_time_scheme()
 {
     _F_;
     std::string sch = utils::to_lower(this->scheme);
-    if (sch.compare("beuler") == 0)
+    if (sch == "beuler")
         PETSC_CHECK(TSSetType(this->ts, TSBEULER));
-    else if (sch.compare("cn") == 0)
+    else if (sch == "cn")
         PETSC_CHECK(TSSetType(this->ts, TSCN));
 }
 

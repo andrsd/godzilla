@@ -54,13 +54,13 @@ Output::set_up_exec()
             unsigned int mask = 0;
             for (auto & s : on) {
                 std::string ls = utils::to_lower(s);
-                if (ls.compare("initial") == 0)
+                if (ls == "initial")
                     mask |= ON_INITIAL;
-                else if (ls.compare("timestep") == 0)
+                else if (ls == "timestep")
                     mask |= ON_TIMESTEP;
-                else if (ls.compare("final") == 0)
+                else if (ls == "final")
                     mask |= ON_FINAL;
-                else if (ls.compare("none") == 0)
+                else if (ls == "none")
                     none = true;
             }
 

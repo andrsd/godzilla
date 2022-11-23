@@ -187,15 +187,15 @@ NonlinearProblem::set_up_line_search()
     _F_;
     SNESLineSearch line_search;
     PETSC_CHECK(SNESGetLineSearch(this->snes, &line_search));
-    if (this->line_search_type.compare("basic") == 0)
+    if (this->line_search_type == "basic")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHBASIC));
-    else if (this->line_search_type.compare("l2") == 0)
+    else if (this->line_search_type == "l2")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHL2));
-    else if (this->line_search_type.compare("cp") == 0)
+    else if (this->line_search_type == "cp")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHCP));
-    else if (this->line_search_type.compare("nleqerr") == 0)
+    else if (this->line_search_type == "nleqerr")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHNLEQERR));
-    else if (this->line_search_type.compare("shell") == 0)
+    else if (this->line_search_type == "shell")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHSHELL));
     else
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHBT));
