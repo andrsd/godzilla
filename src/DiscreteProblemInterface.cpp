@@ -185,7 +185,7 @@ void
 DiscreteProblemInterface::set_up_initial_guess()
 {
     _F_;
-    if (this->ics.size() > 0)
+    if (!this->ics.empty())
         set_initial_guess_from_ics();
     else
         set_zero_initial_guess();

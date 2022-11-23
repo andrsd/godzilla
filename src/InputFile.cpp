@@ -301,7 +301,7 @@ InputFile::check_params(const Parameters * params,
     else
         this->valid_param_object_names.insert(name);
 
-    if (unused_param_names.size() > 0)
+    if (!unused_param_names.empty())
         log_warning("%s: Following parameters were not used: %s",
                     name,
                     fmt::to_string(fmt::join(unused_param_names, ", ")));

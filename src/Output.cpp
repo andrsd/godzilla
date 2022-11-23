@@ -49,7 +49,7 @@ Output::set_up_exec()
     _F_;
     if (is_param_valid("on")) {
         const auto & on = get_param<std::vector<std::string>>("on");
-        if (on.size() > 0) {
+        if (!on.empty()) {
             bool none = false;
             unsigned int mask = 0;
             for (auto & s : on) {

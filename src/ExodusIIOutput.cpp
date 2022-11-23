@@ -78,7 +78,7 @@ ExodusIIOutput::create()
     auto flds = this->dpi->get_field_names();
     auto & pps = this->problem->get_postprocessor_names();
 
-    if (this->variable_names.size() == 0) {
+    if (this->variable_names.empty()) {
         this->field_var_names = flds;
         this->global_var_names = pps;
     }

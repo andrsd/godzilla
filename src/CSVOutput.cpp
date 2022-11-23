@@ -38,7 +38,7 @@ CSVOutput::create()
 
     this->pps_names = this->problem->get_postprocessor_names();
 
-    if (this->pps_names.size() > 0)
+    if (!this->pps_names.empty())
         open_file();
 }
 
@@ -53,7 +53,7 @@ void
 CSVOutput::output_step()
 {
     _F_;
-    if (this->pps_names.size() == 0)
+    if (this->pps_names.empty())
         return;
 
     lprintf(9, "Output to file: %s", this->file_name);
