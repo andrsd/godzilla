@@ -23,7 +23,7 @@ public:
 
     /// Get the name of the object
     /// @return The name of the object
-    virtual const std::string & get_name() const;
+    const std::string & get_name() const;
 
     /// Get the parameters of the object
     /// @return The parameters of the object

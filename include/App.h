@@ -26,7 +26,7 @@ public:
     /// Get Application name
     ///
     /// @return Application name
-    virtual const std::string & get_name() const;
+    const std::string & get_name() const;
 
     /// @return Get problem this application is representing
     virtual Problem * get_problem() const;
