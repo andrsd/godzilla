@@ -17,6 +17,7 @@ RectangleMesh::parameters()
     params.add_param<PetscReal>("ymax", 1., "Maximum in the y direction");
     params.add_required_param<PetscInt>("nx", "Number of mesh points in the x direction");
     params.add_required_param<PetscInt>("ny", "Number of mesh points in the y direction");
+    params.add_param<bool>("simplex", false, "Generate simplex elements");
     return params;
 }
 
@@ -28,7 +29,7 @@ RectangleMesh::RectangleMesh(const Parameters & parameters) :
     ymax(get_param<PetscReal>("ymax")),
     nx(get_param<PetscInt>("nx")),
     ny(get_param<PetscInt>("ny")),
-    simplex(PETSC_FALSE),
+    simplex(get_param<bool>("simplex") ? PETSC_TRUE : PETSC_FALSE),
     interpolate(PETSC_TRUE)
 {
     _F_;
