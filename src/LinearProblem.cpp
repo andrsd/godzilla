@@ -142,7 +142,7 @@ void
 LinearProblem::set_up_monitors()
 {
     _F_;
-    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor_linear, this, 0));
+    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor_linear, this, nullptr));
 }
 
 void

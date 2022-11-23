@@ -215,8 +215,8 @@ void
 NonlinearProblem::set_up_monitors()
 {
     _F_;
-    PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, 0));
-    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor, this, 0));
+    PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, nullptr));
+    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor, this, nullptr));
 }
 
 void
