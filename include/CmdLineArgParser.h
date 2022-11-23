@@ -27,7 +27,7 @@ public:
     void parse(int argc, const char * const * argv);
 
 protected:
-    /// TCALP command line object
+    /// TCLAP command line object
     TCLAP::CmdLine cmd;
 };
 

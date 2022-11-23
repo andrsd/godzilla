@@ -10,7 +10,7 @@ using namespace godzilla;
 TEST(FactoryTest, valid_params_unreg_obj)
 {
     EXPECT_DEATH(Parameters * params = Factory::get_parameters("ASDF"),
-                 "Getting valid_params for object 'ASDF' failed.  Object is not registred.");
+                 "Getting valid_params for object 'ASDF' failed.  Object is not registered.");
 }
 
 TEST(FactoryTest, create_unreg_obj)

@@ -71,7 +71,7 @@ public:
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
-            error("Getting valid_params for object '%s' failed.  Object is not registred.",
+            error("Getting valid_params for object '%s' failed.  Object is not registered.",
                   class_name);
 
         Entry & entry = it->second;

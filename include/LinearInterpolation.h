@@ -11,13 +11,13 @@ class LinearInterpolation {
 public:
     /// Construct an empty linear interpolation object
     LinearInterpolation();
-    /// COnstruct interpolation object by providing independent and dependent values
+    /// Construct interpolation object by providing independent and dependent values
     ///
     /// @param x Independent values
     /// @param y Dependent values
     LinearInterpolation(const std::vector<PetscReal> & x, const std::vector<PetscReal> & y);
 
-    /// Create the interpolation object by providin independent and dependent values
+    /// Create the interpolation object by providing independent and dependent values
     ///
     /// @param x Independent values
     /// @param y Dependent values

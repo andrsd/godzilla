@@ -108,7 +108,7 @@ protected:
     /// List of postprocessor objects
     std::map<std::string, Postprocessor *> pps;
 
-    /// List of postprocesso names
+    /// List of postprocessor names
     std::vector<std::string> pps_names;
 
     /// Simulation time

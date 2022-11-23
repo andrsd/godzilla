@@ -34,7 +34,7 @@ public:
     /// Parse command line arguments
     ///
     /// @param argc Number of command line arguments
-    /// @param argv Command line argumnts
+    /// @param argv Command line arguments
     virtual void parse_command_line(int argc, char * argv[]);
 
     /// Run the application
@@ -105,7 +105,7 @@ protected:
 
     /// Run the input file
     ///
-    /// This is the method that will be called wehn user specify -i command line parameter
+    /// This is the method that will be called when user specifies -i command line parameter
     virtual void run_input_file();
 
     /// Run the problem build via `build_from_yml`
