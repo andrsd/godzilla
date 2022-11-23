@@ -29,7 +29,7 @@ FileOutput::create()
     Output::create();
     if (this->file_base.length() == 0) {
         std::filesystem::path input_file_name(get_app()->get_input_file_name());
-        this->file_base = input_file_name.stem().u8string().c_str();
+        this->file_base = input_file_name.stem().u8string();
     }
 }
 
