@@ -140,7 +140,7 @@ FVProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
     if (fid == 0) {
         const char * name;
         PETSC_CHECK(PetscFVGetComponentName(this->fvm, component, &name));
-        return std::string(name);
+        return { name };
     }
     else
         error("Multiple-field problems are not implemented");

@@ -32,7 +32,7 @@ HDF5Output::~HDF5Output()
 std::string
 HDF5Output::get_file_ext() const
 {
-    return std::string("h5");
+    return { "h5" };
 }
 
 void

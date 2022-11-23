@@ -52,7 +52,7 @@ std::string
 ExodusIIOutput::get_file_ext() const
 {
     _F_;
-    return std::string("exo");
+    return { "exo" };
 }
 
 void

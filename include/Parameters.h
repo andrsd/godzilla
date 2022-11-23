@@ -183,7 +183,7 @@ public:
         if (it != this->params.end())
             return it->second->doc_string;
         else
-            return std::string();
+            return {};
     }
 
     /// Parameter map iterator.
