@@ -6,7 +6,7 @@
 #include "NonlinearProblem.h"
 #include "Output.h"
 #include "petscdmplex.h"
-#include <assert.h>
+#include <cassert>
 #include "petsc/private/tsimpl.h"
 
 PETSC_EXTERN PetscErrorCode TSAdaptCreate_godzilla(TSAdapt adapt);
@@ -19,7 +19,7 @@ __transient_pre_step(TS ts)
     _F_;
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
-    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     return tpi->pre_step();
 }
 
@@ -29,15 +29,15 @@ __transient_post_step(TS ts)
     _F_;
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
-    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     return tpi->post_step();
 }
 
 PetscErrorCode
-__transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx)
+__transient_monitor(TS, PetscInt stepi, PetscReal time, Vec x, void * ctx)
 {
     _F_;
-    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     return tpi->ts_monitor_callback(stepi, time, x);
 }
 
@@ -120,7 +120,7 @@ TransientProblemInterface::set_up_monitors()
     _F_;
     PETSC_CHECK(TSSetPreStep(this->ts, __transient_pre_step));
     PETSC_CHECK(TSSetPostStep(this->ts, __transient_post_step));
-    PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, NULL));
+    PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, nullptr));
 }
 
 PetscErrorCode

@@ -13,11 +13,11 @@ class ParsedFunction;
 ///
 class L2FieldDiff : public Postprocessor {
 public:
-    L2FieldDiff(const Parameters & params);
+    explicit L2FieldDiff(const Parameters & params);
 
-    virtual void create() override;
-    virtual void compute() override;
-    virtual PetscReal get_value() override;
+    void create() override;
+    void compute() override;
+    PetscReal get_value() override;
 
 protected:
     /// FE problem

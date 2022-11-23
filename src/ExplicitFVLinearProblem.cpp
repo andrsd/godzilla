@@ -114,11 +114,11 @@ ExplicitFVLinearProblem::set_up_time_scheme()
 {
     _F_;
     std::string sch = utils::to_lower(this->scheme);
-    if (sch.compare("euler") == 0)
+    if (sch == "euler")
         PETSC_CHECK(TSSetType(this->ts, TSEULER));
-    else if (sch.compare("ssp") == 0)
+    else if (sch == "ssp")
         PETSC_CHECK(TSSetType(this->ts, TSSSP));
-    else if (sch.compare("rk") == 0)
+    else if (sch == "rk")
         PETSC_CHECK(TSSetType(this->ts, TSRK));
 }
 

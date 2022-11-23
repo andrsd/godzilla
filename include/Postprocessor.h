@@ -13,8 +13,7 @@ class Problem;
 ///
 class Postprocessor : public Object, public PrintInterface {
 public:
-    Postprocessor(const Parameters & params);
-    virtual ~Postprocessor();
+    explicit Postprocessor(const Parameters & params);
 
     /// Compute the postprocessor value
     ///

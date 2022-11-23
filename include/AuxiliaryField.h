@@ -13,10 +13,9 @@ class FEProblemInterface;
 ///
 class AuxiliaryField : public Object, public PrintInterface {
 public:
-    AuxiliaryField(const Parameters & params);
-    virtual ~AuxiliaryField();
+    explicit AuxiliaryField(const Parameters & params);
 
-    virtual void create() override;
+    void create() override;
 
     virtual DMLabel get_label() const;
 

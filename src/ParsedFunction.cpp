@@ -8,9 +8,9 @@ namespace godzilla {
 REGISTER_OBJECT(ParsedFunction);
 
 static double
-__parsed_function_eval(void * ctx, double t, double x, double y, double z)
+parsed_function_eval(void * ctx, double t, double x, double y, double z)
 {
-    ParsedFunction * fn = static_cast<ParsedFunction *>(ctx);
+    auto * fn = static_cast<ParsedFunction *>(ctx);
     PetscReal u[1] = { 0. };
     PetscReal coord[3] = { x, y, z };
     fn->evaluate(3, t, coord, 1, u);
@@ -18,14 +18,14 @@ __parsed_function_eval(void * ctx, double t, double x, double y, double z)
 }
 
 static PetscErrorCode
-__parsed_function(PetscInt dim,
-                  PetscReal time,
-                  const PetscReal x[],
-                  PetscInt nc,
-                  PetscScalar u[],
-                  void * ctx)
+parsed_function(PetscInt dim,
+                PetscReal time,
+                const PetscReal x[],
+                PetscInt nc,
+                PetscScalar u[],
+                void * ctx)
 {
-    ParsedFunction * fn = static_cast<ParsedFunction *>(ctx);
+    auto * fn = static_cast<ParsedFunction *>(ctx);
     fn->evaluate(dim, time, x, nc, u);
     return 0;
 }
@@ -56,7 +56,7 @@ PetscFunc *
 ParsedFunction::get_function()
 {
     _F_;
-    return __parsed_function;
+    return parsed_function;
 }
 
 void *
@@ -71,7 +71,7 @@ ParsedFunction::register_callback(mu::Parser & parser)
 {
     _F_;
     if (this->function.size() == 1)
-        parser.DefineFunUserData(get_name(), __parsed_function_eval, this);
+        parser.DefineFunUserData(get_name(), parsed_function_eval, this);
 }
 
 void

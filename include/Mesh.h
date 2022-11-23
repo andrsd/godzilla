@@ -10,8 +10,7 @@ namespace godzilla {
 ///
 class Mesh : public Object, public PrintInterface {
 public:
-    Mesh(const Parameters & parameters);
-    virtual ~Mesh();
+    explicit Mesh(const Parameters & parameters);
 
     virtual DM get_dm() const = 0;
 

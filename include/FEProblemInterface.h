@@ -19,22 +19,22 @@ class WeakForm;
 class FEProblemInterface : public DiscreteProblemInterface {
 public:
     FEProblemInterface(Problem * problem, const Parameters & params);
-    virtual ~FEProblemInterface();
+    ~FEProblemInterface() override;
 
-    virtual PetscInt get_num_fields() const override;
-    virtual std::vector<std::string> get_field_names() const override;
-    virtual const std::string & get_field_name(PetscInt fid) const override;
-    virtual PetscInt get_field_num_components(PetscInt fid) const override;
-    virtual PetscInt get_field_id(const std::string & name) const override;
-    virtual bool has_field_by_id(PetscInt fid) const override;
-    virtual bool has_field_by_name(const std::string & name) const override;
-    virtual PetscInt get_field_order(PetscInt fid) const override;
-    virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
-    virtual void
+    PetscInt get_num_fields() const override;
+    std::vector<std::string> get_field_names() const override;
+    const std::string & get_field_name(PetscInt fid) const override;
+    PetscInt get_field_num_components(PetscInt fid) const override;
+    PetscInt get_field_id(const std::string & name) const override;
+    bool has_field_by_id(PetscInt fid) const override;
+    bool has_field_by_name(const std::string & name) const override;
+    PetscInt get_field_order(PetscInt fid) const override;
+    std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
+    void
     set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
-    virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
-    virtual Vec get_solution_vector_local() const override;
-    virtual WeakForm * get_weak_form() const override;
+    PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
+    Vec get_solution_vector_local() const override;
+    WeakForm * get_weak_form() const override;
 
     /// Get number of auxiliary fields
     ///
@@ -177,8 +177,8 @@ public:
 protected:
     struct FieldInfo;
 
-    virtual void create() override;
-    virtual void init() override;
+    void create() override;
+    void init() override;
     virtual void allocate_objects();
 
     /// Create FE object from FieldInfo
@@ -187,7 +187,7 @@ protected:
     void create_fe(FieldInfo & fi);
 
     /// Set up discretization system
-    virtual void set_up_ds() override;
+    void set_up_ds() override;
 
     /// Set up quadrature
     virtual void set_up_quadrature();

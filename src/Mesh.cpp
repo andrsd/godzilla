@@ -13,8 +13,6 @@ Mesh::parameters()
 
 Mesh::Mesh(const Parameters & parameters) : Object(parameters), PrintInterface(this), dim(-1) {}
 
-Mesh::~Mesh() {}
-
 PetscInt
 Mesh::get_dimension() const
 {

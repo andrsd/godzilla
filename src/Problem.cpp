@@ -25,8 +25,6 @@ Problem::Problem(const Parameters & parameters) :
 {
 }
 
-Problem::~Problem() {}
-
 void
 Problem::check()
 {

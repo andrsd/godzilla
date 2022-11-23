@@ -12,7 +12,7 @@ class BndJacobianFunc;
 /// Base class for natural boundary conditions
 class NaturalBC : public BoundaryCondition {
 public:
-    NaturalBC(const Parameters & params);
+    explicit NaturalBC(const Parameters & params);
 
     /// Set up the weak form for the boundary integral of this boundary condition
     virtual void set_up_weak_form() = 0;
@@ -37,7 +37,7 @@ protected:
                             BndJacobianFunc * g2,
                             BndJacobianFunc * g3);
 
-    virtual void add_boundary() override;
+    void add_boundary() override;
 
     /// WeakForm object
     WeakForm * wf;

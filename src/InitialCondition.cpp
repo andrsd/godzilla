@@ -2,20 +2,20 @@
 #include "CallStack.h"
 #include "InitialCondition.h"
 #include "DiscreteProblemInterface.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 
 static PetscErrorCode
-__initial_condition_function(PetscInt dim,
-                             PetscReal time,
-                             const PetscReal x[],
-                             PetscInt Nc,
-                             PetscScalar u[],
-                             void * ctx)
+initial_condition_function(PetscInt dim,
+                           PetscReal time,
+                           const PetscReal x[],
+                           PetscInt Nc,
+                           PetscScalar u[],
+                           void * ctx)
 {
     _F_;
-    InitialCondition * ic = static_cast<InitialCondition *>(ctx);
+    auto * ic = static_cast<InitialCondition *>(ctx);
     assert(ic != nullptr);
     ic->evaluate(dim, time, x, Nc, u);
     return 0;
@@ -49,7 +49,7 @@ InitialCondition::create()
         this->fid = this->dpi->get_field_id(field_names[0]);
     }
     else if (field_names.size() > 1) {
-        const std::string & field_name = get_param<std::string>("field");
+        const auto & field_name = get_param<std::string>("field");
         if (field_name.length() > 0) {
             if (this->dpi->has_field_by_name(field_name))
                 this->fid = this->dpi->get_field_id(field_name);
@@ -73,7 +73,7 @@ PetscFunc *
 InitialCondition::get_function()
 {
     _F_;
-    return __initial_condition_function;
+    return initial_condition_function;
 }
 
 void *

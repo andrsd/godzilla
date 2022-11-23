@@ -34,19 +34,19 @@ __dummy_jacobian_func(PetscInt,
 } // namespace internal
 
 PetscErrorCode
-__fep_compute_residual(DM dm, Vec x, Vec F, void * user)
+__fep_compute_residual(DM, Vec x, Vec F, void * user)
 {
     _F_;
-    FENonlinearProblem * fep = static_cast<FENonlinearProblem *>(user);
+    auto * fep = static_cast<FENonlinearProblem *>(user);
     fep->compute_residual_callback(x, F);
     return 0;
 }
 
 PetscErrorCode
-__fep_compute_jacobian(DM dm, Vec x, Mat J, Mat Jp, void * user)
+__fep_compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * user)
 {
     _F_;
-    FENonlinearProblem * fep = static_cast<FENonlinearProblem *>(user);
+    auto * fep = static_cast<FENonlinearProblem *>(user);
     fep->compute_jacobian_callback(x, J, Jp);
     return 0;
 }
@@ -64,8 +64,6 @@ FENonlinearProblem::FENonlinearProblem(const Parameters & parameters) :
 {
     _F_;
 }
-
-FENonlinearProblem::~FENonlinearProblem() {}
 
 void
 FENonlinearProblem::create()

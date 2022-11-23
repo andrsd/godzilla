@@ -48,7 +48,7 @@ DirichletBC::get_components() const
 PetscFunc *
 DirichletBC::get_function_t()
 {
-    if (this->expression_t.size() > 0)
+    if (!this->expression_t.empty())
         return EssentialBC::get_function_t();
     else
         return nullptr;

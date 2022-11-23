@@ -23,13 +23,9 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
     fepi(get_param<FEProblemInterface *>("_fepi")),
     field(get_param<std::string>("field")),
     region(get_param<std::string>("region")),
+    fid(-1),
     label(nullptr)
 {
-}
-
-AuxiliaryField::~AuxiliaryField()
-{
-    _F_;
 }
 
 void

@@ -8,7 +8,7 @@ namespace godzilla {
 /// Base class for natural Riemann boundary conditions
 class NaturalRiemannBC : public BoundaryCondition {
 public:
-    NaturalRiemannBC(const Parameters & params);
+    explicit NaturalRiemannBC(const Parameters & params);
 
     /// Evaluate the boundary condition
     ///
@@ -24,7 +24,7 @@ public:
                           PetscScalar * xG) = 0;
 
 protected:
-    virtual void add_boundary() override;
+    void add_boundary() override;
 
     /// Boundary number
     PetscInt bd;

@@ -9,34 +9,34 @@
 namespace godzilla {
 
 PetscErrorCode
-__compute_residual(SNES snes, Vec x, Vec f, void * ctx)
+__compute_residual(SNES, Vec x, Vec f, void * ctx)
 {
     _F_;
-    NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
+    auto * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->compute_residual_callback(x, f);
 }
 
 PetscErrorCode
-__compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void * ctx)
+__compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     _F_;
-    NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
+    auto * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->compute_jacobian_callback(x, J, Jp);
 }
 
 PetscErrorCode
-__ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
+__ksp_monitor(KSP, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
-    NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
+    auto * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->ksp_monitor_callback(it, rnorm);
 }
 
 PetscErrorCode
-__snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx)
+__snes_monitor(SNES, PetscInt it, PetscReal norm, void * ctx)
 {
     _F_;
-    NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
+    auto * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->snes_monitor_callback(it, norm);
 }
 
@@ -72,11 +72,12 @@ NonlinearProblem::parameters()
 
 NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     Problem(parameters),
-    snes(NULL),
-    ksp(NULL),
-    x(NULL),
-    r(NULL),
-    J(NULL),
+    snes(nullptr),
+    ksp(nullptr),
+    x(nullptr),
+    r(nullptr),
+    J(nullptr),
+    converged_reason(SNES_CONVERGED_ITERATING),
     line_search_type(get_param<std::string>("line_search")),
     nl_rel_tol(get_param<PetscReal>("nl_rel_tol")),
     nl_abs_tol(get_param<PetscReal>("nl_abs_tol")),
@@ -186,15 +187,15 @@ NonlinearProblem::set_up_line_search()
     _F_;
     SNESLineSearch line_search;
     PETSC_CHECK(SNESGetLineSearch(this->snes, &line_search));
-    if (this->line_search_type.compare("basic") == 0)
+    if (this->line_search_type == "basic")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHBASIC));
-    else if (this->line_search_type.compare("l2") == 0)
+    else if (this->line_search_type == "l2")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHL2));
-    else if (this->line_search_type.compare("cp") == 0)
+    else if (this->line_search_type == "cp")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHCP));
-    else if (this->line_search_type.compare("nleqerr") == 0)
+    else if (this->line_search_type == "nleqerr")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHNLEQERR));
-    else if (this->line_search_type.compare("shell") == 0)
+    else if (this->line_search_type == "shell")
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHSHELL));
     else
         PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHBT));
@@ -214,8 +215,8 @@ void
 NonlinearProblem::set_up_monitors()
 {
     _F_;
-    PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, 0));
-    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor, this, 0));
+    PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, nullptr));
+    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor, this, nullptr));
 }
 
 void
@@ -257,7 +258,7 @@ NonlinearProblem::solve()
 {
     _F_;
     lprintf(9, "Solving");
-    PETSC_CHECK(SNESSolve(this->snes, NULL, this->x));
+    PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }
 

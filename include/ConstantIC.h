@@ -12,15 +12,15 @@ namespace godzilla {
 /// value for each component
 class ConstantIC : public InitialCondition {
 public:
-    ConstantIC(const Parameters & params);
+    explicit ConstantIC(const Parameters & params);
 
-    virtual PetscInt get_num_components() const override;
+    PetscInt get_num_components() const override;
 
-    virtual void evaluate(PetscInt dim,
-                          PetscReal time,
-                          const PetscReal x[],
-                          PetscInt Nc,
-                          PetscScalar u[]) override;
+    void evaluate(PetscInt dim,
+                  PetscReal time,
+                  const PetscReal x[],
+                  PetscInt Nc,
+                  PetscScalar u[]) override;
 
 protected:
     /// Constant values -- one for each component

@@ -16,7 +16,7 @@ in(const std::string & value, const std::vector<std::string> & options)
     _F_;
     std::string v = utils::to_lower(value);
     for (auto & o : options)
-        if (v.compare(utils::to_lower(o)) == 0)
+        if (v == utils::to_lower(o))
             return true;
     return false;
 }

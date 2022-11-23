@@ -16,10 +16,10 @@ template <typename... Args>
 void
 error_printf(const char * s, Args... args)
 {
-    fmt::fprintf(stderr, "%s", Terminal::Color::red);
+    fmt::fprintf(stderr, "%s", (const char *) Terminal::Color::red);
     fmt::fprintf(stderr, "[ERROR] ");
     fmt::fprintf(stderr, s, std::forward<Args>(args)...);
-    fmt::fprintf(stderr, "%s", Terminal::Color::normal);
+    fmt::fprintf(stderr, "%s", (const char *) Terminal::Color::normal);
     fmt::fprintf(stderr, "\n");
 }
 

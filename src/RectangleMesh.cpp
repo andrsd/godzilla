@@ -39,14 +39,14 @@ RectangleMesh::RectangleMesh(const Parameters & parameters) :
         log_error("Parameter 'ymax' must be larger than 'ymin'.");
 }
 
-PetscInt
+PetscReal
 RectangleMesh::get_x_min() const
 {
     _F_;
     return this->xmin;
 }
 
-PetscInt
+PetscReal
 RectangleMesh::get_x_max() const
 {
     _F_;
@@ -60,14 +60,14 @@ RectangleMesh::get_nx() const
     return this->nx;
 }
 
-PetscInt
+PetscReal
 RectangleMesh::get_y_min() const
 {
     _F_;
     return this->ymin;
 }
 
-PetscInt
+PetscReal
 RectangleMesh::get_y_max() const
 {
     _F_;
@@ -85,8 +85,6 @@ void
 RectangleMesh::create_dm()
 {
     _F_;
-    PetscErrorCode ierr;
-
     PetscReal lower[2] = { this->xmin, this->ymin };
     PetscReal upper[2] = { this->xmax, this->ymax };
     PetscInt faces[2] = { this->nx, this->ny };

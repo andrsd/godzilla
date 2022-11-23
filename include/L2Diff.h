@@ -9,11 +9,11 @@ namespace godzilla {
 ///
 class L2Diff : public Postprocessor, public FunctionInterface {
 public:
-    L2Diff(const Parameters & params);
+    explicit L2Diff(const Parameters & params);
 
-    virtual void create() override;
-    virtual void compute() override;
-    virtual PetscReal get_value() override;
+    void create() override;
+    void compute() override;
+    PetscReal get_value() override;
 
     /// Evaluate the function 'u'
     ///
@@ -22,8 +22,7 @@ public:
     /// @param x The coordinates
     /// @param Nc The number of components
     /// @param u  The output field values
-    virtual void
-    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+    void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
 
 protected:
     /// Computed L_2 error

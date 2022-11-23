@@ -9,7 +9,7 @@ class FEProblemInterface;
 
 class ResidualFunc {
 public:
-    ResidualFunc(const FEProblemInterface * fepi);
+    explicit ResidualFunc(const FEProblemInterface * fepi);
 
     /// Evaluate this residual function
     ///

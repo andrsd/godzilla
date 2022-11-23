@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class EssentialBC : public BoundaryCondition {
 public:
-    EssentialBC(const Parameters & params);
+    explicit EssentialBC(const Parameters & params);
 
     /// Evaluate the boundary condition
     ///
@@ -41,7 +41,7 @@ public:
     virtual void * get_context();
 
 protected:
-    virtual void add_boundary();
+    void add_boundary() override;
 
 public:
     static Parameters parameters();

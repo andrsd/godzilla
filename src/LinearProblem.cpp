@@ -7,26 +7,26 @@
 namespace godzilla {
 
 PetscErrorCode
-__compute_rhs(KSP ksp, Vec b, void * ctx)
+__compute_rhs(KSP, Vec b, void * ctx)
 {
     _F_;
-    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
+    auto * problem = static_cast<LinearProblem *>(ctx);
     return problem->compute_rhs_callback(b);
 }
 
 PetscErrorCode
-__compute_operators(KSP ksp, Mat A, Mat B, void * ctx)
+__compute_operators(KSP, Mat A, Mat B, void * ctx)
 {
     _F_;
-    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
+    auto * problem = static_cast<LinearProblem *>(ctx);
     return problem->compute_operators_callback(A, B);
 }
 
 PetscErrorCode
-__ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
+__ksp_monitor_linear(KSP, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
-    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
+    auto * problem = static_cast<LinearProblem *>(ctx);
     return problem->ksp_monitor_callback(it, rnorm);
 }
 
@@ -48,10 +48,10 @@ LinearProblem::parameters()
 
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
-    ksp(NULL),
-    x(NULL),
-    b(NULL),
-    A(NULL),
+    ksp(nullptr),
+    x(nullptr),
+    b(nullptr),
+    A(nullptr),
     lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
     lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
     lin_max_iter(get_param<PetscInt>("lin_max_iter"))
@@ -142,7 +142,7 @@ void
 LinearProblem::set_up_monitors()
 {
     _F_;
-    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor_linear, this, 0));
+    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor_linear, this, nullptr));
 }
 
 void

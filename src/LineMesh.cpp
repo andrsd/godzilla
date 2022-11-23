@@ -31,21 +31,21 @@ LineMesh::LineMesh(const Parameters & parameters) :
 }
 
 PetscReal
-LineMesh::get_x_min()
+LineMesh::get_x_min() const
 {
     _F_;
     return this->xmin;
 }
 
 PetscReal
-LineMesh::get_x_max()
+LineMesh::get_x_max() const
 {
     _F_;
     return this->xmax;
 }
 
 PetscInt
-LineMesh::get_nx()
+LineMesh::get_nx() const
 {
     _F_;
     return this->nx;

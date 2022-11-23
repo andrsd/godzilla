@@ -8,14 +8,14 @@
 #include "Logger.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 
 namespace internal {
 
 static PetscErrorCode
-zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar * u, void * ctx)
+zero_fn(PetscInt, PetscReal, const PetscReal[], PetscInt, PetscScalar * u, void *)
 {
     u[0] = 0.0;
     return 0;
@@ -31,8 +31,6 @@ DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Para
     logger(params.get<const App *>("_app")->get_logger())
 {
 }
-
-DiscreteProblemInterface::~DiscreteProblemInterface() {}
 
 const UnstructuredMesh *
 DiscreteProblemInterface::get_mesh() const
@@ -185,7 +183,7 @@ void
 DiscreteProblemInterface::set_up_initial_guess()
 {
     _F_;
-    if (this->ics.size() > 0)
+    if (!this->ics.empty())
         set_initial_guess_from_ics();
     else
         set_zero_initial_guess();
@@ -207,7 +205,7 @@ DiscreteProblemInterface::build_local_solution_vector(Vec sln) const
     DM dm = this->unstr_mesh->get_dm();
     PetscReal time = this->problem->get_time();
     PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
-    PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, NULL, NULL, NULL));
+    PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, nullptr, nullptr, nullptr));
 }
 
 } // namespace godzilla

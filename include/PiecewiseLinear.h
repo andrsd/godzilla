@@ -11,9 +11,9 @@ namespace godzilla {
 /// User have to specify at least 2 points
 class PiecewiseLinear : public Function {
 public:
-    PiecewiseLinear(const Parameters & params);
+    explicit PiecewiseLinear(const Parameters & params);
 
-    virtual void register_callback(mu::Parser & parser);
+    void register_callback(mu::Parser & parser) override;
 
     /// Evaluate this function at point 'x'
     PetscReal evaluate(PetscReal x);

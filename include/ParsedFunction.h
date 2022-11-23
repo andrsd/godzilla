@@ -11,12 +11,12 @@ namespace godzilla {
 ///
 class ParsedFunction : public Function {
 public:
-    ParsedFunction(const Parameters & params);
+    explicit ParsedFunction(const Parameters & params);
 
     /// Register this function with the function parser
     ///
     /// @param parser The mu::Parser object we register this function with
-    virtual void register_callback(mu::Parser & parser);
+    void register_callback(mu::Parser & parser) override;
 
     /// Evaluate the function
     ///
@@ -35,7 +35,7 @@ public:
     void * get_context();
 
 protected:
-    /// Text representation of the function to evaluate (one per compoent)
+    /// Text representation of the function to evaluate (one per component)
     const std::vector<std::string> & function;
     /// User defined constants
     const std::map<std::string, PetscReal> & constants;

@@ -31,7 +31,7 @@ VTKOutput::~VTKOutput()
 std::string
 VTKOutput::get_file_ext() const
 {
-    return std::string("vtk");
+    return { "vtk" };
 }
 
 void
@@ -49,8 +49,7 @@ void
 VTKOutput::check()
 {
     _F_;
-    const UnstructuredMesh * mesh =
-        dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh());
+    const auto * mesh = dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh());
     if (mesh == nullptr)
         log_error("VTK output works only with unstructured meshes.");
 }

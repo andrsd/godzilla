@@ -22,7 +22,7 @@ terminate(int status)
 }
 
 void
-mem_check(int line, const char * func, const char * file, void * var)
+mem_check(int line, const char *, const char * file, void * var)
 {
     if (var == nullptr) {
         error_printf("Out of memory");

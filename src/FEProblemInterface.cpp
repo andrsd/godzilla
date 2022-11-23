@@ -14,7 +14,7 @@
 #include "BndResidualFunc.h"
 #include "JacobianFunc.h"
 #include "BndJacobianFunc.h"
-#include <assert.h>
+#include <cassert>
 #include <petsc/private/petscfeimpl.h>
 
 namespace godzilla {
@@ -92,7 +92,7 @@ FEProblemInterface::init()
 
     set_up_weak_form();
     for (auto & bc : this->bcs) {
-        NaturalBC * nbc = dynamic_cast<NaturalBC *>(bc);
+        auto * nbc = dynamic_cast<NaturalBC *>(bc);
         if (nbc)
             nbc->set_up_weak_form();
     }
@@ -385,7 +385,7 @@ void
 FEProblemInterface::set_up_quadrature()
 {
     _F_;
-    assert(this->fields.size() > 0);
+    assert(!this->fields.empty());
     auto first = this->fields.begin();
     FieldInfo & first_fi = first->second;
     for (auto it = ++first; it != this->fields.end(); ++it) {
@@ -405,7 +405,7 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
 {
     _F_;
     PetscInt n_auxs = this->aux_fields.size();
-    PetscFunc ** func = new PetscFunc *[n_auxs];
+    auto ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
     for (PetscInt i = 0; i < n_auxs; i++) {
         func[i] = nullptr;
@@ -433,7 +433,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
 {
     _F_;
     PetscInt n_auxs = this->aux_fields.size();
-    PetscFunc ** func = new PetscFunc *[n_auxs];
+    auto ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
     for (PetscInt i = 0; i < n_auxs; i++) {
         func[i] = nullptr;
@@ -492,7 +492,7 @@ void
 FEProblemInterface::set_up_auxiliary_dm(DM dm)
 {
     _F_;
-    if (this->aux_fields.size() == 0)
+    if (this->aux_fields.empty())
         return;
 
     PETSC_CHECK(DMClone(dm, &this->dm_aux));
@@ -671,7 +671,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     PetscInt field = key.field;
     const auto & f0_res_fns = this->wf->get(PETSC_WF_F0, key.label, key.value, field, key.part);
     const auto & f1_res_fns = this->wf->get(PETSC_WF_F1, key.label, key.value, field, key.part);
-    if ((f0_res_fns.size() == 0) && (f1_res_fns.size() == 0))
+    if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
     PetscFE & fe = this->fields[field].fe;
@@ -812,7 +812,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
         this->wf->get_bnd(PETSC_WF_BDF0, key.label, key.value, field, key.part);
     const auto & f1_res_fns =
         this->wf->get_bnd(PETSC_WF_BDF1, key.label, key.value, field, key.part);
-    if ((f0_res_fns.size() == 0) && (f1_res_fns.size() == 0))
+    if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
     PetscFE & fe = this->fields[field].fe;
@@ -997,8 +997,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         this->wf->get(kind2, key.label, key.value, field_i, field_j, key.part);
     const auto & g3_jac_fns =
         this->wf->get(kind3, key.label, key.value, field_i, field_j, key.part);
-    if ((g0_jac_fns.size() == 0) && (g1_jac_fns.size() == 0) && (g2_jac_fns.size() == 0) &&
-        (g3_jac_fns.size() == 0))
+    if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return 0;
 
     PetscFE & fe_i = this->fields[field_i].fe;
@@ -1120,28 +1119,28 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                                                 this->au,
                                                 this->au_x,
                                                 nullptr));
-            if (g0_jac_fns.size() > 0) {
+            if (!g0_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g0, n_comp_i * n_comp_j));
                 for (auto & func : g0_jac_fns)
                     func->evaluate(g0);
                 for (PetscInt c = 0; c < n_comp_i * n_comp_j; ++c)
                     g0[c] *= w;
             }
-            if (g1_jac_fns.size() > 0) {
+            if (!g1_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g1, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g1_jac_fns)
                     func->evaluate(g1);
                 for (PetscInt c = 0; c < n_comp_i * n_comp_j * dim; ++c)
                     g1[c] *= w;
             }
-            if (g2_jac_fns.size() > 0) {
+            if (!g2_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g2, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g2_jac_fns)
                     func->evaluate(g2);
                 for (PetscInt c = 0; c < n_comp_i * n_comp_j * dim; ++c)
                     g2[c] *= w;
             }
-            if (g3_jac_fns.size() > 0) {
+            if (!g3_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g3, n_comp_i * n_comp_j * dim_embed * dim_embed));
                 for (auto & func : g3_jac_fns)
                     func->evaluate(g3);
@@ -1206,8 +1205,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
         this->wf->get_bnd(PETSC_WF_BDG2, key.label, key.value, field_i, field_j, key.part);
     const auto & g3_jac_fns =
         this->wf->get_bnd(PETSC_WF_BDG3, key.label, key.value, field_i, field_j, key.part);
-    if ((g0_jac_fns.size() == 0) && (g1_jac_fns.size() == 0) && (g2_jac_fns.size() == 0) &&
-        (g3_jac_fns.size() == 0))
+    if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return 0;
 
     PetscFE & fe_i = this->fields[field_i].fe;
@@ -1342,28 +1340,28 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                                 this->au_x,
                                                 nullptr));
 
-            if (g0_jac_fns.size() > 0) {
+            if (!g0_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g0, n_comp_i * n_comp_j));
                 for (auto & func : g0_jac_fns)
                     func->evaluate(g0);
                 for (PetscInt c = 0; c < n_comp_i * n_comp_j; ++c)
                     g0[c] *= w;
             }
-            if (g1_jac_fns.size() > 0) {
+            if (!g1_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g1, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g1_jac_fns)
                     func->evaluate(g1);
                 for (PetscInt c = 0; c < n_comp_i * n_comp_j * this->dim; ++c)
                     g1[c] *= w;
             }
-            if (g2_jac_fns.size() > 0) {
+            if (!g2_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g2, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g2_jac_fns)
                     func->evaluate(g2);
                 for (PetscInt c = 0; c < n_comp_i * n_comp_j * this->dim; ++c)
                     g2[c] *= w;
             }
-            if (g3_jac_fns.size() > 0) {
+            if (!g3_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g3, n_comp_i * n_comp_j * dim_embed * dim_embed));
                 for (auto & func : g3_jac_fns)
                     func->evaluate(g3);

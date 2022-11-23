@@ -26,14 +26,14 @@ class UnstructuredMesh;
 /// This output works only with finite element problems
 class ExodusIIOutput : public FileOutput {
 public:
-    ExodusIIOutput(const Parameters & params);
-    virtual ~ExodusIIOutput();
+    explicit ExodusIIOutput(const Parameters & params);
+    ~ExodusIIOutput() override;
 
-    virtual std::string get_file_ext() const override;
-    virtual void set_file_name() override;
-    virtual void create() override;
-    virtual void check() override;
-    virtual void output_step() override;
+    std::string get_file_ext() const override;
+    void set_file_name() override;
+    void create() override;
+    void check() override;
+    void output_step() override;
 
 protected:
     void open_file();
@@ -80,7 +80,7 @@ protected:
     /// List of nodal elemental variable field IDs
     std::vector<PetscInt> elem_var_fids;
 
-    /// Block ID used in ExodusII file whne there are not cell sets
+    /// Block ID used in ExodusII file when there are not cell sets
     static const int SINGLE_BLK_ID;
 
 public:

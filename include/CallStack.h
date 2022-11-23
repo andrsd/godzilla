@@ -3,17 +3,17 @@
 namespace godzilla {
 namespace internal {
 
-/// Place at the begining of a method/function
+/// Place at the beginning of a method/function
 ///
 /// @code
 /// void Class::method()
 /// {
-///   _F_
+///   _F_;
 ///  ...your code here...
 /// }
 /// @endcode
 #define _F_ \
-    godzilla::internal::CallStack::Obj __call_stack_obj(__LINE__, __PRETTY_FUNCTION__, __FILE__);
+    godzilla::internal::CallStack::Obj __call_stack_obj(__LINE__, __PRETTY_FUNCTION__, __FILE__)
 
 /// Call stack object
 ///
@@ -24,7 +24,7 @@ public:
     /// Build the call stack object with defined size
     ///
     /// @param max_size The maximum number of call stack objects to handle
-    CallStack(int max_size = 32);
+    explicit CallStack(int max_size = 32);
     virtual ~CallStack();
 
     /// Dump the call stack objects to standard error

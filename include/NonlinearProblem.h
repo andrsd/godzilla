@@ -9,19 +9,19 @@ namespace godzilla {
 ///
 class NonlinearProblem : public Problem {
 public:
-    NonlinearProblem(const Parameters & parameters);
-    virtual ~NonlinearProblem();
+    explicit NonlinearProblem(const Parameters & parameters);
+    ~NonlinearProblem() override;
 
-    virtual void create() override;
-    virtual void check() override;
-    virtual void run() override;
-    virtual void solve() override;
-    virtual bool converged() override;
+    void create() override;
+    void check() override;
+    void run() override;
+    void solve() override;
+    bool converged() override;
     Vec get_solution_vector() const override;
 
 protected:
     /// provide DM for the underlying SNES object
-    virtual DM get_dm() const override;
+    DM get_dm() const override;
     /// Initialize the problem
     virtual void init();
     /// Set up initial guess

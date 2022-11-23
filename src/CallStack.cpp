@@ -1,5 +1,5 @@
 #include "CallStack.h"
-#include <signal.h>
+#include <csignal>
 #include "petscsys.h"
 
 namespace godzilla {
@@ -28,7 +28,7 @@ CallStack::Obj::~Obj()
     // remove the object only if it is on the top of the call stack
     if (callstack.size > 0 && callstack.stack[callstack.size - 1] == this) {
         callstack.size--;
-        callstack.stack[callstack.size] = NULL;
+        callstack.stack[callstack.size] = nullptr;
     }
 }
 

@@ -2,21 +2,21 @@
 #include "ConstantAuxiliaryField.h"
 #include "CallStack.h"
 #include "FEProblemInterface.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 
 REGISTER_OBJECT(ConstantAuxiliaryField);
 
-PetscErrorCode
-__constant_auxiliary_field(PetscInt dim,
-                           PetscReal time,
-                           const PetscReal x[],
-                           PetscInt nc,
-                           PetscScalar u[],
-                           void * ctx)
+static PetscErrorCode
+constant_auxiliary_field(PetscInt dim,
+                         PetscReal time,
+                         const PetscReal x[],
+                         PetscInt nc,
+                         PetscScalar u[],
+                         void * ctx)
 {
-    ConstantAuxiliaryField * aux_fld = static_cast<ConstantAuxiliaryField *>(ctx);
+    auto * aux_fld = static_cast<ConstantAuxiliaryField *>(ctx);
     aux_fld->evaluate(dim, time, x, nc, u);
     return 0;
 }
@@ -55,13 +55,13 @@ ConstantAuxiliaryField::get_num_components() const
 PetscFunc *
 ConstantAuxiliaryField::get_func() const
 {
-    return __constant_auxiliary_field;
+    return constant_auxiliary_field;
 }
 
 void
-ConstantAuxiliaryField::evaluate(PetscInt dim,
-                                 PetscReal time,
-                                 const PetscReal x[],
+ConstantAuxiliaryField::evaluate(PetscInt,
+                                 PetscReal,
+                                 const PetscReal[],
                                  PetscInt nc,
                                  PetscScalar u[])
 {

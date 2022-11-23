@@ -13,7 +13,7 @@ public:
     ///
     /// @param prog_name The name of the binary (shown when printing usage)
     /// @param version The version of the binary
-    CmdLineArgParser(const std::string & prog_name, const std::string & version = "none");
+    explicit CmdLineArgParser(const std::string & prog_name, const std::string & version = "none");
 
     /// Adds an argument
     ///
@@ -27,7 +27,7 @@ public:
     void parse(int argc, const char * const * argv);
 
 protected:
-    /// TCALP command line object
+    /// TCLAP command line object
     TCLAP::CmdLine cmd;
 };
 

@@ -10,7 +10,7 @@ class NaturalBC;
 
 class BndJacobianFunc {
 public:
-    BndJacobianFunc(const NaturalBC * nbc);
+    explicit BndJacobianFunc(const NaturalBC * nbc);
 
     /// Evaluate this Jacobian function
     ///

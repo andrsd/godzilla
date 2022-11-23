@@ -12,10 +12,10 @@ class DiscreteProblemInterface;
 ///
 class BoundaryCondition : public Object, public PrintInterface {
 public:
-    BoundaryCondition(const Parameters & params);
-    virtual ~BoundaryCondition();
+    explicit BoundaryCondition(const Parameters & params);
+    ~BoundaryCondition() override;
 
-    virtual void create() override;
+    void create() override;
 
     /// Get the boundary name this BC is active on
     ///

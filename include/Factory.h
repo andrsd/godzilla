@@ -71,11 +71,11 @@ public:
     {
         auto it = classes.find(class_name);
         if (it == classes.end())
-            error("Getting valid_params for object '%s' failed.  Object is not registred.",
+            error("Getting valid_params for object '%s' failed.  Object is not registered.",
                   class_name);
 
         Entry & entry = it->second;
-        Parameters * ips = new Parameters((*entry.params_ptr)());
+        auto * ips = new Parameters((*entry.params_ptr)());
         params.push_back(ips);
         return ips;
     }

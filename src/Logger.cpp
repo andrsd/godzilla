@@ -39,7 +39,7 @@ Logger::print() const
     for (auto & s : this->entries)
         fmt::fprintf(stderr, "%s\n", s);
 
-    fmt::fprintf(stderr, "%s", Terminal::Color::magenta);
+    fmt::fprintf(stderr, "%s", (const char *) Terminal::Color::magenta);
     if (this->num_errors > 0)
         fmt::fprintf(stderr, "%d error(s)", this->num_errors);
 
@@ -49,7 +49,7 @@ Logger::print() const
 
         fmt::fprintf(stderr, "%d warning(s)", this->num_warnings);
     }
-    fmt::fprintf(stderr, " found.%s\n", Terminal::Color::normal);
+    fmt::fprintf(stderr, " found.%s\n", (const char *) Terminal::Color::normal);
 }
 
 } // namespace godzilla

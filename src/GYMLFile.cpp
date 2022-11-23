@@ -16,7 +16,7 @@
 #include "CallStack.h"
 #include "Validation.h"
 #include "Utils.h"
-#include "assert.h"
+#include "cassert"
 #include "fmt/format.h"
 #include "yaml-cpp/node/iterator.h"
 
@@ -55,10 +55,10 @@ GYMLFile::build_functions()
 
     for (const auto & it : funcs_node) {
         YAML::Node fn_node = it.first;
-        std::string name = fn_node.as<std::string>();
+        auto name = fn_node.as<std::string>();
 
         Parameters * params = build_params(funcs_node, name);
-        const std::string & class_name = params->get<std::string>("_type");
+        const auto & class_name = params->get<std::string>("_type");
         auto fn = Factory::create<Function>(class_name, name, params);
         assert(this->problem != nullptr);
         this->problem->add_function(fn);
@@ -80,15 +80,14 @@ void
 GYMLFile::build_ts_adapt(const YAML::Node & problem_node)
 {
     _F_;
-    TransientProblemInterface * tpi = dynamic_cast<TransientProblemInterface *>(this->problem);
+    auto * tpi = dynamic_cast<TransientProblemInterface *>(this->problem);
     if (tpi != nullptr) {
         Parameters * params = build_params(problem_node, "ts_adapt");
         params->set<const Problem *>("_problem") = this->problem;
         params->set<const TransientProblemInterface *>("_tpi") = tpi;
 
-        const std::string & class_name = params->get<std::string>("_type");
-        TimeSteppingAdaptor * ts_adaptor =
-            Factory::create<TimeSteppingAdaptor>(class_name, "ts_adapt", params);
+        const auto & class_name = params->get<std::string>("_type");
+        auto * ts_adaptor = Factory::create<TimeSteppingAdaptor>(class_name, "ts_adapt", params);
         tpi->set_time_stepping_adaptor(ts_adaptor);
     }
     else
@@ -102,7 +101,7 @@ GYMLFile::build_partitioner()
     if (!this->mesh)
         return;
 
-    UnstructuredMesh * mesh = dynamic_cast<UnstructuredMesh *>(this->mesh);
+    auto * mesh = dynamic_cast<UnstructuredMesh *>(this->mesh);
     if (!mesh)
         return;
 
@@ -131,18 +130,18 @@ GYMLFile::build_auxiliary_fields()
 
     lprintf(9, "- auxiliary fields");
 
-    FEProblemInterface * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
+    auto * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
         log_error("Supplied problem type '%s' does not support auxiliary fields.",
                   this->problem->get_type());
     else {
         for (const auto & it : auxs_root_node) {
             YAML::Node aux_node = it.first;
-            std::string name = aux_node.as<std::string>();
+            auto name = aux_node.as<std::string>();
 
             Parameters * params = build_params(auxs_root_node, name);
             params->set<FEProblemInterface *>("_fepi") = fepface;
-            const std::string & class_name = params->get<std::string>("_type");
+            const auto & class_name = params->get<std::string>("_type");
             auto aux = Factory::create<AuxiliaryField>(class_name, name, params);
             fepface->add_auxiliary_field(aux);
         }
@@ -159,18 +158,18 @@ GYMLFile::build_initial_conditions()
 
     lprintf(9, "- initial conditions");
 
-    DiscreteProblemInterface * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
+    auto * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
     if (dpi == nullptr)
         log_error("Supplied problem type '%s' does not support initial conditions.",
                   this->problem->get_type());
     else {
         for (const auto & it : ics_root_node) {
             YAML::Node ic_node = it.first;
-            std::string name = ic_node.as<std::string>();
+            auto name = ic_node.as<std::string>();
 
             Parameters * params = build_params(ics_root_node, name);
             params->set<const DiscreteProblemInterface *>("_dpi") = dpi;
-            const std::string & class_name = params->get<std::string>("_type");
+            const auto & class_name = params->get<std::string>("_type");
             auto ic = Factory::create<InitialCondition>(class_name, name, params);
             dpi->add_initial_condition(ic);
         }
@@ -187,18 +186,18 @@ GYMLFile::build_boundary_conditions()
 
     lprintf(9, "- boundary conditions");
 
-    DiscreteProblemInterface * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
+    auto * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
     if (dpi == nullptr)
         log_error("Supplied problem type '%s' does not support boundary conditions.",
                   this->problem->get_type());
     else {
         for (const auto & it : bcs_root_node) {
             YAML::Node bc_node = it.first;
-            std::string name = bc_node.as<std::string>();
+            auto name = bc_node.as<std::string>();
 
             Parameters * params = build_params(bcs_root_node, name);
             params->set<const DiscreteProblemInterface *>("_dpi") = dpi;
-            const std::string & class_name = params->get<std::string>("_type");
+            const auto & class_name = params->get<std::string>("_type");
             auto bc = Factory::create<BoundaryCondition>(class_name, name, params);
             dpi->add_boundary_condition(bc);
         }
@@ -217,10 +216,10 @@ GYMLFile::build_postprocessors()
 
     for (const auto & it : pps_root_node) {
         YAML::Node pps_node = it.first;
-        std::string name = pps_node.as<std::string>();
+        auto name = pps_node.as<std::string>();
 
         Parameters * params = build_params(pps_root_node, name);
-        const std::string & class_name = params->get<std::string>("_type");
+        const auto & class_name = params->get<std::string>("_type");
         params->set<const Problem *>("_problem") = this->problem;
         auto pp = Factory::create<Postprocessor>(class_name, name, params);
         problem->add_postprocessor(pp);

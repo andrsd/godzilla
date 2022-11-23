@@ -32,7 +32,7 @@ HDF5Output::~HDF5Output()
 std::string
 HDF5Output::get_file_ext() const
 {
-    return std::string("h5");
+    return { "h5" };
 }
 
 void
@@ -50,8 +50,7 @@ void
 HDF5Output::check()
 {
     _F_;
-    const UnstructuredMesh * mesh =
-        dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh());
+    const auto * mesh = dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh());
     if (mesh == nullptr)
         log_error("HDF5 output works only with unstructured meshes.");
 }

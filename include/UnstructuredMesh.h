@@ -9,11 +9,11 @@ namespace godzilla {
 ///
 class UnstructuredMesh : public Mesh {
 public:
-    UnstructuredMesh(const Parameters & parameters);
-    virtual ~UnstructuredMesh();
+    explicit UnstructuredMesh(const Parameters & parameters);
+    ~UnstructuredMesh() override;
 
     DM get_dm() const override;
-    virtual void create() override;
+    void create() override;
 
     /// Check if mesh has label with a name
     ///
@@ -120,7 +120,7 @@ public:
     /// @return Number of vertex sets
     PetscInt get_num_vertex_sets() const;
 
-    virtual void distribute() override;
+    void distribute() override;
 
     /// Construct ghost cells which connect to every boundary face
     ///

@@ -1,11 +1,26 @@
 #include "EssentialBC.h"
 #include "CallStack.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 
 static PetscErrorCode
-__essential_boundary_condition_function(PetscInt dim,
+essential_boundary_condition_function(PetscInt dim,
+                                      PetscReal time,
+                                      const PetscReal x[],
+                                      PetscInt nc,
+                                      PetscScalar u[],
+                                      void * ctx)
+{
+    _F_;
+    auto * bc = static_cast<EssentialBC *>(ctx);
+    assert(bc != nullptr);
+    bc->evaluate(dim, time, x, nc, u);
+    return 0;
+}
+
+static PetscErrorCode
+essential_boundary_condition_function_t(PetscInt dim,
                                         PetscReal time,
                                         const PetscReal x[],
                                         PetscInt nc,
@@ -13,22 +28,7 @@ __essential_boundary_condition_function(PetscInt dim,
                                         void * ctx)
 {
     _F_;
-    EssentialBC * bc = static_cast<EssentialBC *>(ctx);
-    assert(bc != nullptr);
-    bc->evaluate(dim, time, x, nc, u);
-    return 0;
-}
-
-static PetscErrorCode
-__essential_boundary_condition_function_t(PetscInt dim,
-                                          PetscReal time,
-                                          const PetscReal x[],
-                                          PetscInt nc,
-                                          PetscScalar u[],
-                                          void * ctx)
-{
-    _F_;
-    EssentialBC * bc = static_cast<EssentialBC *>(ctx);
+    auto * bc = static_cast<EssentialBC *>(ctx);
     assert(bc != nullptr);
     bc->evaluate_t(dim, time, x, nc, u);
     return 0;
@@ -50,14 +50,14 @@ PetscFunc *
 EssentialBC::get_function()
 {
     _F_;
-    return __essential_boundary_condition_function;
+    return essential_boundary_condition_function;
 }
 
 PetscFunc *
 EssentialBC::get_function_t()
 {
     _F_;
-    return __essential_boundary_condition_function_t;
+    return essential_boundary_condition_function_t;
 }
 
 void *

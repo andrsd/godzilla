@@ -4,11 +4,11 @@
 #include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "Logger.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 
-const std::string FVProblemInterface::empty_name("");
+const std::string FVProblemInterface::empty_name;
 
 void
 __compute_flux(PetscInt dim,
@@ -23,7 +23,7 @@ __compute_flux(PetscInt dim,
                void * ctx)
 {
     _F_;
-    FVProblemInterface * fvpi = static_cast<FVProblemInterface *>(ctx);
+    auto * fvpi = static_cast<FVProblemInterface *>(ctx);
     fvpi->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
 }
 
@@ -140,7 +140,7 @@ FVProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
     if (fid == 0) {
         const char * name;
         PETSC_CHECK(PetscFVGetComponentName(this->fvm, component, &name));
-        return std::string(name);
+        return { name };
     }
     else
         error("Multiple-field problems are not implemented");

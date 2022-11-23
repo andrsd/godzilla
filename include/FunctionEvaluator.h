@@ -31,7 +31,7 @@ public:
 
     /// Register user function with function evaluator
     ///
-    /// @param fn Fuction to register
+    /// @param fn Function to register
     void register_function(Function * fn);
 
     /// Evaluate the function expression at time `time` and spatial position `x`

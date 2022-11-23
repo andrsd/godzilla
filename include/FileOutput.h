@@ -9,9 +9,9 @@ namespace godzilla {
 ///
 class FileOutput : public Output {
 public:
-    FileOutput(const Parameters & params);
+    explicit FileOutput(const Parameters & params);
 
-    virtual void create() override;
+    void create() override;
 
     /// Get the file name with the output file produced by this outputter
     ///

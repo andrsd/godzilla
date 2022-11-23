@@ -9,16 +9,16 @@ namespace godzilla {
 ///
 class FunctionIC : public InitialCondition, public FunctionInterface {
 public:
-    FunctionIC(const Parameters & params);
+    explicit FunctionIC(const Parameters & params);
 
-    virtual void create() override;
-    virtual PetscInt get_num_components() const override;
+    void create() override;
+    PetscInt get_num_components() const override;
 
-    virtual void evaluate(PetscInt dim,
-                          PetscReal time,
-                          const PetscReal x[],
-                          PetscInt Nc,
-                          PetscScalar u[]) override;
+    void evaluate(PetscInt dim,
+                  PetscReal time,
+                  const PetscReal x[],
+                  PetscInt Nc,
+                  PetscScalar u[]) override;
 
 public:
     static Parameters parameters();

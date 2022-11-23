@@ -3,6 +3,9 @@
 #include "GTestFENonlinearProblem.h"
 #include "LineMesh.h"
 #include "NaturalBC.h"
+#include "WeakForm.h"
+#include "BndResidualFunc.h"
+#include "BndJacobianFunc.h"
 
 using namespace godzilla;
 
@@ -61,54 +64,34 @@ TEST(NaturalBCTest, api)
     EXPECT_EQ(comps[1], 5);
 }
 
-void
-__f0_test_natural_bc(PetscInt dim,
-                     PetscInt nf,
-                     PetscInt nf_aux,
-                     const PetscInt u_off[],
-                     const PetscInt u_off_x[],
-                     const PetscScalar u[],
-                     const PetscScalar u_t[],
-                     const PetscScalar u_x[],
-                     const PetscInt a_off[],
-                     const PetscInt a_off_x[],
-                     const PetscScalar a[],
-                     const PetscScalar a_t[],
-                     const PetscScalar a_x[],
-                     PetscReal t,
-                     const PetscReal x[],
-                     const PetscReal n[],
-                     PetscInt num_constants,
-                     const PetscScalar constants[],
-                     PetscScalar f0[])
-{
-    f0[0] = 100 * u[0];
-}
+namespace {
 
-void
-__g0_test_natural_bc(PetscInt dim,
-                     PetscInt nf,
-                     PetscInt nf_aux,
-                     const PetscInt u_off[],
-                     const PetscInt u_off_x[],
-                     const PetscScalar u[],
-                     const PetscScalar u_t[],
-                     const PetscScalar u_x[],
-                     const PetscInt a_off[],
-                     const PetscInt a_off_x[],
-                     const PetscScalar a[],
-                     const PetscScalar a_t[],
-                     const PetscScalar a_x[],
-                     PetscReal t,
-                     PetscReal u_t_shift,
-                     const PetscReal x[],
-                     const PetscReal n[],
-                     PetscInt num_constants,
-                     const PetscScalar constants[],
-                     PetscScalar g0[])
-{
-    g0[0] = 100;
-}
+class TestNatF0 : public BndResidualFunc {
+public:
+    explicit TestNatF0(const NaturalBC * bc) : BndResidualFunc(bc), u(get_field_value("u")) {}
+
+    void
+    evaluate(PetscScalar f[]) override
+    {
+        f[0] = 100 * this->u[0];
+    }
+
+protected:
+    const PetscScalar * u;
+};
+
+class TestNatG0 : public BndJacobianFunc {
+public:
+    explicit TestNatG0(const NaturalBC * bc) : BndJacobianFunc(bc) {}
+
+    void
+    evaluate(PetscScalar g[]) override
+    {
+        g[0] = 100;
+    }
+};
+
+} // namespace
 
 TEST(NaturalBCTest, fe)
 {
@@ -132,15 +115,32 @@ TEST(NaturalBCTest, fe)
         virtual void
         set_up_weak_form()
         {
-            //            set_residual_block(__f0_test_natural_bc, nullptr);
-            //            set_jacobian_block(this->fid, __g0_test_natural_bc, nullptr, nullptr,
-            //            nullptr);
+            set_residual_block(new TestNatF0(this), nullptr);
+            set_jacobian_block(this->fid, new TestNatG0(this), nullptr, nullptr, nullptr);
         }
 
         PetscInt
-        getBd()
+        get_bd() const
         {
             return this->bd;
+        }
+
+        WeakForm *
+        get_wf() const
+        {
+            return this->wf;
+        }
+
+        DMLabel
+        get_label() const
+        {
+            return this->label;
+        }
+
+        const PetscInt *
+        get_ids() const
+        {
+            return this->ids;
         }
     };
 
@@ -175,7 +175,6 @@ TEST(NaturalBCTest, fe)
     PetscDSGetNumBoundary(ds, &num_bd);
     EXPECT_EQ(num_bd, 1);
     //
-    PetscWeakForm wf;
     DMBoundaryConditionType type;
     const char * name;
     DMLabel label;
@@ -185,8 +184,8 @@ TEST(NaturalBCTest, fe)
     PetscInt nc;
     const PetscInt * comps;
     PetscDSGetBoundary(ds,
-                       bc.getBd(),
-                       &wf,
+                       bc.get_bd(),
+                       nullptr,
                        &type,
                        &name,
                        &label,
@@ -204,4 +203,17 @@ TEST(NaturalBCTest, fe)
     EXPECT_EQ(field, 0);
     EXPECT_EQ(nc, 1);
     EXPECT_EQ(comps[0], 0);
+    //
+    WeakForm * wf = bc.get_wf();
+    PetscInt id = bc.get_ids()[0];
+    PetscInt part = 0;
+    const std::vector<BndResidualFunc *> & f0 =
+        wf->get_bnd(PETSC_WF_BDF0, bc.get_label(), id, field, part);
+    EXPECT_EQ(f0.size(), 1);
+    EXPECT_NE(dynamic_cast<TestNatF0 *>(f0[0]), nullptr);
+
+    const std::vector<BndJacobianFunc *> & g0 =
+        wf->get_bnd(PETSC_WF_BDG0, bc.get_label(), id, field, field, part);
+    EXPECT_EQ(g0.size(), 1);
+    EXPECT_NE(dynamic_cast<TestNatG0 *>(g0[0]), nullptr);
 }

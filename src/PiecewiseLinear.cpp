@@ -6,10 +6,10 @@ namespace godzilla {
 
 REGISTER_OBJECT(PiecewiseLinear);
 
-double
-__piecewise_linear_function_eval(void * ctx, double x)
+static double
+piecewise_linear_function_eval(void * ctx, double x)
 {
-    PiecewiseLinear * fn = static_cast<PiecewiseLinear *>(ctx);
+    auto * fn = static_cast<PiecewiseLinear *>(ctx);
     return fn->evaluate(x);
 }
 
@@ -33,7 +33,7 @@ void
 PiecewiseLinear::register_callback(mu::Parser & parser)
 {
     _F_;
-    parser.DefineFunUserData(get_name(), __piecewise_linear_function_eval, this);
+    parser.DefineFunUserData(get_name(), piecewise_linear_function_eval, this);
 }
 
 PetscReal
