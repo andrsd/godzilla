@@ -13,17 +13,17 @@ public:
     /// Get the lower bound in x-direction
     ///
     /// @return Lower bound in x-direction
-    PetscReal get_x_min();
+    PetscReal get_x_min() const;
 
     /// Get the upper bound in x-direction
     ///
     /// @return Upper bound in x-direction
-    PetscReal get_x_max();
+    PetscReal get_x_max() const;
 
     /// Get the number of divisions in the x-direction
     ///
     /// @return Number of divisions in the x-direction
-    PetscInt get_nx();
+    PetscInt get_nx() const;
 
 protected:
     void create_dm() override;
