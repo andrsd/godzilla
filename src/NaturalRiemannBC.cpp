@@ -13,7 +13,7 @@ natural_riemann_boundary_condition_function(PetscReal time,
                                             void * ctx)
 {
     _F_;
-    NaturalRiemannBC * bc = static_cast<NaturalRiemannBC *>(ctx);
+    auto * bc = static_cast<NaturalRiemannBC *>(ctx);
     assert(bc != nullptr);
     bc->evaluate(time, c, n, xI, xG);
     return 0;

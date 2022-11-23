@@ -67,7 +67,7 @@ protected:
         virtual Value *
         copy() const override
         {
-            Parameter<T> * copy = new Parameter<T>;
+            auto * copy = new Parameter<T>;
             copy->value = this->value;
             copy->required = this->required;
             copy->doc_string = this->doc_string;
@@ -260,7 +260,7 @@ void
 Parameters::add_required_param(const std::string & name, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
-        Parameter<T> * param = new Parameter<T>;
+        auto * param = new Parameter<T>;
         param->required = true;
         param->is_private = false;
         param->doc_string = doc_string;
@@ -275,7 +275,7 @@ void
 Parameters::add_param(const std::string & name, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
-        Parameter<T> * param = new Parameter<T>;
+        auto * param = new Parameter<T>;
         param->required = false;
         param->is_private = false;
         param->doc_string = doc_string;
@@ -290,7 +290,7 @@ void
 Parameters::add_param(const std::string & name, const S & value, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
-        Parameter<T> * param = new Parameter<T>;
+        auto * param = new Parameter<T>;
         param->required = false;
         param->value = value;
         param->is_private = false;
@@ -305,7 +305,7 @@ template <typename T>
 void
 Parameters::add_private_param(const std::string & name, const T & value)
 {
-    Parameter<T> * param = new Parameter<T>;
+    auto * param = new Parameter<T>;
     param->value = value;
     param->required = false;
     param->is_private = true;

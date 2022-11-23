@@ -45,7 +45,7 @@ PetscReal
 FunctionEvaluator::evaluate(PetscInt dim, PetscReal time, const PetscReal x[])
 {
     _F_;
-    PetscReal * xx = const_cast<PetscReal *>(x);
+    auto * xx = const_cast<PetscReal *>(x);
     PetscReal zero = 0.;
     try {
         this->parser.DefineVar("t", &time);
@@ -73,7 +73,7 @@ FunctionEvaluator::evaluate(PetscInt dim,
                             PetscReal u[])
 {
     _F_;
-    PetscReal * xx = const_cast<PetscReal *>(x);
+    auto * xx = const_cast<PetscReal *>(x);
     PetscReal zero = 0.;
     try {
         this->parser.DefineVar("t", &time);

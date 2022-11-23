@@ -92,7 +92,7 @@ FEProblemInterface::init()
 
     set_up_weak_form();
     for (auto & bc : this->bcs) {
-        NaturalBC * nbc = dynamic_cast<NaturalBC *>(bc);
+        auto * nbc = dynamic_cast<NaturalBC *>(bc);
         if (nbc)
             nbc->set_up_weak_form();
     }
@@ -405,7 +405,7 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
 {
     _F_;
     PetscInt n_auxs = this->aux_fields.size();
-    PetscFunc ** func = new PetscFunc *[n_auxs];
+    auto ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
     for (PetscInt i = 0; i < n_auxs; i++) {
         func[i] = nullptr;
@@ -433,7 +433,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
 {
     _F_;
     PetscInt n_auxs = this->aux_fields.size();
-    PetscFunc ** func = new PetscFunc *[n_auxs];
+    auto ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
     for (PetscInt i = 0; i < n_auxs; i++) {
         func[i] = nullptr;

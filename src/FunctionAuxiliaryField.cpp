@@ -15,7 +15,7 @@ function_auxiliary_field(PetscInt dim,
                          PetscScalar u[],
                          void * ctx)
 {
-    FunctionAuxiliaryField * func = static_cast<FunctionAuxiliaryField *>(ctx);
+    auto * func = static_cast<FunctionAuxiliaryField *>(ctx);
     func->evaluate(dim, time, x, nc, u);
     return 0;
 }

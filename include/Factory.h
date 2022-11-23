@@ -75,7 +75,7 @@ public:
                   class_name);
 
         Entry & entry = it->second;
-        Parameters * ips = new Parameters((*entry.params_ptr)());
+        auto * ips = new Parameters((*entry.params_ptr)());
         params.push_back(ips);
         return ips;
     }

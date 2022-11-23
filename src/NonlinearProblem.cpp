@@ -12,7 +12,7 @@ PetscErrorCode
 __compute_residual(SNES snes, Vec x, Vec f, void * ctx)
 {
     _F_;
-    NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
+    auto * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->compute_residual_callback(x, f);
 }
 
@@ -20,7 +20,7 @@ PetscErrorCode
 __compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void * ctx)
 {
     _F_;
-    NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
+    auto * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->compute_jacobian_callback(x, J, Jp);
 }
 
@@ -28,7 +28,7 @@ PetscErrorCode
 __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
-    NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
+    auto * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->ksp_monitor_callback(it, rnorm);
 }
 
@@ -36,7 +36,7 @@ PetscErrorCode
 __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx)
 {
     _F_;
-    NonlinearProblem * problem = static_cast<NonlinearProblem *>(ctx);
+    auto * problem = static_cast<NonlinearProblem *>(ctx);
     return problem->snes_monitor_callback(it, norm);
 }
 

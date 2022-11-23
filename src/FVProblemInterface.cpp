@@ -23,7 +23,7 @@ __compute_flux(PetscInt dim,
                void * ctx)
 {
     _F_;
-    FVProblemInterface * fvpi = static_cast<FVProblemInterface *>(ctx);
+    auto * fvpi = static_cast<FVProblemInterface *>(ctx);
     fvpi->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
 }
 

@@ -88,7 +88,7 @@ InputFile::build_mesh()
     _F_;
     lprintf(9, "- mesh");
     Parameters * params = build_params(this->root, "mesh");
-    const std::string & class_name = params->get<std::string>("_type");
+    const auto & class_name = params->get<std::string>("_type");
     this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
     add_object(this->mesh);
 }
@@ -99,7 +99,7 @@ InputFile::build_problem()
     _F_;
     lprintf(9, "- problem");
     Parameters * params = build_params(this->root, "problem");
-    const std::string & class_name = params->get<std::string>("_type");
+    const auto & class_name = params->get<std::string>("_type");
     params->set<const Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
     add_object(this->problem);
@@ -117,10 +117,10 @@ InputFile::build_outputs()
 
     for (const auto & it : output_root_node) {
         YAML::Node output_node = it.first;
-        std::string name = output_node.as<std::string>();
+        auto name = output_node.as<std::string>();
 
         Parameters * params = build_params(output_root_node, name);
-        const std::string & class_name = params->get<std::string>("_type");
+        const auto & class_name = params->get<std::string>("_type");
         params->set<const Problem *>("_problem") = this->problem;
         auto output = Factory::create<Output>(class_name, name, params);
         assert(this->problem != nullptr);

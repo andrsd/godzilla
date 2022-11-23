@@ -10,7 +10,7 @@ PetscErrorCode
 __compute_rhs(KSP ksp, Vec b, void * ctx)
 {
     _F_;
-    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
+    auto * problem = static_cast<LinearProblem *>(ctx);
     return problem->compute_rhs_callback(b);
 }
 
@@ -18,7 +18,7 @@ PetscErrorCode
 __compute_operators(KSP ksp, Mat A, Mat B, void * ctx)
 {
     _F_;
-    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
+    auto * problem = static_cast<LinearProblem *>(ctx);
     return problem->compute_operators_callback(A, B);
 }
 
@@ -26,7 +26,7 @@ PetscErrorCode
 __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
-    LinearProblem * problem = static_cast<LinearProblem *>(ctx);
+    auto * problem = static_cast<LinearProblem *>(ctx);
     return problem->ksp_monitor_callback(it, rnorm);
 }
 

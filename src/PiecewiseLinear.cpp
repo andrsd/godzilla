@@ -9,7 +9,7 @@ REGISTER_OBJECT(PiecewiseLinear);
 static double
 piecewise_linear_function_eval(void * ctx, double x)
 {
-    PiecewiseLinear * fn = static_cast<PiecewiseLinear *>(ctx);
+    auto * fn = static_cast<PiecewiseLinear *>(ctx);
     return fn->evaluate(x);
 }
 

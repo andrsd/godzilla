@@ -19,7 +19,7 @@ __transient_pre_step(TS ts)
     _F_;
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
-    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     return tpi->pre_step();
 }
 
@@ -29,7 +29,7 @@ __transient_post_step(TS ts)
     _F_;
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
-    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     return tpi->post_step();
 }
 
@@ -37,7 +37,7 @@ PetscErrorCode
 __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx)
 {
     _F_;
-    TransientProblemInterface * tpi = static_cast<TransientProblemInterface *>(ctx);
+    auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     return tpi->ts_monitor_callback(stepi, time, x);
 }
 

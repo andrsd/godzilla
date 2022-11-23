@@ -16,7 +16,7 @@ constant_auxiliary_field(PetscInt dim,
                          PetscScalar u[],
                          void * ctx)
 {
-    ConstantAuxiliaryField * aux_fld = static_cast<ConstantAuxiliaryField *>(ctx);
+    auto * aux_fld = static_cast<ConstantAuxiliaryField *>(ctx);
     aux_fld->evaluate(dim, time, x, nc, u);
     return 0;
 }

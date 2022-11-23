@@ -36,7 +36,7 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
             params->set<const App *>("_app") = this->app;
             params->set<const Problem *>("_problem") = this->problem;
             params->set<std::vector<std::string>>("function") = it.second;
-            ParsedFunction * pfn = Factory::create<ParsedFunction>(class_name, nm, params);
+            auto * pfn = Factory::create<ParsedFunction>(class_name, nm, params);
 
             const_cast<Problem *>(this->problem)->add_function(pfn);
             this->funcs[field_name] = pfn;

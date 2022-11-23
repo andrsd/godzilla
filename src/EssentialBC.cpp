@@ -13,7 +13,7 @@ essential_boundary_condition_function(PetscInt dim,
                                       void * ctx)
 {
     _F_;
-    EssentialBC * bc = static_cast<EssentialBC *>(ctx);
+    auto * bc = static_cast<EssentialBC *>(ctx);
     assert(bc != nullptr);
     bc->evaluate(dim, time, x, nc, u);
     return 0;
@@ -28,7 +28,7 @@ essential_boundary_condition_function_t(PetscInt dim,
                                         void * ctx)
 {
     _F_;
-    EssentialBC * bc = static_cast<EssentialBC *>(ctx);
+    auto * bc = static_cast<EssentialBC *>(ctx);
     assert(bc != nullptr);
     bc->evaluate_t(dim, time, x, nc, u);
     return 0;
