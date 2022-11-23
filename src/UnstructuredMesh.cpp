@@ -42,7 +42,7 @@ UnstructuredMesh::create()
     _F_;
     create_dm();
     PETSC_CHECK(DMSetFromOptions(this->dm));
-    PETSC_CHECK(DMViewFromOptions(dm, NULL, "-dm_view"));
+    PETSC_CHECK(DMViewFromOptions(dm, nullptr, "-dm_view"));
     PETSC_CHECK(DMSetUp(this->dm));
     PETSC_CHECK(DMGetDimension(this->dm, &this->dim));
 
@@ -152,7 +152,7 @@ UnstructuredMesh::distribute()
     PETSC_CHECK(DMPlexSetPartitioner(this->dm, this->partitioner));
 
     DM dm_dist = nullptr;
-    PETSC_CHECK(DMPlexDistribute(this->dm, this->partition_overlap, NULL, &dm_dist));
+    PETSC_CHECK(DMPlexDistribute(this->dm, this->partition_overlap, nullptr, &dm_dist));
     if (dm_dist) {
         PETSC_CHECK(DMDestroy(&this->dm));
         this->dm = dm_dist;
@@ -309,7 +309,7 @@ UnstructuredMesh::construct_ghost_cells()
 {
     _F_;
     DM gdm;
-    PETSC_CHECK(DMPlexConstructGhostCells(this->dm, NULL, NULL, &gdm));
+    PETSC_CHECK(DMPlexConstructGhostCells(this->dm, nullptr, nullptr, &gdm));
     PETSC_CHECK(DMDestroy(&this->dm));
     this->dm = gdm;
 }

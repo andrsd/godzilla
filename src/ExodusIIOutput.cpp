@@ -429,7 +429,7 @@ ExodusIIOutput::write_face_sets()
         for (PetscInt i = 0; i < face_set_size; ++i) {
             // Element
             PetscInt num_points;
-            PetscInt * points = NULL;
+            PetscInt * points = nullptr;
             PETSC_CHECK(
                 DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
@@ -442,7 +442,7 @@ ExodusIIOutput::write_face_sets()
                 DMPlexRestoreTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
             // Side
-            points = NULL;
+            points = nullptr;
             PETSC_CHECK(DMPlexGetTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points));
 
             for (PetscInt j = 1; j < num_points; ++j) {
@@ -669,7 +669,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const
         else
             elem_id = cells[i];
         PetscInt closure_size;
-        PetscInt * closure = NULL;
+        PetscInt * closure = nullptr;
         PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
         for (PetscInt k = 0; k < n_nodes_per_elem; k++, j++) {
             PetscInt l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);

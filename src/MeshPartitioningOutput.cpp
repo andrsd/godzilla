@@ -61,7 +61,8 @@ MeshPartitioningOutput::output_step()
             n_dofs[i] = 1;
         else
             n_dofs[i] = 0;
-    PETSC_CHECK(DMPlexCreateSection(dmp, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &s));
+    PETSC_CHECK(
+        DMPlexCreateSection(dmp, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &s));
     PETSC_CHECK(PetscSectionSetFieldName(s, 0, ""));
     PETSC_CHECK(DMSetLocalSection(dmp, s));
 

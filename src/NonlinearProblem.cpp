@@ -72,11 +72,11 @@ NonlinearProblem::parameters()
 
 NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     Problem(parameters),
-    snes(NULL),
-    ksp(NULL),
-    x(NULL),
-    r(NULL),
-    J(NULL),
+    snes(nullptr),
+    ksp(nullptr),
+    x(nullptr),
+    r(nullptr),
+    J(nullptr),
     line_search_type(get_param<std::string>("line_search")),
     nl_rel_tol(get_param<PetscReal>("nl_rel_tol")),
     nl_abs_tol(get_param<PetscReal>("nl_abs_tol")),
@@ -257,7 +257,7 @@ NonlinearProblem::solve()
 {
     _F_;
     lprintf(9, "Solving");
-    PETSC_CHECK(SNESSolve(this->snes, NULL, this->x));
+    PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }
 

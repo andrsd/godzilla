@@ -48,10 +48,10 @@ LinearProblem::parameters()
 
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
-    ksp(NULL),
-    x(NULL),
-    b(NULL),
-    A(NULL),
+    ksp(nullptr),
+    x(nullptr),
+    b(nullptr),
+    A(nullptr),
     lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
     lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
     lin_max_iter(get_param<PetscInt>("lin_max_iter"))

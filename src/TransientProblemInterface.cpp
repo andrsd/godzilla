@@ -120,7 +120,7 @@ TransientProblemInterface::set_up_monitors()
     _F_;
     PETSC_CHECK(TSSetPreStep(this->ts, __transient_pre_step));
     PETSC_CHECK(TSSetPostStep(this->ts, __transient_post_step));
-    PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, NULL));
+    PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, nullptr));
 }
 
 PetscErrorCode
