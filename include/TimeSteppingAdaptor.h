@@ -13,7 +13,7 @@ class TimeSteppingAdaptor : public Object {
 public:
     TimeSteppingAdaptor(const Parameters & params);
 
-    virtual void create() override;
+    void create() override;
 
     /// Get TSAdapt object
     ///

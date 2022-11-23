@@ -16,7 +16,7 @@ public:
     /// Register this function with the function parser
     ///
     /// @param parser The mu::Parser object we register this function with
-    virtual void register_callback(mu::Parser & parser);
+    void register_callback(mu::Parser & parser) override;
 
     /// Evaluate the function
     ///

@@ -17,15 +17,15 @@ public:
     FENonlinearProblem(const Parameters & parameters);
     virtual ~FENonlinearProblem();
 
-    virtual void create() override;
+    void create() override;
 
 protected:
-    virtual void init() override;
-    virtual void set_up_callbacks() override;
-    virtual void set_up_initial_guess() override;
-    virtual void allocate_objects() override;
-    virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
-    virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
+    void init() override;
+    void set_up_callbacks() override;
+    void set_up_initial_guess() override;
+    void allocate_objects() override;
+    PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
+    PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
 
     /// Set up residual statement for a field variable
     ///
@@ -49,7 +49,7 @@ protected:
                                     JacobianFunc * g2,
                                     JacobianFunc * g3);
 
-    virtual void on_initial() override;
+    void on_initial() override;
 
 public:
     static Parameters parameters();

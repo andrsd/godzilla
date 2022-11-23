@@ -13,7 +13,7 @@ public:
     const std::string get_file_name() const;
 
 protected:
-    virtual void create_dm() override;
+    void create_dm() override;
 
     /// File name with the ExodusII mesh
     const std::string & file_name;

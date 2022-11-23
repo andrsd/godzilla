@@ -41,7 +41,7 @@ public:
     virtual void * get_context();
 
 protected:
-    virtual void add_boundary();
+    void add_boundary() override;
 
 public:
     static Parameters parameters();

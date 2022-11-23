@@ -13,7 +13,7 @@ class GYMLFile : public InputFile {
 public:
     GYMLFile(const App * app);
 
-    virtual void build() override;
+    void build() override;
 
 protected:
     void build_functions();

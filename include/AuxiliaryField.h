@@ -16,7 +16,7 @@ public:
     AuxiliaryField(const Parameters & params);
     virtual ~AuxiliaryField();
 
-    virtual void create() override;
+    void create() override;
 
     virtual DMLabel get_label() const;
 

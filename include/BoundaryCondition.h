@@ -15,7 +15,7 @@ public:
     BoundaryCondition(const Parameters & params);
     virtual ~BoundaryCondition();
 
-    virtual void create() override;
+    void create() override;
 
     /// Get the boundary name this BC is active on
     ///

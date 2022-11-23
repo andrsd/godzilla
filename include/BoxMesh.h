@@ -39,7 +39,7 @@ public:
     PetscInt get_nz() const;
 
 protected:
-    virtual void create_dm() override;
+    void create_dm() override;
 
     /// Minimum in the x direction
     const PetscReal & xmin;

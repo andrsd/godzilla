@@ -13,7 +13,7 @@ class PiecewiseLinear : public Function {
 public:
     PiecewiseLinear(const Parameters & params);
 
-    virtual void register_callback(mu::Parser & parser);
+    void register_callback(mu::Parser & parser) override;
 
     /// Evaluate this function at point 'x'
     PetscReal evaluate(PetscReal x);

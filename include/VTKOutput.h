@@ -20,10 +20,10 @@ public:
     VTKOutput(const Parameters & params);
     virtual ~VTKOutput();
 
-    virtual std::string get_file_ext() const override;
-    virtual void create() override;
-    virtual void check() override;
-    virtual void output_step() override;
+    std::string get_file_ext() const override;
+    void create() override;
+    void check() override;
+    void output_step() override;
 
 protected:
     /// Viewer for the output

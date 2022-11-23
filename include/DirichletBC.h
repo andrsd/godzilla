@@ -12,14 +12,20 @@ class DirichletBC : public EssentialBC, public FunctionInterface {
 public:
     DirichletBC(const Parameters & params);
 
-    virtual void create();
-    virtual PetscInt get_num_components() const;
-    virtual std::vector<PetscInt> get_components() const;
-    virtual PetscFunc * get_function_t();
-    virtual void
-    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
-    virtual void
-    evaluate_t(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+    void create() override;
+    PetscInt get_num_components() const override;
+    std::vector<PetscInt> get_components() const override;
+    PetscFunc * get_function_t() override;
+    void evaluate(PetscInt dim,
+                  PetscReal time,
+                  const PetscReal x[],
+                  PetscInt nc,
+                  PetscScalar u[]) override;
+    void evaluate_t(PetscInt dim,
+                    PetscReal time,
+                    const PetscReal x[],
+                    PetscInt nc,
+                    PetscScalar u[]) override;
 
 public:
     static Parameters parameters();

@@ -29,11 +29,11 @@ public:
     ExodusIIOutput(const Parameters & params);
     virtual ~ExodusIIOutput();
 
-    virtual std::string get_file_ext() const override;
-    virtual void set_file_name() override;
-    virtual void create() override;
-    virtual void check() override;
-    virtual void output_step() override;
+    std::string get_file_ext() const override;
+    void set_file_name() override;
+    void create() override;
+    void check() override;
+    void output_step() override;
 
 protected:
     void open_file();

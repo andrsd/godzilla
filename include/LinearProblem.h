@@ -12,15 +12,15 @@ public:
     LinearProblem(const Parameters & parameters);
     virtual ~LinearProblem();
 
-    virtual void create() override;
-    virtual void solve() override;
-    virtual void run() override;
-    virtual bool converged() override;
-    virtual Vec get_solution_vector() const override;
+    void create() override;
+    void solve() override;
+    void run() override;
+    bool converged() override;
+    Vec get_solution_vector() const override;
 
 protected:
     /// provide DM for the underlying KSP object
-    virtual DM get_dm() const override;
+    DM get_dm() const override;
     /// Initialize the problem
     virtual void init();
     /// Allocate Jacobian/residual objects

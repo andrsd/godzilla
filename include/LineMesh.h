@@ -26,7 +26,7 @@ public:
     PetscInt get_nx();
 
 protected:
-    virtual void create_dm() override;
+    void create_dm() override;
 
     /// Minimum in the x direction
     const PetscReal & xmin;

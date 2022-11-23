@@ -14,7 +14,7 @@ class Output : public Object, public PrintInterface {
 public:
     Output(const Parameters & params);
 
-    virtual void create() override;
+    void create() override;
 
     /// Set execute mask
     ///
