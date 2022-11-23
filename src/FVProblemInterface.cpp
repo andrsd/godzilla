@@ -8,7 +8,7 @@
 
 namespace godzilla {
 
-const std::string FVProblemInterface::empty_name("");
+const std::string FVProblemInterface::empty_name;
 
 void
 __compute_flux(PetscInt dim,
