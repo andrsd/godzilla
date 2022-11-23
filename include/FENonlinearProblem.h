@@ -15,7 +15,6 @@ class JacobianFunc;
 class FENonlinearProblem : public NonlinearProblem, public FEProblemInterface {
 public:
     explicit FENonlinearProblem(const Parameters & parameters);
-    virtual ~FENonlinearProblem();
 
     void create() override;
 

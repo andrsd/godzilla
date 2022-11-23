@@ -10,7 +10,7 @@ namespace godzilla {
 class UnstructuredMesh : public Mesh {
 public:
     explicit UnstructuredMesh(const Parameters & parameters);
-    virtual ~UnstructuredMesh();
+    ~UnstructuredMesh() override;
 
     DM get_dm() const override;
     void create() override;

@@ -17,7 +17,6 @@ class Output;
 class Problem : public Object, public PrintInterface {
 public:
     explicit Problem(const Parameters & parameters);
-    virtual ~Problem();
 
     void check() override;
 
@@ -108,7 +107,8 @@ protected:
     /// List of postprocessor objects
     std::map<std::string, Postprocessor *> pps;
 
-    /// List of postprocessor names
+    /// List of
+    /// postprocessor names
     std::vector<std::string> pps_names;
 
     /// Simulation time

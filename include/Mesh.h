@@ -11,7 +11,6 @@ namespace godzilla {
 class Mesh : public Object, public PrintInterface {
 public:
     explicit Mesh(const Parameters & parameters);
-    virtual ~Mesh();
 
     virtual DM get_dm() const = 0;
 

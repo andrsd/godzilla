@@ -27,7 +27,7 @@ class UnstructuredMesh;
 class ExodusIIOutput : public FileOutput {
 public:
     explicit ExodusIIOutput(const Parameters & params);
-    virtual ~ExodusIIOutput();
+    ~ExodusIIOutput() override;
 
     std::string get_file_ext() const override;
     void set_file_name() override;

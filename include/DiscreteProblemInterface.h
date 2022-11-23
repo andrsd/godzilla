@@ -18,7 +18,7 @@ class BoundaryCondition;
 class DiscreteProblemInterface {
 public:
     DiscreteProblemInterface(Problem * problem, const Parameters & params);
-    virtual ~DiscreteProblemInterface();
+    virtual ~DiscreteProblemInterface() = default;
 
     /// Get the unstructured mesh
     ///

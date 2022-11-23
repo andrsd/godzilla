@@ -10,7 +10,7 @@ namespace godzilla {
 class CSVOutput : public FileOutput {
 public:
     explicit CSVOutput(const Parameters & params);
-    virtual ~CSVOutput();
+    ~CSVOutput() override;
 
     void create() override;
     std::string get_file_ext() const override;

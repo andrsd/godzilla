@@ -28,11 +28,6 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
 {
 }
 
-AuxiliaryField::~AuxiliaryField()
-{
-    _F_;
-}
-
 void
 AuxiliaryField::create()
 {

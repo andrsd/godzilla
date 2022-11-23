@@ -10,7 +10,7 @@ namespace godzilla {
 class LinearProblem : public Problem {
 public:
     explicit LinearProblem(const Parameters & parameters);
-    virtual ~LinearProblem();
+    ~LinearProblem() override;
 
     void create() override;
     void solve() override;

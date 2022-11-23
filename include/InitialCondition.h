@@ -14,7 +14,7 @@ class InitialCondition : public Object, public PrintInterface {
 public:
     explicit InitialCondition(const Parameters & params);
 
-    virtual void create();
+    void create() override;
     virtual PetscInt get_field_id() const;
     virtual PetscInt get_num_components() const = 0;
 

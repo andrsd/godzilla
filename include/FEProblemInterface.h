@@ -19,7 +19,7 @@ class WeakForm;
 class FEProblemInterface : public DiscreteProblemInterface {
 public:
     FEProblemInterface(Problem * problem, const Parameters & params);
-    virtual ~FEProblemInterface();
+    ~FEProblemInterface() override;
 
     PetscInt get_num_fields() const override;
     std::vector<std::string> get_field_names() const override;

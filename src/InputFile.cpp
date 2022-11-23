@@ -23,8 +23,6 @@ InputFile::InputFile(const App * app) :
     _F_;
 }
 
-InputFile::~InputFile() {}
-
 bool
 InputFile::parse(const std::string & file_name)
 {

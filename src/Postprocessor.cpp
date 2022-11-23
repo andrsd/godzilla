@@ -19,6 +19,4 @@ Postprocessor::Postprocessor(const Parameters & params) :
 {
 }
 
-Postprocessor::~Postprocessor() {}
-
 } // namespace godzilla

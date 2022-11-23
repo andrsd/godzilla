@@ -10,7 +10,7 @@ namespace godzilla {
 class FVProblemInterface : public DiscreteProblemInterface {
 public:
     FVProblemInterface(Problem * problem, const Parameters & params);
-    virtual ~FVProblemInterface();
+    ~FVProblemInterface() override;
 
     PetscInt get_num_fields() const override;
     std::vector<std::string> get_field_names() const override;

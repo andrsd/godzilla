@@ -65,8 +65,6 @@ FENonlinearProblem::FENonlinearProblem(const Parameters & parameters) :
     _F_;
 }
 
-FENonlinearProblem::~FENonlinearProblem() {}
-
 void
 FENonlinearProblem::create()
 {

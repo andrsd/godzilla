@@ -32,8 +32,6 @@ DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Para
 {
 }
 
-DiscreteProblemInterface::~DiscreteProblemInterface() {}
-
 const UnstructuredMesh *
 DiscreteProblemInterface::get_mesh() const
 {

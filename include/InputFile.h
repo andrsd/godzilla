@@ -20,7 +20,7 @@ class Function;
 class InputFile : public PrintInterface, public LoggingInterface {
 public:
     explicit InputFile(const App * app);
-    virtual ~InputFile();
+    virtual ~InputFile() = default;
 
     /// Parse the YML file
     ///

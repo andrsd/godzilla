@@ -20,7 +20,7 @@ protected:
     /// Base class for parameter values
     class Value {
     public:
-        virtual ~Value() {}
+        virtual ~Value() = default;
 
         /// Return the type of this value as a string
         virtual std::string type() const = 0;
@@ -64,7 +64,7 @@ protected:
             return std::string(typeid(T).name());
         }
 
-        virtual Value *
+        Value *
         copy() const override
         {
             auto * copy = new Parameter<T>;
