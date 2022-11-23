@@ -12,28 +12,28 @@ public:
     explicit BoxMesh(const Parameters & parameters);
 
     /// Get lower limit in x-direction
-    PetscInt get_x_min() const;
+    PetscReal get_x_min() const;
 
     /// Get upper limit in x-direction
-    PetscInt get_x_max() const;
+    PetscReal get_x_max() const;
 
     /// Get the number of mesh points in x direction
     PetscInt get_nx() const;
 
     /// Get lower limit in y-direction
-    PetscInt get_y_min() const;
+    PetscReal get_y_min() const;
 
     /// Get upper limit in y-direction
-    PetscInt get_y_max() const;
+    PetscReal get_y_max() const;
 
     /// Get the number of mesh points in y-direction
     PetscInt get_ny() const;
 
     /// Get lower limit in z-direction
-    PetscInt get_z_min() const;
+    PetscReal get_z_min() const;
 
     /// Get upper limit in z-direction
-    PetscInt get_z_max() const;
+    PetscReal get_z_max() const;
 
     /// Get the number of mesh points in z direction
     PetscInt get_nz() const;

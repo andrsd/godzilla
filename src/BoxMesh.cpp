@@ -47,14 +47,14 @@ BoxMesh::BoxMesh(const Parameters & parameters) :
         log_error("Parameter 'zmax' must be larger than 'zmin'.");
 }
 
-PetscInt
+PetscReal
 BoxMesh::get_x_min() const
 {
     _F_;
     return this->xmin;
 }
 
-PetscInt
+PetscReal
 BoxMesh::get_x_max() const
 {
     _F_;
@@ -68,14 +68,14 @@ BoxMesh::get_nx() const
     return this->nx;
 }
 
-PetscInt
+PetscReal
 BoxMesh::get_y_min() const
 {
     _F_;
     return this->ymin;
 }
 
-PetscInt
+PetscReal
 BoxMesh::get_y_max() const
 {
     _F_;
@@ -89,14 +89,14 @@ BoxMesh::get_ny() const
     return this->ny;
 }
 
-PetscInt
+PetscReal
 BoxMesh::get_z_min() const
 {
     _F_;
     return this->zmin;
 }
 
-PetscInt
+PetscReal
 BoxMesh::get_z_max() const
 {
     _F_;
