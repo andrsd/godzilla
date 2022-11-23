@@ -41,7 +41,7 @@ FunctionIC::evaluate(PetscInt dim,
                      PetscInt nc,
                      PetscScalar u[])
 {
-    FunctionInterface::evaluate(dim, time, x, nc, u);
+    evaluate_func(dim, time, x, nc, u);
 }
 
 } // namespace godzilla
