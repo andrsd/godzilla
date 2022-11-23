@@ -299,7 +299,7 @@ FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, P
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (unsigned int i = 0; i < nc; i++)
-                fi.component_names[i] = fmt::sprintf("%d", i);
+                fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields[id] = fi;
         this->fields_by_name[name] = id;

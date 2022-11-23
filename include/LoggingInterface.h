@@ -8,7 +8,9 @@ namespace godzilla {
 ///
 class LoggingInterface {
 public:
-    LoggingInterface(Logger * alogger, std::string aprefix = "") : logger(alogger), prefix(aprefix)
+    explicit LoggingInterface(Logger * alogger, std::string aprefix = "") :
+        logger(alogger),
+        prefix(aprefix)
     {
     }
 

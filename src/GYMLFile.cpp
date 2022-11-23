@@ -34,6 +34,7 @@ GYMLFile::build()
     lprintf(9, "Allocating objects");
     build_mesh();
     build_problem();
+    build_problem_adapt();
     build_functions();
     build_partitioner();
     build_auxiliary_fields();
@@ -66,11 +67,9 @@ GYMLFile::build_functions()
 }
 
 void
-GYMLFile::build_problem()
+GYMLFile::build_problem_adapt()
 {
     _F_;
-    InputFile::build_problem();
-
     YAML::Node problem_node = this->root["problem"];
     if (this->problem && problem_node && problem_node["ts_adapt"])
         build_ts_adapt(problem_node);

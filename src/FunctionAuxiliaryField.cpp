@@ -63,7 +63,7 @@ FunctionAuxiliaryField::evaluate(PetscInt dim,
                                  PetscScalar u[])
 {
     _F_;
-    FunctionInterface::evaluate(dim, time, x, nc, u);
+    evaluate_func(dim, time, x, nc, u);
 }
 
 } // namespace godzilla

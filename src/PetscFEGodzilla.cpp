@@ -2,6 +2,7 @@
 #include "petscfe.h"
 #include "FEProblemInterface.h"
 #include "Error.h"
+#include "CallStack.h"
 
 namespace godzilla {
 namespace internal {
@@ -16,13 +17,13 @@ integrate(PetscDS ds,
           const PetscScalar coefficients_aux[],
           PetscScalar integral[])
 {
-    PetscFunctionBegin;
+    _F_;
     void * ctx;
-    PetscCall(PetscDSGetContext(ds, field, &ctx));
+    PETSC_CHECK(PetscDSGetContext(ds, field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
     PetscErrorCode err =
         fepi->integrate(ds, field, ne, cgeom, coefficients, ds_aux, coefficients_aux, integral);
-    PetscFunctionReturn(err);
+    return err;
 }
 
 static PetscErrorCode
@@ -36,9 +37,9 @@ integrate_bd(PetscDS ds,
              const PetscScalar coefficients_aux[],
              PetscScalar integral[])
 {
-    PetscFunctionBegin;
+    _F_;
     void * ctx;
-    PetscCall(PetscDSGetContext(ds, field, &ctx));
+    PETSC_CHECK(PetscDSGetContext(ds, field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
     PetscErrorCode err = fepi->integrate_bnd(ds,
                                              field,
@@ -49,7 +50,7 @@ integrate_bd(PetscDS ds,
                                              ds_aux,
                                              coefficients_aux,
                                              integral);
-    PetscFunctionReturn(err);
+    return err;
 }
 
 static PetscErrorCode
@@ -64,9 +65,9 @@ integrate_residual(PetscDS ds,
                    PetscReal t,
                    PetscScalar elem_vec[])
 {
-    PetscFunctionBegin;
+    _F_;
     void * ctx;
-    PetscCall(PetscDSGetContext(ds, key.field, &ctx));
+    PETSC_CHECK(PetscDSGetContext(ds, key.field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
     PetscErrorCode err = fepi->integrate_residual(ds,
                                                   key,
@@ -78,7 +79,7 @@ integrate_residual(PetscDS ds,
                                                   coefficients_aux,
                                                   t,
                                                   elem_vec);
-    PetscFunctionReturn(err);
+    return err;
 }
 
 static PetscErrorCode
@@ -94,9 +95,9 @@ integrate_bd_residual(PetscDS ds,
                       PetscReal t,
                       PetscScalar elem_vec[])
 {
-    PetscFunctionBegin;
+    _F_;
     void * ctx;
-    PetscCall(PetscDSGetContext(ds, key.field, &ctx));
+    PETSC_CHECK(PetscDSGetContext(ds, key.field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
     PetscErrorCode err = fepi->integrate_bnd_residual(ds,
                                                       key,
@@ -108,7 +109,7 @@ integrate_bd_residual(PetscDS ds,
                                                       coefficients_aux,
                                                       t,
                                                       elem_vec);
-    PetscFunctionReturn(err);
+    return err;
 }
 
 PetscErrorCode
@@ -125,12 +126,12 @@ integrate_jacobian(PetscDS ds,
                    PetscReal u_tshift,
                    PetscScalar elem_mat[])
 {
-    PetscFunctionBegin;
+    _F_;
     PetscInt n_fields;
-    PetscCall(PetscDSGetNumFields(ds, &n_fields));
+    PETSC_CHECK(PetscDSGetNumFields(ds, &n_fields));
     PetscInt field_i = key.field / n_fields;
     void * ctx;
-    PetscCall(PetscDSGetContext(ds, field_i, &ctx));
+    PETSC_CHECK(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
     PetscErrorCode err = fepi->integrate_jacobian(ds,
                                                   jtype,
@@ -144,7 +145,7 @@ integrate_jacobian(PetscDS ds,
                                                   t,
                                                   u_tshift,
                                                   elem_mat);
-    PetscFunctionReturn(err);
+    return err;
 }
 
 static PetscErrorCode
@@ -161,12 +162,12 @@ integrate_bd_jacobian(PetscDS ds,
                       PetscReal u_tshift,
                       PetscScalar elem_mat[])
 {
-    PetscFunctionBegin;
+    _F_;
     PetscInt n_fields;
-    PetscCall(PetscDSGetNumFields(ds, &n_fields));
+    PETSC_CHECK(PetscDSGetNumFields(ds, &n_fields));
     PetscInt field_i = key.field / n_fields;
     void * ctx;
-    PetscCall(PetscDSGetContext(ds, field_i, &ctx));
+    PETSC_CHECK(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
     PetscErrorCode err = fepi->integrate_bnd_jacobian(ds,
                                                       key,
@@ -179,7 +180,7 @@ integrate_bd_jacobian(PetscDS ds,
                                                       t,
                                                       u_tshift,
                                                       elem_mat);
-    PetscFunctionReturn(err);
+    return err;
 }
 
 PetscErrorCode
@@ -191,8 +192,8 @@ create_lagrange_petscfe(MPI_Comm comm,
                         PetscInt qorder,
                         PetscFE * fem)
 {
-    PetscFunctionBegin;
-    PetscCall(PetscFECreateLagrange(comm, dim, nc, is_simplex, k, qorder, fem));
+    _F_;
+    PETSC_CHECK(PetscFECreateLagrange(comm, dim, nc, is_simplex, k, qorder, fem));
     // replace PETSc functions with ours
     (*fem)->ops->integrate = integrate;
     (*fem)->ops->integratebd = integrate_bd;
@@ -203,7 +204,7 @@ create_lagrange_petscfe(MPI_Comm comm,
     (*fem)->ops->integratejacobian = integrate_jacobian;
     (*fem)->ops->integratebdjacobian = integrate_bd_jacobian;
     (*fem)->ops->integratehybridjacobian = nullptr;
-    PetscFunctionReturn(0);
+    return 0;
 }
 
 } // namespace internal

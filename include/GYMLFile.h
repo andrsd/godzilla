@@ -17,7 +17,7 @@ public:
 
 protected:
     void build_functions();
-    void build_problem();
+    void build_problem_adapt();
     void build_partitioner();
     void build_auxiliary_fields();
     void build_initial_conditions();
