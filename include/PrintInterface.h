@@ -30,7 +30,7 @@ protected:
     lprintf(unsigned int level, const char * format, Args &&... args) const
     {
         if (level <= this->verbosity_level && this->proc_id == 0) {
-            fmt::fprintf(stdout, "%s: ", this->prefix);
+            fmt::fprintf(stdout, "%s: ", this->prefix.c_str());
             fmt::fprintf(stdout, format, std::forward<Args>(args)...);
             fmt::fprintf(stdout, "\n");
         }

@@ -198,8 +198,8 @@ FVProblemInterface::add_field(PetscInt id, const std::string & name, PetscInt nc
         FieldInfo fi = { name, id, nc, {} };
         if (nc > 1) {
             fi.component_names.resize(nc);
-            for (unsigned int i = 0; i < nc; i++)
-                fi.component_names[i] = fmt::sprintf("%d", i);
+            for (PetscInt i = 0; i < nc; i++)
+                fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields[id] = fi;
         this->fields_by_name[name] = id;

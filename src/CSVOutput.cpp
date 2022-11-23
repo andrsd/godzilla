@@ -80,7 +80,7 @@ CSVOutput::write_header()
     _F_;
     fmt::fprintf(this->f, "time");
     for (auto & name : this->pps_names)
-        fmt::fprintf(this->f, ",%s", name);
+        fmt::fprintf(this->f, ",%s", name.c_str());
     fmt::fprintf(this->f, "\n");
 }
 
