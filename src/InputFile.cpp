@@ -227,7 +227,7 @@ bool
 InputFile::read_bool_value(const std::string & param_name, const YAML::Node & val_node)
 {
     _F_;
-    bool val;
+    bool val = false;
     if (val_node.IsScalar()) {
         std::string str = utils::to_lower(val_node.as<std::string>());
         if (validation::in(str, { "on", "true", "yes" }))
