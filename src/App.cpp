@@ -7,7 +7,7 @@
 #include "Error.h"
 #include "Utils.h"
 #include "Terminal.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

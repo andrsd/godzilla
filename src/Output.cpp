@@ -2,7 +2,7 @@
 #include "CallStack.h"
 #include "Problem.h"
 #include "Utils.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

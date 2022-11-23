@@ -1,7 +1,7 @@
 #include "TimeSteppingAdaptor.h"
 #include "CallStack.h"
 #include "TransientProblemInterface.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

@@ -2,7 +2,7 @@
 #include "CallStack.h"
 #include "InitialCondition.h"
 #include "DiscreteProblemInterface.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

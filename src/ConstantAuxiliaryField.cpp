@@ -2,7 +2,7 @@
 #include "ConstantAuxiliaryField.h"
 #include "CallStack.h"
 #include "FEProblemInterface.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

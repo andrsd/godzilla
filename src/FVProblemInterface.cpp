@@ -4,7 +4,7 @@
 #include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "Logger.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

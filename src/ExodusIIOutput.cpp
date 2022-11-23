@@ -10,7 +10,7 @@
 #include "fmt/printf.h"
 #include "fmt/format.h"
 #include "fmt/chrono.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

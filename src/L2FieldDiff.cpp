@@ -5,7 +5,7 @@
 #include "FEProblemInterface.h"
 #include "ParsedFunction.h"
 #include "Types.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

@@ -5,8 +5,8 @@
 #include "Postprocessor.h"
 #include "Error.h"
 #include "fmt/printf.h"
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 
 namespace godzilla {
 

@@ -14,7 +14,7 @@
 #include "BndResidualFunc.h"
 #include "JacobianFunc.h"
 #include "BndJacobianFunc.h"
-#include <assert.h>
+#include <cassert>
 #include <petsc/private/petscfeimpl.h>
 
 namespace godzilla {

@@ -16,7 +16,7 @@
 #include "CallStack.h"
 #include "Validation.h"
 #include "Utils.h"
-#include "assert.h"
+#include "cassert"
 #include "fmt/format.h"
 #include "yaml-cpp/node/iterator.h"
 

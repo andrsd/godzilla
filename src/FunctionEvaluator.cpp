@@ -2,7 +2,7 @@
 #include "CallStack.h"
 #include "Function.h"
 #include "fmt/format.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

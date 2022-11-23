@@ -6,7 +6,7 @@
 #include "NonlinearProblem.h"
 #include "Output.h"
 #include "petscdmplex.h"
-#include <assert.h>
+#include <cassert>
 #include "petsc/private/tsimpl.h"
 
 PETSC_EXTERN PetscErrorCode TSAdaptCreate_godzilla(TSAdapt adapt);

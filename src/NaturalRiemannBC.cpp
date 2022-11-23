@@ -1,6 +1,6 @@
 #include "NaturalRiemannBC.h"
 #include "CallStack.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

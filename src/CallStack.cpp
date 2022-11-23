@@ -1,5 +1,5 @@
 #include "CallStack.h"
-#include <signal.h>
+#include <csignal>
 #include "petscsys.h"
 
 namespace godzilla {

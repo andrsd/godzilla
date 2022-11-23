@@ -8,7 +8,7 @@
 #include "Logger.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 

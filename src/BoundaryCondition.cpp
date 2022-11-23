@@ -5,7 +5,7 @@
 #include "Problem.h"
 #include "DiscreteProblemInterface.h"
 #include "BoundaryCondition.h"
-#include <assert.h>
+#include <cassert>
 
 namespace godzilla {
 
