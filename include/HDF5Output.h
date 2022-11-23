@@ -27,7 +27,7 @@ namespace godzilla {
 ///
 class HDF5Output : public FileOutput {
 public:
-    HDF5Output(const Parameters & params);
+    explicit HDF5Output(const Parameters & params);
     virtual ~HDF5Output();
 
     std::string get_file_ext() const override;

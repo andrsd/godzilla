@@ -9,7 +9,7 @@ class FEProblemInterface;
 
 class JacobianFunc {
 public:
-    JacobianFunc(const FEProblemInterface * fepi);
+    explicit JacobianFunc(const FEProblemInterface * fepi);
 
     /// Evaluate this Jacobian function
     ///

@@ -24,7 +24,7 @@ public:
     /// Build the call stack object with defined size
     ///
     /// @param max_size The maximum number of call stack objects to handle
-    CallStack(int max_size = 32);
+    explicit CallStack(int max_size = 32);
     virtual ~CallStack();
 
     /// Dump the call stack objects to standard error

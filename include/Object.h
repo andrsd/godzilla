@@ -14,7 +14,7 @@ class App;
 class Object : public LoggingInterface {
 public:
     /// Constructor for building the object via Factory
-    Object(const Parameters & parameters);
+    explicit Object(const Parameters & parameters);
     virtual ~Object();
 
     /// Get the type of this object.

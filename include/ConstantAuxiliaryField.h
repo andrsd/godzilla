@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class ConstantAuxiliaryField : public AuxiliaryField {
 public:
-    ConstantAuxiliaryField(const Parameters & params);
+    explicit ConstantAuxiliaryField(const Parameters & params);
 
     void create() override;
     PetscInt get_num_components() const override;

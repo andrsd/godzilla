@@ -8,7 +8,7 @@ namespace godzilla {
 ///
 class ExodusIIMesh : public UnstructuredMesh {
 public:
-    ExodusIIMesh(const Parameters & parameters);
+    explicit ExodusIIMesh(const Parameters & parameters);
 
     const std::string get_file_name() const;
 

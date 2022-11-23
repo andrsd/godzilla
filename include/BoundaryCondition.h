@@ -12,7 +12,7 @@ class DiscreteProblemInterface;
 ///
 class BoundaryCondition : public Object, public PrintInterface {
 public:
-    BoundaryCondition(const Parameters & params);
+    explicit BoundaryCondition(const Parameters & params);
     virtual ~BoundaryCondition();
 
     void create() override;

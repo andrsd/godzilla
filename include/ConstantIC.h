@@ -12,7 +12,7 @@ namespace godzilla {
 /// value for each component
 class ConstantIC : public InitialCondition {
 public:
-    ConstantIC(const Parameters & params);
+    explicit ConstantIC(const Parameters & params);
 
     PetscInt get_num_components() const override;
 

@@ -8,7 +8,7 @@ namespace godzilla {
 ///
 class BasicTSAdapt : public TimeSteppingAdaptor {
 public:
-    BasicTSAdapt(const Parameters & params);
+    explicit BasicTSAdapt(const Parameters & params);
 
 protected:
     void set_type() override;

@@ -16,7 +16,7 @@ class Output;
 ///
 class Problem : public Object, public PrintInterface {
 public:
-    Problem(const Parameters & parameters);
+    explicit Problem(const Parameters & parameters);
     virtual ~Problem();
 
     void check() override;

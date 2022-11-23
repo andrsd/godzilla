@@ -10,7 +10,7 @@ class FEProblemInterface;
 
 class BndResidualFunc {
 public:
-    BndResidualFunc(const NaturalBC * nbc);
+    explicit BndResidualFunc(const NaturalBC * nbc);
 
     /// Evaluate this residual function
     ///

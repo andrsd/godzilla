@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class NonlinearProblem : public Problem {
 public:
-    NonlinearProblem(const Parameters & parameters);
+    explicit NonlinearProblem(const Parameters & parameters);
     virtual ~NonlinearProblem();
 
     void create() override;

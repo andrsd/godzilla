@@ -12,7 +12,7 @@ class App;
 ///
 class FunctionInterface {
 public:
-    FunctionInterface(const Parameters & params);
+    explicit FunctionInterface(const Parameters & params);
 
     /// Build the evaluator
     void create();

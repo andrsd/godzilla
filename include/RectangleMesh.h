@@ -8,7 +8,7 @@ namespace godzilla {
 ///
 class RectangleMesh : public UnstructuredMesh {
 public:
-    RectangleMesh(const Parameters & parameters);
+    explicit RectangleMesh(const Parameters & parameters);
 
     ///
     PetscInt get_x_min() const;

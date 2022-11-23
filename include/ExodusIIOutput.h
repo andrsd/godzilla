@@ -26,7 +26,7 @@ class UnstructuredMesh;
 /// This output works only with finite element problems
 class ExodusIIOutput : public FileOutput {
 public:
-    ExodusIIOutput(const Parameters & params);
+    explicit ExodusIIOutput(const Parameters & params);
     virtual ~ExodusIIOutput();
 
     std::string get_file_ext() const override;

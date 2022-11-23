@@ -11,7 +11,7 @@ class App;
 ///
 class GYMLFile : public InputFile {
 public:
-    GYMLFile(const App * app);
+    explicit GYMLFile(const App * app);
 
     void build() override;
 

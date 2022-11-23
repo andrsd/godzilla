@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class Function : public Object {
 public:
-    Function(const Parameters & params);
+    explicit Function(const Parameters & params);
 
     /// Register this function with the function parser
     ///

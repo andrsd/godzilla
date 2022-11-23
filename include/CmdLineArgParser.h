@@ -13,7 +13,7 @@ public:
     ///
     /// @param prog_name The name of the binary (shown when printing usage)
     /// @param version The version of the binary
-    CmdLineArgParser(const std::string & prog_name, const std::string & version = "none");
+    explicit CmdLineArgParser(const std::string & prog_name, const std::string & version = "none");
 
     /// Adds an argument
     ///

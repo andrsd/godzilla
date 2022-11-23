@@ -17,7 +17,7 @@ namespace godzilla {
 /// ```
 class VTKOutput : public FileOutput {
 public:
-    VTKOutput(const Parameters & params);
+    explicit VTKOutput(const Parameters & params);
     virtual ~VTKOutput();
 
     std::string get_file_ext() const override;

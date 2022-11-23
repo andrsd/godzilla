@@ -12,7 +12,7 @@ class DiscreteProblemInterface;
 ///
 class InitialCondition : public Object, public PrintInterface {
 public:
-    InitialCondition(const Parameters & params);
+    explicit InitialCondition(const Parameters & params);
 
     virtual void create();
     virtual PetscInt get_field_id() const;

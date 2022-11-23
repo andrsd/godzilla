@@ -8,7 +8,7 @@ namespace godzilla {
 ///
 class MeshPartitioningOutput : public FileOutput {
 public:
-    MeshPartitioningOutput(const Parameters & params);
+    explicit MeshPartitioningOutput(const Parameters & params);
 
     void check() override;
     std::string get_file_ext() const override;

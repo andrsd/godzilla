@@ -14,8 +14,8 @@ class App;
 ///
 class PrintInterface {
 public:
-    PrintInterface(const Object * obj);
-    PrintInterface(const App * app);
+    explicit PrintInterface(const Object * obj);
+    explicit PrintInterface(const App * app);
     PrintInterface(MPI_Comm comm, const unsigned int & verbosity_level, const std::string & prefix);
 
 protected:

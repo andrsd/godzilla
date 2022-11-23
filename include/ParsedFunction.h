@@ -11,7 +11,7 @@ namespace godzilla {
 ///
 class ParsedFunction : public Function {
 public:
-    ParsedFunction(const Parameters & params);
+    explicit ParsedFunction(const Parameters & params);
 
     /// Register this function with the function parser
     ///

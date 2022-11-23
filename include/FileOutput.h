@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class FileOutput : public Output {
 public:
-    FileOutput(const Parameters & params);
+    explicit FileOutput(const Parameters & params);
 
     void create() override;
 

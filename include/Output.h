@@ -12,7 +12,7 @@ class Problem;
 ///
 class Output : public Object, public PrintInterface {
 public:
-    Output(const Parameters & params);
+    explicit Output(const Parameters & params);
 
     void create() override;
 

@@ -13,7 +13,7 @@ class FEProblemInterface;
 ///
 class AuxiliaryField : public Object, public PrintInterface {
 public:
-    AuxiliaryField(const Parameters & params);
+    explicit AuxiliaryField(const Parameters & params);
     virtual ~AuxiliaryField();
 
     void create() override;

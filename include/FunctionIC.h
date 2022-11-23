@@ -9,7 +9,7 @@ namespace godzilla {
 ///
 class FunctionIC : public InitialCondition, public FunctionInterface {
 public:
-    FunctionIC(const Parameters & params);
+    explicit FunctionIC(const Parameters & params);
 
     void create() override;
     PetscInt get_num_components() const override;

@@ -11,7 +11,7 @@ class ExplicitFVLinearProblem :
     public FVProblemInterface,
     public TransientProblemInterface {
 public:
-    ExplicitFVLinearProblem(const Parameters & params);
+    explicit ExplicitFVLinearProblem(const Parameters & params);
     virtual ~ExplicitFVLinearProblem();
 
     void create() override;

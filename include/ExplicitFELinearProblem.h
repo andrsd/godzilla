@@ -9,7 +9,7 @@ class ResidualFunc;
 
 class ExplicitFELinearProblem : public FENonlinearProblem, public TransientProblemInterface {
 public:
-    ExplicitFELinearProblem(const Parameters & params);
+    explicit ExplicitFELinearProblem(const Parameters & params);
     virtual ~ExplicitFELinearProblem();
 
     void create() override;

@@ -11,7 +11,7 @@ class TransientProblemInterface;
 ///
 class TimeSteppingAdaptor : public Object {
 public:
-    TimeSteppingAdaptor(const Parameters & params);
+    explicit TimeSteppingAdaptor(const Parameters & params);
 
     void create() override;
 
