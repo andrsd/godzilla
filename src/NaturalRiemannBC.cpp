@@ -5,12 +5,12 @@
 namespace godzilla {
 
 static PetscErrorCode
-__natural_riemann_boundary_condition_function(PetscReal time,
-                                              const PetscReal * c,
-                                              const PetscReal * n,
-                                              const PetscScalar * xI,
-                                              PetscScalar * xG,
-                                              void * ctx)
+natural_riemann_boundary_condition_function(PetscReal time,
+                                            const PetscReal * c,
+                                            const PetscReal * n,
+                                            const PetscScalar * xI,
+                                            PetscScalar * xG,
+                                            void * ctx)
 {
     _F_;
     NaturalRiemannBC * bc = static_cast<NaturalRiemannBC *>(ctx);
@@ -44,7 +44,7 @@ NaturalRiemannBC::add_boundary()
                                    this->fid,
                                    get_num_components(),
                                    get_num_components() == 0 ? nullptr : get_components().data(),
-                                   (void (*)(void)) __natural_riemann_boundary_condition_function,
+                                   (void (*)(void)) natural_riemann_boundary_condition_function,
                                    nullptr,
                                    (void *) this,
                                    &this->bd));

@@ -8,13 +8,13 @@ namespace godzilla {
 
 REGISTER_OBJECT(ConstantAuxiliaryField);
 
-PetscErrorCode
-__constant_auxiliary_field(PetscInt dim,
-                           PetscReal time,
-                           const PetscReal x[],
-                           PetscInt nc,
-                           PetscScalar u[],
-                           void * ctx)
+static PetscErrorCode
+constant_auxiliary_field(PetscInt dim,
+                         PetscReal time,
+                         const PetscReal x[],
+                         PetscInt nc,
+                         PetscScalar u[],
+                         void * ctx)
 {
     ConstantAuxiliaryField * aux_fld = static_cast<ConstantAuxiliaryField *>(ctx);
     aux_fld->evaluate(dim, time, x, nc, u);
@@ -55,7 +55,7 @@ ConstantAuxiliaryField::get_num_components() const
 PetscFunc *
 ConstantAuxiliaryField::get_func() const
 {
-    return __constant_auxiliary_field;
+    return constant_auxiliary_field;
 }
 
 void

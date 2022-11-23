@@ -5,12 +5,12 @@
 namespace godzilla {
 
 static PetscErrorCode
-__essential_boundary_condition_function(PetscInt dim,
-                                        PetscReal time,
-                                        const PetscReal x[],
-                                        PetscInt nc,
-                                        PetscScalar u[],
-                                        void * ctx)
+essential_boundary_condition_function(PetscInt dim,
+                                      PetscReal time,
+                                      const PetscReal x[],
+                                      PetscInt nc,
+                                      PetscScalar u[],
+                                      void * ctx)
 {
     _F_;
     EssentialBC * bc = static_cast<EssentialBC *>(ctx);
@@ -20,12 +20,12 @@ __essential_boundary_condition_function(PetscInt dim,
 }
 
 static PetscErrorCode
-__essential_boundary_condition_function_t(PetscInt dim,
-                                          PetscReal time,
-                                          const PetscReal x[],
-                                          PetscInt nc,
-                                          PetscScalar u[],
-                                          void * ctx)
+essential_boundary_condition_function_t(PetscInt dim,
+                                        PetscReal time,
+                                        const PetscReal x[],
+                                        PetscInt nc,
+                                        PetscScalar u[],
+                                        void * ctx)
 {
     _F_;
     EssentialBC * bc = static_cast<EssentialBC *>(ctx);
@@ -50,14 +50,14 @@ PetscFunc *
 EssentialBC::get_function()
 {
     _F_;
-    return __essential_boundary_condition_function;
+    return essential_boundary_condition_function;
 }
 
 PetscFunc *
 EssentialBC::get_function_t()
 {
     _F_;
-    return __essential_boundary_condition_function_t;
+    return essential_boundary_condition_function_t;
 }
 
 void *

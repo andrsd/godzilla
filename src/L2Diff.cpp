@@ -8,13 +8,13 @@ namespace godzilla {
 
 REGISTER_OBJECT(L2Diff);
 
-PetscErrorCode
-__l2_diff(PetscInt dim,
-          PetscReal time,
-          const PetscReal x[],
-          PetscInt nc,
-          PetscScalar u[],
-          void * ctx)
+static PetscErrorCode
+l2_diff_eval(PetscInt dim,
+             PetscReal time,
+             const PetscReal x[],
+             PetscInt nc,
+             PetscScalar u[],
+             void * ctx)
 {
     L2Diff * l2_diff = static_cast<L2Diff *>(ctx);
     l2_diff->evaluate(dim, time, x, nc, u);
@@ -47,7 +47,7 @@ void
 L2Diff::compute()
 {
     _F_;
-    PetscFunc * funcs[1] = { __l2_diff };
+    PetscFunc * funcs[1] = { l2_diff_eval };
     void * ctxs[1] = { this };
     PETSC_CHECK(DMComputeL2Diff(this->problem->get_dm(),
                                 this->problem->get_time(),
