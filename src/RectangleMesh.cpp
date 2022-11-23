@@ -85,8 +85,6 @@ void
 RectangleMesh::create_dm()
 {
     _F_;
-    PetscErrorCode ierr;
-
     PetscReal lower[2] = { this->xmin, this->ymin };
     PetscReal upper[2] = { this->xmax, this->ymax };
     PetscInt faces[2] = { this->nx, this->ny };

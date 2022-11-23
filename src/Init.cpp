@@ -6,7 +6,7 @@
 
 namespace godzilla {
 
-Init::Init(int argc, char * argv[], MPI_Comm COMM_WORLD_IN)
+Init::Init(int argc, char * argv[], MPI_Comm)
 {
     PetscInitialize(&argc, &argv, nullptr, nullptr);
 #ifdef GODZILLA_WITH_PERF_LOG

@@ -9,7 +9,7 @@
 namespace godzilla {
 
 PetscErrorCode
-__compute_residual(SNES snes, Vec x, Vec f, void * ctx)
+__compute_residual(SNES, Vec x, Vec f, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
@@ -17,7 +17,7 @@ __compute_residual(SNES snes, Vec x, Vec f, void * ctx)
 }
 
 PetscErrorCode
-__compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void * ctx)
+__compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
@@ -25,7 +25,7 @@ __compute_jacobian(SNES snes, Vec x, Mat J, Mat Jp, void * ctx)
 }
 
 PetscErrorCode
-__ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
+__ksp_monitor(KSP, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
@@ -33,7 +33,7 @@ __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
 }
 
 PetscErrorCode
-__snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx)
+__snes_monitor(SNES, PetscInt it, PetscReal norm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);

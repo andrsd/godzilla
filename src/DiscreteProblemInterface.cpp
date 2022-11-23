@@ -15,7 +15,7 @@ namespace godzilla {
 namespace internal {
 
 static PetscErrorCode
-zero_fn(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar * u, void * ctx)
+zero_fn(PetscInt, PetscReal, const PetscReal[], PetscInt, PetscScalar * u, void *)
 {
     u[0] = 0.0;
     return 0;

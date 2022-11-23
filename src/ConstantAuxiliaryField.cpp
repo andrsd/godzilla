@@ -59,9 +59,9 @@ ConstantAuxiliaryField::get_func() const
 }
 
 void
-ConstantAuxiliaryField::evaluate(PetscInt dim,
-                                 PetscReal time,
-                                 const PetscReal x[],
+ConstantAuxiliaryField::evaluate(PetscInt,
+                                 PetscReal,
+                                 const PetscReal[],
                                  PetscInt nc,
                                  PetscScalar u[])
 {

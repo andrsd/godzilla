@@ -34,7 +34,7 @@ __dummy_jacobian_func(PetscInt,
 } // namespace internal
 
 PetscErrorCode
-__fep_compute_residual(DM dm, Vec x, Vec F, void * user)
+__fep_compute_residual(DM, Vec x, Vec F, void * user)
 {
     _F_;
     auto * fep = static_cast<FENonlinearProblem *>(user);
@@ -43,7 +43,7 @@ __fep_compute_residual(DM dm, Vec x, Vec F, void * user)
 }
 
 PetscErrorCode
-__fep_compute_jacobian(DM dm, Vec x, Mat J, Mat Jp, void * user)
+__fep_compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * user)
 {
     _F_;
     auto * fep = static_cast<FENonlinearProblem *>(user);

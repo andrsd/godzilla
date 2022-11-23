@@ -34,7 +34,7 @@ __transient_post_step(TS ts)
 }
 
 PetscErrorCode
-__transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx)
+__transient_monitor(TS, PetscInt stepi, PetscReal time, Vec x, void * ctx)
 {
     _F_;
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);

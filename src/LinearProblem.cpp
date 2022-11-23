@@ -7,7 +7,7 @@
 namespace godzilla {
 
 PetscErrorCode
-__compute_rhs(KSP ksp, Vec b, void * ctx)
+__compute_rhs(KSP, Vec b, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
@@ -15,7 +15,7 @@ __compute_rhs(KSP ksp, Vec b, void * ctx)
 }
 
 PetscErrorCode
-__compute_operators(KSP ksp, Mat A, Mat B, void * ctx)
+__compute_operators(KSP, Mat A, Mat B, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
@@ -23,7 +23,7 @@ __compute_operators(KSP ksp, Mat A, Mat B, void * ctx)
 }
 
 PetscErrorCode
-__ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx)
+__ksp_monitor_linear(KSP, PetscInt it, PetscReal rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
