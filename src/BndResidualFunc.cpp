@@ -10,6 +10,12 @@ BndResidualFunc::BndResidualFunc(const NaturalBC * nbc) :
 {
 }
 
+const FEProblemInterface *
+BndResidualFunc::get_fe_problem() const
+{
+    return this->fepi;
+}
+
 const PetscInt &
 BndResidualFunc::get_spatial_dimension() const
 {

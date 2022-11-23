@@ -245,11 +245,6 @@ public:
     }
 
 private:
-    /// This method is called when adding a Parameter with a default value, can be specialized for
-    /// non-matching types.
-    template <typename T, typename S>
-    void set_param_helper(const std::string & name, T & l_value, const S & r_value);
-
     /// The actual parameter data. Each Metadata object contains attributes for the corresponding
     /// parameter.
     std::map<std::string, Value *> params;
