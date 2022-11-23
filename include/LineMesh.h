@@ -34,8 +34,6 @@ protected:
     const PetscReal & xmax;
     /// Number of mesh point in the x direction
     const PetscInt & nx;
-    /// True for simplices, False for tensor cells
-    PetscBool simplex;
     /// create intermediate mesh pieces (edges, faces)
     PetscBool interpolate;
 

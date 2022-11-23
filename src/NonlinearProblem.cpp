@@ -77,6 +77,7 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     x(nullptr),
     r(nullptr),
     J(nullptr),
+    converged_reason(SNES_CONVERGED_ITERATING),
     line_search_type(get_param<std::string>("line_search")),
     nl_rel_tol(get_param<PetscReal>("nl_rel_tol")),
     nl_abs_tol(get_param<PetscReal>("nl_abs_tol")),

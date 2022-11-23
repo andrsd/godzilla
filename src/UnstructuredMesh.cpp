@@ -15,6 +15,7 @@ UnstructuredMesh::parameters()
 UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     Mesh(parameters),
     dm(nullptr),
+    partitioner(nullptr),
     partition_overlap(0)
 {
     _F_;

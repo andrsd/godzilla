@@ -24,6 +24,7 @@ PrintInterface::PrintInterface(const App * app) :
 PrintInterface::PrintInterface(MPI_Comm comm,
                                const unsigned int & verbosity_level,
                                const std::string & prefix) :
+    proc_id(0),
     verbosity_level(verbosity_level),
     prefix(prefix)
 {
