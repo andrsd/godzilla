@@ -80,8 +80,8 @@ EssentialBC::add_boundary()
                                    this->fid,
                                    get_num_components(),
                                    get_num_components() == 0 ? nullptr : get_components().data(),
-                                   (void (*)(void)) get_function(),
-                                   (void (*)(void)) get_function_t(),
+                                   (void (*)()) get_function(),
+                                   (void (*)()) get_function_t(),
                                    (void *) get_context(),
                                    nullptr));
 }

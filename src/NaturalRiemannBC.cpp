@@ -44,7 +44,7 @@ NaturalRiemannBC::add_boundary()
                                    this->fid,
                                    get_num_components(),
                                    get_num_components() == 0 ? nullptr : get_components().data(),
-                                   (void (*)(void)) natural_riemann_boundary_condition_function,
+                                   (void (*)()) natural_riemann_boundary_condition_function,
                                    nullptr,
                                    (void *) this,
                                    &this->bd));
