@@ -16,6 +16,102 @@ namespace godzilla {
 
 const int ExodusIIOutput::SINGLE_BLK_ID = 0;
 
+namespace {
+
+const char *
+get_elem_type(DMPolytopeType elem_type)
+{
+    _F_;
+    switch (elem_type) {
+    case DM_POLYTOPE_SEGMENT:
+        return "BAR2";
+    case DM_POLYTOPE_TRIANGLE:
+        return "TRI3";
+    case DM_POLYTOPE_QUADRILATERAL:
+        return "QUAD4";
+    case DM_POLYTOPE_TETRAHEDRON:
+        return "TET4";
+    case DM_POLYTOPE_HEXAHEDRON:
+        return "HEX8";
+    default:
+        error("Unsupported type.");
+    }
+}
+
+int
+get_num_elem_nodes(DMPolytopeType elem_type)
+{
+    _F_;
+    switch (elem_type) {
+    case DM_POLYTOPE_SEGMENT:
+        return 2;
+    case DM_POLYTOPE_TRIANGLE:
+        return 3;
+    case DM_POLYTOPE_QUADRILATERAL:
+        return 4;
+    case DM_POLYTOPE_TETRAHEDRON:
+        return 4;
+    case DM_POLYTOPE_HEXAHEDRON:
+        return 8;
+    default:
+        error("Unsupported type.");
+    }
+}
+
+const PetscInt *
+get_elem_node_ordering(DMPolytopeType elem_type)
+{
+    _F_;
+
+    static const PetscInt seg_ordering[] = { 0, 1 };
+    static const PetscInt tri_ordering[] = { 0, 1, 2 };
+    static const PetscInt quad_ordering[] = { 0, 1, 2, 3 };
+    static const PetscInt tet_ordering[] = { 1, 0, 2, 3 };
+    static const PetscInt hex_ordering[] = { 0, 3, 2, 1, 4, 5, 6, 7, 8 };
+
+    switch (elem_type) {
+    case DM_POLYTOPE_SEGMENT:
+        return seg_ordering;
+    case DM_POLYTOPE_TRIANGLE:
+        return tri_ordering;
+    case DM_POLYTOPE_QUADRILATERAL:
+        return quad_ordering;
+    case DM_POLYTOPE_TETRAHEDRON:
+        return tet_ordering;
+    case DM_POLYTOPE_HEXAHEDRON:
+        return hex_ordering;
+    default:
+        error("Unsupported type.");
+    }
+}
+
+const PetscInt *
+get_elem_side_ordering(DMPolytopeType elem_type)
+{
+    static const PetscInt seg_ordering[] = { 1, 2 };
+    static const PetscInt tri_ordering[] = { 1, 2, 3 };
+    static const PetscInt quad_ordering[] = { 1, 2, 3, 4 };
+    static const PetscInt tet_ordering[] = { 4, 1, 2, 3 };
+    static const PetscInt hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
+
+    switch (elem_type) {
+    case DM_POLYTOPE_SEGMENT:
+        return seg_ordering;
+    case DM_POLYTOPE_TRIANGLE:
+        return tri_ordering;
+    case DM_POLYTOPE_QUADRILATERAL:
+        return quad_ordering;
+    case DM_POLYTOPE_TETRAHEDRON:
+        return tet_ordering;
+    case DM_POLYTOPE_HEXAHEDRON:
+        return hex_ordering;
+    default:
+        error("Unsupported type.");
+    }
+}
+
+} // namespace
+
 REGISTER_OBJECT(ExodusIIOutput);
 
 Parameters
@@ -207,98 +303,6 @@ ExodusIIOutput::write_coords(int exo_dim)
     PETSC_CHECK(VecRestoreArray(coord, &xyz));
 
     this->exo->write_coord_names();
-}
-
-const char *
-ExodusIIOutput::get_elem_type(DMPolytopeType elem_type) const
-{
-    _F_;
-    switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
-        return "BAR2";
-    case DM_POLYTOPE_TRIANGLE:
-        return "TRI3";
-    case DM_POLYTOPE_QUADRILATERAL:
-        return "QUAD4";
-    case DM_POLYTOPE_TETRAHEDRON:
-        return "TET4";
-    case DM_POLYTOPE_HEXAHEDRON:
-        return "HEX8";
-    default:
-        error("Unsupported type.");
-    }
-}
-
-int
-ExodusIIOutput::get_num_elem_nodes(DMPolytopeType elem_type) const
-{
-    _F_;
-    switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
-        return 2;
-    case DM_POLYTOPE_TRIANGLE:
-        return 3;
-    case DM_POLYTOPE_QUADRILATERAL:
-        return 4;
-    case DM_POLYTOPE_TETRAHEDRON:
-        return 4;
-    case DM_POLYTOPE_HEXAHEDRON:
-        return 8;
-    default:
-        error("Unsupported type.");
-    }
-}
-
-const PetscInt *
-ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type) const
-{
-    _F_;
-
-    static const PetscInt seg_ordering[] = { 0, 1 };
-    static const PetscInt tri_ordering[] = { 0, 1, 2 };
-    static const PetscInt quad_ordering[] = { 0, 1, 2, 3 };
-    static const PetscInt tet_ordering[] = { 1, 0, 2, 3 };
-    static const PetscInt hex_ordering[] = { 0, 3, 2, 1, 4, 5, 6, 7, 8 };
-
-    switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
-        return seg_ordering;
-    case DM_POLYTOPE_TRIANGLE:
-        return tri_ordering;
-    case DM_POLYTOPE_QUADRILATERAL:
-        return quad_ordering;
-    case DM_POLYTOPE_TETRAHEDRON:
-        return tet_ordering;
-    case DM_POLYTOPE_HEXAHEDRON:
-        return hex_ordering;
-    default:
-        error("Unsupported type.");
-    }
-}
-
-const PetscInt *
-ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type) const
-{
-    static const PetscInt seg_ordering[] = { 1, 2 };
-    static const PetscInt tri_ordering[] = { 1, 2, 3 };
-    static const PetscInt quad_ordering[] = { 1, 2, 3, 4 };
-    static const PetscInt tet_ordering[] = { 4, 1, 2, 3 };
-    static const PetscInt hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
-
-    switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
-        return seg_ordering;
-    case DM_POLYTOPE_TRIANGLE:
-        return tri_ordering;
-    case DM_POLYTOPE_QUADRILATERAL:
-        return quad_ordering;
-    case DM_POLYTOPE_TETRAHEDRON:
-        return tet_ordering;
-    case DM_POLYTOPE_HEXAHEDRON:
-        return hex_ordering;
-    default:
-        error("Unsupported type.");
-    }
 }
 
 void
