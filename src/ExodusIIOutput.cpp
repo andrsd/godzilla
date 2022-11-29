@@ -553,9 +553,7 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
 
     for (PetscInt n = first; n < last; n++) {
         int exo_var_id = 1;
-        for (std::size_t i = 0; i < this->nodal_var_fids.size(); i++) {
-            PetscInt fid = this->nodal_var_fids[i];
-
+        for (auto fid : this->nodal_var_fids) {
             PetscInt offset = this->dpi->get_field_dof(n, fid);
             PetscInt nc = this->dpi->get_field_num_components(fid);
             for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
@@ -592,9 +590,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, const PetscScalar * sln)
 
     for (PetscInt n = first; n < last; n++) {
         int exo_var_id = 1;
-        for (std::size_t i = 0; i < this->elem_var_fids.size(); i++) {
-            PetscInt fid = this->elem_var_fids[i];
-
+        for (auto & fid : this->elem_var_fids) {
             PetscInt offset = this->dpi->get_field_dof(n, fid);
             PetscInt nc = this->dpi->get_field_num_components(fid);
             for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
