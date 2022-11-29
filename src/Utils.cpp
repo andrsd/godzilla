@@ -11,7 +11,7 @@ bool
 path_exists(const std::string & path)
 {
     _F_;
-    struct stat buffer;
+    struct stat buffer = {};
     return (stat(path.c_str(), &buffer) == 0);
 }
 
