@@ -1,7 +1,6 @@
 #include "LinearProblem.h"
 #include "CallStack.h"
 #include "Mesh.h"
-#include "Utils.h"
 #include "Output.h"
 
 namespace godzilla {

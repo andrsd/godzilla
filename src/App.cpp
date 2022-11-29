@@ -1,5 +1,4 @@
 #include "App.h"
-#include "GodzillaConfig.h"
 #include "GYMLFile.h"
 #include "Mesh.h"
 #include "Problem.h"

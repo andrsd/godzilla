@@ -3,9 +3,7 @@
 #include "Problem.h"
 #include "TimeSteppingAdaptor.h"
 #include "TransientProblemInterface.h"
-#include "NonlinearProblem.h"
 #include "Output.h"
-#include "petscdmplex.h"
 #include <cassert>
 #include "petsc/private/tsimpl.h"
 
