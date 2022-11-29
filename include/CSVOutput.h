@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "FileOutput.h"
 #include <fstream>
 
@@ -13,7 +14,7 @@ public:
     ~CSVOutput() override;
 
     void create() override;
-    std::string get_file_ext() const override;
+    NO_DISCARD std::string get_file_ext() const override;
     void output_step() override;
 
 protected:

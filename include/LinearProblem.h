@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Problem.h"
 #include "petscksp.h"
 
@@ -16,11 +17,11 @@ public:
     void solve() override;
     void run() override;
     bool converged() override;
-    Vec get_solution_vector() const override;
+    NO_DISCARD Vec get_solution_vector() const override;
 
 protected:
     /// provide DM for the underlying KSP object
-    DM get_dm() const override;
+    NO_DISCARD DM get_dm() const override;
     /// Initialize the problem
     virtual void init();
     /// Allocate Jacobian/residual objects

@@ -30,7 +30,7 @@ public:
     explicit HDF5Output(const Parameters & params);
     ~HDF5Output() override;
 
-    std::string get_file_ext() const override;
+    NO_DISCARD std::string get_file_ext() const override;
     void create() override;
     void check() override;
     void output_step() override;

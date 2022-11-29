@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "UnstructuredMesh.h"
 
 namespace godzilla {
@@ -12,31 +13,31 @@ public:
     explicit BoxMesh(const Parameters & parameters);
 
     /// Get lower limit in x-direction
-    PetscReal get_x_min() const;
+    NO_DISCARD PetscReal get_x_min() const;
 
     /// Get upper limit in x-direction
-    PetscReal get_x_max() const;
+    NO_DISCARD PetscReal get_x_max() const;
 
     /// Get the number of mesh points in x direction
-    PetscInt get_nx() const;
+    NO_DISCARD PetscInt get_nx() const;
 
     /// Get lower limit in y-direction
-    PetscReal get_y_min() const;
+    NO_DISCARD PetscReal get_y_min() const;
 
     /// Get upper limit in y-direction
-    PetscReal get_y_max() const;
+    NO_DISCARD PetscReal get_y_max() const;
 
     /// Get the number of mesh points in y-direction
-    PetscInt get_ny() const;
+    NO_DISCARD PetscInt get_ny() const;
 
     /// Get lower limit in z-direction
-    PetscReal get_z_min() const;
+    NO_DISCARD PetscReal get_z_min() const;
 
     /// Get upper limit in z-direction
-    PetscReal get_z_max() const;
+    NO_DISCARD PetscReal get_z_max() const;
 
     /// Get the number of mesh points in z direction
-    PetscInt get_nz() const;
+    NO_DISCARD PetscInt get_nz() const;
 
 protected:
     void create_dm() override;

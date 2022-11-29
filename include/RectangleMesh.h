@@ -11,15 +11,15 @@ public:
     explicit RectangleMesh(const Parameters & parameters);
 
     ///
-    PetscReal get_x_min() const;
-    PetscReal get_x_max() const;
+    NO_DISCARD PetscReal get_x_min() const;
+    NO_DISCARD PetscReal get_x_max() const;
     /// Get the number of mesh points in x direction
-    PetscInt get_nx() const;
+    NO_DISCARD PetscInt get_nx() const;
     ///
-    PetscReal get_y_min() const;
-    PetscReal get_y_max() const;
+    NO_DISCARD PetscReal get_y_min() const;
+    NO_DISCARD PetscReal get_y_max() const;
     /// Get the number of mesh points in y direction
-    PetscInt get_ny() const;
+    NO_DISCARD PetscInt get_ny() const;
 
 protected:
     void create_dm() override;

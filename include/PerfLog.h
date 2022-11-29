@@ -73,7 +73,7 @@ public:
         /// Get ID of this event
         ///
         /// @return ID of this event
-        PetscLogEvent get_id() const;
+        NO_DISCARD PetscLogEvent get_id() const;
 
         /// Log number of FLOPS
         void log_flops(PetscLogDouble n);
@@ -105,7 +105,7 @@ public:
         /// Get ID of this stage
         ///
         /// @return ID of this stage
-        PetscLogStage get_id() const;
+        NO_DISCARD PetscLogStage get_id() const;
 
     protected:
         /// Event ID
@@ -119,17 +119,17 @@ public:
         /// Get the number of FLOPS
         ///
         /// @return Number of FLOPS
-        PetscLogDouble get_flops() const;
+        NO_DISCARD PetscLogDouble get_flops() const;
 
         /// Get total time spent on this event
         ///
         /// @return The total time spent on this event
-        PetscLogDouble get_time() const;
+        NO_DISCARD PetscLogDouble get_time() const;
 
         /// Get number of times this event was called
         ///
         /// @return Number of times this event was called
-        int get_num_calls() const;
+        NO_DISCARD int get_num_calls() const;
 
     protected:
         /// Event information collected by PETSc

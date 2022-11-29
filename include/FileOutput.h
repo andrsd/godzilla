@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Output.h"
 #include "petscviewer.h"
 
@@ -16,7 +17,7 @@ public:
     /// Get the file name with the output file produced by this outputter
     ///
     /// @return The file name with the output
-    virtual const std::string & get_file_name() const;
+    NO_DISCARD virtual const std::string & get_file_name() const;
 
     /// Set the file name for single output
     virtual void set_file_name();
@@ -29,7 +30,7 @@ public:
     /// Get file extension
     ///
     /// @return File extension
-    virtual std::string get_file_ext() const = 0;
+    NO_DISCARD virtual std::string get_file_ext() const = 0;
 
 protected:
     /// The file base of the output file
