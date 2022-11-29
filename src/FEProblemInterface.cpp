@@ -109,7 +109,7 @@ PetscInt
 FEProblemInterface::get_num_fields() const
 {
     _F_;
-    return this->fields.size();
+    return (PetscInt) this->fields.size();
 }
 
 std::vector<std::string>
@@ -248,7 +248,7 @@ PetscInt
 FEProblemInterface::get_num_aux_fields() const
 {
     _F_;
-    return this->aux_fields.size();
+    return (PetscInt) this->aux_fields.size();
 }
 
 const std::string &
@@ -404,7 +404,7 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
                                               Vec a)
 {
     _F_;
-    PetscInt n_auxs = this->aux_fields.size();
+    auto n_auxs = this->aux_fields.size();
     auto ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
     for (PetscInt i = 0; i < n_auxs; i++) {
@@ -432,7 +432,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
                                              Vec a)
 {
     _F_;
-    PetscInt n_auxs = this->aux_fields.size();
+    auto n_auxs = this->aux_fields.size();
     auto ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
     for (PetscInt i = 0; i < n_auxs; i++) {

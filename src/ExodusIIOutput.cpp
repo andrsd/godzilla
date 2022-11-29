@@ -142,19 +142,19 @@ void
 ExodusIIOutput::write_mesh()
 {
     _F_;
-    int n_nodes = this->mesh->get_num_vertices();
-    int n_elems = this->mesh->get_num_elements();
+    int n_nodes = (int) this->mesh->get_num_vertices();
+    int n_elems = (int) this->mesh->get_num_elements();
 
     // number of element blocks
-    PetscInt n_elem_blk = this->mesh->get_num_cell_sets();
+    int n_elem_blk = (int) this->mesh->get_num_cell_sets();
     // no cell sets defined, therefore we have one element block
     if (n_elem_blk == 0)
         n_elem_blk = 1;
 
-    PetscInt n_node_sets = this->mesh->get_num_vertex_sets();
-    PetscInt n_side_sets = this->mesh->get_num_face_sets();
+    int n_node_sets = (int) this->mesh->get_num_vertex_sets();
+    int n_side_sets = (int) this->mesh->get_num_face_sets();
 
-    int exo_dim = this->mesh->get_dimension();
+    int exo_dim = (int) this->mesh->get_dimension();
     // Visualization SW based on VTK have problems showing 1D, so we cast it like a 2D problem with
     // y-coordinate equal to zero
     if (exo_dim == 1)
@@ -173,14 +173,14 @@ void
 ExodusIIOutput::write_coords(int exo_dim)
 {
     _F_;
-    PetscInt dim = this->mesh->get_dimension();
+    int dim = (int) this->mesh->get_dimension();
     Vec coord = this->dpi->get_coordinates_local();
     PetscInt coord_size;
     PETSC_CHECK(VecGetSize(coord, &coord_size));
     PetscScalar * xyz;
     PETSC_CHECK(VecGetArray(coord, &xyz));
 
-    int n_nodes = coord_size / dim;
+    int n_nodes = (int) coord_size / dim;
     std::vector<double> x(n_nodes, 0.);
     std::vector<double> y;
     std::vector<double> z;
@@ -329,7 +329,7 @@ ExodusIIOutput::write_elements()
             PetscInt n_elems_in_block;
             PETSC_CHECK(ISGetSize(stratum_is, &n_elems_in_block));
 
-            write_block_connectivity(cell_set_idx[i], n_elems_in_block, cells);
+            write_block_connectivity((int) cell_set_idx[i], n_elems_in_block, cells);
 
             PETSC_CHECK(ISRestoreIndices(stratum_is, &cells));
             PETSC_CHECK(ISDestroy(&stratum_is));
@@ -354,7 +354,7 @@ ExodusIIOutput::write_node_sets()
 
     PetscInt elem_first, elem_last;
     this->mesh->get_element_idx_range(elem_first, elem_last);
-    int n_elems_in_block = elem_last - elem_first;
+    PetscInt n_elems_in_block = elem_last - elem_first;
 
     PetscInt n_node_sets = this->mesh->get_num_vertex_sets();
 
@@ -378,7 +378,7 @@ ExodusIIOutput::write_node_sets()
 
         std::vector<int> node_set(n_nodes_in_set);
         for (PetscInt j = 0; j < n_nodes_in_set; j++)
-            node_set[j] = vertices[j] - n_elems_in_block + 1;
+            node_set[j] = (int) (vertices[j] - n_elems_in_block + 1);
         this->exo->write_node_set(vertex_set_idx[i], node_set);
 
         PETSC_CHECK(ISRestoreIndices(stratum_is, &vertices));
@@ -436,7 +436,7 @@ ExodusIIOutput::write_face_sets()
             PetscInt el = points[2];
             DMPolytopeType polytope_type = this->mesh->get_cell_type(el);
             const PetscInt * side_ordering = get_elem_side_ordering(polytope_type);
-            elem_list[i] = el + 1;
+            elem_list[i] = (int) (el + 1);
 
             PETSC_CHECK(
                 DMPlexRestoreTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
@@ -447,7 +447,7 @@ ExodusIIOutput::write_face_sets()
 
             for (PetscInt j = 1; j < num_points; ++j) {
                 if (points[j * 2] == faces[i]) {
-                    side_list[i] = side_ordering[j - 1];
+                    side_list[i] = (int) side_ordering[j - 1];
                     break;
                 }
             }
@@ -563,7 +563,7 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
             PetscInt offset = this->dpi->get_field_dof(n, fid);
             PetscInt nc = this->dpi->get_field_num_components(fid);
             for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
-                int exo_idx = n - n_all_elems + 1;
+                int exo_idx = (int) (n - n_all_elems + 1);
                 this->exo->write_partial_nodal_var(this->step_num,
                                                    exo_var_id,
                                                    1,
@@ -602,7 +602,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, const PetscScalar * sln)
             PetscInt offset = this->dpi->get_field_dof(n, fid);
             PetscInt nc = this->dpi->get_field_num_components(fid);
             for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
-                int exo_idx = n - first + 1;
+                int exo_idx = (int) (n - first + 1);
                 this->exo->write_partial_elem_var(this->step_num,
                                                   exo_var_id,
                                                   blk_id,
@@ -642,11 +642,13 @@ ExodusIIOutput::write_info()
 }
 
 void
-ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const PetscInt * cells)
+ExodusIIOutput::write_block_connectivity(int blk_id,
+                                         PetscInt n_elems_in_block,
+                                         const PetscInt * cells)
 {
     _F_;
     DM dm = this->mesh->get_dm();
-    int n_all_elems = this->mesh->get_num_all_elements();
+    PetscInt n_all_elems = this->mesh->get_num_all_elements();
     PetscInt elem_first, elem_last;
     DMPolytopeType polytope_type;
 
@@ -673,7 +675,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id, int n_elems_in_block, const
         PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
         for (PetscInt k = 0; k < n_nodes_per_elem; k++, j++) {
             PetscInt l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
-            connect[j] = closure[l] - n_all_elems + 1;
+            connect[j] = (int) (closure[l] - n_all_elems + 1);
         }
         PETSC_CHECK(
             DMPlexRestoreTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));

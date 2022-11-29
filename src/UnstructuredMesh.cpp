@@ -170,7 +170,7 @@ UnstructuredMesh::is_simplex() const
 }
 
 void
-UnstructuredMesh::create_face_set_labels(const std::map<int, std::string> & names)
+UnstructuredMesh::create_face_set_labels(const std::map<PetscInt, std::string> & names)
 {
     _F_;
     DMLabel fs_label;

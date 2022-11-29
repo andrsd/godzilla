@@ -26,7 +26,7 @@ PetscInt
 ConstantIC::get_num_components() const
 {
     _F_;
-    return this->values.size();
+    return (PetscInt) this->values.size();
 }
 
 void

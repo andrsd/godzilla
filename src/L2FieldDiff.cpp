@@ -49,7 +49,7 @@ L2FieldDiff::create()
 {
     _F_;
     auto field_names = this->fepi->get_field_names();
-    PetscInt n_fields = field_names.size();
+    auto n_fields = field_names.size();
 
     if (this->funcs.size() == n_fields) {
         this->l2_diff.resize(n_fields, 0.);
@@ -71,7 +71,7 @@ void
 L2FieldDiff::compute()
 {
     _F_;
-    PetscInt n_fields = this->funcs.size();
+    auto n_fields = this->funcs.size();
     PetscFunc * funcs[n_fields];
     void * ctxs[n_fields];
     PetscReal diff[n_fields];

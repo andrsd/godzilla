@@ -132,7 +132,7 @@ BoxMesh::create_dm()
                                     &this->dm));
 
     // create user-friendly names for sides
-    std::map<int, std::string> face_set_names;
+    std::map<PetscInt, std::string> face_set_names;
     face_set_names[1] = "back";
     face_set_names[2] = "front";
     face_set_names[3] = "bottom";

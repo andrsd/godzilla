@@ -64,7 +64,9 @@ ExodusIIMesh::create_dm()
                 create_cell_set(it.first, it.second);
         }
 
-        auto sideset_names = f.read_side_set_names();
+        std::map<PetscInt, std::string> sideset_names;
+        for (auto it : f.read_side_set_names())
+            sideset_names[it.first] = it.second;
         create_face_set_labels(sideset_names);
 
         f.close();
