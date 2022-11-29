@@ -48,7 +48,6 @@ get_num_elem_nodes(DMPolytopeType elem_type)
     case DM_POLYTOPE_TRIANGLE:
         return 3;
     case DM_POLYTOPE_QUADRILATERAL:
-        return 4;
     case DM_POLYTOPE_TETRAHEDRON:
         return 4;
     case DM_POLYTOPE_HEXAHEDRON:
