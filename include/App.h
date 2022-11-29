@@ -73,16 +73,18 @@ public:
     /// application object.
     ///
     /// @param class_name C++ class name of the object to build
-    /// @param name Name of the object
+    /// @param obj_name Name of the object
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    T *
-    build_object(const std::string & class_name, const std::string & name, Parameters & parameters);
+    T * build_object(const std::string & class_name,
+                     const std::string & obj_name,
+                     Parameters & parameters);
 
     template <typename T>
-    T *
-    build_object(const std::string & class_name, const std::string & name, Parameters * parameters);
+    T * build_object(const std::string & class_name,
+                     const std::string & obj_name,
+                     Parameters * parameters);
 
 protected:
     /// Builds an InputFile instance
@@ -150,18 +152,22 @@ protected:
 
 template <typename T>
 T *
-App::build_object(const std::string & class_name, const std::string & name, Parameters & parameters)
+App::build_object(const std::string & class_name,
+                  const std::string & obj_name,
+                  Parameters & parameters)
 {
     parameters.set<const App *>("_app") = this;
-    return Factory::create<T>(class_name, name, parameters);
+    return Factory::create<T>(class_name, obj_name, parameters);
 }
 
 template <typename T>
 T *
-App::build_object(const std::string & class_name, const std::string & name, Parameters * parameters)
+App::build_object(const std::string & class_name,
+                  const std::string & obj_name,
+                  Parameters * parameters)
 {
     parameters->set<const App *>("_app") = this;
-    return Factory::create<T>(class_name, name, parameters);
+    return Factory::create<T>(class_name, obj_name, parameters);
 }
 
 } // namespace godzilla

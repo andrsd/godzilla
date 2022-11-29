@@ -52,10 +52,10 @@ Object::get_parameters() const
 }
 
 bool
-Object::is_param_valid(const std::string & name) const
+Object::is_param_valid(const std::string & par_name) const
 {
     _F_;
-    return this->pars.is_param_valid(name);
+    return this->pars.is_param_valid(par_name);
 }
 
 const App *

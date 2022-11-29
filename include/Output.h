@@ -38,7 +38,7 @@ protected:
     const Problem * problem;
 
     /// Bitwise mask for determining when this output object should output its content
-    unsigned int on;
+    unsigned int on_mask;
 
 public:
     static Parameters parameters();

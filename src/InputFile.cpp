@@ -127,10 +127,10 @@ InputFile::build_outputs()
 }
 
 Parameters *
-InputFile::build_params(const YAML::Node & root, const std::string & name)
+InputFile::build_params(const YAML::Node & parent, const std::string & name)
 {
     _F_;
-    YAML::Node node = root[name];
+    YAML::Node node = parent[name];
     if (!node)
         error("Missing '%s' block.", name);
 

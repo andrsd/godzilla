@@ -22,7 +22,7 @@ public:
     unsigned int
     get_exec_mask() const
     {
-        return this->on;
+        return this->on_mask;
     }
 };
 

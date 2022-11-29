@@ -23,7 +23,7 @@ Output::Output(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     problem(get_param<const Problem *>("_problem")),
-    on(ON_NONE)
+    on_mask(ON_NONE)
 {
     _F_;
 }
@@ -39,7 +39,7 @@ void
 Output::set_exec_mask(unsigned int mask)
 {
     _F_;
-    this->on = mask;
+    this->on_mask = mask;
 }
 
 void
@@ -66,7 +66,7 @@ Output::set_up_exec()
             if (none && (mask != 0))
                 log_error("The 'none' execution flag can be used only by itself.");
             else
-                this->on = mask;
+                this->on_mask = mask;
         }
         else
             log_error("The 'on' parameter can be either 'none' or a combination of 'initial', "
@@ -78,7 +78,7 @@ bool
 Output::should_output(unsigned int flag)
 {
     _F_;
-    return ((this->on & flag) == flag);
+    return ((this->on_mask & flag) == flag);
 }
 
 } // namespace godzilla
