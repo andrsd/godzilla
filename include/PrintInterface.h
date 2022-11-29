@@ -16,7 +16,7 @@ class PrintInterface {
 public:
     explicit PrintInterface(const Object * obj);
     explicit PrintInterface(const App * app);
-    PrintInterface(MPI_Comm comm, const unsigned int & verbosity_level, const std::string & prefix);
+    PrintInterface(MPI_Comm comm, const unsigned int & verbosity_level, std::string prefix);
 
 protected:
     /// Print a message on a terminal
