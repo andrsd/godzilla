@@ -10,7 +10,10 @@ class ExodusIIMesh : public UnstructuredMesh {
 public:
     explicit ExodusIIMesh(const Parameters & parameters);
 
-    const std::string get_file_name() const;
+    /// Return ExodusII file name
+    ///
+    /// @return Name of the ExodusII file
+    const std::string & get_file_name() const;
 
 protected:
     void create_dm() override;

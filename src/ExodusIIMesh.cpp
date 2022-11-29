@@ -30,7 +30,7 @@ ExodusIIMesh::ExodusIIMesh(const Parameters & parameters) :
             this->file_name);
 }
 
-const std::string
+const std::string &
 ExodusIIMesh::get_file_name() const
 {
     _F_;
