@@ -117,6 +117,7 @@ FEProblemInterface::get_field_names() const
 {
     _F_;
     std::vector<std::string> infos;
+    infos.reserve(this->fields.size());
     for (const auto & it : this->fields)
         infos.push_back(it.second.name);
 
