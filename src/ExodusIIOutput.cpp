@@ -511,11 +511,7 @@ ExodusIIOutput::write_all_variable_names()
     }
     this->exo->write_nodal_var_names(nodal_var_names);
     this->exo->write_elem_var_names(elem_var_names);
-
-    std::vector<std::string> global_var_names;
-    for (auto & name : this->global_var_names)
-        global_var_names.push_back(name);
-    this->exo->write_global_var_names(global_var_names);
+    this->exo->write_global_var_names(this->global_var_names);
 }
 
 void
