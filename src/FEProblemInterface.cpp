@@ -207,7 +207,7 @@ FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
     if (it != this->fields.end()) {
         const FieldInfo & fi = it->second;
         if (fi.nc == 1)
-            return std::string("");
+            return { "" };
         else {
             assert(component < it->second.nc && component < it->second.component_names.size());
             return it->second.component_names.at(component);
