@@ -10,7 +10,7 @@ class LoggingInterface {
 public:
     explicit LoggingInterface(Logger * alogger, std::string aprefix = "") :
         logger(alogger),
-        prefix(aprefix)
+        prefix(std::move(aprefix))
     {
     }
 
