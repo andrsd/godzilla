@@ -29,10 +29,10 @@ public:
     evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
 
     /// Get pointer to the C function that will be passed into PETSc API
-    PetscFunc * get_function();
+    virtual PetscFunc * get_function();
 
     /// Get the pointer to the context that will be passed into PETSc API
-    void * get_context();
+    virtual void * get_context();
 
 protected:
     /// Text representation of the function to evaluate (one per component)
