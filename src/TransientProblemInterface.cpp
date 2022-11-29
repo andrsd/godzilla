@@ -58,7 +58,8 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     ts_adaptor(nullptr),
     start_time(params.get<PetscReal>("start_time")),
     end_time(params.get<PetscReal>("end_time")),
-    dt(params.get<PetscReal>("dt"))
+    dt(params.get<PetscReal>("dt")),
+    converged_reason(TS_CONVERGED_ITERATING)
 {
     _F_;
 }
