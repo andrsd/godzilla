@@ -1,5 +1,9 @@
 name: qa
 
+env:
+  PETSC_VERSION: 3.17.0
+  PETSC_CACHE_NUM: 10
+
 on:
   push:
     branches:
@@ -20,3 +24,67 @@ jobs:
         clang-format-version: '13'
         check-path: .
         exclude-regex: './contrib/'
+
+  analyze:
+    name: CodeQL
+    runs-on: ubuntu-22.04
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          path: main
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt install \
+            cmake \
+            libblas-dev \
+            liblapack-dev \
+            libfmt-dev \
+            libyaml-cpp-dev \
+            zlib1g-dev
+
+      - name: Setup env
+        run: |
+          echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
+          echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
+          echo "NETCDF_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
+          echo "EXODUSII_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
+          echo "CC=mpicc" >> $GITHUB_ENV
+          echo "CXX=mpicxx" >> $GITHUB_ENV
+
+      - name: Cache PETSc
+        id: cache-petsc
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/petsc
+          key: ${{ runner.os }}-gcc-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+          restore-keys: ${{ runner.os }}-gcc-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+
+      - name: Configure
+        run: |
+          cmake -S ${{ github.workspace }}/main -B ${{ github.workspace }}/main/build \
+            -DGODZILLA_BUILD_EXAMPLES=YES \
+            -DGODZILLA_BUILD_TESTS=YES
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Build
+        run: make -C ${{ github.workspace }}/main/build
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
