@@ -3,8 +3,6 @@
 
 namespace godzilla {
 
-Parameters::Parameters() {}
-
 Parameters::Parameters(const Parameters & p)
 {
     *this = p;

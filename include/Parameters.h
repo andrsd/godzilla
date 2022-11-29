@@ -12,7 +12,7 @@ namespace godzilla {
 ///
 class Parameters {
 public:
-    Parameters();
+    Parameters() = default;
     Parameters(const Parameters & p);
     virtual ~Parameters();
 
