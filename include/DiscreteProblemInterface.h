@@ -83,7 +83,7 @@ public:
     /// @param component Component index
     /// @param name Component name
     virtual void
-    set_field_component_name(PetscInt fid, PetscInt component, const std::string name) = 0;
+    set_field_component_name(PetscInt fid, PetscInt component, const std::string & name) = 0;
 
     /// Add initial condition
     ///

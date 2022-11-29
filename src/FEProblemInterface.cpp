@@ -219,7 +219,7 @@ FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
 void
 FEProblemInterface::set_field_component_name(PetscInt fid,
                                              PetscInt component,
-                                             const std::string name)
+                                             const std::string & name)
 {
     _F_;
     const auto & it = this->fields.find(fid);
