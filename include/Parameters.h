@@ -227,11 +227,11 @@ public:
     Parameters &
     operator+=(const Parameters & rhs)
     {
-        for (auto it = rhs.begin(); it != rhs.end(); ++it) {
-            auto jt = this->params.find(it->first);
+        for (const auto & rpar : rhs) {
+            auto jt = this->params.find(rpar.first);
             if (jt != this->params.end())
                 delete jt->second;
-            this->params[it->first] = it->second->copy();
+            this->params[rpar.first] = rpar.second->copy();
         }
         return *this;
     }
