@@ -56,9 +56,7 @@ public:
     static char
     reg(const std::string & class_name)
     {
-        Entry entry;
-        entry.build_ptr = &build_obj<T>;
-        entry.params_ptr = &call_parameters<T>;
+        Entry entry = { &build_obj<T>, &call_parameters<T> };
         classes[class_name] = entry;
         return '\0';
     }
