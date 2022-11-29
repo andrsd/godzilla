@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Types.h"
 #include "AuxiliaryField.h"
 
@@ -12,8 +13,8 @@ public:
     explicit ConstantAuxiliaryField(const Parameters & params);
 
     void create() override;
-    PetscInt get_num_components() const override;
-    PetscFunc * get_func() const override;
+    NO_DISCARD PetscInt get_num_components() const override;
+    NO_DISCARD PetscFunc * get_func() const override;
     void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
 
 protected:

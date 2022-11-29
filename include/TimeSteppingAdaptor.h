@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Object.h"
 
 namespace godzilla {
@@ -18,17 +19,17 @@ public:
     /// Get TSAdapt object
     ///
     /// @return PETSc TSAdapt object
-    TSAdapt get_ts_adapt() const;
+    NO_DISCARD TSAdapt get_ts_adapt() const;
 
     /// Get minimum time step size
     ///
     /// @return Minimum time step size
-    PetscReal get_dt_min() const;
+    NO_DISCARD PetscReal get_dt_min() const;
 
     /// Get maximum time step size
     ///
     /// @return Maximum time step size
-    PetscReal get_dt_max() const;
+    NO_DISCARD PetscReal get_dt_max() const;
 
 protected:
     /// Set the type of time stepping adaptivity

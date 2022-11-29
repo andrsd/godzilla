@@ -11,7 +11,7 @@ public:
     explicit MeshPartitioningOutput(const Parameters & params);
 
     void check() override;
-    std::string get_file_ext() const override;
+    NO_DISCARD std::string get_file_ext() const override;
     void output_step() override;
 
 public:

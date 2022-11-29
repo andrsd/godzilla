@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "InitialCondition.h"
 #include <vector>
 
@@ -14,7 +15,7 @@ class ConstantIC : public InitialCondition {
 public:
     explicit ConstantIC(const Parameters & params);
 
-    PetscInt get_num_components() const override;
+    NO_DISCARD PetscInt get_num_components() const override;
 
     void evaluate(PetscInt dim,
                   PetscReal time,

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Object.h"
 #include "PrintInterface.h"
 #include "Types.h"
@@ -15,8 +16,8 @@ public:
     explicit InitialCondition(const Parameters & params);
 
     void create() override;
-    virtual PetscInt get_field_id() const;
-    virtual PetscInt get_num_components() const = 0;
+    NO_DISCARD virtual PetscInt get_field_id() const;
+    NO_DISCARD virtual PetscInt get_num_components() const = 0;
 
     /// Get pointer to the C function that will be passed into PETSc API
     virtual PetscFunc * get_function();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Object.h"
 #include "PrintInterface.h"
 #include "Types.h"
@@ -17,21 +18,21 @@ public:
 
     void create() override;
 
-    virtual DMLabel get_label() const;
+    NO_DISCARD virtual DMLabel get_label() const;
 
-    virtual const std::string & get_region() const;
+    NO_DISCARD virtual const std::string & get_region() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    virtual PetscInt get_field_id() const;
+    NO_DISCARD virtual PetscInt get_field_id() const;
 
     /// Get the number of constrained components
     ///
     /// @return The number of constrained components
-    virtual PetscInt get_num_components() const = 0;
+    NO_DISCARD virtual PetscInt get_num_components() const = 0;
 
-    virtual PetscFunc * get_func() const = 0;
+    NO_DISCARD virtual PetscFunc * get_func() const = 0;
 
     virtual void * get_context();
 

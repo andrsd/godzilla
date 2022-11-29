@@ -7,8 +7,6 @@
 #include <cassert>
 #include "petsc/private/tsimpl.h"
 
-PETSC_EXTERN PetscErrorCode TSAdaptCreate_godzilla(TSAdapt adapt);
-
 namespace godzilla {
 
 PetscErrorCode

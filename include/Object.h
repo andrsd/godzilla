@@ -30,14 +30,14 @@ public:
     const Parameters & get_parameters() const;
 
     /// Retrieve a parameter for the object
-    /// @param name The name of the parameter
+    /// @param par_name The name of the parameter
     /// @return The value of the parameter
     template <typename T>
-    const T & get_param(const std::string & name) const;
+    const T & get_param(const std::string & par_name) const;
 
     /// Test if the supplied parameter is valid
-    /// @param name The name of the parameter to test
-    bool is_param_valid(const std::string & name) const;
+    /// @param par_name The name of the parameter to test
+    bool is_param_valid(const std::string & par_name) const;
 
     /// Get the App this object is associated with
     const App * get_app() const;
@@ -77,9 +77,9 @@ public:
 
 template <typename T>
 const T &
-Object::get_param(const std::string & name) const
+Object::get_param(const std::string & par_name) const
 {
-    return this->pars.get<T>(name);
+    return this->pars.get<T>(par_name);
 }
 
 } // namespace godzilla

@@ -2,6 +2,8 @@
 
 #define GODZILLA_VERSION "@godzilla_VERSION@"
 
+#define NO_DISCARD [[nodiscard]]
+
 #cmakedefine GODZILLA_WITH_PERF_LOG
 
 #define GODZILLA_UNIT_TESTS_ROOT "@GODZILLA_UNIT_TESTS_ROOT@"

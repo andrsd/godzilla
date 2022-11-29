@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Mesh.h"
 #include "petscpartitioner.h"
 
@@ -12,23 +13,23 @@ public:
     explicit UnstructuredMesh(const Parameters & parameters);
     ~UnstructuredMesh() override;
 
-    DM get_dm() const override;
+    NO_DISCARD DM get_dm() const override;
     void create() override;
 
     /// Check if mesh has label with a name
     ///
     /// @param name The name of the label
     /// @return true if label exists, otherwise false
-    virtual bool has_label(const std::string & name) const;
+    NO_DISCARD virtual bool has_label(const std::string & name) const;
 
     /// Get label associated with a name
     ///
     /// @param name Label name
     /// @return DMLabel associated with the `name`
-    virtual DMLabel get_label(const std::string & name) const;
+    NO_DISCARD virtual DMLabel get_label(const std::string & name) const;
 
     /// Return the number of mesh vertices
-    virtual PetscInt get_num_vertices() const;
+    NO_DISCARD virtual PetscInt get_num_vertices() const;
 
     /// Get range of vertex indices
     ///
@@ -37,10 +38,10 @@ public:
     void get_vertex_idx_range(PetscInt & first, PetscInt & last) const;
 
     /// Return the number of mesh elements (interior)
-    virtual PetscInt get_num_elements() const;
+    NO_DISCARD virtual PetscInt get_num_elements() const;
 
     /// Return the number of all mesh elements (interior + ghosted)
-    virtual PetscInt get_num_all_elements() const;
+    NO_DISCARD virtual PetscInt get_num_all_elements() const;
 
     /// Get range of element indices (interior only)
     ///
@@ -58,7 +59,7 @@ public:
     ///
     /// @param el Element index
     /// @return Cell type
-    virtual DMPolytopeType get_cell_type(PetscInt el) const;
+    NO_DISCARD virtual DMPolytopeType get_cell_type(PetscInt el) const;
 
     /// Set partitioner type
     ///
@@ -73,7 +74,7 @@ public:
     /// Is the first cell in the mesh a simplex?
     ///
     /// @return true if cell is a simplex, otherwise false
-    virtual bool is_simplex() const;
+    NO_DISCARD virtual bool is_simplex() const;
 
     /// Get cell set name
     ///
@@ -84,7 +85,7 @@ public:
     /// Get number of cell sets
     ///
     /// @return Number of cell sets
-    PetscInt get_num_cell_sets() const;
+    NO_DISCARD PetscInt get_num_cell_sets() const;
 
     /// Get face set name
     ///
@@ -95,7 +96,7 @@ public:
     /// Get number of face sets
     ///
     /// @return Number of face sets
-    PetscInt get_num_face_sets() const;
+    NO_DISCARD PetscInt get_num_face_sets() const;
 
     /// Set face set name
     ///
@@ -107,18 +108,18 @@ public:
     ///
     /// @param name The name of the face set
     /// @return true if label exists, false otherwise
-    bool has_face_set(const std::string & name) const;
+    NO_DISCARD bool has_face_set(const std::string & name) const;
 
     /// Get label corresponding to a face set name
     ///
     /// @param name The name of the face set
     /// @return DMLabel associated with face set name
-    DMLabel get_face_set_label(const std::string & name) const;
+    NO_DISCARD DMLabel get_face_set_label(const std::string & name) const;
 
     /// Get number of vertex sets
     ///
     /// @return Number of vertex sets
-    PetscInt get_num_vertex_sets() const;
+    NO_DISCARD PetscInt get_num_vertex_sets() const;
 
     void distribute() override;
 

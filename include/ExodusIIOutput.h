@@ -29,7 +29,7 @@ public:
     explicit ExodusIIOutput(const Parameters & params);
     ~ExodusIIOutput() override;
 
-    std::string get_file_ext() const override;
+    NO_DISCARD std::string get_file_ext() const override;
     void set_file_name() override;
     void create() override;
     void check() override;
@@ -40,10 +40,6 @@ protected:
     void write_info();
     void write_mesh();
     void write_coords(int n_dim);
-    const char * get_elem_type(DMPolytopeType elem_type) const;
-    int get_num_elem_nodes(DMPolytopeType elem_type) const;
-    const PetscInt * get_elem_node_ordering(DMPolytopeType elem_type) const;
-    const PetscInt * get_elem_side_ordering(DMPolytopeType elem_type) const;
     void write_elements();
     void write_node_sets();
     void write_face_sets();

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include <array>
 #include <map>
 #include <vector>
@@ -100,7 +101,7 @@ public:
              BndJacobianFunc * func);
 
 protected:
-    PetscInt get_jac_key(PetscInt f, PetscInt g) const;
+    NO_DISCARD PetscInt get_jac_key(PetscInt f, PetscInt g) const;
 
     /// Number of fields
     PetscInt n_fields;

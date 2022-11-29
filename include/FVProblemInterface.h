@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "DiscreteProblemInterface.h"
 
 namespace godzilla {
@@ -12,20 +13,20 @@ public:
     FVProblemInterface(Problem * problem, const Parameters & params);
     ~FVProblemInterface() override;
 
-    PetscInt get_num_fields() const override;
-    std::vector<std::string> get_field_names() const override;
+    NO_DISCARD PetscInt get_num_fields() const override;
+    NO_DISCARD std::vector<std::string> get_field_names() const override;
     const std::string & get_field_name(PetscInt fid) const override;
     PetscInt get_field_num_components(PetscInt fid) const override;
-    PetscInt get_field_id(const std::string & name) const override;
-    bool has_field_by_id(PetscInt fid) const override;
-    bool has_field_by_name(const std::string & name) const override;
+    NO_DISCARD PetscInt get_field_id(const std::string & name) const override;
+    NO_DISCARD bool has_field_by_id(PetscInt fid) const override;
+    NO_DISCARD bool has_field_by_name(const std::string & name) const override;
     PetscInt get_field_order(PetscInt fid) const override;
     std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
     void
     set_field_component_name(PetscInt fid, PetscInt component, const std::string & name) override;
-    PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
-    Vec get_solution_vector_local() const override;
-    WeakForm * get_weak_form() const override;
+    NO_DISCARD PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
+    NO_DISCARD Vec get_solution_vector_local() const override;
+    NO_DISCARD WeakForm * get_weak_form() const override;
 
     /// Adds a volumetric field
     ///

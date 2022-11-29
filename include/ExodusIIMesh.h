@@ -13,7 +13,7 @@ public:
     /// Return ExodusII file name
     ///
     /// @return Name of the ExodusII file
-    const std::string & get_file_name() const;
+    NO_DISCARD const std::string & get_file_name() const;
 
 protected:
     void create_dm() override;

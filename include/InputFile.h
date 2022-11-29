@@ -41,7 +41,7 @@ protected:
     void build_mesh();
     void build_problem();
     void build_outputs();
-    Parameters * build_params(const YAML::Node & root, const std::string & name);
+    Parameters * build_params(const YAML::Node & parent, const std::string & name);
     void set_parameter_from_yml(Parameters * params,
                                 const YAML::Node & node,
                                 const std::string & param_name);

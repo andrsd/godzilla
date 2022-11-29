@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GodzillaConfig.h"
 #include "Object.h"
 #include "PrintInterface.h"
 #include "petsc.h"
@@ -20,27 +21,27 @@ public:
     /// Get the boundary name this BC is active on
     ///
     /// @return The boundary name
-    virtual const std::string & get_boundary() const;
+    NO_DISCARD virtual const std::string & get_boundary() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    virtual PetscInt get_field_id() const;
+    NO_DISCARD virtual PetscInt get_field_id() const;
 
     /// Get the number of constrained components
     ///
     /// @return The number of constrained components
-    virtual PetscInt get_num_components() const = 0;
+    NO_DISCARD virtual PetscInt get_num_components() const = 0;
 
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    virtual std::vector<PetscInt> get_components() const = 0;
+    NO_DISCARD virtual std::vector<PetscInt> get_components() const = 0;
 
     /// Get DiscreteProblemInterface
     ///
     /// @return Discrete problem this BC is part of
-    virtual const DiscreteProblemInterface * get_discrete_problem_interface() const;
+    NO_DISCARD virtual const DiscreteProblemInterface * get_discrete_problem_interface() const;
 
     /// Set up this boundary condition
     virtual void set_up();
