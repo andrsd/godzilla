@@ -1,4 +1,3 @@
-#include "Godzilla.h"
 #include "Parameters.h"
 #include "CallStack.h"
 #include "App.h"
@@ -82,7 +81,7 @@ DiscreteProblemInterface::set_up_initial_conditions()
 {
     _F_;
 
-    PetscInt n_ics = this->ics.size();
+    auto n_ics = this->ics.size();
     if (n_ics == 0)
         return;
     PetscInt n_fields = get_num_fields();
@@ -161,7 +160,7 @@ void
 DiscreteProblemInterface::set_initial_guess_from_ics()
 {
     _F_;
-    PetscInt n_ics = this->ics.size();
+    auto n_ics = this->ics.size();
     PetscFunc * ic_funcs[n_ics];
     void * ic_ctxs[n_ics];
     for (auto & ic : this->ics) {

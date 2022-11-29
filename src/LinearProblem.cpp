@@ -1,7 +1,6 @@
 #include "LinearProblem.h"
 #include "CallStack.h"
 #include "Mesh.h"
-#include "Utils.h"
 #include "Output.h"
 
 namespace godzilla {
@@ -52,6 +51,7 @@ LinearProblem::LinearProblem(const Parameters & parameters) :
     x(nullptr),
     b(nullptr),
     A(nullptr),
+    converged_reason(KSP_CONVERGED_ITERATING),
     lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
     lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
     lin_max_iter(get_param<PetscInt>("lin_max_iter"))

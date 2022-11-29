@@ -128,7 +128,7 @@ PerfLog::Stage::get_id() const
 
 // Event info
 
-PerfLog::EventInfo::EventInfo(PetscLogEvent event_id, PetscLogStage stage_id)
+PerfLog::EventInfo::EventInfo(PetscLogEvent event_id, PetscLogStage stage_id) : info()
 {
     PetscLogEventGetPerfInfo(stage_id, event_id, &this->info);
 }

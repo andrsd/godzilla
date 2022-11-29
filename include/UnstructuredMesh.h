@@ -132,7 +132,7 @@ protected:
 
     void create_cell_set(PetscInt id, const std::string & name);
 
-    void create_face_set_labels(const std::map<int, std::string> & names);
+    void create_face_set_labels(const std::map<PetscInt, std::string> & names);
 
     void create_face_set(PetscInt id);
 

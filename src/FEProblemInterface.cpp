@@ -109,7 +109,7 @@ PetscInt
 FEProblemInterface::get_num_fields() const
 {
     _F_;
-    return this->fields.size();
+    return (PetscInt) this->fields.size();
 }
 
 std::vector<std::string>
@@ -117,6 +117,7 @@ FEProblemInterface::get_field_names() const
 {
     _F_;
     std::vector<std::string> infos;
+    infos.reserve(this->fields.size());
     for (const auto & it : this->fields)
         infos.push_back(it.second.name);
 
@@ -206,7 +207,7 @@ FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
     if (it != this->fields.end()) {
         const FieldInfo & fi = it->second;
         if (fi.nc == 1)
-            return std::string("");
+            return { "" };
         else {
             assert(component < it->second.nc && component < it->second.component_names.size());
             return it->second.component_names.at(component);
@@ -219,7 +220,7 @@ FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
 void
 FEProblemInterface::set_field_component_name(PetscInt fid,
                                              PetscInt component,
-                                             const std::string name)
+                                             const std::string & name)
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -248,7 +249,7 @@ PetscInt
 FEProblemInterface::get_num_aux_fields() const
 {
     _F_;
-    return this->aux_fields.size();
+    return (PetscInt) this->aux_fields.size();
 }
 
 const std::string &
@@ -404,7 +405,7 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
                                               Vec a)
 {
     _F_;
-    PetscInt n_auxs = this->aux_fields.size();
+    auto n_auxs = this->aux_fields.size();
     auto ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
     for (PetscInt i = 0; i < n_auxs; i++) {
@@ -432,7 +433,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
                                              Vec a)
 {
     _F_;
-    PetscInt n_auxs = this->aux_fields.size();
+    auto n_auxs = this->aux_fields.size();
     auto ** func = new PetscFunc *[n_auxs];
     void ** ctxs = new void *[n_auxs];
     for (PetscInt i = 0; i < n_auxs; i++) {

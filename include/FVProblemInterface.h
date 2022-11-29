@@ -22,7 +22,7 @@ public:
     PetscInt get_field_order(PetscInt fid) const override;
     std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
     void
-    set_field_component_name(PetscInt fid, PetscInt component, const std::string name) override;
+    set_field_component_name(PetscInt fid, PetscInt component, const std::string & name) override;
     PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
     Vec get_solution_vector_local() const override;
     WeakForm * get_weak_form() const override;

@@ -5,7 +5,6 @@
 #include "FEProblemInterface.h"
 #include "ParsedFunction.h"
 #include "Types.h"
-#include <cassert>
 
 namespace godzilla {
 
@@ -32,11 +31,11 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
             std::string nm = get_name() + "_" + field_name;
 
             const std::string class_name = "ParsedFunction";
-            Parameters * params = Factory::get_parameters(class_name);
-            params->set<const App *>("_app") = this->app;
-            params->set<const Problem *>("_problem") = this->problem;
-            params->set<std::vector<std::string>>("function") = it.second;
-            auto * pfn = Factory::create<ParsedFunction>(class_name, nm, params);
+            Parameters * fn_pars = Factory::get_parameters(class_name);
+            fn_pars->set<const App *>("_app") = this->app;
+            fn_pars->set<const Problem *>("_problem") = this->problem;
+            fn_pars->set<std::vector<std::string>>("function") = it.second;
+            auto * pfn = Factory::create<ParsedFunction>(class_name, nm, fn_pars);
 
             const_cast<Problem *>(this->problem)->add_function(pfn);
             this->funcs[field_name] = pfn;
@@ -49,7 +48,7 @@ L2FieldDiff::create()
 {
     _F_;
     auto field_names = this->fepi->get_field_names();
-    PetscInt n_fields = field_names.size();
+    auto n_fields = field_names.size();
 
     if (this->funcs.size() == n_fields) {
         this->l2_diff.resize(n_fields, 0.);
@@ -71,8 +70,8 @@ void
 L2FieldDiff::compute()
 {
     _F_;
-    PetscInt n_fields = this->funcs.size();
-    PetscFunc * funcs[n_fields];
+    auto n_fields = this->funcs.size();
+    PetscFunc * pfns[n_fields];
     void * ctxs[n_fields];
     PetscReal diff[n_fields];
 
@@ -80,14 +79,14 @@ L2FieldDiff::compute()
         PetscInt fid = this->fepi->get_field_id(it.first);
         ParsedFunction * pfn = it.second;
 
-        funcs[fid] = pfn->get_function();
+        pfns[fid] = pfn->get_function();
         ctxs[fid] = pfn->get_context();
         diff[fid] = 0.;
     }
 
     PETSC_CHECK(DMComputeL2FieldDiff(this->problem->get_dm(),
                                      this->problem->get_time(),
-                                     funcs,
+                                     pfns,
                                      ctxs,
                                      this->problem->get_solution_vector(),
                                      diff));
