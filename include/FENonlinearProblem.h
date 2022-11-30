@@ -18,13 +18,14 @@ public:
 
     void create() override;
 
+    PetscErrorCode compute_residual(Vec x, Vec f) override;
+    PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp) override;
+
 protected:
     void init() override;
     void set_up_callbacks() override;
     void set_up_initial_guess() override;
     void allocate_objects() override;
-    PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
-    PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
 
     /// Set up residual statement for a field variable
     ///
@@ -52,9 +53,6 @@ protected:
 
 public:
     static Parameters parameters();
-
-    friend PetscErrorCode __fep_compute_residual(DM dm, Vec x, Vec F, void * user);
-    friend PetscErrorCode __fep_compute_jacobian(DM dm, Vec x, Mat J, Mat Jp, void * user);
 };
 
 } // namespace godzilla

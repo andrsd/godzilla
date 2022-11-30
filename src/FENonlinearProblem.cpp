@@ -33,21 +33,21 @@ __dummy_jacobian_func(PetscInt,
 
 } // namespace internal
 
-PetscErrorCode
+static PetscErrorCode
 __fep_compute_residual(DM, Vec x, Vec F, void * user)
 {
     _F_;
     auto * fep = static_cast<FENonlinearProblem *>(user);
-    fep->compute_residual_callback(x, F);
+    fep->compute_residual(x, F);
     return 0;
 }
 
-PetscErrorCode
+static PetscErrorCode
 __fep_compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * user)
 {
     _F_;
     auto * fep = static_cast<FENonlinearProblem *>(user);
-    fep->compute_jacobian_callback(x, J, Jp);
+    fep->compute_jacobian(x, J, Jp);
     return 0;
 }
 
@@ -108,19 +108,17 @@ FENonlinearProblem::allocate_objects()
 }
 
 PetscErrorCode
-FENonlinearProblem::compute_residual_callback(Vec x, Vec f)
+FENonlinearProblem::compute_residual(Vec x, Vec f)
 {
     _F_;
-    DM dm = this->get_dm();
-    return DMPlexSNESComputeResidualFEM(dm, x, f, this);
+    return DMPlexSNESComputeResidualFEM(get_dm(), x, f, this);
 }
 
 PetscErrorCode
-FENonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
+FENonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
 {
     _F_;
-    DM dm = this->get_dm();
-    return DMPlexSNESComputeJacobianFEM(dm, x, J, Jp, this);
+    return DMPlexSNESComputeJacobianFEM(get_dm(), x, J, Jp, this);
 }
 
 void

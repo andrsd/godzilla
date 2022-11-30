@@ -19,6 +19,8 @@ public:
     bool converged() override;
     void solve() override;
 
+    PetscErrorCode compute_rhs(PetscReal time, Vec x, Vec F);
+
 protected:
     void init() override;
     void allocate_objects() override;
@@ -26,9 +28,6 @@ protected:
     void set_up_initial_guess() override;
     void set_up_time_scheme() override;
     void set_up_monitors() override;
-
-    PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
-    PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
 
     /// Time stepping scheme
     const std::string & scheme;

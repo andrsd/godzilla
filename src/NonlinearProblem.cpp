@@ -8,20 +8,20 @@
 
 namespace godzilla {
 
-PetscErrorCode
+static PetscErrorCode
 __compute_residual(SNES, Vec x, Vec f, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    return problem->compute_residual_callback(x, f);
+    return problem->compute_residual(x, f);
 }
 
-PetscErrorCode
+static PetscErrorCode
 __compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    return problem->compute_jacobian_callback(x, J, Jp);
+    return problem->compute_jacobian(x, J, Jp);
 }
 
 PetscErrorCode
@@ -292,6 +292,20 @@ NonlinearProblem::set_up_matrix_properties()
 void
 NonlinearProblem::set_up_preconditioning()
 {
+}
+
+PetscErrorCode
+NonlinearProblem::compute_residual(Vec x, Vec f)
+{
+    _F_;
+    return 0;
+}
+
+PetscErrorCode
+NonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
+{
+    _F_;
+    return 0;
 }
 
 } // namespace godzilla

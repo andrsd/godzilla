@@ -8,6 +8,15 @@
 
 namespace godzilla {
 
+static PetscErrorCode
+__efvlp_compute_rhs(DM dm, PetscReal time, Vec x, Vec F, void * ctx)
+{
+    _F_;
+    auto * efvp = static_cast<ExplicitFVLinearProblem *>(ctx);
+    efvp->compute_rhs(time, x, F);
+    return 0;
+}
+
 Parameters
 ExplicitFVLinearProblem::parameters()
 {
@@ -98,7 +107,7 @@ ExplicitFVLinearProblem::set_up_callbacks()
     _F_;
     DM dm = get_dm();
     PETSC_CHECK(DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this));
-    PETSC_CHECK(DMTSSetRHSFunctionLocal(dm, DMPlexTSComputeRHSFunctionFVM, this));
+    PETSC_CHECK(DMTSSetRHSFunctionLocal(dm, __efvlp_compute_rhs, this));
 }
 
 void
@@ -131,15 +140,10 @@ ExplicitFVLinearProblem::set_up_monitors()
 }
 
 PetscErrorCode
-ExplicitFVLinearProblem::compute_residual_callback(Vec x, Vec f)
+ExplicitFVLinearProblem::compute_rhs(PetscReal time, Vec x, Vec F)
 {
-    return 0;
-}
-
-PetscErrorCode
-ExplicitFVLinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
-{
-    return 0;
+    _F_;
+    return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this);
 }
 
 } // namespace godzilla
