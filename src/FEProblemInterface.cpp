@@ -10,10 +10,7 @@
 #include "Logger.h"
 #include "PetscFEGodzilla.h"
 #include "WeakForm.h"
-#include "ResidualFunc.h"
-#include "BndResidualFunc.h"
-#include "JacobianFunc.h"
-#include "BndJacobianFunc.h"
+#include "Functional.h"
 #include <cassert>
 #include <petsc/private/petscfeimpl.h>
 
@@ -809,10 +806,8 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
 {
     _F_;
     PetscInt field = key.field;
-    const auto & f0_res_fns =
-        this->wf->get_bnd(PETSC_WF_BDF0, key.label, key.value, field, key.part);
-    const auto & f1_res_fns =
-        this->wf->get_bnd(PETSC_WF_BDF1, key.label, key.value, field, key.part);
+    const auto & f0_res_fns = this->wf->get(PETSC_WF_BDF0, key.label, key.value, field, key.part);
+    const auto & f1_res_fns = this->wf->get(PETSC_WF_BDF1, key.label, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
@@ -1199,13 +1194,13 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     PetscInt field_j = key.field % n_fields;
 
     const auto & g0_jac_fns =
-        this->wf->get_bnd(PETSC_WF_BDG0, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(PETSC_WF_BDG0, key.label, key.value, field_i, field_j, key.part);
     const auto & g1_jac_fns =
-        this->wf->get_bnd(PETSC_WF_BDG1, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(PETSC_WF_BDG1, key.label, key.value, field_i, field_j, key.part);
     const auto & g2_jac_fns =
-        this->wf->get_bnd(PETSC_WF_BDG2, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(PETSC_WF_BDG2, key.label, key.value, field_i, field_j, key.part);
     const auto & g3_jac_fns =
-        this->wf->get_bnd(PETSC_WF_BDG3, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(PETSC_WF_BDG3, key.label, key.value, field_i, field_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return 0;
 

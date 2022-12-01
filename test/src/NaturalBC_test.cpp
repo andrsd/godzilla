@@ -207,13 +207,11 @@ TEST(NaturalBCTest, fe)
     WeakForm * wf = bc.get_wf();
     PetscInt id = bc.get_ids()[0];
     PetscInt part = 0;
-    const std::vector<BndResidualFunc *> & f0 =
-        wf->get_bnd(PETSC_WF_BDF0, bc.get_label(), id, field, part);
+    const auto & f0 = wf->get(PETSC_WF_BDF0, bc.get_label(), id, field, part);
     EXPECT_EQ(f0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatF0 *>(f0[0]), nullptr);
 
-    const std::vector<BndJacobianFunc *> & g0 =
-        wf->get_bnd(PETSC_WF_BDG0, bc.get_label(), id, field, field, part);
+    const auto & g0 = wf->get(PETSC_WF_BDG0, bc.get_label(), id, field, field, part);
     EXPECT_EQ(g0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatG0 *>(g0[0]), nullptr);
 }

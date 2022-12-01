@@ -2,6 +2,8 @@
 #include "CallStack.h"
 #include "DiscreteProblemInterface.h"
 #include "WeakForm.h"
+#include "BndResidualFunc.h"
+#include "BndJacobianFunc.h"
 
 namespace godzilla {
 

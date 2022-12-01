@@ -2,6 +2,8 @@
 #include "CallStack.h"
 #include "Mesh.h"
 #include "WeakForm.h"
+#include "ResidualFunc.h"
+#include "JacobianFunc.h"
 #include "petscdm.h"
 
 namespace godzilla {
