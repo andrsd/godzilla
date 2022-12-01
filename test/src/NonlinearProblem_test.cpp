@@ -2,6 +2,7 @@
 #include "GodzillaApp_test.h"
 #include "Factory.h"
 #include "Mesh.h"
+#include "LineMesh.h"
 #include "NonlinearProblem.h"
 #include "Output.h"
 #include "petsc.h"
@@ -19,10 +20,10 @@ public:
     virtual void create() override;
     void call_initial_guess();
 
-protected:
-    virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) override;
-    virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) override;
+    PetscErrorCode compute_residual(Vec x, Vec f) override;
+    PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp) override;
 
+protected:
     PetscSection s;
 };
 
@@ -60,7 +61,7 @@ G1DTestNonlinearProblem::call_initial_guess()
 }
 
 PetscErrorCode
-G1DTestNonlinearProblem::compute_residual_callback(Vec x, Vec f)
+G1DTestNonlinearProblem::compute_residual(Vec x, Vec f)
 {
     PetscInt ni = 2;
     PetscInt ix[] = { 0, 1 };
@@ -77,7 +78,7 @@ G1DTestNonlinearProblem::compute_residual_callback(Vec x, Vec f)
 }
 
 PetscErrorCode
-G1DTestNonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
+G1DTestNonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
 {
     MatSetValue(J, 0, 0, 1, INSERT_VALUES);
     MatSetValue(J, 1, 1, 1, INSERT_VALUES);
@@ -88,56 +89,54 @@ G1DTestNonlinearProblem::compute_jacobian_callback(Vec x, Mat J, Mat Jp)
     return 0;
 }
 
-// Test fixture
+//
 
-class NonlinearProblemTest : public GodzillaAppTest {
-protected:
-    Mesh *
-    gMesh1d()
-    {
-        const std::string class_name = "LineMesh";
-        Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 1;
-        return this->app->build_object<Mesh>(class_name, "mesh", params);
-    }
-
-    G1DTestNonlinearProblem *
-    gProblem1d(Mesh * mesh)
-    {
-        const std::string class_name = "G1DTestNonlinearProblem";
-        Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
-        return this->app->build_object<G1DTestNonlinearProblem>(class_name, "problem", params);
-    }
-};
-
-TEST_F(NonlinearProblemTest, initial_guess)
+TEST(NonlinearProblemTest, initial_guess)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-    prob->call_initial_guess();
+    TestApp app;
 
-    const Vec x = prob->get_solution_vector();
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 1;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
+
+    Parameters prob_pars = G1DTestNonlinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    G1DTestNonlinearProblem prob(prob_pars);
+    prob.create();
+    prob.call_initial_guess();
+
+    const Vec x = prob.get_solution_vector();
     PetscReal l2_norm = 0;
     VecNorm(x, NORM_2, &l2_norm);
     EXPECT_DOUBLE_EQ(l2_norm, 0.);
 }
 
-TEST_F(NonlinearProblemTest, solve)
+TEST(NonlinearProblemTest, solve)
 {
-    auto mesh = gMesh1d();
-    mesh->create();
-    auto prob = gProblem1d(mesh);
-    prob->create();
-    prob->solve();
+    TestApp app;
 
-    bool conv = prob->converged();
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 1;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
+
+    Parameters prob_pars = G1DTestNonlinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    G1DTestNonlinearProblem prob(prob_pars);
+
+    prob.create();
+    prob.solve();
+
+    bool conv = prob.converged();
     EXPECT_EQ(conv, true);
 
     // extract the solution and make sure it is [2, 3]
-    const Vec x = prob->get_solution_vector();
+    const Vec x = prob.get_solution_vector();
     PetscInt ni = 2;
     PetscInt ix[2] = { 0, 1 };
     PetscScalar xx[2];
@@ -147,7 +146,29 @@ TEST_F(NonlinearProblemTest, solve)
     EXPECT_DOUBLE_EQ(xx[1], 3.);
 }
 
-TEST_F(NonlinearProblemTest, run)
+TEST(NonlinearProblemTest, compute_callbacks)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 1;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = NonlinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    NonlinearProblem prob(prob_pars);
+
+    Vec x;
+    Vec F;
+    EXPECT_EQ(prob.compute_residual(x, F), 0);
+
+    Mat J;
+    EXPECT_EQ(prob.compute_jacobian(x, J, J), 0);
+}
+
+TEST(NonlinearProblemTest, run)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
@@ -162,16 +183,19 @@ TEST_F(NonlinearProblemTest, run)
         }
         MOCK_METHOD(void, on_initial, ());
         MOCK_METHOD(void, on_final, ());
-        MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
-        MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
     };
 
-    auto mesh = gMesh1d();
-    mesh->create();
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 1;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
 
     Parameters prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<const Mesh *>("_mesh") = mesh;
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
     MockNonlinearProblem prob(prob_pars);
 
     EXPECT_CALL(prob, set_up_initial_guess);
@@ -181,14 +205,11 @@ TEST_F(NonlinearProblemTest, run)
     prob.run();
 }
 
-TEST_F(NonlinearProblemTest, line_search_type)
+TEST(NonlinearProblemTest, line_search_type)
 {
     class MockNonlinearProblem : public NonlinearProblem {
     public:
         explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
-
-        MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
-        MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
 
         SNES
         getSNES()
@@ -197,14 +218,19 @@ TEST_F(NonlinearProblemTest, line_search_type)
         }
     };
 
-    auto mesh = gMesh1d();
-    mesh->create();
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 1;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
 
     std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
         Parameters prob_pars = NonlinearProblem::parameters();
-        prob_pars.set<const App *>("_app") = this->app;
-        prob_pars.set<const Mesh *>("_mesh") = mesh;
+        prob_pars.set<const App *>("_app") = &app;
+        prob_pars.set<const Mesh *>("_mesh") = &mesh;
         prob_pars.set<std::string>("line_search") = lst;
         MockNonlinearProblem prob(prob_pars);
         prob.create();
@@ -218,31 +244,33 @@ TEST_F(NonlinearProblemTest, line_search_type)
     }
 }
 
-TEST_F(NonlinearProblemTest, invalid_line_search_type)
+TEST(NonlinearProblemTest, invalid_line_search_type)
 {
     testing::internal::CaptureStderr();
 
     class MockNonlinearProblem : public NonlinearProblem {
     public:
         explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
-
-        MOCK_METHOD(PetscErrorCode, compute_residual_callback, (Vec x, Vec f));
-        MOCK_METHOD(PetscErrorCode, compute_jacobian_callback, (Vec x, Mat J, Mat Jp));
     };
 
-    auto mesh = gMesh1d();
-    mesh->create();
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<PetscInt>("nx") = 1;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
 
     Parameters prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<const Mesh *>("_mesh") = mesh;
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<std::string>("line_search") = "asdf";
     MockNonlinearProblem prob(prob_pars);
     prob.create();
 
     prob.check();
 
-    this->app->check_integrity();
+    app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("The 'line_search' parameter can be either 'bt', 'basic', 'l2', "

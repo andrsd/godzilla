@@ -18,6 +18,10 @@ public:
     void solve() override;
     bool converged() override;
     Vec get_solution_vector() const override;
+    /// Method to compute residual. Called from the PETsc callback
+    virtual PetscErrorCode compute_residual(Vec x, Vec f);
+    /// Method to compute Jacobian. Called from the PETsc callback
+    virtual PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp);
 
 protected:
     /// provide DM for the underlying SNES object
@@ -36,10 +40,6 @@ protected:
     virtual void set_up_monitors();
     /// Set up solver parameters
     virtual void set_up_solver_parameters();
-    /// Method to compute residual. Called from the PETsc callback
-    virtual PetscErrorCode compute_residual_callback(Vec x, Vec f) = 0;
-    /// Method to compute Jacobian. Called from the PETsc callback
-    virtual PetscErrorCode compute_jacobian_callback(Vec x, Mat J, Mat Jp) = 0;
     /// SNES monitor
     PetscErrorCode snes_monitor_callback(PetscInt it, PetscReal norm);
     /// KSP monitor
@@ -82,8 +82,6 @@ protected:
 public:
     static Parameters parameters();
 
-    friend PetscErrorCode __compute_residual(SNES snes, Vec x, Vec f, void * ctx);
-    friend PetscErrorCode __compute_jacobian(SNES snes, Vec x, Mat A, Mat B, void * ctx);
     friend PetscErrorCode __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx);
     friend PetscErrorCode __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx);
 };
