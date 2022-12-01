@@ -1,16 +1,51 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
 #include "LineMesh.h"
-#include "GTestImplicitFENonlinearProblem.h"
+#include "ImplicitFENonlinearProblem.h"
 #include "ResidualFunc.h"
 
 using namespace godzilla;
+using namespace testing;
 
 namespace {
 
+class GTestProblem : public ImplicitFENonlinearProblem {
+public:
+    explicit GTestProblem(const Parameters & params) : ImplicitFENonlinearProblem(params) {}
+
+    MOCK_METHOD(const PetscInt &, get_spatial_dimension, (), (const));
+    MOCK_METHOD(const PetscScalar *, get_field_value, (const std::string & field_name), (const));
+    MOCK_METHOD(const PetscScalar *, get_field_gradient, (const std::string & field_name), (const));
+    MOCK_METHOD(const PetscScalar *, get_field_dot, (const std::string & field_name), (const));
+    MOCK_METHOD(const PetscReal &, get_time_shift, (), (const));
+    MOCK_METHOD(const PetscReal &, get_time, (), (const));
+    MOCK_METHOD(PetscReal * const &, get_normal, (), (const));
+    MOCK_METHOD(PetscReal * const &, get_xyz, (), (const));
+
+protected:
+    void
+    set_up_fields() override
+    {
+        add_fe(0, "u", 1, 1);
+    }
+
+    void
+    set_up_weak_form() override
+    {
+    }
+};
+
 class TestF : public ResidualFunc {
 public:
-    explicit TestF(const GTestImplicitFENonlinearProblem * prob) : ResidualFunc(prob) {}
+    explicit TestF(const GTestProblem * prob) :
+        ResidualFunc(prob),
+        dim(get_spatial_dimension()),
+        u(get_field_value("u")),
+        u_x(get_field_gradient("u")),
+        u_t(get_field_dot("u")),
+        t(get_time())
+    {
+    }
 
     void
     evaluate(PetscScalar f[]) override
@@ -24,35 +59,12 @@ public:
         return ResidualFunc::get_fe_problem();
     }
 
-    const PetscInt &
-    get_spatial_dimension() const
-    {
-        return ResidualFunc::get_spatial_dimension();
-    }
-
-    const PetscScalar *
-    get_field_value(const std::string & field_name) const
-    {
-        return ResidualFunc::get_field_value(field_name);
-    }
-
-    const PetscScalar *
-    get_field_gradient(const std::string & field_name) const
-    {
-        return ResidualFunc::get_field_gradient(field_name);
-    }
-
-    const PetscScalar *
-    get_field_dot(const std::string & field_name) const
-    {
-        return ResidualFunc::get_field_dot(field_name);
-    }
-
-    const PetscReal &
-    get_time() const
-    {
-        return ResidualFunc::get_time();
-    }
+protected:
+    const PetscInt & dim;
+    const PetscScalar * u;
+    const PetscScalar * u_x;
+    const PetscScalar * u_t;
+    const PetscReal & t;
 };
 
 } // namespace
@@ -66,27 +78,25 @@ TEST(ResidualFuncTest, test)
     mesh_pars.set<PetscInt>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestImplicitFENonlinearProblem::parameters();
+    Parameters prob_pars = GTestProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     prob_pars.set<PetscReal>("start_time") = 0.;
     prob_pars.set<PetscReal>("end_time") = 20;
     prob_pars.set<PetscReal>("dt") = 5;
-    GTestImplicitFENonlinearProblem prob(prob_pars);
+    GTestProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
-    prob.set_up_initial_guess();
-    prob.solve();
+
+    PetscInt dim;
+    EXPECT_CALL(prob, get_spatial_dimension()).Times(1).WillOnce(ReturnRef(dim));
+    EXPECT_CALL(prob, get_field_value(_)).Times(1).WillOnce(ReturnNull());
+    EXPECT_CALL(prob, get_field_gradient(_)).Times(1).WillOnce(ReturnNull());
+    EXPECT_CALL(prob, get_field_dot(_)).Times(1).WillOnce(ReturnNull());
+    PetscReal time;
+    EXPECT_CALL(prob, get_time()).Times(1).WillOnce(ReturnRef(time));
 
     TestF res(&prob);
     EXPECT_EQ(res.get_fe_problem(), &prob);
-    EXPECT_EQ(res.get_spatial_dimension(), 1);
-    const PetscScalar * val = res.get_field_value("u");
-    EXPECT_EQ(val[0], 0);
-    const PetscScalar * grad = res.get_field_gradient("u");
-    EXPECT_EQ(grad[0], 0);
-    const PetscScalar * dot = res.get_field_dot("u");
-    EXPECT_EQ(dot[0], 0);
-    EXPECT_EQ(res.get_time(), 20.);
 }
