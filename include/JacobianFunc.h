@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Functional.h"
 #include <string>
 #include "petsc.h"
 
@@ -8,21 +9,11 @@ namespace godzilla {
 
 class FEProblemInterface;
 
-class JacobianFunc {
+class JacobianFunc : public Functional {
 public:
     explicit JacobianFunc(const FEProblemInterface * fepi);
 
-    /// Evaluate this Jacobian function
-    ///
-    /// @param val Array to store the evaluated Jacobian into
-    virtual void evaluate(PetscScalar val[]) = 0;
-
 protected:
-    /// Get pointer to FEProblemInterface
-    ///
-    /// @return Pointer to FEProblemInterface
-    NO_DISCARD const FEProblemInterface * get_fe_problem() const;
-
     /// Get spatial dimension
     ///
     /// @return Spatial dimension
@@ -49,9 +40,6 @@ protected:
     ///
     /// @return Time at which is the function evaluated
     NO_DISCARD const PetscReal & get_time() const;
-
-private:
-    const FEProblemInterface * fepi;
 };
 
 } // namespace godzilla

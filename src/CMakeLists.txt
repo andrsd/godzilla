@@ -32,6 +32,7 @@ add_library(${PROJECT_NAME}
         FEProblemInterface.cpp
         FileOutput.cpp
         Function.cpp
+        Functional.cpp
         FunctionAuxiliaryField.cpp
         FunctionEvaluator.cpp
         FunctionIC.cpp

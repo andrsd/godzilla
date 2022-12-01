@@ -78,12 +78,6 @@ public:
         f[0] = 0.;
     }
 
-    const FEProblemInterface *
-    get_fe_problem() const
-    {
-        return BndJacobianFunc::get_fe_problem();
-    }
-
 protected:
     const PetscInt & dim;
     const PetscScalar * u;
@@ -138,5 +132,4 @@ TEST(BndJacobianFuncTest, test)
     EXPECT_CALL(prob, get_xyz()).Times(1).WillOnce(ReturnNull());
 
     TestJ jac(&bc);
-    EXPECT_EQ(jac.get_fe_problem(), &prob);
 }

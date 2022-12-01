@@ -78,12 +78,6 @@ public:
         f[0] = 0.;
     }
 
-    const FEProblemInterface *
-    get_fe_problem() const
-    {
-        return BndResidualFunc::get_fe_problem();
-    }
-
 protected:
     const PetscInt & dim;
     const PetscScalar * u;
@@ -137,5 +131,4 @@ TEST(BndResidualFuncTest, test)
     EXPECT_CALL(prob, get_xyz()).Times(1).WillOnce(ReturnNull());
 
     TestF res(&bc);
-    EXPECT_EQ(res.get_fe_problem(), &prob);
 }

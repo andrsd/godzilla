@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Functional.h"
 #include <string>
 #include "petsc.h"
 
@@ -9,21 +10,11 @@ namespace godzilla {
 class NaturalBC;
 class FEProblemInterface;
 
-class BndResidualFunc {
+class BndResidualFunc : public Functional {
 public:
     explicit BndResidualFunc(const NaturalBC * nbc);
 
-    /// Evaluate this residual function
-    ///
-    /// @param val Array to store the evaluated residual into
-    virtual void evaluate(PetscScalar val[]) = 0;
-
 protected:
-    /// Get pointer to FEProblemInterface
-    ///
-    /// @return Pointer to FEProblemInterface
-    NO_DISCARD const FEProblemInterface * get_fe_problem() const;
-
     /// Get spatial dimension
     ///
     /// @return Spatial dimension
@@ -61,10 +52,6 @@ protected:
     ///
     /// @return Physical coordinates
     NO_DISCARD PetscReal * const & get_xyz() const;
-
-private:
-    /// FEProblemInterface this function is part of
-    const FEProblemInterface * fepi;
 };
 
 } // namespace godzilla

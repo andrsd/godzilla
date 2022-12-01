@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Functional.h"
 #include <string>
 #include "petsc.h"
 
@@ -7,21 +8,11 @@ namespace godzilla {
 
 class FEProblemInterface;
 
-class ResidualFunc {
+class ResidualFunc : public Functional {
 public:
     explicit ResidualFunc(const FEProblemInterface * fepi);
 
-    /// Evaluate this residual function
-    ///
-    /// @param val Array to store the evaluated residual into
-    virtual void evaluate(PetscScalar val[]) = 0;
-
 protected:
-    /// Get pointer to FEProblemInterface
-    ///
-    /// @return Pointer to FEProblemInterface
-    const FEProblemInterface * get_fe_problem() const;
-
     /// Get spatial dimension
     ///
     /// @return Spatial dimension
@@ -49,10 +40,6 @@ protected:
     ///
     /// @return Time at which is the function evaluated
     const PetscReal & get_time() const;
-
-private:
-    /// FEProblemInterface this function is part of
-    const FEProblemInterface * fepi;
 };
 
 } // namespace godzilla

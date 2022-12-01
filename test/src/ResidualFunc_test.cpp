@@ -53,12 +53,6 @@ public:
         f[0] = 0.;
     }
 
-    const FEProblemInterface *
-    get_fe_problem() const
-    {
-        return ResidualFunc::get_fe_problem();
-    }
-
 protected:
     const PetscInt & dim;
     const PetscScalar * u;
@@ -98,5 +92,4 @@ TEST(ResidualFuncTest, test)
     EXPECT_CALL(prob, get_time()).Times(1).WillOnce(ReturnRef(time));
 
     TestF res(&prob);
-    EXPECT_EQ(res.get_fe_problem(), &prob);
 }

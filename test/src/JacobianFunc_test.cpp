@@ -53,12 +53,6 @@ public:
         g[0] = 1.;
     }
 
-    const FEProblemInterface *
-    get_fe_problem() const
-    {
-        return JacobianFunc::get_fe_problem();
-    }
-
 protected:
     const PetscInt & dim;
     const PetscScalar * u;
@@ -99,5 +93,4 @@ TEST(JacobianFuncTest, test)
     EXPECT_CALL(prob, get_time_shift()).Times(1).WillOnce(ReturnRef(time_shift));
 
     TestJ jac(&prob);
-    EXPECT_EQ(jac.get_fe_problem(), &prob);
 }
