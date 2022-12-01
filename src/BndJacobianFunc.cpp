@@ -11,7 +11,7 @@ BndJacobianFunc::BndJacobianFunc(const NaturalBC * nbc) :
 }
 
 const FEProblemInterface *
-BndJacobianFunc::get_fe_problem()
+BndJacobianFunc::get_fe_problem() const
 {
     _F_;
     return this->fepi;

@@ -1,6 +1,8 @@
 add_executable(${PROJECT_NAME}
     AuxiliaryField_test.cpp
     BasicTSAdapt_test.cpp
+    BndJacobianFunc_test.cpp
+    BndResidualFunc_test.cpp
     BoundaryCondition_test.cpp
     BoxMesh_test.cpp
     CallStack_test.cpp

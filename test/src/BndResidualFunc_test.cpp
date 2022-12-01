@@ -2,12 +2,35 @@
 #include "TestApp.h"
 #include "LineMesh.h"
 #include "ImplicitFENonlinearProblem.h"
-#include "ResidualFunc.h"
+#include "NaturalBC.h"
+#include "BndResidualFunc.h"
 
 using namespace godzilla;
 using namespace testing;
 
 namespace {
+
+class TestBC : public NaturalBC {
+public:
+    explicit TestBC(const Parameters & params) : NaturalBC(params) {}
+
+    PetscInt
+    get_num_components() const override
+    {
+        return 1;
+    }
+    std::vector<PetscInt>
+    get_components() const override
+    {
+        return { 0 };
+    }
+
+protected:
+    void
+    set_up_weak_form() override
+    {
+    }
+};
 
 class GTestProblem : public ImplicitFENonlinearProblem {
 public:
@@ -35,15 +58,17 @@ protected:
     }
 };
 
-class TestF : public ResidualFunc {
+class TestF : public BndResidualFunc {
 public:
-    explicit TestF(const GTestProblem * prob) :
-        ResidualFunc(prob),
+    explicit TestF(const TestBC * bc) :
+        BndResidualFunc(bc),
         dim(get_spatial_dimension()),
         u(get_field_value("u")),
         u_x(get_field_gradient("u")),
         u_t(get_field_dot("u")),
-        t(get_time())
+        t(get_time()),
+        normal(get_normal()),
+        xyz(get_xyz())
     {
     }
 
@@ -56,7 +81,7 @@ public:
     const FEProblemInterface *
     get_fe_problem() const
     {
-        return ResidualFunc::get_fe_problem();
+        return BndResidualFunc::get_fe_problem();
     }
 
 protected:
@@ -65,11 +90,13 @@ protected:
     const PetscScalar * u_x;
     const PetscScalar * u_t;
     const PetscReal & t;
+    PetscReal * const & normal;
+    PetscReal * const & xyz;
 };
 
 } // namespace
 
-TEST(ResidualFuncTest, test)
+TEST(BndResidualFuncTest, test)
 {
     TestApp app;
 
@@ -85,9 +112,19 @@ TEST(ResidualFuncTest, test)
     prob_pars.set<PetscReal>("end_time") = 20;
     prob_pars.set<PetscReal>("dt") = 5;
     GTestProblem prob(prob_pars);
+    app.problem = &prob;
+
+    Parameters bc_pars = NaturalBC::parameters();
+    bc_pars.set<const App *>("_app") = &app;
+    bc_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_pars.set<std::string>("field") = "u";
+    bc_pars.set<std::string>("boundary") = "marker";
+    TestBC bc(bc_pars);
+    prob.add_boundary_condition(&bc);
 
     mesh.create();
     prob.create();
+    bc.create();
 
     PetscInt dim;
     EXPECT_CALL(prob, get_spatial_dimension()).Times(1).WillOnce(ReturnRef(dim));
@@ -96,7 +133,9 @@ TEST(ResidualFuncTest, test)
     EXPECT_CALL(prob, get_field_dot(_)).Times(1).WillOnce(ReturnNull());
     PetscReal time;
     EXPECT_CALL(prob, get_time()).Times(1).WillOnce(ReturnRef(time));
+    EXPECT_CALL(prob, get_normal()).Times(1).WillOnce(ReturnNull());
+    EXPECT_CALL(prob, get_xyz()).Times(1).WillOnce(ReturnNull());
 
-    TestF res(&prob);
+    TestF res(&bc);
     EXPECT_EQ(res.get_fe_problem(), &prob);
 }

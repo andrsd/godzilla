@@ -22,7 +22,7 @@ protected:
     /// Get pointer to FEProblemInterface
     ///
     /// @return Pointer to FEProblemInterface
-    const FEProblemInterface * get_fe_problem();
+    const FEProblemInterface * get_fe_problem() const;
 
     /// Get spatial dimension
     ///
