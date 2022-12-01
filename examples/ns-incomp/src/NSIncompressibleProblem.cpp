@@ -42,10 +42,10 @@ public:
 protected:
     const PetscInt & n_comp;
     const PetscInt & dim;
-    const PetscScalar * vel;
-    const PetscScalar * vel_t;
-    const PetscScalar * vel_x;
-    const PetscScalar * ffn;
+    const FieldValue & vel;
+    const FieldValue & vel_t;
+    const FieldGradient & vel_x;
+    const FieldValue & ffn;
 };
 
 class ResidualVeloc1 : public ResidualFunc {
@@ -74,8 +74,8 @@ public:
 protected:
     const PetscInt & n_comp;
     const PetscInt & dim;
-    const PetscScalar * vel_x;
-    const PetscScalar * press;
+    const FieldGradient & vel_x;
+    const FieldValue & press;
     const PetscScalar & Re;
 };
 
@@ -98,7 +98,7 @@ public:
 
 protected:
     const PetscInt & dim;
-    const PetscReal * vel_x;
+    const FieldGradient & vel_x;
 };
 
 class ResidualPress1 : public ResidualFunc {
@@ -149,7 +149,7 @@ public:
 
 protected:
     const PetscInt & dim;
-    const PetscReal * vel_x;
+    const FieldGradient & vel_x;
     const PetscReal & u_t_shift;
 };
 
@@ -181,7 +181,7 @@ public:
 
 protected:
     const PetscInt & dim;
-    const PetscReal * vel;
+    const FieldValue & vel;
 };
 
 class JacobianPV1 : public JacobianFunc {

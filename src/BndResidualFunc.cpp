@@ -17,21 +17,21 @@ BndResidualFunc::get_spatial_dimension() const
     return get_fe_problem()->get_spatial_dimension();
 }
 
-const PetscScalar *
+const FieldValue &
 BndResidualFunc::get_field_value(const std::string & field_name) const
 {
     _F_;
     return get_fe_problem()->get_field_value(field_name);
 }
 
-const PetscScalar *
+const FieldGradient &
 BndResidualFunc::get_field_gradient(const std::string & field_name) const
 {
     _F_;
     return get_fe_problem()->get_field_gradient(field_name);
 }
 
-const PetscScalar *
+const FieldValue &
 BndResidualFunc::get_field_dot(const std::string & field_name) const
 {
     _F_;
@@ -45,14 +45,14 @@ BndResidualFunc::get_time() const
     return get_fe_problem()->get_time();
 }
 
-PetscReal * const &
+const Vector &
 BndResidualFunc::get_normal() const
 {
     _F_;
     return get_fe_problem()->get_normal();
 }
 
-PetscReal * const &
+const Point &
 BndResidualFunc::get_xyz() const
 {
     _F_;

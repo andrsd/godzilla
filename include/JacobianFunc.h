@@ -2,6 +2,7 @@
 
 #include "GodzillaConfig.h"
 #include "Functional.h"
+#include "FieldValue.h"
 #include <string>
 #include "petsc.h"
 
@@ -23,13 +24,13 @@ protected:
     ///
     /// @param field_name The name of the field
     /// @return Pointer to array that contains the field values
-    NO_DISCARD const PetscScalar * get_field_value(const std::string & field_name) const;
+    NO_DISCARD const FieldValue & get_field_value(const std::string & field_name) const;
 
     /// Get values of a gradient of a field
     ///
     /// @param field_name The name of the field
     /// @return Pointer to array that contains the field gradient values
-    NO_DISCARD const PetscScalar * get_field_gradient(const std::string & field_name) const;
+    NO_DISCARD const FieldGradient & get_field_gradient(const std::string & field_name) const;
 
     /// Get the multiplier a for dF/dU_t
     ///

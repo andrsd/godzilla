@@ -77,7 +77,7 @@ public:
     }
 
 protected:
-    const PetscScalar * u;
+    const FieldValue & u;
 };
 
 class TestNatG0 : public BndJacobianFunc {

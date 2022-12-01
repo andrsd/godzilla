@@ -21,7 +21,7 @@ public:
     }
 
 protected:
-    const PetscScalar * ffn;
+    const FieldValue & ffn;
 };
 
 class Residual1 : public ResidualFunc {
@@ -42,7 +42,7 @@ public:
 
 protected:
     const PetscInt & dim;
-    const PetscScalar * u_x;
+    const FieldGradient & u_x;
 };
 
 class Jacobian3 : public JacobianFunc {

@@ -13,14 +13,14 @@ JacobianFunc::get_spatial_dimension() const
     return get_fe_problem()->get_spatial_dimension();
 }
 
-const PetscScalar *
+const FieldValue &
 JacobianFunc::get_field_value(const std::string & field_name) const
 {
     _F_;
     return get_fe_problem()->get_field_value(field_name);
 }
 
-const PetscScalar *
+const FieldGradient &
 JacobianFunc::get_field_gradient(const std::string & field_name) const
 {
     _F_;

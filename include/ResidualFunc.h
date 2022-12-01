@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Functional.h"
+#include "FieldValue.h"
 #include <string>
 #include "petsc.h"
 
@@ -21,20 +22,20 @@ protected:
     /// Get values of a field
     ///
     /// @param field_name The name of the field
-    /// @return Pointer to array that contains the field values
-    const PetscScalar * get_field_value(const std::string & field_name) const;
+    /// @return Reference to a class that contains the field values
+    const FieldValue & get_field_value(const std::string & field_name) const;
 
     /// Get values of a gradient of a field
     ///
     /// @param field_name The name of the field
     /// @return Pointer to array that contains the field gradient values
-    const PetscScalar * get_field_gradient(const std::string & field_name) const;
+    const FieldGradient & get_field_gradient(const std::string & field_name) const;
 
     /// Get values of a time derivative of a field
     ///
     /// @param field_name The name of the field
-    /// @return Pointer to array that contains the field time derivative values
-    const PetscScalar * get_field_dot(const std::string & field_name) const;
+    /// @return Reference to a class that contains the field time derivative values
+    const FieldValue & get_field_dot(const std::string & field_name) const;
 
     /// Get time at which the function is evaluated
     ///

@@ -23,8 +23,8 @@ FEProblemInterface::AssemblyData::AssemblyData() :
     u_x(nullptr),
     u_offset(nullptr),
     u_offset_x(nullptr),
-    xyz(nullptr),
-    normals(nullptr),
+    xyz(dim),
+    normals(dim),
     a(nullptr),
     a_x(nullptr),
     a_offset(nullptr),
@@ -297,13 +297,13 @@ FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, P
     _F_;
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
-        FieldInfo fi = { name, id, nullptr, nullptr, nc, k, {} };
+        FieldInfo fi(name, id, nc, k, this->asmbl.dim);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (unsigned int i = 0; i < nc; i++)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
-        this->fields[id] = fi;
+        this->fields.emplace(id, fi);
         this->fields_by_name[name] = id;
     }
     else
@@ -316,8 +316,8 @@ FEProblemInterface::add_aux_fe(PetscInt id, const std::string & name, PetscInt n
     _F_;
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
-        FieldInfo fi = { name, id, nullptr, nullptr, nc, k };
-        this->aux_fields[id] = fi;
+        FieldInfo fi(name, id, nc, k, this->asmbl.dim);
+        this->aux_fields.emplace(id, fi);
         this->aux_fields_by_name[name] = id;
     }
     else
@@ -381,8 +381,15 @@ FEProblemInterface::set_up_ds()
         PetscDSGetEvaluationArrays(this->ds, &this->asmbl.u, &this->asmbl.u_t, &this->asmbl.u_x));
     PETSC_CHECK(PetscDSGetComponentOffsets(this->ds, &this->asmbl.u_offset));
     PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(this->ds, &this->asmbl.u_offset_x));
-    PETSC_CHECK(
-        PetscDSGetWorkspace(this->ds, &this->asmbl.xyz, nullptr, nullptr, nullptr, nullptr));
+    for (auto & it : this->fields) {
+        FieldInfo & fi = it.second;
+        fi.values.set(this->asmbl.u + this->asmbl.u_offset[fi.id]);
+        fi.derivs.set(this->asmbl.u_x + this->asmbl.u_offset_x[fi.id]);
+        fi.dots.set(this->asmbl.u_t + this->asmbl.u_offset[fi.id]);
+    }
+    PetscReal * coord;
+    PETSC_CHECK(PetscDSGetWorkspace(this->ds, &coord, nullptr, nullptr, nullptr, nullptr));
+    this->asmbl.xyz.set(coord);
 }
 
 void
@@ -513,7 +520,7 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         PetscInt fid = aux->get_field_id();
         if (has_aux_field_by_id(fid)) {
             PetscInt aux_nc = aux->get_num_components();
-            PetscInt field_nc = this->aux_fields[fid].nc;
+            PetscInt field_nc = this->aux_fields.at(fid).nc;
             if (aux_nc == field_nc) {
                 const std::string & region_name = aux->get_region();
                 this->auxs_by_region[region_name].push_back(aux);
@@ -544,6 +551,12 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
             PetscDSGetEvaluationArrays(this->ds_aux, &this->asmbl.a, nullptr, &this->asmbl.a_x));
         PETSC_CHECK(PetscDSGetComponentOffsets(this->ds_aux, &this->asmbl.a_offset));
         PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(this->ds_aux, &this->asmbl.a_offset_x));
+
+        for (auto & it : this->aux_fields) {
+            FieldInfo & fi = it.second;
+            fi.values.set(this->asmbl.a + this->asmbl.a_offset[fi.id]);
+            fi.derivs.set(this->asmbl.a_x + this->asmbl.a_offset_x[fi.id]);
+        }
     }
 }
 
@@ -554,48 +567,49 @@ FEProblemInterface::get_spatial_dimension() const
     return this->asmbl.dim;
 }
 
-const PetscScalar *
+const FieldValue &
 FEProblemInterface::get_field_value(const std::string & field_name) const
 {
     _F_;
     if (has_field_by_name(field_name)) {
         PetscInt fid = get_field_id(field_name);
-        return this->asmbl.u + this->asmbl.u_offset[fid];
+        return this->fields.at(fid).values;
     }
     else if (has_aux_field_by_name(field_name)) {
         PetscInt fid = get_aux_field_id(field_name);
-        return this->asmbl.a + this->asmbl.a_offset[fid];
+        return this->aux_fields.at(fid).values;
     }
     else
         error("Field '%s' does not exist. Typo?", field_name);
 }
 
-const PetscScalar *
+const FieldGradient &
 FEProblemInterface::get_field_gradient(const std::string & field_name) const
 {
     _F_;
     if (has_field_by_name(field_name)) {
         PetscInt fid = get_field_id(field_name);
-        return this->asmbl.u_x + this->asmbl.u_offset_x[fid];
+        return this->fields.at(fid).derivs;
     }
     else if (has_aux_field_by_name(field_name)) {
         PetscInt fid = get_aux_field_id(field_name);
-        return this->asmbl.a_x + this->asmbl.a_offset_x[fid];
+        return this->aux_fields.at(fid).derivs;
     }
     else
         error("Field '%s' does not exist. Typo?", field_name);
 }
 
-const PetscScalar *
+const FieldValue &
 FEProblemInterface::get_field_dot(const std::string & field_name) const
 {
     _F_;
     if (has_field_by_name(field_name)) {
         PetscInt fid = get_field_id(field_name);
-        return this->asmbl.u_t + this->asmbl.u_offset[fid];
+        return this->fields.at(fid).dots;
     }
     else if (has_aux_field_by_name(field_name)) {
-        return nullptr;
+        PetscInt fid = get_aux_field_id(field_name);
+        return this->aux_fields.at(fid).dots;
     }
     else
         error("Field '%s' does not exist. Typo?", field_name);
@@ -615,14 +629,14 @@ FEProblemInterface::get_time() const
     return this->asmbl.time;
 }
 
-PetscReal * const &
+const Vector &
 FEProblemInterface::get_normal() const
 {
     _F_;
     return this->asmbl.normals;
 }
 
-PetscReal * const &
+const Point &
 FEProblemInterface::get_xyz() const
 {
     _F_;
@@ -679,7 +693,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
-    PetscFE & fe = this->fields[field].fe;
+    PetscFE & fe = this->fields.at(field).fe;
 
     PETSC_CHECK(PetscFEGetSpatialDimension(fe, &this->asmbl.dim));
     this->asmbl.time = t;
@@ -736,7 +750,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     for (PetscInt e = 0; e < n_elems; ++e) {
         PetscFEGeom fe_geom;
 
-        fe_geom.v = this->asmbl.xyz; /* workspace */
+        fe_geom.v = this->asmbl.xyz.get(); /* workspace */
 
         PETSC_CHECK(PetscArrayzero(f0, q_n_pts * T[field]->Nc));
         PETSC_CHECK(PetscArrayzero(f1, q_n_pts * T[field]->Nc * dim_embed));
@@ -818,7 +832,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
-    PetscFE & fe = this->fields[field].fe;
+    PetscFE & fe = this->fields.at(field).fe;
 
     PETSC_CHECK(PetscFEGetSpatialDimension(fe, &this->asmbl.dim));
     this->asmbl.time = t;
@@ -890,7 +904,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
         PetscFEGeom fe_geom, cell_geom;
         const PetscInt face = face_geom->face[e][0];
 
-        fe_geom.v = this->asmbl.xyz; /* Workspace */
+        fe_geom.v = this->asmbl.xyz.get(); /* Workspace */
         PETSC_CHECK(PetscArrayzero(f0, q_n_pts * n_comp_i));
         PETSC_CHECK(PetscArrayzero(f1, q_n_pts * n_comp_i * dim_embed));
         for (PetscInt q = 0; q < q_n_pts; ++q) {
@@ -898,7 +912,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                 PetscFEGeomGetPoint(face_geom, e, q, &q_points[q * face_geom->dim], &fe_geom));
             PETSC_CHECK(PetscFEGeomGetCellPoint(face_geom, e, q, &cell_geom));
             PetscReal w = fe_geom.detJ[0] * q_weights[q];
-            this->asmbl.normals = fe_geom.n;
+            this->asmbl.normals.set(fe_geom.n);
             PETSC_CHECK(evaluate_field_jets(ds,
                                             n_fields,
                                             face,
@@ -1003,8 +1017,8 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return 0;
 
-    PetscFE & fe_i = this->fields[field_i].fe;
-    PetscFE & fe_j = this->fields[field_j].fe;
+    PetscFE & fe_i = this->fields.at(field_i).fe;
+    PetscFE & fe_j = this->fields.at(field_j).fe;
 
     PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &this->asmbl.dim));
     this->asmbl.time = t;
@@ -1074,7 +1088,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         fe_geom.dim = cell_geom->dim;
         fe_geom.dimEmbed = cell_geom->dimEmbed;
         if (is_affine) {
-            fe_geom.v = this->asmbl.xyz;
+            fe_geom.v = this->asmbl.xyz.get();
             fe_geom.xi = cell_geom->xi;
             fe_geom.J = &cell_geom->J[e * n_pts * dim_embed * dim_embed];
             fe_geom.invJ = &cell_geom->invJ[e * n_pts * dim_embed * dim_embed];
@@ -1088,7 +1102,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                                      &cell_geom->v[e * n_pts * dim_embed],
                                      fe_geom.J,
                                      &q_points[q * this->asmbl.dim],
-                                     this->asmbl.xyz);
+                                     this->asmbl.xyz.get());
             }
             else {
                 fe_geom.v = &cell_geom->v[(e * n_pts + q) * dim_embed];
@@ -1212,8 +1226,8 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return 0;
 
-    PetscFE & fe_i = this->fields[field_i].fe;
-    PetscFE & fe_j = this->fields[field_j].fe;
+    PetscFE & fe_i = this->fields.at(field_i).fe;
+    PetscFE & fe_j = this->fields.at(field_j).fe;
 
     PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &this->asmbl.dim));
     this->asmbl.time = t;
@@ -1284,7 +1298,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
         cell_geom.dim = face_geom->dim;
         cell_geom.dimEmbed = face_geom->dimEmbed;
         if (is_affine) {
-            fe_geom.v = this->asmbl.xyz;
+            fe_geom.v = this->asmbl.xyz.get();
             fe_geom.xi = face_geom->xi;
             fe_geom.J = &face_geom->J[e * n_pts * dim_embed * dim_embed];
             fe_geom.invJ = &face_geom->invJ[e * n_pts * dim_embed * dim_embed];
@@ -1303,7 +1317,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                      &face_geom->v[e * n_pts * dim_embed],
                                      fe_geom.J,
                                      &q_points[q * (this->asmbl.dim - 1)],
-                                     this->asmbl.xyz);
+                                     this->asmbl.xyz.get());
             }
             else {
                 fe_geom.v = &face_geom->v[(e * n_pts + q) * dim_embed];
@@ -1316,7 +1330,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                 cell_geom.invJ = &face_geom->suppInvJ[0][(e * n_pts + q) * dim_embed * dim_embed];
                 cell_geom.detJ = &face_geom->suppDetJ[0][e * n_pts + q];
             }
-            this->asmbl.normals = fe_geom.n;
+            this->asmbl.normals.set(fe_geom.n);
             PetscReal w = fe_geom.detJ[0] * q_weights[q];
             if (coefficients)
                 PETSC_CHECK(

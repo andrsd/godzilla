@@ -37,13 +37,16 @@ public:
     explicit GTestProblem(const Parameters & params) : ImplicitFENonlinearProblem(params) {}
 
     MOCK_METHOD(const PetscInt &, get_spatial_dimension, (), (const));
-    MOCK_METHOD(const PetscScalar *, get_field_value, (const std::string & field_name), (const));
-    MOCK_METHOD(const PetscScalar *, get_field_gradient, (const std::string & field_name), (const));
-    MOCK_METHOD(const PetscScalar *, get_field_dot, (const std::string & field_name), (const));
+    MOCK_METHOD(const FieldValue &, get_field_value, (const std::string & field_name), (const));
+    MOCK_METHOD(const FieldGradient &,
+                get_field_gradient,
+                (const std::string & field_name),
+                (const));
+    MOCK_METHOD(const FieldValue &, get_field_dot, (const std::string & field_name), (const));
     MOCK_METHOD(const PetscReal &, get_time_shift, (), (const));
     MOCK_METHOD(const PetscReal &, get_time, (), (const));
-    MOCK_METHOD(PetscReal * const &, get_normal, (), (const));
-    MOCK_METHOD(PetscReal * const &, get_xyz, (), (const));
+    MOCK_METHOD(const Vector &, get_normal, (), (const));
+    MOCK_METHOD(const Point &, get_xyz, (), (const));
 
 protected:
     void
@@ -80,12 +83,12 @@ public:
 
 protected:
     const PetscInt & dim;
-    const PetscScalar * u;
-    const PetscScalar * u_x;
-    const PetscScalar * u_t;
+    const FieldValue & u;
+    const FieldGradient & u_x;
+    const FieldValue & u_t;
     const PetscReal & t;
-    PetscReal * const & normal;
-    PetscReal * const & xyz;
+    const Vector & normal;
+    const Point & xyz;
 };
 
 } // namespace
@@ -122,13 +125,18 @@ TEST(BndResidualFuncTest, test)
 
     PetscInt dim;
     EXPECT_CALL(prob, get_spatial_dimension()).Times(1).WillOnce(ReturnRef(dim));
-    EXPECT_CALL(prob, get_field_value(_)).Times(1).WillOnce(ReturnNull());
-    EXPECT_CALL(prob, get_field_gradient(_)).Times(1).WillOnce(ReturnNull());
-    EXPECT_CALL(prob, get_field_dot(_)).Times(1).WillOnce(ReturnNull());
+    FieldValue val;
+    EXPECT_CALL(prob, get_field_value(_)).Times(1).WillOnce(ReturnRef(val));
+    FieldGradient grad(1);
+    EXPECT_CALL(prob, get_field_gradient(_)).Times(1).WillOnce(ReturnRef(grad));
+    FieldValue dot;
+    EXPECT_CALL(prob, get_field_dot(_)).Times(1).WillOnce(ReturnRef(dot));
     PetscReal time;
     EXPECT_CALL(prob, get_time()).Times(1).WillOnce(ReturnRef(time));
-    EXPECT_CALL(prob, get_normal()).Times(1).WillOnce(ReturnNull());
-    EXPECT_CALL(prob, get_xyz()).Times(1).WillOnce(ReturnNull());
+    Vector n(1);
+    EXPECT_CALL(prob, get_normal()).Times(1).WillOnce(ReturnRef(n));
+    Point coord(1);
+    EXPECT_CALL(prob, get_xyz()).Times(1).WillOnce(ReturnRef(coord));
 
     TestF res(&bc);
 }
