@@ -86,21 +86,21 @@ public:
     /// @param aux Auxiliary field object to add
     virtual void add_auxiliary_field(AuxiliaryField * aux);
 
-    const PetscInt & get_spatial_dimension() const;
+    virtual const PetscInt & get_spatial_dimension() const;
 
-    const PetscScalar * get_field_value(const std::string & field_name) const;
+    virtual const PetscScalar * get_field_value(const std::string & field_name) const;
 
-    const PetscScalar * get_field_gradient(const std::string & field_name) const;
+    virtual const PetscScalar * get_field_gradient(const std::string & field_name) const;
 
-    const PetscScalar * get_field_dot(const std::string & field_name) const;
+    virtual const PetscScalar * get_field_dot(const std::string & field_name) const;
 
-    const PetscReal & get_time_shift() const;
+    virtual const PetscReal & get_time_shift() const;
 
-    const PetscReal & get_time() const;
+    virtual const PetscReal & get_time() const;
 
-    PetscReal * const & get_normal() const;
+    virtual PetscReal * const & get_normal() const;
 
-    PetscReal * const & get_xyz() const;
+    virtual PetscReal * const & get_xyz() const;
 
     /// Integrate
     virtual PetscErrorCode integrate(PetscDS ds,
