@@ -322,24 +322,39 @@ protected:
     /// Weak formulation
     WeakForm * wf;
 
-    /// Spatial dimension
-    PetscInt dim;
+    /// Data used during assembling procedure
+    struct AssemblyData {
+        /// Spatial dimension
+        PetscInt dim;
+        /// Values of primary variables
+        PetscScalar * u;
+        /// Time derivative of primary variable values
+        PetscScalar * u_t;
+        /// Gradient of primary values
+        PetscScalar * u_x;
+        /// Offset into primary variable values (when having multiple fields)
+        PetscInt * u_offset;
+        /// Offset into gradient of primary variables (when having multiple fields)
+        PetscInt * u_offset_x;
+        /// Spatial coordinates
+        PetscReal * xyz;
+        /// Outward normals when doing surface integration
+        PetscReal * normals;
+        /// Values of auxiliary fields
+        PetscScalar * a;
+        /// Gradients of auxiliary fields
+        PetscScalar * a_x;
+        /// Offset into auxiliary variable values (when having multiple fields)
+        PetscInt * a_offset;
+        /// Offset into gradient of auxiliary variables (when having multiple fields)
+        PetscInt * a_offset_x;
+        /// Time at which are our forms evaluated (NOTE: this is not the simulation time)
+        PetscReal time;
+        /// the multiplier a for dF/dU_t
+        PetscReal u_t_shift;
 
-    PetscScalar * u;
-    PetscScalar * u_t;
-    PetscScalar * u_x;
-    PetscInt * u_offset;
-    PetscInt * u_offset_x;
-    PetscReal * xyz;
-    PetscReal * normals;
-    PetscScalar * au;
-    PetscScalar * au_x;
-    PetscInt * au_offset;
-    PetscInt * au_offset_x;
-    /// Time at which are our forms evaluated (NOTE: this is not the simulation time)
-    PetscReal time;
-    /// the multiplier a for dF/dU_t
-    PetscReal u_t_shift;
+        AssemblyData();
+    } asmbl;
 };
 
 } // namespace godzilla
