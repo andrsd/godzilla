@@ -416,12 +416,8 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
 {
     _F_;
     auto n_auxs = this->aux_fields.size();
-    auto ** func = new PetscFunc *[n_auxs];
-    void ** ctxs = new void *[n_auxs];
-    for (PetscInt i = 0; i < n_auxs; i++) {
-        func[i] = nullptr;
-        ctxs[i] = nullptr;
-    }
+    std::vector<PetscFunc *> func(n_auxs, nullptr);
+    std::vector<void *> ctxs(n_auxs, nullptr);
 
     for (const auto & aux : auxs) {
         PetscInt fid = aux->get_field_id();
@@ -429,11 +425,12 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
         ctxs[fid] = aux->get_context();
     }
 
-    PETSC_CHECK(
-        DMProjectFunctionLocal(dm, this->problem->get_time(), func, ctxs, INSERT_ALL_VALUES, a));
-
-    delete[] func;
-    delete[] ctxs;
+    PETSC_CHECK(DMProjectFunctionLocal(dm,
+                                       this->problem->get_time(),
+                                       func.data(),
+                                       ctxs.data(),
+                                       INSERT_ALL_VALUES,
+                                       a));
 }
 
 void
@@ -444,12 +441,8 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
 {
     _F_;
     auto n_auxs = this->aux_fields.size();
-    auto ** func = new PetscFunc *[n_auxs];
-    void ** ctxs = new void *[n_auxs];
-    for (PetscInt i = 0; i < n_auxs; i++) {
-        func[i] = nullptr;
-        ctxs[i] = nullptr;
-    }
+    std::vector<PetscFunc *> func(n_auxs, nullptr);
+    std::vector<void *> ctxs(n_auxs, nullptr);
 
     for (const auto & aux : auxs) {
         PetscInt fid = aux->get_field_id();
@@ -470,15 +463,12 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
                                             ids,
                                             PETSC_DETERMINE,
                                             nullptr,
-                                            func,
-                                            ctxs,
+                                            func.data(),
+                                            ctxs.data(),
                                             INSERT_ALL_VALUES,
                                             a));
     PETSC_CHECK(ISRestoreIndices(is, &ids));
     PETSC_CHECK(ISDestroy(&is));
-
-    delete[] func;
-    delete[] ctxs;
 }
 
 void

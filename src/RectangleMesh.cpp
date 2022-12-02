@@ -2,6 +2,7 @@
 #include "RectangleMesh.h"
 #include "CallStack.h"
 #include "petscdmplex.h"
+#include <array>
 
 namespace godzilla {
 
@@ -85,19 +86,19 @@ void
 RectangleMesh::create_dm()
 {
     _F_;
-    PetscReal lower[2] = { this->xmin, this->ymin };
-    PetscReal upper[2] = { this->xmax, this->ymax };
-    PetscInt faces[2] = { this->nx, this->ny };
-    DMBoundaryType periodicity[2] = { DM_BOUNDARY_GHOSTED, DM_BOUNDARY_GHOSTED };
+    std::array<PetscReal, 2> lower = { this->xmin, this->ymin };
+    std::array<PetscReal, 2> upper = { this->xmax, this->ymax };
+    std::array<PetscInt, 2> faces = { this->nx, this->ny };
+    std::array<DMBoundaryType, 2> periodicity = { DM_BOUNDARY_GHOSTED, DM_BOUNDARY_GHOSTED };
 
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     2,
                                     this->simplex,
-                                    faces,
-                                    lower,
-                                    upper,
-                                    periodicity,
-                                    interpolate,
+                                    faces.data(),
+                                    lower.data(),
+                                    upper.data(),
+                                    periodicity.data(),
+                                    this->interpolate,
                                     &this->dm));
 
     // create user-friendly names for sides

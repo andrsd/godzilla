@@ -3,6 +3,7 @@
 #include "CallStack.h"
 #include "petscdm.h"
 #include "petscdmplex.h"
+#include <array>
 
 namespace godzilla {
 
@@ -55,19 +56,19 @@ void
 LineMesh::create_dm()
 {
     _F_;
-    PetscReal lower[1] = { this->xmin };
-    PetscReal upper[1] = { this->xmax };
-    PetscInt faces[1] = { this->nx };
-    DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
+    std::array<PetscReal, 1> lower = { this->xmin };
+    std::array<PetscReal, 1> upper = { this->xmax };
+    std::array<PetscInt, 1> faces = { this->nx };
+    std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
 
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     1,
                                     PETSC_TRUE,
-                                    faces,
-                                    lower,
-                                    upper,
-                                    periodicity,
-                                    interpolate,
+                                    faces.data(),
+                                    lower.data(),
+                                    upper.data(),
+                                    periodicity.data(),
+                                    this->interpolate,
                                     &this->dm));
 
     // create user-friendly names for sides
