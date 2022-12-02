@@ -154,6 +154,13 @@ install(
 )
 
 install(
+    FILES
+        ${CMAKE_BINARY_DIR}/GodzillaConfig.h
+    DESTINATION
+        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+)
+
+install(
     DIRECTORY
         ${CMAKE_SOURCE_DIR}/contrib/tclap
     DESTINATION
