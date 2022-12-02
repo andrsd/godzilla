@@ -107,29 +107,27 @@ TEST(WeakFormTest, test)
     wf.add(PETSC_WF_BDF0, nullptr, 0, fid, 0, new BndTestF(&bc));
     wf.add(PETSC_WF_BDG0, nullptr, 0, fid, fid, 0, new BndTestJ(&bc));
 
-    const std::vector<ResidualFunc *> & f0 = wf.get(PETSC_WF_F0, nullptr, 0, fid, 0);
+    const auto & f0 = wf.get(PETSC_WF_F0, nullptr, 0, fid, 0);
     EXPECT_EQ(f0.size(), 1);
 
-    const std::vector<ResidualFunc *> & f1 = wf.get(PETSC_WF_F1, nullptr, 0, fid, 0);
+    const auto & f1 = wf.get(PETSC_WF_F1, nullptr, 0, fid, 0);
     EXPECT_EQ(f1.size(), 0);
 
-    const std::vector<BndResidualFunc *> & f0_bnd = wf.get_bnd(PETSC_WF_BDF0, nullptr, 0, fid, 0);
+    const auto & f0_bnd = wf.get(PETSC_WF_BDF0, nullptr, 0, fid, 0);
     EXPECT_EQ(f0_bnd.size(), 1);
 
-    const std::vector<BndResidualFunc *> & f1_bnd = wf.get_bnd(PETSC_WF_BDF1, nullptr, 0, fid, 0);
+    const auto & f1_bnd = wf.get(PETSC_WF_BDF1, nullptr, 0, fid, 0);
     EXPECT_EQ(f1_bnd.size(), 0);
 
-    const std::vector<JacobianFunc *> & g0 = wf.get(PETSC_WF_G0, nullptr, 0, fid, fid, 0);
+    const auto & g0 = wf.get(PETSC_WF_G0, nullptr, 0, fid, fid, 0);
     EXPECT_EQ(g0.size(), 1);
 
-    const std::vector<JacobianFunc *> & g1 = wf.get(PETSC_WF_G1, nullptr, 0, fid, fid, 0);
+    const auto & g1 = wf.get(PETSC_WF_G1, nullptr, 0, fid, fid, 0);
     EXPECT_EQ(g1.size(), 0);
 
-    const std::vector<BndJacobianFunc *> & g0_bnd =
-        wf.get_bnd(PETSC_WF_BDG0, nullptr, 0, fid, fid, 0);
+    const auto & g0_bnd = wf.get(PETSC_WF_BDG0, nullptr, 0, fid, fid, 0);
     EXPECT_EQ(g0_bnd.size(), 1);
 
-    const std::vector<BndJacobianFunc *> & g1_bnd =
-        wf.get_bnd(PETSC_WF_BDG1, nullptr, 0, fid, fid, 0);
+    const auto & g1_bnd = wf.get(PETSC_WF_BDG1, nullptr, 0, fid, fid, 0);
     EXPECT_EQ(g1_bnd.size(), 0);
 }

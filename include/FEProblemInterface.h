@@ -6,6 +6,7 @@
 #include "petsc.h"
 #include "petscfe.h"
 #include "DiscreteProblemInterface.h"
+#include "FieldValue.h"
 
 namespace godzilla {
 
@@ -88,19 +89,19 @@ public:
 
     virtual const PetscInt & get_spatial_dimension() const;
 
-    virtual const PetscScalar * get_field_value(const std::string & field_name) const;
+    virtual const FieldValue & get_field_value(const std::string & field_name) const;
 
-    virtual const PetscScalar * get_field_gradient(const std::string & field_name) const;
+    virtual const FieldGradient & get_field_gradient(const std::string & field_name) const;
 
-    virtual const PetscScalar * get_field_dot(const std::string & field_name) const;
+    virtual const FieldValue & get_field_dot(const std::string & field_name) const;
 
     virtual const PetscReal & get_time_shift() const;
 
     virtual const PetscReal & get_time() const;
 
-    virtual PetscReal * const & get_normal() const;
+    virtual const Vector & get_normal() const;
 
-    virtual PetscReal * const & get_xyz() const;
+    virtual const Point & get_xyz() const;
 
     /// Integrate
     virtual PetscErrorCode integrate(PetscDS ds,
@@ -284,6 +285,46 @@ protected:
 
         /// Component names
         std::vector<std::string> component_names;
+
+        /// Values (used during assembling)
+        FieldValue values;
+
+        /// Gradient (used during assembling)
+        FieldGradient derivs;
+
+        /// Time derivative (used during assembling)
+        FieldValue dots;
+
+        FieldInfo(const std::string & name,
+                  PetscInt id,
+                  PetscInt nc,
+                  PetscInt k,
+                  const PetscInt & dim) :
+            name(name),
+            id(id),
+            fe(nullptr),
+            block(nullptr),
+            nc(nc),
+            k(k),
+            values(),
+            derivs(dim),
+            dots()
+        {
+        }
+
+        FieldInfo(const FieldInfo & other) :
+            name(other.name),
+            id(other.id),
+            fe(other.fe),
+            block(other.block),
+            nc(other.nc),
+            k(other.k),
+            component_names(other.component_names),
+            values(other.values),
+            derivs(other.derivs),
+            dots(other.dots)
+        {
+        }
     };
 
     /// Fields in the problem
@@ -322,24 +363,39 @@ protected:
     /// Weak formulation
     WeakForm * wf;
 
-    /// Spatial dimension
-    PetscInt dim;
+    /// Data used during assembling procedure
+    struct AssemblyData {
+        /// Spatial dimension
+        PetscInt dim;
+        /// Values of primary variables
+        PetscScalar * u;
+        /// Time derivative of primary variable values
+        PetscScalar * u_t;
+        /// Gradient of primary values
+        PetscScalar * u_x;
+        /// Offset into primary variable values (when having multiple fields)
+        PetscInt * u_offset;
+        /// Offset into gradient of primary variables (when having multiple fields)
+        PetscInt * u_offset_x;
+        /// Spatial coordinates
+        Point xyz;
+        /// Outward normals when doing surface integration
+        Vector normals;
+        /// Values of auxiliary fields
+        PetscScalar * a;
+        /// Gradients of auxiliary fields
+        PetscScalar * a_x;
+        /// Offset into auxiliary variable values (when having multiple fields)
+        PetscInt * a_offset;
+        /// Offset into gradient of auxiliary variables (when having multiple fields)
+        PetscInt * a_offset_x;
+        /// Time at which are our forms evaluated (NOTE: this is not the simulation time)
+        PetscReal time;
+        /// the multiplier a for dF/dU_t
+        PetscReal u_t_shift;
 
-    PetscScalar * u;
-    PetscScalar * u_t;
-    PetscScalar * u_x;
-    PetscInt * u_offset;
-    PetscInt * u_offset_x;
-    PetscReal * xyz;
-    PetscReal * normals;
-    PetscScalar * au;
-    PetscScalar * au_x;
-    PetscInt * au_offset;
-    PetscInt * au_offset_x;
-    /// Time at which are our forms evaluated (NOTE: this is not the simulation time)
-    PetscReal time;
-    /// the multiplier a for dF/dU_t
-    PetscReal u_t_shift;
+        AssemblyData();
+    } asmbl;
 };
 
 } // namespace godzilla

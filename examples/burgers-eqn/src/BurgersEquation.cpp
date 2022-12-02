@@ -28,8 +28,8 @@ public:
 
 protected:
     const PetscReal & visc;
-    const PetscScalar * u;
-    const PetscScalar * u_x;
+    const FieldValue & u;
+    const FieldGradient & u_x;
 };
 
 } // namespace

@@ -36,7 +36,7 @@ public:
 
 protected:
     const PetscInt & dim;
-    const PetscScalar * u_x;
+    const FieldGradient & u_x;
 };
 
 class G3 : public JacobianFunc {

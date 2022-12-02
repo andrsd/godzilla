@@ -23,7 +23,7 @@ public:
     }
 
 protected:
-    const PetscScalar * ffn;
+    const FieldValue & ffn;
 };
 
 class Residual1 : public ResidualFunc {
@@ -44,7 +44,7 @@ public:
 
 protected:
     const PetscInt & dim;
-    const PetscScalar * T_x;
+    const FieldGradient & T_x;
 };
 
 } // namespace

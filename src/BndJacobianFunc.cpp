@@ -6,64 +6,57 @@
 namespace godzilla {
 
 BndJacobianFunc::BndJacobianFunc(const NaturalBC * nbc) :
-    fepi(dynamic_cast<const FEProblemInterface *>(nbc->get_discrete_problem_interface()))
+    Functional(dynamic_cast<const FEProblemInterface *>(nbc->get_discrete_problem_interface()))
 {
-}
-
-const FEProblemInterface *
-BndJacobianFunc::get_fe_problem() const
-{
-    _F_;
-    return this->fepi;
 }
 
 const PetscInt &
 BndJacobianFunc::get_spatial_dimension() const
 {
     _F_;
-    return this->fepi->get_spatial_dimension();
+    return get_fe_problem()->get_spatial_dimension();
 }
 
-const PetscScalar *
+const FieldValue &
 BndJacobianFunc::get_field_value(const std::string & field_name) const
 {
     _F_;
-    return this->fepi->get_field_value(field_name);
+    return get_fe_problem()->get_field_value(field_name);
 }
 
-const PetscScalar *
+const FieldGradient &
 BndJacobianFunc::get_field_gradient(const std::string & field_name) const
 {
     _F_;
-    return this->fepi->get_field_gradient(field_name);
+    return get_fe_problem()->get_field_gradient(field_name);
 }
 
 const PetscReal &
 BndJacobianFunc::get_time_shift() const
 {
     _F_;
-    return this->fepi->get_time_shift();
+    return get_fe_problem()->get_time_shift();
 }
 
 const PetscReal &
 BndJacobianFunc::get_time() const
 {
     _F_;
-    return this->fepi->get_time();
+    return get_fe_problem()->get_time();
 }
 
-PetscReal * const &
+const Vector &
 BndJacobianFunc::get_normal() const
 {
     _F_;
-    return this->fepi->get_normal();
+    return get_fe_problem()->get_normal();
 }
 
-PetscReal * const &
+const Point &
 BndJacobianFunc::get_xyz() const
 {
     _F_;
-    return this->fepi->get_xyz();
+    return get_fe_problem()->get_xyz();
 }
 
 } // namespace godzilla

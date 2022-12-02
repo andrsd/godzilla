@@ -9,8 +9,7 @@ using namespace godzilla;
 
 namespace {
 
-class ExodusIIOutputTest : public FENonlinearProblemTest {
-};
+class ExodusIIOutputTest : public FENonlinearProblemTest {};
 
 } // namespace
 

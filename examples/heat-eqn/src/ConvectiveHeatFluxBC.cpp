@@ -28,9 +28,9 @@ public:
     }
 
 protected:
-    const PetscScalar * T;
-    const PetscScalar * htc;
-    const PetscScalar * T_infinity;
+    const FieldValue & T;
+    const FieldValue & htc;
+    const FieldValue & T_infinity;
 };
 
 class Jacobian0 : public BndJacobianFunc {
@@ -44,7 +44,7 @@ public:
     }
 
 protected:
-    const PetscScalar * htc;
+    const FieldValue & htc;
 };
 
 } // namespace

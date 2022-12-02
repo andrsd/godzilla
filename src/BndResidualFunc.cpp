@@ -6,63 +6,57 @@
 namespace godzilla {
 
 BndResidualFunc::BndResidualFunc(const NaturalBC * nbc) :
-    fepi(dynamic_cast<const FEProblemInterface *>(nbc->get_discrete_problem_interface()))
+    Functional(dynamic_cast<const FEProblemInterface *>(nbc->get_discrete_problem_interface()))
 {
-}
-
-const FEProblemInterface *
-BndResidualFunc::get_fe_problem() const
-{
-    return this->fepi;
 }
 
 const PetscInt &
 BndResidualFunc::get_spatial_dimension() const
 {
     _F_;
-    return this->fepi->get_spatial_dimension();
+    return get_fe_problem()->get_spatial_dimension();
 }
 
-const PetscScalar *
+const FieldValue &
 BndResidualFunc::get_field_value(const std::string & field_name) const
 {
     _F_;
-    return this->fepi->get_field_value(field_name);
+    return get_fe_problem()->get_field_value(field_name);
 }
 
-const PetscScalar *
+const FieldGradient &
 BndResidualFunc::get_field_gradient(const std::string & field_name) const
 {
     _F_;
-    return this->fepi->get_field_gradient(field_name);
+    return get_fe_problem()->get_field_gradient(field_name);
 }
 
-const PetscScalar *
+const FieldValue &
 BndResidualFunc::get_field_dot(const std::string & field_name) const
 {
     _F_;
-    return this->fepi->get_field_dot(field_name);
+    return get_fe_problem()->get_field_dot(field_name);
 }
 
 const PetscReal &
 BndResidualFunc::get_time() const
 {
     _F_;
-    return this->fepi->get_time();
+    return get_fe_problem()->get_time();
 }
 
-PetscReal * const &
+const Vector &
 BndResidualFunc::get_normal() const
 {
     _F_;
-    return this->fepi->get_normal();
+    return get_fe_problem()->get_normal();
 }
 
-PetscReal * const &
+const Point &
 BndResidualFunc::get_xyz() const
 {
     _F_;
-    return this->fepi->get_xyz();
+    return get_fe_problem()->get_xyz();
 }
 
 } // namespace godzilla
