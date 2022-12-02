@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 namespace godzilla {
 namespace internal {
 
@@ -21,11 +23,11 @@ namespace internal {
 /// That's why we should not be using `std::vector` or similar.
 class CallStack {
 public:
+    static const std::size_t MAX_SIZE = 256;
+
+public:
     /// Build the call stack object with defined size
-    ///
-    /// @param max_size The maximum number of call stack objects to handle
-    explicit CallStack(int max_size = 32);
-    virtual ~CallStack();
+    explicit CallStack();
 
     /// Dump the call stack objects to standard error
     void dump();
@@ -51,11 +53,9 @@ public:
 
 protected:
     /// The object storing call stack objects
-    Obj ** stack;
+    std::array<Obj *, MAX_SIZE> stack;
     /// Actual size of the stack
     int size;
-    /// Maximum size of the stack
-    int max_size;
 
 public:
     /// Initialize the call stack capability

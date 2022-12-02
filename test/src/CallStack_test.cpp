@@ -1,4 +1,3 @@
-#include "GodzillaApp_test.h"
 #include "CallStack.h"
 #include "gmock/gmock.h"
 #include <unistd.h>
@@ -31,6 +30,6 @@ TEST(CallStackTest, alloc)
 {
     _F_;
 
-    auto * callstack = new godzilla::internal::CallStack(2);
+    auto * callstack = new godzilla::internal::CallStack();
     delete callstack;
 }

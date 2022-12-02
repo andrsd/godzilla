@@ -6,18 +6,14 @@ namespace godzilla {
 namespace internal {
 
 // global instance of the call stack object
-static CallStack callstack(256);
+static CallStack callstack;
 
 // Call Stack Object ////
 
-CallStack::Obj::Obj(int ln, const char * func, const char * file)
+CallStack::Obj::Obj(int ln, const char * func, const char * file) : line(ln), func(func), file(file)
 {
-    this->line = ln;
-    this->func = func;
-    this->file = file;
-
     // add this object to the call stack
-    if (callstack.size < callstack.max_size) {
+    if (callstack.size < CallStack::MAX_SIZE) {
         callstack.stack[callstack.size] = this;
         callstack.size++;
     }
@@ -59,17 +55,7 @@ get_callstack()
     return callstack;
 }
 
-CallStack::CallStack(int max_size)
-{
-    this->max_size = max_size;
-    this->size = 0;
-    this->stack = new Obj *[max_size];
-}
-
-CallStack::~CallStack()
-{
-    delete[] this->stack;
-}
+CallStack::CallStack() : size(0) {}
 
 void
 CallStack::dump()
