@@ -56,7 +56,7 @@ L2FieldDiff::create()
         for (const auto & it : this->funcs) {
             const auto & fld_name = it.first;
             if (!this->fepi->has_field_by_name(fld_name))
-                log_error("Field '%s' does not exists. Typo?");
+                log_error("Field '%s' does not exists. Typo?", fld_name);
         }
     }
     else
