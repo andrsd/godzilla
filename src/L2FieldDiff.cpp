@@ -71,9 +71,9 @@ L2FieldDiff::compute()
 {
     _F_;
     auto n_fields = this->funcs.size();
-    PetscFunc * pfns[n_fields];
-    void * ctxs[n_fields];
-    PetscReal diff[n_fields];
+    std::vector<PetscFunc *> pfns(n_fields, nullptr);
+    std::vector<void *> ctxs(n_fields, nullptr);
+    std::vector<PetscReal> diff(n_fields, 0.);
 
     for (const auto & it : this->funcs) {
         PetscInt fid = this->fepi->get_field_id(it.first);
@@ -81,15 +81,14 @@ L2FieldDiff::compute()
 
         pfns[fid] = pfn->get_function();
         ctxs[fid] = pfn->get_context();
-        diff[fid] = 0.;
     }
 
     PETSC_CHECK(DMComputeL2FieldDiff(this->problem->get_dm(),
                                      this->problem->get_time(),
-                                     pfns,
-                                     ctxs,
+                                     pfns.data(),
+                                     ctxs.data(),
                                      this->problem->get_solution_vector(),
-                                     diff));
+                                     diff.data()));
 
     for (PetscInt i = 0; i < n_fields; i++) {
         this->l2_diff[i] = diff[i];
