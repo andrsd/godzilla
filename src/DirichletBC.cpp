@@ -15,9 +15,14 @@ DirichletBC::parameters()
     return params;
 }
 
-DirichletBC::DirichletBC(const Parameters & params) : EssentialBC(params), FunctionInterface(params)
+DirichletBC::DirichletBC(const Parameters & params) :
+    EssentialBC(params),
+    FunctionInterface(params),
+    components(this->num_comps, 0)
 {
     _F_;
+    for (PetscInt i = 0; i < this->num_comps; i++)
+        this->components[i] = i;
 }
 
 void
@@ -28,21 +33,10 @@ DirichletBC::create()
     FunctionInterface::create();
 }
 
-PetscInt
-DirichletBC::get_num_components() const
-{
-    _F_;
-    return this->num_comps;
-}
-
-std::vector<PetscInt>
+const std::vector<PetscInt> &
 DirichletBC::get_components() const
 {
-    PetscInt nc = get_num_components();
-    std::vector<PetscInt> comps(nc);
-    for (PetscInt i = 0; i < nc; i++)
-        comps[i] = i;
-    return comps;
+    return this->components;
 }
 
 PetscFunc *

@@ -14,7 +14,7 @@ TEST(EssentialBCTest, api)
 
     class TestEssentialBC : public EssentialBC {
     public:
-        explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars) {}
+        explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars), components({ 0 }) {}
 
         MOCK_METHOD(
             void,
@@ -25,15 +25,10 @@ TEST(EssentialBCTest, api)
             evaluate_t,
             (PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]));
 
-        virtual PetscInt
-        get_num_components() const
-        {
-            return 1.;
-        }
-        virtual std::vector<PetscInt>
+        virtual const std::vector<PetscInt> &
         get_components() const
         {
-            return { 0 };
+            return this->components;
         }
 
     protected:
@@ -41,6 +36,8 @@ TEST(EssentialBCTest, api)
         set_up_callback()
         {
         }
+
+        std::vector<PetscInt> components;
     };
 
     Parameters mesh_pars = LineMesh::parameters();
@@ -63,8 +60,7 @@ TEST(EssentialBCTest, api)
     problem.create();
     bc.create();
 
-    EXPECT_EQ(bc.get_num_components(), 1);
-    auto comps = bc.get_components();
+    const auto & comps = bc.get_components();
     EXPECT_EQ(comps.size(), 1);
     EXPECT_EQ(comps[0], 0);
 

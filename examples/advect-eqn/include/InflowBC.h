@@ -10,8 +10,7 @@ class InflowBC : public NaturalRiemannBC {
 public:
     InflowBC(const Parameters & params);
 
-    virtual PetscInt get_num_components() const override;
-    virtual std::vector<PetscInt> get_components() const override;
+    const std::vector<PetscInt> & get_components() const override;
     virtual void evaluate(PetscReal time,
                           const PetscReal * c,
                           const PetscReal * n,
@@ -21,6 +20,7 @@ public:
 protected:
     /// Inlet velocity
     const PetscReal & inlet_vel;
+    std::vector<PetscInt> components;
 
 public:
     static Parameters parameters();

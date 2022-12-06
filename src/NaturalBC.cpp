@@ -26,6 +26,7 @@ void
 NaturalBC::add_boundary()
 {
     _F_;
+    const auto & components = get_components();
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_NATURAL,
                                    get_name().c_str(),
@@ -33,8 +34,8 @@ NaturalBC::add_boundary()
                                    this->n_ids,
                                    this->ids,
                                    this->fid,
-                                   get_num_components(),
-                                   get_num_components() == 0 ? nullptr : get_components().data(),
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
                                    nullptr,
                                    nullptr,
                                    (void *) this,

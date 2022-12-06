@@ -35,6 +35,7 @@ void
 NaturalRiemannBC::add_boundary()
 {
     _F_;
+    const auto & components = get_components();
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_NATURAL_RIEMANN,
                                    get_name().c_str(),
@@ -42,8 +43,8 @@ NaturalRiemannBC::add_boundary()
                                    this->n_ids,
                                    this->ids,
                                    this->fid,
-                                   get_num_components(),
-                                   get_num_components() == 0 ? nullptr : get_components().data(),
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
                                    (void (*)()) natural_riemann_boundary_condition_function,
                                    nullptr,
                                    (void *) this,

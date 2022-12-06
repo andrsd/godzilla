@@ -12,17 +12,12 @@ namespace {
 
 class TestBC : public NaturalBC {
 public:
-    explicit TestBC(const Parameters & params) : NaturalBC(params) {}
+    explicit TestBC(const Parameters & params) : NaturalBC(params), components({ 0 }) {}
 
-    PetscInt
-    get_num_components() const override
-    {
-        return 1;
-    }
-    std::vector<PetscInt>
+    const std::vector<PetscInt> &
     get_components() const override
     {
-        return { 0 };
+        return this->components;
     }
 
 protected:
@@ -30,6 +25,8 @@ protected:
     set_up_weak_form() override
     {
     }
+
+    std::vector<PetscInt> components;
 };
 
 class GTestProblem : public ImplicitFENonlinearProblem {

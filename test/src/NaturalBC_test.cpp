@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
 #include "LineMesh.h"
@@ -26,25 +26,21 @@ TEST(NaturalBCTest, api)
 
     class MockNaturalBC : public NaturalBC {
     public:
-        explicit MockNaturalBC(const Parameters & params) : NaturalBC(params) {}
+        explicit MockNaturalBC(const Parameters & params) : NaturalBC(params), comps({ 3, 5 }) {}
 
-        virtual PetscInt
-        get_num_components() const
-        {
-            return 2;
-        }
-
-        virtual std::vector<PetscInt>
+        virtual const std::vector<PetscInt> &
         get_components() const
         {
-            std::vector<PetscInt> comps = { 3, 5 };
-            return comps;
+            return this->comps;
         }
 
         virtual void
         set_up_weak_form()
         {
         }
+
+    protected:
+        std::vector<PetscInt> comps;
     };
 
     Parameters params = NaturalBC::parameters();
@@ -57,11 +53,8 @@ TEST(NaturalBCTest, api)
     prob.create();
     bc.create();
 
-    EXPECT_EQ(bc.get_num_components(), 2);
-
     std::vector<PetscInt> comps = bc.get_components();
-    EXPECT_EQ(comps[0], 3);
-    EXPECT_EQ(comps[1], 5);
+    EXPECT_THAT(comps, testing::ElementsAre(3, 5));
 }
 
 namespace {
@@ -97,19 +90,12 @@ TEST(NaturalBCTest, fe)
 {
     class TestNaturalBC : public NaturalBC {
     public:
-        explicit TestNaturalBC(const Parameters & params) : NaturalBC(params) {}
+        explicit TestNaturalBC(const Parameters & params) : NaturalBC(params), comps({ 0 }) {}
 
-        virtual PetscInt
-        get_num_components() const
-        {
-            return 1;
-        }
-
-        virtual std::vector<PetscInt>
+        virtual const std::vector<PetscInt> &
         get_components() const
         {
-            std::vector<PetscInt> comps = { 0 };
-            return comps;
+            return this->comps;
         }
 
         virtual void
@@ -142,6 +128,9 @@ TEST(NaturalBCTest, fe)
         {
             return this->ids;
         }
+
+    protected:
+        std::vector<PetscInt> comps;
     };
 
     TestApp app;

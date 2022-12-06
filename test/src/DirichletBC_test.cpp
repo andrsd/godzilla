@@ -34,7 +34,8 @@ TEST(DirichletBCTest, api)
     problem.create();
     obj.create();
 
-    EXPECT_EQ(obj.get_num_components(), 1);
+    const auto & components = obj.get_components();
+    EXPECT_EQ(components.size(), 1);
 
     PetscInt dim = 3;
     PetscReal time = 2.5;

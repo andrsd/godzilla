@@ -13,8 +13,7 @@ public:
     explicit DirichletBC(const Parameters & params);
 
     void create() override;
-    PetscInt get_num_components() const override;
-    std::vector<PetscInt> get_components() const override;
+    const std::vector<PetscInt> & get_components() const override;
     PetscFunc * get_function_t() override;
     void evaluate(PetscInt dim,
                   PetscReal time,
@@ -26,6 +25,9 @@ public:
                     const PetscReal x[],
                     PetscInt nc,
                     PetscScalar u[]) override;
+
+protected:
+    std::vector<PetscInt> components;
 
 public:
     static Parameters parameters();

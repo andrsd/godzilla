@@ -71,6 +71,7 @@ void
 EssentialBC::add_boundary()
 {
     _F_;
+    const auto & components = get_components();
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_ESSENTIAL,
                                    get_name().c_str(),
@@ -78,8 +79,8 @@ EssentialBC::add_boundary()
                                    this->n_ids,
                                    this->ids,
                                    this->fid,
-                                   get_num_components(),
-                                   get_num_components() == 0 ? nullptr : get_components().data(),
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
                                    (void (*)()) get_function(),
                                    (void (*)()) get_function_t(),
                                    (void *) get_context(),

@@ -28,15 +28,10 @@ public:
     /// @return ID of the field
     NO_DISCARD virtual PetscInt get_field_id() const;
 
-    /// Get the number of constrained components
-    ///
-    /// @return The number of constrained components
-    NO_DISCARD virtual PetscInt get_num_components() const = 0;
-
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    NO_DISCARD virtual std::vector<PetscInt> get_components() const = 0;
+    NO_DISCARD virtual const std::vector<PetscInt> & get_components() const = 0;
 
     /// Get DiscreteProblemInterface
     ///
