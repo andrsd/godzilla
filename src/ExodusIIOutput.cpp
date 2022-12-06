@@ -6,6 +6,7 @@
 #include "DiscreteProblemInterface.h"
 #include "UnstructuredMesh.h"
 #include "Postprocessor.h"
+#include "IndexSet.h"
 #include "exodusIIcpp.h"
 #include "fmt/printf.h"
 #include "fmt/format.h"
@@ -316,12 +317,7 @@ ExodusIIOutput::write_elements()
         block_names.resize(n_cells_sets);
 
         DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
-
-        IS cell_sets_is;
-        PETSC_CHECK(DMLabelGetValueIS(cell_sets_label, &cell_sets_is));
-        const PetscInt * cell_set_idx;
-        PETSC_CHECK(ISGetIndices(cell_sets_is, &cell_set_idx));
-
+        IndexSet cell_set_idx = IndexSet::values_from_label(cell_sets_label);
         for (PetscInt i = 0; i < n_cells_sets; ++i) {
             IS stratum_is;
             PETSC_CHECK(DMLabelGetStratumIS(cell_sets_label, cell_set_idx[i], &stratum_is));
@@ -339,8 +335,6 @@ ExodusIIOutput::write_elements()
 
             block_names[i] = this->mesh->get_cell_set_name(cell_set_idx[i]);
         }
-        PETSC_CHECK(ISRestoreIndices(cell_sets_is, &cell_set_idx));
-        PETSC_CHECK(ISDestroy(&cell_sets_is));
     }
     else
         write_block_connectivity(SINGLE_BLK_ID);
@@ -360,15 +354,8 @@ ExodusIIOutput::write_node_sets()
     PetscInt n_elems_in_block = elem_last - elem_first;
 
     PetscInt n_node_sets = this->mesh->get_num_vertex_sets();
-
     DMLabel vertex_sets_label = this->mesh->get_label("Vertex Sets");
-
-    IS vertex_sets_is;
-    PETSC_CHECK(DMLabelGetValueIS(vertex_sets_label, &vertex_sets_is));
-
-    const PetscInt * vertex_set_idx;
-    PETSC_CHECK(ISGetIndices(vertex_sets_is, &vertex_set_idx));
-
+    IndexSet vertex_set_idx = IndexSet::values_from_label(vertex_sets_label);
     for (PetscInt i = 0; i < n_node_sets; ++i) {
         IS stratum_is;
         PETSC_CHECK(DMLabelGetStratumIS(vertex_sets_label, vertex_set_idx[i], &stratum_is));
@@ -390,9 +377,6 @@ ExodusIIOutput::write_node_sets()
 
         // TODO: set the face name
     }
-    PETSC_CHECK(ISRestoreIndices(vertex_sets_is, &vertex_set_idx));
-
-    PETSC_CHECK(ISDestroy(&vertex_sets_is));
 }
 
 void
@@ -411,12 +395,7 @@ ExodusIIOutput::write_face_sets()
     PetscInt n_side_sets = this->mesh->get_num_face_sets();
     fs_names.resize(n_side_sets);
 
-    IS face_sets_is;
-    PETSC_CHECK(DMLabelGetValueIS(face_sets_label, &face_sets_is));
-
-    const PetscInt * face_set_idx;
-    PETSC_CHECK(ISGetIndices(face_sets_is, &face_set_idx));
-
+    IndexSet face_set_idx = IndexSet::values_from_label(face_sets_label);
     for (PetscInt fs = 0; fs < n_side_sets; ++fs) {
         IS stratum_is;
         PETSC_CHECK(DMLabelGetStratumIS(face_sets_label, face_set_idx[fs], &stratum_is));
@@ -465,8 +444,6 @@ ExodusIIOutput::write_face_sets()
 
         fs_names[fs] = this->mesh->get_face_set_name(face_set_idx[fs]);
     }
-    PETSC_CHECK(ISRestoreIndices(face_sets_is, &face_set_idx));
-    PETSC_CHECK(ISDestroy(&face_sets_is));
 
     this->exo->write_side_set_names(fs_names);
 }

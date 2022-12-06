@@ -5,6 +5,7 @@
 #include "Problem.h"
 #include "DiscreteProblemInterface.h"
 #include "BoundaryCondition.h"
+#include "IndexSet.h"
 #include <cassert>
 
 namespace godzilla {
@@ -89,17 +90,8 @@ BoundaryCondition::set_up()
 {
     _F_;
     PETSC_CHECK(DMGetDS(this->dm, &this->ds));
-    IS is;
-    PETSC_CHECK(DMLabelGetValueIS(this->label, &is));
-    PetscInt n;
-    PETSC_CHECK(ISGetSize(is, &n));
-    const PetscInt * vals = nullptr;
-    PETSC_CHECK(ISGetIndices(is, &vals));
-    this->ids.resize(n);
-    for (PetscInt i = 0; i < n; i++)
-        this->ids[i] = vals[i];
-    PETSC_CHECK(ISRestoreIndices(is, &vals));
-    PETSC_CHECK(ISDestroy(&is));
+    IndexSet is = IndexSet::values_from_label(this->label);
+    this->ids = is.to_std_vector();
     add_boundary();
 }
 
