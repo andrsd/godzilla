@@ -87,6 +87,14 @@ install(
         ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
 
+install(
+    FILES
+        ${PROJECT_SOURCE_DIR}/cmake/TesterExodusII.cmake
+        ${PROJECT_SOURCE_DIR}/cmake/TesterHDF5.cmake
+    DESTINATION
+        ${CMAKE_ROOT}/Modules
+)
+
 # Tests
 
 if (GODZILLA_BUILD_TESTS)
