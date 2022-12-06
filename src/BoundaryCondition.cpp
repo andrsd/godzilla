@@ -26,22 +26,11 @@ BoundaryCondition::BoundaryCondition(const Parameters & params) :
     dm(nullptr),
     ds(nullptr),
     label(nullptr),
-    is(nullptr),
     fid(-1),
-    n_ids(0),
-    ids(nullptr),
+    ids({}),
     boundary(get_param<std::string>("boundary"))
 {
     _F_;
-}
-
-BoundaryCondition::~BoundaryCondition()
-{
-    _F_;
-    if (this->ids)
-        PETSC_CHECK(ISRestoreIndices(this->is, &this->ids));
-    if (this->is)
-        PETSC_CHECK(ISDestroy(&this->is));
 }
 
 void
@@ -100,9 +89,17 @@ BoundaryCondition::set_up()
 {
     _F_;
     PETSC_CHECK(DMGetDS(this->dm, &this->ds));
-    PETSC_CHECK(DMLabelGetValueIS(this->label, &this->is));
-    PETSC_CHECK(ISGetSize(is, &this->n_ids));
-    PETSC_CHECK(ISGetIndices(is, &this->ids));
+    IS is;
+    PETSC_CHECK(DMLabelGetValueIS(this->label, &is));
+    PetscInt n;
+    PETSC_CHECK(ISGetSize(is, &n));
+    const PetscInt * vals = nullptr;
+    PETSC_CHECK(ISGetIndices(is, &vals));
+    this->ids.resize(n);
+    for (PetscInt i = 0; i < n; i++)
+        this->ids[i] = vals[i];
+    PETSC_CHECK(ISRestoreIndices(is, &vals));
+    PETSC_CHECK(ISDestroy(&is));
     add_boundary();
 }
 

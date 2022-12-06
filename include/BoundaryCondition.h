@@ -14,7 +14,7 @@ class DiscreteProblemInterface;
 class BoundaryCondition : public Object, public PrintInterface {
 public:
     explicit BoundaryCondition(const Parameters & params);
-    ~BoundaryCondition() override;
+    ~BoundaryCondition() override = default;
 
     void create() override;
 
@@ -57,16 +57,11 @@ protected:
     /// DMLabel associated with the boundary name this boundary condition acts on
     DMLabel label;
 
-    IS is;
-
     /// Field ID this boundary condition is attached to
     PetscInt fid;
 
-    /// Number of IDs in the label
-    PetscInt n_ids;
-
     /// IDs of the label
-    const PetscInt * ids;
+    std::vector<PetscInt> ids;
 
     /// List of boundary names
     const std::string & boundary;

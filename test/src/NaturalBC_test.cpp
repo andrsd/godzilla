@@ -123,7 +123,7 @@ TEST(NaturalBCTest, fe)
             return this->label;
         }
 
-        const PetscInt *
+        const std::vector<PetscInt> &
         get_ids() const
         {
             return this->ids;
