@@ -48,7 +48,7 @@ endfunction()
 # The Exodiff tester
 #
 # This will:
-#   1. run the provided exeecutable
+#   1. run the provided executable
 #   2. compare its output to the expected values
 if(
     DEFINED BIN AND
