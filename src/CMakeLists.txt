@@ -41,6 +41,7 @@ add_library(${PROJECT_NAME}
         GYMLFile.cpp
         HDF5Output.cpp
         ImplicitFENonlinearProblem.cpp
+        IndexSet.cpp
         Init.cpp
         InitialCondition.cpp
         InputFile.cpp

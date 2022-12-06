@@ -1,6 +1,7 @@
 #include "Godzilla.h"
 #include "UnstructuredMesh.h"
 #include "CallStack.h"
+#include "IndexSet.h"
 #include "petscdmplex.h"
 
 namespace godzilla {
@@ -173,20 +174,14 @@ void
 UnstructuredMesh::create_face_set_labels(const std::map<PetscInt, std::string> & names)
 {
     _F_;
-    DMLabel fs_label;
-    PETSC_CHECK(DMGetLabel(dm, "Face Sets", &fs_label));
+    DMLabel fs_label = get_label("Face Sets");
     PetscInt n_fs = get_num_face_sets();
-    IS fs_is;
-    PETSC_CHECK(DMLabelGetValueIS(fs_label, &fs_is));
-    const PetscInt * fs_ids;
-    PETSC_CHECK(ISGetIndices(fs_is, &fs_ids));
+    IndexSet fs_ids = IndexSet::values_from_label(fs_label);
     for (PetscInt i = 0; i < n_fs; i++) {
         PetscInt id = fs_ids[i];
         create_face_set(id);
         set_face_set_name(id, names.at(id));
     }
-    PETSC_CHECK(ISRestoreIndices(fs_is, &fs_ids));
-    PETSC_CHECK(ISDestroy(&fs_is));
 }
 
 void

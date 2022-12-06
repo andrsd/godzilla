@@ -11,6 +11,7 @@
 #include "PetscFEGodzilla.h"
 #include "WeakForm.h"
 #include "Functional.h"
+#include "IndexSet.h"
 #include <cassert>
 #include <petsc/private/petscfeimpl.h>
 
@@ -450,25 +451,18 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
         ctxs[fid] = aux->get_context();
     }
 
-    IS is;
-    PETSC_CHECK(DMLabelGetValueIS(label, &is));
-    PetscInt n_ids;
-    PETSC_CHECK(ISGetSize(is, &n_ids));
-    const PetscInt * ids;
-    PETSC_CHECK(ISGetIndices(is, &ids));
+    IndexSet ids = IndexSet::values_from_label(label);
     PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
                                             this->problem->get_time(),
                                             label,
-                                            n_ids,
-                                            ids,
+                                            ids.size(),
+                                            ids.data(),
                                             PETSC_DETERMINE,
                                             nullptr,
                                             func.data(),
                                             ctxs.data(),
                                             INSERT_ALL_VALUES,
                                             a));
-    PETSC_CHECK(ISRestoreIndices(is, &ids));
-    PETSC_CHECK(ISDestroy(&is));
 }
 
 void
