@@ -56,22 +56,17 @@ ConvectiveHeatFluxBC::parameters()
     return params;
 }
 
-ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const Parameters & params) : NaturalBC(params)
+ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const Parameters & params) :
+    NaturalBC(params),
+    components({ 0 })
 {
     _F_;
 }
 
-PetscInt
-ConvectiveHeatFluxBC::get_num_components() const
-{
-    return 1;
-}
-
-std::vector<PetscInt>
+const std::vector<PetscInt> &
 ConvectiveHeatFluxBC::get_components() const
 {
-    std::vector<PetscInt> comps = { 0 };
-    return comps;
+    return this->components;
 }
 
 void

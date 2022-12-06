@@ -26,15 +26,16 @@ void
 NaturalBC::add_boundary()
 {
     _F_;
+    const auto & components = get_components();
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_NATURAL,
                                    get_name().c_str(),
                                    this->label,
-                                   this->n_ids,
-                                   this->ids,
+                                   this->ids.size(),
+                                   this->ids.data(),
                                    this->fid,
-                                   get_num_components(),
-                                   get_num_components() == 0 ? nullptr : get_components().data(),
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
                                    nullptr,
                                    nullptr,
                                    (void *) this,
@@ -45,8 +46,7 @@ void
 NaturalBC::set_residual_block(BndResidualFunc * f0, BndResidualFunc * f1)
 {
     _F_;
-    for (PetscInt i = 0; i < this->n_ids; i++) {
-        PetscInt id = this->ids[i];
+    for (auto & id : this->ids) {
         this->wf->add(PETSC_WF_BDF0, this->label, id, this->fid, 0, f0);
         this->wf->add(PETSC_WF_BDF1, this->label, id, this->fid, 0, f1);
     }
@@ -60,8 +60,7 @@ NaturalBC::set_jacobian_block(PetscInt gid,
                               BndJacobianFunc * g3)
 {
     _F_;
-    for (PetscInt i = 0; i < this->n_ids; i++) {
-        PetscInt id = this->ids[i];
+    for (auto & id : this->ids) {
         this->wf->add(PETSC_WF_BDG0, this->label, id, this->fid, gid, 0, g0);
         this->wf->add(PETSC_WF_BDG1, this->label, id, this->fid, gid, 0, g1);
         this->wf->add(PETSC_WF_BDG2, this->label, id, this->fid, gid, 0, g2);

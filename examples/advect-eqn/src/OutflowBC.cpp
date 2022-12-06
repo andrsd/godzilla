@@ -11,23 +11,16 @@ OutflowBC::parameters()
     return params;
 }
 
-OutflowBC::OutflowBC(const Parameters & params) : NaturalRiemannBC(params)
+OutflowBC::OutflowBC(const Parameters & params) : NaturalRiemannBC(params), components({ 0 })
 {
     _F_;
 }
 
-PetscInt
-OutflowBC::get_num_components() const
-{
-    _F_;
-    return 1;
-}
-
-std::vector<PetscInt>
+const std::vector<PetscInt> &
 OutflowBC::get_components() const
 {
     _F_;
-    return { 0 };
+    return this->components;
 }
 
 void

@@ -11,18 +11,12 @@ namespace {
 
 class TestBC : public NaturalRiemannBC {
 public:
-    explicit TestBC(const Parameters & params) : NaturalRiemannBC(params) {}
+    explicit TestBC(const Parameters & params) : NaturalRiemannBC(params), comps({ 0 }) {}
 
-    virtual PetscInt
-    get_num_components() const override
-    {
-        return 1;
-    }
-
-    virtual std::vector<PetscInt>
+    virtual const std::vector<PetscInt> &
     get_components() const override
     {
-        return { 0 };
+        return this->comps;
     }
 
     virtual void
@@ -34,6 +28,9 @@ public:
     {
         xG[0] = xI[0];
     }
+
+protected:
+    std::vector<PetscInt> comps;
 
 public:
     static Parameters
@@ -102,6 +99,5 @@ TEST(NaturalRiemannBCTest, api)
     mesh.create();
     prob.create();
 
-    EXPECT_EQ(bc.get_num_components(), 1);
     EXPECT_THAT(bc.get_components(), testing::ElementsAre(0));
 }

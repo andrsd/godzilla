@@ -15,22 +15,20 @@ namespace {
 
 class TestBC : public NaturalBC {
 public:
-    explicit TestBC(const Parameters & params) : NaturalBC(params) {}
+    explicit TestBC(const Parameters & params) : NaturalBC(params), comps({ 1 }) {}
 
-    PetscInt
-    get_num_components() const override
-    {
-        return 1;
-    }
-    std::vector<PetscInt>
+    const std::vector<PetscInt> &
     get_components() const override
     {
-        return { 1 };
+        return this->comps;
     }
     void
     set_up_weak_form() override
     {
     }
+
+protected:
+    std::vector<PetscInt> comps;
 };
 
 class TestF : public ResidualFunc {

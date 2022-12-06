@@ -14,23 +14,17 @@ InflowBC::parameters()
 
 InflowBC::InflowBC(const Parameters & params) :
     NaturalRiemannBC(params),
-    inlet_vel(get_param<PetscReal>("vel"))
+    inlet_vel(get_param<PetscReal>("vel")),
+    components({ 0 })
 {
     _F_;
 }
 
-PetscInt
-InflowBC::get_num_components() const
-{
-    _F_;
-    return 1;
-}
-
-std::vector<PetscInt>
+const std::vector<PetscInt> &
 InflowBC::get_components() const
 {
     _F_;
-    return { 0 };
+    return this->components;
 }
 
 void

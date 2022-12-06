@@ -14,7 +14,7 @@ class DiscreteProblemInterface;
 class BoundaryCondition : public Object, public PrintInterface {
 public:
     explicit BoundaryCondition(const Parameters & params);
-    ~BoundaryCondition() override;
+    ~BoundaryCondition() override = default;
 
     void create() override;
 
@@ -28,15 +28,10 @@ public:
     /// @return ID of the field
     NO_DISCARD virtual PetscInt get_field_id() const;
 
-    /// Get the number of constrained components
-    ///
-    /// @return The number of constrained components
-    NO_DISCARD virtual PetscInt get_num_components() const = 0;
-
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    NO_DISCARD virtual std::vector<PetscInt> get_components() const = 0;
+    NO_DISCARD virtual const std::vector<PetscInt> & get_components() const = 0;
 
     /// Get DiscreteProblemInterface
     ///
@@ -62,16 +57,11 @@ protected:
     /// DMLabel associated with the boundary name this boundary condition acts on
     DMLabel label;
 
-    IS is;
-
     /// Field ID this boundary condition is attached to
     PetscInt fid;
 
-    /// Number of IDs in the label
-    PetscInt n_ids;
-
     /// IDs of the label
-    const PetscInt * ids;
+    std::vector<PetscInt> ids;
 
     /// List of boundary names
     const std::string & boundary;
