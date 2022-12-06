@@ -66,4 +66,14 @@ IndexSet::values_from_label(DMLabel label)
     return obj;
 }
 
+IndexSet
+IndexSet::stratum_from_label(DMLabel label, PetscInt stratum_value)
+{
+    IS is;
+    PETSC_CHECK(DMLabelGetStratumIS(label, stratum_value, &is));
+    IndexSet obj(is);
+    obj.get_indices_internal();
+    return obj;
+}
+
 } // namespace godzilla

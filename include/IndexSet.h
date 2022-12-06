@@ -32,6 +32,7 @@ private:
 
 public:
     static IndexSet values_from_label(DMLabel label);
+    static IndexSet stratum_from_label(DMLabel label, PetscInt stratum_value);
 };
 
 } // namespace godzilla
