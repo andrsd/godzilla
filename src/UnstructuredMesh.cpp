@@ -174,8 +174,7 @@ void
 UnstructuredMesh::create_face_set_labels(const std::map<PetscInt, std::string> & names)
 {
     _F_;
-    DMLabel fs_label;
-    PETSC_CHECK(DMGetLabel(dm, "Face Sets", &fs_label));
+    DMLabel fs_label = get_label("Face Sets");
     PetscInt n_fs = get_num_face_sets();
     IndexSet fs_ids = IndexSet::values_from_label(fs_label);
     for (PetscInt i = 0; i < n_fs; i++) {

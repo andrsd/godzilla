@@ -367,8 +367,7 @@ ExodusIIOutput::write_face_sets()
     DM dm = this->mesh->get_dm();
     std::vector<std::string> fs_names;
 
-    DMLabel face_sets_label;
-    PETSC_CHECK(DMGetLabel(dm, "Face Sets", &face_sets_label));
+    DMLabel face_sets_label = this->mesh->get_label("Face Sets");
 
     PetscInt n_side_sets = this->mesh->get_num_face_sets();
     fs_names.resize(n_side_sets);
