@@ -293,6 +293,25 @@ FEProblemInterface::has_aux_field_by_name(const std::string & name) const
     return it != this->aux_fields_by_name.end();
 }
 
+bool
+FEProblemInterface::has_aux(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->auxs_by_name.find(name);
+    return it != this->auxs_by_name.end();
+}
+
+const AuxiliaryField *
+FEProblemInterface::get_aux(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->auxs_by_name.find(name);
+    if (it != this->auxs_by_name.end())
+        return it->second;
+    else
+        return nullptr;
+}
+
 PetscInt
 FEProblemInterface::add_fe(const std::string & name, PetscInt nc, PetscInt k)
 {
@@ -350,7 +369,14 @@ void
 FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 {
     _F_;
-    this->auxs.push_back(aux);
+    const std::string & name = aux->get_name();
+    auto it = this->auxs_by_name.find(name);
+    if (it == this->auxs_by_name.end()) {
+        this->auxs.push_back(aux);
+        this->auxs_by_name[name] = aux;
+    }
+    else
+        error("Cannot add auxiliary object '%s'. Name already taken.", name);
 }
 
 void
