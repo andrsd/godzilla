@@ -106,7 +106,7 @@ GTestImplicitFENonlinearProblem::set_up_fields()
 {
     _F_;
     PetscInt order = 1;
-    add_fe(this->iu, "u", 1, order);
+    set_fe(this->iu, "u", 1, order);
 }
 
 void

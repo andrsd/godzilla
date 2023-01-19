@@ -33,8 +33,8 @@ void
 PoissonEquation::set_up_fields()
 {
     _F_;
-    add_fe(this->iu, "u", 1, this->p_order);
-    add_aux_fe(this->affn, "forcing_fn", 1, this->p_order);
+    set_fe(this->iu, "u", 1, this->p_order);
+    set_aux_fe(this->affn, "forcing_fn", 1, this->p_order);
 }
 
 void

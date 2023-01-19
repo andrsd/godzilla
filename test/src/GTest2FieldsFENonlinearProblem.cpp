@@ -13,5 +13,5 @@ void
 GTest2FieldsFENonlinearProblem::set_up_fields()
 {
     GTestFENonlinearProblem::set_up_fields();
-    add_fe(this->iv, "v", 1, 1);
+    set_fe(this->iv, "v", 1, 1);
 }

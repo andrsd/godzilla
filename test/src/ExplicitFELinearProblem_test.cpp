@@ -31,7 +31,7 @@ protected:
     virtual void
     set_up_fields() override
     {
-        add_fe(0, "u", 1, 1);
+        set_fe(0, "u", 1, 1);
     }
     virtual void set_up_weak_form() override;
 };

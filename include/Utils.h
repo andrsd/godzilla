@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include <map>
 #include <string>
 #include <typeinfo>
 
@@ -41,6 +43,31 @@ std::string
 type_name()
 {
     return typeid(T).name();
+}
+
+/**
+ *
+ */
+template <typename T, typename U>
+std::vector<T>
+map_keys(const std::map<T, U> & m)
+{
+    std::vector<T> k;
+    k.reserve(m.size());
+    for (auto && it : m)
+        k.push_back(it.first);
+    return k;
+}
+
+template <typename T, typename U>
+std::vector<T>
+map_values(const std::map<T, U> & m)
+{
+    std::vector<T> v;
+    v.reserve(m.size());
+    for (auto && it : m)
+        v.push_back(it.second);
+    return v;
 }
 
 } // namespace utils

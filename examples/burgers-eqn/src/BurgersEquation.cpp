@@ -62,7 +62,7 @@ void
 BurgersEquation::set_up_fields()
 {
     _F_;
-    add_fe(u_id, "u", 1, 1);
+    set_fe(u_id, "u", 1, 1);
 }
 
 void

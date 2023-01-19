@@ -19,7 +19,7 @@ TEST(ConstantAuxiliaryFieldTest, create)
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
-    prob.add_aux_fe(0, "aux1", 1, 1);
+    prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters aux_params = ConstantAuxiliaryField::parameters();
     aux_params.set<const App *>("_app") = &app;
@@ -58,7 +58,7 @@ TEST(ConstantAuxiliaryFieldTest, evaluate)
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
-    prob.add_aux_fe(0, "aux1", 1, 1);
+    prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters aux_params = ConstantAuxiliaryField::parameters();
     aux_params.set<const App *>("_app") = &app;

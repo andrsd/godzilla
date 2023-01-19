@@ -88,7 +88,7 @@ void
 GTestFENonlinearProblem::set_up_fields()
 {
     PetscInt order = 1;
-    add_fe(this->iu, "u", 1, order);
+    set_fe(this->iu, "u", 1, order);
 }
 
 void
