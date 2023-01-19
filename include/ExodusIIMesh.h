@@ -19,7 +19,7 @@ protected:
     void create_dm() override;
 
     /// File name with the ExodusII mesh
-    const std::string & file_name;
+    std::string file_name;
     /// Create faces and edges in the mesh
     const PetscBool interpolate;
 
