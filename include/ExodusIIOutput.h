@@ -49,7 +49,10 @@ protected:
     void write_field_variables();
     void write_nodal_variables(const PetscScalar * sln);
     void write_elem_variables(const PetscScalar * sln);
-    void write_block_elem_variables(int blk_id, const PetscScalar * sln);
+    void write_block_elem_variables(int blk_id,
+                                    const PetscScalar * sln,
+                                    PetscInt n_elems_in_block = 0,
+                                    const PetscInt * cells = nullptr);
     void write_global_variables();
     void write_block_connectivity(int blk_id,
                                   PetscInt n_elems_in_block = 0,
