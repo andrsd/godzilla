@@ -123,6 +123,18 @@ UnstructuredMesh::get_all_element_idx_range(PetscInt & first, PetscInt & last) c
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
 }
 
+IndexSet
+UnstructuredMesh::get_all_elements() const
+{
+    PetscInt depth;
+    PETSC_CHECK(DMPlexGetDepth(this->dm, &depth));
+    IS cell_is;
+    PETSC_CHECK(DMGetStratumIS(this->dm, "dim", depth, &cell_is));
+    if (!cell_is)
+        PETSC_CHECK(DMGetStratumIS(this->dm, "depth", depth, &cell_is));
+    return IndexSet(cell_is);
+}
+
 DMPolytopeType
 UnstructuredMesh::get_cell_type(PetscInt el) const
 {

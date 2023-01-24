@@ -41,6 +41,11 @@ class WeakForm {
 public:
     WeakForm();
 
+    /// Get residual keys
+    ///
+    /// FIXME: needs a better name
+    std::vector<PetscFormKey> get_residual_keys() const;
+
     /// Get residual forms
     const std::vector<Functional *> &
     get(PetscWeakFormKind kind, DMLabel label, PetscInt val, PetscInt f, PetscInt part) const;

@@ -8,6 +8,7 @@ namespace godzilla {
 
 class ResidualFunc;
 class JacobianFunc;
+class IndexSet;
 
 /// PETSc non-linear problem that arises from a finite element discretization
 /// using the PetscFE system
@@ -32,7 +33,13 @@ protected:
     /// @param fid Field ID
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
-    virtual void set_residual_block(PetscInt fid, ResidualFunc * f0, ResidualFunc * f1);
+    /// @param label Region specified by DMLabel where this residual statement is active
+    /// @param val Value associated with the region
+    virtual void set_residual_block(PetscInt fid,
+                                    ResidualFunc * f0,
+                                    ResidualFunc * f1,
+                                    DMLabel label = nullptr,
+                                    PetscInt val = 0);
 
     /// Set up Jacobian statement for a field variable
     ///
@@ -50,6 +57,25 @@ protected:
                                     JacobianFunc * g3);
 
     void on_initial() override;
+
+    PetscErrorCode compute_residual_internal(DM dm,
+                                             PetscFormKey key,
+                                             const IndexSet & cells,
+                                             PetscReal time,
+                                             Vec loc_x,
+                                             Vec loc_x_t,
+                                             PetscReal t,
+                                             Vec loc_f);
+    PetscErrorCode
+    compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, PetscReal t, Vec loc_f);
+    PetscErrorCode compute_bnd_residual_single_internal(DM dm,
+                                                        PetscReal t,
+                                                        PetscFormKey key,
+                                                        Vec loc_x,
+                                                        Vec loc_x_t,
+                                                        Vec loc_f,
+                                                        DMField coord_field,
+                                                        const IndexSet & facets);
 
 public:
     static Parameters parameters();

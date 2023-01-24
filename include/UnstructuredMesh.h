@@ -2,6 +2,7 @@
 
 #include "GodzillaConfig.h"
 #include "Mesh.h"
+#include "IndexSet.h"
 #include "petscpartitioner.h"
 
 namespace godzilla {
@@ -54,6 +55,11 @@ public:
     /// @param first First element index
     /// @param last Last element index plus one
     void get_all_element_idx_range(PetscInt & first, PetscInt & last) const;
+
+    /// Get index set with all elements
+    ///
+    /// @return Index set with all elements
+    IndexSet get_all_elements() const;
 
     /// Get cell type
     ///

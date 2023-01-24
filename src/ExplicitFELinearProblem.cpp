@@ -145,13 +145,17 @@ ExplicitFELinearProblem::set_up_monitors()
 }
 
 void
-ExplicitFELinearProblem::set_residual_block(PetscInt field_id, ResidualFunc * f0, ResidualFunc * f1)
+ExplicitFELinearProblem::set_residual_block(PetscInt field_id,
+                                            ResidualFunc * f0,
+                                            ResidualFunc * f1,
+                                            DMLabel label,
+                                            PetscInt val)
 {
     _F_;
     // see PetscDSSetRHSResidual for explanation
     PetscInt part = 100;
-    this->wf->add(PETSC_WF_F0, nullptr, 0, field_id, part, f0);
-    this->wf->add(PETSC_WF_F1, nullptr, 0, field_id, part, f1);
+    this->wf->add(PETSC_WF_F0, label, val, field_id, part, f0);
+    this->wf->add(PETSC_WF_F1, label, val, field_id, part, f1);
 }
 
 } // namespace godzilla
