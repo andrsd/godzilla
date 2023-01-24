@@ -18,6 +18,8 @@ public:
 
     void create() override;
 
+    NO_DISCARD virtual PetscInt get_block_id() const;
+
     NO_DISCARD virtual DMLabel get_label() const;
 
     NO_DISCARD virtual const std::string & get_region() const;
@@ -51,6 +53,9 @@ protected:
 
     /// Block here the auxiliary field lives
     DMLabel label;
+
+    /// Block ID associated with the label where this field is defined
+    PetscInt block_id;
 
 public:
     static Parameters parameters();
