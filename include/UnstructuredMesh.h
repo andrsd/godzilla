@@ -82,6 +82,12 @@ public:
     /// @return Cell set name
     const std::string & get_cell_set_name(PetscInt id) const;
 
+    /// Get cell set ID
+    ///
+    /// @param name The name of a cell sel
+    /// @return Cell set ID
+    PetscInt get_cell_set_id(const std::string & name) const;
+
     /// Get number of cell sets
     ///
     /// @return Number of cell sets
@@ -148,6 +154,9 @@ protected:
 
     /// Cell set names
     std::map<PetscInt, std::string> cell_set_names;
+
+    /// Cell set IDs
+    std::map<std::string, PetscInt> cell_set_ids;
 
     /// Face set names
     std::map<PetscInt, std::string> face_set_names;

@@ -264,6 +264,7 @@ UnstructuredMesh::create_cell_set(PetscInt id, const std::string & name)
     PETSC_CHECK(ISDestroy(&is));
     PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
     this->cell_set_names[id] = name;
+    this->cell_set_ids[name] = id;
 }
 
 const std::string &
@@ -275,6 +276,17 @@ UnstructuredMesh::get_cell_set_name(PetscInt id) const
         return it->second;
     else
         error("Cell set ID '%d' does not exist.", id);
+}
+
+PetscInt
+UnstructuredMesh::get_cell_set_id(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->cell_set_ids.find(name);
+    if (it != this->cell_set_ids.end())
+        return it->second;
+    else
+        error("Cell set '%s' does not exist.", name);
 }
 
 PetscInt
