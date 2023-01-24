@@ -318,12 +318,18 @@ ExodusIIOutput::write_elements()
 
         DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
         IndexSet cell_set_idx = IndexSet::values_from_label(cell_sets_label);
+        cell_set_idx.get_indices();
         for (PetscInt i = 0; i < n_cells_sets; ++i) {
             IndexSet cells = IndexSet::stratum_from_label(cell_sets_label, cell_set_idx[i]);
-            write_block_connectivity((int) cell_set_idx[i], cells.size(), cells.data());
+            cells.get_indices();
+            write_block_connectivity((int) cell_set_idx[i], cells.get_size(), cells.data());
 
             block_names[i] = this->mesh->get_cell_set_name(cell_set_idx[i]);
+            cells.restore_indices();
+            cells.destroy();
         }
+        cell_set_idx.restore_indices();
+        cell_set_idx.destroy();
     }
     else
         write_block_connectivity(SINGLE_BLK_ID);
@@ -345,16 +351,23 @@ ExodusIIOutput::write_node_sets()
     PetscInt n_node_sets = this->mesh->get_num_vertex_sets();
     DMLabel vertex_sets_label = this->mesh->get_label("Vertex Sets");
     IndexSet vertex_set_idx = IndexSet::values_from_label(vertex_sets_label);
+    vertex_set_idx.get_indices();
     for (PetscInt i = 0; i < n_node_sets; ++i) {
         IndexSet vertices = IndexSet::stratum_from_label(vertex_sets_label, vertex_set_idx[i]);
-        PetscInt n_nodes_in_set = vertices.size();
+        vertices.get_indices();
+        PetscInt n_nodes_in_set = vertices.get_size();
         std::vector<int> node_set(n_nodes_in_set);
         for (PetscInt j = 0; j < n_nodes_in_set; j++)
             node_set[j] = (int) (vertices[j] - n_elems_in_block + 1);
         this->exo->write_node_set(vertex_set_idx[i], node_set);
 
         // TODO: set the node set name
+
+        vertices.restore_indices();
+        vertices.destroy();
     }
+    vertex_set_idx.restore_indices();
+    vertex_set_idx.destroy();
 }
 
 void
@@ -373,9 +386,11 @@ ExodusIIOutput::write_face_sets()
     fs_names.resize(n_side_sets);
 
     IndexSet face_set_idx = IndexSet::values_from_label(face_sets_label);
+    face_set_idx.get_indices();
     for (PetscInt fs = 0; fs < n_side_sets; ++fs) {
         IndexSet faces = IndexSet::stratum_from_label(face_sets_label, face_set_idx[fs]);
-        PetscInt face_set_size = faces.size();
+        faces.get_indices();
+        PetscInt face_set_size = faces.get_size();
         std::vector<int> elem_list(face_set_size);
         std::vector<int> side_list(face_set_size);
         for (PetscInt i = 0; i < face_set_size; ++i) {
@@ -409,7 +424,11 @@ ExodusIIOutput::write_face_sets()
         this->exo->write_side_set(face_set_idx[fs], elem_list, side_list);
 
         fs_names[fs] = this->mesh->get_face_set_name(face_set_idx[fs]);
+        faces.restore_indices();
+        faces.destroy();
     }
+    face_set_idx.restore_indices();
+    face_set_idx.destroy();
 
     this->exo->write_side_set_names(fs_names);
 }
@@ -522,10 +541,14 @@ ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
     if (n_cells_sets > 1) {
         DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
         IndexSet cell_set_idx = IndexSet::values_from_label(cell_sets_label);
+        cell_set_idx.get_indices();
         for (PetscInt i = 0; i < n_cells_sets; ++i) {
             IndexSet cells = IndexSet::stratum_from_label(cell_sets_label, cell_set_idx[i]);
-            write_block_elem_variables((int) cell_set_idx[i], sln, cells.size(), cells.data());
+            write_block_elem_variables((int) cell_set_idx[i], sln, cells.get_size(), cells.data());
+            cells.destroy();
         }
+        cell_set_idx.restore_indices();
+        cell_set_idx.destroy();
     }
     else
         write_block_elem_variables(SINGLE_BLK_ID, sln);

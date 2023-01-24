@@ -177,11 +177,14 @@ UnstructuredMesh::create_face_set_labels(const std::map<PetscInt, std::string> &
     DMLabel fs_label = get_label("Face Sets");
     PetscInt n_fs = get_num_face_sets();
     IndexSet fs_ids = IndexSet::values_from_label(fs_label);
+    fs_ids.get_indices();
     for (PetscInt i = 0; i < n_fs; i++) {
         PetscInt id = fs_ids[i];
         create_face_set(id);
         set_face_set_name(id, names.at(id));
     }
+    fs_ids.restore_indices();
+    fs_ids.destroy();
 }
 
 void

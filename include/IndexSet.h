@@ -13,8 +13,13 @@ public:
     ~IndexSet();
 
     void create(MPI_Comm comm);
+    void destroy();
 
-    NO_DISCARD PetscInt size() const;
+    void get_indices();
+    void restore_indices();
+
+    NO_DISCARD PetscInt get_size() const;
+    NO_DISCARD PetscInt get_local_size() const;
     NO_DISCARD const PetscInt * data() const;
     PetscInt operator[](unsigned int i) const;
 
@@ -23,16 +28,22 @@ public:
     /// @return std::vector containing the indices
     std::vector<PetscInt> to_std_vector();
 
-private:
-    void get_indices_internal();
+    void inc_ref();
 
+    explicit operator IS() const;
+
+    bool empty() const;
+
+    PetscObjectId get_id() const;
+
+private:
     IS is;
-    PetscInt n;
     const PetscInt * indices;
 
 public:
     static IndexSet values_from_label(DMLabel label);
     static IndexSet stratum_from_label(DMLabel label, PetscInt stratum_value);
+    static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);
 };
 
 } // namespace godzilla
