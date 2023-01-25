@@ -24,6 +24,7 @@ add_library(${PROJECT_NAME}
         ExplicitFVLinearProblem.cpp
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
+        FileMesh.cpp
         FileOutput.cpp
         Function.cpp
         Functional.cpp

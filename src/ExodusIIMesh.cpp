@@ -2,11 +2,7 @@
 #include "ExodusIIMesh.h"
 #include "App.h"
 #include "CallStack.h"
-#include "Utils.h"
-#include "petscdmplex.h"
 #include "exodusIIcpp.h"
-
-namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -15,31 +11,13 @@ REGISTER_OBJECT(ExodusIIMesh);
 Parameters
 ExodusIIMesh::parameters()
 {
-    Parameters params = UnstructuredMesh::parameters();
-    params.add_required_param<std::string>("file", "The name of the ExodusII file.");
+    Parameters params = FileMesh::parameters();
     return params;
 }
 
-ExodusIIMesh::ExodusIIMesh(const Parameters & parameters) :
-    UnstructuredMesh(parameters),
-    interpolate(PETSC_TRUE)
+ExodusIIMesh::ExodusIIMesh(const Parameters & parameters) : FileMesh(parameters)
 {
     _F_;
-
-    this->file_name =
-        fs::path(this->app->get_input_file_name()).parent_path() / get_param<std::string>("file");
-
-    if (!utils::path_exists(this->file_name))
-        log_error(
-            "Unable to open '%s' for reading. Make sure it exists and you have read permissions.",
-            this->file_name);
-}
-
-const std::string &
-ExodusIIMesh::get_file_name() const
-{
-    _F_;
-    return this->file_name;
 }
 
 void
