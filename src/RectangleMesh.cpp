@@ -89,7 +89,10 @@ RectangleMesh::create_dm()
     std::array<PetscReal, 2> lower = { this->xmin, this->ymin };
     std::array<PetscReal, 2> upper = { this->xmax, this->ymax };
     std::array<PetscInt, 2> faces = { this->nx, this->ny };
-    std::array<DMBoundaryType, 2> periodicity = { DM_BOUNDARY_GHOSTED, DM_BOUNDARY_GHOSTED };
+    std::array<DMBoundaryType, 2> periodicity = {
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
+    };
 
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     2,

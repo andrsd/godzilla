@@ -118,9 +118,11 @@ BoxMesh::create_dm()
     std::array<PetscReal, 3> lower = { this->xmin, this->ymin, this->zmin };
     std::array<PetscReal, 3> upper = { this->xmax, this->ymax, this->zmax };
     std::array<PetscInt, 3> faces = { this->nx, this->ny, this->nz };
-    std::array<DMBoundaryType, 3> periodicity = { DM_BOUNDARY_GHOSTED,
-                                                  DM_BOUNDARY_GHOSTED,
-                                                  DM_BOUNDARY_GHOSTED };
+    std::array<DMBoundaryType, 3> periodicity = {
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
+    };
 
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     3,
