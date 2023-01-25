@@ -63,6 +63,32 @@ WeakForm::get_residual_keys() const
     return v;
 }
 
+std::vector<PetscFormKey>
+WeakForm::get_jacobian_keys() const
+{
+    std::set<Key> unique;
+    std::array<PetscWeakFormKind, 4> jacmap = { PETSC_WF_G0,
+                                                PETSC_WF_G1,
+                                                PETSC_WF_G2,
+                                                PETSC_WF_G3 };
+    for (const auto & r : jacmap) {
+        const auto & forms = this->jac_forms[r];
+        for (const auto & it : forms) {
+            const auto & form_key = it.first;
+            Key k = { form_key.label, form_key.value, form_key.part };
+            unique.insert(k);
+        }
+    }
+
+    std::vector<PetscFormKey> v;
+    for (auto & k : unique) {
+        PetscFormKey fk = { k.label, k.value, 0, k.part };
+        v.push_back(fk);
+    }
+
+    return v;
+}
+
 const std::vector<Functional *> &
 WeakForm::get(PetscWeakFormKind kind, DMLabel label, PetscInt val, PetscInt f, PetscInt part) const
 {
