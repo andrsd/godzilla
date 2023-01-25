@@ -4,11 +4,11 @@
 
 namespace godzilla {
 
-/// Mesh loaded from a ExodusII file
+/// Mesh loaded from a Gmsh file
 ///
-class ExodusIIMesh : public FileMesh {
+class GmshMesh : public FileMesh {
 public:
-    explicit ExodusIIMesh(const Parameters & parameters);
+    explicit GmshMesh(const Parameters & parameters);
 
 protected:
     void create_dm() override;

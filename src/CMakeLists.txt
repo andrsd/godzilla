@@ -24,6 +24,7 @@ add_library(${PROJECT_NAME}
         ExplicitFVLinearProblem.cpp
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
+        FileMesh.cpp
         FileOutput.cpp
         Function.cpp
         Functional.cpp
@@ -32,6 +33,7 @@ add_library(${PROJECT_NAME}
         FunctionIC.cpp
         FunctionInterface.cpp
         FVProblemInterface.cpp
+        GmshMesh.cpp
         GYMLFile.cpp
         HDF5Output.cpp
         ImplicitFENonlinearProblem.cpp

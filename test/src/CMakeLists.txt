@@ -25,6 +25,7 @@ add_executable(${PROJECT_NAME}
     GTestFENonlinearProblem.cpp
     GTest2FieldsFENonlinearProblem.cpp
     GTestImplicitFENonlinearProblem.cpp
+    GmshMesh_test.cpp
     GYMLFile_test.cpp
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp
