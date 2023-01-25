@@ -4,23 +4,11 @@
 
 namespace godzilla {
 
-IndexSet::IndexSet() : is(nullptr), n(0), indices(nullptr) {}
+IndexSet::IndexSet() : is(nullptr), indices(nullptr) {}
 
-IndexSet::IndexSet(IS is) : is(is), n(0), indices(nullptr) {}
+IndexSet::IndexSet(IS is) : is(is), indices(nullptr) {}
 
-IndexSet::~IndexSet()
-{
-    if (this->indices)
-        PETSC_CHECK(ISRestoreIndices(is, &indices));
-    if (this->is)
-        PETSC_CHECK(ISDestroy(&this->is));
-}
-
-PetscInt
-IndexSet::size() const
-{
-    return this->n;
-}
+IndexSet::~IndexSet() {}
 
 const PetscInt *
 IndexSet::data() const
@@ -31,7 +19,6 @@ IndexSet::data() const
 PetscInt
 IndexSet::operator[](unsigned int i) const
 {
-    assert(i < this->n);
     return this->indices[i];
 }
 
@@ -42,9 +29,40 @@ IndexSet::create(MPI_Comm comm)
 }
 
 void
-IndexSet::get_indices_internal()
+IndexSet::destroy()
 {
-    PETSC_CHECK(ISGetSize(this->is, &this->n));
+    PETSC_CHECK(ISDestroy(&this->is));
+}
+
+void
+IndexSet::restore_indices()
+{
+    assert(this->is != nullptr);
+    PETSC_CHECK(ISRestoreIndices(this->is, &this->indices));
+}
+
+PetscInt
+IndexSet::get_size() const
+{
+    assert(this->is != nullptr);
+    PetscInt n;
+    PETSC_CHECK(ISGetSize(this->is, &n));
+    return n;
+}
+
+PetscInt
+IndexSet::get_local_size() const
+{
+    assert(this->is != nullptr);
+    PetscInt n;
+    PETSC_CHECK(ISGetLocalSize(this->is, &n));
+    return n;
+}
+
+void
+IndexSet::get_indices()
+{
+    assert(this->is != nullptr);
     PETSC_CHECK(ISGetIndices(this->is, &this->indices));
 }
 
@@ -52,7 +70,8 @@ std::vector<PetscInt>
 IndexSet::to_std_vector()
 {
     std::vector<PetscInt> idxs;
-    idxs.assign(this->indices, this->indices + this->n);
+    PetscInt n = get_size();
+    idxs.assign(this->indices, this->indices + n);
     return idxs;
 }
 
@@ -61,9 +80,7 @@ IndexSet::values_from_label(DMLabel label)
 {
     IS is;
     PETSC_CHECK(DMLabelGetValueIS(label, &is));
-    IndexSet obj(is);
-    obj.get_indices_internal();
-    return obj;
+    return IndexSet(is);
 }
 
 IndexSet
@@ -71,9 +88,55 @@ IndexSet::stratum_from_label(DMLabel label, PetscInt stratum_value)
 {
     IS is;
     PETSC_CHECK(DMLabelGetStratumIS(label, stratum_value, &is));
-    IndexSet obj(is);
-    obj.get_indices_internal();
-    return obj;
+    return IndexSet(is);
+}
+
+PetscObjectId
+IndexSet::get_id() const
+{
+    PetscObjectId id;
+    PETSC_CHECK(PetscObjectGetId((PetscObject) this->is, &id));
+    return id;
+}
+
+void
+IndexSet::inc_ref()
+{
+    PETSC_CHECK(PetscObjectReference((PetscObject) this->is));
+}
+
+IndexSet::operator IS() const
+{
+    return this->is;
+}
+
+bool
+IndexSet::empty() const
+{
+    return this->is == nullptr;
+}
+
+IndexSet
+IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
+{
+    if (!is2.empty() && !is1.empty()) {
+        PetscObjectId is2id = is2.get_id();
+        char compose_str[33] = { 0 };
+        PETSC_CHECK(PetscSNPrintf(compose_str, 32, "ISIntersect_Caching_%" PetscInt64_FMT, is2id));
+        IS isect;
+        PETSC_CHECK(PetscObjectQuery((PetscObject) (IS) is1, compose_str, (PetscObject *) &isect));
+        if (isect == nullptr) {
+            PETSC_CHECK(ISIntersect((IS) is1, (IS) is2, &isect));
+            PETSC_CHECK(
+                PetscObjectCompose((PetscObject) (IS) is1, compose_str, (PetscObject) isect));
+        }
+        else {
+            PETSC_CHECK(PetscObjectReference((PetscObject) isect));
+        }
+        return IndexSet(isect);
+    }
+    else
+        return IndexSet();
 }
 
 } // namespace godzilla

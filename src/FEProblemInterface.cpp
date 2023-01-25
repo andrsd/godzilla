@@ -473,10 +473,11 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
     }
 
     IndexSet ids = IndexSet::values_from_label(label);
+    ids.get_indices();
     PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
                                             this->problem->get_time(),
                                             label,
-                                            ids.size(),
+                                            ids.get_size(),
                                             ids.data(),
                                             PETSC_DETERMINE,
                                             nullptr,
@@ -484,6 +485,8 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
                                             ctxs.data(),
                                             INSERT_ALL_VALUES,
                                             a));
+    ids.restore_indices();
+    ids.destroy();
 }
 
 void

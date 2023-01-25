@@ -29,6 +29,7 @@ add_executable(${PROJECT_NAME}
     GYMLFile_test.cpp
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp
+    IndexSet_test.cpp
     InitialCondition_test.cpp
     JacobianFunc_test.cpp
     L2Diff_test.cpp

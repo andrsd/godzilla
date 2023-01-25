@@ -91,8 +91,11 @@ BoundaryCondition::set_up()
     _F_;
     PETSC_CHECK(DMGetDS(this->dm, &this->ds));
     IndexSet is = IndexSet::values_from_label(this->label);
+    is.get_indices();
     this->ids = is.to_std_vector();
     add_boundary();
+    is.restore_indices();
+    is.destroy();
 }
 
 } // namespace godzilla
