@@ -520,27 +520,43 @@ ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
     _F_;
     PetscInt n_cells_sets = this->mesh->get_num_cell_sets();
     if (n_cells_sets > 1) {
-        // TODO: go block by block and save the elemental variables
-        error("Block-restricted elemental variable output is not implemented, yet.");
+        DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
+        IndexSet cell_set_idx = IndexSet::values_from_label(cell_sets_label);
+        for (PetscInt i = 0; i < n_cells_sets; ++i) {
+            IndexSet cells = IndexSet::stratum_from_label(cell_sets_label, cell_set_idx[i]);
+            write_block_elem_variables((int) cell_set_idx[i], sln, cells.size(), cells.data());
+        }
     }
     else
         write_block_elem_variables(SINGLE_BLK_ID, sln);
 }
 
 void
-ExodusIIOutput::write_block_elem_variables(int blk_id, const PetscScalar * sln)
+ExodusIIOutput::write_block_elem_variables(int blk_id,
+                                           const PetscScalar * sln,
+                                           PetscInt n_elems_in_block,
+                                           const PetscInt * cells)
 {
     _F_;
     PetscInt first, last;
-    this->mesh->get_element_idx_range(first, last);
+    if (cells == nullptr) {
+        this->mesh->get_element_idx_range(first, last);
+        n_elems_in_block = last - first;
+    }
 
-    for (PetscInt n = first; n < last; n++) {
+    for (PetscInt i = 0; i < n_elems_in_block; i++) {
+        PetscInt elem_id;
+        if (cells == nullptr)
+            elem_id = first + i;
+        else
+            elem_id = cells[i];
+
         int exo_var_id = 1;
         for (auto & fid : this->elem_var_fids) {
-            PetscInt offset = this->dpi->get_field_dof(n, fid);
+            PetscInt offset = this->dpi->get_field_dof(elem_id, fid);
             PetscInt nc = this->dpi->get_field_num_components(fid);
             for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
-                int exo_idx = (int) (n - first + 1);
+                int exo_idx = (int) (i + 1);
                 this->exo->write_partial_elem_var(this->step_num,
                                                   exo_var_id,
                                                   blk_id,
