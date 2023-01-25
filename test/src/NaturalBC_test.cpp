@@ -145,7 +145,7 @@ TEST(NaturalBCTest, fe)
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     app.problem = &prob;
-    prob.add_aux_fe(0, "aux1", 1, 1);
+    prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters bc_params = TestNaturalBC::parameters();
     bc_params.set<const App *>("_app") = &app;

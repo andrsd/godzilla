@@ -36,7 +36,7 @@ TEST_F(AuxiliaryFieldTest, api)
         }
     };
 
-    prob->add_aux_fe(0, "fld", 1, 1);
+    prob->set_aux_fe(0, "fld", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
@@ -80,7 +80,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
 
     testing::internal::CaptureStderr();
 
-    prob->add_aux_fe(0, "aux1", 1, 1);
+    prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
@@ -123,7 +123,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
 
     testing::internal::CaptureStderr();
 
-    prob->add_aux_fe(0, "aux1", 1, 1);
+    prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
@@ -166,7 +166,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
     testing::internal::CaptureStderr();
 
-    prob->add_aux_fe(0, "aux1", 1, 1);
+    prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;

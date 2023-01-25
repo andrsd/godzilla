@@ -68,19 +68,35 @@ public:
 
     /// Adds a volumetric field
     ///
-    /// @param id The field ID
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void add_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+    /// @return ID of the new field
+    virtual PetscInt add_fe(const std::string & name, PetscInt nc, PetscInt k);
 
-    /// Adds a volumetric auxiliary field
+    /// Set a volumetric field
     ///
     /// @param id The field ID
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void add_aux_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+    virtual void set_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+
+    /// Adds a volumetric auxiliary field
+    ///
+    /// @param name The name of the field
+    /// @param nc The number of components
+    /// @param k The degree k of the space
+    /// @return ID of the new field
+    virtual PetscInt add_aux_fe(const std::string & name, PetscInt nc, PetscInt k);
+
+    /// Set a volumetric auxiliary field
+    ///
+    /// @param id The field ID
+    /// @param name The name of the field
+    /// @param nc The number of components
+    /// @param k The degree k of the space
+    virtual void set_aux_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
 
     /// Add auxiliary field
     ///
@@ -256,6 +272,8 @@ protected:
                                        PetscScalar u[],
                                        PetscScalar u_x[],
                                        PetscScalar u_t[]);
+
+    PetscInt get_next_id(const std::vector<PetscInt> & ids) const;
 
     /// PETSc section
     PetscSection section;

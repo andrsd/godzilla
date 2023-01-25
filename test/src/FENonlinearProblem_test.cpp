@@ -51,7 +51,7 @@ TEST_F(FENonlinearProblemTest, get_fepi_mesh)
 
 TEST_F(FENonlinearProblemTest, fields)
 {
-    prob->add_fe(1, "vec", 3, 1);
+    prob->set_fe(1, "vec", 3, 1);
 
     mesh->create();
     prob->create();
@@ -87,19 +87,22 @@ TEST_F(FENonlinearProblemTest, fields)
                  "\\[ERROR\\] Unable to set component name for single-component field");
     EXPECT_DEATH(prob->set_field_component_name(65536, 0, "x"),
                  "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
+
+    PetscInt fld2_idx = prob->add_fe("fld2", 3, 1);
+    EXPECT_EQ(fld2_idx, 2);
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
-    prob->add_fe(0, "first", 1, 1);
-    EXPECT_DEATH(prob->add_fe(0, "second", 1, 1),
+    prob->set_fe(0, "first", 1, 1);
+    EXPECT_DEATH(prob->set_fe(0, "second", 1, 1),
                  "\\[ERROR\\] Cannot add field 'second' with ID = 0. ID already exists.");
 }
 
 TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
     mesh->create();
-    prob->add_aux_fe(0, "aux_one", 1, 1);
+    prob->set_aux_fe(0, "aux_one", 1, 1);
     prob->create();
 
     EXPECT_EQ(prob->get_aux_field_name(0), "aux_one");
@@ -117,9 +120,9 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
-    prob->add_aux_fe(0, "first", 1, 1);
+    prob->set_aux_fe(0, "first", 1, 1);
     EXPECT_DEATH(
-        prob->add_aux_fe(0, "second", 1, 1),
+        prob->set_aux_fe(0, "second", 1, 1),
         "\\[ERROR\\] Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
 }
 

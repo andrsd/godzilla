@@ -12,6 +12,7 @@
 #include "WeakForm.h"
 #include "Functional.h"
 #include "IndexSet.h"
+#include "Utils.h"
 #include <cassert>
 #include <petsc/private/petscfeimpl.h>
 
@@ -292,8 +293,18 @@ FEProblemInterface::has_aux_field_by_name(const std::string & name) const
     return it != this->aux_fields_by_name.end();
 }
 
+PetscInt
+FEProblemInterface::add_fe(const std::string & name, PetscInt nc, PetscInt k)
+{
+    _F_;
+    std::vector<PetscInt> keys = utils::map_keys(this->fields);
+    PetscInt id = get_next_id(keys);
+    set_fe(id, name, nc, k);
+    return id;
+}
+
 void
-FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
+FEProblemInterface::set_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
 {
     _F_;
     auto it = this->fields.find(id);
@@ -311,8 +322,18 @@ FEProblemInterface::add_fe(PetscInt id, const std::string & name, PetscInt nc, P
         error("Cannot add field '%s' with ID = %d. ID already exists.", name, id);
 }
 
+PetscInt
+FEProblemInterface::add_aux_fe(const std::string & name, PetscInt nc, PetscInt k)
+{
+    _F_;
+    std::vector<PetscInt> keys = utils::map_keys(this->aux_fields);
+    PetscInt id = get_next_id(keys);
+    set_aux_fe(id, name, nc, k);
+    return id;
+}
+
 void
-FEProblemInterface::add_aux_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
+FEProblemInterface::set_aux_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
 {
     _F_;
     auto it = this->aux_fields.find(id);
@@ -1627,6 +1648,18 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
         d_offset += n_bf;
     }
     return 0;
+}
+
+PetscInt
+FEProblemInterface::get_next_id(const std::vector<PetscInt> & ids) const
+{
+    std::set<PetscInt> s;
+    for (auto & id : ids)
+        s.insert(id);
+    for (PetscInt id = 0; id < std::numeric_limits<PetscInt>::max(); id++)
+        if (s.find(id) == s.end())
+            return id;
+    return -1;
 }
 
 } // namespace godzilla
