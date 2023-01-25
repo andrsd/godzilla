@@ -1,9 +1,12 @@
 #include "Godzilla.h"
 #include "ExodusIIMesh.h"
+#include "App.h"
 #include "CallStack.h"
 #include "Utils.h"
 #include "petscdmplex.h"
 #include "exodusIIcpp.h"
+
+namespace fs = std::filesystem;
 
 namespace godzilla {
 
@@ -19,10 +22,12 @@ ExodusIIMesh::parameters()
 
 ExodusIIMesh::ExodusIIMesh(const Parameters & parameters) :
     UnstructuredMesh(parameters),
-    file_name(get_param<std::string>("file")),
     interpolate(PETSC_TRUE)
 {
     _F_;
+
+    this->file_name =
+        fs::path(this->app->get_input_file_name()).parent_path() / get_param<std::string>("file");
 
     if (!utils::path_exists(this->file_name))
         log_error(
