@@ -32,6 +32,7 @@ add_library(${PROJECT_NAME}
         FunctionIC.cpp
         FunctionInterface.cpp
         FVProblemInterface.cpp
+        GmshMesh.cpp
         GYMLFile.cpp
         HDF5Output.cpp
         ImplicitFENonlinearProblem.cpp
