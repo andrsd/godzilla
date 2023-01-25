@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION VERSION 3.16)
 
-project(godzilla)
+project(godzilla
+    VERSION 0.1
+    LANGUAGES CXX
+)
 
 enable_language(C)
 
