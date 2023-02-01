@@ -66,6 +66,18 @@ public:
     /// @return True if the auxiliary field exists, otherwise False
     virtual bool has_aux_field_by_name(const std::string & name) const;
 
+    /// Check if we have an auxiliary object with a specified name
+    ///
+    /// @param name The name of the object
+    /// @return True if the object exists, otherwise false
+    virtual bool has_aux(const std::string & name) const;
+
+    /// Get auxiliary object with a specified name
+    ///
+    /// @param name The name of the object
+    /// @return Pointer to the auxiliary object
+    virtual const AuxiliaryField * get_aux(const std::string & name) const;
+
     /// Adds a volumetric field
     ///
     /// @param name The name of the field
@@ -359,6 +371,9 @@ protected:
 
     /// List of auxiliary field objects
     std::vector<AuxiliaryField *> auxs;
+
+    /// Map from aux object name to the aux object
+    std::map<std::string, AuxiliaryField *> auxs_by_name;
 
     /// Map from region to list of auxiliary field objects
     std::map<std::string, std::vector<AuxiliaryField *>> auxs_by_region;

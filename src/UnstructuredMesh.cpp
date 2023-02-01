@@ -123,6 +123,18 @@ UnstructuredMesh::get_all_element_idx_range(PetscInt & first, PetscInt & last) c
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
 }
 
+IndexSet
+UnstructuredMesh::get_all_elements() const
+{
+    PetscInt depth;
+    PETSC_CHECK(DMPlexGetDepth(this->dm, &depth));
+    IS cell_is;
+    PETSC_CHECK(DMGetStratumIS(this->dm, "dim", depth, &cell_is));
+    if (!cell_is)
+        PETSC_CHECK(DMGetStratumIS(this->dm, "depth", depth, &cell_is));
+    return IndexSet(cell_is);
+}
+
 DMPolytopeType
 UnstructuredMesh::get_cell_type(PetscInt el) const
 {
@@ -264,6 +276,7 @@ UnstructuredMesh::create_cell_set(PetscInt id, const std::string & name)
     PETSC_CHECK(ISDestroy(&is));
     PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
     this->cell_set_names[id] = name;
+    this->cell_set_ids[name] = id;
 }
 
 const std::string &
@@ -275,6 +288,17 @@ UnstructuredMesh::get_cell_set_name(PetscInt id) const
         return it->second;
     else
         error("Cell set ID '%d' does not exist.", id);
+}
+
+PetscInt
+UnstructuredMesh::get_cell_set_id(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->cell_set_ids.find(name);
+    if (it != this->cell_set_ids.end())
+        return it->second;
+    else
+        error("Cell set '%s' does not exist.", name);
 }
 
 PetscInt

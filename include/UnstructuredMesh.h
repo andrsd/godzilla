@@ -2,6 +2,7 @@
 
 #include "GodzillaConfig.h"
 #include "Mesh.h"
+#include "IndexSet.h"
 #include "petscpartitioner.h"
 
 namespace godzilla {
@@ -55,6 +56,11 @@ public:
     /// @param last Last element index plus one
     void get_all_element_idx_range(PetscInt & first, PetscInt & last) const;
 
+    /// Get index set with all elements
+    ///
+    /// @return Index set with all elements
+    IndexSet get_all_elements() const;
+
     /// Get cell type
     ///
     /// @param el Element index
@@ -81,6 +87,12 @@ public:
     /// @param id The ID of the cell set
     /// @return Cell set name
     const std::string & get_cell_set_name(PetscInt id) const;
+
+    /// Get cell set ID
+    ///
+    /// @param name The name of a cell sel
+    /// @return Cell set ID
+    PetscInt get_cell_set_id(const std::string & name) const;
 
     /// Get number of cell sets
     ///
@@ -148,6 +160,9 @@ protected:
 
     /// Cell set names
     std::map<PetscInt, std::string> cell_set_names;
+
+    /// Cell set IDs
+    std::map<std::string, PetscInt> cell_set_ids;
 
     /// Face set names
     std::map<PetscInt, std::string> face_set_names;

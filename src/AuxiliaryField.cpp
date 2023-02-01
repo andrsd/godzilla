@@ -24,7 +24,8 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
     field(get_param<std::string>("field")),
     region(get_param<std::string>("region")),
     fid(-1),
-    label(nullptr)
+    label(nullptr),
+    block_id(-1)
 {
 }
 
@@ -34,8 +35,10 @@ AuxiliaryField::create()
     _F_;
     if (this->region.length() > 0) {
         const UnstructuredMesh * mesh = this->fepi->get_mesh();
-        if (mesh->has_label(this->region))
+        if (mesh->has_label(this->region)) {
             this->label = mesh->get_label(this->region);
+            this->block_id = mesh->get_cell_set_id(this->region);
+        }
         else
             log_error("Region '%s' does not exists. Typo?", this->region);
     }
@@ -46,6 +49,13 @@ AuxiliaryField::get_region() const
 {
     _F_;
     return this->region;
+}
+
+PetscInt
+AuxiliaryField::get_block_id() const
+{
+    _F_;
+    return this->block_id;
 }
 
 DMLabel

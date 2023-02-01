@@ -1,12 +1,82 @@
 #include "Godzilla.h"
 #include "CallStack.h"
+#include "UnstructuredMesh.h"
 #include "ImplicitFENonlinearProblem.h"
+#include "WeakForm.h"
 #include "Output.h"
 #include "Validation.h"
 #include "Utils.h"
+#include "IndexSet.h"
 #include "petscts.h"
+#include <petsc/private/tsimpl.h>
 
 namespace godzilla {
+
+static PetscErrorCode
+__tsfep_compute_ifunction(DM, PetscReal time, Vec x, Vec x_t, Vec F, void * user)
+{
+    _F_;
+    auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
+    fep->compute_ifunction(time, x, x_t, F);
+    return 0;
+}
+
+static PetscErrorCode
+__tsfep_compute_ijacobian(DM,
+                          PetscReal time,
+                          Vec x,
+                          Vec x_t,
+                          PetscReal x_t_shift,
+                          Mat J,
+                          Mat Jp,
+                          void * user)
+{
+    _F_;
+    auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
+    fep->compute_ijacobian(time, x, x_t, x_t_shift, J, Jp);
+    return 0;
+}
+
+static PetscErrorCode
+_tsfep_compute_boundary(DM, PetscReal time, Vec x, Vec x_t, void * user)
+{
+    _F_;
+    auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
+    fep->compute_boundary(time, x, x_t);
+    return 0;
+}
+
+// Taken from PETSc: dmplexts.c
+static PetscErrorCode
+DMTSConvertPlex(DM dm, DM * plex, PetscBool copy)
+{
+    PetscBool isPlex;
+
+    PetscFunctionBegin;
+    PetscCall(PetscObjectTypeCompare((PetscObject) dm, DMPLEX, &isPlex));
+    if (isPlex) {
+        *plex = dm;
+        PetscCall(PetscObjectReference((PetscObject) dm));
+    }
+    else {
+        PetscCall(PetscObjectQuery((PetscObject) dm, "dm_plex", (PetscObject *) plex));
+        if (!*plex) {
+            PetscCall(DMConvert(dm, DMPLEX, plex));
+            PetscCall(PetscObjectCompose((PetscObject) dm, "dm_plex", (PetscObject) *plex));
+            if (copy) {
+                PetscCall(DMCopyDMTS(dm, *plex));
+                PetscCall(DMCopyDMSNES(dm, *plex));
+                PetscCall(DMCopyAuxiliaryVec(dm, *plex));
+            }
+        }
+        else {
+            PetscCall(PetscObjectReference((PetscObject) *plex));
+        }
+    }
+    PetscFunctionReturn(0);
+}
+
+///
 
 Parameters
 ImplicitFENonlinearProblem::parameters()
@@ -81,9 +151,9 @@ ImplicitFENonlinearProblem::set_up_callbacks()
 {
     _F_;
     DM dm = get_dm();
-    PETSC_CHECK(DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this));
-    PETSC_CHECK(DMTSSetIFunctionLocal(dm, DMPlexTSComputeIFunctionFEM, this));
-    PETSC_CHECK(DMTSSetIJacobianLocal(dm, DMPlexTSComputeIJacobianFEM, this));
+    PETSC_CHECK(DMTSSetBoundaryLocal(dm, _tsfep_compute_boundary, this));
+    PETSC_CHECK(DMTSSetIFunctionLocal(dm, __tsfep_compute_ifunction, this));
+    PETSC_CHECK(DMTSSetIJacobianLocal(dm, __tsfep_compute_ijacobian, this));
 }
 
 void
@@ -103,6 +173,96 @@ ImplicitFENonlinearProblem::set_up_monitors()
     _F_;
     FENonlinearProblem::set_up_monitors();
     TransientProblemInterface::set_up_monitors();
+}
+
+PetscErrorCode
+ImplicitFENonlinearProblem::compute_ifunction(PetscReal time, Vec X, Vec X_t, Vec F)
+{
+    // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
+    _F_;
+    DM plex;
+    PetscCall(DMTSConvertPlex(get_dm(), &plex, PETSC_TRUE));
+
+    IndexSet all_cells = this->unstr_mesh->get_all_elements();
+
+    PetscInt n_ds;
+    PETSC_CHECK(DMGetNumDS(plex, &n_ds));
+    for (PetscInt s = 0; s < n_ds; ++s) {
+        PetscDS ds;
+        DMLabel label;
+        PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
+
+        for (auto & res_key : this->wf->get_residual_keys()) {
+            IndexSet cells;
+            if (res_key.label == nullptr) {
+                all_cells.inc_ref();
+                cells = all_cells;
+            }
+            else {
+                IndexSet points = IndexSet::stratum_from_label(res_key.label, res_key.value);
+                cells = IndexSet::intersect_caching(all_cells, points);
+                points.destroy();
+            }
+            compute_residual_internal(plex, res_key, cells, time, X, X_t, time, F);
+            cells.destroy();
+        }
+    }
+    all_cells.destroy();
+    PetscCall(DMDestroy(&plex));
+    return 0;
+}
+
+PetscErrorCode
+ImplicitFENonlinearProblem::compute_ijacobian(PetscReal time,
+                                              Vec X,
+                                              Vec X_t,
+                                              PetscReal x_t_shift,
+                                              Mat J,
+                                              Mat Jp)
+{
+    // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
+    // DMPlexTSComputeIJacobianFEM()
+    _F_;
+    DM plex;
+    PetscCall(DMTSConvertPlex(get_dm(), &plex, PETSC_TRUE));
+
+    IndexSet all_cells = this->unstr_mesh->get_all_elements();
+
+    PetscInt n_ds;
+    PetscCall(DMGetNumDS(plex, &n_ds));
+    for (PetscInt s = 0; s < n_ds; ++s) {
+        PetscDS ds;
+        DMLabel label;
+        PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
+
+        if (s == 0)
+            PetscCall(MatZeroEntries(Jp));
+
+        for (auto & jac_key : this->wf->get_jacobian_keys()) {
+            IndexSet cells;
+            if (!jac_key.label) {
+                all_cells.inc_ref();
+                cells = all_cells;
+            }
+            else {
+                IndexSet points = IndexSet::stratum_from_label(jac_key.label, jac_key.value);
+                cells = IndexSet::intersect_caching(all_cells, points);
+                points.destroy();
+            }
+            compute_jacobian_internal(plex, jac_key, cells, time, x_t_shift, X, X_t, J, Jp);
+            cells.destroy();
+        }
+    }
+    all_cells.destroy();
+    PetscCall(DMDestroy(&plex));
+    return 0;
+}
+
+PetscErrorCode
+ImplicitFENonlinearProblem::compute_boundary(PetscReal time, Vec X, Vec X_t)
+{
+    _F_;
+    return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
 }
 
 } // namespace godzilla
