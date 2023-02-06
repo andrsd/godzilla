@@ -65,7 +65,7 @@ G1DTestNonlinearProblem::compute_residual(Vec x, Vec f)
 {
     Int ni = 2;
     Int ix[] = { 0, 1 };
-    PetscScalar y[2];
+    Scalar y[2];
     VecGetValues(x, ni, ix, y);
 
     VecSetValue(f, 0, y[0] - 2, INSERT_VALUES);
@@ -109,7 +109,7 @@ TEST(NonlinearProblemTest, initial_guess)
     prob.call_initial_guess();
 
     const Vec x = prob.get_solution_vector();
-    PetscReal l2_norm = 0;
+    Real l2_norm = 0;
     VecNorm(x, NORM_2, &l2_norm);
     EXPECT_DOUBLE_EQ(l2_norm, 0.);
 }
@@ -139,7 +139,7 @@ TEST(NonlinearProblemTest, solve)
     const Vec x = prob.get_solution_vector();
     Int ni = 2;
     Int ix[2] = { 0, 1 };
-    PetscScalar xx[2];
+    Scalar xx[2];
     VecGetValues(x, ni, ix, xx);
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);

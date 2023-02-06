@@ -26,7 +26,7 @@ public:
     {
         return 1.;
     }
-    MOCK_METHOD(void, evaluate, (Int, PetscReal, const PetscReal x[], Int Nc, PetscScalar u[]), ());
+    MOCK_METHOD(void, evaluate, (Int, Real, const Real x[], Int Nc, Scalar u[]), ());
 };
 
 } // namespace
@@ -41,8 +41,8 @@ TEST_F(InitialConditionTest, api)
 
     EXPECT_EQ(ic.get_field_id(), -1);
 
-    PetscReal x[1] = { 0. };
-    PetscReal u[1] = { 0. };
+    Real x[1] = { 0. };
+    Real u[1] = { 0. };
     EXPECT_CALL(ic, evaluate);
     PetscFunc * fn = ic.get_function();
     EXPECT_EQ((*fn)(1, 0., x, 1, u, &ic), 0);

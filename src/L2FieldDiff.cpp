@@ -73,7 +73,7 @@ L2FieldDiff::compute()
     auto n_fields = this->funcs.size();
     std::vector<PetscFunc *> pfns(n_fields, nullptr);
     std::vector<void *> ctxs(n_fields, nullptr);
-    std::vector<PetscReal> diff(n_fields, 0.);
+    std::vector<Real> diff(n_fields, 0.);
 
     for (const auto & it : this->funcs) {
         Int fid = this->fepi->get_field_id(it.first);
@@ -95,7 +95,7 @@ L2FieldDiff::compute()
     }
 }
 
-PetscReal
+Real
 L2FieldDiff::get_value()
 {
     _F_;

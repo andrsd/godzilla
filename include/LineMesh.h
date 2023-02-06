@@ -13,12 +13,12 @@ public:
     /// Get the lower bound in x-direction
     ///
     /// @return Lower bound in x-direction
-    NO_DISCARD PetscReal get_x_min() const;
+    NO_DISCARD Real get_x_min() const;
 
     /// Get the upper bound in x-direction
     ///
     /// @return Upper bound in x-direction
-    NO_DISCARD PetscReal get_x_max() const;
+    NO_DISCARD Real get_x_max() const;
 
     /// Get the number of divisions in the x-direction
     ///
@@ -29,9 +29,9 @@ protected:
     void create_dm() override;
 
     /// Minimum in the x direction
-    const PetscReal & xmin;
+    const Real & xmin;
     /// Maximum in the x direction
-    const PetscReal & xmax;
+    const Real & xmax;
     /// Number of mesh point in the x direction
     const Int & nx;
     /// create intermediate mesh pieces (edges, faces)

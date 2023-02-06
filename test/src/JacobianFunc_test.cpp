@@ -20,8 +20,8 @@ public:
                 (const std::string & field_name),
                 (const));
     MOCK_METHOD(const FieldValue &, get_field_dot, (const std::string & field_name), (const));
-    MOCK_METHOD(const PetscReal &, get_time_shift, (), (const));
-    MOCK_METHOD(const PetscReal &, get_time, (), (const));
+    MOCK_METHOD(const Real &, get_time_shift, (), (const));
+    MOCK_METHOD(const Real &, get_time, (), (const));
     MOCK_METHOD(const Vector &, get_normal, (), (const));
     MOCK_METHOD(const Point &, get_xyz, (), (const));
 
@@ -51,7 +51,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(Scalar g[]) override
     {
         g[0] = 1.;
     }
@@ -60,8 +60,8 @@ protected:
     const Int & dim;
     const FieldValue & u;
     const FieldGradient & u_x;
-    const PetscReal & t;
-    const PetscReal & t_shift;
+    const Real & t;
+    const Real & t_shift;
 };
 
 } // namespace
@@ -78,9 +78,9 @@ TEST(JacobianFuncTest, test)
     Parameters prob_pars = GTestProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 20;
-    prob_pars.set<PetscReal>("dt") = 5;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 20;
+    prob_pars.set<Real>("dt") = 5;
     GTestProblem prob(prob_pars);
 
     mesh.create();
@@ -92,9 +92,9 @@ TEST(JacobianFuncTest, test)
     EXPECT_CALL(prob, get_field_value(_)).Times(1).WillOnce(ReturnRef(val));
     FieldGradient grad(1);
     EXPECT_CALL(prob, get_field_gradient(_)).Times(1).WillOnce(ReturnRef(grad));
-    PetscReal time;
+    Real time;
     EXPECT_CALL(prob, get_time()).Times(1).WillOnce(ReturnRef(time));
-    PetscReal time_shift;
+    Real time_shift;
     EXPECT_CALL(prob, get_time_shift()).Times(1).WillOnce(ReturnRef(time_shift));
 
     TestJ jac(&prob);

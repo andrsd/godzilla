@@ -20,11 +20,7 @@ public:
     }
 
     virtual void
-    evaluate(PetscReal time,
-             const PetscReal * c,
-             const PetscReal * n,
-             const PetscScalar * xI,
-             PetscScalar * xG) override
+    evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) override
     {
         xG[0] = xI[0];
     }
@@ -58,13 +54,13 @@ protected:
     virtual void
     compute_flux(Int dim,
                  Int nf,
-                 const PetscReal x[],
-                 const PetscReal n[],
-                 const PetscScalar uL[],
-                 const PetscScalar uR[],
+                 const Real x[],
+                 const Real n[],
+                 const Scalar uL[],
+                 const Scalar uR[],
                  Int n_consts,
-                 const PetscScalar constants[],
-                 PetscScalar flux[]) override
+                 const Scalar constants[],
+                 Scalar flux[]) override
     {
     }
 };
@@ -83,9 +79,9 @@ TEST(NaturalRiemannBCTest, api)
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     TestExplicitFVLinearProblem prob(prob_pars);
     app.problem = &prob;
 

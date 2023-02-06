@@ -35,10 +35,10 @@ TEST(FunctionICTest, api)
     EXPECT_EQ(obj.get_num_components(), 1);
 
     Int dim = 3;
-    PetscReal time = 2.;
-    PetscReal x[] = { 1, 2, 3 };
+    Real time = 2.;
+    Real x[] = { 1, 2, 3 };
     Int Nc = 1;
-    PetscScalar u[] = { 0 };
+    Scalar u[] = { 0 };
     obj.evaluate(dim, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 12);

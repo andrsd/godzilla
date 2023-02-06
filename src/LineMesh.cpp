@@ -13,16 +13,16 @@ Parameters
 LineMesh::parameters()
 {
     Parameters params = UnstructuredMesh::parameters();
-    params.add_param<PetscReal>("xmin", 0., "Minimum in the x direction");
-    params.add_param<PetscReal>("xmax", 1., "Maximum in the x direction");
+    params.add_param<Real>("xmin", 0., "Minimum in the x direction");
+    params.add_param<Real>("xmax", 1., "Maximum in the x direction");
     params.add_required_param<Int>("nx", "Number of mesh points in the x direction");
     return params;
 }
 
 LineMesh::LineMesh(const Parameters & parameters) :
     UnstructuredMesh(parameters),
-    xmin(get_param<PetscReal>("xmin")),
-    xmax(get_param<PetscReal>("xmax")),
+    xmin(get_param<Real>("xmin")),
+    xmax(get_param<Real>("xmax")),
     nx(get_param<Int>("nx")),
     interpolate(PETSC_TRUE)
 {
@@ -31,14 +31,14 @@ LineMesh::LineMesh(const Parameters & parameters) :
         log_error("Parameter 'xmax' must be larger than 'xmin'.");
 }
 
-PetscReal
+Real
 LineMesh::get_x_min() const
 {
     _F_;
     return this->xmin;
 }
 
-PetscReal
+Real
 LineMesh::get_x_max() const
 {
     _F_;
@@ -56,8 +56,8 @@ void
 LineMesh::create_dm()
 {
     _F_;
-    std::array<PetscReal, 1> lower = { this->xmin };
-    std::array<PetscReal, 1> upper = { this->xmax };
+    std::array<Real, 1> lower = { this->xmin };
+    std::array<Real, 1> upper = { this->xmax };
     std::array<Int, 1> faces = { this->nx };
     std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
 

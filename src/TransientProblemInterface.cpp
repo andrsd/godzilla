@@ -30,7 +30,7 @@ __transient_post_step(TS ts)
 }
 
 PetscErrorCode
-__transient_monitor(TS, Int stepi, PetscReal time, Vec x, void * ctx)
+__transient_monitor(TS, Int stepi, Real time, Vec x, void * ctx)
 {
     _F_;
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
@@ -41,9 +41,9 @@ Parameters
 TransientProblemInterface::parameters()
 {
     Parameters params;
-    params.add_param<PetscReal>("start_time", 0., "Start time of the simulation");
-    params.add_required_param<PetscReal>("end_time", "Simulation end time");
-    params.add_required_param<PetscReal>("dt", "Time step size");
+    params.add_param<Real>("start_time", 0., "Start time of the simulation");
+    params.add_required_param<Real>("end_time", "Simulation end time");
+    params.add_required_param<Real>("dt", "Time step size");
     params.add_param<std::map<std::string, std::string>>("ts_adapt", "Time stepping adaptivity");
     return params;
 }
@@ -52,9 +52,9 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     problem(problem),
     ts(nullptr),
     ts_adaptor(nullptr),
-    start_time(params.get<PetscReal>("start_time")),
-    end_time(params.get<PetscReal>("end_time")),
-    dt(params.get<PetscReal>("dt")),
+    start_time(params.get<Real>("start_time")),
+    end_time(params.get<Real>("end_time")),
+    dt(params.get<Real>("dt")),
     converged_reason(TS_CONVERGED_ITERATING)
 {
     _F_;
@@ -142,10 +142,10 @@ TransientProblemInterface::post_step()
 }
 
 PetscErrorCode
-TransientProblemInterface::ts_monitor_callback(Int stepi, PetscReal t, Vec x)
+TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
 {
     _F_;
-    PetscReal dt;
+    Real dt;
     PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
     this->problem->lprintf(6, "%d Time %f dt = %f", stepi, t, dt);
     return 0;

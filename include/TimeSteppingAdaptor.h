@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Types.h"
 #include "Object.h"
 
 namespace godzilla {
@@ -24,12 +25,12 @@ public:
     /// Get minimum time step size
     ///
     /// @return Minimum time step size
-    NO_DISCARD PetscReal get_dt_min() const;
+    NO_DISCARD Real get_dt_min() const;
 
     /// Get maximum time step size
     ///
     /// @return Maximum time step size
-    NO_DISCARD PetscReal get_dt_max() const;
+    NO_DISCARD Real get_dt_max() const;
 
 protected:
     /// Set the type of time stepping adaptivity
@@ -45,10 +46,10 @@ protected:
     TSAdapt ts_adapt;
 
     /// Minimum time step
-    const PetscReal & dt_min;
+    const Real & dt_min;
 
     /// Maximum time step
-    const PetscReal & dt_max;
+    const Real & dt_max;
 
 public:
     static Parameters parameters();

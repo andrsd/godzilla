@@ -41,7 +41,7 @@ public:
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
     /// @return Simulation time
-    const PetscReal & get_time() const;
+    const Real & get_time() const;
 
     /// Get time step number
     ///
@@ -113,7 +113,7 @@ protected:
     std::vector<std::string> pps_names;
 
     /// Simulation time
-    PetscReal time;
+    Real time;
 
     /// Time step number
     Int step_num;

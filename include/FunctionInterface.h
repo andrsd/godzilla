@@ -25,7 +25,7 @@ public:
     /// @param x Spatial coordinate where we evaluate the function (has size of `dim`)
     /// @param nc Number of components
     /// @param u The result of evaluation (one per component)
-    bool evaluate_func(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscReal u[]);
+    bool evaluate_func(Int dim, Real time, const Real x[], Int nc, Real u[]);
 
     /// Evaluate parsed time derivative function
     ///
@@ -35,7 +35,7 @@ public:
     /// @param x Spatial coordinate where we evaluate the function (has size of `dim`)
     /// @param nc Number of components
     /// @param u The result of evaluation (one per component)
-    bool evaluate_func_t(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscReal u[]);
+    bool evaluate_func_t(Int dim, Real time, const Real x[], Int nc, Real u[]);
 
 protected:
     /// Application

@@ -16,8 +16,8 @@ public:
     void
     create_dm()
     {
-        PetscReal lower[1] = { -1 };
-        PetscReal upper[1] = { 1 };
+        Real lower[1] = { -1 };
+        Real upper[1] = { 1 };
         Int faces[1] = { 2 };
         DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 

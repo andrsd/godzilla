@@ -14,7 +14,7 @@ public:
     void create() override;
     Int get_num_components() const override;
 
-    void evaluate(Int dim, PetscReal time, const PetscReal x[], Int Nc, PetscScalar u[]) override;
+    void evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) override;
 
 public:
     static Parameters parameters();

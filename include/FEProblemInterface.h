@@ -122,9 +122,9 @@ public:
 
     virtual const FieldValue & get_field_dot(const std::string & field_name) const;
 
-    virtual const PetscReal & get_time_shift() const;
+    virtual const Real & get_time_shift() const;
 
-    virtual const PetscReal & get_time() const;
+    virtual const Real & get_time() const;
 
     virtual const Vector & get_normal() const;
 
@@ -135,10 +135,10 @@ public:
                                      Int field,
                                      Int n_elems,
                                      PetscFEGeom * cell_geom,
-                                     const PetscScalar coefficients[],
+                                     const Scalar coefficients[],
                                      PetscDS ds_aux,
-                                     const PetscScalar coefficientsAux[],
-                                     PetscScalar integral[]);
+                                     const Scalar coefficientsAux[],
+                                     Scalar integral[]);
 
     /// Integrate field over a boundary
     virtual PetscErrorCode integrate_bnd(PetscDS ds,
@@ -146,34 +146,34 @@ public:
                                          PetscBdPointFunc obj_func,
                                          Int n_elems,
                                          PetscFEGeom * face_geom,
-                                         const PetscScalar coefficients[],
+                                         const Scalar coefficients[],
                                          PetscDS ds_aux,
-                                         const PetscScalar coefficientsAux[],
-                                         PetscScalar integral[]);
+                                         const Scalar coefficientsAux[],
+                                         Scalar integral[]);
 
     /// Integrate residual
     virtual PetscErrorCode integrate_residual(PetscDS ds,
                                               PetscFormKey key,
                                               Int n_elems,
                                               PetscFEGeom * cell_geom,
-                                              const PetscScalar coefficients[],
-                                              const PetscScalar coefficients_t[],
+                                              const Scalar coefficients[],
+                                              const Scalar coefficients_t[],
                                               PetscDS ds_aux,
-                                              const PetscScalar coefficients_aux[],
-                                              PetscReal t,
-                                              PetscScalar elem_vec[]);
+                                              const Scalar coefficients_aux[],
+                                              Real t,
+                                              Scalar elem_vec[]);
 
     /// Integrate residual over a boundary
     virtual PetscErrorCode integrate_bnd_residual(PetscDS ds,
                                                   PetscFormKey key,
                                                   Int n_elems,
                                                   PetscFEGeom * face_geom,
-                                                  const PetscScalar coefficients[],
-                                                  const PetscScalar coefficients_t[],
+                                                  const Scalar coefficients[],
+                                                  const Scalar coefficients_t[],
                                                   PetscDS ds_aux,
-                                                  const PetscScalar coefficients_aux[],
-                                                  PetscReal t,
-                                                  PetscScalar elem_vec[]);
+                                                  const Scalar coefficients_aux[],
+                                                  Real t,
+                                                  Scalar elem_vec[]);
 
     /// Integrate Jacobian
     virtual PetscErrorCode integrate_jacobian(PetscDS ds,
@@ -181,26 +181,26 @@ public:
                                               PetscFormKey key,
                                               Int n_elems,
                                               PetscFEGeom * cell_geom,
-                                              const PetscScalar coefficients[],
-                                              const PetscScalar coefficients_t[],
+                                              const Scalar coefficients[],
+                                              const Scalar coefficients_t[],
                                               PetscDS ds_aux,
-                                              const PetscScalar coefficients_aux[],
-                                              PetscReal t,
-                                              PetscReal u_tshift,
-                                              PetscScalar elem_mat[]);
+                                              const Scalar coefficients_aux[],
+                                              Real t,
+                                              Real u_tshift,
+                                              Scalar elem_mat[]);
 
     // Integrate Jacobian over a boundary
     virtual PetscErrorCode integrate_bnd_jacobian(PetscDS ds,
                                                   PetscFormKey key,
                                                   Int n_elems,
                                                   PetscFEGeom * face_geom,
-                                                  const PetscScalar coefficients[],
-                                                  const PetscScalar coefficients_t[],
+                                                  const Scalar coefficients[],
+                                                  const Scalar coefficients_t[],
                                                   PetscDS ds_aux,
-                                                  const PetscScalar coefficients_aux[],
-                                                  PetscReal t,
-                                                  PetscReal u_tshift,
-                                                  PetscScalar elem_mat[]);
+                                                  const Scalar coefficients_aux[],
+                                                  Real t,
+                                                  Real u_tshift,
+                                                  Scalar elem_mat[]);
 
 protected:
     struct FieldInfo;
@@ -243,34 +243,34 @@ protected:
     PetscErrorCode update_element_vec(PetscFE fe,
                                       PetscTabulation tab,
                                       Int r,
-                                      PetscScalar tmp_basis[],
-                                      PetscScalar tmp_basis_der[],
+                                      Scalar tmp_basis[],
+                                      Scalar tmp_basis_der[],
                                       Int e,
                                       PetscFEGeom * fe_geom,
-                                      PetscScalar f0[],
-                                      PetscScalar f1[],
-                                      PetscScalar elem_vec[]);
+                                      Scalar f0[],
+                                      Scalar f1[],
+                                      Scalar elem_vec[]);
 
     PetscErrorCode update_element_mat(PetscFE fe_i,
                                       PetscFE fe_j,
                                       Int r,
                                       Int q,
                                       PetscTabulation tab_i,
-                                      PetscScalar tmp_basis_i[],
-                                      PetscScalar tmp_basis_der_i[],
+                                      Scalar tmp_basis_i[],
+                                      Scalar tmp_basis_der_i[],
                                       PetscTabulation tab_j,
-                                      PetscScalar tmp_basis_j[],
-                                      PetscScalar tmp_basis_der_j[],
+                                      Scalar tmp_basis_j[],
+                                      Scalar tmp_basis_der_j[],
                                       PetscFEGeom * fe_geom,
-                                      const PetscScalar g0[],
-                                      const PetscScalar g1[],
-                                      const PetscScalar g2[],
-                                      const PetscScalar g3[],
+                                      const Scalar g0[],
+                                      const Scalar g1[],
+                                      const Scalar g2[],
+                                      const Scalar g3[],
                                       Int e_offset,
                                       Int tot_dim,
                                       Int offset_i,
                                       Int offset_j,
-                                      PetscScalar elem_mat[]);
+                                      Scalar elem_mat[]);
 
     PetscErrorCode evaluate_field_jets(PetscDS ds,
                                        Int nf,
@@ -278,11 +278,11 @@ protected:
                                        Int q,
                                        PetscTabulation tab[],
                                        PetscFEGeom * fe_geom,
-                                       const PetscScalar coefficients[],
-                                       const PetscScalar coefficients_t[],
-                                       PetscScalar u[],
-                                       PetscScalar u_x[],
-                                       PetscScalar u_t[]);
+                                       const Scalar coefficients[],
+                                       const Scalar coefficients_t[],
+                                       Scalar u[],
+                                       Scalar u_x[],
+                                       Scalar u_t[]);
 
     Int get_next_id(const std::vector<Int> & ids) const;
 
@@ -396,11 +396,11 @@ protected:
         /// Spatial dimension
         Int dim;
         /// Values of primary variables
-        PetscScalar * u;
+        Scalar * u;
         /// Time derivative of primary variable values
-        PetscScalar * u_t;
+        Scalar * u_t;
         /// Gradient of primary values
-        PetscScalar * u_x;
+        Scalar * u_x;
         /// Offset into primary variable values (when having multiple fields)
         Int * u_offset;
         /// Offset into gradient of primary variables (when having multiple fields)
@@ -410,17 +410,17 @@ protected:
         /// Outward normals when doing surface integration
         Vector normals;
         /// Values of auxiliary fields
-        PetscScalar * a;
+        Scalar * a;
         /// Gradients of auxiliary fields
-        PetscScalar * a_x;
+        Scalar * a_x;
         /// Offset into auxiliary variable values (when having multiple fields)
         Int * a_offset;
         /// Offset into gradient of auxiliary variables (when having multiple fields)
         Int * a_offset_x;
         /// Time at which are our forms evaluated (NOTE: this is not the simulation time)
-        PetscReal time;
+        Real time;
         /// the multiplier a for dF/dU_t
-        PetscReal u_t_shift;
+        Real u_t_shift;
 
         AssemblyData();
     } asmbl;

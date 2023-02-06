@@ -17,11 +17,8 @@ public:
     /// @param n Normal vector
     /// @param xI State at the interior cell
     /// @param xG State at the ghost cell (computed)
-    virtual void evaluate(PetscReal time,
-                          const PetscReal * c,
-                          const PetscReal * n,
-                          const PetscScalar * xI,
-                          PetscScalar * xG) = 0;
+    virtual void
+    evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) = 0;
 
 protected:
     void add_boundary() override;

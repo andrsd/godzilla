@@ -178,8 +178,8 @@ InputFile::set_parameter_from_yml(Parameters * params,
 
         if (param_type == utils::type_name<std::string>())
             params->set<std::string>(param_name) = val.as<std::string>();
-        else if (param_type == utils::type_name<PetscReal>())
-            params->set<PetscReal>(param_name) = val.as<double>();
+        else if (param_type == utils::type_name<Real>())
+            params->set<Real>(param_name) = val.as<double>();
         else if (param_type == utils::type_name<Int>())
             params->set<Int>(param_name) = val.as<Int>();
         else if (param_type == utils::type_name<int>())
@@ -187,9 +187,8 @@ InputFile::set_parameter_from_yml(Parameters * params,
         else if (param_type == utils::type_name<unsigned int>())
             params->set<unsigned int>(param_name) = val.as<unsigned int>();
         // vector values
-        else if (param_type == utils::type_name<std::vector<PetscReal>>())
-            params->set<std::vector<PetscReal>>(param_name) =
-                read_vector_value<double>(param_name, val);
+        else if (param_type == utils::type_name<std::vector<Real>>())
+            params->set<std::vector<Real>>(param_name) = read_vector_value<double>(param_name, val);
         else if (param_type == utils::type_name<std::vector<Int>>())
             params->set<std::vector<Int>>(param_name) = read_vector_value<Int>(param_name, val);
         else if (param_type == utils::type_name<std::vector<int>>())
@@ -201,9 +200,9 @@ InputFile::set_parameter_from_yml(Parameters * params,
         else if (param_type == utils::type_name<std::map<std::string, std::vector<std::string>>>())
             params->set<std::map<std::string, std::vector<std::string>>>(param_name) =
                 read_map_value<std::string, std::vector<std::string>>(param_name, val);
-        else if (param_type == utils::type_name<std::map<std::string, PetscReal>>())
-            params->set<std::map<std::string, PetscReal>>(param_name) =
-                read_map_value<std::string, PetscReal>(param_name, val);
+        else if (param_type == utils::type_name<std::map<std::string, Real>>())
+            params->set<std::map<std::string, Real>>(param_name) =
+                read_map_value<std::string, Real>(param_name, val);
         // bools
         else if (param_type == utils::type_name<bool>())
             params->set<bool>(param_name) = read_bool_value(param_name, val);

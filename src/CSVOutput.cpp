@@ -85,13 +85,13 @@ CSVOutput::write_header()
 }
 
 void
-CSVOutput::write_values(PetscReal time)
+CSVOutput::write_values(Real time)
 {
     _F_;
     fmt::fprintf(this->f, "%g", time);
     for (auto & name : this->pps_names) {
         auto * pps = this->problem->get_postprocessor(name);
-        PetscReal val = pps->get_value();
+        Real val = pps->get_value();
         fmt::fprintf(this->f, ",%g", val);
     }
     fmt::fprintf(this->f, "\n");

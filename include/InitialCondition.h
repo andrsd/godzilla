@@ -32,8 +32,7 @@ public:
     /// @param x The coordinates
     /// @param Nc The number of components
     /// @param u  The output field values
-    virtual void
-    evaluate(Int dim, PetscReal time, const PetscReal x[], Int Nc, PetscScalar u[]) = 0;
+    virtual void evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) = 0;
 
 protected:
     /// Discrete problem this object is part of

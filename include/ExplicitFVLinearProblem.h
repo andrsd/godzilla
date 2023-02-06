@@ -19,7 +19,7 @@ public:
     bool converged() override;
     void solve() override;
 
-    PetscErrorCode compute_rhs(PetscReal time, Vec x, Vec F);
+    PetscErrorCode compute_rhs(Real time, Vec x, Vec F);
 
 protected:
     void init() override;

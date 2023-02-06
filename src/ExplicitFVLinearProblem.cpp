@@ -9,7 +9,7 @@
 namespace godzilla {
 
 static PetscErrorCode
-__efvlp_compute_rhs(DM dm, PetscReal time, Vec x, Vec F, void * ctx)
+__efvlp_compute_rhs(DM dm, Real time, Vec x, Vec F, void * ctx)
 {
     _F_;
     auto * efvp = static_cast<ExplicitFVLinearProblem *>(ctx);
@@ -140,7 +140,7 @@ ExplicitFVLinearProblem::set_up_monitors()
 }
 
 PetscErrorCode
-ExplicitFVLinearProblem::compute_rhs(PetscReal time, Vec x, Vec F)
+ExplicitFVLinearProblem::compute_rhs(Real time, Vec x, Vec F)
 {
     _F_;
     return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this);

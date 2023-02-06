@@ -22,7 +22,7 @@ __compute_operators(KSP, Mat A, Mat B, void * ctx)
 }
 
 PetscErrorCode
-__ksp_monitor_linear(KSP, Int it, PetscReal rnorm, void * ctx)
+__ksp_monitor_linear(KSP, Int it, Real rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
@@ -33,12 +33,12 @@ Parameters
 LinearProblem::parameters()
 {
     Parameters params = Problem::parameters();
-    params.add_param<PetscReal>("lin_rel_tol",
-                                1e-5,
-                                "Relative convergence tolerance for the linear solver");
-    params.add_param<PetscReal>("lin_abs_tol",
-                                1e-50,
-                                "Absolute convergence tolerance for the linear solver");
+    params.add_param<Real>("lin_rel_tol",
+                           1e-5,
+                           "Relative convergence tolerance for the linear solver");
+    params.add_param<Real>("lin_abs_tol",
+                           1e-50,
+                           "Absolute convergence tolerance for the linear solver");
     params.add_param<Int>("lin_max_iter",
                           10000,
                           "Maximum number of iterations for the linear solver");
@@ -52,8 +52,8 @@ LinearProblem::LinearProblem(const Parameters & parameters) :
     b(nullptr),
     A(nullptr),
     converged_reason(KSP_CONVERGED_ITERATING),
-    lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
-    lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
+    lin_rel_tol(get_param<Real>("lin_rel_tol")),
+    lin_abs_tol(get_param<Real>("lin_abs_tol")),
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     _F_;
@@ -158,7 +158,7 @@ LinearProblem::set_up_solver_parameters()
 }
 
 PetscErrorCode
-LinearProblem::ksp_monitor_callback(Int it, PetscReal rnorm)
+LinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
     lprintf(8, "%d Linear residual: %e", it, rnorm);

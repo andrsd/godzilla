@@ -51,7 +51,7 @@ TEST(ProblemTest, add_pp)
         {
         }
 
-        virtual PetscReal
+        virtual Real
         get_value()
         {
             return 0;

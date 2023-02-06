@@ -22,7 +22,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         const std::string class_name = "ConstantIC";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::vector<PetscReal>>("value") = { 0 };
+        params->set<std::vector<Real>>("value") = { 0 };
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
     }
@@ -46,7 +46,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     Int ni = 1;
     Int ix[1] = { 0 };
-    PetscScalar xx[1];
+    Scalar xx[1];
     VecGetValues(x, ni, ix, xx);
 
     EXPECT_NEAR(xx[0], 0.5, 1e-7);
@@ -63,9 +63,9 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
         const std::string class_name = "GTestImplicitFENonlinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        params->set<PetscReal>("start_time") = 0.;
-        params->set<PetscReal>("end_time") = 20;
-        params->set<PetscReal>("dt") = 5;
+        params->set<Real>("start_time") = 0.;
+        params->set<Real>("end_time") = 20;
+        params->set<Real>("dt") = 5;
         params->set<std::string>("scheme") = "asdf";
         prob = this->app->build_object<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
     }

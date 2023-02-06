@@ -13,11 +13,11 @@ TEST(RectangleMeshTest, api)
     Parameters params = RectangleMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "rect_mesh";
-    params.set<PetscReal>("xmin") = 1;
-    params.set<PetscReal>("xmax") = 3;
+    params.set<Real>("xmin") = 1;
+    params.set<Real>("xmax") = 3;
     params.set<Int>("nx") = 9;
-    params.set<PetscReal>("ymin") = 2;
-    params.set<PetscReal>("ymax") = 4;
+    params.set<Real>("ymin") = 2;
+    params.set<Real>("ymax") = 4;
     params.set<Int>("ny") = 8;
     RectangleMesh mesh(params);
 
@@ -34,7 +34,7 @@ TEST(RectangleMeshTest, api)
 
     EXPECT_EQ(mesh.get_dimension(), 2);
 
-    PetscReal gmin[4], gmax[4];
+    Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
     EXPECT_EQ(gmin[0], 1);
     EXPECT_EQ(gmax[0], 3);
@@ -58,11 +58,11 @@ TEST(RectangleMeshTest, incorrect_dims)
     Parameters params = RectangleMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
-    params.set<PetscReal>("xmin") = 2;
-    params.set<PetscReal>("xmax") = 1;
+    params.set<Real>("xmin") = 2;
+    params.set<Real>("xmax") = 1;
     params.set<Int>("nx") = 9;
-    params.set<PetscReal>("ymin") = 2;
-    params.set<PetscReal>("ymax") = 1;
+    params.set<Real>("ymin") = 2;
+    params.set<Real>("ymax") = 1;
     params.set<Int>("ny") = 8;
     RectangleMesh mesh(params);
 

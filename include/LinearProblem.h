@@ -37,7 +37,7 @@ protected:
     /// Method to compute operators. Called from the PETsc callback
     virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) = 0;
     /// KSP monitor
-    PetscErrorCode ksp_monitor_callback(Int it, PetscReal rnorm);
+    PetscErrorCode ksp_monitor_callback(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning
@@ -55,9 +55,9 @@ protected:
     KSPConvergedReason converged_reason;
 
     /// Relative convergence tolerance for the linear solver
-    PetscReal lin_rel_tol;
+    Real lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver
-    PetscReal lin_abs_tol;
+    Real lin_abs_tol;
     /// Maximum number of iterations for the linear solver
     Int lin_max_iter;
 
@@ -66,7 +66,7 @@ public:
 
     friend PetscErrorCode __compute_rhs(KSP ksp, Vec b, void * ctx);
     friend PetscErrorCode __compute_operators(KSP ksp, Mat A, Mat B, void * ctx);
-    friend PetscErrorCode __ksp_monitor_linear(KSP ksp, Int it, PetscReal rnorm, void * ctx);
+    friend PetscErrorCode __ksp_monitor_linear(KSP ksp, Int it, Real rnorm, void * ctx);
 };
 
 } // namespace godzilla

@@ -40,7 +40,7 @@ protected:
     /// Get time at which the function is evaluated
     ///
     /// @return Time at which is the function evaluated
-    const PetscReal & get_time() const;
+    const Real & get_time() const;
 };
 
 } // namespace godzilla

@@ -162,7 +162,7 @@ TEST_F(HDF5OutputTest, output)
     const std::string file_name = out->get_file_name();
     PetscViewer viewer;
     Vec sln;
-    PetscReal diff;
+    Real diff;
     DMCreateGlobalVector(mesh->get_dm(), &sln);
     PetscObjectSetName((PetscObject) sln, "sln");
     PetscViewerHDF5Open(PETSC_COMM_WORLD, file_name.c_str(), FILE_MODE_READ, &viewer);

@@ -30,7 +30,7 @@ TEST_F(LinearProblemTest, solve)
     Vec x = prob->get_solution_vector();
     Int ni = 2;
     Int ix[2] = { 0, 1 };
-    PetscScalar xx[2];
+    Scalar xx[2];
     VecGetValues(x, ni, ix, xx);
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);

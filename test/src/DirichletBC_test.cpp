@@ -38,10 +38,10 @@ TEST(DirichletBCTest, api)
     EXPECT_EQ(components.size(), 1);
 
     Int dim = 3;
-    PetscReal time = 2.5;
-    PetscReal x[] = { 3, 5, 7 };
+    Real time = 2.5;
+    Real x[] = { 3, 5, 7 };
     Int Nc = 1;
-    PetscScalar u[] = { 0 };
+    Scalar u[] = { 0 };
 
     obj.evaluate(dim, time, x, Nc, u);
     EXPECT_EQ(u[0], 37.5);
@@ -68,8 +68,8 @@ TEST(DirichletBCTest, with_user_defined_fn)
     std::string class_name = "PiecewiseLinear";
     Parameters * fn_pars = Factory::get_parameters(class_name);
     fn_pars->set<const App *>("_app") = &app;
-    fn_pars->set<std::vector<PetscReal>>("x") = { 0., 1. };
-    fn_pars->set<std::vector<PetscReal>>("y") = { 1., 2. };
+    fn_pars->set<std::vector<Real>>("x") = { 0., 1. };
+    fn_pars->set<std::vector<Real>>("y") = { 1., 2. };
     Function * fn = app.build_object<PiecewiseLinear>(class_name, "ipol", fn_pars);
     problem.add_function(fn);
 
@@ -84,10 +84,10 @@ TEST(DirichletBCTest, with_user_defined_fn)
     bc->create();
 
     Int dim = 1;
-    PetscReal time = 0;
-    PetscReal x[] = { 0.5 };
+    Real time = 0;
+    Real x[] = { 0.5 };
     Int Nc = 1;
-    PetscScalar u[] = { 0 };
+    Scalar u[] = { 0 };
     bc->evaluate(dim, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 1.5);

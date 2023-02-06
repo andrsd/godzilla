@@ -42,6 +42,6 @@ TEST(L2DiffTest, compute)
     prob.solve();
     prob.compute_postprocessors();
 
-    PetscReal l2_err = ps.get_value();
+    Real l2_err = ps.get_value();
     EXPECT_NEAR(l2_err, 0.0416667, 1e-7);
 }

@@ -17,11 +17,11 @@ public:
 
     NO_DISCARD Int get_num_components() const override;
 
-    void evaluate(Int dim, PetscReal time, const PetscReal x[], Int Nc, PetscScalar u[]) override;
+    void evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) override;
 
 protected:
     /// Constant values -- one for each component
-    const std::vector<PetscReal> & values;
+    const std::vector<Real> & values;
 
 public:
     static Parameters parameters();

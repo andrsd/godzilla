@@ -35,7 +35,7 @@ FunctionIC::get_num_components() const
 }
 
 void
-FunctionIC::evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[])
+FunctionIC::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
     evaluate_func(dim, time, x, nc, u);
 }

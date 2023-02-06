@@ -31,14 +31,14 @@ BndJacobianFunc::get_field_gradient(const std::string & field_name) const
     return get_fe_problem()->get_field_gradient(field_name);
 }
 
-const PetscReal &
+const Real &
 BndJacobianFunc::get_time_shift() const
 {
     _F_;
     return get_fe_problem()->get_time_shift();
 }
 
-const PetscReal &
+const Real &
 BndJacobianFunc::get_time() const
 {
     _F_;

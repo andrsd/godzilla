@@ -17,14 +17,14 @@ Parameters
 PiecewiseLinear::parameters()
 {
     Parameters params = Function::parameters();
-    params.add_required_param<std::vector<PetscReal>>("x", "Independent variable");
-    params.add_required_param<std::vector<PetscReal>>("y", "Dependent variable");
+    params.add_required_param<std::vector<Real>>("x", "Independent variable");
+    params.add_required_param<std::vector<Real>>("y", "Dependent variable");
     return params;
 }
 
 PiecewiseLinear::PiecewiseLinear(const Parameters & params) :
     Function(params),
-    linpol(get_param<std::vector<PetscReal>>("x"), get_param<std::vector<PetscReal>>("y"))
+    linpol(get_param<std::vector<Real>>("x"), get_param<std::vector<Real>>("y"))
 {
     _F_;
 }
@@ -36,8 +36,8 @@ PiecewiseLinear::register_callback(mu::Parser & parser)
     parser.DefineFunUserData(get_name(), piecewise_linear_function_eval, this);
 }
 
-PetscReal
-PiecewiseLinear::evaluate(PetscReal x)
+Real
+PiecewiseLinear::evaluate(Real x)
 {
     _F_;
     return this->linpol.sample(x);

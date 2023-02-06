@@ -15,8 +15,8 @@ public:
     void create() override;
     const std::vector<Int> & get_components() const override;
     PetscFunc * get_function_t() override;
-    void evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]) override;
-    void evaluate_t(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]) override;
+    void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override;
+    void evaluate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override;
 
 protected:
     std::vector<Int> components;

@@ -9,12 +9,7 @@ namespace godzilla {
 REGISTER_OBJECT(ConstantAuxiliaryField);
 
 static PetscErrorCode
-constant_auxiliary_field(Int dim,
-                         PetscReal time,
-                         const PetscReal x[],
-                         Int nc,
-                         PetscScalar u[],
-                         void * ctx)
+constant_auxiliary_field(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     auto * aux_fld = static_cast<ConstantAuxiliaryField *>(ctx);
     aux_fld->evaluate(dim, time, x, nc, u);
@@ -25,14 +20,14 @@ Parameters
 ConstantAuxiliaryField::parameters()
 {
     Parameters params = AuxiliaryField::parameters();
-    params.add_required_param<std::vector<PetscReal>>("value",
-                                                      "Constant values for each field component");
+    params.add_required_param<std::vector<Real>>("value",
+                                                 "Constant values for each field component");
     return params;
 }
 
 ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & params) :
     AuxiliaryField(params),
-    values(params.get<std::vector<PetscReal>>("value"))
+    values(params.get<std::vector<Real>>("value"))
 {
     _F_;
     this->num_comps = this->values.size();
@@ -59,7 +54,7 @@ ConstantAuxiliaryField::get_func() const
 }
 
 void
-ConstantAuxiliaryField::evaluate(Int, PetscReal, const PetscReal[], Int nc, PetscScalar u[])
+ConstantAuxiliaryField::evaluate(Int, Real, const Real[], Int nc, Scalar u[])
 {
     _F_;
     for (Int c = 0; c < nc; c++)

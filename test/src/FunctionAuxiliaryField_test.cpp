@@ -37,10 +37,10 @@ TEST(FunctionAuxiliaryFieldTest, create)
     EXPECT_EQ(aux.get_num_components(), 1);
 
     Int dim = 1;
-    PetscReal time = 0;
-    PetscReal x[1] = { 1. };
+    Real time = 0;
+    Real x[1] = { 1. };
     Int nc = 1;
-    PetscReal u[1] = { 0 };
+    Real u[1] = { 0 };
     aux.evaluate(dim, time, x, nc, u);
     EXPECT_EQ(u[0], 1234.);
 }
@@ -73,10 +73,10 @@ TEST(FunctionAuxiliaryFieldTest, evaluate)
 
     PetscFunc * fn = aux.get_func();
     Int dim = 1;
-    PetscReal time = 0;
-    PetscReal x[1] = { 1. };
+    Real time = 0;
+    Real x[1] = { 1. };
     Int nc = 1;
-    PetscReal u[1] = { 0 };
+    Real u[1] = { 0 };
     (*fn)(dim, time, x, nc, u, &aux);
     EXPECT_EQ(u[0], 1234.);
 }

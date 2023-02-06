@@ -5,11 +5,11 @@
 namespace godzilla {
 
 static PetscErrorCode
-natural_riemann_boundary_condition_function(PetscReal time,
-                                            const PetscReal * c,
-                                            const PetscReal * n,
-                                            const PetscScalar * xI,
-                                            PetscScalar * xG,
+natural_riemann_boundary_condition_function(Real time,
+                                            const Real * c,
+                                            const Real * n,
+                                            const Scalar * xI,
+                                            Scalar * xG,
                                             void * ctx)
 {
     _F_;

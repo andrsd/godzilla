@@ -36,7 +36,7 @@ public:
     explicit TestF(const GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(Scalar f[]) override
     {
         f[0] = 0.;
     }
@@ -47,7 +47,7 @@ public:
     explicit BndTestF(const TestBC * bc) : BndResidualFunc(bc) {}
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(Scalar f[]) override
     {
         f[0] = 0.;
     }
@@ -58,7 +58,7 @@ public:
     explicit TestJ(const GTestFENonlinearProblem * prob) : JacobianFunc(prob) {}
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(Scalar g[]) override
     {
         g[0] = 1.;
     }
@@ -69,7 +69,7 @@ public:
     explicit BndTestJ(const TestBC * bc) : BndJacobianFunc(bc) {}
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(Scalar g[]) override
     {
         g[0] = 1.;
     }

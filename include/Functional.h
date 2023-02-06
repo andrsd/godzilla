@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Types.h"
 #include "petsc.h"
 
 namespace godzilla {
@@ -14,7 +15,7 @@ public:
     /// Evaluate this functional
     ///
     /// @param val Array to store the values into
-    virtual void evaluate(PetscScalar val[]) = 0;
+    virtual void evaluate(Scalar val[]) = 0;
 
 protected:
     /// Get pointer to FEProblemInterface

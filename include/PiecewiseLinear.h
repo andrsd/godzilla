@@ -16,7 +16,7 @@ public:
     void register_callback(mu::Parser & parser) override;
 
     /// Evaluate this function at point 'x'
-    PetscReal evaluate(PetscReal x);
+    Real evaluate(Real x);
 
 protected:
     /// Linear interpolation object used for function evaluation

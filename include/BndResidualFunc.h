@@ -42,7 +42,7 @@ protected:
     /// Get time at which the function is evaluated
     ///
     /// @return Time at which is the function evaluated
-    NO_DISCARD const PetscReal & get_time() const;
+    NO_DISCARD const Real & get_time() const;
 
     /// Get normal
     ///

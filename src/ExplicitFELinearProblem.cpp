@@ -22,7 +22,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar * g) override
+    evaluate(Scalar * g) override
     {
         for (Int c = 0; c < n_comp; ++c)
             g[c * n_comp + c] = 1.0;

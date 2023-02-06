@@ -46,9 +46,9 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(Scalar f[]) override
     {
-        PetscReal visc = 1.;
+        Real visc = 1.;
         f[0] = -visc * this->u_x[0] + 0.5 * this->u[0] * this->u[0];
     }
 
@@ -79,9 +79,9 @@ TEST(ExplicitFELinearProblemTest, solve)
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFELinearProblem prob(prob_pars);
     app.problem = &prob;
@@ -113,7 +113,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     Vec sln = prob.get_solution_vector();
     Int ni = 2;
     Int ix[2] = { 0, 1 };
-    PetscScalar x[2];
+    Scalar x[2];
     VecGetValues(sln, ni, ix, x);
     EXPECT_NEAR(x[0], 0.0118, 1e-15);
     EXPECT_NEAR(x[1], 0.0098, 1e-15);
@@ -131,9 +131,9 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFELinearProblem prob(prob_pars);
 
@@ -171,9 +171,9 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
         const std::string class_name = "TestExplicitFELinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        params->set<PetscReal>("start_time") = 0.;
-        params->set<PetscReal>("end_time") = 20;
-        params->set<PetscReal>("dt") = 5;
+        params->set<Real>("start_time") = 0.;
+        params->set<Real>("end_time") = 20;
+        params->set<Real>("dt") = 5;
         params->set<std::string>("scheme") = "asdf";
         prob = app.build_object<TestExplicitFELinearProblem>(class_name, "prob", params);
     }

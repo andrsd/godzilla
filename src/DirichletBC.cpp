@@ -49,14 +49,14 @@ DirichletBC::get_function_t()
 }
 
 void
-DirichletBC::evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[])
+DirichletBC::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
     _F_;
     evaluate_func(dim, time, x, nc, u);
 }
 
 void
-DirichletBC::evaluate_t(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[])
+DirichletBC::evaluate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
     _F_;
     evaluate_func_t(dim, time, x, nc, u);

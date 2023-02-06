@@ -18,8 +18,8 @@ TEST(ParsedFunctionTest, fn_eval)
     PetscFunc * fn = obj.get_function();
     EXPECT_EQ(obj.get_context(), &obj);
 
-    PetscReal x[] = { 2. };
-    PetscReal u[] = { 0. };
+    Real x[] = { 2. };
+    Real u[] = { 0. };
     EXPECT_EQ((*fn)(1, 0., x, 1, u, &obj), 0);
     EXPECT_DOUBLE_EQ(u[0], 3421.);
 }
@@ -28,18 +28,18 @@ TEST(ParsedFunctionTest, eval)
 {
     TestApp app;
 
-    std::map<std::string, PetscReal> consts;
+    std::map<std::string, Real> consts;
     consts["Re"] = 100;
 
     Parameters params = ParsedFunction::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "fn1";
     params.set<std::vector<std::string>>("function") = { "t + x + y + Re" };
-    params.set<std::map<std::string, PetscReal>>("constants") = consts;
+    params.set<std::map<std::string, Real>>("constants") = consts;
     ParsedFunction obj(params);
 
-    PetscReal x[] = { 2., 3. };
-    PetscReal u[] = { 0. };
+    Real x[] = { 2., 3. };
+    Real u[] = { 0. };
     obj.evaluate(2, 0.5, x, 1, u);
     EXPECT_EQ(105.5, u[0]);
 }
@@ -54,8 +54,8 @@ TEST(ParsedFunctionTest, multi_eval)
     params.set<std::vector<std::string>>("function") = { "x + 1", "2*t + y" };
     ParsedFunction obj(params);
 
-    PetscReal x[] = { 2., 3. };
-    PetscReal u[] = { 0., 0. };
+    Real x[] = { 2., 3. };
+    Real u[] = { 0., 0. };
     obj.evaluate(2, 0.5, x, 2, u);
     EXPECT_EQ(3., u[0]);
     EXPECT_EQ(4., u[1]);
@@ -76,8 +76,8 @@ TEST(ParsedFunctionTest, eval_via_parser)
 
     parser.SetExpr("exact_fn(t, x, y, z)");
 
-    PetscReal time = 1;
-    PetscReal xx[3] = { 2, 3, 4 };
+    Real time = 1;
+    Real xx[3] = { 2, 3, 4 };
     parser.DefineVar("t", &time);
     parser.DefineVar("x", &(xx[0]));
     parser.DefineVar("y", &(xx[1]));

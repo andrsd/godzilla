@@ -5,6 +5,8 @@
 namespace godzilla {
 
 typedef PetscInt Int;
+typedef PetscReal Real;
+typedef PetscScalar Scalar;
 
 /// This is the API that we hand to PETSc for fields.
 ///
@@ -31,21 +33,21 @@ typedef void PetscFieldFunc(Int dim,
                             Int NfAux,
                             const Int uOff[],
                             const Int uOff_x[],
-                            const PetscScalar u[],
-                            const PetscScalar u_t[],
-                            const PetscScalar u_x[],
+                            const Scalar u[],
+                            const Scalar u_t[],
+                            const Scalar u_x[],
                             const Int aOff[],
                             const Int aOff_x[],
-                            const PetscScalar a[],
-                            const PetscScalar a_t[],
-                            const PetscScalar a_x[],
-                            PetscReal t,
-                            const PetscReal x[],
+                            const Scalar a[],
+                            const Scalar a_t[],
+                            const Scalar a_x[],
+                            Real t,
+                            const Real x[],
                             Int numConstants,
-                            const PetscScalar constants[],
-                            PetscScalar f[]);
+                            const Scalar constants[],
+                            Scalar f[]);
 
 typedef PetscErrorCode
-PetscFunc(Int dim, PetscReal time, const PetscReal x[], Int Nc, PetscScalar u[], void * ctx);
+PetscFunc(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx);
 
 } // namespace godzilla

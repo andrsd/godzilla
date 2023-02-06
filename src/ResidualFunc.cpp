@@ -34,7 +34,7 @@ ResidualFunc::get_field_dot(const std::string & field_name) const
     return get_fe_problem()->get_field_dot(field_name);
 }
 
-const PetscReal &
+const Real &
 ResidualFunc::get_time() const
 {
     _F_;

@@ -27,11 +27,7 @@ public:
     }
 
     virtual void
-    evaluate(PetscReal time,
-             const PetscReal * c,
-             const PetscReal * n,
-             const PetscScalar * xI,
-             PetscScalar * xG) override
+    evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) override
     {
         if (this->inlet)
             xG[0] = 1.;
@@ -78,17 +74,17 @@ protected:
     virtual void
     compute_flux(Int dim,
                  Int nf,
-                 const PetscReal x[],
-                 const PetscReal n[],
-                 const PetscScalar uL[],
-                 const PetscScalar uR[],
+                 const Real x[],
+                 const Real n[],
+                 const Scalar uL[],
+                 const Scalar uR[],
                  Int n_consts,
-                 const PetscScalar constants[],
-                 PetscScalar flux[]) override
+                 const Scalar constants[],
+                 Scalar flux[]) override
     {
         _F_;
-        PetscReal wind[] = { 0.5 };
-        PetscReal wn = 0;
+        Real wind[] = { 0.5 };
+        Real wn = 0;
         wn += wind[0] * n[0];
         flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
     }
@@ -110,9 +106,9 @@ TEST(ExplicitFVLinearProblemTest, api)
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFVLinearProblem prob(prob_pars);
     app.problem = &prob;
@@ -163,9 +159,9 @@ TEST(ExplicitFVLinearProblemTest, fields)
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFVLinearProblem prob(prob_pars);
     app.problem = &prob;
@@ -204,9 +200,9 @@ TEST(ExplicitFVLinearProblemTest, solve)
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFVLinearProblem prob(prob_pars);
     app.problem = &prob;
@@ -238,7 +234,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     Vec sln = prob.get_solution_vector();
     Int ni = 2;
     Int ix[2] = { 0, 1 };
-    PetscScalar x[2];
+    Scalar x[2];
     VecGetValues(sln, ni, ix, x);
     EXPECT_NEAR(x[0], 0.001, 1e-15);
     EXPECT_NEAR(x[1], 0., 1e-15);
@@ -256,9 +252,9 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFVLinearProblem prob(prob_pars);
 
@@ -291,9 +287,9 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "asdf";
     TestExplicitFVLinearProblem prob(prob_pars);
 

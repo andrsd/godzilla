@@ -13,13 +13,13 @@ const std::string FVProblemInterface::empty_name;
 void
 __compute_flux(Int dim,
                Int nf,
-               const PetscReal x[],
-               const PetscReal n[],
-               const PetscScalar uL[],
-               const PetscScalar uR[],
+               const Real x[],
+               const Real n[],
+               const Scalar uL[],
+               const Scalar uR[],
                Int n_consts,
-               const PetscScalar constants[],
-               PetscScalar flux[],
+               const Scalar constants[],
+               Scalar flux[],
                void * ctx)
 {
     _F_;

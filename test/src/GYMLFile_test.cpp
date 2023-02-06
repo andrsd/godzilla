@@ -105,7 +105,7 @@ GTestProblem::parameters()
     params.add_param<std::vector<double>>("arr_d", "vec<d> doco");
     params.add_param<std::vector<int>>("arr_i", "vec<i> doco");
     params.add_param<std::vector<std::string>>("arr_str", "vec<str> doco");
-    params.add_param<std::map<std::string, PetscReal>>("consts", "map<str, real> doco");
+    params.add_param<std::map<std::string, Real>>("consts", "map<str, real> doco");
     params.add_param<std::map<std::string, std::vector<std::string>>>("fns",
                                                                       "map<str, vec<str>> doco");
     params.add_param<bool>("bool1", false, "False bool param");

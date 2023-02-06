@@ -273,7 +273,7 @@ ExodusIIOutput::write_coords(int exo_dim)
     Vec coord = this->dpi->get_coordinates_local();
     Int coord_size;
     PETSC_CHECK(VecGetSize(coord, &coord_size));
-    PetscScalar * xyz;
+    Scalar * xyz;
     PETSC_CHECK(VecGetArray(coord, &xyz));
 
     int n_nodes = (int) coord_size / dim;
@@ -483,7 +483,7 @@ void
 ExodusIIOutput::write_variables()
 {
     _F_;
-    PetscReal time = this->problem->get_time();
+    Real time = this->problem->get_time();
     this->exo->write_time(this->step_num, time);
 
     write_field_variables();
@@ -498,7 +498,7 @@ ExodusIIOutput::write_field_variables()
     _F_;
     Vec sln = this->dpi->get_solution_vector_local();
 
-    const PetscScalar * sln_vals;
+    const Scalar * sln_vals;
     PETSC_CHECK(VecGetArrayRead(sln, &sln_vals));
 
     write_nodal_variables(sln_vals);
@@ -508,7 +508,7 @@ ExodusIIOutput::write_field_variables()
 }
 
 void
-ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
+ExodusIIOutput::write_nodal_variables(const Scalar * sln)
 {
     _F_;
 
@@ -534,7 +534,7 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
 }
 
 void
-ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
+ExodusIIOutput::write_elem_variables(const Scalar * sln)
 {
     _F_;
     Int n_cells_sets = this->mesh->get_num_cell_sets();
@@ -556,7 +556,7 @@ ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
 
 void
 ExodusIIOutput::write_block_elem_variables(int blk_id,
-                                           const PetscScalar * sln,
+                                           const Scalar * sln,
                                            Int n_elems_in_block,
                                            const Int * cells)
 {
@@ -598,7 +598,7 @@ ExodusIIOutput::write_global_variables()
     int exo_var_id = 1;
     for (auto & name : this->global_var_names) {
         Postprocessor * pp = this->problem->get_postprocessor(name);
-        PetscReal val = pp->get_value();
+        Real val = pp->get_value();
         this->exo->write_global_var(this->step_num, exo_var_id, val);
         exo_var_id++;
     }

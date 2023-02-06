@@ -16,12 +16,8 @@ TEST(EssentialBCTest, api)
     public:
         explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars), components({ 0 }) {}
 
-        MOCK_METHOD(void,
-                    evaluate,
-                    (Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]));
-        MOCK_METHOD(void,
-                    evaluate_t,
-                    (Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]));
+        MOCK_METHOD(void, evaluate, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
+        MOCK_METHOD(void, evaluate_t, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
 
         virtual const std::vector<Int> &
         get_components() const
@@ -62,8 +58,8 @@ TEST(EssentialBCTest, api)
     EXPECT_EQ(comps.size(), 1);
     EXPECT_EQ(comps[0], 0);
 
-    PetscReal x[] = { 3 };
-    PetscScalar u[] = { 0 };
+    Real x[] = { 3 };
+    Scalar u[] = { 0 };
 
     EXPECT_CALL(bc, evaluate);
     PetscFunc * fn = bc.get_function();

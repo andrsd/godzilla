@@ -12,12 +12,12 @@ Parameters
 BoxMesh::parameters()
 {
     Parameters params = UnstructuredMesh::parameters();
-    params.add_param<PetscReal>("xmin", 0., "Minimum in the x direction");
-    params.add_param<PetscReal>("xmax", 1., "Maximum in the x direction");
-    params.add_param<PetscReal>("ymin", 0., "Minimum in the y direction");
-    params.add_param<PetscReal>("ymax", 1., "Maximum in the y direction");
-    params.add_param<PetscReal>("zmin", 0., "Minimum in the z direction");
-    params.add_param<PetscReal>("zmax", 1., "Maximum in the z direction");
+    params.add_param<Real>("xmin", 0., "Minimum in the x direction");
+    params.add_param<Real>("xmax", 1., "Maximum in the x direction");
+    params.add_param<Real>("ymin", 0., "Minimum in the y direction");
+    params.add_param<Real>("ymax", 1., "Maximum in the y direction");
+    params.add_param<Real>("zmin", 0., "Minimum in the z direction");
+    params.add_param<Real>("zmax", 1., "Maximum in the z direction");
     params.add_required_param<Int>("nx", "Number of mesh points in the x direction");
     params.add_required_param<Int>("ny", "Number of mesh points in the y direction");
     params.add_required_param<Int>("nz", "Number of mesh points in the z direction");
@@ -27,12 +27,12 @@ BoxMesh::parameters()
 
 BoxMesh::BoxMesh(const Parameters & parameters) :
     UnstructuredMesh(parameters),
-    xmin(get_param<PetscReal>("xmin")),
-    xmax(get_param<PetscReal>("xmax")),
-    ymin(get_param<PetscReal>("ymin")),
-    ymax(get_param<PetscReal>("ymax")),
-    zmin(get_param<PetscReal>("zmin")),
-    zmax(get_param<PetscReal>("zmax")),
+    xmin(get_param<Real>("xmin")),
+    xmax(get_param<Real>("xmax")),
+    ymin(get_param<Real>("ymin")),
+    ymax(get_param<Real>("ymax")),
+    zmin(get_param<Real>("zmin")),
+    zmax(get_param<Real>("zmax")),
     nx(get_param<Int>("nx")),
     ny(get_param<Int>("ny")),
     nz(get_param<Int>("nz")),
@@ -48,14 +48,14 @@ BoxMesh::BoxMesh(const Parameters & parameters) :
         log_error("Parameter 'zmax' must be larger than 'zmin'.");
 }
 
-PetscReal
+Real
 BoxMesh::get_x_min() const
 {
     _F_;
     return this->xmin;
 }
 
-PetscReal
+Real
 BoxMesh::get_x_max() const
 {
     _F_;
@@ -69,14 +69,14 @@ BoxMesh::get_nx() const
     return this->nx;
 }
 
-PetscReal
+Real
 BoxMesh::get_y_min() const
 {
     _F_;
     return this->ymin;
 }
 
-PetscReal
+Real
 BoxMesh::get_y_max() const
 {
     _F_;
@@ -90,14 +90,14 @@ BoxMesh::get_ny() const
     return this->ny;
 }
 
-PetscReal
+Real
 BoxMesh::get_z_min() const
 {
     _F_;
     return this->zmin;
 }
 
-PetscReal
+Real
 BoxMesh::get_z_max() const
 {
     _F_;
@@ -115,8 +115,8 @@ void
 BoxMesh::create_dm()
 {
     _F_;
-    std::array<PetscReal, 3> lower = { this->xmin, this->ymin, this->zmin };
-    std::array<PetscReal, 3> upper = { this->xmax, this->ymax, this->zmax };
+    std::array<Real, 3> lower = { this->xmin, this->ymin, this->zmin };
+    std::array<Real, 3> upper = { this->xmax, this->ymax, this->zmax };
     std::array<Int, 3> faces = { this->nx, this->ny, this->nz };
     std::array<DMBoundaryType, 3> periodicity = {
         this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,

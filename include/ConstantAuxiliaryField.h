@@ -15,10 +15,10 @@ public:
     void create() override;
     NO_DISCARD Int get_num_components() const override;
     NO_DISCARD PetscFunc * get_func() const override;
-    void evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]);
+    void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]);
 
 protected:
-    const std::vector<PetscReal> & values;
+    const std::vector<Real> & values;
     unsigned int num_comps;
 
 public:

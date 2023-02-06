@@ -54,21 +54,13 @@ FunctionInterface::create()
 }
 
 bool
-FunctionInterface::evaluate_func(Int dim,
-                                 PetscReal time,
-                                 const PetscReal x[],
-                                 Int nc,
-                                 PetscReal u[])
+FunctionInterface::evaluate_func(Int dim, Real time, const Real x[], Int nc, Real u[])
 {
     return this->evalr.evaluate(dim, time, x, nc, u);
 }
 
 bool
-FunctionInterface::evaluate_func_t(Int dim,
-                                   PetscReal time,
-                                   const PetscReal x[],
-                                   Int nc,
-                                   PetscReal u[])
+FunctionInterface::evaluate_func_t(Int dim, Real time, const Real x[], Int nc, Real u[])
 {
     return this->evalr_t.evaluate(dim, time, x, nc, u);
 }

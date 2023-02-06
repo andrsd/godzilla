@@ -48,10 +48,10 @@ protected:
     void write_all_variable_names();
     void write_variables();
     void write_field_variables();
-    void write_nodal_variables(const PetscScalar * sln);
-    void write_elem_variables(const PetscScalar * sln);
+    void write_nodal_variables(const Scalar * sln);
+    void write_elem_variables(const Scalar * sln);
     void write_block_elem_variables(int blk_id,
-                                    const PetscScalar * sln,
+                                    const Scalar * sln,
                                     Int n_elems_in_block = 0,
                                     const Int * cells = nullptr);
     void write_global_variables();

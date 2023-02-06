@@ -6,8 +6,8 @@ using namespace godzilla;
 
 TEST(LinearInterpolationTest, sample)
 {
-    std::vector<PetscReal> x = { 1, 2, 3 };
-    std::vector<PetscReal> y = { 0, 4, 2 };
+    std::vector<Real> x = { 1, 2, 3 };
+    std::vector<Real> y = { 0, 4, 2 };
     LinearInterpolation lipol(x, y);
 
     EXPECT_EQ(lipol.sample(0.0), 0.);
@@ -22,8 +22,8 @@ TEST(LinearInterpolationTest, sample)
 TEST(LinearInterpolationTest, ctor_empty)
 {
     LinearInterpolation lipol;
-    std::vector<PetscReal> x = { 1, 2, 3, 4 };
-    std::vector<PetscReal> y = { 0, 4, 2, 3 };
+    std::vector<Real> x = { 1, 2, 3, 4 };
+    std::vector<Real> y = { 0, 4, 2, 3 };
     lipol.create(x, y);
 
     EXPECT_EQ(lipol.sample(0.0), 0.);
@@ -39,8 +39,8 @@ TEST(LinearInterpolationTest, ctor_empty)
 
 TEST(LinearInterpolationTest, single_interval)
 {
-    std::vector<PetscReal> x = { 1, 2 };
-    std::vector<PetscReal> y = { 0, 4 };
+    std::vector<Real> x = { 1, 2 };
+    std::vector<Real> y = { 0, 4 };
     LinearInterpolation lipol(x, y);
 
     EXPECT_EQ(lipol.sample(0.5), 0.);
@@ -52,16 +52,16 @@ TEST(LinearInterpolationTest, single_interval)
 
 TEST(LinearInterpolationTest, single_point)
 {
-    std::vector<PetscReal> x = { 1 };
-    std::vector<PetscReal> y = { 0 };
+    std::vector<Real> x = { 1 };
+    std::vector<Real> y = { 0 };
     EXPECT_DEATH(LinearInterpolation(x, y),
                  "\\[ERROR\\] LinearInterpolation: Size of 'x' is 1. It must be 2 or more.");
 }
 
 TEST(LinearInterpolationTest, unequal_sizes)
 {
-    std::vector<PetscReal> x = { 1, 2 };
-    std::vector<PetscReal> y = { 0, 2, 3 };
+    std::vector<Real> x = { 1, 2 };
+    std::vector<Real> y = { 0, 2, 3 };
     EXPECT_DEATH(
         LinearInterpolation(x, y),
         "\\[ERROR\\] LinearInterpolation: size of 'x' \\(2\\) does not match size of 'y' \\(3\\)");
@@ -69,8 +69,8 @@ TEST(LinearInterpolationTest, unequal_sizes)
 
 TEST(LinearInterpolationTest, non_increasing)
 {
-    std::vector<PetscReal> x = { 1, 2, 1 };
-    std::vector<PetscReal> y = { 0, 2, 3 };
+    std::vector<Real> x = { 1, 2, 1 };
+    std::vector<Real> y = { 0, 2, 3 };
     EXPECT_DEATH(
         LinearInterpolation(x, y),
         "\\[ERROR\\] LinearInterpolation: Values in 'x' must be increasing. Failed at index '2'.");

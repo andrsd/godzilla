@@ -10,8 +10,8 @@ TimeSteppingAdaptor::parameters()
     Parameters params = Object::parameters();
     params.add_private_param<const Problem *>("_problem", nullptr);
     params.add_private_param<const TransientProblemInterface *>("_tpi", nullptr);
-    params.add_param<PetscReal>("dt_min", PETSC_DEFAULT, "Minimum time step");
-    params.add_param<PetscReal>("dt_max", PETSC_DEFAULT, "Maximum time step");
+    params.add_param<Real>("dt_min", PETSC_DEFAULT, "Minimum time step");
+    params.add_param<Real>("dt_max", PETSC_DEFAULT, "Maximum time step");
     return params;
 }
 
@@ -20,8 +20,8 @@ TimeSteppingAdaptor::TimeSteppingAdaptor(const Parameters & params) :
     problem(get_param<const Problem *>("_problem")),
     tpi(get_param<const TransientProblemInterface *>("_tpi")),
     ts_adapt(nullptr),
-    dt_min(get_param<PetscReal>("dt_min")),
-    dt_max(get_param<PetscReal>("dt_max"))
+    dt_min(get_param<Real>("dt_min")),
+    dt_max(get_param<Real>("dt_max"))
 {
     _F_;
 }
@@ -33,14 +33,14 @@ TimeSteppingAdaptor::get_ts_adapt() const
     return this->ts_adapt;
 }
 
-PetscReal
+Real
 TimeSteppingAdaptor::get_dt_min() const
 {
     _F_;
     return this->dt_min;
 }
 
-PetscReal
+Real
 TimeSteppingAdaptor::get_dt_max() const
 {
     _F_;

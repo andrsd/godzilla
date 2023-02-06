@@ -20,7 +20,7 @@ public:
 protected:
     void open_file();
     void write_header();
-    void write_values(PetscReal time);
+    void write_values(Real time);
     void close_file();
 
     /// Output file

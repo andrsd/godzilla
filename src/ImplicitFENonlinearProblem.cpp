@@ -13,7 +13,7 @@
 namespace godzilla {
 
 static PetscErrorCode
-__tsfep_compute_ifunction(DM, PetscReal time, Vec x, Vec x_t, Vec F, void * user)
+__tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
@@ -22,14 +22,7 @@ __tsfep_compute_ifunction(DM, PetscReal time, Vec x, Vec x_t, Vec F, void * user
 }
 
 static PetscErrorCode
-__tsfep_compute_ijacobian(DM,
-                          PetscReal time,
-                          Vec x,
-                          Vec x_t,
-                          PetscReal x_t_shift,
-                          Mat J,
-                          Mat Jp,
-                          void * user)
+__tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * user)
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
@@ -38,7 +31,7 @@ __tsfep_compute_ijacobian(DM,
 }
 
 static PetscErrorCode
-_tsfep_compute_boundary(DM, PetscReal time, Vec x, Vec x_t, void * user)
+_tsfep_compute_boundary(DM, Real time, Vec x, Vec x_t, void * user)
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
@@ -176,7 +169,7 @@ ImplicitFENonlinearProblem::set_up_monitors()
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::compute_ifunction(PetscReal time, Vec X, Vec X_t, Vec F)
+ImplicitFENonlinearProblem::compute_ifunction(Real time, Vec X, Vec X_t, Vec F)
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
     _F_;
@@ -213,10 +206,10 @@ ImplicitFENonlinearProblem::compute_ifunction(PetscReal time, Vec X, Vec X_t, Ve
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::compute_ijacobian(PetscReal time,
+ImplicitFENonlinearProblem::compute_ijacobian(Real time,
                                               Vec X,
                                               Vec X_t,
-                                              PetscReal x_t_shift,
+                                              Real x_t_shift,
                                               Mat J,
                                               Mat Jp)
 {
@@ -259,7 +252,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(PetscReal time,
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::compute_boundary(PetscReal time, Vec X, Vec X_t)
+ImplicitFENonlinearProblem::compute_boundary(Real time, Vec X, Vec X_t)
 {
     _F_;
     return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);

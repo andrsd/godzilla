@@ -12,10 +12,10 @@ integrate(PetscDS ds,
           Int field,
           Int ne,
           PetscFEGeom * cgeom,
-          const PetscScalar coefficients[],
+          const Scalar coefficients[],
           PetscDS ds_aux,
-          const PetscScalar coefficients_aux[],
-          PetscScalar integral[])
+          const Scalar coefficients_aux[],
+          Scalar integral[])
 {
     _F_;
     void * ctx;
@@ -32,10 +32,10 @@ integrate_bd(PetscDS ds,
              PetscBdPointFunc obj_func,
              Int ne,
              PetscFEGeom * fgeom,
-             const PetscScalar coefficients[],
+             const Scalar coefficients[],
              PetscDS ds_aux,
-             const PetscScalar coefficients_aux[],
-             PetscScalar integral[])
+             const Scalar coefficients_aux[],
+             Scalar integral[])
 {
     _F_;
     void * ctx;
@@ -58,12 +58,12 @@ integrate_residual(PetscDS ds,
                    PetscFormKey key,
                    Int ne,
                    PetscFEGeom * cgeom,
-                   const PetscScalar coefficients[],
-                   const PetscScalar coefficients_t[],
+                   const Scalar coefficients[],
+                   const Scalar coefficients_t[],
                    PetscDS ds_aux,
-                   const PetscScalar coefficients_aux[],
-                   PetscReal t,
-                   PetscScalar elem_vec[])
+                   const Scalar coefficients_aux[],
+                   Real t,
+                   Scalar elem_vec[])
 {
     _F_;
     void * ctx;
@@ -88,12 +88,12 @@ integrate_bd_residual(PetscDS ds,
                       PetscFormKey key,
                       Int ne,
                       PetscFEGeom * fgeom,
-                      const PetscScalar coefficients[],
-                      const PetscScalar coefficients_t[],
+                      const Scalar coefficients[],
+                      const Scalar coefficients_t[],
                       PetscDS ds_aux,
-                      const PetscScalar coefficients_aux[],
-                      PetscReal t,
-                      PetscScalar elem_vec[])
+                      const Scalar coefficients_aux[],
+                      Real t,
+                      Scalar elem_vec[])
 {
     _F_;
     void * ctx;
@@ -118,13 +118,13 @@ integrate_jacobian(PetscDS ds,
                    PetscFormKey key,
                    Int ne,
                    PetscFEGeom * cgeom,
-                   const PetscScalar coefficients[],
-                   const PetscScalar coefficients_t[],
+                   const Scalar coefficients[],
+                   const Scalar coefficients_t[],
                    PetscDS ds_aux,
-                   const PetscScalar coefficients_aux[],
-                   PetscReal t,
-                   PetscReal u_tshift,
-                   PetscScalar elem_mat[])
+                   const Scalar coefficients_aux[],
+                   Real t,
+                   Real u_tshift,
+                   Scalar elem_mat[])
 {
     _F_;
     Int n_fields;
@@ -154,13 +154,13 @@ integrate_bd_jacobian(PetscDS ds,
                       PetscFormKey key,
                       Int ne,
                       PetscFEGeom * fgeom,
-                      const PetscScalar coefficients[],
-                      const PetscScalar coefficients_t[],
+                      const Scalar coefficients[],
+                      const Scalar coefficients_t[],
                       PetscDS ds_aux,
-                      const PetscScalar coefficients_aux[],
-                      PetscReal t,
-                      PetscReal u_tshift,
-                      PetscScalar elem_mat[])
+                      const Scalar coefficients_aux[],
+                      Real t,
+                      Real u_tshift,
+                      Scalar elem_mat[])
 {
     _F_;
     Int n_fields;

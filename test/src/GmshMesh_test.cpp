@@ -25,7 +25,7 @@ TEST(GmshMeshTest, api)
 
     EXPECT_EQ(mesh.get_dimension(), 2);
 
-    PetscReal gmin[4], gmax[4];
+    Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
     EXPECT_EQ(gmin[0], 0);
     EXPECT_EQ(gmax[0], 1);

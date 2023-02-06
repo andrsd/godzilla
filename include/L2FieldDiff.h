@@ -17,7 +17,7 @@ public:
 
     void create() override;
     void compute() override;
-    PetscReal get_value() override;
+    Real get_value() override;
 
 protected:
     /// FE problem
@@ -27,7 +27,7 @@ protected:
     std::map<std::string, ParsedFunction *> funcs;
 
     /// Computed L_2 errors
-    std::vector<PetscReal> l2_diff;
+    std::vector<Real> l2_diff;
 
 public:
     static Parameters parameters();

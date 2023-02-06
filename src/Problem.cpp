@@ -64,7 +64,7 @@ Problem::get_dimension() const
     return this->mesh->get_dimension();
 }
 
-const PetscReal &
+const Real &
 Problem::get_time() const
 {
     _F_;

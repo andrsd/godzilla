@@ -126,17 +126,17 @@ PetscErrorCode
 FENonlinearProblem::compute_residual_internal(DM dm,
                                               PetscFormKey key,
                                               const IndexSet & cell_is,
-                                              PetscReal time,
+                                              Real time,
                                               Vec loc_x,
                                               Vec loc_x_t,
-                                              PetscReal t,
+                                              Real t,
                                               Vec loc_f)
 {
     _F_;
     DM dm_aux = nullptr;
     PetscDS ds_aux = nullptr;
     PetscBool is_implicit = (loc_x_t || time == PETSC_MIN_REAL) ? PETSC_TRUE : PETSC_FALSE;
-    PetscScalar *u = nullptr, *u_t, *a;
+    Scalar *u = nullptr, *u_t, *a;
     IS chunk_is;
     Int tot_dim_aux;
     PetscQuadrature affine_quad = nullptr, *quads = nullptr;
@@ -214,7 +214,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     Int cell_chunk_size = n_cells / n_chunks;
     n_chunks = PetscMin(1, n_cells);
     for (Int chunk = 0; chunk < n_chunks; ++chunk) {
-        PetscScalar * elem_vec;
+        Scalar * elem_vec;
         Int cS = c_start + chunk * cell_chunk_size;
         Int cE = PetscMin(cS + cell_chunk_size, c_end);
         Int n_chunk_cells = cE - cS;
@@ -353,11 +353,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
 }
 
 PetscErrorCode
-FENonlinearProblem::compute_bnd_residual_internal(DM dm,
-                                                  Vec loc_x,
-                                                  Vec loc_x_t,
-                                                  PetscReal t,
-                                                  Vec loc_f)
+FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f)
 {
     _F_;
 
@@ -421,7 +417,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm,
 
 PetscErrorCode
 FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
-                                                         PetscReal t,
+                                                         Real t,
                                                          PetscFormKey key,
                                                          Vec loc_x,
                                                          Vec loc_x_t,
@@ -434,7 +430,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
     PetscDS prob, prob_aux = nullptr;
     PetscSection section, section_aux = nullptr;
     Vec loc_a = nullptr;
-    PetscScalar *u = nullptr, *u_t = nullptr, *a = nullptr, *elem_vec = nullptr;
+    Scalar *u = nullptr, *u_t = nullptr, *a = nullptr, *elem_vec = nullptr;
     Int tot_dim, tot_dim_aux = 0;
 
     PetscCall(DMConvert(dm, DMPLEX, &plex));
@@ -491,7 +487,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
             PetscCall(DMPlexGetSupport(dm, points[face], &support));
-            PetscScalar * x = nullptr;
+            Scalar * x = nullptr;
             PetscCall(DMPlexVecGetClosure(plex, section, loc_x, support[0], nullptr, &x));
             for (Int i = 0; i < tot_dim; ++i)
                 u[face * tot_dim + i] = x[i];
@@ -621,8 +617,8 @@ PetscErrorCode
 FENonlinearProblem::compute_jacobian_internal(DM dm,
                                               PetscFormKey key,
                                               const IndexSet & cell_is,
-                                              PetscReal t,
-                                              PetscReal x_t_shift,
+                                              Real t,
+                                              Real x_t_shift,
                                               Vec X,
                                               Vec X_t,
                                               Mat J,
@@ -672,8 +668,8 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         PetscCall(PetscDSGetTotalDimension(prob_aux, &tot_dim_aux));
     }
 
-    PetscScalar *u, *u_t;
-    PetscScalar *elem_mat, *elem_mat_P;
+    Scalar *u, *u_t;
+    Scalar *elem_mat, *elem_mat_P;
     PetscCall(PetscMalloc4(n_cells * tot_dim,
                            &u,
                            X_t ? n_cells * tot_dim : 0,
@@ -682,7 +678,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
                            &elem_mat,
                            has_prec ? n_cells * tot_dim * tot_dim : 0,
                            &elem_mat_P));
-    PetscScalar * a = nullptr;
+    Scalar * a = nullptr;
     if (dm_aux)
         PetscCall(PetscMalloc1(n_cells * tot_dim_aux, &a));
 
@@ -692,7 +688,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         const Int cell = cells ? cells[c] : c;
         const Int cind = c - c_start;
 
-        PetscScalar *x = nullptr, *x_t = nullptr;
+        Scalar *x = nullptr, *x_t = nullptr;
         PetscCall(DMPlexVecGetClosure(dm, section, X, cell, nullptr, &x));
 
         for (Int i = 0; i < tot_dim; ++i)
@@ -872,8 +868,8 @@ PetscErrorCode
 FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
                                                   Vec X_loc,
                                                   Vec X_t_loc,
-                                                  PetscReal t,
-                                                  PetscReal x_t_shift,
+                                                  Real t,
+                                                  Real x_t_shift,
                                                   Mat J,
                                                   Mat Jp)
 {
@@ -934,14 +930,14 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
 
 PetscErrorCode
 FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
-                                                         PetscReal t,
+                                                         Real t,
                                                          DMLabel label,
                                                          Int n_values,
                                                          const Int values[],
                                                          Int field_i,
                                                          Vec X_loc,
                                                          Vec X_t_loc,
-                                                         PetscReal x_t_shift,
+                                                         Real x_t_shift,
                                                          Mat J,
                                                          Mat Jp,
                                                          DMField coord_field,
@@ -1001,7 +997,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         Int n_faces = points.get_local_size();
         points.get_indices();
 
-        PetscScalar *u = nullptr, *u_t = nullptr, *a = nullptr, *elem_mat = nullptr;
+        Scalar *u = nullptr, *u_t = nullptr, *a = nullptr, *elem_mat = nullptr;
         PetscCall(PetscMalloc4(n_faces * tot_dim,
                                &u,
                                X_t_loc ? n_faces * tot_dim : 0,
@@ -1029,7 +1025,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
             PetscCall(DMPlexGetSupport(dm, points[face], &support));
-            PetscScalar * x = nullptr;
+            Scalar * x = nullptr;
             PetscCall(DMPlexVecGetClosure(plex, section, X_loc, support[0], nullptr, &x));
             for (Int i = 0; i < tot_dim; ++i)
                 u[face * tot_dim + i] = x[i];

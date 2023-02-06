@@ -13,14 +13,14 @@ TEST(BoxMeshTest, api)
     Parameters params = BoxMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "box_mesh";
-    params.set<PetscReal>("xmin") = 1;
-    params.set<PetscReal>("xmax") = 4;
+    params.set<Real>("xmin") = 1;
+    params.set<Real>("xmax") = 4;
     params.set<Int>("nx") = 9;
-    params.set<PetscReal>("ymin") = 2;
-    params.set<PetscReal>("ymax") = 5;
+    params.set<Real>("ymin") = 2;
+    params.set<Real>("ymax") = 5;
     params.set<Int>("ny") = 8;
-    params.set<PetscReal>("zmin") = 3;
-    params.set<PetscReal>("zmax") = 6;
+    params.set<Real>("zmin") = 3;
+    params.set<Real>("zmax") = 6;
     params.set<Int>("nz") = 7;
     BoxMesh mesh(params);
 
@@ -41,7 +41,7 @@ TEST(BoxMeshTest, api)
 
     EXPECT_EQ(mesh.get_dimension(), 3);
 
-    PetscReal gmin[4], gmax[4];
+    Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
     EXPECT_EQ(gmin[0], 1);
     EXPECT_EQ(gmax[0], 4);
@@ -68,14 +68,14 @@ TEST(BoxMeshTest, incorrect_dims)
     Parameters params = BoxMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
-    params.set<PetscReal>("xmin") = 4;
-    params.set<PetscReal>("xmax") = 1;
+    params.set<Real>("xmin") = 4;
+    params.set<Real>("xmax") = 1;
     params.set<Int>("nx") = 9;
-    params.set<PetscReal>("ymin") = 5;
-    params.set<PetscReal>("ymax") = 2;
+    params.set<Real>("ymin") = 5;
+    params.set<Real>("ymax") = 2;
     params.set<Int>("ny") = 8;
-    params.set<PetscReal>("zmin") = 6;
-    params.set<PetscReal>("zmax") = 3;
+    params.set<Real>("zmin") = 6;
+    params.set<Real>("zmax") = 3;
     params.set<Int>("nz") = 7;
     BoxMesh mesh(params);
 

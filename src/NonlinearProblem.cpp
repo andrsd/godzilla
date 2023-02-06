@@ -25,7 +25,7 @@ __compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 }
 
 PetscErrorCode
-__ksp_monitor(KSP, Int it, PetscReal rnorm, void * ctx)
+__ksp_monitor(KSP, Int it, Real rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
@@ -33,7 +33,7 @@ __ksp_monitor(KSP, Int it, PetscReal rnorm, void * ctx)
 }
 
 PetscErrorCode
-__snes_monitor(SNES, Int it, PetscReal norm, void * ctx)
+__snes_monitor(SNES, Int it, Real norm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
@@ -45,25 +45,25 @@ NonlinearProblem::parameters()
 {
     Parameters params = Problem::parameters();
     params.add_param<std::string>("line_search", "bt", "The type of line search to be used");
-    params.add_param<PetscReal>("nl_rel_tol",
-                                1e-8,
-                                "Relative convergence tolerance for the non-linear solver");
-    params.add_param<PetscReal>("nl_abs_tol",
-                                1e-15,
-                                "Absolute convergence tolerance for the non-linear solver");
-    params.add_param<PetscReal>(
+    params.add_param<Real>("nl_rel_tol",
+                           1e-8,
+                           "Relative convergence tolerance for the non-linear solver");
+    params.add_param<Real>("nl_abs_tol",
+                           1e-15,
+                           "Absolute convergence tolerance for the non-linear solver");
+    params.add_param<Real>(
         "nl_step_tol",
         1e-15,
         "Convergence tolerance in terms of the norm of the change in the solution between steps");
     params.add_param<Int>("nl_max_iter",
                           40,
                           "Maximum number of iterations for the non-linear solver");
-    params.add_param<PetscReal>("lin_rel_tol",
-                                1e-5,
-                                "Relative convergence tolerance for the linear solver");
-    params.add_param<PetscReal>("lin_abs_tol",
-                                1e-50,
-                                "Absolute convergence tolerance for the linear solver");
+    params.add_param<Real>("lin_rel_tol",
+                           1e-5,
+                           "Relative convergence tolerance for the linear solver");
+    params.add_param<Real>("lin_abs_tol",
+                           1e-50,
+                           "Absolute convergence tolerance for the linear solver");
     params.add_param<Int>("lin_max_iter",
                           10000,
                           "Maximum number of iterations for the linear solver");
@@ -79,12 +79,12 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     J(nullptr),
     converged_reason(SNES_CONVERGED_ITERATING),
     line_search_type(get_param<std::string>("line_search")),
-    nl_rel_tol(get_param<PetscReal>("nl_rel_tol")),
-    nl_abs_tol(get_param<PetscReal>("nl_abs_tol")),
-    nl_step_tol(get_param<PetscReal>("nl_step_tol")),
+    nl_rel_tol(get_param<Real>("nl_rel_tol")),
+    nl_abs_tol(get_param<Real>("nl_abs_tol")),
+    nl_step_tol(get_param<Real>("nl_step_tol")),
     nl_max_iter(get_param<Int>("nl_max_iter")),
-    lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
-    lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
+    lin_rel_tol(get_param<Real>("lin_rel_tol")),
+    lin_abs_tol(get_param<Real>("lin_abs_tol")),
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     _F_;
@@ -240,14 +240,14 @@ NonlinearProblem::set_up_solver_parameters()
 }
 
 PetscErrorCode
-NonlinearProblem::snes_monitor_callback(Int it, PetscReal norm)
+NonlinearProblem::snes_monitor_callback(Int it, Real norm)
 {
     lprintf(7, "%d Non-linear residual: %e", it, norm);
     return 0;
 }
 
 PetscErrorCode
-NonlinearProblem::ksp_monitor_callback(Int it, PetscReal rnorm)
+NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     lprintf(8, "    %d Linear residual: %e", it, rnorm);
     return 0;
