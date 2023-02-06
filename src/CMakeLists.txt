@@ -71,6 +71,7 @@ add_library(${PROJECT_NAME}
         UnstructuredMesh.cpp
         Utils.cpp
         Validation.cpp
+        Vector.cpp
         VTKOutput.cpp
         WeakForm.cpp
 )
