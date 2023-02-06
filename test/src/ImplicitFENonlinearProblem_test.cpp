@@ -44,8 +44,8 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     const Vec x = prob->get_solution_vector();
 
-    PetscInt ni = 1;
-    PetscInt ix[1] = { 0 };
+    Int ni = 1;
+    Int ix[1] = { 0 };
     PetscScalar xx[1];
     VecGetValues(x, ni, ix, xx);
 

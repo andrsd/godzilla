@@ -15,13 +15,9 @@ class ConstantIC : public InitialCondition {
 public:
     explicit ConstantIC(const Parameters & params);
 
-    NO_DISCARD PetscInt get_num_components() const override;
+    NO_DISCARD Int get_num_components() const override;
 
-    void evaluate(PetscInt dim,
-                  PetscReal time,
-                  const PetscReal x[],
-                  PetscInt Nc,
-                  PetscScalar u[]) override;
+    void evaluate(Int dim, PetscReal time, const PetscReal x[], Int Nc, PetscScalar u[]) override;
 
 protected:
     /// Constant values -- one for each component

@@ -15,10 +15,10 @@ TEST(RectangleMeshTest, api)
     params.set<std::string>("_name") = "rect_mesh";
     params.set<PetscReal>("xmin") = 1;
     params.set<PetscReal>("xmax") = 3;
-    params.set<PetscInt>("nx") = 9;
+    params.set<Int>("nx") = 9;
     params.set<PetscReal>("ymin") = 2;
     params.set<PetscReal>("ymax") = 4;
-    params.set<PetscInt>("ny") = 8;
+    params.set<Int>("ny") = 8;
     RectangleMesh mesh(params);
 
     EXPECT_EQ(mesh.get_x_min(), 1);
@@ -44,7 +44,7 @@ TEST(RectangleMeshTest, api)
 
     Vec coords;
     DMGetCoordinates(dm, &coords);
-    PetscInt n;
+    Int n;
     VecGetSize(coords, &n);
     EXPECT_EQ(n, 180);
 }
@@ -60,10 +60,10 @@ TEST(RectangleMeshTest, incorrect_dims)
     params.set<std::string>("_name") = "obj";
     params.set<PetscReal>("xmin") = 2;
     params.set<PetscReal>("xmax") = 1;
-    params.set<PetscInt>("nx") = 9;
+    params.set<Int>("nx") = 9;
     params.set<PetscReal>("ymin") = 2;
     params.set<PetscReal>("ymax") = 1;
-    params.set<PetscInt>("ny") = 8;
+    params.set<Int>("ny") = 8;
     RectangleMesh mesh(params);
 
     app.check_integrity();

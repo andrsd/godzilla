@@ -58,16 +58,16 @@ get_num_elem_nodes(DMPolytopeType elem_type)
     }
 }
 
-const PetscInt *
+const Int *
 get_elem_node_ordering(DMPolytopeType elem_type)
 {
     _F_;
 
-    static const PetscInt seg_ordering[] = { 0, 1 };
-    static const PetscInt tri_ordering[] = { 0, 1, 2 };
-    static const PetscInt quad_ordering[] = { 0, 1, 2, 3 };
-    static const PetscInt tet_ordering[] = { 1, 0, 2, 3 };
-    static const PetscInt hex_ordering[] = { 0, 3, 2, 1, 4, 5, 6, 7, 8 };
+    static const Int seg_ordering[] = { 0, 1 };
+    static const Int tri_ordering[] = { 0, 1, 2 };
+    static const Int quad_ordering[] = { 0, 1, 2, 3 };
+    static const Int tet_ordering[] = { 1, 0, 2, 3 };
+    static const Int hex_ordering[] = { 0, 3, 2, 1, 4, 5, 6, 7, 8 };
 
     switch (elem_type) {
     case DM_POLYTOPE_SEGMENT:
@@ -85,14 +85,14 @@ get_elem_node_ordering(DMPolytopeType elem_type)
     }
 }
 
-const PetscInt *
+const Int *
 get_elem_side_ordering(DMPolytopeType elem_type)
 {
-    static const PetscInt seg_ordering[] = { 1, 2 };
-    static const PetscInt tri_ordering[] = { 1, 2, 3 };
-    static const PetscInt quad_ordering[] = { 1, 2, 3, 4 };
-    static const PetscInt tet_ordering[] = { 4, 1, 2, 3 };
-    static const PetscInt hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
+    static const Int seg_ordering[] = { 1, 2 };
+    static const Int tri_ordering[] = { 1, 2, 3 };
+    static const Int quad_ordering[] = { 1, 2, 3, 4 };
+    static const Int tet_ordering[] = { 4, 1, 2, 3 };
+    static const Int hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
 
     switch (elem_type) {
     case DM_POLYTOPE_SEGMENT:
@@ -271,7 +271,7 @@ ExodusIIOutput::write_coords(int exo_dim)
     _F_;
     int dim = (int) this->mesh->get_dimension();
     Vec coord = this->dpi->get_coordinates_local();
-    PetscInt coord_size;
+    Int coord_size;
     PETSC_CHECK(VecGetSize(coord, &coord_size));
     PetscScalar * xyz;
     PETSC_CHECK(VecGetArray(coord, &xyz));
@@ -285,7 +285,7 @@ ExodusIIOutput::write_coords(int exo_dim)
         y.resize(n_nodes);
     if (exo_dim >= 3)
         z.resize(n_nodes);
-    for (PetscInt i = 0; i < n_nodes; i++) {
+    for (Int i = 0; i < n_nodes; i++) {
         x[i] = xyz[i * dim + 0];
         if (dim >= 2)
             y[i] = xyz[i * dim + 1];
@@ -311,7 +311,7 @@ ExodusIIOutput::write_elements()
     _F_;
     std::vector<std::string> block_names;
 
-    PetscInt n_cells_sets = this->mesh->get_num_cell_sets();
+    Int n_cells_sets = this->mesh->get_num_cell_sets();
 
     if (n_cells_sets > 1) {
         block_names.resize(n_cells_sets);
@@ -319,7 +319,7 @@ ExodusIIOutput::write_elements()
         DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
         IndexSet cell_set_idx = IndexSet::values_from_label(cell_sets_label);
         cell_set_idx.get_indices();
-        for (PetscInt i = 0; i < n_cells_sets; ++i) {
+        for (Int i = 0; i < n_cells_sets; ++i) {
             IndexSet cells = IndexSet::stratum_from_label(cell_sets_label, cell_set_idx[i]);
             cells.get_indices();
             write_block_connectivity((int) cell_set_idx[i], cells.get_size(), cells.data());
@@ -344,20 +344,20 @@ ExodusIIOutput::write_node_sets()
     if (!this->mesh->has_label("Vertex Sets"))
         return;
 
-    PetscInt elem_first, elem_last;
+    Int elem_first, elem_last;
     this->mesh->get_element_idx_range(elem_first, elem_last);
-    PetscInt n_elems_in_block = elem_last - elem_first;
+    Int n_elems_in_block = elem_last - elem_first;
 
-    PetscInt n_node_sets = this->mesh->get_num_vertex_sets();
+    Int n_node_sets = this->mesh->get_num_vertex_sets();
     DMLabel vertex_sets_label = this->mesh->get_label("Vertex Sets");
     IndexSet vertex_set_idx = IndexSet::values_from_label(vertex_sets_label);
     vertex_set_idx.get_indices();
-    for (PetscInt i = 0; i < n_node_sets; ++i) {
+    for (Int i = 0; i < n_node_sets; ++i) {
         IndexSet vertices = IndexSet::stratum_from_label(vertex_sets_label, vertex_set_idx[i]);
         vertices.get_indices();
-        PetscInt n_nodes_in_set = vertices.get_size();
+        Int n_nodes_in_set = vertices.get_size();
         std::vector<int> node_set(n_nodes_in_set);
-        for (PetscInt j = 0; j < n_nodes_in_set; j++)
+        for (Int j = 0; j < n_nodes_in_set; j++)
             node_set[j] = (int) (vertices[j] - n_elems_in_block + 1);
         this->exo->write_node_set(vertex_set_idx[i], node_set);
 
@@ -382,27 +382,27 @@ ExodusIIOutput::write_face_sets()
 
     DMLabel face_sets_label = this->mesh->get_label("Face Sets");
 
-    PetscInt n_side_sets = this->mesh->get_num_face_sets();
+    Int n_side_sets = this->mesh->get_num_face_sets();
     fs_names.resize(n_side_sets);
 
     IndexSet face_set_idx = IndexSet::values_from_label(face_sets_label);
     face_set_idx.get_indices();
-    for (PetscInt fs = 0; fs < n_side_sets; ++fs) {
+    for (Int fs = 0; fs < n_side_sets; ++fs) {
         IndexSet faces = IndexSet::stratum_from_label(face_sets_label, face_set_idx[fs]);
         faces.get_indices();
-        PetscInt face_set_size = faces.get_size();
+        Int face_set_size = faces.get_size();
         std::vector<int> elem_list(face_set_size);
         std::vector<int> side_list(face_set_size);
-        for (PetscInt i = 0; i < face_set_size; ++i) {
+        for (Int i = 0; i < face_set_size; ++i) {
             // Element
-            PetscInt num_points;
-            PetscInt * points = nullptr;
+            Int num_points;
+            Int * points = nullptr;
             PETSC_CHECK(
                 DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
-            PetscInt el = points[2];
+            Int el = points[2];
             DMPolytopeType polytope_type = this->mesh->get_cell_type(el);
-            const PetscInt * side_ordering = get_elem_side_ordering(polytope_type);
+            const Int * side_ordering = get_elem_side_ordering(polytope_type);
             elem_list[i] = (int) (el + 1);
 
             PETSC_CHECK(
@@ -412,7 +412,7 @@ ExodusIIOutput::write_face_sets()
             points = nullptr;
             PETSC_CHECK(DMPlexGetTransitiveClosure(dm, el, PETSC_TRUE, &num_points, &points));
 
-            for (PetscInt j = 1; j < num_points; ++j) {
+            for (Int j = 1; j < num_points; ++j) {
                 if (points[j * 2] == faces[i]) {
                     side_list[i] = (int) side_ordering[j - 1];
                     break;
@@ -434,14 +434,14 @@ ExodusIIOutput::write_face_sets()
 }
 
 void
-ExodusIIOutput::add_var_names(PetscInt fid, std::vector<std::string> & var_names)
+ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
 {
     const std::string & name = this->dpi->get_field_name(fid);
-    PetscInt nc = this->dpi->get_field_num_components(fid);
+    Int nc = this->dpi->get_field_num_components(fid);
     if (nc == 1)
         var_names.push_back(name);
     else {
-        for (PetscInt c = 0; c < nc; c++) {
+        for (Int c = 0; c < nc; c++) {
             std::string comp_name = this->dpi->get_field_component_name(fid, c);
             std::string s;
             if (comp_name.length() == 0)
@@ -463,8 +463,8 @@ ExodusIIOutput::write_all_variable_names()
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
     for (auto & name : this->field_var_names) {
-        PetscInt fid = this->dpi->get_field_id(name);
-        PetscInt order = this->dpi->get_field_order(fid);
+        Int fid = this->dpi->get_field_id(name);
+        Int order = this->dpi->get_field_order(fid);
         if (order == 0) {
             add_var_names(fid, elem_var_names);
             this->elem_var_fids.push_back(fid);
@@ -512,16 +512,16 @@ ExodusIIOutput::write_nodal_variables(const PetscScalar * sln)
 {
     _F_;
 
-    PetscInt n_all_elems = this->mesh->get_num_all_elements();
-    PetscInt first, last;
+    Int n_all_elems = this->mesh->get_num_all_elements();
+    Int first, last;
     this->mesh->get_vertex_idx_range(first, last);
 
-    for (PetscInt n = first; n < last; n++) {
+    for (Int n = first; n < last; n++) {
         int exo_var_id = 1;
         for (auto fid : this->nodal_var_fids) {
-            PetscInt offset = this->dpi->get_field_dof(n, fid);
-            PetscInt nc = this->dpi->get_field_num_components(fid);
-            for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
+            Int offset = this->dpi->get_field_dof(n, fid);
+            Int nc = this->dpi->get_field_num_components(fid);
+            for (Int c = 0; c < nc; c++, exo_var_id++) {
                 int exo_idx = (int) (n - n_all_elems + 1);
                 this->exo->write_partial_nodal_var(this->step_num,
                                                    exo_var_id,
@@ -537,12 +537,12 @@ void
 ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
 {
     _F_;
-    PetscInt n_cells_sets = this->mesh->get_num_cell_sets();
+    Int n_cells_sets = this->mesh->get_num_cell_sets();
     if (n_cells_sets > 1) {
         DMLabel cell_sets_label = this->mesh->get_label("Cell Sets");
         IndexSet cell_set_idx = IndexSet::values_from_label(cell_sets_label);
         cell_set_idx.get_indices();
-        for (PetscInt i = 0; i < n_cells_sets; ++i) {
+        for (Int i = 0; i < n_cells_sets; ++i) {
             IndexSet cells = IndexSet::stratum_from_label(cell_sets_label, cell_set_idx[i]);
             write_block_elem_variables((int) cell_set_idx[i], sln, cells.get_size(), cells.data());
             cells.destroy();
@@ -557,18 +557,18 @@ ExodusIIOutput::write_elem_variables(const PetscScalar * sln)
 void
 ExodusIIOutput::write_block_elem_variables(int blk_id,
                                            const PetscScalar * sln,
-                                           PetscInt n_elems_in_block,
-                                           const PetscInt * cells)
+                                           Int n_elems_in_block,
+                                           const Int * cells)
 {
     _F_;
-    PetscInt first, last;
+    Int first, last;
     if (cells == nullptr) {
         this->mesh->get_element_idx_range(first, last);
         n_elems_in_block = last - first;
     }
 
-    for (PetscInt i = 0; i < n_elems_in_block; i++) {
-        PetscInt elem_id;
+    for (Int i = 0; i < n_elems_in_block; i++) {
+        Int elem_id;
         if (cells == nullptr)
             elem_id = first + i;
         else
@@ -576,9 +576,9 @@ ExodusIIOutput::write_block_elem_variables(int blk_id,
 
         int exo_var_id = 1;
         for (auto & fid : this->elem_var_fids) {
-            PetscInt offset = this->dpi->get_field_dof(elem_id, fid);
-            PetscInt nc = this->dpi->get_field_num_components(fid);
-            for (PetscInt c = 0; c < nc; c++, exo_var_id++) {
+            Int offset = this->dpi->get_field_dof(elem_id, fid);
+            Int nc = this->dpi->get_field_num_components(fid);
+            for (Int c = 0; c < nc; c++, exo_var_id++) {
                 int exo_idx = (int) (i + 1);
                 this->exo->write_partial_elem_var(this->step_num,
                                                   exo_var_id,
@@ -619,14 +619,12 @@ ExodusIIOutput::write_info()
 }
 
 void
-ExodusIIOutput::write_block_connectivity(int blk_id,
-                                         PetscInt n_elems_in_block,
-                                         const PetscInt * cells)
+ExodusIIOutput::write_block_connectivity(int blk_id, Int n_elems_in_block, const Int * cells)
 {
     _F_;
     DM dm = this->mesh->get_dm();
-    PetscInt n_all_elems = this->mesh->get_num_all_elements();
-    PetscInt elem_first, elem_last;
+    Int n_all_elems = this->mesh->get_num_all_elements();
+    Int elem_first, elem_last;
     DMPolytopeType polytope_type;
 
     if (cells == nullptr) {
@@ -639,19 +637,19 @@ ExodusIIOutput::write_block_connectivity(int blk_id,
 
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = get_num_elem_nodes(polytope_type);
-    const PetscInt * ordering = get_elem_node_ordering(polytope_type);
+    const Int * ordering = get_elem_node_ordering(polytope_type);
     std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
-    for (PetscInt i = 0, j = 0; i < n_elems_in_block; i++) {
-        PetscInt elem_id;
+    for (Int i = 0, j = 0; i < n_elems_in_block; i++) {
+        Int elem_id;
         if (cells == nullptr)
             elem_id = elem_first + i;
         else
             elem_id = cells[i];
-        PetscInt closure_size;
-        PetscInt * closure = nullptr;
+        Int closure_size;
+        Int * closure = nullptr;
         PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
-        for (PetscInt k = 0; k < n_nodes_per_elem; k++, j++) {
-            PetscInt l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
+        for (Int k = 0; k < n_nodes_per_elem; k++, j++) {
+            Int l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
             connect[j] = (int) (closure[l] - n_all_elems + 1);
         }
         PETSC_CHECK(

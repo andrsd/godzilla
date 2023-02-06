@@ -18,9 +18,9 @@ BoxMesh::parameters()
     params.add_param<PetscReal>("ymax", 1., "Maximum in the y direction");
     params.add_param<PetscReal>("zmin", 0., "Minimum in the z direction");
     params.add_param<PetscReal>("zmax", 1., "Maximum in the z direction");
-    params.add_required_param<PetscInt>("nx", "Number of mesh points in the x direction");
-    params.add_required_param<PetscInt>("ny", "Number of mesh points in the y direction");
-    params.add_required_param<PetscInt>("nz", "Number of mesh points in the z direction");
+    params.add_required_param<Int>("nx", "Number of mesh points in the x direction");
+    params.add_required_param<Int>("ny", "Number of mesh points in the y direction");
+    params.add_required_param<Int>("nz", "Number of mesh points in the z direction");
     params.add_param<bool>("simplex", false, "Generate simplex elements");
     return params;
 }
@@ -33,9 +33,9 @@ BoxMesh::BoxMesh(const Parameters & parameters) :
     ymax(get_param<PetscReal>("ymax")),
     zmin(get_param<PetscReal>("zmin")),
     zmax(get_param<PetscReal>("zmax")),
-    nx(get_param<PetscInt>("nx")),
-    ny(get_param<PetscInt>("ny")),
-    nz(get_param<PetscInt>("nz")),
+    nx(get_param<Int>("nx")),
+    ny(get_param<Int>("ny")),
+    nz(get_param<Int>("nz")),
     simplex(get_param<bool>("simplex") ? PETSC_TRUE : PETSC_FALSE),
     interpolate(PETSC_TRUE)
 {
@@ -62,7 +62,7 @@ BoxMesh::get_x_max() const
     return this->xmax;
 }
 
-PetscInt
+Int
 BoxMesh::get_nx() const
 {
     _F_;
@@ -83,7 +83,7 @@ BoxMesh::get_y_max() const
     return this->ymax;
 }
 
-PetscInt
+Int
 BoxMesh::get_ny() const
 {
     _F_;
@@ -104,7 +104,7 @@ BoxMesh::get_z_max() const
     return this->zmax;
 }
 
-PetscInt
+Int
 BoxMesh::get_nz() const
 {
     _F_;
@@ -117,7 +117,7 @@ BoxMesh::create_dm()
     _F_;
     std::array<PetscReal, 3> lower = { this->xmin, this->ymin, this->zmin };
     std::array<PetscReal, 3> upper = { this->xmax, this->ymax, this->zmax };
-    std::array<PetscInt, 3> faces = { this->nx, this->ny, this->nz };
+    std::array<Int, 3> faces = { this->nx, this->ny, this->nz };
     std::array<DMBoundaryType, 3> periodicity = {
         this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
         this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
@@ -135,7 +135,7 @@ BoxMesh::create_dm()
                                     &this->dm));
 
     // create user-friendly names for sides
-    std::map<PetscInt, std::string> face_set_names;
+    std::map<Int, std::string> face_set_names;
     face_set_names[1] = "back";
     face_set_names[2] = "front";
     face_set_names[3] = "bottom";

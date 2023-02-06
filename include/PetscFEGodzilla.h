@@ -16,11 +16,11 @@ namespace internal {
 /// @param fem Created PetscFE object
 /// @return PETSC error code
 PetscErrorCode create_lagrange_petscfe(MPI_Comm comm,
-                                       PetscInt dim,
-                                       PetscInt Nc,
+                                       Int dim,
+                                       Int Nc,
                                        PetscBool is_simplex,
-                                       PetscInt k,
-                                       PetscInt qorder,
+                                       Int k,
+                                       Int qorder,
                                        PetscFE * fem);
 
 } // namespace internal

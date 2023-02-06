@@ -6,7 +6,7 @@ namespace godzilla {
 
 JacobianFunc::JacobianFunc(const FEProblemInterface * fepi) : Functional(fepi) {}
 
-const PetscInt &
+const Int &
 JacobianFunc::get_spatial_dimension() const
 {
     _F_;

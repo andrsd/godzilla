@@ -13,9 +13,9 @@ public:
     explicit ConstantAuxiliaryField(const Parameters & params);
 
     void create() override;
-    NO_DISCARD PetscInt get_num_components() const override;
+    NO_DISCARD Int get_num_components() const override;
     NO_DISCARD PetscFunc * get_func() const override;
-    void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+    void evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]);
 
 protected:
     const std::vector<PetscReal> & values;

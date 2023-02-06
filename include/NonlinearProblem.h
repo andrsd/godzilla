@@ -41,9 +41,9 @@ protected:
     /// Set up solver parameters
     virtual void set_up_solver_parameters();
     /// SNES monitor
-    PetscErrorCode snes_monitor_callback(PetscInt it, PetscReal norm);
+    PetscErrorCode snes_monitor_callback(Int it, PetscReal norm);
     /// KSP monitor
-    PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
+    PetscErrorCode ksp_monitor_callback(Int it, PetscReal rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning
@@ -71,19 +71,19 @@ protected:
     /// Convergence tolerance in terms of the norm of the change in the solution between steps
     PetscReal nl_step_tol;
     /// Maximum number of iterations for the non-linear solver
-    PetscInt nl_max_iter;
+    Int nl_max_iter;
     /// Relative convergence tolerance for the linear solver
     PetscReal lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver
     PetscReal lin_abs_tol;
     /// Maximum number of iterations for the linear solver
-    PetscInt lin_max_iter;
+    Int lin_max_iter;
 
 public:
     static Parameters parameters();
 
-    friend PetscErrorCode __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx);
-    friend PetscErrorCode __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx);
+    friend PetscErrorCode __ksp_monitor(KSP ksp, Int it, PetscReal rnorm, void * ctx);
+    friend PetscErrorCode __snes_monitor(SNES snes, Int it, PetscReal norm, void * ctx);
 };
 
 } // namespace godzilla

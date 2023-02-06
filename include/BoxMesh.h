@@ -19,7 +19,7 @@ public:
     NO_DISCARD PetscReal get_x_max() const;
 
     /// Get the number of mesh points in x direction
-    NO_DISCARD PetscInt get_nx() const;
+    NO_DISCARD Int get_nx() const;
 
     /// Get lower limit in y-direction
     NO_DISCARD PetscReal get_y_min() const;
@@ -28,7 +28,7 @@ public:
     NO_DISCARD PetscReal get_y_max() const;
 
     /// Get the number of mesh points in y-direction
-    NO_DISCARD PetscInt get_ny() const;
+    NO_DISCARD Int get_ny() const;
 
     /// Get lower limit in z-direction
     NO_DISCARD PetscReal get_z_min() const;
@@ -37,7 +37,7 @@ public:
     NO_DISCARD PetscReal get_z_max() const;
 
     /// Get the number of mesh points in z direction
-    NO_DISCARD PetscInt get_nz() const;
+    NO_DISCARD Int get_nz() const;
 
 protected:
     void create_dm() override;
@@ -61,13 +61,13 @@ protected:
     const PetscReal & zmax;
 
     /// Number of mesh point in the x direction
-    const PetscInt & nx;
+    const Int & nx;
 
     /// Number of mesh point in the y direction
-    const PetscInt & ny;
+    const Int & ny;
 
     /// Number of mesh point in the z direction
-    const PetscInt & nz;
+    const Int & nz;
 
     /// True for simplices, False for tensor cells
     PetscBool simplex;

@@ -10,7 +10,7 @@ BndResidualFunc::BndResidualFunc(const NaturalBC * nbc) :
 {
 }
 
-const PetscInt &
+const Int &
 BndResidualFunc::get_spatial_dimension() const
 {
     _F_;

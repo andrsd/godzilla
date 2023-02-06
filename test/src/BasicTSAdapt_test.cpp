@@ -15,7 +15,7 @@ TEST(BasicTSAdapt, api)
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 2;
+        params->set<Int>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
 

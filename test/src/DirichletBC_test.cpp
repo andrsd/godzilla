@@ -14,7 +14,7 @@ TEST(DirichletBCTest, api)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
@@ -37,10 +37,10 @@ TEST(DirichletBCTest, api)
     const auto & components = obj.get_components();
     EXPECT_EQ(components.size(), 1);
 
-    PetscInt dim = 3;
+    Int dim = 3;
     PetscReal time = 2.5;
     PetscReal x[] = { 3, 5, 7 };
-    PetscInt Nc = 1;
+    Int Nc = 1;
     PetscScalar u[] = { 0 };
 
     obj.evaluate(dim, time, x, Nc, u);
@@ -56,7 +56,7 @@ TEST(DirichletBCTest, with_user_defined_fn)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
@@ -83,10 +83,10 @@ TEST(DirichletBCTest, with_user_defined_fn)
     problem.create();
     bc->create();
 
-    PetscInt dim = 1;
+    Int dim = 1;
     PetscReal time = 0;
     PetscReal x[] = { 0.5 };
-    PetscInt Nc = 1;
+    Int Nc = 1;
     PetscScalar u[] = { 0 };
     bc->evaluate(dim, time, x, Nc, u);
 

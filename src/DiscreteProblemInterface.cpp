@@ -14,7 +14,7 @@ namespace godzilla {
 namespace internal {
 
 static PetscErrorCode
-zero_fn(PetscInt, PetscReal, const PetscReal[], PetscInt, PetscScalar * u, void *)
+zero_fn(Int, PetscReal, const PetscReal[], Int, PetscScalar * u, void *)
 {
     u[0] = 0.0;
     return 0;
@@ -84,17 +84,17 @@ DiscreteProblemInterface::set_up_initial_conditions()
     auto n_ics = this->ics.size();
     if (n_ics == 0)
         return;
-    PetscInt n_fields = get_num_fields();
+    Int n_fields = get_num_fields();
     if (n_ics == n_fields) {
-        std::map<PetscInt, InitialCondition *> ics_by_fields;
+        std::map<Int, InitialCondition *> ics_by_fields;
         for (auto & ic : this->ics) {
-            PetscInt fid = ic->get_field_id();
+            Int fid = ic->get_field_id();
             if (fid == -1)
                 continue;
             const auto & it = ics_by_fields.find(fid);
             if (it == ics_by_fields.end()) {
-                PetscInt ic_nc = ic->get_num_components();
-                PetscInt field_nc = get_field_num_components(fid);
+                Int ic_nc = ic->get_num_components();
+                Int field_nc = get_field_num_components(fid);
                 if (ic_nc == field_nc)
                     ics_by_fields[fid] = ic;
                 else
@@ -146,7 +146,7 @@ DiscreteProblemInterface::set_zero_initial_guess()
     DM dm = this->unstr_mesh->get_dm();
     auto n_fields = get_num_fields();
     PetscFunc * initial_guess[n_fields];
-    for (PetscInt i = 0; i < n_fields; i++)
+    for (Int i = 0; i < n_fields; i++)
         initial_guess[i] = internal::zero_fn;
     PETSC_CHECK(DMProjectFunction(dm,
                                   this->problem->get_time(),
@@ -164,7 +164,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
     PetscFunc * ic_funcs[n_ics];
     void * ic_ctxs[n_ics];
     for (auto & ic : this->ics) {
-        PetscInt fid = ic->get_field_id();
+        Int fid = ic->get_field_id();
         ic_funcs[fid] = ic->get_function();
         ic_ctxs[fid] = ic->get_context();
     }

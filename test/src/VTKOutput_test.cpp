@@ -19,7 +19,7 @@ protected:
         {
             const std::string class_name = "LineMesh";
             Parameters * params = Factory::get_parameters(class_name);
-            params->set<PetscInt>("nx") = 1;
+            params->set<Int>("nx") = 1;
             this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
         }
 
@@ -112,7 +112,7 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
 
     Parameters mesh_pars = TestMesh::parameters();
     mesh_pars.set<const App *>("_app") = this->app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     TestMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestProblem::parameters();

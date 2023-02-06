@@ -71,7 +71,7 @@ BoundaryCondition::get_boundary() const
     return this->boundary;
 }
 
-PetscInt
+Int
 BoundaryCondition::get_field_id() const
 {
     _F_;

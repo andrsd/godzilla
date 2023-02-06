@@ -22,7 +22,7 @@ public:
     /// @param x The coordinates
     /// @param Nc The number of components
     /// @param u  The output field values
-    void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+    void evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]);
 
 protected:
     /// Computed L_2 error

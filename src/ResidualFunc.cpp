@@ -6,7 +6,7 @@ namespace godzilla {
 
 ResidualFunc::ResidualFunc(const FEProblemInterface * fepi) : Functional(fepi) {}
 
-const PetscInt &
+const Int &
 ResidualFunc::get_spatial_dimension() const
 {
     _F_;

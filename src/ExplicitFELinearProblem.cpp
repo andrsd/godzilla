@@ -24,12 +24,12 @@ public:
     void
     evaluate(PetscScalar * g) override
     {
-        for (PetscInt c = 0; c < n_comp; ++c)
+        for (Int c = 0; c < n_comp; ++c)
             g[c * n_comp + c] = 1.0;
     }
 
 protected:
-    PetscInt n_comp;
+    Int n_comp;
 };
 
 } // namespace
@@ -75,7 +75,7 @@ ExplicitFELinearProblem::init()
     set_jacobian_block(0, 0, new G0Identity(this), nullptr, nullptr, nullptr);
 
     for (auto & f : this->fields) {
-        PetscInt fid = f.second.id;
+        Int fid = f.second.id;
         PETSC_CHECK(PetscDSSetImplicit(this->ds, fid, PETSC_FALSE));
     }
 }
@@ -145,15 +145,15 @@ ExplicitFELinearProblem::set_up_monitors()
 }
 
 void
-ExplicitFELinearProblem::set_residual_block(PetscInt field_id,
+ExplicitFELinearProblem::set_residual_block(Int field_id,
                                             ResidualFunc * f0,
                                             ResidualFunc * f1,
                                             DMLabel label,
-                                            PetscInt val)
+                                            Int val)
 {
     _F_;
     // see PetscDSSetRHSResidual for explanation
-    PetscInt part = 100;
+    Int part = 100;
     this->wf->add(PETSC_WF_F0, label, val, field_id, part, f0);
     this->wf->add(PETSC_WF_F1, label, val, field_id, part, f1);
 }

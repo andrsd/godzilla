@@ -96,9 +96,9 @@ FENonlinearProblem::compute_residual(Vec x, Vec f)
     DM plex = get_dm();
     IndexSet all_cells = this->unstr_mesh->get_all_elements();
 
-    PetscInt n_ds;
+    Int n_ds;
     PETSC_CHECK(DMGetNumDS(plex, &n_ds));
-    for (PetscInt s = 0; s < n_ds; ++s) {
+    for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
         PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
@@ -138,16 +138,16 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     PetscBool is_implicit = (loc_x_t || time == PETSC_MIN_REAL) ? PETSC_TRUE : PETSC_FALSE;
     PetscScalar *u = nullptr, *u_t, *a;
     IS chunk_is;
-    PetscInt tot_dim_aux;
+    Int tot_dim_aux;
     PetscQuadrature affine_quad = nullptr, *quads = nullptr;
     PetscFEGeom *affine_geom = nullptr, **geoms = nullptr;
 
     /// TODO The places where we have to use isFE are probably the member functions for the
     /// PetscDisc class
-    PetscInt c_start, c_end;
-    const PetscInt * cells;
+    Int c_start, c_end;
+    const Int * cells;
     PetscCall(ISGetPointRange((IS) cell_is, &c_start, &c_end, &cells));
-    PetscInt f_start, f_end;
+    Int f_start, f_end;
     PetscCall(DMPlexGetHeightStratum(dm, 1, &f_start, &f_end));
     /* 1: Get sizes from dm and dm_aux */
     PetscSection section = nullptr;
@@ -156,21 +156,21 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     PetscCall(DMGetLabel(dm, "ghost", &ghost_label));
     PetscDS ds = nullptr;
     PetscCall(DMGetCellDS(dm, cells ? cells[c_start] : c_start, &ds));
-    PetscInt n_fields;
+    Int n_fields;
     PetscCall(PetscDSGetNumFields(ds, &n_fields));
-    PetscInt tot_dim;
+    Int tot_dim;
     PetscCall(PetscDSGetTotalDimension(ds, &tot_dim));
     Vec loc_a;
     PetscCall(DMGetAuxiliaryVec(dm, key.label, key.value, key.part, &loc_a));
     if (loc_a) {
-        PetscInt subcell;
+        Int subcell;
         PetscCall(VecGetDM(loc_a, &dm_aux));
         PetscCall(DMGetEnclosurePoint(dm_aux, dm, DM_ENC_UNKNOWN, c_start, &subcell));
         PetscCall(DMGetCellDS(dm_aux, subcell, &ds_aux));
         PetscCall(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
     }
     /* 2: Get geometric data */
-    for (PetscInt f = 0; f < n_fields; ++f) {
+    for (Int f = 0; f < n_fields; ++f) {
         PetscBool fimp;
         PetscCall(PetscDSGetImplicit(ds, f, &fimp));
         if (is_implicit != fimp)
@@ -178,7 +178,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     }
     DMField coord_field = nullptr;
     PetscCall(DMGetCoordinateField(dm, &coord_field));
-    PetscInt max_degree = PETSC_MAX_INT;
+    Int max_degree = PETSC_MAX_INT;
     PetscCall(DMFieldGetDegree(coord_field, (IS) cell_is, nullptr, &max_degree));
     if (max_degree <= 1) {
         PetscCall(DMFieldCreateDefaultQuadrature(coord_field, (IS) cell_is, &affine_quad));
@@ -189,7 +189,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     }
     else {
         PetscCall(PetscCalloc2(n_fields, &quads, n_fields, &geoms));
-        for (PetscInt f = 0; f < n_fields; ++f) {
+        for (Int f = 0; f < n_fields; ++f) {
             PetscBool fimp;
             PetscCall(PetscDSGetImplicit(ds, f, &fimp));
             if (is_implicit != fimp)
@@ -209,15 +209,15 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     }
     /* Loop over chunks */
     PetscCall(ISCreate(PETSC_COMM_SELF, &chunk_is));
-    PetscInt n_cells = c_end - c_start;
-    PetscInt n_chunks = 1;
-    PetscInt cell_chunk_size = n_cells / n_chunks;
+    Int n_cells = c_end - c_start;
+    Int n_chunks = 1;
+    Int cell_chunk_size = n_cells / n_chunks;
     n_chunks = PetscMin(1, n_cells);
-    for (PetscInt chunk = 0; chunk < n_chunks; ++chunk) {
+    for (Int chunk = 0; chunk < n_chunks; ++chunk) {
         PetscScalar * elem_vec;
-        PetscInt cS = c_start + chunk * cell_chunk_size;
-        PetscInt cE = PetscMin(cS + cell_chunk_size, c_end);
-        PetscInt n_chunk_cells = cE - cS;
+        Int cS = c_start + chunk * cell_chunk_size;
+        Int cE = PetscMin(cS + cell_chunk_size, c_end);
+        Int n_chunk_cells = cE - cS;
 
         /* Extract field coefficients */
         PetscCall(ISGetPointSubrange(chunk_is, cS, cE, cells));
@@ -225,7 +225,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         PetscCall(DMGetWorkArray(dm, n_chunk_cells * tot_dim, MPIU_SCALAR, &elem_vec));
         PetscCall(PetscArrayzero(elem_vec, n_chunk_cells * tot_dim));
         /* Loop over fields */
-        for (PetscInt f = 0; f < n_fields; ++f) {
+        for (Int f = 0; f < n_fields; ++f) {
             PetscBool fimp;
             PetscCall(PetscDSGetImplicit(ds, f, &fimp));
             if (is_implicit != fimp)
@@ -242,20 +242,20 @@ FENonlinearProblem::compute_residual_internal(DM dm,
                 PetscFEGeom * geom = affine_geom ? affine_geom : geoms[f];
                 PetscQuadrature quad = affine_quad ? affine_quad : quads[f];
 
-                PetscInt n_batches, n_blocks;
+                Int n_batches, n_blocks;
                 PetscCall(PetscFEGetTileSizes(fe, nullptr, &n_blocks, nullptr, &n_batches));
-                PetscInt n_qpts;
+                Int n_qpts;
                 PetscCall(
                     PetscQuadratureGetData(quad, nullptr, nullptr, &n_qpts, nullptr, nullptr));
-                PetscInt n_basis;
+                Int n_basis;
                 PetscCall(PetscFEGetDimension(fe, &n_basis));
-                PetscInt block_size = n_basis;
-                PetscInt batch_size = n_blocks * block_size;
+                Int block_size = n_basis;
+                Int batch_size = n_blocks * block_size;
                 PetscCall(PetscFESetTileSizes(fe, block_size, n_blocks, batch_size, n_batches));
-                PetscInt n_chunks_field = n_chunk_cells / (n_batches * batch_size);
-                PetscInt n_elems = n_chunks_field * n_batches * batch_size;
-                PetscInt n_remdr = n_chunk_cells % (n_batches * batch_size);
-                PetscInt offset = n_chunk_cells - n_remdr;
+                Int n_chunks_field = n_chunk_cells / (n_batches * batch_size);
+                Int n_elems = n_chunks_field * n_batches * batch_size;
+                Int n_remdr = n_chunk_cells % (n_batches * batch_size);
+                Int offset = n_chunk_cells - n_remdr;
                 /* Integrate FE residual to get elemVec (need fields at quadrature points) */
                 PetscFEGeom * chunk_geom = nullptr;
                 PetscCall(PetscFEGeomGetChunk(geom, 0, offset, &chunk_geom));
@@ -290,12 +290,12 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         }
         /* Loop over domain */
         /* Add elemVec to locX */
-        for (PetscInt c = cS; c < cE; ++c) {
-            const PetscInt cell = cells ? cells[c] : c;
-            const PetscInt cind = c - c_start;
+        for (Int c = cS; c < cE; ++c) {
+            const Int cell = cells ? cells[c] : c;
+            const Int cind = c - c_start;
 
             if (ghost_label) {
-                PetscInt ghost_val;
+                Int ghost_val;
                 PetscCall(DMLabelGetValue(ghost_label, cell, &ghost_val));
                 if (ghost_val > 0)
                     continue;
@@ -322,7 +322,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         PetscCall(PetscQuadratureDestroy(&affine_quad));
     }
     else {
-        for (PetscInt f = 0; f < n_fields; ++f) {
+        for (Int f = 0; f < n_fields; ++f) {
             PetscCall(
                 DMSNESRestoreFEGeom(coord_field, (IS) cell_is, quads[f], PETSC_FALSE, &geoms[f]));
             PetscCall(PetscQuadratureDestroy(&quads[f]));
@@ -365,16 +365,16 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm,
     PetscCall(DMGetDS(dm, &prob));
     DMLabel depth_label;
     PetscCall(DMPlexGetDepthLabel(dm, &depth_label));
-    PetscInt dim;
+    Int dim;
     PetscCall(DMGetDimension(dm, &dim));
     IndexSet facets = IndexSet::stratum_from_label(depth_label, dim - 1);
-    PetscInt n_bnd;
+    Int n_bnd;
     PetscCall(PetscDSGetNumBoundary(prob, &n_bnd));
-    for (PetscInt bd = 0; bd < n_bnd; ++bd) {
+    for (Int bd = 0; bd < n_bnd; ++bd) {
         DMBoundaryConditionType type;
         DMLabel label;
-        const PetscInt * values;
-        PetscInt field, n_values;
+        const Int * values;
+        Int field, n_values;
         PetscFormKey key;
 
         PetscCall(PetscDSGetBoundary(prob,
@@ -400,7 +400,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm,
             continue;
         DMField coord_field = nullptr;
         PetscCall(DMGetCoordinateField(dm, &coord_field));
-        for (PetscInt v = 0; v < n_values; ++v) {
+        for (Int v = 0; v < n_values; ++v) {
             key.label = label;
             key.value = values[v];
             key.field = field;
@@ -435,7 +435,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
     PetscSection section, section_aux = nullptr;
     Vec loc_a = nullptr;
     PetscScalar *u = nullptr, *u_t = nullptr, *a = nullptr, *elem_vec = nullptr;
-    PetscInt tot_dim, tot_dim_aux = 0;
+    Int tot_dim, tot_dim_aux = 0;
 
     PetscCall(DMConvert(dm, DMPLEX, &plex));
     PetscCall(DMGetLocalSection(dm, &section));
@@ -462,7 +462,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         points.destroy();
         points = isect;
 
-        PetscInt n_faces = points.get_local_size();
+        Int n_faces = points.get_local_size();
         points.get_indices();
 
         PetscCall(PetscMalloc4(n_faces * tot_dim,
@@ -473,7 +473,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                &elem_vec,
                                loc_a ? n_faces * tot_dim_aux : 0,
                                &a));
-        PetscInt max_degree;
+        Int max_degree;
         PetscCall(DMFieldGetDegree(coord_field, (IS) points, nullptr, &max_degree));
         if (max_degree <= 1) {
             PetscCall(DMFieldCreateDefaultQuadrature(coord_field, (IS) points, &q_geom));
@@ -484,29 +484,29 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
             PetscCall(PetscFEGetFaceQuadrature(fe, &q_geom));
             PetscCall(PetscObjectReference((PetscObject) q_geom));
         }
-        PetscInt n_qpts;
+        Int n_qpts;
         PetscCall(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * fgeom;
         PetscCall(DMSNESGetFEGeom(coord_field, (IS) points, q_geom, PETSC_TRUE, &fgeom));
-        for (PetscInt face = 0; face < n_faces; ++face) {
-            const PetscInt * support;
+        for (Int face = 0; face < n_faces; ++face) {
+            const Int * support;
             PetscCall(DMPlexGetSupport(dm, points[face], &support));
             PetscScalar * x = nullptr;
             PetscCall(DMPlexVecGetClosure(plex, section, loc_x, support[0], nullptr, &x));
-            for (PetscInt i = 0; i < tot_dim; ++i)
+            for (Int i = 0; i < tot_dim; ++i)
                 u[face * tot_dim + i] = x[i];
             PetscCall(DMPlexVecRestoreClosure(plex, section, loc_x, support[0], nullptr, &x));
             if (loc_x_t) {
                 PetscCall(DMPlexVecGetClosure(plex, section, loc_x_t, support[0], nullptr, &x));
-                for (PetscInt i = 0; i < tot_dim; ++i)
+                for (Int i = 0; i < tot_dim; ++i)
                     u_t[face * tot_dim + i] = x[i];
                 PetscCall(DMPlexVecRestoreClosure(plex, section, loc_x_t, support[0], nullptr, &x));
             }
             if (loc_a) {
-                PetscInt subp;
+                Int subp;
                 PetscCall(DMGetEnclosurePoint(plex_aux, dm, enc_aux, support[0], &subp));
                 PetscCall(DMPlexVecGetClosure(plex_aux, section_aux, loc_a, subp, nullptr, &x));
-                for (PetscInt i = 0; i < tot_dim_aux; ++i)
+                for (Int i = 0; i < tot_dim_aux; ++i)
                     a[face * tot_dim_aux + i] = x[i];
                 PetscCall(DMPlexVecRestoreClosure(plex_aux, section_aux, loc_a, subp, nullptr, &x));
             }
@@ -515,21 +515,21 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
 
         PetscFE fe;
         PetscCall(PetscDSGetDiscretization(prob, key.field, (PetscObject *) &fe));
-        PetscInt n_basis;
+        Int n_basis;
         PetscCall(PetscFEGetDimension(fe, &n_basis));
         /* Conforming batches */
-        PetscInt n_batches, n_blocks;
+        Int n_batches, n_blocks;
         PetscCall(PetscFEGetTileSizes(fe, nullptr, &n_blocks, nullptr, &n_batches));
         /* TODO: documentation is unclear about what is going on with these numbers: how should Nb /
          * Nq factor in ? */
-        PetscInt block_size = n_basis;
-        PetscInt batch_size = n_blocks * block_size;
+        Int block_size = n_basis;
+        Int batch_size = n_blocks * block_size;
         PetscCall(PetscFESetTileSizes(fe, block_size, n_blocks, batch_size, n_batches));
-        PetscInt n_chunks = n_faces / (n_batches * batch_size);
-        PetscInt n_elems = n_chunks * n_batches * batch_size;
+        Int n_chunks = n_faces / (n_batches * batch_size);
+        Int n_elems = n_chunks * n_batches * batch_size;
         /* Remainder */
-        PetscInt n_remdr = n_faces % (n_batches * batch_size);
-        PetscInt offset = n_faces - n_remdr;
+        Int n_remdr = n_faces % (n_batches * batch_size);
+        Int offset = n_faces - n_remdr;
         PetscFEGeom * chunk_geom = nullptr;
         PetscCall(PetscFEGeomGetChunk(fgeom, 0, offset, &chunk_geom));
         PetscCall(PetscFEIntegrateBdResidual(prob,
@@ -558,8 +558,8 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                              &elem_vec[offset * tot_dim]));
         PetscCall(PetscFEGeomRestoreChunk(fgeom, offset, n_faces, &chunk_geom));
 
-        for (PetscInt face = 0; face < n_faces; ++face) {
-            const PetscInt * support;
+        for (Int face = 0; face < n_faces; ++face) {
+            const Int * support;
             PetscCall(DMPlexGetSupport(plex, points[face], &support));
             PetscCall(DMPlexVecSetClosure(plex,
                                           nullptr,
@@ -588,9 +588,9 @@ FENonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
     DM plex = get_dm();
     IndexSet all_cells = this->unstr_mesh->get_all_elements();
 
-    PetscInt n_ds;
+    Int n_ds;
     PetscCall(DMGetNumDS(plex, &n_ds));
-    for (PetscInt s = 0; s < n_ds; ++s) {
+    for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
@@ -628,9 +628,9 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
                                               Mat J,
                                               Mat Jp)
 {
-    PetscInt n_cells = cell_is.get_local_size();
-    PetscInt c_start, c_end;
-    const PetscInt * cells;
+    Int n_cells = cell_is.get_local_size();
+    Int c_start, c_end;
+    const Int * cells;
     PetscCall(ISGetPointRange((IS) cell_is, &c_start, &c_end, &cells));
     PetscBool transform;
     PetscCall(DMHasBasisTransform(dm, &transform));
@@ -644,9 +644,9 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscCall(DMGetGlobalSection(dm, &global_section));
     PetscDS prob;
     PetscCall(DMGetCellDS(dm, cells ? cells[c_start] : c_start, &prob));
-    PetscInt n_fields;
+    Int n_fields;
     PetscCall(PetscDSGetNumFields(prob, &n_fields));
-    PetscInt tot_dim;
+    Int tot_dim;
     PetscCall(PetscDSGetTotalDimension(prob, &tot_dim));
     PetscBool has_prec = PETSC_FALSE;
     // user passed in the same matrix, avoid double contributions and only assemble the Jacobian
@@ -662,7 +662,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscDS prob_aux = nullptr;
     PetscSection section_aux;
     DM plex;
-    PetscInt tot_dim_aux;
+    Int tot_dim_aux;
     if (A) {
         PetscCall(VecGetDM(A, &dm_aux));
         PetscCall(DMGetEnclosureRelation(dm_aux, dm, &enc_aux));
@@ -688,27 +688,27 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
 
     DMField coord_field;
     PetscCall(DMGetCoordinateField(dm, &coord_field));
-    for (PetscInt c = c_start; c < c_end; ++c) {
-        const PetscInt cell = cells ? cells[c] : c;
-        const PetscInt cind = c - c_start;
+    for (Int c = c_start; c < c_end; ++c) {
+        const Int cell = cells ? cells[c] : c;
+        const Int cind = c - c_start;
 
         PetscScalar *x = nullptr, *x_t = nullptr;
         PetscCall(DMPlexVecGetClosure(dm, section, X, cell, nullptr, &x));
 
-        for (PetscInt i = 0; i < tot_dim; ++i)
+        for (Int i = 0; i < tot_dim; ++i)
             u[cind * tot_dim + i] = x[i];
         PetscCall(DMPlexVecRestoreClosure(dm, section, X, cell, nullptr, &x));
         if (X_t) {
             PetscCall(DMPlexVecGetClosure(dm, section, X_t, cell, nullptr, &x_t));
-            for (PetscInt i = 0; i < tot_dim; ++i)
+            for (Int i = 0; i < tot_dim; ++i)
                 u_t[cind * tot_dim + i] = x_t[i];
             PetscCall(DMPlexVecRestoreClosure(dm, section, X_t, cell, nullptr, &x_t));
         }
         if (dm_aux) {
-            PetscInt subcell;
+            Int subcell;
             PetscCall(DMGetEnclosurePoint(dm_aux, dm, enc_aux, cell, &subcell));
             PetscCall(DMPlexVecGetClosure(plex, section_aux, A, subcell, nullptr, &x));
-            for (PetscInt i = 0; i < tot_dim_aux; ++i)
+            for (Int i = 0; i < tot_dim_aux; ++i)
                 a[cind * tot_dim_aux + i] = x[i];
             PetscCall(DMPlexVecRestoreClosure(plex, section_aux, A, subcell, nullptr, &x));
         }
@@ -716,16 +716,16 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscCall(PetscArrayzero(elem_mat, n_cells * tot_dim * tot_dim));
     if (has_prec)
         PetscCall(PetscArrayzero(elem_mat_P, n_cells * tot_dim * tot_dim));
-    for (PetscInt field_i = 0; field_i < n_fields; ++field_i) {
+    for (Int field_i = 0; field_i < n_fields; ++field_i) {
         PetscFE fe;
         PetscCall(PetscDSGetDiscretization(prob, field_i, (PetscObject *) &fe));
         PetscClassId id;
         PetscCall(PetscObjectGetClassId((PetscObject) fe, &id));
-        PetscInt n_basis;
+        Int n_basis;
         PetscCall(PetscFEGetDimension(fe, &n_basis));
-        PetscInt n_batches, n_blocks;
+        Int n_batches, n_blocks;
         PetscCall(PetscFEGetTileSizes(fe, nullptr, &n_blocks, nullptr, &n_batches));
-        PetscInt max_degree;
+        Int max_degree;
         PetscCall(DMFieldGetDegree(coord_field, (IS) cell_is, nullptr, &max_degree));
         PetscQuadrature q_geom = nullptr;
         if (max_degree <= 1) {
@@ -735,22 +735,22 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
             PetscCall(PetscFEGetQuadrature(fe, &q_geom));
             PetscCall(PetscObjectReference((PetscObject) q_geom));
         }
-        PetscInt n_qpts;
+        Int n_qpts;
         PetscCall(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * cgeom_fem;
         PetscCall(DMSNESGetFEGeom(coord_field, (IS) cell_is, q_geom, PETSC_FALSE, &cgeom_fem));
-        PetscInt block_size = n_basis;
-        PetscInt batch_size = n_blocks * block_size;
+        Int block_size = n_basis;
+        Int batch_size = n_blocks * block_size;
         PetscCall(PetscFESetTileSizes(fe, block_size, n_blocks, batch_size, n_batches));
-        PetscInt num_chunks = n_cells / (n_batches * batch_size);
-        PetscInt n_elems = num_chunks * n_batches * batch_size;
-        PetscInt n_remdr = n_cells % (n_batches * batch_size);
-        PetscInt offset = n_cells - n_remdr;
+        Int num_chunks = n_cells / (n_batches * batch_size);
+        Int n_elems = num_chunks * n_batches * batch_size;
+        Int n_remdr = n_cells % (n_batches * batch_size);
+        Int offset = n_cells - n_remdr;
         PetscFEGeom * chunk_geom = nullptr;
         PetscCall(PetscFEGeomGetChunk(cgeom_fem, 0, offset, &chunk_geom));
         PetscFEGeom * rem_geom = nullptr;
         PetscCall(PetscFEGeomGetChunk(cgeom_fem, offset, n_cells, &rem_geom));
-        for (PetscInt field_j = 0; field_j < n_fields; ++field_j) {
+        for (Int field_j = 0; field_j < n_fields; ++field_j) {
             key.field = field_i * n_fields + field_j;
             PetscCall(PetscFEIntegrateJacobian(prob,
                                                PETSCFE_JACOBIAN,
@@ -810,9 +810,9 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     }
     // Add contribution from X_t
     // Insert values into matrix
-    for (PetscInt c = c_start; c < c_end; ++c) {
-        const PetscInt cell = cells ? cells[c] : c;
-        const PetscInt cind = c - c_start;
+    for (Int c = c_start; c < c_end; ++c) {
+        const Int cell = cells ? cells[c] : c;
+        const Int cind = c - c_start;
 
         // Transform to global basis before insertion in Jacobian
         if (transform)
@@ -881,19 +881,19 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
     PetscCall(DMGetDS(dm, &prob));
     DMLabel depth_label;
     PetscCall(DMPlexGetDepthLabel(dm, &depth_label));
-    PetscInt dim;
+    Int dim;
     PetscCall(DMGetDimension(dm, &dim));
     IndexSet facets = IndexSet::stratum_from_label(depth_label, dim - 1);
-    PetscInt n_bnd;
+    Int n_bnd;
     PetscCall(PetscDSGetNumBoundary(prob, &n_bnd));
     DMField coord_field = nullptr;
     PetscCall(DMGetCoordinateField(dm, &coord_field));
-    for (PetscInt bd = 0; bd < n_bnd; ++bd) {
+    for (Int bd = 0; bd < n_bnd; ++bd) {
         DMBoundaryConditionType type;
         DMLabel label;
-        PetscInt n_values;
-        const PetscInt * values;
-        PetscInt field_i;
+        Int n_values;
+        const Int * values;
+        Int field_i;
         PetscCall(PetscDSGetBoundary(prob,
                                      bd,
                                      nullptr,
@@ -936,9 +936,9 @@ PetscErrorCode
 FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                                          PetscReal t,
                                                          DMLabel label,
-                                                         PetscInt n_values,
-                                                         const PetscInt values[],
-                                                         PetscInt field_i,
+                                                         Int n_values,
+                                                         const Int values[],
+                                                         Int field_i,
                                                          Vec X_loc,
                                                          Vec X_t_loc,
                                                          PetscReal x_t_shift,
@@ -959,14 +959,14 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
     PetscCall(DMGetLocalSection(dm, &section));
     PetscDS prob;
     PetscCall(DMGetDS(dm, &prob));
-    PetscInt n_fields;
+    Int n_fields;
     PetscCall(PetscDSGetNumFields(prob, &n_fields));
-    PetscInt tot_dim;
+    Int tot_dim;
     PetscCall(PetscDSGetTotalDimension(prob, &tot_dim));
     Vec locA = nullptr;
     PetscCall(DMGetAuxiliaryVec(dm, label, values[0], 0, &locA));
 
-    PetscInt tot_dim_aux = 0;
+    Int tot_dim_aux = 0;
     DM plexA = nullptr;
     DMEnclosureType enc_aux;
     PetscDS prob_aux = nullptr;
@@ -983,7 +983,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
 
     PetscSection global_section;
     PetscCall(DMGetGlobalSection(dm, &global_section));
-    for (PetscInt v = 0; v < n_values; ++v) {
+    for (Int v = 0; v < n_values; ++v) {
         PetscFormKey key;
         key.label = label;
         key.value = values[v];
@@ -998,7 +998,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         points.destroy();
         points = isect;
 
-        PetscInt n_faces = points.get_local_size();
+        Int n_faces = points.get_local_size();
         points.get_indices();
 
         PetscScalar *u = nullptr, *u_t = nullptr, *a = nullptr, *elem_mat = nullptr;
@@ -1010,7 +1010,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                &elem_mat,
                                locA ? n_faces * tot_dim_aux : 0,
                                &a));
-        PetscInt max_degree;
+        Int max_degree;
         PetscCall(DMFieldGetDegree(coord_field, (IS) points, nullptr, &max_degree));
         PetscQuadrature q_geom = nullptr;
         if (max_degree <= 1) {
@@ -1022,29 +1022,29 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
             PetscCall(PetscFEGetFaceQuadrature(fe, &q_geom));
             PetscCall(PetscObjectReference((PetscObject) q_geom));
         }
-        PetscInt n_qpts;
+        Int n_qpts;
         PetscCall(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * fgeom;
         PetscCall(DMSNESGetFEGeom(coord_field, (IS) points, q_geom, PETSC_TRUE, &fgeom));
-        for (PetscInt face = 0; face < n_faces; ++face) {
-            const PetscInt * support;
+        for (Int face = 0; face < n_faces; ++face) {
+            const Int * support;
             PetscCall(DMPlexGetSupport(dm, points[face], &support));
             PetscScalar * x = nullptr;
             PetscCall(DMPlexVecGetClosure(plex, section, X_loc, support[0], nullptr, &x));
-            for (PetscInt i = 0; i < tot_dim; ++i)
+            for (Int i = 0; i < tot_dim; ++i)
                 u[face * tot_dim + i] = x[i];
             PetscCall(DMPlexVecRestoreClosure(plex, section, X_loc, support[0], nullptr, &x));
             if (X_t_loc) {
                 PetscCall(DMPlexVecGetClosure(plex, section, X_t_loc, support[0], nullptr, &x));
-                for (PetscInt i = 0; i < tot_dim; ++i)
+                for (Int i = 0; i < tot_dim; ++i)
                     u_t[face * tot_dim + i] = x[i];
                 PetscCall(DMPlexVecRestoreClosure(plex, section, X_t_loc, support[0], nullptr, &x));
             }
             if (locA) {
-                PetscInt subp;
+                Int subp;
                 PetscCall(DMGetEnclosurePoint(plexA, dm, enc_aux, support[0], &subp));
                 PetscCall(DMPlexVecGetClosure(plexA, section_aux, locA, subp, nullptr, &x));
-                for (PetscInt i = 0; i < tot_dim_aux; ++i)
+                for (Int i = 0; i < tot_dim_aux; ++i)
                     a[face * tot_dim_aux + i] = x[i];
                 PetscCall(DMPlexVecRestoreClosure(plexA, section_aux, locA, subp, nullptr, &x));
             }
@@ -1053,20 +1053,20 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
 
         PetscFE fe;
         PetscCall(PetscDSGetDiscretization(prob, field_i, (PetscObject *) &fe));
-        PetscInt n_basis;
+        Int n_basis;
         PetscCall(PetscFEGetDimension(fe, &n_basis));
-        PetscInt n_batches, n_blocks;
+        Int n_batches, n_blocks;
         PetscCall(PetscFEGetTileSizes(fe, nullptr, &n_blocks, nullptr, &n_batches));
-        PetscInt block_size = n_basis;
-        PetscInt batch_size = n_blocks * block_size;
+        Int block_size = n_basis;
+        Int batch_size = n_blocks * block_size;
         PetscCall(PetscFESetTileSizes(fe, block_size, n_blocks, batch_size, n_batches));
-        PetscInt n_chunks = n_faces / (n_batches * batch_size);
-        PetscInt n_elems = n_chunks * n_batches * batch_size;
-        PetscInt n_remdr = n_faces % (n_batches * batch_size);
-        PetscInt offset = n_faces - n_remdr;
+        Int n_chunks = n_faces / (n_batches * batch_size);
+        Int n_elems = n_chunks * n_batches * batch_size;
+        Int n_remdr = n_faces % (n_batches * batch_size);
+        Int offset = n_faces - n_remdr;
         PetscFEGeom * chunk_geom = nullptr;
         PetscCall(PetscFEGeomGetChunk(fgeom, 0, offset, &chunk_geom));
-        for (PetscInt field_j = 0; field_j < n_fields; ++field_j) {
+        for (Int field_j = 0; field_j < n_fields; ++field_j) {
             key.field = field_i * n_fields + field_j;
             PetscCall(PetscFEIntegrateBdJacobian(prob,
                                                  nullptr,
@@ -1082,7 +1082,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                                  elem_mat));
         }
         PetscCall(PetscFEGeomGetChunk(fgeom, offset, n_faces, &chunk_geom));
-        for (PetscInt fieldJ = 0; fieldJ < n_fields; ++fieldJ) {
+        for (Int fieldJ = 0; fieldJ < n_fields; ++fieldJ) {
             key.field = field_i * n_fields + fieldJ;
             PetscCall(PetscFEIntegrateBdJacobian(prob,
                                                  nullptr,
@@ -1099,9 +1099,9 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         }
         PetscCall(PetscFEGeomRestoreChunk(fgeom, offset, n_faces, &chunk_geom));
 
-        for (PetscInt face = 0; face < n_faces; ++face) {
+        for (Int face = 0; face < n_faces; ++face) {
             // Transform to global basis before insertion in Jacobian
-            const PetscInt * support;
+            const Int * support;
             PetscCall(DMPlexGetSupport(plex, points[face], &support));
             if (transform)
                 PetscCall(
@@ -1135,11 +1135,11 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
 }
 
 void
-FENonlinearProblem::set_residual_block(PetscInt field_id,
+FENonlinearProblem::set_residual_block(Int field_id,
                                        ResidualFunc * f0,
                                        ResidualFunc * f1,
                                        DMLabel label,
-                                       PetscInt val)
+                                       Int val)
 {
     _F_;
     this->wf->add(PETSC_WF_F0, label, val, field_id, 0, f0);
@@ -1147,14 +1147,14 @@ FENonlinearProblem::set_residual_block(PetscInt field_id,
 }
 
 void
-FENonlinearProblem::set_jacobian_block(PetscInt fid,
-                                       PetscInt gid,
+FENonlinearProblem::set_jacobian_block(Int fid,
+                                       Int gid,
                                        JacobianFunc * g0,
                                        JacobianFunc * g1,
                                        JacobianFunc * g2,
                                        JacobianFunc * g3,
                                        DMLabel label,
-                                       PetscInt val)
+                                       Int val)
 {
     _F_;
     this->wf->add(PETSC_WF_G0, label, val, fid, gid, 0, g0);

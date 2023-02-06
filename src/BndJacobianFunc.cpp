@@ -10,7 +10,7 @@ BndJacobianFunc::BndJacobianFunc(const NaturalBC * nbc) :
 {
 }
 
-const PetscInt &
+const Int &
 BndJacobianFunc::get_spatial_dimension() const
 {
     _F_;

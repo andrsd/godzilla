@@ -28,18 +28,14 @@ FunctionIC::create()
     FunctionInterface::create();
 }
 
-PetscInt
+Int
 FunctionIC::get_num_components() const
 {
     return this->num_comps;
 }
 
 void
-FunctionIC::evaluate(PetscInt dim,
-                     PetscReal time,
-                     const PetscReal x[],
-                     PetscInt nc,
-                     PetscScalar u[])
+FunctionIC::evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[])
 {
     evaluate_func(dim, time, x, nc, u);
 }

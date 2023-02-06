@@ -17,7 +17,7 @@ TEST(LineMeshTest, api)
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 1;
     params.set<PetscReal>("xmax") = 2;
-    params.set<PetscInt>("nx") = 10;
+    params.set<Int>("nx") = 10;
     LineMesh mesh(params);
 
     EXPECT_EQ(mesh.get_x_min(), 1);
@@ -36,7 +36,7 @@ TEST(LineMeshTest, api)
 
     Vec coords;
     DMGetCoordinates(dm, &coords);
-    PetscInt nx;
+    Int nx;
     VecGetSize(coords, &nx);
     EXPECT_EQ(nx, 11);
 }
@@ -52,7 +52,7 @@ TEST(LineMeshTest, incorrect_dims)
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 2;
     params.set<PetscReal>("xmax") = 1;
-    params.set<PetscInt>("nx") = 2;
+    params.set<Int>("nx") = 2;
     LineMesh mesh(params);
 
     app.check_integrity();
@@ -73,7 +73,7 @@ TEST(LineMeshTest, distribute)
     params.set<std::string>("_name") = "line_mesh";
     params.set<PetscReal>("xmin") = 0;
     params.set<PetscReal>("xmax") = 1;
-    params.set<PetscInt>("nx") = 4;
+    params.set<Int>("nx") = 4;
     LineMesh mesh(params);
     mesh.create();
 

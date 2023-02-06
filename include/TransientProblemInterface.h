@@ -1,6 +1,7 @@
 #pragma once
 
 #include "petscts.h"
+#include "Types.h"
 
 namespace godzilla {
 
@@ -43,7 +44,7 @@ protected:
     /// Called after the time step is done solving
     virtual PetscErrorCode post_step();
     /// TS monitor callback
-    virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
+    virtual PetscErrorCode ts_monitor_callback(Int stepi, PetscReal time, Vec x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
@@ -71,8 +72,7 @@ public:
 
     friend PetscErrorCode __transient_pre_step(TS ts);
     friend PetscErrorCode __transient_post_step(TS ts);
-    friend PetscErrorCode
-    __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx);
+    friend PetscErrorCode __transient_monitor(TS ts, Int stepi, PetscReal time, Vec x, void * ctx);
 };
 
 } // namespace godzilla

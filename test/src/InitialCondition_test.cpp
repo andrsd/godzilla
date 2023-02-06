@@ -21,15 +21,12 @@ class MockInitialCondition : public InitialCondition {
 public:
     explicit MockInitialCondition(const Parameters & params) : InitialCondition(params) {}
 
-    PetscInt
+    Int
     get_num_components() const
     {
         return 1.;
     }
-    MOCK_METHOD(void,
-                evaluate,
-                (PetscInt, PetscReal, const PetscReal x[], PetscInt Nc, PetscScalar u[]),
-                ());
+    MOCK_METHOD(void, evaluate, (Int, PetscReal, const PetscReal x[], Int Nc, PetscScalar u[]), ());
 };
 
 } // namespace

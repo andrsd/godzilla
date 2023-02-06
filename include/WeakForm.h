@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Types.h"
 #include <array>
 #include <map>
 #include <vector>
@@ -53,15 +54,11 @@ public:
 
     /// Get residual forms
     const std::vector<Functional *> &
-    get(PetscWeakFormKind kind, DMLabel label, PetscInt val, PetscInt f, PetscInt part) const;
+    get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
-    const std::vector<Functional *> & get(PetscWeakFormKind kind,
-                                          DMLabel label,
-                                          PetscInt val,
-                                          PetscInt f,
-                                          PetscInt g,
-                                          PetscInt part) const;
+    const std::vector<Functional *> &
+    get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int part) const;
 
     /// Add a residual form
     ///
@@ -71,12 +68,7 @@ public:
     /// @param f Field ID
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric residual form
-    void add(PetscWeakFormKind kind,
-             DMLabel label,
-             PetscInt val,
-             PetscInt f,
-             PetscInt part,
-             Functional * func);
+    void add(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part, Functional * func);
 
     /// Add a Jacobian form
     ///
@@ -87,19 +79,14 @@ public:
     /// @param g Field ID (base)
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric Jacobian form
-    void add(PetscWeakFormKind kind,
-             DMLabel label,
-             PetscInt val,
-             PetscInt f,
-             PetscInt g,
-             PetscInt part,
-             Functional * func);
+    void
+    add(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int part, Functional * func);
 
 protected:
-    NO_DISCARD PetscInt get_jac_key(PetscInt f, PetscInt g) const;
+    NO_DISCARD Int get_jac_key(Int f, Int g) const;
 
     /// Number of fields
-    PetscInt n_fields;
+    Int n_fields;
 
     /// All residual forms
     std::array<std::map<PetscFormKey, std::vector<Functional *>>, PETSC_NUM_WF> res_forms;

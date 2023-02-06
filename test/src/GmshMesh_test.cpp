@@ -35,7 +35,7 @@ TEST(GmshMeshTest, api)
 
     Vec coords;
     DMGetCoordinates(dm, &coords);
-    PetscInt n;
+    Int n;
     VecGetSize(coords, &n);
     EXPECT_EQ(n, 10);
 }

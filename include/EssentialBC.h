@@ -19,7 +19,7 @@ public:
     /// @param Nc The number of components
     /// @param u  The output field values
     virtual void
-    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]) = 0;
+    evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]) = 0;
 
     /// Evaluate time derivative of the boundary condition
     ///
@@ -29,7 +29,7 @@ public:
     /// @param Nc The number of components
     /// @param u  The output field values
     virtual void
-    evaluate_t(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]) = 0;
+    evaluate_t(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]) = 0;
 
     /// Get pointer to the C function that will be passed into PETSc API
     virtual PetscFunc * get_function();

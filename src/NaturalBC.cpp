@@ -53,7 +53,7 @@ NaturalBC::set_residual_block(BndResidualFunc * f0, BndResidualFunc * f1)
 }
 
 void
-NaturalBC::set_jacobian_block(PetscInt gid,
+NaturalBC::set_jacobian_block(Int gid,
                               BndJacobianFunc * g0,
                               BndJacobianFunc * g1,
                               BndJacobianFunc * g2,

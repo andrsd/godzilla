@@ -2,6 +2,7 @@
 
 #include "petsc.h"
 #include <cassert>
+#include "Types.h"
 
 namespace godzilla {
 
@@ -42,20 +43,20 @@ class FieldValue : public LateBindArray<PetscScalar> {};
 /// Used for field gradient values during assembling
 class FieldGradient : public LateBindArray<PetscScalar> {
 public:
-    explicit FieldGradient(const PetscInt & dim) : LateBindArray<PetscScalar>(), dim(dim) {}
+    explicit FieldGradient(const Int & dim) : LateBindArray<PetscScalar>(), dim(dim) {}
 
     FieldGradient(const FieldGradient & other) : LateBindArray<PetscScalar>(other), dim(other.dim)
     {
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 /// Used for vector values during assembling (for example normals)
 class Vector : public LateBindArray<PetscReal> {
 public:
-    explicit Vector(const PetscInt & dim) : LateBindArray<PetscReal>(), dim(dim) {}
+    explicit Vector(const Int & dim) : LateBindArray<PetscReal>(), dim(dim) {}
 
     PetscReal
     operator[](unsigned int idx) const
@@ -66,13 +67,13 @@ public:
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 /// Used for points during assembling (for example physical coordinates)
 class Point : public LateBindArray<PetscReal> {
 public:
-    explicit Point(const PetscInt & dim) : LateBindArray<PetscReal>(), dim(dim) {}
+    explicit Point(const Int & dim) : LateBindArray<PetscReal>(), dim(dim) {}
 
     PetscReal
     operator[](unsigned int idx) const
@@ -83,7 +84,7 @@ public:
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 } // namespace godzilla

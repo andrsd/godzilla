@@ -5,10 +5,10 @@
 namespace godzilla {
 
 static PetscErrorCode
-essential_boundary_condition_function(PetscInt dim,
+essential_boundary_condition_function(Int dim,
                                       PetscReal time,
                                       const PetscReal x[],
-                                      PetscInt nc,
+                                      Int nc,
                                       PetscScalar u[],
                                       void * ctx)
 {
@@ -20,10 +20,10 @@ essential_boundary_condition_function(PetscInt dim,
 }
 
 static PetscErrorCode
-essential_boundary_condition_function_t(PetscInt dim,
+essential_boundary_condition_function_t(Int dim,
                                         PetscReal time,
                                         const PetscReal x[],
-                                        PetscInt nc,
+                                        Int nc,
                                         PetscScalar u[],
                                         void * ctx)
 {

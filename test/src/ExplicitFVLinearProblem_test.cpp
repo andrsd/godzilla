@@ -20,7 +20,7 @@ public:
     {
     }
 
-    virtual const std::vector<PetscInt> &
+    virtual const std::vector<Int> &
     get_components() const override
     {
         return this->components;
@@ -41,7 +41,7 @@ public:
 
 protected:
     bool inlet;
-    std::vector<PetscInt> components;
+    std::vector<Int> components;
 
 public:
     static Parameters
@@ -76,13 +76,13 @@ protected:
     }
 
     virtual void
-    compute_flux(PetscInt dim,
-                 PetscInt nf,
+    compute_flux(Int dim,
+                 Int nf,
                  const PetscReal x[],
                  const PetscReal n[],
                  const PetscScalar uL[],
                  const PetscScalar uR[],
-                 PetscInt n_consts,
+                 Int n_consts,
                  const PetscScalar constants[],
                  PetscScalar flux[]) override
     {
@@ -104,7 +104,7 @@ TEST(ExplicitFVLinearProblemTest, api)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
@@ -157,7 +157,7 @@ TEST(ExplicitFVLinearProblemTest, fields)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
@@ -198,7 +198,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
@@ -236,8 +236,8 @@ TEST(ExplicitFVLinearProblemTest, solve)
     EXPECT_TRUE(prob.converged());
 
     Vec sln = prob.get_solution_vector();
-    PetscInt ni = 2;
-    PetscInt ix[2] = { 0, 1 };
+    Int ni = 2;
+    Int ix[2] = { 0, 1 };
     PetscScalar x[2];
     VecGetValues(sln, ni, ix, x);
     EXPECT_NEAR(x[0], 0.001, 1e-15);
@@ -250,7 +250,7 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
@@ -285,7 +285,7 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();

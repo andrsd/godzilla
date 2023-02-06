@@ -17,7 +17,7 @@ class TestBC : public NaturalBC {
 public:
     explicit TestBC(const Parameters & params) : NaturalBC(params), comps({ 1 }) {}
 
-    const std::vector<PetscInt> &
+    const std::vector<Int> &
     get_components() const override
     {
         return this->comps;
@@ -28,7 +28,7 @@ public:
     }
 
 protected:
-    std::vector<PetscInt> comps;
+    std::vector<Int> comps;
 };
 
 class TestF : public ResidualFunc {
@@ -83,7 +83,7 @@ TEST(WeakFormTest, test)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
@@ -97,7 +97,7 @@ TEST(WeakFormTest, test)
     bc_pars.set<std::string>("boundary") = "left";
     TestBC bc(bc_pars);
 
-    PetscInt fid = 0;
+    Int fid = 0;
     WeakForm wf;
     wf.add(PETSC_WF_F0, nullptr, 0, fid, 0, new TestF(&prob));
     wf.add(PETSC_WF_G0, nullptr, 0, fid, fid, 0, new TestJ(&prob));

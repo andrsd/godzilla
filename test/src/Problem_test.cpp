@@ -81,7 +81,7 @@ TEST(ProblemTest, add_pp)
 
     Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
-    mesh_params.set<PetscInt>("nx") = 2;
+    mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = Problem::parameters();

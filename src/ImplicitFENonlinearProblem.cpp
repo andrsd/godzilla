@@ -185,9 +185,9 @@ ImplicitFENonlinearProblem::compute_ifunction(PetscReal time, Vec X, Vec X_t, Ve
 
     IndexSet all_cells = this->unstr_mesh->get_all_elements();
 
-    PetscInt n_ds;
+    Int n_ds;
     PETSC_CHECK(DMGetNumDS(plex, &n_ds));
-    for (PetscInt s = 0; s < n_ds; ++s) {
+    for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
         PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
@@ -228,9 +228,9 @@ ImplicitFENonlinearProblem::compute_ijacobian(PetscReal time,
 
     IndexSet all_cells = this->unstr_mesh->get_all_elements();
 
-    PetscInt n_ds;
+    Int n_ds;
     PetscCall(DMGetNumDS(plex, &n_ds));
-    for (PetscInt s = 0; s < n_ds; ++s) {
+    for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));

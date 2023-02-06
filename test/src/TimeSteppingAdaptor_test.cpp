@@ -14,7 +14,7 @@ static const char * TS_ADAPT_TEST = "test";
 static PetscErrorCode __ts_adapt_choose(TSAdapt adapt,
                                         TS ts,
                                         PetscReal h,
-                                        PetscInt * next_sc,
+                                        Int * next_sc,
                                         PetscReal * next_h,
                                         PetscBool * accept,
                                         PetscReal * wlte,
@@ -37,7 +37,7 @@ public:
     explicit TestTSAdaptor(const Parameters & params);
 
     virtual void choose(PetscReal h,
-                        PetscInt * next_sc,
+                        Int * next_sc,
                         PetscReal * next_h,
                         PetscBool * accept,
                         PetscReal * wlte,
@@ -74,14 +74,14 @@ TestTSAdaptor::TestTSAdaptor(const Parameters & params) : TimeSteppingAdaptor(pa
 
 void
 TestTSAdaptor::choose(PetscReal h,
-                      PetscInt * next_sc,
+                      Int * next_sc,
                       PetscReal * next_h,
                       PetscBool * accept,
                       PetscReal * wlte,
                       PetscReal * wltea,
                       PetscReal * wlter)
 {
-    PetscInt idx = this->problem->get_step_num();
+    Int idx = this->problem->get_step_num();
     *next_sc = 0;
     if (idx < 3) {
         *next_h = this->dts[idx];
@@ -100,7 +100,7 @@ static PetscErrorCode
 __ts_adapt_choose(TSAdapt adapt,
                   TS ts,
                   PetscReal h,
-                  PetscInt * next_sc,
+                  Int * next_sc,
                   PetscReal * next_h,
                   PetscBool * accept,
                   PetscReal * wlte,
@@ -125,7 +125,7 @@ public:
     std::vector<PetscReal> dts;
 
 protected:
-    virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
+    virtual PetscErrorCode ts_monitor_callback(Int stepi, PetscReal time, Vec x);
 };
 
 REGISTER_OBJECT(TestTSProblem);
@@ -136,7 +136,7 @@ TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonline
 }
 
 PetscErrorCode
-TestTSProblem::ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x)
+TestTSProblem::ts_monitor_callback(Int stepi, PetscReal time, Vec x)
 {
     PetscReal dt;
     PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
@@ -161,7 +161,7 @@ TEST(TimeSteppingAdaptor, api)
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 2;
+        params->set<Int>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
 
@@ -203,7 +203,7 @@ TEST(TimeSteppingAdaptor, choose)
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 2;
+        params->set<Int>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
 

@@ -71,53 +71,53 @@ UnstructuredMesh::get_label(const std::string & name) const
     return label;
 }
 
-PetscInt
+Int
 UnstructuredMesh::get_num_vertices() const
 {
     _F_;
-    PetscInt first, last;
+    Int first, last;
     get_vertex_idx_range(first, last);
     return last - first;
 }
 
 void
-UnstructuredMesh::get_vertex_idx_range(PetscInt & first, PetscInt & last) const
+UnstructuredMesh::get_vertex_idx_range(Int & first, Int & last) const
 {
     _F_;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, &first, &last));
 }
 
-PetscInt
+Int
 UnstructuredMesh::get_num_elements() const
 {
     _F_;
-    PetscInt first, last;
+    Int first, last;
     get_element_idx_range(first, last);
     return last - first;
 }
 
-PetscInt
+Int
 UnstructuredMesh::get_num_all_elements() const
 {
     _F_;
-    PetscInt first, last;
+    Int first, last;
     get_all_element_idx_range(first, last);
     return last - first;
 }
 
 void
-UnstructuredMesh::get_element_idx_range(PetscInt & first, PetscInt & last) const
+UnstructuredMesh::get_element_idx_range(Int & first, Int & last) const
 {
     _F_;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
-    PetscInt gc_first, gc_last;
+    Int gc_first, gc_last;
     PETSC_CHECK(DMPlexGetGhostCellStratum(this->dm, &gc_first, &gc_last));
     if (gc_first != -1)
         last = gc_first;
 }
 
 void
-UnstructuredMesh::get_all_element_idx_range(PetscInt & first, PetscInt & last) const
+UnstructuredMesh::get_all_element_idx_range(Int & first, Int & last) const
 {
     _F_;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
@@ -126,7 +126,7 @@ UnstructuredMesh::get_all_element_idx_range(PetscInt & first, PetscInt & last) c
 IndexSet
 UnstructuredMesh::get_all_elements() const
 {
-    PetscInt depth;
+    Int depth;
     PETSC_CHECK(DMPlexGetDepth(this->dm, &depth));
     IS cell_is;
     PETSC_CHECK(DMGetStratumIS(this->dm, "dim", depth, &cell_is));
@@ -136,7 +136,7 @@ UnstructuredMesh::get_all_elements() const
 }
 
 DMPolytopeType
-UnstructuredMesh::get_cell_type(PetscInt el) const
+UnstructuredMesh::get_cell_type(Int el) const
 {
     DMPolytopeType polytope_type;
     PETSC_CHECK(DMPlexGetCellType(this->dm, el, &polytope_type));
@@ -151,7 +151,7 @@ UnstructuredMesh::set_partitioner_type(const std::string & type)
 }
 
 void
-UnstructuredMesh::set_partition_overlap(PetscInt overlap)
+UnstructuredMesh::set_partition_overlap(Int overlap)
 {
     _F_;
     this->partition_overlap = overlap;
@@ -183,15 +183,15 @@ UnstructuredMesh::is_simplex() const
 }
 
 void
-UnstructuredMesh::create_face_set_labels(const std::map<PetscInt, std::string> & names)
+UnstructuredMesh::create_face_set_labels(const std::map<Int, std::string> & names)
 {
     _F_;
     DMLabel fs_label = get_label("Face Sets");
-    PetscInt n_fs = get_num_face_sets();
+    Int n_fs = get_num_face_sets();
     IndexSet fs_ids = IndexSet::values_from_label(fs_label);
     fs_ids.get_indices();
-    for (PetscInt i = 0; i < n_fs; i++) {
-        PetscInt id = fs_ids[i];
+    for (Int i = 0; i < n_fs; i++) {
+        Int id = fs_ids[i];
         create_face_set(id);
         set_face_set_name(id, names.at(id));
     }
@@ -200,7 +200,7 @@ UnstructuredMesh::create_face_set_labels(const std::map<PetscInt, std::string> &
 }
 
 void
-UnstructuredMesh::create_face_set(PetscInt id)
+UnstructuredMesh::create_face_set(Int id)
 {
     _F_;
     DMLabel face_sets_label = get_label("Face Sets");
@@ -216,7 +216,7 @@ UnstructuredMesh::create_face_set(PetscInt id)
 }
 
 void
-UnstructuredMesh::set_face_set_name(PetscInt id, const std::string & name)
+UnstructuredMesh::set_face_set_name(Int id, const std::string & name)
 {
     _F_;
     this->face_set_names[id] = name;
@@ -229,7 +229,7 @@ UnstructuredMesh::has_face_set(const std::string & name) const
     _F_;
     const auto & it = this->face_set_ids.find(name);
     if (it != this->face_set_ids.end()) {
-        PetscInt id = it->second;
+        Int id = it->second;
         return has_label(std::to_string(id));
     }
     else
@@ -243,7 +243,7 @@ UnstructuredMesh::get_face_set_label(const std::string & name) const
     _F_;
     const auto & it = this->face_set_ids.find(name);
     if (it != this->face_set_ids.end()) {
-        PetscInt id = it->second;
+        Int id = it->second;
         return get_label(std::to_string(id));
     }
     else
@@ -252,7 +252,7 @@ UnstructuredMesh::get_face_set_label(const std::string & name) const
 }
 
 const std::string &
-UnstructuredMesh::get_face_set_name(PetscInt id) const
+UnstructuredMesh::get_face_set_name(Int id) const
 {
     _F_;
     const auto & it = this->face_set_names.find(id);
@@ -263,7 +263,7 @@ UnstructuredMesh::get_face_set_name(PetscInt id) const
 }
 
 void
-UnstructuredMesh::create_cell_set(PetscInt id, const std::string & name)
+UnstructuredMesh::create_cell_set(Int id, const std::string & name)
 {
     _F_;
     DMLabel cell_sets_label = get_label("Cell Sets");
@@ -280,7 +280,7 @@ UnstructuredMesh::create_cell_set(PetscInt id, const std::string & name)
 }
 
 const std::string &
-UnstructuredMesh::get_cell_set_name(PetscInt id) const
+UnstructuredMesh::get_cell_set_name(Int id) const
 {
     _F_;
     const auto & it = this->cell_set_names.find(id);
@@ -290,7 +290,7 @@ UnstructuredMesh::get_cell_set_name(PetscInt id) const
         error("Cell set ID '%d' does not exist.", id);
 }
 
-PetscInt
+Int
 UnstructuredMesh::get_cell_set_id(const std::string & name) const
 {
     _F_;
@@ -301,28 +301,28 @@ UnstructuredMesh::get_cell_set_id(const std::string & name) const
         error("Cell set '%s' does not exist.", name);
 }
 
-PetscInt
+Int
 UnstructuredMesh::get_num_cell_sets() const
 {
     _F_;
-    PetscInt n_cells_sets;
+    Int n_cells_sets;
     PETSC_CHECK(DMGetLabelSize(this->dm, "Cell Sets", &n_cells_sets));
     return n_cells_sets;
 }
 
-PetscInt
+Int
 UnstructuredMesh::get_num_face_sets() const
 {
-    PetscInt n_face_sets;
+    Int n_face_sets;
     PETSC_CHECK(DMGetLabelSize(this->dm, "Face Sets", &n_face_sets));
     return n_face_sets;
 }
 
-PetscInt
+Int
 UnstructuredMesh::get_num_vertex_sets() const
 {
     _F_;
-    PetscInt n_vertex_sets;
+    Int n_vertex_sets;
     PETSC_CHECK(DMGetLabelSize(this->dm, "Vertex Sets", &n_vertex_sets));
     return n_vertex_sets;
 }

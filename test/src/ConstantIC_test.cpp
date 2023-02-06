@@ -17,10 +17,10 @@ TEST(ConstantICTest, api)
     EXPECT_EQ(obj.get_field_id(), -1);
     EXPECT_EQ(obj.get_num_components(), 3);
 
-    PetscInt dim = 2;
+    Int dim = 2;
     PetscReal time = 0.;
     PetscReal x[] = { 0 };
-    PetscInt Nc = 3;
+    Int Nc = 3;
     PetscScalar u[] = { 0, 0, 0 };
     obj.evaluate(dim, time, x, Nc, u);
 

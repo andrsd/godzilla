@@ -27,7 +27,7 @@ protected:
     void add_boundary() override;
 
     /// Boundary number
-    PetscInt bd;
+    Int bd;
 
 public:
     static Parameters parameters();

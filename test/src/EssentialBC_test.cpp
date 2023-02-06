@@ -16,16 +16,14 @@ TEST(EssentialBCTest, api)
     public:
         explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars), components({ 0 }) {}
 
-        MOCK_METHOD(
-            void,
-            evaluate,
-            (PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]));
-        MOCK_METHOD(
-            void,
-            evaluate_t,
-            (PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]));
+        MOCK_METHOD(void,
+                    evaluate,
+                    (Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]));
+        MOCK_METHOD(void,
+                    evaluate_t,
+                    (Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]));
 
-        virtual const std::vector<PetscInt> &
+        virtual const std::vector<Int> &
         get_components() const
         {
             return this->components;
@@ -37,12 +35,12 @@ TEST(EssentialBCTest, api)
         {
         }
 
-        std::vector<PetscInt> components;
+        std::vector<Int> components;
     };
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();

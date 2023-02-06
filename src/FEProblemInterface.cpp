@@ -108,11 +108,11 @@ FEProblemInterface::allocate_objects()
     PETSC_CHECK(DMCreateLocalVector(dm, &this->sln));
 }
 
-PetscInt
+Int
 FEProblemInterface::get_num_fields() const
 {
     _F_;
-    return (PetscInt) this->fields.size();
+    return (Int) this->fields.size();
 }
 
 std::vector<std::string>
@@ -128,7 +128,7 @@ FEProblemInterface::get_field_names() const
 }
 
 const std::string &
-FEProblemInterface::get_field_name(PetscInt fid) const
+FEProblemInterface::get_field_name(Int fid) const
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -138,8 +138,8 @@ FEProblemInterface::get_field_name(PetscInt fid) const
         error("Field with ID = '%d' does not exist.", fid);
 }
 
-PetscInt
-FEProblemInterface::get_field_order(PetscInt fid) const
+Int
+FEProblemInterface::get_field_order(Int fid) const
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -149,8 +149,8 @@ FEProblemInterface::get_field_order(PetscInt fid) const
         error("Field with ID = '%d' does not exist.", fid);
 }
 
-PetscInt
-FEProblemInterface::get_field_num_components(PetscInt fid) const
+Int
+FEProblemInterface::get_field_num_components(Int fid) const
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -160,7 +160,7 @@ FEProblemInterface::get_field_num_components(PetscInt fid) const
         error("Field with ID = '%d' does not exist.", fid);
 }
 
-PetscInt
+Int
 FEProblemInterface::get_field_id(const std::string & name) const
 {
     _F_;
@@ -187,7 +187,7 @@ FEProblemInterface::get_weak_form() const
 }
 
 bool
-FEProblemInterface::has_field_by_id(PetscInt fid) const
+FEProblemInterface::has_field_by_id(Int fid) const
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -203,7 +203,7 @@ FEProblemInterface::has_field_by_name(const std::string & name) const
 }
 
 std::string
-FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) const
+FEProblemInterface::get_field_component_name(Int fid, Int component) const
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -221,9 +221,7 @@ FEProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
 }
 
 void
-FEProblemInterface::set_field_component_name(PetscInt fid,
-                                             PetscInt component,
-                                             const std::string & name)
+FEProblemInterface::set_field_component_name(Int fid, Int component, const std::string & name)
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -239,24 +237,24 @@ FEProblemInterface::set_field_component_name(PetscInt fid,
         error("Field with ID = '%d' does not exist.", fid);
 }
 
-PetscInt
-FEProblemInterface::get_field_dof(PetscInt point, PetscInt fid) const
+Int
+FEProblemInterface::get_field_dof(Int point, Int fid) const
 {
     _F_;
-    PetscInt offset;
+    Int offset;
     PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
     return offset;
 }
 
-PetscInt
+Int
 FEProblemInterface::get_num_aux_fields() const
 {
     _F_;
-    return (PetscInt) this->aux_fields.size();
+    return (Int) this->aux_fields.size();
 }
 
 const std::string &
-FEProblemInterface::get_aux_field_name(PetscInt fid) const
+FEProblemInterface::get_aux_field_name(Int fid) const
 {
     _F_;
     const auto & it = this->aux_fields.find(fid);
@@ -266,7 +264,7 @@ FEProblemInterface::get_aux_field_name(PetscInt fid) const
         error("Auxiliary field with ID = '%d' does not exist.", fid);
 }
 
-PetscInt
+Int
 FEProblemInterface::get_aux_field_id(const std::string & name) const
 {
     _F_;
@@ -278,7 +276,7 @@ FEProblemInterface::get_aux_field_id(const std::string & name) const
 }
 
 bool
-FEProblemInterface::has_aux_field_by_id(PetscInt fid) const
+FEProblemInterface::has_aux_field_by_id(Int fid) const
 {
     _F_;
     const auto & it = this->aux_fields.find(fid);
@@ -312,18 +310,18 @@ FEProblemInterface::get_aux(const std::string & name) const
         return nullptr;
 }
 
-PetscInt
-FEProblemInterface::add_fe(const std::string & name, PetscInt nc, PetscInt k)
+Int
+FEProblemInterface::add_fe(const std::string & name, Int nc, Int k)
 {
     _F_;
-    std::vector<PetscInt> keys = utils::map_keys(this->fields);
-    PetscInt id = get_next_id(keys);
+    std::vector<Int> keys = utils::map_keys(this->fields);
+    Int id = get_next_id(keys);
     set_fe(id, name, nc, k);
     return id;
 }
 
 void
-FEProblemInterface::set_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
+FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
 {
     _F_;
     auto it = this->fields.find(id);
@@ -341,18 +339,18 @@ FEProblemInterface::set_fe(PetscInt id, const std::string & name, PetscInt nc, P
         error("Cannot add field '%s' with ID = %d. ID already exists.", name, id);
 }
 
-PetscInt
-FEProblemInterface::add_aux_fe(const std::string & name, PetscInt nc, PetscInt k)
+Int
+FEProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k)
 {
     _F_;
-    std::vector<PetscInt> keys = utils::map_keys(this->aux_fields);
-    PetscInt id = get_next_id(keys);
+    std::vector<Int> keys = utils::map_keys(this->aux_fields);
+    Int id = get_next_id(keys);
     set_aux_fe(id, name, nc, k);
     return id;
 }
 
 void
-FEProblemInterface::set_aux_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k)
+FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
 {
     _F_;
     auto it = this->aux_fields.find(id);
@@ -389,7 +387,7 @@ FEProblemInterface::create_fe(FieldInfo & fi)
 {
     _F_;
     const MPI_Comm & comm = this->unstr_mesh->get_comm();
-    PetscInt dim = this->problem->get_dimension();
+    Int dim = this->problem->get_dimension();
     PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(internal::create_lagrange_petscfe(comm,
                                                   dim,
@@ -468,7 +466,7 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
     std::vector<void *> ctxs(n_auxs, nullptr);
 
     for (const auto & aux : auxs) {
-        PetscInt fid = aux->get_field_id();
+        Int fid = aux->get_field_id();
         func[fid] = aux->get_func();
         ctxs[fid] = aux->get_context();
     }
@@ -493,7 +491,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
     std::vector<void *> ctxs(n_auxs, nullptr);
 
     for (const auto & aux : auxs) {
-        PetscInt fid = aux->get_field_id();
+        Int fid = aux->get_field_id();
         func[fid] = aux->get_func();
         ctxs[fid] = aux->get_context();
     }
@@ -551,10 +549,10 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
 
     bool no_errors = true;
     for (auto & aux : this->auxs) {
-        PetscInt fid = aux->get_field_id();
+        Int fid = aux->get_field_id();
         if (has_aux_field_by_id(fid)) {
-            PetscInt aux_nc = aux->get_num_components();
-            PetscInt field_nc = this->aux_fields.at(fid).nc;
+            Int aux_nc = aux->get_num_components();
+            Int field_nc = this->aux_fields.at(fid).nc;
             if (aux_nc == field_nc) {
                 const std::string & region_name = aux->get_region();
                 this->auxs_by_region[region_name].push_back(aux);
@@ -594,7 +592,7 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
     }
 }
 
-const PetscInt &
+const Int &
 FEProblemInterface::get_spatial_dimension() const
 {
     _F_;
@@ -606,11 +604,11 @@ FEProblemInterface::get_field_value(const std::string & field_name) const
 {
     _F_;
     if (has_field_by_name(field_name)) {
-        PetscInt fid = get_field_id(field_name);
+        Int fid = get_field_id(field_name);
         return this->fields.at(fid).values;
     }
     else if (has_aux_field_by_name(field_name)) {
-        PetscInt fid = get_aux_field_id(field_name);
+        Int fid = get_aux_field_id(field_name);
         return this->aux_fields.at(fid).values;
     }
     else
@@ -622,11 +620,11 @@ FEProblemInterface::get_field_gradient(const std::string & field_name) const
 {
     _F_;
     if (has_field_by_name(field_name)) {
-        PetscInt fid = get_field_id(field_name);
+        Int fid = get_field_id(field_name);
         return this->fields.at(fid).derivs;
     }
     else if (has_aux_field_by_name(field_name)) {
-        PetscInt fid = get_aux_field_id(field_name);
+        Int fid = get_aux_field_id(field_name);
         return this->aux_fields.at(fid).derivs;
     }
     else
@@ -638,11 +636,11 @@ FEProblemInterface::get_field_dot(const std::string & field_name) const
 {
     _F_;
     if (has_field_by_name(field_name)) {
-        PetscInt fid = get_field_id(field_name);
+        Int fid = get_field_id(field_name);
         return this->fields.at(fid).dots;
     }
     else if (has_aux_field_by_name(field_name)) {
-        PetscInt fid = get_aux_field_id(field_name);
+        Int fid = get_aux_field_id(field_name);
         return this->aux_fields.at(fid).dots;
     }
     else
@@ -679,8 +677,8 @@ FEProblemInterface::get_xyz() const
 
 PetscErrorCode
 FEProblemInterface::integrate(PetscDS ds,
-                              PetscInt field,
-                              PetscInt ne,
+                              Int field,
+                              Int ne,
                               PetscFEGeom * cgeom,
                               const PetscScalar coefficients[],
                               PetscDS ds_aux,
@@ -694,9 +692,9 @@ FEProblemInterface::integrate(PetscDS ds,
 
 PetscErrorCode
 FEProblemInterface::integrate_bnd(PetscDS ds,
-                                  PetscInt field,
+                                  Int field,
                                   PetscBdPointFunc obj_func,
-                                  PetscInt ne,
+                                  Int ne,
                                   PetscFEGeom * fgeom,
                                   const PetscScalar coefficients[],
                                   PetscDS ds_aux,
@@ -711,7 +709,7 @@ FEProblemInterface::integrate_bnd(PetscDS ds,
 PetscErrorCode
 FEProblemInterface::integrate_residual(PetscDS ds,
                                        PetscFormKey key,
-                                       PetscInt n_elems,
+                                       Int n_elems,
                                        PetscFEGeom * cell_geom,
                                        const PetscScalar coefficients[],
                                        const PetscScalar coefficients_t[],
@@ -721,7 +719,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                                        PetscScalar elem_vec[])
 {
     _F_;
-    PetscInt field = key.field;
+    Int field = key.field;
     const auto & f0_res_fns = this->wf->get(PETSC_WF_F0, key.label, key.value, field, key.part);
     const auto & f1_res_fns = this->wf->get(PETSC_WF_F1, key.label, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
@@ -736,14 +734,14 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     PETSC_CHECK(PetscDSGetWorkspace(ds, nullptr, &basis_real, &basis_der_real, nullptr, nullptr));
     PetscScalar *f0, *f1;
     PETSC_CHECK(PetscDSGetWeakFormArrays(ds, &f0, &f1, nullptr, nullptr, nullptr, nullptr));
-    PetscInt f_offset;
+    Int f_offset;
     PETSC_CHECK(PetscDSGetFieldOffset(ds, field, &f_offset));
     PetscTabulation * T;
     PETSC_CHECK(PetscDSGetTabulation(ds, &T));
-    PetscInt tot_dim = 0;
+    Int tot_dim = 0;
     PETSC_CHECK(PetscDSGetTotalDimension(ds, &tot_dim));
 
-    PetscInt tot_dim_aux = 0;
+    Int tot_dim_aux = 0;
     PetscTabulation * T_aux = nullptr;
     if (ds_aux) {
         PETSC_CHECK(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
@@ -760,7 +758,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     // FIXME: quad should be a member variable
     PetscQuadrature quad;
     PETSC_CHECK(PetscFEGetQuadrature(fe, &quad));
-    PetscInt q_dim, q_n_comp, q_n_pts;
+    Int q_dim, q_n_comp, q_n_pts;
     const PetscReal *q_points, *q_weights;
     PETSC_CHECK(PetscQuadratureGetData(quad, &q_dim, &q_n_comp, &q_n_pts, &q_points, &q_weights));
     PetscCheckFalse(q_n_comp != 1,
@@ -769,7 +767,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                     "Only supports scalar quadrature, not %D components",
                     q_n_comp);
 
-    PetscInt dim_embed = cell_geom->dimEmbed;
+    Int dim_embed = cell_geom->dimEmbed;
     PetscCheckFalse(cell_geom->dim != q_dim,
                     PETSC_COMM_SELF,
                     PETSC_ERR_ARG_INCOMP,
@@ -777,11 +775,11 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                     cell_geom->dim,
                     q_dim);
 
-    PetscInt n_fields = get_num_fields();
-    PetscInt n_fields_aux = get_num_aux_fields();
-    PetscInt c_offset = 0;
-    PetscInt c_offset_aux = 0;
-    for (PetscInt e = 0; e < n_elems; ++e) {
+    Int n_fields = get_num_fields();
+    Int n_fields_aux = get_num_aux_fields();
+    Int c_offset = 0;
+    Int c_offset_aux = 0;
+    for (Int e = 0; e < n_elems; ++e) {
         PetscFEGeom fe_geom;
 
         fe_geom.v = this->asmbl.xyz.get(); /* workspace */
@@ -789,7 +787,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
         PETSC_CHECK(PetscArrayzero(f0, q_n_pts * T[field]->Nc));
         PETSC_CHECK(PetscArrayzero(f1, q_n_pts * T[field]->Nc * dim_embed));
 
-        for (PetscInt q = 0; q < q_n_pts; ++q) {
+        for (Int q = 0; q < q_n_pts; ++q) {
             PETSC_CHECK(
                 PetscFEGeomGetPoint(cell_geom, e, q, &q_points[q * cell_geom->dim], &fe_geom));
             PetscReal w = fe_geom.detJ[0] * q_weights[q];
@@ -819,13 +817,13 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                                                 nullptr));
             for (auto & func : f0_res_fns)
                 func->evaluate(&f0[q * T[field]->Nc]);
-            for (PetscInt c = 0; c < T[field]->Nc; ++c)
+            for (Int c = 0; c < T[field]->Nc; ++c)
                 f0[q * T[field]->Nc + c] *= w;
 
             for (auto & func : f1_res_fns)
                 func->evaluate(&f1[q * T[field]->Nc * this->asmbl.dim]);
-            for (PetscInt c = 0; c < T[field]->Nc; ++c)
-                for (PetscInt d = 0; d < this->asmbl.dim; ++d)
+            for (Int c = 0; c < T[field]->Nc; ++c)
+                for (Int d = 0; d < this->asmbl.dim; ++d)
                     f1[(q * T[field]->Nc + c) * this->asmbl.dim + d] *= w;
         }
 
@@ -850,7 +848,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
 PetscErrorCode
 FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                                            PetscFormKey key,
-                                           PetscInt n_elems,
+                                           Int n_elems,
                                            PetscFEGeom * face_geom,
                                            const PetscScalar coefficients[],
                                            const PetscScalar coefficients_t[],
@@ -860,7 +858,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                                            PetscScalar elem_vec[])
 {
     _F_;
-    PetscInt field = key.field;
+    Int field = key.field;
     const auto & f0_res_fns = this->wf->get(PETSC_WF_BDF0, key.label, key.value, field, key.part);
     const auto & f1_res_fns = this->wf->get(PETSC_WF_BDF1, key.label, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
@@ -875,15 +873,15 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
     PETSC_CHECK(PetscDSGetWorkspace(ds, nullptr, &basis_real, &basis_der_real, nullptr, nullptr));
     PetscScalar *f0, *f1;
     PETSC_CHECK(PetscDSGetWeakFormArrays(ds, &f0, &f1, nullptr, nullptr, nullptr, nullptr));
-    PetscInt f_offset;
+    Int f_offset;
     PETSC_CHECK(PetscDSGetFieldOffset(ds, field, &f_offset));
-    PetscInt tot_dim = 0;
+    Int tot_dim = 0;
     PETSC_CHECK(PetscDSGetTotalDimension(ds, &tot_dim));
     PetscTabulation * T_face;
     PETSC_CHECK(PetscDSGetFaceTabulation(ds, &T_face));
 
-    PetscInt dim_aux = 0;
-    PetscInt tot_dim_aux = 0;
+    Int dim_aux = 0;
+    Int tot_dim_aux = 0;
     PetscTabulation * T_face_aux = nullptr;
     PetscBool aux_on_bnd = PETSC_FALSE;
     if (ds_aux) {
@@ -905,12 +903,12 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
             T_face_aux[0]->Np);
     }
 
-    PetscInt n_comp_i = T_face[field]->Nc;
+    Int n_comp_i = T_face[field]->Nc;
 
     // FIXME: quad should be a member variable
     PetscQuadrature quad;
     PETSC_CHECK(PetscFEGetFaceQuadrature(fe, &quad));
-    PetscInt q_dim, q_n_comp, q_n_pts;
+    Int q_dim, q_n_comp, q_n_pts;
     const PetscReal *q_points, *q_weights;
     PETSC_CHECK(PetscQuadratureGetData(quad, &q_dim, &q_n_comp, &q_n_pts, &q_points, &q_weights));
     PetscCheckFalse(q_n_comp != 1,
@@ -919,7 +917,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                     "Only supports scalar quadrature, not %D components",
                     q_n_comp);
 
-    PetscInt dim_embed = face_geom->dimEmbed;
+    Int dim_embed = face_geom->dimEmbed;
     /* TODO FIX THIS */
     face_geom->dim = this->asmbl.dim - 1;
 
@@ -930,18 +928,18 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                     face_geom->dim,
                     q_dim);
 
-    PetscInt n_fields = get_num_fields();
-    PetscInt n_fields_aux = get_num_aux_fields();
-    PetscInt c_offset = 0;
-    PetscInt c_offset_aux = 0;
-    for (PetscInt e = 0; e < n_elems; ++e) {
+    Int n_fields = get_num_fields();
+    Int n_fields_aux = get_num_aux_fields();
+    Int c_offset = 0;
+    Int c_offset_aux = 0;
+    for (Int e = 0; e < n_elems; ++e) {
         PetscFEGeom fe_geom, cell_geom;
-        const PetscInt face = face_geom->face[e][0];
+        const Int face = face_geom->face[e][0];
 
         fe_geom.v = this->asmbl.xyz.get(); /* Workspace */
         PETSC_CHECK(PetscArrayzero(f0, q_n_pts * n_comp_i));
         PETSC_CHECK(PetscArrayzero(f1, q_n_pts * n_comp_i * dim_embed));
-        for (PetscInt q = 0; q < q_n_pts; ++q) {
+        for (Int q = 0; q < q_n_pts; ++q) {
             PETSC_CHECK(
                 PetscFEGeomGetPoint(face_geom, e, q, &q_points[q * face_geom->dim], &fe_geom));
             PETSC_CHECK(PetscFEGeomGetCellPoint(face_geom, e, q, &cell_geom));
@@ -972,12 +970,12 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                                                 nullptr));
             for (auto & func : f0_res_fns)
                 func->evaluate(&f0[q * n_comp_i]);
-            for (PetscInt c = 0; c < n_comp_i; ++c)
+            for (Int c = 0; c < n_comp_i; ++c)
                 f0[q * n_comp_i + c] *= w;
             for (auto & func : f1_res_fns)
                 func->evaluate(&f1[q * n_comp_i * this->asmbl.dim]);
-            for (PetscInt c = 0; c < n_comp_i; ++c)
-                for (PetscInt d = 0; d < this->asmbl.dim; ++d)
+            for (Int c = 0; c < n_comp_i; ++c)
+                for (Int d = 0; d < this->asmbl.dim; ++d)
                     f1[(q * n_comp_i + c) * this->asmbl.dim + d] *= w;
         }
         PETSC_CHECK(update_element_vec(fe,
@@ -1001,7 +999,7 @@ PetscErrorCode
 FEProblemInterface::integrate_jacobian(PetscDS ds,
                                        PetscFEJacobianType jtype,
                                        PetscFormKey key,
-                                       PetscInt n_elems,
+                                       Int n_elems,
                                        PetscFEGeom * cell_geom,
                                        const PetscScalar coefficients[],
                                        const PetscScalar coefficients_t[],
@@ -1012,11 +1010,11 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                                        PetscScalar elem_mat[])
 {
     _F_;
-    PetscInt n_fields = get_num_fields();
-    PetscInt n_fields_aux = get_num_aux_fields();
+    Int n_fields = get_num_fields();
+    Int n_fields_aux = get_num_aux_fields();
 
-    PetscInt field_i = key.field / n_fields;
-    PetscInt field_j = key.field % n_fields;
+    Int field_i = key.field / n_fields;
+    Int field_j = key.field % n_fields;
 
     PetscWeakFormKind kind0, kind1, kind2, kind3;
     switch (jtype) {
@@ -1063,19 +1061,19 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         PetscDSGetWorkspace(ds, nullptr, &basis_real, &basis_der_real, &test_real, &test_der_real));
     PetscScalar *g0, *g1, *g2, *g3;
     PETSC_CHECK(PetscDSGetWeakFormArrays(ds, nullptr, nullptr, &g0, &g1, &g2, &g3));
-    PetscInt offset_i;
+    Int offset_i;
     PETSC_CHECK(PetscDSGetFieldOffset(ds, field_i, &offset_i));
-    PetscInt offset_j;
+    Int offset_j;
     PETSC_CHECK(PetscDSGetFieldOffset(ds, field_j, &offset_j));
-    PetscInt tot_dim;
+    Int tot_dim;
     PETSC_CHECK(PetscDSGetTotalDimension(ds, &tot_dim));
     PetscTabulation * T;
     PETSC_CHECK(PetscDSGetTabulation(ds, &T));
-    PetscInt n_comp_i = T[field_i]->Nc;
-    PetscInt n_comp_j = T[field_j]->Nc;
+    Int n_comp_i = T[field_i]->Nc;
+    Int n_comp_j = T[field_j]->Nc;
 
     PetscTabulation * T_aux = nullptr;
-    PetscInt tot_dim_aux = 0;
+    Int tot_dim_aux = 0;
     if (ds_aux) {
         PETSC_CHECK(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
         PETSC_CHECK(PetscDSGetTabulation(ds_aux, &T_aux));
@@ -1088,8 +1086,8 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
             T_aux[0]->Np);
     }
 
-    PetscInt n_pts = cell_geom->numPoints;
-    PetscInt dim_embed = cell_geom->dimEmbed;
+    Int n_pts = cell_geom->numPoints;
+    Int dim_embed = cell_geom->dimEmbed;
     bool is_affine = cell_geom->isAffine;
 
     // Initialize here in case the function is not defined
@@ -1100,7 +1098,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
 
     PetscQuadrature quad;
     PETSC_CHECK(PetscFEGetQuadrature(fe_i, &quad));
-    PetscInt q_n_comp, q_n_points;
+    Int q_n_comp, q_n_points;
     const PetscReal *q_points, *q_weights;
     PETSC_CHECK(
         PetscQuadratureGetData(quad, nullptr, &q_n_comp, &q_n_points, &q_points, &q_weights));
@@ -1111,12 +1109,12 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                     q_n_comp);
 
     // Offset into elem_mat[] for element e
-    PetscInt e_offset = 0;
+    Int e_offset = 0;
     // Offset into coefficients[] for element e
-    PetscInt c_offset = 0;
+    Int c_offset = 0;
     // Offset into coefficientsAux[] for element e
-    PetscInt c_offset_aux = 0;
-    for (PetscInt e = 0; e < n_elems; ++e) {
+    Int c_offset_aux = 0;
+    for (Int e = 0; e < n_elems; ++e) {
         PetscFEGeom fe_geom;
 
         fe_geom.dim = cell_geom->dim;
@@ -1128,7 +1126,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
             fe_geom.invJ = &cell_geom->invJ[e * n_pts * dim_embed * dim_embed];
             fe_geom.detJ = &cell_geom->detJ[e * n_pts];
         }
-        for (PetscInt q = 0; q < q_n_points; ++q) {
+        for (Int q = 0; q < q_n_points; ++q) {
             if (is_affine) {
                 CoordinatesRefToReal(dim_embed,
                                      this->asmbl.dim,
@@ -1174,29 +1172,28 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                 PETSC_CHECK(PetscArrayzero(g0, n_comp_i * n_comp_j));
                 for (auto & func : g0_jac_fns)
                     func->evaluate(g0);
-                for (PetscInt c = 0; c < n_comp_i * n_comp_j; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j; ++c)
                     g0[c] *= w;
             }
             if (!g1_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g1, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g1_jac_fns)
                     func->evaluate(g1);
-                for (PetscInt c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim; ++c)
                     g1[c] *= w;
             }
             if (!g2_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g2, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g2_jac_fns)
                     func->evaluate(g2);
-                for (PetscInt c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim; ++c)
                     g2[c] *= w;
             }
             if (!g3_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g3, n_comp_i * n_comp_j * dim_embed * dim_embed));
                 for (auto & func : g3_jac_fns)
                     func->evaluate(g3);
-                for (PetscInt c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim * this->asmbl.dim;
-                     ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim * this->asmbl.dim; ++c)
                     g3[c] *= w;
             }
 
@@ -1232,7 +1229,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
 PetscErrorCode
 FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                            PetscFormKey key,
-                                           PetscInt n_elems,
+                                           Int n_elems,
                                            PetscFEGeom * face_geom,
                                            const PetscScalar coefficients[],
                                            const PetscScalar coefficients_t[],
@@ -1243,11 +1240,11 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                            PetscScalar elem_mat[])
 {
     _F_;
-    PetscInt n_fields = get_num_fields();
-    PetscInt n_fields_aux = get_num_aux_fields();
+    Int n_fields = get_num_fields();
+    Int n_fields_aux = get_num_aux_fields();
 
-    PetscInt field_i = key.field / n_fields;
-    PetscInt field_j = key.field % n_fields;
+    Int field_i = key.field / n_fields;
+    Int field_j = key.field % n_fields;
 
     const auto & g0_jac_fns =
         this->wf->get(PETSC_WF_BDG0, key.label, key.value, field_i, field_j, key.part);
@@ -1272,26 +1269,26 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
         PetscDSGetWorkspace(ds, nullptr, &basis_real, &basis_der_real, &test_real, &test_der_real));
     PetscScalar *g0, *g1, *g2, *g3;
     PETSC_CHECK(PetscDSGetWeakFormArrays(ds, nullptr, nullptr, &g0, &g1, &g2, &g3));
-    PetscInt offset_i;
+    Int offset_i;
     PETSC_CHECK(PetscDSGetFieldOffset(ds, field_i, &offset_i));
-    PetscInt offset_j;
+    Int offset_j;
     PETSC_CHECK(PetscDSGetFieldOffset(ds, field_j, &offset_j));
-    PetscInt tot_dim;
+    Int tot_dim;
     PETSC_CHECK(PetscDSGetTotalDimension(ds, &tot_dim));
     PetscTabulation * T;
     PETSC_CHECK(PetscDSGetFaceTabulation(ds, &T));
-    PetscInt n_comp_i = T[field_i]->Nc;
-    PetscInt n_comp_j = T[field_j]->Nc;
+    Int n_comp_i = T[field_i]->Nc;
+    Int n_comp_j = T[field_j]->Nc;
 
     PetscTabulation * T_aux = nullptr;
-    PetscInt tot_dim_aux = 0;
+    Int tot_dim_aux = 0;
     if (ds_aux) {
         PETSC_CHECK(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
         PETSC_CHECK(PetscDSGetFaceTabulation(ds_aux, &T_aux));
     }
 
-    PetscInt n_pts = face_geom->numPoints;
-    PetscInt dim_embed = face_geom->dimEmbed;
+    Int n_pts = face_geom->numPoints;
+    Int dim_embed = face_geom->dimEmbed;
     bool is_affine = face_geom->isAffine;
 
     // Initialize here in case the function is not defined
@@ -1302,7 +1299,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
 
     PetscQuadrature quad;
     PETSC_CHECK(PetscFEGetFaceQuadrature(fe_i, &quad));
-    PetscInt q_n_comp, q_n_points;
+    Int q_n_comp, q_n_points;
     const PetscReal *q_points, *q_weights;
     PETSC_CHECK(
         PetscQuadratureGetData(quad, nullptr, &q_n_comp, &q_n_points, &q_points, &q_weights));
@@ -1313,14 +1310,14 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                     q_n_comp);
 
     // Offset into elem_mat[] for element e
-    PetscInt e_offset = 0;
+    Int e_offset = 0;
     // Offset into coefficients[] for element e
-    PetscInt c_offset = 0;
+    Int c_offset = 0;
     // Offset into coefficients_aux[] for element e
-    PetscInt c_offset_aux = 0;
-    for (PetscInt e = 0; e < n_elems; ++e) {
+    Int c_offset_aux = 0;
+    for (Int e = 0; e < n_elems; ++e) {
         PetscFEGeom fe_geom;
-        const PetscInt face = face_geom->face[e][0];
+        const Int face = face_geom->face[e][0];
         fe_geom.n = nullptr;
         fe_geom.v = nullptr;
         fe_geom.J = nullptr;
@@ -1343,7 +1340,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
             cell_geom.invJ = &face_geom->suppInvJ[0][e * n_pts * dim_embed * dim_embed];
             cell_geom.detJ = &face_geom->suppDetJ[0][e * n_pts];
         }
-        for (PetscInt q = 0; q < q_n_points; ++q) {
+        for (Int q = 0; q < q_n_points; ++q) {
             if (is_affine) {
                 CoordinatesRefToReal(dim_embed,
                                      this->asmbl.dim - 1,
@@ -1396,29 +1393,28 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                 PETSC_CHECK(PetscArrayzero(g0, n_comp_i * n_comp_j));
                 for (auto & func : g0_jac_fns)
                     func->evaluate(g0);
-                for (PetscInt c = 0; c < n_comp_i * n_comp_j; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j; ++c)
                     g0[c] *= w;
             }
             if (!g1_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g1, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g1_jac_fns)
                     func->evaluate(g1);
-                for (PetscInt c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim; ++c)
                     g1[c] *= w;
             }
             if (!g2_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g2, n_comp_i * n_comp_j * dim_embed));
                 for (auto & func : g2_jac_fns)
                     func->evaluate(g2);
-                for (PetscInt c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim; ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim; ++c)
                     g2[c] *= w;
             }
             if (!g3_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g3, n_comp_i * n_comp_j * dim_embed * dim_embed));
                 for (auto & func : g3_jac_fns)
                     func->evaluate(g3);
-                for (PetscInt c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim * this->asmbl.dim;
-                     ++c)
+                for (Int c = 0; c < n_comp_i * n_comp_j * this->asmbl.dim * this->asmbl.dim; ++c)
                     g3[c] *= w;
             }
 
@@ -1455,10 +1451,10 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
 PetscErrorCode
 FEProblemInterface::update_element_vec(PetscFE fe,
                                        PetscTabulation tab,
-                                       PetscInt r,
+                                       Int r,
                                        PetscScalar tmp_basis[],
                                        PetscScalar tmp_basis_der[],
-                                       PetscInt e,
+                                       Int e,
                                        PetscFEGeom * fe_geom,
                                        PetscScalar f0[],
                                        PetscScalar f1[],
@@ -1466,36 +1462,36 @@ FEProblemInterface::update_element_vec(PetscFE fe,
 {
     _F_;
     PetscFEGeom pgeom;
-    const PetscInt dEt = tab->cdim;
-    const PetscInt dE = fe_geom->dimEmbed;
-    const PetscInt Nq = tab->Np;
-    const PetscInt Nb = tab->Nb;
-    const PetscInt Nc = tab->Nc;
+    const Int dEt = tab->cdim;
+    const Int dE = fe_geom->dimEmbed;
+    const Int Nq = tab->Np;
+    const Int Nb = tab->Nb;
+    const Int Nc = tab->Nc;
     const PetscReal * basis = &tab->T[0][r * Nq * Nb * Nc];
     const PetscReal * basis_der = &tab->T[1][r * Nq * Nb * Nc * dEt];
 
-    for (PetscInt q = 0; q < Nq; ++q) {
-        for (PetscInt b = 0; b < Nb; ++b) {
-            for (PetscInt c = 0; c < Nc; ++c) {
-                const PetscInt bcidx = b * Nc + c;
+    for (Int q = 0; q < Nq; ++q) {
+        for (Int b = 0; b < Nb; ++b) {
+            for (Int c = 0; c < Nc; ++c) {
+                const Int bcidx = b * Nc + c;
 
                 tmp_basis[bcidx] = basis[q * Nb * Nc + bcidx];
-                for (PetscInt d = 0; d < dEt; ++d)
+                for (Int d = 0; d < dEt; ++d)
                     tmp_basis_der[bcidx * dE + d] = basis_der[q * Nb * Nc * dEt + bcidx * dEt + d];
-                for (PetscInt d = dEt; d < dE; ++d)
+                for (Int d = dEt; d < dE; ++d)
                     tmp_basis_der[bcidx * dE + d] = 0.0;
             }
         }
         PETSC_CHECK(PetscFEGeomGetCellPoint(fe_geom, e, q, &pgeom));
         PETSC_CHECK(PetscFEPushforward(fe, &pgeom, Nb, tmp_basis));
         PETSC_CHECK(PetscFEPushforwardGradient(fe, &pgeom, Nb, tmp_basis_der));
-        for (PetscInt b = 0; b < Nb; ++b) {
-            for (PetscInt c = 0; c < Nc; ++c) {
-                const PetscInt bcidx = b * Nc + c;
-                const PetscInt qcidx = q * Nc + c;
+        for (Int b = 0; b < Nb; ++b) {
+            for (Int c = 0; c < Nc; ++c) {
+                const Int bcidx = b * Nc + c;
+                const Int qcidx = q * Nc + c;
 
                 elem_vec[b] += tmp_basis[bcidx] * f0[qcidx];
-                for (PetscInt d = 0; d < dE; ++d)
+                for (Int d = 0; d < dE; ++d)
                     elem_vec[b] += tmp_basis_der[bcidx * dE + d] * f1[qcidx * dE + d];
             }
         }
@@ -1507,8 +1503,8 @@ FEProblemInterface::update_element_vec(PetscFE fe,
 PetscErrorCode
 FEProblemInterface::update_element_mat(PetscFE fe_i,
                                        PetscFE fe_j,
-                                       PetscInt r,
-                                       PetscInt q,
+                                       Int r,
+                                       Int q,
                                        PetscTabulation tab_i,
                                        PetscScalar tmp_basis_i[],
                                        PetscScalar tmp_basis_der_i[],
@@ -1520,71 +1516,71 @@ FEProblemInterface::update_element_mat(PetscFE fe_i,
                                        const PetscScalar g1[],
                                        const PetscScalar g2[],
                                        const PetscScalar g3[],
-                                       PetscInt e_offset,
-                                       PetscInt tot_dim,
-                                       PetscInt offset_i,
-                                       PetscInt offset_j,
+                                       Int e_offset,
+                                       Int tot_dim,
+                                       Int offset_i,
+                                       Int offset_j,
                                        PetscScalar elem_mat[])
 {
     _F_;
-    const PetscInt dE = tab_i->cdim;
-    const PetscInt NqI = tab_i->Np;
-    const PetscInt NbI = tab_i->Nb;
-    const PetscInt n_comp_i = tab_i->Nc;
+    const Int dE = tab_i->cdim;
+    const Int NqI = tab_i->Np;
+    const Int NbI = tab_i->Nb;
+    const Int n_comp_i = tab_i->Nc;
     const PetscReal * basis_i = &tab_i->T[0][(r * NqI + q) * NbI * n_comp_i];
     const PetscReal * basis_der_i = &tab_i->T[1][(r * NqI + q) * NbI * n_comp_i * dE];
-    const PetscInt NqJ = tab_j->Np;
-    const PetscInt NbJ = tab_j->Nb;
-    const PetscInt n_comp_j = tab_j->Nc;
+    const Int NqJ = tab_j->Np;
+    const Int NbJ = tab_j->Nb;
+    const Int n_comp_j = tab_j->Nc;
     const PetscReal * basis_j = &tab_j->T[0][(r * NqJ + q) * NbJ * n_comp_j];
     const PetscReal * basis_der_j = &tab_j->T[1][(r * NqJ + q) * NbJ * n_comp_j * dE];
 
-    for (PetscInt f = 0; f < NbI; ++f) {
-        for (PetscInt fc = 0; fc < n_comp_i; ++fc) {
+    for (Int f = 0; f < NbI; ++f) {
+        for (Int fc = 0; fc < n_comp_i; ++fc) {
             // Test function basis index
-            const PetscInt fidx = f * n_comp_i + fc;
+            const Int fidx = f * n_comp_i + fc;
 
             tmp_basis_i[fidx] = basis_i[fidx];
-            for (PetscInt df = 0; df < dE; ++df)
+            for (Int df = 0; df < dE; ++df)
                 tmp_basis_der_i[fidx * dE + df] = basis_der_i[fidx * dE + df];
         }
     }
     PETSC_CHECK(PetscFEPushforward(fe_i, fe_geom, NbI, tmp_basis_i));
     PETSC_CHECK(PetscFEPushforwardGradient(fe_i, fe_geom, NbI, tmp_basis_der_i));
-    for (PetscInt g = 0; g < NbJ; ++g) {
-        for (PetscInt gc = 0; gc < n_comp_j; ++gc) {
+    for (Int g = 0; g < NbJ; ++g) {
+        for (Int gc = 0; gc < n_comp_j; ++gc) {
             // Trial function basis index
-            const PetscInt gidx = g * n_comp_j + gc;
+            const Int gidx = g * n_comp_j + gc;
 
             tmp_basis_j[gidx] = basis_j[gidx];
-            for (PetscInt dg = 0; dg < dE; ++dg)
+            for (Int dg = 0; dg < dE; ++dg)
                 tmp_basis_der_j[gidx * dE + dg] = basis_der_j[gidx * dE + dg];
         }
     }
     PETSC_CHECK(PetscFEPushforward(fe_j, fe_geom, NbJ, tmp_basis_j));
     PETSC_CHECK(PetscFEPushforwardGradient(fe_j, fe_geom, NbJ, tmp_basis_der_j));
-    for (PetscInt f = 0; f < NbI; ++f) {
-        for (PetscInt fc = 0; fc < n_comp_i; ++fc) {
+    for (Int f = 0; f < NbI; ++f) {
+        for (Int fc = 0; fc < n_comp_i; ++fc) {
             // Test function basis index
-            const PetscInt fidx = f * n_comp_i + fc;
+            const Int fidx = f * n_comp_i + fc;
             // Element matrix row
-            const PetscInt i = offset_i + f;
-            for (PetscInt g = 0; g < NbJ; ++g) {
-                for (PetscInt gc = 0; gc < n_comp_j; ++gc) {
+            const Int i = offset_i + f;
+            for (Int g = 0; g < NbJ; ++g) {
+                for (Int gc = 0; gc < n_comp_j; ++gc) {
                     // Trial function basis index
-                    const PetscInt gidx = g * n_comp_j + gc;
+                    const Int gidx = g * n_comp_j + gc;
                     // Element matrix column
-                    const PetscInt j = offset_j + g;
-                    const PetscInt f_off = e_offset + i * tot_dim + j;
+                    const Int j = offset_j + g;
+                    const Int f_off = e_offset + i * tot_dim + j;
 
                     elem_mat[f_off] +=
                         tmp_basis_i[fidx] * g0[fc * n_comp_j + gc] * tmp_basis_j[gidx];
-                    for (PetscInt df = 0; df < dE; ++df) {
+                    for (Int df = 0; df < dE; ++df) {
                         elem_mat[f_off] += tmp_basis_i[fidx] * g1[(fc * n_comp_j + gc) * dE + df] *
                                            tmp_basis_der_j[gidx * dE + df];
                         elem_mat[f_off] += tmp_basis_der_i[fidx * dE + df] *
                                            g2[(fc * n_comp_j + gc) * dE + df] * tmp_basis_j[gidx];
-                        for (PetscInt dg = 0; dg < dE; ++dg) {
+                        for (Int dg = 0; dg < dE; ++dg) {
                             elem_mat[f_off] += tmp_basis_der_i[fidx * dE + df] *
                                                g3[((fc * n_comp_j + gc) * dE + df) * dE + dg] *
                                                tmp_basis_der_j[gidx * dE + dg];
@@ -1600,9 +1596,9 @@ FEProblemInterface::update_element_mat(PetscFE fe_i,
 // This is a copy of petsc/fe.c, PetscFEEvaluateFieldJets_Internal
 PetscErrorCode
 FEProblemInterface::evaluate_field_jets(PetscDS ds,
-                                        PetscInt nf,
-                                        PetscInt r,
-                                        PetscInt q,
+                                        Int nf,
+                                        Int r,
+                                        Int q,
                                         PetscTabulation tab[],
                                         PetscFEGeom * fe_geom,
                                         const PetscScalar coefficients[],
@@ -1612,46 +1608,46 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
                                         PetscScalar u_t[])
 {
     _F_;
-    PetscInt d_offset = 0, f_offset = 0;
+    Int d_offset = 0, f_offset = 0;
 
-    for (PetscInt f = 0; f < nf; ++f) {
+    for (Int f = 0; f < nf; ++f) {
         PetscFE fe;
-        const PetscInt k = ds->jetDegree[f];
-        const PetscInt cdim = tab[f]->cdim;
-        const PetscInt n_q = tab[f]->Np;
-        const PetscInt n_bf = tab[f]->Nb;
-        const PetscInt n_cf = tab[f]->Nc;
+        const Int k = ds->jetDegree[f];
+        const Int cdim = tab[f]->cdim;
+        const Int n_q = tab[f]->Np;
+        const Int n_bf = tab[f]->Nb;
+        const Int n_cf = tab[f]->Nc;
         const PetscReal * Bq = &tab[f]->T[0][(r * n_q + q) * n_bf * n_cf];
         const PetscReal * Dq = &tab[f]->T[1][(r * n_q + q) * n_bf * n_cf * cdim];
         const PetscReal * Hq =
             k > 1 ? &tab[f]->T[2][(r * n_q + q) * n_bf * n_cf * cdim * cdim] : nullptr;
-        PetscInt h_offset = 0;
+        Int h_offset = 0;
 
         PETSC_CHECK(PetscDSGetDiscretization(ds, f, (PetscObject *) &fe));
-        for (PetscInt c = 0; c < n_cf; ++c)
+        for (Int c = 0; c < n_cf; ++c)
             u[f_offset + c] = 0.0;
-        for (PetscInt d = 0; d < cdim * n_cf; ++d)
+        for (Int d = 0; d < cdim * n_cf; ++d)
             u_x[f_offset * cdim + d] = 0.0;
-        for (PetscInt b = 0; b < n_bf; ++b) {
-            for (PetscInt c = 0; c < n_cf; ++c) {
-                const PetscInt cidx = b * n_cf + c;
+        for (Int b = 0; b < n_bf; ++b) {
+            for (Int c = 0; c < n_cf; ++c) {
+                const Int cidx = b * n_cf + c;
 
                 u[f_offset + c] += Bq[cidx] * coefficients[d_offset + b];
-                for (PetscInt d = 0; d < cdim; ++d)
+                for (Int d = 0; d < cdim; ++d)
                     u_x[(f_offset + c) * cdim + d] +=
                         Dq[cidx * cdim + d] * coefficients[d_offset + b];
             }
         }
         if (k > 1) {
-            for (PetscInt g = 0; g < nf; ++g)
+            for (Int g = 0; g < nf; ++g)
                 h_offset += tab[g]->Nc * cdim;
-            for (PetscInt d = 0; d < cdim * cdim * n_cf; ++d)
+            for (Int d = 0; d < cdim * cdim * n_cf; ++d)
                 u_x[h_offset + f_offset * cdim * cdim + d] = 0.0;
-            for (PetscInt b = 0; b < n_bf; ++b) {
-                for (PetscInt c = 0; c < n_cf; ++c) {
-                    const PetscInt cidx = b * n_cf + c;
+            for (Int b = 0; b < n_bf; ++b) {
+                for (Int c = 0; c < n_cf; ++c) {
+                    const Int cidx = b * n_cf + c;
 
-                    for (PetscInt d = 0; d < cdim * cdim; ++d)
+                    for (Int d = 0; d < cdim * cdim; ++d)
                         u_x[h_offset + (f_offset + c) * cdim * cdim + d] +=
                             Hq[cidx * cdim * cdim + d] * coefficients[d_offset + b];
                 }
@@ -1662,11 +1658,11 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
         PETSC_CHECK(PetscFEPushforward(fe, fe_geom, 1, &u[f_offset]));
         PETSC_CHECK(PetscFEPushforwardGradient(fe, fe_geom, 1, &u_x[f_offset * cdim]));
         if (coefficients_t) {
-            for (PetscInt c = 0; c < n_cf; ++c)
+            for (Int c = 0; c < n_cf; ++c)
                 u_t[f_offset + c] = 0.0;
-            for (PetscInt b = 0; b < n_bf; ++b) {
-                for (PetscInt c = 0; c < n_cf; ++c) {
-                    const PetscInt cidx = b * n_cf + c;
+            for (Int b = 0; b < n_bf; ++b) {
+                for (Int c = 0; c < n_cf; ++c) {
+                    const Int cidx = b * n_cf + c;
 
                     u_t[f_offset + c] += Bq[cidx] * coefficients_t[d_offset + b];
                 }
@@ -1679,13 +1675,13 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
     return 0;
 }
 
-PetscInt
-FEProblemInterface::get_next_id(const std::vector<PetscInt> & ids) const
+Int
+FEProblemInterface::get_next_id(const std::vector<Int> & ids) const
 {
-    std::set<PetscInt> s;
+    std::set<Int> s;
     for (auto & id : ids)
         s.insert(id);
-    for (PetscInt id = 0; id < std::numeric_limits<PetscInt>::max(); id++)
+    for (Int id = 0; id < std::numeric_limits<Int>::max(); id++)
         if (s.find(id) == s.end())
             return id;
     return -1;

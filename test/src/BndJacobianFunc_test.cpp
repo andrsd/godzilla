@@ -14,7 +14,7 @@ class TestBC : public NaturalBC {
 public:
     explicit TestBC(const Parameters & params) : NaturalBC(params), components({ 0 }) {}
 
-    const std::vector<PetscInt> &
+    const std::vector<Int> &
     get_components() const override
     {
         return this->components;
@@ -26,14 +26,14 @@ protected:
     {
     }
 
-    std::vector<PetscInt> components;
+    std::vector<Int> components;
 };
 
 class GTestProblem : public ImplicitFENonlinearProblem {
 public:
     explicit GTestProblem(const Parameters & params) : ImplicitFENonlinearProblem(params) {}
 
-    MOCK_METHOD(const PetscInt &, get_spatial_dimension, (), (const));
+    MOCK_METHOD(const Int &, get_spatial_dimension, (), (const));
     MOCK_METHOD(const FieldValue &, get_field_value, (const std::string & field_name), (const));
     MOCK_METHOD(const FieldGradient &,
                 get_field_gradient,
@@ -79,7 +79,7 @@ public:
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldValue & u;
     const FieldGradient & u_x;
     const PetscReal & t;
@@ -96,7 +96,7 @@ TEST(BndJacobianFuncTest, test)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestProblem::parameters();
@@ -120,7 +120,7 @@ TEST(BndJacobianFuncTest, test)
     prob.create();
     bc.create();
 
-    PetscInt dim;
+    Int dim;
     EXPECT_CALL(prob, get_spatial_dimension()).Times(1).WillOnce(ReturnRef(dim));
     FieldValue val;
     EXPECT_CALL(prob, get_field_value(_)).Times(1).WillOnce(ReturnRef(val));

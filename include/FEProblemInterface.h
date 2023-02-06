@@ -22,43 +22,42 @@ public:
     FEProblemInterface(Problem * problem, const Parameters & params);
     ~FEProblemInterface() override;
 
-    PetscInt get_num_fields() const override;
+    Int get_num_fields() const override;
     std::vector<std::string> get_field_names() const override;
-    const std::string & get_field_name(PetscInt fid) const override;
-    PetscInt get_field_num_components(PetscInt fid) const override;
-    PetscInt get_field_id(const std::string & name) const override;
-    bool has_field_by_id(PetscInt fid) const override;
+    const std::string & get_field_name(Int fid) const override;
+    Int get_field_num_components(Int fid) const override;
+    Int get_field_id(const std::string & name) const override;
+    bool has_field_by_id(Int fid) const override;
     bool has_field_by_name(const std::string & name) const override;
-    PetscInt get_field_order(PetscInt fid) const override;
-    std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
-    void
-    set_field_component_name(PetscInt fid, PetscInt component, const std::string & name) override;
-    PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
+    Int get_field_order(Int fid) const override;
+    std::string get_field_component_name(Int fid, Int component) const override;
+    void set_field_component_name(Int fid, Int component, const std::string & name) override;
+    Int get_field_dof(Int point, Int fid) const override;
     Vec get_solution_vector_local() const override;
     WeakForm * get_weak_form() const override;
 
     /// Get number of auxiliary fields
     ///
     /// @return The number of auxiliary fields
-    virtual PetscInt get_num_aux_fields() const;
+    virtual Int get_num_aux_fields() const;
 
     /// Get auxiliary field name
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field name
-    virtual const std::string & get_aux_field_name(PetscInt fid) const;
+    virtual const std::string & get_aux_field_name(Int fid) const;
 
     /// Get auxiliary field ID
     ///
     /// @param name Auxiliary field name
     /// @param Auxiliary field ID
-    virtual PetscInt get_aux_field_id(const std::string & name) const;
+    virtual Int get_aux_field_id(const std::string & name) const;
 
     /// Do we have auxiliary field with specified ID
     ///
     /// @param fid The ID of the auxiliary field
     /// @return True if the auxiliary field exists, otherwise False
-    virtual bool has_aux_field_by_id(PetscInt fid) const;
+    virtual bool has_aux_field_by_id(Int fid) const;
 
     /// Do we have auxiliary field with specified name
     ///
@@ -84,7 +83,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    virtual PetscInt add_fe(const std::string & name, PetscInt nc, PetscInt k);
+    virtual Int add_fe(const std::string & name, Int nc, Int k);
 
     /// Set a volumetric field
     ///
@@ -92,7 +91,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void set_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+    virtual void set_fe(Int id, const std::string & name, Int nc, Int k);
 
     /// Adds a volumetric auxiliary field
     ///
@@ -100,7 +99,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    virtual PetscInt add_aux_fe(const std::string & name, PetscInt nc, PetscInt k);
+    virtual Int add_aux_fe(const std::string & name, Int nc, Int k);
 
     /// Set a volumetric auxiliary field
     ///
@@ -108,14 +107,14 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void set_aux_fe(PetscInt id, const std::string & name, PetscInt nc, PetscInt k);
+    virtual void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
 
     /// Add auxiliary field
     ///
     /// @param aux Auxiliary field object to add
     virtual void add_auxiliary_field(AuxiliaryField * aux);
 
-    virtual const PetscInt & get_spatial_dimension() const;
+    virtual const Int & get_spatial_dimension() const;
 
     virtual const FieldValue & get_field_value(const std::string & field_name) const;
 
@@ -133,8 +132,8 @@ public:
 
     /// Integrate
     virtual PetscErrorCode integrate(PetscDS ds,
-                                     PetscInt field,
-                                     PetscInt n_elems,
+                                     Int field,
+                                     Int n_elems,
                                      PetscFEGeom * cell_geom,
                                      const PetscScalar coefficients[],
                                      PetscDS ds_aux,
@@ -143,9 +142,9 @@ public:
 
     /// Integrate field over a boundary
     virtual PetscErrorCode integrate_bnd(PetscDS ds,
-                                         PetscInt field,
+                                         Int field,
                                          PetscBdPointFunc obj_func,
-                                         PetscInt n_elems,
+                                         Int n_elems,
                                          PetscFEGeom * face_geom,
                                          const PetscScalar coefficients[],
                                          PetscDS ds_aux,
@@ -155,7 +154,7 @@ public:
     /// Integrate residual
     virtual PetscErrorCode integrate_residual(PetscDS ds,
                                               PetscFormKey key,
-                                              PetscInt n_elems,
+                                              Int n_elems,
                                               PetscFEGeom * cell_geom,
                                               const PetscScalar coefficients[],
                                               const PetscScalar coefficients_t[],
@@ -167,7 +166,7 @@ public:
     /// Integrate residual over a boundary
     virtual PetscErrorCode integrate_bnd_residual(PetscDS ds,
                                                   PetscFormKey key,
-                                                  PetscInt n_elems,
+                                                  Int n_elems,
                                                   PetscFEGeom * face_geom,
                                                   const PetscScalar coefficients[],
                                                   const PetscScalar coefficients_t[],
@@ -180,7 +179,7 @@ public:
     virtual PetscErrorCode integrate_jacobian(PetscDS ds,
                                               PetscFEJacobianType jtype,
                                               PetscFormKey key,
-                                              PetscInt n_elems,
+                                              Int n_elems,
                                               PetscFEGeom * cell_geom,
                                               const PetscScalar coefficients[],
                                               const PetscScalar coefficients_t[],
@@ -193,7 +192,7 @@ public:
     // Integrate Jacobian over a boundary
     virtual PetscErrorCode integrate_bnd_jacobian(PetscDS ds,
                                                   PetscFormKey key,
-                                                  PetscInt n_elems,
+                                                  Int n_elems,
                                                   PetscFEGeom * face_geom,
                                                   const PetscScalar coefficients[],
                                                   const PetscScalar coefficients_t[],
@@ -243,10 +242,10 @@ protected:
 
     PetscErrorCode update_element_vec(PetscFE fe,
                                       PetscTabulation tab,
-                                      PetscInt r,
+                                      Int r,
                                       PetscScalar tmp_basis[],
                                       PetscScalar tmp_basis_der[],
-                                      PetscInt e,
+                                      Int e,
                                       PetscFEGeom * fe_geom,
                                       PetscScalar f0[],
                                       PetscScalar f1[],
@@ -254,8 +253,8 @@ protected:
 
     PetscErrorCode update_element_mat(PetscFE fe_i,
                                       PetscFE fe_j,
-                                      PetscInt r,
-                                      PetscInt q,
+                                      Int r,
+                                      Int q,
                                       PetscTabulation tab_i,
                                       PetscScalar tmp_basis_i[],
                                       PetscScalar tmp_basis_der_i[],
@@ -267,16 +266,16 @@ protected:
                                       const PetscScalar g1[],
                                       const PetscScalar g2[],
                                       const PetscScalar g3[],
-                                      PetscInt e_offset,
-                                      PetscInt tot_dim,
-                                      PetscInt offset_i,
-                                      PetscInt offset_j,
+                                      Int e_offset,
+                                      Int tot_dim,
+                                      Int offset_i,
+                                      Int offset_j,
                                       PetscScalar elem_mat[]);
 
     PetscErrorCode evaluate_field_jets(PetscDS ds,
-                                       PetscInt nf,
-                                       PetscInt r,
-                                       PetscInt q,
+                                       Int nf,
+                                       Int r,
+                                       Int q,
                                        PetscTabulation tab[],
                                        PetscFEGeom * fe_geom,
                                        const PetscScalar coefficients[],
@@ -285,13 +284,13 @@ protected:
                                        PetscScalar u_x[],
                                        PetscScalar u_t[]);
 
-    PetscInt get_next_id(const std::vector<PetscInt> & ids) const;
+    Int get_next_id(const std::vector<Int> & ids) const;
 
     /// PETSc section
     PetscSection section;
 
     /// Quadrature order
-    PetscInt qorder;
+    Int qorder;
 
     /// Field information
     struct FieldInfo {
@@ -299,7 +298,7 @@ protected:
         std::string name;
 
         /// Field number
-        PetscInt id;
+        Int id;
 
         /// FE object
         PetscFE fe;
@@ -308,10 +307,10 @@ protected:
         DMLabel block;
 
         /// The number of components
-        PetscInt nc;
+        Int nc;
 
         /// The degree k of the space
-        PetscInt k;
+        Int k;
 
         /// Component names
         std::vector<std::string> component_names;
@@ -325,11 +324,7 @@ protected:
         /// Time derivative (used during assembling)
         FieldValue dots;
 
-        FieldInfo(const std::string & name,
-                  PetscInt id,
-                  PetscInt nc,
-                  PetscInt k,
-                  const PetscInt & dim) :
+        FieldInfo(const std::string & name, Int id, Int nc, Int k, const Int & dim) :
             name(name),
             id(id),
             fe(nullptr),
@@ -358,16 +353,16 @@ protected:
     };
 
     /// Fields in the problem
-    std::map<PetscInt, FieldInfo> fields;
+    std::map<Int, FieldInfo> fields;
 
     /// Map from field name to field ID
-    std::map<std::string, PetscInt> fields_by_name;
+    std::map<std::string, Int> fields_by_name;
 
     /// Auxiliary fields in the problem
-    std::map<PetscInt, FieldInfo> aux_fields;
+    std::map<Int, FieldInfo> aux_fields;
 
     /// Map from auxiliary field name to auxiliary field ID
-    std::map<std::string, PetscInt> aux_fields_by_name;
+    std::map<std::string, Int> aux_fields_by_name;
 
     /// List of auxiliary field objects
     std::vector<AuxiliaryField *> auxs;
@@ -399,7 +394,7 @@ protected:
     /// Data used during assembling procedure
     struct AssemblyData {
         /// Spatial dimension
-        PetscInt dim;
+        Int dim;
         /// Values of primary variables
         PetscScalar * u;
         /// Time derivative of primary variable values
@@ -407,9 +402,9 @@ protected:
         /// Gradient of primary values
         PetscScalar * u_x;
         /// Offset into primary variable values (when having multiple fields)
-        PetscInt * u_offset;
+        Int * u_offset;
         /// Offset into gradient of primary variables (when having multiple fields)
-        PetscInt * u_offset_x;
+        Int * u_offset_x;
         /// Spatial coordinates
         Point xyz;
         /// Outward normals when doing surface integration
@@ -419,9 +414,9 @@ protected:
         /// Gradients of auxiliary fields
         PetscScalar * a_x;
         /// Offset into auxiliary variable values (when having multiple fields)
-        PetscInt * a_offset;
+        Int * a_offset;
         /// Offset into gradient of auxiliary variables (when having multiple fields)
-        PetscInt * a_offset_x;
+        Int * a_offset_x;
         /// Time at which are our forms evaluated (NOTE: this is not the simulation time)
         PetscReal time;
         /// the multiplier a for dF/dU_t

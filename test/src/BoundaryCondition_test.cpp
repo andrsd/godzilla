@@ -22,11 +22,8 @@ public:
     explicit MockBoundaryCondition(const Parameters & params) : BoundaryCondition(params) {}
 
     MOCK_METHOD((DMBoundaryConditionType), get_bc_type, (), (const));
-    MOCK_METHOD(void,
-                evaluate,
-                (PetscInt, PetscReal, const PetscReal x[], PetscInt Nc, PetscScalar u[]),
-                ());
-    MOCK_METHOD(const std::vector<PetscInt> &, get_components, (), (const));
+    MOCK_METHOD(void, evaluate, (Int, PetscReal, const PetscReal x[], Int Nc, PetscScalar u[]), ());
+    MOCK_METHOD(const std::vector<Int> &, get_components, (), (const));
     virtual void
     add_boundary() override
     {

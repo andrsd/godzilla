@@ -42,7 +42,7 @@ FunctionEvaluator::register_function(Function * fn)
 }
 
 PetscReal
-FunctionEvaluator::evaluate(PetscInt dim, PetscReal time, const PetscReal x[])
+FunctionEvaluator::evaluate(Int dim, PetscReal time, const PetscReal x[])
 {
     _F_;
     auto * xx = const_cast<PetscReal *>(x);
@@ -66,11 +66,7 @@ FunctionEvaluator::evaluate(PetscInt dim, PetscReal time, const PetscReal x[])
 }
 
 bool
-FunctionEvaluator::evaluate(PetscInt dim,
-                            PetscReal time,
-                            const PetscReal x[],
-                            PetscInt nc,
-                            PetscReal u[])
+FunctionEvaluator::evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscReal u[])
 {
     _F_;
     auto * xx = const_cast<PetscReal *>(x);

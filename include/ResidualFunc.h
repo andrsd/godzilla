@@ -17,7 +17,7 @@ protected:
     /// Get spatial dimension
     ///
     /// @return Spatial dimension
-    const PetscInt & get_spatial_dimension() const;
+    const Int & get_spatial_dimension() const;
 
     /// Get values of a field
     ///

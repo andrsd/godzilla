@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Types.h"
 #include "Object.h"
 #include "PrintInterface.h"
 #include "petscdm.h"
@@ -35,7 +36,7 @@ public:
     /// Get mesh this problem is using
     virtual const Mesh * get_mesh() const;
     /// Get problem spatial dimension
-    virtual PetscInt get_dimension() const;
+    virtual Int get_dimension() const;
 
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
@@ -45,7 +46,7 @@ public:
     /// Get time step number
     ///
     /// @return Time step number
-    const PetscInt & get_step_num() const;
+    const Int & get_step_num() const;
 
     /// Get list of functions
     ///
@@ -115,7 +116,7 @@ protected:
     PetscReal time;
 
     /// Time step number
-    PetscInt step_num;
+    Int step_num;
 
 public:
     static Parameters parameters();

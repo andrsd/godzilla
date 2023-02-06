@@ -1,6 +1,7 @@
 #pragma once
 
 #include "petscds.h"
+#include "Types.h"
 #include "DiscreteProblemInterface.h"
 
 namespace godzilla {
@@ -28,7 +29,7 @@ public:
     /// Get number of fields
     ///
     /// @return The number of fields
-    virtual PetscInt get_num_fields() const = 0;
+    virtual Int get_num_fields() const = 0;
 
     /// Get list of all field names
     ///
@@ -38,25 +39,25 @@ public:
     /// Get field name
     ///
     /// @param fid Field ID
-    virtual const std::string & get_field_name(PetscInt fid) const = 0;
+    virtual const std::string & get_field_name(Int fid) const = 0;
 
     /// Get number of field components
     ///
     /// @param fid Field ID
     /// @return Number of components
-    virtual PetscInt get_field_num_components(PetscInt fid) const = 0;
+    virtual Int get_field_num_components(Int fid) const = 0;
 
     /// Get field ID
     ///
     /// @param name Field name
     /// @param Field ID
-    virtual PetscInt get_field_id(const std::string & name) const = 0;
+    virtual Int get_field_id(const std::string & name) const = 0;
 
     /// Do we have field with specified ID
     ///
     /// @param fid The ID of the field
     /// @return True if the field exists, otherwise False
-    virtual bool has_field_by_id(PetscInt fid) const = 0;
+    virtual bool has_field_by_id(Int fid) const = 0;
 
     /// Do we have field with specified name
     ///
@@ -68,22 +69,21 @@ public:
     ///
     /// @param fid Field ID
     /// @return Field order
-    virtual PetscInt get_field_order(PetscInt fid) const = 0;
+    virtual Int get_field_order(Int fid) const = 0;
 
     /// Get component name of a field
     ///
     /// @param fid Field ID
     /// @param component Component index
     /// @return Component name
-    virtual std::string get_field_component_name(PetscInt fid, PetscInt component) const = 0;
+    virtual std::string get_field_component_name(Int fid, Int component) const = 0;
 
     /// Set the name of a component of afield variable
     ///
     /// @param fid Field ID
     /// @param component Component index
     /// @param name Component name
-    virtual void
-    set_field_component_name(PetscInt fid, PetscInt component, const std::string & name) = 0;
+    virtual void set_field_component_name(Int fid, Int component, const std::string & name) = 0;
 
     /// Add initial condition
     ///
@@ -100,7 +100,7 @@ public:
     /// @param point Point
     /// @param fid Field ID
     /// @return The offset
-    virtual PetscInt get_field_dof(PetscInt point, PetscInt fid) const = 0;
+    virtual Int get_field_dof(Int point, Int fid) const = 0;
 
     /// Gets a local vector with the coordinates associated with this problem's mesh
     ///

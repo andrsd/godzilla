@@ -73,7 +73,7 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 3;
+    mesh_pars.set<Int>("nx") = 3;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
@@ -111,8 +111,8 @@ TEST(ExplicitFELinearProblemTest, solve)
     EXPECT_TRUE(prob.converged());
 
     Vec sln = prob.get_solution_vector();
-    PetscInt ni = 2;
-    PetscInt ix[2] = { 0, 1 };
+    Int ni = 2;
+    Int ix[2] = { 0, 1 };
     PetscScalar x[2];
     VecGetValues(sln, ni, ix, x);
     EXPECT_NEAR(x[0], 0.0118, 1e-15);
@@ -125,7 +125,7 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
@@ -163,7 +163,7 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 2;
+        params->set<Int>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
 

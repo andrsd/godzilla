@@ -15,13 +15,13 @@ TEST(BoxMeshTest, api)
     params.set<std::string>("_name") = "box_mesh";
     params.set<PetscReal>("xmin") = 1;
     params.set<PetscReal>("xmax") = 4;
-    params.set<PetscInt>("nx") = 9;
+    params.set<Int>("nx") = 9;
     params.set<PetscReal>("ymin") = 2;
     params.set<PetscReal>("ymax") = 5;
-    params.set<PetscInt>("ny") = 8;
+    params.set<Int>("ny") = 8;
     params.set<PetscReal>("zmin") = 3;
     params.set<PetscReal>("zmax") = 6;
-    params.set<PetscInt>("nz") = 7;
+    params.set<Int>("nz") = 7;
     BoxMesh mesh(params);
 
     EXPECT_EQ(mesh.get_x_min(), 1);
@@ -54,7 +54,7 @@ TEST(BoxMeshTest, api)
 
     Vec coords;
     DMGetCoordinates(dm, &coords);
-    PetscInt n;
+    Int n;
     VecGetSize(coords, &n);
     EXPECT_EQ(n, 2160);
 }
@@ -70,13 +70,13 @@ TEST(BoxMeshTest, incorrect_dims)
     params.set<std::string>("_name") = "obj";
     params.set<PetscReal>("xmin") = 4;
     params.set<PetscReal>("xmax") = 1;
-    params.set<PetscInt>("nx") = 9;
+    params.set<Int>("nx") = 9;
     params.set<PetscReal>("ymin") = 5;
     params.set<PetscReal>("ymax") = 2;
-    params.set<PetscInt>("ny") = 8;
+    params.set<Int>("ny") = 8;
     params.set<PetscReal>("zmin") = 6;
     params.set<PetscReal>("zmax") = 3;
-    params.set<PetscInt>("nz") = 7;
+    params.set<Int>("nz") = 7;
     BoxMesh mesh(params);
 
     app.check_integrity();

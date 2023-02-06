@@ -48,7 +48,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscReal>("xmin") = 0;
     mesh_params.set<PetscReal>("xmax") = 1;
-    mesh_params.set<PetscInt>("nx") = 4;
+    mesh_params.set<Int>("nx") = 4;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
@@ -72,7 +72,7 @@ TEST(MeshPartitioningOutputTest, output)
     mesh_params.set<const App *>("_app") = &app;
     mesh_params.set<PetscReal>("xmin") = 0;
     mesh_params.set<PetscReal>("xmax") = 1;
-    mesh_params.set<PetscInt>("nx") = 4;
+    mesh_params.set<Int>("nx") = 4;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = G1DTestLinearProblem::parameters();

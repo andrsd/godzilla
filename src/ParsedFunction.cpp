@@ -18,12 +18,7 @@ parsed_function_eval(void * ctx, double t, double x, double y, double z)
 }
 
 static PetscErrorCode
-parsed_function(PetscInt dim,
-                PetscReal time,
-                const PetscReal x[],
-                PetscInt nc,
-                PetscScalar u[],
-                void * ctx)
+parsed_function(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[], void * ctx)
 {
     auto * fn = static_cast<ParsedFunction *>(ctx);
     fn->evaluate(dim, time, x, nc, u);
@@ -75,11 +70,7 @@ ParsedFunction::register_callback(mu::Parser & parser)
 }
 
 void
-ParsedFunction::evaluate(PetscInt dim,
-                         PetscReal time,
-                         const PetscReal x[],
-                         PetscInt nc,
-                         PetscScalar u[])
+ParsedFunction::evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[])
 {
     _F_;
     this->evalr.evaluate(dim, time, x, nc, u);

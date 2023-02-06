@@ -21,7 +21,7 @@ DirichletBC::DirichletBC(const Parameters & params) :
     components(this->num_comps, 0)
 {
     _F_;
-    for (PetscInt i = 0; i < this->num_comps; i++)
+    for (Int i = 0; i < this->num_comps; i++)
         this->components[i] = i;
 }
 
@@ -33,7 +33,7 @@ DirichletBC::create()
     FunctionInterface::create();
 }
 
-const std::vector<PetscInt> &
+const std::vector<Int> &
 DirichletBC::get_components() const
 {
     return this->components;
@@ -49,22 +49,14 @@ DirichletBC::get_function_t()
 }
 
 void
-DirichletBC::evaluate(PetscInt dim,
-                      PetscReal time,
-                      const PetscReal x[],
-                      PetscInt nc,
-                      PetscScalar u[])
+DirichletBC::evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[])
 {
     _F_;
     evaluate_func(dim, time, x, nc, u);
 }
 
 void
-DirichletBC::evaluate_t(PetscInt dim,
-                        PetscReal time,
-                        const PetscReal x[],
-                        PetscInt nc,
-                        PetscScalar u[])
+DirichletBC::evaluate_t(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[])
 {
     _F_;
     evaluate_func_t(dim, time, x, nc, u);

@@ -25,8 +25,7 @@ public:
     /// @param x The coordinates
     /// @param nc The number of components
     /// @param u The computed values
-    virtual void
-    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+    virtual void evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscScalar u[]);
 
     /// Get pointer to the C function that will be passed into PETSc API
     virtual PetscFunc * get_function();

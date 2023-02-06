@@ -2,6 +2,7 @@
 
 #include "muParser/muParser.h"
 #include "petsc.h"
+#include "Types.h"
 
 namespace godzilla {
 
@@ -39,9 +40,9 @@ public:
     /// @param dim Spatial dimension
     /// @param time Simulation time
     /// @param x Spatial location
-    PetscReal evaluate(PetscInt dim, PetscReal time, const PetscReal x[]);
+    PetscReal evaluate(Int dim, PetscReal time, const PetscReal x[]);
 
-    bool evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscReal u[]);
+    bool evaluate(Int dim, PetscReal time, const PetscReal x[], Int nc, PetscReal u[]);
 
 protected:
     /// Underlying muParser object

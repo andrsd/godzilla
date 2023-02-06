@@ -10,13 +10,13 @@ IndexSet::IndexSet(IS is) : is(is), indices(nullptr) {}
 
 IndexSet::~IndexSet() {}
 
-const PetscInt *
+const Int *
 IndexSet::data() const
 {
     return this->indices;
 }
 
-PetscInt
+Int
 IndexSet::operator[](unsigned int i) const
 {
     return this->indices[i];
@@ -41,20 +41,20 @@ IndexSet::restore_indices()
     PETSC_CHECK(ISRestoreIndices(this->is, &this->indices));
 }
 
-PetscInt
+Int
 IndexSet::get_size() const
 {
     assert(this->is != nullptr);
-    PetscInt n;
+    Int n;
     PETSC_CHECK(ISGetSize(this->is, &n));
     return n;
 }
 
-PetscInt
+Int
 IndexSet::get_local_size() const
 {
     assert(this->is != nullptr);
-    PetscInt n;
+    Int n;
     PETSC_CHECK(ISGetLocalSize(this->is, &n));
     return n;
 }
@@ -66,11 +66,11 @@ IndexSet::get_indices()
     PETSC_CHECK(ISGetIndices(this->is, &this->indices));
 }
 
-std::vector<PetscInt>
+std::vector<Int>
 IndexSet::to_std_vector()
 {
-    std::vector<PetscInt> idxs;
-    PetscInt n = get_size();
+    std::vector<Int> idxs;
+    Int n = get_size();
     idxs.assign(this->indices, this->indices + n);
     return idxs;
 }
@@ -84,7 +84,7 @@ IndexSet::values_from_label(DMLabel label)
 }
 
 IndexSet
-IndexSet::stratum_from_label(DMLabel label, PetscInt stratum_value)
+IndexSet::stratum_from_label(DMLabel label, Int stratum_value)
 {
     IS is;
     PETSC_CHECK(DMLabelGetStratumIS(label, stratum_value, &is));

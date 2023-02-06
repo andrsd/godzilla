@@ -9,10 +9,10 @@ namespace godzilla {
 REGISTER_OBJECT(ConstantAuxiliaryField);
 
 static PetscErrorCode
-constant_auxiliary_field(PetscInt dim,
+constant_auxiliary_field(Int dim,
                          PetscReal time,
                          const PetscReal x[],
-                         PetscInt nc,
+                         Int nc,
                          PetscScalar u[],
                          void * ctx)
 {
@@ -46,7 +46,7 @@ ConstantAuxiliaryField::create()
     AuxiliaryField::create();
 }
 
-PetscInt
+Int
 ConstantAuxiliaryField::get_num_components() const
 {
     return this->num_comps;
@@ -59,14 +59,10 @@ ConstantAuxiliaryField::get_func() const
 }
 
 void
-ConstantAuxiliaryField::evaluate(PetscInt,
-                                 PetscReal,
-                                 const PetscReal[],
-                                 PetscInt nc,
-                                 PetscScalar u[])
+ConstantAuxiliaryField::evaluate(Int, PetscReal, const PetscReal[], Int nc, PetscScalar u[])
 {
     _F_;
-    for (PetscInt c = 0; c < nc; c++)
+    for (Int c = 0; c < nc; c++)
         u[c] = this->values[c];
 }
 

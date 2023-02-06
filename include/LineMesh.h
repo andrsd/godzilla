@@ -23,7 +23,7 @@ public:
     /// Get the number of divisions in the x-direction
     ///
     /// @return Number of divisions in the x-direction
-    NO_DISCARD PetscInt get_nx() const;
+    NO_DISCARD Int get_nx() const;
 
 protected:
     void create_dm() override;
@@ -33,7 +33,7 @@ protected:
     /// Maximum in the x direction
     const PetscReal & xmax;
     /// Number of mesh point in the x direction
-    const PetscInt & nx;
+    const Int & nx;
     /// create intermediate mesh pieces (edges, faces)
     PetscBool interpolate;
 

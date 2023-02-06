@@ -22,22 +22,18 @@ ConstantIC::ConstantIC(const Parameters & params) :
     _F_;
 }
 
-PetscInt
+Int
 ConstantIC::get_num_components() const
 {
     _F_;
-    return (PetscInt) this->values.size();
+    return (Int) this->values.size();
 }
 
 void
-ConstantIC::evaluate(PetscInt dim,
-                     PetscReal time,
-                     const PetscReal x[],
-                     PetscInt Nc,
-                     PetscScalar u[])
+ConstantIC::evaluate(Int dim, PetscReal time, const PetscReal x[], Int Nc, PetscScalar u[])
 {
     _F_;
-    for (PetscInt i = 0; i < Nc; i++)
+    for (Int i = 0; i < Nc; i++)
         u[i] = this->values[i];
 }
 

@@ -46,8 +46,8 @@ void
 G1DTestNonlinearProblem::create()
 {
     DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[2] = { 1, 0 };
+    Int nc[1] = { 1 };
+    Int n_dofs[2] = { 1, 0 };
     DMSetNumFields(dm, 1);
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
@@ -63,8 +63,8 @@ G1DTestNonlinearProblem::call_initial_guess()
 PetscErrorCode
 G1DTestNonlinearProblem::compute_residual(Vec x, Vec f)
 {
-    PetscInt ni = 2;
-    PetscInt ix[] = { 0, 1 };
+    Int ni = 2;
+    Int ix[] = { 0, 1 };
     PetscScalar y[2];
     VecGetValues(x, ni, ix, y);
 
@@ -97,7 +97,7 @@ TEST(NonlinearProblemTest, initial_guess)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
@@ -120,7 +120,7 @@ TEST(NonlinearProblemTest, solve)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
@@ -137,8 +137,8 @@ TEST(NonlinearProblemTest, solve)
 
     // extract the solution and make sure it is [2, 3]
     const Vec x = prob.get_solution_vector();
-    PetscInt ni = 2;
-    PetscInt ix[2] = { 0, 1 };
+    Int ni = 2;
+    Int ix[2] = { 0, 1 };
     PetscScalar xx[2];
     VecGetValues(x, ni, ix, xx);
 
@@ -152,7 +152,7 @@ TEST(NonlinearProblemTest, compute_callbacks)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = NonlinearProblem::parameters();
@@ -189,7 +189,7 @@ TEST(NonlinearProblemTest, run)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
@@ -222,7 +222,7 @@ TEST(NonlinearProblemTest, line_search_type)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
@@ -257,7 +257,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 

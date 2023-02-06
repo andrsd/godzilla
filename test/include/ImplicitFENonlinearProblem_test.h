@@ -13,7 +13,7 @@ public:
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 2;
+        params->set<Int>("nx") = 2;
         return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
 

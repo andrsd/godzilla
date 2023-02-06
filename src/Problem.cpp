@@ -57,7 +57,7 @@ Problem::get_mesh() const
     return this->mesh;
 }
 
-PetscInt
+Int
 Problem::get_dimension() const
 {
     _F_;
@@ -71,7 +71,7 @@ Problem::get_time() const
     return this->time;
 }
 
-const PetscInt &
+const Int &
 Problem::get_step_num() const
 {
     _F_;

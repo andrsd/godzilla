@@ -13,7 +13,7 @@ class TestBC : public NaturalRiemannBC {
 public:
     explicit TestBC(const Parameters & params) : NaturalRiemannBC(params), comps({ 0 }) {}
 
-    virtual const std::vector<PetscInt> &
+    virtual const std::vector<Int> &
     get_components() const override
     {
         return this->comps;
@@ -30,7 +30,7 @@ public:
     }
 
 protected:
-    std::vector<PetscInt> comps;
+    std::vector<Int> comps;
 
 public:
     static Parameters
@@ -56,13 +56,13 @@ protected:
     }
 
     virtual void
-    compute_flux(PetscInt dim,
-                 PetscInt nf,
+    compute_flux(Int dim,
+                 Int nf,
                  const PetscReal x[],
                  const PetscReal n[],
                  const PetscScalar uL[],
                  const PetscScalar uR[],
-                 PetscInt n_consts,
+                 Int n_consts,
                  const PetscScalar constants[],
                  PetscScalar flux[]) override
     {
@@ -77,7 +77,7 @@ TEST(NaturalRiemannBCTest, api)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();

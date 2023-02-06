@@ -28,8 +28,8 @@ TEST_F(LinearProblemTest, solve)
 
     // extract the solution and make sure it is [2, 3]
     Vec x = prob->get_solution_vector();
-    PetscInt ni = 2;
-    PetscInt ix[2] = { 0, 1 };
+    Int ni = 2;
+    Int ix[2] = { 0, 1 };
     PetscScalar xx[2];
     VecGetValues(x, ni, ix, xx);
 
@@ -84,8 +84,8 @@ void
 G1DTestLinearProblem::create()
 {
     DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[2] = { 1, 0 };
+    Int nc[1] = { 1 };
+    Int n_dofs[2] = { 1, 0 };
     DMSetNumFields(dm, 1);
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
@@ -133,8 +133,8 @@ void
 G2DTestLinearProblem::create()
 {
     DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[3] = { 1, 0, 0 };
+    Int nc[1] = { 1 };
+    Int n_dofs[3] = { 1, 0, 0 };
     DMSetNumFields(dm, 1);
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
@@ -158,7 +158,7 @@ G2DTestLinearProblem::compute_rhs_callback(Vec b)
 PetscErrorCode
 G2DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
 {
-    for (PetscInt i = 0; i < 4; i++)
+    for (Int i = 0; i < 4; i++)
         MatSetValue(A, i, i, 1, INSERT_VALUES);
 
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
@@ -184,8 +184,8 @@ void
 G3DTestLinearProblem::create()
 {
     DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[4] = { 1, 0, 0, 0 };
+    Int nc[1] = { 1 };
+    Int n_dofs[4] = { 1, 0, 0, 0 };
     DMSetNumFields(dm, 1);
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
@@ -213,7 +213,7 @@ G3DTestLinearProblem::compute_rhs_callback(Vec b)
 PetscErrorCode
 G3DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
 {
-    for (PetscInt i = 0; i < 8; i++)
+    for (Int i = 0; i < 8; i++)
         MatSetValue(A, i, i, 1, INSERT_VALUES);
 
     MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
