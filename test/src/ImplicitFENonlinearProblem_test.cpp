@@ -42,12 +42,12 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     prob->run();
 
-    const Vec x = prob->get_solution_vector();
+    auto x = prob->get_solution_vector();
 
     Int ni = 1;
     Int ix[1] = { 0 };
     Scalar xx[1];
-    VecGetValues(x, ni, ix, xx);
+    VecGetValues((Vec) x, ni, ix, xx);
 
     EXPECT_NEAR(xx[0], 0.5, 1e-7);
 }

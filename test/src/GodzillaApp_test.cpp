@@ -36,7 +36,7 @@ public:
     MOCK_METHOD(void, solve, ());
     MOCK_METHOD(bool, converged, ());
     MOCK_METHOD(DM, get_dm, (), (const));
-    MOCK_METHOD(Vec, get_solution_vector, (), (const));
+    MOCK_METHOD(const Vector &, get_solution_vector, (), (const));
 };
 
 } // namespace

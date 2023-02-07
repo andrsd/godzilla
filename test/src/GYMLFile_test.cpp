@@ -40,12 +40,14 @@ public:
                             PETSC_FALSE,
                             &this->dm);
         DMSetUp(this->dm);
-        DMCreateGlobalVector(this->dm, &this->x);
+        Vec glob_x;
+        DMCreateGlobalVector(this->dm, &glob_x);
+        this->x = Vector(glob_x);
     }
 
     virtual ~GTestProblem()
     {
-        VecDestroy(&this->x);
+        this->x.destroy();
         DMDestroy(&this->dm);
     }
 
@@ -54,7 +56,7 @@ public:
     {
         return this->dm;
     }
-    Vec
+    const Vector &
     get_solution_vector() const override
     {
         return this->x;
@@ -83,7 +85,7 @@ public:
 
 protected:
     DM dm;
-    Vec x;
+    Vector x;
 
 public:
     static Parameters parameters();

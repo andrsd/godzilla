@@ -3,6 +3,7 @@
 #include "Types.h"
 #include "Object.h"
 #include "PrintInterface.h"
+#include "Vector.h"
 #include "petscdm.h"
 #include "petscpartitioner.h"
 
@@ -32,7 +33,7 @@ public:
     /// provide DM for the underlying KSP object
     virtual DM get_dm() const = 0;
     /// Return solution vector
-    virtual Vec get_solution_vector() const = 0;
+    virtual const Vector & get_solution_vector() const = 0;
     /// Get mesh this problem is using
     virtual const Mesh * get_mesh() const;
     /// Get problem spatial dimension

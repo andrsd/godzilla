@@ -35,11 +35,13 @@ TEST(ProblemTest, add_pp)
             return nullptr;
         }
 
-        virtual Vec
+        virtual const Vector &
         get_solution_vector() const
         {
-            return nullptr;
+            return this->sln;
         }
+
+        Vector sln;
     };
 
     class TestPostprocessor : public Postprocessor {

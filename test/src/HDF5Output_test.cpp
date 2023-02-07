@@ -167,7 +167,7 @@ TEST_F(HDF5OutputTest, output)
     PetscObjectSetName((PetscObject) sln, "sln");
     PetscViewerHDF5Open(PETSC_COMM_WORLD, file_name.c_str(), FILE_MODE_READ, &viewer);
     VecLoad(sln, viewer);
-    VecAXPY(sln, -1.0, prob->get_solution_vector());
+    VecAXPY(sln, -1.0, (Vec) prob->get_solution_vector());
     VecNorm(sln, NORM_INFINITY, &diff);
     EXPECT_LT(diff, PETSC_MACHINE_EPSILON);
     PetscViewerDestroy(&viewer);

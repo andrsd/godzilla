@@ -116,11 +116,13 @@ TEST_F(ExodusIIOutputTest, fe_check)
         {
             return nullptr;
         }
-        Vec
+        const Vector &
         get_solution_vector() const
         {
-            return nullptr;
+            return this->sln;
         }
+
+        Vector sln;
     };
 
     testing::internal::CaptureStderr();

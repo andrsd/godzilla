@@ -153,7 +153,7 @@ DiscreteProblemInterface::set_zero_initial_guess()
                                   initial_guess,
                                   nullptr,
                                   INSERT_VALUES,
-                                  this->problem->get_solution_vector()));
+                                  (Vec) this->problem->get_solution_vector()));
 }
 
 void
@@ -175,7 +175,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
                                   ic_funcs,
                                   ic_ctxs,
                                   INSERT_VALUES,
-                                  this->problem->get_solution_vector()));
+                                  (Vec) this->problem->get_solution_vector()));
 }
 
 void
@@ -203,7 +203,7 @@ DiscreteProblemInterface::build_local_solution_vector(Vec sln) const
 {
     DM dm = this->unstr_mesh->get_dm();
     Real time = this->problem->get_time();
-    PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
+    PETSC_CHECK(DMGlobalToLocal(dm, (Vec) this->problem->get_solution_vector(), INSERT_VALUES, sln));
     PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, nullptr, nullptr, nullptr));
 }
 

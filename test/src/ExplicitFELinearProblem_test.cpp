@@ -110,11 +110,11 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     EXPECT_TRUE(prob.converged());
 
-    Vec sln = prob.get_solution_vector();
+    auto sln = prob.get_solution_vector();
     Int ni = 2;
     Int ix[2] = { 0, 1 };
     Scalar x[2];
-    VecGetValues(sln, ni, ix, x);
+    VecGetValues((Vec) sln, ni, ix, x);
     EXPECT_NEAR(x[0], 0.0118, 1e-15);
     EXPECT_NEAR(x[1], 0.0098, 1e-15);
 }

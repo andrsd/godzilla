@@ -18,7 +18,7 @@ public:
     void solve() override;
     void run() override;
     bool converged() override;
-    NO_DISCARD Vec get_solution_vector() const override;
+    NO_DISCARD const Vector & get_solution_vector() const override;
 
 protected:
     /// provide DM for the underlying KSP object

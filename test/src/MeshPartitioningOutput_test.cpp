@@ -31,11 +31,13 @@ public:
     {
         return nullptr;
     }
-    virtual Vec
+    virtual const Vector &
     get_solution_vector() const override
     {
-        return nullptr;
+        return this->sln;
     }
+
+    Vector sln;
 };
 
 } // namespace

@@ -106,9 +106,9 @@ TEST(NonlinearProblemTest, initial_guess)
     prob.create();
     prob.call_initial_guess();
 
-    const Vec x = prob.get_solution_vector();
+    auto x = prob.get_solution_vector();
     Real l2_norm = 0;
-    VecNorm(x, NORM_2, &l2_norm);
+    VecNorm((Vec) x, NORM_2, &l2_norm);
     EXPECT_DOUBLE_EQ(l2_norm, 0.);
 }
 
@@ -134,11 +134,11 @@ TEST(NonlinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     // extract the solution and make sure it is [2, 3]
-    const Vec x = prob.get_solution_vector();
+    auto x = prob.get_solution_vector();
     Int ni = 2;
     Int ix[2] = { 0, 1 };
     Scalar xx[2];
-    VecGetValues(x, ni, ix, xx);
+    VecGetValues((Vec) x, ni, ix, xx);
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);

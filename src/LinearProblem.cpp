@@ -77,11 +77,11 @@ LinearProblem::get_dm() const
     return this->mesh->get_dm();
 }
 
-Vec
+const Vector &
 LinearProblem::get_solution_vector() const
 {
     _F_;
-    return (Vec) this->x;
+    return this->x;
 }
 
 void

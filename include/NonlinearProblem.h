@@ -18,7 +18,7 @@ public:
     void run() override;
     void solve() override;
     bool converged() override;
-    Vec get_solution_vector() const override;
+    const Vector & get_solution_vector() const override;
     /// Method to compute residual. Called from the PETsc callback
     virtual PetscErrorCode compute_residual(const Vector & x, Vector & f);
     /// Method to compute Jacobian. Called from the PETsc callback
