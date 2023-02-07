@@ -11,6 +11,16 @@
 
 namespace godzilla {
 
+static PetscErrorCode
+__efelp_compute_rhs(DM dm, Real time, Vec x, Vec F, void * ctx)
+{
+    _F_;
+    auto * efep = static_cast<ExplicitFELinearProblem *>(ctx);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    return efep->compute_rhs(time, vec_x, vec_F);
+}
+
 namespace {
 
 class G0Identity : public JacobianFunc {
@@ -119,7 +129,7 @@ ExplicitFELinearProblem::set_up_callbacks()
     _F_;
     DM dm = get_dm();
     PETSC_CHECK(DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this));
-    PETSC_CHECK(DMTSSetRHSFunctionLocal(dm, DMPlexTSComputeRHSFunctionFEM, this));
+    PETSC_CHECK(DMTSSetRHSFunctionLocal(dm, __efelp_compute_rhs, this));
     PETSC_CHECK(DMTSCreateRHSMassMatrix(dm));
 }
 
@@ -142,6 +152,13 @@ ExplicitFELinearProblem::set_up_monitors()
     _F_;
     FENonlinearProblem::set_up_monitors();
     TransientProblemInterface::set_up_monitors();
+}
+
+PetscErrorCode
+ExplicitFELinearProblem::compute_rhs(Real time, const Vector & x, Vector & F)
+{
+    _F_;
+    return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, (Vec) x, (Vec) F, this);
 }
 
 void

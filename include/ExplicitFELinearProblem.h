@@ -17,6 +17,8 @@ public:
     bool converged() override;
     void solve() override;
 
+    virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+
 protected:
     void init() override;
     void set_up_callbacks() override;
