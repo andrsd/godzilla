@@ -19,7 +19,7 @@ public:
 
     void create() override;
 
-    PetscErrorCode compute_residual(Vec x, Vec f) override;
+    PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
     PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp) override;
 
 protected:

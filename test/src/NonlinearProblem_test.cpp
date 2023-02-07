@@ -20,7 +20,7 @@ public:
     virtual void create() override;
     void call_initial_guess();
 
-    PetscErrorCode compute_residual(Vec x, Vec f) override;
+    PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
     PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp) override;
 
 protected:
@@ -61,18 +61,16 @@ G1DTestNonlinearProblem::call_initial_guess()
 }
 
 PetscErrorCode
-G1DTestNonlinearProblem::compute_residual(Vec x, Vec f)
+G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
-    Int ni = 2;
-    Int ix[] = { 0, 1 };
-    Scalar y[2];
-    VecGetValues(x, ni, ix, y);
+    std::vector<Int> ix = { 0, 1 };
+    std::vector<Scalar> y(2);
+    x.get_values(ix, y);
 
-    VecSetValue(f, 0, y[0] - 2, INSERT_VALUES);
-    VecSetValue(f, 1, y[1] - 3, INSERT_VALUES);
+    f.set_values({ 0, 1 }, { y[0] - 2, y[1] - 3 });
 
-    VecAssemblyBegin(f);
-    VecAssemblyEnd(f);
+    f.assembly_begin();
+    f.assembly_end();
 
     return 0;
 }
@@ -160,12 +158,12 @@ TEST(NonlinearProblemTest, compute_callbacks)
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     NonlinearProblem prob(prob_pars);
 
-    Vec x;
-    Vec F;
+    Vector x;
+    Vector F;
     EXPECT_EQ(prob.compute_residual(x, F), 0);
 
     Mat J;
-    EXPECT_EQ(prob.compute_jacobian(x, J, J), 0);
+    EXPECT_EQ(prob.compute_jacobian((Vec) x, J, J), 0);
 }
 
 TEST(NonlinearProblemTest, run)

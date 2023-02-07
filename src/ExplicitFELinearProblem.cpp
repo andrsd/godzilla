@@ -110,7 +110,7 @@ ExplicitFELinearProblem::solve()
 {
     _F_;
     lprintf(9, "Solving");
-    TransientProblemInterface::solve(this->x);
+    TransientProblemInterface::solve((Vec) this->x);
 }
 
 void

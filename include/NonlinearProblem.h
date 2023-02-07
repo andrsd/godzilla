@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Problem.h"
+#include "Vector.h"
 #include "petscsnes.h"
 
 namespace godzilla {
@@ -19,7 +20,7 @@ public:
     bool converged() override;
     Vec get_solution_vector() const override;
     /// Method to compute residual. Called from the PETsc callback
-    virtual PetscErrorCode compute_residual(Vec x, Vec f);
+    virtual PetscErrorCode compute_residual(const Vector & x, Vector & f);
     /// Method to compute Jacobian. Called from the PETsc callback
     virtual PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp);
 
@@ -54,9 +55,9 @@ protected:
     /// KSP object
     KSP ksp;
     /// The solution vector
-    Vec x;
+    Vector x;
     /// The residual vector
-    Vec r;
+    Vector r;
     /// Jacobian matrix
     Mat J;
     /// Converged reason

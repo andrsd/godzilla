@@ -88,7 +88,7 @@ ExplicitFVLinearProblem::solve()
 {
     _F_;
     lprintf(9, "Solving");
-    TransientProblemInterface::solve(this->x);
+    TransientProblemInterface::solve((Vec) this->x);
 }
 
 void
@@ -96,8 +96,10 @@ ExplicitFVLinearProblem::allocate_objects()
 {
     _F_;
     DM dm = get_dm();
-    PETSC_CHECK(DMCreateGlobalVector(dm, &this->x));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->x, "sln"));
+    Vec glob_x;
+    PETSC_CHECK(DMCreateGlobalVector(dm, &glob_x));
+    this->x = Vector(glob_x);
+    this->x.set_name("sln");
     FVProblemInterface::allocate_objects();
 }
 

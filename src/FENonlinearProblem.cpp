@@ -17,7 +17,9 @@ __fep_compute_residual(DM, Vec x, Vec F, void * user)
 {
     _F_;
     auto * fep = static_cast<FENonlinearProblem *>(user);
-    fep->compute_residual(x, F);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    fep->compute_residual(vec_x, vec_F);
     return 0;
 }
 
@@ -89,7 +91,7 @@ FENonlinearProblem::allocate_objects()
 }
 
 PetscErrorCode
-FENonlinearProblem::compute_residual(Vec x, Vec f)
+FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
     _F_;
     // this is based on DMSNESComputeResidual()
@@ -114,7 +116,7 @@ FENonlinearProblem::compute_residual(Vec x, Vec f)
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_residual_internal(plex, res_key, cells, PETSC_MIN_REAL, x, nullptr, 0.0, f);
+            compute_residual_internal(plex, res_key, cells, PETSC_MIN_REAL, (Vec) x, nullptr, 0.0, (Vec) f);
             cells.destroy();
         }
     }
