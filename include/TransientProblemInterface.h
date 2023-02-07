@@ -2,6 +2,7 @@
 
 #include "petscts.h"
 #include "Types.h"
+#include "Vector.h"
 
 namespace godzilla {
 
@@ -50,7 +51,7 @@ protected:
     /// @return `true` if solve converged, otherwise `false`
     virtual bool converged() const;
     /// Solve
-    virtual void solve(Vec x);
+    virtual void solve(Vector & x);
 
     /// Problem this interface is part of
     Problem * problem;

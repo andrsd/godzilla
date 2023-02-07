@@ -152,10 +152,10 @@ TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
 }
 
 void
-TransientProblemInterface::solve(Vec x)
+TransientProblemInterface::solve(Vector & x)
 {
     _F_;
-    PETSC_CHECK(TSSolve(this->ts, x));
+    PETSC_CHECK(TSSolve(this->ts, (Vec) x));
     PETSC_CHECK(TSGetConvergedReason(this->ts, &this->converged_reason));
 }
 
