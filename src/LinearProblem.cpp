@@ -11,7 +11,7 @@ __compute_rhs(KSP, Vec b, void * ctx)
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
     Vector vec_b(b);
-    return problem->compute_rhs_callback(vec_b);
+    return problem->compute_rhs(vec_b);
 }
 
 PetscErrorCode
@@ -21,7 +21,7 @@ __compute_operators(KSP, Mat A, Mat B, void * ctx)
     auto * problem = static_cast<LinearProblem *>(ctx);
     Matrix mat_A(A);
     Matrix mat_B(B);
-    return problem->compute_operators_callback(mat_A, mat_B);
+    return problem->compute_operators(mat_A, mat_B);
 }
 
 PetscErrorCode

@@ -73,11 +73,10 @@ public:
     G1DTestLinearProblem(const Parameters & params);
     virtual ~G1DTestLinearProblem();
     virtual void create() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
-    virtual PetscErrorCode compute_operators_callback(Matrix & A, Matrix & B) override;
-
     PetscSection s;
 };
 
@@ -88,11 +87,10 @@ public:
     G2DTestLinearProblem(const Parameters & params);
     virtual ~G2DTestLinearProblem();
     virtual void create() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
-    virtual PetscErrorCode compute_operators_callback(Matrix & A, Matrix & B) override;
-
     PetscSection s;
 };
 
@@ -103,10 +101,9 @@ public:
     G3DTestLinearProblem(const Parameters & params);
     virtual ~G3DTestLinearProblem();
     virtual void create() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
-    virtual PetscErrorCode compute_operators_callback(Matrix & A, Matrix & B) override;
-
     PetscSection s;
 };

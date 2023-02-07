@@ -21,6 +21,11 @@ public:
     bool converged() override;
     NO_DISCARD const Vector & get_solution_vector() const override;
 
+    /// Method to compute right-hand side. Called from the PETsc callback
+    virtual PetscErrorCode compute_rhs(Vector & b) = 0;
+    /// Method to compute operators. Called from the PETsc callback
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) = 0;
+
 protected:
     /// provide DM for the underlying KSP object
     NO_DISCARD DM get_dm() const override;
@@ -34,10 +39,6 @@ protected:
     virtual void set_up_monitors();
     /// Setup solver parameters
     virtual void set_up_solver_parameters();
-    /// Method to compute right-hand side. Called from the PETsc callback
-    virtual PetscErrorCode compute_rhs_callback(Vector & b) = 0;
-    /// Method to compute operators. Called from the PETsc callback
-    virtual PetscErrorCode compute_operators_callback(Matrix & A, Matrix & B) = 0;
     /// KSP monitor
     PetscErrorCode ksp_monitor_callback(Int it, Real rnorm);
     /// Method for setting matrix properties
@@ -66,8 +67,6 @@ protected:
 public:
     static Parameters parameters();
 
-    friend PetscErrorCode __compute_rhs(KSP ksp, Vec b, void * ctx);
-    friend PetscErrorCode __compute_operators(KSP ksp, Mat A, Mat B, void * ctx);
     friend PetscErrorCode __ksp_monitor_linear(KSP ksp, Int it, Real rnorm, void * ctx);
 };
 

@@ -97,12 +97,12 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
 
     protected:
         virtual PetscErrorCode
-        compute_rhs_callback(Vector & b) override
+        compute_rhs(Vector & b) override
         {
             return 0;
         }
         virtual PetscErrorCode
-        compute_operators_callback(Matrix & A, Matrix & B) override
+        compute_operators(Matrix & A, Matrix & B) override
         {
             return 0;
         }
