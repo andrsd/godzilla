@@ -227,12 +227,12 @@ protected:
     /// @param dm DM for auxiliary fields
     void compute_aux_fields();
 
-    void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vec a);
+    void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vector & a);
 
     void compute_label_aux_fields(DM dm,
                                   DMLabel label,
                                   const std::vector<AuxiliaryField *> & auxs,
-                                  Vec a);
+                                  Vector & a);
 
     /// Set up auxiliary DM
     virtual void set_up_auxiliary_dm(DM dm);
@@ -377,7 +377,7 @@ protected:
     DM dm_aux;
 
     /// Vector for auxiliary fields
-    Vec a;
+    Vector a;
 
     /// Local solution vector
     Vector sln;

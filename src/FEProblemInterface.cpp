@@ -60,7 +60,7 @@ FEProblemInterface::~FEProblemInterface()
         PetscFEDestroy(&fi.fe);
     }
 
-    VecDestroy(&this->a);
+    this->a.destroy();
     DMDestroy(&this->dm_aux);
 
     this->sln.destroy();
@@ -459,7 +459,7 @@ FEProblemInterface::set_up_quadrature()
 void
 FEProblemInterface::compute_global_aux_fields(DM dm,
                                               const std::vector<AuxiliaryField *> & auxs,
-                                              Vec a)
+                                              Vector & a)
 {
     _F_;
     auto n_auxs = this->aux_fields.size();
@@ -477,14 +477,14 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
                                        func.data(),
                                        ctxs.data(),
                                        INSERT_ALL_VALUES,
-                                       a));
+                                       (Vec) a));
 }
 
 void
 FEProblemInterface::compute_label_aux_fields(DM dm,
                                              DMLabel label,
                                              const std::vector<AuxiliaryField *> & auxs,
-                                             Vec a)
+                                             Vector & a)
 {
     _F_;
     auto n_auxs = this->aux_fields.size();
@@ -509,7 +509,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
                                             func.data(),
                                             ctxs.data(),
                                             INSERT_ALL_VALUES,
-                                            a));
+                                            (Vec) a));
     ids.restore_indices();
     ids.destroy();
 }
@@ -576,8 +576,10 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         }
     }
     if (no_errors) {
-        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &this->a));
-        PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
+        Vec loc_a;
+        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &loc_a));
+        this->a = Vector(loc_a);
+        PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, (Vec) this->a));
 
         PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
         PETSC_CHECK(
