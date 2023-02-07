@@ -42,7 +42,6 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & par
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
     a(nullptr),
-    sln(nullptr),
     ds(nullptr),
     ds_aux(nullptr),
     wf(new WeakForm())
@@ -64,7 +63,7 @@ FEProblemInterface::~FEProblemInterface()
     VecDestroy(&this->a);
     DMDestroy(&this->dm_aux);
 
-    VecDestroy(&this->sln);
+    this->sln.destroy();
 }
 
 void
@@ -105,7 +104,9 @@ void
 FEProblemInterface::allocate_objects()
 {
     DM dm = this->unstr_mesh->get_dm();
-    PETSC_CHECK(DMCreateLocalVector(dm, &this->sln));
+    Vec loc_sln;
+    PETSC_CHECK(DMCreateLocalVector(dm, &loc_sln));
+    this->sln = Vector(loc_sln);
 }
 
 Int
@@ -171,7 +172,7 @@ FEProblemInterface::get_field_id(const std::string & name) const
         error("Field '%s' does not exist. Typo?", name);
 }
 
-Vec
+const Vector &
 FEProblemInterface::get_solution_vector_local() const
 {
     _F_;

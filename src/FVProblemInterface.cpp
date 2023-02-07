@@ -31,7 +31,6 @@ FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & par
     DiscreteProblemInterface(problem, params),
     section(nullptr),
     fvm(nullptr),
-    sln(nullptr),
     ds(nullptr),
     wf(nullptr)
 {
@@ -40,7 +39,7 @@ FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & par
 
 FVProblemInterface::~FVProblemInterface()
 {
-    VecDestroy(&this->sln);
+    this->sln.destroy();
 }
 
 void
@@ -172,7 +171,7 @@ FVProblemInterface::get_field_dof(Int point, Int fid) const
     return offset;
 }
 
-Vec
+const Vector &
 FVProblemInterface::get_solution_vector_local() const
 {
     _F_;
@@ -218,7 +217,9 @@ void
 FVProblemInterface::allocate_objects()
 {
     DM dm = this->unstr_mesh->get_dm();
-    PETSC_CHECK(DMCreateLocalVector(dm, &this->sln));
+    Vec loc_sln;
+    PETSC_CHECK(DMCreateLocalVector(dm, &loc_sln));
+    this->sln = Vector(loc_sln);
 }
 
 void

@@ -24,7 +24,7 @@ public:
     std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
     NO_DISCARD Int get_field_dof(Int point, Int fid) const override;
-    NO_DISCARD Vec get_solution_vector_local() const override;
+    const Vector & get_solution_vector_local() const override;
     NO_DISCARD WeakForm * get_weak_form() const override;
 
     /// Adds a volumetric field
@@ -90,7 +90,7 @@ protected:
     PetscFV fvm;
 
     /// Local solution vector
-    Vec sln;
+    Vector sln;
 
     /// Object that manages a discrete system
     PetscDS ds;

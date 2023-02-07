@@ -2,6 +2,7 @@
 
 #include "petscds.h"
 #include "Types.h"
+#include "Vector.h"
 #include "DiscreteProblemInterface.h"
 
 namespace godzilla {
@@ -110,7 +111,7 @@ public:
     /// Get local solution vector
     ///
     /// @return Local solution vector
-    virtual Vec get_solution_vector_local() const = 0;
+    virtual const Vector & get_solution_vector_local() const = 0;
 
     /// Get weak form associated with this problem
     ///
@@ -141,7 +142,7 @@ protected:
     /// Build local solution vector
     ///
     /// @param sln Global solution vector
-    void build_local_solution_vector(Vec sln) const;
+    void build_local_solution_vector(const Vector & sln) const;
 
     /// Problem this interface is part of
     Problem * problem;

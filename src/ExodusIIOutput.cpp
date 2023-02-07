@@ -496,15 +496,15 @@ void
 ExodusIIOutput::write_field_variables()
 {
     _F_;
-    Vec sln = this->dpi->get_solution_vector_local();
+    auto sln = this->dpi->get_solution_vector_local();
 
     const Scalar * sln_vals;
-    PETSC_CHECK(VecGetArrayRead(sln, &sln_vals));
+    PETSC_CHECK(VecGetArrayRead((Vec) sln, &sln_vals));
 
     write_nodal_variables(sln_vals);
     write_elem_variables(sln_vals);
 
-    PETSC_CHECK(VecRestoreArrayRead(sln, &sln_vals));
+    PETSC_CHECK(VecRestoreArrayRead((Vec) sln, &sln_vals));
 }
 
 void
