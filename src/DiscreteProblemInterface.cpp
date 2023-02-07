@@ -188,14 +188,14 @@ DiscreteProblemInterface::set_up_initial_guess()
         set_zero_initial_guess();
 }
 
-Vec
+Vector
 DiscreteProblemInterface::get_coordinates_local() const
 {
     _F_;
     DM dm = this->unstr_mesh->get_dm();
     Vec coord;
     PETSC_CHECK(DMGetCoordinatesLocal(dm, &coord));
-    return coord;
+    return Vector(coord);
 }
 
 void

@@ -106,7 +106,7 @@ public:
     /// Gets a local vector with the coordinates associated with this problem's mesh
     ///
     /// @return coordinate vector
-    Vec get_coordinates_local() const;
+    Vector get_coordinates_local() const;
 
     /// Get local solution vector
     ///

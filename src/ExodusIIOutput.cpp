@@ -270,11 +270,9 @@ ExodusIIOutput::write_coords(int exo_dim)
 {
     _F_;
     int dim = (int) this->mesh->get_dimension();
-    Vec coord = this->dpi->get_coordinates_local();
-    Int coord_size;
-    PETSC_CHECK(VecGetSize(coord, &coord_size));
-    Scalar * xyz;
-    PETSC_CHECK(VecGetArray(coord, &xyz));
+    Vector coord = this->dpi->get_coordinates_local();
+    Int coord_size = coord.get_size();
+    Scalar * xyz = coord.get_array();
 
     int n_nodes = (int) coord_size / dim;
     std::vector<double> x(n_nodes, 0.);
@@ -300,7 +298,7 @@ ExodusIIOutput::write_coords(int exo_dim)
     else if (exo_dim == 3)
         this->exo->write_coords(x, y, z);
 
-    PETSC_CHECK(VecRestoreArray(coord, &xyz));
+    coord.restore_array(xyz);
 
     this->exo->write_coord_names();
 }
