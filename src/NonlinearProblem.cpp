@@ -23,7 +23,10 @@ __compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    return problem->compute_jacobian(x, J, Jp);
+    Vector vec_x(x);
+    Matrix mat_J(J);
+    Matrix mat_Jp(Jp);
+    return problem->compute_jacobian(vec_x, mat_J, mat_Jp);
 }
 
 PetscErrorCode
@@ -76,7 +79,6 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     Problem(parameters),
     snes(nullptr),
     ksp(nullptr),
-    J(nullptr),
     converged_reason(SNES_CONVERGED_ITERATING),
     line_search_type(get_param<std::string>("line_search")),
     nl_rel_tol(get_param<Real>("nl_rel_tol")),
@@ -99,8 +101,7 @@ NonlinearProblem::~NonlinearProblem()
         SNESDestroy(&this->snes);
     this->r.destroy();
     this->x.destroy();
-    if (this->J)
-        MatDestroy(&this->J);
+    this->J.destroy();
 }
 
 DM
@@ -177,8 +178,10 @@ NonlinearProblem::allocate_objects()
     this->x.duplicate(this->r);
     this->r.set_name("res");
 
-    PETSC_CHECK(DMCreateMatrix(dm, &this->J));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->J, "Jac"));
+    Mat mat_J;
+    PETSC_CHECK(DMCreateMatrix(dm, &mat_J));
+    this->J = Matrix(mat_J);
+    this->J.set_name("Jac");
 }
 
 void
@@ -208,7 +211,8 @@ NonlinearProblem::set_up_callbacks()
 {
     _F_;
     PETSC_CHECK(SNESSetFunction(this->snes, (Vec) this->r, __compute_residual, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, __compute_jacobian, this));
+    PETSC_CHECK(
+        SNESSetJacobian(this->snes, (Mat) this->J, (Mat) this->J, __compute_jacobian, this));
 }
 
 void
@@ -302,7 +306,7 @@ NonlinearProblem::compute_residual(const Vector &, Vector &)
 }
 
 PetscErrorCode
-NonlinearProblem::compute_jacobian(Vec, Mat, Mat)
+NonlinearProblem::compute_jacobian(const Vector &, Matrix &, Matrix &)
 {
     _F_;
     return 0;

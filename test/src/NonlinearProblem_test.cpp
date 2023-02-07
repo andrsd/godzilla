@@ -21,7 +21,7 @@ public:
     void call_initial_guess();
 
     PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
-    PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp) override;
+    PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
 
 protected:
     PetscSection s;
@@ -76,13 +76,13 @@ G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
 }
 
 PetscErrorCode
-G1DTestNonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
+G1DTestNonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
-    MatSetValue(J, 0, 0, 1, INSERT_VALUES);
-    MatSetValue(J, 1, 1, 1, INSERT_VALUES);
+    J.set_value(0, 0, 1.);
+    J.set_value(1, 1, 1.);
 
-    MatAssemblyBegin(J, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(J, MAT_FINAL_ASSEMBLY);
+    J.assembly_begin();
+    J.assembly_end();
 
     return 0;
 }
@@ -162,8 +162,8 @@ TEST(NonlinearProblemTest, compute_callbacks)
     Vector F;
     EXPECT_EQ(prob.compute_residual(x, F), 0);
 
-    Mat J;
-    EXPECT_EQ(prob.compute_jacobian((Vec) x, J, J), 0);
+    Matrix J;
+    EXPECT_EQ(prob.compute_jacobian(x, J, J), 0);
 }
 
 TEST(NonlinearProblemTest, run)

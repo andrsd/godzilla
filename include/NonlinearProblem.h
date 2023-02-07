@@ -2,6 +2,7 @@
 
 #include "Problem.h"
 #include "Vector.h"
+#include "Matrix.h"
 #include "petscsnes.h"
 
 namespace godzilla {
@@ -22,7 +23,7 @@ public:
     /// Method to compute residual. Called from the PETsc callback
     virtual PetscErrorCode compute_residual(const Vector & x, Vector & f);
     /// Method to compute Jacobian. Called from the PETsc callback
-    virtual PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp);
+    virtual PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
 
 protected:
     /// provide DM for the underlying SNES object
@@ -59,7 +60,7 @@ protected:
     /// The residual vector
     Vector r;
     /// Jacobian matrix
-    Mat J;
+    Matrix J;
     /// Converged reason
     SNESConvergedReason converged_reason;
 

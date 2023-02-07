@@ -28,7 +28,10 @@ __fep_compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * user)
 {
     _F_;
     auto * fep = static_cast<FENonlinearProblem *>(user);
-    fep->compute_jacobian(x, J, Jp);
+    Vector vec_x(x);
+    Matrix mat_J(J);
+    Matrix mat_Jp(Jp);
+    fep->compute_jacobian(vec_x, mat_J, mat_Jp);
     return 0;
 }
 
@@ -72,7 +75,7 @@ FENonlinearProblem::set_up_callbacks()
     PETSC_CHECK(DMPlexSetSNESLocalFEM(dm, this, this, this));
     PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
     PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, nullptr, nullptr));
+    PETSC_CHECK(SNESSetJacobian(this->snes, (Mat) this->J, (Mat) this->J, nullptr, nullptr));
 }
 
 void
@@ -116,7 +119,14 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_residual_internal(plex, res_key, cells, PETSC_MIN_REAL, (Vec) x, nullptr, 0.0, (Vec) f);
+            compute_residual_internal(plex,
+                                      res_key,
+                                      cells,
+                                      PETSC_MIN_REAL,
+                                      (Vec) x,
+                                      nullptr,
+                                      0.0,
+                                      (Vec) f);
             cells.destroy();
         }
     }
@@ -579,7 +589,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
 }
 
 PetscErrorCode
-FENonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
+FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
     _F_;
     // based on DMPlexSNESComputeJacobianFEM and DMSNESComputeJacobianAction
@@ -594,7 +604,7 @@ FENonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
 
         if (s == 0)
-            PetscCall(MatZeroEntries(Jp));
+            Jp.zero();
 
         for (auto & jac_key : this->wf->get_jacobian_keys()) {
             IndexSet cells;
@@ -607,7 +617,15 @@ FENonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_jacobian_internal(plex, jac_key, cells, 0.0, 0.0, x, nullptr, J, Jp);
+            compute_jacobian_internal(plex,
+                                      jac_key,
+                                      cells,
+                                      0.0,
+                                      0.0,
+                                      (Vec) x,
+                                      nullptr,
+                                      (Mat) J,
+                                      (Mat) Jp);
             cells.destroy();
         }
     }
