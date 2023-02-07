@@ -48,6 +48,7 @@ add_library(${PROJECT_NAME}
         LinearProblem.cpp
         LineMesh.cpp
         Logger.cpp
+        Matrix.cpp
         Mesh.cpp
         MeshPartitioningOutput.cpp
         NaturalBC.cpp
