@@ -29,7 +29,11 @@ __tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, 
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    fep->compute_ijacobian(time, x, x_t, x_t_shift, J, Jp);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    Matrix mat_J(J);
+    Matrix mat_Jp(Jp);
+    fep->compute_ijacobian(time, vec_x, vec_x_t, x_t_shift, mat_J, mat_Jp);
     return 0;
 }
 
@@ -38,7 +42,9 @@ _tsfep_compute_boundary(DM, Real time, Vec x, Vec x_t, void * user)
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    fep->compute_boundary(time, x, x_t);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    fep->compute_boundary(time, vec_x, vec_x_t);
     return 0;
 }
 
@@ -220,11 +226,11 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
 
 PetscErrorCode
 ImplicitFENonlinearProblem::compute_ijacobian(Real time,
-                                              Vec X,
-                                              Vec X_t,
+                                              const Vector & X,
+                                              const Vector & X_t,
                                               Real x_t_shift,
-                                              Mat J,
-                                              Mat Jp)
+                                              Matrix & J,
+                                              Matrix & Jp)
 {
     // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
     // DMPlexTSComputeIJacobianFEM()
@@ -242,7 +248,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
 
         if (s == 0)
-            PetscCall(MatZeroEntries(Jp));
+            Jp.zero();
 
         for (auto & jac_key : this->wf->get_jacobian_keys()) {
             IndexSet cells;
@@ -255,7 +261,15 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_jacobian_internal(plex, jac_key, cells, time, x_t_shift, X, X_t, J, Jp);
+            compute_jacobian_internal(plex,
+                                      jac_key,
+                                      cells,
+                                      time,
+                                      x_t_shift,
+                                      (Vec) X,
+                                      (Vec) X_t,
+                                      (Mat) J,
+                                      (Mat) Jp);
             cells.destroy();
         }
     }
@@ -265,10 +279,10 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::compute_boundary(Real time, Vec X, Vec X_t)
+ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const Vector & X_t)
 {
     _F_;
-    return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
+    return DMPlexTSComputeBoundary(get_dm(), time, (Vec) X, (Vec) X_t, this);
 }
 
 } // namespace godzilla
