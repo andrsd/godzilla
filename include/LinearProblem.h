@@ -2,6 +2,7 @@
 
 #include "GodzillaConfig.h"
 #include "Problem.h"
+#include "Vector.h"
 #include "petscksp.h"
 
 namespace godzilla {
@@ -33,7 +34,7 @@ protected:
     /// Setup solver parameters
     virtual void set_up_solver_parameters();
     /// Method to compute right-hand side. Called from the PETsc callback
-    virtual PetscErrorCode compute_rhs_callback(Vec b) = 0;
+    virtual PetscErrorCode compute_rhs_callback(Vector & b) = 0;
     /// Method to compute operators. Called from the PETsc callback
     virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) = 0;
     /// KSP monitor
@@ -46,9 +47,9 @@ protected:
     /// KSP object
     KSP ksp;
     /// The solution vector
-    Vec x;
+    Vector x;
     /// The right-hand side vector
-    Vec b;
+    Vector b;
     /// Linear operator matrix
     Mat A;
     /// Converged reason

@@ -50,7 +50,7 @@ TEST_F(LinearProblemTest, run)
             return true;
         }
         MOCK_METHOD(void, on_final, ());
-        MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vec b));
+        MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vector & b));
         MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Mat A, Mat B));
     };
 
@@ -93,13 +93,13 @@ G1DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G1DTestLinearProblem::compute_rhs_callback(Vec b)
+G1DTestLinearProblem::compute_rhs_callback(Vector & b)
 {
-    VecSetValue(b, 0, 2, INSERT_VALUES);
-    VecSetValue(b, 1, 3, INSERT_VALUES);
+    b.set_value(0, 2);
+    b.set_value(1, 3);
 
-    VecAssemblyBegin(b);
-    VecAssemblyEnd(b);
+    b.assembly_begin();
+    b.assembly_end();
 
     return 0;
 }
@@ -142,15 +142,12 @@ G2DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G2DTestLinearProblem::compute_rhs_callback(Vec b)
+G2DTestLinearProblem::compute_rhs_callback(Vector & b)
 {
-    VecSetValue(b, 0, 2, INSERT_VALUES);
-    VecSetValue(b, 1, 3, INSERT_VALUES);
-    VecSetValue(b, 2, 5, INSERT_VALUES);
-    VecSetValue(b, 3, 8, INSERT_VALUES);
+    b.set_values({ 0, 1, 2, 3 }, { 2, 3, 5, 8 });
 
-    VecAssemblyBegin(b);
-    VecAssemblyEnd(b);
+    b.assembly_begin();
+    b.assembly_end();
 
     return 0;
 }
@@ -193,19 +190,12 @@ G3DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G3DTestLinearProblem::compute_rhs_callback(Vec b)
+G3DTestLinearProblem::compute_rhs_callback(Vector & b)
 {
-    VecSetValue(b, 0, 2, INSERT_VALUES);
-    VecSetValue(b, 1, 3, INSERT_VALUES);
-    VecSetValue(b, 2, 5, INSERT_VALUES);
-    VecSetValue(b, 3, 8, INSERT_VALUES);
-    VecSetValue(b, 4, 13, INSERT_VALUES);
-    VecSetValue(b, 5, 21, INSERT_VALUES);
-    VecSetValue(b, 6, 34, INSERT_VALUES);
-    VecSetValue(b, 7, 55, INSERT_VALUES);
+    b.set_values({ 0, 1, 2, 3, 4, 5, 6, 7 }, { 2, 3, 5, 8, 13, 21, 34, 55 });
 
-    VecAssemblyBegin(b);
-    VecAssemblyEnd(b);
+    b.assembly_begin();
+    b.assembly_end();
 
     return 0;
 }

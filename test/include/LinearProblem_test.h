@@ -75,7 +75,7 @@ public:
     virtual void create() override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
+    virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
     virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
 
     PetscSection s;
@@ -90,7 +90,7 @@ public:
     virtual void create() override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
+    virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
     virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
 
     PetscSection s;
@@ -105,7 +105,7 @@ public:
     virtual void create() override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
+    virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
     virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
 
     PetscSection s;

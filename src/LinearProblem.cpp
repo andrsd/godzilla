@@ -10,7 +10,8 @@ __compute_rhs(KSP, Vec b, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
-    return problem->compute_rhs_callback(b);
+    Vector vec_b(b);
+    return problem->compute_rhs_callback(vec_b);
 }
 
 PetscErrorCode
@@ -48,8 +49,6 @@ LinearProblem::parameters()
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
     ksp(nullptr),
-    x(nullptr),
-    b(nullptr),
     A(nullptr),
     converged_reason(KSP_CONVERGED_ITERATING),
     lin_rel_tol(get_param<Real>("lin_rel_tol")),
@@ -65,10 +64,8 @@ LinearProblem::~LinearProblem()
     _F_;
     if (this->ksp)
         KSPDestroy(&this->ksp);
-    if (this->b)
-        VecDestroy(&this->b);
-    if (this->x)
-        VecDestroy(&this->x);
+    this->x.destroy();
+    this->b.destroy();
     if (this->A)
         MatDestroy(&this->A);
 }
@@ -84,7 +81,7 @@ Vec
 LinearProblem::get_solution_vector() const
 {
     _F_;
-    return this->x;
+    return (Vec) this->x;
 }
 
 void
@@ -120,11 +117,13 @@ LinearProblem::allocate_objects()
     _F_;
     DM dm = get_dm();
 
-    PETSC_CHECK(DMCreateGlobalVector(dm, &this->x));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->x, "sln"));
+    Vec glob_x;
+    PETSC_CHECK(DMCreateGlobalVector(dm, &glob_x));
+    this->x = Vector(glob_x);
+    this->x.set_name("sln");
 
-    PETSC_CHECK(VecDuplicate(this->x, &this->b));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->b, "rhs"));
+    this->x.duplicate(this->b);
+    this->b.set_name("rhs");
 
     PETSC_CHECK(DMCreateMatrix(dm, &this->A));
     PETSC_CHECK(PetscObjectSetName((PetscObject) this->A, "A"));
@@ -169,7 +168,7 @@ void
 LinearProblem::solve()
 {
     _F_;
-    PETSC_CHECK(KSPSolve(this->ksp, this->b, this->x));
+    PETSC_CHECK(KSPSolve(this->ksp, (Vec) this->b, (Vec) this->x));
     PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
 }
 

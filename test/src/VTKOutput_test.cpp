@@ -97,7 +97,7 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
 
     protected:
         virtual PetscErrorCode
-        compute_rhs_callback(Vec b) override
+        compute_rhs_callback(Vector & b) override
         {
             return 0;
         }
