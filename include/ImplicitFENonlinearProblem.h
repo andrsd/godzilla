@@ -15,7 +15,8 @@ public:
     bool converged() override;
     void solve() override;
 
-    virtual PetscErrorCode compute_ifunction(Real time, Vec X, Vec X_t, Vec F);
+    virtual PetscErrorCode
+    compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
     virtual PetscErrorCode
     compute_ijacobian(Real time, Vec X, Vec X_t, Real x_t_shift, Mat J, Mat Jp);
     virtual PetscErrorCode compute_boundary(Real time, Vec X, Vec X_t);

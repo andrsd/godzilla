@@ -17,7 +17,10 @@ __tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    fep->compute_ifunction(time, x, x_t, F);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    Vector vec_F(F);
+    fep->compute_ifunction(time, vec_x, vec_x_t, vec_F);
     return 0;
 }
 
@@ -169,7 +172,10 @@ ImplicitFENonlinearProblem::set_up_monitors()
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::compute_ifunction(Real time, Vec X, Vec X_t, Vec F)
+ImplicitFENonlinearProblem::compute_ifunction(Real time,
+                                              const Vector & X,
+                                              const Vector & X_t,
+                                              Vector & F)
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
     _F_;
@@ -196,7 +202,14 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time, Vec X, Vec X_t, Vec F)
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_residual_internal(plex, res_key, cells, time, X, X_t, time, F);
+            compute_residual_internal(plex,
+                                      res_key,
+                                      cells,
+                                      time,
+                                      (Vec) X,
+                                      (Vec) X_t,
+                                      time,
+                                      (Vec) F);
             cells.destroy();
         }
     }
