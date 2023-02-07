@@ -51,7 +51,7 @@ TEST_F(LinearProblemTest, run)
         }
         MOCK_METHOD(void, on_final, ());
         MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vector & b));
-        MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Mat A, Mat B));
+        MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Matrix & A, Matrix & B));
     };
 
     auto mesh = gMesh1d();
@@ -105,13 +105,13 @@ G1DTestLinearProblem::compute_rhs_callback(Vector & b)
 }
 
 PetscErrorCode
-G1DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
+G1DTestLinearProblem::compute_operators_callback(Matrix & A, Matrix & B)
 {
-    MatSetValue(A, 0, 0, 1, INSERT_VALUES);
-    MatSetValue(A, 1, 1, 1, INSERT_VALUES);
+    A.set_value(0, 0, 1.);
+    A.set_value(1, 1, 1.);
 
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+    A.assembly_begin();
+    A.assembly_end();
 
     return 0;
 }
@@ -153,13 +153,13 @@ G2DTestLinearProblem::compute_rhs_callback(Vector & b)
 }
 
 PetscErrorCode
-G2DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
+G2DTestLinearProblem::compute_operators_callback(Matrix & A, Matrix & B)
 {
     for (Int i = 0; i < 4; i++)
-        MatSetValue(A, i, i, 1, INSERT_VALUES);
+        A.set_value(i, i, 1.);
 
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+    A.assembly_begin();
+    A.assembly_end();
 
     return 0;
 }
@@ -201,13 +201,13 @@ G3DTestLinearProblem::compute_rhs_callback(Vector & b)
 }
 
 PetscErrorCode
-G3DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
+G3DTestLinearProblem::compute_operators_callback(Matrix & A, Matrix & B)
 {
     for (Int i = 0; i < 8; i++)
-        MatSetValue(A, i, i, 1, INSERT_VALUES);
+        A.set_value(i, i, 1.);
 
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+    A.assembly_begin();
+    A.assembly_end();
 
     return 0;
 }

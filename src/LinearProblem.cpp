@@ -19,7 +19,9 @@ __compute_operators(KSP, Mat A, Mat B, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
-    return problem->compute_operators_callback(A, B);
+    Matrix mat_A(A);
+    Matrix mat_B(B);
+    return problem->compute_operators_callback(mat_A, mat_B);
 }
 
 PetscErrorCode
@@ -66,8 +68,7 @@ LinearProblem::~LinearProblem()
         KSPDestroy(&this->ksp);
     this->x.destroy();
     this->b.destroy();
-    if (this->A)
-        MatDestroy(&this->A);
+    this->A.destroy();
 }
 
 DM
@@ -125,8 +126,10 @@ LinearProblem::allocate_objects()
     this->x.duplicate(this->b);
     this->b.set_name("rhs");
 
-    PETSC_CHECK(DMCreateMatrix(dm, &this->A));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->A, "A"));
+    Mat a;
+    PETSC_CHECK(DMCreateMatrix(dm, &a));
+    this->A = Matrix(a);
+    this->A.set_name("A");
 }
 
 void

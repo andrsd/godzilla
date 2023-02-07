@@ -102,7 +102,7 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
             return 0;
         }
         virtual PetscErrorCode
-        compute_operators_callback(Mat A, Mat B) override
+        compute_operators_callback(Matrix & A, Matrix & B) override
         {
             return 0;
         }

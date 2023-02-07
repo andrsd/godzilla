@@ -76,7 +76,7 @@ public:
 
 protected:
     virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
-    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
+    virtual PetscErrorCode compute_operators_callback(Matrix & A, Matrix & B) override;
 
     PetscSection s;
 };
@@ -91,7 +91,7 @@ public:
 
 protected:
     virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
-    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
+    virtual PetscErrorCode compute_operators_callback(Matrix & A, Matrix & B) override;
 
     PetscSection s;
 };
@@ -106,7 +106,7 @@ public:
 
 protected:
     virtual PetscErrorCode compute_rhs_callback(Vector & b) override;
-    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
+    virtual PetscErrorCode compute_operators_callback(Matrix & A, Matrix & B) override;
 
     PetscSection s;
 };
