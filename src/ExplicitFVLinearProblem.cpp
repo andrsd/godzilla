@@ -13,7 +13,9 @@ __efvlp_compute_rhs(DM dm, Real time, Vec x, Vec F, void * ctx)
 {
     _F_;
     auto * efvp = static_cast<ExplicitFVLinearProblem *>(ctx);
-    efvp->compute_rhs(time, x, F);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    efvp->compute_rhs(time, vec_x, vec_F);
     return 0;
 }
 
@@ -142,10 +144,10 @@ ExplicitFVLinearProblem::set_up_monitors()
 }
 
 PetscErrorCode
-ExplicitFVLinearProblem::compute_rhs(Real time, Vec x, Vec F)
+ExplicitFVLinearProblem::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     _F_;
-    return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this);
+    return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, (Vec) x, (Vec) F, this);
 }
 
 } // namespace godzilla
