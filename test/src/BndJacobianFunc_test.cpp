@@ -42,7 +42,7 @@ public:
     MOCK_METHOD(const FieldValue &, get_field_dot, (const std::string & field_name), (const));
     MOCK_METHOD(const Real &, get_time_shift, (), (const));
     MOCK_METHOD(const Real &, get_time, (), (const));
-    MOCK_METHOD(const Vector &, get_normal, (), (const));
+    MOCK_METHOD(const Normal &, get_normal, (), (const));
     MOCK_METHOD(const Point &, get_xyz, (), (const));
 
 protected:
@@ -84,7 +84,7 @@ protected:
     const FieldGradient & u_x;
     const Real & t;
     const Real & t_shift;
-    const Vector & normal;
+    const Normal & normal;
     const Point & xyz;
 };
 
@@ -130,7 +130,7 @@ TEST(BndJacobianFuncTest, test)
     EXPECT_CALL(prob, get_time()).Times(1).WillOnce(ReturnRef(time));
     Real time_shift;
     EXPECT_CALL(prob, get_time_shift()).Times(1).WillOnce(ReturnRef(time_shift));
-    Vector n(1);
+    Normal n(1);
     EXPECT_CALL(prob, get_normal()).Times(1).WillOnce(ReturnRef(n));
     Point coord(1);
     EXPECT_CALL(prob, get_xyz()).Times(1).WillOnce(ReturnRef(coord));

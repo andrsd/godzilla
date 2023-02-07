@@ -45,7 +45,7 @@ BndResidualFunc::get_time() const
     return get_fe_problem()->get_time();
 }
 
-const Vector &
+const Normal &
 BndResidualFunc::get_normal() const
 {
     _F_;

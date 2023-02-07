@@ -661,7 +661,7 @@ FEProblemInterface::get_time() const
     return this->asmbl.time;
 }
 
-const Vector &
+const Normal &
 FEProblemInterface::get_normal() const
 {
     _F_;

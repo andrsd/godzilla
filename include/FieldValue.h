@@ -52,9 +52,9 @@ protected:
 };
 
 /// Used for vector values during assembling (for example normals)
-class Vector : public LateBindArray<Real> {
+class Normal : public LateBindArray<Real> {
 public:
-    explicit Vector(const Int & dim) : LateBindArray<Real>(), dim(dim) {}
+    explicit Normal(const Int & dim) : LateBindArray<Real>(), dim(dim) {}
 
     Real
     operator[](unsigned int idx) const

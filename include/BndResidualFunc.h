@@ -47,7 +47,7 @@ protected:
     /// Get normal
     ///
     /// @return Outward normal
-    NO_DISCARD const Vector & get_normal() const;
+    NO_DISCARD const Normal & get_normal() const;
 
     /// Get physical coordinates
     ///

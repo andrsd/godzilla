@@ -126,7 +126,7 @@ public:
 
     virtual const Real & get_time() const;
 
-    virtual const Vector & get_normal() const;
+    virtual const Normal & get_normal() const;
 
     virtual const Point & get_xyz() const;
 
@@ -408,7 +408,7 @@ protected:
         /// Spatial coordinates
         Point xyz;
         /// Outward normals when doing surface integration
-        Vector normals;
+        Normal normals;
         /// Values of auxiliary fields
         Scalar * a;
         /// Gradients of auxiliary fields
