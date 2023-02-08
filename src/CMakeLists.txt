@@ -64,6 +64,7 @@ add_library(${PROJECT_NAME}
         Postprocessor.cpp
         PrintInterface.cpp
         Problem.cpp
+        Random.cpp
         RectangleMesh.cpp
         ResidualFunc.cpp
         Terminal.cpp
