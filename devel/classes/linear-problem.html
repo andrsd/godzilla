@@ -153,8 +153,20 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_linear_problem_1ad0fb3a8d29c1a9b4b5fef7a080f5f7d0"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Vec</span> <span class="pre">get_solution_vector</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">override</span></span></dt>
+<span class="target" id="classgodzilla_1_1_linear_problem_1ae86fd5f1337756f7735c973b6f582e90"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">Vector</span> <span class="pre">&amp;</span> <span class="pre">get_solution_vector</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">override</span></span></dt>
 <dd><p>Return solution vector. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblem11compute_rhsER6Vector">
+<span id="_CPPv3N8godzilla13LinearProblem11compute_rhsER6Vector"></span><span id="_CPPv2N8godzilla13LinearProblem11compute_rhsER6Vector"></span><span id="godzilla::LinearProblem::compute_rhs__VectorR"></span><span class="target" id="classgodzilla_1_1_linear_problem_1a587b2addd65ed2cad454f6d30b1caf61"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_rhs</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem11compute_rhsER6Vector" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Method to compute right-hand side. Called from the PETsc callback. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix">
+<span id="_CPPv3N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix"></span><span id="_CPPv2N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix"></span><span id="godzilla::LinearProblem::compute_operators__MatrixR.MatrixR"></span><span class="target" id="classgodzilla_1_1_linear_problem_1adffc469bd72cbd8d143e679035ae7a65"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_operators</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">A</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">B</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Method to compute operators. Called from the PETsc callback. </p>
 </dd></dl>
 
 </div>
