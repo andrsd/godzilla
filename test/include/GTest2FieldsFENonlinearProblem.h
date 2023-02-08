@@ -13,5 +13,5 @@ protected:
     virtual void set_up_fields() override;
 
     /// ID for the "v" field
-    const PetscInt iv;
+    const Int iv;
 };

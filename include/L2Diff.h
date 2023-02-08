@@ -13,7 +13,7 @@ public:
 
     void create() override;
     void compute() override;
-    PetscReal get_value() override;
+    Real get_value() override;
 
     /// Evaluate the function 'u'
     ///
@@ -22,11 +22,11 @@ public:
     /// @param x The coordinates
     /// @param Nc The number of components
     /// @param u  The output field values
-    void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+    void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]);
 
 protected:
     /// Computed L_2 error
-    PetscReal l2_diff;
+    Real l2_diff;
 
 public:
     static Parameters parameters();

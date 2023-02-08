@@ -27,11 +27,11 @@ TEST_F(LinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     // extract the solution and make sure it is [2, 3]
-    Vec x = prob->get_solution_vector();
-    PetscInt ni = 2;
-    PetscInt ix[2] = { 0, 1 };
-    PetscScalar xx[2];
-    VecGetValues(x, ni, ix, xx);
+    auto x = prob->get_solution_vector();
+    Int ni = 2;
+    Int ix[2] = { 0, 1 };
+    Scalar xx[2];
+    VecGetValues((Vec) x, ni, ix, xx);
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);
@@ -50,8 +50,8 @@ TEST_F(LinearProblemTest, run)
             return true;
         }
         MOCK_METHOD(void, on_final, ());
-        MOCK_METHOD(PetscErrorCode, compute_rhs_callback, (Vec b));
-        MOCK_METHOD(PetscErrorCode, compute_operators_callback, (Mat A, Mat B));
+        MOCK_METHOD(PetscErrorCode, compute_rhs, (Vector & b));
+        MOCK_METHOD(PetscErrorCode, compute_operators, (Matrix & A, Matrix & B));
     };
 
     auto mesh = gMesh1d();
@@ -84,8 +84,8 @@ void
 G1DTestLinearProblem::create()
 {
     DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[2] = { 1, 0 };
+    Int nc[1] = { 1 };
+    Int n_dofs[2] = { 1, 0 };
     DMSetNumFields(dm, 1);
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
@@ -93,25 +93,25 @@ G1DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G1DTestLinearProblem::compute_rhs_callback(Vec b)
+G1DTestLinearProblem::compute_rhs(Vector & b)
 {
-    VecSetValue(b, 0, 2, INSERT_VALUES);
-    VecSetValue(b, 1, 3, INSERT_VALUES);
+    b.set_value(0, 2);
+    b.set_value(1, 3);
 
-    VecAssemblyBegin(b);
-    VecAssemblyEnd(b);
+    b.assembly_begin();
+    b.assembly_end();
 
     return 0;
 }
 
 PetscErrorCode
-G1DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
+G1DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
-    MatSetValue(A, 0, 0, 1, INSERT_VALUES);
-    MatSetValue(A, 1, 1, 1, INSERT_VALUES);
+    A.set_value(0, 0, 1.);
+    A.set_value(1, 1, 1.);
 
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+    A.assembly_begin();
+    A.assembly_end();
 
     return 0;
 }
@@ -133,8 +133,8 @@ void
 G2DTestLinearProblem::create()
 {
     DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[3] = { 1, 0, 0 };
+    Int nc[1] = { 1 };
+    Int n_dofs[3] = { 1, 0, 0 };
     DMSetNumFields(dm, 1);
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
@@ -142,27 +142,24 @@ G2DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G2DTestLinearProblem::compute_rhs_callback(Vec b)
+G2DTestLinearProblem::compute_rhs(Vector & b)
 {
-    VecSetValue(b, 0, 2, INSERT_VALUES);
-    VecSetValue(b, 1, 3, INSERT_VALUES);
-    VecSetValue(b, 2, 5, INSERT_VALUES);
-    VecSetValue(b, 3, 8, INSERT_VALUES);
+    b.set_values({ 0, 1, 2, 3 }, { 2, 3, 5, 8 });
 
-    VecAssemblyBegin(b);
-    VecAssemblyEnd(b);
+    b.assembly_begin();
+    b.assembly_end();
 
     return 0;
 }
 
 PetscErrorCode
-G2DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
+G2DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
-    for (PetscInt i = 0; i < 4; i++)
-        MatSetValue(A, i, i, 1, INSERT_VALUES);
+    for (Int i = 0; i < 4; i++)
+        A.set_value(i, i, 1.);
 
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+    A.assembly_begin();
+    A.assembly_end();
 
     return 0;
 }
@@ -184,8 +181,8 @@ void
 G3DTestLinearProblem::create()
 {
     DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[4] = { 1, 0, 0, 0 };
+    Int nc[1] = { 1 };
+    Int n_dofs[4] = { 1, 0, 0, 0 };
     DMSetNumFields(dm, 1);
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
@@ -193,31 +190,24 @@ G3DTestLinearProblem::create()
 }
 
 PetscErrorCode
-G3DTestLinearProblem::compute_rhs_callback(Vec b)
+G3DTestLinearProblem::compute_rhs(Vector & b)
 {
-    VecSetValue(b, 0, 2, INSERT_VALUES);
-    VecSetValue(b, 1, 3, INSERT_VALUES);
-    VecSetValue(b, 2, 5, INSERT_VALUES);
-    VecSetValue(b, 3, 8, INSERT_VALUES);
-    VecSetValue(b, 4, 13, INSERT_VALUES);
-    VecSetValue(b, 5, 21, INSERT_VALUES);
-    VecSetValue(b, 6, 34, INSERT_VALUES);
-    VecSetValue(b, 7, 55, INSERT_VALUES);
+    b.set_values({ 0, 1, 2, 3, 4, 5, 6, 7 }, { 2, 3, 5, 8, 13, 21, 34, 55 });
 
-    VecAssemblyBegin(b);
-    VecAssemblyEnd(b);
+    b.assembly_begin();
+    b.assembly_end();
 
     return 0;
 }
 
 PetscErrorCode
-G3DTestLinearProblem::compute_operators_callback(Mat A, Mat B)
+G3DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
-    for (PetscInt i = 0; i < 8; i++)
-        MatSetValue(A, i, i, 1, INSERT_VALUES);
+    for (Int i = 0; i < 8; i++)
+        A.set_value(i, i, 1.);
 
-    MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
+    A.assembly_begin();
+    A.assembly_end();
 
     return 0;
 }

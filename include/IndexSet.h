@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Types.h"
 #include "petsc.h"
 #include <vector>
 
@@ -18,15 +19,15 @@ public:
     void get_indices();
     void restore_indices();
 
-    NO_DISCARD PetscInt get_size() const;
-    NO_DISCARD PetscInt get_local_size() const;
-    NO_DISCARD const PetscInt * data() const;
-    PetscInt operator[](unsigned int i) const;
+    NO_DISCARD Int get_size() const;
+    NO_DISCARD Int get_local_size() const;
+    NO_DISCARD const Int * data() const;
+    Int operator[](unsigned int i) const;
 
     /// Convert indices from this index set into std::vector
     ///
     /// @return std::vector containing the indices
-    std::vector<PetscInt> to_std_vector();
+    std::vector<Int> to_std_vector();
 
     void inc_ref();
 
@@ -38,11 +39,11 @@ public:
 
 private:
     IS is;
-    const PetscInt * indices;
+    const Int * indices;
 
 public:
     static IndexSet values_from_label(DMLabel label);
-    static IndexSet stratum_from_label(DMLabel label, PetscInt stratum_value);
+    static IndexSet stratum_from_label(DMLabel label, Int stratum_value);
     static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);
 };
 

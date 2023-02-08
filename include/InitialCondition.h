@@ -16,8 +16,8 @@ public:
     explicit InitialCondition(const Parameters & params);
 
     void create() override;
-    NO_DISCARD virtual PetscInt get_field_id() const;
-    NO_DISCARD virtual PetscInt get_num_components() const = 0;
+    NO_DISCARD virtual Int get_field_id() const;
+    NO_DISCARD virtual Int get_num_components() const = 0;
 
     /// Get pointer to the C function that will be passed into PETSc API
     virtual PetscFunc * get_function();
@@ -32,15 +32,14 @@ public:
     /// @param x The coordinates
     /// @param Nc The number of components
     /// @param u  The output field values
-    virtual void
-    evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt Nc, PetscScalar u[]) = 0;
+    virtual void evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) = 0;
 
 protected:
     /// Discrete problem this object is part of
     const DiscreteProblemInterface * dpi;
 
     /// Field ID this initial condition is attached to
-    PetscInt fid;
+    Int fid;
 
 public:
     static Parameters parameters();

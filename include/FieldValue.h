@@ -2,6 +2,7 @@
 
 #include "petsc.h"
 #include <cassert>
+#include "Types.h"
 
 namespace godzilla {
 
@@ -37,27 +38,25 @@ protected:
 };
 
 /// Used for field values during assembling
-class FieldValue : public LateBindArray<PetscScalar> {};
+class FieldValue : public LateBindArray<Scalar> {};
 
 /// Used for field gradient values during assembling
-class FieldGradient : public LateBindArray<PetscScalar> {
+class FieldGradient : public LateBindArray<Scalar> {
 public:
-    explicit FieldGradient(const PetscInt & dim) : LateBindArray<PetscScalar>(), dim(dim) {}
+    explicit FieldGradient(const Int & dim) : LateBindArray<Scalar>(), dim(dim) {}
 
-    FieldGradient(const FieldGradient & other) : LateBindArray<PetscScalar>(other), dim(other.dim)
-    {
-    }
+    FieldGradient(const FieldGradient & other) : LateBindArray<Scalar>(other), dim(other.dim) {}
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 /// Used for vector values during assembling (for example normals)
-class Vector : public LateBindArray<PetscReal> {
+class Normal : public LateBindArray<Real> {
 public:
-    explicit Vector(const PetscInt & dim) : LateBindArray<PetscReal>(), dim(dim) {}
+    explicit Normal(const Int & dim) : LateBindArray<Real>(), dim(dim) {}
 
-    PetscReal
+    Real
     operator[](unsigned int idx) const
     {
         assert(this->data != nullptr);
@@ -66,15 +65,15 @@ public:
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 /// Used for points during assembling (for example physical coordinates)
-class Point : public LateBindArray<PetscReal> {
+class Point : public LateBindArray<Real> {
 public:
-    explicit Point(const PetscInt & dim) : LateBindArray<PetscReal>(), dim(dim) {}
+    explicit Point(const Int & dim) : LateBindArray<Real>(), dim(dim) {}
 
-    PetscReal
+    Real
     operator[](unsigned int idx) const
     {
         assert(this->data != nullptr);
@@ -83,7 +82,7 @@ public:
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 } // namespace godzilla

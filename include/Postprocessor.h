@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Object.h"
+#include "Types.h"
 #include "PrintInterface.h"
 #include "petsc.h"
 
@@ -22,7 +23,7 @@ public:
     /// Get the computed value
     ///
     /// @return The value computed by the postprocessor
-    virtual PetscReal get_value() = 0;
+    virtual Real get_value() = 0;
 
 protected:
     /// Problem this object is part of

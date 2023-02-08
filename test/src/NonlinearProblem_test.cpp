@@ -20,8 +20,8 @@ public:
     virtual void create() override;
     void call_initial_guess();
 
-    PetscErrorCode compute_residual(Vec x, Vec f) override;
-    PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp) override;
+    PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
+    PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
 
 protected:
     PetscSection s;
@@ -46,8 +46,8 @@ void
 G1DTestNonlinearProblem::create()
 {
     DM dm = get_dm();
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[2] = { 1, 0 };
+    Int nc[1] = { 1 };
+    Int n_dofs[2] = { 1, 0 };
     DMSetNumFields(dm, 1);
     DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
     DMSetLocalSection(dm, this->s);
@@ -61,30 +61,28 @@ G1DTestNonlinearProblem::call_initial_guess()
 }
 
 PetscErrorCode
-G1DTestNonlinearProblem::compute_residual(Vec x, Vec f)
+G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
-    PetscInt ni = 2;
-    PetscInt ix[] = { 0, 1 };
-    PetscScalar y[2];
-    VecGetValues(x, ni, ix, y);
+    std::vector<Int> ix = { 0, 1 };
+    std::vector<Scalar> y(2);
+    x.get_values(ix, y);
 
-    VecSetValue(f, 0, y[0] - 2, INSERT_VALUES);
-    VecSetValue(f, 1, y[1] - 3, INSERT_VALUES);
+    f.set_values({ 0, 1 }, { y[0] - 2, y[1] - 3 });
 
-    VecAssemblyBegin(f);
-    VecAssemblyEnd(f);
+    f.assembly_begin();
+    f.assembly_end();
 
     return 0;
 }
 
 PetscErrorCode
-G1DTestNonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
+G1DTestNonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
-    MatSetValue(J, 0, 0, 1, INSERT_VALUES);
-    MatSetValue(J, 1, 1, 1, INSERT_VALUES);
+    J.set_value(0, 0, 1.);
+    J.set_value(1, 1, 1.);
 
-    MatAssemblyBegin(J, MAT_FINAL_ASSEMBLY);
-    MatAssemblyEnd(J, MAT_FINAL_ASSEMBLY);
+    J.assembly_begin();
+    J.assembly_end();
 
     return 0;
 }
@@ -97,7 +95,7 @@ TEST(NonlinearProblemTest, initial_guess)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
@@ -108,9 +106,9 @@ TEST(NonlinearProblemTest, initial_guess)
     prob.create();
     prob.call_initial_guess();
 
-    const Vec x = prob.get_solution_vector();
-    PetscReal l2_norm = 0;
-    VecNorm(x, NORM_2, &l2_norm);
+    auto x = prob.get_solution_vector();
+    Real l2_norm = 0;
+    VecNorm((Vec) x, NORM_2, &l2_norm);
     EXPECT_DOUBLE_EQ(l2_norm, 0.);
 }
 
@@ -120,7 +118,7 @@ TEST(NonlinearProblemTest, solve)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
@@ -136,11 +134,11 @@ TEST(NonlinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     // extract the solution and make sure it is [2, 3]
-    const Vec x = prob.get_solution_vector();
-    PetscInt ni = 2;
-    PetscInt ix[2] = { 0, 1 };
-    PetscScalar xx[2];
-    VecGetValues(x, ni, ix, xx);
+    auto x = prob.get_solution_vector();
+    Int ni = 2;
+    Int ix[2] = { 0, 1 };
+    Scalar xx[2];
+    VecGetValues((Vec) x, ni, ix, xx);
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);
@@ -152,7 +150,7 @@ TEST(NonlinearProblemTest, compute_callbacks)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = NonlinearProblem::parameters();
@@ -160,11 +158,11 @@ TEST(NonlinearProblemTest, compute_callbacks)
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
     NonlinearProblem prob(prob_pars);
 
-    Vec x;
-    Vec F;
+    Vector x;
+    Vector F;
     EXPECT_EQ(prob.compute_residual(x, F), 0);
 
-    Mat J;
+    Matrix J;
     EXPECT_EQ(prob.compute_jacobian(x, J, J), 0);
 }
 
@@ -189,7 +187,7 @@ TEST(NonlinearProblemTest, run)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
@@ -222,7 +220,7 @@ TEST(NonlinearProblemTest, line_search_type)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
@@ -257,7 +255,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 

@@ -9,13 +9,13 @@ namespace internal {
 
 static PetscErrorCode
 integrate(PetscDS ds,
-          PetscInt field,
-          PetscInt ne,
+          Int field,
+          Int ne,
           PetscFEGeom * cgeom,
-          const PetscScalar coefficients[],
+          const Scalar coefficients[],
           PetscDS ds_aux,
-          const PetscScalar coefficients_aux[],
-          PetscScalar integral[])
+          const Scalar coefficients_aux[],
+          Scalar integral[])
 {
     _F_;
     void * ctx;
@@ -28,14 +28,14 @@ integrate(PetscDS ds,
 
 static PetscErrorCode
 integrate_bd(PetscDS ds,
-             PetscInt field,
+             Int field,
              PetscBdPointFunc obj_func,
-             PetscInt ne,
+             Int ne,
              PetscFEGeom * fgeom,
-             const PetscScalar coefficients[],
+             const Scalar coefficients[],
              PetscDS ds_aux,
-             const PetscScalar coefficients_aux[],
-             PetscScalar integral[])
+             const Scalar coefficients_aux[],
+             Scalar integral[])
 {
     _F_;
     void * ctx;
@@ -56,14 +56,14 @@ integrate_bd(PetscDS ds,
 static PetscErrorCode
 integrate_residual(PetscDS ds,
                    PetscFormKey key,
-                   PetscInt ne,
+                   Int ne,
                    PetscFEGeom * cgeom,
-                   const PetscScalar coefficients[],
-                   const PetscScalar coefficients_t[],
+                   const Scalar coefficients[],
+                   const Scalar coefficients_t[],
                    PetscDS ds_aux,
-                   const PetscScalar coefficients_aux[],
-                   PetscReal t,
-                   PetscScalar elem_vec[])
+                   const Scalar coefficients_aux[],
+                   Real t,
+                   Scalar elem_vec[])
 {
     _F_;
     void * ctx;
@@ -86,14 +86,14 @@ static PetscErrorCode
 integrate_bd_residual(PetscDS ds,
                       PetscWeakForm /*wf*/,
                       PetscFormKey key,
-                      PetscInt ne,
+                      Int ne,
                       PetscFEGeom * fgeom,
-                      const PetscScalar coefficients[],
-                      const PetscScalar coefficients_t[],
+                      const Scalar coefficients[],
+                      const Scalar coefficients_t[],
                       PetscDS ds_aux,
-                      const PetscScalar coefficients_aux[],
-                      PetscReal t,
-                      PetscScalar elem_vec[])
+                      const Scalar coefficients_aux[],
+                      Real t,
+                      Scalar elem_vec[])
 {
     _F_;
     void * ctx;
@@ -116,20 +116,20 @@ PetscErrorCode
 integrate_jacobian(PetscDS ds,
                    PetscFEJacobianType jtype,
                    PetscFormKey key,
-                   PetscInt ne,
+                   Int ne,
                    PetscFEGeom * cgeom,
-                   const PetscScalar coefficients[],
-                   const PetscScalar coefficients_t[],
+                   const Scalar coefficients[],
+                   const Scalar coefficients_t[],
                    PetscDS ds_aux,
-                   const PetscScalar coefficients_aux[],
-                   PetscReal t,
-                   PetscReal u_tshift,
-                   PetscScalar elem_mat[])
+                   const Scalar coefficients_aux[],
+                   Real t,
+                   Real u_tshift,
+                   Scalar elem_mat[])
 {
     _F_;
-    PetscInt n_fields;
+    Int n_fields;
     PETSC_CHECK(PetscDSGetNumFields(ds, &n_fields));
-    PetscInt field_i = key.field / n_fields;
+    Int field_i = key.field / n_fields;
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
@@ -152,20 +152,20 @@ static PetscErrorCode
 integrate_bd_jacobian(PetscDS ds,
                       PetscWeakForm /*wf*/,
                       PetscFormKey key,
-                      PetscInt ne,
+                      Int ne,
                       PetscFEGeom * fgeom,
-                      const PetscScalar coefficients[],
-                      const PetscScalar coefficients_t[],
+                      const Scalar coefficients[],
+                      const Scalar coefficients_t[],
                       PetscDS ds_aux,
-                      const PetscScalar coefficients_aux[],
-                      PetscReal t,
-                      PetscReal u_tshift,
-                      PetscScalar elem_mat[])
+                      const Scalar coefficients_aux[],
+                      Real t,
+                      Real u_tshift,
+                      Scalar elem_mat[])
 {
     _F_;
-    PetscInt n_fields;
+    Int n_fields;
     PETSC_CHECK(PetscDSGetNumFields(ds, &n_fields));
-    PetscInt field_i = key.field / n_fields;
+    Int field_i = key.field / n_fields;
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
@@ -185,11 +185,11 @@ integrate_bd_jacobian(PetscDS ds,
 
 PetscErrorCode
 create_lagrange_petscfe(MPI_Comm comm,
-                        PetscInt dim,
-                        PetscInt nc,
+                        Int dim,
+                        Int nc,
                         PetscBool is_simplex,
-                        PetscInt k,
-                        PetscInt qorder,
+                        Int k,
+                        Int qorder,
                         PetscFE * fem)
 {
     _F_;

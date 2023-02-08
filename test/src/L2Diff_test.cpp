@@ -11,7 +11,7 @@ TEST(L2DiffTest, compute)
 
     Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
-    mesh_params.set<PetscInt>("nx") = 2;
+    mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
@@ -42,6 +42,6 @@ TEST(L2DiffTest, compute)
     prob.solve();
     prob.compute_postprocessors();
 
-    PetscReal l2_err = ps.get_value();
+    Real l2_err = ps.get_value();
     EXPECT_NEAR(l2_err, 0.0416667, 1e-7);
 }

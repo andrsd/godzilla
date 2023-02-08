@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "Types.h"
 #include "petsc.h"
 
 namespace godzilla {
@@ -15,28 +16,28 @@ public:
     ///
     /// @param x Independent values
     /// @param y Dependent values
-    LinearInterpolation(const std::vector<PetscReal> & x, const std::vector<PetscReal> & y);
+    LinearInterpolation(const std::vector<Real> & x, const std::vector<Real> & y);
 
     /// Create the interpolation object by providing independent and dependent values
     ///
     /// @param x Independent values
     /// @param y Dependent values
-    void create(const std::vector<PetscReal> & x, const std::vector<PetscReal> & y);
+    void create(const std::vector<Real> & x, const std::vector<Real> & y);
 
     /// Sample the interpolation at a point
     ///
     /// @params x Point where we sample the interpolation
     /// @return Interpolated value
-    PetscReal sample(PetscReal x);
+    Real sample(Real x);
 
 protected:
     /// Check that the supplied values are consistent
     void check();
 
     /// Independent values
-    std::vector<PetscReal> x;
+    std::vector<Real> x;
     /// Dependent values
-    std::vector<PetscReal> y;
+    std::vector<Real> y;
 };
 
 } // namespace godzilla

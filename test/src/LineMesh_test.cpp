@@ -15,9 +15,9 @@ TEST(LineMeshTest, api)
     Parameters params = LineMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
-    params.set<PetscReal>("xmin") = 1;
-    params.set<PetscReal>("xmax") = 2;
-    params.set<PetscInt>("nx") = 10;
+    params.set<Real>("xmin") = 1;
+    params.set<Real>("xmax") = 2;
+    params.set<Int>("nx") = 10;
     LineMesh mesh(params);
 
     EXPECT_EQ(mesh.get_x_min(), 1);
@@ -29,14 +29,14 @@ TEST(LineMeshTest, api)
 
     EXPECT_EQ(mesh.get_dimension(), 1);
 
-    PetscReal gmin[4], gmax[4];
+    Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
     EXPECT_EQ(gmin[0], 1);
     EXPECT_EQ(gmax[0], 2);
 
     Vec coords;
     DMGetCoordinates(dm, &coords);
-    PetscInt nx;
+    Int nx;
     VecGetSize(coords, &nx);
     EXPECT_EQ(nx, 11);
 }
@@ -50,9 +50,9 @@ TEST(LineMeshTest, incorrect_dims)
     Parameters params = LineMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
-    params.set<PetscReal>("xmin") = 2;
-    params.set<PetscReal>("xmax") = 1;
-    params.set<PetscInt>("nx") = 2;
+    params.set<Real>("xmin") = 2;
+    params.set<Real>("xmax") = 1;
+    params.set<Int>("nx") = 2;
     LineMesh mesh(params);
 
     app.check_integrity();
@@ -71,9 +71,9 @@ TEST(LineMeshTest, distribute)
     Parameters params = LineMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "line_mesh";
-    params.set<PetscReal>("xmin") = 0;
-    params.set<PetscReal>("xmax") = 1;
-    params.set<PetscInt>("nx") = 4;
+    params.set<Real>("xmin") = 0;
+    params.set<Real>("xmax") = 1;
+    params.set<Int>("nx") = 4;
     LineMesh mesh(params);
     mesh.create();
 

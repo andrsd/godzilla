@@ -19,7 +19,7 @@ protected:
         {
             const std::string class_name = "LineMesh";
             Parameters * params = Factory::get_parameters(class_name);
-            params->set<PetscInt>("nx") = 1;
+            params->set<Int>("nx") = 1;
             this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
         }
 
@@ -94,15 +94,13 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
     class TestProblem : public LinearProblem {
     public:
         explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
-
-    protected:
         virtual PetscErrorCode
-        compute_rhs_callback(Vec b) override
+        compute_rhs(Vector & b) override
         {
             return 0;
         }
         virtual PetscErrorCode
-        compute_operators_callback(Mat A, Mat B) override
+        compute_operators(Matrix & A, Matrix & B) override
         {
             return 0;
         }
@@ -112,7 +110,7 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
 
     Parameters mesh_pars = TestMesh::parameters();
     mesh_pars.set<const App *>("_app") = this->app;
-    mesh_pars.set<PetscInt>("nx") = 1;
+    mesh_pars.set<Int>("nx") = 1;
     TestMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestProblem::parameters();
@@ -162,12 +160,12 @@ TEST_F(HDF5OutputTest, output)
     const std::string file_name = out->get_file_name();
     PetscViewer viewer;
     Vec sln;
-    PetscReal diff;
+    Real diff;
     DMCreateGlobalVector(mesh->get_dm(), &sln);
     PetscObjectSetName((PetscObject) sln, "sln");
     PetscViewerHDF5Open(PETSC_COMM_WORLD, file_name.c_str(), FILE_MODE_READ, &viewer);
     VecLoad(sln, viewer);
-    VecAXPY(sln, -1.0, prob->get_solution_vector());
+    VecAXPY(sln, -1.0, (Vec) prob->get_solution_vector());
     VecNorm(sln, NORM_INFINITY, &diff);
     EXPECT_LT(diff, PETSC_MACHINE_EPSILON);
     PetscViewerDestroy(&viewer);

@@ -30,31 +30,31 @@ public:
     NO_DISCARD virtual DMLabel get_label(const std::string & name) const;
 
     /// Return the number of mesh vertices
-    NO_DISCARD virtual PetscInt get_num_vertices() const;
+    NO_DISCARD virtual Int get_num_vertices() const;
 
     /// Get range of vertex indices
     ///
     /// @param first First vertex index
     /// @param last Last vertex index plus one
-    void get_vertex_idx_range(PetscInt & first, PetscInt & last) const;
+    void get_vertex_idx_range(Int & first, Int & last) const;
 
     /// Return the number of mesh elements (interior)
-    NO_DISCARD virtual PetscInt get_num_elements() const;
+    NO_DISCARD virtual Int get_num_elements() const;
 
     /// Return the number of all mesh elements (interior + ghosted)
-    NO_DISCARD virtual PetscInt get_num_all_elements() const;
+    NO_DISCARD virtual Int get_num_all_elements() const;
 
     /// Get range of element indices (interior only)
     ///
     /// @param first First element index
     /// @param last Last element index plus one
-    void get_element_idx_range(PetscInt & first, PetscInt & last) const;
+    void get_element_idx_range(Int & first, Int & last) const;
 
     /// Get range of all element indices (interior + ghosted)
     ///
     /// @param first First element index
     /// @param last Last element index plus one
-    void get_all_element_idx_range(PetscInt & first, PetscInt & last) const;
+    void get_all_element_idx_range(Int & first, Int & last) const;
 
     /// Get index set with all elements
     ///
@@ -65,7 +65,7 @@ public:
     ///
     /// @param el Element index
     /// @return Cell type
-    NO_DISCARD virtual DMPolytopeType get_cell_type(PetscInt el) const;
+    NO_DISCARD virtual DMPolytopeType get_cell_type(Int el) const;
 
     /// Set partitioner type
     ///
@@ -75,7 +75,7 @@ public:
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
-    virtual void set_partition_overlap(PetscInt overlap);
+    virtual void set_partition_overlap(Int overlap);
 
     /// Is the first cell in the mesh a simplex?
     ///
@@ -86,35 +86,35 @@ public:
     ///
     /// @param id The ID of the cell set
     /// @return Cell set name
-    const std::string & get_cell_set_name(PetscInt id) const;
+    const std::string & get_cell_set_name(Int id) const;
 
     /// Get cell set ID
     ///
     /// @param name The name of a cell sel
     /// @return Cell set ID
-    PetscInt get_cell_set_id(const std::string & name) const;
+    Int get_cell_set_id(const std::string & name) const;
 
     /// Get number of cell sets
     ///
     /// @return Number of cell sets
-    NO_DISCARD PetscInt get_num_cell_sets() const;
+    NO_DISCARD Int get_num_cell_sets() const;
 
     /// Get face set name
     ///
     /// @param id The ID of the face set
     /// @return Facet name
-    const std::string & get_face_set_name(PetscInt id) const;
+    const std::string & get_face_set_name(Int id) const;
 
     /// Get number of face sets
     ///
     /// @return Number of face sets
-    NO_DISCARD PetscInt get_num_face_sets() const;
+    NO_DISCARD Int get_num_face_sets() const;
 
     /// Set face set name
     ///
     /// @param id The ID of the face set
     /// @param name The name of the face set
-    void set_face_set_name(PetscInt id, const std::string & name);
+    void set_face_set_name(Int id, const std::string & name);
 
     /// Check if mesh has a label corresponding to a face set name
     ///
@@ -131,7 +131,7 @@ public:
     /// Get number of vertex sets
     ///
     /// @return Number of vertex sets
-    NO_DISCARD PetscInt get_num_vertex_sets() const;
+    NO_DISCARD Int get_num_vertex_sets() const;
 
     void distribute() override;
 
@@ -143,11 +143,11 @@ protected:
     /// Method that builds DM for the mesh
     virtual void create_dm() = 0;
 
-    void create_cell_set(PetscInt id, const std::string & name);
+    void create_cell_set(Int id, const std::string & name);
 
-    void create_face_set_labels(const std::map<PetscInt, std::string> & names);
+    void create_face_set_labels(const std::map<Int, std::string> & names);
 
-    void create_face_set(PetscInt id);
+    void create_face_set(Int id);
 
     /// DM object
     DM dm;
@@ -156,19 +156,19 @@ protected:
     PetscPartitioner partitioner;
 
     /// Partition overlap for mesh partitioning
-    PetscInt partition_overlap;
+    Int partition_overlap;
 
     /// Cell set names
-    std::map<PetscInt, std::string> cell_set_names;
+    std::map<Int, std::string> cell_set_names;
 
     /// Cell set IDs
-    std::map<std::string, PetscInt> cell_set_ids;
+    std::map<std::string, Int> cell_set_ids;
 
     /// Face set names
-    std::map<PetscInt, std::string> face_set_names;
+    std::map<Int, std::string> face_set_names;
 
     /// Face set IDs
-    std::map<std::string, PetscInt> face_set_ids;
+    std::map<std::string, Int> face_set_ids;
 
 public:
     static Parameters parameters();

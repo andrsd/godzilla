@@ -65,7 +65,7 @@ TEST_F(CSVOutputTest, output)
     public:
         explicit TestPostprocessor(const Parameters & pars) : Postprocessor(pars) {}
         virtual void compute() {};
-        virtual PetscReal
+        virtual Real
         get_value()
         {
             return 1.;

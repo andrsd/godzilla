@@ -6,7 +6,7 @@ namespace godzilla {
 
 JacobianFunc::JacobianFunc(const FEProblemInterface * fepi) : Functional(fepi) {}
 
-const PetscInt &
+const Int &
 JacobianFunc::get_spatial_dimension() const
 {
     _F_;
@@ -27,14 +27,14 @@ JacobianFunc::get_field_gradient(const std::string & field_name) const
     return get_fe_problem()->get_field_gradient(field_name);
 }
 
-const PetscReal &
+const Real &
 JacobianFunc::get_time_shift() const
 {
     _F_;
     return get_fe_problem()->get_time_shift();
 }
 
-const PetscReal &
+const Real &
 JacobianFunc::get_time() const
 {
     _F_;

@@ -13,13 +13,13 @@ static const char * TS_ADAPT_TEST = "test";
 
 static PetscErrorCode __ts_adapt_choose(TSAdapt adapt,
                                         TS ts,
-                                        PetscReal h,
-                                        PetscInt * next_sc,
-                                        PetscReal * next_h,
+                                        Real h,
+                                        Int * next_sc,
+                                        Real * next_h,
                                         PetscBool * accept,
-                                        PetscReal * wlte,
-                                        PetscReal * wltea,
-                                        PetscReal * wlter);
+                                        Real * wlte,
+                                        Real * wltea,
+                                        Real * wlter);
 
 PETSC_EXTERN PetscErrorCode
 TSAdaptCreate_test(TSAdapt adapt)
@@ -36,15 +36,15 @@ class TestTSAdaptor : public TimeSteppingAdaptor {
 public:
     explicit TestTSAdaptor(const Parameters & params);
 
-    virtual void choose(PetscReal h,
-                        PetscInt * next_sc,
-                        PetscReal * next_h,
+    virtual void choose(Real h,
+                        Int * next_sc,
+                        Real * next_h,
                         PetscBool * accept,
-                        PetscReal * wlte,
-                        PetscReal * wltea,
-                        PetscReal * wlter);
+                        Real * wlte,
+                        Real * wltea,
+                        Real * wlter);
 
-    std::vector<PetscReal> dts;
+    std::vector<Real> dts;
 
     static Parameters parameters();
 
@@ -73,15 +73,15 @@ TestTSAdaptor::TestTSAdaptor(const Parameters & params) : TimeSteppingAdaptor(pa
 }
 
 void
-TestTSAdaptor::choose(PetscReal h,
-                      PetscInt * next_sc,
-                      PetscReal * next_h,
+TestTSAdaptor::choose(Real h,
+                      Int * next_sc,
+                      Real * next_h,
                       PetscBool * accept,
-                      PetscReal * wlte,
-                      PetscReal * wltea,
-                      PetscReal * wlter)
+                      Real * wlte,
+                      Real * wltea,
+                      Real * wlter)
 {
-    PetscInt idx = this->problem->get_step_num();
+    Int idx = this->problem->get_step_num();
     *next_sc = 0;
     if (idx < 3) {
         *next_h = this->dts[idx];
@@ -99,13 +99,13 @@ TestTSAdaptor::choose(PetscReal h,
 static PetscErrorCode
 __ts_adapt_choose(TSAdapt adapt,
                   TS ts,
-                  PetscReal h,
-                  PetscInt * next_sc,
-                  PetscReal * next_h,
+                  Real h,
+                  Int * next_sc,
+                  Real * next_h,
                   PetscBool * accept,
-                  PetscReal * wlte,
-                  PetscReal * wltea,
-                  PetscReal * wlter)
+                  Real * wlte,
+                  Real * wltea,
+                  Real * wlter)
 {
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
@@ -122,10 +122,10 @@ class TestTSProblem : public GTestImplicitFENonlinearProblem {
 public:
     explicit TestTSProblem(const Parameters & params);
 
-    std::vector<PetscReal> dts;
+    std::vector<Real> dts;
 
 protected:
-    virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
+    virtual PetscErrorCode ts_monitor_callback(Int stepi, Real time, Vec x);
 };
 
 REGISTER_OBJECT(TestTSProblem);
@@ -136,9 +136,9 @@ TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonline
 }
 
 PetscErrorCode
-TestTSProblem::ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x)
+TestTSProblem::ts_monitor_callback(Int stepi, Real time, Vec x)
 {
-    PetscReal dt;
+    Real dt;
     PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
     this->dts[stepi] = dt;
     return 0;
@@ -161,7 +161,7 @@ TEST(TimeSteppingAdaptor, api)
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 2;
+        params->set<Int>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
 
@@ -170,9 +170,9 @@ TEST(TimeSteppingAdaptor, api)
         const std::string class_name = "TestTSProblem";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        params->set<PetscReal>("start_time") = 0.;
-        params->set<PetscReal>("end_time") = 1;
-        params->set<PetscReal>("dt") = 0.1;
+        params->set<Real>("start_time") = 0.;
+        params->set<Real>("end_time") = 1;
+        params->set<Real>("dt") = 0.1;
         prob = app.build_object<TestTSProblem>(class_name, "prob", params);
     }
     app.problem = prob;
@@ -183,8 +183,8 @@ TEST(TimeSteppingAdaptor, api)
     params.set<const App *>("_app") = &app;
     params.set<const Problem *>("_problem") = prob;
     params.set<const TransientProblemInterface *>("_tpi") = prob;
-    params.set<PetscReal>("dt_min") = 1e-3;
-    params.set<PetscReal>("dt_max") = 1e3;
+    params.set<Real>("dt_min") = 1e-3;
+    params.set<Real>("dt_max") = 1e3;
     MockTSAdaptor adaptor(params);
 
     EXPECT_DOUBLE_EQ(adaptor.get_dt_min(), 1e-3);
@@ -203,7 +203,7 @@ TEST(TimeSteppingAdaptor, choose)
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 2;
+        params->set<Int>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
 
@@ -212,9 +212,9 @@ TEST(TimeSteppingAdaptor, choose)
         const std::string class_name = "TestTSProblem";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        params->set<PetscReal>("start_time") = 0.;
-        params->set<PetscReal>("end_time") = 1;
-        params->set<PetscReal>("dt") = 0.1;
+        params->set<Real>("start_time") = 0.;
+        params->set<Real>("end_time") = 1;
+        params->set<Real>("dt") = 0.1;
         prob = app.build_object<TestTSProblem>(class_name, "prob", params);
     }
     app.problem = prob;

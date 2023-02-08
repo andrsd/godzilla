@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Types.h"
 #include "Object.h"
 #include "PrintInterface.h"
+#include "Vector.h"
 #include "petscdm.h"
 #include "petscpartitioner.h"
 
@@ -31,21 +33,21 @@ public:
     /// provide DM for the underlying KSP object
     virtual DM get_dm() const = 0;
     /// Return solution vector
-    virtual Vec get_solution_vector() const = 0;
+    virtual const Vector & get_solution_vector() const = 0;
     /// Get mesh this problem is using
     virtual const Mesh * get_mesh() const;
     /// Get problem spatial dimension
-    virtual PetscInt get_dimension() const;
+    virtual Int get_dimension() const;
 
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
     /// @return Simulation time
-    const PetscReal & get_time() const;
+    const Real & get_time() const;
 
     /// Get time step number
     ///
     /// @return Time step number
-    const PetscInt & get_step_num() const;
+    const Int & get_step_num() const;
 
     /// Get list of functions
     ///
@@ -112,10 +114,10 @@ protected:
     std::vector<std::string> pps_names;
 
     /// Simulation time
-    PetscReal time;
+    Real time;
 
     /// Time step number
-    PetscInt step_num;
+    Int step_num;
 
 public:
     static Parameters parameters();

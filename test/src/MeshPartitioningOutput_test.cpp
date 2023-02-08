@@ -31,11 +31,13 @@ public:
     {
         return nullptr;
     }
-    virtual Vec
+    virtual const Vector &
     get_solution_vector() const override
     {
-        return nullptr;
+        return this->sln;
     }
+
+    Vector sln;
 };
 
 } // namespace
@@ -46,9 +48,9 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
 
     Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
-    mesh_params.set<PetscReal>("xmin") = 0;
-    mesh_params.set<PetscReal>("xmax") = 1;
-    mesh_params.set<PetscInt>("nx") = 4;
+    mesh_params.set<Real>("xmin") = 0;
+    mesh_params.set<Real>("xmax") = 1;
+    mesh_params.set<Int>("nx") = 4;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
@@ -70,9 +72,9 @@ TEST(MeshPartitioningOutputTest, output)
 
     Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
-    mesh_params.set<PetscReal>("xmin") = 0;
-    mesh_params.set<PetscReal>("xmax") = 1;
-    mesh_params.set<PetscInt>("nx") = 4;
+    mesh_params.set<Real>("xmin") = 0;
+    mesh_params.set<Real>("xmax") = 1;
+    mesh_params.set<Int>("nx") = 4;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
@@ -97,7 +99,7 @@ TEST(MeshPartitioningOutputTest, output)
     PetscObjectSetName((PetscObject) p, "fields/partitioning");
     PetscViewerHDF5Open(app.get_comm(), "part.h5", FILE_MODE_READ, &viewer);
     VecLoad(p, viewer);
-    PetscReal l2_norm;
+    Real l2_norm;
     VecNorm(p, NORM_2, &l2_norm);
     EXPECT_NEAR(l2_norm, 0, 1e-10);
     VecDestroy(&p);

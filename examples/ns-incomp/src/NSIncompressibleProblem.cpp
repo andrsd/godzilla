@@ -353,7 +353,7 @@ NSIncompressibleProblem::set_up_preconditioning()
     }
     PetscFree(field_names);
     PetscFree(is);
-    PETSC_CHECK(PCSetOperators(pc, this->J, this->J));
+    PETSC_CHECK(PCSetOperators(pc, (Mat) this->J, (Mat) this->J));
     PETSC_CHECK(PCSetUp(pc));
 
     PetscInt n;

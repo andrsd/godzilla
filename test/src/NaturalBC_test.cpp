@@ -15,7 +15,7 @@ TEST(NaturalBCTest, api)
 
     Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
-    mesh_params.set<PetscInt>("nx") = 2;
+    mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
@@ -28,7 +28,7 @@ TEST(NaturalBCTest, api)
     public:
         explicit MockNaturalBC(const Parameters & params) : NaturalBC(params), comps({ 3, 5 }) {}
 
-        virtual const std::vector<PetscInt> &
+        virtual const std::vector<Int> &
         get_components() const
         {
             return this->comps;
@@ -40,7 +40,7 @@ TEST(NaturalBCTest, api)
         }
 
     protected:
-        std::vector<PetscInt> comps;
+        std::vector<Int> comps;
     };
 
     Parameters params = NaturalBC::parameters();
@@ -53,7 +53,7 @@ TEST(NaturalBCTest, api)
     prob.create();
     bc.create();
 
-    std::vector<PetscInt> comps = bc.get_components();
+    std::vector<Int> comps = bc.get_components();
     EXPECT_THAT(comps, testing::ElementsAre(3, 5));
 }
 
@@ -64,7 +64,7 @@ public:
     explicit TestNatF0(const NaturalBC * bc) : BndResidualFunc(bc), u(get_field_value("u")) {}
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(Scalar f[]) override
     {
         f[0] = 100 * this->u[0];
     }
@@ -78,7 +78,7 @@ public:
     explicit TestNatG0(const NaturalBC * bc) : BndJacobianFunc(bc) {}
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(Scalar g[]) override
     {
         g[0] = 100;
     }
@@ -92,7 +92,7 @@ TEST(NaturalBCTest, fe)
     public:
         explicit TestNaturalBC(const Parameters & params) : NaturalBC(params), comps({ 0 }) {}
 
-        virtual const std::vector<PetscInt> &
+        virtual const std::vector<Int> &
         get_components() const
         {
             return this->comps;
@@ -105,7 +105,7 @@ TEST(NaturalBCTest, fe)
             set_jacobian_block(this->fid, new TestNatG0(this), nullptr, nullptr, nullptr);
         }
 
-        PetscInt
+        Int
         get_bd() const
         {
             return this->bd;
@@ -123,21 +123,21 @@ TEST(NaturalBCTest, fe)
             return this->label;
         }
 
-        const std::vector<PetscInt> &
+        const std::vector<Int> &
         get_ids() const
         {
             return this->ids;
         }
 
     protected:
-        std::vector<PetscInt> comps;
+        std::vector<Int> comps;
     };
 
     TestApp app;
 
     Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
-    mesh_params.set<PetscInt>("nx") = 2;
+    mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
@@ -160,18 +160,18 @@ TEST(NaturalBCTest, fe)
 
     PetscDS ds = prob.getDS();
     //
-    PetscInt num_bd;
+    Int num_bd;
     PetscDSGetNumBoundary(ds, &num_bd);
     EXPECT_EQ(num_bd, 1);
     //
     DMBoundaryConditionType type;
     const char * name;
     DMLabel label;
-    PetscInt nv;
-    const PetscInt * values;
-    PetscInt field;
-    PetscInt nc;
-    const PetscInt * comps;
+    Int nv;
+    const Int * values;
+    Int field;
+    Int nc;
+    const Int * comps;
     PetscDSGetBoundary(ds,
                        bc.get_bd(),
                        nullptr,
@@ -194,8 +194,8 @@ TEST(NaturalBCTest, fe)
     EXPECT_EQ(comps[0], 0);
     //
     WeakForm * wf = bc.get_wf();
-    PetscInt id = bc.get_ids()[0];
-    PetscInt part = 0;
+    Int id = bc.get_ids()[0];
+    Int part = 0;
     const auto & f0 = wf->get(PETSC_WF_BDF0, bc.get_label(), id, field, part);
     EXPECT_EQ(f0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatF0 *>(f0[0]), nullptr);

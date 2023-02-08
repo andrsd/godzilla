@@ -31,7 +31,7 @@ protected:
     /// @param g1 Integrand for the test function and basis function gradient term
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
-    void set_jacobian_block(PetscInt gid,
+    void set_jacobian_block(Int gid,
                             BndJacobianFunc * g0,
                             BndJacobianFunc * g1,
                             BndJacobianFunc * g2,
@@ -43,7 +43,7 @@ protected:
     WeakForm * wf;
 
     /// Boundary number
-    PetscInt bd;
+    Int bd;
 
 public:
     static Parameters parameters();

@@ -13,9 +13,9 @@ public:
     explicit FunctionAuxiliaryField(const Parameters & params);
 
     void create() override;
-    PetscInt get_num_components() const override;
+    Int get_num_components() const override;
     PetscFunc * get_func() const override;
-    void evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscScalar u[]);
+    void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]);
 
 public:
     static Parameters parameters();

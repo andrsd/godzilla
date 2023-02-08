@@ -19,7 +19,7 @@ protected:
     /// Get spatial dimension
     ///
     /// @return Spatial dimension
-    NO_DISCARD const PetscInt & get_spatial_dimension() const;
+    NO_DISCARD const Int & get_spatial_dimension() const;
 
     /// Get values of a field
     ///
@@ -36,17 +36,17 @@ protected:
     /// Get the multiplier a for dF/dU_t
     ///
     /// @return The multiplier a for dF/dU_t
-    NO_DISCARD const PetscReal & get_time_shift() const;
+    NO_DISCARD const Real & get_time_shift() const;
 
     /// Get time at which the function is evaluated
     ///
     /// @return Time at which is the function evaluated
-    NO_DISCARD const PetscReal & get_time() const;
+    NO_DISCARD const Real & get_time() const;
 
     /// Get normal
     ///
     /// @return Outward normal
-    NO_DISCARD const Vector & get_normal() const;
+    NO_DISCARD const Normal & get_normal() const;
 
     /// Get physical coordinates
     ///

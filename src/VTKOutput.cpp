@@ -64,8 +64,8 @@ VTKOutput::output_step()
     lprintf(9, "Output to file: %s", this->file_name);
     DM dm = this->problem->get_dm();
     PETSC_CHECK(DMView(dm, this->viewer));
-    Vec vec = this->problem->get_solution_vector();
-    PETSC_CHECK(VecView(vec, this->viewer));
+    auto vec = this->problem->get_solution_vector();
+    PETSC_CHECK(VecView((Vec) vec, this->viewer));
 }
 
 } // namespace godzilla

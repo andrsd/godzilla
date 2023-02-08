@@ -2,6 +2,8 @@
 
 #include "GodzillaConfig.h"
 #include "Problem.h"
+#include "Vector.h"
+#include "Matrix.h"
 #include "petscksp.h"
 
 namespace godzilla {
@@ -17,7 +19,12 @@ public:
     void solve() override;
     void run() override;
     bool converged() override;
-    NO_DISCARD Vec get_solution_vector() const override;
+    NO_DISCARD const Vector & get_solution_vector() const override;
+
+    /// Method to compute right-hand side. Called from the PETsc callback
+    virtual PetscErrorCode compute_rhs(Vector & b) = 0;
+    /// Method to compute operators. Called from the PETsc callback
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) = 0;
 
 protected:
     /// provide DM for the underlying KSP object
@@ -32,12 +39,8 @@ protected:
     virtual void set_up_monitors();
     /// Setup solver parameters
     virtual void set_up_solver_parameters();
-    /// Method to compute right-hand side. Called from the PETsc callback
-    virtual PetscErrorCode compute_rhs_callback(Vec b) = 0;
-    /// Method to compute operators. Called from the PETsc callback
-    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) = 0;
     /// KSP monitor
-    PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
+    PetscErrorCode ksp_monitor_callback(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning
@@ -46,27 +49,25 @@ protected:
     /// KSP object
     KSP ksp;
     /// The solution vector
-    Vec x;
+    Vector x;
     /// The right-hand side vector
-    Vec b;
+    Vector b;
     /// Linear operator matrix
-    Mat A;
+    Matrix A;
     /// Converged reason
     KSPConvergedReason converged_reason;
 
     /// Relative convergence tolerance for the linear solver
-    PetscReal lin_rel_tol;
+    Real lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver
-    PetscReal lin_abs_tol;
+    Real lin_abs_tol;
     /// Maximum number of iterations for the linear solver
-    PetscInt lin_max_iter;
+    Int lin_max_iter;
 
 public:
     static Parameters parameters();
 
-    friend PetscErrorCode __compute_rhs(KSP ksp, Vec b, void * ctx);
-    friend PetscErrorCode __compute_operators(KSP ksp, Mat A, Mat B, void * ctx);
-    friend PetscErrorCode __ksp_monitor_linear(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx);
+    friend PetscErrorCode __ksp_monitor_linear(KSP ksp, Int it, Real rnorm, void * ctx);
 };
 
 } // namespace godzilla

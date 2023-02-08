@@ -12,13 +12,9 @@ public:
     explicit FunctionIC(const Parameters & params);
 
     void create() override;
-    PetscInt get_num_components() const override;
+    Int get_num_components() const override;
 
-    void evaluate(PetscInt dim,
-                  PetscReal time,
-                  const PetscReal x[],
-                  PetscInt Nc,
-                  PetscScalar u[]) override;
+    void evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) override;
 
 public:
     static Parameters parameters();

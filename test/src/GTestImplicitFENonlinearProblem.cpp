@@ -20,7 +20,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(Scalar f[]) override
     {
         f[0] = this->u_t[0];
     }
@@ -39,14 +39,14 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(Scalar f[]) override
     {
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             f[d] = this->u_x[d];
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldGradient & u_x;
 };
 
@@ -59,13 +59,13 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(Scalar g[]) override
     {
         g[0] = this->u_t_shift;
     }
 
 protected:
-    const PetscReal & u_t_shift;
+    const Real & u_t_shift;
 };
 
 class G3 : public JacobianFunc {
@@ -77,14 +77,14 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(Scalar g[]) override
     {
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.;
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 } // namespace
@@ -105,7 +105,7 @@ void
 GTestImplicitFENonlinearProblem::set_up_fields()
 {
     _F_;
-    PetscInt order = 1;
+    Int order = 1;
     set_fe(this->iu, "u", 1, order);
 }
 

@@ -7,12 +7,7 @@
 namespace godzilla {
 
 static PetscErrorCode
-initial_condition_function(PetscInt dim,
-                           PetscReal time,
-                           const PetscReal x[],
-                           PetscInt Nc,
-                           PetscScalar u[],
-                           void * ctx)
+initial_condition_function(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx)
 {
     _F_;
     auto * ic = static_cast<InitialCondition *>(ctx);
@@ -62,7 +57,7 @@ InitialCondition::create()
     }
 }
 
-PetscInt
+Int
 InitialCondition::get_field_id() const
 {
     _F_;

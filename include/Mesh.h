@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Types.h"
 #include "Object.h"
 #include "PrintInterface.h"
 #include "petscdm.h"
@@ -18,14 +19,14 @@ public:
     /// Get the mesh spatial dimension
     ///
     /// @return Mesh spatial dimension
-    NO_DISCARD PetscInt get_dimension() const;
+    NO_DISCARD Int get_dimension() const;
 
     /// Distribute mesh over processes
     virtual void distribute() = 0;
 
 protected:
     /// Spatial dimension of the mesh
-    PetscInt dim;
+    Int dim;
 
 public:
     static Parameters parameters();

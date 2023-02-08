@@ -13,7 +13,7 @@ TEST(FunctionICTest, api)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
@@ -34,11 +34,11 @@ TEST(FunctionICTest, api)
     EXPECT_EQ(obj.get_field_id(), 0);
     EXPECT_EQ(obj.get_num_components(), 1);
 
-    PetscInt dim = 3;
-    PetscReal time = 2.;
-    PetscReal x[] = { 1, 2, 3 };
-    PetscInt Nc = 1;
-    PetscScalar u[] = { 0 };
+    Int dim = 3;
+    Real time = 2.;
+    Real x[] = { 1, 2, 3 };
+    Int Nc = 1;
+    Scalar u[] = { 0 };
     obj.evaluate(dim, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 12);

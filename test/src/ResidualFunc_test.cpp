@@ -13,16 +13,16 @@ class GTestProblem : public ImplicitFENonlinearProblem {
 public:
     explicit GTestProblem(const Parameters & params) : ImplicitFENonlinearProblem(params) {}
 
-    MOCK_METHOD(const PetscInt &, get_spatial_dimension, (), (const));
+    MOCK_METHOD(const Int &, get_spatial_dimension, (), (const));
     MOCK_METHOD(const FieldValue &, get_field_value, (const std::string & field_name), (const));
     MOCK_METHOD(const FieldGradient &,
                 get_field_gradient,
                 (const std::string & field_name),
                 (const));
     MOCK_METHOD(const FieldValue &, get_field_dot, (const std::string & field_name), (const));
-    MOCK_METHOD(const PetscReal &, get_time_shift, (), (const));
-    MOCK_METHOD(const PetscReal &, get_time, (), (const));
-    MOCK_METHOD(const Vector &, get_normal, (), (const));
+    MOCK_METHOD(const Real &, get_time_shift, (), (const));
+    MOCK_METHOD(const Real &, get_time, (), (const));
+    MOCK_METHOD(const Normal &, get_normal, (), (const));
     MOCK_METHOD(const Point &, get_xyz, (), (const));
 
 protected:
@@ -51,17 +51,17 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(Scalar f[]) override
     {
         f[0] = 0.;
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldValue & u;
     const FieldGradient & u_x;
     const FieldValue & u_t;
-    const PetscReal & t;
+    const Real & t;
 };
 
 } // namespace
@@ -72,21 +72,21 @@ TEST(ResidualFuncTest, test)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 20;
-    prob_pars.set<PetscReal>("dt") = 5;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 20;
+    prob_pars.set<Real>("dt") = 5;
     GTestProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
-    PetscInt dim;
+    Int dim;
     EXPECT_CALL(prob, get_spatial_dimension()).Times(1).WillOnce(ReturnRef(dim));
     FieldValue val;
     EXPECT_CALL(prob, get_field_value(_)).Times(1).WillOnce(ReturnRef(val));
@@ -94,7 +94,7 @@ TEST(ResidualFuncTest, test)
     EXPECT_CALL(prob, get_field_gradient(_)).Times(1).WillOnce(ReturnRef(grad));
     FieldValue dot;
     EXPECT_CALL(prob, get_field_dot(_)).Times(1).WillOnce(ReturnRef(dot));
-    PetscReal time;
+    Real time;
     EXPECT_CALL(prob, get_time()).Times(1).WillOnce(ReturnRef(time));
 
     TestF res(&prob);

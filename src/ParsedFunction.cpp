@@ -11,19 +11,14 @@ static double
 parsed_function_eval(void * ctx, double t, double x, double y, double z)
 {
     auto * fn = static_cast<ParsedFunction *>(ctx);
-    PetscReal u[1] = { 0. };
-    PetscReal coord[3] = { x, y, z };
+    Real u[1] = { 0. };
+    Real coord[3] = { x, y, z };
     fn->evaluate(3, t, coord, 1, u);
     return u[0];
 }
 
 static PetscErrorCode
-parsed_function(PetscInt dim,
-                PetscReal time,
-                const PetscReal x[],
-                PetscInt nc,
-                PetscScalar u[],
-                void * ctx)
+parsed_function(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     auto * fn = static_cast<ParsedFunction *>(ctx);
     fn->evaluate(dim, time, x, nc, u);
@@ -37,14 +32,14 @@ ParsedFunction::parameters()
     params.add_param<std::vector<std::string>>(
         "function",
         "Text representation of the function to evaluate (one per component)");
-    params.add_param<std::map<std::string, PetscReal>>("constants", "Constants");
+    params.add_param<std::map<std::string, Real>>("constants", "Constants");
     return params;
 }
 
 ParsedFunction::ParsedFunction(const Parameters & params) :
     Function(params),
     function(get_param<std::vector<std::string>>("function")),
-    constants(get_param<std::map<std::string, PetscReal>>("constants"))
+    constants(get_param<std::map<std::string, Real>>("constants"))
 {
     _F_;
     this->evalr.create(this->function);
@@ -75,11 +70,7 @@ ParsedFunction::register_callback(mu::Parser & parser)
 }
 
 void
-ParsedFunction::evaluate(PetscInt dim,
-                         PetscReal time,
-                         const PetscReal x[],
-                         PetscInt nc,
-                         PetscScalar u[])
+ParsedFunction::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
     _F_;
     this->evalr.evaluate(dim, time, x, nc, u);

@@ -13,36 +13,38 @@
 namespace godzilla {
 
 static PetscErrorCode
-__tsfep_compute_ifunction(DM, PetscReal time, Vec x, Vec x_t, Vec F, void * user)
+__tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    fep->compute_ifunction(time, x, x_t, F);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    Vector vec_F(F);
+    fep->compute_ifunction(time, vec_x, vec_x_t, vec_F);
     return 0;
 }
 
 static PetscErrorCode
-__tsfep_compute_ijacobian(DM,
-                          PetscReal time,
-                          Vec x,
-                          Vec x_t,
-                          PetscReal x_t_shift,
-                          Mat J,
-                          Mat Jp,
-                          void * user)
+__tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * user)
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    fep->compute_ijacobian(time, x, x_t, x_t_shift, J, Jp);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    Matrix mat_J(J);
+    Matrix mat_Jp(Jp);
+    fep->compute_ijacobian(time, vec_x, vec_x_t, x_t_shift, mat_J, mat_Jp);
     return 0;
 }
 
 static PetscErrorCode
-_tsfep_compute_boundary(DM, PetscReal time, Vec x, Vec x_t, void * user)
+_tsfep_compute_boundary(DM, Real time, Vec x, Vec x_t, void * user)
 {
     _F_;
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    fep->compute_boundary(time, x, x_t);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    fep->compute_boundary(time, vec_x, vec_x_t);
     return 0;
 }
 
@@ -176,7 +178,10 @@ ImplicitFENonlinearProblem::set_up_monitors()
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::compute_ifunction(PetscReal time, Vec X, Vec X_t, Vec F)
+ImplicitFENonlinearProblem::compute_ifunction(Real time,
+                                              const Vector & X,
+                                              const Vector & X_t,
+                                              Vector & F)
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
     _F_;
@@ -185,9 +190,9 @@ ImplicitFENonlinearProblem::compute_ifunction(PetscReal time, Vec X, Vec X_t, Ve
 
     IndexSet all_cells = this->unstr_mesh->get_all_elements();
 
-    PetscInt n_ds;
+    Int n_ds;
     PETSC_CHECK(DMGetNumDS(plex, &n_ds));
-    for (PetscInt s = 0; s < n_ds; ++s) {
+    for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
         PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
@@ -203,7 +208,14 @@ ImplicitFENonlinearProblem::compute_ifunction(PetscReal time, Vec X, Vec X_t, Ve
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_residual_internal(plex, res_key, cells, time, X, X_t, time, F);
+            compute_residual_internal(plex,
+                                      res_key,
+                                      cells,
+                                      time,
+                                      (Vec) X,
+                                      (Vec) X_t,
+                                      time,
+                                      (Vec) F);
             cells.destroy();
         }
     }
@@ -213,12 +225,12 @@ ImplicitFENonlinearProblem::compute_ifunction(PetscReal time, Vec X, Vec X_t, Ve
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::compute_ijacobian(PetscReal time,
-                                              Vec X,
-                                              Vec X_t,
-                                              PetscReal x_t_shift,
-                                              Mat J,
-                                              Mat Jp)
+ImplicitFENonlinearProblem::compute_ijacobian(Real time,
+                                              const Vector & X,
+                                              const Vector & X_t,
+                                              Real x_t_shift,
+                                              Matrix & J,
+                                              Matrix & Jp)
 {
     // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
     // DMPlexTSComputeIJacobianFEM()
@@ -228,15 +240,15 @@ ImplicitFENonlinearProblem::compute_ijacobian(PetscReal time,
 
     IndexSet all_cells = this->unstr_mesh->get_all_elements();
 
-    PetscInt n_ds;
+    Int n_ds;
     PetscCall(DMGetNumDS(plex, &n_ds));
-    for (PetscInt s = 0; s < n_ds; ++s) {
+    for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
 
         if (s == 0)
-            PetscCall(MatZeroEntries(Jp));
+            Jp.zero();
 
         for (auto & jac_key : this->wf->get_jacobian_keys()) {
             IndexSet cells;
@@ -249,7 +261,15 @@ ImplicitFENonlinearProblem::compute_ijacobian(PetscReal time,
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_jacobian_internal(plex, jac_key, cells, time, x_t_shift, X, X_t, J, Jp);
+            compute_jacobian_internal(plex,
+                                      jac_key,
+                                      cells,
+                                      time,
+                                      x_t_shift,
+                                      (Vec) X,
+                                      (Vec) X_t,
+                                      (Mat) J,
+                                      (Mat) Jp);
             cells.destroy();
         }
     }
@@ -259,10 +279,10 @@ ImplicitFENonlinearProblem::compute_ijacobian(PetscReal time,
 }
 
 PetscErrorCode
-ImplicitFENonlinearProblem::compute_boundary(PetscReal time, Vec X, Vec X_t)
+ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const Vector & X_t)
 {
     _F_;
-    return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
+    return DMPlexTSComputeBoundary(get_dm(), time, (Vec) X, (Vec) X_t, this);
 }
 
 } // namespace godzilla

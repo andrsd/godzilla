@@ -4,6 +4,10 @@
 
 namespace godzilla {
 
+typedef PetscInt Int;
+typedef PetscReal Real;
+typedef PetscScalar Scalar;
+
 /// This is the API that we hand to PETSc for fields.
 ///
 /// @param dim The spatial dimension
@@ -24,30 +28,26 @@ namespace godzilla {
 /// @param numConstants The number of constants
 /// @param constants The value of each constant
 /// @param f The value of the function at this point in space
-typedef void PetscFieldFunc(PetscInt dim,
-                            PetscInt Nf,
-                            PetscInt NfAux,
-                            const PetscInt uOff[],
-                            const PetscInt uOff_x[],
-                            const PetscScalar u[],
-                            const PetscScalar u_t[],
-                            const PetscScalar u_x[],
-                            const PetscInt aOff[],
-                            const PetscInt aOff_x[],
-                            const PetscScalar a[],
-                            const PetscScalar a_t[],
-                            const PetscScalar a_x[],
-                            PetscReal t,
-                            const PetscReal x[],
-                            PetscInt numConstants,
-                            const PetscScalar constants[],
-                            PetscScalar f[]);
+typedef void PetscFieldFunc(Int dim,
+                            Int Nf,
+                            Int NfAux,
+                            const Int uOff[],
+                            const Int uOff_x[],
+                            const Scalar u[],
+                            const Scalar u_t[],
+                            const Scalar u_x[],
+                            const Int aOff[],
+                            const Int aOff_x[],
+                            const Scalar a[],
+                            const Scalar a_t[],
+                            const Scalar a_x[],
+                            Real t,
+                            const Real x[],
+                            Int numConstants,
+                            const Scalar constants[],
+                            Scalar f[]);
 
-typedef PetscErrorCode PetscFunc(PetscInt dim,
-                                 PetscReal time,
-                                 const PetscReal x[],
-                                 PetscInt Nc,
-                                 PetscScalar u[],
-                                 void * ctx);
+typedef PetscErrorCode
+PetscFunc(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx);
 
 } // namespace godzilla

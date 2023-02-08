@@ -16,9 +16,9 @@ public:
     void
     create_dm()
     {
-        PetscReal lower[1] = { -1 };
-        PetscReal upper[1] = { 1 };
-        PetscInt faces[1] = { 2 };
+        Real lower[1] = { -1 };
+        Real upper[1] = { 1 };
+        Int faces[1] = { 2 };
         DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
         PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
@@ -32,7 +32,7 @@ public:
                                         &this->dm));
     }
 
-    PetscInt
+    Int
     get_partition_overlap()
     {
         return this->partition_overlap;
@@ -58,7 +58,7 @@ TEST(UnstructuredMeshTest, api)
     EXPECT_EQ(mesh.get_num_vertices(), 3);
     EXPECT_EQ(mesh.get_num_elements(), 2);
 
-    PetscInt first, last;
+    Int first, last;
     mesh.get_element_idx_range(first, last);
     EXPECT_EQ(first, 0);
     EXPECT_EQ(last, 2);
@@ -85,7 +85,7 @@ TEST(UnstructuredMeshTest, api_ghosted)
     EXPECT_EQ(mesh.get_num_elements(), 2);
     EXPECT_EQ(mesh.get_num_all_elements(), 4);
 
-    PetscInt first, last;
+    Int first, last;
     mesh.get_element_idx_range(first, last);
     EXPECT_EQ(first, 0);
     EXPECT_EQ(last, 2);

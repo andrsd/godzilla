@@ -9,11 +9,13 @@
 namespace godzilla {
 
 static PetscErrorCode
-__efvlp_compute_rhs(DM dm, PetscReal time, Vec x, Vec F, void * ctx)
+__efvlp_compute_rhs(DM dm, Real time, Vec x, Vec F, void * ctx)
 {
     _F_;
     auto * efvp = static_cast<ExplicitFVLinearProblem *>(ctx);
-    efvp->compute_rhs(time, x, F);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    efvp->compute_rhs(time, vec_x, vec_F);
     return 0;
 }
 
@@ -96,8 +98,10 @@ ExplicitFVLinearProblem::allocate_objects()
 {
     _F_;
     DM dm = get_dm();
-    PETSC_CHECK(DMCreateGlobalVector(dm, &this->x));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->x, "sln"));
+    Vec glob_x;
+    PETSC_CHECK(DMCreateGlobalVector(dm, &glob_x));
+    this->x = Vector(glob_x);
+    this->x.set_name("sln");
     FVProblemInterface::allocate_objects();
 }
 
@@ -140,10 +144,10 @@ ExplicitFVLinearProblem::set_up_monitors()
 }
 
 PetscErrorCode
-ExplicitFVLinearProblem::compute_rhs(PetscReal time, Vec x, Vec F)
+ExplicitFVLinearProblem::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     _F_;
-    return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this);
+    return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, (Vec) x, (Vec) F, this);
 }
 
 } // namespace godzilla

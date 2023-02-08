@@ -13,24 +13,20 @@ class TestBC : public NaturalRiemannBC {
 public:
     explicit TestBC(const Parameters & params) : NaturalRiemannBC(params), comps({ 0 }) {}
 
-    virtual const std::vector<PetscInt> &
+    virtual const std::vector<Int> &
     get_components() const override
     {
         return this->comps;
     }
 
     virtual void
-    evaluate(PetscReal time,
-             const PetscReal * c,
-             const PetscReal * n,
-             const PetscScalar * xI,
-             PetscScalar * xG) override
+    evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) override
     {
         xG[0] = xI[0];
     }
 
 protected:
-    std::vector<PetscInt> comps;
+    std::vector<Int> comps;
 
 public:
     static Parameters
@@ -56,15 +52,15 @@ protected:
     }
 
     virtual void
-    compute_flux(PetscInt dim,
-                 PetscInt nf,
-                 const PetscReal x[],
-                 const PetscReal n[],
-                 const PetscScalar uL[],
-                 const PetscScalar uR[],
-                 PetscInt n_consts,
-                 const PetscScalar constants[],
-                 PetscScalar flux[]) override
+    compute_flux(Int dim,
+                 Int nf,
+                 const Real x[],
+                 const Real n[],
+                 const Scalar uL[],
+                 const Scalar uR[],
+                 Int n_consts,
+                 const Scalar constants[],
+                 Scalar flux[]) override
     {
     }
 };
@@ -77,15 +73,15 @@ TEST(NaturalRiemannBCTest, api)
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
-    mesh_pars.set<PetscInt>("nx") = 2;
+    mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
     prob_pars.set<const Mesh *>("_mesh") = &mesh;
-    prob_pars.set<PetscReal>("start_time") = 0.;
-    prob_pars.set<PetscReal>("end_time") = 1e-3;
-    prob_pars.set<PetscReal>("dt") = 1e-3;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
     TestExplicitFVLinearProblem prob(prob_pars);
     app.problem = &prob;
 

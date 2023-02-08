@@ -10,7 +10,7 @@ BndResidualFunc::BndResidualFunc(const NaturalBC * nbc) :
 {
 }
 
-const PetscInt &
+const Int &
 BndResidualFunc::get_spatial_dimension() const
 {
     _F_;
@@ -38,14 +38,14 @@ BndResidualFunc::get_field_dot(const std::string & field_name) const
     return get_fe_problem()->get_field_dot(field_name);
 }
 
-const PetscReal &
+const Real &
 BndResidualFunc::get_time() const
 {
     _F_;
     return get_fe_problem()->get_time();
 }
 
-const Vector &
+const Normal &
 BndResidualFunc::get_normal() const
 {
     _F_;

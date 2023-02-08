@@ -17,7 +17,7 @@ protected:
     /// Get spatial dimension
     ///
     /// @return Spatial dimension
-    const PetscInt & get_spatial_dimension() const;
+    const Int & get_spatial_dimension() const;
 
     /// Get values of a field
     ///
@@ -40,7 +40,7 @@ protected:
     /// Get time at which the function is evaluated
     ///
     /// @return Time at which is the function evaluated
-    const PetscReal & get_time() const;
+    const Real & get_time() const;
 };
 
 } // namespace godzilla

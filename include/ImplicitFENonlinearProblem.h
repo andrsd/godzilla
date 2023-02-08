@@ -15,10 +15,15 @@ public:
     bool converged() override;
     void solve() override;
 
-    virtual PetscErrorCode compute_ifunction(PetscReal time, Vec X, Vec X_t, Vec F);
     virtual PetscErrorCode
-    compute_ijacobian(PetscReal time, Vec X, Vec X_t, PetscReal x_t_shift, Mat J, Mat Jp);
-    virtual PetscErrorCode compute_boundary(PetscReal time, Vec X, Vec X_t);
+    compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
+    virtual PetscErrorCode compute_ijacobian(Real time,
+                                             const Vector & X,
+                                             const Vector & X_t,
+                                             Real x_t_shift,
+                                             Matrix & J,
+                                             Matrix & Jp);
+    virtual PetscErrorCode compute_boundary(Real time, const Vector & X, const Vector & X_t);
 
 protected:
     void init() override;

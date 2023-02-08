@@ -11,6 +11,16 @@
 
 namespace godzilla {
 
+static PetscErrorCode
+__efelp_compute_rhs(DM dm, Real time, Vec x, Vec F, void * ctx)
+{
+    _F_;
+    auto * efep = static_cast<ExplicitFELinearProblem *>(ctx);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    return efep->compute_rhs(time, vec_x, vec_F);
+}
+
 namespace {
 
 class G0Identity : public JacobianFunc {
@@ -22,14 +32,14 @@ public:
     }
 
     void
-    evaluate(PetscScalar * g) override
+    evaluate(Scalar * g) override
     {
-        for (PetscInt c = 0; c < n_comp; ++c)
+        for (Int c = 0; c < n_comp; ++c)
             g[c * n_comp + c] = 1.0;
     }
 
 protected:
-    PetscInt n_comp;
+    Int n_comp;
 };
 
 } // namespace
@@ -75,7 +85,7 @@ ExplicitFELinearProblem::init()
     set_jacobian_block(0, 0, new G0Identity(this), nullptr, nullptr, nullptr);
 
     for (auto & f : this->fields) {
-        PetscInt fid = f.second.id;
+        Int fid = f.second.id;
         PETSC_CHECK(PetscDSSetImplicit(this->ds, fid, PETSC_FALSE));
     }
 }
@@ -119,7 +129,7 @@ ExplicitFELinearProblem::set_up_callbacks()
     _F_;
     DM dm = get_dm();
     PETSC_CHECK(DMTSSetBoundaryLocal(dm, DMPlexTSComputeBoundary, this));
-    PETSC_CHECK(DMTSSetRHSFunctionLocal(dm, DMPlexTSComputeRHSFunctionFEM, this));
+    PETSC_CHECK(DMTSSetRHSFunctionLocal(dm, __efelp_compute_rhs, this));
     PETSC_CHECK(DMTSCreateRHSMassMatrix(dm));
 }
 
@@ -144,16 +154,23 @@ ExplicitFELinearProblem::set_up_monitors()
     TransientProblemInterface::set_up_monitors();
 }
 
+PetscErrorCode
+ExplicitFELinearProblem::compute_rhs(Real time, const Vector & x, Vector & F)
+{
+    _F_;
+    return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, (Vec) x, (Vec) F, this);
+}
+
 void
-ExplicitFELinearProblem::set_residual_block(PetscInt field_id,
+ExplicitFELinearProblem::set_residual_block(Int field_id,
                                             ResidualFunc * f0,
                                             ResidualFunc * f1,
                                             DMLabel label,
-                                            PetscInt val)
+                                            Int val)
 {
     _F_;
     // see PetscDSSetRHSResidual for explanation
-    PetscInt part = 100;
+    Int part = 100;
     this->wf->add(PETSC_WF_F0, label, val, field_id, part, f0);
     this->wf->add(PETSC_WF_F1, label, val, field_id, part, f1);
 }

@@ -23,8 +23,8 @@ TEST(IndexSetTest, values_from_label)
     Parameters params = RectangleMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "rect_mesh";
-    params.set<PetscInt>("nx") = 2;
-    params.set<PetscInt>("ny") = 2;
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 2;
     RectangleMesh mesh(params);
     mesh.create();
 
@@ -43,7 +43,7 @@ TEST(IndexSetTest, values_from_label)
     auto v = is.to_std_vector();
     EXPECT_THAT(v, testing::UnorderedElementsAre(1, 2, 3, 4));
 
-    const PetscInt * vals = is.data();
+    const Int * vals = is.data();
     EXPECT_EQ(vals[0], 4);
     EXPECT_EQ(vals[1], 2);
     EXPECT_EQ(vals[2], 1);
@@ -61,8 +61,8 @@ TEST(IndexSetTest, stratum_from_label)
     Parameters params = RectangleMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "rect_mesh";
-    params.set<PetscInt>("nx") = 2;
-    params.set<PetscInt>("ny") = 2;
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 2;
     RectangleMesh mesh(params);
     mesh.create();
 
@@ -79,8 +79,8 @@ TEST(IndexSetTest, get_id)
     Parameters params = RectangleMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "rect_mesh";
-    params.set<PetscInt>("nx") = 2;
-    params.set<PetscInt>("ny") = 2;
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 2;
     RectangleMesh mesh(params);
     mesh.create();
 
@@ -99,8 +99,8 @@ TEST(IndexSetTest, inc_ref)
     Parameters params = RectangleMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "rect_mesh";
-    params.set<PetscInt>("nx") = 2;
-    params.set<PetscInt>("ny") = 2;
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 2;
     RectangleMesh mesh(params);
     mesh.create();
 
@@ -109,7 +109,7 @@ TEST(IndexSetTest, inc_ref)
 
     is.inc_ref();
 
-    PetscInt cnt = 0;
+    Int cnt = 0;
     PetscObjectGetReference((PetscObject) (IS) is, &cnt);
     EXPECT_EQ(cnt, 2);
 
@@ -123,8 +123,8 @@ TEST(IndexSetTest, intersect_caching)
     Parameters params = RectangleMesh::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "rect_mesh";
-    params.set<PetscInt>("nx") = 2;
-    params.set<PetscInt>("ny") = 2;
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 2;
     RectangleMesh mesh(params);
     mesh.create();
 

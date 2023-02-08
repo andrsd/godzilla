@@ -13,7 +13,9 @@ __compute_residual(SNES, Vec x, Vec f, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    return problem->compute_residual(x, f);
+    Vector vec_x(x);
+    Vector vec_f(f);
+    return problem->compute_residual(vec_x, vec_f);
 }
 
 static PetscErrorCode
@@ -21,11 +23,14 @@ __compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    return problem->compute_jacobian(x, J, Jp);
+    Vector vec_x(x);
+    Matrix mat_J(J);
+    Matrix mat_Jp(Jp);
+    return problem->compute_jacobian(vec_x, mat_J, mat_Jp);
 }
 
 PetscErrorCode
-__ksp_monitor(KSP, PetscInt it, PetscReal rnorm, void * ctx)
+__ksp_monitor(KSP, Int it, Real rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
@@ -33,7 +38,7 @@ __ksp_monitor(KSP, PetscInt it, PetscReal rnorm, void * ctx)
 }
 
 PetscErrorCode
-__snes_monitor(SNES, PetscInt it, PetscReal norm, void * ctx)
+__snes_monitor(SNES, Int it, Real norm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
@@ -45,28 +50,28 @@ NonlinearProblem::parameters()
 {
     Parameters params = Problem::parameters();
     params.add_param<std::string>("line_search", "bt", "The type of line search to be used");
-    params.add_param<PetscReal>("nl_rel_tol",
-                                1e-8,
-                                "Relative convergence tolerance for the non-linear solver");
-    params.add_param<PetscReal>("nl_abs_tol",
-                                1e-15,
-                                "Absolute convergence tolerance for the non-linear solver");
-    params.add_param<PetscReal>(
+    params.add_param<Real>("nl_rel_tol",
+                           1e-8,
+                           "Relative convergence tolerance for the non-linear solver");
+    params.add_param<Real>("nl_abs_tol",
+                           1e-15,
+                           "Absolute convergence tolerance for the non-linear solver");
+    params.add_param<Real>(
         "nl_step_tol",
         1e-15,
         "Convergence tolerance in terms of the norm of the change in the solution between steps");
-    params.add_param<PetscInt>("nl_max_iter",
-                               40,
-                               "Maximum number of iterations for the non-linear solver");
-    params.add_param<PetscReal>("lin_rel_tol",
-                                1e-5,
-                                "Relative convergence tolerance for the linear solver");
-    params.add_param<PetscReal>("lin_abs_tol",
-                                1e-50,
-                                "Absolute convergence tolerance for the linear solver");
-    params.add_param<PetscInt>("lin_max_iter",
-                               10000,
-                               "Maximum number of iterations for the linear solver");
+    params.add_param<Int>("nl_max_iter",
+                          40,
+                          "Maximum number of iterations for the non-linear solver");
+    params.add_param<Real>("lin_rel_tol",
+                           1e-5,
+                           "Relative convergence tolerance for the linear solver");
+    params.add_param<Real>("lin_abs_tol",
+                           1e-50,
+                           "Absolute convergence tolerance for the linear solver");
+    params.add_param<Int>("lin_max_iter",
+                          10000,
+                          "Maximum number of iterations for the linear solver");
     return params;
 }
 
@@ -74,18 +79,15 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     Problem(parameters),
     snes(nullptr),
     ksp(nullptr),
-    x(nullptr),
-    r(nullptr),
-    J(nullptr),
     converged_reason(SNES_CONVERGED_ITERATING),
     line_search_type(get_param<std::string>("line_search")),
-    nl_rel_tol(get_param<PetscReal>("nl_rel_tol")),
-    nl_abs_tol(get_param<PetscReal>("nl_abs_tol")),
-    nl_step_tol(get_param<PetscReal>("nl_step_tol")),
-    nl_max_iter(get_param<PetscInt>("nl_max_iter")),
-    lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
-    lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
-    lin_max_iter(get_param<PetscInt>("lin_max_iter"))
+    nl_rel_tol(get_param<Real>("nl_rel_tol")),
+    nl_abs_tol(get_param<Real>("nl_abs_tol")),
+    nl_step_tol(get_param<Real>("nl_step_tol")),
+    nl_max_iter(get_param<Int>("nl_max_iter")),
+    lin_rel_tol(get_param<Real>("lin_rel_tol")),
+    lin_abs_tol(get_param<Real>("lin_abs_tol")),
+    lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     _F_;
     this->default_output_on = Output::ON_FINAL;
@@ -97,12 +99,9 @@ NonlinearProblem::~NonlinearProblem()
     _F_;
     if (this->snes)
         SNESDestroy(&this->snes);
-    if (this->r)
-        VecDestroy(&this->r);
-    if (this->x)
-        VecDestroy(&this->x);
-    if (this->J)
-        MatDestroy(&this->J);
+    this->r.destroy();
+    this->x.destroy();
+    this->J.destroy();
 }
 
 DM
@@ -112,7 +111,7 @@ NonlinearProblem::get_dm() const
     return this->mesh->get_dm();
 }
 
-Vec
+const Vector &
 NonlinearProblem::get_solution_vector() const
 {
     _F_;
@@ -163,7 +162,7 @@ NonlinearProblem::set_up_initial_guess()
 {
     _F_;
     lprintf(9, "Setting initial guess");
-    PETSC_CHECK(VecSet(this->x, 0.));
+    this->x.set(0.);
 }
 
 void
@@ -171,14 +170,18 @@ NonlinearProblem::allocate_objects()
 {
     _F_;
     DM dm = get_dm();
-    PETSC_CHECK(DMCreateGlobalVector(dm, &this->x));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->x, "sln"));
+    Vec glob_x;
+    PETSC_CHECK(DMCreateGlobalVector(dm, &glob_x));
+    this->x = Vector(glob_x);
+    this->x.set_name("sln");
 
-    PETSC_CHECK(VecDuplicate(this->x, &this->r));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->r, "res"));
+    this->x.duplicate(this->r);
+    this->r.set_name("res");
 
-    PETSC_CHECK(DMCreateMatrix(dm, &this->J));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->J, "Jac"));
+    Mat mat_J;
+    PETSC_CHECK(DMCreateMatrix(dm, &mat_J));
+    this->J = Matrix(mat_J);
+    this->J.set_name("Jac");
 }
 
 void
@@ -207,8 +210,9 @@ void
 NonlinearProblem::set_up_callbacks()
 {
     _F_;
-    PETSC_CHECK(SNESSetFunction(this->snes, this->r, __compute_residual, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, __compute_jacobian, this));
+    PETSC_CHECK(SNESSetFunction(this->snes, (Vec) this->r, __compute_residual, this));
+    PETSC_CHECK(
+        SNESSetJacobian(this->snes, (Mat) this->J, (Mat) this->J, __compute_jacobian, this));
 }
 
 void
@@ -240,14 +244,14 @@ NonlinearProblem::set_up_solver_parameters()
 }
 
 PetscErrorCode
-NonlinearProblem::snes_monitor_callback(PetscInt it, PetscReal norm)
+NonlinearProblem::snes_monitor_callback(Int it, Real norm)
 {
     lprintf(7, "%d Non-linear residual: %e", it, norm);
     return 0;
 }
 
 PetscErrorCode
-NonlinearProblem::ksp_monitor_callback(PetscInt it, PetscReal rnorm)
+NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     lprintf(8, "    %d Linear residual: %e", it, rnorm);
     return 0;
@@ -258,7 +262,7 @@ NonlinearProblem::solve()
 {
     _F_;
     lprintf(9, "Solving");
-    PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
+    PETSC_CHECK(SNESSolve(this->snes, nullptr, (Vec) this->x));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }
 
@@ -295,14 +299,14 @@ NonlinearProblem::set_up_preconditioning()
 }
 
 PetscErrorCode
-NonlinearProblem::compute_residual(Vec x, Vec f)
+NonlinearProblem::compute_residual(const Vector &, Vector &)
 {
     _F_;
     return 0;
 }
 
 PetscErrorCode
-NonlinearProblem::compute_jacobian(Vec x, Mat J, Mat Jp)
+NonlinearProblem::compute_jacobian(const Vector &, Matrix &, Matrix &)
 {
     _F_;
     return 0;

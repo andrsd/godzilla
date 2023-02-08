@@ -1,6 +1,8 @@
 #pragma once
 
 #include "petscts.h"
+#include "Types.h"
+#include "Vector.h"
 
 namespace godzilla {
 
@@ -43,13 +45,13 @@ protected:
     /// Called after the time step is done solving
     virtual PetscErrorCode post_step();
     /// TS monitor callback
-    virtual PetscErrorCode ts_monitor_callback(PetscInt stepi, PetscReal time, Vec x);
+    virtual PetscErrorCode ts_monitor_callback(Int stepi, Real time, Vec x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
     virtual bool converged() const;
     /// Solve
-    virtual void solve(Vec x);
+    virtual void solve(Vector & x);
 
     /// Problem this interface is part of
     Problem * problem;
@@ -58,11 +60,11 @@ protected:
     /// Time-stepping adaptor
     TimeSteppingAdaptor * ts_adaptor;
     /// Simulation start time
-    const PetscReal & start_time;
+    const Real & start_time;
     /// Simulation end time
-    const PetscReal & end_time;
+    const Real & end_time;
     /// Time step size
-    const PetscReal & dt;
+    const Real & dt;
     /// Converged reason
     TSConvergedReason converged_reason;
 
@@ -71,8 +73,7 @@ public:
 
     friend PetscErrorCode __transient_pre_step(TS ts);
     friend PetscErrorCode __transient_post_step(TS ts);
-    friend PetscErrorCode
-    __transient_monitor(TS ts, PetscInt stepi, PetscReal time, Vec x, void * ctx);
+    friend PetscErrorCode __transient_monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
 };
 
 } // namespace godzilla

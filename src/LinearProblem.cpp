@@ -10,7 +10,8 @@ __compute_rhs(KSP, Vec b, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
-    return problem->compute_rhs_callback(b);
+    Vector vec_b(b);
+    return problem->compute_rhs(vec_b);
 }
 
 PetscErrorCode
@@ -18,11 +19,13 @@ __compute_operators(KSP, Mat A, Mat B, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
-    return problem->compute_operators_callback(A, B);
+    Matrix mat_A(A);
+    Matrix mat_B(B);
+    return problem->compute_operators(mat_A, mat_B);
 }
 
 PetscErrorCode
-__ksp_monitor_linear(KSP, PetscInt it, PetscReal rnorm, void * ctx)
+__ksp_monitor_linear(KSP, Int it, Real rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
@@ -33,28 +36,26 @@ Parameters
 LinearProblem::parameters()
 {
     Parameters params = Problem::parameters();
-    params.add_param<PetscReal>("lin_rel_tol",
-                                1e-5,
-                                "Relative convergence tolerance for the linear solver");
-    params.add_param<PetscReal>("lin_abs_tol",
-                                1e-50,
-                                "Absolute convergence tolerance for the linear solver");
-    params.add_param<PetscInt>("lin_max_iter",
-                               10000,
-                               "Maximum number of iterations for the linear solver");
+    params.add_param<Real>("lin_rel_tol",
+                           1e-5,
+                           "Relative convergence tolerance for the linear solver");
+    params.add_param<Real>("lin_abs_tol",
+                           1e-50,
+                           "Absolute convergence tolerance for the linear solver");
+    params.add_param<Int>("lin_max_iter",
+                          10000,
+                          "Maximum number of iterations for the linear solver");
     return params;
 }
 
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
     ksp(nullptr),
-    x(nullptr),
-    b(nullptr),
     A(nullptr),
     converged_reason(KSP_CONVERGED_ITERATING),
-    lin_rel_tol(get_param<PetscReal>("lin_rel_tol")),
-    lin_abs_tol(get_param<PetscReal>("lin_abs_tol")),
-    lin_max_iter(get_param<PetscInt>("lin_max_iter"))
+    lin_rel_tol(get_param<Real>("lin_rel_tol")),
+    lin_abs_tol(get_param<Real>("lin_abs_tol")),
+    lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     _F_;
     this->default_output_on = Output::ON_FINAL;
@@ -65,12 +66,9 @@ LinearProblem::~LinearProblem()
     _F_;
     if (this->ksp)
         KSPDestroy(&this->ksp);
-    if (this->b)
-        VecDestroy(&this->b);
-    if (this->x)
-        VecDestroy(&this->x);
-    if (this->A)
-        MatDestroy(&this->A);
+    this->x.destroy();
+    this->b.destroy();
+    this->A.destroy();
 }
 
 DM
@@ -80,7 +78,7 @@ LinearProblem::get_dm() const
     return this->mesh->get_dm();
 }
 
-Vec
+const Vector &
 LinearProblem::get_solution_vector() const
 {
     _F_;
@@ -120,14 +118,18 @@ LinearProblem::allocate_objects()
     _F_;
     DM dm = get_dm();
 
-    PETSC_CHECK(DMCreateGlobalVector(dm, &this->x));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->x, "sln"));
+    Vec glob_x;
+    PETSC_CHECK(DMCreateGlobalVector(dm, &glob_x));
+    this->x = Vector(glob_x);
+    this->x.set_name("sln");
 
-    PETSC_CHECK(VecDuplicate(this->x, &this->b));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->b, "rhs"));
+    this->x.duplicate(this->b);
+    this->b.set_name("rhs");
 
-    PETSC_CHECK(DMCreateMatrix(dm, &this->A));
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->A, "A"));
+    Mat a;
+    PETSC_CHECK(DMCreateMatrix(dm, &a));
+    this->A = Matrix(a);
+    this->A.set_name("A");
 }
 
 void
@@ -158,7 +160,7 @@ LinearProblem::set_up_solver_parameters()
 }
 
 PetscErrorCode
-LinearProblem::ksp_monitor_callback(PetscInt it, PetscReal rnorm)
+LinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
     lprintf(8, "%d Linear residual: %e", it, rnorm);
@@ -169,7 +171,7 @@ void
 LinearProblem::solve()
 {
     _F_;
-    PETSC_CHECK(KSPSolve(this->ksp, this->b, this->x));
+    PETSC_CHECK(KSPSolve(this->ksp, (Vec) this->b, (Vec) this->x));
     PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
 }
 

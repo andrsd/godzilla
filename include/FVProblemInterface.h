@@ -13,19 +13,18 @@ public:
     FVProblemInterface(Problem * problem, const Parameters & params);
     ~FVProblemInterface() override;
 
-    NO_DISCARD PetscInt get_num_fields() const override;
+    NO_DISCARD Int get_num_fields() const override;
     NO_DISCARD std::vector<std::string> get_field_names() const override;
-    const std::string & get_field_name(PetscInt fid) const override;
-    PetscInt get_field_num_components(PetscInt fid) const override;
-    NO_DISCARD PetscInt get_field_id(const std::string & name) const override;
-    NO_DISCARD bool has_field_by_id(PetscInt fid) const override;
+    const std::string & get_field_name(Int fid) const override;
+    Int get_field_num_components(Int fid) const override;
+    NO_DISCARD Int get_field_id(const std::string & name) const override;
+    NO_DISCARD bool has_field_by_id(Int fid) const override;
     NO_DISCARD bool has_field_by_name(const std::string & name) const override;
-    PetscInt get_field_order(PetscInt fid) const override;
-    std::string get_field_component_name(PetscInt fid, PetscInt component) const override;
-    void
-    set_field_component_name(PetscInt fid, PetscInt component, const std::string & name) override;
-    NO_DISCARD PetscInt get_field_dof(PetscInt point, PetscInt fid) const override;
-    NO_DISCARD Vec get_solution_vector_local() const override;
+    Int get_field_order(Int fid) const override;
+    std::string get_field_component_name(Int fid, Int component) const override;
+    void set_field_component_name(Int fid, Int component, const std::string & name) override;
+    NO_DISCARD Int get_field_dof(Int point, Int fid) const override;
+    const Vector & get_solution_vector_local() const override;
     NO_DISCARD WeakForm * get_weak_form() const override;
 
     /// Adds a volumetric field
@@ -34,7 +33,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void add_field(PetscInt id, const std::string & name, PetscInt nc);
+    virtual void add_field(Int id, const std::string & name, Int nc);
 
 protected:
     void init() override;
@@ -53,15 +52,15 @@ protected:
     /// @param n_consts Number of constant parameters
     /// @param constants Constant parameters
     /// @param flux Computed flux through the interface
-    virtual void compute_flux(PetscInt dim,
-                              PetscInt nf,
-                              const PetscReal x[],
-                              const PetscReal n[],
-                              const PetscScalar uL[],
-                              const PetscScalar uR[],
-                              PetscInt n_consts,
-                              const PetscScalar constants[],
-                              PetscScalar flux[]) = 0;
+    virtual void compute_flux(Int dim,
+                              Int nf,
+                              const Real x[],
+                              const Real n[],
+                              const Scalar uL[],
+                              const Scalar uR[],
+                              Int n_consts,
+                              const Scalar constants[],
+                              Scalar flux[]) = 0;
 
     /// PETSc section
     PetscSection section;
@@ -72,26 +71,26 @@ protected:
         std::string name;
 
         /// Field number
-        PetscInt id;
+        Int id;
 
         /// The number of components
-        PetscInt nc;
+        Int nc;
 
         /// Component names
         std::vector<std::string> component_names;
     };
 
     /// Fields in the problem
-    std::map<PetscInt, FieldInfo> fields;
+    std::map<Int, FieldInfo> fields;
 
     /// Map from field name to field ID
-    std::map<std::string, PetscInt> fields_by_name;
+    std::map<std::string, Int> fields_by_name;
 
     /// PETSc finite volume object
     PetscFV fvm;
 
     /// Local solution vector
-    Vec sln;
+    Vector sln;
 
     /// Object that manages a discrete system
     PetscDS ds;
@@ -99,15 +98,15 @@ protected:
     /// Weak form
     WeakForm * wf;
 
-    friend void __compute_flux(PetscInt dim,
-                               PetscInt nf,
-                               const PetscReal x[],
-                               const PetscReal n[],
-                               const PetscScalar uL[],
-                               const PetscScalar uR[],
-                               PetscInt n_consts,
-                               const PetscScalar constants[],
-                               PetscScalar flux[],
+    friend void __compute_flux(Int dim,
+                               Int nf,
+                               const Real x[],
+                               const Real n[],
+                               const Scalar uL[],
+                               const Scalar uR[],
+                               Int n_consts,
+                               const Scalar constants[],
+                               Scalar flux[],
                                void * ctx);
 
     static const std::string empty_name;

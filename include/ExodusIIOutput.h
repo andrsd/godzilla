@@ -1,6 +1,7 @@
 #pragma once
 
 #include "FileOutput.h"
+#include "Types.h"
 
 namespace exodusIIcpp {
 class File;
@@ -43,20 +44,19 @@ protected:
     void write_elements();
     void write_node_sets();
     void write_face_sets();
-    void add_var_names(PetscInt fid, std::vector<std::string> & var_names);
+    void add_var_names(Int fid, std::vector<std::string> & var_names);
     void write_all_variable_names();
     void write_variables();
     void write_field_variables();
-    void write_nodal_variables(const PetscScalar * sln);
-    void write_elem_variables(const PetscScalar * sln);
+    void write_nodal_variables(const Scalar * sln);
+    void write_elem_variables(const Scalar * sln);
     void write_block_elem_variables(int blk_id,
-                                    const PetscScalar * sln,
-                                    PetscInt n_elems_in_block = 0,
-                                    const PetscInt * cells = nullptr);
+                                    const Scalar * sln,
+                                    Int n_elems_in_block = 0,
+                                    const Int * cells = nullptr);
     void write_global_variables();
-    void write_block_connectivity(int blk_id,
-                                  PetscInt n_elems_in_block = 0,
-                                  const PetscInt * cells = nullptr);
+    void
+    write_block_connectivity(int blk_id, Int n_elems_in_block = 0, const Int * cells = nullptr);
 
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
@@ -75,9 +75,9 @@ protected:
     /// List of global variable names to output
     std::vector<std::string> global_var_names;
     /// List of nodal variable field IDs
-    std::vector<PetscInt> nodal_var_fids;
+    std::vector<Int> nodal_var_fids;
     /// List of nodal elemental variable field IDs
-    std::vector<PetscInt> elem_var_fids;
+    std::vector<Int> elem_var_fids;
 
     /// Block ID used in ExodusII file when there are not cell sets
     static const int SINGLE_BLK_ID;

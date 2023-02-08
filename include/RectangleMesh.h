@@ -11,31 +11,31 @@ public:
     explicit RectangleMesh(const Parameters & parameters);
 
     ///
-    NO_DISCARD PetscReal get_x_min() const;
-    NO_DISCARD PetscReal get_x_max() const;
+    NO_DISCARD Real get_x_min() const;
+    NO_DISCARD Real get_x_max() const;
     /// Get the number of mesh points in x direction
-    NO_DISCARD PetscInt get_nx() const;
+    NO_DISCARD Int get_nx() const;
     ///
-    NO_DISCARD PetscReal get_y_min() const;
-    NO_DISCARD PetscReal get_y_max() const;
+    NO_DISCARD Real get_y_min() const;
+    NO_DISCARD Real get_y_max() const;
     /// Get the number of mesh points in y direction
-    NO_DISCARD PetscInt get_ny() const;
+    NO_DISCARD Int get_ny() const;
 
 protected:
     void create_dm() override;
 
     /// Minimum in the x direction
-    const PetscReal & xmin;
+    const Real & xmin;
     /// Maximum in the x direction
-    const PetscReal & xmax;
+    const Real & xmax;
     /// Minimum in the y direction
-    const PetscReal & ymin;
+    const Real & ymin;
     /// Maximum in the y direction
-    const PetscReal & ymax;
+    const Real & ymax;
     /// Number of mesh point in the x direction
-    const PetscInt & nx;
+    const Int & nx;
     /// Number of mesh point in the y direction
-    const PetscInt & ny;
+    const Int & ny;
     /// True for simplices, False for tensor cells
     PetscBool simplex;
     /// create intermediate mesh pieces (edges, faces)

@@ -2,6 +2,7 @@
 
 #include "muParser/muParser.h"
 #include "petsc.h"
+#include "Types.h"
 
 namespace godzilla {
 
@@ -27,7 +28,7 @@ public:
     ///
     /// @param name Name of the constant
     /// @param value Value
-    void define_constant(const std::string & name, PetscReal value);
+    void define_constant(const std::string & name, Real value);
 
     /// Register user function with function evaluator
     ///
@@ -39,9 +40,9 @@ public:
     /// @param dim Spatial dimension
     /// @param time Simulation time
     /// @param x Spatial location
-    PetscReal evaluate(PetscInt dim, PetscReal time, const PetscReal x[]);
+    Real evaluate(Int dim, Real time, const Real x[]);
 
-    bool evaluate(PetscInt dim, PetscReal time, const PetscReal x[], PetscInt nc, PetscReal u[]);
+    bool evaluate(Int dim, Real time, const Real x[], Int nc, Real u[]);
 
 protected:
     /// Underlying muParser object

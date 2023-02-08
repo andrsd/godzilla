@@ -11,17 +11,17 @@ TEST(ConstantICTest, api)
 
     Parameters params = ConstantIC::parameters();
     params.set<const App *>("_app") = &app;
-    params.set<std::vector<PetscReal>>("value") = { 3, 4, 5 };
+    params.set<std::vector<Real>>("value") = { 3, 4, 5 };
     ConstantIC obj(params);
 
     EXPECT_EQ(obj.get_field_id(), -1);
     EXPECT_EQ(obj.get_num_components(), 3);
 
-    PetscInt dim = 2;
-    PetscReal time = 0.;
-    PetscReal x[] = { 0 };
-    PetscInt Nc = 3;
-    PetscScalar u[] = { 0, 0, 0 };
+    Int dim = 2;
+    Real time = 0.;
+    Real x[] = { 0 };
+    Int Nc = 3;
+    Scalar u[] = { 0, 0, 0 };
     obj.evaluate(dim, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 3);

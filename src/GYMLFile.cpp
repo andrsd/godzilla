@@ -113,7 +113,7 @@ GYMLFile::build_partitioner()
 
     YAML::Node overlap = part_node["overlap"];
     if (overlap)
-        mesh->set_partition_overlap(overlap.as<PetscInt>());
+        mesh->set_partition_overlap(overlap.as<Int>());
 }
 
 void

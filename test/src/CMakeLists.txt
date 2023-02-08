@@ -37,6 +37,7 @@ add_executable(${PROJECT_NAME}
     LinearProblem_test.cpp
     LineMesh_test.cpp
     Logger_test.cpp
+    Matrix_test.cpp
     MeshPartitioningOutput_test.cpp
     NaturalBC_test.cpp
     NaturalRiemannBC_test.cpp
@@ -56,6 +57,7 @@ add_executable(${PROJECT_NAME}
     UnstructuredMesh_test.cpp
     Utils_test.cpp
     Validation_test.cpp
+    Vector_test.cpp
     VTKOutput_test.cpp
     WeakForm_test.cpp
     main.cpp

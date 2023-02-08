@@ -24,7 +24,7 @@ TEST_F(AuxiliaryFieldTest, api)
         create() override
         {
         }
-        virtual PetscInt
+        virtual Int
         get_num_components() const override
         {
             return 1;
@@ -61,12 +61,12 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        virtual PetscInt
+        virtual Int
         get_field_id() const
         {
             return 1;
         }
-        virtual PetscInt
+        virtual Int
         get_num_components() const
         {
             return 2;
@@ -104,12 +104,12 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        virtual PetscInt
+        virtual Int
         get_field_id() const
         {
             return 0;
         }
-        virtual PetscInt
+        virtual Int
         get_num_components() const
         {
             return 2;
@@ -147,12 +147,12 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        virtual PetscInt
+        virtual Int
         get_field_id() const
         {
             return 0;
         }
-        virtual PetscInt
+        virtual Int
         get_num_components() const
         {
             return 1;

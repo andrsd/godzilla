@@ -19,8 +19,8 @@ public:
 
     void create() override;
 
-    PetscErrorCode compute_residual(Vec x, Vec f) override;
-    PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp) override;
+    PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
+    PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
 
 protected:
     void init() override;
@@ -35,11 +35,11 @@ protected:
     /// @param f1 Integrand for the test function gradient term
     /// @param label Region specified by DMLabel where this residual statement is active
     /// @param val Value associated with the region
-    virtual void set_residual_block(PetscInt fid,
+    virtual void set_residual_block(Int fid,
                                     ResidualFunc * f0,
                                     ResidualFunc * f1,
                                     DMLabel label = nullptr,
-                                    PetscInt val = 0);
+                                    Int val = 0);
 
     /// Set up Jacobian statement for a field variable
     ///
@@ -51,29 +51,28 @@ protected:
     /// @param g3 Integrand for the test function gradient and basis function gradient term
     /// @param label Region specified by DMLabel where this residual statement is active
     /// @param val Value associated with the region
-    virtual void set_jacobian_block(PetscInt fid,
-                                    PetscInt gid,
+    virtual void set_jacobian_block(Int fid,
+                                    Int gid,
                                     JacobianFunc * g0,
                                     JacobianFunc * g1,
                                     JacobianFunc * g2,
                                     JacobianFunc * g3,
                                     DMLabel label = nullptr,
-                                    PetscInt val = 0);
+                                    Int val = 0);
 
     void on_initial() override;
 
     PetscErrorCode compute_residual_internal(DM dm,
                                              PetscFormKey key,
                                              const IndexSet & cells,
-                                             PetscReal time,
+                                             Real time,
                                              Vec loc_x,
                                              Vec loc_x_t,
-                                             PetscReal t,
+                                             Real t,
                                              Vec loc_f);
-    PetscErrorCode
-    compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, PetscReal t, Vec loc_f);
+    PetscErrorCode compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f);
     PetscErrorCode compute_bnd_residual_single_internal(DM dm,
-                                                        PetscReal t,
+                                                        Real t,
                                                         PetscFormKey key,
                                                         Vec loc_x,
                                                         Vec loc_x_t,
@@ -84,8 +83,8 @@ protected:
     PetscErrorCode compute_jacobian_internal(DM dm,
                                              PetscFormKey key,
                                              const IndexSet & cell_is,
-                                             PetscReal t,
-                                             PetscReal x_t_shift,
+                                             Real t,
+                                             Real x_t_shift,
                                              Vec X,
                                              Vec X_t,
                                              Mat J,
@@ -93,19 +92,19 @@ protected:
     PetscErrorCode compute_bnd_jacobian_internal(DM dm,
                                                  Vec X_loc,
                                                  Vec X_t_loc,
-                                                 PetscReal t,
-                                                 PetscReal x_t_shift,
+                                                 Real t,
+                                                 Real x_t_shift,
                                                  Mat J,
                                                  Mat Jp);
     PetscErrorCode compute_bnd_jacobian_single_internal(DM dm,
-                                                        PetscReal t,
+                                                        Real t,
                                                         DMLabel label,
-                                                        PetscInt n_values,
-                                                        const PetscInt values[],
-                                                        PetscInt field_i,
+                                                        Int n_values,
+                                                        const Int values[],
+                                                        Int field_i,
                                                         Vec X_loc,
                                                         Vec X_t_loc,
-                                                        PetscReal x_t_shift,
+                                                        Real x_t_shift,
                                                         Mat J,
                                                         Mat Jp,
                                                         DMField coord_field,

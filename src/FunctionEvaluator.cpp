@@ -28,7 +28,7 @@ FunctionEvaluator::create(const std::vector<std::string> & expressions)
 }
 
 void
-FunctionEvaluator::define_constant(const std::string & name, PetscReal value)
+FunctionEvaluator::define_constant(const std::string & name, Real value)
 {
     _F_;
     this->parser.DefineConst(name, value);
@@ -41,12 +41,12 @@ FunctionEvaluator::register_function(Function * fn)
     fn->register_callback(this->parser);
 }
 
-PetscReal
-FunctionEvaluator::evaluate(PetscInt dim, PetscReal time, const PetscReal x[])
+Real
+FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
 {
     _F_;
-    auto * xx = const_cast<PetscReal *>(x);
-    PetscReal zero = 0.;
+    auto * xx = const_cast<Real *>(x);
+    Real zero = 0.;
     try {
         this->parser.DefineVar("t", &time);
         this->parser.DefineVar("x", &(xx[0]));
@@ -66,15 +66,11 @@ FunctionEvaluator::evaluate(PetscInt dim, PetscReal time, const PetscReal x[])
 }
 
 bool
-FunctionEvaluator::evaluate(PetscInt dim,
-                            PetscReal time,
-                            const PetscReal x[],
-                            PetscInt nc,
-                            PetscReal u[])
+FunctionEvaluator::evaluate(Int dim, Real time, const Real x[], Int nc, Real u[])
 {
     _F_;
-    auto * xx = const_cast<PetscReal *>(x);
-    PetscReal zero = 0.;
+    auto * xx = const_cast<Real *>(x);
+    Real zero = 0.;
     try {
         this->parser.DefineVar("t", &time);
         this->parser.DefineVar("x", &(xx[0]));

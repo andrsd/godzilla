@@ -51,7 +51,7 @@ AuxiliaryField::get_region() const
     return this->region;
 }
 
-PetscInt
+Int
 AuxiliaryField::get_block_id() const
 {
     _F_;
@@ -65,7 +65,7 @@ AuxiliaryField::get_label() const
     return this->label;
 }
 
-PetscInt
+Int
 AuxiliaryField::get_field_id() const
 {
     _F_;

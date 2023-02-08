@@ -49,14 +49,14 @@ MeshPartitioningOutput::output_step()
     DM dmp;
     PETSC_CHECK(DMClone(this->problem->get_dm(), &dmp));
 
-    PetscInt dim;
+    Int dim;
     PETSC_CHECK(DMGetDimension(dmp, &dim));
 
     PETSC_CHECK(DMSetNumFields(dmp, 1));
     PetscSection s;
-    PetscInt nc[1] = { 1 };
-    PetscInt n_dofs[dim + 1];
-    for (PetscInt i = 0; i < dim + 1; i++)
+    Int nc[1] = { 1 };
+    Int n_dofs[dim + 1];
+    for (Int i = 0; i < dim + 1; i++)
         if (i == dim)
             n_dofs[i] = 1;
         else

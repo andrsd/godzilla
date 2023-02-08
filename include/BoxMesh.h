@@ -13,61 +13,61 @@ public:
     explicit BoxMesh(const Parameters & parameters);
 
     /// Get lower limit in x-direction
-    NO_DISCARD PetscReal get_x_min() const;
+    NO_DISCARD Real get_x_min() const;
 
     /// Get upper limit in x-direction
-    NO_DISCARD PetscReal get_x_max() const;
+    NO_DISCARD Real get_x_max() const;
 
     /// Get the number of mesh points in x direction
-    NO_DISCARD PetscInt get_nx() const;
+    NO_DISCARD Int get_nx() const;
 
     /// Get lower limit in y-direction
-    NO_DISCARD PetscReal get_y_min() const;
+    NO_DISCARD Real get_y_min() const;
 
     /// Get upper limit in y-direction
-    NO_DISCARD PetscReal get_y_max() const;
+    NO_DISCARD Real get_y_max() const;
 
     /// Get the number of mesh points in y-direction
-    NO_DISCARD PetscInt get_ny() const;
+    NO_DISCARD Int get_ny() const;
 
     /// Get lower limit in z-direction
-    NO_DISCARD PetscReal get_z_min() const;
+    NO_DISCARD Real get_z_min() const;
 
     /// Get upper limit in z-direction
-    NO_DISCARD PetscReal get_z_max() const;
+    NO_DISCARD Real get_z_max() const;
 
     /// Get the number of mesh points in z direction
-    NO_DISCARD PetscInt get_nz() const;
+    NO_DISCARD Int get_nz() const;
 
 protected:
     void create_dm() override;
 
     /// Minimum in the x direction
-    const PetscReal & xmin;
+    const Real & xmin;
 
     /// Maximum in the x direction
-    const PetscReal & xmax;
+    const Real & xmax;
 
     /// Minimum in the y direction
-    const PetscReal & ymin;
+    const Real & ymin;
 
     /// Maximum in the y direction
-    const PetscReal & ymax;
+    const Real & ymax;
 
     /// Minimum in the z direction
-    const PetscReal & zmin;
+    const Real & zmin;
 
     /// Maximum in the z direction
-    const PetscReal & zmax;
+    const Real & zmax;
 
     /// Number of mesh point in the x direction
-    const PetscInt & nx;
+    const Int & nx;
 
     /// Number of mesh point in the y direction
-    const PetscInt & ny;
+    const Int & ny;
 
     /// Number of mesh point in the z direction
-    const PetscInt & nz;
+    const Int & nz;
 
     /// True for simplices, False for tensor cells
     PetscBool simplex;

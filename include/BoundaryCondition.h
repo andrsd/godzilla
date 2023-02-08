@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GodzillaConfig.h"
+#include "Types.h"
 #include "Object.h"
 #include "PrintInterface.h"
 #include "petsc.h"
@@ -26,12 +27,12 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    NO_DISCARD virtual PetscInt get_field_id() const;
+    NO_DISCARD virtual Int get_field_id() const;
 
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    NO_DISCARD virtual const std::vector<PetscInt> & get_components() const = 0;
+    NO_DISCARD virtual const std::vector<Int> & get_components() const = 0;
 
     /// Get DiscreteProblemInterface
     ///
@@ -58,10 +59,10 @@ protected:
     DMLabel label;
 
     /// Field ID this boundary condition is attached to
-    PetscInt fid;
+    Int fid;
 
     /// IDs of the label
-    std::vector<PetscInt> ids;
+    std::vector<Int> ids;
 
     /// List of boundary names
     const std::string & boundary;

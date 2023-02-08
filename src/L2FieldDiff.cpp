@@ -73,10 +73,10 @@ L2FieldDiff::compute()
     auto n_fields = this->funcs.size();
     std::vector<PetscFunc *> pfns(n_fields, nullptr);
     std::vector<void *> ctxs(n_fields, nullptr);
-    std::vector<PetscReal> diff(n_fields, 0.);
+    std::vector<Real> diff(n_fields, 0.);
 
     for (const auto & it : this->funcs) {
-        PetscInt fid = this->fepi->get_field_id(it.first);
+        Int fid = this->fepi->get_field_id(it.first);
         ParsedFunction * pfn = it.second;
 
         pfns[fid] = pfn->get_function();
@@ -87,15 +87,15 @@ L2FieldDiff::compute()
                                      this->problem->get_time(),
                                      pfns.data(),
                                      ctxs.data(),
-                                     this->problem->get_solution_vector(),
+                                     (Vec) this->problem->get_solution_vector(),
                                      diff.data()));
 
-    for (PetscInt i = 0; i < n_fields; i++) {
+    for (Int i = 0; i < n_fields; i++) {
         this->l2_diff[i] = diff[i];
     }
 }
 
-PetscReal
+Real
 L2FieldDiff::get_value()
 {
     _F_;

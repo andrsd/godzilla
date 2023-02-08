@@ -25,7 +25,7 @@ TEST(FactoryTest, create_reg_obj)
     App app("test", MPI_COMM_WORLD);
 
     Parameters * params = Factory::get_parameters("LineMesh");
-    params->set<PetscInt>("nx") = 1;
+    params->set<Int>("nx") = 1;
     app.build_object<LineMesh>("LineMesh", "name", params);
 }
 
@@ -34,7 +34,7 @@ TEST(FactoryTest, create_wrong_type)
     App app("test", MPI_COMM_WORLD);
 
     Parameters * params = Factory::get_parameters("LineMesh");
-    params->set<PetscInt>("nx") = 1;
+    params->set<Int>("nx") = 1;
     EXPECT_DEATH(app.build_object<RectangleMesh>("LineMesh", "name", params),
                  "\\[ERROR\\] Instantiation of object 'name:\\[LineMesh\\]' failed\\.");
 }

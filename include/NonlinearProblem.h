@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Problem.h"
+#include "Vector.h"
+#include "Matrix.h"
 #include "petscsnes.h"
 
 namespace godzilla {
@@ -17,11 +19,11 @@ public:
     void run() override;
     void solve() override;
     bool converged() override;
-    Vec get_solution_vector() const override;
+    const Vector & get_solution_vector() const override;
     /// Method to compute residual. Called from the PETsc callback
-    virtual PetscErrorCode compute_residual(Vec x, Vec f);
+    virtual PetscErrorCode compute_residual(const Vector & x, Vector & f);
     /// Method to compute Jacobian. Called from the PETsc callback
-    virtual PetscErrorCode compute_jacobian(Vec x, Mat J, Mat Jp);
+    virtual PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
 
 protected:
     /// provide DM for the underlying SNES object
@@ -41,9 +43,9 @@ protected:
     /// Set up solver parameters
     virtual void set_up_solver_parameters();
     /// SNES monitor
-    PetscErrorCode snes_monitor_callback(PetscInt it, PetscReal norm);
+    PetscErrorCode snes_monitor_callback(Int it, Real norm);
     /// KSP monitor
-    PetscErrorCode ksp_monitor_callback(PetscInt it, PetscReal rnorm);
+    PetscErrorCode ksp_monitor_callback(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning
@@ -54,36 +56,36 @@ protected:
     /// KSP object
     KSP ksp;
     /// The solution vector
-    Vec x;
+    Vector x;
     /// The residual vector
-    Vec r;
+    Vector r;
     /// Jacobian matrix
-    Mat J;
+    Matrix J;
     /// Converged reason
     SNESConvergedReason converged_reason;
 
     /// The type of line search to be used
     std::string line_search_type;
     /// Relative convergence tolerance for the non-linear solver
-    PetscReal nl_rel_tol;
+    Real nl_rel_tol;
     /// Absolute convergence tolerance for the non-linear solver
-    PetscReal nl_abs_tol;
+    Real nl_abs_tol;
     /// Convergence tolerance in terms of the norm of the change in the solution between steps
-    PetscReal nl_step_tol;
+    Real nl_step_tol;
     /// Maximum number of iterations for the non-linear solver
-    PetscInt nl_max_iter;
+    Int nl_max_iter;
     /// Relative convergence tolerance for the linear solver
-    PetscReal lin_rel_tol;
+    Real lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver
-    PetscReal lin_abs_tol;
+    Real lin_abs_tol;
     /// Maximum number of iterations for the linear solver
-    PetscInt lin_max_iter;
+    Int lin_max_iter;
 
 public:
     static Parameters parameters();
 
-    friend PetscErrorCode __ksp_monitor(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx);
-    friend PetscErrorCode __snes_monitor(SNES snes, PetscInt it, PetscReal norm, void * ctx);
+    friend PetscErrorCode __ksp_monitor(KSP ksp, Int it, Real rnorm, void * ctx);
+    friend PetscErrorCode __snes_monitor(SNES snes, Int it, Real norm, void * ctx);
 };
 
 } // namespace godzilla

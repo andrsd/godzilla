@@ -13,7 +13,7 @@ protected:
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 1;
+        params->set<Int>("nx") = 1;
         return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
 
@@ -22,8 +22,8 @@ protected:
     {
         const std::string class_name = "RectangleMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 1;
-        params->set<PetscInt>("ny") = 1;
+        params->set<Int>("nx") = 1;
+        params->set<Int>("ny") = 1;
         return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
 
@@ -32,9 +32,9 @@ protected:
     {
         const std::string class_name = "BoxMesh";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<PetscInt>("nx") = 1;
-        params->set<PetscInt>("ny") = 1;
-        params->set<PetscInt>("nz") = 1;
+        params->set<Int>("nx") = 1;
+        params->set<Int>("ny") = 1;
+        params->set<Int>("nz") = 1;
         return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
 
@@ -73,11 +73,10 @@ public:
     G1DTestLinearProblem(const Parameters & params);
     virtual ~G1DTestLinearProblem();
     virtual void create() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
-    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
-
     PetscSection s;
 };
 
@@ -88,11 +87,10 @@ public:
     G2DTestLinearProblem(const Parameters & params);
     virtual ~G2DTestLinearProblem();
     virtual void create() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
-    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
-
     PetscSection s;
 };
 
@@ -103,10 +101,9 @@ public:
     G3DTestLinearProblem(const Parameters & params);
     virtual ~G3DTestLinearProblem();
     virtual void create() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    virtual PetscErrorCode compute_rhs_callback(Vec b) override;
-    virtual PetscErrorCode compute_operators_callback(Mat A, Mat B) override;
-
     PetscSection s;
 };

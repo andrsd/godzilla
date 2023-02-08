@@ -11,15 +11,15 @@ namespace godzilla {
 const std::string FVProblemInterface::empty_name;
 
 void
-__compute_flux(PetscInt dim,
-               PetscInt nf,
-               const PetscReal x[],
-               const PetscReal n[],
-               const PetscScalar uL[],
-               const PetscScalar uR[],
-               PetscInt n_consts,
-               const PetscScalar constants[],
-               PetscScalar flux[],
+__compute_flux(Int dim,
+               Int nf,
+               const Real x[],
+               const Real n[],
+               const Scalar uL[],
+               const Scalar uR[],
+               Int n_consts,
+               const Scalar constants[],
+               Scalar flux[],
                void * ctx)
 {
     _F_;
@@ -31,7 +31,6 @@ FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & par
     DiscreteProblemInterface(problem, params),
     section(nullptr),
     fvm(nullptr),
-    sln(nullptr),
     ds(nullptr),
     wf(nullptr)
 {
@@ -40,7 +39,7 @@ FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & par
 
 FVProblemInterface::~FVProblemInterface()
 {
-    VecDestroy(&this->sln);
+    this->sln.destroy();
 }
 
 void
@@ -52,7 +51,7 @@ FVProblemInterface::init()
     PETSC_CHECK(DMGetLocalSection(dm, &this->section));
 }
 
-PetscInt
+Int
 FVProblemInterface::get_num_fields() const
 {
     _F_;
@@ -70,11 +69,11 @@ FVProblemInterface::get_field_names() const
 }
 
 const std::string &
-FVProblemInterface::get_field_name(PetscInt fid) const
+FVProblemInterface::get_field_name(Int fid) const
 {
     _F_;
     if (fid == 0) {
-        PetscInt nc;
+        Int nc;
         PETSC_CHECK(PetscFVGetNumComponents(this->fvm, &nc));
         if (nc == 1)
             return this->fields.at(0).name;
@@ -85,12 +84,12 @@ FVProblemInterface::get_field_name(PetscInt fid) const
         error("Field with ID = '%d' does not exist.", fid);
 }
 
-PetscInt
-FVProblemInterface::get_field_num_components(PetscInt fid) const
+Int
+FVProblemInterface::get_field_num_components(Int fid) const
 {
     _F_;
     if (fid == 0) {
-        PetscInt n_comps = 0;
+        Int n_comps = 0;
         for (auto & it : this->fields)
             n_comps += it.second.nc;
         return n_comps;
@@ -99,7 +98,7 @@ FVProblemInterface::get_field_num_components(PetscInt fid) const
         error("Field with ID = '%d' does not exist.", fid);
 }
 
-PetscInt
+Int
 FVProblemInterface::get_field_id(const std::string & name) const
 {
     _F_;
@@ -107,7 +106,7 @@ FVProblemInterface::get_field_id(const std::string & name) const
 }
 
 bool
-FVProblemInterface::has_field_by_id(PetscInt fid) const
+FVProblemInterface::has_field_by_id(Int fid) const
 {
     _F_;
     if (fid == 0)
@@ -123,8 +122,8 @@ FVProblemInterface::has_field_by_name(const std::string & name) const
     return false;
 }
 
-PetscInt
-FVProblemInterface::get_field_order(PetscInt fid) const
+Int
+FVProblemInterface::get_field_order(Int fid) const
 {
     _F_;
     if (fid == 0)
@@ -134,7 +133,7 @@ FVProblemInterface::get_field_order(PetscInt fid) const
 }
 
 std::string
-FVProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) const
+FVProblemInterface::get_field_component_name(Int fid, Int component) const
 {
     _F_;
     if (fid == 0) {
@@ -147,9 +146,7 @@ FVProblemInterface::get_field_component_name(PetscInt fid, PetscInt component) c
 }
 
 void
-FVProblemInterface::set_field_component_name(PetscInt fid,
-                                             PetscInt component,
-                                             const std::string & name)
+FVProblemInterface::set_field_component_name(Int fid, Int component, const std::string & name)
 {
     _F_;
     const auto & it = this->fields.find(fid);
@@ -165,16 +162,16 @@ FVProblemInterface::set_field_component_name(PetscInt fid,
         error("Field with ID = '%d' does not exist.", fid);
 }
 
-PetscInt
-FVProblemInterface::get_field_dof(PetscInt point, PetscInt fid) const
+Int
+FVProblemInterface::get_field_dof(Int point, Int fid) const
 {
     _F_;
-    PetscInt offset;
+    Int offset;
     PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
     return offset;
 }
 
-Vec
+const Vector &
 FVProblemInterface::get_solution_vector_local() const
 {
     _F_;
@@ -190,7 +187,7 @@ FVProblemInterface::get_weak_form() const
 }
 
 void
-FVProblemInterface::add_field(PetscInt id, const std::string & name, PetscInt nc)
+FVProblemInterface::add_field(Int id, const std::string & name, Int nc)
 {
     _F_;
     auto it = this->fields.find(id);
@@ -198,7 +195,7 @@ FVProblemInterface::add_field(PetscInt id, const std::string & name, PetscInt nc
         FieldInfo fi = { name, id, nc, {} };
         if (nc > 1) {
             fi.component_names.resize(nc);
-            for (PetscInt i = 0; i < nc; i++)
+            for (Int i = 0; i < nc; i++)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields[id] = fi;
@@ -220,7 +217,9 @@ void
 FVProblemInterface::allocate_objects()
 {
     DM dm = this->unstr_mesh->get_dm();
-    PETSC_CHECK(DMCreateLocalVector(dm, &this->sln));
+    Vec loc_sln;
+    PETSC_CHECK(DMCreateLocalVector(dm, &loc_sln));
+    this->sln = Vector(loc_sln);
 }
 
 void
@@ -232,20 +231,20 @@ FVProblemInterface::set_up_ds()
     PETSC_CHECK(PetscFVCreate(comm, &this->fvm));
     PETSC_CHECK(PetscFVSetType(this->fvm, PETSCFVUPWIND));
 
-    PetscInt n_comps = 0;
+    Int n_comps = 0;
     for (auto & it : this->fields)
         n_comps += it.second.nc;
     PETSC_CHECK(PetscFVSetNumComponents(this->fvm, n_comps));
 
     PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, this->unstr_mesh->get_dimension()));
 
-    for (PetscInt id = 0, c = 0; id < this->fields.size(); id++) {
+    for (Int id = 0, c = 0; id < this->fields.size(); id++) {
         const FieldInfo & fi = this->fields[id];
         if (fi.nc == 1) {
             PETSC_CHECK(PetscFVSetComponentName(this->fvm, c, fi.name.c_str()));
         }
         else {
-            for (PetscInt i = 0; i < fi.nc; i++) {
+            for (Int i = 0; i < fi.nc; i++) {
                 std::string name = fmt::sprintf("%s_%s", fi.name, fi.component_names[i]);
                 PETSC_CHECK(PetscFVSetComponentName(this->fvm, c + i, name.c_str()));
             }

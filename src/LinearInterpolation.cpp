@@ -9,8 +9,8 @@ LinearInterpolation::LinearInterpolation() : x(), y()
     _F_;
 }
 
-LinearInterpolation::LinearInterpolation(const std::vector<PetscReal> & ax,
-                                         const std::vector<PetscReal> & ay) :
+LinearInterpolation::LinearInterpolation(const std::vector<Real> & ax,
+                                         const std::vector<Real> & ay) :
     x(ax),
     y(ay)
 {
@@ -19,7 +19,7 @@ LinearInterpolation::LinearInterpolation(const std::vector<PetscReal> & ax,
 }
 
 void
-LinearInterpolation::create(const std::vector<PetscReal> & x, const std::vector<PetscReal> & y)
+LinearInterpolation::create(const std::vector<Real> & x, const std::vector<Real> & y)
 {
     _F_;
     this->x = x;
@@ -41,7 +41,7 @@ LinearInterpolation::check()
                         this->x.size());
     else {
         // check monotonicity
-        PetscReal a = this->x[0];
+        Real a = this->x[0];
         for (std::size_t i = 1; i < this->x.size(); i++) {
             if (this->x[i] <= a)
                 godzilla::error(
@@ -51,8 +51,8 @@ LinearInterpolation::check()
     }
 }
 
-PetscReal
-LinearInterpolation::sample(PetscReal x)
+Real
+LinearInterpolation::sample(Real x)
 {
     _F_;
     std::size_t sz = this->x.size();

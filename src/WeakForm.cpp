@@ -6,8 +6,8 @@ namespace godzilla {
 
 struct Key {
     DMLabel label;
-    PetscInt value;
-    PetscInt part;
+    Int value;
+    Int part;
 };
 
 } // namespace godzilla
@@ -90,7 +90,7 @@ WeakForm::get_jacobian_keys() const
 }
 
 const std::vector<Functional *> &
-WeakForm::get(PetscWeakFormKind kind, DMLabel label, PetscInt val, PetscInt f, PetscInt part) const
+WeakForm::get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part) const
 {
     PetscFormKey key;
     key.label = label;
@@ -105,12 +105,7 @@ WeakForm::get(PetscWeakFormKind kind, DMLabel label, PetscInt val, PetscInt f, P
 }
 
 const std::vector<Functional *> &
-WeakForm::get(PetscWeakFormKind kind,
-              DMLabel label,
-              PetscInt val,
-              PetscInt f,
-              PetscInt g,
-              PetscInt part) const
+WeakForm::get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int part) const
 {
     PetscFormKey key;
     key.label = label;
@@ -125,12 +120,7 @@ WeakForm::get(PetscWeakFormKind kind,
 }
 
 void
-WeakForm::add(PetscWeakFormKind kind,
-              DMLabel label,
-              PetscInt value,
-              PetscInt f,
-              PetscInt part,
-              Functional * func)
+WeakForm::add(PetscWeakFormKind kind, DMLabel label, Int value, Int f, Int part, Functional * func)
 {
     if (func != nullptr) {
         PetscFormKey key;
@@ -145,10 +135,10 @@ WeakForm::add(PetscWeakFormKind kind,
 void
 WeakForm::add(PetscWeakFormKind kind,
               DMLabel label,
-              PetscInt val,
-              PetscInt f,
-              PetscInt g,
-              PetscInt part,
+              Int val,
+              Int f,
+              Int g,
+              Int part,
               Functional * func)
 {
     if (func != nullptr) {
@@ -161,8 +151,8 @@ WeakForm::add(PetscWeakFormKind kind,
     }
 }
 
-PetscInt
-WeakForm::get_jac_key(PetscInt f, PetscInt g) const
+Int
+WeakForm::get_jac_key(Int f, Int g) const
 {
     return f * this->n_fields + g;
 }

@@ -35,11 +35,13 @@ TEST(ProblemTest, add_pp)
             return nullptr;
         }
 
-        virtual Vec
+        virtual const Vector &
         get_solution_vector() const
         {
-            return nullptr;
+            return this->sln;
         }
+
+        Vector sln;
     };
 
     class TestPostprocessor : public Postprocessor {
@@ -51,7 +53,7 @@ TEST(ProblemTest, add_pp)
         {
         }
 
-        virtual PetscReal
+        virtual Real
         get_value()
         {
             return 0;
@@ -81,7 +83,7 @@ TEST(ProblemTest, add_pp)
 
     Parameters mesh_params = LineMesh::parameters();
     mesh_params.set<const App *>("_app") = &app;
-    mesh_params.set<PetscInt>("nx") = 2;
+    mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = Problem::parameters();

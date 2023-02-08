@@ -9,12 +9,7 @@ namespace godzilla {
 REGISTER_OBJECT(ConstantAuxiliaryField);
 
 static PetscErrorCode
-constant_auxiliary_field(PetscInt dim,
-                         PetscReal time,
-                         const PetscReal x[],
-                         PetscInt nc,
-                         PetscScalar u[],
-                         void * ctx)
+constant_auxiliary_field(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     auto * aux_fld = static_cast<ConstantAuxiliaryField *>(ctx);
     aux_fld->evaluate(dim, time, x, nc, u);
@@ -25,14 +20,14 @@ Parameters
 ConstantAuxiliaryField::parameters()
 {
     Parameters params = AuxiliaryField::parameters();
-    params.add_required_param<std::vector<PetscReal>>("value",
-                                                      "Constant values for each field component");
+    params.add_required_param<std::vector<Real>>("value",
+                                                 "Constant values for each field component");
     return params;
 }
 
 ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & params) :
     AuxiliaryField(params),
-    values(params.get<std::vector<PetscReal>>("value"))
+    values(params.get<std::vector<Real>>("value"))
 {
     _F_;
     this->num_comps = this->values.size();
@@ -46,7 +41,7 @@ ConstantAuxiliaryField::create()
     AuxiliaryField::create();
 }
 
-PetscInt
+Int
 ConstantAuxiliaryField::get_num_components() const
 {
     return this->num_comps;
@@ -59,14 +54,10 @@ ConstantAuxiliaryField::get_func() const
 }
 
 void
-ConstantAuxiliaryField::evaluate(PetscInt,
-                                 PetscReal,
-                                 const PetscReal[],
-                                 PetscInt nc,
-                                 PetscScalar u[])
+ConstantAuxiliaryField::evaluate(Int, Real, const Real[], Int nc, Scalar u[])
 {
     _F_;
-    for (PetscInt c = 0; c < nc; c++)
+    for (Int c = 0; c < nc; c++)
         u[c] = this->values[c];
 }
 

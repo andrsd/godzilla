@@ -18,7 +18,7 @@ public:
 
     void create() override;
 
-    NO_DISCARD virtual PetscInt get_block_id() const;
+    NO_DISCARD virtual Int get_block_id() const;
 
     NO_DISCARD virtual DMLabel get_label() const;
 
@@ -27,12 +27,12 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    NO_DISCARD virtual PetscInt get_field_id() const;
+    NO_DISCARD virtual Int get_field_id() const;
 
     /// Get the number of constrained components
     ///
     /// @return The number of constrained components
-    NO_DISCARD virtual PetscInt get_num_components() const = 0;
+    NO_DISCARD virtual Int get_num_components() const = 0;
 
     NO_DISCARD virtual PetscFunc * get_func() const = 0;
 
@@ -49,13 +49,13 @@ protected:
     const std::string & region;
 
     /// Field ID
-    PetscInt fid;
+    Int fid;
 
     /// Block here the auxiliary field lives
     DMLabel label;
 
     /// Block ID associated with the label where this field is defined
-    PetscInt block_id;
+    Int block_id;
 
 public:
     static Parameters parameters();
