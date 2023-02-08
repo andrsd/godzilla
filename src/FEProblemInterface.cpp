@@ -1690,4 +1690,68 @@ FEProblemInterface::get_next_id(const std::vector<Int> & ids) const
     return -1;
 }
 
+void
+FEProblemInterface::add_boundary_essential(const std::string & name,
+                                           DMLabel label,
+                                           const std::vector<Int> & ids,
+                                           Int field,
+                                           const std::vector<Int> & components,
+                                           PetscFunc * fn,
+                                           PetscFunc * fn_t,
+                                           void * context) const
+{
+    _F_;
+    PETSC_CHECK(PetscDSAddBoundary(this->ds,
+                                   DM_BC_ESSENTIAL,
+                                   name.c_str(),
+                                   label,
+                                   ids.size(),
+                                   ids.data(),
+                                   field,
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
+                                   (void (*)()) fn,
+                                   (void (*)()) fn_t,
+                                   context,
+                                   nullptr));
+}
+
+void
+FEProblemInterface::add_boundary_natural(const std::string & name,
+                                         DMLabel label,
+                                         const std::vector<Int> & ids,
+                                         Int field,
+                                         const std::vector<Int> & components,
+                                         void * context) const
+{
+    _F_;
+    PETSC_CHECK(PetscDSAddBoundary(this->ds,
+                                   DM_BC_NATURAL,
+                                   name.c_str(),
+                                   label,
+                                   ids.size(),
+                                   ids.data(),
+                                   field,
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
+                                   nullptr,
+                                   nullptr,
+                                   context,
+                                   nullptr));
+}
+
+void
+FEProblemInterface::add_boundary_natural_riemann(const std::string & name,
+                                                 DMLabel label,
+                                                 const std::vector<Int> & ids,
+                                                 Int field,
+                                                 const std::vector<Int> & components,
+                                                 PetscNaturalRiemannBCFunc * fn,
+                                                 PetscNaturalRiemannBCFunc * fn_t,
+                                                 void * context) const
+{
+    _F_;
+    error("Natural Riemann BCs are not supported for FE problems");
+}
+
 } // namespace godzilla

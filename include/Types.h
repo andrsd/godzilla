@@ -50,4 +50,11 @@ typedef void PetscFieldFunc(Int dim,
 typedef PetscErrorCode
 PetscFunc(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx);
 
+typedef PetscErrorCode PetscNaturalRiemannBCFunc(Real time,
+                                                 const Real * c,
+                                                 const Real * n,
+                                                 const Scalar * xI,
+                                                 Scalar * xG,
+                                                 void * ctx);
+
 } // namespace godzilla

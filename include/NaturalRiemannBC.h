@@ -23,9 +23,6 @@ public:
 protected:
     void add_boundary() override;
 
-    /// Boundary number
-    Int bd;
-
 public:
     static Parameters parameters();
 };

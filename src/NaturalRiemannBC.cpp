@@ -1,5 +1,6 @@
 #include "NaturalRiemannBC.h"
 #include "CallStack.h"
+#include "DiscreteProblemInterface.h"
 #include <cassert>
 
 namespace godzilla {
@@ -26,7 +27,7 @@ NaturalRiemannBC::parameters()
     return params;
 }
 
-NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryCondition(params), bd(-1)
+NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryCondition(params)
 {
     _F_;
 }
@@ -35,20 +36,14 @@ void
 NaturalRiemannBC::add_boundary()
 {
     _F_;
-    const auto & components = get_components();
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_NATURAL_RIEMANN,
-                                   get_name().c_str(),
-                                   this->label,
-                                   this->ids.size(),
-                                   this->ids.data(),
-                                   this->fid,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   (void (*)()) natural_riemann_boundary_condition_function,
-                                   nullptr,
-                                   (void *) this,
-                                   &this->bd));
+    this->dpi->add_boundary_natural_riemann(get_name(),
+                                            this->label,
+                                            this->ids,
+                                            this->fid,
+                                            get_components(),
+                                            natural_riemann_boundary_condition_function,
+                                            nullptr,
+                                            this);
 }
 
 } // namespace godzilla

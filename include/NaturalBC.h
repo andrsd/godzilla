@@ -42,9 +42,6 @@ protected:
     /// WeakForm object
     WeakForm * wf;
 
-    /// Boundary number
-    Int bd;
-
 public:
     static Parameters parameters();
 };

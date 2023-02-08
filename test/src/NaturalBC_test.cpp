@@ -105,12 +105,6 @@ TEST(NaturalBCTest, fe)
             set_jacobian_block(this->fid, new TestNatG0(this), nullptr, nullptr, nullptr);
         }
 
-        Int
-        get_bd() const
-        {
-            return this->bd;
-        }
-
         WeakForm *
         get_wf() const
         {
@@ -164,35 +158,7 @@ TEST(NaturalBCTest, fe)
     PetscDSGetNumBoundary(ds, &num_bd);
     EXPECT_EQ(num_bd, 1);
     //
-    DMBoundaryConditionType type;
-    const char * name;
-    DMLabel label;
-    Int nv;
-    const Int * values;
-    Int field;
-    Int nc;
-    const Int * comps;
-    PetscDSGetBoundary(ds,
-                       bc.get_bd(),
-                       nullptr,
-                       &type,
-                       &name,
-                       &label,
-                       &nv,
-                       &values,
-                       &field,
-                       &nc,
-                       &comps,
-                       nullptr,
-                       nullptr,
-                       nullptr);
-    EXPECT_STREQ(name, "bc1");
-    EXPECT_EQ(nv, 1);
-    EXPECT_EQ(values[0], 1);
-    EXPECT_EQ(field, 0);
-    EXPECT_EQ(nc, 1);
-    EXPECT_EQ(comps[0], 0);
-    //
+    Int field = bc.get_field_id();
     WeakForm * wf = bc.get_wf();
     Int id = bc.get_ids()[0];
     Int part = 0;

@@ -24,8 +24,6 @@ BoundaryCondition::BoundaryCondition(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     dpi(get_param<const DiscreteProblemInterface *>("_dpi")),
-    dm(nullptr),
-    ds(nullptr),
     label(nullptr),
     fid(-1),
     ids({}),
@@ -40,8 +38,6 @@ BoundaryCondition::create()
     _F_;
     Problem * problem = this->app->get_problem();
     assert(problem != nullptr);
-    this->dm = problem->get_dm();
-    assert(this->dm != nullptr);
 
     assert(this->dpi != nullptr);
     const UnstructuredMesh * mesh = this->dpi->get_mesh();
@@ -89,7 +85,6 @@ void
 BoundaryCondition::set_up()
 {
     _F_;
-    PETSC_CHECK(DMGetDS(this->dm, &this->ds));
     IndexSet is = IndexSet::values_from_label(this->label);
     is.get_indices();
     this->ids = is.to_std_vector();
