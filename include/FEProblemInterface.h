@@ -207,6 +207,7 @@ protected:
 
     void create() override;
     void init() override;
+
     virtual void allocate_objects();
 
     /// Create FE object from FieldInfo
@@ -216,6 +217,29 @@ protected:
 
     /// Set up discretization system
     void set_up_ds() override;
+
+    void add_boundary_essential(const std::string & name,
+                                DMLabel label,
+                                const std::vector<Int> & ids,
+                                Int field,
+                                const std::vector<Int> & components,
+                                PetscFunc * fn,
+                                PetscFunc * fn_t,
+                                void * context) const override;
+    void add_boundary_natural(const std::string & name,
+                              DMLabel label,
+                              const std::vector<Int> & ids,
+                              Int field,
+                              const std::vector<Int> & components,
+                              void * context) const override;
+    void add_boundary_natural_riemann(const std::string & name,
+                                      DMLabel label,
+                                      const std::vector<Int> & ids,
+                                      Int field,
+                                      const std::vector<Int> & components,
+                                      PetscNaturalRiemannBCFunc * fn,
+                                      PetscNaturalRiemannBCFunc * fn_t,
+                                      void * context) const override;
 
     /// Set up quadrature
     virtual void set_up_quadrature();

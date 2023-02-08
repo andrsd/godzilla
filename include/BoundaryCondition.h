@@ -49,12 +49,6 @@ protected:
     /// Discrete problem this object is part of
     const DiscreteProblemInterface * dpi;
 
-    /// DM object
-    DM dm;
-
-    /// DS object
-    PetscDS ds;
-
     /// DMLabel associated with the boundary name this boundary condition acts on
     DMLabel label;
 

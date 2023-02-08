@@ -1,5 +1,6 @@
 #include "EssentialBC.h"
 #include "CallStack.h"
+#include "DiscreteProblemInterface.h"
 #include <cassert>
 
 namespace godzilla {
@@ -71,20 +72,14 @@ void
 EssentialBC::add_boundary()
 {
     _F_;
-    const auto & components = get_components();
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_ESSENTIAL,
-                                   get_name().c_str(),
-                                   this->label,
-                                   this->ids.size(),
-                                   this->ids.data(),
-                                   this->fid,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   (void (*)()) get_function(),
-                                   (void (*)()) get_function_t(),
-                                   (void *) get_context(),
-                                   nullptr));
+    this->dpi->add_boundary_essential(get_name(),
+                                      this->label,
+                                      this->ids,
+                                      this->fid,
+                                      get_components(),
+                                      get_function(),
+                                      get_function_t(),
+                                      this);
 }
 
 } // namespace godzilla

@@ -40,6 +40,28 @@ protected:
     void create() override;
     virtual void allocate_objects();
     void set_up_ds() override;
+    void add_boundary_essential(const std::string & name,
+                                DMLabel label,
+                                const std::vector<Int> & ids,
+                                Int field,
+                                const std::vector<Int> & components,
+                                PetscFunc * fn,
+                                PetscFunc * fn_t,
+                                void * context) const override;
+    void add_boundary_natural(const std::string & name,
+                              DMLabel label,
+                              const std::vector<Int> & ids,
+                              Int field,
+                              const std::vector<Int> & components,
+                              void * context) const override;
+    void add_boundary_natural_riemann(const std::string & name,
+                                      DMLabel label,
+                                      const std::vector<Int> & ids,
+                                      Int field,
+                                      const std::vector<Int> & components,
+                                      PetscNaturalRiemannBCFunc * fn,
+                                      PetscNaturalRiemannBCFunc * fn_t,
+                                      void * context) const override;
 
     /// Compute flux
     ///

@@ -16,8 +16,7 @@ NaturalBC::parameters()
 
 NaturalBC::NaturalBC(const Parameters & params) :
     BoundaryCondition(params),
-    wf(this->dpi->get_weak_form()),
-    bd(-1)
+    wf(this->dpi->get_weak_form())
 {
     _F_;
 }
@@ -26,20 +25,12 @@ void
 NaturalBC::add_boundary()
 {
     _F_;
-    const auto & components = get_components();
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_NATURAL,
-                                   get_name().c_str(),
-                                   this->label,
-                                   this->ids.size(),
-                                   this->ids.data(),
-                                   this->fid,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   nullptr,
-                                   nullptr,
-                                   (void *) this,
-                                   &this->bd));
+    this->dpi->add_boundary_natural(get_name(),
+                                    this->label,
+                                    this->ids,
+                                    this->fid,
+                                    get_components(),
+                                    this);
 }
 
 void
