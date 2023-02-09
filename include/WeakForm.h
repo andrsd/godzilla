@@ -82,6 +82,16 @@ public:
     void
     add(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int part, Functional * func);
 
+    /// Query if Jacobian statement is set
+    ///
+    /// @return `true` if weak form for Jacobian statement is set, otherwise `false`
+    bool has_jacobian() const;
+
+    /// Query if Jacobian preconditioner statement is set
+    ///
+    /// @return `true` if weak form for Jacobian preconditioner statement is set, otherwise `false`
+    bool has_jacobian_preconditioner() const;
+
 protected:
     NO_DISCARD Int get_jac_key(Int f, Int g) const;
 

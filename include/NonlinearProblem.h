@@ -40,6 +40,8 @@ protected:
     virtual void set_up_callbacks();
     /// Set up monitors
     virtual void set_up_monitors();
+    /// Set up solve type
+    virtual void set_up_solve_type();
     /// Set up solver parameters
     virtual void set_up_solver_parameters();
     /// SNES monitor
