@@ -603,8 +603,13 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
         DMLabel label;
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
 
-        if (s == 0)
+        if (s == 0) {
+            auto has_jac = get_weak_form()->has_jacobian();
+            auto has_precond = get_weak_form()->has_jacobian_preconditioner();
+            if (has_jac && has_precond)
+                J.zero();
             Jp.zero();
+        }
 
         for (auto & jac_key : this->wf->get_jacobian_keys()) {
             IndexSet cells;
@@ -664,12 +669,11 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscCall(PetscDSGetNumFields(prob, &n_fields));
     Int tot_dim;
     PetscCall(PetscDSGetTotalDimension(prob, &tot_dim));
-    PetscBool has_prec = PETSC_FALSE;
+    auto has_jac = this->get_weak_form()->has_jacobian();
+    auto has_prec = this->get_weak_form()->has_jacobian_preconditioner();
     // user passed in the same matrix, avoid double contributions and only assemble the Jacobian
-    if (J == Jp)
+    if (has_jac && J == Jp)
         has_prec = PETSC_FALSE;
-    else
-        error("Contributing into a Jacobian and a preconditioner is not implemented yet.");
 
     Vec A;
     PetscCall(DMGetAuxiliaryVec(dm, key.label, key.value, key.part, &A));
@@ -729,7 +733,8 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
             PetscCall(DMPlexVecRestoreClosure(plex, section_aux, A, subcell, nullptr, &x));
         }
     }
-    PetscCall(PetscArrayzero(elem_mat, n_cells * tot_dim * tot_dim));
+    if (has_jac)
+        PetscCall(PetscArrayzero(elem_mat, n_cells * tot_dim * tot_dim));
     if (has_prec)
         PetscCall(PetscArrayzero(elem_mat_P, n_cells * tot_dim * tot_dim));
     for (Int field_i = 0; field_i < n_fields; ++field_i) {
@@ -768,30 +773,32 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         PetscCall(PetscFEGeomGetChunk(cgeom_fem, offset, n_cells, &rem_geom));
         for (Int field_j = 0; field_j < n_fields; ++field_j) {
             key.field = field_i * n_fields + field_j;
-            PetscCall(PetscFEIntegrateJacobian(prob,
-                                               PETSCFE_JACOBIAN,
-                                               key,
-                                               n_elems,
-                                               chunk_geom,
-                                               u,
-                                               u_t,
-                                               prob_aux,
-                                               a,
-                                               t,
-                                               x_t_shift,
-                                               elem_mat));
-            PetscCall(PetscFEIntegrateJacobian(prob,
-                                               PETSCFE_JACOBIAN,
-                                               key,
-                                               n_remdr,
-                                               rem_geom,
-                                               &u[offset * tot_dim],
-                                               u_t ? &u_t[offset * tot_dim] : nullptr,
-                                               prob_aux,
-                                               &a[offset * tot_dim_aux],
-                                               t,
-                                               x_t_shift,
-                                               &elem_mat[offset * tot_dim * tot_dim]));
+            if (has_jac) {
+                PetscCall(PetscFEIntegrateJacobian(prob,
+                                                   PETSCFE_JACOBIAN,
+                                                   key,
+                                                   n_elems,
+                                                   chunk_geom,
+                                                   u,
+                                                   u_t,
+                                                   prob_aux,
+                                                   a,
+                                                   t,
+                                                   x_t_shift,
+                                                   elem_mat));
+                PetscCall(PetscFEIntegrateJacobian(prob,
+                                                   PETSCFE_JACOBIAN,
+                                                   key,
+                                                   n_remdr,
+                                                   rem_geom,
+                                                   &u[offset * tot_dim],
+                                                   u_t ? &u_t[offset * tot_dim] : nullptr,
+                                                   prob_aux,
+                                                   &a[offset * tot_dim_aux],
+                                                   t,
+                                                   x_t_shift,
+                                                   &elem_mat[offset * tot_dim * tot_dim]));
+            }
             if (has_prec) {
                 PetscCall(PetscFEIntegrateJacobian(prob,
                                                    PETSCFE_JACOBIAN_PRE,
@@ -841,13 +848,14 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
                                                          tot_dim,
                                                          &elem_mat[cind * tot_dim * tot_dim]));
         if (has_prec) {
-            PetscCall(DMPlexMatSetClosure(dm,
-                                          section,
-                                          global_section,
-                                          J,
-                                          cell,
-                                          &elem_mat[cind * tot_dim * tot_dim],
-                                          ADD_VALUES));
+            if (has_jac)
+                PetscCall(DMPlexMatSetClosure(dm,
+                                              section,
+                                              global_section,
+                                              J,
+                                              cell,
+                                              &elem_mat[cind * tot_dim * tot_dim],
+                                              ADD_VALUES));
             PetscCall(DMPlexMatSetClosure(dm,
                                           section,
                                           global_section,
@@ -857,13 +865,14 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
                                           ADD_VALUES));
         }
         else {
-            PetscCall(DMPlexMatSetClosure(dm,
-                                          section,
-                                          global_section,
-                                          Jp,
-                                          cell,
-                                          &elem_mat[cind * tot_dim * tot_dim],
-                                          ADD_VALUES));
+            if (has_jac)
+                PetscCall(DMPlexMatSetClosure(dm,
+                                              section,
+                                              global_section,
+                                              Jp,
+                                              cell,
+                                              &elem_mat[cind * tot_dim * tot_dim],
+                                              ADD_VALUES));
         }
     }
     PetscCall(ISRestorePointRange((IS) cell_is, &c_start, &c_end, &cells));
@@ -875,7 +884,11 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     // Compute boundary integrals
     compute_bnd_jacobian_internal(dm, X, X_t, t, x_t_shift, J, Jp);
     // Assemble matrix
-    if (has_prec) {
+    PetscBool ass_op = has_jac && has_prec ? PETSC_TRUE : PETSC_FALSE, gass_op;
+    PetscCallMPI(
+        MPI_Allreduce(&ass_op, &gass_op, 1, MPIU_BOOL, MPI_LOR, PetscObjectComm((PetscObject) dm)));
+
+    if (has_jac & has_prec) {
         PetscCall(MatAssemblyBegin(J, MAT_FINAL_ASSEMBLY));
         PetscCall(MatAssemblyEnd(J, MAT_FINAL_ASSEMBLY));
     }
@@ -1177,6 +1190,23 @@ FENonlinearProblem::set_jacobian_block(Int fid,
     this->wf->add(PETSC_WF_G1, label, val, fid, gid, 0, g1);
     this->wf->add(PETSC_WF_G2, label, val, fid, gid, 0, g2);
     this->wf->add(PETSC_WF_G3, label, val, fid, gid, 0, g3);
+}
+
+void
+FENonlinearProblem::set_jacobian_preconditioner_block(Int fid,
+                                                      Int gid,
+                                                      JacobianFunc * g0,
+                                                      JacobianFunc * g1,
+                                                      JacobianFunc * g2,
+                                                      JacobianFunc * g3,
+                                                      DMLabel label,
+                                                      Int val)
+{
+    _F_;
+    this->wf->add(PETSC_WF_GP0, label, val, fid, gid, 0, g0);
+    this->wf->add(PETSC_WF_GP1, label, val, fid, gid, 0, g1);
+    this->wf->add(PETSC_WF_GP2, label, val, fid, gid, 0, g2);
+    this->wf->add(PETSC_WF_GP3, label, val, fid, gid, 0, g3);
 }
 
 void

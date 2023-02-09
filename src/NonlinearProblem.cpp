@@ -132,6 +132,7 @@ NonlinearProblem::create()
     set_up_line_search();
     set_up_monitors();
     set_up_callbacks();
+    set_up_solve_type();
 
     Problem::create();
 }
@@ -221,6 +222,11 @@ NonlinearProblem::set_up_monitors()
     _F_;
     PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, nullptr));
     PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor, this, nullptr));
+}
+
+void
+NonlinearProblem::set_up_solve_type()
+{
 }
 
 void

@@ -1,5 +1,6 @@
 #include "WeakForm.h"
 #include "Functional.h"
+#include "CallStack.h"
 #include <set>
 
 namespace godzilla {
@@ -67,10 +68,9 @@ std::vector<PetscFormKey>
 WeakForm::get_jacobian_keys() const
 {
     std::set<Key> unique;
-    std::array<PetscWeakFormKind, 4> jacmap = { PETSC_WF_G0,
-                                                PETSC_WF_G1,
-                                                PETSC_WF_G2,
-                                                PETSC_WF_G3 };
+    std::array<PetscWeakFormKind, 8> jacmap = { PETSC_WF_G0,  PETSC_WF_G1,  PETSC_WF_G2,
+                                                PETSC_WF_G3,  PETSC_WF_GP0, PETSC_WF_GP1,
+                                                PETSC_WF_GP2, PETSC_WF_GP3 };
     for (const auto & r : jacmap) {
         const auto & forms = this->jac_forms[r];
         for (const auto & it : forms) {
@@ -155,6 +155,28 @@ Int
 WeakForm::get_jac_key(Int f, Int g) const
 {
     return f * this->n_fields + g;
+}
+
+bool
+WeakForm::has_jacobian() const
+{
+    _F_;
+    auto n0 = this->jac_forms[PETSC_WF_G0].size();
+    auto n1 = this->jac_forms[PETSC_WF_G1].size();
+    auto n2 = this->jac_forms[PETSC_WF_G2].size();
+    auto n3 = this->jac_forms[PETSC_WF_G3].size();
+    return (n0 + n1 + n2 + n3) > 0;
+}
+
+bool
+WeakForm::has_jacobian_preconditioner() const
+{
+    _F_;
+    auto n0 = this->jac_forms[PETSC_WF_GP0].size();
+    auto n1 = this->jac_forms[PETSC_WF_GP1].size();
+    auto n2 = this->jac_forms[PETSC_WF_GP2].size();
+    auto n3 = this->jac_forms[PETSC_WF_GP3].size();
+    return (n0 + n1 + n2 + n3) > 0;
 }
 
 } // namespace godzilla

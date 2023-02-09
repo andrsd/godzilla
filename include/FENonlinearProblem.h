@@ -60,6 +60,25 @@ protected:
                                     DMLabel label = nullptr,
                                     Int val = 0);
 
+    /// Set up Jacobian preconditioner statement for a field variable
+    ///
+    /// @param fid Test field number
+    /// @param gid Field number
+    /// @param g0 Integrand for the test and basis function term
+    /// @param g1 Integrand for the test function and basis function gradient term
+    /// @param g2 Integrand for the test function gradient and basis function term
+    /// @param g3 Integrand for the test function gradient and basis function gradient term
+    /// @param label Region specified by DMLabel where this residual statement is active
+    /// @param val Value associated with the region
+    virtual void set_jacobian_preconditioner_block(Int fid,
+                                                   Int gid,
+                                                   JacobianFunc * g0,
+                                                   JacobianFunc * g1,
+                                                   JacobianFunc * g2,
+                                                   JacobianFunc * g3,
+                                                   DMLabel label = nullptr,
+                                                   Int val = 0);
+
     void on_initial() override;
 
     PetscErrorCode compute_residual_internal(DM dm,
