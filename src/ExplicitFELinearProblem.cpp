@@ -32,7 +32,7 @@ public:
     }
 
     void
-    evaluate(Scalar * g) override
+    evaluate(Scalar * g) const override
     {
         for (Int c = 0; c < n_comp; ++c)
             g[c * n_comp + c] = 1.0;

@@ -12,7 +12,7 @@ public:
     explicit F0(const GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
 
     void
-    evaluate(Scalar f[]) override
+    evaluate(Scalar f[]) const override
     {
         f[0] = 2.0;
     }
@@ -28,7 +28,7 @@ public:
     }
 
     void
-    evaluate(Scalar f[]) override
+    evaluate(Scalar f[]) const override
     {
         for (Int d = 0; d < this->dim; ++d)
             f[d] = this->u_x[d];
@@ -48,7 +48,7 @@ public:
     }
 
     void
-    evaluate(Scalar g[]) override
+    evaluate(Scalar g[]) const override
     {
         for (Int d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.;

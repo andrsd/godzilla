@@ -22,7 +22,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         f[0] = htc[0] * (T[0] - T_infinity[0]);
     }
@@ -38,7 +38,7 @@ public:
     explicit Jacobian0(const NaturalBC * nbc) : BndJacobianFunc(nbc), htc(get_field_value("htc")) {}
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(PetscScalar g[]) const override
     {
         g[0] = htc[0];
     }

@@ -27,7 +27,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         for (PetscInt c = 0; c < this->n_comp; ++c) {
             f[c] = this->vel_t[c];
@@ -61,7 +61,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         for (PetscInt comp = 0; comp < this->n_comp; ++comp) {
             for (PetscInt d = 0; d < this->dim; ++d) {
@@ -89,7 +89,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         f[0] = 0.0;
         for (PetscInt d = 0; d < this->dim; ++d)
@@ -110,7 +110,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         for (PetscInt d = 0; d < this->dim; ++d)
             f[d] = 0.0;
@@ -131,7 +131,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(PetscScalar g[]) const override
     {
         PetscInt nc_i = this->dim;
         PetscInt nc_j = this->dim;
@@ -163,7 +163,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(PetscScalar g[]) const override
     {
         PetscInt nc_i = this->dim;
         PetscInt nc_j = this->dim;
@@ -193,7 +193,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(PetscScalar g[]) const override
     {
         for (PetscInt d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;
@@ -212,7 +212,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(PetscScalar g[]) const override
     {
         for (PetscInt d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = -1.0;
@@ -233,7 +233,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(PetscScalar g[]) const override
     {
         for (PetscInt comp_i = 0; comp_i < this->n_comp; ++comp_i) {
             for (PetscInt d = 0; d < this->dim; ++d) {
