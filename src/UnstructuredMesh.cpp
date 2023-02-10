@@ -310,6 +310,13 @@ UnstructuredMesh::get_num_cell_sets() const
     return n_cells_sets;
 }
 
+const std::map<Int, std::string> &
+UnstructuredMesh::get_cell_sets() const
+{
+    _F_;
+    return this->cell_set_names;
+}
+
 Int
 UnstructuredMesh::get_num_face_sets() const
 {
