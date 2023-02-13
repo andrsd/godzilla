@@ -89,7 +89,7 @@ WeakForm::get_jacobian_keys() const
     return v;
 }
 
-const std::vector<Functional *> &
+const std::vector<ResidualFunc *> &
 WeakForm::get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part) const
 {
     PetscFormKey key;
@@ -104,7 +104,7 @@ WeakForm::get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part) c
         return this->empty_res_forms;
 }
 
-const std::vector<Functional *> &
+const std::vector<JacobianFunc *> &
 WeakForm::get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int part) const
 {
     PetscFormKey key;
@@ -120,7 +120,12 @@ WeakForm::get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int 
 }
 
 void
-WeakForm::add(PetscWeakFormKind kind, DMLabel label, Int value, Int f, Int part, Functional * func)
+WeakForm::add(PetscWeakFormKind kind,
+              DMLabel label,
+              Int value,
+              Int f,
+              Int part,
+              ResidualFunc * func)
 {
     if (func != nullptr) {
         PetscFormKey key;
@@ -139,7 +144,7 @@ WeakForm::add(PetscWeakFormKind kind,
               Int f,
               Int g,
               Int part,
-              Functional * func)
+              JacobianFunc * func)
 {
     if (func != nullptr) {
         PetscFormKey key;

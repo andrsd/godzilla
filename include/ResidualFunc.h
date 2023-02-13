@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Functional.h"
-#include "FieldValue.h"
-#include <string>
-#include "petsc.h"
 
 namespace godzilla {
 
@@ -11,36 +8,12 @@ class FEProblemInterface;
 
 class ResidualFunc : public Functional {
 public:
-    explicit ResidualFunc(const FEProblemInterface * fepi);
+    ResidualFunc(const FEProblemInterface * fepi, const std::string & region = "");
 
-protected:
-    /// Get spatial dimension
+    /// Evaluate this functional
     ///
-    /// @return Spatial dimension
-    const Int & get_spatial_dimension() const;
-
-    /// Get values of a field
-    ///
-    /// @param field_name The name of the field
-    /// @return Reference to a class that contains the field values
-    const FieldValue & get_field_value(const std::string & field_name) const;
-
-    /// Get values of a gradient of a field
-    ///
-    /// @param field_name The name of the field
-    /// @return Pointer to array that contains the field gradient values
-    const FieldGradient & get_field_gradient(const std::string & field_name) const;
-
-    /// Get values of a time derivative of a field
-    ///
-    /// @param field_name The name of the field
-    /// @return Reference to a class that contains the field time derivative values
-    const FieldValue & get_field_dot(const std::string & field_name) const;
-
-    /// Get time at which the function is evaluated
-    ///
-    /// @return Time at which is the function evaluated
-    const Real & get_time() const;
+    /// @param val Array to store the values into
+    virtual void evaluate(Scalar val[]) const = 0;
 };
 
 } // namespace godzilla

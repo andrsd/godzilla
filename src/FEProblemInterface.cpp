@@ -1,5 +1,4 @@
 #include "Godzilla.h"
-#include "CallStack.h"
 #include "FEProblemInterface.h"
 #include "UnstructuredMesh.h"
 #include "Problem.h"
@@ -10,13 +9,35 @@
 #include "Logger.h"
 #include "PetscFEGodzilla.h"
 #include "WeakForm.h"
-#include "Functional.h"
+#include "ResidualFunc.h"
+#include "JacobianFunc.h"
+#include "ValueFunctional.h"
 #include "IndexSet.h"
 #include "Utils.h"
+#include "DependencyGraph.h"
 #include <cassert>
 #include <petsc/private/petscfeimpl.h>
 
 namespace godzilla {
+
+template <typename T>
+void
+add_functionals(DependencyGraph<const Functional *> & g,
+                const std::map<std::string, const ValueFunctional *> & suppliers,
+                const std::vector<T> & fnls)
+{
+    _F_;
+    for (auto & f : fnls) {
+        auto depends_on = f->get_dependent_values();
+        for (auto & dep : depends_on) {
+            auto jt = suppliers.find(dep);
+            if (jt != suppliers.end())
+                g.add_edge(f, jt->second);
+            else
+                error("Did not find any functional which would supply '%'.", dep);
+        }
+    }
+}
 
 FEProblemInterface::AssemblyData::AssemblyData() :
     dim(-1),
@@ -38,6 +59,7 @@ FEProblemInterface::AssemblyData::AssemblyData() :
 
 FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
+    DependencyEvaluator(),
     section(nullptr),
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
@@ -98,6 +120,8 @@ FEProblemInterface::init()
         if (nbc)
             nbc->set_up_weak_form();
     }
+
+    sort_functionals();
 }
 
 void
@@ -678,6 +702,127 @@ FEProblemInterface::get_xyz() const
     return this->asmbl.xyz;
 }
 
+void
+FEProblemInterface::sort_residual_functionals(
+    const std::map<std::string, const ValueFunctional *> & suppliers)
+{
+    _F_;
+    DependencyGraph<const Functional *> graph;
+    for (auto & it : get_functionals()) {
+        auto fnl = it.second;
+        auto depends_on = fnl->get_dependent_values();
+        for (auto & dep : depends_on) {
+            auto jt = suppliers.find(dep);
+            if (jt != suppliers.end())
+                graph.add_edge(fnl, jt->second);
+            else
+                error("Did not find any functional which would supply '%'.", dep);
+        }
+    }
+
+    this->sorted_res_functionals.clear();
+    auto res_keys = this->wf->get_residual_keys();
+    for (auto & k : res_keys) {
+        for (Int f = 0; f < get_num_fields(); f++) {
+            auto f0_fnls = this->wf->get(PETSC_WF_F0, k.label, k.value, f, k.part);
+            auto f1_fnls = this->wf->get(PETSC_WF_F1, k.label, k.value, f, k.part);
+
+            add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
+            add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
+
+            std::vector<const Functional *> fnls;
+            fnls.insert(fnls.end(), f0_fnls.begin(), f0_fnls.end());
+            fnls.insert(fnls.end(), f1_fnls.begin(), f1_fnls.end());
+            const auto & sv = graph.bfs(fnls);
+
+            PetscFormKey pwfk = k;
+            pwfk.field = f;
+            // bfs gives back a sorted vector, but in reverse order, so
+            // we reverse the vector here to get the order of evaluation
+            for (auto it = sv.rbegin(); it != sv.rend(); it++) {
+                auto ofnl = dynamic_cast<const ValueFunctional *>(*it);
+                if (ofnl)
+                    this->sorted_res_functionals[pwfk].push_back(ofnl);
+            }
+        }
+    }
+}
+
+void
+FEProblemInterface::sort_jacobian_functionals(
+    const std::map<std::string, const ValueFunctional *> & suppliers)
+{
+    _F_;
+    DependencyGraph<const Functional *> graph;
+    for (auto & it : get_functionals()) {
+        auto fnl = it.second;
+        auto depends_on = fnl->get_dependent_values();
+        for (auto & dep : depends_on) {
+            auto jt = suppliers.find(dep);
+            if (jt != suppliers.end())
+                graph.add_edge(fnl, jt->second);
+            else
+                error("Did not find any functional which would supply '%'.", dep);
+        }
+    }
+
+    this->sorted_jac_functionals.clear();
+    auto jac_keys = this->wf->get_jacobian_keys();
+    for (auto & k : jac_keys) {
+        for (Int f = 0; f < get_num_fields(); f++) {
+            for (Int g = 0; g < get_num_fields(); g++) {
+                auto g0_fnls = this->wf->get(PETSC_WF_G0, k.label, k.value, f, g, k.part);
+                auto g1_fnls = this->wf->get(PETSC_WF_G1, k.label, k.value, f, g, k.part);
+                auto g2_fnls = this->wf->get(PETSC_WF_G2, k.label, k.value, f, g, k.part);
+                auto g3_fnls = this->wf->get(PETSC_WF_G3, k.label, k.value, f, g, k.part);
+
+                add_functionals<JacobianFunc *>(graph, suppliers, g0_fnls);
+                add_functionals<JacobianFunc *>(graph, suppliers, g1_fnls);
+                add_functionals<JacobianFunc *>(graph, suppliers, g2_fnls);
+                add_functionals<JacobianFunc *>(graph, suppliers, g3_fnls);
+
+                std::vector<const Functional *> fnls;
+                fnls.insert(fnls.end(), g0_fnls.begin(), g0_fnls.end());
+                fnls.insert(fnls.end(), g1_fnls.begin(), g1_fnls.end());
+                fnls.insert(fnls.end(), g2_fnls.begin(), g2_fnls.end());
+                fnls.insert(fnls.end(), g3_fnls.begin(), g3_fnls.end());
+                const auto & sv = graph.bfs(fnls);
+
+                PetscFormKey pwfk = k;
+                pwfk.field = this->wf->get_jac_key(f, g);
+                // bfs gives back a sorted vector, but in reverse order, so
+                // we reverse the vector here to get the order of evaluation
+                for (auto it = sv.rbegin(); it != sv.rend(); it++) {
+                    auto ofnl = dynamic_cast<const ValueFunctional *>(*it);
+                    if (ofnl)
+                        this->sorted_jac_functionals[pwfk].push_back(ofnl);
+                }
+            }
+        }
+    }
+}
+
+void
+FEProblemInterface::sort_functionals()
+{
+    _F_;
+    // build map of suppliers
+    std::map<std::string, const ValueFunctional *> suppliers;
+    for (auto & it : get_functionals()) {
+        auto fnl = it.second;
+        auto provides = fnl->get_provided_values();
+        for (auto & s : provides) {
+            if (suppliers.find(s) == suppliers.end())
+                suppliers[s] = fnl;
+            else
+                error("Value '%s' is being supplied multiple times.", s);
+        }
+    }
+
+    sort_residual_functionals(suppliers);
+    sort_jacobian_functionals(suppliers);
+}
+
 PetscErrorCode
 FEProblemInterface::integrate(PetscDS ds,
                               Int field,
@@ -818,11 +963,12 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                                                 this->asmbl.a,
                                                 this->asmbl.a_x,
                                                 nullptr));
+            for (auto & f : this->sorted_res_functionals[key])
+                f->evaluate();
             for (auto & func : f0_res_fns)
                 func->evaluate(&f0[q * T[field]->Nc]);
             for (Int c = 0; c < T[field]->Nc; ++c)
                 f0[q * T[field]->Nc + c] *= w;
-
             for (auto & func : f1_res_fns)
                 func->evaluate(&f1[q * T[field]->Nc * this->asmbl.dim]);
             for (Int c = 0; c < T[field]->Nc; ++c)
@@ -971,6 +1117,8 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                                                 this->asmbl.a,
                                                 this->asmbl.a_x,
                                                 nullptr));
+            for (auto & f : this->sorted_res_functionals[key])
+                f->evaluate();
             for (auto & func : f0_res_fns)
                 func->evaluate(&f0[q * n_comp_i]);
             for (Int c = 0; c < n_comp_i; ++c)
@@ -1171,6 +1319,8 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                                                 this->asmbl.a,
                                                 this->asmbl.a_x,
                                                 nullptr));
+            for (auto & f : this->sorted_jac_functionals[key])
+                f->evaluate();
             if (!g0_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g0, n_comp_i * n_comp_j));
                 for (auto & func : g0_jac_fns)
@@ -1392,6 +1542,8 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                                 this->asmbl.a_x,
                                                 nullptr));
 
+            for (auto & f : this->sorted_jac_functionals[key])
+                f->evaluate();
             if (!g0_jac_fns.empty()) {
                 PETSC_CHECK(PetscArrayzero(g0, n_comp_i * n_comp_j));
                 for (auto & func : g0_jac_fns)

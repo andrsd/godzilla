@@ -7,34 +7,10 @@
 #include <vector>
 #include "petsc.h"
 
-namespace std {
-
-template <>
-struct less<PetscFormKey> {
-    bool
-    operator()(const PetscFormKey & lhs, const PetscFormKey & rhs) const
-    {
-        if (lhs.label == rhs.label) {
-            if (lhs.value == rhs.value) {
-                if (lhs.field == rhs.field) {
-                    return lhs.part < rhs.part;
-                }
-                else
-                    return lhs.field < rhs.field;
-            }
-            else
-                return lhs.value < rhs.value;
-        }
-        else
-            return lhs.label < rhs.label;
-    }
-};
-
-} // namespace std
-
 namespace godzilla {
 
-class Functional;
+class ResidualFunc;
+class JacobianFunc;
 
 /// Weak formulation
 ///
@@ -53,11 +29,11 @@ public:
     std::vector<PetscFormKey> get_jacobian_keys() const;
 
     /// Get residual forms
-    const std::vector<Functional *> &
+    const std::vector<ResidualFunc *> &
     get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
-    const std::vector<Functional *> &
+    const std::vector<JacobianFunc *> &
     get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int part) const;
 
     /// Add a residual form
@@ -68,7 +44,7 @@ public:
     /// @param f Field ID
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric residual form
-    void add(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part, Functional * func);
+    void add(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part, ResidualFunc * func);
 
     /// Add a Jacobian form
     ///
@@ -79,8 +55,13 @@ public:
     /// @param g Field ID (base)
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric Jacobian form
-    void
-    add(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int part, Functional * func);
+    void add(PetscWeakFormKind kind,
+             DMLabel label,
+             Int val,
+             Int f,
+             Int g,
+             Int part,
+             JacobianFunc * func);
 
     /// Query if Jacobian statement is set
     ///
@@ -92,23 +73,28 @@ public:
     /// @return `true` if weak form for Jacobian preconditioner statement is set, otherwise `false`
     bool has_jacobian_preconditioner() const;
 
-protected:
+    /// Get field ID for the combination of fields `f` and `g`
+    ///
+    /// @param f Field `f` ID
+    /// @param g Field `g` ID
+    /// @return Field ID used in `PetscFormKey`
     NO_DISCARD Int get_jac_key(Int f, Int g) const;
 
+protected:
     /// Number of fields
     Int n_fields;
 
     /// All residual forms
-    std::array<std::map<PetscFormKey, std::vector<Functional *>>, PETSC_NUM_WF> res_forms;
+    std::array<std::map<PetscFormKey, std::vector<ResidualFunc *>>, PETSC_NUM_WF> res_forms;
 
     /// Empty array for residual forms
-    std::vector<Functional *> empty_res_forms;
+    std::vector<ResidualFunc *> empty_res_forms;
 
     /// All Jacobian forms
-    std::array<std::map<PetscFormKey, std::vector<Functional *>>, PETSC_NUM_WF> jac_forms;
+    std::array<std::map<PetscFormKey, std::vector<JacobianFunc *>>, PETSC_NUM_WF> jac_forms;
 
     /// Empty array for Jacobian forms
-    std::vector<Functional *> empty_jac_forms;
+    std::vector<JacobianFunc *> empty_jac_forms;
 };
 
 } // namespace godzilla
