@@ -251,10 +251,6 @@ ExodusIIOutput::write_mesh()
     int n_side_sets = (int) this->mesh->get_num_face_sets();
 
     int exo_dim = (int) this->mesh->get_dimension();
-    // Visualization SW based on VTK have problems showing 1D, so we cast it like a 2D problem with
-    // y-coordinate equal to zero
-    if (exo_dim == 1)
-        exo_dim = 2;
     this->exo->init("", exo_dim, n_nodes, n_elems, n_elem_blk, n_node_sets, n_side_sets);
 
     write_coords(exo_dim);

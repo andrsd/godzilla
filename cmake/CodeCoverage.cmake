@@ -40,6 +40,7 @@ if(GODZILLA_CODE_COVERAGE)
             --ignore-filename-regex=/include/gmock/*
             --ignore-filename-regex=test/*
             --ignore-filename-regex=/muparser/*
+            --ignore-filename-regex=/include/exodusIIcpp*
         )
 
         set(CODE_COVERAGE_BINS
@@ -135,6 +136,7 @@ if(GODZILLA_CODE_COVERAGE)
             --exclude=*/include/yaml-cpp/*
             --exclude=/usr/include/*
             --exclude=*muparser*
+            --exclude=*/include/exodusIIcpp*
         )
 
         add_custom_target(coverage DEPENDS ${COVERAGE_INFO})
