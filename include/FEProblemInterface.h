@@ -3,21 +3,27 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include "petsc.h"
 #include "petscfe.h"
+#include "CallStack.h"
 #include "DiscreteProblemInterface.h"
+#include "DependencyEvaluator.h"
 #include "FieldValue.h"
+#include "Error.h"
+#include "Types.h"
 
 namespace godzilla {
 
 class Problem;
 class AuxiliaryField;
 class WeakForm;
+class ValueFunctional;
 
 /// Interface for FE problems
 ///
 /// Any problem using PetscFE should inherit from this for unified API
-class FEProblemInterface : public DiscreteProblemInterface {
+class FEProblemInterface : public DiscreteProblemInterface, public DependencyEvaluator {
 public:
     FEProblemInterface(Problem * problem, const Parameters & params);
     ~FEProblemInterface() override;
@@ -264,6 +270,12 @@ protected:
     /// Setup volumetric weak form terms
     virtual void set_up_weak_form() = 0;
 
+    void sort_functionals();
+    void
+    sort_residual_functionals(const std::map<std::string, const ValueFunctional *> & suppliers);
+    void
+    sort_jacobian_functionals(const std::map<std::string, const ValueFunctional *> & suppliers);
+
     PetscErrorCode update_element_vec(PetscFE fe,
                                       PetscTabulation tab,
                                       Int r,
@@ -448,6 +460,13 @@ protected:
 
         AssemblyData();
     } asmbl;
+
+    /// Functionals that must be evaluated before the weak form residual functionals
+    /// associated with the PetscFormKey are evaluated
+    std::map<PetscFormKey, std::vector<const ValueFunctional *>> sorted_res_functionals;
+    /// Functionals that must be evaluated before the weak form Jacobian functionals
+    /// associated with the PetscFormKey are evaluated
+    std::map<PetscFormKey, std::vector<const ValueFunctional *>> sorted_jac_functionals;
 };
 
 } // namespace godzilla

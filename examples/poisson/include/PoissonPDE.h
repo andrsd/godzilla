@@ -15,7 +15,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         f[0] = -this->ffn[0];
     }
@@ -34,7 +34,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         for (PetscInt d = 0; d < this->dim; ++d)
             f[d] = this->u_x[d];
@@ -50,7 +50,7 @@ public:
     Jacobian3(const FEProblemInterface * fepi) : JacobianFunc(fepi), dim(get_spatial_dimension()) {}
 
     void
-    evaluate(PetscScalar g[]) override
+    evaluate(PetscScalar g[]) const override
     {
         for (PetscInt d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;

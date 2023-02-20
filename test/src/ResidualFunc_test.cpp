@@ -51,7 +51,7 @@ public:
     }
 
     void
-    evaluate(Scalar f[]) override
+    evaluate(Scalar f[]) const override
     {
         f[0] = 0.;
     }

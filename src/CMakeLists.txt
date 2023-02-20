@@ -14,6 +14,7 @@ add_library(${PROJECT_NAME}
         ConstantAuxiliaryField.cpp
         ConstantIC.cpp
         CSVOutput.cpp
+        DependencyEvaluator.cpp
         DirichletBC.cpp
         DiscreteProblemInterface.cpp
         Error.cpp
@@ -28,6 +29,7 @@ add_library(${PROJECT_NAME}
         FileOutput.cpp
         Function.cpp
         Functional.cpp
+        ValueFunctional.cpp
         FunctionAuxiliaryField.cpp
         FunctionEvaluator.cpp
         FunctionIC.cpp
@@ -73,6 +75,7 @@ add_library(${PROJECT_NAME}
         UnstructuredMesh.cpp
         Utils.cpp
         Validation.cpp
+        ValueFunctional.cpp
         Vector.cpp
         VTKOutput.cpp
         WeakForm.cpp

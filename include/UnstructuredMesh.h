@@ -99,6 +99,11 @@ public:
     /// @return Number of cell sets
     NO_DISCARD Int get_num_cell_sets() const;
 
+    /// Get cell sets
+    ///
+    /// @return Cell sets
+    const std::map<Int, std::string> & get_cell_sets() const;
+
     /// Get face set name
     ///
     /// @param id The ID of the face set

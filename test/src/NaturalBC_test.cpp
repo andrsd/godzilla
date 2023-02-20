@@ -64,7 +64,7 @@ public:
     explicit TestNatF0(const NaturalBC * bc) : BndResidualFunc(bc), u(get_field_value("u")) {}
 
     void
-    evaluate(Scalar f[]) override
+    evaluate(Scalar f[]) const override
     {
         f[0] = 100 * this->u[0];
     }
@@ -78,7 +78,7 @@ public:
     explicit TestNatG0(const NaturalBC * bc) : BndJacobianFunc(bc) {}
 
     void
-    evaluate(Scalar g[]) override
+    evaluate(Scalar g[]) const override
     {
         g[0] = 100;
     }

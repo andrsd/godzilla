@@ -17,7 +17,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         f[0] = -this->ffn[0];
     }
@@ -36,7 +36,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) override
+    evaluate(PetscScalar f[]) const override
     {
         for (PetscInt d = 0; d < this->dim; ++d)
             f[d] = -this->T_x[d];

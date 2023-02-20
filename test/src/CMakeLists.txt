@@ -9,6 +9,8 @@ add_executable(${PROJECT_NAME}
     ConstantAuxiliaryField_test.cpp
     ConstantIC_test.cpp
     CSVOutput_test.cpp
+    DependencyEvaluator_test.cpp
+    DependencyGraph_test.cpp
     DirichletBC_test.cpp
     Error_test.cpp
     EssentialBC_test.cpp
@@ -58,6 +60,7 @@ add_executable(${PROJECT_NAME}
     UnstructuredMesh_test.cpp
     Utils_test.cpp
     Validation_test.cpp
+    ValueFunctional_test.cpp
     Vector_test.cpp
     VTKOutput_test.cpp
     WeakForm_test.cpp
