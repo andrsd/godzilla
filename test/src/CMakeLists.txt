@@ -60,6 +60,7 @@ add_executable(${PROJECT_NAME}
     UnstructuredMesh_test.cpp
     Utils_test.cpp
     Validation_test.cpp
+    ValueFunctional_test.cpp
     Vector_test.cpp
     VTKOutput_test.cpp
     WeakForm_test.cpp
