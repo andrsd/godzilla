@@ -9,6 +9,7 @@ add_executable(${PROJECT_NAME}
     ConstantAuxiliaryField_test.cpp
     ConstantIC_test.cpp
     CSVOutput_test.cpp
+    DependencyEvaluator_test.cpp
     DependencyGraph_test.cpp
     DirichletBC_test.cpp
     Error_test.cpp
