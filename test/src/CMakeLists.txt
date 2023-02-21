@@ -43,6 +43,7 @@ add_executable(${PROJECT_NAME}
     MeshPartitioningOutput_test.cpp
     NaturalBC_test.cpp
     NaturalRiemannBC_test.cpp
+    NeumannProblem_test.cpp
     NonlinearProblem_test.cpp
     Object_test.cpp
     Output_test.cpp
