@@ -237,7 +237,7 @@ Vector::zero()
 }
 
 Scalar
-Vector::operator[](Int idx) const
+Vector::operator()(Int idx) const
 {
     _F_;
     Scalar val;

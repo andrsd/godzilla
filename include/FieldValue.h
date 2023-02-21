@@ -57,7 +57,7 @@ public:
     explicit Normal(const Int & dim) : LateBindArray<Real>(), dim(dim) {}
 
     Real
-    operator[](unsigned int idx) const
+    operator()(unsigned int idx) const
     {
         assert(this->data != nullptr);
         assert(idx < this->dim);
@@ -74,7 +74,7 @@ public:
     explicit Point(const Int & dim) : LateBindArray<Real>(), dim(dim) {}
 
     Real
-    operator[](unsigned int idx) const
+    operator()(unsigned int idx) const
     {
         assert(this->data != nullptr);
         assert(idx < this->dim);
