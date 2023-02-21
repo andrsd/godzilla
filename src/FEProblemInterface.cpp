@@ -938,6 +938,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
         for (Int q = 0; q < q_n_pts; ++q) {
             PETSC_CHECK(
                 PetscFEGeomGetPoint(cell_geom, e, q, &q_points[q * cell_geom->dim], &fe_geom));
+            this->asmbl.xyz.set(fe_geom.v);
             Real w = fe_geom.detJ[0] * q_weights[q];
 
             PETSC_CHECK(evaluate_field_jets(ds,
@@ -1091,6 +1092,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
         for (Int q = 0; q < q_n_pts; ++q) {
             PETSC_CHECK(
                 PetscFEGeomGetPoint(face_geom, e, q, &q_points[q * face_geom->dim], &fe_geom));
+            this->asmbl.xyz.set(fe_geom.v);
             PETSC_CHECK(PetscFEGeomGetCellPoint(face_geom, e, q, &cell_geom));
             Real w = fe_geom.detJ[0] * q_weights[q];
             this->asmbl.normals.set(fe_geom.n);
@@ -1288,7 +1290,8 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                                      this->asmbl.xyz.get());
             }
             else {
-                fe_geom.v = &cell_geom->v[(e * n_pts + q) * dim_embed];
+                this->asmbl.xyz.set(&cell_geom->v[(e * n_pts + q) * dim_embed]);
+                fe_geom.v = this->asmbl.xyz.get();
                 fe_geom.J = &cell_geom->J[(e * n_pts + q) * dim_embed * dim_embed];
                 fe_geom.invJ = &cell_geom->invJ[(e * n_pts + q) * dim_embed * dim_embed];
                 fe_geom.detJ = &cell_geom->detJ[e * n_pts + q];
@@ -1504,7 +1507,8 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                      this->asmbl.xyz.get());
             }
             else {
-                fe_geom.v = &face_geom->v[(e * n_pts + q) * dim_embed];
+                this->asmbl.xyz.set(&face_geom->v[(e * n_pts + q) * dim_embed]);
+                fe_geom.v = this->asmbl.xyz.get();
                 fe_geom.J = &face_geom->J[(e * n_pts + q) * dim_embed * dim_embed];
                 fe_geom.invJ = &face_geom->invJ[(e * n_pts + q) * dim_embed * dim_embed];
                 fe_geom.detJ = &face_geom->detJ[e * n_pts + q];
