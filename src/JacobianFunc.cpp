@@ -9,6 +9,13 @@ JacobianFunc::JacobianFunc(const FEProblemInterface * fepi, const std::string & 
 {
 }
 
+const Point &
+JacobianFunc::get_xyz() const
+{
+    _F_;
+    return get_fe_problem()->get_xyz();
+}
+
 const Real &
 JacobianFunc::get_time_shift() const
 {

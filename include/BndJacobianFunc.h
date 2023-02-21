@@ -19,11 +19,6 @@ protected:
     ///
     /// @return Outward normal
     NO_DISCARD const Normal & get_normal() const;
-
-    /// Get physical coordinates
-    ///
-    /// @return Physical coordinates
-    NO_DISCARD const Point & get_xyz() const;
 };
 
 } // namespace godzilla

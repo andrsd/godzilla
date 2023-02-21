@@ -101,8 +101,8 @@ TEST(MatrixTest, mult)
 
     m.mult(x, y);
 
-    EXPECT_DOUBLE_EQ(y[0], 3.);
-    EXPECT_DOUBLE_EQ(y[1], 5.);
+    EXPECT_DOUBLE_EQ(y(0), 3.);
+    EXPECT_DOUBLE_EQ(y(1), 5.);
 
     m.destroy();
 }

@@ -59,7 +59,7 @@ public:
 
     void zero();
 
-    Scalar operator[](Int idx) const;
+    Scalar operator()(Int idx) const;
 
     explicit operator Vec() const;
 

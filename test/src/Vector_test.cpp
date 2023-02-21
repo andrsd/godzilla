@@ -52,7 +52,7 @@ TEST(VectorTest, set)
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 10);
     v.set(21.);
     for (Int i = 0; i < 10; i++)
-        EXPECT_DOUBLE_EQ(v[i], 21.);
+        EXPECT_DOUBLE_EQ(v(i), 21.);
     v.destroy();
 }
 
@@ -60,9 +60,9 @@ TEST(VectorTest, set_values)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
     v.set_values({ 0, 1, 2 }, { 3, 5, 9 });
-    EXPECT_DOUBLE_EQ(v[0], 3.);
-    EXPECT_DOUBLE_EQ(v[1], 5.);
-    EXPECT_DOUBLE_EQ(v[2], 9.);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
     v.destroy();
 }
 
@@ -71,9 +71,9 @@ TEST(VectorTest, set_values_local)
     // TODO: this should be tested with MPI n_proc > 1
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
     v.set_values_local({ 0, 1, 2 }, { 3, 5, 9 });
-    EXPECT_DOUBLE_EQ(v[0], 3.);
-    EXPECT_DOUBLE_EQ(v[1], 5.);
-    EXPECT_DOUBLE_EQ(v[2], 9.);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
     v.destroy();
 }
 
@@ -86,9 +86,9 @@ TEST(VectorTest, duplicate)
     Vector dup;
     v.duplicate(dup);
     v.copy(dup);
-    EXPECT_DOUBLE_EQ(dup[0], 1.);
-    EXPECT_DOUBLE_EQ(dup[1], 3.);
-    EXPECT_DOUBLE_EQ(dup[2], 7.);
+    EXPECT_DOUBLE_EQ(dup(0), 1.);
+    EXPECT_DOUBLE_EQ(dup(1), 3.);
+    EXPECT_DOUBLE_EQ(dup(2), 7.);
     v.destroy();
 }
 
@@ -109,9 +109,9 @@ TEST(VectorTest, zero)
     v.set_value(1, 3.);
     v.set_value(2, 7.);
     v.zero();
-    EXPECT_DOUBLE_EQ(v[0], 0.);
-    EXPECT_DOUBLE_EQ(v[1], 0.);
-    EXPECT_DOUBLE_EQ(v[2], 0.);
+    EXPECT_DOUBLE_EQ(v(0), 0.);
+    EXPECT_DOUBLE_EQ(v(1), 0.);
+    EXPECT_DOUBLE_EQ(v(2), 0.);
     v.destroy();
 }
 
@@ -143,9 +143,9 @@ TEST(VectorTest, get_restore_array)
     arr[2] = 7.;
     v.restore_array(arr);
 
-    EXPECT_EQ(v[0], 3.);
-    EXPECT_EQ(v[1], 5.);
-    EXPECT_EQ(v[2], 7.);
+    EXPECT_EQ(v(0), 3.);
+    EXPECT_EQ(v(1), 5.);
+    EXPECT_EQ(v(2), 7.);
 
     v.destroy();
 }
@@ -157,9 +157,9 @@ TEST(VectorTest, abs)
     v.set_value(1, 5.);
     v.set_value(2, -7.);
     v.abs();
-    EXPECT_DOUBLE_EQ(v[0], 3.);
-    EXPECT_DOUBLE_EQ(v[1], 5.);
-    EXPECT_DOUBLE_EQ(v[2], 7.);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 7.);
     v.destroy();
 }
 
@@ -169,8 +169,8 @@ TEST(VectorTest, scale)
     v.set_value(0, -3.);
     v.set_value(1, 5.);
     v.scale(-1.);
-    EXPECT_DOUBLE_EQ(v[0], 3.);
-    EXPECT_DOUBLE_EQ(v[1], -5.);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), -5.);
     v.destroy();
 }
 
@@ -180,8 +180,8 @@ TEST(VectorTest, normalize)
     v.set_value(0, 3.);
     v.set_value(1, 4.);
     v.normalize();
-    EXPECT_DOUBLE_EQ(v[0], 0.6);
-    EXPECT_DOUBLE_EQ(v[1], 0.8);
+    EXPECT_DOUBLE_EQ(v(0), 0.6);
+    EXPECT_DOUBLE_EQ(v(1), 0.8);
     v.destroy();
 }
 
@@ -191,8 +191,8 @@ TEST(VectorTest, shift)
     v.set_value(0, 3.);
     v.set_value(1, 4.);
     v.shift(1.);
-    EXPECT_DOUBLE_EQ(v[0], 4.);
-    EXPECT_DOUBLE_EQ(v[1], 5);
+    EXPECT_DOUBLE_EQ(v(0), 4.);
+    EXPECT_DOUBLE_EQ(v(1), 5);
     v.destroy();
 }
 
@@ -220,8 +220,8 @@ TEST(VectorTest, chop)
     v.set_value(0, 3.);
     v.set_value(1, 4.);
     v.chop(3.5);
-    EXPECT_DOUBLE_EQ(v[0], 0.);
-    EXPECT_DOUBLE_EQ(v[1], 4.);
+    EXPECT_DOUBLE_EQ(v(0), 0.);
+    EXPECT_DOUBLE_EQ(v(1), 4.);
     v.destroy();
 }
 
@@ -236,8 +236,8 @@ TEST(VectorTest, axpy)
     x.set_value(1, 5.);
 
     y.axpy(3., x);
-    EXPECT_DOUBLE_EQ(y[0], 9.);
-    EXPECT_DOUBLE_EQ(y[1], 19.);
+    EXPECT_DOUBLE_EQ(y(0), 9.);
+    EXPECT_DOUBLE_EQ(y(1), 19.);
     x.destroy();
     y.destroy();
 }
@@ -253,8 +253,8 @@ TEST(VectorTest, aypx)
     x.set_value(1, 5.);
 
     y.aypx(3., x);
-    EXPECT_DOUBLE_EQ(y[0], 11.);
-    EXPECT_DOUBLE_EQ(y[1], 17.);
+    EXPECT_DOUBLE_EQ(y(0), 11.);
+    EXPECT_DOUBLE_EQ(y(1), 17.);
 
     x.destroy();
     y.destroy();
@@ -275,8 +275,8 @@ TEST(VectorTest, pointwise_min)
     y.set_value(1, 4.);
 
     Vector::pointwise_min(w, x, y);
-    EXPECT_DOUBLE_EQ(w[0], 2.);
-    EXPECT_DOUBLE_EQ(w[1], 4.);
+    EXPECT_DOUBLE_EQ(w(0), 2.);
+    EXPECT_DOUBLE_EQ(w(1), 4.);
 
     x.destroy();
     y.destroy();
@@ -298,8 +298,8 @@ TEST(VectorTest, pointwise_max)
     y.set_value(1, 4.);
 
     Vector::pointwise_max(w, x, y);
-    EXPECT_DOUBLE_EQ(w[0], 3.);
-    EXPECT_DOUBLE_EQ(w[1], 5.);
+    EXPECT_DOUBLE_EQ(w(0), 3.);
+    EXPECT_DOUBLE_EQ(w(1), 5.);
 
     x.destroy();
     y.destroy();
@@ -321,8 +321,8 @@ TEST(VectorTest, pointwise_mult)
     y.set_value(1, 4.);
 
     Vector::pointwise_mult(w, x, y);
-    EXPECT_DOUBLE_EQ(w[0], 6.);
-    EXPECT_DOUBLE_EQ(w[1], 20.);
+    EXPECT_DOUBLE_EQ(w(0), 6.);
+    EXPECT_DOUBLE_EQ(w(1), 20.);
 
     x.destroy();
     y.destroy();
@@ -344,8 +344,8 @@ TEST(VectorTest, pointwise_divide)
     y.set_value(1, 3.);
 
     Vector::pointwise_divide(w, x, y);
-    EXPECT_DOUBLE_EQ(w[0], 4.);
-    EXPECT_DOUBLE_EQ(w[1], 6.);
+    EXPECT_DOUBLE_EQ(w(0), 4.);
+    EXPECT_DOUBLE_EQ(w(1), 6.);
 
     x.destroy();
     y.destroy();

@@ -17,11 +17,4 @@ BndJacobianFunc::get_normal() const
     return get_fe_problem()->get_normal();
 }
 
-const Point &
-BndJacobianFunc::get_xyz() const
-{
-    _F_;
-    return get_fe_problem()->get_xyz();
-}
-
 } // namespace godzilla
