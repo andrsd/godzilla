@@ -34,7 +34,7 @@ add_functionals(DependencyGraph<const Functional *> & g,
             if (jt != suppliers.end())
                 g.add_edge(f, jt->second);
             else
-                error("Did not find any functional which would supply '%'.", dep);
+                error("Did not find any functional which would supply '%s'.", dep);
         }
     }
 }
