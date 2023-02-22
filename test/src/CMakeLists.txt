@@ -53,6 +53,7 @@ add_executable(${PROJECT_NAME}
     PiecewiseLinear_test.cpp
     PrintInterface_test.cpp
     Problem_test.cpp
+    Quadrature_test.cpp
     Random_test.cpp
     RectangleMesh_test.cpp
     ResidualFunc_test.cpp
