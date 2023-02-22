@@ -111,8 +111,8 @@ target_link_libraries(
     PUBLIC
         fmt::fmt
         yaml-cpp
-        ${PETSC_LIBRARY}
     PRIVATE
+        ${PETSC_LIBRARY}
         ${HDF5_LIBRARIES}
         muParser
         exodusIIcpp
