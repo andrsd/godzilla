@@ -77,6 +77,8 @@ target_include_directories(
         ${CMAKE_BINARY_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
+    PRIVATE
+        ${PETSC_INCLUDE_DIR}
 )
 
 target_link_libraries(
@@ -85,6 +87,8 @@ target_link_libraries(
         godzilla
         gtest_main
         gmock_main
+    PRIVATE
+        ${PETSC_LIBRARY}
 )
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
