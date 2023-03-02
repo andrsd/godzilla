@@ -29,6 +29,7 @@ add_executable(${PROJECT_NAME}
     GTestImplicitFENonlinearProblem.cpp
     GmshMesh_test.cpp
     GYMLFile_test.cpp
+    HashMap_test.cpp
     HDF5Output_test.cpp
     ImplicitFENonlinearProblem_test.cpp
     IndexSet_test.cpp
