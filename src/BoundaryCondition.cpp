@@ -24,9 +24,7 @@ BoundaryCondition::BoundaryCondition(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     dpi(get_param<const DiscreteProblemInterface *>("_dpi")),
-    label(nullptr),
     fid(-1),
-    ids({}),
     boundary(get_param<std::string>("boundary"))
 {
     _F_;
@@ -36,12 +34,8 @@ void
 BoundaryCondition::create()
 {
     _F_;
-    Problem * problem = this->app->get_problem();
-    assert(problem != nullptr);
-
+    assert(this->app->get_problem() != nullptr);
     assert(this->dpi != nullptr);
-    const UnstructuredMesh * mesh = this->dpi->get_mesh();
-    this->label = mesh->get_face_set_label(this->boundary);
 
     std::vector<std::string> field_names = this->dpi->get_field_names();
     if (field_names.size() == 1) {
@@ -79,18 +73,6 @@ BoundaryCondition::get_discrete_problem_interface() const
 {
     _F_;
     return this->dpi;
-}
-
-void
-BoundaryCondition::set_up()
-{
-    _F_;
-    IndexSet is = IndexSet::values_from_label(this->label);
-    is.get_indices();
-    this->ids = is.to_std_vector();
-    add_boundary();
-    is.restore_indices();
-    is.destroy();
 }
 
 } // namespace godzilla

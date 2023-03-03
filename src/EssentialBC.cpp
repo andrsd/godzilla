@@ -1,5 +1,6 @@
 #include "EssentialBC.h"
 #include "CallStack.h"
+#include "UnstructuredMesh.h"
 #include "DiscreteProblemInterface.h"
 #include <cassert>
 
@@ -69,17 +70,24 @@ EssentialBC::get_context()
 }
 
 void
-EssentialBC::add_boundary()
+EssentialBC::set_up()
 {
     _F_;
+    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    auto label = mesh->get_face_set_label(this->boundary);
+    IndexSet is = IndexSet::values_from_label(label);
+    is.get_indices();
+    auto ids = is.to_std_vector();
     this->dpi->add_boundary_essential(get_name(),
-                                      this->label,
-                                      this->ids,
+                                      label,
+                                      ids,
                                       this->fid,
                                       get_components(),
                                       get_function(),
                                       get_function_t(),
                                       this);
+    is.restore_indices();
+    is.destroy();
 }
 
 } // namespace godzilla

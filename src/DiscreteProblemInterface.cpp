@@ -11,19 +11,6 @@
 
 namespace godzilla {
 
-namespace internal {
-
-static PetscErrorCode
-zero_fn(Int, Real, const Real[], Int, Scalar * u, void *)
-{
-    u[0] = 0.0;
-    return 0;
-}
-
-} // namespace internal
-
-///
-
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
     unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
@@ -140,23 +127,6 @@ DiscreteProblemInterface::set_up_boundary_conditions()
 }
 
 void
-DiscreteProblemInterface::set_zero_initial_guess()
-{
-    _F_;
-    DM dm = this->unstr_mesh->get_dm();
-    auto n_fields = get_num_fields();
-    PetscFunc * initial_guess[n_fields];
-    for (Int i = 0; i < n_fields; i++)
-        initial_guess[i] = internal::zero_fn;
-    PETSC_CHECK(DMProjectFunction(dm,
-                                  this->problem->get_time(),
-                                  initial_guess,
-                                  nullptr,
-                                  INSERT_VALUES,
-                                  (Vec) this->problem->get_solution_vector()));
-}
-
-void
 DiscreteProblemInterface::set_initial_guess_from_ics()
 {
     _F_;
@@ -184,8 +154,6 @@ DiscreteProblemInterface::set_up_initial_guess()
     _F_;
     if (!this->ics.empty())
         set_initial_guess_from_ics();
-    else
-        set_zero_initial_guess();
 }
 
 Vector

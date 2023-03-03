@@ -151,8 +151,6 @@ protected:
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
-    void set_zero_initial_guess();
-
     void set_initial_guess_from_ics();
 
     virtual void set_up_initial_guess();

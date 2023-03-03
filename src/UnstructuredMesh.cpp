@@ -161,6 +161,7 @@ void
 UnstructuredMesh::distribute()
 {
     _F_;
+    lprintf(9, "Distributing");
     PETSC_CHECK(PetscPartitionerSetUp(this->partitioner));
 
     PETSC_CHECK(DMPlexSetPartitioner(this->dm, this->partitioner));
@@ -187,16 +188,19 @@ UnstructuredMesh::create_face_set_labels(const std::map<Int, std::string> & name
 {
     _F_;
     DMLabel fs_label = get_label("Face Sets");
-    Int n_fs = get_num_face_sets();
+    Int n_fs;
+    DMLabelGetNumValues(fs_label, &n_fs);
     IndexSet fs_ids = IndexSet::values_from_label(fs_label);
     fs_ids.get_indices();
     for (Int i = 0; i < n_fs; i++) {
         Int id = fs_ids[i];
         create_face_set(id);
-        set_face_set_name(id, names.at(id));
     }
     fs_ids.restore_indices();
     fs_ids.destroy();
+
+    for (auto & it : names)
+        set_face_set_name(it.first, it.second);
 }
 
 void
