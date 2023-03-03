@@ -261,6 +261,13 @@ Vector::restore_array(Scalar * array)
     PETSC_CHECK(VecRestoreArray(this->vec, &array));
 }
 
+void
+Vector::view(PetscViewer viewer) const
+{
+    _F_;
+    PETSC_CHECK(VecView(this->vec, viewer));
+}
+
 Vector::operator Vec() const
 {
     _F_;
