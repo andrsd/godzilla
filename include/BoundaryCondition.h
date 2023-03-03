@@ -40,23 +40,14 @@ public:
     NO_DISCARD virtual const DiscreteProblemInterface * get_discrete_problem_interface() const;
 
     /// Set up this boundary condition
-    virtual void set_up();
+    virtual void set_up() = 0;
 
 protected:
-    /// Add boundary to the discretization object
-    virtual void add_boundary() = 0;
-
     /// Discrete problem this object is part of
     const DiscreteProblemInterface * dpi;
 
-    /// DMLabel associated with the boundary name this boundary condition acts on
-    DMLabel label;
-
     /// Field ID this boundary condition is attached to
     Int fid;
-
-    /// IDs of the label
-    std::vector<Int> ids;
 
     /// List of boundary names
     const std::string & boundary;

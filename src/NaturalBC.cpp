@@ -1,5 +1,6 @@
 #include "NaturalBC.h"
 #include "CallStack.h"
+#include "UnstructuredMesh.h"
 #include "DiscreteProblemInterface.h"
 #include "WeakForm.h"
 #include "BndResidualFunc.h"
@@ -22,15 +23,22 @@ NaturalBC::NaturalBC(const Parameters & params) :
 }
 
 void
-NaturalBC::add_boundary()
+NaturalBC::set_up()
 {
     _F_;
+    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    this->label = mesh->get_face_set_label(this->boundary);
+    IndexSet is = IndexSet::values_from_label(this->label);
+    is.get_indices();
+    this->ids = is.to_std_vector();
     this->dpi->add_boundary_natural(get_name(),
                                     this->label,
                                     this->ids,
                                     this->fid,
                                     get_components(),
                                     this);
+    is.restore_indices();
+    is.destroy();
 }
 
 void

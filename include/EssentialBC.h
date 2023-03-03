@@ -38,8 +38,7 @@ public:
     /// Get the pointer to the context that will be passed into PETSc API
     virtual void * get_context();
 
-protected:
-    void add_boundary() override;
+    void set_up() override;
 
 public:
     static Parameters parameters();

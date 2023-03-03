@@ -17,6 +17,8 @@ public:
     /// Set up the weak form for the boundary integral of this boundary condition
     virtual void set_up_weak_form() = 0;
 
+    void set_up() override;
+
 protected:
     /// Set residual statement for the boundary integral
     ///
@@ -37,8 +39,10 @@ protected:
                             BndJacobianFunc * g2,
                             BndJacobianFunc * g3);
 
-    void add_boundary() override;
-
+    /// DMLabel associated with the boundary name this boundary condition acts on
+    DMLabel label;
+    /// IDs of the label
+    std::vector<Int> ids;
     /// WeakForm object
     WeakForm * wf;
 

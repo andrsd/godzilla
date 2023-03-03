@@ -1,6 +1,7 @@
 #include "NaturalRiemannBC.h"
 #include "CallStack.h"
 #include "DiscreteProblemInterface.h"
+#include "UnstructuredMesh.h"
 #include <cassert>
 
 namespace godzilla {
@@ -33,17 +34,24 @@ NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryConditio
 }
 
 void
-NaturalRiemannBC::add_boundary()
+NaturalRiemannBC::set_up()
 {
     _F_;
+    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    auto label = mesh->get_face_set_label(this->boundary);
+    IndexSet is = IndexSet::values_from_label(label);
+    is.get_indices();
+    auto ids = is.to_std_vector();
     this->dpi->add_boundary_natural_riemann(get_name(),
-                                            this->label,
-                                            this->ids,
+                                            label,
+                                            ids,
                                             this->fid,
                                             get_components(),
                                             natural_riemann_boundary_condition_function,
                                             nullptr,
                                             this);
+    is.restore_indices();
+    is.destroy();
 }
 
 } // namespace godzilla

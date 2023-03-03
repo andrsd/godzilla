@@ -25,7 +25,7 @@ public:
     MOCK_METHOD(void, evaluate, (Int, Real, const Real x[], Int Nc, Scalar u[]), ());
     MOCK_METHOD(const std::vector<Int> &, get_components, (), (const));
     virtual void
-    add_boundary() override
+    set_up() override
     {
     }
 };
