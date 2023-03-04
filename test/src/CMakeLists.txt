@@ -58,6 +58,7 @@ add_executable(${PROJECT_NAME}
     Random_test.cpp
     RectangleMesh_test.cpp
     ResidualFunc_test.cpp
+    Section_test.cpp
     Terminal_test.cpp
     TimeSteppingAdaptor_test.cpp
     UnstructuredMesh_test.cpp
