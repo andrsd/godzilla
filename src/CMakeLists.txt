@@ -70,6 +70,7 @@ add_library(${PROJECT_NAME}
         Random.cpp
         RectangleMesh.cpp
         ResidualFunc.cpp
+        Section.cpp
         Terminal.cpp
         TimeSteppingAdaptor.cpp
         TransientProblemInterface.cpp
