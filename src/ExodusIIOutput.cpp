@@ -1,5 +1,6 @@
 #include "Godzilla.h"
 #include "GodzillaConfig.h"
+#include "App.h"
 #include "CallStack.h"
 #include "ExodusIIOutput.h"
 #include "Problem.h"
@@ -604,8 +605,10 @@ ExodusIIOutput::write_info()
     _F_;
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
-    std::string created_by =
-        fmt::format("Created by godzilla {}, on {}", GODZILLA_VERSION, datetime);
+    std::string created_by = fmt::format("Created by {} {}, on {}",
+                                         this->app->get_name(),
+                                         this->app->get_version(),
+                                         datetime);
 
     std::vector<std::string> info;
     info.push_back(created_by);

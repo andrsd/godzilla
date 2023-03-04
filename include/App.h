@@ -28,6 +28,11 @@ public:
     /// @return Application name
     const std::string & get_name() const;
 
+    /// Get application version
+    ///
+    /// @return The application version as a string
+    virtual const std::string & get_version() const;
+
     /// @return Get problem this application is representing
     virtual Problem * get_problem() const;
 

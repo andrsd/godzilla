@@ -48,6 +48,14 @@ App::get_name() const
     return this->name;
 }
 
+const std::string &
+App::get_version() const
+{
+    _F_;
+    static const std::string ver(GODZILLA_VERSION);
+    return ver;
+}
+
 Logger *
 App::get_logger() const
 {
