@@ -41,6 +41,8 @@ public:
 
     Scalar operator()(Int row, Int col) const;
 
+    void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
+
     explicit operator Mat() const;
 
     static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, Int nz);

@@ -129,6 +129,13 @@ Matrix::operator()(Int row, Int col) const
     return get_value(row, col);
 }
 
+void
+Matrix::view(PetscViewer viewer) const
+{
+    _F_;
+    PETSC_CHECK(MatView(this->mat, viewer));
+}
+
 Matrix::operator Mat() const
 {
     _F_;
