@@ -8,6 +8,8 @@
 
 namespace godzilla {
 
+class Section;
+
 /// Base class for meshes
 ///
 class Mesh : public Object, public PrintInterface {
@@ -23,6 +25,12 @@ public:
 
     /// Distribute mesh over processes
     virtual void distribute() = 0;
+
+    /// Set the `Section` encoding the local data layout for the `DM`.
+    void set_local_section(const Section & section) const;
+
+    /// Set the `Section` encoding the global data layout for the `DM`.
+    void set_global_section(const Section & section) const;
 
 protected:
     /// Spatial dimension of the mesh

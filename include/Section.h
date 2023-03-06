@@ -65,6 +65,16 @@ public:
     void set_constraint_dof(Int point, Int n_dofs);
     Int get_constraint_dof(Int point) const;
 
+    operator const PetscSection &() const
+    {
+        return this->section;
+    }
+
+    operator PetscSection &()
+    {
+        return this->section;
+    }
+
 private:
     PetscSection section;
 };
