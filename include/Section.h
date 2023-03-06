@@ -65,15 +65,19 @@ public:
     void set_constraint_dof(Int point, Int n_dofs);
     Int get_constraint_dof(Int point) const;
 
-    operator const PetscSection &() const
-    {
-        return this->section;
-    }
+    operator const PetscSection &() const { return this->section; }
 
-    operator PetscSection &()
-    {
-        return this->section;
-    }
+    operator PetscSection &() { return this->section; }
+
+    static Section create(DM dm,
+                          DMLabel label[],
+                          const Int n_comp[],
+                          const Int n_dof[],
+                          Int n_bc,
+                          const Int bc_field[],
+                          const IS bc_comps[],
+                          const IS bc_points[],
+                          IS perm);
 
 private:
     PetscSection section;
