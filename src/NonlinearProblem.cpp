@@ -212,8 +212,7 @@ NonlinearProblem::set_up_callbacks()
 {
     _F_;
     PETSC_CHECK(SNESSetFunction(this->snes, (Vec) this->r, __compute_residual, this));
-    PETSC_CHECK(
-        SNESSetJacobian(this->snes, (Mat) this->J, (Mat) this->J, __compute_jacobian, this));
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, __compute_jacobian, this));
 }
 
 void

@@ -268,8 +268,8 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
                                       x_t_shift,
                                       (Vec) X,
                                       (Vec) X_t,
-                                      (Mat) J,
-                                      (Mat) Jp);
+                                      J,
+                                      Jp);
             cells.destroy();
         }
     }
