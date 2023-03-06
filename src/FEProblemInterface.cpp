@@ -501,7 +501,7 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
                                        func.data(),
                                        ctxs.data(),
                                        INSERT_ALL_VALUES,
-                                       (Vec) a));
+                                       a));
 }
 
 void
@@ -533,7 +533,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
                                             func.data(),
                                             ctxs.data(),
                                             INSERT_ALL_VALUES,
-                                            (Vec) a));
+                                            a));
     ids.restore_indices();
     ids.destroy();
 }
@@ -603,7 +603,7 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         Vec loc_a;
         PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &loc_a));
         this->a = Vector(loc_a);
-        PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, (Vec) this->a));
+        PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
 
         PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
         PETSC_CHECK(

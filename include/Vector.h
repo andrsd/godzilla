@@ -63,7 +63,7 @@ public:
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
-    explicit operator Vec() const;
+    operator Vec() const;
 
     static Vector create_seq(MPI_Comm comm, Int n);
 

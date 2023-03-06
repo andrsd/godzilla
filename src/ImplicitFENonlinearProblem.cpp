@@ -208,14 +208,7 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_residual_internal(plex,
-                                      res_key,
-                                      cells,
-                                      time,
-                                      (Vec) X,
-                                      (Vec) X_t,
-                                      time,
-                                      (Vec) F);
+            compute_residual_internal(plex, res_key, cells, time, X, X_t, time, F);
             cells.destroy();
         }
     }
@@ -261,15 +254,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_jacobian_internal(plex,
-                                      jac_key,
-                                      cells,
-                                      time,
-                                      x_t_shift,
-                                      (Vec) X,
-                                      (Vec) X_t,
-                                      J,
-                                      Jp);
+            compute_jacobian_internal(plex, jac_key, cells, time, x_t_shift, X, X_t, J, Jp);
             cells.destroy();
         }
     }
@@ -282,7 +267,7 @@ PetscErrorCode
 ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const Vector & X_t)
 {
     _F_;
-    return DMPlexTSComputeBoundary(get_dm(), time, (Vec) X, (Vec) X_t, this);
+    return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
 }
 
 } // namespace godzilla

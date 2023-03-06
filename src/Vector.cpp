@@ -154,14 +154,14 @@ void
 Vector::axpy(Scalar alpha, const Vector & x)
 {
     _F_;
-    PETSC_CHECK(VecAXPY(this->vec, alpha, (Vec) x));
+    PETSC_CHECK(VecAXPY(this->vec, alpha, x));
 }
 
 void
 Vector::aypx(Scalar beta, const Vector & x)
 {
     _F_;
-    PETSC_CHECK(VecAYPX(this->vec, beta, (Vec) x));
+    PETSC_CHECK(VecAYPX(this->vec, beta, x));
 }
 
 void
@@ -287,28 +287,28 @@ void
 Vector::pointwise_min(const Vector & w, const Vector & x, const Vector & y)
 {
     _F_;
-    PETSC_CHECK(VecPointwiseMin((Vec) w, (Vec) x, (Vec) y));
+    PETSC_CHECK(VecPointwiseMin(w, x, y));
 }
 
 void
 Vector::pointwise_max(const Vector & w, const Vector & x, const Vector & y)
 {
     _F_;
-    PETSC_CHECK(VecPointwiseMax((Vec) w, (Vec) x, (Vec) y));
+    PETSC_CHECK(VecPointwiseMax(w, x, y));
 }
 
 void
 Vector::pointwise_mult(const Vector & w, const Vector & x, const Vector & y)
 {
     _F_;
-    PETSC_CHECK(VecPointwiseMult((Vec) w, (Vec) x, (Vec) y));
+    PETSC_CHECK(VecPointwiseMult(w, x, y));
 }
 
 void
 Vector::pointwise_divide(const Vector & w, const Vector & x, const Vector & y)
 {
     _F_;
-    PETSC_CHECK(VecPointwiseDivide((Vec) w, (Vec) x, (Vec) y));
+    PETSC_CHECK(VecPointwiseDivide(w, x, y));
 }
 
 } // namespace godzilla

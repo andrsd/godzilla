@@ -87,7 +87,7 @@ L2FieldDiff::compute()
                                      this->problem->get_time(),
                                      pfns.data(),
                                      ctxs.data(),
-                                     (Vec) this->problem->get_solution_vector(),
+                                     this->problem->get_solution_vector(),
                                      diff.data()));
 
     for (Int i = 0; i < n_fields; i++) {

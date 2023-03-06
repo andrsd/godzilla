@@ -171,7 +171,7 @@ void
 LinearProblem::solve()
 {
     _F_;
-    PETSC_CHECK(KSPSolve(this->ksp, (Vec) this->b, (Vec) this->x));
+    PETSC_CHECK(KSPSolve(this->ksp, this->b, this->x));
     PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
 }
 

@@ -145,7 +145,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
                                   ic_funcs,
                                   ic_ctxs,
                                   INSERT_VALUES,
-                                  (Vec) this->problem->get_solution_vector()));
+                                  this->problem->get_solution_vector()));
 }
 
 void
@@ -171,10 +171,8 @@ DiscreteProblemInterface::build_local_solution_vector(const Vector & sln) const
 {
     DM dm = this->unstr_mesh->get_dm();
     Real time = this->problem->get_time();
-    PETSC_CHECK(
-        DMGlobalToLocal(dm, (Vec) this->problem->get_solution_vector(), INSERT_VALUES, (Vec) sln));
-    PETSC_CHECK(
-        DMPlexInsertBoundaryValues(dm, PETSC_TRUE, (Vec) sln, time, nullptr, nullptr, nullptr));
+    PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
+    PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, nullptr, nullptr, nullptr));
 }
 
 } // namespace godzilla

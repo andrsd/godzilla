@@ -112,7 +112,7 @@ void
 Matrix::mult(const Vector & x, Vector & y)
 {
     _F_;
-    MatMult(this->mat, (Vec) x, (Vec) y);
+    MatMult(this->mat, x, y);
 }
 
 void

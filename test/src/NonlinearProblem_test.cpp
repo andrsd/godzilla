@@ -108,7 +108,7 @@ TEST(NonlinearProblemTest, initial_guess)
 
     auto x = prob.get_solution_vector();
     Real l2_norm = 0;
-    VecNorm((Vec) x, NORM_2, &l2_norm);
+    VecNorm(x, NORM_2, &l2_norm);
     EXPECT_DOUBLE_EQ(l2_norm, 0.);
 }
 
@@ -138,7 +138,7 @@ TEST(NonlinearProblemTest, solve)
     Int ni = 2;
     Int ix[2] = { 0, 1 };
     Scalar xx[2];
-    VecGetValues((Vec) x, ni, ix, xx);
+    VecGetValues(x, ni, ix, xx);
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);

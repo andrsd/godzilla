@@ -147,7 +147,7 @@ PetscErrorCode
 ExplicitFVLinearProblem::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     _F_;
-    return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, (Vec) x, (Vec) F, this);
+    return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this);
 }
 
 } // namespace godzilla

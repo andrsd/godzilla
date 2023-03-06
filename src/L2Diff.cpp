@@ -48,7 +48,7 @@ L2Diff::compute()
                                 this->problem->get_time(),
                                 funcs.data(),
                                 ctxs.data(),
-                                (Vec) this->problem->get_solution_vector(),
+                                this->problem->get_solution_vector(),
                                 &this->l2_diff));
 }
 

@@ -119,14 +119,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_residual_internal(plex,
-                                      res_key,
-                                      cells,
-                                      PETSC_MIN_REAL,
-                                      (Vec) x,
-                                      nullptr,
-                                      0.0,
-                                      (Vec) f);
+            compute_residual_internal(plex, res_key, cells, PETSC_MIN_REAL, x, nullptr, 0.0, f);
             cells.destroy();
         }
     }
@@ -622,15 +615,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_jacobian_internal(plex,
-                                      jac_key,
-                                      cells,
-                                      0.0,
-                                      0.0,
-                                      (Vec) x,
-                                      nullptr,
-                                      J,
-                                      Jp);
+            compute_jacobian_internal(plex, jac_key, cells, 0.0, 0.0, x, nullptr, J, Jp);
             cells.destroy();
         }
     }

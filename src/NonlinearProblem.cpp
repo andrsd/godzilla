@@ -211,7 +211,7 @@ void
 NonlinearProblem::set_up_callbacks()
 {
     _F_;
-    PETSC_CHECK(SNESSetFunction(this->snes, (Vec) this->r, __compute_residual, this));
+    PETSC_CHECK(SNESSetFunction(this->snes, this->r, __compute_residual, this));
     PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, __compute_jacobian, this));
 }
 
@@ -267,7 +267,7 @@ NonlinearProblem::solve()
 {
     _F_;
     lprintf(9, "Solving");
-    PETSC_CHECK(SNESSolve(this->snes, nullptr, (Vec) this->x));
+    PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }
 

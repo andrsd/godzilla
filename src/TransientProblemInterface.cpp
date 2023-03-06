@@ -135,7 +135,7 @@ TransientProblemInterface::post_step()
     PETSC_CHECK(TSGetStepNumber(this->ts, &this->problem->step_num));
     Vec sln;
     PETSC_CHECK(TSGetSolution(this->ts, &sln));
-    PETSC_CHECK(VecCopy(sln, (Vec) this->problem->get_solution_vector()));
+    PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
     this->problem->compute_postprocessors();
     this->problem->output(Output::ON_TIMESTEP);
     return 0;
@@ -155,7 +155,7 @@ void
 TransientProblemInterface::solve(Vector & x)
 {
     _F_;
-    PETSC_CHECK(TSSolve(this->ts, (Vec) x));
+    PETSC_CHECK(TSSolve(this->ts, x));
     PETSC_CHECK(TSGetConvergedReason(this->ts, &this->converged_reason));
 }
 

@@ -31,7 +31,7 @@ TEST_F(LinearProblemTest, solve)
     Int ni = 2;
     Int ix[2] = { 0, 1 };
     Scalar xx[2];
-    VecGetValues((Vec) x, ni, ix, xx);
+    VecGetValues(x, ni, ix, xx);
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);
