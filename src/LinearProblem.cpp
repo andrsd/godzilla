@@ -51,7 +51,6 @@ LinearProblem::parameters()
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
     ksp(nullptr),
-    A(nullptr),
     converged_reason(KSP_CONVERGED_ITERATING),
     lin_rel_tol(get_param<Real>("lin_rel_tol")),
     lin_abs_tol(get_param<Real>("lin_abs_tol")),
@@ -68,7 +67,6 @@ LinearProblem::~LinearProblem()
         KSPDestroy(&this->ksp);
     this->x.destroy();
     this->b.destroy();
-    this->A.destroy();
 }
 
 DM
@@ -100,6 +98,8 @@ LinearProblem::create()
     set_up_callbacks();
 
     Problem::create();
+
+    PETSC_CHECK(KSPSetFromOptions(this->ksp));
 }
 
 void
@@ -125,11 +125,6 @@ LinearProblem::allocate_objects()
 
     this->x.duplicate(this->b);
     this->b.set_name("rhs");
-
-    Mat a;
-    PETSC_CHECK(DMCreateMatrix(dm, &a));
-    this->A = Matrix(a);
-    this->A.set_name("A");
 }
 
 void
@@ -156,7 +151,6 @@ LinearProblem::set_up_solver_parameters()
                                  this->lin_abs_tol,
                                  PETSC_DEFAULT,
                                  this->lin_max_iter));
-    PETSC_CHECK(KSPSetFromOptions(ksp));
 }
 
 PetscErrorCode
