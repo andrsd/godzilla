@@ -4,7 +4,6 @@
 #include <sstream>
 #include <iostream>
 #include "Terminal.h"
-#include "petsc.h"
 #include "fmt/printf.h"
 #include "fmt/color.h"
 
@@ -28,7 +27,9 @@ error_printf(const char * s, Args... args)
 
 void mem_check(int line, const char * func, const char * file, void * var);
 
-void check_petsc_error(PetscErrorCode ierr, const char * file, int line);
+void check_petsc_error(int ierr, const char * file, int line);
+
+void check_mpi_error(int ierr, const char * file, int line);
 
 } // namespace internal
 
@@ -47,5 +48,8 @@ error(const char * format, Args &&... args)
 /// Check that PETSc call was successful . If not, report an error (also dump call stack) and
 /// terminate
 #define PETSC_CHECK(ierr) godzilla::internal::check_petsc_error(ierr, __FILE__, __LINE__)
+
+/// Check that MPI call was successful.
+#define MPI_CHECK(ierr) godzilla::internal::check_mpi_error(ierr, __FILE__, __LINE__)
 
 } // namespace godzilla
