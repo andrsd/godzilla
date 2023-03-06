@@ -48,6 +48,7 @@ public:
     void set_type(VecType method);
 
     void set_value(Int row, Scalar value, InsertMode mode = INSERT_VALUES);
+    void set_value_local(Int row, Scalar value, InsertMode mode = INSERT_VALUES);
     void set_values(const std::vector<Int> & ix,
                     const std::vector<Scalar> & y,
                     InsertMode mode = INSERT_VALUES);

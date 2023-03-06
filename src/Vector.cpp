@@ -203,6 +203,13 @@ Vector::set_value(Int row, Scalar value, InsertMode mode)
 }
 
 void
+Vector::set_value_local(Int row, Scalar value, InsertMode mode)
+{
+    _F_;
+    PETSC_CHECK(VecSetValueLocal(this->vec, row, value, mode));
+}
+
+void
 Vector::set_values(const std::vector<Int> & ix, const std::vector<Scalar> & y, InsertMode mode)
 {
     _F_;
