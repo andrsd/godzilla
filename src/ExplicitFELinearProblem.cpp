@@ -158,7 +158,7 @@ PetscErrorCode
 ExplicitFELinearProblem::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     _F_;
-    return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, (Vec) x, (Vec) F, this);
+    return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, x, F, this);
 }
 
 void

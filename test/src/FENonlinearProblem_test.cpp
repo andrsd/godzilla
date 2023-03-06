@@ -142,7 +142,7 @@ TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 
     auto x = prob->get_solution_vector();
     Real l2_norm = 0;
-    VecNorm((Vec) x, NORM_2, &l2_norm);
+    VecNorm(x, NORM_2, &l2_norm);
     EXPECT_DOUBLE_EQ(l2_norm, 0.);
 }
 
@@ -154,7 +154,7 @@ TEST_F(FENonlinearProblemTest, zero_initial_guess)
 
     auto x = prob->get_solution_vector();
     Real l2_norm = 0;
-    VecNorm((Vec) x, NORM_2, &l2_norm);
+    VecNorm(x, NORM_2, &l2_norm);
     EXPECT_DOUBLE_EQ(l2_norm, 0.);
 }
 
@@ -193,7 +193,7 @@ TEST_F(FENonlinearProblemTest, solve)
     Int ni = 1;
     Int ix[1] = { 0 };
     Scalar xx[1];
-    VecGetValues((Vec) x, ni, ix, xx);
+    VecGetValues(x, ni, ix, xx);
     EXPECT_DOUBLE_EQ(xx[0], 0.25);
 }
 
@@ -216,7 +216,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
     Int ni = 1;
     Int ix[1] = { 0 };
     Scalar xx[1];
-    VecGetValues((Vec) x, ni, ix, xx);
+    VecGetValues(x, ni, ix, xx);
     EXPECT_DOUBLE_EQ(xx[0], 0.);
 }
 

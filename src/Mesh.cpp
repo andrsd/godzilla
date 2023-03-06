@@ -1,6 +1,7 @@
 #include "Godzilla.h"
 #include "Mesh.h"
 #include "CallStack.h"
+#include "Section.h"
 
 namespace godzilla {
 
@@ -18,6 +19,20 @@ Mesh::get_dimension() const
 {
     _F_;
     return this->dim;
+}
+
+void
+Mesh::set_local_section(const Section & section) const
+{
+    _F_;
+    PETSC_CHECK(DMSetLocalSection(get_dm(), section));
+}
+
+void
+Mesh::set_global_section(const Section & section) const
+{
+    _F_;
+    PETSC_CHECK(DMSetGlobalSection(get_dm(), section));
 }
 
 } // namespace godzilla

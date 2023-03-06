@@ -114,7 +114,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     Int ni = 2;
     Int ix[2] = { 0, 1 };
     Scalar x[2];
-    VecGetValues((Vec) sln, ni, ix, x);
+    VecGetValues(sln, ni, ix, x);
     EXPECT_NEAR(x[0], 0.0118, 1e-15);
     EXPECT_NEAR(x[1], 0.0098, 1e-15);
 }

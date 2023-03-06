@@ -112,7 +112,7 @@ void
 Matrix::mult(const Vector & x, Vector & y)
 {
     _F_;
-    MatMult(this->mat, (Vec) x, (Vec) y);
+    MatMult(this->mat, x, y);
 }
 
 void
@@ -127,6 +127,13 @@ Matrix::operator()(Int row, Int col) const
 {
     _F_;
     return get_value(row, col);
+}
+
+void
+Matrix::view(PetscViewer viewer) const
+{
+    _F_;
+    PETSC_CHECK(MatView(this->mat, viewer));
 }
 
 Matrix::operator Mat() const

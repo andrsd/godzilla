@@ -56,6 +56,19 @@ TEST(VectorTest, set)
     v.destroy();
 }
 
+TEST(VectorTest, set_value_local)
+{
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    v.set_value_local(0, 3.);
+    v.set_value_local(1, 5.);
+    v.set_value_local(2, 9.);
+
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+    v.destroy();
+}
+
 TEST(VectorTest, set_values)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);

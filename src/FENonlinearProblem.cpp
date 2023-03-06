@@ -75,7 +75,7 @@ FENonlinearProblem::set_up_callbacks()
     PETSC_CHECK(DMPlexSetSNESLocalFEM(dm, this, this, this));
     PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
     PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, (Mat) this->J, (Mat) this->J, nullptr, nullptr));
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, nullptr, nullptr));
 }
 
 void
@@ -119,14 +119,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_residual_internal(plex,
-                                      res_key,
-                                      cells,
-                                      PETSC_MIN_REAL,
-                                      (Vec) x,
-                                      nullptr,
-                                      0.0,
-                                      (Vec) f);
+            compute_residual_internal(plex, res_key, cells, PETSC_MIN_REAL, x, nullptr, 0.0, f);
             cells.destroy();
         }
     }
@@ -622,15 +615,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
-            compute_jacobian_internal(plex,
-                                      jac_key,
-                                      cells,
-                                      0.0,
-                                      0.0,
-                                      (Vec) x,
-                                      nullptr,
-                                      (Mat) J,
-                                      (Mat) Jp);
+            compute_jacobian_internal(plex, jac_key, cells, 0.0, 0.0, x, nullptr, J, Jp);
             cells.destroy();
         }
     }

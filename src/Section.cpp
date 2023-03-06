@@ -300,4 +300,29 @@ Section::get_constraint_dof(Int point) const
     return n_dofs;
 }
 
+Section
+Section::create(DM dm,
+                DMLabel label[],
+                const Int n_comp[],
+                const Int n_dof[],
+                Int n_bc,
+                const Int bc_field[],
+                const IS bc_comps[],
+                const IS bc_points[],
+                IS perm)
+{
+    PetscSection s;
+    PETSC_CHECK(DMPlexCreateSection(dm,
+                                    label,
+                                    n_comp,
+                                    n_dof,
+                                    n_bc,
+                                    bc_field,
+                                    bc_comps,
+                                    bc_points,
+                                    perm,
+                                    &s));
+    return { s };
+}
+
 } // namespace godzilla

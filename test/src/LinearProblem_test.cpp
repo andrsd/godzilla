@@ -31,7 +31,7 @@ TEST_F(LinearProblemTest, solve)
     Int ni = 2;
     Int ix[2] = { 0, 1 };
     Scalar xx[2];
-    VecGetValues((Vec) x, ni, ix, xx);
+    VecGetValues(x, ni, ix, xx);
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);
@@ -69,26 +69,22 @@ TEST_F(LinearProblemTest, run)
 
 // 1D
 
-G1DTestLinearProblem::G1DTestLinearProblem(const Parameters & params) :
-    LinearProblem(params),
-    s(nullptr)
-{
-}
+G1DTestLinearProblem::G1DTestLinearProblem(const Parameters & params) : LinearProblem(params) {}
 
 G1DTestLinearProblem::~G1DTestLinearProblem()
 {
-    PetscSectionDestroy(&this->s);
+    this->s.destroy();
 }
 
 void
 G1DTestLinearProblem::create()
 {
     DM dm = get_dm();
+    DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
-    DMSetNumFields(dm, 1);
-    DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
-    DMSetLocalSection(dm, this->s);
+    this->s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    this->mesh->set_local_section(this->s);
     LinearProblem::create();
 }
 
@@ -118,26 +114,22 @@ G1DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 
 // 2D
 
-G2DTestLinearProblem::G2DTestLinearProblem(const Parameters & params) :
-    LinearProblem(params),
-    s(nullptr)
-{
-}
+G2DTestLinearProblem::G2DTestLinearProblem(const Parameters & params) : LinearProblem(params) {}
 
 G2DTestLinearProblem::~G2DTestLinearProblem()
 {
-    PetscSectionDestroy(&this->s);
+    this->s.destroy();
 }
 
 void
 G2DTestLinearProblem::create()
 {
     DM dm = get_dm();
+    DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[3] = { 1, 0, 0 };
-    DMSetNumFields(dm, 1);
-    DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
-    DMSetLocalSection(dm, this->s);
+    this->s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    this->mesh->set_local_section(this->s);
     LinearProblem::create();
 }
 
@@ -166,26 +158,22 @@ G2DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 
 // 3D
 
-G3DTestLinearProblem::G3DTestLinearProblem(const Parameters & params) :
-    LinearProblem(params),
-    s(nullptr)
-{
-}
+G3DTestLinearProblem::G3DTestLinearProblem(const Parameters & params) : LinearProblem(params) {}
 
 G3DTestLinearProblem::~G3DTestLinearProblem()
 {
-    PetscSectionDestroy(&this->s);
+    this->s.destroy();
 }
 
 void
 G3DTestLinearProblem::create()
 {
     DM dm = get_dm();
+    DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[4] = { 1, 0, 0, 0 };
-    DMSetNumFields(dm, 1);
-    DMPlexCreateSection(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL, &this->s);
-    DMSetLocalSection(dm, this->s);
+    this->s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    this->mesh->set_local_section(this->s);
     LinearProblem::create();
 }
 

@@ -65,7 +65,7 @@ VTKOutput::output_step()
     DM dm = this->problem->get_dm();
     PETSC_CHECK(DMView(dm, this->viewer));
     auto vec = this->problem->get_solution_vector();
-    PETSC_CHECK(VecView((Vec) vec, this->viewer));
+    PETSC_CHECK(VecView(vec, this->viewer));
 }
 
 } // namespace godzilla

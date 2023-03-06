@@ -2,6 +2,7 @@
 
 #include "Mesh.h"
 #include "LinearProblem.h"
+#include "Section.h"
 #include "GodzillaApp_test.h"
 
 using namespace godzilla;
@@ -77,7 +78,7 @@ public:
     virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    PetscSection s;
+    Section s;
 };
 
 //
@@ -91,7 +92,7 @@ public:
     virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    PetscSection s;
+    Section s;
 };
 
 //
@@ -105,5 +106,5 @@ public:
     virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
-    PetscSection s;
+    Section s;
 };

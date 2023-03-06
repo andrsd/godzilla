@@ -52,8 +52,6 @@ protected:
     Vector x;
     /// The right-hand side vector
     Vector b;
-    /// Linear operator matrix
-    Matrix A;
     /// Converged reason
     KSPConvergedReason converged_reason;
 
