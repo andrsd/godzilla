@@ -19,7 +19,7 @@ public:
     virtual ~G1DTestNonlinearProblem();
     virtual void create() override;
     void call_initial_guess();
-
+    void solve() override;
     PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
     PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
 
@@ -58,6 +58,12 @@ void
 G1DTestNonlinearProblem::call_initial_guess()
 {
     NonlinearProblem::set_up_initial_guess();
+}
+
+void
+G1DTestNonlinearProblem::solve()
+{
+    NonlinearProblem::solve();
 }
 
 PetscErrorCode

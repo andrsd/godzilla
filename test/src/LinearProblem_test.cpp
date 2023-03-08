@@ -88,6 +88,12 @@ G1DTestLinearProblem::create()
     LinearProblem::create();
 }
 
+void
+G1DTestLinearProblem::solve()
+{
+    LinearProblem::solve();
+}
+
 PetscErrorCode
 G1DTestLinearProblem::compute_rhs(Vector & b)
 {
@@ -133,6 +139,12 @@ G2DTestLinearProblem::create()
     LinearProblem::create();
 }
 
+void
+G2DTestLinearProblem::solve()
+{
+    LinearProblem::solve();
+}
+
 PetscErrorCode
 G2DTestLinearProblem::compute_rhs(Vector & b)
 {
@@ -175,6 +187,12 @@ G3DTestLinearProblem::create()
     this->s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
     this->mesh->set_local_section(this->s);
     LinearProblem::create();
+}
+
+void
+G3DTestLinearProblem::solve()
+{
+    LinearProblem::solve();
 }
 
 PetscErrorCode

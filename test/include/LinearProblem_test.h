@@ -7,6 +7,51 @@
 
 using namespace godzilla;
 
+class G1DTestLinearProblem : public LinearProblem {
+public:
+    G1DTestLinearProblem(const Parameters & params);
+    virtual ~G1DTestLinearProblem();
+    virtual void create() override;
+    virtual void solve() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
+
+protected:
+    Section s;
+};
+
+//
+
+class G2DTestLinearProblem : public LinearProblem {
+public:
+    G2DTestLinearProblem(const Parameters & params);
+    virtual ~G2DTestLinearProblem();
+    virtual void create() override;
+    virtual void solve() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
+
+protected:
+    Section s;
+};
+
+//
+
+class G3DTestLinearProblem : public LinearProblem {
+public:
+    G3DTestLinearProblem(const Parameters & params);
+    virtual ~G3DTestLinearProblem();
+    virtual void create() override;
+    virtual void solve() override;
+    virtual PetscErrorCode compute_rhs(Vector & b) override;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
+
+protected:
+    Section s;
+};
+
+//
+
 class LinearProblemTest : public GodzillaAppTest {
 protected:
     Mesh *
@@ -39,72 +84,30 @@ protected:
         return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
 
-    Problem *
+    G1DTestLinearProblem *
     gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "G1DTestLinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        return this->app->build_object<Problem>(class_name, "problem", params);
+        return this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
     }
 
-    Problem *
+    G2DTestLinearProblem *
     gProblem2d(Mesh * mesh)
     {
         const std::string class_name = "G2DTestLinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        return this->app->build_object<Problem>(class_name, "problem", params);
+        return this->app->build_object<G2DTestLinearProblem>(class_name, "problem", params);
     }
 
-    Problem *
+    G3DTestLinearProblem *
     gProblem3d(Mesh * mesh)
     {
         const std::string class_name = "G3DTestLinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const Mesh *>("_mesh") = mesh;
-        return this->app->build_object<Problem>(class_name, "problem", params);
+        return this->app->build_object<G3DTestLinearProblem>(class_name, "problem", params);
     }
-};
-
-//
-
-class G1DTestLinearProblem : public LinearProblem {
-public:
-    G1DTestLinearProblem(const Parameters & params);
-    virtual ~G1DTestLinearProblem();
-    virtual void create() override;
-    virtual PetscErrorCode compute_rhs(Vector & b) override;
-    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
-
-protected:
-    Section s;
-};
-
-//
-
-class G2DTestLinearProblem : public LinearProblem {
-public:
-    G2DTestLinearProblem(const Parameters & params);
-    virtual ~G2DTestLinearProblem();
-    virtual void create() override;
-    virtual PetscErrorCode compute_rhs(Vector & b) override;
-    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
-
-protected:
-    Section s;
-};
-
-//
-
-class G3DTestLinearProblem : public LinearProblem {
-public:
-    G3DTestLinearProblem(const Parameters & params);
-    virtual ~G3DTestLinearProblem();
-    virtual void create() override;
-    virtual PetscErrorCode compute_rhs(Vector & b) override;
-    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
-
-protected:
-    Section s;
 };

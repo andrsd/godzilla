@@ -12,6 +12,7 @@ public:
     PetscDS getDS();
     void compute_postprocessors() override;
     void set_up_initial_guess() override;
+    void solve() override;
 
 protected:
     void set_up_fields() override;

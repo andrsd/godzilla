@@ -16,7 +16,6 @@ public:
     ~LinearProblem() override;
 
     void create() override;
-    void solve() override;
     void run() override;
     bool converged() override;
     NO_DISCARD const Vector & get_solution_vector() const override;
@@ -43,6 +42,8 @@ protected:
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning
     virtual void set_up_preconditioning();
+    /// Solve the problem
+    virtual void solve();
 
     /// KSP object
     KSP ksp;

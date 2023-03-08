@@ -66,10 +66,6 @@ public:
     {
     }
     void
-    solve() override
-    {
-    }
-    void
     run() override
     {
     }

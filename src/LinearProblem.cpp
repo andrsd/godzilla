@@ -154,14 +154,6 @@ LinearProblem::ksp_monitor_callback(Int it, Real rnorm)
     return 0;
 }
 
-void
-LinearProblem::solve()
-{
-    _F_;
-    PETSC_CHECK(KSPSolve(this->ksp, this->b, this->x));
-    PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
-}
-
 bool
 LinearProblem::converged()
 {
@@ -195,6 +187,14 @@ LinearProblem::set_up_matrix_properties()
 void
 LinearProblem::set_up_preconditioning()
 {
+}
+
+void
+LinearProblem::solve()
+{
+    _F_;
+    PETSC_CHECK(KSPSolve(this->ksp, this->b, this->x));
+    PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
 }
 
 } // namespace godzilla

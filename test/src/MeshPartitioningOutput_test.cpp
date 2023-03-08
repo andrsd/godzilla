@@ -17,10 +17,6 @@ public:
     run() override
     {
     }
-    virtual void
-    solve() override
-    {
-    }
     virtual bool
     converged() override
     {
