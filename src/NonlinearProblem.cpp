@@ -104,13 +104,6 @@ NonlinearProblem::~NonlinearProblem()
     this->J.destroy();
 }
 
-DM
-NonlinearProblem::get_dm() const
-{
-    _F_;
-    return this->mesh->get_dm();
-}
-
 const Vector &
 NonlinearProblem::get_solution_vector() const
 {

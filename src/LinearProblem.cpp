@@ -69,13 +69,6 @@ LinearProblem::~LinearProblem()
     this->b.destroy();
 }
 
-DM
-LinearProblem::get_dm() const
-{
-    _F_;
-    return this->mesh->get_dm();
-}
-
 const Vector &
 LinearProblem::get_solution_vector() const
 {

@@ -27,8 +27,6 @@ public:
     virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) = 0;
 
 protected:
-    /// provide DM for the underlying KSP object
-    NO_DISCARD DM get_dm() const override;
     /// Initialize the problem
     virtual void init();
     /// Allocate Jacobian/residual objects

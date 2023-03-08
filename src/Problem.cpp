@@ -25,6 +25,13 @@ Problem::Problem(const Parameters & parameters) :
 {
 }
 
+DM
+Problem::get_dm() const
+{
+    _F_;
+    return this->mesh->get_dm();
+}
+
 void
 Problem::check()
 {
