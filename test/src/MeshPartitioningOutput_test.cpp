@@ -17,11 +17,6 @@ public:
     run() override
     {
     }
-    virtual bool
-    converged() override
-    {
-        return false;
-    }
     virtual DM
     get_dm() const override
     {

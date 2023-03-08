@@ -26,8 +26,6 @@ public:
     void create() override;
     /// Run the problem
     virtual void run() = 0;
-    /// true if solve converged, otherwise false
-    virtual bool converged() = 0;
     /// Provide DM for this problem
     virtual DM get_dm() const;
     /// Return solution vector

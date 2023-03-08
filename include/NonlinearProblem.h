@@ -17,8 +17,10 @@ public:
     void create() override;
     void check() override;
     void run() override;
-    bool converged() override;
     const Vector & get_solution_vector() const override;
+
+    /// true if solve converged, otherwise false
+    virtual bool converged();
     /// Method to compute residual. Called from the PETsc callback
     virtual PetscErrorCode compute_residual(const Vector & x, Vector & f);
     /// Method to compute Jacobian. Called from the PETsc callback
