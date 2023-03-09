@@ -30,8 +30,8 @@ public:
     virtual void solve() = 0;
     /// true if solve converged, otherwise false
     virtual bool converged() = 0;
-    /// provide DM for the underlying KSP object
-    virtual DM get_dm() const = 0;
+    /// Provide DM for this problem
+    virtual DM get_dm() const;
     /// Return solution vector
     virtual const Vector & get_solution_vector() const = 0;
     /// Get mesh this problem is using

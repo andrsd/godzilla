@@ -26,8 +26,6 @@ public:
     virtual PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
 
 protected:
-    /// provide DM for the underlying SNES object
-    DM get_dm() const override;
     /// Initialize the problem
     virtual void init();
     /// Set up initial guess
