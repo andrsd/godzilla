@@ -27,7 +27,8 @@ protected:
             const std::string class_name = "G1DTestLinearProblem";
             Parameters * params = Factory::get_parameters(class_name);
             params->set<const Mesh *>("_mesh") = mesh;
-            this->prob = this->app->build_object<Problem>(class_name, "problem", params);
+            this->prob =
+                this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
         }
     }
 
@@ -52,7 +53,7 @@ protected:
     }
 
     LineMesh * mesh;
-    Problem * prob;
+    G1DTestLinearProblem * prob;
 };
 
 } // namespace

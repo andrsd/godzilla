@@ -16,6 +16,7 @@ namespace {
 class TestNeumannProblem : public FENonlinearProblem {
 public:
     explicit TestNeumannProblem(const Parameters & params);
+    void solve() override;
 
 protected:
     void set_up_fields() override;
@@ -97,6 +98,12 @@ TestNeumannProblem::TestNeumannProblem(const Parameters & params) :
     FENonlinearProblem(params),
     iu(0)
 {
+}
+
+void
+TestNeumannProblem::solve()
+{
+    FENonlinearProblem::solve();
 }
 
 void

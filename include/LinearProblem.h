@@ -16,11 +16,11 @@ public:
     ~LinearProblem() override;
 
     void create() override;
-    void solve() override;
     void run() override;
-    bool converged() override;
     NO_DISCARD const Vector & get_solution_vector() const override;
 
+    /// true if solve converged, otherwise false
+    virtual bool converged();
     /// Method to compute right-hand side. Called from the PETsc callback
     virtual PetscErrorCode compute_rhs(Vector & b) = 0;
     /// Method to compute operators. Called from the PETsc callback
@@ -43,6 +43,8 @@ protected:
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning
     virtual void set_up_preconditioning();
+    /// Solve the problem
+    virtual void solve();
 
     /// KSP object
     KSP ksp;

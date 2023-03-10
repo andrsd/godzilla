@@ -66,17 +66,8 @@ public:
     {
     }
     void
-    solve() override
-    {
-    }
-    void
     run() override
     {
-    }
-    bool
-    converged() override
-    {
-        return false;
     }
     void
     set_up_time_scheme() override

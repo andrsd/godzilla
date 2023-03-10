@@ -255,15 +255,6 @@ NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
     return 0;
 }
 
-void
-NonlinearProblem::solve()
-{
-    _F_;
-    lprintf(9, "Solving");
-    PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
-    PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
-}
-
 bool
 NonlinearProblem::converged()
 {
@@ -294,6 +285,15 @@ NonlinearProblem::set_up_matrix_properties()
 void
 NonlinearProblem::set_up_preconditioning()
 {
+}
+
+void
+NonlinearProblem::solve()
+{
+    _F_;
+    lprintf(9, "Solving");
+    PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
+    PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }
 
 PetscErrorCode
