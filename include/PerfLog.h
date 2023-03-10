@@ -32,24 +32,28 @@ public:
     /// @param name Event name
     /// @return Event ID
     static PetscLogEvent register_event(const char * name);
+    static PetscLogEvent register_event(const std::string & name);
 
     /// Get event ID
     ///
     /// @param name Event name
     /// @return Event ID
     static PetscLogEvent get_event_id(const char * name);
+    static PetscLogEvent get_event_id(const std::string & name);
 
     /// Register a logging stage
     ///
     /// @param name Stage name
     /// @return
     static PetscLogStage register_stage(const char * name);
+    static PetscLogStage register_stage(const std::string & name);
 
     /// Get stage ID
     ///
     /// @param name Stage name
     /// @return Stage ID
     static PetscLogStage get_stage_id(const char * name);
+    static PetscLogStage get_stage_id(const std::string & name);
 
     /// Event for performance logging
     ///
@@ -59,6 +63,7 @@ public:
         ///
         /// @param name Name of the event. Must be registered in PerfLog class.
         explicit Event(const char * name);
+        explicit Event(const std::string & name);
 
         /// Construct a performance logging event from event ID
         ///
@@ -91,6 +96,7 @@ public:
         ///
         /// @param name Name of the stage. Must be registered in PerfLog class.
         explicit Stage(const char * name);
+        explicit Stage(const std::string & name);
 
         /// Construct a performance logging stage from stage ID
         ///
