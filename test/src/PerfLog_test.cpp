@@ -11,11 +11,14 @@ using namespace godzilla;
 
 TEST(PerfLogTest, event)
 {
-    PerfLog::register_event("event1");
-    auto event2_id = PerfLog::register_event("event2");
+    const std::string event1_name = "event1";
+    const std::string event2_name = "event2";
+
+    PerfLog::register_event(event1_name);
+    auto event2_id = PerfLog::register_event(event2_name);
 
     for (int i = 0; i < 2; i++) {
-        PerfLog::Event event("event1");
+        PerfLog::Event event(event1_name);
         event.log_flops(4.);
         usleep(50000);
     }
@@ -26,7 +29,7 @@ TEST(PerfLogTest, event)
         usleep(200000);
     }
 
-    PerfLog::EventInfo info1 = PerfLog::get_event_info("event1");
+    PerfLog::EventInfo info1 = PerfLog::get_event_info(event1_name);
     EXPECT_DOUBLE_EQ(info1.get_flops(), 8.);
     EXPECT_EQ(info1.get_num_calls(), 2);
     EXPECT_NEAR(info1.get_time(), 0.1, 1.5e-2);
@@ -46,18 +49,23 @@ TEST(PerfLogTest, error_existing_event)
 TEST(PerfLogTest, non_existent_event_id)
 {
     EXPECT_DEATH(PerfLog::get_event_id("event_none"), "Event 'event_none' was not registered.");
+
+    const std::string no_event = "event_none";
+    EXPECT_DEATH(PerfLog::get_event_id(no_event), "Event 'event_none' was not registered.");
 }
 
 TEST(PerfLogTest, stage)
 {
-    PerfLog::register_event("event");
+    const std::string event_name = "event";
+    PerfLog::register_event(event_name);
 
-    PerfLog::register_stage("stage1");
+    const std::string stage_name = "stage1";
+    PerfLog::register_stage(stage_name);
     PetscLogStage stage2_id = PerfLog::register_stage("stage2");
 
     for (int i = 0; i < 3; i++) {
-        PerfLog::Stage stage("stage1");
-        PerfLog::Event ev("event");
+        PerfLog::Stage stage(stage_name);
+        PerfLog::Event ev(event_name);
         ev.log_flops(1.);
         usleep(50000);
     }
@@ -72,11 +80,11 @@ TEST(PerfLogTest, stage)
     PerfLog::Stage stage("stage1");
     EXPECT_EQ(stage.get_id(), 1);
 
-    PerfLog::EventInfo info1 = PerfLog::get_event_info("event", "stage1");
+    PerfLog::EventInfo info1 = PerfLog::get_event_info(event_name, stage_name);
     EXPECT_DOUBLE_EQ(info1.get_flops(), 3.);
     EXPECT_EQ(info1.get_num_calls(), 3);
 
-    PerfLog::Event ev("event");
+    PerfLog::Event ev(event_name);
     PerfLog::EventInfo info2 = PerfLog::get_event_info(ev.get_id(), stage2_id);
     EXPECT_DOUBLE_EQ(info2.get_flops(), 2.);
     EXPECT_EQ(info2.get_num_calls(), 1);
