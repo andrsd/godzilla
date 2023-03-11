@@ -364,3 +364,20 @@ TEST(VectorTest, pointwise_divide)
     y.destroy();
     w.destroy();
 }
+
+TEST(VectorTest, view)
+{
+    ::testing::internal::CaptureStdout();
+
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 2);
+    v.set_value_local(0, 1.);
+    v.set_value_local(1, 4.);
+    v.assembly_begin();
+    v.assembly_end();
+    v.view();
+
+    auto output = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(output, testing::HasSubstr("type: seq"));
+    EXPECT_THAT(output, testing::HasSubstr("1."));
+    EXPECT_THAT(output, testing::HasSubstr("4."));
+}

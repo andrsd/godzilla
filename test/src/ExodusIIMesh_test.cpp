@@ -6,6 +6,8 @@
 #include "petsc.h"
 
 using namespace godzilla;
+using testing::ElementsAre;
+using testing::Pair;
 
 TEST(ExodusIIMeshTest, api)
 {
@@ -53,6 +55,12 @@ TEST(ExodusIIMeshTest, two_block)
 
     EXPECT_EQ(mesh.get_cell_set_name(0), "0");
     EXPECT_EQ(mesh.get_cell_set_name(1), "1");
+
+    EXPECT_EQ(mesh.get_cell_set_id("0"), 0);
+    EXPECT_EQ(mesh.get_cell_set_id("1"), 1);
+
+    auto cell_sets = mesh.get_cell_sets();
+    EXPECT_THAT(cell_sets, ElementsAre(Pair(0, "0"), Pair(1, "1")));
 }
 
 TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
@@ -67,6 +75,7 @@ TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
     mesh.create();
 
     EXPECT_DEATH(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
+    EXPECT_DEATH(mesh.get_cell_set_id("1234"), "Cell set '1234' does not exist.");
 }
 
 TEST(ExodusIIMeshTest, nonexitent_file)
