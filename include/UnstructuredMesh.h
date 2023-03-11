@@ -78,6 +78,12 @@ public:
     /// @return Cell type
     NO_DISCARD virtual DMPolytopeType get_cell_type(Int el) const;
 
+    /// Get connectivity
+    ///
+    /// @param cell_id ID of the cell
+    /// @return Cell connectivity
+    std::vector<Int> get_cell_connectivity(Int cell_id) const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
@@ -188,6 +194,8 @@ protected:
 
 public:
     static Parameters parameters();
+
+    static int get_num_elem_nodes(DMPolytopeType elem_type);
 };
 
 } // namespace godzilla

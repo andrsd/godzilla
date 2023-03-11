@@ -40,25 +40,6 @@ get_elem_type(DMPolytopeType elem_type)
     }
 }
 
-int
-get_num_elem_nodes(DMPolytopeType elem_type)
-{
-    _F_;
-    switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
-        return 2;
-    case DM_POLYTOPE_TRIANGLE:
-        return 3;
-    case DM_POLYTOPE_QUADRILATERAL:
-    case DM_POLYTOPE_TETRAHEDRON:
-        return 4;
-    case DM_POLYTOPE_HEXAHEDRON:
-        return 8;
-    default:
-        error("Unsupported type.");
-    }
-}
-
 const Int *
 get_elem_node_ordering(DMPolytopeType elem_type)
 {
@@ -633,7 +614,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id, Int n_elems_in_block, const
         polytope_type = this->mesh->get_cell_type(cells[0]);
 
     const char * elem_type = get_elem_type(polytope_type);
-    int n_nodes_per_elem = get_num_elem_nodes(polytope_type);
+    int n_nodes_per_elem = UnstructuredMesh::get_num_elem_nodes(polytope_type);
     const Int * ordering = get_elem_node_ordering(polytope_type);
     std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
     for (Int i = 0, j = 0; i < n_elems_in_block; i++) {
