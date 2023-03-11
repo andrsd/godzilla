@@ -3,6 +3,7 @@
 #include "GodzillaConfig.h"
 #include "Mesh.h"
 #include "IndexSet.h"
+#include "Vector.h"
 #include "petscpartitioner.h"
 
 namespace godzilla {
@@ -28,6 +29,16 @@ public:
     /// @param name Label name
     /// @return DMLabel associated with the `name`
     NO_DISCARD virtual DMLabel get_label(const std::string & name) const;
+
+    /// Get a global vector with the coordinates associated with this mesh
+    ///
+    /// @return Global coordinate vector
+    Vector get_coordinates() const;
+
+    /// Get a local vector with the coordinates associated with this mesh
+    ///
+    /// @return Coordinate vector
+    Vector get_coordinates_local() const;
 
     /// Return the number of mesh vertices
     NO_DISCARD virtual Int get_num_vertices() const;
