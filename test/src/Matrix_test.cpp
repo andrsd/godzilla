@@ -126,3 +126,20 @@ TEST(MatrixTest, create_seq_aij_2)
     EXPECT_EQ(m.get_n_cols(), 2);
     m.destroy();
 }
+
+TEST(MatrixTest, view)
+{
+    ::testing::internal::CaptureStdout();
+
+    Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
+    m.set_value_local(0, 0, 1.);
+    m.set_value_local(1, 1, 4.);
+    m.assembly_begin();
+    m.assembly_end();
+    m.view();
+
+    auto output = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(output, testing::HasSubstr("type: seqaij"));
+    EXPECT_THAT(output, testing::HasSubstr("row 0: (0, 1.)"));
+    EXPECT_THAT(output, testing::HasSubstr("row 1: (1, 4.)"));
+}
