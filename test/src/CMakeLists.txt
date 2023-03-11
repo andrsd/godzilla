@@ -1,4 +1,5 @@
 add_executable(${PROJECT_NAME}
+    Array1D_test.cpp
     AuxiliaryField_test.cpp
     BasicTSAdapt_test.cpp
     BndJacobianFunc_test.cpp
