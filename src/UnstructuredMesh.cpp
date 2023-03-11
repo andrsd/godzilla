@@ -71,6 +71,22 @@ UnstructuredMesh::get_label(const std::string & name) const
     return label;
 }
 
+Vector
+UnstructuredMesh::get_coordinates() const
+{
+    Vec vec;
+    PETSC_CHECK(DMGetCoordinates(this->dm, &vec));
+    return { vec };
+}
+
+Vector
+UnstructuredMesh::get_coordinates_local() const
+{
+    Vec vec;
+    PETSC_CHECK(DMGetCoordinatesLocal(this->dm, &vec));
+    return { vec };
+}
+
 Int
 UnstructuredMesh::get_num_vertices() const
 {

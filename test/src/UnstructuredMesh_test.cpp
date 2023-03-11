@@ -123,3 +123,35 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
 
     EXPECT_DEATH(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
 }
+
+TEST(UnstructuredMeshTest, get_coordinates)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+    mesh.create();
+
+    Vector coords = mesh.get_coordinates();
+    EXPECT_EQ(coords(0), -1.);
+    EXPECT_EQ(coords(1), 0.);
+    EXPECT_EQ(coords(2), 1.);
+}
+
+TEST(UnstructuredMeshTest, get_coordinates_local)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+    mesh.create();
+
+    Vector coords = mesh.get_coordinates_local();
+    EXPECT_EQ(coords(0), -1.);
+    EXPECT_EQ(coords(1), 0.);
+    EXPECT_EQ(coords(2), 1.);
+}
