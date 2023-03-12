@@ -159,6 +159,31 @@ UnstructuredMesh::get_cell_type(Int el) const
     return polytope_type;
 }
 
+std::vector<Int>
+UnstructuredMesh::get_cell_connectivity(Int cell_id) const
+{
+    Int n_all_elems = get_num_all_elements();
+
+    Int closure_size;
+    Int * closure = nullptr;
+    PETSC_CHECK(DMPlexGetTransitiveClosure(this->dm, cell_id, PETSC_TRUE, &closure_size, &closure));
+
+    auto polytope_type = get_cell_type(cell_id);
+    Int n_elem_nodes = UnstructuredMesh::get_num_elem_nodes(polytope_type);
+    std::vector<Int> elem_connect;
+    elem_connect.resize(n_elem_nodes);
+    for (Int k = 0; k < n_elem_nodes; k++) {
+        Int l = 2 * (closure_size - n_elem_nodes + k);
+        Int idx = (closure[l] - n_all_elems);
+        elem_connect[k] = idx;
+    }
+
+    PETSC_CHECK(
+        DMPlexRestoreTransitiveClosure(this->dm, cell_id, PETSC_TRUE, &closure_size, &closure));
+
+    return elem_connect;
+}
+
 void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
@@ -364,6 +389,25 @@ UnstructuredMesh::construct_ghost_cells()
     PETSC_CHECK(DMPlexConstructGhostCells(this->dm, nullptr, nullptr, &gdm));
     PETSC_CHECK(DMDestroy(&this->dm));
     this->dm = gdm;
+}
+
+int
+UnstructuredMesh::get_num_elem_nodes(DMPolytopeType elem_type)
+{
+    _F_;
+    switch (elem_type) {
+    case DM_POLYTOPE_SEGMENT:
+        return 2;
+    case DM_POLYTOPE_TRIANGLE:
+        return 3;
+    case DM_POLYTOPE_QUADRILATERAL:
+    case DM_POLYTOPE_TETRAHEDRON:
+        return 4;
+    case DM_POLYTOPE_HEXAHEDRON:
+        return 8;
+    default:
+        error("Unsupported type.");
+    }
 }
 
 } // namespace godzilla

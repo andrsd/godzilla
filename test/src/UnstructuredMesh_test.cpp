@@ -155,3 +155,21 @@ TEST(UnstructuredMeshTest, get_coordinates_local)
     EXPECT_EQ(coords(1), 0.);
     EXPECT_EQ(coords(2), 1.);
 }
+
+TEST(UnstructuredMeshTest, get_cell_connectivity)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+    mesh.create();
+
+    auto cell0 = mesh.get_cell_connectivity(0);
+    EXPECT_EQ(cell0[0], 0);
+    EXPECT_EQ(cell0[1], 1);
+    auto cell1 = mesh.get_cell_connectivity(1);
+    EXPECT_EQ(cell1[0], 1);
+    EXPECT_EQ(cell1[1], 2);
+}
