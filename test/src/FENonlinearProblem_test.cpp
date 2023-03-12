@@ -45,8 +45,7 @@ REGISTER_OBJECT(GTest2CompIC);
 TEST_F(FENonlinearProblemTest, get_fepi_mesh)
 {
     FEProblemInterface * fepi = dynamic_cast<FEProblemInterface *>(prob);
-    UnstructuredMesh * unstr_mesh = dynamic_cast<UnstructuredMesh *>(mesh);
-    EXPECT_EQ(fepi->get_mesh(), unstr_mesh);
+    EXPECT_EQ(fepi->get_mesh(), mesh);
 }
 
 TEST_F(FENonlinearProblemTest, fields)
@@ -90,6 +89,11 @@ TEST_F(FENonlinearProblemTest, fields)
 
     Int fld2_idx = prob->add_fe("fld2", 3, 1);
     EXPECT_EQ(fld2_idx, 2);
+
+    auto s = mesh->get_local_section();
+    s.view();
+    EXPECT_EQ(prob->get_field_dof(4, 0), 8);
+    EXPECT_EQ(prob->get_field_dof(4, 1), 9);
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
@@ -313,14 +317,14 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
         }
     } app;
 
-    Mesh * mesh;
+    UnstructuredMesh * mesh;
     FENonlinearProblem * prob;
 
     {
         const std::string class_name = "LineMesh";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<Int>("nx") = 2;
-        mesh = app.build_object<Mesh>(class_name, "mesh", params);
+        mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
