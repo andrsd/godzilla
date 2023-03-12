@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gmock/gmock.h"
-#include "Mesh.h"
+#include "UnstructuredMesh.h"
 #include "FENonlinearProblem.h"
 #include "InitialCondition.h"
 #include "GodzillaApp_test.h"
@@ -20,7 +20,7 @@ public:
             const std::string class_name = "LineMesh";
             Parameters * params = Factory::get_parameters(class_name);
             params->set<Int>("nx") = 2;
-            this->mesh = this->app->build_object<Mesh>(class_name, "mesh", params);
+            this->mesh = this->app->build_object<UnstructuredMesh>(class_name, "mesh", params);
         }
         {
             const std::string class_name = "GTestFENonlinearProblem";
@@ -38,7 +38,7 @@ public:
         GodzillaAppTest::TearDown();
     }
 
-    Mesh * mesh;
+    UnstructuredMesh * mesh;
     GTestFENonlinearProblem * prob;
 };
 

@@ -1,18 +1,21 @@
 #include "CallStack.h"
 #include "gmock/gmock.h"
-#include <unistd.h>
-#include <signal.h>
 
 using namespace godzilla;
+
+void
+segfault()
+{
+    volatile int * x = nullptr;
+    int a = *x;
+}
 
 TEST(CallStackTest, abort)
 {
     _F_;
-
-    pid_t my_pid = getpid();
-    EXPECT_EXIT(kill(my_pid, SIGABRT),
+    EXPECT_EXIT(segfault(),
                 ::testing::ExitedWithCode(254),
-                "Caught signal 6 \\(Abort\\)");
+                "Caught signal 11 \\(Segmentation violation\\)");
 }
 
 TEST(CallStackTest, dump)

@@ -68,4 +68,6 @@ TEST(EssentialBCTest, api)
     EXPECT_CALL(bc, evaluate_t);
     PetscFunc * fn_t = bc.get_function_t();
     (*fn_t)(1, 0, x, 1, u, &bc);
+
+    EXPECT_EQ(bc.get_context(), &bc);
 }

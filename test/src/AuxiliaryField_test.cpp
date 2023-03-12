@@ -51,6 +51,7 @@ TEST_F(AuxiliaryFieldTest, api)
 
     EXPECT_EQ(aux.get_label(), nullptr);
     EXPECT_EQ(aux.get_region(), "rgn");
+    EXPECT_EQ(aux.get_block_id(), -1);
     EXPECT_EQ(aux.get_field_id(), 0);
     EXPECT_EQ(aux.get_func(), nullptr);
     EXPECT_EQ(aux.get_context(), &aux);

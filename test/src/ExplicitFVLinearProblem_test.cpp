@@ -64,6 +64,37 @@ public:
         ExplicitFVLinearProblem::set_up_time_scheme();
     }
 
+    void
+    add_boundary_essential(const std::string & name,
+                           DMLabel label,
+                           const std::vector<Int> & ids,
+                           Int field,
+                           const std::vector<Int> & components,
+                           PetscFunc * fn,
+                           PetscFunc * fn_t,
+                           void * context)
+    {
+        ExplicitFVLinearProblem::add_boundary_essential(name,
+                                                        label,
+                                                        ids,
+                                                        field,
+                                                        components,
+                                                        fn,
+                                                        fn_t,
+                                                        context);
+    }
+
+    void
+    add_boundary_natural(const std::string & name,
+                         DMLabel label,
+                         const std::vector<Int> & ids,
+                         Int field,
+                         const std::vector<Int> & components,
+                         void * context)
+    {
+        ExplicitFVLinearProblem::add_boundary_natural(name, label, ids, field, components, context);
+    }
+
 protected:
     virtual void
     set_up_fields() override
@@ -145,6 +176,13 @@ TEST(ExplicitFVLinearProblemTest, api)
 
     EXPECT_DEATH(prob.set_field_component_name(0, 0, "x"),
                  "\\[ERROR\\] Unable to set component name for single-component field");
+
+    EXPECT_TRUE(prob.get_weak_form() == nullptr);
+
+    EXPECT_DEATH(prob.add_boundary_essential("", nullptr, {}, -1, {}, nullptr, nullptr, nullptr),
+                 "\\[ERROR\\] Essential BCs are not supported for FV problems");
+    EXPECT_DEATH(prob.add_boundary_natural("", nullptr, {}, -1, {}, nullptr),
+                 "\\[ERROR\\] Natural BCs are not supported for FV problems");
 }
 
 TEST(ExplicitFVLinearProblemTest, fields)
@@ -186,6 +224,8 @@ TEST(ExplicitFVLinearProblemTest, fields)
     EXPECT_EQ(prob.get_field_component_name(0, 1).compare("vec_x"), 0);
     EXPECT_EQ(prob.get_field_component_name(0, 2).compare("vec_y"), 0);
     EXPECT_EQ(prob.get_field_component_name(0, 3).compare("vec_z"), 0);
+
+    EXPECT_EQ(prob.get_field_dof(1, 0), 4);
 }
 
 TEST(ExplicitFVLinearProblemTest, solve)
