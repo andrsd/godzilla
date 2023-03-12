@@ -29,7 +29,6 @@ __compute_flux(Int dim,
 
 FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
-    section(nullptr),
     fvm(nullptr),
     ds(nullptr),
     wf(nullptr)
@@ -47,8 +46,7 @@ FVProblemInterface::init()
 {
     DiscreteProblemInterface::init();
 
-    DM dm = this->unstr_mesh->get_dm();
-    PETSC_CHECK(DMGetLocalSection(dm, &this->section));
+    this->section = this->unstr_mesh->get_local_section();
 }
 
 Int

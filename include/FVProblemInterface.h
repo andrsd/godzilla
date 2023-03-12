@@ -2,6 +2,7 @@
 
 #include "GodzillaConfig.h"
 #include "DiscreteProblemInterface.h"
+#include "Section.h"
 
 namespace godzilla {
 
@@ -85,7 +86,7 @@ protected:
                               Scalar flux[]) = 0;
 
     /// PETSc section
-    PetscSection section;
+    Section section;
 
     /// Field information
     struct FieldInfo {
