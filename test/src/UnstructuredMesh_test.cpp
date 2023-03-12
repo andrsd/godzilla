@@ -223,3 +223,14 @@ TEST(UnstructuredMeshTest, get_global_section)
     PetscSectionCompare(s, ls, &congruent);
     EXPECT_EQ(congruent, PETSC_TRUE);
 }
+
+TEST(UnstructuredMeshTest, get_num_elem_nodes)
+{
+    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_SEGMENT), 2);
+    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_TRIANGLE), 3);
+    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_QUADRILATERAL), 4);
+    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_TETRAHEDRON), 4);
+    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_HEXAHEDRON), 8);
+
+    EXPECT_DEATH(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_PYRAMID), "Unsupported type.");
+}
