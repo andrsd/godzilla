@@ -60,7 +60,6 @@ FEProblemInterface::AssemblyData::AssemblyData() :
 FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
     DependencyEvaluator(),
-    section(nullptr),
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
     a(nullptr),
@@ -103,8 +102,8 @@ FEProblemInterface::init()
     _F_;
     DiscreteProblemInterface::init();
 
+    this->section = this->unstr_mesh->get_local_section();
     DM dm = this->unstr_mesh->get_dm();
-    PETSC_CHECK(DMGetLocalSection(dm, &this->section));
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);

@@ -391,6 +391,22 @@ UnstructuredMesh::construct_ghost_cells()
     this->dm = gdm;
 }
 
+Section
+UnstructuredMesh::get_local_section() const
+{
+    PetscSection section = nullptr;
+    PETSC_CHECK(DMGetLocalSection(this->dm, &section));
+    return { section };
+}
+
+Section
+UnstructuredMesh::get_global_section() const
+{
+    PetscSection section = nullptr;
+    PETSC_CHECK(DMGetGlobalSection(this->dm, &section));
+    return { section };
+}
+
 int
 UnstructuredMesh::get_num_elem_nodes(DMPolytopeType elem_type)
 {
