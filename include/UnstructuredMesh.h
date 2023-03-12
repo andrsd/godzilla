@@ -4,6 +4,7 @@
 #include "Mesh.h"
 #include "IndexSet.h"
 #include "Vector.h"
+#include "Section.h"
 #include "petscpartitioner.h"
 
 namespace godzilla {
@@ -160,6 +161,12 @@ public:
     /// Construct ghost cells which connect to every boundary face
     ///
     virtual void construct_ghost_cells();
+
+    /// Get the Section encoding the local data layout for the DM
+    Section get_local_section() const;
+
+    /// Get the Section encoding the global data layout for the DM
+    Section get_global_section() const;
 
 protected:
     /// Method that builds DM for the mesh

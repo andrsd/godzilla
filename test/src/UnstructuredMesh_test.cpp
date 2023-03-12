@@ -173,3 +173,53 @@ TEST(UnstructuredMeshTest, get_cell_connectivity)
     EXPECT_EQ(cell1[0], 1);
     EXPECT_EQ(cell1[1], 2);
 }
+
+TEST(UnstructuredMeshTest, get_local_section)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+    mesh.create();
+
+    DM dm = mesh.get_dm();
+
+    DMSetNumFields(dm, 1);
+    Int nc[1] = { 1 };
+    Int n_dofs[4] = { 1, 0, 0, 0 };
+    Section s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    mesh.set_local_section(s);
+
+    Section ls = mesh.get_local_section();
+
+    PetscBool congruent = PETSC_FALSE;
+    PetscSectionCompare(s, ls, &congruent);
+    EXPECT_EQ(congruent, PETSC_TRUE);
+}
+
+TEST(UnstructuredMeshTest, get_global_section)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+    mesh.create();
+
+    DM dm = mesh.get_dm();
+
+    DMSetNumFields(dm, 1);
+    Int nc[1] = { 1 };
+    Int n_dofs[4] = { 1, 0, 0, 0 };
+    Section s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    mesh.set_global_section(s);
+
+    Section ls = mesh.get_global_section();
+
+    PetscBool congruent = PETSC_FALSE;
+    PetscSectionCompare(s, ls, &congruent);
+    EXPECT_EQ(congruent, PETSC_TRUE);
+}
