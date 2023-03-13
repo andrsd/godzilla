@@ -118,6 +118,19 @@ public:
             this->data[i] = vals[i];
     }
 
+    /// Set multiple values at specified indices
+    ///
+    /// @tparam N Size of the array
+    /// @param idx Indices where the values are to be set
+    /// @param a Values to be set
+    template <Int N>
+    void
+    set_values(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
+    {
+        for (Int i = 0; i < N; i++)
+            set(idx(i)) = a(i);
+    }
+
     /// Multiply all entries in the array by a value
     ///
     /// @param alpha Value to multiply all entries with

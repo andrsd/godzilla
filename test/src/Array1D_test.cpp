@@ -46,6 +46,19 @@ TEST(Array1DTest, set_values)
     arr.destroy();
 }
 
+TEST(Array1DTest, set_values_idxs)
+{
+    Array1D<Real> arr(5);
+    arr.zero();
+    DenseVector<Int, 3> idxs({ 1, 4, 2 });
+    DenseVector<Real, 3> vals({ 8, 7, 6 });
+    arr.set_values(idxs, vals);
+    EXPECT_EQ(arr(1), 8);
+    EXPECT_EQ(arr(4), 7);
+    EXPECT_EQ(arr(2), 6);
+    arr.destroy();
+}
+
 TEST(Array1DTest, scale)
 {
     Array1D<Real> arr(5);
