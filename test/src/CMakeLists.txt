@@ -12,7 +12,8 @@ add_executable(${PROJECT_NAME}
     ConstantIC_test.cpp
     CSVOutput_test.cpp
     DenseMatrix_test.cpp
-    DenseVector_test.cpp
+        DenseMatrixSymm_test.cpp
+        DenseVector_test.cpp
     DependencyEvaluator_test.cpp
     DependencyGraph_test.cpp
     DirichletBC_test.cpp
