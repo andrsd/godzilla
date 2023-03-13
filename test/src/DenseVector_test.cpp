@@ -222,3 +222,13 @@ TEST(DenseVectorTest, avg)
     DenseVector<Real, 3> a({ -2., 5, 3. });
     EXPECT_EQ(a.avg(), 2.);
 }
+
+TEST(DenseVectorTest, op_inc)
+{
+    DenseVector<Real, 3> a({ -2., 5, 3. });
+    DenseVector<Real, 3> b({ 1., -1, 2. });
+    a += b;
+    EXPECT_EQ(a(0), -1.);
+    EXPECT_EQ(a(1), 4.);
+    EXPECT_EQ(a(2), 5.);
+}

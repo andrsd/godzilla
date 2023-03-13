@@ -217,6 +217,14 @@ public:
         return res;
     }
 
+    DenseVector<T, N> &
+    operator+=(const DenseVector<T, N> & a)
+    {
+        for (Int i = 0; i < N; i++)
+            set(i) += a(i);
+        return *this;
+    }
+
     T *
     get_data()
     {
