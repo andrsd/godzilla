@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Types.h"
+#include "Error.h"
 #include <cassert>
 
 namespace godzilla {
@@ -97,6 +98,12 @@ public:
         for (Int i = 0; i < N; i++)
             dot += this->data[i] * a(i);
         return dot;
+    }
+
+    DenseVector<Real, N>
+    cross(const DenseVector<Real, N> &) const
+    {
+        error("Cross product in %d dimensions is not unique.", N);
     }
 
     template <Int M>
@@ -272,6 +279,33 @@ operator*(Real alpha, const DenseVector<T, N> & a)
     DenseVector<T, N> res;
     for (Int i = 0; i < N; i++)
         res(i) = alpha * a(i);
+    return res;
+}
+
+// Cross product
+
+template <>
+inline DenseVector<Real, 1>
+DenseVector<Real, 1>::cross(const DenseVector<Real, 1> &) const
+{
+    error("Cross product of 1D vectors is not defined.");
+}
+
+template <>
+inline DenseVector<Real, 2>
+DenseVector<Real, 2>::cross(const DenseVector<Real, 2> &) const
+{
+    error("Cross product of 2D vectors is not defined.");
+}
+
+template <>
+inline DenseVector<Real, 3>
+DenseVector<Real, 3>::cross(const DenseVector<Real, 3> & a) const
+{
+    DenseVector<Real, 3> res;
+    res(0) = get(1) * a(2) - get(2) * a(1);
+    res(1) = -(get(0) * a(2) - get(2) * a(0));
+    res(2) = get(0) * a(1) - get(1) * a(0);
     return res;
 }
 
