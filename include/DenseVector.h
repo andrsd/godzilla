@@ -99,6 +99,17 @@ public:
         return dot;
     }
 
+    template <Int M>
+    DenseMatrix<Real, N, M>
+    tensor_prod(const DenseVector<Real, M> & a) const
+    {
+        DenseMatrix<Real, N, M> res;
+        for (Int i = 0; i < N; i++)
+            for (Int j = 0; j < M; j++)
+                res(i, j) = get(i) * a(j);
+        return res;
+    }
+
     /// Sum all vector elements, i.e \Sum_i vec[i]
     ///
     /// @return Sum of all elements

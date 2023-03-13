@@ -181,3 +181,16 @@ TEST(DenseVectorDeathTest, get_out_of_range)
     const DenseVector<Real, 3> & ca = a;
     EXPECT_DEATH({ auto r = ca(4); }, "Assertion.+failed");
 }
+
+TEST(DenseVectorTest, tensor_prod)
+{
+    DenseVector<Real, 3> a({ -2., 5., 1. });
+    DenseVector<Real, 2> b({ 3, 1 });
+    auto m = a.tensor_prod(b);
+    EXPECT_EQ(m(0, 0), -6.);
+    EXPECT_EQ(m(0, 1), -2.);
+    EXPECT_EQ(m(1, 0), 15.);
+    EXPECT_EQ(m(1, 1), 5.);
+    EXPECT_EQ(m(2, 0), 3.);
+    EXPECT_EQ(m(2, 1), 1.);
+}
