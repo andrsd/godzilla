@@ -6,6 +6,9 @@
 
 namespace godzilla {
 
+template <typename T, Int N>
+class DenseVector;
+
 template <typename T>
 class Array1D {
 public:
@@ -75,6 +78,21 @@ public:
         delete[] this->data;
         this->data = nullptr;
         this->n = -1;
+    }
+
+    /// Get values from specified indices
+    ///
+    /// @tparam N Size of the index array
+    /// @param idx Indices to get the values from
+    /// @return Vector with the value from locations specified by `idx`
+    template <Int N>
+    DenseVector<T, N>
+    get_values(DenseVector<Int, N> idx)
+    {
+        DenseVector<T, N> res;
+        for (Int i = 0; i < N; i++)
+            res(i) = get(idx(i));
+        return res;
     }
 
     /// Assign a value into all vector entries, i.e. `vec[i] = val`

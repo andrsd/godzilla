@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "Array1D.h"
+#include "DenseVector.h"
 
 using namespace godzilla;
 
@@ -116,6 +117,21 @@ TEST(Array1DTest, op_to_stream)
     std::cout << x;
 
     EXPECT_THAT(testing::internal::GetCapturedStdout(), testing::HasSubstr("(1, -1, 3, 0, 2)"));
+
+    x.destroy();
+}
+
+TEST(Array1DTest, get_values)
+{
+    Array1D<Real> x(8);
+    x.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
+
+    DenseVector<Int, 3> idx({ 1, 6, 3 });
+    auto vals = x.get_values(idx);
+
+    EXPECT_EQ(vals(0), 3.);
+    EXPECT_EQ(vals(1), 10.);
+    EXPECT_EQ(vals(2), -2.);
 
     x.destroy();
 }
