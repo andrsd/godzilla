@@ -128,6 +128,19 @@ public:
             this->data[i] *= alpha;
     }
 
+    /// Add values to specified locations
+    ///
+    /// @tparam N Size of the index and value array
+    /// @param idx Indices to modify
+    /// @param a Vector with values to add at locations specified by `idx`
+    template <Int N>
+    void
+    add(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
+    {
+        for (Int i = 0; i < N; i++)
+            set(idx(i)) += a(i);
+    }
+
     /// Add alpha * x to this vector
     ///
     /// @param alpha Scalar value

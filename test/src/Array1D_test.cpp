@@ -135,3 +135,24 @@ TEST(Array1DTest, get_values)
 
     x.destroy();
 }
+
+TEST(Array1DTest, add)
+{
+    Array1D<Real> x(8);
+    x.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
+
+    DenseVector<Int, 3> idx({ 1, 6, 3 });
+    DenseVector<Real, 3> dx({ -1, 2, 1 });
+    x.add(idx, dx);
+
+    EXPECT_EQ(x(0), 2.);
+    EXPECT_EQ(x(1), 2.);
+    EXPECT_EQ(x(2), 1.);
+    EXPECT_EQ(x(3), -1.);
+    EXPECT_EQ(x(4), 0.);
+    EXPECT_EQ(x(5), 6.);
+    EXPECT_EQ(x(6), 12.);
+    EXPECT_EQ(x(7), 8.);
+
+    x.destroy();
+}
