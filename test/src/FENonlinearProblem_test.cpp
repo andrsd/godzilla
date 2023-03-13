@@ -90,8 +90,6 @@ TEST_F(FENonlinearProblemTest, fields)
     Int fld2_idx = prob->add_fe("fld2", 3, 1);
     EXPECT_EQ(fld2_idx, 2);
 
-    auto s = mesh->get_local_section();
-    s.view();
     EXPECT_EQ(prob->get_field_dof(4, 0), 8);
     EXPECT_EQ(prob->get_field_dof(4, 1), 9);
 }
