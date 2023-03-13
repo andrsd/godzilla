@@ -215,6 +215,7 @@ TEST(UnstructuredMeshTest, get_global_section)
     Int nc[1] = { 1 };
     Int n_dofs[4] = { 1, 0, 0, 0 };
     Section s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    mesh.set_local_section(s);
     mesh.set_global_section(s);
 
     Section ls = mesh.get_global_section();
