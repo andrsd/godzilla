@@ -87,6 +87,18 @@ public:
             this->data[i] += a(i);
     }
 
+    /// Compute average from vector entries
+    ///
+    /// @return Average of vector entries
+    Real
+    avg() const
+    {
+        Real res = 0.;
+        for (Int i = 0; i < N; i++)
+            res += this->data[i];
+        return res / N;
+    }
+
     /// Compute dot product, i.e. \Sum_i vec[i] * a[i]
     ///
     /// @param a Dotted vector

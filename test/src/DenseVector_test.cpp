@@ -216,3 +216,9 @@ TEST(DenseVectorTest, cross_prod_3)
     EXPECT_EQ(v(1), 7.);
     EXPECT_EQ(v(2), -17.);
 }
+
+TEST(DenseVectorTest, avg)
+{
+    DenseVector<Real, 3> a({ -2., 5, 3. });
+    EXPECT_EQ(a.avg(), 2.);
+}
