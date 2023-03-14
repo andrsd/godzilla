@@ -76,6 +76,7 @@ add_library(${PROJECT_NAME}
         Terminal.cpp
         TimeSteppingAdaptor.cpp
         TransientProblemInterface.cpp
+        Types.cpp
         UnstructuredMesh.cpp
         Utils.cpp
         Validation.cpp
