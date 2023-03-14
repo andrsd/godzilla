@@ -10,6 +10,9 @@ namespace godzilla {
 template <typename T, Int N>
 class DenseVector;
 
+template <typename T, Int N>
+class DenseMatrixSymm;
+
 /// Dense matrix with `ROWS` rows and `COLS` columns
 ///
 /// Entries are stored in column-major format
@@ -20,6 +23,14 @@ template <typename T, Int ROWS, Int COLS = ROWS>
 class DenseMatrix {
 public:
     DenseMatrix() {};
+
+    DenseMatrix(const DenseMatrixSymm<Real, ROWS> & m)
+    {
+        assert(COLS == ROWS);
+        for (Int i = 0; i < ROWS; i++)
+            for (Int j = 0; j < COLS; j++)
+                set(i, j) = m(i, j);
+    }
 
     /// Get the number of rows
     ///
@@ -221,6 +232,15 @@ public:
     operator*(const DenseMatrix<T, COLS, ROWS2> & x) const
     {
         return mult(x);
+    }
+
+    void
+    operator=(const DenseMatrixSymm<Real, ROWS> & m)
+    {
+        assert(COLS == ROWS);
+        for (Int i = 0; i < ROWS; i++)
+            for (Int j = 0; j < COLS; j++)
+                set(i, j) = m(i, j);
     }
 
     /// Get access to the underlying data

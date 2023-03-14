@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "DenseMatrix.h"
+#include "DenseMatrixSymm.h"
 #include "DenseVector.h"
 #include "Types.h"
 
@@ -258,4 +259,35 @@ TEST(DenseMatrixTest, mult_mat)
     EXPECT_EQ(m(1, 1), -8.);
     EXPECT_EQ(m(1, 2), -22.);
     EXPECT_EQ(m(1, 3), -16.);
+}
+
+TEST(DenseMatrixTest, copy_ctor)
+{
+    DenseMatrixSymm<Real, 3> symm({ 1, -1, 2, 3, -2, -1 });
+    DenseMatrix<Real, 3> a(symm);
+    EXPECT_EQ(a(0, 0), 1);
+    EXPECT_EQ(a(0, 1), -1);
+    EXPECT_EQ(a(0, 2), 3);
+    EXPECT_EQ(a(1, 0), -1);
+    EXPECT_EQ(a(1, 1), 2);
+    EXPECT_EQ(a(1, 2), -2);
+    EXPECT_EQ(a(2, 0), 3);
+    EXPECT_EQ(a(2, 1), -2);
+    EXPECT_EQ(a(2, 2), -1);
+}
+
+TEST(DenseMatrixTest, op_assign)
+{
+    DenseMatrixSymm<Real, 3> symm({ 1, -1, 2, 3, -2, -1 });
+    DenseMatrix<Real, 3> a;
+    a = symm;
+    EXPECT_EQ(a(0, 0), 1);
+    EXPECT_EQ(a(0, 1), -1);
+    EXPECT_EQ(a(0, 2), 3);
+    EXPECT_EQ(a(1, 0), -1);
+    EXPECT_EQ(a(1, 1), 2);
+    EXPECT_EQ(a(1, 2), -2);
+    EXPECT_EQ(a(2, 0), 3);
+    EXPECT_EQ(a(2, 1), -2);
+    EXPECT_EQ(a(2, 2), -1);
 }
