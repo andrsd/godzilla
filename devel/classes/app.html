@@ -127,8 +127,8 @@
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppERKNSt6stringE8MPI_Comm">
-<span id="_CPPv3N8godzilla3App3AppERKNSt6stringE8MPI_Comm"></span><span id="_CPPv2N8godzilla3App3AppERKNSt6stringE8MPI_Comm"></span><span id="godzilla::App::App__ssCR.MPI_Comm"></span><span class="target" id="classgodzilla_1_1_app_1a62e8b419fae0f61f60802ba41853d3de"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">app_name</span></span>, <span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">comm</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppERKNSt6stringE8MPI_Comm" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorE">
+<span id="_CPPv3N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorE"></span><span id="_CPPv2N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorE"></span><span id="godzilla::App::App__ssCR.mpi::CommunicatorCR"></span><span class="target" id="classgodzilla_1_1_app_1aefa1ca5d4abcdd0ecad80b5ba7950d50"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">app_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comm</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Build and application object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -217,33 +217,11 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App8get_commEv">
-<span id="_CPPv3NK8godzilla3App8get_commEv"></span><span id="_CPPv2NK8godzilla3App8get_commEv"></span><span id="godzilla::App::get_commC"></span><span class="target" id="classgodzilla_1_1_app_1a346cf204b89ce56067413c7bc46ecf5b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MPI_Comm</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App8get_commEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla3App8get_commEv"></span><span id="_CPPv2NK8godzilla3App8get_commEv"></span><span id="godzilla::App::get_commC"></span><span class="target" id="classgodzilla_1_1_app_1aaa5cc4c414e7b660d3915f5ff8754af5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App8get_commEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get MPI communicator. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>MPI communicator </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App13get_comm_rankEv">
-<span id="_CPPv3NK8godzilla3App13get_comm_rankEv"></span><span id="_CPPv2NK8godzilla3App13get_comm_rankEv"></span><span id="godzilla::App::get_comm_rankC"></span><span class="target" id="classgodzilla_1_1_app_1a7b5c7914408ab5213b64f43e346e3a40"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscMPIInt</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm_rank</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App13get_comm_rankEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Get communicator rank. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The rank of the calling process in the application communicator </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App13get_comm_sizeEv">
-<span id="_CPPv3NK8godzilla3App13get_comm_sizeEv"></span><span id="_CPPv2NK8godzilla3App13get_comm_sizeEv"></span><span id="godzilla::App::get_comm_sizeC"></span><span class="target" id="classgodzilla_1_1_app_1a7cdb5eef90308528432ab6c0310791f2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscMPIInt</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App13get_comm_sizeEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Get communicator size. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Size of the group associated with the application communicator </p>
 </dd>
 </dl>
 </dd></dl>
