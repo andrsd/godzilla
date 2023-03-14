@@ -1,11 +1,13 @@
 #pragma once
 
 #include <string>
-#include "Error.h"
-#include "petscsys.h"
 #include "fmt/printf.h"
 
 namespace godzilla {
+
+namespace mpi {
+class Communicator;
+}
 
 class Object;
 class App;
@@ -16,7 +18,9 @@ class PrintInterface {
 public:
     explicit PrintInterface(const Object * obj);
     explicit PrintInterface(const App * app);
-    PrintInterface(MPI_Comm comm, const unsigned int & verbosity_level, std::string prefix);
+    PrintInterface(const mpi::Communicator & comm,
+                   const unsigned int & verbosity_level,
+                   std::string prefix);
 
 protected:
     /// Print a message on a terminal
@@ -38,7 +42,7 @@ protected:
 
 private:
     /// Processor ID
-    PetscMPIInt proc_id;
+    int proc_id;
     /// Verbosity level
     const unsigned int & verbosity_level;
     /// Prefix to print

@@ -3,7 +3,6 @@
 #include "GodzillaConfig.h"
 #include "Types.h"
 #include "Output.h"
-#include "petscviewer.h"
 
 namespace godzilla {
 

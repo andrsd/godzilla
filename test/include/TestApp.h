@@ -6,7 +6,7 @@ using namespace godzilla;
 
 class TestApp : public App {
 public:
-    TestApp() : App("godzilla", MPI_COMM_WORLD), problem(nullptr) {}
+    TestApp() : App("godzilla", mpi::Communicator(MPI_COMM_WORLD)), problem(nullptr) {}
 
     virtual Problem *
     get_problem() const

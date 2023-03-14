@@ -1,6 +1,6 @@
 #pragma once
 
-#include "petsc.h"
+#include "mpi/Communicator.h"
 #include "Parameters.h"
 #include "LoggingInterface.h"
 
@@ -43,13 +43,10 @@ public:
     const App * get_app() const;
 
     /// Get the MPI comm this object works on
-    const MPI_Comm & get_comm() const;
+    const mpi::Communicator & get_comm() const;
 
     /// Get processor ID (aka MPI rank) this object is running at
-    const PetscMPIInt & get_processor_id() const;
-
-    /// Get communicator size
-    const PetscMPIInt & get_comm_size() const;
+    int get_processor_id() const;
 
     /// Called to construct the object
     virtual void create();

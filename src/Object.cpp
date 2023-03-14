@@ -65,25 +65,18 @@ Object::get_app() const
     return this->app;
 }
 
-const MPI_Comm &
+const mpi::Communicator &
 Object::get_comm() const
 {
     _F_;
     return this->app->get_comm();
 }
 
-const PetscMPIInt &
+int
 Object::get_processor_id() const
 {
     _F_;
-    return this->app->get_comm_rank();
-}
-
-const PetscMPIInt &
-Object::get_comm_size() const
-{
-    _F_;
-    return this->app->get_comm_size();
+    return this->app->get_comm().rank();
 }
 
 void

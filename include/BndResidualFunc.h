@@ -4,7 +4,6 @@
 #include "ResidualFunc.h"
 #include "FieldValue.h"
 #include <string>
-#include "petsc.h"
 
 namespace godzilla {
 

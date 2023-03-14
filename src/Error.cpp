@@ -2,6 +2,7 @@
 #include "CallStack.h"
 #include <cstdio>
 #include "fmt/printf.h"
+#include "mpi.h"
 
 namespace godzilla {
 namespace internal {
@@ -34,10 +35,22 @@ mem_check(int line, const char *, const char * file, void * var)
 }
 
 void
-check_petsc_error(PetscErrorCode ierr, const char * file, int line)
+check_petsc_error(int ierr, const char * file, int line)
 {
     if (ierr) {
         error_printf("PETSc error: %d", ierr);
+        error_printf("");
+        error_printf("  Location: %s:%d", file, line);
+        print_call_stack();
+        terminate();
+    }
+}
+
+void
+check_mpi_error(int ierr, const char * file, int line)
+{
+    if (ierr) {
+        error_printf("MPI error: %d", ierr);
         error_printf("");
         error_printf("  Location: %s:%d", file, line);
         print_call_stack();

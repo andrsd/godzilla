@@ -52,7 +52,8 @@ TEST_F(GodzillaAppTest, run_input)
                       (char *) GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml",
                       NULL };
 
-    App app("godzilla", MPI_COMM_WORLD);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app("godzilla", comm);
     app.parse_command_line(argc, argv);
     app.run();
 
@@ -69,7 +70,8 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
                       (char *) GODZILLA_UNIT_TESTS_ROOT "/assets/non_existent_file.yml",
                       NULL };
 
-    App app("godzilla", MPI_COMM_WORLD);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app("godzilla", comm);
     app.parse_command_line(argc, argv);
 
     EXPECT_DEATH(app.run(), "\\[ERROR\\] Unable to open");
@@ -80,7 +82,8 @@ TEST_F(GodzillaAppTest, no_colors)
     int argc = 2;
     char * argv[] = { (char *) "godzilla", (char *) "--no-colors", NULL };
 
-    App app("godzilla", MPI_COMM_WORLD);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app("godzilla", comm);
     app.parse_command_line(argc, argv);
 
     app.run();
@@ -92,7 +95,8 @@ TEST_F(GodzillaAppTest, verbose)
     int argc = 3;
     char * argv[] = { (char *) "godzilla", (char *) "--verbose", (char *) "2", NULL };
 
-    App app("godzilla", MPI_COMM_WORLD);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app("godzilla", comm);
     app.parse_command_line(argc, argv);
 
     app.run();
@@ -103,7 +107,7 @@ TEST_F(GodzillaAppTest, check_integrity)
 {
     class TestApp : public App {
     public:
-        TestApp() : App("godzilla", MPI_COMM_WORLD) {}
+        TestApp() : App("godzilla", mpi::Communicator(MPI_COMM_WORLD)) {}
 
         void
         run()
@@ -126,7 +130,7 @@ TEST_F(GodzillaAppTest, run_problem)
 
     class TestApp : public App {
     public:
-        TestApp() : App("godzilla", MPI_COMM_WORLD) {}
+        TestApp() : App("godzilla", mpi::Communicator(MPI_COMM_WORLD)) {}
 
         void
         set_problem(Problem * prob)

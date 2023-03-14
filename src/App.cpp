@@ -6,16 +6,15 @@
 #include "Error.h"
 #include "Utils.h"
 #include "Terminal.h"
+#include "Logger.h"
 #include <cassert>
 
 namespace godzilla {
 
-App::App(const std::string & app_name, MPI_Comm comm) :
+App::App(const std::string & app_name, const mpi::Communicator & comm) :
     PrintInterface(comm, this->verbosity_level, app_name),
     name(app_name),
     comm(comm),
-    comm_size(0),
-    comm_rank(0),
     args(app_name),
     input_file_arg("i", "input-file", "Input file to execute", false, "", "string"),
     verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
@@ -25,8 +24,6 @@ App::App(const std::string & app_name, MPI_Comm comm) :
 {
     _F_;
     this->log = new Logger();
-    MPI_Comm_size(comm, &this->comm_size);
-    MPI_Comm_rank(comm, &this->comm_rank);
 
     this->args.add(this->input_file_arg);
     this->args.add(this->verbose_arg);
@@ -99,25 +96,11 @@ App::get_input_file_name() const
     return this->input_file_name;
 }
 
-const MPI_Comm &
+const mpi::Communicator &
 App::get_comm() const
 {
     _F_;
     return this->comm;
-}
-
-const PetscMPIInt &
-App::get_comm_rank() const
-{
-    _F_;
-    return this->comm_rank;
-}
-
-const PetscMPIInt &
-App::get_comm_size() const
-{
-    _F_;
-    return this->comm_size;
 }
 
 InputFile *

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "petsc.h"
+#include "mpi/Communicator.h"
 #include "CmdLineArgParser.h"
 #include "Parameters.h"
 #include "Factory.h"
-#include "Logger.h"
 #include "PrintInterface.h"
 
 namespace godzilla {
 
 class Problem;
 class InputFile;
+class Logger;
 
 class App : public PrintInterface {
 public:
@@ -18,7 +18,7 @@ public:
     ///
     /// @param app_name Name of the application
     /// @param comm MPI communicator
-    App(const std::string & app_name, MPI_Comm comm);
+    App(const std::string & app_name, const mpi::Communicator & comm);
     virtual ~App();
 
     Logger * get_logger() const;
@@ -60,17 +60,7 @@ public:
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    virtual const MPI_Comm & get_comm() const;
-
-    /// Get communicator rank
-    ///
-    /// @return The rank of the calling process in the application communicator
-    virtual const PetscMPIInt & get_comm_rank() const;
-
-    /// Get communicator size
-    ///
-    /// @return Size of the group associated with the application communicator
-    virtual const PetscMPIInt & get_comm_size() const;
+    virtual const mpi::Communicator & get_comm() const;
 
     /// Build object using the Factory
     ///
@@ -121,14 +111,8 @@ protected:
     /// Application name
     std::string name;
 
-    /// MPI communicators
-    MPI_Comm comm;
-
-    /// Size of the MPI communicator
-    PetscMPIInt comm_size;
-
-    /// MPI rank (aka processor ID) of this application
-    PetscMPIInt comm_rank;
+    /// MPI communicator
+    mpi::Communicator comm;
 
     /// Log with errors and/or warnings
     Logger * log;

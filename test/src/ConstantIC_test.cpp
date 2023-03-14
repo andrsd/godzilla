@@ -7,7 +7,8 @@ using namespace godzilla;
 
 TEST(ConstantICTest, api)
 {
-    App app("test", MPI_COMM_WORLD);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app("test", comm);
 
     Parameters params = ConstantIC::parameters();
     params.set<const App *>("_app") = &app;
