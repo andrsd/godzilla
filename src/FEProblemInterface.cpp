@@ -63,7 +63,6 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & par
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
     a(nullptr),
-    ds(nullptr),
     ds_aux(nullptr),
     wf(new WeakForm())
 {
@@ -91,6 +90,7 @@ void
 FEProblemInterface::create()
 {
     _F_;
+    set_up_fields();
     DiscreteProblemInterface::create();
     for (auto & aux : this->auxs)
         aux->create();
@@ -1843,56 +1843,6 @@ FEProblemInterface::get_next_id(const std::vector<Int> & ids) const
         if (s.find(id) == s.end())
             return id;
     return -1;
-}
-
-void
-FEProblemInterface::add_boundary_essential(const std::string & name,
-                                           DMLabel label,
-                                           const std::vector<Int> & ids,
-                                           Int field,
-                                           const std::vector<Int> & components,
-                                           PetscFunc * fn,
-                                           PetscFunc * fn_t,
-                                           void * context) const
-{
-    _F_;
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_ESSENTIAL,
-                                   name.c_str(),
-                                   label,
-                                   ids.size(),
-                                   ids.data(),
-                                   field,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   (void (*)()) fn,
-                                   (void (*)()) fn_t,
-                                   context,
-                                   nullptr));
-}
-
-void
-FEProblemInterface::add_boundary_natural(const std::string & name,
-                                         DMLabel label,
-                                         const std::vector<Int> & ids,
-                                         Int field,
-                                         const std::vector<Int> & components,
-                                         void * context) const
-{
-    _F_;
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_NATURAL,
-                                   name.c_str(),
-                                   label,
-                                   ids.size(),
-                                   ids.data(),
-                                   field,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   nullptr,
-                                   nullptr,
-                                   context,
-                                   nullptr));
 }
 
 void

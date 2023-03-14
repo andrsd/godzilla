@@ -225,20 +225,9 @@ protected:
     /// Set up discretization system
     void set_up_ds() override;
 
-    void add_boundary_essential(const std::string & name,
-                                DMLabel label,
-                                const std::vector<Int> & ids,
-                                Int field,
-                                const std::vector<Int> & components,
-                                PetscFunc * fn,
-                                PetscFunc * fn_t,
-                                void * context) const override;
-    void add_boundary_natural(const std::string & name,
-                              DMLabel label,
-                              const std::vector<Int> & ids,
-                              Int field,
-                              const std::vector<Int> & components,
-                              void * context) const override;
+    /// Set up field variables
+    virtual void set_up_fields() = 0;
+
     void add_boundary_natural_riemann(const std::string & name,
                                       DMLabel label,
                                       const std::vector<Int> & ids,
@@ -418,9 +407,6 @@ protected:
 
     /// Local solution vector
     Vector sln;
-
-    /// Object that manages a discrete system
-    PetscDS ds;
 
     /// Object that manages a discrete system for aux variables
     PetscDS ds_aux;

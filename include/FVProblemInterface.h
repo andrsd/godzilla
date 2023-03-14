@@ -55,19 +55,14 @@ protected:
                               Int field,
                               const std::vector<Int> & components,
                               void * context) const override;
-    void add_boundary_natural_riemann(const std::string & name,
-                                      DMLabel label,
-                                      const std::vector<Int> & ids,
-                                      Int field,
-                                      const std::vector<Int> & components,
-                                      PetscNaturalRiemannBCFunc * fn,
-                                      PetscNaturalRiemannBCFunc * fn_t,
-                                      void * context) const override;
+
+    /// Set up field variables
+    virtual void set_up_fields() = 0;
 
     /// Compute flux
     ///
     /// @param dim Spatial dimension
-    /// @param nf Nuber of fields
+    /// @param nf Number of fields
     /// @param x The coordinates at a point on the interface
     /// @param n The normal vector to the interface
     /// @param uL The state vector to the left of the interface
@@ -114,9 +109,6 @@ protected:
 
     /// Local solution vector
     Vector sln;
-
-    /// Object that manages a discrete system
-    PetscDS ds;
 
     /// Weak form
     WeakForm * wf;

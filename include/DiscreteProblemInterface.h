@@ -118,7 +118,6 @@ public:
     /// @return The weak form associated with this problem
     virtual WeakForm * get_weak_form() const = 0;
 
-    // NOTE: these may be pushed down into child classes if needed
     virtual void add_boundary_essential(const std::string & name,
                                         DMLabel label,
                                         const std::vector<Int> & ids,
@@ -126,13 +125,13 @@ public:
                                         const std::vector<Int> & components,
                                         PetscFunc * fn,
                                         PetscFunc * fn_t,
-                                        void * context) const = 0;
+                                        void * context) const;
     virtual void add_boundary_natural(const std::string & name,
                                       DMLabel label,
                                       const std::vector<Int> & ids,
                                       Int field,
                                       const std::vector<Int> & components,
-                                      void * context) const = 0;
+                                      void * context) const;
     virtual void add_boundary_natural_riemann(const std::string & name,
                                               DMLabel label,
                                               const std::vector<Int> & ids,
@@ -140,16 +139,13 @@ public:
                                               const std::vector<Int> & components,
                                               PetscNaturalRiemannBCFunc * fn,
                                               PetscNaturalRiemannBCFunc * fn_t,
-                                              void * context) const = 0;
+                                              void * context) const;
 
 protected:
     virtual void init();
     virtual void create();
     /// Set up discrete system
     virtual void set_up_ds() = 0;
-
-    /// Set up field variables
-    virtual void set_up_fields() = 0;
 
     void set_initial_guess_from_ics();
 
@@ -180,6 +176,9 @@ protected:
 
     /// List of boundary conditions
     std::vector<BoundaryCondition *> bcs;
+
+    /// Object that manages a discrete system
+    PetscDS ds;
 };
 
 } // namespace godzilla
