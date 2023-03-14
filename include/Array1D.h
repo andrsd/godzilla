@@ -87,7 +87,7 @@ public:
     /// @return Vector with the value from locations specified by `idx`
     template <Int N>
     DenseVector<T, N>
-    get_values(DenseVector<Int, N> idx)
+    get_values(DenseVector<Int, N> idx) const
     {
         DenseVector<T, N> res;
         for (Int i = 0; i < N; i++)
