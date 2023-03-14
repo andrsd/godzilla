@@ -211,7 +211,7 @@ private:
 };
 
 template <>
-void
+inline void
 Array1D<Real>::axpy(Real alpha, const Array1D<Real> & x) const
 {
     for (Int i = 0; i < this->n; i++)
@@ -219,7 +219,7 @@ Array1D<Real>::axpy(Real alpha, const Array1D<Real> & x) const
 }
 
 template <>
-Real
+inline Real
 Array1D<Real>::dot(const Array1D<Real> & a) const
 {
     Real res = 0;
