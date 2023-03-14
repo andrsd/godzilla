@@ -1,4 +1,6 @@
 add_executable(${PROJECT_NAME}
+    Array1D_test.cpp
+    Array2D_test.cpp
     AuxiliaryField_test.cpp
     BasicTSAdapt_test.cpp
     BndJacobianFunc_test.cpp
@@ -9,6 +11,9 @@ add_executable(${PROJECT_NAME}
     ConstantAuxiliaryField_test.cpp
     ConstantIC_test.cpp
     CSVOutput_test.cpp
+    DenseMatrix_test.cpp
+        DenseMatrixSymm_test.cpp
+        DenseVector_test.cpp
     DependencyEvaluator_test.cpp
     DependencyGraph_test.cpp
     DirichletBC_test.cpp
