@@ -68,7 +68,9 @@ public:
     void
     zero()
     {
-        set_values(0.);
+        assert(this->data != nullptr);
+        for (Int i = 0; i < this->n; i++)
+            this->data[i].zero();
     }
 
     /// Free memory allocated by this array
@@ -87,7 +89,7 @@ public:
     /// @return Vector with the value from locations specified by `idx`
     template <Int N>
     DenseVector<T, N>
-    get_values(DenseVector<Int, N> idx)
+    get_values(DenseVector<Int, N> idx) const
     {
         DenseVector<T, N> res;
         for (Int i = 0; i < N; i++)
@@ -211,7 +213,7 @@ private:
 };
 
 template <>
-void
+inline void
 Array1D<Real>::axpy(Real alpha, const Array1D<Real> & x) const
 {
     for (Int i = 0; i < this->n; i++)
@@ -219,13 +221,22 @@ Array1D<Real>::axpy(Real alpha, const Array1D<Real> & x) const
 }
 
 template <>
-Real
+inline Real
 Array1D<Real>::dot(const Array1D<Real> & a) const
 {
     Real res = 0;
     for (Int i = 0; i < this->n; i++)
         res += get(i) * a(i);
     return res;
+}
+
+template <>
+inline void
+Array1D<Real>::zero()
+{
+    assert(this->data != nullptr);
+    for (Int i = 0; i < this->n; i++)
+        this->data[i] = 0.;
 }
 
 // Output
