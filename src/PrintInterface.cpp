@@ -2,6 +2,7 @@
 #include "CallStack.h"
 #include "Object.h"
 #include "App.h"
+#include "mpi/Communicator.h"
 
 namespace godzilla {
 
@@ -14,21 +15,20 @@ PrintInterface::PrintInterface(const Object * obj) :
 }
 
 PrintInterface::PrintInterface(const App * app) :
-    proc_id(app->get_comm_rank()),
+    proc_id(app->get_comm().rank()),
     verbosity_level(app->get_verbosity_level()),
     prefix(app->get_name())
 {
     _F_;
 }
 
-PrintInterface::PrintInterface(MPI_Comm comm,
+PrintInterface::PrintInterface(const mpi::Communicator & comm,
                                const unsigned int & verbosity_level,
                                std::string prefix) :
-    proc_id(0),
+    proc_id(comm.rank()),
     verbosity_level(verbosity_level),
     prefix(std::move(prefix))
 {
-    MPI_Comm_rank(comm, &this->proc_id);
 }
 
 } // namespace godzilla

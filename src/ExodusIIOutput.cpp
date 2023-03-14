@@ -137,7 +137,7 @@ void
 ExodusIIOutput::set_file_name()
 {
     _F_;
-    if (get_comm_size() == 1)
+    if (get_comm().size() == 1)
         this->file_name = fmt::sprintf("%s.%s", this->file_base, this->get_file_ext());
     else
         this->file_name =

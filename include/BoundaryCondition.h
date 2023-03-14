@@ -4,7 +4,6 @@
 #include "Types.h"
 #include "Object.h"
 #include "PrintInterface.h"
-#include "petsc.h"
 
 namespace godzilla {
 

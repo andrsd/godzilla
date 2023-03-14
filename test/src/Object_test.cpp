@@ -9,7 +9,8 @@ REGISTER_OBJECT(Object);
 
 TEST(ObjectTest, api)
 {
-    App app("test", MPI_COMM_WORLD);
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app("test", comm);
 
     Parameters params = Object::parameters();
     auto obj = app.build_object<Object>("Object", "name", params);
@@ -23,9 +24,9 @@ TEST(ObjectTest, api)
 
     EXPECT_EQ(obj->get_processor_id(), 0);
 
-    PetscMPIInt sz;
+    int sz;
     MPI_Comm_size(app.get_comm(), &sz);
-    EXPECT_EQ(obj->get_comm_size(), sz);
+    EXPECT_EQ(obj->get_comm().size(), sz);
 
     obj->create();
 }
