@@ -68,7 +68,9 @@ public:
     void
     zero()
     {
-        set_values(0.);
+        assert(this->data != nullptr);
+        for (Int i = 0; i < this->n; i++)
+            this->data[i].zero();
     }
 
     /// Free memory allocated by this array
@@ -226,6 +228,15 @@ Array1D<Real>::dot(const Array1D<Real> & a) const
     for (Int i = 0; i < this->n; i++)
         res += get(i) * a(i);
     return res;
+}
+
+template <>
+inline void
+Array1D<Real>::zero()
+{
+    assert(this->data != nullptr);
+    for (Int i = 0; i < this->n; i++)
+        this->data[i] = 0.;
 }
 
 // Output
