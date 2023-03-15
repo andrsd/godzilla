@@ -44,8 +44,6 @@ void
 FVProblemInterface::init()
 {
     DiscreteProblemInterface::init();
-
-    this->section = this->unstr_mesh->get_local_section();
 }
 
 Int

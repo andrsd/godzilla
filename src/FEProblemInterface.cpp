@@ -102,7 +102,6 @@ FEProblemInterface::init()
     _F_;
     DiscreteProblemInterface::init();
 
-    this->section = this->unstr_mesh->get_local_section();
     DM dm = this->unstr_mesh->get_dm();
     DM cdm = dm;
     while (cdm) {

@@ -2,7 +2,6 @@
 
 #include "GodzillaConfig.h"
 #include "DiscreteProblemInterface.h"
-#include "Section.h"
 
 namespace godzilla {
 
@@ -79,9 +78,6 @@ protected:
                               Int n_consts,
                               const Scalar constants[],
                               Scalar flux[]) = 0;
-
-    /// PETSc section
-    Section section;
 
     /// Field information
     struct FieldInfo {

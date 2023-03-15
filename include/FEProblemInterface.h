@@ -8,7 +8,6 @@
 #include "petscfe.h"
 #include "CallStack.h"
 #include "DiscreteProblemInterface.h"
-#include "Section.h"
 #include "DependencyEvaluator.h"
 #include "FieldValue.h"
 #include "Error.h"
@@ -311,9 +310,6 @@ protected:
                                        Scalar u_t[]);
 
     Int get_next_id(const std::vector<Int> & ids) const;
-
-    /// Section
-    Section section;
 
     /// Quadrature order
     Int qorder;

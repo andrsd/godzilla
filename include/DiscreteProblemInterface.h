@@ -3,6 +3,7 @@
 #include "petscds.h"
 #include "Types.h"
 #include "Vector.h"
+#include "Section.h"
 #include "DiscreteProblemInterface.h"
 
 namespace godzilla {
@@ -170,6 +171,9 @@ protected:
 
     /// Logger object
     Logger * logger;
+
+    /// Section
+    Section section;
 
     /// Initial conditions in the problem
     std::vector<InitialCondition *> ics;
