@@ -191,3 +191,18 @@ TEST(DenseMatrixSymmTest, mult_mat)
     EXPECT_EQ(m(2, 1), -5.);
     EXPECT_EQ(m(2, 2), 21.);
 }
+
+TEST(DenseMatrixSymmTest, op_mult_scalar_pre)
+{
+    DenseMatrixSymm<Real, 3> m({ 1, 2, 3, 4, 5, 6 });
+    auto res = 2. * m;
+    EXPECT_EQ(res(0, 0), 2.);
+    EXPECT_EQ(res(0, 1), 4.);
+    EXPECT_EQ(res(0, 2), 8.);
+    EXPECT_EQ(res(1, 0), 4.);
+    EXPECT_EQ(res(1, 1), 6.);
+    EXPECT_EQ(res(1, 2), 10.);
+    EXPECT_EQ(res(2, 0), 8.);
+    EXPECT_EQ(res(2, 1), 10.);
+    EXPECT_EQ(res(2, 2), 12.);
+}

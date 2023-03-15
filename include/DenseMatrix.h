@@ -386,4 +386,17 @@ DenseMatrix<Real, 3>::inv() const
     return inv;
 }
 
+//
+
+template <typename T, Int M, Int N = M>
+inline DenseMatrix<T, M, N>
+operator*(Real alpha, const DenseMatrix<T, M, N> & a)
+{
+    DenseMatrix<T, M, N> res;
+    for (Int i = 0; i < M; i++)
+        for (Int j = 0; j < N; j++)
+            res(i, j) = alpha * a(i, j);
+    return res;
+}
+
 } // namespace godzilla

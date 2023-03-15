@@ -245,4 +245,17 @@ DenseMatrixSymm<Real, 3>::det() const
             this->data[1] * this->data[1] * this->data[5]);
 }
 
+//
+
+template <typename T, Int N>
+inline DenseMatrixSymm<T, N>
+operator*(Real alpha, const DenseMatrixSymm<T, N> & a)
+{
+    DenseMatrixSymm<T, N> res;
+    for (Int i = 0; i < N; i++)
+        for (Int j = i; j < N; j++)
+            res(i, j) = alpha * a(i, j);
+    return res;
+}
+
 } // namespace godzilla
