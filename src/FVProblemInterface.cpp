@@ -30,7 +30,6 @@ __compute_flux(Int dim,
 FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
     fvm(nullptr),
-    ds(nullptr),
     wf(nullptr)
 {
     _F_;
@@ -208,6 +207,7 @@ FVProblemInterface::create()
 {
     _F_;
     const_cast<UnstructuredMesh *>(this->unstr_mesh)->construct_ghost_cells();
+    set_up_fields();
     DiscreteProblemInterface::create();
 }
 
@@ -282,32 +282,6 @@ FVProblemInterface::add_boundary_natural(const std::string & name,
 {
     _F_;
     error("Natural BCs are not supported for FV problems");
-}
-
-void
-FVProblemInterface::add_boundary_natural_riemann(const std::string & name,
-                                                 DMLabel label,
-                                                 const std::vector<Int> & ids,
-                                                 Int field,
-                                                 const std::vector<Int> & components,
-                                                 PetscNaturalRiemannBCFunc * fn,
-                                                 PetscNaturalRiemannBCFunc * fn_t,
-                                                 void * context) const
-{
-    _F_;
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_NATURAL_RIEMANN,
-                                   name.c_str(),
-                                   label,
-                                   ids.size(),
-                                   ids.data(),
-                                   field,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   (void (*)()) fn,
-                                   (void (*)()) fn_t,
-                                   context,
-                                   nullptr));
 }
 
 } // namespace godzilla

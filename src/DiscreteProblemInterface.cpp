@@ -14,7 +14,8 @@ namespace godzilla {
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
     unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
-    logger(params.get<const App *>("_app")->get_logger())
+    logger(params.get<const App *>("_app")->get_logger()),
+    ds(nullptr)
 {
 }
 
@@ -54,8 +55,6 @@ DiscreteProblemInterface::create()
     _F_;
     assert(this->problem != nullptr);
     assert(this->unstr_mesh != nullptr);
-
-    set_up_fields();
 
     for (auto & ic : this->ics)
         ic->create();
@@ -173,6 +172,80 @@ DiscreteProblemInterface::build_local_solution_vector(const Vector & sln) const
     Real time = this->problem->get_time();
     PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
     PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, nullptr, nullptr, nullptr));
+}
+
+void
+DiscreteProblemInterface::add_boundary_essential(const std::string & name,
+                                                 DMLabel label,
+                                                 const std::vector<Int> & ids,
+                                                 Int field,
+                                                 const std::vector<Int> & components,
+                                                 PetscFunc * fn,
+                                                 PetscFunc * fn_t,
+                                                 void * context) const
+{
+    PETSC_CHECK(PetscDSAddBoundary(this->ds,
+                                   DM_BC_ESSENTIAL,
+                                   name.c_str(),
+                                   label,
+                                   ids.size(),
+                                   ids.data(),
+                                   field,
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
+                                   (void (*)()) fn,
+                                   (void (*)()) fn_t,
+                                   context,
+                                   nullptr));
+}
+
+void
+DiscreteProblemInterface::add_boundary_natural(const std::string & name,
+                                               DMLabel label,
+                                               const std::vector<Int> & ids,
+                                               Int field,
+                                               const std::vector<Int> & components,
+                                               void * context) const
+{
+    PETSC_CHECK(PetscDSAddBoundary(this->ds,
+                                   DM_BC_NATURAL,
+                                   name.c_str(),
+                                   label,
+                                   ids.size(),
+                                   ids.data(),
+                                   field,
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
+                                   nullptr,
+                                   nullptr,
+                                   context,
+                                   nullptr));
+}
+
+void
+DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
+                                                       DMLabel label,
+                                                       const std::vector<Int> & ids,
+                                                       Int field,
+                                                       const std::vector<Int> & components,
+                                                       PetscNaturalRiemannBCFunc * fn,
+                                                       PetscNaturalRiemannBCFunc * fn_t,
+                                                       void * context) const
+{
+    _F_;
+    PETSC_CHECK(PetscDSAddBoundary(this->ds,
+                                   DM_BC_NATURAL_RIEMANN,
+                                   name.c_str(),
+                                   label,
+                                   ids.size(),
+                                   ids.data(),
+                                   field,
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
+                                   (void (*)()) fn,
+                                   (void (*)()) fn_t,
+                                   context,
+                                   nullptr));
 }
 
 } // namespace godzilla
