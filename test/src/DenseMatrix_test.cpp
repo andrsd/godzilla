@@ -35,6 +35,16 @@ TEST(DenseMatrixTest, set2)
     EXPECT_EQ(m(1, 1), -1.);
 }
 
+TEST(DenseMatrixTest, set_values)
+{
+    DenseMatrix<Real, 2> m;
+    m.set_values(3.);
+    EXPECT_EQ(m(0, 0), 3.);
+    EXPECT_EQ(m(0, 1), 3.);
+    EXPECT_EQ(m(1, 0), 3.);
+    EXPECT_EQ(m(1, 1), 3.);
+}
+
 TEST(DenseMatrixTest, scale)
 {
     DenseMatrix<Real, 3> m;

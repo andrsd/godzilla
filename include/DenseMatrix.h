@@ -106,14 +106,14 @@ public:
     void
     zero()
     {
-        set_val(0.);
+        set_values(0.);
     }
 
     /// Set `alpha` into all matrix entries, i.e. mat[i, j] = alpha
     ///
     /// @param alpha Value to set into matrix entries
     void
-    set_val(const T & alpha)
+    set_values(const T & alpha)
     {
         for (Int i = 0; i < ROWS * COLS; i++)
             this->data[i] = alpha;
