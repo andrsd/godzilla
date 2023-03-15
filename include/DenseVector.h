@@ -64,14 +64,14 @@ public:
     void
     zero()
     {
-        set_val(0.);
+        set_values(0.);
     }
 
     /// Set `alpha` into all vector elements, i.e. vec[i] = alpha
     ///
     /// @param alpha Constant to set into vector elements
     void
-    set_val(const T & alpha)
+    set_values(const T & alpha)
     {
         for (Int i = 0; i < N; i++)
             this->data[i] = alpha;

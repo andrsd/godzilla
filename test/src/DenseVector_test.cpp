@@ -30,10 +30,10 @@ TEST(DenseVectorTest, zero)
     EXPECT_EQ(a(2), 0.);
 }
 
-TEST(DenseVectorTest, set_val)
+TEST(DenseVectorTest, set_values)
 {
     DenseVector<Real, 3> a;
-    a.set_val(2.);
+    a.set_values(2.);
     EXPECT_EQ(a(0), 2.);
     EXPECT_EQ(a(1), 2.);
     EXPECT_EQ(a(2), 2.);
