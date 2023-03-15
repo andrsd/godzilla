@@ -14,6 +14,27 @@ TEST(DenseMatrixSymmTest, dimensions)
     EXPECT_EQ(m.get_num_cols(), 3);
 }
 
+TEST(DenseMatrixSymmTest, zero)
+{
+    DenseMatrixSymm<Real, 3> m;
+    m.set(0, 0) = 1.;
+    m.set(0, 1) = 0.;
+    m.set(0, 2) = 3.;
+    m.set(1, 1) = -1.;
+    m.set(1, 2) = 4.;
+    m.set(2, 2) = 2.;
+    m.zero();
+    EXPECT_EQ(m(0, 0), 0.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 0.);
+    EXPECT_EQ(m(1, 2), 0.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(2, 1), 0.);
+    EXPECT_EQ(m(2, 2), 0.);
+}
+
 TEST(DenseMatrixSymmTest, set)
 {
     DenseMatrixSymm<Real, 3> m;
