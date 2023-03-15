@@ -156,6 +156,15 @@ DiscreteProblemInterface::set_up_initial_guess()
         set_initial_guess_from_ics();
 }
 
+Int
+DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
+{
+    _F_;
+    Int offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
+    return offset;
+}
+
 Vector
 DiscreteProblemInterface::get_coordinates_local() const
 {

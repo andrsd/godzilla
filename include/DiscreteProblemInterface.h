@@ -102,7 +102,7 @@ public:
     /// @param point Point
     /// @param fid Field ID
     /// @return The offset
-    virtual Int get_field_dof(Int point, Int fid) const = 0;
+    virtual Int get_field_dof(Int point, Int fid) const;
 
     /// Gets a local vector with the coordinates associated with this problem's mesh
     ///
