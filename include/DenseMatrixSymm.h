@@ -165,6 +165,18 @@ public:
         return set(row, col);
     }
 
+    /// Multiply this matrix with a scalar value
+    ///
+    /// @param alpha Value to multiply with
+    /// @return Resulting matrix
+    DenseMatrixSymm<T, DIM>
+    operator*(Real alpha) const
+    {
+        DenseMatrixSymm<T, DIM> m(*this);
+        m.scale(alpha);
+        return m;
+    }
+
     DenseVector<T, DIM>
     operator*(const DenseVector<T, DIM> & rhs) const
     {

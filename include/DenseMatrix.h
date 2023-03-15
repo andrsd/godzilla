@@ -217,6 +217,18 @@ public:
         return set(row, col);
     }
 
+    /// Multiply this matrix with a scalar value
+    ///
+    /// @param alpha Value to multiply with
+    /// @return Resulting matrix
+    DenseMatrix<T, COLS, ROWS>
+    operator*(Real alpha) const
+    {
+        DenseMatrix<T, COLS, ROWS> m(*this);
+        m.scale(alpha);
+        return m;
+    }
+
     /// Multiply this matrix with a vector
     ///
     /// @param rhs Vector to multiply with

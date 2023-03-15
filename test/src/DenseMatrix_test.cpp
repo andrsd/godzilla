@@ -77,6 +77,25 @@ TEST(DenseMatrixTest, mult)
     EXPECT_EQ(res(2), 7.);
 }
 
+TEST(DenseMatrixTest, op_mult_scalar)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2, 1, 0 });
+    m.set_row(1, { -1, -2, 4 });
+    m.set_row(2, { 0, 3, -1 });
+
+    auto res = m * 2.;
+    EXPECT_EQ(res(0, 0), 4.);
+    EXPECT_EQ(res(0, 1), 2.);
+    EXPECT_EQ(res(0, 2), 0.);
+    EXPECT_EQ(res(1, 0), -2.);
+    EXPECT_EQ(res(1, 1), -4.);
+    EXPECT_EQ(res(1, 2), 8.);
+    EXPECT_EQ(res(2, 0), 0.);
+    EXPECT_EQ(res(2, 1), 6.);
+    EXPECT_EQ(res(2, 2), -2.);
+}
+
 TEST(DenseMatrixTest, op_mult)
 {
     DenseMatrix<Real, 3> m;
