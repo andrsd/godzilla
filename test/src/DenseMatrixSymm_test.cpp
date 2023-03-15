@@ -7,6 +7,13 @@
 using namespace godzilla;
 using namespace testing;
 
+TEST(DenseMatrixSymmTest, dimensions)
+{
+    DenseMatrixSymm<Real, 3> m;
+    EXPECT_EQ(m.get_num_rows(), 3);
+    EXPECT_EQ(m.get_num_cols(), 3);
+}
+
 TEST(DenseMatrixSymmTest, set)
 {
     DenseMatrixSymm<Real, 3> m;
