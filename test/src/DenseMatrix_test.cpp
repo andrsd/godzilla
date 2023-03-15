@@ -7,6 +7,21 @@
 using namespace godzilla;
 using namespace testing;
 
+TEST(DenseMatrixTest, zero)
+{
+    DenseMatrix<Real, 2> m;
+    m.set(0, 0) = 1.;
+    m.set(0, 1) = -2.;
+    m.set(1, 0) = 2.;
+    m.set(1, 1) = -1.;
+    m.zero();
+
+    EXPECT_EQ(m(0, 0), 0.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 0.);
+}
+
 TEST(DenseMatrixTest, set)
 {
     DenseMatrix<Real, 2> m;
