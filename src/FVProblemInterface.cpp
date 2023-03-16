@@ -29,8 +29,7 @@ __compute_flux(Int dim,
 
 FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
-    fvm(nullptr),
-    wf(nullptr)
+    fvm(nullptr)
 {
     _F_;
 }
@@ -163,13 +162,6 @@ FVProblemInterface::get_solution_vector_local() const
     _F_;
     build_local_solution_vector(this->sln);
     return this->sln;
-}
-
-WeakForm *
-FVProblemInterface::get_weak_form() const
-{
-    _F_;
-    return wf;
 }
 
 void

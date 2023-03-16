@@ -177,8 +177,6 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_DEATH(prob.set_field_component_name(0, 0, "x"),
                  "\\[ERROR\\] Unable to set component name for single-component field");
 
-    EXPECT_TRUE(prob.get_weak_form() == nullptr);
-
     EXPECT_DEATH(prob.add_boundary_essential("", nullptr, {}, -1, {}, nullptr, nullptr, nullptr),
                  "\\[ERROR\\] Essential BCs are not supported for FV problems");
     EXPECT_DEATH(prob.add_boundary_natural("", nullptr, {}, -1, {}, nullptr),

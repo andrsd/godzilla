@@ -15,7 +15,6 @@ class Parameters;
 class Logger;
 class UnstructuredMesh;
 class Problem;
-class WeakForm;
 class InitialCondition;
 class BoundaryCondition;
 
@@ -116,11 +115,6 @@ public:
     ///
     /// @return Local solution vector
     virtual const Vector & get_solution_vector_local() const = 0;
-
-    /// Get weak form associated with this problem
-    ///
-    /// @return The weak form associated with this problem
-    virtual WeakForm * get_weak_form() const = 0;
 
     virtual void add_boundary_essential(const std::string & name,
                                         DMLabel label,

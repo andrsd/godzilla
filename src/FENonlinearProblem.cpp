@@ -597,8 +597,8 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
 
         if (s == 0) {
-            auto has_jac = get_weak_form()->has_jacobian();
-            auto has_precond = get_weak_form()->has_jacobian_preconditioner();
+            auto has_jac = this->wf->has_jacobian();
+            auto has_precond = this->wf->has_jacobian_preconditioner();
             if (has_jac && has_precond)
                 J.zero();
             Jp.zero();
@@ -654,8 +654,8 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscCall(PetscDSGetNumFields(prob, &n_fields));
     Int tot_dim;
     PetscCall(PetscDSGetTotalDimension(prob, &tot_dim));
-    auto has_jac = this->get_weak_form()->has_jacobian();
-    auto has_prec = this->get_weak_form()->has_jacobian_preconditioner();
+    auto has_jac = this->wf->has_jacobian();
+    auto has_prec = this->wf->has_jacobian_preconditioner();
     // user passed in the same matrix, avoid double contributions and only assemble the Jacobian
     if (has_jac && J == Jp)
         has_prec = PETSC_FALSE;
