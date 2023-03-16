@@ -8,7 +8,6 @@
 #include "petscfe.h"
 #include "CallStack.h"
 #include "DiscreteProblemInterface.h"
-#include "Section.h"
 #include "DependencyEvaluator.h"
 #include "FieldValue.h"
 #include "Error.h"
@@ -39,7 +38,6 @@ public:
     Int get_field_order(Int fid) const override;
     std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
-    Int get_field_dof(Int point, Int fid) const override;
     const Vector & get_solution_vector_local() const override;
     WeakForm * get_weak_form() const override;
 
@@ -311,9 +309,6 @@ protected:
                                        Scalar u_t[]);
 
     Int get_next_id(const std::vector<Int> & ids) const;
-
-    /// Section
-    Section section;
 
     /// Quadrature order
     Int qorder;

@@ -2,7 +2,6 @@
 #include "CallStack.h"
 #include "App.h"
 #include "DiscreteProblemInterface.h"
-#include "UnstructuredMesh.h"
 #include "Problem.h"
 #include "Logger.h"
 #include "InitialCondition.h"
@@ -47,6 +46,7 @@ DiscreteProblemInterface::init()
     set_up_ds();
     set_up_initial_conditions();
     set_up_boundary_conditions();
+    this->section = this->unstr_mesh->get_local_section();
 }
 
 void
@@ -153,6 +153,15 @@ DiscreteProblemInterface::set_up_initial_guess()
     _F_;
     if (!this->ics.empty())
         set_initial_guess_from_ics();
+}
+
+Int
+DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
+{
+    _F_;
+    Int offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
+    return offset;
 }
 
 Vector

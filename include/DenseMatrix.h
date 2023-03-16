@@ -106,14 +106,14 @@ public:
     void
     zero()
     {
-        set_val(0.);
+        set_values(0.);
     }
 
     /// Set `alpha` into all matrix entries, i.e. mat[i, j] = alpha
     ///
     /// @param alpha Value to set into matrix entries
     void
-    set_val(const T & alpha)
+    set_values(const T & alpha)
     {
         for (Int i = 0; i < ROWS * COLS; i++)
             this->data[i] = alpha;
@@ -215,6 +215,18 @@ public:
     operator()(Int row, Int col)
     {
         return set(row, col);
+    }
+
+    /// Multiply this matrix with a scalar value
+    ///
+    /// @param alpha Value to multiply with
+    /// @return Resulting matrix
+    DenseMatrix<T, COLS, ROWS>
+    operator*(Real alpha) const
+    {
+        DenseMatrix<T, COLS, ROWS> m(*this);
+        m.scale(alpha);
+        return m;
     }
 
     /// Multiply this matrix with a vector
@@ -372,6 +384,19 @@ DenseMatrix<Real, 3>::inv() const
     inv(2, 2) = (this->data[0] * this->data[4] - this->data[3] * this->data[1]);
     inv.scale(1. / det);
     return inv;
+}
+
+//
+
+template <typename T, Int M, Int N = M>
+inline DenseMatrix<T, M, N>
+operator*(Real alpha, const DenseMatrix<T, M, N> & a)
+{
+    DenseMatrix<T, M, N> res;
+    for (Int i = 0; i < M; i++)
+        for (Int j = 0; j < N; j++)
+            res(i, j) = alpha * a(i, j);
+    return res;
 }
 
 } // namespace godzilla

@@ -2,7 +2,6 @@
 
 #include "GodzillaConfig.h"
 #include "DiscreteProblemInterface.h"
-#include "Section.h"
 
 namespace godzilla {
 
@@ -24,7 +23,6 @@ public:
     Int get_field_order(Int fid) const override;
     std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
-    NO_DISCARD Int get_field_dof(Int point, Int fid) const override;
     const Vector & get_solution_vector_local() const override;
     NO_DISCARD WeakForm * get_weak_form() const override;
 
@@ -79,9 +77,6 @@ protected:
                               Int n_consts,
                               const Scalar constants[],
                               Scalar flux[]) = 0;
-
-    /// PETSc section
-    Section section;
 
     /// Field information
     struct FieldInfo {

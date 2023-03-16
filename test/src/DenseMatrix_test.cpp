@@ -7,6 +7,21 @@
 using namespace godzilla;
 using namespace testing;
 
+TEST(DenseMatrixTest, zero)
+{
+    DenseMatrix<Real, 2> m;
+    m.set(0, 0) = 1.;
+    m.set(0, 1) = -2.;
+    m.set(1, 0) = 2.;
+    m.set(1, 1) = -1.;
+    m.zero();
+
+    EXPECT_EQ(m(0, 0), 0.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 0.);
+}
+
 TEST(DenseMatrixTest, set)
 {
     DenseMatrix<Real, 2> m;
@@ -33,6 +48,16 @@ TEST(DenseMatrixTest, set2)
     EXPECT_EQ(m(0, 1), 0.);
     EXPECT_EQ(m(1, 0), 2.);
     EXPECT_EQ(m(1, 1), -1.);
+}
+
+TEST(DenseMatrixTest, set_values)
+{
+    DenseMatrix<Real, 2> m;
+    m.set_values(3.);
+    EXPECT_EQ(m(0, 0), 3.);
+    EXPECT_EQ(m(0, 1), 3.);
+    EXPECT_EQ(m(1, 0), 3.);
+    EXPECT_EQ(m(1, 1), 3.);
 }
 
 TEST(DenseMatrixTest, scale)
@@ -65,6 +90,25 @@ TEST(DenseMatrixTest, mult)
     EXPECT_EQ(res(0), 5.);
     EXPECT_EQ(res(1), 9.);
     EXPECT_EQ(res(2), 7.);
+}
+
+TEST(DenseMatrixTest, op_mult_scalar)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2, 1, 0 });
+    m.set_row(1, { -1, -2, 4 });
+    m.set_row(2, { 0, 3, -1 });
+
+    auto res = m * 2.;
+    EXPECT_EQ(res(0, 0), 4.);
+    EXPECT_EQ(res(0, 1), 2.);
+    EXPECT_EQ(res(0, 2), 0.);
+    EXPECT_EQ(res(1, 0), -2.);
+    EXPECT_EQ(res(1, 1), -4.);
+    EXPECT_EQ(res(1, 2), 8.);
+    EXPECT_EQ(res(2, 0), 0.);
+    EXPECT_EQ(res(2, 1), 6.);
+    EXPECT_EQ(res(2, 2), -2.);
 }
 
 TEST(DenseMatrixTest, op_mult)
@@ -290,4 +334,22 @@ TEST(DenseMatrixTest, op_assign)
     EXPECT_EQ(a(2, 0), 3);
     EXPECT_EQ(a(2, 1), -2);
     EXPECT_EQ(a(2, 2), -1);
+}
+
+TEST(DenseMatrixTest, op_mult_scalar_pre)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2, 1, 0 });
+    m.set_row(1, { 1, 2, -1 });
+    m.set_row(2, { 0, -1, 2 });
+    auto res = 3. * m;
+    EXPECT_EQ(res(0, 0), 6.);
+    EXPECT_EQ(res(0, 1), 3.);
+    EXPECT_EQ(res(0, 2), 0.);
+    EXPECT_EQ(res(1, 0), 3.);
+    EXPECT_EQ(res(1, 1), 6.);
+    EXPECT_EQ(res(1, 2), -3.);
+    EXPECT_EQ(res(2, 0), 0.);
+    EXPECT_EQ(res(2, 1), -3.);
+    EXPECT_EQ(res(2, 2), 6.);
 }

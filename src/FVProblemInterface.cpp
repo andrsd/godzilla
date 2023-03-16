@@ -44,8 +44,6 @@ void
 FVProblemInterface::init()
 {
     DiscreteProblemInterface::init();
-
-    this->section = this->unstr_mesh->get_local_section();
 }
 
 Int
@@ -157,15 +155,6 @@ FVProblemInterface::set_field_component_name(Int fid, Int component, const std::
     }
     else
         error("Field with ID = '%d' does not exist.", fid);
-}
-
-Int
-FVProblemInterface::get_field_dof(Int point, Int fid) const
-{
-    _F_;
-    Int offset;
-    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
-    return offset;
 }
 
 const Vector &

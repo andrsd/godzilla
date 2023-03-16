@@ -2,8 +2,12 @@
 
 #include "petscds.h"
 #include "Types.h"
+#include "UnstructuredMesh.h"
 #include "Vector.h"
-#include "DiscreteProblemInterface.h"
+#include "Matrix.h"
+#include "Section.h"
+#include "DenseMatrix.h"
+#include "DenseMatrixSymm.h"
 
 namespace godzilla {
 
@@ -101,7 +105,7 @@ public:
     /// @param point Point
     /// @param fid Field ID
     /// @return The offset
-    virtual Int get_field_dof(Int point, Int fid) const = 0;
+    virtual Int get_field_dof(Int point, Int fid) const;
 
     /// Gets a local vector with the coordinates associated with this problem's mesh
     ///
@@ -162,6 +166,15 @@ protected:
     /// @param sln Global solution vector
     void build_local_solution_vector(const Vector & sln) const;
 
+    template <Int N>
+    void set_closure(Vector & v, Int point, const DenseVector<Real, N> & vec, InsertMode mode);
+
+    template <Int N>
+    void set_closure(Matrix & A, Int point, const DenseMatrix<Real, N> & mat, InsertMode mode);
+
+    template <Int N>
+    void set_closure(Matrix & A, Int point, const DenseMatrixSymm<Real, N> & mat, InsertMode mode);
+
     /// Problem this interface is part of
     Problem * problem;
 
@@ -170,6 +183,9 @@ protected:
 
     /// Logger object
     Logger * logger;
+
+    /// Section
+    Section section;
 
     /// Initial conditions in the problem
     std::vector<InitialCondition *> ics;
@@ -180,5 +196,43 @@ protected:
     /// Object that manages a discrete system
     PetscDS ds;
 };
+
+template <Int N>
+void
+DiscreteProblemInterface::set_closure(Vector & v,
+                                      Int point,
+                                      const DenseVector<Real, N> & vec,
+                                      InsertMode mode)
+{
+    DM dm = this->unstr_mesh->get_dm();
+    PETSC_CHECK(DMPlexVecSetClosure(dm, this->section, v, point, vec.get_data(), mode));
+}
+
+template <Int N>
+void
+DiscreteProblemInterface::set_closure(Matrix & A,
+                                      Int point,
+                                      const DenseMatrix<Real, N> & mat,
+                                      InsertMode mode)
+{
+    DM dm = this->unstr_mesh->get_dm();
+    Section global_section = this->unstr_mesh->get_global_section();
+    PETSC_CHECK(
+        DMPlexMatSetClosure(dm, this->section, global_section, A, point, mat.get_data(), mode));
+}
+
+template <Int N>
+void
+DiscreteProblemInterface::set_closure(Matrix & A,
+                                      Int point,
+                                      const DenseMatrixSymm<Real, N> & mat,
+                                      InsertMode mode)
+{
+    DM dm = this->unstr_mesh->get_dm();
+    Section global_section = this->unstr_mesh->get_global_section();
+    DenseMatrix<Real, N> m = mat;
+    PETSC_CHECK(
+        DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.get_data(), mode));
+}
 
 } // namespace godzilla

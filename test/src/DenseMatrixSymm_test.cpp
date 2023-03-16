@@ -7,6 +7,34 @@
 using namespace godzilla;
 using namespace testing;
 
+TEST(DenseMatrixSymmTest, dimensions)
+{
+    DenseMatrixSymm<Real, 3> m;
+    EXPECT_EQ(m.get_num_rows(), 3);
+    EXPECT_EQ(m.get_num_cols(), 3);
+}
+
+TEST(DenseMatrixSymmTest, zero)
+{
+    DenseMatrixSymm<Real, 3> m;
+    m.set(0, 0) = 1.;
+    m.set(0, 1) = 0.;
+    m.set(0, 2) = 3.;
+    m.set(1, 1) = -1.;
+    m.set(1, 2) = 4.;
+    m.set(2, 2) = 2.;
+    m.zero();
+    EXPECT_EQ(m(0, 0), 0.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 0.);
+    EXPECT_EQ(m(1, 2), 0.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(2, 1), 0.);
+    EXPECT_EQ(m(2, 2), 0.);
+}
+
 TEST(DenseMatrixSymmTest, set)
 {
     DenseMatrixSymm<Real, 3> m;
@@ -99,6 +127,21 @@ TEST(DenseMatrixSymmTest, mult)
     EXPECT_EQ(res(2), 7.);
 }
 
+TEST(DenseMatrixSymmTest, op_mult_scalar)
+{
+    DenseMatrixSymm<Real, 3> m({ 1, 2, 3, 4, 5, 6 });
+    auto res = m * 2.;
+    EXPECT_EQ(res(0, 0), 2.);
+    EXPECT_EQ(res(0, 1), 4.);
+    EXPECT_EQ(res(0, 2), 8.);
+    EXPECT_EQ(res(1, 0), 4.);
+    EXPECT_EQ(res(1, 1), 6.);
+    EXPECT_EQ(res(1, 2), 10.);
+    EXPECT_EQ(res(2, 0), 8.);
+    EXPECT_EQ(res(2, 1), 10.);
+    EXPECT_EQ(res(2, 2), 12.);
+}
+
 TEST(DenseMatrixSymmTest, op_mult)
 {
     DenseMatrixSymm<Real, 3> m({ 1, 1, 1, 0, 1, 1 });
@@ -175,4 +218,19 @@ TEST(DenseMatrixSymmTest, mult_mat)
     EXPECT_EQ(m(2, 0), -6.);
     EXPECT_EQ(m(2, 1), -5.);
     EXPECT_EQ(m(2, 2), 21.);
+}
+
+TEST(DenseMatrixSymmTest, op_mult_scalar_pre)
+{
+    DenseMatrixSymm<Real, 3> m({ 1, 2, 3, 4, 5, 6 });
+    auto res = 2. * m;
+    EXPECT_EQ(res(0, 0), 2.);
+    EXPECT_EQ(res(0, 1), 4.);
+    EXPECT_EQ(res(0, 2), 8.);
+    EXPECT_EQ(res(1, 0), 4.);
+    EXPECT_EQ(res(1, 1), 6.);
+    EXPECT_EQ(res(1, 2), 10.);
+    EXPECT_EQ(res(2, 0), 8.);
+    EXPECT_EQ(res(2, 1), 10.);
+    EXPECT_EQ(res(2, 2), 12.);
 }
