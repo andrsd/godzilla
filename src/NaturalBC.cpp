@@ -15,11 +15,12 @@ NaturalBC::parameters()
     return params;
 }
 
-NaturalBC::NaturalBC(const Parameters & params) :
-    BoundaryCondition(params),
-    wf(this->dpi->get_weak_form())
+NaturalBC::NaturalBC(const Parameters & params) : BoundaryCondition(params), wf(nullptr)
 {
     _F_;
+    auto fepi = dynamic_cast<const FEProblemInterface *>(this->dpi);
+    if (fepi)
+        this->wf = fepi->get_weak_form();
 }
 
 void

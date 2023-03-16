@@ -24,7 +24,6 @@ public:
     std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
     const Vector & get_solution_vector_local() const override;
-    NO_DISCARD WeakForm * get_weak_form() const override;
 
     /// Adds a volumetric field
     ///
@@ -104,9 +103,6 @@ protected:
 
     /// Local solution vector
     Vector sln;
-
-    /// Weak form
-    WeakForm * wf;
 
     friend void __compute_flux(Int dim,
                                Int nf,
