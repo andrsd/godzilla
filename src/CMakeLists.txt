@@ -118,8 +118,6 @@ target_link_libraries(
         ${HDF5_LIBRARIES}
         muParser
         exodusIIcpp
-        blas
-        lapack
 )
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
