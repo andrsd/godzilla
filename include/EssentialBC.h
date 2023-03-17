@@ -11,6 +11,18 @@ class EssentialBC : public BoundaryCondition {
 public:
     explicit EssentialBC(const Parameters & params);
 
+    void create() override;
+
+    /// Get the ID of the field this boundary condition operates on
+    ///
+    /// @return ID of the field
+    NO_DISCARD virtual Int get_field_id() const;
+
+    /// Get the component numbers this boundary condition is constraining
+    ///
+    /// @return Vector of component numbers
+    NO_DISCARD virtual const std::vector<Int> & get_components() const = 0;
+
     /// Evaluate the boundary condition
     ///
     /// @param dim The spatial dimension
@@ -39,6 +51,10 @@ public:
     virtual void * get_context();
 
     void set_up() override;
+
+protected:
+    /// Field ID this boundary condition is attached to
+    Int fid;
 
 public:
     static Parameters parameters();

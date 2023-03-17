@@ -16,22 +16,10 @@ public:
     explicit BoundaryCondition(const Parameters & params);
     ~BoundaryCondition() override = default;
 
-    void create() override;
-
     /// Get the boundary name this BC is active on
     ///
     /// @return The boundary name
     NO_DISCARD virtual const std::string & get_boundary() const;
-
-    /// Get the ID of the field this boundary condition operates on
-    ///
-    /// @return ID of the field
-    NO_DISCARD virtual Int get_field_id() const;
-
-    /// Get the component numbers this boundary condition is constraining
-    ///
-    /// @return Vector of component numbers
-    NO_DISCARD virtual const std::vector<Int> & get_components() const = 0;
 
     /// Get DiscreteProblemInterface
     ///
@@ -44,9 +32,6 @@ public:
 protected:
     /// Discrete problem this object is part of
     const DiscreteProblemInterface * dpi;
-
-    /// Field ID this boundary condition is attached to
-    Int fid;
 
     /// List of boundary names
     const std::string & boundary;
