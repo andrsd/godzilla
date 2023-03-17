@@ -10,6 +10,8 @@ add_library(${PROJECT_NAME}
         muParserTokenReader.cpp
 )
 
+set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+
 install(
     DIRECTORY
         ${PROJECT_SOURCE_DIR}
