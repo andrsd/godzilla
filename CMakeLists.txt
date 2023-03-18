@@ -43,7 +43,7 @@ endif()
 FetchContent_Declare(
     exodusIIcpp
     GIT_REPOSITORY https://github.com/andrsd/exodusIIcpp.git
-    GIT_TAG        v1.2.0
+    GIT_TAG        v1.4.0
 )
 mark_as_advanced(FORCE
     FETCHCONTENT_SOURCE_DIR_EXODUSIICPP
