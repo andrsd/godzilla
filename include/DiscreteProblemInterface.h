@@ -139,6 +139,18 @@ public:
                                               PetscNaturalRiemannBCFunc * fn_t,
                                               void * context) const;
 
+    template <Int N>
+    void
+    set_closure(Vector & v, Int point, const DenseVector<Real, N> & vec, InsertMode mode) const;
+
+    template <Int N>
+    void
+    set_closure(Matrix & A, Int point, const DenseMatrix<Real, N> & mat, InsertMode mode) const;
+
+    template <Int N>
+    void
+    set_closure(Matrix & A, Int point, const DenseMatrixSymm<Real, N> & mat, InsertMode mode) const;
+
 protected:
     virtual void init();
     virtual void create();
@@ -159,15 +171,6 @@ protected:
     ///
     /// @param sln Global solution vector
     void build_local_solution_vector(const Vector & sln) const;
-
-    template <Int N>
-    void set_closure(Vector & v, Int point, const DenseVector<Real, N> & vec, InsertMode mode);
-
-    template <Int N>
-    void set_closure(Matrix & A, Int point, const DenseMatrix<Real, N> & mat, InsertMode mode);
-
-    template <Int N>
-    void set_closure(Matrix & A, Int point, const DenseMatrixSymm<Real, N> & mat, InsertMode mode);
 
     /// Problem this interface is part of
     Problem * problem;
@@ -196,7 +199,7 @@ void
 DiscreteProblemInterface::set_closure(Vector & v,
                                       Int point,
                                       const DenseVector<Real, N> & vec,
-                                      InsertMode mode)
+                                      InsertMode mode) const
 {
     DM dm = this->unstr_mesh->get_dm();
     PETSC_CHECK(DMPlexVecSetClosure(dm, this->section, v, point, vec.get_data(), mode));
@@ -207,7 +210,7 @@ void
 DiscreteProblemInterface::set_closure(Matrix & A,
                                       Int point,
                                       const DenseMatrix<Real, N> & mat,
-                                      InsertMode mode)
+                                      InsertMode mode) const
 {
     DM dm = this->unstr_mesh->get_dm();
     Section global_section = this->unstr_mesh->get_global_section();
@@ -220,7 +223,7 @@ void
 DiscreteProblemInterface::set_closure(Matrix & A,
                                       Int point,
                                       const DenseMatrixSymm<Real, N> & mat,
-                                      InsertMode mode)
+                                      InsertMode mode) const
 {
     DM dm = this->unstr_mesh->get_dm();
     Section global_section = this->unstr_mesh->get_global_section();
