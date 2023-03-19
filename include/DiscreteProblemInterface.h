@@ -151,6 +151,9 @@ public:
     void
     set_closure(Matrix & A, Int point, const DenseMatrixSymm<Real, N> & mat, InsertMode mode) const;
 
+    template <Int N>
+    DenseVector<Real, N> get_closure(const Vector & v, Int point) const;
+
 protected:
     virtual void init();
     virtual void create();
@@ -230,6 +233,18 @@ DiscreteProblemInterface::set_closure(Matrix & A,
     DenseMatrix<Real, N> m = mat;
     PETSC_CHECK(
         DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.get_data(), mode));
+}
+
+template <Int N>
+DenseVector<Real, N>
+DiscreteProblemInterface::get_closure(const Vector & v, Int point) const
+{
+    DM dm = this->unstr_mesh->get_dm();
+    Int sz = N;
+    DenseVector<Real, N> vec;
+    Real * data = vec.get_data();
+    PETSC_CHECK(DMPlexVecGetClosure(dm, this->section, v, point, &sz, &data));
+    return vec;
 }
 
 } // namespace godzilla
