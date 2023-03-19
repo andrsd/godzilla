@@ -91,52 +91,49 @@ Int
 UnstructuredMesh::get_num_vertices() const
 {
     _F_;
-    Int first, last;
-    get_vertex_idx_range(first, last);
-    return last - first;
+    return get_vertex_range().size();
 }
 
-void
-UnstructuredMesh::get_vertex_idx_range(Int & first, Int & last) const
+UnstructuredMesh::Range
+UnstructuredMesh::get_vertex_range() const
 {
-    _F_;
+    Int first, last;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, &first, &last));
+    return { first, last };
 }
 
 Int
 UnstructuredMesh::get_num_elements() const
 {
     _F_;
-    Int first, last;
-    get_element_idx_range(first, last);
-    return last - first;
+    return get_element_range().size();
 }
 
 Int
 UnstructuredMesh::get_num_all_elements() const
 {
     _F_;
-    Int first, last;
-    get_all_element_idx_range(first, last);
-    return last - first;
+    return get_all_element_range().size();
 }
 
-void
-UnstructuredMesh::get_element_idx_range(Int & first, Int & last) const
+UnstructuredMesh::Range
+UnstructuredMesh::get_element_range() const
 {
-    _F_;
+    Int first, last;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
     Int gc_first, gc_last;
     PETSC_CHECK(DMPlexGetGhostCellStratum(this->dm, &gc_first, &gc_last));
     if (gc_first != -1)
         last = gc_first;
+    return { first, last };
 }
 
-void
-UnstructuredMesh::get_all_element_idx_range(Int & first, Int & last) const
+UnstructuredMesh::Range
+UnstructuredMesh::get_all_element_range() const
 {
-    _F_;
+    Int first, last;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
+    return { first, last };
 }
 
 IndexSet
@@ -424,6 +421,38 @@ UnstructuredMesh::get_num_elem_nodes(DMPolytopeType elem_type)
     default:
         error("Unsupported type.");
     }
+}
+
+UnstructuredMesh::Iterator
+UnstructuredMesh::vertex_begin() const
+{
+    Int idx;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, &idx, nullptr));
+    return Iterator(idx);
+}
+
+UnstructuredMesh::Iterator
+UnstructuredMesh::vertex_end() const
+{
+    Int idx;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, nullptr, &idx));
+    return Iterator(idx);
+}
+
+UnstructuredMesh::Iterator
+UnstructuredMesh::cell_begin() const
+{
+    Int idx;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &idx, nullptr));
+    return Iterator(idx);
+}
+
+UnstructuredMesh::Iterator
+UnstructuredMesh::cell_end() const
+{
+    Int idx;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, nullptr, &idx));
+    return Iterator(idx);
 }
 
 } // namespace godzilla

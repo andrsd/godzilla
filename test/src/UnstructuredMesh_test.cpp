@@ -58,10 +58,13 @@ TEST(UnstructuredMeshTest, api)
     EXPECT_EQ(mesh.get_num_vertices(), 3);
     EXPECT_EQ(mesh.get_num_elements(), 2);
 
-    Int first, last;
-    mesh.get_element_idx_range(first, last);
-    EXPECT_EQ(first, 0);
-    EXPECT_EQ(last, 2);
+    auto elem_range = mesh.get_element_range();
+    EXPECT_EQ(elem_range.get_first(), 0);
+    EXPECT_EQ(elem_range.get_last(), 2);
+
+    auto vtx_range = mesh.get_vertex_range();
+    EXPECT_EQ(vtx_range.get_first(), 2);
+    EXPECT_EQ(vtx_range.get_last(), 5);
 
     EXPECT_EQ(mesh.get_partition_overlap(), 1);
 
@@ -85,13 +88,12 @@ TEST(UnstructuredMeshTest, api_ghosted)
     EXPECT_EQ(mesh.get_num_elements(), 2);
     EXPECT_EQ(mesh.get_num_all_elements(), 4);
 
-    Int first, last;
-    mesh.get_element_idx_range(first, last);
-    EXPECT_EQ(first, 0);
-    EXPECT_EQ(last, 2);
-    mesh.get_all_element_idx_range(first, last);
-    EXPECT_EQ(first, 0);
-    EXPECT_EQ(last, 4);
+    auto elem_range = mesh.get_element_range();
+    EXPECT_EQ(elem_range.get_first(), 0);
+    EXPECT_EQ(elem_range.get_last(), 2);
+    auto all_elem_range = mesh.get_all_element_range();
+    EXPECT_EQ(all_elem_range.get_first(), 0);
+    EXPECT_EQ(all_elem_range.get_last(), 4);
 
     EXPECT_EQ(mesh.get_partition_overlap(), 1);
 

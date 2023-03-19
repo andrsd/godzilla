@@ -320,9 +320,8 @@ ExodusIIOutput::write_node_sets()
     if (!this->mesh->has_label("Vertex Sets"))
         return;
 
-    Int elem_first, elem_last;
-    this->mesh->get_element_idx_range(elem_first, elem_last);
-    Int n_elems_in_block = elem_last - elem_first;
+    auto elem_range = this->mesh->get_element_range();
+    Int n_elems_in_block = elem_range.size();
 
     Int n_node_sets = this->mesh->get_num_vertex_sets();
     DMLabel vertex_sets_label = this->mesh->get_label("Vertex Sets");
@@ -489,10 +488,8 @@ ExodusIIOutput::write_nodal_variables(const Scalar * sln)
     _F_;
 
     Int n_all_elems = this->mesh->get_num_all_elements();
-    Int first, last;
-    this->mesh->get_vertex_idx_range(first, last);
 
-    for (Int n = first; n < last; n++) {
+    for (auto n : this->mesh->get_vertex_range()) {
         int exo_var_id = 1;
         for (auto fid : this->nodal_var_fids) {
             Int offset = this->dpi->get_field_dof(n, fid);
@@ -537,16 +534,16 @@ ExodusIIOutput::write_block_elem_variables(int blk_id,
                                            const Int * cells)
 {
     _F_;
-    Int first, last;
+    UnstructuredMesh::Range elem_range;
     if (cells == nullptr) {
-        this->mesh->get_element_idx_range(first, last);
-        n_elems_in_block = last - first;
+        elem_range = this->mesh->get_element_range();
+        n_elems_in_block = elem_range.size();
     }
 
     for (Int i = 0; i < n_elems_in_block; i++) {
         Int elem_id;
         if (cells == nullptr)
-            elem_id = first + i;
+            elem_id = elem_range.get_first() + i;
         else
             elem_id = cells[i];
 
@@ -602,13 +599,13 @@ ExodusIIOutput::write_block_connectivity(int blk_id, Int n_elems_in_block, const
     _F_;
     DM dm = this->mesh->get_dm();
     Int n_all_elems = this->mesh->get_num_all_elements();
-    Int elem_first, elem_last;
+    UnstructuredMesh::Range elem_range;
     DMPolytopeType polytope_type;
 
     if (cells == nullptr) {
-        this->mesh->get_element_idx_range(elem_first, elem_last);
+        elem_range = this->mesh->get_element_range();
         n_elems_in_block = this->mesh->get_num_elements();
-        polytope_type = this->mesh->get_cell_type(elem_first);
+        polytope_type = this->mesh->get_cell_type(elem_range.get_first());
     }
     else
         polytope_type = this->mesh->get_cell_type(cells[0]);
@@ -620,7 +617,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id, Int n_elems_in_block, const
     for (Int i = 0, j = 0; i < n_elems_in_block; i++) {
         Int elem_id;
         if (cells == nullptr)
-            elem_id = elem_first + i;
+            elem_id = elem_range.get_first() + i;
         else
             elem_id = cells[i];
         Int closure_size;

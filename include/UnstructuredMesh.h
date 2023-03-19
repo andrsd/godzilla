@@ -13,6 +13,102 @@ namespace godzilla {
 ///
 class UnstructuredMesh : public Mesh {
 public:
+    struct Iterator {
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = Int;
+
+        explicit Iterator(Int idx) : idx(idx) {}
+
+        const value_type &
+        operator*() const
+        {
+            return this->idx;
+        }
+
+        /// Prefix increment
+        Iterator &
+        operator++()
+        {
+            this->idx++;
+            return *this;
+        }
+
+        /// Postfix increment
+        Iterator
+        operator++(int)
+        {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        friend bool
+        operator==(const Iterator & a, const Iterator & b)
+        {
+            return a.idx == b.idx;
+        };
+
+        friend bool
+        operator!=(const Iterator & a, const Iterator & b)
+        {
+            return a.idx != b.idx;
+        };
+
+    private:
+        Int idx;
+    };
+
+    Iterator vertex_begin() const;
+    Iterator vertex_end() const;
+
+    Iterator cell_begin() const;
+    Iterator cell_end() const;
+
+    /// Contiguous range of indices
+    struct Range {
+        Range() : first(-1), last(-1) {}
+        Range(Int first, Int last) : first(first), last(last) {}
+
+        Iterator
+        begin() const
+        {
+            return Iterator(this->first);
+        }
+
+        Iterator
+        end() const
+        {
+            return Iterator(this->last);
+        }
+
+        /// Get the number of indices in the range
+        Int
+        size() const
+        {
+            return last - first;
+        }
+
+        Int
+        get_first() const
+        {
+            return first;
+        }
+
+        Int
+        get_last() const
+        {
+            return last;
+        }
+
+    private:
+        /// First index
+        Int first;
+        /// Last index (not included in the range)
+        Int last;
+    };
+
+    //
+
     explicit UnstructuredMesh(const Parameters & parameters);
     ~UnstructuredMesh() override;
 
@@ -46,9 +142,8 @@ public:
 
     /// Get range of vertex indices
     ///
-    /// @param first First vertex index
-    /// @param last Last vertex index plus one
-    void get_vertex_idx_range(Int & first, Int & last) const;
+    /// @return Range of vertex indices
+    Range get_vertex_range() const;
 
     /// Return the number of mesh elements (interior)
     NO_DISCARD virtual Int get_num_elements() const;
@@ -58,15 +153,13 @@ public:
 
     /// Get range of element indices (interior only)
     ///
-    /// @param first First element index
-    /// @param last Last element index plus one
-    void get_element_idx_range(Int & first, Int & last) const;
+    /// @return Range of element indices
+    Range get_element_range() const;
 
     /// Get range of all element indices (interior + ghosted)
     ///
-    /// @param first First element index
-    /// @param last Last element index plus one
-    void get_all_element_idx_range(Int & first, Int & last) const;
+    /// @param Range of all element indices (interior + ghosted)
+    Range get_all_element_range() const;
 
     /// Get index set with all elements
     ///
