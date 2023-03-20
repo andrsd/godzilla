@@ -217,6 +217,19 @@ public:
         return set(row, col);
     }
 
+    /// Add matrix to this matrix
+    ///
+    /// @param a Matrix to add
+    /// @return Resulting matrix, i.e. `this + a`
+    DenseMatrix<T, ROWS, COLS> &
+    operator+=(const DenseMatrix<T, ROWS, COLS> & a)
+    {
+        for (Int i = 0; i < ROWS; i++)
+            for (Int j = 0; j < COLS; j++)
+                set(i, j) += a.get(i, j);
+        return *this;
+    }
+
     /// Multiply this matrix with a scalar value
     ///
     /// @param alpha Value to multiply with
