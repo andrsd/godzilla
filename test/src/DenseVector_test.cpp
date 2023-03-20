@@ -232,3 +232,12 @@ TEST(DenseVectorTest, op_inc)
     EXPECT_EQ(a(1), 4.);
     EXPECT_EQ(a(2), 5.);
 }
+
+TEST(DenseVectorTest, op_inc_scalar)
+{
+    DenseVector<Real, 3> a({ -2., 5, 3. });
+    a += 2.;
+    EXPECT_EQ(a(0), 0.);
+    EXPECT_EQ(a(1), 7.);
+    EXPECT_EQ(a(2), 5.);
+}
