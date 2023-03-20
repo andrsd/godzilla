@@ -400,3 +400,26 @@ TEST(DenseMatrixTest, column)
     EXPECT_EQ(c2(1), -2.);
     EXPECT_EQ(c2(2), 4.);
 }
+
+TEST(DenseMatrixTest, row)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2, 1, 5 });
+    m.set_row(1, { 3, -1, -2 });
+    m.set_row(2, { 0, -3, 4 });
+
+    DenseVector<Real, 3> r0 = m.row(0);
+    EXPECT_EQ(r0(0), 2.);
+    EXPECT_EQ(r0(1), 1.);
+    EXPECT_EQ(r0(2), 5.);
+
+    DenseVector<Real, 3> r1 = m.row(1);
+    EXPECT_EQ(r1(0), 3.);
+    EXPECT_EQ(r1(1), -1.);
+    EXPECT_EQ(r1(2), -2.);
+
+    DenseVector<Real, 3> r2 = m.row(2);
+    EXPECT_EQ(r2(0), 0.);
+    EXPECT_EQ(r2(1), -3.);
+    EXPECT_EQ(r2(2), 4.);
+}
