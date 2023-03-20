@@ -143,6 +143,18 @@ TEST(DenseVectorTest, pointwise_div_glob)
     EXPECT_EQ(res(2), -4.);
 }
 
+TEST(DenseVectorTest, op_mult_mat)
+{
+    DenseVector<Real, 2> a({ 2., 3. });
+    DenseMatrix<Real, 2, 3> b;
+    b.set_row(0, { 4., 2., -1. });
+    b.set_row(1, { 0., -3., 1. });
+    DenseVector<Real, 3> x = a * b;
+    EXPECT_EQ(x(0), 8.);
+    EXPECT_EQ(x(1), -5.);
+    EXPECT_EQ(x(2), 1.);
+}
+
 TEST(DenseVectorTest, op_mult_vec)
 {
     DenseVector<Real, 3> a({ 2., 3., 4. });

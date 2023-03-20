@@ -203,6 +203,20 @@ public:
         return res;
     }
 
+    template <Int M>
+    DenseVector<T, M>
+    operator*(const DenseMatrix<T, N, M> & a) const
+    {
+        DenseVector<T, M> res;
+        for (Int j = 0; j < M; j++) {
+            T prod = 0;
+            for (Int i = 0; i < N; i++)
+                prod += get(i) * a(i, j);
+            res(j) = prod;
+        }
+        return res;
+    }
+
     T
     operator*(const DenseVector<T, N> & a) const
     {
