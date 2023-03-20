@@ -253,3 +253,42 @@ TEST(DenseVectorTest, op_inc_scalar)
     EXPECT_EQ(a(1), 7.);
     EXPECT_EQ(a(2), 5.);
 }
+
+TEST(DenseVectorTest, mat)
+{
+    DenseVector<DenseVector<Real, 3>, 2> A;
+    A(0)(0) = -2;
+    A(0)(1) = 5;
+    A(0)(2) = 3;
+    A(1)(0) = 1;
+    A(1)(1) = -1;
+    A(1)(2) = 2;
+
+    DenseMatrix<Real, 2, 3> m = mat(A);
+    EXPECT_EQ(m(0, 0), -2.);
+    EXPECT_EQ(m(0, 1), 5.);
+    EXPECT_EQ(m(0, 2), 3.);
+    EXPECT_EQ(m(1, 0), 1.);
+    EXPECT_EQ(m(1, 1), -1.);
+    EXPECT_EQ(m(1, 2), 2.);
+}
+
+TEST(DenseVectorTest, mat_transpose)
+{
+    DenseVector<DenseVector<Real, 3>, 2> A;
+    A(0)(0) = -2;
+    A(0)(1) = 5;
+    A(0)(2) = 3;
+    A(1)(0) = 1;
+    A(1)(1) = -1;
+    A(1)(2) = 2;
+
+    DenseMatrix<Real, 3, 2> m = mat_transpose(A);
+
+    EXPECT_EQ(m(0, 0), -2.);
+    EXPECT_EQ(m(0, 1), 1.);
+    EXPECT_EQ(m(1, 0), 5.);
+    EXPECT_EQ(m(1, 1), -1.);
+    EXPECT_EQ(m(2, 0), 3.);
+    EXPECT_EQ(m(2, 1), 2.);
+}
