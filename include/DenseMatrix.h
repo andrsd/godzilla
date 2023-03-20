@@ -234,10 +234,10 @@ public:
     ///
     /// @param alpha Value to multiply with
     /// @return Resulting matrix
-    DenseMatrix<T, COLS, ROWS>
+    DenseMatrix<T, ROWS, COLS>
     operator*(Real alpha) const
     {
-        DenseMatrix<T, COLS, ROWS> m(*this);
+        DenseMatrix<T, ROWS, COLS> m(*this);
         m.scale(alpha);
         return m;
     }
