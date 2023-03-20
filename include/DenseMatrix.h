@@ -63,6 +63,32 @@ public:
         return this->data[idx(row, col)];
     }
 
+    /// Obtain a column from the matrix
+    ///
+    /// @param idx Index of the column
+    /// @return Column as a DenseVector
+    DenseVector<T, ROWS>
+    column(Int idx)
+    {
+        DenseVector<T, ROWS> col;
+        for (Int row = 0; row < ROWS; row++)
+            col(row) = get(row, idx);
+        return col;
+    }
+
+    /// Obtain a column from the matrix
+    ///
+    /// @param idx Index of the column
+    /// @return Column as a DenseVector
+    DenseVector<T, COLS>
+    row(Int idx)
+    {
+        DenseVector<T, COLS> row;
+        for (Int col = 0; col < COLS; col++)
+            row(col) = get(idx, col);
+        return row;
+    }
+
     /// Get entry at specified location for writing
     ///
     /// @param row Row number
@@ -217,14 +243,27 @@ public:
         return set(row, col);
     }
 
+    /// Add matrix to this matrix
+    ///
+    /// @param a Matrix to add
+    /// @return Resulting matrix, i.e. `this + a`
+    DenseMatrix<T, ROWS, COLS> &
+    operator+=(const DenseMatrix<T, ROWS, COLS> & a)
+    {
+        for (Int i = 0; i < ROWS; i++)
+            for (Int j = 0; j < COLS; j++)
+                set(i, j) += a.get(i, j);
+        return *this;
+    }
+
     /// Multiply this matrix with a scalar value
     ///
     /// @param alpha Value to multiply with
     /// @return Resulting matrix
-    DenseMatrix<T, COLS, ROWS>
+    DenseMatrix<T, ROWS, COLS>
     operator*(Real alpha) const
     {
-        DenseMatrix<T, COLS, ROWS> m(*this);
+        DenseMatrix<T, ROWS, COLS> m(*this);
         m.scale(alpha);
         return m;
     }

@@ -92,6 +92,30 @@ TEST(DenseMatrixTest, mult)
     EXPECT_EQ(res(2), 7.);
 }
 
+TEST(DenseMatrixTest, op_inc_mat)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 1, 1, 0 });
+    m.set_row(1, { 1, 1, 1 });
+    m.set_row(2, { 0, 1, 1 });
+
+    DenseMatrix<Real, 3> n;
+    n.set_row(0, { 2, -1, 1 });
+    n.set_row(1, { 1, -3, 4 });
+    n.set_row(2, { -1, -1, -2 });
+
+    m += n;
+    EXPECT_EQ(m(0, 0), 3.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 1.);
+    EXPECT_EQ(m(1, 0), 2.);
+    EXPECT_EQ(m(1, 1), -2.);
+    EXPECT_EQ(m(1, 2), 5.);
+    EXPECT_EQ(m(2, 0), -1.);
+    EXPECT_EQ(m(2, 1), 0.);
+    EXPECT_EQ(m(2, 2), -1.);
+}
+
 TEST(DenseMatrixTest, op_mult_scalar)
 {
     DenseMatrix<Real, 3> m;
@@ -352,4 +376,50 @@ TEST(DenseMatrixTest, op_mult_scalar_pre)
     EXPECT_EQ(res(2, 0), 0.);
     EXPECT_EQ(res(2, 1), -3.);
     EXPECT_EQ(res(2, 2), 6.);
+}
+
+TEST(DenseMatrixTest, column)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2, 1, 5 });
+    m.set_row(1, { 3, -1, -2 });
+    m.set_row(2, { 0, -3, 4 });
+
+    DenseVector<Real, 3> c0 = m.column(0);
+    EXPECT_EQ(c0(0), 2.);
+    EXPECT_EQ(c0(1), 3.);
+    EXPECT_EQ(c0(2), 0.);
+
+    DenseVector<Real, 3> c1 = m.column(1);
+    EXPECT_EQ(c1(0), 1.);
+    EXPECT_EQ(c1(1), -1.);
+    EXPECT_EQ(c1(2), -3.);
+
+    DenseVector<Real, 3> c2 = m.column(2);
+    EXPECT_EQ(c2(0), 5.);
+    EXPECT_EQ(c2(1), -2.);
+    EXPECT_EQ(c2(2), 4.);
+}
+
+TEST(DenseMatrixTest, row)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2, 1, 5 });
+    m.set_row(1, { 3, -1, -2 });
+    m.set_row(2, { 0, -3, 4 });
+
+    DenseVector<Real, 3> r0 = m.row(0);
+    EXPECT_EQ(r0(0), 2.);
+    EXPECT_EQ(r0(1), 1.);
+    EXPECT_EQ(r0(2), 5.);
+
+    DenseVector<Real, 3> r1 = m.row(1);
+    EXPECT_EQ(r1(0), 3.);
+    EXPECT_EQ(r1(1), -1.);
+    EXPECT_EQ(r1(2), -2.);
+
+    DenseVector<Real, 3> r2 = m.row(2);
+    EXPECT_EQ(r2(0), 0.);
+    EXPECT_EQ(r2(1), -3.);
+    EXPECT_EQ(r2(2), 4.);
 }

@@ -64,7 +64,8 @@ public:
     void
     zero()
     {
-        set_values(0.);
+        for (Int i = 0; i < N; i++)
+            this->data[i].zero();
     }
 
     /// Set `alpha` into all vector elements, i.e. vec[i] = alpha
@@ -202,6 +203,20 @@ public:
         return res;
     }
 
+    template <Int M>
+    DenseVector<T, M>
+    operator*(const DenseMatrix<T, N, M> & a) const
+    {
+        DenseVector<T, M> res;
+        for (Int j = 0; j < M; j++) {
+            T prod = 0;
+            for (Int i = 0; i < N; i++)
+                prod += get(i) * a(i, j);
+            res(j) = prod;
+        }
+        return res;
+    }
+
     T
     operator*(const DenseVector<T, N> & a) const
     {
@@ -222,6 +237,14 @@ public:
     {
         for (Int i = 0; i < N; i++)
             set(i) += a(i);
+        return *this;
+    }
+
+    DenseVector<T, N> &
+    operator+=(const T & a)
+    {
+        for (Int i = 0; i < N; i++)
+            set(i) += a;
         return *this;
     }
 
@@ -326,6 +349,42 @@ DenseVector<Real, 3>::cross(const DenseVector<Real, 3> & a) const
     res(0) = get(1) * a(2) - get(2) * a(1);
     res(1) = -(get(0) * a(2) - get(2) * a(0));
     res(2) = get(0) * a(1) - get(1) * a(0);
+    return res;
+}
+
+/// Convert DenseVector<DenseVector, M>, N> into a DenseMatrix<N, M>
+///
+/// @tparam T Data type
+/// @tparam N Number of rows
+/// @tparam M Number of columns
+/// @param a Vector of vectors to be converted
+/// @return DenseMatrix with values from `a`
+template <typename T, Int N, Int M>
+inline DenseMatrix<T, N, M>
+mat(const DenseVector<DenseVector<T, M>, N> & a)
+{
+    DenseMatrix<T, N, M> res;
+    for (Int i = 0; i < N; i++)
+        for (Int j = 0; j < M; j++)
+            res(i, j) = a(i)(j);
+    return res;
+}
+
+/// Convert DenseVector<DenseVector, M>, N> into a DenseMatrix<M, N>
+///
+/// @tparam T Data type
+/// @tparam N Number of rows in the input "matrix", but number of columns in the resulting matrix
+/// @tparam M Number of columns in the input "matrix", but number of rows in the resulting matrix
+/// @param a Input "matrix"
+/// @return Transposed DenseMatrix with values from `a`
+template <typename T, Int N, Int M>
+inline DenseMatrix<T, M, N>
+mat_transpose(const DenseVector<DenseVector<T, M>, N> & a)
+{
+    DenseMatrix<T, M, N> res;
+    for (Int i = 0; i < N; i++)
+        for (Int j = 0; j < M; j++)
+            res(j, i) = a(i)(j);
     return res;
 }
 
