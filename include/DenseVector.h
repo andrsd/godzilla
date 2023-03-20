@@ -64,7 +64,8 @@ public:
     void
     zero()
     {
-        set_values(0.);
+        for (Int i = 0; i < N; i++)
+            this->data[i].zero();
     }
 
     /// Set `alpha` into all vector elements, i.e. vec[i] = alpha
