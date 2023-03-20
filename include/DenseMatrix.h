@@ -63,6 +63,19 @@ public:
         return this->data[idx(row, col)];
     }
 
+    /// Obtain a column from the matrix
+    ///
+    /// @param idx Index of the column
+    /// @return Column as a DenseVector
+    DenseVector<T, ROWS>
+    column(Int idx)
+    {
+        DenseVector<T, ROWS> col;
+        for (Int row = 0; row < ROWS; row++)
+            col(row) = get(row, idx);
+        return col;
+    }
+
     /// Get entry at specified location for writing
     ///
     /// @param row Row number
