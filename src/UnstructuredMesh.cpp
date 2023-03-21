@@ -446,6 +446,8 @@ UnstructuredMesh::get_num_elem_nodes(DMPolytopeType elem_type)
 {
     _F_;
     switch (elem_type) {
+    case DM_POLYTOPE_POINT:
+        return 1;
     case DM_POLYTOPE_SEGMENT:
         return 2;
     case DM_POLYTOPE_TRIANGLE:
