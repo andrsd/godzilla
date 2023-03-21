@@ -14,10 +14,21 @@ class NaturalBC : public BoundaryCondition {
 public:
     explicit NaturalBC(const Parameters & params);
 
+    void create() override;
+    void set_up() override;
+
+    /// Get the ID of the field this boundary condition operates on
+    ///
+    /// @return ID of the field
+    NO_DISCARD virtual Int get_field_id() const;
+
+    /// Get the component numbers this boundary condition is constraining
+    ///
+    /// @return Vector of component numbers
+    NO_DISCARD virtual const std::vector<Int> & get_components() const = 0;
+
     /// Set up the weak form for the boundary integral of this boundary condition
     virtual void set_up_weak_form() = 0;
-
-    void set_up() override;
 
 protected:
     /// Set residual statement for the boundary integral
@@ -43,6 +54,8 @@ protected:
     DMLabel label;
     /// IDs of the label
     std::vector<Int> ids;
+    /// Field ID this boundary condition is attached to
+    Int fid;
     /// WeakForm object
     WeakForm * wf;
 

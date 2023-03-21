@@ -70,4 +70,5 @@ TEST(EssentialBCTest, api)
     (*fn_t)(1, 0, x, 1, u, &bc);
 
     EXPECT_EQ(bc.get_context(), &bc);
+    EXPECT_EQ(bc.get_field_id(), 0);
 }

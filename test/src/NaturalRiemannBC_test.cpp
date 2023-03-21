@@ -96,4 +96,5 @@ TEST(NaturalRiemannBCTest, api)
     prob.create();
 
     EXPECT_THAT(bc.get_components(), testing::ElementsAre(0));
+    EXPECT_EQ(bc.get_field_id(), 0);
 }
