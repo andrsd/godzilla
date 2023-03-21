@@ -108,6 +108,14 @@ UnstructuredMesh::get_label(const std::string & name) const
     return label;
 }
 
+DMLabel
+UnstructuredMesh::get_depth_label() const
+{
+    DMLabel depth_label;
+    PETSC_CHECK(DMPlexGetDepthLabel(this->dm, &depth_label));
+    return depth_label;
+}
+
 Vector
 UnstructuredMesh::get_coordinates() const
 {

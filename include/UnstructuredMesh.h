@@ -127,6 +127,11 @@ public:
     /// @return DMLabel associated with the `name`
     NO_DISCARD virtual DMLabel get_label(const std::string & name) const;
 
+    /// Get the `DMLabel` recording the depth of each point
+    ///
+    /// @return The `DMLabel` recording point depth
+    DMLabel get_depth_label() const;
+
     /// Get a global vector with the coordinates associated with this mesh
     ///
     /// @return Global coordinate vector

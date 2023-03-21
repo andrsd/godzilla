@@ -187,6 +187,15 @@ TEST(UnstructuredMeshTest, get_cell_connectivity)
     auto support4 = mesh.get_support(4);
     EXPECT_EQ(support4.size(), 1);
     EXPECT_EQ(support4[0], 1);
+
+    auto depth_lbl = mesh.get_depth_label();
+    IndexSet facets = IndexSet::stratum_from_label(depth_lbl, 0);
+    facets.get_indices();
+    EXPECT_EQ(facets.get_local_size(), 3);
+    EXPECT_EQ(facets(0), 2);
+    EXPECT_EQ(facets(1), 3);
+    EXPECT_EQ(facets(2), 4);
+    facets.restore_indices();
 }
 
 TEST(UnstructuredMeshTest, get_local_section)
