@@ -6,6 +6,43 @@
 
 namespace godzilla {
 
+const char *
+get_polytope_type_str(DMPolytopeType elem_type)
+{
+    switch (elem_type) {
+    case DM_POLYTOPE_POINT:
+        return "POINT";
+    case DM_POLYTOPE_SEGMENT:
+        return "SEGMENT";
+    case DM_POLYTOPE_POINT_PRISM_TENSOR:
+        return "POINT_PRISM_TENSOR";
+    case DM_POLYTOPE_TRIANGLE:
+        return "TRIANGLE";
+    case DM_POLYTOPE_QUADRILATERAL:
+        return "QUADRILATERAL";
+    case DM_POLYTOPE_SEG_PRISM_TENSOR:
+        return "SEG_PRISM_TENSOR";
+    case DM_POLYTOPE_TETRAHEDRON:
+        return "TETRAHEDRON";
+    case DM_POLYTOPE_HEXAHEDRON:
+        return "HEXAHEDRON";
+    case DM_POLYTOPE_TRI_PRISM:
+        return "TRI_PRISM";
+    case DM_POLYTOPE_TRI_PRISM_TENSOR:
+        return "TRI_PRISM_TENSOR";
+    case DM_POLYTOPE_QUAD_PRISM_TENSOR:
+        return "QUAD_PRISM_TENSOR";
+    case DM_POLYTOPE_PYRAMID:
+        return "PYRAMID";
+    case DM_POLYTOPE_FV_GHOST:
+        return "FV_GHOST";
+    case DM_POLYTOPE_INTERIOR_GHOST:
+        return "INTERIOR_GHOST";
+    default:
+        return "UNKNOWN";
+    }
+}
+
 Parameters
 UnstructuredMesh::parameters()
 {
@@ -424,6 +461,8 @@ UnstructuredMesh::get_num_elem_nodes(DMPolytopeType elem_type)
 {
     _F_;
     switch (elem_type) {
+    case DM_POLYTOPE_POINT:
+        return 1;
     case DM_POLYTOPE_SEGMENT:
         return 2;
     case DM_POLYTOPE_TRIANGLE:
@@ -434,7 +473,7 @@ UnstructuredMesh::get_num_elem_nodes(DMPolytopeType elem_type)
     case DM_POLYTOPE_HEXAHEDRON:
         return 8;
     default:
-        error("Unsupported type.");
+        error("Unsupported type '%s'.", get_polytope_type_str(elem_type));
     }
 }
 
