@@ -178,6 +178,12 @@ public:
     /// @return Cell connectivity
     std::vector<Int> get_cell_connectivity(Int cell_id) const;
 
+    /// Return the points on the out-edges for this point
+    ///
+    /// @param point Point with must lie in the chart
+    /// @return Points which are on the out-edges for point `p`
+    std::vector<Int> get_support(Int point) const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
