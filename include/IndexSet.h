@@ -23,6 +23,7 @@ public:
     NO_DISCARD Int get_local_size() const;
     NO_DISCARD const Int * data() const;
     Int operator[](unsigned int i) const;
+    Int operator()(unsigned int i) const;
 
     /// Convert indices from this index set into std::vector
     ///
