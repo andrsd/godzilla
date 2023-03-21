@@ -22,6 +22,12 @@ IndexSet::operator[](unsigned int i) const
     return this->indices[i];
 }
 
+Int
+IndexSet::operator()(unsigned int i) const
+{
+    return this->indices[i];
+}
+
 void
 IndexSet::create(MPI_Comm comm)
 {

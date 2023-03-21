@@ -40,6 +40,11 @@ TEST(IndexSetTest, values_from_label)
     EXPECT_EQ(is[2], 1);
     EXPECT_EQ(is[3], 3);
 
+    EXPECT_EQ(is(0), 4);
+    EXPECT_EQ(is(1), 2);
+    EXPECT_EQ(is(2), 1);
+    EXPECT_EQ(is(3), 3);
+
     auto v = is.to_std_vector();
     EXPECT_THAT(v, testing::UnorderedElementsAre(1, 2, 3, 4));
 
