@@ -174,6 +174,19 @@ TEST(UnstructuredMeshTest, get_cell_connectivity)
     auto cell1 = mesh.get_cell_connectivity(1);
     EXPECT_EQ(cell1[0], 1);
     EXPECT_EQ(cell1[1], 2);
+
+    auto support2 = mesh.get_support(2);
+    EXPECT_EQ(support2.size(), 1);
+    EXPECT_EQ(support2[0], 0);
+
+    auto support3 = mesh.get_support(3);
+    EXPECT_EQ(support3.size(), 2);
+    EXPECT_EQ(support3[0], 0);
+    EXPECT_EQ(support3[1], 1);
+
+    auto support4 = mesh.get_support(4);
+    EXPECT_EQ(support4.size(), 1);
+    EXPECT_EQ(support4[0], 1);
 }
 
 TEST(UnstructuredMeshTest, get_local_section)

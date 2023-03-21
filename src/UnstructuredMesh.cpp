@@ -181,6 +181,21 @@ UnstructuredMesh::get_cell_connectivity(Int cell_id) const
     return elem_connect;
 }
 
+std::vector<Int>
+UnstructuredMesh::get_support(Int point) const
+{
+    _F_;
+    Int n_support;
+    PETSC_CHECK(DMPlexGetSupportSize(this->dm, point, &n_support));
+    const Int * support;
+    PETSC_CHECK(DMPlexGetSupport(this->dm, point, &support));
+    std::vector<Int> v;
+    v.resize(n_support);
+    for (Int i = 0; i < n_support; i++)
+        v[i] = support[i];
+    return v;
+}
+
 void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
