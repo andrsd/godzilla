@@ -128,6 +128,40 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NaturalRiemannBC6createEv">
+<span id="_CPPv3N8godzilla16NaturalRiemannBC6createEv"></span><span id="_CPPv2N8godzilla16NaturalRiemannBC6createEv"></span><span id="godzilla::NaturalRiemannBC::create"></span><span class="target" id="classgodzilla_1_1_natural_riemann_b_c_1af4c9ae8ee05c9c0dc0f70591c8e38fc2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NaturalRiemannBC6createEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Called to construct the object. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NaturalRiemannBC6set_upEv">
+<span id="_CPPv3N8godzilla16NaturalRiemannBC6set_upEv"></span><span id="_CPPv2N8godzilla16NaturalRiemannBC6set_upEv"></span><span id="godzilla::NaturalRiemannBC::set_up"></span><span class="target" id="classgodzilla_1_1_natural_riemann_b_c_1a7d46763be250101f8289c82967066f6b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_up</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NaturalRiemannBC6set_upEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Set up this boundary condition. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classgodzilla_1_1_natural_riemann_b_c_1a2653c9f84c7b623d780b8e46a343feb2"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Int</span> <span class="pre">get_field_id</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dd><p>Get the ID of the field this boundary condition operates on. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ID of the field </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classgodzilla_1_1_natural_riemann_b_c_1a17eada23b3a3f9d2d58ec56e47a03ce8"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">std::vector&lt;</span> <span class="pre">Int</span> <span class="pre">&gt;</span> <span class="pre">&amp;</span> <span class="pre">get_components</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">=0</span></span></dt>
+<dd><p>Get the component numbers this boundary condition is constraining. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Vector of component numbers </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NaturalRiemannBC8evaluateE4RealPK4RealPK4RealPK6ScalarP6Scalar">
 <span id="_CPPv3N8godzilla16NaturalRiemannBC8evaluateE4RealPK4RealPK4RealPK6ScalarP6Scalar"></span><span id="_CPPv2N8godzilla16NaturalRiemannBC8evaluateE4RealPK4RealPK4RealPK6ScalarP6Scalar"></span><span id="godzilla::NaturalRiemannBC::evaluate__Real.RealCP.RealCP.ScalarCP.ScalarP"></span><span class="target" id="classgodzilla_1_1_natural_riemann_b_c_1a9910ae876885692cd865ad2ccee51b47"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">c</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">n</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">xI</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">xG</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NaturalRiemannBC8evaluateE4RealPK4RealPK4RealPK6ScalarP6Scalar" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Evaluate the boundary condition. </p>
@@ -142,12 +176,6 @@
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NaturalRiemannBC6set_upEv">
-<span id="_CPPv3N8godzilla16NaturalRiemannBC6set_upEv"></span><span id="_CPPv2N8godzilla16NaturalRiemannBC6set_upEv"></span><span id="godzilla::NaturalRiemannBC::set_up"></span><span class="target" id="classgodzilla_1_1_natural_riemann_b_c_1a7d46763be250101f8289c82967066f6b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_up</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NaturalRiemannBC6set_upEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Set up this boundary condition. </p>
 </dd></dl>
 
 </div>

@@ -129,6 +129,34 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC6createEv">
+<span id="_CPPv3N8godzilla11EssentialBC6createEv"></span><span id="_CPPv2N8godzilla11EssentialBC6createEv"></span><span id="godzilla::EssentialBC::create"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a0b928b43883a092d2e16243a64090c57"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC6createEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Called to construct the object. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classgodzilla_1_1_essential_b_c_1a1af9b526fc25c765c1ab71f05c5d03dc"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Int</span> <span class="pre">get_field_id</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dd><p>Get the ID of the field this boundary condition operates on. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ID of the field </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classgodzilla_1_1_essential_b_c_1a4e1af8ce2d24424b7880d569a4d6d248"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">std::vector&lt;</span> <span class="pre">Int</span> <span class="pre">&gt;</span> <span class="pre">&amp;</span> <span class="pre">get_components</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">=0</span></span></dt>
+<dd><p>Get the component numbers this boundary condition is constraining. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Vector of component numbers </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar">
 <span id="_CPPv3N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1abdea4ab52460f90374cb788bee2587d5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Evaluate the boundary condition. </p>
