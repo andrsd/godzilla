@@ -313,7 +313,7 @@ FEProblemInterface::has_aux(const std::string & name) const
     return it != this->auxs_by_name.end();
 }
 
-const AuxiliaryField *
+AuxiliaryField *
 FEProblemInterface::get_aux(const std::string & name) const
 {
     _F_;

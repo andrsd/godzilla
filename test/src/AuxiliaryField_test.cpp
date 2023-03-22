@@ -34,6 +34,10 @@ TEST_F(AuxiliaryFieldTest, api)
         {
             return nullptr;
         }
+        void
+        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        {
+        }
     };
 
     prob->set_aux_fe(0, "fld", 1, 1);
@@ -76,6 +80,10 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
         get_func() const
         {
             return nullptr;
+        }
+        void
+        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        {
         }
     };
 
@@ -120,6 +128,10 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
         {
             return nullptr;
         }
+        void
+        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        {
+        }
     };
 
     testing::internal::CaptureStderr();
@@ -162,6 +174,10 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
         get_func() const
         {
             return nullptr;
+        }
+        void
+        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        {
         }
     };
 
