@@ -24,13 +24,14 @@ TEST(FunctionEvaluatorTest, multi_evaluate)
     EXPECT_DOUBLE_EQ(7890., val[1]);
 }
 
-TEST(FunctionEvaluatorTest, nan)
+TEST(FunctionEvaluatorTest, error)
 {
     FunctionEvaluator e;
     e.create("a");
     Real x[] = { 1 };
-    Real val = e.evaluate(1, 0., x);
-    EXPECT_TRUE(!(val == val));
+    EXPECT_DEATH(
+        e.evaluate(1, 0., x),
+        "\\[ERROR\\] Function evaluator failed: Unexpected token \"a\" found at position 0.");
 }
 
 TEST(FunctionEvaluatorTest, define_constant)
@@ -43,11 +44,12 @@ TEST(FunctionEvaluatorTest, define_constant)
     EXPECT_DOUBLE_EQ(1234., val);
 }
 
-TEST(FunctionEvaluatorTest, exception)
+TEST(FunctionEvaluatorTest, evaluate_error)
 {
     FunctionEvaluator e;
     e.create("");
     Real x[] = { 0. };
     Real u[] = { 0. };
-    EXPECT_FALSE(e.evaluate(1, 0., x, 1, u));
+    EXPECT_DEATH(e.evaluate(1, 0., x, 1, u),
+                 "\\[ERROR\\] Function evaluator failed: Expression is empty.");
 }

@@ -61,7 +61,7 @@ FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
         return this->parser.Eval();
     }
     catch (mu::Parser::exception_type & e) {
-        return std::nan("");
+        error("Function evaluator failed: %s", e.GetMsg());
     }
 }
 
@@ -91,7 +91,7 @@ FunctionEvaluator::evaluate(Int dim, Real time, const Real x[], Int nc, Real u[]
         return true;
     }
     catch (mu::Parser::exception_type & e) {
-        return false;
+        error("Function evaluator failed: %s", e.GetMsg());
     }
 }
 
