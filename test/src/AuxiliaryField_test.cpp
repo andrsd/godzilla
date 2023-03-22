@@ -20,16 +20,16 @@ TEST_F(AuxiliaryFieldTest, api)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        virtual void
+        void
         create() override
         {
         }
-        virtual Int
+        Int
         get_num_components() const override
         {
             return 1;
         }
-        virtual PetscFunc *
+        PetscFunc *
         get_func() const override
         {
             return nullptr;
@@ -66,18 +66,18 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        virtual Int
-        get_field_id() const
+        Int
+        get_field_id() const override
         {
             return 1;
         }
-        virtual Int
-        get_num_components() const
+        Int
+        get_num_components() const override
         {
             return 2;
         }
-        virtual PetscFunc *
-        get_func() const
+        PetscFunc *
+        get_func() const override
         {
             return nullptr;
         }
@@ -113,18 +113,18 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        virtual Int
-        get_field_id() const
+        Int
+        get_field_id() const override
         {
             return 0;
         }
-        virtual Int
-        get_num_components() const
+        Int
+        get_num_components() const override
         {
             return 2;
         }
-        virtual PetscFunc *
-        get_func() const
+        PetscFunc *
+        get_func() const override
         {
             return nullptr;
         }
@@ -160,18 +160,18 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        virtual Int
-        get_field_id() const
+        Int
+        get_field_id() const override
         {
             return 0;
         }
-        virtual Int
-        get_num_components() const
+        Int
+        get_num_components() const override
         {
             return 1;
         }
-        virtual PetscFunc *
-        get_func() const
+        PetscFunc *
+        get_func() const override
         {
             return nullptr;
         }
