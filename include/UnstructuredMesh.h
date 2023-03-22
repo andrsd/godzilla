@@ -132,6 +132,12 @@ public:
     /// @return The `DMLabel` recording point depth
     DMLabel get_depth_label() const;
 
+    /// Gets the DM that prescribes coordinate layout and scatters between global and local
+    /// coordinates
+    ///
+    /// @return coordinate `DM`
+    DM get_coordinate_dm() const;
+
     /// Get a global vector with the coordinates associated with this mesh
     ///
     /// @return Global coordinate vector
