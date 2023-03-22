@@ -116,6 +116,14 @@ UnstructuredMesh::get_depth_label() const
     return depth_label;
 }
 
+DM
+UnstructuredMesh::get_coordinate_dm() const
+{
+    DM cdm;
+    PETSC_CHECK(DMGetCoordinateDM(this->dm, &cdm));
+    return cdm;
+}
+
 Vector
 UnstructuredMesh::get_coordinates() const
 {
