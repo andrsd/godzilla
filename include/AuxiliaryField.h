@@ -38,6 +38,8 @@ public:
 
     virtual void * get_context();
 
+    virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
+
 protected:
     /// FE problem this object is part of
     const FEProblemInterface * fepi;

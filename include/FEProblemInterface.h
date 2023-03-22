@@ -80,7 +80,7 @@ public:
     ///
     /// @param name The name of the object
     /// @return Pointer to the auxiliary object
-    virtual const AuxiliaryField * get_aux(const std::string & name) const;
+    virtual AuxiliaryField * get_aux(const std::string & name) const;
 
     /// Adds a volumetric field
     ///
