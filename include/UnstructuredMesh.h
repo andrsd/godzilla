@@ -319,4 +319,10 @@ public:
     static int get_num_cell_nodes(DMPolytopeType cell_type);
 };
 
+/// Get string representation of a polytope type
+///
+/// @param cell_type Cell type
+/// @return String describing the polytope type
+const char * get_polytope_type_str(DMPolytopeType cell_type);
+
 } // namespace godzilla
