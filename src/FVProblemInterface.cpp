@@ -165,7 +165,7 @@ FVProblemInterface::get_num_aux_fields() const
 std::vector<std::string>
 FVProblemInterface::get_aux_field_names() const
 {
-    error("Not implemented");
+    return {};
 }
 
 const std::string &
@@ -233,7 +233,7 @@ FVProblemInterface::get_solution_vector_local() const
 const Vector &
 FVProblemInterface::get_aux_solution_vector_local() const
 {
-    error("Not implemented");
+    return this->a;
 }
 
 void

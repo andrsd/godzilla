@@ -119,6 +119,9 @@ protected:
     /// Local solution vector
     Vector sln;
 
+    /// Local auxiliary solution vector
+    Vector a;
+
     friend void __compute_flux(Int dim,
                                Int nf,
                                const Real x[],

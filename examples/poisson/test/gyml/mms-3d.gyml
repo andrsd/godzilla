@@ -32,3 +32,4 @@ bcs:
 output:
   out:
     type: ExodusIIOutput
+    variables: 'u'
