@@ -255,6 +255,7 @@ TEST(UnstructuredMeshTest, get_global_section)
 
 TEST(UnstructuredMeshTest, get_num_cell_nodes)
 {
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_POINT), 1);
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_SEGMENT), 2);
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_TRIANGLE), 3);
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_QUADRILATERAL), 4);
