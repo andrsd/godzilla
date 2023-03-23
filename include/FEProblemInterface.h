@@ -38,37 +38,23 @@ public:
     Int get_field_order(Int fid) const override;
     std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
+
+    Int get_num_aux_fields() const override;
+    std::vector<std::string> get_aux_field_names() const override;
+    const std::string & get_aux_field_name(Int fid) const override;
+    Int get_aux_field_num_components(Int fid) const override;
+    Int get_aux_field_id(const std::string & name) const override;
+    bool has_aux_field_by_id(Int fid) const override;
+    bool has_aux_field_by_name(const std::string & name) const override;
+    Int get_aux_field_order(Int fid) const override;
+    std::string get_aux_field_component_name(Int fid, Int component) const override;
+    void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
+
+    Int get_aux_field_dof(Int point, Int fid) const override;
+
     const Vector & get_solution_vector_local() const override;
+    const Vector & get_aux_solution_vector_local() const override;
     virtual WeakForm * get_weak_form() const;
-
-    /// Get number of auxiliary fields
-    ///
-    /// @return The number of auxiliary fields
-    virtual Int get_num_aux_fields() const;
-
-    /// Get auxiliary field name
-    ///
-    /// @param fid Auxiliary field ID
-    /// @return Auxiliary field name
-    virtual const std::string & get_aux_field_name(Int fid) const;
-
-    /// Get auxiliary field ID
-    ///
-    /// @param name Auxiliary field name
-    /// @param Auxiliary field ID
-    virtual Int get_aux_field_id(const std::string & name) const;
-
-    /// Do we have auxiliary field with specified ID
-    ///
-    /// @param fid The ID of the auxiliary field
-    /// @return True if the auxiliary field exists, otherwise False
-    virtual bool has_aux_field_by_id(Int fid) const;
-
-    /// Do we have auxiliary field with specified name
-    ///
-    /// @param name The name of the auxiliary field
-    /// @return True if the auxiliary field exists, otherwise False
-    virtual bool has_aux_field_by_name(const std::string & name) const;
 
     /// Check if we have an auxiliary object with a specified name
     ///
@@ -396,6 +382,9 @@ protected:
 
     /// DM for auxiliary fields
     DM dm_aux;
+
+    /// Auxiliary section
+    Section section_aux;
 
     /// Vector for auxiliary fields
     Vector a;

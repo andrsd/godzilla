@@ -89,6 +89,66 @@ public:
     /// @param name Component name
     virtual void set_field_component_name(Int fid, Int component, const std::string & name) = 0;
 
+    /// Get number of auxiliary fields
+    ///
+    /// @return The number of auxiliary fields
+    virtual Int get_num_aux_fields() const = 0;
+
+    /// Get all auxiliary field names
+    ///
+    /// @return All auxiliary field names
+    virtual std::vector<std::string> get_aux_field_names() const = 0;
+
+    /// Get auxiliary field name
+    ///
+    /// @param fid Auxiliary field ID
+    /// @return Auxiliary field name
+    virtual const std::string & get_aux_field_name(Int fid) const = 0;
+
+    /// Get number of auxiliary field components
+    ///
+    /// @param fid Auxiliary field ID
+    /// @return Number of components
+    virtual Int get_aux_field_num_components(Int fid) const = 0;
+
+    /// Get auxiliary field ID
+    ///
+    /// @param name Auxiliary field name
+    /// @return Auxiliary field ID
+    virtual Int get_aux_field_id(const std::string & name) const = 0;
+
+    /// Do we have auxiliary field with specified ID
+    ///
+    /// @param fid The ID of the auxiliary field
+    /// @return True if the auxiliary field exists, otherwise False
+    virtual bool has_aux_field_by_id(Int fid) const = 0;
+
+    /// Do we have auxiliary field with specified name
+    ///
+    /// @param name The name of the auxiliary field
+    /// @return True if the auxiliary field exists, otherwise False
+    virtual bool has_aux_field_by_name(const std::string & name) const = 0;
+
+    /// Get auxiliary field order
+    ///
+    /// @param fid Auxiliary field ID
+    /// @return Auxiliary field order
+    virtual Int get_aux_field_order(Int fid) const = 0;
+
+    /// Get component name of an auxiliary field
+    ///
+    /// @param fid Auxiliary field ID
+    /// @param component Component index
+    /// @return Component name
+    virtual std::string get_aux_field_component_name(Int fid, Int component) const = 0;
+
+    /// Set the name of a component of an auxiliary field variable
+    ///
+    /// @param fid Field ID
+    /// @param component Component index
+    /// @param name Component name
+    virtual void set_aux_field_component_name(Int fid, Int component, const std::string & name) = 0;
+
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
@@ -106,6 +166,14 @@ public:
     /// @return The offset
     virtual Int get_field_dof(Int point, Int fid) const;
 
+    /// Return the offset into an array of local auxiliary Vec for the dof associated with the given
+    /// point
+    ///
+    /// @param point Point
+    /// @param fid Field ID
+    /// @return The offset
+    virtual Int get_aux_field_dof(Int point, Int fid) const = 0;
+
     /// Gets a local vector with the coordinates associated with this problem's mesh
     ///
     /// @return coordinate vector
@@ -115,6 +183,11 @@ public:
     ///
     /// @return Local solution vector
     virtual const Vector & get_solution_vector_local() const = 0;
+
+    /// Get local auxiliary solution vector
+    ///
+    /// @return Local auxiliary solution vector
+    virtual const Vector & get_aux_solution_vector_local() const = 0;
 
     virtual void add_boundary_essential(const std::string & name,
                                         DMLabel label,

@@ -62,6 +62,7 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & par
     DependencyEvaluator(),
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
+    section_aux(nullptr),
     a(nullptr),
     ds_aux(nullptr),
     wf(new WeakForm())
@@ -194,12 +195,27 @@ FEProblemInterface::get_field_id(const std::string & name) const
         error("Field '%s' does not exist. Typo?", name);
 }
 
+Int
+FEProblemInterface::get_aux_field_dof(Int point, Int fid) const
+{
+    _F_;
+    Int offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid, &offset));
+    return offset;
+}
+
 const Vector &
 FEProblemInterface::get_solution_vector_local() const
 {
     _F_;
     build_local_solution_vector(this->sln);
     return this->sln;
+}
+
+const Vector &
+FEProblemInterface::get_aux_solution_vector_local() const
+{
+    return this->a;
 }
 
 WeakForm *
@@ -267,6 +283,17 @@ FEProblemInterface::get_num_aux_fields() const
     return (Int) this->aux_fields.size();
 }
 
+std::vector<std::string>
+FEProblemInterface::get_aux_field_names() const
+{
+    _F_;
+    std::vector<std::string> names;
+    names.reserve(this->aux_fields.size());
+    for (const auto & it : this->aux_fields)
+        names.push_back(it.second.name);
+    return names;
+}
+
 const std::string &
 FEProblemInterface::get_aux_field_name(Int fid) const
 {
@@ -274,6 +301,17 @@ FEProblemInterface::get_aux_field_name(Int fid) const
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end())
         return it->second.name;
+    else
+        error("Auxiliary field with ID = '%d' does not exist.", fid);
+}
+
+Int
+FEProblemInterface::get_aux_field_num_components(Int fid) const
+{
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end())
+        return it->second.nc;
     else
         error("Auxiliary field with ID = '%d' does not exist.", fid);
 }
@@ -303,6 +341,52 @@ FEProblemInterface::has_aux_field_by_name(const std::string & name) const
     _F_;
     const auto & it = this->aux_fields_by_name.find(name);
     return it != this->aux_fields_by_name.end();
+}
+
+Int
+FEProblemInterface::get_aux_field_order(Int fid) const
+{
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end())
+        return it->second.k;
+    else
+        error("Auxiliary field with ID = '%d' does not exist.", fid);
+}
+
+std::string
+FEProblemInterface::get_aux_field_component_name(Int fid, Int component) const
+{
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end()) {
+        const FieldInfo & fi = it->second;
+        if (fi.nc == 1)
+            return { "" };
+        else {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            return it->second.component_names.at(component);
+        }
+    }
+    else
+        error("Auxiliary field with ID = '%d' does not exist.", fid);
+}
+
+void
+FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const std::string & name)
+{
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end()) {
+        if (it->second.nc > 1) {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            it->second.component_names[component] = name;
+        }
+        else
+            error("Unable to set component name for single-component field");
+    }
+    else
+        error("Auxiliary field with ID = '%d' does not exist.", fid);
 }
 
 bool
@@ -595,6 +679,9 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
 
         PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
+        PetscSection sa;
+        PETSC_CHECK(DMGetLocalSection(this->dm_aux, &sa));
+        this->section_aux = Section(sa);
         PETSC_CHECK(
             PetscDSGetEvaluationArrays(this->ds_aux, &this->asmbl.a, nullptr, &this->asmbl.a_x));
         PETSC_CHECK(PetscDSGetComponentOffsets(this->ds_aux, &this->asmbl.a_offset));
