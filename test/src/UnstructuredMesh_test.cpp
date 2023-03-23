@@ -140,6 +140,10 @@ TEST(UnstructuredMeshTest, get_coordinates)
     EXPECT_EQ(coords(0), -1.);
     EXPECT_EQ(coords(1), 0.);
     EXPECT_EQ(coords(2), 1.);
+
+    DM cdm;
+    DMGetCoordinateDM(mesh.get_dm(), &cdm);
+    EXPECT_EQ(mesh.get_coordinate_dm(), cdm);
 }
 
 TEST(UnstructuredMeshTest, get_coordinates_local)
