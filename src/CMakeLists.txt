@@ -71,6 +71,7 @@ add_library(${PROJECT_NAME}
         RectangleMesh.cpp
         ResidualFunc.cpp
         Section.cpp
+        TecplotOutput.cpp
         Terminal.cpp
         TimeSteppingAdaptor.cpp
         TransientProblemInterface.cpp
