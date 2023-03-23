@@ -56,9 +56,9 @@ TEST(UnstructuredMeshTest, api)
     mesh.create();
 
     EXPECT_EQ(mesh.get_num_vertices(), 3);
-    EXPECT_EQ(mesh.get_num_elements(), 2);
+    EXPECT_EQ(mesh.get_num_cells(), 2);
 
-    auto elem_range = mesh.get_element_range();
+    auto elem_range = mesh.get_cell_range();
     EXPECT_EQ(elem_range.get_first(), 0);
     EXPECT_EQ(elem_range.get_last(), 2);
 
@@ -85,13 +85,13 @@ TEST(UnstructuredMeshTest, api_ghosted)
     mesh.construct_ghost_cells();
 
     EXPECT_EQ(mesh.get_num_vertices(), 3);
-    EXPECT_EQ(mesh.get_num_elements(), 2);
-    EXPECT_EQ(mesh.get_num_all_elements(), 4);
+    EXPECT_EQ(mesh.get_num_cells(), 2);
+    EXPECT_EQ(mesh.get_num_all_cells(), 4);
 
-    auto elem_range = mesh.get_element_range();
+    auto elem_range = mesh.get_cell_range();
     EXPECT_EQ(elem_range.get_first(), 0);
     EXPECT_EQ(elem_range.get_last(), 2);
-    auto all_elem_range = mesh.get_all_element_range();
+    auto all_elem_range = mesh.get_all_cell_range();
     EXPECT_EQ(all_elem_range.get_first(), 0);
     EXPECT_EQ(all_elem_range.get_last(), 4);
 
@@ -249,13 +249,13 @@ TEST(UnstructuredMeshTest, get_global_section)
     EXPECT_EQ(congruent, PETSC_TRUE);
 }
 
-TEST(UnstructuredMeshTest, get_num_elem_nodes)
+TEST(UnstructuredMeshTest, get_num_cell_nodes)
 {
-    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_SEGMENT), 2);
-    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_TRIANGLE), 3);
-    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_QUADRILATERAL), 4);
-    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_TETRAHEDRON), 4);
-    EXPECT_EQ(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_HEXAHEDRON), 8);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_SEGMENT), 2);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_TRIANGLE), 3);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_QUADRILATERAL), 4);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_TETRAHEDRON), 4);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_HEXAHEDRON), 8);
 
-    EXPECT_DEATH(UnstructuredMesh::get_num_elem_nodes(DM_POLYTOPE_PYRAMID), "Unsupported type.");
+    EXPECT_DEATH(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_PYRAMID), "Unsupported type.");
 }

@@ -10,7 +10,7 @@ namespace internal {
 /// @param comm MPI communicator
 /// @param dim Spatial dimension
 /// @param Nc Number of components
-/// @param is_simplex `true` is simplex elements
+/// @param is_simplex `true` is simplex cells
 /// @param k Polynomial order
 /// @param qorder Quadrature order
 /// @param fem Created PetscFE object

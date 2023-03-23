@@ -188,7 +188,7 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
     DM plex;
     PetscCall(DMTSConvertPlex(get_dm(), &plex, PETSC_TRUE));
 
-    IndexSet all_cells = this->unstr_mesh->get_all_elements();
+    IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
     Int n_ds;
     PETSC_CHECK(DMGetNumDS(plex, &n_ds));
@@ -231,7 +231,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
     DM plex;
     PetscCall(DMTSConvertPlex(get_dm(), &plex, PETSC_TRUE));
 
-    IndexSet all_cells = this->unstr_mesh->get_all_elements();
+    IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
     Int n_ds;
     PetscCall(DMGetNumDS(plex, &n_ds));

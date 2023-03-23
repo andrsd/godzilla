@@ -156,32 +156,36 @@ public:
     /// @return Range of vertex indices
     Range get_vertex_range() const;
 
-    /// Return the number of mesh elements (interior)
-    NO_DISCARD virtual Int get_num_elements() const;
-
-    /// Return the number of all mesh elements (interior + ghosted)
-    NO_DISCARD virtual Int get_num_all_elements() const;
-
-    /// Get range of element indices (interior only)
+    /// Return the number of mesh cells (interior)
     ///
-    /// @return Range of element indices
-    Range get_element_range() const;
+    /// @return Number of mesh cells (interior)
+    NO_DISCARD virtual Int get_num_cells() const;
 
-    /// Get range of all element indices (interior + ghosted)
+    /// Return the number of all mesh cells (interior + ghosted)
     ///
-    /// @param Range of all element indices (interior + ghosted)
-    Range get_all_element_range() const;
+    /// @return Number of all mesh cells (interior + ghosted)
+    NO_DISCARD virtual Int get_num_all_cells() const;
 
-    /// Get index set with all elements
+    /// Get range of cell indices (interior only)
     ///
-    /// @return Index set with all elements
-    IndexSet get_all_elements() const;
+    /// @return Range of cell indices
+    Range get_cell_range() const;
+
+    /// Get range of all cell indices (interior + ghosted)
+    ///
+    /// @param Range of all cell indices (interior + ghosted)
+    Range get_all_cell_range() const;
+
+    /// Get index set with all cells
+    ///
+    /// @return Index set with all cells
+    IndexSet get_all_cells() const;
 
     /// Get cell type
     ///
-    /// @param el Element index
+    /// @param cell Cell index
     /// @return Cell type
-    NO_DISCARD virtual DMPolytopeType get_cell_type(Int el) const;
+    NO_DISCARD virtual DMPolytopeType get_cell_type(Int cell) const;
 
     /// Get connectivity
     ///
@@ -312,7 +316,7 @@ protected:
 public:
     static Parameters parameters();
 
-    static int get_num_elem_nodes(DMPolytopeType elem_type);
+    static int get_num_cell_nodes(DMPolytopeType cell_type);
 };
 
 } // namespace godzilla
