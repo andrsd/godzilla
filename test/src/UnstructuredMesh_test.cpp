@@ -58,14 +58,6 @@ TEST(UnstructuredMeshTest, api)
     EXPECT_EQ(mesh.get_num_vertices(), 3);
     EXPECT_EQ(mesh.get_num_cells(), 2);
 
-    auto elem_range = mesh.get_cell_range();
-    EXPECT_EQ(elem_range.get_first(), 0);
-    EXPECT_EQ(elem_range.get_last(), 2);
-
-    auto vtx_range = mesh.get_vertex_range();
-    EXPECT_EQ(vtx_range.get_first(), 2);
-    EXPECT_EQ(vtx_range.get_last(), 5);
-
     EXPECT_EQ(mesh.get_partition_overlap(), 1);
 
     EXPECT_TRUE(mesh.is_simplex());
@@ -87,13 +79,6 @@ TEST(UnstructuredMeshTest, api_ghosted)
     EXPECT_EQ(mesh.get_num_vertices(), 3);
     EXPECT_EQ(mesh.get_num_cells(), 2);
     EXPECT_EQ(mesh.get_num_all_cells(), 4);
-
-    auto elem_range = mesh.get_cell_range();
-    EXPECT_EQ(elem_range.get_first(), 0);
-    EXPECT_EQ(elem_range.get_last(), 2);
-    auto all_elem_range = mesh.get_all_cell_range();
-    EXPECT_EQ(all_elem_range.get_first(), 0);
-    EXPECT_EQ(all_elem_range.get_last(), 4);
 
     EXPECT_EQ(mesh.get_partition_overlap(), 1);
 
@@ -263,4 +248,35 @@ TEST(UnstructuredMeshTest, get_num_cell_nodes)
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_HEXAHEDRON), 8);
 
     EXPECT_DEATH(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_PYRAMID), "Unsupported type.");
+}
+
+TEST(UnstructuredMeshTest, ranges)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+    mesh.set_partition_overlap(1);
+    mesh.create();
+    mesh.construct_ghost_cells();
+
+    EXPECT_EQ(*mesh.vertex_begin(), 4);
+    EXPECT_EQ(*mesh.vertex_end(), 7);
+
+    auto vtx_range = mesh.get_vertex_range();
+    EXPECT_EQ(vtx_range.get_first(), 4);
+    EXPECT_EQ(vtx_range.get_last(), 7);
+
+    EXPECT_EQ(*mesh.cell_begin(), 0);
+    EXPECT_EQ(*mesh.cell_end(), 4);
+
+    auto cell_range = mesh.get_cell_range();
+    EXPECT_EQ(cell_range.get_first(), 0);
+    EXPECT_EQ(cell_range.get_last(), 2);
+
+    auto all_cell_range = mesh.get_all_cell_range();
+    EXPECT_EQ(all_cell_range.get_first(), 0);
+    EXPECT_EQ(all_cell_range.get_last(), 4);
 }
