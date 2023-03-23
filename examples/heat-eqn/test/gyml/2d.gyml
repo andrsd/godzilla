@@ -37,3 +37,4 @@ output:
     type: ExodusIIOutput
     file: '2d'
     on: ['initial', 'final']
+    variables: 'temp'

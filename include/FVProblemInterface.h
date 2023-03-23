@@ -23,7 +23,22 @@ public:
     Int get_field_order(Int fid) const override;
     std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
+
+    Int get_num_aux_fields() const override;
+    std::vector<std::string> get_aux_field_names() const override;
+    const std::string & get_aux_field_name(Int fid) const override;
+    Int get_aux_field_num_components(Int fid) const override;
+    Int get_aux_field_id(const std::string & name) const override;
+    bool has_aux_field_by_id(Int fid) const override;
+    bool has_aux_field_by_name(const std::string & name) const override;
+    Int get_aux_field_order(Int fid) const override;
+    std::string get_aux_field_component_name(Int fid, Int component) const override;
+    void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
+
+    Int get_aux_field_dof(Int point, Int fid) const override;
+
     const Vector & get_solution_vector_local() const override;
+    const Vector & get_aux_solution_vector_local() const override;
 
     /// Adds a volumetric field
     ///
@@ -103,6 +118,9 @@ protected:
 
     /// Local solution vector
     Vector sln;
+
+    /// Local auxiliary solution vector
+    Vector a;
 
     friend void __compute_flux(Int dim,
                                Int nf,

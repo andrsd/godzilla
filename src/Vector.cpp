@@ -261,11 +261,27 @@ Vector::get_array()
     return array;
 }
 
+const Scalar *
+Vector::get_array_read()
+{
+    _F_;
+    const Scalar * array;
+    PETSC_CHECK(VecGetArrayRead(this->vec, &array));
+    return array;
+}
+
 void
 Vector::restore_array(Scalar * array)
 {
     _F_;
     PETSC_CHECK(VecRestoreArray(this->vec, &array));
+}
+
+void
+Vector::restore_array_read(const Scalar * array)
+{
+    _F_;
+    PETSC_CHECK(VecRestoreArrayRead(this->vec, &array));
 }
 
 void

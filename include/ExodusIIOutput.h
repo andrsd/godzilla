@@ -45,11 +45,12 @@ protected:
     void write_node_sets();
     void write_face_sets();
     void add_var_names(Int fid, std::vector<std::string> & var_names);
+    void add_aux_var_names(Int fid, std::vector<std::string> & var_names);
     void write_all_variable_names();
     void write_variables();
     void write_field_variables();
-    void write_nodal_variables(const Scalar * sln);
-    void write_elem_variables(const Scalar * sln);
+    void write_nodal_variables();
+    void write_elem_variables();
     void write_block_elem_variables(int blk_id,
                                     const Scalar * sln,
                                     Int n_elems_in_block = 0,
@@ -72,10 +73,14 @@ protected:
     bool mesh_stored;
     /// List of field variable names to output
     std::vector<std::string> field_var_names;
+    /// List of auxiliary field variable names to output
+    std::vector<std::string> aux_field_var_names;
     /// List of global variable names to output
     std::vector<std::string> global_var_names;
     /// List of nodal variable field IDs
     std::vector<Int> nodal_var_fids;
+    /// List of nodal auxiliary variable field IDs
+    std::vector<Int> nodal_aux_var_fids;
     /// List of nodal elemental variable field IDs
     std::vector<Int> elem_var_fids;
 

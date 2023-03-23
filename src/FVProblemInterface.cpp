@@ -156,12 +156,84 @@ FVProblemInterface::set_field_component_name(Int fid, Int component, const std::
         error("Field with ID = '%d' does not exist.", fid);
 }
 
+Int
+FVProblemInterface::get_num_aux_fields() const
+{
+    error("Not implemented");
+}
+
+std::vector<std::string>
+FVProblemInterface::get_aux_field_names() const
+{
+    return {};
+}
+
+const std::string &
+FVProblemInterface::get_aux_field_name(Int fid) const
+{
+    error("Not implemented");
+}
+
+Int
+FVProblemInterface::get_aux_field_num_components(Int fid) const
+{
+    error("Not implemented");
+}
+
+Int
+FVProblemInterface::get_aux_field_id(const std::string & name) const
+{
+    error("Not implemented");
+}
+
+bool
+FVProblemInterface::has_aux_field_by_id(Int fid) const
+{
+    error("Not implemented");
+}
+
+bool
+FVProblemInterface::has_aux_field_by_name(const std::string & name) const
+{
+    error("Not implemented");
+}
+
+Int
+FVProblemInterface::get_aux_field_order(Int fid) const
+{
+    error("Not implemented");
+}
+
+std::string
+FVProblemInterface::get_aux_field_component_name(Int fid, Int component) const
+{
+    error("Not implemented");
+}
+
+void
+FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const std::string & name)
+{
+    error("Not implemented");
+}
+
+Int
+FVProblemInterface::get_aux_field_dof(Int point, Int fid) const
+{
+    error("Not implemented");
+}
+
 const Vector &
 FVProblemInterface::get_solution_vector_local() const
 {
     _F_;
     build_local_solution_vector(this->sln);
     return this->sln;
+}
+
+const Vector &
+FVProblemInterface::get_aux_solution_vector_local() const
+{
+    return this->a;
 }
 
 void
