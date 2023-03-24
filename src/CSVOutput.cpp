@@ -78,23 +78,23 @@ void
 CSVOutput::write_header()
 {
     _F_;
-    fmt::fprintf(this->f, "time");
+    fmt::print(this->f, "time");
     for (auto & name : this->pps_names)
-        fmt::fprintf(this->f, ",%s", name.c_str());
-    fmt::fprintf(this->f, "\n");
+        fmt::print(this->f, ",{}", name);
+    fmt::print(this->f, "\n");
 }
 
 void
 CSVOutput::write_values(Real time)
 {
     _F_;
-    fmt::fprintf(this->f, "%g", time);
+    fmt::print(this->f, "{:g}", time);
     for (auto & name : this->pps_names) {
         auto * pps = this->problem->get_postprocessor(name);
         Real val = pps->get_value();
-        fmt::fprintf(this->f, ",%g", val);
+        fmt::print(this->f, ",{:g}", val);
     }
-    fmt::fprintf(this->f, "\n");
+    fmt::print(this->f, "\n");
 }
 
 void

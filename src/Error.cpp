@@ -10,7 +10,7 @@ namespace internal {
 void
 print_call_stack()
 {
-    fmt::fprintf(stderr, "\n");
+    fmt::print(stderr, "\n");
     get_callstack().dump();
 }
 
