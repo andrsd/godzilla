@@ -78,6 +78,7 @@ TecplotOutput::parameters()
 
 TecplotOutput::TecplotOutput(const Parameters & params) :
     FileOutput(params),
+    format(BINARY),
     dpi(dynamic_cast<const DiscreteProblemInterface *>(this->problem)),
     mesh(this->problem ? dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh())
                        : nullptr),
@@ -85,7 +86,8 @@ TecplotOutput::TecplotOutput(const Parameters & params) :
     file(nullptr),
     header_written(false),
     n_shared_vars(-1),
-    n_zones(-1)
+    n_zones(-1),
+    element_id_var_index(-1)
 {
     _F_;
 }
@@ -306,21 +308,21 @@ TecplotOutput::write_header_ascii()
     std::vector<std::string> var_names;
     for (Int i = 0; i < dim; i++) {
         var_names.push_back(coord_names[i]);
-        dts.push_back("DOUBLE");
+        dts.emplace_back("DOUBLE");
     }
-    var_names.push_back("Node IDs");
-    dts.push_back("LONGINT");
-    var_names.push_back("Element IDs");
-    dts.push_back("LONGINT");
-    this->element_id_var_index = var_names.size();
-    this->n_shared_vars = var_names.size();
+    var_names.emplace_back("Node IDs");
+    dts.emplace_back("LONGINT");
+    var_names.emplace_back("Element IDs");
+    dts.emplace_back("LONGINT");
+    this->element_id_var_index = (Int) var_names.size();
+    this->n_shared_vars = (Int) var_names.size();
     for (auto & vn : this->field_var_names) {
         var_names.push_back(vn);
-        dts.push_back("DOUBLE");
+        dts.emplace_back("DOUBLE");
     }
     for (auto & vn : this->aux_field_var_names) {
         var_names.push_back(vn);
-        dts.push_back("DOUBLE");
+        dts.emplace_back("DOUBLE");
     }
 
     this->datatypes = fmt::format("{}", fmt::join(dts, " "));
