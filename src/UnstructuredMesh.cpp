@@ -87,7 +87,7 @@ UnstructuredMesh::create()
 
     lprintf(9, "Information:");
     lprintf(9, "- vertices: %d", get_num_vertices());
-    lprintf(9, "- elements: %d", get_num_elements());
+    lprintf(9, "- elements: %d", get_num_cells());
 }
 
 bool
@@ -156,21 +156,21 @@ UnstructuredMesh::get_vertex_range() const
 }
 
 Int
-UnstructuredMesh::get_num_elements() const
+UnstructuredMesh::get_num_cells() const
 {
     _F_;
-    return get_element_range().size();
+    return get_cell_range().size();
 }
 
 Int
-UnstructuredMesh::get_num_all_elements() const
+UnstructuredMesh::get_num_all_cells() const
 {
     _F_;
-    return get_all_element_range().size();
+    return get_all_cell_range().size();
 }
 
 UnstructuredMesh::Range
-UnstructuredMesh::get_element_range() const
+UnstructuredMesh::get_cell_range() const
 {
     Int first, last;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
@@ -182,7 +182,7 @@ UnstructuredMesh::get_element_range() const
 }
 
 UnstructuredMesh::Range
-UnstructuredMesh::get_all_element_range() const
+UnstructuredMesh::get_all_cell_range() const
 {
     Int first, last;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
@@ -190,7 +190,7 @@ UnstructuredMesh::get_all_element_range() const
 }
 
 IndexSet
-UnstructuredMesh::get_all_elements() const
+UnstructuredMesh::get_all_cells() const
 {
     Int depth;
     PETSC_CHECK(DMPlexGetDepth(this->dm, &depth));
@@ -212,14 +212,14 @@ UnstructuredMesh::get_cell_type(Int el) const
 std::vector<Int>
 UnstructuredMesh::get_cell_connectivity(Int cell_id) const
 {
-    Int n_all_elems = get_num_all_elements();
+    Int n_all_elems = get_num_all_cells();
 
     Int closure_size;
     Int * closure = nullptr;
     PETSC_CHECK(DMPlexGetTransitiveClosure(this->dm, cell_id, PETSC_TRUE, &closure_size, &closure));
 
     auto polytope_type = get_cell_type(cell_id);
-    Int n_elem_nodes = UnstructuredMesh::get_num_elem_nodes(polytope_type);
+    Int n_elem_nodes = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     std::vector<Int> elem_connect;
     elem_connect.resize(n_elem_nodes);
     for (Int k = 0; k < n_elem_nodes; k++) {
@@ -473,7 +473,7 @@ UnstructuredMesh::get_global_section() const
 }
 
 int
-UnstructuredMesh::get_num_elem_nodes(DMPolytopeType elem_type)
+UnstructuredMesh::get_num_cell_nodes(DMPolytopeType elem_type)
 {
     _F_;
     switch (elem_type) {

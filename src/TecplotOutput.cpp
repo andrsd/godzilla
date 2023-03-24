@@ -347,15 +347,15 @@ TecplotOutput::write_zone_ascii()
 {
     _F_;
     // FIXME: allow output for cell sets
-    auto elem_range = this->mesh->get_element_range();
-    auto n_elems_in_block = this->mesh->get_num_elements();
-    DMPolytopeType polytope_type = this->mesh->get_cell_type(elem_range.get_first());
+    auto cell_range = this->mesh->get_cell_range();
+    auto n_cells_in_block = this->mesh->get_num_cells();
+    DMPolytopeType polytope_type = this->mesh->get_cell_type(cell_range.get_first());
     const char * zone_type = get_zone_type(polytope_type);
     Int n_nodes = this->mesh->get_num_vertices();
 
     write_line("ZONE\n");
     write_line(
-        fmt::format(" ZONETYPE={}, Nodes={}, Elements={}\n", zone_type, n_nodes, n_elems_in_block));
+        fmt::format(" ZONETYPE={}, Nodes={}, Elements={}\n", zone_type, n_nodes, n_cells_in_block));
 
     Real time = this->problem->get_time();
     write_line(fmt::format(" STRANDID=2, SOLUTIONTIME={}\n", time));
@@ -403,7 +403,7 @@ void
 TecplotOutput::write_node_ids_ascii()
 {
     _F_;
-    auto n_elems = this->mesh->get_num_elements();
+    auto n_elems = this->mesh->get_num_cells();
     for (auto & vertex_id : this->mesh->get_vertex_range()) {
         auto node_id = vertex_id - n_elems;
         write_line(fmt::format(" {}", node_id));
@@ -417,7 +417,7 @@ void
 TecplotOutput::write_element_ids_ascii()
 {
     _F_;
-    for (auto & elem_id : this->mesh->get_element_range()) {
+    for (auto & elem_id : this->mesh->get_cell_range()) {
         write_line(fmt::format(" {}", elem_id));
         if ((elem_id + 1) % 10 == 0)
             write_line("\n");
@@ -429,10 +429,10 @@ void
 TecplotOutput::write_connectivity_ascii()
 {
     _F_;
-    for (auto & elem_id : this->mesh->get_element_range()) {
-        auto polytope_type = this->mesh->get_cell_type(elem_id);
+    for (auto & cell_id : this->mesh->get_cell_range()) {
+        auto polytope_type = this->mesh->get_cell_type(cell_id);
         const Int * ordering = get_elem_node_ordering(polytope_type);
-        auto cell_connect = this->mesh->get_cell_connectivity(elem_id);
+        auto cell_connect = this->mesh->get_cell_connectivity(cell_id);
         for (Int k = 0; k < cell_connect.size(); k++)
             write_line(fmt::format(" {}", cell_connect[ordering[k]] + 1));
         write_line("\n");

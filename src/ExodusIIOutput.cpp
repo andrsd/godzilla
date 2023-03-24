@@ -226,7 +226,7 @@ ExodusIIOutput::write_mesh()
 {
     _F_;
     int n_nodes = (int) this->mesh->get_num_vertices();
-    int n_elems = (int) this->mesh->get_num_elements();
+    int n_elems = (int) this->mesh->get_num_cells();
 
     // number of element blocks
     int n_elem_blk = (int) this->mesh->get_num_cell_sets();
@@ -325,7 +325,7 @@ ExodusIIOutput::write_node_sets()
     if (!this->mesh->has_label("Vertex Sets"))
         return;
 
-    auto elem_range = this->mesh->get_element_range();
+    auto elem_range = this->mesh->get_cell_range();
     Int n_elems_in_block = elem_range.size();
 
     Int n_node_sets = this->mesh->get_num_vertex_sets();
@@ -523,7 +523,7 @@ ExodusIIOutput::write_nodal_variables()
     auto aux_sln = this->dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
 
-    Int n_all_elems = this->mesh->get_num_all_elements();
+    Int n_all_elems = this->mesh->get_num_all_cells();
 
     for (auto n : this->mesh->get_vertex_range()) {
         int exo_var_id = 1;
@@ -599,7 +599,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id,
     _F_;
     UnstructuredMesh::Range elem_range;
     if (cells == nullptr) {
-        elem_range = this->mesh->get_element_range();
+        elem_range = this->mesh->get_cell_range();
         n_elems_in_block = elem_range.size();
     }
 
@@ -661,20 +661,20 @@ ExodusIIOutput::write_block_connectivity(int blk_id, Int n_elems_in_block, const
 {
     _F_;
     DM dm = this->mesh->get_dm();
-    Int n_all_elems = this->mesh->get_num_all_elements();
+    Int n_all_elems = this->mesh->get_num_all_cells();
     UnstructuredMesh::Range elem_range;
     DMPolytopeType polytope_type;
 
     if (cells == nullptr) {
-        elem_range = this->mesh->get_element_range();
-        n_elems_in_block = this->mesh->get_num_elements();
+        elem_range = this->mesh->get_cell_range();
+        n_elems_in_block = this->mesh->get_num_cells();
         polytope_type = this->mesh->get_cell_type(elem_range.get_first());
     }
     else
         polytope_type = this->mesh->get_cell_type(cells[0]);
 
     const char * elem_type = get_elem_type(polytope_type);
-    int n_nodes_per_elem = UnstructuredMesh::get_num_elem_nodes(polytope_type);
+    int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     const Int * ordering = get_elem_node_ordering(polytope_type);
     std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
     for (Int i = 0, j = 0; i < n_elems_in_block; i++) {

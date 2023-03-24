@@ -99,7 +99,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
     _F_;
     // this is based on DMSNESComputeResidual()
     DM plex = get_dm();
-    IndexSet all_cells = this->unstr_mesh->get_all_elements();
+    IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
     Int n_ds;
     PETSC_CHECK(DMGetNumDS(plex, &n_ds));
@@ -587,7 +587,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
     _F_;
     // based on DMPlexSNESComputeJacobianFEM and DMSNESComputeJacobianAction
     DM plex = get_dm();
-    IndexSet all_cells = this->unstr_mesh->get_all_elements();
+    IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
     Int n_ds;
     PetscCall(DMGetNumDS(plex, &n_ds));

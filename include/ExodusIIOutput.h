@@ -81,7 +81,7 @@ protected:
     std::vector<Int> nodal_var_fids;
     /// List of nodal auxiliary variable field IDs
     std::vector<Int> nodal_aux_var_fids;
-    /// List of nodal elemental variable field IDs
+    /// List of elemental variable field IDs
     std::vector<Int> elem_var_fids;
 
     /// Block ID used in ExodusII file when there are not cell sets
