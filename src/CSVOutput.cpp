@@ -71,7 +71,7 @@ CSVOutput::open_file()
     _F_;
     this->f = fopen(this->file_name.c_str(), "w");
     if (this->f == nullptr)
-        log_error("Unable to open '%s' for writing: %s.", this->file_name, strerror(errno));
+        log_error("Unable to open '{}' for writing: {}.", this->file_name, strerror(errno));
 }
 
 void

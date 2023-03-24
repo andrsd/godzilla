@@ -19,7 +19,7 @@ PerfLog::register_event(const char * name)
         return event_id;
     }
     else
-        error("PerfLog event '%s' is already registered.", name);
+        error("PerfLog event '{}' is already registered.", name);
 }
 
 PetscLogEvent
@@ -36,7 +36,7 @@ PerfLog::get_event_id(const char * name)
     if (event_id != -1)
         return event_id;
     else
-        error("Event '%s' was not registered.", name);
+        error("Event '{}' was not registered.", name);
 }
 
 PetscLogEvent
@@ -55,7 +55,7 @@ PerfLog::register_stage(const char * name)
         return stage_id;
     }
     else
-        error("PerfLog stage '%s' is already registered.", name);
+        error("PerfLog stage '{}' is already registered.", name);
 }
 
 PetscLogStage
@@ -72,7 +72,7 @@ PerfLog::get_stage_id(const char * name)
     if (stage_id != -1)
         return stage_id;
     else
-        error("Stage '%s' was not registered.", name);
+        error("Stage '{}' was not registered.", name);
 }
 
 PetscLogStage

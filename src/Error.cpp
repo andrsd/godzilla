@@ -26,9 +26,9 @@ void
 mem_check(int line, const char *, const char * file, void * var)
 {
     if (var == nullptr) {
-        error_printf("Out of memory");
-        error_printf("");
-        error_printf("  Location: %s:%d", file, line);
+        error_print("Out of memory");
+        error_print("");
+        error_print("  Location: {}:{}", file, line);
         print_call_stack();
         terminate();
     }
@@ -38,9 +38,9 @@ void
 check_petsc_error(int ierr, const char * file, int line)
 {
     if (ierr) {
-        error_printf("PETSc error: %d", ierr);
-        error_printf("");
-        error_printf("  Location: %s:%d", file, line);
+        error_print("PETSc error: {}", ierr);
+        error_print("");
+        error_print("  Location: {}:{}", file, line);
         print_call_stack();
         terminate();
     }
@@ -50,9 +50,9 @@ void
 check_mpi_error(int ierr, const char * file, int line)
 {
     if (ierr) {
-        error_printf("MPI error: %d", ierr);
-        error_printf("");
-        error_printf("  Location: %s:%d", file, line);
+        error_print("MPI error: {}", ierr);
+        error_print("");
+        error_print("  Location: {}:{}", file, line);
         print_call_stack();
         terminate();
     }

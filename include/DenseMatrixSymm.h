@@ -139,7 +139,7 @@ public:
     Real
     det() const
     {
-        error("Determinant is not implemented for %dx%d matrices, yet.", DIM, DIM);
+        error("Determinant is not implemented for {}x{} matrices, yet.", DIM, DIM);
     }
 
     /// Compute transpose

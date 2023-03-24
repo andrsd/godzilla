@@ -34,7 +34,7 @@ add_functionals(DependencyGraph<const Functional *> & g,
             if (jt != suppliers.end())
                 g.add_edge(f, jt->second);
             else
-                error("Did not find any functional which would supply '%s'.", dep);
+                error("Did not find any functional which would supply '{}'.", dep);
         }
     }
 }
@@ -159,7 +159,7 @@ FEProblemInterface::get_field_name(Int fid) const
     if (it != this->fields.end())
         return it->second.name;
     else
-        error("Field with ID = '%d' does not exist.", fid);
+        error("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -170,7 +170,7 @@ FEProblemInterface::get_field_order(Int fid) const
     if (it != this->fields.end())
         return it->second.k;
     else
-        error("Field with ID = '%d' does not exist.", fid);
+        error("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -181,7 +181,7 @@ FEProblemInterface::get_field_num_components(Int fid) const
     if (it != this->fields.end())
         return it->second.nc;
     else
-        error("Field with ID = '%d' does not exist.", fid);
+        error("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -192,7 +192,7 @@ FEProblemInterface::get_field_id(const std::string & name) const
     if (it != this->fields_by_name.end())
         return it->second;
     else
-        error("Field '%s' does not exist. Typo?", name);
+        error("Field '{}' does not exist. Typo?", name);
 }
 
 Int
@@ -256,7 +256,7 @@ FEProblemInterface::get_field_component_name(Int fid, Int component) const
         }
     }
     else
-        error("Field with ID = '%d' does not exist.", fid);
+        error("Field with ID = '{}' does not exist.", fid);
 }
 
 void
@@ -273,7 +273,7 @@ FEProblemInterface::set_field_component_name(Int fid, Int component, const std::
             error("Unable to set component name for single-component field");
     }
     else
-        error("Field with ID = '%d' does not exist.", fid);
+        error("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -302,7 +302,7 @@ FEProblemInterface::get_aux_field_name(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.name;
     else
-        error("Auxiliary field with ID = '%d' does not exist.", fid);
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -313,7 +313,7 @@ FEProblemInterface::get_aux_field_num_components(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.nc;
     else
-        error("Auxiliary field with ID = '%d' does not exist.", fid);
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -324,7 +324,7 @@ FEProblemInterface::get_aux_field_id(const std::string & name) const
     if (it != this->aux_fields_by_name.end())
         return it->second;
     else
-        error("Auxiliary field '%s' does not exist. Typo?", name);
+        error("Auxiliary field '{}' does not exist. Typo?", name);
 }
 
 bool
@@ -351,7 +351,7 @@ FEProblemInterface::get_aux_field_order(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.k;
     else
-        error("Auxiliary field with ID = '%d' does not exist.", fid);
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 std::string
@@ -369,7 +369,7 @@ FEProblemInterface::get_aux_field_component_name(Int fid, Int component) const
         }
     }
     else
-        error("Auxiliary field with ID = '%d' does not exist.", fid);
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 void
@@ -386,7 +386,7 @@ FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
             error("Unable to set component name for single-component field");
     }
     else
-        error("Auxiliary field with ID = '%d' does not exist.", fid);
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 bool
@@ -434,7 +434,7 @@ FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
         this->fields_by_name[name] = id;
     }
     else
-        error("Cannot add field '%s' with ID = %d. ID already exists.", name, id);
+        error("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
 }
 
 Int
@@ -458,7 +458,7 @@ FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
         this->aux_fields_by_name[name] = id;
     }
     else
-        error("Cannot add auxiliary field '%s' with ID = %d. ID is already taken.", name, id);
+        error("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.", name, id);
 }
 
 void
@@ -472,7 +472,7 @@ FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
         this->auxs_by_name[name] = aux;
     }
     else
-        error("Cannot add auxiliary object '%s'. Name already taken.", name);
+        error("Cannot add auxiliary object '{}'. Name already taken.", name);
 }
 
 void
@@ -657,8 +657,8 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
             }
             else {
                 no_errors = false;
-                this->logger->error("Auxiliary field '%s' has %d component(s), but is set on a "
-                                    "field with %d component(s).",
+                this->logger->error("Auxiliary field '{}' has {} component(s), but is set on a "
+                                    "field with {} component(s).",
                                     aux->get_name(),
                                     aux_nc,
                                     field_nc);
@@ -666,7 +666,7 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         }
         else {
             no_errors = false;
-            this->logger->error("Auxiliary field '%s' is set on auxiliary field with ID '%d', but "
+            this->logger->error("Auxiliary field '{}' is set on auxiliary field with ID '{}', but "
                                 "such ID does not exist.",
                                 aux->get_name(),
                                 fid);
@@ -715,7 +715,7 @@ FEProblemInterface::get_field_value(const std::string & field_name) const
         return this->aux_fields.at(fid).values;
     }
     else
-        error("Field '%s' does not exist. Typo?", field_name);
+        error("Field '{}' does not exist. Typo?", field_name);
 }
 
 const FieldGradient &
@@ -731,7 +731,7 @@ FEProblemInterface::get_field_gradient(const std::string & field_name) const
         return this->aux_fields.at(fid).derivs;
     }
     else
-        error("Field '%s' does not exist. Typo?", field_name);
+        error("Field '{}' does not exist. Typo?", field_name);
 }
 
 const FieldValue &
@@ -747,7 +747,7 @@ FEProblemInterface::get_field_dot(const std::string & field_name) const
         return this->aux_fields.at(fid).dots;
     }
     else
-        error("Field '%s' does not exist. Typo?", field_name);
+        error("Field '{}' does not exist. Typo?", field_name);
 }
 
 const Real &
@@ -792,7 +792,7 @@ FEProblemInterface::sort_residual_functionals(
             if (jt != suppliers.end())
                 graph.add_edge(fnl, jt->second);
             else
-                error("Did not find any functional which would supply '%'.", dep);
+                error("Did not find any functional which would supply '{}'.", dep);
         }
     }
 
@@ -838,7 +838,7 @@ FEProblemInterface::sort_jacobian_functionals(
             if (jt != suppliers.end())
                 graph.add_edge(fnl, jt->second);
             else
-                error("Did not find any functional which would supply '%'.", dep);
+                error("Did not find any functional which would supply '{}'.", dep);
         }
     }
 
@@ -891,7 +891,7 @@ FEProblemInterface::sort_functionals()
             if (suppliers.find(s) == suppliers.end())
                 suppliers[s] = fnl;
             else
-                error("Value '%s' is being supplied multiple times.", s);
+                error("Value '{}' is being supplied multiple times.", s);
         }
     }
 

@@ -28,7 +28,7 @@ FileMesh::FileMesh(const Parameters & parameters) :
 
     if (!utils::path_exists(this->file_name))
         log_error(
-            "Unable to open '%s' for reading. Make sure it exists and you have read permissions.",
+            "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
             this->file_name);
 }
 

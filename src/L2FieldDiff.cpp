@@ -56,11 +56,11 @@ L2FieldDiff::create()
         for (const auto & it : this->funcs) {
             const auto & fld_name = it.first;
             if (!this->fepi->has_field_by_name(fld_name))
-                log_error("Field '%s' does not exists. Typo?", fld_name);
+                log_error("Field '{}' does not exists. Typo?", fld_name);
         }
     }
     else
-        log_error("Provided %d functions for %d fields. You must supply the same number of "
+        log_error("Provided {} functions for {} fields. You must supply the same number of "
                   "functions as you have fields.",
                   this->funcs.size(),
                   n_fields);

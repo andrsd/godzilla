@@ -28,7 +28,7 @@ DependencyEvaluator::get_functional(const std::string & name) const
     if (it != this->functionals.end())
         return *it->second;
     else
-        error("No functional with name '%s' found. Typo?", name);
+        error("No functional with name '{}' found. Typo?", name);
 }
 
 } // namespace godzilla

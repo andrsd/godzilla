@@ -371,7 +371,7 @@ UnstructuredMesh::get_face_set_name(Int id) const
     if (it != this->face_set_names.end())
         return it->second;
     else
-        error("Face set ID '%d' does not exist.", id);
+        error("Face set ID '{}' does not exist.", id);
 }
 
 void
@@ -399,7 +399,7 @@ UnstructuredMesh::get_cell_set_name(Int id) const
     if (it != this->cell_set_names.end())
         return it->second;
     else
-        error("Cell set ID '%d' does not exist.", id);
+        error("Cell set ID '{}' does not exist.", id);
 }
 
 Int
@@ -410,7 +410,7 @@ UnstructuredMesh::get_cell_set_id(const std::string & name) const
     if (it != this->cell_set_ids.end())
         return it->second;
     else
-        error("Cell set '%s' does not exist.", name);
+        error("Cell set '{}' does not exist.", name);
 }
 
 Int
@@ -489,7 +489,7 @@ UnstructuredMesh::get_num_cell_nodes(DMPolytopeType elem_type)
     case DM_POLYTOPE_HEXAHEDRON:
         return 8;
     default:
-        error("Unsupported type '%s'.", get_polytope_type_str(elem_type));
+        error("Unsupported type '{}'.", get_polytope_type_str(elem_type));
     }
 }
 

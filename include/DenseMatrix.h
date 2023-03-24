@@ -194,7 +194,7 @@ public:
     Real
     det() const
     {
-        error("Determinant is not implemented for %dx%d matrices, yet.", ROWS, ROWS);
+        error("Determinant is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
     }
 
     /// Compute inverse of this matrix
@@ -203,7 +203,7 @@ public:
     DenseMatrix<Real, COLS>
     inv() const
     {
-        error("Inverse is not implemented for %dx%d matrices, yet.", ROWS, ROWS);
+        error("Inverse is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
     }
 
     /// Compute transpose

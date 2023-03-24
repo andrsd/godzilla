@@ -161,7 +161,7 @@ TecplotOutput::create()
             else if (aux_field_names.count(name) == 1)
                 this->aux_field_var_names.push_back(name);
             else
-                log_error("Variable '%s' specified in 'variables' parameter does not exist. Typo?",
+                log_error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
                           name);
         }
     }
@@ -225,7 +225,7 @@ TecplotOutput::open_file()
     const char * mode = this->format == BINARY ? "wb" : "w";
     this->file = std::fopen(this->file_name.c_str(), mode);
     if (this->file == nullptr)
-        error("Could not open file '%s' for writing.", get_file_name());
+        error("Could not open file '{}' for writing.", get_file_name());
 }
 
 void

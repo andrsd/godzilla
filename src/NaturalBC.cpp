@@ -42,7 +42,7 @@ NaturalBC::create()
             if (this->dpi->has_field_by_name(field_name))
                 this->fid = this->dpi->get_field_id(field_name);
             else
-                log_error("Field '%s' does not exists. Typo?", field_name);
+                log_error("Field '{}' does not exists. Typo?", field_name);
         }
         else
             log_error("Use the 'field' parameter to assign this boundary condition to an existing "

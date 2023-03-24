@@ -11,15 +11,15 @@ namespace godzilla {
 
 namespace internal {
 
-template <typename... Args>
+template <typename... T>
 void
-error_printf(const char * s, Args... args)
+error_print(fmt::format_string<T...> format, T... args)
 {
-    fmt::fprintf(stderr, "%s", (const char *) Terminal::Color::red);
-    fmt::fprintf(stderr, "[ERROR] ");
-    fmt::fprintf(stderr, s, std::forward<Args>(args)...);
-    fmt::fprintf(stderr, "%s", (const char *) Terminal::Color::normal);
-    fmt::fprintf(stderr, "\n");
+    fmt::print(stderr, "{}", (const char *) Terminal::Color::red);
+    fmt::print(stderr, "[ERROR] ");
+    fmt::print(stderr, format, std::forward<T>(args)...);
+    fmt::print(stderr, "{}", (const char *) Terminal::Color::normal);
+    fmt::print(stderr, "\n");
 }
 
 /// Terminate the run
@@ -33,11 +33,11 @@ void check_mpi_error(int ierr, const char * file, int line);
 
 } // namespace internal
 
-template <typename... Args>
+template <typename... T>
 [[noreturn]] void
-error(const char * format, Args &&... args)
+error(fmt::format_string<T...> format, T... args)
 {
-    internal::error_printf(format, std::forward<Args>(args)...);
+    internal::error_print(format, std::forward<T>(args)...);
     internal::terminate();
 }
 

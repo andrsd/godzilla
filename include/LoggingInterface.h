@@ -15,19 +15,19 @@ public:
     }
 
     /// Log an error
-    template <typename... Args>
+    template <typename... T>
     void
-    log_error(const char * s, Args... args)
+    log_error(fmt::format_string<T...> format, T... args)
     {
-        this->logger->error(this->prefix, s, std::forward<Args>(args)...);
+        this->logger->error(this->prefix, format, std::forward<T>(args)...);
     }
 
     /// Log a warning
-    template <typename... Args>
+    template <typename... T>
     void
-    log_warning(const char * s, Args... args)
+    log_warning(fmt::format_string<T...> format, T... args)
     {
-        this->logger->warning(this->prefix, s, std::forward<Args>(args)...);
+        this->logger->warning(this->prefix, format, std::forward<T>(args)...);
     }
 
 protected:
