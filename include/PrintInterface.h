@@ -2,6 +2,7 @@
 
 #include <string>
 #include "fmt/printf.h"
+#include "PerfLog.h"
 
 namespace godzilla {
 
@@ -15,6 +16,34 @@ class App;
 /// Interface for printing on terminal
 ///
 class PrintInterface {
+public:
+    class TimedEvent {
+    public:
+        TimedEvent(const PrintInterface * pi,
+                   unsigned int level,
+                   const std::string & event_name,
+                   const std::string & text);
+        ~TimedEvent();
+
+        template <typename... T>
+        static TimedEvent
+        create(const PrintInterface * pi,
+               unsigned int level,
+               const std::string & event_name,
+               fmt::format_string<T...> format,
+               T... args)
+        {
+            std::string text = fmt::format(format, std::forward<T>(args)...);
+            return TimedEvent(pi, level, event_name, text);
+        }
+
+    protected:
+        const PrintInterface * pi;
+        unsigned int level;
+        PerfLog::Event * event;
+        PetscLogDouble start_time;
+    };
+
 public:
     explicit PrintInterface(const Object * obj);
     explicit PrintInterface(const App * app);
@@ -41,6 +70,8 @@ protected:
     }
 
 private:
+    /// Application
+    const App * pi_app;
     /// Processor ID
     int proc_id;
     /// Verbosity level
@@ -48,5 +79,9 @@ private:
     /// Prefix to print
     const std::string prefix;
 };
+
+#define TIMED_EVENT(level, event_name, ...) \
+    auto __timed_event_obj =                \
+        PrintInterface::TimedEvent::create(this, level, event_name, __VA_ARGS__);
 
 } // namespace godzilla

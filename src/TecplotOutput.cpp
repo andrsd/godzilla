@@ -203,7 +203,7 @@ TecplotOutput::output_step()
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
     set_file_name();
-    lprintf(9, "Output to file: {}", this->file_name);
+    TIMED_EVENT(9, "TecplotOutput", "Output to file: {}", this->file_name);
 
     if (this->file == nullptr)
         open_file();

@@ -61,7 +61,7 @@ VTKOutput::output_step()
     set_sequence_file_name(this->problem->get_step_num());
     PETSC_CHECK(PetscViewerFileSetName(this->viewer, this->file_name.c_str()));
 
-    lprintf(9, "Output to file: {}", this->file_name);
+    TIMED_EVENT(9, "VTKOutput", "Output to file: {}", this->file_name);
     DM dm = this->problem->get_dm();
     PETSC_CHECK(DMView(dm, this->viewer));
     auto vec = this->problem->get_solution_vector();

@@ -42,3 +42,29 @@ TEST(PrintInterfaceTest, lprintf)
     obj.create();
     EXPECT_THAT(testing::internal::GetCapturedStdout(), testing::HasSubstr("Print"));
 }
+
+TEST(PrintInterfaceTest, timed_event)
+{
+    testing::internal::CaptureStdout();
+
+    TestApp app;
+
+    class TestObject : public Object, public PrintInterface {
+    public:
+        explicit TestObject(const Parameters & params) : Object(params), PrintInterface(this) {}
+
+        virtual void
+        create()
+        {
+            TIMED_EVENT(0, "Print", "Print {}", "text");
+        }
+    };
+
+    Parameters pars = TestObject::parameters();
+    pars.set<const App *>("_app") = &app;
+    TestObject obj(pars);
+
+    obj.create();
+    EXPECT_THAT(testing::internal::GetCapturedStdout(),
+                testing::ContainsRegex("Print text... done \\[.+\\]"));
+}
