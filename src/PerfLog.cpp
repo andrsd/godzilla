@@ -9,6 +9,20 @@ PerfLog::init()
     PetscLogDefaultBegin();
 }
 
+bool
+PerfLog::is_event_registered(const char * name)
+{
+    PetscLogEvent event_id;
+    PetscLogEventGetId(name, &event_id);
+    return (event_id != -1);
+}
+
+bool
+PerfLog::is_event_registered(const std::string & name)
+{
+    return PerfLog::is_event_registered(name.c_str());
+}
+
 PetscLogEvent
 PerfLog::register_event(const char * name)
 {

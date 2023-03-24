@@ -267,7 +267,7 @@ void
 UnstructuredMesh::distribute()
 {
     _F_;
-    lprintf(9, "Distributing");
+    TIMED_EVENT(9, "MeshDistribution", "Distributing");
     PETSC_CHECK(PetscPartitionerSetUp(this->partitioner));
 
     PETSC_CHECK(DMPlexSetPartitioner(this->dm, this->partitioner));

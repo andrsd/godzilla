@@ -102,4 +102,11 @@ TEST(PerfLogTest, non_existent_stage_id)
     EXPECT_DEATH(PerfLog::get_stage_id("stage_none"), "Stage 'stage_none' was not registered.");
 }
 
+TEST(PerfLogTest, is_event_registered)
+{
+    EXPECT_FALSE(PerfLog::is_event_registered("event3"));
+    PerfLog::register_event("event3");
+    EXPECT_TRUE(PerfLog::is_event_registered("event3"));
+}
+
 #endif

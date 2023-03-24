@@ -2,14 +2,23 @@
 
 #include <vector>
 #include <string>
-#include "Terminal.h"
 #include "Error.h"
-#include "fmt/color.h"
 
 namespace godzilla {
 
 /// Class for logging errors and warnings
 class Logger {
+    /// Type of the message
+    enum Type { ERROR, WARNING };
+
+    /// Logger entry
+    struct Entry {
+        /// Type of the entry
+        Type type;
+        /// Text of the message
+        std::string text;
+    };
+
 public:
     Logger();
 
@@ -25,9 +34,8 @@ public:
     void
     error(const std::string & prefix, fmt::format_string<T...> format, T... args)
     {
-        std::string str =
-            format_msg(Terminal::Color::red, "[ERROR]", prefix, format, std::forward<T>(args)...);
-        this->entries.push_back(str);
+        std::string str = format_msg("[ERROR]", prefix, format, std::forward<T>(args)...);
+        this->entries.push_back({ ERROR, str });
         this->num_errors++;
     }
 
@@ -43,12 +51,8 @@ public:
     void
     warning(const std::string & prefix, fmt::format_string<T...> format, T... args)
     {
-        std::string str = format_msg(Terminal::Color::yellow,
-                                     "[WARNING]",
-                                     prefix,
-                                     format,
-                                     std::forward<T>(args)...);
-        this->entries.push_back(str);
+        std::string str = format_msg("[WARNING]", prefix, format, std::forward<T>(args)...);
+        this->entries.push_back({ WARNING, str });
         this->num_warnings++;
     }
 
@@ -73,23 +77,21 @@ public:
 protected:
     template <typename... T>
     std::string
-    format_msg(const Terminal::Color & color,
-               const char * title,
+    format_msg(const std::string & title,
                const std::string & prefix,
                fmt::format_string<T...> format,
                T... args)
     {
         std::string str;
-        str += fmt::format("{}{} ", color, title);
+        str += fmt::format("{} ", title);
         if (prefix.length() > 0)
             str += fmt::format("{}: ", prefix);
         str += fmt::format(format, std::forward<T>(args)...);
-        str += fmt::format("{}", Terminal::Color::normal);
         return str;
     }
 
     /// List of logged errors/warnings
-    std::vector<std::string> entries;
+    std::vector<Entry> entries;
     /// Number of errors
     std::size_t num_errors;
     /// Number of warnings

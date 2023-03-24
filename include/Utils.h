@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <typeinfo>
+#include <petsclog.h>
 
 namespace godzilla {
 namespace utils {
@@ -69,6 +70,12 @@ map_values(const std::map<T, U> & m)
         v.push_back(it.second);
     return v;
 }
+
+/// Provide human readable time
+///
+/// @param time Time in seconds
+/// @return Formatted string with human readable time
+std::string human_time(PetscLogDouble time);
 
 } // namespace utils
 } // namespace godzilla

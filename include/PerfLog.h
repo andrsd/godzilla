@@ -27,6 +27,9 @@ public:
     /// Initialize performance logging
     static void init();
 
+    static bool is_event_registered(const char * name);
+    static bool is_event_registered(const std::string & name);
+
     /// Register a logging event
     ///
     /// @param name Event name
@@ -54,39 +57,6 @@ public:
     /// @return Stage ID
     static PetscLogStage get_stage_id(const char * name);
     static PetscLogStage get_stage_id(const std::string & name);
-
-    /// Event for performance logging
-    ///
-    class Event {
-    public:
-        /// Construct a performance logging event
-        ///
-        /// @param name Name of the event. Must be registered in PerfLog class.
-        explicit Event(const char * name);
-        explicit Event(const std::string & name);
-
-        /// Construct a performance logging event from event ID
-        ///
-        /// @param id ID of an event previously registered in PerfLog class.
-        explicit Event(PetscLogEvent id);
-
-        /// Destroy an event
-        ///
-        /// This will finish logging the event
-        virtual ~Event();
-
-        /// Get ID of this event
-        ///
-        /// @return ID of this event
-        NO_DISCARD PetscLogEvent get_id() const;
-
-        /// Log number of FLOPS
-        void log_flops(PetscLogDouble n);
-
-    protected:
-        /// Event ID
-        PetscLogEvent id;
-    };
 
     /// Performance logging stage
     ///
@@ -157,6 +127,39 @@ public:
     /// @return Event information
     static EventInfo get_event_info(PetscLogEvent event_id,
                                     PetscLogStage stage_id = PETSC_DETERMINE);
+
+    /// Event for performance logging
+    ///
+    class Event {
+    public:
+        /// Construct a performance logging event
+        ///
+        /// @param name Name of the event. Must be registered in PerfLog class.
+        explicit Event(const char * name);
+        explicit Event(const std::string & name);
+
+        /// Construct a performance logging event from event ID
+        ///
+        /// @param id ID of an event previously registered in PerfLog class.
+        explicit Event(PetscLogEvent id);
+
+        /// Destroy an event
+        ///
+        /// This will finish logging the event
+        virtual ~Event();
+
+        /// Get ID of this event
+        ///
+        /// @return ID of this event
+        NO_DISCARD PetscLogEvent get_id() const;
+
+        /// Log number of FLOPS
+        void log_flops(PetscLogDouble n);
+
+    protected:
+        /// Event ID
+        PetscLogEvent id;
+    };
 };
 
 } // namespace godzilla

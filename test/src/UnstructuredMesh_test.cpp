@@ -279,6 +279,11 @@ TEST(UnstructuredMeshTest, ranges)
     auto all_cell_range = mesh.get_all_cell_range();
     EXPECT_EQ(all_cell_range.get_first(), 0);
     EXPECT_EQ(all_cell_range.get_last(), 4);
+
+    auto it = mesh.cell_begin();
+    for (Int i = 0; i < 4; i++)
+        it++;
+    EXPECT_TRUE(it == mesh.cell_end());
 }
 
 TEST(UnstructuredMeshTest, polytope_type_str)
@@ -297,4 +302,5 @@ TEST(UnstructuredMeshTest, polytope_type_str)
     EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_PYRAMID), "PYRAMID");
     EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_FV_GHOST), "FV_GHOST");
     EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_INTERIOR_GHOST), "INTERIOR_GHOST");
+    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_UNKNOWN), "UNKNOWN");
 }

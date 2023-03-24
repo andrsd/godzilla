@@ -34,20 +34,30 @@ void
 Logger::print() const
 {
     _F_;
-    for (auto & s : this->entries)
-        fmt::fprintf(stderr, "%s\n", s.c_str());
+    for (auto & entry : this->entries) {
+        switch (entry.type) {
+        case ERROR:
+            fmt::print(stderr, "{}", Terminal::Color::red);
+            break;
+        case WARNING:
+            fmt::print(stderr, "{}", Terminal::Color::yellow);
+            break;
+        }
+        fmt::print(stderr, entry.text);
+        fmt::print(stderr, "{}\n", Terminal::Color::normal);
+    }
 
-    fmt::fprintf(stderr, "%s", (const char *) Terminal::Color::magenta);
+    fmt::print(stderr, "{}", Terminal::Color::magenta);
     if (this->num_errors > 0)
-        fmt::fprintf(stderr, "%zd error(s)", this->num_errors);
+        fmt::print(stderr, "{} error(s)", this->num_errors);
 
     if (this->num_warnings > 0) {
         if (this->num_errors > 0)
-            fmt::fprintf(stderr, ", ");
+            fmt::print(stderr, ", ");
 
-        fmt::fprintf(stderr, "%zd warning(s)", this->num_warnings);
+        fmt::print(stderr, "{} warning(s)", this->num_warnings);
     }
-    fmt::fprintf(stderr, " found.%s\n", (const char *) Terminal::Color::normal);
+    fmt::print(stderr, " found.{}\n", Terminal::Color::normal);
 }
 
 } // namespace godzilla
