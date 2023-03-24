@@ -42,3 +42,17 @@ TEST(UtilsTest, map_values)
     std::vector<int> keys = utils::map_values(m);
     EXPECT_THAT(keys, testing::UnorderedElementsAre(200, 201, 203, 204));
 }
+
+TEST(UtilsTest, human_time)
+{
+    EXPECT_EQ(utils::human_time(0), "0s");
+    EXPECT_EQ(utils::human_time(0.5), "0.500s");
+    EXPECT_EQ(utils::human_time(10), "10s");
+    EXPECT_EQ(utils::human_time(60), "1m");
+    EXPECT_EQ(utils::human_time(70), "1m 10s");
+    EXPECT_EQ(utils::human_time(70.5), "1m 10.500s");
+    EXPECT_EQ(utils::human_time(3600), "1h");
+    EXPECT_EQ(utils::human_time(3720), "1h 2m");
+    EXPECT_EQ(utils::human_time(3725), "1h 2m 5s");
+    EXPECT_EQ(utils::human_time(3725.2), "1h 2m 5.200s");
+}

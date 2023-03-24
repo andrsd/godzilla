@@ -2,6 +2,8 @@
 #include "CallStack.h"
 #include <algorithm>
 #include <sys/stat.h>
+#include <chrono>
+#include <fmt/printf.h>
 
 namespace godzilla {
 namespace utils {
@@ -43,6 +45,32 @@ bool
 has_prefix(const std::string & str, const std::string & prefix)
 {
     return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
+}
+
+std::string
+human_time(PetscLogDouble time)
+{
+    using namespace std::chrono;
+    duration<double, std::micro> us(time * 1e6);
+    auto h = duration_cast<hours>(us);
+    us -= h;
+    auto m = duration_cast<minutes>(us);
+    us -= m;
+    auto s = duration_cast<seconds>(us);
+    us -= s;
+    auto ms = duration_cast<milliseconds>(us);
+    std::string tm;
+    if (h.count() > 0)
+        tm += fmt::format(" {}h", h.count());
+    if (m.count() > 0)
+        tm += fmt::format(" {}m", m.count());
+    if ((s.count() > 0) || (h.count() == 0 && m.count() == 0)) {
+        tm += fmt::format(" {}", s.count());
+        if (ms.count() > 0)
+            tm += fmt::format(".{}", ms.count());
+        tm += fmt::format("s");
+    }
+    return tm.substr(1);
 }
 
 } // namespace utils
