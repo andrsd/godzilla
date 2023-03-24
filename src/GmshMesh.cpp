@@ -22,7 +22,7 @@ void
 GmshMesh::create_dm()
 {
     _F_;
-    lprintf(9, "Loading mesh '%s'", this->file_name);
+    lprintf(9, "Loading mesh '{}'", this->file_name);
     PetscOptionsSetValue(nullptr, "-dm_plex_gmsh_use_regions", nullptr);
     PETSC_CHECK(DMPlexCreateGmshFromFile(get_comm(),
                                          this->file_name.c_str(),

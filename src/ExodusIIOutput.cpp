@@ -197,7 +197,7 @@ ExodusIIOutput::output_step()
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
     set_file_name();
-    lprintf(9, "Output to file: %s", this->file_name);
+    lprintf(9, "Output to file: {}", this->file_name);
 
     if (this->exo == nullptr)
         open_file();

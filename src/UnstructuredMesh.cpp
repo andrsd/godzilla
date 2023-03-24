@@ -86,8 +86,8 @@ UnstructuredMesh::create()
     PETSC_CHECK(DMGetDimension(this->dm, &this->dim));
 
     lprintf(9, "Information:");
-    lprintf(9, "- vertices: %d", get_num_vertices());
-    lprintf(9, "- elements: %d", get_num_cells());
+    lprintf(9, "- vertices: {}", get_num_vertices());
+    lprintf(9, "- elements: {}", get_num_cells());
 }
 
 bool

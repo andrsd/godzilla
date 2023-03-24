@@ -29,14 +29,14 @@ protected:
     ///              message will be printed.
     /// @param format String specifying how to interpret the data
     /// @param ... Arguments specifying data to print
-    template <typename... Args>
+    template <typename... T>
     void
-    lprintf(unsigned int level, const char * format, Args &&... args) const
+    lprintf(unsigned int level, fmt::format_string<T...> format, T... args) const
     {
         if (level <= this->verbosity_level && this->proc_id == 0) {
-            fmt::fprintf(stdout, "%s: ", this->prefix.c_str());
-            fmt::fprintf(stdout, format, std::forward<Args>(args)...);
-            fmt::fprintf(stdout, "\n");
+            fmt::print(stdout, "{}: ", this->prefix);
+            fmt::print(stdout, format, std::forward<T>(args)...);
+            fmt::print(stdout, "\n");
         }
     }
 

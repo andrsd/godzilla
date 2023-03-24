@@ -27,7 +27,7 @@ bool
 InputFile::parse(const std::string & file_name)
 {
     _F_;
-    lprintf(9, "Parsing input file '%s'", file_name);
+    lprintf(9, "Parsing input file '{}'", file_name);
     try {
         this->root = YAML::LoadFile(file_name);
         return true;

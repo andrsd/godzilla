@@ -150,7 +150,7 @@ PetscErrorCode
 LinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
-    lprintf(8, "%d Linear residual: %e", it, rnorm);
+    lprintf(8, "{} Linear residual: {:e}", it, rnorm);
     return 0;
 }
 
