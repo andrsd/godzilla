@@ -14,40 +14,40 @@ public:
     Logger();
 
     /// Log an error
-    template <typename... Args>
+    template <typename... T>
     void
-    error(const char * s, Args... args)
+    error(fmt::format_string<T...> format, T... args)
     {
-        error(std::string(""), s, std::forward<Args>(args)...);
+        error(std::string(""), format, std::forward<T>(args)...);
     }
 
-    template <typename... Args>
+    template <typename... T>
     void
-    error(const std::string & prefix, const char * s, Args... args)
+    error(const std::string & prefix, fmt::format_string<T...> format, T... args)
     {
         std::string str =
-            format_msg(Terminal::Color::red, "[ERROR]", prefix, s, std::forward<Args>(args)...);
+            format_msg(Terminal::Color::red, "[ERROR]", prefix, format, std::forward<T>(args)...);
         this->entries.push_back(str);
         this->num_errors++;
     }
 
     /// Log a warning
-    template <typename... Args>
+    template <typename... T>
     void
-    warning(const char * s, Args... args)
+    warning(fmt::format_string<T...> format, T... args)
     {
-        warning(std::string(""), s, std::forward<Args>(args)...);
+        warning(std::string(""), format, std::forward<T>(args)...);
     }
 
-    template <typename... Args>
+    template <typename... T>
     void
-    warning(const std::string & prefix, const char * s, Args... args)
+    warning(const std::string & prefix, fmt::format_string<T...> format, T... args)
     {
         std::string str = format_msg(Terminal::Color::yellow,
                                      "[WARNING]",
                                      prefix,
-                                     s,
-                                     std::forward<Args>(args)...);
+                                     format,
+                                     std::forward<T>(args)...);
         this->entries.push_back(str);
         this->num_warnings++;
     }
@@ -71,20 +71,20 @@ public:
     void print() const;
 
 protected:
-    template <typename... Args>
+    template <typename... T>
     std::string
     format_msg(const Terminal::Color & color,
                const char * title,
                const std::string & prefix,
-               const char * format,
-               Args... args)
+               fmt::format_string<T...> format,
+               T... args)
     {
         std::string str;
-        str += fmt::sprintf("%s%s ", color, title);
+        str += fmt::format("{}{} ", color, title);
         if (prefix.length() > 0)
-            str += fmt::sprintf("%s: ", prefix);
-        str += fmt::sprintf(format, std::forward<Args>(args)...);
-        str += fmt::sprintf("%s", Terminal::Color::normal);
+            str += fmt::format("{}: ", prefix);
+        str += fmt::format(format, std::forward<T>(args)...);
+        str += fmt::format("{}", Terminal::Color::normal);
         return str;
     }
 

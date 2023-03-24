@@ -147,7 +147,7 @@ TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
     _F_;
     Real dt;
     PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
-    this->problem->lprintf(6, "%d Time %f dt = %f", stepi, t, dt);
+    this->problem->lprintf(6, "{} Time {:f} dt = {:f}", stepi, t, dt);
     return 0;
 }
 

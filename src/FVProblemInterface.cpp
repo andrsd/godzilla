@@ -75,7 +75,7 @@ FVProblemInterface::get_field_name(Int fid) const
             return empty_name;
     }
     else
-        error("Field with ID = '%d' does not exist.", fid);
+        error("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -89,7 +89,7 @@ FVProblemInterface::get_field_num_components(Int fid) const
         return n_comps;
     }
     else
-        error("Field with ID = '%d' does not exist.", fid);
+        error("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -153,7 +153,7 @@ FVProblemInterface::set_field_component_name(Int fid, Int component, const std::
             error("Unable to set component name for single-component field");
     }
     else
-        error("Field with ID = '%d' does not exist.", fid);
+        error("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -252,7 +252,7 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc)
         this->fields_by_name[name] = id;
     }
     else
-        error("Cannot add field '%s' with ID = %d. ID already exists.", name, id);
+        error("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
 }
 
 void

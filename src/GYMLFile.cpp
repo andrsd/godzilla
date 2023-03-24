@@ -128,7 +128,7 @@ GYMLFile::build_auxiliary_fields()
 
     auto * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
     if (fepface == nullptr)
-        log_error("Supplied problem type '%s' does not support auxiliary fields.",
+        log_error("Supplied problem type '{}' does not support auxiliary fields.",
                   this->problem->get_type());
     else {
         for (const auto & it : auxs_root_node) {
@@ -156,7 +156,7 @@ GYMLFile::build_initial_conditions()
 
     auto * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
     if (dpi == nullptr)
-        log_error("Supplied problem type '%s' does not support initial conditions.",
+        log_error("Supplied problem type '{}' does not support initial conditions.",
                   this->problem->get_type());
     else {
         for (const auto & it : ics_root_node) {
@@ -184,7 +184,7 @@ GYMLFile::build_boundary_conditions()
 
     auto * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
     if (dpi == nullptr)
-        log_error("Supplied problem type '%s' does not support boundary conditions.",
+        log_error("Supplied problem type '{}' does not support boundary conditions.",
                   this->problem->get_type());
     else {
         for (const auto & it : bcs_root_node) {

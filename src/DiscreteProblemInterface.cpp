@@ -84,8 +84,8 @@ DiscreteProblemInterface::set_up_initial_conditions()
                 if (ic_nc == field_nc)
                     ics_by_fields[fid] = ic;
                 else
-                    this->logger->error("Initial condition '%s' operates on %d components, but is "
-                                        "set on a field with %d components.",
+                    this->logger->error("Initial condition '{}' operates on {} components, but is "
+                                        "set on a field with {} components.",
                                         ic->get_name(),
                                         ic_nc,
                                         field_nc);
@@ -93,13 +93,13 @@ DiscreteProblemInterface::set_up_initial_conditions()
             else
                 // TODO: improve this error message
                 this->logger->error(
-                    "Initial condition '%s' is being applied to a field that already "
+                    "Initial condition '{}' is being applied to a field that already "
                     "has an initial condition.",
                     ic->get_name());
         }
     }
     else
-        this->logger->error("Provided %d field(s), but %d initial condition(s).", n_fields, n_ics);
+        this->logger->error("Provided {} field(s), but {} initial condition(s).", n_fields, n_ics);
 }
 
 void
@@ -114,7 +114,7 @@ DiscreteProblemInterface::set_up_boundary_conditions()
         if (!exists) {
             no_errors = false;
             this->logger->error(
-                "Boundary condition '%s' is set on boundary '%s' which does not exist in the mesh.",
+                "Boundary condition '{}' is set on boundary '{}' which does not exist in the mesh.",
                 bc->get_name(),
                 bnd_name);
         }

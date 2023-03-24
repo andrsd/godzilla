@@ -24,7 +24,7 @@ void
 ExodusIIMesh::create_dm()
 {
     _F_;
-    lprintf(9, "Loading mesh '%s'", this->file_name);
+    lprintf(9, "Loading mesh '{}'", this->file_name);
     PETSC_CHECK(DMPlexCreateExodusFromFile(get_comm(),
                                            this->file_name.c_str(),
                                            this->interpolate,

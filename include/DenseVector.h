@@ -116,7 +116,7 @@ public:
     DenseVector<Real, N>
     cross(const DenseVector<Real, N> &) const
     {
-        error("Cross product in %d dimensions is not unique.", N);
+        error("Cross product in {} dimensions is not unique.", N);
     }
 
     template <Int M>

@@ -40,7 +40,7 @@ AuxiliaryField::create()
             this->block_id = mesh->get_cell_set_id(this->region);
         }
         else
-            log_error("Region '%s' does not exists. Typo?", this->region);
+            log_error("Region '{}' does not exists. Typo?", this->region);
     }
 }
 

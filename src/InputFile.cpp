@@ -27,13 +27,13 @@ bool
 InputFile::parse(const std::string & file_name)
 {
     _F_;
-    lprintf(9, "Parsing input file '%s'", file_name);
+    lprintf(9, "Parsing input file '{}'", file_name);
     try {
         this->root = YAML::LoadFile(file_name);
         return true;
     }
     catch (YAML::ParserException & e) {
-        log_error("Failed to parse the input file: %s", e.what() + 10);
+        log_error("Failed to parse the input file: {}", e.what() + 10);
         return false;
     }
 }
@@ -132,7 +132,7 @@ InputFile::build_params(const YAML::Node & parent, const std::string & name)
     _F_;
     YAML::Node node = parent[name];
     if (!node)
-        error("Missing '%s' block.", name);
+        error("Missing '{}' block.", name);
 
     std::set<std::string> unused_param_names;
     if (node.IsMap()) {
@@ -142,10 +142,10 @@ InputFile::build_params(const YAML::Node & parent, const std::string & name)
 
     YAML::Node type = node["type"];
     if (!type)
-        error("%s: No 'type' specified.", name);
+        error("{}: No 'type' specified.", name);
     const std::string & class_name = type.as<std::string>();
     if (!Factory::is_registered(class_name))
-        error("%s: Type '%s' is not a registered object.", name, class_name);
+        error("{}: Type '{}' is not a registered object.", name, class_name);
     unused_param_names.erase("type");
 
     Parameters * params = Factory::get_parameters(class_name);
@@ -231,11 +231,11 @@ InputFile::read_bool_value(const std::string & param_name, const YAML::Node & va
         else if (validation::in(str, { "off", "false", "no" }))
             val = false;
         else
-            log_error("Parameter '%s' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.",
+            log_error("Parameter '{}' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.",
                       param_name);
     }
     else
-        log_error("Parameter '%s' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.",
+        log_error("Parameter '{}' must be either 'on', 'off', 'true', 'false', 'yes' or 'no'.",
                   param_name);
 
     return val;
@@ -252,7 +252,7 @@ InputFile::read_vector_value(const std::string & param_name, const YAML::Node & 
     else if (val_node.IsSequence())
         vec = val_node.as<std::vector<T>>();
     else
-        log_error("Parameter '%s' must be either a single value or a vector of values.",
+        log_error("Parameter '{}' must be either a single value or a vector of values.",
                   param_name);
 
     return vec;
@@ -272,7 +272,7 @@ InputFile::read_map_value(const std::string & param_name, const YAML::Node & val
         }
     }
     else
-        log_error("Parameter '%s' must be a map.", param_name);
+        log_error("Parameter '{}' must be a map.", param_name);
 
     return map;
 }
@@ -293,12 +293,12 @@ InputFile::check_params(const Parameters * params,
     }
 
     if (!missing_pars.empty())
-        log_error("%s: Missing required parameters:%s", name, missing_pars);
+        log_error("{}: Missing required parameters:{}", name, missing_pars);
     else
         this->valid_param_object_names.insert(name);
 
     if (!unused_param_names.empty())
-        log_warning("%s: Following parameters were not used: %s",
+        log_warning("{}: Following parameters were not used: {}",
                     name,
                     fmt::to_string(fmt::join(unused_param_names, ", ")));
 }

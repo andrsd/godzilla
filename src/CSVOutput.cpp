@@ -56,7 +56,7 @@ CSVOutput::output_step()
     if (this->pps_names.empty())
         return;
 
-    lprintf(9, "Output to file: %s", this->file_name);
+    lprintf(9, "Output to file: {}", this->file_name);
 
     if (!this->has_header) {
         write_header();
@@ -71,7 +71,7 @@ CSVOutput::open_file()
     _F_;
     this->f = fopen(this->file_name.c_str(), "w");
     if (this->f == nullptr)
-        log_error("Unable to open '%s' for writing: %s.", this->file_name, strerror(errno));
+        log_error("Unable to open '{}' for writing: {}.", this->file_name, strerror(errno));
 }
 
 void

@@ -175,7 +175,7 @@ ExodusIIOutput::create()
             else if (pp_names.count(name) == 1)
                 this->global_var_names.push_back(name);
             else
-                log_error("Variable '%s' specified in 'variables' parameter does not exist. Typo?",
+                log_error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
                           name);
         }
     }
@@ -197,7 +197,7 @@ ExodusIIOutput::output_step()
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
     set_file_name();
-    lprintf(9, "Output to file: %s", this->file_name);
+    lprintf(9, "Output to file: {}", this->file_name);
 
     if (this->exo == nullptr)
         open_file();
@@ -218,7 +218,7 @@ ExodusIIOutput::open_file()
     _F_;
     this->exo = new exodusIIcpp::File(this->file_name, exodusIIcpp::FileAccess::WRITE);
     if (!this->exo->is_opened())
-        error("Could not open file '%s' for writing.", get_file_name());
+        error("Could not open file '{}' for writing.", get_file_name());
 }
 
 void

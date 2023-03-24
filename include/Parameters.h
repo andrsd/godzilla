@@ -102,7 +102,7 @@ public:
     get(const std::string & name) const
     {
         if (!this->has<T>(name))
-            error("No parameter '%s' found.", name);
+            error("No parameter '{}' found.", name);
 
         auto it = this->params.find(name);
         return dynamic_cast<Parameter<T> *>(it->second)->get();
