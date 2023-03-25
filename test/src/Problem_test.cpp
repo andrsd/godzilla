@@ -110,6 +110,7 @@ TEST(ProblemTest, add_pp)
     out_params.set<const Problem *>("_problem") = &problem;
     out_params.set<std::string>("_name") = "out";
     out_params.set<std::vector<std::string>>("on") = { "initial" };
+    out_params.set<Int>("interval") = 1;
     TestOutput out(out_params);
     out.create();
     problem.add_output(&out);
