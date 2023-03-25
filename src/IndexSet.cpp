@@ -145,4 +145,12 @@ IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
         return IndexSet();
 }
 
+IndexSet
+IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
+{
+    IS is;
+    ISIntersect((IS) is1, (IS) is2, &is);
+    return IndexSet(is);
+}
+
 } // namespace godzilla
