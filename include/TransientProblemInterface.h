@@ -31,6 +31,8 @@ public:
     /// @return PETSc TS object
     TS get_ts() const;
 
+    Vector get_solution() const;
+
 protected:
     /// Initialize
     virtual void init();

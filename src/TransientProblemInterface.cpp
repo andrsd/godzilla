@@ -87,6 +87,14 @@ TransientProblemInterface::get_ts() const
     return this->ts;
 }
 
+Vector
+TransientProblemInterface::get_solution() const
+{
+    Vec sln;
+    PETSC_CHECK(TSGetSolution(this->ts, &sln));
+    return { sln };
+}
+
 void
 TransientProblemInterface::init()
 {
@@ -133,8 +141,7 @@ TransientProblemInterface::post_step()
     _F_;
     PETSC_CHECK(TSGetTime(this->ts, &this->problem->time));
     PETSC_CHECK(TSGetStepNumber(this->ts, &this->problem->step_num));
-    Vec sln;
-    PETSC_CHECK(TSGetSolution(this->ts, &sln));
+    Vector sln = get_solution();
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
     this->problem->compute_postprocessors();
     this->problem->output(Output::ON_TIMESTEP);
