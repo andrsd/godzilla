@@ -2,6 +2,7 @@
 
 #include "Object.h"
 #include "PrintInterface.h"
+#include "Types.h"
 
 namespace godzilla {
 
@@ -38,6 +39,9 @@ protected:
 
     /// Bitwise mask for determining when this output object should output its content
     unsigned int on_mask;
+
+    ///
+    Int interval;
 
 public:
     static Parameters parameters();

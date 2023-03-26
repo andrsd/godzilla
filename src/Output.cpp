@@ -15,6 +15,7 @@ Output::parameters()
 {
     Parameters params = Object::parameters();
     params.add_param<std::vector<std::string>>("on", "When output should happen");
+    params.add_param<Int>("interval", 1, "Interval");
     params.add_private_param<const Problem *>("_problem", nullptr);
     return params;
 }
@@ -23,7 +24,8 @@ Output::Output(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     problem(get_param<const Problem *>("_problem")),
-    on_mask(ON_NONE)
+    on_mask(ON_NONE),
+    interval(get_param<Int>("interval"))
 {
     _F_;
 }
@@ -78,7 +80,8 @@ bool
 Output::should_output(unsigned int flag)
 {
     _F_;
-    return ((this->on_mask & flag) == flag);
+    return ((this->on_mask & flag) == flag) &&
+           ((this->problem->get_step_num() % this->interval) == 0);
 }
 
 } // namespace godzilla
