@@ -1,6 +1,5 @@
 #pragma once
 
-#include "yaml-cpp/yaml.h"
 #include "InputFile.h"
 
 namespace godzilla {
@@ -23,7 +22,7 @@ protected:
     void build_initial_conditions();
     void build_boundary_conditions();
     void build_postprocessors();
-    void build_ts_adapt(const YAML::Node & problem_node);
+    void build_ts_adapt(const Block & problem_node);
 };
 
 } // namespace godzilla

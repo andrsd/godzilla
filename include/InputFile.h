@@ -22,6 +22,11 @@ public:
     explicit InputFile(const App * app);
     virtual ~InputFile() = default;
 
+    /// Get the file name of this input file
+    ///
+    /// @return File name of this input file
+    const std::string & get_file_name() const;
+
     /// Parse the YML file
     ///
     /// @return `true` if successful, otherwise `false`
@@ -37,11 +42,57 @@ public:
     virtual Problem * get_problem();
 
 protected:
+    /// Representation of a block in the YAML input file
+    ///
+    /// Block for us has this form:
+    /// ```
+    /// name:
+    ///   parameter_name_1: value_1
+    ///   parameter_name_1: value_2
+    /// ```
+    class Block {
+        /// "Parent" YAML node of this block. This typically contains the block name.
+        YAML::Node parent_node;
+        /// Block parameters as a YAML node
+        YAML::Node val_nodes;
+
+    public:
+        Block() = default;
+        Block(const YAML::Node & parent, const YAML::Node & values);
+
+        /// Get parent YAML node
+        const YAML::Node & parent() const;
+
+        /// Get block values as a YAML node
+        const YAML::Node & values() const;
+
+        /// Get name of this block
+        std::string name() const;
+
+        /// Get parameter by name
+        template <typename Key>
+        YAML::Node
+        operator[](const Key & param_name) const
+        {
+            return this->val_nodes[param_name];
+        }
+
+        /// Get parameter by name
+        template <typename Key>
+        YAML::Node
+        operator[](const Key & param_name)
+        {
+            return this->val_nodes[param_name];
+        }
+    };
+
     void add_object(Object * obj);
+    void check_unused_blocks();
     void build_mesh();
     void build_problem();
     void build_outputs();
-    Parameters * build_params(const YAML::Node & parent, const std::string & name);
+    Block get_block(const Block & parent, const std::string & name);
+    Parameters * build_params(const Block & block);
     void set_parameter_from_yml(Parameters * params,
                                 const YAML::Node & node,
                                 const std::string & param_name);
@@ -70,8 +121,10 @@ protected:
 
     /// Application object
     const godzilla::App * app;
+    /// Name of this input file
+    std::string file_name;
     /// Root node of the YML file
-    YAML::Node root;
+    Block root;
     /// Mesh object
     Mesh * mesh;
     /// Problem object
@@ -80,6 +133,8 @@ protected:
     std::vector<Object *> objects;
     /// Names of object with correct parameters
     std::set<std::string> valid_param_object_names;
+    /// Names of used top-level blocks
+    std::set<std::string> used_top_block_names;
 };
 
 } // namespace godzilla
