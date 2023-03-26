@@ -142,3 +142,26 @@ TEST(IndexSetTest, intersect_caching)
     is1.destroy();
     is2.destroy();
 }
+
+TEST(IndexSetTest, intersect)
+{
+    TestApp app;
+
+    Parameters params = RectangleMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "rect_mesh";
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 2;
+    RectangleMesh mesh(params);
+    mesh.create();
+
+    DMLabel label1 = mesh.get_label("1");
+    IndexSet is1 = IndexSet::values_from_label(label1);
+    DMLabel label2 = mesh.get_label("2");
+    IndexSet is2 = IndexSet::values_from_label(label2);
+    IndexSet isect = IndexSet::intersect(is1, is2);
+    EXPECT_EQ(isect.get_size(), 0);
+    is1.destroy();
+    is2.destroy();
+    isect.destroy();
+}
