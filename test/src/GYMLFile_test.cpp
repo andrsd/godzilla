@@ -125,7 +125,7 @@ TEST_F(GYMLFileTest, parse_empty)
     public:
         explicit TestGYMLFile(const App * app) : GYMLFile(app) {}
 
-        const YAML::Node &
+        const Block &
         get_yml()
         {
             return this->root;
@@ -139,7 +139,7 @@ TEST_F(GYMLFileTest, parse_empty)
 
     file.parse(file_name);
     auto yml = file.get_yml();
-    EXPECT_EQ(yml.size(), 0);
+    EXPECT_EQ(yml.values().size(), 0);
 }
 
 TEST_F(GYMLFileTest, build_empty)
@@ -470,4 +470,20 @@ TEST_F(GYMLFileTest, ts_adapt_with_steady)
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
         testing::HasSubstr("Time stepping adaptivity can be used only with transient problems."));
+}
+
+TEST_F(GYMLFileTest, unused_block)
+{
+    testing::internal::CaptureStderr();
+
+    GYMLFile file(this->app);
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/unused_block.yml");
+    EXPECT_TRUE(file.parse(file_name));
+    file.build();
+    file.check();
+    this->app->check_integrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::ContainsRegex("\\[WARNING\\] Unused block 'asdf' in '.+'"));
 }

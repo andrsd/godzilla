@@ -8,6 +8,12 @@ class TestApp : public App {
 public:
     TestApp() : App("godzilla", mpi::Communicator(MPI_COMM_WORLD)), problem(nullptr) {}
 
+    const std::string &
+    get_input_file_name() const
+    {
+        return this->input_file_name;
+    }
+
     virtual Problem *
     get_problem() const
     {
@@ -22,4 +28,5 @@ public:
     }
 
     Problem * problem;
+    std::string input_file_name;
 };

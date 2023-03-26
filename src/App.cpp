@@ -93,7 +93,8 @@ const std::string &
 App::get_input_file_name() const
 {
     _F_;
-    return this->input_file_name;
+    assert(this->yml != nullptr);
+    return this->yml->get_file_name();
 }
 
 const mpi::Communicator &
@@ -134,10 +135,10 @@ void
 App::run_input_file()
 {
     _F_;
-    if (utils::path_exists(this->input_file_arg.getValue())) {
+    auto input_file_name = this->input_file_arg.getValue();
+    if (utils::path_exists(input_file_name)) {
         this->yml = allocate_input_file();
-        this->input_file_name = this->input_file_arg.getValue();
-        build_from_yml();
+        build_from_yml(input_file_name);
         if (this->log->get_num_errors() == 0)
             create();
         check_integrity();
@@ -145,14 +146,14 @@ App::run_input_file()
     }
     else
         error("Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
-              this->input_file_name);
+              input_file_name);
 }
 
 void
-App::build_from_yml()
+App::build_from_yml(const std::string & file_name)
 {
     _F_;
-    if (this->yml->parse(this->input_file_name))
+    if (this->yml->parse(file_name))
         this->yml->build();
 }
 

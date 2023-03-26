@@ -92,7 +92,7 @@ protected:
     /// Build application objects from an input file
     ///
     /// @param file_name The input file name
-    virtual void build_from_yml();
+    virtual void build_from_yml(const std::string & file_name);
 
     /// Check integrity of the application
     virtual void check_integrity();
@@ -131,9 +131,6 @@ protected:
 
     /// Verbosity level
     unsigned int verbosity_level;
-
-    /// Input file name
-    std::string input_file_name;
 
     /// YML file with application objects
     InputFile * yml;

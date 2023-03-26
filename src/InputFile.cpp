@@ -7,11 +7,40 @@
 #include "CallStack.h"
 #include "Validation.h"
 #include "Utils.h"
-#include "cassert"
+#include <cassert>
 #include "fmt/format.h"
 #include "yaml-cpp/node/iterator.h"
 
 namespace godzilla {
+
+InputFile::Block::Block(const YAML::Node & parent, const YAML::Node & values) :
+    parent_node(parent),
+    val_nodes(values)
+{
+}
+
+const YAML::Node &
+InputFile::Block::parent() const
+{
+    _F_;
+    return this->parent_node;
+}
+
+const YAML::Node &
+InputFile::Block::values() const
+{
+    _F_;
+    return this->val_nodes;
+}
+
+std::string
+InputFile::Block::name() const
+{
+    _F_;
+    return this->parent_node.as<std::string>();
+}
+
+//
 
 InputFile::InputFile(const App * app) :
     PrintInterface(app),
@@ -23,13 +52,21 @@ InputFile::InputFile(const App * app) :
     _F_;
 }
 
+const std::string &
+InputFile::get_file_name() const
+{
+    _F_;
+    return this->file_name;
+}
+
 bool
 InputFile::parse(const std::string & file_name)
 {
     _F_;
     lprintf(9, "Parsing input file '{}'", file_name);
     try {
-        this->root = YAML::LoadFile(file_name);
+        this->root = { YAML::Node(), YAML::LoadFile(file_name) };
+        this->file_name = file_name;
         return true;
     }
     catch (YAML::ParserException & e) {
@@ -67,6 +104,18 @@ InputFile::check()
     _F_;
     for (auto & obj : this->objects)
         obj->check();
+    check_unused_blocks();
+}
+
+void
+InputFile::check_unused_blocks()
+{
+    _F_;
+    for (auto it = this->root.values().begin(); it != this->root.values().end(); ++it) {
+        auto blk_name = it->first.as<std::string>();
+        if (this->used_top_block_names.find(blk_name) == this->used_top_block_names.end())
+            log_warning("Unused block '{}' in '{}'.", blk_name, this->file_name);
+    }
 }
 
 void
@@ -85,7 +134,8 @@ InputFile::build_mesh()
 {
     _F_;
     lprintf(9, "- mesh");
-    Parameters * params = build_params(this->root, "mesh");
+    auto node = get_block(this->root, "mesh");
+    Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
     this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
     add_object(this->mesh);
@@ -96,7 +146,8 @@ InputFile::build_problem()
 {
     _F_;
     lprintf(9, "- problem");
-    Parameters * params = build_params(this->root, "problem");
+    auto node = get_block(this->root, "problem");
+    Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
     params->set<const Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
@@ -107,61 +158,68 @@ void
 InputFile::build_outputs()
 {
     _F_;
-    YAML::Node output_root_node = this->root["output"];
-    if (!output_root_node)
+    if (!this->root["output"])
         return;
 
     lprintf(9, "- outputs");
-
-    for (const auto & it : output_root_node) {
-        YAML::Node output_node = it.first;
-        auto name = output_node.as<std::string>();
-
-        Parameters * params = build_params(output_root_node, name);
+    auto output_block = get_block(this->root, "output");
+    for (const auto & it : output_block.values()) {
+        Block blk = get_block(output_block, it.first.as<std::string>());
+        Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
         params->set<const Problem *>("_problem") = this->problem;
-        auto output = Factory::create<Output>(class_name, name, params);
+        auto output = Factory::create<Output>(class_name, blk.name(), params);
         assert(this->problem != nullptr);
         this->problem->add_output(output);
     }
 }
 
+InputFile::Block
+InputFile::get_block(const Block & parent, const std::string & name)
+{
+    for (auto it = parent.values().begin(); it != parent.values().end(); ++it) {
+        if (it->first.as<std::string>() == name) {
+            if (this->root.parent() == parent.parent())
+                this->used_top_block_names.insert(name);
+            return { it->first, it->second };
+        }
+    }
+    error("Missing '{}' block.", name);
+}
+
 Parameters *
-InputFile::build_params(const YAML::Node & parent, const std::string & name)
+InputFile::build_params(const Block & block)
 {
     _F_;
-    YAML::Node node = parent[name];
-    if (!node)
-        error("Missing '{}' block.", name);
-
     std::set<std::string> unused_param_names;
-    if (node.IsMap()) {
-        for (auto it = node.begin(); it != node.end(); ++it)
+    auto vals = block.values();
+    if (vals.IsMap()) {
+        for (auto it = vals.begin(); it != vals.end(); ++it)
             unused_param_names.insert(it->first.as<std::string>());
     }
 
-    YAML::Node type = node["type"];
+    YAML::Node type = vals["type"];
     if (!type)
-        error("{}: No 'type' specified.", name);
+        error("{}: No 'type' specified.", block.name());
     const std::string & class_name = type.as<std::string>();
     if (!Factory::is_registered(class_name))
-        error("{}: Type '{}' is not a registered object.", name, class_name);
+        error("{}: Type '{}' is not a registered object.", block.name(), class_name);
     unused_param_names.erase("type");
 
     Parameters * params = Factory::get_parameters(class_name);
     params->set<std::string>("_type") = class_name;
-    params->set<std::string>("_name") = name;
+    params->set<std::string>("_name") = block.name();
     params->set<const App *>("_app") = this->app;
 
     for (auto & kv : *params) {
         const std::string & param_name = kv.first;
         if (!params->is_private(param_name)) {
-            set_parameter_from_yml(params, node, param_name);
+            set_parameter_from_yml(params, block.values(), param_name);
             unused_param_names.erase(param_name);
         }
     }
 
-    check_params(params, name, unused_param_names);
+    check_params(params, block.name(), unused_param_names);
 
     return params;
 }
