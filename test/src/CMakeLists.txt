@@ -2,28 +2,28 @@ add_executable(${PROJECT_NAME}
     Array1D_test.cpp
     Array2D_test.cpp
     AuxiliaryField_test.cpp
-        BasicTSAdapt_test.cpp
-        BndJacobianFunc_test.cpp
-        BndResidualFunc_test.cpp
-        BoundaryCondition_test.cpp
-        BoxMesh_test.cpp
-        CallStack_test.cpp
-        ConstantAuxiliaryField_test.cpp
-        ConstantIC_test.cpp
-        CSVOutput_test.cpp
-        DenseMatrix_test.cpp
-        DenseMatrixSymm_test.cpp
-        DenseVector_test.cpp
-        DependencyEvaluator_test.cpp
-        DependencyGraph_test.cpp
-        DirichletBC_test.cpp
-        Error_test.cpp
-        EssentialBC_test.cpp
-        ExodusIIMesh_test.cpp
-        ExodusIIOutput_test.cpp
-        ExplicitFELinearProblem_test.cpp
-        ExplicitFVLinearProblem_test.cpp
-        Factory_test.cpp
+    BasicTSAdapt_test.cpp
+    BndJacobianFunc_test.cpp
+    BndResidualFunc_test.cpp
+    BoundaryCondition_test.cpp
+    BoxMesh_test.cpp
+    CallStack_test.cpp
+    ConstantAuxiliaryField_test.cpp
+    ConstantIC_test.cpp
+    CSVOutput_test.cpp
+    DenseMatrix_test.cpp
+    DenseMatrixSymm_test.cpp
+    DenseVector_test.cpp
+    DependencyEvaluator_test.cpp
+    DependencyGraph_test.cpp
+    DirichletBC_test.cpp
+    Error_test.cpp
+    EssentialBC_test.cpp
+    ExodusIIMesh_test.cpp
+    ExodusIIOutput_test.cpp
+    ExplicitFELinearProblem_test.cpp
+    ExplicitFVLinearProblem_test.cpp
+    Factory_test.cpp
     FENonlinearProblem_test.cpp
     FunctionAuxiliaryField_test.cpp
     FunctionEvaluator_test.cpp
