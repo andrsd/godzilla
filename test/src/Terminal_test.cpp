@@ -24,13 +24,13 @@ TEST(TerminalTest, ostream_operator)
 {
     std::ostringstream oss;
     oss << Terminal::Color::red;
-    EXPECT_STREQ(oss.str().c_str(), (const char *) Terminal::Color::red);
+    EXPECT_EQ(oss.str(), Terminal::Color::red.str);
 }
 
 TEST(TerminalTest, fmt_formatter)
 {
     std::string s = fmt::format("{}", Terminal::Color::red);
-    EXPECT_STREQ(s.c_str(), (const char *) Terminal::Color::red);
+    EXPECT_EQ(s, Terminal::Color::red.str);
 }
 
 TEST(TerminalTest, color_codes)
