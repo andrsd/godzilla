@@ -121,27 +121,6 @@ public:
 
     virtual const Point & get_xyz() const;
 
-    /// Integrate
-    virtual PetscErrorCode integrate(PetscDS ds,
-                                     Int field,
-                                     Int n_elems,
-                                     PetscFEGeom * cell_geom,
-                                     const Scalar coefficients[],
-                                     PetscDS ds_aux,
-                                     const Scalar coefficientsAux[],
-                                     Scalar integral[]);
-
-    /// Integrate field over a boundary
-    virtual PetscErrorCode integrate_bnd(PetscDS ds,
-                                         Int field,
-                                         PetscBdPointFunc obj_func,
-                                         Int n_elems,
-                                         PetscFEGeom * face_geom,
-                                         const Scalar coefficients[],
-                                         PetscDS ds_aux,
-                                         const Scalar coefficientsAux[],
-                                         Scalar integral[]);
-
     /// Integrate residual
     virtual PetscErrorCode integrate_residual(PetscDS ds,
                                               PetscFormKey key,
