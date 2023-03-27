@@ -202,8 +202,8 @@ DiscreteProblemInterface::add_boundary_essential(const std::string & name,
                                    field,
                                    components.size(),
                                    components.size() == 0 ? nullptr : components.data(),
-                                   (void (*)()) fn,
-                                   (void (*)()) fn_t,
+                                   reinterpret_cast<void (*)()>(fn),
+                                   reinterpret_cast<void (*)()>(fn_t),
                                    context,
                                    nullptr));
 }
@@ -251,8 +251,8 @@ DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                    field,
                                    components.size(),
                                    components.size() == 0 ? nullptr : components.data(),
-                                   (void (*)()) fn,
-                                   (void (*)()) fn_t,
+                                   reinterpret_cast<void (*)()>(fn),
+                                   reinterpret_cast<void (*)()>(fn_t),
                                    context,
                                    nullptr));
 }
