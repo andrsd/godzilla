@@ -41,9 +41,8 @@ LinearInterpolation::check()
                         this->x.size());
     else {
         // check monotonicity
-        Real a = this->x[0];
-        for (std::size_t i = 1; i < this->x.size(); i++) {
-            if (this->x[i] <= a)
+        for (std::size_t i = 0; i < this->x.size() - 1; i++) {
+            if (this->x[i] >= this->x[i + 1])
                 godzilla::error(
                     "LinearInterpolation: Values in 'x' must be increasing. Failed at index '{}'.",
                     i);
