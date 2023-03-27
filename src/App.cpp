@@ -76,7 +76,7 @@ App::create()
 }
 
 void
-App::parse_command_line(int argc, char * argv[])
+App::parse_command_line(int argc, const char * const * argv)
 {
     _F_;
     this->args.parse(argc, argv);

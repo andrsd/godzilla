@@ -47,10 +47,10 @@ REGISTER_OBJECT(MockProblem);
 TEST_F(GodzillaAppTest, run_input)
 {
     int argc = 3;
-    char * argv[] = { (char *) "godzilla",
-                      (char *) "-i",
-                      (char *) GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml",
-                      NULL };
+    const char * argv[] = { "godzilla",
+                            "-i",
+                            GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml",
+                            nullptr };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app("godzilla", comm);
@@ -65,10 +65,10 @@ TEST_F(GodzillaAppTest, run_input)
 TEST_F(GodzillaAppTest, run_input_non_existent_file)
 {
     int argc = 3;
-    char * argv[] = { (char *) "godzilla",
-                      (char *) "-i",
-                      (char *) GODZILLA_UNIT_TESTS_ROOT "/assets/non_existent_file.yml",
-                      NULL };
+    const char * argv[] = { "godzilla",
+                            "-i",
+                            GODZILLA_UNIT_TESTS_ROOT "/assets/non_existent_file.yml",
+                            nullptr };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app("godzilla", comm);
@@ -80,7 +80,7 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
 TEST_F(GodzillaAppTest, no_colors)
 {
     int argc = 2;
-    char * argv[] = { (char *) "godzilla", (char *) "--no-colors", NULL };
+    const char * argv[] = { "godzilla", "--no-colors", nullptr };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app("godzilla", comm);
@@ -93,7 +93,7 @@ TEST_F(GodzillaAppTest, no_colors)
 TEST_F(GodzillaAppTest, verbose)
 {
     int argc = 3;
-    char * argv[] = { (char *) "godzilla", (char *) "--verbose", (char *) "2", NULL };
+    const char * argv[] = { "godzilla", "--verbose", "2", nullptr };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app("godzilla", comm);
