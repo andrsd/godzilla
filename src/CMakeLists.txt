@@ -62,6 +62,7 @@ add_library(${PROJECT_NAME}
         ParsedFunction.cpp
         PerfLog.cpp
         PetscFEGodzilla.cpp
+        PiecewiseConstant.cpp
         PiecewiseLinear.cpp
         Postprocessor.cpp
         PrintInterface.cpp
