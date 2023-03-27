@@ -40,7 +40,7 @@ public:
     ///
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    virtual void parse_command_line(int argc, char * argv[]);
+    virtual void parse_command_line(int argc, const char * const * argv);
 
     /// Run the application
     ///
