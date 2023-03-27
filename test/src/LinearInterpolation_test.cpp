@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "Godzilla.h"
 #include "LinearInterpolation.h"
 
@@ -52,26 +52,32 @@ TEST(LinearInterpolationTest, single_interval)
 
 TEST(LinearInterpolationTest, single_point)
 {
-    std::vector<Real> x = { 1 };
-    std::vector<Real> y = { 0 };
-    EXPECT_DEATH(LinearInterpolation(x, y),
-                 "\\[ERROR\\] LinearInterpolation: Size of 'x' is 1. It must be 2 or more.");
+    EXPECT_THAT(
+        []() {
+            LinearInterpolation ipol({ 1 }, { 0 });
+            ipol.check();
+        },
+        testing::ThrowsMessage<std::domain_error>("Size of 'x' is 1. It must be 2 or more."));
 }
 
 TEST(LinearInterpolationTest, unequal_sizes)
 {
-    std::vector<Real> x = { 1, 2 };
-    std::vector<Real> y = { 0, 2, 3 };
-    EXPECT_DEATH(
-        LinearInterpolation(x, y),
-        "\\[ERROR\\] LinearInterpolation: size of 'x' \\(2\\) does not match size of 'y' \\(3\\)");
+    EXPECT_THAT(
+        []() {
+            LinearInterpolation ipol({ 1, 2 }, { 0, 2, 3 });
+            ipol.check();
+        },
+        testing::ThrowsMessage<std::domain_error>(
+            "Size of 'x' (2) does not match size of 'y' (3)."));
 }
 
 TEST(LinearInterpolationTest, non_increasing)
 {
-    std::vector<Real> x = { 1, 2, 1 };
-    std::vector<Real> y = { 0, 2, 3 };
-    EXPECT_DEATH(
-        LinearInterpolation(x, y),
-        "\\[ERROR\\] LinearInterpolation: Values in 'x' must be increasing. Failed at index '2'.");
+    EXPECT_THAT(
+        []() {
+            LinearInterpolation ipol({ 1, 2, 1 }, { 0, 2, 3 });
+            ipol.check();
+        },
+        testing::ThrowsMessage<std::domain_error>(
+            "Values in 'x' must be increasing. Failed at index '2'."));
 }

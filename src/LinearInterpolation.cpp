@@ -1,6 +1,6 @@
 #include "CallStack.h"
 #include "LinearInterpolation.h"
-#include "Error.h"
+#include "fmt/printf.h"
 
 namespace godzilla {
 
@@ -15,7 +15,6 @@ LinearInterpolation::LinearInterpolation(const std::vector<Real> & ax,
     y(ay)
 {
     _F_;
-    check();
 }
 
 void
@@ -24,28 +23,26 @@ LinearInterpolation::create(const std::vector<Real> & x, const std::vector<Real>
     _F_;
     this->x = x;
     this->y = y;
-    check();
 }
 
 void
-LinearInterpolation::check()
+LinearInterpolation::check() const
 {
     _F_;
     if (this->x.size() != this->y.size())
-        godzilla::error("LinearInterpolation: size of 'x' ({}) does not match size of 'y' ({}).",
-                        this->x.size(),
-                        this->y.size());
+        throw std::domain_error(fmt::format("Size of 'x' ({}) does not match size of 'y' ({}).",
+                                            this->x.size(),
+                                            this->y.size()));
 
     if (this->x.size() < 2)
-        godzilla::error("LinearInterpolation: Size of 'x' is {}. It must be 2 or more.",
-                        this->x.size());
+        throw std::domain_error(
+            fmt::format("Size of 'x' is {}. It must be 2 or more.", this->x.size()));
     else {
         // check monotonicity
         for (std::size_t i = 0; i < this->x.size() - 1; i++) {
             if (this->x[i] >= this->x[i + 1])
-                godzilla::error(
-                    "LinearInterpolation: Values in 'x' must be increasing. Failed at index '{}'.",
-                    i);
+                throw std::domain_error(
+                    fmt::format("Values in 'x' must be increasing. Failed at index '{}'.", i + 1));
         }
     }
 }
