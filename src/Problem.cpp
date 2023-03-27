@@ -167,4 +167,65 @@ Problem::on_final()
     output(Output::ON_FINAL);
 }
 
+Vector
+Problem::create_local_vector() const
+{
+    _F_;
+    Vec v;
+    PETSC_CHECK(DMCreateLocalVector(get_dm(), &v));
+    return { v };
+}
+
+Vector
+Problem::get_local_vector() const
+{
+    _F_;
+    Vec v;
+    PETSC_CHECK(DMGetLocalVector(get_dm(), &v));
+    return { v };
+}
+
+void
+Problem::restore_local_vector(const Vector & vec) const
+{
+    _F_;
+    Vec v = vec;
+    PETSC_CHECK(DMRestoreLocalVector(get_dm(), &v));
+}
+
+Vector
+Problem::create_global_vector() const
+{
+    _F_;
+    Vec v;
+    PETSC_CHECK(DMCreateGlobalVector(get_dm(), &v));
+    return { v };
+}
+
+Vector
+Problem::get_global_vector() const
+{
+    _F_;
+    Vec v;
+    PETSC_CHECK(DMGetGlobalVector(get_dm(), &v));
+    return { v };
+}
+
+void
+Problem::restore_global_vector(const Vector & vec) const
+{
+    _F_;
+    Vec v = vec;
+    PETSC_CHECK(DMRestoreGlobalVector(get_dm(), &v));
+}
+
+Matrix
+Problem::create_matrix() const
+{
+    _F_;
+    Mat m;
+    PETSC_CHECK(DMCreateMatrix(get_dm(), &m));
+    return { m };
+}
+
 } // namespace godzilla

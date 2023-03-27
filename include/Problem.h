@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "PrintInterface.h"
 #include "Vector.h"
+#include "Matrix.h"
 #include "petscdm.h"
 #include "petscpartitioner.h"
 
@@ -83,6 +84,35 @@ public:
     ///
     /// @param mask Bit mask for an output event, see `Output` for valid options.
     virtual void output(unsigned int mask);
+
+    /// Creates a local vector from a DM object
+    ///
+    /// @return New local vector
+    Vector create_local_vector() const;
+
+    /// Get a vector that may be used with the DM local routines. This vector has spaces for the
+    /// ghost values.
+    ///
+    /// @return Local vector
+    Vector get_local_vector() const;
+
+    void restore_local_vector(const Vector & vec) const;
+
+    /// Creates a global vector from a DM object. A global vector is a parallel vector that has no
+    /// duplicate values shared between MPI ranks, that is it has no ghost locations.
+    ///
+    /// @return New global vector
+    Vector create_global_vector() const;
+
+    /// Get a vector that may be used with the DM global routines
+    ///
+    /// @return Global vector
+    Vector get_global_vector() const;
+
+    void restore_global_vector(const Vector & vec) const;
+
+    /// Get an empty matrix for a `DM`
+    Matrix create_matrix() const;
 
 protected:
     /// Called before solving starts
