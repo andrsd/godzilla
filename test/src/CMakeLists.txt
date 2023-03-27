@@ -56,6 +56,7 @@ add_executable(${PROJECT_NAME}
     Parameters_test.cpp
     ParsedFunction_test.cpp
     PerfLog_test.cpp
+    PiecewiseConstant_test.cpp
     PiecewiseLinear_test.cpp
     PrintInterface_test.cpp
     Problem_test.cpp
