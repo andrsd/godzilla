@@ -40,9 +40,7 @@ public:
                             PETSC_FALSE,
                             &this->dm);
         DMSetUp(this->dm);
-        Vec glob_x;
-        DMCreateGlobalVector(this->dm, &glob_x);
-        this->x = Vector(glob_x);
+        this->x = create_global_vector();
     }
 
     virtual ~GTestProblem()

@@ -163,18 +163,13 @@ void
 NonlinearProblem::allocate_objects()
 {
     _F_;
-    DM dm = get_dm();
-    Vec glob_x;
-    PETSC_CHECK(DMCreateGlobalVector(dm, &glob_x));
-    this->x = Vector(glob_x);
+    this->x = create_global_vector();
     this->x.set_name("sln");
 
     this->x.duplicate(this->r);
     this->r.set_name("res");
 
-    Mat mat_J;
-    PETSC_CHECK(DMCreateMatrix(dm, &mat_J));
-    this->J = Matrix(mat_J);
+    this->J = create_matrix();
     this->J.set_name("Jac");
 }
 

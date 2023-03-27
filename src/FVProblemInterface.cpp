@@ -267,10 +267,8 @@ FVProblemInterface::create()
 void
 FVProblemInterface::allocate_objects()
 {
-    DM dm = this->unstr_mesh->get_dm();
-    Vec loc_sln;
-    PETSC_CHECK(DMCreateLocalVector(dm, &loc_sln));
-    this->sln = Vector(loc_sln);
+    _F_;
+    this->sln = this->problem->create_local_vector();
 }
 
 void
