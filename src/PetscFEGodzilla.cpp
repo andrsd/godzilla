@@ -8,52 +8,6 @@ namespace godzilla {
 namespace internal {
 
 static PetscErrorCode
-integrate(PetscDS ds,
-          Int field,
-          Int ne,
-          PetscFEGeom * cgeom,
-          const Scalar coefficients[],
-          PetscDS ds_aux,
-          const Scalar coefficients_aux[],
-          Scalar integral[])
-{
-    _F_;
-    void * ctx;
-    PETSC_CHECK(PetscDSGetContext(ds, field, &ctx));
-    auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    PetscErrorCode err =
-        fepi->integrate(ds, field, ne, cgeom, coefficients, ds_aux, coefficients_aux, integral);
-    return err;
-}
-
-static PetscErrorCode
-integrate_bd(PetscDS ds,
-             Int field,
-             PetscBdPointFunc obj_func,
-             Int ne,
-             PetscFEGeom * fgeom,
-             const Scalar coefficients[],
-             PetscDS ds_aux,
-             const Scalar coefficients_aux[],
-             Scalar integral[])
-{
-    _F_;
-    void * ctx;
-    PETSC_CHECK(PetscDSGetContext(ds, field, &ctx));
-    auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    PetscErrorCode err = fepi->integrate_bnd(ds,
-                                             field,
-                                             obj_func,
-                                             ne,
-                                             fgeom,
-                                             coefficients,
-                                             ds_aux,
-                                             coefficients_aux,
-                                             integral);
-    return err;
-}
-
-static PetscErrorCode
 integrate_residual(PetscDS ds,
                    PetscFormKey key,
                    Int ne,
@@ -195,8 +149,8 @@ create_lagrange_petscfe(MPI_Comm comm,
     _F_;
     PETSC_CHECK(PetscFECreateLagrange(comm, dim, nc, is_simplex, k, qorder, fem));
     // replace PETSc functions with ours
-    (*fem)->ops->integrate = integrate;
-    (*fem)->ops->integratebd = integrate_bd;
+    (*fem)->ops->integrate = nullptr;
+    (*fem)->ops->integratebd = nullptr;
     (*fem)->ops->integrateresidual = integrate_residual;
     (*fem)->ops->integratebdresidual = integrate_bd_residual;
     (*fem)->ops->integratehybridresidual = nullptr;

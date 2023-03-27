@@ -900,37 +900,6 @@ FEProblemInterface::sort_functionals()
 }
 
 PetscErrorCode
-FEProblemInterface::integrate(PetscDS ds,
-                              Int field,
-                              Int ne,
-                              PetscFEGeom * cgeom,
-                              const Scalar coefficients[],
-                              PetscDS ds_aux,
-                              const Scalar coefficients_aux[],
-                              Scalar integral[])
-{
-    _F_;
-    error("Not implemented.");
-    return 0;
-}
-
-PetscErrorCode
-FEProblemInterface::integrate_bnd(PetscDS ds,
-                                  Int field,
-                                  PetscBdPointFunc obj_func,
-                                  Int ne,
-                                  PetscFEGeom * fgeom,
-                                  const Scalar coefficients[],
-                                  PetscDS ds_aux,
-                                  const Scalar coefficients_aux[],
-                                  Scalar integral[])
-{
-    _F_;
-    error("Not implemented.");
-    return 0;
-}
-
-PetscErrorCode
 FEProblemInterface::integrate_residual(PetscDS ds,
                                        PetscFormKey key,
                                        Int n_elems,
