@@ -1,9 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaConfig.h"
-#include "Godzilla.h"
 #include "PerfLog.h"
-#include <string.h>
-#include <unistd.h>
+#include <time.h>
 
 #ifdef GODZILLA_WITH_PERF_LOG
 
@@ -18,15 +16,17 @@ TEST(PerfLogTest, event)
     auto event2_id = PerfLog::register_event(event2_name);
 
     for (int i = 0; i < 2; i++) {
+        struct timespec remaining, request = { 0, 50000000 };
         PerfLog::Event event(event1_name);
         event.log_flops(4.);
-        usleep(50000);
+        nanosleep(&request, &remaining);
     }
 
     {
+        struct timespec remaining, request = { 0, 200000000 };
         PerfLog::Event ev2(event2_id);
         ev2.log_flops(16.);
-        usleep(200000);
+        nanosleep(&request, &remaining);
     }
 
     PerfLog::EventInfo info1 = PerfLog::get_event_info(event1_name);
@@ -64,17 +64,19 @@ TEST(PerfLogTest, stage)
     PetscLogStage stage2_id = PerfLog::register_stage("stage2");
 
     for (int i = 0; i < 3; i++) {
+        struct timespec remaining, request = { 0, 50000000 };
         PerfLog::Stage stage(stage_name);
         PerfLog::Event ev(event_name);
         ev.log_flops(1.);
-        usleep(50000);
+        nanosleep(&request, &remaining);
     }
 
     {
+        struct timespec remaining, request = { 0, 100000000 };
         PerfLog::Stage stage2(stage2_id);
         PerfLog::Event ev("event");
         ev.log_flops(2.);
-        usleep(100000);
+        nanosleep(&request, &remaining);
     }
 
     PerfLog::Stage stage("stage1");
