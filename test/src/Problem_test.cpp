@@ -8,41 +8,54 @@
 
 using namespace godzilla;
 
+namespace {
+
+class TestProblem : public Problem {
+public:
+    explicit TestProblem(const Parameters & params) : Problem(params) {}
+
+    virtual void
+    run()
+    {
+    }
+    virtual void
+    solve()
+    {
+    }
+    virtual bool
+    converged()
+    {
+        return false;
+    }
+    virtual DM
+    get_dm() const
+    {
+        return this->mesh->get_dm();
+    }
+
+    virtual const Vector &
+    get_solution_vector() const
+    {
+        return this->sln;
+    }
+
+    Vector sln;
+};
+
+Section
+create_section(DM dm)
+{
+    DMSetNumFields(dm, 1);
+    Int nc[1] = { 1 };
+    Int n_dofs[2] = { 1, 0 };
+    return Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+}
+
+} // namespace
+
 TEST(ProblemTest, add_pp)
 {
     TestApp app;
-
-    class TestProblem : public Problem {
-    public:
-        explicit TestProblem(const Parameters & params) : Problem(params) {}
-
-        virtual void
-        run()
-        {
-        }
-        virtual void
-        solve()
-        {
-        }
-        virtual bool
-        converged()
-        {
-            return false;
-        }
-        virtual DM
-        get_dm() const
-        {
-            return nullptr;
-        }
-
-        virtual const Vector &
-        get_solution_vector() const
-        {
-            return this->sln;
-        }
-
-        Vector sln;
-    };
 
     class TestPostprocessor : public Postprocessor {
     public:
@@ -128,4 +141,77 @@ TEST(ProblemTest, add_pp)
 
     EXPECT_CALL(out, output_step);
     problem.output(Output::ON_INITIAL);
+}
+
+TEST(ProblemTest, local_vec)
+{
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_params);
+    mesh.create();
+    mesh.set_local_section(create_section(mesh.get_dm()));
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    TestProblem problem(prob_params);
+
+    Vector loc_vec = problem.get_local_vector();
+    EXPECT_EQ(loc_vec.get_size(), 3);
+    problem.restore_local_vector(loc_vec);
+
+    Vector vec = problem.create_local_vector();
+    EXPECT_EQ(vec.get_size(), 3);
+    vec.destroy();
+}
+
+TEST(ProblemTest, global_vec)
+{
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_params);
+    mesh.create();
+    mesh.set_local_section(create_section(mesh.get_dm()));
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    TestProblem problem(prob_params);
+
+    Vector glob_vec = problem.get_global_vector();
+    EXPECT_EQ(glob_vec.get_size(), 3);
+    problem.restore_global_vector(glob_vec);
+
+    Vector vec = problem.create_global_vector();
+    EXPECT_EQ(vec.get_size(), 3);
+    vec.destroy();
+}
+
+TEST(ProblemTest, create_matrix)
+{
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_params);
+    mesh.create();
+    mesh.set_local_section(create_section(mesh.get_dm()));
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    TestProblem problem(prob_params);
+    problem.create();
+
+    Matrix mat = problem.create_matrix();
+    EXPECT_EQ(mat.get_n_rows(), 3);
+    EXPECT_EQ(mat.get_n_cols(), 3);
+    mat.destroy();
 }
