@@ -36,6 +36,19 @@ PiecewiseLinear::register_callback(mu::Parser & parser)
     parser.DefineFunUserData(get_name(), piecewise_linear_function_eval, this);
 }
 
+void
+PiecewiseLinear::check()
+{
+    _F_;
+    Function::check();
+    try {
+        this->linpol.check();
+    }
+    catch (std::exception & e) {
+        log_error(e.what());
+    }
+}
+
 Real
 PiecewiseLinear::evaluate(Real x)
 {

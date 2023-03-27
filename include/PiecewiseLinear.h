@@ -13,6 +13,8 @@ class PiecewiseLinear : public Function {
 public:
     explicit PiecewiseLinear(const Parameters & params);
 
+    void check() override;
+
     void register_callback(mu::Parser & parser) override;
 
     /// Evaluate this function at point 'x'

@@ -24,6 +24,9 @@ public:
     /// @param y Dependent values
     void create(const std::vector<Real> & x, const std::vector<Real> & y);
 
+    /// Check that the supplied values are consistent
+    void check() const;
+
     /// Sample the interpolation at a point
     ///
     /// @params x Point where we sample the interpolation
@@ -31,9 +34,6 @@ public:
     Real sample(Real x);
 
 protected:
-    /// Check that the supplied values are consistent
-    void check();
-
     /// Independent values
     std::vector<Real> x;
     /// Dependent values
