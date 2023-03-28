@@ -223,7 +223,7 @@ protected:
     /// Setup volumetric weak form terms
     virtual void set_up_weak_form() = 0;
 
-    void sort_functionals();
+    virtual void sort_functionals();
     void
     sort_residual_functionals(const std::map<std::string, const ValueFunctional *> & suppliers);
     void
