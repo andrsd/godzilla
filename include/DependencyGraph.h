@@ -90,7 +90,7 @@ public:
             stack.pop();
             if (visited.find(v) == visited.end()) {
                 visited[v] = true;
-                for (auto & w : this->adj[v]) {
+                for (auto & w : this->adj.at(v)) {
                     if (rec_stack.find(w) == rec_stack.end()) {
                         stack.push(w);
                         rec_stack.insert(w);
@@ -121,7 +121,7 @@ public:
             T v = queue.front();
             sorted_vector.push_back(v);
             queue.pop();
-            for (auto & w : this->adj[v]) {
+            for (auto & w : this->adj.at(v)) {
                 if (explored.find(w) == explored.end()) {
                     explored[w] = true;
                     if (rec_stack.find(w) == rec_stack.end()) {
