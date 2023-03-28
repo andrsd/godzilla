@@ -879,19 +879,7 @@ void
 FEProblemInterface::sort_functionals()
 {
     _F_;
-    // build map of suppliers
-    std::map<std::string, const ValueFunctional *> suppliers;
-    for (auto & it : get_functionals()) {
-        auto fnl = it.second;
-        auto provides = fnl->get_provided_values();
-        for (auto & s : provides) {
-            if (suppliers.find(s) == suppliers.end())
-                suppliers[s] = fnl;
-            else
-                error("Value '{}' is being supplied multiple times.", s);
-        }
-    }
-
+    auto suppliers = get_suppliers();
     sort_residual_functionals(suppliers);
     sort_jacobian_functionals(suppliers);
 }
