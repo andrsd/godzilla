@@ -65,7 +65,7 @@ PiecewiseConstant::check()
     _F_;
     Function::check();
 
-    if (this->x.size() != this->y.size() + 1)
+    if (this->x.size() + 1 != this->y.size())
         log_error("Size of 'x' ({}) does not match size of 'y' ({}).",
                   this->x.size(),
                   this->y.size());
