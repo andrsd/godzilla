@@ -27,6 +27,7 @@ add_executable(${PROJECT_NAME}
     FEIntegration_test.cpp
     FEMatrices_test.cpp
     FENonlinearProblem_test.cpp
+    FEOps.cpp
     FEShapeFns_test.cpp
     FEVolumes_test.cpp
     FunctionAuxiliaryField_test.cpp
