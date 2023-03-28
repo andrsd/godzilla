@@ -20,11 +20,6 @@ public:
     virtual void evaluate(Scalar val[]) const = 0;
 
 protected:
-    /// Get physical coordinates
-    ///
-    /// @return Physical coordinates
-    NO_DISCARD const Point & get_xyz() const;
-
     /// Get the multiplier a for dF/dU_t
     ///
     /// @return The multiplier a for dF/dU_t
