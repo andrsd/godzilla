@@ -95,6 +95,22 @@ TransientProblemInterface::get_solution() const
     return { sln };
 }
 
+Real
+TransientProblemInterface::get_time_step() const
+{
+    _F_;
+    Real dt;
+    PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
+    return dt;
+}
+
+void
+TransientProblemInterface::set_time_step(Real dt) const
+{
+    _F_;
+    PETSC_CHECK(TSSetTimeStep(this->ts, dt));
+}
+
 void
 TransientProblemInterface::init()
 {
@@ -112,7 +128,7 @@ TransientProblemInterface::create()
     set_up_time_scheme();
     PETSC_CHECK(TSSetTime(this->ts, this->start_time));
     PETSC_CHECK(TSSetMaxTime(this->ts, this->end_time));
-    PETSC_CHECK(TSSetTimeStep(this->ts, this->dt));
+    set_time_step(this->dt);
     PETSC_CHECK(TSSetStepNumber(this->ts, this->problem->get_step_num()));
     PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
     if (this->ts_adaptor)

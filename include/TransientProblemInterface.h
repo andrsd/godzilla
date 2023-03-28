@@ -33,6 +33,16 @@ public:
 
     Vector get_solution() const;
 
+    /// Get the current timestep size
+    ///
+    /// @return the current timestep size
+    Real get_time_step() const;
+
+    /// Allows one to reset the timestep at any time, useful for simple pseudo-timestepping codes.
+    ///
+    /// @param dt The size of the timestep
+    void set_time_step(Real dt) const;
+
 protected:
     /// Initialize
     virtual void init();
