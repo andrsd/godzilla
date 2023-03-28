@@ -44,11 +44,11 @@ TEST(DependencyGraph, dfs)
 
     gr.add_edge(5, 8);
 
-    const auto & n = gr.dfs({ 1 });
+    auto n = gr.dfs({ 1 });
     EXPECT_THAT(n, ElementsAre(1, 5, 8, 6, 7, 2, 4, 3));
 
     // make sure calling dfs() twice in a row will produce the same answer
-    const auto & m = gr.dfs({ 1 });
+    auto m = gr.dfs({ 1 });
     EXPECT_THAT(m, ElementsAre(1, 5, 8, 6, 7, 2, 4, 3));
 }
 
@@ -74,11 +74,11 @@ TEST(DependencyGraph, bfs)
 
     gr.add_edge(5, 8);
 
-    const auto & n = gr.bfs({ 1 });
+    auto n = gr.bfs({ 1 });
     EXPECT_THAT(n, ElementsAre(1, 2, 5, 3, 4, 6, 8, 7));
 
     // make sure calling bfs() twice in a row will produce the same answer
-    const auto & m = gr.dfs({ 1 });
+    auto m = gr.dfs({ 1 });
     EXPECT_THAT(m, ElementsAre(1, 5, 8, 6, 7, 2, 4, 3));
 }
 

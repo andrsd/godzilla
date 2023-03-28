@@ -41,7 +41,7 @@ public:
     /// @param a Node to check
     /// @return `true` if node exists in the graph, `false` otherwise
     bool
-    has_node(const T & a)
+    has_node(const T & a) const
     {
         return this->adj.find(a) != this->adj.end();
     }
@@ -52,7 +52,7 @@ public:
     /// @param b End node
     /// @return `true` if there is an edge from `a` to `b`, `false` otherwise
     bool
-    has_edge(const T & a, const T & b)
+    has_edge(const T & a, const T & b) const
     {
         auto it = this->adj.find(a);
         if (it != this->adj.end()) {
@@ -71,78 +71,74 @@ public:
     }
 
     /// Depth-first search
-    const std::vector<T> &
-    dfs(const std::vector<T> & nodes)
+    std::vector<T>
+    dfs(const std::vector<T> & nodes) const
     {
-        this->rec_stack.clear();
-        this->sorted_vector.clear();
+        std::set<T> rec_stack;
+        std::vector<T> sorted_vector;
         std::map<T, bool> visited;
         std::stack<T> stack;
         for (auto n : nodes) {
             if (has_node(n)) {
                 stack.push(n);
-                this->rec_stack.insert(n);
+                rec_stack.insert(n);
             }
         }
         while (!stack.empty()) {
             T v = stack.top();
-            this->sorted_vector.push_back(v);
+            sorted_vector.push_back(v);
             stack.pop();
             if (visited.find(v) == visited.end()) {
                 visited[v] = true;
-                for (auto & w : this->adj[v]) {
-                    if (this->rec_stack.find(w) == this->rec_stack.end()) {
+                for (auto & w : this->adj.at(v)) {
+                    if (rec_stack.find(w) == rec_stack.end()) {
                         stack.push(w);
-                        this->rec_stack.insert(w);
+                        rec_stack.insert(w);
                     }
                     else
                         throw std::runtime_error("Cyclic dependency detected");
                 }
             }
         }
-        return this->sorted_vector;
+        return sorted_vector;
     }
 
     /// Breadth-first search
-    const std::vector<T> &
-    bfs(const std::vector<T> & nodes)
+    std::vector<T>
+    bfs(const std::vector<T> & nodes) const
     {
-        this->rec_stack.clear();
-        this->sorted_vector.clear();
+        std::set<T> rec_stack;
+        std::vector<T> sorted_vector;
         std::map<T, bool> explored;
         std::queue<T> queue;
         for (auto n : nodes) {
             if (has_node(n)) {
                 queue.push(n);
-                this->rec_stack.insert(n);
+                rec_stack.insert(n);
             }
         }
         while (!queue.empty()) {
             T v = queue.front();
-            this->sorted_vector.push_back(v);
+            sorted_vector.push_back(v);
             queue.pop();
-            for (auto & w : this->adj[v]) {
+            for (auto & w : this->adj.at(v)) {
                 if (explored.find(w) == explored.end()) {
                     explored[w] = true;
-                    if (this->rec_stack.find(w) == this->rec_stack.end()) {
+                    if (rec_stack.find(w) == rec_stack.end()) {
                         queue.push(w);
-                        this->rec_stack.insert(w);
+                        rec_stack.insert(w);
                     }
                     else
                         throw std::runtime_error("Cyclic dependency detected");
                 }
             }
         }
-        return this->sorted_vector;
+        return sorted_vector;
     }
 
 protected:
     /// adjacency
     std::map<T, std::set<T>> adj;
-    /// "sorted" vector of nodes
-    std::vector<T> sorted_vector;
-    /// recursive stack
-    std::set<T> rec_stack;
 };
 
 } // namespace godzilla
