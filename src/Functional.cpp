@@ -36,6 +36,13 @@ Functional::get_spatial_dimension() const
     return get_fe_problem()->get_spatial_dimension();
 }
 
+const Point &
+Functional::get_xyz() const
+{
+    _F_;
+    return get_fe_problem()->get_xyz();
+}
+
 const FieldValue &
 Functional::get_field_value(const std::string & field_name) const
 {
