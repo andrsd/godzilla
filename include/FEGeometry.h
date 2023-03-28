@@ -35,6 +35,15 @@ coordinates(const UnstructuredMesh & mesh, Array1D<DenseVector<Real, DIM>> & coo
     vc.restore_array(coord_vals);
 }
 
+template <Int DIM>
+Array1D<DenseVector<Real, DIM>>
+coordinates(const UnstructuredMesh & mesh)
+{
+    Array1D<DenseVector<Real, DIM>> coords(mesh.get_num_vertices());
+    coordinates<DIM>(mesh, coords);
+    return coords;
+}
+
 template <Int DIM, Int N_ELEM_NODES>
 void
 connectivity(const UnstructuredMesh & mesh, Array1D<DenseVector<Int, N_ELEM_NODES>> & connect)
@@ -44,6 +53,16 @@ connectivity(const UnstructuredMesh & mesh, Array1D<DenseVector<Int, N_ELEM_NODE
     for (auto elem_id : mesh.get_all_cell_range()) {
         connect(elem_id) = DenseVector<Int, N_ELEM_NODES>(mesh.get_cell_connectivity(elem_id));
     }
+}
+
+template <Int DIM, Int N_ELEM_NODES>
+Array1D<DenseVector<Int, N_ELEM_NODES>>
+connectivity(const UnstructuredMesh & mesh)
+{
+    _F_;
+    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(mesh.get_num_cells());
+    connectivity<DIM, N_ELEM_NODES>(mesh, connect);
+    return connect;
 }
 
 // Normals

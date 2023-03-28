@@ -79,6 +79,17 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
     }
 }
 
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+Array1D<Real>
+calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
+             const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect)
+{
+    _F_;
+    Array1D<Real> fe_volume(connect.get_size());
+    calc_volumes<ELEM_TYPE, DIM, N_ELEM_NODES>(coords, connect, fe_volume);
+    return fe_volume;
+}
+
 } // namespace fe
 
 } // namespace godzilla

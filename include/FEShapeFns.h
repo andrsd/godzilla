@@ -99,6 +99,33 @@ calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
     }
 }
 
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+Array2D<DenseVector<Real, DIM>>
+calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
+                const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
+                const Array1D<Real> & volumes)
+{
+    Array2D<DenseVector<Real, DIM>> grad_shfns(connect.get_size());
+    calc_grad_shape<ELEM_TYPE, DIM, N_ELEM_NODES>(coords, connect, volumes, grad_shfns);
+    return grad_shfns;
+}
+
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+Array1D<DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES>>
+calc_grad_shape_1d(const Array1D<DenseVector<Real, DIM>> & coords,
+                   const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
+                   const Array1D<Real> & volumes)
+{
+    _F_;
+    Array1D<DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES>> grad_shfns(connect.get_size());
+    for (godzilla::Int ie = 0; ie < connect.get_size(); ie++) {
+        auto idx = connect.get(ie);
+        auto elem_coord = coords.get_values(idx);
+        auto volume = volumes(ie);
+        grad_shfns(ie) = grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
+    }
+}
+
 } // namespace fe
 
 } // namespace godzilla
