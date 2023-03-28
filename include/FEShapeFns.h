@@ -124,6 +124,7 @@ calc_grad_shape_1d(const Array1D<DenseVector<Real, DIM>> & coords,
         auto volume = volumes(ie);
         grad_shfns(ie) = grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
     }
+    return grad_shfns;
 }
 
 } // namespace fe
