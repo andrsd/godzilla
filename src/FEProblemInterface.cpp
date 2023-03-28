@@ -794,7 +794,7 @@ FEProblemInterface::sort_residual_functionals(
             std::vector<const Functional *> fnls;
             fnls.insert(fnls.end(), f0_fnls.begin(), f0_fnls.end());
             fnls.insert(fnls.end(), f1_fnls.begin(), f1_fnls.end());
-            const auto & sv = graph.bfs(fnls);
+            auto sv = graph.bfs(fnls);
 
             PetscFormKey pwfk = k;
             pwfk.field = f;
@@ -835,7 +835,7 @@ FEProblemInterface::sort_jacobian_functionals(
                 fnls.insert(fnls.end(), g1_fnls.begin(), g1_fnls.end());
                 fnls.insert(fnls.end(), g2_fnls.begin(), g2_fnls.end());
                 fnls.insert(fnls.end(), g3_fnls.begin(), g3_fnls.end());
-                const auto & sv = graph.bfs(fnls);
+                auto sv = graph.bfs(fnls);
 
                 PetscFormKey pwfk = k;
                 pwfk.field = this->wf->get_jac_key(f, g);
