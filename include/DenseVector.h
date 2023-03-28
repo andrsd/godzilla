@@ -217,6 +217,16 @@ public:
         return res;
     }
 
+    template <Int M>
+    DenseVector<T, M>
+    operator*(const DenseVector<DenseVector<T, N>, M> & a) const
+    {
+        DenseVector<T, M> res;
+        for (Int j = 0; j < M; j++)
+            res(j) = *this * a(j);
+        return res;
+    }
+
     T
     operator*(const DenseVector<T, N> & a) const
     {
