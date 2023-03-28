@@ -18,9 +18,11 @@ public:
     explicit FENonlinearProblem(const Parameters & parameters);
 
     void create() override;
-
     PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
     PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
+
+    /// Method for computing boundary values
+    virtual PetscErrorCode compute_boundary(Vector & x);
 
 protected:
     void init() override;

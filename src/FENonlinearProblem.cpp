@@ -13,6 +13,15 @@
 namespace godzilla {
 
 static PetscErrorCode
+__fep_compute_boundary(DM, Vec x, void * user)
+{
+    auto * fep = static_cast<FENonlinearProblem *>(user);
+    Vector vec_x(x);
+    fep->compute_boundary(vec_x);
+    return 0;
+}
+
+static PetscErrorCode
 __fep_compute_residual(DM, Vec x, Vec F, void * user)
 {
     _F_;
@@ -72,7 +81,7 @@ FENonlinearProblem::set_up_callbacks()
 {
     _F_;
     DM dm = this->get_dm();
-    PETSC_CHECK(DMPlexSetSNESLocalFEM(dm, this, this, this));
+    PETSC_CHECK(DMSNESSetBoundaryLocal(dm, __fep_compute_boundary, this));
     PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
     PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
     PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, nullptr, nullptr));
@@ -91,6 +100,19 @@ FENonlinearProblem::allocate_objects()
 {
     NonlinearProblem::allocate_objects();
     FEProblemInterface::allocate_objects();
+}
+
+PetscErrorCode
+FENonlinearProblem::compute_boundary(Vector & x)
+{
+    PETSC_CHECK(DMPlexInsertBoundaryValues(get_dm(),
+                                           PETSC_TRUE,
+                                           x,
+                                           PETSC_MIN_REAL,
+                                           nullptr,
+                                           nullptr,
+                                           nullptr));
+    return 0;
 }
 
 PetscErrorCode
