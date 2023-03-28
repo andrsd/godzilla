@@ -403,4 +403,22 @@ operator*(Real alpha, const DenseMatrixSymm<T, N> & a)
     return res;
 }
 
+// Output
+
+template <typename T, Int N>
+std::ostream &
+operator<<(std::ostream & os, const DenseMatrixSymm<T, N> & obj)
+{
+    for (Int i = 0; i < N; i++) {
+        os << "(";
+        for (Int j = 0; j < N; j++) {
+            os << obj(i, j);
+            if (j < N - 1)
+                os << ", ";
+        }
+        os << ")" << std::endl;
+    }
+    return os;
+}
+
 } // namespace godzilla
