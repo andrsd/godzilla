@@ -780,19 +780,7 @@ FEProblemInterface::sort_residual_functionals(
     const std::map<std::string, const ValueFunctional *> & suppliers)
 {
     _F_;
-    DependencyGraph<const Functional *> graph;
-    for (auto & it : get_functionals()) {
-        auto fnl = it.second;
-        auto depends_on = fnl->get_dependent_values();
-        for (auto & dep : depends_on) {
-            auto jt = suppliers.find(dep);
-            if (jt != suppliers.end())
-                graph.add_edge(fnl, jt->second);
-            else
-                error("Did not find any functional which would supply '{}'.", dep);
-        }
-    }
-
+    auto graph = build_dependecy_graph(suppliers);
     this->sorted_res_functionals.clear();
     auto res_keys = this->wf->get_residual_keys();
     for (auto & k : res_keys) {
@@ -826,19 +814,7 @@ FEProblemInterface::sort_jacobian_functionals(
     const std::map<std::string, const ValueFunctional *> & suppliers)
 {
     _F_;
-    DependencyGraph<const Functional *> graph;
-    for (auto & it : get_functionals()) {
-        auto fnl = it.second;
-        auto depends_on = fnl->get_dependent_values();
-        for (auto & dep : depends_on) {
-            auto jt = suppliers.find(dep);
-            if (jt != suppliers.end())
-                graph.add_edge(fnl, jt->second);
-            else
-                error("Did not find any functional which would supply '{}'.", dep);
-        }
-    }
-
+    auto graph = build_dependecy_graph(suppliers);
     this->sorted_jac_functionals.clear();
     auto jac_keys = this->wf->get_jacobian_keys();
     for (auto & k : jac_keys) {
@@ -879,19 +855,7 @@ void
 FEProblemInterface::sort_functionals()
 {
     _F_;
-    // build map of suppliers
-    std::map<std::string, const ValueFunctional *> suppliers;
-    for (auto & it : get_functionals()) {
-        auto fnl = it.second;
-        auto provides = fnl->get_provided_values();
-        for (auto & s : provides) {
-            if (suppliers.find(s) == suppliers.end())
-                suppliers[s] = fnl;
-            else
-                error("Value '{}' is being supplied multiple times.", s);
-        }
-    }
-
+    auto suppliers = get_suppliers();
     sort_residual_functionals(suppliers);
     sort_jacobian_functionals(suppliers);
 }
