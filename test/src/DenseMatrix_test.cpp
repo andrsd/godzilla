@@ -149,6 +149,29 @@ TEST(DenseMatrixTest, op_mult)
     EXPECT_EQ(res(2), 7.);
 }
 
+TEST(DenseMatrixTest, op_mult_symm)
+{
+    DenseMatrix<Real, 2, 3> m;
+    m.set_row(0, { -1., 2., 1. });
+    m.set_row(1, { 0., 1., -2. });
+
+    DenseMatrixSymm<Real, 3> ms;
+    ms(0, 0) = 1;
+    ms(0, 1) = 2;
+    ms(0, 2) = 0;
+    ms(1, 1) = 3;
+    ms(1, 2) = 4;
+    ms(2, 2) = 5;
+
+    auto res = m * ms;
+    EXPECT_EQ(res(0, 0), 3);
+    EXPECT_EQ(res(0, 1), 8);
+    EXPECT_EQ(res(0, 2), 13);
+    EXPECT_EQ(res(1, 0), 2);
+    EXPECT_EQ(res(1, 1), -5);
+    EXPECT_EQ(res(1, 2), -6);
+}
+
 TEST(DenseMatrixTest, create_symm_1)
 {
     auto m = DenseMatrix<Real, 1>::create_symm({ 2 });
