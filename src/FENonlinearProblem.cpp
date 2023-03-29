@@ -154,10 +154,10 @@ FENonlinearProblem::compute_residual_internal(DM dm,
                                               PetscFormKey key,
                                               const IndexSet & cell_is,
                                               Real time,
-                                              Vec loc_x,
-                                              Vec loc_x_t,
+                                              const Vector & loc_x,
+                                              const Vector & loc_x_t,
                                               Real t,
-                                              Vec loc_f)
+                                              Vector & loc_f)
 {
     _F_;
     DM dm_aux = nullptr;
