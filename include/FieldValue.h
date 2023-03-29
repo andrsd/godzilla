@@ -33,6 +33,13 @@ public:
         return this->data[idx];
     }
 
+    T
+    operator()(unsigned int idx) const
+    {
+        assert(this->data != nullptr);
+        return this->data[idx];
+    }
+
 protected:
     T * data;
 };
