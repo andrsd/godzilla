@@ -49,7 +49,7 @@ public:
     evaluate(Scalar f[]) const override
     {
         Real visc = 1.;
-        f[0] = -visc * this->u_x[0] + 0.5 * this->u[0] * this->u[0];
+        f[0] = -visc * this->u_x(0) + 0.5 * this->u(0) * this->u(0);
     }
 
 protected:

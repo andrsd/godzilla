@@ -24,7 +24,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        f[0] = htc[0] * (T[0] - T_infinity[0]);
+        f[0] = htc(0) * (T(0) - T_infinity(0));
     }
 
 protected:
@@ -40,7 +40,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
-        g[0] = htc[0];
+        g[0] = htc(0);
     }
 
 protected:

@@ -67,7 +67,7 @@ public:
     void
     evaluate(Scalar f[]) const override
     {
-        f[0] = 100 * this->u[0];
+        f[0] = 100 * this->u(0);
     }
 
 protected:
