@@ -277,16 +277,16 @@ private:
 /// Compute dot product of 2 vectors
 ///
 /// @tparam T Data type
-/// @tparam DIM Dimension of the vector
+/// @tparam N Size of the vector
 /// @param a First vector
 /// @param b Second vector
 /// @return Dot product
-template <typename T, Int DIM>
+template <typename T, Int N>
 inline T
-dot(const DenseVector<T, DIM> & a, const DenseVector<T, DIM> & b)
+dot(const DenseVector<T, N> & a, const DenseVector<T, N> & b)
 {
     T dot = 0.;
-    for (Int i = 0; i < DIM; i++)
+    for (Int i = 0; i < N; i++)
         dot += a(i) * b(i);
     return dot;
 }
@@ -294,16 +294,16 @@ dot(const DenseVector<T, DIM> & a, const DenseVector<T, DIM> & b)
 /// Pointwise multiplication of 2 vectors
 ///
 /// @tparam T Data type
-/// @tparam DIM Dimension of the vectors
+/// @tparam N Size of the vector
 /// @param a First vector
 /// @param b Second vector
 /// @return Vector with vec[i] = a[i] * b[i]
-template <typename T, Int DIM>
-inline DenseVector<T, DIM>
-pointwise_mult(const DenseVector<T, DIM> & a, const DenseVector<T, DIM> & b)
+template <typename T, Int N>
+inline DenseVector<T, N>
+pointwise_mult(const DenseVector<T, N> & a, const DenseVector<T, N> & b)
 {
-    DenseVector<T, DIM> res;
-    for (Int i = 0; i < DIM; i++)
+    DenseVector<T, N> res;
+    for (Int i = 0; i < N; i++)
         res(i) = a(i) * b(i);
     return res;
 }
@@ -311,16 +311,16 @@ pointwise_mult(const DenseVector<T, DIM> & a, const DenseVector<T, DIM> & b)
 /// Pointwise division of 2 vectors
 ///
 /// @tparam T Data type
-/// @tparam DIM Dimension of the vectors
+/// @tparam N Size of the vector
 /// @param a First vector
 /// @param b Second vector
 /// @return Vector with vec[i] = a[i] / b[i]
-template <typename T, Int DIM>
-inline DenseVector<T, DIM>
-pointwise_div(const DenseVector<T, DIM> & a, const DenseVector<T, DIM> & b)
+template <typename T, Int N>
+inline DenseVector<T, N>
+pointwise_div(const DenseVector<T, N> & a, const DenseVector<T, N> & b)
 {
-    DenseVector<T, DIM> res;
-    for (Int i = 0; i < DIM; i++)
+    DenseVector<T, N> res;
+    for (Int i = 0; i < N; i++)
         res(i) = a(i) / b(i);
     return res;
 }
