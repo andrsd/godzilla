@@ -651,10 +651,10 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
                                               const IndexSet & cell_is,
                                               Real t,
                                               Real x_t_shift,
-                                              Vec X,
-                                              Vec X_t,
-                                              Mat J,
-                                              Mat Jp)
+                                              const Vector & X,
+                                              const Vector & X_t,
+                                              Matrix & J,
+                                              Matrix & Jp)
 {
     Int n_cells = cell_is.get_local_size();
     Int c_start, c_end;
@@ -703,7 +703,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     Scalar *elem_mat, *elem_mat_P;
     PetscCall(PetscMalloc4(n_cells * tot_dim,
                            &u,
-                           X_t ? n_cells * tot_dim : 0,
+                           (X_t ? n_cells * tot_dim : 0),
                            &u_t,
                            n_cells * tot_dim * tot_dim,
                            &elem_mat,

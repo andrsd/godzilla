@@ -101,15 +101,15 @@ protected:
                                                         DMField coord_field,
                                                         const IndexSet & facets);
 
-    PetscErrorCode compute_jacobian_internal(DM dm,
-                                             PetscFormKey key,
-                                             const IndexSet & cell_is,
-                                             Real t,
-                                             Real x_t_shift,
-                                             Vec X,
-                                             Vec X_t,
-                                             Mat J,
-                                             Mat Jp);
+    virtual PetscErrorCode compute_jacobian_internal(DM dm,
+                                                     PetscFormKey key,
+                                                     const IndexSet & cell_is,
+                                                     Real t,
+                                                     Real x_t_shift,
+                                                     const Vector & X,
+                                                     const Vector & X_t,
+                                                     Matrix & J,
+                                                     Matrix & Jp);
     PetscErrorCode compute_bnd_jacobian_internal(DM dm,
                                                  Vec X_loc,
                                                  Vec X_t_loc,
