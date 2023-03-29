@@ -188,6 +188,9 @@ protected:
     /// Set up discretization system
     void set_up_ds() override;
 
+    virtual void set_up_assembly_data();
+    virtual void set_up_assembly_data_aux();
+
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
@@ -387,10 +390,6 @@ protected:
         Scalar * u_t;
         /// Gradient of primary values
         Scalar * u_x;
-        /// Offset into primary variable values (when having multiple fields)
-        Int * u_offset;
-        /// Offset into gradient of primary variables (when having multiple fields)
-        Int * u_offset_x;
         /// Spatial coordinates
         Point xyz;
         /// Outward normals when doing surface integration
@@ -399,10 +398,6 @@ protected:
         Scalar * a;
         /// Gradients of auxiliary fields
         Scalar * a_x;
-        /// Offset into auxiliary variable values (when having multiple fields)
-        Int * a_offset;
-        /// Offset into gradient of auxiliary variables (when having multiple fields)
-        Int * a_offset_x;
         /// Time at which are our forms evaluated (NOTE: this is not the simulation time)
         Real time;
         /// the multiplier a for dF/dU_t
