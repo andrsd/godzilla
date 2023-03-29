@@ -78,6 +78,22 @@ integration_coeff<TET4, 1, 1>()
     return 1. / 20.;
 }
 
+// these are fudge factors
+
+template <>
+const Real
+integration_coeff<EDGE2, 0, 0>()
+{
+    return 1.;
+}
+
+template <>
+const Real
+integration_coeff<TRI3, 0, 0>()
+{
+    return 1. / 4.;
+}
+
 } // namespace fe
 
 } // namespace godzilla
