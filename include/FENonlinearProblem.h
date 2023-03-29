@@ -83,14 +83,14 @@ protected:
 
     void on_initial() override;
 
-    PetscErrorCode compute_residual_internal(DM dm,
-                                             PetscFormKey key,
-                                             const IndexSet & cells,
-                                             Real time,
-                                             Vec loc_x,
-                                             Vec loc_x_t,
-                                             Real t,
-                                             Vec loc_f);
+    virtual PetscErrorCode compute_residual_internal(DM dm,
+                                                     PetscFormKey key,
+                                                     const IndexSet & cells,
+                                                     Real time,
+                                                     const Vector & loc_x,
+                                                     const Vector & loc_x_t,
+                                                     Real t,
+                                                     Vector & loc_f);
     PetscErrorCode compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f);
     PetscErrorCode compute_bnd_residual_single_internal(DM dm,
                                                         Real t,
