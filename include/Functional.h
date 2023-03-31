@@ -26,6 +26,12 @@ public:
     /// @return Region name where this functional is defined
     const std::string & get_region() const;
 
+    const std::string
+    get_value_name(const std::string & val_name) const
+    {
+        return this->region.empty() ? val_name : val_name + "@" + this->region;
+    }
+
 protected:
     /// Get pointer to FEProblemInterface
     ///
@@ -78,12 +84,6 @@ protected:
         auto val_name = get_value_name(name);
         this->depends_on.insert(val_name);
         return get_fe_problem()->get_value<T>(val_name);
-    }
-
-    const std::string
-    get_value_name(const std::string & val_name) const
-    {
-        return this->region.empty() ? val_name : val_name + "@" + this->region;
     }
 
 private:
