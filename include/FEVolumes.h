@@ -33,7 +33,9 @@ template <>
 inline Real
 volume<EDGE2, 2>(const DenseVector<DenseVector<Real, 2>, 2> & coords)
 {
-    DenseVector<Real, 2> v({ coords(0)(0) - coords(1)(0), coords(0)(1) - coords(1)(1) });
+    DenseVector<Real, 2> v;
+    v(0) = coords(0)(0) - coords(1)(0);
+    v(1) = coords(0)(1) - coords(1)(1);
     return v.magnitude();
 }
 
