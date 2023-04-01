@@ -340,7 +340,7 @@ private:
     Int
     idx(Int row, Int col) const
     {
-        return col * ROWS + row;
+        return row * COLS + col;
     }
 
     /// Array that stores the matrix entries
@@ -412,15 +412,15 @@ DenseMatrix<Real, 3>::inv() const
         error("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 3> inv;
-    inv(0, 0) = (this->data[4] * this->data[8] - this->data[7] * this->data[5]);
-    inv(1, 0) = -(this->data[1] * this->data[8] - this->data[7] * this->data[2]);
-    inv(2, 0) = (this->data[1] * this->data[5] - this->data[4] * this->data[2]);
-    inv(0, 1) = -(this->data[3] * this->data[8] - this->data[6] * this->data[5]);
-    inv(1, 1) = (this->data[0] * this->data[8] - this->data[6] * this->data[2]);
-    inv(2, 1) = -(this->data[0] * this->data[5] - this->data[3] * this->data[2]);
-    inv(0, 2) = (this->data[3] * this->data[7] - this->data[6] * this->data[4]);
-    inv(1, 2) = -(this->data[0] * this->data[7] - this->data[6] * this->data[1]);
-    inv(2, 2) = (this->data[0] * this->data[4] - this->data[3] * this->data[1]);
+    inv(0, 0) = (this->data[4] * this->data[8] - this->data[5] * this->data[7]);
+    inv(1, 0) = -(this->data[3] * this->data[8] - this->data[5] * this->data[6]);
+    inv(2, 0) = (this->data[3] * this->data[7] - this->data[4] * this->data[6]);
+    inv(0, 1) = -(this->data[1] * this->data[8] - this->data[2] * this->data[7]);
+    inv(1, 1) = (this->data[0] * this->data[8] - this->data[2] * this->data[6]);
+    inv(2, 1) = -(this->data[0] * this->data[7] - this->data[1] * this->data[6]);
+    inv(0, 2) = (this->data[1] * this->data[5] - this->data[2] * this->data[4]);
+    inv(1, 2) = -(this->data[0] * this->data[5] - this->data[2] * this->data[3]);
+    inv(2, 2) = (this->data[0] * this->data[4] - this->data[1] * this->data[3]);
     inv.scale(1. / det);
     return inv;
 }
