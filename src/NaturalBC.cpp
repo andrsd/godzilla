@@ -72,8 +72,12 @@ NaturalBC::set_up()
                                     this->fid,
                                     get_components(),
                                     this);
-    is.restore_indices();
-    is.destroy();
+}
+
+void
+NaturalBC::set_up_fields()
+{
+    _F_;
 }
 
 void

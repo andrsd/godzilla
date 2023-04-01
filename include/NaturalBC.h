@@ -27,6 +27,9 @@ public:
     /// @return Vector of component numbers
     NO_DISCARD virtual const std::vector<Int> & get_components() const = 0;
 
+    /// Set up fields
+    virtual void set_up_fields();
+
     /// Set up the weak form for the boundary integral of this boundary condition
     virtual void set_up_weak_form() = 0;
 

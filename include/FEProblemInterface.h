@@ -53,7 +53,7 @@ public:
     Int get_aux_field_dof(Int point, Int fid) const override;
 
     const Vector & get_solution_vector_local() const override;
-    const Vector & get_aux_solution_vector_local() const override;
+    const Vector & get_aux_solution_vector_local(DMLabel region = nullptr) const override;
     virtual WeakForm * get_weak_form() const;
 
     /// Check if we have an auxiliary object with a specified name
@@ -89,8 +89,11 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
+    /// @param label The label where the field is defined
+    /// @param value The value where the field is defined
     /// @return ID of the new field
-    virtual Int add_aux_fe(const std::string & name, Int nc, Int k);
+    virtual Int
+    add_aux_fe(const std::string & name, Int nc, Int k, DMLabel label = nullptr, Int value = 0);
 
     /// Set a volumetric auxiliary field
     ///
@@ -98,7 +101,14 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
+    /// @param label The label where the field is defined
+    /// @param value The value where the field is defined
+    virtual void set_aux_fe(Int id,
+                            const std::string & name,
+                            Int nc,
+                            Int k,
+                            DMLabel label = nullptr,
+                            Int value = 0);
 
     /// Add auxiliary field
     ///
@@ -193,6 +203,7 @@ protected:
 
     /// Set up field variables
     virtual void set_up_fields() = 0;
+    virtual void set_up_boundary_fields();
 
     void add_boundary_natural_riemann(const std::string & name,
                                       DMLabel label,
@@ -295,6 +306,8 @@ protected:
         /// Mesh support
         DMLabel block;
 
+        Int block_value;
+
         /// The number of components
         Int nc;
 
@@ -313,11 +326,18 @@ protected:
         /// Time derivative (used during assembling)
         FieldValue dots;
 
-        FieldInfo(const std::string & name, Int id, Int nc, Int k, const Int & dim) :
+        FieldInfo(const std::string & name,
+                  Int id,
+                  Int nc,
+                  Int k,
+                  const Int & dim,
+                  const DMLabel block = nullptr,
+                  Int value = 0) :
             name(name),
             id(id),
             fe(nullptr),
-            block(nullptr),
+            block(block),
+            block_value(value),
             nc(nc),
             k(k),
             values(),
@@ -331,6 +351,7 @@ protected:
             id(other.id),
             fe(other.fe),
             block(other.block),
+            block_value(other.block_value),
             nc(other.nc),
             k(other.k),
             component_names(other.component_names),
@@ -360,16 +381,18 @@ protected:
     std::map<std::string, AuxiliaryField *> auxs_by_name;
 
     /// Map from region to list of auxiliary field objects
-    std::map<std::string, std::vector<AuxiliaryField *>> auxs_by_region;
+    std::map<DMLabel, std::vector<AuxiliaryField *>> auxs_by_region;
+
+    std::map<DMLabel, Int> aux_regions;
+
+    /// Vectors for auxiliary fields
+    std::map<DMLabel, Vector> aux_vecs_by_region;
 
     /// DM for auxiliary fields
     DM dm_aux;
 
     /// Auxiliary section
     Section section_aux;
-
-    /// Vector for auxiliary fields
-    Vector a;
 
     /// Local solution vector
     Vector sln;

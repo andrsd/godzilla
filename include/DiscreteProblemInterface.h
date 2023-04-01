@@ -187,7 +187,7 @@ public:
     /// Get local auxiliary solution vector
     ///
     /// @return Local auxiliary solution vector
-    virtual const Vector & get_aux_solution_vector_local() const = 0;
+    virtual const Vector & get_aux_solution_vector_local(DMLabel region = nullptr) const = 0;
 
     virtual void add_boundary_essential(const std::string & name,
                                         DMLabel label,

@@ -38,7 +38,7 @@ public:
     Int get_aux_field_dof(Int point, Int fid) const override;
 
     const Vector & get_solution_vector_local() const override;
-    const Vector & get_aux_solution_vector_local() const override;
+    const Vector & get_aux_solution_vector_local(DMLabel region = nullptr) const override;
 
     /// Adds a volumetric field
     ///

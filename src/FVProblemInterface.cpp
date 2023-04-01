@@ -231,7 +231,7 @@ FVProblemInterface::get_solution_vector_local() const
 }
 
 const Vector &
-FVProblemInterface::get_aux_solution_vector_local() const
+FVProblemInterface::get_aux_solution_vector_local(DMLabel region) const
 {
     return this->a;
 }

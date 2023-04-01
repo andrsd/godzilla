@@ -59,7 +59,6 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & par
     qorder(PETSC_DETERMINE),
     dm_aux(nullptr),
     section_aux(nullptr),
-    a(nullptr),
     ds_aux(nullptr),
     wf(new WeakForm())
 {
@@ -77,7 +76,8 @@ FEProblemInterface::~FEProblemInterface()
         PetscFEDestroy(&fi.fe);
     }
 
-    this->a.destroy();
+    for (auto & it : this->aux_vecs_by_region)
+        it.second.destroy();
     DMDestroy(&this->dm_aux);
 
     this->sln.destroy();
@@ -89,6 +89,7 @@ FEProblemInterface::create()
     _F_;
     set_up_fields();
     DiscreteProblemInterface::create();
+    set_up_boundary_fields();
     for (auto & aux : this->auxs)
         aux->create();
 }
@@ -206,9 +207,9 @@ FEProblemInterface::get_solution_vector_local() const
 }
 
 const Vector &
-FEProblemInterface::get_aux_solution_vector_local() const
+FEProblemInterface::get_aux_solution_vector_local(DMLabel region) const
 {
-    return this->a;
+    return this->aux_vecs_by_region.at(region);
 }
 
 WeakForm *
@@ -431,24 +432,30 @@ FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
 }
 
 Int
-FEProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k)
+FEProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k, DMLabel label, Int value)
 {
     _F_;
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
     Int id = get_next_id(keys);
-    set_aux_fe(id, name, nc, k);
+    set_aux_fe(id, name, nc, k, label, value);
     return id;
 }
 
 void
-FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
+FEProblemInterface::set_aux_fe(Int id,
+                               const std::string & name,
+                               Int nc,
+                               Int k,
+                               DMLabel label,
+                               Int value)
 {
     _F_;
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
-        FieldInfo fi(name, id, nc, k, this->asmbl.dim);
+        FieldInfo fi(name, id, nc, k, this->asmbl.dim, label, value);
         this->aux_fields.emplace(id, fi);
         this->aux_fields_by_name[name] = id;
+        this->aux_regions[label] = value;
     }
     else
         error("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.", name, id);
@@ -487,6 +494,17 @@ FEProblemInterface::create_fe(FieldInfo & fi)
                                                   fi.k,
                                                   this->qorder,
                                                   &fi.fe));
+}
+
+void
+FEProblemInterface::set_up_boundary_fields()
+{
+    _F_;
+    for (auto & bc : this->bcs) {
+        auto * nbc = dynamic_cast<NaturalBC *>(bc);
+        if (nbc)
+            nbc->set_up_fields();
+    }
 }
 
 void
@@ -615,17 +633,15 @@ void
 FEProblemInterface::compute_aux_fields()
 {
     _F_;
-    for (const auto & it : this->auxs_by_region) {
-        const std::string & region_name = it.first;
-        const std::vector<AuxiliaryField *> & auxs = it.second;
-        DMLabel label = nullptr;
-        if (region_name.length() > 0)
-            label = this->unstr_mesh->get_label(region_name);
+    for (const auto & it : this->aux_vecs_by_region) {
+        auto label = it.first;
+        auto a = it.second;
 
+        const std::vector<AuxiliaryField *> & aux_flds = this->auxs_by_region[label];
         if (label == nullptr)
-            compute_global_aux_fields(this->dm_aux, auxs, this->a);
+            compute_global_aux_fields(this->dm_aux, aux_flds, a);
         else
-            compute_label_aux_fields(this->dm_aux, label, auxs, this->a);
+            compute_label_aux_fields(this->dm_aux, label, aux_flds, a);
     }
 }
 
@@ -652,8 +668,8 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
             Int aux_nc = aux->get_num_components();
             Int field_nc = this->aux_fields.at(fid).nc;
             if (aux_nc == field_nc) {
-                const std::string & region_name = aux->get_region();
-                this->auxs_by_region[region_name].push_back(aux);
+                auto label = aux->get_label();
+                this->auxs_by_region[label].push_back(aux);
             }
             else {
                 no_errors = false;
@@ -673,10 +689,17 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         }
     }
     if (no_errors) {
-        Vec loc_a;
-        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &loc_a));
-        this->a = Vector(loc_a);
-        PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
+        for (auto & it : this->aux_regions) {
+            auto label = it.first;
+            auto id = it.second;
+
+            Vec loc_a;
+            PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &loc_a));
+            Vector a(loc_a);
+            PETSC_CHECK(DMSetAuxiliaryVec(dm, label, id, 0, a));
+
+            this->aux_vecs_by_region[label] = a;
+        }
 
         PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
         PetscSection sa;
