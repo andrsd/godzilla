@@ -92,6 +92,35 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
     return fe_volume;
 }
 
+//
+
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+Real
+face_area(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords)
+{
+    _F_;
+    error("Face Volume calculation for {} in {} dimensions is not implemented.",
+          get_element_type_str(ELEM_TYPE),
+          DIM);
+}
+
+template <>
+inline Real
+face_area<EDGE2, 1>(const DenseVector<DenseVector<Real, 1>, 1> & coords)
+{
+    return 1.;
+}
+
+template <>
+inline Real
+face_area<TRI3, 2>(const DenseVector<DenseVector<Real, 2>, 2> & coords)
+{
+    DenseVector<Real, 2> v;
+    v(0) = coords(0)(0) - coords(1)(0);
+    v(1) = coords(0)(1) - coords(1)(1);
+    return v.magnitude();
+}
+
 } // namespace fe
 
 } // namespace godzilla
