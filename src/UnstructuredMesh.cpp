@@ -381,7 +381,6 @@ UnstructuredMesh::create_cell_set(Int id, const std::string & name)
     if (is)
         PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
     PETSC_CHECK(ISDestroy(&is));
-    PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
     this->cell_set_names[id] = name;
     this->cell_set_ids[name] = id;
 }
