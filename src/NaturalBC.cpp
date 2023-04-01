@@ -65,6 +65,20 @@ NaturalBC::create()
     }
 }
 
+DMLabel
+NaturalBC::get_label() const
+{
+    _F_;
+    return this->label;
+}
+
+const std::vector<Int> &
+NaturalBC::get_ids() const
+{
+    _F_;
+    return this->ids;
+}
+
 Int
 NaturalBC::get_field_id() const
 {

@@ -17,6 +17,16 @@ public:
     void create() override;
     void set_up() override;
 
+    /// Get the label this boundary condition operates on
+    ///
+    /// @return The label
+    NO_DISCARD virtual DMLabel get_label() const;
+
+    /// Get the label values this boundary condition operates on
+    ///
+    /// @return The label values
+    NO_DISCARD virtual const std::vector<Int> & get_ids() const;
+
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
