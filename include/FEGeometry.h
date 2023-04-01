@@ -137,6 +137,64 @@ calc_element_length(const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
     }
 }
 
+//
+
+template <CoordinateType COORD_TYPE, Int DIM>
+Array1D<Real>
+calc_nodal_radius(Array1D<DenseVector<Real, DIM>> & coords)
+{
+    error("Radius computation is not implemented in {} dimensions.", DIM);
+}
+
+template <>
+Array1D<Real>
+calc_nodal_radius<CARTESIAN, 1>(Array1D<DenseVector<Real, 1>> & coords)
+{
+    _F_;
+    auto n = coords.get_size();
+    Array1D<Real> rad(n);
+    for (Int in = 0; in < n; in++)
+        rad(in) = 1.;
+    return rad;
+}
+
+template <>
+Array1D<Real>
+calc_nodal_radius<CARTESIAN, 2>(Array1D<DenseVector<Real, 2>> & coords)
+{
+    _F_;
+    auto n = coords.get_size();
+    Array1D<Real> rad(n);
+    for (Int in = 0; in < n; in++)
+        rad(in) = 1.;
+    return rad;
+}
+
+template <>
+Array1D<Real>
+calc_nodal_radius<CARTESIAN, 3>(Array1D<DenseVector<Real, 3>> & coords)
+{
+    _F_;
+    auto n = coords.get_size();
+    Array1D<Real> rad(n);
+    for (Int in = 0; in < n; in++)
+        rad(in) = 1.;
+    return rad;
+}
+
+template <>
+Array1D<Real>
+calc_nodal_radius<AXISYMMETRIC, 2>(Array1D<DenseVector<Real, 2>> & coords)
+{
+    // symmetric around x-axis
+    _F_;
+    auto n = coords.get_size();
+    Array1D<Real> rad(n);
+    for (Int in = 0; in < n; in++)
+        rad(in) = coords(in)(1);
+    return rad;
+}
+
 } // namespace fe
 
 } // namespace godzilla
