@@ -17,6 +17,8 @@ class UnstructuredMesh;
 class Problem;
 class InitialCondition;
 class BoundaryCondition;
+class EssentialBC;
+class NaturalBC;
 
 /// Interface for discrete problems
 ///
@@ -263,8 +265,14 @@ protected:
     /// Initial conditions in the problem
     std::vector<InitialCondition *> ics;
 
-    /// List of boundary conditions
+    /// List of all boundary conditions
     std::vector<BoundaryCondition *> bcs;
+
+    /// List of essential boundary conditions
+    std::vector<EssentialBC *> essential_bcs;
+
+    /// List of natural boundary conditions
+    std::vector<NaturalBC *> natural_bcs;
 
     /// Object that manages a discrete system
     PetscDS ds;

@@ -6,6 +6,8 @@
 #include "Logger.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
+#include "NaturalBC.h"
+#include "EssentialBC.h"
 #include <cassert>
 
 namespace godzilla {
@@ -37,6 +39,12 @@ DiscreteProblemInterface::add_boundary_condition(BoundaryCondition * bc)
 {
     _F_;
     this->bcs.push_back(bc);
+    auto nbc = dynamic_cast<NaturalBC *>(bc);
+    if (nbc)
+        this->natural_bcs.push_back(nbc);
+    auto ebc = dynamic_cast<EssentialBC *>(bc);
+    if (ebc)
+        this->essential_bcs.push_back(ebc);
 }
 
 void
