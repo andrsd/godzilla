@@ -37,8 +37,17 @@ AuxiliaryField::create()
         const UnstructuredMesh * mesh = this->fepi->get_mesh();
         if (mesh->has_label(this->region)) {
             this->label = mesh->get_label(this->region);
-            this->block_id = mesh->get_cell_set_id(this->region);
+            // this->block_id = mesh->get_cell_set_id(this->region);
+            this->block_id = -9999;
         }
+        //        if (mesh->has_cell_set(this->region)) {
+        //            this->label = mesh->get_cell_set_label(this->region);
+        //            this->block_id = mesh->get_cell_set_id(this->region);
+        //        }
+        //        else if (mesh->has_face_set(this->region)) {
+        //            this->label = mesh->get_face_set_label(this->region);
+        //            this->block_id = mesh->get_face_set_id(this->region);
+        //        }
         else
             log_error("Region '{}' does not exists. Typo?", this->region);
     }

@@ -334,28 +334,35 @@ bool
 UnstructuredMesh::has_face_set(const std::string & name) const
 {
     _F_;
-    const auto & it = this->face_set_ids.find(name);
-    if (it != this->face_set_ids.end()) {
-        Int id = it->second;
-        return has_label(std::to_string(id));
+    if (has_label(name)) {
+        return true;
     }
-    else
-        // assume `name` is an ID
-        return has_label(name);
+    else {
+        return false;
+        //        const auto & it = this->face_set_ids.find(name);
+        //        if (it != this->face_set_ids.end()) {
+        //            Int id = it->second;
+        //            return has_label(std::to_string(id));
+        //        }
+        //        else
+        //            // assume `name` is an ID
+        //            return has_label(name);
+    }
 }
 
 DMLabel
 UnstructuredMesh::get_face_set_label(const std::string & name) const
 {
     _F_;
-    const auto & it = this->face_set_ids.find(name);
-    if (it != this->face_set_ids.end()) {
-        Int id = it->second;
-        return get_label(std::to_string(id));
-    }
-    else
-        // assume `name` is an ID
-        return get_label(name);
+    return get_label(name);
+    //    const auto & it = this->face_set_ids.find(name);
+    //    if (it != this->face_set_ids.end()) {
+    //        Int id = it->second;
+    //        return get_label(std::to_string(id));
+    //    }
+    //    else
+    //        // assume `name` is an ID
+    //        return get_label(name);
 }
 
 const std::string &
@@ -367,6 +374,17 @@ UnstructuredMesh::get_face_set_name(Int id) const
         return it->second;
     else
         error("Face set ID '{}' does not exist.", id);
+}
+
+Int
+UnstructuredMesh::get_face_set_id(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->face_set_ids.find(name);
+    if (it != this->face_set_ids.end())
+        return it->second;
+    else
+        error("Face set '{}' does not exist.", name);
 }
 
 void
@@ -421,6 +439,29 @@ UnstructuredMesh::get_cell_sets() const
 {
     _F_;
     return this->cell_set_names;
+}
+
+bool
+UnstructuredMesh::has_cell_set(const std::string & name) const
+{
+    const auto & it = this->cell_set_ids.find(name);
+    if (it != this->cell_set_ids.end())
+        return true;
+    else
+        return false;
+}
+
+DMLabel
+UnstructuredMesh::get_cell_set_label(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->cell_set_ids.find(name);
+    if (it != this->cell_set_ids.end()) {
+        Int id = it->second;
+        return get_label(std::to_string(id));
+    }
+    else
+        return nullptr;
 }
 
 Int

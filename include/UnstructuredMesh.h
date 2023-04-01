@@ -236,11 +236,29 @@ public:
     /// @return Cell sets
     const std::map<Int, std::string> & get_cell_sets() const;
 
+    /// Check if mesh has a label corresponding to a cell set name
+    ///
+    /// @param name The name of the cell set
+    /// @return true if label exists, false otherwise
+    NO_DISCARD bool has_cell_set(const std::string & name) const;
+
+    /// Get label corresponding to a cell set name
+    ///
+    /// @param name The name of the cell set
+    /// @return DMLabel associated with face set name
+    NO_DISCARD DMLabel get_cell_set_label(const std::string & name) const;
+
     /// Get face set name
     ///
     /// @param id The ID of the face set
     /// @return Facet name
     const std::string & get_face_set_name(Int id) const;
+
+    /// Get face set ID
+    ///
+    /// @param name The name of a face sel
+    /// @return Face set ID
+    Int get_face_set_id(const std::string & name) const;
 
     /// Get number of face sets
     ///
