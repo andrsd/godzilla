@@ -24,6 +24,9 @@ add_executable(${PROJECT_NAME}
     ExplicitFELinearProblem_test.cpp
     ExplicitFVLinearProblem_test.cpp
     Factory_test.cpp
+    FEBoundary1D_test.cpp
+    FEBoundary2D_test.cpp
+    FEBoundary3D_test.cpp
     FEIntegration_test.cpp
     FEMatrices_test.cpp
     FENonlinearProblem_test.cpp
