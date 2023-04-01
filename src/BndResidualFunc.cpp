@@ -11,6 +11,30 @@ BndResidualFunc::BndResidualFunc(const NaturalBC * nbc) :
 {
 }
 
+const FieldValue &
+BndResidualFunc::get_field_value(const std::string & field_name) const
+{
+    _F_;
+    auto nm = get_value_name(field_name);
+    return get_fe_problem()->get_field_value(nm);
+}
+
+const FieldGradient &
+BndResidualFunc::get_field_gradient(const std::string & field_name) const
+{
+    _F_;
+    auto nm = get_value_name(field_name);
+    return get_fe_problem()->get_field_gradient(nm);
+}
+
+const FieldValue &
+BndResidualFunc::get_field_dot(const std::string & field_name) const
+{
+    _F_;
+    auto nm = get_value_name(field_name);
+    return get_fe_problem()->get_field_dot(nm);
+}
+
 const Normal &
 BndResidualFunc::get_normal() const
 {
