@@ -28,7 +28,13 @@ auxs:
 bcs:
   left:
     type: DirichletBC
-    boundary: 'marker'
+    boundary: 'left'
+    value: [ 'exact_fn(t,x,y,z)' ]
+    value_t: [ '1' ]
+
+  right:
+    type: DirichletBC
+    boundary: 'right'
     value: [ 'exact_fn(t,x,y,z)' ]
     value_t: [ '1' ]
 

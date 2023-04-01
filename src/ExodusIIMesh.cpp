@@ -47,10 +47,8 @@ ExodusIIMesh::create_dm()
                 create_cell_set(it.first, it.second);
         }
 
-        std::map<Int, std::string> sideset_names;
         for (auto it : f.read_side_set_names())
-            sideset_names[it.first] = it.second;
-        create_face_set_labels(sideset_names);
+            set_face_set_name(it.first, it.second);
 
         f.close();
     }

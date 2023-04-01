@@ -27,10 +27,10 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         prob->add_initial_condition(ic);
     }
 
-    {
+    for (auto & bnd : { "left", "right" }) {
         const std::string class_name = "DirichletBC";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<std::string>("boundary") = "marker";
+        params->set<std::string>("boundary") = bnd;
         params->set<std::vector<std::string>>("value") = { "x*x" };
         params->set<const DiscreteProblemInterface *>("_dpi") = prob;
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);

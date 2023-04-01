@@ -134,6 +134,7 @@ BoxMesh::create_dm()
                                     this->interpolate,
                                     &this->dm));
 
+    PETSC_CHECK(DMRemoveLabel(this->dm, "marker", nullptr));
     // create user-friendly names for sides
     std::map<Int, std::string> face_set_names;
     face_set_names[1] = "back";
@@ -143,6 +144,8 @@ BoxMesh::create_dm()
     face_set_names[5] = "right";
     face_set_names[6] = "left";
     create_face_set_labels(face_set_names);
+    for (auto it : face_set_names)
+        set_face_set_name(it.first, it.second);
 }
 
 } // namespace godzilla

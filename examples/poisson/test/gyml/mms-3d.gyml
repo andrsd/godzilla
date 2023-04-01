@@ -24,9 +24,34 @@ ics:
     value: 0
 
 bcs:
-  all:
+  left:
     type: DirichletBC
-    boundary: 'marker'
+    boundary: 'left'
+    value: 'x*x + y*y + z*z'
+
+  right:
+    type: DirichletBC
+    boundary: 'right'
+    value: 'x*x + y*y + z*z'
+
+  top:
+    type: DirichletBC
+    boundary: 'top'
+    value: 'x*x + y*y + z*z'
+
+  bottom:
+    type: DirichletBC
+    boundary: 'bottom'
+    value: 'x*x + y*y + z*z'
+
+  front:
+    type: DirichletBC
+    boundary: 'front'
+    value: 'x*x + y*y + z*z'
+
+  back:
+    type: DirichletBC
+    boundary: 'back'
     value: 'x*x + y*y + z*z'
 
 output:

@@ -21,9 +21,24 @@ ics:
     value: [ 0 ]
 
 bcs:
-  all:
+  left:
     type: DirichletBC
-    boundary: 'marker'
+    boundary: 'left'
+    value: [ 'x*x + y*y' ]
+
+  right:
+    type: DirichletBC
+    boundary: 'right'
+    value: [ 'x*x + y*y' ]
+
+  top:
+    type: DirichletBC
+    boundary: 'top'
+    value: [ 'x*x + y*y' ]
+
+  bottom:
+    type: DirichletBC
+    boundary: 'bottom'
     value: [ 'x*x + y*y' ]
 
 output:

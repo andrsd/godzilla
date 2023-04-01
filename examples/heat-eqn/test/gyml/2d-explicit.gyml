@@ -21,9 +21,24 @@ auxs:
     value: 2
 
 bcs:
-  all:
+  left:
     type: DirichletBC
-    boundary: 'marker'
+    boundary: 'left'
+    value: '2*t + x*x + y*y'
+
+  right:
+    type: DirichletBC
+    boundary: 'right'
+    value: '2*t + x*x + y*y'
+
+  top:
+    type: DirichletBC
+    boundary: 'top'
+    value: '2*t + x*x + y*y'
+
+  bottom:
+    type: DirichletBC
+    boundary: 'bottom'
     value: '2*t + x*x + y*y'
 
 pps:

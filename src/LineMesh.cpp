@@ -71,11 +71,14 @@ LineMesh::create_dm()
                                     this->interpolate,
                                     &this->dm));
 
+    PETSC_CHECK(DMRemoveLabel(this->dm, "marker", nullptr));
     // create user-friendly names for sides
     std::map<Int, std::string> face_set_names;
     face_set_names[1] = "left";
     face_set_names[2] = "right";
     create_face_set_labels(face_set_names);
+    for (auto it : face_set_names)
+        set_face_set_name(it.first, it.second);
 }
 
 } // namespace godzilla
