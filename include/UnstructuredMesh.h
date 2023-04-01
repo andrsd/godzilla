@@ -290,7 +290,7 @@ protected:
 
     void create_face_set_labels(const std::map<Int, std::string> & names);
 
-    void create_face_set(Int id);
+    void create_face_set(Int id, const std::string & name);
 
     /// DM object
     DM dm;

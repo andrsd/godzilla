@@ -301,30 +301,25 @@ UnstructuredMesh::create_face_set_labels(const std::map<Int, std::string> & name
         fs_ids.get_indices();
         for (Int i = 0; i < n_fs; i++) {
             Int id = fs_ids[i];
-            create_face_set(id);
+            create_face_set(id, names.at(id));
         }
         fs_ids.restore_indices();
         fs_ids.destroy();
-
-        for (auto & it : names)
-            set_face_set_name(it.first, it.second);
     }
 }
 
 void
-UnstructuredMesh::create_face_set(Int id)
+UnstructuredMesh::create_face_set(Int id, const std::string & name)
 {
     _F_;
     DMLabel face_sets_label = get_label("Face Sets");
-    IS is;
-    PETSC_CHECK(DMLabelGetStratumIS(face_sets_label, id, &is));
-    std::string id_str = std::to_string(id);
-    PETSC_CHECK(DMCreateLabel(this->dm, id_str.c_str()));
-    DMLabel label = get_label(id_str);
-    if (is)
-        PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
-    PETSC_CHECK(ISDestroy(&is));
-    PETSC_CHECK(DMPlexLabelComplete(this->dm, label));
+    IndexSet is = IndexSet::stratum_from_label(face_sets_label, id);
+    if (!is.empty()) {
+        PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
+        DMLabel label = get_label(name);
+        PETSC_CHECK(DMLabelSetStratumIS(label, id, (IS) is));
+    }
+    is.destroy();
 }
 
 void

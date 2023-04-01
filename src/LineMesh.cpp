@@ -76,6 +76,8 @@ LineMesh::create_dm()
     face_set_names[1] = "left";
     face_set_names[2] = "right";
     create_face_set_labels(face_set_names);
+    for (auto it : face_set_names)
+        set_face_set_name(it.first, it.second);
 }
 
 } // namespace godzilla

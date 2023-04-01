@@ -143,6 +143,8 @@ BoxMesh::create_dm()
     face_set_names[5] = "right";
     face_set_names[6] = "left";
     create_face_set_labels(face_set_names);
+    for (auto it : face_set_names)
+        set_face_set_name(it.first, it.second);
 }
 
 } // namespace godzilla
