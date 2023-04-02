@@ -37,6 +37,11 @@ protected:
     /// @return Spatial dimension
     const Int & get_spatial_dimension() const;
 
+    /// Get physical coordinates
+    ///
+    /// @return Physical coordinates
+    const Point & get_xyz() const;
+
     /// Get values of a field
     ///
     /// @param field_name The name of the field

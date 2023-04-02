@@ -14,12 +14,6 @@ public:
     ///
     /// @param val Array to store the values into
     virtual void evaluate(Scalar val[]) const = 0;
-
-protected:
-    /// Get physical coordinates
-    ///
-    /// @return Physical coordinates
-    NO_DISCARD const Point & get_xyz() const;
 };
 
 } // namespace godzilla
