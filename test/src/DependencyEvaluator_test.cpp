@@ -209,3 +209,72 @@ TEST(DependencyEvaluator, redeclare_a_value)
     EXPECT_DEATH(prob.create_functional<SimpleFnl>("a", params),
                  "\\[ERROR\\] Trying to declare an already existing value 'a@region'.");
 }
+
+TEST(DependencyEvaluator, get_suppliers)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    GTestFENonlinearProblem prob(prob_pars);
+
+    mesh.create();
+    prob.create();
+
+    Parameters params;
+    params.set<FEProblemInterface *>("_fepi") = &prob;
+    prob.create_functional<NeedAFnl>("b", params);
+    prob.create_functional<SimpleFnl>("a", params);
+    prob.create_functional<NeedBFnl>("c", params);
+
+    const auto & fnls = prob.get_functionals();
+    auto a = fnls.find("a")->second;
+    auto b = fnls.find("b")->second;
+    auto c = fnls.find("c")->second;
+
+    auto suppliers = prob.get_suppliers();
+    EXPECT_THAT(
+        suppliers,
+        UnorderedElementsAre(Pair("a@region", a), Pair("b@region", b), Pair("c@region", c)));
+}
+
+TEST(DependencyEvaluator, build_dep_graph)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    GTestFENonlinearProblem prob(prob_pars);
+
+    mesh.create();
+    prob.create();
+
+    Parameters params;
+    params.set<FEProblemInterface *>("_fepi") = &prob;
+    prob.create_functional<NeedAFnl>("b", params);
+    prob.create_functional<SimpleFnl>("a", params);
+    prob.create_functional<NeedBFnl>("c", params);
+
+    const auto & fnls = prob.get_functionals();
+    auto a = fnls.find("a")->second;
+    auto b = fnls.find("b")->second;
+    auto c = fnls.find("c")->second;
+
+    auto suppliers = prob.get_suppliers();
+    auto graph = prob.build_dependecy_graph(suppliers);
+
+    auto v = graph.bfs({ c });
+    EXPECT_THAT(v, ElementsAre(c, b, a));
+}

@@ -3,9 +3,11 @@
 #include <map>
 #include "Error.h"
 #include "CallStack.h"
+#include "DependencyGraph.h"
 
 namespace godzilla {
 
+class Functional;
 class ValueFunctional;
 class Parameters;
 
@@ -96,6 +98,11 @@ public:
     /// @return Const reference to the actual value
     template <typename T>
     const T & get_value(const std::string & val_name);
+
+    std::map<std::string, const ValueFunctional *> get_suppliers() const;
+
+    DependencyGraph<const Functional *>
+    build_dependecy_graph(const std::map<std::string, const ValueFunctional *> & suppliers);
 
 private:
     /// All created functionals

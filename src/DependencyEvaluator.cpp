@@ -31,4 +31,42 @@ DependencyEvaluator::get_functional(const std::string & name) const
         error("No functional with name '{}' found. Typo?", name);
 }
 
+std::map<std::string, const ValueFunctional *>
+DependencyEvaluator::get_suppliers() const
+{
+    _F_;
+    std::map<std::string, const ValueFunctional *> suppliers;
+    for (auto & it : get_functionals()) {
+        auto fnl = it.second;
+        auto provides = fnl->get_provided_values();
+        for (auto & s : provides) {
+            if (suppliers.find(s) == suppliers.end())
+                suppliers[s] = fnl;
+            else
+                error("Value '{}' is being supplied multiple times.", s);
+        }
+    }
+    return suppliers;
+}
+
+DependencyGraph<const Functional *>
+DependencyEvaluator::build_dependecy_graph(
+    const std::map<std::string, const ValueFunctional *> & suppliers)
+{
+    _F_;
+    DependencyGraph<const Functional *> graph;
+    for (auto & it : get_functionals()) {
+        auto fnl = it.second;
+        auto depends_on = fnl->get_dependent_values();
+        for (auto & dep : depends_on) {
+            auto jt = suppliers.find(dep);
+            if (jt != suppliers.end())
+                graph.add_edge(fnl, jt->second);
+            else
+                error("Did not find any functional which would supply '{}'.", dep);
+        }
+    }
+    return graph;
+}
+
 } // namespace godzilla
