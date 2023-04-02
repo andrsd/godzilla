@@ -64,8 +64,7 @@ public:
     void
     zero()
     {
-        for (Int i = 0; i < N; i++)
-            this->data[i].zero();
+        zero_impl(std::is_fundamental<T>());
     }
 
     /// Set `alpha` into all vector elements, i.e. vec[i] = alpha
@@ -268,6 +267,20 @@ public:
     get_data() const
     {
         return &this->data[0];
+    }
+
+protected:
+    void
+    zero_impl(std::true_type)
+    {
+        set_values(0);
+    }
+
+    void
+    zero_impl(std::false_type)
+    {
+        for (Int i = 0; i < N; i++)
+            this->data[i].zero();
     }
 
 private:

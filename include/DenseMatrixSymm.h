@@ -21,6 +21,10 @@ class DenseMatrix;
 /// @tparam DIM Dimension of the matrix
 template <typename T, Int DIM>
 class DenseMatrixSymm {
+private:
+    /// Number of entries of the matrix
+    static const Int N = DIM * (1 + DIM) / 2;
+
 public:
     DenseMatrixSymm() {};
 
@@ -69,7 +73,7 @@ public:
     void
     zero()
     {
-        set_values(0.);
+        zero_impl(std::is_fundamental<T>());
     }
 
     /// Set `alpha` into all matrix entries, i.e. mat[i, j] = alpha
@@ -201,6 +205,20 @@ public:
         return &this->data[0];
     }
 
+protected:
+    void
+    zero_impl(std::true_type)
+    {
+        set_values(0);
+    }
+
+    void
+    zero_impl(std::false_type)
+    {
+        for (Int i = 0; i < N; i++)
+            this->data[i].zero();
+    }
+
 private:
     inline Int
     idx(Int row, Int col) const
@@ -211,8 +229,6 @@ private:
             return (col * (1 + col) / 2) + row;
     }
 
-    /// Number of entries of the matrix
-    static const Int N = DIM * (1 + DIM) / 2;
     /// Matrix entries
     T data[N];
 };
