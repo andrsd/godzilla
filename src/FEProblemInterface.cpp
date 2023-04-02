@@ -44,14 +44,10 @@ FEProblemInterface::AssemblyData::AssemblyData() :
     u(nullptr),
     u_t(nullptr),
     u_x(nullptr),
-    u_offset(nullptr),
-    u_offset_x(nullptr),
     xyz(dim),
     normals(dim),
     a(nullptr),
     a_x(nullptr),
-    a_offset(nullptr),
-    a_offset_x(nullptr),
     time(0.),
     u_t_shift(0.)
 {
@@ -513,17 +509,24 @@ FEProblemInterface::set_up_ds()
         PETSC_CHECK(PetscDSSetContext(this->ds, fi.id, this));
     }
 
-    //
+    set_up_assembly_data();
+}
+
+void
+FEProblemInterface::set_up_assembly_data()
+{
+    _F_;
     this->asmbl.dim = this->problem->get_dimension();
     PETSC_CHECK(
         PetscDSGetEvaluationArrays(this->ds, &this->asmbl.u, &this->asmbl.u_t, &this->asmbl.u_x));
-    PETSC_CHECK(PetscDSGetComponentOffsets(this->ds, &this->asmbl.u_offset));
-    PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(this->ds, &this->asmbl.u_offset_x));
+    Int *u_offset, *u_offset_x;
+    PETSC_CHECK(PetscDSGetComponentOffsets(this->ds, &u_offset));
+    PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(this->ds, &u_offset_x));
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
-        fi.values.set(this->asmbl.u + this->asmbl.u_offset[fi.id]);
-        fi.derivs.set(this->asmbl.u_x + this->asmbl.u_offset_x[fi.id]);
-        fi.dots.set(this->asmbl.u_t + this->asmbl.u_offset[fi.id]);
+        fi.values.set(this->asmbl.u + u_offset[fi.id]);
+        fi.derivs.set(this->asmbl.u_x + u_offset_x[fi.id]);
+        fi.dots.set(this->asmbl.u_t + u_offset[fi.id]);
     }
     Real * coord;
     PETSC_CHECK(PetscDSGetWorkspace(this->ds, &coord, nullptr, nullptr, nullptr, nullptr));
@@ -676,16 +679,25 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
         PetscSection sa;
         PETSC_CHECK(DMGetLocalSection(this->dm_aux, &sa));
         this->section_aux = Section(sa);
-        PETSC_CHECK(
-            PetscDSGetEvaluationArrays(this->ds_aux, &this->asmbl.a, nullptr, &this->asmbl.a_x));
-        PETSC_CHECK(PetscDSGetComponentOffsets(this->ds_aux, &this->asmbl.a_offset));
-        PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(this->ds_aux, &this->asmbl.a_offset_x));
 
-        for (auto & it : this->aux_fields) {
-            FieldInfo & fi = it.second;
-            fi.values.set(this->asmbl.a + this->asmbl.a_offset[fi.id]);
-            fi.derivs.set(this->asmbl.a_x + this->asmbl.a_offset_x[fi.id]);
-        }
+        set_up_assembly_data_aux();
+    }
+}
+
+void
+FEProblemInterface::set_up_assembly_data_aux()
+{
+    _F_;
+    PETSC_CHECK(
+        PetscDSGetEvaluationArrays(this->ds_aux, &this->asmbl.a, nullptr, &this->asmbl.a_x));
+    Int *a_offset, *a_offset_x;
+    PETSC_CHECK(PetscDSGetComponentOffsets(this->ds_aux, &a_offset));
+    PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(this->ds_aux, &a_offset_x));
+
+    for (auto & it : this->aux_fields) {
+        FieldInfo & fi = it.second;
+        fi.values.set(this->asmbl.a + a_offset[fi.id]);
+        fi.derivs.set(this->asmbl.a_x + a_offset_x[fi.id]);
     }
 }
 
