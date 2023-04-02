@@ -155,6 +155,22 @@ TEST(DenseVectorTest, op_mult_mat)
     EXPECT_EQ(x(2), 1.);
 }
 
+TEST(DenseVectorTest, op_mult_vecvec)
+{
+    DenseVector<Real, 2> a({ 2., 3. });
+    DenseVector<DenseVector<Real, 2>, 3> b;
+    b(0)(0) = 4.;
+    b(0)(1) = 0.;
+    b(1)(0) = 2.;
+    b(1)(1) = -3.;
+    b(2)(0) = -1.;
+    b(2)(1) = 1.;
+    DenseVector<Real, 3> x = a * b;
+    EXPECT_EQ(x(0), 8.);
+    EXPECT_EQ(x(1), -5.);
+    EXPECT_EQ(x(2), 1.);
+}
+
 TEST(DenseVectorTest, op_mult_vec)
 {
     DenseVector<Real, 3> a({ 2., 3., 4. });
