@@ -22,6 +22,17 @@ TEST(DenseMatrixTest, zero)
     EXPECT_EQ(m(1, 1), 0.);
 }
 
+TEST(DenseMatrixTest, zero_non_fundamental_type)
+{
+    DenseMatrix<DenseVector<Real, 2>, 1, 2> m;
+    m.zero();
+
+    EXPECT_EQ(m(0, 0)(0), 0.);
+    EXPECT_EQ(m(0, 0)(1), 0.);
+    EXPECT_EQ(m(0, 1)(0), 0.);
+    EXPECT_EQ(m(0, 1)(1), 0.);
+}
+
 TEST(DenseMatrixTest, set)
 {
     DenseMatrix<Real, 2> m;

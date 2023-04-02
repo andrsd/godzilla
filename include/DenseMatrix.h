@@ -132,7 +132,7 @@ public:
     void
     zero()
     {
-        set_values(0.);
+        zero_impl(std::is_fundamental<T>());
     }
 
     /// Set `alpha` into all matrix entries, i.e. mat[i, j] = alpha
@@ -349,6 +349,20 @@ public:
             for (Int j = 0; j < i; j++)
                 res(i, j) = res(j, i);
         return res;
+    }
+
+protected:
+    void
+    zero_impl(std::true_type)
+    {
+        set_values(0);
+    }
+
+    void
+    zero_impl(std::false_type)
+    {
+        for (Int i = 0; i < ROWS * COLS; i++)
+            this->data[i].zero();
     }
 
 private:

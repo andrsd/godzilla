@@ -21,13 +21,13 @@ TEST(DenseVectorTest, ctor_std_vector)
     EXPECT_EQ(v(2), 4.);
 }
 
-TEST(DenseVectorTest, DISABLED_zero)
+TEST(DenseVectorTest, zero)
 {
-    //    DenseVector<Real, 3> a({ 1, 2, 3 });
-    //    a.zero();
-    //    EXPECT_EQ(a(0), 0.);
-    //    EXPECT_EQ(a(1), 0.);
-    //    EXPECT_EQ(a(2), 0.);
+    DenseVector<Real, 3> a({ 1, 2, 3 });
+    a.zero();
+    EXPECT_EQ(a(0), 0.);
+    EXPECT_EQ(a(1), 0.);
+    EXPECT_EQ(a(2), 0.);
 }
 
 TEST(DenseVectorTest, set_values)

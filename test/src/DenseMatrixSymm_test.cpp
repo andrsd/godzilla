@@ -35,6 +35,21 @@ TEST(DenseMatrixSymmTest, zero)
     EXPECT_EQ(m(2, 2), 0.);
 }
 
+TEST(DenseMatrixSymmTest, zero_non_fundamental_type)
+{
+    DenseMatrixSymm<DenseVector<Real, 2>, 2> m;
+    m.zero();
+
+    EXPECT_EQ(m(0, 0)(0), 0.);
+    EXPECT_EQ(m(0, 0)(1), 0.);
+    EXPECT_EQ(m(0, 1)(0), 0.);
+    EXPECT_EQ(m(0, 1)(1), 0.);
+    EXPECT_EQ(m(1, 0)(0), 0.);
+    EXPECT_EQ(m(1, 0)(1), 0.);
+    EXPECT_EQ(m(1, 1)(0), 0.);
+    EXPECT_EQ(m(1, 1)(1), 0.);
+}
+
 TEST(DenseMatrixSymmTest, set)
 {
     DenseMatrixSymm<Real, 3> m;
