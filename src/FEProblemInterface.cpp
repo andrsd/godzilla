@@ -114,11 +114,8 @@ FEProblemInterface::init()
     }
 
     set_up_weak_form();
-    for (auto & bc : this->bcs) {
-        auto * nbc = dynamic_cast<NaturalBC *>(bc);
-        if (nbc)
-            nbc->set_up_weak_form();
-    }
+    for (auto & bc : this->natural_bcs)
+        bc->set_up_weak_form();
 
     sort_functionals();
 }
