@@ -31,7 +31,7 @@ public:
     evaluate(Scalar f[]) const override
     {
         for (Int d = 0; d < this->dim; ++d)
-            f[d] = this->u_x[d];
+            f[d] = this->u_x(d);
     }
 
 protected:

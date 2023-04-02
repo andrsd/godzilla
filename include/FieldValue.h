@@ -27,7 +27,7 @@ public:
     }
 
     T
-    operator[](unsigned int idx) const
+    operator()(unsigned int idx) const
     {
         assert(this->data != nullptr);
         return this->data[idx];

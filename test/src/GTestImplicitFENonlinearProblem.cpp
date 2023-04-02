@@ -22,7 +22,7 @@ public:
     void
     evaluate(Scalar f[]) const override
     {
-        f[0] = this->u_t[0];
+        f[0] = this->u_t(0);
     }
 
 protected:
@@ -42,7 +42,7 @@ public:
     evaluate(Scalar f[]) const override
     {
         for (Int d = 0; d < this->dim; ++d)
-            f[d] = this->u_x[d];
+            f[d] = this->u_x(d);
     }
 
 protected:
