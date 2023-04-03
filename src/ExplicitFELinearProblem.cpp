@@ -82,7 +82,8 @@ ExplicitFELinearProblem::init()
 
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
-    set_jacobian_block(0, 0, new G0Identity(this), nullptr, nullptr, nullptr);
+    for (Int i = 0; i < get_num_fields(); i++)
+        set_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
 
     for (auto & f : this->fields) {
         Int fid = f.second.id;
