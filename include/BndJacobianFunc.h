@@ -12,7 +12,7 @@ class NaturalBC;
 
 class BndJacobianFunc : public JacobianFunc {
 public:
-    explicit BndJacobianFunc(const NaturalBC * nbc);
+    explicit BndJacobianFunc(const BoundaryCondition * bc);
 
 protected:
     /// Get normal

@@ -5,8 +5,8 @@
 
 namespace godzilla {
 
-BndJacobianFunc::BndJacobianFunc(const NaturalBC * nbc) :
-    JacobianFunc(dynamic_cast<const FEProblemInterface *>(nbc->get_discrete_problem_interface()))
+BndJacobianFunc::BndJacobianFunc(const BoundaryCondition * bc) :
+    JacobianFunc(dynamic_cast<const FEProblemInterface *>(bc->get_discrete_problem_interface()))
 {
 }
 
