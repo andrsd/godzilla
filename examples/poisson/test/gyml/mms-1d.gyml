@@ -18,9 +18,14 @@ ics:
     value: 0
 
 bcs:
-  all:
+  left:
     type: DirichletBC
-    boundary: 'marker'
+    boundary: 'left'
+    value: [ 'x*x' ]
+
+  right:
+    type: DirichletBC
+    boundary: 'right'
     value: [ 'x*x' ]
 
 output:

@@ -38,10 +38,40 @@ ics:
     value: 'x + y - 1'
 
 bcs:
-  vel_bc:
+  vel_bc_left:
     type: DirichletBC
     field: 'velocity'
-    boundary: 'marker'
+    boundary: 'left'
+    value: [
+      't + x * x + y * y',
+      't + 2.0 * x * x - 2.0 * x * y'
+    ]
+    value_t: ['1', '1']
+
+  vel_bc_right:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'right'
+    value: [
+      't + x * x + y * y',
+      't + 2.0 * x * x - 2.0 * x * y'
+    ]
+    value_t: ['1', '1']
+
+  vel_bc_top:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'top'
+    value: [
+      't + x * x + y * y',
+      't + 2.0 * x * x - 2.0 * x * y'
+    ]
+    value_t: ['1', '1']
+
+  vel_bc_bottom:
+    type: DirichletBC
+    field: 'velocity'
+    boundary: 'bottom'
     value: [
       't + x * x + y * y',
       't + 2.0 * x * x - 2.0 * x * y'

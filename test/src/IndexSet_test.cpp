@@ -133,9 +133,9 @@ TEST(IndexSetTest, intersect_caching)
     RectangleMesh mesh(params);
     mesh.create();
 
-    DMLabel label1 = mesh.get_label("1");
+    DMLabel label1 = mesh.get_label("bottom");
     IndexSet is1 = IndexSet::values_from_label(label1);
-    DMLabel label2 = mesh.get_label("2");
+    DMLabel label2 = mesh.get_label("right");
     IndexSet is2 = IndexSet::values_from_label(label2);
     IndexSet isect = IndexSet::intersect_caching(is1, is2);
     EXPECT_EQ(isect.get_size(), 0);
@@ -155,9 +155,9 @@ TEST(IndexSetTest, intersect)
     RectangleMesh mesh(params);
     mesh.create();
 
-    DMLabel label1 = mesh.get_label("1");
+    DMLabel label1 = mesh.get_label("bottom");
     IndexSet is1 = IndexSet::values_from_label(label1);
-    DMLabel label2 = mesh.get_label("2");
+    DMLabel label2 = mesh.get_label("right");
     IndexSet is2 = IndexSet::values_from_label(label2);
     IndexSet isect = IndexSet::intersect(is1, is2);
     EXPECT_EQ(isect.get_size(), 0);

@@ -20,12 +20,19 @@ TEST(L2DiffTest, compute)
     GTestFENonlinearProblem prob(prob_params);
     app.problem = &prob;
 
-    Parameters bc_params = DirichletBC::parameters();
-    bc_params.set<const App *>("_app") = &app;
-    bc_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_params.set<std::vector<std::string>>("value") = { "x*x" };
-    bc_params.set<std::string>("boundary") = "marker";
-    DirichletBC bc(bc_params);
+    Parameters bc_left_params = DirichletBC::parameters();
+    bc_left_params.set<const App *>("_app") = &app;
+    bc_left_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_left_params.set<std::vector<std::string>>("value") = { "x*x" };
+    bc_left_params.set<std::string>("boundary") = "left";
+    DirichletBC bc_left(bc_left_params);
+
+    Parameters bc_right_params = DirichletBC::parameters();
+    bc_right_params.set<const App *>("_app") = &app;
+    bc_right_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_right_params.set<std::vector<std::string>>("value") = { "x*x" };
+    bc_right_params.set<std::string>("boundary") = "right";
+    DirichletBC bc_right(bc_right_params);
 
     Parameters ps_params = L2Diff::parameters();
     ps_params.set<const App *>("_app") = &app;
@@ -33,7 +40,8 @@ TEST(L2DiffTest, compute)
     ps_params.set<std::vector<std::string>>("value") = { "x*x" };
     L2Diff ps(ps_params);
 
-    prob.add_boundary_condition(&bc);
+    prob.add_boundary_condition(&bc_left);
+    prob.add_boundary_condition(&bc_right);
     prob.add_postprocessor(&ps);
 
     mesh.create();
