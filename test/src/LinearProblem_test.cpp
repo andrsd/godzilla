@@ -50,8 +50,6 @@ TEST_F(LinearProblemTest, run)
             return true;
         }
         MOCK_METHOD(void, on_final, ());
-        MOCK_METHOD(PetscErrorCode, compute_rhs, (Vector & b));
-        MOCK_METHOD(PetscErrorCode, compute_operators, (Matrix & A, Matrix & B));
     };
 
     auto mesh = gMesh1d();
@@ -65,6 +63,11 @@ TEST_F(LinearProblemTest, run)
     EXPECT_CALL(prob, solve);
     EXPECT_CALL(prob, on_final);
     prob.run();
+
+    Vector b;
+    EXPECT_EQ(prob.compute_rhs(b), 0);
+    Matrix A;
+    EXPECT_EQ(prob.compute_operators(A, A), 0);
 }
 
 // 1D
