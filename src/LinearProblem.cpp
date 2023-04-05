@@ -193,4 +193,18 @@ LinearProblem::solve()
     PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
 }
 
+PetscErrorCode
+LinearProblem::compute_rhs(Vector & b)
+{
+    _F_;
+    return 0;
+}
+
+PetscErrorCode
+LinearProblem::compute_operators(Matrix & A, Matrix & B)
+{
+    _F_;
+    return 0;
+}
+
 } // namespace godzilla

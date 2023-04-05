@@ -22,9 +22,9 @@ public:
     /// true if solve converged, otherwise false
     virtual bool converged();
     /// Method to compute right-hand side. Called from the PETsc callback
-    virtual PetscErrorCode compute_rhs(Vector & b) = 0;
+    virtual PetscErrorCode compute_rhs(Vector & b);
     /// Method to compute operators. Called from the PETsc callback
-    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) = 0;
+    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B);
 
 protected:
     /// Initialize the problem
