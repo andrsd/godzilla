@@ -314,3 +314,9 @@ TEST(DenseVectorTest, min)
     DenseVector<Real, 3> a({ 5, -2, 10 });
     EXPECT_EQ(a.min(), -2);
 }
+
+TEST(DenseVectorTest, max)
+{
+    DenseVector<Real, 3> a({ 5, -2, 10 });
+    EXPECT_EQ(a.max(), 10);
+}

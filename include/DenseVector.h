@@ -192,6 +192,19 @@ public:
         return res;
     }
 
+    /// Find the minimum value of the elements
+    ///
+    /// @return The minimum value of the elements
+    T
+    max() const
+    {
+        T res = std::numeric_limits<T>::min();
+        for (Int i = 0; i < N; i++)
+            if (get(i) > res)
+                res = get(i);
+        return res;
+    }
+
     // Operators
 
     const T &
