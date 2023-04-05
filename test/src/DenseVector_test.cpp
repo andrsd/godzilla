@@ -308,3 +308,9 @@ TEST(DenseVectorTest, mat_transpose)
     EXPECT_EQ(m(2, 0), 3.);
     EXPECT_EQ(m(2, 1), 2.);
 }
+
+TEST(DenseVectorTest, min)
+{
+    DenseVector<Real, 3> a({ 5, -2, 10 });
+    EXPECT_EQ(a.min(), -2);
+}
