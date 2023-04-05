@@ -5,8 +5,8 @@
 
 namespace godzilla {
 
-BndResidualFunc::BndResidualFunc(const NaturalBC * nbc) :
-    ResidualFunc(dynamic_cast<const FEProblemInterface *>(nbc->get_discrete_problem_interface()))
+BndResidualFunc::BndResidualFunc(const BoundaryCondition * bc) :
+    ResidualFunc(dynamic_cast<const FEProblemInterface *>(bc->get_discrete_problem_interface()))
 {
 }
 
