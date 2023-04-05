@@ -149,6 +149,20 @@ TEST(Array1DTest, get_values)
     x.destroy();
 }
 
+TEST(Array1DTest, get_values_std_vec)
+{
+    Array1D<Real> x(8);
+    x.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
+
+    auto vals = x.get_values<3>({ 1, 6, 3 });
+
+    EXPECT_EQ(vals(0), 3.);
+    EXPECT_EQ(vals(1), 10.);
+    EXPECT_EQ(vals(2), -2.);
+
+    x.destroy();
+}
+
 TEST(Array1DTest, add)
 {
     Array1D<Real> x(8);
