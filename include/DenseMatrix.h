@@ -205,6 +205,22 @@ public:
         return res;
     }
 
+    template <Int M>
+    DenseVector<DenseVector<T, M>, ROWS>
+    mult(const DenseVector<DenseVector<T, M>, COLS> & x) const
+    {
+        DenseVector<DenseVector<T, M>, ROWS> res;
+        for (Int i = 0; i < ROWS; i++) {
+            for (Int j = 0; j < M; j++) {
+                T prod = 0.;
+                for (Int k = 0; k < COLS; k++)
+                    prod += get(i, k) * x(k)(j);
+                res(i)(j) = prod;
+            }
+        }
+        return res;
+    }
+
     /// Compute determinant of the matrix
     Real
     det() const
@@ -302,6 +318,13 @@ public:
 
     DenseMatrix<T, ROWS, COLS>
     operator*(const DenseMatrixSymm<T, COLS> & x) const
+    {
+        return mult(x);
+    }
+
+    template <Int M>
+    DenseVector<DenseVector<T, M>, ROWS>
+    operator*(const DenseVector<DenseVector<T, M>, COLS> & x) const
     {
         return mult(x);
     }
