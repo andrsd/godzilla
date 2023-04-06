@@ -291,7 +291,6 @@ TEST(DenseMatrixSymmTest, transpose3)
     EXPECT_EQ(tr(2, 2), -2.);
 }
 
-
 TEST(DenseMatrixSymmTest, op_mult_scalar_pre)
 {
     DenseMatrixSymm<Real, 3> m({ 1, 2, 3, 4, 5, 6 });
