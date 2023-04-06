@@ -80,8 +80,14 @@ bool
 Output::should_output(unsigned int flag)
 {
     _F_;
-    return ((this->on_mask & flag) == flag) &&
-           ((this->problem->get_step_num() % this->interval) == 0);
+    if ((this->on_mask & flag) == flag) {
+        if (flag == ON_TIMESTEP)
+            return (this->problem->get_step_num() % this->interval) == 0;
+        else
+            return true;
+    }
+    else
+        return false;
 }
 
 } // namespace godzilla
