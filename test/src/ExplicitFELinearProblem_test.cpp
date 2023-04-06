@@ -142,8 +142,8 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
 
     TS ts = prob.get_ts();
     TSType type;
-    std::vector<std::string> schemes = { "euler", "ssp", "rk" };
-    std::vector<TSType> types = { TSEULER, TSSSP, TSRK };
+    std::vector<std::string> schemes = { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" };
+    std::vector<TSType> types = { TSEULER, TSSSP, TSSSP, TSRK, TSRK };
     for (std::size_t i = 0; i < schemes.size(); i++) {
         prob_pars.set<std::string>("scheme") = schemes[i];
         prob.set_up_time_scheme();
@@ -185,5 +185,6 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
     app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("The 'scheme' parameter can be either 'euler', 'ssp' or 'rk'."));
+                testing::HasSubstr("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "
+                                   "'ssp-rk-3', 'rk-2' or 'heun'."));
 }

@@ -49,7 +49,9 @@ ExplicitFELinearProblem::parameters()
 {
     Parameters params = FENonlinearProblem::parameters();
     params += TransientProblemInterface::parameters();
-    params.add_param<std::string>("scheme", "euler", "Time stepping scheme: [euler, ssp, rk]");
+    params.add_param<std::string>("scheme",
+                                  "euler",
+                                  "Time stepping scheme: [euler, ssp-rk-2, ssp-rk-3, rk-2, heun]");
     return params;
 }
 
@@ -105,8 +107,9 @@ ExplicitFELinearProblem::check()
     _F_;
     FENonlinearProblem::check();
 
-    if (!validation::in(this->scheme, { "euler", "ssp", "rk" }))
-        log_error("The 'scheme' parameter can be either 'euler', 'ssp' or 'rk'.");
+    if (!validation::in(this->scheme, { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
+        log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', 'ssp-rk-3', 'rk-2' or "
+                  "'heun'.");
 }
 
 bool
@@ -141,10 +144,22 @@ ExplicitFELinearProblem::set_up_time_scheme()
     std::string sch = utils::to_lower(this->scheme);
     if (sch == "euler")
         PETSC_CHECK(TSSetType(this->ts, TSEULER));
-    else if (sch == "ssp")
+    else if (sch == "ssp-rk-2") {
         PETSC_CHECK(TSSetType(this->ts, TSSSP));
-    else if (sch == "rk")
+        PETSC_CHECK(TSSSPSetType(this->ts, TSSSPRKS2));
+    }
+    else if (sch == "ssp-rk-3") {
+        PETSC_CHECK(TSSetType(this->ts, TSSSP));
+        PETSC_CHECK(TSSSPSetType(this->ts, TSSSPRKS3));
+    }
+    else if (sch == "rk-2") {
         PETSC_CHECK(TSSetType(this->ts, TSRK));
+        PETSC_CHECK(TSRKSetType(this->ts, TSRK2B));
+    }
+    else if (sch == "heun") {
+        PETSC_CHECK(TSSetType(this->ts, TSRK));
+        PETSC_CHECK(TSRKSetType(this->ts, TSRK2A));
+    }
 }
 
 void
