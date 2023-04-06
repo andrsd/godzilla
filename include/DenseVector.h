@@ -179,6 +179,32 @@ public:
         return res;
     }
 
+    /// Find the minimum value of the elements
+    ///
+    /// @return The minimum value of the elements
+    T
+    min() const
+    {
+        T res = std::numeric_limits<T>::max();
+        for (Int i = 0; i < N; i++)
+            if (get(i) < res)
+                res = get(i);
+        return res;
+    }
+
+    /// Find the minimum value of the elements
+    ///
+    /// @return The minimum value of the elements
+    T
+    max() const
+    {
+        T res = std::numeric_limits<T>::min();
+        for (Int i = 0; i < N; i++)
+            if (get(i) > res)
+                res = get(i);
+        return res;
+    }
+
     // Operators
 
     const T &
@@ -408,6 +434,24 @@ mat_transpose(const DenseVector<DenseVector<T, M>, N> & a)
     for (Int i = 0; i < N; i++)
         for (Int j = 0; j < M; j++)
             res(j, i) = a(i)(j);
+    return res;
+}
+
+/// Transpose DenseVector<DenseVector<T>>
+///
+/// @tparam T Data type
+/// @tparam N Number of rows in the input "matrix", but number of columns in the resulting matrix
+/// @tparam M Number of columns in the input "matrix", but number of rows in the resulting matrix
+/// @param a Input "matrix"
+/// @return Transposed version of DenseVector<DenseVector<T>> with values from `a`
+template <typename T, Int N, Int M>
+inline DenseVector<DenseVector<T, N>, M>
+transpose(const DenseVector<DenseVector<T, M>, N> & a)
+{
+    DenseVector<DenseVector<T, N>, M> res;
+    for (Int i = 0; i < N; i++)
+        for (Int j = 0; j < M; j++)
+            res(j)(i) = a(i)(j);
     return res;
 }
 

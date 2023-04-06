@@ -308,3 +308,34 @@ TEST(DenseVectorTest, mat_transpose)
     EXPECT_EQ(m(2, 0), 3.);
     EXPECT_EQ(m(2, 1), 2.);
 }
+
+TEST(DenseVectorTest, min)
+{
+    DenseVector<Real, 3> a({ 5, -2, 10 });
+    EXPECT_EQ(a.min(), -2);
+}
+
+TEST(DenseVectorTest, max)
+{
+    DenseVector<Real, 3> a({ 5, -2, 10 });
+    EXPECT_EQ(a.max(), 10);
+}
+
+TEST(DenseVectorTest, transpose)
+{
+    DenseVector<DenseVector<Real, 3>, 2> A;
+    A(0)(0) = -2;
+    A(0)(1) = 5;
+    A(0)(2) = 3;
+    A(1)(0) = 1;
+    A(1)(1) = -1;
+    A(1)(2) = 2;
+
+    DenseVector<DenseVector<Real, 2>, 3> m = transpose(A);
+    EXPECT_EQ(m(0)(0), -2.);
+    EXPECT_EQ(m(0)(1), 1.);
+    EXPECT_EQ(m(1)(0), 5.);
+    EXPECT_EQ(m(1)(1), -1.);
+    EXPECT_EQ(m(2)(0), 3.);
+    EXPECT_EQ(m(2)(1), 2.);
+}
