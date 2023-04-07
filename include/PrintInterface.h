@@ -2,6 +2,7 @@
 
 #include <string>
 #include "fmt/printf.h"
+#include "GodzillaConfig.h"
 #include "PerfLog.h"
 
 namespace godzilla {
@@ -80,8 +81,11 @@ private:
     const std::string prefix;
 };
 
-#define TIMED_EVENT(level, event_name, ...) \
-    auto __timed_event_obj =                \
-        PrintInterface::TimedEvent::create(this, level, event_name, __VA_ARGS__);
-
+#ifdef GODZILLA_WITH_PERF_LOG
+    #define TIMED_EVENT(level, event_name, ...) \
+        auto __timed_event_obj =                \
+            PrintInterface::TimedEvent::create(this, level, event_name, __VA_ARGS__)
+#else
+    #define TIMED_EVENT(level, event_name, ...) lprintf(level, __VA_ARGS__)
+#endif
 } // namespace godzilla

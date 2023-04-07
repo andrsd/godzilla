@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "GodzillaConfig.h"
 #include "GodzillaApp_test.h"
 #include "PrintInterface.h"
 
@@ -65,6 +66,10 @@ TEST(PrintInterfaceTest, timed_event)
     TestObject obj(pars);
 
     obj.create();
+#ifdef GODZILLA_WITH_PERF_LOG
     EXPECT_THAT(testing::internal::GetCapturedStdout(),
                 testing::ContainsRegex("Print text... done \\[.+\\]"));
+#else
+    EXPECT_THAT(testing::internal::GetCapturedStdout(), testing::ContainsRegex("Print text"));
+#endif
 }
