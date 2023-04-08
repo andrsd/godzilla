@@ -66,6 +66,7 @@ MeshPartitioningOutput::output_step()
         DMPlexCreateSection(dmp, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &s));
     PETSC_CHECK(PetscSectionSetFieldName(s, 0, ""));
     PETSC_CHECK(DMSetLocalSection(dmp, s));
+    PETSC_CHECK(DMCreateDS(dmp));
 
     Vec local, global;
     PETSC_CHECK(DMCreateLocalVector(dmp, &local));

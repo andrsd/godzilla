@@ -140,7 +140,11 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
     for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
+#if PETSC_VERSION_GE(3, 19, 0)
+        PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds, nullptr));
+#else
         PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
+#endif
 
         for (auto & res_key : this->wf->get_residual_keys()) {
             IndexSet cells;
@@ -195,7 +199,11 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     DMLabel ghost_label = nullptr;
     PetscCall(DMGetLabel(dm, "ghost", &ghost_label));
     PetscDS ds = nullptr;
+#if PETSC_VERSION_GE(3, 19, 0)
+    PetscCall(DMGetCellDS(dm, cells ? cells[c_start] : c_start, &ds, nullptr));
+#else
     PetscCall(DMGetCellDS(dm, cells ? cells[c_start] : c_start, &ds));
+#endif
     Int n_fields;
     PetscCall(PetscDSGetNumFields(ds, &n_fields));
     Int tot_dim;
@@ -206,7 +214,11 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         Int subcell;
         PetscCall(VecGetDM(loc_a, &dm_aux));
         PetscCall(DMGetEnclosurePoint(dm_aux, dm, DM_ENC_UNKNOWN, c_start, &subcell));
+#if PETSC_VERSION_GE(3, 19, 0)
+        PetscCall(DMGetCellDS(dm_aux, subcell, &ds_aux, nullptr));
+#else
         PetscCall(DMGetCellDS(dm_aux, subcell, &ds_aux));
+#endif
         PetscCall(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
     }
     /* 2: Get geometric data */
@@ -627,7 +639,11 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
     for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
+#if PETSC_VERSION_GE(3, 19, 0)
+        PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds, nullptr));
+#else
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
+#endif
 
         if (s == 0) {
             auto has_jac = this->wf->has_jacobian();
@@ -684,7 +700,11 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscSection global_section;
     PetscCall(DMGetGlobalSection(dm, &global_section));
     PetscDS prob;
+#if PETSC_VERSION_GE(3, 19, 0)
+    PetscCall(DMGetCellDS(dm, cells ? cells[c_start] : c_start, &prob, nullptr));
+#else
     PetscCall(DMGetCellDS(dm, cells ? cells[c_start] : c_start, &prob));
+#endif
     Int n_fields;
     PetscCall(PetscDSGetNumFields(prob, &n_fields));
     Int tot_dim;

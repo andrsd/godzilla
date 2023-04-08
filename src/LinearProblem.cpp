@@ -159,8 +159,12 @@ LinearProblem::converged()
                 this->converged_reason == KSP_CONVERGED_RTOL ||
                 this->converged_reason == KSP_CONVERGED_ATOL ||
                 this->converged_reason == KSP_CONVERGED_ITS ||
+#if PETSC_VERSION_GE(3, 19, 0)
+                this->converged_reason == KSP_CONVERGED_NEG_CURVE ||
+#else
                 this->converged_reason == KSP_CONVERGED_CG_NEG_CURVE ||
                 this->converged_reason == KSP_CONVERGED_CG_CONSTRAINED ||
+#endif
                 this->converged_reason == KSP_CONVERGED_STEP_LENGTH ||
                 this->converged_reason == KSP_CONVERGED_HAPPY_BREAKDOWN;
     return conv;
