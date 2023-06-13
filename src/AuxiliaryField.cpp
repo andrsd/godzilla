@@ -9,7 +9,7 @@ Parameters
 AuxiliaryField::parameters()
 {
     Parameters params = Object::parameters();
-    params.add_private_param<const FEProblemInterface *>("_fepi", nullptr);
+    params.add_private_param<FEProblemInterface *>("_fepi", nullptr);
     params.add_param<std::string>("field", "", "Name of the field.");
     params.add_param<std::string>("region",
                                   "",
