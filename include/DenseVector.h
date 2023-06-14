@@ -87,6 +87,16 @@ public:
             this->data[i] += a(i);
     }
 
+    /// Add `a` to each element of this vector, i.e. vec[i] += a
+    ///
+    /// @param a Value to add
+    void
+    add(T a)
+    {
+        for (Int i = 0; i < N; i++)
+            this->data[i] += a;
+    }
+
     /// Compute average from vector entries
     ///
     /// @return Average of vector entries

@@ -58,6 +58,15 @@ TEST(DenseVectorTest, add)
     EXPECT_EQ(a(2), 3.);
 }
 
+TEST(DenseVectorTest, add_scalar)
+{
+    DenseVector<Real, 3> a({ 2., 3., 4. });
+    a.add(2);
+    EXPECT_EQ(a(0), 4.);
+    EXPECT_EQ(a(1), 5.);
+    EXPECT_EQ(a(2), 6.);
+}
+
 TEST(DenseVectorTest, op_add)
 {
     DenseVector<Real, 3> a({ 2., 3., 4. });
