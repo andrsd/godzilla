@@ -339,3 +339,12 @@ TEST(DenseVectorTest, transpose)
     EXPECT_EQ(m(2)(0), 3.);
     EXPECT_EQ(m(2)(1), 2.);
 }
+
+TEST(DenseVectorTest, abs)
+{
+    DenseVector<Real, 3> v({ -5, 2, -10 });
+    v.abs();
+    EXPECT_EQ(v(0), 5.);
+    EXPECT_EQ(v(1), 2.);
+    EXPECT_EQ(v(2), 10.);
+}
