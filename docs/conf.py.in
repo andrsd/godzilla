@@ -3,7 +3,7 @@ import sys
 import subprocess
 
 project = 'godzilla'
-copyright = '2021, David Andrs'
+copyright = '2021-present, David Andrs'
 author = 'David Andrs'
 
 master_doc = 'index'

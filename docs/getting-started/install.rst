@@ -73,14 +73,6 @@ Installation
          If you installed HDF5 via some other means, do not specify ``--download-hdf5=yes``.
          You can use ``--with-hdf=/path/to/hdf5``, if the library is installed in a non-standard location.
 
-      Set environment variables
-
-      .. code-block::
-
-         export CC=mpicc
-         export CXX=mpicxx
-         export FC=mpif90
-
       Build godzilla
 
       .. code-block::
@@ -98,14 +90,7 @@ Installation
 
       .. code-block::
 
-         conda install doxygen doxyrest sphinx
-         pip install sphinx-rtd-theme sphinx-tabs
-
-      Environment
-
-      .. code-block::
-
-         export DOXYREST_PATH=$CONDA_PREFIX/share/doxyrest
+         conda install doxygen breathe sphinx sphinx_rtd_theme sphinx-tabs
 
       Build the documentation:
 
@@ -119,7 +104,7 @@ Installation
 
    .. group-tab:: MacOS X
 
-      Instrcutions for MacOS X
+      Instructions for MacOS X
 
    .. group-tab:: Windows
 
