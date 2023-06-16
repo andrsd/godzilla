@@ -77,6 +77,26 @@ TEST(DenseVectorTest, op_add)
     EXPECT_EQ(c(2), 3.);
 }
 
+TEST(DenseVectorTest, subtract)
+{
+    DenseVector<Real, 3> a({ 2., 3., 4. });
+    DenseVector<Real, 3> b({ 4., 2., -1. });
+    a.subtract(b);
+    EXPECT_EQ(a(0), -2.);
+    EXPECT_EQ(a(1), 1.);
+    EXPECT_EQ(a(2), 5.);
+}
+
+TEST(DenseVectorTest, op_subtract)
+{
+    DenseVector<Real, 3> a({ 2., 3., 4. });
+    DenseVector<Real, 3> b({ 4., 2., -1. });
+    DenseVector<Real, 3> c = a - b;
+    EXPECT_EQ(c(0), -2.);
+    EXPECT_EQ(c(1), 1.);
+    EXPECT_EQ(c(2), 5.);
+}
+
 TEST(DenseVectorTest, dot)
 {
     DenseVector<Real, 3> a({ 2., 3., 4. });
@@ -277,6 +297,16 @@ TEST(DenseVectorTest, op_inc_scalar)
     EXPECT_EQ(a(0), 0.);
     EXPECT_EQ(a(1), 7.);
     EXPECT_EQ(a(2), 5.);
+}
+
+TEST(DenseVectorTest, op_dec)
+{
+    DenseVector<Real, 3> a({ -2., 5, 3. });
+    DenseVector<Real, 3> b({ 1., -1, 2. });
+    a -= b;
+    EXPECT_EQ(a(0), -3.);
+    EXPECT_EQ(a(1), 6.);
+    EXPECT_EQ(a(2), 1.);
 }
 
 TEST(DenseVectorTest, mat)

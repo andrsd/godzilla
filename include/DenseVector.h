@@ -97,6 +97,16 @@ public:
             this->data[i] += a;
     }
 
+    /// Subtract `a` from this vector, i.e. vec[i] -= a[i]
+    ///
+    /// @param a Vector to subtract
+    void
+    subtract(const DenseVector<T, N> & a)
+    {
+        for (Int i = 0; i < N; i++)
+            this->data[i] -= a(i);
+    }
+
     /// Compute average from vector entries
     ///
     /// @return Average of vector entries
@@ -246,6 +256,15 @@ public:
         return res;
     }
 
+    DenseVector<T, N>
+    operator-(const DenseVector<T, N> & a) const
+    {
+        DenseVector<T, N> res;
+        for (Int i = 0; i < N; i++)
+            res(i) = get(i) - a(i);
+        return res;
+    }
+
     template <Int M>
     DenseVector<T, M>
     operator*(const DenseMatrix<T, N, M> & a) const
@@ -298,6 +317,14 @@ public:
     {
         for (Int i = 0; i < N; i++)
             set(i) += a;
+        return *this;
+    }
+
+    DenseVector<T, N> &
+    operator-=(const DenseVector<T, N> & a)
+    {
+        for (Int i = 0; i < N; i++)
+            set(i) -= a(i);
         return *this;
     }
 
