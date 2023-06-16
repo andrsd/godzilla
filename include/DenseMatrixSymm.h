@@ -201,6 +201,15 @@ public:
         return set(row, col);
     }
 
+    DenseMatrixSymm<T, DIM>
+    operator-() const
+    {
+        DenseMatrixSymm<T, DIM> res;
+        for (Int i = 0; i < N; i++)
+            res.data[i] = -this->data[i];
+        return res;
+    }
+
     /// Multiply this matrix with a scalar value
     ///
     /// @param alpha Value to multiply with

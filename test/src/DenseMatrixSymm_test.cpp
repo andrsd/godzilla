@@ -305,3 +305,16 @@ TEST(DenseMatrixSymmTest, op_mult_scalar_pre)
     EXPECT_EQ(res(2, 1), 10.);
     EXPECT_EQ(res(2, 2), 12.);
 }
+
+TEST(DenseMatrixSymmTest, op_unary_minus)
+{
+    DenseMatrixSymm<Real, 2> m;
+    m.set(0, 0) = 1.;
+    m.set(0, 1) = -2.;
+    m.set(1, 1) = 0.;
+    auto n = -m;
+    EXPECT_EQ(n(0, 0), -1.);
+    EXPECT_EQ(n(0, 1), 2.);
+    EXPECT_EQ(n(1, 0), 2.);
+    EXPECT_EQ(n(1, 1), 0.);
+}
