@@ -179,6 +179,29 @@ public:
                 set(i, j) += x.get(i, j);
     }
 
+    /// Subtract matrix `x` from this matrix
+    ///
+    /// @param x Matrix to subtract
+    void
+    subtract(const DenseMatrix<T, ROWS, COLS> & x)
+    {
+        for (Int i = 0; i < ROWS; i++)
+            for (Int j = 0; j < COLS; j++)
+                set(i, j) -= x.get(i, j);
+    }
+
+    /// Subtract matrix `x` from this matrix
+    ///
+    /// @param x Matrix to subtract
+    void
+    subtract(const DenseMatrixSymm<T, ROWS> & x)
+    {
+        assert(ROWS == COLS);
+        for (Int i = 0; i < ROWS; i++)
+            for (Int j = 0; j < COLS; j++)
+                set(i, j) -= x.get(i, j);
+    }
+
     /// Multiply the matrix by a vector
     ///
     /// Vector size must be equal to the number of columns
@@ -347,6 +370,36 @@ public:
             for (Int j = 0; j < COLS; j++)
                 set(i, j) += a.get(i, j);
         return *this;
+    }
+
+    /// Subtract matrix `a` from this matrix and return the result
+    ///
+    /// @param a Matrix to subtract
+    /// @return Resulting matrix
+    DenseMatrix<T, ROWS, COLS>
+    operator-(const DenseMatrix<T, ROWS, COLS> & a) const
+    {
+        DenseMatrix<T, ROWS, COLS> res;
+        for (Int i = 0; i < ROWS; i++)
+            for (Int j = 0; j < COLS; j++)
+                res(i, j) = this->get(i, j) - a.get(i, j);
+        return res;
+    }
+
+    /// Subtract matrix `a` from this matrix and return the result
+    ///
+    /// This matrix must be a square matrix
+    /// @param a Matrix to subtract
+    /// @return Resulting matrix
+    DenseMatrix<T, ROWS>
+    operator-(const DenseMatrixSymm<T, ROWS> & a) const
+    {
+        assert(ROWS == COLS);
+        DenseMatrix<T, ROWS> res;
+        for (Int i = 0; i < ROWS; i++)
+            for (Int j = 0; j < COLS; j++)
+                res(i, j) = this->get(i, j) - a.get(i, j);
+        return res;
     }
 
     /// Multiply this matrix with a scalar value
