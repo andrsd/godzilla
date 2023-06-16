@@ -181,12 +181,6 @@
 <p>If you installed HDF5 via some other means, do not specify <code class="docutils literal notranslate"><span class="pre">--download-hdf5=yes</span></code>.
 You can use <code class="docutils literal notranslate"><span class="pre">--with-hdf=/path/to/hdf5</span></code>, if the library is installed in a non-standard location.</p>
 </div>
-<p>Set environment variables</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">CC</span><span class="o">=</span><span class="n">mpicc</span>
-<span class="n">export</span> <span class="n">CXX</span><span class="o">=</span><span class="n">mpicxx</span>
-<span class="n">export</span> <span class="n">FC</span><span class="o">=</span><span class="n">mpif90</span>
-</pre></div>
-</div>
 <p>Build godzilla</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">&lt;</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">godzilla</span><span class="o">&gt;</span>
 <span class="n">mkdir</span> <span class="n">build</span>
@@ -197,12 +191,7 @@ You can use <code class="docutils literal notranslate"><span class="pre">--with-
 </div>
 <p><strong>Documentation</strong></p>
 <p>For documentation, you will also need</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">doxygen</span> <span class="n">doxyrest</span> <span class="n">sphinx</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">rtd</span><span class="o">-</span><span class="n">theme</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">tabs</span>
-</pre></div>
-</div>
-<p>Environment</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export DOXYREST_PATH=$CONDA_PREFIX/share/doxyrest
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">doxygen</span> <span class="n">breathe</span> <span class="n">sphinx</span> <span class="n">sphinx_rtd_theme</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">tabs</span>
 </pre></div>
 </div>
 <p>Build the documentation:</p>
@@ -210,7 +199,7 @@ You can use <code class="docutils literal notranslate"><span class="pre">--with-
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-TGludXg=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-TGludXg=" name="TGludXg=" role="tabpanel" tabindex="0"><p>Instructions for linux</p>
-</div><div aria-labelledby="tab-0-TWFjT1MgWA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-TWFjT1MgWA==" name="TWFjT1MgWA==" role="tabpanel" tabindex="0"><p>Instrcutions for MacOS X</p>
+</div><div aria-labelledby="tab-0-TWFjT1MgWA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-TWFjT1MgWA==" name="TWFjT1MgWA==" role="tabpanel" tabindex="0"><p>Instructions for MacOS X</p>
 </div><div aria-labelledby="tab-0-V2luZG93cw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-V2luZG93cw==" name="V2luZG93cw==" role="tabpanel" tabindex="0"><p>Not supported</p>
 </div></div>
 </section>
@@ -226,7 +215,7 @@ You can use <code class="docutils literal notranslate"><span class="pre">--with-
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, David Andrs.</p>
+    <p>&#169; Copyright 2021-present, David Andrs.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
