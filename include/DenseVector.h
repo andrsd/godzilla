@@ -257,6 +257,15 @@ public:
     }
 
     DenseVector<T, N>
+    operator-() const
+    {
+        DenseVector<T, N> res;
+        for (Int i = 0; i < N; i++)
+            res(i) = -get(i);
+        return res;
+    }
+
+    DenseVector<T, N>
     operator-(const DenseVector<T, N> & a) const
     {
         DenseVector<T, N> res;

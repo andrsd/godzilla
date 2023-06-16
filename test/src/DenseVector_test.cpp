@@ -309,6 +309,15 @@ TEST(DenseVectorTest, op_dec)
     EXPECT_EQ(a(2), 1.);
 }
 
+TEST(DenseVectorTest, op_unary_minus)
+{
+    DenseVector<Real, 3> a({ -2., 5, 3. });
+    auto b = -a;
+    EXPECT_EQ(b(0), 2.);
+    EXPECT_EQ(b(1), -5.);
+    EXPECT_EQ(b(2), -3.);
+}
+
 TEST(DenseVectorTest, mat)
 {
     DenseVector<DenseVector<Real, 3>, 2> A;
