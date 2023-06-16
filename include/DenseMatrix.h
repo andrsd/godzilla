@@ -274,6 +274,15 @@ public:
         return set(row, col);
     }
 
+    DenseMatrix<T, ROWS, COLS>
+    operator-() const
+    {
+        DenseMatrix<T, ROWS, COLS> res;
+        for (Int i = 0; i < ROWS * COLS; i++)
+            res.data[i] = -this->data[i];
+        return res;
+    }
+
     /// Add matrix to this matrix
     ///
     /// @param a Matrix to add
