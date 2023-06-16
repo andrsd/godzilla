@@ -131,6 +131,46 @@ TEST(DenseMatrixSymmTest, scale)
     EXPECT_EQ(m(2, 2), -6.);
 }
 
+TEST(DenseMatrixSymmTest, add)
+{
+    DenseMatrixSymm<Real, 2> m;
+    m.set_values({ 1., -2., 0 });
+    DenseMatrixSymm<Real, 2> n;
+    n.set_values({ 1., -1., -3. });
+    m.add(n);
+    EXPECT_EQ(m(0, 0), 2.);
+    EXPECT_EQ(m(0, 1), -3.);
+    EXPECT_EQ(m(1, 0), -3.);
+    EXPECT_EQ(m(1, 1), -3.);
+}
+
+TEST(DenseMatrixSymmTest, op_add_symm)
+{
+    DenseMatrixSymm<Real, 2> m;
+    m.set_values({ 1., -2., 0. });
+    DenseMatrixSymm<Real, 2> n;
+    n.set_values({ 1., -1., -3. });
+    auto o = m + n;
+    EXPECT_EQ(o(0, 0), 2.);
+    EXPECT_EQ(o(0, 1), -3.);
+    EXPECT_EQ(o(1, 0), -3.);
+    EXPECT_EQ(o(1, 1), -3.);
+}
+
+TEST(DenseMatrixSymmTest, op_add)
+{
+    DenseMatrixSymm<Real, 2> m;
+    m.set_values({ 1., -2., 0. });
+    DenseMatrix<Real, 2> n;
+    n.set_row(0, { 1., -1. });
+    n.set_row(1, { 0., -3. });
+    auto o = m + n;
+    EXPECT_EQ(o(0, 0), 2.);
+    EXPECT_EQ(o(0, 1), -3.);
+    EXPECT_EQ(o(1, 0), -2.);
+    EXPECT_EQ(o(1, 1), -3.);
+}
+
 TEST(DenseMatrixSymmTest, mult)
 {
     DenseMatrixSymm<Real, 3> m({ 1, 1, 1, 0, 1, 1 });
