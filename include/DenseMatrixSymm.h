@@ -107,6 +107,16 @@ public:
             this->data[i] *= alpha;
     }
 
+    /// Add matrix `x` to this matrix
+    ///
+    /// @param x Matrix to add
+    void
+    add(const DenseMatrixSymm<T, DIM> & x)
+    {
+        for (Int i = 0; i < N; i++)
+            this->data[i] += x.data[i];
+    }
+
     /// Multiply the matrix by a vector
     ///
     /// @param x Vector to multiply by
@@ -207,6 +217,33 @@ public:
         DenseMatrixSymm<T, DIM> res;
         for (Int i = 0; i < N; i++)
             res.data[i] = -this->data[i];
+        return res;
+    }
+
+    /// Add matrix `a` to this matrix and return the result
+    ///
+    /// @param a Matrix to add
+    /// @return Resulting matrix
+    DenseMatrixSymm<T, DIM>
+    operator+(const DenseMatrixSymm<T, DIM> & a) const
+    {
+        DenseMatrixSymm<T, DIM> res;
+        for (Int i = 0; i < N; i++)
+            res.data[i] = this->data[i] + a.data[i];
+        return res;
+    }
+
+    /// Add matrix `a` to this matrix and return the result
+    ///
+    /// @param a Matrix to add
+    /// @return Resulting matrix
+    DenseMatrix<T, DIM, DIM>
+    operator+(const DenseMatrix<T, DIM, DIM> & a) const
+    {
+        DenseMatrix<T, DIM, DIM> res;
+        for (Int i = 0; i < DIM; i++)
+            for (Int j = 0; j < DIM; j++)
+                res(i, j) = get(i, j) + a(i, j);
         return res;
     }
 
