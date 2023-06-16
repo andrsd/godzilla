@@ -172,6 +172,13 @@ public:
                                                   Real u_tshift,
                                                   Scalar elem_mat[]);
 
+    template <Int N>
+    void
+    set_aux_closure(Vector & v, Int point, const DenseVector<Real, N> & vec, InsertMode mode) const;
+
+    template <Int N>
+    DenseVector<Real, N> get_aux_closure(const Vector & v, Int point) const;
+
 protected:
     struct FieldInfo;
 
@@ -413,5 +420,27 @@ protected:
     /// associated with the PetscFormKey are evaluated
     std::map<PetscFormKey, std::vector<const ValueFunctional *>> sorted_jac_functionals;
 };
+
+template <Int N>
+DenseVector<Real, N>
+FEProblemInterface::get_aux_closure(const Vector & v, Int point) const
+{
+    Int sz = N;
+    DenseVector<Real, N> vec;
+    Real * data = vec.get_data();
+    PETSC_CHECK(DMPlexVecGetClosure(this->dm_aux, this->section_aux, v, point, &sz, &data));
+    return vec;
+}
+
+template <Int N>
+void
+FEProblemInterface::set_aux_closure(Vector & v,
+                                    Int point,
+                                    const DenseVector<Real, N> & vec,
+                                    InsertMode mode) const
+{
+    PETSC_CHECK(
+        DMPlexVecSetClosure(this->dm_aux, this->section_aux, v, point, vec.get_data(), mode));
+}
 
 } // namespace godzilla
