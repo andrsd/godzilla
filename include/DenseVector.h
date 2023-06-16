@@ -205,6 +205,14 @@ public:
         return res;
     }
 
+    /// Replaces every element in a vector with its absolute value
+    void
+    abs()
+    {
+        for (Int i = 0; i < N; i++)
+            set(i) = std::abs(get(i));
+    }
+
     // Operators
 
     const T &
