@@ -464,7 +464,7 @@ DenseVector<Real, 3>::cross(const DenseVector<Real, 3> & a) const
 /// @return DenseMatrix with values from `a`
 template <typename T, Int N, Int M>
 inline DenseMatrix<T, N, M>
-mat(const DenseVector<DenseVector<T, M>, N> & a)
+mat_row(const DenseVector<DenseVector<T, M>, N> & a)
 {
     DenseMatrix<T, N, M> res;
     for (Int i = 0; i < N; i++)
@@ -482,7 +482,7 @@ mat(const DenseVector<DenseVector<T, M>, N> & a)
 /// @return Transposed DenseMatrix with values from `a`
 template <typename T, Int N, Int M>
 inline DenseMatrix<T, M, N>
-mat_transpose(const DenseVector<DenseVector<T, M>, N> & a)
+mat_col(const DenseVector<DenseVector<T, M>, N> & a)
 {
     DenseMatrix<T, M, N> res;
     for (Int i = 0; i < N; i++)
