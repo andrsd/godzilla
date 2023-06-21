@@ -82,6 +82,75 @@ TEST(FEMatricesTest, mass_rz_tri3)
     EXPECT_EQ(m(2, 2), 28.);
 }
 
+TEST(FEMatricesTest, mass_lumped_edge2)
+{
+    auto m = fe::matrix::mass_lumped<EDGE2>();
+    EXPECT_EQ(m(0, 0), 3.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 3.);
+}
+
+TEST(FEMatricesTest, mass_lumped_tri3)
+{
+    auto m = fe::matrix::mass_lumped<TRI3>();
+    EXPECT_EQ(m(0, 0), 4.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 4.);
+    EXPECT_EQ(m(1, 2), 0.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(2, 1), 0.);
+    EXPECT_EQ(m(2, 2), 4.);
+}
+
+TEST(FEMatricesTest, mass_lumped_tet4)
+{
+    auto m = fe::matrix::mass_lumped<TET4>();
+    EXPECT_EQ(m(0, 0), 5.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 0.);
+    EXPECT_EQ(m(0, 3), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 5.);
+    EXPECT_EQ(m(1, 2), 0.);
+    EXPECT_EQ(m(1, 3), 0.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(2, 1), 0.);
+    EXPECT_EQ(m(2, 2), 5.);
+    EXPECT_EQ(m(2, 3), 0.);
+    EXPECT_EQ(m(3, 0), 0.);
+    EXPECT_EQ(m(3, 1), 0.);
+    EXPECT_EQ(m(3, 2), 0.);
+    EXPECT_EQ(m(3, 3), 5.);
+}
+
+TEST(FEMatricesTest, mass_lumped_rz_edge2)
+{
+    DenseVector<Real, 2> rad_n({ 1, 2 });
+    auto m = fe::matrix::mass_lumped_rz<EDGE2>(rad_n);
+    EXPECT_EQ(m(0, 0), 16.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 20.);
+}
+
+TEST(FEMatricesTest, mass_lumped_rz_tri3)
+{
+    DenseVector<Real, 3> rad_n({ 1, 2, 3 });
+    auto m = fe::matrix::mass_lumped_rz<TRI3>(rad_n);
+    EXPECT_EQ(m(0, 0), 35);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 40.);
+    EXPECT_EQ(m(1, 2), 0.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(2, 1), 0.);
+    EXPECT_EQ(m(2, 2), 45.);
+}
+
 TEST(FEMatricesTest, stiffness_edge2)
 {
     auto m = fe::matrix::stiffness<EDGE2>();

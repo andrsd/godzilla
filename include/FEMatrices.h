@@ -108,6 +108,86 @@ mass_rz<TRI3>(Real rad_e, const DenseVector<Real, 3> & rad_n)
     return m;
 }
 
+//
+
+template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
+inline DenseMatrixSymm<Real, N_ELEM_NODES>
+mass_lumped()
+{
+    error("Lumped mass matrix in not implemented for {}.", get_element_type_str(ETYPE));
+}
+
+/// Local lumped mass matrix for EDGE2 in 1D
+template <>
+inline DenseMatrixSymm<Real, 2>
+mass_lumped<EDGE2>()
+{
+    DenseMatrixSymm<Real, 2> m;
+    m.zero();
+    m(0, 0) = 3.;
+    m(1, 1) = 3.;
+    return m;
+}
+
+/// Local lumped mass matrix for TRI3 in 2D
+template <>
+inline DenseMatrixSymm<Real, 3>
+mass_lumped<TRI3>()
+{
+    DenseMatrixSymm<Real, 3> m;
+    m.zero();
+    m(0, 0) = 4.;
+    m(1, 1) = 4.;
+    m(2, 2) = 4.;
+    return m;
+}
+
+/// Local lumped mass matrix for TET4 in 3D
+template <>
+inline DenseMatrixSymm<Real, 4>
+mass_lumped<TET4>()
+{
+    DenseMatrixSymm<Real, 4> m;
+    m.zero();
+    m(0, 0) = 5.;
+    m(1, 1) = 5.;
+    m(2, 2) = 5.;
+    m(3, 3) = 5.;
+    return m;
+}
+
+//
+
+template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
+inline DenseMatrixSymm<Real, N_ELEM_NODES>
+mass_lumped_rz(const DenseVector<Real, N_ELEM_NODES> & rad_n)
+{
+    error("Mass matrix (RZ) in not implemented for {}.", get_element_type_str(ETYPE));
+}
+
+template <>
+inline DenseMatrixSymm<Real, 2>
+mass_lumped_rz<EDGE2>(const DenseVector<Real, 2> & rad_n)
+{
+    DenseMatrixSymm<Real, 2> m;
+    m.zero();
+    m(0, 0) = 8. * rad_n(0) + 4. * rad_n(1);
+    m(1, 1) = 4. * rad_n(0) + 8. * rad_n(1);
+    return m;
+}
+
+template <>
+inline DenseMatrixSymm<Real, 3>
+mass_lumped_rz<TRI3>(const DenseVector<Real, 3> & rad_n)
+{
+    DenseMatrixSymm<Real, 3> m;
+    m.zero();
+    m(0, 0) = 10. * rad_n(0) + 5. * rad_n(1) + 5. * rad_n(2);
+    m(1, 1) = 5. * rad_n(0) + 10. * rad_n(1) + 5. * rad_n(2);
+    m(2, 2) = 5. * rad_n(0) + 5. * rad_n(1) + 10. * rad_n(2);
+    return m;
+}
+
 // Stiffness matrices
 
 /// Template for local stiffness matrix in `DIM` spatial dimensions for elements with `N_ELEM_NODES`
