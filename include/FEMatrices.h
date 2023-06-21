@@ -72,6 +72,42 @@ mass<TET4>()
     return m;
 }
 
+//
+
+template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
+inline DenseMatrixSymm<Real, N_ELEM_NODES>
+mass_rz(Real rad_e, const DenseVector<Real, N_ELEM_NODES> & rad_n)
+{
+    error("Mass matrix (RZ) in not implemented for {}.", get_element_type_str(ETYPE));
+}
+
+/// Local mass matrix (RZ) for EDGE2 in 1D
+template <>
+inline DenseMatrixSymm<Real, 2>
+mass_rz<EDGE2>(Real rad_e, const DenseVector<Real, 2> & rad_n)
+{
+    DenseMatrixSymm<Real, 2> m;
+    m(0, 0) = (4 * rad_e + 4. * rad_n(0));
+    m(0, 1) = (4 * rad_e);
+    m(1, 1) = (4 * rad_e + 4. * rad_n(1));
+    return m;
+}
+
+/// Local mass matrix (RZ) for TRI3 in 2D
+template <>
+inline DenseMatrixSymm<Real, 3>
+mass_rz<TRI3>(Real rad_e, const DenseVector<Real, 3> & rad_n)
+{
+    DenseMatrixSymm<Real, 3> m;
+    m(0, 0) = 6. * rad_e + 4. * rad_n(0);
+    m(0, 1) = 6. * rad_e - rad_n(2);
+    m(0, 2) = 6. * rad_e - rad_n(1);
+    m(1, 1) = 6. * rad_e + 4. * rad_n(1);
+    m(1, 2) = 6. * rad_e - rad_n(0);
+    m(2, 2) = 6. * rad_e + 4. * rad_n(2);
+    return m;
+}
+
 // Stiffness matrices
 
 /// Template for local stiffness matrix in `DIM` spatial dimensions for elements with `N_ELEM_NODES`
