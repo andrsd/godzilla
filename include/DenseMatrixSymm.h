@@ -334,6 +334,16 @@ public:
         return &this->data[0];
     }
 
+    static DenseMatrixSymm<T, DIM>
+    create_diagonal(const DenseVector<T, DIM> & vals)
+    {
+        DenseMatrixSymm<T, DIM> res;
+        res.zero();
+        for (Int i = 0; i < DIM; i++)
+            res(i, i) = vals(i);
+        return res;
+    }
+
 protected:
     void
     zero_impl(std::true_type)

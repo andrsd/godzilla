@@ -398,3 +398,15 @@ TEST(DenseMatrixSymmTest, op_unary_minus)
     EXPECT_EQ(n(1, 0), 2.);
     EXPECT_EQ(n(1, 1), 0.);
 }
+
+TEST(DenseMatrixSymmTest, create_diagonal)
+{
+    auto v = DenseVector<Real, 3>({ 1, 2, 3 });
+    auto m = DenseMatrixSymm<Real, 3>::create_diagonal(v);
+    EXPECT_EQ(m(0, 0), 1.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 0.);
+    EXPECT_EQ(m(1, 1), 2.);
+    EXPECT_EQ(m(1, 2), 0.);
+    EXPECT_EQ(m(2, 2), 3.);
+}

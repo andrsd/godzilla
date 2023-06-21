@@ -489,6 +489,16 @@ public:
         return res;
     }
 
+    static DenseMatrix<T, ROWS, ROWS>
+    create_diagonal(const DenseVector<T, ROWS> & vals)
+    {
+        DenseMatrix<T, ROWS, ROWS> res;
+        res.zero();
+        for (Int i = 0; i < ROWS; i++)
+            res(i, i) = vals(i);
+        return res;
+    }
+
 protected:
     void
     zero_impl(std::true_type)
