@@ -113,3 +113,20 @@ TEST(FEMatricesTest, stiffness_hex8)
 {
     EXPECT_DEATH(fe::matrix::stiffness<HEX8>(), "Stiffness matrix in not implemented for HEX8");
 }
+
+TEST(FEMatricesTest, bnd_rz_edge2)
+{
+    DenseVector<Real, 1> rad_n({ 10. });
+    auto m = fe::matrix::bnd_rz<EDGE2>(rad_n);
+    EXPECT_EQ(m(0, 0), 1.);
+}
+
+TEST(FEMatricesTest, bnd_rz_tri3)
+{
+    DenseVector<Real, 2> rad_n({ 1., 2. });
+    auto m = fe::matrix::bnd_rz<godzilla::TRI3>(rad_n);
+    EXPECT_EQ(m(0, 0), 5.);
+    EXPECT_EQ(m(0, 1), 3.);
+    EXPECT_EQ(m(1, 0), 3.);
+    EXPECT_EQ(m(1, 1), 7.);
+}

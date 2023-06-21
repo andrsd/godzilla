@@ -2,6 +2,8 @@
 
 #include "Types.h"
 #include "Error.h"
+#include "DenseVector.h"
+#include "DenseMatrix.h"
 #include "DenseMatrixSymm.h"
 
 namespace godzilla {
@@ -128,6 +130,36 @@ stiffness<TET4>()
     m(2, 3) = -1.;
     m(3, 3) = 1.;
     return m;
+}
+
+//
+
+template <ElementType ELEM_TYPE, Int N_BND_NODES>
+inline DenseMatrix<Real, N_BND_NODES>
+bnd_rz(const DenseVector<Real, N_BND_NODES> & radii)
+{
+    error("Not implemented.");
+}
+
+template <>
+inline DenseMatrix<Real, 1>
+bnd_rz<EDGE2, 1>(const DenseVector<Real, 1> & radius)
+{
+    DenseMatrix<Real, 1> bi;
+    bi(0, 0) = 1.;
+    return bi;
+}
+
+template <>
+inline DenseMatrix<Real, 2>
+bnd_rz<TRI3, 2>(const DenseVector<Real, 2> & radius)
+{
+    DenseMatrix<Real, 2> bi;
+    bi(0, 0) = 3. * radius(0) + radius(1);
+    bi(0, 1) = radius(0) + radius(1);
+    bi(1, 0) = radius(0) + radius(1);
+    bi(1, 1) = radius(0) + 3. * radius(1);
+    return bi;
 }
 
 } // namespace matrix
