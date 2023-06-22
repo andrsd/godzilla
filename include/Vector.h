@@ -44,6 +44,7 @@ public:
     void chop(Real tol);
     void axpy(Scalar alpha, const Vector & x);
     void aypx(Scalar beta, const Vector & x);
+    void reciprocal();
 
     void set(Scalar alpha);
     void set_sizes(Int n, Int N = PETSC_DECIDE);

@@ -165,6 +165,13 @@ Vector::aypx(Scalar beta, const Vector & x)
 }
 
 void
+Vector::reciprocal()
+{
+    _F_;
+    PETSC_CHECK(VecReciprocal(this->vec));
+}
+
+void
 Vector::shift(Scalar shift)
 {
     _F_;
