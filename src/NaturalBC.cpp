@@ -48,6 +48,30 @@ NaturalBC::create()
             log_error("Use the 'field' parameter to assign this boundary condition to an existing "
                       "field.");
     }
+
+    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    this->label = mesh->get_label(this->boundary);
+    if (this->label) {
+        IndexSet is = IndexSet::values_from_label(this->label);
+        is.get_indices();
+        this->ids = is.to_std_vector();
+        is.restore_indices();
+        is.destroy();
+    }
+}
+
+DMLabel
+NaturalBC::get_label() const
+{
+    _F_;
+    return this->label;
+}
+
+const std::vector<Int> &
+NaturalBC::get_ids() const
+{
+    _F_;
+    return this->ids;
 }
 
 Int
@@ -61,19 +85,12 @@ void
 NaturalBC::set_up()
 {
     _F_;
-    const UnstructuredMesh * mesh = this->dpi->get_mesh();
-    this->label = mesh->get_face_set_label(this->boundary);
-    IndexSet is = IndexSet::values_from_label(this->label);
-    is.get_indices();
-    this->ids = is.to_std_vector();
     this->dpi->add_boundary_natural(get_name(),
                                     this->label,
                                     this->ids,
                                     this->fid,
                                     get_components(),
                                     this);
-    is.restore_indices();
-    is.destroy();
 }
 
 void
