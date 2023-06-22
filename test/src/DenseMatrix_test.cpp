@@ -622,3 +622,15 @@ TEST(DenseMatrixTest, row)
     EXPECT_EQ(r2(1), -3.);
     EXPECT_EQ(r2(2), 4.);
 }
+
+TEST(DenseMatrixTest, diagonal)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2, 1, 5 });
+    m.set_row(1, { 3, -1, -2 });
+    m.set_row(2, { 0, -3, 4 });
+    auto diag = m.diagonal();
+    EXPECT_EQ(diag(0), 2.);
+    EXPECT_EQ(diag(1), -1.);
+    EXPECT_EQ(diag(2), 4.);
+}

@@ -410,3 +410,13 @@ TEST(DenseMatrixSymmTest, create_diagonal)
     EXPECT_EQ(m(1, 2), 0.);
     EXPECT_EQ(m(2, 2), 3.);
 }
+
+TEST(DenseMatrixSymmTest, diagonal)
+{
+    DenseMatrixSymm<Real, 3> m;
+    m.set_values({ 2, 1, -1, 5, -2, 4 });
+    auto diag = m.diagonal();
+    EXPECT_EQ(diag(0), 2.);
+    EXPECT_EQ(diag(1), -1.);
+    EXPECT_EQ(diag(2), 4.);
+}

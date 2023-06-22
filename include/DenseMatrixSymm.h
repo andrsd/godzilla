@@ -207,6 +207,18 @@ public:
         return *this;
     }
 
+    /// Get diagonal of the matrix as a DenseVector
+    ///
+    /// @return Matrix diagonal as a vector
+    DenseVector<Real, DIM>
+    diagonal() const
+    {
+        DenseVector<Real, DIM> diag;
+        for (Int i = 0; i < DIM; i++)
+            diag(i) = get(i, i);
+        return diag;
+    }
+
     // operators
 
     const T &
