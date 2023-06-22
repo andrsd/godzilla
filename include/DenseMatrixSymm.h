@@ -207,6 +207,18 @@ public:
         return *this;
     }
 
+    /// Get diagonal of the matrix as a DenseVector
+    ///
+    /// @return Matrix diagonal as a vector
+    DenseVector<Real, DIM>
+    diagonal() const
+    {
+        DenseVector<Real, DIM> diag;
+        for (Int i = 0; i < DIM; i++)
+            diag(i) = get(i, i);
+        return diag;
+    }
+
     // operators
 
     const T &
@@ -332,6 +344,16 @@ public:
     get_data() const
     {
         return &this->data[0];
+    }
+
+    static DenseMatrixSymm<T, DIM>
+    create_diagonal(const DenseVector<T, DIM> & vals)
+    {
+        DenseMatrixSymm<T, DIM> res;
+        res.zero();
+        for (Int i = 0; i < DIM; i++)
+            res(i, i) = vals(i);
+        return res;
     }
 
 protected:

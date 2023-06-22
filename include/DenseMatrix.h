@@ -296,6 +296,19 @@ public:
         return tr;
     }
 
+    /// Get diagonal of the matrix as a DenseVector
+    ///
+    /// @return Matrix diagonal as a vector
+    DenseVector<Real, COLS>
+    diagonal() const
+    {
+        assert(ROWS == COLS);
+        DenseVector<Real, COLS> diag;
+        for (Int i = 0; i < COLS; i++)
+            diag(i) = get(i, i);
+        return diag;
+    }
+
     // operators
 
     /// Get a value at position (row, col) for reading
@@ -486,6 +499,16 @@ public:
         for (Int i = 0; i < ROWS; i++)
             for (Int j = 0; j < i; j++)
                 res(i, j) = res(j, i);
+        return res;
+    }
+
+    static DenseMatrix<T, ROWS, ROWS>
+    create_diagonal(const DenseVector<T, ROWS> & vals)
+    {
+        DenseMatrix<T, ROWS, ROWS> res;
+        res.zero();
+        for (Int i = 0; i < ROWS; i++)
+            res(i, i) = vals(i);
         return res;
     }
 

@@ -359,6 +359,21 @@ TEST(DenseMatrixDeathTest, create_symm_not_enough_vals)
     EXPECT_DEATH(fail_to_create_symm(), "Assertion.+failed");
 }
 
+TEST(DenseMatrixTest, create_diagonal)
+{
+    auto v = DenseVector<Real, 3>({ 1, 2, 3 });
+    auto m = DenseMatrix<Real, 3>::create_diagonal(v);
+    EXPECT_EQ(m(0, 0), 1.);
+    EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 0.);
+    EXPECT_EQ(m(1, 0), 0.);
+    EXPECT_EQ(m(1, 1), 2.);
+    EXPECT_EQ(m(1, 2), 0.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(2, 1), 0.);
+    EXPECT_EQ(m(2, 2), 3.);
+}
+
 TEST(DenseMatrixTest, det1)
 {
     auto m = DenseMatrix<Real, 1>();
@@ -606,4 +621,16 @@ TEST(DenseMatrixTest, row)
     EXPECT_EQ(r2(0), 0.);
     EXPECT_EQ(r2(1), -3.);
     EXPECT_EQ(r2(2), 4.);
+}
+
+TEST(DenseMatrixTest, diagonal)
+{
+    DenseMatrix<Real, 3> m;
+    m.set_row(0, { 2, 1, 5 });
+    m.set_row(1, { 3, -1, -2 });
+    m.set_row(2, { 0, -3, 4 });
+    auto diag = m.diagonal();
+    EXPECT_EQ(diag(0), 2.);
+    EXPECT_EQ(diag(1), -1.);
+    EXPECT_EQ(diag(2), 4.);
 }
