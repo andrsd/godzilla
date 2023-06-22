@@ -381,3 +381,13 @@ TEST(VectorTest, view)
     EXPECT_THAT(output, testing::HasSubstr("1."));
     EXPECT_THAT(output, testing::HasSubstr("4."));
 }
+
+TEST(VectorTest, reciprocal)
+{
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    v.set_values({ 0, 1, 2 }, { 2, 3, 4 });
+    v.reciprocal();
+    EXPECT_DOUBLE_EQ(v(0), 1. / 2.);
+    EXPECT_DOUBLE_EQ(v(1), 1. / 3.);
+    EXPECT_DOUBLE_EQ(v(2), 1. / 4.);
+}
