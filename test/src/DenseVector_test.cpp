@@ -318,7 +318,7 @@ TEST(DenseVectorTest, op_unary_minus)
     EXPECT_EQ(b(2), -3.);
 }
 
-TEST(DenseVectorTest, mat)
+TEST(DenseVectorTest, mat_row)
 {
     DenseVector<DenseVector<Real, 3>, 2> A;
     A(0)(0) = -2;
@@ -328,7 +328,7 @@ TEST(DenseVectorTest, mat)
     A(1)(1) = -1;
     A(1)(2) = 2;
 
-    DenseMatrix<Real, 2, 3> m = mat(A);
+    DenseMatrix<Real, 2, 3> m = mat_row(A);
     EXPECT_EQ(m(0, 0), -2.);
     EXPECT_EQ(m(0, 1), 5.);
     EXPECT_EQ(m(0, 2), 3.);
@@ -337,7 +337,7 @@ TEST(DenseVectorTest, mat)
     EXPECT_EQ(m(1, 2), 2.);
 }
 
-TEST(DenseVectorTest, mat_transpose)
+TEST(DenseVectorTest, mat_col)
 {
     DenseVector<DenseVector<Real, 3>, 2> A;
     A(0)(0) = -2;
@@ -347,7 +347,7 @@ TEST(DenseVectorTest, mat_transpose)
     A(1)(1) = -1;
     A(1)(2) = 2;
 
-    DenseMatrix<Real, 3, 2> m = mat_transpose(A);
+    DenseMatrix<Real, 3, 2> m = mat_col(A);
 
     EXPECT_EQ(m(0, 0), -2.);
     EXPECT_EQ(m(0, 1), 1.);
