@@ -15,7 +15,7 @@ class DenseMatrixSymm;
 
 /// Dense matrix with `ROWS` rows and `COLS` columns
 ///
-/// Entries are stored in column-major format
+/// Entries are stored in row-major format
 /// @tparam T Data type of matrix entries
 /// @tparam ROWS Number of rows
 /// @tparam COLS Number of columns
