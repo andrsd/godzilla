@@ -97,6 +97,17 @@ public:
         return res;
     }
 
+    template <Int N>
+    DenseVector<T, N>
+    get_values(const std::vector<Int> & idx) const
+    {
+        assert(N == idx.size());
+        DenseVector<T, N> res;
+        for (Int i = 0; i < N; i++)
+            res(i) = get(idx[i]);
+        return res;
+    }
+
     /// Assign a value into all vector entries, i.e. `vec[i] = val`
     ///
     /// @param val Value to assign
