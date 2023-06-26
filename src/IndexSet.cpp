@@ -116,6 +116,11 @@ IndexSet::operator IS() const
     return this->is;
 }
 
+IndexSet::operator IS *()
+{
+    return &(this->is);
+}
+
 bool
 IndexSet::empty() const
 {
