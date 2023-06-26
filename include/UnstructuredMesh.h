@@ -199,6 +199,12 @@ public:
     /// @return Points which are on the out-edges for point `p`
     std::vector<Int> get_support(Int point) const;
 
+    /// Return the points on the in-edges for this point
+    ///
+    /// @param point Point with must lie in the chart
+    /// @return Points which are on the out-edges for point `p`
+    std::vector<Int> get_cone(Int point) const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner

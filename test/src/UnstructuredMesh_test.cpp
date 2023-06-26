@@ -177,6 +177,16 @@ TEST(UnstructuredMeshTest, get_cell_connectivity)
     EXPECT_EQ(support4.size(), 1);
     EXPECT_EQ(support4[0], 1);
 
+    auto cone0 = mesh.get_cone(0);
+    EXPECT_EQ(cone0.size(), 2);
+    EXPECT_EQ(cone0[0], 2);
+    EXPECT_EQ(cone0[1], 3);
+
+    auto cone1 = mesh.get_cone(1);
+    EXPECT_EQ(cone1.size(), 2);
+    EXPECT_EQ(cone1[0], 3);
+    EXPECT_EQ(cone1[1], 4);
+
     auto depth_lbl = mesh.get_depth_label();
     IndexSet facets = IndexSet::stratum_from_label(depth_lbl, 0);
     facets.get_indices();

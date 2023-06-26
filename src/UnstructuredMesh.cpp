@@ -249,6 +249,21 @@ UnstructuredMesh::get_support(Int point) const
     return v;
 }
 
+std::vector<Int>
+UnstructuredMesh::get_cone(Int point) const
+{
+    _F_;
+    Int n;
+    PETSC_CHECK(DMPlexGetConeSize(this->dm, point, &n));
+    const Int * cone;
+    PETSC_CHECK(DMPlexGetCone(this->dm, point, &cone));
+    std::vector<Int> v;
+    v.resize(n);
+    for (Int i = 0; i < n; i++)
+        v[i] = cone[i];
+    return v;
+}
+
 void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
