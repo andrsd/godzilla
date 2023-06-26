@@ -14,36 +14,42 @@ IndexSet::~IndexSet() {}
 const Int *
 IndexSet::data() const
 {
+    _F_;
     return this->indices;
 }
 
 Int
 IndexSet::operator[](unsigned int i) const
 {
+    _F_;
     return this->indices[i];
 }
 
 Int
 IndexSet::operator()(unsigned int i) const
 {
+    _F_;
     return this->indices[i];
 }
 
 void
 IndexSet::create(MPI_Comm comm)
 {
+    _F_;
     PETSC_CHECK(ISCreate(comm, &this->is));
 }
 
 void
 IndexSet::destroy()
 {
+    _F_;
     PETSC_CHECK(ISDestroy(&this->is));
 }
 
 void
 IndexSet::restore_indices()
 {
+    _F_;
     assert(this->is != nullptr);
     PETSC_CHECK(ISRestoreIndices(this->is, &this->indices));
 }
@@ -51,6 +57,7 @@ IndexSet::restore_indices()
 Int
 IndexSet::get_size() const
 {
+    _F_;
     assert(this->is != nullptr);
     Int n;
     PETSC_CHECK(ISGetSize(this->is, &n));
@@ -60,6 +67,7 @@ IndexSet::get_size() const
 Int
 IndexSet::get_local_size() const
 {
+    _F_;
     assert(this->is != nullptr);
     Int n;
     PETSC_CHECK(ISGetLocalSize(this->is, &n));
@@ -69,6 +77,7 @@ IndexSet::get_local_size() const
 void
 IndexSet::get_indices()
 {
+    _F_;
     assert(this->is != nullptr);
     PETSC_CHECK(ISGetIndices(this->is, &this->indices));
 }
@@ -76,6 +85,7 @@ IndexSet::get_indices()
 std::vector<Int>
 IndexSet::to_std_vector()
 {
+    _F_;
     std::vector<Int> idxs;
     Int n = get_size();
     idxs.assign(this->indices, this->indices + n);
@@ -94,6 +104,7 @@ IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx)
 IndexSet
 IndexSet::values_from_label(DMLabel label)
 {
+    _F_;
     IS is;
     PETSC_CHECK(DMLabelGetValueIS(label, &is));
     return IndexSet(is);
@@ -102,6 +113,7 @@ IndexSet::values_from_label(DMLabel label)
 IndexSet
 IndexSet::stratum_from_label(DMLabel label, Int stratum_value)
 {
+    _F_;
     IS is;
     PETSC_CHECK(DMLabelGetStratumIS(label, stratum_value, &is));
     return IndexSet(is);
@@ -110,6 +122,7 @@ IndexSet::stratum_from_label(DMLabel label, Int stratum_value)
 PetscObjectId
 IndexSet::get_id() const
 {
+    _F_;
     PetscObjectId id;
     PETSC_CHECK(PetscObjectGetId((PetscObject) this->is, &id));
     return id;
@@ -118,6 +131,7 @@ IndexSet::get_id() const
 void
 IndexSet::inc_ref()
 {
+    _F_;
     PETSC_CHECK(PetscObjectReference((PetscObject) this->is));
 }
 
@@ -146,23 +160,27 @@ IndexSet::sort_remove_dups() const
 
 IndexSet::operator IS() const
 {
+    _F_;
     return this->is;
 }
 
 IndexSet::operator IS *()
 {
+    _F_;
     return &(this->is);
 }
 
 bool
 IndexSet::empty() const
 {
+    _F_;
     return this->is == nullptr;
 }
 
 IndexSet
 IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
 {
+    _F_;
     if (!is2.empty() && !is1.empty()) {
         PetscObjectId is2id = is2.get_id();
         char compose_str[33] = { 0 };
@@ -186,6 +204,7 @@ IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
 IndexSet
 IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
 {
+    _F_;
     IS is;
     ISIntersect(is1, is2, &is);
     return IndexSet(is);
