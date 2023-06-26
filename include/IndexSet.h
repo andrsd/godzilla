@@ -32,8 +32,8 @@ public:
 
     void inc_ref();
 
-    explicit operator IS() const;
-    explicit operator IS *();
+    operator IS() const;
+    operator IS *();
 
     bool empty() const;
 

@@ -137,7 +137,7 @@ IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
         IS isect;
         PETSC_CHECK(PetscObjectQuery((PetscObject) (IS) is1, compose_str, (PetscObject *) &isect));
         if (isect == nullptr) {
-            PETSC_CHECK(ISIntersect((IS) is1, (IS) is2, &isect));
+            PETSC_CHECK(ISIntersect(is1, is2, &isect));
             PETSC_CHECK(
                 PetscObjectCompose((PetscObject) (IS) is1, compose_str, (PetscObject) isect));
         }
@@ -154,7 +154,7 @@ IndexSet
 IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
 {
     IS is;
-    ISIntersect((IS) is1, (IS) is2, &is);
+    ISIntersect(is1, is2, &is);
     return IndexSet(is);
 }
 
