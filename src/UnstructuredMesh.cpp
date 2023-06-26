@@ -116,6 +116,15 @@ UnstructuredMesh::get_depth_label() const
     return depth_label;
 }
 
+DMLabel
+UnstructuredMesh::create_label(const std::string & name) const
+{
+    DMLabel label;
+    PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
+    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
+    return label;
+}
+
 DM
 UnstructuredMesh::get_coordinate_dm() const
 {

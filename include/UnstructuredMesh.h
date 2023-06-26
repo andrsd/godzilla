@@ -132,6 +132,12 @@ public:
     /// @return The `DMLabel` recording point depth
     DMLabel get_depth_label() const;
 
+    /// Create label
+    ///
+    /// @param name Label name
+    /// @return Created label
+    DMLabel create_label(const std::string & name) const;
+
     /// Gets the DM that prescribes coordinate layout and scatters between global and local
     /// coordinates
     ///
