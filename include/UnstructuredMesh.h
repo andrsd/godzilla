@@ -211,6 +211,13 @@ public:
     /// @return Points which are on the out-edges for point `p`
     std::vector<Int> get_cone(Int point) const;
 
+    /// Expand each given point into its cone points and do that recursively until we end up just
+    /// with vertices.
+    ///
+    /// @param points IndexSet of points with must lie in the chart
+    /// @return Vertices recursively expanded from input points
+    IndexSet get_cone_recursive_vertices(IndexSet points) const;
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
