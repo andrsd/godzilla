@@ -317,7 +317,7 @@ UnstructuredMesh::create_face_set(Int id, const std::string & name)
     if (!is.empty()) {
         PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
         DMLabel label = get_label(name);
-        PETSC_CHECK(DMLabelSetStratumIS(label, id, (IS) is));
+        PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
     }
     is.destroy();
 }

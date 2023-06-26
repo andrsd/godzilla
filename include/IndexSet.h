@@ -32,17 +32,30 @@ public:
 
     void inc_ref();
 
-    explicit operator IS() const;
+    operator IS() const;
+    operator IS *();
 
     bool empty() const;
 
     PetscObjectId get_id() const;
+
+    /// Checks the indices to determine whether they have been sorted
+    ///
+    /// @return `true` is index set is sorted
+    bool sorted() const;
+
+    /// Sort the indices of the index set
+    void sort() const;
+
+    /// Sort the indices of the index set, removing duplicates.
+    void sort_remove_dups() const;
 
 private:
     IS is;
     const Int * indices;
 
 public:
+    static IndexSet create_general(MPI_Comm comm, const std::vector<Int> & idx);
     static IndexSet values_from_label(DMLabel label);
     static IndexSet stratum_from_label(DMLabel label, Int stratum_value);
     static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);

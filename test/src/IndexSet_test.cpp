@@ -4,6 +4,7 @@
 #include "RectangleMesh.h"
 
 using namespace godzilla;
+using namespace testing;
 
 TEST(IndexSetTest, create)
 {
@@ -13,6 +14,18 @@ TEST(IndexSetTest, create)
     EXPECT_TRUE(is.empty());
     is.create(app.get_comm());
     EXPECT_TRUE((IS) is != nullptr);
+    is.destroy();
+}
+
+TEST(IndexSetTest, create_general)
+{
+    TestApp app;
+
+    IndexSet is = IndexSet::create_general(app.get_comm(), { 3, 5, 1, 8 });
+    is.get_indices();
+    auto idx = is.to_std_vector();
+    EXPECT_THAT(idx, UnorderedElementsAre(1, 3, 5, 8));
+    is.restore_indices();
     is.destroy();
 }
 
@@ -119,6 +132,33 @@ TEST(IndexSetTest, inc_ref)
     EXPECT_EQ(cnt, 2);
 
     is.destroy();
+}
+
+TEST(IndexSetTest, sort)
+{
+    TestApp app;
+
+    IndexSet is = IndexSet::create_general(app.get_comm(), { 3, 5, 1, 8 });
+    EXPECT_EQ(is.sorted(), false);
+    is.sort();
+    is.get_indices();
+    auto idx = is.to_std_vector();
+    EXPECT_THAT(idx, ElementsAreArray({ 1, 3, 5, 8 }));
+    is.restore_indices();
+    EXPECT_EQ(is.sorted(), true);
+}
+
+TEST(IndexSetTest, sort_remove_dups)
+{
+    TestApp app;
+
+    IndexSet is = IndexSet::create_general(app.get_comm(), { 3, 1, 5, 3, 1, 8 });
+    is.sort_remove_dups();
+    is.get_indices();
+    auto idx = is.to_std_vector();
+    EXPECT_THAT(idx, ElementsAreArray({ 1, 3, 5, 8 }));
+    is.restore_indices();
+    EXPECT_EQ(is.sorted(), true);
 }
 
 TEST(IndexSetTest, intersect_caching)

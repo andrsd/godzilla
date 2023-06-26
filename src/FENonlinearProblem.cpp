@@ -206,12 +206,12 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     DMField coord_field = nullptr;
     PetscCall(DMGetCoordinateField(dm, &coord_field));
     Int max_degree = PETSC_MAX_INT;
-    PetscCall(DMFieldGetDegree(coord_field, (IS) cell_is, nullptr, &max_degree));
+    PetscCall(DMFieldGetDegree(coord_field, cell_is, nullptr, &max_degree));
     if (max_degree <= 1) {
-        PetscCall(DMFieldCreateDefaultQuadrature(coord_field, (IS) cell_is, &affine_quad));
+        PetscCall(DMFieldCreateDefaultQuadrature(coord_field, cell_is, &affine_quad));
         if (affine_quad) {
             PetscCall(
-                DMSNESGetFEGeom(coord_field, (IS) cell_is, affine_quad, PETSC_FALSE, &affine_geom));
+                DMSNESGetFEGeom(coord_field, cell_is, affine_quad, PETSC_FALSE, &affine_geom));
         }
     }
     else {
@@ -229,8 +229,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
                 PetscFE fe = (PetscFE) obj;
                 PetscCall(PetscFEGetQuadrature(fe, &quads[f]));
                 PetscCall(PetscObjectReference((PetscObject) quads[f]));
-                PetscCall(
-                    DMSNESGetFEGeom(coord_field, (IS) cell_is, quads[f], PETSC_FALSE, &geoms[f]));
+                PetscCall(DMSNESGetFEGeom(coord_field, cell_is, quads[f], PETSC_FALSE, &geoms[f]));
             }
         }
     }
@@ -345,13 +344,12 @@ FENonlinearProblem::compute_residual_internal(DM dm,
 
     if (max_degree <= 1) {
         PetscCall(
-            DMSNESRestoreFEGeom(coord_field, (IS) cell_is, affine_quad, PETSC_FALSE, &affine_geom));
+            DMSNESRestoreFEGeom(coord_field, cell_is, affine_quad, PETSC_FALSE, &affine_geom));
         PetscCall(PetscQuadratureDestroy(&affine_quad));
     }
     else {
         for (Int f = 0; f < n_fields; ++f) {
-            PetscCall(
-                DMSNESRestoreFEGeom(coord_field, (IS) cell_is, quads[f], PETSC_FALSE, &geoms[f]));
+            PetscCall(DMSNESRestoreFEGeom(coord_field, cell_is, quads[f], PETSC_FALSE, &geoms[f]));
             PetscCall(PetscQuadratureDestroy(&quads[f]));
         }
         PetscCall(PetscFree2(quads, geoms));
@@ -497,9 +495,9 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                loc_a ? n_faces * tot_dim_aux : 0,
                                &a));
         Int max_degree;
-        PetscCall(DMFieldGetDegree(coord_field, (IS) points, nullptr, &max_degree));
+        PetscCall(DMFieldGetDegree(coord_field, points, nullptr, &max_degree));
         if (max_degree <= 1) {
-            PetscCall(DMFieldCreateDefaultQuadrature(coord_field, (IS) points, &q_geom));
+            PetscCall(DMFieldCreateDefaultQuadrature(coord_field, points, &q_geom));
         }
         if (!q_geom) {
             PetscFE fe;
@@ -510,7 +508,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         Int n_qpts;
         PetscCall(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * fgeom;
-        PetscCall(DMSNESGetFEGeom(coord_field, (IS) points, q_geom, PETSC_TRUE, &fgeom));
+        PetscCall(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
             PetscCall(DMPlexGetSupport(dm, points[face], &support));
@@ -591,7 +589,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                           &elem_vec[face * tot_dim],
                                           ADD_ALL_VALUES));
         }
-        PetscCall(DMSNESRestoreFEGeom(coord_field, (IS) points, q_geom, PETSC_TRUE, &fgeom));
+        PetscCall(DMSNESRestoreFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
         PetscCall(PetscQuadratureDestroy(&q_geom));
         points.restore_indices();
         points.destroy();
@@ -754,10 +752,10 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         Int n_batches, n_blocks;
         PetscCall(PetscFEGetTileSizes(fe, nullptr, &n_blocks, nullptr, &n_batches));
         Int max_degree;
-        PetscCall(DMFieldGetDegree(coord_field, (IS) cell_is, nullptr, &max_degree));
+        PetscCall(DMFieldGetDegree(coord_field, cell_is, nullptr, &max_degree));
         PetscQuadrature q_geom = nullptr;
         if (max_degree <= 1) {
-            PetscCall(DMFieldCreateDefaultQuadrature(coord_field, (IS) cell_is, &q_geom));
+            PetscCall(DMFieldCreateDefaultQuadrature(coord_field, cell_is, &q_geom));
         }
         if (!q_geom) {
             PetscCall(PetscFEGetQuadrature(fe, &q_geom));
@@ -766,7 +764,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         Int n_qpts;
         PetscCall(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * cgeom_fem;
-        PetscCall(DMSNESGetFEGeom(coord_field, (IS) cell_is, q_geom, PETSC_FALSE, &cgeom_fem));
+        PetscCall(DMSNESGetFEGeom(coord_field, cell_is, q_geom, PETSC_FALSE, &cgeom_fem));
         Int block_size = n_basis;
         Int batch_size = n_blocks * block_size;
         PetscCall(PetscFESetTileSizes(fe, block_size, n_blocks, batch_size, n_batches));
@@ -835,7 +833,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         }
         PetscCall(PetscFEGeomRestoreChunk(cgeom_fem, offset, n_cells, &rem_geom));
         PetscCall(PetscFEGeomRestoreChunk(cgeom_fem, 0, offset, &chunk_geom));
-        PetscCall(DMSNESRestoreFEGeom(coord_field, (IS) cell_is, q_geom, PETSC_FALSE, &cgeom_fem));
+        PetscCall(DMSNESRestoreFEGeom(coord_field, cell_is, q_geom, PETSC_FALSE, &cgeom_fem));
         PetscCall(PetscQuadratureDestroy(&q_geom));
     }
     // Add contribution from X_t
@@ -1047,10 +1045,10 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                locA ? n_faces * tot_dim_aux : 0,
                                &a));
         Int max_degree;
-        PetscCall(DMFieldGetDegree(coord_field, (IS) points, nullptr, &max_degree));
+        PetscCall(DMFieldGetDegree(coord_field, points, nullptr, &max_degree));
         PetscQuadrature q_geom = nullptr;
         if (max_degree <= 1) {
-            PetscCall(DMFieldCreateDefaultQuadrature(coord_field, (IS) points, &q_geom));
+            PetscCall(DMFieldCreateDefaultQuadrature(coord_field, points, &q_geom));
         }
         if (!q_geom) {
             PetscFE fe;
@@ -1061,7 +1059,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         Int n_qpts;
         PetscCall(PetscQuadratureGetData(q_geom, nullptr, nullptr, &n_qpts, nullptr, nullptr));
         PetscFEGeom * fgeom;
-        PetscCall(DMSNESGetFEGeom(coord_field, (IS) points, q_geom, PETSC_TRUE, &fgeom));
+        PetscCall(DMSNESGetFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
         for (Int face = 0; face < n_faces; ++face) {
             const Int * support;
             PetscCall(DMPlexGetSupport(dm, points[face], &support));
@@ -1156,7 +1154,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                           &elem_mat[face * tot_dim * tot_dim],
                                           ADD_VALUES));
         }
-        PetscCall(DMSNESRestoreFEGeom(coord_field, (IS) points, q_geom, PETSC_TRUE, &fgeom));
+        PetscCall(DMSNESRestoreFEGeom(coord_field, points, q_geom, PETSC_TRUE, &fgeom));
         PetscCall(PetscQuadratureDestroy(&q_geom));
         points.restore_indices();
         points.destroy();
