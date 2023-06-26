@@ -455,6 +455,21 @@ DenseVector<Real, 3>::cross(const DenseVector<Real, 3> & a) const
     return res;
 }
 
+/// Compute cross product from 2 vectors
+///
+/// @param a First vector
+/// @param b Second vector
+/// @return Resulting vector \f$ a x b\f$
+inline DenseVector<Real, 3>
+cross_product(const DenseVector<Real, 3> & a, const DenseVector<Real, 3> & b)
+{
+    DenseVector<Real, 3> res;
+    res(0) = a(1) * b(2) - a(2) * b(1);
+    res(1) = -(a(0) * b(2) - a(2) * b(0));
+    res(2) = a(0) * b(1) - a(1) * b(0);
+    return res;
+}
+
 /// Convert DenseVector<DenseVector, M>, N> into a DenseMatrix<N, M>
 ///
 /// @tparam T Data type
