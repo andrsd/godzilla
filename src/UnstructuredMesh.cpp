@@ -116,6 +116,15 @@ UnstructuredMesh::get_depth_label() const
     return depth_label;
 }
 
+DMLabel
+UnstructuredMesh::create_label(const std::string & name) const
+{
+    DMLabel label;
+    PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
+    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
+    return label;
+}
+
 DM
 UnstructuredMesh::get_coordinate_dm() const
 {
@@ -247,6 +256,30 @@ UnstructuredMesh::get_support(Int point) const
     for (Int i = 0; i < n_support; i++)
         v[i] = support[i];
     return v;
+}
+
+std::vector<Int>
+UnstructuredMesh::get_cone(Int point) const
+{
+    _F_;
+    Int n;
+    PETSC_CHECK(DMPlexGetConeSize(this->dm, point, &n));
+    const Int * cone;
+    PETSC_CHECK(DMPlexGetCone(this->dm, point, &cone));
+    std::vector<Int> v;
+    v.resize(n);
+    for (Int i = 0; i < n; i++)
+        v[i] = cone[i];
+    return v;
+}
+
+IndexSet
+UnstructuredMesh::get_cone_recursive_vertices(IndexSet points) const
+{
+    _F_;
+    IndexSet expanded_points;
+    DMPlexGetConeRecursiveVertices(this->dm, points, expanded_points);
+    return expanded_points;
 }
 
 void

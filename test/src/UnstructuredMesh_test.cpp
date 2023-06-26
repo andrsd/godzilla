@@ -6,8 +6,21 @@
 #include "petsc.h"
 
 using namespace godzilla;
+using namespace testing;
 
 namespace {
+
+IndexSet
+points_from_label(const DMLabel & label)
+{
+    IndexSet is = IndexSet::values_from_label(label);
+    is.get_indices();
+    auto ids = is.to_std_vector();
+    is.restore_indices();
+    is.destroy();
+
+    return IndexSet::stratum_from_label(label, ids[0]);
+}
 
 class TestUnstructuredMesh : public UnstructuredMesh {
 public:
@@ -36,6 +49,43 @@ public:
     get_partition_overlap()
     {
         return this->partition_overlap;
+    }
+};
+
+class TestUnstructuredMesh3D : public UnstructuredMesh {
+public:
+    explicit TestUnstructuredMesh3D(const Parameters & params) : UnstructuredMesh(params) {}
+
+    void
+    create_dm()
+    {
+        Real lower[3] = { 0, 0, 0 };
+        Real upper[3] = { 1, 1, 1 };
+        Int faces[3] = { 1, 1, 1 };
+        DMBoundaryType periodicity[3] = { DM_BOUNDARY_GHOSTED,
+                                          DM_BOUNDARY_GHOSTED,
+                                          DM_BOUNDARY_GHOSTED };
+
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                        3,
+                                        PETSC_FALSE,
+                                        faces,
+                                        lower,
+                                        upper,
+                                        periodicity,
+                                        PETSC_TRUE,
+                                        &this->dm));
+        // create "side sets"
+        std::map<Int, std::string> face_set_names;
+        face_set_names[1] = "back";
+        face_set_names[2] = "front";
+        face_set_names[3] = "bottom";
+        face_set_names[4] = "top";
+        face_set_names[5] = "right";
+        face_set_names[6] = "left";
+        create_face_set_labels(face_set_names);
+        for (auto it : face_set_names)
+            set_face_set_name(it.first, it.second);
     }
 };
 
@@ -177,6 +227,16 @@ TEST(UnstructuredMeshTest, get_cell_connectivity)
     EXPECT_EQ(support4.size(), 1);
     EXPECT_EQ(support4[0], 1);
 
+    auto cone0 = mesh.get_cone(0);
+    EXPECT_EQ(cone0.size(), 2);
+    EXPECT_EQ(cone0[0], 2);
+    EXPECT_EQ(cone0[1], 3);
+
+    auto cone1 = mesh.get_cone(1);
+    EXPECT_EQ(cone1.size(), 2);
+    EXPECT_EQ(cone1[0], 3);
+    EXPECT_EQ(cone1[1], 4);
+
     auto depth_lbl = mesh.get_depth_label();
     IndexSet facets = IndexSet::stratum_from_label(depth_lbl, 0);
     facets.get_indices();
@@ -303,4 +363,24 @@ TEST(UnstructuredMeshTest, polytope_type_str)
     EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_FV_GHOST), "FV_GHOST");
     EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_INTERIOR_GHOST), "INTERIOR_GHOST");
     EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_UNKNOWN), "UNKNOWN");
+}
+
+TEST(UnstructuredMesh, get_cone_recursive_vertices)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<const App *>("_app") = &app;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    auto depth_label = mesh.get_depth_label();
+    auto left = mesh.get_label("left");
+    IndexSet left_facet = points_from_label(left);
+    IndexSet left_points = mesh.get_cone_recursive_vertices(left_facet);
+    left_points.sort_remove_dups();
+    left_points.get_indices();
+    auto idxs = left_points.to_std_vector();
+    EXPECT_THAT(idxs, ::UnorderedElementsAre(1, 3, 5, 7));
+    left_points.restore_indices();
 }

@@ -132,6 +132,12 @@ public:
     /// @return The `DMLabel` recording point depth
     DMLabel get_depth_label() const;
 
+    /// Create label
+    ///
+    /// @param name Label name
+    /// @return Created label
+    DMLabel create_label(const std::string & name) const;
+
     /// Gets the DM that prescribes coordinate layout and scatters between global and local
     /// coordinates
     ///
@@ -198,6 +204,19 @@ public:
     /// @param point Point with must lie in the chart
     /// @return Points which are on the out-edges for point `p`
     std::vector<Int> get_support(Int point) const;
+
+    /// Return the points on the in-edges for this point
+    ///
+    /// @param point Point with must lie in the chart
+    /// @return Points which are on the out-edges for point `p`
+    std::vector<Int> get_cone(Int point) const;
+
+    /// Expand each given point into its cone points and do that recursively until we end up just
+    /// with vertices.
+    ///
+    /// @param points IndexSet of points with must lie in the chart
+    /// @return Vertices recursively expanded from input points
+    IndexSet get_cone_recursive_vertices(IndexSet points) const;
 
     /// Set partitioner type
     ///
