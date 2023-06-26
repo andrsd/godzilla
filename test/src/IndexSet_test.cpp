@@ -4,6 +4,7 @@
 #include "RectangleMesh.h"
 
 using namespace godzilla;
+using namespace testing;
 
 TEST(IndexSetTest, create)
 {
@@ -13,6 +14,18 @@ TEST(IndexSetTest, create)
     EXPECT_TRUE(is.empty());
     is.create(app.get_comm());
     EXPECT_TRUE((IS) is != nullptr);
+    is.destroy();
+}
+
+TEST(IndexSetTest, create_general)
+{
+    TestApp app;
+
+    IndexSet is = IndexSet::create_general(app.get_comm(), { 3, 5, 1, 8 });
+    is.get_indices();
+    auto idx = is.to_std_vector();
+    EXPECT_THAT(idx, UnorderedElementsAre(1, 3, 5, 8));
+    is.restore_indices();
     is.destroy();
 }
 

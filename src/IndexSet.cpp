@@ -1,5 +1,6 @@
 #include "IndexSet.h"
 #include "Error.h"
+#include "CallStack.h"
 #include <cassert>
 
 namespace godzilla {
@@ -79,6 +80,15 @@ IndexSet::to_std_vector()
     Int n = get_size();
     idxs.assign(this->indices, this->indices + n);
     return idxs;
+}
+
+IndexSet
+IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx)
+{
+    _F_;
+    IS is;
+    PETSC_CHECK(ISCreateGeneral(comm, idx.size(), idx.data(), PETSC_COPY_VALUES, &is));
+    return IndexSet(is);
 }
 
 IndexSet
