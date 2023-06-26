@@ -121,6 +121,29 @@ IndexSet::inc_ref()
     PETSC_CHECK(PetscObjectReference((PetscObject) this->is));
 }
 
+bool
+IndexSet::sorted() const
+{
+    _F_;
+    PetscBool res;
+    PETSC_CHECK(ISSorted(this->is, &res));
+    return res == PETSC_TRUE;
+}
+
+void
+IndexSet::sort() const
+{
+    _F_;
+    PETSC_CHECK(ISSort(this->is));
+}
+
+void
+IndexSet::sort_remove_dups() const
+{
+    _F_;
+    PETSC_CHECK(ISSortRemoveDups(this->is));
+}
+
 IndexSet::operator IS() const
 {
     return this->is;

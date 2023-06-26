@@ -39,6 +39,17 @@ public:
 
     PetscObjectId get_id() const;
 
+    /// Checks the indices to determine whether they have been sorted
+    ///
+    /// @return `true` is index set is sorted
+    bool sorted() const;
+
+    /// Sort the indices of the index set
+    void sort() const;
+
+    /// Sort the indices of the index set, removing duplicates.
+    void sort_remove_dups() const;
+
 private:
     IS is;
     const Int * indices;

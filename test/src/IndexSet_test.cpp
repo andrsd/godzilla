@@ -134,6 +134,33 @@ TEST(IndexSetTest, inc_ref)
     is.destroy();
 }
 
+TEST(IndexSetTest, sort)
+{
+    TestApp app;
+
+    IndexSet is = IndexSet::create_general(app.get_comm(), { 3, 5, 1, 8 });
+    EXPECT_EQ(is.sorted(), false);
+    is.sort();
+    is.get_indices();
+    auto idx = is.to_std_vector();
+    EXPECT_THAT(idx, ElementsAreArray({ 1, 3, 5, 8 }));
+    is.restore_indices();
+    EXPECT_EQ(is.sorted(), true);
+}
+
+TEST(IndexSetTest, sort_remove_dups)
+{
+    TestApp app;
+
+    IndexSet is = IndexSet::create_general(app.get_comm(), { 3, 1, 5, 3, 1, 8 });
+    is.sort_remove_dups();
+    is.get_indices();
+    auto idx = is.to_std_vector();
+    EXPECT_THAT(idx, ElementsAreArray({ 1, 3, 5, 8 }));
+    is.restore_indices();
+    EXPECT_EQ(is.sorted(), true);
+}
+
 TEST(IndexSetTest, intersect_caching)
 {
     TestApp app;
