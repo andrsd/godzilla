@@ -137,7 +137,8 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
                 cells = all_cells;
             }
             else {
-                IndexSet points = IndexSet::stratum_from_label(res_key.label, res_key.value);
+                Label l(res_key.label);
+                IndexSet points = l.get_stratum(res_key.value);
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
@@ -384,11 +385,9 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
 
     PetscDS prob;
     PetscCall(DMGetDS(dm, &prob));
-    DMLabel depth_label;
-    PetscCall(DMPlexGetDepthLabel(dm, &depth_label));
-    Int dim;
-    PetscCall(DMGetDimension(dm, &dim));
-    IndexSet facets = IndexSet::stratum_from_label(depth_label, dim - 1);
+    auto depth_label = this->unstr_mesh->get_depth_label();
+    Int dim = this->unstr_mesh->get_dimension();
+    auto facets = depth_label.get_stratum(dim - 1);
     Int n_bnd;
     PetscCall(PetscDSGetNumBoundary(prob, &n_bnd));
     for (Int bd = 0; bd < n_bnd; ++bd) {
@@ -473,7 +472,8 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         PetscCall(DMGetLocalSection(plex_aux, &section_aux));
     }
 
-    IndexSet points = IndexSet::stratum_from_label(key.label, key.value);
+    Label l(key.label);
+    auto points = l.get_stratum(key.value);
     if (!points.empty()) {
         PetscQuadrature q_geom = nullptr;
 
@@ -631,7 +631,8 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
                 cells = all_cells;
             }
             else {
-                IndexSet points = IndexSet::stratum_from_label(jac_key.label, jac_key.value);
+                Label l(jac_key.label);
+                auto points = l.get_stratum(jac_key.value);
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
@@ -913,11 +914,9 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
 {
     PetscDS prob;
     PetscCall(DMGetDS(dm, &prob));
-    DMLabel depth_label;
-    PetscCall(DMPlexGetDepthLabel(dm, &depth_label));
-    Int dim;
-    PetscCall(DMGetDimension(dm, &dim));
-    IndexSet facets = IndexSet::stratum_from_label(depth_label, dim - 1);
+    auto depth_label = this->unstr_mesh->get_depth_label();
+    Int dim = this->unstr_mesh->get_dimension();
+    auto facets = depth_label.get_stratum(dim - 1);
     Int n_bnd;
     PetscCall(PetscDSGetNumBoundary(prob, &n_bnd));
     DMField coord_field = nullptr;
@@ -1022,7 +1021,8 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         key.label = label;
         key.value = values[v];
         key.part = 0;
-        IndexSet points = IndexSet::stratum_from_label(label, values[v]);
+        Label l(label);
+        auto points = l.get_stratum(values[v]);
         if (points.empty())
             continue; /* No points with that id on this process */
 

@@ -29,24 +29,6 @@ TEST(IndexSetTest, create_general)
     is.destroy();
 }
 
-TEST(IndexSetTest, stratum_from_label)
-{
-    TestApp app;
-
-    Parameters params = RectangleMesh::parameters();
-    params.set<const App *>("_app") = &app;
-    params.set<std::string>("_name") = "rect_mesh";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 2;
-    RectangleMesh mesh(params);
-    mesh.create();
-
-    DMLabel label = mesh.get_label("celltype");
-    IndexSet is = IndexSet::stratum_from_label(label, 0);
-    EXPECT_EQ(is.get_size(), 9);
-    is.destroy();
-}
-
 TEST(IndexSetTest, get_id)
 {
     TestApp app;

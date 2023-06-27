@@ -19,7 +19,7 @@ points_from_label(const Label & label)
     is.restore_indices();
     is.destroy();
 
-    return IndexSet::stratum_from_label(label, ids[0]);
+    return label.get_stratum(ids[0]);
 }
 
 class TestUnstructuredMesh : public UnstructuredMesh {
@@ -238,7 +238,7 @@ TEST(UnstructuredMeshTest, get_cell_connectivity)
     EXPECT_EQ(cone1[1], 4);
 
     auto depth_lbl = mesh.get_depth_label();
-    IndexSet facets = IndexSet::stratum_from_label(depth_lbl, 0);
+    auto facets = depth_lbl.get_stratum(0);
     facets.get_indices();
     EXPECT_EQ(facets.get_local_size(), 3);
     EXPECT_EQ(facets(0), 2);
