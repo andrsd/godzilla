@@ -41,6 +41,7 @@ add_executable(${PROJECT_NAME}
     InitialCondition_test.cpp
     JacobianFunc_test.cpp
     L2Diff_test.cpp
+    Label_test.cpp
     LinearInterpolation_test.cpp
     LinearProblem_test.cpp
     LineMesh_test.cpp
