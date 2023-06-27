@@ -56,7 +56,6 @@ private:
 
 public:
     static IndexSet create_general(MPI_Comm comm, const std::vector<Int> & idx);
-    static IndexSet values_from_label(DMLabel label);
     static IndexSet stratum_from_label(DMLabel label, Int stratum_value);
     static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);
     static IndexSet intersect(const IndexSet & is1, const IndexSet & is2);

@@ -11,9 +11,9 @@ using namespace testing;
 namespace {
 
 IndexSet
-points_from_label(const DMLabel & label)
+points_from_label(const Label & label)
 {
-    IndexSet is = IndexSet::values_from_label(label);
+    IndexSet is = label.get_values();
     is.get_indices();
     auto ids = is.to_std_vector();
     is.restore_indices();

@@ -2,6 +2,7 @@
 
 #include "BoundaryCondition.h"
 #include "Types.h"
+#include "Label.h"
 
 namespace godzilla {
 
@@ -20,7 +21,7 @@ public:
     /// Get the label this boundary condition operates on
     ///
     /// @return The label
-    NO_DISCARD virtual DMLabel get_label() const;
+    NO_DISCARD virtual const Label & get_label() const;
 
     /// Get the label values this boundary condition operates on
     ///
@@ -60,8 +61,8 @@ protected:
                             BndJacobianFunc * g2,
                             BndJacobianFunc * g3);
 
-    /// DMLabel associated with the boundary name this boundary condition acts on
-    DMLabel label;
+    /// Label associated with the boundary name this boundary condition acts on
+    Label label;
     /// IDs of the label
     std::vector<Int> ids;
     /// Field ID this boundary condition is attached to

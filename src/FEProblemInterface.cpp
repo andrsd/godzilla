@@ -591,7 +591,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
         ctxs[fid] = aux->get_context();
     }
 
-    IndexSet ids = IndexSet::values_from_label(label);
+    auto ids = label.get_values();
     ids.get_indices();
     PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
                                             this->problem->get_time(),

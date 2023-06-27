@@ -29,49 +29,6 @@ TEST(IndexSetTest, create_general)
     is.destroy();
 }
 
-TEST(IndexSetTest, values_from_label)
-{
-    TestApp app;
-
-    Parameters params = RectangleMesh::parameters();
-    params.set<const App *>("_app") = &app;
-    params.set<std::string>("_name") = "rect_mesh";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 2;
-    RectangleMesh mesh(params);
-    mesh.create();
-
-    DMLabel label = mesh.get_label("Face Sets");
-    IndexSet is = IndexSet::values_from_label(label);
-    EXPECT_EQ(is.get_size(), 4);
-    EXPECT_EQ(is.get_local_size(), 4);
-
-    is.get_indices();
-
-    EXPECT_EQ(is[0], 4);
-    EXPECT_EQ(is[1], 2);
-    EXPECT_EQ(is[2], 1);
-    EXPECT_EQ(is[3], 3);
-
-    EXPECT_EQ(is(0), 4);
-    EXPECT_EQ(is(1), 2);
-    EXPECT_EQ(is(2), 1);
-    EXPECT_EQ(is(3), 3);
-
-    auto v = is.to_std_vector();
-    EXPECT_THAT(v, testing::UnorderedElementsAre(1, 2, 3, 4));
-
-    const Int * vals = is.data();
-    EXPECT_EQ(vals[0], 4);
-    EXPECT_EQ(vals[1], 2);
-    EXPECT_EQ(vals[2], 1);
-    EXPECT_EQ(vals[3], 3);
-
-    is.restore_indices();
-
-    is.destroy();
-}
-
 TEST(IndexSetTest, stratum_from_label)
 {
     TestApp app;
@@ -102,8 +59,8 @@ TEST(IndexSetTest, get_id)
     RectangleMesh mesh(params);
     mesh.create();
 
-    DMLabel label = mesh.get_label("Face Sets");
-    IndexSet is = IndexSet::values_from_label(label);
+    auto label = mesh.get_label("Face Sets");
+    auto is = label.get_values();
 
     EXPECT_TRUE(is.get_id() != 0);
 
@@ -122,8 +79,8 @@ TEST(IndexSetTest, inc_ref)
     RectangleMesh mesh(params);
     mesh.create();
 
-    DMLabel label = mesh.get_label("Face Sets");
-    IndexSet is = IndexSet::values_from_label(label);
+    auto label = mesh.get_label("Face Sets");
+    auto is = label.get_values();
 
     is.inc_ref();
 
@@ -173,10 +130,10 @@ TEST(IndexSetTest, intersect_caching)
     RectangleMesh mesh(params);
     mesh.create();
 
-    DMLabel label1 = mesh.get_label("bottom");
-    IndexSet is1 = IndexSet::values_from_label(label1);
-    DMLabel label2 = mesh.get_label("right");
-    IndexSet is2 = IndexSet::values_from_label(label2);
+    auto label1 = mesh.get_label("bottom");
+    auto is1 = label1.get_values();
+    auto label2 = mesh.get_label("right");
+    auto is2 = label2.get_values();
     IndexSet isect = IndexSet::intersect_caching(is1, is2);
     EXPECT_EQ(isect.get_size(), 0);
     is1.destroy();
@@ -195,10 +152,10 @@ TEST(IndexSetTest, intersect)
     RectangleMesh mesh(params);
     mesh.create();
 
-    DMLabel label1 = mesh.get_label("bottom");
-    IndexSet is1 = IndexSet::values_from_label(label1);
-    DMLabel label2 = mesh.get_label("right");
-    IndexSet is2 = IndexSet::values_from_label(label2);
+    auto label1 = mesh.get_label("bottom");
+    auto is1 = label1.get_values();
+    auto label2 = mesh.get_label("right");
+    auto is2 = label2.get_values();
     IndexSet isect = IndexSet::intersect(is1, is2);
     EXPECT_EQ(isect.get_size(), 0);
     is1.destroy();

@@ -102,15 +102,6 @@ IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx)
 }
 
 IndexSet
-IndexSet::values_from_label(DMLabel label)
-{
-    _F_;
-    IS is;
-    PETSC_CHECK(DMLabelGetValueIS(label, &is));
-    return IndexSet(is);
-}
-
-IndexSet
 IndexSet::stratum_from_label(DMLabel label, Int stratum_value)
 {
     _F_;

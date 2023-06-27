@@ -73,7 +73,7 @@ NaturalRiemannBC::set_up()
     _F_;
     const UnstructuredMesh * mesh = this->dpi->get_mesh();
     auto label = mesh->get_face_set_label(this->boundary);
-    IndexSet is = IndexSet::values_from_label(label);
+    auto is = label.get_values();
     is.get_indices();
     auto ids = is.to_std_vector();
     this->dpi->add_boundary_natural_riemann(get_name(),
