@@ -181,7 +181,7 @@ void
 ExplicitFELinearProblem::set_residual_block(Int field_id,
                                             ResidualFunc * f0,
                                             ResidualFunc * f1,
-                                            DMLabel label,
+                                            const Label & label,
                                             Int val)
 {
     _F_;

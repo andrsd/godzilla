@@ -24,7 +24,6 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
     field(get_param<std::string>("field")),
     region(get_param<std::string>("region")),
     fid(-1),
-    label(nullptr),
     block_id(-1)
 {
 }
@@ -58,7 +57,7 @@ AuxiliaryField::get_block_id() const
     return this->block_id;
 }
 
-DMLabel
+const Label &
 AuxiliaryField::get_label() const
 {
     _F_;

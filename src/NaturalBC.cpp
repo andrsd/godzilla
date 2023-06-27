@@ -50,9 +50,9 @@ NaturalBC::create()
     }
 
     const UnstructuredMesh * mesh = this->dpi->get_mesh();
-    this->label = mesh->get_label(this->boundary);
-    if (this->label) {
-        IndexSet is = IndexSet::values_from_label(this->label);
+    if (mesh->has_label(this->boundary)) {
+        this->label = mesh->get_label(this->boundary);
+        auto is = this->label.get_values();
         is.get_indices();
         this->ids = is.to_std_vector();
         is.restore_indices();
@@ -60,7 +60,7 @@ NaturalBC::create()
     }
 }
 
-DMLabel
+const Label &
 NaturalBC::get_label() const
 {
     _F_;

@@ -66,7 +66,7 @@ public:
 
     void
     add_boundary_essential(const std::string & name,
-                           DMLabel label,
+                           const Label & label,
                            const std::vector<Int> & ids,
                            Int field,
                            const std::vector<Int> & components,
@@ -86,7 +86,7 @@ public:
 
     void
     add_boundary_natural(const std::string & name,
-                         DMLabel label,
+                         const Label & label,
                          const std::vector<Int> & ids,
                          Int field,
                          const std::vector<Int> & components,
@@ -177,9 +177,10 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_DEATH(prob.set_field_component_name(0, 0, "x"),
                  "\\[ERROR\\] Unable to set component name for single-component field");
 
-    EXPECT_DEATH(prob.add_boundary_essential("", nullptr, {}, -1, {}, nullptr, nullptr, nullptr),
+    Label label;
+    EXPECT_DEATH(prob.add_boundary_essential("", label, {}, -1, {}, nullptr, nullptr, nullptr),
                  "\\[ERROR\\] Essential BCs are not supported for FV problems");
-    EXPECT_DEATH(prob.add_boundary_natural("", nullptr, {}, -1, {}, nullptr),
+    EXPECT_DEATH(prob.add_boundary_natural("", label, {}, -1, {}, nullptr),
                  "\\[ERROR\\] Natural BCs are not supported for FV problems");
 }
 

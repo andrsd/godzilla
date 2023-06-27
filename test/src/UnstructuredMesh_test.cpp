@@ -11,15 +11,15 @@ using namespace testing;
 namespace {
 
 IndexSet
-points_from_label(const DMLabel & label)
+points_from_label(const Label & label)
 {
-    IndexSet is = IndexSet::values_from_label(label);
+    IndexSet is = label.get_values();
     is.get_indices();
     auto ids = is.to_std_vector();
     is.restore_indices();
     is.destroy();
 
-    return IndexSet::stratum_from_label(label, ids[0]);
+    return label.get_stratum(ids[0]);
 }
 
 class TestUnstructuredMesh : public UnstructuredMesh {
@@ -238,7 +238,7 @@ TEST(UnstructuredMeshTest, get_cell_connectivity)
     EXPECT_EQ(cone1[1], 4);
 
     auto depth_lbl = mesh.get_depth_label();
-    IndexSet facets = IndexSet::stratum_from_label(depth_lbl, 0);
+    auto facets = depth_lbl.get_stratum(0);
     facets.get_indices();
     EXPECT_EQ(facets.get_local_size(), 3);
     EXPECT_EQ(facets(0), 2);
@@ -262,7 +262,7 @@ TEST(UnstructuredMeshTest, get_local_section)
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[4] = { 1, 0, 0, 0 };
-    Section s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    Section s = Section::create(dm, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
     mesh.set_local_section(s);
 
     Section ls = mesh.get_local_section();
@@ -287,7 +287,7 @@ TEST(UnstructuredMeshTest, get_global_section)
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[4] = { 1, 0, 0, 0 };
-    Section s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    Section s = Section::create(dm, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
     mesh.set_local_section(s);
     mesh.set_global_section(s);
 

@@ -70,7 +70,6 @@ public:
     operator PetscSection &() { return this->section; }
 
     static Section create(DM dm,
-                          DMLabel label[],
                           const Int n_comp[],
                           const Int n_dof[],
                           Int n_bc,

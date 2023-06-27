@@ -2,6 +2,7 @@
 
 #include "petscds.h"
 #include "Types.h"
+#include "Label.h"
 #include "UnstructuredMesh.h"
 #include "Vector.h"
 #include "Matrix.h"
@@ -192,7 +193,7 @@ public:
     virtual const Vector & get_aux_solution_vector_local() const = 0;
 
     virtual void add_boundary_essential(const std::string & name,
-                                        DMLabel label,
+                                        const Label & label,
                                         const std::vector<Int> & ids,
                                         Int field,
                                         const std::vector<Int> & components,
@@ -200,13 +201,13 @@ public:
                                         PetscFunc * fn_t,
                                         void * context) const;
     virtual void add_boundary_natural(const std::string & name,
-                                      DMLabel label,
+                                      const Label & label,
                                       const std::vector<Int> & ids,
                                       Int field,
                                       const std::vector<Int> & components,
                                       void * context) const;
     virtual void add_boundary_natural_riemann(const std::string & name,
-                                              DMLabel label,
+                                              const Label & label,
                                               const std::vector<Int> & ids,
                                               Int field,
                                               const std::vector<Int> & components,

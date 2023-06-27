@@ -35,12 +35,12 @@ protected:
     /// @param fid Field ID
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
-    /// @param label Region specified by DMLabel where this residual statement is active
+    /// @param label Region specified by Label where this residual statement is active
     /// @param val Value associated with the region
     virtual void set_residual_block(Int fid,
                                     ResidualFunc * f0,
                                     ResidualFunc * f1,
-                                    DMLabel label = nullptr,
+                                    const Label & label = Label(),
                                     Int val = 0);
 
     /// Set up Jacobian statement for a field variable
@@ -51,7 +51,7 @@ protected:
     /// @param g1 Integrand for the test function and basis function gradient term
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
-    /// @param label Region specified by DMLabel where this residual statement is active
+    /// @param label Region specified by Label where this residual statement is active
     /// @param val Value associated with the region
     virtual void set_jacobian_block(Int fid,
                                     Int gid,
@@ -59,7 +59,7 @@ protected:
                                     JacobianFunc * g1,
                                     JacobianFunc * g2,
                                     JacobianFunc * g3,
-                                    DMLabel label = nullptr,
+                                    const Label & label = Label(),
                                     Int val = 0);
 
     /// Set up Jacobian preconditioner statement for a field variable
@@ -70,7 +70,7 @@ protected:
     /// @param g1 Integrand for the test function and basis function gradient term
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
-    /// @param label Region specified by DMLabel where this residual statement is active
+    /// @param label Region specified by Label where this residual statement is active
     /// @param val Value associated with the region
     virtual void set_jacobian_preconditioner_block(Int fid,
                                                    Int gid,
@@ -78,7 +78,7 @@ protected:
                                                    JacobianFunc * g1,
                                                    JacobianFunc * g2,
                                                    JacobianFunc * g3,
-                                                   DMLabel label = nullptr,
+                                                   const Label & label = Label(),
                                                    Int val = 0);
 
     void on_initial() override;
@@ -119,7 +119,7 @@ protected:
                                                  Mat Jp);
     PetscErrorCode compute_bnd_jacobian_single_internal(DM dm,
                                                         Real t,
-                                                        DMLabel label,
+                                                        const Label & label,
                                                         Int n_values,
                                                         const Int values[],
                                                         Int field_i,

@@ -46,6 +46,7 @@ add_library(${PROJECT_NAME}
         JacobianFunc.cpp
         L2Diff.cpp
         L2FieldDiff.cpp
+        Label.cpp
         LinearInterpolation.cpp
         LinearProblem.cpp
         LineMesh.cpp

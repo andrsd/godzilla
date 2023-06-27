@@ -2,6 +2,7 @@
 
 #include "GodzillaConfig.h"
 #include "Types.h"
+#include "Label.h"
 #include <array>
 #include <map>
 #include <vector>
@@ -30,33 +31,34 @@ public:
 
     /// Get residual forms
     const std::vector<ResidualFunc *> &
-    get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part) const;
+    get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
     const std::vector<JacobianFunc *> &
-    get(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int g, Int part) const;
+    get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int g, Int part) const;
 
     /// Add a residual form
     ///
     /// @param kind Kind of the form
-    /// @param label DMLabel where the form is defined
+    /// @param label Label where the form is defined
     /// @param val Value
     /// @param f Field ID
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric residual form
-    void add(PetscWeakFormKind kind, DMLabel label, Int val, Int f, Int part, ResidualFunc * func);
+    void
+    add(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part, ResidualFunc * func);
 
     /// Add a Jacobian form
     ///
     /// @param kind Kind of the form
-    /// @param label DMLabel where the form is defined
+    /// @param label Label where the form is defined
     /// @param val Value
     /// @param f Field ID (test)
     /// @param g Field ID (base)
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric Jacobian form
     void add(PetscWeakFormKind kind,
-             DMLabel label,
+             const Label & label,
              Int val,
              Int f,
              Int g,

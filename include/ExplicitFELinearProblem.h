@@ -27,7 +27,7 @@ protected:
     void set_residual_block(Int field_id,
                             ResidualFunc * f0,
                             ResidualFunc * f1,
-                            DMLabel label = nullptr,
+                            const Label & label = Label(),
                             Int val = 0) override;
 
     /// Time stepping scheme

@@ -204,7 +204,8 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
                 cells = all_cells;
             }
             else {
-                IndexSet points = IndexSet::stratum_from_label(res_key.label, res_key.value);
+                Label l(res_key.label);
+                auto points = l.get_stratum(res_key.value);
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }
@@ -250,7 +251,8 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
                 cells = all_cells;
             }
             else {
-                IndexSet points = IndexSet::stratum_from_label(jac_key.label, jac_key.value);
+                Label l(jac_key.label);
+                auto points = l.get_stratum(jac_key.value);
                 cells = IndexSet::intersect_caching(all_cells, points);
                 points.destroy();
             }

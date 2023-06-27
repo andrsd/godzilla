@@ -112,7 +112,7 @@ TEST(NaturalBCTest, fe)
             return this->wf;
         }
 
-        DMLabel
+        const Label &
         get_label() const
         {
             return this->label;
