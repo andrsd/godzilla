@@ -3,8 +3,8 @@
 #include "GodzillaConfig.h"
 #include "Object.h"
 #include "PrintInterface.h"
+#include "Label.h"
 #include "Types.h"
-#include "petsc.h"
 
 namespace godzilla {
 
@@ -20,7 +20,7 @@ public:
 
     NO_DISCARD virtual Int get_block_id() const;
 
-    NO_DISCARD virtual DMLabel get_label() const;
+    NO_DISCARD virtual const Label & get_label() const;
 
     NO_DISCARD virtual const std::string & get_region() const;
 
@@ -54,7 +54,7 @@ protected:
     Int fid;
 
     /// Block here the auxiliary field lives
-    DMLabel label;
+    Label label;
 
     /// Block ID associated with the label where this field is defined
     Int block_id;
