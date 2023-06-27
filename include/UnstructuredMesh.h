@@ -5,6 +5,7 @@
 #include "IndexSet.h"
 #include "Vector.h"
 #include "Section.h"
+#include "Label.h"
 #include "petscpartitioner.h"
 
 namespace godzilla {
@@ -124,19 +125,19 @@ public:
     /// Get label associated with a name
     ///
     /// @param name Label name
-    /// @return DMLabel associated with the `name`
-    NO_DISCARD virtual DMLabel get_label(const std::string & name) const;
+    /// @return Label associated with the `name`
+    NO_DISCARD virtual Label get_label(const std::string & name) const;
 
-    /// Get the `DMLabel` recording the depth of each point
+    /// Get the `Label` recording the depth of each point
     ///
-    /// @return The `DMLabel` recording point depth
-    DMLabel get_depth_label() const;
+    /// @return The `Label` recording point depth
+    Label get_depth_label() const;
 
     /// Create label
     ///
     /// @param name Label name
     /// @return Created label
-    DMLabel create_label(const std::string & name) const;
+    Label create_label(const std::string & name) const;
 
     /// Gets the DM that prescribes coordinate layout and scatters between global and local
     /// coordinates
@@ -281,8 +282,8 @@ public:
     /// Get label corresponding to a face set name
     ///
     /// @param name The name of the face set
-    /// @return DMLabel associated with face set name
-    NO_DISCARD DMLabel get_face_set_label(const std::string & name) const;
+    /// @return Label associated with face set name
+    NO_DISCARD Label get_face_set_label(const std::string & name) const;
 
     /// Get number of vertex sets
     ///

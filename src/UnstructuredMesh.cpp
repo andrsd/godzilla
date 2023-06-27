@@ -99,30 +99,30 @@ UnstructuredMesh::has_label(const std::string & name) const
     return exists == PETSC_TRUE;
 }
 
-DMLabel
+Label
 UnstructuredMesh::get_label(const std::string & name) const
 {
     _F_;
     DMLabel label;
     PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
-    return label;
+    return Label(label);
 }
 
-DMLabel
+Label
 UnstructuredMesh::get_depth_label() const
 {
     DMLabel depth_label;
     PETSC_CHECK(DMPlexGetDepthLabel(this->dm, &depth_label));
-    return depth_label;
+    return Label(depth_label);
 }
 
-DMLabel
+Label
 UnstructuredMesh::create_label(const std::string & name) const
 {
     DMLabel label;
     PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
     PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
-    return label;
+    return Label(label);
 }
 
 DM
@@ -326,11 +326,10 @@ void
 UnstructuredMesh::create_face_set_labels(const std::map<Int, std::string> & names)
 {
     _F_;
-    DMLabel fs_label = get_label("Face Sets");
+    Label fs_label = get_label("Face Sets");
     if (fs_label) {
-        Int n_fs;
-        DMLabelGetNumValues(fs_label, &n_fs);
-        IndexSet fs_ids = IndexSet::values_from_label(fs_label);
+        Int n_fs = fs_label.get_num_values();
+        IndexSet fs_ids = fs_label.get_values();
         fs_ids.get_indices();
         for (Int i = 0; i < n_fs; i++) {
             Int id = fs_ids[i];
@@ -345,12 +344,11 @@ void
 UnstructuredMesh::create_face_set(Int id, const std::string & name)
 {
     _F_;
-    DMLabel face_sets_label = get_label("Face Sets");
-    IndexSet is = IndexSet::stratum_from_label(face_sets_label, id);
+    Label face_sets_label = get_label("Face Sets");
+    IndexSet is = face_sets_label.get_stratum(id);
     if (!is.empty()) {
-        PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
-        DMLabel label = get_label(name);
-        PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
+        Label label = create_label(name);
+        label.set_stratum(id, is);
     }
     is.destroy();
 }
@@ -371,7 +369,7 @@ UnstructuredMesh::has_face_set(const std::string & name) const
     return it != this->face_set_ids.end();
 }
 
-DMLabel
+Label
 UnstructuredMesh::get_face_set_label(const std::string & name) const
 {
     _F_;
@@ -379,7 +377,7 @@ UnstructuredMesh::get_face_set_label(const std::string & name) const
     if (it != this->face_set_ids.end())
         return get_label(name);
     else
-        return nullptr;
+        return Label();
 }
 
 const std::string &
@@ -397,14 +395,12 @@ void
 UnstructuredMesh::create_cell_set(Int id, const std::string & name)
 {
     _F_;
-    DMLabel cell_sets_label = get_label("Cell Sets");
-    IS is;
-    PETSC_CHECK(DMLabelGetStratumIS(cell_sets_label, id, &is));
-    PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
-    DMLabel label = get_label(name);
-    if (is)
-        PETSC_CHECK(DMLabelSetStratumIS(label, id, is));
-    PETSC_CHECK(ISDestroy(&is));
+    auto cell_sets_label = get_label("Cell Sets");
+    auto cell_set = cell_sets_label.get_stratum(id);
+    auto label = create_label(name);
+    if (!cell_set.empty())
+        label.set_stratum(id, cell_set);
+    cell_set.destroy();
     this->cell_set_names[id] = name;
     this->cell_set_ids[name] = id;
 }
