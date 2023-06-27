@@ -302,7 +302,6 @@ Section::get_constraint_dof(Int point) const
 
 Section
 Section::create(DM dm,
-                DMLabel label[],
                 const Int n_comp[],
                 const Int n_dof[],
                 Int n_bc,
@@ -313,7 +312,7 @@ Section::create(DM dm,
 {
     PetscSection s;
     PETSC_CHECK(DMPlexCreateSection(dm,
-                                    label,
+                                    nullptr,
                                     n_comp,
                                     n_dof,
                                     n_bc,

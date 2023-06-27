@@ -86,7 +86,7 @@ G1DTestLinearProblem::create()
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
-    this->s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    this->s = Section::create(dm, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
     this->mesh->set_local_section(this->s);
     LinearProblem::create();
 }
@@ -137,7 +137,7 @@ G2DTestLinearProblem::create()
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[3] = { 1, 0, 0 };
-    this->s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    this->s = Section::create(dm, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
     this->mesh->set_local_section(this->s);
     LinearProblem::create();
 }
@@ -187,7 +187,7 @@ G3DTestLinearProblem::create()
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[4] = { 1, 0, 0, 0 };
-    this->s = Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    this->s = Section::create(dm, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
     this->mesh->set_local_section(this->s);
     LinearProblem::create();
 }

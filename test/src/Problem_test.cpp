@@ -48,7 +48,7 @@ create_section(DM dm)
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
-    return Section::create(dm, NULL, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    return Section::create(dm, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
 }
 
 } // namespace
