@@ -112,18 +112,6 @@ TEST(NaturalBCTest, fe)
             return this->wf;
         }
 
-        const Label &
-        get_label() const
-        {
-            return this->label;
-        }
-
-        const std::vector<Int> &
-        get_ids() const
-        {
-            return this->ids;
-        }
-
     protected:
         std::vector<Int> comps;
     };
