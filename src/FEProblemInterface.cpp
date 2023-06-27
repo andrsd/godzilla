@@ -794,8 +794,9 @@ FEProblemInterface::sort_residual_functionals(
     auto res_keys = this->wf->get_residual_keys();
     for (auto & k : res_keys) {
         for (Int f = 0; f < get_num_fields(); f++) {
-            auto f0_fnls = this->wf->get(PETSC_WF_F0, k.label, k.value, f, k.part);
-            auto f1_fnls = this->wf->get(PETSC_WF_F1, k.label, k.value, f, k.part);
+            Label lbl(k.label);
+            auto f0_fnls = this->wf->get(PETSC_WF_F0, lbl, k.value, f, k.part);
+            auto f1_fnls = this->wf->get(PETSC_WF_F1, lbl, k.value, f, k.part);
 
             add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
             add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
@@ -829,10 +830,11 @@ FEProblemInterface::sort_jacobian_functionals(
     for (auto & k : jac_keys) {
         for (Int f = 0; f < get_num_fields(); f++) {
             for (Int g = 0; g < get_num_fields(); g++) {
-                auto g0_fnls = this->wf->get(PETSC_WF_G0, k.label, k.value, f, g, k.part);
-                auto g1_fnls = this->wf->get(PETSC_WF_G1, k.label, k.value, f, g, k.part);
-                auto g2_fnls = this->wf->get(PETSC_WF_G2, k.label, k.value, f, g, k.part);
-                auto g3_fnls = this->wf->get(PETSC_WF_G3, k.label, k.value, f, g, k.part);
+                Label lbl(k.label);
+                auto g0_fnls = this->wf->get(PETSC_WF_G0, lbl, k.value, f, g, k.part);
+                auto g1_fnls = this->wf->get(PETSC_WF_G1, lbl, k.value, f, g, k.part);
+                auto g2_fnls = this->wf->get(PETSC_WF_G2, lbl, k.value, f, g, k.part);
+                auto g3_fnls = this->wf->get(PETSC_WF_G3, lbl, k.value, f, g, k.part);
 
                 add_functionals<JacobianFunc *>(graph, suppliers, g0_fnls);
                 add_functionals<JacobianFunc *>(graph, suppliers, g1_fnls);
@@ -883,8 +885,9 @@ FEProblemInterface::integrate_residual(PetscDS ds,
 {
     _F_;
     Int field = key.field;
-    const auto & f0_res_fns = this->wf->get(PETSC_WF_F0, key.label, key.value, field, key.part);
-    const auto & f1_res_fns = this->wf->get(PETSC_WF_F1, key.label, key.value, field, key.part);
+    Label lbl(key.label);
+    const auto & f0_res_fns = this->wf->get(PETSC_WF_F0, lbl, key.value, field, key.part);
+    const auto & f1_res_fns = this->wf->get(PETSC_WF_F1, lbl, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
@@ -1024,8 +1027,9 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
 {
     _F_;
     Int field = key.field;
-    const auto & f0_res_fns = this->wf->get(PETSC_WF_BDF0, key.label, key.value, field, key.part);
-    const auto & f1_res_fns = this->wf->get(PETSC_WF_BDF1, key.label, key.value, field, key.part);
+    Label lbl(key.label);
+    const auto & f0_res_fns = this->wf->get(PETSC_WF_BDF0, lbl, key.value, field, key.part);
+    const auto & f1_res_fns = this->wf->get(PETSC_WF_BDF1, lbl, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
@@ -1206,14 +1210,11 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         break;
     }
 
-    const auto & g0_jac_fns =
-        this->wf->get(kind0, key.label, key.value, field_i, field_j, key.part);
-    const auto & g1_jac_fns =
-        this->wf->get(kind1, key.label, key.value, field_i, field_j, key.part);
-    const auto & g2_jac_fns =
-        this->wf->get(kind2, key.label, key.value, field_i, field_j, key.part);
-    const auto & g3_jac_fns =
-        this->wf->get(kind3, key.label, key.value, field_i, field_j, key.part);
+    Label lbl(key.label);
+    const auto & g0_jac_fns = this->wf->get(kind0, lbl, key.value, field_i, field_j, key.part);
+    const auto & g1_jac_fns = this->wf->get(kind1, lbl, key.value, field_i, field_j, key.part);
+    const auto & g2_jac_fns = this->wf->get(kind2, lbl, key.value, field_i, field_j, key.part);
+    const auto & g3_jac_fns = this->wf->get(kind3, lbl, key.value, field_i, field_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return 0;
 
@@ -1417,14 +1418,15 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     Int field_i = key.field / n_fields;
     Int field_j = key.field % n_fields;
 
+    Label lbl(key.label);
     const auto & g0_jac_fns =
-        this->wf->get(PETSC_WF_BDG0, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(PETSC_WF_BDG0, lbl, key.value, field_i, field_j, key.part);
     const auto & g1_jac_fns =
-        this->wf->get(PETSC_WF_BDG1, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(PETSC_WF_BDG1, lbl, key.value, field_i, field_j, key.part);
     const auto & g2_jac_fns =
-        this->wf->get(PETSC_WF_BDG2, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(PETSC_WF_BDG2, lbl, key.value, field_i, field_j, key.part);
     const auto & g3_jac_fns =
-        this->wf->get(PETSC_WF_BDG3, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(PETSC_WF_BDG3, lbl, key.value, field_i, field_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return 0;
 
