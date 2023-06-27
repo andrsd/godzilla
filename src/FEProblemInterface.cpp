@@ -576,7 +576,7 @@ FEProblemInterface::compute_global_aux_fields(DM dm,
 
 void
 FEProblemInterface::compute_label_aux_fields(DM dm,
-                                             DMLabel label,
+                                             const Label & label,
                                              const std::vector<AuxiliaryField *> & auxs,
                                              Vector & a)
 {
@@ -615,11 +615,11 @@ FEProblemInterface::compute_aux_fields()
     for (const auto & it : this->auxs_by_region) {
         const std::string & region_name = it.first;
         const std::vector<AuxiliaryField *> & auxs = it.second;
-        DMLabel label = nullptr;
+        Label label;
         if (region_name.length() > 0)
             label = this->unstr_mesh->get_label(region_name);
 
-        if (label == nullptr)
+        if (label.is_null())
             compute_global_aux_fields(this->dm_aux, auxs, this->a);
         else
             compute_label_aux_fields(this->dm_aux, label, auxs, this->a);
@@ -1865,7 +1865,7 @@ FEProblemInterface::get_next_id(const std::vector<Int> & ids) const
 
 void
 FEProblemInterface::add_boundary_natural_riemann(const std::string & name,
-                                                 DMLabel label,
+                                                 const Label & label,
                                                  const std::vector<Int> & ids,
                                                  Int field,
                                                  const std::vector<Int> & components,

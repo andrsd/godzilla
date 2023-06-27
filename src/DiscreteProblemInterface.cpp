@@ -193,7 +193,7 @@ DiscreteProblemInterface::build_local_solution_vector(const Vector & sln) const
 
 void
 DiscreteProblemInterface::add_boundary_essential(const std::string & name,
-                                                 DMLabel label,
+                                                 const Label & label,
                                                  const std::vector<Int> & ids,
                                                  Int field,
                                                  const std::vector<Int> & components,
@@ -218,7 +218,7 @@ DiscreteProblemInterface::add_boundary_essential(const std::string & name,
 
 void
 DiscreteProblemInterface::add_boundary_natural(const std::string & name,
-                                               DMLabel label,
+                                               const Label & label,
                                                const std::vector<Int> & ids,
                                                Int field,
                                                const std::vector<Int> & components,
@@ -241,7 +241,7 @@ DiscreteProblemInterface::add_boundary_natural(const std::string & name,
 
 void
 DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
-                                                       DMLabel label,
+                                                       const Label & label,
                                                        const std::vector<Int> & ids,
                                                        Int field,
                                                        const std::vector<Int> & components,

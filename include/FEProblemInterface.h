@@ -202,7 +202,7 @@ protected:
     virtual void set_up_fields() = 0;
 
     void add_boundary_natural_riemann(const std::string & name,
-                                      DMLabel label,
+                                      const Label & label,
                                       const std::vector<Int> & ids,
                                       Int field,
                                       const std::vector<Int> & components,
@@ -223,7 +223,7 @@ protected:
     void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vector & a);
 
     void compute_label_aux_fields(DM dm,
-                                  DMLabel label,
+                                  const Label & label,
                                   const std::vector<AuxiliaryField *> & auxs,
                                   Vector & a);
 
