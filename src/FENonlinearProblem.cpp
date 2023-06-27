@@ -923,7 +923,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
     PetscCall(DMGetCoordinateField(dm, &coord_field));
     for (Int bd = 0; bd < n_bnd; ++bd) {
         DMBoundaryConditionType type;
-        DMLabel label;
+        DMLabel dm_label;
         Int n_values;
         const Int * values;
         Int field_i;
@@ -932,7 +932,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
                                      nullptr,
                                      &type,
                                      nullptr,
-                                     &label,
+                                     &dm_label,
                                      &n_values,
                                      &values,
                                      &field_i,
@@ -947,6 +947,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
         PetscCall(PetscObjectGetClassId(obj, &id));
         if ((id != PETSCFE_CLASSID) || (type & DM_BC_ESSENTIAL))
             continue;
+        Label label(dm_label);
         compute_bnd_jacobian_single_internal(dm,
                                              t,
                                              label,
@@ -968,7 +969,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
 PetscErrorCode
 FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                                          Real t,
-                                                         DMLabel label,
+                                                         const Label & label,
                                                          Int n_values,
                                                          const Int values[],
                                                          Int field_i,
@@ -1021,8 +1022,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         key.label = label;
         key.value = values[v];
         key.part = 0;
-        Label l(label);
-        auto points = l.get_stratum(values[v]);
+        auto points = label.get_stratum(values[v]);
         if (points.empty())
             continue; /* No points with that id on this process */
 
@@ -1172,7 +1172,7 @@ void
 FENonlinearProblem::set_residual_block(Int field_id,
                                        ResidualFunc * f0,
                                        ResidualFunc * f1,
-                                       DMLabel label,
+                                       const Label & label,
                                        Int val)
 {
     _F_;
@@ -1187,7 +1187,7 @@ FENonlinearProblem::set_jacobian_block(Int fid,
                                        JacobianFunc * g1,
                                        JacobianFunc * g2,
                                        JacobianFunc * g3,
-                                       DMLabel label,
+                                       const Label & label,
                                        Int val)
 {
     _F_;
@@ -1204,7 +1204,7 @@ FENonlinearProblem::set_jacobian_preconditioner_block(Int fid,
                                                       JacobianFunc * g1,
                                                       JacobianFunc * g2,
                                                       JacobianFunc * g3,
-                                                      DMLabel label,
+                                                      const Label & label,
                                                       Int val)
 {
     _F_;
