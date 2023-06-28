@@ -97,13 +97,13 @@ public:
     ///
     /// @param field The field number
     /// @param n_comps The number of field components
-    void set_field_components(Int field, Int n_comps);
+    void set_num_field_components(Int field, Int n_comps);
 
     /// Returns the number of field components for the given field
     ///
     /// @param field The field number
     /// @return The number of field components
-    Int get_field_components(Int field) const;
+    Int get_num_field_components(Int field) const;
 
     /// Increment the number of constrained degrees of freedom associated with a given field on a
     /// point

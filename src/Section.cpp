@@ -132,14 +132,14 @@ Section::get_field(Int field) const
 }
 
 void
-Section::set_field_components(Int field, Int n_comps)
+Section::set_num_field_components(Int field, Int n_comps)
 {
     _F_;
     PETSC_CHECK(PetscSectionSetFieldComponents(this->section, field, n_comps));
 }
 
 Int
-Section::get_field_components(Int field) const
+Section::get_num_field_components(Int field) const
 {
     _F_;
     Int n_comps;
