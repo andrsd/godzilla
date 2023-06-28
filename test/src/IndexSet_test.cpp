@@ -17,6 +17,21 @@ TEST(IndexSetTest, create)
     is.destroy();
 }
 
+TEST(IndexSetTest, data)
+{
+    TestApp app;
+
+    IndexSet is = IndexSet::create_general(app.get_comm(), { 3, 5, 1, 8 });
+    is.get_indices();
+    auto data = is.data();
+    EXPECT_THAT(data[0], 3);
+    EXPECT_THAT(data[1], 5);
+    EXPECT_THAT(data[2], 1);
+    EXPECT_THAT(data[3], 8);
+    is.restore_indices();
+    is.destroy();
+}
+
 TEST(IndexSetTest, create_general)
 {
     TestApp app;
