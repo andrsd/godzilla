@@ -40,6 +40,8 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     mesh->create();
     prob->create();
 
+    EXPECT_EQ(prob->get_time_step(), 5.);
+
     prob->run();
 
     auto x = prob->get_solution_vector();

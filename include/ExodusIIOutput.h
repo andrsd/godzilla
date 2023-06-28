@@ -56,8 +56,10 @@ protected:
                                     Int n_elems_in_block = 0,
                                     const Int * cells = nullptr);
     void write_global_variables();
-    void
-    write_block_connectivity(int blk_id, Int n_elems_in_block = 0, const Int * cells = nullptr);
+    void write_block_connectivity(int blk_id,
+                                  DMPolytopeType polytope_type,
+                                  Int n_elems_in_block,
+                                  const Int * cells);
 
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
