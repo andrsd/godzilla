@@ -303,7 +303,11 @@ ExodusIIOutput::write_elements()
         for (Int i = 0; i < n_cells_sets; ++i) {
             auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);
             cells.get_indices();
-            write_block_connectivity((int) cell_set_idx[i], cells.get_size(), cells.data());
+            auto polytope_type = this->mesh->get_cell_type(cells[0]);
+            write_block_connectivity((int) cell_set_idx[i],
+                                     polytope_type,
+                                     cells.get_size(),
+                                     cells.data());
 
             block_names[i] = this->mesh->get_cell_set_name(cell_set_idx[i]);
             cells.restore_indices();
@@ -312,8 +316,17 @@ ExodusIIOutput::write_elements()
         cell_set_idx.restore_indices();
         cell_set_idx.destroy();
     }
-    else
-        write_block_connectivity(SINGLE_BLK_ID);
+    else {
+        auto depth_label = this->mesh->get_depth_label();
+        Int dim = this->mesh->get_dimension();
+        IndexSet cells = depth_label.get_stratum(dim);
+        cells.get_indices();
+        DMPolytopeType polytope_type = this->mesh->get_cell_type(cells[0]);
+        auto n_elems = this->mesh->get_num_cells();
+        write_block_connectivity(SINGLE_BLK_ID, polytope_type, n_elems, cells.data());
+        cells.restore_indices();
+        cells.destroy();
+    }
 
     this->exo->write_block_names(block_names);
 }
@@ -657,32 +670,20 @@ ExodusIIOutput::write_info()
 }
 
 void
-ExodusIIOutput::write_block_connectivity(int blk_id, Int n_elems_in_block, const Int * cells)
+ExodusIIOutput::write_block_connectivity(int blk_id,
+                                         DMPolytopeType polytope_type,
+                                         Int n_elems_in_block,
+                                         const Int * cells)
 {
     _F_;
     DM dm = this->mesh->get_dm();
     Int n_all_elems = this->mesh->get_num_all_cells();
-    UnstructuredMesh::Range elem_range;
-    DMPolytopeType polytope_type;
-
-    if (cells == nullptr) {
-        elem_range = this->mesh->get_cell_range();
-        n_elems_in_block = this->mesh->get_num_cells();
-        polytope_type = this->mesh->get_cell_type(elem_range.get_first());
-    }
-    else
-        polytope_type = this->mesh->get_cell_type(cells[0]);
-
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     const Int * ordering = get_elem_node_ordering(polytope_type);
     std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
     for (Int i = 0, j = 0; i < n_elems_in_block; i++) {
-        Int elem_id;
-        if (cells == nullptr)
-            elem_id = elem_range.get_first() + i;
-        else
-            elem_id = cells[i];
+        Int elem_id = cells[i];
         Int closure_size;
         Int * closure = nullptr;
         PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
