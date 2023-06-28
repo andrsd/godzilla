@@ -132,14 +132,14 @@ Section::get_field(Int field) const
 }
 
 void
-Section::set_field_components(Int field, Int n_comps)
+Section::set_num_field_components(Int field, Int n_comps)
 {
     _F_;
     PETSC_CHECK(PetscSectionSetFieldComponents(this->section, field, n_comps));
 }
 
 Int
-Section::get_field_components(Int field) const
+Section::get_num_field_components(Int field) const
 {
     _F_;
     Int n_comps;
@@ -298,6 +298,38 @@ Section::get_constraint_dof(Int point) const
     Int n_dofs;
     PETSC_CHECK(PetscSectionGetConstraintDof(this->section, point, &n_dofs));
     return n_dofs;
+}
+
+void
+Section::set_constraint_indices(Int point, const std::vector<Int> & indices)
+{
+    _F_;
+    PETSC_CHECK(PetscSectionSetConstraintIndices(this->section, point, indices.data()));
+}
+
+const Int *
+Section::get_constraint_indices(Int point) const
+{
+    _F_;
+    const Int * indices;
+    PETSC_CHECK(PetscSectionGetConstraintIndices(this->section, point, &indices));
+    return indices;
+}
+
+void
+Section::set_field_constraint_indices(Int point, Int field, const std::vector<Int> & indices)
+{
+    _F_;
+    PETSC_CHECK(PetscSectionSetFieldConstraintIndices(this->section, point, field, indices.data()));
+}
+
+const Int *
+Section::get_field_constraint_indices(Int point, Int field) const
+{
+    _F_;
+    const Int * indices;
+    PETSC_CHECK(PetscSectionGetFieldConstraintIndices(this->section, point, field, &indices));
+    return indices;
 }
 
 Section
