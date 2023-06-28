@@ -106,6 +106,7 @@ ExplicitFELinearProblem::check()
 {
     _F_;
     FENonlinearProblem::check();
+    TransientProblemInterface::check(this);
 
     if (!validation::in(this->scheme, { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
         log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', 'ssp-rk-3', 'rk-2' or "

@@ -48,6 +48,8 @@ protected:
     virtual void init();
     /// Create
     virtual void create();
+    /// Check
+    virtual void check(LoggingInterface * li);
     /// Set up monitors
     virtual void set_up_monitors();
     /// Set up time integration scheme
@@ -67,6 +69,8 @@ protected:
 
     /// Problem this interface is part of
     Problem * problem;
+    /// Parameters
+    const Parameters & tpi_params;
     /// PETSc TS object
     TS ts;
     /// Time-stepping adaptor
@@ -75,6 +79,8 @@ protected:
     const Real & start_time;
     /// Simulation end time
     const Real & end_time;
+    /// Number of steps
+    const Int & num_steps;
     /// Time step size
     const Real & dt;
     /// Converged reason
