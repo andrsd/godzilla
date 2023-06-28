@@ -128,6 +128,7 @@ ImplicitFENonlinearProblem::check()
 {
     _F_;
     FENonlinearProblem::check();
+    TransientProblemInterface::check(this);
 
     if (!validation::in(this->scheme, { "beuler", "cn" }))
         log_error("The 'scheme' parameter can be either 'beuler' or 'cn'.");

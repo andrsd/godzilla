@@ -3,6 +3,7 @@
 #include "Problem.h"
 #include "TimeSteppingAdaptor.h"
 #include "TransientProblemInterface.h"
+#include "LoggingInterface.h"
 #include "Output.h"
 #include <cassert>
 #include "petsc/private/tsimpl.h"
@@ -42,7 +43,8 @@ TransientProblemInterface::parameters()
 {
     Parameters params;
     params.add_param<Real>("start_time", 0., "Start time of the simulation");
-    params.add_required_param<Real>("end_time", "Simulation end time");
+    params.add_param<Real>("end_time", "Simulation end time");
+    params.add_param<Int>("num_steps", "Number of steps");
     params.add_required_param<Real>("dt", "Time step size");
     params.add_param<std::map<std::string, std::string>>("ts_adapt", "Time stepping adaptivity");
     return params;
@@ -50,10 +52,12 @@ TransientProblemInterface::parameters()
 
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
+    tpi_params(params),
     ts(nullptr),
     ts_adaptor(nullptr),
     start_time(params.get<Real>("start_time")),
     end_time(params.get<Real>("end_time")),
+    num_steps(params.get<Int>("num_steps")),
     dt(params.get<Real>("dt")),
     converged_reason(TS_CONVERGED_ITERATING)
 {
@@ -127,12 +131,27 @@ TransientProblemInterface::create()
     _F_;
     set_up_time_scheme();
     PETSC_CHECK(TSSetTime(this->ts, this->start_time));
-    PETSC_CHECK(TSSetMaxTime(this->ts, this->end_time));
+    if (this->tpi_params.is_param_valid("end_time"))
+        PETSC_CHECK(TSSetMaxTime(this->ts, this->end_time));
+    if (this->tpi_params.is_param_valid("num_steps"))
+        PETSC_CHECK(TSSetMaxSteps(this->ts, this->num_steps));
     set_time_step(this->dt);
     PETSC_CHECK(TSSetStepNumber(this->ts, this->problem->get_step_num()));
     PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
     if (this->ts_adaptor)
         this->ts_adaptor->create();
+}
+
+void
+TransientProblemInterface::check(LoggingInterface * li)
+{
+    _F_;
+    if (this->tpi_params.is_param_valid("end_time") && this->tpi_params.is_param_valid("num_steps"))
+        li->log_error(
+            "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
+    if (!this->tpi_params.is_param_valid("end_time") &&
+        !this->tpi_params.is_param_valid("num_steps"))
+        li->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 void

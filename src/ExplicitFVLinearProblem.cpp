@@ -73,6 +73,7 @@ ExplicitFVLinearProblem::check()
 {
     _F_;
     NonlinearProblem::check();
+    TransientProblemInterface::check(this);
 
     if (!validation::in(this->scheme, { "euler", "ssp", "rk" }))
         log_error("The 'scheme' parameter can be either 'euler', 'ssp' or 'rk'.");
