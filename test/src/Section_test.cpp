@@ -204,18 +204,28 @@ TEST(SectionTest, ceds)
 {
     Section s;
     s.create(MPI_COMM_WORLD);
-    s.set_num_fields(1);
     s.set_chart(0, 3);
+    s.set_dof(0, 1);
     s.set_constraint_dof(0, 1);
     s.set_dof(1, 2);
+    s.set_dof(2, 2);
     s.set_constraint_dof(2, 1);
     s.add_constraint_dof(2, 1);
     s.set_up();
+    s.set_constraint_indices(0, { 0 });
+    s.set_constraint_indices(2, { 0, 1 });
 
     EXPECT_TRUE(s.has_constraints());
     EXPECT_EQ(s.get_constraint_dof(0), 1);
     EXPECT_EQ(s.get_constraint_dof(1), 0);
     EXPECT_EQ(s.get_constraint_dof(2), 2);
+
+    auto idx0 = s.get_constraint_indices(0);
+    EXPECT_EQ(idx0[0], 0);
+
+    auto idx2 = s.get_constraint_indices(2);
+    EXPECT_EQ(idx2[0], 0);
+    EXPECT_EQ(idx2[1], 1);
 
     s.destroy();
 }
@@ -226,24 +236,34 @@ TEST(SectionTest, field_ceds)
     s.create(MPI_COMM_WORLD);
     s.set_num_fields(2);
     s.set_chart(0, 2);
-    s.set_dof(0, 1);
+    s.set_dof(0, 2);
     s.set_constraint_dof(0, 1);
+    s.set_field_dof(0, 0, 1);
     s.set_field_constraint_dof(0, 0, 1);
     s.set_field_dof(0, 1, 1);
 
-    s.set_dof(1, 1);
-    s.set_constraint_dof(1, 2);
+    s.set_dof(1, 2);
+    s.set_constraint_dof(1, 1);
     s.set_field_dof(1, 0, 1);
-    s.set_field_constraint_dof(1, 1, 1);
+    s.set_field_dof(1, 1, 1);
     s.add_field_constraint_dof(1, 1, 1);
 
     s.set_up();
+
+    s.set_field_constraint_indices(0, 0, { 0 });
+    s.set_field_constraint_indices(1, 1, { 0 });
 
     EXPECT_TRUE(s.has_constraints());
     EXPECT_EQ(s.get_field_constraint_dof(0, 0), 1);
     EXPECT_EQ(s.get_field_dof(0, 1), 1);
     EXPECT_EQ(s.get_field_dof(1, 0), 1);
-    EXPECT_EQ(s.get_field_constraint_dof(1, 1), 2);
+    EXPECT_EQ(s.get_field_constraint_dof(1, 1), 1);
+
+    auto fidx0 = s.get_field_constraint_indices(0, 1);
+    EXPECT_EQ(fidx0[0], 0);
+
+    auto fidx1 = s.get_field_constraint_indices(1, 1);
+    EXPECT_EQ(fidx1[0], 0);
 
     s.destroy();
 }
