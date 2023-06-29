@@ -51,6 +51,14 @@ BurgersEquation::BurgersEquation(const Parameters & parameters) :
     _F_;
 }
 
+void
+BurgersEquation::create()
+{
+    _F_;
+    ExplicitFELinearProblem::create();
+    create_mass_matrix();
+}
+
 const PetscReal &
 BurgersEquation::get_viscosity() const
 {

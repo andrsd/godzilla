@@ -11,6 +11,7 @@ using namespace godzilla;
 class HeatEquationExplicit : public ExplicitFELinearProblem {
 public:
     explicit HeatEquationExplicit(const Parameters & parameters);
+    void create() override;
 
 protected:
     void set_up_fields() override;

@@ -67,6 +67,14 @@ HeatEquationExplicit::HeatEquationExplicit(const Parameters & parameters) :
 }
 
 void
+HeatEquationExplicit::create()
+{
+    _F_;
+    ExplicitFELinearProblem::create();
+    create_mass_matrix();
+}
+
+void
 HeatEquationExplicit::set_up_fields()
 {
     _F_;
