@@ -26,7 +26,8 @@ void
 Matrix::destroy()
 {
     _F_;
-    PETSC_CHECK(MatDestroy(&this->mat));
+    if (this->mat)
+        PETSC_CHECK(MatDestroy(&this->mat));
     this->mat = nullptr;
 }
 
