@@ -21,19 +21,27 @@ public:
     {
     }
 
-    virtual void
+    void
+    create() override
+    {
+        ExplicitFELinearProblem::create();
+        create_mass_matrix();
+    }
+
+    void
     set_up_time_scheme() override
     {
         ExplicitFELinearProblem::set_up_time_scheme();
     }
 
 protected:
-    virtual void
+    void
     set_up_fields() override
     {
         set_fe(0, "u", 1, 1);
     }
-    virtual void set_up_weak_form() override;
+
+    void set_up_weak_form() override;
 };
 
 class TestF1 : public ResidualFunc {
