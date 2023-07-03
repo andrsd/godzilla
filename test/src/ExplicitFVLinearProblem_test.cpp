@@ -58,6 +58,13 @@ public:
     {
     }
 
+    void
+    create() override
+    {
+        ExplicitFVLinearProblem::create();
+        create_mass_matrix();
+    }
+
     virtual void
     set_up_time_scheme() override
     {

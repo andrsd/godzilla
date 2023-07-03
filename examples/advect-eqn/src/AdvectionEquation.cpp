@@ -23,6 +23,14 @@ AdvectionEquation::AdvectionEquation(const Parameters & parameters) :
 }
 
 void
+AdvectionEquation::create()
+{
+    _F_;
+    ExplicitFVLinearProblem::create();
+    create_mass_matrix();
+}
+
+void
 AdvectionEquation::set_up_fields()
 {
     _F_;
