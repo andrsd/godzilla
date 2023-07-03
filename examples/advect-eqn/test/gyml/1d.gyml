@@ -23,7 +23,7 @@ problem:
   type: AdvectionEquation
   dt: 1e-3
   end_time: 5e-3
-  scheme: ssp
+  scheme: ssp-rk-2
 
 output:
   out:
