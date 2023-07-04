@@ -9,6 +9,7 @@
 #include "BoundaryCondition.h"
 #include "DiscreteProblemInterface.h"
 #include "FEProblemInterface.h"
+#include "FVProblemInterface.h"
 #include "TransientProblemInterface.h"
 #include "TimeSteppingAdaptor.h"
 #include "Postprocessor.h"
@@ -122,20 +123,22 @@ GYMLFile::build_auxiliary_fields()
 
     lprintf(9, "- auxiliary fields");
     auto auxs_node = get_block(this->root, "auxs");
-    auto * fepface = dynamic_cast<FEProblemInterface *>(this->problem);
-    if (fepface == nullptr)
-        log_error("Supplied problem type '{}' does not support auxiliary fields.",
-                  this->problem->get_type());
-    else {
+    auto * fepi = dynamic_cast<FEProblemInterface *>(this->problem);
+    auto * fvpi = dynamic_cast<FVProblemInterface *>(this->problem);
+    if (fepi != nullptr || fvpi != nullptr) {
+        auto * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
         for (const auto & it : auxs_node.values()) {
             Block blk = get_block(auxs_node, it.first.as<std::string>());
             Parameters * params = build_params(blk);
-            params->set<FEProblemInterface *>("_fepi") = fepface;
+            params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
             auto aux = Factory::create<AuxiliaryField>(class_name, blk.name(), params);
-            fepface->add_auxiliary_field(aux);
+            dpi->add_auxiliary_field(aux);
         }
     }
+    else
+        log_error("Supplied problem type '{}' does not support auxiliary fields.",
+                  this->problem->get_type());
 }
 
 void

@@ -16,7 +16,6 @@
 namespace godzilla {
 
 class Problem;
-class AuxiliaryField;
 class WeakForm;
 class ValueFunctional;
 
@@ -56,18 +55,6 @@ public:
     const Vector & get_aux_solution_vector_local() const override;
     virtual WeakForm * get_weak_form() const;
 
-    /// Check if we have an auxiliary object with a specified name
-    ///
-    /// @param name The name of the object
-    /// @return True if the object exists, otherwise false
-    virtual bool has_aux(const std::string & name) const;
-
-    /// Get auxiliary object with a specified name
-    ///
-    /// @param name The name of the object
-    /// @return Pointer to the auxiliary object
-    virtual AuxiliaryField * get_aux(const std::string & name) const;
-
     /// Adds a volumetric field
     ///
     /// @param name The name of the field
@@ -99,11 +86,6 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     virtual void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
-
-    /// Add auxiliary field
-    ///
-    /// @param aux Auxiliary field object to add
-    virtual void add_auxiliary_field(AuxiliaryField * aux);
 
     virtual const Int & get_spatial_dimension() const;
 
@@ -171,13 +153,6 @@ public:
                                                   Real t,
                                                   Real u_tshift,
                                                   Scalar elem_mat[]);
-
-    template <Int N>
-    void
-    set_aux_closure(Vector & v, Int point, const DenseVector<Real, N> & vec, InsertMode mode) const;
-
-    template <Int N>
-    DenseVector<Real, N> get_aux_closure(const Vector & v, Int point) const;
 
 protected:
     struct FieldInfo;
@@ -360,29 +335,11 @@ protected:
     /// Map from auxiliary field name to auxiliary field ID
     std::map<std::string, Int> aux_fields_by_name;
 
-    /// List of auxiliary field objects
-    std::vector<AuxiliaryField *> auxs;
-
-    /// Map from aux object name to the aux object
-    std::map<std::string, AuxiliaryField *> auxs_by_name;
-
-    /// Map from region to list of auxiliary field objects
-    std::map<std::string, std::vector<AuxiliaryField *>> auxs_by_region;
-
-    /// DM for auxiliary fields
-    DM dm_aux;
-
-    /// Auxiliary section
-    Section section_aux;
-
     /// Vector for auxiliary fields
     Vector a;
 
     /// Local solution vector
     Vector sln;
-
-    /// Object that manages a discrete system for aux variables
-    PetscDS ds_aux;
 
     /// Weak formulation
     WeakForm * wf;
@@ -420,27 +377,5 @@ protected:
     /// associated with the PetscFormKey are evaluated
     std::map<PetscFormKey, std::vector<const ValueFunctional *>> sorted_jac_functionals;
 };
-
-template <Int N>
-DenseVector<Real, N>
-FEProblemInterface::get_aux_closure(const Vector & v, Int point) const
-{
-    Int sz = N;
-    DenseVector<Real, N> vec;
-    Real * data = vec.get_data();
-    PETSC_CHECK(DMPlexVecGetClosure(this->dm_aux, this->section_aux, v, point, &sz, &data));
-    return vec;
-}
-
-template <Int N>
-void
-FEProblemInterface::set_aux_closure(Vector & v,
-                                    Int point,
-                                    const DenseVector<Real, N> & vec,
-                                    InsertMode mode) const
-{
-    PETSC_CHECK(
-        DMPlexVecSetClosure(this->dm_aux, this->section_aux, v, point, vec.get_data(), mode));
-}
 
 } // namespace godzilla

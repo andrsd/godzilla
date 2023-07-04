@@ -18,6 +18,7 @@ class UnstructuredMesh;
 class Problem;
 class InitialCondition;
 class BoundaryCondition;
+class AuxiliaryField;
 class EssentialBC;
 class NaturalBC;
 
@@ -26,7 +27,7 @@ class NaturalBC;
 class DiscreteProblemInterface {
 public:
     DiscreteProblemInterface(Problem * problem, const Parameters & params);
-    virtual ~DiscreteProblemInterface() = default;
+    virtual ~DiscreteProblemInterface();
 
     /// Get the unstructured mesh
     ///
@@ -162,6 +163,23 @@ public:
     /// @param bc Boundary condition object to add
     virtual void add_boundary_condition(BoundaryCondition * bc);
 
+    /// Add auxiliary field
+    ///
+    /// @param aux Auxiliary field object to add
+    virtual void add_auxiliary_field(AuxiliaryField * aux);
+
+    /// Check if we have an auxiliary object with a specified name
+    ///
+    /// @param name The name of the object
+    /// @return True if the object exists, otherwise false
+    virtual bool has_aux(const std::string & name) const;
+
+    /// Get auxiliary object with a specified name
+    ///
+    /// @param name The name of the object
+    /// @return Pointer to the auxiliary object
+    virtual AuxiliaryField * get_aux(const std::string & name) const;
+
     /// Return the offset into an array or local Vec for the dof associated with the given point
     ///
     /// @param point Point
@@ -230,6 +248,13 @@ public:
     template <Int N>
     DenseVector<Real, N> get_closure(const Vector & v, Int point) const;
 
+    template <Int N>
+    void
+    set_aux_closure(Vector & v, Int point, const DenseVector<Real, N> & vec, InsertMode mode) const;
+
+    template <Int N>
+    DenseVector<Real, N> get_aux_closure(const Vector & v, Int point) const;
+
 protected:
     virtual void init();
     virtual void create();
@@ -263,6 +288,9 @@ protected:
     /// Section
     Section section;
 
+    /// Object that manages a discrete system
+    PetscDS ds;
+
     /// Initial conditions in the problem
     std::vector<InitialCondition *> ics;
 
@@ -275,8 +303,23 @@ protected:
     /// List of natural boundary conditions
     std::vector<NaturalBC *> natural_bcs;
 
-    /// Object that manages a discrete system
-    PetscDS ds;
+    /// List of auxiliary field objects
+    std::vector<AuxiliaryField *> auxs;
+
+    /// Map from aux object name to the aux object
+    std::map<std::string, AuxiliaryField *> auxs_by_name;
+
+    /// Map from region to list of auxiliary field objects
+    std::map<std::string, std::vector<AuxiliaryField *>> auxs_by_region;
+
+    /// DM for auxiliary fields
+    DM dm_aux;
+
+    /// Auxiliary section
+    Section section_aux;
+
+    /// Object that manages a discrete system for aux variables
+    PetscDS ds_aux;
 };
 
 template <Int N>
@@ -327,6 +370,28 @@ DiscreteProblemInterface::get_closure(const Vector & v, Int point) const
     Real * data = vec.get_data();
     PETSC_CHECK(DMPlexVecGetClosure(dm, this->section, v, point, &sz, &data));
     return vec;
+}
+
+template <Int N>
+DenseVector<Real, N>
+DiscreteProblemInterface::get_aux_closure(const Vector & v, Int point) const
+{
+    Int sz = N;
+    DenseVector<Real, N> vec;
+    Real * data = vec.get_data();
+    PETSC_CHECK(DMPlexVecGetClosure(this->dm_aux, this->section_aux, v, point, &sz, &data));
+    return vec;
+}
+
+template <Int N>
+void
+DiscreteProblemInterface::set_aux_closure(Vector & v,
+                                          Int point,
+                                          const DenseVector<Real, N> & vec,
+                                          InsertMode mode) const
+{
+    PETSC_CHECK(
+        DMPlexVecSetClosure(this->dm_aux, this->section_aux, v, point, vec.get_data(), mode));
 }
 
 } // namespace godzilla

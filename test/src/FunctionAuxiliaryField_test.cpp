@@ -24,7 +24,7 @@ TEST(FunctionAuxiliaryFieldTest, create)
     Parameters aux_params = FunctionAuxiliaryField::parameters();
     aux_params.set<const App *>("_app") = &app;
     aux_params.set<std::string>("_name") = "aux1";
-    aux_params.set<FEProblemInterface *>("_fepi") = &prob;
+    aux_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     aux_params.set<std::vector<std::string>>("value") = { "1234" };
     FunctionAuxiliaryField aux(aux_params);
     prob.add_auxiliary_field(&aux);
@@ -63,7 +63,7 @@ TEST(FunctionAuxiliaryFieldTest, evaluate)
     Parameters aux_params = FunctionAuxiliaryField::parameters();
     aux_params.set<const App *>("_app") = &app;
     aux_params.set<std::string>("_name") = "aux1";
-    aux_params.set<FEProblemInterface *>("_fepi") = &prob;
+    aux_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     aux_params.set<std::vector<std::string>>("value") = { "1234" };
     FunctionAuxiliaryField aux(aux_params);
     prob.add_auxiliary_field(&aux);

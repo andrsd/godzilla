@@ -6,6 +6,7 @@
 #include "Logger.h"
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
+#include "AuxiliaryField.h"
 #include "NaturalBC.h"
 #include "EssentialBC.h"
 #include <cassert>
@@ -16,8 +17,16 @@ DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Para
     problem(problem),
     unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
     logger(params.get<const App *>("_app")->get_logger()),
-    ds(nullptr)
+    ds(nullptr),
+    dm_aux(nullptr),
+    ds_aux(nullptr)
 {
+}
+
+DiscreteProblemInterface::~DiscreteProblemInterface()
+{
+    _F_;
+    DMDestroy(&this->dm_aux);
 }
 
 const UnstructuredMesh *
@@ -48,6 +57,39 @@ DiscreteProblemInterface::add_boundary_condition(BoundaryCondition * bc)
 }
 
 void
+DiscreteProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
+{
+    _F_;
+    const std::string & name = aux->get_name();
+    auto it = this->auxs_by_name.find(name);
+    if (it == this->auxs_by_name.end()) {
+        this->auxs.push_back(aux);
+        this->auxs_by_name[name] = aux;
+    }
+    else
+        error("Cannot add auxiliary object '{}'. Name already taken.", name);
+}
+
+bool
+DiscreteProblemInterface::has_aux(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->auxs_by_name.find(name);
+    return it != this->auxs_by_name.end();
+}
+
+AuxiliaryField *
+DiscreteProblemInterface::get_aux(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->auxs_by_name.find(name);
+    if (it != this->auxs_by_name.end())
+        return it->second;
+    else
+        return nullptr;
+}
+
+void
 DiscreteProblemInterface::init()
 {
     _F_;
@@ -68,6 +110,8 @@ DiscreteProblemInterface::create()
         ic->create();
     for (auto & bc : this->bcs)
         bc->create();
+    for (auto & aux : this->auxs)
+        aux->create();
 }
 
 void

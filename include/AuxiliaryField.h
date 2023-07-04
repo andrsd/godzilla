@@ -8,7 +8,7 @@
 
 namespace godzilla {
 
-class FEProblemInterface;
+class DiscreteProblemInterface;
 
 /// Base class for auxiliary fields
 ///
@@ -42,7 +42,7 @@ public:
 
 protected:
     /// FE problem this object is part of
-    const FEProblemInterface * fepi;
+    const DiscreteProblemInterface * dpi;
 
     /// Field name
     const std::string & field;
