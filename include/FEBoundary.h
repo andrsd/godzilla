@@ -10,6 +10,8 @@
 #include "Array2D.h"
 #include "FEGeometry.h"
 #include "FEVolumes.h"
+#include <set>
+#include <vector>
 
 namespace godzilla {
 
