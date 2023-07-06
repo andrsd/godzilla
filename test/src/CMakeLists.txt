@@ -24,7 +24,16 @@ add_executable(${PROJECT_NAME}
     ExplicitFELinearProblem_test.cpp
     ExplicitFVLinearProblem_test.cpp
     Factory_test.cpp
+    FEBoundary1D_test.cpp
+    FEBoundary2D_test.cpp
+    FEBoundary3D_test.cpp
+    FEIntegration_test.cpp
+    FEMatrices_test.cpp
     FENonlinearProblem_test.cpp
+    FEGeometry_test.cpp
+    FEOps_test.cpp
+    FEShapeFns_test.cpp
+    FEVolumes_test.cpp
     FunctionAuxiliaryField_test.cpp
     FunctionEvaluator_test.cpp
     FunctionIC_test.cpp
@@ -68,6 +77,7 @@ add_executable(${PROJECT_NAME}
     Section_test.cpp
     Terminal_test.cpp
     TimeSteppingAdaptor_test.cpp
+    Types_test.cpp
     UnstructuredMesh_test.cpp
     Utils_test.cpp
     Validation_test.cpp

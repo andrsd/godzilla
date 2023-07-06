@@ -57,6 +57,39 @@ typedef PetscErrorCode PetscNaturalRiemannBCFunc(Real time,
                                                  Scalar * xG,
                                                  void * ctx);
 
+//
+
+enum CoordinateType { CARTESIAN, SPHERICAL, AXISYMMETRIC };
+
+enum ElementType { EDGE2, TRI3, QUAD4, TET4, HEX8 };
+
+/// Return the text representation of an element type
+///
+/// @param type Element type
+/// @return Text representation of an element type
+std::string get_element_type_str(const ElementType & type);
+
+/// Return number of nodes given FE type
+///
+/// @param type Element type
+/// @return Number of nodes per element
+constexpr Int
+get_num_element_nodes(ElementType type)
+{
+    switch (type) {
+    case EDGE2:
+        return 2;
+    case TRI3:
+        return 3;
+    case QUAD4:
+        return 4;
+    case TET4:
+        return 4;
+    case HEX8:
+        return 8;
+    }
+}
+
 } // namespace godzilla
 
 namespace std {
