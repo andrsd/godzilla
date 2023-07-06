@@ -121,7 +121,7 @@ private:
             Int ie = support[0];
             auto volume = (*this->fe_volume)(ie);
             auto elem_conn = this->mesh->get_cell_connectivity(ie);
-            int local_idx = get_local_face_index(elem_conn, face_conn);
+            Int local_idx = get_local_face_index(elem_conn, face_conn);
             auto edge_length = this->length(i);
             auto grad = (*this->grad_phi)(ie) (local_idx);
             auto normal = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
