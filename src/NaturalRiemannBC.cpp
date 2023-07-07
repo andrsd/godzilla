@@ -58,6 +58,30 @@ NaturalRiemannBC::create()
             log_error("Use the 'field' parameter to assign this boundary condition to an existing "
                       "field.");
     }
+
+    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    this->label = mesh->get_face_set_label(this->boundary);
+    if (!this->label.is_null()) {
+        auto is = this->label.get_values();
+        is.get_indices();
+        this->ids = is.to_std_vector();
+        is.restore_indices();
+        is.destroy();
+    }
+}
+
+const Label &
+NaturalRiemannBC::get_label() const
+{
+    _F_;
+    return this->label;
+}
+
+const std::vector<Int> &
+NaturalRiemannBC::get_ids() const
+{
+    _F_;
+    return this->ids;
 }
 
 Int
@@ -72,20 +96,14 @@ NaturalRiemannBC::set_up()
 {
     _F_;
     const UnstructuredMesh * mesh = this->dpi->get_mesh();
-    auto label = mesh->get_face_set_label(this->boundary);
-    auto is = label.get_values();
-    is.get_indices();
-    auto ids = is.to_std_vector();
     this->dpi->add_boundary_natural_riemann(get_name(),
-                                            label,
-                                            ids,
+                                            this->label,
+                                            this->ids,
                                             this->fid,
                                             get_components(),
                                             natural_riemann_boundary_condition_function,
                                             nullptr,
                                             this);
-    is.restore_indices();
-    is.destroy();
 }
 
 } // namespace godzilla
