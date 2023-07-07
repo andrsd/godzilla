@@ -23,6 +23,8 @@ target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
         godzilla
+    PRIVATE
+        ${PETSC_LIBRARY}
 )
 
 if (DEFINED ENV{CONDA_PREFIX})
