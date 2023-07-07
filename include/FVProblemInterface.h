@@ -71,27 +71,6 @@ protected:
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
-    /// Compute flux
-    ///
-    /// @param dim Spatial dimension
-    /// @param nf Number of fields
-    /// @param x The coordinates at a point on the interface
-    /// @param n The normal vector to the interface
-    /// @param uL The state vector to the left of the interface
-    /// @param uR The state vector to the right of the interface
-    /// @param n_consts Number of constant parameters
-    /// @param constants Constant parameters
-    /// @param flux Computed flux through the interface
-    virtual void compute_flux(Int dim,
-                              Int nf,
-                              const Real x[],
-                              const Real n[],
-                              const Scalar uL[],
-                              const Scalar uR[],
-                              Int n_consts,
-                              const Scalar constants[],
-                              Scalar flux[]) = 0;
-
     /// Field information
     struct FieldInfo {
         /// The name of the field

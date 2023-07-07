@@ -10,23 +10,6 @@ namespace godzilla {
 
 const std::string FVProblemInterface::empty_name;
 
-void
-__compute_flux(Int dim,
-               Int nf,
-               const Real x[],
-               const Real n[],
-               const Scalar uL[],
-               const Scalar uR[],
-               Int n_consts,
-               const Scalar constants[],
-               Scalar flux[],
-               void * ctx)
-{
-    _F_;
-    auto * fvpi = static_cast<FVProblemInterface *>(ctx);
-    fvpi->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
-}
-
 FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
     fvm(nullptr)
@@ -305,8 +288,6 @@ FVProblemInterface::set_up_ds()
     PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm));
     PETSC_CHECK(DMCreateDS(dm));
     PETSC_CHECK(DMGetDS(dm, &this->ds));
-    PETSC_CHECK(PetscDSSetRiemannSolver(this->ds, 0, __compute_flux));
-    PETSC_CHECK(PetscDSSetContext(this->ds, 0, this));
 }
 
 void

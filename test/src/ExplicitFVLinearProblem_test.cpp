@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
 #include "CallStack.h"
 #include "LineMesh.h"
 #include "NaturalRiemannBC.h"
@@ -50,6 +49,19 @@ public:
 };
 
 //
+
+class TestExplicitFVLinearProblem;
+
+void compute_flux(Int dim,
+                  Int nf,
+                  const Real x[],
+                  const Real n[],
+                  const Scalar uL[],
+                  const Scalar uR[],
+                  Int n_consts,
+                  const Scalar constants[],
+                  Scalar flux[],
+                  void * ctx);
 
 class TestExplicitFVLinearProblem : public ExplicitFVLinearProblem {
 public:
@@ -102,14 +114,15 @@ public:
         ExplicitFVLinearProblem::add_boundary_natural(name, label, ids, field, components, context);
     }
 
-protected:
-    virtual void
-    set_up_fields() override
+    void
+    set_up_ds() override
     {
-        add_field(0, "u", 1);
+        ExplicitFVLinearProblem::set_up_ds();
+        PETSC_CHECK(PetscDSSetRiemannSolver(this->ds, 0, ::compute_flux));
+        PETSC_CHECK(PetscDSSetContext(this->ds, 0, this));
     }
 
-    virtual void
+    void
     compute_flux(Int dim,
                  Int nf,
                  const Real x[],
@@ -118,7 +131,7 @@ protected:
                  const Scalar uR[],
                  Int n_consts,
                  const Scalar constants[],
-                 Scalar flux[]) override
+                 Scalar flux[])
     {
         _F_;
         Real wind[] = { 0.5 };
@@ -126,7 +139,31 @@ protected:
         wn += wind[0] * n[0];
         flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
     }
+
+protected:
+    virtual void
+    set_up_fields() override
+    {
+        add_field(0, "u", 1);
+    }
 };
+
+void
+compute_flux(Int dim,
+             Int nf,
+             const Real x[],
+             const Real n[],
+             const Scalar uL[],
+             const Scalar uR[],
+             Int n_consts,
+             const Scalar constants[],
+             Scalar flux[],
+             void * ctx)
+{
+    _F_;
+    auto * p = static_cast<TestExplicitFVLinearProblem *>(ctx);
+    p->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
+}
 
 } // namespace
 

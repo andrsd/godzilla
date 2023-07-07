@@ -50,19 +50,6 @@ protected:
     {
         add_field(0, "u", 1);
     }
-
-    virtual void
-    compute_flux(Int dim,
-                 Int nf,
-                 const Real x[],
-                 const Real n[],
-                 const Scalar uL[],
-                 const Scalar uR[],
-                 Int n_consts,
-                 const Scalar constants[],
-                 Scalar flux[]) override
-    {
-    }
 };
 
 } // namespace

@@ -9,6 +9,27 @@ REGISTER_OBJECT(AdvectionEquation);
 
 ///
 
+namespace {
+
+void
+compute_flux(Int dim,
+             Int nf,
+             const Real x[],
+             const Real n[],
+             const Scalar uL[],
+             const Scalar uR[],
+             Int n_consts,
+             const Scalar constants[],
+             Scalar flux[],
+             void * ctx)
+{
+    _F_;
+    auto * ae = static_cast<AdvectionEquation *>(ctx);
+    ae->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
+}
+
+} // namespace
+
 Parameters
 AdvectionEquation::parameters()
 {
@@ -35,6 +56,15 @@ AdvectionEquation::set_up_fields()
 {
     _F_;
     add_field(0, "u", 1);
+}
+
+void
+AdvectionEquation::set_up_ds()
+{
+    _F_;
+    ExplicitFVLinearProblem::set_up_ds();
+    PETSC_CHECK(PetscDSSetRiemannSolver(this->ds, 0, ::compute_flux));
+    PETSC_CHECK(PetscDSSetContext(this->ds, 0, this));
 }
 
 void
