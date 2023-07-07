@@ -1,11 +1,11 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
 #include "LineMesh.h"
 #include "NaturalRiemannBC.h"
 #include "ExplicitFVLinearProblem.h"
 #include "TestApp.h"
 
 using namespace godzilla;
+using namespace testing;
 
 namespace {
 
@@ -95,6 +95,10 @@ TEST(NaturalRiemannBCTest, api)
     mesh.create();
     prob.create();
 
-    EXPECT_THAT(bc.get_components(), testing::ElementsAre(0));
+    EXPECT_THAT(bc.get_components(), ElementsAre(0));
     EXPECT_EQ(bc.get_field_id(), 0);
+    EXPECT_THAT(bc.get_ids(), ElementsAre(1));
+
+    Label left = mesh.get_label("left");
+    EXPECT_EQ(bc.get_label(), left);
 }
