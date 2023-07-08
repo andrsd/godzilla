@@ -234,23 +234,31 @@ public:
                                               void * context) const;
 
     template <Int N>
-    void
-    set_closure(Vector & v, Int point, const DenseVector<Real, N> & vec, InsertMode mode) const;
+    void set_closure(const Vector & v,
+                     Int point,
+                     const DenseVector<Real, N> & vec,
+                     InsertMode mode) const;
 
     template <Int N>
-    void
-    set_closure(Matrix & A, Int point, const DenseMatrix<Real, N> & mat, InsertMode mode) const;
+    void set_closure(const Matrix & A,
+                     Int point,
+                     const DenseMatrix<Real, N> & mat,
+                     InsertMode mode) const;
 
     template <Int N>
-    void
-    set_closure(Matrix & A, Int point, const DenseMatrixSymm<Real, N> & mat, InsertMode mode) const;
+    void set_closure(const Matrix & A,
+                     Int point,
+                     const DenseMatrixSymm<Real, N> & mat,
+                     InsertMode mode) const;
 
     template <Int N>
     DenseVector<Real, N> get_closure(const Vector & v, Int point) const;
 
     template <Int N>
-    void
-    set_aux_closure(Vector & v, Int point, const DenseVector<Real, N> & vec, InsertMode mode) const;
+    void set_aux_closure(const Vector & v,
+                         Int point,
+                         const DenseVector<Real, N> & vec,
+                         InsertMode mode) const;
 
     template <Int N>
     DenseVector<Real, N> get_aux_closure(const Vector & v, Int point) const;
@@ -324,7 +332,7 @@ protected:
 
 template <Int N>
 void
-DiscreteProblemInterface::set_closure(Vector & v,
+DiscreteProblemInterface::set_closure(const Vector & v,
                                       Int point,
                                       const DenseVector<Real, N> & vec,
                                       InsertMode mode) const
@@ -335,7 +343,7 @@ DiscreteProblemInterface::set_closure(Vector & v,
 
 template <Int N>
 void
-DiscreteProblemInterface::set_closure(Matrix & A,
+DiscreteProblemInterface::set_closure(const Matrix & A,
                                       Int point,
                                       const DenseMatrix<Real, N> & mat,
                                       InsertMode mode) const
@@ -348,7 +356,7 @@ DiscreteProblemInterface::set_closure(Matrix & A,
 
 template <Int N>
 void
-DiscreteProblemInterface::set_closure(Matrix & A,
+DiscreteProblemInterface::set_closure(const Matrix & A,
                                       Int point,
                                       const DenseMatrixSymm<Real, N> & mat,
                                       InsertMode mode) const
@@ -385,7 +393,7 @@ DiscreteProblemInterface::get_aux_closure(const Vector & v, Int point) const
 
 template <Int N>
 void
-DiscreteProblemInterface::set_aux_closure(Vector & v,
+DiscreteProblemInterface::set_aux_closure(const Vector & v,
                                           Int point,
                                           const DenseVector<Real, N> & vec,
                                           InsertMode mode) const
