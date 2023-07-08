@@ -165,6 +165,21 @@ UnstructuredMesh::get_vertex_range() const
 }
 
 Int
+UnstructuredMesh::get_num_faces() const
+{
+    _F_;
+    return get_face_range().size();
+}
+
+UnstructuredMesh::Range
+UnstructuredMesh::get_face_range() const
+{
+    Int first, last;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 1, &first, &last));
+    return { first, last };
+}
+
+Int
 UnstructuredMesh::get_num_cells() const
 {
     _F_;
@@ -520,6 +535,22 @@ UnstructuredMesh::vertex_end() const
 {
     Int idx;
     PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, nullptr, &idx));
+    return Iterator(idx);
+}
+
+UnstructuredMesh::Iterator
+UnstructuredMesh::face_begin() const
+{
+    Int idx;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 1, &idx, nullptr));
+    return Iterator(idx);
+}
+
+UnstructuredMesh::Iterator
+UnstructuredMesh::face_end() const
+{
+    Int idx;
+    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 1, nullptr, &idx));
     return Iterator(idx);
 }
 
