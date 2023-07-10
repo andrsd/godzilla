@@ -474,6 +474,7 @@ ExodusIIOutput::write_all_variable_names()
     this->nodal_var_fids.clear();
     this->nodal_aux_var_fids.clear();
     this->elem_var_fids.clear();
+    this->elem_aux_var_fids.clear();
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
     for (auto & name : this->field_var_names) {
@@ -492,7 +493,8 @@ ExodusIIOutput::write_all_variable_names()
         Int fid = this->dpi->get_aux_field_id(name);
         Int order = this->dpi->get_aux_field_order(fid);
         if (order == 0) {
-            error("Auxiliary elemental fields are not supported yet");
+            add_aux_var_names(fid, elem_var_names);
+            this->elem_aux_var_fids.push_back(fid);
         }
         else {
             add_aux_var_names(fid, nodal_var_names);
@@ -577,10 +579,6 @@ void
 ExodusIIOutput::write_elem_variables()
 {
     _F_;
-    auto sln = this->dpi->get_solution_vector_local();
-
-    const Scalar * sln_vals = sln.get_array_read();
-
     Int n_cells_sets = this->mesh->get_num_cell_sets();
     if (n_cells_sets > 1) {
         auto cell_sets_label = this->mesh->get_label("Cell Sets");
@@ -588,26 +586,18 @@ ExodusIIOutput::write_elem_variables()
         cell_set_idx.get_indices();
         for (Int i = 0; i < n_cells_sets; ++i) {
             auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);
-            write_block_elem_variables((int) cell_set_idx[i],
-                                       sln_vals,
-                                       cells.get_size(),
-                                       cells.data());
+            write_block_elem_variables((int) cell_set_idx[i], cells.get_size(), cells.data());
             cells.destroy();
         }
         cell_set_idx.restore_indices();
         cell_set_idx.destroy();
     }
     else
-        write_block_elem_variables(SINGLE_BLK_ID, sln_vals);
-
-    sln.restore_array_read(sln_vals);
+        write_block_elem_variables(SINGLE_BLK_ID);
 }
 
 void
-ExodusIIOutput::write_block_elem_variables(int blk_id,
-                                           const Scalar * sln,
-                                           Int n_elems_in_block,
-                                           const Int * cells)
+ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, const Int * cells)
 {
     _F_;
     UnstructuredMesh::Range elem_range;
@@ -615,6 +605,12 @@ ExodusIIOutput::write_block_elem_variables(int blk_id,
         elem_range = this->mesh->get_cell_range();
         n_elems_in_block = elem_range.size();
     }
+
+    auto sln = this->dpi->get_solution_vector_local();
+    const Scalar * sln_vals = sln.get_array_read();
+
+    auto aux_sln = this->dpi->get_aux_solution_vector_local();
+    const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
 
     for (Int i = 0; i < n_elems_in_block; i++) {
         Int elem_id;
@@ -633,10 +629,28 @@ ExodusIIOutput::write_block_elem_variables(int blk_id,
                                                   exo_var_id,
                                                   blk_id,
                                                   exo_idx,
-                                                  sln[offset + c]);
+                                                  sln_vals[offset + c]);
+            }
+        }
+        if (aux_sln_vals) {
+            for (auto & fid : this->elem_aux_var_fids) {
+                Int offset = this->dpi->get_aux_field_dof(elem_id, fid);
+                Int nc = this->dpi->get_aux_field_num_components(fid);
+                for (Int c = 0; c < nc; c++, exo_var_id++) {
+                    int exo_idx = (int) (i + 1);
+                    this->exo->write_partial_elem_var(this->step_num,
+                                                      exo_var_id,
+                                                      blk_id,
+                                                      exo_idx,
+                                                      aux_sln_vals[offset + c]);
+                }
             }
         }
     }
+
+    if (aux_sln)
+        aux_sln.restore_array_read(aux_sln_vals);
+    sln.restore_array_read(sln_vals);
 }
 
 void
