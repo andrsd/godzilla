@@ -77,6 +77,11 @@ public:
     /// @param is The stratum points
     void set_stratum(Int value, const IndexSet & is) const;
 
+    /// View the label
+    ///
+    /// @param viewer The PETSc viewer
+    void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
+
     /// typecast operator so we can use our class directly with PETSc API
     operator DMLabel() const;
 

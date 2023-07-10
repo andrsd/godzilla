@@ -118,6 +118,13 @@ Label::set_stratum(Int value, const IndexSet & is) const
     PETSC_CHECK(DMLabelSetStratumIS(this->label, value, is));
 }
 
+void
+Label::view(PetscViewer viewer) const
+{
+    _F_;
+    PETSC_CHECK(DMLabelView(this->label, viewer));
+}
+
 Label::operator DMLabel() const
 {
     _F_;
