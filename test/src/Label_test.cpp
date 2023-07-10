@@ -97,3 +97,24 @@ TEST(Label, get_stratum)
     l.destroy();
     is.destroy();
 }
+
+TEST(Label, view)
+{
+    testing::internal::CaptureStdout();
+
+    TestApp app;
+    Label l;
+    l.create(app.get_comm(), "name");
+    l.set_value(1, 101);
+    l.set_value(3, 101);
+    l.set_value(4, 102);
+    l.set_value(7, 103);
+    l.view();
+    l.destroy();
+
+    auto output = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(output, testing::HasSubstr("[0]: 1 (101)"));
+    EXPECT_THAT(output, testing::HasSubstr("[0]: 3 (101)"));
+    EXPECT_THAT(output, testing::HasSubstr("[0]: 4 (102)"));
+    EXPECT_THAT(output, testing::HasSubstr("[0]: 7 (103)"));
+}
