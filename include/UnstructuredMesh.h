@@ -62,6 +62,9 @@ public:
     Iterator vertex_begin() const;
     Iterator vertex_end() const;
 
+    Iterator face_begin() const;
+    Iterator face_end() const;
+
     Iterator cell_begin() const;
     Iterator cell_end() const;
 
@@ -162,6 +165,14 @@ public:
     ///
     /// @return Range of vertex indices
     Range get_vertex_range() const;
+
+    /// Return the number of mesh faces
+    NO_DISCARD virtual Int get_num_faces() const;
+
+    /// Get range of face indices
+    ///
+    /// @return Range of face indices
+    Range get_face_range() const;
 
     /// Return the number of mesh cells (interior)
     ///
