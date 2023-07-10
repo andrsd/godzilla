@@ -54,14 +54,20 @@ public:
 
 class TestUnstructuredMesh3D : public UnstructuredMesh {
 public:
-    explicit TestUnstructuredMesh3D(const Parameters & params) : UnstructuredMesh(params) {}
+    explicit TestUnstructuredMesh3D(const Parameters & params) :
+        UnstructuredMesh(params),
+        nx(get_param<Int>("nx")),
+        ny(get_param<Int>("ny")),
+        nz(get_param<Int>("nz"))
+    {
+    }
 
     void
     create_dm()
     {
         Real lower[3] = { 0, 0, 0 };
         Real upper[3] = { 1, 1, 1 };
-        Int faces[3] = { 1, 1, 1 };
+        Int faces[3] = { this->nx, this->ny, this->nz };
         DMBoundaryType periodicity[3] = { DM_BOUNDARY_GHOSTED,
                                           DM_BOUNDARY_GHOSTED,
                                           DM_BOUNDARY_GHOSTED };
@@ -87,6 +93,10 @@ public:
         for (auto it : face_set_names)
             set_face_set_name(it.first, it.second);
     }
+
+    const Int & nx;
+    const Int & ny;
+    const Int & nz;
 };
 
 } // namespace
@@ -314,23 +324,33 @@ TEST(UnstructuredMeshTest, ranges)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::parameters();
+    Parameters params = TestUnstructuredMesh3D::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
-    TestUnstructuredMesh mesh(params);
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
     mesh.set_partition_overlap(1);
     mesh.create();
     mesh.construct_ghost_cells();
 
-    EXPECT_EQ(*mesh.vertex_begin(), 4);
-    EXPECT_EQ(*mesh.vertex_end(), 7);
+    EXPECT_EQ(*mesh.vertex_begin(), 12);
+    EXPECT_EQ(*mesh.vertex_end(), 24);
 
     auto vtx_range = mesh.get_vertex_range();
-    EXPECT_EQ(vtx_range.get_first(), 4);
-    EXPECT_EQ(vtx_range.get_last(), 7);
+    EXPECT_EQ(vtx_range.get_first(), 12);
+    EXPECT_EQ(vtx_range.get_last(), 24);
+
+    EXPECT_EQ(*mesh.face_begin(), 24);
+    EXPECT_EQ(*mesh.face_end(), 35);
+
+    auto face_range = mesh.get_face_range();
+    EXPECT_EQ(face_range.get_first(), 24);
+    EXPECT_EQ(face_range.get_last(), 35);
 
     EXPECT_EQ(*mesh.cell_begin(), 0);
-    EXPECT_EQ(*mesh.cell_end(), 4);
+    EXPECT_EQ(*mesh.cell_end(), 12);
 
     auto cell_range = mesh.get_cell_range();
     EXPECT_EQ(cell_range.get_first(), 0);
@@ -338,10 +358,10 @@ TEST(UnstructuredMeshTest, ranges)
 
     auto all_cell_range = mesh.get_all_cell_range();
     EXPECT_EQ(all_cell_range.get_first(), 0);
-    EXPECT_EQ(all_cell_range.get_last(), 4);
+    EXPECT_EQ(all_cell_range.get_last(), 12);
 
     auto it = mesh.cell_begin();
-    for (Int i = 0; i < 4; i++)
+    for (Int i = 0; i < 12; i++)
         it++;
     EXPECT_TRUE(it == mesh.cell_end());
 }
@@ -371,6 +391,9 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
 
     Parameters params = TestUnstructuredMesh3D::parameters();
     params.set<const App *>("_app") = &app;
+    params.set<Int>("nx") = 1;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
 
