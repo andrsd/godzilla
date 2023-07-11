@@ -69,12 +69,6 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
     public:
         explicit TestMesh(const Parameters & params) : Mesh(params) {}
 
-        DM
-        get_dm() const override
-        {
-            return this->dm;
-        }
-
         void
         create() override
         {
@@ -87,8 +81,6 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
         distribute() override
         {
         }
-
-        DM dm;
     };
 
     class TestProblem : public LinearProblem {

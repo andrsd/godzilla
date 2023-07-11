@@ -52,7 +52,6 @@ UnstructuredMesh::parameters()
 
 UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     Mesh(parameters),
-    dm(nullptr),
     partitioner(nullptr),
     partition_overlap(0)
 {
@@ -64,15 +63,6 @@ UnstructuredMesh::~UnstructuredMesh()
 {
     _F_;
     PETSC_CHECK(PetscPartitionerDestroy(&this->partitioner));
-    if (this->dm)
-        PETSC_CHECK(DMDestroy(&this->dm));
-}
-
-DM
-UnstructuredMesh::get_dm() const
-{
-    _F_;
-    return this->dm;
 }
 
 void
@@ -90,63 +80,12 @@ UnstructuredMesh::create()
     lprintf(9, "- elements: {}", get_num_cells());
 }
 
-bool
-UnstructuredMesh::has_label(const std::string & name) const
-{
-    _F_;
-    PetscBool exists = PETSC_FALSE;
-    PETSC_CHECK(DMHasLabel(this->dm, name.c_str(), &exists));
-    return exists == PETSC_TRUE;
-}
-
-Label
-UnstructuredMesh::get_label(const std::string & name) const
-{
-    _F_;
-    DMLabel label;
-    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
-    return Label(label);
-}
-
 Label
 UnstructuredMesh::get_depth_label() const
 {
     DMLabel depth_label;
     PETSC_CHECK(DMPlexGetDepthLabel(this->dm, &depth_label));
     return Label(depth_label);
-}
-
-Label
-UnstructuredMesh::create_label(const std::string & name) const
-{
-    DMLabel label;
-    PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
-    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
-    return Label(label);
-}
-
-DM
-UnstructuredMesh::get_coordinate_dm() const
-{
-    DM cdm;
-    PETSC_CHECK(DMGetCoordinateDM(this->dm, &cdm));
-    return cdm;
-}
-
-Vector
-UnstructuredMesh::get_coordinates() const
-{
-    Vec vec;
-    PETSC_CHECK(DMGetCoordinates(this->dm, &vec));
-    return { vec };
-}
-
-Vector
-UnstructuredMesh::get_coordinates_local() const
-{
-    Vec vec;
-    PETSC_CHECK(DMGetCoordinatesLocal(this->dm, &vec));
-    return { vec };
 }
 
 Int
@@ -490,22 +429,6 @@ UnstructuredMesh::compute_cell_geometry(Int cell, Real * vol, Real centroid[], R
 {
     _F_;
     PETSC_CHECK(DMPlexComputeCellGeometryFVM(this->dm, cell, vol, centroid, normal));
-}
-
-Section
-UnstructuredMesh::get_local_section() const
-{
-    PetscSection section = nullptr;
-    PETSC_CHECK(DMGetLocalSection(this->dm, &section));
-    return { section };
-}
-
-Section
-UnstructuredMesh::get_global_section() const
-{
-    PetscSection section = nullptr;
-    PETSC_CHECK(DMGetGlobalSection(this->dm, &section));
-    return { section };
 }
 
 int

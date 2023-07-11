@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
 #include "GodzillaApp_test.h"
 #include "UnstructuredMesh.h"
 #include "Parameters.h"
@@ -169,42 +168,6 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     mesh.create();
 
     EXPECT_DEATH(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
-}
-
-TEST(UnstructuredMeshTest, get_coordinates)
-{
-    TestApp app;
-
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<const App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    TestUnstructuredMesh mesh(params);
-    mesh.create();
-
-    Vector coords = mesh.get_coordinates();
-    EXPECT_EQ(coords(0), -1.);
-    EXPECT_EQ(coords(1), 0.);
-    EXPECT_EQ(coords(2), 1.);
-
-    DM cdm;
-    DMGetCoordinateDM(mesh.get_dm(), &cdm);
-    EXPECT_EQ(mesh.get_coordinate_dm(), cdm);
-}
-
-TEST(UnstructuredMeshTest, get_coordinates_local)
-{
-    TestApp app;
-
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<const App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    TestUnstructuredMesh mesh(params);
-    mesh.create();
-
-    Vector coords = mesh.get_coordinates_local();
-    EXPECT_EQ(coords(0), -1.);
-    EXPECT_EQ(coords(1), 0.);
-    EXPECT_EQ(coords(2), 1.);
 }
 
 TEST(UnstructuredMeshTest, get_cell_connectivity)
