@@ -51,10 +51,8 @@ protected:
     void write_field_variables();
     void write_nodal_variables();
     void write_elem_variables();
-    void write_block_elem_variables(int blk_id,
-                                    const Scalar * sln,
-                                    Int n_elems_in_block = 0,
-                                    const Int * cells = nullptr);
+    void
+    write_block_elem_variables(int blk_id, Int n_elems_in_block = 0, const Int * cells = nullptr);
     void write_global_variables();
     void write_block_connectivity(int blk_id,
                                   DMPolytopeType polytope_type,
@@ -85,6 +83,8 @@ protected:
     std::vector<Int> nodal_aux_var_fids;
     /// List of elemental variable field IDs
     std::vector<Int> elem_var_fids;
+    /// List of elemental auxiliary variable field IDs
+    std::vector<Int> elem_aux_var_fids;
 
     /// Block ID used in ExodusII file when there are not cell sets
     static const int SINGLE_BLK_ID;
