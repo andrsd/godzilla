@@ -42,12 +42,6 @@ public:
 
 REGISTER_OBJECT(GTest2CompIC);
 
-TEST_F(FENonlinearProblemTest, get_fepi_mesh)
-{
-    FEProblemInterface * fepi = dynamic_cast<FEProblemInterface *>(prob);
-    EXPECT_EQ(fepi->get_mesh(), mesh);
-}
-
 TEST_F(FENonlinearProblemTest, fields)
 {
     prob->set_fe(1, "vec", 3, 1);

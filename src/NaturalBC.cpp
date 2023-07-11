@@ -1,7 +1,7 @@
 #include "NaturalBC.h"
 #include "CallStack.h"
 #include "App.h"
-#include "UnstructuredMesh.h"
+#include "Problem.h"
 #include "DiscreteProblemInterface.h"
 #include "WeakForm.h"
 #include "BndResidualFunc.h"
@@ -48,7 +48,7 @@ NaturalBC::create()
                       "field.");
     }
 
-    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    auto mesh = get_problem()->get_mesh();
     if (mesh->has_label(this->boundary)) {
         this->label = mesh->get_label(this->boundary);
         auto is = this->label.get_values();

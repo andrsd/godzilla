@@ -29,10 +29,10 @@ public:
     DiscreteProblemInterface(Problem * problem, const Parameters & params);
     virtual ~DiscreteProblemInterface();
 
-    /// Get the unstructured mesh
+    /// Get problem
     ///
-    /// @return Pointer to the unstructured mesh this problem is using
-    virtual const UnstructuredMesh * get_mesh() const;
+    /// @return Problem this interface is part of
+    const Problem * get_problem() const;
 
     /// Get number of fields
     ///

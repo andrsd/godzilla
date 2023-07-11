@@ -29,11 +29,11 @@ DiscreteProblemInterface::~DiscreteProblemInterface()
     DMDestroy(&this->dm_aux);
 }
 
-const UnstructuredMesh *
-DiscreteProblemInterface::get_mesh() const
+const Problem *
+DiscreteProblemInterface::get_problem() const
 {
     _F_;
-    return this->unstr_mesh;
+    return this->problem;
 }
 
 void

@@ -1,6 +1,7 @@
 #include "AuxiliaryField.h"
 #include "CallStack.h"
 #include "UnstructuredMesh.h"
+#include "Problem.h"
 #include "DiscreteProblemInterface.h"
 
 namespace godzilla {
@@ -20,12 +21,28 @@ AuxiliaryField::parameters()
 AuxiliaryField::AuxiliaryField(const Parameters & params) :
     Object(params),
     PrintInterface(this),
+    mesh(nullptr),
     dpi(get_param<DiscreteProblemInterface *>("_dpi")),
     field(get_param<std::string>("field")),
     region(get_param<std::string>("region")),
     fid(-1),
     block_id(-1)
 {
+    this->mesh = dynamic_cast<const UnstructuredMesh *>(get_problem()->get_mesh());
+}
+
+const UnstructuredMesh *
+AuxiliaryField::get_mesh() const
+{
+    _F_;
+    return this->mesh;
+}
+
+const Problem *
+AuxiliaryField::get_problem() const
+{
+    _F_;
+    return this->dpi->get_problem();
 }
 
 void
@@ -33,7 +50,7 @@ AuxiliaryField::create()
 {
     _F_;
     if (this->region.length() > 0) {
-        const UnstructuredMesh * mesh = this->dpi->get_mesh();
+        auto mesh = get_mesh();
         if (mesh->has_label(this->region)) {
             this->label = mesh->get_label(this->region);
             this->block_id = mesh->get_cell_set_id(this->region);

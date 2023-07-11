@@ -8,6 +8,8 @@
 
 namespace godzilla {
 
+class UnstructuredMesh;
+class Problem;
 class DiscreteProblemInterface;
 
 /// Base class for auxiliary fields
@@ -41,7 +43,20 @@ public:
     virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
 
 protected:
-    /// FE problem this object is part of
+    /// Get mesh this auxiliary field is defined on
+    ///
+    /// @return Mesh this auxiliary field is defined on
+    const UnstructuredMesh * get_mesh() const;
+
+    /// Get problem this auxiliary field is part of
+    ///
+    /// @return Problem this auxiliary field of part of
+    const Problem * get_problem() const;
+
+    /// Unstructured mesh this field is defined on
+    const UnstructuredMesh * mesh;
+
+    /// Discrete problem this object is part of
     const DiscreteProblemInterface * dpi;
 
     /// Field name
