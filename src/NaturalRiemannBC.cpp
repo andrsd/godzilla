@@ -1,6 +1,7 @@
 #include "NaturalRiemannBC.h"
 #include "CallStack.h"
 #include "App.h"
+#include "Problem.h"
 #include "DiscreteProblemInterface.h"
 #include "UnstructuredMesh.h"
 #include <cassert>
@@ -58,7 +59,7 @@ NaturalRiemannBC::create()
                       "field.");
     }
 
-    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    auto mesh = get_mesh();
     this->label = mesh->get_face_set_label(this->boundary);
     if (!this->label.is_null()) {
         auto is = this->label.get_values();
@@ -94,7 +95,7 @@ void
 NaturalRiemannBC::set_up()
 {
     _F_;
-    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    auto mesh = get_problem()->get_mesh();
     this->dpi->add_boundary_natural_riemann(get_name(),
                                             this->label,
                                             this->ids,

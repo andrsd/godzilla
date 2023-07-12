@@ -7,6 +7,8 @@
 
 namespace godzilla {
 
+class UnstructuredMesh;
+class Problem;
 class DiscreteProblemInterface;
 
 /// Base class for boundary conditions
@@ -30,6 +32,17 @@ public:
     virtual void set_up() = 0;
 
 protected:
+    /// Get mesh this boundary condition is associated with
+    ///
+    /// @return Mesh this boundary condition is associated with
+    const UnstructuredMesh * get_mesh() const;
+
+    /// Get problem this auxiliary field is part of
+    const Problem * get_problem() const;
+
+    /// Unstructured mesh this field is defined on
+    const UnstructuredMesh * mesh;
+
     /// Discrete problem this object is part of
     const DiscreteProblemInterface * dpi;
 

@@ -73,12 +73,6 @@ TEST_F(ExodusIIOutputTest, fe_check)
     public:
         explicit TestMesh(const Parameters & params) : Mesh(params) {}
 
-        DM
-        get_dm() const override
-        {
-            return this->dm;
-        }
-
         void
         create() override
         {
@@ -90,8 +84,6 @@ TEST_F(ExodusIIOutputTest, fe_check)
         distribute() override
         {
         }
-
-        DM dm;
     };
 
     class TestLinearProblem : public Problem {

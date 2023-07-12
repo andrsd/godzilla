@@ -5,8 +5,6 @@
 #include "Problem.h"
 #include "DiscreteProblemInterface.h"
 #include "BoundaryCondition.h"
-#include "IndexSet.h"
-#include <cassert>
 
 namespace godzilla {
 
@@ -22,10 +20,25 @@ BoundaryCondition::parameters()
 BoundaryCondition::BoundaryCondition(const Parameters & params) :
     Object(params),
     PrintInterface(this),
+    mesh(nullptr),
     dpi(get_param<const DiscreteProblemInterface *>("_dpi")),
     boundary(get_param<std::string>("boundary"))
 {
     _F_;
+    this->mesh = dynamic_cast<const UnstructuredMesh *>(get_problem()->get_mesh());
+}
+
+const UnstructuredMesh *
+BoundaryCondition::get_mesh() const
+{
+    _F_;
+    return this->mesh;
+}
+
+const Problem *
+BoundaryCondition::get_problem() const
+{
+    return this->dpi->get_problem();
 }
 
 const std::string &

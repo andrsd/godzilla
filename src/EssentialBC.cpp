@@ -1,7 +1,7 @@
 #include "EssentialBC.h"
 #include "CallStack.h"
 #include "App.h"
-#include "UnstructuredMesh.h"
+#include "Problem.h"
 #include "DiscreteProblemInterface.h"
 #include <cassert>
 
@@ -107,7 +107,7 @@ void
 EssentialBC::set_up()
 {
     _F_;
-    const UnstructuredMesh * mesh = this->dpi->get_mesh();
+    auto mesh = get_mesh();
     auto label = mesh->get_face_set_label(this->boundary);
     auto is = label.get_values();
     is.get_indices();

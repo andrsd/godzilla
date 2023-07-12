@@ -56,7 +56,8 @@ add_executable(${PROJECT_NAME}
     LineMesh_test.cpp
     Logger_test.cpp
     Matrix_test.cpp
-    MeshPartitioningOutput_test.cpp
+        Mesh_test.cpp
+        MeshPartitioningOutput_test.cpp
     NaturalBC_test.cpp
     NaturalRiemannBC_test.cpp
     NeumannProblem_test.cpp

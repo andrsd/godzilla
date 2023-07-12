@@ -5,7 +5,6 @@
 #include "IndexSet.h"
 #include "Vector.h"
 #include "Section.h"
-#include "Label.h"
 #include "petscpartitioner.h"
 
 namespace godzilla {
@@ -116,47 +115,12 @@ public:
     explicit UnstructuredMesh(const Parameters & parameters);
     ~UnstructuredMesh() override;
 
-    NO_DISCARD DM get_dm() const override;
     void create() override;
-
-    /// Check if mesh has label with a name
-    ///
-    /// @param name The name of the label
-    /// @return true if label exists, otherwise false
-    NO_DISCARD virtual bool has_label(const std::string & name) const;
-
-    /// Get label associated with a name
-    ///
-    /// @param name Label name
-    /// @return Label associated with the `name`
-    NO_DISCARD virtual Label get_label(const std::string & name) const;
 
     /// Get the `Label` recording the depth of each point
     ///
     /// @return The `Label` recording point depth
     Label get_depth_label() const;
-
-    /// Create label
-    ///
-    /// @param name Label name
-    /// @return Created label
-    Label create_label(const std::string & name) const;
-
-    /// Gets the DM that prescribes coordinate layout and scatters between global and local
-    /// coordinates
-    ///
-    /// @return coordinate `DM`
-    DM get_coordinate_dm() const;
-
-    /// Get a global vector with the coordinates associated with this mesh
-    ///
-    /// @return Global coordinate vector
-    Vector get_coordinates() const;
-
-    /// Get a local vector with the coordinates associated with this mesh
-    ///
-    /// @return Coordinate vector
-    Vector get_coordinates_local() const;
 
     /// Return the number of mesh vertices
     NO_DISCARD virtual Int get_num_vertices() const;
@@ -315,12 +279,6 @@ public:
     /// @param normal The cell normal, if appropriate
     void compute_cell_geometry(Int cell, Real * vol, Real centroid[], Real normal[]) const;
 
-    /// Get the Section encoding the local data layout for the DM
-    Section get_local_section() const;
-
-    /// Get the Section encoding the global data layout for the DM
-    Section get_global_section() const;
-
 protected:
     /// Method that builds DM for the mesh
     virtual void create_dm() = 0;
@@ -330,9 +288,6 @@ protected:
     void create_face_set_labels(const std::map<Int, std::string> & names);
 
     void create_face_set(Int id, const std::string & name);
-
-    /// DM object
-    DM dm;
 
     /// Mesh partitioner
     PetscPartitioner partitioner;
