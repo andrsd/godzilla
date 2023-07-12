@@ -12,7 +12,6 @@
 #include "ResidualFunc.h"
 #include "JacobianFunc.h"
 #include "ValueFunctional.h"
-#include "IndexSet.h"
 #include "Utils.h"
 #include "DependencyGraph.h"
 #include <cassert>
@@ -57,10 +56,6 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & par
     DiscreteProblemInterface(problem, params),
     DependencyEvaluator(),
     qorder(PETSC_DETERMINE),
-    dm_aux(nullptr),
-    section_aux(nullptr),
-    a(nullptr),
-    ds_aux(nullptr),
     wf(new WeakForm())
 {
 }
@@ -78,7 +73,6 @@ FEProblemInterface::~FEProblemInterface()
     }
 
     this->a.destroy();
-    DMDestroy(&this->dm_aux);
 
     this->sln.destroy();
 }
@@ -89,8 +83,6 @@ FEProblemInterface::create()
     _F_;
     set_up_fields();
     DiscreteProblemInterface::create();
-    for (auto & aux : this->auxs)
-        aux->create();
 }
 
 void
@@ -379,25 +371,6 @@ FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
         error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-bool
-FEProblemInterface::has_aux(const std::string & name) const
-{
-    _F_;
-    const auto & it = this->auxs_by_name.find(name);
-    return it != this->auxs_by_name.end();
-}
-
-AuxiliaryField *
-FEProblemInterface::get_aux(const std::string & name) const
-{
-    _F_;
-    const auto & it = this->auxs_by_name.find(name);
-    if (it != this->auxs_by_name.end())
-        return it->second;
-    else
-        return nullptr;
-}
-
 Int
 FEProblemInterface::add_fe(const std::string & name, Int nc, Int k)
 {
@@ -449,20 +422,6 @@ FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
     }
     else
         error("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.", name, id);
-}
-
-void
-FEProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
-{
-    _F_;
-    const std::string & name = aux->get_name();
-    auto it = this->auxs_by_name.find(name);
-    if (it == this->auxs_by_name.end()) {
-        this->auxs.push_back(aux);
-        this->auxs_by_name[name] = aux;
-    }
-    else
-        error("Cannot add auxiliary object '{}'. Name already taken.", name);
 }
 
 void

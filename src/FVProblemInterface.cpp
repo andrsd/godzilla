@@ -3,7 +3,9 @@
 #include "FVProblemInterface.h"
 #include "UnstructuredMesh.h"
 #include "Problem.h"
+#include "AuxiliaryField.h"
 #include "Logger.h"
+#include "Utils.h"
 #include <cassert>
 
 namespace godzilla {
@@ -19,13 +21,43 @@ FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & par
 
 FVProblemInterface::~FVProblemInterface()
 {
+    _F_;
+    for (auto & kv : this->aux_fe) {
+        auto & fe = kv.second;
+        PetscFEDestroy(&fe);
+    }
+    this->a.destroy();
     this->sln.destroy();
 }
 
 void
 FVProblemInterface::init()
 {
+    _F_;
     DiscreteProblemInterface::init();
+
+    const MPI_Comm & comm = this->unstr_mesh->get_comm();
+    Int dim = this->problem->get_dimension();
+    PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
+    for (auto & it : this->aux_fields) {
+        auto fi = it.second;
+        PETSC_CHECK(PetscFECreateLagrange(comm,
+                                          dim,
+                                          fi.nc,
+                                          is_simplex,
+                                          fi.k,
+                                          PETSC_DETERMINE,
+                                          &this->aux_fe.at(fi.id)));
+    }
+
+    DM dm = this->unstr_mesh->get_dm();
+    DM cdm = dm;
+    while (cdm) {
+        set_up_auxiliary_dm(cdm);
+
+        PETSC_CHECK(DMCopyDisc(dm, cdm));
+        PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
+    }
 }
 
 Int
@@ -142,67 +174,122 @@ FVProblemInterface::set_field_component_name(Int fid, Int component, const std::
 Int
 FVProblemInterface::get_num_aux_fields() const
 {
-    error("Not implemented");
+    _F_;
+    return (Int) this->aux_fields.size();
 }
 
 std::vector<std::string>
 FVProblemInterface::get_aux_field_names() const
 {
-    return {};
+    _F_;
+    std::vector<std::string> names;
+    names.reserve(this->aux_fields.size());
+    for (const auto & it : this->aux_fields)
+        names.push_back(it.second.name);
+    return names;
 }
 
 const std::string &
 FVProblemInterface::get_aux_field_name(Int fid) const
 {
-    error("Not implemented");
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end())
+        return it->second.name;
+    else
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
 FVProblemInterface::get_aux_field_num_components(Int fid) const
 {
-    error("Not implemented");
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end())
+        return it->second.nc;
+    else
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
 FVProblemInterface::get_aux_field_id(const std::string & name) const
 {
-    error("Not implemented");
+    _F_;
+    const auto & it = this->aux_fields_by_name.find(name);
+    if (it != this->aux_fields_by_name.end())
+        return it->second;
+    else
+        error("Auxiliary field '{}' does not exist. Typo?", name);
 }
 
 bool
 FVProblemInterface::has_aux_field_by_id(Int fid) const
 {
-    error("Not implemented");
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    return it != this->aux_fields.end();
 }
 
 bool
 FVProblemInterface::has_aux_field_by_name(const std::string & name) const
 {
-    error("Not implemented");
+    _F_;
+    const auto & it = this->aux_fields_by_name.find(name);
+    return it != this->aux_fields_by_name.end();
 }
 
 Int
 FVProblemInterface::get_aux_field_order(Int fid) const
 {
-    error("Not implemented");
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end())
+        return it->second.k;
+    else
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 std::string
 FVProblemInterface::get_aux_field_component_name(Int fid, Int component) const
 {
-    error("Not implemented");
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end()) {
+        const FieldInfo & fi = it->second;
+        if (fi.nc == 1)
+            return { "" };
+        else {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            return it->second.component_names.at(component);
+        }
+    }
+    else
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 void
 FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const std::string & name)
 {
-    error("Not implemented");
+    _F_;
+    const auto & it = this->aux_fields.find(fid);
+    if (it != this->aux_fields.end()) {
+        if (it->second.nc > 1) {
+            assert(component < it->second.nc && component < it->second.component_names.size());
+            it->second.component_names[component] = name;
+        }
+        else
+            error("Unable to set component name for single-component field");
+    }
+    else
+        error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
 FVProblemInterface::get_aux_field_dof(Int point, Int fid) const
 {
-    error("Not implemented");
+    Int offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid, &offset));
+    return offset;
 }
 
 const Vector &
@@ -225,17 +312,42 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc)
     _F_;
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
-        FieldInfo fi = { name, id, nc, {} };
+        FieldInfo fi(name, id, nc, 0);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (Int i = 0; i < nc; i++)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
-        this->fields[id] = fi;
+        this->fields.emplace(id, fi);
         this->fields_by_name[name] = id;
     }
     else
         error("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
+}
+
+Int
+FVProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k)
+{
+    _F_;
+    std::vector<Int> keys = utils::map_keys(this->aux_fields);
+    Int id = get_next_id(keys);
+    set_aux_fe(id, name, nc, k);
+    return id;
+}
+
+void
+FVProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
+{
+    _F_;
+    auto it = this->aux_fields.find(id);
+    if (it == this->aux_fields.end()) {
+        FieldInfo fi(name, id, nc, k);
+        this->aux_fields.emplace(id, fi);
+        this->aux_fields_by_name[name] = id;
+        this->aux_fe[id] = nullptr;
+    }
+    else
+        error("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.", name, id);
 }
 
 void
@@ -271,7 +383,7 @@ FVProblemInterface::set_up_ds()
     PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, this->unstr_mesh->get_dimension()));
 
     for (Int id = 0, c = 0; id < this->fields.size(); id++) {
-        const FieldInfo & fi = this->fields[id];
+        const FieldInfo & fi = this->fields.at(id);
         if (fi.nc == 1) {
             PETSC_CHECK(PetscFVSetComponentName(this->fvm, c, fi.name.c_str()));
         }
@@ -288,6 +400,139 @@ FVProblemInterface::set_up_ds()
     PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm));
     PETSC_CHECK(DMCreateDS(dm));
     PETSC_CHECK(DMGetDS(dm, &this->ds));
+}
+
+void
+FVProblemInterface::compute_global_aux_fields(DM dm,
+                                              const std::vector<AuxiliaryField *> & auxs,
+                                              Vector & a)
+{
+    _F_;
+    auto n_auxs = this->aux_fields.size();
+    std::vector<PetscFunc *> func(n_auxs, nullptr);
+    std::vector<void *> ctxs(n_auxs, nullptr);
+
+    for (const auto & aux : auxs) {
+        Int fid = aux->get_field_id();
+        func[fid] = aux->get_func();
+        ctxs[fid] = aux->get_context();
+    }
+
+    PETSC_CHECK(DMProjectFunctionLocal(dm,
+                                       this->problem->get_time(),
+                                       func.data(),
+                                       ctxs.data(),
+                                       INSERT_ALL_VALUES,
+                                       a));
+}
+
+void
+FVProblemInterface::compute_label_aux_fields(DM dm,
+                                             const Label & label,
+                                             const std::vector<AuxiliaryField *> & auxs,
+                                             Vector & a)
+{
+    _F_;
+    auto n_auxs = this->aux_fields.size();
+    std::vector<PetscFunc *> func(n_auxs, nullptr);
+    std::vector<void *> ctxs(n_auxs, nullptr);
+
+    for (const auto & aux : auxs) {
+        Int fid = aux->get_field_id();
+        func[fid] = aux->get_func();
+        ctxs[fid] = aux->get_context();
+    }
+
+    auto ids = label.get_values();
+    ids.get_indices();
+    PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
+                                            this->problem->get_time(),
+                                            label,
+                                            ids.get_size(),
+                                            ids.data(),
+                                            PETSC_DETERMINE,
+                                            nullptr,
+                                            func.data(),
+                                            ctxs.data(),
+                                            INSERT_ALL_VALUES,
+                                            a));
+    ids.restore_indices();
+    ids.destroy();
+}
+
+void
+FVProblemInterface::compute_aux_fields()
+{
+    _F_;
+    for (const auto & it : this->auxs_by_region) {
+        const std::string & region_name = it.first;
+        const std::vector<AuxiliaryField *> & auxs = it.second;
+        Label label;
+        if (region_name.length() > 0)
+            label = this->unstr_mesh->get_label(region_name);
+
+        if (label.is_null())
+            compute_global_aux_fields(this->dm_aux, auxs, this->a);
+        else
+            compute_label_aux_fields(this->dm_aux, label, auxs, this->a);
+    }
+}
+
+void
+FVProblemInterface::set_up_auxiliary_dm(DM dm)
+{
+    _F_;
+    if (this->aux_fields.empty())
+        return;
+
+    PETSC_CHECK(DMClone(dm, &this->dm_aux));
+
+    for (auto & it : this->aux_fields) {
+        FieldInfo & fi = it.second;
+        PETSC_CHECK(
+            DMSetField(this->dm_aux, fi.id, fi.block, (PetscObject) this->aux_fe.at(fi.id)));
+    }
+
+    PETSC_CHECK(DMCreateDS(this->dm_aux));
+
+    bool no_errors = true;
+    for (auto & aux : this->auxs) {
+        Int fid = aux->get_field_id();
+        if (has_aux_field_by_id(fid)) {
+            Int aux_nc = aux->get_num_components();
+            Int field_nc = this->aux_fields.at(fid).nc;
+            if (aux_nc == field_nc) {
+                const std::string & region_name = aux->get_region();
+                this->auxs_by_region[region_name].push_back(aux);
+            }
+            else {
+                no_errors = false;
+                this->logger->error("Auxiliary field '{}' has {} component(s), but is set on a "
+                                    "field with {} component(s).",
+                                    aux->get_name(),
+                                    aux_nc,
+                                    field_nc);
+            }
+        }
+        else {
+            no_errors = false;
+            this->logger->error("Auxiliary field '{}' is set on auxiliary field with ID '{}', but "
+                                "such ID does not exist.",
+                                aux->get_name(),
+                                fid);
+        }
+    }
+    if (no_errors) {
+        Vec loc_a;
+        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &loc_a));
+        this->a = Vector(loc_a);
+        PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
+
+        PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
+        PetscSection sa;
+        PETSC_CHECK(DMGetLocalSection(this->dm_aux, &sa));
+        this->section_aux = Section(sa);
+    }
 }
 
 void
@@ -314,6 +559,18 @@ FVProblemInterface::add_boundary_natural(const std::string & name,
 {
     _F_;
     error("Natural BCs are not supported for FV problems");
+}
+
+Int
+FVProblemInterface::get_next_id(const std::vector<Int> & ids) const
+{
+    std::set<Int> s;
+    for (auto & id : ids)
+        s.insert(id);
+    for (Int id = 0; id < std::numeric_limits<Int>::max(); id++)
+        if (s.find(id) == s.end())
+            return id;
+    return -1;
 }
 
 } // namespace godzilla

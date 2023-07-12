@@ -5,6 +5,8 @@
 
 namespace godzilla {
 
+class AuxiliaryField;
+
 /// Interface for finite volume problems
 ///
 /// Any problem using PetscFV should inherit from this for unified API
@@ -48,6 +50,22 @@ public:
     /// @param k The degree k of the space
     virtual void add_field(Int id, const std::string & name, Int nc);
 
+    /// Adds a volumetric auxiliary field
+    ///
+    /// @param name The name of the field
+    /// @param nc The number of components
+    /// @param k The degree k of the space
+    /// @return ID of the new field
+    virtual Int add_aux_fe(const std::string & name, Int nc, Int k);
+
+    /// Set a volumetric auxiliary field
+    ///
+    /// @param id The field ID
+    /// @param name The name of the field
+    /// @param nc The number of components
+    /// @param k The degree k of the space
+    virtual void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
+
 protected:
     void init() override;
     void create() override;
@@ -68,8 +86,25 @@ protected:
                               const std::vector<Int> & components,
                               void * context) const override;
 
+    /// Compute auxiliary fields
+    ///
+    /// @param dm DM for auxiliary fields
+    void compute_aux_fields();
+
+    void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vector & a);
+
+    void compute_label_aux_fields(DM dm,
+                                  const Label & label,
+                                  const std::vector<AuxiliaryField *> & auxs,
+                                  Vector & a);
+
+    /// Set up auxiliary DM
+    virtual void set_up_auxiliary_dm(DM dm);
+
     /// Set up field variables
     virtual void set_up_fields() = 0;
+
+    Int get_next_id(const std::vector<Int> & ids) const;
 
     /// Field information
     struct FieldInfo {
@@ -79,11 +114,36 @@ protected:
         /// Field number
         Int id;
 
+        /// Mesh support
+        DMLabel block;
+
         /// The number of components
         Int nc;
 
+        /// The degree k of the space
+        Int k;
+
         /// Component names
         std::vector<std::string> component_names;
+
+        FieldInfo(const std::string & name, Int id, Int nc, Int k) :
+            name(name),
+            id(id),
+            block(nullptr),
+            nc(nc),
+            k(k)
+        {
+        }
+
+        FieldInfo(const FieldInfo & other) :
+            name(other.name),
+            id(other.id),
+            block(other.block),
+            nc(other.nc),
+            k(other.k),
+            component_names(other.component_names)
+        {
+        }
     };
 
     /// Fields in the problem
@@ -98,19 +158,16 @@ protected:
     /// Local solution vector
     Vector sln;
 
+    /// Auxiliary fields in the problem
+    std::map<Int, FieldInfo> aux_fields;
+
+    /// Map from auxiliary field name to auxiliary field ID
+    std::map<std::string, Int> aux_fields_by_name;
+
+    std::map<Int, PetscFE> aux_fe;
+
     /// Local auxiliary solution vector
     Vector a;
-
-    friend void __compute_flux(Int dim,
-                               Int nf,
-                               const Real x[],
-                               const Real n[],
-                               const Scalar uL[],
-                               const Scalar uR[],
-                               Int n_consts,
-                               const Scalar constants[],
-                               Scalar flux[],
-                               void * ctx);
 
     static const std::string empty_name;
 };

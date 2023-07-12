@@ -45,7 +45,7 @@ TEST_F(AuxiliaryFieldTest, api)
     Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
-    params.set<FEProblemInterface *>("_fepi") = prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("field") = "fld";
     params.set<std::string>("region") = "rgn";
     auto aux = TestAuxFld(params);
@@ -94,7 +94,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
     Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
-    params.set<FEProblemInterface *>("_fepi") = prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
     auto aux = TestAuxFld(params);
     prob->add_auxiliary_field(&aux);
 
@@ -141,7 +141,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
     Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
-    params.set<FEProblemInterface *>("_fepi") = prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
     auto aux = TestAuxFld(params);
     prob->add_auxiliary_field(&aux);
 
@@ -188,7 +188,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     Parameters params = AuxiliaryField::parameters();
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
-    params.set<FEProblemInterface *>("_fepi") = prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("region") = "asdf";
     auto aux = TestAuxFld(params);
     prob->add_auxiliary_field(&aux);
