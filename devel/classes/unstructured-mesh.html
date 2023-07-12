@@ -135,87 +135,12 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_unstructured_mesh_1ad0118e017df950791c6fdf967310a8a2"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">bool</span> <span class="pre">has_label</span> <span class="pre">(const</span> <span class="pre">std::string</span> <span class="pre">&amp;name)</span> <span class="pre">const</span></span></dt>
-<dd><p>Check if mesh has label with a name. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> – The name of the label </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>true if label exists, otherwise false </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_unstructured_mesh_1a24acf35580f957fbb2781dfafd3c6fe2"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Label</span> <span class="pre">get_label</span> <span class="pre">(const</span> <span class="pre">std::string</span> <span class="pre">&amp;name)</span> <span class="pre">const</span></span></dt>
-<dd><p>Get label associated with a name. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> – Label name </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Label associated with the <code class="docutils literal notranslate"><span class="pre">name</span></code> </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh15get_depth_labelEv">
 <span id="_CPPv3NK8godzilla16UnstructuredMesh15get_depth_labelEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh15get_depth_labelEv"></span><span id="godzilla::UnstructuredMesh::get_depth_labelC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a1ab3807582facc9fbc5ae9f72c6277f9"></span><span class="n"><span class="pre">Label</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_depth_label</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh15get_depth_labelEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get the <code class="docutils literal notranslate"><span class="pre">Label</span></code> recording the depth of each point. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The <code class="docutils literal notranslate"><span class="pre">Label</span></code> recording point depth </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh12create_labelERKNSt6stringE">
-<span id="_CPPv3NK8godzilla16UnstructuredMesh12create_labelERKNSt6stringE"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh12create_labelERKNSt6stringE"></span><span id="godzilla::UnstructuredMesh::create_label__ssCRC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a77b5a8ff8e89fcb79bcb71756ca22599"></span><span class="n"><span class="pre">Label</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_label</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh12create_labelERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Create label. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> – Label name </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Created label </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh17get_coordinate_dmEv">
-<span id="_CPPv3NK8godzilla16UnstructuredMesh17get_coordinate_dmEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh17get_coordinate_dmEv"></span><span id="godzilla::UnstructuredMesh::get_coordinate_dmC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1aa8519791213737601a6ad552ede4af9f"></span><span class="n"><span class="pre">DM</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_coordinate_dm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_coordinate_dmEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Gets the DM that prescribes coordinate layout and scatters between global and local coordinates. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>coordinate <code class="docutils literal notranslate"><span class="pre">DM</span></code> </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh15get_coordinatesEv">
-<span id="_CPPv3NK8godzilla16UnstructuredMesh15get_coordinatesEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh15get_coordinatesEv"></span><span id="godzilla::UnstructuredMesh::get_coordinatesC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a73cc5083412370ee2ecbbcf86c5d57e6"></span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_coordinates</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh15get_coordinatesEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Get a global vector with the coordinates associated with this mesh. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Global coordinate vector </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh21get_coordinates_localEv">
-<span id="_CPPv3NK8godzilla16UnstructuredMesh21get_coordinates_localEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh21get_coordinates_localEv"></span><span id="godzilla::UnstructuredMesh::get_coordinates_localC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1ac7d1542b17bbef3d4e8925c7caf43cc5"></span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_coordinates_local</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh21get_coordinates_localEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Get a local vector with the coordinates associated with this mesh. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Coordinate vector </p>
 </dd>
 </dl>
 </dd></dl>
@@ -566,18 +491,6 @@
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh17get_local_sectionEv">
-<span id="_CPPv3NK8godzilla16UnstructuredMesh17get_local_sectionEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh17get_local_sectionEv"></span><span id="godzilla::UnstructuredMesh::get_local_sectionC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a3c83bcde142dc45bdfc4f71f082e034b"></span><span class="n"><span class="pre">Section</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_local_section</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_local_sectionEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Get the Section encoding the local data layout for the DM. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh18get_global_sectionEv">
-<span id="_CPPv3NK8godzilla16UnstructuredMesh18get_global_sectionEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh18get_global_sectionEv"></span><span id="godzilla::UnstructuredMesh::get_global_sectionC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a67fb3f29874adf093d3eb3389873de87"></span><span class="n"><span class="pre">Section</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_global_section</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh18get_global_sectionEv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Get the Section encoding the global data layout for the DM. </p>
 </dd></dl>
 
 </div>
