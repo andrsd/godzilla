@@ -485,6 +485,13 @@ UnstructuredMesh::construct_ghost_cells()
     this->dm = gdm;
 }
 
+void
+UnstructuredMesh::compute_cell_geometry(Int cell, Real * vol, Real centroid[], Real normal[]) const
+{
+    _F_;
+    PETSC_CHECK(DMPlexComputeCellGeometryFVM(this->dm, cell, vol, centroid, normal));
+}
+
 Section
 UnstructuredMesh::get_local_section() const
 {

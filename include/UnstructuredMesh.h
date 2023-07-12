@@ -307,6 +307,14 @@ public:
     ///
     virtual void construct_ghost_cells();
 
+    /// Compute the volume for a given cell
+    ///
+    /// @param cell The cell
+    /// @param vol The cell volume
+    /// @param centroid The cell centroid
+    /// @param normal The cell normal, if appropriate
+    void compute_cell_geometry(Int cell, Real * vol, Real centroid[], Real normal[]) const;
+
     /// Get the Section encoding the local data layout for the DM
     Section get_local_section() const;
 

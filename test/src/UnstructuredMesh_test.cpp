@@ -407,3 +407,61 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
     EXPECT_THAT(idxs, ::UnorderedElementsAre(1, 3, 5, 7));
     left_points.restore_indices();
 }
+
+TEST(UnstructuredMesh, compute_cell_geometry)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    {
+        Real vol;
+        Real centroid[3];
+        mesh.compute_cell_geometry(0, &vol, centroid, nullptr);
+        EXPECT_DOUBLE_EQ(centroid[0], 0.25);
+        EXPECT_DOUBLE_EQ(centroid[1], 0.5);
+        EXPECT_DOUBLE_EQ(centroid[2], 0.5);
+    }
+    {
+        Real vol;
+        Real centroid[3];
+        mesh.compute_cell_geometry(1, &vol, centroid, nullptr);
+        EXPECT_DOUBLE_EQ(centroid[0], 0.75);
+        EXPECT_DOUBLE_EQ(centroid[1], 0.5);
+        EXPECT_DOUBLE_EQ(centroid[2], 0.5);
+    }
+
+    {
+        Real vol;
+        Real centroid[3];
+        Real normal[3];
+        mesh.compute_cell_geometry(14, &vol, centroid, normal);
+        EXPECT_DOUBLE_EQ(centroid[0], 0.);
+        EXPECT_DOUBLE_EQ(centroid[1], 0.5);
+        EXPECT_DOUBLE_EQ(centroid[2], 0.5);
+
+        EXPECT_DOUBLE_EQ(normal[0], 1.);
+        EXPECT_DOUBLE_EQ(normal[1], 0.);
+        EXPECT_DOUBLE_EQ(normal[2], 0.);
+    }
+    {
+        Real vol;
+        Real centroid[3];
+        Real normal[3];
+        mesh.compute_cell_geometry(16, &vol, centroid, normal);
+        EXPECT_DOUBLE_EQ(centroid[0], 1.);
+        EXPECT_DOUBLE_EQ(centroid[1], 0.5);
+        EXPECT_DOUBLE_EQ(centroid[2], 0.5);
+
+        EXPECT_DOUBLE_EQ(normal[0], 1.);
+        EXPECT_DOUBLE_EQ(normal[1], 0.);
+        EXPECT_DOUBLE_EQ(normal[2], 0.);
+    }
+}
