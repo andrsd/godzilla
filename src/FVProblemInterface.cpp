@@ -342,6 +342,11 @@ FVProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
         FieldInfo fi(name, id, nc, k);
+        if (nc > 1) {
+            fi.component_names.resize(nc);
+            for (unsigned int i = 0; i < nc; i++)
+                fi.component_names[i] = fmt::format("{:d}", i);
+        }
         this->aux_fields.emplace(id, fi);
         this->aux_fields_by_name[name] = id;
         this->aux_fe[id] = nullptr;
