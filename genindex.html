@@ -183,9 +183,13 @@
 </li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterfaceE">godzilla::DiscreteProblemInterface (C++ class)</a>
 </li>
+      <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterface19add_auxiliary_fieldEP14AuxiliaryField">godzilla::DiscreteProblemInterface::add_auxiliary_field (C++ function)</a>
+</li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterface22add_boundary_conditionEP17BoundaryCondition">godzilla::DiscreteProblemInterface::add_boundary_condition (C++ function)</a>
 </li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterface21add_initial_conditionEP16InitialCondition">godzilla::DiscreteProblemInterface::add_initial_condition (C++ function)</a>
+</li>
+      <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface7get_auxERKNSt6stringE">godzilla::DiscreteProblemInterface::get_aux (C++ function)</a>
 </li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface28get_aux_field_component_nameE3Int3Int">godzilla::DiscreteProblemInterface::get_aux_field_component_name (C++ function)</a>
 </li>
@@ -226,6 +230,8 @@
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface14get_num_fieldsEv">godzilla::DiscreteProblemInterface::get_num_fields (C++ function)</a>
 </li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface25get_solution_vector_localEv">godzilla::DiscreteProblemInterface::get_solution_vector_local (C++ function)</a>
+</li>
+      <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface7has_auxERKNSt6stringE">godzilla::DiscreteProblemInterface::has_aux (C++ function)</a>
 </li>
       <li><a href="devel/classes/discrete-problem-interface.html#_CPPv4NK8godzilla24DiscreteProblemInterface19has_aux_field_by_idE3Int">godzilla::DiscreteProblemInterface::has_aux_field_by_id (C++ function)</a>
 </li>
@@ -309,11 +315,7 @@
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface10add_aux_feERKNSt6stringE3Int3Int">godzilla::FEProblemInterface::add_aux_fe (C++ function)</a>
 </li>
-      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField">godzilla::FEProblemInterface::add_auxiliary_field (C++ function)</a>
-</li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterface6add_feERKNSt6stringE3Int3Int">godzilla::FEProblemInterface::add_fe (C++ function)</a>
-</li>
-      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface7get_auxERKNSt6stringE">godzilla::FEProblemInterface::get_aux (C++ function)</a>
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface28get_aux_field_component_nameE3Int3Int">godzilla::FEProblemInterface::get_aux_field_component_name (C++ function)</a>
 </li>
@@ -348,8 +350,6 @@
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface14get_num_fieldsEv">godzilla::FEProblemInterface::get_num_fields (C++ function)</a>
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface25get_solution_vector_localEv">godzilla::FEProblemInterface::get_solution_vector_local (C++ function)</a>
-</li>
-      <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface7has_auxERKNSt6stringE">godzilla::FEProblemInterface::has_aux (C++ function)</a>
 </li>
       <li><a href="devel/classes/fe-problem-interface.html#_CPPv4NK8godzilla18FEProblemInterface19has_aux_field_by_idE3Int">godzilla::FEProblemInterface::has_aux_field_by_id (C++ function)</a>
 </li>
@@ -417,6 +417,8 @@
 </li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4N8godzilla18FVProblemInterfaceE">godzilla::FVProblemInterface (C++ class)</a>
 </li>
+      <li><a href="devel/classes/fv-problem-interface.html#_CPPv4N8godzilla18FVProblemInterface10add_aux_feERKNSt6stringE3Int3Int">godzilla::FVProblemInterface::add_aux_fe (C++ function)</a>
+</li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4N8godzilla18FVProblemInterface9add_fieldE3IntRKNSt6stringE3Int">godzilla::FVProblemInterface::add_field (C++ function)</a>
 </li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4NK8godzilla18FVProblemInterface28get_aux_field_component_nameE3Int3Int">godzilla::FVProblemInterface::get_aux_field_component_name (C++ function)</a>
@@ -451,6 +453,8 @@
 </li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4NK8godzilla18FVProblemInterface21has_aux_field_by_nameERKNSt6stringE">godzilla::FVProblemInterface::has_aux_field_by_name (C++ function)</a>
 </li>
+      <li><a href="devel/classes/fv-problem-interface.html#_CPPv4N8godzilla18FVProblemInterface10set_aux_feE3IntRKNSt6stringE3Int3Int">godzilla::FVProblemInterface::set_aux_fe (C++ function)</a>
+</li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4N8godzilla18FVProblemInterface28set_aux_field_component_nameE3Int3IntRKNSt6stringE">godzilla::FVProblemInterface::set_aux_field_component_name (C++ function)</a>
 </li>
       <li><a href="devel/classes/fv-problem-interface.html#_CPPv4N8godzilla18FVProblemInterface24set_field_component_nameE3Int3IntRKNSt6stringE">godzilla::FVProblemInterface::set_field_component_name (C++ function)</a>
@@ -467,10 +471,10 @@
 </li>
       <li><a href="devel/classes/hdf5-output.html#_CPPv4N8godzilla10HDF5Output11output_stepEv">godzilla::HDF5Output::output_step (C++ function)</a>
 </li>
-      <li><a href="devel/classes/implicit-fe-nonlinear-problem.html#_CPPv4N8godzilla26ImplicitFENonlinearProblemE">godzilla::ImplicitFENonlinearProblem (C++ class)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="devel/classes/implicit-fe-nonlinear-problem.html#_CPPv4N8godzilla26ImplicitFENonlinearProblemE">godzilla::ImplicitFENonlinearProblem (C++ class)</a>
+</li>
       <li><a href="devel/classes/implicit-fe-nonlinear-problem.html#_CPPv4N8godzilla26ImplicitFENonlinearProblem5checkEv">godzilla::ImplicitFENonlinearProblem::check (C++ function)</a>
 </li>
       <li><a href="devel/classes/implicit-fe-nonlinear-problem.html#_CPPv4N8godzilla26ImplicitFENonlinearProblem9convergedEv">godzilla::ImplicitFENonlinearProblem::converged (C++ function)</a>

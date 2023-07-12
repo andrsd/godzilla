@@ -442,34 +442,6 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface7has_auxERKNSt6stringE">
-<span id="_CPPv3NK8godzilla18FEProblemInterface7has_auxERKNSt6stringE"></span><span id="_CPPv2NK8godzilla18FEProblemInterface7has_auxERKNSt6stringE"></span><span id="godzilla::FEProblemInterface::has_aux__ssCRC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1ad7adc77a4e138608c447de95ffc6983e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_aux</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface7has_auxERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Check if we have an auxiliary object with a specified name. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> – The name of the object </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True if the object exists, otherwise false </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla18FEProblemInterface7get_auxERKNSt6stringE">
-<span id="_CPPv3NK8godzilla18FEProblemInterface7get_auxERKNSt6stringE"></span><span id="_CPPv2NK8godzilla18FEProblemInterface7get_auxERKNSt6stringE"></span><span id="godzilla::FEProblemInterface::get_aux__ssCRC"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a4a93b0d945ca1221ae44a4bb8b939dc8"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="auxiliary-field.html#_CPPv4N8godzilla14AuxiliaryFieldE" title="godzilla::AuxiliaryField"><span class="n"><span class="pre">AuxiliaryField</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_aux</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FEProblemInterface7get_auxERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Get auxiliary object with a specified name. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>name</strong> – The name of the object </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Pointer to the auxiliary object </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FEProblemInterface6add_feERKNSt6stringE3Int3Int">
 <span id="_CPPv3N8godzilla18FEProblemInterface6add_feERKNSt6stringE3Int3Int"></span><span id="_CPPv2N8godzilla18FEProblemInterface6add_feERKNSt6stringE3Int3Int"></span><span id="godzilla::FEProblemInterface::add_fe__ssCR.Int.Int"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a10e01721fc329191e12339de03f7e69f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_fe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FEProblemInterface6add_feERKNSt6stringE3Int3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Adds a volumetric field. </p>
@@ -533,17 +505,6 @@
 <li><p><strong>nc</strong> – The number of components </p></li>
 <li><p><strong>k</strong> – The degree k of the space </p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField">
-<span id="_CPPv3N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField"></span><span id="_CPPv2N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField"></span><span id="godzilla::FEProblemInterface::add_auxiliary_field__AuxiliaryFieldP"></span><span class="target" id="classgodzilla_1_1_f_e_problem_interface_1a28805fc1d97865a20726aaa69e42623a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_auxiliary_field</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="auxiliary-field.html#_CPPv4N8godzilla14AuxiliaryFieldE" title="godzilla::AuxiliaryField"><span class="n"><span class="pre">AuxiliaryField</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">aux</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FEProblemInterface19add_auxiliary_fieldEP14AuxiliaryField" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Add auxiliary field. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>aux</strong> – Auxiliary field object to add </p>
 </dd>
 </dl>
 </dd></dl>
