@@ -29,7 +29,6 @@ void
 NaturalBC::create()
 {
     _F_;
-    assert(this->app->get_problem() != nullptr);
     assert(this->dpi != nullptr);
 
     std::vector<std::string> field_names = this->dpi->get_field_names();
