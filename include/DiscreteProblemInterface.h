@@ -263,6 +263,10 @@ public:
     template <Int N>
     DenseVector<Real, N> get_aux_closure(const Vector & v, Int point) const;
 
+    /// Return read/write access to a field on a point in local array
+    template <typename T>
+    T get_point_local_field_ref(Int point, Int field, Scalar * array) const;
+
 protected:
     virtual void init();
     virtual void create();
@@ -400,6 +404,16 @@ DiscreteProblemInterface::set_aux_closure(const Vector & v,
 {
     PETSC_CHECK(
         DMPlexVecSetClosure(this->dm_aux, this->section_aux, v, point, vec.get_data(), mode));
+}
+
+template <typename T>
+T
+DiscreteProblemInterface::get_point_local_field_ref(Int point, Int field, Scalar * array) const
+{
+    DM dm = this->unstr_mesh->get_dm();
+    T var;
+    PETSC_CHECK(DMPlexPointLocalFieldRef(dm, point, field, array, &var));
+    return var;
 }
 
 } // namespace godzilla
