@@ -93,23 +93,6 @@ protected:
     }
 
 private:
-    Int
-    get_local_face_index(const std::vector<Int> & elem_conn, const std::vector<Int> & face_conn)
-    {
-        // this only works for simplexes
-        std::set<Int> ec(elem_conn.begin(), elem_conn.end());
-        std::set<Int> fc(face_conn.begin(), face_conn.end());
-        std::vector<Int> diff;
-        std::set_difference(ec.begin(),
-                            ec.end(),
-                            fc.begin(),
-                            fc.end(),
-                            std::inserter(diff, diff.begin()));
-        assert(diff.size() == 1);
-        auto it = std::find(elem_conn.begin(), elem_conn.end(), diff[0]);
-        return std::distance(elem_conn.begin(), it);
-    }
-
     /// Compute face normals
     void
     calc_face_normals()
