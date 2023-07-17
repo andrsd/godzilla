@@ -13,14 +13,14 @@ namespace godzilla {
 template <class KEY, class VAL, class HASH_FN = HashFn<KEY>, class HASH_EQUAL = HashEqual<KEY>>
 class HashMap {
 private:
-    __KHASH_TYPE(ht, KEY, VAL);
-    __KHASH_IMPL(ht, inline, KEY, VAL, 1, HASH_FN, HASH_EQUAL);
+    __KHASH_TYPE(ght, KEY, VAL);
+    __KHASH_IMPL(ght, inline, KEY, VAL, 1, HASH_FN, HASH_EQUAL);
 
 public:
     struct Iterator {
         using iterator_category = std::forward_iterator_tag;
 
-        Iterator(kh_ht_t * ht, khiter_t it) : ht(ht), it(it) {}
+        Iterator(kh_ght_t * ht, khiter_t it) : ht(ht), it(it) {}
 
         Iterator &
         operator++()
@@ -50,7 +50,7 @@ public:
         }
 
     private:
-        kh_ht_t * ht;
+        kh_ght_t * ht;
         khiter_t it;
     };
 
@@ -132,7 +132,7 @@ public:
     }
 
 private:
-    kh_ht_t * ht;
+    kh_ght_t * ht;
 };
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -145,7 +145,7 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::create()
 {
     _F_;
-    this->ht = kh_init(ht);
+    this->ht = kh_init(ght);
     assert(this->ht != nullptr);
 }
 
@@ -154,7 +154,7 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::destroy()
 {
     _F_;
-    kh_destroy(ht, this->ht);
+    kh_destroy(ght, this->ht);
     this->ht = nullptr;
 }
 
@@ -163,7 +163,7 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::reset()
 {
     _F_;
-    kh_reset(ht, this->ht);
+    kh_reset(ght, this->ht);
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -171,7 +171,7 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::clear()
 {
     _F_;
-    kh_clear(ht, this->ht);
+    kh_clear(ght, this->ht);
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -179,7 +179,7 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::resize(Int nb)
 {
     _F_;
-    int ret = kh_resize(ht, this->ht, (khint_t) nb);
+    int ret = kh_resize(ght, this->ht, (khint_t) nb);
     assert(ret >= 0);
 }
 
@@ -204,7 +204,7 @@ bool
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::has(const KEY & key)
 {
     _F_;
-    khiter_t iter = kh_get(ht, this->ht, key);
+    khiter_t iter = kh_get(ght, this->ht, key);
     return (iter != kh_end(this->ht));
 }
 
@@ -213,8 +213,8 @@ VAL
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get(const KEY & key)
 {
     _F_;
-    khiter_t iter = kh_get(ht, this->ht, key);
-    return (iter != kh_end(ht)) ? kh_val(this->ht, iter) : VAL();
+    khiter_t iter = kh_get(ght, this->ht, key);
+    return (iter != kh_end(this->ht)) ? kh_val(this->ht, iter) : VAL();
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -223,7 +223,7 @@ HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::set(const KEY & key, const VAL & val)
 {
     _F_;
     int ret;
-    khiter_t iter = kh_put(ht, this->ht, key, &ret);
+    khiter_t iter = kh_put(ght, this->ht, key, &ret);
     assert(ret >= 0);
     kh_val(this->ht, iter) = val;
 }
@@ -233,8 +233,8 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::del(const KEY & key)
 {
     _F_;
-    khiter_t iter = kh_get(ht, this->ht, key);
-    kh_del(ht, this->ht, iter);
+    khiter_t iter = kh_get(ght, this->ht, key);
+    kh_del(ght, this->ht, iter);
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -243,7 +243,7 @@ HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::query_set(const KEY & key, const VAL & v
 {
     _F_;
     int ret;
-    khiter_t iter = kh_put(ht, this->ht, key, &ret);
+    khiter_t iter = kh_put(ght, this->ht, key, &ret);
     assert(ret >= 0);
     kh_val(this->ht, iter) = val;
     return ret != 0;
@@ -254,9 +254,9 @@ bool
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::query_del(const KEY & key)
 {
     _F_;
-    khiter_t iter = kh_get(ht, this->ht, key);
-    if (iter != kh_end(ht)) {
-        kh_del(ht, this->ht, iter);
+    khiter_t iter = kh_get(ght, this->ht, key);
+    if (iter != kh_end(this->ht)) {
+        kh_del(ght, this->ht, iter);
         return true;
     }
     else
@@ -268,7 +268,7 @@ typename HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::Iterator
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::find(const KEY & key)
 {
     _F_;
-    PetscHashIter iter = kh_get(ht, this->ht, key);
+    PetscHashIter iter = kh_get(ght, this->ht, key);
     return Iterator(this->ht, iter);
 }
 
@@ -278,7 +278,7 @@ HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::put(const KEY & key)
 {
     _F_;
     int ret;
-    PetscHashIter iter = kh_put(ht, this->ht, key, &ret);
+    PetscHashIter iter = kh_put(ght, this->ht, key, &ret);
     assert(ret >= 0);
     return Iterator(this->ht, iter);
 }
