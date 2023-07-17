@@ -1,60 +1,127 @@
 #pragma once
 
-#include "petsc/private/khash/khash.h"
-#include "petsc/private/hashtable.h"
 #include "CallStack.h"
 #include "Types.h"
-#include "HashFn.h"
-#include "HashEqual.h"
+#include <stdexcept>
 
 namespace godzilla {
 
+#if UINT_MAX == 0xffffffffu
+typedef unsigned int khint32_t;
+#elif ULONG_MAX == 0xffffffffu
+typedef unsigned long khint32_t;
+#endif
+
+#if ULONG_MAX == ULLONG_MAX
+typedef unsigned long khint64_t;
+#else
+typedef unsigned long long khint64_t;
+#endif
+
+typedef khint32_t khint_t;
+typedef khint32_t Hash32_t;
+typedef khint64_t Hash64_t;
+typedef khint_t Hash_t;
+
+// Thomas Wang's version for 64bit integer -> 32bit hash
+static inline Hash32_t
+Hash_UInt64_32(Hash64_t key)
+{
+    key = ~key + (key << 18); /* key = (key << 18) - key - 1; */
+    key = key ^ (key >> 31);
+    key = key * 21; /* key = (key + (key << 2)) + (key << 4);  */
+    key = key ^ (key >> 11);
+    key = key + (key << 6);
+    key = key ^ (key >> 22);
+    return (Hash32_t) key;
+}
+
+// Thomas Wang's version for 64bit integer -> 64bit hash
+static inline Hash64_t
+Hash_UInt64_64(Hash64_t key)
+{
+    key = ~key + (key << 21); /* key = (key << 21) - key - 1; */
+    key = key ^ (key >> 24);
+    key = key * 265; /* key = (key + (key << 3)) + (key << 8);  */
+    key = key ^ (key >> 14);
+    key = key * 21; /* key = (key + (key << 2)) + (key << 4); */
+    key = key ^ (key >> 28);
+    key = key + (key << 31);
+    return key;
+}
+
+// Thomas Wang's second version for 32bit integers
+static inline Hash_t
+Hash_UInt32_v1(Hash32_t key)
+{
+    key = ~key + (key << 15); /* key = (key << 15) - key - 1; */
+    key = key ^ (key >> 12);
+    key = key + (key << 2);
+    key = key ^ (key >> 4);
+    key = key * 2057; /* key = (key + (key << 3)) + (key << 11); */
+    key = key ^ (key >> 16);
+    return key;
+}
+
+/// Template for hash functions
+template <class KEY>
+class HashFn {
+};
+
+/// Hash function for `Int`
+template <>
+class HashFn<Int> {
+public:
+    HashFn(Int k)
+    {
+#if defined(PETSC_USE_64BIT_INDICES)
+        this->key = Hash_UInt64_32(k);
+#else
+        this->key = Hash_UInt32_v1(k);
+#endif
+    }
+
+    operator khint_t() const
+    {
+        return this->key;
+    }
+
+private:
+    khint_t key;
+};
+
+///
+
+/// Template for determining the equality of 2 hashes
+template <class T>
+class HashEqual {
+};
+
+template <>
+class HashEqual<Int> {
+public:
+    HashEqual(Int a, Int b) { this->equal = (a == b); }
+
+    operator bool() const { return this->equal; }
+
+private:
+    bool equal;
+};
+
 /// Template for hash map
+///
+/// @tparam KEY
+/// @tparam VAL
+/// @tparam HASH_FN
+/// @tparam HASH_EQUAL
+///
+/// Based on
+/// https://github.com/attractivechaos/klib/blob/928581a78413bed4efa956731b35b18a638f20f3/khash.h
 template <class KEY, class VAL, class HASH_FN = HashFn<KEY>, class HASH_EQUAL = HashEqual<KEY>>
 class HashMap {
-private:
-    __KHASH_TYPE(ght, KEY, VAL);
-    __KHASH_IMPL(ght, inline, KEY, VAL, 1, HASH_FN, HASH_EQUAL);
-
 public:
-    struct Iterator {
-        using iterator_category = std::forward_iterator_tag;
+    struct Iterator;
 
-        Iterator(kh_ght_t * ht, khiter_t it) : ht(ht), it(it) {}
-
-        Iterator &
-        operator++()
-        {
-            PetscHashIterNext(this->ht, this->it);
-            return *this;
-        }
-
-        Iterator
-        operator++(int)
-        {
-            Iterator tmp = *this;
-            ++(*this);
-            return tmp;
-        }
-
-        friend bool
-        operator==(const Iterator & a, const Iterator & b)
-        {
-            return (a.ht == b.ht) && (a.it == b.it);
-        }
-
-        friend bool
-        operator!=(const Iterator & a, const Iterator & b)
-        {
-            return (a.ht != b.ht) || (a.it != b.it);
-        }
-
-    private:
-        kh_ght_t * ht;
-        khiter_t it;
-    };
-
-public:
     HashMap();
 
     /// Create a hash table
@@ -70,7 +137,7 @@ public:
     void clear();
 
     /// Set the number of buckets in a hash table
-    void resize(Int nb);
+    int resize(Int nb);
 
     /// Get the number of entries in a hash table
     Int get_size() const;
@@ -82,10 +149,10 @@ public:
     bool has(const KEY & key);
 
     /// Get the value for a key in the hash table
-    const VAL & get(const KEY & key);
+    const VAL & get(const KEY & key) const;
 
-    /// Set a (key,value) entry in the hash table
-    void set(const KEY & key, const VAL & val);
+    /// Get a writeable reference to an entry with a `key`
+    VAL & set(const KEY & key);
 
     /// Remove a key and its value from the hash table
     void del(const KEY & key);
@@ -114,29 +181,272 @@ public:
     // ...
 
     /// Get all keys from a hash table
-    std::vector<KEY> get_keys(PetscInt off = 0);
+    std::vector<KEY> get_keys(Int off = 0);
 
     /// Get all values from a hash table
-    std::vector<VAL> get_vals(PetscInt off = 0);
+    std::vector<VAL> get_vals(Int off = 0);
 
     Iterator
     begin()
     {
-        return Iterator(this->ht, kh_begin(this->ht));
+        return Iterator(this, kh_begin());
     }
 
     Iterator
     end()
     {
-        return Iterator(this->ht, kh_end(this->ht));
+        return Iterator(this, kh_end());
     }
 
 private:
-    kh_ght_t * ht;
+    static constexpr double HASH_UPPER = 0.77;
+
+    inline bool
+    isempty(khint32_t * flag, int i) const
+    {
+        return (flag[i >> 4] >> ((i & 0xfU) << 1)) & 2;
+    }
+
+    inline bool
+    isdel(khint32_t * flag, int i) const
+    {
+        return (flag[i >> 4] >> ((i & 0xfU) << 1)) & 1;
+    }
+
+    inline bool
+    iseither(khint32_t * flag, int i) const
+    {
+        return (flag[i >> 4] >> ((i & 0xfU) << 1)) & 3;
+    }
+
+    inline void
+    set_isdel_false(khint32_t * flag, int i)
+    {
+        flag[i >> 4] &= ~(1U << ((i & 0xfU) << 1));
+    }
+
+    inline void
+    set_isempty_false(khint32_t * flag, int i)
+    {
+        flag[i >> 4] &= ~(2U << ((i & 0xfU) << 1));
+    }
+
+    inline void
+    set_isboth_false(khint32_t * flag, int i)
+    {
+        flag[i >> 4] &= ~(3U << ((i & 0xfU) << 1));
+    }
+
+    inline void
+    set_isdel_true(khint32_t * flag, int i)
+    {
+        flag[i >> 4] |= 1U << ((i & 0xfU) << 1);
+    }
+
+    inline khint_t
+    fsize(khint_t m) const
+    {
+        return m < 16 ? 1 : m >> 4;
+    }
+
+    inline void
+    kroundup32(khint_t & x)
+    {
+        --x, x |= x >> 1, x |= x >> 2, x |= x >> 4, x |= x >> 8, x |= x >> 16, ++x;
+    }
+
+    typedef khint_t khiter_t;
+
+    khint_t n_buckets, size, n_occupied, upper_bound;
+    khint32_t * flags;
+    KEY * keys;
+    VAL * vals;
+
+    inline khint_t
+    kh_get(KEY key) const
+    {
+        if (this->n_buckets) {
+            khint_t k, i, last, mask, step = 0;
+            mask = this->n_buckets - 1;
+            k = HASH_FN(key);
+            i = k & mask;
+            last = i;
+            while (!isempty(this->flags, i) &&
+                   (isdel(this->flags, i) || !HASH_EQUAL(this->keys[i], key))) {
+                i = (i + (++step)) & mask;
+                if (i == last)
+                    return this->n_buckets;
+            }
+            return iseither(this->flags, i) ? this->n_buckets : i;
+        }
+        else
+            return 0;
+    }
+
+    inline khint_t
+    kh_put(KEY key, int * ret)
+    {
+        khint_t x;
+        if (this->n_occupied >= this->upper_bound) {
+            /* update the hash table */
+            if (this->n_buckets > (this->size << 1)) {
+                if (resize(this->n_buckets - 1) < 0) {
+                    /* clear "deleted" elements */
+                    *ret = -1;
+                    return this->n_buckets;
+                }
+            }
+            else if (resize(this->n_buckets + 1) < 0) {
+                /* expand the hash table */
+                *ret = -1;
+                return this->n_buckets;
+            }
+        }
+        /* TODO: to implement automatically shrinking; resize() already support shrinking */
+        {
+            khint_t k, i, site, last, mask = this->n_buckets - 1, step = 0;
+            x = site = this->n_buckets;
+            k = HASH_FN(key);
+            i = k & mask;
+            if (isempty(this->flags, i))
+                /* for speed up */
+                x = i;
+            else {
+                last = i;
+                while (!isempty(this->flags, i) &&
+                       (isdel(this->flags, i) || !HASH_EQUAL(this->keys[i], key))) {
+                    if (isdel(this->flags, i))
+                        site = i;
+                    i = (i + (++step)) & mask;
+                    if (i == last) {
+                        x = site;
+                        break;
+                    }
+                }
+                if (x == this->n_buckets) {
+                    if (isempty(this->flags, i) && site != this->n_buckets)
+                        x = site;
+                    else
+                        x = i;
+                }
+            }
+        }
+        if (isempty(this->flags, x)) {
+            /* not present at all */
+            this->keys[x] = key;
+            set_isboth_false(this->flags, x);
+            ++this->size;
+            ++this->n_occupied;
+            *ret = 1;
+        }
+        else if (isdel(this->flags, x)) {
+            /* deleted */
+            this->keys[x] = key;
+            set_isboth_false(this->flags, x);
+            ++this->size;
+            *ret = 2;
+        }
+        else
+            /* Don't touch h->keys[x] if present and not deleted */
+            *ret = 0;
+        return x;
+    }
+
+    inline void
+    kh_del(khint_t x)
+    {
+        if (x != this->n_buckets && !iseither(this->flags, x)) {
+            set_isdel_true(this->flags, x);
+            --this->size;
+        }
+    }
+
+    inline khiter_t
+    kh_begin() const
+    {
+        return 0;
+    }
+
+    inline khiter_t
+    kh_end() const
+    {
+        return this->n_buckets;
+    }
+
+    inline bool
+    kh_exist(khint_t x) const
+    {
+        return !iseither(this->flags, x);
+    }
+
+    inline KEY
+    kh_key(khint_t x) const
+    {
+        return this->keys[x];
+    }
+
+    inline VAL
+    kh_val(khint_t x) const
+    {
+        return this->vals[x];
+    }
+
+public:
+    struct Iterator {
+        using iterator_category = std::forward_iterator_tag;
+
+        Iterator(HashMap * hash, khiter_t it) : hash(hash), it(it) {}
+
+        Iterator &
+        operator++()
+        {
+            next();
+            return *this;
+        }
+
+        Iterator
+        operator++(int)
+        {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        friend bool
+        operator==(const Iterator & a, const Iterator & b)
+        {
+            return (a.hash == b.hash) && (a.it == b.it);
+        }
+
+        friend bool
+        operator!=(const Iterator & a, const Iterator & b)
+        {
+            return (a.hash != b.hash) || (a.it != b.it);
+        }
+
+    private:
+        inline void
+        next()
+        {
+            do {
+                ++this->it;
+            } while (this->it != this->hash->kh_end() && !this->hash->kh_exist(this->it));
+        }
+
+        HashMap<KEY, VAL, HASH_FN, HASH_EQUAL> * hash;
+        khiter_t it;
+    };
 };
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
-HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::HashMap() : ht(nullptr)
+HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::HashMap() :
+    n_buckets(0),
+    size(0),
+    n_occupied(0),
+    upper_bound(0),
+    flags(nullptr),
+    keys(nullptr),
+    vals(nullptr)
 {
 }
 
@@ -145,8 +455,14 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::create()
 {
     _F_;
-    this->ht = kh_init(ght);
-    assert(this->ht != nullptr);
+    this->flags = nullptr;
+    this->keys = nullptr;
+    this->vals = nullptr;
+
+    this->n_buckets = 0;
+    this->size = 0;
+    this->n_occupied = 0;
+    this->upper_bound = 0;
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -154,8 +470,15 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::destroy()
 {
     _F_;
-    kh_destroy(ght, this->ht);
-    this->ht = nullptr;
+    if (this->keys != nullptr) {
+        free((void *) this->keys);
+        free(this->flags);
+        free((void *) this->vals);
+
+        this->keys = nullptr;
+        this->flags = nullptr;
+        this->vals = nullptr;
+    }
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -163,7 +486,20 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::reset()
 {
     _F_;
-    kh_reset(ght, this->ht);
+    if (this->keys != nullptr) {
+        free(this->keys);
+        free(this->flags);
+        free(this->vals);
+
+        this->n_buckets = 0;
+        this->size = 0;
+        this->n_occupied = 0;
+        this->upper_bound = 0;
+
+        this->keys = nullptr;
+        this->flags = nullptr;
+        this->vals = nullptr;
+    }
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -171,16 +507,105 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::clear()
 {
     _F_;
-    kh_clear(ght, this->ht);
+    if (this->flags) {
+        memset(this->flags, 0xaa, fsize(this->n_buckets) * sizeof(khint32_t));
+        this->size = this->n_occupied = 0;
+    }
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
-void
+int
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::resize(Int nb)
 {
     _F_;
-    int ret = kh_resize(ght, this->ht, (khint_t) nb);
-    assert(ret >= 0);
+    /* This function uses 0.25*n_buckets bytes of working space instead of
+     * [sizeof(key_t+val_t)+.25]*n_buckets. */
+    khint32_t * new_flags = NULL;
+    khint_t j = 1;
+    khint_t new_n_buckets = nb;
+    {
+        kroundup32(new_n_buckets);
+        if (new_n_buckets < 4)
+            new_n_buckets = 4;
+        if (this->size >= (khint_t) (new_n_buckets * HASH_UPPER + 0.5))
+            /* requested size is too small */
+            j = 0;
+        else {
+            /* hash table size to be changed (shrink or expand); rehash */
+            new_flags = (khint32_t *) malloc(fsize(new_n_buckets) * sizeof(khint32_t));
+            if (!new_flags)
+                return -1;
+            memset(new_flags, 0xaa, fsize(new_n_buckets) * sizeof(khint32_t));
+            if (this->n_buckets < new_n_buckets) { /* expand */
+                KEY * new_keys = (KEY *) realloc((void *) this->keys, new_n_buckets * sizeof(KEY));
+                if (!new_keys) {
+                    free(new_flags);
+                    return -1;
+                }
+                this->keys = new_keys;
+                VAL * new_vals = (VAL *) realloc((void *) this->vals, new_n_buckets * sizeof(VAL));
+                if (!new_vals) {
+                    free(new_flags);
+                    return -1;
+                }
+                this->vals = new_vals;
+            }
+            /* otherwise shrink */
+        }
+    }
+    if (j) {
+        /* rehashing is needed */
+        for (j = 0; j != this->n_buckets; ++j) {
+            if (iseither(this->flags, j) == 0) {
+                KEY key = this->keys[j];
+                VAL val;
+                khint_t new_mask;
+                new_mask = new_n_buckets - 1;
+                val = this->vals[j];
+                set_isdel_true(this->flags, j);
+                while (1) {
+                    /* kick-out process; sort of like in Cuckoo hashing */
+                    khint_t k, i, step = 0;
+                    k = HASH_FN(key);
+                    i = k & new_mask;
+                    while (!isempty(new_flags, i))
+                        i = (i + (++step)) & new_mask;
+                    set_isempty_false(new_flags, i);
+                    if (i < this->n_buckets && iseither(this->flags, i) == 0) {
+                        /* kick out the existing element */
+                        {
+                            KEY tmp = this->keys[i];
+                            this->keys[i] = key;
+                            key = tmp;
+                        }
+                        VAL tmp = this->vals[i];
+                        this->vals[i] = val;
+                        val = tmp;
+                        /* mark it as deleted in the old hash table */
+                        set_isdel_true(this->flags, i);
+                    }
+                    else {
+                        /* write the element and jump out of the loop */
+                        this->keys[i] = key;
+                        this->vals[i] = val;
+                        break;
+                    }
+                }
+            }
+        }
+        if (this->n_buckets > new_n_buckets) {
+            /* shrink the hash table */
+            this->keys = (KEY *) realloc((void *) this->keys, new_n_buckets * sizeof(KEY));
+            this->vals = (VAL *) realloc((void *) this->vals, new_n_buckets * sizeof(VAL));
+        }
+        free(this->flags);
+        /* free the working space */
+        this->flags = new_flags;
+        this->n_buckets = new_n_buckets;
+        this->n_occupied = this->size;
+        this->upper_bound = (khint_t) (this->n_buckets * HASH_UPPER + 0.5);
+    }
+    return 0;
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -188,7 +613,7 @@ Int
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_size() const
 {
     _F_;
-    return (Int) kh_size(this->ht);
+    return (Int) this->size;
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -196,7 +621,7 @@ Int
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_capacity() const
 {
     _F_;
-    return (Int) kh_n_buckets(this->ht);
+    return (Int) this->n_buckets;
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -204,34 +629,33 @@ bool
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::has(const KEY & key)
 {
     _F_;
-    khiter_t iter = kh_get(ght, this->ht, key);
-    return (iter != kh_end(this->ht));
+    khiter_t iter = kh_get(key);
+    return (iter != kh_end());
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 const VAL &
-HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get(const KEY & key)
+HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get(const KEY & key) const
 {
     _F_;
-    khiter_t iter = kh_get(ght, this->ht, key);
-    if (iter == kh_end(this->ht)) {
-        int ret;
-        iter = kh_put(ght, this->ht, key, &ret);
-        assert(ret >= 0);
-        kh_val(this->ht, iter) = VAL();
-    }
-    return kh_val(this->ht, iter);
+    khiter_t iter = kh_get(key);
+    if (iter != kh_end())
+        return this->vals[iter];
+    else
+        throw std::out_of_range("Key not found");
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
-void
-HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::set(const KEY & key, const VAL & val)
+VAL &
+HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::set(const KEY & key)
 {
     _F_;
     int ret;
-    khiter_t iter = kh_put(ght, this->ht, key, &ret);
-    assert(ret >= 0);
-    kh_val(this->ht, iter) = val;
+    khiter_t iter = kh_put(key, &ret);
+    if (ret >= 0)
+        return this->vals[iter];
+    else
+        throw std::invalid_argument("Invalid key");
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -239,8 +663,8 @@ void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::del(const KEY & key)
 {
     _F_;
-    khiter_t iter = kh_get(ght, this->ht, key);
-    kh_del(ght, this->ht, iter);
+    khiter_t iter = kh_get(key);
+    kh_del(iter);
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -249,9 +673,9 @@ HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::query_set(const KEY & key, const VAL & v
 {
     _F_;
     int ret;
-    khiter_t iter = kh_put(ght, this->ht, key, &ret);
+    khiter_t iter = kh_put(key, &ret);
     assert(ret >= 0);
-    kh_val(this->ht, iter) = val;
+    this->vals[iter] = val;
     return ret != 0;
 }
 
@@ -260,9 +684,9 @@ bool
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::query_del(const KEY & key)
 {
     _F_;
-    khiter_t iter = kh_get(ght, this->ht, key);
-    if (iter != kh_end(this->ht)) {
-        kh_del(ght, this->ht, iter);
+    khiter_t iter = kh_get(key);
+    if (iter != kh_end()) {
+        kh_del(iter);
         return true;
     }
     else
@@ -274,8 +698,8 @@ typename HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::Iterator
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::find(const KEY & key)
 {
     _F_;
-    PetscHashIter iter = kh_get(ght, this->ht, key);
-    return Iterator(this->ht, iter);
+    khint_t iter = kh_get(key);
+    return Iterator(this, iter);
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
@@ -284,34 +708,38 @@ HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::put(const KEY & key)
 {
     _F_;
     int ret;
-    PetscHashIter iter = kh_put(ght, this->ht, key, &ret);
+    khint_t iter = kh_put(key, &ret);
     assert(ret >= 0);
-    return Iterator(this->ht, iter);
+    return Iterator(this, iter);
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 std::vector<KEY>
-HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_keys(PetscInt off)
+HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_keys(Int off)
 {
     _F_;
-    KEY k;
     std::vector<KEY> keys;
     keys.resize((std::size_t) get_size());
     Int pos = off;
-    kh_foreach_key(this->ht, k, keys[pos++] = k);
+    for (khint_t it = kh_begin(); it != kh_end(); ++it) {
+        if (kh_exist(it))
+            keys[pos++] = kh_key(it);
+    }
     return keys;
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 std::vector<VAL>
-HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_vals(PetscInt off)
+HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_vals(Int off)
 {
     _F_;
-    VAL v;
     std::vector<VAL> vals;
     vals.resize((std::size_t) get_size());
     Int pos = off;
-    kh_foreach_value(this->ht, v, vals[pos++] = v);
+    for (khint_t it = kh_begin(); it != kh_end(); ++it) {
+        if (kh_exist(it))
+            vals[pos++] = kh_val(it);
+    }
     return vals;
 }
 
