@@ -82,7 +82,7 @@ public:
     bool has(const KEY & key);
 
     /// Get the value for a key in the hash table
-    VAL get(const KEY & key);
+    const VAL & get(const KEY & key);
 
     /// Set a (key,value) entry in the hash table
     void set(const KEY & key, const VAL & val);
@@ -209,12 +209,18 @@ HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::has(const KEY & key)
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
-VAL
+const VAL &
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get(const KEY & key)
 {
     _F_;
     khiter_t iter = kh_get(ght, this->ht, key);
-    return (iter != kh_end(this->ht)) ? kh_val(this->ht, iter) : VAL();
+    if (iter == kh_end(this->ht)) {
+        int ret;
+        iter = kh_put(ght, this->ht, key, &ret);
+        assert(ret >= 0);
+        kh_val(this->ht, iter) = VAL();
+    }
+    return kh_val(this->ht, iter);
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
