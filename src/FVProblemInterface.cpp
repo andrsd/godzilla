@@ -284,14 +284,6 @@ FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
         error("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-Int
-FVProblemInterface::get_aux_field_dof(Int point, Int fid) const
-{
-    Int offset;
-    PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid, &offset));
-    return offset;
-}
-
 const Vector &
 FVProblemInterface::get_solution_vector_local() const
 {

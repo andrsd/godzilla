@@ -216,6 +216,14 @@ DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
     return offset;
 }
 
+Int
+DiscreteProblemInterface::get_aux_field_dof(Int point, Int fid) const
+{
+    Int offset;
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid, &offset));
+    return offset;
+}
+
 Vector
 DiscreteProblemInterface::get_coordinates_local() const
 {

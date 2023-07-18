@@ -37,8 +37,6 @@ public:
     std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    Int get_aux_field_dof(Int point, Int fid) const override;
-
     const Vector & get_solution_vector_local() const override;
     const Vector & get_aux_solution_vector_local() const override;
 
