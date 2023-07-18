@@ -99,11 +99,11 @@ private:
     {
         _F_;
         for (Int i = 0; i < this->facets.get_local_size(); i++) {
-            auto face_conn = this->mesh->get_cell_connectivity(this->facets(i));
+            auto face_conn = this->mesh->get_connectivity(this->facets(i));
             auto support = this->mesh->get_support(this->facets(i));
             Int ie = support[0];
             auto volume = (*this->fe_volume)(ie);
-            auto elem_conn = this->mesh->get_cell_connectivity(ie);
+            auto elem_conn = this->mesh->get_connectivity(ie);
             Int local_idx = get_local_face_index(elem_conn, face_conn);
             auto edge_length = this->length(i);
             auto grad = (*this->grad_phi)(ie) (local_idx);
@@ -115,10 +115,13 @@ private:
     void
     calc_face_length()
     {
+        auto n_cells = this->mesh->get_num_all_cells();
         for (Int i = 0; i < this->facets.get_local_size(); i++) {
-            auto face_conn = this->mesh->get_cell_connectivity(this->facets(i));
+            auto face_conn = this->mesh->get_connectivity(this->facets(i));
             // works for simplexes
-            DenseVector<Int, N_ELEM_NODES - 1> idx({ face_conn });
+            DenseVector<Int, N_ELEM_NODES - 1> idx;
+            for (Int j = 0; j < N_ELEM_NODES - 1; j++)
+                idx(j) = face_conn[j] - n_cells;
             auto coords = this->coords->get_values(idx);
             auto edge_length = fe::face_area<ELEM_TYPE>(coords);
             this->length(i) = edge_length;

@@ -41,9 +41,13 @@ Array1D<DenseVector<Int, N_ELEM_NODES>>
 connectivity(const UnstructuredMesh & mesh)
 {
     _F_;
-    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(mesh.get_num_cells());
-    for (auto elem_id : mesh.get_cell_range())
-        connect(elem_id) = DenseVector<Int, N_ELEM_NODES>(mesh.get_cell_connectivity(elem_id));
+    auto n_cells = mesh.get_num_cells();
+    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(n_cells);
+    for (auto elem_id : mesh.get_cell_range()) {
+        auto cell_conn = mesh.get_connectivity(elem_id);
+        for (Int i = 0; i < N_ELEM_NODES; i++)
+            connect(elem_id)(i) = cell_conn[i] - n_cells;
+    }
     return connect;
 }
 

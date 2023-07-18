@@ -170,7 +170,7 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     EXPECT_DEATH(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
 }
 
-TEST(UnstructuredMeshTest, get_cell_connectivity)
+TEST(UnstructuredMeshTest, get_connectivity)
 {
     TestApp app;
 
@@ -180,12 +180,12 @@ TEST(UnstructuredMeshTest, get_cell_connectivity)
     TestUnstructuredMesh mesh(params);
     mesh.create();
 
-    auto cell0 = mesh.get_cell_connectivity(0);
-    EXPECT_EQ(cell0[0], 0);
-    EXPECT_EQ(cell0[1], 1);
-    auto cell1 = mesh.get_cell_connectivity(1);
-    EXPECT_EQ(cell1[0], 1);
-    EXPECT_EQ(cell1[1], 2);
+    auto conn0 = mesh.get_connectivity(0);
+    EXPECT_EQ(conn0[0], 2);
+    EXPECT_EQ(conn0[1], 3);
+    auto conn1 = mesh.get_connectivity(1);
+    EXPECT_EQ(conn1[0], 3);
+    EXPECT_EQ(conn1[1], 4);
 
     auto support2 = mesh.get_support(2);
     EXPECT_EQ(support2.size(), 1);
