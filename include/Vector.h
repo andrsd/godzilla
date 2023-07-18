@@ -22,9 +22,9 @@ public:
     void assembly_end();
 
     Scalar * get_array();
-    const Scalar * get_array_read();
+    const Scalar * get_array_read() const;
     void restore_array(Scalar * arr);
-    void restore_array_read(const Scalar * arr);
+    void restore_array_read(const Scalar * arr) const;
 
     /// Returns the global number of elements of the vector
     Int get_size() const;
