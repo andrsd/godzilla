@@ -201,3 +201,97 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Region 'asdf' does not exists. Typo?"));
 }
+
+TEST_F(AuxiliaryFieldTest, get_value)
+{
+    class TestAuxFld : public AuxiliaryField {
+    public:
+        explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
+        Int
+        get_field_id() const override
+        {
+            return 0;
+        }
+        Int
+        get_num_components() const override
+        {
+            return 1;
+        }
+        PetscFunc *
+        get_func() const override
+        {
+            return nullptr;
+        }
+        void
+        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        {
+            u[0] = time * (x[0] + 1234);
+        }
+    };
+
+    prob->set_aux_fe(0, "aux1", 1, 1);
+
+    Parameters params = AuxiliaryField::parameters();
+    params.set<const App *>("_app") = app;
+    params.set<std::string>("_name") = "aux";
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
+    params.set<std::string>("region") = "asdf";
+    auto aux = TestAuxFld(params);
+    prob->add_auxiliary_field(&aux);
+
+    mesh->create();
+    prob->create();
+
+    DenseVector<Real, 1> coord({ 2. });
+    auto val = aux.get_value(3., coord);
+    EXPECT_DOUBLE_EQ(val, 3708.);
+}
+
+TEST_F(AuxiliaryFieldTest, get_vector_value)
+{
+    class TestAuxFld : public AuxiliaryField {
+    public:
+        explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
+        Int
+        get_field_id() const override
+        {
+            return 0;
+        }
+        Int
+        get_num_components() const override
+        {
+            return 3;
+        }
+        PetscFunc *
+        get_func() const override
+        {
+            return nullptr;
+        }
+        void
+        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        {
+            u[0] = x[0] + 2;
+            u[1] = time;
+            u[2] = 42.;
+        }
+    };
+
+    prob->set_aux_fe(0, "aux1", 1, 1);
+
+    Parameters params = AuxiliaryField::parameters();
+    params.set<const App *>("_app") = app;
+    params.set<std::string>("_name") = "aux";
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
+    params.set<std::string>("region") = "asdf";
+    auto aux = TestAuxFld(params);
+    prob->add_auxiliary_field(&aux);
+
+    mesh->create();
+    prob->create();
+
+    DenseVector<Real, 1> coord({ 3. });
+    auto val = aux.get_vector_value<3>(2., coord);
+    EXPECT_DOUBLE_EQ(val(0), 5.);
+    EXPECT_DOUBLE_EQ(val(1), 2.);
+    EXPECT_DOUBLE_EQ(val(2), 42.);
+}
