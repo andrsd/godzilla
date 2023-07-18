@@ -125,7 +125,9 @@ public:
     HashMap();
 
     /// Create a hash table
-    void create();
+    ///
+    /// @param n Initial number of entries in the hash table
+    void create(Int n = 0);
 
     /// Destroy a hash table
     void destroy();
@@ -452,17 +454,21 @@ HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::HashMap() :
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 void
-HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::create()
+HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::create(Int n)
 {
     _F_;
-    this->flags = nullptr;
-    this->keys = nullptr;
-    this->vals = nullptr;
+    if (n == 0) {
+        this->flags = nullptr;
+        this->keys = nullptr;
+        this->vals = nullptr;
 
-    this->n_buckets = 0;
-    this->size = 0;
-    this->n_occupied = 0;
-    this->upper_bound = 0;
+        this->n_buckets = 0;
+        this->size = 0;
+        this->n_occupied = 0;
+        this->upper_bound = 0;
+    }
+    else
+        resize(n);
 }
 
 template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
