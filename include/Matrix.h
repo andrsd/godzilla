@@ -1,7 +1,10 @@
 #pragma once
 
 #include "Types.h"
+#include "CallStack.h"
 #include "Vector.h"
+#include "DenseVector.h"
+#include "DenseMatrix.h"
 #include "petscmat.h"
 #include <vector>
 
@@ -34,6 +37,12 @@ public:
                     const std::vector<Scalar> & vals,
                     InsertMode mode = INSERT_VALUES);
 
+    template <Int N>
+    void set_values(const DenseVector<Int, N> & row_idxs,
+                    const DenseVector<Int, N> & col_idxs,
+                    const DenseMatrix<Scalar, N, N> & vals,
+                    InsertMode mode = INSERT_VALUES);
+
     /// Computes the matrix-vector product, y = Ax
     void mult(const Vector & x, Vector & y);
 
@@ -51,5 +60,22 @@ public:
 private:
     Mat mat;
 };
+
+template <Int N>
+inline void
+Matrix::set_values(const DenseVector<Int, N> & row_idxs,
+                   const DenseVector<Int, N> & col_idxs,
+                   const DenseMatrix<Scalar, N, N> & vals,
+                   InsertMode mode)
+{
+    _F_;
+    PETSC_CHECK(MatSetValues(this->mat,
+                             N,
+                             row_idxs.get_data(),
+                             N,
+                             col_idxs.get_data(),
+                             vals.get_data(),
+                             mode));
+}
 
 } // namespace godzilla

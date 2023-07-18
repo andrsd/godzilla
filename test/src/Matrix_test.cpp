@@ -85,6 +85,24 @@ TEST(MatrixTest, set_values)
     m.destroy();
 }
 
+TEST(MatrixTest, set_values_dense)
+{
+    Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 2);
+    DenseVector<Int, 2> rows({ 0, 1 });
+    DenseVector<Int, 2> cols({ 0, 1 });
+    DenseMatrix<Scalar, 2, 2> vals;
+    vals.set_row(0, { 1, 2 });
+    vals.set_row(1, { 3, 4 });
+    m.set_values(rows, cols, vals);
+    m.assembly_begin();
+    m.assembly_end();
+    EXPECT_DOUBLE_EQ(m(0, 0), 1.);
+    EXPECT_DOUBLE_EQ(m(0, 1), 2.);
+    EXPECT_DOUBLE_EQ(m(1, 0), 3.);
+    EXPECT_DOUBLE_EQ(m(1, 1), 4.);
+    m.destroy();
+}
+
 TEST(MatrixTest, mult)
 {
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
