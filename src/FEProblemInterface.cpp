@@ -177,15 +177,6 @@ FEProblemInterface::get_field_id(const std::string & name) const
         error("Field '{}' does not exist. Typo?", name);
 }
 
-Int
-FEProblemInterface::get_aux_field_dof(Int point, Int fid) const
-{
-    _F_;
-    Int offset;
-    PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid, &offset));
-    return offset;
-}
-
 const Vector &
 FEProblemInterface::get_solution_vector_local() const
 {
