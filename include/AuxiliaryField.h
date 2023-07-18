@@ -5,6 +5,7 @@
 #include "PrintInterface.h"
 #include "Label.h"
 #include "Types.h"
+#include "DenseVector.h"
 
 namespace godzilla {
 
@@ -42,6 +43,12 @@ public:
 
     virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
 
+    template <Int DIM>
+    Real get_value(Real time, const DenseVector<Real, DIM> & x);
+
+    template <Int N, Int DIM>
+    DenseVector<Real, N> get_vector_value(Real time, const DenseVector<Real, DIM> & x);
+
 protected:
     /// Get mesh this auxiliary field is defined on
     ///
@@ -77,5 +84,23 @@ protected:
 public:
     static Parameters parameters();
 };
+
+template <Int DIM>
+inline Real
+AuxiliaryField::get_value(Real time, const DenseVector<Real, DIM> & x)
+{
+    Real val;
+    evaluate(DIM, time, x.get_data(), 1, &val);
+    return val;
+}
+
+template <Int N, Int DIM>
+inline DenseVector<Real, N>
+AuxiliaryField::get_vector_value(Real time, const DenseVector<Real, DIM> & x)
+{
+    DenseVector<Real, N> val;
+    evaluate(DIM, time, x.get_data(), N, val.get_data());
+    return val;
+}
 
 } // namespace godzilla
