@@ -269,7 +269,7 @@ Vector::get_array()
 }
 
 const Scalar *
-Vector::get_array_read()
+Vector::get_array_read() const
 {
     _F_;
     const Scalar * array;
@@ -285,7 +285,7 @@ Vector::restore_array(Scalar * array)
 }
 
 void
-Vector::restore_array_read(const Scalar * array)
+Vector::restore_array_read(const Scalar * array) const
 {
     _F_;
     PETSC_CHECK(VecRestoreArrayRead(this->vec, &array));
