@@ -7,6 +7,7 @@
 #include "Array1D.h"
 #include "Array2D.h"
 #include "DenseVector.h"
+#include <set>
 
 namespace godzilla {
 
@@ -40,9 +41,13 @@ Array1D<DenseVector<Int, N_ELEM_NODES>>
 connectivity(const UnstructuredMesh & mesh)
 {
     _F_;
-    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(mesh.get_num_cells());
-    for (auto elem_id : mesh.get_cell_range())
-        connect(elem_id) = DenseVector<Int, N_ELEM_NODES>(mesh.get_cell_connectivity(elem_id));
+    auto n_cells = mesh.get_num_cells();
+    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(n_cells);
+    for (auto elem_id : mesh.get_cell_range()) {
+        auto cell_conn = mesh.get_connectivity(elem_id);
+        for (Int i = 0; i < N_ELEM_NODES; i++)
+            connect(elem_id)(i) = cell_conn[i] - n_cells;
+    }
     return connect;
 }
 
@@ -184,6 +189,28 @@ calc_nodal_radius<AXISYMMETRIC, 2>(Array1D<DenseVector<Real, 2>> & coords)
     for (Int in = 0; in < n; in++)
         rad(in) = coords(in)(1);
     return rad;
+}
+
+/// Get local face index
+///
+/// @param elem_conn Element connectivity array
+/// @param face_conn Face connectivity array
+/// @return Local face index
+inline Int
+get_local_face_index(const std::vector<Int> & elem_conn, const std::vector<Int> & face_conn)
+{
+    // this only works for simplexes
+    std::set<Int> ec(elem_conn.begin(), elem_conn.end());
+    std::set<Int> fc(face_conn.begin(), face_conn.end());
+    std::vector<Int> diff;
+    std::set_difference(ec.begin(),
+                        ec.end(),
+                        fc.begin(),
+                        fc.end(),
+                        std::inserter(diff, diff.begin()));
+    assert(diff.size() == 1);
+    auto it = std::find(elem_conn.begin(), elem_conn.end(), diff[0]);
+    return std::distance(elem_conn.begin(), it);
 }
 
 } // namespace fe

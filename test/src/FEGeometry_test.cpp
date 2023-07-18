@@ -144,3 +144,11 @@ TEST(FEGeometryTest, calc_nodal_radius_rz_tri3)
     EXPECT_DOUBLE_EQ(rad(1), 0.);
     EXPECT_DOUBLE_EQ(rad(2), 1.);
 }
+
+TEST(FEGeometryTest, get_local_face_index)
+{
+    std::vector<Int> elem = { 2, 4, 7 };
+    EXPECT_EQ(fe::get_local_face_index(elem, { 2, 4 }), 2);
+    EXPECT_EQ(fe::get_local_face_index(elem, { 4, 7 }), 0);
+    EXPECT_EQ(fe::get_local_face_index(elem, { 7, 2 }), 1);
+}

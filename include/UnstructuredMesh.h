@@ -171,9 +171,9 @@ public:
 
     /// Get connectivity
     ///
-    /// @param cell_id ID of the cell
-    /// @return Cell connectivity
-    std::vector<Int> get_cell_connectivity(Int cell_id) const;
+    /// @param point Point with must lie in the chart
+    /// @return Point connectivity
+    std::vector<Int> get_connectivity(Int point) const;
 
     /// Return the points on the out-edges for this point
     ///

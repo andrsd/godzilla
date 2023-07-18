@@ -173,26 +173,25 @@ UnstructuredMesh::get_cell_type(Int el) const
 }
 
 std::vector<Int>
-UnstructuredMesh::get_cell_connectivity(Int cell_id) const
+UnstructuredMesh::get_connectivity(Int point) const
 {
     Int n_all_elems = get_num_all_cells();
 
     Int closure_size;
     Int * closure = nullptr;
-    PETSC_CHECK(DMPlexGetTransitiveClosure(this->dm, cell_id, PETSC_TRUE, &closure_size, &closure));
+    PETSC_CHECK(DMPlexGetTransitiveClosure(this->dm, point, PETSC_TRUE, &closure_size, &closure));
 
-    auto polytope_type = get_cell_type(cell_id);
+    auto polytope_type = get_cell_type(point);
     Int n_elem_nodes = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     std::vector<Int> elem_connect;
     elem_connect.resize(n_elem_nodes);
     for (Int k = 0; k < n_elem_nodes; k++) {
         Int l = 2 * (closure_size - n_elem_nodes + k);
-        Int idx = (closure[l] - n_all_elems);
-        elem_connect[k] = idx;
+        elem_connect[k] = closure[l];
     }
 
     PETSC_CHECK(
-        DMPlexRestoreTransitiveClosure(this->dm, cell_id, PETSC_TRUE, &closure_size, &closure));
+        DMPlexRestoreTransitiveClosure(this->dm, point, PETSC_TRUE, &closure_size, &closure));
 
     return elem_connect;
 }
