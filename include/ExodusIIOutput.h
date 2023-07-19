@@ -91,6 +91,10 @@ protected:
 
 public:
     static Parameters parameters();
+
+    static const char * get_elem_type(DMPolytopeType elem_type);
+    static const Int * get_elem_node_ordering(DMPolytopeType elem_type);
+    static const Int * get_elem_side_ordering(DMPolytopeType elem_type);
 };
 
 } // namespace godzilla
