@@ -18,10 +18,8 @@ namespace godzilla {
 
 const int ExodusIIOutput::SINGLE_BLK_ID = 0;
 
-namespace {
-
 const char *
-get_elem_type(DMPolytopeType elem_type)
+ExodusIIOutput::get_elem_type(DMPolytopeType elem_type)
 {
     _F_;
     switch (elem_type) {
@@ -41,10 +39,9 @@ get_elem_type(DMPolytopeType elem_type)
 }
 
 const Int *
-get_elem_node_ordering(DMPolytopeType elem_type)
+ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type)
 {
     _F_;
-
     static const Int seg_ordering[] = { 0, 1 };
     static const Int tri_ordering[] = { 0, 1, 2 };
     static const Int quad_ordering[] = { 0, 1, 2, 3 };
@@ -68,7 +65,7 @@ get_elem_node_ordering(DMPolytopeType elem_type)
 }
 
 const Int *
-get_elem_side_ordering(DMPolytopeType elem_type)
+ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type)
 {
     static const Int seg_ordering[] = { 1, 2 };
     static const Int tri_ordering[] = { 1, 2, 3 };
@@ -91,8 +88,6 @@ get_elem_side_ordering(DMPolytopeType elem_type)
         error("Unsupported type.");
     }
 }
-
-} // namespace
 
 REGISTER_OBJECT(ExodusIIOutput);
 
