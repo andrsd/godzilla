@@ -47,6 +47,12 @@ public:
         _F_;
     }
 
+    const UnstructuredMesh *
+    get_mesh() const
+    {
+        return this->mesh;
+    }
+
 protected:
     void
     compute_face_normals()
