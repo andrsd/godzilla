@@ -192,6 +192,21 @@ calc_nodal_radius<AXISYMMETRIC, 2>(Array1D<DenseVector<Real, 2>> & coords)
     return rad;
 }
 
+/// Get local vertex index
+///
+/// @param conn Element connectivity array
+/// @param vertex Vertex index
+/// @return
+inline Int
+get_local_vertex_index(const std::vector<Int> & conn, Int vertex)
+{
+    _F_;
+    for (std::size_t i = 0; i < conn.size(); i++)
+        if (conn[i] == vertex)
+            return i;
+    error("Vertex {} is not part of the connectivity array.", vertex);
+}
+
 /// Get local face index
 ///
 /// @param elem_conn Element connectivity array

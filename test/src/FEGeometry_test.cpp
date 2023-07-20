@@ -145,6 +145,14 @@ TEST(FEGeometryTest, calc_nodal_radius_rz_tri3)
     EXPECT_DOUBLE_EQ(rad(2), 1.);
 }
 
+TEST(FEGeometryTest, get_local_vertex_index)
+{
+    std::vector<Int> elem = { 2, 7, 4 };
+    EXPECT_EQ(fe::get_local_vertex_index(elem, 2), 0);
+    EXPECT_EQ(fe::get_local_vertex_index(elem, 7), 1);
+    EXPECT_EQ(fe::get_local_vertex_index(elem, 4), 2);
+}
+
 TEST(FEGeometryTest, get_local_face_index)
 {
     std::vector<Int> elem = { 2, 4, 7 };
