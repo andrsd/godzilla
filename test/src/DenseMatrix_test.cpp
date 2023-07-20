@@ -634,3 +634,19 @@ TEST(DenseMatrixTest, diagonal)
     EXPECT_EQ(diag(1), -1.);
     EXPECT_EQ(diag(2), 4.);
 }
+
+TEST(DenseMatrixTest, set_col)
+{
+    DenseMatrix<Real, 3, 2> m;
+    m.zero();
+
+    m.set_col(0, DenseVector<Real, 3>({ 1, 2, 0 }));
+    m.set_col(1, DenseVector<Real, 3>({ 3, 5, 4 }));
+
+    EXPECT_EQ(m(0, 0), 1.);
+    EXPECT_EQ(m(1, 0), 2.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(0, 1), 3.);
+    EXPECT_EQ(m(1, 1), 5.);
+    EXPECT_EQ(m(2, 1), 4.);
+}
