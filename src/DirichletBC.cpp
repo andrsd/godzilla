@@ -36,12 +36,14 @@ DirichletBC::create()
 const std::vector<Int> &
 DirichletBC::get_components() const
 {
+    _F_;
     return this->components;
 }
 
 PetscFunc *
 DirichletBC::get_function_t()
 {
+    _F_;
     if (!this->expression_t.empty())
         return EssentialBC::get_function_t();
     else

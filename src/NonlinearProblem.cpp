@@ -239,6 +239,7 @@ NonlinearProblem::set_up_solver_parameters()
 PetscErrorCode
 NonlinearProblem::snes_monitor_callback(Int it, Real norm)
 {
+    _F_;
     lprintf(7, "{} Non-linear residual: {:e}", it, norm);
     return 0;
 }
@@ -246,6 +247,7 @@ NonlinearProblem::snes_monitor_callback(Int it, Real norm)
 PetscErrorCode
 NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
+    _F_;
     lprintf(8, "    {} Linear residual: {:e}", it, rnorm);
     return 0;
 }
@@ -275,11 +277,13 @@ NonlinearProblem::run()
 void
 NonlinearProblem::set_up_matrix_properties()
 {
+    _F_;
 }
 
 void
 NonlinearProblem::set_up_preconditioning()
 {
+    _F_;
 }
 
 void

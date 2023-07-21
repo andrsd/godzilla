@@ -66,6 +66,7 @@ ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & params) :
 
 ExplicitFELinearProblem::~ExplicitFELinearProblem()
 {
+    _F_;
     this->M.destroy();
     this->M_lumped_inv.destroy();
     this->snes = nullptr;
@@ -228,6 +229,7 @@ ExplicitFELinearProblem::compute_rhs(Real time, const Vector & X, Vector & F)
 PetscErrorCode
 ExplicitFELinearProblem::compute_boundary_local(Real time, Vector & x)
 {
+    _F_;
     return DMPlexTSComputeBoundary(get_dm(), time, x, nullptr, this);
 }
 

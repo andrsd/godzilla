@@ -295,6 +295,7 @@ FVProblemInterface::get_solution_vector_local() const
 const Vector &
 FVProblemInterface::get_aux_solution_vector_local() const
 {
+    _F_;
     return this->a;
 }
 
@@ -561,6 +562,7 @@ FVProblemInterface::add_boundary_natural(const std::string & name,
 Int
 FVProblemInterface::get_next_id(const std::vector<Int> & ids) const
 {
+    _F_;
     std::set<Int> s;
     for (auto & id : ids)
         s.insert(id);

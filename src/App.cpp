@@ -114,6 +114,7 @@ App::allocate_input_file()
 void
 App::process_command_line()
 {
+    _F_;
     if (this->no_colors_switch.getValue())
         Terminal::num_colors = 1;
 

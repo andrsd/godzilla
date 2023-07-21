@@ -111,6 +111,7 @@ FEProblemInterface::init()
 void
 FEProblemInterface::allocate_objects()
 {
+    _F_;
     this->sln = this->problem->create_local_vector();
 }
 
@@ -188,6 +189,7 @@ FEProblemInterface::get_solution_vector_local() const
 const Vector &
 FEProblemInterface::get_aux_solution_vector_local() const
 {
+    _F_;
     return this->a;
 }
 
@@ -418,6 +420,7 @@ FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
 void
 FEProblemInterface::set_up_field_null_space(DM dm)
 {
+    _F_;
 }
 
 void
@@ -1804,6 +1807,7 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
 Int
 FEProblemInterface::get_next_id(const std::vector<Int> & ids) const
 {
+    _F_;
     std::set<Int> s;
     for (auto & id : ids)
         s.insert(id);

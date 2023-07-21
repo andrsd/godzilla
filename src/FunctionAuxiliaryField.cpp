@@ -41,12 +41,14 @@ FunctionAuxiliaryField::create()
 Int
 FunctionAuxiliaryField::get_num_components() const
 {
+    _F_;
     return this->num_comps;
 }
 
 PetscFunc *
 FunctionAuxiliaryField::get_func() const
 {
+    _F_;
     return function_auxiliary_field;
 }
 

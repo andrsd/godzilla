@@ -9,6 +9,7 @@ namespace godzilla {
 const char *
 get_polytope_type_str(DMPolytopeType elem_type)
 {
+    _F_;
     switch (elem_type) {
     case DM_POLYTOPE_POINT:
         return "POINT";

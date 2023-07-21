@@ -177,6 +177,7 @@ InputFile::build_outputs()
 InputFile::Block
 InputFile::get_block(const Block & parent, const std::string & name)
 {
+    _F_;
     for (auto it = parent.values().begin(); it != parent.values().end(); ++it) {
         if (it->first.as<std::string>() == name) {
             if (this->root.parent() == parent.parent())
@@ -275,6 +276,7 @@ InputFile::set_app_defined_param(Parameters * params,
                                  const std::string & type,
                                  const YAML::Node & val)
 {
+    _F_;
 }
 
 bool

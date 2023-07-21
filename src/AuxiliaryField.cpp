@@ -28,6 +28,7 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
     fid(-1),
     block_id(-1)
 {
+    _F_;
     this->mesh = dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh());
 }
 

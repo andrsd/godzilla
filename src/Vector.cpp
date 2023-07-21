@@ -39,6 +39,7 @@ Vector::destroy()
 void
 Vector::set_name(const std::string & name)
 {
+    _F_;
     PETSC_CHECK(PetscObjectSetName((PetscObject) this->vec, name.c_str()));
 }
 

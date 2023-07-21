@@ -38,12 +38,14 @@ BoundaryCondition::get_mesh() const
 const Problem *
 BoundaryCondition::get_problem() const
 {
+    _F_;
     return this->dpi->get_problem();
 }
 
 const std::string &
 BoundaryCondition::get_boundary() const
 {
+    _F_;
     return this->boundary;
 }
 

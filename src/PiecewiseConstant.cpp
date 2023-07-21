@@ -96,6 +96,7 @@ PiecewiseConstant::evaluate(Real x)
 Real
 PiecewiseConstant::eval_right_cont(Real x)
 {
+    _F_;
     std::size_t sz = this->x.size();
     if (x < this->x[0])
         return this->y[0];
@@ -122,6 +123,7 @@ PiecewiseConstant::eval_right_cont(Real x)
 Real
 PiecewiseConstant::eval_left_cont(Real x)
 {
+    _F_;
     std::size_t sz = this->x.size();
     if (x <= this->x[0])
         return this->y[0];
