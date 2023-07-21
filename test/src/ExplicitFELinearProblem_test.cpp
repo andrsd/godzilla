@@ -96,7 +96,7 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     Parameters bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<const App *>("_app") = &app;
-    bc_left_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::string>("boundary") = "left";
     bc_left_pars.set<std::vector<std::string>>("value") = { "1" };
     DirichletBC bc_left(bc_left_pars);
@@ -104,7 +104,7 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     Parameters bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<const App *>("_app") = &app;
-    bc_right_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::string>("boundary") = "right";
     bc_right_pars.set<std::vector<std::string>>("value") = { "1" };
     DirichletBC bc_right(bc_right_pars);

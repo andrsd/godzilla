@@ -1821,7 +1821,7 @@ FEProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                                  const std::vector<Int> & components,
                                                  PetscNaturalRiemannBCFunc * fn,
                                                  PetscNaturalRiemannBCFunc * fn_t,
-                                                 void * context) const
+                                                 void * context)
 {
     _F_;
     error("Natural Riemann BCs are not supported for FE problems");

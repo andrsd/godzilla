@@ -540,7 +540,7 @@ FVProblemInterface::add_boundary_essential(const std::string & name,
                                            const std::vector<Int> & components,
                                            PetscFunc * fn,
                                            PetscFunc * fn_t,
-                                           void * context) const
+                                           void * context)
 {
     _F_;
     error("Essential BCs are not supported for FV problems");
@@ -552,7 +552,7 @@ FVProblemInterface::add_boundary_natural(const std::string & name,
                                          const std::vector<Int> & ids,
                                          Int field,
                                          const std::vector<Int> & components,
-                                         void * context) const
+                                         void * context)
 {
     _F_;
     error("Natural BCs are not supported for FV problems");

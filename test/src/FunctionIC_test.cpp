@@ -23,7 +23,7 @@ TEST(FunctionICTest, api)
 
     Parameters params = FunctionIC::parameters();
     params.set<const App *>("_app") = &app;
-    params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     FunctionIC obj(params);
 

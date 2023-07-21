@@ -251,7 +251,7 @@ DiscreteProblemInterface::add_boundary_essential(const std::string & name,
                                                  const std::vector<Int> & components,
                                                  PetscFunc * fn,
                                                  PetscFunc * fn_t,
-                                                 void * context) const
+                                                 void * context)
 {
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_ESSENTIAL,
@@ -274,7 +274,7 @@ DiscreteProblemInterface::add_boundary_natural(const std::string & name,
                                                const std::vector<Int> & ids,
                                                Int field,
                                                const std::vector<Int> & components,
-                                               void * context) const
+                                               void * context)
 {
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_NATURAL,
@@ -299,7 +299,7 @@ DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                                        const std::vector<Int> & components,
                                                        PetscNaturalRiemannBCFunc * fn,
                                                        PetscNaturalRiemannBCFunc * fn_t,
-                                                       void * context) const
+                                                       void * context)
 {
     _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,

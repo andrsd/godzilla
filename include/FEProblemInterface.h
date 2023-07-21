@@ -181,7 +181,7 @@ protected:
                                       const std::vector<Int> & components,
                                       PetscNaturalRiemannBCFunc * fn,
                                       PetscNaturalRiemannBCFunc * fn_t,
-                                      void * context) const override;
+                                      void * context) override;
 
     /// Set up quadrature
     virtual void set_up_quadrature();

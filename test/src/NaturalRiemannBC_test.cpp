@@ -74,7 +74,7 @@ TEST(NaturalRiemannBCTest, api)
 
     Parameters bc_pars = TestBC::parameters();
     bc_pars.set<const App *>("_app") = &app;
-    bc_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_pars.set<std::string>("boundary") = "left";
     TestBC bc(bc_pars);
     prob.add_boundary_condition(&bc);

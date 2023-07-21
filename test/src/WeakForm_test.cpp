@@ -93,7 +93,7 @@ TEST(WeakFormTest, test)
 
     Parameters bc_pars = NaturalBC::parameters();
     bc_pars.set<const App *>("_app") = &app;
-    bc_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_pars.set<std::string>("boundary") = "left";
     TestBC bc(bc_pars);
 

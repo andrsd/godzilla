@@ -224,7 +224,7 @@ TEST(TimeSteppingAdaptor, choose)
         Parameters * params = Factory::get_parameters(class_name);
         params->set<std::string>("boundary") = "marker";
         params->set<std::vector<std::string>>("value") = { "x*x" };
-        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
         auto bc = app.build_object<BoundaryCondition>(class_name, "bc", params);
         prob->add_boundary_condition(bc);
     }

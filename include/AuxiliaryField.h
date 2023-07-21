@@ -64,7 +64,7 @@ protected:
     const UnstructuredMesh * mesh;
 
     /// Discrete problem this object is part of
-    const DiscreteProblemInterface * dpi;
+    DiscreteProblemInterface * dpi;
 
     /// Field name
     const std::string & field;

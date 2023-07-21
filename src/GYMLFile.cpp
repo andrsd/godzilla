@@ -158,7 +158,7 @@ GYMLFile::build_initial_conditions()
         for (const auto & it : ics_node.values()) {
             Block blk = get_block(ics_node, it.first.as<std::string>());
             Parameters * params = build_params(blk);
-            params->set<const DiscreteProblemInterface *>("_dpi") = dpi;
+            params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
             auto ic = Factory::create<InitialCondition>(class_name, blk.name(), params);
             dpi->add_initial_condition(ic);
@@ -183,7 +183,7 @@ GYMLFile::build_boundary_conditions()
         for (const auto & it : bcs_node.values()) {
             Block blk = get_block(bcs_node, it.first.as<std::string>());
             Parameters * params = build_params(blk);
-            params->set<const DiscreteProblemInterface *>("_dpi") = dpi;
+            params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
             auto bc = Factory::create<BoundaryCondition>(class_name, blk.name(), params);
             dpi->add_boundary_condition(bc);

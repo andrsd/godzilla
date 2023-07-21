@@ -36,7 +36,7 @@ public:
 
 protected:
     /// Discrete problem this object is part of
-    const DiscreteProblemInterface * dpi;
+    DiscreteProblemInterface * dpi;
 
     /// Field ID this initial condition is attached to
     Int fid;
