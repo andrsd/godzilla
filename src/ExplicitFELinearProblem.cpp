@@ -228,7 +228,7 @@ ExplicitFELinearProblem::compute_rhs(Real time, const Vector & X, Vector & F)
 PetscErrorCode
 ExplicitFELinearProblem::compute_boundary_local(Real time, Vector & x)
 {
-    return DMPlexTSComputeBoundary(get_dm(), time, x, NULL, this);
+    return DMPlexTSComputeBoundary(get_dm(), time, x, nullptr, this);
 }
 
 PetscErrorCode

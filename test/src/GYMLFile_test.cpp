@@ -33,10 +33,10 @@ public:
         DMPlexCreateBoxMesh(get_comm(),
                             1,
                             PETSC_TRUE,
-                            NULL,
-                            NULL,
-                            NULL,
-                            NULL,
+                            nullptr,
+                            nullptr,
+                            nullptr,
+                            nullptr,
                             PETSC_FALSE,
                             &this->dm);
         DMSetUp(this->dm);
