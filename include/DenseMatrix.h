@@ -128,6 +128,18 @@ public:
             set(row, i) = vals[i];
     }
 
+    /// Set a matrix column at once
+    ///
+    /// This is a convenience method
+    /// @param col Column number
+    /// @param vals Values of the column
+    void
+    set_col(Int col, const DenseVector<Real, ROWS> & vals)
+    {
+        for (Int i = 0; i < ROWS; i++)
+            set(i, col) = vals(i);
+    }
+
     /// Set all matrix entries to zero, i.e. mat[i,j] = 0.
     void
     zero()
