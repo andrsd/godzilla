@@ -48,7 +48,7 @@ create_section(DM dm)
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
-    return Section::create(dm, nc, n_dofs, 0, NULL, NULL, NULL, NULL);
+    return Section::create(dm, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
 }
 
 } // namespace
@@ -152,12 +152,12 @@ TEST(ProblemTest, local_vec)
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
     mesh.create();
-    mesh.set_local_section(create_section(mesh.get_dm()));
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
+    problem.set_local_section(create_section(mesh.get_dm()));
 
     Vector loc_vec = problem.get_local_vector();
     EXPECT_EQ(loc_vec.get_size(), 3);
@@ -177,12 +177,12 @@ TEST(ProblemTest, global_vec)
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
     mesh.create();
-    mesh.set_local_section(create_section(mesh.get_dm()));
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
     prob_params.set<const Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
+    problem.set_local_section(create_section(mesh.get_dm()));
 
     Vector glob_vec = problem.get_global_vector();
     EXPECT_EQ(glob_vec.get_size(), 3);
@@ -202,7 +202,29 @@ TEST(ProblemTest, create_matrix)
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
     mesh.create();
-    mesh.set_local_section(create_section(mesh.get_dm()));
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    TestProblem problem(prob_params);
+    problem.create();
+    problem.set_local_section(create_section(mesh.get_dm()));
+
+    Matrix mat = problem.create_matrix();
+    EXPECT_EQ(mat.get_n_rows(), 3);
+    EXPECT_EQ(mat.get_n_cols(), 3);
+    mat.destroy();
+}
+
+TEST(UnstructuredMeshTest, get_local_section)
+{
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_params);
+    mesh.create();
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
@@ -210,8 +232,41 @@ TEST(ProblemTest, create_matrix)
     TestProblem problem(prob_params);
     problem.create();
 
-    Matrix mat = problem.create_matrix();
-    EXPECT_EQ(mat.get_n_rows(), 3);
-    EXPECT_EQ(mat.get_n_cols(), 3);
-    mat.destroy();
+    DM dm = mesh.get_dm();
+    Section s = create_section(dm);
+    problem.set_local_section(s);
+
+    Section ls = problem.get_local_section();
+
+    PetscBool congruent = PETSC_FALSE;
+    PetscSectionCompare(s, ls, &congruent);
+    EXPECT_EQ(congruent, PETSC_TRUE);
+}
+
+TEST(UnstructuredMeshTest, get_global_section)
+{
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_params);
+    mesh.create();
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    TestProblem problem(prob_params);
+    problem.create();
+
+    DM dm = mesh.get_dm();
+    Section s = create_section(dm);
+    problem.set_local_section(s);
+    problem.set_global_section(s);
+
+    Section ls = problem.get_global_section();
+
+    PetscBool congruent = PETSC_FALSE;
+    PetscSectionCompare(s, ls, &congruent);
+    EXPECT_EQ(congruent, PETSC_TRUE);
 }

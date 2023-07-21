@@ -14,6 +14,7 @@ class Mesh;
 class Function;
 class Postprocessor;
 class Output;
+class Section;
 
 /// Problem
 ///
@@ -113,6 +114,18 @@ public:
 
     /// Get an empty matrix for a `DM`
     Matrix create_matrix() const;
+
+    /// Get the Section encoding the local data layout for the DM
+    Section get_local_section() const;
+
+    /// Set the `Section` encoding the local data layout for the `DM`.
+    void set_local_section(const Section & section) const;
+
+    /// Get the Section encoding the global data layout for the DM
+    Section get_global_section() const;
+
+    /// Set the `Section` encoding the global data layout for the `DM`.
+    void set_global_section(const Section & section) const;
 
 protected:
     /// Called before solving starts

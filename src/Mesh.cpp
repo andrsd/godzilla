@@ -1,7 +1,6 @@
 #include "Godzilla.h"
 #include "Mesh.h"
 #include "CallStack.h"
-#include "Section.h"
 
 namespace godzilla {
 
@@ -90,36 +89,6 @@ Mesh::get_coordinates_local() const
     Vec vec;
     PETSC_CHECK(DMGetCoordinatesLocal(this->dm, &vec));
     return { vec };
-}
-
-Section
-Mesh::get_local_section() const
-{
-    PetscSection section = nullptr;
-    PETSC_CHECK(DMGetLocalSection(this->dm, &section));
-    return { section };
-}
-
-void
-Mesh::set_local_section(const Section & section) const
-{
-    _F_;
-    PETSC_CHECK(DMSetLocalSection(this->dm, section));
-}
-
-Section
-Mesh::get_global_section() const
-{
-    PetscSection section = nullptr;
-    PETSC_CHECK(DMGetGlobalSection(this->dm, &section));
-    return { section };
-}
-
-void
-Mesh::set_global_section(const Section & section) const
-{
-    _F_;
-    PETSC_CHECK(DMSetGlobalSection(this->dm, section));
 }
 
 } // namespace godzilla

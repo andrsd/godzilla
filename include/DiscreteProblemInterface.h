@@ -4,6 +4,7 @@
 #include "Types.h"
 #include "Label.h"
 #include "UnstructuredMesh.h"
+#include "Problem.h"
 #include "Vector.h"
 #include "Matrix.h"
 #include "Section.h"
@@ -14,8 +15,6 @@ namespace godzilla {
 
 class Parameters;
 class Logger;
-class UnstructuredMesh;
-class Problem;
 class InitialCondition;
 class BoundaryCondition;
 class AuxiliaryField;
@@ -353,7 +352,7 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
                                       InsertMode mode) const
 {
     DM dm = this->unstr_mesh->get_dm();
-    Section global_section = this->unstr_mesh->get_global_section();
+    Section global_section = this->problem->get_global_section();
     PETSC_CHECK(
         DMPlexMatSetClosure(dm, this->section, global_section, A, point, mat.get_data(), mode));
 }
@@ -366,7 +365,7 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
                                       InsertMode mode) const
 {
     DM dm = this->unstr_mesh->get_dm();
-    Section global_section = this->unstr_mesh->get_global_section();
+    Section global_section = this->problem->get_global_section();
     DenseMatrix<Real, N> m = mat;
     PETSC_CHECK(
         DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.get_data(), mode));
