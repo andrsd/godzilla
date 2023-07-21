@@ -19,7 +19,7 @@ TEST(DirichletBCTest, api)
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
@@ -61,7 +61,7 @@ TEST(DirichletBCTest, with_user_defined_fn)
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 

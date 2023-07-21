@@ -12,14 +12,14 @@ Parameters
 Problem::parameters()
 {
     Parameters params = Object::parameters();
-    params.add_private_param<const Mesh *>("_mesh", nullptr);
+    params.add_private_param<Mesh *>("_mesh", nullptr);
     return params;
 }
 
 Problem::Problem(const Parameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    mesh(get_param<const Mesh *>("_mesh")),
+    mesh(get_param<Mesh *>("_mesh")),
     default_output_on(Output::ON_NONE),
     time(0.),
     step_num(0)
@@ -58,7 +58,7 @@ Problem::create()
         out->create();
 }
 
-const Mesh *
+Mesh *
 Problem::get_mesh() const
 {
     _F_;

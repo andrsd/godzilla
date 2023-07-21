@@ -52,7 +52,7 @@ protected:
     /// FE problem interface (convenience pointer)
     const DiscreteProblemInterface * dpi;
     /// Unstructured mesh
-    const UnstructuredMesh * mesh;
+    UnstructuredMesh * mesh;
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
 

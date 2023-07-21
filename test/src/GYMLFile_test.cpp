@@ -101,7 +101,7 @@ GTestProblem::parameters()
                                                                       "map<str, vec<str>> doco");
     params.add_param<bool>("bool1", false, "False bool param");
     params.add_param<bool>("bool2", true, "True bool param");
-    params.add_private_param<const Mesh *>("_mesh", nullptr);
+    params.add_private_param<Mesh *>("_mesh", nullptr);
     return params;
 }
 
@@ -200,7 +200,7 @@ TEST_F(GYMLFileTest, mesh_partitioner)
     file.parse(file_name);
     file.build();
 
-    Mesh * mesh = file.get_mesh();
+    auto mesh = file.get_mesh();
     EXPECT_NE(mesh, nullptr);
     mesh->create();
 

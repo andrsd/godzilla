@@ -181,7 +181,7 @@ TEST(NeumannProblemTest, solve)
 
     Parameters prob_params = TestNeumannProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     TestNeumannProblem prob(prob_params);
     app.problem = &prob;
 

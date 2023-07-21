@@ -46,7 +46,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     G1DTestLinearProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
@@ -70,7 +70,7 @@ TEST(MeshPartitioningOutputTest, output)
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     G1DTestLinearProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();

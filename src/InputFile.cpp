@@ -149,7 +149,7 @@ InputFile::build_problem()
     auto node = get_block(this->root, "problem");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
-    params->set<const Mesh *>("_mesh") = this->mesh;
+    params->set<Mesh *>("_mesh") = this->mesh;
     this->problem = Factory::create<Problem>(class_name, "problem", params);
     add_object(this->problem);
 }

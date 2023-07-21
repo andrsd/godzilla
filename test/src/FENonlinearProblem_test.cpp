@@ -264,7 +264,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<Mesh *>("_mesh") = mesh;
         prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
     }
     {
@@ -321,7 +321,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     {
         const std::string class_name = "GTest2FieldsFENonlinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<Mesh *>("_mesh") = mesh;
         prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
     }
 

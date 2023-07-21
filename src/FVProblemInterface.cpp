@@ -351,7 +351,7 @@ void
 FVProblemInterface::create()
 {
     _F_;
-    const_cast<UnstructuredMesh *>(this->unstr_mesh)->construct_ghost_cells();
+    this->unstr_mesh->construct_ghost_cells();
     set_up_fields();
     DiscreteProblemInterface::create();
 }

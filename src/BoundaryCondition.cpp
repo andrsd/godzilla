@@ -25,10 +25,10 @@ BoundaryCondition::BoundaryCondition(const Parameters & params) :
     boundary(get_param<std::string>("boundary"))
 {
     _F_;
-    this->mesh = dynamic_cast<const UnstructuredMesh *>(get_problem()->get_mesh());
+    this->mesh = dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh());
 }
 
-const UnstructuredMesh *
+UnstructuredMesh *
 BoundaryCondition::get_mesh() const
 {
     _F_;

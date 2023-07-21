@@ -101,7 +101,7 @@ TEST(ProblemTest, add_pp)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
 
     Parameters pp_params = Postprocessor::parameters();
@@ -155,7 +155,7 @@ TEST(ProblemTest, local_vec)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
     problem.set_local_section(create_section(mesh.get_dm()));
 
@@ -180,7 +180,7 @@ TEST(ProblemTest, global_vec)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
     problem.set_local_section(create_section(mesh.get_dm()));
 
@@ -205,7 +205,7 @@ TEST(ProblemTest, create_matrix)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
     problem.create();
     problem.set_local_section(create_section(mesh.get_dm()));
@@ -228,7 +228,7 @@ TEST(UnstructuredMeshTest, get_local_section)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
     problem.create();
 
@@ -255,7 +255,7 @@ TEST(UnstructuredMeshTest, get_global_section)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
     problem.create();
 

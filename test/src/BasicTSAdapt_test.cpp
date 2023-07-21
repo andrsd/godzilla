@@ -23,7 +23,7 @@ TEST(BasicTSAdapt, api)
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<Mesh *>("_mesh") = mesh;
         params->set<Real>("start_time") = 0.;
         params->set<Real>("end_time") = 1;
         params->set<Real>("dt") = 0.1;

@@ -64,7 +64,7 @@ protected:
     /// FE problem interface (convenience pointer)
     const DiscreteProblemInterface * dpi;
     /// Unstructured mesh
-    const UnstructuredMesh * mesh;
+    UnstructuredMesh * mesh;
     /// ExodusII file
     exodusIIcpp::File * exo;
     /// Step number

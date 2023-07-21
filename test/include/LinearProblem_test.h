@@ -89,7 +89,7 @@ protected:
     {
         const std::string class_name = "G1DTestLinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<Mesh *>("_mesh") = mesh;
         return this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
     }
 
@@ -98,7 +98,7 @@ protected:
     {
         const std::string class_name = "G2DTestLinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<Mesh *>("_mesh") = mesh;
         return this->app->build_object<G2DTestLinearProblem>(class_name, "problem", params);
     }
 
@@ -107,7 +107,7 @@ protected:
     {
         const std::string class_name = "G3DTestLinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<Mesh *>("_mesh") = mesh;
         return this->app->build_object<G3DTestLinearProblem>(class_name, "problem", params);
     }
 };

@@ -291,7 +291,7 @@ protected:
     Problem * problem;
 
     /// Unstructured mesh
-    const UnstructuredMesh * unstr_mesh;
+    UnstructuredMesh * unstr_mesh;
 
     /// Logger object
     Logger * logger;

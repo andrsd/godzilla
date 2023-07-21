@@ -25,7 +25,7 @@ public:
         {
             const std::string class_name = "GTestFENonlinearProblem";
             Parameters * params = Factory::get_parameters(class_name);
-            params->set<const Mesh *>("_mesh") = this->mesh;
+            params->set<Mesh *>("_mesh") = this->mesh;
             this->prob =
                 this->app->build_object<GTestFENonlinearProblem>(class_name, "prob", params);
         }
@@ -58,7 +58,7 @@ public:
         {
             const std::string class_name = "GTest2FieldsFENonlinearProblem";
             Parameters * params = Factory::get_parameters(class_name);
-            params->set<const Mesh *>("_mesh") = this->mesh;
+            params->set<Mesh *>("_mesh") = this->mesh;
             this->prob =
                 this->app->build_object<GTest2FieldsFENonlinearProblem>(class_name, "prob", params);
         }
