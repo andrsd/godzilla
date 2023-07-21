@@ -4,6 +4,7 @@
 #include "Function.h"
 #include "Postprocessor.h"
 #include "Output.h"
+#include "Section.h"
 
 namespace godzilla {
 
@@ -226,6 +227,36 @@ Problem::create_matrix() const
     Mat m;
     PETSC_CHECK(DMCreateMatrix(get_dm(), &m));
     return { m };
+}
+
+Section
+Problem::get_local_section() const
+{
+    PetscSection section = nullptr;
+    PETSC_CHECK(DMGetLocalSection(get_dm(), &section));
+    return { section };
+}
+
+void
+Problem::set_local_section(const Section & section) const
+{
+    _F_;
+    PETSC_CHECK(DMSetLocalSection(get_dm(), section));
+}
+
+Section
+Problem::get_global_section() const
+{
+    PetscSection section = nullptr;
+    PETSC_CHECK(DMGetGlobalSection(get_dm(), &section));
+    return { section };
+}
+
+void
+Problem::set_global_section(const Section & section) const
+{
+    _F_;
+    PETSC_CHECK(DMSetGlobalSection(get_dm(), section));
 }
 
 } // namespace godzilla

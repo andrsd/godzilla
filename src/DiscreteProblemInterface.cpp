@@ -96,7 +96,7 @@ DiscreteProblemInterface::init()
     set_up_ds();
     set_up_initial_conditions();
     set_up_boundary_conditions();
-    this->section = this->unstr_mesh->get_local_section();
+    this->section = this->problem->get_local_section();
 }
 
 void

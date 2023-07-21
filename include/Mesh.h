@@ -10,8 +10,6 @@
 
 namespace godzilla {
 
-class Section;
-
 /// Base class for meshes
 ///
 class Mesh : public Object, public PrintInterface {
@@ -65,18 +63,6 @@ public:
     ///
     /// @return Coordinate vector
     Vector get_coordinates_local() const;
-
-    /// Get the Section encoding the local data layout for the DM
-    Section get_local_section() const;
-
-    /// Set the `Section` encoding the local data layout for the `DM`.
-    void set_local_section(const Section & section) const;
-
-    /// Get the Section encoding the global data layout for the DM
-    Section get_global_section() const;
-
-    /// Set the `Section` encoding the global data layout for the `DM`.
-    void set_global_section(const Section & section) const;
 
 protected:
     /// DM object
