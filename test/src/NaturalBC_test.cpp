@@ -20,7 +20,7 @@ TEST(NaturalBCTest, api)
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     app.problem = &prob;
 
@@ -45,7 +45,7 @@ TEST(NaturalBCTest, api)
 
     Parameters params = NaturalBC::parameters();
     params.set<const App *>("_app") = &app;
-    params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::string>("boundary") = "left";
     MockNaturalBC bc(params);
 
@@ -125,14 +125,14 @@ TEST(NaturalBCTest, fe)
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     app.problem = &prob;
     prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters bc_params = TestNaturalBC::parameters();
     bc_params.set<const App *>("_app") = &app;
-    bc_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_params.set<std::string>("_name") = "bc1";
     bc_params.set<std::string>("boundary") = "left";
     TestNaturalBC bc(bc_params);

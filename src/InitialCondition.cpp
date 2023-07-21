@@ -21,14 +21,14 @@ InitialCondition::parameters()
 {
     Parameters params = Object::parameters();
     params.add_param<std::string>("field", "", "Field name");
-    params.add_private_param<const DiscreteProblemInterface *>("_dpi", nullptr);
+    params.add_private_param<DiscreteProblemInterface *>("_dpi", nullptr);
     return params;
 }
 
 InitialCondition::InitialCondition(const Parameters & params) :
     Object(params),
     PrintInterface(this),
-    dpi(get_param<const DiscreteProblemInterface *>("_dpi")),
+    dpi(get_param<DiscreteProblemInterface *>("_dpi")),
     fid(-1)
 {
     _F_;

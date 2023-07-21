@@ -50,7 +50,7 @@ void
 HDF5Output::check()
 {
     _F_;
-    const auto * mesh = dynamic_cast<const UnstructuredMesh *>(this->problem->get_mesh());
+    const auto * mesh = dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh());
     if (mesh == nullptr)
         log_error("HDF5 output works only with unstructured meshes.");
 }

@@ -26,7 +26,7 @@ protected:
         {
             const std::string class_name = "G1DTestLinearProblem";
             Parameters * params = Factory::get_parameters(class_name);
-            params->set<const Mesh *>("_mesh") = mesh;
+            params->set<Mesh *>("_mesh") = mesh;
             this->prob =
                 this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
         }
@@ -110,7 +110,7 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
 
     Parameters prob_pars = TestProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     TestProblem prob(prob_pars);
 
     Parameters pars = VTKOutput::parameters();

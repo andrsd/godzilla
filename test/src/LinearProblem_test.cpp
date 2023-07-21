@@ -57,7 +57,7 @@ TEST_F(LinearProblemTest, run)
 
     Parameters prob_pars = LinearProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<const Mesh *>("_mesh") = mesh;
+    prob_pars.set<Mesh *>("_mesh") = mesh;
     MockLinearProblem prob(prob_pars);
 
     EXPECT_CALL(prob, solve);

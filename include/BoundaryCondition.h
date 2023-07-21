@@ -26,7 +26,7 @@ public:
     /// Get DiscreteProblemInterface
     ///
     /// @return Discrete problem this BC is part of
-    NO_DISCARD virtual const DiscreteProblemInterface * get_discrete_problem_interface() const;
+    NO_DISCARD virtual DiscreteProblemInterface * get_discrete_problem_interface() const;
 
     /// Set up this boundary condition
     virtual void set_up() = 0;
@@ -35,16 +35,16 @@ protected:
     /// Get mesh this boundary condition is associated with
     ///
     /// @return Mesh this boundary condition is associated with
-    const UnstructuredMesh * get_mesh() const;
+    UnstructuredMesh * get_mesh() const;
 
     /// Get problem this auxiliary field is part of
     const Problem * get_problem() const;
 
     /// Unstructured mesh this field is defined on
-    const UnstructuredMesh * mesh;
+    UnstructuredMesh * mesh;
 
     /// Discrete problem this object is part of
-    const DiscreteProblemInterface * dpi;
+    DiscreteProblemInterface * dpi;
 
     /// List of boundary names
     const std::string & boundary;

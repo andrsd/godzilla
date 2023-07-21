@@ -216,13 +216,13 @@ public:
                                         const std::vector<Int> & components,
                                         PetscFunc * fn,
                                         PetscFunc * fn_t,
-                                        void * context) const;
+                                        void * context);
     virtual void add_boundary_natural(const std::string & name,
                                       const Label & label,
                                       const std::vector<Int> & ids,
                                       Int field,
                                       const std::vector<Int> & components,
-                                      void * context) const;
+                                      void * context);
     virtual void add_boundary_natural_riemann(const std::string & name,
                                               const Label & label,
                                               const std::vector<Int> & ids,
@@ -230,7 +230,7 @@ public:
                                               const std::vector<Int> & components,
                                               PetscNaturalRiemannBCFunc * fn,
                                               PetscNaturalRiemannBCFunc * fn_t,
-                                              void * context) const;
+                                              void * context);
 
     template <Int N>
     void set_closure(const Vector & v,
@@ -291,7 +291,7 @@ protected:
     Problem * problem;
 
     /// Unstructured mesh
-    const UnstructuredMesh * unstr_mesh;
+    UnstructuredMesh * unstr_mesh;
 
     /// Logger object
     Logger * logger;

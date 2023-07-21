@@ -16,20 +16,20 @@ TEST(L2DiffTest, compute)
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    prob_params.set<const Mesh *>("_mesh") = &mesh;
+    prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     app.problem = &prob;
 
     Parameters bc_left_params = DirichletBC::parameters();
     bc_left_params.set<const App *>("_app") = &app;
-    bc_left_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_left_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_params.set<std::vector<std::string>>("value") = { "x*x" };
     bc_left_params.set<std::string>("boundary") = "left";
     DirichletBC bc_left(bc_left_params);
 
     Parameters bc_right_params = DirichletBC::parameters();
     bc_right_params.set<const App *>("_app") = &app;
-    bc_right_params.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_right_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_params.set<std::vector<std::string>>("value") = { "x*x" };
     bc_right_params.set<std::string>("boundary") = "right";
     DirichletBC bc_right(bc_right_params);

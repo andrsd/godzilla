@@ -12,7 +12,7 @@ class FEProblemInterface;
 
 class JacobianFunc : public Functional {
 public:
-    explicit JacobianFunc(const FEProblemInterface * fepi, const std::string & region = "");
+    explicit JacobianFunc(FEProblemInterface * fepi, const std::string & region = "");
 
     /// Evaluate this functional
     ///

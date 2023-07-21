@@ -21,7 +21,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     {
         const std::string class_name = "ConstantIC";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<Real>>("value") = { 0 };
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
         prob->add_initial_condition(ic);
@@ -32,7 +32,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
         Parameters * params = Factory::get_parameters(class_name);
         params->set<std::string>("boundary") = bnd;
         params->set<std::vector<std::string>>("value") = { "x*x" };
-        params->set<const DiscreteProblemInterface *>("_dpi") = prob;
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
         prob->add_boundary_condition(bc);
     }
@@ -64,7 +64,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<Mesh *>("_mesh") = mesh;
         params->set<Real>("start_time") = 0.;
         params->set<Real>("end_time") = 20;
         params->set<Real>("dt") = 5;

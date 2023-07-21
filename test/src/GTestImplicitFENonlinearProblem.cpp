@@ -13,7 +13,7 @@ namespace {
 
 class F0 : public ResidualFunc {
 public:
-    explicit F0(const GTestImplicitFENonlinearProblem * prob) :
+    explicit F0(GTestImplicitFENonlinearProblem * prob) :
         ResidualFunc(prob),
         u_t(get_field_dot("u"))
     {
@@ -31,7 +31,7 @@ protected:
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(const GTestImplicitFENonlinearProblem * prob) :
+    explicit F1(GTestImplicitFENonlinearProblem * prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u_x(get_field_gradient("u"))
@@ -52,7 +52,7 @@ protected:
 
 class G0 : public JacobianFunc {
 public:
-    explicit G0(const GTestImplicitFENonlinearProblem * prob) :
+    explicit G0(GTestImplicitFENonlinearProblem * prob) :
         JacobianFunc(prob),
         u_t_shift(get_time_shift())
     {
@@ -70,7 +70,7 @@ protected:
 
 class G3 : public JacobianFunc {
 public:
-    explicit G3(const GTestImplicitFENonlinearProblem * prob) :
+    explicit G3(GTestImplicitFENonlinearProblem * prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension())
     {

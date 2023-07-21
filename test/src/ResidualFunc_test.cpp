@@ -40,7 +40,7 @@ protected:
 
 class TestF : public ResidualFunc {
 public:
-    explicit TestF(const GTestProblem * prob) :
+    explicit TestF(GTestProblem * prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u(get_field_value("u")),
@@ -77,7 +77,7 @@ TEST(ResidualFuncTest, test)
 
     Parameters prob_pars = GTestProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 20;
     prob_pars.set<Real>("dt") = 5;

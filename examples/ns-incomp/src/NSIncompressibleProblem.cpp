@@ -15,7 +15,7 @@ namespace {
 
 class ResidualVeloc0 : public ResidualFunc {
 public:
-    explicit ResidualVeloc0(const NSIncompressibleProblem * prob) :
+    explicit ResidualVeloc0(NSIncompressibleProblem * prob) :
         ResidualFunc(prob),
         n_comp(get_spatial_dimension()),
         dim(get_spatial_dimension()),
@@ -50,7 +50,7 @@ protected:
 
 class ResidualVeloc1 : public ResidualFunc {
 public:
-    explicit ResidualVeloc1(const NSIncompressibleProblem * prob) :
+    explicit ResidualVeloc1(NSIncompressibleProblem * prob) :
         ResidualFunc(prob),
         n_comp(get_spatial_dimension()),
         dim(get_spatial_dimension()),
@@ -81,7 +81,7 @@ protected:
 
 class ResidualPress0 : public ResidualFunc {
 public:
-    explicit ResidualPress0(const NSIncompressibleProblem * prob) :
+    explicit ResidualPress0(NSIncompressibleProblem * prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         vel_x(get_field_gradient("velocity"))
@@ -103,7 +103,7 @@ protected:
 
 class ResidualPress1 : public ResidualFunc {
 public:
-    explicit ResidualPress1(const NSIncompressibleProblem * prob) :
+    explicit ResidualPress1(NSIncompressibleProblem * prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -122,7 +122,7 @@ protected:
 
 class JacobianVV0 : public JacobianFunc {
 public:
-    explicit JacobianVV0(const NSIncompressibleProblem * prob) :
+    explicit JacobianVV0(NSIncompressibleProblem * prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension()),
         vel_x(get_field_gradient("velocity")),
@@ -155,7 +155,7 @@ protected:
 
 class JacobianVV1 : public JacobianFunc {
 public:
-    explicit JacobianVV1(const NSIncompressibleProblem * prob) :
+    explicit JacobianVV1(NSIncompressibleProblem * prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension()),
         vel(get_field_value("velocity"))
@@ -186,7 +186,7 @@ protected:
 
 class JacobianPV1 : public JacobianFunc {
 public:
-    explicit JacobianPV1(const NSIncompressibleProblem * prob) :
+    explicit JacobianPV1(NSIncompressibleProblem * prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -205,7 +205,7 @@ protected:
 
 class JacobianVP2 : public JacobianFunc {
 public:
-    explicit JacobianVP2(const NSIncompressibleProblem * prob) :
+    explicit JacobianVP2(NSIncompressibleProblem * prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension())
     {
@@ -224,7 +224,7 @@ protected:
 
 class JacobianVV3 : public JacobianFunc {
 public:
-    explicit JacobianVV3(const NSIncompressibleProblem * prob) :
+    explicit JacobianVV3(NSIncompressibleProblem * prob) :
         JacobianFunc(prob),
         n_comp(get_spatial_dimension()),
         dim(get_spatial_dimension()),

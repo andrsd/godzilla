@@ -53,7 +53,7 @@ protected:
     /// Get mesh this auxiliary field is defined on
     ///
     /// @return Mesh this auxiliary field is defined on
-    const UnstructuredMesh * get_mesh() const;
+    UnstructuredMesh * get_mesh() const;
 
     /// Get problem this auxiliary field is part of
     ///
@@ -61,10 +61,10 @@ protected:
     const Problem * get_problem() const;
 
     /// Unstructured mesh this field is defined on
-    const UnstructuredMesh * mesh;
+    UnstructuredMesh * mesh;
 
     /// Discrete problem this object is part of
-    const DiscreteProblemInterface * dpi;
+    DiscreteProblemInterface * dpi;
 
     /// Field name
     const std::string & field;

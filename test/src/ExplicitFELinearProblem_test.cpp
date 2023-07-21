@@ -46,7 +46,7 @@ protected:
 
 class TestF1 : public ResidualFunc {
 public:
-    explicit TestF1(const TestExplicitFELinearProblem * prob) :
+    explicit TestF1(TestExplicitFELinearProblem * prob) :
         ResidualFunc(prob),
         u(get_field_value("u")),
         u_x(get_field_gradient("u"))
@@ -86,7 +86,7 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -96,7 +96,7 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     Parameters bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<const App *>("_app") = &app;
-    bc_left_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::string>("boundary") = "left";
     bc_left_pars.set<std::vector<std::string>>("value") = { "1" };
     DirichletBC bc_left(bc_left_pars);
@@ -104,7 +104,7 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     Parameters bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<const App *>("_app") = &app;
-    bc_right_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::string>("boundary") = "right";
     bc_right_pars.set<std::vector<std::string>>("value") = { "1" };
     DirichletBC bc_right(bc_right_pars);
@@ -138,7 +138,7 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -178,7 +178,7 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
     {
         const std::string class_name = "TestExplicitFELinearProblem";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Mesh *>("_mesh") = mesh;
+        params->set<Mesh *>("_mesh") = mesh;
         params->set<Real>("start_time") = 0.;
         params->set<Real>("end_time") = 20;
         params->set<Real>("dt") = 5;

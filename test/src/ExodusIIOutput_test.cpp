@@ -127,7 +127,7 @@ TEST_F(ExodusIIOutputTest, fe_check)
 
     Parameters prob_pars = TestLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = this->app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     TestLinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();

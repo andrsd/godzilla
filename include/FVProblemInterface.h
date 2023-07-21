@@ -76,13 +76,13 @@ protected:
                                 const std::vector<Int> & components,
                                 PetscFunc * fn,
                                 PetscFunc * fn_t,
-                                void * context) const override;
+                                void * context) override;
     void add_boundary_natural(const std::string & name,
                               const Label & label,
                               const std::vector<Int> & ids,
                               Int field,
                               const std::vector<Int> & components,
-                              void * context) const override;
+                              void * context) override;
 
     /// Compute auxiliary fields
     ///

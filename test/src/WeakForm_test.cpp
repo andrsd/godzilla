@@ -33,7 +33,7 @@ protected:
 
 class TestF : public ResidualFunc {
 public:
-    explicit TestF(const GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
+    explicit TestF(GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -44,7 +44,7 @@ public:
 
 class BndTestF : public BndResidualFunc {
 public:
-    explicit BndTestF(const TestBC * bc) : BndResidualFunc(bc) {}
+    explicit BndTestF(TestBC * bc) : BndResidualFunc(bc) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -55,7 +55,7 @@ public:
 
 class TestJ : public JacobianFunc {
 public:
-    explicit TestJ(const GTestFENonlinearProblem * prob) : JacobianFunc(prob) {}
+    explicit TestJ(GTestFENonlinearProblem * prob) : JacobianFunc(prob) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -66,7 +66,7 @@ public:
 
 class BndTestJ : public BndJacobianFunc {
 public:
-    explicit BndTestJ(const TestBC * bc) : BndJacobianFunc(bc) {}
+    explicit BndTestJ(TestBC * bc) : BndJacobianFunc(bc) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -88,12 +88,12 @@ TEST(WeakFormTest, test)
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters bc_pars = NaturalBC::parameters();
     bc_pars.set<const App *>("_app") = &app;
-    bc_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_pars.set<std::string>("boundary") = "left";
     TestBC bc(bc_pars);
 

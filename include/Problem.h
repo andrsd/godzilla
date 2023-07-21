@@ -33,7 +33,7 @@ public:
     /// Return solution vector
     virtual const Vector & get_solution_vector() const = 0;
     /// Get mesh this problem is using
-    virtual const Mesh * get_mesh() const;
+    virtual Mesh * get_mesh() const;
     /// Get problem spatial dimension
     virtual Int get_dimension() const;
 
@@ -134,7 +134,7 @@ protected:
     virtual void on_final();
 
     /// Mesh
-    const Mesh * mesh;
+    Mesh * mesh;
 
     /// List of functions
     std::vector<Function *> functions;

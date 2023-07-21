@@ -91,7 +91,7 @@ public:
                            const std::vector<Int> & components,
                            PetscFunc * fn,
                            PetscFunc * fn_t,
-                           void * context)
+                           void * context) override
     {
         ExplicitFVLinearProblem::add_boundary_essential(name,
                                                         label,
@@ -109,7 +109,7 @@ public:
                          const std::vector<Int> & ids,
                          Int field,
                          const std::vector<Int> & components,
-                         void * context)
+                         void * context) override
     {
         ExplicitFVLinearProblem::add_boundary_natural(name, label, ids, field, components, context);
     }
@@ -180,7 +180,7 @@ TEST(ExplicitFVLinearProblemTest, api)
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -239,7 +239,7 @@ TEST(ExplicitFVLinearProblemTest, fields)
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -282,7 +282,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -292,7 +292,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
 
     Parameters bc_left_pars = TestBC::parameters();
     bc_left_pars.set<const App *>("_app") = &app;
-    bc_left_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::string>("boundary") = "left";
     bc_left_pars.set<bool>("inlet") = true;
     TestBC bc_left(bc_left_pars);
@@ -300,7 +300,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
 
     Parameters bc_right_pars = TestBC::parameters();
     bc_right_pars.set<const App *>("_app") = &app;
-    bc_right_pars.set<const DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::string>("boundary") = "right";
     bc_right_pars.set<bool>("inlet") = false;
     TestBC bc_right(bc_right_pars);
@@ -334,7 +334,7 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -369,7 +369,7 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<const App *>("_app") = &app;
-    prob_pars.set<const Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;

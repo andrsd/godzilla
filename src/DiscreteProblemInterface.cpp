@@ -15,7 +15,7 @@ namespace godzilla {
 
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
-    unstr_mesh(dynamic_cast<const UnstructuredMesh *>(problem->get_mesh())),
+    unstr_mesh(dynamic_cast<UnstructuredMesh *>(problem->get_mesh())),
     logger(params.get<const App *>("_app")->get_logger()),
     ds(nullptr),
     dm_aux(nullptr),
@@ -251,7 +251,7 @@ DiscreteProblemInterface::add_boundary_essential(const std::string & name,
                                                  const std::vector<Int> & components,
                                                  PetscFunc * fn,
                                                  PetscFunc * fn_t,
-                                                 void * context) const
+                                                 void * context)
 {
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_ESSENTIAL,
@@ -274,7 +274,7 @@ DiscreteProblemInterface::add_boundary_natural(const std::string & name,
                                                const std::vector<Int> & ids,
                                                Int field,
                                                const std::vector<Int> & components,
-                                               void * context) const
+                                               void * context)
 {
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_NATURAL,
@@ -299,7 +299,7 @@ DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                                        const std::vector<Int> & components,
                                                        PetscNaturalRiemannBCFunc * fn,
                                                        PetscNaturalRiemannBCFunc * fn_t,
-                                                       void * context) const
+                                                       void * context)
 {
     _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,

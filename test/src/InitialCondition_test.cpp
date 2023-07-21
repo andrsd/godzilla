@@ -35,7 +35,7 @@ TEST_F(InitialConditionTest, api)
 {
     Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     MockInitialCondition ic(params);
 
@@ -52,7 +52,7 @@ TEST_F(InitialConditionTest, test)
 {
     Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("field") = "u";
     MockInitialCondition ic(params);
@@ -73,7 +73,7 @@ TEST_F(InitialCondition2FieldTest, no_field_param)
 
     Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     MockInitialCondition ic(params);
 
@@ -96,7 +96,7 @@ TEST_F(InitialCondition2FieldTest, non_existing_field)
 
     Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const DiscreteProblemInterface *>("_dpi") = this->prob;
+    params.set<DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("field") = "asdf";
     MockInitialCondition ic(params);
