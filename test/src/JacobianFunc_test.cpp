@@ -40,7 +40,7 @@ protected:
 
 class TestJ : public JacobianFunc {
 public:
-    explicit TestJ(const GTestProblem * prob) :
+    explicit TestJ(GTestProblem * prob) :
         JacobianFunc(prob),
         dim(get_spatial_dimension()),
         u(get_field_value("u")),

@@ -27,7 +27,7 @@ protected:
 
 class F0 : public ResidualFunc {
 public:
-    explicit F0(const TestNeumannProblem * prob) :
+    explicit F0(TestNeumannProblem * prob) :
         ResidualFunc(prob),
         u(get_field_value("u")),
         x(get_xyz())
@@ -47,7 +47,7 @@ protected:
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(const TestNeumannProblem * prob) :
+    explicit F1(TestNeumannProblem * prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u_x(get_field_gradient("u"))
@@ -68,7 +68,7 @@ protected:
 
 class G0 : public JacobianFunc {
 public:
-    explicit G0(const TestNeumannProblem * prob) : JacobianFunc(prob) {}
+    explicit G0(TestNeumannProblem * prob) : JacobianFunc(prob) {}
 
     void
     evaluate(Scalar g[]) const override
@@ -79,9 +79,7 @@ public:
 
 class G3 : public JacobianFunc {
 public:
-    explicit G3(const TestNeumannProblem * prob) : JacobianFunc(prob), dim(get_spatial_dimension())
-    {
-    }
+    explicit G3(TestNeumannProblem * prob) : JacobianFunc(prob), dim(get_spatial_dimension()) {}
 
     void
     evaluate(Scalar g[]) const override

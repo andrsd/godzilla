@@ -6,7 +6,7 @@
 namespace godzilla {
 
 BndResidualFunc::BndResidualFunc(const BoundaryCondition * bc) :
-    ResidualFunc(dynamic_cast<const FEProblemInterface *>(bc->get_discrete_problem_interface()))
+    ResidualFunc(dynamic_cast<FEProblemInterface *>(bc->get_discrete_problem_interface()))
 {
 }
 

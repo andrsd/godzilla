@@ -9,7 +9,7 @@ namespace {
 
 class F0 : public ResidualFunc {
 public:
-    explicit F0(const GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
+    explicit F0(GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
 
     void
     evaluate(Scalar f[]) const override
@@ -20,7 +20,7 @@ public:
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(const GTestFENonlinearProblem * prob) :
+    explicit F1(GTestFENonlinearProblem * prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u_x(get_field_gradient("u"))
@@ -41,9 +41,7 @@ protected:
 
 class G3 : public JacobianFunc {
 public:
-    explicit G3(const GTestFENonlinearProblem * prob) :
-        JacobianFunc(prob),
-        dim(get_spatial_dimension())
+    explicit G3(GTestFENonlinearProblem * prob) : JacobianFunc(prob), dim(get_spatial_dimension())
     {
     }
 

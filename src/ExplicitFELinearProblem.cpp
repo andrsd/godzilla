@@ -25,7 +25,7 @@ namespace {
 
 class G0Identity : public JacobianFunc {
 public:
-    explicit G0Identity(const ExplicitFELinearProblem * prob) :
+    explicit G0Identity(ExplicitFELinearProblem * prob) :
         JacobianFunc(prob),
         n_comp(prob->get_field_num_components(0))
     {

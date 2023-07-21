@@ -46,7 +46,7 @@ protected:
 
 class TestF1 : public ResidualFunc {
 public:
-    explicit TestF1(const TestExplicitFELinearProblem * prob) :
+    explicit TestF1(TestExplicitFELinearProblem * prob) :
         ResidualFunc(prob),
         u(get_field_value("u")),
         u_x(get_field_gradient("u"))

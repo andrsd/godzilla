@@ -40,7 +40,7 @@ protected:
 
 class TestF : public ResidualFunc {
 public:
-    explicit TestF(const GTestProblem * prob) :
+    explicit TestF(GTestProblem * prob) :
         ResidualFunc(prob),
         dim(get_spatial_dimension()),
         u(get_field_value("u")),

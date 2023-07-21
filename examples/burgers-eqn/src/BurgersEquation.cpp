@@ -12,7 +12,7 @@ namespace {
 
 class F1 : public ResidualFunc {
 public:
-    explicit F1(const BurgersEquation * prob) :
+    explicit F1(BurgersEquation * prob) :
         ResidualFunc(prob),
         visc(prob->get_viscosity()),
         u(get_field_value("u")),

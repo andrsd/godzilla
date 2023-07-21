@@ -11,7 +11,7 @@ namespace {
 
 class Residual0 : public ResidualFunc {
 public:
-    explicit Residual0(const FEProblemInterface * fepi) :
+    explicit Residual0(FEProblemInterface * fepi) :
         ResidualFunc(fepi),
         T_t(get_field_dot("temp")),
         q_ppp(get_field_value("q_ppp"))
@@ -31,7 +31,7 @@ protected:
 
 class Residual1 : public ResidualFunc {
 public:
-    explicit Residual1(const FEProblemInterface * fepi) :
+    explicit Residual1(FEProblemInterface * fepi) :
         ResidualFunc(fepi),
         dim(get_spatial_dimension()),
         T_x(get_field_gradient("temp"))
@@ -52,9 +52,7 @@ protected:
 
 class Jacobian0 : public JacobianFunc {
 public:
-    explicit Jacobian0(const FEProblemInterface * fepi) :
-        JacobianFunc(fepi),
-        T_t_shift(get_time_shift())
+    explicit Jacobian0(FEProblemInterface * fepi) : JacobianFunc(fepi), T_t_shift(get_time_shift())
     {
     }
 
@@ -70,9 +68,7 @@ protected:
 
 class Jacobian3 : public JacobianFunc {
 public:
-    explicit Jacobian3(const FEProblemInterface * fepi) :
-        JacobianFunc(fepi),
-        dim(get_spatial_dimension())
+    explicit Jacobian3(FEProblemInterface * fepi) : JacobianFunc(fepi), dim(get_spatial_dimension())
     {
     }
 
