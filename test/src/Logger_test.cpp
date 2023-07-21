@@ -1,6 +1,5 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "Godzilla.h"
 #include "Logger.h"
 
 using namespace godzilla;

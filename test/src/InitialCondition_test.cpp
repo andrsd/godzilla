@@ -1,9 +1,7 @@
 #include "gmock/gmock.h"
-#include "LineMesh.h"
 #include "FENonlinearProblem_test.h"
 #include "InitialCondition.h"
 #include "Parameters.h"
-#include "petsc.h"
 
 using namespace godzilla;
 

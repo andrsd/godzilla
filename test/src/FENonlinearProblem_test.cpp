@@ -1,17 +1,14 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
 #include "FENonlinearProblem_test.h"
 #include "CallStack.h"
 #include "Factory.h"
 #include "GTestFENonlinearProblem.h"
-#include "GTest2FieldsFENonlinearProblem.h"
 #include "Parameters.h"
 #include "LineMesh.h"
 #include "UnstructuredMesh.h"
 #include "InitialCondition.h"
 #include "ConstantIC.h"
 #include "BoundaryCondition.h"
-#include "petsc.h"
 #include "petscvec.h"
 
 using namespace ::testing;

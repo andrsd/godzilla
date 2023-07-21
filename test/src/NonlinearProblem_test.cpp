@@ -7,7 +7,6 @@
 #include "Output.h"
 #include "petsc.h"
 #include "petscvec.h"
-#include "petscmat.h"
 
 using namespace godzilla;
 
