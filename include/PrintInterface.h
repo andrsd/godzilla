@@ -52,7 +52,6 @@ public:
                    const unsigned int & verbosity_level,
                    std::string prefix);
 
-protected:
     /// Print a message on a terminal
     ///
     /// @param level Verbosity level. If application verbose level is higher than this number, the

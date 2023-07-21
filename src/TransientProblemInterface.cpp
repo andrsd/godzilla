@@ -59,7 +59,9 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     end_time(params.get<Real>("end_time")),
     num_steps(params.get<Int>("num_steps")),
     dt(params.get<Real>("dt")),
-    converged_reason(TS_CONVERGED_ITERATING)
+    converged_reason(TS_CONVERGED_ITERATING),
+    time(0.),
+    step_num(0)
 {
     _F_;
 }
@@ -136,7 +138,7 @@ TransientProblemInterface::create()
     if (this->tpi_params.is_param_valid("num_steps"))
         PETSC_CHECK(TSSetMaxSteps(this->ts, this->num_steps));
     set_time_step(this->dt);
-    PETSC_CHECK(TSSetStepNumber(this->ts, this->problem->get_step_num()));
+    PETSC_CHECK(TSSetStepNumber(this->ts, this->step_num));
     PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
     if (this->ts_adaptor)
         this->ts_adaptor->create();
@@ -174,8 +176,8 @@ PetscErrorCode
 TransientProblemInterface::post_step()
 {
     _F_;
-    PETSC_CHECK(TSGetTime(this->ts, &this->problem->time));
-    PETSC_CHECK(TSGetStepNumber(this->ts, &this->problem->step_num));
+    PETSC_CHECK(TSGetTime(this->ts, &this->time));
+    PETSC_CHECK(TSGetStepNumber(this->ts, &this->step_num));
     Vector sln = get_solution();
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
     this->problem->compute_postprocessors();

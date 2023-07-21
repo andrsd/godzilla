@@ -14,6 +14,8 @@ public:
     void check() override;
     bool converged() override;
     void solve() override;
+    Real get_time() const override;
+    Int get_step_num() const override;
 
     virtual PetscErrorCode
     compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);

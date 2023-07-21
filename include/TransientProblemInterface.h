@@ -85,6 +85,10 @@ protected:
     const Real & dt;
     /// Converged reason
     TSConvergedReason converged_reason;
+    /// Simulation time
+    Real time;
+    /// Time step number
+    Int step_num;
 
 public:
     static Parameters parameters();

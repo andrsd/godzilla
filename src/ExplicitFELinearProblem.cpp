@@ -72,6 +72,20 @@ ExplicitFELinearProblem::~ExplicitFELinearProblem()
     this->ksp = nullptr;
 }
 
+Real
+ExplicitFELinearProblem::get_time() const
+{
+    _F_;
+    return this->time;
+}
+
+Int
+ExplicitFELinearProblem::get_step_num() const
+{
+    _F_;
+    return this->step_num;
+}
+
 void
 ExplicitFELinearProblem::init()
 {

@@ -104,6 +104,20 @@ ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
     this->ksp = nullptr;
 }
 
+Real
+ImplicitFENonlinearProblem::get_time() const
+{
+    _F_;
+    return this->time;
+}
+
+Int
+ImplicitFENonlinearProblem::get_step_num() const
+{
+    _F_;
+    return this->step_num;
+}
+
 void
 ImplicitFENonlinearProblem::init()
 {

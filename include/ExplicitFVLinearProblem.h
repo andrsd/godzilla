@@ -18,6 +18,8 @@ public:
     void check() override;
     bool converged() override;
     void solve() override;
+    Real get_time() const override;
+    Int get_step_num() const override;
 
     virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 

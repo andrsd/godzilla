@@ -95,7 +95,7 @@ public:
 
     virtual const Real & get_time_shift() const;
 
-    virtual const Real & get_time() const;
+    virtual const Real & get_assembly_time() const;
 
     virtual const Normal & get_normal() const;
 
