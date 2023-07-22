@@ -105,7 +105,7 @@ ExodusIIOutput::parameters()
 ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     FileOutput(params),
     variable_names(get_param<std::vector<std::string>>("variables")),
-    dpi(dynamic_cast<const DiscreteProblemInterface *>(this->problem)),
+    dpi(dynamic_cast<DiscreteProblemInterface *>(this->problem)),
     mesh(this->problem ? dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh()) : nullptr),
     exo(nullptr),
     step_num(1),

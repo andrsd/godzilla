@@ -79,7 +79,7 @@ TecplotOutput::parameters()
 TecplotOutput::TecplotOutput(const Parameters & params) :
     FileOutput(params),
     format(BINARY),
-    dpi(dynamic_cast<const DiscreteProblemInterface *>(this->problem)),
+    dpi(dynamic_cast<DiscreteProblemInterface *>(this->problem)),
     mesh(this->problem ? dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh()) : nullptr),
     variable_names(get_param<std::vector<std::string>>("variables")),
     file(nullptr),

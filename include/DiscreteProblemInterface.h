@@ -31,7 +31,7 @@ public:
     /// Get problem
     ///
     /// @return Problem this interface is part of
-    const Problem * get_problem() const;
+    Problem * get_problem() const;
 
     /// Get number of fields
     ///
@@ -202,12 +202,12 @@ public:
     /// Get local solution vector
     ///
     /// @return Local solution vector
-    virtual const Vector & get_solution_vector_local() const = 0;
+    virtual const Vector & get_solution_vector_local() = 0;
 
     /// Get local auxiliary solution vector
     ///
     /// @return Local auxiliary solution vector
-    virtual const Vector & get_aux_solution_vector_local() const = 0;
+    virtual const Vector & get_aux_solution_vector_local() = 0;
 
     virtual void add_boundary_essential(const std::string & name,
                                         const Label & label,
@@ -285,7 +285,7 @@ protected:
     /// Build local solution vector
     ///
     /// @param sln Global solution vector
-    void build_local_solution_vector(const Vector & sln) const;
+    void build_local_solution_vector(const Vector & sln);
 
     /// Problem this interface is part of
     Problem * problem;

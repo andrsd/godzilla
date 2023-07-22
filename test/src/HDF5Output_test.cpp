@@ -43,7 +43,7 @@ protected:
     {
         const std::string class_name = "HDF5Output";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Problem *>("_problem") = this->prob;
+        params->set<Problem *>("_problem") = this->prob;
         if (file_name.length() > 0)
             params->set<std::string>("file") = file_name;
         HDF5Output * out = this->app->build_object<HDF5Output>(class_name, "out", params);
@@ -112,7 +112,7 @@ TEST_F(HDF5OutputTest, wrong_mesh_type)
 
     Parameters pars = HDF5Output::parameters();
     pars.set<const App *>("_app") = this->app;
-    pars.set<const Problem *>("_problem") = &prob;
+    pars.set<Problem *>("_problem") = &prob;
     HDF5Output out(pars);
     prob.add_output(&out);
 

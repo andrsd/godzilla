@@ -17,7 +17,7 @@ TEST_F(ExodusIIOutputTest, get_file_ext)
 {
     Parameters params = ExodusIIOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "out";
     ExodusIIOutput out(params);
 
@@ -28,7 +28,7 @@ TEST_F(ExodusIIOutputTest, create)
 {
     Parameters params = ExodusIIOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     ExodusIIOutput out(params);
 
     this->prob->add_output(&out);
@@ -41,7 +41,7 @@ TEST_F(ExodusIIOutputTest, non_existent_var)
 
     Parameters params = ExodusIIOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     params.set<std::vector<std::string>>("variables") = { "asdf" };
     ExodusIIOutput out(params);
 
@@ -61,7 +61,7 @@ TEST_F(ExodusIIOutputTest, check)
 {
     Parameters params = ExodusIIOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     ExodusIIOutput out(params);
 
     out.check();
@@ -132,7 +132,7 @@ TEST_F(ExodusIIOutputTest, fe_check)
 
     Parameters params = ExodusIIOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = &prob;
+    params.set<Problem *>("_problem") = &prob;
     ExodusIIOutput out(params);
 
     mesh.create();
@@ -152,7 +152,7 @@ TEST_F(ExodusIIOutputTest, output)
 {
     Parameters params = ExodusIIOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     ExodusIIOutput out(params);
 
     this->mesh->create();
@@ -168,7 +168,7 @@ TEST_F(ExodusIIOutputTest, set_file_name)
 {
     Parameters params = ExodusIIOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "out";
     ExodusIIOutput out(params);
 
@@ -182,7 +182,7 @@ TEST_F(ExodusIIOutputTest, set_seq_file_name)
 {
     Parameters params = ExodusIIOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "out";
     ExodusIIOutput out(params);
 

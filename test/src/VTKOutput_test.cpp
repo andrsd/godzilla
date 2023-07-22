@@ -44,7 +44,7 @@ protected:
     {
         const std::string class_name = "VTKOutput";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Problem *>("_problem") = this->prob;
+        params->set<Problem *>("_problem") = this->prob;
         if (file_name.length() > 0)
             params->set<std::string>("file") = file_name;
         VTKOutput * out = this->app->build_object<VTKOutput>(class_name, "out", params);
@@ -115,7 +115,7 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
 
     Parameters pars = VTKOutput::parameters();
     pars.set<const App *>("_app") = this->app;
-    pars.set<const Problem *>("_problem") = &prob;
+    pars.set<Problem *>("_problem") = &prob;
     VTKOutput out(pars);
     prob.add_output(&out);
 

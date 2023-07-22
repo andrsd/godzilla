@@ -179,7 +179,7 @@ FEProblemInterface::get_field_id(const std::string & name) const
 }
 
 const Vector &
-FEProblemInterface::get_solution_vector_local() const
+FEProblemInterface::get_solution_vector_local()
 {
     _F_;
     build_local_solution_vector(this->sln);
@@ -187,7 +187,7 @@ FEProblemInterface::get_solution_vector_local() const
 }
 
 const Vector &
-FEProblemInterface::get_aux_solution_vector_local() const
+FEProblemInterface::get_aux_solution_vector_local()
 {
     _F_;
     return this->a;

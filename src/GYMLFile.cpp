@@ -78,7 +78,7 @@ GYMLFile::build_ts_adapt(const Block & problem_node)
     if (tpi != nullptr) {
         auto ts_adapt_node = get_block(problem_node, "ts_adapt");
         Parameters * params = build_params(ts_adapt_node);
-        params->set<const Problem *>("_problem") = this->problem;
+        params->set<Problem *>("_problem") = this->problem;
         params->set<const TransientProblemInterface *>("_tpi") = tpi;
 
         const auto & class_name = params->get<std::string>("_type");
@@ -204,7 +204,7 @@ GYMLFile::build_postprocessors()
         Block blk = get_block(pps_node, it.first.as<std::string>());
         Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
-        params->set<const Problem *>("_problem") = this->problem;
+        params->set<Problem *>("_problem") = this->problem;
         auto pp = Factory::create<Postprocessor>(class_name, blk.name(), params);
         problem->add_postprocessor(pp);
     }

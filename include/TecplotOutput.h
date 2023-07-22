@@ -50,7 +50,7 @@ protected:
     enum Format { BINARY, ASCII } format;
 
     /// FE problem interface (convenience pointer)
-    const DiscreteProblemInterface * dpi;
+    DiscreteProblemInterface * dpi;
     /// Unstructured mesh
     UnstructuredMesh * mesh;
     /// Variable names to be stored

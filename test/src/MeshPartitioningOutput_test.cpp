@@ -51,7 +51,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
 
     Parameters params = MeshPartitioningOutput::parameters();
     params.set<const App *>("_app") = &app;
-    params.set<const Problem *>("_problem") = &prob;
+    params.set<Problem *>("_problem") = &prob;
     MeshPartitioningOutput out(params);
 
     EXPECT_EQ(out.get_file_ext(), "h5");
@@ -75,7 +75,7 @@ TEST(MeshPartitioningOutputTest, output)
 
     Parameters params = MeshPartitioningOutput::parameters();
     params.set<const App *>("_app") = &app;
-    params.set<const Problem *>("_problem") = &prob;
+    params.set<Problem *>("_problem") = &prob;
     MeshPartitioningOutput out(params);
     prob.add_output(&out);
 
@@ -109,7 +109,7 @@ TEST(MeshPartitioningOutputTest, no_dm)
 
     Parameters params = MeshPartitioningOutput::parameters();
     params.set<const App *>("_app") = &app;
-    params.set<const Problem *>("_problem") = &prob;
+    params.set<Problem *>("_problem") = &prob;
     MeshPartitioningOutput out(params);
 
     out.check();

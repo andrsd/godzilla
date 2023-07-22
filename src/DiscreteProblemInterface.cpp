@@ -29,7 +29,7 @@ DiscreteProblemInterface::~DiscreteProblemInterface()
     DMDestroy(&this->dm_aux);
 }
 
-const Problem *
+Problem *
 DiscreteProblemInterface::get_problem() const
 {
     _F_;
@@ -236,7 +236,7 @@ DiscreteProblemInterface::get_coordinates_local() const
 }
 
 void
-DiscreteProblemInterface::build_local_solution_vector(const Vector & sln) const
+DiscreteProblemInterface::build_local_solution_vector(const Vector & sln)
 {
     _F_;
     DM dm = this->unstr_mesh->get_dm();

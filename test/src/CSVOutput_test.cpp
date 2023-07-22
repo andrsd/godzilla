@@ -33,7 +33,7 @@ TEST_F(CSVOutputTest, get_file_ext)
 {
     Parameters params = CSVOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "asdf";
     CSVOutput out(params);
 
@@ -44,7 +44,7 @@ TEST_F(CSVOutputTest, create)
 {
     Parameters params = CSVOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "asdf";
     TestCSVOutput out(params);
     prob->add_output(&out);
@@ -74,13 +74,13 @@ TEST_F(CSVOutputTest, output)
     Parameters pp_params = Postprocessor::parameters();
     pp_params.set<std::string>("_name") = "pp";
     pp_params.set<const App *>("_app") = this->app;
-    pp_params.set<const Problem *>("_problem") = this->prob;
+    pp_params.set<Problem *>("_problem") = this->prob;
     TestPostprocessor pp(pp_params);
     this->prob->add_postprocessor(&pp);
 
     Parameters params = CSVOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "out";
     TestCSVOutput out(params);
     this->prob->add_output(&out);
@@ -115,7 +115,7 @@ TEST_F(CSVOutputTest, set_file_name)
 {
     Parameters params = CSVOutput::parameters();
     params.set<const App *>("_app") = this->app;
-    params.set<const Problem *>("_problem") = this->prob;
+    params.set<Problem *>("_problem") = this->prob;
     params.set<std::string>("file") = "asdf";
     CSVOutput out(params);
 

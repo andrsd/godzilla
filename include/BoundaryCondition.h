@@ -38,7 +38,7 @@ protected:
     UnstructuredMesh * get_mesh() const;
 
     /// Get problem this auxiliary field is part of
-    const Problem * get_problem() const;
+    Problem * get_problem() const;
 
     /// Unstructured mesh this field is defined on
     UnstructuredMesh * mesh;

@@ -39,7 +39,7 @@ AuxiliaryField::get_mesh() const
     return this->mesh;
 }
 
-const Problem *
+Problem *
 AuxiliaryField::get_problem() const
 {
     _F_;

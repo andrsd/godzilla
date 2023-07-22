@@ -49,8 +49,8 @@ public:
     std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    const Vector & get_solution_vector_local() const override;
-    const Vector & get_aux_solution_vector_local() const override;
+    const Vector & get_solution_vector_local() override;
+    const Vector & get_aux_solution_vector_local() override;
     virtual WeakForm * get_weak_form() const;
 
     /// Adds a volumetric field
