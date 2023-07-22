@@ -141,6 +141,16 @@ ExplicitFELinearProblem::solve()
     TransientProblemInterface::solve(this->x);
 }
 
+const Vector &
+ExplicitFELinearProblem::get_solution_vector_local()
+{
+    _F_;
+    auto & loc_sln = this->sln;
+    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
+    compute_boundary_local(get_time(), loc_sln);
+    return loc_sln;
+}
+
 void
 ExplicitFELinearProblem::set_up_callbacks()
 {

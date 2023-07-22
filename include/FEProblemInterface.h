@@ -49,7 +49,6 @@ public:
     std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    const Vector & get_solution_vector_local() override;
     const Vector & get_aux_solution_vector_local() override;
     virtual WeakForm * get_weak_form() const;
 
@@ -157,8 +156,6 @@ protected:
 
     void create() override;
     void init() override;
-
-    virtual void allocate_objects();
 
     /// Create FE object from FieldInfo
     ///
@@ -335,9 +332,6 @@ protected:
 
     /// Vector for auxiliary fields
     Vector a;
-
-    /// Local solution vector
-    Vector sln;
 
     /// Weak formulation
     WeakForm * wf;

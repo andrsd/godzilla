@@ -73,8 +73,6 @@ FEProblemInterface::~FEProblemInterface()
     }
 
     this->a.destroy();
-
-    this->sln.destroy();
 }
 
 void
@@ -106,13 +104,6 @@ FEProblemInterface::init()
         bc->set_up_weak_form();
 
     sort_functionals();
-}
-
-void
-FEProblemInterface::allocate_objects()
-{
-    _F_;
-    this->sln = this->problem->create_local_vector();
 }
 
 Int
@@ -176,14 +167,6 @@ FEProblemInterface::get_field_id(const std::string & name) const
         return it->second;
     else
         error("Field '{}' does not exist. Typo?", name);
-}
-
-const Vector &
-FEProblemInterface::get_solution_vector_local()
-{
-    _F_;
-    build_local_solution_vector(this->sln);
-    return this->sln;
 }
 
 const Vector &

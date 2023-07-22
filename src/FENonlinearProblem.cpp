@@ -104,6 +104,15 @@ FENonlinearProblem::allocate_objects()
     FEProblemInterface::allocate_objects();
 }
 
+const Vector &
+FENonlinearProblem::get_solution_vector_local()
+{
+    _F_;
+    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, this->sln));
+    compute_boundary(this->sln);
+    return this->sln;
+}
+
 PetscErrorCode
 FENonlinearProblem::compute_boundary(Vector & x)
 {

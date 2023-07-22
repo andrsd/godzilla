@@ -18,6 +18,7 @@ public:
     void check() override;
     bool converged() override;
     void solve() override;
+    const Vector & get_solution_vector_local() override;
 
     virtual PetscErrorCode compute_rhs(Real time, const Vector & X, Vector & F);
 

@@ -269,6 +269,7 @@ public:
 protected:
     virtual void init();
     virtual void create();
+    virtual void allocate_objects();
     /// Set up discrete system
     virtual void set_up_ds() = 0;
 
@@ -281,11 +282,6 @@ protected:
 
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
-
-    /// Build local solution vector
-    ///
-    /// @param sln Global solution vector
-    void build_local_solution_vector(const Vector & sln);
 
     /// Problem this interface is part of
     Problem * problem;
@@ -322,6 +318,9 @@ protected:
 
     /// Map from region to list of auxiliary field objects
     std::map<std::string, std::vector<AuxiliaryField *>> auxs_by_region;
+
+    /// Local solution vector
+    Vector sln;
 
     /// DM for auxiliary fields
     DM dm_aux;
