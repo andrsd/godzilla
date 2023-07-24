@@ -2,7 +2,6 @@
 #include "GodzillaApp_test.h"
 #include "CSVOutput_test.h"
 #include "Postprocessor.h"
-#include "petsc.h"
 
 namespace {
 

@@ -31,12 +31,14 @@ FunctionIC::create()
 Int
 FunctionIC::get_num_components() const
 {
+    _F_;
     return this->num_comps;
 }
 
 void
 FunctionIC::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
+    _F_;
     evaluate_func(dim, time, x, nc, u);
 }
 

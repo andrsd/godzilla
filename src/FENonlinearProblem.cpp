@@ -15,6 +15,7 @@ namespace godzilla {
 static PetscErrorCode
 __fep_compute_boundary(DM, Vec x, void * user)
 {
+    _F_;
     auto * fep = static_cast<FENonlinearProblem *>(user);
     Vector vec_x(x);
     fep->compute_boundary(vec_x);
@@ -98,6 +99,7 @@ FENonlinearProblem::set_up_initial_guess()
 void
 FENonlinearProblem::allocate_objects()
 {
+    _F_;
     NonlinearProblem::allocate_objects();
     FEProblemInterface::allocate_objects();
 }
@@ -105,6 +107,7 @@ FENonlinearProblem::allocate_objects()
 PetscErrorCode
 FENonlinearProblem::compute_boundary(Vector & x)
 {
+    _F_;
     PETSC_CHECK(DMPlexInsertBoundaryValues(get_dm(),
                                            PETSC_TRUE,
                                            x,
@@ -449,6 +452,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                                          DMField coord_field,
                                                          const IndexSet & facets)
 {
+    _F_;
     DM plex = nullptr, plex_aux = nullptr;
     DMEnclosureType enc_aux;
     PetscDS prob, prob_aux = nullptr;
@@ -655,6 +659,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
                                               Matrix & J,
                                               Matrix & Jp)
 {
+    _F_;
     Int n_cells = cell_is.get_local_size();
     Int c_start, c_end;
     const Int * cells;
@@ -912,6 +917,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
                                                   Mat J,
                                                   Mat Jp)
 {
+    _F_;
     PetscDS prob;
     PetscCall(DMGetDS(dm, &prob));
     auto depth_label = this->unstr_mesh->get_depth_label();
@@ -981,6 +987,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                                          DMField coord_field,
                                                          const IndexSet & facets)
 {
+    _F_;
     DM plex = nullptr;
     PetscCall(DMConvert(dm, DMPLEX, &plex));
     PetscBool transform;

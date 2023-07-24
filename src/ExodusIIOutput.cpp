@@ -67,6 +67,7 @@ ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type)
 const Int *
 ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type)
 {
+    _F_;
     static const Int seg_ordering[] = { 1, 2 };
     static const Int tri_ordering[] = { 1, 2, 3 };
     static const Int quad_ordering[] = { 1, 2, 3, 4 };
@@ -423,6 +424,7 @@ ExodusIIOutput::write_face_sets()
 void
 ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
 {
+    _F_;
     const std::string & name = this->dpi->get_field_name(fid);
     Int nc = this->dpi->get_field_num_components(fid);
     if (nc == 1)
@@ -443,6 +445,7 @@ ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
 void
 ExodusIIOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
 {
+    _F_;
     const std::string & name = this->dpi->get_aux_field_name(fid);
     Int nc = this->dpi->get_aux_field_num_components(fid);
     if (nc == 1)

@@ -44,12 +44,14 @@ ConstantAuxiliaryField::create()
 Int
 ConstantAuxiliaryField::get_num_components() const
 {
+    _F_;
     return this->num_comps;
 }
 
 PetscFunc *
 ConstantAuxiliaryField::get_func() const
 {
+    _F_;
     return constant_auxiliary_field;
 }
 

@@ -178,11 +178,13 @@ LinearProblem::run()
 void
 LinearProblem::set_up_matrix_properties()
 {
+    _F_;
 }
 
 void
 LinearProblem::set_up_preconditioning()
 {
+    _F_;
 }
 
 void

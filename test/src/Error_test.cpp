@@ -1,8 +1,6 @@
 #include "Error.h"
 #include "CallStack.h"
 #include "gmock/gmock.h"
-#include <unistd.h>
-#include <signal.h>
 
 using namespace godzilla;
 

@@ -16,12 +16,12 @@ typedef PetscScalar Scalar;
 /// @param uOff The offset of each field in u[]
 /// @param uOff_x The offset of each field in u_x[]
 /// @param u The field values at this point in space
-/// @param u_t The field time derivative at this point in space (or NULL)
+/// @param u_t The field time derivative at this point in space (or `nullptr`)
 /// @param u_x The field derivatives at this point in space
 /// @param aOff The offset of each auxiliary field in u[]
 /// @param aOff_x The offset of each auxiliary field in u_x[]
 /// @param a The auxiliary field values at this point in space
-/// @param a_t The auxiliary field time derivative at this point in space (or NULL)
+/// @param a_t The auxiliary field time derivative at this point in space (or `nullptr`)
 /// @param a_x The auxiliary field derivatives at this point in space
 /// @param t The current time
 /// @param x The coordinates of this point

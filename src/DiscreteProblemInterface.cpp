@@ -219,6 +219,7 @@ DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
 Int
 DiscreteProblemInterface::get_aux_field_dof(Int point, Int fid) const
 {
+    _F_;
     Int offset;
     PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid, &offset));
     return offset;
@@ -237,6 +238,7 @@ DiscreteProblemInterface::get_coordinates_local() const
 void
 DiscreteProblemInterface::build_local_solution_vector(const Vector & sln) const
 {
+    _F_;
     DM dm = this->unstr_mesh->get_dm();
     Real time = this->problem->get_time();
     PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
@@ -253,6 +255,7 @@ DiscreteProblemInterface::add_boundary_essential(const std::string & name,
                                                  PetscFunc * fn_t,
                                                  void * context)
 {
+    _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_ESSENTIAL,
                                    name.c_str(),
@@ -276,6 +279,7 @@ DiscreteProblemInterface::add_boundary_natural(const std::string & name,
                                                const std::vector<Int> & components,
                                                void * context)
 {
+    _F_;
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    DM_BC_NATURAL,
                                    name.c_str(),

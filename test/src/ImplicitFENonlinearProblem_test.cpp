@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
 #include "CallStack.h"
 #include "Factory.h"
 #include "ImplicitFENonlinearProblem_test.h"
@@ -7,7 +6,6 @@
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "Output.h"
-#include "petsc.h"
 #include "petscvec.h"
 
 using namespace godzilla;

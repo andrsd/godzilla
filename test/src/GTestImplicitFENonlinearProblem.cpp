@@ -1,5 +1,3 @@
-#include "gmock/gmock.h"
-#include "GodzillaConfig.h"
 #include "ResidualFunc.h"
 #include "JacobianFunc.h"
 #include "CallStack.h"

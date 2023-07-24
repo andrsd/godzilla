@@ -37,6 +37,7 @@ to_lower(const std::string & name)
 bool
 has_suffix(const std::string & str, const std::string & suffix)
 {
+    _F_;
     return str.size() >= suffix.size() &&
            str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
 }
@@ -44,12 +45,14 @@ has_suffix(const std::string & str, const std::string & suffix)
 bool
 has_prefix(const std::string & str, const std::string & prefix)
 {
+    _F_;
     return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
 }
 
 std::string
 human_time(PetscLogDouble time)
 {
+    _F_;
     using namespace std::chrono;
     duration<double, std::micro> us(time * 1e6);
     auto h = duration_cast<hours>(us);

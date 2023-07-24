@@ -60,6 +60,7 @@ PrintInterface::PrintInterface(const mpi::Communicator & comm,
     verbosity_level(verbosity_level),
     prefix(std::move(prefix))
 {
+    _F_;
 }
 
 } // namespace godzilla

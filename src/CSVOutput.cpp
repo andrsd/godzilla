@@ -25,6 +25,7 @@ CSVOutput::CSVOutput(const Parameters & params) : FileOutput(params), f(nullptr)
 
 CSVOutput::~CSVOutput()
 {
+    _F_;
     close_file();
 }
 

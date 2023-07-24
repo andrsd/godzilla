@@ -44,6 +44,7 @@ WeakForm::WeakForm() :
 std::vector<PetscFormKey>
 WeakForm::get_residual_keys() const
 {
+    _F_;
     std::set<Key> unique;
     std::array<PetscWeakFormKind, 2> resmap = { PETSC_WF_F0, PETSC_WF_F1 };
     for (const auto & r : resmap) {
@@ -67,6 +68,7 @@ WeakForm::get_residual_keys() const
 std::vector<PetscFormKey>
 WeakForm::get_jacobian_keys() const
 {
+    _F_;
     std::set<Key> unique;
     std::array<PetscWeakFormKind, 8> jacmap = { PETSC_WF_G0,  PETSC_WF_G1,  PETSC_WF_G2,
                                                 PETSC_WF_G3,  PETSC_WF_GP0, PETSC_WF_GP1,
@@ -92,6 +94,7 @@ WeakForm::get_jacobian_keys() const
 const std::vector<ResidualFunc *> &
 WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part) const
 {
+    _F_;
     PetscFormKey key;
     key.label = label;
     key.value = val;
@@ -107,6 +110,7 @@ WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int p
 const std::vector<JacobianFunc *> &
 WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int g, Int part) const
 {
+    _F_;
     PetscFormKey key;
     key.label = label;
     key.value = val;
@@ -127,6 +131,7 @@ WeakForm::add(PetscWeakFormKind kind,
               Int part,
               ResidualFunc * func)
 {
+    _F_;
     if (func != nullptr) {
         PetscFormKey key;
         key.label = label;
@@ -146,6 +151,7 @@ WeakForm::add(PetscWeakFormKind kind,
               Int part,
               JacobianFunc * func)
 {
+    _F_;
     if (func != nullptr) {
         PetscFormKey key;
         key.label = label;
@@ -159,6 +165,7 @@ WeakForm::add(PetscWeakFormKind kind,
 Int
 WeakForm::get_jac_key(Int f, Int g) const
 {
+    _F_;
     return f * this->n_fields + g;
 }
 

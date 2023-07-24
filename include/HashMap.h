@@ -526,7 +526,7 @@ HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::resize(Int nb)
     _F_;
     /* This function uses 0.25*n_buckets bytes of working space instead of
      * [sizeof(key_t+val_t)+.25]*n_buckets. */
-    khint32_t * new_flags = NULL;
+    khint32_t * new_flags = nullptr;
     khint_t j = 1;
     khint_t new_n_buckets = nb;
     {

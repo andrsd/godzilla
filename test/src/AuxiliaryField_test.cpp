@@ -1,6 +1,5 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "LineMesh.h"
 #include "FENonlinearProblem.h"
 #include "AuxiliaryField.h"
 #include "FENonlinearProblem_test.h"
@@ -48,7 +47,7 @@ TEST_F(AuxiliaryFieldTest, api)
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("field") = "fld";
     params.set<std::string>("region") = "rgn";
-    auto aux = TestAuxFld(params);
+    TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
     mesh->create();
@@ -95,7 +94,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
-    auto aux = TestAuxFld(params);
+    TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
     mesh->create();
@@ -142,7 +141,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
     params.set<const App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
-    auto aux = TestAuxFld(params);
+    TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
     mesh->create();
@@ -190,7 +189,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("region") = "asdf";
-    auto aux = TestAuxFld(params);
+    TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
     mesh->create();
@@ -236,7 +235,7 @@ TEST_F(AuxiliaryFieldTest, get_value)
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("region") = "asdf";
-    auto aux = TestAuxFld(params);
+    TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
     mesh->create();
@@ -283,7 +282,7 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("region") = "asdf";
-    auto aux = TestAuxFld(params);
+    TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
     mesh->create();

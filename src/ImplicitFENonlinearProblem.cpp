@@ -100,6 +100,7 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & params
 
 ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
 {
+    _F_;
     this->snes = nullptr;
     this->ksp = nullptr;
 }

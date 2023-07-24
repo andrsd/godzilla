@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "LineMesh.h"
 #include "FENonlinearProblem_test.h"
 #include "BoundaryCondition.h"
 #include "Parameters.h"

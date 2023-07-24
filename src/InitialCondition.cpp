@@ -74,6 +74,7 @@ InitialCondition::get_function()
 void *
 InitialCondition::get_context()
 {
+    _F_;
     return this;
 }
 

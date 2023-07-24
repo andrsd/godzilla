@@ -2,7 +2,6 @@
 #include "TestApp.h"
 #include "FEGeometry.h"
 #include "FEVolumes.h"
-#include "FEShapeFns.h"
 #include "FEBoundary.h"
 
 using namespace godzilla;

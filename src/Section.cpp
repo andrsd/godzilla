@@ -342,6 +342,7 @@ Section::create(DM dm,
                 const IS bc_points[],
                 IS perm)
 {
+    _F_;
     PetscSection s;
     PETSC_CHECK(DMPlexCreateSection(dm,
                                     nullptr,

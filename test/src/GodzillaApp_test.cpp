@@ -4,28 +4,10 @@
 #include "Mesh.h"
 #include "Problem.h"
 #include "GYMLFile.h"
-#include "petsc.h"
 
 using namespace godzilla;
 
 namespace {
-
-class MockMesh : public Mesh {
-public:
-    explicit MockMesh(const Parameters & params) : Mesh(params) {}
-
-    virtual DM
-    get_dm() const
-    {
-        return nullptr;
-    }
-
-protected:
-    virtual void
-    distribute()
-    {
-    }
-};
 
 class MockProblem : public Problem {
 public:
@@ -35,13 +17,11 @@ public:
     MOCK_METHOD(void, run, ());
     MOCK_METHOD(void, solve, ());
     MOCK_METHOD(bool, converged, ());
-    MOCK_METHOD(DM, get_dm, (), (const));
     MOCK_METHOD(const Vector &, get_solution_vector, (), (const));
 };
 
 } // namespace
 
-REGISTER_OBJECT(MockMesh);
 REGISTER_OBJECT(MockProblem);
 
 TEST_F(GodzillaAppTest, run_input)

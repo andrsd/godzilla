@@ -56,12 +56,14 @@ FunctionInterface::create()
 bool
 FunctionInterface::evaluate_func(Int dim, Real time, const Real x[], Int nc, Real u[])
 {
+    _F_;
     return this->evalr.evaluate(dim, time, x, nc, u);
 }
 
 bool
 FunctionInterface::evaluate_func_t(Int dim, Real time, const Real x[], Int nc, Real u[])
 {
+    _F_;
     return this->evalr_t.evaluate(dim, time, x, nc, u);
 }
 

@@ -3,7 +3,6 @@
 #include "App.h"
 #include "LineMesh.h"
 #include "RectangleMesh.h"
-#include "petsc.h"
 
 using namespace godzilla;
 

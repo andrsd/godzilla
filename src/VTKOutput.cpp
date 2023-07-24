@@ -31,6 +31,7 @@ VTKOutput::~VTKOutput()
 std::string
 VTKOutput::get_file_ext() const
 {
+    _F_;
     return { "vtk" };
 }
 

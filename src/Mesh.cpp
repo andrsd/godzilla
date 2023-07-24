@@ -61,6 +61,7 @@ Mesh::get_label(const std::string & name) const
 Label
 Mesh::create_label(const std::string & name) const
 {
+    _F_;
     DMLabel label;
     PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
     PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
@@ -70,6 +71,7 @@ Mesh::create_label(const std::string & name) const
 DM
 Mesh::get_coordinate_dm() const
 {
+    _F_;
     DM cdm;
     PETSC_CHECK(DMGetCoordinateDM(this->dm, &cdm));
     return cdm;
@@ -78,6 +80,7 @@ Mesh::get_coordinate_dm() const
 Vector
 Mesh::get_coordinates() const
 {
+    _F_;
     Vec vec;
     PETSC_CHECK(DMGetCoordinates(this->dm, &vec));
     return { vec };
@@ -86,6 +89,7 @@ Mesh::get_coordinates() const
 Vector
 Mesh::get_coordinates_local() const
 {
+    _F_;
     Vec vec;
     PETSC_CHECK(DMGetCoordinatesLocal(this->dm, &vec));
     return { vec };

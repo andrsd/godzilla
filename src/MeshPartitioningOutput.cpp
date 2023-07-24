@@ -34,6 +34,7 @@ MeshPartitioningOutput::check()
 std::string
 MeshPartitioningOutput::get_file_ext() const
 {
+    _F_;
     return { "h5" };
 }
 
