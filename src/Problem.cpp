@@ -20,9 +20,7 @@ Problem::Problem(const Parameters & parameters) :
     Object(parameters),
     PrintInterface(this),
     mesh(get_param<Mesh *>("_mesh")),
-    default_output_on(Output::ON_NONE),
-    time(0.),
-    step_num(0)
+    default_output_on(Output::ON_NONE)
 {
 }
 
@@ -72,18 +70,18 @@ Problem::get_dimension() const
     return this->mesh->get_dimension();
 }
 
-const Real &
+Real
 Problem::get_time() const
 {
     _F_;
-    return this->time;
+    return 0.;
 }
 
-const Int &
+Int
 Problem::get_step_num() const
 {
     _F_;
-    return this->step_num;
+    return 0;
 }
 
 const std::vector<Function *> &

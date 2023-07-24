@@ -12,6 +12,8 @@ public:
     explicit ExplicitFELinearProblem(const Parameters & params);
     ~ExplicitFELinearProblem() override;
 
+    Real get_time() const override;
+    Int get_step_num() const override;
     void create() override;
     void check() override;
     bool converged() override;

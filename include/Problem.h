@@ -40,12 +40,12 @@ public:
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
     /// @return Simulation time
-    const Real & get_time() const;
+    virtual Real get_time() const;
 
     /// Get time step number
     ///
     /// @return Time step number
-    const Int & get_step_num() const;
+    virtual Int get_step_num() const;
 
     /// Get list of functions
     ///
@@ -152,16 +152,8 @@ protected:
     /// postprocessor names
     std::vector<std::string> pps_names;
 
-    /// Simulation time
-    Real time;
-
-    /// Time step number
-    Int step_num;
-
 public:
     static Parameters parameters();
-
-    friend class TransientProblemInterface;
 };
 
 } // namespace godzilla

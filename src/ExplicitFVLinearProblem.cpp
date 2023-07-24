@@ -47,6 +47,20 @@ ExplicitFVLinearProblem::~ExplicitFVLinearProblem()
     this->ksp = nullptr;
 }
 
+Real
+ExplicitFVLinearProblem::get_time() const
+{
+    _F_;
+    return this->time;
+}
+
+Int
+ExplicitFVLinearProblem::get_step_num() const
+{
+    _F_;
+    return this->step_num;
+}
+
 void
 ExplicitFVLinearProblem::init()
 {

@@ -68,7 +68,7 @@ const Real &
 Functional::get_time() const
 {
     _F_;
-    return get_fe_problem()->get_time();
+    return get_fe_problem()->get_assembly_time();
 }
 
 } // namespace godzilla

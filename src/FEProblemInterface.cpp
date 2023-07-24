@@ -714,7 +714,7 @@ FEProblemInterface::get_time_shift() const
 }
 
 const Real &
-FEProblemInterface::get_time() const
+FEProblemInterface::get_assembly_time() const
 {
     _F_;
     return this->asmbl.time;

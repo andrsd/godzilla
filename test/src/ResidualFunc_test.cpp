@@ -21,7 +21,7 @@ public:
                 (const));
     MOCK_METHOD(const FieldValue &, get_field_dot, (const std::string & field_name), (const));
     MOCK_METHOD(const Real &, get_time_shift, (), (const));
-    MOCK_METHOD(const Real &, get_time, (), (const));
+    MOCK_METHOD(const Real &, get_assembly_time, (), (const));
     MOCK_METHOD(const Normal &, get_normal, (), (const));
     MOCK_METHOD(const Point &, get_xyz, (), (const));
 
@@ -95,7 +95,7 @@ TEST(ResidualFuncTest, test)
     FieldValue dot;
     EXPECT_CALL(prob, get_field_dot(_)).Times(1).WillOnce(ReturnRef(dot));
     Real time;
-    EXPECT_CALL(prob, get_time()).Times(1).WillOnce(ReturnRef(time));
+    EXPECT_CALL(prob, get_assembly_time()).Times(1).WillOnce(ReturnRef(time));
 
     TestF res(&prob);
 }
