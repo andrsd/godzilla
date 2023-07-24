@@ -134,81 +134,61 @@ set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_
 
 # install
 
-install(
-    TARGETS
-        godzilla
-    EXPORT
-        GodzillaTargets
-    LIBRARY DESTINATION
-        lib
-    ARCHIVE DESTINATION
-        lib
-    RUNTIME DESTINATION
-        bin
-    INCLUDES DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}
-    PUBLIC_HEADER DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}
+configure_package_config_file(
+    ${PROJECT_SOURCE_DIR}/cmake/GodzillaConfig.cmake.in
+    GodzillaConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
+    NO_SET_AND_CHECK_MACRO
 )
-
-install(
-    DIRECTORY
-        ${CMAKE_SOURCE_DIR}/include/
-    DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
-    FILES_MATCHING
-        PATTERN "*.h"
-)
-
-install(
-    FILES
-        ${CMAKE_BINARY_DIR}/GodzillaConfig.h
-    DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
-)
-
-install(
-    DIRECTORY
-        ${CMAKE_SOURCE_DIR}/contrib/tclap
-    DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING
-        PATTERN "*.h"
-)
-
-install(
-    DIRECTORY
-        ${CMAKE_SOURCE_DIR}/contrib/h5pp
-    DESTINATION
-        ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING
-        PATTERN "*.h"
-)
-
-include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
     GodzillaConfigVersion.cmake
-    VERSION
-        ${PROJECT_VERSION}
-    COMPATIBILITY
-        AnyNewerVersion
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
 )
 
 install(
-    EXPORT
-        GodzillaTargets
-    FILE
-        GodzillaTargets.cmake
-    NAMESPACE
-        Godzilla::
-    DESTINATION
-        lib/cmake/godzilla
+    TARGETS godzilla
+    EXPORT GodzillaTargets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+    FILES ${CMAKE_BINARY_DIR}/GodzillaConfig.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+)
+
+install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/tclap
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/h5pp
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+    EXPORT GodzillaTargets
+    FILE GodzillaTargets.cmake
+    NAMESPACE Godzilla::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
 )
 
 install(
     FILES
-        "${CMAKE_SOURCE_DIR}/cmake/GodzillaConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/GodzillaConfig.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/GodzillaConfigVersion.cmake"
-    DESTINATION
-        lib/cmake/godzilla
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
 )
