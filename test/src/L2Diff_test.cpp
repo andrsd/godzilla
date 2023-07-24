@@ -36,7 +36,7 @@ TEST(L2DiffTest, compute)
 
     Parameters ps_params = L2Diff::parameters();
     ps_params.set<const App *>("_app") = &app;
-    ps_params.set<const Problem *>("_problem") = &prob;
+    ps_params.set<Problem *>("_problem") = &prob;
     ps_params.set<std::vector<std::string>>("value") = { "x*x" };
     L2Diff ps(ps_params);
 

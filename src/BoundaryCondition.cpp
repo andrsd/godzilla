@@ -35,7 +35,7 @@ BoundaryCondition::get_mesh() const
     return this->mesh;
 }
 
-const Problem *
+Problem *
 BoundaryCondition::get_problem() const
 {
     _F_;

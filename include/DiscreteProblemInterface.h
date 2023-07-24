@@ -31,7 +31,7 @@ public:
     /// Get problem
     ///
     /// @return Problem this interface is part of
-    const Problem * get_problem() const;
+    Problem * get_problem() const;
 
     /// Get number of fields
     ///
@@ -202,12 +202,12 @@ public:
     /// Get local solution vector
     ///
     /// @return Local solution vector
-    virtual const Vector & get_solution_vector_local() const = 0;
+    virtual const Vector & get_solution_vector_local() = 0;
 
     /// Get local auxiliary solution vector
     ///
     /// @return Local auxiliary solution vector
-    virtual const Vector & get_aux_solution_vector_local() const = 0;
+    virtual const Vector & get_aux_solution_vector_local() = 0;
 
     virtual void add_boundary_essential(const std::string & name,
                                         const Label & label,
@@ -269,6 +269,7 @@ public:
 protected:
     virtual void init();
     virtual void create();
+    virtual void allocate_objects();
     /// Set up discrete system
     virtual void set_up_ds() = 0;
 
@@ -281,11 +282,6 @@ protected:
 
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
-
-    /// Build local solution vector
-    ///
-    /// @param sln Global solution vector
-    void build_local_solution_vector(const Vector & sln) const;
 
     /// Problem this interface is part of
     Problem * problem;
@@ -322,6 +318,9 @@ protected:
 
     /// Map from region to list of auxiliary field objects
     std::map<std::string, std::vector<AuxiliaryField *>> auxs_by_region;
+
+    /// Local solution vector
+    Vector sln;
 
     /// DM for auxiliary fields
     DM dm_aux;

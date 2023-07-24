@@ -106,21 +106,21 @@ TEST(ProblemTest, add_pp)
 
     Parameters pp_params = Postprocessor::parameters();
     pp_params.set<const App *>("_app") = &app;
-    pp_params.set<const Problem *>("_problem") = &problem;
+    pp_params.set<Problem *>("_problem") = &problem;
     pp_params.set<std::string>("_name") = "pp";
     TestPostprocessor pp(pp_params);
     problem.add_postprocessor(&pp);
 
     Parameters fn_params = Function::parameters();
     fn_params.set<const App *>("_app") = &app;
-    fn_params.set<const Problem *>("_problem") = &problem;
+    fn_params.set<Problem *>("_problem") = &problem;
     fn_params.set<std::string>("_name") = "fn";
     TestFunction fn(fn_params);
     problem.add_function(&fn);
 
     Parameters out_params = Function::parameters();
     out_params.set<const App *>("_app") = &app;
-    out_params.set<const Problem *>("_problem") = &problem;
+    out_params.set<Problem *>("_problem") = &problem;
     out_params.set<std::string>("_name") = "out";
     out_params.set<std::vector<std::string>>("on") = { "initial" };
     out_params.set<Int>("interval") = 1;

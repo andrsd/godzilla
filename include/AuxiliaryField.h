@@ -58,7 +58,7 @@ protected:
     /// Get problem this auxiliary field is part of
     ///
     /// @return Problem this auxiliary field of part of
-    const Problem * get_problem() const;
+    Problem * get_problem() const;
 
     /// Unstructured mesh this field is defined on
     UnstructuredMesh * mesh;

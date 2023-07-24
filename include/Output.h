@@ -35,7 +35,7 @@ protected:
     void set_up_exec();
 
     /// Problem to get data from
-    const Problem * problem;
+    Problem * problem;
 
     /// Bitwise mask for determining when this output object should output its content
     unsigned int on_mask;

@@ -32,7 +32,7 @@ TEST_F(OutputTest, exec_masks_1)
 {
     Parameters pars = Output::parameters();
     pars.set<const App *>("_app") = app;
-    pars.set<const Problem *>("_problem") = prob;
+    pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "none" };
     MockOutput out(pars);
     out.create();
@@ -46,7 +46,7 @@ TEST_F(OutputTest, exec_masks_2)
 {
     Parameters pars = Output::parameters();
     pars.set<const App *>("_app") = app;
-    pars.set<const Problem *>("_problem") = prob;
+    pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "final" };
     MockOutput out(pars);
     out.create();
@@ -61,7 +61,7 @@ TEST_F(OutputTest, exec_masks_3)
 {
     Parameters pars = Output::parameters();
     pars.set<const App *>("_app") = app;
-    pars.set<const Problem *>("_problem") = prob;
+    pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "final", "initial", "timestep" };
     MockOutput out(pars);
     out.create();
@@ -81,7 +81,7 @@ TEST_F(OutputTest, empty_on)
 
     Parameters pars = Output::parameters();
     pars.set<const App *>("_app") = app;
-    pars.set<const Problem *>("_problem") = prob;
+    pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = {};
     MockOutput out(pars);
 
@@ -100,7 +100,7 @@ TEST_F(OutputTest, none_plus_mask)
 
     Parameters pars = Output::parameters();
     pars.set<const App *>("_app") = app;
-    pars.set<const Problem *>("_problem") = prob;
+    pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "none", "final", "timestep" };
     MockOutput out(pars);
 

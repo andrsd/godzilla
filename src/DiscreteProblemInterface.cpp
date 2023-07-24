@@ -26,10 +26,11 @@ DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Para
 DiscreteProblemInterface::~DiscreteProblemInterface()
 {
     _F_;
+    this->sln.destroy();
     DMDestroy(&this->dm_aux);
 }
 
-const Problem *
+Problem *
 DiscreteProblemInterface::get_problem() const
 {
     _F_;
@@ -112,6 +113,13 @@ DiscreteProblemInterface::create()
         bc->create();
     for (auto & aux : this->auxs)
         aux->create();
+}
+
+void
+DiscreteProblemInterface::allocate_objects()
+{
+    _F_;
+    this->sln = this->problem->create_local_vector();
 }
 
 void
@@ -233,16 +241,6 @@ DiscreteProblemInterface::get_coordinates_local() const
     Vec coord;
     PETSC_CHECK(DMGetCoordinatesLocal(dm, &coord));
     return Vector(coord);
-}
-
-void
-DiscreteProblemInterface::build_local_solution_vector(const Vector & sln) const
-{
-    _F_;
-    DM dm = this->unstr_mesh->get_dm();
-    Real time = this->problem->get_time();
-    PETSC_CHECK(DMGlobalToLocal(dm, this->problem->get_solution_vector(), INSERT_VALUES, sln));
-    PETSC_CHECK(DMPlexInsertBoundaryValues(dm, PETSC_TRUE, sln, time, nullptr, nullptr, nullptr));
 }
 
 void

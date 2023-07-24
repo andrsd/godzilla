@@ -193,6 +193,16 @@ ImplicitFENonlinearProblem::set_up_monitors()
     TransientProblemInterface::set_up_monitors();
 }
 
+const Vector &
+ImplicitFENonlinearProblem::get_solution_vector_local()
+{
+    _F_;
+    auto & loc_sln = this->sln;
+    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
+    compute_boundary(get_time(), loc_sln, Vector());
+    return loc_sln;
+}
+
 PetscErrorCode
 ImplicitFENonlinearProblem::compute_ifunction(Real time,
                                               const Vector & X,

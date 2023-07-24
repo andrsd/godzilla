@@ -62,7 +62,7 @@ protected:
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
     /// FE problem interface (convenience pointer)
-    const DiscreteProblemInterface * dpi;
+    DiscreteProblemInterface * dpi;
     /// Unstructured mesh
     UnstructuredMesh * mesh;
     /// ExodusII file

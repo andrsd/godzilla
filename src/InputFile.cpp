@@ -167,7 +167,7 @@ InputFile::build_outputs()
         Block blk = get_block(output_block, it.first.as<std::string>());
         Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
-        params->set<const Problem *>("_problem") = this->problem;
+        params->set<Problem *>("_problem") = this->problem;
         auto output = Factory::create<Output>(class_name, blk.name(), params);
         assert(this->problem != nullptr);
         this->problem->add_output(output);

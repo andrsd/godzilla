@@ -37,7 +37,7 @@ protected:
     virtual void set_type() = 0;
 
     /// Problem this adaptor is part of
-    const Problem * problem;
+    Problem * problem;
 
     /// Transient problem interface this adaptor is part of
     const TransientProblemInterface * tpi;

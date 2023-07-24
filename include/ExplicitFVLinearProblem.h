@@ -20,6 +20,7 @@ public:
     void solve() override;
     Real get_time() const override;
     Int get_step_num() const override;
+    const Vector & get_solution_vector_local() override;
 
     virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 

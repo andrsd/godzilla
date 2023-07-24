@@ -16,14 +16,14 @@ Output::parameters()
     Parameters params = Object::parameters();
     params.add_param<std::vector<std::string>>("on", "When output should happen");
     params.add_param<Int>("interval", 1, "Interval");
-    params.add_private_param<const Problem *>("_problem", nullptr);
+    params.add_private_param<Problem *>("_problem", nullptr);
     return params;
 }
 
 Output::Output(const Parameters & params) :
     Object(params),
     PrintInterface(this),
-    problem(get_param<const Problem *>("_problem")),
+    problem(get_param<Problem *>("_problem")),
     on_mask(ON_NONE),
     interval(get_param<Int>("interval"))
 {

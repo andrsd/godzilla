@@ -18,6 +18,7 @@ public:
     explicit FENonlinearProblem(const Parameters & parameters);
 
     void create() override;
+    const Vector & get_solution_vector_local() override;
     PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
     PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
 

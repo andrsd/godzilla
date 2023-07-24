@@ -11,7 +11,7 @@ protected:
     {
         const std::string class_name = "CSVOutput";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<const Problem *>("_problem") = this->prob;
+        params->set<Problem *>("_problem") = this->prob;
         params->set<std::string>("file") = file_name;
         return this->app->build_object<CSVOutput>(class_name, "out", params);
     }

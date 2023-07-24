@@ -27,7 +27,7 @@ public:
 
 protected:
     /// Problem this object is part of
-    const Problem * problem;
+    Problem * problem;
 
 public:
     static Parameters parameters();

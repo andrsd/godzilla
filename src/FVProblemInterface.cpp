@@ -27,7 +27,6 @@ FVProblemInterface::~FVProblemInterface()
         PetscFEDestroy(&fe);
     }
     this->a.destroy();
-    this->sln.destroy();
 }
 
 void
@@ -285,15 +284,7 @@ FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 }
 
 const Vector &
-FVProblemInterface::get_solution_vector_local() const
-{
-    _F_;
-    build_local_solution_vector(this->sln);
-    return this->sln;
-}
-
-const Vector &
-FVProblemInterface::get_aux_solution_vector_local() const
+FVProblemInterface::get_aux_solution_vector_local()
 {
     _F_;
     return this->a;
@@ -355,13 +346,6 @@ FVProblemInterface::create()
     this->unstr_mesh->construct_ghost_cells();
     set_up_fields();
     DiscreteProblemInterface::create();
-}
-
-void
-FVProblemInterface::allocate_objects()
-{
-    _F_;
-    this->sln = this->problem->create_local_vector();
 }
 
 void
