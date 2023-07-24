@@ -33,6 +33,7 @@ protected:
     void set_up_callbacks() override;
     void set_up_time_scheme() override;
     void set_up_monitors() override;
+    PetscErrorCode post_step() override;
 
     /// Time stepping scheme
     const std::string & scheme;

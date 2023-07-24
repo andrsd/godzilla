@@ -36,6 +36,7 @@ protected:
     void create_mass_matrix_lumped();
     virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);
     virtual PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F);
+    PetscErrorCode post_step() override;
 
     /// Time stepping scheme
     const std::string & scheme;

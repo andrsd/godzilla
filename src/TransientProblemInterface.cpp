@@ -180,8 +180,6 @@ TransientProblemInterface::post_step()
     PETSC_CHECK(TSGetStepNumber(this->ts, &this->step_num));
     Vector sln = get_solution();
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
-    this->problem->compute_postprocessors();
-    this->problem->output(Output::ON_TIMESTEP);
     return 0;
 }
 

@@ -298,4 +298,15 @@ ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const 
     return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
 }
 
+PetscErrorCode
+ImplicitFENonlinearProblem::post_step()
+{
+    _F_;
+    TransientProblemInterface::post_step();
+    DiscreteProblemInterface::update_aux_vector();
+    compute_postprocessors();
+    output(Output::ON_TIMESTEP);
+    return 0;
+}
+
 } // namespace godzilla

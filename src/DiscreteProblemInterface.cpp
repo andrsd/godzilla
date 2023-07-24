@@ -319,4 +319,10 @@ DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                    nullptr));
 }
 
+void
+DiscreteProblemInterface::update_aux_vector()
+{
+    _F_;
+}
+
 } // namespace godzilla

@@ -283,6 +283,9 @@ protected:
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
 
+    /// Update auxiliary vector
+    virtual void update_aux_vector();
+
     /// Problem this interface is part of
     Problem * problem;
 
