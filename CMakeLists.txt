@@ -27,7 +27,7 @@ if (GODZILLA_WITH_MPI)
     find_package(MPI REQUIRED)
 endif()
 
-find_package(PETSc)
+find_package(PETSc 3.17 REQUIRED)
 if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environment variable PETSC_DIR to point to your PETSc installation.")
 endif()
