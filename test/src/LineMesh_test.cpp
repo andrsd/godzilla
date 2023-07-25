@@ -4,7 +4,6 @@
 #include "Parameters.h"
 #include "LineMesh.h"
 #include "petsc.h"
-#include "petscviewerhdf5.h"
 
 using namespace godzilla;
 
