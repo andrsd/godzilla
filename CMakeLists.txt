@@ -28,38 +28,36 @@ find_package(yaml-cpp 0.7 REQUIRED)
 if (GODZILLA_WITH_MPI)
     find_package(MPI REQUIRED)
 endif()
-
 find_package(PETSc 3.17 REQUIRED)
 if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environment variable PETSC_DIR to point to your PETSc installation.")
 endif()
-
 find_package(exodusIIcpp 1.5 REQUIRED)
 
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.11.0
-)
-set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
-mark_as_advanced(FORCE
-    BUILD_GMOCK
-    INSTALL_GTEST
-    FETCHCONTENT_SOURCE_DIR_GOOGLETEST
-    FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
-)
+if (GODZILLA_BUILD_TESTS)
+    FetchContent_Declare(
+            googletest
+            GIT_REPOSITORY https://github.com/google/googletest.git
+            GIT_TAG release-1.11.0
+    )
+    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+    mark_as_advanced(FORCE
+            BUILD_GMOCK
+            INSTALL_GTEST
+            FETCHCONTENT_SOURCE_DIR_GOOGLETEST
+            FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
+            )
 
-FetchContent_MakeAvailable(googletest)
-mark_as_advanced(FORCE
-    FETCHCONTENT_BASE_DIR
-    FETCHCONTENT_FULLY_DISCONNECTED
-    FETCHCONTENT_QUIET
-    FETCHCONTENT_UPDATES_DISCONNECTED
-)
+    FetchContent_MakeAvailable(googletest)
+    mark_as_advanced(FORCE
+            FETCHCONTENT_BASE_DIR
+            FETCHCONTENT_FULLY_DISCONNECTED
+            FETCHCONTENT_QUIET
+            FETCHCONTENT_UPDATES_DISCONNECTED
+            )
+endif ()
 
 # Godzilla
-
-include(GNUInstallDirs)
 
 add_subdirectory(contrib/muParser)
 add_subdirectory(src)
