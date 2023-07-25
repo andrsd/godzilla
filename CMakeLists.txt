@@ -35,10 +35,7 @@ endif()
 if (GODZILLA_WITH_MPI)
     set(HDF5_PREFER_PARALLEL TRUE)
 endif()
-find_package(HDF5 1.10 COMPONENTS C)
-if (NOT ${HDF5_FOUND})
-    message(STATUS "HDF5 was not found.")
-endif()
+find_package(HDF5 1.10 REQUIRED COMPONENTS C)
 
 FetchContent_Declare(
     exodusIIcpp
