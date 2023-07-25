@@ -3,6 +3,7 @@ name: qa
 env:
   PETSC_VERSION: 3.17.0
   PETSC_CACHE_NUM: 10
+  EXODUSIICPP_VERSION: 1.6
 
 on:
   push:
@@ -71,6 +72,26 @@ jobs:
           path: ${{ github.workspace }}/petsc
           key: ${{ runner.os }}-gcc-petsc-cache-${{ env.PETSC_CACHE_NUM }}
           restore-keys: ${{ runner.os }}-gcc-petsc-cache-${{ env.PETSC_CACHE_NUM }}
+
+      - name: Build exodusIIcpp
+        run: |
+          cd ${{ github.workspace }}
+          echo "::group::download"
+          wget -q https://github.com/andrsd/exodusIIcpp/archive/refs/tags/v${EXODUSIICPP_VERSION}.tar.gz -O exodusIIcpp-${EXODUSIICPP_VERSION}.tar.gz
+          tar -xzf exodusIIcpp-${EXODUSIICPP_VERSION}.tar.gz
+          echo "::endgroup::"
+          echo "::group::configure"
+          cmake \
+            -S ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION} \
+            -B ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION}/build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DEXODUSIICPP_LIBRARY_TYPE=SHARED
+          echo "::endgroup::"
+          echo "::group::make"
+          cd ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION}/build
+          make all -C ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION}/build
+          sudo make install -C ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION}/build
+          echo "::endgroup::"
 
       - name: Configure
         run: |
