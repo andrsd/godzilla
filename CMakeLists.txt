@@ -34,11 +34,6 @@ if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environment variable PETSC_DIR to point to your PETSc installation.")
 endif()
 
-if (GODZILLA_WITH_MPI)
-    set(HDF5_PREFER_PARALLEL TRUE)
-endif()
-find_package(HDF5 1.10 REQUIRED COMPONENTS C)
-
 find_package(exodusIIcpp 1.5 REQUIRED)
 
 FetchContent_Declare(
@@ -81,7 +76,6 @@ install(
 install(
     FILES
         ${PROJECT_SOURCE_DIR}/cmake/TesterExodusII.cmake
-        ${PROJECT_SOURCE_DIR}/cmake/TesterHDF5.cmake
     DESTINATION ${CMAKE_ROOT}/Modules
 )
 

@@ -37,7 +37,6 @@ add_library(${PROJECT_NAME}
         FVProblemInterface.cpp
         GmshMesh.cpp
         GYMLFile.cpp
-        HDF5Output.cpp
         ImplicitFENonlinearProblem.cpp
         IndexSet.cpp
         Init.cpp
@@ -106,7 +105,6 @@ target_include_directories(
     ${PROJECT_NAME}
     PRIVATE
         ${PETSC_INCLUDE_DIR}
-        ${HDF5_INCLUDE_DIRS}
         ${CMAKE_BINARY_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
@@ -119,7 +117,6 @@ target_link_libraries(
         yaml-cpp
     PRIVATE
         ${PETSC_LIBRARY}
-        ${HDF5_LIBRARIES}
         muParser
         exodusIIcpp::exodusIIcpp
 )
@@ -169,12 +166,6 @@ install(
 
 install(
     DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/tclap
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.h"
-)
-
-install(
-    DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/h5pp
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.h"
 )
