@@ -13,6 +13,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 include(FetchContent)
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
 include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 
@@ -72,18 +74,15 @@ add_subdirectory(src)
 configure_file(godzilla.pc.in godzilla.pc @ONLY)
 
 install(
-    FILES
-        "${PROJECT_BINARY_DIR}/godzilla.pc"
-    DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+    FILES "${PROJECT_BINARY_DIR}/godzilla.pc"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
 
 install(
     FILES
         ${PROJECT_SOURCE_DIR}/cmake/TesterExodusII.cmake
         ${PROJECT_SOURCE_DIR}/cmake/TesterHDF5.cmake
-    DESTINATION
-        ${CMAKE_ROOT}/Modules
+    DESTINATION ${CMAKE_ROOT}/Modules
 )
 
 # Tests
