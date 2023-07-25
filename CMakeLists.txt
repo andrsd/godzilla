@@ -28,12 +28,10 @@ find_package(yaml-cpp 0.7 REQUIRED)
 if (GODZILLA_WITH_MPI)
     find_package(MPI REQUIRED)
 endif()
-
 find_package(PETSc 3.17 REQUIRED)
 if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environment variable PETSC_DIR to point to your PETSc installation.")
 endif()
-
 find_package(exodusIIcpp 1.5 REQUIRED)
 
 FetchContent_Declare(
@@ -58,8 +56,6 @@ mark_as_advanced(FORCE
 )
 
 # Godzilla
-
-include(GNUInstallDirs)
 
 add_subdirectory(contrib/muParser)
 add_subdirectory(src)
