@@ -250,6 +250,17 @@ ExplicitFELinearProblem::compute_rhs_local(Real time, const Vector & x, Vector &
     return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, x, F, this);
 }
 
+PetscErrorCode
+ExplicitFELinearProblem::post_step()
+{
+    _F_;
+    TransientProblemInterface::post_step();
+    DiscreteProblemInterface::update_aux_vector();
+    compute_postprocessors();
+    output(Output::ON_TIMESTEP);
+    return 0;
+}
+
 void
 ExplicitFELinearProblem::set_residual_block(Int field_id,
                                             ResidualFunc * f0,
