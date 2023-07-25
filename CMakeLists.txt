@@ -34,26 +34,28 @@ if (NOT ${PETSC_FOUND})
 endif()
 find_package(exodusIIcpp 1.5 REQUIRED)
 
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.11.0
-)
-set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
-mark_as_advanced(FORCE
-    BUILD_GMOCK
-    INSTALL_GTEST
-    FETCHCONTENT_SOURCE_DIR_GOOGLETEST
-    FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
-)
+if (GODZILLA_BUILD_TESTS)
+    FetchContent_Declare(
+            googletest
+            GIT_REPOSITORY https://github.com/google/googletest.git
+            GIT_TAG release-1.11.0
+    )
+    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+    mark_as_advanced(FORCE
+            BUILD_GMOCK
+            INSTALL_GTEST
+            FETCHCONTENT_SOURCE_DIR_GOOGLETEST
+            FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
+            )
 
-FetchContent_MakeAvailable(googletest)
-mark_as_advanced(FORCE
-    FETCHCONTENT_BASE_DIR
-    FETCHCONTENT_FULLY_DISCONNECTED
-    FETCHCONTENT_QUIET
-    FETCHCONTENT_UPDATES_DISCONNECTED
-)
+    FetchContent_MakeAvailable(googletest)
+    mark_as_advanced(FORCE
+            FETCHCONTENT_BASE_DIR
+            FETCHCONTENT_FULLY_DISCONNECTED
+            FETCHCONTENT_QUIET
+            FETCHCONTENT_UPDATES_DISCONNECTED
+            )
+endif ()
 
 # Godzilla
 
