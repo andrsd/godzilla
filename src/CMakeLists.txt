@@ -121,7 +121,7 @@ target_link_libraries(
         ${PETSC_LIBRARY}
         ${HDF5_LIBRARIES}
         muParser
-        exodusIIcpp
+        exodusIIcpp::exodusIIcpp
 )
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)

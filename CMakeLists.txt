@@ -37,16 +37,7 @@ if (GODZILLA_WITH_MPI)
 endif()
 find_package(HDF5 1.10 REQUIRED COMPONENTS C)
 
-FetchContent_Declare(
-    exodusIIcpp
-    GIT_REPOSITORY https://github.com/andrsd/exodusIIcpp.git
-    GIT_TAG        v1.4.0
-)
-mark_as_advanced(FORCE
-    FETCHCONTENT_SOURCE_DIR_EXODUSIICPP
-    FETCHCONTENT_UPDATES_DISCONNECTED_EXODUSIICPP
-    EXODUSIICPP_BUILD_TESTS
-)
+find_package(exodusIIcpp 1.5 REQUIRED)
 
 FetchContent_Declare(
   googletest
@@ -61,7 +52,7 @@ mark_as_advanced(FORCE
     FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST
 )
 
-FetchContent_MakeAvailable(exodusIIcpp googletest)
+FetchContent_MakeAvailable(googletest)
 mark_as_advanced(FORCE
     FETCHCONTENT_BASE_DIR
     FETCHCONTENT_FULLY_DISCONNECTED
