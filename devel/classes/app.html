@@ -126,14 +126,16 @@
 <dd><div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorE">
-<span id="_CPPv3N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorE"></span><span id="_CPPv2N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorE"></span><span id="godzilla::App::App__ssCR.mpi::CommunicatorCR"></span><span class="target" id="classgodzilla_1_1_app_1aefa1ca5d4abcdd0ecad80b5ba7950d50"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">app_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comm</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorE" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorEiPPCKc">
+<span id="_CPPv3N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorEiPPCKc"></span><span id="_CPPv2N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorEiPPCKc"></span><span id="godzilla::App::App__ssCR.mpi::CommunicatorCR.i.cCPCP"></span><span class="target" id="classgodzilla_1_1_app_1a6a51bdc69cdf1fd5594586955cc7547e"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">app_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argc</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">argv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppERKNSt6stringERKN3mpi12CommunicatorEiPPCKc" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Build and application object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>app_name</strong> – Name of the application </p></li>
 <li><p><strong>comm</strong> – MPI communicator </p></li>
+<li><p><strong>argc</strong> – Number of command line arguments </p></li>
+<li><p><strong>argv</strong> – Command line arguments </p></li>
 </ul>
 </dd>
 </dl>
@@ -164,7 +166,8 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App11get_problemEv">
 <span id="_CPPv3NK8godzilla3App11get_problemEv"></span><span id="_CPPv2NK8godzilla3App11get_problemEv"></span><span id="godzilla::App::get_problemC"></span><span class="target" id="classgodzilla_1_1_app_1a170c5a5eb56394609e75acb9f0ac0b2f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><a class="reference internal" href="problem.html#_CPPv4N8godzilla7ProblemE" title="godzilla::Problem"><span class="n"><span class="pre">Problem</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_problem</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App11get_problemEv" title="Permalink to this definition"></a><br /></dt>
-<dd><dl class="field-list simple">
+<dd><p>Get pointer to the <code class="docutils literal notranslate"><a class="reference internal" href="problem.html#classgodzilla_1_1_problem"><span class="std std-ref"><span class="pre">Problem</span></span></a></code> class in this application. </p>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Get problem this application is representing </p>
 </dd>
@@ -172,15 +175,23 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App18parse_command_lineEiPPCKc">
-<span id="_CPPv3N8godzilla3App18parse_command_lineEiPPCKc"></span><span id="_CPPv2N8godzilla3App18parse_command_lineEiPPCKc"></span><span id="godzilla::App::parse_command_line__i.cCPCP"></span><span class="target" id="classgodzilla_1_1_app_1a2fc934c65e36c2a1aff35310136f1dfa"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">parse_command_line</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argc</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">argv</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App18parse_command_lineEiPPCKc" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App18parse_command_lineEv">
+<span id="_CPPv3N8godzilla3App18parse_command_lineEv"></span><span id="_CPPv2N8godzilla3App18parse_command_lineEv"></span><span id="godzilla::App::parse_command_line"></span><span class="target" id="classgodzilla_1_1_app_1a8a28ac13e1a7fa21bed743fb9f7430cc"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">cxxopts</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ParseResult</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">parse_command_line</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App18parse_command_lineEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Parse command line arguments. </p>
 <dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Result of parsing the command line </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App20process_command_lineERN7cxxopts11ParseResultE">
+<span id="_CPPv3N8godzilla3App20process_command_lineERN7cxxopts11ParseResultE"></span><span id="_CPPv2N8godzilla3App20process_command_lineERN7cxxopts11ParseResultE"></span><span id="godzilla::App::process_command_line__cxxopts::ParseResultR"></span><span class="target" id="classgodzilla_1_1_app_1a85a5bcc93f5a5afa8b84dfe2c4994aa8"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">process_command_line</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">cxxopts</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ParseResult</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App20process_command_lineERN7cxxopts11ParseResultE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Process command line. </p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>argc</strong> – Number of command line arguments </p></li>
-<li><p><strong>argv</strong> – Command line arguments </p></li>
-</ul>
+<dd class="field-odd"><p><strong>result</strong> – Result from calling <code class="docutils literal notranslate"><span class="pre">parse_command_line</span></code> or <code class="docutils literal notranslate"><span class="pre">cxxopt::parse</span></code> </p>
 </dd>
 </dl>
 </dd></dl>
@@ -189,7 +200,6 @@
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3runEv">
 <span id="_CPPv3N8godzilla3App3runEv"></span><span id="_CPPv2N8godzilla3App3runEv"></span><span id="godzilla::App::run"></span><span class="target" id="classgodzilla_1_1_app_1aacc34ed845993b9488c7c4cd52ee24ec"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3runEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Run the application. </p>
-<p>This is the main entry point </p>
 </dd></dl>
 
 <dl class="cpp function">
