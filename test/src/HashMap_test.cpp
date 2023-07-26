@@ -161,3 +161,15 @@ TEST(HashMap, get_vals)
     std::vector<Int> keys = h.get_vals();
     EXPECT_THAT(keys, UnorderedElementsAre(100, 101, 102, 103, 104));
 }
+
+TEST(HashMap, uint64_64)
+{
+    Hash64_t key(10);
+    EXPECT_EQ(Hash_UInt64_64(key), 10802492104133333621UL);
+}
+
+TEST(HashMap, uint32_v1)
+{
+    Hash64_t key(10);
+    EXPECT_EQ(Hash_UInt32_v1(key), 3429890023);
+}
