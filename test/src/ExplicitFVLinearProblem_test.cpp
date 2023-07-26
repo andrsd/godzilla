@@ -7,6 +7,7 @@
 #include "TestApp.h"
 
 using namespace godzilla;
+using namespace testing;
 
 namespace {
 
@@ -164,6 +165,9 @@ protected:
     set_up_fields() override
     {
         add_field(0, "u", 1);
+
+        add_aux_fe("a0", 1, 0);
+        add_aux_fe("a1", 2, 0);
     }
 };
 
@@ -239,6 +243,39 @@ TEST(ExplicitFVLinearProblemTest, api)
 
     EXPECT_DEATH(prob.set_field_component_name(0, 0, "x"),
                  "\\[ERROR\\] Unable to set component name for single-component field");
+
+    EXPECT_EQ(prob.get_num_aux_fields(), 2);
+    EXPECT_THAT(prob.get_aux_field_names(), ElementsAre("a0", "a1"));
+    EXPECT_TRUE(prob.get_aux_field_name(0) == "a0");
+    EXPECT_TRUE(prob.get_aux_field_name(1) == "a1");
+    EXPECT_DEATH(prob.get_aux_field_name(99), "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_EQ(prob.get_aux_field_num_components(0), 1);
+    EXPECT_EQ(prob.get_aux_field_num_components(1), 2);
+    EXPECT_DEATH(prob.get_aux_field_num_components(99),
+                 "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_EQ(prob.get_aux_field_id("a0"), 0);
+    EXPECT_EQ(prob.get_aux_field_id("a1"), 1);
+    EXPECT_DEATH(prob.get_aux_field_id("non-existent"),
+                 "Auxiliary field 'non-existent' does not exist. Typo?");
+    EXPECT_TRUE(prob.has_aux_field_by_id(0));
+    EXPECT_TRUE(prob.has_aux_field_by_id(1));
+    EXPECT_FALSE(prob.has_aux_field_by_id(99));
+    EXPECT_TRUE(prob.has_aux_field_by_name("a0"));
+    EXPECT_TRUE(prob.has_aux_field_by_name("a1"));
+    EXPECT_FALSE(prob.has_aux_field_by_name("non-existent"));
+    EXPECT_EQ(prob.get_aux_field_order(0), 0);
+    EXPECT_EQ(prob.get_aux_field_order(1), 0);
+    EXPECT_DEATH(prob.get_aux_field_order(99), "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_TRUE(prob.get_aux_field_component_name(0, 1) == "");
+    EXPECT_TRUE(prob.get_aux_field_component_name(1, 0) == "0");
+    EXPECT_DEATH(prob.get_aux_field_component_name(99, 0),
+                 "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_DEATH(prob.set_aux_field_component_name(0, 0, "C"),
+                 "Unable to set component name for single-component field");
+    prob.set_aux_field_component_name(1, 1, "Y");
+    EXPECT_TRUE(prob.get_aux_field_component_name(1, 1) == "Y");
+    EXPECT_DEATH(prob.set_aux_field_component_name(99, 0, "A"),
+                 "Auxiliary field with ID = '99' does not exist.");
 
     Label label;
     EXPECT_DEATH(prob.add_boundary_essential("", label, {}, -1, {}, nullptr, nullptr, nullptr),
