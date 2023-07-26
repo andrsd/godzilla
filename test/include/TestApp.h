@@ -6,7 +6,7 @@ using namespace godzilla;
 
 class TestApp : public App {
 public:
-    TestApp() : App("godzilla", mpi::Communicator(MPI_COMM_WORLD)), problem(nullptr) {}
+    TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla"), problem(nullptr) {}
 
     const std::string &
     get_input_file_name() const

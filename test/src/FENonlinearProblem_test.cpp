@@ -240,7 +240,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
 
     class TestApp : public App {
     public:
-        TestApp() : App("godzilla", mpi::Communicator(MPI_COMM_WORLD)) {}
+        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
 
         virtual void
         check_integrity()
@@ -296,7 +296,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 
     class TestApp : public App {
     public:
-        TestApp() : App("godzilla", mpi::Communicator(MPI_COMM_WORLD)) {}
+        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
 
         virtual void
         check_integrity()

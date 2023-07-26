@@ -22,7 +22,7 @@ TEST(FactoryTest, create_unreg_obj)
 TEST(FactoryTest, create_reg_obj)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app("test", comm);
+    App app(comm, "test");
 
     Parameters * params = Factory::get_parameters("LineMesh");
     params->set<Int>("nx") = 1;
@@ -32,7 +32,7 @@ TEST(FactoryTest, create_reg_obj)
 TEST(FactoryTest, create_wrong_type)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app("test", comm);
+    App app(comm, "test");
 
     Parameters * params = Factory::get_parameters("LineMesh");
     params->set<Int>("nx") = 1;

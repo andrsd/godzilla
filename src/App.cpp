@@ -11,8 +11,8 @@
 
 namespace godzilla {
 
-App::App(const std::string & app_name,
-         const mpi::Communicator & comm,
+App::App(const mpi::Communicator & comm,
+         const std::string & app_name,
          int argc,
          const char * const * argv) :
     PrintInterface(comm, this->verbosity_level, app_name),
