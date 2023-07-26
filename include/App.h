@@ -1,7 +1,7 @@
 #pragma once
 
 #include "mpi/Communicator.h"
-#include "CmdLineArgParser.h"
+#include "cxxopts/cxxopts.hpp"
 #include "Parameters.h"
 #include "Factory.h"
 #include "PrintInterface.h"
@@ -18,7 +18,12 @@ public:
     ///
     /// @param app_name Name of the application
     /// @param comm MPI communicator
-    App(const std::string & app_name, const mpi::Communicator & comm);
+    /// @param argc Number of command line arguments
+    /// @param argv Command line arguments
+    App(const std::string & app_name,
+        const mpi::Communicator & comm,
+        int argc = 0,
+        const char * const * argv = nullptr);
     virtual ~App();
 
     Logger * get_logger() const;
@@ -33,18 +38,22 @@ public:
     /// @return The application version as a string
     virtual const std::string & get_version() const;
 
+    /// Get pointer to the `Problem` class in this application
+    ///
     /// @return Get problem this application is representing
     virtual Problem * get_problem() const;
 
     /// Parse command line arguments
     ///
-    /// @param argc Number of command line arguments
-    /// @param argv Command line arguments
-    virtual void parse_command_line(int argc, const char * const * argv);
+    /// @return Result of parsing the command line
+    virtual cxxopts::ParseResult parse_command_line();
+
+    /// Process command line
+    ///
+    /// @param result Result from calling `parse_command_line` or `cxxopt::parse`
+    virtual void process_command_line(cxxopts::ParseResult & result);
 
     /// Run the application
-    ///
-    /// This is the main entry point
     virtual void run();
 
     /// Get level of verbosity
@@ -97,13 +106,10 @@ protected:
     /// Check integrity of the application
     virtual void check_integrity();
 
-    /// Process command line
-    virtual void process_command_line();
-
     /// Run the input file
     ///
-    /// This is the method that will be called when user specifies -i command line parameter
-    virtual void run_input_file();
+    /// @param input_file_name Input file name
+    virtual void run_input_file(const std::string & input_file_name);
 
     /// Run the problem build via `build_from_yml`
     virtual void run_problem();
@@ -117,17 +123,14 @@ protected:
     /// Log with errors and/or warnings
     Logger * log;
 
-    /// Command line parser
-    CmdLineArgParser args;
+    /// The number of command line arguments
+    int argc;
 
-    /// Command line argument passed via `-i` parameter
-    TCLAP::ValueArg<std::string> input_file_arg;
+    /// The command line arguments
+    const char * const * argv;
 
-    /// Command line argument passed via `--verbose` parameter
-    TCLAP::ValueArg<unsigned int> verbose_arg;
-
-    /// Command line switch to turn terminal colors off (passed via `--no-colors`)
-    TCLAP::SwitchArg no_colors_switch;
+    /// Command line options
+    cxxopts::Options cmdln_opts;
 
     /// Verbosity level
     unsigned int verbosity_level;

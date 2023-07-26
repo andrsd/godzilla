@@ -10,7 +10,6 @@ add_library(${PROJECT_NAME}
         BoundaryCondition.cpp
         BoxMesh.cpp
         CallStack.cpp
-        CmdLineArgParser.cpp
         ConstantAuxiliaryField.cpp
         ConstantIC.cpp
         CSVOutput.cpp
@@ -165,9 +164,9 @@ install(
 )
 
 install(
-    DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/tclap
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.h"
+    DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/cxxopts
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+    FILES_MATCHING PATTERN "*.hpp"
 )
 
 install(

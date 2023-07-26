@@ -33,8 +33,7 @@ TEST_F(GodzillaAppTest, run_input)
                             nullptr };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app("godzilla", comm);
-    app.parse_command_line(argc, argv);
+    App app("godzilla", comm, argc, argv);
     app.run();
 
     EXPECT_EQ(app.get_input_file_name(), GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml");
@@ -51,8 +50,7 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
                             nullptr };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app("godzilla", comm);
-    app.parse_command_line(argc, argv);
+    App app("godzilla", comm, argc, argv);
 
     EXPECT_DEATH(app.run(), "\\[ERROR\\] Unable to open");
 }
@@ -63,8 +61,7 @@ TEST_F(GodzillaAppTest, no_colors)
     const char * argv[] = { "godzilla", "--no-colors", nullptr };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app("godzilla", comm);
-    app.parse_command_line(argc, argv);
+    App app("godzilla", comm, argc, argv);
 
     app.run();
     EXPECT_EQ(Terminal::num_colors, 1);
@@ -76,8 +73,7 @@ TEST_F(GodzillaAppTest, verbose)
     const char * argv[] = { "godzilla", "--verbose", "2", nullptr };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app("godzilla", comm);
-    app.parse_command_line(argc, argv);
+    App app("godzilla", comm, argc, argv);
 
     app.run();
     EXPECT_EQ(app.get_verbosity_level(), 2);
