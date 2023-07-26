@@ -77,6 +77,13 @@ public:
         create_mass_matrix();
     }
 
+    void
+    create_w_lumped_mass_matrix()
+    {
+        ExplicitFVLinearProblem::create();
+        create_mass_matrix_lumped();
+    }
+
     virtual void
     set_up_time_scheme() override
     {
@@ -138,6 +145,18 @@ public:
         Real wn = 0;
         wn += wind[0] * n[0];
         flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
+    }
+
+    const Matrix &
+    get_mass_matrix() const
+    {
+        return this->M;
+    }
+
+    const Vector &
+    get_lumped_mass_matrix() const
+    {
+        return this->M_lumped_inv;
     }
 
 protected:
@@ -271,6 +290,38 @@ TEST(ExplicitFVLinearProblemTest, fields)
     EXPECT_EQ(prob.get_field_dof(1, 0), 4);
 }
 
+TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 3;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFVLinearProblem prob(prob_pars);
+    app.problem = &prob;
+
+    mesh.create();
+    prob.create();
+
+    auto M = prob.get_mass_matrix();
+    EXPECT_NEAR(M(0, 0), 1., 1e-9);
+    EXPECT_NEAR(M(0, 1), 0., 1e-9);
+    EXPECT_NEAR(M(1, 0), 0., 1e-9);
+    EXPECT_NEAR(M(1, 1), 1., 1e-9);
+    EXPECT_NEAR(M(1, 2), 0., 1e-9);
+    EXPECT_NEAR(M(2, 1), 0., 1e-9);
+    EXPECT_NEAR(M(2, 2), 1., 1e-9);
+}
+
 TEST(ExplicitFVLinearProblemTest, solve)
 {
     TestApp app;
@@ -313,14 +364,22 @@ TEST(ExplicitFVLinearProblemTest, solve)
     prob.run();
 
     EXPECT_TRUE(prob.converged());
+    EXPECT_DOUBLE_EQ(prob.get_time(), 1e-3);
+    EXPECT_EQ(prob.get_step_num(), 1);
 
     auto sln = prob.get_solution_vector();
-    Int ni = 2;
-    Int ix[2] = { 0, 1 };
-    Scalar x[2];
-    VecGetValues(sln, ni, ix, x);
+    auto x = sln.get_array_read();
     EXPECT_NEAR(x[0], 0.001, 1e-15);
     EXPECT_NEAR(x[1], 0., 1e-15);
+    sln.restore_array_read(x);
+
+    auto loc_sln = prob.get_solution_vector_local();
+    auto lx = loc_sln.get_array_read();
+    EXPECT_NEAR(lx[0], 0.001, 1e-15);
+    EXPECT_NEAR(lx[1], 0., 1e-15);
+    EXPECT_NEAR(lx[2], 0., 1e-15);
+    EXPECT_NEAR(lx[3], 0., 1e-15);
+    loc_sln.restore_array_read(lx);
 }
 
 TEST(ExplicitFVLinearProblemTest, set_schemes)
