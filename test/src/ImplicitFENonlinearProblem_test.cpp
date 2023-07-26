@@ -43,13 +43,18 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     prob->run();
 
     auto x = prob->get_solution_vector();
-
-    Int ni = 1;
-    Int ix[1] = { 0 };
-    Scalar xx[1];
-    VecGetValues(x, ni, ix, xx);
-
+    auto xx = x.get_array_read();
     EXPECT_NEAR(xx[0], 0.5, 1e-7);
+    x.restore_array_read(xx);
+
+    auto lx = prob->get_solution_vector_local();
+    lx.view();
+    auto lxx = lx.get_array_read();
+    EXPECT_NEAR(lxx[0], 0., 1e-7);
+    EXPECT_NEAR(lxx[1], 0.5, 1e-7);
+    EXPECT_NEAR(lxx[2], 1., 1e-7);
+    lx.restore_array_read(lxx);
+
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
