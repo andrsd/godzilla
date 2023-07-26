@@ -11,23 +11,35 @@
 
 namespace godzilla {
 
-App::App(const std::string & app_name, const mpi::Communicator & comm) :
+App::App(const std::string & app_name,
+         const mpi::Communicator & comm,
+         int argc,
+         const char * const * argv) :
     PrintInterface(comm, this->verbosity_level, app_name),
     name(app_name),
     comm(comm),
-    args(app_name),
-    input_file_arg("i", "input-file", "Input file to execute", false, "", "string"),
-    verbose_arg("", "verbose", "Verbosity level", false, 1, "number"),
-    no_colors_switch("", "no-colors", "Do not use terminal colors", false),
+    log(nullptr),
+    argc(argc),
+    argv(argv),
+    cmdln_opts(app_name),
     verbosity_level(1),
     yml(nullptr)
 {
     _F_;
     this->log = new Logger();
 
-    this->args.add(this->input_file_arg);
-    this->args.add(this->verbose_arg);
-    this->args.add(this->no_colors_switch);
+    this->cmdln_opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
+    this->cmdln_opts.add_option("",
+                                "i",
+                                "input-file",
+                                "Input file to execute",
+                                cxxopts::value<std::string>(),
+                                "");
+    this->cmdln_opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
+    this->cmdln_opts
+        .add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
+    this->cmdln_opts
+        .add_option("", "", "no-colors", "Do not use terminal colors", cxxopts::value<bool>(), "");
 }
 
 App::~App()
@@ -75,11 +87,18 @@ App::create()
     this->yml->create();
 }
 
-void
-App::parse_command_line(int argc, const char * const * argv)
+cxxopts::ParseResult
+App::parse_command_line()
 {
     _F_;
-    this->args.parse(argc, argv);
+    try {
+        return this->cmdln_opts.parse(this->argc, this->argv);
+    }
+    catch (const cxxopts::exceptions::exception & e) {
+        fmt::print(stderr, "Error: {}\n", e.what());
+        fmt::print(stdout, "{}", this->cmdln_opts.help());
+        internal::terminate(1);
+    }
 }
 
 const unsigned int &
@@ -112,31 +131,40 @@ App::allocate_input_file()
 }
 
 void
-App::process_command_line()
+App::process_command_line(cxxopts::ParseResult & result)
 {
     _F_;
-    if (this->no_colors_switch.getValue())
-        Terminal::num_colors = 1;
+    if (result.count("help")) {
+        fmt::print("{}", this->cmdln_opts.help());
+    }
+    else if (result.count("version"))
+        fmt::print("{}, version {}\n", get_name(), get_version());
+    else {
+        if (result.count("no-colors"))
+            Terminal::num_colors = 1;
 
-    if (this->verbose_arg.isSet())
-        this->verbosity_level = this->verbose_arg.getValue();
+        if (result.count("verbose"))
+            this->verbosity_level = result["verbose"].as<unsigned int>();
+
+        if (result.count("input-file")) {
+            auto input_file_name = result["input-file"].as<std::string>();
+            run_input_file(input_file_name);
+        }
+    }
 }
 
 void
 App::run()
 {
     _F_;
-    process_command_line();
-
-    if (this->input_file_arg.isSet())
-        run_input_file();
+    auto result = parse_command_line();
+    process_command_line(result);
 }
 
 void
-App::run_input_file()
+App::run_input_file(const std::string & input_file_name)
 {
     _F_;
-    auto input_file_name = this->input_file_arg.getValue();
     if (utils::path_exists(input_file_name)) {
         this->yml = allocate_input_file();
         build_from_yml(input_file_name);
