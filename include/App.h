@@ -16,12 +16,12 @@ class App : public PrintInterface {
 public:
     /// Build and application object
     ///
-    /// @param app_name Name of the application
     /// @param comm MPI communicator
+    /// @param app_name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const std::string & app_name,
-        const mpi::Communicator & comm,
+    App(const mpi::Communicator & comm,
+        const std::string & app_name = "",
         int argc = 0,
         const char * const * argv = nullptr);
     virtual ~App();

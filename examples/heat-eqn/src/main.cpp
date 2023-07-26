@@ -7,7 +7,7 @@ main(int argc, char * argv[])
     godzilla::mpi::Communicator comm(MPI_COMM_WORLD);
     godzilla::Init init(argc, argv);
 
-    godzilla::App app("heat-eqn", comm, argc, argv);
+    godzilla::App app(comm, "heat-eqn", argc, argv);
     app.run();
 
     return 0;

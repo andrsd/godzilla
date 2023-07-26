@@ -7,7 +7,7 @@ main(int argc, char * argv[])
     godzilla::mpi::Communicator comm(MPI_COMM_WORLD);
     godzilla::Init init(argc, argv);
 
-    godzilla::App app("poisson", comm, argc, argv);
+    godzilla::App app(comm, "poisson", argc, argv);
     app.run();
 
     return 0;
