@@ -115,6 +115,7 @@ TEST(UnstructuredMeshTest, api)
     mesh.create();
 
     EXPECT_EQ(mesh.get_num_vertices(), 3);
+    EXPECT_EQ(mesh.get_num_faces(), 3);
     EXPECT_EQ(mesh.get_num_cells(), 2);
 
     EXPECT_EQ(mesh.get_partition_overlap(), 1);
