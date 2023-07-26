@@ -96,19 +96,38 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
     mesh->create();
     prob->set_aux_fe(0, "aux_one", 1, 1);
+    prob->add_aux_fe("aux_two", 2, 1);
     prob->create();
 
     EXPECT_EQ(prob->get_aux_field_name(0), "aux_one");
+    EXPECT_EQ(prob->get_aux_field_num_components(0), 1);
+    EXPECT_EQ(prob->get_aux_field_num_components(1), 2);
     EXPECT_EQ(prob->get_aux_field_id("aux_one"), 0);
     EXPECT_EQ(prob->has_aux_field_by_id(0), true);
     EXPECT_EQ(prob->has_aux_field_by_name("aux_one"), true);
+    EXPECT_EQ(prob->get_aux_field_order(0), 1);
 
-    EXPECT_DEATH(prob->get_aux_field_name(1),
-                 "\\[ERROR\\] Auxiliary field with ID = '1' does not exist.");
-    EXPECT_DEATH(prob->get_aux_field_id("aux_two"),
-                 "\\[ERROR\\] Auxiliary field 'aux_two' does not exist\\. Typo\\?");
-    EXPECT_EQ(prob->has_aux_field_by_id(1), false);
-    EXPECT_EQ(prob->has_aux_field_by_name("aux_two"), false);
+    prob->set_aux_field_component_name(1, 1, "Y");
+    EXPECT_TRUE(prob->get_aux_field_component_name(0, 0) == "");
+    EXPECT_TRUE(prob->get_aux_field_component_name(1, 0) == "0");
+    EXPECT_TRUE(prob->get_aux_field_component_name(1, 1) == "Y");
+    EXPECT_DEATH(prob->get_aux_field_component_name(2, 1),
+                 "\\[ERROR\\] Auxiliary field with ID = '2' does not exist.");
+
+    EXPECT_DEATH(prob->get_aux_field_name(2),
+                 "\\[ERROR\\] Auxiliary field with ID = '2' does not exist.");
+    EXPECT_DEATH(prob->get_aux_field_num_components(2),
+                 "\\[ERROR\\] Auxiliary field with ID = '2' does not exist.");
+    EXPECT_DEATH(prob->get_aux_field_id("aux_none"),
+                 "\\[ERROR\\] Auxiliary field 'aux_none' does not exist\\. Typo\\?");
+    EXPECT_EQ(prob->has_aux_field_by_id(2), false);
+    EXPECT_EQ(prob->has_aux_field_by_name("aux_none"), false);
+    EXPECT_DEATH(prob->get_aux_field_order(2),
+                 "\\[ERROR\\] Auxiliary field with ID = '2' does not exist.");
+    EXPECT_DEATH(prob->set_aux_field_component_name(0, 1, "C"),
+                 "\\[ERROR\\] Unable to set component name for single-component field");
+    EXPECT_DEATH(prob->set_aux_field_component_name(2, 1, "C"),
+                 "\\[ERROR\\] Auxiliary field with ID = '2' does not exist.");
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
@@ -361,4 +380,12 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
                 testing::HasSubstr(
                     "Boundary condition 'bc1' is set on boundary 'asdf' which does not exist "
                     "in the mesh."));
+}
+
+TEST_F(FENonlinearProblemTest, natural_riemann_bcs_not_supported)
+{
+    Label label;
+    EXPECT_DEATH(
+        prob->add_boundary_natural_riemann("", label, {}, -1, {}, nullptr, nullptr, nullptr),
+        "\\[ERROR\\] Natural Riemann BCs are not supported for FE problems");
 }
