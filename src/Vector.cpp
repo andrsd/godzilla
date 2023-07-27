@@ -113,7 +113,7 @@ Vector::duplicate(Vector & b) const
 }
 
 void
-Vector::copy(Vector & y)
+Vector::copy(Vector & y) const
 {
     _F_;
     PETSC_CHECK(VecCopy(this->vec, y.vec));

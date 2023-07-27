@@ -36,7 +36,12 @@ public:
     Scalar dot(const Vector & y) const;
     void scale(Scalar alpha);
     void duplicate(Vector & b) const;
-    void copy(Vector & y);
+
+    /// Copy this vector into `y`
+    ///
+    /// @param y Vector to copy our values into
+    void copy(Vector & y) const;
+
     void normalize();
     void shift(Scalar shift);
     Scalar min() const;
