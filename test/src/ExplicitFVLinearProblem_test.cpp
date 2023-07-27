@@ -7,6 +7,7 @@
 #include "TestApp.h"
 
 using namespace godzilla;
+using namespace testing;
 
 namespace {
 
@@ -77,6 +78,13 @@ public:
         create_mass_matrix();
     }
 
+    void
+    create_w_lumped_mass_matrix()
+    {
+        ExplicitFVLinearProblem::create();
+        create_mass_matrix_lumped();
+    }
+
     virtual void
     set_up_time_scheme() override
     {
@@ -140,11 +148,26 @@ public:
         flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
     }
 
+    const Matrix &
+    get_mass_matrix() const
+    {
+        return this->M;
+    }
+
+    const Vector &
+    get_lumped_mass_matrix() const
+    {
+        return this->M_lumped_inv;
+    }
+
 protected:
     virtual void
     set_up_fields() override
     {
         add_field(0, "u", 1);
+
+        add_aux_fe("a0", 1, 0);
+        add_aux_fe("a1", 2, 0);
     }
 };
 
@@ -221,6 +244,39 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_DEATH(prob.set_field_component_name(0, 0, "x"),
                  "\\[ERROR\\] Unable to set component name for single-component field");
 
+    EXPECT_EQ(prob.get_num_aux_fields(), 2);
+    EXPECT_THAT(prob.get_aux_field_names(), ElementsAre("a0", "a1"));
+    EXPECT_TRUE(prob.get_aux_field_name(0) == "a0");
+    EXPECT_TRUE(prob.get_aux_field_name(1) == "a1");
+    EXPECT_DEATH(prob.get_aux_field_name(99), "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_EQ(prob.get_aux_field_num_components(0), 1);
+    EXPECT_EQ(prob.get_aux_field_num_components(1), 2);
+    EXPECT_DEATH(prob.get_aux_field_num_components(99),
+                 "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_EQ(prob.get_aux_field_id("a0"), 0);
+    EXPECT_EQ(prob.get_aux_field_id("a1"), 1);
+    EXPECT_DEATH(prob.get_aux_field_id("non-existent"),
+                 "Auxiliary field 'non-existent' does not exist. Typo?");
+    EXPECT_TRUE(prob.has_aux_field_by_id(0));
+    EXPECT_TRUE(prob.has_aux_field_by_id(1));
+    EXPECT_FALSE(prob.has_aux_field_by_id(99));
+    EXPECT_TRUE(prob.has_aux_field_by_name("a0"));
+    EXPECT_TRUE(prob.has_aux_field_by_name("a1"));
+    EXPECT_FALSE(prob.has_aux_field_by_name("non-existent"));
+    EXPECT_EQ(prob.get_aux_field_order(0), 0);
+    EXPECT_EQ(prob.get_aux_field_order(1), 0);
+    EXPECT_DEATH(prob.get_aux_field_order(99), "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_TRUE(prob.get_aux_field_component_name(0, 1) == "");
+    EXPECT_TRUE(prob.get_aux_field_component_name(1, 0) == "0");
+    EXPECT_DEATH(prob.get_aux_field_component_name(99, 0),
+                 "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_DEATH(prob.set_aux_field_component_name(0, 0, "C"),
+                 "Unable to set component name for single-component field");
+    prob.set_aux_field_component_name(1, 1, "Y");
+    EXPECT_TRUE(prob.get_aux_field_component_name(1, 1) == "Y");
+    EXPECT_DEATH(prob.set_aux_field_component_name(99, 0, "A"),
+                 "Auxiliary field with ID = '99' does not exist.");
+
     Label label;
     EXPECT_DEATH(prob.add_boundary_essential("", label, {}, -1, {}, nullptr, nullptr, nullptr),
                  "\\[ERROR\\] Essential BCs are not supported for FV problems");
@@ -271,6 +327,38 @@ TEST(ExplicitFVLinearProblemTest, fields)
     EXPECT_EQ(prob.get_field_dof(1, 0), 4);
 }
 
+TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 3;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFVLinearProblem prob(prob_pars);
+    app.problem = &prob;
+
+    mesh.create();
+    prob.create();
+
+    auto M = prob.get_mass_matrix();
+    EXPECT_NEAR(M(0, 0), 1., 1e-9);
+    EXPECT_NEAR(M(0, 1), 0., 1e-9);
+    EXPECT_NEAR(M(1, 0), 0., 1e-9);
+    EXPECT_NEAR(M(1, 1), 1., 1e-9);
+    EXPECT_NEAR(M(1, 2), 0., 1e-9);
+    EXPECT_NEAR(M(2, 1), 0., 1e-9);
+    EXPECT_NEAR(M(2, 2), 1., 1e-9);
+}
+
 TEST(ExplicitFVLinearProblemTest, solve)
 {
     TestApp app;
@@ -313,14 +401,22 @@ TEST(ExplicitFVLinearProblemTest, solve)
     prob.run();
 
     EXPECT_TRUE(prob.converged());
+    EXPECT_DOUBLE_EQ(prob.get_time(), 1e-3);
+    EXPECT_EQ(prob.get_step_num(), 1);
 
     auto sln = prob.get_solution_vector();
-    Int ni = 2;
-    Int ix[2] = { 0, 1 };
-    Scalar x[2];
-    VecGetValues(sln, ni, ix, x);
+    auto x = sln.get_array_read();
     EXPECT_NEAR(x[0], 0.001, 1e-15);
     EXPECT_NEAR(x[1], 0., 1e-15);
+    sln.restore_array_read(x);
+
+    auto loc_sln = prob.get_solution_vector_local();
+    auto lx = loc_sln.get_array_read();
+    EXPECT_NEAR(lx[0], 0.001, 1e-15);
+    EXPECT_NEAR(lx[1], 0., 1e-15);
+    EXPECT_NEAR(lx[2], 0., 1e-15);
+    EXPECT_NEAR(lx[3], 0., 1e-15);
+    loc_sln.restore_array_read(lx);
 }
 
 TEST(ExplicitFVLinearProblemTest, set_schemes)

@@ -2,6 +2,7 @@
 #include "TestApp.h"
 #include "FENonlinearProblem.h"
 #include "AuxiliaryField.h"
+#include "ConstantAuxiliaryField.h"
 #include "FENonlinearProblem_test.h"
 
 using namespace godzilla;
@@ -58,6 +59,11 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux.get_field_id(), 0);
     EXPECT_EQ(aux.get_func(), nullptr);
     EXPECT_EQ(aux.get_context(), &aux);
+
+    EXPECT_TRUE(prob->has_aux("aux"));
+    EXPECT_FALSE(prob->has_aux("no-aux"));
+    EXPECT_EQ(prob->get_aux("aux"), &aux);
+    EXPECT_EQ(prob->get_aux("no-aux"), nullptr);
 }
 
 TEST_F(AuxiliaryFieldTest, non_existent_id)
@@ -199,6 +205,22 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Region 'asdf' does not exists. Typo?"));
+}
+
+TEST_F(AuxiliaryFieldTest, name_already_taken)
+{
+    prob->set_aux_fe(0, "fld", 1, 1);
+
+    Parameters params = ConstantAuxiliaryField::parameters();
+    params.set<const App *>("_app") = app;
+    params.set<std::string>("_name") = "aux";
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
+    params.set<std::vector<Real>>("value") = { 1 };
+    ConstantAuxiliaryField aux(params);
+    prob->add_auxiliary_field(&aux);
+
+    EXPECT_DEATH(prob->add_auxiliary_field(&aux),
+                 "Cannot add auxiliary object 'aux'. Name already taken.");
 }
 
 TEST_F(AuxiliaryFieldTest, get_value)

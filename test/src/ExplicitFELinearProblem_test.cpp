@@ -29,9 +29,28 @@ public:
     }
 
     void
+    create_w_lumped_mass_matrix()
+    {
+        ExplicitFELinearProblem::create();
+        create_mass_matrix_lumped();
+    }
+
+    void
     set_up_time_scheme() override
     {
         ExplicitFELinearProblem::set_up_time_scheme();
+    }
+
+    const Matrix &
+    get_mass_matrix() const
+    {
+        return this->M;
+    }
+
+    const Vector &
+    get_lumped_mass_matrix() const
+    {
+        return this->M_lumped_inv;
     }
 
 protected:
@@ -75,6 +94,70 @@ TestExplicitFELinearProblem::set_up_weak_form()
 
 REGISTER_OBJECT(TestExplicitFELinearProblem);
 
+TEST(ExplicitFELinearProblemTest, test_mass_matrix)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 3;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = TestExplicitFELinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFELinearProblem prob(prob_pars);
+    app.problem = &prob;
+
+    mesh.create();
+    prob.create();
+
+    auto M = prob.get_mass_matrix();
+    EXPECT_NEAR(M(0, 0), 0.1111111111111111, 1e-9);
+    EXPECT_NEAR(M(0, 1), 0.0555555555555555, 1e-9);
+    EXPECT_NEAR(M(1, 0), 0.0555555555555555, 1e-9);
+    EXPECT_NEAR(M(1, 1), 0.2222222222222222, 1e-9);
+    EXPECT_NEAR(M(1, 2), 0.0555555555555555, 1e-9);
+    EXPECT_NEAR(M(2, 1), 0.0555555555555555, 1e-9);
+    EXPECT_NEAR(M(2, 2), 0.2222222222222222, 1e-9);
+    EXPECT_NEAR(M(2, 3), 0.0555555555555555, 1e-9);
+    EXPECT_NEAR(M(3, 2), 0.0555555555555555, 1e-9);
+    EXPECT_NEAR(M(3, 3), 0.1111111111111111, 1e-9);
+}
+
+TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 3;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = TestExplicitFELinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFELinearProblem prob(prob_pars);
+    app.problem = &prob;
+
+    mesh.create();
+    prob.create_w_lumped_mass_matrix();
+
+    auto M = prob.get_lumped_mass_matrix();
+    EXPECT_NEAR(M(0), 6., 1e-9);
+    EXPECT_NEAR(M(1), 3., 1e-9);
+    EXPECT_NEAR(M(2), 3., 1e-9);
+    EXPECT_NEAR(M(3), 6., 1e-9);
+}
+
 TEST(ExplicitFELinearProblemTest, solve)
 {
     TestApp app;
@@ -117,14 +200,82 @@ TEST(ExplicitFELinearProblemTest, solve)
     prob.run();
 
     EXPECT_TRUE(prob.converged());
+    EXPECT_DOUBLE_EQ(prob.get_time(), 1e-3);
+    EXPECT_EQ(prob.get_step_num(), 1);
 
     auto sln = prob.get_solution_vector();
-    Int ni = 2;
-    Int ix[2] = { 0, 1 };
-    Scalar x[2];
-    VecGetValues(sln, ni, ix, x);
+    auto x = sln.get_array_read();
     EXPECT_NEAR(x[0], 0.0118, 1e-15);
     EXPECT_NEAR(x[1], 0.0098, 1e-15);
+    sln.restore_array_read(x);
+
+    auto loc_sln = prob.get_solution_vector_local();
+    auto lx = loc_sln.get_array_read();
+    EXPECT_NEAR(lx[0], 1., 1e-15);
+    EXPECT_NEAR(lx[1], 0.0118, 1e-15);
+    EXPECT_NEAR(lx[2], 0.0098, 1e-15);
+    EXPECT_NEAR(lx[3], 1., 1e-15);
+    loc_sln.restore_array_read(lx);
+}
+
+TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 3;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = TestExplicitFELinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFELinearProblem prob(prob_pars);
+    app.problem = &prob;
+
+    Parameters bc_left_pars = DirichletBC::parameters();
+    bc_left_pars.set<const App *>("_app") = &app;
+    bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_left_pars.set<std::string>("boundary") = "left";
+    bc_left_pars.set<std::vector<std::string>>("value") = { "1" };
+    DirichletBC bc_left(bc_left_pars);
+    prob.add_boundary_condition(&bc_left);
+
+    Parameters bc_right_pars = DirichletBC::parameters();
+    bc_right_pars.set<const App *>("_app") = &app;
+    bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_right_pars.set<std::string>("boundary") = "right";
+    bc_right_pars.set<std::vector<std::string>>("value") = { "1" };
+    DirichletBC bc_right(bc_right_pars);
+    prob.add_boundary_condition(&bc_right);
+
+    mesh.create();
+    prob.create_w_lumped_mass_matrix();
+    prob.check();
+
+    prob.run();
+
+    EXPECT_TRUE(prob.converged());
+    EXPECT_DOUBLE_EQ(prob.get_time(), 1e-3);
+    EXPECT_EQ(prob.get_step_num(), 1);
+
+    auto sln = prob.get_solution_vector();
+    auto x = sln.get_array_read();
+    EXPECT_NEAR(x[0], 0.0095, 1e-15);
+    EXPECT_NEAR(x[1], 0.0085, 1e-15);
+    sln.restore_array_read(x);
+
+    auto loc_sln = prob.get_solution_vector_local();
+    auto lx = loc_sln.get_array_read();
+    EXPECT_NEAR(lx[0], 1., 1e-15);
+    EXPECT_NEAR(lx[1], 0.0095, 1e-15);
+    EXPECT_NEAR(lx[2], 0.0085, 1e-15);
+    EXPECT_NEAR(lx[3], 1., 1e-15);
+    loc_sln.restore_array_read(lx);
 }
 
 TEST(ExplicitFELinearProblemTest, set_schemes)

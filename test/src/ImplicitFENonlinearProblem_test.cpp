@@ -43,13 +43,17 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     prob->run();
 
     auto x = prob->get_solution_vector();
-
-    Int ni = 1;
-    Int ix[1] = { 0 };
-    Scalar xx[1];
-    VecGetValues(x, ni, ix, xx);
-
+    auto xx = x.get_array_read();
     EXPECT_NEAR(xx[0], 0.5, 1e-7);
+    x.restore_array_read(xx);
+
+    auto lx = prob->get_solution_vector_local();
+    lx.view();
+    auto lxx = lx.get_array_read();
+    EXPECT_NEAR(lxx[0], 0., 1e-7);
+    EXPECT_NEAR(lxx[1], 0.5, 1e-7);
+    EXPECT_NEAR(lxx[2], 1., 1e-7);
+    lx.restore_array_read(lxx);
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
@@ -78,4 +82,59 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("prob: The 'scheme' parameter can be either 'beuler' or 'cn'."));
+}
+
+TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
+{
+    testing::internal::CaptureStderr();
+
+    auto mesh = gMesh1d();
+
+    const std::string class_name = "GTestImplicitFENonlinearProblem";
+    Parameters * params = Factory::get_parameters(class_name);
+    params->set<Mesh *>("_mesh") = mesh;
+    params->set<Real>("start_time") = 0.;
+    params->set<Int>("num_steps") = 2;
+    params->set<Real>("end_time") = 20;
+    params->set<Real>("dt") = 5;
+    params->set<std::string>("scheme") = "asdf";
+    auto prob =
+        this->app->build_object<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
+
+    mesh->create();
+    prob->create();
+    prob->check();
+
+    this->app->check_integrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::HasSubstr(
+            "prob: Cannot provide 'end_time' and 'num_steps' together. Specify one or the other."));
+}
+
+TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
+{
+    testing::internal::CaptureStderr();
+
+    auto mesh = gMesh1d();
+
+    const std::string class_name = "GTestImplicitFENonlinearProblem";
+    Parameters * params = Factory::get_parameters(class_name);
+    params->set<Mesh *>("_mesh") = mesh;
+    params->set<Real>("start_time") = 0.;
+    params->set<Real>("dt") = 5;
+    params->set<std::string>("scheme") = "asdf";
+    auto prob =
+        this->app->build_object<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
+
+    mesh->create();
+    prob->create();
+    prob->check();
+
+    this->app->check_integrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::HasSubstr("prob: You must provide either 'end_time' or 'num_steps' parameter."));
 }

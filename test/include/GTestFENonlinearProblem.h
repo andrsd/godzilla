@@ -13,6 +13,25 @@ public:
     void compute_postprocessors() override;
     void set_up_initial_guess() override;
     void solve() override;
+    void
+    add_boundary_natural_riemann(const std::string & name,
+                                 const Label & label,
+                                 const std::vector<Int> & ids,
+                                 Int field,
+                                 const std::vector<Int> & components,
+                                 PetscNaturalRiemannBCFunc * fn,
+                                 PetscNaturalRiemannBCFunc * fn_t,
+                                 void * context) override
+    {
+        FENonlinearProblem::add_boundary_natural_riemann(name,
+                                                         label,
+                                                         ids,
+                                                         field,
+                                                         components,
+                                                         fn,
+                                                         fn_t,
+                                                         context);
+    }
 
 protected:
     void set_up_fields() override;

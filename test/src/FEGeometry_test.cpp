@@ -70,6 +70,14 @@ TEST(FEGeometryTest, normal_tri3)
     }
 }
 
+TEST(FEGeometryTest, normal_hex8)
+{
+    DenseVector<Real, 10> grad;
+    EXPECT_DEATH(
+        (fe::normal<EDGE2, 10>(1., 1., grad)),
+        "Computation of a normal for element 'EDGE2' in 10 dimensions is not implemented.");
+}
+
 TEST(FEGeometryTest, element_length_edge2)
 {
     Real volume = 2.;
@@ -151,6 +159,8 @@ TEST(FEGeometryTest, get_local_vertex_index)
     EXPECT_EQ(fe::get_local_vertex_index(elem, 2), 0);
     EXPECT_EQ(fe::get_local_vertex_index(elem, 7), 1);
     EXPECT_EQ(fe::get_local_vertex_index(elem, 4), 2);
+    EXPECT_DEATH(fe::get_local_vertex_index(elem, 0),
+                 "Vertex 0 is not part of the connectivity array.");
 }
 
 TEST(FEGeometryTest, get_local_face_index)
