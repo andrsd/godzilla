@@ -303,7 +303,7 @@ ImplicitFENonlinearProblem::post_step()
 {
     _F_;
     TransientProblemInterface::post_step();
-    DiscreteProblemInterface::update_aux_vector();
+    update_aux_vector();
     compute_postprocessors();
     output(Output::ON_TIMESTEP);
     return 0;
