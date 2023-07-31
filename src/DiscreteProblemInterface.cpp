@@ -37,11 +37,44 @@ DiscreteProblemInterface::get_problem() const
     return this->problem;
 }
 
+const std::vector<InitialCondition *> &
+DiscreteProblemInterface::get_initial_conditions()
+{
+    _F_;
+    return this->ics;
+}
+
 void
 DiscreteProblemInterface::add_initial_condition(InitialCondition * ic)
 {
     _F_;
-    this->ics.push_back(ic);
+    const std::string & name = ic->get_name();
+    auto it = this->ics_by_name.find(name);
+    if (it == this->ics_by_name.end()) {
+        this->ics.push_back(ic);
+        this->ics_by_name[name] = ic;
+    }
+    else
+        error("Cannot add initial condition object '{}'. Name already taken.", name);
+}
+
+bool
+DiscreteProblemInterface::has_initial_condition(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->ics_by_name.find(name);
+    return it != this->ics_by_name.end();
+}
+
+InitialCondition *
+DiscreteProblemInterface::get_initial_condition(const std::string & name) const
+{
+    _F_;
+    const auto & it = this->ics_by_name.find(name);
+    if (it != this->ics_by_name.end())
+        return it->second;
+    else
+        return nullptr;
 }
 
 void
