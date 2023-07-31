@@ -12,7 +12,7 @@ problem:
 
 ics:
   all:
-    type: FunctionIC
+    type: FunctionInitialCondition
     value: [ '2*t + x*x + y*y' ]
 
 auxs:
