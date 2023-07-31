@@ -44,6 +44,13 @@ DiscreteProblemInterface::get_initial_conditions()
     return this->ics;
 }
 
+const std::vector<InitialCondition *> &
+DiscreteProblemInterface::get_aux_initial_conditions()
+{
+    _F_;
+    return this->ics_aux;
+}
+
 void
 DiscreteProblemInterface::add_initial_condition(InitialCondition * ic)
 {
@@ -51,7 +58,7 @@ DiscreteProblemInterface::add_initial_condition(InitialCondition * ic)
     const std::string & name = ic->get_name();
     auto it = this->ics_by_name.find(name);
     if (it == this->ics_by_name.end()) {
-        this->ics.push_back(ic);
+        this->all_ics.push_back(ic);
         this->ics_by_name[name] = ic;
     }
     else
@@ -140,7 +147,7 @@ DiscreteProblemInterface::create()
     assert(this->problem != nullptr);
     assert(this->unstr_mesh != nullptr);
 
-    for (auto & ic : this->ics)
+    for (auto & ic : this->all_ics)
         ic->create();
     for (auto & bc : this->bcs)
         bc->create();
@@ -156,24 +163,25 @@ DiscreteProblemInterface::allocate_objects()
 }
 
 void
-DiscreteProblemInterface::set_up_initial_conditions()
+DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCondition *> & ics,
+                                                   const std::map<Int, Int> & field_comps)
 {
     _F_;
-
-    auto n_ics = this->ics.size();
+    auto n_ics = ics.size();
     if (n_ics == 0)
         return;
-    Int n_fields = get_num_fields();
+
+    Int n_fields = field_comps.size();
     if (n_ics == n_fields) {
         std::map<Int, InitialCondition *> ics_by_fields;
-        for (auto & ic : this->ics) {
+        for (auto & ic : ics) {
             Int fid = ic->get_field_id();
             if (fid == -1)
                 continue;
             const auto & it = ics_by_fields.find(fid);
             if (it == ics_by_fields.end()) {
                 Int ic_nc = ic->get_num_components();
-                Int field_nc = get_field_num_components(fid);
+                Int field_nc = field_comps.at(fid);
                 if (ic_nc == field_nc)
                     ics_by_fields[fid] = ic;
                 else
@@ -193,6 +201,32 @@ DiscreteProblemInterface::set_up_initial_conditions()
     }
     else
         this->logger->error("Provided {} field(s), but {} initial condition(s).", n_fields, n_ics);
+}
+
+void
+DiscreteProblemInterface::set_up_initial_conditions()
+{
+    _F_;
+    for (auto & ic : this->all_ics) {
+        auto field_name = ic->get_field_name();
+        if (has_field_by_name(field_name))
+            this->ics.push_back(ic);
+        else if (has_aux_field_by_name(field_name))
+            this->ics_aux.push_back(ic);
+    }
+
+    std::map<Int, Int> field_comps;
+    for (auto & name : get_field_names()) {
+        auto fid = get_field_id(name);
+        field_comps[fid] = get_field_num_components(fid);
+    }
+    std::map<Int, Int> aux_field_comps;
+    for (auto & name : get_aux_field_names()) {
+        auto fid = get_aux_field_id(name);
+        aux_field_comps[fid] = get_aux_field_num_components(fid);
+    }
+    check_initial_conditions(this->ics, field_comps);
+    check_initial_conditions(this->ics_aux, aux_field_comps);
 }
 
 void

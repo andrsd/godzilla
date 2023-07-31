@@ -39,22 +39,34 @@ InitialCondition::create()
 {
     _F_;
     assert(this->dpi != nullptr);
-    std::vector<std::string> field_names = this->dpi->get_field_names();
-    if (field_names.size() == 1) {
-        this->fid = this->dpi->get_field_id(field_names[0]);
+    auto fld = get_param<std::string>("field");
+    if (fld.length() > 0) {
+        this->field_name = fld;
+        if (this->dpi->has_field_by_name(fld))
+            this->fid = this->dpi->get_field_id(fld);
+        else if (this->dpi->has_aux_field_by_name(fld))
+            this->fid = this->dpi->get_aux_field_id(fld);
+        else
+            log_error("Field '{}' does not exists. Typo?", fld);
     }
-    else if (field_names.size() > 1) {
-        const auto & field_name = get_param<std::string>("field");
-        if (field_name.length() > 0) {
-            if (this->dpi->has_field_by_name(field_name))
-                this->fid = this->dpi->get_field_id(field_name);
-            else
-                log_error("Field '{}' does not exists. Typo?", field_name);
+    else {
+        std::vector<std::string> field_names = this->dpi->get_field_names();
+        std::vector<std::string> aux_field_names = this->dpi->get_aux_field_names();
+        if ((field_names.size() == 1) && (aux_field_names.size() == 0)) {
+            this->fid = this->dpi->get_field_id(field_names[0]);
+            this->field_name = this->dpi->get_field_name(this->fid);
         }
         else
             log_error(
                 "Use the 'field' parameter to assign this initial condition to an existing field.");
     }
+}
+
+const std::string &
+InitialCondition::get_field_name() const
+{
+    _F_;
+    return this->field_name;
 }
 
 Int

@@ -18,6 +18,7 @@ problem:
 ics:
   all:
     type: FunctionInitialCondition
+    field: 'temp'
     value: 'exact_fn(t,x,y,z)'
 
 auxs:
