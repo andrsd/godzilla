@@ -152,10 +152,27 @@ public:
     /// @param name Component name
     virtual void set_aux_field_component_name(Int fid, Int component, const std::string & name) = 0;
 
+    /// Get list of all initial conditions
+    ///
+    /// @return List of all initial conditions
+    const std::vector<InitialCondition *> & get_initial_conditions();
+
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
     virtual void add_initial_condition(InitialCondition * ic);
+
+    /// Check if we have an initial condition object with a specified name
+    ///
+    /// @param name The name of the object
+    /// @return True if the object exists, otherwise false
+    virtual bool has_initial_condition(const std::string & name) const;
+
+    /// Get initial condition object with a specified name
+    ///
+    /// @param name The name of the object
+    /// @return Pointer to the initial condition object
+    virtual InitialCondition * get_initial_condition(const std::string & name) const;
 
     /// Add essential boundary condition
     ///
@@ -303,6 +320,9 @@ protected:
 
     /// Initial conditions in the problem
     std::vector<InitialCondition *> ics;
+
+    /// Map from aux object name to the aux object
+    std::map<std::string, InitialCondition *> ics_by_name;
 
     /// List of all boundary conditions
     std::vector<BoundaryCondition *> bcs;
