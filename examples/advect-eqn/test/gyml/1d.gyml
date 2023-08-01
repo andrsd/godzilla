@@ -6,7 +6,7 @@ mesh:
 
 ics:
   all:
-    type: FunctionIC
+    type: FunctionInitialCondition
     value: '(x < 0.5) ? 1 : 0'
 
 bcs:

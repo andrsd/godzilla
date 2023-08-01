@@ -17,7 +17,7 @@ problem:
 
 ics:
   all:
-    type: FunctionIC
+    type: FunctionInitialCondition
     value: 'exact_fn(t,x,y,z)'
 
 auxs:

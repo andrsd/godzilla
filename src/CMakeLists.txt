@@ -31,7 +31,7 @@ add_library(${PROJECT_NAME}
         ValueFunctional.cpp
         FunctionAuxiliaryField.cpp
         FunctionEvaluator.cpp
-        FunctionIC.cpp
+        FunctionInitialCondition.cpp
         FunctionInterface.cpp
         FVProblemInterface.cpp
         GmshMesh.cpp

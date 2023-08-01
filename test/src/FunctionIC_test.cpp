@@ -3,7 +3,7 @@
 #include "TestApp.h"
 #include "LineMesh.h"
 #include "GTestFENonlinearProblem.h"
-#include "FunctionIC.h"
+#include "FunctionInitialCondition.h"
 
 using namespace godzilla;
 
@@ -21,11 +21,11 @@ TEST(FunctionICTest, api)
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
-    Parameters params = FunctionIC::parameters();
+    Parameters params = FunctionInitialCondition::parameters();
     params.set<const App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
-    FunctionIC obj(params);
+    FunctionInitialCondition obj(params);
 
     mesh.create();
     prob.create();

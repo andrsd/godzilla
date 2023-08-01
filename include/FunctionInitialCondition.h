@@ -7,9 +7,9 @@ namespace godzilla {
 
 /// Initial condition given by a function expression
 ///
-class FunctionIC : public InitialCondition, public FunctionInterface {
+class FunctionInitialCondition : public InitialCondition, public FunctionInterface {
 public:
-    explicit FunctionIC(const Parameters & params);
+    explicit FunctionInitialCondition(const Parameters & params);
 
     void create() override;
     Int get_num_components() const override;

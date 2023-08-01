@@ -25,7 +25,7 @@ auxs:
 
 ics:
   velocity:
-    type: FunctionIC
+    type: FunctionInitialCondition
     field: 'velocity'
     value: [
       't + x * x + y * y',
@@ -33,7 +33,7 @@ ics:
     ]
 
   pressure:
-    type: FunctionIC
+    type: FunctionInitialCondition
     field: 'pressure'
     value: 'x + y - 1'
 
