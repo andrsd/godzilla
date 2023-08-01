@@ -81,9 +81,7 @@ FVProblemInterface::get_field_name(Int fid) const
 {
     _F_;
     if (fid == 0) {
-        Int nc;
-        PETSC_CHECK(PetscFVGetNumComponents(this->fvm, &nc));
-        if (nc == 1)
+        if (this->fields.size() == 1)
             return this->fields.at(0).name;
         else
             return empty_name;
@@ -127,7 +125,8 @@ bool
 FVProblemInterface::has_field_by_name(const std::string & name) const
 {
     _F_;
-    return false;
+    const auto & it = this->fields_by_name.find(name);
+    return it != this->fields_by_name.end();
 }
 
 Int

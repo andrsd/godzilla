@@ -230,7 +230,7 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_TRUE(prob.has_field_by_id(0));
     EXPECT_FALSE(prob.has_field_by_id(65536));
 
-    EXPECT_FALSE(prob.has_field_by_name("u"));
+    EXPECT_TRUE(prob.has_field_by_name("u"));
     EXPECT_FALSE(prob.has_field_by_name("nonexistent"));
 
     EXPECT_EQ(prob.get_field_order(0), 0);

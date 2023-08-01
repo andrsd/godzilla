@@ -13,6 +13,7 @@ problem:
 ics:
   all:
     type: FunctionInitialCondition
+    field: 'temp'
     value: [ '2*t + x*x + y*y' ]
 
 auxs:

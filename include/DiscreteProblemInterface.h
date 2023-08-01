@@ -157,6 +157,11 @@ public:
     /// @return List of all initial conditions
     const std::vector<InitialCondition *> & get_initial_conditions();
 
+    /// Get list of all auxiliary initial conditions
+    ///
+    /// @return List of all auxiliary initial conditions
+    const std::vector<InitialCondition *> & get_aux_initial_conditions();
+
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
@@ -290,6 +295,10 @@ protected:
     /// Set up discrete system
     virtual void set_up_ds() = 0;
 
+    /// Check initial conditions
+    void check_initial_conditions(const std::vector<InitialCondition *> & ics,
+                                  const std::map<Int, Int> & field_comps);
+
     void set_initial_guess_from_ics();
 
     virtual void set_up_initial_guess();
@@ -318,8 +327,14 @@ protected:
     /// Object that manages a discrete system
     PetscDS ds;
 
-    /// Initial conditions in the problem
+    /// All initial condition objects
+    std::vector<InitialCondition *> all_ics;
+
+    /// Initial conditions for primary fields
     std::vector<InitialCondition *> ics;
+
+    /// Initial conditions for auxiliary fields
+    std::vector<InitialCondition *> ics_aux;
 
     /// Map from aux object name to the aux object
     std::map<std::string, InitialCondition *> ics_by_name;

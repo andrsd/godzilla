@@ -346,6 +346,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
         Parameters * params = Factory::get_parameters(class_name);
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<Real>>("value") = { 0.1 };
+        params->set<std::string>("field") = "u";
         auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
         prob->add_initial_condition(ic);
     }

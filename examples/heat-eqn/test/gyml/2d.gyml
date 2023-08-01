@@ -12,6 +12,7 @@ problem:
 ics:
   all:
     type: ConstantIC
+    field: 'temp'
     value: [ 300 ]
 
 auxs:

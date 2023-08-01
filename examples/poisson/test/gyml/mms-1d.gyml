@@ -15,6 +15,7 @@ problem:
 ics:
   all:
     type: ConstantIC
+    field: 'u'
     value: 0
 
 bcs:

@@ -17,6 +17,7 @@ public:
     explicit InitialCondition(const Parameters & params);
 
     void create() override;
+    virtual const std::string & get_field_name() const;
     NO_DISCARD virtual Int get_field_id() const;
     NO_DISCARD virtual Int get_num_components() const = 0;
 
@@ -57,6 +58,9 @@ public:
 protected:
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
+
+    /// Field name this initial condition is attached to
+    std::string field_name;
 
     /// Field ID this initial condition is attached to
     Int fid;
