@@ -128,6 +128,18 @@ public:
             set(row, i) = vals[i];
     }
 
+    /// Set a matrix row at once
+    ///
+    /// This is a convenience method
+    /// @param row Row number
+    /// @param vals Values of the row
+    void
+    set_row(Int row, const DenseVector<T, COLS> & vals)
+    {
+        for (Int i = 0; i < COLS; i++)
+            set(row, i) = vals(i);
+    }
+
     /// Set a matrix column at once
     ///
     /// This is a convenience method
