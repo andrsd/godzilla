@@ -635,6 +635,40 @@ TEST(DenseMatrixTest, diagonal)
     EXPECT_EQ(diag(2), 4.);
 }
 
+TEST(DenseMatrixTest, set_row_std_vec)
+{
+    DenseMatrix<Real, 3, 2> m;
+    m.zero();
+
+    m.set_row(0, { 1, 3 });
+    m.set_row(1, { 2, 5 });
+    m.set_row(2, { 0, 4 });
+
+    EXPECT_EQ(m(0, 0), 1.);
+    EXPECT_EQ(m(1, 0), 2.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(0, 1), 3.);
+    EXPECT_EQ(m(1, 1), 5.);
+    EXPECT_EQ(m(2, 1), 4.);
+}
+
+TEST(DenseMatrixTest, set_row_dv)
+{
+    DenseMatrix<Real, 3, 2> m;
+    m.zero();
+
+    m.set_row(0, DenseVector<Real, 2>({ 1, 3 }));
+    m.set_row(1, DenseVector<Real, 2>({ 2, 5 }));
+    m.set_row(2, DenseVector<Real, 2>({ 0, 4 }));
+
+    EXPECT_EQ(m(0, 0), 1.);
+    EXPECT_EQ(m(1, 0), 2.);
+    EXPECT_EQ(m(2, 0), 0.);
+    EXPECT_EQ(m(0, 1), 3.);
+    EXPECT_EQ(m(1, 1), 5.);
+    EXPECT_EQ(m(2, 1), 4.);
+}
+
 TEST(DenseMatrixTest, set_col)
 {
     DenseMatrix<Real, 3, 2> m;
