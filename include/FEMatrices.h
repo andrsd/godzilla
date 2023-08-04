@@ -248,6 +248,35 @@ stiffness<TET4>()
     return m;
 }
 
+// Mass matrix for surface integration of linear forms
+
+template <ElementType ELEM_TYPE, Int N_BND_NODES>
+inline DenseMatrixSymm<Real, N_BND_NODES>
+mass_surface()
+{
+    error("Not implemented.");
+}
+
+template <>
+inline DenseMatrixSymm<Real, 1>
+mass_surface<EDGE2, 1>()
+{
+    DenseMatrixSymm<Real, 1> m;
+    m(0, 0) = 1.;
+    return m;
+}
+
+template <>
+inline DenseMatrixSymm<Real, 2>
+mass_surface<TRI3, 2>()
+{
+    DenseMatrixSymm<Real, 2> m;
+    m(0, 0) = 2.;
+    m(0, 1) = 1.;
+    m(1, 1) = 2.;
+    return m;
+}
+
 //
 
 template <ElementType ELEM_TYPE, Int N_BND_NODES>
