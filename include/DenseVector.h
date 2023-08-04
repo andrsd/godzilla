@@ -107,6 +107,17 @@ public:
             this->data[i] -= a(i);
     }
 
+    /// Normalize this vector
+    void
+    normalize()
+    {
+        T mag = magnitude();
+        if (mag > 0) {
+            for (Int i = 0; i < N; i++)
+                this->data[i] /= mag;
+        }
+    }
+
     /// Compute average from vector entries
     ///
     /// @return Average of vector entries
