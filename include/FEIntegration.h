@@ -99,6 +99,43 @@ integration_coeff<TET4, 0, 0>()
     return 1.;
 }
 
+// Surface linear forms
+
+/// Get coefficient for exact integration of a surface linear form
+///
+/// @tparam ELEM_TYPE Element type
+/// @tparam N1 Order of the 1st shape function
+/// @tparam N2 Order of the 2nd shape function
+/// @return
+template <ElementType ELEM_TYPE, Int N1, Int N2>
+inline const Real
+surface_integration_coeff()
+{
+    error("Surface integration coefficient for '{}' is not implemented",
+          get_element_type_str(ELEM_TYPE));
+}
+
+template <>
+inline const Real
+surface_integration_coeff<EDGE2, 1, 1>()
+{
+    return 1.;
+}
+
+template <>
+inline const Real
+surface_integration_coeff<TRI3, 1, 1>()
+{
+    return 1. / 6.;
+}
+
+template <>
+inline const Real
+surface_integration_coeff<TET4, 1, 1>()
+{
+    return 1. / 12.;
+}
+
 } // namespace fe
 
 } // namespace godzilla
