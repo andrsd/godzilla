@@ -406,3 +406,11 @@ TEST(DenseVectorTest, abs)
     EXPECT_EQ(v(1), 2.);
     EXPECT_EQ(v(2), 10.);
 }
+
+TEST(DenseVectorTest, normalize)
+{
+    DenseVector<Real, 2> v({ 3., 4. });
+    v.normalize();
+    EXPECT_EQ(v(0), 3. / 5.);
+    EXPECT_EQ(v(1), 4. / 5.);
+}
