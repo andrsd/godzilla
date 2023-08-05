@@ -43,6 +43,8 @@ TEST_F(FENonlinearProblemTest, fields)
 {
     prob->set_fe(1, "vec", 3, 1);
 
+    Int aux_fld1_idx = prob->add_aux_fe("aux_fld1", 2, 1);
+
     mesh->create();
     prob->create();
 
@@ -83,6 +85,11 @@ TEST_F(FENonlinearProblemTest, fields)
 
     EXPECT_EQ(prob->get_field_dof(4, 0), 8);
     EXPECT_EQ(prob->get_field_dof(4, 1), 9);
+
+    EXPECT_EQ(aux_fld1_idx, 0);
+
+    EXPECT_EQ(prob->get_aux_field_dof(3, 0), 2);
+    EXPECT_EQ(prob->get_aux_field_dof(4, 0), 4);
 }
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
