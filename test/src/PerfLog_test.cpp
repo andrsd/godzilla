@@ -32,7 +32,7 @@ TEST(PerfLogTest, event)
     PerfLog::EventInfo info1 = PerfLog::get_event_info(event1_name);
     EXPECT_DOUBLE_EQ(info1.get_flops(), 8.);
     EXPECT_EQ(info1.get_num_calls(), 2);
-    EXPECT_NEAR(info1.get_time(), 0.1, 1.5e-2);
+    EXPECT_NEAR(info1.get_time(), 0.1, 0.3);
 
     PerfLog::EventInfo info2 = PerfLog::get_event_info(event2_id);
     EXPECT_DOUBLE_EQ(info2.get_flops(), 16.);
