@@ -324,7 +324,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
             else
                 SETERRQ(PetscObjectComm((PetscObject) dm),
                         PETSC_ERR_ARG_WRONG,
-                        "Unknown discretization type for field %D",
+                        "Unknown discretization type for field %" PetscInt_FMT,
                         f);
         }
         /* Loop over domain */
