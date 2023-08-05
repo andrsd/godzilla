@@ -1,38 +1,44 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
+#include "GTest2FieldsFENonlinearProblem.h"
 #include "Factory.h"
 #include "LineMesh.h"
 #include "EssentialBC.h"
 #include "PiecewiseLinear.h"
 
 using namespace godzilla;
+using namespace testing;
+
+namespace {
+
+class TestEssentialBC : public EssentialBC {
+public:
+    explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars), components({ 0 }) {}
+
+    MOCK_METHOD(void, evaluate, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
+    MOCK_METHOD(void, evaluate_t, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
+
+    virtual const std::vector<Int> &
+    get_components() const
+    {
+        return this->components;
+    }
+
+protected:
+    virtual void
+    set_up_callback()
+    {
+    }
+
+    std::vector<Int> components;
+};
+
+} // namespace
 
 TEST(EssentialBCTest, api)
 {
     TestApp app;
-
-    class TestEssentialBC : public EssentialBC {
-    public:
-        explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars), components({ 0 }) {}
-
-        MOCK_METHOD(void, evaluate, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
-        MOCK_METHOD(void, evaluate_t, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
-
-        virtual const std::vector<Int> &
-        get_components() const
-        {
-            return this->components;
-        }
-
-    protected:
-        virtual void
-        set_up_callback()
-        {
-        }
-
-        std::vector<Int> components;
-    };
 
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<const App *>("_app") = &app;
@@ -71,4 +77,71 @@ TEST(EssentialBCTest, api)
 
     EXPECT_EQ(bc.get_context(), &bc);
     EXPECT_EQ(bc.get_field_id(), 0);
+}
+
+TEST(EssentialBCTest, non_existing_field)
+{
+    testing::internal::CaptureStderr();
+
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    GTest2FieldsFENonlinearProblem problem(prob_pars);
+    app.problem = &problem;
+
+    Parameters params = TestEssentialBC::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<DiscreteProblemInterface *>("_dpi") = &problem;
+    params.set<std::string>("field") = "asdf";
+    TestEssentialBC bc(params);
+
+    mesh.create();
+    problem.add_boundary_condition(&bc);
+    problem.create();
+
+    app.check_integrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                HasSubstr("Field 'asdf' does not exists. Typo?"));
+}
+
+TEST(EssentialBCTest, field_param_not_specified)
+{
+    testing::internal::CaptureStderr();
+
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
+    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    GTest2FieldsFENonlinearProblem problem(prob_pars);
+    app.problem = &problem;
+
+    Parameters params = TestEssentialBC::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<DiscreteProblemInterface *>("_dpi") = &problem;
+    TestEssentialBC bc(params);
+
+    mesh.create();
+    problem.add_boundary_condition(&bc);
+    problem.create();
+
+    app.check_integrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        HasSubstr(
+            "Use the 'field' parameter to assign this boundary condition to an existing field."));
 }

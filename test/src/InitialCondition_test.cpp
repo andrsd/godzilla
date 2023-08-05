@@ -10,6 +10,13 @@ namespace {
 
 class InitialConditionTest : public FENonlinearProblemTest {
 public:
+    //    void
+    //    SetUp() override
+    //    {
+    //        FENonlinearProblemTest::SetUp();
+    //    }
+    //
+    //    const Int ia;
 };
 
 class InitialCondition2FieldTest : public FENonlinear2FieldProblemTest {
@@ -84,6 +91,8 @@ TEST_F(InitialConditionTest, api)
 
 TEST_F(InitialConditionTest, test)
 {
+    this->prob->add_aux_fe("a", 1, 1);
+
     Parameters params = InitialCondition::parameters();
     params.set<const App *>("_app") = this->app;
     params.set<DiscreteProblemInterface *>("_dpi") = this->prob;
@@ -91,7 +100,15 @@ TEST_F(InitialConditionTest, test)
     params.set<std::string>("field") = "u";
     MockInitialCondition ic(params);
 
+    Parameters aux_ic_pars = InitialCondition::parameters();
+    aux_ic_pars.set<const App *>("_app") = this->app;
+    aux_ic_pars.set<DiscreteProblemInterface *>("_dpi") = this->prob;
+    aux_ic_pars.set<std::string>("_name") = "a_ic";
+    aux_ic_pars.set<std::string>("field") = "a";
+    MockInitialCondition aux_ic(aux_ic_pars);
+
     this->prob->add_initial_condition(&ic);
+    this->prob->add_initial_condition(&aux_ic);
 
     this->mesh->create();
     this->prob->create();
@@ -108,6 +125,16 @@ TEST_F(InitialConditionTest, test)
 
     auto ics = this->prob->get_initial_conditions();
     EXPECT_THAT(ics, ElementsAre(&ic));
+
+    // aux ICs
+
+    EXPECT_EQ(aux_ic.get_field_id(), 0);
+
+    EXPECT_TRUE(this->prob->has_initial_condition("a_ic"));
+    EXPECT_EQ(this->prob->get_initial_condition("a_ic"), &aux_ic);
+
+    auto aux_ics = this->prob->get_aux_initial_conditions();
+    EXPECT_THAT(aux_ics, ElementsAre(&aux_ic));
 }
 
 TEST_F(InitialConditionTest, get_value)

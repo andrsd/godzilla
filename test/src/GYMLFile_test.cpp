@@ -485,3 +485,18 @@ TEST_F(GYMLFileTest, unused_block)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::ContainsRegex("\\[WARNING\\] Unused block 'asdf' in '.+'"));
 }
+
+TEST_F(GYMLFileTest, param_not_map)
+{
+    testing::internal::CaptureStderr();
+
+    GYMLFile file(this->app);
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/not_map.yml");
+    EXPECT_TRUE(file.parse(file_name));
+    file.build();
+    this->app->check_integrity();
+
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::HasSubstr("Parameter 'consts' must be a map."));
+}
