@@ -142,3 +142,36 @@ TEST_F(GodzillaAppTest, unknown_command_line_switch)
 
     EXPECT_DEATH(app.run(), "Error: Option ‘asdf’ does not exist");
 }
+
+TEST_F(GodzillaAppTest, help)
+{
+    testing::internal::CaptureStdout();
+
+    int argc = 2;
+    const char * argv[] = { "godzilla", "--help", nullptr };
+
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app(comm, "godzilla", argc, argv);
+
+    app.run();
+
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, testing::HasSubstr("Usage:"));
+    EXPECT_THAT(out, testing::HasSubstr("godzilla [OPTION...]"));
+}
+
+TEST_F(GodzillaAppTest, version)
+{
+    testing::internal::CaptureStdout();
+
+    int argc = 2;
+    const char * argv[] = { "godzilla", "--version", nullptr };
+
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app(comm, "godzilla", argc, argv);
+
+    app.run();
+
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, testing::HasSubstr("godzilla, version"));
+}
