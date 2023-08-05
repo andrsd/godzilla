@@ -96,6 +96,7 @@ jobs:
       - name: Configure
         run: |
           cmake -S ${{ github.workspace }}/main -B ${{ github.workspace }}/main/build \
+            -DGODZILLA_WITH_PERF_LOG=YES \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES
 
