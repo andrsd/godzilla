@@ -378,3 +378,23 @@ TEST(UnstructuredMesh, compute_cell_geometry)
         EXPECT_DOUBLE_EQ(normal[2], 0.);
     }
 }
+
+TEST(UnstructuredMesh, get_face_set_label_nonexistent)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    auto nonex_lbl = mesh.get_face_set_label("asdf");
+    EXPECT_EQ((DMLabel) nonex_lbl, nullptr);
+
+    auto front_lbl = mesh.get_face_set_label("front");
+    EXPECT_EQ((DMLabel) front_lbl, (DMLabel) mesh.get_label("front"));
+}

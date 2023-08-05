@@ -3,6 +3,7 @@
 #include "DenseMatrix.h"
 
 using namespace godzilla;
+using namespace testing;
 
 TEST(DenseVectorTest, ctor)
 {
@@ -413,4 +414,16 @@ TEST(DenseVectorTest, normalize)
     v.normalize();
     EXPECT_EQ(v(0), 3. / 5.);
     EXPECT_EQ(v(1), 4. / 5.);
+}
+
+TEST(DenseVectorTest, out)
+{
+    testing::internal::CaptureStdout();
+
+    DenseVector<Real, 3> v({ 1, 2, 3 });
+
+    std::cout << v;
+
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, HasSubstr("(1, 2, 3)"));
 }
