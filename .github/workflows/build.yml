@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: "${{ matrix.os }}, py-${{ matrix.python-version }}, petsc-${{ matrix.petsc }}"
     defaults:
       run:
         shell: bash -el {0}
@@ -19,8 +20,13 @@ jobs:
         include:
           - os: ubuntu-22.04
             python-version: '3.9'
+            petsc: 3.17.5
+          - os: ubuntu-22.04
+            python-version: '3.9'
+            petsc: 3.18.6
           - os: macos-12
             python-version: '3.9'
+            petsc: 3.18.6
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up miniconda
@@ -44,7 +50,7 @@ jobs:
             make \
             cxx-compiler \
             mpich \
-            petsc==3.17.5 \
+            petsc==${{ matrix.petsc }} \
             fmt==9.1.0 \
             yaml-cpp=0.7.0 \
             exodusIIcpp==1.6 \
@@ -70,7 +76,7 @@ jobs:
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v3
         with:
-          name: coverage-${{ matrix.os }}
+          name: coverage-${{ matrix.os }}-petsc-${{ matrix.petsc }}
           path: ${{ github.workspace }}/build/coverage.info
 
   upload-to-codecov:
@@ -85,9 +91,3 @@ jobs:
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v3
-
-      - name: Run codacy-coverage-reporter
-        uses: codacy/codacy-coverage-reporter-action@v1
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: 'coverage-ubuntu-22.04/coverage.info,coverage-macos-12/coverage.info'
