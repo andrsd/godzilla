@@ -131,3 +131,14 @@ TEST_F(GodzillaAppTest, run_problem)
     EXPECT_CALL(*prob, run);
     app.run();
 }
+
+TEST_F(GodzillaAppTest, unknown_command_line_switch)
+{
+    int argc = 2;
+    const char * argv[] = { "godzilla", "--asdf", nullptr };
+
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    App app(comm, "godzilla", argc, argv);
+
+    EXPECT_DEATH(app.run(), "Error: Option ‘asdf’ does not exist");
+}
