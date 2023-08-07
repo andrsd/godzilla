@@ -19,14 +19,14 @@ IndexSet::data() const
 }
 
 Int
-IndexSet::operator[](unsigned int i) const
+IndexSet::operator[](Int i) const
 {
     _F_;
     return this->indices[i];
 }
 
 Int
-IndexSet::operator()(unsigned int i) const
+IndexSet::operator()(Int i) const
 {
     _F_;
     return this->indices[i];
