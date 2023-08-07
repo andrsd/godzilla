@@ -1,10 +1,5 @@
 name: build
 
-env:
-  PETSC_VERSION: 3.17.0
-  PETSC_CACHE_NUM: 10
-  EXODUSIICPP_VERSION: 1.6
-
 on:
   push:
     branches:
@@ -15,158 +10,68 @@ on:
 
 jobs:
   build:
+    defaults:
+      run:
+        shell: bash -el {0}
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-22.04
-            compiler: gcc
-          - os: macos-11
-            compiler: clang
+            python-version: '3.9'
+          - os: macos-12
+            python-version: '3.9'
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Set up miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          auto-update-conda: false
+          channels: andrsd,conda-forge,defaults
+          channel-priority: strict
+          miniforge-version: latest
+          miniforge-variant: Mambaforge
+          use-mamba: true
+
       - name: Checkout source
         uses: actions/checkout@v3
-        with:
-          path: main
 
       - name: Install dependencies
-        if: startsWith(matrix.os, 'ubuntu')
         run: |
-          sudo apt-get update -qq
-          sudo apt install \
+          mamba install \
             cmake \
-            lcov \
-            libblas-dev \
-            liblapack-dev \
-            libfmt-dev \
-            libyaml-cpp-dev \
-            zlib1g-dev
-
-      - name: Install dependencies
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          brew install \
-            cmake \
-            llvm@14 \
-            lcov \
-            automake \
-            fmt \
-            yaml-cpp \
-            zlib
-
-      - name: Set up env (macos)
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          echo "$(brew --cellar)/llvm@14/14.0.6/bin" >> $GITHUB_PATH
-
-      - name: Set up env (clang)
-        if: matrix.compiler == 'clang'
-        run: |
-          echo "CC=clang" >> $GITHUB_ENV
-          echo "CXX=clang++" >> $GITHUB_ENV
-          echo "FC=gfortran-10" >> $GITHUB_ENV
-
-      - name: Set up env (gcc)
-        if: matrix.compiler == 'gcc'
-        run: |
-          echo "CC=gcc" >> $GITHUB_ENV
-          echo "CXX=g++" >> $GITHUB_ENV
-          echo "FC=gfortran-10" >> $GITHUB_ENV
-
-      - name: Cache PETSc
-        id: cache-petsc
-        uses: actions/cache@v3
-        with:
-          path: ${{ github.workspace }}/petsc
-          key: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-          restore-keys: ${{ runner.os }}-${{ matrix.compiler }}-petsc-cache-${{ env.PETSC_CACHE_NUM }}
-
-      - name: Build PETSc
-        if: steps.cache-petsc.outputs.cache-hit != 'true'
-        run: |
-          cd ${{ github.workspace }}
-          echo "::group::download"
-          wget -q https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${PETSC_VERSION}.tar.gz
-          tar -xzf petsc-${PETSC_VERSION}.tar.gz
-          echo "::endgroup::"
-          cd petsc-${PETSC_VERSION}
-          echo "::group::configure"
-          ./configure \
-            --prefix=${{ github.workspace }}/petsc \
-            --shared-libraries \
-            --with-debugging=no \
-            --with-cxx-dialect=cxx14 \
-            --with-pic=yes \
-            --with-ssl=no \
-            --with-zlib=yes \
-            --with-x=no \
-            --download-mpich \
-            --download-exodusii \
-            --download-netcdf \
-            --download-pnetcdf \
-            --download-hdf5 \
-            --CC=$CC \
-            --CXX=$CXX \
-            --FC=$FC \
-            PETSC_DIR=`pwd`
-          echo "::endgroup::"
-          echo "::group::make"
-          make PETSC_DIR=`pwd` all
-          make PETSC_DIR=`pwd` install
-          echo "::endgroup::"
-
-      - name: Set up env
-        run: |
-          echo "${{ github.workspace }}/petsc/bin" >> $GITHUB_PATH
-          echo "NETCDF_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "EXODUSII_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "PETSC_DIR=${{ github.workspace }}/petsc" >> $GITHUB_ENV
-          echo "CC=mpicc" >> $GITHUB_ENV
-          echo "CXX=mpicxx" >> $GITHUB_ENV
-
-      - name: Build exodusIIcpp
-        run: |
-          cd ${{ github.workspace }}
-          echo "::group::download"
-          wget -q https://github.com/andrsd/exodusIIcpp/archive/refs/tags/v${EXODUSIICPP_VERSION}.tar.gz -O exodusIIcpp-${EXODUSIICPP_VERSION}.tar.gz
-          tar -xzf exodusIIcpp-${EXODUSIICPP_VERSION}.tar.gz
-          echo "::endgroup::"
-          echo "::group::configure"
-          cmake \
-            -S ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION} \
-            -B ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION}/build \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DEXODUSIICPP_LIBRARY_TYPE=SHARED
-          echo "::endgroup::"
-          echo "::group::make"
-          cd ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION}/build
-          make all -C ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION}/build
-          sudo make install -C ${{ github.workspace }}/exodusIIcpp-${EXODUSIICPP_VERSION}/build
-          echo "::endgroup::"
+            make \
+            cxx-compiler \
+            mpich \
+            petsc==3.17.5 \
+            fmt==9.1.0 \
+            yaml-cpp=0.7.0 \
+            exodusIIcpp==1.6 \
+            lcov
 
       - name: Configure
         run: |
-          cmake -S ${{ github.workspace }}/main -B ${{ github.workspace }}/main/build \
+          cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
             -DGODZILLA_WITH_PERF_LOG=YES \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
             -DGODZILLA_CODE_COVERAGE=YES
 
       - name: Build
-        run: make -C ${{ github.workspace }}/main/build
+        run: make -C ${{ github.workspace }}/build
 
       - name: Run tests
-        run: make -C ${{ github.workspace }}/main/build test ARGS='-V'
+        run: make -C ${{ github.workspace }}/build test ARGS='-V'
 
       - name: Generate code coverage
-        run: make -C ${{ github.workspace }}/main/build coverage
+        run: make -C ${{ github.workspace }}/build coverage
 
       - name: Upload coverage artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage-${{ matrix.os }}
-          path: ${{ github.workspace }}/main/build/coverage.info
+          path: ${{ github.workspace }}/build/coverage.info
 
   upload-to-codecov:
     needs: [build]
@@ -176,7 +81,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Download artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v3
@@ -185,4 +90,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: 'coverage-ubuntu-22.04/coverage.info,coverage-macos-11/coverage.info'
+          coverage-reports: 'coverage-ubuntu-22.04/coverage.info,coverage-macos-12/coverage.info'
