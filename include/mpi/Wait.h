@@ -16,8 +16,7 @@ namespace mpi {
 inline void
 wait(const Request & request)
 {
-    const MPI_Request * req = request;
-    MPI_CHECK(MPI_Wait(const_cast<MPI_Request *>(req), MPI_STATUS_IGNORE));
+    MPI_CHECK(MPI_Wait(const_cast<Request &>(request), MPI_STATUS_IGNORE));
 }
 
 /// Wait for a single request to complete with status
@@ -27,8 +26,7 @@ wait(const Request & request)
 inline void
 wait(const Request & request, Status & status)
 {
-    const MPI_Request * req = request;
-    MPI_CHECK(MPI_Wait(const_cast<MPI_Request *>(req), &static_cast<MPI_Status &>(status)));
+    MPI_CHECK(MPI_Wait(const_cast<Request &>(request), status));
 }
 
 /// Wait for all requests to complete
@@ -41,7 +39,7 @@ wait_all(const std::vector<Request> & requests)
     std::vector<MPI_Request> reqs;
     reqs.resize(n);
     for (int i = 0; i < n; i++)
-        reqs[i] = *(requests[i]);
+        reqs[i] = requests[i];
     MPI_CHECK(MPI_Waitall(n, reqs.data(), MPI_STATUSES_IGNORE));
 }
 
@@ -56,7 +54,7 @@ wait_any(const std::vector<Request> & requests)
     std::vector<MPI_Request> reqs;
     reqs.resize(n);
     for (int i = 0; i < n; i++)
-        reqs[i] = *(requests[i]);
+        reqs[i] = requests[i];
     int idx;
     MPI_CHECK(MPI_Waitany(n, reqs.data(), &idx, MPI_STATUS_IGNORE));
     return idx;
