@@ -16,8 +16,6 @@ public:
 
     /// Type cast operators so we can pass this class directly into MPI calls
     operator MPI_Request *() { return &this->request; }
-    operator const MPI_Request *() const { return &this->request; }
-
     operator MPI_Request &() { return this->request; }
     operator const MPI_Request &() const { return this->request; }
 

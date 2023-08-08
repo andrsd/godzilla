@@ -22,6 +22,7 @@ public:
     int error() const;
 
     /// Type cast operators so we can pass this class directly into the MPI API
+    operator MPI_Status *() { return &this->status; }
     operator MPI_Status &() { return this->status; }
     operator const MPI_Status &() const { return this->status; }
 
