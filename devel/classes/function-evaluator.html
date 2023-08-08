@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FunctionEvaluator &mdash; godzilla  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -25,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -108,8 +116,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>FunctionEvaluator</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">FunctionEvaluator</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -119,10 +127,10 @@
            <div itemprop="articleBody">
              
   <section id="functionevaluator">
-<h1>FunctionEvaluator<a class="headerlink" href="#functionevaluator" title="Permalink to this headline"></a></h1>
+<h1>FunctionEvaluator<a class="headerlink" href="#functionevaluator" title="Permalink to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla17FunctionEvaluatorE">
-<span id="_CPPv3N8godzilla17FunctionEvaluatorE"></span><span id="_CPPv2N8godzilla17FunctionEvaluatorE"></span><span id="godzilla::FunctionEvaluator"></span><span class="target" id="classgodzilla_1_1_function_evaluator"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">FunctionEvaluator</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionEvaluatorE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla17FunctionEvaluatorE"></span><span id="_CPPv2N8godzilla17FunctionEvaluatorE"></span><span id="godzilla::FunctionEvaluator"></span><span class="target" id="classgodzilla_1_1_function_evaluator"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FunctionEvaluator</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionEvaluatorE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Class to evaluate function expressions given by a string. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
@@ -131,7 +139,7 @@
 <span id="_CPPv3N8godzilla17FunctionEvaluator6createERKNSt6stringE"></span><span id="_CPPv2N8godzilla17FunctionEvaluator6createERKNSt6stringE"></span><span id="godzilla::FunctionEvaluator::create__ssCR"></span><span class="target" id="classgodzilla_1_1_function_evaluator_1a10a2e13e401770ffe8173b07adee9caf"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">expr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionEvaluator6createERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Build the evaluator object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>expr</strong> – <a class="reference internal" href="function.html#classgodzilla_1_1_function"><span class="std std-ref">Function</span></a> expression to be evaluated </p>
 </dd>
 </dl>
@@ -142,7 +150,7 @@
 <span id="_CPPv3N8godzilla17FunctionEvaluator6createERKNSt6vectorINSt6stringEEE"></span><span id="_CPPv2N8godzilla17FunctionEvaluator6createERKNSt6vectorINSt6stringEEE"></span><span id="godzilla::FunctionEvaluator::create__std::vector:ss:CR"></span><span class="target" id="classgodzilla_1_1_function_evaluator_1ae24aaf13521a03b27e4ec1a51f8e3940"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">expressions</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionEvaluator6createERKNSt6vectorINSt6stringEEE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Build the evaluator object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>expressions</strong> – <a class="reference internal" href="function.html#classgodzilla_1_1_function"><span class="std std-ref">Function</span></a> expressions (one per component) to be evaluated </p>
 </dd>
 </dl>
@@ -153,7 +161,7 @@
 <span id="_CPPv3N8godzilla17FunctionEvaluator15define_constantERKNSt6stringE4Real"></span><span id="_CPPv2N8godzilla17FunctionEvaluator15define_constantERKNSt6stringE4Real"></span><span id="godzilla::FunctionEvaluator::define_constant__ssCR.Real"></span><span class="target" id="classgodzilla_1_1_function_evaluator_1abe5902d51581d1ac9f081590dc9608a5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">define_constant</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionEvaluator15define_constantERKNSt6stringE4Real" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Define a constant. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> – Name of the constant </p></li>
 <li><p><strong>value</strong> – Value </p></li>
@@ -167,7 +175,7 @@
 <span id="_CPPv3N8godzilla17FunctionEvaluator17register_functionEP8Function"></span><span id="_CPPv2N8godzilla17FunctionEvaluator17register_functionEP8Function"></span><span id="godzilla::FunctionEvaluator::register_function__FunctionP"></span><span class="target" id="classgodzilla_1_1_function_evaluator_1aa7c8cf5efe4166c8f6d88f960b95724b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">register_function</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="function.html#_CPPv4N8godzilla8FunctionE" title="godzilla::Function"><span class="n"><span class="pre">Function</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">fn</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionEvaluator17register_functionEP8Function" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Register user function with function evaluator. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fn</strong> – <a class="reference internal" href="function.html#classgodzilla_1_1_function"><span class="std std-ref">Function</span></a> to register </p>
 </dd>
 </dl>
@@ -176,9 +184,9 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla17FunctionEvaluator8evaluateE3Int4RealA_K4Real">
 <span id="_CPPv3N8godzilla17FunctionEvaluator8evaluateE3Int4RealA_K4Real"></span><span id="_CPPv2N8godzilla17FunctionEvaluator8evaluateE3Int4RealA_K4Real"></span><span id="godzilla::FunctionEvaluator::evaluate__Int.Real.RealCA"></span><span class="target" id="classgodzilla_1_1_function_evaluator_1ad397185be9d94d9be799aa543cb1529e"></span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionEvaluator8evaluateE3Int4RealA_K4Real" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Evaluate the function expression at time <code class="docutils literal notranslate"><span class="pre">time</span></code> and spatial position <code class="docutils literal notranslate"><span class="pre">x</span></code> </p>
+<dd><p>Evaluate the function expression at time <code class="docutils literal notranslate"><span class="pre">time</span></code> and spatial position <code class="docutils literal notranslate"><span class="pre">x</span></code></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dim</strong> – Spatial dimension </p></li>
 <li><p><strong>time</strong> – Simulation time </p></li>

@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TransientProblemInterface &mdash; godzilla  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -25,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -108,8 +116,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>TransientProblemInterface</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">TransientProblemInterface</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -119,10 +127,10 @@
            <div itemprop="articleBody">
              
   <section id="transientprobleminterface">
-<h1>TransientProblemInterface<a class="headerlink" href="#transientprobleminterface" title="Permalink to this headline"></a></h1>
+<h1>TransientProblemInterface<a class="headerlink" href="#transientprobleminterface" title="Permalink to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterfaceE">
-<span id="_CPPv3N8godzilla25TransientProblemInterfaceE"></span><span id="_CPPv2N8godzilla25TransientProblemInterfaceE"></span><span id="godzilla::TransientProblemInterface"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">TransientProblemInterface</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterfaceE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla25TransientProblemInterfaceE"></span><span id="_CPPv2N8godzilla25TransientProblemInterfaceE"></span><span id="godzilla::TransientProblemInterface"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TransientProblemInterface</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterfaceE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Interface for transient simulations. </p>
 <p>Subclassed by <a class="reference internal" href="explicit-fe-linear-problem.html#classgodzilla_1_1_explicit_f_e_linear_problem"><span class="std std-ref">godzilla::ExplicitFELinearProblem</span></a>, <a class="reference internal" href="explicit-fv-linear-problem.html#classgodzilla_1_1_explicit_f_v_linear_problem"><span class="std std-ref">godzilla::ExplicitFVLinearProblem</span></a>, <a class="reference internal" href="implicit-fe-nonlinear-problem.html#classgodzilla_1_1_implicit_f_e_nonlinear_problem"><span class="std std-ref">godzilla::ImplicitFENonlinearProblem</span></a></p>
 <div class="breathe-sectiondef docutils container">
@@ -132,7 +140,7 @@
 <span id="_CPPv3N8godzilla25TransientProblemInterface25set_time_stepping_adaptorEP19TimeSteppingAdaptor"></span><span id="_CPPv2N8godzilla25TransientProblemInterface25set_time_stepping_adaptorEP19TimeSteppingAdaptor"></span><span id="godzilla::TransientProblemInterface::set_time_stepping_adaptor__TimeSteppingAdaptorP"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a0eb170ed2fe77265a466bc1312e49dba"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_time_stepping_adaptor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">TimeSteppingAdaptor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">adaptor</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface25set_time_stepping_adaptorEP19TimeSteppingAdaptor" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set time stepping adaptivity using an adaptor class. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>adaptor</strong> – Time stepping adaptor object </p>
 </dd>
 </dl>
@@ -143,7 +151,7 @@
 <span id="_CPPv3NK8godzilla25TransientProblemInterface25get_time_stepping_adaptorEv"></span><span id="_CPPv2NK8godzilla25TransientProblemInterface25get_time_stepping_adaptorEv"></span><span id="godzilla::TransientProblemInterface::get_time_stepping_adaptorC"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1abb9c3bdf2433d4247a0388afe0597e8a"></span><span class="n"><span class="pre">TimeSteppingAdaptor</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_time_stepping_adaptor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla25TransientProblemInterface25get_time_stepping_adaptorEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get time stepping adaptor. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Time stepping adaptor </p>
 </dd>
 </dl>
@@ -154,7 +162,7 @@
 <span id="_CPPv3NK8godzilla25TransientProblemInterface6get_tsEv"></span><span id="_CPPv2NK8godzilla25TransientProblemInterface6get_tsEv"></span><span id="godzilla::TransientProblemInterface::get_tsC"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a534ee5e3442978d5e1210faf2253a255"></span><span class="n"><span class="pre">TS</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ts</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla25TransientProblemInterface6get_tsEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get TS object. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>PETSc TS object </p>
 </dd>
 </dl>
@@ -165,7 +173,7 @@
 <span id="_CPPv3NK8godzilla25TransientProblemInterface13get_time_stepEv"></span><span id="_CPPv2NK8godzilla25TransientProblemInterface13get_time_stepEv"></span><span id="godzilla::TransientProblemInterface::get_time_stepC"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a1d6605b7e873d52ab86fe4b35f3ec5c3"></span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_time_step</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla25TransientProblemInterface13get_time_stepEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get the current timestep size. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>the current timestep size </p>
 </dd>
 </dl>
@@ -176,7 +184,7 @@
 <span id="_CPPv3NK8godzilla25TransientProblemInterface13set_time_stepE4Real"></span><span id="_CPPv2NK8godzilla25TransientProblemInterface13set_time_stepE4Real"></span><span id="godzilla::TransientProblemInterface::set_time_step__RealC"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1aef0dcb45b62dabd6e8045054f8968e51"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_time_step</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dt</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla25TransientProblemInterface13set_time_stepE4Real" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Allows one to reset the timestep at any time, useful for simple pseudo-timestepping codes. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>dt</strong> – The size of the timestep </p>
 </dd>
 </dl>

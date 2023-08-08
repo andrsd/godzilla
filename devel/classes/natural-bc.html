@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NaturalBC &mdash; godzilla  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -25,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -108,8 +116,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>NaturalBC</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">NaturalBC</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -119,10 +127,10 @@
            <div itemprop="articleBody">
              
   <section id="naturalbc">
-<h1>NaturalBC<a class="headerlink" href="#naturalbc" title="Permalink to this headline"></a></h1>
+<h1>NaturalBC<a class="headerlink" href="#naturalbc" title="Permalink to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla9NaturalBCE">
-<span id="_CPPv3N8godzilla9NaturalBCE"></span><span id="_CPPv2N8godzilla9NaturalBCE"></span><span id="godzilla::NaturalBC"></span><span class="target" id="classgodzilla_1_1_natural_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">NaturalBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="boundary-condition.html#_CPPv4N8godzilla17BoundaryConditionE" title="godzilla::BoundaryCondition"><span class="n"><span class="pre">BoundaryCondition</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla9NaturalBCE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla9NaturalBCE"></span><span id="_CPPv2N8godzilla9NaturalBCE"></span><span id="godzilla::NaturalBC"></span><span class="target" id="classgodzilla_1_1_natural_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NaturalBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="boundary-condition.html#_CPPv4N8godzilla17BoundaryConditionE" title="godzilla::BoundaryCondition"><span class="n"><span class="pre">BoundaryCondition</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla9NaturalBCE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Base class for natural boundary conditions. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
@@ -143,7 +151,7 @@
 <span class="target" id="classgodzilla_1_1_natural_b_c_1aae95585701db1a1631d224146273f57a"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">Label</span> <span class="pre">&amp;</span> <span class="pre">get_label</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
 <dd><p>Get the label this boundary condition operates on. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The label </p>
 </dd>
 </dl>
@@ -154,7 +162,7 @@
 <span class="target" id="classgodzilla_1_1_natural_b_c_1a9412adbb3d73e8aec87d0c9887d7da10"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">std::vector&lt;</span> <span class="pre">Int</span> <span class="pre">&gt;</span> <span class="pre">&amp;</span> <span class="pre">get_ids</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
 <dd><p>Get the label values this boundary condition operates on. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The label values </p>
 </dd>
 </dl>
@@ -165,7 +173,7 @@
 <span class="target" id="classgodzilla_1_1_natural_b_c_1aa28f8c015ee51bc3301c47cffdd4b264"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Int</span> <span class="pre">get_field_id</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
 <dd><p>Get the ID of the field this boundary condition operates on. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ID of the field </p>
 </dd>
 </dl>
@@ -173,10 +181,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_natural_b_c_1af2cce1ed18122e1972ec6eae3c28f180"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">std::vector&lt;</span> <span class="pre">Int</span> <span class="pre">&gt;</span> <span class="pre">&amp;</span> <span class="pre">get_components</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">=0</span></span></dt>
+<span class="target" id="classgodzilla_1_1_natural_b_c_1a4752e9ca7e778aea5ece7387d12159e4"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">std::vector&lt;</span> <span class="pre">Int</span> <span class="pre">&gt;</span> <span class="pre">&amp;</span> <span class="pre">get_components</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">=0</span></span></dt>
 <dd><p>Get the component numbers this boundary condition is constraining. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Vector of component numbers </p>
 </dd>
 </dl>

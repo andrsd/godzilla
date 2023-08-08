@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FVProblemInterface &mdash; godzilla  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -25,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -108,8 +116,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>FVProblemInterface</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">FVProblemInterface</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -119,10 +127,10 @@
            <div itemprop="articleBody">
              
   <section id="fvprobleminterface">
-<h1>FVProblemInterface<a class="headerlink" href="#fvprobleminterface" title="Permalink to this headline"></a></h1>
+<h1>FVProblemInterface<a class="headerlink" href="#fvprobleminterface" title="Permalink to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FVProblemInterfaceE">
-<span id="_CPPv3N8godzilla18FVProblemInterfaceE"></span><span id="_CPPv2N8godzilla18FVProblemInterfaceE"></span><span id="godzilla::FVProblemInterface"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">FVProblemInterface</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterfaceE" title="godzilla::DiscreteProblemInterface"><span class="n"><span class="pre">DiscreteProblemInterface</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterfaceE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla18FVProblemInterfaceE"></span><span id="_CPPv2N8godzilla18FVProblemInterfaceE"></span><span id="godzilla::FVProblemInterface"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FVProblemInterface</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="discrete-problem-interface.html#_CPPv4N8godzilla24DiscreteProblemInterfaceE" title="godzilla::DiscreteProblemInterface"><span class="n"><span class="pre">DiscreteProblemInterface</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterfaceE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Interface for finite volume problems. </p>
 <p>Any problem using PetscFV should inherit from this for unified API </p>
 <p>Subclassed by <a class="reference internal" href="explicit-fv-linear-problem.html#classgodzilla_1_1_explicit_f_v_linear_problem"><span class="std std-ref">godzilla::ExplicitFVLinearProblem</span></a></p>
@@ -133,7 +141,7 @@
 <span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a425622f7f09ed5ded2d2fca794bf70b7"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Int</span> <span class="pre">get_num_fields</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">override</span></span></dt>
 <dd><p>Get number of fields. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of fields </p>
 </dd>
 </dl>
@@ -144,7 +152,7 @@
 <span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a248d21b92926ea71af889ef985970306"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">std::vector&lt;</span> <span class="pre">std::string</span> <span class="pre">&gt;</span> <span class="pre">get_field_names</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">override</span></span></dt>
 <dd><p>Get list of all field names. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List of field names </p>
 </dd>
 </dl>
@@ -155,7 +163,7 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface14get_field_nameE3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface14get_field_nameE3Int"></span><span id="godzilla::FVProblemInterface::get_field_name__IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a2995f839e0eb5b1bf68dfae6a06e74bd"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_field_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface14get_field_nameE3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get field name. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fid</strong> – Field ID </p>
 </dd>
 </dl>
@@ -166,10 +174,10 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface24get_field_num_componentsE3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface24get_field_num_componentsE3Int"></span><span id="godzilla::FVProblemInterface::get_field_num_components__IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1af05eb273216c6508f3a0d2dd6dfefa9c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_num_components</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface24get_field_num_componentsE3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get number of field components. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fid</strong> – Field ID </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Number of components </p>
 </dd>
 </dl>
@@ -180,7 +188,7 @@
 <span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a0f64086689b6b575615d8dc881ea276c"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Int</span> <span class="pre">get_field_id</span> <span class="pre">(const</span> <span class="pre">std::string</span> <span class="pre">&amp;name)</span> <span class="pre">const</span> <span class="pre">override</span></span></dt>
 <dd><p>Get field ID. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> – Field name </p></li>
 <li><p><strong>Field</strong> – ID </p></li>
@@ -194,10 +202,10 @@
 <span class="target" id="classgodzilla_1_1_f_v_problem_interface_1affa94d3ce71c46e3ad2108e627e8ee3d"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">bool</span> <span class="pre">has_field_by_id</span> <span class="pre">(Int</span> <span class="pre">fid)</span> <span class="pre">const</span> <span class="pre">override</span></span></dt>
 <dd><p>Do we have field with specified ID. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fid</strong> – The ID of the field </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the field exists, otherwise False </p>
 </dd>
 </dl>
@@ -208,10 +216,10 @@
 <span class="target" id="classgodzilla_1_1_f_v_problem_interface_1af2f6bb686df61fc3fa27980304c04309"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">bool</span> <span class="pre">has_field_by_name</span> <span class="pre">(const</span> <span class="pre">std::string</span> <span class="pre">&amp;name)</span> <span class="pre">const</span> <span class="pre">override</span></span></dt>
 <dd><p>Do we have field with specified name. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> – The name of the field </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the field exists, otherwise False </p>
 </dd>
 </dl>
@@ -222,10 +230,10 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface15get_field_orderE3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface15get_field_orderE3Int"></span><span id="godzilla::FVProblemInterface::get_field_order__IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1ae5496432f3493477ba7169028c6a1909"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_order</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface15get_field_orderE3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get field order. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fid</strong> – Field ID </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Field order </p>
 </dd>
 </dl>
@@ -236,13 +244,13 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface24get_field_component_nameE3Int3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface24get_field_component_nameE3Int3Int"></span><span id="godzilla::FVProblemInterface::get_field_component_name__Int.IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a245f3c2903f266fdc5e71d70e5c2a6c2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_component_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">component</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface24get_field_component_nameE3Int3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get component name of a field. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fid</strong> – Field ID </p></li>
 <li><p><strong>component</strong> – Component index </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Component name </p>
 </dd>
 </dl>
@@ -253,7 +261,7 @@
 <span id="_CPPv3N8godzilla18FVProblemInterface24set_field_component_nameE3Int3IntRKNSt6stringE"></span><span id="_CPPv2N8godzilla18FVProblemInterface24set_field_component_nameE3Int3IntRKNSt6stringE"></span><span id="godzilla::FVProblemInterface::set_field_component_name__Int.Int.ssCR"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a02b9342ccdad1831b8d82842bb1e58cc"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_field_component_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">component</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterface24set_field_component_nameE3Int3IntRKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set the name of a component of afield variable. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fid</strong> – Field ID </p></li>
 <li><p><strong>component</strong> – Component index </p></li>
@@ -268,7 +276,7 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface18get_num_aux_fieldsEv"></span><span id="_CPPv2NK8godzilla18FVProblemInterface18get_num_aux_fieldsEv"></span><span id="godzilla::FVProblemInterface::get_num_aux_fieldsC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a0a0605cfa9f6705ca814ea8c85594295"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_aux_fields</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface18get_num_aux_fieldsEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get number of auxiliary fields. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of auxiliary fields </p>
 </dd>
 </dl>
@@ -279,7 +287,7 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface19get_aux_field_namesEv"></span><span id="_CPPv2NK8godzilla18FVProblemInterface19get_aux_field_namesEv"></span><span id="godzilla::FVProblemInterface::get_aux_field_namesC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1aecec97d129668d360bb9f98888a32e8a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_field_names</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface19get_aux_field_namesEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get all auxiliary field names. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All auxiliary field names </p>
 </dd>
 </dl>
@@ -290,10 +298,10 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface18get_aux_field_nameE3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface18get_aux_field_nameE3Int"></span><span id="godzilla::FVProblemInterface::get_aux_field_name__IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a3726be8625caec92bc6ec788ab3652b4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_field_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface18get_aux_field_nameE3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get auxiliary field name. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fid</strong> – Auxiliary field ID </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Auxiliary field name </p>
 </dd>
 </dl>
@@ -304,10 +312,10 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface28get_aux_field_num_componentsE3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface28get_aux_field_num_componentsE3Int"></span><span id="godzilla::FVProblemInterface::get_aux_field_num_components__IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a2c204c4a91d45e42be8b4f6094271796"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_field_num_components</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface28get_aux_field_num_componentsE3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get number of auxiliary field components. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fid</strong> – Auxiliary field ID </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Number of components </p>
 </dd>
 </dl>
@@ -318,10 +326,10 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface16get_aux_field_idERKNSt6stringE"></span><span id="_CPPv2NK8godzilla18FVProblemInterface16get_aux_field_idERKNSt6stringE"></span><span id="godzilla::FVProblemInterface::get_aux_field_id__ssCRC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1afdbbd62e709d65df6be5d21e58d802e1"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_field_id</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface16get_aux_field_idERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get auxiliary field ID. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> – Auxiliary field name </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Auxiliary field ID </p>
 </dd>
 </dl>
@@ -332,10 +340,10 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface19has_aux_field_by_idE3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface19has_aux_field_by_idE3Int"></span><span id="godzilla::FVProblemInterface::has_aux_field_by_id__IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1aef81ba703fe50b316002e177e6d1214d"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_aux_field_by_id</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface19has_aux_field_by_idE3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Do we have auxiliary field with specified ID. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fid</strong> – The ID of the auxiliary field </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the auxiliary field exists, otherwise False </p>
 </dd>
 </dl>
@@ -346,10 +354,10 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface21has_aux_field_by_nameERKNSt6stringE"></span><span id="_CPPv2NK8godzilla18FVProblemInterface21has_aux_field_by_nameERKNSt6stringE"></span><span id="godzilla::FVProblemInterface::has_aux_field_by_name__ssCRC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1acdca38a9a73e9d422e4bb22075ff6c52"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_aux_field_by_name</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface21has_aux_field_by_nameERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Do we have auxiliary field with specified name. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>name</strong> – The name of the auxiliary field </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if the auxiliary field exists, otherwise False </p>
 </dd>
 </dl>
@@ -360,10 +368,10 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface19get_aux_field_orderE3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface19get_aux_field_orderE3Int"></span><span id="godzilla::FVProblemInterface::get_aux_field_order__IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a6c65599cedd967f94d80a9b9eed0e2b5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_field_order</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface19get_aux_field_orderE3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get auxiliary field order. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fid</strong> – Auxiliary field ID </p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Auxiliary field order </p>
 </dd>
 </dl>
@@ -374,13 +382,13 @@
 <span id="_CPPv3NK8godzilla18FVProblemInterface28get_aux_field_component_nameE3Int3Int"></span><span id="_CPPv2NK8godzilla18FVProblemInterface28get_aux_field_component_nameE3Int3Int"></span><span id="godzilla::FVProblemInterface::get_aux_field_component_name__Int.IntC"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1ae0223ccd4ba3a3687b627912016ea8e0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_field_component_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">component</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla18FVProblemInterface28get_aux_field_component_nameE3Int3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get component name of an auxiliary field. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fid</strong> – Auxiliary field ID </p></li>
 <li><p><strong>component</strong> – Component index </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Component name </p>
 </dd>
 </dl>
@@ -391,7 +399,7 @@
 <span id="_CPPv3N8godzilla18FVProblemInterface28set_aux_field_component_nameE3Int3IntRKNSt6stringE"></span><span id="_CPPv2N8godzilla18FVProblemInterface28set_aux_field_component_nameE3Int3IntRKNSt6stringE"></span><span id="godzilla::FVProblemInterface::set_aux_field_component_name__Int.Int.ssCR"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1ad07eb37359ffa4bed93a39e93d8d5f51"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_aux_field_component_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">fid</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">component</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterface28set_aux_field_component_nameE3Int3IntRKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set the name of a component of an auxiliary field variable. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fid</strong> – Field ID </p></li>
 <li><p><strong>component</strong> – Component index </p></li>
@@ -406,7 +414,7 @@
 <span id="_CPPv3N8godzilla18FVProblemInterface29get_aux_solution_vector_localEv"></span><span id="_CPPv2N8godzilla18FVProblemInterface29get_aux_solution_vector_localEv"></span><span id="godzilla::FVProblemInterface::get_aux_solution_vector_local"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1ad922041d782600bdb525331d6b2f4bc7"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_aux_solution_vector_local</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterface29get_aux_solution_vector_localEv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get local auxiliary solution vector. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Local auxiliary solution vector </p>
 </dd>
 </dl>
@@ -417,7 +425,7 @@
 <span id="_CPPv3N8godzilla18FVProblemInterface9add_fieldE3IntRKNSt6stringE3Int"></span><span id="_CPPv2N8godzilla18FVProblemInterface9add_fieldE3IntRKNSt6stringE3Int"></span><span id="godzilla::FVProblemInterface::add_field__Int.ssCR.Int"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a53ad495e8ff8036ec3f777742a9b5384"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_field</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterface9add_fieldE3IntRKNSt6stringE3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Adds a volumetric field. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> – The field ID </p></li>
 <li><p><strong>name</strong> – The name of the field </p></li>
@@ -433,14 +441,14 @@
 <span id="_CPPv3N8godzilla18FVProblemInterface10add_aux_feERKNSt6stringE3Int3Int"></span><span id="_CPPv2N8godzilla18FVProblemInterface10add_aux_feERKNSt6stringE3Int3Int"></span><span id="godzilla::FVProblemInterface::add_aux_fe__ssCR.Int.Int"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1a96604ac53a0222857c96642524ec0613"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_aux_fe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterface10add_aux_feERKNSt6stringE3Int3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Adds a volumetric auxiliary field. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> – The name of the field </p></li>
 <li><p><strong>nc</strong> – The number of components </p></li>
 <li><p><strong>k</strong> – The degree k of the space </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>ID of the new field </p>
 </dd>
 </dl>
@@ -451,7 +459,7 @@
 <span id="_CPPv3N8godzilla18FVProblemInterface10set_aux_feE3IntRKNSt6stringE3Int3Int"></span><span id="_CPPv2N8godzilla18FVProblemInterface10set_aux_feE3IntRKNSt6stringE3Int3Int"></span><span id="godzilla::FVProblemInterface::set_aux_fe__Int.ssCR.Int.Int"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1adad6379041fa721bb232c580bd119f94"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_aux_fe</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterface10set_aux_feE3IntRKNSt6stringE3Int3Int" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Set a volumetric auxiliary field. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> – The field ID </p></li>
 <li><p><strong>name</strong> – The name of the field </p></li>

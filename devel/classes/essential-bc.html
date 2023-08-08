@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EssentialBC &mdash; godzilla  documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/tabs.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -25,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -108,8 +116,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>EssentialBC</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">EssentialBC</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -119,10 +127,10 @@
            <div itemprop="articleBody">
              
   <section id="essentialbc">
-<h1>EssentialBC<a class="headerlink" href="#essentialbc" title="Permalink to this headline"></a></h1>
+<h1>EssentialBC<a class="headerlink" href="#essentialbc" title="Permalink to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBCE">
-<span id="_CPPv3N8godzilla11EssentialBCE"></span><span id="_CPPv2N8godzilla11EssentialBCE"></span><span id="godzilla::EssentialBC"></span><span class="target" id="classgodzilla_1_1_essential_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">EssentialBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="boundary-condition.html#_CPPv4N8godzilla17BoundaryConditionE" title="godzilla::BoundaryCondition"><span class="n"><span class="pre">BoundaryCondition</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBCE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBCE"></span><span id="_CPPv2N8godzilla11EssentialBCE"></span><span id="godzilla::EssentialBC"></span><span class="target" id="classgodzilla_1_1_essential_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EssentialBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="boundary-condition.html#_CPPv4N8godzilla17BoundaryConditionE" title="godzilla::BoundaryCondition"><span class="n"><span class="pre">BoundaryCondition</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBCE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Essential boundary condition. </p>
 <p>Subclassed by <a class="reference internal" href="dirichlet-bc.html#classgodzilla_1_1_dirichlet_b_c"><span class="std std-ref">godzilla::DirichletBC</span></a></p>
 <div class="breathe-sectiondef docutils container">
@@ -138,7 +146,7 @@
 <span class="target" id="classgodzilla_1_1_essential_b_c_1a1af9b526fc25c765c1ab71f05c5d03dc"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Int</span> <span class="pre">get_field_id</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
 <dd><p>Get the ID of the field this boundary condition operates on. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ID of the field </p>
 </dd>
 </dl>
@@ -146,10 +154,10 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_essential_b_c_1a4e1af8ce2d24424b7880d569a4d6d248"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">std::vector&lt;</span> <span class="pre">Int</span> <span class="pre">&gt;</span> <span class="pre">&amp;</span> <span class="pre">get_components</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">=0</span></span></dt>
+<span class="target" id="classgodzilla_1_1_essential_b_c_1a50f408e55e16bc0f7b17dc81995c8cd8"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">std::vector&lt;</span> <span class="pre">Int</span> <span class="pre">&gt;</span> <span class="pre">&amp;</span> <span class="pre">get_components</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">=0</span></span></dt>
 <dd><p>Get the component numbers this boundary condition is constraining. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Vector of component numbers </p>
 </dd>
 </dl>
@@ -160,7 +168,7 @@
 <span id="_CPPv3N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1abdea4ab52460f90374cb788bee2587d5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Evaluate the boundary condition. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dim</strong> – The spatial dimension </p></li>
 <li><p><strong>time</strong> – The time at which to sample </p></li>
@@ -177,7 +185,7 @@
 <span id="_CPPv3N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate_t__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1ac262d3fa48d58dd59ed971ec7cf31ad1"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Evaluate time derivative of the boundary condition. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dim</strong> – The spatial dimension </p></li>
 <li><p><strong>time</strong> – The time at which to sample </p></li>
