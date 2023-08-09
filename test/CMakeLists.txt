@@ -7,7 +7,7 @@ add_subdirectory(src)
 
 add_test(
     NAME godzilla-test
-    COMMAND ${PROJECT_NAME} --gtest_death_test_style=threadsafe
+    COMMAND ${PROJECT_NAME}
 )
 if(GODZILLA_CODE_COVERAGE)
     set_tests_properties(
@@ -21,7 +21,7 @@ if (GODZILLA_WITH_MPI)
 
 add_test(
     NAME par-godzilla-test
-    COMMAND mpirun -np 4 $<TARGET_FILE:par-godzilla-test> --gtest_death_test_style=threadsafe
+    COMMAND mpirun -np 4 $<TARGET_FILE:par-godzilla-test>
 )
 set_property(TEST par-godzilla-test PROPERTY PROCESSORS 4)
 set_property(TEST par-godzilla-test PROPERTY PROCESSOR_AFFINITY TRUE)
