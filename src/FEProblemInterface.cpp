@@ -853,13 +853,13 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     if (ds_aux) {
         PETSC_CHECK(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
         PETSC_CHECK(PetscDSGetTabulation(ds_aux, &T_aux));
-        PetscCheckFalse(
-            T[0]->Np != T_aux[0]->Np,
-            PETSC_COMM_SELF,
-            PETSC_ERR_ARG_WRONG,
-            "Number of tabulation points %D != %D number of auxiliary tabulation points",
-            T[0]->Np,
-            T_aux[0]->Np);
+        PetscCheck(T[0]->Np == T_aux[0]->Np,
+                   PETSC_COMM_SELF,
+                   PETSC_ERR_ARG_WRONG,
+                   "Number of tabulation points %" PetscInt_FMT " != %" PetscInt_FMT
+                   " number of auxiliary tabulation points",
+                   T[0]->Np,
+                   T_aux[0]->Np);
     }
 
     // FIXME: quad should be a member variable
@@ -868,19 +868,19 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     Int q_dim, q_n_comp, q_n_pts;
     const Real *q_points, *q_weights;
     PETSC_CHECK(PetscQuadratureGetData(quad, &q_dim, &q_n_comp, &q_n_pts, &q_points, &q_weights));
-    PetscCheckFalse(q_n_comp != 1,
-                    PETSC_COMM_SELF,
-                    PETSC_ERR_SUP,
-                    "Only supports scalar quadrature, not %D components",
-                    q_n_comp);
+    PetscCheck(q_n_comp == 1,
+               PETSC_COMM_SELF,
+               PETSC_ERR_SUP,
+               "Only supports scalar quadrature, not %" PetscInt_FMT " components",
+               q_n_comp);
 
     Int dim_embed = cell_geom->dimEmbed;
-    PetscCheckFalse(cell_geom->dim != q_dim,
-                    PETSC_COMM_SELF,
-                    PETSC_ERR_ARG_INCOMP,
-                    "FEGeom dim %D != %D quadrature dim",
-                    cell_geom->dim,
-                    q_dim);
+    PetscCheck(cell_geom->dim == q_dim,
+               PETSC_COMM_SELF,
+               PETSC_ERR_ARG_INCOMP,
+               "FEGeom dim %" PetscInt_FMT " != %" PetscInt_FMT " quadrature dim",
+               cell_geom->dim,
+               q_dim);
 
     Int n_fields = get_num_fields();
     Int n_fields_aux = get_num_aux_fields();
@@ -1004,13 +1004,13 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
         else
             PETSC_CHECK(PetscDSGetFaceTabulation(ds_aux, &T_face_aux));
 
-        PetscCheckFalse(
-            T_face[0]->Np != T_face_aux[0]->Np,
-            PETSC_COMM_SELF,
-            PETSC_ERR_ARG_WRONG,
-            "Number of tabulation points %D != %D number of auxiliary tabulation points",
-            T_face[0]->Np,
-            T_face_aux[0]->Np);
+        PetscCheck(T_face[0]->Np == T_face_aux[0]->Np,
+                   PETSC_COMM_SELF,
+                   PETSC_ERR_ARG_WRONG,
+                   "Number of tabulation points %" PetscInt_FMT " != %" PetscInt_FMT
+                   " number of auxiliary tabulation points",
+                   T_face[0]->Np,
+                   T_face_aux[0]->Np);
     }
 
     Int n_comp_i = T_face[field]->Nc;
@@ -1021,22 +1021,22 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
     Int q_dim, q_n_comp, q_n_pts;
     const Real *q_points, *q_weights;
     PETSC_CHECK(PetscQuadratureGetData(quad, &q_dim, &q_n_comp, &q_n_pts, &q_points, &q_weights));
-    PetscCheckFalse(q_n_comp != 1,
-                    PETSC_COMM_SELF,
-                    PETSC_ERR_SUP,
-                    "Only supports scalar quadrature, not %D components",
-                    q_n_comp);
+    PetscCheck(q_n_comp == 1,
+               PETSC_COMM_SELF,
+               PETSC_ERR_SUP,
+               "Only supports scalar quadrature, not %" PetscInt_FMT " components",
+               q_n_comp);
 
     Int dim_embed = face_geom->dimEmbed;
     /* TODO FIX THIS */
     face_geom->dim = this->asmbl.dim - 1;
 
-    PetscCheckFalse(face_geom->dim != q_dim,
-                    PETSC_COMM_SELF,
-                    PETSC_ERR_ARG_INCOMP,
-                    "FEGeom dim %D != %D quadrature dim",
-                    face_geom->dim,
-                    q_dim);
+    PetscCheck(face_geom->dim == q_dim,
+               PETSC_COMM_SELF,
+               PETSC_ERR_ARG_INCOMP,
+               "FEGeom dim %" PetscInt_FMT " != %" PetscInt_FMT " quadrature dim",
+               face_geom->dim,
+               q_dim);
 
     Int n_fields = get_num_fields();
     Int n_fields_aux = get_num_aux_fields();
@@ -1187,13 +1187,13 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     if (ds_aux) {
         PETSC_CHECK(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
         PETSC_CHECK(PetscDSGetTabulation(ds_aux, &T_aux));
-        PetscCheckFalse(
-            T[0]->Np != T_aux[0]->Np,
-            PETSC_COMM_SELF,
-            PETSC_ERR_ARG_WRONG,
-            "Number of tabulation points %D != %D number of auxiliary tabulation points",
-            T[0]->Np,
-            T_aux[0]->Np);
+        PetscCheck(T[0]->Np == T_aux[0]->Np,
+                   PETSC_COMM_SELF,
+                   PETSC_ERR_ARG_WRONG,
+                   "Number of tabulation points %" PetscInt_FMT " != %" PetscInt_FMT
+                   " number of auxiliary tabulation points",
+                   T[0]->Np,
+                   T_aux[0]->Np);
     }
 
     Int n_pts = cell_geom->numPoints;
@@ -1212,11 +1212,11 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     const Real *q_points, *q_weights;
     PETSC_CHECK(
         PetscQuadratureGetData(quad, nullptr, &q_n_comp, &q_n_points, &q_points, &q_weights));
-    PetscCheckFalse(q_n_comp != 1,
-                    PETSC_COMM_SELF,
-                    PETSC_ERR_SUP,
-                    "Only supports scalar quadrature, not %D components",
-                    q_n_comp);
+    PetscCheck(q_n_comp == 1,
+               PETSC_COMM_SELF,
+               PETSC_ERR_SUP,
+               "Only supports scalar quadrature, not %" PetscInt_FMT " components",
+               q_n_comp);
 
     // Offset into elem_mat[] for element e
     Int e_offset = 0;
@@ -1417,11 +1417,11 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     const Real *q_points, *q_weights;
     PETSC_CHECK(
         PetscQuadratureGetData(quad, nullptr, &q_n_comp, &q_n_points, &q_points, &q_weights));
-    PetscCheckFalse(q_n_comp != 1,
-                    PETSC_COMM_SELF,
-                    PETSC_ERR_SUP,
-                    "Only supports scalar quadrature, not %D components",
-                    q_n_comp);
+    PetscCheck(q_n_comp == 1,
+               PETSC_COMM_SELF,
+               PETSC_ERR_SUP,
+               "Only supports scalar quadrature, not %" PetscInt_FMT " components",
+               q_n_comp);
 
     // Offset into elem_mat[] for element e
     Int e_offset = 0;

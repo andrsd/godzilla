@@ -43,7 +43,7 @@ jobs:
             breathe \
             sphinx-tabs \
             fmt==9.1.0 \
-            petsc==3.17.5 \
+            petsc==3.18.6 \
             yaml-cpp==0.7.0 \
             exodusIIcpp==1.6
 

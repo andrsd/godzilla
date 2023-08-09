@@ -80,7 +80,11 @@ TEST(PerfLogTest, stage)
     }
 
     PerfLog::Stage stage("stage1");
+    #if PETSC_VERSION_GE(3, 18, 0)
+    EXPECT_EQ(stage.get_id(), 2);
+    #else
     EXPECT_EQ(stage.get_id(), 1);
+    #endif
 
     PerfLog::EventInfo info1 = PerfLog::get_event_info(event_name, stage_name);
     EXPECT_DOUBLE_EQ(info1.get_flops(), 3.);
