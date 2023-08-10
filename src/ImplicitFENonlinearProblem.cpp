@@ -221,7 +221,11 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
     for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
+#if PETSC_VERSION_GE(3, 19, 0)
+        PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds, nullptr));
+#else
         PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
+#endif
 
         for (auto & res_key : this->wf->get_residual_keys()) {
             IndexSet cells;
@@ -265,7 +269,11 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
     for (Int s = 0; s < n_ds; ++s) {
         PetscDS ds;
         DMLabel label;
+#if PETSC_VERSION_GE(3, 19, 0)
+        PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds, nullptr));
+#else
         PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
+#endif
 
         if (s == 0)
             Jp.zero();
