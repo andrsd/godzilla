@@ -48,7 +48,6 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     x.restore_array_read(xx);
 
     auto lx = prob->get_solution_vector_local();
-    lx.view();
     auto lxx = lx.get_array_read();
     EXPECT_NEAR(lxx[0], 0., 1e-7);
     EXPECT_NEAR(lxx[1], 0.5, 1e-7);
