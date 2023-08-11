@@ -436,7 +436,7 @@ ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
             if (comp_name.length() == 0)
                 s = fmt::sprintf("%s_%d", name, c);
             else
-                s = fmt::sprintf("%s_%s", name, comp_name);
+                s = fmt::sprintf("%s", comp_name);
             var_names.push_back(s);
         }
     }
@@ -457,7 +457,7 @@ ExodusIIOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
             if (comp_name.length() == 0)
                 s = fmt::sprintf("%s_%d", name, c);
             else
-                s = fmt::sprintf("%s_%s", name, comp_name);
+                s = fmt::sprintf("%s", comp_name);
             var_names.push_back(s);
         }
     }

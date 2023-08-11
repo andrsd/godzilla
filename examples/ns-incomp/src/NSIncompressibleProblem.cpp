@@ -277,7 +277,7 @@ void
 NSIncompressibleProblem::set_up_fields()
 {
     _F_;
-    const char * comp_name[] = { "x", "y", "z" };
+    const char * comp_name[] = { "velocity_x", "velocity_y", "velocity_z" };
 
     PetscInt dim = this->get_dimension();
     set_fe(velocity_id, "velocity", dim, 2);
