@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "Factory.h"
 #include "App.h"
-#include "ConstantIC.h"
+#include "ConstantInitialCondition.h"
 
 using namespace godzilla;
 
@@ -10,10 +10,10 @@ TEST(ConstantICTest, api)
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app(comm, "test");
 
-    Parameters params = ConstantIC::parameters();
+    Parameters params = ConstantInitialCondition::parameters();
     params.set<const App *>("_app") = &app;
     params.set<std::vector<Real>>("value") = { 3, 4, 5 };
-    ConstantIC obj(params);
+    ConstantInitialCondition obj(params);
 
     EXPECT_EQ(obj.get_field_id(), -1);
     EXPECT_EQ(obj.get_num_components(), 3);

@@ -6,5 +6,5 @@ problem:
   str: "input_str"
 ics:
   ic:
-    type: ConstantIC
+    type: ConstantInitialCondition
     value: 1.0

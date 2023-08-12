@@ -20,7 +20,7 @@ problem:
 
 ics:
   all:
-    type: ConstantIC
+    type: ConstantInitialCondition
     field: 'u'
     value: 0
 

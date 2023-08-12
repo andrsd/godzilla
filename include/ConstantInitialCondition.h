@@ -11,9 +11,9 @@ namespace godzilla {
 /// Use to set the initial condition of a field to constant values
 /// Note that if the field has multiple components, you can provide a single
 /// value for each component
-class ConstantIC : public InitialCondition {
+class ConstantInitialCondition : public InitialCondition {
 public:
-    explicit ConstantIC(const Parameters & params);
+    explicit ConstantInitialCondition(const Parameters & params);
 
     NO_DISCARD Int get_num_components() const override;
 

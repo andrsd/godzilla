@@ -9,7 +9,7 @@ problem:
   type: GTestFENonlinearProblem
 ics:
   all:
-    type: ConstantIC
+    type: ConstantInitialCondition
     value: [0.1]
 bcs:
   all:

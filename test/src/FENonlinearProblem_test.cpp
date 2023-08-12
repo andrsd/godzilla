@@ -7,7 +7,7 @@
 #include "LineMesh.h"
 #include "UnstructuredMesh.h"
 #include "InitialCondition.h"
-#include "ConstantIC.h"
+#include "ConstantInitialCondition.h"
 #include "BoundaryCondition.h"
 #include "petscvec.h"
 
@@ -147,11 +147,11 @@ TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 
 TEST_F(FENonlinearProblemTest, set_up_initial_guess)
 {
-    Parameters ic_pars = ConstantIC::parameters();
+    Parameters ic_pars = ConstantInitialCondition::parameters();
     ic_pars.set<const App *>("_app") = app;
     ic_pars.set<DiscreteProblemInterface *>("_dpi") = prob;
     ic_pars.set<std::vector<Real>>("value") = { 0 };
-    ConstantIC ic(ic_pars);
+    ConstantInitialCondition ic(ic_pars);
     prob->add_initial_condition(&ic);
 
     mesh->create();
@@ -181,7 +181,7 @@ TEST_F(FENonlinearProblemTest, solve)
 {
     InitialCondition * ic = nullptr;
     {
-        const std::string class_name = "ConstantIC";
+        const std::string class_name = "ConstantInitialCondition";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<Real>>("value") = { 0.1 };
@@ -291,7 +291,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
         prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
     }
     {
-        const std::string class_name = "ConstantIC";
+        const std::string class_name = "ConstantInitialCondition";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::string>("field") = "u";
@@ -299,7 +299,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
         auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
         prob->add_initial_condition(ic);
     }
-    const std::string class_name = "ConstantIC";
+    const std::string class_name = "ConstantInitialCondition";
     Parameters * params = Factory::get_parameters(class_name);
     params->set<DiscreteProblemInterface *>("_dpi") = prob;
     params->set<std::string>("field") = "u";
@@ -349,7 +349,7 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     }
 
     {
-        const std::string class_name = "ConstantIC";
+        const std::string class_name = "ConstantInitialCondition";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<Real>>("value") = { 0.1 };
