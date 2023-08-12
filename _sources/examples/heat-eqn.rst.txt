@@ -24,7 +24,7 @@ Input file:
 
    ics:
      all:
-       type: ConstantIC
+       type: ConstantInitialCondition
        value: [ 300 ]
 
    bcs:
