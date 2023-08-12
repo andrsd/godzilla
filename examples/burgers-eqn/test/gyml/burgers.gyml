@@ -13,7 +13,7 @@ problem:
 
 ics:
   all:
-    type: ConstantIC
+    type: ConstantInitialCondition
     value: 0
 
 bcs:

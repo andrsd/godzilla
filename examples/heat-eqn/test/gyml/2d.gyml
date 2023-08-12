@@ -11,7 +11,7 @@ problem:
 
 ics:
   all:
-    type: ConstantIC
+    type: ConstantInitialCondition
     field: 'temp'
     value: [ 300 ]
 

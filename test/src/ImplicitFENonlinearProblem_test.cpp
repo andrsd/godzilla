@@ -17,7 +17,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     this->app->problem = prob;
 
     {
-        const std::string class_name = "ConstantIC";
+        const std::string class_name = "ConstantInitialCondition";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<Real>>("value") = { 0 };

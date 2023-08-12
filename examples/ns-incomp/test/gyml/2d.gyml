@@ -19,12 +19,12 @@ auxs:
 
 ics:
   velocity:
-    type: ConstantIC
+    type: ConstantInitialCondition
     field: 'velocity'
     value: [ 0, 0 ]
 
   pressure:
-    type: ConstantIC
+    type: ConstantInitialCondition
     field: 'pressure'
     value: [ 0.1 ]
 

@@ -1,13 +1,13 @@
 #include "Godzilla.h"
-#include "ConstantIC.h"
+#include "ConstantInitialCondition.h"
 #include "CallStack.h"
 
 namespace godzilla {
 
-REGISTER_OBJECT(ConstantIC);
+REGISTER_OBJECT(ConstantInitialCondition);
 
 Parameters
-ConstantIC::parameters()
+ConstantInitialCondition::parameters()
 {
     Parameters params = InitialCondition::parameters();
     params.add_required_param<std::vector<Real>>("value",
@@ -15,7 +15,7 @@ ConstantIC::parameters()
     return params;
 }
 
-ConstantIC::ConstantIC(const Parameters & params) :
+ConstantInitialCondition::ConstantInitialCondition(const Parameters & params) :
     InitialCondition(params),
     values(get_param<std::vector<Real>>("value"))
 {
@@ -23,14 +23,14 @@ ConstantIC::ConstantIC(const Parameters & params) :
 }
 
 Int
-ConstantIC::get_num_components() const
+ConstantInitialCondition::get_num_components() const
 {
     _F_;
     return (Int) this->values.size();
 }
 
 void
-ConstantIC::evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[])
+ConstantInitialCondition::evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[])
 {
     _F_;
     for (Int i = 0; i < Nc; i++)

@@ -11,7 +11,7 @@ add_library(${PROJECT_NAME}
         BoxMesh.cpp
         CallStack.cpp
         ConstantAuxiliaryField.cpp
-        ConstantIC.cpp
+        ConstantInitialCondition.cpp
         CSVOutput.cpp
         DependencyEvaluator.cpp
         DirichletBC.cpp
