@@ -147,7 +147,7 @@ TEST(NaturalBCTest, fe)
     Int field = bc.get_field_id();
     WeakForm * wf = prob.get_weak_form();
     auto label = mesh.get_label("left");
-    auto is = label.get_values();
+    auto is = label.get_value_index_set();
     is.get_indices();
     auto ids = is.to_std_vector();
 

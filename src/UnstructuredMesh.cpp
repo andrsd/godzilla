@@ -289,7 +289,7 @@ UnstructuredMesh::create_face_set_labels(const std::map<Int, std::string> & name
     Label fs_label = get_label("Face Sets");
     if (fs_label) {
         Int n_fs = fs_label.get_num_values();
-        IndexSet fs_ids = fs_label.get_values();
+        IndexSet fs_ids = fs_label.get_value_index_set();
         fs_ids.get_indices();
         for (Int i = 0; i < n_fs; i++) {
             Int id = fs_ids[i];

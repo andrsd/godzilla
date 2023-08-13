@@ -277,7 +277,7 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
     }
     else {
         auto label = this->unstr_mesh->get_label(region);
-        auto is = label.get_values();
+        auto is = label.get_value_index_set();
         is.get_indices();
         auto ids = is.to_std_vector();
         for (auto & val : ids) {

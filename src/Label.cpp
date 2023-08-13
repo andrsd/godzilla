@@ -78,7 +78,7 @@ Label::get_value(Int point) const
 }
 
 IndexSet
-Label::get_values() const
+Label::get_value_index_set() const
 {
     _F_;
     IS is;

@@ -349,7 +349,7 @@ DiscreteProblemInterface::add_boundary_essential(const std::string & name,
                                                  void * context)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto is = label.get_values();
+    auto is = label.get_value_index_set();
     is.get_indices();
     auto ids = is.to_std_vector();
 
@@ -375,7 +375,7 @@ DiscreteProblemInterface::add_boundary_natural(const std::string & name,
                                                void * context)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto is = label.get_values();
+    auto is = label.get_value_index_set();
     is.get_indices();
     auto ids = is.to_std_vector();
 
@@ -395,7 +395,7 @@ DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                                        void * context)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto is = label.get_values();
+    auto is = label.get_value_index_set();
     is.get_indices();
     auto ids = is.to_std_vector();
 

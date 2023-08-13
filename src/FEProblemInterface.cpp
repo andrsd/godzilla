@@ -532,7 +532,7 @@ FEProblemInterface::compute_label_aux_fields(DM dm,
         ctxs[fid] = aux->get_context();
     }
 
-    auto ids = label.get_values();
+    auto ids = label.get_value_index_set();
     ids.get_indices();
     PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
                                             this->problem->get_time(),
@@ -825,7 +825,7 @@ FEProblemInterface::add_residual_block(Int field_id,
     }
     else {
         auto label = this->unstr_mesh->get_label(region);
-        auto is = label.get_values();
+        auto is = label.get_value_index_set();
         is.get_indices();
         auto ids = is.to_std_vector();
         for (auto & val : ids) {
@@ -847,7 +847,7 @@ FEProblemInterface::add_boundary_residual_block(Int field_id,
     assert(!boundary.empty());
 
     auto label = this->unstr_mesh->get_label(boundary);
-    auto is = label.get_values();
+    auto is = label.get_value_index_set();
     is.get_indices();
     auto ids = is.to_std_vector();
     for (auto & val : ids) {
@@ -876,7 +876,7 @@ FEProblemInterface::add_jacobian_block(Int fid,
     }
     else {
         auto label = this->unstr_mesh->get_label(region);
-        auto is = label.get_values();
+        auto is = label.get_value_index_set();
         is.get_indices();
         auto ids = is.to_std_vector();
         for (auto & val : ids) {
@@ -908,7 +908,7 @@ FEProblemInterface::add_jacobian_preconditioner_block(Int fid,
     }
     else {
         auto label = this->unstr_mesh->get_label(region);
-        auto is = label.get_values();
+        auto is = label.get_value_index_set();
         is.get_indices();
         auto ids = is.to_std_vector();
         for (auto & val : ids) {
@@ -935,7 +935,7 @@ FEProblemInterface::add_boundary_jacobian_block(Int fid,
     assert(!region.empty());
 
     auto label = this->unstr_mesh->get_label(region);
-    auto is = label.get_values();
+    auto is = label.get_value_index_set();
     is.get_indices();
     auto ids = is.to_std_vector();
     for (auto & val : ids) {

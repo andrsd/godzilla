@@ -13,7 +13,7 @@ namespace {
 IndexSet
 points_from_label(const Label & label)
 {
-    auto is = label.get_values();
+    auto is = label.get_value_index_set();
     is.get_indices();
     auto ids = is.to_std_vector();
     is.restore_indices();

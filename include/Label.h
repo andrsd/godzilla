@@ -55,7 +55,7 @@ public:
     /// Get an IndexSet of all values that the Label takes
     ///
     /// @return IndexSet with all label values
-    IndexSet get_values() const;
+    IndexSet get_value_index_set() const;
 
     void set_value(Int point, Int value);
 
