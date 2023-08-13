@@ -55,7 +55,12 @@ public:
     /// Get an IndexSet of all values that the Label takes
     ///
     /// @return IndexSet with all label values
-    IndexSet get_values() const;
+    IndexSet get_value_index_set() const;
+
+    /// Get all values that the `Label` takes
+    ///
+    /// @return `std::vector` with all label values
+    std::vector<Int> get_values() const;
 
     void set_value(Int point, Int value);
 

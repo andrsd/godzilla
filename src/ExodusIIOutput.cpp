@@ -293,7 +293,7 @@ ExodusIIOutput::write_elements()
         block_names.resize(n_cells_sets);
 
         auto cell_sets_label = this->mesh->get_label("Cell Sets");
-        auto cell_set_idx = cell_sets_label.get_values();
+        auto cell_set_idx = cell_sets_label.get_value_index_set();
         cell_set_idx.get_indices();
         for (Int i = 0; i < n_cells_sets; ++i) {
             auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);
@@ -338,7 +338,7 @@ ExodusIIOutput::write_node_sets()
 
     Int n_node_sets = this->mesh->get_num_vertex_sets();
     auto vertex_sets_label = this->mesh->get_label("Vertex Sets");
-    auto vertex_set_idx = vertex_sets_label.get_values();
+    auto vertex_set_idx = vertex_sets_label.get_value_index_set();
     vertex_set_idx.get_indices();
     for (Int i = 0; i < n_node_sets; ++i) {
         auto vertices = vertex_sets_label.get_stratum(vertex_set_idx[i]);
@@ -373,7 +373,7 @@ ExodusIIOutput::write_face_sets()
     Int n_side_sets = this->mesh->get_num_face_sets();
     fs_names.resize(n_side_sets);
 
-    auto face_set_idx = face_sets_label.get_values();
+    auto face_set_idx = face_sets_label.get_value_index_set();
     face_set_idx.get_indices();
     for (Int fs = 0; fs < n_side_sets; ++fs) {
         auto faces = face_sets_label.get_stratum(face_set_idx[fs]);
@@ -579,7 +579,7 @@ ExodusIIOutput::write_elem_variables()
     Int n_cells_sets = this->mesh->get_num_cell_sets();
     if (n_cells_sets > 1) {
         auto cell_sets_label = this->mesh->get_label("Cell Sets");
-        auto cell_set_idx = cell_sets_label.get_values();
+        auto cell_set_idx = cell_sets_label.get_value_index_set();
         cell_set_idx.get_indices();
         for (Int i = 0; i < n_cells_sets; ++i) {
             auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);

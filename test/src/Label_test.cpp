@@ -62,6 +62,23 @@ TEST(Label, get_num_values)
     l.destroy();
 }
 
+TEST(Label, get_values)
+{
+    TestApp app;
+    Label l;
+    l.create(app.get_comm(), "name");
+    l.set_value(0, 1001);
+    l.set_value(1, 1001);
+    l.set_value(2, 1002);
+    l.set_value(3, 1003);
+    l.set_value(4, 1003);
+
+    auto vals = l.get_values();
+    EXPECT_THAT(vals, UnorderedElementsAre(1001, 1002, 1003));
+
+    l.destroy();
+}
+
 TEST(Label, set_stratum)
 {
     TestApp app;

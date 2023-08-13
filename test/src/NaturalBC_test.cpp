@@ -147,9 +147,7 @@ TEST(NaturalBCTest, fe)
     Int field = bc.get_field_id();
     WeakForm * wf = prob.get_weak_form();
     auto label = mesh.get_label("left");
-    auto is = label.get_values();
-    is.get_indices();
-    auto ids = is.to_std_vector();
+    auto ids = label.get_values();
 
     const auto & f0 = wf->get(PETSC_WF_BDF0, label, ids[0], field, 0);
     EXPECT_EQ(f0.size(), 1);
@@ -158,9 +156,6 @@ TEST(NaturalBCTest, fe)
     const auto & g0 = wf->get(PETSC_WF_BDG0, label, ids[0], field, field, 0);
     EXPECT_EQ(g0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatG0 *>(g0[0]), nullptr);
-
-    is.restore_indices();
-    is.destroy();
 }
 
 TEST(NaturalBCTest, non_existing_field)

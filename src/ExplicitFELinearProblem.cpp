@@ -277,15 +277,11 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
     }
     else {
         auto label = this->unstr_mesh->get_label(region);
-        auto is = label.get_values();
-        is.get_indices();
-        auto ids = is.to_std_vector();
+        auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, label, val, part);
             add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, label, val, part);
         }
-        is.restore_indices();
-        is.destroy();
     }
 }
 

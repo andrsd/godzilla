@@ -349,10 +349,7 @@ DiscreteProblemInterface::add_boundary_essential(const std::string & name,
                                                  void * context)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto is = label.get_values();
-    is.get_indices();
-    auto ids = is.to_std_vector();
-
+    auto ids = label.get_values();
     add_boundary(DM_BC_ESSENTIAL,
                  name,
                  label,
@@ -362,9 +359,6 @@ DiscreteProblemInterface::add_boundary_essential(const std::string & name,
                  reinterpret_cast<void (*)()>(fn),
                  reinterpret_cast<void (*)()>(fn_t),
                  context);
-
-    is.restore_indices();
-    is.destroy();
 }
 
 void
@@ -375,14 +369,8 @@ DiscreteProblemInterface::add_boundary_natural(const std::string & name,
                                                void * context)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto is = label.get_values();
-    is.get_indices();
-    auto ids = is.to_std_vector();
-
+    auto ids = label.get_values();
     add_boundary(DM_BC_NATURAL, name, label, ids, field, components, nullptr, nullptr, context);
-
-    is.restore_indices();
-    is.destroy();
 }
 
 void
@@ -395,10 +383,7 @@ DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                                        void * context)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto is = label.get_values();
-    is.get_indices();
-    auto ids = is.to_std_vector();
-
+    auto ids = label.get_values();
     add_boundary(DM_BC_NATURAL_RIEMANN,
                  name,
                  label,
@@ -408,9 +393,6 @@ DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
                  reinterpret_cast<void (*)()>(fn),
                  reinterpret_cast<void (*)()>(fn_t),
                  context);
-
-    is.restore_indices();
-    is.destroy();
 }
 
 void

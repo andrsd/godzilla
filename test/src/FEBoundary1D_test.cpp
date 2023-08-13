@@ -13,12 +13,8 @@ namespace {
 IndexSet
 points_from_label(const Label & label)
 {
-    auto is = label.get_values();
-    is.get_indices();
-    auto ids = is.to_std_vector();
-    is.restore_indices();
-    is.destroy();
-
+    auto is = label.get_value_index_set();
+    auto ids = label.get_values();
     return label.get_stratum(ids[0]);
 }
 

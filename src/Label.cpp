@@ -78,12 +78,24 @@ Label::get_value(Int point) const
 }
 
 IndexSet
-Label::get_values() const
+Label::get_value_index_set() const
 {
     _F_;
     IS is;
     PETSC_CHECK(DMLabelGetValueIS(this->label, &is));
     return IndexSet(is);
+}
+
+std::vector<Int>
+Label::get_values() const
+{
+    _F_;
+    auto is = get_value_index_set();
+    is.get_indices();
+    auto values = is.to_std_vector();
+    is.restore_indices();
+    is.destroy();
+    return values;
 }
 
 void
