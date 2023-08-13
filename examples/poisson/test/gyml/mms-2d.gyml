@@ -22,24 +22,9 @@ ics:
     value: [ 0 ]
 
 bcs:
-  left:
+  all:
     type: DirichletBC
-    boundary: 'left'
-    value: [ 'x*x + y*y' ]
-
-  right:
-    type: DirichletBC
-    boundary: 'right'
-    value: [ 'x*x + y*y' ]
-
-  top:
-    type: DirichletBC
-    boundary: 'top'
-    value: [ 'x*x + y*y' ]
-
-  bottom:
-    type: DirichletBC
-    boundary: 'bottom'
+    boundary: [ 'left', 'right', 'top', 'bottom' ]
     value: [ 'x*x + y*y' ]
 
 output:

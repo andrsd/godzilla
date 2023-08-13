@@ -48,7 +48,7 @@ TEST(NaturalBCTest, api)
     Parameters params = NaturalBC::parameters();
     params.set<const App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    params.set<std::string>("boundary") = "left";
+    params.set<std::vector<std::string>>("boundary") = { "left" };
     MockNaturalBC bc(params);
 
     mesh.create();
@@ -91,23 +91,17 @@ class TestNaturalBC : public NaturalBC {
 public:
     explicit TestNaturalBC(const Parameters & params) : NaturalBC(params), comps({ 0 }) {}
 
-    virtual const std::vector<Int> &
-    get_components() const
+    const std::vector<Int> &
+    get_components() const override
     {
         return this->comps;
     }
 
-    virtual void
-    set_up_weak_form()
+    void
+    set_up_weak_form() override
     {
-        set_residual_block(new TestNatF0(this), nullptr);
-        set_jacobian_block(this->fid, new TestNatG0(this), nullptr, nullptr, nullptr);
-    }
-
-    WeakForm *
-    get_wf() const
-    {
-        return this->wf;
+        add_residual_block(new TestNatF0(this), nullptr);
+        add_jacobian_block(this->fid, new TestNatG0(this), nullptr, nullptr, nullptr);
     }
 
 protected:
@@ -136,7 +130,7 @@ TEST(NaturalBCTest, fe)
     bc_params.set<const App *>("_app") = &app;
     bc_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_params.set<std::string>("_name") = "bc1";
-    bc_params.set<std::string>("boundary") = "left";
+    bc_params.set<std::vector<std::string>>("boundary") = { "left" };
     bc_params.set<std::string>("field") = "u";
     TestNaturalBC bc(bc_params);
     prob.add_boundary_condition(&bc);
@@ -151,16 +145,22 @@ TEST(NaturalBCTest, fe)
     EXPECT_EQ(num_bd, 1);
     //
     Int field = bc.get_field_id();
-    WeakForm * wf = bc.get_wf();
-    Int id = bc.get_ids()[0];
-    Int part = 0;
-    const auto & f0 = wf->get(PETSC_WF_BDF0, bc.get_label(), id, field, part);
+    WeakForm * wf = prob.get_weak_form();
+    auto label = mesh.get_label("left");
+    auto is = label.get_values();
+    is.get_indices();
+    auto ids = is.to_std_vector();
+
+    const auto & f0 = wf->get(PETSC_WF_BDF0, label, ids[0], field, 0);
     EXPECT_EQ(f0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatF0 *>(f0[0]), nullptr);
 
-    const auto & g0 = wf->get(PETSC_WF_BDG0, bc.get_label(), id, field, field, part);
+    const auto & g0 = wf->get(PETSC_WF_BDG0, label, ids[0], field, field, 0);
     EXPECT_EQ(g0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatG0 *>(g0[0]), nullptr);
+
+    is.restore_indices();
+    is.destroy();
 }
 
 TEST(NaturalBCTest, non_existing_field)

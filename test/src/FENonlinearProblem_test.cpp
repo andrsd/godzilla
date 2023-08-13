@@ -189,12 +189,12 @@ TEST_F(FENonlinearProblemTest, solve)
         prob->add_initial_condition(ic);
     }
 
-    for (auto & bnd : { "left", "right" }) {
+    {
         const std::string class_name = "DirichletBC";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<const App *>("_app") = this->app;
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::string>("boundary") = bnd;
+        params->set<std::vector<std::string>>("boundary") = { "left", "right" };
         params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
         prob->add_boundary_condition(bc);
@@ -222,7 +222,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
         const std::string class_name = "DirichletBC";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::string>("boundary") = "marker";
+        params->set<std::vector<std::string>>("boundary") = { "marker" };
         params->set<std::vector<std::string>>("value") = { "x*x" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
         prob->add_boundary_condition(bc);
@@ -374,7 +374,7 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
         const std::string class_name = "DirichletBC";
         Parameters * params = Factory::get_parameters(class_name);
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::string>("boundary") = "asdf";
+        params->set<std::vector<std::string>>("boundary") = { "asdf" };
         params->set<std::vector<std::string>>("value") = { "0.1" };
         auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc1", params);
         prob->add_boundary_condition(bc);
@@ -393,7 +393,6 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 TEST_F(FENonlinearProblemTest, natural_riemann_bcs_not_supported)
 {
     Label label;
-    EXPECT_DEATH(
-        prob->add_boundary_natural_riemann("", label, {}, -1, {}, nullptr, nullptr, nullptr),
-        "\\[ERROR\\] Natural Riemann BCs are not supported for FE problems");
+    EXPECT_DEATH(prob->add_boundary_natural_riemann("", "", -1, {}, nullptr, nullptr, nullptr),
+                 "\\[ERROR\\] Natural Riemann BCs are not supported for FE problems");
 }

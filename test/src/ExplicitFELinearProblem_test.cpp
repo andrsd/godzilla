@@ -87,7 +87,7 @@ protected:
 void
 TestExplicitFELinearProblem::set_up_weak_form()
 {
-    set_residual_block(0, nullptr, new TestF1(this));
+    add_residual_block(0, nullptr, new TestF1(this));
 }
 
 } // namespace
@@ -180,7 +180,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     Parameters bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<const App *>("_app") = &app;
     bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_left_pars.set<std::string>("boundary") = "left";
+    bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
     bc_left_pars.set<std::vector<std::string>>("value") = { "1" };
     DirichletBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
@@ -188,7 +188,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     Parameters bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<const App *>("_app") = &app;
     bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_right_pars.set<std::string>("boundary") = "right";
+    bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };
     bc_right_pars.set<std::vector<std::string>>("value") = { "1" };
     DirichletBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);
@@ -240,7 +240,7 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     Parameters bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<const App *>("_app") = &app;
     bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_left_pars.set<std::string>("boundary") = "left";
+    bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
     bc_left_pars.set<std::vector<std::string>>("value") = { "1" };
     DirichletBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
@@ -248,7 +248,7 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     Parameters bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<const App *>("_app") = &app;
     bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_right_pars.set<std::string>("boundary") = "right";
+    bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };
     bc_right_pars.set<std::vector<std::string>>("value") = { "1" };
     DirichletBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);

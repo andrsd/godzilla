@@ -110,6 +110,6 @@ GTestImplicitFENonlinearProblem::set_up_fields()
 void
 GTestImplicitFENonlinearProblem::set_up_weak_form()
 {
-    set_residual_block(this->iu, new F0(this), new F1(this));
-    set_jacobian_block(this->iu, this->iu, new G0(this), nullptr, nullptr, new G3(this));
+    add_residual_block(this->iu, new F0(this), new F1(this));
+    add_jacobian_block(this->iu, this->iu, new G0(this), nullptr, nullptr, new G3(this));
 }

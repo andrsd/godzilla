@@ -14,16 +14,6 @@ public:
     void create() override;
     void set_up() override;
 
-    /// Get the label this boundary condition operates on
-    ///
-    /// @return The label
-    NO_DISCARD virtual const godzilla::Label & get_label() const;
-
-    /// Get the label values this boundary condition operates on
-    ///
-    /// @return The label values
-    NO_DISCARD virtual const std::vector<godzilla::Int> & get_ids() const;
-
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
@@ -45,10 +35,6 @@ public:
     evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) = 0;
 
 protected:
-    /// DMLabel associated with the boundary name this boundary condition acts on
-    godzilla::Label label;
-    /// IDs of the label
-    std::vector<godzilla::Int> ids;
     /// Field ID this boundary condition is attached to
     Int fid;
 

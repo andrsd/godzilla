@@ -5,6 +5,7 @@
 #include "petsc.h"
 
 using namespace godzilla;
+using namespace testing;
 
 namespace {
 
@@ -33,8 +34,8 @@ TEST_F(BoundaryConditionTest, api)
     params.set<const App *>("_app") = this->app;
     params.set<DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
-    params.set<std::string>("boundary") = "side1";
+    params.set<std::vector<std::string>>("boundary") = { "side1" };
     MockBoundaryCondition bc(params);
 
-    EXPECT_EQ(bc.get_boundary(), "side1");
+    EXPECT_THAT(bc.get_boundary(), ElementsAre("side1"));
 }

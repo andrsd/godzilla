@@ -3,7 +3,7 @@
 #include "App.h"
 #include "Problem.h"
 #include "DiscreteProblemInterface.h"
-#include "WeakForm.h"
+#include "FEProblemInterface.h"
 #include "BndResidualFunc.h"
 #include "BndJacobianFunc.h"
 
@@ -17,12 +17,12 @@ NaturalBC::parameters()
     return params;
 }
 
-NaturalBC::NaturalBC(const Parameters & params) : BoundaryCondition(params), fid(-1), wf(nullptr)
+NaturalBC::NaturalBC(const Parameters & params) :
+    BoundaryCondition(params),
+    fid(-1),
+    fepi(dynamic_cast<FEProblemInterface *>(this->dpi))
 {
     _F_;
-    auto fepi = dynamic_cast<const FEProblemInterface *>(this->dpi);
-    if (fepi)
-        this->wf = fepi->get_weak_form();
 }
 
 void
@@ -47,30 +47,6 @@ NaturalBC::create()
             log_error("Use the 'field' parameter to assign this boundary condition to an existing "
                       "field.");
     }
-
-    auto mesh = get_problem()->get_mesh();
-    if (mesh->has_label(this->boundary)) {
-        this->label = mesh->get_label(this->boundary);
-        auto is = this->label.get_values();
-        is.get_indices();
-        this->ids = is.to_std_vector();
-        is.restore_indices();
-        is.destroy();
-    }
-}
-
-const Label &
-NaturalBC::get_label() const
-{
-    _F_;
-    return this->label;
-}
-
-const std::vector<Int> &
-NaturalBC::get_ids() const
-{
-    _F_;
-    return this->ids;
 }
 
 Int
@@ -84,38 +60,28 @@ void
 NaturalBC::set_up()
 {
     _F_;
-    this->dpi->add_boundary_natural(get_name(),
-                                    this->label,
-                                    this->ids,
-                                    this->fid,
-                                    get_components(),
-                                    this);
+    for (auto & bnd : get_boundary())
+        this->dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components(), this);
 }
 
 void
-NaturalBC::set_residual_block(BndResidualFunc * f0, BndResidualFunc * f1)
+NaturalBC::add_residual_block(BndResidualFunc * f0, BndResidualFunc * f1)
 {
     _F_;
-    for (auto & id : this->ids) {
-        this->wf->add(PETSC_WF_BDF0, this->label, id, this->fid, 0, f0);
-        this->wf->add(PETSC_WF_BDF1, this->label, id, this->fid, 0, f1);
-    }
+    for (auto & bnd : get_boundary())
+        this->fepi->add_boundary_residual_block(this->fid, f0, f1, bnd);
 }
 
 void
-NaturalBC::set_jacobian_block(Int gid,
+NaturalBC::add_jacobian_block(Int gid,
                               BndJacobianFunc * g0,
                               BndJacobianFunc * g1,
                               BndJacobianFunc * g2,
                               BndJacobianFunc * g3)
 {
     _F_;
-    for (auto & id : this->ids) {
-        this->wf->add(PETSC_WF_BDG0, this->label, id, this->fid, gid, 0, g0);
-        this->wf->add(PETSC_WF_BDG1, this->label, id, this->fid, gid, 0, g1);
-        this->wf->add(PETSC_WF_BDG2, this->label, id, this->fid, gid, 0, g2);
-        this->wf->add(PETSC_WF_BDG3, this->label, id, this->fid, gid, 0, g3);
-    }
+    for (auto & bnd : get_boundary())
+        this->fepi->add_boundary_jacobian_block(this->fid, gid, g0, g1, g2, g3, bnd);
 }
 
 } // namespace godzilla

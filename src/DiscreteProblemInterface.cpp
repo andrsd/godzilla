@@ -236,14 +236,16 @@ DiscreteProblemInterface::set_up_boundary_conditions()
     /// TODO: refactor this into a method
     bool no_errors = true;
     for (auto & bc : this->bcs) {
-        const std::string & bnd_name = bc->get_boundary();
-        bool exists = this->unstr_mesh->has_face_set(bnd_name);
-        if (!exists) {
-            no_errors = false;
-            this->logger->error(
-                "Boundary condition '{}' is set on boundary '{}' which does not exist in the mesh.",
-                bc->get_name(),
-                bnd_name);
+        auto boundaries = bc->get_boundary();
+        for (auto & bnd_name : boundaries) {
+            bool exists = this->unstr_mesh->has_face_set(bnd_name);
+            if (!exists) {
+                no_errors = false;
+                this->logger->error("Boundary condition '{}' is set on boundary '{}' which does "
+                                    "not exist in the mesh.",
+                                    bc->get_name(),
+                                    bnd_name);
+            }
         }
     }
 
@@ -311,79 +313,104 @@ DiscreteProblemInterface::get_coordinates_local() const
 }
 
 void
+DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
+                                       const std::string & name,
+                                       const Label & label,
+                                       const std::vector<Int> & ids,
+                                       Int field,
+                                       const std::vector<Int> & components,
+                                       void (*bc_fn)(void),
+                                       void (*bc_fn_t)(void),
+                                       void * context)
+{
+    _F_;
+    PETSC_CHECK(PetscDSAddBoundary(this->ds,
+                                   type,
+                                   name.c_str(),
+                                   label,
+                                   ids.size(),
+                                   ids.data(),
+                                   field,
+                                   components.size(),
+                                   components.size() == 0 ? nullptr : components.data(),
+                                   bc_fn,
+                                   bc_fn_t,
+                                   context,
+                                   nullptr));
+}
+
+void
 DiscreteProblemInterface::add_boundary_essential(const std::string & name,
-                                                 const Label & label,
-                                                 const std::vector<Int> & ids,
+                                                 const std::string & boundary,
                                                  Int field,
                                                  const std::vector<Int> & components,
                                                  PetscFunc * fn,
                                                  PetscFunc * fn_t,
                                                  void * context)
 {
-    _F_;
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_ESSENTIAL,
-                                   name.c_str(),
-                                   label,
-                                   ids.size(),
-                                   ids.data(),
-                                   field,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   reinterpret_cast<void (*)()>(fn),
-                                   reinterpret_cast<void (*)()>(fn_t),
-                                   context,
-                                   nullptr));
+    auto label = this->unstr_mesh->get_face_set_label(boundary);
+    auto is = label.get_values();
+    is.get_indices();
+    auto ids = is.to_std_vector();
+
+    add_boundary(DM_BC_ESSENTIAL,
+                 name,
+                 label,
+                 ids,
+                 field,
+                 components,
+                 reinterpret_cast<void (*)()>(fn),
+                 reinterpret_cast<void (*)()>(fn_t),
+                 context);
+
+    is.restore_indices();
+    is.destroy();
 }
 
 void
 DiscreteProblemInterface::add_boundary_natural(const std::string & name,
-                                               const Label & label,
-                                               const std::vector<Int> & ids,
+                                               const std::string & boundary,
                                                Int field,
                                                const std::vector<Int> & components,
                                                void * context)
 {
-    _F_;
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_NATURAL,
-                                   name.c_str(),
-                                   label,
-                                   ids.size(),
-                                   ids.data(),
-                                   field,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   nullptr,
-                                   nullptr,
-                                   context,
-                                   nullptr));
+    auto label = this->unstr_mesh->get_face_set_label(boundary);
+    auto is = label.get_values();
+    is.get_indices();
+    auto ids = is.to_std_vector();
+
+    add_boundary(DM_BC_NATURAL, name, label, ids, field, components, nullptr, nullptr, context);
+
+    is.restore_indices();
+    is.destroy();
 }
 
 void
 DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
-                                                       const Label & label,
-                                                       const std::vector<Int> & ids,
+                                                       const std::string & boundary,
                                                        Int field,
                                                        const std::vector<Int> & components,
                                                        PetscNaturalRiemannBCFunc * fn,
                                                        PetscNaturalRiemannBCFunc * fn_t,
                                                        void * context)
 {
-    _F_;
-    PETSC_CHECK(PetscDSAddBoundary(this->ds,
-                                   DM_BC_NATURAL_RIEMANN,
-                                   name.c_str(),
-                                   label,
-                                   ids.size(),
-                                   ids.data(),
-                                   field,
-                                   components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
-                                   reinterpret_cast<void (*)()>(fn),
-                                   reinterpret_cast<void (*)()>(fn_t),
-                                   context,
-                                   nullptr));
+    auto label = this->unstr_mesh->get_face_set_label(boundary);
+    auto is = label.get_values();
+    is.get_indices();
+    auto ids = is.to_std_vector();
+
+    add_boundary(DM_BC_NATURAL_RIEMANN,
+                 name,
+                 label,
+                 ids,
+                 field,
+                 components,
+                 reinterpret_cast<void (*)()>(fn),
+                 reinterpret_cast<void (*)()>(fn_t),
+                 context);
+
+    is.restore_indices();
+    is.destroy();
 }
 
 void

@@ -98,7 +98,7 @@ ExplicitFELinearProblem::init()
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
     for (Int i = 0; i < get_num_fields(); i++)
-        set_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
+        add_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
 
     for (auto & f : this->fields) {
         Int fid = f.second.id;
@@ -262,17 +262,31 @@ ExplicitFELinearProblem::post_step()
 }
 
 void
-ExplicitFELinearProblem::set_residual_block(Int field_id,
+ExplicitFELinearProblem::add_residual_block(Int field_id,
                                             ResidualFunc * f0,
                                             ResidualFunc * f1,
-                                            const Label & label,
-                                            Int val)
+                                            const std::string & region)
 {
     _F_;
     // see PetscDSSetRHSResidual for explanation
     Int part = 100;
-    this->wf->add(PETSC_WF_F0, label, val, field_id, part, f0);
-    this->wf->add(PETSC_WF_F1, label, val, field_id, part, f1);
+
+    if (region.empty()) {
+        add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, Label(), 0, part);
+        add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, Label(), 0, part);
+    }
+    else {
+        auto label = this->unstr_mesh->get_label(region);
+        auto is = label.get_values();
+        is.get_indices();
+        auto ids = is.to_std_vector();
+        for (auto & val : ids) {
+            add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, label, val, part);
+            add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, label, val, part);
+        }
+        is.restore_indices();
+        is.destroy();
+    }
 }
 
 } // namespace godzilla

@@ -231,23 +231,30 @@ public:
     /// @return Local auxiliary solution vector
     virtual const Vector & get_aux_solution_vector_local() = 0;
 
+    void add_boundary(DMBoundaryConditionType type,
+                      const std::string & name,
+                      const Label & label,
+                      const std::vector<Int> & ids,
+                      Int field,
+                      const std::vector<Int> & components,
+                      void (*bc_fn)(void),
+                      void (*bc_fn_t)(void),
+                      void * context);
+
     virtual void add_boundary_essential(const std::string & name,
-                                        const Label & label,
-                                        const std::vector<Int> & ids,
+                                        const std::string & boundary,
                                         Int field,
                                         const std::vector<Int> & components,
                                         PetscFunc * fn,
                                         PetscFunc * fn_t,
                                         void * context);
     virtual void add_boundary_natural(const std::string & name,
-                                      const Label & label,
-                                      const std::vector<Int> & ids,
+                                      const std::string & boundary,
                                       Int field,
                                       const std::vector<Int> & components,
                                       void * context);
     virtual void add_boundary_natural_riemann(const std::string & name,
-                                              const Label & label,
-                                              const std::vector<Int> & ids,
+                                              const std::string & boundary,
                                               Int field,
                                               const std::vector<Int> & components,
                                               PetscNaturalRiemannBCFunc * fn,

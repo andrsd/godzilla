@@ -107,21 +107,14 @@ void
 EssentialBC::set_up()
 {
     _F_;
-    auto mesh = get_mesh();
-    auto label = mesh->get_face_set_label(this->boundary);
-    auto is = label.get_values();
-    is.get_indices();
-    auto ids = is.to_std_vector();
-    this->dpi->add_boundary_essential(get_name(),
-                                      label,
-                                      ids,
-                                      this->fid,
-                                      get_components(),
-                                      get_function(),
-                                      get_function_t(),
-                                      this);
-    is.restore_indices();
-    is.destroy();
+    for (auto & bnd : get_boundary())
+        this->dpi->add_boundary_essential(get_name(),
+                                          bnd,
+                                          get_field_id(),
+                                          get_components(),
+                                          get_function(),
+                                          get_function_t(),
+                                          this);
 }
 
 } // namespace godzilla

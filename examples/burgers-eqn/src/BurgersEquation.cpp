@@ -77,5 +77,5 @@ void
 BurgersEquation::set_up_weak_form()
 {
     _F_;
-    set_residual_block(u_id, nullptr, new F1(this));
+    add_residual_block(u_id, nullptr, new F1(this));
 }
