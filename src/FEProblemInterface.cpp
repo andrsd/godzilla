@@ -825,15 +825,11 @@ FEProblemInterface::add_residual_block(Int field_id,
     }
     else {
         auto label = this->unstr_mesh->get_label(region);
-        auto is = label.get_value_index_set();
-        is.get_indices();
-        auto ids = is.to_std_vector();
+        auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, label, val, 0);
             add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, label, val, 0);
         }
-        is.restore_indices();
-        is.destroy();
     }
 }
 
@@ -847,15 +843,11 @@ FEProblemInterface::add_boundary_residual_block(Int field_id,
     assert(!boundary.empty());
 
     auto label = this->unstr_mesh->get_label(boundary);
-    auto is = label.get_value_index_set();
-    is.get_indices();
-    auto ids = is.to_std_vector();
+    auto ids = label.get_values();
     for (auto & val : ids) {
         add_weak_form_residual_block(PETSC_WF_BDF0, field_id, f0, label, val, 0);
         add_weak_form_residual_block(PETSC_WF_BDF1, field_id, f1, label, val, 0);
     }
-    is.restore_indices();
-    is.destroy();
 }
 
 void
@@ -876,17 +868,13 @@ FEProblemInterface::add_jacobian_block(Int fid,
     }
     else {
         auto label = this->unstr_mesh->get_label(region);
-        auto is = label.get_value_index_set();
-        is.get_indices();
-        auto ids = is.to_std_vector();
+        auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_jacobian_block(PETSC_WF_G0, fid, gid, g0, label, val, 0);
             add_weak_form_jacobian_block(PETSC_WF_G1, fid, gid, g1, label, val, 0);
             add_weak_form_jacobian_block(PETSC_WF_G2, fid, gid, g2, label, val, 0);
             add_weak_form_jacobian_block(PETSC_WF_G3, fid, gid, g3, label, val, 0);
         }
-        is.restore_indices();
-        is.destroy();
     }
 }
 
@@ -908,17 +896,13 @@ FEProblemInterface::add_jacobian_preconditioner_block(Int fid,
     }
     else {
         auto label = this->unstr_mesh->get_label(region);
-        auto is = label.get_value_index_set();
-        is.get_indices();
-        auto ids = is.to_std_vector();
+        auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_jacobian_block(PETSC_WF_GP0, fid, gid, g0, label, val, 0);
             add_weak_form_jacobian_block(PETSC_WF_GP1, fid, gid, g1, label, val, 0);
             add_weak_form_jacobian_block(PETSC_WF_GP2, fid, gid, g2, label, val, 0);
             add_weak_form_jacobian_block(PETSC_WF_GP3, fid, gid, g3, label, val, 0);
         }
-        is.restore_indices();
-        is.destroy();
     }
 }
 
@@ -935,17 +919,13 @@ FEProblemInterface::add_boundary_jacobian_block(Int fid,
     assert(!region.empty());
 
     auto label = this->unstr_mesh->get_label(region);
-    auto is = label.get_value_index_set();
-    is.get_indices();
-    auto ids = is.to_std_vector();
+    auto ids = label.get_values();
     for (auto & val : ids) {
         add_weak_form_jacobian_block(PETSC_WF_BDG0, fid, gid, g0, label, val, 0);
         add_weak_form_jacobian_block(PETSC_WF_BDG1, fid, gid, g1, label, val, 0);
         add_weak_form_jacobian_block(PETSC_WF_BDG2, fid, gid, g2, label, val, 0);
         add_weak_form_jacobian_block(PETSC_WF_BDG3, fid, gid, g3, label, val, 0);
     }
-    is.restore_indices();
-    is.destroy();
 }
 
 void
