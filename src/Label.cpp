@@ -86,6 +86,18 @@ Label::get_value_index_set() const
     return IndexSet(is);
 }
 
+std::vector<Int>
+Label::get_values() const
+{
+    _F_;
+    auto is = get_value_index_set();
+    is.get_indices();
+    auto values = is.to_std_vector();
+    is.restore_indices();
+    is.destroy();
+    return values;
+}
+
 void
 Label::set_value(Int point, Int value)
 {

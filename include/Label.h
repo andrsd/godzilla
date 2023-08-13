@@ -57,6 +57,11 @@ public:
     /// @return IndexSet with all label values
     IndexSet get_value_index_set() const;
 
+    /// Get all values that the `Label` takes
+    ///
+    /// @return `std::vector` with all label values
+    std::vector<Int> get_values() const;
+
     void set_value(Int point, Int value);
 
     /// Get the size of a stratum
