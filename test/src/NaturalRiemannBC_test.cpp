@@ -19,11 +19,9 @@ public:
         return this->comps;
     }
 
-    virtual void
-    evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) override
-    {
-        xG[0] = xI[0];
-    }
+    MOCK_METHOD(void,
+                evaluate,
+                (Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG));
 
 protected:
     std::vector<Int> comps;
@@ -75,7 +73,7 @@ TEST(NaturalRiemannBCTest, api)
     Parameters bc_pars = TestBC::parameters();
     bc_pars.set<const App *>("_app") = &app;
     bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_pars.set<std::string>("boundary") = "left";
+    bc_pars.set<std::vector<std::string>>("boundary") = { "left" };
     TestBC bc(bc_pars);
     prob.add_boundary_condition(&bc);
 
@@ -84,8 +82,4 @@ TEST(NaturalRiemannBCTest, api)
 
     EXPECT_THAT(bc.get_components(), ElementsAre(0));
     EXPECT_EQ(bc.get_field_id(), 0);
-    EXPECT_THAT(bc.get_ids(), ElementsAre(1));
-
-    Label left = mesh.get_label("left");
-    EXPECT_EQ(bc.get_label(), left);
 }

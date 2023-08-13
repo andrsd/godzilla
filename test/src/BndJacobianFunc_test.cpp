@@ -112,7 +112,7 @@ TEST(BndJacobianFuncTest, test)
     bc_pars.set<const App *>("_app") = &app;
     bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_pars.set<std::string>("field") = "u";
-    bc_pars.set<std::string>("boundary") = "marker";
+    bc_pars.set<std::vector<std::string>>("boundary") = { "marker" };
     TestBC bc(bc_pars);
     prob.add_boundary_condition(&bc);
 

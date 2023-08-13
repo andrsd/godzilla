@@ -21,7 +21,7 @@ public:
     /// Get the boundary name this BC is active on
     ///
     /// @return The boundary name
-    NO_DISCARD virtual const std::string & get_boundary() const;
+    NO_DISCARD virtual const std::vector<std::string> & get_boundary() const;
 
     /// Get DiscreteProblemInterface
     ///
@@ -32,22 +32,14 @@ public:
     virtual void set_up() = 0;
 
 protected:
-    /// Get mesh this boundary condition is associated with
-    ///
-    /// @return Mesh this boundary condition is associated with
-    UnstructuredMesh * get_mesh() const;
-
     /// Get problem this auxiliary field is part of
     Problem * get_problem() const;
-
-    /// Unstructured mesh this field is defined on
-    UnstructuredMesh * mesh;
 
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
 
     /// List of boundary names
-    const std::string & boundary;
+    const std::vector<std::string> & boundary;
 
 public:
     /// Method for building Parameters for this class

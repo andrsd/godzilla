@@ -15,8 +15,7 @@ public:
     void solve() override;
     void
     add_boundary_natural_riemann(const std::string & name,
-                                 const Label & label,
-                                 const std::vector<Int> & ids,
+                                 const std::string & boundary,
                                  Int field,
                                  const std::vector<Int> & components,
                                  PetscNaturalRiemannBCFunc * fn,
@@ -24,8 +23,7 @@ public:
                                  void * context) override
     {
         FENonlinearProblem::add_boundary_natural_riemann(name,
-                                                         label,
-                                                         ids,
+                                                         boundary,
                                                          field,
                                                          components,
                                                          fn,

@@ -114,8 +114,8 @@ TestNeumannProblem::set_up_fields()
 void
 TestNeumannProblem::set_up_weak_form()
 {
-    set_residual_block(this->iu, new F0(this), new F1(this));
-    set_jacobian_block(this->iu, this->iu, new G0(this), nullptr, nullptr, new G3(this));
+    add_residual_block(this->iu, new F0(this), new F1(this));
+    add_jacobian_block(this->iu, this->iu, new G0(this), nullptr, nullptr, new G3(this));
 }
 
 class BndF0 : public BndResidualFunc {
@@ -157,8 +157,8 @@ public:
     virtual void
     set_up_weak_form()
     {
-        set_residual_block(new BndF0(this), nullptr);
-        set_jacobian_block(this->fid, new BndG0(this), nullptr, nullptr, nullptr);
+        add_residual_block(new BndF0(this), nullptr);
+        add_jacobian_block(this->fid, new BndG0(this), nullptr, nullptr, nullptr);
     }
 
 protected:
@@ -187,7 +187,7 @@ TEST(NeumannProblemTest, solve)
     bc_left_pars.set<const App *>("_app") = &app;
     bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::string>("_name") = "bc1";
-    bc_left_pars.set<std::string>("boundary") = "left";
+    bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
     TestNeumannBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
 
@@ -195,7 +195,7 @@ TEST(NeumannProblemTest, solve)
     bc_right_pars.set<const App *>("_app") = &app;
     bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::string>("_name") = "bc2";
-    bc_right_pars.set<std::string>("boundary") = "right";
+    bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };
     TestNeumannBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);
 

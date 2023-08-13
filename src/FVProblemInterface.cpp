@@ -518,8 +518,7 @@ FVProblemInterface::set_up_auxiliary_dm(DM dm)
 
 void
 FVProblemInterface::add_boundary_essential(const std::string & name,
-                                           const Label & label,
-                                           const std::vector<Int> & ids,
+                                           const std::string & boundary,
                                            Int field,
                                            const std::vector<Int> & components,
                                            PetscFunc * fn,
@@ -532,8 +531,7 @@ FVProblemInterface::add_boundary_essential(const std::string & name,
 
 void
 FVProblemInterface::add_boundary_natural(const std::string & name,
-                                         const Label & label,
-                                         const std::vector<Int> & ids,
+                                         const std::string & boundary,
                                          Int field,
                                          const std::vector<Int> & components,
                                          void * context)

@@ -93,8 +93,7 @@ public:
 
     void
     add_boundary_essential(const std::string & name,
-                           const Label & label,
-                           const std::vector<Int> & ids,
+                           const std::string & boundary,
                            Int field,
                            const std::vector<Int> & components,
                            PetscFunc * fn,
@@ -102,8 +101,7 @@ public:
                            void * context) override
     {
         ExplicitFVLinearProblem::add_boundary_essential(name,
-                                                        label,
-                                                        ids,
+                                                        boundary,
                                                         field,
                                                         components,
                                                         fn,
@@ -113,13 +111,12 @@ public:
 
     void
     add_boundary_natural(const std::string & name,
-                         const Label & label,
-                         const std::vector<Int> & ids,
+                         const std::string & boundary,
                          Int field,
                          const std::vector<Int> & components,
                          void * context) override
     {
-        ExplicitFVLinearProblem::add_boundary_natural(name, label, ids, field, components, context);
+        ExplicitFVLinearProblem::add_boundary_natural(name, boundary, field, components, context);
     }
 
     void
@@ -278,9 +275,9 @@ TEST(ExplicitFVLinearProblemTest, api)
                  "Auxiliary field with ID = '99' does not exist.");
 
     Label label;
-    EXPECT_DEATH(prob.add_boundary_essential("", label, {}, -1, {}, nullptr, nullptr, nullptr),
+    EXPECT_DEATH(prob.add_boundary_essential("", "", -1, {}, nullptr, nullptr, nullptr),
                  "\\[ERROR\\] Essential BCs are not supported for FV problems");
-    EXPECT_DEATH(prob.add_boundary_natural("", label, {}, -1, {}, nullptr),
+    EXPECT_DEATH(prob.add_boundary_natural("", "", -1, {}, nullptr),
                  "\\[ERROR\\] Natural BCs are not supported for FV problems");
 }
 
@@ -381,7 +378,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     Parameters bc_left_pars = TestBC::parameters();
     bc_left_pars.set<const App *>("_app") = &app;
     bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_left_pars.set<std::string>("boundary") = "left";
+    bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
     bc_left_pars.set<bool>("inlet") = true;
     TestBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
@@ -389,7 +386,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     Parameters bc_right_pars = TestBC::parameters();
     bc_right_pars.set<const App *>("_app") = &app;
     bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_right_pars.set<std::string>("boundary") = "right";
+    bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };
     bc_right_pars.set<bool>("inlet") = false;
     TestBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);

@@ -24,14 +24,14 @@ TEST(L2DiffTest, compute)
     bc_left_params.set<const App *>("_app") = &app;
     bc_left_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_params.set<std::vector<std::string>>("value") = { "x*x" };
-    bc_left_params.set<std::string>("boundary") = "left";
+    bc_left_params.set<std::vector<std::string>>("boundary") = { "left" };
     DirichletBC bc_left(bc_left_params);
 
     Parameters bc_right_params = DirichletBC::parameters();
     bc_right_params.set<const App *>("_app") = &app;
     bc_right_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_params.set<std::vector<std::string>>("value") = { "x*x" };
-    bc_right_params.set<std::string>("boundary") = "right";
+    bc_right_params.set<std::vector<std::string>>("boundary") = { "right" };
     DirichletBC bc_right(bc_right_params);
 
     Parameters ps_params = L2Diff::parameters();

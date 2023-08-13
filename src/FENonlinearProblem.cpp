@@ -1205,52 +1205,6 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
 }
 
 void
-FENonlinearProblem::set_residual_block(Int field_id,
-                                       ResidualFunc * f0,
-                                       ResidualFunc * f1,
-                                       const Label & label,
-                                       Int val)
-{
-    _F_;
-    this->wf->add(PETSC_WF_F0, label, val, field_id, 0, f0);
-    this->wf->add(PETSC_WF_F1, label, val, field_id, 0, f1);
-}
-
-void
-FENonlinearProblem::set_jacobian_block(Int fid,
-                                       Int gid,
-                                       JacobianFunc * g0,
-                                       JacobianFunc * g1,
-                                       JacobianFunc * g2,
-                                       JacobianFunc * g3,
-                                       const Label & label,
-                                       Int val)
-{
-    _F_;
-    this->wf->add(PETSC_WF_G0, label, val, fid, gid, 0, g0);
-    this->wf->add(PETSC_WF_G1, label, val, fid, gid, 0, g1);
-    this->wf->add(PETSC_WF_G2, label, val, fid, gid, 0, g2);
-    this->wf->add(PETSC_WF_G3, label, val, fid, gid, 0, g3);
-}
-
-void
-FENonlinearProblem::set_jacobian_preconditioner_block(Int fid,
-                                                      Int gid,
-                                                      JacobianFunc * g0,
-                                                      JacobianFunc * g1,
-                                                      JacobianFunc * g2,
-                                                      JacobianFunc * g3,
-                                                      const Label & label,
-                                                      Int val)
-{
-    _F_;
-    this->wf->add(PETSC_WF_GP0, label, val, fid, gid, 0, g0);
-    this->wf->add(PETSC_WF_GP1, label, val, fid, gid, 0, g1);
-    this->wf->add(PETSC_WF_GP2, label, val, fid, gid, 0, g2);
-    this->wf->add(PETSC_WF_GP3, label, val, fid, gid, 0, g3);
-}
-
-void
 FENonlinearProblem::on_initial()
 {
     _F_;

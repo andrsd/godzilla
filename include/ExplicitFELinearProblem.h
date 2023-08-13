@@ -27,11 +27,10 @@ protected:
     void set_up_callbacks() override;
     void set_up_time_scheme() override;
     void set_up_monitors() override;
-    void set_residual_block(Int field_id,
+    void add_residual_block(Int field_id,
                             ResidualFunc * f0,
                             ResidualFunc * f1,
-                            const Label & label = Label(),
-                            Int val = 0) override;
+                            const std::string & region = "") override;
     void create_mass_matrix();
     void create_mass_matrix_lumped();
     virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);

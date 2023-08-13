@@ -17,6 +17,8 @@ namespace godzilla {
 
 class Problem;
 class WeakForm;
+class ResidualFunc;
+class JacobianFunc;
 class ValueFunctional;
 
 /// Interface for FE problems
@@ -100,6 +102,94 @@ public:
 
     virtual const Point & get_xyz() const;
 
+    /// Add residual statement for a field variable
+    ///
+    /// @param fid Field ID
+    /// @param f0 Integrand for the test function term
+    /// @param f1 Integrand for the test function gradient term
+    /// @param region Region name where this residual statement is active
+    virtual void add_residual_block(Int fid,
+                                    ResidualFunc * f0,
+                                    ResidualFunc * f1,
+                                    const std::string & region = "");
+
+    /// Add boundary residual statement for a field variable
+    ///
+    /// @param fid Field ID
+    /// @param f0 Integrand for the test function term
+    /// @param f1 Integrand for the test function gradient term
+    /// @param boundary Boundary name where this residual statement is active
+    virtual void add_boundary_residual_block(Int fid,
+                                             ResidualFunc * f0,
+                                             ResidualFunc * f1,
+                                             const std::string & boundary);
+
+    /// Add Jacobian statement for a field variable
+    ///
+    /// @param fid Test field number
+    /// @param gid Field number
+    /// @param g0 Integrand for the test and basis function term
+    /// @param g1 Integrand for the test function and basis function gradient term
+    /// @param g2 Integrand for the test function gradient and basis function term
+    /// @param g3 Integrand for the test function gradient and basis function gradient term
+    /// @param region Region name where this Jacobian statement is active
+    virtual void add_jacobian_block(Int fid,
+                                    Int gid,
+                                    JacobianFunc * g0,
+                                    JacobianFunc * g1,
+                                    JacobianFunc * g2,
+                                    JacobianFunc * g3,
+                                    const std::string & region = "");
+
+    /// Add Jacobian preconditioner statement for a field variable
+    ///
+    /// @param fid Test field number
+    /// @param gid Field number
+    /// @param g0 Integrand for the test and basis function term
+    /// @param g1 Integrand for the test function and basis function gradient term
+    /// @param g2 Integrand for the test function gradient and basis function term
+    /// @param g3 Integrand for the test function gradient and basis function gradient term
+    /// @param region Region name where this Jacobian statement is active
+    virtual void add_jacobian_preconditioner_block(Int fid,
+                                                   Int gid,
+                                                   JacobianFunc * g0,
+                                                   JacobianFunc * g1,
+                                                   JacobianFunc * g2,
+                                                   JacobianFunc * g3,
+                                                   const std::string & region = "");
+
+    /// Add boundary Jacobian statement for a field variable
+    ///
+    /// @param fid Test field number
+    /// @param gid Field number
+    /// @param g0 Integrand for the test and basis function term
+    /// @param g1 Integrand for the test function and basis function gradient term
+    /// @param g2 Integrand for the test function gradient and basis function term
+    /// @param g3 Integrand for the test function gradient and basis function gradient term
+    /// @param boundary Boundary name where this Jacobian statement is active
+    virtual void add_boundary_jacobian_block(Int fid,
+                                             Int gid,
+                                             JacobianFunc * g0,
+                                             JacobianFunc * g1,
+                                             JacobianFunc * g2,
+                                             JacobianFunc * g3,
+                                             const std::string & boundary);
+
+    void add_weak_form_residual_block(PetscWeakFormKind kind,
+                                      Int field_id,
+                                      ResidualFunc * f,
+                                      const Label & label = Label(),
+                                      Int val = 0,
+                                      Int part = 0);
+
+    void add_weak_form_jacobian_block(PetscWeakFormKind kind,
+                                      Int fid,
+                                      Int gid,
+                                      JacobianFunc * g,
+                                      const Label & label = Label(),
+                                      Int val = 0,
+                                      Int part = 0);
+
     /// Integrate residual
     virtual PetscErrorCode integrate_residual(PetscDS ds,
                                               PetscFormKey key,
@@ -172,8 +262,7 @@ protected:
     virtual void set_up_fields() = 0;
 
     void add_boundary_natural_riemann(const std::string & name,
-                                      const Label & label,
-                                      const std::vector<Int> & ids,
+                                      const std::string & boundary,
                                       Int field,
                                       const std::vector<Int> & components,
                                       PetscNaturalRiemannBCFunc * fn,

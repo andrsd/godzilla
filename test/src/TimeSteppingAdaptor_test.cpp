@@ -222,7 +222,7 @@ TEST(TimeSteppingAdaptor, choose)
     {
         const std::string class_name = "DirichletBC";
         Parameters * params = Factory::get_parameters(class_name);
-        params->set<std::string>("boundary") = "marker";
+        params->set<std::vector<std::string>>("boundary") = { "marker" };
         params->set<std::vector<std::string>>("value") = { "x*x" };
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
         auto bc = app.build_object<BoundaryCondition>(class_name, "bc", params);
