@@ -81,8 +81,8 @@ protected:
     const Real & end_time;
     /// Number of steps
     const Int & num_steps;
-    /// Time step size
-    const Real & dt;
+    /// Initial time step size
+    const Real & dt_initial;
     /// Converged reason
     TSConvergedReason converged_reason;
     /// Simulation time

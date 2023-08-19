@@ -58,7 +58,7 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     start_time(params.get<Real>("start_time")),
     end_time(params.get<Real>("end_time")),
     num_steps(params.get<Int>("num_steps")),
-    dt(params.get<Real>("dt")),
+    dt_initial(params.get<Real>("dt")),
     converged_reason(TS_CONVERGED_ITERATING),
     time(0.),
     step_num(0)
@@ -137,7 +137,7 @@ TransientProblemInterface::create()
         PETSC_CHECK(TSSetMaxTime(this->ts, this->end_time));
     if (this->tpi_params.is_param_valid("num_steps"))
         PETSC_CHECK(TSSetMaxSteps(this->ts, this->num_steps));
-    set_time_step(this->dt);
+    set_time_step(this->dt_initial);
     PETSC_CHECK(TSSetStepNumber(this->ts, this->step_num));
     PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
     if (this->ts_adaptor)
@@ -187,8 +187,7 @@ PetscErrorCode
 TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
 {
     _F_;
-    Real dt;
-    PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
+    Real dt = get_time_step();
     this->problem->lprintf(6, "{} Time {:f} dt = {:f}", stepi, t, dt);
     return 0;
 }
