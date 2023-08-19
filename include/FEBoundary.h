@@ -113,8 +113,7 @@ private:
             Int local_idx = get_local_face_index(elem_conn, face_conn);
             auto edge_length = this->length(i);
             auto grad = (*this->grad_phi)(ie) (local_idx);
-            auto normal = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
-            this->normal(i) = normal;
+            this->normal(i) = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
         }
     }
 
@@ -128,8 +127,7 @@ private:
             DenseVector<Int, N_ELEM_NODES - 1> idx;
             for (Int j = 0; j < N_ELEM_NODES - 1; j++)
                 idx(j) = face_conn[j] - n_cells;
-            auto coords = this->coords->get_values(idx);
-            auto edge_length = fe::face_area<ELEM_TYPE>(coords);
+            auto edge_length = fe::face_area<ELEM_TYPE>(this->coords->get_values(idx));
             this->length(i) = edge_length;
         }
     }
