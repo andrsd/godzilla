@@ -29,7 +29,8 @@ __ksp_monitor_linear(KSP, Int it, Real rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
-    return problem->ksp_monitor_callback(it, rnorm);
+    problem->ksp_monitor_callback(it, rnorm);
+    return 0;
 }
 
 Parameters
@@ -142,12 +143,11 @@ LinearProblem::set_up_solver_parameters()
                                  this->lin_max_iter));
 }
 
-PetscErrorCode
+void
 LinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
     lprintf(8, "{} Linear residual: {:e}", it, rnorm);
-    return 0;
 }
 
 bool

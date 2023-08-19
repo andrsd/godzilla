@@ -35,7 +35,8 @@ __transient_monitor(TS, Int stepi, Real time, Vec x, void * ctx)
 {
     _F_;
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
-    return tpi->ts_monitor_callback(stepi, time, x);
+    tpi->ts_monitor_callback(stepi, time, x);
+    return 0;
 }
 
 Parameters
@@ -183,13 +184,12 @@ TransientProblemInterface::post_step()
     return 0;
 }
 
-PetscErrorCode
+void
 TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
 {
     _F_;
     Real dt = get_time_step();
     this->problem->lprintf(6, "{} Time {:f} dt = {:f}", stepi, t, dt);
-    return 0;
 }
 
 void

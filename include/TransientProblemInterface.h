@@ -59,7 +59,7 @@ protected:
     /// Called after the time step is done solving
     virtual PetscErrorCode post_step();
     /// TS monitor callback
-    virtual PetscErrorCode ts_monitor_callback(Int stepi, Real time, Vec x);
+    virtual void ts_monitor_callback(Int stepi, Real time, Vec x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`

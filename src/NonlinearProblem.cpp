@@ -34,7 +34,8 @@ __ksp_monitor(KSP, Int it, Real rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    return problem->ksp_monitor_callback(it, rnorm);
+    problem->ksp_monitor_callback(it, rnorm);
+    return 0;
 }
 
 PetscErrorCode
@@ -42,7 +43,8 @@ __snes_monitor(SNES, Int it, Real norm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    return problem->snes_monitor_callback(it, norm);
+    problem->snes_monitor_callback(it, norm);
+    return 0;
 }
 
 Parameters
@@ -236,20 +238,18 @@ NonlinearProblem::set_up_solver_parameters()
     PETSC_CHECK(KSPSetFromOptions(this->ksp));
 }
 
-PetscErrorCode
+void
 NonlinearProblem::snes_monitor_callback(Int it, Real norm)
 {
     _F_;
     lprintf(7, "{} Non-linear residual: {:e}", it, norm);
-    return 0;
 }
 
-PetscErrorCode
+void
 NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
     lprintf(8, "    {} Linear residual: {:e}", it, rnorm);
-    return 0;
 }
 
 bool
