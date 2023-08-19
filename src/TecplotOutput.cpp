@@ -114,10 +114,10 @@ TecplotOutput::set_file_name()
 {
     _F_;
     if (get_comm().size() == 1)
-        this->file_name = fmt::sprintf("%s.%s", this->file_base, this->get_file_ext());
+        this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
     else
         this->file_name =
-            fmt::sprintf("%s.%d.%s", this->file_base, get_processor_id(), this->get_file_ext());
+            fmt::format("{}.{}.{}", this->file_base, get_processor_id(), this->get_file_ext());
 }
 
 void

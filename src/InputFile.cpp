@@ -349,7 +349,7 @@ InputFile::check_params(const Parameters * params,
         const auto & param_name = it.first;
         if (!params->is_param_valid(param_name) && params->is_param_required(param_name))
             missing_pars +=
-                fmt::sprintf("\n- '%s': %s", param_name, params->get_doc_string(param_name));
+                fmt::format("\n- '{}': {}", param_name, params->get_doc_string(param_name));
     }
 
     if (!missing_pars.empty())

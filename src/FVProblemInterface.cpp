@@ -370,7 +370,7 @@ FVProblemInterface::set_up_ds()
         }
         else {
             for (Int i = 0; i < fi.nc; i++) {
-                std::string name = fmt::sprintf("%s_%s", fi.name, fi.component_names[i]);
+                std::string name = fmt::format("{}_{}", fi.name, fi.component_names[i]);
                 PETSC_CHECK(PetscFVSetComponentName(this->fvm, c + i, name.c_str()));
             }
         }

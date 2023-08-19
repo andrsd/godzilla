@@ -44,14 +44,14 @@ void
 FileOutput::set_file_name()
 {
     _F_;
-    this->file_name = fmt::sprintf("%s.%s", this->file_base, this->get_file_ext());
+    this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
 }
 
 void
 FileOutput::set_sequence_file_name(unsigned int stepi)
 {
     _F_;
-    this->file_name = fmt::sprintf("%s.%d.%s", this->file_base, stepi, this->get_file_ext());
+    this->file_name = fmt::format("{}.{}.{}", this->file_base, stepi, this->get_file_ext());
 }
 
 } // namespace godzilla
