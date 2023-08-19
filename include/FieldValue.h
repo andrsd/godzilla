@@ -12,7 +12,7 @@ namespace godzilla {
 template <typename T>
 class LateBindArray {
 public:
-    LateBindArray(Int size) : size(size), data(nullptr) {}
+    LateBindArray() : data(nullptr) {}
 
     void
     set(T * new_data)
@@ -26,17 +26,7 @@ public:
         return this->data;
     }
 
-    T
-    operator()(unsigned int idx) const
-    {
-        assert(this->data != nullptr);
-        assert(idx < this->size);
-        return this->data[idx];
-    }
-
 protected:
-    /// Number of elements stored in `data`
-    Int size;
     /// The elements of the array
     T * data;
 };
@@ -47,7 +37,23 @@ public:
     /// Constructor
     ///
     /// @param nc Number of field components
-    explicit FieldValue(Int nc) : LateBindArray<Scalar>(nc) {}
+    explicit FieldValue(Int nc) : LateBindArray<Scalar>() {}
+
+    /// Access an element
+    ///
+    /// @param c Component number
+    /// @return Requested element
+    Scalar
+    operator()(unsigned int c) const
+    {
+        assert(this->data != nullptr);
+        assert(c < this->nc);
+        return this->data[c];
+    }
+
+protected:
+    /// Number of components
+    Int nc;
 };
 
 /// Used for field gradient values during assembling
@@ -57,7 +63,27 @@ public:
     ///
     /// @param dim Spatial dimension
     /// @param nc Number of field components
-    explicit FieldGradient(Int dim, Int nc) : LateBindArray<Scalar>(nc * dim) {}
+    explicit FieldGradient(Int dim, Int nc) : LateBindArray<Scalar>(), dim(dim), nc(nc) {}
+
+    /// Access an element
+    ///
+    /// @param idx i-th element of the gradient vector
+    /// @param c Component number
+    /// @return Requested element
+    Scalar
+    operator()(unsigned int idx, unsigned int c = 0) const
+    {
+        assert(this->data != nullptr);
+        assert(idx < this->dim);
+        assert(c < this->nc);
+        return this->data[c * this->dim + idx];
+    }
+
+protected:
+    /// Spatial dimension
+    Int dim;
+    /// Number of components
+    Int nc;
 };
 
 /// Used for vector values during assembling (for example normals)
@@ -66,7 +92,23 @@ public:
     /// Constructor
     ///
     /// @param dim Spatial dimension
-    explicit Normal(Int dim) : LateBindArray<Real>(dim) {}
+    explicit Normal(Int dim) : LateBindArray<Real>(), dim(dim) {}
+
+    /// Access a component
+    ///
+    /// @param idx Component index
+    /// @return Requested component
+    Real
+    operator()(unsigned int idx) const
+    {
+        assert(this->data != nullptr);
+        assert(idx < this->dim);
+        return this->data[idx];
+    }
+
+protected:
+    /// Spatial dimension
+    Int dim;
 };
 
 /// Used for points during assembling (for example physical coordinates)
@@ -75,7 +117,23 @@ public:
     /// Constructor
     ///
     /// @param dim Spatial dimension
-    explicit Point(Int dim) : LateBindArray<Real>(dim) {}
+    explicit Point(Int dim) : LateBindArray<Real>(), dim(dim) {}
+
+    /// Access a component
+    ///
+    /// @param idx Component index
+    /// @return Requested component
+    Real
+    operator()(unsigned int idx) const
+    {
+        assert(this->data != nullptr);
+        assert(idx < this->dim);
+        return this->data[idx];
+    }
+
+protected:
+    /// Spatial dimension
+    Int dim;
 };
 
 } // namespace godzilla

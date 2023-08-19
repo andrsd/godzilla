@@ -34,7 +34,7 @@ public:
             f[c] = this->vel_t(c);
 
             for (PetscInt d = 0; d < this->dim; ++d)
-                f[c] += this->vel(d) * this->vel_x(c * this->dim + d);
+                f[c] += this->vel(d) * this->vel_x(d, c);
 
             f[c] -= this->ffn(c);
         }
@@ -67,7 +67,7 @@ public:
         _F_;
         for (PetscInt comp = 0; comp < this->n_comp; ++comp) {
             for (PetscInt d = 0; d < this->dim; ++d) {
-                f[comp * this->dim + d] = 1.0 / this->Re * this->vel_x(comp * this->dim + d);
+                f[comp * this->dim + d] = 1.0 / this->Re * this->vel_x(d, comp);
             }
             f[comp * this->dim + comp] -= this->press(0);
         }
@@ -96,7 +96,7 @@ public:
         _F_;
         f[0] = 0.0;
         for (PetscInt d = 0; d < this->dim; ++d)
-            f[0] += this->vel_x(d * this->dim + d);
+            f[0] += this->vel_x(d, d);
     }
 
 protected:
@@ -147,7 +147,7 @@ public:
 
         for (PetscInt fc = 0; fc < nc_i; ++fc) {
             for (PetscInt gc = 0; gc < nc_j; ++gc) {
-                g[fc * nc_j + gc] += this->vel_x(fc * nc_j + gc);
+                g[fc * nc_j + gc] += this->vel_x(gc, fc);
             }
         }
     }
