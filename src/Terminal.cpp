@@ -25,6 +25,6 @@ unsigned int Terminal::num_colors = 256;
 std::ostream &
 operator<<(std::ostream & os, const godzilla::Terminal::Color & clr)
 {
-    os << clr.str;
+    os << static_cast<const char *>(clr);
     return os;
 }

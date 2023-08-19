@@ -16,17 +16,24 @@ public:
     ///
     /// @param aclr Control characters representing the color
     struct Color {
-        explicit Color(const char * aclr) : str(nullptr)
+        explicit Color(const char * aclr)
         {
             if (has_colors())
-                this->str = aclr;
-            else
-                this->str = "";
+                this->str = std::string(aclr);
         }
 
-        const char * str;
+        operator const std::string &() const // NOLINT(google-explicit-constructor)
+        {
+            return this->str;
+        }
 
-        operator const char *() const { return this->str; }
+        operator const char *() const // NOLINT(google-explicit-constructor)
+        {
+            return this->str.c_str();
+        }
+
+    private:
+        std::string str;
 
     public:
         static Color black;
@@ -53,14 +60,3 @@ public:
 
 /// Operator to print the color to the terminal
 std::ostream & operator<<(std::ostream & os, const godzilla::Terminal::Color & clr);
-
-// Formatter for {fmt} library
-template <>
-struct fmt::formatter<godzilla::Terminal::Color> : formatter<std::string> {
-    template <typename FormatContext>
-    auto
-    format(const godzilla::Terminal::Color & c, FormatContext & ctx)
-    {
-        return fmt::formatter<std::string>::format(c.str, ctx);
-    }
-};

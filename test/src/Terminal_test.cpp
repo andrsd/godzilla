@@ -14,7 +14,7 @@ TEST(TerminalTest, colors)
     EXPECT_EQ(Terminal::has_colors(), false);
 
     Terminal::Color blk("\33[30m");
-    EXPECT_EQ(blk.str, "");
+    EXPECT_STREQ(blk, "");
 
     // restore
     Terminal::num_colors = nc;
@@ -24,13 +24,13 @@ TEST(TerminalTest, ostream_operator)
 {
     std::ostringstream oss;
     oss << Terminal::Color::red;
-    EXPECT_EQ(oss.str(), Terminal::Color::red.str);
+    EXPECT_STREQ(oss.str().c_str(), Terminal::Color::red);
 }
 
 TEST(TerminalTest, fmt_formatter)
 {
     std::string s = fmt::format("{}", Terminal::Color::red);
-    EXPECT_EQ(s, Terminal::Color::red.str);
+    EXPECT_STREQ(s.c_str(), Terminal::Color::red);
 }
 
 TEST(TerminalTest, color_codes)
