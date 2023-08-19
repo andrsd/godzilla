@@ -21,6 +21,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
+        _F_;
         f[0] = this->T_t(0) - this->q_ppp(0);
     }
 
@@ -41,6 +42,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
+        _F_;
         for (PetscInt d = 0; d < this->dim; ++d)
             f[d] = this->T_x(d);
     }
@@ -59,6 +61,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
+        _F_;
         g[0] = this->T_t_shift * 1.0;
     }
 
@@ -75,6 +78,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
+        _F_;
         for (PetscInt d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;
     }

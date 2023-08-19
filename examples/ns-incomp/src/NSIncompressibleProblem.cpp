@@ -29,6 +29,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
+        _F_;
         for (PetscInt c = 0; c < this->n_comp; ++c) {
             f[c] = this->vel_t(c);
 
@@ -63,6 +64,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
+        _F_;
         for (PetscInt comp = 0; comp < this->n_comp; ++comp) {
             for (PetscInt d = 0; d < this->dim; ++d) {
                 f[comp * this->dim + d] = 1.0 / this->Re * this->vel_x(comp * this->dim + d);
@@ -91,6 +93,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
+        _F_;
         f[0] = 0.0;
         for (PetscInt d = 0; d < this->dim; ++d)
             f[0] += this->vel_x(d * this->dim + d);
@@ -112,6 +115,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
+        _F_;
         for (PetscInt d = 0; d < this->dim; ++d)
             f[d] = 0.0;
     }
@@ -133,6 +137,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
+        _F_;
         PetscInt nc_i = this->dim;
         PetscInt nc_j = this->dim;
 
@@ -165,6 +170,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
+        _F_;
         PetscInt nc_i = this->dim;
         PetscInt nc_j = this->dim;
 
@@ -195,6 +201,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
+        _F_;
         for (PetscInt d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;
     }
@@ -214,6 +221,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
+        _F_;
         for (PetscInt d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = -1.0;
     }
@@ -235,6 +243,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
+        _F_;
         for (PetscInt comp_i = 0; comp_i < this->n_comp; ++comp_i) {
             for (PetscInt d = 0; d < this->dim; ++d) {
                 g[((comp_i * this->n_comp + comp_i) * this->dim + d) * this->dim + d] =
