@@ -54,7 +54,6 @@ DMTSConvertPlex(DM dm, DM * plex, PetscBool copy)
 {
     PetscBool isPlex;
 
-    PetscFunctionBegin;
     PetscCall(PetscObjectTypeCompare((PetscObject) dm, DMPLEX, &isPlex));
     if (isPlex) {
         *plex = dm;
@@ -75,7 +74,7 @@ DMTSConvertPlex(DM dm, DM * plex, PetscBool copy)
             PetscCall(PetscObjectReference((PetscObject) *plex));
         }
     }
-    PetscFunctionReturn(0);
+    return 0;
 }
 
 ///

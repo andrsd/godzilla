@@ -18,7 +18,7 @@ points_from_label(const Label & label)
     return label.get_stratum(ids[0]);
 }
 
-}; // namespace
+} // namespace
 
 namespace {
 
