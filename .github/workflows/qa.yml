@@ -1,9 +1,6 @@
 name: qa
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -108,3 +105,58 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: results.sarif
+
+  clang-tidy:
+    name: clang-tidy review
+    defaults:
+      run:
+        shell: bash -el {0}
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Set up miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: 3.9
+          auto-update-conda: false
+          channels: andrsd,conda-forge,defaults
+          channel-priority: strict
+          miniforge-version: latest
+          miniforge-variant: Mambaforge
+          use-mamba: true
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          mamba install \
+            clang-tools \
+            cmake \
+            make \
+            cxx-compiler \
+            mpich \
+            fmt==9.1.0 \
+            petsc==3.19.4 \
+            yaml-cpp==0.7.0 \
+            exodusIIcpp==1.6
+
+      - name: Configure
+        run: |
+          cmake . -DCMAKE_EXPORT_COMPILE_COMMANDS=on
+
+      - name: Review
+        uses: ZedThree/clang-tidy-review@v0.13.3
+        id: review
+        with:
+          clang_tidy_version: 14
+          exclude: "contrib/*"
+          lgtm_comment_body: "Passed clang-tidy review"
+
+      - name: Upload review
+        uses: ZedThree/clang-tidy-review/upload@v0.13.3
+        id: upload-review
+
+      - name: Result
+        if: steps.review.outputs.total_comments > 0
+        run: exit 1
