@@ -1,5 +1,4 @@
 #include "Godzilla.h"
-#include "GodzillaConfig.h"
 #include "App.h"
 #include "CallStack.h"
 #include "ExodusIIOutput.h"
@@ -133,10 +132,10 @@ ExodusIIOutput::set_file_name()
 {
     _F_;
     if (get_comm().size() == 1)
-        this->file_name = fmt::sprintf("%s.%s", this->file_base, this->get_file_ext());
+        this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
     else
         this->file_name =
-            fmt::sprintf("%s.%d.%s", this->file_base, get_processor_id(), this->get_file_ext());
+            fmt::format("{}.{}.{}", this->file_base, get_processor_id(), this->get_file_ext());
 }
 
 void
@@ -434,9 +433,9 @@ ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
             std::string comp_name = this->dpi->get_field_component_name(fid, c);
             std::string s;
             if (comp_name.length() == 0)
-                s = fmt::sprintf("%s_%d", name, c);
+                s = fmt::format("{}_{}", name, c);
             else
-                s = fmt::sprintf("%s", comp_name);
+                s = fmt::format("{}", comp_name);
             var_names.push_back(s);
         }
     }
@@ -455,9 +454,9 @@ ExodusIIOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
             std::string comp_name = this->dpi->get_aux_field_component_name(fid, c);
             std::string s;
             if (comp_name.length() == 0)
-                s = fmt::sprintf("%s_%d", name, c);
+                s = fmt::format("{}_{}", name, c);
             else
-                s = fmt::sprintf("%s", comp_name);
+                s = fmt::format("{}", comp_name);
             var_names.push_back(s);
         }
     }

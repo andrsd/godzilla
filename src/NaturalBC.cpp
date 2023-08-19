@@ -2,7 +2,6 @@
 #include "CallStack.h"
 #include "App.h"
 #include "Problem.h"
-#include "DiscreteProblemInterface.h"
 #include "FEProblemInterface.h"
 #include "BndResidualFunc.h"
 #include "BndJacobianFunc.h"

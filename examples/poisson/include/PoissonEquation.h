@@ -9,11 +9,11 @@ using namespace godzilla;
 class PoissonEquation : public FENonlinearProblem {
 public:
     PoissonEquation(const Parameters & parameters);
-    virtual ~PoissonEquation();
+    ~PoissonEquation() override;
 
 protected:
-    virtual void set_up_fields() override;
-    virtual void set_up_weak_form() override;
+    void set_up_fields() override;
+    void set_up_weak_form() override;
 
     /// Polynomial order of the FE space
     PetscInt p_order;

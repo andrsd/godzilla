@@ -51,10 +51,9 @@ AuxiliaryField::create()
 {
     _F_;
     if (this->region.length() > 0) {
-        auto mesh = get_mesh();
-        if (mesh->has_label(this->region)) {
-            this->label = mesh->get_label(this->region);
-            this->block_id = mesh->get_cell_set_id(this->region);
+        if (this->mesh->has_label(this->region)) {
+            this->label = this->mesh->get_label(this->region);
+            this->block_id = this->mesh->get_cell_set_id(this->region);
         }
         else
             log_error("Region '{}' does not exists. Typo?", this->region);

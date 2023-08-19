@@ -8,7 +8,6 @@
 #include "Output.h"
 #include "TestApp.h"
 #include "petsc.h"
-#include "petscvec.h"
 
 using namespace godzilla;
 

@@ -3,7 +3,6 @@
 #include "CallStack.h"
 #include "Problem.h"
 #include "Postprocessor.h"
-#include "Error.h"
 #include "fmt/printf.h"
 #include <cstring>
 #include <cerrno>

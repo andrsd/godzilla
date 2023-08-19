@@ -1,5 +1,4 @@
 #include "WeakForm.h"
-#include "Functional.h"
 #include "CallStack.h"
 #include <set>
 
