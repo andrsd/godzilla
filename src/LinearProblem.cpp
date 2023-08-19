@@ -200,14 +200,14 @@ LinearProblem::solve()
 }
 
 PetscErrorCode
-LinearProblem::compute_rhs(Vector & b)
+LinearProblem::compute_rhs(Vector &)
 {
     _F_;
     return 0;
 }
 
 PetscErrorCode
-LinearProblem::compute_operators(Matrix & A, Matrix & B)
+LinearProblem::compute_operators(Matrix &, Matrix &)
 {
     _F_;
     return 0;
