@@ -26,26 +26,35 @@ public:
         return this->data;
     }
 
-    T
-    operator()(unsigned int idx) const
-    {
-        assert(this->data != nullptr);
-        return this->data[idx];
-    }
-
 protected:
     T * data;
 };
 
 /// Used for field values during assembling
-class FieldValue : public LateBindArray<Scalar> {};
+class FieldValue : public LateBindArray<Scalar> {
+public:
+    Scalar
+    operator()(unsigned int idx) const
+    {
+        assert(this->data != nullptr);
+        return this->data[idx];
+    }
+};
 
 /// Used for field gradient values during assembling
 class FieldGradient : public LateBindArray<Scalar> {
 public:
     explicit FieldGradient(const Int & dim) : LateBindArray<Scalar>(), dim(dim) {}
 
-    FieldGradient(const FieldGradient & other) : LateBindArray<Scalar>(other), dim(other.dim) {}
+    FieldGradient(const FieldGradient & other) = default;
+
+    Scalar
+    operator()(unsigned int idx) const
+    {
+        assert(this->data != nullptr);
+        assert(idx < this->dim);
+        return this->data[idx];
+    }
 
 protected:
     const Int & dim;
