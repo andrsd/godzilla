@@ -143,7 +143,11 @@ jobs:
 
       - name: Configure
         run: |
-          cmake . -DCMAKE_EXPORT_COMPILE_COMMANDS=on
+          cmake . \
+            -DGODZILLA_WITH_PERF_LOG=YES \
+            -DGODZILLA_BUILD_EXAMPLES=YES \
+            -DGODZILLA_BUILD_TESTS=YES \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=on
 
       - name: Review
         uses: ZedThree/clang-tidy-review@v0.13.3
