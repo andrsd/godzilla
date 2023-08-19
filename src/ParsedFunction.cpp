@@ -1,7 +1,6 @@
 #include "Godzilla.h"
 #include "ParsedFunction.h"
 #include "CallStack.h"
-#include "fmt/format.h"
 
 namespace godzilla {
 

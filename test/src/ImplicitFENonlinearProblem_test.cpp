@@ -6,7 +6,6 @@
 #include "InitialCondition.h"
 #include "BoundaryCondition.h"
 #include "Output.h"
-#include "petscvec.h"
 
 using namespace godzilla;
 

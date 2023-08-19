@@ -1,6 +1,5 @@
 #include "Utils.h"
 #include "CallStack.h"
-#include <algorithm>
 #include <sys/stat.h>
 #include <chrono>
 #include <fmt/printf.h>

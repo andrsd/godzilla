@@ -1,5 +1,4 @@
 #include "Godzilla.h"
-#include "GodzillaConfig.h"
 #include "App.h"
 #include "CallStack.h"
 #include "ExodusIIOutput.h"

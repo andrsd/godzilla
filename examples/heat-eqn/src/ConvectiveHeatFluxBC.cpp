@@ -1,5 +1,4 @@
 #include "Godzilla.h"
-#include "HeatEquationProblem.h"
 #include "ConvectiveHeatFluxBC.h"
 #include "BndResidualFunc.h"
 #include "BndJacobianFunc.h"
