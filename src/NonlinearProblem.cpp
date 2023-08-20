@@ -154,6 +154,15 @@ NonlinearProblem::init()
 }
 
 void
+NonlinearProblem::set_use_matrix_free(bool mf_operator, bool mf)
+{
+    _F_;
+    PETSC_CHECK(SNESSetUseMatrixFree(this->snes,
+                                     mf_operator ? PETSC_TRUE : PETSC_FALSE,
+                                     mf ? PETSC_TRUE : PETSC_FALSE));
+}
+
+void
 NonlinearProblem::set_up_initial_guess()
 {
     _F_;
