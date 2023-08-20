@@ -130,11 +130,13 @@ if(GODZILLA_CODE_COVERAGE)
         set(EXCLUDE_REGEX
             --exclude=*/contrib/*
             --exclude=*/include/petsc*
-            --exclude=*/include/gtest/*
-            --exclude=*/include/gmock/*
+            --exclude=*/include/mpi*
             --exclude=*/include/fmt/*
             --exclude=*/include/yaml-cpp/*
             --exclude=/usr/include/*
+            --exclude=*/include/gtest/*
+            --exclude=*/include/gmock/*
+            --exclude=*/test/*
             --exclude=*muparser*
             --exclude=*/include/exodusIIcpp*
         )
