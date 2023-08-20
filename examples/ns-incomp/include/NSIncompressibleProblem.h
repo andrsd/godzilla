@@ -19,14 +19,12 @@ protected:
     void set_up_field_null_space(DM dm) override;
     void set_up_preconditioning() override;
 
+    PetscInt velocity_id;
+    PetscInt pressure_id;
+    PetscInt ffn_aid;
     /// Reynolds number
     const PetscReal & Re;
 
 public:
     static Parameters parameters();
-
-    static const PetscInt velocity_id = 0;
-    static const PetscInt pressure_id = 1;
-
-    static const PetscInt ffn_aid = 0;
 };

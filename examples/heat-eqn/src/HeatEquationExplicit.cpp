@@ -80,8 +80,8 @@ void
 HeatEquationExplicit::set_up_fields()
 {
     _F_;
-    set_fe(temp_id, "temp", 1, this->order);
-    set_aux_fe(ffn_aux_id, "forcing_fn", 1, this->order);
+    temp_id = add_fe("temp", 1, this->order);
+    ffn_aux_id = add_aux_fe("forcing_fn", 1, this->order);
 }
 
 void

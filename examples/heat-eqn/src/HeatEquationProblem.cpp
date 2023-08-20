@@ -110,11 +110,11 @@ void
 HeatEquationProblem::set_up_fields()
 {
     _F_;
-    set_fe(temp_id, "temp", 1, this->p_order);
+    temp_id = add_fe("temp", 1, this->p_order);
 
-    set_aux_fe(q_ppp_id, "q_ppp", 1, 0);
-    set_aux_fe(htc_aux_id, "htc", 1, this->p_order);
-    set_aux_fe(T_ambient_aux_id, "T_ambient", 1, this->p_order);
+    q_ppp_id = add_aux_fe("q_ppp", 1, 0);
+    htc_aux_id = add_aux_fe("htc", 1, this->p_order);
+    T_ambient_aux_id = add_aux_fe("T_ambient", 1, this->p_order);
 }
 
 void

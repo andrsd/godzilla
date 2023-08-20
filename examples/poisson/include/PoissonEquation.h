@@ -17,12 +17,10 @@ protected:
 
     /// Polynomial order of the FE space
     PetscInt p_order;
-
     /// ID for the "u" field
-    const PetscInt iu;
-
+    PetscInt iu;
     /// ID for the forcing function field
-    const PetscInt affn;
+    PetscInt affn;
 
 public:
     static Parameters parameters();
