@@ -7,7 +7,7 @@ void
 segfault()
 {
     volatile int * x = nullptr;
-    int a = *x;
+    int a = *x; // NOLINT
 }
 
 TEST(CallStackTest, abort)

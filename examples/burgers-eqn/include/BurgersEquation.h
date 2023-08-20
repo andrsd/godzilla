@@ -17,10 +17,9 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
 
+    PetscInt u_id;
     const PetscReal & viscosity;
 
 public:
     static Parameters parameters();
-
-    static const PetscInt u_id = 0;
 };

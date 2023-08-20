@@ -20,9 +20,7 @@ PoissonEquation::parameters()
 
 PoissonEquation::PoissonEquation(const Parameters & parameters) :
     FENonlinearProblem(parameters),
-    p_order(get_param<PetscInt>("p_order")),
-    iu(0),
-    affn(0)
+    p_order(get_param<PetscInt>("p_order"))
 {
     _F_;
 }
@@ -33,8 +31,8 @@ void
 PoissonEquation::set_up_fields()
 {
     _F_;
-    set_fe(this->iu, "u", 1, this->p_order);
-    set_aux_fe(this->affn, "forcing_fn", 1, this->p_order);
+    this->iu = add_fe("u", 1, this->p_order);
+    this->affn = add_aux_fe("forcing_fn", 1, this->p_order);
 }
 
 void

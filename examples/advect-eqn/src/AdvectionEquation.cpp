@@ -78,6 +78,12 @@ AdvectionEquation::compute_flux(PetscInt dim,
                                 const PetscScalar constants[],
                                 PetscScalar flux[])
 {
+    GODZILLA_UNUSED(dim);
+    GODZILLA_UNUSED(nf);
+    GODZILLA_UNUSED(x);
+    GODZILLA_UNUSED(n_consts);
+    GODZILLA_UNUSED(constants);
+
     _F_;
     PetscReal wind[] = { 0.5 };
     PetscReal wn = 0;
