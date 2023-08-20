@@ -23,6 +23,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
+        _F_;
         f[0] = -this->visc * this->u_x(0) + 0.5 * this->u(0) * this->u(0);
     }
 

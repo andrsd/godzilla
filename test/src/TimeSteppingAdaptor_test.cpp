@@ -125,7 +125,7 @@ public:
     std::vector<Real> dts;
 
 protected:
-    virtual PetscErrorCode ts_monitor_callback(Int stepi, Real time, Vec x);
+    virtual void ts_monitor_callback(Int stepi, Real time, Vec x);
 };
 
 REGISTER_OBJECT(TestTSProblem);
@@ -135,13 +135,12 @@ TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonline
     this->dts.resize(5);
 }
 
-PetscErrorCode
+void
 TestTSProblem::ts_monitor_callback(Int stepi, Real time, Vec x)
 {
     Real dt;
     PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
     this->dts[stepi] = dt;
-    return 0;
 }
 
 ///

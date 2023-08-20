@@ -18,8 +18,6 @@ public:
 protected:
     /// File name with the mesh
     std::string file_name;
-    /// Create faces and edges in the mesh
-    const PetscBool interpolate;
 
 public:
     static Parameters parameters();

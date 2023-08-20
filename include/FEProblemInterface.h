@@ -379,16 +379,16 @@ protected:
         /// Time derivative (used during assembling)
         FieldValue dots;
 
-        FieldInfo(const std::string & name, Int id, Int nc, Int k, const Int & dim) :
+        FieldInfo(const std::string & name, Int id, Int nc, Int k, Int dim) :
             name(name),
             id(id),
             fe(nullptr),
             block(nullptr),
             nc(nc),
             k(k),
-            values(),
-            derivs(dim),
-            dots()
+            values(nc),
+            derivs(dim, nc),
+            dots(nc)
         {
         }
 
@@ -448,8 +448,8 @@ protected:
         /// the multiplier a for dF/dU_t
         Real u_t_shift;
 
-        AssemblyData();
-    } asmbl;
+        AssemblyData(Int dim);
+    } * asmbl;
 
     /// Functionals that must be evaluated before the weak form residual functionals
     /// associated with the PetscFormKey are evaluated

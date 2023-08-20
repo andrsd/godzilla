@@ -59,7 +59,7 @@ protected:
     /// Called after the time step is done solving
     virtual PetscErrorCode post_step();
     /// TS monitor callback
-    virtual PetscErrorCode ts_monitor_callback(Int stepi, Real time, Vec x);
+    virtual void ts_monitor_callback(Int stepi, Real time, Vec x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
@@ -81,8 +81,8 @@ protected:
     const Real & end_time;
     /// Number of steps
     const Int & num_steps;
-    /// Time step size
-    const Real & dt;
+    /// Initial time step size
+    const Real & dt_initial;
     /// Converged reason
     TSConvergedReason converged_reason;
     /// Simulation time

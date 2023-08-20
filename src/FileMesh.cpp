@@ -17,9 +17,7 @@ FileMesh::parameters()
     return params;
 }
 
-FileMesh::FileMesh(const Parameters & parameters) :
-    UnstructuredMesh(parameters),
-    interpolate(PETSC_TRUE)
+FileMesh::FileMesh(const Parameters & parameters) : UnstructuredMesh(parameters)
 {
     _F_;
 

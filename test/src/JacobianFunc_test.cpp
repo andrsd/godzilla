@@ -88,9 +88,9 @@ TEST(JacobianFuncTest, test)
 
     Int dim;
     EXPECT_CALL(prob, get_spatial_dimension()).Times(1).WillOnce(ReturnRef(dim));
-    FieldValue val;
+    FieldValue val(1);
     EXPECT_CALL(prob, get_field_value(_)).Times(1).WillOnce(ReturnRef(val));
-    FieldGradient grad(1);
+    FieldGradient grad(1, 1);
     EXPECT_CALL(prob, get_field_gradient(_)).Times(1).WillOnce(ReturnRef(grad));
     Real time;
     EXPECT_CALL(prob, get_assembly_time()).Times(1).WillOnce(ReturnRef(time));
