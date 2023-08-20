@@ -26,6 +26,12 @@ public:
     /// Method to compute Jacobian. Called from the PETsc callback
     virtual PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
 
+    /// Use matrix free finite difference matrix vector products to apply the Jacobian
+    ///
+    /// @param mf_operator use matrix-free only the A matrix
+    /// @param mf use matrix-free for both the A and P matrices
+    void set_use_matrix_free(bool mf_operator, bool mf);
+
 protected:
     /// Initialize the problem
     virtual void init();
