@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mpi.h>
+#include "mpi.h"
 #include <vector>
 #include "GodzillaConfig.h"
 #include "Datatype.h"
