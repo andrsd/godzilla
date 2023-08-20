@@ -24,6 +24,12 @@ public:
     set_up() override
     {
     }
+
+    Problem *
+    get_prob()
+    {
+        return BoundaryCondition::get_problem();
+    }
 };
 
 } // namespace
@@ -38,4 +44,5 @@ TEST_F(BoundaryConditionTest, api)
     MockBoundaryCondition bc(params);
 
     EXPECT_THAT(bc.get_boundary(), ElementsAre("side1"));
+    EXPECT_THAT(bc.get_prob(), this->prob);
 }

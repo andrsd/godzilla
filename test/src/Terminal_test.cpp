@@ -27,6 +27,12 @@ TEST(TerminalTest, ostream_operator)
     EXPECT_STREQ(oss.str().c_str(), Terminal::Color::red);
 }
 
+TEST(TerminalTest, string_operator)
+{
+    const std::string & r = Terminal::Color::red;
+    EXPECT_EQ(r, "\33[31m");
+}
+
 TEST(TerminalTest, fmt_formatter)
 {
     std::string s = fmt::format("{}", Terminal::Color::red);
