@@ -38,6 +38,12 @@ TEST_F(AuxiliaryFieldTest, api)
         evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
         {
         }
+
+        UnstructuredMesh *
+        get_msh() const
+        {
+            return AuxiliaryField::get_mesh();
+        }
     };
 
     prob->set_aux_fe(0, "fld", 1, 1);
@@ -59,6 +65,7 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux.get_field_id(), 0);
     EXPECT_EQ(aux.get_func(), nullptr);
     EXPECT_EQ(aux.get_context(), &aux);
+    EXPECT_EQ(aux.get_msh(), this->mesh);
 
     EXPECT_TRUE(prob->has_aux("aux"));
     EXPECT_FALSE(prob->has_aux("no-aux"));
