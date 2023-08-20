@@ -30,6 +30,7 @@ add_executable(${PROJECT_NAME}
     FEIntegration_test.cpp
     FEMatrices_test.cpp
     FENonlinearProblem_test.cpp
+    FENonlinearProblemJFNK_test.cpp
     FEGeometry_test.cpp
     FEOps_test.cpp
     FEShapeFns_test.cpp
