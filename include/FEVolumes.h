@@ -13,6 +13,8 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nod
 Real
 volume(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords)
 {
+    GODZILLA_UNUSED(coords);
+
     _F_;
     error("Volume calculation for {} in {} dimensions is not implemented.",
           get_element_type_str(ELEM_TYPE),
@@ -126,6 +128,8 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nod
 Real
 face_area(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords)
 {
+    GODZILLA_UNUSED(coords);
+
     _F_;
     error("Face area calculation for {} in {} dimensions is not implemented.",
           get_element_type_str(ELEM_TYPE),
@@ -136,6 +140,8 @@ template <>
 inline Real
 face_area<EDGE2, 1>(const DenseVector<DenseVector<Real, 1>, 1> & coords)
 {
+    GODZILLA_UNUSED(coords);
+
     return 1.;
 }
 

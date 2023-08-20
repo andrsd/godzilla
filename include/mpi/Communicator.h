@@ -2,6 +2,7 @@
 
 #include <mpi.h>
 #include <vector>
+#include "GodzillaConfig.h"
 #include "Datatype.h"
 #include "Status.h"
 #include "Request.h"
@@ -229,6 +230,8 @@ template <typename T>
 Request
 Communicator::isend(int dest, int tag, const T * values, int n) const
 {
+    GODZILLA_UNUSED(n);
+
     assert(values != nullptr);
     MPI_Request request;
     MPI_CHECK(MPI_Isend(const_cast<T *>(values),
