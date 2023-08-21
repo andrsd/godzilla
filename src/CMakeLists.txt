@@ -102,9 +102,11 @@ set_target_properties(
 
 target_include_directories(
     ${PROJECT_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
+        $<INSTALL_INTERFACE:include/godzilla>
     PRIVATE
         ${PETSC_INCLUDE_DIR}
-        ${CMAKE_BINARY_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
 )

@@ -7,7 +7,7 @@
 #include "Status.h"
 #include "Request.h"
 #include "Operation.h"
-#include "../Error.h"
+#include "Error.h"
 
 namespace godzilla {
 
