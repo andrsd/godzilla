@@ -1457,26 +1457,26 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                     g3[c] *= w;
             }
 
-            PETSC_CHECK(update_element_mat(fe_i,
-                                           fe_j,
-                                           0,
-                                           q,
-                                           T[field_i],
-                                           basis_real,
-                                           basis_der_real,
-                                           T[field_j],
-                                           test_real,
-                                           test_der_real,
-                                           &fe_geom,
-                                           g0,
-                                           g1,
-                                           g2,
-                                           g3,
-                                           e_offset,
-                                           tot_dim,
-                                           offset_i,
-                                           offset_j,
-                                           elem_mat));
+            update_element_mat(fe_i,
+                               fe_j,
+                               0,
+                               q,
+                               T[field_i],
+                               basis_real,
+                               basis_der_real,
+                               T[field_j],
+                               test_real,
+                               test_der_real,
+                               &fe_geom,
+                               g0,
+                               g1,
+                               g2,
+                               g3,
+                               e_offset,
+                               tot_dim,
+                               offset_i,
+                               offset_j,
+                               elem_mat);
         }
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
@@ -1681,26 +1681,26 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                     g3[c] *= w;
             }
 
-            PETSC_CHECK(update_element_mat(fe_i,
-                                           fe_j,
-                                           face,
-                                           q,
-                                           T[field_i],
-                                           basis_real,
-                                           basis_der_real,
-                                           T[field_j],
-                                           test_real,
-                                           test_der_real,
-                                           &cell_geom,
-                                           g0,
-                                           g1,
-                                           g2,
-                                           g3,
-                                           e_offset,
-                                           tot_dim,
-                                           offset_i,
-                                           offset_j,
-                                           elem_mat));
+            update_element_mat(fe_i,
+                               fe_j,
+                               face,
+                               q,
+                               T[field_i],
+                               basis_real,
+                               basis_der_real,
+                               T[field_j],
+                               test_real,
+                               test_der_real,
+                               &cell_geom,
+                               g0,
+                               g1,
+                               g2,
+                               g3,
+                               e_offset,
+                               tot_dim,
+                               offset_i,
+                               offset_j,
+                               elem_mat);
         }
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
@@ -1762,7 +1762,7 @@ FEProblemInterface::update_element_vec(PetscFE fe,
 }
 
 // This is a copy of petsc/fe.c, PetscFEUpdateElementMat_Internal
-PetscErrorCode
+void
 FEProblemInterface::update_element_mat(PetscFE fe_i,
                                        PetscFE fe_j,
                                        Int r,
@@ -1852,7 +1852,6 @@ FEProblemInterface::update_element_mat(PetscFE fe_i,
             }
         }
     }
-    return (0);
 }
 
 // This is a copy of petsc/fe.c, PetscFEEvaluateFieldJets_Internal
