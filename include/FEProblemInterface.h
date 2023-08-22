@@ -330,17 +330,17 @@ protected:
                                       Int offset_j,
                                       Scalar elem_mat[]);
 
-    PetscErrorCode evaluate_field_jets(PetscDS ds,
-                                       Int nf,
-                                       Int r,
-                                       Int q,
-                                       PetscTabulation tab[],
-                                       PetscFEGeom * fe_geom,
-                                       const Scalar coefficients[],
-                                       const Scalar coefficients_t[],
-                                       Scalar u[],
-                                       Scalar u_x[],
-                                       Scalar u_t[]);
+    void evaluate_field_jets(PetscDS ds,
+                             Int nf,
+                             Int r,
+                             Int q,
+                             PetscTabulation tab[],
+                             PetscFEGeom * fe_geom,
+                             const Scalar coefficients[],
+                             const Scalar coefficients_t[],
+                             Scalar u[],
+                             Scalar u_x[],
+                             Scalar u_t[]);
 
     Int get_next_id(const std::vector<Int> & ids) const;
 
