@@ -68,6 +68,13 @@ Mesh::create_label(const std::string & name) const
     return Label(label);
 }
 
+void
+Mesh::remove_label(const std::string & name)
+{
+    _F_;
+    PETSC_CHECK(DMRemoveLabel(this->dm, name.c_str(), nullptr));
+}
+
 DM
 Mesh::get_coordinate_dm() const
 {

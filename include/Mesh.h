@@ -48,6 +48,11 @@ public:
     /// @return Created label
     Label create_label(const std::string & name) const;
 
+    /// Remove label with given name
+    ///
+    /// @param name The label name
+    void remove_label(const std::string & name);
+
     /// Gets the DM that prescribes coordinate layout and scatters between global and local
     /// coordinates
     ///
