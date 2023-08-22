@@ -1048,29 +1048,29 @@ FEProblemInterface::integrate_residual(PetscDS ds,
             this->asmbl->xyz.set(fe_geom.v);
             Real w = fe_geom.detJ[0] * q_weights[q];
 
-            PETSC_CHECK(evaluate_field_jets(ds,
-                                            n_fields,
-                                            0,
-                                            q,
-                                            T,
-                                            &fe_geom,
-                                            &coefficients[c_offset],
-                                            coefficients_t ? &coefficients_t[c_offset] : nullptr,
-                                            this->asmbl->u,
-                                            this->asmbl->u_x,
-                                            coefficients_t ? this->asmbl->u_t : nullptr));
+            evaluate_field_jets(ds,
+                                n_fields,
+                                0,
+                                q,
+                                T,
+                                &fe_geom,
+                                &coefficients[c_offset],
+                                coefficients_t ? &coefficients_t[c_offset] : nullptr,
+                                this->asmbl->u,
+                                this->asmbl->u_x,
+                                coefficients_t ? this->asmbl->u_t : nullptr);
             if (ds_aux)
-                PETSC_CHECK(evaluate_field_jets(ds_aux,
-                                                n_fields_aux,
-                                                0,
-                                                q,
-                                                T_aux,
-                                                &fe_geom,
-                                                &coefficients_aux[c_offset_aux],
-                                                nullptr,
-                                                this->asmbl->a,
-                                                this->asmbl->a_x,
-                                                nullptr));
+                evaluate_field_jets(ds_aux,
+                                    n_fields_aux,
+                                    0,
+                                    q,
+                                    T_aux,
+                                    &fe_geom,
+                                    &coefficients_aux[c_offset_aux],
+                                    nullptr,
+                                    this->asmbl->a,
+                                    this->asmbl->a_x,
+                                    nullptr);
             for (auto & f : this->sorted_res_functionals[key])
                 f->evaluate();
             for (auto & func : f0_res_fns)
@@ -1084,16 +1084,16 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                     f1[(q * T[field]->Nc + c) * this->asmbl->dim + d] *= w;
         }
 
-        PETSC_CHECK(update_element_vec(fe,
-                                       T[field],
-                                       0,
-                                       basis_real,
-                                       basis_der_real,
-                                       e,
-                                       cell_geom,
-                                       f0,
-                                       f1,
-                                       &elem_vec[c_offset + f_offset]));
+        update_element_vec(fe,
+                           T[field],
+                           0,
+                           basis_real,
+                           basis_der_real,
+                           e,
+                           cell_geom,
+                           f0,
+                           f1,
+                           &elem_vec[c_offset + f_offset]);
 
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
@@ -1204,29 +1204,29 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
             PETSC_CHECK(PetscFEGeomGetCellPoint(face_geom, e, q, &cell_geom));
             Real w = fe_geom.detJ[0] * q_weights[q];
             this->asmbl->normals.set(fe_geom.n);
-            PETSC_CHECK(evaluate_field_jets(ds,
-                                            n_fields,
-                                            face,
-                                            q,
-                                            T_face,
-                                            &cell_geom,
-                                            &coefficients[c_offset],
-                                            coefficients_t ? &coefficients_t[c_offset] : nullptr,
-                                            this->asmbl->u,
-                                            this->asmbl->u_x,
-                                            coefficients_t ? this->asmbl->u_t : nullptr));
+            evaluate_field_jets(ds,
+                                n_fields,
+                                face,
+                                q,
+                                T_face,
+                                &cell_geom,
+                                &coefficients[c_offset],
+                                coefficients_t ? &coefficients_t[c_offset] : nullptr,
+                                this->asmbl->u,
+                                this->asmbl->u_x,
+                                coefficients_t ? this->asmbl->u_t : nullptr);
             if (ds_aux)
-                PETSC_CHECK(evaluate_field_jets(ds_aux,
-                                                n_fields_aux,
-                                                aux_on_bnd ? 0 : face,
-                                                q,
-                                                T_face_aux,
-                                                &cell_geom,
-                                                &coefficients_aux[c_offset_aux],
-                                                nullptr,
-                                                this->asmbl->a,
-                                                this->asmbl->a_x,
-                                                nullptr));
+                evaluate_field_jets(ds_aux,
+                                    n_fields_aux,
+                                    aux_on_bnd ? 0 : face,
+                                    q,
+                                    T_face_aux,
+                                    &cell_geom,
+                                    &coefficients_aux[c_offset_aux],
+                                    nullptr,
+                                    this->asmbl->a,
+                                    this->asmbl->a_x,
+                                    nullptr);
             for (auto & f : this->sorted_res_functionals[key])
                 f->evaluate();
             for (auto & func : f0_res_fns)
@@ -1239,16 +1239,16 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                 for (Int d = 0; d < this->asmbl->dim; ++d)
                     f1[(q * n_comp_i + c) * this->asmbl->dim + d] *= w;
         }
-        PETSC_CHECK(update_element_vec(fe,
-                                       T_face[field],
-                                       face,
-                                       basis_real,
-                                       basis_der_real,
-                                       e,
-                                       face_geom,
-                                       f0,
-                                       f1,
-                                       &elem_vec[c_offset + f_offset]));
+        update_element_vec(fe,
+                           T_face[field],
+                           face,
+                           basis_real,
+                           basis_der_real,
+                           e,
+                           face_geom,
+                           f0,
+                           f1,
+                           &elem_vec[c_offset + f_offset]);
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
     }
@@ -1403,30 +1403,29 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
             }
             Real w = fe_geom.detJ[0] * q_weights[q];
             if (coefficients)
-                PETSC_CHECK(
-                    evaluate_field_jets(ds,
-                                        n_fields,
-                                        0,
-                                        q,
-                                        T,
-                                        &fe_geom,
-                                        &coefficients[c_offset],
-                                        coefficients_t ? &coefficients_t[c_offset] : nullptr,
-                                        this->asmbl->u,
-                                        this->asmbl->u_x,
-                                        coefficients_t ? this->asmbl->u_t : nullptr));
+                evaluate_field_jets(ds,
+                                    n_fields,
+                                    0,
+                                    q,
+                                    T,
+                                    &fe_geom,
+                                    &coefficients[c_offset],
+                                    coefficients_t ? &coefficients_t[c_offset] : nullptr,
+                                    this->asmbl->u,
+                                    this->asmbl->u_x,
+                                    coefficients_t ? this->asmbl->u_t : nullptr);
             if (ds_aux)
-                PETSC_CHECK(evaluate_field_jets(ds_aux,
-                                                n_fields_aux,
-                                                0,
-                                                q,
-                                                T_aux,
-                                                &fe_geom,
-                                                &coefficients_aux[c_offset_aux],
-                                                nullptr,
-                                                this->asmbl->a,
-                                                this->asmbl->a_x,
-                                                nullptr));
+                evaluate_field_jets(ds_aux,
+                                    n_fields_aux,
+                                    0,
+                                    q,
+                                    T_aux,
+                                    &fe_geom,
+                                    &coefficients_aux[c_offset_aux],
+                                    nullptr,
+                                    this->asmbl->a,
+                                    this->asmbl->a_x,
+                                    nullptr);
             for (auto & f : this->sorted_jac_functionals[key])
                 f->evaluate();
             if (!g0_jac_fns.empty()) {
@@ -1458,26 +1457,26 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
                     g3[c] *= w;
             }
 
-            PETSC_CHECK(update_element_mat(fe_i,
-                                           fe_j,
-                                           0,
-                                           q,
-                                           T[field_i],
-                                           basis_real,
-                                           basis_der_real,
-                                           T[field_j],
-                                           test_real,
-                                           test_der_real,
-                                           &fe_geom,
-                                           g0,
-                                           g1,
-                                           g2,
-                                           g3,
-                                           e_offset,
-                                           tot_dim,
-                                           offset_i,
-                                           offset_j,
-                                           elem_mat));
+            update_element_mat(fe_i,
+                               fe_j,
+                               0,
+                               q,
+                               T[field_i],
+                               basis_real,
+                               basis_der_real,
+                               T[field_j],
+                               test_real,
+                               test_der_real,
+                               &fe_geom,
+                               g0,
+                               g1,
+                               g2,
+                               g3,
+                               e_offset,
+                               tot_dim,
+                               offset_i,
+                               offset_j,
+                               elem_mat);
         }
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
@@ -1627,30 +1626,29 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
             this->asmbl->normals.set(fe_geom.n);
             Real w = fe_geom.detJ[0] * q_weights[q];
             if (coefficients)
-                PETSC_CHECK(
-                    evaluate_field_jets(ds,
-                                        n_fields,
-                                        face,
-                                        q,
-                                        T,
-                                        &cell_geom,
-                                        &coefficients[c_offset],
-                                        coefficients_t ? &coefficients_t[c_offset] : nullptr,
-                                        this->asmbl->u,
-                                        this->asmbl->u_x,
-                                        coefficients_t ? this->asmbl->u_t : nullptr));
+                evaluate_field_jets(ds,
+                                    n_fields,
+                                    face,
+                                    q,
+                                    T,
+                                    &cell_geom,
+                                    &coefficients[c_offset],
+                                    coefficients_t ? &coefficients_t[c_offset] : nullptr,
+                                    this->asmbl->u,
+                                    this->asmbl->u_x,
+                                    coefficients_t ? this->asmbl->u_t : nullptr);
             if (ds_aux)
-                PETSC_CHECK(evaluate_field_jets(ds_aux,
-                                                n_fields_aux,
-                                                face,
-                                                q,
-                                                T_aux,
-                                                &cell_geom,
-                                                &coefficients_aux[c_offset_aux],
-                                                nullptr,
-                                                this->asmbl->a,
-                                                this->asmbl->a_x,
-                                                nullptr));
+                evaluate_field_jets(ds_aux,
+                                    n_fields_aux,
+                                    face,
+                                    q,
+                                    T_aux,
+                                    &cell_geom,
+                                    &coefficients_aux[c_offset_aux],
+                                    nullptr,
+                                    this->asmbl->a,
+                                    this->asmbl->a_x,
+                                    nullptr);
 
             for (auto & f : this->sorted_jac_functionals[key])
                 f->evaluate();
@@ -1683,26 +1681,26 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                     g3[c] *= w;
             }
 
-            PETSC_CHECK(update_element_mat(fe_i,
-                                           fe_j,
-                                           face,
-                                           q,
-                                           T[field_i],
-                                           basis_real,
-                                           basis_der_real,
-                                           T[field_j],
-                                           test_real,
-                                           test_der_real,
-                                           &cell_geom,
-                                           g0,
-                                           g1,
-                                           g2,
-                                           g3,
-                                           e_offset,
-                                           tot_dim,
-                                           offset_i,
-                                           offset_j,
-                                           elem_mat));
+            update_element_mat(fe_i,
+                               fe_j,
+                               face,
+                               q,
+                               T[field_i],
+                               basis_real,
+                               basis_der_real,
+                               T[field_j],
+                               test_real,
+                               test_der_real,
+                               &cell_geom,
+                               g0,
+                               g1,
+                               g2,
+                               g3,
+                               e_offset,
+                               tot_dim,
+                               offset_i,
+                               offset_j,
+                               elem_mat);
         }
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
@@ -1713,7 +1711,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
 }
 
 // This is a copy of petsc/fe.c, PetscFEUpdateElementVec_Internal
-PetscErrorCode
+void
 FEProblemInterface::update_element_vec(PetscFE fe,
                                        PetscTabulation tab,
                                        Int r,
@@ -1761,11 +1759,10 @@ FEProblemInterface::update_element_vec(PetscFE fe,
             }
         }
     }
-    return 0;
 }
 
 // This is a copy of petsc/fe.c, PetscFEUpdateElementMat_Internal
-PetscErrorCode
+void
 FEProblemInterface::update_element_mat(PetscFE fe_i,
                                        PetscFE fe_j,
                                        Int r,
@@ -1855,11 +1852,10 @@ FEProblemInterface::update_element_mat(PetscFE fe_i,
             }
         }
     }
-    return (0);
 }
 
 // This is a copy of petsc/fe.c, PetscFEEvaluateFieldJets_Internal
-PetscErrorCode
+void
 FEProblemInterface::evaluate_field_jets(PetscDS ds,
                                         Int nf,
                                         Int r,
@@ -1937,7 +1933,6 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
         f_offset += n_cf;
         d_offset += n_bf;
     }
-    return 0;
 }
 
 Int

@@ -214,7 +214,7 @@ ExplicitFVLinearProblem::compute_rhs(Real time, const Vector & x, Vector & F)
     if ((Vec) this->M_lumped_inv == nullptr)
         PETSC_CHECK(KSPSolve(this->ksp, F, F));
     else
-        PETSC_CHECK(VecPointwiseMult(F, this->M_lumped_inv, F));
+        Vector::pointwise_mult(F, this->M_lumped_inv, F);
     restore_local_vector(loc_x);
     restore_local_vector(loc_F);
     return 0;
