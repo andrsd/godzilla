@@ -298,16 +298,16 @@ protected:
     void
     sort_jacobian_functionals(const std::map<std::string, const ValueFunctional *> & suppliers);
 
-    PetscErrorCode update_element_vec(PetscFE fe,
-                                      PetscTabulation tab,
-                                      Int r,
-                                      Scalar tmp_basis[],
-                                      Scalar tmp_basis_der[],
-                                      Int e,
-                                      PetscFEGeom * fe_geom,
-                                      Scalar f0[],
-                                      Scalar f1[],
-                                      Scalar elem_vec[]);
+    void update_element_vec(PetscFE fe,
+                            PetscTabulation tab,
+                            Int r,
+                            Scalar tmp_basis[],
+                            Scalar tmp_basis_der[],
+                            Int e,
+                            PetscFEGeom * fe_geom,
+                            Scalar f0[],
+                            Scalar f1[],
+                            Scalar elem_vec[]);
 
     PetscErrorCode update_element_mat(PetscFE fe_i,
                                       PetscFE fe_j,

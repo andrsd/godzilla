@@ -1084,16 +1084,16 @@ FEProblemInterface::integrate_residual(PetscDS ds,
                     f1[(q * T[field]->Nc + c) * this->asmbl->dim + d] *= w;
         }
 
-        PETSC_CHECK(update_element_vec(fe,
-                                       T[field],
-                                       0,
-                                       basis_real,
-                                       basis_der_real,
-                                       e,
-                                       cell_geom,
-                                       f0,
-                                       f1,
-                                       &elem_vec[c_offset + f_offset]));
+        update_element_vec(fe,
+                           T[field],
+                           0,
+                           basis_real,
+                           basis_der_real,
+                           e,
+                           cell_geom,
+                           f0,
+                           f1,
+                           &elem_vec[c_offset + f_offset]);
 
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
@@ -1239,16 +1239,16 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                 for (Int d = 0; d < this->asmbl->dim; ++d)
                     f1[(q * n_comp_i + c) * this->asmbl->dim + d] *= w;
         }
-        PETSC_CHECK(update_element_vec(fe,
-                                       T_face[field],
-                                       face,
-                                       basis_real,
-                                       basis_der_real,
-                                       e,
-                                       face_geom,
-                                       f0,
-                                       f1,
-                                       &elem_vec[c_offset + f_offset]));
+        update_element_vec(fe,
+                           T_face[field],
+                           face,
+                           basis_real,
+                           basis_der_real,
+                           e,
+                           face_geom,
+                           f0,
+                           f1,
+                           &elem_vec[c_offset + f_offset]);
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
     }
@@ -1711,7 +1711,7 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
 }
 
 // This is a copy of petsc/fe.c, PetscFEUpdateElementVec_Internal
-PetscErrorCode
+void
 FEProblemInterface::update_element_vec(PetscFE fe,
                                        PetscTabulation tab,
                                        Int r,
@@ -1759,7 +1759,6 @@ FEProblemInterface::update_element_vec(PetscFE fe,
             }
         }
     }
-    return 0;
 }
 
 // This is a copy of petsc/fe.c, PetscFEUpdateElementMat_Internal
