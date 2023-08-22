@@ -33,6 +33,13 @@ public:
     /// @param points The indices
     void restore_point_range(Int start, Int end, const Int * points) const;
 
+    /// Configures the IndexSet to be a subrange for the traversal information given
+    ///
+    /// @param start The first index of the subrange
+    /// @param end One past the last index for the subrange
+    /// @param points The indices for the entire range, from `get_point_range`
+    void get_point_subrange(Int start, Int end, const Int * points) const;
+
     NO_DISCARD Int get_size() const;
     NO_DISCARD Int get_local_size() const;
     NO_DISCARD const Int * data() const;

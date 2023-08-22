@@ -68,6 +68,13 @@ IndexSet::restore_point_range(Int start, Int end, const Int * points) const
     PETSC_CHECK(ISRestorePointRange(this->is, &start, &end, &points));
 }
 
+void
+IndexSet::get_point_subrange(Int start, Int end, const Int * points) const
+{
+    _F_;
+    PETSC_CHECK(ISGetPointSubrange(this->is, start, end, points));
+}
+
 Int
 IndexSet::get_size() const
 {

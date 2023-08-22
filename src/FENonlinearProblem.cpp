@@ -181,7 +181,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     PetscDS ds_aux = nullptr;
     PetscBool is_implicit = (loc_x_t || time == PETSC_MIN_REAL) ? PETSC_TRUE : PETSC_FALSE;
     Scalar *u = nullptr, *u_t, *a;
-    IS chunk_is;
+    IndexSet chunk_is;
     Int tot_dim_aux;
     PetscQuadrature affine_quad = nullptr, *quads = nullptr;
     PetscFEGeom *affine_geom = nullptr, **geoms = nullptr;
@@ -259,7 +259,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         }
     }
     /* Loop over chunks */
-    PetscCall(ISCreate(PETSC_COMM_SELF, &chunk_is));
+    chunk_is.create(PETSC_COMM_SELF);
     Int n_cells = c_end - c_start;
     Int n_chunks = 1;
     Int cell_chunk_size = n_cells / n_chunks;
@@ -271,7 +271,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         Int n_chunk_cells = cE - cS;
 
         /* Extract field coefficients */
-        PetscCall(ISGetPointSubrange(chunk_is, cS, cE, cells));
+        chunk_is.get_point_subrange(cS, cE, cells);
         PetscCall(DMPlexGetCellFields(dm, chunk_is, loc_x, loc_x_t, loc_a, &u, &u_t, &a));
         PetscCall(DMGetWorkArray(dm, n_chunk_cells * tot_dim, MPIU_SCALAR, &elem_vec));
         PetscCall(PetscArrayzero(elem_vec, n_chunk_cells * tot_dim));
@@ -362,7 +362,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         PetscCall(DMPlexRestoreCellFields(dm, chunk_is, loc_x, loc_x_t, loc_a, &u, &u_t, &a));
         PetscCall(DMRestoreWorkArray(dm, n_chunk_cells * tot_dim, MPIU_SCALAR, &elem_vec));
     }
-    PetscCall(ISDestroy(&chunk_is));
+    chunk_is.destroy();
     cell_is.restore_point_range(c_start, c_end, cells);
 
     PetscCall(compute_bnd_residual_internal(dm, loc_x, loc_x_t, t, loc_f));
