@@ -76,3 +76,17 @@ TEST(MeshTest, get_coordinates_local)
     EXPECT_EQ(coords(1), 0.);
     EXPECT_EQ(coords(2), 1.);
 }
+
+TEST(MeshTest, remove_label)
+{
+    TestApp app;
+
+    Parameters params = TestMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestMesh mesh(params);
+    mesh.create();
+
+    mesh.remove_label("marker");
+    EXPECT_FALSE(mesh.has_label("marker"));
+}

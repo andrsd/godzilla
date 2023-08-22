@@ -104,7 +104,7 @@ RectangleMesh::create_dm()
                                     this->interpolate,
                                     &this->dm));
 
-    PETSC_CHECK(DMRemoveLabel(this->dm, "marker", nullptr));
+    remove_label("marker");
     // create user-friendly names for sides
     std::map<Int, std::string> face_set_names;
     face_set_names[1] = "bottom";
