@@ -903,11 +903,11 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         MPI_Allreduce(&ass_op, &gass_op, 1, MPIU_BOOL, MPI_LOR, PetscObjectComm((PetscObject) dm)));
 
     if (has_jac & has_prec) {
-        PetscCall(MatAssemblyBegin(J, MAT_FINAL_ASSEMBLY));
-        PetscCall(MatAssemblyEnd(J, MAT_FINAL_ASSEMBLY));
+        J.assembly_begin();
+        J.assembly_end();
     }
-    PetscCall(MatAssemblyBegin(Jp, MAT_FINAL_ASSEMBLY));
-    PetscCall(MatAssemblyEnd(Jp, MAT_FINAL_ASSEMBLY));
+    Jp.assembly_begin();
+    Jp.assembly_end();
     return 0;
 }
 
