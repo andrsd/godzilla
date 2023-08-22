@@ -54,6 +54,20 @@ IndexSet::restore_indices()
     PETSC_CHECK(ISRestoreIndices(this->is, &this->indices));
 }
 
+void
+IndexSet::get_point_range(Int & start, Int & end, const Int *& points) const
+{
+    _F_;
+    PETSC_CHECK(ISGetPointRange(this->is, &start, &end, &points));
+}
+
+void
+IndexSet::restore_point_range(Int start, Int end, const Int * points) const
+{
+    _F_;
+    PETSC_CHECK(ISRestorePointRange(this->is, &start, &end, &points));
+}
+
 Int
 IndexSet::get_size() const
 {

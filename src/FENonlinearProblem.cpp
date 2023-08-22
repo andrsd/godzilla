@@ -190,7 +190,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     /// PetscDisc class
     Int c_start, c_end;
     const Int * cells;
-    PetscCall(ISGetPointRange((IS) cell_is, &c_start, &c_end, &cells));
+    cell_is.get_point_range(c_start, c_end, cells);
     Int f_start, f_end;
     PetscCall(DMPlexGetHeightStratum(dm, 1, &f_start, &f_end));
     /* 1: Get sizes from dm and dm_aux */
@@ -363,7 +363,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         PetscCall(DMRestoreWorkArray(dm, n_chunk_cells * tot_dim, MPIU_SCALAR, &elem_vec));
     }
     PetscCall(ISDestroy(&chunk_is));
-    PetscCall(ISRestorePointRange((IS) cell_is, &c_start, &c_end, &cells));
+    cell_is.restore_point_range(c_start, c_end, cells);
 
     PetscCall(compute_bnd_residual_internal(dm, loc_x, loc_x_t, t, loc_f));
 
@@ -688,7 +688,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     Int n_cells = cell_is.get_local_size();
     Int c_start, c_end;
     const Int * cells;
-    PetscCall(ISGetPointRange((IS) cell_is, &c_start, &c_end, &cells));
+    cell_is.get_point_range(c_start, c_end, cells);
     PetscBool transform;
     PetscCall(DMHasBasisTransform(dm, &transform));
     DM tdm;
@@ -915,7 +915,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
                                               ADD_VALUES));
         }
     }
-    PetscCall(ISRestorePointRange((IS) cell_is, &c_start, &c_end, &cells));
+    cell_is.restore_point_range(c_start, c_end, cells);
     PetscCall(PetscFree4(u, u_t, elem_mat, elem_mat_P));
     if (dm_aux) {
         PetscCall(PetscFree(a));

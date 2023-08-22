@@ -19,6 +19,20 @@ public:
     void get_indices();
     void restore_indices();
 
+    /// Returns a description of the points in an IndexSet suitable for traversal
+    ///
+    /// @param start The first index
+    /// @param end  One past the last index
+    /// @param points The indices
+    void get_point_range(Int & start, Int & end, const Int *& points) const;
+
+    /// Destroys the traversal description created with `get_point_range`
+    ///
+    /// @param start The first index
+    /// @param end One past the last index
+    /// @param points The indices
+    void restore_point_range(Int start, Int end, const Int * points) const;
+
     NO_DISCARD Int get_size() const;
     NO_DISCARD Int get_local_size() const;
     NO_DISCARD const Int * data() const;
