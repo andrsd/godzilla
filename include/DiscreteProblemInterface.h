@@ -216,11 +216,6 @@ public:
     /// @return The offset
     Int get_aux_field_dof(Int point, Int fid) const;
 
-    /// Gets a local vector with the coordinates associated with this problem's mesh
-    ///
-    /// @return coordinate vector
-    Vector get_coordinates_local() const;
-
     /// Get local solution vector
     ///
     /// @return Local solution vector

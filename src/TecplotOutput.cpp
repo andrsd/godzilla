@@ -386,7 +386,7 @@ TecplotOutput::write_coordinates_ascii()
 {
     _F_;
     auto dim = this->mesh->get_dimension();
-    auto coord = this->dpi->get_coordinates_local();
+    auto coord = this->mesh->get_coordinates_local();
     auto xyz = coord.get_array_read();
     auto n_coords = coord.get_size() / dim;
     for (Int d = 0; d < dim; d++) {
