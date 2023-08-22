@@ -132,36 +132,24 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
     _F_;
     // this is based on DMSNESComputeResidual()
-    DM plex = get_dm();
     IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
-    Int n_ds;
-    PETSC_CHECK(DMGetNumDS(plex, &n_ds));
-    for (Int s = 0; s < n_ds; ++s) {
-        PetscDS ds;
-        DMLabel label;
-#if PETSC_VERSION_GE(3, 19, 0)
-        PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds, nullptr));
-#else
-        PETSC_CHECK(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
-#endif
-
-        for (auto & res_key : this->wf->get_residual_keys()) {
-            IndexSet cells;
-            if (res_key.label == nullptr) {
-                all_cells.inc_ref();
-                cells = all_cells;
-            }
-            else {
-                Label l(res_key.label);
-                IndexSet points = l.get_stratum(res_key.value);
-                cells = IndexSet::intersect_caching(all_cells, points);
-                points.destroy();
-            }
-            compute_residual_internal(plex, res_key, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
-            cells.destroy();
+    for (auto & res_key : this->wf->get_residual_keys()) {
+        IndexSet cells;
+        if (res_key.label == nullptr) {
+            all_cells.inc_ref();
+            cells = all_cells;
         }
+        else {
+            Label l(res_key.label);
+            IndexSet points = l.get_stratum(res_key.value);
+            cells = IndexSet::intersect_caching(all_cells, points);
+            points.destroy();
+        }
+        compute_residual_internal(get_dm(), res_key, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
+        cells.destroy();
     }
+
     all_cells.destroy();
     return 0;
 }
@@ -631,44 +619,30 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
     _F_;
     // based on DMPlexSNESComputeJacobianFEM and DMSNESComputeJacobianAction
-    DM plex = get_dm();
     IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
-    Int n_ds;
-    PetscCall(DMGetNumDS(plex, &n_ds));
-    for (Int s = 0; s < n_ds; ++s) {
-        PetscDS ds;
-        DMLabel label;
-#if PETSC_VERSION_GE(3, 19, 0)
-        PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds, nullptr));
-#else
-        PetscCall(DMGetRegionNumDS(plex, s, &label, nullptr, &ds));
-#endif
+    auto has_jac = this->wf->has_jacobian();
+    auto has_precond = this->wf->has_jacobian_preconditioner();
+    if (has_jac && has_precond)
+        J.zero();
+    Jp.zero();
 
-        if (s == 0) {
-            auto has_jac = this->wf->has_jacobian();
-            auto has_precond = this->wf->has_jacobian_preconditioner();
-            if (has_jac && has_precond)
-                J.zero();
-            Jp.zero();
+    for (auto & jac_key : this->wf->get_jacobian_keys()) {
+        IndexSet cells;
+        if (!jac_key.label) {
+            all_cells.inc_ref();
+            cells = all_cells;
         }
-
-        for (auto & jac_key : this->wf->get_jacobian_keys()) {
-            IndexSet cells;
-            if (!jac_key.label) {
-                all_cells.inc_ref();
-                cells = all_cells;
-            }
-            else {
-                Label l(jac_key.label);
-                auto points = l.get_stratum(jac_key.value);
-                cells = IndexSet::intersect_caching(all_cells, points);
-                points.destroy();
-            }
-            compute_jacobian_internal(plex, jac_key, cells, 0.0, 0.0, x, Vector(), J, Jp);
-            cells.destroy();
+        else {
+            Label l(jac_key.label);
+            auto points = l.get_stratum(jac_key.value);
+            cells = IndexSet::intersect_caching(all_cells, points);
+            points.destroy();
         }
+        compute_jacobian_internal(get_dm(), jac_key, cells, 0.0, 0.0, x, Vector(), J, Jp);
+        cells.destroy();
     }
+
     all_cells.destroy();
     return 0;
 }
