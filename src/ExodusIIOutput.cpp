@@ -247,7 +247,7 @@ ExodusIIOutput::write_coords(int exo_dim)
 {
     _F_;
     int dim = (int) this->mesh->get_dimension();
-    Vector coord = this->dpi->get_coordinates_local();
+    Vector coord = this->mesh->get_coordinates_local();
     Int coord_size = coord.get_size();
     Scalar * xyz = coord.get_array();
 
