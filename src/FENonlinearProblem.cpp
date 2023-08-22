@@ -271,7 +271,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
         Int n_chunk_cells = cE - cS;
 
         /* Extract field coefficients */
-        PetscCall(ISGetPointSubrange(chunk_is, cS, cE, cells));
+        chunk_is.get_point_subrange(cS, cE, cells);
         PetscCall(DMPlexGetCellFields(dm, chunk_is, loc_x, loc_x_t, loc_a, &u, &u_t, &a));
         PetscCall(DMGetWorkArray(dm, n_chunk_cells * tot_dim, MPIU_SCALAR, &elem_vec));
         PetscCall(PetscArrayzero(elem_vec, n_chunk_cells * tot_dim));
