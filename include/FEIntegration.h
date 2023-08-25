@@ -117,6 +117,13 @@ surface_integration_coeff()
 
 template <>
 inline Real
+surface_integration_coeff<EDGE2, 0, 1>()
+{
+    return 1.;
+}
+
+template <>
+inline Real
 surface_integration_coeff<EDGE2, 1, 1>()
 {
     return 1.;
@@ -124,9 +131,23 @@ surface_integration_coeff<EDGE2, 1, 1>()
 
 template <>
 inline Real
+surface_integration_coeff<TRI3, 0, 1>()
+{
+    return 1. / 2.;
+}
+
+template <>
+inline Real
 surface_integration_coeff<TRI3, 1, 1>()
 {
     return 1. / 6.;
+}
+
+template <>
+inline Real
+surface_integration_coeff<TET4, 0, 1>()
+{
+    return 1. / 3.;
 }
 
 template <>
