@@ -286,35 +286,34 @@ mass_surface<TRI3, 2>()
 //
 
 template <ElementType ELEM_TYPE, Int N_BND_NODES>
-inline DenseMatrix<Real, N_BND_NODES>
-bnd_rz(const DenseVector<Real, N_BND_NODES> & radii)
+inline DenseMatrixSymm<Real, N_BND_NODES>
+mass_surface_rz(const DenseVector<Real, N_BND_NODES> & radius)
 {
-    GODZILLA_UNUSED(radii);
+    GODZILLA_UNUSED(radius);
 
     error("Not implemented.");
 }
 
 template <>
-inline DenseMatrix<Real, 1>
-bnd_rz<EDGE2, 1>(const DenseVector<Real, 1> & radius)
+inline DenseMatrixSymm<Real, 1>
+mass_surface_rz<EDGE2, 1>(const DenseVector<Real, 1> & radius)
 {
     GODZILLA_UNUSED(radius);
 
-    DenseMatrix<Real, 1> bi;
-    bi(0, 0) = 1.;
-    return bi;
+    DenseMatrixSymm<Real, 1> m;
+    m(0, 0) = 1.;
+    return m;
 }
 
 template <>
-inline DenseMatrix<Real, 2>
-bnd_rz<TRI3, 2>(const DenseVector<Real, 2> & radius)
+inline DenseMatrixSymm<Real, 2>
+mass_surface_rz<TRI3, 2>(const DenseVector<Real, 2> & radius)
 {
-    DenseMatrix<Real, 2> bi;
-    bi(0, 0) = 3. * radius(0) + radius(1);
-    bi(0, 1) = radius(0) + radius(1);
-    bi(1, 0) = radius(0) + radius(1);
-    bi(1, 1) = radius(0) + 3. * radius(1);
-    return bi;
+    DenseMatrixSymm<Real, 2> m;
+    m(0, 0) = 3. * radius(0) + radius(1);
+    m(0, 1) = radius(0) + radius(1);
+    m(1, 1) = radius(0) + 3. * radius(1);
+    return m;
 }
 
 } // namespace matrix
