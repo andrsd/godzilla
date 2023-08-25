@@ -593,28 +593,31 @@ FEProblemInterface::set_up_auxiliary_dm(DM dm)
     bool no_errors = true;
     for (auto & aux : this->auxs) {
         Int fid = aux->get_field_id();
-        if (has_aux_field_by_id(fid)) {
-            Int aux_nc = aux->get_num_components();
-            Int field_nc = this->aux_fields.at(fid).nc;
-            if (aux_nc == field_nc) {
-                const std::string & region_name = aux->get_region();
-                this->auxs_by_region[region_name].push_back(aux);
+        if (fid >= 0) {
+            if (has_aux_field_by_id(fid)) {
+                Int aux_nc = aux->get_num_components();
+                Int field_nc = this->aux_fields.at(fid).nc;
+                if (aux_nc == field_nc) {
+                    const std::string & region_name = aux->get_region();
+                    this->auxs_by_region[region_name].push_back(aux);
+                }
+                else {
+                    no_errors = false;
+                    this->logger->error("Auxiliary field '{}' has {} component(s), but is set on a "
+                                        "field with {} component(s).",
+                                        aux->get_name(),
+                                        aux_nc,
+                                        field_nc);
+                }
             }
             else {
                 no_errors = false;
-                this->logger->error("Auxiliary field '{}' has {} component(s), but is set on a "
-                                    "field with {} component(s).",
-                                    aux->get_name(),
-                                    aux_nc,
-                                    field_nc);
+                this->logger->error(
+                    "Auxiliary field '{}' is set on auxiliary field with ID '{}', but "
+                    "such ID does not exist.",
+                    aux->get_name(),
+                    fid);
             }
-        }
-        else {
-            no_errors = false;
-            this->logger->error("Auxiliary field '{}' is set on auxiliary field with ID '{}', but "
-                                "such ID does not exist.",
-                                aux->get_name(),
-                                fid);
         }
     }
     if (no_errors) {
