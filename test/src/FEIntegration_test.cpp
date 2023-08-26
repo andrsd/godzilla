@@ -9,6 +9,7 @@ TEST(FEIntegrationTest, edge2)
     EXPECT_EQ((fe::integration_coeff<EDGE2, 0, 0>()), 1.);
     EXPECT_EQ((fe::integration_coeff<EDGE2, 1, 1>()), 1. / 6.);
 
+    EXPECT_EQ((fe::surface_integration_coeff<EDGE2, 0, 1>()), 1.);
     EXPECT_EQ((fe::surface_integration_coeff<EDGE2, 1, 1>()), 1.);
 }
 
@@ -18,6 +19,7 @@ TEST(FEIntegrationTest, tri3)
     EXPECT_EQ((fe::integration_coeff<TRI3, 0, 0>()), 1.);
     EXPECT_EQ((fe::integration_coeff<TRI3, 1, 1>()), 1. / 12.);
 
+    EXPECT_EQ((fe::surface_integration_coeff<TRI3, 0, 1>()), 1. / 2.);
     EXPECT_EQ((fe::surface_integration_coeff<TRI3, 1, 1>()), 1. / 6.);
 }
 
@@ -35,6 +37,7 @@ TEST(FEIntegrationTest, tet4)
     EXPECT_EQ((fe::integration_coeff<TET4, 0, 0>()), 1.);
     EXPECT_EQ((fe::integration_coeff<TET4, 1, 1>()), 1. / 20.);
 
+    EXPECT_EQ((fe::surface_integration_coeff<TET4, 0, 1>()), 1. / 3.);
     EXPECT_EQ((fe::surface_integration_coeff<TET4, 1, 1>()), 1. / 12.);
 }
 
