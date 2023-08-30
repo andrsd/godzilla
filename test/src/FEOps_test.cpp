@@ -52,6 +52,25 @@ TEST(FEOpsTest, gradient_vector)
     EXPECT_DOUBLE_EQ(grad_F(2, 1), -4.);
 }
 
+TEST(FEOpsTest, gradient_vector_mat)
+{
+    DenseMatrix<Real, 2, 3> f;
+    f.set_row(0, { 3, -1, 2 });
+    f.set_row(1, { -2, 1, -3 });
+
+    DenseVector<DenseVector<Real, 2>, 2> grad_phi;
+    grad_phi(0) = DenseVector<Real, 2>({ -1, -2 });
+    grad_phi(1) = DenseVector<Real, 2>({ 2, 0 });
+
+    auto grad_F = fe::gradient(f, grad_phi);
+    EXPECT_DOUBLE_EQ(grad_F(0, 0), -7.);
+    EXPECT_DOUBLE_EQ(grad_F(0, 1), -6.);
+    EXPECT_DOUBLE_EQ(grad_F(1, 0), 3.);
+    EXPECT_DOUBLE_EQ(grad_F(1, 1), 2.);
+    EXPECT_DOUBLE_EQ(grad_F(2, 0), -8.);
+    EXPECT_DOUBLE_EQ(grad_F(2, 1), -4.);
+}
+
 TEST(FEOpsTest, grad_u_grad_phi)
 {
     DenseVector<Real, 2> grad_u({ 2., 3. });
