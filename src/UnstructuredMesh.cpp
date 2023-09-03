@@ -53,17 +53,16 @@ UnstructuredMesh::parameters()
 
 UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     Mesh(parameters),
-    partitioner(nullptr),
     partition_overlap(0)
 {
     _F_;
-    PETSC_CHECK(PetscPartitionerCreate(get_comm(), &this->partitioner));
+    this->partitioner.create(get_comm());
 }
 
 UnstructuredMesh::~UnstructuredMesh()
 {
     _F_;
-    PETSC_CHECK(PetscPartitionerDestroy(&this->partitioner));
+    this->partitioner.destroy();
 }
 
 void
@@ -246,7 +245,7 @@ void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
     _F_;
-    PETSC_CHECK(PetscPartitionerSetType(this->partitioner, type.c_str()));
+    this->partitioner.set_type(type);
 }
 
 void
@@ -261,7 +260,7 @@ UnstructuredMesh::distribute()
 {
     _F_;
     TIMED_EVENT(9, "MeshDistribution", "Distributing");
-    PETSC_CHECK(PetscPartitionerSetUp(this->partitioner));
+    this->partitioner.set_up();
 
     PETSC_CHECK(DMPlexSetPartitioner(this->dm, this->partitioner));
 
