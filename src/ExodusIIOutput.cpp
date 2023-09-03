@@ -95,6 +95,7 @@ Parameters
 ExodusIIOutput::parameters()
 {
     Parameters params = FileOutput::parameters();
+    params.add_private_param<UnstructuredMesh *>("_mesh", nullptr);
     params.add_param<std::vector<std::string>>(
         "variables",
         "List of variables to be stored. If not specified, all variables will be stored.");
@@ -105,7 +106,8 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     FileOutput(params),
     variable_names(get_param<std::vector<std::string>>("variables")),
     dpi(dynamic_cast<DiscreteProblemInterface *>(this->problem)),
-    mesh(this->problem ? dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh()) : nullptr),
+    mesh(this->problem ? dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh())
+                       : get_param<UnstructuredMesh *>("_mesh")),
     exo(nullptr),
     step_num(1),
     mesh_stored(false)
@@ -144,33 +146,33 @@ ExodusIIOutput::create()
     _F_;
     FileOutput::create();
 
-    assert(this->dpi != nullptr);
-    assert(this->problem != nullptr);
+    if (this->dpi) {
+        auto flds = this->dpi->get_field_names();
+        auto aux_flds = this->dpi->get_aux_field_names();
+        auto & pps = this->problem->get_postprocessor_names();
 
-    auto flds = this->dpi->get_field_names();
-    auto aux_flds = this->dpi->get_aux_field_names();
-    auto & pps = this->problem->get_postprocessor_names();
+        if (this->variable_names.empty()) {
+            this->field_var_names = flds;
+            this->aux_field_var_names = aux_flds;
+            this->global_var_names = pps;
+        }
+        else {
+            std::set<std::string> field_names(flds.begin(), flds.end());
+            std::set<std::string> aux_field_names(aux_flds.begin(), aux_flds.end());
+            std::set<std::string> pp_names(pps.begin(), pps.end());
 
-    if (this->variable_names.empty()) {
-        this->field_var_names = flds;
-        this->aux_field_var_names = aux_flds;
-        this->global_var_names = pps;
-    }
-    else {
-        std::set<std::string> field_names(flds.begin(), flds.end());
-        std::set<std::string> aux_field_names(aux_flds.begin(), aux_flds.end());
-        std::set<std::string> pp_names(pps.begin(), pps.end());
-
-        for (auto & name : this->variable_names) {
-            if (field_names.count(name) == 1)
-                this->field_var_names.push_back(name);
-            else if (aux_field_names.count(name) == 1)
-                this->aux_field_var_names.push_back(name);
-            else if (pp_names.count(name) == 1)
-                this->global_var_names.push_back(name);
-            else
-                log_error("Variable '{}' specified in 'variables' parameter does not exist. Typo?",
-                          name);
+            for (auto & name : this->variable_names) {
+                if (field_names.count(name) == 1)
+                    this->field_var_names.push_back(name);
+                else if (aux_field_names.count(name) == 1)
+                    this->aux_field_var_names.push_back(name);
+                else if (pp_names.count(name) == 1)
+                    this->global_var_names.push_back(name);
+                else
+                    log_error(
+                        "Variable '{}' specified in 'variables' parameter does not exist. Typo?",
+                        name);
+            }
         }
     }
 }
@@ -179,10 +181,25 @@ void
 ExodusIIOutput::check()
 {
     _F_;
-    if (this->dpi == nullptr)
-        log_error("ExodusII output can be only used with finite element problems.");
     if (this->mesh == nullptr)
         log_error("ExodusII output can be only used with unstructured meshes.");
+}
+
+void
+ExodusIIOutput::output_mesh()
+{
+    _F_;
+    // We only have fixed meshes, so no need to deal with a sequence of files
+    set_file_name();
+    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", this->file_name);
+
+    if (this->exo == nullptr)
+        open_file();
+
+    if (!this->mesh_stored) {
+        write_info();
+        write_mesh();
+    }
 }
 
 void

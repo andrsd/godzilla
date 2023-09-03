@@ -34,6 +34,7 @@ public:
     void set_file_name() override;
     void create() override;
     void check() override;
+    void output_mesh();
     void output_step() override;
 
 protected:
