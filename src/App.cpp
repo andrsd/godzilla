@@ -27,19 +27,6 @@ App::App(const mpi::Communicator & comm,
 {
     _F_;
     this->log = new Logger();
-
-    this->cmdln_opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
-    this->cmdln_opts.add_option("",
-                                "i",
-                                "input-file",
-                                "Input file to execute",
-                                cxxopts::value<std::string>(),
-                                "");
-    this->cmdln_opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
-    this->cmdln_opts
-        .add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
-    this->cmdln_opts
-        .add_option("", "", "no-colors", "Do not use terminal colors", cxxopts::value<bool>(), "");
 }
 
 App::~App()
@@ -78,6 +65,23 @@ App::get_problem() const
     _F_;
     assert(this->yml != nullptr);
     return this->yml->get_problem();
+}
+
+void
+App::create_command_line_options()
+{
+    this->cmdln_opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
+    this->cmdln_opts.add_option("",
+                                "i",
+                                "input-file",
+                                "Input file to execute",
+                                cxxopts::value<std::string>(),
+                                "");
+    this->cmdln_opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
+    this->cmdln_opts
+        .add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
+    this->cmdln_opts
+        .add_option("", "", "no-colors", "Do not use terminal colors", cxxopts::value<bool>(), "");
 }
 
 void
@@ -157,6 +161,7 @@ void
 App::run()
 {
     _F_;
+    this->create_command_line_options();
     auto result = parse_command_line();
     process_command_line(result);
 }
