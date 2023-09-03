@@ -98,6 +98,10 @@ protected:
     /// application runs
     virtual void create();
 
+    /// Create command line options
+    ///
+    virtual void create_command_line_options();
+
     /// Build application objects from an input file
     ///
     /// @param file_name The input file name
