@@ -59,6 +59,7 @@ add_library(${PROJECT_NAME}
         Output.cpp
         Parameters.cpp
         ParsedFunction.cpp
+        Partitioner.cpp
         PerfLog.cpp
         PetscFEGodzilla.cpp
         PiecewiseConstant.cpp

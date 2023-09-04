@@ -5,7 +5,7 @@
 #include "IndexSet.h"
 #include "Vector.h"
 #include "Section.h"
-#include "petscpartitioner.h"
+#include "Partitioner.h"
 
 namespace godzilla {
 
@@ -290,7 +290,7 @@ protected:
     void create_face_set(Int id, const std::string & name);
 
     /// Mesh partitioner
-    PetscPartitioner partitioner;
+    Partitioner partitioner;
 
     /// Partition overlap for mesh partitioning
     Int partition_overlap;
