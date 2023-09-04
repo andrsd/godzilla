@@ -40,7 +40,7 @@ jobs:
             doxygen \
             sphinx \
             sphinx_rtd_theme \
-            breathe \
+            breathe==4.35.0 \
             sphinx-design \
             fmt==9.1.0 \
             petsc==3.19.4 \
