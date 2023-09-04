@@ -20,7 +20,7 @@ jobs:
       - name: Set up miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: 3.9
           auto-update-conda: false
           channels: andrsd,conda-forge,defaults
           channel-priority: strict
@@ -41,7 +41,7 @@ jobs:
             sphinx \
             sphinx_rtd_theme \
             breathe \
-            sphinx-tabs \
+            sphinx-design \
             fmt==9.1.0 \
             petsc==3.19.4 \
             yaml-cpp==0.7.0 \
