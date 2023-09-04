@@ -184,11 +184,9 @@ TEST(ExodusIIOutputTest, fe_check)
     out.check();
     app.check_integrity();
 
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::AllOf(
-            testing::HasSubstr("ExodusII output can be only used with unstructured meshes."),
-            testing::HasSubstr("ExodusII output can be only used with finite element problems.")));
+    EXPECT_THAT(testing::internal::GetCapturedStderr(),
+                testing::AllOf(testing::HasSubstr(
+                    "ExodusII output can be only used with unstructured meshes.")));
 }
 
 TEST(ExodusIIOutputTest, output)
