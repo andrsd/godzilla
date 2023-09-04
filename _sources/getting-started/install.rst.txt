@@ -1,9 +1,9 @@
 Installation
 ============
 
-.. tabs::
+.. tab-set::
 
-   .. group-tab:: Conda
+   .. tab-item:: Conda
 
       Create a new environment
 
@@ -90,7 +90,7 @@ Installation
 
       .. code-block::
 
-         conda install doxygen breathe sphinx sphinx_rtd_theme sphinx-tabs
+         conda install doxygen breathe sphinx sphinx_rtd_theme sphinx-design
 
       Build the documentation:
 
@@ -98,14 +98,14 @@ Installation
 
          make doc
 
-   .. group-tab:: Linux
+   .. tab-item:: Linux
 
       Instructions for linux
 
-   .. group-tab:: MacOS X
+   .. tab-item:: MacOS X
 
       Instructions for MacOS X
 
-   .. group-tab:: Windows
+   .. tab-item:: Windows
 
       Not supported

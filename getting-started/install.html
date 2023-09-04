@@ -7,7 +7,7 @@
   <title>Installation &mdash; godzilla  documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -17,7 +17,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
-        <script src="../_static/tabs.js"></script>
+        <script src="../_static/design-tabs.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -129,8 +129,11 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
-<div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-Q29uZGE=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-Q29uZGE=" name="Q29uZGE=" role="tab" tabindex="0">Conda</button><button aria-controls="panel-0-TGludXg=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-TGludXg=" name="TGludXg=" role="tab" tabindex="-1">Linux</button><button aria-controls="panel-0-TWFjT1MgWA==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-TWFjT1MgWA==" name="TWFjT1MgWA==" role="tab" tabindex="-1">MacOS X</button><button aria-controls="panel-0-V2luZG93cw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-V2luZG93cw==" name="V2luZG93cw==" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-0-Q29uZGE=" class="sphinx-tabs-panel group-tab" id="panel-0-Q29uZGE=" name="Q29uZGE=" role="tabpanel" tabindex="0"><p>Create a new environment</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-0">
+Conda</label><div class="sd-tab-content docutils">
+<p>Create a new environment</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">godzilla</span>
 </pre></div>
 </div>
@@ -198,17 +201,30 @@ You can use <code class="docutils literal notranslate"><span class="pre">--with-
 </div>
 <p><strong>Documentation</strong></p>
 <p>For documentation, you will also need</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">doxygen</span> <span class="n">breathe</span> <span class="n">sphinx</span> <span class="n">sphinx_rtd_theme</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">tabs</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">doxygen</span> <span class="n">breathe</span> <span class="n">sphinx</span> <span class="n">sphinx_rtd_theme</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">design</span>
 </pre></div>
 </div>
 <p>Build the documentation:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">doc</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-TGludXg=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-TGludXg=" name="TGludXg=" role="tabpanel" tabindex="0"><p>Instructions for linux</p>
-</div><div aria-labelledby="tab-0-TWFjT1MgWA==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-TWFjT1MgWA==" name="TWFjT1MgWA==" role="tabpanel" tabindex="0"><p>Instructions for MacOS X</p>
-</div><div aria-labelledby="tab-0-V2luZG93cw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-V2luZG93cw==" name="V2luZG93cw==" role="tabpanel" tabindex="0"><p>Not supported</p>
-</div></div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-1">
+Linux</label><div class="sd-tab-content docutils">
+<p>Instructions for linux</p>
+</div>
+<input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-2">
+MacOS X</label><div class="sd-tab-content docutils">
+<p>Instructions for MacOS X</p>
+</div>
+<input id="sd-tab-item-3" name="sd-tab-set-0" type="radio">
+</input><label class="sd-tab-label" for="sd-tab-item-3">
+Windows</label><div class="sd-tab-content docutils">
+<p>Not supported</p>
+</div>
+</div>
 </section>
 
 
