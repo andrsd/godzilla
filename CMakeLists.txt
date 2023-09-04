@@ -61,6 +61,7 @@ endif ()
 
 add_subdirectory(contrib/muParser)
 add_subdirectory(src)
+add_subdirectory(tools)
 
 # Install
 
