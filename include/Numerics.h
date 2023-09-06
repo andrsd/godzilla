@@ -15,5 +15,17 @@ sign(T val)
     return (T(0) < val) - (val < T(0));
 }
 
+/// Square of the argument
+///
+/// @tparam T Type
+/// @param val Value to be squared
+/// @return Square of the value, i.e. `val * val`
+template <typename T>
+T
+sqr(T val)
+{
+    return val * val;
+}
+
 } // namespace math
 } // namespace godzilla
