@@ -121,6 +121,22 @@ TransientProblemInterface::set_time_step(Real dt) const
 }
 
 void
+TransientProblemInterface::set_max_time(Real time)
+{
+    _F_;
+    PETSC_CHECK(TSSetMaxTime(this->ts, time));
+}
+
+Real
+TransientProblemInterface::get_max_time() const
+{
+    _F_;
+    Real time;
+    PETSC_CHECK(TSGetMaxTime(this->ts, &time));
+    return time;
+}
+
+void
 TransientProblemInterface::init()
 {
     _F_;
@@ -137,7 +153,7 @@ TransientProblemInterface::create()
     set_up_time_scheme();
     PETSC_CHECK(TSSetTime(this->ts, this->start_time));
     if (this->tpi_params.is_param_valid("end_time"))
-        PETSC_CHECK(TSSetMaxTime(this->ts, this->end_time));
+        set_max_time(this->end_time);
     if (this->tpi_params.is_param_valid("num_steps"))
         PETSC_CHECK(TSSetMaxSteps(this->ts, this->num_steps));
     set_time_step(this->dt_initial);

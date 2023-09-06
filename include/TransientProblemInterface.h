@@ -43,6 +43,16 @@ public:
     /// @param dt The size of the timestep
     void set_time_step(Real dt) const;
 
+    /// Sets the maximum (or final) time for time-stepping
+    ///
+    /// @param max_time Final time to step to
+    void set_max_time(Real max_time);
+
+    /// Gets the maximum (or final) time for time-stepping
+    ///
+    /// @return Final time to step to
+    Real get_max_time() const;
+
 protected:
     /// Initialize
     virtual void init();
