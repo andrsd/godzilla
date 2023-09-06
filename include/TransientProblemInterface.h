@@ -55,7 +55,7 @@ protected:
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
     /// Called before the time step solve
-    virtual PetscErrorCode pre_step();
+    virtual void pre_step();
     /// Called after the time step is done solving
     virtual void post_step();
     /// TS monitor callback

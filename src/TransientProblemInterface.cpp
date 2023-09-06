@@ -17,7 +17,8 @@ __transient_pre_step(TS ts)
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
-    return tpi->pre_step();
+    tpi->pre_step();
+    return 0;
 }
 
 PetscErrorCode
@@ -167,11 +168,10 @@ TransientProblemInterface::set_up_monitors()
     PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, nullptr));
 }
 
-PetscErrorCode
+void
 TransientProblemInterface::pre_step()
 {
     _F_;
-    return 0;
 }
 
 void
