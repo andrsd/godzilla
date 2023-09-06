@@ -53,6 +53,18 @@ public:
     /// @return Final time to step to
     Real get_max_time() const;
 
+    /// Sets the reason for handling the convergence
+    ///
+    /// @param reason Converged reason
+    void set_converged_reason(TSConvergedReason reason);
+
+    /// Gets the reason the time iteration was stopped
+    ///
+    /// NOTE: Can only be called after the call to solve() is complete.
+    ///
+    /// @return Converged reason
+    TSConvergedReason get_converged_reason() const;
+
 protected:
     /// Initialize
     virtual void init();
@@ -93,8 +105,6 @@ protected:
     const Int & num_steps;
     /// Initial time step size
     const Real & dt_initial;
-    /// Converged reason
-    TSConvergedReason converged_reason;
     /// Simulation time
     Real time;
     /// Time step number

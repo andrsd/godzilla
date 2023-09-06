@@ -62,7 +62,6 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     end_time(params.get<Real>("end_time")),
     num_steps(params.get<Int>("num_steps")),
     dt_initial(params.get<Real>("dt")),
-    converged_reason(TS_CONVERGED_ITERATING),
     time(0.),
     step_num(0)
 {
@@ -213,14 +212,29 @@ TransientProblemInterface::solve(Vector & x)
 {
     _F_;
     PETSC_CHECK(TSSolve(this->ts, x));
-    PETSC_CHECK(TSGetConvergedReason(this->ts, &this->converged_reason));
+}
+
+TSConvergedReason
+TransientProblemInterface::get_converged_reason() const
+{
+    _F_;
+    TSConvergedReason reason;
+    PETSC_CHECK(TSGetConvergedReason(this->ts, &reason));
+    return reason;
+}
+
+void
+TransientProblemInterface::set_converged_reason(TSConvergedReason reason)
+{
+    _F_;
+    PETSC_CHECK(TSSetConvergedReason(this->ts, reason));
 }
 
 bool
 TransientProblemInterface::converged() const
 {
     _F_;
-    return this->converged_reason > 0;
+    return get_converged_reason() > 0;
 }
 
 } // namespace godzilla
