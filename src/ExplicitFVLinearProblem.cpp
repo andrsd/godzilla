@@ -234,7 +234,7 @@ ExplicitFVLinearProblem::compute_rhs_local(Real time, const Vector & x, Vector &
     return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this);
 }
 
-PetscErrorCode
+void
 ExplicitFVLinearProblem::post_step()
 {
     _F_;
@@ -242,7 +242,6 @@ ExplicitFVLinearProblem::post_step()
     update_aux_vector();
     compute_postprocessors();
     output(Output::ON_TIMESTEP);
-    return 0;
 }
 
 } // namespace godzilla

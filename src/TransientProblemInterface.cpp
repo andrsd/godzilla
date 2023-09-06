@@ -27,7 +27,8 @@ __transient_post_step(TS ts)
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
-    return tpi->post_step();
+    tpi->post_step();
+    return 0;
 }
 
 PetscErrorCode
@@ -173,7 +174,7 @@ TransientProblemInterface::pre_step()
     return 0;
 }
 
-PetscErrorCode
+void
 TransientProblemInterface::post_step()
 {
     _F_;
@@ -181,7 +182,6 @@ TransientProblemInterface::post_step()
     PETSC_CHECK(TSGetStepNumber(this->ts, &this->step_num));
     Vector sln = get_solution();
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
-    return 0;
 }
 
 void
