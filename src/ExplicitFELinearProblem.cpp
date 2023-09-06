@@ -250,7 +250,7 @@ ExplicitFELinearProblem::compute_rhs_local(Real time, const Vector & x, Vector &
     return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, x, F, this);
 }
 
-PetscErrorCode
+void
 ExplicitFELinearProblem::post_step()
 {
     _F_;
@@ -258,7 +258,6 @@ ExplicitFELinearProblem::post_step()
     update_aux_vector();
     compute_postprocessors();
     output(Output::ON_TIMESTEP);
-    return 0;
 }
 
 void

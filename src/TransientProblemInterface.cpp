@@ -17,7 +17,8 @@ __transient_pre_step(TS ts)
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
-    return tpi->pre_step();
+    tpi->pre_step();
+    return 0;
 }
 
 PetscErrorCode
@@ -27,7 +28,8 @@ __transient_post_step(TS ts)
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
-    return tpi->post_step();
+    tpi->post_step();
+    return 0;
 }
 
 PetscErrorCode
@@ -166,14 +168,13 @@ TransientProblemInterface::set_up_monitors()
     PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, nullptr));
 }
 
-PetscErrorCode
+void
 TransientProblemInterface::pre_step()
 {
     _F_;
-    return 0;
 }
 
-PetscErrorCode
+void
 TransientProblemInterface::post_step()
 {
     _F_;
@@ -181,7 +182,6 @@ TransientProblemInterface::post_step()
     PETSC_CHECK(TSGetStepNumber(this->ts, &this->step_num));
     Vector sln = get_solution();
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
-    return 0;
 }
 
 void
