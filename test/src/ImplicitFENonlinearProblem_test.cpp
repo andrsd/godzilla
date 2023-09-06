@@ -38,6 +38,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     prob->create();
 
     EXPECT_EQ(prob->get_time_step(), 5.);
+    EXPECT_DOUBLE_EQ(prob->get_max_time(), 20.);
 
     prob->run();
 
