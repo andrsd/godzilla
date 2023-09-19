@@ -50,6 +50,7 @@ void
 VTKOutput::check()
 {
     _F_;
+    FileOutput::check();
     const auto * mesh = dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh());
     if (mesh == nullptr)
         log_error("VTK output works only with unstructured meshes.");

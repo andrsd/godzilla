@@ -15,6 +15,7 @@ public:
     explicit Output(const Parameters & params);
 
     void create() override;
+    void check() override;
 
     /// Set execute mask
     ///

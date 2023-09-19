@@ -181,6 +181,7 @@ void
 ExodusIIOutput::check()
 {
     _F_;
+    FileOutput::check();
     if (this->mesh == nullptr)
         log_error("ExodusII output can be only used with unstructured meshes.");
 }

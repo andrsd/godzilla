@@ -190,6 +190,7 @@ void
 TecplotOutput::check()
 {
     _F_;
+    FileOutput::check();
     if (this->dpi == nullptr)
         log_error("Tecplot output can be only used with finite element problems.");
     if (this->mesh == nullptr)

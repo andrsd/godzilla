@@ -111,3 +111,24 @@ TEST_F(OutputTest, none_plus_mask)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("The 'none' execution flag can be used only by itself."));
 }
+
+TEST_F(OutputTest, interval_with_no_timestep_output)
+{
+    testing::internal::CaptureStderr();
+
+    Parameters pars = Output::parameters();
+    pars.set<const App *>("_app") = app;
+    pars.set<Problem *>("_problem") = prob;
+    pars.set<std::vector<std::string>>("on") = { "initial", "final" };
+    pars.set<Int>("interval") = 10;
+    MockOutput out(pars);
+
+    out.create();
+    out.check();
+
+    app->check_integrity();
+
+    EXPECT_THAT(
+        testing::internal::GetCapturedStderr(),
+        testing::HasSubstr("Parameter 'interval' was specified, but 'on' is missing 'timestep'."));
+}
