@@ -273,6 +273,26 @@ TEST(VectorTest, aypx)
     y.destroy();
 }
 
+TEST(VectorTest, waxpy)
+{
+    Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
+    x.set_value(0, 2.);
+    x.set_value(1, 5.);
+
+    Vector y = Vector::create_seq(MPI_COMM_WORLD, 2);
+    y.set_value(0, 3.);
+    y.set_value(1, 4.);
+
+    Vector w = Vector::create_seq(MPI_COMM_WORLD, 2);
+    w.waxpy(3., x, y);
+    EXPECT_DOUBLE_EQ(w(0), 9.);
+    EXPECT_DOUBLE_EQ(w(1), 19.);
+
+    x.destroy();
+    y.destroy();
+    w.destroy();
+}
+
 TEST(VectorTest, pointwise_min)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);

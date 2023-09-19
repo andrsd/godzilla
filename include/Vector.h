@@ -49,6 +49,14 @@ public:
     void chop(Real tol);
     void axpy(Scalar alpha, const Vector & x);
     void aypx(Scalar beta, const Vector & x);
+
+    /// Computes `this[i] = alpha * x[i] + y[i]
+    ///
+    /// @param alpha Scalar
+    /// @param x First vector multiplied by `alpha`
+    /// @param y Second vector
+    void waxpy(Scalar alpha, const Vector & x, const Vector & y);
+
     void reciprocal();
 
     void set(Scalar alpha);
