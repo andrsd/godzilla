@@ -47,8 +47,26 @@ public:
     Scalar min() const;
     Scalar max() const;
     void chop(Real tol);
+
+    /// Computes `this[i] = alpha x[i] + this[i]`
+    ///
+    /// @param alpha Scalar
+    /// @param x Vetor to scale by `alpha`
     void axpy(Scalar alpha, const Vector & x);
+
+    /// Computes `this[i] = x[i] + beta * this[i]`
+    ///
+    /// @param beta Scalar
+    /// @param x Unscaled vector
     void aypx(Scalar beta, const Vector & x);
+
+    /// Computes `this[i] = alpha * x[i] + y[i]
+    ///
+    /// @param alpha Scalar
+    /// @param x First vector multiplied by `alpha`
+    /// @param y Second vector
+    void waxpy(Scalar alpha, const Vector & x, const Vector & y);
+
     void reciprocal();
 
     void set(Scalar alpha);

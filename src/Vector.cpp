@@ -166,6 +166,13 @@ Vector::aypx(Scalar beta, const Vector & x)
 }
 
 void
+Vector::waxpy(Scalar alpha, const Vector & x, const Vector & y)
+{
+    _F_;
+    PETSC_CHECK(VecWAXPY(this->vec, alpha, x, y));
+}
+
+void
 Vector::reciprocal()
 {
     _F_;
