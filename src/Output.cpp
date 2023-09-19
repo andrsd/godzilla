@@ -15,7 +15,7 @@ Output::parameters()
 {
     Parameters params = Object::parameters();
     params.add_param<std::vector<std::string>>("on", "When output should happen");
-    params.add_param<Int>("interval", 1, "Interval");
+    params.add_param<Int>("interval", "Interval");
     params.add_private_param<Problem *>("_problem", nullptr);
     return params;
 }
@@ -25,7 +25,7 @@ Output::Output(const Parameters & params) :
     PrintInterface(this),
     problem(get_param<Problem *>("_problem")),
     on_mask(ON_NONE),
-    interval(get_param<Int>("interval"))
+    interval(is_param_valid("interval") ? get_param<Int>("interval") : 1)
 {
     _F_;
 }
@@ -35,6 +35,14 @@ Output::create()
 {
     _F_;
     set_up_exec();
+}
+
+void
+Output::check()
+{
+    _F_;
+    if (is_param_valid("interval") && ((this->on_mask & ON_TIMESTEP) == 0))
+        log_warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
 }
 
 void

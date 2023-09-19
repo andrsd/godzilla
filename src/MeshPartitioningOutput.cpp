@@ -26,6 +26,7 @@ void
 MeshPartitioningOutput::check()
 {
     _F_;
+    FileOutput::check();
     DM dm = this->problem->get_dm();
     if (dm == nullptr)
         log_error("Mesh partitioning output works only with problems that provide DM.");
