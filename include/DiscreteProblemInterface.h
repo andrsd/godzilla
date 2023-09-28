@@ -405,8 +405,7 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
     DM dm = this->unstr_mesh->get_dm();
     Section global_section = this->problem->get_global_section();
     DenseMatrix<Real, N> m = mat;
-    PETSC_CHECK(
-        DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.get_data(), mode));
+    PETSC_CHECK(DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.data(), mode));
 }
 
 template <Int N>

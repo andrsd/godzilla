@@ -50,7 +50,7 @@ public:
     {
         assert((row >= 0) && (row < DIM));
         assert((col >= 0) && (col < DIM));
-        return this->data[idx(row, col)];
+        return this->values[idx(row, col)];
     }
 
     T &
@@ -58,7 +58,7 @@ public:
     {
         assert((row >= 0) && (row < DIM));
         assert((col >= 0) && (col < DIM));
-        return this->data[idx(row, col)];
+        return this->values[idx(row, col)];
     }
 
     void
@@ -66,7 +66,7 @@ public:
     {
         assert((row >= 0) && (row < DIM));
         assert((col >= 0) && (col < DIM));
-        this->data[idx(row, col)] = val;
+        this->values[idx(row, col)] = val;
     }
 
     /// Set all matrix entries to zero, i.e. mat[i,j] = 0.
@@ -83,7 +83,7 @@ public:
     set_values(const T & alpha)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] = alpha;
+            this->values[i] = alpha;
     }
 
     /// Set matrix entries from provided values
@@ -94,7 +94,7 @@ public:
     {
         assert(vals.size() == N);
         for (Int i = 0; i < N; i++)
-            this->data[i] = vals[i];
+            this->values[i] = vals[i];
     }
 
     /// Multiply all entries by a scalar value
@@ -104,7 +104,7 @@ public:
     scale(Real alpha)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] *= alpha;
+            this->values[i] *= alpha;
     }
 
     /// Add matrix `x` to this matrix
@@ -114,7 +114,7 @@ public:
     add(const DenseMatrixSymm<T, DIM> & x)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] += x.data[i];
+            this->values[i] += x.values[i];
     }
 
     /// Subtract matrix `x` from this matrix
@@ -124,7 +124,7 @@ public:
     subtract(const DenseMatrixSymm<T, DIM> & x)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] -= x.data[i];
+            this->values[i] -= x.values[i];
     }
 
     /// Multiply the matrix by a vector
@@ -238,7 +238,7 @@ public:
     {
         DenseMatrixSymm<T, DIM> res;
         for (Int i = 0; i < N; i++)
-            res.data[i] = -this->data[i];
+            res.values[i] = -this->values[i];
         return res;
     }
 
@@ -251,7 +251,7 @@ public:
     {
         DenseMatrixSymm<T, DIM> res;
         for (Int i = 0; i < N; i++)
-            res.data[i] = this->data[i] + a.data[i];
+            res.values[i] = this->values[i] + a.values[i];
         return res;
     }
 
@@ -278,7 +278,7 @@ public:
     {
         DenseMatrixSymm<T, DIM> res;
         for (Int i = 0; i < N; i++)
-            res.data[i] = this->data[i] - a.data[i];
+            res.values[i] = this->values[i] - a.values[i];
         return res;
     }
 
@@ -334,16 +334,28 @@ public:
         return mult(rhs);
     }
 
-    T *
+    [[deprecated("Use data() instead")]] T *
     get_data()
     {
-        return &this->data[0];
+        return &this->values[0];
+    }
+
+    [[deprecated("Use data() instead")]] const T *
+    get_data() const
+    {
+        return &this->values[0];
+    }
+
+    T *
+    data()
+    {
+        return &this->values[0];
     }
 
     const T *
-    get_data() const
+    data() const
     {
-        return &this->data[0];
+        return &this->values[0];
     }
 
     static DenseMatrixSymm<T, DIM>
@@ -367,7 +379,7 @@ protected:
     zero_impl(std::false_type)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i].zero();
+            this->values[i].zero();
     }
 
 private:
@@ -381,7 +393,7 @@ private:
     }
 
     /// Matrix entries
-    T data[N];
+    T values[N];
 };
 
 // Determinant computation for small matrices
@@ -390,26 +402,26 @@ template <>
 inline Real
 DenseMatrixSymm<Real, 1>::det() const
 {
-    return this->data[0];
+    return this->values[0];
 }
 
 template <>
 inline Real
 DenseMatrixSymm<Real, 2>::det() const
 {
-    return this->data[0] * this->data[2] - this->data[1] * this->data[1];
+    return this->values[0] * this->values[2] - this->values[1] * this->values[1];
 }
 
 template <>
 inline Real
 DenseMatrixSymm<Real, 3>::det() const
 {
-    return this->data[0] * this->data[2] * this->data[5] +
-           this->data[1] * this->data[4] * this->data[3] +
-           this->data[1] * this->data[4] * this->data[3] -
-           (this->data[3] * this->data[2] * this->data[3] +
-            this->data[0] * this->data[4] * this->data[4] +
-            this->data[1] * this->data[1] * this->data[5]);
+    return this->values[0] * this->values[2] * this->values[5] +
+           this->values[1] * this->values[4] * this->values[3] +
+           this->values[1] * this->values[4] * this->values[3] -
+           (this->values[3] * this->values[2] * this->values[3] +
+            this->values[0] * this->values[4] * this->values[4] +
+            this->values[1] * this->values[1] * this->values[5]);
 }
 
 //
