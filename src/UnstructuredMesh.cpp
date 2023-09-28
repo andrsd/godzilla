@@ -170,6 +170,22 @@ UnstructuredMesh::get_all_cells() const
     return IndexSet(cell_is);
 }
 
+void
+UnstructuredMesh::get_chart(Int & start, Int & end) const
+{
+    _F_;
+    PETSC_CHECK(DMPlexGetChart(this->dm, &start, &end));
+}
+
+UnstructuredMesh::Range
+UnstructuredMesh::get_chart() const
+{
+    _F_;
+    Int start, end;
+    PETSC_CHECK(DMPlexGetChart(this->dm, &start, &end));
+    return Range(start, end);
+}
+
 DMPolytopeType
 UnstructuredMesh::get_cell_type(Int el) const
 {
