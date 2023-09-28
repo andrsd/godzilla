@@ -351,7 +351,7 @@ TecplotOutput::write_zone_ascii()
     // FIXME: allow output for cell sets
     auto cell_range = this->mesh->get_cell_range();
     auto n_cells_in_block = this->mesh->get_num_cells();
-    DMPolytopeType polytope_type = this->mesh->get_cell_type(cell_range.get_first());
+    DMPolytopeType polytope_type = this->mesh->get_cell_type(cell_range.first());
     const char * zone_type = get_zone_type(polytope_type);
     Int n_nodes = this->mesh->get_num_vertices();
 

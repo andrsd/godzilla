@@ -69,45 +69,69 @@ public:
 
     /// Contiguous range of indices
     struct Range {
-        Range() : first(-1), last(-1) {}
-        Range(Int first, Int last) : first(first), last(last) {}
+        Range() : first_idx(-1), last_idx(-1) {}
+        Range(Int first, Int last) : first_idx(first), last_idx(last) {}
 
         Iterator
         begin() const
         {
-            return Iterator(this->first);
+            return Iterator(this->first_idx);
         }
 
         Iterator
         end() const
         {
-            return Iterator(this->last);
+            return Iterator(this->last_idx);
         }
 
         /// Get the number of indices in the range
         Int
         size() const
         {
-            return last - first;
+            return last_idx - first_idx;
         }
 
-        Int
+        /// Get the first index in the range
+        ///
+        /// @return First index in the range
+        [[deprecated("Use first() instead")]] Int
         get_first() const
         {
-            return first;
+            return first_idx;
         }
 
+        /// Get the first index in the range
+        ///
+        /// @return First index in the range
         Int
+        first() const
+        {
+            return first_idx;
+        }
+
+        /// Get the last index (not included) in the range
+        ///
+        /// @return Last index (not included) in the range
+        [[deprecated("Use last() instead")]] Int
         get_last() const
         {
-            return last;
+            return last_idx;
+        }
+
+        /// Get the last index (not included) in the range
+        ///
+        /// @return Last index (not included) in the range
+        Int
+        last() const
+        {
+            return last_idx;
         }
 
     private:
         /// First index
-        Int first;
+        Int first_idx;
         /// Last index (not included in the range)
-        Int last;
+        Int last_idx;
     };
 
     //
