@@ -25,7 +25,7 @@ public:
     explicit DenseVector(const std::vector<T> & a)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] = a[i];
+            this->values[i] = a[i];
     }
 
     /// Get an entry at location (i) for reading
@@ -36,7 +36,7 @@ public:
     get(Int i) const
     {
         assert((i >= 0) && (i < N));
-        return this->data[i];
+        return this->values[i];
     }
 
     /// Get an entry at location (i) for writing
@@ -47,7 +47,7 @@ public:
     set(Int i)
     {
         assert((i >= 0) && (i < N));
-        return this->data[i];
+        return this->values[i];
     }
 
     /// Multiply all entries by a scalar `alpha`, i.e. vec[i] = alpha * vec[i]
@@ -57,7 +57,7 @@ public:
     scale(Real alpha)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] *= alpha;
+            this->values[i] *= alpha;
     }
 
     /// Set all vector elements to zero, i.e. vec[i] = 0.
@@ -74,7 +74,7 @@ public:
     set_values(const T & alpha)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] = alpha;
+            this->values[i] = alpha;
     }
 
     /// Add `a` to this vector, i.e. vec[i] += a[i]
@@ -84,7 +84,7 @@ public:
     add(const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] += a(i);
+            this->values[i] += a(i);
     }
 
     /// Add `a` to each element of this vector, i.e. vec[i] += a
@@ -94,7 +94,7 @@ public:
     add(T a)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] += a;
+            this->values[i] += a;
     }
 
     /// Subtract `a` from this vector, i.e. vec[i] -= a[i]
@@ -104,7 +104,7 @@ public:
     subtract(const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i] -= a(i);
+            this->values[i] -= a(i);
     }
 
     /// Normalize this vector
@@ -114,7 +114,7 @@ public:
         T mag = magnitude();
         if (mag > 0) {
             for (Int i = 0; i < N; i++)
-                this->data[i] /= mag;
+                this->values[i] /= mag;
         }
     }
 
@@ -126,7 +126,7 @@ public:
     {
         Real res = 0.;
         for (Int i = 0; i < N; i++)
-            res += this->data[i];
+            res += this->values[i];
         return res / N;
     }
 
@@ -139,7 +139,7 @@ public:
     {
         T dot = 0.;
         for (Int i = 0; i < N; i++)
-            dot += this->data[i] * a(i);
+            dot += this->values[i] * a(i);
         return dot;
     }
 
@@ -168,7 +168,7 @@ public:
     {
         T sum = 0.;
         for (Int i = 0; i < N; i++)
-            sum += this->data[i];
+            sum += this->values[i];
         return sum;
     }
 
@@ -180,7 +180,7 @@ public:
     {
         T sum = 0.;
         for (Int i = 0; i < N; i++)
-            sum += this->data[i] * this->data[i];
+            sum += this->values[i] * this->values[i];
         return std::sqrt(sum);
     }
 
@@ -348,16 +348,28 @@ public:
         return *this;
     }
 
-    T *
+    [[deprecated("Use data() instead")]] T *
     get_data()
     {
-        return &this->data[0];
+        return &this->values[0];
+    }
+
+    [[deprecated("Use data() instead")]] const T *
+    get_data() const
+    {
+        return &this->values[0];
+    }
+
+    T *
+    data()
+    {
+        return &this->values[0];
     }
 
     const T *
-    get_data() const
+    data() const
     {
-        return &this->data[0];
+        return &this->values[0];
     }
 
 protected:
@@ -371,11 +383,11 @@ protected:
     zero_impl(std::false_type)
     {
         for (Int i = 0; i < N; i++)
-            this->data[i].zero();
+            this->values[i].zero();
     }
 
 private:
-    T data[N];
+    T values[N];
 };
 
 /// Compute dot product of 2 vectors

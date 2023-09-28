@@ -380,7 +380,7 @@ DiscreteProblemInterface::set_closure(const Vector & v,
                                       InsertMode mode) const
 {
     DM dm = this->unstr_mesh->get_dm();
-    PETSC_CHECK(DMPlexVecSetClosure(dm, this->section, v, point, vec.get_data(), mode));
+    PETSC_CHECK(DMPlexVecSetClosure(dm, this->section, v, point, vec.data(), mode));
 }
 
 template <Int N>
@@ -392,8 +392,7 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
 {
     DM dm = this->unstr_mesh->get_dm();
     Section global_section = this->problem->get_global_section();
-    PETSC_CHECK(
-        DMPlexMatSetClosure(dm, this->section, global_section, A, point, mat.get_data(), mode));
+    PETSC_CHECK(DMPlexMatSetClosure(dm, this->section, global_section, A, point, mat.data(), mode));
 }
 
 template <Int N>
@@ -406,8 +405,7 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
     DM dm = this->unstr_mesh->get_dm();
     Section global_section = this->problem->get_global_section();
     DenseMatrix<Real, N> m = mat;
-    PETSC_CHECK(
-        DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.get_data(), mode));
+    PETSC_CHECK(DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.data(), mode));
 }
 
 template <Int N>
@@ -417,7 +415,7 @@ DiscreteProblemInterface::get_closure(const Vector & v, Int point) const
     DM dm = this->unstr_mesh->get_dm();
     Int sz = N;
     DenseVector<Real, N> vec;
-    Real * data = vec.get_data();
+    Real * data = vec.data();
     PETSC_CHECK(DMPlexVecGetClosure(dm, this->section, v, point, &sz, &data));
     return vec;
 }
@@ -428,7 +426,7 @@ DiscreteProblemInterface::get_aux_closure(const Vector & v, Int point) const
 {
     Int sz = N;
     DenseVector<Real, N> vec;
-    Real * data = vec.get_data();
+    Real * data = vec.data();
     PETSC_CHECK(DMPlexVecGetClosure(this->dm_aux, this->section_aux, v, point, &sz, &data));
     return vec;
 }
@@ -440,8 +438,7 @@ DiscreteProblemInterface::set_aux_closure(const Vector & v,
                                           const DenseVector<Real, N> & vec,
                                           InsertMode mode) const
 {
-    PETSC_CHECK(
-        DMPlexVecSetClosure(this->dm_aux, this->section_aux, v, point, vec.get_data(), mode));
+    PETSC_CHECK(DMPlexVecSetClosure(this->dm_aux, this->section_aux, v, point, vec.data(), mode));
 }
 
 template <typename T>

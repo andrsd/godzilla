@@ -69,13 +69,8 @@ Matrix::set_values(const DenseVector<Int, N> & row_idxs,
                    InsertMode mode)
 {
     _F_;
-    PETSC_CHECK(MatSetValues(this->mat,
-                             N,
-                             row_idxs.get_data(),
-                             N,
-                             col_idxs.get_data(),
-                             vals.get_data(),
-                             mode));
+    PETSC_CHECK(
+        MatSetValues(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
 }
 
 } // namespace godzilla
