@@ -70,7 +70,7 @@ Matrix::set_values(const DenseVector<Int, N> & row_idxs,
 {
     _F_;
     PETSC_CHECK(
-        MatSetValues(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.get_data(), mode));
+        MatSetValues(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
 }
 
 } // namespace godzilla

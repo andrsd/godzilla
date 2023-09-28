@@ -392,8 +392,7 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
 {
     DM dm = this->unstr_mesh->get_dm();
     Section global_section = this->problem->get_global_section();
-    PETSC_CHECK(
-        DMPlexMatSetClosure(dm, this->section, global_section, A, point, mat.get_data(), mode));
+    PETSC_CHECK(DMPlexMatSetClosure(dm, this->section, global_section, A, point, mat.data(), mode));
 }
 
 template <Int N>

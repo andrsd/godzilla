@@ -60,7 +60,7 @@ public:
     {
         assert((row >= 0) && (row < ROWS));
         assert((col >= 0) && (col < COLS));
-        return this->data[idx(row, col)];
+        return this->values[idx(row, col)];
     }
 
     /// Obtain a column from the matrix
@@ -99,7 +99,7 @@ public:
     {
         assert((row >= 0) && (row < ROWS));
         assert((col >= 0) && (col < COLS));
-        return this->data[idx(row, col)];
+        return this->values[idx(row, col)];
     }
 
     /// Set value at a specified location
@@ -112,7 +112,7 @@ public:
     {
         assert((row >= 0) && (row < ROWS));
         assert((col >= 0) && (col < COLS));
-        this->data[idx(row, col)] = val;
+        this->values[idx(row, col)] = val;
     }
 
     /// Set a matrix row at once
@@ -166,7 +166,7 @@ public:
     set_values(const T & alpha)
     {
         for (Int i = 0; i < ROWS * COLS; i++)
-            this->data[i] = alpha;
+            this->values[i] = alpha;
     }
 
     /// Multiply all entries by a scalar value
@@ -362,7 +362,7 @@ public:
     {
         DenseMatrix<T, ROWS, COLS> res;
         for (Int i = 0; i < ROWS * COLS; i++)
-            res.data[i] = -this->data[i];
+            res.values[i] = -this->values[i];
         return res;
     }
 
@@ -494,10 +494,30 @@ public:
     ///
     /// WARNING: Avoid using this API as much as you can
     /// @return Pointer to the underlying matrix entries
-    T *
+    [[deprecated("Use data() instead")]] T *
     get_data()
     {
-        return &this->data[0];
+        return &this->values[0];
+    }
+
+    /// Get access to the underlying data
+    ///
+    /// WARNING: Avoid using this API as much as you can
+    /// @return Pointer to the underlying matrix entries
+    [[deprecated("Use data() instead")]] const T *
+    get_data() const
+    {
+        return &this->values[0];
+    }
+
+    /// Get access to the underlying data
+    ///
+    /// WARNING: Avoid using this API as much as you can
+    /// @return Pointer to the underlying matrix entries
+    T *
+    data()
+    {
+        return &this->values[0];
     }
 
     /// Get access to the underlying data
@@ -505,9 +525,9 @@ public:
     /// WARNING: Avoid using this API as much as you can
     /// @return Pointer to the underlying matrix entries
     const T *
-    get_data() const
+    data() const
     {
-        return &this->data[0];
+        return &this->values[0];
     }
 
     static DenseMatrix<T, ROWS, ROWS>
@@ -547,7 +567,7 @@ protected:
     zero_impl(std::false_type)
     {
         for (Int i = 0; i < ROWS * COLS; i++)
-            this->data[i].zero();
+            this->values[i].zero();
     }
 
 private:
@@ -564,7 +584,7 @@ private:
     }
 
     /// Array that stores the matrix entries
-    T data[ROWS * COLS];
+    T values[ROWS * COLS];
 };
 
 // ---
@@ -573,26 +593,26 @@ template <>
 inline Real
 DenseMatrix<Real, 1>::det() const
 {
-    return this->data[0];
+    return this->values[0];
 }
 
 template <>
 inline Real
 DenseMatrix<Real, 2>::det() const
 {
-    return this->data[0] * this->data[3] - this->data[2] * this->data[1];
+    return this->values[0] * this->values[3] - this->values[2] * this->values[1];
 }
 
 template <>
 inline Real
 DenseMatrix<Real, 3>::det() const
 {
-    return this->data[0] * this->data[4] * this->data[8] +
-           this->data[3] * this->data[7] * this->data[2] +
-           this->data[1] * this->data[5] * this->data[6] -
-           (this->data[6] * this->data[4] * this->data[2] +
-            this->data[1] * this->data[3] * this->data[8] +
-            this->data[5] * this->data[7] * this->data[0]);
+    return this->values[0] * this->values[4] * this->values[8] +
+           this->values[3] * this->values[7] * this->values[2] +
+           this->values[1] * this->values[5] * this->values[6] -
+           (this->values[6] * this->values[4] * this->values[2] +
+            this->values[1] * this->values[3] * this->values[8] +
+            this->values[5] * this->values[7] * this->values[0]);
 }
 
 // Inversion
@@ -602,7 +622,7 @@ inline DenseMatrix<Real, 1>
 DenseMatrix<Real, 1>::inv() const
 {
     DenseMatrix<Real, 1> inv;
-    inv(0, 0) = 1. / this->data[0];
+    inv(0, 0) = 1. / this->values[0];
     return inv;
 }
 
@@ -615,10 +635,10 @@ DenseMatrix<Real, 2>::inv() const
         error("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 2> inv;
-    inv.data[0] = this->data[3];
-    inv.data[1] = -this->data[1];
-    inv.data[2] = -this->data[2];
-    inv.data[3] = this->data[0];
+    inv.values[0] = this->values[3];
+    inv.values[1] = -this->values[1];
+    inv.values[2] = -this->values[2];
+    inv.values[3] = this->values[0];
     inv.scale(1. / det);
     return inv;
 }
@@ -632,15 +652,15 @@ DenseMatrix<Real, 3>::inv() const
         error("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 3> inv;
-    inv(0, 0) = (this->data[4] * this->data[8] - this->data[5] * this->data[7]);
-    inv(1, 0) = -(this->data[3] * this->data[8] - this->data[5] * this->data[6]);
-    inv(2, 0) = (this->data[3] * this->data[7] - this->data[4] * this->data[6]);
-    inv(0, 1) = -(this->data[1] * this->data[8] - this->data[2] * this->data[7]);
-    inv(1, 1) = (this->data[0] * this->data[8] - this->data[2] * this->data[6]);
-    inv(2, 1) = -(this->data[0] * this->data[7] - this->data[1] * this->data[6]);
-    inv(0, 2) = (this->data[1] * this->data[5] - this->data[2] * this->data[4]);
-    inv(1, 2) = -(this->data[0] * this->data[5] - this->data[2] * this->data[3]);
-    inv(2, 2) = (this->data[0] * this->data[4] - this->data[1] * this->data[3]);
+    inv(0, 0) = (this->values[4] * this->values[8] - this->values[5] * this->values[7]);
+    inv(1, 0) = -(this->values[3] * this->values[8] - this->values[5] * this->values[6]);
+    inv(2, 0) = (this->values[3] * this->values[7] - this->values[4] * this->values[6]);
+    inv(0, 1) = -(this->values[1] * this->values[8] - this->values[2] * this->values[7]);
+    inv(1, 1) = (this->values[0] * this->values[8] - this->values[2] * this->values[6]);
+    inv(2, 1) = -(this->values[0] * this->values[7] - this->values[1] * this->values[6]);
+    inv(0, 2) = (this->values[1] * this->values[5] - this->values[2] * this->values[4]);
+    inv(1, 2) = -(this->values[0] * this->values[5] - this->values[2] * this->values[3]);
+    inv(2, 2) = (this->values[0] * this->values[4] - this->values[1] * this->values[3]);
     inv.scale(1. / det);
     return inv;
 }
