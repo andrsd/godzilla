@@ -90,7 +90,7 @@ inline Real
 AuxiliaryField::get_value(Real time, const DenseVector<Real, DIM> & x)
 {
     Real val;
-    evaluate(DIM, time, x.get_data(), 1, &val);
+    evaluate(DIM, time, x.data(), 1, &val);
     return val;
 }
 
@@ -99,7 +99,7 @@ inline DenseVector<Real, N>
 AuxiliaryField::get_vector_value(Real time, const DenseVector<Real, DIM> & x)
 {
     DenseVector<Real, N> val;
-    evaluate(DIM, time, x.get_data(), N, val.get_data());
+    evaluate(DIM, time, x.data(), N, val.data());
     return val;
 }
 
