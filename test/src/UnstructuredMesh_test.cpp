@@ -393,3 +393,26 @@ TEST(UnstructuredMesh, get_face_set_label_nonexistent)
     auto front_lbl = mesh.get_face_set_label("front");
     EXPECT_EQ((DMLabel) front_lbl, (DMLabel) mesh.get_label("front"));
 }
+
+TEST(UnstructuredMesh, get_chart)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    Int start, end;
+    mesh.get_chart(start, end);
+    EXPECT_EQ(start, 0);
+    EXPECT_EQ(end, 45);
+
+    auto range = mesh.get_chart();
+    EXPECT_EQ(range.get_first(), 0);
+    EXPECT_EQ(range.get_last(), 45);
+}

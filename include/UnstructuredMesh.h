@@ -163,6 +163,17 @@ public:
     /// @return Index set with all cells
     IndexSet get_all_cells() const;
 
+    /// Return the interval for all mesh points [start, end)
+    ///
+    /// @param start The first mesh point
+    /// @param end The upper bound for mesh points
+    void get_chart(Int & start, Int & end) const;
+
+    /// Return the interval for all mesh points [start, end)
+    ///
+    /// @return Range of mesh points
+    Range get_chart() const;
+
     /// Get cell type
     ///
     /// @param cell Cell index
