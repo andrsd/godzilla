@@ -629,7 +629,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
     for (Int i = 0; i < n_elems_in_block; i++) {
         Int elem_id;
         if (cells == nullptr)
-            elem_id = elem_range.get_first() + i;
+            elem_id = elem_range.first() + i;
         else
             elem_id = cells[i];
 

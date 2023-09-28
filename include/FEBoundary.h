@@ -140,7 +140,7 @@ private:
         auto vertex_range = this->mesh->get_vertex_range();
         for (Int i = 0; i < this->vertices.get_local_size(); i++) {
             Int vertex = this->vertices(i);
-            Int node = vertex - vertex_range.get_first();
+            Int node = vertex - vertex_range.first();
             DenseVector<Real, DIM> sum;
             sum.zero();
             for (Int iec = 0; iec < (*this->nelcom)(node).size(); iec++) {

@@ -247,26 +247,26 @@ TEST(UnstructuredMeshTest, ranges)
     EXPECT_EQ(*mesh.vertex_end(), 24);
 
     auto vtx_range = mesh.get_vertex_range();
-    EXPECT_EQ(vtx_range.get_first(), 12);
-    EXPECT_EQ(vtx_range.get_last(), 24);
+    EXPECT_EQ(vtx_range.first(), 12);
+    EXPECT_EQ(vtx_range.last(), 24);
 
     EXPECT_EQ(*mesh.face_begin(), 24);
     EXPECT_EQ(*mesh.face_end(), 35);
 
     auto face_range = mesh.get_face_range();
-    EXPECT_EQ(face_range.get_first(), 24);
-    EXPECT_EQ(face_range.get_last(), 35);
+    EXPECT_EQ(face_range.first(), 24);
+    EXPECT_EQ(face_range.last(), 35);
 
     EXPECT_EQ(*mesh.cell_begin(), 0);
     EXPECT_EQ(*mesh.cell_end(), 12);
 
     auto cell_range = mesh.get_cell_range();
-    EXPECT_EQ(cell_range.get_first(), 0);
-    EXPECT_EQ(cell_range.get_last(), 2);
+    EXPECT_EQ(cell_range.first(), 0);
+    EXPECT_EQ(cell_range.last(), 2);
 
     auto all_cell_range = mesh.get_all_cell_range();
-    EXPECT_EQ(all_cell_range.get_first(), 0);
-    EXPECT_EQ(all_cell_range.get_last(), 12);
+    EXPECT_EQ(all_cell_range.first(), 0);
+    EXPECT_EQ(all_cell_range.last(), 12);
 
     auto it = mesh.cell_begin();
     for (Int i = 0; i < 12; i++)
@@ -413,6 +413,6 @@ TEST(UnstructuredMesh, get_chart)
     EXPECT_EQ(end, 45);
 
     auto range = mesh.get_chart();
-    EXPECT_EQ(range.get_first(), 0);
-    EXPECT_EQ(range.get_last(), 45);
+    EXPECT_EQ(range.first(), 0);
+    EXPECT_EQ(range.last(), 45);
 }
