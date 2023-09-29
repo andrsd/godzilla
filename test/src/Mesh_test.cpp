@@ -77,6 +77,22 @@ TEST(MeshTest, get_coordinates_local)
     EXPECT_EQ(coords(2), 1.);
 }
 
+TEST(MeshTest, get_coordinates_section)
+{
+    TestApp app;
+
+    Parameters params = TestMesh::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestMesh mesh(params);
+    mesh.create();
+
+    auto section = mesh.get_coordinate_section();
+    EXPECT_EQ(section.get_offset(2), 0);
+    EXPECT_EQ(section.get_offset(3), 1);
+    EXPECT_EQ(section.get_offset(4), 2);
+}
+
 TEST(MeshTest, remove_label)
 {
     TestApp app;

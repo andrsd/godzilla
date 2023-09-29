@@ -102,4 +102,13 @@ Mesh::get_coordinates_local() const
     return { vec };
 }
 
+Section
+Mesh::get_coordinate_section() const
+{
+    _F_;
+    PetscSection section;
+    PETSC_CHECK(DMGetCoordinateSection(this->dm, &section));
+    return { section };
+}
+
 } // namespace godzilla
