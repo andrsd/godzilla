@@ -192,8 +192,51 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_3IntEN8godzilla16InitialCondition9get_valueE4Real4RealPK4Real">
+<span id="_CPPv3I_3IntEN8godzilla16InitialCondition9get_valueE4RealPK4Real"></span><span id="_CPPv2I_3IntEN8godzilla16InitialCondition9get_valueE4RealPK4Real"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DIM</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_initial_condition_1ad51f5479e62513674b5295e03e1b92f0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_value</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_3IntEN8godzilla16InitialCondition9get_valueE4Real4RealPK4Real" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Evaluate the initial condition. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>DIM</strong> – The spatial dimension </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>time</strong> – The time at which to sample </p></li>
+<li><p><strong>x</strong> – The coordinates </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The value of the initial condition </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE11DenseVectorI4Real1NE4RealRK11DenseVectorI4Real3DIME">
 <span id="_CPPv3I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE4RealRK11DenseVectorI4Real3DIME"></span><span id="_CPPv2I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE4RealRK11DenseVectorI4Real3DIME"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">N</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DIM</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_initial_condition_1a8dbd88e0129a22ab129d05a1e5e7ed95"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">DenseVector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE11DenseVectorI4Real1NE4RealRK11DenseVectorI4Real3DIME" title="godzilla::InitialCondition::get_vector_value::N"><span class="n"><span class="pre">N</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_vector_value</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">DenseVector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE11DenseVectorI4Real1NE4RealRK11DenseVectorI4Real3DIME" title="godzilla::InitialCondition::get_vector_value::DIM"><span class="n"><span class="pre">DIM</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE11DenseVectorI4Real1NE4RealRK11DenseVectorI4Real3DIME" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Evaluate the initial condition (vector-valued version) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> – The number of components </p></li>
+<li><p><strong>DIM</strong> – The spatial dimension </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>time</strong> – The time at which to sample </p></li>
+<li><p><strong>x</strong> – The coordinates </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The value of the initial condition </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE11DenseVectorI4Real1NE4RealPK4Real">
+<span id="_CPPv3I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE4RealPK4Real"></span><span id="_CPPv2I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE4RealPK4Real"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">N</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DIM</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_initial_condition_1acd7445c8e2473250a4d16b637f206414"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">DenseVector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Real</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE11DenseVectorI4Real1NE4RealPK4Real" title="godzilla::InitialCondition::get_vector_value::N"><span class="n"><span class="pre">N</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_vector_value</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_3Int_3IntEN8godzilla16InitialCondition16get_vector_valueE11DenseVectorI4Real1NE4RealPK4Real" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Evaluate the initial condition (vector-valued version) </p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
