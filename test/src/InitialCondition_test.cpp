@@ -145,8 +145,14 @@ TEST_F(InitialConditionTest, get_value)
     params.set<std::string>("_name") = "obj";
     TestInitialCondition ic(params);
 
-    DenseVector<Real, 1> x({ 1. });
-    EXPECT_EQ(ic.get_value(2., x), 22.);
+    {
+        DenseVector<Real, 1> x({ 1. });
+        EXPECT_EQ(ic.get_value(2., x), 22.);
+    }
+    {
+        Real x[1] = { 1. };
+        EXPECT_EQ(ic.get_value<1>(2., x), 22.);
+    }
 }
 
 TEST_F(InitialConditionTest, get_vector_value)
@@ -157,10 +163,18 @@ TEST_F(InitialConditionTest, get_vector_value)
     params.set<std::string>("_name") = "obj";
     TestVectorInitialCondition ic(params);
 
-    DenseVector<Real, 1> x({ 1. });
-    DenseVector<Real, 2> u = ic.get_vector_value<2>(2., x);
-    EXPECT_EQ(u(0), 12.);
-    EXPECT_EQ(u(1), 3.);
+    {
+        DenseVector<Real, 1> x({ 1. });
+        DenseVector<Real, 2> u = ic.get_vector_value<2>(2., x);
+        EXPECT_EQ(u(0), 12.);
+        EXPECT_EQ(u(1), 3.);
+    }
+    {
+        Real x[1] = { 1. };
+        DenseVector<Real, 2> u = ic.get_vector_value<2, 1>(2., x);
+        EXPECT_EQ(u(0), 12.);
+        EXPECT_EQ(u(1), 3.);
+    }
 }
 
 TEST_F(InitialConditionTest, duplicate_ic_name)
