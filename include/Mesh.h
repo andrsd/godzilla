@@ -6,6 +6,7 @@
 #include "PrintInterface.h"
 #include "Label.h"
 #include "Vector.h"
+#include "Section.h"
 #include "petscdm.h"
 
 namespace godzilla {
@@ -68,6 +69,11 @@ public:
     ///
     /// @return Coordinate vector
     Vector get_coordinates_local() const;
+
+    /// Retrieve the layout of coordinate values over the mesh.
+    ///
+    /// @return Local section from the coordinate `DM`
+    Section get_coordinate_section() const;
 
 protected:
     /// DM object
