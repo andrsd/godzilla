@@ -5,6 +5,51 @@
 
 namespace godzilla {
 
+IndexSet::Iterator::Iterator(IndexSet & is, Int idx) : is(is), idx(idx)
+{
+    this->is.get_indices();
+}
+
+IndexSet::Iterator::~Iterator()
+{
+    this->is.restore_indices();
+}
+
+const IndexSet::Iterator::value_type &
+IndexSet::Iterator::operator*() const
+{
+    return this->is.indices[this->idx];
+}
+
+IndexSet::Iterator &
+IndexSet::Iterator::operator++()
+{
+    this->idx++;
+    return *this;
+}
+
+IndexSet::Iterator
+IndexSet::Iterator::operator++(int)
+{
+    Iterator tmp = *this;
+    ++(*this);
+    return tmp;
+}
+
+bool
+operator==(const IndexSet::Iterator & a, const IndexSet::Iterator & b)
+{
+    return ((IS) a.is == (IS) b.is) && (a.idx == b.idx);
+}
+
+bool
+operator!=(const IndexSet::Iterator & a, const IndexSet::Iterator & b)
+{
+    return ((IS) a.is != (IS) b.is) || (a.idx != b.idx);
+}
+
+//
+
 IndexSet::IndexSet() : is(nullptr), indices(nullptr) {}
 
 IndexSet::IndexSet(IS is) : is(is), indices(nullptr) {}
@@ -211,6 +256,21 @@ IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
     IS is;
     ISIntersect(is1, is2, &is);
     return IndexSet(is);
+}
+
+IndexSet::Iterator
+IndexSet::begin()
+{
+    _F_;
+    return Iterator(*this, 0);
+}
+
+IndexSet::Iterator
+IndexSet::end()
+{
+    _F_;
+    auto n = get_local_size();
+    return Iterator(*this, n);
 }
 
 } // namespace godzilla

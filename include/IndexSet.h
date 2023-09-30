@@ -9,6 +9,32 @@ namespace godzilla {
 
 class IndexSet {
 public:
+    struct Iterator {
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = Int;
+
+        explicit Iterator(IndexSet & is, Int idx);
+        ~Iterator();
+
+        const value_type & operator*() const;
+
+        /// Prefix increment
+        Iterator & operator++();
+
+        /// Postfix increment
+        Iterator operator++(int);
+
+        friend bool operator==(const Iterator & a, const Iterator & b);
+
+        friend bool operator!=(const Iterator & a, const Iterator & b);
+
+    private:
+        /// IndexSet to iterate over
+        IndexSet & is;
+        /// Index pointing to the `is`
+        Int idx;
+    };
+
     IndexSet();
     explicit IndexSet(IS is);
     ~IndexSet();
@@ -70,6 +96,12 @@ public:
 
     /// Sort the indices of the index set, removing duplicates.
     void sort_remove_dups() const;
+
+    /// Begin iterator for range-based for-loops
+    Iterator begin();
+
+    /// End iterator for range-based for-loops
+    Iterator end();
 
 private:
     IS is;
