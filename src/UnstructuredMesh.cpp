@@ -528,4 +528,17 @@ UnstructuredMesh::cell_end() const
     return Iterator(idx);
 }
 
+std::map<Int, std::vector<Int>>
+UnstructuredMesh::common_cells_by_vertex() const
+{
+    _F_;
+    std::map<Int, std::vector<Int>> map;
+    for (auto & cell : get_cell_range()) {
+        auto connect = get_connectivity(cell);
+        for (auto & vtx : connect)
+            map[vtx].push_back(cell);
+    }
+    return map;
+}
+
 } // namespace godzilla

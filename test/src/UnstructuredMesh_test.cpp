@@ -416,3 +416,32 @@ TEST(UnstructuredMesh, get_chart)
     EXPECT_EQ(range.first(), 0);
     EXPECT_EQ(range.last(), 45);
 }
+
+TEST(UnstructuredMesh, common_cells_by_vertex)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<const App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    auto map = mesh.common_cells_by_vertex();
+
+    EXPECT_THAT(map[2], UnorderedElementsAre(0));
+    EXPECT_THAT(map[3], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map[4], UnorderedElementsAre(1));
+    EXPECT_THAT(map[5], UnorderedElementsAre(0));
+    EXPECT_THAT(map[6], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map[7], UnorderedElementsAre(1));
+    EXPECT_THAT(map[8], UnorderedElementsAre(0));
+    EXPECT_THAT(map[9], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map[10], UnorderedElementsAre(1));
+    EXPECT_THAT(map[11], UnorderedElementsAre(0));
+    EXPECT_THAT(map[12], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map[13], UnorderedElementsAre(1));
+}
