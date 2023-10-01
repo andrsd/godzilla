@@ -688,7 +688,7 @@ ExodusIIOutput::write_info()
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
     std::string created_by = fmt::format("Created by {} {}, on {}",
-                                         this->app->get_name(),
+                                         this->app->name(),
                                          this->app->get_version(),
                                          datetime);
 

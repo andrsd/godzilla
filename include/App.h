@@ -31,7 +31,9 @@ public:
     /// Get Application name
     ///
     /// @return Application name
-    const std::string & get_name() const;
+    [[deprecated("Use name() instead")]] const std::string & get_name() const;
+
+    const std::string & name() const;
 
     /// Get application version
     ///
@@ -119,7 +121,7 @@ protected:
     virtual void run_problem();
 
     /// Application name
-    std::string name;
+    std::string _name;
 
     /// MPI communicator
     mpi::Communicator comm;

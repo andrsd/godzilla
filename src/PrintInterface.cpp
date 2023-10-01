@@ -14,7 +14,7 @@ PrintInterface::TimedEvent::TimedEvent(const PrintInterface * pi,
     pi(pi),
     level(level)
 {
-    std::string evt_name = fmt::format("{}::{}", this->pi->pi_app->get_name(), event_name);
+    std::string evt_name = fmt::format("{}::{}", this->pi->pi_app->name(), event_name);
     if (!PerfLog::is_event_registered(evt_name))
         PerfLog::register_event(evt_name);
     this->event = new PerfLog::Event(evt_name);
@@ -48,7 +48,7 @@ PrintInterface::PrintInterface(const App * app) :
     pi_app(app),
     proc_id(app->get_comm().rank()),
     verbosity_level(app->get_verbosity_level()),
-    prefix(app->get_name())
+    prefix(app->name())
 {
     _F_;
 }

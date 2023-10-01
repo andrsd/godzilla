@@ -16,7 +16,7 @@ App::App(const mpi::Communicator & comm,
          int argc,
          const char * const * argv) :
     PrintInterface(comm, this->verbosity_level, app_name),
-    name(app_name),
+    _name(app_name),
     comm(comm),
     log(nullptr),
     argc(argc),
@@ -41,7 +41,14 @@ const std::string &
 App::get_name() const
 {
     _F_;
-    return this->name;
+    return this->_name;
+}
+
+const std::string &
+App::name() const
+{
+    _F_;
+    return this->_name;
 }
 
 const std::string &
@@ -142,7 +149,7 @@ App::process_command_line(cxxopts::ParseResult & result)
         fmt::print("{}", this->cmdln_opts.help());
     }
     else if (result.count("version"))
-        fmt::print("{}, version {}\n", get_name(), get_version());
+        fmt::print("{}, version {}\n", name(), get_version());
     else {
         if (result.count("no-colors"))
             Terminal::num_colors = 1;
