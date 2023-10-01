@@ -65,49 +65,50 @@ public:
 
     /// Broadcast a value from a root process to all other processes
     template <typename T>
-    void broadcast(T & value, int root);
+    void broadcast(T & value, int root) const;
     template <typename T>
-    void broadcast(T * values, int n, int root);
+    void broadcast(T * values, int n, int root) const;
 
     /// Gather
     template <typename T>
-    void gather(const T & in_value, T * out_values, int root);
+    void gather(const T & in_value, T * out_values, int root) const;
     template <typename T>
-    void gather(const T & in_value, std::vector<T> & out_values, int root);
+    void gather(const T & in_value, std::vector<T> & out_values, int root) const;
     template <typename T>
-    void gather(const T * in_values, int n, T * out_values, int root);
+    void gather(const T * in_values, int n, T * out_values, int root) const;
     template <typename T>
-    void gather(const T * in_values, int n, std::vector<T> & out_values, int root);
+    void gather(const T * in_values, int n, std::vector<T> & out_values, int root) const;
 
     /// Scatter
     template <typename T>
-    void scatter(const T * in_values, T & out_value, int root);
+    void scatter(const T * in_values, T & out_value, int root) const;
     template <typename T>
-    void scatter(const std::vector<T> & in_values, T & out_value, int root);
+    void scatter(const std::vector<T> & in_values, T & out_value, int root) const;
     template <typename T>
-    void scatter(const T * in_values, T * out_values, int n, int root);
+    void scatter(const T * in_values, T * out_values, int n, int root) const;
     template <typename T>
-    void scatter(const std::vector<T> & in_values, T * out_values, int n, int root);
+    void scatter(const std::vector<T> & in_values, T * out_values, int n, int root) const;
 
     /// Reduce
     template <typename T, typename Op>
-    void reduce(const T * in_values, int n, T * out_values, Op op, int root);
+    void reduce(const T * in_values, int n, T * out_values, Op op, int root) const;
     template <typename T, typename Op>
-    void reduce(const T * in_values, int n, Op op, int root);
+    void reduce(const T * in_values, int n, Op op, int root) const;
     template <typename T, typename Op>
-    void reduce(std::vector<T> const & in_values, Op op, int root);
+    void reduce(std::vector<T> const & in_values, Op op, int root) const;
     template <typename T, typename Op>
-    void reduce(std::vector<T> const & in_values, std::vector<T> & out_values, Op op, int root);
+    void
+    reduce(std::vector<T> const & in_values, std::vector<T> & out_values, Op op, int root) const;
     template <typename T, typename Op>
-    void reduce(const T & in_value, T & out_value, Op op, int root);
+    void reduce(const T & in_value, T & out_value, Op op, int root) const;
 
     /// All reduce
     template <typename T, typename Op>
-    void all_reduce(const T * in_values, int n, T * out_values, Op op);
+    void all_reduce(const T * in_values, int n, T * out_values, Op op) const;
     template <typename T, typename Op>
-    void all_reduce(const T & in_value, T & out_value, Op op);
+    void all_reduce(const T & in_value, T & out_value, Op op) const;
     template <typename T, typename Op>
-    void all_reduce(T & value, Op op);
+    void all_reduce(T & value, Op op) const;
 
     /// Abort all tasks in the group of this communicator.
     void abort(int errcode) const;
@@ -281,14 +282,14 @@ Communicator::barrier() const
 
 template <typename T>
 void
-Communicator::broadcast(T & value, int root)
+Communicator::broadcast(T & value, int root) const
 {
     broadcast(&value, 1, root);
 }
 
 template <typename T>
 void
-Communicator::broadcast(T * values, int n, int root)
+Communicator::broadcast(T * values, int n, int root) const
 {
     MPI_CHECK(MPI_Bcast(values, n, get_mpi_datatype<T>(), root, this->comm));
 }
@@ -297,7 +298,7 @@ Communicator::broadcast(T * values, int n, int root)
 
 template <typename T>
 void
-Communicator::gather(const T & in_value, T * out_values, int root)
+Communicator::gather(const T & in_value, T * out_values, int root) const
 {
     assert(out_values || (rank() != root));
     gather(&in_value, 1, out_values, root);
@@ -305,7 +306,7 @@ Communicator::gather(const T & in_value, T * out_values, int root)
 
 template <typename T>
 void
-Communicator::gather(const T & in_value, std::vector<T> & out_values, int root)
+Communicator::gather(const T & in_value, std::vector<T> & out_values, int root) const
 {
     if (rank() == root)
         out_values.resize(size());
@@ -314,7 +315,7 @@ Communicator::gather(const T & in_value, std::vector<T> & out_values, int root)
 
 template <typename T>
 void
-Communicator::gather(const T * in_values, int n, T * out_values, int root)
+Communicator::gather(const T * in_values, int n, T * out_values, int root) const
 {
     auto type = get_mpi_datatype<T>();
     MPI_CHECK(
@@ -323,7 +324,7 @@ Communicator::gather(const T * in_values, int n, T * out_values, int root)
 
 template <typename T>
 void
-Communicator::gather(const T * in_values, int n, std::vector<T> & out_values, int root)
+Communicator::gather(const T * in_values, int n, std::vector<T> & out_values, int root) const
 {
     if (rank() == root)
         out_values.resize(size() * (std::size_t) n);
@@ -334,21 +335,21 @@ Communicator::gather(const T * in_values, int n, std::vector<T> & out_values, in
 
 template <typename T>
 void
-Communicator::scatter(const T * in_values, T & out_value, int root)
+Communicator::scatter(const T * in_values, T & out_value, int root) const
 {
     scatter(in_values, &out_value, 1, root);
 }
 
 template <typename T>
 void
-Communicator::scatter(const std::vector<T> & in_values, T & out_value, int root)
+Communicator::scatter(const std::vector<T> & in_values, T & out_value, int root) const
 {
     scatter(in_values.data(), &out_value, 1, root);
 }
 
 template <typename T>
 void
-Communicator::scatter(const T * in_values, T * out_values, int n, int root)
+Communicator::scatter(const T * in_values, T * out_values, int n, int root) const
 {
     auto type = get_mpi_datatype<T>();
     MPI_CHECK(
@@ -357,7 +358,7 @@ Communicator::scatter(const T * in_values, T * out_values, int n, int root)
 
 template <typename T>
 void
-Communicator::scatter(const std::vector<T> & in_values, T * out_values, int n, int root)
+Communicator::scatter(const std::vector<T> & in_values, T * out_values, int n, int root) const
 {
     scatter(in_values.data(), out_values, n, root);
 }
@@ -366,7 +367,7 @@ Communicator::scatter(const std::vector<T> & in_values, T * out_values, int n, i
 
 template <typename T, typename Op>
 void
-Communicator::reduce(const T * in_values, int n, T * out_values, Op, int root)
+Communicator::reduce(const T * in_values, int n, T * out_values, Op, int root) const
 {
     MPI_Op op = mpi::op::Operation<Op, T>::op();
     MPI_CHECK(MPI_Reduce(const_cast<T *>(in_values),
@@ -380,21 +381,24 @@ Communicator::reduce(const T * in_values, int n, T * out_values, Op, int root)
 
 template <typename T, typename Op>
 void
-Communicator::reduce(const T * in_values, int n, Op op, int root)
+Communicator::reduce(const T * in_values, int n, Op op, int root) const
 {
     reduce(in_values, n, nullptr, op, root);
 }
 
 template <typename T, typename Op>
 void
-Communicator::reduce(std::vector<T> const & in_values, Op op, int root)
+Communicator::reduce(std::vector<T> const & in_values, Op op, int root) const
 {
     reduce(in_values.data(), in_values.size(), op, root);
 }
 
 template <typename T, typename Op>
 void
-Communicator::reduce(std::vector<T> const & in_values, std::vector<T> & out_values, Op op, int root)
+Communicator::reduce(std::vector<T> const & in_values,
+                     std::vector<T> & out_values,
+                     Op op,
+                     int root) const
 {
     if (root == rank())
         out_values.resize(in_values.size());
@@ -403,7 +407,7 @@ Communicator::reduce(std::vector<T> const & in_values, std::vector<T> & out_valu
 
 template <typename T, typename Op>
 void
-Communicator::reduce(const T & in_value, T & out_value, Op op, int root)
+Communicator::reduce(const T & in_value, T & out_value, Op op, int root) const
 {
     reduce(&in_value, 1, &out_value, op, root);
 }
@@ -412,7 +416,7 @@ Communicator::reduce(const T & in_value, T & out_value, Op op, int root)
 
 template <typename T, typename Op>
 void
-Communicator::all_reduce(const T * in_values, int n, T * out_values, Op)
+Communicator::all_reduce(const T * in_values, int n, T * out_values, Op) const
 {
     MPI_Op op = mpi::op::Operation<Op, T>::op();
     MPI_CHECK(MPI_Allreduce(const_cast<T *>(in_values),
@@ -425,14 +429,14 @@ Communicator::all_reduce(const T * in_values, int n, T * out_values, Op)
 
 template <typename T, typename Op>
 void
-Communicator::all_reduce(const T & in_value, T & out_value, Op op)
+Communicator::all_reduce(const T & in_value, T & out_value, Op op) const
 {
     all_reduce(&in_value, 1, &out_value, op);
 }
 
 template <typename T, typename Op>
 void
-Communicator::all_reduce(T & in_value, Op op)
+Communicator::all_reduce(T & in_value, Op op) const
 {
     T out_value;
     all_reduce(&in_value, 1, &out_value, op);
