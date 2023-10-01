@@ -113,7 +113,7 @@ void
 TecplotOutput::set_file_name()
 {
     _F_;
-    if (get_comm().size() == 1)
+    if (comm().size() == 1)
         this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
     else
         this->file_name =

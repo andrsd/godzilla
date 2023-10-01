@@ -30,7 +30,7 @@ public:
         Problem(params),
         TransientProblemInterface(this, params)
     {
-        DMPlexCreateBoxMesh(get_comm(),
+        DMPlexCreateBoxMesh(comm(),
                             1,
                             PETSC_TRUE,
                             nullptr,

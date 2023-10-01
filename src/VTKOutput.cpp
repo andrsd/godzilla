@@ -41,7 +41,7 @@ VTKOutput::create()
     _F_;
     FileOutput::create();
 
-    PETSC_CHECK(PetscViewerCreate(get_comm(), &this->viewer));
+    PETSC_CHECK(PetscViewerCreate(comm(), &this->viewer));
     PETSC_CHECK(PetscViewerSetType(this->viewer, PETSCVIEWERVTK));
     PETSC_CHECK(PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE));
 }

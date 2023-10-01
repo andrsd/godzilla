@@ -26,7 +26,7 @@ TEST(ObjectTest, api)
 
     int sz;
     MPI_Comm_size(app.get_comm(), &sz);
-    EXPECT_EQ(obj->get_comm().size(), sz);
+    EXPECT_EQ(obj->comm().size(), sz);
 
     obj->create();
 }

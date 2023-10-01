@@ -119,7 +119,7 @@ TEST(ExodusIIOutputTest, fe_check)
         void
         create() override
         {
-            DMCreate(get_comm(), &this->dm);
+            DMCreate(comm(), &this->dm);
         }
 
     protected:

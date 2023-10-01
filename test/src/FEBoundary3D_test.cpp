@@ -36,7 +36,7 @@ protected:
         PetscInt n_verts = 4;
         PetscInt cells[] = { 0, 1, 2, 3 };
         double coords[] = { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 };
-        PETSC_CHECK(DMPlexCreateFromCellListPetsc(get_comm(),
+        PETSC_CHECK(DMPlexCreateFromCellListPetsc(comm(),
                                                   DIM,
                                                   n_cells,
                                                   n_verts,

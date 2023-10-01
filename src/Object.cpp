@@ -72,6 +72,13 @@ Object::get_comm() const
     return this->app->get_comm();
 }
 
+const mpi::Communicator &
+Object::comm() const
+{
+    _F_;
+    return this->app->get_comm();
+}
+
 int
 Object::get_processor_id() const
 {

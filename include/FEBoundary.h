@@ -210,7 +210,7 @@ BoundaryInfo<TRI3, 2, 3>::correct_nodal_normals()
     for (Int i = 0; i < this->vertices.get_local_size(); i++) {
         Int vertex = this->vertices(i);
         auto support = this->mesh->get_support(vertex);
-        IndexSet support_is = IndexSet::create_general(this->mesh->get_comm(), support);
+        IndexSet support_is = IndexSet::create_general(this->mesh->comm(), support);
         auto common_edges = IndexSet::intersect(this->facets, support_is);
         if (common_edges.get_size() == 1) {
             common_edges.get_indices();

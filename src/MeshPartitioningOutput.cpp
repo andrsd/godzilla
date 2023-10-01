@@ -46,7 +46,7 @@ MeshPartitioningOutput::output_step()
     set_file_name();
 
     PetscViewer viewer;
-    PETSC_CHECK(PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
+    PETSC_CHECK(PetscViewerHDF5Open(comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 
     DM dmp;
     PETSC_CHECK(DMClone(this->problem->get_dm(), &dmp));

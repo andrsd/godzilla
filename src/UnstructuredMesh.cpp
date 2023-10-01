@@ -56,7 +56,7 @@ UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     partition_overlap(0)
 {
     _F_;
-    this->partitioner.create(get_comm());
+    this->partitioner.create(comm());
 }
 
 UnstructuredMesh::~UnstructuredMesh()
