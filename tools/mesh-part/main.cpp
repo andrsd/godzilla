@@ -46,7 +46,7 @@ MeshPartApp::process_command_line(cxxopts::ParseResult & result)
     if (res.count("help"))
         fmt::print("{}", this->cmdln_opts.help());
     else if (res.count("version"))
-        fmt::print("{}, version {}\n", name(), version);
+        fmt::print("{}, version {}\n", name(), version());
     else if (res.count("mesh-file"))
         partition_mesh_file(res["mesh-file"].as<std::string>());
     else

@@ -38,7 +38,9 @@ public:
     /// Get application version
     ///
     /// @return The application version as a string
-    virtual const std::string & get_version() const;
+    [[deprecated("Use version() instead")]] virtual const std::string & get_version() const;
+
+    virtual const std::string & version() const;
 
     /// Get pointer to the `Problem` class in this application
     ///

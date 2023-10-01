@@ -59,6 +59,14 @@ App::get_version() const
     return ver;
 }
 
+const std::string &
+App::version() const
+{
+    _F_;
+    static const std::string ver(GODZILLA_VERSION);
+    return ver;
+}
+
 Logger *
 App::get_logger() const
 {
@@ -149,7 +157,7 @@ App::process_command_line(cxxopts::ParseResult & result)
         fmt::print("{}", this->cmdln_opts.help());
     }
     else if (result.count("version"))
-        fmt::print("{}, version {}\n", name(), get_version());
+        fmt::print("{}, version {}\n", name(), version());
     else {
         if (result.count("no-colors"))
             Terminal::num_colors = 1;

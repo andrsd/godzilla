@@ -337,10 +337,8 @@ TecplotOutput::write_created_by_ascii()
     _F_;
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
-    std::string created_by = fmt::format("Created by {} {}, on {}",
-                                         this->app->name(),
-                                         this->app->get_version(),
-                                         datetime);
+    std::string created_by =
+        fmt::format("Created by {} {}, on {}", this->app->name(), this->app->version(), datetime);
     write_line(fmt::format("DATASETAUXDATA {} = \"{}\"\n", "created_by", created_by));
 }
 
