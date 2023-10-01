@@ -86,9 +86,9 @@ TEST(MeshPartitioningOutputTest, output)
 
     PetscViewer viewer;
     Vec p;
-    VecCreate(app.get_comm(), &p);
+    VecCreate(app.comm(), &p);
     PetscObjectSetName((PetscObject) p, "fields/partitioning");
-    PetscViewerHDF5Open(app.get_comm(), "part.h5", FILE_MODE_READ, &viewer);
+    PetscViewerHDF5Open(app.comm(), "part.h5", FILE_MODE_READ, &viewer);
     VecLoad(p, viewer);
     Real l2_norm;
     VecNorm(p, NORM_2, &l2_norm);

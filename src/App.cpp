@@ -17,7 +17,7 @@ App::App(const mpi::Communicator & comm,
          const char * const * argv) :
     PrintInterface(comm, this->verbosity_level, app_name),
     _name(app_name),
-    comm(comm),
+    _comm(comm),
     log(nullptr),
     argc(argc),
     argv(argv),
@@ -139,7 +139,14 @@ const mpi::Communicator &
 App::get_comm() const
 {
     _F_;
-    return this->comm;
+    return comm();
+}
+
+const mpi::Communicator &
+App::comm() const
+{
+    _F_;
+    return this->_comm;
 }
 
 InputFile *

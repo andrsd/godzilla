@@ -73,7 +73,9 @@ public:
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    virtual const mpi::Communicator & get_comm() const;
+    [[deprecated("Use comm() instead")]] virtual const mpi::Communicator & get_comm() const;
+
+    virtual const mpi::Communicator & comm() const;
 
     /// Build object using the Factory
     ///
@@ -126,7 +128,7 @@ protected:
     std::string _name;
 
     /// MPI communicator
-    mpi::Communicator comm;
+    mpi::Communicator _comm;
 
     /// Log with errors and/or warnings
     Logger * log;

@@ -46,7 +46,7 @@ PrintInterface::PrintInterface(const Object * obj) :
 
 PrintInterface::PrintInterface(const App * app) :
     pi_app(app),
-    proc_id(app->get_comm().rank()),
+    proc_id(app->comm().rank()),
     verbosity_level(app->get_verbosity_level()),
     prefix(app->name())
 {

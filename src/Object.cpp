@@ -69,21 +69,21 @@ const mpi::Communicator &
 Object::get_comm() const
 {
     _F_;
-    return this->app->get_comm();
+    return this->app->comm();
 }
 
 const mpi::Communicator &
 Object::comm() const
 {
     _F_;
-    return this->app->get_comm();
+    return this->app->comm();
 }
 
 int
 Object::get_processor_id() const
 {
     _F_;
-    return this->app->get_comm().rank();
+    return this->app->comm().rank();
 }
 
 void
