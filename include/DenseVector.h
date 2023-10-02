@@ -493,6 +493,17 @@ cross_product(const DenseVector<Real, 3> & a, const DenseVector<Real, 3> & b)
     return res;
 }
 
+template <typename T, Int M, Int N>
+inline DenseMatrix<T, M, N>
+tensor_product(const DenseVector<T, M> & a, const DenseVector<T, N> & b)
+{
+    DenseMatrix<T, M, N> prod;
+    for (Int i = 0; i < M; i++)
+        for (Int j = 0; j < N; j++)
+            prod(i, j) = a(i) * b(j);
+    return prod;
+}
+
 /// Convert DenseVector<DenseVector, M>, N> into a DenseMatrix<N, M>
 ///
 /// @tparam T Data type
