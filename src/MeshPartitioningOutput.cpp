@@ -27,7 +27,7 @@ MeshPartitioningOutput::check()
 {
     _F_;
     FileOutput::check();
-    DM dm = this->problem->get_dm();
+    auto dm = this->problem->dm();
     if (dm == nullptr)
         log_error("Mesh partitioning output works only with problems that provide DM.");
 }
@@ -49,7 +49,7 @@ MeshPartitioningOutput::output_step()
     PETSC_CHECK(PetscViewerHDF5Open(comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 
     DM dmp;
-    PETSC_CHECK(DMClone(this->problem->get_dm(), &dmp));
+    PETSC_CHECK(DMClone(this->problem->dm(), &dmp));
 
     Int dim;
     PETSC_CHECK(DMGetDimension(dmp, &dim));

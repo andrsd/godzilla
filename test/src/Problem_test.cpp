@@ -27,11 +27,6 @@ public:
     {
         return false;
     }
-    virtual DM
-    get_dm() const
-    {
-        return this->mesh->dm();
-    }
 
     virtual const Vector &
     get_solution_vector() const

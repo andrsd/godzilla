@@ -146,7 +146,7 @@ ExplicitFELinearProblem::get_solution_vector_local()
 {
     _F_;
     auto & loc_sln = this->sln;
-    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
+    PETSC_CHECK(DMGlobalToLocal(dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary_local(get_time(), loc_sln);
     return loc_sln;
 }
@@ -155,8 +155,7 @@ void
 ExplicitFELinearProblem::set_up_callbacks()
 {
     _F_;
-    DM dm = get_dm();
-    PETSC_CHECK(DMTSSetRHSFunction(dm, __efelp_compute_rhs, this));
+    PETSC_CHECK(DMTSSetRHSFunction(dm(), __efelp_compute_rhs, this));
 }
 
 void
@@ -196,9 +195,8 @@ void
 ExplicitFELinearProblem::create_mass_matrix()
 {
     _F_;
-    DM dm = get_dm();
     Mat m;
-    PETSC_CHECK(DMCreateMassMatrix(dm, dm, &m));
+    PETSC_CHECK(DMCreateMassMatrix(dm(), dm(), &m));
     this->M = Matrix(m);
     PETSC_CHECK(KSPSetOperators(this->ksp, this->M, this->M));
 }
@@ -208,7 +206,7 @@ ExplicitFELinearProblem::create_mass_matrix_lumped()
 {
     _F_;
     Vec v;
-    PETSC_CHECK(DMCreateMassMatrixLumped(get_dm(), &v));
+    PETSC_CHECK(DMCreateMassMatrixLumped(dm(), &v));
     this->M_lumped_inv = Vector(v);
     this->M_lumped_inv.reciprocal();
 }
@@ -217,16 +215,15 @@ PetscErrorCode
 ExplicitFELinearProblem::compute_rhs(Real time, const Vector & X, Vector & F)
 {
     _F_;
-    DM dm = get_dm();
     Vector loc_X = get_local_vector();
     Vector loc_F = get_local_vector();
     loc_X.zero();
     compute_boundary_local(time, loc_X);
-    PETSC_CHECK(DMGlobalToLocal(dm, X, INSERT_VALUES, loc_X));
+    PETSC_CHECK(DMGlobalToLocal(dm(), X, INSERT_VALUES, loc_X));
     loc_F.zero();
     compute_rhs_local(time, loc_X, loc_F);
     F.zero();
-    PETSC_CHECK(DMLocalToGlobal(dm, loc_F, ADD_VALUES, F));
+    PETSC_CHECK(DMLocalToGlobal(dm(), loc_F, ADD_VALUES, F));
     if ((Vec) this->M_lumped_inv == nullptr)
         PETSC_CHECK(KSPSolve(this->ksp, F, F));
     else
@@ -240,14 +237,14 @@ PetscErrorCode
 ExplicitFELinearProblem::compute_boundary_local(Real time, Vector & x)
 {
     _F_;
-    return DMPlexTSComputeBoundary(get_dm(), time, x, nullptr, this);
+    return DMPlexTSComputeBoundary(dm(), time, x, nullptr, this);
 }
 
 PetscErrorCode
 ExplicitFELinearProblem::compute_rhs_local(Real time, const Vector & x, Vector & F)
 {
     _F_;
-    return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, x, F, this);
+    return DMPlexTSComputeRHSFunctionFEM(dm(), time, x, F, this);
 }
 
 void

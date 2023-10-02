@@ -30,50 +30,36 @@ public:
         Problem(params),
         TransientProblemInterface(this, params)
     {
-        DMPlexCreateBoxMesh(comm(),
-                            1,
-                            PETSC_TRUE,
-                            nullptr,
-                            nullptr,
-                            nullptr,
-                            nullptr,
-                            PETSC_FALSE,
-                            &this->dm);
-        DMSetUp(this->dm);
-        this->x = create_global_vector();
     }
 
     virtual ~GTestProblem()
     {
         this->x.destroy();
-        DMDestroy(&this->dm);
     }
 
-    DM
-    get_dm() const override
-    {
-        return this->dm;
-    }
     const Vector &
     get_solution_vector() const override
     {
         return this->x;
     }
+
     void
     create() override
     {
+        this->x = create_global_vector();
     }
+
     void
     run() override
     {
     }
+
     void
     set_up_time_scheme() override
     {
     }
 
 protected:
-    DM dm;
     Vector x;
 
 public:

@@ -146,11 +146,6 @@ TEST(ExodusIIOutputTest, fe_check)
         {
             return true;
         }
-        DM
-        get_dm() const
-        {
-            return nullptr;
-        }
         const Vector &
         get_solution_vector() const
         {

@@ -346,7 +346,7 @@ NSIncompressibleProblem::set_up_preconditioning()
     PetscInt n_fields;
     char ** field_names;
     IS * is;
-    PETSC_CHECK(DMCreateFieldIS(get_dm(), &n_fields, &field_names, &is));
+    PETSC_CHECK(DMCreateFieldIS(dm(), &n_fields, &field_names, &is));
 
     // attach null space to the pressure field
     MatNullSpace nsp;

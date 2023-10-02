@@ -9,26 +9,14 @@
 
 namespace {
 
-class EmptyProblem : public Problem {
+class EmptyMesh : public Mesh {
 public:
-    explicit EmptyProblem(const Parameters & params) : Problem(params) {}
+    explicit EmptyMesh(const Parameters & params) : Mesh(params) {}
 
-    virtual void
-    run() override
+    void
+    distribute() override
     {
     }
-    virtual DM
-    get_dm() const override
-    {
-        return nullptr;
-    }
-    virtual const Vector &
-    get_solution_vector() const override
-    {
-        return this->sln;
-    }
-
-    Vector sln;
 };
 
 } // namespace
@@ -103,9 +91,14 @@ TEST(MeshPartitioningOutputTest, no_dm)
 
     TestApp app;
 
-    Parameters prob_params = EmptyProblem::parameters();
+    Parameters mesh_params = EmptyMesh::parameters();
+    mesh_params.set<const App *>("_app") = &app;
+    EmptyMesh mesh(mesh_params);
+
+    Parameters prob_params = G1DTestLinearProblem::parameters();
     prob_params.set<const App *>("_app") = &app;
-    EmptyProblem prob(prob_params);
+    prob_params.set<Mesh *>("_mesh") = &mesh;
+    G1DTestLinearProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
     params.set<const App *>("_app") = &app;

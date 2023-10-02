@@ -28,6 +28,13 @@ DM
 Problem::get_dm() const
 {
     _F_;
+    return dm();
+}
+
+DM
+Problem::dm() const
+{
+    _F_;
     return this->mesh->dm();
 }
 
@@ -171,7 +178,7 @@ Problem::create_local_vector() const
 {
     _F_;
     Vec v;
-    PETSC_CHECK(DMCreateLocalVector(get_dm(), &v));
+    PETSC_CHECK(DMCreateLocalVector(dm(), &v));
     return { v };
 }
 
@@ -180,7 +187,7 @@ Problem::get_local_vector() const
 {
     _F_;
     Vec v;
-    PETSC_CHECK(DMGetLocalVector(get_dm(), &v));
+    PETSC_CHECK(DMGetLocalVector(dm(), &v));
     return { v };
 }
 
@@ -189,7 +196,7 @@ Problem::restore_local_vector(const Vector & vec) const
 {
     _F_;
     Vec v = vec;
-    PETSC_CHECK(DMRestoreLocalVector(get_dm(), &v));
+    PETSC_CHECK(DMRestoreLocalVector(dm(), &v));
 }
 
 Vector
@@ -197,7 +204,7 @@ Problem::create_global_vector() const
 {
     _F_;
     Vec v;
-    PETSC_CHECK(DMCreateGlobalVector(get_dm(), &v));
+    PETSC_CHECK(DMCreateGlobalVector(dm(), &v));
     return { v };
 }
 
@@ -206,7 +213,7 @@ Problem::get_global_vector() const
 {
     _F_;
     Vec v;
-    PETSC_CHECK(DMGetGlobalVector(get_dm(), &v));
+    PETSC_CHECK(DMGetGlobalVector(dm(), &v));
     return { v };
 }
 
@@ -215,7 +222,7 @@ Problem::restore_global_vector(const Vector & vec) const
 {
     _F_;
     Vec v = vec;
-    PETSC_CHECK(DMRestoreGlobalVector(get_dm(), &v));
+    PETSC_CHECK(DMRestoreGlobalVector(dm(), &v));
 }
 
 Matrix
@@ -223,7 +230,7 @@ Problem::create_matrix() const
 {
     _F_;
     Mat m;
-    PETSC_CHECK(DMCreateMatrix(get_dm(), &m));
+    PETSC_CHECK(DMCreateMatrix(dm(), &m));
     return { m };
 }
 
@@ -231,7 +238,7 @@ Section
 Problem::get_local_section() const
 {
     PetscSection section = nullptr;
-    PETSC_CHECK(DMGetLocalSection(get_dm(), &section));
+    PETSC_CHECK(DMGetLocalSection(dm(), &section));
     return { section };
 }
 
@@ -239,14 +246,14 @@ void
 Problem::set_local_section(const Section & section) const
 {
     _F_;
-    PETSC_CHECK(DMSetLocalSection(get_dm(), section));
+    PETSC_CHECK(DMSetLocalSection(dm(), section));
 }
 
 Section
 Problem::get_global_section() const
 {
     PetscSection section = nullptr;
-    PETSC_CHECK(DMGetGlobalSection(get_dm(), &section));
+    PETSC_CHECK(DMGetGlobalSection(dm(), &section));
     return { section };
 }
 
@@ -254,7 +261,7 @@ void
 Problem::set_global_section(const Section & section) const
 {
     _F_;
-    PETSC_CHECK(DMSetGlobalSection(get_dm(), section));
+    PETSC_CHECK(DMSetGlobalSection(dm(), section));
 }
 
 } // namespace godzilla

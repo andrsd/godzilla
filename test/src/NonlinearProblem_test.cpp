@@ -44,12 +44,11 @@ G1DTestNonlinearProblem::~G1DTestNonlinearProblem()
 void
 G1DTestNonlinearProblem::create()
 {
-    DM dm = get_dm();
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
-    DMSetNumFields(dm, 1);
-    DMPlexCreateSection(dm, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
-    DMSetLocalSection(dm, this->s);
+    DMSetNumFields(dm(), 1);
+    DMPlexCreateSection(dm(), nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
+    DMSetLocalSection(dm(), this->s);
     NonlinearProblem::create();
 }
 

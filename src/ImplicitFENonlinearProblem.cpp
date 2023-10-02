@@ -167,10 +167,9 @@ void
 ImplicitFENonlinearProblem::set_up_callbacks()
 {
     _F_;
-    DM dm = get_dm();
-    PETSC_CHECK(DMTSSetBoundaryLocal(dm, _tsfep_compute_boundary, this));
-    PETSC_CHECK(DMTSSetIFunctionLocal(dm, __tsfep_compute_ifunction, this));
-    PETSC_CHECK(DMTSSetIJacobianLocal(dm, __tsfep_compute_ijacobian, this));
+    PETSC_CHECK(DMTSSetBoundaryLocal(dm(), _tsfep_compute_boundary, this));
+    PETSC_CHECK(DMTSSetIFunctionLocal(dm(), __tsfep_compute_ifunction, this));
+    PETSC_CHECK(DMTSSetIJacobianLocal(dm(), __tsfep_compute_ijacobian, this));
 }
 
 void
@@ -197,7 +196,7 @@ ImplicitFENonlinearProblem::get_solution_vector_local()
 {
     _F_;
     auto & loc_sln = this->sln;
-    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
+    PETSC_CHECK(DMGlobalToLocal(dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary(get_time(), loc_sln, Vector());
     return loc_sln;
 }
@@ -224,7 +223,7 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_residual_internal(get_dm(), res_key, cells, time, X, X_t, time, F);
+        compute_residual_internal(dm(), res_key, cells, time, X, X_t, time, F);
         cells.destroy();
     }
 
@@ -258,7 +257,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_jacobian_internal(get_dm(), jac_key, cells, time, x_t_shift, X, X_t, J, Jp);
+        compute_jacobian_internal(dm(), jac_key, cells, time, x_t_shift, X, X_t, J, Jp);
         cells.destroy();
     }
 
@@ -269,7 +268,7 @@ PetscErrorCode
 ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const Vector & X_t)
 {
     _F_;
-    return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
+    return DMPlexTSComputeBoundary(dm(), time, X, X_t, this);
 }
 
 void
