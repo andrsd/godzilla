@@ -21,14 +21,14 @@ class GTest2CompIC : public InitialCondition {
 public:
     explicit GTest2CompIC(const Parameters & params) : InitialCondition(params) {}
 
-    virtual Int
-    get_num_components() const
+    Int
+    get_num_components() const override
     {
         return 2;
     }
 
-    virtual void
-    evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[])
+    void
+    evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) override
     {
         u[0] = 0.;
         u[1] = 10.;
@@ -268,8 +268,8 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     public:
         TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
 
-        virtual void
-        check_integrity()
+        void
+        check_integrity() override
         {
             if (this->log->get_num_entries() > 0)
                 this->log->print();
@@ -324,8 +324,8 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     public:
         TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
 
-        virtual void
-        check_integrity()
+        void
+        check_integrity() override
         {
             if (this->log->get_num_entries() > 0)
                 this->log->print();

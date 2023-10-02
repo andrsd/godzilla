@@ -63,9 +63,11 @@ TEST_F(CSVOutputTest, output)
     class TestPostprocessor : public Postprocessor {
     public:
         explicit TestPostprocessor(const Parameters & pars) : Postprocessor(pars) {}
-        virtual void compute() {};
-        virtual Real
-        get_value()
+
+        void compute() override {};
+
+        Real
+        get_value() override
         {
             return 1.;
         }

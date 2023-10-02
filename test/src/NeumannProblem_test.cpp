@@ -148,14 +148,14 @@ class TestNeumannBC : public NaturalBC {
 public:
     explicit TestNeumannBC(const Parameters & params) : NaturalBC(params), comps({ 0 }) {}
 
-    virtual const std::vector<Int> &
-    get_components() const
+    const std::vector<Int> &
+    get_components() const override
     {
         return this->comps;
     }
 
-    virtual void
-    set_up_weak_form()
+    void
+    set_up_weak_form() override
     {
         add_residual_block(new BndF0(this), nullptr);
         add_jacobian_block(this->fid, new BndG0(this), nullptr, nullptr, nullptr);

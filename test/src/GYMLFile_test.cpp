@@ -32,8 +32,7 @@ public:
     {
     }
 
-    virtual ~GTestProblem()
-    {
+    ~GTestProblem() override {
         this->x.destroy();
     }
 

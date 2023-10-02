@@ -44,12 +44,13 @@ TEST_F(LinearProblemTest, run)
         explicit MockLinearProblem(const Parameters & params) : LinearProblem(params) {}
 
         MOCK_METHOD(void, solve, ());
-        virtual bool
-        converged()
+        MOCK_METHOD(void, on_final, ());
+
+        bool
+        converged() override
         {
             return true;
         }
-        MOCK_METHOD(void, on_final, ());
     };
 
     auto mesh = gMesh1d();

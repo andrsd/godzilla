@@ -123,7 +123,7 @@ TEST(ExodusIIOutputTest, fe_check)
         }
 
     protected:
-        virtual void
+        void
         distribute() override
         {
         }

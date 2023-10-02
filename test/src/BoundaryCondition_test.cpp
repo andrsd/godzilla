@@ -20,7 +20,8 @@ public:
     MOCK_METHOD((DMBoundaryConditionType), get_bc_type, (), (const));
     MOCK_METHOD(void, evaluate, (Int, Real, const Real x[], Int Nc, Scalar u[]), ());
     MOCK_METHOD(const std::vector<Int> &, get_components, (), (const));
-    virtual void
+
+    void
     set_up() override
     {
     }

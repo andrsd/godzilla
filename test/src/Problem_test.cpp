@@ -14,22 +14,13 @@ class TestProblem : public Problem {
 public:
     explicit TestProblem(const Parameters & params) : Problem(params) {}
 
-    virtual void
-    run()
+    void
+    run() override
     {
-    }
-    virtual void
-    solve()
-    {
-    }
-    virtual bool
-    converged()
-    {
-        return false;
     }
 
-    virtual const Vector &
-    get_solution_vector() const
+    const Vector &
+    get_solution_vector() const override
     {
         return this->sln;
     }
@@ -56,13 +47,13 @@ TEST(ProblemTest, add_pp)
     public:
         explicit TestPostprocessor(const Parameters & params) : Postprocessor(params) {}
 
-        virtual void
-        compute()
+        void
+        compute() override
         {
         }
 
-        virtual Real
-        get_value()
+        Real
+        get_value() override
         {
             return 0;
         }
@@ -74,8 +65,8 @@ TEST(ProblemTest, add_pp)
     public:
         explicit TestFunction(const Parameters & params) : Function(params) {}
 
-        virtual void
-        register_callback(mu::Parser & parser)
+        void
+        register_callback(mu::Parser & parser) override
         {
         }
 

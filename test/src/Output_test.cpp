@@ -14,8 +14,9 @@ public:
 class MockOutput : public Output {
 public:
     explicit MockOutput(const Parameters & params) : Output(params) {}
-    virtual void
-    output_step()
+
+    void
+    output_step() override
     {
     }
 

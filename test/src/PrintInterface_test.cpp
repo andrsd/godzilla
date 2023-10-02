@@ -29,8 +29,8 @@ TEST(PrintInterfaceTest, lprintf)
     public:
         explicit TestObject(const Parameters & params) : Object(params), PrintInterface(this) {}
 
-        virtual void
-        create()
+        void
+        create() override
         {
             lprintf(0, "Print");
         }
@@ -54,8 +54,8 @@ TEST(PrintInterfaceTest, timed_event)
     public:
         explicit TestObject(const Parameters & params) : Object(params), PrintInterface(this) {}
 
-        virtual void
-        create()
+        void
+        create() override
         {
             TIMED_EVENT(0, "Print", "Print {}", "text");
         }
