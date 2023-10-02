@@ -72,7 +72,7 @@ UnstructuredMesh::create()
     create_dm();
     PETSC_CHECK(DMSetFromOptions(dm()));
     PETSC_CHECK(DMViewFromOptions(dm(), nullptr, "-dm_view"));
-    PETSC_CHECK(DMSetUp(dm()));
+    set_up();
     PETSC_CHECK(DMGetDimension(dm(), &this->dim));
 
     lprintf(9, "Information:");

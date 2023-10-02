@@ -77,6 +77,9 @@ public:
     /// @return Local section from the coordinate `DM`
     Section get_coordinate_section() const;
 
+    /// Sets up the data structures inside the `DM` object
+    void set_up();
+
 protected:
     /// DM object
     DM _dm;

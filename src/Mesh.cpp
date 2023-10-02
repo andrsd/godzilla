@@ -118,4 +118,11 @@ Mesh::get_coordinate_section() const
     return { section };
 }
 
+void
+Mesh::set_up()
+{
+    _F_;
+    PETSC_CHECK(DMSetUp(this->_dm));
+}
+
 } // namespace godzilla
