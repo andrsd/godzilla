@@ -204,7 +204,7 @@ TEST_F(GYMLFileTest, mesh_partitioner)
     EXPECT_NE(mesh, nullptr);
     mesh->create();
 
-    DM dm = mesh->get_dm();
+    auto dm = mesh->dm();
     PetscBool distr;
     DMPlexIsDistributed(dm, &distr);
     if (sz > 1)

@@ -21,7 +21,7 @@ TEST(GmshMeshTest, api)
     EXPECT_EQ(mesh.get_file_name(), file_name);
 
     mesh.create();
-    DM dm = mesh.get_dm();
+    auto dm = mesh.dm();
 
     EXPECT_EQ(mesh.get_dimension(), 2);
 

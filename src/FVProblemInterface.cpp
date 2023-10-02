@@ -49,7 +49,7 @@ FVProblemInterface::init()
                                           &this->aux_fe.at(fi.id)));
     }
 
-    DM dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh->dm();
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -377,7 +377,7 @@ FVProblemInterface::set_up_ds()
         c += fi.nc;
     }
 
-    DM dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh->dm();
     PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm));
     PETSC_CHECK(DMCreateDS(dm));
     PETSC_CHECK(DMGetDS(dm, &this->ds));

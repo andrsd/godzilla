@@ -46,7 +46,7 @@ protected:
                                                   cells,
                                                   DIM,
                                                   coords,
-                                                  &this->dm));
+                                                  &this->_dm));
 
         // create "side sets"
         DMLabel face_sets = create_label("Face Sets");
@@ -72,7 +72,7 @@ protected:
     {
         for (auto & f : faces) {
             PETSC_CHECK(DMLabelSetValue(face_sets, f, id));
-            PETSC_CHECK(DMSetLabelValue(this->dm, name, f, id));
+            PETSC_CHECK(DMSetLabelValue(dm(), name, f, id));
         }
     }
 

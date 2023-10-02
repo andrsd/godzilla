@@ -132,7 +132,7 @@ BoxMesh::create_dm()
                                     upper.data(),
                                     periodicity.data(),
                                     this->interpolate,
-                                    &this->dm));
+                                    &this->_dm));
 
     remove_label("marker");
     // create user-friendly names for sides

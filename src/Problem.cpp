@@ -28,7 +28,7 @@ DM
 Problem::get_dm() const
 {
     _F_;
-    return this->mesh->get_dm();
+    return this->mesh->dm();
 }
 
 void

@@ -29,8 +29,8 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->dm));
-        PETSC_CHECK(DMSetUp(this->dm));
+                                        &this->_dm));
+        PETSC_CHECK(DMSetUp(dm()));
     }
 
     void
@@ -57,7 +57,7 @@ TEST(MeshTest, get_coordinates)
     EXPECT_EQ(coords(2), 1.);
 
     DM cdm;
-    DMGetCoordinateDM(mesh.get_dm(), &cdm);
+    DMGetCoordinateDM(mesh.dm(), &cdm);
     EXPECT_EQ(mesh.get_coordinate_dm(), cdm);
 }
 
