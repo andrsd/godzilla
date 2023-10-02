@@ -427,3 +427,16 @@ TEST(DenseVectorTest, out)
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, HasSubstr("(1, 2, 3)"));
 }
+
+TEST(DenseVectorTest, tensor_product)
+{
+    DenseVector<Real, 3> a({ 1, 2, 3 });
+    DenseVector<Real, 2> b({ 5, 7 });
+    auto prod = tensor_product(a, b);
+    EXPECT_DOUBLE_EQ(prod(0, 0), 5.);
+    EXPECT_DOUBLE_EQ(prod(1, 0), 10.);
+    EXPECT_DOUBLE_EQ(prod(2, 0), 15.);
+    EXPECT_DOUBLE_EQ(prod(0, 1), 7.);
+    EXPECT_DOUBLE_EQ(prod(1, 1), 14.);
+    EXPECT_DOUBLE_EQ(prod(2, 1), 21.);
+}
