@@ -30,7 +30,7 @@ public:
                                         periodicity,
                                         PETSC_TRUE,
                                         &this->_dm));
-        PETSC_CHECK(DMSetUp(dm()));
+        set_up();
     }
 
     void
