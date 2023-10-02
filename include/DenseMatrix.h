@@ -68,7 +68,7 @@ public:
     /// @param idx Index of the column
     /// @return Column as a DenseVector
     DenseVector<T, ROWS>
-    column(Int idx)
+    column(Int idx) const
     {
         DenseVector<T, ROWS> col;
         for (Int row = 0; row < ROWS; row++)
@@ -81,7 +81,7 @@ public:
     /// @param idx Index of the column
     /// @return Column as a DenseVector
     DenseVector<T, COLS>
-    row(Int idx)
+    row(Int idx) const
     {
         DenseVector<T, COLS> row;
         for (Int col = 0; col < COLS; col++)
