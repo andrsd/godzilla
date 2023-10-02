@@ -63,7 +63,10 @@ public:
     /// Get level of verbosity
     ///
     /// @return The verbosity level
-    virtual const unsigned int & get_verbosity_level() const;
+    [[deprecated("Use verbosity_level() instead.")]] virtual const unsigned int &
+    get_verbosity_level() const;
+
+    virtual const unsigned int & verbosity_level() const;
 
     /// Get the input file name
     ///
@@ -143,7 +146,7 @@ protected:
     cxxopts::Options cmdln_opts;
 
     /// Verbosity level
-    unsigned int verbosity_level;
+    unsigned int _verbosity_level;
 
     /// YML file with application objects
     InputFile * yml;

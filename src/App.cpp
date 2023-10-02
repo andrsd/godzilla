@@ -15,14 +15,14 @@ App::App(const mpi::Communicator & comm,
          const std::string & app_name,
          int argc,
          const char * const * argv) :
-    PrintInterface(comm, this->verbosity_level, app_name),
+    PrintInterface(comm, this->_verbosity_level, app_name),
     _name(app_name),
     _comm(comm),
     log(new Logger()),
     argc(argc),
     argv(argv),
     cmdln_opts(app_name),
-    verbosity_level(1),
+    _verbosity_level(1),
     yml(nullptr)
 {
     _F_;
@@ -123,7 +123,14 @@ const unsigned int &
 App::get_verbosity_level() const
 {
     _F_;
-    return this->verbosity_level;
+    return verbosity_level();
+}
+
+const unsigned int &
+App::verbosity_level() const
+{
+    _F_;
+    return this->_verbosity_level;
 }
 
 const std::string &
@@ -169,7 +176,7 @@ App::process_command_line(cxxopts::ParseResult & result)
             Terminal::num_colors = 1;
 
         if (result.count("verbose"))
-            this->verbosity_level = result["verbose"].as<unsigned int>();
+            this->_verbosity_level = result["verbose"].as<unsigned int>();
 
         if (result.count("input-file")) {
             auto input_file_name = result["input-file"].as<std::string>();

@@ -38,7 +38,7 @@ PrintInterface::TimedEvent::~TimedEvent()
 PrintInterface::PrintInterface(const Object * obj) :
     pi_app(obj->get_app()),
     proc_id(obj->get_processor_id()),
-    verbosity_level(obj->get_app()->get_verbosity_level()),
+    verbosity_level(obj->get_app()->verbosity_level()),
     prefix(obj->get_name())
 {
     _F_;
@@ -47,7 +47,7 @@ PrintInterface::PrintInterface(const Object * obj) :
 PrintInterface::PrintInterface(const App * app) :
     pi_app(app),
     proc_id(app->comm().rank()),
-    verbosity_level(app->get_verbosity_level()),
+    verbosity_level(app->verbosity_level()),
     prefix(app->name())
 {
     _F_;

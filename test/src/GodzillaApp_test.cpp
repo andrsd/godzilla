@@ -76,7 +76,7 @@ TEST_F(GodzillaAppTest, verbose)
     App app(comm, "godzilla", argc, argv);
 
     app.run();
-    EXPECT_EQ(app.get_verbosity_level(), 2);
+    EXPECT_EQ(app.verbosity_level(), 2);
 }
 
 TEST_F(GodzillaAppTest, check_integrity)
