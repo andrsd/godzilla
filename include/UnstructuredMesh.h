@@ -6,6 +6,7 @@
 #include "Vector.h"
 #include "Section.h"
 #include "Partitioner.h"
+#include "DenseVector.h"
 
 namespace godzilla {
 
@@ -140,6 +141,26 @@ public:
     ~UnstructuredMesh() override;
 
     void create() override;
+
+    /// Build from a list of vertices for each cell (common mesh generator output)
+    ///
+    /// @param dim The topological dimension of the mesh
+    /// @param n_corners The number of vertices for each cell
+    /// @param cells An array of the vertices for each cell - must be a multiple of `n_corners`
+    /// @param space_dim The spatial dimension used for coordinates
+    /// @param vertices An array of the coordinates of each vertex - must be a multiple of
+    ///                 `space_dim`
+    /// @param interpolate Flag indicating that intermediate mesh entities (faces, edges) should be
+    ///                    created automatically
+    ///
+    /// NOTES:
+    /// - only process 0 takes in the input
+    void build_from_cell_list(Int dim,
+                              Int n_corners,
+                              const std::vector<Int> & cells,
+                              Int space_dim,
+                              const std::vector<Real> & vertices,
+                              bool interpolate);
 
     /// Get the `Label` recording the depth of each point
     ///

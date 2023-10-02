@@ -540,4 +540,25 @@ UnstructuredMesh::common_cells_by_vertex() const
     return map;
 }
 
+void
+UnstructuredMesh::build_from_cell_list(Int dim,
+                                       Int n_corners,
+                                       const std::vector<Int> & cells,
+                                       Int space_dim,
+                                       const std::vector<Real> & vertices,
+                                       bool interpolate)
+{
+    _F_;
+    PETSC_CHECK(DMPlexCreateFromCellListPetsc(comm(),
+                                              dim,
+                                              cells.size() / n_corners,
+                                              vertices.size() / space_dim,
+                                              n_corners,
+                                              interpolate ? PETSC_TRUE : PETSC_FALSE,
+                                              cells.data(),
+                                              space_dim,
+                                              vertices.data(),
+                                              &this->_dm));
+}
+
 } // namespace godzilla
