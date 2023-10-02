@@ -121,3 +121,34 @@ TEST(IndexSetTest, intersect)
     is2.destroy();
     isect.destroy();
 }
+
+TEST(IndexSetTest, range)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    std::vector<Int> vals;
+    for (auto & i : is)
+        vals.push_back(i);
+    EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
+}
+
+TEST(IndexSetTest, for_loop)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    std::vector<Int> vals;
+    for (auto i = is.begin(); i != is.end(); i++)
+        vals.push_back(*i);
+    EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
+}
+
+TEST(IndexSetTest, iters)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+
+    auto iter = is.begin();
+    for (int i = 0; i < 6; i++, iter++)
+        ;
+    EXPECT_TRUE(iter == is.end());
+}
