@@ -32,21 +32,9 @@ protected:
     {
         const PetscInt DIM = 2;
         const PetscInt N_ELEM_NODES = 3;
-
-        PetscInt n_cells = 2;
-        PetscInt n_verts = 4;
-        PetscInt cells[] = { 0, 1, 2, 1, 3, 2 };
-        double coords[] = { 0, 0, 1, 0, 0, 1, 1, 1 };
-        PETSC_CHECK(DMPlexCreateFromCellListPetsc(comm(),
-                                                  DIM,
-                                                  n_cells,
-                                                  n_verts,
-                                                  N_ELEM_NODES,
-                                                  PETSC_TRUE,
-                                                  cells,
-                                                  DIM,
-                                                  coords,
-                                                  &this->_dm));
+        std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
+        std::vector<Real> coords = { 0, 0, 1, 0, 0, 1, 1, 1 };
+        build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
 
         // create "side sets"
         DMLabel face_sets = create_label("Face Sets");

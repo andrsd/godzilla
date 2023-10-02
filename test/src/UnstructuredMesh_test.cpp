@@ -445,3 +445,44 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
     EXPECT_THAT(map[12], UnorderedElementsAre(0, 1));
     EXPECT_THAT(map[13], UnorderedElementsAre(1));
 }
+
+TEST(UnstructuredMesh, build_from_cell_list_2d)
+{
+    class TestMesh2D : public godzilla::UnstructuredMesh {
+    public:
+        explicit TestMesh2D(const godzilla::Parameters & parameters) : UnstructuredMesh(parameters)
+        {
+        }
+
+    protected:
+        void
+        create_dm() override
+        {
+            std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
+            std::vector<Real> vertices = { 0, 0, 1, 0, 0, 1, 1, 1 };
+            build_from_cell_list(2, 3, cells, 2, vertices, true);
+        }
+    };
+
+    TestApp app;
+
+    Parameters mesh_pars = TestMesh2D::parameters();
+    mesh_pars.set<const godzilla::App *>("_app") = &app;
+    TestMesh2D mesh(mesh_pars);
+    mesh.create();
+
+    EXPECT_EQ(mesh.get_num_cells(), 2);
+    EXPECT_THAT(mesh.get_connectivity(0), ElementsAre(2, 3, 4));
+    EXPECT_THAT(mesh.get_connectivity(1), ElementsAre(3, 5, 4));
+    EXPECT_EQ(mesh.get_num_vertices(), 4);
+    auto coords = mesh.get_coordinates();
+    EXPECT_EQ(coords.get_size(), 8);
+    EXPECT_DOUBLE_EQ(coords(0), 0.);
+    EXPECT_DOUBLE_EQ(coords(1), 0.);
+    EXPECT_DOUBLE_EQ(coords(2), 1.);
+    EXPECT_DOUBLE_EQ(coords(3), 0.);
+    EXPECT_DOUBLE_EQ(coords(4), 0.);
+    EXPECT_DOUBLE_EQ(coords(5), 1.);
+    EXPECT_DOUBLE_EQ(coords(6), 1.);
+    EXPECT_DOUBLE_EQ(coords(7), 1.);
+}
