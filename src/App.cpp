@@ -18,7 +18,7 @@ App::App(const mpi::Communicator & comm,
     PrintInterface(comm, this->verbosity_level, app_name),
     _name(app_name),
     _comm(comm),
-    log(nullptr),
+    log(new Logger()),
     argc(argc),
     argv(argv),
     cmdln_opts(app_name),
@@ -26,7 +26,6 @@ App::App(const mpi::Communicator & comm,
     yml(nullptr)
 {
     _F_;
-    this->log = new Logger();
 }
 
 App::~App()
