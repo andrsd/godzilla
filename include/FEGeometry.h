@@ -7,6 +7,7 @@
 #include "Array1D.h"
 #include "Array2D.h"
 #include "DenseVector.h"
+#include "DenseMatrix.h"
 #include <set>
 
 namespace godzilla {
@@ -101,7 +102,7 @@ normal<TRI3, 2>(Real volume, Real edge_len, const DenseVector<Real, 2> & grad)
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 inline Real
-element_length(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & grad_phi)
+element_length(const DenseMatrix<Real, N_ELEM_NODES, DIM> & grad_phi)
 {
     GODZILLA_UNUSED(grad_phi);
 
@@ -113,27 +114,27 @@ element_length(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & grad_ph
 
 template <>
 inline Real
-element_length<EDGE2, 1, 2>(const DenseVector<DenseVector<Real, 1>, 2> & grad_phi)
+element_length<EDGE2, 1, 2>(const DenseMatrix<Real, 2, 1> & grad_phi)
 {
-    auto h1 = 1. / grad_phi(0).magnitude();
-    auto h2 = 1. / grad_phi(1).magnitude();
+    auto h1 = 1. / std::abs(grad_phi(0, 0));
+    auto h2 = 1. / std::abs(grad_phi(1, 0));
     return std::min({ h1, h2 });
 }
 
 template <>
 inline Real
-element_length<TRI3, 2, 3>(const DenseVector<DenseVector<Real, 2>, 3> & grad_phi)
+element_length<TRI3, 2, 3>(const DenseMatrix<Real, 3, 2> & grad_phi)
 {
-    auto h1 = 1. / grad_phi(0).magnitude();
-    auto h2 = 1. / grad_phi(1).magnitude();
-    auto h3 = 1. / grad_phi(2).magnitude();
+    auto h1 = 1. / grad_phi.row(0).magnitude();
+    auto h2 = 1. / grad_phi.row(1).magnitude();
+    auto h3 = 1. / grad_phi.row(2).magnitude();
     return std::min({ h1, h2, h3 });
 }
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 Array1D<Real>
 calc_element_length(const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
-                    const Array1D<DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES>> & grad_phi)
+                    const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> & grad_phi)
 {
     _F_;
     Array1D<Real> elem_lengths(connect.get_size());
