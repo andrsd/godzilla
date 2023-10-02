@@ -19,18 +19,13 @@ public:
     MOCK_METHOD(void, evaluate, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
     MOCK_METHOD(void, evaluate_t, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
 
-    virtual const std::vector<Int> &
-    get_components() const
+    const std::vector<Int> &
+    get_components() const override
     {
         return this->components;
     }
 
 protected:
-    virtual void
-    set_up_callback()
-    {
-    }
-
     std::vector<Int> components;
 };
 

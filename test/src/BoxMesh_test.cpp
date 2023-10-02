@@ -37,7 +37,7 @@ TEST(BoxMeshTest, api)
     EXPECT_EQ(mesh.get_nz(), 7);
 
     mesh.create();
-    DM dm = mesh.get_dm();
+    auto dm = mesh.dm();
 
     EXPECT_EQ(mesh.get_dimension(), 3);
 

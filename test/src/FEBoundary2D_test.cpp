@@ -37,7 +37,7 @@ protected:
         PetscInt n_verts = 4;
         PetscInt cells[] = { 0, 1, 2, 1, 3, 2 };
         double coords[] = { 0, 0, 1, 0, 0, 1, 1, 1 };
-        PETSC_CHECK(DMPlexCreateFromCellListPetsc(get_comm(),
+        PETSC_CHECK(DMPlexCreateFromCellListPetsc(comm(),
                                                   DIM,
                                                   n_cells,
                                                   n_verts,
@@ -46,7 +46,7 @@ protected:
                                                   cells,
                                                   DIM,
                                                   coords,
-                                                  &this->dm));
+                                                  &this->_dm));
 
         // create "side sets"
         DMLabel face_sets = create_label("Face Sets");
@@ -72,7 +72,7 @@ protected:
     {
         for (auto & f : faces) {
             PETSC_CHECK(DMLabelSetValue(face_sets, f, id));
-            PETSC_CHECK(DMSetLabelValue(this->dm, name, f, id));
+            PETSC_CHECK(DMSetLabelValue(dm(), name, f, id));
         }
     }
 

@@ -56,7 +56,7 @@ UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     partition_overlap(0)
 {
     _F_;
-    this->partitioner.create(get_comm());
+    this->partitioner.create(comm());
 }
 
 UnstructuredMesh::~UnstructuredMesh()
@@ -70,10 +70,10 @@ UnstructuredMesh::create()
 {
     _F_;
     create_dm();
-    PETSC_CHECK(DMSetFromOptions(this->dm));
-    PETSC_CHECK(DMViewFromOptions(dm, nullptr, "-dm_view"));
-    PETSC_CHECK(DMSetUp(this->dm));
-    PETSC_CHECK(DMGetDimension(this->dm, &this->dim));
+    PETSC_CHECK(DMSetFromOptions(dm()));
+    PETSC_CHECK(DMViewFromOptions(dm(), nullptr, "-dm_view"));
+    PETSC_CHECK(DMSetUp(dm()));
+    PETSC_CHECK(DMGetDimension(dm(), &this->dim));
 
     lprintf(9, "Information:");
     lprintf(9, "- vertices: {}", get_num_vertices());
@@ -85,7 +85,7 @@ UnstructuredMesh::get_depth_label() const
 {
     _F_;
     DMLabel depth_label;
-    PETSC_CHECK(DMPlexGetDepthLabel(this->dm, &depth_label));
+    PETSC_CHECK(DMPlexGetDepthLabel(dm(), &depth_label));
     return Label(depth_label);
 }
 
@@ -101,7 +101,7 @@ UnstructuredMesh::get_vertex_range() const
 {
     _F_;
     Int first, last;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, &first, &last));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), this->dim, &first, &last));
     return { first, last };
 }
 
@@ -117,7 +117,7 @@ UnstructuredMesh::get_face_range() const
 {
     _F_;
     Int first, last;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 1, &first, &last));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), 1, &first, &last));
     return { first, last };
 }
 
@@ -140,9 +140,9 @@ UnstructuredMesh::get_cell_range() const
 {
     _F_;
     Int first, last;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), 0, &first, &last));
     Int gc_first, gc_last;
-    PETSC_CHECK(DMPlexGetGhostCellStratum(this->dm, &gc_first, &gc_last));
+    PETSC_CHECK(DMPlexGetGhostCellStratum(dm(), &gc_first, &gc_last));
     if (gc_first != -1)
         last = gc_first;
     return { first, last };
@@ -153,7 +153,7 @@ UnstructuredMesh::get_all_cell_range() const
 {
     _F_;
     Int first, last;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &first, &last));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), 0, &first, &last));
     return { first, last };
 }
 
@@ -162,11 +162,11 @@ UnstructuredMesh::get_all_cells() const
 {
     _F_;
     Int depth;
-    PETSC_CHECK(DMPlexGetDepth(this->dm, &depth));
+    PETSC_CHECK(DMPlexGetDepth(dm(), &depth));
     IS cell_is;
-    PETSC_CHECK(DMGetStratumIS(this->dm, "dim", depth, &cell_is));
+    PETSC_CHECK(DMGetStratumIS(dm(), "dim", depth, &cell_is));
     if (!cell_is)
-        PETSC_CHECK(DMGetStratumIS(this->dm, "depth", depth, &cell_is));
+        PETSC_CHECK(DMGetStratumIS(dm(), "depth", depth, &cell_is));
     return IndexSet(cell_is);
 }
 
@@ -174,7 +174,7 @@ void
 UnstructuredMesh::get_chart(Int & start, Int & end) const
 {
     _F_;
-    PETSC_CHECK(DMPlexGetChart(this->dm, &start, &end));
+    PETSC_CHECK(DMPlexGetChart(dm(), &start, &end));
 }
 
 UnstructuredMesh::Range
@@ -182,7 +182,7 @@ UnstructuredMesh::get_chart() const
 {
     _F_;
     Int start, end;
-    PETSC_CHECK(DMPlexGetChart(this->dm, &start, &end));
+    PETSC_CHECK(DMPlexGetChart(dm(), &start, &end));
     return Range(start, end);
 }
 
@@ -191,7 +191,7 @@ UnstructuredMesh::get_cell_type(Int el) const
 {
     _F_;
     DMPolytopeType polytope_type;
-    PETSC_CHECK(DMPlexGetCellType(this->dm, el, &polytope_type));
+    PETSC_CHECK(DMPlexGetCellType(dm(), el, &polytope_type));
     return polytope_type;
 }
 
@@ -201,7 +201,7 @@ UnstructuredMesh::get_connectivity(Int point) const
     _F_;
     Int closure_size;
     Int * closure = nullptr;
-    PETSC_CHECK(DMPlexGetTransitiveClosure(this->dm, point, PETSC_TRUE, &closure_size, &closure));
+    PETSC_CHECK(DMPlexGetTransitiveClosure(dm(), point, PETSC_TRUE, &closure_size, &closure));
 
     auto polytope_type = get_cell_type(point);
     Int n_elem_nodes = UnstructuredMesh::get_num_cell_nodes(polytope_type);
@@ -212,8 +212,7 @@ UnstructuredMesh::get_connectivity(Int point) const
         elem_connect[k] = closure[l];
     }
 
-    PETSC_CHECK(
-        DMPlexRestoreTransitiveClosure(this->dm, point, PETSC_TRUE, &closure_size, &closure));
+    PETSC_CHECK(DMPlexRestoreTransitiveClosure(dm(), point, PETSC_TRUE, &closure_size, &closure));
 
     return elem_connect;
 }
@@ -223,9 +222,9 @@ UnstructuredMesh::get_support(Int point) const
 {
     _F_;
     Int n_support;
-    PETSC_CHECK(DMPlexGetSupportSize(this->dm, point, &n_support));
+    PETSC_CHECK(DMPlexGetSupportSize(dm(), point, &n_support));
     const Int * support;
-    PETSC_CHECK(DMPlexGetSupport(this->dm, point, &support));
+    PETSC_CHECK(DMPlexGetSupport(dm(), point, &support));
     std::vector<Int> v;
     v.resize(n_support);
     for (Int i = 0; i < n_support; i++)
@@ -238,9 +237,9 @@ UnstructuredMesh::get_cone(Int point) const
 {
     _F_;
     Int n;
-    PETSC_CHECK(DMPlexGetConeSize(this->dm, point, &n));
+    PETSC_CHECK(DMPlexGetConeSize(dm(), point, &n));
     const Int * cone;
-    PETSC_CHECK(DMPlexGetCone(this->dm, point, &cone));
+    PETSC_CHECK(DMPlexGetCone(dm(), point, &cone));
     std::vector<Int> v;
     v.resize(n);
     for (Int i = 0; i < n; i++)
@@ -253,7 +252,7 @@ UnstructuredMesh::get_cone_recursive_vertices(IndexSet points) const
 {
     _F_;
     IndexSet expanded_points;
-    PETSC_CHECK(DMPlexGetConeRecursiveVertices(this->dm, points, expanded_points));
+    PETSC_CHECK(DMPlexGetConeRecursiveVertices(dm(), points, expanded_points));
     return expanded_points;
 }
 
@@ -278,13 +277,13 @@ UnstructuredMesh::distribute()
     TIMED_EVENT(9, "MeshDistribution", "Distributing");
     this->partitioner.set_up();
 
-    PETSC_CHECK(DMPlexSetPartitioner(this->dm, this->partitioner));
+    PETSC_CHECK(DMPlexSetPartitioner(dm(), this->partitioner));
 
     DM dm_dist = nullptr;
-    PETSC_CHECK(DMPlexDistribute(this->dm, this->partition_overlap, nullptr, &dm_dist));
+    PETSC_CHECK(DMPlexDistribute(dm(), this->partition_overlap, nullptr, &dm_dist));
     if (dm_dist) {
-        PETSC_CHECK(DMDestroy(&this->dm));
-        this->dm = dm_dist;
+        PETSC_CHECK(DMDestroy(&this->_dm));
+        this->_dm = dm_dist;
     }
 }
 
@@ -293,7 +292,7 @@ UnstructuredMesh::is_simplex() const
 {
     _F_;
     PetscBool simplex;
-    PETSC_CHECK(DMPlexIsSimplex(this->dm, &simplex));
+    PETSC_CHECK(DMPlexIsSimplex(dm(), &simplex));
     return simplex == PETSC_TRUE;
 }
 
@@ -407,7 +406,7 @@ UnstructuredMesh::get_num_cell_sets() const
 {
     _F_;
     Int n_cells_sets;
-    PETSC_CHECK(DMGetLabelSize(this->dm, "Cell Sets", &n_cells_sets));
+    PETSC_CHECK(DMGetLabelSize(dm(), "Cell Sets", &n_cells_sets));
     return n_cells_sets;
 }
 
@@ -423,7 +422,7 @@ UnstructuredMesh::get_num_face_sets() const
 {
     _F_;
     Int n_face_sets;
-    PETSC_CHECK(DMGetLabelSize(this->dm, "Face Sets", &n_face_sets));
+    PETSC_CHECK(DMGetLabelSize(dm(), "Face Sets", &n_face_sets));
     return n_face_sets;
 }
 
@@ -432,7 +431,7 @@ UnstructuredMesh::get_num_vertex_sets() const
 {
     _F_;
     Int n_vertex_sets;
-    PETSC_CHECK(DMGetLabelSize(this->dm, "Vertex Sets", &n_vertex_sets));
+    PETSC_CHECK(DMGetLabelSize(dm(), "Vertex Sets", &n_vertex_sets));
     return n_vertex_sets;
 }
 
@@ -441,16 +440,16 @@ UnstructuredMesh::construct_ghost_cells()
 {
     _F_;
     DM gdm;
-    PETSC_CHECK(DMPlexConstructGhostCells(this->dm, nullptr, nullptr, &gdm));
-    PETSC_CHECK(DMDestroy(&this->dm));
-    this->dm = gdm;
+    PETSC_CHECK(DMPlexConstructGhostCells(dm(), nullptr, nullptr, &gdm));
+    PETSC_CHECK(DMDestroy(&this->_dm));
+    this->_dm = gdm;
 }
 
 void
 UnstructuredMesh::compute_cell_geometry(Int cell, Real * vol, Real centroid[], Real normal[]) const
 {
     _F_;
-    PETSC_CHECK(DMPlexComputeCellGeometryFVM(this->dm, cell, vol, centroid, normal));
+    PETSC_CHECK(DMPlexComputeCellGeometryFVM(dm(), cell, vol, centroid, normal));
 }
 
 int
@@ -479,7 +478,7 @@ UnstructuredMesh::vertex_begin() const
 {
     _F_;
     Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, &idx, nullptr));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), this->dim, &idx, nullptr));
     return Iterator(idx);
 }
 
@@ -488,7 +487,7 @@ UnstructuredMesh::vertex_end() const
 {
     _F_;
     Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, this->dim, nullptr, &idx));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), this->dim, nullptr, &idx));
     return Iterator(idx);
 }
 
@@ -497,7 +496,7 @@ UnstructuredMesh::face_begin() const
 {
     _F_;
     Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 1, &idx, nullptr));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), 1, &idx, nullptr));
     return Iterator(idx);
 }
 
@@ -506,7 +505,7 @@ UnstructuredMesh::face_end() const
 {
     _F_;
     Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 1, nullptr, &idx));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), 1, nullptr, &idx));
     return Iterator(idx);
 }
 
@@ -515,7 +514,7 @@ UnstructuredMesh::cell_begin() const
 {
     _F_;
     Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, &idx, nullptr));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), 0, &idx, nullptr));
     return Iterator(idx);
 }
 
@@ -524,7 +523,7 @@ UnstructuredMesh::cell_end() const
 {
     _F_;
     Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(this->dm, 0, nullptr, &idx));
+    PETSC_CHECK(DMPlexGetHeightStratum(dm(), 0, nullptr, &idx));
     return Iterator(idx);
 }
 

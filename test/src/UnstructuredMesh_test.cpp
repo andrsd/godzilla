@@ -28,7 +28,7 @@ public:
         Int faces[1] = { 2 };
         DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
-        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+        PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
                                         1,
                                         PETSC_TRUE,
                                         faces,
@@ -36,7 +36,7 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->dm));
+                                        &this->_dm));
     }
 
     Int
@@ -66,7 +66,7 @@ public:
                                           DM_BOUNDARY_GHOSTED,
                                           DM_BOUNDARY_GHOSTED };
 
-        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+        PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
                                         3,
                                         PETSC_FALSE,
                                         faces,
@@ -74,7 +74,7 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->dm));
+                                        &this->_dm));
         // create "side sets"
         std::map<Int, std::string> face_set_names;
         face_set_names[1] = "back";

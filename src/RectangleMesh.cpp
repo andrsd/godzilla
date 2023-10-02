@@ -94,7 +94,7 @@ RectangleMesh::create_dm()
         this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
     };
 
-    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+    PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
                                     2,
                                     this->simplex,
                                     faces.data(),
@@ -102,7 +102,7 @@ RectangleMesh::create_dm()
                                     upper.data(),
                                     periodicity.data(),
                                     this->interpolate,
-                                    &this->dm));
+                                    &this->_dm));
 
     remove_label("marker");
     // create user-friendly names for sides

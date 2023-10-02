@@ -73,12 +73,12 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
         void
         create() override
         {
-            DMDACreate1d(get_comm(), DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &this->dm);
-            DMSetUp(this->dm);
+            DMDACreate1d(comm(), DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &this->_dm);
+            DMSetUp(dm());
         }
 
     protected:
-        virtual void
+        void
         distribute() override
         {
         }
@@ -89,12 +89,13 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
         explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
 
     protected:
-        virtual PetscErrorCode
+        PetscErrorCode
         compute_rhs(Vector & b) override
         {
             return 0;
         }
-        virtual PetscErrorCode
+
+        PetscErrorCode
         compute_operators(Matrix & A, Matrix & B) override
         {
             return 0;

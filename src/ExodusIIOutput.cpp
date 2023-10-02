@@ -133,7 +133,7 @@ void
 ExodusIIOutput::set_file_name()
 {
     _F_;
-    if (get_comm().size() == 1)
+    if (comm().size() == 1)
         this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
     else
         this->file_name =
@@ -382,7 +382,7 @@ ExodusIIOutput::write_face_sets()
     if (!this->mesh->has_label("Face Sets"))
         return;
 
-    DM dm = this->mesh->get_dm();
+    auto dm = this->mesh->dm();
     std::vector<std::string> fs_names;
 
     auto face_sets_label = this->mesh->get_label("Face Sets");
@@ -687,10 +687,8 @@ ExodusIIOutput::write_info()
     _F_;
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
-    std::string created_by = fmt::format("Created by {} {}, on {}",
-                                         this->app->get_name(),
-                                         this->app->get_version(),
-                                         datetime);
+    std::string created_by =
+        fmt::format("Created by {} {}, on {}", this->app->name(), this->app->version(), datetime);
 
     std::vector<std::string> info;
     info.push_back(created_by);
@@ -704,7 +702,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id,
                                          const Int * cells)
 {
     _F_;
-    DM dm = this->mesh->get_dm();
+    auto dm = this->mesh->dm();
     Int n_all_elems = this->mesh->get_num_all_cells();
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);

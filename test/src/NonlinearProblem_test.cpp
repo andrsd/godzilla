@@ -15,8 +15,8 @@ namespace {
 class G1DTestNonlinearProblem : public NonlinearProblem {
 public:
     explicit G1DTestNonlinearProblem(const Parameters & params);
-    virtual ~G1DTestNonlinearProblem();
-    virtual void create() override;
+    ~G1DTestNonlinearProblem() override;
+    void create() override;
     void call_initial_guess();
     void solve() override;
     PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
@@ -44,12 +44,11 @@ G1DTestNonlinearProblem::~G1DTestNonlinearProblem()
 void
 G1DTestNonlinearProblem::create()
 {
-    DM dm = get_dm();
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
-    DMSetNumFields(dm, 1);
-    DMPlexCreateSection(dm, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
-    DMSetLocalSection(dm, this->s);
+    DMSetNumFields(dm(), 1);
+    DMPlexCreateSection(dm(), nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
+    DMSetLocalSection(dm(), this->s);
     NonlinearProblem::create();
 }
 
@@ -179,13 +178,14 @@ TEST(NonlinearProblemTest, run)
 
         MOCK_METHOD(void, set_up_initial_guess, ());
         MOCK_METHOD(void, solve, ());
-        virtual bool
-        converged()
+        MOCK_METHOD(void, on_initial, ());
+        MOCK_METHOD(void, on_final, ());
+
+        bool
+        converged() override
         {
             return true;
         }
-        MOCK_METHOD(void, on_initial, ());
-        MOCK_METHOD(void, on_final, ());
     };
 
     TestApp app;

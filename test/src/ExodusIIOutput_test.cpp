@@ -119,11 +119,11 @@ TEST(ExodusIIOutputTest, fe_check)
         void
         create() override
         {
-            DMCreate(get_comm(), &this->dm);
+            DMCreate(comm(), &this->_dm);
         }
 
     protected:
-        virtual void
+        void
         distribute() override
         {
         }
@@ -145,11 +145,6 @@ TEST(ExodusIIOutputTest, fe_check)
         converged()
         {
             return true;
-        }
-        DM
-        get_dm() const
-        {
-            return nullptr;
         }
         const Vector &
         get_solution_vector() const

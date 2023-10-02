@@ -20,13 +20,13 @@ public:
     {
     }
 
-    virtual const std::vector<Int> &
+    const std::vector<Int> &
     get_components() const override
     {
         return this->components;
     }
 
-    virtual void
+    void
     evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) override
     {
         if (this->inlet)
@@ -85,7 +85,7 @@ public:
         create_mass_matrix_lumped();
     }
 
-    virtual void
+    void
     set_up_time_scheme() override
     {
         ExplicitFVLinearProblem::set_up_time_scheme();
@@ -158,7 +158,7 @@ public:
     }
 
 protected:
-    virtual void
+    void
     set_up_fields() override
     {
         add_field(0, "u", 1);

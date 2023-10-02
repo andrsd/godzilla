@@ -267,7 +267,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
         ic_ctxs[fid] = ic->get_context();
     }
 
-    DM dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh->dm();
     PETSC_CHECK(DMProjectFunction(dm,
                                   this->problem->get_time(),
                                   ic_funcs,

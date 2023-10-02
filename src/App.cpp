@@ -15,18 +15,17 @@ App::App(const mpi::Communicator & comm,
          const std::string & app_name,
          int argc,
          const char * const * argv) :
-    PrintInterface(comm, this->verbosity_level, app_name),
-    name(app_name),
-    comm(comm),
-    log(nullptr),
+    PrintInterface(comm, this->_verbosity_level, app_name),
+    _name(app_name),
+    _comm(comm),
+    log(new Logger()),
     argc(argc),
     argv(argv),
     cmdln_opts(app_name),
-    verbosity_level(1),
+    _verbosity_level(1),
     yml(nullptr)
 {
     _F_;
-    this->log = new Logger();
 }
 
 App::~App()
@@ -41,11 +40,26 @@ const std::string &
 App::get_name() const
 {
     _F_;
-    return this->name;
+    return this->_name;
+}
+
+const std::string &
+App::name() const
+{
+    _F_;
+    return this->_name;
 }
 
 const std::string &
 App::get_version() const
+{
+    _F_;
+    static const std::string ver(GODZILLA_VERSION);
+    return ver;
+}
+
+const std::string &
+App::version() const
 {
     _F_;
     static const std::string ver(GODZILLA_VERSION);
@@ -109,7 +123,14 @@ const unsigned int &
 App::get_verbosity_level() const
 {
     _F_;
-    return this->verbosity_level;
+    return verbosity_level();
+}
+
+const unsigned int &
+App::verbosity_level() const
+{
+    _F_;
+    return this->_verbosity_level;
 }
 
 const std::string &
@@ -124,7 +145,14 @@ const mpi::Communicator &
 App::get_comm() const
 {
     _F_;
-    return this->comm;
+    return comm();
+}
+
+const mpi::Communicator &
+App::comm() const
+{
+    _F_;
+    return this->_comm;
 }
 
 InputFile *
@@ -142,13 +170,13 @@ App::process_command_line(cxxopts::ParseResult & result)
         fmt::print("{}", this->cmdln_opts.help());
     }
     else if (result.count("version"))
-        fmt::print("{}, version {}\n", get_name(), get_version());
+        fmt::print("{}, version {}\n", name(), version());
     else {
         if (result.count("no-colors"))
             Terminal::num_colors = 1;
 
         if (result.count("verbose"))
-            this->verbosity_level = result["verbose"].as<unsigned int>();
+            this->_verbosity_level = result["verbose"].as<unsigned int>();
 
         if (result.count("input-file")) {
             auto input_file_name = result["input-file"].as<std::string>();

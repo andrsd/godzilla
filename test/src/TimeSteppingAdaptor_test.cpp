@@ -36,20 +36,20 @@ class TestTSAdaptor : public TimeSteppingAdaptor {
 public:
     explicit TestTSAdaptor(const Parameters & params);
 
-    virtual void choose(Real h,
-                        Int * next_sc,
-                        Real * next_h,
-                        PetscBool * accept,
-                        Real * wlte,
-                        Real * wltea,
-                        Real * wlter);
+    void choose(Real h,
+                Int * next_sc,
+                Real * next_h,
+                PetscBool * accept,
+                Real * wlte,
+                Real * wltea,
+                Real * wlter);
 
     std::vector<Real> dts;
 
     static Parameters parameters();
 
 protected:
-    virtual void
+    void
     set_type() override
     {
         PETSC_CHECK(TSAdaptSetType(this->ts_adapt, TS_ADAPT_TEST));
@@ -125,7 +125,7 @@ public:
     std::vector<Real> dts;
 
 protected:
-    virtual void ts_monitor_callback(Int stepi, Real time, Vec x);
+    void ts_monitor_callback(Int stepi, Real time, Vec x) override;
 };
 
 REGISTER_OBJECT(TestTSProblem);

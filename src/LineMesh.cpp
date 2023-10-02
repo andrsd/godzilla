@@ -61,7 +61,7 @@ LineMesh::create_dm()
     std::array<Int, 1> faces = { this->nx };
     std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
 
-    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+    PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
                                     1,
                                     PETSC_TRUE,
                                     faces.data(),
@@ -69,7 +69,7 @@ LineMesh::create_dm()
                                     upper.data(),
                                     periodicity.data(),
                                     this->interpolate,
-                                    &this->dm));
+                                    &this->_dm));
 
     remove_label("marker");
     // create user-friendly names for sides

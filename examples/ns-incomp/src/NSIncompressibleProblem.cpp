@@ -346,11 +346,11 @@ NSIncompressibleProblem::set_up_preconditioning()
     PetscInt n_fields;
     char ** field_names;
     IS * is;
-    PETSC_CHECK(DMCreateFieldIS(get_dm(), &n_fields, &field_names, &is));
+    PETSC_CHECK(DMCreateFieldIS(dm(), &n_fields, &field_names, &is));
 
     // attach null space to the pressure field
     MatNullSpace nsp;
-    PETSC_CHECK(MatNullSpaceCreate(get_comm(), PETSC_TRUE, 0, nullptr, &nsp));
+    PETSC_CHECK(MatNullSpaceCreate(comm(), PETSC_TRUE, 0, nullptr, &nsp));
     PETSC_CHECK(PetscObjectCompose((PetscObject) is[1], "nullspace", (PetscObject) nsp));
     PETSC_CHECK(MatNullSpaceDestroy(&nsp));
 

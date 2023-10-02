@@ -31,12 +31,16 @@ public:
     /// Get Application name
     ///
     /// @return Application name
-    const std::string & get_name() const;
+    [[deprecated("Use name() instead")]] const std::string & get_name() const;
+
+    const std::string & name() const;
 
     /// Get application version
     ///
     /// @return The application version as a string
-    virtual const std::string & get_version() const;
+    [[deprecated("Use version() instead")]] virtual const std::string & get_version() const;
+
+    virtual const std::string & version() const;
 
     /// Get pointer to the `Problem` class in this application
     ///
@@ -59,7 +63,10 @@ public:
     /// Get level of verbosity
     ///
     /// @return The verbosity level
-    virtual const unsigned int & get_verbosity_level() const;
+    [[deprecated("Use verbosity_level() instead.")]] virtual const unsigned int &
+    get_verbosity_level() const;
+
+    virtual const unsigned int & verbosity_level() const;
 
     /// Get the input file name
     ///
@@ -69,7 +76,9 @@ public:
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    virtual const mpi::Communicator & get_comm() const;
+    [[deprecated("Use comm() instead")]] virtual const mpi::Communicator & get_comm() const;
+
+    virtual const mpi::Communicator & comm() const;
 
     /// Build object using the Factory
     ///
@@ -119,10 +128,10 @@ protected:
     virtual void run_problem();
 
     /// Application name
-    std::string name;
+    std::string _name;
 
     /// MPI communicator
-    mpi::Communicator comm;
+    mpi::Communicator _comm;
 
     /// Log with errors and/or warnings
     Logger * log;
@@ -137,7 +146,7 @@ protected:
     cxxopts::Options cmdln_opts;
 
     /// Verbosity level
-    unsigned int verbosity_level;
+    unsigned int _verbosity_level;
 
     /// YML file with application objects
     InputFile * yml;

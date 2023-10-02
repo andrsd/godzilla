@@ -93,7 +93,7 @@ FEProblemInterface::init()
     _F_;
     DiscreteProblemInterface::init();
 
-    DM dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh->dm();
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -421,7 +421,7 @@ void
 FEProblemInterface::create_fe(FieldInfo & fi)
 {
     _F_;
-    const MPI_Comm & comm = this->unstr_mesh->get_comm();
+    auto comm = this->unstr_mesh->comm();
     Int dim = this->problem->get_dimension();
     PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(internal::create_lagrange_petscfe(comm,
@@ -444,7 +444,7 @@ FEProblemInterface::set_up_ds()
 
     set_up_quadrature();
 
-    DM dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh->dm();
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
         PETSC_CHECK(DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe));

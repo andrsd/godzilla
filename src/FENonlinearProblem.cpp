@@ -81,10 +81,9 @@ void
 FENonlinearProblem::set_up_callbacks()
 {
     _F_;
-    DM dm = this->get_dm();
-    PETSC_CHECK(DMSNESSetBoundaryLocal(dm, __fep_compute_boundary, this));
-    PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
-    PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
+    PETSC_CHECK(DMSNESSetBoundaryLocal(dm(), __fep_compute_boundary, this));
+    PETSC_CHECK(DMSNESSetFunctionLocal(dm(), __fep_compute_residual, this));
+    PETSC_CHECK(DMSNESSetJacobianLocal(dm(), __fep_compute_jacobian, this));
     PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, nullptr, nullptr));
 }
 
@@ -108,7 +107,7 @@ const Vector &
 FENonlinearProblem::get_solution_vector_local()
 {
     _F_;
-    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, this->sln));
+    PETSC_CHECK(DMGlobalToLocal(dm(), get_solution_vector(), INSERT_VALUES, this->sln));
     compute_boundary(this->sln);
     return this->sln;
 }
@@ -117,13 +116,8 @@ PetscErrorCode
 FENonlinearProblem::compute_boundary(Vector & x)
 {
     _F_;
-    PETSC_CHECK(DMPlexInsertBoundaryValues(get_dm(),
-                                           PETSC_TRUE,
-                                           x,
-                                           PETSC_MIN_REAL,
-                                           nullptr,
-                                           nullptr,
-                                           nullptr));
+    PETSC_CHECK(
+        DMPlexInsertBoundaryValues(dm(), PETSC_TRUE, x, PETSC_MIN_REAL, nullptr, nullptr, nullptr));
     return 0;
 }
 
@@ -146,7 +140,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_residual_internal(get_dm(), res_key, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
+        compute_residual_internal(dm(), res_key, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
         cells.destroy();
     }
 
@@ -639,7 +633,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_jacobian_internal(get_dm(), jac_key, cells, 0.0, 0.0, x, Vector(), J, Jp);
+        compute_jacobian_internal(dm(), jac_key, cells, 0.0, 0.0, x, Vector(), J, Jp);
         cells.destroy();
     }
 

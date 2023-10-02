@@ -44,12 +44,13 @@ TEST_F(LinearProblemTest, run)
         explicit MockLinearProblem(const Parameters & params) : LinearProblem(params) {}
 
         MOCK_METHOD(void, solve, ());
-        virtual bool
-        converged()
+        MOCK_METHOD(void, on_final, ());
+
+        bool
+        converged() override
         {
             return true;
         }
-        MOCK_METHOD(void, on_final, ());
     };
 
     auto mesh = gMesh1d();
@@ -82,11 +83,10 @@ G1DTestLinearProblem::~G1DTestLinearProblem()
 void
 G1DTestLinearProblem::create()
 {
-    DM dm = get_dm();
-    DMSetNumFields(dm, 1);
+    DMSetNumFields(dm(), 1);
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
-    this->s = Section::create(dm, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
+    this->s = Section::create(dm(), nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
     set_local_section(this->s);
     LinearProblem::create();
 }
@@ -133,11 +133,10 @@ G2DTestLinearProblem::~G2DTestLinearProblem()
 void
 G2DTestLinearProblem::create()
 {
-    DM dm = get_dm();
-    DMSetNumFields(dm, 1);
+    DMSetNumFields(dm(), 1);
     Int nc[1] = { 1 };
     Int n_dofs[3] = { 1, 0, 0 };
-    this->s = Section::create(dm, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
+    this->s = Section::create(dm(), nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
     set_local_section(this->s);
     LinearProblem::create();
 }
@@ -183,11 +182,10 @@ G3DTestLinearProblem::~G3DTestLinearProblem()
 void
 G3DTestLinearProblem::create()
 {
-    DM dm = get_dm();
-    DMSetNumFields(dm, 1);
+    DMSetNumFields(dm(), 1);
     Int nc[1] = { 1 };
     Int n_dofs[4] = { 1, 0, 0, 0 };
-    this->s = Section::create(dm, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
+    this->s = Section::create(dm(), nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
     set_local_section(this->s);
     LinearProblem::create();
 }

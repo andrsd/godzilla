@@ -30,14 +30,14 @@ TEST(NaturalBCTest, api)
     public:
         explicit MockNaturalBC(const Parameters & params) : NaturalBC(params), comps({ 3, 5 }) {}
 
-        virtual const std::vector<Int> &
-        get_components() const
+        const std::vector<Int> &
+        get_components() const override
         {
             return this->comps;
         }
 
-        virtual void
-        set_up_weak_form()
+        void
+        set_up_weak_form() override
         {
         }
 

@@ -35,7 +35,7 @@ FVProblemInterface::init()
     _F_;
     DiscreteProblemInterface::init();
 
-    const MPI_Comm & comm = this->unstr_mesh->get_comm();
+    auto comm = this->unstr_mesh->comm();
     Int dim = this->problem->get_dimension();
     PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     for (auto & it : this->aux_fields) {
@@ -49,7 +49,7 @@ FVProblemInterface::init()
                                           &this->aux_fe.at(fi.id)));
     }
 
-    DM dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh->dm();
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -351,7 +351,7 @@ void
 FVProblemInterface::set_up_ds()
 {
     _F_;
-    const MPI_Comm & comm = this->unstr_mesh->get_comm();
+    auto comm = this->unstr_mesh->comm();
 
     PETSC_CHECK(PetscFVCreate(comm, &this->fvm));
     PETSC_CHECK(PetscFVSetType(this->fvm, PETSCFVUPWIND));
@@ -377,7 +377,7 @@ FVProblemInterface::set_up_ds()
         c += fi.nc;
     }
 
-    DM dm = this->unstr_mesh->get_dm();
+    auto dm = this->unstr_mesh->dm();
     PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm));
     PETSC_CHECK(DMCreateDS(dm));
     PETSC_CHECK(DMGetDS(dm, &this->ds));

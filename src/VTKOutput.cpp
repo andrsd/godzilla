@@ -41,7 +41,7 @@ VTKOutput::create()
     _F_;
     FileOutput::create();
 
-    PETSC_CHECK(PetscViewerCreate(get_comm(), &this->viewer));
+    PETSC_CHECK(PetscViewerCreate(comm(), &this->viewer));
     PETSC_CHECK(PetscViewerSetType(this->viewer, PETSCVIEWERVTK));
     PETSC_CHECK(PetscViewerFileSetMode(this->viewer, FILE_MODE_WRITE));
 }
@@ -64,7 +64,7 @@ VTKOutput::output_step()
     PETSC_CHECK(PetscViewerFileSetName(this->viewer, this->file_name.c_str()));
 
     TIMED_EVENT(9, "VTKOutput", "Output to file: {}", this->file_name);
-    DM dm = this->problem->get_dm();
+    auto dm = this->problem->dm();
     PETSC_CHECK(DMView(dm, this->viewer));
     auto vec = this->problem->get_solution_vector();
     PETSC_CHECK(VecView(vec, this->viewer));

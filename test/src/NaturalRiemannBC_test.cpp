@@ -13,7 +13,7 @@ class TestBC : public NaturalRiemannBC {
 public:
     explicit TestBC(const Parameters & params) : NaturalRiemannBC(params), comps({ 0 }) {}
 
-    virtual const std::vector<Int> &
+    const std::vector<Int> &
     get_components() const override
     {
         return this->comps;
@@ -43,7 +43,7 @@ public:
     }
 
 protected:
-    virtual void
+    void
     set_up_fields() override
     {
         add_field(0, "u", 1);

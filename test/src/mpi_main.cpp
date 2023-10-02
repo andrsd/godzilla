@@ -3,21 +3,23 @@
 
 class MPIEnvironment : public ::testing::Environment {
 public:
-    virtual void
-    SetUp()
+    void
+    SetUp() override
     {
         char ** argv;
         int argc = 0;
         int err = MPI_Init(&argc, &argv);
         ASSERT_FALSE(err);
     }
-    virtual void
-    TearDown()
+
+    void
+    TearDown() override
     {
         int err = MPI_Finalize();
         ASSERT_FALSE(err);
     }
-    virtual ~MPIEnvironment() {}
+
+    ~MPIEnvironment() override {}
 };
 
 int
