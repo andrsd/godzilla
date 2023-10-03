@@ -70,14 +70,12 @@ public:
 
 class TestBoundary2D : public fe::BoundaryInfo<TRI3, 2, 3> {
 public:
-    TestBoundary2D(const UnstructuredMesh * mesh,
+    TestBoundary2D(UnstructuredMesh * mesh,
                    const Array1D<DenseVector<Real, 2>> * coords,
-                   const Array1D<DenseVector<Int, 3>> * connect,
-                   const Array1D<std::vector<Int>> * nelcom,
                    const Array1D<Real> * fe_volume,
                    const Array1D<DenseMatrix<Real, 3, 2>> * grad_phi,
                    const IndexSet & facets) :
-        fe::BoundaryInfo<TRI3, 2, 3>(mesh, coords, connect, nelcom, fe_volume, grad_phi, facets)
+        fe::BoundaryInfo<TRI3, 2, 3>(mesh, coords, fe_volume, grad_phi, facets)
     {
     }
 
@@ -120,16 +118,10 @@ TEST(FEBoundaryTest, nodal_normals_2d)
     auto fe_volume = fe::calc_volumes<TRI3, 2>(coords, connect);
     auto grad_phi = fe::calc_grad_shape<TRI3, 2>(coords, connect, fe_volume);
 
-    auto n_nodes = mesh.get_num_vertices();
-
-    Array1D<std::vector<Int>> nelcom;
-    nelcom.create(n_nodes);
-    fe::common_elements_by_node(connect, nelcom);
-
     {
         auto label = mesh.get_label("left");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &connect, &nelcom, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
@@ -145,7 +137,7 @@ TEST(FEBoundaryTest, nodal_normals_2d)
     {
         auto label = mesh.get_label("bottom");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &connect, &nelcom, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), -1);
@@ -161,7 +153,7 @@ TEST(FEBoundaryTest, nodal_normals_2d)
     {
         auto label = mesh.get_label("top_right");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &connect, &nelcom, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);

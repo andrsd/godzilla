@@ -71,14 +71,12 @@ public:
 
 class TestBoundary3D : public fe::BoundaryInfo<TET4, 3, 4> {
 public:
-    TestBoundary3D(const UnstructuredMesh * mesh,
+    TestBoundary3D(UnstructuredMesh * mesh,
                    const Array1D<DenseVector<Real, 3>> * coords,
-                   const Array1D<DenseVector<Int, 4>> * connect,
-                   const Array1D<std::vector<Int>> * nelcom,
                    const Array1D<Real> * fe_volume,
                    const Array1D<DenseMatrix<Real, 4, 3>> * grad_phi,
                    const IndexSet & facets) :
-        fe::BoundaryInfo<TET4, 3, 4>(mesh, coords, connect, nelcom, fe_volume, grad_phi, facets)
+        fe::BoundaryInfo<TET4, 3, 4>(mesh, coords, fe_volume, grad_phi, facets)
     {
     }
 
@@ -118,20 +116,13 @@ TEST(FEBoundaryTest, nodal_normals_3d)
     mesh.create();
 
     auto coords = fe::coordinates<3>(mesh);
-    auto connect = fe::connectivity<3, 4>(mesh);
     auto fe_volume = fe::calc_volumes<TET4, 3>(coords, connect);
     auto grad_phi = fe::calc_grad_shape<TET4, 3>(coords, connect, fe_volume);
-
-    auto n_nodes = mesh.get_num_vertices();
-
-    Array1D<std::vector<Int>> nelcom;
-    nelcom.create(n_nodes);
-    fe::common_elements_by_node(connect, nelcom);
 
     {
         auto label = mesh.get_label("left");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(&mesh, &coords, &connect, &nelcom, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary3D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
          bnd.create();
          bnd.destroy();
     }

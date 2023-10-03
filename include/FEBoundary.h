@@ -10,6 +10,7 @@
 #include "Array2D.h"
 #include "FEGeometry.h"
 #include "FEVolumes.h"
+#include "Utils.h"
 #include <set>
 #include <vector>
 
@@ -29,17 +30,13 @@ public:
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 class BoundaryInfo : public BoundaryInfoAbstract {
 public:
-    BoundaryInfo(const UnstructuredMesh * mesh,
+    BoundaryInfo(UnstructuredMesh * mesh,
                  const Array1D<DenseVector<Real, DIM>> * coords,
-                 const Array1D<DenseVector<Int, N_ELEM_NODES>> * connect,
-                 const Array1D<std::vector<Int>> * nelcom,
                  const Array1D<Real> * fe_volume,
                  const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> * grad_phi,
                  const IndexSet & facets) :
         mesh(mesh),
         coords(coords),
-        connect(connect),
-        nelcom(nelcom),
         fe_volume(fe_volume),
         grad_phi(grad_phi),
         facets(facets)
@@ -47,7 +44,7 @@ public:
         _F_;
     }
 
-    const UnstructuredMesh *
+    UnstructuredMesh *
     get_mesh() const
     {
         return this->mesh;
@@ -137,18 +134,16 @@ private:
     calc_nodal_normals()
     {
         _F_;
-        auto vertex_range = this->mesh->get_vertex_range();
+        auto comm_cells = this->mesh->common_cells_by_vertex();
         for (Int i = 0; i < this->vertices.get_local_size(); i++) {
             Int vertex = this->vertices(i);
-            Int node = vertex - vertex_range.first();
             DenseVector<Real, DIM> sum;
             sum.zero();
-            for (Int iec = 0; iec < (*this->nelcom)(node).size(); iec++) {
-                auto ie = (*this->nelcom)(node)[iec];
-                auto idx = (*this->connect)(ie);
-                auto lnne = node_index(idx, node);
-                auto vol = (*this->fe_volume)(ie);
-                auto inc = vol * (*this->grad_phi)(ie).row(lnne);
+            for (auto & cell : comm_cells[vertex]) {
+                auto connect = this->mesh->get_connectivity(cell);
+                auto lnne = utils::index_of(connect, vertex);
+                auto vol = (*this->fe_volume)(cell);
+                auto inc = vol * (*this->grad_phi)(cell).row(lnne);
                 sum += inc;
             }
             auto mag = sum.magnitude();
@@ -163,23 +158,10 @@ private:
         _F_;
     }
 
-    Int
-    node_index(const DenseVector<Int, N_ELEM_NODES> & idx, Int node_id)
-    {
-        for (Int i = 0; i < N_ELEM_NODES; i++)
-            if (idx(i) == node_id)
-                return i;
-        error("Did not find {} in indices", node_id);
-    }
-
     /// Mesh
-    const UnstructuredMesh * mesh;
+    UnstructuredMesh * mesh;
     /// Coordinates
     const Array1D<DenseVector<Real, DIM>> * coords;
-    /// Connectivity array
-    const Array1D<DenseVector<Int, N_ELEM_NODES>> * connect;
-    /// Indices of elements common to a node
-    const Array1D<std::vector<Int>> * nelcom;
     /// Element volume
     const Array1D<Real> * fe_volume;
     /// Gradients of shape functions
