@@ -86,21 +86,6 @@ gradient(const DenseMatrix<Real, N_VALS, N_COMPS> & vals,
     return grad;
 }
 
-/// Compute gradient(u) * gradient(phi) (at nodes)
-///
-/// @tparam DIM Spatial dimension
-/// @tparam N_VALS Number of values (at nodes)
-/// @param grad_u Gradient of variable u
-/// @param grad_phi Gradients of shape functions (at nodes)
-/// @return Vector of grad(u)*grad(phi)_i (at nodes)
-template <Int DIM, Int N_VALS>
-inline DenseVector<Real, N_VALS>
-grad_u_grad_phi(const DenseVector<Real, DIM> & grad_u,
-                const DenseMatrix<Real, N_VALS, DIM> & grad_phi)
-{
-    return grad_phi * grad_u;
-}
-
 } // namespace fe
 
 } // namespace godzilla
