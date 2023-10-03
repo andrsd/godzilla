@@ -5,6 +5,7 @@
 #include <string>
 #include <typeinfo>
 #include <petsclog.h>
+#include "fmt/printf.h"
 
 namespace godzilla {
 namespace utils {
@@ -76,6 +77,26 @@ map_values(const std::map<T, U> & m)
 /// @param time Time in seconds
 /// @return Formatted string with human readable time
 std::string human_time(PetscLogDouble time);
+
+/// Get index of an value in a std::vector
+///
+/// @tparam T Type
+/// @param array Array of values
+/// @param value The value we are looking for
+/// @return Index in the array
+///
+/// NOTE:
+/// 1. This function will find only the first value, so make sure that `array` does not have
+///    duplicates unless you are really looking for just the first one.
+template <typename T>
+std::size_t
+index_of(const std::vector<T> & array, T value)
+{
+    for (std::size_t i = 0; i < array.size(); i++)
+        if (array[i] == value)
+            return i;
+    throw std::runtime_error(fmt::format("Did not find {} in array", value));
+}
 
 } // namespace utils
 } // namespace godzilla
