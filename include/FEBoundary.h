@@ -32,11 +32,9 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nod
 class BoundaryInfo : public BoundaryInfoAbstract {
 public:
     BoundaryInfo(UnstructuredMesh * mesh,
-                 const Array1D<Real> * fe_volume,
                  const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> * grad_phi,
                  const IndexSet & facets) :
         mesh(mesh),
-        fe_volume(fe_volume),
         grad_phi(grad_phi),
         facets(facets)
     {
@@ -104,7 +102,8 @@ private:
             auto face_conn = this->mesh->get_connectivity(this->facets(i));
             auto support = this->mesh->get_support(this->facets(i));
             Int ie = support[0];
-            auto volume = (*this->fe_volume)(ie);
+            Real volume;
+            this->mesh->compute_cell_geometry(ie, &volume, nullptr, nullptr);
             auto elem_conn = this->mesh->get_connectivity(ie);
             Int local_idx = get_local_face_index(elem_conn, face_conn);
             auto edge_length = this->length(i);
@@ -134,9 +133,10 @@ private:
             DenseVector<Real, DIM> sum;
             sum.zero();
             for (auto & cell : comm_cells[vertex]) {
+                Real vol;
+                this->mesh->compute_cell_geometry(cell, &vol, nullptr, nullptr);
                 auto connect = this->mesh->get_connectivity(cell);
                 auto lnne = utils::index_of(connect, vertex);
-                auto vol = (*this->fe_volume)(cell);
                 auto inc = vol * (*this->grad_phi)(cell).row(lnne);
                 sum += inc;
             }
@@ -154,8 +154,6 @@ private:
 
     /// Mesh
     UnstructuredMesh * mesh;
-    /// Element volume
-    const Array1D<Real> * fe_volume;
     /// Gradients of shape functions
     const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> * grad_phi;
 

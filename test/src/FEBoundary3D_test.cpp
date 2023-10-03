@@ -2,6 +2,7 @@
 #include "TestApp.h"
 #include "FEGeometry.h"
 #include "FEVolumes.h"
+#include "FEShapeFns.h"
 #include "FEBoundary.h"
 
 using namespace godzilla;
@@ -38,8 +39,8 @@ protected:
         // create "side sets"
         auto face_sets = create_label("Face Sets");
 
-        create_side_set(face_sets, 1, { 5 }, "front");
-        create_side_set(face_sets, 2, { 6 }, "bottom");
+        create_side_set(face_sets, 1, { 6 }, "front");
+        create_side_set(face_sets, 2, { 5 }, "bottom");
         create_side_set(face_sets, 3, { 7 }, "left");
         create_side_set(face_sets, 4, { 8 }, "slanted");
 
@@ -54,10 +55,7 @@ protected:
     }
 
     void
-    create_side_set(Label & face_sets,
-                    Int id,
-                    const std::vector<Int> & faces,
-                    const char * name)
+    create_side_set(Label & face_sets, Int id, const std::vector<Int> & faces, const char * name)
     {
         for (auto & f : faces) {
             face_sets.set_value(f, id);
@@ -72,10 +70,9 @@ public:
 class TestBoundary3D : public fe::BoundaryInfo<TET4, 3, 4> {
 public:
     TestBoundary3D(UnstructuredMesh * mesh,
-                   const Array1D<Real> * fe_volume,
                    const Array1D<DenseMatrix<Real, 4, 3>> * grad_phi,
                    const IndexSet & facets) :
-        fe::BoundaryInfo<TET4, 3, 4>(mesh, fe_volume, grad_phi, facets)
+        fe::BoundaryInfo<TET4, 3, 4>(mesh, grad_phi, facets)
     {
     }
 
@@ -115,15 +112,49 @@ TEST(FEBoundaryTest, nodal_normals_3d)
     mesh.create();
 
     auto coords = fe::coordinates<3>(mesh);
+    auto connect = fe::connectivity<3, 4>(mesh);
     auto fe_volume = fe::calc_volumes<TET4, 3>(coords, connect);
     auto grad_phi = fe::calc_grad_shape<TET4, 3>(coords, connect, fe_volume);
 
     {
         auto label = mesh.get_label("left");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
-         bnd.create();
-         bnd.destroy();
+        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
+        bnd.destroy();
+    }
+    {
+        auto label = mesh.get_label("front");
+        IndexSet bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0.57735026918962584);
+        bnd.destroy();
+    }
+    {
+        auto label = mesh.get_label("bottom");
+        IndexSet bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), -1);
+        bnd.destroy();
+    }
+    {
+        auto label = mesh.get_label("slanted");
+        IndexSet bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
+        bnd.destroy();
     }
     */
 }
