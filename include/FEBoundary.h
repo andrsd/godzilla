@@ -10,8 +10,10 @@
 #include "Array2D.h"
 #include "FEGeometry.h"
 #include "FEVolumes.h"
+#include "Utils.h"
 #include <set>
 #include <vector>
+#include "petscdm.h"
 
 namespace godzilla {
 
@@ -29,25 +31,17 @@ public:
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 class BoundaryInfo : public BoundaryInfoAbstract {
 public:
-    BoundaryInfo(const UnstructuredMesh * mesh,
-                 const Array1D<DenseVector<Real, DIM>> * coords,
-                 const Array1D<DenseVector<Int, N_ELEM_NODES>> * connect,
-                 const Array1D<std::vector<Int>> * nelcom,
-                 const Array1D<Real> * fe_volume,
+    BoundaryInfo(UnstructuredMesh * mesh,
                  const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> * grad_phi,
                  const IndexSet & facets) :
         mesh(mesh),
-        coords(coords),
-        connect(connect),
-        nelcom(nelcom),
-        fe_volume(fe_volume),
         grad_phi(grad_phi),
         facets(facets)
     {
         _F_;
     }
 
-    const UnstructuredMesh *
+    UnstructuredMesh *
     get_mesh() const
     {
         return this->mesh;
@@ -108,7 +102,8 @@ private:
             auto face_conn = this->mesh->get_connectivity(this->facets(i));
             auto support = this->mesh->get_support(this->facets(i));
             Int ie = support[0];
-            auto volume = (*this->fe_volume)(ie);
+            Real volume;
+            this->mesh->compute_cell_geometry(ie, &volume, nullptr, nullptr);
             auto elem_conn = this->mesh->get_connectivity(ie);
             Int local_idx = get_local_face_index(elem_conn, face_conn);
             auto edge_length = this->length(i);
@@ -120,15 +115,10 @@ private:
     void
     calc_face_length()
     {
-        auto n_cells = this->mesh->get_num_all_cells();
         for (Int i = 0; i < this->facets.get_local_size(); i++) {
-            auto face_conn = this->mesh->get_connectivity(this->facets(i));
-            // works for simplexes
-            DenseVector<Int, N_ELEM_NODES - 1> idx;
-            for (Int j = 0; j < N_ELEM_NODES - 1; j++)
-                idx(j) = face_conn[j] - n_cells;
-            auto edge_length = fe::face_area<ELEM_TYPE>(this->coords->get_values(idx));
-            this->length(i) = edge_length;
+            Real A;
+            this->mesh->compute_cell_geometry(this->facets(i), &A, nullptr, nullptr);
+            this->length(i) = A;
         }
     }
 
@@ -137,18 +127,17 @@ private:
     calc_nodal_normals()
     {
         _F_;
-        auto vertex_range = this->mesh->get_vertex_range();
+        auto comm_cells = this->mesh->common_cells_by_vertex();
         for (Int i = 0; i < this->vertices.get_local_size(); i++) {
             Int vertex = this->vertices(i);
-            Int node = vertex - vertex_range.first();
             DenseVector<Real, DIM> sum;
             sum.zero();
-            for (Int iec = 0; iec < (*this->nelcom)(node).size(); iec++) {
-                auto ie = (*this->nelcom)(node)[iec];
-                auto idx = (*this->connect)(ie);
-                auto lnne = node_index(idx, node);
-                auto vol = (*this->fe_volume)(ie);
-                auto inc = vol * (*this->grad_phi)(ie).row(lnne);
+            for (auto & cell : comm_cells[vertex]) {
+                Real vol;
+                this->mesh->compute_cell_geometry(cell, &vol, nullptr, nullptr);
+                auto connect = this->mesh->get_connectivity(cell);
+                auto lnne = utils::index_of(connect, vertex);
+                auto inc = vol * (*this->grad_phi)(cell).row(lnne);
                 sum += inc;
             }
             auto mag = sum.magnitude();
@@ -163,25 +152,8 @@ private:
         _F_;
     }
 
-    Int
-    node_index(const DenseVector<Int, N_ELEM_NODES> & idx, Int node_id)
-    {
-        for (Int i = 0; i < N_ELEM_NODES; i++)
-            if (idx(i) == node_id)
-                return i;
-        error("Did not find {} in indices", node_id);
-    }
-
     /// Mesh
-    const UnstructuredMesh * mesh;
-    /// Coordinates
-    const Array1D<DenseVector<Real, DIM>> * coords;
-    /// Connectivity array
-    const Array1D<DenseVector<Int, N_ELEM_NODES>> * connect;
-    /// Indices of elements common to a node
-    const Array1D<std::vector<Int>> * nelcom;
-    /// Element volume
-    const Array1D<Real> * fe_volume;
+    UnstructuredMesh * mesh;
     /// Gradients of shape functions
     const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> * grad_phi;
 

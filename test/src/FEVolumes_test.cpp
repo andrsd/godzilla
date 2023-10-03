@@ -74,27 +74,27 @@ TEST(FEVolumesTest, calc_volumes)
 
 TEST(FEVolumesTest, face_area_edge2)
 {
-    DenseVector<DenseVector<Real, 1>, 1> coords;
-    coords(0) = DenseVector<Real, 1>({ 0. });
+    DenseMatrix<Real, 1, 1> coords;
+    coords(0, 0) = 0.;
     auto A = fe::face_area<EDGE2>(coords);
     EXPECT_DOUBLE_EQ(A, 1.);
 }
 
 TEST(FEVolumesTest, face_area_tri3)
 {
-    DenseVector<DenseVector<Real, 2>, 2> coords;
-    coords(0) = DenseVector<Real, 2>({ 0., 0. });
-    coords(1) = DenseVector<Real, 2>({ 1., 1. });
+    DenseMatrix<Real, 2, 2> coords;
+    coords.set_row(0, { 0., 0. });
+    coords.set_row(1, { 1., 1. });
     auto A = fe::face_area<TRI3>(coords);
     EXPECT_DOUBLE_EQ(A, std::sqrt(2));
 }
 
 TEST(FEVolumesTest, face_area_tet4)
 {
-    DenseVector<DenseVector<Real, 3>, 3> coords;
-    coords(0) = DenseVector<Real, 3>({ 0., 0., 0. });
-    coords(1) = DenseVector<Real, 3>({ 1., 0., 0. });
-    coords(2) = DenseVector<Real, 3>({ 0., 1., 0. });
+    DenseMatrix<Real, 3, 3> coords;
+    coords.set_row(0, { 0., 0., 0. });
+    coords.set_row(1, { 1., 0., 0. });
+    coords.set_row(2, { 0., 1., 0. });
     EXPECT_DEATH(fe::face_area<TET4>(coords),
                  "Face area calculation for TET4 in 3 dimensions is not implemented.");
 }

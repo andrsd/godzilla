@@ -2,6 +2,7 @@
 #include "TestApp.h"
 #include "FEGeometry.h"
 #include "FEVolumes.h"
+#include "FEShapeFns.h"
 #include "FEBoundary.h"
 
 using namespace godzilla;
@@ -36,10 +37,10 @@ protected:
         build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
 
         // create "side sets"
-        DMLabel face_sets = create_label("Face Sets");
+        auto face_sets = create_label("Face Sets");
 
-        create_side_set(face_sets, 1, { 5 }, "front");
-        create_side_set(face_sets, 2, { 6 }, "bottom");
+        create_side_set(face_sets, 1, { 6 }, "front");
+        create_side_set(face_sets, 2, { 5 }, "bottom");
         create_side_set(face_sets, 3, { 7 }, "left");
         create_side_set(face_sets, 4, { 8 }, "slanted");
 
@@ -54,13 +55,10 @@ protected:
     }
 
     void
-    create_side_set(const DMLabel & face_sets,
-                    Int id,
-                    const std::vector<Int> & faces,
-                    const char * name)
+    create_side_set(Label & face_sets, Int id, const std::vector<Int> & faces, const char * name)
     {
         for (auto & f : faces) {
-            PETSC_CHECK(DMLabelSetValue(face_sets, f, id));
+            face_sets.set_value(f, id);
             PETSC_CHECK(DMSetLabelValue(dm(), name, f, id));
         }
     }
@@ -71,14 +69,10 @@ public:
 
 class TestBoundary3D : public fe::BoundaryInfo<TET4, 3, 4> {
 public:
-    TestBoundary3D(const UnstructuredMesh * mesh,
-                   const Array1D<DenseVector<Real, 3>> * coords,
-                   const Array1D<DenseVector<Int, 4>> * connect,
-                   const Array1D<std::vector<Int>> * nelcom,
-                   const Array1D<Real> * fe_volume,
+    TestBoundary3D(UnstructuredMesh * mesh,
                    const Array1D<DenseMatrix<Real, 4, 3>> * grad_phi,
                    const IndexSet & facets) :
-        fe::BoundaryInfo<TET4, 3, 4>(mesh, coords, connect, nelcom, fe_volume, grad_phi, facets)
+        fe::BoundaryInfo<TET4, 3, 4>(mesh, grad_phi, facets)
     {
     }
 
@@ -122,18 +116,45 @@ TEST(FEBoundaryTest, nodal_normals_3d)
     auto fe_volume = fe::calc_volumes<TET4, 3>(coords, connect);
     auto grad_phi = fe::calc_grad_shape<TET4, 3>(coords, connect, fe_volume);
 
-    auto n_nodes = mesh.get_num_vertices();
-
-    Array1D<std::vector<Int>> nelcom;
-    nelcom.create(n_nodes);
-    fe::common_elements_by_node(connect, nelcom);
-
     {
         auto label = mesh.get_label("left");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(&mesh, &coords, &connect, &nelcom, &fe_volume, &grad_phi, bnd_facets);
-         bnd.create();
-         bnd.destroy();
+        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
+        bnd.destroy();
+    }
+    {
+        auto label = mesh.get_label("front");
+        IndexSet bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0.57735026918962584);
+        bnd.destroy();
+    }
+    {
+        auto label = mesh.get_label("bottom");
+        IndexSet bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), -1);
+        bnd.destroy();
+    }
+    {
+        auto label = mesh.get_label("slanted");
+        IndexSet bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
+        bnd.destroy();
     }
     */
 }

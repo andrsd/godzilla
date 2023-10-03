@@ -4,6 +4,7 @@
 #include "Types.h"
 #include "Array1D.h"
 #include "DenseVector.h"
+#include "DenseMatrix.h"
 
 namespace godzilla {
 
@@ -124,9 +125,9 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
 
 //
 
-template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+template <ElementType ELEM_TYPE, Int DIM, Int N_FACE_NODES>
 Real
-face_area(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords)
+face_area(const DenseMatrix<Real, N_FACE_NODES, DIM> & coords)
 {
     GODZILLA_UNUSED(coords);
 
@@ -138,7 +139,7 @@ face_area(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords)
 
 template <>
 inline Real
-face_area<EDGE2, 1>(const DenseVector<DenseVector<Real, 1>, 1> & coords)
+face_area<EDGE2, 1>(const DenseMatrix<Real, 1, 1> & coords)
 {
     GODZILLA_UNUSED(coords);
 
@@ -147,11 +148,11 @@ face_area<EDGE2, 1>(const DenseVector<DenseVector<Real, 1>, 1> & coords)
 
 template <>
 inline Real
-face_area<TRI3, 2>(const DenseVector<DenseVector<Real, 2>, 2> & coords)
+face_area<TRI3, 2>(const DenseMatrix<Real, 2, 2> & coords)
 {
     DenseVector<Real, 2> v;
-    v(0) = coords(0)(0) - coords(1)(0);
-    v(1) = coords(0)(1) - coords(1)(1);
+    v(0) = coords(0, 0) - coords(1, 0);
+    v(1) = coords(0, 1) - coords(1, 1);
     return v.magnitude();
 }
 

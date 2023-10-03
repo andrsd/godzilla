@@ -37,7 +37,7 @@ protected:
         build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
 
         // create "side sets"
-        DMLabel face_sets = create_label("Face Sets");
+        auto face_sets = create_label("Face Sets");
 
         create_side_set(face_sets, 1, { 8 }, "left");
         create_side_set(face_sets, 2, { 6 }, "bottom");
@@ -53,13 +53,13 @@ protected:
     }
 
     void
-    create_side_set(const DMLabel & face_sets,
+    create_side_set(Label & face_sets,
                     Int id,
                     const std::vector<Int> & faces,
                     const char * name)
     {
         for (auto & f : faces) {
-            PETSC_CHECK(DMLabelSetValue(face_sets, f, id));
+            face_sets.set_value(f, id);
             PETSC_CHECK(DMSetLabelValue(dm(), name, f, id));
         }
     }
@@ -70,14 +70,10 @@ public:
 
 class TestBoundary2D : public fe::BoundaryInfo<TRI3, 2, 3> {
 public:
-    TestBoundary2D(const UnstructuredMesh * mesh,
-                   const Array1D<DenseVector<Real, 2>> * coords,
-                   const Array1D<DenseVector<Int, 3>> * connect,
-                   const Array1D<std::vector<Int>> * nelcom,
-                   const Array1D<Real> * fe_volume,
+    TestBoundary2D(UnstructuredMesh * mesh,
                    const Array1D<DenseMatrix<Real, 3, 2>> * grad_phi,
                    const IndexSet & facets) :
-        fe::BoundaryInfo<TRI3, 2, 3>(mesh, coords, connect, nelcom, fe_volume, grad_phi, facets)
+        fe::BoundaryInfo<TRI3, 2, 3>(mesh, grad_phi, facets)
     {
     }
 
@@ -120,16 +116,10 @@ TEST(FEBoundaryTest, nodal_normals_2d)
     auto fe_volume = fe::calc_volumes<TRI3, 2>(coords, connect);
     auto grad_phi = fe::calc_grad_shape<TRI3, 2>(coords, connect, fe_volume);
 
-    auto n_nodes = mesh.get_num_vertices();
-
-    Array1D<std::vector<Int>> nelcom;
-    nelcom.create(n_nodes);
-    fe::common_elements_by_node(connect, nelcom);
-
     {
         auto label = mesh.get_label("left");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &connect, &nelcom, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
@@ -139,13 +129,16 @@ TEST(FEBoundaryTest, nodal_normals_2d)
 
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(1), 0);
+
+        EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
+
         bnd.destroy();
     }
 
     {
         auto label = mesh.get_label("bottom");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &connect, &nelcom, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), -1);
@@ -155,13 +148,16 @@ TEST(FEBoundaryTest, nodal_normals_2d)
 
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(1), -1);
+
+        EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
+
         bnd.destroy();
     }
 
     {
         auto label = mesh.get_label("top_right");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &connect, &nelcom, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
@@ -177,6 +173,10 @@ TEST(FEBoundaryTest, nodal_normals_2d)
 
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(0), 1. / std::sqrt(2));
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(1), 1. / std::sqrt(2));
+
+        EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
+        EXPECT_DOUBLE_EQ(bnd.length(1), 1.);
+
         bnd.destroy();
     }
 }

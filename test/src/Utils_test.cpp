@@ -56,3 +56,13 @@ TEST(UtilsTest, human_time)
     EXPECT_EQ(utils::human_time(3725), "1h 2m 5s");
     EXPECT_EQ(utils::human_time(3725.2), "1h 2m 5.200s");
 }
+
+TEST(UtilsTest, index_of)
+{
+    std::vector<int> vals = { 2, 5, 8 };
+    EXPECT_EQ(utils::index_of(vals, 2), 0);
+    EXPECT_EQ(utils::index_of(vals, 5), 1);
+    EXPECT_EQ(utils::index_of(vals, 8), 2);
+
+    EXPECT_THROW({ utils::index_of(vals, 1); }, std::runtime_error);
+}
