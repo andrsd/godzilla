@@ -34,7 +34,7 @@ public:
                  const Array1D<DenseVector<Int, N_ELEM_NODES>> * connect,
                  const Array1D<std::vector<Int>> * nelcom,
                  const Array1D<Real> * fe_volume,
-                 const Array1D<DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES>> * grad_phi,
+                 const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> * grad_phi,
                  const IndexSet & facets) :
         mesh(mesh),
         coords(coords),
@@ -112,7 +112,7 @@ private:
             auto elem_conn = this->mesh->get_connectivity(ie);
             Int local_idx = get_local_face_index(elem_conn, face_conn);
             auto edge_length = this->length(i);
-            auto grad = (*this->grad_phi)(ie) (local_idx);
+            auto grad = (*this->grad_phi)(ie).row(local_idx);
             this->normal(i) = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
         }
     }
@@ -148,7 +148,7 @@ private:
                 auto idx = (*this->connect)(ie);
                 auto lnne = node_index(idx, node);
                 auto vol = (*this->fe_volume)(ie);
-                auto inc = vol * (*this->grad_phi)(ie) (lnne);
+                auto inc = vol * (*this->grad_phi)(ie).row(lnne);
                 sum += inc;
             }
             auto mag = sum.magnitude();
@@ -183,7 +183,7 @@ private:
     /// Element volume
     const Array1D<Real> * fe_volume;
     /// Gradients of shape functions
-    const Array1D<DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES>> * grad_phi;
+    const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> * grad_phi;
 
 public:
     /// IndexSet with boundary facets

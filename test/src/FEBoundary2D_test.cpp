@@ -75,7 +75,7 @@ public:
                    const Array1D<DenseVector<Int, 3>> * connect,
                    const Array1D<std::vector<Int>> * nelcom,
                    const Array1D<Real> * fe_volume,
-                   const Array1D<DenseVector<DenseVector<Real, 2>, 3>> * grad_phi,
+                   const Array1D<DenseMatrix<Real, 3, 2>> * grad_phi,
                    const IndexSet & facets) :
         fe::BoundaryInfo<TRI3, 2, 3>(mesh, coords, connect, nelcom, fe_volume, grad_phi, facets)
     {

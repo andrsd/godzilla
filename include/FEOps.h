@@ -30,15 +30,14 @@ linear_combination(const DenseVector<Real, N_VALS> & a, const DenseVector<T, N_V
 ///
 /// @tparam D Spatial dimension
 /// @tparam N_VALS Number of values per element
-/// @param vals Nodal values
+/// @param vals Values
 /// @param grad_phi Gradient of test functions
 /// @return Computed gradient
 template <Int D, Int N_VALS>
 inline DenseVector<Real, D>
-gradient(const DenseVector<Real, N_VALS> & vals,
-         const DenseVector<DenseVector<Real, D>, N_VALS> & grad_phi)
+gradient(const DenseVector<Real, N_VALS> & vals, const DenseMatrix<Real, N_VALS, D> & grad_phi)
 {
-    return fe::linear_combination(vals, grad_phi);
+    return vals * grad_phi;
 }
 
 /// Compute gradient of a vector-valued quantity
@@ -46,20 +45,20 @@ gradient(const DenseVector<Real, N_VALS> & vals,
 /// @tparam N_COMPS Number of vector component
 /// @tparam D Spatial dimension
 /// @tparam N_VALS Number of values per element
-/// @param vals Nodal values
+/// @param vals Values
 /// @param grad_phi Gradient of test functions
 /// @return Computed gradient
 template <Int N_COMPS, Int D, Int N_VALS>
-inline DenseMatrix<Real, N_COMPS, D>
+inline DenseMatrix<Real, D, N_COMPS>
 gradient(const DenseVector<DenseVector<Real, N_COMPS>, N_VALS> & vals,
-         const DenseVector<DenseVector<Real, D>, N_VALS> & grad_phi)
+         const DenseMatrix<Real, N_VALS, D> & grad_phi)
 {
-    DenseMatrix<Real, N_COMPS, D> grad;
+    DenseMatrix<Real, D, N_COMPS> grad;
     grad.set_values(0.);
-    for (Int i = 0; i < N_COMPS; i++) {
-        for (Int j = 0; j < N_VALS; j++)
-            for (Int k = 0; k < D; k++)
-                grad(i, k) += vals(j)(i) * grad_phi(j)(k);
+    for (Int i = 0; i < D; i++) {
+        for (Int j = 0; j < N_COMPS; j++)
+            for (Int k = 0; k < N_VALS; k++)
+                grad(i, j) += vals(k)(j) * grad_phi(k, i);
     }
     return grad;
 }
@@ -69,40 +68,22 @@ gradient(const DenseVector<DenseVector<Real, N_COMPS>, N_VALS> & vals,
 /// @tparam N_COMPS Number of vector component
 /// @tparam D Spatial dimension
 /// @tparam N_VALS Number of values per element
-/// @param vals Nodal values
+/// @param vals Values
 /// @param grad_phi Gradient of test functions
 /// @return Computed gradient
 template <Int N_COMPS, Int D, Int N_VALS>
-inline DenseMatrix<Real, N_COMPS, D>
+inline DenseMatrix<Real, D, N_COMPS>
 gradient(const DenseMatrix<Real, N_VALS, N_COMPS> & vals,
-         const DenseVector<DenseVector<Real, D>, N_VALS> & grad_phi)
+         const DenseMatrix<Real, N_VALS, D> & grad_phi)
 {
-    DenseMatrix<Real, N_COMPS, D> grad;
+    DenseMatrix<Real, D, N_COMPS> grad;
     grad.set_values(0.);
-    for (Int i = 0; i < N_COMPS; i++) {
-        for (Int j = 0; j < N_VALS; j++)
-            for (Int k = 0; k < D; k++)
-                grad(i, k) += vals(j, i) * grad_phi(j)(k);
+    for (Int i = 0; i < D; i++) {
+        for (Int j = 0; j < N_COMPS; j++)
+            for (Int k = 0; k < N_VALS; k++)
+                grad(i, j) += vals(k, j) * grad_phi(k, i);
     }
     return grad;
-}
-
-/// Compute gradient(u) * gradient(phi) (at nodes)
-///
-/// @tparam DIM Spatial dimension
-/// @tparam N_VALS Number of values (at nodes)
-/// @param grad_u Gradient of variable u
-/// @param grad_phi Gradients of shape functions (at nodes)
-/// @return Vector of grad(u)*grad(phi)_i (at nodes)
-template <Int DIM, Int N_VALS>
-inline DenseVector<Real, N_VALS>
-grad_u_grad_phi(const DenseVector<Real, DIM> & grad_u,
-                const DenseVector<DenseVector<Real, DIM>, N_VALS> & grad_phi)
-{
-    DenseVector<Real, N_VALS> res;
-    for (Int i = 0; i < N_VALS; i++)
-        res(i) = grad_u * grad_phi(i);
-    return res;
 }
 
 } // namespace fe

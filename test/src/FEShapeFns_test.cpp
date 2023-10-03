@@ -11,8 +11,8 @@ TEST(FEShapeFns, grad_shape_egde2)
     coords(1) = DenseVector<Real, 1>({ 3. });
     Real volume = fe::volume<EDGE2>(coords);
     auto grads = fe::grad_shape<EDGE2, 1>(coords, volume);
-    EXPECT_DOUBLE_EQ(grads(0)(0), -0.5);
-    EXPECT_DOUBLE_EQ(grads(1)(0), 0.5);
+    EXPECT_DOUBLE_EQ(grads(0, 0), -0.5);
+    EXPECT_DOUBLE_EQ(grads(1, 0), 0.5);
 }
 
 TEST(FEShapeFns, grad_shape_tri3)
@@ -23,12 +23,12 @@ TEST(FEShapeFns, grad_shape_tri3)
     coords(2) = DenseVector<Real, 2>({ 0, 1. });
     Real volume = fe::volume<TRI3>(coords);
     auto grads = fe::grad_shape<TRI3, 2>(coords, volume);
-    EXPECT_DOUBLE_EQ(grads(0)(0), -1);
-    EXPECT_DOUBLE_EQ(grads(0)(1), -1);
-    EXPECT_DOUBLE_EQ(grads(1)(0), 1);
-    EXPECT_DOUBLE_EQ(grads(1)(1), 0);
-    EXPECT_DOUBLE_EQ(grads(2)(0), 0);
-    EXPECT_DOUBLE_EQ(grads(2)(1), 1);
+    EXPECT_DOUBLE_EQ(grads(0, 0), -1);
+    EXPECT_DOUBLE_EQ(grads(0, 1), -1);
+    EXPECT_DOUBLE_EQ(grads(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grads(1, 1), 0);
+    EXPECT_DOUBLE_EQ(grads(2, 0), 0);
+    EXPECT_DOUBLE_EQ(grads(2, 1), 1);
 }
 
 TEST(FEShapeFns, calc_grad_shape)
