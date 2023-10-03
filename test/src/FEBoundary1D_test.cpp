@@ -69,11 +69,10 @@ public:
 class TestBoundary1D : public fe::BoundaryInfo<EDGE2, 1, 2> {
 public:
     TestBoundary1D(UnstructuredMesh * mesh,
-                   const Array1D<DenseVector<Real, 1>> * coords,
                    const Array1D<Real> * fe_volume,
                    const Array1D<DenseMatrix<Real, 2, 1>> * grad_phi,
                    const IndexSet & facets) :
-        fe::BoundaryInfo<EDGE2, 1, 2>(mesh, coords, fe_volume, grad_phi, facets)
+        fe::BoundaryInfo<EDGE2, 1, 2>(mesh, fe_volume, grad_phi, facets)
     {
     }
 
@@ -118,19 +117,21 @@ TEST(FEBoundaryTest, nodal_normals_1d)
 
     {
         IndexSet bnd_facets = points_from_label(mesh.get_label("left"));
-        TestBoundary1D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary1D bnd(&mesh, &fe_volume, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), -1);
+        EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
         bnd.destroy();
     }
 
     {
         IndexSet bnd_facets = points_from_label(mesh.get_label("right"));
-        TestBoundary1D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary1D bnd(&mesh, &fe_volume, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), 1);
+        EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
         bnd.destroy();
     }
 }

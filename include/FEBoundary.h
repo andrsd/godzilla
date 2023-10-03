@@ -13,6 +13,7 @@
 #include "Utils.h"
 #include <set>
 #include <vector>
+#include "petscdm.h"
 
 namespace godzilla {
 
@@ -31,12 +32,10 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nod
 class BoundaryInfo : public BoundaryInfoAbstract {
 public:
     BoundaryInfo(UnstructuredMesh * mesh,
-                 const Array1D<DenseVector<Real, DIM>> * coords,
                  const Array1D<Real> * fe_volume,
                  const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> * grad_phi,
                  const IndexSet & facets) :
         mesh(mesh),
-        coords(coords),
         fe_volume(fe_volume),
         grad_phi(grad_phi),
         facets(facets)
@@ -117,15 +116,10 @@ private:
     void
     calc_face_length()
     {
-        auto n_cells = this->mesh->get_num_all_cells();
         for (Int i = 0; i < this->facets.get_local_size(); i++) {
-            auto face_conn = this->mesh->get_connectivity(this->facets(i));
-            // works for simplexes
-            DenseVector<Int, N_ELEM_NODES - 1> idx;
-            for (Int j = 0; j < N_ELEM_NODES - 1; j++)
-                idx(j) = face_conn[j] - n_cells;
-            auto edge_length = fe::face_area<ELEM_TYPE>(this->coords->get_values(idx));
-            this->length(i) = edge_length;
+            Real A;
+            this->mesh->compute_cell_geometry(this->facets(i), &A, nullptr, nullptr);
+            this->length(i) = A;
         }
     }
 
@@ -160,8 +154,6 @@ private:
 
     /// Mesh
     UnstructuredMesh * mesh;
-    /// Coordinates
-    const Array1D<DenseVector<Real, DIM>> * coords;
     /// Element volume
     const Array1D<Real> * fe_volume;
     /// Gradients of shape functions

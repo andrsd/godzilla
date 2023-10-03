@@ -72,11 +72,10 @@ public:
 class TestBoundary3D : public fe::BoundaryInfo<TET4, 3, 4> {
 public:
     TestBoundary3D(UnstructuredMesh * mesh,
-                   const Array1D<DenseVector<Real, 3>> * coords,
                    const Array1D<Real> * fe_volume,
                    const Array1D<DenseMatrix<Real, 4, 3>> * grad_phi,
                    const IndexSet & facets) :
-        fe::BoundaryInfo<TET4, 3, 4>(mesh, coords, fe_volume, grad_phi, facets)
+        fe::BoundaryInfo<TET4, 3, 4>(mesh, fe_volume, grad_phi, facets)
     {
     }
 

@@ -71,11 +71,10 @@ public:
 class TestBoundary2D : public fe::BoundaryInfo<TRI3, 2, 3> {
 public:
     TestBoundary2D(UnstructuredMesh * mesh,
-                   const Array1D<DenseVector<Real, 2>> * coords,
                    const Array1D<Real> * fe_volume,
                    const Array1D<DenseMatrix<Real, 3, 2>> * grad_phi,
                    const IndexSet & facets) :
-        fe::BoundaryInfo<TRI3, 2, 3>(mesh, coords, fe_volume, grad_phi, facets)
+        fe::BoundaryInfo<TRI3, 2, 3>(mesh, fe_volume, grad_phi, facets)
     {
     }
 
@@ -121,7 +120,7 @@ TEST(FEBoundaryTest, nodal_normals_2d)
     {
         auto label = mesh.get_label("left");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &fe_volume, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
@@ -131,13 +130,16 @@ TEST(FEBoundaryTest, nodal_normals_2d)
 
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(1), 0);
+
+        EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
+
         bnd.destroy();
     }
 
     {
         auto label = mesh.get_label("bottom");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &fe_volume, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), -1);
@@ -147,13 +149,16 @@ TEST(FEBoundaryTest, nodal_normals_2d)
 
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(1), -1);
+
+        EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
+
         bnd.destroy();
     }
 
     {
         auto label = mesh.get_label("top_right");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary2D bnd(&mesh, &coords, &fe_volume, &grad_phi, bnd_facets);
+        TestBoundary2D bnd(&mesh, &fe_volume, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
@@ -169,6 +174,10 @@ TEST(FEBoundaryTest, nodal_normals_2d)
 
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(0), 1. / std::sqrt(2));
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(1), 1. / std::sqrt(2));
+
+        EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
+        EXPECT_DOUBLE_EQ(bnd.length(1), 1.);
+
         bnd.destroy();
     }
 }
