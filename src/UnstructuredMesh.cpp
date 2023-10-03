@@ -53,7 +53,8 @@ UnstructuredMesh::parameters()
 
 UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     Mesh(parameters),
-    partition_overlap(0)
+    partition_overlap(0),
+    common_cells_by_vtx_computed(false)
 {
     _F_;
     this->partitioner.create(comm());
@@ -527,17 +528,18 @@ UnstructuredMesh::cell_end() const
     return Iterator(idx);
 }
 
-std::map<Int, std::vector<Int>>
-UnstructuredMesh::common_cells_by_vertex() const
+const std::map<Int, std::vector<Int>> &
+UnstructuredMesh::common_cells_by_vertex()
 {
     _F_;
-    std::map<Int, std::vector<Int>> map;
-    for (auto & cell : get_cell_range()) {
-        auto connect = get_connectivity(cell);
-        for (auto & vtx : connect)
-            map[vtx].push_back(cell);
+    if (!this->common_cells_by_vtx_computed) {
+        for (auto & cell : get_cell_range()) {
+            auto connect = get_connectivity(cell);
+            for (auto & vtx : connect)
+                this->common_cells_by_vtx[vtx].push_back(cell);
+        }
     }
-    return map;
+    return this->common_cells_by_vtx;
 }
 
 void
