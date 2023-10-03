@@ -37,7 +37,7 @@ protected:
         build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
 
         // create "side sets"
-        DMLabel face_sets = create_label("Face Sets");
+        auto face_sets = create_label("Face Sets");
 
         create_side_set(face_sets, 1, { 8 }, "left");
         create_side_set(face_sets, 2, { 6 }, "bottom");
@@ -53,13 +53,13 @@ protected:
     }
 
     void
-    create_side_set(const DMLabel & face_sets,
+    create_side_set(Label & face_sets,
                     Int id,
                     const std::vector<Int> & faces,
                     const char * name)
     {
         for (auto & f : faces) {
-            PETSC_CHECK(DMLabelSetValue(face_sets, f, id));
+            face_sets.set_value(f, id);
             PETSC_CHECK(DMSetLabelValue(dm(), name, f, id));
         }
     }
