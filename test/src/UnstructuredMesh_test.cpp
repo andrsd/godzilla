@@ -431,7 +431,7 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
     mesh.create();
 
     auto map = mesh.common_cells_by_vertex();
-
+    EXPECT_EQ(map.size(), 12);
     EXPECT_THAT(map[2], UnorderedElementsAre(0));
     EXPECT_THAT(map[3], UnorderedElementsAre(0, 1));
     EXPECT_THAT(map[4], UnorderedElementsAre(1));
@@ -444,6 +444,22 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
     EXPECT_THAT(map[11], UnorderedElementsAre(0));
     EXPECT_THAT(map[12], UnorderedElementsAre(0, 1));
     EXPECT_THAT(map[13], UnorderedElementsAre(1));
+
+    // subsequent calls to `common_cells_by_vertex()` must give back the same map
+    auto map1 = mesh.common_cells_by_vertex();
+    EXPECT_EQ(map1.size(), 12);
+    EXPECT_THAT(map1[2], UnorderedElementsAre(0));
+    EXPECT_THAT(map1[3], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map1[4], UnorderedElementsAre(1));
+    EXPECT_THAT(map1[5], UnorderedElementsAre(0));
+    EXPECT_THAT(map1[6], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map1[7], UnorderedElementsAre(1));
+    EXPECT_THAT(map1[8], UnorderedElementsAre(0));
+    EXPECT_THAT(map1[9], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map1[10], UnorderedElementsAre(1));
+    EXPECT_THAT(map1[11], UnorderedElementsAre(0));
+    EXPECT_THAT(map1[12], UnorderedElementsAre(0, 1));
+    EXPECT_THAT(map1[13], UnorderedElementsAre(1));
 }
 
 TEST(UnstructuredMesh, build_from_cell_list_2d)
