@@ -538,6 +538,7 @@ UnstructuredMesh::common_cells_by_vertex()
             for (auto & vtx : connect)
                 this->common_cells_by_vtx[vtx].push_back(cell);
         }
+        this->common_cells_by_vtx_computed = true;
     }
     return this->common_cells_by_vtx;
 }
