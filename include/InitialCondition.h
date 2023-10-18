@@ -36,44 +36,6 @@ public:
     /// @param u  The output field values
     virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
 
-    /// Evaluate the initial condition
-    ///
-    /// @tparam DIM The spatial dimension
-    /// @param time The time at which to sample
-    /// @param x The coordinates
-    /// @return The value of the initial condition
-    template <Int DIM>
-    Real get_value(Real time, const DenseVector<Real, DIM> & x);
-
-    /// Evaluate the initial condition
-    ///
-    /// @tparam DIM The spatial dimension
-    /// @param time The time at which to sample
-    /// @param x The coordinates
-    /// @return The value of the initial condition
-    template <Int DIM>
-    Real get_value(Real time, const Real * x);
-
-    /// Evaluate the initial condition (vector-valued version)
-    ///
-    /// @tparam N The number of components
-    /// @tparam DIM The spatial dimension
-    /// @param time The time at which to sample
-    /// @param x The coordinates
-    /// @return The value of the initial condition
-    template <Int N, Int DIM>
-    DenseVector<Real, N> get_vector_value(Real time, const DenseVector<Real, DIM> & x);
-
-    /// Evaluate the initial condition (vector-valued version)
-    ///
-    /// @tparam N The number of components
-    /// @tparam DIM The spatial dimension
-    /// @param time The time at which to sample
-    /// @param x The coordinates
-    /// @return The value of the initial condition
-    template <Int N, Int DIM>
-    DenseVector<Real, N> get_vector_value(Real time, const Real * x);
-
 protected:
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
@@ -87,41 +49,5 @@ protected:
 public:
     static Parameters parameters();
 };
-
-template <Int DIM>
-inline Real
-InitialCondition::get_value(Real time, const DenseVector<Real, DIM> & x)
-{
-    Real val;
-    evaluate(DIM, time, x.data(), 1, &val);
-    return val;
-}
-
-template <Int DIM>
-inline Real
-InitialCondition::get_value(Real time, const Real * x)
-{
-    Real val;
-    evaluate(DIM, time, x, 1, &val);
-    return val;
-}
-
-template <Int N, Int DIM>
-inline DenseVector<Real, N>
-InitialCondition::get_vector_value(Real time, const DenseVector<Real, DIM> & x)
-{
-    DenseVector<Real, N> val;
-    evaluate(DIM, time, x.data(), N, val.data());
-    return val;
-}
-
-template <Int N, Int DIM>
-inline DenseVector<Real, N>
-InitialCondition::get_vector_value(Real time, const Real * x)
-{
-    DenseVector<Real, N> val;
-    evaluate(DIM, time, x, N, val.data());
-    return val;
-}
 
 } // namespace godzilla
