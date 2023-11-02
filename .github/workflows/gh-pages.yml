@@ -22,21 +22,17 @@ jobs:
         with:
           python-version: 3.9
           auto-update-conda: false
-          channels: andrsd,conda-forge,defaults
-          channel-priority: strict
-          miniforge-version: latest
-          miniforge-variant: Mambaforge
-          use-mamba: true
+          channels: andrsd,defaults
 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Install dependencies
         run: |
-          mamba install \
+          conda install \
             cmake \
             make \
-            cxx-compiler \
+            mpich-mpicxx \
             doxygen \
             sphinx \
             sphinx_rtd_theme \

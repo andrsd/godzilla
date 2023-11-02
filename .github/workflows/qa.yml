@@ -18,21 +18,16 @@ jobs:
         with:
           python-version: 3.9
           auto-update-conda: false
-          channels: andrsd,conda-forge,defaults
-          channel-priority: strict
-          miniforge-version: latest
-          miniforge-variant: Mambaforge
-          use-mamba: true
+          channels: andrsd,defaults
 
       - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: |
-          mamba install \
+          conda install \
             cmake \
             make \
-            cxx-compiler \
-            mpich \
+            mpich-mpicxx \
             fmt==9.1.0 \
             petsc==3.19.4 \
             yaml-cpp==0.7.0 \
@@ -79,22 +74,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           auto-update-conda: false
-          channels: andrsd,conda-forge,defaults
-          channel-priority: strict
-          miniforge-version: latest
-          miniforge-variant: Mambaforge
-          use-mamba: true
+          channels: andrsd,defaults
 
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install dependencies
         run: |
-          mamba install \
+          conda install \
             cmake \
             make \
-            cxx-compiler \
-            mpich \
+            mpich-mpicxx \
             fmt==9.1.0 \
             petsc==3.19.4 \
             yaml-cpp==0.7.0 \
