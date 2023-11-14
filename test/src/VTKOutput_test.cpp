@@ -18,14 +18,14 @@ protected:
 
         {
             const std::string class_name = "LineMesh";
-            Parameters * params = Factory::get_parameters(class_name);
+            Parameters * params = this->app->get_parameters(class_name);
             params->set<Int>("nx") = 1;
             this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
         }
 
         {
             const std::string class_name = "G1DTestLinearProblem";
-            Parameters * params = Factory::get_parameters(class_name);
+            Parameters * params = this->app->get_parameters(class_name);
             params->set<Mesh *>("_mesh") = mesh;
             this->prob =
                 this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
@@ -43,7 +43,7 @@ protected:
     build_output(const std::string & file_name = "")
     {
         const std::string class_name = "VTKOutput";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Problem *>("_problem") = this->prob;
         if (file_name.length() > 0)
             params->set<std::string>("file") = file_name;
@@ -105,17 +105,17 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
     testing::internal::CaptureStderr();
 
     Parameters mesh_pars = TestMesh::parameters();
-    mesh_pars.set<const App *>("_app") = this->app;
+    mesh_pars.set<App *>("_app") = this->app;
     mesh_pars.set<Int>("nx") = 1;
     TestMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestProblem::parameters();
-    prob_pars.set<const App *>("_app") = this->app;
+    prob_pars.set<App *>("_app") = this->app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     TestProblem prob(prob_pars);
 
     Parameters pars = VTKOutput::parameters();
-    pars.set<const App *>("_app") = this->app;
+    pars.set<App *>("_app") = this->app;
     pars.set<Problem *>("_problem") = &prob;
     VTKOutput out(pars);
     prob.add_output(&out);

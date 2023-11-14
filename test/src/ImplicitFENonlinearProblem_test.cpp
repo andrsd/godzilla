@@ -17,7 +17,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     {
         const std::string class_name = "ConstantInitialCondition";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
         params->set<std::vector<Real>>("value") = { 0 };
         auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
@@ -26,7 +26,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 
     {
         const std::string class_name = "DirichletBC";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<std::vector<std::string>>("boundary") = { "left", "right" };
         params->set<std::vector<std::string>>("value") = { "x*x" };
         params->set<DiscreteProblemInterface *>("_dpi") = prob;
@@ -64,7 +64,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
     GTestImplicitFENonlinearProblem * prob;
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Mesh *>("_mesh") = mesh;
         params->set<Real>("start_time") = 0.;
         params->set<Real>("end_time") = 20;
@@ -90,7 +90,7 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
     auto mesh = gMesh1d();
 
     const std::string class_name = "GTestImplicitFENonlinearProblem";
-    Parameters * params = Factory::get_parameters(class_name);
+    Parameters * params = this->app->get_parameters(class_name);
     params->set<Mesh *>("_mesh") = mesh;
     params->set<Real>("start_time") = 0.;
     params->set<Int>("num_steps") = 2;
@@ -119,7 +119,7 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
     auto mesh = gMesh1d();
 
     const std::string class_name = "GTestImplicitFENonlinearProblem";
-    Parameters * params = Factory::get_parameters(class_name);
+    Parameters * params = this->app->get_parameters(class_name);
     params->set<Mesh *>("_mesh") = mesh;
     params->set<Real>("start_time") = 0.;
     params->set<Real>("dt") = 5;

@@ -42,10 +42,10 @@ InputFile::Block::name() const
 
 //
 
-InputFile::InputFile(const App * app) :
+InputFile::InputFile(App * app) :
     PrintInterface(app),
-    LoggingInterface(const_cast<App *>(app)->get_logger()),
-    app(app),
+    LoggingInterface(app->get_logger()),
+    _app(app),
     mesh(nullptr),
     problem(nullptr)
 {
@@ -57,6 +57,12 @@ InputFile::get_file_name() const
 {
     _F_;
     return this->file_name;
+}
+
+App *
+InputFile::app() const
+{
+    return this->_app;
 }
 
 bool
@@ -137,7 +143,7 @@ InputFile::build_mesh()
     auto node = get_block(this->root, "mesh");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
-    this->mesh = Factory::create<Mesh>(class_name, "mesh", params);
+    this->mesh = app()->build_object<Mesh>(class_name, "mesh", params);
     add_object(this->mesh);
 }
 
@@ -150,7 +156,7 @@ InputFile::build_problem()
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
     params->set<Mesh *>("_mesh") = this->mesh;
-    this->problem = Factory::create<Problem>(class_name, "problem", params);
+    this->problem = app()->build_object<Problem>(class_name, "problem", params);
     add_object(this->problem);
 }
 
@@ -168,7 +174,7 @@ InputFile::build_outputs()
         Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
         params->set<Problem *>("_problem") = this->problem;
-        auto output = Factory::create<Output>(class_name, blk.name(), params);
+        auto output = app()->build_object<Output>(class_name, blk.name(), params);
         assert(this->problem != nullptr);
         this->problem->add_output(output);
     }
@@ -203,14 +209,14 @@ InputFile::build_params(const Block & block)
     if (!type)
         error("{}: No 'type' specified.", block.name());
     const std::string & class_name = type.as<std::string>();
-    if (!Factory::is_registered(class_name))
+    if (!app()->factory().is_registered(class_name))
         error("{}: Type '{}' is not a registered object.", block.name(), class_name);
     unused_param_names.erase("type");
 
-    Parameters * params = Factory::get_parameters(class_name);
+    Parameters * params = app()->get_parameters(class_name);
     params->set<std::string>("_type") = class_name;
     params->set<std::string>("_name") = block.name();
-    params->set<const App *>("_app") = this->app;
+    params->set<App *>("_app") = app();
 
     for (auto & kv : *params) {
         const std::string & param_name = kv.first;

@@ -42,6 +42,11 @@ public:
 
     virtual const std::string & version() const;
 
+    /// Get the factory for building objects
+    ///
+    /// @return Factory that builds objects
+    Factory & factory();
+
     /// Get pointer to the `Problem` class in this application
     ///
     /// @return Get problem this application is representing
@@ -79,6 +84,12 @@ public:
     [[deprecated("Use comm() instead")]] virtual const mpi::Communicator & get_comm() const;
 
     virtual const mpi::Communicator & comm() const;
+
+    /// Get parameters for a class
+    ///
+    /// @param class_name Class name to get parameters for
+    /// @return Parameters for class `class_name`
+    Parameters * get_parameters(const std::string & class_name);
 
     /// Build object using the Factory
     ///
@@ -150,6 +161,9 @@ protected:
 
     /// YML file with application objects
     InputFile * yml;
+
+    /// Faactory for building objects
+    Factory _factory;
 };
 
 template <typename T>
@@ -158,8 +172,8 @@ App::build_object(const std::string & class_name,
                   const std::string & obj_name,
                   Parameters & parameters)
 {
-    parameters.set<const App *>("_app") = this;
-    return Factory::create<T>(class_name, obj_name, parameters);
+    parameters.set<App *>("_app") = this;
+    return this->_factory.create<T>(class_name, obj_name, parameters);
 }
 
 template <typename T>
@@ -168,8 +182,8 @@ App::build_object(const std::string & class_name,
                   const std::string & obj_name,
                   Parameters * parameters)
 {
-    parameters->set<const App *>("_app") = this;
-    return Factory::create<T>(class_name, obj_name, parameters);
+    parameters->set<App *>("_app") = this;
+    return this->_factory.create<T>(class_name, obj_name, parameters);
 }
 
 } // namespace godzilla

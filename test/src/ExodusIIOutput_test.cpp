@@ -13,17 +13,17 @@ TEST(ExodusIIOutputTest, get_file_ext)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     params.set<std::string>("file") = "out";
     ExodusIIOutput out(params);
@@ -36,17 +36,17 @@ TEST(ExodusIIOutputTest, create)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     ExodusIIOutput out(params);
 
@@ -61,17 +61,17 @@ TEST(ExodusIIOutputTest, non_existent_var)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     params.set<std::vector<std::string>>("variables") = { "asdf" };
     ExodusIIOutput out(params);
@@ -93,17 +93,17 @@ TEST(ExodusIIOutputTest, check)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     ExodusIIOutput out(params);
 
@@ -160,16 +160,16 @@ TEST(ExodusIIOutputTest, fe_check)
     TestApp app;
 
     Parameters mesh_pars = Mesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     TestMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestLinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     TestLinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     ExodusIIOutput out(params);
 
@@ -189,17 +189,17 @@ TEST(ExodusIIOutputTest, output)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     ExodusIIOutput out(params);
 
@@ -217,17 +217,17 @@ TEST(ExodusIIOutputTest, set_file_name)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     params.set<std::string>("file") = "out";
     ExodusIIOutput out(params);
@@ -243,17 +243,17 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     params.set<std::string>("file") = "out";
     ExodusIIOutput out(params);

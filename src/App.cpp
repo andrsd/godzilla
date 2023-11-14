@@ -33,7 +33,7 @@ App::~App()
     _F_;
     delete this->yml;
     delete this->log;
-    Factory::destroy();
+    this->_factory.destroy();
 }
 
 const std::string &
@@ -71,6 +71,12 @@ App::get_logger() const
 {
     _F_;
     return this->log;
+}
+
+Factory &
+App::factory()
+{
+    return this->_factory;
 }
 
 Problem *
@@ -153,6 +159,12 @@ App::comm() const
 {
     _F_;
     return this->_comm;
+}
+
+Parameters *
+App::get_parameters(const std::string & class_name)
+{
+    return this->_factory.get_parameters(class_name);
 }
 
 InputFile *

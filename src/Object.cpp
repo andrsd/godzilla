@@ -8,17 +8,17 @@ Parameters
 Object::parameters()
 {
     Parameters params;
-    params.add_private_param<const App *>("_app", nullptr);
+    params.add_private_param<App *>("_app", nullptr);
     params.add_private_param<std::string>("_type", "");
     params.add_private_param<std::string>("_name", "");
     return params;
 }
 
 Object::Object(const Parameters & parameters) :
-    LoggingInterface(parameters.get<const App *>("_app")->get_logger(),
+    LoggingInterface(parameters.get<App *>("_app")->get_logger(),
                      parameters.get<std::string>("_name")),
     pars(parameters),
-    app(get_param<const App *>("_app")),
+    _app(get_param<App *>("_app")),
     type(get_param<std::string>("_type")),
     name(get_param<std::string>("_name"))
 {
@@ -58,32 +58,32 @@ Object::is_param_valid(const std::string & par_name) const
     return this->pars.is_param_valid(par_name);
 }
 
-const App *
+App *
 Object::get_app() const
 {
     _F_;
-    return this->app;
+    return this->_app;
 }
 
 const mpi::Communicator &
 Object::get_comm() const
 {
     _F_;
-    return this->app->comm();
+    return this->_app->comm();
 }
 
 const mpi::Communicator &
 Object::comm() const
 {
     _F_;
-    return this->app->comm();
+    return this->_app->comm();
 }
 
 int
 Object::get_processor_id() const
 {
     _F_;
-    return this->app->comm().rank();
+    return this->_app->comm().rank();
 }
 
 void

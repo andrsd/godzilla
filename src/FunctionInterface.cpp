@@ -25,7 +25,7 @@ FunctionInterface::valid_params_t()
 }
 
 FunctionInterface::FunctionInterface(const Parameters & params) :
-    fi_app(params.get<const App *>("_app")),
+    fi_app(params.get<App *>("_app")),
     expression(params.get<std::vector<std::string>>("value")),
     expression_t(params.has<std::vector<std::string>>("value_t")
                      ? params.get<std::vector<std::string>>("value_t")

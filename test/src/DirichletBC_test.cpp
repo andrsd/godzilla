@@ -13,18 +13,18 @@ TEST(DirichletBCTest, api)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     Parameters params = DirichletBC::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &problem;
     params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
     params.set<std::vector<std::string>>("value_t") = { "1" };
@@ -55,26 +55,26 @@ TEST(DirichletBCTest, with_user_defined_fn)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     std::string class_name = "PiecewiseLinear";
-    Parameters * fn_pars = Factory::get_parameters(class_name);
-    fn_pars->set<const App *>("_app") = &app;
+    Parameters * fn_pars = app.get_parameters(class_name);
+    fn_pars->set<App *>("_app") = &app;
     fn_pars->set<std::vector<Real>>("x") = { 0., 1. };
     fn_pars->set<std::vector<Real>>("y") = { 1., 2. };
     Function * fn = app.build_object<PiecewiseLinear>(class_name, "ipol", fn_pars);
     problem.add_function(fn);
 
-    Parameters * bc_pars = Factory::get_parameters("DirichletBC");
-    bc_pars->set<const App *>("_app") = &app;
+    Parameters * bc_pars = app.get_parameters("DirichletBC");
+    bc_pars->set<App *>("_app") = &app;
     bc_pars->set<DiscreteProblemInterface *>("_dpi") = &problem;
     bc_pars->set<std::vector<std::string>>("value") = { "ipol(x)" };
     DirichletBC * bc = app.build_object<DirichletBC>("DirichletBC", "name", bc_pars);

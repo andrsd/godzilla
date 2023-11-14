@@ -46,7 +46,7 @@ TEST(MeshTest, get_coordinates)
     TestApp app;
 
     Parameters params = TestMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestMesh mesh(params);
     mesh.create();
@@ -66,7 +66,7 @@ TEST(MeshTest, get_coordinates_local)
     TestApp app;
 
     Parameters params = TestMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestMesh mesh(params);
     mesh.create();
@@ -82,7 +82,7 @@ TEST(MeshTest, get_coordinates_section)
     TestApp app;
 
     Parameters params = TestMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestMesh mesh(params);
     mesh.create();
@@ -98,7 +98,7 @@ TEST(MeshTest, remove_label)
     TestApp app;
 
     Parameters params = TestMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestMesh mesh(params);
     mesh.create();

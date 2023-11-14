@@ -16,12 +16,12 @@ TEST(NaturalBCTest, api)
     TestApp app;
 
     Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<App *>("_app") = &app;
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
-    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     app.problem = &prob;
@@ -46,7 +46,7 @@ TEST(NaturalBCTest, api)
     };
 
     Parameters params = NaturalBC::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::vector<std::string>>("boundary") = { "left" };
     MockNaturalBC bc(params);
@@ -115,19 +115,19 @@ TEST(NaturalBCTest, fe)
     TestApp app;
 
     Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<App *>("_app") = &app;
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = GTest2FieldsFENonlinearProblem::parameters();
-    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem prob(prob_params);
     app.problem = &prob;
     prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters bc_params = TestNaturalBC::parameters();
-    bc_params.set<const App *>("_app") = &app;
+    bc_params.set<App *>("_app") = &app;
     bc_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_params.set<std::string>("_name") = "bc1";
     bc_params.set<std::vector<std::string>>("boundary") = { "left" };
@@ -165,18 +165,18 @@ TEST(NaturalBCTest, non_existing_field)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     Parameters params = TestNaturalBC::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &problem;
     params.set<std::string>("field") = "asdf";
     TestNaturalBC bc(params);
@@ -198,18 +198,18 @@ TEST(NaturalBCTest, field_param_not_specified)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     Parameters params = TestNaturalBC::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &problem;
     TestNaturalBC bc(params);
 

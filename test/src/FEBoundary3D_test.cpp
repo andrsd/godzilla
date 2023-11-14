@@ -107,7 +107,7 @@ TEST(FEBoundaryTest, nodal_normals_3d)
     TestApp app;
 
     Parameters mesh_pars = TestMesh3D::parameters();
-    mesh_pars.set<const godzilla::App *>("_app") = &app;
+    mesh_pars.set<godzilla::App *>("_app") = &app;
     TestMesh3D mesh(mesh_pars);
     mesh.create();
 

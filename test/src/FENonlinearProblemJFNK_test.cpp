@@ -127,26 +127,26 @@ TEST(FENonlinearProblemJFNKTest, solve)
     TestApp app;
 
     Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<const godzilla::App *>("_app") = &app;
+    mesh_params.set<godzilla::App *>("_app") = &app;
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = GTestFENonlinearProblemJFNK::parameters();
-    prob_params.set<const godzilla::App *>("_app") = &app;
+    prob_params.set<godzilla::App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblemJFNK prob(prob_params);
     app.problem = &prob;
 
     Parameters ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<const godzilla::App *>("_app") = &app;
+    ic_params.set<godzilla::App *>("_app") = &app;
     ic_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     ic_params.set<std::vector<Real>>("value") = { 0.1 };
     ConstantInitialCondition ic(ic_params);
     prob.add_initial_condition(&ic);
 
     Parameters bc_params = DirichletBC::parameters();
-    bc_params.set<const godzilla::App *>("_app") = &app;
-    bc_params.set<const App *>("_app") = &app;
+    bc_params.set<godzilla::App *>("_app") = &app;
+    bc_params.set<App *>("_app") = &app;
     bc_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_params.set<std::vector<std::string>>("boundary") = { "left", "right" };
     bc_params.set<std::vector<std::string>>("value") = { "x*x" };

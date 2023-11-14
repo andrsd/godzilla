@@ -98,12 +98,12 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 3;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -133,12 +133,12 @@ TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 3;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -162,12 +162,12 @@ TEST(ExplicitFELinearProblemTest, solve)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 3;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -177,7 +177,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     app.problem = &prob;
 
     Parameters bc_left_pars = DirichletBC::parameters();
-    bc_left_pars.set<const App *>("_app") = &app;
+    bc_left_pars.set<App *>("_app") = &app;
     bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
     bc_left_pars.set<std::vector<std::string>>("value") = { "1" };
@@ -185,7 +185,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     prob.add_boundary_condition(&bc_left);
 
     Parameters bc_right_pars = DirichletBC::parameters();
-    bc_right_pars.set<const App *>("_app") = &app;
+    bc_right_pars.set<App *>("_app") = &app;
     bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };
     bc_right_pars.set<std::vector<std::string>>("value") = { "1" };
@@ -222,12 +222,12 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 3;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -237,7 +237,7 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     app.problem = &prob;
 
     Parameters bc_left_pars = DirichletBC::parameters();
-    bc_left_pars.set<const App *>("_app") = &app;
+    bc_left_pars.set<App *>("_app") = &app;
     bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
     bc_left_pars.set<std::vector<std::string>>("value") = { "1" };
@@ -245,7 +245,7 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     prob.add_boundary_condition(&bc_left);
 
     Parameters bc_right_pars = DirichletBC::parameters();
-    bc_right_pars.set<const App *>("_app") = &app;
+    bc_right_pars.set<App *>("_app") = &app;
     bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };
     bc_right_pars.set<std::vector<std::string>>("value") = { "1" };
@@ -282,12 +282,12 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -320,14 +320,14 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
 
     {
         const std::string class_name = "LineMesh";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = app.get_parameters(class_name);
         params->set<Int>("nx") = 2;
         mesh = app.build_object<LineMesh>(class_name, "mesh", params);
     }
 
     {
         const std::string class_name = "TestExplicitFELinearProblem";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = app.get_parameters(class_name);
         params->set<Mesh *>("_mesh") = mesh;
         params->set<Real>("start_time") = 0.;
         params->set<Real>("end_time") = 20;

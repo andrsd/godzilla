@@ -194,12 +194,12 @@ TEST(ExplicitFVLinearProblemTest, api)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -286,12 +286,12 @@ TEST(ExplicitFVLinearProblemTest, fields)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -329,12 +329,12 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 3;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -361,12 +361,12 @@ TEST(ExplicitFVLinearProblemTest, solve)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -376,7 +376,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     app.problem = &prob;
 
     Parameters bc_left_pars = TestBC::parameters();
-    bc_left_pars.set<const App *>("_app") = &app;
+    bc_left_pars.set<App *>("_app") = &app;
     bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
     bc_left_pars.set<bool>("inlet") = true;
@@ -384,7 +384,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     prob.add_boundary_condition(&bc_left);
 
     Parameters bc_right_pars = TestBC::parameters();
-    bc_right_pars.set<const App *>("_app") = &app;
+    bc_right_pars.set<App *>("_app") = &app;
     bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };
     bc_right_pars.set<bool>("inlet") = false;
@@ -421,12 +421,12 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
@@ -456,12 +456,12 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;

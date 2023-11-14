@@ -172,19 +172,19 @@ TEST(NeumannProblemTest, solve)
     TestApp app;
 
     Parameters mesh_params = RectangleMesh::parameters();
-    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<App *>("_app") = &app;
     mesh_params.set<Int>("nx") = 2;
     mesh_params.set<Int>("ny") = 1;
     RectangleMesh mesh(mesh_params);
 
     Parameters prob_params = TestNeumannProblem::parameters();
-    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     TestNeumannProblem prob(prob_params);
     app.problem = &prob;
 
     Parameters bc_left_pars = TestNeumannBC::parameters();
-    bc_left_pars.set<const App *>("_app") = &app;
+    bc_left_pars.set<App *>("_app") = &app;
     bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_left_pars.set<std::string>("_name") = "bc1";
     bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
@@ -192,7 +192,7 @@ TEST(NeumannProblemTest, solve)
     prob.add_boundary_condition(&bc_left);
 
     Parameters bc_right_pars = TestNeumannBC::parameters();
-    bc_right_pars.set<const App *>("_app") = &app;
+    bc_right_pars.set<App *>("_app") = &app;
     bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_right_pars.set<std::string>("_name") = "bc2";
     bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };

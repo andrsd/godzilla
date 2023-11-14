@@ -102,7 +102,7 @@ TEST(UnstructuredMeshTest, api)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);
 
@@ -123,7 +123,7 @@ TEST(UnstructuredMeshTest, api_ghosted)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);
 
@@ -145,7 +145,7 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);
     mesh.create();
@@ -158,7 +158,7 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);
     mesh.create();
@@ -171,7 +171,7 @@ TEST(UnstructuredMeshTest, get_connectivity)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     TestUnstructuredMesh mesh(params);
     mesh.create();
@@ -233,7 +233,7 @@ TEST(UnstructuredMeshTest, ranges)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<Int>("nx") = 2;
     params.set<Int>("ny") = 1;
@@ -298,7 +298,7 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Int>("nx") = 1;
     params.set<Int>("ny") = 1;
     params.set<Int>("nz") = 1;
@@ -321,7 +321,7 @@ TEST(UnstructuredMesh, compute_cell_geometry)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<Int>("nx") = 2;
     params.set<Int>("ny") = 1;
@@ -379,7 +379,7 @@ TEST(UnstructuredMesh, get_face_set_label_nonexistent)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<Int>("nx") = 2;
     params.set<Int>("ny") = 1;
@@ -399,7 +399,7 @@ TEST(UnstructuredMesh, get_chart)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<Int>("nx") = 2;
     params.set<Int>("ny") = 1;
@@ -422,7 +422,7 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
     TestApp app;
 
     Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<Int>("nx") = 2;
     params.set<Int>("ny") = 1;
@@ -483,7 +483,7 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
     TestApp app;
 
     Parameters mesh_pars = TestMesh2D::parameters();
-    mesh_pars.set<const godzilla::App *>("_app") = &app;
+    mesh_pars.set<godzilla::App *>("_app") = &app;
     TestMesh2D mesh(mesh_pars);
     mesh.create();
 

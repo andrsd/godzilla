@@ -6,6 +6,7 @@
 #include "AuxiliaryField.h"
 #include "Logger.h"
 #include "Utils.h"
+#include <set>
 #include <cassert>
 
 namespace godzilla {

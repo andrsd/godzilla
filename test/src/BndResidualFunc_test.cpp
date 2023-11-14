@@ -95,12 +95,12 @@ TEST(BndResidualFuncTest, test)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 20;
@@ -109,7 +109,7 @@ TEST(BndResidualFuncTest, test)
     app.problem = &prob;
 
     Parameters bc_pars = NaturalBC::parameters();
-    bc_pars.set<const App *>("_app") = &app;
+    bc_pars.set<App *>("_app") = &app;
     bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_pars.set<std::string>("field") = "u";
     bc_pars.set<std::vector<std::string>>("boundary") = { "marker" };

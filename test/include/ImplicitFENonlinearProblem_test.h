@@ -12,7 +12,7 @@ public:
     gMesh1d()
     {
         const std::string class_name = "LineMesh";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Int>("nx") = 2;
         return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
@@ -21,7 +21,7 @@ public:
     gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "GTestImplicitFENonlinearProblem";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Mesh *>("_mesh") = mesh;
         params->set<Real>("start_time") = 0.;
         params->set<Real>("end_time") = 20;

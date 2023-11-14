@@ -11,7 +11,7 @@ TEST(ConstantICTest, api)
     App app(comm, "test");
 
     Parameters params = ConstantInitialCondition::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::vector<Real>>("value") = { 3, 4, 5 };
     ConstantInitialCondition obj(params);
 
