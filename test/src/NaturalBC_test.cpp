@@ -2,11 +2,11 @@
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
-#include "LineMesh.h"
-#include "NaturalBC.h"
-#include "WeakForm.h"
-#include "BndResidualFunc.h"
-#include "BndJacobianFunc.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/NaturalBC.h"
+#include "godzilla/WeakForm.h"
+#include "godzilla/BndResidualFunc.h"
+#include "godzilla/BndJacobianFunc.h"
 
 using namespace godzilla;
 using namespace testing;

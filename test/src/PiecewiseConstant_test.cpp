@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
-#include "Godzilla.h"
+#include "godzilla/Godzilla.h"
 #include "GodzillaApp_test.h"
-#include "PiecewiseConstant.h"
+#include "godzilla/PiecewiseConstant.h"
 
 using namespace godzilla;
 

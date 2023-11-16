@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "Init.h"
+#include "godzilla/Init.h"
 
 int
 main(int argc, char ** argv)

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ImplicitFENonlinearProblem.h"
-#include "Mesh.h"
-#include "InitialCondition.h"
+#include "godzilla/ImplicitFENonlinearProblem.h"
+#include "godzilla/Mesh.h"
+#include "godzilla/InitialCondition.h"
 #include "GodzillaApp_test.h"
 #include "GTestImplicitFENonlinearProblem.h"
 

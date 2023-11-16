@@ -1,9 +1,9 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "LineMesh.h"
-#include "DirichletBC.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/DirichletBC.h"
 #include "GTestFENonlinearProblem.h"
-#include "L2Diff.h"
+#include "godzilla/L2Diff.h"
 
 TEST(L2DiffTest, compute)
 {

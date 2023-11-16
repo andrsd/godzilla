@@ -1,8 +1,8 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
+#include "godzilla/GodzillaConfig.h"
 #include "GodzillaApp_test.h"
-#include "ExodusIIMesh.h"
-#include "Parameters.h"
+#include "godzilla/ExodusIIMesh.h"
+#include "godzilla/Parameters.h"
 #include "petsc.h"
 
 using namespace godzilla;

@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
-#include "PerfLog.h"
+#include "godzilla/GodzillaConfig.h"
+#include "godzilla/PerfLog.h"
 #include <time.h>
 
 #ifdef GODZILLA_WITH_PERF_LOG

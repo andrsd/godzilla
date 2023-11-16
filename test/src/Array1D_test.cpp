@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "Array1D.h"
-#include "DenseVector.h"
+#include "godzilla/Array1D.h"
+#include "godzilla/DenseVector.h"
 
 using namespace godzilla;
 

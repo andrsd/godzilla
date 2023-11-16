@@ -1,9 +1,9 @@
 #include "gmock/gmock.h"
-#include "Factory.h"
+#include "godzilla/Factory.h"
 #include "TestApp.h"
-#include "LineMesh.h"
+#include "godzilla/LineMesh.h"
 #include "GTestImplicitFENonlinearProblem.h"
-#include "BasicTSAdapt.h"
+#include "godzilla/BasicTSAdapt.h"
 
 using namespace godzilla;
 

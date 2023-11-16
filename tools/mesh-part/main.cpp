@@ -1,9 +1,9 @@
 #include "cxxopts/cxxopts.hpp"
 #include "fmt/printf.h"
-#include "Init.h"
-#include "App.h"
-#include "ExodusIIMesh.h"
-#include "ExodusIIOutput.h"
+#include "godzilla/Init.h"
+#include "godzilla/App.h"
+#include "godzilla/ExodusIIMesh.h"
+#include "godzilla/ExodusIIOutput.h"
 
 const char * version = "1.0";
 

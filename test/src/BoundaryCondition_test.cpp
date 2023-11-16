@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
 #include "FENonlinearProblem_test.h"
-#include "BoundaryCondition.h"
-#include "Parameters.h"
+#include "godzilla/BoundaryCondition.h"
+#include "godzilla/Parameters.h"
 #include "petsc.h"
 
 using namespace godzilla;

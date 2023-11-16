@@ -1,9 +1,9 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "LinearProblem_test.h"
-#include "LineMesh.h"
-#include "Problem.h"
-#include "MeshPartitioningOutput.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/Problem.h"
+#include "godzilla/MeshPartitioningOutput.h"
 #include "petsc.h"
 #include "petscviewerhdf5.h"
 

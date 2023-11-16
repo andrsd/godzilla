@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Mesh.h"
-#include "LinearProblem.h"
-#include "Section.h"
+#include "godzilla/Mesh.h"
+#include "godzilla/LinearProblem.h"
+#include "godzilla/Section.h"
 #include "GodzillaApp_test.h"
 
 using namespace godzilla;

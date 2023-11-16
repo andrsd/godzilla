@@ -1,11 +1,11 @@
 #include "gmock/gmock.h"
-#include "CallStack.h"
-#include "Factory.h"
+#include "godzilla/CallStack.h"
+#include "godzilla/Factory.h"
 #include "ImplicitFENonlinearProblem_test.h"
-#include "Parameters.h"
-#include "InitialCondition.h"
-#include "BoundaryCondition.h"
-#include "Output.h"
+#include "godzilla/Parameters.h"
+#include "godzilla/InitialCondition.h"
+#include "godzilla/BoundaryCondition.h"
+#include "godzilla/Output.h"
 
 using namespace godzilla;
 

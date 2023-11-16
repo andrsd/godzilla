@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "Parameters.h"
-#include "LineMesh.h"
+#include "godzilla/Parameters.h"
+#include "godzilla/LineMesh.h"
 #include "petsc.h"
 
 using namespace godzilla;

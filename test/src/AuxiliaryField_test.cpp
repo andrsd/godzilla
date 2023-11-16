@@ -1,8 +1,8 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "FENonlinearProblem.h"
-#include "AuxiliaryField.h"
-#include "ConstantAuxiliaryField.h"
+#include "godzilla/FENonlinearProblem.h"
+#include "godzilla/AuxiliaryField.h"
+#include "godzilla/ConstantAuxiliaryField.h"
 #include "FENonlinearProblem_test.h"
 
 using namespace godzilla;

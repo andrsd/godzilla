@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "Terminal.h"
+#include "godzilla/Terminal.h"
 
 using namespace godzilla;
 

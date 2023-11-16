@@ -1,6 +1,6 @@
-#include "Godzilla.h"
-#include "Mesh.h"
-#include "CallStack.h"
+#include "godzilla/Godzilla.h"
+#include "godzilla/Mesh.h"
+#include "godzilla/CallStack.h"
 
 namespace godzilla {
 

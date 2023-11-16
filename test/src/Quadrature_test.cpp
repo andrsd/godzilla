@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "Quadrature.h"
+#include "godzilla/Quadrature.h"
 
 using namespace godzilla;
 

@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "Types.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 

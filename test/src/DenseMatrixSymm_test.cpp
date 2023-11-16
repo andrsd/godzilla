@@ -1,8 +1,8 @@
 #include "gmock/gmock.h"
-#include "DenseMatrixSymm.h"
-#include "DenseVector.h"
-#include "DenseMatrix.h"
-#include "Types.h"
+#include "godzilla/DenseMatrixSymm.h"
+#include "godzilla/DenseVector.h"
+#include "godzilla/DenseMatrix.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 using namespace testing;

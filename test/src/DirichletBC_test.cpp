@@ -1,10 +1,10 @@
 #include "gtest/gtest.h"
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
-#include "Factory.h"
-#include "LineMesh.h"
-#include "DirichletBC.h"
-#include "PiecewiseLinear.h"
+#include "godzilla/Factory.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/DirichletBC.h"
+#include "godzilla/PiecewiseLinear.h"
 
 using namespace godzilla;
 

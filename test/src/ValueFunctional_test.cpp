@@ -1,8 +1,8 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "LineMesh.h"
-#include "Parameters.h"
-#include "ValueFunctional.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/Parameters.h"
+#include "godzilla/ValueFunctional.h"
 #include "GTestFENonlinearProblem.h"
 
 using namespace godzilla;

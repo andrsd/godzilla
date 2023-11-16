@@ -1,14 +1,14 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "yaml-cpp/yaml.h"
-#include "GodzillaConfig.h"
-#include "LineMesh.h"
-#include "PiecewiseLinear.h"
-#include "Postprocessor.h"
-#include "FEProblemInterface.h"
-#include "GYMLFile.h"
-#include "Problem.h"
-#include "TransientProblemInterface.h"
+#include "godzilla/GodzillaConfig.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/PiecewiseLinear.h"
+#include "godzilla/Postprocessor.h"
+#include "godzilla/FEProblemInterface.h"
+#include "godzilla/GYMLFile.h"
+#include "godzilla/Problem.h"
+#include "godzilla/TransientProblemInterface.h"
 
 using namespace godzilla;
 

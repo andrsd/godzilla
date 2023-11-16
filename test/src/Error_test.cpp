@@ -1,5 +1,5 @@
-#include "Error.h"
-#include "CallStack.h"
+#include "godzilla/Error.h"
+#include "godzilla/CallStack.h"
 #include "gmock/gmock.h"
 
 using namespace godzilla;

@@ -1,7 +1,7 @@
 #include "GTestFENonlinearProblem.h"
-#include "ResidualFunc.h"
-#include "JacobianFunc.h"
-#include "Godzilla.h"
+#include "godzilla/ResidualFunc.h"
+#include "godzilla/JacobianFunc.h"
+#include "godzilla/Godzilla.h"
 
 REGISTER_OBJECT(GTestFENonlinearProblem);
 

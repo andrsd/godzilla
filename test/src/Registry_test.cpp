@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "Registry.h"
-#include "App.h"
+#include "godzilla/Registry.h"
+#include "godzilla/App.h"
 
 using namespace godzilla;
 

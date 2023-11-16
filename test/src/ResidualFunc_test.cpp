@@ -1,8 +1,8 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "LineMesh.h"
-#include "ImplicitFENonlinearProblem.h"
-#include "ResidualFunc.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/ImplicitFENonlinearProblem.h"
+#include "godzilla/ResidualFunc.h"
 
 using namespace godzilla;
 using namespace testing;

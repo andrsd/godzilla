@@ -1,9 +1,9 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "FEGeometry.h"
-#include "FEVolumes.h"
-#include "FEShapeFns.h"
-#include "FEBoundary.h"
+#include "godzilla/FEGeometry.h"
+#include "godzilla/FEVolumes.h"
+#include "godzilla/FEShapeFns.h"
+#include "godzilla/FEBoundary.h"
 
 using namespace godzilla;
 using namespace testing;

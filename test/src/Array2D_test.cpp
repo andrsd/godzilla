@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "Array2D.h"
+#include "godzilla/Array2D.h"
 
 using namespace godzilla;
 

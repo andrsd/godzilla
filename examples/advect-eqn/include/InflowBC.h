@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NaturalRiemannBC.h"
+#include "godzilla/NaturalRiemannBC.h"
 
 using namespace godzilla;
 

@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "FEVolumes.h"
-#include "FEShapeFns.h"
+#include "godzilla/FEVolumes.h"
+#include "godzilla/FEShapeFns.h"
 
 using namespace godzilla;
 

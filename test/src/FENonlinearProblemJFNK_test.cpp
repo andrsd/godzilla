@@ -1,12 +1,12 @@
 #include "gmock/gmock.h"
-#include "Godzilla.h"
+#include "godzilla/Godzilla.h"
 #include "TestApp.h"
-#include "LineMesh.h"
-#include "FENonlinearProblem.h"
-#include "ResidualFunc.h"
-#include "JacobianFunc.h"
-#include "ConstantInitialCondition.h"
-#include "DirichletBC.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/FENonlinearProblem.h"
+#include "godzilla/ResidualFunc.h"
+#include "godzilla/JacobianFunc.h"
+#include "godzilla/ConstantInitialCondition.h"
+#include "godzilla/DirichletBC.h"
 
 using namespace godzilla;
 

@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "CSVOutput_test.h"
-#include "Postprocessor.h"
+#include "godzilla/Postprocessor.h"
 
 namespace {
 

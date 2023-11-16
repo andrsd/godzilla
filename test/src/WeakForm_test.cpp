@@ -1,13 +1,13 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "LineMesh.h"
+#include "godzilla/LineMesh.h"
 #include "GTestFENonlinearProblem.h"
-#include "ResidualFunc.h"
-#include "JacobianFunc.h"
-#include "NaturalBC.h"
-#include "BndResidualFunc.h"
-#include "BndJacobianFunc.h"
-#include "WeakForm.h"
+#include "godzilla/ResidualFunc.h"
+#include "godzilla/JacobianFunc.h"
+#include "godzilla/NaturalBC.h"
+#include "godzilla/BndResidualFunc.h"
+#include "godzilla/BndJacobianFunc.h"
+#include "godzilla/WeakForm.h"
 
 using namespace godzilla;
 

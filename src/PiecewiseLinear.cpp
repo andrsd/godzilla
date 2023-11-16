@@ -1,6 +1,6 @@
-#include "PiecewiseLinear.h"
-#include "Godzilla.h"
-#include "CallStack.h"
+#include "godzilla/PiecewiseLinear.h"
+#include "godzilla/Godzilla.h"
+#include "godzilla/CallStack.h"
 
 namespace godzilla {
 
