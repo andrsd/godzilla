@@ -173,6 +173,12 @@ install(
 )
 
 install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/mpicpp-lite
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+    FILES_MATCHING PATTERN "*.h"
+)
+
+install(
     EXPORT GodzillaTargets
     FILE GodzillaTargets.cmake
     NAMESPACE Godzilla::

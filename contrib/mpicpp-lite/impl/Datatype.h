@@ -2,14 +2,12 @@
 
 #include "mpi.h"
 
-namespace godzilla {
-
-namespace mpi {
+namespace mpicpp_lite {
 
 /// Create a new datatype for MPI communication
 ///
 /// @tparam T Datatype
-/// @return new MPI_Datatype
+/// @return New `MPI_Datatype`
 template <typename T>
 inline MPI_Datatype
 build_mpi_datatype()
@@ -31,7 +29,7 @@ build_mpi_datatype<bool>()
 /// General template to obtain an MPI_Datatype from a C++ type
 ///
 /// @tparam T C++ data type
-/// @return MPI_Datatype that is used in the MPI API
+/// @return `MPI_Datatype` that is used in the MPI API
 template <typename T>
 MPI_Datatype
 get_mpi_datatype()
@@ -139,5 +137,3 @@ get_mpi_datatype<bool>()
 }
 
 } // namespace mpi
-
-} // namespace godzilla

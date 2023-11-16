@@ -1,10 +1,12 @@
 #pragma once
 
-#include "mpi/Communicator.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include "Parameters.h"
 #include "LoggingInterface.h"
 
 namespace godzilla {
+
+namespace mpi = mpicpp_lite;
 
 class App;
 

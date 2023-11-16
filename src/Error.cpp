@@ -46,18 +46,6 @@ check_petsc_error(int ierr, const char * file, int line)
     }
 }
 
-void
-check_mpi_error(int ierr, const char * file, int line)
-{
-    if (ierr) {
-        error_print("MPI error: {}", ierr);
-        error_print("");
-        error_print("  Location: {}:{}", file, line);
-        print_call_stack();
-        terminate();
-    }
-}
-
 } // namespace internal
 
 } // namespace godzilla

@@ -1,12 +1,14 @@
 #pragma once
 
-#include "mpi/Communicator.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include "cxxopts/cxxopts.hpp"
 #include "Parameters.h"
 #include "Factory.h"
 #include "PrintInterface.h"
 
 namespace godzilla {
+
+namespace mpi = mpicpp_lite;
 
 class Problem;
 class InputFile;

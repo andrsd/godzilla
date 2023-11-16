@@ -6,9 +6,7 @@
 #include "Status.h"
 #include "Error.h"
 
-namespace godzilla {
-
-namespace mpi {
+namespace mpicpp_lite {
 
 /// Wait for a single request to complete, ignoring status
 ///
@@ -60,6 +58,4 @@ wait_any(const std::vector<Request> & requests)
     return idx;
 }
 
-} // namespace mpi
-
-} // namespace godzilla
+} // namespace mpicpp_lite
