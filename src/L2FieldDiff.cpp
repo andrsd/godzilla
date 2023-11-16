@@ -5,6 +5,7 @@
 #include "FEProblemInterface.h"
 #include "ParsedFunction.h"
 #include "Types.h"
+#include "App.h"
 
 namespace godzilla {
 
@@ -31,11 +32,11 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
             std::string nm = get_name() + "_" + field_name;
 
             const std::string class_name = "ParsedFunction";
-            Parameters * fn_pars = Factory::get_parameters(class_name);
-            fn_pars->set<const App *>("_app") = this->app;
+            Parameters * fn_pars = get_app()->get_parameters(class_name);
+            fn_pars->set<App *>("_app") = get_app();
             fn_pars->set<Problem *>("_problem") = this->problem;
             fn_pars->set<std::vector<std::string>>("function") = it.second;
-            auto * pfn = Factory::create<ParsedFunction>(class_name, nm, fn_pars);
+            auto * pfn = get_app()->build_object<ParsedFunction>(class_name, nm, fn_pars);
 
             const_cast<Problem *>(this->problem)->add_function(pfn);
             this->funcs[field_name] = pfn;

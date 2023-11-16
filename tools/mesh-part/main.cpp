@@ -73,7 +73,7 @@ UnstructuredMesh *
 MeshPartApp::load_mesh(const std::string & file_name)
 {
     auto pars = ExodusIIMesh::parameters();
-    pars.set<const App *>("_app") = this;
+    pars.set<App *>("_app") = this;
     pars.set<std::string>("file") = file_name;
     UnstructuredMesh * mesh = new ExodusIIMesh(pars);
     mesh->create();
@@ -94,7 +94,7 @@ void
 MeshPartApp::save_partition(UnstructuredMesh * mesh, const std::string & file_name)
 {
     auto pars = ExodusIIOutput::parameters();
-    pars.set<const App *>("_app") = this;
+    pars.set<App *>("_app") = this;
     pars.set<UnstructuredMesh *>("_mesh") = mesh;
     pars.set<std::string>("file") = file_name;
     ExodusIIOutput out(pars);

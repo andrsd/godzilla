@@ -82,17 +82,17 @@ TEST(WeakFormTest, test)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters bc_pars = NaturalBC::parameters();
-    bc_pars.set<const App *>("_app") = &app;
+    bc_pars.set<App *>("_app") = &app;
     bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
     bc_pars.set<std::vector<std::string>>("boundary") = { "left" };
     TestBC bc(bc_pars);

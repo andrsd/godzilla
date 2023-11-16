@@ -13,7 +13,7 @@ TEST(GmshMeshTest, api)
     std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/quad.msh");
 
     Parameters params = GmshMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("file") = file_name;
     GmshMesh mesh(params);
@@ -47,7 +47,7 @@ TEST(GmshMeshTest, nonexitent_file)
     TestApp app;
 
     Parameters params = GmshMesh::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
     params.set<std::string>("file") = "asdf.msh";
     GmshMesh mesh(params);

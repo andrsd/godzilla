@@ -3,10 +3,6 @@
 
 namespace godzilla {
 
-std::map<std::string, Factory::Entry> Factory::classes;
-std::list<Object *> Factory::objects;
-std::list<Parameters *> Factory::params;
-
 void
 Factory::destroy()
 {

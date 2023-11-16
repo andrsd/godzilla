@@ -75,6 +75,7 @@ add_executable(${PROJECT_NAME}
     Quadrature_test.cpp
     Random_test.cpp
     RectangleMesh_test.cpp
+    Registry_test.cpp
     ResidualFunc_test.cpp
     Section_test.cpp
     Terminal_test.cpp

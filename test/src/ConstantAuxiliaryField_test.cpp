@@ -11,18 +11,18 @@ TEST(ConstantAuxiliaryFieldTest, create)
     TestApp app;
 
     Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<App *>("_app") = &app;
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
-    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters aux_params = ConstantAuxiliaryField::parameters();
-    aux_params.set<const App *>("_app") = &app;
+    aux_params.set<App *>("_app") = &app;
     aux_params.set<std::string>("_name") = "aux1";
     aux_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     aux_params.set<std::vector<Real>>("value") = { 1234 };
@@ -50,18 +50,18 @@ TEST(ConstantAuxiliaryFieldTest, evaluate)
     TestApp app;
 
     Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<App *>("_app") = &app;
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
-    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters aux_params = ConstantAuxiliaryField::parameters();
-    aux_params.set<const App *>("_app") = &app;
+    aux_params.set<App *>("_app") = &app;
     aux_params.set<std::string>("_name") = "aux1";
     aux_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     aux_params.set<std::vector<Real>>("value") = { 1234 };

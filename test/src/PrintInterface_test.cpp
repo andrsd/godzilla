@@ -37,7 +37,7 @@ TEST(PrintInterfaceTest, lprintf)
     };
 
     Parameters pars = TestObject::parameters();
-    pars.set<const App *>("_app") = &app;
+    pars.set<App *>("_app") = &app;
     TestObject obj(pars);
 
     obj.create();
@@ -62,7 +62,7 @@ TEST(PrintInterfaceTest, timed_event)
     };
 
     Parameters pars = TestObject::parameters();
-    pars.set<const App *>("_app") = &app;
+    pars.set<App *>("_app") = &app;
     TestObject obj(pars);
 
     obj.create();

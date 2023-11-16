@@ -36,18 +36,18 @@ TEST(EssentialBCTest, api)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     Parameters params = TestEssentialBC::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &problem;
     TestEssentialBC bc(params);
 
@@ -81,18 +81,18 @@ TEST(EssentialBCTest, non_existing_field)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     Parameters params = TestEssentialBC::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &problem;
     params.set<std::string>("field") = "asdf";
     TestEssentialBC bc(params);
@@ -114,18 +114,18 @@ TEST(EssentialBCTest, field_param_not_specified)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.problem = &problem;
 
     Parameters params = TestEssentialBC::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &problem;
     TestEssentialBC bc(params);
 

@@ -40,7 +40,8 @@ public:
     bool is_param_valid(const std::string & par_name) const;
 
     /// Get the App this object is associated with
-    const App * get_app() const;
+
+    App * get_app() const;
 
     /// Get the MPI comm this object works on
     [[deprecated("Use comm() instead")]] const mpi::Communicator & get_comm() const;
@@ -57,12 +58,12 @@ public:
     /// Called to check object's integrity
     virtual void check();
 
-protected:
+private:
     /// Parameters of this object
     const Parameters & pars;
 
     /// The application owning this object
-    const App * app;
+    App * _app;
 
     /// The type of this object
     const std::string & type;

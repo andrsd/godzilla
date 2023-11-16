@@ -98,13 +98,13 @@ TEST(NonlinearProblemTest, initial_guess)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
     Parameters prob_pars = G1DTestNonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     G1DTestNonlinearProblem prob(prob_pars);
     prob.create();
@@ -121,13 +121,13 @@ TEST(NonlinearProblemTest, solve)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
     Parameters prob_pars = G1DTestNonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     G1DTestNonlinearProblem prob(prob_pars);
 
@@ -153,12 +153,12 @@ TEST(NonlinearProblemTest, compute_callbacks)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
 
     Parameters prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     NonlinearProblem prob(prob_pars);
 
@@ -191,13 +191,13 @@ TEST(NonlinearProblemTest, run)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
     Parameters prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     MockNonlinearProblem prob(prob_pars);
 
@@ -224,7 +224,7 @@ TEST(NonlinearProblemTest, line_search_type)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
@@ -232,7 +232,7 @@ TEST(NonlinearProblemTest, line_search_type)
     std::vector<std::string> ls_type = { "basic", "l2", "cp", "nleqerr", "shell" };
     for (auto & lst : ls_type) {
         Parameters prob_pars = NonlinearProblem::parameters();
-        prob_pars.set<const App *>("_app") = &app;
+        prob_pars.set<App *>("_app") = &app;
         prob_pars.set<Mesh *>("_mesh") = &mesh;
         prob_pars.set<std::string>("line_search") = lst;
         MockNonlinearProblem prob(prob_pars);
@@ -259,13 +259,13 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     TestApp app;
 
     Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<const App *>("_app") = &app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 1;
     LineMesh mesh(mesh_pars);
     mesh.create();
 
     Parameters prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<const App *>("_app") = &app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     prob_pars.set<std::string>("line_search") = "asdf";
     MockNonlinearProblem prob(prob_pars);

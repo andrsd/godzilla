@@ -1,7 +1,5 @@
 add_library(${PROJECT_NAME}
     SHARED
-        # factory must be first
-        Factory.cpp
         App.cpp
         AuxiliaryField.cpp
         BasicTSAdapt.cpp
@@ -24,6 +22,7 @@ add_library(${PROJECT_NAME}
         ExplicitFVLinearProblem.cpp
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
+        Factory.cpp
         FileMesh.cpp
         FileOutput.cpp
         Function.cpp
@@ -70,6 +69,7 @@ add_library(${PROJECT_NAME}
         Quadrature.cpp
         Random.cpp
         RectangleMesh.cpp
+        Registry.cpp
         ResidualFunc.cpp
         Section.cpp
         TecplotOutput.cpp

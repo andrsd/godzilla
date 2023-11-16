@@ -19,13 +19,18 @@ class Function;
 ///
 class InputFile : public PrintInterface, public LoggingInterface {
 public:
-    explicit InputFile(const App * app);
+    explicit InputFile(App * app);
     virtual ~InputFile() = default;
 
     /// Get the file name of this input file
     ///
     /// @return File name of this input file
     const std::string & get_file_name() const;
+
+    /// Get application
+    ///
+    /// @return Application this input file belongs to
+    App * app() const;
 
     /// Parse the YML file
     ///
@@ -120,7 +125,7 @@ protected:
                       std::set<std::string> & unused_param_names);
 
     /// Application object
-    const godzilla::App * app;
+    godzilla::App * _app;
     /// Name of this input file
     std::string file_name;
     /// Root node of the YML file

@@ -10,7 +10,7 @@ TEST(ParsedFunctionTest, fn_eval)
     TestApp app;
 
     Parameters params = ParsedFunction::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "fn1";
     params.set<std::vector<std::string>>("function") = { "3421" };
     ParsedFunction obj(params);
@@ -32,7 +32,7 @@ TEST(ParsedFunctionTest, eval)
     consts["Re"] = 100;
 
     Parameters params = ParsedFunction::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "fn1";
     params.set<std::vector<std::string>>("function") = { "t + x + y + Re" };
     params.set<std::map<std::string, Real>>("constants") = consts;
@@ -49,7 +49,7 @@ TEST(ParsedFunctionTest, multi_eval)
     TestApp app;
 
     Parameters params = ParsedFunction::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "fn1";
     params.set<std::vector<std::string>>("function") = { "x + 1", "2*t + y" };
     ParsedFunction obj(params);
@@ -66,7 +66,7 @@ TEST(ParsedFunctionTest, eval_via_parser)
     TestApp app;
 
     Parameters params = ParsedFunction::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "exact_fn";
     params.set<std::vector<std::string>>("function") = { "t + x + y + z" };
     ParsedFunction obj(params);

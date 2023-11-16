@@ -26,19 +26,19 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     TestApp app;
 
     Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<App *>("_app") = &app;
     mesh_params.set<Real>("xmin") = 0;
     mesh_params.set<Real>("xmax") = 1;
     mesh_params.set<Int>("nx") = 4;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
-    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     G1DTestLinearProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     MeshPartitioningOutput out(params);
 
@@ -50,19 +50,19 @@ TEST(MeshPartitioningOutputTest, output)
     TestApp app;
 
     Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<App *>("_app") = &app;
     mesh_params.set<Real>("xmin") = 0;
     mesh_params.set<Real>("xmax") = 1;
     mesh_params.set<Int>("nx") = 4;
     LineMesh mesh(mesh_params);
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
-    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     G1DTestLinearProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     MeshPartitioningOutput out(params);
     prob.add_output(&out);
@@ -92,16 +92,16 @@ TEST(MeshPartitioningOutputTest, no_dm)
     TestApp app;
 
     Parameters mesh_params = EmptyMesh::parameters();
-    mesh_params.set<const App *>("_app") = &app;
+    mesh_params.set<App *>("_app") = &app;
     EmptyMesh mesh(mesh_params);
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
-    prob_params.set<const App *>("_app") = &app;
+    prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     G1DTestLinearProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
-    params.set<const App *>("_app") = &app;
+    params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     MeshPartitioningOutput out(params);
 

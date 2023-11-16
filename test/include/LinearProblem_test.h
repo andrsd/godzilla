@@ -58,7 +58,7 @@ protected:
     gMesh1d()
     {
         const std::string class_name = "LineMesh";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Int>("nx") = 1;
         return this->app->build_object<Mesh>(class_name, "mesh", params);
     }
@@ -67,7 +67,7 @@ protected:
     gMesh2d()
     {
         const std::string class_name = "RectangleMesh";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Int>("nx") = 1;
         params->set<Int>("ny") = 1;
         return this->app->build_object<Mesh>(class_name, "mesh", params);
@@ -77,7 +77,7 @@ protected:
     gMesh3d()
     {
         const std::string class_name = "BoxMesh";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Int>("nx") = 1;
         params->set<Int>("ny") = 1;
         params->set<Int>("nz") = 1;
@@ -88,7 +88,7 @@ protected:
     gProblem1d(Mesh * mesh)
     {
         const std::string class_name = "G1DTestLinearProblem";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Mesh *>("_mesh") = mesh;
         return this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
     }
@@ -97,7 +97,7 @@ protected:
     gProblem2d(Mesh * mesh)
     {
         const std::string class_name = "G2DTestLinearProblem";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Mesh *>("_mesh") = mesh;
         return this->app->build_object<G2DTestLinearProblem>(class_name, "problem", params);
     }
@@ -106,7 +106,7 @@ protected:
     gProblem3d(Mesh * mesh)
     {
         const std::string class_name = "G3DTestLinearProblem";
-        Parameters * params = Factory::get_parameters(class_name);
+        Parameters * params = this->app->get_parameters(class_name);
         params->set<Mesh *>("_mesh") = mesh;
         return this->app->build_object<G3DTestLinearProblem>(class_name, "problem", params);
     }

@@ -18,13 +18,13 @@ public:
 
         {
             const std::string class_name = "LineMesh";
-            Parameters * params = Factory::get_parameters(class_name);
+            Parameters * params = this->app->get_parameters(class_name);
             params->set<Int>("nx") = 2;
             this->mesh = this->app->build_object<UnstructuredMesh>(class_name, "mesh", params);
         }
         {
             const std::string class_name = "GTestFENonlinearProblem";
-            Parameters * params = Factory::get_parameters(class_name);
+            Parameters * params = this->app->get_parameters(class_name);
             params->set<Mesh *>("_mesh") = this->mesh;
             this->prob =
                 this->app->build_object<GTestFENonlinearProblem>(class_name, "prob", params);
@@ -51,13 +51,13 @@ public:
 
         {
             const std::string class_name = "LineMesh";
-            Parameters * params = Factory::get_parameters(class_name);
+            Parameters * params = this->app->get_parameters(class_name);
             params->set<Int>("nx") = 2;
             this->mesh = this->app->build_object<Mesh>(class_name, "mesh", params);
         }
         {
             const std::string class_name = "GTest2FieldsFENonlinearProblem";
-            Parameters * params = Factory::get_parameters(class_name);
+            Parameters * params = this->app->get_parameters(class_name);
             params->set<Mesh *>("_mesh") = this->mesh;
             this->prob =
                 this->app->build_object<GTest2FieldsFENonlinearProblem>(class_name, "prob", params);

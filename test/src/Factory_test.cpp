@@ -6,36 +6,43 @@
 
 using namespace godzilla;
 
-TEST(FactoryTest, valid_params_unreg_obj)
-{
-    EXPECT_DEATH(Parameters * params = Factory::get_parameters("ASDF"),
-                 "Getting valid_params for object 'ASDF' failed.  Object is not registered.");
-}
+namespace {
 
-TEST(FactoryTest, create_unreg_obj)
-{
-    Parameters params;
-    EXPECT_DEATH(Factory::create<Object>("ASDF", "name", params),
-                 "Trying to create object of unregistered type 'ASDF'.");
-}
+class TestObject : public Object {
+public:
+    explicit TestObject(const Parameters & parameters) : Object(parameters) {}
+};
 
-TEST(FactoryTest, create_reg_obj)
+REGISTER_OBJECT(TestObject);
+
+} // namespace
+
+TEST(FactoryTest, get_parameters)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app(comm, "test");
 
-    Parameters * params = Factory::get_parameters("LineMesh");
-    params->set<Int>("nx") = 1;
-    app.build_object<LineMesh>("LineMesh", "name", params);
+    Factory factory;
+    auto params = factory.get_parameters("TestObject");
+    params->set<App *>("_app") = &app;
+    factory.create<TestObject>("TestObject", "name", params);
+}
+
+TEST(FactoryTest, is_registered)
+{
+    Factory factory;
+    EXPECT_TRUE(factory.is_registered("LineMesh"));
+    EXPECT_FALSE(factory.is_registered("ASDF"));
 }
 
 TEST(FactoryTest, create_wrong_type)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app(comm, "test");
-
-    Parameters * params = Factory::get_parameters("LineMesh");
+    Factory factory;
+    Parameters * params = factory.get_parameters("LineMesh");
+    params->set<App *>("_app") = &app;
     params->set<Int>("nx") = 1;
-    EXPECT_DEATH(app.build_object<RectangleMesh>("LineMesh", "name", params),
+    EXPECT_DEATH(factory.create<RectangleMesh>("LineMesh", "name", params),
                  "\\[ERROR\\] Instantiation of object 'name:\\[LineMesh\\]' failed\\.");
 }

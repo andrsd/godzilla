@@ -16,7 +16,7 @@ namespace {
 
 class MockGYMLFile : public GYMLFile {
 public:
-    explicit MockGYMLFile(const App * app) : GYMLFile(app) {}
+    explicit MockGYMLFile(App * app) : GYMLFile(app) {}
 
     MOCK_METHOD(void, build_mesh, (), ());
     MOCK_METHOD(void, build_problem, (), ());
@@ -106,7 +106,7 @@ TEST_F(GYMLFileTest, parse_empty)
 {
     class TestGYMLFile : public GYMLFile {
     public:
-        explicit TestGYMLFile(const App * app) : GYMLFile(app) {}
+        explicit TestGYMLFile(App * app) : GYMLFile(app) {}
 
         const Block &
         get_yml()
@@ -230,7 +230,7 @@ TEST_F(GYMLFileTest, funcs)
 {
     class TestGYMLFile : public GYMLFile {
     public:
-        explicit TestGYMLFile(const App * app) : GYMLFile(app) {}
+        explicit TestGYMLFile(App * app) : GYMLFile(app) {}
         void
         build()
         {

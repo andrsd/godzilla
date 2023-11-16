@@ -18,7 +18,7 @@
 
 namespace godzilla {
 
-GYMLFile::GYMLFile(const App * app) : InputFile(app)
+GYMLFile::GYMLFile(App * app) : InputFile(app)
 {
     _F_;
 }
@@ -53,7 +53,7 @@ GYMLFile::build_functions()
         Block blk = get_block(funcs_block, it.first.as<std::string>());
         Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
-        auto fn = Factory::create<Function>(class_name, blk.name(), params);
+        auto fn = app()->build_object<Function>(class_name, blk.name(), params);
         assert(this->problem != nullptr);
         this->problem->add_function(fn);
     }
@@ -82,7 +82,7 @@ GYMLFile::build_ts_adapt(const Block & problem_node)
         params->set<const TransientProblemInterface *>("_tpi") = tpi;
 
         const auto & class_name = params->get<std::string>("_type");
-        auto * ts_adaptor = Factory::create<TimeSteppingAdaptor>(class_name, "ts_adapt", params);
+        auto * ts_adaptor = app()->build_object<TimeSteppingAdaptor>(class_name, "ts_adapt", params);
         tpi->set_time_stepping_adaptor(ts_adaptor);
     }
     else
@@ -132,7 +132,7 @@ GYMLFile::build_auxiliary_fields()
             Parameters * params = build_params(blk);
             params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
-            auto aux = Factory::create<AuxiliaryField>(class_name, blk.name(), params);
+            auto aux = app()->build_object<AuxiliaryField>(class_name, blk.name(), params);
             dpi->add_auxiliary_field(aux);
         }
     }
@@ -160,7 +160,7 @@ GYMLFile::build_initial_conditions()
             Parameters * params = build_params(blk);
             params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
-            auto ic = Factory::create<InitialCondition>(class_name, blk.name(), params);
+            auto ic = app()->build_object<InitialCondition>(class_name, blk.name(), params);
             dpi->add_initial_condition(ic);
         }
     }
@@ -185,7 +185,7 @@ GYMLFile::build_boundary_conditions()
             Parameters * params = build_params(blk);
             params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
-            auto bc = Factory::create<BoundaryCondition>(class_name, blk.name(), params);
+            auto bc = app()->build_object<BoundaryCondition>(class_name, blk.name(), params);
             dpi->add_boundary_condition(bc);
         }
     }
@@ -205,7 +205,7 @@ GYMLFile::build_postprocessors()
         Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
         params->set<Problem *>("_problem") = this->problem;
-        auto pp = Factory::create<Postprocessor>(class_name, blk.name(), params);
+        auto pp = app()->build_object<Postprocessor>(class_name, blk.name(), params);
         problem->add_postprocessor(pp);
     }
 }

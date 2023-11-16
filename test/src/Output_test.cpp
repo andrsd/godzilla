@@ -32,7 +32,7 @@ public:
 TEST_F(OutputTest, exec_masks_1)
 {
     Parameters pars = Output::parameters();
-    pars.set<const App *>("_app") = app;
+    pars.set<App *>("_app") = app;
     pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "none" };
     MockOutput out(pars);
@@ -46,7 +46,7 @@ TEST_F(OutputTest, exec_masks_1)
 TEST_F(OutputTest, exec_masks_2)
 {
     Parameters pars = Output::parameters();
-    pars.set<const App *>("_app") = app;
+    pars.set<App *>("_app") = app;
     pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "final" };
     MockOutput out(pars);
@@ -61,7 +61,7 @@ TEST_F(OutputTest, exec_masks_2)
 TEST_F(OutputTest, exec_masks_3)
 {
     Parameters pars = Output::parameters();
-    pars.set<const App *>("_app") = app;
+    pars.set<App *>("_app") = app;
     pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "final", "initial", "timestep" };
     MockOutput out(pars);
@@ -81,7 +81,7 @@ TEST_F(OutputTest, empty_on)
     testing::internal::CaptureStderr();
 
     Parameters pars = Output::parameters();
-    pars.set<const App *>("_app") = app;
+    pars.set<App *>("_app") = app;
     pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = {};
     MockOutput out(pars);
@@ -100,7 +100,7 @@ TEST_F(OutputTest, none_plus_mask)
     testing::internal::CaptureStderr();
 
     Parameters pars = Output::parameters();
-    pars.set<const App *>("_app") = app;
+    pars.set<App *>("_app") = app;
     pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "none", "final", "timestep" };
     MockOutput out(pars);
@@ -118,7 +118,7 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
     testing::internal::CaptureStderr();
 
     Parameters pars = Output::parameters();
-    pars.set<const App *>("_app") = app;
+    pars.set<App *>("_app") = app;
     pars.set<Problem *>("_problem") = prob;
     pars.set<std::vector<std::string>>("on") = { "initial", "final" };
     pars.set<Int>("interval") = 10;

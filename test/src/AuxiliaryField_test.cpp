@@ -49,7 +49,7 @@ TEST_F(AuxiliaryFieldTest, api)
     prob->set_aux_fe(0, "fld", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
-    params.set<const App *>("_app") = app;
+    params.set<App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("field") = "fld";
@@ -104,7 +104,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
     prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
-    params.set<const App *>("_app") = app;
+    params.set<App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     TestAuxFld aux(params);
@@ -151,7 +151,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
     prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
-    params.set<const App *>("_app") = app;
+    params.set<App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     TestAuxFld aux(params);
@@ -198,7 +198,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
-    params.set<const App *>("_app") = app;
+    params.set<App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("region") = "asdf";
@@ -219,7 +219,7 @@ TEST_F(AuxiliaryFieldTest, name_already_taken)
     prob->set_aux_fe(0, "fld", 1, 1);
 
     Parameters params = ConstantAuxiliaryField::parameters();
-    params.set<const App *>("_app") = app;
+    params.set<App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::vector<Real>>("value") = { 1 };
@@ -260,7 +260,7 @@ TEST_F(AuxiliaryFieldTest, get_value)
     prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
-    params.set<const App *>("_app") = app;
+    params.set<App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("region") = "asdf";
@@ -307,7 +307,7 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
     prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
-    params.set<const App *>("_app") = app;
+    params.set<App *>("_app") = app;
     params.set<std::string>("_name") = "aux";
     params.set<DiscreteProblemInterface *>("_dpi") = prob;
     params.set<std::string>("region") = "asdf";

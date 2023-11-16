@@ -1,43 +1,23 @@
 #pragma once
 
-#include <set>
 #include <list>
 #include <ctime>
 #include "Object.h"
+#include "Registry.h"
 #include "Error.h"
 
 #define COMBINE_NAMES1(X, Y) X##Y
 #define COMBINE_NAMES(X, Y) COMBINE_NAMES1(X, Y)
 
-#define REGISTER_OBJECT(classname)                                                  \
-    static char COMBINE_NAMES(dummyvar_for_registering_obj_##classname, __LINE__) = \
-        godzilla::Factory::reg<classname>(#classname)
+#define REGISTER_OBJECT(classname)                                                     \
+    static char COMBINE_NAMES(dummyvar_for_registering_obj_##classname, __COUNTER__) = \
+        godzilla::Registry::instance().reg<classname>(#classname)
 
-#define REGISTER_OBJECT_ALIAS(classname, alias)                                     \
-    static char COMBINE_NAMES(dummyvar_for_registering_obj_##classname, __LINE__) = \
-        godzilla::Factory::reg<classname>(#alias)
+#define REGISTER_OBJECT_ALIAS(classname, alias)                                        \
+    static char COMBINE_NAMES(dummyvar_for_registering_obj_##classname, __COUNTER__) = \
+        godzilla::Registry::instance().reg<classname>(#alias)
 
 namespace godzilla {
-
-using ObjectPtr = Object *;
-
-using ParamsPtr = Parameters (*)();
-
-using BuildPtr = ObjectPtr (*)(const Parameters & parameters);
-
-template <typename T>
-ObjectPtr
-build_obj(const Parameters & parameters)
-{
-    return new T(parameters);
-}
-
-template <typename T>
-auto
-call_parameters() -> decltype(T::parameters(), Parameters())
-{
-    return T::parameters();
-}
 
 class Parameters;
 
@@ -45,87 +25,70 @@ class Parameters;
 ///
 class Factory {
 public:
-    struct Entry {
-        BuildPtr build_ptr;
-        ParamsPtr params_ptr;
-    };
-
-    /// Register an object
-    /// @param class_name Name of the object to register
-    template <typename T>
-    static char
-    reg(const std::string & class_name)
-    {
-        Entry entry = { &build_obj<T>, &call_parameters<T> };
-        classes[class_name] = entry;
-        return '\0';
-    }
-
     /// Get valid parameters for the object
+    ///
     /// @param class_name Name of the object whose parameter we are requesting
     /// @return Parameters of the object
-    static Parameters *
+    Parameters *
     get_parameters(const std::string & class_name)
     {
-        auto it = classes.find(class_name);
-        if (it == classes.end())
-            error("Getting valid_params for object '{}' failed.  Object is not registered.",
-                  class_name);
-
-        Entry & entry = it->second;
-        auto * ips = new Parameters((*entry.params_ptr)());
-        params.push_back(ips);
-        return ips;
+        auto registry = Registry::instance();
+        auto entry = registry.get(class_name);
+        auto pars = new Parameters((*entry.params_ptr)());
+        this->params.push_back(pars);
+        return pars;
     }
 
-    /// Build an object (must be registered)
-    /// @param class_name Type of the object being constructed
+    /// Build an object (must be registered in Registry)
+    ///
     /// @param name Name for the object
     /// @param parameters Parameters this object should have
     /// @return The created object
     template <typename T>
-    static T *
+    T *
     create(const std::string & class_name, const std::string & name, Parameters & parameters)
     {
-        auto it = classes.find(class_name);
-        if (it == classes.end())
-            error("Trying to create object of unregistered type '{}'.", class_name);
-        else {
-            parameters.set<std::string>("_type") = class_name;
-            parameters.set<std::string>("_name") = name;
-
-            auto entry = it->second;
-            T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
-            if (object == nullptr)
-                error("Instantiation of object '{}:[{}]' failed.", name, class_name);
-            objects.push_back(object);
-            return object;
-        }
+        auto registry = Registry::instance();
+        auto entry = registry.get(class_name);
+        parameters.set<std::string>("_type") = class_name;
+        parameters.set<std::string>("_name") = name;
+        T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
+        if (object == nullptr)
+            error("Instantiation of object '{}:[{}]' failed.", name, class_name);
+        this->objects.push_back(object);
+        return object;
     }
 
+    /// Build an object (must be registered in Registry)
+    ///
+    /// @param name Name for the object
+    /// @param parameters Parameters this object should have
+    /// @return The created object
     template <typename T>
-    static T *
+    T *
     create(const std::string & class_name, const std::string & name, Parameters * parameters)
     {
         return create<T>(class_name, name, *parameters);
     }
 
-    static bool
-    is_registered(const std::string & class_name)
+    /// Check if class is registered
+    ///
+    /// @param class_name Class name to check
+    /// @return `true` if class name is known, `false` otherwise
+    bool
+    is_registered(const std::string & class_name) const
     {
-        auto it = classes.find(class_name);
-        return it != classes.end();
+        return Registry::instance().exists(class_name);
     }
 
-    static void destroy();
+    /// Destroy all object build by this factory
+    void destroy();
 
 protected:
-    /// All registered classes that this factory can build
-    static std::map<std::string, Entry> classes;
     /// All objects built by this factory
-    static std::list<Object *> objects;
+    std::list<Object *> objects;
     /// All Parameters objects built by this factory
-    static std::list<Parameters *> params;
+    std::list<Parameters *> params;
 };
 
 } // namespace godzilla
