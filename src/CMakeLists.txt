@@ -157,12 +157,12 @@ install(
 
 install(
     DIRECTORY ${CMAKE_SOURCE_DIR}/include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.h"
 )
 
 install(
-    FILES ${CMAKE_BINARY_DIR}/GodzillaConfig.h
+    FILES ${CMAKE_BINARY_DIR}/godzilla/GodzillaConfig.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
 )
 
@@ -181,7 +181,7 @@ install(
 install(
     EXPORT GodzillaTargets
     FILE GodzillaTargets.cmake
-    NAMESPACE Godzilla::
+    NAMESPACE godzilla::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
 )
 
