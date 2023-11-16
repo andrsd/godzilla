@@ -3,7 +3,6 @@
 #include "Object.h"
 #include "App.h"
 #include "Utils.h"
-#include "mpi/Communicator.h"
 
 namespace godzilla {
 

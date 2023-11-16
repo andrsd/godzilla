@@ -15,8 +15,3 @@ TEST(ErrorTest, petsc_check_macro)
 {
     EXPECT_DEATH(PETSC_CHECK(123), "\\[ERROR\\] PETSc error: 123");
 }
-
-TEST(ErrorTest, mpi_check_macro)
-{
-    EXPECT_DEATH(MPI_CHECK(123), "\\[ERROR\\] MPI error: 123");
-}

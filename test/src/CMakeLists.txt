@@ -120,34 +120,3 @@ endif()
 if (DEFINED ENV{CONDA_PREFIX})
     set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
 endif()
-
-#
-
-if (GODZILLA_WITH_MPI)
-
-add_executable(par-${PROJECT_NAME}
-    MPI_test.cpp
-    mpi_main.cpp
-)
-
-target_include_directories(
-    par-${PROJECT_NAME}
-    PUBLIC
-        ${PROJECT_SOURCE_DIR}/include
-        ${CMAKE_BINARY_DIR}
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/contrib
-)
-
-target_link_libraries(
-    par-${PROJECT_NAME}
-    PUBLIC
-        godzilla
-        gtest_main
-        gmock_main
-    PRIVATE
-        MPI::MPI_CXX
-        ${PETSC_LIBRARY}
-)
-
-endif()

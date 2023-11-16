@@ -2,14 +2,13 @@
 
 #include <string>
 #include "fmt/printf.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include "GodzillaConfig.h"
 #include "PerfLog.h"
 
 namespace godzilla {
 
-namespace mpi {
-class Communicator;
-}
+namespace mpi = mpicpp_lite;
 
 class Object;
 class App;
