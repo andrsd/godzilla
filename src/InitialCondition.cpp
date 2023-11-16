@@ -1,7 +1,7 @@
-#include "Godzilla.h"
-#include "CallStack.h"
-#include "InitialCondition.h"
-#include "DiscreteProblemInterface.h"
+#include "godzilla/Godzilla.h"
+#include "godzilla/CallStack.h"
+#include "godzilla/InitialCondition.h"
+#include "godzilla/DiscreteProblemInterface.h"
 #include <cassert>
 
 namespace godzilla {

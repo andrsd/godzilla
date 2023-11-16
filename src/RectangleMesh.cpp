@@ -1,6 +1,6 @@
-#include "Godzilla.h"
-#include "RectangleMesh.h"
-#include "CallStack.h"
+#include "godzilla/Godzilla.h"
+#include "godzilla/RectangleMesh.h"
+#include "godzilla/CallStack.h"
 #include "petscdmplex.h"
 #include <array>
 

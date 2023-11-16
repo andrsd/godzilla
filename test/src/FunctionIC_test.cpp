@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
-#include "Factory.h"
+#include "godzilla/Factory.h"
 #include "TestApp.h"
-#include "LineMesh.h"
+#include "godzilla/LineMesh.h"
 #include "GTestFENonlinearProblem.h"
-#include "FunctionInitialCondition.h"
+#include "godzilla/FunctionInitialCondition.h"
 
 using namespace godzilla;
 

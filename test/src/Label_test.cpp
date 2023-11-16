@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "Label.h"
+#include "godzilla/Label.h"
 #include "TestApp.h"
 
 using namespace testing;

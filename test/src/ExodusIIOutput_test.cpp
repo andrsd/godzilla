@@ -2,8 +2,8 @@
 #include "GodzillaApp_test.h"
 #include "FENonlinearProblem_test.h"
 #include "LinearProblem_test.h"
-#include "ExodusIIOutput.h"
-#include "LineMesh.h"
+#include "godzilla/ExodusIIOutput.h"
+#include "godzilla/LineMesh.h"
 #include "petsc.h"
 
 using namespace godzilla;

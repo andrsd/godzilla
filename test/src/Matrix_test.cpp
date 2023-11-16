@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "Matrix.h"
+#include "godzilla/Matrix.h"
 
 using namespace godzilla;
 

@@ -1,8 +1,8 @@
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
-#include "Parameters.h"
-#include "LineMesh.h"
-#include "ConstantAuxiliaryField.h"
+#include "godzilla/Parameters.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/ConstantAuxiliaryField.h"
 
 using namespace godzilla;
 

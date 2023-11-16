@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NaturalBC.h"
+#include "godzilla/NaturalBC.h"
 
 using namespace godzilla;
 

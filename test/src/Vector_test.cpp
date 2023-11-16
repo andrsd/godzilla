@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "Vector.h"
-#include "PerfLog.h"
+#include "godzilla/Vector.h"
+#include "godzilla/PerfLog.h"
 
 using namespace godzilla;
 

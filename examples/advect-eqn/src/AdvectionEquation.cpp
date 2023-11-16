@@ -1,7 +1,7 @@
-#include "Godzilla.h"
-#include "FunctionInterface.h"
+#include "godzilla/Godzilla.h"
+#include "godzilla/FunctionInterface.h"
 #include "AdvectionEquation.h"
-#include "CallStack.h"
+#include "godzilla/CallStack.h"
 
 using namespace godzilla;
 

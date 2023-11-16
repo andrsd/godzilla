@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
-#include "App.h"
+#include "godzilla/App.h"
 #include "FENonlinearProblem_test.h"
-#include "Output.h"
+#include "godzilla/Output.h"
 
 using namespace godzilla;
 

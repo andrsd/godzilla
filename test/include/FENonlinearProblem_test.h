@@ -1,9 +1,9 @@
 #pragma once
 
 #include "gmock/gmock.h"
-#include "UnstructuredMesh.h"
-#include "FENonlinearProblem.h"
-#include "InitialCondition.h"
+#include "godzilla/UnstructuredMesh.h"
+#include "godzilla/FENonlinearProblem.h"
+#include "godzilla/InitialCondition.h"
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"

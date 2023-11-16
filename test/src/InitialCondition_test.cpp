@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
 #include "FENonlinearProblem_test.h"
-#include "InitialCondition.h"
-#include "Parameters.h"
+#include "godzilla/InitialCondition.h"
+#include "godzilla/Parameters.h"
 
 using namespace godzilla;
 using namespace testing;

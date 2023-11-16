@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "FEGeometry.h"
-#include "FEShapeFns.h"
+#include "godzilla/FEGeometry.h"
+#include "godzilla/FEShapeFns.h"
 
 using namespace godzilla;
 using namespace testing;

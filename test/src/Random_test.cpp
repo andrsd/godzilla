@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "Random.h"
+#include "godzilla/Random.h"
 
 using namespace godzilla;
 

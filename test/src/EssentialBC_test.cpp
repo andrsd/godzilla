@@ -2,10 +2,10 @@
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
-#include "Factory.h"
-#include "LineMesh.h"
-#include "EssentialBC.h"
-#include "PiecewiseLinear.h"
+#include "godzilla/Factory.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/EssentialBC.h"
+#include "godzilla/PiecewiseLinear.h"
 
 using namespace godzilla;
 using namespace testing;

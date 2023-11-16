@@ -1,9 +1,9 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "LineMesh.h"
-#include "ImplicitFENonlinearProblem.h"
-#include "NaturalBC.h"
-#include "BndResidualFunc.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/ImplicitFENonlinearProblem.h"
+#include "godzilla/NaturalBC.h"
+#include "godzilla/BndResidualFunc.h"
 
 using namespace godzilla;
 using namespace testing;

@@ -1,10 +1,10 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "LineMesh.h"
-#include "Problem.h"
-#include "Function.h"
-#include "Output.h"
-#include "Postprocessor.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/Problem.h"
+#include "godzilla/Function.h"
+#include "godzilla/Output.h"
+#include "godzilla/Postprocessor.h"
 
 using namespace godzilla;
 

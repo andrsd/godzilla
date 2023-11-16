@@ -1,9 +1,9 @@
 #include "gmock/gmock.h"
-#include "Factory.h"
-#include "Mesh.h"
+#include "godzilla/Factory.h"
+#include "godzilla/Mesh.h"
 #include "LinearProblem_test.h"
-#include "Parameters.h"
-#include "Output.h"
+#include "godzilla/Parameters.h"
+#include "godzilla/Output.h"
 #include "petsc.h"
 #include "petscmat.h"
 

@@ -98,6 +98,6 @@ endif()
 
 # Config file
 
-configure_file(include/GodzillaConfig.h.in GodzillaConfig.h)
+configure_file(include/GodzillaConfig.h.in godzilla/GodzillaConfig.h)
 
 add_subdirectory(docs)

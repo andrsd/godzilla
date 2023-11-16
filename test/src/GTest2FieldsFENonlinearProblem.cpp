@@ -1,5 +1,5 @@
 #include "GTest2FieldsFENonlinearProblem.h"
-#include "Godzilla.h"
+#include "godzilla/Godzilla.h"
 
 REGISTER_OBJECT(GTest2FieldsFENonlinearProblem);
 

@@ -1,9 +1,9 @@
 #include "gmock/gmock.h"
-#include "CallStack.h"
-#include "LineMesh.h"
-#include "NaturalRiemannBC.h"
-#include "ExplicitFVLinearProblem.h"
-#include "Parameters.h"
+#include "godzilla/CallStack.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/NaturalRiemannBC.h"
+#include "godzilla/ExplicitFVLinearProblem.h"
+#include "godzilla/Parameters.h"
 #include "TestApp.h"
 
 using namespace godzilla;

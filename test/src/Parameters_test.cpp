@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
-#include "Types.h"
-#include "Parameters.h"
-#include "Factory.h"
+#include "godzilla/Types.h"
+#include "godzilla/Parameters.h"
+#include "godzilla/Factory.h"
 
 using namespace godzilla;
 

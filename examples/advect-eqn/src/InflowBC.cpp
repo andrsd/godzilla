@@ -1,5 +1,5 @@
-#include "Godzilla.h"
-#include "CallStack.h"
+#include "godzilla/Godzilla.h"
+#include "godzilla/CallStack.h"
 #include "InflowBC.h"
 
 REGISTER_OBJECT(InflowBC);

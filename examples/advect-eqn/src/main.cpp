@@ -1,5 +1,5 @@
-#include "App.h"
-#include "Init.h"
+#include "godzilla/App.h"
+#include "godzilla/Init.h"
 
 int
 main(int argc, char * argv[])

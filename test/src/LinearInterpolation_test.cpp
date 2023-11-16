@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "Godzilla.h"
-#include "LinearInterpolation.h"
+#include "godzilla/Godzilla.h"
+#include "godzilla/LinearInterpolation.h"
 
 using namespace godzilla;
 

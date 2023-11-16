@@ -105,7 +105,7 @@ target_include_directories(
     ${PROJECT_NAME}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
-        $<INSTALL_INTERFACE:include/godzilla>
+        $<INSTALL_INTERFACE:include>
     PRIVATE
         ${PETSC_INCLUDE_DIR}
         ${CMAKE_SOURCE_DIR}/include

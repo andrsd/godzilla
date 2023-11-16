@@ -1,9 +1,9 @@
-#include "GodzillaConfig.h"
+#include "godzilla/GodzillaConfig.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "Mesh.h"
-#include "Problem.h"
-#include "GYMLFile.h"
+#include "godzilla/Mesh.h"
+#include "godzilla/Problem.h"
+#include "godzilla/GYMLFile.h"
 
 using namespace godzilla;
 

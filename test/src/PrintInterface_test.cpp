@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
-#include "GodzillaConfig.h"
+#include "godzilla/GodzillaConfig.h"
 #include "GodzillaApp_test.h"
-#include "PrintInterface.h"
+#include "godzilla/PrintInterface.h"
 
 using namespace godzilla;
 

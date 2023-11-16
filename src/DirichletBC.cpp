@@ -1,6 +1,6 @@
-#include "Godzilla.h"
-#include "CallStack.h"
-#include "DirichletBC.h"
+#include "godzilla/Godzilla.h"
+#include "godzilla/CallStack.h"
+#include "godzilla/DirichletBC.h"
 
 namespace godzilla {
 

@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
-#include "IndexSet.h"
+#include "godzilla/IndexSet.h"
 
 using namespace godzilla;
 using namespace testing;

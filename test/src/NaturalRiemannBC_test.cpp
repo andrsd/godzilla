@@ -1,7 +1,7 @@
 #include "gmock/gmock.h"
-#include "LineMesh.h"
-#include "NaturalRiemannBC.h"
-#include "ExplicitFVLinearProblem.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/NaturalRiemannBC.h"
+#include "godzilla/ExplicitFVLinearProblem.h"
 #include "TestApp.h"
 
 using namespace godzilla;

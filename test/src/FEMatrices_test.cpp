@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "FEMatrices.h"
+#include "godzilla/FEMatrices.h"
 
 using namespace godzilla;
 

@@ -1,5 +1,5 @@
 #include "gmock/gmock.h"
-#include "DependencyGraph.h"
+#include "godzilla/DependencyGraph.h"
 
 using namespace godzilla;
 using namespace testing;

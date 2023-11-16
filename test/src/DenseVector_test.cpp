@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "DenseVector.h"
-#include "DenseMatrix.h"
+#include "godzilla/DenseVector.h"
+#include "godzilla/DenseMatrix.h"
 
 using namespace godzilla;
 using namespace testing;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Problem.h"
-#include "CSVOutput.h"
+#include "godzilla/Problem.h"
+#include "godzilla/CSVOutput.h"
 #include "FENonlinearProblem_test.h"
 
 class CSVOutputTest : public FENonlinearProblemTest {
