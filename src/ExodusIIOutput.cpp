@@ -7,7 +7,7 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/IndexSet.h"
-#include "exodusIIcpp.h"
+#include "exodusIIcpp/exodusIIcpp.h"
 #include "fmt/printf.h"
 #include "fmt/format.h"
 #include "fmt/chrono.h"

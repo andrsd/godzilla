@@ -2,7 +2,7 @@
 #include "godzilla/ExodusIIMesh.h"
 #include "godzilla/App.h"
 #include "godzilla/CallStack.h"
-#include "exodusIIcpp.h"
+#include "exodusIIcpp/exodusIIcpp.h"
 
 namespace godzilla {
 
