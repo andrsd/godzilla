@@ -181,7 +181,7 @@ install(
 install(
     EXPORT GodzillaTargets
     FILE GodzillaTargets.cmake
-    NAMESPACE Godzilla::
+    NAMESPACE godzilla::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
 )
 
