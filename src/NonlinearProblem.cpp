@@ -250,14 +250,14 @@ void
 NonlinearProblem::snes_monitor_callback(Int it, Real norm)
 {
     _F_;
-    lprintf(7, "{} Non-linear residual: {:e}", it, norm);
+    lprint(7, "{} Non-linear residual: {:e}", it, norm);
 }
 
 void
 NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
-    lprintf(8, "    {} Linear residual: {:e}", it, rnorm);
+    lprint(8, "    {} Linear residual: {:e}", it, rnorm);
 }
 
 bool
@@ -298,7 +298,7 @@ void
 NonlinearProblem::solve()
 {
     _F_;
-    lprintf(9, "Solving");
+    lprint(9, "Solving");
     PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }

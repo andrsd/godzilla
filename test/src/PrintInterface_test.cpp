@@ -32,7 +32,7 @@ TEST(PrintInterfaceTest, lprintf)
         void
         create() override
         {
-            lprintf(0, "Print");
+            lprint(0, "Print");
         }
     };
 

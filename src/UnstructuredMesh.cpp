@@ -76,9 +76,9 @@ UnstructuredMesh::create()
     set_up();
     PETSC_CHECK(DMGetDimension(dm(), &this->dim));
 
-    lprintf(9, "Information:");
-    lprintf(9, "- vertices: {}", get_num_vertices());
-    lprintf(9, "- elements: {}", get_num_cells());
+    lprint(9, "Information:");
+    lprint(9, "- vertices: {}", get_num_vertices());
+    lprint(9, "- elements: {}", get_num_cells());
 }
 
 Label

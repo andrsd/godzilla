@@ -146,7 +146,7 @@ void
 LinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
-    lprintf(8, "{} Linear residual: {:e}", it, rnorm);
+    lprint(8, "{} Linear residual: {:e}", it, rnorm);
 }
 
 bool

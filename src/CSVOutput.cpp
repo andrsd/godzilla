@@ -56,7 +56,7 @@ CSVOutput::output_step()
     if (this->pps_names.empty())
         return;
 
-    lprintf(9, "Output to file: {}", this->file_name);
+    lprint(9, "Output to file: {}", this->file_name);
 
     if (!this->has_header) {
         write_header();

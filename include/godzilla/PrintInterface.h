@@ -51,6 +51,13 @@ public:
                    const unsigned int & verbosity_level,
                    std::string prefix);
 
+    template <typename... T>
+    [[deprecated("Use lprint() instead")]]  void
+    lprintf(unsigned int level, fmt::format_string<T...> format, T... args) const
+    {
+        lprint(level, format, std::forward<T>(args)...);
+    }
+
     /// Print a message on a terminal
     ///
     /// @param level Verbosity level. If application verbose level is higher than this number, the
@@ -59,7 +66,7 @@ public:
     /// @param ... Arguments specifying data to print
     template <typename... T>
     void
-    lprintf(unsigned int level, fmt::format_string<T...> format, T... args) const
+    lprint(unsigned int level, fmt::format_string<T...> format, T... args) const
     {
         if (level <= this->verbosity_level && this->proc_id == 0) {
             fmt::print(stdout, "{}: ", this->prefix);
@@ -84,6 +91,6 @@ private:
         auto __timed_event_obj =                \
             PrintInterface::TimedEvent::create(this, level, event_name, __VA_ARGS__)
 #else
-    #define TIMED_EVENT(level, event_name, ...) lprintf(level, __VA_ARGS__)
+    #define TIMED_EVENT(level, event_name, ...) lprint(level, __VA_ARGS__)
 #endif
 } // namespace godzilla

@@ -204,7 +204,7 @@ TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
 {
     _F_;
     Real dt = get_time_step();
-    this->problem->lprintf(6, "{} Time {:f} dt = {:f}", stepi, t, dt);
+    this->problem->lprint(6, "{} Time {:f} dt = {:f}", stepi, t, dt);
 }
 
 void

@@ -69,7 +69,7 @@ bool
 InputFile::parse(const std::string & file_name)
 {
     _F_;
-    lprintf(9, "Parsing input file '{}'", file_name);
+    lprint(9, "Parsing input file '{}'", file_name);
     try {
         this->root = { YAML::Node(), YAML::LoadFile(file_name) };
         this->file_name = file_name;
@@ -99,7 +99,7 @@ void
 InputFile::create()
 {
     _F_;
-    lprintf(9, "Creating objects");
+    lprint(9, "Creating objects");
     for (auto & obj : this->objects)
         obj->create();
 }
@@ -139,7 +139,7 @@ void
 InputFile::build_mesh()
 {
     _F_;
-    lprintf(9, "- mesh");
+    lprint(9, "- mesh");
     auto node = get_block(this->root, "mesh");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
@@ -151,7 +151,7 @@ void
 InputFile::build_problem()
 {
     _F_;
-    lprintf(9, "- problem");
+    lprint(9, "- problem");
     auto node = get_block(this->root, "problem");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
@@ -167,7 +167,7 @@ InputFile::build_outputs()
     if (!this->root["output"])
         return;
 
-    lprintf(9, "- outputs");
+    lprint(9, "- outputs");
     auto output_block = get_block(this->root, "output");
     for (const auto & it : output_block.values()) {
         Block blk = get_block(output_block, it.first.as<std::string>());
