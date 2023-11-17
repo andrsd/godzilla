@@ -45,7 +45,7 @@ InputFile::Block::name() const
 InputFile::InputFile(App * app) :
     PrintInterface(app),
     LoggingInterface(app->get_logger()),
-    _app(app),
+    app(app),
     mesh(nullptr),
     problem(nullptr)
 {
@@ -60,9 +60,9 @@ InputFile::get_file_name() const
 }
 
 App *
-InputFile::app() const
+InputFile::get_app() const
 {
-    return this->_app;
+    return this->app;
 }
 
 bool
@@ -82,14 +82,14 @@ InputFile::parse(const std::string & file_name)
 }
 
 Mesh *
-InputFile::get_mesh()
+InputFile::get_mesh() const
 {
     _F_;
     return this->mesh;
 }
 
 Problem *
-InputFile::get_problem()
+InputFile::get_problem() const
 {
     _F_;
     return this->problem;
@@ -143,7 +143,7 @@ InputFile::build_mesh()
     auto node = get_block(this->root, "mesh");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
-    this->mesh = app()->build_object<Mesh>(class_name, "mesh", params);
+    this->mesh = this->app->build_object<Mesh>(class_name, "mesh", params);
     add_object(this->mesh);
 }
 
@@ -156,7 +156,7 @@ InputFile::build_problem()
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
     params->set<Mesh *>("_mesh") = this->mesh;
-    this->problem = app()->build_object<Problem>(class_name, "problem", params);
+    this->problem = this->app->build_object<Problem>(class_name, "problem", params);
     add_object(this->problem);
 }
 
@@ -174,7 +174,7 @@ InputFile::build_outputs()
         Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
         params->set<Problem *>("_problem") = this->problem;
-        auto output = app()->build_object<Output>(class_name, blk.name(), params);
+        auto output = this->app->build_object<Output>(class_name, blk.name(), params);
         assert(this->problem != nullptr);
         this->problem->add_output(output);
     }
@@ -209,14 +209,14 @@ InputFile::build_params(const Block & block)
     if (!type)
         error("{}: No 'type' specified.", block.name());
     const std::string & class_name = type.as<std::string>();
-    if (!app()->get_factory().is_registered(class_name))
+    if (!this->app->get_factory().is_registered(class_name))
         error("{}: Type '{}' is not a registered object.", block.name(), class_name);
     unused_param_names.erase("type");
 
-    Parameters * params = app()->get_parameters(class_name);
+    Parameters * params = this->app->get_parameters(class_name);
     params->set<std::string>("_type") = class_name;
     params->set<std::string>("_name") = block.name();
-    params->set<App *>("_app") = app();
+    params->set<App *>("_app") = this->app;
 
     for (auto & kv : *params) {
         const std::string & param_name = kv.first;

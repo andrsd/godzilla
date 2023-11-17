@@ -30,7 +30,7 @@ public:
     /// Get application
     ///
     /// @return Application this input file belongs to
-    App * app() const;
+    App * get_app() const;
 
     /// Parse the YML file
     ///
@@ -46,8 +46,11 @@ public:
     /// build the simulation objects
     virtual void build() = 0;
 
-    virtual Mesh * get_mesh();
-    virtual Problem * get_problem();
+    /// Get the mesh specified in the input file
+    Mesh * get_mesh() const;
+
+    /// Get the problem specified in the input file
+    Problem * get_problem() const;
 
 protected:
     /// Representation of a block in the YAML input file
@@ -128,7 +131,7 @@ protected:
                       std::set<std::string> & unused_param_names);
 
     /// Application object
-    App * _app;
+    App * app;
     /// Name of this input file
     std::string file_name;
     /// Root node of the YML file

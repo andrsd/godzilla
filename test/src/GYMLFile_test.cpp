@@ -32,9 +32,7 @@ public:
     {
     }
 
-    ~GTestProblem() override {
-        this->x.destroy();
-    }
+    ~GTestProblem() override { this->x.destroy(); }
 
     const Vector &
     get_solution_vector() const override
