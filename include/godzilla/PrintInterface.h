@@ -37,7 +37,7 @@ public:
             return TimedEvent(pi, level, event_name, text);
         }
 
-    protected:
+    private:
         const PrintInterface * pi;
         unsigned int level;
         PerfLog::Event * event;
