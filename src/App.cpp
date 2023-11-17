@@ -23,7 +23,8 @@ App::App(const mpi::Communicator & comm,
     argv(argv),
     cmdln_opts(name),
     verbosity_level(1),
-    yml(nullptr)
+    yml(nullptr),
+    problem(nullptr)
 {
     _F_;
 }
@@ -68,8 +69,14 @@ Problem *
 App::get_problem() const
 {
     _F_;
-    assert(this->yml != nullptr);
-    return this->yml->get_problem();
+    return this->problem;
+}
+
+void
+App::set_problem(Problem * problem)
+{
+    _F_;
+    this->problem = problem;
 }
 
 void
@@ -87,13 +94,6 @@ App::create_command_line_options()
         .add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
     this->cmdln_opts
         .add_option("", "", "no-colors", "Do not use terminal colors", cxxopts::value<bool>(), "");
-}
-
-void
-App::create()
-{
-    _F_;
-    this->yml->create();
 }
 
 cxxopts::ParseResult
@@ -191,7 +191,7 @@ App::run_input_file(const std::string & input_file_name)
         set_input_file(new GYMLFile(this));
         build_from_yml(input_file_name);
         if (this->logger->get_num_errors() == 0)
-            create();
+            this->yml->create_objects();
         check_integrity();
         run_problem();
     }
@@ -204,8 +204,10 @@ void
 App::build_from_yml(const std::string & file_name)
 {
     _F_;
-    if (this->yml->parse(file_name))
+    if (this->yml->parse(file_name)) {
         this->yml->build();
+        this->problem = this->yml->get_problem();
+    }
 }
 
 void
@@ -225,9 +227,8 @@ App::run_problem()
 {
     _F_;
     lprint(9, "Running");
-    Problem * p = this->yml->get_problem();
-    assert(p != nullptr);
-    p->run();
+    assert(this->problem != nullptr);
+    this->problem->run();
 }
 
 } // namespace godzilla

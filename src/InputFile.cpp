@@ -96,11 +96,11 @@ InputFile::get_problem()
 }
 
 void
-InputFile::create()
+InputFile::create_objects()
 {
     _F_;
     lprint(9, "Creating objects");
-    for (auto & obj : this->objects)
+    for (auto & obj : this->objs)
         obj->create();
 }
 
@@ -108,7 +108,7 @@ void
 InputFile::check()
 {
     _F_;
-    for (auto & obj : this->objects)
+    for (auto & obj : this->objs)
         obj->check();
     check_unused_blocks();
 }
@@ -131,7 +131,7 @@ InputFile::add_object(Object * obj)
     if (obj != nullptr) {
         // only add objects with valid parameters
         if (this->valid_param_object_names.count(obj->get_name()) == 1)
-            this->objects.push_back(obj);
+            this->objs.push_back(obj);
     }
 }
 

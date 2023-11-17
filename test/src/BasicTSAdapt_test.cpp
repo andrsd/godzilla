@@ -29,7 +29,7 @@ TEST(BasicTSAdapt, api)
         params->set<Real>("dt") = 0.1;
         prob = app.build_object<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
     }
-    app.problem = prob;
+    app.set_problem(prob);
 
     Parameters params = BasicTSAdapt::parameters();
     params.set<App *>("_app") = &app;

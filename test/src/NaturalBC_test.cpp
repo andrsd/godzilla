@@ -24,7 +24,7 @@ TEST(NaturalBCTest, api)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     class MockNaturalBC : public NaturalBC {
     public:
@@ -123,7 +123,7 @@ TEST(NaturalBCTest, fe)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem prob(prob_params);
-    app.problem = &prob;
+    app.set_problem(&prob);
     prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters bc_params = TestNaturalBC::parameters();
@@ -173,7 +173,7 @@ TEST(NaturalBCTest, non_existing_field)
     prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
-    app.problem = &problem;
+    app.set_problem(&problem);
 
     Parameters params = TestNaturalBC::parameters();
     params.set<App *>("_app") = &app;
@@ -206,7 +206,7 @@ TEST(NaturalBCTest, field_param_not_specified)
     prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
-    app.problem = &problem;
+    app.set_problem(&problem);
 
     Parameters params = TestNaturalBC::parameters();
     params.set<App *>("_app") = &app;

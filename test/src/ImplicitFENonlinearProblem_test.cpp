@@ -13,7 +13,7 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
 {
     auto mesh = gMesh1d();
     auto prob = gProblem1d(mesh);
-    this->app->problem = prob;
+    this->app->set_problem(prob);
 
     {
         const std::string class_name = "ConstantInitialCondition";

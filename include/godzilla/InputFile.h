@@ -36,10 +36,13 @@ public:
     ///
     /// @return `true` if successful, otherwise `false`
     virtual bool parse(const std::string & file_name);
-    /// create
-    virtual void create();
-    /// check
+
+    /// Create objects
+    virtual void create_objects();
+
+    /// Check objects
     virtual void check();
+
     /// build the simulation objects
     virtual void build() = 0;
 
@@ -125,7 +128,7 @@ protected:
                       std::set<std::string> & unused_param_names);
 
     /// Application object
-    godzilla::App * _app;
+    App * _app;
     /// Name of this input file
     std::string file_name;
     /// Root node of the YML file
@@ -135,7 +138,7 @@ protected:
     /// Problem object
     Problem * problem;
     /// List of all objects built from the input file
-    std::vector<Object *> objects;
+    std::vector<Object *> objs;
     /// Names of object with correct parameters
     std::set<std::string> valid_param_object_names;
     /// Names of used top-level blocks

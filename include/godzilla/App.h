@@ -48,7 +48,9 @@ public:
     /// Get pointer to the `Problem` class in this application
     ///
     /// @return Get problem this application is representing
-    virtual Problem * get_problem() const;
+    Problem * get_problem() const;
+
+    void set_problem(Problem * problem);
 
     /// Parse command line arguments
     ///
@@ -114,10 +116,6 @@ protected:
     /// @param input_file Input file to set
     void set_input_file(InputFile * input_file);
 
-    /// Create method can be used to additional object allocation, etc. needed before the
-    /// application runs
-    virtual void create();
-
     /// Create command line options
     ///
     virtual void create_command_line_options();
@@ -125,18 +123,18 @@ protected:
     /// Build application objects from an input file
     ///
     /// @param file_name The input file name
-    virtual void build_from_yml(const std::string & file_name);
+    void build_from_yml(const std::string & file_name);
 
     /// Check integrity of the application
-    virtual void check_integrity();
+    void check_integrity();
 
     /// Run the input file
     ///
     /// @param input_file_name Input file name
-    virtual void run_input_file(const std::string & input_file_name);
+    void run_input_file(const std::string & input_file_name);
 
     /// Run the problem build via `build_from_yml`
-    virtual void run_problem();
+    void run_problem();
 
 private:
     /// Application name
@@ -162,6 +160,9 @@ private:
 
     /// YML file with application objects
     InputFile * yml;
+
+    /// Pointer to `Problem`
+    Problem * problem;
 
     /// Factory for building objects
     Factory factory;

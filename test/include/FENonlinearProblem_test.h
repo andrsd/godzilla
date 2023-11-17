@@ -29,7 +29,7 @@ public:
             this->prob =
                 this->app->build_object<GTestFENonlinearProblem>(class_name, "prob", params);
         }
-        this->app->problem = this->prob;
+        this->app->set_problem(this->prob);
     }
 
     void
@@ -62,7 +62,7 @@ public:
             this->prob =
                 this->app->build_object<GTest2FieldsFENonlinearProblem>(class_name, "prob", params);
         }
-        this->app->problem = this->prob;
+        this->app->set_problem(this->prob);
     }
 
     void

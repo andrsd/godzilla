@@ -106,7 +106,7 @@ TEST(BndJacobianFuncTest, test)
     prob_pars.set<Real>("end_time") = 20;
     prob_pars.set<Real>("dt") = 5;
     GTestProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     Parameters bc_pars = NaturalBC::parameters();
     bc_pars.set<App *>("_app") = &app;

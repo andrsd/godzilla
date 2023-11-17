@@ -21,7 +21,7 @@ TEST(DirichletBCTest, api)
     prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
-    app.problem = &problem;
+    app.set_problem(&problem);
 
     Parameters params = DirichletBC::parameters();
     params.set<App *>("_app") = &app;
@@ -63,7 +63,7 @@ TEST(DirichletBCTest, with_user_defined_fn)
     prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
-    app.problem = &problem;
+    app.set_problem(&problem);
 
     std::string class_name = "PiecewiseLinear";
     Parameters * fn_pars = app.get_parameters(class_name);

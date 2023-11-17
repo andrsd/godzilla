@@ -174,7 +174,7 @@ TEST(TimeSteppingAdaptor, api)
         params->set<Real>("dt") = 0.1;
         prob = app.build_object<TestTSProblem>(class_name, "prob", params);
     }
-    app.problem = prob;
+    app.set_problem(prob);
     mesh->create();
     prob->create();
 
@@ -216,7 +216,7 @@ TEST(TimeSteppingAdaptor, choose)
         params->set<Real>("dt") = 0.1;
         prob = app.build_object<TestTSProblem>(class_name, "prob", params);
     }
-    app.problem = prob;
+    app.set_problem(prob);
 
     {
         const std::string class_name = "DirichletBC";

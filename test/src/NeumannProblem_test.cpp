@@ -181,7 +181,7 @@ TEST(NeumannProblemTest, solve)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     TestNeumannProblem prob(prob_params);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     Parameters bc_left_pars = TestNeumannBC::parameters();
     bc_left_pars.set<App *>("_app") = &app;

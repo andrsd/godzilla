@@ -18,7 +18,7 @@ TEST(L2DiffTest, compute)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     Parameters bc_left_params = DirichletBC::parameters();
     bc_left_params.set<App *>("_app") = &app;

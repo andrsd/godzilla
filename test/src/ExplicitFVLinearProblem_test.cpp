@@ -206,7 +206,7 @@ TEST(ExplicitFVLinearProblemTest, api)
     prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFVLinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     mesh.create();
     prob.create();
@@ -298,7 +298,7 @@ TEST(ExplicitFVLinearProblemTest, fields)
     prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFVLinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     prob.add_field(1, "vec", 3);
     EXPECT_EQ(prob.get_field_id("vec"), 0);
@@ -341,7 +341,7 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
     prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFVLinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     mesh.create();
     prob.create();
@@ -373,7 +373,7 @@ TEST(ExplicitFVLinearProblemTest, solve)
     prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFVLinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     Parameters bc_left_pars = TestBC::parameters();
     bc_left_pars.set<App *>("_app") = &app;

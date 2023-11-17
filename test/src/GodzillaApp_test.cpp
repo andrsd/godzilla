@@ -97,41 +97,6 @@ TEST_F(GodzillaAppTest, check_integrity)
     EXPECT_DEATH(app.run(), "error1");
 }
 
-TEST_F(GodzillaAppTest, run_problem)
-{
-    class TestFile : public GYMLFile {
-    public:
-        TestFile(App * app, Problem * prob) : GYMLFile(app) { this->problem = prob; }
-    };
-
-    class TestApp : public App {
-    public:
-        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
-
-        void
-        set_problem(Problem * prob)
-        {
-            set_input_file(new TestFile(this, prob));
-        }
-
-        void
-        run()
-        {
-            run_problem();
-        }
-    } app;
-
-    const std::string & class_name = "MockProblem";
-    Parameters * pars = app.get_parameters(class_name);
-    MockProblem * prob = app.build_object<MockProblem>(class_name, "prob", pars);
-
-    app.set_problem(prob);
-
-    EXPECT_EQ(app.get_problem(), prob);
-    EXPECT_CALL(*prob, run);
-    app.run();
-}
-
 TEST_F(GodzillaAppTest, unknown_command_line_switch)
 {
     int argc = 2;

@@ -135,7 +135,7 @@ TEST(FENonlinearProblemJFNKTest, solve)
     prob_params.set<godzilla::App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblemJFNK prob(prob_params);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     Parameters ic_params = ConstantInitialCondition::parameters();
     ic_params.set<godzilla::App *>("_app") = &app;
