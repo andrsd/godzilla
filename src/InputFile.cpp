@@ -209,7 +209,7 @@ InputFile::build_params(const Block & block)
     if (!type)
         error("{}: No 'type' specified.", block.name());
     const std::string & class_name = type.as<std::string>();
-    if (!app()->factory().is_registered(class_name))
+    if (!app()->get_factory().is_registered(class_name))
         error("{}: Type '{}' is not a registered object.", block.name(), class_name);
     unused_param_names.erase("type");
 

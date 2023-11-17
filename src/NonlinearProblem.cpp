@@ -146,7 +146,7 @@ void
 NonlinearProblem::init()
 {
     _F_;
-    PETSC_CHECK(SNESCreate(comm(), &this->snes));
+    PETSC_CHECK(SNESCreate(get_comm(), &this->snes));
     PETSC_CHECK(SNESSetDM(this->snes, dm()));
     PETSC_CHECK(DMSetApplicationContext(dm(), this));
     PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));

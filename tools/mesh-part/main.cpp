@@ -13,7 +13,7 @@ class MeshPartApp : public App {
 public:
     MeshPartApp(int argc, const char * const * argv);
 
-    void process_command_line(cxxopts::ParseResult & result) override;
+    void process_command_line(const cxxopts::ParseResult & result) override;
 
 protected:
     void create_command_line_options() override;
@@ -39,34 +39,34 @@ MeshPartApp::get_input_file_name() const
 }
 
 void
-MeshPartApp::process_command_line(cxxopts::ParseResult & result)
+MeshPartApp::process_command_line(const cxxopts::ParseResult & result)
 {
-    this->cmdln_opts.parse_positional({ "mesh-file" });
-    auto res = this->cmdln_opts.parse(argc, argv);
+    get_command_line_opts().parse_positional({ "mesh-file" });
+    auto res = parse_command_line();
     if (res.count("help"))
-        fmt::print("{}", this->cmdln_opts.help());
+        fmt::print("{}", get_command_line_opts().help());
     else if (res.count("version"))
-        fmt::print("{}, version {}\n", name(), version());
+        fmt::print("{}, version {}\n", get_name(), get_version());
     else if (res.count("mesh-file"))
         partition_mesh_file(res["mesh-file"].as<std::string>());
     else
-        fmt::print("{}", this->cmdln_opts.help());
+        fmt::print("{}", get_command_line_opts().help());
 }
 
 void
 MeshPartApp::create_command_line_options()
 {
-    this->cmdln_opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
-    this->cmdln_opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
-    this->cmdln_opts.add_option("",
-                                "p",
-                                "partitioner",
-                                "Name of the partitioner",
-                                cxxopts::value<std::string>(),
-                                "");
-    this->cmdln_opts
-        .add_option("", "", "mesh-file", "The mesh file name", cxxopts::value<std::string>(), "");
-    this->cmdln_opts.positional_help("<mesh-file>");
+    auto opts = get_command_line_opts();
+    opts.add_option("", "h", "help", "Show this help page", cxxopts::value<bool>(), "");
+    opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
+    opts.add_option("",
+                    "p",
+                    "partitioner",
+                    "Name of the partitioner",
+                    cxxopts::value<std::string>(),
+                    "");
+    opts.add_option("", "", "mesh-file", "The mesh file name", cxxopts::value<std::string>(), "");
+    opts.positional_help("<mesh-file>");
 }
 
 UnstructuredMesh *

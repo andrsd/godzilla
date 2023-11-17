@@ -28,7 +28,7 @@ public:
         Int faces[1] = { 2 };
         DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
-        PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                         1,
                                         PETSC_TRUE,
                                         faces,
@@ -66,7 +66,7 @@ public:
                                           DM_BOUNDARY_GHOSTED,
                                           DM_BOUNDARY_GHOSTED };
 
-        PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                         3,
                                         PETSC_FALSE,
                                         faces,

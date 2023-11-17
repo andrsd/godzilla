@@ -94,7 +94,7 @@ RectangleMesh::create_dm()
         this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
     };
 
-    PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
+    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     2,
                                     this->simplex,
                                     faces.data(),

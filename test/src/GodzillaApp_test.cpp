@@ -76,7 +76,7 @@ TEST_F(GodzillaAppTest, verbose)
     App app(comm, "godzilla", argc, argv);
 
     app.run();
-    EXPECT_EQ(app.verbosity_level(), 2);
+    EXPECT_EQ(app.get_verbosity_level(), 2);
 }
 
 TEST_F(GodzillaAppTest, check_integrity)
@@ -88,8 +88,8 @@ TEST_F(GodzillaAppTest, check_integrity)
         void
         run()
         {
-            this->yml = allocate_input_file();
-            this->log->error("error1");
+            set_input_file(new GYMLFile(this));
+            get_logger()->error("error1");
             check_integrity();
         }
     } app;
@@ -111,7 +111,7 @@ TEST_F(GodzillaAppTest, run_problem)
         void
         set_problem(Problem * prob)
         {
-            this->yml = new TestFile(this, prob);
+            set_input_file(new TestFile(this, prob));
         }
 
         void

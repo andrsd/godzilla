@@ -271,8 +271,8 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
         void
         check_integrity() override
         {
-            if (this->log->get_num_entries() > 0)
-                this->log->print();
+            if (get_logger()->get_num_entries() > 0)
+                get_logger()->print();
         }
     } app;
 
@@ -327,8 +327,8 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
         void
         check_integrity() override
         {
-            if (this->log->get_num_entries() > 0)
-                this->log->print();
+            if (get_logger()->get_num_entries() > 0)
+                get_logger()->print();
         }
     } app;
 

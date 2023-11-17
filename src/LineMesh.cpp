@@ -61,7 +61,7 @@ LineMesh::create_dm()
     std::array<Int, 1> faces = { this->nx };
     std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
 
-    PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
+    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     1,
                                     PETSC_TRUE,
                                     faces.data(),

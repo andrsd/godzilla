@@ -421,7 +421,7 @@ void
 FEProblemInterface::create_fe(FieldInfo & fi)
 {
     _F_;
-    auto comm = this->unstr_mesh->comm();
+    auto comm = this->unstr_mesh->get_comm();
     Int dim = this->problem->get_dimension();
     PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(internal::create_lagrange_petscfe(comm,

@@ -4,7 +4,7 @@
 
 namespace godzilla {
 
-/// Logging interface to give objects capability to log problems like errors and warnings
+/// Logging interface to give objects capability to logger problems like errors and warnings
 ///
 class LoggingInterface {
 public:

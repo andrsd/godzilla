@@ -114,7 +114,7 @@ void
 TecplotOutput::set_file_name()
 {
     _F_;
-    if (comm().size() == 1)
+    if (get_comm().size() == 1)
         this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
     else
         this->file_name =
@@ -336,10 +336,11 @@ void
 TecplotOutput::write_created_by_ascii()
 {
     _F_;
+    auto app = get_app();
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
     std::string created_by =
-        fmt::format("Created by {} {}, on {}", get_app()->name(), get_app()->version(), datetime);
+        fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
     write_line(fmt::format("DATASETAUXDATA {} = \"{}\"\n", "created_by", created_by));
 }
 

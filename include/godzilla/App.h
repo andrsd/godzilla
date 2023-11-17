@@ -19,11 +19,11 @@ public:
     /// Build and application object
     ///
     /// @param comm MPI communicator
-    /// @param app_name Name of the application
+    /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
     App(const mpi::Communicator & comm,
-        const std::string & app_name = "",
+        const std::string & name = "",
         int argc = 0,
         const char * const * argv = nullptr);
     virtual ~App();
@@ -33,21 +33,17 @@ public:
     /// Get Application name
     ///
     /// @return Application name
-    [[deprecated("Use name() instead")]] const std::string & get_name() const;
-
-    const std::string & name() const;
+    const std::string & get_name() const;
 
     /// Get application version
     ///
     /// @return The application version as a string
-    [[deprecated("Use version() instead")]] virtual const std::string & get_version() const;
-
-    virtual const std::string & version() const;
+    virtual const std::string & get_version() const;
 
     /// Get the factory for building objects
     ///
     /// @return Factory that builds objects
-    Factory & factory();
+    Factory & get_factory();
 
     /// Get pointer to the `Problem` class in this application
     ///
@@ -62,7 +58,7 @@ public:
     /// Process command line
     ///
     /// @param result Result from calling `parse_command_line` or `cxxopt::parse`
-    virtual void process_command_line(cxxopts::ParseResult & result);
+    virtual void process_command_line(const cxxopts::ParseResult & result);
 
     /// Run the application
     virtual void run();
@@ -70,10 +66,7 @@ public:
     /// Get level of verbosity
     ///
     /// @return The verbosity level
-    [[deprecated("Use verbosity_level() instead.")]] virtual const unsigned int &
-    get_verbosity_level() const;
-
-    virtual const unsigned int & verbosity_level() const;
+    virtual const unsigned int & get_verbosity_level() const;
 
     /// Get the input file name
     ///
@@ -83,9 +76,7 @@ public:
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    [[deprecated("Use comm() instead")]] virtual const mpi::Communicator & get_comm() const;
-
-    virtual const mpi::Communicator & comm() const;
+    virtual const mpi::Communicator & get_comm() const;
 
     /// Get parameters for a class
     ///
@@ -113,8 +104,15 @@ public:
                      Parameters * parameters);
 
 protected:
-    /// Builds an InputFile instance
-    virtual InputFile * allocate_input_file();
+    /// Get command line options
+    ///
+    /// @return Command line options
+    cxxopts::Options & get_command_line_opts();
+
+    /// Set the input file
+    ///
+    /// @param input_file Input file to set
+    void set_input_file(InputFile * input_file);
 
     /// Create method can be used to additional object allocation, etc. needed before the
     /// application runs
@@ -140,14 +138,15 @@ protected:
     /// Run the problem build via `build_from_yml`
     virtual void run_problem();
 
+private:
     /// Application name
-    std::string _name;
+    std::string name;
 
     /// MPI communicator
-    mpi::Communicator _comm;
+    mpi::Communicator mpi_comm;
 
     /// Log with errors and/or warnings
-    Logger * log;
+    Logger * logger;
 
     /// The number of command line arguments
     int argc;
@@ -159,13 +158,13 @@ protected:
     cxxopts::Options cmdln_opts;
 
     /// Verbosity level
-    unsigned int _verbosity_level;
+    unsigned int verbosity_level;
 
     /// YML file with application objects
     InputFile * yml;
 
-    /// Faactory for building objects
-    Factory _factory;
+    /// Factory for building objects
+    Factory factory;
 };
 
 template <typename T>
@@ -175,7 +174,7 @@ App::build_object(const std::string & class_name,
                   Parameters & parameters)
 {
     parameters.set<App *>("_app") = this;
-    return this->_factory.create<T>(class_name, obj_name, parameters);
+    return this->factory.create<T>(class_name, obj_name, parameters);
 }
 
 template <typename T>
@@ -185,7 +184,7 @@ App::build_object(const std::string & class_name,
                   Parameters * parameters)
 {
     parameters->set<App *>("_app") = this;
-    return this->_factory.create<T>(class_name, obj_name, parameters);
+    return this->factory.create<T>(class_name, obj_name, parameters);
 }
 
 } // namespace godzilla

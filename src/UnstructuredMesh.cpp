@@ -57,7 +57,7 @@ UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
     common_cells_by_vtx_computed(false)
 {
     _F_;
-    this->partitioner.create(comm());
+    this->partitioner.create(get_comm());
 }
 
 UnstructuredMesh::~UnstructuredMesh()
@@ -552,7 +552,7 @@ UnstructuredMesh::build_from_cell_list(Int dim,
                                        bool interpolate)
 {
     _F_;
-    PETSC_CHECK(DMPlexCreateFromCellListPetsc(comm(),
+    PETSC_CHECK(DMPlexCreateFromCellListPetsc(get_comm(),
                                               dim,
                                               cells.size() / n_corners,
                                               vertices.size() / space_dim,
