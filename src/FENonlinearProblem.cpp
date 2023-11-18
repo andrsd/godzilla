@@ -134,7 +134,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
     // this is based on DMSNESComputeResidual()
     IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
-    for (auto & res_key : this->wf->get_residual_keys()) {
+    for (auto & res_key : get_weak_form()->get_residual_keys()) {
         IndexSet cells;
         if (res_key.label == nullptr) {
             all_cells.inc_ref();
@@ -621,13 +621,14 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
     // based on DMPlexSNESComputeJacobianFEM and DMSNESComputeJacobianAction
     IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
-    auto has_jac = this->wf->has_jacobian();
-    auto has_precond = this->wf->has_jacobian_preconditioner();
+    auto wf = get_weak_form();
+    auto has_jac = wf->has_jacobian();
+    auto has_precond = wf->has_jacobian_preconditioner();
     if (has_jac && has_precond)
         J.zero();
     Jp.zero();
 
-    for (auto & jac_key : this->wf->get_jacobian_keys()) {
+    for (auto & jac_key : wf->get_jacobian_keys()) {
         IndexSet cells;
         if (!jac_key.label) {
             all_cells.inc_ref();
@@ -683,8 +684,9 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscCall(PetscDSGetNumFields(prob, &n_fields));
     Int tot_dim;
     PetscCall(PetscDSGetTotalDimension(prob, &tot_dim));
-    auto has_jac = this->wf->has_jacobian();
-    auto has_prec = this->wf->has_jacobian_preconditioner();
+    auto wf = get_weak_form();
+    auto has_jac = wf->has_jacobian();
+    auto has_prec = wf->has_jacobian_preconditioner();
     // user passed in the same matrix, avoid double contributions and only assemble the Jacobian
     if (has_jac && J == Jp)
         has_prec = PETSC_FALSE;

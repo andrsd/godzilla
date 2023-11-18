@@ -100,7 +100,7 @@ ExplicitFELinearProblem::init()
     for (Int i = 0; i < get_num_fields(); i++)
         add_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
 
-    for (auto & f : this->fields) {
+    for (auto & f : get_fields()) {
         Int fid = f.second.id;
         PETSC_CHECK(PetscDSSetImplicit(this->ds, fid, PETSC_FALSE));
     }

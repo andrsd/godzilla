@@ -212,7 +212,7 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
     _F_;
     IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
-    for (auto & res_key : this->wf->get_residual_keys()) {
+    for (auto & res_key : get_weak_form()->get_residual_keys()) {
         IndexSet cells;
         if (res_key.label == nullptr) {
             all_cells.inc_ref();
@@ -246,7 +246,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
 
     Jp.zero();
 
-    for (auto & jac_key : this->wf->get_jacobian_keys()) {
+    for (auto & jac_key : get_weak_form()->get_jacobian_keys()) {
         IndexSet cells;
         if (!jac_key.label) {
             all_cells.inc_ref();

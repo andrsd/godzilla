@@ -77,6 +77,13 @@ FEProblemInterface::~FEProblemInterface()
     delete this->asmbl;
 }
 
+const std::map<Int, FEProblemInterface::FieldInfo> &
+FEProblemInterface::get_fields() const
+{
+    _F_;
+    return this->fields;
+}
+
 void
 FEProblemInterface::create()
 {
