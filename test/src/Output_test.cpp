@@ -32,9 +32,9 @@ TEST_F(OutputTest, exec_masks_1)
     MockOutput out(pars);
     out.create();
 
-    EXPECT_FALSE(out.should_output(Output::ON_FINAL));
-    EXPECT_FALSE(out.should_output(Output::ON_INITIAL));
-    EXPECT_FALSE(out.should_output(Output::ON_TIMESTEP));
+    EXPECT_FALSE(out.should_output(ExecuteOn::FINAL));
+    EXPECT_FALSE(out.should_output(ExecuteOn::INITIAL));
+    EXPECT_FALSE(out.should_output(ExecuteOn::TIMESTEP));
 }
 
 TEST_F(OutputTest, exec_masks_2)
@@ -46,10 +46,10 @@ TEST_F(OutputTest, exec_masks_2)
     MockOutput out(pars);
     out.create();
 
-    EXPECT_EQ(out.get_exec_mask(), Output::ON_FINAL);
-    EXPECT_TRUE(out.should_output(Output::ON_FINAL));
-    EXPECT_FALSE(out.should_output(Output::ON_INITIAL));
-    EXPECT_FALSE(out.should_output(Output::ON_TIMESTEP));
+    EXPECT_TRUE(out.get_exec_mask() & ExecuteOn::FINAL);
+    EXPECT_TRUE(out.should_output(ExecuteOn::FINAL));
+    EXPECT_FALSE(out.should_output(ExecuteOn::INITIAL));
+    EXPECT_FALSE(out.should_output(ExecuteOn::TIMESTEP));
 }
 
 TEST_F(OutputTest, exec_masks_3)
@@ -61,13 +61,13 @@ TEST_F(OutputTest, exec_masks_3)
     MockOutput out(pars);
     out.create();
 
-    EXPECT_EQ(out.get_exec_mask() & Output::ON_FINAL, Output::ON_FINAL);
-    EXPECT_EQ(out.get_exec_mask() & Output::ON_INITIAL, Output::ON_INITIAL);
-    EXPECT_EQ(out.get_exec_mask() & Output::ON_TIMESTEP, Output::ON_TIMESTEP);
+    EXPECT_TRUE(out.get_exec_mask() & ExecuteOn::FINAL);
+    EXPECT_TRUE(out.get_exec_mask() & ExecuteOn::INITIAL);
+    EXPECT_TRUE(out.get_exec_mask() & ExecuteOn::TIMESTEP);
 
-    EXPECT_TRUE(out.should_output(Output::ON_FINAL));
-    EXPECT_TRUE(out.should_output(Output::ON_INITIAL));
-    EXPECT_TRUE(out.should_output(Output::ON_TIMESTEP));
+    EXPECT_TRUE(out.should_output(ExecuteOn::FINAL));
+    EXPECT_TRUE(out.should_output(ExecuteOn::INITIAL));
+    EXPECT_TRUE(out.should_output(ExecuteOn::TIMESTEP));
 }
 
 TEST_F(OutputTest, empty_on)

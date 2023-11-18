@@ -3,6 +3,7 @@
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Types.h"
+#include "godzilla/ExecuteFlags.h"
 
 namespace godzilla {
 
@@ -20,18 +21,18 @@ public:
     /// Set execute mask
     ///
     /// @param mask Bit mask for execution
-    void set_exec_mask(unsigned int mask);
+    void set_exec_mask(ExecuteOn mask);
 
     /// Get execution mask
     ///
     /// @return execution mask
-    unsigned int get_exec_mask() const;
+    ExecuteOn get_exec_mask() const;
 
     /// Should output happen at a specified occasion
     ///
     /// @param mask Bit mask specifying the occasion, see ON_XYZ below
     /// @return `true` if output should happen, otherwise `false`
-    virtual bool should_output(unsigned int mask);
+    virtual bool should_output(ExecuteOn::ExecuteOnFlag mask);
 
     /// Output a step of a simulation
     virtual void output_step() = 0;
@@ -50,18 +51,13 @@ private:
     Problem * problem;
 
     /// Bitwise mask for determining when this output object should output its content
-    unsigned int on_mask;
+    ExecuteOn on_mask;
 
     ///
     Int interval;
 
 public:
     static Parameters parameters();
-
-    static const unsigned int ON_NONE;
-    static const unsigned int ON_INITIAL;
-    static const unsigned int ON_TIMESTEP;
-    static const unsigned int ON_FINAL;
 };
 
 } // namespace godzilla

@@ -94,7 +94,7 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & params
     scheme(get_param<std::string>("scheme"))
 {
     _F_;
-    set_default_output_on(Output::ON_INITIAL | Output::ON_TIMESTEP);
+    set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
 }
 
 ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
@@ -279,7 +279,7 @@ ImplicitFENonlinearProblem::post_step()
     TransientProblemInterface::post_step();
     update_aux_vector();
     compute_postprocessors();
-    output(Output::ON_TIMESTEP);
+    output(ExecuteOn::TIMESTEP);
 }
 
 } // namespace godzilla

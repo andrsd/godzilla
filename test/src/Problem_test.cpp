@@ -126,7 +126,7 @@ TEST(ProblemTest, add_pp)
     EXPECT_EQ(pps_names[0], "pp");
 
     EXPECT_CALL(out, output_step);
-    problem.output(Output::ON_INITIAL);
+    problem.output(ExecuteOn::INITIAL);
 }
 
 TEST(ProblemTest, local_vec)
