@@ -16,10 +16,10 @@ BasicTSAdapt::parameters()
 BasicTSAdapt::BasicTSAdapt(const Parameters & params) : TimeSteppingAdaptor(params) {}
 
 void
-BasicTSAdapt::set_type()
+BasicTSAdapt::set_type_impl()
 {
     _F_;
-    PETSC_CHECK(TSAdaptSetType(this->ts_adapt, TSADAPTBASIC));
+    set_type(TSADAPTBASIC);
 }
 
 } // namespace godzilla

@@ -11,7 +11,7 @@ public:
     explicit BasicTSAdapt(const Parameters & params);
 
 protected:
-    void set_type() override;
+    void set_type_impl() override;
 
 public:
     static Parameters parameters();

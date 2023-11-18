@@ -48,11 +48,25 @@ TimeSteppingAdaptor::get_dt_max() const
 }
 
 void
+TimeSteppingAdaptor::set_type(const char * type)
+{
+    _F_;
+    PETSC_CHECK(TSAdaptSetType(this->ts_adapt, type));
+}
+
+Problem *
+TimeSteppingAdaptor::get_problem() const
+{
+    _F_;
+    return this->problem;
+}
+
+void
 TimeSteppingAdaptor::create()
 {
     _F_;
     PETSC_CHECK(TSGetAdapt(this->tpi->get_ts(), &this->ts_adapt));
-    set_type();
+    set_type_impl();
     PETSC_CHECK(TSAdaptSetStepLimits(this->ts_adapt, this->dt_min, this->dt_max));
 }
 
