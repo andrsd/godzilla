@@ -46,6 +46,7 @@ protected:
 
     void write_line(const std::string & line);
 
+private:
     enum Format { BINARY, ASCII } format;
 
     /// FE problem interface (convenience pointer)
