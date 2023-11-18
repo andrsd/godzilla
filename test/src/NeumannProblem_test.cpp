@@ -158,7 +158,7 @@ public:
     set_up_weak_form() override
     {
         add_residual_block(new BndF0(this), nullptr);
-        add_jacobian_block(this->fid, new BndG0(this), nullptr, nullptr, nullptr);
+        add_jacobian_block(get_field_id(), new BndG0(this), nullptr, nullptr, nullptr);
     }
 
 protected:
