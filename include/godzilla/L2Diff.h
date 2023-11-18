@@ -24,7 +24,7 @@ public:
     /// @param u  The output field values
     void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]);
 
-protected:
+private:
     /// Computed L_2 error
     Real l2_diff;
 
