@@ -5,6 +5,7 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
+#include "godzilla/ExecuteFlags.h"
 #include "petscdm.h"
 #include "petscpartitioner.h"
 
@@ -84,7 +85,7 @@ public:
     /// Output
     ///
     /// @param mask Bit mask for an output event, see `Output` for valid options.
-    virtual void output(unsigned int mask);
+    virtual void output(ExecuteOn::ExecuteOnFlag flag);
 
     /// Creates a local vector from a DM object
     ///
@@ -127,7 +128,8 @@ public:
     /// Set the `Section` encoding the global data layout for the `DM`.
     void set_global_section(const Section & section) const;
 
-    void set_default_output_on(unsigned int mask);
+    /// Set default execute on flags
+    void set_default_output_on(ExecuteOn flags);
 
 protected:
     /// Called before solving starts
@@ -146,7 +148,7 @@ private:
     std::vector<Output *> outputs;
 
     /// Default output execute mask
-    unsigned int default_output_on;
+    ExecuteOn default_output_on;
 
     /// List of postprocessor objects
     std::map<std::string, Postprocessor *> pps;

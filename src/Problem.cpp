@@ -20,7 +20,7 @@ Problem::Problem(const Parameters & parameters) :
     Object(parameters),
     PrintInterface(this),
     mesh(get_param<Mesh *>("_mesh")),
-    default_output_on(Output::ON_NONE)
+    default_output_on()
 {
 }
 
@@ -142,11 +142,11 @@ Problem::get_postprocessor_names() const
 }
 
 void
-Problem::output(unsigned int mask)
+Problem::output(ExecuteOn::ExecuteOnFlag flag)
 {
     _F_;
     for (auto & o : this->outputs)
-        if (o->should_output(mask))
+        if (o->should_output(flag))
             o->output_step();
 }
 
@@ -155,7 +155,7 @@ Problem::on_initial()
 {
     _F_;
     compute_postprocessors();
-    output(Output::ON_INITIAL);
+    output(ExecuteOn::INITIAL);
 }
 
 void
@@ -163,7 +163,7 @@ Problem::on_final()
 {
     _F_;
     compute_postprocessors();
-    output(Output::ON_FINAL);
+    output(ExecuteOn::FINAL);
 }
 
 Vector
@@ -258,9 +258,9 @@ Problem::set_global_section(const Section & section) const
 }
 
 void
-Problem::set_default_output_on(unsigned int mask)
+Problem::set_default_output_on(ExecuteOn flags)
 {
-    this->default_output_on = mask;
+    this->default_output_on = flags;
 }
 
 } // namespace godzilla
