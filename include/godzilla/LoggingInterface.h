@@ -30,7 +30,7 @@ public:
         this->logger->warning(this->prefix, format, std::forward<T>(args)...);
     }
 
-protected:
+private:
     /// Logger object
     Logger * logger;
 
