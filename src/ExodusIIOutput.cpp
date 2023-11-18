@@ -131,17 +131,6 @@ ExodusIIOutput::get_file_ext() const
 }
 
 void
-ExodusIIOutput::set_file_name()
-{
-    _F_;
-    if (get_comm().size() == 1)
-        this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
-    else
-        this->file_name =
-            fmt::format("{}.{}.{}", this->file_base, get_processor_id(), this->get_file_ext());
-}
-
-void
 ExodusIIOutput::create()
 {
     _F_;
@@ -192,8 +181,7 @@ ExodusIIOutput::output_mesh()
 {
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
-    set_file_name();
-    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", this->file_name);
+    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", get_file_name());
 
     if (this->exo == nullptr)
         open_file();
@@ -209,8 +197,7 @@ ExodusIIOutput::output_step()
 {
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
-    set_file_name();
-    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", this->file_name);
+    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", get_file_name());
 
     if (this->exo == nullptr)
         open_file();
@@ -229,7 +216,7 @@ void
 ExodusIIOutput::open_file()
 {
     _F_;
-    this->exo = new exodusIIcpp::File(this->file_name, exodusIIcpp::FileAccess::WRITE);
+    this->exo = new exodusIIcpp::File(get_file_name(), exodusIIcpp::FileAccess::WRITE);
     if (!this->exo->is_opened())
         error("Could not open file '{}' for writing.", get_file_name());
 }

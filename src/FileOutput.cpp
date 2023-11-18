@@ -33,25 +33,28 @@ FileOutput::create()
     }
 }
 
-const std::string &
+std::string
 FileOutput::get_file_name() const
 {
     _F_;
-    return this->file_name;
+    if (get_comm().size() == 1)
+        return fmt::format("{}.{}", this->file_base, this->get_file_ext());
+    else
+        return fmt::format("{}.{}.{}", this->file_base, get_processor_id(), this->get_file_ext());
 }
 
 void
-FileOutput::set_file_name()
+FileOutput::set_file_base(const std::string & file_base)
 {
     _F_;
-    this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
+    this->file_base = file_base;
 }
 
 void
-FileOutput::set_sequence_file_name(unsigned int stepi)
+FileOutput::set_sequence_file_base(unsigned int stepi)
 {
     _F_;
-    this->file_name = fmt::format("{}.{}.{}", this->file_base, stepi, this->get_file_ext());
+    this->file_base = fmt::format("{}.{}", this->file_base, stepi);
 }
 
 } // namespace godzilla

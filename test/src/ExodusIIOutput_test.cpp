@@ -236,7 +236,6 @@ TEST(ExodusIIOutputTest, set_file_name)
 
     out.create();
 
-    out.set_file_name();
     EXPECT_EQ(out.get_file_name(), "out.exo");
 }
 
@@ -262,6 +261,6 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
 
     out.create();
 
-    out.set_sequence_file_name(2);
+    out.set_sequence_file_base(2);
     EXPECT_EQ(out.get_file_name(), "out.2.exo");
 }

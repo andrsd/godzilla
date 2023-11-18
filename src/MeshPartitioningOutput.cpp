@@ -19,7 +19,7 @@ MeshPartitioningOutput::parameters()
 MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & params) : FileOutput(params)
 {
     _F_;
-    this->file_base = "part";
+    set_file_base("part");
 }
 
 void
@@ -43,8 +43,6 @@ void
 MeshPartitioningOutput::output_step()
 {
     _F_;
-    set_file_name();
-
     PetscViewer viewer;
     PETSC_CHECK(PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 

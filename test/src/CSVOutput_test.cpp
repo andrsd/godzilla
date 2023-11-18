@@ -124,6 +124,5 @@ TEST_F(CSVOutputTest, set_file_name)
     this->mesh->create();
     this->prob->create();
 
-    out.set_file_name();
     EXPECT_EQ(out.get_file_name(), "asdf.csv");
 }

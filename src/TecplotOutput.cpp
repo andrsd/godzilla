@@ -111,17 +111,6 @@ TecplotOutput::get_file_ext() const
 }
 
 void
-TecplotOutput::set_file_name()
-{
-    _F_;
-    if (get_comm().size() == 1)
-        this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
-    else
-        this->file_name =
-            fmt::format("{}.{}.{}", this->file_base, get_processor_id(), this->get_file_ext());
-}
-
-void
 TecplotOutput::create()
 {
     _F_;
@@ -203,8 +192,7 @@ TecplotOutput::output_step()
 {
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
-    set_file_name();
-    TIMED_EVENT(9, "TecplotOutput", "Output to file: {}", this->file_name);
+    TIMED_EVENT(9, "TecplotOutput", "Output to file: {}", get_file_name());
 
     if (this->file == nullptr)
         open_file();
@@ -224,7 +212,7 @@ TecplotOutput::open_file()
 {
     _F_;
     const char * mode = this->format == BINARY ? "wb" : "w";
-    this->file = std::fopen(this->file_name.c_str(), mode);
+    this->file = std::fopen(get_file_name().c_str(), mode);
     if (this->file == nullptr)
         error("Could not open file '{}' for writing.", get_file_name());
 }

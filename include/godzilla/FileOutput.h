@@ -17,27 +17,26 @@ public:
     /// Get the file name with the output file produced by this outputter
     ///
     /// @return The file name with the output
-    NO_DISCARD virtual const std::string & get_file_name() const;
+    std::string get_file_name() const;
 
-    /// Set the file name for single output
-    virtual void set_file_name();
+    /// Set file base
+    ///
+    /// @param file_base File base to set
+    void set_file_base(const std::string & file_base);
 
-    /// Set the file name for a sequence of outputs
+    /// Set the file base for a sequence of outputs
     ///
     /// @param stepi Step number
-    virtual void set_sequence_file_name(unsigned int stepi);
+    void set_sequence_file_base(unsigned int stepi);
 
     /// Get file extension
     ///
     /// @return File extension
     NO_DISCARD virtual std::string get_file_ext() const = 0;
 
-protected:
+private:
     /// The file base of the output file
     std::string file_base;
-
-    /// The file name of the output file
-    std::string file_name;
 
 public:
     static Parameters parameters();
