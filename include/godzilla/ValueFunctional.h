@@ -30,6 +30,7 @@ protected:
         return this->evalr->declare_value<T>(val_name);
     }
 
+private:
     /// Dependency evaluator
     DependencyEvaluator * evalr;
     /// Values this object provides (i.e what was announced via `declare_value`)
