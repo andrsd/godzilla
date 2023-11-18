@@ -90,6 +90,7 @@ protected:
         return str;
     }
 
+private:
     /// List of logged errors/warnings
     std::vector<Entry> entries;
     /// Number of errors
