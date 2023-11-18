@@ -53,6 +53,18 @@ FunctionInterface::create()
     }
 }
 
+unsigned int
+FunctionInterface::get_num_components() const
+{
+    return this->num_comps;
+}
+
+bool
+FunctionInterface::has_time_expression() const
+{
+    return !this->expression_t.empty();
+}
+
 bool
 FunctionInterface::evaluate_func(Int dim, Real time, const Real x[], Int nc, Real u[])
 {

@@ -32,7 +32,7 @@ Int
 FunctionInitialCondition::get_num_components() const
 {
     _F_;
-    return this->num_comps;
+    return FunctionInterface::get_num_components();
 }
 
 void

@@ -8,7 +8,7 @@ namespace godzilla {
 /// Dirichlet boundary condition
 ///
 /// Can be used only on single-field problems
-class DirichletBC : public EssentialBC, public FunctionInterface {
+class DirichletBC : public EssentialBC, protected FunctionInterface {
 public:
     explicit DirichletBC(const Parameters & params);
 

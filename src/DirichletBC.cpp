@@ -18,10 +18,10 @@ DirichletBC::parameters()
 DirichletBC::DirichletBC(const Parameters & params) :
     EssentialBC(params),
     FunctionInterface(params),
-    components(this->num_comps, 0)
+    components(get_num_components(), 0)
 {
     _F_;
-    for (Int i = 0; i < this->num_comps; i++)
+    for (Int i = 0; i < get_num_components(); i++)
         this->components[i] = i;
 }
 
@@ -44,7 +44,7 @@ PetscFunc *
 DirichletBC::get_function_t()
 {
     _F_;
-    if (!this->expression_t.empty())
+    if (has_time_expression())
         return EssentialBC::get_function_t();
     else
         return nullptr;
