@@ -143,7 +143,7 @@ TEST(ProblemTest, local_vec)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
-    problem.set_local_section(create_section(mesh.dm()));
+    problem.set_local_section(create_section(mesh.get_dm()));
 
     Vector loc_vec = problem.get_local_vector();
     EXPECT_EQ(loc_vec.get_size(), 3);
@@ -168,7 +168,7 @@ TEST(ProblemTest, global_vec)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
-    problem.set_local_section(create_section(mesh.dm()));
+    problem.set_local_section(create_section(mesh.get_dm()));
 
     Vector glob_vec = problem.get_global_vector();
     EXPECT_EQ(glob_vec.get_size(), 3);
@@ -194,7 +194,7 @@ TEST(ProblemTest, create_matrix)
     prob_params.set<Mesh *>("_mesh") = &mesh;
     TestProblem problem(prob_params);
     problem.create();
-    problem.set_local_section(create_section(mesh.dm()));
+    problem.set_local_section(create_section(mesh.get_dm()));
 
     Matrix mat = problem.create_matrix();
     EXPECT_EQ(mat.get_n_rows(), 3);
@@ -218,7 +218,7 @@ TEST(UnstructuredMeshTest, get_local_section)
     TestProblem problem(prob_params);
     problem.create();
 
-    auto dm = mesh.dm();
+    auto dm = mesh.get_dm();
     Section s = create_section(dm);
     problem.set_local_section(s);
 
@@ -245,7 +245,7 @@ TEST(UnstructuredMeshTest, get_global_section)
     TestProblem problem(prob_params);
     problem.create();
 
-    auto dm = mesh.dm();
+    auto dm = mesh.get_dm();
     Section s = create_section(dm);
     problem.set_local_section(s);
     problem.set_global_section(s);

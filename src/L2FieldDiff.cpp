@@ -84,7 +84,7 @@ L2FieldDiff::compute()
         ctxs[fid] = pfn->get_context();
     }
 
-    PETSC_CHECK(DMComputeL2FieldDiff(this->problem->dm(),
+    PETSC_CHECK(DMComputeL2FieldDiff(this->problem->get_dm(),
                                      this->problem->get_time(),
                                      pfns.data(),
                                      ctxs.data(),

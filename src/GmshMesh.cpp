@@ -25,7 +25,7 @@ GmshMesh::create_dm()
     TIMED_EVENT(9, "MeshLoad", "Loading mesh '{}'", this->file_name);
     PetscOptionsSetValue(nullptr, "-dm_plex_gmsh_use_regions", nullptr);
     PETSC_CHECK(
-        DMPlexCreateGmshFromFile(get_comm(), this->file_name.c_str(), PETSC_TRUE, &this->_dm));
+        DMPlexCreateGmshFromFile(get_comm(), this->file_name.c_str(), PETSC_TRUE, &this->dm));
 }
 
 } // namespace godzilla

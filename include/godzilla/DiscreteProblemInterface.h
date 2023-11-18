@@ -379,7 +379,7 @@ DiscreteProblemInterface::set_closure(const Vector & v,
                                       const DenseVector<Real, N> & vec,
                                       InsertMode mode) const
 {
-    auto dm = this->unstr_mesh->dm();
+    auto dm = this->unstr_mesh->get_dm();
     PETSC_CHECK(DMPlexVecSetClosure(dm, this->section, v, point, vec.data(), mode));
 }
 
@@ -390,7 +390,7 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
                                       const DenseMatrix<Real, N> & mat,
                                       InsertMode mode) const
 {
-    auto dm = this->unstr_mesh->dm();
+    auto dm = this->unstr_mesh->get_dm();
     Section global_section = this->problem->get_global_section();
     PETSC_CHECK(DMPlexMatSetClosure(dm, this->section, global_section, A, point, mat.data(), mode));
 }
@@ -402,7 +402,7 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
                                       const DenseMatrixSymm<Real, N> & mat,
                                       InsertMode mode) const
 {
-    auto dm = this->unstr_mesh->dm();
+    auto dm = this->unstr_mesh->get_dm();
     Section global_section = this->problem->get_global_section();
     DenseMatrix<Real, N> m = mat;
     PETSC_CHECK(DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.data(), mode));
@@ -412,7 +412,7 @@ template <Int N>
 DenseVector<Real, N>
 DiscreteProblemInterface::get_closure(const Vector & v, Int point) const
 {
-    auto dm = this->unstr_mesh->dm();
+    auto dm = this->unstr_mesh->get_dm();
     Int sz = N;
     DenseVector<Real, N> vec;
     Real * data = vec.data();
@@ -445,7 +445,7 @@ template <typename T>
 T
 DiscreteProblemInterface::get_point_local_field_ref(Int point, Int field, Scalar * array) const
 {
-    auto dm = this->unstr_mesh->dm();
+    auto dm = this->unstr_mesh->get_dm();
     T var;
     PETSC_CHECK(DMPlexPointLocalFieldRef(dm, point, field, array, &var));
     return var;

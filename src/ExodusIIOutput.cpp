@@ -383,7 +383,7 @@ ExodusIIOutput::write_face_sets()
     if (!this->mesh->has_label("Face Sets"))
         return;
 
-    auto dm = this->mesh->dm();
+    auto dm = this->mesh->get_dm();
     std::vector<std::string> fs_names;
 
     auto face_sets_label = this->mesh->get_label("Face Sets");
@@ -704,7 +704,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id,
                                          const Int * cells)
 {
     _F_;
-    auto dm = this->mesh->dm();
+    auto dm = this->mesh->get_dm();
     Int n_all_elems = this->mesh->get_num_all_cells();
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);

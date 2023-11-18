@@ -59,7 +59,7 @@ protected:
     {
         for (auto & f : faces) {
             face_sets.set_value(f, id);
-            PETSC_CHECK(DMSetLabelValue(dm(), name, f, id));
+            PETSC_CHECK(DMSetLabelValue(get_dm(), name, f, id));
         }
     }
 

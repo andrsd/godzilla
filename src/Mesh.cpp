@@ -14,7 +14,7 @@ Mesh::parameters()
 Mesh::Mesh(const Parameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    _dm(nullptr),
+    dm(nullptr),
     dim(-1)
 {
 }
@@ -22,22 +22,15 @@ Mesh::Mesh(const Parameters & parameters) :
 Mesh::~Mesh()
 {
     _F_;
-    if (this->_dm)
-        PETSC_CHECK(DMDestroy(&this->_dm));
+    if (this->dm)
+        PETSC_CHECK(DMDestroy(&this->dm));
 }
 
 DM
 Mesh::get_dm() const
 {
     _F_;
-    return dm();
-}
-
-DM
-Mesh::dm() const
-{
-    _F_;
-    return this->_dm;
+    return this->dm;
 }
 
 Int
@@ -52,7 +45,7 @@ Mesh::has_label(const std::string & name) const
 {
     _F_;
     PetscBool exists = PETSC_FALSE;
-    PETSC_CHECK(DMHasLabel(this->_dm, name.c_str(), &exists));
+    PETSC_CHECK(DMHasLabel(this->dm, name.c_str(), &exists));
     return exists == PETSC_TRUE;
 }
 
@@ -61,7 +54,7 @@ Mesh::get_label(const std::string & name) const
 {
     _F_;
     DMLabel label;
-    PETSC_CHECK(DMGetLabel(this->_dm, name.c_str(), &label));
+    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
     return Label(label);
 }
 
@@ -70,8 +63,8 @@ Mesh::create_label(const std::string & name) const
 {
     _F_;
     DMLabel label;
-    PETSC_CHECK(DMCreateLabel(this->_dm, name.c_str()));
-    PETSC_CHECK(DMGetLabel(this->_dm, name.c_str(), &label));
+    PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
+    PETSC_CHECK(DMGetLabel(this->dm, name.c_str(), &label));
     return Label(label);
 }
 
@@ -79,7 +72,7 @@ void
 Mesh::remove_label(const std::string & name)
 {
     _F_;
-    PETSC_CHECK(DMRemoveLabel(this->_dm, name.c_str(), nullptr));
+    PETSC_CHECK(DMRemoveLabel(this->dm, name.c_str(), nullptr));
 }
 
 DM
@@ -87,7 +80,7 @@ Mesh::get_coordinate_dm() const
 {
     _F_;
     DM cdm;
-    PETSC_CHECK(DMGetCoordinateDM(this->_dm, &cdm));
+    PETSC_CHECK(DMGetCoordinateDM(this->dm, &cdm));
     return cdm;
 }
 
@@ -96,7 +89,7 @@ Mesh::get_coordinates() const
 {
     _F_;
     Vec vec;
-    PETSC_CHECK(DMGetCoordinates(this->_dm, &vec));
+    PETSC_CHECK(DMGetCoordinates(this->dm, &vec));
     return { vec };
 }
 
@@ -105,7 +98,7 @@ Mesh::get_coordinates_local() const
 {
     _F_;
     Vec vec;
-    PETSC_CHECK(DMGetCoordinatesLocal(this->_dm, &vec));
+    PETSC_CHECK(DMGetCoordinatesLocal(this->dm, &vec));
     return { vec };
 }
 
@@ -114,7 +107,7 @@ Mesh::get_coordinate_section() const
 {
     _F_;
     PetscSection section;
-    PETSC_CHECK(DMGetCoordinateSection(this->_dm, &section));
+    PETSC_CHECK(DMGetCoordinateSection(this->dm, &section));
     return { section };
 }
 
@@ -122,7 +115,7 @@ void
 Mesh::set_up()
 {
     _F_;
-    PETSC_CHECK(DMSetUp(this->_dm));
+    PETSC_CHECK(DMSetUp(this->dm));
 }
 
 } // namespace godzilla

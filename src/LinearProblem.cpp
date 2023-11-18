@@ -101,8 +101,8 @@ LinearProblem::init()
 {
     _F_;
     PETSC_CHECK(KSPCreate(get_comm(), &this->ksp));
-    PETSC_CHECK(KSPSetDM(this->ksp, dm()));
-    PETSC_CHECK(DMSetApplicationContext(dm(), this));
+    PETSC_CHECK(KSPSetDM(this->ksp, get_dm()));
+    PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
 }
 
 void

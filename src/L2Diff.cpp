@@ -44,7 +44,7 @@ L2Diff::compute()
     _F_;
     std::vector<PetscFunc *> funcs(1, l2_diff_eval);
     std::vector<void *> ctxs(1, this);
-    PETSC_CHECK(DMComputeL2Diff(this->problem->dm(),
+    PETSC_CHECK(DMComputeL2Diff(this->problem->get_dm(),
                                 this->problem->get_time(),
                                 funcs.data(),
                                 ctxs.data(),

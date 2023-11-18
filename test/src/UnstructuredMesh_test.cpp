@@ -36,7 +36,7 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->_dm));
+                                        &this->dm));
     }
 
     Int
@@ -74,7 +74,7 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->_dm));
+                                        &this->dm));
         // create "side sets"
         std::map<Int, std::string> face_set_names;
         face_set_names[1] = "back";

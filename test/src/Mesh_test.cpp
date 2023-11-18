@@ -29,7 +29,7 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->_dm));
+                                        &this->dm));
         set_up();
     }
 
@@ -57,7 +57,7 @@ TEST(MeshTest, get_coordinates)
     EXPECT_EQ(coords(2), 1.);
 
     DM cdm;
-    DMGetCoordinateDM(mesh.dm(), &cdm);
+    DMGetCoordinateDM(mesh.get_dm(), &cdm);
     EXPECT_EQ(mesh.get_coordinate_dm(), cdm);
 }
 
