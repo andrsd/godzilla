@@ -18,11 +18,8 @@ public:
     void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override;
 
 private:
-    /// Values (per component)
+    /// Values (one per component)
     const std::vector<Real> & values;
-
-    /// Number of compoennts
-    unsigned int num_comps;
 
 public:
     static Parameters parameters();
