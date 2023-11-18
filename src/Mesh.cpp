@@ -11,13 +11,7 @@ Mesh::parameters()
     return params;
 }
 
-Mesh::Mesh(const Parameters & parameters) :
-    Object(parameters),
-    PrintInterface(this),
-    dm(nullptr),
-    dim(-1)
-{
-}
+Mesh::Mesh(const Parameters & parameters) : Object(parameters), PrintInterface(this), dm(nullptr) {}
 
 Mesh::~Mesh()
 {
@@ -37,7 +31,9 @@ Int
 Mesh::get_dimension() const
 {
     _F_;
-    return this->dim;
+    Int dim;
+    PETSC_CHECK(DMGetDimension(this->dm, &dim));
+    return dim;
 }
 
 bool
@@ -116,6 +112,15 @@ Mesh::set_up()
 {
     _F_;
     PETSC_CHECK(DMSetUp(this->dm));
+}
+
+void
+Mesh::set_dm(DM dm)
+{
+    _F_;
+    if (this->dm)
+        PETSC_CHECK(DMDestroy(&this->dm));
+    this->dm = dm;
 }
 
 } // namespace godzilla

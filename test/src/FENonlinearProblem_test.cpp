@@ -41,11 +41,12 @@ REGISTER_OBJECT(GTest2CompIC);
 
 TEST_F(FENonlinearProblemTest, fields)
 {
+    mesh->create();
+
     prob->set_fe(1, "vec", 3, 1);
 
     Int aux_fld1_idx = prob->add_aux_fe("aux_fld1", 2, 1);
 
-    mesh->create();
     prob->create();
 
     EXPECT_EQ(prob->get_field_name(0), "u");
@@ -94,6 +95,7 @@ TEST_F(FENonlinearProblemTest, fields)
 
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
+    mesh->create();
     prob->set_fe(0, "first", 1, 1);
     EXPECT_DEATH(prob->set_fe(0, "second", 1, 1),
                  "\\[ERROR\\] Cannot add field 'second' with ID = 0. ID already exists.");
@@ -139,6 +141,7 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
+    mesh->create();
     prob->set_aux_fe(0, "first", 1, 1);
     EXPECT_DEATH(
         prob->set_aux_fe(0, "second", 1, 1),

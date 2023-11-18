@@ -10,8 +10,10 @@ class ExodusIIMesh : public FileMesh {
 public:
     explicit ExodusIIMesh(const Parameters & parameters);
 
+    void create() override;
+
 protected:
-    void create_dm() override;
+    DM create_dm() override;
 
 public:
     static Parameters parameters();

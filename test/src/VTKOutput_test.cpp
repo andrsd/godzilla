@@ -73,7 +73,9 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
         void
         create() override
         {
-            DMDACreate1d(get_comm(), DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &this->dm);
+            DM dm;
+            DMDACreate1d(get_comm(), DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &dm);
+            set_dm(dm);
             set_up();
         }
 

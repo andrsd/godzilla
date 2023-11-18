@@ -10,6 +10,7 @@ class RectangleMesh : public UnstructuredMesh {
 public:
     explicit RectangleMesh(const Parameters & parameters);
 
+    void create() override;
     ///
     NO_DISCARD Real get_x_min() const;
     NO_DISCARD Real get_x_max() const;
@@ -22,7 +23,7 @@ public:
     NO_DISCARD Int get_ny() const;
 
 protected:
-    void create_dm() override;
+    DM create_dm() override;
 
     /// Minimum in the x direction
     const Real & xmin;

@@ -11,7 +11,7 @@ public:
     explicit GmshMesh(const Parameters & parameters);
 
 protected:
-    void create_dm() override;
+    DM create_dm() override;
 
 public:
     static Parameters parameters();

@@ -155,12 +155,12 @@ public:
     ///
     /// NOTES:
     /// - only process 0 takes in the input
-    void build_from_cell_list(Int dim,
-                              Int n_corners,
-                              const std::vector<Int> & cells,
-                              Int space_dim,
-                              const std::vector<Real> & vertices,
-                              bool interpolate);
+    DM build_from_cell_list(Int dim,
+                            Int n_corners,
+                            const std::vector<Int> & cells,
+                            Int space_dim,
+                            const std::vector<Real> & vertices,
+                            bool interpolate);
 
     /// Get the `Label` recording the depth of each point
     ///
@@ -342,7 +342,7 @@ public:
 
 protected:
     /// Method that builds DM for the mesh
-    virtual void create_dm() = 0;
+    virtual DM create_dm() = 0;
 
     void create_cell_set(Int id, const std::string & name);
 

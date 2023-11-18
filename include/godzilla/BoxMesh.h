@@ -12,6 +12,8 @@ public:
     /// Constructor for building the object via Factory
     explicit BoxMesh(const Parameters & parameters);
 
+    void create() override;
+
     /// Get lower limit in x-direction
     NO_DISCARD Real get_x_min() const;
 
@@ -40,7 +42,7 @@ public:
     NO_DISCARD Int get_nz() const;
 
 protected:
-    void create_dm() override;
+    DM create_dm() override;
 
     /// Minimum in the x direction
     const Real & xmin;

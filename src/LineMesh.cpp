@@ -53,23 +53,10 @@ LineMesh::get_nx() const
 }
 
 void
-LineMesh::create_dm()
+LineMesh::create()
 {
     _F_;
-    std::array<Real, 1> lower = { this->xmin };
-    std::array<Real, 1> upper = { this->xmax };
-    std::array<Int, 1> faces = { this->nx };
-    std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
-
-    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
-                                    1,
-                                    PETSC_TRUE,
-                                    faces.data(),
-                                    lower.data(),
-                                    upper.data(),
-                                    periodicity.data(),
-                                    this->interpolate,
-                                    &this->dm));
+    UnstructuredMesh::create();
 
     remove_label("marker");
     // create user-friendly names for sides
@@ -79,6 +66,28 @@ LineMesh::create_dm()
     create_face_set_labels(face_set_names);
     for (auto it : face_set_names)
         set_face_set_name(it.first, it.second);
+}
+
+DM
+LineMesh::create_dm()
+{
+    _F_;
+    std::array<Real, 1> lower = { this->xmin };
+    std::array<Real, 1> upper = { this->xmax };
+    std::array<Int, 1> faces = { this->nx };
+    std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
+
+    DM dm;
+    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                    1,
+                                    PETSC_TRUE,
+                                    faces.data(),
+                                    lower.data(),
+                                    upper.data(),
+                                    periodicity.data(),
+                                    this->interpolate,
+                                    &dm));
+    return dm;
 }
 
 } // namespace godzilla

@@ -91,6 +91,8 @@ TEST_F(InitialConditionTest, api)
 
 TEST_F(InitialConditionTest, test)
 {
+    this->mesh->create();
+
     this->prob->add_aux_fe("a", 1, 1);
 
     Parameters params = InitialCondition::parameters();
@@ -109,8 +111,6 @@ TEST_F(InitialConditionTest, test)
 
     this->prob->add_initial_condition(&ic);
     this->prob->add_initial_condition(&aux_ic);
-
-    this->mesh->create();
     this->prob->create();
 
     this->app->check_integrity();
@@ -179,9 +179,9 @@ TEST_F(InitialCondition2FieldTest, no_field_param)
     params.set<std::string>("_name") = "obj";
     MockInitialCondition ic(params);
 
-    this->prob->add_initial_condition(&ic);
-
     this->mesh->create();
+
+    this->prob->add_initial_condition(&ic);
     this->prob->create();
 
     this->app->check_integrity();
@@ -203,9 +203,9 @@ TEST_F(InitialCondition2FieldTest, non_existing_field)
     params.set<std::string>("field") = "asdf";
     MockInitialCondition ic(params);
 
-    this->prob->add_initial_condition(&ic);
-
     this->mesh->create();
+
+    this->prob->add_initial_condition(&ic);
     this->prob->create();
 
     this->app->check_integrity();

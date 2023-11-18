@@ -112,27 +112,10 @@ BoxMesh::get_nz() const
 }
 
 void
-BoxMesh::create_dm()
+BoxMesh::create()
 {
     _F_;
-    std::array<Real, 3> lower = { this->xmin, this->ymin, this->zmin };
-    std::array<Real, 3> upper = { this->xmax, this->ymax, this->zmax };
-    std::array<Int, 3> faces = { this->nx, this->ny, this->nz };
-    std::array<DMBoundaryType, 3> periodicity = {
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
-    };
-
-    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
-                                    3,
-                                    this->simplex,
-                                    faces.data(),
-                                    lower.data(),
-                                    upper.data(),
-                                    periodicity.data(),
-                                    this->interpolate,
-                                    &this->dm));
+    UnstructuredMesh::create();
 
     remove_label("marker");
     // create user-friendly names for sides
@@ -146,6 +129,32 @@ BoxMesh::create_dm()
     create_face_set_labels(face_set_names);
     for (auto it : face_set_names)
         set_face_set_name(it.first, it.second);
+}
+
+DM
+BoxMesh::create_dm()
+{
+    _F_;
+    std::array<Real, 3> lower = { this->xmin, this->ymin, this->zmin };
+    std::array<Real, 3> upper = { this->xmax, this->ymax, this->zmax };
+    std::array<Int, 3> faces = { this->nx, this->ny, this->nz };
+    std::array<DMBoundaryType, 3> periodicity = {
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
+    };
+
+    DM dm;
+    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                    3,
+                                    this->simplex,
+                                    faces.data(),
+                                    lower.data(),
+                                    upper.data(),
+                                    periodicity.data(),
+                                    this->interpolate,
+                                    &dm));
+    return dm;
 }
 
 } // namespace godzilla

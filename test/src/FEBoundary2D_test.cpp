@@ -26,16 +26,10 @@ class TestMesh2D : public godzilla::UnstructuredMesh {
 public:
     explicit TestMesh2D(const godzilla::Parameters & parameters) : UnstructuredMesh(parameters) {}
 
-protected:
     void
-    create_dm() override
+    create() override
     {
-        const PetscInt DIM = 2;
-        const PetscInt N_ELEM_NODES = 3;
-        std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
-        std::vector<Real> coords = { 0, 0, 1, 0, 0, 1, 1, 1 };
-        build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
-
+        UnstructuredMesh::create();
         // create "side sets"
         auto face_sets = create_label("Face Sets");
 
@@ -50,6 +44,16 @@ protected:
         create_face_set_labels(face_set_names);
         for (auto it : face_set_names)
             set_face_set_name(it.first, it.second);
+    }
+
+    DM
+    create_dm() override
+    {
+        const PetscInt DIM = 2;
+        const PetscInt N_ELEM_NODES = 3;
+        std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
+        std::vector<Real> coords = { 0, 0, 1, 0, 0, 1, 1, 1 };
+        return build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
     }
 
     void

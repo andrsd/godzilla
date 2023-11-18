@@ -79,10 +79,12 @@ public:
     void set_up();
 
 protected:
+    /// Set the DM
+    void set_dm(DM dm);
+
+private:
     /// DM object
     DM dm;
-    /// Spatial dimension of the mesh
-    Int dim;
 
 public:
     static Parameters parameters();

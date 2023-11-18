@@ -70,12 +70,11 @@ void
 UnstructuredMesh::create()
 {
     _F_;
-    create_dm();
-    auto dm = get_dm();
+    DM dm = create_dm();
     PETSC_CHECK(DMSetFromOptions(dm));
     PETSC_CHECK(DMViewFromOptions(dm, nullptr, "-dm_view"));
+    set_dm(dm);
     set_up();
-    PETSC_CHECK(DMGetDimension(dm, &this->dim));
 
     lprint(9, "Information:");
     lprint(9, "- vertices: {}", get_num_vertices());
@@ -103,7 +102,7 @@ UnstructuredMesh::get_vertex_range() const
 {
     _F_;
     Int first, last;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), this->dim, &first, &last));
+    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), get_dimension(), &first, &last));
     return { first, last };
 }
 
@@ -284,10 +283,8 @@ UnstructuredMesh::distribute()
 
     DM dm_dist = nullptr;
     PETSC_CHECK(DMPlexDistribute(get_dm(), this->partition_overlap, nullptr, &dm_dist));
-    if (dm_dist) {
-        PETSC_CHECK(DMDestroy(&this->dm));
-        this->dm = dm_dist;
-    }
+    if (dm_dist)
+        set_dm(dm_dist);
 }
 
 bool
@@ -444,8 +441,7 @@ UnstructuredMesh::construct_ghost_cells()
     _F_;
     DM gdm;
     PETSC_CHECK(DMPlexConstructGhostCells(get_dm(), nullptr, nullptr, &gdm));
-    PETSC_CHECK(DMDestroy(&this->dm));
-    this->dm = gdm;
+    set_dm(gdm);
 }
 
 void
@@ -481,7 +477,7 @@ UnstructuredMesh::vertex_begin() const
 {
     _F_;
     Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), this->dim, &idx, nullptr));
+    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), get_dimension(), &idx, nullptr));
     return Iterator(idx);
 }
 
@@ -490,7 +486,7 @@ UnstructuredMesh::vertex_end() const
 {
     _F_;
     Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), this->dim, nullptr, &idx));
+    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), get_dimension(), nullptr, &idx));
     return Iterator(idx);
 }
 
@@ -545,7 +541,7 @@ UnstructuredMesh::common_cells_by_vertex()
     return this->common_cells_by_vtx;
 }
 
-void
+DM
 UnstructuredMesh::build_from_cell_list(Int dim,
                                        Int n_corners,
                                        const std::vector<Int> & cells,
@@ -554,6 +550,7 @@ UnstructuredMesh::build_from_cell_list(Int dim,
                                        bool interpolate)
 {
     _F_;
+    DM dm;
     PETSC_CHECK(DMPlexCreateFromCellListPetsc(get_comm(),
                                               dim,
                                               cells.size() / n_corners,
@@ -563,7 +560,8 @@ UnstructuredMesh::build_from_cell_list(Int dim,
                                               cells.data(),
                                               space_dim,
                                               vertices.data(),
-                                              &this->dm));
+                                              &dm));
+    return dm;
 }
 
 } // namespace godzilla

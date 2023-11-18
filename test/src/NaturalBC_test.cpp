@@ -124,7 +124,6 @@ TEST(NaturalBCTest, fe)
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
-    prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters bc_params = TestNaturalBC::parameters();
     bc_params.set<App *>("_app") = &app;
@@ -133,9 +132,10 @@ TEST(NaturalBCTest, fe)
     bc_params.set<std::vector<std::string>>("boundary") = { "left" };
     bc_params.set<std::string>("field") = "u";
     TestNaturalBC bc(bc_params);
-    prob.add_boundary_condition(&bc);
 
     mesh.create();
+    prob.set_aux_fe(0, "aux1", 1, 1);
+    prob.add_boundary_condition(&bc);
     prob.create();
 
     PetscDS ds = prob.getDS();
