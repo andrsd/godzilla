@@ -25,7 +25,7 @@ public:
     void check() override;
     void output_step() override;
 
-protected:
+private:
     /// Viewer for the output
     PetscViewer viewer;
 
