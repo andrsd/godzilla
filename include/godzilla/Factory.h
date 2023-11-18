@@ -84,7 +84,7 @@ public:
     /// Destroy all object build by this factory
     void destroy();
 
-protected:
+private:
     /// All objects built by this factory
     std::list<Object *> objects;
     /// All Parameters objects built by this factory
