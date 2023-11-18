@@ -18,7 +18,7 @@ public:
     void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override;
     void evaluate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override;
 
-protected:
+private:
     std::vector<Int> components;
 
 public:
