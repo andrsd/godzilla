@@ -33,7 +33,7 @@ public:
     /// Get the pointer to the context that will be passed into PETSc API
     virtual void * get_context();
 
-protected:
+private:
     /// Text representation of the function to evaluate (one per component)
     const std::vector<std::string> & function;
     /// User defined constants
