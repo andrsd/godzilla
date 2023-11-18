@@ -22,10 +22,10 @@ DM
 GmshMesh::create_dm()
 {
     _F_;
-    TIMED_EVENT(9, "MeshLoad", "Loading mesh '{}'", this->file_name);
+    TIMED_EVENT(9, "MeshLoad", "Loading mesh '{}'", get_file_name());
     PetscOptionsSetValue(nullptr, "-dm_plex_gmsh_use_regions", nullptr);
     DM dm;
-    PETSC_CHECK(DMPlexCreateGmshFromFile(get_comm(), this->file_name.c_str(), PETSC_TRUE, &dm));
+    PETSC_CHECK(DMPlexCreateGmshFromFile(get_comm(), get_file_name().c_str(), PETSC_TRUE, &dm));
     return dm;
 }
 

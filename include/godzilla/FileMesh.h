@@ -15,7 +15,7 @@ public:
     /// @return Name of the file
     NO_DISCARD const std::string & get_file_name() const;
 
-protected:
+private:
     /// File name with the mesh
     std::string file_name;
 
