@@ -19,7 +19,7 @@ public:
     void compute() override;
     Real get_value() override;
 
-protected:
+private:
     /// FE problem
     const FEProblemInterface * fepi;
 
