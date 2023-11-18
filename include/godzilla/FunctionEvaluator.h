@@ -44,7 +44,7 @@ public:
 
     bool evaluate(Int dim, Real time, const Real x[], Int nc, Real u[]);
 
-protected:
+private:
     /// Underlying muParser object
     mu::Parser parser;
 };
