@@ -36,7 +36,7 @@ public:
     /// @param u  The output field values
     virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
 
-protected:
+private:
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
 
