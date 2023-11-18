@@ -30,6 +30,7 @@ public:
 protected:
     DM create_dm() override;
 
+private:
     /// Minimum in the x direction
     const Real & xmin;
     /// Maximum in the x direction
