@@ -145,18 +145,6 @@ public:
         flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
     }
 
-    const Matrix &
-    get_mass_matrix() const
-    {
-        return this->M;
-    }
-
-    const Vector &
-    get_lumped_mass_matrix() const
-    {
-        return this->M_lumped_inv;
-    }
-
 protected:
     void
     set_up_fields() override
