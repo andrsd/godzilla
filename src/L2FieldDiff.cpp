@@ -21,7 +21,7 @@ L2FieldDiff::parameters()
 
 L2FieldDiff::L2FieldDiff(const Parameters & params) :
     Postprocessor(params),
-    fepi(dynamic_cast<const FEProblemInterface *>(this->problem))
+    fepi(dynamic_cast<const FEProblemInterface *>(get_problem()))
 {
     _F_;
     const auto & fn_map = get_param<std::map<std::string, std::vector<std::string>>>("functions");
@@ -34,11 +34,11 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
             const std::string class_name = "ParsedFunction";
             Parameters * fn_pars = get_app()->get_parameters(class_name);
             fn_pars->set<App *>("_app") = get_app();
-            fn_pars->set<Problem *>("_problem") = this->problem;
+            fn_pars->set<Problem *>("_problem") = get_problem();
             fn_pars->set<std::vector<std::string>>("function") = it.second;
             auto * pfn = get_app()->build_object<ParsedFunction>(class_name, nm, fn_pars);
 
-            const_cast<Problem *>(this->problem)->add_function(pfn);
+            get_problem()->add_function(pfn);
             this->funcs[field_name] = pfn;
         }
     }
@@ -84,11 +84,12 @@ L2FieldDiff::compute()
         ctxs[fid] = pfn->get_context();
     }
 
-    PETSC_CHECK(DMComputeL2FieldDiff(this->problem->get_dm(),
-                                     this->problem->get_time(),
+    auto * problem = get_problem();
+    PETSC_CHECK(DMComputeL2FieldDiff(problem->get_dm(),
+                                     problem->get_time(),
                                      pfns.data(),
                                      ctxs.data(),
-                                     this->problem->get_solution_vector(),
+                                     problem->get_solution_vector(),
                                      diff.data()));
 
     for (Int i = 0; i < n_fields; i++) {
