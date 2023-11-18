@@ -51,7 +51,7 @@ public:
         const char * func;
     };
 
-protected:
+private:
     /// The object storing call stack objects
     std::array<Obj *, MAX_SIZE> stack;
     /// Actual size of the stack
