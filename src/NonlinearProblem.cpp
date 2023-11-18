@@ -92,7 +92,7 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     _F_;
-    this->default_output_on = Output::ON_FINAL;
+    set_default_output_on(Output::ON_FINAL);
     line_search_type = utils::to_lower(line_search_type);
 }
 

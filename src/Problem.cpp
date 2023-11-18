@@ -257,4 +257,10 @@ Problem::set_global_section(const Section & section) const
     PETSC_CHECK(DMSetGlobalSection(get_dm(), section));
 }
 
+void
+Problem::set_default_output_on(unsigned int mask)
+{
+    this->default_output_on = mask;
+}
+
 } // namespace godzilla

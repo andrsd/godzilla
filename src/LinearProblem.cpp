@@ -58,7 +58,7 @@ LinearProblem::LinearProblem(const Parameters & parameters) :
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     _F_;
-    this->default_output_on = Output::ON_FINAL;
+    set_default_output_on(Output::ON_FINAL);
 }
 
 LinearProblem::~LinearProblem()

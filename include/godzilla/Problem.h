@@ -127,12 +127,15 @@ public:
     /// Set the `Section` encoding the global data layout for the `DM`.
     void set_global_section(const Section & section) const;
 
+    void set_default_output_on(unsigned int mask);
+
 protected:
     /// Called before solving starts
     virtual void on_initial();
     /// Called after solve has successfully finished
     virtual void on_final();
 
+private:
     /// Mesh
     Mesh * mesh;
 
