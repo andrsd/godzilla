@@ -59,6 +59,7 @@ protected:
                                   Int n_elems_in_block,
                                   const Int * cells);
 
+private:
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
     /// FE problem interface (convenience pointer)
