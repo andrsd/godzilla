@@ -54,9 +54,9 @@ TransientProblemInterface::parameters()
 }
 
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
+    ts(nullptr),
     problem(problem),
     tpi_params(params),
-    ts(nullptr),
     ts_adaptor(nullptr),
     start_time(params.get<Real>("start_time")),
     end_time(params.get<Real>("end_time")),
@@ -133,6 +133,20 @@ TransientProblemInterface::get_max_time() const
     Real time;
     PETSC_CHECK(TSGetMaxTime(this->ts, &time));
     return time;
+}
+
+Real
+TransientProblemInterface::get_time() const
+{
+    _F_;
+    return this->time;
+}
+
+Int
+TransientProblemInterface::get_step_number() const
+{
+    _F_;
+    return this->step_num;
 }
 
 void

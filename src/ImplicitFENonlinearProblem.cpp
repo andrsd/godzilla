@@ -108,14 +108,14 @@ Real
 ImplicitFENonlinearProblem::get_time() const
 {
     _F_;
-    return this->time;
+    return TransientProblemInterface::get_time();
 }
 
 Int
 ImplicitFENonlinearProblem::get_step_num() const
 {
     _F_;
-    return this->step_num;
+    return TransientProblemInterface::get_step_number();
 }
 
 void

@@ -51,14 +51,14 @@ Real
 ExplicitFVLinearProblem::get_time() const
 {
     _F_;
-    return this->time;
+    return TransientProblemInterface::get_time();
 }
 
 Int
 ExplicitFVLinearProblem::get_step_num() const
 {
     _F_;
-    return this->step_num;
+    return TransientProblemInterface::get_step_number();
 }
 
 void
