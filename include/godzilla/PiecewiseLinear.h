@@ -20,7 +20,7 @@ public:
     /// Evaluate this function at point 'x'
     Real evaluate(Real x);
 
-protected:
+private:
     /// Linear interpolation object used for function evaluation
     LinearInterpolation linpol;
 
