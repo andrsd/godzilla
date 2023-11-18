@@ -40,12 +40,6 @@ public:
                                         &dm));
         return dm;
     }
-
-    Int
-    get_partition_overlap()
-    {
-        return this->partition_overlap;
-    }
 };
 
 class TestUnstructuredMesh3D : public UnstructuredMesh {

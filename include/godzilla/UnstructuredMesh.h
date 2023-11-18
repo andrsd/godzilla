@@ -255,6 +255,11 @@ public:
     /// @param type Type of the partitioner
     virtual void set_partitioner_type(const std::string & type);
 
+    /// Get partition overlap
+    ///
+    /// @return Partition overlap
+    Int get_partition_overlap();
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
@@ -350,6 +355,7 @@ protected:
 
     void create_face_set(Int id, const std::string & name);
 
+private:
     /// Mesh partitioner
     Partitioner partitioner;
 

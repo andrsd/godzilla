@@ -265,6 +265,13 @@ UnstructuredMesh::set_partitioner_type(const std::string & type)
     this->partitioner.set_type(type);
 }
 
+Int
+UnstructuredMesh::get_partition_overlap()
+{
+    _F_;
+    return this->partition_overlap;
+}
+
 void
 UnstructuredMesh::set_partition_overlap(Int overlap)
 {
