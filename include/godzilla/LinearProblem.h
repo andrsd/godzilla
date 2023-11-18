@@ -46,6 +46,7 @@ protected:
     /// Solve the problem
     virtual void solve();
 
+private:
     /// KSP object
     KSP ksp;
     /// The solution vector
