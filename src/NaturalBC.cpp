@@ -19,7 +19,7 @@ NaturalBC::parameters()
 NaturalBC::NaturalBC(const Parameters & params) :
     BoundaryCondition(params),
     fid(-1),
-    fepi(dynamic_cast<FEProblemInterface *>(this->dpi))
+    fepi(dynamic_cast<FEProblemInterface *>(get_discrete_problem_interface()))
 {
     _F_;
 }
@@ -28,17 +28,18 @@ void
 NaturalBC::create()
 {
     _F_;
-    assert(this->dpi != nullptr);
+    auto dpi = get_discrete_problem_interface();
+    assert(dpi != nullptr);
 
-    std::vector<std::string> field_names = this->dpi->get_field_names();
+    std::vector<std::string> field_names = dpi->get_field_names();
     if (field_names.size() == 1) {
-        this->fid = this->dpi->get_field_id(field_names[0]);
+        this->fid = dpi->get_field_id(field_names[0]);
     }
     else if (field_names.size() > 1) {
         const auto & field_name = get_param<std::string>("field");
         if (field_name.length() > 0) {
-            if (this->dpi->has_field_by_name(field_name))
-                this->fid = this->dpi->get_field_id(field_name);
+            if (dpi->has_field_by_name(field_name))
+                this->fid = dpi->get_field_id(field_name);
             else
                 log_error("Field '{}' does not exists. Typo?", field_name);
         }
@@ -59,8 +60,9 @@ void
 NaturalBC::set_up()
 {
     _F_;
+    auto dpi = get_discrete_problem_interface();
     for (auto & bnd : get_boundary())
-        this->dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components(), this);
+        dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components(), this);
 }
 
 void

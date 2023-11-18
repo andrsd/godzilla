@@ -35,6 +35,7 @@ protected:
     /// Get problem this auxiliary field is part of
     Problem * get_problem() const;
 
+private:
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
 
