@@ -155,12 +155,12 @@ public:
     ///
     /// NOTES:
     /// - only process 0 takes in the input
-    void build_from_cell_list(Int dim,
-                              Int n_corners,
-                              const std::vector<Int> & cells,
-                              Int space_dim,
-                              const std::vector<Real> & vertices,
-                              bool interpolate);
+    DM build_from_cell_list(Int dim,
+                            Int n_corners,
+                            const std::vector<Int> & cells,
+                            Int space_dim,
+                            const std::vector<Real> & vertices,
+                            bool interpolate);
 
     /// Get the `Label` recording the depth of each point
     ///
@@ -255,6 +255,11 @@ public:
     /// @param type Type of the partitioner
     virtual void set_partitioner_type(const std::string & type);
 
+    /// Get partition overlap
+    ///
+    /// @return Partition overlap
+    Int get_partition_overlap();
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
@@ -342,7 +347,7 @@ public:
 
 protected:
     /// Method that builds DM for the mesh
-    virtual void create_dm() = 0;
+    virtual DM create_dm() = 0;
 
     void create_cell_set(Int id, const std::string & name);
 
@@ -350,6 +355,7 @@ protected:
 
     void create_face_set(Int id, const std::string & name);
 
+private:
     /// Mesh partitioner
     Partitioner partitioner;
 

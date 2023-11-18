@@ -26,6 +26,7 @@ protected:
     Real eval_right_cont(Real x);
     Real eval_left_cont(Real x);
 
+private:
     enum Continuity { LEFT, RIGHT } continuity;
     /// Independent values
     const std::vector<Real> & x;

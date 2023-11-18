@@ -31,7 +31,6 @@ public:
     ~ExodusIIOutput() override;
 
     NO_DISCARD std::string get_file_ext() const override;
-    void set_file_name() override;
     void create() override;
     void check() override;
     void output_mesh();
@@ -60,6 +59,7 @@ protected:
                                   Int n_elems_in_block,
                                   const Int * cells);
 
+private:
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
     /// FE problem interface (convenience pointer)

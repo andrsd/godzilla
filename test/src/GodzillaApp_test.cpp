@@ -76,7 +76,7 @@ TEST_F(GodzillaAppTest, verbose)
     App app(comm, "godzilla", argc, argv);
 
     app.run();
-    EXPECT_EQ(app.verbosity_level(), 2);
+    EXPECT_EQ(app.get_verbosity_level(), 2);
 }
 
 TEST_F(GodzillaAppTest, check_integrity)
@@ -88,48 +88,13 @@ TEST_F(GodzillaAppTest, check_integrity)
         void
         run()
         {
-            this->yml = allocate_input_file();
-            this->log->error("error1");
+            set_input_file(new GYMLFile(this));
+            get_logger()->error("error1");
             check_integrity();
         }
     } app;
 
     EXPECT_DEATH(app.run(), "error1");
-}
-
-TEST_F(GodzillaAppTest, run_problem)
-{
-    class TestFile : public GYMLFile {
-    public:
-        TestFile(App * app, Problem * prob) : GYMLFile(app) { this->problem = prob; }
-    };
-
-    class TestApp : public App {
-    public:
-        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
-
-        void
-        set_problem(Problem * prob)
-        {
-            this->yml = new TestFile(this, prob);
-        }
-
-        void
-        run()
-        {
-            run_problem();
-        }
-    } app;
-
-    const std::string & class_name = "MockProblem";
-    Parameters * pars = app.get_parameters(class_name);
-    MockProblem * prob = app.build_object<MockProblem>(class_name, "prob", pars);
-
-    app.set_problem(prob);
-
-    EXPECT_EQ(app.get_problem(), prob);
-    EXPECT_CALL(*prob, run);
-    app.run();
 }
 
 TEST_F(GodzillaAppTest, unknown_command_line_switch)

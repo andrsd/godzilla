@@ -40,18 +40,6 @@ public:
         ExplicitFELinearProblem::set_up_time_scheme();
     }
 
-    const Matrix &
-    get_mass_matrix() const
-    {
-        return this->M;
-    }
-
-    const Vector &
-    get_lumped_mass_matrix() const
-    {
-        return this->M_lumped_inv;
-    }
-
 protected:
     void
     set_up_fields() override
@@ -110,7 +98,7 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
     prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFELinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     mesh.create();
     prob.create();
@@ -145,7 +133,7 @@ TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
     prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFELinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     mesh.create();
     prob.create_w_lumped_mass_matrix();
@@ -174,7 +162,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFELinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     Parameters bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<App *>("_app") = &app;
@@ -234,7 +222,7 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     prob_pars.set<Real>("dt") = 1e-3;
     prob_pars.set<std::string>("scheme") = "euler";
     TestExplicitFELinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     Parameters bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<App *>("_app") = &app;

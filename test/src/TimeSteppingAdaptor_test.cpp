@@ -50,9 +50,9 @@ public:
 
 protected:
     void
-    set_type() override
+    set_type_impl() override
     {
-        PETSC_CHECK(TSAdaptSetType(this->ts_adapt, TS_ADAPT_TEST));
+        set_type(TS_ADAPT_TEST);
     }
 };
 
@@ -81,7 +81,7 @@ TestTSAdaptor::choose(Real h,
                       Real * wltea,
                       Real * wlter)
 {
-    Int idx = this->problem->get_step_num();
+    Int idx = get_problem()->get_step_num();
     *next_sc = 0;
     if (idx < 3) {
         *next_h = this->dts[idx];
@@ -151,7 +151,7 @@ TEST(TimeSteppingAdaptor, api)
     public:
         explicit MockTSAdaptor(const Parameters & params) : TimeSteppingAdaptor(params) {}
 
-        MOCK_METHOD((void), set_type, ());
+        MOCK_METHOD((void), set_type_impl, ());
     };
 
     TestApp app;
@@ -174,7 +174,7 @@ TEST(TimeSteppingAdaptor, api)
         params->set<Real>("dt") = 0.1;
         prob = app.build_object<TestTSProblem>(class_name, "prob", params);
     }
-    app.problem = prob;
+    app.set_problem(prob);
     mesh->create();
     prob->create();
 
@@ -189,7 +189,7 @@ TEST(TimeSteppingAdaptor, api)
     EXPECT_DOUBLE_EQ(adaptor.get_dt_min(), 1e-3);
     EXPECT_DOUBLE_EQ(adaptor.get_dt_max(), 1e3);
 
-    EXPECT_CALL(adaptor, set_type);
+    EXPECT_CALL(adaptor, set_type_impl);
     adaptor.create();
 }
 
@@ -216,7 +216,7 @@ TEST(TimeSteppingAdaptor, choose)
         params->set<Real>("dt") = 0.1;
         prob = app.build_object<TestTSProblem>(class_name, "prob", params);
     }
-    app.problem = prob;
+    app.set_problem(prob);
 
     {
         const std::string class_name = "DirichletBC";

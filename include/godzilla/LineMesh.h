@@ -10,6 +10,8 @@ class LineMesh : public UnstructuredMesh {
 public:
     explicit LineMesh(const Parameters & parameters);
 
+    void create() override;
+
     /// Get the lower bound in x-direction
     ///
     /// @return Lower bound in x-direction
@@ -26,8 +28,9 @@ public:
     NO_DISCARD Int get_nx() const;
 
 protected:
-    void create_dm() override;
+    DM create_dm() override;
 
+private:
     /// Minimum in the x direction
     const Real & xmin;
     /// Maximum in the x direction

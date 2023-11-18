@@ -83,7 +83,7 @@ public:
         /// @return ID of this stage
         NO_DISCARD PetscLogStage get_id() const;
 
-    protected:
+    private:
         /// Event ID
         PetscLogStage id;
     };
@@ -107,7 +107,7 @@ public:
         /// @return Number of times this event was called
         NO_DISCARD int get_num_calls() const;
 
-    protected:
+    private:
         /// Event information collected by PETSc
         PetscEventPerfInfo info;
     };
@@ -156,7 +156,7 @@ public:
         /// Log number of FLOPS
         void log_flops(PetscLogDouble n);
 
-    protected:
+    private:
         /// Event ID
         PetscLogEvent id;
     };

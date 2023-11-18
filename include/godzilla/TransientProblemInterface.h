@@ -66,6 +66,10 @@ public:
     TSConvergedReason get_converged_reason() const;
 
 protected:
+    /// Get time
+    Real get_time() const;
+    /// Get step number
+    Int get_step_number() const;
     /// Initialize
     virtual void init();
     /// Create
@@ -89,12 +93,15 @@ protected:
     /// Solve
     virtual void solve(Vector & x);
 
+protected:
+    /// PETSc TS object
+    TS ts;
+
+private:
     /// Problem this interface is part of
     Problem * problem;
     /// Parameters
     const Parameters & tpi_params;
-    /// PETSc TS object
-    TS ts;
     /// Time-stepping adaptor
     TimeSteppingAdaptor * ts_adaptor;
     /// Simulation start time

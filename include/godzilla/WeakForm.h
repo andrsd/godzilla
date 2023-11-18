@@ -82,7 +82,7 @@ public:
     /// @return Field ID used in `PetscFormKey`
     NO_DISCARD Int get_jac_key(Int f, Int g) const;
 
-protected:
+private:
     /// Number of fields
     Int n_fields;
 

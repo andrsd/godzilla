@@ -9,7 +9,7 @@ TEST(Label, create_destroy)
 {
     TestApp app;
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     EXPECT_EQ(l.is_null(), false);
     l.destroy();
     EXPECT_EQ(l.is_null(), true);
@@ -19,7 +19,7 @@ TEST(Label, default_value)
 {
     TestApp app;
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     l.set_default_value(-10);
     EXPECT_EQ(l.get_value(0), -10);
     EXPECT_EQ(l.get_default_value(), -10);
@@ -30,7 +30,7 @@ TEST(Label, set_value)
 {
     TestApp app;
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     l.set_value(1, 101);
     EXPECT_EQ(l.get_value(1), 101);
     l.destroy();
@@ -40,7 +40,7 @@ TEST(Label, reset)
 {
     TestApp app;
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     l.set_value(100, 1001);
     l.reset();
     EXPECT_EQ(l.get_value(100), -1);
@@ -52,7 +52,7 @@ TEST(Label, get_num_values)
 {
     TestApp app;
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     l.set_value(0, 1001);
     l.set_value(1, 1001);
     l.set_value(2, 1002);
@@ -66,7 +66,7 @@ TEST(Label, get_values)
 {
     TestApp app;
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     l.set_value(0, 1001);
     l.set_value(1, 1001);
     l.set_value(2, 1002);
@@ -82,9 +82,9 @@ TEST(Label, get_values)
 TEST(Label, set_stratum)
 {
     TestApp app;
-    IndexSet is = IndexSet::create_general(app.comm(), { 1, 2, 3, 4, 5 });
+    IndexSet is = IndexSet::create_general(app.get_comm(), { 1, 2, 3, 4, 5 });
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     l.set_stratum(101, is);
     EXPECT_EQ(l.get_value(1), 101);
     EXPECT_EQ(l.get_value(2), 101);
@@ -100,7 +100,7 @@ TEST(Label, get_stratum)
 {
     TestApp app;
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     l.set_value(1, 101);
     l.set_value(3, 101);
     l.set_value(4, 101);
@@ -121,7 +121,7 @@ TEST(Label, view)
 
     TestApp app;
     Label l;
-    l.create(app.comm(), "name");
+    l.create(app.get_comm(), "name");
     l.set_value(1, 101);
     l.set_value(3, 101);
     l.set_value(4, 102);

@@ -24,6 +24,18 @@ public:
 
     virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 
+    const Matrix &
+    get_mass_matrix() const
+    {
+        return this->M;
+    }
+
+    const Vector &
+    get_lumped_mass_matrix() const
+    {
+        return this->M_lumped_inv;
+    }
+
 protected:
     void init() override;
     void allocate_objects() override;
@@ -37,6 +49,7 @@ protected:
     virtual PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F);
     void post_step() override;
 
+private:
     /// Time stepping scheme
     const std::string & scheme;
 

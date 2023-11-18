@@ -24,7 +24,7 @@ TEST(NaturalBCTest, api)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     class MockNaturalBC : public NaturalBC {
     public:
@@ -101,7 +101,7 @@ public:
     set_up_weak_form() override
     {
         add_residual_block(new TestNatF0(this), nullptr);
-        add_jacobian_block(this->fid, new TestNatG0(this), nullptr, nullptr, nullptr);
+        add_jacobian_block(get_field_id(), new TestNatG0(this), nullptr, nullptr, nullptr);
     }
 
 protected:
@@ -123,8 +123,7 @@ TEST(NaturalBCTest, fe)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem prob(prob_params);
-    app.problem = &prob;
-    prob.set_aux_fe(0, "aux1", 1, 1);
+    app.set_problem(&prob);
 
     Parameters bc_params = TestNaturalBC::parameters();
     bc_params.set<App *>("_app") = &app;
@@ -133,9 +132,10 @@ TEST(NaturalBCTest, fe)
     bc_params.set<std::vector<std::string>>("boundary") = { "left" };
     bc_params.set<std::string>("field") = "u";
     TestNaturalBC bc(bc_params);
-    prob.add_boundary_condition(&bc);
 
     mesh.create();
+    prob.set_aux_fe(0, "aux1", 1, 1);
+    prob.add_boundary_condition(&bc);
     prob.create();
 
     PetscDS ds = prob.getDS();
@@ -173,7 +173,7 @@ TEST(NaturalBCTest, non_existing_field)
     prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
-    app.problem = &problem;
+    app.set_problem(&problem);
 
     Parameters params = TestNaturalBC::parameters();
     params.set<App *>("_app") = &app;
@@ -206,7 +206,7 @@ TEST(NaturalBCTest, field_param_not_specified)
     prob_pars.set<App *>("_app") = &app;
     prob_pars.set<Mesh *>("_mesh") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
-    app.problem = &problem;
+    app.set_problem(&problem);
 
     Parameters params = TestNaturalBC::parameters();
     params.set<App *>("_app") = &app;

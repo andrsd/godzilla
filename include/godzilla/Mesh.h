@@ -21,9 +21,7 @@ public:
     /// Get the underlying DM object
     ///
     /// @return Underlying PETSc DM
-    [[deprecated("Use dm() instead")]] DM get_dm() const;
-
-    DM dm() const;
+    DM get_dm() const;
 
     /// Get the mesh spatial dimension
     ///
@@ -81,10 +79,12 @@ public:
     void set_up();
 
 protected:
+    /// Set the DM
+    void set_dm(DM dm);
+
+private:
     /// DM object
-    DM _dm;
-    /// Spatial dimension of the mesh
-    Int dim;
+    DM dm;
 
 public:
     static Parameters parameters();

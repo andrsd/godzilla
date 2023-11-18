@@ -21,18 +21,16 @@ ExodusIIMesh::ExodusIIMesh(const Parameters & parameters) : FileMesh(parameters)
 }
 
 void
-ExodusIIMesh::create_dm()
+ExodusIIMesh::create()
 {
     _F_;
-    TIMED_EVENT(9, "MeshLoad", "Loading mesh '{}'", this->file_name);
-    PETSC_CHECK(
-        DMPlexCreateExodusFromFile(comm(), this->file_name.c_str(), PETSC_TRUE, &this->_dm));
+    UnstructuredMesh::create();
 
     // Ideally we would like to use DMPlexCreateExodus here and get rid of the above
     // DMPlexCreateExodusFromFile, so that we don't open the same file twice. For some reason,
     // that just doesn't work even though this is just exactly what DMPlexCreateExodusFromFile
     // is doing :confused:
-    exodusIIcpp::File f(this->file_name, exodusIIcpp::FileAccess::READ);
+    exodusIIcpp::File f(get_file_name(), exodusIIcpp::FileAccess::READ);
     if (f.is_opened()) {
         auto blk_names = f.read_block_names();
         for (auto & it : blk_names) {
@@ -50,6 +48,16 @@ ExodusIIMesh::create_dm()
 
         f.close();
     }
+}
+
+DM
+ExodusIIMesh::create_dm()
+{
+    _F_;
+    TIMED_EVENT(9, "MeshLoad", "Loading mesh '{}'", get_file_name());
+    DM dm;
+    PETSC_CHECK(DMPlexCreateExodusFromFile(get_comm(), get_file_name().c_str(), PETSC_TRUE, &dm));
+    return dm;
 }
 
 } // namespace godzilla

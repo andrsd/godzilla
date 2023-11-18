@@ -25,8 +25,8 @@ TEST(ObjectTest, api)
     EXPECT_EQ(obj->get_processor_id(), 0);
 
     int sz;
-    MPI_Comm_size(app.comm(), &sz);
-    EXPECT_EQ(obj->comm().size(), sz);
+    MPI_Comm_size(app.get_comm(), &sz);
+    EXPECT_EQ(obj->get_comm().size(), sz);
 
     obj->create();
 }

@@ -34,9 +34,7 @@ CSVOutput::create()
     _F_;
     FileOutput::create();
 
-    set_file_name();
-
-    this->pps_names = this->problem->get_postprocessor_names();
+    this->pps_names = get_problem()->get_postprocessor_names();
 
     if (!this->pps_names.empty())
         open_file();
@@ -56,22 +54,22 @@ CSVOutput::output_step()
     if (this->pps_names.empty())
         return;
 
-    lprintf(9, "Output to file: {}", this->file_name);
+    lprint(9, "Output to file: {}", get_file_name());
 
     if (!this->has_header) {
         write_header();
         this->has_header = true;
     }
-    write_values(this->problem->get_time());
+    write_values(get_problem()->get_time());
 }
 
 void
 CSVOutput::open_file()
 {
     _F_;
-    this->f = fopen(this->file_name.c_str(), "w");
+    this->f = fopen(get_file_name().c_str(), "w");
     if (this->f == nullptr)
-        log_error("Unable to open '{}' for writing: {}.", this->file_name, strerror(errno));
+        log_error("Unable to open '{}' for writing: {}.", get_file_name(), strerror(errno));
 }
 
 void
@@ -90,7 +88,7 @@ CSVOutput::write_values(Real time)
     _F_;
     fmt::print(this->f, "{:g}", time);
     for (auto & name : this->pps_names) {
-        auto * pps = this->problem->get_postprocessor(name);
+        auto * pps = get_problem()->get_postprocessor(name);
         Real val = pps->get_value();
         fmt::print(this->f, ",{:g}", val);
     }

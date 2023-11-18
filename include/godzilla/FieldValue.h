@@ -34,7 +34,7 @@ public:
         return this->data[idx];
     }
 
-protected:
+private:
     /// Number of elements stored in `data`
     Int size;
     /// The elements of the array

@@ -20,15 +20,16 @@ class TestUnstructuredMesh : public UnstructuredMesh {
 public:
     explicit TestUnstructuredMesh(const Parameters & params) : UnstructuredMesh(params) {}
 
-    void
-    create_dm()
+    DM
+    create_dm() override
     {
         Real lower[1] = { -1 };
         Real upper[1] = { 1 };
         Int faces[1] = { 2 };
         DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
-        PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
+        DM dm;
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                         1,
                                         PETSC_TRUE,
                                         faces,
@@ -36,13 +37,8 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->_dm));
-    }
-
-    Int
-    get_partition_overlap()
-    {
-        return this->partition_overlap;
+                                        &dm));
+        return dm;
     }
 };
 
@@ -56,8 +52,8 @@ public:
     {
     }
 
-    void
-    create_dm()
+    DM
+    create_dm() override
     {
         Real lower[3] = { 0, 0, 0 };
         Real upper[3] = { 1, 1, 1 };
@@ -66,7 +62,8 @@ public:
                                           DM_BOUNDARY_GHOSTED,
                                           DM_BOUNDARY_GHOSTED };
 
-        PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
+        DM dm;
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                         3,
                                         PETSC_FALSE,
                                         faces,
@@ -74,7 +71,14 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->_dm));
+                                        &dm));
+        return dm;
+    }
+
+    void
+    create() override
+    {
+        UnstructuredMesh::create();
         // create "side sets"
         std::map<Int, std::string> face_set_names;
         face_set_names[1] = "back";
@@ -471,12 +475,12 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
         }
 
     protected:
-        void
+        DM
         create_dm() override
         {
             std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
             std::vector<Real> vertices = { 0, 0, 1, 0, 0, 1, 1, 1 };
-            build_from_cell_list(2, 3, cells, 2, vertices, true);
+            return build_from_cell_list(2, 3, cells, 2, vertices, true);
         }
     };
 

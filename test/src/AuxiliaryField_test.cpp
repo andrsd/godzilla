@@ -46,6 +46,8 @@ TEST_F(AuxiliaryFieldTest, api)
         }
     };
 
+    mesh->create();
+
     prob->set_aux_fe(0, "fld", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
@@ -56,8 +58,6 @@ TEST_F(AuxiliaryFieldTest, api)
     params.set<std::string>("region") = "rgn";
     TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
-
-    mesh->create();
 
     EXPECT_EQ(aux.get_label(), nullptr);
     EXPECT_EQ(aux.get_region(), "rgn");
@@ -99,6 +99,8 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
         }
     };
 
+    mesh->create();
+
     testing::internal::CaptureStderr();
 
     prob->set_aux_fe(0, "aux1", 1, 1);
@@ -110,7 +112,6 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
     TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
-    mesh->create();
     prob->create();
 
     app->check_integrity();
@@ -146,6 +147,8 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
         }
     };
 
+    mesh->create();
+
     testing::internal::CaptureStderr();
 
     prob->set_aux_fe(0, "aux1", 1, 1);
@@ -157,7 +160,6 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
     TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
-    mesh->create();
     prob->create();
 
     app->check_integrity();
@@ -193,6 +195,8 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
         }
     };
 
+    mesh->create();
+
     testing::internal::CaptureStderr();
 
     prob->set_aux_fe(0, "aux1", 1, 1);
@@ -205,7 +209,6 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
-    mesh->create();
     prob->create();
 
     app->check_integrity();
@@ -216,6 +219,8 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
 TEST_F(AuxiliaryFieldTest, name_already_taken)
 {
+    mesh->create();
+
     prob->set_aux_fe(0, "fld", 1, 1);
 
     Parameters params = ConstantAuxiliaryField::parameters();
@@ -257,6 +262,8 @@ TEST_F(AuxiliaryFieldTest, get_value)
         }
     };
 
+    mesh->create();
+
     prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
@@ -267,7 +274,6 @@ TEST_F(AuxiliaryFieldTest, get_value)
     TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
-    mesh->create();
     prob->create();
 
     DenseVector<Real, 1> coord({ 2. });
@@ -304,6 +310,8 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
         }
     };
 
+    mesh->create();
+
     prob->set_aux_fe(0, "aux1", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
@@ -314,7 +322,6 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
     TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
 
-    mesh->create();
     prob->create();
 
     DenseVector<Real, 1> coord({ 3. });

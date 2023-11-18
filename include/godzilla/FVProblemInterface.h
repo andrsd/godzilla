@@ -100,6 +100,7 @@ protected:
 
     Int get_next_id(const std::vector<Int> & ids) const;
 
+private:
     /// Field information
     struct FieldInfo {
         /// The name of the field

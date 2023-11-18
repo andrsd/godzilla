@@ -52,6 +52,20 @@ Output::set_exec_mask(unsigned int mask)
     this->on_mask = mask;
 }
 
+Problem *
+Output::get_problem() const
+{
+    _F_;
+    return this->problem;
+}
+
+unsigned int
+Output::get_exec_mask() const
+{
+    _F_;
+    return this->on_mask;
+}
+
 void
 Output::set_up_exec()
 {

@@ -81,9 +81,10 @@ void
 FENonlinearProblem::set_up_callbacks()
 {
     _F_;
-    PETSC_CHECK(DMSNESSetBoundaryLocal(dm(), __fep_compute_boundary, this));
-    PETSC_CHECK(DMSNESSetFunctionLocal(dm(), __fep_compute_residual, this));
-    PETSC_CHECK(DMSNESSetJacobianLocal(dm(), __fep_compute_jacobian, this));
+    auto dm = get_dm();
+    PETSC_CHECK(DMSNESSetBoundaryLocal(dm, __fep_compute_boundary, this));
+    PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
+    PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
     PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, nullptr, nullptr));
 }
 
@@ -107,7 +108,7 @@ const Vector &
 FENonlinearProblem::get_solution_vector_local()
 {
     _F_;
-    PETSC_CHECK(DMGlobalToLocal(dm(), get_solution_vector(), INSERT_VALUES, this->sln));
+    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, this->sln));
     compute_boundary(this->sln);
     return this->sln;
 }
@@ -116,8 +117,13 @@ PetscErrorCode
 FENonlinearProblem::compute_boundary(Vector & x)
 {
     _F_;
-    PETSC_CHECK(
-        DMPlexInsertBoundaryValues(dm(), PETSC_TRUE, x, PETSC_MIN_REAL, nullptr, nullptr, nullptr));
+    PETSC_CHECK(DMPlexInsertBoundaryValues(get_dm(),
+                                           PETSC_TRUE,
+                                           x,
+                                           PETSC_MIN_REAL,
+                                           nullptr,
+                                           nullptr,
+                                           nullptr));
     return 0;
 }
 
@@ -128,7 +134,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
     // this is based on DMSNESComputeResidual()
     IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
-    for (auto & res_key : this->wf->get_residual_keys()) {
+    for (auto & res_key : get_weak_form()->get_residual_keys()) {
         IndexSet cells;
         if (res_key.label == nullptr) {
             all_cells.inc_ref();
@@ -140,7 +146,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_residual_internal(dm(), res_key, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
+        compute_residual_internal(get_dm(), res_key, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
         cells.destroy();
     }
 
@@ -615,13 +621,14 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
     // based on DMPlexSNESComputeJacobianFEM and DMSNESComputeJacobianAction
     IndexSet all_cells = this->unstr_mesh->get_all_cells();
 
-    auto has_jac = this->wf->has_jacobian();
-    auto has_precond = this->wf->has_jacobian_preconditioner();
+    auto wf = get_weak_form();
+    auto has_jac = wf->has_jacobian();
+    auto has_precond = wf->has_jacobian_preconditioner();
     if (has_jac && has_precond)
         J.zero();
     Jp.zero();
 
-    for (auto & jac_key : this->wf->get_jacobian_keys()) {
+    for (auto & jac_key : wf->get_jacobian_keys()) {
         IndexSet cells;
         if (!jac_key.label) {
             all_cells.inc_ref();
@@ -633,7 +640,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_jacobian_internal(dm(), jac_key, cells, 0.0, 0.0, x, Vector(), J, Jp);
+        compute_jacobian_internal(get_dm(), jac_key, cells, 0.0, 0.0, x, Vector(), J, Jp);
         cells.destroy();
     }
 
@@ -677,8 +684,9 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscCall(PetscDSGetNumFields(prob, &n_fields));
     Int tot_dim;
     PetscCall(PetscDSGetTotalDimension(prob, &tot_dim));
-    auto has_jac = this->wf->has_jacobian();
-    auto has_prec = this->wf->has_jacobian_preconditioner();
+    auto wf = get_weak_form();
+    auto has_jac = wf->has_jacobian();
+    auto has_prec = wf->has_jacobian_preconditioner();
     // user passed in the same matrix, avoid double contributions and only assemble the Jacobian
     if (has_jac && J == Jp)
         has_prec = PETSC_FALSE;

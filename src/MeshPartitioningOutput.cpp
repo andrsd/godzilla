@@ -19,7 +19,7 @@ MeshPartitioningOutput::parameters()
 MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & params) : FileOutput(params)
 {
     _F_;
-    this->file_base = "part";
+    set_file_base("part");
 }
 
 void
@@ -27,7 +27,7 @@ MeshPartitioningOutput::check()
 {
     _F_;
     FileOutput::check();
-    auto dm = this->problem->dm();
+    auto dm = get_problem()->get_dm();
     if (dm == nullptr)
         log_error("Mesh partitioning output works only with problems that provide DM.");
 }
@@ -43,13 +43,11 @@ void
 MeshPartitioningOutput::output_step()
 {
     _F_;
-    set_file_name();
-
     PetscViewer viewer;
-    PETSC_CHECK(PetscViewerHDF5Open(comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
+    PETSC_CHECK(PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 
     DM dmp;
-    PETSC_CHECK(DMClone(this->problem->dm(), &dmp));
+    PETSC_CHECK(DMClone(get_problem()->get_dm(), &dmp));
 
     Int dim;
     PETSC_CHECK(DMGetDimension(dmp, &dim));

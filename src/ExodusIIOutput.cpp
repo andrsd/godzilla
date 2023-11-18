@@ -106,8 +106,8 @@ ExodusIIOutput::parameters()
 ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     FileOutput(params),
     variable_names(get_param<std::vector<std::string>>("variables")),
-    dpi(dynamic_cast<DiscreteProblemInterface *>(this->problem)),
-    mesh(this->problem ? dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh())
+    dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem())),
+    mesh(get_problem() ? dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh())
                        : get_param<UnstructuredMesh *>("_mesh")),
     exo(nullptr),
     step_num(1),
@@ -131,17 +131,6 @@ ExodusIIOutput::get_file_ext() const
 }
 
 void
-ExodusIIOutput::set_file_name()
-{
-    _F_;
-    if (comm().size() == 1)
-        this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
-    else
-        this->file_name =
-            fmt::format("{}.{}.{}", this->file_base, get_processor_id(), this->get_file_ext());
-}
-
-void
 ExodusIIOutput::create()
 {
     _F_;
@@ -150,7 +139,7 @@ ExodusIIOutput::create()
     if (this->dpi) {
         auto flds = this->dpi->get_field_names();
         auto aux_flds = this->dpi->get_aux_field_names();
-        auto & pps = this->problem->get_postprocessor_names();
+        auto & pps = get_problem()->get_postprocessor_names();
 
         if (this->variable_names.empty()) {
             this->field_var_names = flds;
@@ -192,8 +181,7 @@ ExodusIIOutput::output_mesh()
 {
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
-    set_file_name();
-    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", this->file_name);
+    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", get_file_name());
 
     if (this->exo == nullptr)
         open_file();
@@ -209,8 +197,7 @@ ExodusIIOutput::output_step()
 {
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
-    set_file_name();
-    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", this->file_name);
+    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", get_file_name());
 
     if (this->exo == nullptr)
         open_file();
@@ -229,7 +216,7 @@ void
 ExodusIIOutput::open_file()
 {
     _F_;
-    this->exo = new exodusIIcpp::File(this->file_name, exodusIIcpp::FileAccess::WRITE);
+    this->exo = new exodusIIcpp::File(get_file_name(), exodusIIcpp::FileAccess::WRITE);
     if (!this->exo->is_opened())
         error("Could not open file '{}' for writing.", get_file_name());
 }
@@ -383,7 +370,7 @@ ExodusIIOutput::write_face_sets()
     if (!this->mesh->has_label("Face Sets"))
         return;
 
-    auto dm = this->mesh->dm();
+    auto dm = this->mesh->get_dm();
     std::vector<std::string> fs_names;
 
     auto face_sets_label = this->mesh->get_label("Face Sets");
@@ -525,7 +512,7 @@ void
 ExodusIIOutput::write_variables()
 {
     _F_;
-    Real time = this->problem->get_time();
+    Real time = get_problem()->get_time();
     this->exo->write_time(this->step_num, time);
 
     write_field_variables();
@@ -675,7 +662,7 @@ ExodusIIOutput::write_global_variables()
 
     int exo_var_id = 1;
     for (auto & name : this->global_var_names) {
-        Postprocessor * pp = this->problem->get_postprocessor(name);
+        Postprocessor * pp = get_problem()->get_postprocessor(name);
         Real val = pp->get_value();
         this->exo->write_global_var(this->step_num, exo_var_id, val);
         exo_var_id++;
@@ -686,10 +673,11 @@ void
 ExodusIIOutput::write_info()
 {
     _F_;
+    auto app = get_app();
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
     std::string created_by =
-        fmt::format("Created by {} {}, on {}", get_app()->name(), get_app()->version(), datetime);
+        fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
 
     std::vector<std::string> info;
     info.push_back(created_by);
@@ -703,7 +691,7 @@ ExodusIIOutput::write_block_connectivity(int blk_id,
                                          const Int * cells)
 {
     _F_;
-    auto dm = this->mesh->dm();
+    auto dm = this->mesh->get_dm();
     Int n_all_elems = this->mesh->get_num_all_cells();
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);

@@ -24,7 +24,7 @@ TEST(LineMeshTest, api)
     EXPECT_EQ(mesh.get_nx(), 10);
 
     mesh.create();
-    auto dm = mesh.dm();
+    auto dm = mesh.get_dm();
 
     EXPECT_EQ(mesh.get_dimension(), 1);
 
@@ -77,7 +77,7 @@ TEST(LineMeshTest, distribute)
     mesh.create();
 
     PetscBool distr;
-    DMPlexIsDistributed(mesh.dm(), &distr);
+    DMPlexIsDistributed(mesh.get_dm(), &distr);
     if (sz > 1)
         EXPECT_EQ(distr, 1);
     else

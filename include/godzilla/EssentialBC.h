@@ -52,7 +52,7 @@ public:
 
     void set_up() override;
 
-protected:
+private:
     /// Field ID this boundary condition is attached to
     Int fid;
 

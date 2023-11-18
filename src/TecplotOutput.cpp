@@ -80,8 +80,8 @@ TecplotOutput::parameters()
 TecplotOutput::TecplotOutput(const Parameters & params) :
     FileOutput(params),
     format(BINARY),
-    dpi(dynamic_cast<DiscreteProblemInterface *>(this->problem)),
-    mesh(this->problem ? dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh()) : nullptr),
+    dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem())),
+    mesh(get_problem() ? dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh()) : nullptr),
     variable_names(get_param<std::vector<std::string>>("variables")),
     file(nullptr),
     header_written(false),
@@ -111,24 +111,13 @@ TecplotOutput::get_file_ext() const
 }
 
 void
-TecplotOutput::set_file_name()
-{
-    _F_;
-    if (comm().size() == 1)
-        this->file_name = fmt::format("{}.{}", this->file_base, this->get_file_ext());
-    else
-        this->file_name =
-            fmt::format("{}.{}.{}", this->file_base, get_processor_id(), this->get_file_ext());
-}
-
-void
 TecplotOutput::create()
 {
     _F_;
     FileOutput::create();
 
     assert(this->dpi != nullptr);
-    assert(this->problem != nullptr);
+    assert(get_problem() != nullptr);
 
     auto fmt_str = get_param<std::string>("format");
     if (validation::in(fmt_str, { "binary", "ascii" })) {
@@ -203,8 +192,7 @@ TecplotOutput::output_step()
 {
     _F_;
     // We only have fixed meshes, so no need to deal with a sequence of files
-    set_file_name();
-    TIMED_EVENT(9, "TecplotOutput", "Output to file: {}", this->file_name);
+    TIMED_EVENT(9, "TecplotOutput", "Output to file: {}", get_file_name());
 
     if (this->file == nullptr)
         open_file();
@@ -224,7 +212,7 @@ TecplotOutput::open_file()
 {
     _F_;
     const char * mode = this->format == BINARY ? "wb" : "w";
-    this->file = std::fopen(this->file_name.c_str(), mode);
+    this->file = std::fopen(get_file_name().c_str(), mode);
     if (this->file == nullptr)
         error("Could not open file '{}' for writing.", get_file_name());
 }
@@ -336,10 +324,11 @@ void
 TecplotOutput::write_created_by_ascii()
 {
     _F_;
+    auto app = get_app();
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
     std::string created_by =
-        fmt::format("Created by {} {}, on {}", get_app()->name(), get_app()->version(), datetime);
+        fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
     write_line(fmt::format("DATASETAUXDATA {} = \"{}\"\n", "created_by", created_by));
 }
 
@@ -358,7 +347,7 @@ TecplotOutput::write_zone_ascii()
     write_line(
         fmt::format(" ZONETYPE={}, Nodes={}, Elements={}\n", zone_type, n_nodes, n_cells_in_block));
 
-    Real time = this->problem->get_time();
+    Real time = get_problem()->get_time();
     write_line(fmt::format(" STRANDID=2, SOLUTIONTIME={}\n", time));
     write_line(fmt::format(" DATAPACKING=BLOCK\n"));
     write_line(fmt::format(" VARLOCATION=([{}]=CELLCENTERED)\n", this->element_id_var_index));

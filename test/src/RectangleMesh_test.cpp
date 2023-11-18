@@ -30,7 +30,7 @@ TEST(RectangleMeshTest, api)
     EXPECT_EQ(mesh.get_ny(), 8);
 
     mesh.create();
-    auto dm = mesh.dm();
+    auto dm = mesh.get_dm();
 
     EXPECT_EQ(mesh.get_dimension(), 2);
 

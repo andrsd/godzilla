@@ -18,4 +18,11 @@ Postprocessor::Postprocessor(const Parameters & params) :
 {
 }
 
+Problem *
+Postprocessor::get_problem() const
+{
+    _F_;
+    return this->problem;
+}
+
 } // namespace godzilla

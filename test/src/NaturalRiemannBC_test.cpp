@@ -68,7 +68,7 @@ TEST(NaturalRiemannBCTest, api)
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
     TestExplicitFVLinearProblem prob(prob_pars);
-    app.problem = &prob;
+    app.set_problem(&prob);
 
     Parameters bc_pars = TestBC::parameters();
     bc_pars.set<App *>("_app") = &app;

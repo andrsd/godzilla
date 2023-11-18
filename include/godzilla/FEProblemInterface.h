@@ -25,6 +25,8 @@ class ValueFunctional;
 ///
 /// Any problem using PetscFE should inherit from this for unified API
 class FEProblemInterface : public DiscreteProblemInterface, public DependencyEvaluator {
+    struct FieldInfo;
+
 public:
     FEProblemInterface(Problem * problem, const Parameters & params);
     ~FEProblemInterface() override;
@@ -242,7 +244,7 @@ public:
                                                   Scalar elem_mat[]);
 
 protected:
-    struct FieldInfo;
+    const std::map<Int, FieldInfo> & get_fields() const;
 
     void create() override;
     void init() override;
@@ -344,6 +346,7 @@ protected:
 
     Int get_next_id(const std::vector<Int> & ids) const;
 
+private:
     /// Quadrature order
     Int qorder;
 

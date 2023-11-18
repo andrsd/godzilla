@@ -32,9 +32,7 @@ public:
     {
     }
 
-    ~GTestProblem() override {
-        this->x.destroy();
-    }
+    ~GTestProblem() override { this->x.destroy(); }
 
     const Vector &
     get_solution_vector() const override
@@ -189,7 +187,7 @@ TEST_F(GYMLFileTest, mesh_partitioner)
     EXPECT_NE(mesh, nullptr);
     mesh->create();
 
-    auto dm = mesh->dm();
+    auto dm = mesh->get_dm();
     PetscBool distr;
     DMPlexIsDistributed(dm, &distr);
     if (sz > 1)

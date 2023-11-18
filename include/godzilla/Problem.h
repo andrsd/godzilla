@@ -29,8 +29,7 @@ public:
     /// Run the problem
     virtual void run() = 0;
     /// Provide DM for this problem
-    [[deprecated("Use dm() instead.")]] virtual DM get_dm() const;
-    DM dm() const;
+    DM get_dm() const;
     /// Return solution vector
     virtual const Vector & get_solution_vector() const = 0;
     /// Get mesh this problem is using
@@ -128,12 +127,15 @@ public:
     /// Set the `Section` encoding the global data layout for the `DM`.
     void set_global_section(const Section & section) const;
 
+    void set_default_output_on(unsigned int mask);
+
 protected:
     /// Called before solving starts
     virtual void on_initial();
     /// Called after solve has successfully finished
     virtual void on_final();
 
+private:
     /// Mesh
     Mesh * mesh;
 

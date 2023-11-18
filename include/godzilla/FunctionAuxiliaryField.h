@@ -8,7 +8,7 @@ namespace godzilla {
 
 /// Auxiliary field set by a function
 ///
-class FunctionAuxiliaryField : public AuxiliaryField, public FunctionInterface {
+class FunctionAuxiliaryField : public AuxiliaryField, protected FunctionInterface {
 public:
     explicit FunctionAuxiliaryField(const Parameters & params);
 

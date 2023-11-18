@@ -21,7 +21,8 @@ public:
         Int faces[1] = { 2 };
         DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
-        PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
+        DM dm;
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                         1,
                                         PETSC_TRUE,
                                         faces,
@@ -29,7 +30,8 @@ public:
                                         upper,
                                         periodicity,
                                         PETSC_TRUE,
-                                        &this->_dm));
+                                        &dm));
+        set_dm(dm);
         set_up();
     }
 
@@ -57,7 +59,7 @@ TEST(MeshTest, get_coordinates)
     EXPECT_EQ(coords(2), 1.);
 
     DM cdm;
-    DMGetCoordinateDM(mesh.dm(), &cdm);
+    DMGetCoordinateDM(mesh.get_dm(), &cdm);
     EXPECT_EQ(mesh.get_coordinate_dm(), cdm);
 }
 

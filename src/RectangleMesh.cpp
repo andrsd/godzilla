@@ -83,26 +83,10 @@ RectangleMesh::get_ny() const
 }
 
 void
-RectangleMesh::create_dm()
+RectangleMesh::create()
 {
     _F_;
-    std::array<Real, 2> lower = { this->xmin, this->ymin };
-    std::array<Real, 2> upper = { this->xmax, this->ymax };
-    std::array<Int, 2> faces = { this->nx, this->ny };
-    std::array<DMBoundaryType, 2> periodicity = {
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
-        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
-    };
-
-    PETSC_CHECK(DMPlexCreateBoxMesh(comm(),
-                                    2,
-                                    this->simplex,
-                                    faces.data(),
-                                    lower.data(),
-                                    upper.data(),
-                                    periodicity.data(),
-                                    this->interpolate,
-                                    &this->_dm));
+    UnstructuredMesh::create();
 
     remove_label("marker");
     // create user-friendly names for sides
@@ -114,6 +98,31 @@ RectangleMesh::create_dm()
     create_face_set_labels(face_set_names);
     for (auto it : face_set_names)
         set_face_set_name(it.first, it.second);
+}
+
+DM
+RectangleMesh::create_dm()
+{
+    _F_;
+    std::array<Real, 2> lower = { this->xmin, this->ymin };
+    std::array<Real, 2> upper = { this->xmax, this->ymax };
+    std::array<Int, 2> faces = { this->nx, this->ny };
+    std::array<DMBoundaryType, 2> periodicity = {
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED,
+        this->simplex ? DM_BOUNDARY_NONE : DM_BOUNDARY_GHOSTED
+    };
+
+    DM dm;
+    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                    2,
+                                    this->simplex,
+                                    faces.data(),
+                                    lower.data(),
+                                    upper.data(),
+                                    periodicity.data(),
+                                    this->interpolate,
+                                    &dm));
+    return dm;
 }
 
 } // namespace godzilla

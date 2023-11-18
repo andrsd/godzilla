@@ -17,12 +17,22 @@ public:
     NO_DISCARD std::string get_file_ext() const override;
     void output_step() override;
 
+    /// Get post-processor names
+    ///
+    /// @return Post-processor names
+    const std::vector<std::string> &
+    get_pps_names() const
+    {
+        return pps_names;
+    }
+
 protected:
     void open_file();
     void write_header();
     void write_values(Real time);
     void close_file();
 
+private:
     /// Output file
     std::FILE * f;
 

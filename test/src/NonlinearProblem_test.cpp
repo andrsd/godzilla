@@ -46,9 +46,10 @@ G1DTestNonlinearProblem::create()
 {
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
-    DMSetNumFields(dm(), 1);
-    DMPlexCreateSection(dm(), nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
-    DMSetLocalSection(dm(), this->s);
+    auto dm = get_dm();
+    DMSetNumFields(dm, 1);
+    DMPlexCreateSection(dm, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
+    DMSetLocalSection(dm, this->s);
     NonlinearProblem::create();
 }
 

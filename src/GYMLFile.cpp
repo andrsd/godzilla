@@ -27,7 +27,7 @@ void
 GYMLFile::build()
 {
     _F_;
-    lprintf(9, "Allocating objects");
+    lprint(9, "Allocating objects");
     build_mesh();
     build_problem();
     build_problem_adapt();
@@ -47,15 +47,15 @@ GYMLFile::build_functions()
     if (!this->root["functions"])
         return;
 
-    lprintf(9, "- functions");
+    lprint(9, "- functions");
     auto funcs_block = get_block(this->root, "functions");
     for (const auto & it : funcs_block.values()) {
         Block blk = get_block(funcs_block, it.first.as<std::string>());
         Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
-        auto fn = app()->build_object<Function>(class_name, blk.name(), params);
-        assert(this->problem != nullptr);
-        this->problem->add_function(fn);
+        auto fn = get_app()->build_object<Function>(class_name, blk.name(), params);
+        assert(get_problem() != nullptr);
+        get_problem()->add_function(fn);
     }
 }
 
@@ -63,7 +63,7 @@ void
 GYMLFile::build_problem_adapt()
 {
     _F_;
-    if (this->problem) {
+    if (get_problem()) {
         auto problem_node = get_block(this->root, "problem");
         if (problem_node["ts_adapt"])
             build_ts_adapt(problem_node);
@@ -74,15 +74,16 @@ void
 GYMLFile::build_ts_adapt(const Block & problem_node)
 {
     _F_;
-    auto * tpi = dynamic_cast<TransientProblemInterface *>(this->problem);
+    auto * tpi = dynamic_cast<TransientProblemInterface *>(get_problem());
     if (tpi != nullptr) {
         auto ts_adapt_node = get_block(problem_node, "ts_adapt");
         Parameters * params = build_params(ts_adapt_node);
-        params->set<Problem *>("_problem") = this->problem;
+        params->set<Problem *>("_problem") = get_problem();
         params->set<const TransientProblemInterface *>("_tpi") = tpi;
 
         const auto & class_name = params->get<std::string>("_type");
-        auto * ts_adaptor = app()->build_object<TimeSteppingAdaptor>(class_name, "ts_adapt", params);
+        auto * ts_adaptor =
+            get_app()->build_object<TimeSteppingAdaptor>(class_name, "ts_adapt", params);
         tpi->set_time_stepping_adaptor(ts_adaptor);
     }
     else
@@ -93,25 +94,25 @@ void
 GYMLFile::build_partitioner()
 {
     _F_;
-    if (!this->mesh)
+    if (!get_mesh())
         return;
 
-    auto * mesh = dynamic_cast<UnstructuredMesh *>(this->mesh);
-    if (!mesh)
+    auto * unstr_mesh = dynamic_cast<UnstructuredMesh *>(get_mesh());
+    if (!unstr_mesh)
         return;
 
     if (!this->root["partitioner"])
         return;
 
-    lprintf(9, "- partitioner");
+    lprint(9, "- partitioner");
     auto part_node = get_block(this->root, "partitioner");
     auto name = part_node["name"];
     if (name)
-        mesh->set_partitioner_type(name.as<std::string>());
+        unstr_mesh->set_partitioner_type(name.as<std::string>());
 
     auto overlap = part_node["overlap"];
     if (overlap)
-        mesh->set_partition_overlap(overlap.as<Int>());
+        unstr_mesh->set_partition_overlap(overlap.as<Int>());
 }
 
 void
@@ -121,24 +122,24 @@ GYMLFile::build_auxiliary_fields()
     if (!this->root["auxs"])
         return;
 
-    lprintf(9, "- auxiliary fields");
+    lprint(9, "- auxiliary fields");
     auto auxs_node = get_block(this->root, "auxs");
-    auto * fepi = dynamic_cast<FEProblemInterface *>(this->problem);
-    auto * fvpi = dynamic_cast<FVProblemInterface *>(this->problem);
+    auto * fepi = dynamic_cast<FEProblemInterface *>(get_problem());
+    auto * fvpi = dynamic_cast<FVProblemInterface *>(get_problem());
     if (fepi != nullptr || fvpi != nullptr) {
-        auto * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
+        auto * dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
         for (const auto & it : auxs_node.values()) {
             Block blk = get_block(auxs_node, it.first.as<std::string>());
             Parameters * params = build_params(blk);
             params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
-            auto aux = app()->build_object<AuxiliaryField>(class_name, blk.name(), params);
+            auto aux = get_app()->build_object<AuxiliaryField>(class_name, blk.name(), params);
             dpi->add_auxiliary_field(aux);
         }
     }
     else
         log_error("Supplied problem type '{}' does not support auxiliary fields.",
-                  this->problem->get_type());
+                  get_problem()->get_type());
 }
 
 void
@@ -148,19 +149,19 @@ GYMLFile::build_initial_conditions()
     if (!this->root["ics"])
         return;
 
-    lprintf(9, "- initial conditions");
+    lprint(9, "- initial conditions");
     auto ics_node = get_block(this->root, "ics");
-    auto * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
+    auto * dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
     if (dpi == nullptr)
         log_error("Supplied problem type '{}' does not support initial conditions.",
-                  this->problem->get_type());
+                  get_problem()->get_type());
     else {
         for (const auto & it : ics_node.values()) {
             Block blk = get_block(ics_node, it.first.as<std::string>());
             Parameters * params = build_params(blk);
             params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
-            auto ic = app()->build_object<InitialCondition>(class_name, blk.name(), params);
+            auto ic = get_app()->build_object<InitialCondition>(class_name, blk.name(), params);
             dpi->add_initial_condition(ic);
         }
     }
@@ -173,19 +174,19 @@ GYMLFile::build_boundary_conditions()
     if (!this->root["bcs"])
         return;
 
-    lprintf(9, "- boundary conditions");
+    lprint(9, "- boundary conditions");
     auto bcs_node = get_block(this->root, "bcs");
-    auto * dpi = dynamic_cast<DiscreteProblemInterface *>(this->problem);
+    auto * dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
     if (dpi == nullptr)
         log_error("Supplied problem type '{}' does not support boundary conditions.",
-                  this->problem->get_type());
+                  get_problem()->get_type());
     else {
         for (const auto & it : bcs_node.values()) {
             Block blk = get_block(bcs_node, it.first.as<std::string>());
             Parameters * params = build_params(blk);
             params->set<DiscreteProblemInterface *>("_dpi") = dpi;
             const auto & class_name = params->get<std::string>("_type");
-            auto bc = app()->build_object<BoundaryCondition>(class_name, blk.name(), params);
+            auto bc = get_app()->build_object<BoundaryCondition>(class_name, blk.name(), params);
             dpi->add_boundary_condition(bc);
         }
     }
@@ -198,15 +199,15 @@ GYMLFile::build_postprocessors()
     if (!this->root["pps"])
         return;
 
-    lprintf(9, "- post-processors");
+    lprint(9, "- post-processors");
     auto pps_node = get_block(this->root, "pps");
     for (const auto & it : pps_node.values()) {
         Block blk = get_block(pps_node, it.first.as<std::string>());
         Parameters * params = build_params(blk);
         const auto & class_name = params->get<std::string>("_type");
-        params->set<Problem *>("_problem") = this->problem;
-        auto pp = app()->build_object<Postprocessor>(class_name, blk.name(), params);
-        problem->add_postprocessor(pp);
+        params->set<Problem *>("_problem") = get_problem();
+        auto pp = get_app()->build_object<Postprocessor>(class_name, blk.name(), params);
+        get_problem()->add_postprocessor(pp);
     }
 }
 

@@ -60,6 +60,7 @@ protected:
     /// @return Problem this auxiliary field of part of
     Problem * get_problem() const;
 
+private:
     /// Unstructured mesh this field is defined on
     UnstructuredMesh * mesh;
 

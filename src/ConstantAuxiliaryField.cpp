@@ -30,8 +30,7 @@ ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & params) :
     values(params.get<std::vector<Real>>("value"))
 {
     _F_;
-    this->num_comps = this->values.size();
-    assert(this->num_comps >= 1);
+    assert(this->values.size() >= 1);
 }
 
 void
@@ -45,7 +44,7 @@ Int
 ConstantAuxiliaryField::get_num_components() const
 {
     _F_;
-    return this->num_comps;
+    return this->values.size();
 }
 
 PetscFunc *

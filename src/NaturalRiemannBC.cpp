@@ -39,11 +39,12 @@ void
 NaturalRiemannBC::create()
 {
     _F_;
-    assert(this->dpi != nullptr);
+    auto dpi = get_discrete_problem_interface();
+    assert(dpi != nullptr);
 
-    std::vector<std::string> field_names = this->dpi->get_field_names();
+    std::vector<std::string> field_names = dpi->get_field_names();
     if (field_names.size() == 1) {
-        this->fid = this->dpi->get_field_id(field_names[0]);
+        this->fid = dpi->get_field_id(field_names[0]);
     }
 }
 
@@ -58,14 +59,15 @@ void
 NaturalRiemannBC::set_up()
 {
     _F_;
+    auto dpi = get_discrete_problem_interface();
     for (auto & bnd : get_boundary())
-        this->dpi->add_boundary_natural_riemann(get_name(),
-                                                bnd,
-                                                get_field_id(),
-                                                get_components(),
-                                                natural_riemann_boundary_condition_function,
-                                                nullptr,
-                                                this);
+        dpi->add_boundary_natural_riemann(get_name(),
+                                          bnd,
+                                          get_field_id(),
+                                          get_components(),
+                                          natural_riemann_boundary_condition_function,
+                                          nullptr,
+                                          this);
 }
 
 } // namespace godzilla

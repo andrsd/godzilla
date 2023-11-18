@@ -92,7 +92,7 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     _F_;
-    this->default_output_on = Output::ON_FINAL;
+    set_default_output_on(Output::ON_FINAL);
     line_search_type = utils::to_lower(line_search_type);
 }
 
@@ -146,9 +146,9 @@ void
 NonlinearProblem::init()
 {
     _F_;
-    PETSC_CHECK(SNESCreate(comm(), &this->snes));
-    PETSC_CHECK(SNESSetDM(this->snes, dm()));
-    PETSC_CHECK(DMSetApplicationContext(dm(), this));
+    PETSC_CHECK(SNESCreate(get_comm(), &this->snes));
+    PETSC_CHECK(SNESSetDM(this->snes, get_dm()));
+    PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
     PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
 }
 
@@ -250,14 +250,14 @@ void
 NonlinearProblem::snes_monitor_callback(Int it, Real norm)
 {
     _F_;
-    lprintf(7, "{} Non-linear residual: {:e}", it, norm);
+    lprint(7, "{} Non-linear residual: {:e}", it, norm);
 }
 
 void
 NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
-    lprintf(8, "    {} Linear residual: {:e}", it, rnorm);
+    lprint(8, "    {} Linear residual: {:e}", it, rnorm);
 }
 
 bool
@@ -298,7 +298,7 @@ void
 NonlinearProblem::solve()
 {
     _F_;
-    lprintf(9, "Solving");
+    lprint(9, "Solving");
     PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }

@@ -136,7 +136,7 @@ public:
         return sorted_vector;
     }
 
-protected:
+private:
     /// adjacency
     std::map<T, std::set<T>> adj;
 };

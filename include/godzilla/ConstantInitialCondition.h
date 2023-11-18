@@ -19,7 +19,7 @@ public:
 
     void evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) override;
 
-protected:
+private:
     /// Constant values -- one for each component
     const std::vector<Real> & values;
 

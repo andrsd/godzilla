@@ -25,7 +25,12 @@ public:
     /// @return The value computed by the postprocessor
     virtual Real get_value() = 0;
 
-protected:
+    /// Get problem this post-processor is part of
+    ///
+    /// @return Problem this postprocessor is part of
+    Problem * get_problem() const;
+
+private:
     /// Problem this object is part of
     Problem * problem;
 

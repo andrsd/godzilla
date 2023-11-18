@@ -54,9 +54,9 @@ TransientProblemInterface::parameters()
 }
 
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
+    ts(nullptr),
     problem(problem),
     tpi_params(params),
-    ts(nullptr),
     ts_adaptor(nullptr),
     start_time(params.get<Real>("start_time")),
     end_time(params.get<Real>("end_time")),
@@ -135,13 +135,27 @@ TransientProblemInterface::get_max_time() const
     return time;
 }
 
+Real
+TransientProblemInterface::get_time() const
+{
+    _F_;
+    return this->time;
+}
+
+Int
+TransientProblemInterface::get_step_number() const
+{
+    _F_;
+    return this->step_num;
+}
+
 void
 TransientProblemInterface::init()
 {
     _F_;
     assert(this->problem != nullptr);
-    PETSC_CHECK(TSCreate(this->problem->comm(), &this->ts));
-    PETSC_CHECK(TSSetDM(this->ts, this->problem->dm()));
+    PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
+    PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
 }
 
@@ -204,7 +218,7 @@ TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
 {
     _F_;
     Real dt = get_time_step();
-    this->problem->lprintf(6, "{} Time {:f} dt = {:f}", stepi, t, dt);
+    this->problem->lprint(6, "{} Time {:f} dt = {:f}", stepi, t, dt);
 }
 
 void

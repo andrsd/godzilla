@@ -51,6 +51,7 @@ protected:
                             BndJacobianFunc * g2,
                             BndJacobianFunc * g3);
 
+private:
     /// Field ID this boundary condition is attached to
     Int fid;
 

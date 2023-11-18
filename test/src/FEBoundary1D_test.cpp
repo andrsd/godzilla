@@ -26,16 +26,10 @@ class TestMesh1D : public godzilla::UnstructuredMesh {
 public:
     explicit TestMesh1D(const godzilla::Parameters & parameters) : UnstructuredMesh(parameters) {}
 
-protected:
     void
-    create_dm() override
+    create() override
     {
-        const PetscInt DIM = 1;
-        const PetscInt N_ELEM_NODES = 2;
-        std::vector<Int> cells = { 0, 1, 1, 2 };
-        std::vector<Real> coords = { 0, 0.4, 1 };
-        build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
-
+        UnstructuredMesh::create();
         // create "side sets"
         auto face_sets = create_label("Face Sets");
 
@@ -50,15 +44,22 @@ protected:
             set_face_set_name(it.first, it.second);
     }
 
+    DM
+    create_dm() override
+    {
+        const PetscInt DIM = 1;
+        const PetscInt N_ELEM_NODES = 2;
+        std::vector<Int> cells = { 0, 1, 1, 2 };
+        std::vector<Real> coords = { 0, 0.4, 1 };
+        return build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
+    }
+
     void
-    create_side_set(Label & face_sets,
-                    Int id,
-                    const std::vector<Int> & faces,
-                    const char * name)
+    create_side_set(Label & face_sets, Int id, const std::vector<Int> & faces, const char * name)
     {
         for (auto & f : faces) {
             face_sets.set_value(f, id);
-            PETSC_CHECK(DMSetLabelValue(dm(), name, f, id));
+            PETSC_CHECK(DMSetLabelValue(get_dm(), name, f, id));
         }
     }
 

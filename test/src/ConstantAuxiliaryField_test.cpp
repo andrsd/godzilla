@@ -19,7 +19,6 @@ TEST(ConstantAuxiliaryFieldTest, create)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
-    prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters aux_params = ConstantAuxiliaryField::parameters();
     aux_params.set<App *>("_app") = &app;
@@ -27,10 +26,11 @@ TEST(ConstantAuxiliaryFieldTest, create)
     aux_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     aux_params.set<std::vector<Real>>("value") = { 1234 };
     ConstantAuxiliaryField aux(aux_params);
-    prob.add_auxiliary_field(&aux);
 
     mesh.create();
     prob.create();
+    prob.set_aux_fe(0, "aux1", 1, 1);
+    prob.add_auxiliary_field(&aux);
 
     EXPECT_EQ(aux.get_field_id(), 0);
 
@@ -58,7 +58,6 @@ TEST(ConstantAuxiliaryFieldTest, evaluate)
     prob_params.set<App *>("_app") = &app;
     prob_params.set<Mesh *>("_mesh") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
-    prob.set_aux_fe(0, "aux1", 1, 1);
 
     Parameters aux_params = ConstantAuxiliaryField::parameters();
     aux_params.set<App *>("_app") = &app;
@@ -66,10 +65,11 @@ TEST(ConstantAuxiliaryFieldTest, evaluate)
     aux_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     aux_params.set<std::vector<Real>>("value") = { 1234 };
     ConstantAuxiliaryField aux(aux_params);
-    prob.add_auxiliary_field(&aux);
 
     mesh.create();
     prob.create();
+    prob.set_aux_fe(0, "aux1", 1, 1);
+    prob.add_auxiliary_field(&aux);
 
     PetscFunc * fn = aux.get_func();
     Int dim = 1;

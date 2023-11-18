@@ -58,7 +58,7 @@ LinearProblem::LinearProblem(const Parameters & parameters) :
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     _F_;
-    this->default_output_on = Output::ON_FINAL;
+    set_default_output_on(Output::ON_FINAL);
 }
 
 LinearProblem::~LinearProblem()
@@ -100,9 +100,9 @@ void
 LinearProblem::init()
 {
     _F_;
-    PETSC_CHECK(KSPCreate(comm(), &this->ksp));
-    PETSC_CHECK(KSPSetDM(this->ksp, dm()));
-    PETSC_CHECK(DMSetApplicationContext(dm(), this));
+    PETSC_CHECK(KSPCreate(get_comm(), &this->ksp));
+    PETSC_CHECK(KSPSetDM(this->ksp, get_dm()));
+    PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
 }
 
 void
@@ -146,7 +146,7 @@ void
 LinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
-    lprintf(8, "{} Linear residual: {:e}", it, rnorm);
+    lprint(8, "{} Linear residual: {:e}", it, rnorm);
 }
 
 bool

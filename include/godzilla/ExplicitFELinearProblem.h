@@ -20,6 +20,18 @@ public:
     void solve() override;
     const Vector & get_solution_vector_local() override;
 
+    const Matrix &
+    get_mass_matrix() const
+    {
+        return this->M;
+    }
+
+    const Vector &
+    get_lumped_mass_matrix() const
+    {
+        return this->M_lumped_inv;
+    }
+
     virtual PetscErrorCode compute_rhs(Real time, const Vector & X, Vector & F);
 
 protected:
@@ -37,6 +49,7 @@ protected:
     virtual PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F);
     void post_step() override;
 
+private:
     /// Time stepping scheme
     const std::string & scheme;
 

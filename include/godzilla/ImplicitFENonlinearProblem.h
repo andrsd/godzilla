@@ -35,6 +35,7 @@ protected:
     void set_up_monitors() override;
     void post_step() override;
 
+private:
     /// Time stepping scheme
     const std::string & scheme;
 

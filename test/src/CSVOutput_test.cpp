@@ -13,18 +13,6 @@ public:
     {
         close_file();
     }
-
-    std::vector<std::string>
-    get_pps_names()
-    {
-        return pps_names;
-    }
-
-    const std::FILE *
-    get_f()
-    {
-        return f;
-    }
 };
 
 } // namespace
@@ -54,8 +42,6 @@ TEST_F(CSVOutputTest, create)
 
     auto pps_names = out.get_pps_names();
     EXPECT_EQ(pps_names.size(), 0);
-
-    EXPECT_TRUE(out.get_f() == nullptr);
 }
 
 TEST_F(CSVOutputTest, output)
@@ -93,8 +79,6 @@ TEST_F(CSVOutputTest, output)
     auto pps_names = out.get_pps_names();
     EXPECT_EQ(pps_names.size(), 1);
 
-    EXPECT_TRUE(out.get_f() != nullptr);
-
     out.output_step();
     out.close();
 
@@ -124,6 +108,5 @@ TEST_F(CSVOutputTest, set_file_name)
     this->mesh->create();
     this->prob->create();
 
-    out.set_file_name();
     EXPECT_EQ(out.get_file_name(), "asdf.csv");
 }

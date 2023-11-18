@@ -17,6 +17,16 @@ public:
     /// Build the evaluator
     void create();
 
+    /// Get number of components
+    ///
+    /// @return The number of components
+    unsigned int get_num_components() const;
+
+    /// Check if time dependent expression was specified
+    ///
+    /// @return `true` if time dependent expression is specified, `false` otherwise
+    bool has_time_expression() const;
+
     /// Evaluate parsed function
     ///
     /// @return 'true' if evaluation was successful, `false` otherwise
@@ -37,7 +47,7 @@ public:
     /// @param u The result of evaluation (one per component)
     bool evaluate_func_t(Int dim, Real time, const Real x[], Int nc, Real u[]);
 
-protected:
+private:
     /// Application
     const App * fi_app;
     /// Function expressions

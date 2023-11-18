@@ -20,7 +20,6 @@ public:
     ~TecplotOutput() override;
 
     NO_DISCARD std::string get_file_ext() const override;
-    void set_file_name() override;
     void create() override;
     void check() override;
     void output_step() override;
@@ -47,6 +46,7 @@ protected:
 
     void write_line(const std::string & line);
 
+private:
     enum Format { BINARY, ASCII } format;
 
     /// FE problem interface (convenience pointer)

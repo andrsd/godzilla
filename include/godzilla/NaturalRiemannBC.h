@@ -34,7 +34,7 @@ public:
     virtual void
     evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) = 0;
 
-protected:
+private:
     /// Field ID this boundary condition is attached to
     Int fid;
 

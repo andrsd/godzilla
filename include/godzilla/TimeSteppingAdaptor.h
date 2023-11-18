@@ -33,9 +33,20 @@ public:
     NO_DISCARD Real get_dt_max() const;
 
 protected:
-    /// Set the type of time stepping adaptivity
-    virtual void set_type() = 0;
+    /// Set time adaptor type
+    ///
+    /// @param type Type of time adaptor
+    void set_type(const char * type);
 
+    /// Set the type of time stepping adaptivity
+    virtual void set_type_impl() = 0;
+
+    /// Get problem this time adaptor is part of
+    ///
+    /// @return Problem this time adaptor is part of
+    Problem * get_problem() const;
+
+private:
     /// Problem this adaptor is part of
     Problem * problem;
 

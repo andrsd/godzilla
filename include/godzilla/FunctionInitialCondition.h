@@ -7,7 +7,7 @@ namespace godzilla {
 
 /// Initial condition given by a function expression
 ///
-class FunctionInitialCondition : public InitialCondition, public FunctionInterface {
+class FunctionInitialCondition : public InitialCondition, protected FunctionInterface {
 public:
     explicit FunctionInitialCondition(const Parameters & params);
 
