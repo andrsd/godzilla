@@ -80,8 +80,8 @@ TecplotOutput::parameters()
 TecplotOutput::TecplotOutput(const Parameters & params) :
     FileOutput(params),
     format(BINARY),
-    dpi(dynamic_cast<DiscreteProblemInterface *>(this->problem)),
-    mesh(this->problem ? dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh()) : nullptr),
+    dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem())),
+    mesh(get_problem() ? dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh()) : nullptr),
     variable_names(get_param<std::vector<std::string>>("variables")),
     file(nullptr),
     header_written(false),
@@ -128,7 +128,7 @@ TecplotOutput::create()
     FileOutput::create();
 
     assert(this->dpi != nullptr);
-    assert(this->problem != nullptr);
+    assert(get_problem() != nullptr);
 
     auto fmt_str = get_param<std::string>("format");
     if (validation::in(fmt_str, { "binary", "ascii" })) {
@@ -359,7 +359,7 @@ TecplotOutput::write_zone_ascii()
     write_line(
         fmt::format(" ZONETYPE={}, Nodes={}, Elements={}\n", zone_type, n_nodes, n_cells_in_block));
 
-    Real time = this->problem->get_time();
+    Real time = get_problem()->get_time();
     write_line(fmt::format(" STRANDID=2, SOLUTIONTIME={}\n", time));
     write_line(fmt::format(" DATAPACKING=BLOCK\n"));
     write_line(fmt::format(" VARLOCATION=([{}]=CELLCENTERED)\n", this->element_id_var_index));

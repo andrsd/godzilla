@@ -20,7 +20,12 @@ public:
     /// Set execute mask
     ///
     /// @param mask Bit mask for execution
-    virtual void set_exec_mask(unsigned int mask);
+    void set_exec_mask(unsigned int mask);
+
+    /// Get execution mask
+    ///
+    /// @return execution mask
+    unsigned int get_exec_mask() const;
 
     /// Should output happen at a specified occasion
     ///
@@ -32,9 +37,15 @@ public:
     virtual void output_step() = 0;
 
 protected:
+    /// Get problem
+    ///
+    /// @return Problem this output is part of
+    Problem * get_problem() const;
+
     /// Set up the execution mask
     void set_up_exec();
 
+private:
     /// Problem to get data from
     Problem * problem;
 

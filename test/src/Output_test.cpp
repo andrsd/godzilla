@@ -19,12 +19,6 @@ public:
     output_step() override
     {
     }
-
-    unsigned int
-    get_exec_mask() const
-    {
-        return this->on_mask;
-    }
 };
 
 } // namespace

@@ -106,8 +106,8 @@ ExodusIIOutput::parameters()
 ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     FileOutput(params),
     variable_names(get_param<std::vector<std::string>>("variables")),
-    dpi(dynamic_cast<DiscreteProblemInterface *>(this->problem)),
-    mesh(this->problem ? dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh())
+    dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem())),
+    mesh(get_problem() ? dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh())
                        : get_param<UnstructuredMesh *>("_mesh")),
     exo(nullptr),
     step_num(1),
@@ -150,7 +150,7 @@ ExodusIIOutput::create()
     if (this->dpi) {
         auto flds = this->dpi->get_field_names();
         auto aux_flds = this->dpi->get_aux_field_names();
-        auto & pps = this->problem->get_postprocessor_names();
+        auto & pps = get_problem()->get_postprocessor_names();
 
         if (this->variable_names.empty()) {
             this->field_var_names = flds;
@@ -525,7 +525,7 @@ void
 ExodusIIOutput::write_variables()
 {
     _F_;
-    Real time = this->problem->get_time();
+    Real time = get_problem()->get_time();
     this->exo->write_time(this->step_num, time);
 
     write_field_variables();
@@ -675,7 +675,7 @@ ExodusIIOutput::write_global_variables()
 
     int exo_var_id = 1;
     for (auto & name : this->global_var_names) {
-        Postprocessor * pp = this->problem->get_postprocessor(name);
+        Postprocessor * pp = get_problem()->get_postprocessor(name);
         Real val = pp->get_value();
         this->exo->write_global_var(this->step_num, exo_var_id, val);
         exo_var_id++;

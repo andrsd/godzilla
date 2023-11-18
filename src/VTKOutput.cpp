@@ -51,7 +51,7 @@ VTKOutput::check()
 {
     _F_;
     FileOutput::check();
-    const auto * mesh = dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh());
+    const auto * mesh = dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh());
     if (mesh == nullptr)
         log_error("VTK output works only with unstructured meshes.");
 }
@@ -60,13 +60,14 @@ void
 VTKOutput::output_step()
 {
     _F_;
-    set_sequence_file_name(this->problem->get_step_num());
+    auto problem = get_problem();
+    set_sequence_file_name(problem->get_step_num());
     PETSC_CHECK(PetscViewerFileSetName(this->viewer, this->file_name.c_str()));
 
     TIMED_EVENT(9, "VTKOutput", "Output to file: {}", this->file_name);
-    auto dm = this->problem->get_dm();
+    auto dm = problem->get_dm();
     PETSC_CHECK(DMView(dm, this->viewer));
-    auto vec = this->problem->get_solution_vector();
+    auto vec = problem->get_solution_vector();
     PETSC_CHECK(VecView(vec, this->viewer));
 }
 

@@ -36,7 +36,7 @@ CSVOutput::create()
 
     set_file_name();
 
-    this->pps_names = this->problem->get_postprocessor_names();
+    this->pps_names = get_problem()->get_postprocessor_names();
 
     if (!this->pps_names.empty())
         open_file();
@@ -62,7 +62,7 @@ CSVOutput::output_step()
         write_header();
         this->has_header = true;
     }
-    write_values(this->problem->get_time());
+    write_values(get_problem()->get_time());
 }
 
 void
@@ -90,7 +90,7 @@ CSVOutput::write_values(Real time)
     _F_;
     fmt::print(this->f, "{:g}", time);
     for (auto & name : this->pps_names) {
-        auto * pps = this->problem->get_postprocessor(name);
+        auto * pps = get_problem()->get_postprocessor(name);
         Real val = pps->get_value();
         fmt::print(this->f, ",{:g}", val);
     }
