@@ -33,7 +33,7 @@ public:
     /// @return Interpolated value
     Real sample(Real x);
 
-protected:
+private:
     /// Independent values
     std::vector<Real> x;
     /// Dependent values
