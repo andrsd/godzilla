@@ -40,18 +40,6 @@ public:
         ExplicitFELinearProblem::set_up_time_scheme();
     }
 
-    const Matrix &
-    get_mass_matrix() const
-    {
-        return this->M;
-    }
-
-    const Vector &
-    get_lumped_mass_matrix() const
-    {
-        return this->M_lumped_inv;
-    }
-
 protected:
     void
     set_up_fields() override
