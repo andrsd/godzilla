@@ -105,6 +105,20 @@ TEST(VectorTest, duplicate)
     v.destroy();
 }
 
+TEST(VectorTest, duplicate_ret)
+{
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    v.set_value(0, 1.);
+    v.set_value(1, 3.);
+    v.set_value(2, 7.);
+    Vector dup = v.duplicate();
+    v.copy(dup);
+    EXPECT_DOUBLE_EQ(dup(0), 1.);
+    EXPECT_DOUBLE_EQ(dup(1), 3.);
+    EXPECT_DOUBLE_EQ(dup(2), 7.);
+    v.destroy();
+}
+
 TEST(VectorTest, sum)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
