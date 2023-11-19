@@ -13,6 +13,24 @@ class TimeSteppingAdaptor;
 ///
 class TransientProblemInterface {
 public:
+    /// Time stepping schemes
+    enum class TimeScheme {
+        /// Backward Euler
+        BEULER,
+        /// Crank-Nicolson
+        CN,
+        /// Forward Euler
+        EULER,
+        /// Runge-Kutta 2 (midpoint)
+        RK_2,
+        /// Heun's
+        HEUN,
+        /// Strong stability preserving RK-2
+        SSP_RK_2,
+        /// Strong stability preserving RK-3
+        SSP_RK_3,
+    };
+
     TransientProblemInterface(Problem * problem, const Parameters & params);
     virtual ~TransientProblemInterface();
 
@@ -92,6 +110,8 @@ protected:
     virtual bool converged() const;
     /// Solve
     virtual void solve(Vector & x);
+    /// Set time-stepping scheme
+    void set_scheme(TimeScheme scheme);
 
 protected:
     /// PETSc TS object

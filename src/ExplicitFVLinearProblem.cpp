@@ -146,25 +146,13 @@ void
 ExplicitFVLinearProblem::set_up_time_scheme()
 {
     _F_;
-    std::string sch = utils::to_lower(this->scheme);
-    if (sch == "euler")
-        PETSC_CHECK(TSSetType(this->ts, TSEULER));
-    else if (sch == "ssp-rk-2") {
-        PETSC_CHECK(TSSetType(this->ts, TSSSP));
-        PETSC_CHECK(TSSSPSetType(this->ts, TSSSPRKS2));
-    }
-    else if (sch == "ssp-rk-3") {
-        PETSC_CHECK(TSSetType(this->ts, TSSSP));
-        PETSC_CHECK(TSSSPSetType(this->ts, TSSSPRKS3));
-    }
-    else if (sch == "rk-2") {
-        PETSC_CHECK(TSSetType(this->ts, TSRK));
-        PETSC_CHECK(TSRKSetType(this->ts, TSRK2B));
-    }
-    else if (sch == "heun") {
-        PETSC_CHECK(TSSetType(this->ts, TSRK));
-        PETSC_CHECK(TSRKSetType(this->ts, TSRK2A));
-    }
+    std::string name = utils::to_lower(this->scheme);
+    std::map<std::string, TimeScheme> scheme_map = { { "euler", TimeScheme::EULER },
+                                                     { "ssp-rk-2", TimeScheme::SSP_RK_2 },
+                                                     { "ssp-rk-3", TimeScheme::SSP_RK_3 },
+                                                     { "rk-2", TimeScheme::RK_2 },
+                                                     { "heun", TimeScheme::HEUN } };
+    set_scheme(scheme_map[name]);
 }
 
 void

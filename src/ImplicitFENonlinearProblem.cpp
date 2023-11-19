@@ -148,11 +148,10 @@ void
 ImplicitFENonlinearProblem::set_up_time_scheme()
 {
     _F_;
-    std::string sch = utils::to_lower(this->scheme);
-    if (sch == "beuler")
-        PETSC_CHECK(TSSetType(this->ts, TSBEULER));
-    else if (sch == "cn")
-        PETSC_CHECK(TSSetType(this->ts, TSCN));
+    std::string name = utils::to_lower(this->scheme);
+    std::map<std::string, TimeScheme> scheme_map = { { "beuler", TimeScheme::BEULER },
+                                                     { "cn", TimeScheme::CN } };
+    set_scheme(scheme_map[name]);
 }
 
 void

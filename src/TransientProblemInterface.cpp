@@ -251,4 +251,32 @@ TransientProblemInterface::converged() const
     return get_converged_reason() > 0;
 }
 
+void
+TransientProblemInterface::set_scheme(TimeScheme scheme)
+{
+    _F_;
+    if (scheme == TimeScheme::BEULER)
+        PETSC_CHECK(TSSetType(this->ts, TSBEULER));
+    else if (scheme == TimeScheme::CN)
+        PETSC_CHECK(TSSetType(this->ts, TSCN));
+    else if (scheme == TimeScheme::EULER)
+        PETSC_CHECK(TSSetType(this->ts, TSEULER));
+    else if (scheme == TimeScheme::SSP_RK_2) {
+        PETSC_CHECK(TSSetType(this->ts, TSSSP));
+        PETSC_CHECK(TSSSPSetType(this->ts, TSSSPRKS2));
+    }
+    else if (scheme == TimeScheme::SSP_RK_3) {
+        PETSC_CHECK(TSSetType(this->ts, TSSSP));
+        PETSC_CHECK(TSSSPSetType(this->ts, TSSSPRKS3));
+    }
+    else if (scheme == TimeScheme::RK_2) {
+        PETSC_CHECK(TSSetType(this->ts, TSRK));
+        PETSC_CHECK(TSRKSetType(this->ts, TSRK2B));
+    }
+    else if (scheme == TimeScheme::HEUN) {
+        PETSC_CHECK(TSSetType(this->ts, TSRK));
+        PETSC_CHECK(TSRKSetType(this->ts, TSRK2A));
+    }
+}
+
 } // namespace godzilla
