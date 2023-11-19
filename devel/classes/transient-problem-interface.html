@@ -131,6 +131,58 @@
 <dd><p>Interface for transient simulations. </p>
 <p>Subclassed by <a class="reference internal" href="explicit-fe-linear-problem.html#classgodzilla_1_1_explicit_f_e_linear_problem"><span class="std std-ref">godzilla::ExplicitFELinearProblem</span></a>, <a class="reference internal" href="explicit-fv-linear-problem.html#classgodzilla_1_1_explicit_f_v_linear_problem"><span class="std std-ref">godzilla::ExplicitFVLinearProblem</span></a>, <a class="reference internal" href="implicit-fe-nonlinear-problem.html#classgodzilla_1_1_implicit_f_e_nonlinear_problem"><span class="std std-ref">godzilla::ImplicitFENonlinearProblem</span></a></p>
 <div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp enum-class">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10TimeSchemeE">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10TimeSchemeE"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10TimeSchemeE"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a403bda7714e35f65501ad50858c4999d"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TimeScheme</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10TimeSchemeE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Time stepping schemes. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10TimeScheme6BEULERE">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10TimeScheme6BEULERE"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10TimeScheme6BEULERE"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a403bda7714e35f65501ad50858c4999dae5df820a0fe875c1aeb17786959bb920"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BEULER</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10TimeScheme6BEULERE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Backward Euler. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10TimeScheme2CNE">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10TimeScheme2CNE"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10TimeScheme2CNE"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a403bda7714e35f65501ad50858c4999da1c2903397d8833382673bab22aa8b937"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CN</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10TimeScheme2CNE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Crank-Nicolson. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10TimeScheme5EULERE">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10TimeScheme5EULERE"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10TimeScheme5EULERE"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a403bda7714e35f65501ad50858c4999da678c1200011554fa94722938765910bf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EULER</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10TimeScheme5EULERE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Forward Euler. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10TimeScheme4RK_2E">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10TimeScheme4RK_2E"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10TimeScheme4RK_2E"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a403bda7714e35f65501ad50858c4999da89ba3a1a15c1293e5ab42c29b9f4be6e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RK_2</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10TimeScheme4RK_2E" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Runge-Kutta 2 (midpoint) </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10TimeScheme4HEUNE">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10TimeScheme4HEUNE"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10TimeScheme4HEUNE"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a403bda7714e35f65501ad50858c4999da429ae49ad4b193b84fcbc2ca63343025"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HEUN</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10TimeScheme4HEUNE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Heun’s. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10TimeScheme8SSP_RK_2E">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10TimeScheme8SSP_RK_2E"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10TimeScheme8SSP_RK_2E"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a403bda7714e35f65501ad50858c4999da691f182f2beb15c18ad659ebb988e1eb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SSP_RK_2</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10TimeScheme8SSP_RK_2E" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Strong stability preserving RK-2. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10TimeScheme8SSP_RK_3E">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10TimeScheme8SSP_RK_3E"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10TimeScheme8SSP_RK_3E"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a403bda7714e35f65501ad50858c4999da4a0d85fff901bd2050ee53b17801db60"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SSP_RK_3</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10TimeScheme8SSP_RK_3E" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Strong stability preserving RK-3. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface25set_time_stepping_adaptorEP19TimeSteppingAdaptor">
