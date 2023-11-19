@@ -148,13 +148,6 @@ TEST(ExodusIIOutputTest, fe_check)
         {
             return true;
         }
-        const Vector &
-        get_solution_vector() const
-        {
-            return this->sln;
-        }
-
-        Vector sln;
     };
 
     testing::internal::CaptureStderr();

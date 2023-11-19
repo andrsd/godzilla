@@ -18,14 +18,6 @@ public:
     run() override
     {
     }
-
-    const Vector &
-    get_solution_vector() const override
-    {
-        return this->sln;
-    }
-
-    Vector sln;
 };
 
 Section

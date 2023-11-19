@@ -24,11 +24,29 @@ Problem::Problem(const Parameters & parameters) :
 {
 }
 
+Problem::~Problem()
+{
+    this->x.destroy();
+}
+
 DM
 Problem::get_dm() const
 {
     _F_;
     return this->mesh->get_dm();
+}
+
+const Vector &
+Problem::get_solution_vector() const
+{
+    _F_;
+    return this->x;
+}
+
+Vector &
+Problem::get_solution_vector()
+{
+    return this->x;
 }
 
 void
@@ -54,6 +72,13 @@ Problem::create()
         pp.second->create();
     for (auto & out : this->outputs)
         out->create();
+}
+
+void
+Problem::allocate_objects()
+{
+    this->x = create_global_vector();
+    this->x.set_name("sln");
 }
 
 Mesh *

@@ -131,7 +131,7 @@ ImplicitFENonlinearProblem::solve()
 {
     _F_;
     lprint(9, "Solving");
-    TransientProblemInterface::solve(this->x);
+    TransientProblemInterface::solve(get_solution_vector());
 }
 
 void

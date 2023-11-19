@@ -66,15 +66,7 @@ LinearProblem::~LinearProblem()
     _F_;
     if (this->ksp)
         KSPDestroy(&this->ksp);
-    this->x.destroy();
     this->b.destroy();
-}
-
-const Vector &
-LinearProblem::get_solution_vector() const
-{
-    _F_;
-    return this->x;
 }
 
 void
@@ -109,10 +101,9 @@ void
 LinearProblem::allocate_objects()
 {
     _F_;
-    this->x = create_global_vector();
-    this->x.set_name("sln");
+    Problem::allocate_objects();
 
-    this->x.duplicate(this->b);
+    this->b = get_solution_vector().duplicate();
     this->b.set_name("rhs");
 }
 
@@ -194,7 +185,7 @@ void
 LinearProblem::solve()
 {
     _F_;
-    PETSC_CHECK(KSPSolve(this->ksp, this->b, this->x));
+    PETSC_CHECK(KSPSolve(this->ksp, this->b, get_solution_vector()));
     PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
 }
 

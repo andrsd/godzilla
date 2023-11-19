@@ -17,7 +17,6 @@ public:
     void create() override;
     void check() override;
     void run() override;
-    const Vector & get_solution_vector() const override;
 
     /// true if solve converged, otherwise false
     virtual bool converged();
@@ -64,8 +63,6 @@ protected:
     SNES snes;
     /// KSP object
     KSP ksp;
-    /// The solution vector
-    Vector x;
     /// The residual vector
     Vector r;
     /// Jacobian matrix

@@ -22,6 +22,7 @@ class Section;
 class Problem : public Object, public PrintInterface {
 public:
     explicit Problem(const Parameters & parameters);
+    virtual ~Problem();
 
     void check() override;
 
@@ -32,7 +33,8 @@ public:
     /// Provide DM for this problem
     DM get_dm() const;
     /// Return solution vector
-    virtual const Vector & get_solution_vector() const = 0;
+    const Vector & get_solution_vector() const;
+    Vector & get_solution_vector();
     /// Get mesh this problem is using
     virtual Mesh * get_mesh() const;
     /// Get problem spatial dimension
@@ -132,6 +134,8 @@ public:
     void set_default_output_on(ExecuteOn flags);
 
 protected:
+    /// Allocate objects
+    void allocate_objects();
     /// Called before solving starts
     virtual void on_initial();
     /// Called after solve has successfully finished
@@ -140,6 +144,9 @@ protected:
 private:
     /// Mesh
     Mesh * mesh;
+
+    /// The solution vector
+    Vector x;
 
     /// List of functions
     std::vector<Function *> functions;
