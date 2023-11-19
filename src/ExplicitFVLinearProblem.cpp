@@ -105,7 +105,7 @@ ExplicitFVLinearProblem::solve()
 {
     _F_;
     lprint(9, "Solving");
-    TransientProblemInterface::solve(this->x);
+    TransientProblemInterface::solve(get_solution_vector());
 }
 
 const Vector &
@@ -122,8 +122,7 @@ void
 ExplicitFVLinearProblem::allocate_objects()
 {
     _F_;
-    this->x = create_global_vector();
-    this->x.set_name("sln");
+    Problem::allocate_objects();
     FVProblemInterface::allocate_objects();
 }
 

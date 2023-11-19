@@ -17,7 +17,6 @@ public:
 
     void create() override;
     void run() override;
-    NO_DISCARD const Vector & get_solution_vector() const override;
 
     /// true if solve converged, otherwise false
     virtual bool converged();
@@ -49,8 +48,6 @@ protected:
 private:
     /// KSP object
     KSP ksp;
-    /// The solution vector
-    Vector x;
     /// The right-hand side vector
     Vector b;
     /// Converged reason

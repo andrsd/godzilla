@@ -32,18 +32,10 @@ public:
     {
     }
 
-    ~GTestProblem() override { this->x.destroy(); }
-
-    const Vector &
-    get_solution_vector() const override
-    {
-        return this->x;
-    }
-
     void
     create() override
     {
-        this->x = create_global_vector();
+        Problem::allocate_objects();
     }
 
     void
@@ -55,9 +47,6 @@ public:
     set_up_time_scheme() override
     {
     }
-
-protected:
-    Vector x;
 
 public:
     static Parameters parameters();

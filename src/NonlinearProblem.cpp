@@ -102,15 +102,7 @@ NonlinearProblem::~NonlinearProblem()
     if (this->snes)
         SNESDestroy(&this->snes);
     this->r.destroy();
-    this->x.destroy();
     this->J.destroy();
-}
-
-const Vector &
-NonlinearProblem::get_solution_vector() const
-{
-    _F_;
-    return this->x;
 }
 
 void
@@ -166,17 +158,16 @@ NonlinearProblem::set_up_initial_guess()
 {
     _F_;
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
-    this->x.set(0.);
+    get_solution_vector().set(0.);
 }
 
 void
 NonlinearProblem::allocate_objects()
 {
     _F_;
-    this->x = create_global_vector();
-    this->x.set_name("sln");
+    Problem::allocate_objects();
 
-    this->x.duplicate(this->r);
+    this->r = get_solution_vector().duplicate();
     this->r.set_name("res");
 
     this->J = create_matrix();
@@ -299,7 +290,7 @@ NonlinearProblem::solve()
 {
     _F_;
     lprint(9, "Solving");
-    PETSC_CHECK(SNESSolve(this->snes, nullptr, this->x));
+    PETSC_CHECK(SNESSolve(this->snes, nullptr, get_solution_vector()));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
 }
 
