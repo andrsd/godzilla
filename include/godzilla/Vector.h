@@ -36,6 +36,7 @@ public:
     Scalar dot(const Vector & y) const;
     void scale(Scalar alpha);
     void duplicate(Vector & b) const;
+    Vector duplicate() const;
 
     /// Copy this vector into `y`
     ///

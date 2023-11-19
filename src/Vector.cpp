@@ -112,6 +112,14 @@ Vector::duplicate(Vector & b) const
     VecDuplicate(this->vec, &b.vec);
 }
 
+Vector
+Vector::duplicate() const
+{
+    Vec dup;
+    PETSC_CHECK(VecDuplicate(this->vec, &dup));
+    return { dup };
+}
+
 void
 Vector::copy(Vector & y) const
 {
