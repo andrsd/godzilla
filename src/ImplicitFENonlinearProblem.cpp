@@ -48,35 +48,6 @@ _tsfep_compute_boundary(DM, Real time, Vec x, Vec x_t, void * user)
     return 0;
 }
 
-// Taken from PETSc: dmplexts.c
-static PetscErrorCode
-DMTSConvertPlex(DM dm, DM * plex, PetscBool copy)
-{
-    PetscBool isPlex;
-
-    PetscCall(PetscObjectTypeCompare((PetscObject) dm, DMPLEX, &isPlex));
-    if (isPlex) {
-        *plex = dm;
-        PetscCall(PetscObjectReference((PetscObject) dm));
-    }
-    else {
-        PetscCall(PetscObjectQuery((PetscObject) dm, "dm_plex", (PetscObject *) plex));
-        if (!*plex) {
-            PetscCall(DMConvert(dm, DMPLEX, plex));
-            PetscCall(PetscObjectCompose((PetscObject) dm, "dm_plex", (PetscObject) *plex));
-            if (copy) {
-                PetscCall(DMCopyDMTS(dm, *plex));
-                PetscCall(DMCopyDMSNES(dm, *plex));
-                PetscCall(DMCopyAuxiliaryVec(dm, *plex));
-            }
-        }
-        else {
-            PetscCall(PetscObjectReference((PetscObject) *plex));
-        }
-    }
-    return 0;
-}
-
 ///
 
 Parameters
