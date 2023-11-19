@@ -33,13 +33,6 @@ ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & params) :
     assert(this->values.size() >= 1);
 }
 
-void
-ConstantAuxiliaryField::create()
-{
-    _F_;
-    AuxiliaryField::create();
-}
-
 Int
 ConstantAuxiliaryField::get_num_components() const
 {
