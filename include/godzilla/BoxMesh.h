@@ -15,31 +15,31 @@ public:
     void create() override;
 
     /// Get lower limit in x-direction
-    NO_DISCARD Real get_x_min() const;
+    Real get_x_min() const;
 
     /// Get upper limit in x-direction
-    NO_DISCARD Real get_x_max() const;
+    Real get_x_max() const;
 
     /// Get the number of mesh points in x direction
-    NO_DISCARD Int get_nx() const;
+    Int get_nx() const;
 
     /// Get lower limit in y-direction
-    NO_DISCARD Real get_y_min() const;
+    Real get_y_min() const;
 
     /// Get upper limit in y-direction
-    NO_DISCARD Real get_y_max() const;
+    Real get_y_max() const;
 
     /// Get the number of mesh points in y-direction
-    NO_DISCARD Int get_ny() const;
+    Int get_ny() const;
 
     /// Get lower limit in z-direction
-    NO_DISCARD Real get_z_min() const;
+    Real get_z_min() const;
 
     /// Get upper limit in z-direction
-    NO_DISCARD Real get_z_max() const;
+    Real get_z_max() const;
 
     /// Get the number of mesh points in z direction
-    NO_DISCARD Int get_nz() const;
+    Int get_nz() const;
 
 protected:
     DM create_dm() override;
