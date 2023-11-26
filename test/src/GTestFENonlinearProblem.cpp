@@ -77,9 +77,9 @@ GTestFENonlinearProblem::solve()
 }
 
 PetscDS
-GTestFENonlinearProblem::getDS()
+GTestFENonlinearProblem::get_ds()
 {
-    return this->ds;
+    return FENonlinearProblem::get_ds();
 }
 
 void

@@ -37,8 +37,6 @@ public:
     std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    const Vector & get_aux_solution_vector_local() override;
-
     /// Adds a volumetric field
     ///
     /// @param id The field ID
@@ -85,15 +83,12 @@ protected:
     /// @param dm DM for auxiliary fields
     void compute_aux_fields();
 
-    void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vector & a);
-
     void compute_label_aux_fields(DM dm,
                                   const Label & label,
                                   const std::vector<AuxiliaryField *> & auxs,
                                   Vector & a);
 
-    /// Set up auxiliary DM
-    virtual void set_up_auxiliary_dm(DM dm);
+    void set_up_aux_fields() override;
 
     /// Set up field variables
     virtual void set_up_fields() = 0;

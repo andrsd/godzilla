@@ -138,7 +138,7 @@ TEST(NaturalBCTest, fe)
     prob.add_boundary_condition(&bc);
     prob.create();
 
-    PetscDS ds = prob.getDS();
+    PetscDS ds = prob.get_ds();
     //
     Int num_bd;
     PetscDSGetNumBoundary(ds, &num_bd);

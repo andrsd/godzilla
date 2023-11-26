@@ -17,7 +17,6 @@ public:
     explicit FENonlinearProblem(const Parameters & parameters);
 
     void create() override;
-    const Vector & get_solution_vector_local() override;
     PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
     PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
 
@@ -30,6 +29,7 @@ protected:
     void set_up_initial_guess() override;
     void allocate_objects() override;
     void on_initial() override;
+    void build_local_solution_vector(Vector & loc_sln) override;
 
     virtual PetscErrorCode compute_residual_internal(DM dm,
                                                      PetscFormKey key,

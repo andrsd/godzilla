@@ -20,7 +20,6 @@ public:
     void solve() override;
     Real get_time() const override;
     Int get_step_num() const override;
-    const Vector & get_solution_vector_local() override;
 
     virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 
@@ -43,6 +42,7 @@ protected:
     void set_up_initial_guess() override;
     void set_up_time_scheme() override;
     void set_up_monitors() override;
+    void build_local_solution_vector(Vector & loc_sln) override;
     void create_mass_matrix();
     void create_mass_matrix_lumped();
     virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);

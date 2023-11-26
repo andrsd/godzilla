@@ -18,7 +18,6 @@ public:
     void check() override;
     bool converged() override;
     void solve() override;
-    const Vector & get_solution_vector_local() override;
 
     const Matrix &
     get_mass_matrix() const
@@ -43,6 +42,7 @@ protected:
                             ResidualFunc * f0,
                             ResidualFunc * f1,
                             const std::string & region = "") override;
+    void build_local_solution_vector(Vector & loc_sln) override;
     void create_mass_matrix();
     void create_mass_matrix_lumped();
     virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);

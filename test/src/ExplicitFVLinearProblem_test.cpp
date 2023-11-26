@@ -123,8 +123,9 @@ public:
     set_up_ds() override
     {
         ExplicitFVLinearProblem::set_up_ds();
-        PETSC_CHECK(PetscDSSetRiemannSolver(this->ds, 0, ::compute_flux));
-        PETSC_CHECK(PetscDSSetContext(this->ds, 0, this));
+        auto ds = get_ds();
+        PETSC_CHECK(PetscDSSetRiemannSolver(ds, 0, ::compute_flux));
+        PETSC_CHECK(PetscDSSetContext(ds, 0, this));
     }
 
     void

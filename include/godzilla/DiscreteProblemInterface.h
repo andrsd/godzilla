@@ -219,12 +219,12 @@ public:
     /// Get local solution vector
     ///
     /// @return Local solution vector
-    virtual const Vector & get_solution_vector_local() = 0;
+    const Vector & get_solution_vector_local();
 
     /// Get local auxiliary solution vector
     ///
     /// @return Local auxiliary solution vector
-    virtual const Vector & get_aux_solution_vector_local() = 0;
+    const Vector & get_aux_solution_vector_local();
 
     void add_boundary(DMBoundaryConditionType type,
                       const std::string & name,
@@ -291,9 +291,20 @@ public:
     T get_point_local_field_ref(Int point, Int field, Scalar * array) const;
 
 protected:
+    /// Get unstructured mesh associated with this problem
+    UnstructuredMesh * get_unstr_mesh() const;
+    /// Build local solution vector for this problem
+    virtual void build_local_solution_vector(Vector & sln) = 0;
+    /// Get list of all natural boundary conditions
+    std::vector<NaturalBC *> get_natural_bcs() const;
+
     virtual void init();
     virtual void create();
     virtual void allocate_objects();
+    /// Create underlying PetscDS object
+    void create_ds();
+    /// Get underlying PetscDS object
+    PetscDS get_ds();
     /// Set up discrete system
     virtual void set_up_ds() = 0;
 
@@ -311,9 +322,30 @@ protected:
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
 
+    DM get_dm_aux() const;
+
+    PetscDS get_ds_aux() const;
+
+    virtual void set_up_aux_fields() = 0;
+
+    void set_up_auxiliary_dm(DM dm);
+
+    void compute_global_aux_fields(DM dm, const std::vector<AuxiliaryField *> & auxs, Vector & a);
+
+    void compute_label_aux_fields(DM dm,
+                                  const Label & label,
+                                  const std::vector<AuxiliaryField *> & auxs,
+                                  Vector & a);
+
+    /// Compute auxiliary fields
+    ///
+    /// @param dm DM for auxiliary fields
+    void compute_aux_fields();
+
     /// Update auxiliary vector
     virtual void update_aux_vector();
 
+private:
     /// Problem this interface is part of
     Problem * problem;
 
@@ -370,6 +402,9 @@ protected:
 
     /// Object that manages a discrete system for aux variables
     PetscDS ds_aux;
+
+    /// Vector for auxiliary fields
+    Vector a;
 };
 
 template <Int N>

@@ -98,9 +98,10 @@ ExplicitFELinearProblem::init()
     for (Int i = 0; i < get_num_fields(); i++)
         add_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
 
+    auto ds = get_ds();
     for (auto & f : get_fields()) {
         Int fid = f.second.id;
-        PETSC_CHECK(PetscDSSetImplicit(this->ds, fid, PETSC_FALSE));
+        PETSC_CHECK(PetscDSSetImplicit(ds, fid, PETSC_FALSE));
     }
 }
 
@@ -139,14 +140,12 @@ ExplicitFELinearProblem::solve()
     TransientProblemInterface::solve(get_solution_vector());
 }
 
-const Vector &
-ExplicitFELinearProblem::get_solution_vector_local()
+void
+ExplicitFELinearProblem::build_local_solution_vector(Vector & loc_sln)
 {
     _F_;
-    auto & loc_sln = this->sln;
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary_local(get_time(), loc_sln);
-    return loc_sln;
 }
 
 void
@@ -260,7 +259,7 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
         add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, Label(), 0, part);
     }
     else {
-        auto label = this->unstr_mesh->get_label(region);
+        auto label = get_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, label, val, part);

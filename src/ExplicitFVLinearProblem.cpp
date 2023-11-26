@@ -106,14 +106,12 @@ ExplicitFVLinearProblem::solve()
     TransientProblemInterface::solve(get_solution_vector());
 }
 
-const Vector &
-ExplicitFVLinearProblem::get_solution_vector_local()
+void
+ExplicitFVLinearProblem::build_local_solution_vector(godzilla::Vector & loc_sln)
 {
     _F_;
-    auto & loc_sln = this->sln;
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary_local(get_time(), loc_sln);
-    return loc_sln;
 }
 
 void

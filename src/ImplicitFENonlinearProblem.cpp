@@ -160,14 +160,12 @@ ImplicitFENonlinearProblem::set_up_monitors()
     TransientProblemInterface::set_up_monitors();
 }
 
-const Vector &
-ImplicitFENonlinearProblem::get_solution_vector_local()
+void
+ImplicitFENonlinearProblem::build_local_solution_vector(Vector & loc_sln)
 {
     _F_;
-    auto & loc_sln = this->sln;
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary(get_time(), loc_sln, Vector());
-    return loc_sln;
 }
 
 PetscErrorCode
@@ -178,7 +176,7 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
     _F_;
-    IndexSet all_cells = this->unstr_mesh->get_all_cells();
+    IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
     for (auto & res_key : get_weak_form()->get_residual_keys()) {
         IndexSet cells;
@@ -210,7 +208,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
     // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
     // DMPlexTSComputeIJacobianFEM()
     _F_;
-    IndexSet all_cells = this->unstr_mesh->get_all_cells();
+    IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
     Jp.zero();
 
