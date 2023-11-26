@@ -74,6 +74,14 @@ TransientProblemInterface::~TransientProblemInterface()
     TSDestroy(&this->ts);
 }
 
+SNES
+TransientProblemInterface::get_snes() const
+{
+    SNES snes;
+    PETSC_CHECK(TSGetSNES(this->ts, &snes));
+    return snes;
+}
+
 void
 TransientProblemInterface::set_time_stepping_adaptor(TimeSteppingAdaptor * adaptor)
 {

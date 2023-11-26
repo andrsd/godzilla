@@ -72,7 +72,6 @@ FEProblemInterface::~FEProblemInterface()
         PetscFEDestroy(&fi.fe);
     }
 
-    this->a.destroy();
     delete this->asmbl;
 }
 
@@ -87,7 +86,7 @@ void
 FEProblemInterface::create()
 {
     _F_;
-    auto dim = this->problem->get_dimension();
+    auto dim = get_problem()->get_dimension();
     this->asmbl = new AssemblyData(dim);
     set_up_fields();
     DiscreteProblemInterface::create();
@@ -99,7 +98,7 @@ FEProblemInterface::init()
     _F_;
     DiscreteProblemInterface::init();
 
-    auto dm = this->unstr_mesh->get_dm();
+    auto dm = get_unstr_mesh()->get_dm();
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -109,8 +108,9 @@ FEProblemInterface::init()
         PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
     }
 
+    set_up_assembly_data_aux();
     set_up_weak_form();
-    for (auto & bc : this->natural_bcs)
+    for (auto & bc : get_natural_bcs())
         bc->set_up_weak_form();
 
     sort_functionals();
@@ -177,13 +177,6 @@ FEProblemInterface::get_field_id(const std::string & name) const
         return it->second;
     else
         error("Field '{}' does not exist. Typo?", name);
-}
-
-const Vector &
-FEProblemInterface::get_aux_solution_vector_local()
-{
-    _F_;
-    return this->a;
 }
 
 WeakForm *
@@ -373,7 +366,7 @@ FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
     _F_;
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
-        auto dim = this->problem->get_dimension();
+        auto dim = get_problem()->get_dimension();
         FieldInfo fi(name, id, nc, k, dim);
         if (nc > 1) {
             fi.component_names.resize(nc);
@@ -403,7 +396,7 @@ FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
     _F_;
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
-        auto dim = this->problem->get_dimension();
+        auto dim = get_problem()->get_dimension();
         FieldInfo fi(name, id, nc, k, dim);
         if (nc > 1) {
             fi.component_names.resize(nc);
@@ -427,9 +420,9 @@ void
 FEProblemInterface::create_fe(FieldInfo & fi)
 {
     _F_;
-    auto comm = this->unstr_mesh->get_comm();
-    Int dim = this->problem->get_dimension();
-    PetscBool is_simplex = this->unstr_mesh->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
+    auto comm = get_unstr_mesh()->get_comm();
+    Int dim = get_problem()->get_dimension();
+    PetscBool is_simplex = get_unstr_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(internal::create_lagrange_petscfe(comm,
                                                   dim,
                                                   fi.nc,
@@ -450,16 +443,16 @@ FEProblemInterface::set_up_ds()
 
     set_up_quadrature();
 
-    auto dm = this->unstr_mesh->get_dm();
+    auto dm = get_unstr_mesh()->get_dm();
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
         PETSC_CHECK(DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe));
     }
-    PETSC_CHECK(DMCreateDS(dm));
-    PETSC_CHECK(DMGetDS(dm, &this->ds));
+    create_ds();
+    auto ds = get_ds();
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
-        PETSC_CHECK(PetscDSSetContext(this->ds, fi.id, this));
+        PETSC_CHECK(PetscDSSetContext(ds, fi.id, this));
     }
 
     set_up_assembly_data();
@@ -469,13 +462,12 @@ void
 FEProblemInterface::set_up_assembly_data()
 {
     _F_;
-    PETSC_CHECK(PetscDSGetEvaluationArrays(this->ds,
-                                           &this->asmbl->u,
-                                           &this->asmbl->u_t,
-                                           &this->asmbl->u_x));
+    auto ds = get_ds();
+    PETSC_CHECK(
+        PetscDSGetEvaluationArrays(ds, &this->asmbl->u, &this->asmbl->u_t, &this->asmbl->u_x));
     Int *u_offset, *u_offset_x;
-    PETSC_CHECK(PetscDSGetComponentOffsets(this->ds, &u_offset));
-    PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(this->ds, &u_offset_x));
+    PETSC_CHECK(PetscDSGetComponentOffsets(ds, &u_offset));
+    PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(ds, &u_offset_x));
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
         fi.values.set(this->asmbl->u + u_offset[fi.id]);
@@ -483,7 +475,7 @@ FEProblemInterface::set_up_assembly_data()
         fi.dots.set(this->asmbl->u_t + u_offset[fi.id]);
     }
     Real * coord;
-    PETSC_CHECK(PetscDSGetWorkspace(this->ds, &coord, nullptr, nullptr, nullptr, nullptr));
+    PETSC_CHECK(PetscDSGetWorkspace(ds, &coord, nullptr, nullptr, nullptr, nullptr));
     this->asmbl->xyz.set(coord);
 }
 
@@ -505,139 +497,13 @@ FEProblemInterface::set_up_quadrature()
 }
 
 void
-FEProblemInterface::compute_global_aux_fields(DM dm,
-                                              const std::vector<AuxiliaryField *> & auxs,
-                                              Vector & a)
+FEProblemInterface::set_up_aux_fields()
 {
     _F_;
-    auto n_auxs = this->aux_fields.size();
-    std::vector<PetscFunc *> func(n_auxs, nullptr);
-    std::vector<void *> ctxs(n_auxs, nullptr);
-
-    for (const auto & aux : auxs) {
-        Int fid = aux->get_field_id();
-        func[fid] = aux->get_func();
-        ctxs[fid] = aux->get_context();
-    }
-
-    PETSC_CHECK(DMProjectFunctionLocal(dm,
-                                       this->problem->get_time(),
-                                       func.data(),
-                                       ctxs.data(),
-                                       INSERT_ALL_VALUES,
-                                       a));
-}
-
-void
-FEProblemInterface::compute_label_aux_fields(DM dm,
-                                             const Label & label,
-                                             const std::vector<AuxiliaryField *> & auxs,
-                                             Vector & a)
-{
-    _F_;
-    auto n_auxs = this->aux_fields.size();
-    std::vector<PetscFunc *> func(n_auxs, nullptr);
-    std::vector<void *> ctxs(n_auxs, nullptr);
-
-    for (const auto & aux : auxs) {
-        Int fid = aux->get_field_id();
-        func[fid] = aux->get_func();
-        ctxs[fid] = aux->get_context();
-    }
-
-    auto ids = label.get_value_index_set();
-    ids.get_indices();
-    PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
-                                            this->problem->get_time(),
-                                            label,
-                                            ids.get_size(),
-                                            ids.data(),
-                                            PETSC_DETERMINE,
-                                            nullptr,
-                                            func.data(),
-                                            ctxs.data(),
-                                            INSERT_ALL_VALUES,
-                                            a));
-    ids.restore_indices();
-    ids.destroy();
-}
-
-void
-FEProblemInterface::compute_aux_fields()
-{
-    _F_;
-    for (const auto & it : this->auxs_by_region) {
-        const std::string & region_name = it.first;
-        const std::vector<AuxiliaryField *> & auxs = it.second;
-        Label label;
-        if (region_name.length() > 0)
-            label = this->unstr_mesh->get_label(region_name);
-
-        if (label.is_null())
-            compute_global_aux_fields(this->dm_aux, auxs, this->a);
-        else
-            compute_label_aux_fields(this->dm_aux, label, auxs, this->a);
-    }
-}
-
-void
-FEProblemInterface::set_up_auxiliary_dm(DM dm)
-{
-    _F_;
-    if (this->aux_fields.empty())
-        return;
-
-    PETSC_CHECK(DMClone(dm, &this->dm_aux));
-
+    auto dm_aux = get_dm_aux();
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
-        PETSC_CHECK(DMSetField(this->dm_aux, fi.id, fi.block, (PetscObject) fi.fe));
-    }
-
-    PETSC_CHECK(DMCreateDS(this->dm_aux));
-
-    bool no_errors = true;
-    for (auto & aux : this->auxs) {
-        Int fid = aux->get_field_id();
-        if (fid >= 0) {
-            if (has_aux_field_by_id(fid)) {
-                Int aux_nc = aux->get_num_components();
-                Int field_nc = this->aux_fields.at(fid).nc;
-                if (aux_nc == field_nc) {
-                    const std::string & region_name = aux->get_region();
-                    this->auxs_by_region[region_name].push_back(aux);
-                }
-                else {
-                    no_errors = false;
-                    this->logger->error("Auxiliary field '{}' has {} component(s), but is set on a "
-                                        "field with {} component(s).",
-                                        aux->get_name(),
-                                        aux_nc,
-                                        field_nc);
-                }
-            }
-            else {
-                no_errors = false;
-                this->logger->error(
-                    "Auxiliary field '{}' is set on auxiliary field with ID '{}', but "
-                    "such ID does not exist.",
-                    aux->get_name(),
-                    fid);
-            }
-        }
-    }
-    if (no_errors) {
-        Vec loc_a;
-        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &loc_a));
-        this->a = Vector(loc_a);
-        PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
-
-        PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
-        PetscSection sa;
-        PETSC_CHECK(DMGetLocalSection(this->dm_aux, &sa));
-        this->section_aux = Section(sa);
-
-        set_up_assembly_data_aux();
+        PETSC_CHECK(DMSetField(dm_aux, fi.id, fi.block, (PetscObject) fi.fe));
     }
 }
 
@@ -645,16 +511,19 @@ void
 FEProblemInterface::set_up_assembly_data_aux()
 {
     _F_;
-    PETSC_CHECK(
-        PetscDSGetEvaluationArrays(this->ds_aux, &this->asmbl->a, nullptr, &this->asmbl->a_x));
-    Int *a_offset, *a_offset_x;
-    PETSC_CHECK(PetscDSGetComponentOffsets(this->ds_aux, &a_offset));
-    PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(this->ds_aux, &a_offset_x));
+    auto ds_aux = get_ds_aux();
+    if (ds_aux) {
+        PETSC_CHECK(
+            PetscDSGetEvaluationArrays(ds_aux, &this->asmbl->a, nullptr, &this->asmbl->a_x));
+        Int *a_offset, *a_offset_x;
+        PETSC_CHECK(PetscDSGetComponentOffsets(ds_aux, &a_offset));
+        PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(ds_aux, &a_offset_x));
 
-    for (auto & it : this->aux_fields) {
-        FieldInfo & fi = it.second;
-        fi.values.set(this->asmbl->a + a_offset[fi.id]);
-        fi.derivs.set(this->asmbl->a_x + a_offset_x[fi.id]);
+        for (auto & it : this->aux_fields) {
+            FieldInfo & fi = it.second;
+            fi.values.set(this->asmbl->a + a_offset[fi.id]);
+            fi.derivs.set(this->asmbl->a_x + a_offset_x[fi.id]);
+        }
     }
 }
 
@@ -840,7 +709,7 @@ FEProblemInterface::add_residual_block(Int field_id,
         add_weak_form_residual_block(PETSC_WF_F1, field_id, f1);
     }
     else {
-        auto label = this->unstr_mesh->get_label(region);
+        auto label = get_unstr_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, label, val, 0);
@@ -858,7 +727,7 @@ FEProblemInterface::add_boundary_residual_block(Int field_id,
     _F_;
     assert(!boundary.empty());
 
-    auto label = this->unstr_mesh->get_label(boundary);
+    auto label = get_unstr_mesh()->get_label(boundary);
     auto ids = label.get_values();
     for (auto & val : ids) {
         add_weak_form_residual_block(PETSC_WF_BDF0, field_id, f0, label, val, 0);
@@ -883,7 +752,7 @@ FEProblemInterface::add_jacobian_block(Int fid,
         add_weak_form_jacobian_block(PETSC_WF_G3, fid, gid, g3);
     }
     else {
-        auto label = this->unstr_mesh->get_label(region);
+        auto label = get_unstr_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_jacobian_block(PETSC_WF_G0, fid, gid, g0, label, val, 0);
@@ -911,7 +780,7 @@ FEProblemInterface::add_jacobian_preconditioner_block(Int fid,
         add_weak_form_jacobian_block(PETSC_WF_GP3, fid, gid, g3);
     }
     else {
-        auto label = this->unstr_mesh->get_label(region);
+        auto label = get_unstr_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_jacobian_block(PETSC_WF_GP0, fid, gid, g0, label, val, 0);
@@ -934,7 +803,7 @@ FEProblemInterface::add_boundary_jacobian_block(Int fid,
     _F_;
     assert(!region.empty());
 
-    auto label = this->unstr_mesh->get_label(region);
+    auto label = get_unstr_mesh()->get_label(region);
     auto ids = label.get_values();
     for (auto & val : ids) {
         add_weak_form_jacobian_block(PETSC_WF_BDG0, fid, gid, g0, label, val, 0);

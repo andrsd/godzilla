@@ -9,7 +9,7 @@ class GTestFENonlinearProblem : public FENonlinearProblem {
 public:
     explicit GTestFENonlinearProblem(const Parameters & params);
 
-    PetscDS getDS();
+    PetscDS get_ds();
     void compute_postprocessors() override;
     void set_up_initial_guess() override;
     void solve() override;

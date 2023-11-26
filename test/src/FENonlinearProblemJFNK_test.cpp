@@ -109,8 +109,9 @@ GTestFENonlinearProblemJFNK::set_up_solve_type()
 void
 GTestFENonlinearProblemJFNK::set_up_preconditioning()
 {
+    auto ksp = get_ksp();
     PC pc;
-    PETSC_CHECK(KSPGetPC(this->ksp, &pc));
+    PETSC_CHECK(KSPGetPC(ksp, &pc));
     PETSC_CHECK(PCSetType(pc, PCILU));
 }
 

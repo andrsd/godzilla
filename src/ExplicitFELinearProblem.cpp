@@ -69,8 +69,7 @@ ExplicitFELinearProblem::~ExplicitFELinearProblem()
     _F_;
     this->M.destroy();
     this->M_lumped_inv.destroy();
-    this->snes = nullptr;
-    this->ksp = nullptr;
+    set_snes(nullptr);
 }
 
 Real
@@ -92,17 +91,17 @@ ExplicitFELinearProblem::init()
 {
     _F_;
     TransientProblemInterface::init();
-    PETSC_CHECK(TSGetSNES(this->ts, &this->snes));
-    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
-
+    auto snes = TransientProblemInterface::get_snes();
+    NonlinearProblem::set_snes(snes);
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
     for (Int i = 0; i < get_num_fields(); i++)
         add_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
 
+    auto ds = get_ds();
     for (auto & f : get_fields()) {
         Int fid = f.second.id;
-        PETSC_CHECK(PetscDSSetImplicit(this->ds, fid, PETSC_FALSE));
+        PETSC_CHECK(PetscDSSetImplicit(ds, fid, PETSC_FALSE));
     }
 }
 
@@ -141,14 +140,12 @@ ExplicitFELinearProblem::solve()
     TransientProblemInterface::solve(get_solution_vector());
 }
 
-const Vector &
-ExplicitFELinearProblem::get_solution_vector_local()
+void
+ExplicitFELinearProblem::build_local_solution_vector(Vector & loc_sln)
 {
     _F_;
-    auto & loc_sln = this->sln;
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary_local(get_time(), loc_sln);
-    return loc_sln;
 }
 
 void
@@ -186,7 +183,7 @@ ExplicitFELinearProblem::create_mass_matrix()
     Mat m;
     PETSC_CHECK(DMCreateMassMatrix(get_dm(), get_dm(), &m));
     this->M = Matrix(m);
-    PETSC_CHECK(KSPSetOperators(this->ksp, this->M, this->M));
+    set_ksp_operators(this->M, this->M);
 }
 
 void
@@ -212,8 +209,10 @@ ExplicitFELinearProblem::compute_rhs(Real time, const Vector & X, Vector & F)
     compute_rhs_local(time, loc_X, loc_F);
     F.zero();
     PETSC_CHECK(DMLocalToGlobal(get_dm(), loc_F, ADD_VALUES, F));
-    if ((Vec) this->M_lumped_inv == nullptr)
-        PETSC_CHECK(KSPSolve(this->ksp, F, F));
+    if ((Vec) this->M_lumped_inv == nullptr) {
+        auto ksp = get_ksp();
+        PETSC_CHECK(KSPSolve(ksp, F, F));
+    }
     else
         Vector::pointwise_mult(F, this->M_lumped_inv, F);
     restore_local_vector(loc_X);
@@ -260,7 +259,7 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
         add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, Label(), 0, part);
     }
     else {
-        auto label = this->unstr_mesh->get_label(region);
+        auto label = get_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, label, val, part);

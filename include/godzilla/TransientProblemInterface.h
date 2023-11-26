@@ -84,6 +84,8 @@ public:
     TSConvergedReason get_converged_reason() const;
 
 protected:
+    /// Get underlying SNES object
+    SNES get_snes() const;
     /// Get time
     Real get_time() const;
     /// Get step number
@@ -113,11 +115,9 @@ protected:
     /// Set time-stepping scheme
     void set_scheme(TimeScheme scheme);
 
-protected:
+private:
     /// PETSc TS object
     TS ts;
-
-private:
     /// Problem this interface is part of
     Problem * problem;
     /// Parameters

@@ -85,7 +85,7 @@ FENonlinearProblem::set_up_callbacks()
     PETSC_CHECK(DMSNESSetBoundaryLocal(dm, __fep_compute_boundary, this));
     PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
     PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, nullptr, nullptr));
+    NonlinearProblem::set_jacobian_function(nullptr, nullptr);
 }
 
 void
@@ -102,15 +102,6 @@ FENonlinearProblem::allocate_objects()
     _F_;
     NonlinearProblem::allocate_objects();
     FEProblemInterface::allocate_objects();
-}
-
-const Vector &
-FENonlinearProblem::get_solution_vector_local()
-{
-    _F_;
-    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, this->sln));
-    compute_boundary(this->sln);
-    return this->sln;
 }
 
 PetscErrorCode
@@ -132,7 +123,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
     _F_;
     // this is based on DMSNESComputeResidual()
-    IndexSet all_cells = this->unstr_mesh->get_all_cells();
+    IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
     for (auto & res_key : get_weak_form()->get_residual_keys()) {
         IndexSet cells;
@@ -397,8 +388,8 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
 
     PetscDS prob;
     PetscCall(DMGetDS(dm, &prob));
-    auto depth_label = this->unstr_mesh->get_depth_label();
-    Int dim = this->unstr_mesh->get_dimension();
+    auto depth_label = get_unstr_mesh()->get_depth_label();
+    Int dim = get_unstr_mesh()->get_dimension();
     auto facets = depth_label.get_stratum(dim - 1);
     Int n_bnd;
     PetscCall(PetscDSGetNumBoundary(prob, &n_bnd));
@@ -619,7 +610,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
     _F_;
     // based on DMPlexSNESComputeJacobianFEM and DMSNESComputeJacobianAction
-    IndexSet all_cells = this->unstr_mesh->get_all_cells();
+    IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
     auto wf = get_weak_form();
     auto has_jac = wf->has_jacobian();
@@ -925,8 +916,8 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
     _F_;
     PetscDS prob;
     PetscCall(DMGetDS(dm, &prob));
-    auto depth_label = this->unstr_mesh->get_depth_label();
-    Int dim = this->unstr_mesh->get_dimension();
+    auto depth_label = get_unstr_mesh()->get_depth_label();
+    Int dim = get_unstr_mesh()->get_dimension();
     auto facets = depth_label.get_stratum(dim - 1);
     Int n_bnd;
     PetscCall(PetscDSGetNumBoundary(prob, &n_bnd));
@@ -1186,6 +1177,14 @@ FENonlinearProblem::on_initial()
     _F_;
     NonlinearProblem::on_initial();
     compute_aux_fields();
+}
+
+void
+FENonlinearProblem::build_local_solution_vector(Vector & loc_sln)
+{
+    _F_;
+    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
+    compute_boundary(loc_sln);
 }
 
 } // namespace godzilla

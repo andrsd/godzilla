@@ -216,9 +216,9 @@ TEST(NonlinearProblemTest, line_search_type)
         explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
 
         SNES
-        getSNES()
+        get_snes()
         {
-            return this->snes;
+            return NonlinearProblem::get_snes();
         }
     };
 
@@ -239,7 +239,7 @@ TEST(NonlinearProblemTest, line_search_type)
         MockNonlinearProblem prob(prob_pars);
         prob.create();
 
-        SNES snes = prob.getSNES();
+        SNES snes = prob.get_snes();
         SNESLineSearch ls;
         SNESGetLineSearch(snes, &ls);
         SNESLineSearchType tp;

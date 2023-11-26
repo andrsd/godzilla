@@ -43,8 +43,7 @@ ExplicitFVLinearProblem::~ExplicitFVLinearProblem()
 {
     this->M.destroy();
     this->M_lumped_inv.destroy();
-    this->snes = nullptr;
-    this->ksp = nullptr;
+    set_snes(nullptr);
 }
 
 Real
@@ -66,9 +65,8 @@ ExplicitFVLinearProblem::init()
 {
     _F_;
     TransientProblemInterface::init();
-    PETSC_CHECK(TSGetSNES(this->ts, &this->snes));
-    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
-
+    auto snes = TransientProblemInterface::get_snes();
+    NonlinearProblem::set_snes(snes);
     FVProblemInterface::init();
 }
 
@@ -108,14 +106,12 @@ ExplicitFVLinearProblem::solve()
     TransientProblemInterface::solve(get_solution_vector());
 }
 
-const Vector &
-ExplicitFVLinearProblem::get_solution_vector_local()
+void
+ExplicitFVLinearProblem::build_local_solution_vector(godzilla::Vector & loc_sln)
 {
     _F_;
-    auto & loc_sln = this->sln;
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary_local(get_time(), loc_sln);
-    return loc_sln;
 }
 
 void
@@ -169,7 +165,7 @@ ExplicitFVLinearProblem::create_mass_matrix()
     Mat m;
     PETSC_CHECK(DMCreateMassMatrix(get_dm(), get_dm(), &m));
     this->M = Matrix(m);
-    PETSC_CHECK(KSPSetOperators(this->ksp, this->M, this->M));
+    set_ksp_operators(this->M, this->M);
 }
 
 void
@@ -195,8 +191,10 @@ ExplicitFVLinearProblem::compute_rhs(Real time, const Vector & x, Vector & F)
     compute_rhs_local(time, loc_x, loc_F);
     F.zero();
     PETSC_CHECK(DMLocalToGlobal(get_dm(), loc_F, ADD_VALUES, F));
-    if ((Vec) this->M_lumped_inv == nullptr)
-        PETSC_CHECK(KSPSolve(this->ksp, F, F));
+    if ((Vec) this->M_lumped_inv == nullptr) {
+        auto ksp = get_ksp();
+        PETSC_CHECK(KSPSolve(ksp, F, F));
+    }
     else
         Vector::pointwise_mult(F, this->M_lumped_inv, F);
     restore_local_vector(loc_x);

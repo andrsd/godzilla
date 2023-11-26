@@ -105,6 +105,13 @@ NonlinearProblem::~NonlinearProblem()
     this->J.destroy();
 }
 
+const Matrix &
+NonlinearProblem::get_jacobian() const
+{
+    _F_;
+    return this->J;
+}
+
 void
 NonlinearProblem::create()
 {
@@ -134,14 +141,47 @@ NonlinearProblem::check()
                   "or 'shell'.");
 }
 
+SNES
+NonlinearProblem::get_snes() const
+{
+    _F_;
+    return this->snes;
+}
+
+void
+NonlinearProblem::set_snes(SNES snes)
+{
+    _F_;
+    this->snes = snes;
+    if (this->snes)
+        PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
+}
+
+void
+NonlinearProblem::set_jacobian_function(
+    PetscErrorCode (*jacobian_func)(SNES, Vec, Mat, Mat, void *),
+    void * ctx)
+{
+    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, jacobian_func, ctx));
+}
+
+KSP
+NonlinearProblem::get_ksp() const
+{
+    _F_;
+    return this->ksp;
+}
+
 void
 NonlinearProblem::init()
 {
     _F_;
-    PETSC_CHECK(SNESCreate(get_comm(), &this->snes));
-    PETSC_CHECK(SNESSetDM(this->snes, get_dm()));
-    PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
-    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
+    DM dm = get_dm();
+    SNES snes;
+    PETSC_CHECK(SNESCreate(get_comm(), &snes));
+    PETSC_CHECK(SNESSetDM(snes, dm));
+    PETSC_CHECK(DMSetApplicationContext(dm, this));
+    set_snes(snes);
 }
 
 void
@@ -201,7 +241,7 @@ NonlinearProblem::set_up_callbacks()
 {
     _F_;
     PETSC_CHECK(SNESSetFunction(this->snes, this->r, __compute_residual, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, __compute_jacobian, this));
+    set_jacobian_function(__compute_jacobian, this);
 }
 
 void
@@ -249,6 +289,13 @@ NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
     _F_;
     lprint(8, "    {} Linear residual: {:e}", it, rnorm);
+}
+
+void
+NonlinearProblem::set_ksp_operators(const Matrix & A, const Matrix & B)
+{
+    _F_;
+    PETSC_CHECK(KSPSetOperators(this->ksp, A, B));
 }
 
 bool

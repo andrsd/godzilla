@@ -17,7 +17,6 @@ public:
     Real get_time() const override;
     Int get_step_num() const override;
 
-    const Vector & get_solution_vector_local() override;
     virtual PetscErrorCode
     compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
     virtual PetscErrorCode compute_ijacobian(Real time,
@@ -34,6 +33,7 @@ protected:
     void set_up_time_scheme() override;
     void set_up_monitors() override;
     void post_step() override;
+    void build_local_solution_vector(Vector & loc_sln) override;
 
 private:
     /// Time stepping scheme

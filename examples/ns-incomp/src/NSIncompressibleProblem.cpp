@@ -337,8 +337,9 @@ NSIncompressibleProblem::set_up_preconditioning()
 {
     _F_;
 
+    auto ksp = get_ksp();
     PC pc;
-    PETSC_CHECK(KSPGetPC(this->ksp, &pc));
+    PETSC_CHECK(KSPGetPC(ksp, &pc));
 
     PETSC_CHECK(PCSetType(pc, PCFIELDSPLIT));
     PETSC_CHECK(PCFieldSplitSetType(pc, PC_COMPOSITE_SCHUR));
@@ -362,7 +363,8 @@ NSIncompressibleProblem::set_up_preconditioning()
     }
     PetscFree(field_names);
     PetscFree(is);
-    PETSC_CHECK(PCSetOperators(pc, this->J, this->J));
+    auto J = get_jacobian();
+    PETSC_CHECK(PCSetOperators(pc, J, J));
     PETSC_CHECK(PCSetUp(pc));
 
     PetscInt n;

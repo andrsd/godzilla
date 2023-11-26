@@ -18,6 +18,8 @@ public:
     void check() override;
     void run() override;
 
+    /// Get Jacobian matrix
+    const Matrix & get_jacobian() const;
     /// true if solve converged, otherwise false
     virtual bool converged();
     /// Method to compute residual. Called from the PETsc callback
@@ -32,6 +34,15 @@ public:
     void set_use_matrix_free(bool mf_operator, bool mf);
 
 protected:
+    /// Get underlying SNES
+    SNES get_snes() const;
+    /// Set SNES object for this non-linear problem
+    void set_snes(SNES snes);
+    /// Set Jacobian evaluation function
+    void set_jacobian_function(PetscErrorCode (*jacobian_func)(SNES, Vec, Mat, Mat, void *),
+                               void * ctx);
+    /// Get underlying KSP
+    KSP get_ksp() const;
     /// Initialize the problem
     virtual void init();
     /// Set up initial guess
@@ -52,6 +63,8 @@ protected:
     void snes_monitor_callback(Int it, Real norm);
     /// KSP monitor
     void ksp_monitor_callback(Int it, Real rnorm);
+    /// Set KSP operators
+    void set_ksp_operators(const Matrix & A, const Matrix & B);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning
@@ -59,6 +72,7 @@ protected:
     /// Solve the problem
     virtual void solve();
 
+private:
     /// SNES object
     SNES snes;
     /// KSP object
