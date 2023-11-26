@@ -53,17 +53,6 @@ public:
 
 class TestExplicitFVLinearProblem;
 
-void compute_flux(Int dim,
-                  Int nf,
-                  const Real x[],
-                  const Real n[],
-                  const Scalar uL[],
-                  const Scalar uR[],
-                  Int n_consts,
-                  const Scalar constants[],
-                  Scalar flux[],
-                  void * ctx);
-
 class TestExplicitFVLinearProblem : public ExplicitFVLinearProblem {
 public:
     explicit TestExplicitFVLinearProblem(const Parameters & params) :
@@ -119,16 +108,7 @@ public:
         ExplicitFVLinearProblem::add_boundary_natural(name, boundary, field, components, context);
     }
 
-    void
-    set_up_ds() override
-    {
-        ExplicitFVLinearProblem::set_up_ds();
-        auto ds = get_ds();
-        PETSC_CHECK(PetscDSSetRiemannSolver(ds, 0, ::compute_flux));
-        PETSC_CHECK(PetscDSSetContext(ds, 0, this));
-    }
-
-    void
+    PetscErrorCode
     compute_flux(Int dim,
                  Int nf,
                  const Real x[],
@@ -137,13 +117,14 @@ public:
                  const Scalar uR[],
                  Int n_consts,
                  const Scalar constants[],
-                 Scalar flux[])
+                 Scalar flux[]) override
     {
         _F_;
         Real wind[] = { 0.5 };
         Real wn = 0;
         wn += wind[0] * n[0];
         flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
+        return 0;
     }
 
 protected:
@@ -156,23 +137,6 @@ protected:
         add_aux_fe("a1", 2, 0);
     }
 };
-
-void
-compute_flux(Int dim,
-             Int nf,
-             const Real x[],
-             const Real n[],
-             const Scalar uL[],
-             const Scalar uR[],
-             Int n_consts,
-             const Scalar constants[],
-             Scalar flux[],
-             void * ctx)
-{
-    _F_;
-    auto * p = static_cast<TestExplicitFVLinearProblem *>(ctx);
-    p->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
-}
 
 } // namespace
 
