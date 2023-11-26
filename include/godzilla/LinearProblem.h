@@ -29,7 +29,7 @@ protected:
     /// Initialize the problem
     virtual void init();
     /// Allocate Jacobian/residual objects
-    virtual void allocate_objects();
+    void allocate_objects() override;
     /// Setup computation of residual and Jacobian callbacks
     virtual void set_up_callbacks();
     /// Setup monitors

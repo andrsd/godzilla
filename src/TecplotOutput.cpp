@@ -2,7 +2,6 @@
 #include "godzilla/App.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/TecplotOutput.h"
-#include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Validation.h"

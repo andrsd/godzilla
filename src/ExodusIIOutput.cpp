@@ -8,11 +8,9 @@
 #include "godzilla/Postprocessor.h"
 #include "godzilla/IndexSet.h"
 #include "exodusIIcpp/exodusIIcpp.h"
-#include "fmt/printf.h"
 #include "fmt/format.h"
 #include "fmt/chrono.h"
 #include <set>
-#include <cassert>
 
 namespace godzilla {
 

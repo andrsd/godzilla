@@ -37,7 +37,7 @@ protected:
     /// Set up initial guess
     virtual void set_up_initial_guess();
     /// Allocate Jacobian/residual objects
-    virtual void allocate_objects();
+    void allocate_objects() override;
     /// Set up line search
     virtual void set_up_line_search();
     /// Set up computation of residual and Jacobian callbacks

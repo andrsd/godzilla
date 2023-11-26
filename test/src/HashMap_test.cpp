@@ -1,6 +1,5 @@
 #include "gmock/gmock.h"
 #include "godzilla/HashMap.h"
-#include "godzilla/Types.h"
 
 using namespace godzilla;
 using namespace testing;

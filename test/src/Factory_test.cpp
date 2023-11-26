@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "godzilla/Factory.h"
 #include "godzilla/App.h"
-#include "godzilla/LineMesh.h"
 #include "godzilla/RectangleMesh.h"
 
 using namespace godzilla;

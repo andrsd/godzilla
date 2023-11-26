@@ -135,7 +135,7 @@ public:
 
 protected:
     /// Allocate objects
-    void allocate_objects();
+    virtual void allocate_objects();
     /// Called before solving starts
     virtual void on_initial();
     /// Called after solve has successfully finished

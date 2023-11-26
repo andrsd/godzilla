@@ -4,7 +4,6 @@
 #include "PoissonEquation.h"
 #include "PoissonPDE.h"
 #include "godzilla/CallStack.h"
-#include "petscdmlabel.h"
 
 using namespace godzilla;
 
