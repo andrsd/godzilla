@@ -61,6 +61,16 @@ public:
     /// @param k The degree k of the space
     virtual void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
 
+    virtual PetscErrorCode compute_flux(PetscInt dim,
+                                        PetscInt nf,
+                                        const PetscReal x[],
+                                        const PetscReal n[],
+                                        const PetscScalar uL[],
+                                        const PetscScalar uR[],
+                                        PetscInt n_consts,
+                                        const PetscScalar constants[],
+                                        PetscScalar flux[]);
+
 protected:
     void init() override;
     void create() override;

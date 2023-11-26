@@ -11,6 +11,27 @@
 
 namespace godzilla {
 
+namespace {
+
+void
+compute_flux(Int dim,
+             Int nf,
+             const Real x[],
+             const Real n[],
+             const Scalar uL[],
+             const Scalar uR[],
+             Int n_consts,
+             const Scalar constants[],
+             Scalar flux[],
+             void * ctx)
+{
+    _F_;
+    auto * fvpi = static_cast<FVProblemInterface *>(ctx);
+    fvpi->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
+}
+
+} // namespace
+
 const std::string FVProblemInterface::empty_name;
 
 FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & params) :
@@ -373,6 +394,10 @@ FVProblemInterface::set_up_ds()
     auto dm = get_unstr_mesh()->get_dm();
     PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm));
     create_ds();
+
+    auto ds = get_ds();
+    PETSC_CHECK(PetscDSSetRiemannSolver(ds, 0, godzilla::compute_flux));
+    PETSC_CHECK(PetscDSSetContext(ds, 0, this));
 }
 
 void
@@ -420,6 +445,21 @@ FVProblemInterface::get_next_id(const std::vector<Int> & ids) const
         if (s.find(id) == s.end())
             return id;
     return -1;
+}
+
+PetscErrorCode
+FVProblemInterface::compute_flux(PetscInt dim,
+                                 PetscInt nf,
+                                 const PetscReal x[],
+                                 const PetscReal n[],
+                                 const PetscScalar uL[],
+                                 const PetscScalar uR[],
+                                 PetscInt n_consts,
+                                 const PetscScalar constants[],
+                                 PetscScalar flux[])
+{
+    _F_;
+    return 0;
 }
 
 } // namespace godzilla

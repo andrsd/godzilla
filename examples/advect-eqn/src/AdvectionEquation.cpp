@@ -7,29 +7,6 @@ using namespace godzilla;
 
 REGISTER_OBJECT(AdvectionEquation);
 
-///
-
-namespace {
-
-void
-compute_flux(Int dim,
-             Int nf,
-             const Real x[],
-             const Real n[],
-             const Scalar uL[],
-             const Scalar uR[],
-             Int n_consts,
-             const Scalar constants[],
-             Scalar flux[],
-             void * ctx)
-{
-    _F_;
-    auto * ae = static_cast<AdvectionEquation *>(ctx);
-    ae->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
-}
-
-} // namespace
-
 Parameters
 AdvectionEquation::parameters()
 {
@@ -58,17 +35,7 @@ AdvectionEquation::set_up_fields()
     add_field(0, "u", 1);
 }
 
-void
-AdvectionEquation::set_up_ds()
-{
-    _F_;
-    ExplicitFVLinearProblem::set_up_ds();
-    auto ds = get_ds();
-    PETSC_CHECK(PetscDSSetRiemannSolver(ds, 0, ::compute_flux));
-    PETSC_CHECK(PetscDSSetContext(ds, 0, this));
-}
-
-void
+PetscErrorCode
 AdvectionEquation::compute_flux(PetscInt dim,
                                 PetscInt nf,
                                 const PetscReal x[],
@@ -90,4 +57,5 @@ AdvectionEquation::compute_flux(PetscInt dim,
     PetscReal wn = 0;
     wn += wind[0] * n[0];
     flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
+    return 0;
 }
