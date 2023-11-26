@@ -138,8 +138,7 @@ TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonline
 void
 TestTSProblem::ts_monitor_callback(Int stepi, Real time, Vec x)
 {
-    Real dt;
-    PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
+    Real dt = get_time_step();
     this->dts[stepi] = dt;
 }
 

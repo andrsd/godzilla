@@ -71,8 +71,7 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & params
 ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
 {
     _F_;
-    this->snes = nullptr;
-    this->ksp = nullptr;
+    set_snes(nullptr);
 }
 
 Real
@@ -94,9 +93,8 @@ ImplicitFENonlinearProblem::init()
 {
     _F_;
     TransientProblemInterface::init();
-    PETSC_CHECK(TSGetSNES(this->ts, &this->snes));
-    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
-
+    auto snes = TransientProblemInterface::get_snes();
+    NonlinearProblem::set_snes(snes);
     FEProblemInterface::init();
 }
 

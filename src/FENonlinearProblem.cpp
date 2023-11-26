@@ -85,7 +85,7 @@ FENonlinearProblem::set_up_callbacks()
     PETSC_CHECK(DMSNESSetBoundaryLocal(dm, __fep_compute_boundary, this));
     PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
     PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
-    PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, nullptr, nullptr));
+    NonlinearProblem::set_jacobian_function(nullptr, nullptr);
 }
 
 void

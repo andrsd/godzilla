@@ -69,8 +69,7 @@ ExplicitFELinearProblem::~ExplicitFELinearProblem()
     _F_;
     this->M.destroy();
     this->M_lumped_inv.destroy();
-    this->snes = nullptr;
-    this->ksp = nullptr;
+    set_snes(nullptr);
 }
 
 Real
@@ -92,9 +91,8 @@ ExplicitFELinearProblem::init()
 {
     _F_;
     TransientProblemInterface::init();
-    PETSC_CHECK(TSGetSNES(this->ts, &this->snes));
-    PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
-
+    auto snes = TransientProblemInterface::get_snes();
+    NonlinearProblem::set_snes(snes);
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
     for (Int i = 0; i < get_num_fields(); i++)
@@ -186,7 +184,7 @@ ExplicitFELinearProblem::create_mass_matrix()
     Mat m;
     PETSC_CHECK(DMCreateMassMatrix(get_dm(), get_dm(), &m));
     this->M = Matrix(m);
-    PETSC_CHECK(KSPSetOperators(this->ksp, this->M, this->M));
+    set_ksp_operators(this->M, this->M);
 }
 
 void
@@ -212,8 +210,10 @@ ExplicitFELinearProblem::compute_rhs(Real time, const Vector & X, Vector & F)
     compute_rhs_local(time, loc_X, loc_F);
     F.zero();
     PETSC_CHECK(DMLocalToGlobal(get_dm(), loc_F, ADD_VALUES, F));
-    if ((Vec) this->M_lumped_inv == nullptr)
-        PETSC_CHECK(KSPSolve(this->ksp, F, F));
+    if ((Vec) this->M_lumped_inv == nullptr) {
+        auto ksp = get_ksp();
+        PETSC_CHECK(KSPSolve(ksp, F, F));
+    }
     else
         Vector::pointwise_mult(F, this->M_lumped_inv, F);
     restore_local_vector(loc_X);
