@@ -4,7 +4,6 @@
 #include "godzilla/Problem.h"
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/NaturalBC.h"
-#include "godzilla/Types.h"
 #include "godzilla/App.h"
 #include "godzilla/Logger.h"
 #include "godzilla/PetscFEGodzilla.h"
