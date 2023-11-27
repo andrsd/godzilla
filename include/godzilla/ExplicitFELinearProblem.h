@@ -42,6 +42,7 @@ protected:
     virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);
     virtual PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F);
     void post_step() override;
+    const std::string & get_scheme() const;
 
 private:
     /// Time stepping scheme

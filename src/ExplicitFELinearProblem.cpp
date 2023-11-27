@@ -104,6 +104,13 @@ ExplicitFELinearProblem::get_lumped_mass_matrix() const
     return this->M_lumped_inv;
 }
 
+const std::string &
+ExplicitFELinearProblem::get_scheme() const
+{
+    _F_;
+    return this->scheme;
+}
+
 void
 ExplicitFELinearProblem::init()
 {

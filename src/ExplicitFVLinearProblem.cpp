@@ -60,6 +60,13 @@ ExplicitFVLinearProblem::get_step_num() const
     return TransientProblemInterface::get_step_number();
 }
 
+const std::string &
+ExplicitFVLinearProblem::get_scheme() const
+{
+    _F_;
+    return this->scheme;
+}
+
 void
 ExplicitFVLinearProblem::init()
 {
