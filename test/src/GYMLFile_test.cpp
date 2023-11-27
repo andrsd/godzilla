@@ -98,7 +98,7 @@ TEST_F(GYMLFileTest, parse_empty)
         const Block &
         get_yml()
         {
-            return this->root;
+            return get_root();
         }
     };
 

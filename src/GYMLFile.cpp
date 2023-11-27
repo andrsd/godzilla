@@ -44,11 +44,11 @@ void
 GYMLFile::build_functions()
 {
     _F_;
-    if (!this->root["functions"])
+    if (!get_root()["functions"])
         return;
 
     lprint(9, "- functions");
-    auto funcs_block = get_block(this->root, "functions");
+    auto funcs_block = get_block(get_root(), "functions");
     for (const auto & it : funcs_block.values()) {
         Block blk = get_block(funcs_block, it.first.as<std::string>());
         Parameters * params = build_params(blk);
@@ -64,7 +64,7 @@ GYMLFile::build_problem_adapt()
 {
     _F_;
     if (get_problem()) {
-        auto problem_node = get_block(this->root, "problem");
+        auto problem_node = get_block(get_root(), "problem");
         if (problem_node["ts_adapt"])
             build_ts_adapt(problem_node);
     }
@@ -101,11 +101,11 @@ GYMLFile::build_partitioner()
     if (!unstr_mesh)
         return;
 
-    if (!this->root["partitioner"])
+    if (!get_root()["partitioner"])
         return;
 
     lprint(9, "- partitioner");
-    auto part_node = get_block(this->root, "partitioner");
+    auto part_node = get_block(get_root(), "partitioner");
     auto name = part_node["name"];
     if (name)
         unstr_mesh->set_partitioner_type(name.as<std::string>());
@@ -119,11 +119,11 @@ void
 GYMLFile::build_auxiliary_fields()
 {
     _F_;
-    if (!this->root["auxs"])
+    if (!get_root()["auxs"])
         return;
 
     lprint(9, "- auxiliary fields");
-    auto auxs_node = get_block(this->root, "auxs");
+    auto auxs_node = get_block(get_root(), "auxs");
     auto * fepi = dynamic_cast<FEProblemInterface *>(get_problem());
     auto * fvpi = dynamic_cast<FVProblemInterface *>(get_problem());
     if (fepi != nullptr || fvpi != nullptr) {
@@ -146,11 +146,11 @@ void
 GYMLFile::build_initial_conditions()
 {
     _F_;
-    if (!this->root["ics"])
+    if (!get_root()["ics"])
         return;
 
     lprint(9, "- initial conditions");
-    auto ics_node = get_block(this->root, "ics");
+    auto ics_node = get_block(get_root(), "ics");
     auto * dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
     if (dpi == nullptr)
         log_error("Supplied problem type '{}' does not support initial conditions.",
@@ -171,11 +171,11 @@ void
 GYMLFile::build_boundary_conditions()
 {
     _F_;
-    if (!this->root["bcs"])
+    if (!get_root()["bcs"])
         return;
 
     lprint(9, "- boundary conditions");
-    auto bcs_node = get_block(this->root, "bcs");
+    auto bcs_node = get_block(get_root(), "bcs");
     auto * dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
     if (dpi == nullptr)
         log_error("Supplied problem type '{}' does not support boundary conditions.",
@@ -196,11 +196,11 @@ void
 GYMLFile::build_postprocessors()
 {
     _F_;
-    if (!this->root["pps"])
+    if (!get_root()["pps"])
         return;
 
     lprint(9, "- post-processors");
-    auto pps_node = get_block(this->root, "pps");
+    auto pps_node = get_block(get_root(), "pps");
     for (const auto & it : pps_node.values()) {
         Block blk = get_block(pps_node, it.first.as<std::string>());
         Parameters * params = build_params(blk);
