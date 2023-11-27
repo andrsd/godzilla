@@ -65,6 +65,13 @@ InputFile::get_app() const
     return this->app;
 }
 
+InputFile::Block &
+InputFile::get_root()
+{
+    _F_;
+    return this->root;
+}
+
 bool
 InputFile::parse(const std::string & file_name)
 {

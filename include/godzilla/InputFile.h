@@ -130,6 +130,10 @@ protected:
                       const std::string & name,
                       std::set<std::string> & unused_param_names);
 
+    /// Get the root block of the YAML file
+    Block & get_root();
+
+private:
     /// Application object
     App * app;
     /// Name of this input file
