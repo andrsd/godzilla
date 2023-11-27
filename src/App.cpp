@@ -174,6 +174,13 @@ App::process_command_line(const cxxopts::ParseResult & result)
     }
 }
 
+InputFile *
+App::create_input_file()
+{
+    _F_;
+    return new GYMLFile(this);
+}
+
 void
 App::run()
 {
@@ -188,7 +195,8 @@ App::run_input_file(const std::string & input_file_name)
 {
     _F_;
     if (utils::path_exists(input_file_name)) {
-        set_input_file(new GYMLFile(this));
+        auto input_file = create_input_file();
+        set_input_file(input_file);
         build_from_yml(input_file_name);
         if (this->logger->get_num_errors() == 0)
             this->yml->create_objects();
