@@ -43,6 +43,8 @@ protected:
     void set_up_time_scheme() override;
     void set_up_monitors() override;
     void build_local_solution_vector(Vector & loc_sln) override;
+    void allocate_mass_matrix();
+    void allocate_lumped_mass_matrix();
     void create_mass_matrix();
     void create_mass_matrix_lumped();
     virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);

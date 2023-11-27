@@ -166,6 +166,21 @@ ExplicitFVLinearProblem::set_up_monitors()
 }
 
 void
+ExplicitFVLinearProblem::allocate_mass_matrix()
+{
+    _F_;
+    this->M = create_matrix();
+    set_ksp_operators(this->M, this->M);
+}
+
+void
+ExplicitFVLinearProblem::allocate_lumped_mass_matrix()
+{
+    _F_;
+    this->M_lumped_inv = create_global_vector();
+}
+
+void
 ExplicitFVLinearProblem::create_mass_matrix()
 {
     _F_;
