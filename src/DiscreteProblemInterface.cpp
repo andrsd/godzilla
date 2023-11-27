@@ -159,7 +159,6 @@ DiscreteProblemInterface::init()
     set_up_ds();
     set_up_initial_conditions();
     set_up_boundary_conditions();
-    this->section = this->problem->get_local_section();
 }
 
 void
@@ -472,7 +471,8 @@ DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
 {
     _F_;
     Int offset;
-    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
+    PETSC_CHECK(
+        PetscSectionGetFieldOffset(this->problem->get_local_section(), point, fid, &offset));
     return offset;
 }
 
