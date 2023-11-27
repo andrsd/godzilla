@@ -146,9 +146,17 @@ DiscreteProblemInterface::get_solution_vector_local()
     return this->sln;
 }
 
-std::vector<NaturalBC *>
+const std::vector<BoundaryCondition *> &
+DiscreteProblemInterface::get_boundary_conditions() const
+{
+    _F_;
+    return this->bcs;
+}
+
+const std::vector<NaturalBC *> &
 DiscreteProblemInterface::get_natural_bcs() const
 {
+    _F_;
     return this->natural_bcs;
 }
 

@@ -295,8 +295,10 @@ protected:
     UnstructuredMesh * get_unstr_mesh() const;
     /// Build local solution vector for this problem
     virtual void build_local_solution_vector(Vector & sln) = 0;
+    /// Get list of all boundary conditions
+    const std::vector<BoundaryCondition *> & get_boundary_conditions() const;
     /// Get list of all natural boundary conditions
-    std::vector<NaturalBC *> get_natural_bcs() const;
+    const std::vector<NaturalBC *> & get_natural_bcs() const;
 
     virtual void init();
     virtual void create();
