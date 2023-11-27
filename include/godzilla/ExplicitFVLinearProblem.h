@@ -43,11 +43,14 @@ protected:
     void set_up_time_scheme() override;
     void set_up_monitors() override;
     void build_local_solution_vector(Vector & loc_sln) override;
+    void allocate_mass_matrix();
+    void allocate_lumped_mass_matrix();
     void create_mass_matrix();
     void create_mass_matrix_lumped();
     virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);
     virtual PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F);
     void post_step() override;
+    const std::string & get_scheme() const;
 
 private:
     /// Time stepping scheme

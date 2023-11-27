@@ -295,8 +295,10 @@ protected:
     UnstructuredMesh * get_unstr_mesh() const;
     /// Build local solution vector for this problem
     virtual void build_local_solution_vector(Vector & sln) = 0;
+    /// Get list of all boundary conditions
+    const std::vector<BoundaryCondition *> & get_boundary_conditions() const;
     /// Get list of all natural boundary conditions
-    std::vector<NaturalBC *> get_natural_bcs() const;
+    const std::vector<NaturalBC *> & get_natural_bcs() const;
 
     virtual void init();
     virtual void create();
@@ -326,6 +328,8 @@ protected:
 
     PetscDS get_ds_aux() const;
 
+    Section get_local_section_aux() const;
+
     virtual void set_up_aux_fields() = 0;
 
     void set_up_auxiliary_dm(DM dm);
@@ -354,9 +358,6 @@ private:
 
     /// Logger object
     Logger * logger;
-
-    /// Section
-    Section section;
 
     /// Object that manages a discrete system
     PetscDS ds;
@@ -415,7 +416,8 @@ DiscreteProblemInterface::set_closure(const Vector & v,
                                       InsertMode mode) const
 {
     auto dm = this->unstr_mesh->get_dm();
-    PETSC_CHECK(DMPlexVecSetClosure(dm, this->section, v, point, vec.data(), mode));
+    auto local_section = this->problem->get_local_section();
+    PETSC_CHECK(DMPlexVecSetClosure(dm, local_section, v, point, vec.data(), mode));
 }
 
 template <Int N>
@@ -426,8 +428,9 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
                                       InsertMode mode) const
 {
     auto dm = this->unstr_mesh->get_dm();
-    Section global_section = this->problem->get_global_section();
-    PETSC_CHECK(DMPlexMatSetClosure(dm, this->section, global_section, A, point, mat.data(), mode));
+    auto global_section = this->problem->get_global_section();
+    auto local_section = this->problem->get_local_section();
+    PETSC_CHECK(DMPlexMatSetClosure(dm, local_section, global_section, A, point, mat.data(), mode));
 }
 
 template <Int N>
@@ -438,9 +441,10 @@ DiscreteProblemInterface::set_closure(const Matrix & A,
                                       InsertMode mode) const
 {
     auto dm = this->unstr_mesh->get_dm();
-    Section global_section = this->problem->get_global_section();
+    auto global_section = this->problem->get_global_section();
+    auto local_section = this->problem->get_local_section();
     DenseMatrix<Real, N> m = mat;
-    PETSC_CHECK(DMPlexMatSetClosure(dm, this->section, global_section, A, point, m.data(), mode));
+    PETSC_CHECK(DMPlexMatSetClosure(dm, local_section, global_section, A, point, m.data(), mode));
 }
 
 template <Int N>
@@ -451,7 +455,8 @@ DiscreteProblemInterface::get_closure(const Vector & v, Int point) const
     Int sz = N;
     DenseVector<Real, N> vec;
     Real * data = vec.data();
-    PETSC_CHECK(DMPlexVecGetClosure(dm, this->section, v, point, &sz, &data));
+    auto local_section = this->problem->get_local_section();
+    PETSC_CHECK(DMPlexVecGetClosure(dm, local_section, v, point, &sz, &data));
     return vec;
 }
 

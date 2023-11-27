@@ -60,6 +60,13 @@ ExplicitFVLinearProblem::get_step_num() const
     return TransientProblemInterface::get_step_number();
 }
 
+const std::string &
+ExplicitFVLinearProblem::get_scheme() const
+{
+    _F_;
+    return this->scheme;
+}
+
 void
 ExplicitFVLinearProblem::init()
 {
@@ -156,6 +163,21 @@ ExplicitFVLinearProblem::set_up_monitors()
     _F_;
     NonlinearProblem::set_up_monitors();
     TransientProblemInterface::set_up_monitors();
+}
+
+void
+ExplicitFVLinearProblem::allocate_mass_matrix()
+{
+    _F_;
+    this->M = create_matrix();
+    set_ksp_operators(this->M, this->M);
+}
+
+void
+ExplicitFVLinearProblem::allocate_lumped_mass_matrix()
+{
+    _F_;
+    this->M_lumped_inv = create_global_vector();
 }
 
 void

@@ -114,6 +114,8 @@ protected:
     virtual void solve(Vector & x);
     /// Set time-stepping scheme
     void set_scheme(TimeScheme scheme);
+    /// Set time-stepping scheme
+    void set_scheme(const char * scheme_name);
 
 private:
     /// PETSc TS object

@@ -146,9 +146,17 @@ DiscreteProblemInterface::get_solution_vector_local()
     return this->sln;
 }
 
-std::vector<NaturalBC *>
+const std::vector<BoundaryCondition *> &
+DiscreteProblemInterface::get_boundary_conditions() const
+{
+    _F_;
+    return this->bcs;
+}
+
+const std::vector<NaturalBC *> &
 DiscreteProblemInterface::get_natural_bcs() const
 {
+    _F_;
     return this->natural_bcs;
 }
 
@@ -159,7 +167,6 @@ DiscreteProblemInterface::init()
     set_up_ds();
     set_up_initial_conditions();
     set_up_boundary_conditions();
-    this->section = this->problem->get_local_section();
 }
 
 void
@@ -279,6 +286,13 @@ DiscreteProblemInterface::get_ds_aux() const
 {
     _F_;
     return this->ds_aux;
+}
+
+Section
+DiscreteProblemInterface::get_local_section_aux() const
+{
+    _F_;
+    return this->section_aux;
 }
 
 void
@@ -472,7 +486,8 @@ DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
 {
     _F_;
     Int offset;
-    PETSC_CHECK(PetscSectionGetFieldOffset(this->section, point, fid, &offset));
+    PETSC_CHECK(
+        PetscSectionGetFieldOffset(this->problem->get_local_section(), point, fid, &offset));
     return offset;
 }
 

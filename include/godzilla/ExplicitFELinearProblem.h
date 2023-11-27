@@ -19,17 +19,11 @@ public:
     bool converged() override;
     void solve() override;
 
-    const Matrix &
-    get_mass_matrix() const
-    {
-        return this->M;
-    }
+    const Matrix & get_mass_matrix() const;
 
-    const Vector &
-    get_lumped_mass_matrix() const
-    {
-        return this->M_lumped_inv;
-    }
+    Matrix & get_mass_matrix();
+
+    const Vector & get_lumped_mass_matrix() const;
 
     virtual PetscErrorCode compute_rhs(Real time, const Vector & X, Vector & F);
 
@@ -43,11 +37,14 @@ protected:
                             ResidualFunc * f1,
                             const std::string & region = "") override;
     void build_local_solution_vector(Vector & loc_sln) override;
+    void allocate_mass_matrix();
+    void allocate_lumped_mass_matrix();
     void create_mass_matrix();
     void create_mass_matrix_lumped();
     virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);
     virtual PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F);
     void post_step() override;
+    const std::string & get_scheme() const;
 
 private:
     /// Time stepping scheme

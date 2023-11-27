@@ -86,6 +86,31 @@ ExplicitFELinearProblem::get_step_num() const
     return TransientProblemInterface::get_step_number();
 }
 
+const Matrix &
+ExplicitFELinearProblem::get_mass_matrix() const
+{
+    return this->M;
+}
+
+Matrix &
+ExplicitFELinearProblem::get_mass_matrix()
+{
+    return this->M;
+}
+
+const Vector &
+ExplicitFELinearProblem::get_lumped_mass_matrix() const
+{
+    return this->M_lumped_inv;
+}
+
+const std::string &
+ExplicitFELinearProblem::get_scheme() const
+{
+    _F_;
+    return this->scheme;
+}
+
 void
 ExplicitFELinearProblem::init()
 {
@@ -174,6 +199,21 @@ ExplicitFELinearProblem::set_up_monitors()
     _F_;
     FENonlinearProblem::set_up_monitors();
     TransientProblemInterface::set_up_monitors();
+}
+
+void
+ExplicitFELinearProblem::allocate_mass_matrix()
+{
+    _F_;
+    this->M = create_matrix();
+    set_ksp_operators(this->M, this->M);
+}
+
+void
+ExplicitFELinearProblem::allocate_lumped_mass_matrix()
+{
+    _F_;
+    this->M_lumped_inv = create_global_vector();
 }
 
 void

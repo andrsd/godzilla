@@ -287,4 +287,11 @@ TransientProblemInterface::set_scheme(TimeScheme scheme)
     }
 }
 
+void
+TransientProblemInterface::set_scheme(const char * scheme_name)
+{
+    _F_;
+    PETSC_CHECK(TSSetType(this->ts, scheme_name));
+}
+
 } // namespace godzilla
