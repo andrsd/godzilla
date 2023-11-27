@@ -86,6 +86,24 @@ ExplicitFELinearProblem::get_step_num() const
     return TransientProblemInterface::get_step_number();
 }
 
+const Matrix &
+ExplicitFELinearProblem::get_mass_matrix() const
+{
+    return this->M;
+}
+
+Matrix &
+ExplicitFELinearProblem::get_mass_matrix()
+{
+    return this->M;
+}
+
+const Vector &
+ExplicitFELinearProblem::get_lumped_mass_matrix() const
+{
+    return this->M_lumped_inv;
+}
+
 void
 ExplicitFELinearProblem::init()
 {

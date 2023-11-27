@@ -19,17 +19,11 @@ public:
     bool converged() override;
     void solve() override;
 
-    const Matrix &
-    get_mass_matrix() const
-    {
-        return this->M;
-    }
+    const Matrix & get_mass_matrix() const;
 
-    const Vector &
-    get_lumped_mass_matrix() const
-    {
-        return this->M_lumped_inv;
-    }
+    Matrix & get_mass_matrix();
+
+    const Vector & get_lumped_mass_matrix() const;
 
     virtual PetscErrorCode compute_rhs(Real time, const Vector & X, Vector & F);
 
