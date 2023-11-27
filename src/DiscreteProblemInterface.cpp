@@ -280,6 +280,13 @@ DiscreteProblemInterface::get_ds_aux() const
     return this->ds_aux;
 }
 
+Section
+DiscreteProblemInterface::get_local_section_aux() const
+{
+    _F_;
+    return this->section_aux;
+}
+
 void
 DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
 {
