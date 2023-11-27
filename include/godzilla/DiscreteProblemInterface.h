@@ -326,6 +326,8 @@ protected:
 
     PetscDS get_ds_aux() const;
 
+    Section get_local_section_aux() const;
+
     virtual void set_up_aux_fields() = 0;
 
     void set_up_auxiliary_dm(DM dm);
