@@ -14,6 +14,8 @@ public:
     explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & params);
     ~ExplicitProblemInterface();
 
+    const std::string & get_scheme() const;
+
     const Matrix & get_mass_matrix() const;
 
     Matrix & get_mass_matrix();
@@ -23,7 +25,6 @@ public:
     virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 
 protected:
-    const std::string & get_scheme() const;
     void check();
     void set_up_callbacks();
     void set_up_time_scheme();

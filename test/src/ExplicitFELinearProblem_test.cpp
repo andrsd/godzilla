@@ -311,6 +311,7 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
         prob.set_up_time_scheme();
         TSGetType(ts, &type);
         EXPECT_STREQ(type, types[i]);
+        EXPECT_EQ(prob.get_scheme(), schemes[i]);
     }
 }
 
