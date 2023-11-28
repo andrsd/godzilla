@@ -84,6 +84,8 @@ public:
     TSConvergedReason get_converged_reason() const;
 
 protected:
+    /// Get `Problem`
+    Problem * get_problem();
     /// Get underlying SNES object
     SNES get_snes() const;
     /// Get time
@@ -95,7 +97,7 @@ protected:
     /// Create
     virtual void create();
     /// Check
-    virtual void check(LoggingInterface * li);
+    virtual void check();
     /// Set up monitors
     virtual void set_up_monitors();
     /// Set up time integration scheme

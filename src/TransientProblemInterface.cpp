@@ -74,6 +74,13 @@ TransientProblemInterface::~TransientProblemInterface()
     TSDestroy(&this->ts);
 }
 
+Problem *
+TransientProblemInterface::get_problem()
+{
+    _F_;
+    return this->problem;
+}
+
 SNES
 TransientProblemInterface::get_snes() const
 {
@@ -185,15 +192,15 @@ TransientProblemInterface::create()
 }
 
 void
-TransientProblemInterface::check(LoggingInterface * li)
+TransientProblemInterface::check()
 {
     _F_;
     if (this->tpi_params.is_param_valid("end_time") && this->tpi_params.is_param_valid("num_steps"))
-        li->log_error(
+        this->problem->log_error(
             "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
     if (!this->tpi_params.is_param_valid("end_time") &&
         !this->tpi_params.is_param_valid("num_steps"))
-        li->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
+        this->problem->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 void
