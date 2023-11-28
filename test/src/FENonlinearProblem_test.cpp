@@ -206,6 +206,10 @@ TEST_F(FENonlinearProblemTest, solve)
     mesh->create();
     prob->create();
 
+    auto bcs = prob->get_boundary_conditions();
+    EXPECT_EQ(bcs.size(), 1);
+    EXPECT_EQ(bcs[0]->get_type(), "DirichletBC");
+
     prob->solve();
 
     bool conv = prob->converged();

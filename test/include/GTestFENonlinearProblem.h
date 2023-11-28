@@ -31,6 +31,12 @@ public:
                                                          context);
     }
 
+    const std::vector<BoundaryCondition *> &
+    get_boundary_conditions() const
+    {
+        return DiscreteProblemInterface::get_boundary_conditions();
+    }
+
 protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
