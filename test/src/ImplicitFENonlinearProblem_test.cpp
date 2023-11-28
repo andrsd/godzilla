@@ -170,3 +170,35 @@ TEST_F(ImplicitFENonlinearProblemTest, set_scheme_str)
     TSGetType(ts, &type);
     EXPECT_STREQ(type, TSCN);
 }
+
+TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
+{
+    auto mesh = gMesh1d();
+    auto prob = gProblem1d(mesh);
+    this->app->set_problem(prob);
+
+    {
+        const std::string class_name = "ConstantInitialCondition";
+        Parameters * params = this->app->get_parameters(class_name);
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
+        params->set<std::vector<Real>>("value") = { 0 };
+        auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
+        prob->add_initial_condition(ic);
+    }
+
+    {
+        const std::string class_name = "DirichletBC";
+        Parameters * params = this->app->get_parameters(class_name);
+        params->set<std::vector<std::string>>("boundary") = { "left", "right" };
+        params->set<std::vector<std::string>>("value") = { "x*x" };
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
+        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
+        prob->add_boundary_condition(bc);
+    }
+
+    mesh->create();
+    prob->create();
+
+    prob->set_converged_reason(TS_CONVERGED_USER);
+    EXPECT_EQ(prob->get_converged_reason(), TS_CONVERGED_USER);
+}
