@@ -147,6 +147,12 @@ TEST(NonlinearProblemTest, solve)
 
     EXPECT_DOUBLE_EQ(xx[0], 2.);
     EXPECT_DOUBLE_EQ(xx[1], 3.);
+
+    auto J = prob.get_jacobian();
+    EXPECT_EQ(J(0, 0), 1.);
+    EXPECT_EQ(J(0, 1), 0.);
+    EXPECT_EQ(J(1, 0), 0.);
+    EXPECT_EQ(J(1, 1), 1.);
 }
 
 TEST(NonlinearProblemTest, compute_callbacks)
