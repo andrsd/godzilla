@@ -14,8 +14,6 @@ public:
     explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & params);
     ~ExplicitProblemInterface();
 
-    const std::string & get_scheme() const;
-
     const Matrix & get_mass_matrix() const;
 
     Matrix & get_mass_matrix();
@@ -38,8 +36,6 @@ protected:
 private:
     /// Nonlinear problem
     NonlinearProblem * nl_problem;
-    /// Time stepping scheme
-    const std::string & scheme;
     /// Mass matrix
     Matrix M;
     /// Inverse of the lumped mass matrix
