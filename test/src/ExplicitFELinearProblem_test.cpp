@@ -103,17 +103,33 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
     mesh.create();
     prob.create();
 
-    auto M = prob.get_mass_matrix();
-    EXPECT_NEAR(M(0, 0), 0.1111111111111111, 1e-9);
-    EXPECT_NEAR(M(0, 1), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(1, 0), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(1, 1), 0.2222222222222222, 1e-9);
-    EXPECT_NEAR(M(1, 2), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(2, 1), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(2, 2), 0.2222222222222222, 1e-9);
-    EXPECT_NEAR(M(2, 3), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(3, 2), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(3, 3), 0.1111111111111111, 1e-9);
+    {
+        auto M = prob.get_mass_matrix();
+        EXPECT_NEAR(M(0, 0), 0.1111111111111111, 1e-9);
+        EXPECT_NEAR(M(0, 1), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(1, 0), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(1, 1), 0.2222222222222222, 1e-9);
+        EXPECT_NEAR(M(1, 2), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(2, 1), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(2, 2), 0.2222222222222222, 1e-9);
+        EXPECT_NEAR(M(2, 3), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(3, 2), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(3, 3), 0.1111111111111111, 1e-9);
+    }
+    {
+        const TestExplicitFELinearProblem * cprob = &prob;
+        auto M = cprob->get_mass_matrix();
+        EXPECT_NEAR(M(0, 0), 0.1111111111111111, 1e-9);
+        EXPECT_NEAR(M(0, 1), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(1, 0), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(1, 1), 0.2222222222222222, 1e-9);
+        EXPECT_NEAR(M(1, 2), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(2, 1), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(2, 2), 0.2222222222222222, 1e-9);
+        EXPECT_NEAR(M(2, 3), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(3, 2), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(3, 3), 0.1111111111111111, 1e-9);
+    }
 }
 
 TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
