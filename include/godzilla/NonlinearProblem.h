@@ -18,6 +18,10 @@ public:
     void check() override;
     void run() override;
 
+    /// Get underlying KSP
+    KSP get_ksp() const;
+    /// Set KSP operators
+    void set_ksp_operators(const Matrix & A, const Matrix & B);
     /// Get Jacobian matrix
     const Matrix & get_jacobian() const;
     /// true if solve converged, otherwise false
@@ -41,8 +45,6 @@ protected:
     /// Set Jacobian evaluation function
     void set_jacobian_function(PetscErrorCode (*jacobian_func)(SNES, Vec, Mat, Mat, void *),
                                void * ctx);
-    /// Get underlying KSP
-    KSP get_ksp() const;
     /// Initialize the problem
     virtual void init();
     /// Set up initial guess
@@ -63,8 +65,6 @@ protected:
     void snes_monitor_callback(Int it, Real norm);
     /// KSP monitor
     void ksp_monitor_callback(Int it, Real rnorm);
-    /// Set KSP operators
-    void set_ksp_operators(const Matrix & A, const Matrix & B);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning

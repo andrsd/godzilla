@@ -20,6 +20,7 @@ add_library(${PROJECT_NAME}
         ExodusIIOutput.cpp
         ExplicitFELinearProblem.cpp
         ExplicitFVLinearProblem.cpp
+        ExplicitProblemInterface.cpp
         FENonlinearProblem.cpp
         FEProblemInterface.cpp
         Factory.cpp
