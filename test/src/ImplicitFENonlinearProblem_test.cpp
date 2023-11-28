@@ -136,7 +136,7 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
         testing::HasSubstr("prob: You must provide either 'end_time' or 'num_steps' parameter."));
 }
 
-TEST_F(ImplicitFENonlinearProblemTest, set_scheme_str)
+TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 {
     auto mesh = gMesh1d();
     auto prob = gProblem1d(mesh);
@@ -164,11 +164,15 @@ TEST_F(ImplicitFENonlinearProblemTest, set_scheme_str)
     mesh->create();
     prob->create();
 
-    prob->set_scheme(TSCN);
-    auto ts = prob->get_ts();
+    TS ts = prob->get_ts();
     TSType type;
-    TSGetType(ts, &type);
-    EXPECT_STREQ(type, TSCN);
+    std::vector<std::string> schemes = { "beuler", "cn", };
+    std::vector<TSType> types = { TSBEULER, TSCN };
+    for (std::size_t i = 0; i < schemes.size(); i++) {
+        prob->set_scheme(types[i]);
+        TSGetType(ts, &type);
+        EXPECT_STREQ(type, types[i]);
+    }
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
