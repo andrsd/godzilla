@@ -48,6 +48,20 @@ protected:
     {
         add_field(0, "u", 1);
     }
+
+    PetscErrorCode
+    compute_flux(PetscInt dim,
+                 PetscInt nf,
+                 const PetscReal x[],
+                 const PetscReal n[],
+                 const PetscScalar uL[],
+                 const PetscScalar uR[],
+                 PetscInt n_consts,
+                 const PetscScalar constants[],
+                 PetscScalar flux[]) override
+    {
+        return 0;
+    }
 };
 
 } // namespace

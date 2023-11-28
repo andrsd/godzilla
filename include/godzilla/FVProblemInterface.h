@@ -61,6 +61,18 @@ public:
     /// @param k The degree k of the space
     virtual void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
 
+    /// Method to compute flux across an edge
+    ///
+    /// @param dim[in] Spatial dimension
+    /// @param nf[in] Number of fields
+    /// @param x[in] Edge centroid
+    /// @param n[in] Normal
+    /// @param uL[in] Solution on the "left" side
+    /// @param uR[in] Solution on the "right" side
+    /// @param n_consts[in] Number of constants
+    /// @param constants[in] Constants
+    /// @param flux[out] Computed flux
+    /// @return PETSc error code, zero means success
     virtual PetscErrorCode compute_flux(PetscInt dim,
                                         PetscInt nf,
                                         const PetscReal x[],
@@ -69,7 +81,7 @@ public:
                                         const PetscScalar uR[],
                                         PetscInt n_consts,
                                         const PetscScalar constants[],
-                                        PetscScalar flux[]);
+                                        PetscScalar flux[]) = 0;
 
 protected:
     void init() override;
