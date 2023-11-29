@@ -135,3 +135,74 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
         testing::internal::GetCapturedStderr(),
         testing::HasSubstr("prob: You must provide either 'end_time' or 'num_steps' parameter."));
 }
+
+TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
+{
+    auto mesh = gMesh1d();
+    auto prob = gProblem1d(mesh);
+    this->app->set_problem(prob);
+
+    {
+        const std::string class_name = "ConstantInitialCondition";
+        Parameters * params = this->app->get_parameters(class_name);
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
+        params->set<std::vector<Real>>("value") = { 0 };
+        auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
+        prob->add_initial_condition(ic);
+    }
+
+    {
+        const std::string class_name = "DirichletBC";
+        Parameters * params = this->app->get_parameters(class_name);
+        params->set<std::vector<std::string>>("boundary") = { "left", "right" };
+        params->set<std::vector<std::string>>("value") = { "x*x" };
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
+        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
+        prob->add_boundary_condition(bc);
+    }
+
+    mesh->create();
+    prob->create();
+
+    TS ts = prob->get_ts();
+    TSType type;
+    std::vector<std::string> schemes = { "beuler", "cn", };
+    std::vector<TSType> types = { TSBEULER, TSCN };
+    for (std::size_t i = 0; i < schemes.size(); i++) {
+        prob->set_scheme(types[i]);
+        TSGetType(ts, &type);
+        EXPECT_STREQ(type, types[i]);
+    }
+}
+
+TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
+{
+    auto mesh = gMesh1d();
+    auto prob = gProblem1d(mesh);
+    this->app->set_problem(prob);
+
+    {
+        const std::string class_name = "ConstantInitialCondition";
+        Parameters * params = this->app->get_parameters(class_name);
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
+        params->set<std::vector<Real>>("value") = { 0 };
+        auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
+        prob->add_initial_condition(ic);
+    }
+
+    {
+        const std::string class_name = "DirichletBC";
+        Parameters * params = this->app->get_parameters(class_name);
+        params->set<std::vector<std::string>>("boundary") = { "left", "right" };
+        params->set<std::vector<std::string>>("value") = { "x*x" };
+        params->set<DiscreteProblemInterface *>("_dpi") = prob;
+        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
+        prob->add_boundary_condition(bc);
+    }
+
+    mesh->create();
+    prob->create();
+
+    prob->set_converged_reason(TS_CONVERGED_USER);
+    EXPECT_EQ(prob->get_converged_reason(), TS_CONVERGED_USER);
+}

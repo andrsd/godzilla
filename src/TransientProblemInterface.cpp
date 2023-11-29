@@ -55,6 +55,7 @@ TransientProblemInterface::parameters()
 
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     ts(nullptr),
+    scheme(params.get<std::string>("scheme")),
     problem(problem),
     tpi_params(params),
     ts_adaptor(nullptr),
@@ -108,6 +109,13 @@ TransientProblemInterface::get_ts() const
 {
     _F_;
     return this->ts;
+}
+
+const std::string &
+TransientProblemInterface::get_scheme() const
+{
+    _F_;
+    return this->scheme;
 }
 
 Vector

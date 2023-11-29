@@ -40,6 +40,18 @@ public:
         ExplicitFELinearProblem::set_up_time_scheme();
     }
 
+    void
+    allocate_mass_matrix()
+    {
+        ExplicitProblemInterface::allocate_mass_matrix();
+    }
+
+    void
+    allocate_lumped_mass_matrix()
+    {
+        ExplicitProblemInterface::allocate_lumped_mass_matrix();
+    }
+
 protected:
     void
     set_up_fields() override
@@ -103,17 +115,33 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
     mesh.create();
     prob.create();
 
-    auto M = prob.get_mass_matrix();
-    EXPECT_NEAR(M(0, 0), 0.1111111111111111, 1e-9);
-    EXPECT_NEAR(M(0, 1), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(1, 0), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(1, 1), 0.2222222222222222, 1e-9);
-    EXPECT_NEAR(M(1, 2), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(2, 1), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(2, 2), 0.2222222222222222, 1e-9);
-    EXPECT_NEAR(M(2, 3), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(3, 2), 0.0555555555555555, 1e-9);
-    EXPECT_NEAR(M(3, 3), 0.1111111111111111, 1e-9);
+    {
+        auto M = prob.get_mass_matrix();
+        EXPECT_NEAR(M(0, 0), 0.1111111111111111, 1e-9);
+        EXPECT_NEAR(M(0, 1), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(1, 0), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(1, 1), 0.2222222222222222, 1e-9);
+        EXPECT_NEAR(M(1, 2), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(2, 1), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(2, 2), 0.2222222222222222, 1e-9);
+        EXPECT_NEAR(M(2, 3), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(3, 2), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(3, 3), 0.1111111111111111, 1e-9);
+    }
+    {
+        const TestExplicitFELinearProblem * cprob = &prob;
+        auto M = cprob->get_mass_matrix();
+        EXPECT_NEAR(M(0, 0), 0.1111111111111111, 1e-9);
+        EXPECT_NEAR(M(0, 1), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(1, 0), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(1, 1), 0.2222222222222222, 1e-9);
+        EXPECT_NEAR(M(1, 2), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(2, 1), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(2, 2), 0.2222222222222222, 1e-9);
+        EXPECT_NEAR(M(2, 3), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(3, 2), 0.0555555555555555, 1e-9);
+        EXPECT_NEAR(M(3, 3), 0.1111111111111111, 1e-9);
+    }
 }
 
 TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
@@ -295,6 +323,7 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
         prob.set_up_time_scheme();
         TSGetType(ts, &type);
         EXPECT_STREQ(type, types[i]);
+        EXPECT_EQ(prob.get_scheme(), schemes[i]);
     }
 }
 
@@ -333,4 +362,58 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "
                                    "'ssp-rk-3', 'rk-2' or 'heun'."));
+}
+
+TEST(ExplicitFELinearProblemTest, allocate_mass_matrix)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 3;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = TestExplicitFELinearProblem::parameters();
+    prob_pars.set<App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFELinearProblem prob(prob_pars);
+    app.set_problem(&prob);
+
+    mesh.create();
+    prob.create();
+
+    prob.allocate_mass_matrix();
+    auto M = prob.get_mass_matrix();
+    EXPECT_NE(M, nullptr);
+}
+
+TEST(ExplicitFELinearProblemTest, allocate_lumped_mass_matrix)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 3;
+    LineMesh mesh(mesh_pars);
+
+    Parameters prob_pars = TestExplicitFELinearProblem::parameters();
+    prob_pars.set<App *>("_app") = &app;
+    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1e-3;
+    prob_pars.set<Real>("dt") = 1e-3;
+    prob_pars.set<std::string>("scheme") = "euler";
+    TestExplicitFELinearProblem prob(prob_pars);
+    app.set_problem(&prob);
+
+    mesh.create();
+    prob.create();
+
+    prob.allocate_lumped_mass_matrix();
+    auto M = prob.get_lumped_mass_matrix();
+    EXPECT_NE(M, nullptr);
 }

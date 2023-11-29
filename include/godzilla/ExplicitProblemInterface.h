@@ -23,7 +23,6 @@ public:
     virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 
 protected:
-    const std::string & get_scheme() const;
     void check();
     void set_up_callbacks();
     void set_up_time_scheme();
@@ -37,8 +36,6 @@ protected:
 private:
     /// Nonlinear problem
     NonlinearProblem * nl_problem;
-    /// Time stepping scheme
-    const std::string & scheme;
     /// Mass matrix
     Matrix M;
     /// Inverse of the lumped mass matrix

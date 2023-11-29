@@ -97,6 +97,23 @@ TEST_F(GodzillaAppTest, check_integrity)
     EXPECT_DEATH(app.run(), "error1");
 }
 
+TEST_F(GodzillaAppTest, command_line_opt)
+{
+    class TestApp : public App {
+    public:
+        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "test_godzilla_app") {}
+
+        cxxopts::Options &
+        get_command_line_opts()
+        {
+            return App::get_command_line_opts();
+        }
+    } app;
+
+    auto cmd_ln_opts = app.get_command_line_opts();
+    EXPECT_THAT(cmd_ln_opts.help(), testing::HasSubstr("test_godzilla_app"));
+}
+
 TEST_F(GodzillaAppTest, unknown_command_line_switch)
 {
     int argc = 2;

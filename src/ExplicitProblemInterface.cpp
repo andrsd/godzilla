@@ -31,8 +31,7 @@ ExplicitProblemInterface::parameters()
 ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem * problem,
                                                    const Parameters & params) :
     TransientProblemInterface(problem, params),
-    nl_problem(problem),
-    scheme(params.get<std::string>("scheme"))
+    nl_problem(problem)
 {
 }
 
@@ -63,20 +62,13 @@ ExplicitProblemInterface::get_lumped_mass_matrix() const
     return this->M_lumped_inv;
 }
 
-const std::string &
-ExplicitProblemInterface::get_scheme() const
-{
-    _F_;
-    return this->scheme;
-}
-
 void
 ExplicitProblemInterface::check()
 {
     _F_;
     TransientProblemInterface::check();
     auto prob = this->nl_problem;
-    if (!validation::in(this->scheme, { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
+    if (!validation::in(get_scheme(), { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
         prob->log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', 'ssp-rk-3', "
                         "'rk-2' or 'heun'.");
 }
@@ -93,7 +85,7 @@ void
 ExplicitProblemInterface::set_up_time_scheme()
 {
     _F_;
-    std::string name = utils::to_lower(this->scheme);
+    std::string name = utils::to_lower(get_scheme());
     std::map<std::string, TimeScheme> scheme_map = { { "euler", TimeScheme::EULER },
                                                      { "ssp-rk-2", TimeScheme::SSP_RK_2 },
                                                      { "ssp-rk-3", TimeScheme::SSP_RK_3 },

@@ -61,6 +61,7 @@ GTestProblem::parameters()
 {
     Parameters params = Problem::parameters();
     params += TransientProblemInterface::parameters();
+    params.add_param<std::string>("scheme", "", "time stepping scheme");
     params.add_param<std::string>("str", "empty", "str doco");
     params.add_param<double>("d", 1.234, "d doco");
     params.add_param<int>("i", -1234, "i doco");

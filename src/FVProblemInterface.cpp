@@ -447,19 +447,4 @@ FVProblemInterface::get_next_id(const std::vector<Int> & ids) const
     return -1;
 }
 
-PetscErrorCode
-FVProblemInterface::compute_flux(PetscInt dim,
-                                 PetscInt nf,
-                                 const PetscReal x[],
-                                 const PetscReal n[],
-                                 const PetscScalar uL[],
-                                 const PetscScalar uR[],
-                                 PetscInt n_consts,
-                                 const PetscScalar constants[],
-                                 PetscScalar flux[])
-{
-    _F_;
-    return 0;
-}
-
 } // namespace godzilla
