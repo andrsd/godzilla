@@ -456,6 +456,30 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FVProblemInterface12compute_fluxE8PetscInt8PetscIntA_K9PetscRealA_K9PetscRealA_K11PetscScalarA_K11PetscScalar8PetscIntA_K11PetscScalarA_11PetscScalar">
+<span id="_CPPv3N8godzilla18FVProblemInterface12compute_fluxE8PetscInt8PetscIntA_K9PetscRealA_K9PetscRealA_K11PetscScalarA_K11PetscScalar8PetscIntA_K11PetscScalarA_11PetscScalar"></span><span id="_CPPv2N8godzilla18FVProblemInterface12compute_fluxE8PetscInt8PetscIntA_K9PetscRealA_K9PetscRealA_K11PetscScalarA_K11PetscScalar8PetscIntA_K11PetscScalarA_11PetscScalar"></span><span id="godzilla::FVProblemInterface::compute_flux__PetscInt.PetscInt.PetscRealCA.PetscRealCA.PetscScalarCA.PetscScalarCA.PetscInt.PetscScalarCA.PetscScalarA"></span><span class="target" id="classgodzilla_1_1_f_v_problem_interface_1ac0daa9c786ddface0a091a1ea2af85a5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_flux</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nf</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscReal</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscReal</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscScalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">uL</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscScalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">uR</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">PetscInt</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">n_consts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">PetscScalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">constants</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">PetscScalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">flux</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FVProblemInterface12compute_fluxE8PetscInt8PetscIntA_K9PetscRealA_K9PetscRealA_K11PetscScalarA_K11PetscScalar8PetscIntA_K11PetscScalarA_11PetscScalar" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Method to compute flux across an edge. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim[in]</strong> – Spatial dimension </p></li>
+<li><p><strong>nf[in]</strong> – Number of fields </p></li>
+<li><p><strong>x[in]</strong> – Edge centroid </p></li>
+<li><p><strong>n[in]</strong> – Normal</p></li>
+<li><p><strong>uL[in]</strong> – Solution on the “left” side </p></li>
+<li><p><strong>uR[in]</strong> – Solution on the “right” side </p></li>
+<li><p><strong>n_consts[in]</strong> – Number of constants </p></li>
+<li><p><strong>constants[in]</strong> – Constants </p></li>
+<li><p><strong>flux[out]</strong> – Computed flux </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>PETSc error code, zero means success </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </dd></dl>
 
