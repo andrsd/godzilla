@@ -330,6 +330,8 @@ protected:
 
     Section get_local_section_aux() const;
 
+    void set_local_section_aux(const Section & section);
+
     virtual void set_up_aux_fields() = 0;
 
     void set_up_auxiliary_dm(DM dm);

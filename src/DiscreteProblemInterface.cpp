@@ -296,6 +296,13 @@ DiscreteProblemInterface::get_local_section_aux() const
 }
 
 void
+DiscreteProblemInterface::set_local_section_aux(const Section & section)
+{
+    _F_;
+    this->section_aux = section;
+}
+
+void
 DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
 {
     _F_;
@@ -347,7 +354,7 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
         PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
         PetscSection sa;
         PETSC_CHECK(DMGetLocalSection(this->dm_aux, &sa));
-        this->section_aux = Section(sa);
+        set_local_section_aux(Section(sa));
     }
 }
 
