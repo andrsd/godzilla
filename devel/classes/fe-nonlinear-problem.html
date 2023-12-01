@@ -77,6 +77,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem::compute_residual()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem::compute_jacobian()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_boundaryER6Vector"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem::compute_boundary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblem29compute_solution_vector_localEv"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem::compute_solution_vector_local()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -169,6 +170,12 @@
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FENonlinearProblem16compute_boundaryER6Vector">
 <span id="_CPPv3N8godzilla18FENonlinearProblem16compute_boundaryER6Vector"></span><span id="_CPPv2N8godzilla18FENonlinearProblem16compute_boundaryER6Vector"></span><span id="godzilla::FENonlinearProblem::compute_boundary__VectorR"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a7207287c086cb7f9d582ce4844a840cd"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_boundary</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_boundaryER6Vector" title="Link to this definition"></a><br /></dt>
 <dd><p>Method for computing boundary values. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FENonlinearProblem29compute_solution_vector_localEv">
+<span id="_CPPv3N8godzilla18FENonlinearProblem29compute_solution_vector_localEv"></span><span id="_CPPv2N8godzilla18FENonlinearProblem29compute_solution_vector_localEv"></span><span id="godzilla::FENonlinearProblem::compute_solution_vector_local"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a34c3de7feeae4da0edef838538f2048b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_solution_vector_local</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem29compute_solution_vector_localEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Build local solution vector for this problem. </p>
 </dd></dl>
 
 </div>
