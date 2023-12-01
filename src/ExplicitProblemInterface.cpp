@@ -102,7 +102,6 @@ ExplicitProblemInterface::allocate_mass_matrix()
 {
     _F_;
     this->M = this->nl_problem->create_matrix();
-    this->nl_problem->set_ksp_operators(this->M, this->M);
 }
 
 void

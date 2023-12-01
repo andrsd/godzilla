@@ -12,12 +12,14 @@ add_library(${PROJECT_NAME}
         ConstantInitialCondition.cpp
         CSVOutput.cpp
         DependencyEvaluator.cpp
+        DGProblemInterface.cpp
         DirichletBC.cpp
         DiscreteProblemInterface.cpp
         Error.cpp
         EssentialBC.cpp
         ExodusIIMesh.cpp
         ExodusIIOutput.cpp
+        ExplicitDGLinearProblem.cpp
         ExplicitFELinearProblem.cpp
         ExplicitFVLinearProblem.cpp
         ExplicitProblemInterface.cpp
