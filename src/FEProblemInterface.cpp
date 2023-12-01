@@ -99,6 +99,13 @@ void
 FEProblemInterface::init()
 {
     _F_;
+    for (auto & it : this->fields)
+        create_fe(it.second);
+    for (auto & it : this->aux_fields)
+        create_fe(it.second);
+
+    set_up_quadrature();
+
     DiscreteProblemInterface::init();
 
     auto dm = get_unstr_mesh()->get_dm();
@@ -439,13 +446,6 @@ void
 FEProblemInterface::set_up_ds()
 {
     _F_;
-    for (auto & it : this->fields)
-        create_fe(it.second);
-    for (auto & it : this->aux_fields)
-        create_fe(it.second);
-
-    set_up_quadrature();
-
     auto dm = get_unstr_mesh()->get_dm();
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
