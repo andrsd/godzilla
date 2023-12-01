@@ -102,16 +102,6 @@ protected:
                               const std::vector<Int> & components,
                               void * context) override;
 
-    /// Compute auxiliary fields
-    ///
-    /// @param dm DM for auxiliary fields
-    void compute_aux_fields();
-
-    void compute_label_aux_fields(DM dm,
-                                  const Label & label,
-                                  const std::vector<AuxiliaryField *> & auxs,
-                                  Vector & a);
-
     void set_up_aux_fields() override;
 
     /// Set up field variables
@@ -174,9 +164,6 @@ private:
     std::map<std::string, Int> aux_fields_by_name;
 
     std::map<Int, PetscFE> aux_fe;
-
-    /// Local auxiliary solution vector
-    Vector a;
 
     static const std::string empty_name;
 };
