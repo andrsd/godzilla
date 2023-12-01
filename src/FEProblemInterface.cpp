@@ -1813,19 +1813,6 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
     }
 }
 
-Int
-FEProblemInterface::get_next_id(const std::vector<Int> & ids) const
-{
-    _F_;
-    std::set<Int> s;
-    for (auto & id : ids)
-        s.insert(id);
-    for (Int id = 0; id < std::numeric_limits<Int>::max(); id++)
-        if (s.find(id) == s.end())
-            return id;
-    return -1;
-}
-
 void
 FEProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                                  const std::string & boundary,

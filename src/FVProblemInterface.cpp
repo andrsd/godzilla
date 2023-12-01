@@ -434,17 +434,4 @@ FVProblemInterface::add_boundary_natural(const std::string & name,
     error("Natural BCs are not supported for FV problems");
 }
 
-Int
-FVProblemInterface::get_next_id(const std::vector<Int> & ids) const
-{
-    _F_;
-    std::set<Int> s;
-    for (auto & id : ids)
-        s.insert(id);
-    for (Int id = 0; id < std::numeric_limits<Int>::max(); id++)
-        if (s.find(id) == s.end())
-            return id;
-    return -1;
-}
-
 } // namespace godzilla

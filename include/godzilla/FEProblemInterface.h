@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <set>
 #include "petsc.h"
 #include "petscfe.h"
 #include "godzilla/CallStack.h"
@@ -329,8 +328,6 @@ protected:
                              Scalar u[],
                              Scalar u_x[],
                              Scalar u_t[]);
-
-    Int get_next_id(const std::vector<Int> & ids) const;
 
 private:
     /// Quadrature order

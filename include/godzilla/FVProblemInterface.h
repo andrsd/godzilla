@@ -114,8 +114,6 @@ protected:
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
-    Int get_next_id(const std::vector<Int> & ids) const;
-
 private:
     /// Field information
     struct FieldInfo {
