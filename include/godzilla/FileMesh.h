@@ -13,7 +13,7 @@ public:
     /// Return file name
     ///
     /// @return Name of the file
-    NO_DISCARD const std::string & get_file_name() const;
+    [[nodiscard]] const std::string & get_file_name() const;
 
 private:
     /// File name with the mesh

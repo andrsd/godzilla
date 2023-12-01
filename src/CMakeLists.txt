@@ -102,6 +102,8 @@ set_target_properties(
         SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
+target_compile_definitions(${PROJECT_NAME} PUBLIC -DGODZILLA_WITH_PERF_LOG)
+
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC

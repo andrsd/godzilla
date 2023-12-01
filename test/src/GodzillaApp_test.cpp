@@ -1,4 +1,3 @@
-#include "godzilla/GodzillaConfig.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "godzilla/Mesh.h"

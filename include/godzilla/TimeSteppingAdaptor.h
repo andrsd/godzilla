@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
 
@@ -20,17 +19,17 @@ public:
     /// Get TSAdapt object
     ///
     /// @return PETSc TSAdapt object
-    NO_DISCARD TSAdapt get_ts_adapt() const;
+    [[nodiscard]] TSAdapt get_ts_adapt() const;
 
     /// Get minimum time step size
     ///
     /// @return Minimum time step size
-    NO_DISCARD Real get_dt_min() const;
+    [[nodiscard]] Real get_dt_min() const;
 
     /// Get maximum time step size
     ///
     /// @return Maximum time step size
-    NO_DISCARD Real get_dt_max() const;
+    [[nodiscard]] Real get_dt_max() const;
 
 protected:
     /// Set time adaptor type

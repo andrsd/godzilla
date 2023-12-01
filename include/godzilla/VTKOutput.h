@@ -20,7 +20,7 @@ public:
     explicit VTKOutput(const Parameters & params);
     ~VTKOutput() override;
 
-    NO_DISCARD std::string get_file_ext() const override;
+    [[nodiscard]] std::string get_file_ext() const override;
     void create() override;
     void check() override;
     void output_step() override;

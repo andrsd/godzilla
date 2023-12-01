@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/UnstructuredMesh.h"
 
 namespace godzilla {

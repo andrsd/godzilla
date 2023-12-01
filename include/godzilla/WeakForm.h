@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/Label.h"
 #include <array>
@@ -80,7 +79,7 @@ public:
     /// @param f Field `f` ID
     /// @param g Field `g` ID
     /// @return Field ID used in `PetscFormKey`
-    NO_DISCARD Int get_jac_key(Int f, Int g) const;
+    [[nodiscard]] Int get_jac_key(Int f, Int g) const;
 
 private:
     /// Number of fields

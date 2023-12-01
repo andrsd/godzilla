@@ -1,11 +1,3 @@
 #pragma once
 
 #define GODZILLA_VERSION "@godzilla_VERSION@"
-
-#define NO_DISCARD [[nodiscard]]
-
-#cmakedefine GODZILLA_WITH_PERF_LOG
-
-#define GODZILLA_UNUSED_STRINGIFY(param_string_literal) #param_string_literal
-#define GODZILLA_UNUSED_VAR(param) _Pragma(GODZILLA_UNUSED_STRINGIFY(unused(#param)))
-#define GODZILLA_UNUSED(x) (void)(x)

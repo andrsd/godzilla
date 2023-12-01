@@ -3,7 +3,6 @@
 #include <string>
 #include "fmt/printf.h"
 #include "mpicpp-lite/mpicpp-lite.h"
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/PerfLog.h"
 
 namespace godzilla {

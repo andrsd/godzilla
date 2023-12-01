@@ -36,22 +36,16 @@ AdvectionEquation::set_up_fields()
 }
 
 PetscErrorCode
-AdvectionEquation::compute_flux(PetscInt dim,
-                                PetscInt nf,
-                                const PetscReal x[],
+AdvectionEquation::compute_flux(PetscInt,
+                                PetscInt,
+                                const PetscReal[],
                                 const PetscReal n[],
                                 const PetscScalar uL[],
                                 const PetscScalar uR[],
-                                PetscInt n_consts,
-                                const PetscScalar constants[],
+                                PetscInt,
+                                const PetscScalar[],
                                 PetscScalar flux[])
 {
-    GODZILLA_UNUSED(dim);
-    GODZILLA_UNUSED(nf);
-    GODZILLA_UNUSED(x);
-    GODZILLA_UNUSED(n_consts);
-    GODZILLA_UNUSED(constants);
-
     _F_;
     PetscReal wind[] = { 0.5 };
     PetscReal wn = 0;

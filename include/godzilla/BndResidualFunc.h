@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/FieldValue.h"
 #include <string>
@@ -18,7 +17,7 @@ protected:
     /// Get normal
     ///
     /// @return Outward normal
-    NO_DISCARD const Normal & get_normal() const;
+    [[nodiscard]] const Normal & get_normal() const;
 };
 
 } // namespace godzilla

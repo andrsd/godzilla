@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/CallStack.h"
@@ -36,7 +35,7 @@ protected:
     /// Get pointer to FEProblemInterface
     ///
     /// @return Pointer to FEProblemInterface
-    NO_DISCARD FEProblemInterface * get_fe_problem() const;
+    [[nodiscard]] FEProblemInterface * get_fe_problem() const;
 
     /// Get spatial dimension
     ///

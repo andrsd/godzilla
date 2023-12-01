@@ -72,10 +72,6 @@ template <ElementType ELEM_TYPE, Int DIM>
 inline DenseVector<Real, DIM>
 normal(Real volume, Real edge_len, const DenseVector<Real, DIM> & grad)
 {
-    GODZILLA_UNUSED(volume);
-    GODZILLA_UNUSED(edge_len);
-    GODZILLA_UNUSED(grad);
-
     _F_;
     error("Computation of a normal for element '{}' in {} dimensions is not implemented.",
           get_element_type_str(ELEM_TYPE),
@@ -86,8 +82,6 @@ template <>
 inline DenseVector<Real, 1>
 normal<EDGE2, 1>(Real volume, Real edge_len, const DenseVector<Real, 1> & grad)
 {
-    GODZILLA_UNUSED(edge_len);
-
     return -volume * grad;
 }
 
@@ -104,8 +98,6 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nod
 inline Real
 element_length(const DenseMatrix<Real, N_ELEM_NODES, DIM> & grad_phi)
 {
-    GODZILLA_UNUSED(grad_phi);
-
     _F_;
     error("Computation of a element length for '{}' in {} dimensions is not implemented.",
           get_element_type_str(ELEM_TYPE),
@@ -149,8 +141,6 @@ template <CoordinateType COORD_TYPE, Int DIM>
 inline Array1D<Real>
 calc_nodal_radius(Array1D<DenseVector<Real, DIM>> & coords)
 {
-    GODZILLA_UNUSED(coords);
-
     error("Radius computation is not implemented in {} dimensions.", DIM);
 }
 

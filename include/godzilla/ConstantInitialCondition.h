@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/InitialCondition.h"
 #include <vector>
 
@@ -15,7 +14,7 @@ class ConstantInitialCondition : public InitialCondition {
 public:
     explicit ConstantInitialCondition(const Parameters & params);
 
-    NO_DISCARD Int get_num_components() const override;
+    [[nodiscard]] Int get_num_components() const override;
 
     void evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) override;
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/FileOutput.h"
 #include <fstream>
 
@@ -14,7 +13,7 @@ public:
     ~CSVOutput() override;
 
     void create() override;
-    NO_DISCARD std::string get_file_ext() const override;
+    [[nodiscard]] std::string get_file_ext() const override;
     void output_step() override;
 
     /// Get post-processor names

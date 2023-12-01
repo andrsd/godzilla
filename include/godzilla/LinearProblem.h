@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"

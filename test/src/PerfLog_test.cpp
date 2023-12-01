@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/PerfLog.h"
 #include <time.h>
 
