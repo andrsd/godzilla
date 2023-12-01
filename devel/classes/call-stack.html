@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CallStack &mdash; godzilla  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -30,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -55,7 +61,22 @@
 <li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
 <li class="toctree-l1"><a class="reference internal" href="boundary-condition.html">BoundaryCondition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">CallStack</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CallStack</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStackE"><code class="docutils literal notranslate"><span class="pre">CallStack</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack9CallStackEv"><code class="docutils literal notranslate"><span class="pre">CallStack::CallStack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack4dumpEv"><code class="docutils literal notranslate"><span class="pre">CallStack::dump()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack10initializeEv"><code class="docutils literal notranslate"><span class="pre">CallStack::initialize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack3ObjE"><code class="docutils literal notranslate"><span class="pre">CallStack::Obj</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack3Obj3ObjEiPKcPKc"><code class="docutils literal notranslate"><span class="pre">CallStack::Obj::Obj()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack3Obj4lineE"><code class="docutils literal notranslate"><span class="pre">CallStack::Obj::line</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack3Obj4fileE"><code class="docutils literal notranslate"><span class="pre">CallStack::Obj::file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla8internal9CallStack3Obj4funcE"><code class="docutils literal notranslate"><span class="pre">CallStack::Obj::func</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="constant-initial-condition.html">ConstantInitialCondition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dirichlet-bc.html">DirichletBC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
@@ -113,7 +134,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">CallStack</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -124,23 +145,23 @@
            <div itemprop="articleBody">
              
   <section id="callstack">
-<h1>CallStack<a class="headerlink" href="#callstack" title="Permalink to this heading"></a></h1>
+<h1>CallStack<a class="headerlink" href="#callstack" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStackE">
-<span id="_CPPv3N8godzilla8internal9CallStackE"></span><span id="_CPPv2N8godzilla8internal9CallStackE"></span><span id="godzilla::internal::CallStack"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CallStack</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStackE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStackE"></span><span id="_CPPv2N8godzilla8internal9CallStackE"></span><span id="godzilla::internal::CallStack"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CallStack</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStackE" title="Link to this definition"></a><br /></dt>
 <dd><p>Call stack object. </p>
 <p>The allocation of the stack must be static to prevent problems during out-of-memory scenario. That’s why we should not be using <code class="docutils literal notranslate"><span class="pre">std::vector</span></code> or similar. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack9CallStackEv">
-<span id="_CPPv3N8godzilla8internal9CallStack9CallStackEv"></span><span id="_CPPv2N8godzilla8internal9CallStack9CallStackEv"></span><span id="godzilla::internal::CallStack::CallStack"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack_1ad9384d40f3a587468c044bb8445357ff"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CallStack</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack9CallStackEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack9CallStackEv"></span><span id="_CPPv2N8godzilla8internal9CallStack9CallStackEv"></span><span id="godzilla::internal::CallStack::CallStack"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack_1ad9384d40f3a587468c044bb8445357ff"></span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CallStack</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack9CallStackEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Build the call stack object with defined size. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack4dumpEv">
-<span id="_CPPv3N8godzilla8internal9CallStack4dumpEv"></span><span id="_CPPv2N8godzilla8internal9CallStack4dumpEv"></span><span id="godzilla::internal::CallStack::dump"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack_1af93ce4aec1c53ffedc9fe0f9969c60df"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack4dumpEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack4dumpEv"></span><span id="_CPPv2N8godzilla8internal9CallStack4dumpEv"></span><span id="godzilla::internal::CallStack::dump"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack_1af93ce4aec1c53ffedc9fe0f9969c60df"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dump</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack4dumpEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Dump the call stack objects to standard error. </p>
 </dd></dl>
 
@@ -149,7 +170,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack10initializeEv">
-<span id="_CPPv3N8godzilla8internal9CallStack10initializeEv"></span><span id="_CPPv2N8godzilla8internal9CallStack10initializeEv"></span><span id="godzilla::internal::CallStack::initialize"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack_1a1d5af044a3dbe737f86f4e998b6302b7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack10initializeEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack10initializeEv"></span><span id="_CPPv2N8godzilla8internal9CallStack10initializeEv"></span><span id="godzilla::internal::CallStack::initialize"></span><span class="target" id="classgodzilla_1_1internal_1_1_call_stack_1a1d5af044a3dbe737f86f4e998b6302b7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialize</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack10initializeEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Initialize the call stack capability. </p>
 <p>This hooks to SIGABRT and SIGSEGV signals </p>
 </dd></dl>
@@ -157,13 +178,13 @@
 </div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack3ObjE">
-<span id="_CPPv3N8godzilla8internal9CallStack3ObjE"></span><span id="_CPPv2N8godzilla8internal9CallStack3ObjE"></span><span id="godzilla::internal::CallStack::Obj"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obj</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3ObjE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack3ObjE"></span><span id="_CPPv2N8godzilla8internal9CallStack3ObjE"></span><span id="godzilla::internal::CallStack::Obj"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obj</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3ObjE" title="Link to this definition"></a><br /></dt>
 <dd><p>Holds data for one call stack object. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack3Obj3ObjEiPKcPKc">
-<span id="_CPPv3N8godzilla8internal9CallStack3Obj3ObjEiPKcPKc"></span><span id="_CPPv2N8godzilla8internal9CallStack3Obj3ObjEiPKcPKc"></span><span id="godzilla::internal::CallStack::Obj::Obj__i.cCP.cCP"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj_1a601b58ad491045331445a3fb6139e399"></span><span class="sig-name descname"><span class="n"><span class="pre">Obj</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ln</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">func</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">file</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Obj3ObjEiPKcPKc" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack3Obj3ObjEiPKcPKc"></span><span id="_CPPv2N8godzilla8internal9CallStack3Obj3ObjEiPKcPKc"></span><span id="godzilla::internal::CallStack::Obj::Obj__i.cCP.cCP"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj_1a601b58ad491045331445a3fb6139e399"></span><span class="sig-name descname"><span class="n"><span class="pre">Obj</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ln</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">func</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">file</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Obj3ObjEiPKcPKc" title="Link to this definition"></a><br /></dt>
 <dd><p>Construct call stack object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -181,19 +202,19 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack3Obj4lineE">
-<span id="_CPPv3N8godzilla8internal9CallStack3Obj4lineE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Obj4lineE"></span><span id="godzilla::internal::CallStack::Obj::line__i"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj_1a3aac8409f1b5ade2b96e0a34eed02ec2"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">line</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Obj4lineE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack3Obj4lineE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Obj4lineE"></span><span id="godzilla::internal::CallStack::Obj::line__i"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj_1a3aac8409f1b5ade2b96e0a34eed02ec2"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">line</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Obj4lineE" title="Link to this definition"></a><br /></dt>
 <dd><p>Line number in the file. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack3Obj4fileE">
-<span id="_CPPv3N8godzilla8internal9CallStack3Obj4fileE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Obj4fileE"></span><span id="godzilla::internal::CallStack::Obj::file__cCP"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj_1acc461f5425a196d31c7b17323a6eaf22"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">file</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Obj4fileE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack3Obj4fileE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Obj4fileE"></span><span id="godzilla::internal::CallStack::Obj::file__cCP"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj_1acc461f5425a196d31c7b17323a6eaf22"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">file</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Obj4fileE" title="Link to this definition"></a><br /></dt>
 <dd><p>File name. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8internal9CallStack3Obj4funcE">
-<span id="_CPPv3N8godzilla8internal9CallStack3Obj4funcE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Obj4funcE"></span><span id="godzilla::internal::CallStack::Obj::func__cCP"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj_1a32ad7fdff74c59b8f2247c4f21ec2119"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">func</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Obj4funcE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla8internal9CallStack3Obj4funcE"></span><span id="_CPPv2N8godzilla8internal9CallStack3Obj4funcE"></span><span id="godzilla::internal::CallStack::Obj::func__cCP"></span><span class="target" id="structgodzilla_1_1internal_1_1_call_stack_1_1_obj_1a32ad7fdff74c59b8f2247c4f21ec2119"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">func</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla8internal9CallStack3Obj4funcE" title="Link to this definition"></a><br /></dt>
 <dd><p><a class="reference internal" href="function.html#classgodzilla_1_1_function"><span class="std std-ref">Function</span></a> name. </p>
 </dd></dl>
 

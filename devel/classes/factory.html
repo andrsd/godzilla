@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Factory &mdash; godzilla  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -30,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -64,7 +70,17 @@
 <li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Factory</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Factory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla7FactoryE"><code class="docutils literal notranslate"><span class="pre">Factory</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Factory14get_parametersERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Factory::get_parameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringER10Parameters"><code class="docutils literal notranslate"><span class="pre">Factory::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringEP10Parameters"><code class="docutils literal notranslate"><span class="pre">Factory::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Factory13is_registeredERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Factory::is_registered()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Factory7destroyEv"><code class="docutils literal notranslate"><span class="pre">Factory::destroy()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
@@ -113,7 +129,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Factory</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -124,16 +140,16 @@
            <div itemprop="articleBody">
              
   <section id="factory">
-<h1>Factory<a class="headerlink" href="#factory" title="Permalink to this heading"></a></h1>
+<h1>Factory<a class="headerlink" href="#factory" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla7FactoryE">
-<span id="_CPPv3N8godzilla7FactoryE"></span><span id="_CPPv2N8godzilla7FactoryE"></span><span id="godzilla::Factory"></span><span class="target" id="classgodzilla_1_1_factory"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Factory</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla7FactoryE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla7FactoryE"></span><span id="_CPPv2N8godzilla7FactoryE"></span><span id="godzilla::Factory"></span><span class="target" id="classgodzilla_1_1_factory"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Factory</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla7FactoryE" title="Link to this definition"></a><br /></dt>
 <dd><p>Generic factory class for building objects. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Factory14get_parametersERKNSt6stringE">
-<span id="_CPPv3N8godzilla7Factory14get_parametersERKNSt6stringE"></span><span id="_CPPv2N8godzilla7Factory14get_parametersERKNSt6stringE"></span><span id="godzilla::Factory::get_parameters__ssCR"></span><span class="target" id="classgodzilla_1_1_factory_1acf70323cb25aa20b4a6f617efabe3ded"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_parameters</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Factory14get_parametersERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla7Factory14get_parametersERKNSt6stringE"></span><span id="_CPPv2N8godzilla7Factory14get_parametersERKNSt6stringE"></span><span id="godzilla::Factory::get_parameters__ssCR"></span><span class="target" id="classgodzilla_1_1_factory_1acf70323cb25aa20b4a6f617efabe3ded"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_parameters</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Factory14get_parametersERKNSt6stringE" title="Link to this definition"></a><br /></dt>
 <dd><p>Get valid parameters for the object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -147,7 +163,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringER10Parameters">
-<span id="_CPPv3I0EN8godzilla7Factory6createERKNSt6stringERKNSt6stringER10Parameters"></span><span id="_CPPv2I0EN8godzilla7Factory6createERKNSt6stringERKNSt6stringER10Parameters"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_factory_1a827dd0c24621c3fe0d19de9de175d2e6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringER10Parameters" title="godzilla::Factory::create::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringER10Parameters" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN8godzilla7Factory6createERKNSt6stringERKNSt6stringER10Parameters"></span><span id="_CPPv2I0EN8godzilla7Factory6createERKNSt6stringERKNSt6stringER10Parameters"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_factory_1a827dd0c24621c3fe0d19de9de175d2e6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringER10Parameters" title="godzilla::Factory::create::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringER10Parameters" title="Link to this definition"></a><br /></dt>
 <dd><p>Build an object (must be registered in Registry) </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -164,7 +180,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringEP10Parameters">
-<span id="_CPPv3I0EN8godzilla7Factory6createERKNSt6stringERKNSt6stringEP10Parameters"></span><span id="_CPPv2I0EN8godzilla7Factory6createERKNSt6stringERKNSt6stringEP10Parameters"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_factory_1a86e5579174f1a8115ccf464a1d182412"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringEP10Parameters" title="godzilla::Factory::create::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringEP10Parameters" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3I0EN8godzilla7Factory6createERKNSt6stringERKNSt6stringEP10Parameters"></span><span id="_CPPv2I0EN8godzilla7Factory6createERKNSt6stringERKNSt6stringEP10Parameters"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_factory_1a86e5579174f1a8115ccf464a1d182412"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringEP10Parameters" title="godzilla::Factory::create::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span>, <a class="reference internal" href="parameters.html#_CPPv4N8godzilla10ParametersE" title="godzilla::Parameters"><span class="n"><span class="pre">Parameters</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">parameters</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN8godzilla7Factory6createEP1TRKNSt6stringERKNSt6stringEP10Parameters" title="Link to this definition"></a><br /></dt>
 <dd><p>Build an object (must be registered in Registry) </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -181,7 +197,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Factory13is_registeredERKNSt6stringE">
-<span id="_CPPv3NK8godzilla7Factory13is_registeredERKNSt6stringE"></span><span id="_CPPv2NK8godzilla7Factory13is_registeredERKNSt6stringE"></span><span id="godzilla::Factory::is_registered__ssCRC"></span><span class="target" id="classgodzilla_1_1_factory_1aec1aaaad60a69902c31e0bdaf176f0ce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_registered</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Factory13is_registeredERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla7Factory13is_registeredERKNSt6stringE"></span><span id="_CPPv2NK8godzilla7Factory13is_registeredERKNSt6stringE"></span><span id="godzilla::Factory::is_registered__ssCRC"></span><span class="target" id="classgodzilla_1_1_factory_1aec1aaaad60a69902c31e0bdaf176f0ce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_registered</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">class_name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Factory13is_registeredERKNSt6stringE" title="Link to this definition"></a><br /></dt>
 <dd><p>Check if class is registered. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -195,7 +211,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Factory7destroyEv">
-<span id="_CPPv3N8godzilla7Factory7destroyEv"></span><span id="_CPPv2N8godzilla7Factory7destroyEv"></span><span id="godzilla::Factory::destroy"></span><span class="target" id="classgodzilla_1_1_factory_1a3a631b0808cab2fcb81b1956f996d3e8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">destroy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Factory7destroyEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla7Factory7destroyEv"></span><span id="_CPPv2N8godzilla7Factory7destroyEv"></span><span id="godzilla::Factory::destroy"></span><span class="target" id="classgodzilla_1_1_factory_1a3a631b0808cab2fcb81b1956f996d3e8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">destroy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Factory7destroyEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Destroy all object build by this factory. </p>
 </dd></dl>
 

@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DirichletBC &mdash; godzilla  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -30,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -57,7 +63,17 @@
 <li class="toctree-l1"><a class="reference internal" href="box-mesh.html">BoxMesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="call-stack.html">CallStack</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constant-initial-condition.html">ConstantInitialCondition</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">DirichletBC</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">DirichletBC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBCE"><code class="docutils literal notranslate"><span class="pre">DirichletBC</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC6createEv"><code class="docutils literal notranslate"><span class="pre">DirichletBC::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11DirichletBC14get_componentsEv"><code class="docutils literal notranslate"><span class="pre">DirichletBC::get_components()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC14get_function_tEv"><code class="docutils literal notranslate"><span class="pre">DirichletBC::get_function_t()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"><code class="docutils literal notranslate"><span class="pre">DirichletBC::evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"><code class="docutils literal notranslate"><span class="pre">DirichletBC::evaluate_t()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exodusii-mesh.html">ExodusIIMesh</a></li>
@@ -113,7 +129,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">DirichletBC</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -124,23 +140,23 @@
            <div itemprop="articleBody">
              
   <section id="dirichletbc">
-<h1>DirichletBC<a class="headerlink" href="#dirichletbc" title="Permalink to this heading"></a></h1>
+<h1>DirichletBC<a class="headerlink" href="#dirichletbc" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBCE">
-<span id="_CPPv3N8godzilla11DirichletBCE"></span><span id="_CPPv2N8godzilla11DirichletBCE"></span><span id="godzilla::DirichletBC"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DirichletBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="essential-bc.html#_CPPv4N8godzilla11EssentialBCE" title="godzilla::EssentialBC"><span class="n"><span class="pre">EssentialBC</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">protected</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="function-interface.html#_CPPv4N8godzilla17FunctionInterfaceE" title="godzilla::FunctionInterface"><span class="n"><span class="pre">FunctionInterface</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBCE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11DirichletBCE"></span><span id="_CPPv2N8godzilla11DirichletBCE"></span><span id="godzilla::DirichletBC"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DirichletBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="essential-bc.html#_CPPv4N8godzilla11EssentialBCE" title="godzilla::EssentialBC"><span class="n"><span class="pre">EssentialBC</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">protected</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="function-interface.html#_CPPv4N8godzilla17FunctionInterfaceE" title="godzilla::FunctionInterface"><span class="n"><span class="pre">FunctionInterface</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBCE" title="Link to this definition"></a><br /></dt>
 <dd><p>Dirichlet boundary condition. </p>
 <p>Can be used only on single-field problems </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC6createEv">
-<span id="_CPPv3N8godzilla11DirichletBC6createEv"></span><span id="_CPPv2N8godzilla11DirichletBC6createEv"></span><span id="godzilla::DirichletBC::create"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1abc6945bf5dda5ae4788ee6d8f8aa0c6e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC6createEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11DirichletBC6createEv"></span><span id="_CPPv2N8godzilla11DirichletBC6createEv"></span><span id="godzilla::DirichletBC::create"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1abc6945bf5dda5ae4788ee6d8f8aa0c6e"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC6createEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Called to construct the object. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11DirichletBC14get_componentsEv">
-<span id="_CPPv3NK8godzilla11DirichletBC14get_componentsEv"></span><span id="_CPPv2NK8godzilla11DirichletBC14get_componentsEv"></span><span id="godzilla::DirichletBC::get_componentsC"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1a424b2faf17008af02757f6192c3adcd7"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11DirichletBC14get_componentsEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla11DirichletBC14get_componentsEv"></span><span id="_CPPv2NK8godzilla11DirichletBC14get_componentsEv"></span><span id="godzilla::DirichletBC::get_componentsC"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1a424b2faf17008af02757f6192c3adcd7"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11DirichletBC14get_componentsEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the component numbers this boundary condition is constraining. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -151,13 +167,13 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC14get_function_tEv">
-<span id="_CPPv3N8godzilla11DirichletBC14get_function_tEv"></span><span id="_CPPv2N8godzilla11DirichletBC14get_function_tEv"></span><span id="godzilla::DirichletBC::get_function_t"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1a8b8f4f2896afa60cb391b55432473081"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscFunc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_function_t</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC14get_function_tEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11DirichletBC14get_function_tEv"></span><span id="_CPPv2N8godzilla11DirichletBC14get_function_tEv"></span><span id="godzilla::DirichletBC::get_function_t"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1a8b8f4f2896afa60cb391b55432473081"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscFunc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_function_t</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC14get_function_tEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get pointer to the C function that will be passed into PETSc API for time derivatives. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar">
-<span id="_CPPv3N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::DirichletBC::evaluate__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1ad2bb1fc85d94d0c597817648dc747d9a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::DirichletBC::evaluate__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1ad2bb1fc85d94d0c597817648dc747d9a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate the boundary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -174,7 +190,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar">
-<span id="_CPPv3N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::DirichletBC::evaluate_t__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1afcdf7b44a5f7509aa5e7e3c650964767"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::DirichletBC::evaluate_t__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1afcdf7b44a5f7509aa5e7e3c650964767"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate time derivative of the boundary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

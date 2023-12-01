@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EssentialBC &mdash; godzilla  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -30,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -59,7 +65,19 @@
 <li class="toctree-l1"><a class="reference internal" href="constant-initial-condition.html">ConstantInitialCondition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dirichlet-bc.html">DirichletBC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">EssentialBC</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">EssentialBC</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla11EssentialBCE"><code class="docutils literal notranslate"><span class="pre">EssentialBC</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11EssentialBC6createEv"><code class="docutils literal notranslate"><span class="pre">EssentialBC::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"><code class="docutils literal notranslate"><span class="pre">EssentialBC::evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"><code class="docutils literal notranslate"><span class="pre">EssentialBC::evaluate_t()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11EssentialBC12get_functionEv"><code class="docutils literal notranslate"><span class="pre">EssentialBC::get_function()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11EssentialBC14get_function_tEv"><code class="docutils literal notranslate"><span class="pre">EssentialBC::get_function_t()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11EssentialBC11get_contextEv"><code class="docutils literal notranslate"><span class="pre">EssentialBC::get_context()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11EssentialBC6set_upEv"><code class="docutils literal notranslate"><span class="pre">EssentialBC::set_up()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="exodusii-mesh.html">ExodusIIMesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
@@ -113,7 +131,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">EssentialBC</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -124,17 +142,17 @@
            <div itemprop="articleBody">
              
   <section id="essentialbc">
-<h1>EssentialBC<a class="headerlink" href="#essentialbc" title="Permalink to this heading"></a></h1>
+<h1>EssentialBC<a class="headerlink" href="#essentialbc" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBCE">
-<span id="_CPPv3N8godzilla11EssentialBCE"></span><span id="_CPPv2N8godzilla11EssentialBCE"></span><span id="godzilla::EssentialBC"></span><span class="target" id="classgodzilla_1_1_essential_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EssentialBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="boundary-condition.html#_CPPv4N8godzilla17BoundaryConditionE" title="godzilla::BoundaryCondition"><span class="n"><span class="pre">BoundaryCondition</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBCE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBCE"></span><span id="_CPPv2N8godzilla11EssentialBCE"></span><span id="godzilla::EssentialBC"></span><span class="target" id="classgodzilla_1_1_essential_b_c"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EssentialBC</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="boundary-condition.html#_CPPv4N8godzilla17BoundaryConditionE" title="godzilla::BoundaryCondition"><span class="n"><span class="pre">BoundaryCondition</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBCE" title="Link to this definition"></a><br /></dt>
 <dd><p>Essential boundary condition. </p>
 <p>Subclassed by <a class="reference internal" href="dirichlet-bc.html#classgodzilla_1_1_dirichlet_b_c"><span class="std std-ref">godzilla::DirichletBC</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC6createEv">
-<span id="_CPPv3N8godzilla11EssentialBC6createEv"></span><span id="_CPPv2N8godzilla11EssentialBC6createEv"></span><span id="godzilla::EssentialBC::create"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a0b928b43883a092d2e16243a64090c57"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC6createEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBC6createEv"></span><span id="_CPPv2N8godzilla11EssentialBC6createEv"></span><span id="godzilla::EssentialBC::create"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a0b928b43883a092d2e16243a64090c57"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC6createEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Called to construct the object. </p>
 </dd></dl>
 
@@ -162,7 +180,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar">
-<span id="_CPPv3N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1abdea4ab52460f90374cb788bee2587d5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1abdea4ab52460f90374cb788bee2587d5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate the boundary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -179,7 +197,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar">
-<span id="_CPPv3N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate_t__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1ac262d3fa48d58dd59ed971ec7cf31ad1"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::EssentialBC::evaluate_t__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1ac262d3fa48d58dd59ed971ec7cf31ad1"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate time derivative of the boundary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -196,25 +214,25 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC12get_functionEv">
-<span id="_CPPv3N8godzilla11EssentialBC12get_functionEv"></span><span id="_CPPv2N8godzilla11EssentialBC12get_functionEv"></span><span id="godzilla::EssentialBC::get_function"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1ad52201b39e89cf91f5eba3524667c680"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscFunc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_function</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC12get_functionEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBC12get_functionEv"></span><span id="_CPPv2N8godzilla11EssentialBC12get_functionEv"></span><span id="godzilla::EssentialBC::get_function"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1ad52201b39e89cf91f5eba3524667c680"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscFunc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_function</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC12get_functionEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get pointer to the C function that will be passed into PETSc API. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC14get_function_tEv">
-<span id="_CPPv3N8godzilla11EssentialBC14get_function_tEv"></span><span id="_CPPv2N8godzilla11EssentialBC14get_function_tEv"></span><span id="godzilla::EssentialBC::get_function_t"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a8ebf2f598f2c876c0b5e95d92a96c8a9"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscFunc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_function_t</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC14get_function_tEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBC14get_function_tEv"></span><span id="_CPPv2N8godzilla11EssentialBC14get_function_tEv"></span><span id="godzilla::EssentialBC::get_function_t"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a8ebf2f598f2c876c0b5e95d92a96c8a9"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscFunc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_function_t</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC14get_function_tEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get pointer to the C function that will be passed into PETSc API for time derivatives. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC11get_contextEv">
-<span id="_CPPv3N8godzilla11EssentialBC11get_contextEv"></span><span id="_CPPv2N8godzilla11EssentialBC11get_contextEv"></span><span id="godzilla::EssentialBC::get_context"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a9b97da14fb74dee27eb4153ad6792a9b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_context</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC11get_contextEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBC11get_contextEv"></span><span id="_CPPv2N8godzilla11EssentialBC11get_contextEv"></span><span id="godzilla::EssentialBC::get_context"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1a9b97da14fb74dee27eb4153ad6792a9b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_context</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC11get_contextEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the pointer to the context that will be passed into PETSc API. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla11EssentialBC6set_upEv">
-<span id="_CPPv3N8godzilla11EssentialBC6set_upEv"></span><span id="_CPPv2N8godzilla11EssentialBC6set_upEv"></span><span id="godzilla::EssentialBC::set_up"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1af89f60cdf148002308b3426f8a59befa"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_up</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC6set_upEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla11EssentialBC6set_upEv"></span><span id="_CPPv2N8godzilla11EssentialBC6set_upEv"></span><span id="godzilla::EssentialBC::set_up"></span><span class="target" id="classgodzilla_1_1_essential_b_c_1af89f60cdf148002308b3426f8a59befa"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_up</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11EssentialBC6set_upEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Set up this boundary condition. </p>
 </dd></dl>
 

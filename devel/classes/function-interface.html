@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FunctionInterface &mdash; godzilla  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -30,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -72,7 +78,17 @@
 <li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionIC</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FunctionInterface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FunctionInterface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla17FunctionInterfaceE"><code class="docutils literal notranslate"><span class="pre">FunctionInterface</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla17FunctionInterface6createEv"><code class="docutils literal notranslate"><span class="pre">FunctionInterface::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla17FunctionInterface18get_num_componentsEv"><code class="docutils literal notranslate"><span class="pre">FunctionInterface::get_num_components()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla17FunctionInterface19has_time_expressionEv"><code class="docutils literal notranslate"><span class="pre">FunctionInterface::has_time_expression()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla17FunctionInterface13evaluate_funcE3Int4RealA_K4Real3IntA_4Real"><code class="docutils literal notranslate"><span class="pre">FunctionInterface::evaluate_func()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla17FunctionInterface15evaluate_func_tE3Int4RealA_K4Real3IntA_4Real"><code class="docutils literal notranslate"><span class="pre">FunctionInterface::evaluate_func_t()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gyml-file.html">GYMLFile</a></li>
 <li class="toctree-l1"><a class="reference internal" href="implicit-fe-nonlinear-problem.html">ImplicitFENonlinearProblem</a></li>
@@ -113,7 +129,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">FunctionInterface</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -124,23 +140,23 @@
            <div itemprop="articleBody">
              
   <section id="functioninterface">
-<h1>FunctionInterface<a class="headerlink" href="#functioninterface" title="Permalink to this heading"></a></h1>
+<h1>FunctionInterface<a class="headerlink" href="#functioninterface" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla17FunctionInterfaceE">
-<span id="_CPPv3N8godzilla17FunctionInterfaceE"></span><span id="_CPPv2N8godzilla17FunctionInterfaceE"></span><span id="godzilla::FunctionInterface"></span><span class="target" id="classgodzilla_1_1_function_interface"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FunctionInterface</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionInterfaceE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla17FunctionInterfaceE"></span><span id="_CPPv2N8godzilla17FunctionInterfaceE"></span><span id="godzilla::FunctionInterface"></span><span class="target" id="classgodzilla_1_1_function_interface"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FunctionInterface</span></span></span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionInterfaceE" title="Link to this definition"></a><br /></dt>
 <dd><p>Interface for parsed function. </p>
 <p>Subclassed by <a class="reference internal" href="dirichlet-bc.html#classgodzilla_1_1_dirichlet_b_c"><span class="std std-ref">godzilla::DirichletBC</span></a>, <a class="reference internal" href="function-auxiliary-field.html#classgodzilla_1_1_function_auxiliary_field"><span class="std std-ref">godzilla::FunctionAuxiliaryField</span></a>, godzilla::FunctionInitialCondition, godzilla::L2Diff</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla17FunctionInterface6createEv">
-<span id="_CPPv3N8godzilla17FunctionInterface6createEv"></span><span id="_CPPv2N8godzilla17FunctionInterface6createEv"></span><span id="godzilla::FunctionInterface::create"></span><span class="target" id="classgodzilla_1_1_function_interface_1a98f3710f1f0fd1b6cca0d4ca3d766691"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionInterface6createEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla17FunctionInterface6createEv"></span><span id="_CPPv2N8godzilla17FunctionInterface6createEv"></span><span id="godzilla::FunctionInterface::create"></span><span class="target" id="classgodzilla_1_1_function_interface_1a98f3710f1f0fd1b6cca0d4ca3d766691"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionInterface6createEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Build the evaluator. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla17FunctionInterface18get_num_componentsEv">
-<span id="_CPPv3NK8godzilla17FunctionInterface18get_num_componentsEv"></span><span id="_CPPv2NK8godzilla17FunctionInterface18get_num_componentsEv"></span><span id="godzilla::FunctionInterface::get_num_componentsC"></span><span class="target" id="classgodzilla_1_1_function_interface_1a44e21a8aaa413fabd60a3d5990a48974"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla17FunctionInterface18get_num_componentsEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla17FunctionInterface18get_num_componentsEv"></span><span id="_CPPv2NK8godzilla17FunctionInterface18get_num_componentsEv"></span><span id="godzilla::FunctionInterface::get_num_componentsC"></span><span class="target" id="classgodzilla_1_1_function_interface_1a44e21a8aaa413fabd60a3d5990a48974"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla17FunctionInterface18get_num_componentsEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get number of components. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -151,7 +167,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla17FunctionInterface19has_time_expressionEv">
-<span id="_CPPv3NK8godzilla17FunctionInterface19has_time_expressionEv"></span><span id="_CPPv2NK8godzilla17FunctionInterface19has_time_expressionEv"></span><span id="godzilla::FunctionInterface::has_time_expressionC"></span><span class="target" id="classgodzilla_1_1_function_interface_1ab1b31a9319123015dd37241d3f0ba52a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_time_expression</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla17FunctionInterface19has_time_expressionEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla17FunctionInterface19has_time_expressionEv"></span><span id="_CPPv2NK8godzilla17FunctionInterface19has_time_expressionEv"></span><span id="godzilla::FunctionInterface::has_time_expressionC"></span><span class="target" id="classgodzilla_1_1_function_interface_1ab1b31a9319123015dd37241d3f0ba52a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_time_expression</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla17FunctionInterface19has_time_expressionEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Check if time dependent expression was specified. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -162,7 +178,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla17FunctionInterface13evaluate_funcE3Int4RealA_K4Real3IntA_4Real">
-<span id="_CPPv3N8godzilla17FunctionInterface13evaluate_funcE3Int4RealA_K4Real3IntA_4Real"></span><span id="_CPPv2N8godzilla17FunctionInterface13evaluate_funcE3Int4RealA_K4Real3IntA_4Real"></span><span id="godzilla::FunctionInterface::evaluate_func__Int.Real.RealCA.Int.RealA"></span><span class="target" id="classgodzilla_1_1_function_interface_1a0be97880a80f20130543318f0b9060b5"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_func</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionInterface13evaluate_funcE3Int4RealA_K4Real3IntA_4Real" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla17FunctionInterface13evaluate_funcE3Int4RealA_K4Real3IntA_4Real"></span><span id="_CPPv2N8godzilla17FunctionInterface13evaluate_funcE3Int4RealA_K4Real3IntA_4Real"></span><span id="godzilla::FunctionInterface::evaluate_func__Int.Real.RealCA.Int.RealA"></span><span class="target" id="classgodzilla_1_1_function_interface_1a0be97880a80f20130543318f0b9060b5"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_func</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionInterface13evaluate_funcE3Int4RealA_K4Real3IntA_4Real" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate parsed function. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -182,7 +198,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla17FunctionInterface15evaluate_func_tE3Int4RealA_K4Real3IntA_4Real">
-<span id="_CPPv3N8godzilla17FunctionInterface15evaluate_func_tE3Int4RealA_K4Real3IntA_4Real"></span><span id="_CPPv2N8godzilla17FunctionInterface15evaluate_func_tE3Int4RealA_K4Real3IntA_4Real"></span><span id="godzilla::FunctionInterface::evaluate_func_t__Int.Real.RealCA.Int.RealA"></span><span class="target" id="classgodzilla_1_1_function_interface_1a182e19517c0c40009eb8b87afa7dd23d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_func_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionInterface15evaluate_func_tE3Int4RealA_K4Real3IntA_4Real" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla17FunctionInterface15evaluate_func_tE3Int4RealA_K4Real3IntA_4Real"></span><span id="_CPPv2N8godzilla17FunctionInterface15evaluate_func_tE3Int4RealA_K4Real3IntA_4Real"></span><span id="godzilla::FunctionInterface::evaluate_func_t__Int.Real.RealCA.Int.RealA"></span><span class="target" id="classgodzilla_1_1_function_interface_1a182e19517c0c40009eb8b87afa7dd23d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_func_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla17FunctionInterface15evaluate_func_tE3Int4RealA_K4Real3IntA_4Real" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate parsed time derivative function. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

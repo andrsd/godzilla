@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FileOutput &mdash; godzilla  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -30,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -67,7 +73,16 @@
 <li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FileOutput</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FileOutput</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla10FileOutputE"><code class="docutils literal notranslate"><span class="pre">FileOutput</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla10FileOutput6createEv"><code class="docutils literal notranslate"><span class="pre">FileOutput::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla10FileOutput13get_file_nameEv"><code class="docutils literal notranslate"><span class="pre">FileOutput::get_file_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla10FileOutput13set_file_baseERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">FileOutput::set_file_base()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla10FileOutput22set_sequence_file_baseEj"><code class="docutils literal notranslate"><span class="pre">FileOutput::set_sequence_file_base()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
@@ -113,7 +128,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">FileOutput</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -124,23 +139,23 @@
            <div itemprop="articleBody">
              
   <section id="fileoutput">
-<h1>FileOutput<a class="headerlink" href="#fileoutput" title="Permalink to this heading"></a></h1>
+<h1>FileOutput<a class="headerlink" href="#fileoutput" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla10FileOutputE">
-<span id="_CPPv3N8godzilla10FileOutputE"></span><span id="_CPPv2N8godzilla10FileOutputE"></span><span id="godzilla::FileOutput"></span><span class="target" id="classgodzilla_1_1_file_output"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FileOutput</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="output.html#_CPPv4N8godzilla6OutputE" title="godzilla::Output"><span class="n"><span class="pre">Output</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla10FileOutputE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla10FileOutputE"></span><span id="_CPPv2N8godzilla10FileOutputE"></span><span id="godzilla::FileOutput"></span><span class="target" id="classgodzilla_1_1_file_output"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FileOutput</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="output.html#_CPPv4N8godzilla6OutputE" title="godzilla::Output"><span class="n"><span class="pre">Output</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla10FileOutputE" title="Link to this definition"></a><br /></dt>
 <dd><p>Base class for file output. </p>
 <p>Subclassed by godzilla::CSVOutput, <a class="reference internal" href="exodusii-output.html#classgodzilla_1_1_exodus_i_i_output"><span class="std std-ref">godzilla::ExodusIIOutput</span></a>, godzilla::MeshPartitioningOutput, godzilla::TecplotOutput, <a class="reference internal" href="vtk-output.html#classgodzilla_1_1_v_t_k_output"><span class="std std-ref">godzilla::VTKOutput</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla10FileOutput6createEv">
-<span id="_CPPv3N8godzilla10FileOutput6createEv"></span><span id="_CPPv2N8godzilla10FileOutput6createEv"></span><span id="godzilla::FileOutput::create"></span><span class="target" id="classgodzilla_1_1_file_output_1a87326ec81887871d55305cf18d8b7485"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla10FileOutput6createEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla10FileOutput6createEv"></span><span id="_CPPv2N8godzilla10FileOutput6createEv"></span><span id="godzilla::FileOutput::create"></span><span class="target" id="classgodzilla_1_1_file_output_1a87326ec81887871d55305cf18d8b7485"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla10FileOutput6createEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Called to construct the object. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla10FileOutput13get_file_nameEv">
-<span id="_CPPv3NK8godzilla10FileOutput13get_file_nameEv"></span><span id="_CPPv2NK8godzilla10FileOutput13get_file_nameEv"></span><span id="godzilla::FileOutput::get_file_nameC"></span><span class="target" id="classgodzilla_1_1_file_output_1a90a78e296c2c79f536e5403cb042524b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_file_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla10FileOutput13get_file_nameEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla10FileOutput13get_file_nameEv"></span><span id="_CPPv2NK8godzilla10FileOutput13get_file_nameEv"></span><span id="godzilla::FileOutput::get_file_nameC"></span><span class="target" id="classgodzilla_1_1_file_output_1a90a78e296c2c79f536e5403cb042524b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_file_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla10FileOutput13get_file_nameEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the file name with the output file produced by this outputter. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -151,7 +166,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla10FileOutput13set_file_baseERKNSt6stringE">
-<span id="_CPPv3N8godzilla10FileOutput13set_file_baseERKNSt6stringE"></span><span id="_CPPv2N8godzilla10FileOutput13set_file_baseERKNSt6stringE"></span><span id="godzilla::FileOutput::set_file_base__ssCR"></span><span class="target" id="classgodzilla_1_1_file_output_1ac21a06c7b97a988dfbab5a35446a0d92"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_file_base</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file_base</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla10FileOutput13set_file_baseERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla10FileOutput13set_file_baseERKNSt6stringE"></span><span id="_CPPv2N8godzilla10FileOutput13set_file_baseERKNSt6stringE"></span><span id="godzilla::FileOutput::set_file_base__ssCR"></span><span class="target" id="classgodzilla_1_1_file_output_1ac21a06c7b97a988dfbab5a35446a0d92"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_file_base</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file_base</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla10FileOutput13set_file_baseERKNSt6stringE" title="Link to this definition"></a><br /></dt>
 <dd><p>Set file base. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -162,7 +177,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla10FileOutput22set_sequence_file_baseEj">
-<span id="_CPPv3N8godzilla10FileOutput22set_sequence_file_baseEj"></span><span id="_CPPv2N8godzilla10FileOutput22set_sequence_file_baseEj"></span><span id="godzilla::FileOutput::set_sequence_file_base__unsigned-i"></span><span class="target" id="classgodzilla_1_1_file_output_1aa471f486179e6a8af3da62a0f2cc1159"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_sequence_file_base</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stepi</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla10FileOutput22set_sequence_file_baseEj" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla10FileOutput22set_sequence_file_baseEj"></span><span id="_CPPv2N8godzilla10FileOutput22set_sequence_file_baseEj"></span><span id="godzilla::FileOutput::set_sequence_file_base__unsigned-i"></span><span class="target" id="classgodzilla_1_1_file_output_1aa471f486179e6a8af3da62a0f2cc1159"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_sequence_file_base</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stepi</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla10FileOutput22set_sequence_file_baseEj" title="Link to this definition"></a><br /></dt>
 <dd><p>Set the file base for a sequence of outputs. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

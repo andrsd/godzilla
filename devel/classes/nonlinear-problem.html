@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NonlinearProblem &mdash; godzilla  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -30,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -86,7 +92,22 @@
 <li class="toctree-l1"><a class="reference internal" href="mesh.html">Mesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="natural-bc.html">NaturalBC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="natural-riemann-bc.html">NaturalRiemannBC</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">NonlinearProblem</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NonlinearProblem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblemE"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem6createEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem5checkEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::check()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem3runEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem7get_kspEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::get_ksp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::set_ksp_operators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem12get_jacobianEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::get_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem9convergedEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::converged()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem16compute_residualERK6VectorR6Vector"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::compute_residual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem19set_use_matrix_freeEbb"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::set_use_matrix_free()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="object.html">Object</a></li>
 <li class="toctree-l1"><a class="reference internal" href="output.html">Output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html">Parameters</a></li>
@@ -113,7 +134,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">NonlinearProblem</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -124,71 +145,71 @@
            <div itemprop="articleBody">
              
   <section id="nonlinearproblem">
-<h1>NonlinearProblem<a class="headerlink" href="#nonlinearproblem" title="Permalink to this heading"></a></h1>
+<h1>NonlinearProblem<a class="headerlink" href="#nonlinearproblem" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblemE">
-<span id="_CPPv3N8godzilla16NonlinearProblemE"></span><span id="_CPPv2N8godzilla16NonlinearProblemE"></span><span id="godzilla::NonlinearProblem"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NonlinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="problem.html#_CPPv4N8godzilla7ProblemE" title="godzilla::Problem"><span class="n"><span class="pre">Problem</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblemE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblemE"></span><span id="_CPPv2N8godzilla16NonlinearProblemE"></span><span id="godzilla::NonlinearProblem"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NonlinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="problem.html#_CPPv4N8godzilla7ProblemE" title="godzilla::Problem"><span class="n"><span class="pre">Problem</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblemE" title="Link to this definition"></a><br /></dt>
 <dd><p>PETSc non-linear problem. </p>
 <p>Subclassed by <a class="reference internal" href="explicit-fv-linear-problem.html#classgodzilla_1_1_explicit_f_v_linear_problem"><span class="std std-ref">godzilla::ExplicitFVLinearProblem</span></a>, <a class="reference internal" href="fe-nonlinear-problem.html#classgodzilla_1_1_f_e_nonlinear_problem"><span class="std std-ref">godzilla::FENonlinearProblem</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem6createEv">
-<span id="_CPPv3N8godzilla16NonlinearProblem6createEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem6createEv"></span><span id="godzilla::NonlinearProblem::create"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a69fbbad9068e4b4615f887f6ffcac60b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem6createEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblem6createEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem6createEv"></span><span id="godzilla::NonlinearProblem::create"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a69fbbad9068e4b4615f887f6ffcac60b"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem6createEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Called to construct the object. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem5checkEv">
-<span id="_CPPv3N8godzilla16NonlinearProblem5checkEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem5checkEv"></span><span id="godzilla::NonlinearProblem::check"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a3a50ee20d7d7398bc2b95f3579f5d991"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem5checkEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblem5checkEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem5checkEv"></span><span id="godzilla::NonlinearProblem::check"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a3a50ee20d7d7398bc2b95f3579f5d991"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem5checkEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Called to check object’s integrity. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem3runEv">
-<span id="_CPPv3N8godzilla16NonlinearProblem3runEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem3runEv"></span><span id="godzilla::NonlinearProblem::run"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1aaba3f486ea63dbd7087aa6e72c05f2e0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem3runEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblem3runEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem3runEv"></span><span id="godzilla::NonlinearProblem::run"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1aaba3f486ea63dbd7087aa6e72c05f2e0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem3runEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Run the problem. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16NonlinearProblem7get_kspEv">
-<span id="_CPPv3NK8godzilla16NonlinearProblem7get_kspEv"></span><span id="_CPPv2NK8godzilla16NonlinearProblem7get_kspEv"></span><span id="godzilla::NonlinearProblem::get_kspC"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a2571d62b3880fbbb975b06a6fe37dbaa"></span><span class="n"><span class="pre">KSP</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ksp</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16NonlinearProblem7get_kspEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla16NonlinearProblem7get_kspEv"></span><span id="_CPPv2NK8godzilla16NonlinearProblem7get_kspEv"></span><span id="godzilla::NonlinearProblem::get_kspC"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a2571d62b3880fbbb975b06a6fe37dbaa"></span><span class="n"><span class="pre">KSP</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ksp</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16NonlinearProblem7get_kspEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get underlying KSP. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix">
-<span id="_CPPv3N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix"></span><span id="_CPPv2N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix"></span><span id="godzilla::NonlinearProblem::set_ksp_operators__MatrixCR.MatrixCR"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1af8fac636c194975930fc40a1fb7505e4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_ksp_operators</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">A</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">B</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix"></span><span id="_CPPv2N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix"></span><span id="godzilla::NonlinearProblem::set_ksp_operators__MatrixCR.MatrixCR"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1af8fac636c194975930fc40a1fb7505e4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_ksp_operators</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">A</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">B</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix" title="Link to this definition"></a><br /></dt>
 <dd><p>Set KSP operators. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16NonlinearProblem12get_jacobianEv">
-<span id="_CPPv3NK8godzilla16NonlinearProblem12get_jacobianEv"></span><span id="_CPPv2NK8godzilla16NonlinearProblem12get_jacobianEv"></span><span id="godzilla::NonlinearProblem::get_jacobianC"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a58f0524f33fb21c6f68de924d287567b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_jacobian</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16NonlinearProblem12get_jacobianEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla16NonlinearProblem12get_jacobianEv"></span><span id="_CPPv2NK8godzilla16NonlinearProblem12get_jacobianEv"></span><span id="godzilla::NonlinearProblem::get_jacobianC"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a58f0524f33fb21c6f68de924d287567b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_jacobian</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16NonlinearProblem12get_jacobianEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get Jacobian matrix. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem9convergedEv">
-<span id="_CPPv3N8godzilla16NonlinearProblem9convergedEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem9convergedEv"></span><span id="godzilla::NonlinearProblem::converged"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1af88759a2ab0ab9b8a27ce3a6fc954e76"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">converged</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem9convergedEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblem9convergedEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem9convergedEv"></span><span id="godzilla::NonlinearProblem::converged"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1af88759a2ab0ab9b8a27ce3a6fc954e76"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">converged</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem9convergedEv" title="Link to this definition"></a><br /></dt>
 <dd><p>true if solve converged, otherwise false </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem16compute_residualERK6VectorR6Vector">
-<span id="_CPPv3N8godzilla16NonlinearProblem16compute_residualERK6VectorR6Vector"></span><span id="_CPPv2N8godzilla16NonlinearProblem16compute_residualERK6VectorR6Vector"></span><span id="godzilla::NonlinearProblem::compute_residual__VectorCR.VectorR"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a4eaae55aeef33932d4df3fa929b06812"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_residual</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem16compute_residualERK6VectorR6Vector" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblem16compute_residualERK6VectorR6Vector"></span><span id="_CPPv2N8godzilla16NonlinearProblem16compute_residualERK6VectorR6Vector"></span><span id="godzilla::NonlinearProblem::compute_residual__VectorCR.VectorR"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a4eaae55aeef33932d4df3fa929b06812"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_residual</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem16compute_residualERK6VectorR6Vector" title="Link to this definition"></a><br /></dt>
 <dd><p>Method to compute residual. Called from the PETsc callback. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix">
-<span id="_CPPv3N8godzilla16NonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"></span><span id="_CPPv2N8godzilla16NonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"></span><span id="godzilla::NonlinearProblem::compute_jacobian__VectorCR.MatrixR.MatrixR"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1aac7c2c95bae8c9019f1c9c9f82d3f80c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_jacobian</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">J</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Jp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"></span><span id="_CPPv2N8godzilla16NonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"></span><span id="godzilla::NonlinearProblem::compute_jacobian__VectorCR.MatrixR.MatrixR"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1aac7c2c95bae8c9019f1c9c9f82d3f80c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_jacobian</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">J</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Jp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix" title="Link to this definition"></a><br /></dt>
 <dd><p>Method to compute Jacobian. Called from the PETsc callback. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem19set_use_matrix_freeEbb">
-<span id="_CPPv3N8godzilla16NonlinearProblem19set_use_matrix_freeEbb"></span><span id="_CPPv2N8godzilla16NonlinearProblem19set_use_matrix_freeEbb"></span><span id="godzilla::NonlinearProblem::set_use_matrix_free__b.b"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a9a42826a4cc54f50fcac142cc2bdc8bb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_use_matrix_free</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mf_operator</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem19set_use_matrix_freeEbb" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblem19set_use_matrix_freeEbb"></span><span id="_CPPv2N8godzilla16NonlinearProblem19set_use_matrix_freeEbb"></span><span id="godzilla::NonlinearProblem::set_use_matrix_free__b.b"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a9a42826a4cc54f50fcac142cc2bdc8bb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_use_matrix_free</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mf_operator</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mf</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem19set_use_matrix_freeEbb" title="Link to this definition"></a><br /></dt>
 <dd><p>Use matrix free finite difference matrix vector products to apply the Jacobian. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

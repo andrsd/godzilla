@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FENonlinearProblem &mdash; godzilla  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/design-tabs.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -30,11 +32,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> godzilla
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            godzilla
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -65,7 +71,16 @@
 <li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FENonlinearProblem</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FENonlinearProblem</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblemE"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblem6createEv"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem::compute_residual()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem::compute_jacobian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_boundaryER6Vector"><code class="docutils literal notranslate"><span class="pre">FENonlinearProblem::compute_boundary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
@@ -113,7 +128,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">FENonlinearProblem</li>
       <li class="wy-breadcrumbs-aside">
       </li>
@@ -124,35 +139,35 @@
            <div itemprop="articleBody">
              
   <section id="fenonlinearproblem">
-<h1>FENonlinearProblem<a class="headerlink" href="#fenonlinearproblem" title="Permalink to this heading"></a></h1>
+<h1>FENonlinearProblem<a class="headerlink" href="#fenonlinearproblem" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FENonlinearProblemE">
-<span id="_CPPv3N8godzilla18FENonlinearProblemE"></span><span id="_CPPv2N8godzilla18FENonlinearProblemE"></span><span id="godzilla::FENonlinearProblem"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FENonlinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="nonlinear-problem.html#_CPPv4N8godzilla16NonlinearProblemE" title="godzilla::NonlinearProblem"><span class="n"><span class="pre">NonlinearProblem</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterfaceE" title="godzilla::FEProblemInterface"><span class="n"><span class="pre">FEProblemInterface</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblemE" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla18FENonlinearProblemE"></span><span id="_CPPv2N8godzilla18FENonlinearProblemE"></span><span id="godzilla::FENonlinearProblem"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FENonlinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="nonlinear-problem.html#_CPPv4N8godzilla16NonlinearProblemE" title="godzilla::NonlinearProblem"><span class="n"><span class="pre">NonlinearProblem</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="fe-problem-interface.html#_CPPv4N8godzilla18FEProblemInterfaceE" title="godzilla::FEProblemInterface"><span class="n"><span class="pre">FEProblemInterface</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblemE" title="Link to this definition"></a><br /></dt>
 <dd><p>PETSc non-linear problem that arises from a finite element discretization using the PetscFE system. </p>
 <p>Subclassed by <a class="reference internal" href="explicit-fe-linear-problem.html#classgodzilla_1_1_explicit_f_e_linear_problem"><span class="std std-ref">godzilla::ExplicitFELinearProblem</span></a>, <a class="reference internal" href="implicit-fe-nonlinear-problem.html#classgodzilla_1_1_implicit_f_e_nonlinear_problem"><span class="std std-ref">godzilla::ImplicitFENonlinearProblem</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FENonlinearProblem6createEv">
-<span id="_CPPv3N8godzilla18FENonlinearProblem6createEv"></span><span id="_CPPv2N8godzilla18FENonlinearProblem6createEv"></span><span id="godzilla::FENonlinearProblem::create"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a770bf35404edb8350e0a793f0ebe21e3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem6createEv" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla18FENonlinearProblem6createEv"></span><span id="_CPPv2N8godzilla18FENonlinearProblem6createEv"></span><span id="godzilla::FENonlinearProblem::create"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a770bf35404edb8350e0a793f0ebe21e3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem6createEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Called to construct the object. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector">
-<span id="_CPPv3N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector"></span><span id="_CPPv2N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector"></span><span id="godzilla::FENonlinearProblem::compute_residual__VectorCR.VectorR"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a91d66d562b92548aa512849c91fde810"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_residual</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector"></span><span id="_CPPv2N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector"></span><span id="godzilla::FENonlinearProblem::compute_residual__VectorCR.VectorR"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a91d66d562b92548aa512849c91fde810"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_residual</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">f</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_residualERK6VectorR6Vector" title="Link to this definition"></a><br /></dt>
 <dd><p>Method to compute residual. Called from the PETsc callback. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix">
-<span id="_CPPv3N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"></span><span id="_CPPv2N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"></span><span id="godzilla::FENonlinearProblem::compute_jacobian__VectorCR.MatrixR.MatrixR"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a2702e91341316615189402d33923d789"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_jacobian</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">J</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Jp</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"></span><span id="_CPPv2N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix"></span><span id="godzilla::FENonlinearProblem::compute_jacobian__VectorCR.MatrixR.MatrixR"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a2702e91341316615189402d33923d789"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_jacobian</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">J</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Jp</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_jacobianERK6VectorR6MatrixR6Matrix" title="Link to this definition"></a><br /></dt>
 <dd><p>Method to compute Jacobian. Called from the PETsc callback. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla18FENonlinearProblem16compute_boundaryER6Vector">
-<span id="_CPPv3N8godzilla18FENonlinearProblem16compute_boundaryER6Vector"></span><span id="_CPPv2N8godzilla18FENonlinearProblem16compute_boundaryER6Vector"></span><span id="godzilla::FENonlinearProblem::compute_boundary__VectorR"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a7207287c086cb7f9d582ce4844a840cd"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_boundary</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_boundaryER6Vector" title="Permalink to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla18FENonlinearProblem16compute_boundaryER6Vector"></span><span id="_CPPv2N8godzilla18FENonlinearProblem16compute_boundaryER6Vector"></span><span id="godzilla::FENonlinearProblem::compute_boundary__VectorR"></span><span class="target" id="classgodzilla_1_1_f_e_nonlinear_problem_1a7207287c086cb7f9d582ce4844a840cd"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_boundary</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla18FENonlinearProblem16compute_boundaryER6Vector" title="Link to this definition"></a><br /></dt>
 <dd><p>Method for computing boundary values. </p>
 </dd></dl>
 
