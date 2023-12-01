@@ -107,8 +107,8 @@ if(GODZILLA_CODE_COVERAGE)
         )
 
         function(target_code_coverage TARGET_NAME)
-            target_compile_options(${TARGET_NAME} PUBLIC -fprofile-instr-generate -fcoverage-mapping)
-            target_link_options(${TARGET_NAME} PUBLIC -fprofile-instr-generate -fcoverage-mapping)
+            target_compile_options(${TARGET_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
+            target_link_options(${TARGET_NAME} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
         endfunction()
 
         function(add_test_with_coverage)
@@ -175,8 +175,8 @@ if(GODZILLA_CODE_COVERAGE)
         )
 
         function(target_code_coverage TARGET_NAME)
-            target_compile_options(${TARGET_NAME} PUBLIC -fprofile-arcs -ftest-coverage)
-            target_link_options(${TARGET_NAME} PUBLIC -fprofile-arcs -ftest-coverage)
+            target_compile_options(${TARGET_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
+            target_link_options(${TARGET_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
         endfunction()
 
         function(add_test_with_coverage)
