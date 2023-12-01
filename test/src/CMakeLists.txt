@@ -93,6 +93,11 @@ add_executable(${PROJECT_NAME}
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
 
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+        -DGODZILLA_UNIT_TESTS_ROOT="${GODZILLA_UNIT_TESTS_ROOT}"
+)
+
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC

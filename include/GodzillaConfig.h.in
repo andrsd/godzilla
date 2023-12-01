@@ -6,8 +6,6 @@
 
 #cmakedefine GODZILLA_WITH_PERF_LOG
 
-#define GODZILLA_UNIT_TESTS_ROOT "@GODZILLA_UNIT_TESTS_ROOT@"
-
 #define GODZILLA_UNUSED_STRINGIFY(param_string_literal) #param_string_literal
 #define GODZILLA_UNUSED_VAR(param) _Pragma(GODZILLA_UNUSED_STRINGIFY(unused(#param)))
 #define GODZILLA_UNUSED(x) (void)(x)
