@@ -351,6 +351,8 @@ protected:
     /// Update auxiliary vector
     virtual void update_aux_vector();
 
+    Int get_next_id(const std::vector<Int> & ids) const;
+
 private:
     /// Problem this interface is part of
     Problem * problem;
