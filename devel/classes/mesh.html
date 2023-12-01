@@ -92,7 +92,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Mesh</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla4MeshE"><code class="docutils literal notranslate"><span class="pre">Mesh</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh6get_dmEv"><code class="docutils literal notranslate"><span class="pre">Mesh::get_dm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh13get_dimensionEv"><code class="docutils literal notranslate"><span class="pre">Mesh::get_dimension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh10distributeEv"><code class="docutils literal notranslate"><span class="pre">Mesh::distribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh9has_labelERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Mesh::has_label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh9get_labelERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Mesh::get_label()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh12create_labelERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Mesh::create_label()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh12remove_labelERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Mesh::remove_label()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh17get_coordinate_dmEv"><code class="docutils literal notranslate"><span class="pre">Mesh::get_coordinate_dm()</span></code></a></li>
@@ -164,8 +167,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_mesh_1afc7fbbfd06b820fcf3c0ed90fe42d130"></span><span class="sig-name descname"><span class="pre">NO_DISCARD</span> <span class="pre">Int</span> <span class="pre">get_dimension</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla4Mesh13get_dimensionEv">
+<span id="_CPPv3NK8godzilla4Mesh13get_dimensionEv"></span><span id="_CPPv2NK8godzilla4Mesh13get_dimensionEv"></span><span id="godzilla::Mesh::get_dimensionC"></span><span class="target" id="classgodzilla_1_1_mesh_1afc7fbbfd06b820fcf3c0ed90fe42d130"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_dimension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla4Mesh13get_dimensionEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the mesh spatial dimension. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -181,8 +184,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_mesh_1ad48ffe743e62b4602f60e9ccc267f0a3"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">bool</span> <span class="pre">has_label</span> <span class="pre">(const</span> <span class="pre">std::string</span> <span class="pre">&amp;name)</span> <span class="pre">const</span></span></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla4Mesh9has_labelERKNSt6stringE">
+<span id="_CPPv3NK8godzilla4Mesh9has_labelERKNSt6stringE"></span><span id="_CPPv2NK8godzilla4Mesh9has_labelERKNSt6stringE"></span><span id="godzilla::Mesh::has_label__ssCRC"></span><span class="target" id="classgodzilla_1_1_mesh_1ad48ffe743e62b4602f60e9ccc267f0a3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_label</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla4Mesh9has_labelERKNSt6stringE" title="Link to this definition"></a><br /></dt>
 <dd><p>Check if mesh has label with a name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -195,8 +198,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_mesh_1a9d0d7601d460bc0cc6ed6fc53d7e3a35"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Label</span> <span class="pre">get_label</span> <span class="pre">(const</span> <span class="pre">std::string</span> <span class="pre">&amp;name)</span> <span class="pre">const</span></span></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla4Mesh9get_labelERKNSt6stringE">
+<span id="_CPPv3NK8godzilla4Mesh9get_labelERKNSt6stringE"></span><span id="_CPPv2NK8godzilla4Mesh9get_labelERKNSt6stringE"></span><span id="godzilla::Mesh::get_label__ssCRC"></span><span class="target" id="classgodzilla_1_1_mesh_1a9d0d7601d460bc0cc6ed6fc53d7e3a35"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Label</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_label</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla4Mesh9get_labelERKNSt6stringE" title="Link to this definition"></a><br /></dt>
 <dd><p>Get label associated with a name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

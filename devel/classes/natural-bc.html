@@ -94,6 +94,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla9NaturalBCE"><code class="docutils literal notranslate"><span class="pre">NaturalBC</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla9NaturalBC6createEv"><code class="docutils literal notranslate"><span class="pre">NaturalBC::create()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla9NaturalBC6set_upEv"><code class="docutils literal notranslate"><span class="pre">NaturalBC::set_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla9NaturalBC12get_field_idEv"><code class="docutils literal notranslate"><span class="pre">NaturalBC::get_field_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla9NaturalBC14get_componentsEv"><code class="docutils literal notranslate"><span class="pre">NaturalBC::get_components()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla9NaturalBC16set_up_weak_formEv"><code class="docutils literal notranslate"><span class="pre">NaturalBC::set_up_weak_form()</span></code></a></li>
 </ul>
 </li>
@@ -158,8 +160,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_natural_b_c_1aa28f8c015ee51bc3301c47cffdd4b264"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">Int</span> <span class="pre">get_field_id</span> <span class="pre">()</span> <span class="pre">const</span></span></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla9NaturalBC12get_field_idEv">
+<span id="_CPPv3NK8godzilla9NaturalBC12get_field_idEv"></span><span id="_CPPv2NK8godzilla9NaturalBC12get_field_idEv"></span><span id="godzilla::NaturalBC::get_field_idC"></span><span class="target" id="classgodzilla_1_1_natural_b_c_1aa28f8c015ee51bc3301c47cffdd4b264"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla9NaturalBC12get_field_idEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the ID of the field this boundary condition operates on. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -169,8 +171,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp">
-<span class="target" id="classgodzilla_1_1_natural_b_c_1a4752e9ca7e778aea5ece7387d12159e4"></span><span class="sig-name descname"><span class="pre">virtual</span> <span class="pre">NO_DISCARD</span> <span class="pre">const</span> <span class="pre">std::vector&lt;</span> <span class="pre">Int</span> <span class="pre">&gt;</span> <span class="pre">&amp;</span> <span class="pre">get_components</span> <span class="pre">()</span> <span class="pre">const</span> <span class="pre">=0</span></span></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla9NaturalBC14get_componentsEv">
+<span id="_CPPv3NK8godzilla9NaturalBC14get_componentsEv"></span><span id="_CPPv2NK8godzilla9NaturalBC14get_componentsEv"></span><span id="godzilla::NaturalBC::get_componentsC"></span><span class="target" id="classgodzilla_1_1_natural_b_c_1ace68ea43c48cfd22ba6445baf93050d4"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8godzilla9NaturalBC14get_componentsEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the component numbers this boundary condition is constraining. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
