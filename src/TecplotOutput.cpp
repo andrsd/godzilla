@@ -440,6 +440,7 @@ void
 TecplotOutput::write_nodal_field_variable_values_ascii()
 {
     _F_;
+    this->dpi->compute_solution_vector_local();
     auto sln = this->dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
     for (auto fid : this->nodal_var_fids) {

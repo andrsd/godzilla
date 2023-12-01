@@ -140,10 +140,9 @@ DiscreteProblemInterface::get_unstr_mesh() const
 }
 
 const Vector &
-DiscreteProblemInterface::get_solution_vector_local()
+DiscreteProblemInterface::get_solution_vector_local() const
 {
     _F_;
-    build_local_solution_vector(this->sln);
     return this->sln;
 }
 
@@ -509,7 +508,7 @@ DiscreteProblemInterface::get_aux_field_dof(Int point, Int fid) const
 }
 
 const Vector &
-DiscreteProblemInterface::get_aux_solution_vector_local()
+DiscreteProblemInterface::get_aux_solution_vector_local() const
 {
     _F_;
     return this->a;

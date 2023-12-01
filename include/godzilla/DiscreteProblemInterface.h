@@ -219,12 +219,12 @@ public:
     /// Get local solution vector
     ///
     /// @return Local solution vector
-    const Vector & get_solution_vector_local();
+    const Vector & get_solution_vector_local() const;
 
     /// Get local auxiliary solution vector
     ///
     /// @return Local auxiliary solution vector
-    const Vector & get_aux_solution_vector_local();
+    const Vector & get_aux_solution_vector_local() const;
 
     void add_boundary(DMBoundaryConditionType type,
                       const std::string & name,
@@ -290,11 +290,12 @@ public:
     template <typename T>
     T get_point_local_field_ref(Int point, Int field, Scalar * array) const;
 
+    /// Build local solution vector for this problem
+    virtual void compute_solution_vector_local() = 0;
+
 protected:
     /// Get unstructured mesh associated with this problem
     UnstructuredMesh * get_unstr_mesh() const;
-    /// Build local solution vector for this problem
-    virtual void build_local_solution_vector(Vector & sln) = 0;
     /// Get list of all boundary conditions
     const std::vector<BoundaryCondition *> & get_boundary_conditions() const;
     /// Get list of all natural boundary conditions

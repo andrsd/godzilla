@@ -531,7 +531,7 @@ void
 ExodusIIOutput::write_nodal_variables()
 {
     _F_;
-
+    this->dpi->compute_solution_vector_local();
     auto sln = this->dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
 
@@ -606,6 +606,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
         n_elems_in_block = elem_range.size();
     }
 
+    this->dpi->compute_solution_vector_local();
     auto sln = this->dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
 

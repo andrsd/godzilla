@@ -18,6 +18,7 @@ public:
     void check() override;
     bool converged() override;
     void solve() override;
+    void compute_solution_vector_local() override;
 
 protected:
     void init() override;
@@ -28,7 +29,6 @@ protected:
                             ResidualFunc * f0,
                             ResidualFunc * f1,
                             const std::string & region = "") override;
-    void build_local_solution_vector(Vector & loc_sln) override;
     PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) override;
     void post_step() override;
 

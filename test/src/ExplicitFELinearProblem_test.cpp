@@ -224,6 +224,7 @@ TEST(ExplicitFELinearProblemTest, solve)
     EXPECT_NEAR(x[1], 0.0098, 1e-15);
     sln.restore_array_read(x);
 
+    prob.compute_solution_vector_local();
     auto loc_sln = prob.get_solution_vector_local();
     auto lx = loc_sln.get_array_read();
     EXPECT_NEAR(lx[0], 1., 1e-15);
@@ -284,6 +285,7 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
     EXPECT_NEAR(x[1], 0.0085, 1e-15);
     sln.restore_array_read(x);
 
+    prob.compute_solution_vector_local();
     auto loc_sln = prob.get_solution_vector_local();
     auto lx = loc_sln.get_array_read();
     EXPECT_NEAR(lx[0], 1., 1e-15);
