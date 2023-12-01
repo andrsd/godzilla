@@ -23,13 +23,14 @@ public:
     /// Method for computing boundary values
     virtual PetscErrorCode compute_boundary(Vector & x);
 
+    void compute_solution_vector_local() override;
+
 protected:
     void init() override;
     void set_up_callbacks() override;
     void set_up_initial_guess() override;
     void allocate_objects() override;
     void on_initial() override;
-    void build_local_solution_vector(Vector & loc_sln) override;
 
     virtual PetscErrorCode compute_residual_internal(DM dm,
                                                      PetscFormKey key,
