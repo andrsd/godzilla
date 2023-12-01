@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/Output.h"
 
@@ -32,7 +31,7 @@ public:
     /// Get file extension
     ///
     /// @return File extension
-    NO_DISCARD virtual std::string get_file_ext() const = 0;
+    [[nodiscard]] virtual std::string get_file_ext() const = 0;
 
 private:
     /// The file base of the output file

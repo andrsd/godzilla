@@ -1,4 +1,3 @@
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Init.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/PerfLog.h"

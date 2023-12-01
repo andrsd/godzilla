@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/DiscreteProblemInterface.h"
 
 namespace godzilla {
@@ -15,13 +14,13 @@ public:
     FVProblemInterface(Problem * problem, const Parameters & params);
     ~FVProblemInterface() override;
 
-    NO_DISCARD Int get_num_fields() const override;
-    NO_DISCARD std::vector<std::string> get_field_names() const override;
+    [[nodiscard]] Int get_num_fields() const override;
+    [[nodiscard]] std::vector<std::string> get_field_names() const override;
     const std::string & get_field_name(Int fid) const override;
     Int get_field_num_components(Int fid) const override;
-    NO_DISCARD Int get_field_id(const std::string & name) const override;
-    NO_DISCARD bool has_field_by_id(Int fid) const override;
-    NO_DISCARD bool has_field_by_name(const std::string & name) const override;
+    [[nodiscard]] Int get_field_id(const std::string & name) const override;
+    [[nodiscard]] bool has_field_by_id(Int fid) const override;
+    [[nodiscard]] bool has_field_by_name(const std::string & name) const override;
     Int get_field_order(Int fid) const override;
     std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;

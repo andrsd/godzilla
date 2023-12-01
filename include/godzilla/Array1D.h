@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
 #include <cassert>
@@ -175,9 +174,6 @@ public:
     void
     axpy(Real alpha, const Array1D<T> & x) const
     {
-        GODZILLA_UNUSED(alpha);
-        GODZILLA_UNUSED(x);
-
         error("AXPY not implemented");
     }
 
@@ -188,8 +184,6 @@ public:
     T
     dot(const Array1D<T> & a) const
     {
-        GODZILLA_UNUSED(a);
-
         error("Dot product not implemented");
     }
 

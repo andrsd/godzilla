@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "godzilla/GodzillaConfig.h"
 #include "GodzillaApp_test.h"
 #include "godzilla/ExodusIIMesh.h"
 #include "godzilla/Parameters.h"

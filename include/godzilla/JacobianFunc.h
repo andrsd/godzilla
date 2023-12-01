@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Functional.h"
 #include "godzilla/FieldValue.h"
 #include <string>
@@ -23,7 +22,7 @@ protected:
     /// Get the multiplier a for dF/dU_t
     ///
     /// @return The multiplier a for dF/dU_t
-    NO_DISCARD const Real & get_time_shift() const;
+    [[nodiscard]] const Real & get_time_shift() const;
 };
 
 } // namespace godzilla

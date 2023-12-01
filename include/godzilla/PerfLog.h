@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "petsclog.h"
 #include <map>
 
@@ -81,7 +80,7 @@ public:
         /// Get ID of this stage
         ///
         /// @return ID of this stage
-        NO_DISCARD PetscLogStage get_id() const;
+        [[nodiscard]] PetscLogStage get_id() const;
 
     private:
         /// Event ID
@@ -95,17 +94,17 @@ public:
         /// Get the number of FLOPS
         ///
         /// @return Number of FLOPS
-        NO_DISCARD PetscLogDouble get_flops() const;
+        [[nodiscard]] PetscLogDouble get_flops() const;
 
         /// Get total time spent on this event
         ///
         /// @return The total time spent on this event
-        NO_DISCARD PetscLogDouble get_time() const;
+        [[nodiscard]] PetscLogDouble get_time() const;
 
         /// Get number of times this event was called
         ///
         /// @return Number of times this event was called
-        NO_DISCARD int get_num_calls() const;
+        [[nodiscard]] int get_num_calls() const;
 
     private:
         /// Event information collected by PETSc
@@ -151,7 +150,7 @@ public:
         /// Get ID of this event
         ///
         /// @return ID of this event
-        NO_DISCARD PetscLogEvent get_id() const;
+        [[nodiscard]] PetscLogEvent get_id() const;
 
         /// Log number of FLOPS
         void log_flops(PetscLogDouble n);

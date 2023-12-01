@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
 #include "godzilla/DenseVector.h"
@@ -79,9 +78,6 @@ template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrixSymm<Real, N_ELEM_NODES>
 mass_rz(Real rad_e, const DenseVector<Real, N_ELEM_NODES> & rad_n)
 {
-    GODZILLA_UNUSED(rad_e);
-    GODZILLA_UNUSED(rad_n);
-
     error("Mass matrix (RZ) in not implemented for {}.", get_element_type_str(ETYPE));
 }
 
@@ -166,8 +162,6 @@ template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrixSymm<Real, N_ELEM_NODES>
 mass_lumped_rz(const DenseVector<Real, N_ELEM_NODES> & rad_n)
 {
-    GODZILLA_UNUSED(rad_n);
-
     error("Mass matrix (RZ) in not implemented for {}.", get_element_type_str(ETYPE));
 }
 
@@ -289,8 +283,6 @@ template <ElementType ELEM_TYPE, Int N_BND_NODES>
 inline DenseMatrixSymm<Real, N_BND_NODES>
 mass_surface_rz(const DenseVector<Real, N_BND_NODES> & radius)
 {
-    GODZILLA_UNUSED(radius);
-
     error("Not implemented.");
 }
 
@@ -298,8 +290,6 @@ template <>
 inline DenseMatrixSymm<Real, 1>
 mass_surface_rz<EDGE2, 1>(const DenseVector<Real, 1> & radius)
 {
-    GODZILLA_UNUSED(radius);
-
     DenseMatrixSymm<Real, 1> m;
     m(0, 0) = 1.;
     return m;

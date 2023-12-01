@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "petsc.h"
 #include <vector>
@@ -66,9 +65,9 @@ public:
     /// @param points The indices for the entire range, from `get_point_range`
     void get_point_subrange(Int start, Int end, const Int * points) const;
 
-    NO_DISCARD Int get_size() const;
-    NO_DISCARD Int get_local_size() const;
-    NO_DISCARD const Int * data() const;
+    [[nodiscard]] Int get_size() const;
+    [[nodiscard]] Int get_local_size() const;
+    [[nodiscard]] const Int * data() const;
     Int operator[](Int i) const;
     Int operator()(Int i) const;
 

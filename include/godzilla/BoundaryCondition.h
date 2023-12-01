@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
@@ -21,12 +20,12 @@ public:
     /// Get the boundary name this BC is active on
     ///
     /// @return The boundary name
-    NO_DISCARD virtual const std::vector<std::string> & get_boundary() const;
+    [[nodiscard]] virtual const std::vector<std::string> & get_boundary() const;
 
     /// Get DiscreteProblemInterface
     ///
     /// @return Discrete problem this BC is part of
-    NO_DISCARD virtual DiscreteProblemInterface * get_discrete_problem_interface() const;
+    [[nodiscard]] virtual DiscreteProblemInterface * get_discrete_problem_interface() const;
 
     /// Set up this boundary condition
     virtual void set_up() = 0;

@@ -1,7 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "yaml-cpp/yaml.h"
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/PiecewiseLinear.h"
 #include "godzilla/Postprocessor.h"

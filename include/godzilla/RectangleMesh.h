@@ -12,15 +12,15 @@ public:
 
     void create() override;
     ///
-    NO_DISCARD Real get_x_min() const;
-    NO_DISCARD Real get_x_max() const;
+    [[nodiscard]] Real get_x_min() const;
+    [[nodiscard]] Real get_x_max() const;
     /// Get the number of mesh points in x direction
-    NO_DISCARD Int get_nx() const;
+    [[nodiscard]] Int get_nx() const;
     ///
-    NO_DISCARD Real get_y_min() const;
-    NO_DISCARD Real get_y_max() const;
+    [[nodiscard]] Real get_y_min() const;
+    [[nodiscard]] Real get_y_max() const;
     /// Get the number of mesh points in y direction
-    NO_DISCARD Int get_ny() const;
+    [[nodiscard]] Int get_ny() const;
 
 protected:
     DM create_dm() override;

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/Functional.h"
 #include "godzilla/FEProblemInterface.h"

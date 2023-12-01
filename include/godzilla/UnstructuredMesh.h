@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Vector.h"
@@ -168,7 +167,7 @@ public:
     Label get_depth_label() const;
 
     /// Return the number of mesh vertices
-    NO_DISCARD virtual Int get_num_vertices() const;
+    [[nodiscard]] virtual Int get_num_vertices() const;
 
     /// Get range of vertex indices
     ///
@@ -176,7 +175,7 @@ public:
     Range get_vertex_range() const;
 
     /// Return the number of mesh faces
-    NO_DISCARD virtual Int get_num_faces() const;
+    [[nodiscard]] virtual Int get_num_faces() const;
 
     /// Get range of face indices
     ///
@@ -186,12 +185,12 @@ public:
     /// Return the number of mesh cells (interior)
     ///
     /// @return Number of mesh cells (interior)
-    NO_DISCARD virtual Int get_num_cells() const;
+    [[nodiscard]] virtual Int get_num_cells() const;
 
     /// Return the number of all mesh cells (interior + ghosted)
     ///
     /// @return Number of all mesh cells (interior + ghosted)
-    NO_DISCARD virtual Int get_num_all_cells() const;
+    [[nodiscard]] virtual Int get_num_all_cells() const;
 
     /// Get range of cell indices (interior only)
     ///
@@ -223,7 +222,7 @@ public:
     ///
     /// @param cell Cell index
     /// @return Cell type
-    NO_DISCARD virtual DMPolytopeType get_cell_type(Int cell) const;
+    [[nodiscard]] virtual DMPolytopeType get_cell_type(Int cell) const;
 
     /// Get connectivity
     ///
@@ -268,7 +267,7 @@ public:
     /// Is the first cell in the mesh a simplex?
     ///
     /// @return true if cell is a simplex, otherwise false
-    NO_DISCARD virtual bool is_simplex() const;
+    [[nodiscard]] virtual bool is_simplex() const;
 
     /// Get cell set name
     ///
@@ -285,7 +284,7 @@ public:
     /// Get number of cell sets
     ///
     /// @return Number of cell sets
-    NO_DISCARD Int get_num_cell_sets() const;
+    [[nodiscard]] Int get_num_cell_sets() const;
 
     /// Get cell sets
     ///
@@ -301,7 +300,7 @@ public:
     /// Get number of face sets
     ///
     /// @return Number of face sets
-    NO_DISCARD Int get_num_face_sets() const;
+    [[nodiscard]] Int get_num_face_sets() const;
 
     /// Set face set name
     ///
@@ -313,18 +312,18 @@ public:
     ///
     /// @param name The name of the face set
     /// @return true if label exists, false otherwise
-    NO_DISCARD bool has_face_set(const std::string & name) const;
+    [[nodiscard]] bool has_face_set(const std::string & name) const;
 
     /// Get label corresponding to a face set name
     ///
     /// @param name The name of the face set
     /// @return Label associated with face set name
-    NO_DISCARD Label get_face_set_label(const std::string & name) const;
+    [[nodiscard]] Label get_face_set_label(const std::string & name) const;
 
     /// Get number of vertex sets
     ///
     /// @return Number of vertex sets
-    NO_DISCARD Int get_num_vertex_sets() const;
+    [[nodiscard]] Int get_num_vertex_sets() const;
 
     void distribute() override;
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "godzilla/GodzillaConfig.h"
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
@@ -26,7 +25,7 @@ public:
     /// Get the mesh spatial dimension
     ///
     /// @return Mesh spatial dimension
-    NO_DISCARD Int get_dimension() const;
+    [[nodiscard]] Int get_dimension() const;
 
     /// Distribute mesh over processes
     virtual void distribute() = 0;
@@ -35,13 +34,13 @@ public:
     ///
     /// @param name The name of the label
     /// @return true if label exists, otherwise false
-    NO_DISCARD virtual bool has_label(const std::string & name) const;
+    [[nodiscard]] virtual bool has_label(const std::string & name) const;
 
     /// Get label associated with a name
     ///
     /// @param name Label name
     /// @return Label associated with the `name`
-    NO_DISCARD virtual Label get_label(const std::string & name) const;
+    [[nodiscard]] virtual Label get_label(const std::string & name) const;
 
     /// Create label
     ///

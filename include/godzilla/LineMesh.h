@@ -15,17 +15,17 @@ public:
     /// Get the lower bound in x-direction
     ///
     /// @return Lower bound in x-direction
-    NO_DISCARD Real get_x_min() const;
+    [[nodiscard]] Real get_x_min() const;
 
     /// Get the upper bound in x-direction
     ///
     /// @return Upper bound in x-direction
-    NO_DISCARD Real get_x_max() const;
+    [[nodiscard]] Real get_x_max() const;
 
     /// Get the number of divisions in the x-direction
     ///
     /// @return Number of divisions in the x-direction
-    NO_DISCARD Int get_nx() const;
+    [[nodiscard]] Int get_nx() const;
 
 protected:
     DM create_dm() override;

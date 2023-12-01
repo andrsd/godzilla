@@ -23,9 +23,6 @@ template <ElementType ELEM_TYPE, int DIM, Int N_ELEM_NODES = get_num_element_nod
 inline DenseMatrix<Real, N_ELEM_NODES, DIM>
 grad_shape(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords, Real volume)
 {
-    GODZILLA_UNUSED(coords);
-    GODZILLA_UNUSED(volume);
-
     error("Calculation of shape function gradients is not implemented for element '{}' yet.",
           get_element_type_str(ELEM_TYPE));
 }
@@ -35,8 +32,6 @@ template <>
 inline DenseMatrix<Real, 2, 1>
 grad_shape<EDGE2, 1>(const DenseVector<DenseVector<Real, 1>, 2> & coords, Real volume)
 {
-    GODZILLA_UNUSED(coords);
-
     _F_;
     Real c = 1 / volume;
     DenseMatrix<Real, 2, 1> grads;
