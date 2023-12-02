@@ -66,8 +66,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App11get_problemEv"><code class="docutils literal notranslate"><span class="pre">App::get_problem()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App18parse_command_lineEv"><code class="docutils literal notranslate"><span class="pre">App::parse_command_line()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App20process_command_lineERKN7cxxopts11ParseResultE"><code class="docutils literal notranslate"><span class="pre">App::process_command_line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App15check_integrityEv"><code class="docutils literal notranslate"><span class="pre">App::check_integrity()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App3runEv"><code class="docutils literal notranslate"><span class="pre">App::run()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App19get_verbosity_levelEv"><code class="docutils literal notranslate"><span class="pre">App::get_verbosity_level()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App19set_verbosity_levelEj"><code class="docutils literal notranslate"><span class="pre">App::set_verbosity_level()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App19get_input_file_nameEv"><code class="docutils literal notranslate"><span class="pre">App::get_input_file_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App8get_commEv"><code class="docutils literal notranslate"><span class="pre">App::get_comm()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App14get_parametersERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::get_parameters()</span></code></a></li>
@@ -237,6 +239,17 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App15check_integrityEv">
+<span id="_CPPv3N8godzilla3App15check_integrityEv"></span><span id="_CPPv2N8godzilla3App15check_integrityEv"></span><span id="godzilla::App::check_integrity"></span><span class="target" id="classgodzilla_1_1_app_1a9e132cec3754ad3ea07332470d8cb2f3"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">check_integrity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App15check_integrityEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Check integrity of the application. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the check passed, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3runEv">
 <span id="_CPPv3N8godzilla3App3runEv"></span><span id="_CPPv2N8godzilla3App3runEv"></span><span id="godzilla::App::run"></span><span class="target" id="classgodzilla_1_1_app_1aacc34ed845993b9488c7c4cd52ee24ec"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3runEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Run the application. </p>
@@ -244,7 +257,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App19get_verbosity_levelEv">
-<span id="_CPPv3NK8godzilla3App19get_verbosity_levelEv"></span><span id="_CPPv2NK8godzilla3App19get_verbosity_levelEv"></span><span id="godzilla::App::get_verbosity_levelC"></span><span class="target" id="classgodzilla_1_1_app_1a0d8090f2cec437cba78a78e2ed5cd16f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity_level</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App19get_verbosity_levelEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla3App19get_verbosity_levelEv"></span><span id="_CPPv2NK8godzilla3App19get_verbosity_levelEv"></span><span id="godzilla::App::get_verbosity_levelC"></span><span class="target" id="classgodzilla_1_1_app_1a0d8090f2cec437cba78a78e2ed5cd16f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_verbosity_level</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App19get_verbosity_levelEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get level of verbosity. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -254,8 +267,19 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App19set_verbosity_levelEj">
+<span id="_CPPv3N8godzilla3App19set_verbosity_levelEj"></span><span id="_CPPv2N8godzilla3App19set_verbosity_levelEj"></span><span id="godzilla::App::set_verbosity_level__unsigned-i"></span><span class="target" id="classgodzilla_1_1_app_1abe37d58edd0b5f772427995395f74245"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_verbosity_level</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">level</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App19set_verbosity_levelEj" title="Link to this definition"></a><br /></dt>
+<dd><p>Set verbosity level. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> – Verbosity level </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App19get_input_file_nameEv">
-<span id="_CPPv3NK8godzilla3App19get_input_file_nameEv"></span><span id="_CPPv2NK8godzilla3App19get_input_file_nameEv"></span><span id="godzilla::App::get_input_file_nameC"></span><span class="target" id="classgodzilla_1_1_app_1a0ac261a285606c2861384df205527d4f"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_input_file_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App19get_input_file_nameEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla3App19get_input_file_nameEv"></span><span id="_CPPv2NK8godzilla3App19get_input_file_nameEv"></span><span id="godzilla::App::get_input_file_nameC"></span><span class="target" id="classgodzilla_1_1_app_1a0ac261a285606c2861384df205527d4f"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_input_file_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App19get_input_file_nameEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the input file name. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -266,7 +290,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App8get_commEv">
-<span id="_CPPv3NK8godzilla3App8get_commEv"></span><span id="_CPPv2NK8godzilla3App8get_commEv"></span><span id="godzilla::App::get_commC"></span><span class="target" id="classgodzilla_1_1_app_1aaa5cc4c414e7b660d3915f5ff8754af5"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App8get_commEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla3App8get_commEv"></span><span id="_CPPv2NK8godzilla3App8get_commEv"></span><span id="godzilla::App::get_commC"></span><span class="target" id="classgodzilla_1_1_app_1aaa5cc4c414e7b660d3915f5ff8754af5"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_comm</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App8get_commEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get MPI communicator. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
