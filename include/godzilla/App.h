@@ -70,6 +70,11 @@ public:
     /// @return The verbosity level
     const unsigned int & get_verbosity_level() const;
 
+    /// Set verbosity level
+    ///
+    /// @param level Verbosity level
+    void set_verbosity_level(unsigned int level);
+
     /// Get the input file name
     ///
     /// @return The input file name

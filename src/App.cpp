@@ -118,6 +118,13 @@ App::get_verbosity_level() const
     return this->verbosity_level;
 }
 
+void
+App::set_verbosity_level(unsigned int level)
+{
+    _F_;
+    this->verbosity_level = level;
+}
+
 const std::string &
 App::get_input_file_name() const
 {
@@ -166,7 +173,7 @@ App::process_command_line(const cxxopts::ParseResult & result)
             Terminal::num_colors = 1;
 
         if (result.count("verbose"))
-            this->verbosity_level = result["verbose"].as<unsigned int>();
+            set_verbosity_level(result["verbose"].as<unsigned int>());
 
         if (result.count("input-file")) {
             auto input_file_name = result["input-file"].as<std::string>();
