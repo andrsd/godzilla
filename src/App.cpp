@@ -129,8 +129,11 @@ const std::string &
 App::get_input_file_name() const
 {
     _F_;
-    assert(this->yml != nullptr);
-    return this->yml->get_file_name();
+    static std::string empty_file_name;
+    if (this->yml != nullptr)
+        return this->yml->get_file_name();
+    else
+        return empty_file_name;
 }
 
 const mpi::Communicator &

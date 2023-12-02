@@ -78,7 +78,7 @@ public:
     /// Get the input file name
     ///
     /// @return The input file name
-    virtual const std::string & get_input_file_name() const;
+    const std::string & get_input_file_name() const;
 
     /// Get MPI communicator
     ///
