@@ -21,8 +21,11 @@ FileMesh::FileMesh(const Parameters & parameters) : UnstructuredMesh(parameters)
 {
     _F_;
 
-    this->file_name =
-        fs::path(get_app()->get_input_file_name()).parent_path() / get_param<std::string>("file");
+    std::filesystem::path file(get_param<std::string>("file"));
+    if (file.is_absolute())
+        this->file_name = file;
+    else
+        this->file_name = fs::path(get_app()->get_input_file_name()).parent_path() / file;
 
     if (!utils::path_exists(this->file_name))
         log_error(

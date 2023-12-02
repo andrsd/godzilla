@@ -62,23 +62,33 @@ public:
     /// @param result Result from calling `parse_command_line` or `cxxopt::parse`
     virtual void process_command_line(const cxxopts::ParseResult & result);
 
+    /// Check integrity of the application
+    ///
+    /// @return `true` if the check passed, `false` otherwise
+    bool check_integrity();
+
     /// Run the application
     virtual void run();
 
     /// Get level of verbosity
     ///
     /// @return The verbosity level
-    virtual const unsigned int & get_verbosity_level() const;
+    const unsigned int & get_verbosity_level() const;
+
+    /// Set verbosity level
+    ///
+    /// @param level Verbosity level
+    void set_verbosity_level(unsigned int level);
 
     /// Get the input file name
     ///
     /// @return The input file name
-    virtual const std::string & get_input_file_name() const;
+    const std::string & get_input_file_name() const;
 
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    virtual const mpi::Communicator & get_comm() const;
+    const mpi::Communicator & get_comm() const;
 
     /// Get parameters for a class
     ///
@@ -127,9 +137,6 @@ protected:
     ///
     /// @param file_name The input file name
     void build_from_yml(const std::string & file_name);
-
-    /// Check integrity of the application
-    void check_integrity();
 
     /// Run the input file
     ///

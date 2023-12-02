@@ -118,12 +118,22 @@ App::get_verbosity_level() const
     return this->verbosity_level;
 }
 
+void
+App::set_verbosity_level(unsigned int level)
+{
+    _F_;
+    this->verbosity_level = level;
+}
+
 const std::string &
 App::get_input_file_name() const
 {
     _F_;
-    assert(this->yml != nullptr);
-    return this->yml->get_file_name();
+    static std::string empty_file_name;
+    if (this->yml != nullptr)
+        return this->yml->get_file_name();
+    else
+        return empty_file_name;
 }
 
 const mpi::Communicator &
@@ -166,7 +176,7 @@ App::process_command_line(const cxxopts::ParseResult & result)
             Terminal::num_colors = 1;
 
         if (result.count("verbose"))
-            this->verbosity_level = result["verbose"].as<unsigned int>();
+            set_verbosity_level(result["verbose"].as<unsigned int>());
 
         if (result.count("input-file")) {
             auto input_file_name = result["input-file"].as<std::string>();
@@ -201,8 +211,10 @@ App::run_input_file(const std::string & input_file_name)
         build_from_yml(input_file_name);
         if (this->logger->get_num_errors() == 0)
             this->yml->create_objects();
-        check_integrity();
-        run_problem();
+        if (check_integrity())
+            run_problem();
+        else
+            godzilla::internal::terminate();
     }
     else
         error("Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
@@ -219,16 +231,19 @@ App::build_from_yml(const std::string & file_name)
     }
 }
 
-void
+bool
 App::check_integrity()
 {
     _F_;
     lprint(9, "Checking integrity");
-    this->yml->check();
+    if (this->yml)
+        this->yml->check();
     if (this->logger->get_num_entries() > 0) {
         this->logger->print();
-        godzilla::internal::terminate();
+        return false;
     }
+    else
+        return true;
 }
 
 void

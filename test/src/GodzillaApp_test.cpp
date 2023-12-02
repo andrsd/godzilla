@@ -80,20 +80,15 @@ TEST_F(GodzillaAppTest, verbose)
 
 TEST_F(GodzillaAppTest, check_integrity)
 {
-    class TestApp : public App {
-    public:
-        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
+    testing::internal::CaptureStderr();
+    TestApp app;
+    app.get_logger()->error("error1");
 
-        void
-        run()
-        {
-            set_input_file(new GYMLFile(this));
-            get_logger()->error("error1");
-            check_integrity();
-        }
-    } app;
+    EXPECT_FALSE(app.check_integrity());
 
-    EXPECT_DEATH(app.run(), "error1");
+    auto out = testing::internal::GetCapturedStderr();
+    EXPECT_THAT(out, testing::HasSubstr("[ERROR] error1"));
+    EXPECT_THAT(out, testing::HasSubstr("1 error(s) found"));
 }
 
 TEST_F(GodzillaAppTest, command_line_opt)

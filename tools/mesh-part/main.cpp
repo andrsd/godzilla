@@ -17,25 +17,14 @@ public:
 
 protected:
     void create_command_line_options() override;
-    const std::string & get_input_file_name() const override;
     UnstructuredMesh * load_mesh(const std::string & file_name);
     void partition_mesh_file(const std::string & mesh_file_name);
     void save_partition(UnstructuredMesh * mesh, const std::string & file_name);
-
-private:
-    std::string input_file_name;
 };
 
 MeshPartApp::MeshPartApp(int argc, const char * const * argv) :
-    App(mpi::Communicator(PETSC_COMM_WORLD), "mesh-part", argc, argv),
-    input_file_name(".")
+    App(mpi::Communicator(PETSC_COMM_WORLD), "mesh-part", argc, argv)
 {
-}
-
-const std::string &
-MeshPartApp::get_input_file_name() const
-{
-    return this->input_file_name;
 }
 
 void
