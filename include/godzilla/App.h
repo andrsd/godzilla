@@ -68,7 +68,7 @@ public:
     /// Get level of verbosity
     ///
     /// @return The verbosity level
-    virtual const unsigned int & get_verbosity_level() const;
+    const unsigned int & get_verbosity_level() const;
 
     /// Get the input file name
     ///
