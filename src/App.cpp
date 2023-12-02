@@ -211,8 +211,10 @@ App::run_input_file(const std::string & input_file_name)
         build_from_yml(input_file_name);
         if (this->logger->get_num_errors() == 0)
             this->yml->create_objects();
-        check_integrity();
-        run_problem();
+        if (check_integrity())
+            run_problem();
+        else
+            godzilla::internal::terminate();
     }
     else
         error("Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
@@ -229,16 +231,19 @@ App::build_from_yml(const std::string & file_name)
     }
 }
 
-void
+bool
 App::check_integrity()
 {
     _F_;
     lprint(9, "Checking integrity");
-    this->yml->check();
+    if (this->yml)
+        this->yml->check();
     if (this->logger->get_num_entries() > 0) {
         this->logger->print();
-        godzilla::internal::terminate();
+        return false;
     }
+    else
+        return true;
 }
 
 void

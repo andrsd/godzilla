@@ -62,6 +62,11 @@ public:
     /// @param result Result from calling `parse_command_line` or `cxxopt::parse`
     virtual void process_command_line(const cxxopts::ParseResult & result);
 
+    /// Check integrity of the application
+    ///
+    /// @return `true` if the check passed, `false` otherwise
+    bool check_integrity();
+
     /// Run the application
     virtual void run();
 
@@ -132,9 +137,6 @@ protected:
     ///
     /// @param file_name The input file name
     void build_from_yml(const std::string & file_name);
-
-    /// Check integrity of the application
-    void check_integrity();
 
     /// Run the input file
     ///

@@ -274,13 +274,6 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     class TestApp : public App {
     public:
         TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
-
-        void
-        check_integrity()
-        {
-            if (get_logger()->get_num_entries() > 0)
-                get_logger()->print();
-        }
     } app;
 
     Mesh * mesh;
@@ -330,13 +323,6 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
     class TestApp : public App {
     public:
         TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
-
-        void
-        check_integrity()
-        {
-            if (get_logger()->get_num_entries() > 0)
-                get_logger()->print();
-        }
     } app;
 
     UnstructuredMesh * mesh;
