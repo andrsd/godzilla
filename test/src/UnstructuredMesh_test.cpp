@@ -20,8 +20,8 @@ class TestUnstructuredMesh : public UnstructuredMesh {
 public:
     explicit TestUnstructuredMesh(const Parameters & params) : UnstructuredMesh(params) {}
 
-    DM
-    create_dm() override
+    void
+    create() override
     {
         Real lower[1] = { -1 };
         Real upper[1] = { 1 };
@@ -38,7 +38,8 @@ public:
                                         periodicity,
                                         PETSC_TRUE,
                                         &dm));
-        return dm;
+        set_dm(dm);
+        set_up();
     }
 };
 
@@ -52,8 +53,8 @@ public:
     {
     }
 
-    DM
-    create_dm() override
+    void
+    create() override
     {
         Real lower[3] = { 0, 0, 0 };
         Real upper[3] = { 1, 1, 1 };
@@ -72,13 +73,8 @@ public:
                                         periodicity,
                                         PETSC_TRUE,
                                         &dm));
-        return dm;
-    }
+        set_dm(dm);
 
-    void
-    create() override
-    {
-        UnstructuredMesh::create();
         // create "side sets"
         std::map<Int, std::string> face_set_names;
         face_set_names[1] = "back";
@@ -90,6 +86,8 @@ public:
         create_face_set_labels(face_set_names);
         for (auto it : face_set_names)
             set_face_set_name(it.first, it.second);
+
+        set_up();
     }
 
     const Int & nx;
@@ -474,13 +472,13 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
         {
         }
 
-    protected:
-        DM
-        create_dm() override
+        void
+        create() override
         {
             std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
             std::vector<Real> vertices = { 0, 0, 1, 0, 0, 1, 1, 1 };
-            return build_from_cell_list(2, 3, cells, 2, vertices, true);
+            build_from_cell_list(2, 3, cells, 2, vertices, true);
+            set_up();
         }
     };
 

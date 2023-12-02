@@ -29,7 +29,12 @@ public:
     void
     create() override
     {
-        UnstructuredMesh::create();
+        const PetscInt DIM = 3;
+        const PetscInt N_ELEM_NODES = 4;
+        std::vector<Int> cells = { 0, 1, 2, 3 };
+        std::vector<Real> coords = { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 };
+        build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
+
         // create "side sets"
         auto face_sets = create_label("Face Sets");
 
@@ -46,16 +51,8 @@ public:
         create_face_set_labels(face_set_names);
         for (auto it : face_set_names)
             set_face_set_name(it.first, it.second);
-    }
 
-    DM
-    create_dm() override
-    {
-        const PetscInt DIM = 3;
-        const PetscInt N_ELEM_NODES = 4;
-        std::vector<Int> cells = { 0, 1, 2, 3 };
-        std::vector<Real> coords = { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 };
-        return build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
+        set_up();
     }
 
     void

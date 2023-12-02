@@ -43,9 +43,6 @@ public:
     /// Get the number of mesh points in z direction
     Int get_nz() const;
 
-protected:
-    DM create_dm() override;
-
 private:
     /// Minimum in the x direction
     const Real & xmin;

@@ -73,12 +73,12 @@ void
 UnstructuredMesh::create()
 {
     _F_;
-    DM dm = create_dm();
-    PETSC_CHECK(DMSetFromOptions(dm));
-    PETSC_CHECK(DMViewFromOptions(dm, nullptr, "-dm_view"));
-    set_dm(dm);
-    set_up();
+}
 
+void
+UnstructuredMesh::lprint_mesh_info()
+{
+    _F_;
     lprint(9, "Information:");
     lprint(9, "- vertices: {}", get_num_vertices());
     lprint(9, "- elements: {}", get_num_cells());
@@ -551,7 +551,7 @@ UnstructuredMesh::common_cells_by_vertex()
     return this->common_cells_by_vtx;
 }
 
-DM
+void
 UnstructuredMesh::build_from_cell_list(Int dim,
                                        Int n_corners,
                                        const std::vector<Int> & cells,
@@ -571,7 +571,7 @@ UnstructuredMesh::build_from_cell_list(Int dim,
                                               space_dim,
                                               vertices.data(),
                                               &dm));
-    return dm;
+    set_dm(dm);
 }
 
 } // namespace godzilla

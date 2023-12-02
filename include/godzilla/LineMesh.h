@@ -30,9 +30,6 @@ public:
     /// @return Number of divisions in the x-direction
     [[nodiscard]] Int get_nx() const;
 
-protected:
-    DM create_dm() override;
-
 private:
     /// Minimum in the x direction
     const Real & xmin;

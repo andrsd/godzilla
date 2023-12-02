@@ -25,9 +25,6 @@ public:
     /// Get the number of mesh points in y direction
     [[nodiscard]] Int get_ny() const;
 
-protected:
-    DM create_dm() override;
-
 private:
     /// Minimum in the x direction
     const Real & xmin;
