@@ -83,7 +83,7 @@ public:
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    virtual const mpi::Communicator & get_comm() const;
+    const mpi::Communicator & get_comm() const;
 
     /// Get parameters for a class
     ///
