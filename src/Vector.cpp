@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 David Andrs <andrsd@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #include "godzilla/Vector.h"
 #include "godzilla/Error.h"
 #include "godzilla/CallStack.h"

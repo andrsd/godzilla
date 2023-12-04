@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 #include <string>
@@ -51,7 +54,7 @@ public:
                    std::string prefix);
 
     template <typename... T>
-    [[deprecated("Use lprint() instead")]]  void
+    [[deprecated("Use lprint() instead")]] void
     lprintf(unsigned int level, fmt::format_string<T...> format, T... args) const
     {
         lprint(level, format, std::forward<T>(args)...);

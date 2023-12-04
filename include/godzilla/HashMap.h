@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 David Andrs <andrsd@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 #include "godzilla/CallStack.h"
@@ -65,8 +68,7 @@ Hash_UInt32_v1(Hash32_t key)
 
 /// Template for hash functions
 template <class KEY>
-class HashFn {
-};
+class HashFn {};
 
 /// Hash function for `Int`
 template <>
@@ -81,10 +83,7 @@ public:
 #endif
     }
 
-    operator khint_t() const
-    {
-        return this->key;
-    }
+    operator khint_t() const { return this->key; }
 
 private:
     khint_t key;
@@ -94,8 +93,7 @@ private:
 
 /// Template for determining the equality of 2 hashes
 template <class T>
-class HashEqual {
-};
+class HashEqual {};
 
 template <>
 class HashEqual<Int> {

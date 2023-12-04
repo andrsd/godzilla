@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #include "godzilla/Utils.h"
 #include "godzilla/CallStack.h"
 #include <sys/stat.h>
