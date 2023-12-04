@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #include "godzilla/InputFile.h"
 #include "godzilla/App.h"
 #include "godzilla/Factory.h"

@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 David Andrs <andrsd@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #pragma once
 
 #include "godzilla/Types.h"
@@ -69,8 +72,7 @@ Matrix::set_values(const DenseVector<Int, N> & row_idxs,
                    InsertMode mode)
 {
     _F_;
-    PETSC_CHECK(
-        MatSetValues(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
+    PETSC_CHECK(MatSetValues(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
 }
 
 } // namespace godzilla

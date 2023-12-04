@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2022 David Andrs <andrsd@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #include "godzilla/BndResidualFunc.h"
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/NaturalBC.h"

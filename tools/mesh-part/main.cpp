@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2023 David Andrs <andrsd@gmail.com>
+// SPDX-License-Identifier: MIT
+
 #include "cxxopts/cxxopts.hpp"
 #include "fmt/printf.h"
 #include "godzilla/Init.h"
