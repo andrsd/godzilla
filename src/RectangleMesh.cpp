@@ -89,24 +89,6 @@ void
 RectangleMesh::create()
 {
     _F_;
-    UnstructuredMesh::create();
-
-    remove_label("marker");
-    // create user-friendly names for sides
-    std::map<Int, std::string> face_set_names;
-    face_set_names[1] = "bottom";
-    face_set_names[2] = "right";
-    face_set_names[3] = "top";
-    face_set_names[4] = "left";
-    create_face_set_labels(face_set_names);
-    for (auto it : face_set_names)
-        set_face_set_name(it.first, it.second);
-}
-
-DM
-RectangleMesh::create_dm()
-{
-    _F_;
     std::array<Real, 2> lower = { this->xmin, this->ymin };
     std::array<Real, 2> upper = { this->xmax, this->ymax };
     std::array<Int, 2> faces = { this->nx, this->ny };
@@ -125,7 +107,21 @@ RectangleMesh::create_dm()
                                     periodicity.data(),
                                     this->interpolate,
                                     &dm));
-    return dm;
+    set_dm(dm);
+
+    remove_label("marker");
+    // create user-friendly names for sides
+    std::map<Int, std::string> face_set_names;
+    face_set_names[1] = "bottom";
+    face_set_names[2] = "right";
+    face_set_names[3] = "top";
+    face_set_names[4] = "left";
+    create_face_set_labels(face_set_names);
+    for (auto it : face_set_names)
+        set_face_set_name(it.first, it.second);
+
+    set_up();
+    lprint_mesh_info();
 }
 
 } // namespace godzilla
