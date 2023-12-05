@@ -80,6 +80,13 @@ public:
     /// Sets up the data structures inside the `DM` object
     void set_up();
 
+    /// Add a point to a Label with given value
+    ///
+    /// @param name The label name
+    /// @param point The mesh point
+    /// @param value The label value for this point
+    void set_label_value(const char * name, Int point, Int value);
+
 protected:
     /// Set the DM
     void set_dm(DM dm);
