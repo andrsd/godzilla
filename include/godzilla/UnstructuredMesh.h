@@ -347,6 +347,12 @@ public:
     /// @return A mapping [vertex index -> list of cell indices]
     const std::map<Int, std::vector<Int>> & common_cells_by_vertex();
 
+    /// Mark all faces on the boundary
+    ///
+    /// @param val The marker value
+    /// @param label The `Label` marking boundary faces with the given value
+    void mark_boundary_faces(Int val, Label & label);
+
 protected:
     void lprint_mesh_info();
 

@@ -552,6 +552,13 @@ UnstructuredMesh::common_cells_by_vertex()
 }
 
 void
+UnstructuredMesh::mark_boundary_faces(Int val, Label & label)
+{
+    _F_;
+    PETSC_CHECK(DMPlexMarkBoundaryFaces(get_dm(), val, label));
+}
+
+void
 UnstructuredMesh::build_from_cell_list(Int dim,
                                        Int n_corners,
                                        const std::vector<Int> & cells,

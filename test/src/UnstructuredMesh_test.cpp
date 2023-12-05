@@ -504,3 +504,38 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
     EXPECT_DOUBLE_EQ(coords(6), 1.);
     EXPECT_DOUBLE_EQ(coords(7), 1.);
 }
+
+TEST(UnstructuredMesh, mark_boundary_faces) {
+    class TestMesh2D : public godzilla::UnstructuredMesh {
+    public:
+        explicit TestMesh2D(const godzilla::Parameters & parameters) : UnstructuredMesh(parameters)
+        {
+        }
+
+        void
+        create() override
+        {
+            std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
+            std::vector<Real> vertices = { 0, 0, 1, 0, 0, 1, 1, 1 };
+            build_from_cell_list(2, 3, cells, 2, vertices, true);
+            auto face_sets = create_label("face sets");
+            mark_boundary_faces(10, face_sets);
+            set_up();
+        }
+    };
+
+    TestApp app;
+
+    Parameters mesh_pars = TestMesh2D::parameters();
+    mesh_pars.set<godzilla::App *>("_app") = &app;
+    TestMesh2D mesh(mesh_pars);
+    mesh.create();
+
+    auto face_set = mesh.get_label("face sets");
+    auto facets = face_set.get_stratum(10);
+    facets.get_indices();
+    EXPECT_EQ(facets.get_local_size(), 4);
+    auto facets_idxs = facets.to_std_vector();
+    EXPECT_THAT(facets_idxs, ElementsAre(6, 8, 9, 10));
+    facets.restore_indices();
+}
