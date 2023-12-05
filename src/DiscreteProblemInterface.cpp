@@ -156,6 +156,13 @@ DiscreteProblemInterface::get_boundary_conditions() const
     return this->bcs;
 }
 
+const std::vector<EssentialBC *> &
+DiscreteProblemInterface::get_essential_bcs() const
+{
+    _F_;
+    return this->essential_bcs;
+}
+
 const std::vector<NaturalBC *> &
 DiscreteProblemInterface::get_natural_bcs() const
 {

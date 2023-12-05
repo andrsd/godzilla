@@ -301,6 +301,8 @@ protected:
     UnstructuredMesh * get_unstr_mesh() const;
     /// Get list of all boundary conditions
     const std::vector<BoundaryCondition *> & get_boundary_conditions() const;
+    /// Get list of all essential boundary conditions
+    const std::vector<EssentialBC *> & get_essential_bcs() const;
     /// Get list of all natural boundary conditions
     const std::vector<NaturalBC *> & get_natural_bcs() const;
 
