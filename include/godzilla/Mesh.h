@@ -87,6 +87,13 @@ public:
     /// @param value The label value for this point
     void set_label_value(const char * name, Int point, Int value);
 
+    /// Remove a point from a Label with given value
+    ///
+    /// @param name The label name
+    /// @param point The mesh point
+    /// @param value The label value for this point
+    void clear_label_value(const char * name, Int point, Int value);
+
 protected:
     /// Set the DM
     void set_dm(DM dm);

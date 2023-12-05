@@ -124,3 +124,19 @@ TEST(MeshTest, set_label_value)
 
     EXPECT_EQ(bnd.get_value(0), 1001);
 }
+
+TEST(MeshTest, clear_label_value)
+{
+    TestApp app;
+
+    Parameters params = TestMesh::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestMesh mesh(params);
+    mesh.create();
+
+    auto bnd = mesh.create_label("bnd");
+    mesh.set_label_value("bnd", 0, 1001);
+    mesh.clear_label_value("bnd", 0, 1001);
+    EXPECT_EQ(bnd.get_value(0), -1);
+}
