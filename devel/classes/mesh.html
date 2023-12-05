@@ -103,6 +103,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh21get_coordinates_localEv"><code class="docutils literal notranslate"><span class="pre">Mesh::get_coordinates_local()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh22get_coordinate_sectionEv"><code class="docutils literal notranslate"><span class="pre">Mesh::get_coordinate_section()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh6set_upEv"><code class="docutils literal notranslate"><span class="pre">Mesh::set_up()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh15set_label_valueEPKc3Int3Int"><code class="docutils literal notranslate"><span class="pre">Mesh::set_label_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh17clear_label_valueEPKc3Int3Int"><code class="docutils literal notranslate"><span class="pre">Mesh::clear_label_value()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -284,6 +286,36 @@
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla4Mesh6set_upEv">
 <span id="_CPPv3N8godzilla4Mesh6set_upEv"></span><span id="_CPPv2N8godzilla4Mesh6set_upEv"></span><span id="godzilla::Mesh::set_up"></span><span class="target" id="classgodzilla_1_1_mesh_1a8eefff46d1214fd426a31264ea901637"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_up</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla4Mesh6set_upEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Sets up the data structures inside the <code class="docutils literal notranslate"><span class="pre">DM</span></code> object. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla4Mesh15set_label_valueEPKc3Int3Int">
+<span id="_CPPv3N8godzilla4Mesh15set_label_valueEPKc3Int3Int"></span><span id="_CPPv2N8godzilla4Mesh15set_label_valueEPKc3Int3Int"></span><span id="godzilla::Mesh::set_label_value__cCP.Int.Int"></span><span class="target" id="classgodzilla_1_1_mesh_1adbbc00c5239485ea73464e335932b930"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_label_value</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">point</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla4Mesh15set_label_valueEPKc3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Add a point to a Label with given value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The label name </p></li>
+<li><p><strong>point</strong> – The mesh point </p></li>
+<li><p><strong>value</strong> – The label value for this point </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla4Mesh17clear_label_valueEPKc3Int3Int">
+<span id="_CPPv3N8godzilla4Mesh17clear_label_valueEPKc3Int3Int"></span><span id="_CPPv2N8godzilla4Mesh17clear_label_valueEPKc3Int3Int"></span><span id="godzilla::Mesh::clear_label_value__cCP.Int.Int"></span><span class="target" id="classgodzilla_1_1_mesh_1a9c319bfe3a114ffa5f6b721899ae629c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">clear_label_value</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">point</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla4Mesh17clear_label_valueEPKc3Int3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Remove a point from a Label with given value. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The label name </p></li>
+<li><p><strong>point</strong> – The mesh point </p></li>
+<li><p><strong>value</strong> – The label value for this point </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
