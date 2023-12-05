@@ -141,6 +141,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh21construct_ghost_cellsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::construct_ghost_cells()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh21compute_cell_geometryE3IntP4RealA_4RealA_4Real"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::compute_cell_geometry()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh22common_cells_by_vertexEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::common_cells_by_vertex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh19mark_boundary_facesE3IntR5Label"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::mark_boundary_faces()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh8IteratorE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::Iterator</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh8IteratorppEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::Iterator::operator++()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh8IteratorppEi"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::Iterator::operator++()</span></code></a></li>
@@ -624,6 +625,20 @@ NOTES:<ul class="simple">
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A mapping [vertex index -&gt; list of cell indices] </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh19mark_boundary_facesE3IntR5Label">
+<span id="_CPPv3N8godzilla16UnstructuredMesh19mark_boundary_facesE3IntR5Label"></span><span id="_CPPv2N8godzilla16UnstructuredMesh19mark_boundary_facesE3IntR5Label"></span><span id="godzilla::UnstructuredMesh::mark_boundary_faces__Int.LabelR"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a2a33979d855abd870edcfead6bf3e976"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mark_boundary_faces</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">val</span></span>, <span class="n"><span class="pre">Label</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">label</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh19mark_boundary_facesE3IntR5Label" title="Link to this definition"></a><br /></dt>
+<dd><p>Mark all faces on the boundary. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> – The marker value </p></li>
+<li><p><strong>label</strong> – The <code class="docutils literal notranslate"><span class="pre">Label</span></code> marking boundary faces with the given value </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
