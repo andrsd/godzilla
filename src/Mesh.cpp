@@ -126,4 +126,18 @@ Mesh::set_dm(DM dm)
     this->dm = dm;
 }
 
+void
+Mesh::set_label_value(const char * name, Int point, Int value)
+{
+    _F_;
+    PETSC_CHECK(DMSetLabelValue(this->dm, name, point, value));
+}
+
+void
+Mesh::clear_label_value(const char * name, Int point, Int value)
+{
+    _F_;
+    PETSC_CHECK(DMClearLabelValue(this->dm, name, point, value));
+}
+
 } // namespace godzilla
