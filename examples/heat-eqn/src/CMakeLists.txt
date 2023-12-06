@@ -24,7 +24,3 @@ target_link_libraries(
     PUBLIC
         godzilla
 )
-
-if (DEFINED ENV{CONDA_PREFIX})
-    set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
-endif()

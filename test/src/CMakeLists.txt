@@ -121,7 +121,3 @@ target_link_libraries(
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
 endif()
-
-if (DEFINED ENV{CONDA_PREFIX})
-    set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
-endif()

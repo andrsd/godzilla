@@ -26,7 +26,3 @@ target_link_libraries(
     PRIVATE
         ${PETSC_LIBRARY}
 )
-
-if (DEFINED ENV{CONDA_PREFIX})
-    set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH $ENV{CONDA_PREFIX}/lib)
-endif()
