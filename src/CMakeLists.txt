@@ -130,10 +130,6 @@ if (GODZILLA_WITH_MPI)
 endif()
 
 
-set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_RPATH OFF)
-set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-
 # install
 
 configure_package_config_file(
