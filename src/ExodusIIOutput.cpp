@@ -7,6 +7,7 @@
 #include "godzilla/ExodusIIOutput.h"
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/DGProblemInterface.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/IndexSet.h"
@@ -106,8 +107,11 @@ ExodusIIOutput::parameters()
 
 ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     FileOutput(params),
+    cont(false),
+    discont(false),
     variable_names(get_param<std::vector<std::string>>("variables")),
     dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem())),
+    dgpi(dynamic_cast<DGProblemInterface *>(get_problem())),
     mesh(get_problem() ? dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh())
                        : get_param<UnstructuredMesh *>("_mesh")),
     exo(nullptr),
@@ -115,6 +119,10 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     mesh_stored(false)
 {
     _F_;
+    if (this->dgpi != nullptr)
+        this->discont = true;
+    else
+        this->cont = true;
 }
 
 ExodusIIOutput::~ExodusIIOutput()
@@ -226,6 +234,23 @@ void
 ExodusIIOutput::write_mesh()
 {
     _F_;
+    if (cont) {
+        write_mesh_continuous();
+        write_node_sets();
+        write_face_sets();
+    }
+    else if (discont) {
+        write_mesh_discontinuous();
+        // TODO: write node sets
+        // TODO: write side sets
+    }
+    this->mesh_stored = true;
+}
+
+void
+ExodusIIOutput::write_mesh_continuous()
+{
+    _F_;
     int n_nodes = (int) this->mesh->get_num_vertices();
     int n_elems = (int) this->mesh->get_num_cells();
 
@@ -241,16 +266,33 @@ ExodusIIOutput::write_mesh()
     int exo_dim = (int) this->mesh->get_dimension();
     this->exo->init("", exo_dim, n_nodes, n_elems, n_elem_blk, n_node_sets, n_side_sets);
 
-    write_coords(exo_dim);
+    write_coords_continuous(exo_dim);
     write_elements();
-    write_node_sets();
-    write_face_sets();
-
-    this->mesh_stored = true;
 }
 
 void
-ExodusIIOutput::write_coords(int exo_dim)
+ExodusIIOutput::write_mesh_discontinuous()
+{
+    _F_;
+    int n_elems = (int) this->mesh->get_num_cells();
+    int n_nodes_per_elem = get_num_nodes_per_element();
+    int n_nodes = (int) n_elems * n_nodes_per_elem;
+
+    // number of element blocks
+    int n_elem_blk = (int) this->mesh->get_num_cell_sets();
+    // no cell sets defined, therefore we have one element block
+    if (n_elem_blk == 0)
+        n_elem_blk = 1;
+
+    int exo_dim = (int) this->mesh->get_dimension();
+    this->exo->init("", exo_dim, n_nodes, n_elems, n_elem_blk, 0, 0);
+
+    write_coords_discontinuous(exo_dim);
+    write_elements();
+}
+
+void
+ExodusIIOutput::write_coords_continuous(int exo_dim)
 {
     _F_;
     int dim = (int) this->mesh->get_dimension();
@@ -288,6 +330,52 @@ ExodusIIOutput::write_coords(int exo_dim)
 }
 
 void
+ExodusIIOutput::write_coords_discontinuous(int exo_dim)
+{
+    _F_;
+    int dim = (int) this->mesh->get_dimension();
+    Vector coord = this->mesh->get_coordinates_local();
+    Scalar * xyz = coord.get_array();
+
+    int n_elems = (int) this->mesh->get_num_cells();
+    int n_nodes_per_elem = get_num_nodes_per_element();
+    int n_nodes = n_elems * n_nodes_per_elem;
+
+    std::vector<double> x(n_nodes, 0.);
+    std::vector<double> y;
+    if (exo_dim >= 2)
+        y.resize(n_nodes);
+    std::vector<double> z;
+    if (exo_dim >= 3)
+        z.resize(n_nodes);
+
+    auto n_all_cells = this->mesh->get_num_all_cells();
+    Int i = 0;
+    for (auto & cid : this->mesh->get_cell_range()) {
+        auto conn = this->mesh->get_connectivity(cid);
+        for (Int j = 0; j < conn.size(); j++, i++) {
+            Int ni = conn[j] - n_all_cells;
+            x[i] = xyz[ni * dim + 0];
+            if (dim >= 2)
+                y[i] = xyz[ni * dim + 1];
+            if (dim >= 3)
+                z[i] = xyz[ni * dim + 2];
+        }
+    }
+
+    if (exo_dim == 1)
+        this->exo->write_coords(x);
+    else if (exo_dim == 2)
+        this->exo->write_coords(x, y);
+    else if (exo_dim == 3)
+        this->exo->write_coords(x, y, z);
+
+    coord.restore_array(xyz);
+
+    this->exo->write_coord_names();
+}
+
+void
 ExodusIIOutput::write_elements()
 {
     _F_;
@@ -305,10 +393,16 @@ ExodusIIOutput::write_elements()
             auto cells = cell_sets_label.get_stratum(cell_set_idx[i]);
             cells.get_indices();
             auto polytope_type = this->mesh->get_cell_type(cells[0]);
-            write_block_connectivity((int) cell_set_idx[i],
-                                     polytope_type,
-                                     cells.get_size(),
-                                     cells.data());
+            if (this->cont)
+                write_block_connectivity_continuous((int) cell_set_idx[i],
+                                                    polytope_type,
+                                                    cells.get_size(),
+                                                    cells.data());
+            else if (this->discont)
+                write_block_connectivity_discontinuous((int) cell_set_idx[i],
+                                                       polytope_type,
+                                                       cells.get_size(),
+                                                       cells.data());
 
             block_names[i] = this->mesh->get_cell_set_name(cell_set_idx[i]);
             cells.restore_indices();
@@ -324,7 +418,16 @@ ExodusIIOutput::write_elements()
         cells.get_indices();
         DMPolytopeType polytope_type = this->mesh->get_cell_type(cells[0]);
         auto n_elems = this->mesh->get_num_cells();
-        write_block_connectivity(SINGLE_BLK_ID, polytope_type, n_elems, cells.data());
+        if (this->cont)
+            write_block_connectivity_continuous(SINGLE_BLK_ID,
+                                                polytope_type,
+                                                n_elems,
+                                                cells.data());
+        else if (this->discont)
+            write_block_connectivity_discontinuous(SINGLE_BLK_ID,
+                                                   polytope_type,
+                                                   n_elems,
+                                                   cells.data());
         cells.restore_indices();
         cells.destroy();
     }
@@ -526,12 +629,15 @@ void
 ExodusIIOutput::write_field_variables()
 {
     _F_;
-    write_nodal_variables();
+    if (this->cont)
+        write_nodal_variables_continuous();
+    else if (this->discont)
+        write_nodal_variables_discontinuous();
     write_elem_variables();
 }
 
 void
-ExodusIIOutput::write_nodal_variables()
+ExodusIIOutput::write_nodal_variables_continuous()
 {
     _F_;
     this->dpi->compute_solution_vector_local();
@@ -568,6 +674,57 @@ ExodusIIOutput::write_nodal_variables()
                                                        1,
                                                        exo_idx,
                                                        aux_sln_vals[offset + c]);
+                }
+            }
+        }
+    }
+
+    if (aux_sln)
+        aux_sln.restore_array_read(aux_sln_vals);
+    sln.restore_array_read(sln_vals);
+}
+
+void
+ExodusIIOutput::write_nodal_variables_discontinuous()
+{
+    _F_;
+    auto dgpi = this->dgpi;
+    auto sln = dgpi->get_solution_vector_local();
+    const Scalar * sln_vals = sln.get_array_read();
+
+    auto aux_sln = dgpi->get_aux_solution_vector_local();
+    const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
+
+    int n_nodes_per_elem = get_num_nodes_per_element();
+    for (auto & cid : this->mesh->get_cell_range()) {
+        int exo_var_id = 1;
+        for (auto fid : this->nodal_var_fids) {
+            Int nc = dgpi->get_field_num_components(fid);
+            for (Int c = 0; c < nc; c++, exo_var_id++) {
+                for (Int lni = 0; lni < n_nodes_per_elem; lni++) {
+                    Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
+                    Int offset = dgpi->get_field_dof(cid, lni, c, fid);
+                    this->exo->write_partial_nodal_var(this->step_num,
+                                                       exo_var_id,
+                                                       1,
+                                                       exo_idx,
+                                                       sln_vals[offset]);
+                }
+            }
+        }
+        if (aux_sln_vals) {
+            for (auto fid : this->nodal_aux_var_fids) {
+                Int nc = dgpi->get_aux_field_num_components(fid);
+                for (Int c = 0; c < nc; c++, exo_var_id++) {
+                    for (Int lni = 0; lni < n_nodes_per_elem; lni++) {
+                        Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
+                        Int offset = dgpi->get_aux_field_dof(cid, lni, c, fid);
+                        this->exo->write_partial_nodal_var(this->step_num,
+                                                           exo_var_id,
+                                                           1,
+                                                           exo_idx,
+                                                           aux_sln_vals[offset]);
+                    }
                 }
             }
         }
@@ -687,10 +844,10 @@ ExodusIIOutput::write_info()
 }
 
 void
-ExodusIIOutput::write_block_connectivity(int blk_id,
-                                         DMPolytopeType polytope_type,
-                                         Int n_elems_in_block,
-                                         const Int * cells)
+ExodusIIOutput::write_block_connectivity_continuous(int blk_id,
+                                                    DMPolytopeType polytope_type,
+                                                    Int n_elems_in_block,
+                                                    const Int * cells)
 {
     _F_;
     auto dm = this->mesh->get_dm();
@@ -712,6 +869,37 @@ ExodusIIOutput::write_block_connectivity(int blk_id,
             DMPlexRestoreTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
     }
     this->exo->write_block(blk_id, elem_type, n_elems_in_block, connect);
+}
+
+void
+ExodusIIOutput::write_block_connectivity_discontinuous(int blk_id,
+                                                       DMPolytopeType polytope_type,
+                                                       Int n_elems_in_block,
+                                                       const Int * cells)
+{
+    _F_;
+    const char * elem_type = get_elem_type(polytope_type);
+    int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);
+    std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
+    for (Int i = 0, j = 0; i < n_elems_in_block; i++) {
+        auto cell_id = cells[i];
+        for (Int k = 0; k < n_nodes_per_elem; k++, j++)
+            connect[j] = (int) (cell_id * n_nodes_per_elem + k + 1);
+    }
+    this->exo->write_block(blk_id, elem_type, n_elems_in_block, connect);
+}
+
+int
+ExodusIIOutput::get_num_nodes_per_element()
+{
+    _F_;
+    int n_nodes_per_elem = 0;
+    int n_elems = (int) this->mesh->get_num_cells();
+    if (n_elems > 0) {
+        auto ct = this->mesh->get_cell_type(0);
+        n_nodes_per_elem = this->mesh->get_num_cell_nodes(ct);
+    }
+    return n_nodes_per_elem;
 }
 
 } // namespace godzilla

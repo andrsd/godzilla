@@ -13,6 +13,7 @@ class File;
 namespace godzilla {
 
 class DiscreteProblemInterface;
+class DGProblemInterface;
 class UnstructuredMesh;
 
 /// ExodusII output
@@ -43,7 +44,10 @@ protected:
     void open_file();
     void write_info();
     void write_mesh();
-    void write_coords(int n_dim);
+    void write_mesh_continuous();
+    void write_mesh_discontinuous();
+    void write_coords_continuous(int n_dim);
+    void write_coords_discontinuous(int n_dim);
     void write_elements();
     void write_node_sets();
     void write_face_sets();
@@ -52,21 +56,31 @@ protected:
     void write_all_variable_names();
     void write_variables();
     void write_field_variables();
-    void write_nodal_variables();
+    void write_nodal_variables_continuous();
+    void write_nodal_variables_discontinuous();
     void write_elem_variables();
     void
     write_block_elem_variables(int blk_id, Int n_elems_in_block = 0, const Int * cells = nullptr);
     void write_global_variables();
-    void write_block_connectivity(int blk_id,
-                                  DMPolytopeType polytope_type,
-                                  Int n_elems_in_block,
-                                  const Int * cells);
+    void write_block_connectivity_continuous(int blk_id,
+                                             DMPolytopeType polytope_type,
+                                             Int n_elems_in_block,
+                                             const Int * cells);
+    void write_block_connectivity_discontinuous(int blk_id,
+                                                DMPolytopeType polytope_type,
+                                                Int n_elems_in_block,
+                                                const Int * /*cells*/);
+    int get_num_nodes_per_element();
 
 private:
+    bool cont;
+    bool discont;
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
     /// FE problem interface (convenience pointer)
     DiscreteProblemInterface * dpi;
+    /// DG problem interface
+    DGProblemInterface * dgpi;
     /// Unstructured mesh
     UnstructuredMesh * mesh;
     /// ExodusII file
