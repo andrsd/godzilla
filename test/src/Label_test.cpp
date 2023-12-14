@@ -11,8 +11,10 @@ TEST(Label, create_destroy)
     Label l;
     l.create(app.get_comm(), "name");
     EXPECT_EQ(l.is_null(), false);
+    EXPECT_TRUE(l);
     l.destroy();
     EXPECT_EQ(l.is_null(), true);
+    EXPECT_FALSE(l);
 }
 
 TEST(Label, default_value)

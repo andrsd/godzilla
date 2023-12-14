@@ -93,6 +93,9 @@ public:
     /// typecast operator so we can use our class directly with PETSc API
     operator DMLabel() const;
 
+    /// Typecast operator to determine if label is null or not
+    operator bool() const;
+
 private:
     DMLabel label;
 };

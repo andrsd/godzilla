@@ -146,4 +146,10 @@ Label::operator DMLabel() const
     return this->label;
 }
 
+Label::operator bool() const
+{
+    _F_;
+    return !is_null();
+}
+
 } // namespace godzilla
