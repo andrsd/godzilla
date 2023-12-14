@@ -75,6 +75,7 @@ add_library(${PROJECT_NAME}
         Registry.cpp
         ResidualFunc.cpp
         Section.cpp
+        StarForest.cpp
         TecplotOutput.cpp
         Terminal.cpp
         TimeSteppingAdaptor.cpp

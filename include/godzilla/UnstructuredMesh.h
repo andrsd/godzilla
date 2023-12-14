@@ -9,6 +9,7 @@
 #include "godzilla/Section.h"
 #include "godzilla/Partitioner.h"
 #include "godzilla/DenseVector.h"
+#include "godzilla/StarForest.h"
 
 namespace godzilla {
 
@@ -357,6 +358,11 @@ public:
     /// @param val The marker value
     /// @param label The `Label` marking boundary faces with the given value
     void mark_boundary_faces(Int val, Label & label);
+
+    /// Get the encoding of the parallel section point overlap
+    StarForest get_point_star_forest() const;
+
+    void set_point_star_forest(const StarForest & sf);
 
 protected:
     void lprint_mesh_info();

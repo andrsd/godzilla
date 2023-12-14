@@ -78,6 +78,7 @@ add_executable(${PROJECT_NAME}
     Registry_test.cpp
     ResidualFunc_test.cpp
     Section_test.cpp
+        StarForrest_test.cpp
     Terminal_test.cpp
     TimeSteppingAdaptor_test.cpp
     Types_test.cpp
