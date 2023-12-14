@@ -140,6 +140,10 @@ TEST(UnstructuredMeshTest, api_ghosted)
     EXPECT_EQ(mesh.get_partition_overlap(), 1);
 
     EXPECT_TRUE(mesh.is_simplex());
+
+    auto ghost_range = mesh.get_ghost_cell_range();
+    EXPECT_EQ(ghost_range.first(), 2);
+    EXPECT_EQ(ghost_range.last(), 4);
 }
 
 TEST(UnstructuredMeshTest, nonexistent_face_set)

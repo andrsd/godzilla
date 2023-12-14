@@ -205,6 +205,11 @@ public:
     /// @param Range of all cell indices (interior + ghosted)
     Range get_all_cell_range() const;
 
+    /// Get range of ghost cell indices
+    ///
+    /// @param Range of ghost cell indices
+    Range get_ghost_cell_range() const;
+
     /// Get index set with all cells
     ///
     /// @return Index set with all cells

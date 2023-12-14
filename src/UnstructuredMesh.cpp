@@ -161,6 +161,15 @@ UnstructuredMesh::get_all_cell_range() const
     return { first, last };
 }
 
+UnstructuredMesh::Range
+UnstructuredMesh::get_ghost_cell_range() const
+{
+    _F_;
+    Int first, last;
+    PETSC_CHECK(DMPlexGetGhostCellStratum(get_dm(), &first, &last));
+    return { first, last };
+}
+
 IndexSet
 UnstructuredMesh::get_all_cells() const
 {
