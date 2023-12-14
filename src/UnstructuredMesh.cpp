@@ -590,4 +590,20 @@ UnstructuredMesh::build_from_cell_list(Int dim,
     set_dm(dm);
 }
 
+StarForest
+UnstructuredMesh::get_point_star_forest() const
+{
+    _F_;
+    PetscSF sf;
+    PETSC_CHECK(DMGetPointSF(get_dm(), &sf));
+    return { sf };
+}
+
+void
+UnstructuredMesh::set_point_star_forest(const StarForest & sf)
+{
+    _F_;
+    PETSC_CHECK(DMSetPointSF(get_dm(), sf));
+}
+
 } // namespace godzilla
