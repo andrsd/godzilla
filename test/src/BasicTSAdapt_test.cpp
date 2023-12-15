@@ -34,7 +34,6 @@ TEST(BasicTSAdapt, api)
     Parameters params = BasicTSAdapt::parameters();
     params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = prob;
-    params.set<const TransientProblemInterface *>("_tpi") = prob;
     BasicTSAdapt adaptor(params);
     prob->set_time_stepping_adaptor(&adaptor);
 

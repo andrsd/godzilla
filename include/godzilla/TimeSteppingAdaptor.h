@@ -56,7 +56,7 @@ private:
     Problem * problem;
 
     /// Transient problem interface this adaptor is part of
-    const TransientProblemInterface * tpi;
+    TransientProblemInterface * tpi;
 
     /// TSAdapt object
     TSAdapt ts_adapt;

@@ -175,7 +175,6 @@ TEST(TimeSteppingAdaptor, api)
     Parameters params = TimeSteppingAdaptor::parameters();
     params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = prob;
-    params.set<const TransientProblemInterface *>("_tpi") = prob;
     params.set<Real>("dt_min") = 1e-3;
     params.set<Real>("dt_max") = 1e3;
     TimeSteppingAdaptor adaptor(params);
@@ -225,7 +224,6 @@ TEST(TimeSteppingAdaptor, choose)
         const std::string class_name = "TestTSAdaptor";
         Parameters * params = app.get_parameters(class_name);
         params->set<Problem *>("_problem") = prob;
-        params->set<const TransientProblemInterface *>("_tpi") = prob;
         auto * ts_adaptor = app.build_object<TestTSAdaptor>(class_name, "ts_adapt", params);
         prob->set_time_stepping_adaptor(ts_adaptor);
     }
