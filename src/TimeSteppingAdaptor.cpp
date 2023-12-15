@@ -3,6 +3,7 @@
 
 #include "godzilla/TimeSteppingAdaptor.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Problem.h"
 #include "godzilla/TransientProblemInterface.h"
 
 namespace godzilla {
@@ -12,7 +13,6 @@ TimeSteppingAdaptor::parameters()
 {
     Parameters params = Object::parameters();
     params.add_private_param<Problem *>("_problem", nullptr);
-    params.add_private_param<const TransientProblemInterface *>("_tpi", nullptr);
     params.add_param<Real>("dt_min", PETSC_DEFAULT, "Minimum time step");
     params.add_param<Real>("dt_max", PETSC_DEFAULT, "Maximum time step");
     return params;
@@ -21,12 +21,14 @@ TimeSteppingAdaptor::parameters()
 TimeSteppingAdaptor::TimeSteppingAdaptor(const Parameters & params) :
     Object(params),
     problem(get_param<Problem *>("_problem")),
-    tpi(get_param<const TransientProblemInterface *>("_tpi")),
+    tpi(dynamic_cast<TransientProblemInterface *>(problem)),
     ts_adapt(nullptr),
     dt_min(get_param<Real>("dt_min")),
     dt_max(get_param<Real>("dt_max"))
 {
     _F_;
+    if (this->tpi)
+        PETSC_CHECK(TSGetAdapt(this->tpi->get_ts(), &this->ts_adapt));
 }
 
 TSAdapt
@@ -68,9 +70,14 @@ void
 TimeSteppingAdaptor::create()
 {
     _F_;
-    PETSC_CHECK(TSGetAdapt(this->tpi->get_ts(), &this->ts_adapt));
-    set_type_impl();
     PETSC_CHECK(TSAdaptSetStepLimits(this->ts_adapt, this->dt_min, this->dt_max));
+}
+
+void
+TimeSteppingAdaptor::set_always_accept(bool flag)
+{
+    _F_;
+    PETSC_CHECK(TSAdaptSetAlwaysAccept(this->ts_adapt, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 } // namespace godzilla

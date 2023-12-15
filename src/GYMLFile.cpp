@@ -82,7 +82,6 @@ GYMLFile::build_ts_adapt(const Block & problem_node)
         auto ts_adapt_node = get_block(problem_node, "ts_adapt");
         Parameters * params = build_params(ts_adapt_node);
         params->set<Problem *>("_problem") = get_problem();
-        params->set<const TransientProblemInterface *>("_tpi") = tpi;
 
         const auto & class_name = params->get<std::string>("_type");
         auto * ts_adaptor =

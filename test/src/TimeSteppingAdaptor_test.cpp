@@ -36,6 +36,8 @@ class TestTSAdaptor : public TimeSteppingAdaptor {
 public:
     explicit TestTSAdaptor(const Parameters & params);
 
+    void create() override;
+
     void choose(Real h,
                 Int * next_sc,
                 Real * next_h,
@@ -47,13 +49,6 @@ public:
     std::vector<Real> dts;
 
     static Parameters parameters();
-
-protected:
-    void
-    set_type_impl() override
-    {
-        set_type(TS_ADAPT_TEST);
-    }
 };
 
 } // namespace
@@ -70,6 +65,13 @@ TestTSAdaptor::parameters()
 TestTSAdaptor::TestTSAdaptor(const Parameters & params) : TimeSteppingAdaptor(params)
 {
     this->dts = { 0.2, 0.3, 0.4, 1 };
+}
+
+void
+TestTSAdaptor::create()
+{
+    TimeSteppingAdaptor::create();
+    set_type(TS_ADAPT_TEST);
 }
 
 void
@@ -146,13 +148,6 @@ TestTSProblem::ts_monitor_callback(Int stepi, Real time, Vec x)
 
 TEST(TimeSteppingAdaptor, api)
 {
-    class MockTSAdaptor : public TimeSteppingAdaptor {
-    public:
-        explicit MockTSAdaptor(const Parameters & params) : TimeSteppingAdaptor(params) {}
-
-        MOCK_METHOD((void), set_type_impl, ());
-    };
-
     TestApp app;
 
     LineMesh * mesh;
@@ -177,18 +172,16 @@ TEST(TimeSteppingAdaptor, api)
     mesh->create();
     prob->create();
 
-    Parameters params = MockTSAdaptor::parameters();
+    Parameters params = TimeSteppingAdaptor::parameters();
     params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = prob;
-    params.set<const TransientProblemInterface *>("_tpi") = prob;
     params.set<Real>("dt_min") = 1e-3;
     params.set<Real>("dt_max") = 1e3;
-    MockTSAdaptor adaptor(params);
+    TimeSteppingAdaptor adaptor(params);
 
     EXPECT_DOUBLE_EQ(adaptor.get_dt_min(), 1e-3);
     EXPECT_DOUBLE_EQ(adaptor.get_dt_max(), 1e3);
 
-    EXPECT_CALL(adaptor, set_type_impl);
     adaptor.create();
 }
 
@@ -231,7 +224,6 @@ TEST(TimeSteppingAdaptor, choose)
         const std::string class_name = "TestTSAdaptor";
         Parameters * params = app.get_parameters(class_name);
         params->set<Problem *>("_problem") = prob;
-        params->set<const TransientProblemInterface *>("_tpi") = prob;
         auto * ts_adaptor = app.build_object<TestTSAdaptor>(class_name, "ts_adapt", params);
         prob->set_time_stepping_adaptor(ts_adaptor);
     }

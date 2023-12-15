@@ -34,15 +34,18 @@ public:
     /// @return Maximum time step size
     [[nodiscard]] Real get_dt_max() const;
 
-protected:
     /// Set time adaptor type
     ///
     /// @param type Type of time adaptor
     void set_type(const char * type);
 
-    /// Set the type of time stepping adaptivity
-    virtual void set_type_impl() = 0;
+    /// Set whether to always accept steps regardless of any error or stability condition not
+    /// meeting the prescribed goal
+    ///
+    /// @param flag Whether to always accept steps
+    void set_always_accept(bool flag);
 
+protected:
     /// Get problem this time adaptor is part of
     ///
     /// @return Problem this time adaptor is part of
@@ -53,7 +56,7 @@ private:
     Problem * problem;
 
     /// Transient problem interface this adaptor is part of
-    const TransientProblemInterface * tpi;
+    TransientProblemInterface * tpi;
 
     /// TSAdapt object
     TSAdapt ts_adapt;

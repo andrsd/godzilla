@@ -19,9 +19,10 @@ BasicTSAdapt::parameters()
 BasicTSAdapt::BasicTSAdapt(const Parameters & params) : TimeSteppingAdaptor(params) {}
 
 void
-BasicTSAdapt::set_type_impl()
+BasicTSAdapt::create()
 {
     _F_;
+    TimeSteppingAdaptor::create();
     set_type(TSADAPTBASIC);
 }
 
