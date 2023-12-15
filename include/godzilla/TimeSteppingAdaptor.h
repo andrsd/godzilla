@@ -34,15 +34,12 @@ public:
     /// @return Maximum time step size
     [[nodiscard]] Real get_dt_max() const;
 
-protected:
     /// Set time adaptor type
     ///
     /// @param type Type of time adaptor
     void set_type(const char * type);
 
-    /// Set the type of time stepping adaptivity
-    virtual void set_type_impl() = 0;
-
+protected:
     /// Get problem this time adaptor is part of
     ///
     /// @return Problem this time adaptor is part of

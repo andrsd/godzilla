@@ -70,6 +70,7 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     step_num(0)
 {
     _F_;
+    PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
 }
 
 TransientProblemInterface::~TransientProblemInterface()
@@ -180,7 +181,6 @@ TransientProblemInterface::init()
 {
     _F_;
     assert(this->problem != nullptr);
-    PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
 }

@@ -27,6 +27,7 @@ TimeSteppingAdaptor::TimeSteppingAdaptor(const Parameters & params) :
     dt_max(get_param<Real>("dt_max"))
 {
     _F_;
+    PETSC_CHECK(TSGetAdapt(this->tpi->get_ts(), &this->ts_adapt));
 }
 
 TSAdapt
@@ -68,8 +69,6 @@ void
 TimeSteppingAdaptor::create()
 {
     _F_;
-    PETSC_CHECK(TSGetAdapt(this->tpi->get_ts(), &this->ts_adapt));
-    set_type_impl();
     PETSC_CHECK(TSAdaptSetStepLimits(this->ts_adapt, this->dt_min, this->dt_max));
 }
 

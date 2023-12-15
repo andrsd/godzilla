@@ -13,8 +13,7 @@ class BasicTSAdapt : public TimeSteppingAdaptor {
 public:
     explicit BasicTSAdapt(const Parameters & params);
 
-protected:
-    void set_type_impl() override;
+    void create() override;
 
 public:
     static Parameters parameters();
