@@ -72,4 +72,11 @@ TimeSteppingAdaptor::create()
     PETSC_CHECK(TSAdaptSetStepLimits(this->ts_adapt, this->dt_min, this->dt_max));
 }
 
+void
+TimeSteppingAdaptor::set_always_accept(bool flag)
+{
+    _F_;
+    PETSC_CHECK(TSAdaptSetAlwaysAccept(this->ts_adapt, flag ? PETSC_TRUE : PETSC_FALSE));
+}
+
 } // namespace godzilla

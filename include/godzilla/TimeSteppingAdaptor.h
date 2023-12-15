@@ -39,6 +39,12 @@ public:
     /// @param type Type of time adaptor
     void set_type(const char * type);
 
+    /// Set whether to always accept steps regardless of any error or stability condition not
+    /// meeting the prescribed goal
+    ///
+    /// @param flag Whether to always accept steps
+    void set_always_accept(bool flag);
+
 protected:
     /// Get problem this time adaptor is part of
     ///
