@@ -3,7 +3,41 @@ project(godzilla-test)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_subdirectory(src)
+file(GLOB SRCS CONFIGURE_DEPENDS src/*.cpp)
+
+add_executable(${PROJECT_NAME} ${SRCS})
+
+target_code_coverage(${PROJECT_NAME})
+target_sanitization(${PROJECT_NAME})
+
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+        -DGODZILLA_UNIT_TESTS_ROOT="${GODZILLA_UNIT_TESTS_ROOT}"
+)
+
+target_include_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+        ${PROJECT_SOURCE_DIR}/include
+        ${CMAKE_BINARY_DIR}
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/contrib
+    PRIVATE
+        ${PETSC_INCLUDE_DIR}
+)
+
+target_link_libraries(
+    ${PROJECT_NAME}
+    PUBLIC
+        godzilla
+        gtest_main
+        gmock_main
+    PRIVATE
+        ${PETSC_LIBRARY}
+)
+if (GODZILLA_WITH_MPI)
+    target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
+endif()
 
 add_test(
     NAME godzilla-test
