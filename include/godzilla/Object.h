@@ -65,7 +65,7 @@ private:
     const Parameters & pars;
 
     /// The application owning this object
-    App * _app;
+    App * app;
 
     /// The type of this object
     const std::string & type;
