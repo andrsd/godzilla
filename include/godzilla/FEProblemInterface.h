@@ -185,7 +185,7 @@ public:
                                       Int val = 0,
                                       Int part = 0);
 
-    void add_weak_form_jacobian_block(PetscWeakFormKind kind,
+    void add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
                                       Int fid,
                                       Int gid,
                                       JacobianFunc * g,

@@ -660,10 +660,10 @@ FEProblemInterface::sort_jacobian_functionals(
         for (Int f = 0; f < get_num_fields(); f++) {
             for (Int g = 0; g < get_num_fields(); g++) {
                 Label lbl(k.label);
-                auto g0_fnls = this->wf->get(PETSC_WF_G0, lbl, k.value, f, g, k.part);
-                auto g1_fnls = this->wf->get(PETSC_WF_G1, lbl, k.value, f, g, k.part);
-                auto g2_fnls = this->wf->get(PETSC_WF_G2, lbl, k.value, f, g, k.part);
-                auto g3_fnls = this->wf->get(PETSC_WF_G3, lbl, k.value, f, g, k.part);
+                auto g0_fnls = this->wf->get(WeakForm::G0, lbl, k.value, f, g, k.part);
+                auto g1_fnls = this->wf->get(WeakForm::G1, lbl, k.value, f, g, k.part);
+                auto g2_fnls = this->wf->get(WeakForm::G2, lbl, k.value, f, g, k.part);
+                auto g3_fnls = this->wf->get(WeakForm::G3, lbl, k.value, f, g, k.part);
 
                 add_functionals<JacobianFunc *>(graph, suppliers, g0_fnls);
                 add_functionals<JacobianFunc *>(graph, suppliers, g1_fnls);
@@ -749,19 +749,19 @@ FEProblemInterface::add_jacobian_block(Int fid,
 {
     _F_;
     if (region.empty()) {
-        add_weak_form_jacobian_block(PETSC_WF_G0, fid, gid, g0);
-        add_weak_form_jacobian_block(PETSC_WF_G1, fid, gid, g1);
-        add_weak_form_jacobian_block(PETSC_WF_G2, fid, gid, g2);
-        add_weak_form_jacobian_block(PETSC_WF_G3, fid, gid, g3);
+        add_weak_form_jacobian_block(WeakForm::G0, fid, gid, g0);
+        add_weak_form_jacobian_block(WeakForm::G1, fid, gid, g1);
+        add_weak_form_jacobian_block(WeakForm::G2, fid, gid, g2);
+        add_weak_form_jacobian_block(WeakForm::G3, fid, gid, g3);
     }
     else {
         auto label = get_unstr_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
-            add_weak_form_jacobian_block(PETSC_WF_G0, fid, gid, g0, label, val, 0);
-            add_weak_form_jacobian_block(PETSC_WF_G1, fid, gid, g1, label, val, 0);
-            add_weak_form_jacobian_block(PETSC_WF_G2, fid, gid, g2, label, val, 0);
-            add_weak_form_jacobian_block(PETSC_WF_G3, fid, gid, g3, label, val, 0);
+            add_weak_form_jacobian_block(WeakForm::G0, fid, gid, g0, label, val, 0);
+            add_weak_form_jacobian_block(WeakForm::G1, fid, gid, g1, label, val, 0);
+            add_weak_form_jacobian_block(WeakForm::G2, fid, gid, g2, label, val, 0);
+            add_weak_form_jacobian_block(WeakForm::G3, fid, gid, g3, label, val, 0);
         }
     }
 }
@@ -777,19 +777,19 @@ FEProblemInterface::add_jacobian_preconditioner_block(Int fid,
 {
     _F_;
     if (region.empty()) {
-        add_weak_form_jacobian_block(PETSC_WF_GP0, fid, gid, g0);
-        add_weak_form_jacobian_block(PETSC_WF_GP1, fid, gid, g1);
-        add_weak_form_jacobian_block(PETSC_WF_GP2, fid, gid, g2);
-        add_weak_form_jacobian_block(PETSC_WF_GP3, fid, gid, g3);
+        add_weak_form_jacobian_block(WeakForm::GP0, fid, gid, g0);
+        add_weak_form_jacobian_block(WeakForm::GP1, fid, gid, g1);
+        add_weak_form_jacobian_block(WeakForm::GP2, fid, gid, g2);
+        add_weak_form_jacobian_block(WeakForm::GP3, fid, gid, g3);
     }
     else {
         auto label = get_unstr_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
-            add_weak_form_jacobian_block(PETSC_WF_GP0, fid, gid, g0, label, val, 0);
-            add_weak_form_jacobian_block(PETSC_WF_GP1, fid, gid, g1, label, val, 0);
-            add_weak_form_jacobian_block(PETSC_WF_GP2, fid, gid, g2, label, val, 0);
-            add_weak_form_jacobian_block(PETSC_WF_GP3, fid, gid, g3, label, val, 0);
+            add_weak_form_jacobian_block(WeakForm::GP0, fid, gid, g0, label, val, 0);
+            add_weak_form_jacobian_block(WeakForm::GP1, fid, gid, g1, label, val, 0);
+            add_weak_form_jacobian_block(WeakForm::GP2, fid, gid, g2, label, val, 0);
+            add_weak_form_jacobian_block(WeakForm::GP3, fid, gid, g3, label, val, 0);
         }
     }
 }
@@ -809,10 +809,10 @@ FEProblemInterface::add_boundary_jacobian_block(Int fid,
     auto label = get_unstr_mesh()->get_label(region);
     auto ids = label.get_values();
     for (auto & val : ids) {
-        add_weak_form_jacobian_block(PETSC_WF_BDG0, fid, gid, g0, label, val, 0);
-        add_weak_form_jacobian_block(PETSC_WF_BDG1, fid, gid, g1, label, val, 0);
-        add_weak_form_jacobian_block(PETSC_WF_BDG2, fid, gid, g2, label, val, 0);
-        add_weak_form_jacobian_block(PETSC_WF_BDG3, fid, gid, g3, label, val, 0);
+        add_weak_form_jacobian_block(WeakForm::BND_G0, fid, gid, g0, label, val, 0);
+        add_weak_form_jacobian_block(WeakForm::BND_G1, fid, gid, g1, label, val, 0);
+        add_weak_form_jacobian_block(WeakForm::BND_G2, fid, gid, g2, label, val, 0);
+        add_weak_form_jacobian_block(WeakForm::BND_G3, fid, gid, g3, label, val, 0);
     }
 }
 
@@ -829,7 +829,7 @@ FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
 }
 
 void
-FEProblemInterface::add_weak_form_jacobian_block(PetscWeakFormKind kind,
+FEProblemInterface::add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
                                                  Int fid,
                                                  Int gid,
                                                  JacobianFunc * g,
@@ -1158,25 +1158,25 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     Int field_i = key.field / n_fields;
     Int field_j = key.field % n_fields;
 
-    PetscWeakFormKind kind0, kind1, kind2, kind3;
+    WeakForm::JacobianKind kind0, kind1, kind2, kind3;
     switch (jtype) {
     case PETSCFE_JACOBIAN_DYN:
-        kind0 = PETSC_WF_GT0;
-        kind1 = PETSC_WF_GT1;
-        kind2 = PETSC_WF_GT2;
-        kind3 = PETSC_WF_GT3;
+        kind0 = WeakForm::GT0;
+        kind1 = WeakForm::GT1;
+        kind2 = WeakForm::GT2;
+        kind3 = WeakForm::GT3;
         break;
     case PETSCFE_JACOBIAN_PRE:
-        kind0 = PETSC_WF_GP0;
-        kind1 = PETSC_WF_GP1;
-        kind2 = PETSC_WF_GP2;
-        kind3 = PETSC_WF_GP3;
+        kind0 = WeakForm::GP0;
+        kind1 = WeakForm::GP1;
+        kind2 = WeakForm::GP2;
+        kind3 = WeakForm::GP3;
         break;
     case PETSCFE_JACOBIAN:
-        kind0 = PETSC_WF_G0;
-        kind1 = PETSC_WF_G1;
-        kind2 = PETSC_WF_G2;
-        kind3 = PETSC_WF_G3;
+        kind0 = WeakForm::G0;
+        kind1 = WeakForm::G1;
+        kind2 = WeakForm::G2;
+        kind3 = WeakForm::G3;
         break;
     }
 
@@ -1389,13 +1389,13 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
 
     Label lbl(key.label);
     const auto & g0_jac_fns =
-        this->wf->get(PETSC_WF_BDG0, lbl, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G0, lbl, key.value, field_i, field_j, key.part);
     const auto & g1_jac_fns =
-        this->wf->get(PETSC_WF_BDG1, lbl, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G1, lbl, key.value, field_i, field_j, key.part);
     const auto & g2_jac_fns =
-        this->wf->get(PETSC_WF_BDG2, lbl, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G2, lbl, key.value, field_i, field_j, key.part);
     const auto & g3_jac_fns =
-        this->wf->get(PETSC_WF_BDG3, lbl, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G3, lbl, key.value, field_i, field_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return 0;
 
