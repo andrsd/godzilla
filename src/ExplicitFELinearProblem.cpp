@@ -179,15 +179,15 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
     Int part = 100;
 
     if (region.empty()) {
-        add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, Label(), 0, part);
-        add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, Label(), 0, part);
+        add_weak_form_residual_block(WeakForm::F0, field_id, f0, Label(), 0, part);
+        add_weak_form_residual_block(WeakForm::F1, field_id, f1, Label(), 0, part);
     }
     else {
         auto label = get_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
-            add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, label, val, part);
-            add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, label, val, part);
+            add_weak_form_residual_block(WeakForm::F0, field_id, f0, label, val, part);
+            add_weak_form_residual_block(WeakForm::F1, field_id, f1, label, val, part);
         }
     }
 }

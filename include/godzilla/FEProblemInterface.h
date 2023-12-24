@@ -14,11 +14,11 @@
 #include "godzilla/FieldValue.h"
 #include "godzilla/Error.h"
 #include "godzilla/Types.h"
+#include "godzilla/WeakForm.h"
 
 namespace godzilla {
 
 class Problem;
-class WeakForm;
 class ResidualFunc;
 class JacobianFunc;
 class ValueFunctional;
@@ -178,14 +178,14 @@ public:
                                              JacobianFunc * g3,
                                              const std::string & boundary);
 
-    void add_weak_form_residual_block(PetscWeakFormKind kind,
+    void add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                       Int field_id,
                                       ResidualFunc * f,
                                       const Label & label = Label(),
                                       Int val = 0,
                                       Int part = 0);
 
-    void add_weak_form_jacobian_block(PetscWeakFormKind kind,
+    void add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
                                       Int fid,
                                       Int gid,
                                       JacobianFunc * g,

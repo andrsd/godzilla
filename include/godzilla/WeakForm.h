@@ -19,6 +19,32 @@ class JacobianFunc;
 ///
 class WeakForm {
 public:
+    enum ResidualKind {
+        F0 = PETSC_WF_F0,
+        F1 = PETSC_WF_F1,
+        BND_F0 = PETSC_WF_BDF0,
+        BND_F1 = PETSC_WF_BDF1
+    };
+
+    enum JacobianKind {
+        G0 = PETSC_WF_G0,
+        G1 = PETSC_WF_G1,
+        G2 = PETSC_WF_G2,
+        G3 = PETSC_WF_G3,
+        GP0 = PETSC_WF_GP0,
+        GP1 = PETSC_WF_GP1,
+        GP2 = PETSC_WF_GP2,
+        GP3 = PETSC_WF_GP3,
+        GT0 = PETSC_WF_GT0,
+        GT1 = PETSC_WF_GT1,
+        GT2 = PETSC_WF_GT2,
+        GT3 = PETSC_WF_GT3,
+        BND_G0 = PETSC_WF_BDG0,
+        BND_G1 = PETSC_WF_BDG1,
+        BND_G2 = PETSC_WF_BDG2,
+        BND_G3 = PETSC_WF_BDG3,
+    };
+
     WeakForm();
 
     /// Get residual keys
@@ -33,11 +59,11 @@ public:
 
     /// Get residual forms
     const std::vector<ResidualFunc *> &
-    get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part) const;
+    get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
     const std::vector<JacobianFunc *> &
-    get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int g, Int part) const;
+    get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const;
 
     /// Add a residual form
     ///
@@ -47,8 +73,7 @@ public:
     /// @param f Field ID
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric residual form
-    void
-    add(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part, ResidualFunc * func);
+    void add(ResidualKind kind, const Label & label, Int val, Int f, Int part, ResidualFunc * func);
 
     /// Add a Jacobian form
     ///
@@ -59,7 +84,7 @@ public:
     /// @param g Field ID (base)
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric Jacobian form
-    void add(PetscWeakFormKind kind,
+    void add(JacobianKind kind,
              const Label & label,
              Int val,
              Int f,

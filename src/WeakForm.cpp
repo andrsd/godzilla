@@ -48,9 +48,9 @@ WeakForm::get_residual_keys() const
 {
     _F_;
     std::set<Key> unique;
-    std::array<PetscWeakFormKind, 2> resmap = { PETSC_WF_F0, PETSC_WF_F1 };
-    for (const auto & r : resmap) {
-        const auto & forms = res_forms[r];
+    std::array<ResidualKind, 2> res_kind = { F0, F1 };
+    for (const auto & r : res_kind) {
+        const auto & forms = this->res_forms[r];
         for (const auto & it : forms) {
             const auto & form_key = it.first;
             Key k = { form_key.label, form_key.value, form_key.part };
@@ -72,9 +72,7 @@ WeakForm::get_jacobian_keys() const
 {
     _F_;
     std::set<Key> unique;
-    std::array<PetscWeakFormKind, 8> jacmap = { PETSC_WF_G0,  PETSC_WF_G1,  PETSC_WF_G2,
-                                                PETSC_WF_G3,  PETSC_WF_GP0, PETSC_WF_GP1,
-                                                PETSC_WF_GP2, PETSC_WF_GP3 };
+    std::array<JacobianKind, 8> jacmap = { G0, G1, G2, G3, GP0, GP1, GP2, GP3 };
     for (const auto & r : jacmap) {
         const auto & forms = this->jac_forms[r];
         for (const auto & it : forms) {
@@ -94,7 +92,7 @@ WeakForm::get_jacobian_keys() const
 }
 
 const std::vector<ResidualFunc *> &
-WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part) const
+WeakForm::get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const
 {
     _F_;
     PetscFormKey key;
@@ -110,7 +108,7 @@ WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int p
 }
 
 const std::vector<JacobianFunc *> &
-WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int g, Int part) const
+WeakForm::get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const
 {
     _F_;
     PetscFormKey key;
@@ -126,7 +124,7 @@ WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int g
 }
 
 void
-WeakForm::add(PetscWeakFormKind kind,
+WeakForm::add(ResidualKind kind,
               const Label & label,
               Int value,
               Int f,
@@ -145,7 +143,7 @@ WeakForm::add(PetscWeakFormKind kind,
 }
 
 void
-WeakForm::add(PetscWeakFormKind kind,
+WeakForm::add(JacobianKind kind,
               const Label & label,
               Int val,
               Int f,
@@ -175,10 +173,10 @@ bool
 WeakForm::has_jacobian() const
 {
     _F_;
-    auto n0 = this->jac_forms[PETSC_WF_G0].size();
-    auto n1 = this->jac_forms[PETSC_WF_G1].size();
-    auto n2 = this->jac_forms[PETSC_WF_G2].size();
-    auto n3 = this->jac_forms[PETSC_WF_G3].size();
+    auto n0 = this->jac_forms[WeakForm::G0].size();
+    auto n1 = this->jac_forms[WeakForm::G1].size();
+    auto n2 = this->jac_forms[WeakForm::G2].size();
+    auto n3 = this->jac_forms[WeakForm::G3].size();
     return (n0 + n1 + n2 + n3) > 0;
 }
 
@@ -186,10 +184,10 @@ bool
 WeakForm::has_jacobian_preconditioner() const
 {
     _F_;
-    auto n0 = this->jac_forms[PETSC_WF_GP0].size();
-    auto n1 = this->jac_forms[PETSC_WF_GP1].size();
-    auto n2 = this->jac_forms[PETSC_WF_GP2].size();
-    auto n3 = this->jac_forms[PETSC_WF_GP3].size();
+    auto n0 = this->jac_forms[WeakForm::GP0].size();
+    auto n1 = this->jac_forms[WeakForm::GP1].size();
+    auto n2 = this->jac_forms[WeakForm::GP2].size();
+    auto n3 = this->jac_forms[WeakForm::GP3].size();
     return (n0 + n1 + n2 + n3) > 0;
 }
 
