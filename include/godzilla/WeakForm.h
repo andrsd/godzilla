@@ -19,6 +19,13 @@ class JacobianFunc;
 ///
 class WeakForm {
 public:
+    enum ResidualKind {
+        F0 = PETSC_WF_F0,
+        F1 = PETSC_WF_F1,
+        BND_F0 = PETSC_WF_BDF0,
+        BND_F1 = PETSC_WF_BDF1
+    };
+
     WeakForm();
 
     /// Get residual keys
@@ -33,7 +40,7 @@ public:
 
     /// Get residual forms
     const std::vector<ResidualFunc *> &
-    get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part) const;
+    get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
     const std::vector<JacobianFunc *> &
@@ -47,8 +54,7 @@ public:
     /// @param f Field ID
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric residual form
-    void
-    add(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part, ResidualFunc * func);
+    void add(ResidualKind kind, const Label & label, Int val, Int f, Int part, ResidualFunc * func);
 
     /// Add a Jacobian form
     ///

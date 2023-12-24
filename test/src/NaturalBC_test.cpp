@@ -149,7 +149,7 @@ TEST(NaturalBCTest, fe)
     auto label = mesh.get_label("left");
     auto ids = label.get_values();
 
-    const auto & f0 = wf->get(PETSC_WF_BDF0, label, ids[0], field, 0);
+    const auto & f0 = wf->get(WeakForm::BND_F0, label, ids[0], field, 0);
     EXPECT_EQ(f0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatF0 *>(f0[0]), nullptr);
 

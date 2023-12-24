@@ -48,9 +48,9 @@ WeakForm::get_residual_keys() const
 {
     _F_;
     std::set<Key> unique;
-    std::array<PetscWeakFormKind, 2> resmap = { PETSC_WF_F0, PETSC_WF_F1 };
-    for (const auto & r : resmap) {
-        const auto & forms = res_forms[r];
+    std::array<ResidualKind, 2> res_kind = { F0, F1 };
+    for (const auto & r : res_kind) {
+        const auto & forms = this->res_forms[r];
         for (const auto & it : forms) {
             const auto & form_key = it.first;
             Key k = { form_key.label, form_key.value, form_key.part };
@@ -94,7 +94,7 @@ WeakForm::get_jacobian_keys() const
 }
 
 const std::vector<ResidualFunc *> &
-WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int part) const
+WeakForm::get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const
 {
     _F_;
     PetscFormKey key;
@@ -126,7 +126,7 @@ WeakForm::get(PetscWeakFormKind kind, const Label & label, Int val, Int f, Int g
 }
 
 void
-WeakForm::add(PetscWeakFormKind kind,
+WeakForm::add(ResidualKind kind,
               const Label & label,
               Int value,
               Int f,

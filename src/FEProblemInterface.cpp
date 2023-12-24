@@ -624,8 +624,8 @@ FEProblemInterface::sort_residual_functionals(
     for (auto & k : res_keys) {
         for (Int f = 0; f < get_num_fields(); f++) {
             Label lbl(k.label);
-            auto f0_fnls = this->wf->get(PETSC_WF_F0, lbl, k.value, f, k.part);
-            auto f1_fnls = this->wf->get(PETSC_WF_F1, lbl, k.value, f, k.part);
+            auto f0_fnls = this->wf->get(WeakForm::F0, lbl, k.value, f, k.part);
+            auto f1_fnls = this->wf->get(WeakForm::F1, lbl, k.value, f, k.part);
 
             add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
             add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
@@ -708,15 +708,15 @@ FEProblemInterface::add_residual_block(Int field_id,
 {
     _F_;
     if (region.empty()) {
-        add_weak_form_residual_block(PETSC_WF_F0, field_id, f0);
-        add_weak_form_residual_block(PETSC_WF_F1, field_id, f1);
+        add_weak_form_residual_block(WeakForm::F0, field_id, f0);
+        add_weak_form_residual_block(WeakForm::F1, field_id, f1);
     }
     else {
         auto label = get_unstr_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
-            add_weak_form_residual_block(PETSC_WF_F0, field_id, f0, label, val, 0);
-            add_weak_form_residual_block(PETSC_WF_F1, field_id, f1, label, val, 0);
+            add_weak_form_residual_block(WeakForm::F0, field_id, f0, label, val, 0);
+            add_weak_form_residual_block(WeakForm::F1, field_id, f1, label, val, 0);
         }
     }
 }
@@ -733,8 +733,8 @@ FEProblemInterface::add_boundary_residual_block(Int field_id,
     auto label = get_unstr_mesh()->get_label(boundary);
     auto ids = label.get_values();
     for (auto & val : ids) {
-        add_weak_form_residual_block(PETSC_WF_BDF0, field_id, f0, label, val, 0);
-        add_weak_form_residual_block(PETSC_WF_BDF1, field_id, f1, label, val, 0);
+        add_weak_form_residual_block(WeakForm::BND_F0, field_id, f0, label, val, 0);
+        add_weak_form_residual_block(WeakForm::BND_F1, field_id, f1, label, val, 0);
     }
 }
 
@@ -817,7 +817,7 @@ FEProblemInterface::add_boundary_jacobian_block(Int fid,
 }
 
 void
-FEProblemInterface::add_weak_form_residual_block(PetscWeakFormKind kind,
+FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                                  Int field_id,
                                                  ResidualFunc * f,
                                                  const Label & label,
@@ -856,8 +856,8 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     _F_;
     Int field = key.field;
     Label lbl(key.label);
-    const auto & f0_res_fns = this->wf->get(PETSC_WF_F0, lbl, key.value, field, key.part);
-    const auto & f1_res_fns = this->wf->get(PETSC_WF_F1, lbl, key.value, field, key.part);
+    const auto & f0_res_fns = this->wf->get(WeakForm::F0, lbl, key.value, field, key.part);
+    const auto & f1_res_fns = this->wf->get(WeakForm::F1, lbl, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
@@ -998,8 +998,8 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
     _F_;
     Int field = key.field;
     Label lbl(key.label);
-    const auto & f0_res_fns = this->wf->get(PETSC_WF_BDF0, lbl, key.value, field, key.part);
-    const auto & f1_res_fns = this->wf->get(PETSC_WF_BDF1, lbl, key.value, field, key.part);
+    const auto & f0_res_fns = this->wf->get(WeakForm::BND_F0, lbl, key.value, field, key.part);
+    const auto & f1_res_fns = this->wf->get(WeakForm::BND_F1, lbl, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return 0;
 
