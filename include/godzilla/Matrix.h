@@ -27,6 +27,7 @@ public:
 
     void assembly_begin(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
     void assembly_end(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
+    void assemble(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
 
     void get_size(Int & m, Int & n) const;
     Int get_n_rows() const;

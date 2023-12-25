@@ -30,6 +30,14 @@ TEST(MatrixTest, assembly)
     m.destroy();
 }
 
+TEST(MatrixTest, assemble)
+{
+    // TODO: this should really be tested with MPI (n_proc > 1)
+    Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
+    m.assemble();
+    m.destroy();
+}
+
 TEST(MatrixTest, get_size)
 {
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 3, 6, 1);

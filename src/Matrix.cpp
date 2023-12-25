@@ -55,6 +55,14 @@ Matrix::assembly_end(MatAssemblyType type)
 }
 
 void
+Matrix::assemble(MatAssemblyType type)
+{
+    _F_;
+    assembly_begin(type);
+    assembly_end(type);
+}
+
+void
 Matrix::get_size(Int & m, Int & n) const
 {
     _F_;
