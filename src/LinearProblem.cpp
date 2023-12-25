@@ -8,8 +8,10 @@
 
 namespace godzilla {
 
+namespace internal {
+
 PetscErrorCode
-__compute_rhs(KSP, Vec b, void * ctx)
+compute_rhs(KSP, Vec b, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
@@ -18,7 +20,7 @@ __compute_rhs(KSP, Vec b, void * ctx)
 }
 
 PetscErrorCode
-__compute_operators(KSP, Mat A, Mat B, void * ctx)
+compute_operators(KSP, Mat A, Mat B, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
@@ -28,13 +30,14 @@ __compute_operators(KSP, Mat A, Mat B, void * ctx)
 }
 
 PetscErrorCode
-__ksp_monitor_linear(KSP, Int it, Real rnorm, void * ctx)
+ksp_monitor(KSP, Int it, Real rnorm, void * ctx)
 {
     _F_;
     auto * problem = static_cast<LinearProblem *>(ctx);
-    problem->ksp_monitor_callback(it, rnorm);
-    return 0;
+    return problem->monitor(it, rnorm);
 }
+
+} // namespace internal
 
 Parameters
 LinearProblem::parameters()
@@ -54,8 +57,6 @@ LinearProblem::parameters()
 
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
-    ksp(nullptr),
-    converged_reason(KSP_CONVERGED_ITERATING),
     lin_rel_tol(get_param<Real>("lin_rel_tol")),
     lin_abs_tol(get_param<Real>("lin_abs_tol")),
     lin_max_iter(get_param<Int>("lin_max_iter"))
@@ -67,8 +68,7 @@ LinearProblem::LinearProblem(const Parameters & parameters) :
 LinearProblem::~LinearProblem()
 {
     _F_;
-    if (this->ksp)
-        KSPDestroy(&this->ksp);
+    this->ks.destroy();
     this->b.destroy();
 }
 
@@ -88,15 +88,15 @@ LinearProblem::create()
 
     Problem::create();
 
-    PETSC_CHECK(KSPSetFromOptions(this->ksp));
+    this->ks.set_from_options();
 }
 
 void
 LinearProblem::init()
 {
     _F_;
-    PETSC_CHECK(KSPCreate(get_comm(), &this->ksp));
-    PETSC_CHECK(KSPSetDM(this->ksp, get_dm()));
+    this->ks.create(get_comm());
+    this->ks.set_dm(get_dm());
     PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
 }
 
@@ -114,53 +114,45 @@ void
 LinearProblem::set_up_callbacks()
 {
     _F_;
-    PETSC_CHECK(KSPSetComputeRHS(this->ksp, __compute_rhs, this));
-    PETSC_CHECK(KSPSetComputeOperators(this->ksp, __compute_operators, this));
+    this->ks.set_compute_rhs(internal::compute_rhs, this);
+    this->ks.set_compute_operators(internal::compute_operators, this);
+    // TODO: this would be nice
+    // this->ks.set_compute_rhs(this, &LinearProblem::compute_rhs);
+    // this->ks.set_compute_operators(this, &LinearProblem::compute_operators);
 }
 
 void
 LinearProblem::set_up_monitors()
 {
     _F_;
-    PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor_linear, this, nullptr));
+    this->ks.monitor_set(internal::ksp_monitor, this);
+    // TODO: this would be nice
+    // this->ks.monitor_set(this, &LinearProblem::monitor);
 }
 
 void
 LinearProblem::set_up_solver_parameters()
 {
     _F_;
-    PETSC_CHECK(KSPSetTolerances(this->ksp,
-                                 this->lin_rel_tol,
-                                 this->lin_abs_tol,
-                                 PETSC_DEFAULT,
-                                 this->lin_max_iter));
+    this->ks.set_tolerances(this->lin_rel_tol,
+                            this->lin_abs_tol,
+                            PETSC_DEFAULT,
+                            this->lin_max_iter);
 }
 
-void
-LinearProblem::ksp_monitor_callback(Int it, Real rnorm)
+PetscErrorCode
+LinearProblem::monitor(Int it, Real rnorm)
 {
     _F_;
     lprint(8, "{} Linear residual: {:e}", it, rnorm);
+    return 0;
 }
 
 bool
 LinearProblem::converged()
 {
     _F_;
-    bool conv = this->converged_reason == KSP_CONVERGED_RTOL_NORMAL ||
-                this->converged_reason == KSP_CONVERGED_ATOL_NORMAL ||
-                this->converged_reason == KSP_CONVERGED_RTOL ||
-                this->converged_reason == KSP_CONVERGED_ATOL ||
-                this->converged_reason == KSP_CONVERGED_ITS ||
-#if PETSC_VERSION_GE(3, 19, 0)
-                this->converged_reason == KSP_CONVERGED_NEG_CURVE ||
-#else
-                this->converged_reason == KSP_CONVERGED_CG_NEG_CURVE ||
-                this->converged_reason == KSP_CONVERGED_CG_CONSTRAINED ||
-#endif
-                this->converged_reason == KSP_CONVERGED_STEP_LENGTH ||
-                this->converged_reason == KSP_CONVERGED_HAPPY_BREAKDOWN;
-    return conv;
+    return this->ks.get_converged_reason() > 0;
 }
 
 void
@@ -188,8 +180,7 @@ void
 LinearProblem::solve()
 {
     _F_;
-    PETSC_CHECK(KSPSolve(this->ksp, this->b, get_solution_vector()));
-    PETSC_CHECK(KSPGetConvergedReason(this->ksp, &this->converged_reason));
+    this->ks.solve(this->b, get_solution_vector());
 }
 
 PetscErrorCode
