@@ -6,6 +6,7 @@
 #include "godzilla/Problem.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
+#include "godzilla/KrylovSolver.h"
 #include "petscksp.h"
 
 namespace godzilla {
@@ -26,6 +27,8 @@ public:
     virtual PetscErrorCode compute_rhs(Vector & b);
     /// Method to compute operators. Called from the PETsc callback
     virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B);
+    /// Monitor callback
+    PetscErrorCode monitor(Int it, Real rnorm);
 
 protected:
     /// Initialize the problem
@@ -38,8 +41,6 @@ protected:
     virtual void set_up_monitors();
     /// Setup solver parameters
     virtual void set_up_solver_parameters();
-    /// KSP monitor
-    void ksp_monitor_callback(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for setting preconditioning
@@ -49,11 +50,9 @@ protected:
 
 private:
     /// KSP object
-    KSP ksp;
+    KrylovSolver ks;
     /// The right-hand side vector
     Vector b;
-    /// Converged reason
-    KSPConvergedReason converged_reason;
 
     /// Relative convergence tolerance for the linear solver
     Real lin_rel_tol;
@@ -64,8 +63,6 @@ private:
 
 public:
     static Parameters parameters();
-
-    friend PetscErrorCode __ksp_monitor_linear(KSP ksp, Int it, Real rnorm, void * ctx);
 };
 
 } // namespace godzilla
