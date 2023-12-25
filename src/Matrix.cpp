@@ -89,6 +89,13 @@ Matrix::get_value(Int row, Int col) const
 }
 
 void
+Matrix::set_sizes(Int m, Int n, Int M, Int N)
+{
+    _F_;
+    PETSC_CHECK(MatSetSizes(this->mat, m, n, M, N));
+}
+
+void
 Matrix::set_value(Int row, Int col, Scalar val, InsertMode mode)
 {
     _F_;

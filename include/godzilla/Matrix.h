@@ -34,6 +34,8 @@ public:
 
     Scalar get_value(Int row, Int col) const;
 
+    void set_sizes(Int m, Int n, Int M = PETSC_DECIDE, Int N = PETSC_DECIDE);
+
     void set_value(Int row, Int col, Scalar val, InsertMode mode = INSERT_VALUES);
     void set_value_local(Int row, Int col, Scalar val, InsertMode mode = INSERT_VALUES);
 
