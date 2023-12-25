@@ -63,11 +63,11 @@ protected:
     Problem * get_problem() const;
 
 private:
-    /// Unstructured mesh this field is defined on
-    UnstructuredMesh * mesh;
-
     /// Discrete problem this object is part of
     DiscreteProblemInterface * dpi;
+
+    /// Unstructured mesh this field is defined on
+    UnstructuredMesh * mesh;
 
     /// Field name
     const std::string & field;

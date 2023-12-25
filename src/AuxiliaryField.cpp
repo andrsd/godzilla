@@ -24,15 +24,14 @@ AuxiliaryField::parameters()
 AuxiliaryField::AuxiliaryField(const Parameters & params) :
     Object(params),
     PrintInterface(this),
-    mesh(nullptr),
     dpi(get_param<DiscreteProblemInterface *>("_dpi")),
+    mesh(dpi->get_unstr_mesh()),
     field(get_param<std::string>("field")),
     region(get_param<std::string>("region")),
     fid(-1),
     block_id(-1)
 {
     _F_;
-    this->mesh = dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh());
 }
 
 UnstructuredMesh *

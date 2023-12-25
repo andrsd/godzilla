@@ -31,6 +31,9 @@ public:
     DiscreteProblemInterface(Problem * problem, const Parameters & params);
     virtual ~DiscreteProblemInterface();
 
+    /// Get unstructured mesh associated with this problem
+    UnstructuredMesh * get_unstr_mesh() const;
+
     /// Get problem
     ///
     /// @return Problem this interface is part of
@@ -297,8 +300,6 @@ public:
     virtual void compute_solution_vector_local() = 0;
 
 protected:
-    /// Get unstructured mesh associated with this problem
-    UnstructuredMesh * get_unstr_mesh() const;
     /// Get list of all boundary conditions
     const std::vector<BoundaryCondition *> & get_boundary_conditions() const;
     /// Get list of all essential boundary conditions
