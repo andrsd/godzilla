@@ -13,6 +13,14 @@ TEST(VectorTest, assembly)
     v.destroy();
 }
 
+TEST(VectorTest, set_up)
+{
+    Vector v(MPI_COMM_WORLD);
+    v.set_sizes(3);
+    v.set_up();
+    EXPECT_EQ(v.get_local_size(), 3);
+}
+
 TEST(VectorTest, set_sizes)
 {
     Vector v(MPI_COMM_WORLD);
