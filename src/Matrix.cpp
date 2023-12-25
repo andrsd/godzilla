@@ -34,6 +34,13 @@ Matrix::destroy()
 }
 
 void
+Matrix::set_up()
+{
+    _F_;
+    PETSC_CHECK(MatSetUp(this->mat));
+}
+
+void
 Matrix::assembly_begin(MatAssemblyType type)
 {
     _F_;
@@ -45,6 +52,14 @@ Matrix::assembly_end(MatAssemblyType type)
 {
     _F_;
     PETSC_CHECK(MatAssemblyEnd(this->mat, type));
+}
+
+void
+Matrix::assemble(MatAssemblyType type)
+{
+    _F_;
+    assembly_begin(type);
+    assembly_end(type);
 }
 
 void
@@ -79,6 +94,13 @@ Matrix::get_value(Int row, Int col) const
     Scalar val;
     PETSC_CHECK(MatGetValue(this->mat, row, col, &val));
     return val;
+}
+
+void
+Matrix::set_sizes(Int m, Int n, Int M, Int N)
+{
+    _F_;
+    PETSC_CHECK(MatSetSizes(this->mat, m, n, M, N));
 }
 
 void

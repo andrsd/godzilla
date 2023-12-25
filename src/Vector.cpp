@@ -40,6 +40,13 @@ Vector::destroy()
 }
 
 void
+Vector::set_up()
+{
+    _F_;
+    PETSC_CHECK(VecSetUp(this->vec));
+}
+
+void
 Vector::set_name(const std::string & name)
 {
     _F_;

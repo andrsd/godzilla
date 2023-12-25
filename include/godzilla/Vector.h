@@ -21,6 +21,8 @@ public:
     void destroy();
     void set_name(const std::string & name);
 
+    void set_up();
+
     void assembly_begin();
     void assembly_end();
 

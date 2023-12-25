@@ -23,14 +23,19 @@ public:
     void create(MPI_Comm comm);
     void destroy();
 
+    void set_up();
+
     void assembly_begin(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
     void assembly_end(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
+    void assemble(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
 
     void get_size(Int & m, Int & n) const;
     Int get_n_rows() const;
     Int get_n_cols() const;
 
     Scalar get_value(Int row, Int col) const;
+
+    void set_sizes(Int m, Int n, Int M = PETSC_DECIDE, Int N = PETSC_DECIDE);
 
     void set_value(Int row, Int col, Scalar val, InsertMode mode = INSERT_VALUES);
     void set_value_local(Int row, Int col, Scalar val, InsertMode mode = INSERT_VALUES);
