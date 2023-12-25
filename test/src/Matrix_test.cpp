@@ -10,6 +10,17 @@ TEST(MatrixTest, create)
     m.destroy();
 }
 
+TEST(MatrixTest, set_sizes)
+{
+    Matrix m;
+    m.create(MPI_COMM_WORLD);
+    m.set_sizes(2, 3);
+    m.set_up();
+    EXPECT_EQ(m.get_n_rows(), 2);
+    EXPECT_EQ(m.get_n_cols(), 3);
+    m.destroy();
+}
+
 TEST(MatrixTest, assembly)
 {
     // TODO: this should really be tested with MPI (n_proc > 1)
