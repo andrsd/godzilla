@@ -23,6 +23,8 @@ public:
     void create(MPI_Comm comm);
     void destroy();
 
+    void set_up();
+
     void assembly_begin(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
     void assembly_end(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
 

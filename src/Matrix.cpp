@@ -34,6 +34,13 @@ Matrix::destroy()
 }
 
 void
+Matrix::set_up()
+{
+    _F_;
+    PETSC_CHECK(MatSetUp(this->mat));
+}
+
+void
 Matrix::assembly_begin(MatAssemblyType type)
 {
     _F_;
