@@ -8,37 +8,6 @@
 
 namespace godzilla {
 
-namespace internal {
-
-PetscErrorCode
-compute_rhs(KSP, Vec b, void * ctx)
-{
-    _F_;
-    auto * problem = static_cast<LinearProblem *>(ctx);
-    Vector vec_b(b);
-    return problem->compute_rhs(vec_b);
-}
-
-PetscErrorCode
-compute_operators(KSP, Mat A, Mat B, void * ctx)
-{
-    _F_;
-    auto * problem = static_cast<LinearProblem *>(ctx);
-    Matrix mat_A(A);
-    Matrix mat_B(B);
-    return problem->compute_operators(mat_A, mat_B);
-}
-
-PetscErrorCode
-ksp_monitor(KSP, Int it, Real rnorm, void * ctx)
-{
-    _F_;
-    auto * problem = static_cast<LinearProblem *>(ctx);
-    return problem->monitor(it, rnorm);
-}
-
-} // namespace internal
-
 Parameters
 LinearProblem::parameters()
 {
@@ -114,20 +83,15 @@ void
 LinearProblem::set_up_callbacks()
 {
     _F_;
-    this->ks.set_compute_rhs(internal::compute_rhs, this);
-    this->ks.set_compute_operators(internal::compute_operators, this);
-    // TODO: this would be nice
-    // this->ks.set_compute_rhs(this, &LinearProblem::compute_rhs);
-    // this->ks.set_compute_operators(this, &LinearProblem::compute_operators);
+    this->ks.set_compute_rhs(this, &LinearProblem::compute_rhs);
+    this->ks.set_compute_operators(this, &LinearProblem::compute_operators);
 }
 
 void
 LinearProblem::set_up_monitors()
 {
     _F_;
-    this->ks.monitor_set(internal::ksp_monitor, this);
-    // TODO: this would be nice
-    // this->ks.monitor_set(this, &LinearProblem::monitor);
+    this->ks.monitor_set(this, &LinearProblem::monitor);
 }
 
 void
