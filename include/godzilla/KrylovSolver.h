@@ -5,6 +5,7 @@
 
 #include "petscksp.h"
 #include "godzilla/Types.h"
+#include "godzilla/KrylovSolverCallbacks.h"
 
 namespace godzilla {
 
@@ -14,8 +15,6 @@ class Vector;
 /// Wrapper around KSP
 class KrylovSolver {
 public:
-    // typedef void (*MonitorCallback)(Int, Real);
-
     enum ConvergedReason {
         CONVERGED_RTOL_NORMAL = KSP_CONVERGED_RTOL_NORMAL,
         CONVERGED_ATOL_NORMAL = KSP_CONVERGED_ATOL_NORMAL,
@@ -83,12 +82,39 @@ public:
     /// @param ctx Optional context
     void set_compute_rhs(PetscErrorCode (*func)(KSP ksp, Vec b, void * ctx), void * ctx = nullptr);
 
+    /// Set member function to compute the right hand side of the linear system
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param callback Member function in class T
+    template <class T>
+    void
+    set_compute_rhs(T * instance, PetscErrorCode (T::*callback)(Vector &))
+    {
+        this->compute_rhs_method = new KSPComputeRhsMethod<T>(instance, callback);
+        PETSC_CHECK(KSPSetComputeRHS(this->ksp, compute_rhs, this->compute_rhs_method));
+    }
+
     /// Set routine to compute the linear operators
     ///
     /// @param func Function to compute the operators
     /// @param ctx Optional context
     void set_compute_operators(PetscErrorCode (*func)(KSP ksp, Mat A, Mat B, void * ctx),
                                void * ctx = nullptr);
+
+    /// Set member function to compute operators of the linear system
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param callback Member function in class T
+    template <class T>
+    void
+    set_compute_operators(T * instance, PetscErrorCode (T::*callback)(Matrix &, Matrix &))
+    {
+        this->compute_operators_method = new KSPComputeOperatorsMethod<T>(instance, callback);
+        PETSC_CHECK(
+            KSPSetComputeOperators(this->ksp, compute_operators, this->compute_operators_method));
+    }
 
     /// Sets an *additional* function to be called at every iteration to monitor the residual/error
     /// etc.
@@ -100,6 +126,20 @@ public:
     void monitor_set(PetscErrorCode (*monitor)(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx),
                      void * ctx = nullptr,
                      PetscErrorCode (*monitordestroy)(void ** ctx) = nullptr);
+
+    /// Sets an *additional* member function to be called at every iteration to monitor the
+    /// residual/error etc.
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param callback Member function in class T
+    template <class T>
+    void
+    monitor_set(T * instance, PetscErrorCode (T::*callback)(Int, Real))
+    {
+        this->monitor_method = new KSPMonitorMethod<T>(instance, callback);
+        PETSC_CHECK(KSPMonitorSet(this->ksp, monitor, this->monitor_method, monitor_destroy));
+    }
 
     /// Solve a linear system
     ///
@@ -125,8 +165,18 @@ public:
 private:
     /// PETSc object
     KSP ksp;
-    // /// Pointer to the monitor callback
-    // MonitorCallback * monitor;
+    /// Method for monitoring the solve
+    KSPMonitorMethodAbstract * monitor_method;
+    /// Method for computing RHS
+    KSPComputeRhsMethodAbstract * compute_rhs_method;
+    /// Method for computing operators
+    KSPComputeOperatorsMethodAbstract * compute_operators_method;
+
+public:
+    static PetscErrorCode compute_operators(KSP, Mat A, Mat B, void * ctx);
+    static PetscErrorCode compute_rhs(KSP, Vec b, void * ctx);
+    static PetscErrorCode monitor(KSP, Int it, Real rnorm, void * ctx);
+    static PetscErrorCode monitor_destroy(void ** ctx);
 };
 
 } // namespace godzilla

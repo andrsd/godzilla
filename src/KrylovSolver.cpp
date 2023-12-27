@@ -9,9 +9,55 @@
 
 namespace godzilla {
 
-KrylovSolver::KrylovSolver() : ksp(nullptr) {}
+PetscErrorCode
+KrylovSolver::compute_operators(KSP, Mat A, Mat B, void * ctx)
+{
+    _F_;
+    auto * method = static_cast<KSPComputeOperatorsMethodAbstract *>(ctx);
+    Matrix mat_A(A);
+    Matrix mat_B(B);
+    return method->invoke(mat_A, mat_B);
+}
 
-KrylovSolver::KrylovSolver(KSP ksp) : ksp(ksp) {}
+PetscErrorCode
+KrylovSolver::compute_rhs(KSP, Vec b, void * ctx)
+{
+    _F_;
+    auto * method = static_cast<KSPComputeRhsMethodAbstract *>(ctx);
+    Vector vec_b(b);
+    return method->invoke(vec_b);
+}
+
+PetscErrorCode
+KrylovSolver::monitor(KSP, Int it, Real rnorm, void * ctx)
+{
+    auto * method = static_cast<KSPMonitorMethodAbstract *>(ctx);
+    return method->invoke(it, rnorm);
+}
+
+PetscErrorCode
+KrylovSolver::monitor_destroy(void ** ctx)
+{
+    auto * method = static_cast<KSPMonitorMethodAbstract *>(*ctx);
+    delete method;
+    return 0;
+}
+
+KrylovSolver::KrylovSolver() :
+    ksp(nullptr),
+    monitor_method(nullptr),
+    compute_rhs_method(nullptr),
+    compute_operators_method(nullptr)
+{
+}
+
+KrylovSolver::KrylovSolver(KSP ksp) :
+    ksp(ksp),
+    monitor_method(nullptr),
+    compute_rhs_method(nullptr),
+    compute_operators_method(nullptr)
+{
+}
 
 void
 KrylovSolver::create(MPI_Comm comm)
