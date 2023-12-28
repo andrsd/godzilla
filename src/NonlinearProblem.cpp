@@ -333,6 +333,16 @@ void
 NonlinearProblem::set_up_preconditioning()
 {
     CALL_STACK_MSG();
+    PC pc;
+    KSPGetPC(this->ksp, &pc);
+    this->precond = create_preconditioner(pc);
+}
+
+Preconditioner
+NonlinearProblem::create_preconditioner(PC pc)
+{
+    CALL_STACK_MSG();
+    return Preconditioner(pc);
 }
 
 void
