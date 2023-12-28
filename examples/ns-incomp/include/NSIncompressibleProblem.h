@@ -17,7 +17,7 @@ protected:
     void set_up_weak_form() override;
     void set_up_matrix_properties() override;
     void set_up_field_null_space(DM dm) override;
-    void set_up_preconditioning() override;
+    Preconditioner create_preconditioner(PC pc) override;
 
     PetscInt velocity_id;
     PetscInt pressure_id;
