@@ -22,26 +22,26 @@ VTKOutput::parameters()
 
 VTKOutput::VTKOutput(const Parameters & params) : FileOutput(params), viewer(nullptr)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 VTKOutput::~VTKOutput()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscViewerDestroy(&this->viewer));
 }
 
 std::string
 VTKOutput::get_file_ext() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return { "vtk" };
 }
 
 void
 VTKOutput::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FileOutput::create();
 
     PETSC_CHECK(PetscViewerCreate(get_comm(), &this->viewer));
@@ -52,7 +52,7 @@ VTKOutput::create()
 void
 VTKOutput::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     FileOutput::check();
     const auto * mesh = dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh());
     if (mesh == nullptr)
@@ -62,7 +62,7 @@ VTKOutput::check()
 void
 VTKOutput::output_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto problem = get_problem();
     set_sequence_file_base(problem->get_step_num());
     PETSC_CHECK(PetscViewerFileSetName(this->viewer, get_file_name().c_str()));

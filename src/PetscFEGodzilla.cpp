@@ -22,7 +22,7 @@ integrate_residual(PetscDS ds,
                    Real t,
                    Scalar elem_vec[])
 {
-    _F_;
+    CALL_STACK_MSG();
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, key.field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
@@ -52,7 +52,7 @@ integrate_bd_residual(PetscDS ds,
                       Real t,
                       Scalar elem_vec[])
 {
-    _F_;
+    CALL_STACK_MSG();
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, key.field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
@@ -83,7 +83,7 @@ integrate_jacobian(PetscDS ds,
                    Real u_tshift,
                    Scalar elem_mat[])
 {
-    _F_;
+    CALL_STACK_MSG();
     Int n_fields;
     PETSC_CHECK(PetscDSGetNumFields(ds, &n_fields));
     Int field_i = key.field / n_fields;
@@ -119,7 +119,7 @@ integrate_bd_jacobian(PetscDS ds,
                       Real u_tshift,
                       Scalar elem_mat[])
 {
-    _F_;
+    CALL_STACK_MSG();
     Int n_fields;
     PETSC_CHECK(PetscDSGetNumFields(ds, &n_fields));
     Int field_i = key.field / n_fields;
@@ -149,7 +149,7 @@ create_lagrange_petscfe(MPI_Comm comm,
                         Int qorder,
                         PetscFE * fem)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscFECreateLagrange(comm, dim, nc, is_simplex, k, qorder, fem));
     // replace PETSc functions with ours
     (*fem)->ops->integrate = nullptr;

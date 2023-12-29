@@ -14,7 +14,7 @@ namespace godzilla {
 static PetscErrorCode
 __compute_residual(SNES, Vec x, Vec f, void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * problem = static_cast<NonlinearProblem *>(ctx);
     Vector vec_x(x);
     Vector vec_f(f);
@@ -24,7 +24,7 @@ __compute_residual(SNES, Vec x, Vec f, void * ctx)
 static PetscErrorCode
 __compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * problem = static_cast<NonlinearProblem *>(ctx);
     Vector vec_x(x);
     Matrix mat_J(J);
@@ -35,7 +35,7 @@ __compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 PetscErrorCode
 __ksp_monitor(KSP, Int it, Real rnorm, void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * problem = static_cast<NonlinearProblem *>(ctx);
     problem->ksp_monitor_callback(it, rnorm);
     return 0;
@@ -44,7 +44,7 @@ __ksp_monitor(KSP, Int it, Real rnorm, void * ctx)
 PetscErrorCode
 __snes_monitor(SNES, Int it, Real norm, void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * problem = static_cast<NonlinearProblem *>(ctx);
     problem->snes_monitor_callback(it, norm);
     return 0;
@@ -94,14 +94,14 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     lin_abs_tol(get_param<Real>("lin_abs_tol")),
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
-    _F_;
+    CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::FINAL);
     line_search_type = utils::to_lower(line_search_type);
 }
 
 NonlinearProblem::~NonlinearProblem()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->snes)
         SNESDestroy(&this->snes);
     this->r.destroy();
@@ -111,14 +111,14 @@ NonlinearProblem::~NonlinearProblem()
 const Matrix &
 NonlinearProblem::get_jacobian() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->J;
 }
 
 void
 NonlinearProblem::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     get_mesh()->distribute();
     init();
     allocate_objects();
@@ -137,7 +137,7 @@ NonlinearProblem::create()
 void
 NonlinearProblem::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     Problem::check();
     if (!validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }))
         log_error("The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
@@ -147,14 +147,14 @@ NonlinearProblem::check()
 SNES
 NonlinearProblem::get_snes() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->snes;
 }
 
 void
 NonlinearProblem::set_snes(SNES snes)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->snes = snes;
     if (this->snes)
         PETSC_CHECK(SNESGetKSP(this->snes, &this->ksp));
@@ -171,14 +171,14 @@ NonlinearProblem::set_jacobian_function(
 KSP
 NonlinearProblem::get_ksp() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ksp;
 }
 
 void
 NonlinearProblem::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     DM dm = get_dm();
     SNES snes;
     PETSC_CHECK(SNESCreate(get_comm(), &snes));
@@ -190,7 +190,7 @@ NonlinearProblem::init()
 void
 NonlinearProblem::set_use_matrix_free(bool mf_operator, bool mf)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(SNESSetUseMatrixFree(this->snes,
                                      mf_operator ? PETSC_TRUE : PETSC_FALSE,
                                      mf ? PETSC_TRUE : PETSC_FALSE));
@@ -199,7 +199,7 @@ NonlinearProblem::set_use_matrix_free(bool mf_operator, bool mf)
 void
 NonlinearProblem::set_up_initial_guess()
 {
-    _F_;
+    CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
     get_solution_vector().set(0.);
 }
@@ -207,7 +207,7 @@ NonlinearProblem::set_up_initial_guess()
 void
 NonlinearProblem::allocate_objects()
 {
-    _F_;
+    CALL_STACK_MSG();
     Problem::allocate_objects();
 
     this->r = get_solution_vector().duplicate();
@@ -220,7 +220,7 @@ NonlinearProblem::allocate_objects()
 void
 NonlinearProblem::set_up_line_search()
 {
-    _F_;
+    CALL_STACK_MSG();
     SNESLineSearch line_search;
     PETSC_CHECK(SNESGetLineSearch(this->snes, &line_search));
     if (this->line_search_type == "basic")
@@ -242,7 +242,7 @@ NonlinearProblem::set_up_line_search()
 void
 NonlinearProblem::set_up_callbacks()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(SNESSetFunction(this->snes, this->r, __compute_residual, this));
     set_jacobian_function(__compute_jacobian, this);
 }
@@ -250,7 +250,7 @@ NonlinearProblem::set_up_callbacks()
 void
 NonlinearProblem::set_up_monitors()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(SNESMonitorSet(this->snes, __snes_monitor, this, nullptr));
     PETSC_CHECK(KSPMonitorSet(this->ksp, __ksp_monitor, this, nullptr));
 }
@@ -263,7 +263,7 @@ NonlinearProblem::set_up_solve_type()
 void
 NonlinearProblem::set_up_solver_parameters()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(SNESSetTolerances(this->snes,
                                   this->nl_abs_tol,
                                   this->nl_rel_tol,
@@ -283,28 +283,28 @@ NonlinearProblem::set_up_solver_parameters()
 void
 NonlinearProblem::snes_monitor_callback(Int it, Real norm)
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(7, "{} Non-linear residual: {:e}", it, norm);
 }
 
 void
 NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(8, "    {} Linear residual: {:e}", it, rnorm);
 }
 
 void
 NonlinearProblem::set_ksp_operators(const Matrix & A, const Matrix & B)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(KSPSetOperators(this->ksp, A, B));
 }
 
 bool
 NonlinearProblem::converged()
 {
-    _F_;
+    CALL_STACK_MSG();
     bool conv = (this->converged_reason == SNES_CONVERGED_FNORM_ABS) ||
                 (this->converged_reason == SNES_CONVERGED_FNORM_RELATIVE) ||
                 (this->converged_reason == SNES_CONVERGED_SNORM_RELATIVE) ||
@@ -315,7 +315,7 @@ NonlinearProblem::converged()
 void
 NonlinearProblem::run()
 {
-    _F_;
+    CALL_STACK_MSG();
     set_up_initial_guess();
     on_initial();
     solve();
@@ -326,19 +326,19 @@ NonlinearProblem::run()
 void
 NonlinearProblem::set_up_matrix_properties()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 NonlinearProblem::set_up_preconditioning()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 NonlinearProblem::solve()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Solving");
     PETSC_CHECK(SNESSolve(this->snes, nullptr, get_solution_vector()));
     PETSC_CHECK(SNESGetConvergedReason(this->snes, &this->converged_reason));
@@ -347,14 +347,14 @@ NonlinearProblem::solve()
 PetscErrorCode
 NonlinearProblem::compute_residual(const Vector &, Vector &)
 {
-    _F_;
+    CALL_STACK_MSG();
     return 0;
 }
 
 PetscErrorCode
 NonlinearProblem::compute_jacobian(const Vector &, Matrix &, Matrix &)
 {
-    _F_;
+    CALL_STACK_MSG();
     return 0;
 }
 

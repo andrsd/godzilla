@@ -32,28 +32,28 @@ ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & params) :
     AuxiliaryField(params),
     values(params.get<std::vector<Real>>("value"))
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->values.size() >= 1);
 }
 
 Int
 ConstantAuxiliaryField::get_num_components() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->values.size();
 }
 
 PetscFunc *
 ConstantAuxiliaryField::get_func() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return constant_auxiliary_field;
 }
 
 void
 ConstantAuxiliaryField::evaluate(Int, Real, const Real[], Int nc, Scalar u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     for (Int c = 0; c < nc; c++)
         u[c] = this->values[c];
 }

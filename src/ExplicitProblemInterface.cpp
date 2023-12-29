@@ -12,7 +12,7 @@ namespace {
 PetscErrorCode
 compute_rhs(TS, Real time, Vec x, Vec F, void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * epi = static_cast<ExplicitProblemInterface *>(ctx);
     Vector vec_x(x);
     Vector vec_F(F);
@@ -47,28 +47,28 @@ ExplicitProblemInterface::~ExplicitProblemInterface()
 const Matrix &
 ExplicitProblemInterface::get_mass_matrix() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->M;
 }
 
 Matrix &
 ExplicitProblemInterface::get_mass_matrix()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->M;
 }
 
 const Vector &
 ExplicitProblemInterface::get_lumped_mass_matrix() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->M_lumped_inv;
 }
 
 void
 ExplicitProblemInterface::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     TransientProblemInterface::check();
     auto prob = this->nl_problem;
     if (!validation::in(get_scheme(), { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
@@ -79,7 +79,7 @@ ExplicitProblemInterface::check()
 void
 ExplicitProblemInterface::set_up_callbacks()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
     PETSC_CHECK(DMTSSetRHSFunction(dm, godzilla::compute_rhs, this));
 }
@@ -87,7 +87,7 @@ ExplicitProblemInterface::set_up_callbacks()
 void
 ExplicitProblemInterface::set_up_time_scheme()
 {
-    _F_;
+    CALL_STACK_MSG();
     std::string name = utils::to_lower(get_scheme());
     std::map<std::string, TimeScheme> scheme_map = { { "euler", TimeScheme::EULER },
                                                      { "ssp-rk-2", TimeScheme::SSP_RK_2 },
@@ -100,21 +100,21 @@ ExplicitProblemInterface::set_up_time_scheme()
 void
 ExplicitProblemInterface::allocate_mass_matrix()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->M = this->nl_problem->create_matrix();
 }
 
 void
 ExplicitProblemInterface::allocate_lumped_mass_matrix()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->M_lumped_inv = this->nl_problem->create_global_vector();
 }
 
 void
 ExplicitProblemInterface::create_mass_matrix()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
     Mat m;
     PETSC_CHECK(DMCreateMassMatrix(dm, dm, &m));
@@ -125,7 +125,7 @@ ExplicitProblemInterface::create_mass_matrix()
 void
 ExplicitProblemInterface::create_mass_matrix_lumped()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
     Vec v;
     PETSC_CHECK(DMCreateMassMatrixLumped(dm, &v));
@@ -136,7 +136,7 @@ ExplicitProblemInterface::create_mass_matrix_lumped()
 PetscErrorCode
 ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
     Vector loc_x = this->nl_problem->get_local_vector();
     Vector loc_F = this->nl_problem->get_local_vector();
@@ -161,7 +161,7 @@ ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 PetscErrorCode
 ExplicitProblemInterface::compute_boundary_local(Real time, Vector & x)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
     return DMPlexTSComputeBoundary(dm, time, x, nullptr, this);
 }

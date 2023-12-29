@@ -21,7 +21,7 @@ PoissonEquation::PoissonEquation(const Parameters & parameters) :
     FENonlinearProblem(parameters),
     p_order(get_param<PetscInt>("p_order"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 PoissonEquation::~PoissonEquation() {}
@@ -29,7 +29,7 @@ PoissonEquation::~PoissonEquation() {}
 void
 PoissonEquation::set_up_fields()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->iu = add_fe("u", 1, this->p_order);
     this->affn = add_aux_fe("forcing_fn", 1, this->p_order);
 }
@@ -37,7 +37,7 @@ PoissonEquation::set_up_fields()
 void
 PoissonEquation::set_up_weak_form()
 {
-    _F_;
+    CALL_STACK_MSG();
     add_residual_block(this->iu, new Residual0(this), new Residual1(this));
     add_jacobian_block(this->iu, this->iu, nullptr, nullptr, nullptr, new Jacobian3(this));
 }

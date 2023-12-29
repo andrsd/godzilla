@@ -23,7 +23,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         f[0] = -this->visc * this->u_x(0) + 0.5 * this->u(0) * this->u(0);
     }
 
@@ -49,13 +49,13 @@ BurgersEquation::BurgersEquation(const Parameters & parameters) :
     ExplicitFELinearProblem(parameters),
     viscosity(get_param<PetscReal>("viscosity"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 BurgersEquation::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitFELinearProblem::create();
     create_mass_matrix();
 }
@@ -63,20 +63,20 @@ BurgersEquation::create()
 const PetscReal &
 BurgersEquation::get_viscosity() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->viscosity;
 }
 
 void
 BurgersEquation::set_up_fields()
 {
-    _F_;
+    CALL_STACK_MSG();
     u_id = add_fe("u", 1, 1);
 }
 
 void
 BurgersEquation::set_up_weak_form()
 {
-    _F_;
+    CALL_STACK_MSG();
     add_residual_block(u_id, nullptr, new F1(this));
 }

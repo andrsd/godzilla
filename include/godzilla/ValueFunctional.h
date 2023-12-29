@@ -26,7 +26,7 @@ protected:
     T &
     declare_value(const std::string & name)
     {
-        _F_;
+        CALL_STACK_MSG();
         auto val_name = get_value_name(name);
         this->provides.insert(val_name);
         return this->evalr->declare_value<T>(val_name);

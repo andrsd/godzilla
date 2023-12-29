@@ -21,14 +21,14 @@ MeshPartitioningOutput::parameters()
 
 MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & params) : FileOutput(params)
 {
-    _F_;
+    CALL_STACK_MSG();
     set_file_base("part");
 }
 
 void
 MeshPartitioningOutput::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     FileOutput::check();
     auto dm = get_problem()->get_dm();
     if (dm == nullptr)
@@ -38,14 +38,14 @@ MeshPartitioningOutput::check()
 std::string
 MeshPartitioningOutput::get_file_ext() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return { "h5" };
 }
 
 void
 MeshPartitioningOutput::output_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscViewer viewer;
     PETSC_CHECK(PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 

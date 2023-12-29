@@ -12,7 +12,7 @@ namespace godzilla {
 static PetscErrorCode
 initial_condition_function(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * ic = static_cast<InitialCondition *>(ctx);
     assert(ic != nullptr);
     ic->evaluate(dim, time, x, Nc, u);
@@ -34,13 +34,13 @@ InitialCondition::InitialCondition(const Parameters & params) :
     dpi(get_param<DiscreteProblemInterface *>("_dpi")),
     fid(-1)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 InitialCondition::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->dpi != nullptr);
     auto fld = get_param<std::string>("field");
     if (fld.length() > 0) {
@@ -68,28 +68,28 @@ InitialCondition::create()
 const std::string &
 InitialCondition::get_field_name() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->field_name;
 }
 
 Int
 InitialCondition::get_field_id() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->fid;
 }
 
 PetscFunc *
 InitialCondition::get_function()
 {
-    _F_;
+    CALL_STACK_MSG();
     return initial_condition_function;
 }
 
 void *
 InitialCondition::get_context()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this;
 }
 

@@ -28,7 +28,7 @@ compute_flux(Int dim,
              Scalar flux[],
              void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * fvpi = static_cast<FVProblemInterface *>(ctx);
     fvpi->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
 }
@@ -41,12 +41,12 @@ FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & par
     DiscreteProblemInterface(problem, params),
     fvm(nullptr)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 FVProblemInterface::~FVProblemInterface()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & kv : this->aux_fe) {
         auto & fe = kv.second;
         PetscFEDestroy(&fe);
@@ -56,7 +56,7 @@ FVProblemInterface::~FVProblemInterface()
 void
 FVProblemInterface::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     DiscreteProblemInterface::init();
 
     auto comm = get_unstr_mesh()->get_comm();
@@ -86,7 +86,7 @@ FVProblemInterface::init()
 Int
 FVProblemInterface::get_num_fields() const
 {
-    _F_;
+    CALL_STACK_MSG();
     // because there is one field with 'n' components which are the individual fields
     return 1;
 }
@@ -94,7 +94,7 @@ FVProblemInterface::get_num_fields() const
 std::vector<std::string>
 FVProblemInterface::get_field_names() const
 {
-    _F_;
+    CALL_STACK_MSG();
     std::vector<std::string> infos;
     infos.push_back(empty_name);
     return infos;
@@ -103,7 +103,7 @@ FVProblemInterface::get_field_names() const
 const std::string &
 FVProblemInterface::get_field_name(Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     if (fid == 0) {
         if (this->fields.size() == 1)
             return this->fields.at(0).name;
@@ -117,7 +117,7 @@ FVProblemInterface::get_field_name(Int fid) const
 Int
 FVProblemInterface::get_field_num_components(Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     if (fid == 0) {
         Int n_comps = 0;
         for (auto & it : this->fields)
@@ -131,14 +131,14 @@ FVProblemInterface::get_field_num_components(Int fid) const
 Int
 FVProblemInterface::get_field_id(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     return 0;
 }
 
 bool
 FVProblemInterface::has_field_by_id(Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     if (fid == 0)
         return true;
     else
@@ -148,7 +148,7 @@ FVProblemInterface::has_field_by_id(Int fid) const
 bool
 FVProblemInterface::has_field_by_name(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
     return it != this->fields_by_name.end();
 }
@@ -156,7 +156,7 @@ FVProblemInterface::has_field_by_name(const std::string & name) const
 Int
 FVProblemInterface::get_field_order(Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     if (fid == 0)
         return 0;
     else
@@ -166,7 +166,7 @@ FVProblemInterface::get_field_order(Int fid) const
 std::string
 FVProblemInterface::get_field_component_name(Int fid, Int component) const
 {
-    _F_;
+    CALL_STACK_MSG();
     if (fid == 0) {
         const char * name;
         PETSC_CHECK(PetscFVGetComponentName(this->fvm, component, &name));
@@ -179,7 +179,7 @@ FVProblemInterface::get_field_component_name(Int fid, Int component) const
 void
 FVProblemInterface::set_field_component_name(Int fid, Int component, const std::string & name)
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
     if (it != this->fields.end()) {
         if (it->second.nc > 1) {
@@ -196,14 +196,14 @@ FVProblemInterface::set_field_component_name(Int fid, Int component, const std::
 Int
 FVProblemInterface::get_num_aux_fields() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return (Int) this->aux_fields.size();
 }
 
 std::vector<std::string>
 FVProblemInterface::get_aux_field_names() const
 {
-    _F_;
+    CALL_STACK_MSG();
     std::vector<std::string> names;
     names.reserve(this->aux_fields.size());
     for (const auto & it : this->aux_fields)
@@ -214,7 +214,7 @@ FVProblemInterface::get_aux_field_names() const
 const std::string &
 FVProblemInterface::get_aux_field_name(Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end())
         return it->second.name;
@@ -225,7 +225,7 @@ FVProblemInterface::get_aux_field_name(Int fid) const
 Int
 FVProblemInterface::get_aux_field_num_components(Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end())
         return it->second.nc;
@@ -236,7 +236,7 @@ FVProblemInterface::get_aux_field_num_components(Int fid) const
 Int
 FVProblemInterface::get_aux_field_id(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
     if (it != this->aux_fields_by_name.end())
         return it->second;
@@ -247,7 +247,7 @@ FVProblemInterface::get_aux_field_id(const std::string & name) const
 bool
 FVProblemInterface::has_aux_field_by_id(Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
     return it != this->aux_fields.end();
 }
@@ -255,7 +255,7 @@ FVProblemInterface::has_aux_field_by_id(Int fid) const
 bool
 FVProblemInterface::has_aux_field_by_name(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->aux_fields_by_name.find(name);
     return it != this->aux_fields_by_name.end();
 }
@@ -263,7 +263,7 @@ FVProblemInterface::has_aux_field_by_name(const std::string & name) const
 Int
 FVProblemInterface::get_aux_field_order(Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end())
         return it->second.k;
@@ -274,7 +274,7 @@ FVProblemInterface::get_aux_field_order(Int fid) const
 std::string
 FVProblemInterface::get_aux_field_component_name(Int fid, Int component) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end()) {
         const FieldInfo & fi = it->second;
@@ -292,7 +292,7 @@ FVProblemInterface::get_aux_field_component_name(Int fid, Int component) const
 void
 FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const std::string & name)
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end()) {
         if (it->second.nc > 1) {
@@ -309,7 +309,7 @@ FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 void
 FVProblemInterface::add_field(Int id, const std::string & name, Int nc)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
         FieldInfo fi(name, id, nc, 0);
@@ -328,7 +328,7 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc)
 Int
 FVProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
     Int id = get_next_id(keys);
     set_aux_fe(id, name, nc, k);
@@ -338,7 +338,7 @@ FVProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k)
 void
 FVProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
         FieldInfo fi(name, id, nc, k);
@@ -358,7 +358,7 @@ FVProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
 void
 FVProblemInterface::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     get_unstr_mesh()->construct_ghost_cells();
     set_up_fields();
     DiscreteProblemInterface::create();
@@ -367,7 +367,7 @@ FVProblemInterface::create()
 void
 FVProblemInterface::set_up_ds()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto comm = get_unstr_mesh()->get_comm();
 
     PETSC_CHECK(PetscFVCreate(comm, &this->fvm));
@@ -422,7 +422,7 @@ FVProblemInterface::add_boundary_essential(const std::string & name,
                                            PetscFunc * fn_t,
                                            void * context)
 {
-    _F_;
+    CALL_STACK_MSG();
     error("Essential BCs are not supported for FV problems");
 }
 
@@ -433,7 +433,7 @@ FVProblemInterface::add_boundary_natural(const std::string & name,
                                          const std::vector<Int> & components,
                                          void * context)
 {
-    _F_;
+    CALL_STACK_MSG();
     error("Natural BCs are not supported for FV problems");
 }
 

@@ -21,7 +21,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         f[0] = this->T_t(0) - this->q_ppp(0);
     }
 
@@ -42,7 +42,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         for (PetscInt d = 0; d < this->dim; ++d)
             f[d] = this->T_x(d);
     }
@@ -61,7 +61,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         g[0] = this->T_t_shift * 1.0;
     }
 
@@ -78,7 +78,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         for (PetscInt d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;
     }
@@ -103,13 +103,13 @@ HeatEquationProblem::HeatEquationProblem(const Parameters & parameters) :
     ImplicitFENonlinearProblem(parameters),
     p_order(get_param<PetscInt>("p_order"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 HeatEquationProblem::set_up_fields()
 {
-    _F_;
+    CALL_STACK_MSG();
     temp_id = add_fe("temp", 1, this->p_order);
 
     q_ppp_id = add_aux_fe("q_ppp", 1, 0);
@@ -120,7 +120,7 @@ HeatEquationProblem::set_up_fields()
 void
 HeatEquationProblem::set_up_weak_form()
 {
-    _F_;
+    CALL_STACK_MSG();
     add_residual_block(temp_id, new Residual0(this), new Residual1(this));
     add_jacobian_block(temp_id,
                        temp_id,

@@ -22,13 +22,13 @@ FileOutput::FileOutput(const Parameters & params) :
     Output(params),
     file_base(get_param<std::string>("file"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 FileOutput::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     Output::create();
     if (this->file_base.length() == 0) {
         std::filesystem::path input_file_name(get_app()->get_input_file_name());
@@ -39,7 +39,7 @@ FileOutput::create()
 std::string
 FileOutput::get_file_name() const
 {
-    _F_;
+    CALL_STACK_MSG();
     if (get_comm().size() == 1)
         return fmt::format("{}.{}", this->file_base, this->get_file_ext());
     else
@@ -49,14 +49,14 @@ FileOutput::get_file_name() const
 void
 FileOutput::set_file_base(const std::string & file_base)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->file_base = file_base;
 }
 
 void
 FileOutput::set_sequence_file_base(unsigned int stepi)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->file_base = fmt::format("{}.{}", this->file_base, stepi);
 }
 

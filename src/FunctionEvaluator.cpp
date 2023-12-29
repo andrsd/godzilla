@@ -11,13 +11,13 @@ namespace godzilla {
 
 FunctionEvaluator::FunctionEvaluator()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 FunctionEvaluator::create(const std::string & expr)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->parser.SetExpr(expr);
     this->parser.DefineConst("pi", 3.14159265359);
     this->parser.DefineConst("e", 2.71828182846);
@@ -33,21 +33,21 @@ FunctionEvaluator::create(const std::vector<std::string> & expressions)
 void
 FunctionEvaluator::define_constant(const std::string & name, Real value)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->parser.DefineConst(name, value);
 }
 
 void
 FunctionEvaluator::register_function(Function * fn)
 {
-    _F_;
+    CALL_STACK_MSG();
     fn->register_callback(this->parser);
 }
 
 Real
 FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * xx = const_cast<Real *>(x);
     Real zero = 0.;
     try {
@@ -71,7 +71,7 @@ FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
 bool
 FunctionEvaluator::evaluate(Int dim, Real time, const Real x[], Int nc, Real u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * xx = const_cast<Real *>(x);
     Real zero = 0.;
     try {

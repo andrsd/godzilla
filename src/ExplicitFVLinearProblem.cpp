@@ -21,7 +21,7 @@ ExplicitFVLinearProblem::ExplicitFVLinearProblem(const Parameters & params) :
     FVProblemInterface(this, params),
     ExplicitProblemInterface(this, params)
 {
-    _F_;
+    CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
 }
 
@@ -33,21 +33,21 @@ ExplicitFVLinearProblem::~ExplicitFVLinearProblem()
 Real
 ExplicitFVLinearProblem::get_time() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::get_time();
 }
 
 Int
 ExplicitFVLinearProblem::get_step_num() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::get_step_number();
 }
 
 void
 ExplicitFVLinearProblem::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::init();
     auto snes = ExplicitProblemInterface::get_snes();
     NonlinearProblem::set_snes(snes);
@@ -57,7 +57,7 @@ ExplicitFVLinearProblem::init()
 void
 ExplicitFVLinearProblem::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FVProblemInterface::create();
     NonlinearProblem::create();
     ExplicitProblemInterface::create();
@@ -66,7 +66,7 @@ ExplicitFVLinearProblem::create()
 void
 ExplicitFVLinearProblem::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     NonlinearProblem::check();
     ExplicitProblemInterface::check();
 }
@@ -74,14 +74,14 @@ ExplicitFVLinearProblem::check()
 bool
 ExplicitFVLinearProblem::converged()
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::converged();
 }
 
 void
 ExplicitFVLinearProblem::solve()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Solving");
     ExplicitProblemInterface::solve(get_solution_vector());
 }
@@ -89,7 +89,7 @@ ExplicitFVLinearProblem::solve()
 void
 ExplicitFVLinearProblem::compute_solution_vector_local()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary_local(get_time(), loc_sln);
@@ -98,7 +98,7 @@ ExplicitFVLinearProblem::compute_solution_vector_local()
 void
 ExplicitFVLinearProblem::allocate_objects()
 {
-    _F_;
+    CALL_STACK_MSG();
     Problem::allocate_objects();
     FVProblemInterface::allocate_objects();
 }
@@ -106,14 +106,14 @@ ExplicitFVLinearProblem::allocate_objects()
 void
 ExplicitFVLinearProblem::set_up_callbacks()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::set_up_callbacks();
 }
 
 void
 ExplicitFVLinearProblem::set_up_initial_guess()
 {
-    _F_;
+    CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
     DiscreteProblemInterface::set_up_initial_guess();
 }
@@ -121,14 +121,14 @@ ExplicitFVLinearProblem::set_up_initial_guess()
 void
 ExplicitFVLinearProblem::set_up_time_scheme()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::set_up_time_scheme();
 }
 
 void
 ExplicitFVLinearProblem::set_up_monitors()
 {
-    _F_;
+    CALL_STACK_MSG();
     NonlinearProblem::set_up_monitors();
     ExplicitProblemInterface::set_up_monitors();
 }
@@ -136,14 +136,14 @@ ExplicitFVLinearProblem::set_up_monitors()
 PetscErrorCode
 ExplicitFVLinearProblem::compute_rhs_local(Real time, const Vector & x, Vector & F)
 {
-    _F_;
+    CALL_STACK_MSG();
     return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this);
 }
 
 void
 ExplicitFVLinearProblem::post_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     TransientProblemInterface::post_step();
     update_aux_vector();
     compute_postprocessors();

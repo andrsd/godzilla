@@ -23,35 +23,35 @@ StarForest::Graph::Graph(Int n_roots,
 Int
 StarForest::Graph::get_num_roots() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->n_roots;
 }
 
 Int
 StarForest::Graph::get_num_leaves() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->n_leaves;
 }
 
 const Int *
 StarForest::Graph::get_leaves() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->leaves;
 }
 
 const StarForest::Node *
 StarForest::Graph::get_remote_leaves() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->remote_leaves;
 }
 
 Int
 StarForest::Graph::find_leaf(Int point) const
 {
-    _F_;
+    CALL_STACK_MSG();
     Int idx;
     PETSC_CHECK(PetscFindInt(point, this->n_leaves, this->leaves, &idx));
     return idx;
@@ -71,35 +71,35 @@ StarForest::StarForest(PetscSF sf) : sf(sf) {}
 void
 StarForest::create(MPI_Comm comm)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscSFCreate(comm, &this->sf));
 }
 
 void
 StarForest::destroy()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscSFDestroy(&this->sf));
 }
 
 void
 StarForest::reset()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscSFReset(this->sf));
 }
 
 void
 StarForest::set_up()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscSFSetUp(this->sf));
 }
 
 StarForest::Graph
 StarForest::get_graph() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Int n_roots, n_leaves;
     const Int * leaves;
     const PetscSFNode * remote_leaves;
@@ -113,7 +113,7 @@ StarForest::set_graph(Int n_roots,
                       const std::vector<Int> & ilocal,
                       const std::vector<Node> & iremote) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscSFSetGraph(this->sf,
                                 n_roots,
                                 n_leaves,
@@ -126,13 +126,13 @@ StarForest::set_graph(Int n_roots,
 void
 StarForest::view(PetscViewer viewer) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscSFView(this->sf, viewer));
 }
 
 StarForest::operator PetscSF() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->sf;
 }
 

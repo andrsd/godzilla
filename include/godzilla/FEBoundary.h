@@ -41,7 +41,7 @@ public:
         grad_phi(grad_phi),
         facets(facets)
     {
-        _F_;
+        CALL_STACK_MSG();
     }
 
     UnstructuredMesh *
@@ -54,7 +54,7 @@ protected:
     void
     compute_face_normals()
     {
-        _F_;
+        CALL_STACK_MSG();
         if (!this->facets.empty()) {
             this->facets.get_indices();
             Int n = this->facets.get_local_size();
@@ -100,7 +100,7 @@ private:
     void
     calc_face_normals()
     {
-        _F_;
+        CALL_STACK_MSG();
         for (Int i = 0; i < this->facets.get_local_size(); i++) {
             auto face_conn = this->mesh->get_connectivity(this->facets(i));
             auto support = this->mesh->get_support(this->facets(i));
@@ -129,7 +129,7 @@ private:
     void
     calc_nodal_normals()
     {
-        _F_;
+        CALL_STACK_MSG();
         auto comm_cells = this->mesh->common_cells_by_vertex();
         for (Int i = 0; i < this->vertices.get_local_size(); i++) {
             Int vertex = this->vertices(i);
@@ -152,7 +152,7 @@ private:
     void
     correct_nodal_normals()
     {
-        _F_;
+        CALL_STACK_MSG();
     }
 
     /// Mesh
@@ -177,7 +177,7 @@ template <>
 inline void
 BoundaryInfo<TRI3, 2, 3>::correct_nodal_normals()
 {
-    _F_;
+    CALL_STACK_MSG();
     std::map<Int, Int> idx_of;
     for (Int i = 0; i < this->facets.get_local_size(); i++)
         idx_of.insert(std::pair<Int, Int>(this->facets[i], i));

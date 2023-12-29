@@ -26,7 +26,7 @@ FunctionInitialCondition::FunctionInitialCondition(const Parameters & params) :
 void
 FunctionInitialCondition::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     InitialCondition::create();
     FunctionInterface::create();
 }
@@ -34,14 +34,14 @@ FunctionInitialCondition::create()
 Int
 FunctionInitialCondition::get_num_components() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return FunctionInterface::get_num_components();
 }
 
 void
 FunctionInitialCondition::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     evaluate_func(dim, time, x, nc, u);
 }
 

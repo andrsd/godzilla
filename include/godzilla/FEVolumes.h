@@ -17,7 +17,7 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nod
 Real
 volume(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords)
 {
-    _F_;
+    CALL_STACK_MSG();
     error("Volume calculation for {} in {} dimensions is not implemented.",
           get_element_type_str(ELEM_TYPE),
           DIM);
@@ -103,7 +103,7 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
              const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
              Array1D<Real> & fe_volume)
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(connect.get_size() == fe_volume.get_size());
 
     for (godzilla::Int ie = 0; ie < connect.get_size(); ie++) {
@@ -118,7 +118,7 @@ Array1D<Real>
 calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
              const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect)
 {
-    _F_;
+    CALL_STACK_MSG();
     Array1D<Real> fe_volume(connect.get_size());
     calc_volumes<ELEM_TYPE, DIM, N_ELEM_NODES>(coords, connect, fe_volume);
     return fe_volume;
@@ -130,7 +130,7 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_FACE_NODES>
 Real
 face_area(const DenseMatrix<Real, N_FACE_NODES, DIM> & coords)
 {
-    _F_;
+    CALL_STACK_MSG();
     error("Face area calculation for {} in {} dimensions is not implemented.",
           get_element_type_str(ELEM_TYPE),
           DIM);

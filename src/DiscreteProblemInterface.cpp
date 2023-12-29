@@ -29,7 +29,7 @@ DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Para
 
 DiscreteProblemInterface::~DiscreteProblemInterface()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->sln.destroy();
     this->a.destroy();
     DMDestroy(&this->dm_aux);
@@ -38,28 +38,28 @@ DiscreteProblemInterface::~DiscreteProblemInterface()
 Problem *
 DiscreteProblemInterface::get_problem() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->problem;
 }
 
 const std::vector<InitialCondition *> &
 DiscreteProblemInterface::get_initial_conditions()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ics;
 }
 
 const std::vector<InitialCondition *> &
 DiscreteProblemInterface::get_aux_initial_conditions()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ics_aux;
 }
 
 void
 DiscreteProblemInterface::add_initial_condition(InitialCondition * ic)
 {
-    _F_;
+    CALL_STACK_MSG();
     const std::string & name = ic->get_name();
     auto it = this->ics_by_name.find(name);
     if (it == this->ics_by_name.end()) {
@@ -73,7 +73,7 @@ DiscreteProblemInterface::add_initial_condition(InitialCondition * ic)
 bool
 DiscreteProblemInterface::has_initial_condition(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->ics_by_name.find(name);
     return it != this->ics_by_name.end();
 }
@@ -81,7 +81,7 @@ DiscreteProblemInterface::has_initial_condition(const std::string & name) const
 InitialCondition *
 DiscreteProblemInterface::get_initial_condition(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->ics_by_name.find(name);
     if (it != this->ics_by_name.end())
         return it->second;
@@ -92,7 +92,7 @@ DiscreteProblemInterface::get_initial_condition(const std::string & name) const
 void
 DiscreteProblemInterface::add_boundary_condition(BoundaryCondition * bc)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->bcs.push_back(bc);
     auto nbc = dynamic_cast<NaturalBC *>(bc);
     if (nbc)
@@ -105,7 +105,7 @@ DiscreteProblemInterface::add_boundary_condition(BoundaryCondition * bc)
 void
 DiscreteProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 {
-    _F_;
+    CALL_STACK_MSG();
     const std::string & name = aux->get_name();
     auto it = this->auxs_by_name.find(name);
     if (it == this->auxs_by_name.end()) {
@@ -119,7 +119,7 @@ DiscreteProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
 bool
 DiscreteProblemInterface::has_aux(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->auxs_by_name.find(name);
     return it != this->auxs_by_name.end();
 }
@@ -127,7 +127,7 @@ DiscreteProblemInterface::has_aux(const std::string & name) const
 AuxiliaryField *
 DiscreteProblemInterface::get_aux(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->auxs_by_name.find(name);
     if (it != this->auxs_by_name.end())
         return it->second;
@@ -138,42 +138,42 @@ DiscreteProblemInterface::get_aux(const std::string & name) const
 UnstructuredMesh *
 DiscreteProblemInterface::get_unstr_mesh() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->unstr_mesh;
 }
 
 const Vector &
 DiscreteProblemInterface::get_solution_vector_local() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->sln;
 }
 
 const std::vector<BoundaryCondition *> &
 DiscreteProblemInterface::get_boundary_conditions() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->bcs;
 }
 
 const std::vector<EssentialBC *> &
 DiscreteProblemInterface::get_essential_bcs() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->essential_bcs;
 }
 
 const std::vector<NaturalBC *> &
 DiscreteProblemInterface::get_natural_bcs() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->natural_bcs;
 }
 
 void
 DiscreteProblemInterface::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     set_up_ds();
     set_up_initial_conditions();
     set_up_boundary_conditions();
@@ -182,7 +182,7 @@ DiscreteProblemInterface::init()
 void
 DiscreteProblemInterface::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->problem != nullptr);
     assert(this->unstr_mesh != nullptr);
 
@@ -197,14 +197,14 @@ DiscreteProblemInterface::create()
 void
 DiscreteProblemInterface::allocate_objects()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->sln = this->problem->create_local_vector();
 }
 
 void
 DiscreteProblemInterface::create_ds()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = this->unstr_mesh->get_dm();
     PETSC_CHECK(DMCreateDS(dm));
     PETSC_CHECK(DMGetDS(dm, &this->ds));
@@ -213,7 +213,7 @@ DiscreteProblemInterface::create_ds()
 PetscDS
 DiscreteProblemInterface::get_ds()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ds;
 }
 
@@ -221,7 +221,7 @@ void
 DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCondition *> & ics,
                                                    const std::map<Int, Int> & field_comps)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n_ics = ics.size();
     if (n_ics == 0)
         return;
@@ -261,7 +261,7 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
 void
 DiscreteProblemInterface::set_up_initial_conditions()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & ic : this->all_ics) {
         auto field_name = ic->get_field_name();
         if (has_field_by_name(field_name))
@@ -287,35 +287,35 @@ DiscreteProblemInterface::set_up_initial_conditions()
 DM
 DiscreteProblemInterface::get_dm_aux() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->dm_aux;
 }
 
 PetscDS
 DiscreteProblemInterface::get_ds_aux() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ds_aux;
 }
 
 Section
 DiscreteProblemInterface::get_local_section_aux() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->section_aux;
 }
 
 void
 DiscreteProblemInterface::set_local_section_aux(const Section & section)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->section_aux = section;
 }
 
 void
 DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (get_num_aux_fields() == 0)
         return;
 
@@ -373,7 +373,7 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
                                                     const std::vector<AuxiliaryField *> & auxs,
                                                     Vector & a)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n_auxs = get_num_aux_fields();
     std::vector<PetscFunc *> func(n_auxs, nullptr);
     std::vector<void *> ctxs(n_auxs, nullptr);
@@ -398,7 +398,7 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
                                                    const std::vector<AuxiliaryField *> & auxs,
                                                    Vector & a)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n_auxs = get_num_aux_fields();
     std::vector<PetscFunc *> func(n_auxs, nullptr);
     std::vector<void *> ctxs(n_auxs, nullptr);
@@ -429,7 +429,7 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
 void
 DiscreteProblemInterface::compute_aux_fields()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (const auto & it : this->auxs_by_region) {
         const std::string & region_name = it.first;
         const std::vector<AuxiliaryField *> & auxs = it.second;
@@ -447,7 +447,7 @@ DiscreteProblemInterface::compute_aux_fields()
 void
 DiscreteProblemInterface::set_up_boundary_conditions()
 {
-    _F_;
+    CALL_STACK_MSG();
     /// TODO: refactor this into a method
     bool no_errors = true;
     for (auto & bc : this->bcs) {
@@ -472,7 +472,7 @@ DiscreteProblemInterface::set_up_boundary_conditions()
 void
 DiscreteProblemInterface::set_initial_guess_from_ics()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n_ics = this->ics.size();
     PetscFunc * ic_funcs[n_ics];
     void * ic_ctxs[n_ics];
@@ -493,7 +493,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
 void
 DiscreteProblemInterface::set_up_initial_guess()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!this->ics.empty())
         set_initial_guess_from_ics();
 }
@@ -501,7 +501,7 @@ DiscreteProblemInterface::set_up_initial_guess()
 Int
 DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     Int offset;
     PETSC_CHECK(
         PetscSectionGetFieldOffset(this->problem->get_local_section(), point, fid, &offset));
@@ -511,7 +511,7 @@ DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
 Int
 DiscreteProblemInterface::get_aux_field_dof(Int point, Int fid) const
 {
-    _F_;
+    CALL_STACK_MSG();
     Int offset;
     PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid, &offset));
     return offset;
@@ -520,7 +520,7 @@ DiscreteProblemInterface::get_aux_field_dof(Int point, Int fid) const
 const Vector &
 DiscreteProblemInterface::get_aux_solution_vector_local() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->a;
 }
 
@@ -535,7 +535,7 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                        void (*bc_fn_t)(void),
                                        void * context)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscDSAddBoundary(this->ds,
                                    type,
                                    name.c_str(),
@@ -610,13 +610,13 @@ DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
 void
 DiscreteProblemInterface::update_aux_vector()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 Int
 DiscreteProblemInterface::get_next_id(const std::vector<Int> & ids) const
 {
-    _F_;
+    CALL_STACK_MSG();
     std::set<Int> s;
     for (auto & id : ids)
         s.insert(id);

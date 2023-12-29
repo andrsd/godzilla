@@ -18,7 +18,7 @@ GmshMesh::parameters()
 
 GmshMesh::GmshMesh(const Parameters & parameters) : FileMesh(parameters)
 {
-    _F_;
+    CALL_STACK_MSG();
     set_file_format(GMSH);
 }
 

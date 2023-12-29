@@ -13,13 +13,13 @@ OutflowBC::parameters()
 
 OutflowBC::OutflowBC(const Parameters & params) : NaturalRiemannBC(params), components({ 0 })
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 const std::vector<PetscInt> &
 OutflowBC::get_components() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->components;
 }
 
@@ -30,6 +30,6 @@ OutflowBC::evaluate(PetscReal time,
                     const PetscScalar * xI,
                     PetscScalar * xG)
 {
-    _F_;
+    CALL_STACK_MSG();
     xG[0] = xI[0];
 }

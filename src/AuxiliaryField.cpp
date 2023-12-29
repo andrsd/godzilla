@@ -31,27 +31,27 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
     fid(-1),
     block_id(-1)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 UnstructuredMesh *
 AuxiliaryField::get_mesh() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->mesh;
 }
 
 Problem *
 AuxiliaryField::get_problem() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->dpi->get_problem();
 }
 
 void
 AuxiliaryField::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->region.length() > 0) {
         if (this->mesh->has_label(this->region)) {
             this->label = this->mesh->get_label(this->region);
@@ -65,28 +65,28 @@ AuxiliaryField::create()
 const std::string &
 AuxiliaryField::get_region() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->region;
 }
 
 Int
 AuxiliaryField::get_block_id() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->block_id;
 }
 
 const Label &
 AuxiliaryField::get_label() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->label;
 }
 
 Int
 AuxiliaryField::get_field_id() const
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->field.length() > 0)
         return this->dpi->get_aux_field_id(this->field);
     else
@@ -96,7 +96,7 @@ AuxiliaryField::get_field_id() const
 void *
 AuxiliaryField::get_context()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this;
 }
 

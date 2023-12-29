@@ -102,7 +102,7 @@ GTestImplicitFENonlinearProblem::set_up_initial_guess()
 void
 GTestImplicitFENonlinearProblem::set_up_fields()
 {
-    _F_;
+    CALL_STACK_MSG();
     Int order = 1;
     set_fe(this->iu, "u", 1, order);
 }

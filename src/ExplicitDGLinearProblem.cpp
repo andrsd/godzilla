@@ -18,7 +18,7 @@ ExplicitDGLinearProblem::ExplicitDGLinearProblem(const Parameters & params) :
     DGProblemInterface(this, params),
     ExplicitProblemInterface(this, params)
 {
-    _F_;
+    CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
 }
 
@@ -30,21 +30,21 @@ ExplicitDGLinearProblem::~ExplicitDGLinearProblem()
 Real
 ExplicitDGLinearProblem::get_time() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::get_time();
 }
 
 Int
 ExplicitDGLinearProblem::get_step_num() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::get_step_number();
 }
 
 void
 ExplicitDGLinearProblem::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::init();
     auto snes = ExplicitProblemInterface::get_snes();
     NonlinearProblem::set_snes(snes);
@@ -54,7 +54,7 @@ ExplicitDGLinearProblem::init()
 void
 ExplicitDGLinearProblem::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     DGProblemInterface::create();
     NonlinearProblem::create();
     ExplicitProblemInterface::create();
@@ -63,7 +63,7 @@ ExplicitDGLinearProblem::create()
 void
 ExplicitDGLinearProblem::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     NonlinearProblem::check();
     ExplicitProblemInterface::check();
 }
@@ -71,14 +71,14 @@ ExplicitDGLinearProblem::check()
 bool
 ExplicitDGLinearProblem::converged()
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::converged();
 }
 
 void
 ExplicitDGLinearProblem::solve()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Solving");
     ExplicitProblemInterface::solve(get_solution_vector());
 }
@@ -86,7 +86,7 @@ ExplicitDGLinearProblem::solve()
 void
 ExplicitDGLinearProblem::compute_solution_vector_local()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary_local(get_time(), loc_sln);
@@ -95,7 +95,7 @@ ExplicitDGLinearProblem::compute_solution_vector_local()
 void
 ExplicitDGLinearProblem::allocate_objects()
 {
-    _F_;
+    CALL_STACK_MSG();
     Problem::allocate_objects();
     DGProblemInterface::allocate_objects();
 }
@@ -103,14 +103,14 @@ ExplicitDGLinearProblem::allocate_objects()
 void
 ExplicitDGLinearProblem::set_up_callbacks()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::set_up_callbacks();
 }
 
 void
 ExplicitDGLinearProblem::set_up_initial_guess()
 {
-    _F_;
+    CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
     DiscreteProblemInterface::set_up_initial_guess();
 }
@@ -118,14 +118,14 @@ ExplicitDGLinearProblem::set_up_initial_guess()
 void
 ExplicitDGLinearProblem::set_up_time_scheme()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::set_up_time_scheme();
 }
 
 void
 ExplicitDGLinearProblem::set_up_monitors()
 {
-    _F_;
+    CALL_STACK_MSG();
     NonlinearProblem::set_up_monitors();
     ExplicitProblemInterface::set_up_monitors();
 }
@@ -133,7 +133,7 @@ ExplicitDGLinearProblem::set_up_monitors()
 void
 ExplicitDGLinearProblem::post_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     TransientProblemInterface::post_step();
     update_aux_vector();
     compute_postprocessors();

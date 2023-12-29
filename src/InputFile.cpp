@@ -25,21 +25,21 @@ InputFile::Block::Block(const YAML::Node & parent, const YAML::Node & values) :
 const YAML::Node &
 InputFile::Block::parent() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->parent_node;
 }
 
 const YAML::Node &
 InputFile::Block::values() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->val_nodes;
 }
 
 std::string
 InputFile::Block::name() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->parent_node.as<std::string>();
 }
 
@@ -52,13 +52,13 @@ InputFile::InputFile(App * app) :
     mesh(nullptr),
     problem(nullptr)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 const std::string &
 InputFile::get_file_name() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->file_name;
 }
 
@@ -71,14 +71,14 @@ InputFile::get_app() const
 InputFile::Block &
 InputFile::get_root()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->root;
 }
 
 bool
 InputFile::parse(const std::string & file_name)
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Parsing input file '{}'", file_name);
     try {
         this->root = { YAML::Node(), YAML::LoadFile(file_name) };
@@ -94,21 +94,21 @@ InputFile::parse(const std::string & file_name)
 Mesh *
 InputFile::get_mesh() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->mesh;
 }
 
 Problem *
 InputFile::get_problem() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->problem;
 }
 
 void
 InputFile::create_objects()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Creating objects");
     for (auto & obj : this->objs)
         obj->create();
@@ -117,7 +117,7 @@ InputFile::create_objects()
 void
 InputFile::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & obj : this->objs)
         obj->check();
     check_unused_blocks();
@@ -126,7 +126,7 @@ InputFile::check()
 void
 InputFile::check_unused_blocks()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto it = this->root.values().begin(); it != this->root.values().end(); ++it) {
         auto blk_name = it->first.as<std::string>();
         if (this->used_top_block_names.find(blk_name) == this->used_top_block_names.end())
@@ -137,7 +137,7 @@ InputFile::check_unused_blocks()
 void
 InputFile::add_object(Object * obj)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (obj != nullptr) {
         // only add objects with valid parameters
         if (this->valid_param_object_names.count(obj->get_name()) == 1)
@@ -148,7 +148,7 @@ InputFile::add_object(Object * obj)
 void
 InputFile::build_mesh()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "- mesh");
     auto node = get_block(this->root, "mesh");
     Parameters * params = build_params(node);
@@ -160,7 +160,7 @@ InputFile::build_mesh()
 void
 InputFile::build_problem()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "- problem");
     auto node = get_block(this->root, "problem");
     Parameters * params = build_params(node);
@@ -173,7 +173,7 @@ InputFile::build_problem()
 void
 InputFile::build_outputs()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!this->root["output"])
         return;
 
@@ -193,7 +193,7 @@ InputFile::build_outputs()
 InputFile::Block
 InputFile::get_block(const Block & parent, const std::string & name)
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto it = parent.values().begin(); it != parent.values().end(); ++it) {
         if (it->first.as<std::string>() == name) {
             if (this->root.parent() == parent.parent())
@@ -207,7 +207,7 @@ InputFile::get_block(const Block & parent, const std::string & name)
 Parameters *
 InputFile::build_params(const Block & block)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::set<std::string> unused_param_names;
     auto vals = block.values();
     if (vals.IsMap()) {
@@ -246,7 +246,7 @@ InputFile::set_parameter_from_yml(Parameters * params,
                                   const YAML::Node & node,
                                   const std::string & param_name)
 {
-    _F_;
+    CALL_STACK_MSG();
     YAML::Node val = node[param_name];
     if (val) {
         const std::string & param_type = params->type(param_name);
@@ -292,13 +292,13 @@ InputFile::set_app_defined_param(Parameters * params,
                                  const std::string & type,
                                  const YAML::Node & val)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 bool
 InputFile::read_bool_value(const std::string & param_name, const YAML::Node & val_node)
 {
-    _F_;
+    CALL_STACK_MSG();
     bool val = false;
     if (val_node.IsScalar()) {
         std::string str = utils::to_lower(val_node.as<std::string>());
@@ -321,7 +321,7 @@ template <typename T>
 std::vector<T>
 InputFile::read_vector_value(const std::string & param_name, const YAML::Node & val_node)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::vector<T> vec;
     if (val_node.IsScalar())
         vec.push_back(val_node.as<T>());
@@ -338,7 +338,7 @@ template <typename K, typename V>
 std::map<K, V>
 InputFile::read_map_value(const std::string & param_name, const YAML::Node & val_node)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::map<K, V> map;
     if (val_node.IsMap()) {
         for (YAML::const_iterator it = val_node.begin(); it != val_node.end(); ++it) {
@@ -358,7 +358,7 @@ InputFile::check_params(const Parameters * params,
                         const std::string & name,
                         std::set<std::string> & unused_param_names)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::string missing_pars;
 
     for (const auto & it : *params) {

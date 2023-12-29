@@ -6,7 +6,7 @@ using namespace godzilla;
 
 TEST(ErrorTest, mem_check)
 {
-    _F_;
+    CALL_STACK_MSG();
     void * var = nullptr;
     EXPECT_DEATH(MEM_CHECK(var), "Out of memory");
 }

@@ -23,7 +23,7 @@ const int ExodusIIOutput::SINGLE_BLK_ID = 0;
 const char *
 ExodusIIOutput::get_elem_type(DMPolytopeType elem_type)
 {
-    _F_;
+    CALL_STACK_MSG();
     switch (elem_type) {
     case DM_POLYTOPE_SEGMENT:
         return "BAR2";
@@ -43,7 +43,7 @@ ExodusIIOutput::get_elem_type(DMPolytopeType elem_type)
 const Int *
 ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type)
 {
-    _F_;
+    CALL_STACK_MSG();
     static const Int seg_ordering[] = { 0, 1 };
     static const Int tri_ordering[] = { 0, 1, 2 };
     static const Int quad_ordering[] = { 0, 1, 2, 3 };
@@ -69,7 +69,7 @@ ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type)
 const Int *
 ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type)
 {
-    _F_;
+    CALL_STACK_MSG();
     static const Int seg_ordering[] = { 1, 2 };
     static const Int tri_ordering[] = { 1, 2, 3 };
     static const Int quad_ordering[] = { 1, 2, 3, 4 };
@@ -118,7 +118,7 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     step_num(1),
     mesh_stored(false)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->dgpi != nullptr)
         this->discont = true;
     else
@@ -127,7 +127,7 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
 
 ExodusIIOutput::~ExodusIIOutput()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->exo)
         this->exo->close();
 }
@@ -135,14 +135,14 @@ ExodusIIOutput::~ExodusIIOutput()
 std::string
 ExodusIIOutput::get_file_ext() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return { "exo" };
 }
 
 void
 ExodusIIOutput::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FileOutput::create();
 
     if (this->dpi) {
@@ -179,7 +179,7 @@ ExodusIIOutput::create()
 void
 ExodusIIOutput::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     FileOutput::check();
     if (this->mesh == nullptr)
         log_error("ExodusII output can be only used with unstructured meshes.");
@@ -188,7 +188,7 @@ ExodusIIOutput::check()
 void
 ExodusIIOutput::output_mesh()
 {
-    _F_;
+    CALL_STACK_MSG();
     // We only have fixed meshes, so no need to deal with a sequence of files
     TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", get_file_name());
 
@@ -204,7 +204,7 @@ ExodusIIOutput::output_mesh()
 void
 ExodusIIOutput::output_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     // We only have fixed meshes, so no need to deal with a sequence of files
     TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", get_file_name());
 
@@ -224,7 +224,7 @@ ExodusIIOutput::output_step()
 void
 ExodusIIOutput::open_file()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->exo = new exodusIIcpp::File(get_file_name(), exodusIIcpp::FileAccess::WRITE);
     if (!this->exo->is_opened())
         error("Could not open file '{}' for writing.", get_file_name());
@@ -233,7 +233,7 @@ ExodusIIOutput::open_file()
 void
 ExodusIIOutput::write_mesh()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (cont) {
         write_mesh_continuous();
         write_node_sets();
@@ -250,7 +250,7 @@ ExodusIIOutput::write_mesh()
 void
 ExodusIIOutput::write_mesh_continuous()
 {
-    _F_;
+    CALL_STACK_MSG();
     int n_nodes = (int) this->mesh->get_num_vertices();
     int n_elems = (int) this->mesh->get_num_cells();
 
@@ -273,7 +273,7 @@ ExodusIIOutput::write_mesh_continuous()
 void
 ExodusIIOutput::write_mesh_discontinuous()
 {
-    _F_;
+    CALL_STACK_MSG();
     int n_elems = (int) this->mesh->get_num_cells();
     int n_nodes_per_elem = get_num_nodes_per_element();
     int n_nodes = (int) n_elems * n_nodes_per_elem;
@@ -294,7 +294,7 @@ ExodusIIOutput::write_mesh_discontinuous()
 void
 ExodusIIOutput::write_coords_continuous(int exo_dim)
 {
-    _F_;
+    CALL_STACK_MSG();
     int dim = (int) this->mesh->get_dimension();
     Vector coord = this->mesh->get_coordinates_local();
     Int coord_size = coord.get_size();
@@ -332,7 +332,7 @@ ExodusIIOutput::write_coords_continuous(int exo_dim)
 void
 ExodusIIOutput::write_coords_discontinuous(int exo_dim)
 {
-    _F_;
+    CALL_STACK_MSG();
     int dim = (int) this->mesh->get_dimension();
     Vector coord = this->mesh->get_coordinates_local();
     Scalar * xyz = coord.get_array();
@@ -378,7 +378,7 @@ ExodusIIOutput::write_coords_discontinuous(int exo_dim)
 void
 ExodusIIOutput::write_elements()
 {
-    _F_;
+    CALL_STACK_MSG();
     std::vector<std::string> block_names;
 
     Int n_cells_sets = this->mesh->get_num_cell_sets();
@@ -438,7 +438,7 @@ ExodusIIOutput::write_elements()
 void
 ExodusIIOutput::write_node_sets()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!this->mesh->has_label("Vertex Sets"))
         return;
 
@@ -470,7 +470,7 @@ ExodusIIOutput::write_node_sets()
 void
 ExodusIIOutput::write_face_sets()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!this->mesh->has_label("Face Sets"))
         return;
 
@@ -533,7 +533,7 @@ ExodusIIOutput::write_face_sets()
 void
 ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
 {
-    _F_;
+    CALL_STACK_MSG();
     const std::string & name = this->dpi->get_field_name(fid);
     Int nc = this->dpi->get_field_num_components(fid);
     if (nc == 1)
@@ -554,7 +554,7 @@ ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
 void
 ExodusIIOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
 {
-    _F_;
+    CALL_STACK_MSG();
     const std::string & name = this->dpi->get_aux_field_name(fid);
     Int nc = this->dpi->get_aux_field_num_components(fid);
     if (nc == 1)
@@ -575,7 +575,7 @@ ExodusIIOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
 void
 ExodusIIOutput::write_all_variable_names()
 {
-    _F_;
+    CALL_STACK_MSG();
 
     this->nodal_var_fids.clear();
     this->nodal_aux_var_fids.clear();
@@ -615,7 +615,7 @@ ExodusIIOutput::write_all_variable_names()
 void
 ExodusIIOutput::write_variables()
 {
-    _F_;
+    CALL_STACK_MSG();
     Real time = get_problem()->get_time();
     this->exo->write_time(this->step_num, time);
 
@@ -628,7 +628,7 @@ ExodusIIOutput::write_variables()
 void
 ExodusIIOutput::write_field_variables()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->cont)
         write_nodal_variables_continuous();
     else if (this->discont)
@@ -639,7 +639,7 @@ ExodusIIOutput::write_field_variables()
 void
 ExodusIIOutput::write_nodal_variables_continuous()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->dpi->compute_solution_vector_local();
     auto sln = this->dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
@@ -687,7 +687,7 @@ ExodusIIOutput::write_nodal_variables_continuous()
 void
 ExodusIIOutput::write_nodal_variables_discontinuous()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dgpi = this->dgpi;
     auto sln = dgpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
@@ -738,7 +738,7 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
 void
 ExodusIIOutput::write_elem_variables()
 {
-    _F_;
+    CALL_STACK_MSG();
     Int n_cells_sets = this->mesh->get_num_cell_sets();
     if (n_cells_sets > 1) {
         auto cell_sets_label = this->mesh->get_label("Cell Sets");
@@ -759,7 +759,7 @@ ExodusIIOutput::write_elem_variables()
 void
 ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, const Int * cells)
 {
-    _F_;
+    CALL_STACK_MSG();
     UnstructuredMesh::Range elem_range;
     if (cells == nullptr) {
         elem_range = this->mesh->get_cell_range();
@@ -817,7 +817,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
 void
 ExodusIIOutput::write_global_variables()
 {
-    _F_;
+    CALL_STACK_MSG();
 
     int exo_var_id = 1;
     for (auto & name : this->global_var_names) {
@@ -831,7 +831,7 @@ ExodusIIOutput::write_global_variables()
 void
 ExodusIIOutput::write_info()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto app = get_app();
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
@@ -849,7 +849,7 @@ ExodusIIOutput::write_block_connectivity_continuous(int blk_id,
                                                     Int n_elems_in_block,
                                                     const Int * cells)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = this->mesh->get_dm();
     Int n_all_elems = this->mesh->get_num_all_cells();
     const char * elem_type = get_elem_type(polytope_type);
@@ -877,7 +877,7 @@ ExodusIIOutput::write_block_connectivity_discontinuous(int blk_id,
                                                        Int n_elems_in_block,
                                                        const Int * cells)
 {
-    _F_;
+    CALL_STACK_MSG();
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
@@ -892,7 +892,7 @@ ExodusIIOutput::write_block_connectivity_discontinuous(int blk_id,
 int
 ExodusIIOutput::get_num_nodes_per_element()
 {
-    _F_;
+    CALL_STACK_MSG();
     int n_nodes_per_elem = 0;
     int n_elems = (int) this->mesh->get_num_cells();
     if (n_elems > 0) {

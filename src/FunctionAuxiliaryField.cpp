@@ -30,13 +30,13 @@ FunctionAuxiliaryField::FunctionAuxiliaryField(const Parameters & params) :
     AuxiliaryField(params),
     FunctionInterface(params)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 FunctionAuxiliaryField::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     AuxiliaryField::create();
     FunctionInterface::create();
 }
@@ -44,21 +44,21 @@ FunctionAuxiliaryField::create()
 Int
 FunctionAuxiliaryField::get_num_components() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return FunctionInterface::get_num_components();
 }
 
 PetscFunc *
 FunctionAuxiliaryField::get_func() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return function_auxiliary_field;
 }
 
 void
 FunctionAuxiliaryField::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     evaluate_func(dim, time, x, nc, u);
 }
 

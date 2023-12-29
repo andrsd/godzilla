@@ -41,7 +41,7 @@ FunctionInterface::FunctionInterface(const Parameters & params) :
 void
 FunctionInterface::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->evalr.create(this->expression);
     this->evalr_t.create(this->expression_t);
 
@@ -71,14 +71,14 @@ FunctionInterface::has_time_expression() const
 bool
 FunctionInterface::evaluate_func(Int dim, Real time, const Real x[], Int nc, Real u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->evalr.evaluate(dim, time, x, nc, u);
 }
 
 bool
 FunctionInterface::evaluate_func_t(Int dim, Real time, const Real x[], Int nc, Real u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->evalr_t.evaluate(dim, time, x, nc, u);
 }
 

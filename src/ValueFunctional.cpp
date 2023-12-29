@@ -15,7 +15,7 @@ ValueFunctional::ValueFunctional(FEProblemInterface * fepi, const std::string & 
 const std::set<std::string> &
 ValueFunctional::get_provided_values() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->provides;
 }
 

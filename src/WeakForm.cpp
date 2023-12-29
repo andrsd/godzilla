@@ -46,7 +46,7 @@ WeakForm::WeakForm() :
 std::vector<PetscFormKey>
 WeakForm::get_residual_keys() const
 {
-    _F_;
+    CALL_STACK_MSG();
     std::set<Key> unique;
     std::array<ResidualKind, 2> res_kind = { F0, F1 };
     for (const auto & r : res_kind) {
@@ -70,7 +70,7 @@ WeakForm::get_residual_keys() const
 std::vector<PetscFormKey>
 WeakForm::get_jacobian_keys() const
 {
-    _F_;
+    CALL_STACK_MSG();
     std::set<Key> unique;
     std::array<JacobianKind, 8> jacmap = { G0, G1, G2, G3, GP0, GP1, GP2, GP3 };
     for (const auto & r : jacmap) {
@@ -94,7 +94,7 @@ WeakForm::get_jacobian_keys() const
 const std::vector<ResidualFunc *> &
 WeakForm::get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscFormKey key;
     key.label = label;
     key.value = val;
@@ -110,7 +110,7 @@ WeakForm::get(ResidualKind kind, const Label & label, Int val, Int f, Int part) 
 const std::vector<JacobianFunc *> &
 WeakForm::get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscFormKey key;
     key.label = label;
     key.value = val;
@@ -131,7 +131,7 @@ WeakForm::add(ResidualKind kind,
               Int part,
               ResidualFunc * func)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (func != nullptr) {
         PetscFormKey key;
         key.label = label;
@@ -151,7 +151,7 @@ WeakForm::add(JacobianKind kind,
               Int part,
               JacobianFunc * func)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (func != nullptr) {
         PetscFormKey key;
         key.label = label;
@@ -165,14 +165,14 @@ WeakForm::add(JacobianKind kind,
 Int
 WeakForm::get_jac_key(Int f, Int g) const
 {
-    _F_;
+    CALL_STACK_MSG();
     return f * this->n_fields + g;
 }
 
 bool
 WeakForm::has_jacobian() const
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n0 = this->jac_forms[WeakForm::G0].size();
     auto n1 = this->jac_forms[WeakForm::G1].size();
     auto n2 = this->jac_forms[WeakForm::G2].size();
@@ -183,7 +183,7 @@ WeakForm::has_jacobian() const
 bool
 WeakForm::has_jacobian_preconditioner() const
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n0 = this->jac_forms[WeakForm::GP0].size();
     auto n1 = this->jac_forms[WeakForm::GP1].size();
     auto n2 = this->jac_forms[WeakForm::GP2].size();

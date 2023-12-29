@@ -9,34 +9,34 @@ namespace godzilla {
 
 Logger::Logger() : num_errors(0), num_warnings(0)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 std::size_t
 Logger::get_num_entries() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->entries.size();
 }
 
 std::size_t
 Logger::get_num_errors() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->num_errors;
 }
 
 std::size_t
 Logger::get_num_warnings() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->num_warnings;
 }
 
 void
 Logger::print() const
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & entry : this->entries) {
         switch (entry.type) {
         case ERROR:

@@ -119,7 +119,7 @@ public:
                  const Scalar constants[],
                  Scalar flux[]) override
     {
-        _F_;
+        CALL_STACK_MSG();
         Real wind[] = { 0.5 };
         Real wn = 0;
         wn += wind[0] * n[0];

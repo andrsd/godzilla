@@ -24,7 +24,7 @@ Postprocessor::Postprocessor(const Parameters & params) :
 Problem *
 Postprocessor::get_problem() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->problem;
 }
 

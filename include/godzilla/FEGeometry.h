@@ -44,7 +44,7 @@ template <Int DIM, Int N_ELEM_NODES>
 Array1D<DenseVector<Int, N_ELEM_NODES>>
 connectivity(const UnstructuredMesh & mesh)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n_cells = mesh.get_num_cells();
     auto n_all_cells = mesh.get_num_all_cells();
     Array1D<DenseVector<Int, N_ELEM_NODES>> connect(n_cells);
@@ -61,7 +61,7 @@ void
 common_elements_by_node(const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
                         Array1D<std::vector<Int>> & nelcom)
 {
-    _F_;
+    CALL_STACK_MSG();
     for (Int ei = 0; ei < connect.get_size(); ei++) {
         const auto & node_ids = connect(ei);
         for (Int j = 0; j < N_ELEM_NODES; j++)
@@ -75,7 +75,7 @@ template <ElementType ELEM_TYPE, Int DIM>
 inline DenseVector<Real, DIM>
 normal(Real volume, Real edge_len, const DenseVector<Real, DIM> & grad)
 {
-    _F_;
+    CALL_STACK_MSG();
     error("Computation of a normal for element '{}' in {} dimensions is not implemented.",
           get_element_type_str(ELEM_TYPE),
           DIM);
@@ -101,7 +101,7 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nod
 inline Real
 element_length(const DenseMatrix<Real, N_ELEM_NODES, DIM> & grad_phi)
 {
-    _F_;
+    CALL_STACK_MSG();
     error("Computation of a element length for '{}' in {} dimensions is not implemented.",
           get_element_type_str(ELEM_TYPE),
           DIM);
@@ -131,7 +131,7 @@ Array1D<Real>
 calc_element_length(const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
                     const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> & grad_phi)
 {
-    _F_;
+    CALL_STACK_MSG();
     Array1D<Real> elem_lengths(connect.get_size());
     for (godzilla::Int ie = 0; ie < connect.get_size(); ie++)
         elem_lengths(ie) = element_length<ELEM_TYPE, DIM>(grad_phi(ie));
@@ -151,7 +151,7 @@ template <>
 inline Array1D<Real>
 calc_nodal_radius<CARTESIAN, 1>(Array1D<DenseVector<Real, 1>> & coords)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n = coords.get_size();
     Array1D<Real> rad(n);
     for (Int in = 0; in < n; in++)
@@ -163,7 +163,7 @@ template <>
 inline Array1D<Real>
 calc_nodal_radius<CARTESIAN, 2>(Array1D<DenseVector<Real, 2>> & coords)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n = coords.get_size();
     Array1D<Real> rad(n);
     for (Int in = 0; in < n; in++)
@@ -175,7 +175,7 @@ template <>
 inline Array1D<Real>
 calc_nodal_radius<CARTESIAN, 3>(Array1D<DenseVector<Real, 3>> & coords)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n = coords.get_size();
     Array1D<Real> rad(n);
     for (Int in = 0; in < n; in++)
@@ -188,7 +188,7 @@ inline Array1D<Real>
 calc_nodal_radius<AXISYMMETRIC, 2>(Array1D<DenseVector<Real, 2>> & coords)
 {
     // symmetric around x-axis
-    _F_;
+    CALL_STACK_MSG();
     auto n = coords.get_size();
     Array1D<Real> rad(n);
     for (Int in = 0; in < n; in++)
@@ -204,7 +204,7 @@ calc_nodal_radius<AXISYMMETRIC, 2>(Array1D<DenseVector<Real, 2>> & coords)
 inline Int
 get_local_vertex_index(const std::vector<Int> & conn, Int vertex)
 {
-    _F_;
+    CALL_STACK_MSG();
     for (std::size_t i = 0; i < conn.size(); i++)
         if (conn[i] == vertex)
             return i;

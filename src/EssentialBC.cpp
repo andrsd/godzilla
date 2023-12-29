@@ -18,7 +18,7 @@ essential_boundary_condition_function(Int dim,
                                       Scalar u[],
                                       void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * bc = static_cast<EssentialBC *>(ctx);
     assert(bc != nullptr);
     bc->evaluate(dim, time, x, nc, u);
@@ -33,7 +33,7 @@ essential_boundary_condition_function_t(Int dim,
                                         Scalar u[],
                                         void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * bc = static_cast<EssentialBC *>(ctx);
     assert(bc != nullptr);
     bc->evaluate_t(dim, time, x, nc, u);
@@ -51,13 +51,13 @@ EssentialBC::parameters()
 EssentialBC::EssentialBC(const Parameters & params) : BoundaryCondition(params), fid(-1)
 
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 EssentialBC::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     assert(dpi != nullptr);
 
@@ -82,35 +82,35 @@ EssentialBC::create()
 Int
 EssentialBC::get_field_id() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->fid;
 }
 
 PetscFunc *
 EssentialBC::get_function()
 {
-    _F_;
+    CALL_STACK_MSG();
     return essential_boundary_condition_function;
 }
 
 PetscFunc *
 EssentialBC::get_function_t()
 {
-    _F_;
+    CALL_STACK_MSG();
     return essential_boundary_condition_function_t;
 }
 
 void *
 EssentialBC::get_context()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this;
 }
 
 void
 EssentialBC::set_up()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     for (auto & bnd : get_boundary())
         dpi->add_boundary_essential(get_name(),

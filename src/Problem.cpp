@@ -35,14 +35,14 @@ Problem::~Problem()
 DM
 Problem::get_dm() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->mesh->get_dm();
 }
 
 const Vector &
 Problem::get_solution_vector() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->x;
 }
 
@@ -55,7 +55,7 @@ Problem::get_solution_vector()
 void
 Problem::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & f : this->functions)
         f->check();
     for (auto & pp : this->pps)
@@ -68,7 +68,7 @@ Problem::check()
 void
 Problem::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & f : this->functions)
         f->create();
     for (auto & pp : this->pps)
@@ -87,49 +87,49 @@ Problem::allocate_objects()
 Mesh *
 Problem::get_mesh() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->mesh;
 }
 
 Int
 Problem::get_dimension() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->mesh->get_dimension();
 }
 
 Real
 Problem::get_time() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return 0.;
 }
 
 Int
 Problem::get_step_num() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return 0;
 }
 
 const std::vector<Function *> &
 Problem::get_functions() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->functions;
 }
 
 void
 Problem::add_function(Function * fn)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->functions.push_back(fn);
 }
 
 void
 Problem::add_output(Output * output)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!output->is_param_valid("on"))
         output->set_exec_mask(this->default_output_on);
     this->outputs.push_back(output);
@@ -138,7 +138,7 @@ Problem::add_output(Output * output)
 void
 Problem::add_postprocessor(Postprocessor * pp)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->pps_names.push_back(pp->get_name());
     this->pps[pp->get_name()] = pp;
 }
@@ -146,7 +146,7 @@ Problem::add_postprocessor(Postprocessor * pp)
 void
 Problem::compute_postprocessors()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & pp : this->pps)
         pp.second->compute();
 }
@@ -154,7 +154,7 @@ Problem::compute_postprocessors()
 Postprocessor *
 Problem::get_postprocessor(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->pps.find(name);
     if (it != this->pps.end())
         return it->second;
@@ -165,14 +165,14 @@ Problem::get_postprocessor(const std::string & name) const
 const std::vector<std::string> &
 Problem::get_postprocessor_names() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->pps_names;
 }
 
 void
 Problem::output(ExecuteOn::ExecuteOnFlag flag)
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & o : this->outputs)
         if (o->should_output(flag))
             o->output_step();
@@ -181,7 +181,7 @@ Problem::output(ExecuteOn::ExecuteOnFlag flag)
 void
 Problem::on_initial()
 {
-    _F_;
+    CALL_STACK_MSG();
     compute_postprocessors();
     output(ExecuteOn::INITIAL);
 }
@@ -189,7 +189,7 @@ Problem::on_initial()
 void
 Problem::on_final()
 {
-    _F_;
+    CALL_STACK_MSG();
     compute_postprocessors();
     output(ExecuteOn::FINAL);
 }
@@ -197,7 +197,7 @@ Problem::on_final()
 Vector
 Problem::create_local_vector() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Vec v;
     PETSC_CHECK(DMCreateLocalVector(get_dm(), &v));
     return { v };
@@ -206,7 +206,7 @@ Problem::create_local_vector() const
 Vector
 Problem::get_local_vector() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Vec v;
     PETSC_CHECK(DMGetLocalVector(get_dm(), &v));
     return { v };
@@ -215,7 +215,7 @@ Problem::get_local_vector() const
 void
 Problem::restore_local_vector(const Vector & vec) const
 {
-    _F_;
+    CALL_STACK_MSG();
     Vec v = vec;
     PETSC_CHECK(DMRestoreLocalVector(get_dm(), &v));
 }
@@ -223,7 +223,7 @@ Problem::restore_local_vector(const Vector & vec) const
 Vector
 Problem::create_global_vector() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Vec v;
     PETSC_CHECK(DMCreateGlobalVector(get_dm(), &v));
     return { v };
@@ -232,7 +232,7 @@ Problem::create_global_vector() const
 Vector
 Problem::get_global_vector() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Vec v;
     PETSC_CHECK(DMGetGlobalVector(get_dm(), &v));
     return { v };
@@ -241,7 +241,7 @@ Problem::get_global_vector() const
 void
 Problem::restore_global_vector(const Vector & vec) const
 {
-    _F_;
+    CALL_STACK_MSG();
     Vec v = vec;
     PETSC_CHECK(DMRestoreGlobalVector(get_dm(), &v));
 }
@@ -249,7 +249,7 @@ Problem::restore_global_vector(const Vector & vec) const
 Matrix
 Problem::create_matrix() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Mat m;
     PETSC_CHECK(DMCreateMatrix(get_dm(), &m));
     return { m };
@@ -266,7 +266,7 @@ Problem::get_local_section() const
 void
 Problem::set_local_section(const Section & section) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(DMSetLocalSection(get_dm(), section));
 }
 
@@ -281,7 +281,7 @@ Problem::get_global_section() const
 void
 Problem::set_global_section(const Section & section) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(DMSetGlobalSection(get_dm(), section));
 }
 

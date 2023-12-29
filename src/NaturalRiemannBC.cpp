@@ -19,7 +19,7 @@ natural_riemann_boundary_condition_function(Real time,
                                             Scalar * xG,
                                             void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * bc = static_cast<NaturalRiemannBC *>(ctx);
     assert(bc != nullptr);
     bc->evaluate(time, c, n, xI, xG);
@@ -35,13 +35,13 @@ NaturalRiemannBC::parameters()
 
 NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryCondition(params)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 NaturalRiemannBC::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     assert(dpi != nullptr);
 
@@ -54,14 +54,14 @@ NaturalRiemannBC::create()
 Int
 NaturalRiemannBC::get_field_id() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->fid;
 }
 
 void
 NaturalRiemannBC::set_up()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     for (auto & bnd : get_boundary())
         dpi->add_boundary_natural_riemann(get_name(),

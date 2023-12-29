@@ -9,31 +9,31 @@ using namespace godzilla;
 
 Partitioner::Partitioner() : part(nullptr)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 Partitioner::Partitioner(MPI_Comm comm) : part(nullptr)
 {
-    _F_;
+    CALL_STACK_MSG();
     create(comm);
 }
 
 Partitioner::Partitioner(PetscPartitioner p) : part(p)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 Partitioner::create(MPI_Comm comm)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscPartitionerCreate(comm, &this->part));
 }
 
 void
 Partitioner::destroy()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->part)
         PETSC_CHECK(PetscPartitionerDestroy(&this->part));
     this->part = nullptr;
@@ -42,14 +42,14 @@ Partitioner::destroy()
 void
 Partitioner::set_type(const std::string & type)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscPartitionerSetType(this->part, type.c_str()));
 }
 
 std::string
 Partitioner::get_type() const
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscPartitionerType name;
     PETSC_CHECK(PetscPartitionerGetType(this->part, &name));
     return { name };
@@ -58,21 +58,21 @@ Partitioner::get_type() const
 void
 Partitioner::reset()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscPartitionerReset(this->part));
 }
 
 void
 Partitioner::set_up()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscPartitionerSetUp(this->part));
 }
 
 void
 Partitioner::view(PetscViewer viewer) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscPartitionerView(this->part, viewer));
 }
 
@@ -86,7 +86,7 @@ Partitioner::partition(Int n_parts,
                        Section & part_section,
                        IndexSet & partition)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscPartitionerPartition(this->part,
                                           n_parts,
                                           n_vertices,
@@ -100,6 +100,6 @@ Partitioner::partition(Int n_parts,
 
 Partitioner::operator PetscPartitioner() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->part;
 }

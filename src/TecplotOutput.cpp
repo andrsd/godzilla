@@ -20,7 +20,7 @@ namespace {
 const char *
 get_zone_type(DMPolytopeType elem_type)
 {
-    _F_;
+    CALL_STACK_MSG();
     switch (elem_type) {
     case DM_POLYTOPE_SEGMENT:
         return "FELINESEG";
@@ -40,7 +40,7 @@ get_zone_type(DMPolytopeType elem_type)
 const Int *
 get_elem_node_ordering(DMPolytopeType elem_type)
 {
-    _F_;
+    CALL_STACK_MSG();
 
     static const Int seg_ordering[] = { 0, 1 };
     static const Int tri_ordering[] = { 0, 1, 2 };
@@ -91,19 +91,19 @@ TecplotOutput::TecplotOutput(const Parameters & params) :
     n_zones(-1),
     element_id_var_index(-1)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 TecplotOutput::~TecplotOutput()
 {
-    _F_;
+    CALL_STACK_MSG();
     close_file();
 }
 
 std::string
 TecplotOutput::get_file_ext() const
 {
-    _F_;
+    CALL_STACK_MSG();
     switch (this->format) {
     case BINARY:
         return { "plt" };
@@ -115,7 +115,7 @@ TecplotOutput::get_file_ext() const
 void
 TecplotOutput::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FileOutput::create();
 
     assert(this->dpi != nullptr);
@@ -181,7 +181,7 @@ TecplotOutput::create()
 void
 TecplotOutput::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     FileOutput::check();
     if (this->dpi == nullptr)
         log_error("Tecplot output can be only used with finite element problems.");
@@ -192,7 +192,7 @@ TecplotOutput::check()
 void
 TecplotOutput::output_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     // We only have fixed meshes, so no need to deal with a sequence of files
     TIMED_EVENT(9, "TecplotOutput", "Output to file: {}", get_file_name());
 
@@ -212,7 +212,7 @@ TecplotOutput::output_step()
 void
 TecplotOutput::open_file()
 {
-    _F_;
+    CALL_STACK_MSG();
     const char * mode = this->format == BINARY ? "wb" : "w";
     this->file = std::fopen(get_file_name().c_str(), mode);
     if (this->file == nullptr)
@@ -222,14 +222,14 @@ TecplotOutput::open_file()
 void
 TecplotOutput::close_file()
 {
-    _F_;
+    CALL_STACK_MSG();
     std::fclose(this->file);
 }
 
 void
 TecplotOutput::write_header()
 {
-    _F_;
+    CALL_STACK_MSG();
     switch (this->format) {
     case BINARY:
         write_header_binary();
@@ -243,7 +243,7 @@ TecplotOutput::write_header()
 void
 TecplotOutput::write_dataset_aux_data()
 {
-    _F_;
+    CALL_STACK_MSG();
     switch (this->format) {
     case BINARY:
         break;
@@ -256,7 +256,7 @@ TecplotOutput::write_dataset_aux_data()
 void
 TecplotOutput::write_zone()
 {
-    _F_;
+    CALL_STACK_MSG();
     switch (this->format) {
     case BINARY:
         write_zone_binary();
@@ -272,13 +272,13 @@ TecplotOutput::write_zone()
 void
 TecplotOutput::write_header_binary()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 TecplotOutput::write_zone_binary()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 //
@@ -286,7 +286,7 @@ TecplotOutput::write_zone_binary()
 void
 TecplotOutput::write_header_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto title = fmt::format("TITLE = \"{}\"\n", "data");
     write_line(title);
 
@@ -325,7 +325,7 @@ TecplotOutput::write_header_ascii()
 void
 TecplotOutput::write_created_by_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto app = get_app();
     std::time_t now = std::time(nullptr);
     std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
@@ -337,7 +337,7 @@ TecplotOutput::write_created_by_ascii()
 void
 TecplotOutput::write_zone_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     // FIXME: allow output for cell sets
     auto cell_range = this->mesh->get_cell_range();
     auto n_cells_in_block = this->mesh->get_num_cells();
@@ -375,7 +375,7 @@ TecplotOutput::write_zone_ascii()
 void
 TecplotOutput::write_coordinates_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dim = this->mesh->get_dimension();
     auto coord = this->mesh->get_coordinates_local();
     auto xyz = coord.get_array_read();
@@ -394,7 +394,7 @@ TecplotOutput::write_coordinates_ascii()
 void
 TecplotOutput::write_node_ids_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n_elems = this->mesh->get_num_cells();
     for (auto & vertex_id : this->mesh->get_vertex_range()) {
         auto node_id = vertex_id - n_elems;
@@ -408,7 +408,7 @@ TecplotOutput::write_node_ids_ascii()
 void
 TecplotOutput::write_element_ids_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & elem_id : this->mesh->get_cell_range()) {
         write_line(fmt::format(" {}", elem_id));
         if ((elem_id + 1) % 10 == 0)
@@ -420,7 +420,7 @@ TecplotOutput::write_element_ids_ascii()
 void
 TecplotOutput::write_connectivity_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     Int n_all_elems = this->mesh->get_num_all_cells();
     for (auto & cell_id : this->mesh->get_cell_range()) {
         auto polytope_type = this->mesh->get_cell_type(cell_id);
@@ -435,14 +435,14 @@ TecplotOutput::write_connectivity_ascii()
 void
 TecplotOutput::write_field_variable_values_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     write_nodal_field_variable_values_ascii();
 }
 
 void
 TecplotOutput::write_nodal_field_variable_values_ascii()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->dpi->compute_solution_vector_local();
     auto sln = this->dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
@@ -478,7 +478,7 @@ TecplotOutput::write_nodal_field_variable_values_ascii()
 void
 TecplotOutput::write_line(const std::string & line)
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->file != nullptr);
     std::fputs(line.c_str(), this->file);
 }

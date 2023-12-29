@@ -37,14 +37,14 @@ L2Diff::L2Diff(const Parameters & params) :
 void
 L2Diff::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FunctionInterface::create();
 }
 
 void
 L2Diff::compute()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto problem = get_problem();
     std::vector<PetscFunc *> funcs(1, l2_diff_eval);
     std::vector<void *> ctxs(1, this);
@@ -59,14 +59,14 @@ L2Diff::compute()
 Real
 L2Diff::get_value()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->l2_diff;
 }
 
 void
 L2Diff::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     evaluate_func(dim, time, x, nc, u);
 }
 

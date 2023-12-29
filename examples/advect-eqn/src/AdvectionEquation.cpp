@@ -17,13 +17,13 @@ AdvectionEquation::parameters()
 AdvectionEquation::AdvectionEquation(const Parameters & parameters) :
     ExplicitFVLinearProblem(parameters)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 AdvectionEquation::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitFVLinearProblem::create();
     create_mass_matrix();
 }
@@ -31,7 +31,7 @@ AdvectionEquation::create()
 void
 AdvectionEquation::set_up_fields()
 {
-    _F_;
+    CALL_STACK_MSG();
     add_field(0, "u", 1);
 }
 
@@ -46,7 +46,7 @@ AdvectionEquation::compute_flux(PetscInt,
                                 const PetscScalar[],
                                 PetscScalar flux[])
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscReal wind[] = { 0.5 };
     PetscReal wn = 0;
     wn += wind[0] * n[0];

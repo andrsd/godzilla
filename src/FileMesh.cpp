@@ -25,7 +25,7 @@ FileMesh::FileMesh(const Parameters & parameters) :
     UnstructuredMesh(parameters),
     file_format(UNKNOWN)
 {
-    _F_;
+    CALL_STACK_MSG();
 
     std::filesystem::path file(get_param<std::string>("file"));
     if (file.is_absolute())
@@ -44,14 +44,14 @@ FileMesh::FileMesh(const Parameters & parameters) :
 const std::string &
 FileMesh::get_file_name() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->file_name;
 }
 
 void
 FileMesh::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     switch (this->file_format) {
     case EXODUSII:
         create_from_exodus();
@@ -69,7 +69,7 @@ FileMesh::create()
 void
 FileMesh::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->file_format == UNKNOWN)
         log_error("Unknown mesh format");
 }
@@ -77,7 +77,7 @@ FileMesh::check()
 void
 FileMesh::create_from_exodus()
 {
-    _F_;
+    CALL_STACK_MSG();
     DM dm;
     PETSC_CHECK(DMPlexCreateExodusFromFile(get_comm(), get_file_name().c_str(), PETSC_TRUE, &dm));
     set_dm(dm);
@@ -109,7 +109,7 @@ FileMesh::create_from_exodus()
 void
 FileMesh::create_from_gmsh()
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscOptionsSetValue(nullptr, "-dm_plex_gmsh_use_regions", nullptr);
     DM dm;
     PETSC_CHECK(DMPlexCreateGmshFromFile(get_comm(), get_file_name().c_str(), PETSC_TRUE, &dm));
@@ -119,14 +119,14 @@ FileMesh::create_from_gmsh()
 void
 FileMesh::set_file_format(FileFormat fmt)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->file_format = fmt;
 }
 
 void
 FileMesh::detect_file_format()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (utils::has_suffix(this->file_name, ".exo") || utils::has_suffix(this->file_name, ".e"))
         this->file_format = EXODUSII;
     else if (utils::has_suffix(this->file_name, ".gmsh"))

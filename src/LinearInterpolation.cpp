@@ -9,7 +9,7 @@ namespace godzilla {
 
 LinearInterpolation::LinearInterpolation() : x(), y()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 LinearInterpolation::LinearInterpolation(const std::vector<Real> & ax,
@@ -17,13 +17,13 @@ LinearInterpolation::LinearInterpolation(const std::vector<Real> & ax,
     x(ax),
     y(ay)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 LinearInterpolation::create(const std::vector<Real> & x, const std::vector<Real> & y)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->x = x;
     this->y = y;
 }
@@ -31,7 +31,7 @@ LinearInterpolation::create(const std::vector<Real> & x, const std::vector<Real>
 void
 LinearInterpolation::check() const
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->x.size() != this->y.size())
         throw std::domain_error(fmt::format("Size of 'x' ({}) does not match size of 'y' ({}).",
                                             this->x.size(),
@@ -53,7 +53,7 @@ LinearInterpolation::check() const
 Real
 LinearInterpolation::sample(Real x)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::size_t sz = this->x.size();
     if (x < this->x[0])
         return this->y[0];

@@ -17,13 +17,13 @@ InflowBC::InflowBC(const Parameters & params) :
     inlet_vel(get_param<PetscReal>("vel")),
     components({ 0 })
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 const std::vector<PetscInt> &
 InflowBC::get_components() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->components;
 }
 
@@ -34,6 +34,6 @@ InflowBC::evaluate(PetscReal time,
                    const PetscScalar * xI,
                    PetscScalar * xG)
 {
-    _F_;
+    CALL_STACK_MSG();
     xG[0] = this->inlet_vel;
 }

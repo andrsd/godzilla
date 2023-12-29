@@ -118,7 +118,7 @@ template <typename T>
 T &
 DependencyEvaluator::declare_value(const std::string & val_name)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto it = this->values.find(val_name);
     if (it == this->values.end()) {
         auto * new_val = new Value<T>();
@@ -139,7 +139,7 @@ template <typename T>
 const T &
 DependencyEvaluator::get_value(const std::string & val_name)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto it = this->values.find(val_name);
     if (it != this->values.end()) {
         auto val = dynamic_cast<const Value<T> *>(it->second);
@@ -156,7 +156,7 @@ template <typename Fn>
 void
 DependencyEvaluator::create_functional(const std::string & name, const Parameters & params)
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);
     if (it == this->functionals.end()) {
         auto * fnl = new Fn(params);
