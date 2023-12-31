@@ -10,6 +10,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Validation.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Exception.h"
 #include <cassert>
 #include "fmt/format.h"
 #include "yaml-cpp/node/iterator.h"
@@ -201,7 +202,7 @@ InputFile::get_block(const Block & parent, const std::string & name)
             return { it->first, it->second };
         }
     }
-    error("Missing '{}' block.", name);
+    throw Exception("Missing '{}' block.", name);
 }
 
 Parameters *
@@ -217,10 +218,10 @@ InputFile::build_params(const Block & block)
 
     YAML::Node type = vals["type"];
     if (!type)
-        error("{}: No 'type' specified.", block.name());
+        throw Exception("{}: No 'type' specified.", block.name());
     const std::string & class_name = type.as<std::string>();
     if (!this->app->get_factory().is_registered(class_name))
-        error("{}: Type '{}' is not a registered object.", block.name(), class_name);
+        throw Exception("{}: Type '{}' is not a registered object.", block.name(), class_name);
     unused_param_names.erase("type");
 
     Parameters * params = this->app->get_parameters(class_name);

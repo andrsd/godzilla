@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/PerfLog.h"
-#include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 
 namespace godzilla {
 
@@ -36,7 +36,7 @@ PerfLog::register_event(const char * name)
         return event_id;
     }
     else
-        error("PerfLog event '{}' is already registered.", name);
+        throw Exception("PerfLog event '{}' is already registered.", name);
 }
 
 PetscLogEvent
@@ -53,7 +53,7 @@ PerfLog::get_event_id(const char * name)
     if (event_id != -1)
         return event_id;
     else
-        error("Event '{}' was not registered.", name);
+        throw Exception("Event '{}' was not registered.", name);
 }
 
 PetscLogEvent
@@ -72,7 +72,7 @@ PerfLog::register_stage(const char * name)
         return stage_id;
     }
     else
-        error("PerfLog stage '{}' is already registered.", name);
+        throw Exception("PerfLog stage '{}' is already registered.", name);
 }
 
 PetscLogStage
@@ -89,7 +89,7 @@ PerfLog::get_stage_id(const char * name)
     if (stage_id != -1)
         return stage_id;
     else
-        error("Stage '{}' was not registered.", name);
+        throw Exception("Stage '{}' was not registered.", name);
 }
 
 PetscLogStage

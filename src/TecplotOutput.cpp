@@ -9,6 +9,7 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Validation.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Exception.h"
 #include <cassert>
 #include <set>
 #include <fmt/chrono.h>
@@ -216,7 +217,7 @@ TecplotOutput::open_file()
     const char * mode = this->format == BINARY ? "wb" : "w";
     this->file = std::fopen(get_file_name().c_str(), mode);
     if (this->file == nullptr)
-        error("Could not open file '{}' for writing.", get_file_name());
+        throw Exception("Could not open file '{}' for writing.", get_file_name());
 }
 
 void

@@ -11,6 +11,7 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/IndexSet.h"
+#include "godzilla/Exception.h"
 #include "exodusIIcpp/exodusIIcpp.h"
 #include "fmt/format.h"
 #include "fmt/chrono.h"
@@ -227,7 +228,7 @@ ExodusIIOutput::open_file()
     CALL_STACK_MSG();
     this->exo = new exodusIIcpp::File(get_file_name(), exodusIIcpp::FileAccess::WRITE);
     if (!this->exo->is_opened())
-        error("Could not open file '{}' for writing.", get_file_name());
+        throw Exception("Could not open file '{}' for writing.", get_file_name());
 }
 
 void

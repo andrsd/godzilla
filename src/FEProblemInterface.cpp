@@ -16,6 +16,7 @@
 #include "godzilla/ValueFunctional.h"
 #include "godzilla/Utils.h"
 #include "godzilla/DependencyGraph.h"
+#include "godzilla/Exception.h"
 #include <cassert>
 #include <petsc/private/petscfeimpl.h>
 
@@ -35,7 +36,7 @@ add_functionals(DependencyGraph<const Functional *> & g,
             if (jt != suppliers.end())
                 g.add_edge(f, jt->second);
             else
-                error("Did not find any functional which would supply '{}'.", dep);
+                throw Exception("Did not find any functional which would supply '{}'.", dep);
         }
     }
 }
@@ -153,7 +154,7 @@ FEProblemInterface::get_field_name(Int fid) const
     if (it != this->fields.end())
         return it->second.name;
     else
-        error("Field with ID = '{}' does not exist.", fid);
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -164,7 +165,7 @@ FEProblemInterface::get_field_order(Int fid) const
     if (it != this->fields.end())
         return it->second.k;
     else
-        error("Field with ID = '{}' does not exist.", fid);
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -175,7 +176,7 @@ FEProblemInterface::get_field_num_components(Int fid) const
     if (it != this->fields.end())
         return it->second.nc;
     else
-        error("Field with ID = '{}' does not exist.", fid);
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -186,7 +187,7 @@ FEProblemInterface::get_field_id(const std::string & name) const
     if (it != this->fields_by_name.end())
         return it->second;
     else
-        error("Field '{}' does not exist. Typo?", name);
+        throw Exception("Field '{}' does not exist. Typo?", name);
 }
 
 WeakForm *
@@ -227,7 +228,7 @@ FEProblemInterface::get_field_component_name(Int fid, Int component) const
         }
     }
     else
-        error("Field with ID = '{}' does not exist.", fid);
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 void
@@ -241,10 +242,10 @@ FEProblemInterface::set_field_component_name(Int fid, Int component, const std::
             it->second.component_names[component] = name;
         }
         else
-            error("Unable to set component name for single-component field");
+            throw Exception("Unable to set component name for single-component field");
     }
     else
-        error("Field with ID = '{}' does not exist.", fid);
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -273,7 +274,7 @@ FEProblemInterface::get_aux_field_name(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.name;
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -284,7 +285,7 @@ FEProblemInterface::get_aux_field_num_components(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.nc;
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -295,7 +296,7 @@ FEProblemInterface::get_aux_field_id(const std::string & name) const
     if (it != this->aux_fields_by_name.end())
         return it->second;
     else
-        error("Auxiliary field '{}' does not exist. Typo?", name);
+        throw Exception("Auxiliary field '{}' does not exist. Typo?", name);
 }
 
 bool
@@ -322,7 +323,7 @@ FEProblemInterface::get_aux_field_order(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.k;
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 std::string
@@ -340,7 +341,7 @@ FEProblemInterface::get_aux_field_component_name(Int fid, Int component) const
         }
     }
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 void
@@ -354,10 +355,10 @@ FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
             it->second.component_names[component] = name;
         }
         else
-            error("Unable to set component name for single-component field");
+            throw Exception("Unable to set component name for single-component field");
     }
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -387,7 +388,7 @@ FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
         this->fields_by_name[name] = id;
     }
     else
-        error("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
+        throw Exception("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
 }
 
 Int
@@ -417,7 +418,9 @@ FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
         this->aux_fields_by_name[name] = id;
     }
     else
-        error("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.", name, id);
+        throw Exception("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
+                        name,
+                        id);
 }
 
 void
@@ -550,7 +553,7 @@ FEProblemInterface::get_field_value(const std::string & field_name) const
         return this->aux_fields.at(fid).values;
     }
     else
-        error("Field '{}' does not exist. Typo?", field_name);
+        throw Exception("Field '{}' does not exist. Typo?", field_name);
 }
 
 const FieldGradient &
@@ -566,7 +569,7 @@ FEProblemInterface::get_field_gradient(const std::string & field_name) const
         return this->aux_fields.at(fid).derivs;
     }
     else
-        error("Field '{}' does not exist. Typo?", field_name);
+        throw Exception("Field '{}' does not exist. Typo?", field_name);
 }
 
 const FieldValue &
@@ -582,7 +585,7 @@ FEProblemInterface::get_field_dot(const std::string & field_name) const
         return this->aux_fields.at(fid).dots;
     }
     else
-        error("Field '{}' does not exist. Typo?", field_name);
+        throw Exception("Field '{}' does not exist. Typo?", field_name);
 }
 
 const Real &
@@ -1826,7 +1829,7 @@ FEProblemInterface::add_boundary_natural_riemann(const std::string & name,
                                                  void * context)
 {
     CALL_STACK_MSG();
-    error("Natural Riemann BCs are not supported for FE problems");
+    throw Exception("Natural Riemann BCs are not supported for FE problems");
 }
 
 } // namespace godzilla
