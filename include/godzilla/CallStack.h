@@ -111,6 +111,12 @@ public:
     /// Remove a message from a stack
     void remove(Msg * msg);
 
+    /// Get size of the call stack
+    int get_size() const;
+
+    /// Get item at position `idx`
+    Msg * at(int idx) const;
+
 private:
     /// The object storing call stack objects
     std::array<Msg *, MAX_SIZE> stack;
