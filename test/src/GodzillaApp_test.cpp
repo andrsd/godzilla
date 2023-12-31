@@ -3,6 +3,7 @@
 #include "godzilla/Mesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/GYMLFile.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -51,7 +52,7 @@ TEST_F(GodzillaAppTest, run_input_non_existent_file)
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app(comm, "godzilla", argc, argv);
 
-    EXPECT_DEATH(app.run(), "\\[ERROR\\] Unable to open");
+    EXPECT_THAT_THROW_MSG(app.run(), ::testing::HasSubstr("Unable to open"));
 }
 
 TEST_F(GodzillaAppTest, no_colors)

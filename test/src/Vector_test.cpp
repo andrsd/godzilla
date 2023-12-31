@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/Vector.h"
 #include "godzilla/PerfLog.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -29,10 +30,9 @@ TEST(VectorTest, set_sizes)
     EXPECT_EQ(v.get_size(), 3);
     EXPECT_EQ(v.get_local_size(), 3);
 
-    EXPECT_DEATH(
+    EXPECT_THROW_MSG(
         v.set_sizes(PETSC_DECIDE, PETSC_DECIDE),
-        "\\[ERROR\\] Calling Vector::set_sizes with n = PETSC_DECIDE and N = PETSC_DECIDE is "
-        "not allowed.");
+        "Calling Vector::set_sizes with n = PETSC_DECIDE and N = PETSC_DECIDE is not allowed.");
     v.destroy();
 }
 

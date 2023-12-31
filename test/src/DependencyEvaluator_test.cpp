@@ -4,6 +4,7 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/ValueFunctional.h"
 #include "GTestFENonlinearProblem.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -116,8 +117,8 @@ TEST(DependencyEvaluator, create_existing_functional)
     params.set<FEProblemInterface *>("_fepi") = &prob;
     prob.create_functional<SimpleFnl>("test", params);
 
-    EXPECT_DEATH(prob.create_functional<SimpleFnl>("test", params),
-                 "\\[ERROR\\] Functional with name 'test' already exists.");
+    EXPECT_THROW_MSG(prob.create_functional<SimpleFnl>("test", params),
+                     "Functional with name 'test' already exists.");
 }
 
 TEST(DependencyEvaluator, get_non_existent_functional)
@@ -137,8 +138,7 @@ TEST(DependencyEvaluator, get_non_existent_functional)
     mesh.create();
     prob.create();
 
-    EXPECT_DEATH(prob.get_functional("asdf"),
-                 "\\[ERROR\\] No functional with name 'asdf' found. Typo?.");
+    EXPECT_THROW_MSG(prob.get_functional("asdf"), "No functional with name 'asdf' found. Typo?");
 }
 
 TEST(DependencyEvaluator, eval)
@@ -205,8 +205,8 @@ TEST(DependencyEvaluator, redeclare_a_value)
     Parameters params;
     params.set<FEProblemInterface *>("_fepi") = &prob;
     prob.create_functional<SimpleFnl>("b", params);
-    EXPECT_DEATH(prob.create_functional<SimpleFnl>("a", params),
-                 "\\[ERROR\\] Trying to declare an already existing value 'a@region'.");
+    EXPECT_THROW_MSG(prob.create_functional<SimpleFnl>("a", params),
+                     "Trying to declare an already existing value 'a@region'.");
 }
 
 TEST(DependencyEvaluator, get_suppliers)

@@ -2,6 +2,7 @@
 #include "GodzillaApp_test.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
+#include "ExceptionTestMacros.h"
 #include "petsc.h"
 
 using namespace godzilla;
@@ -156,7 +157,7 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     TestUnstructuredMesh mesh(params);
     mesh.create();
 
-    EXPECT_DEATH(mesh.get_face_set_name(1234), "Face set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(mesh.get_face_set_name(1234), "Face set ID '1234' does not exist.");
 }
 
 TEST(UnstructuredMeshTest, nonexistent_cell_set)
@@ -169,7 +170,7 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     TestUnstructuredMesh mesh(params);
     mesh.create();
 
-    EXPECT_DEATH(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
 }
 
 TEST(UnstructuredMeshTest, get_connectivity)
@@ -509,7 +510,8 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
     EXPECT_DOUBLE_EQ(coords(7), 1.);
 }
 
-TEST(UnstructuredMesh, mark_boundary_faces) {
+TEST(UnstructuredMesh, mark_boundary_faces)
+{
     class TestMesh2D : public godzilla::UnstructuredMesh {
     public:
         explicit TestMesh2D(const godzilla::Parameters & parameters) : UnstructuredMesh(parameters)

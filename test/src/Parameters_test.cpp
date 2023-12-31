@@ -2,13 +2,14 @@
 #include "godzilla/Types.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/Factory.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
 TEST(ParametersTest, get)
 {
     Parameters params = Object::parameters();
-    EXPECT_DEATH(params.get<int>("i"), "No parameter 'i' found.");
+    EXPECT_THROW_MSG(params.get<int>("i"), "No parameter 'i' found.");
 }
 
 TEST(ParametersTest, param_value)

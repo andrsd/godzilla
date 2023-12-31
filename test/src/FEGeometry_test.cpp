@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEShapeFns.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -159,8 +160,8 @@ TEST(FEGeometryTest, get_local_vertex_index)
     EXPECT_EQ(fe::get_local_vertex_index(elem, 2), 0);
     EXPECT_EQ(fe::get_local_vertex_index(elem, 7), 1);
     EXPECT_EQ(fe::get_local_vertex_index(elem, 4), 2);
-    EXPECT_DEATH(fe::get_local_vertex_index(elem, 0),
-                 "Vertex 0 is not part of the connectivity array.");
+    EXPECT_THROW_MSG(fe::get_local_vertex_index(elem, 0),
+                     "Vertex 0 is not part of the connectivity array.");
 }
 
 TEST(FEGeometryTest, get_local_face_index)

@@ -2,6 +2,7 @@
 #include "FENonlinearProblem_test.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/Parameters.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -165,8 +166,8 @@ TEST_F(InitialConditionTest, duplicate_ic_name)
 
     this->prob->add_initial_condition(&ic);
 
-    EXPECT_DEATH(this->prob->add_initial_condition(&ic),
-                 "Cannot add initial condition object 'obj'. Name already taken.");
+    EXPECT_THROW_MSG(this->prob->add_initial_condition(&ic),
+                     "Cannot add initial condition object 'obj'. Name already taken.");
 }
 
 TEST_F(InitialCondition2FieldTest, no_field_param)

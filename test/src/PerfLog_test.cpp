@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/PerfLog.h"
+#include "ExceptionTestMacros.h"
 #include <time.h>
 
 #ifdef GODZILLA_WITH_PERF_LOG
@@ -41,16 +42,16 @@ TEST(PerfLogTest, event)
 TEST(PerfLogTest, error_existing_event)
 {
     PerfLog::register_event("event_asdf");
-    EXPECT_DEATH(PerfLog::register_event("event_asdf"),
-                 "PerfLog event 'event_asdf' is already registered.");
+    EXPECT_THROW_MSG(PerfLog::register_event("event_asdf"),
+                     "PerfLog event 'event_asdf' is already registered.");
 }
 
 TEST(PerfLogTest, non_existent_event_id)
 {
-    EXPECT_DEATH(PerfLog::get_event_id("event_none"), "Event 'event_none' was not registered.");
+    EXPECT_THROW_MSG(PerfLog::get_event_id("event_none"), "Event 'event_none' was not registered.");
 
     const std::string no_event = "event_none";
-    EXPECT_DEATH(PerfLog::get_event_id(no_event), "Event 'event_none' was not registered.");
+    EXPECT_THROW_MSG(PerfLog::get_event_id(no_event), "Event 'event_none' was not registered.");
 }
 
 TEST(PerfLogTest, stage)
@@ -98,13 +99,13 @@ TEST(PerfLogTest, stage)
 TEST(PerfLogTest, error_existing_stage)
 {
     PerfLog::register_stage("stage_asdf");
-    EXPECT_DEATH(PerfLog::register_stage("stage_asdf"),
-                 "PerfLog stage 'stage_asdf' is already registered.");
+    EXPECT_THROW_MSG(PerfLog::register_stage("stage_asdf"),
+                     "PerfLog stage 'stage_asdf' is already registered.");
 }
 
 TEST(PerfLogTest, non_existent_stage_id)
 {
-    EXPECT_DEATH(PerfLog::get_stage_id("stage_none"), "Stage 'stage_none' was not registered.");
+    EXPECT_THROW_MSG(PerfLog::get_stage_id("stage_none"), "Stage 'stage_none' was not registered.");
 }
 
 TEST(PerfLogTest, is_event_registered)

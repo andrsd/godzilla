@@ -2,6 +2,7 @@
 #include "GodzillaApp_test.h"
 #include "godzilla/ExodusIIMesh.h"
 #include "godzilla/Parameters.h"
+#include "ExceptionTestMacros.h"
 #include "petsc.h"
 
 using namespace godzilla;
@@ -73,8 +74,8 @@ TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
     ExodusIIMesh mesh(params);
     mesh.create();
 
-    EXPECT_DEATH(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
-    EXPECT_DEATH(mesh.get_cell_set_id("1234"), "Cell set '1234' does not exist.");
+    EXPECT_THROW_MSG(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(mesh.get_cell_set_id("1234"), "Cell set '1234' does not exist.");
 }
 
 TEST(ExodusIIMeshTest, nonexitent_file)
