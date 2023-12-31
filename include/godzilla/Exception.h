@@ -5,7 +5,9 @@
 
 #include <exception>
 #include <string>
+#include <vector>
 #include "fmt/format.h"
+#include "godzilla/CallStack.h"
 
 namespace godzilla {
 
@@ -17,13 +19,23 @@ public:
     Exception(fmt::format_string<T...> format, T... args)
     {
         this->msg = fmt::format(format, std::forward<T>(args)...);
+        store_call_stack();
     }
 
+    /// Get the exception message
     const char * what() const noexcept override;
 
+    /// Get the call stack from the time the exception occured
+    const std::vector<std::string> & get_call_stack() const;
+
 private:
+    /// Store call stack
+    void store_call_stack();
+
     /// Error message
     std::string msg;
+    /// Call stack at the time exception occured
+    std::vector<std::string> call_stack;
 };
 
 } // namespace godzilla
