@@ -30,13 +30,13 @@ LinearProblem::LinearProblem(const Parameters & parameters) :
     lin_abs_tol(get_param<Real>("lin_abs_tol")),
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
-    _F_;
+    CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::FINAL);
 }
 
 LinearProblem::~LinearProblem()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->ks.destroy();
     this->b.destroy();
 }
@@ -44,7 +44,7 @@ LinearProblem::~LinearProblem()
 void
 LinearProblem::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     get_mesh()->distribute();
     init();
     allocate_objects();
@@ -63,7 +63,7 @@ LinearProblem::create()
 void
 LinearProblem::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->ks.create(get_comm());
     this->ks.set_dm(get_dm());
     PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
@@ -72,7 +72,7 @@ LinearProblem::init()
 void
 LinearProblem::allocate_objects()
 {
-    _F_;
+    CALL_STACK_MSG();
     Problem::allocate_objects();
 
     this->b = get_solution_vector().duplicate();
@@ -82,7 +82,7 @@ LinearProblem::allocate_objects()
 void
 LinearProblem::set_up_callbacks()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->ks.set_compute_rhs(this, &LinearProblem::compute_rhs);
     this->ks.set_compute_operators(this, &LinearProblem::compute_operators);
 }
@@ -90,14 +90,14 @@ LinearProblem::set_up_callbacks()
 void
 LinearProblem::set_up_monitors()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->ks.monitor_set(this, &LinearProblem::monitor);
 }
 
 void
 LinearProblem::set_up_solver_parameters()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->ks.set_tolerances(this->lin_rel_tol,
                             this->lin_abs_tol,
                             PETSC_DEFAULT,
@@ -107,7 +107,7 @@ LinearProblem::set_up_solver_parameters()
 PetscErrorCode
 LinearProblem::monitor(Int it, Real rnorm)
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(8, "{} Linear residual: {:e}", it, rnorm);
     return 0;
 }
@@ -115,14 +115,14 @@ LinearProblem::monitor(Int it, Real rnorm)
 bool
 LinearProblem::converged()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ks.get_converged_reason() > 0;
 }
 
 void
 LinearProblem::run()
 {
-    _F_;
+    CALL_STACK_MSG();
     solve();
     if (converged())
         on_final();
@@ -131,33 +131,33 @@ LinearProblem::run()
 void
 LinearProblem::set_up_matrix_properties()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 LinearProblem::set_up_preconditioning()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 LinearProblem::solve()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->ks.solve(this->b, get_solution_vector());
 }
 
 PetscErrorCode
 LinearProblem::compute_rhs(Vector &)
 {
-    _F_;
+    CALL_STACK_MSG();
     return 0;
 }
 
 PetscErrorCode
 LinearProblem::compute_operators(Matrix &, Matrix &)
 {
-    _F_;
+    CALL_STACK_MSG();
     return 0;
 }
 

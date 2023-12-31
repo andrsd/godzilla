@@ -16,7 +16,7 @@ BndResidualFunc::BndResidualFunc(const BoundaryCondition * bc) :
 const Normal &
 BndResidualFunc::get_normal() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return get_fe_problem()->get_normal();
 }
 

@@ -35,7 +35,7 @@ template <>
 inline DenseMatrix<Real, 2, 1>
 grad_shape<EDGE2, 1>(const DenseVector<DenseVector<Real, 1>, 2> & coords, Real volume)
 {
-    _F_;
+    CALL_STACK_MSG();
     Real c = 1 / volume;
     DenseMatrix<Real, 2, 1> grads;
     grads(0, 0) = -c;
@@ -48,7 +48,7 @@ template <>
 inline DenseMatrix<Real, 3, 2>
 grad_shape<TRI3, 2>(const DenseVector<DenseVector<Real, 2>, 3> & coords, Real volume)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n0 = coords(0);
     auto n1 = coords(1);
     auto n2 = coords(2);
@@ -79,7 +79,7 @@ calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
                 const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
                 const Array1D<Real> & volumes)
 {
-    _F_;
+    CALL_STACK_MSG();
     Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> grad_shfns(connect.get_size());
     for (godzilla::Int ie = 0; ie < connect.get_size(); ie++) {
         auto idx = connect.get(ie);

@@ -13,22 +13,15 @@ static CallStack callstack;
 
 // Call Stack Object ////
 
-CallStack::Obj::Obj(int ln, const char * func, const char * file) : line(ln), func(func), file(file)
+CallStack::Msg::Msg(const char * func)
 {
-    // add this object to the call stack
-    if (callstack.size < CallStack::MAX_SIZE) {
-        callstack.stack[callstack.size] = this;
-        callstack.size++;
-    }
+    this->msg = fmt::format("{}", func);
+    callstack.add(this);
 }
 
-CallStack::Obj::~Obj()
+CallStack::Msg::~Msg()
 {
-    // remove the object only if it is on the top of the call stack
-    if (callstack.size > 0 && callstack.stack[callstack.size - 1] == this) {
-        callstack.size--;
-        callstack.stack[callstack.size] = nullptr;
-    }
+    callstack.remove(this);
 }
 
 // Signals ////
@@ -66,18 +59,32 @@ CallStack::dump()
     if (this->size > 0) {
         PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "Call stack:\n");
         for (int n = 0, i = this->size - 1; i >= 0; i--, n++) {
-            Obj * o = this->stack[i];
-            PetscFPrintf(PETSC_COMM_WORLD,
-                         PETSC_STDERR,
-                         "  #%d: %s:%d: %s\n",
-                         n,
-                         o->file,
-                         o->line,
-                         o->func);
+            Msg * m = this->stack[i];
+            PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "  #%d: %s\n", n, m->msg.c_str());
         }
     }
     else
         PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "No call stack available.\n");
+}
+
+void
+CallStack::add(Msg * msg)
+{
+    // add this object to the call stack
+    if (this->size < CallStack::MAX_SIZE) {
+        this->stack[this->size] = msg;
+        this->size++;
+    }
+}
+
+void
+CallStack::remove(Msg * msg)
+{
+    // remove the object only if it is on the top of the call stack
+    if (this->size > 0 && this->stack[this->size - 1] == msg) {
+        this->size--;
+        this->stack[this->size] = nullptr;
+    }
 }
 
 void

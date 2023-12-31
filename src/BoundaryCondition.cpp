@@ -25,27 +25,27 @@ BoundaryCondition::BoundaryCondition(const Parameters & params) :
     dpi(get_param<DiscreteProblemInterface *>("_dpi")),
     boundary(get_param<std::vector<std::string>>("boundary"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 Problem *
 BoundaryCondition::get_problem() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->dpi->get_problem();
 }
 
 const std::vector<std::string> &
 BoundaryCondition::get_boundary() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->boundary;
 }
 
 DiscreteProblemInterface *
 BoundaryCondition::get_discrete_problem_interface() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->dpi;
 }
 

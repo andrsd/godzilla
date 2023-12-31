@@ -15,7 +15,7 @@ JacobianFunc::JacobianFunc(FEProblemInterface * fepi, const std::string & region
 const Real &
 JacobianFunc::get_time_shift() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return get_fe_problem()->get_time_shift();
 }
 

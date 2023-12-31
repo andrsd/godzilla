@@ -19,14 +19,14 @@ DependencyEvaluator::~DependencyEvaluator()
 const std::map<std::string, const ValueFunctional *> &
 DependencyEvaluator::get_functionals() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->functionals;
 }
 
 const ValueFunctional &
 DependencyEvaluator::get_functional(const std::string & name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & it = this->functionals.find(name);
     if (it != this->functionals.end())
         return *it->second;
@@ -37,7 +37,7 @@ DependencyEvaluator::get_functional(const std::string & name) const
 std::map<std::string, const ValueFunctional *>
 DependencyEvaluator::get_suppliers() const
 {
-    _F_;
+    CALL_STACK_MSG();
     std::map<std::string, const ValueFunctional *> suppliers;
     for (auto & it : get_functionals()) {
         auto fnl = it.second;
@@ -56,7 +56,7 @@ DependencyGraph<const Functional *>
 DependencyEvaluator::build_dependecy_graph(
     const std::map<std::string, const ValueFunctional *> & suppliers)
 {
-    _F_;
+    CALL_STACK_MSG();
     DependencyGraph<const Functional *> graph;
     for (auto & it : get_functionals()) {
         auto fnl = it.second;

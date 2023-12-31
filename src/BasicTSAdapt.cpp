@@ -21,7 +21,7 @@ BasicTSAdapt::BasicTSAdapt(const Parameters & params) : TimeSteppingAdaptor(para
 void
 BasicTSAdapt::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     TimeSteppingAdaptor::create();
     set_type(TSADAPTBASIC);
 }

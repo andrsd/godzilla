@@ -29,7 +29,7 @@ LineMesh::LineMesh(const Parameters & parameters) :
     nx(get_param<Int>("nx")),
     interpolate(PETSC_TRUE)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->xmax <= this->xmin)
         log_error("Parameter 'xmax' must be larger than 'xmin'.");
 }
@@ -37,28 +37,28 @@ LineMesh::LineMesh(const Parameters & parameters) :
 Real
 LineMesh::get_x_min() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->xmin;
 }
 
 Real
 LineMesh::get_x_max() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->xmax;
 }
 
 Int
 LineMesh::get_nx() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->nx;
 }
 
 void
 LineMesh::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     std::array<Real, 1> lower = { this->xmin };
     std::array<Real, 1> upper = { this->xmax };
     std::array<Int, 1> faces = { this->nx };

@@ -22,20 +22,20 @@ ConstantInitialCondition::ConstantInitialCondition(const Parameters & params) :
     InitialCondition(params),
     values(get_param<std::vector<Real>>("value"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 Int
 ConstantInitialCondition::get_num_components() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return (Int) this->values.size();
 }
 
 void
 ConstantInitialCondition::evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     for (Int i = 0; i < Nc; i++)
         u[i] = this->values[i];
 }

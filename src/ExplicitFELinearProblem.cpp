@@ -46,34 +46,34 @@ ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & params) :
     FENonlinearProblem(params),
     ExplicitProblemInterface(this, params)
 {
-    _F_;
+    CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
 }
 
 ExplicitFELinearProblem::~ExplicitFELinearProblem()
 {
-    _F_;
+    CALL_STACK_MSG();
     set_snes(nullptr);
 }
 
 Real
 ExplicitFELinearProblem::get_time() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::get_time();
 }
 
 Int
 ExplicitFELinearProblem::get_step_num() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::get_step_number();
 }
 
 void
 ExplicitFELinearProblem::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::init();
     auto snes = ExplicitProblemInterface::get_snes();
     NonlinearProblem::set_snes(snes);
@@ -92,7 +92,7 @@ ExplicitFELinearProblem::init()
 void
 ExplicitFELinearProblem::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FENonlinearProblem::create();
     ExplicitProblemInterface::create();
 }
@@ -100,7 +100,7 @@ ExplicitFELinearProblem::create()
 void
 ExplicitFELinearProblem::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     FENonlinearProblem::check();
     ExplicitProblemInterface::check();
 }
@@ -108,14 +108,14 @@ ExplicitFELinearProblem::check()
 bool
 ExplicitFELinearProblem::converged()
 {
-    _F_;
+    CALL_STACK_MSG();
     return ExplicitProblemInterface::converged();
 }
 
 void
 ExplicitFELinearProblem::solve()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Solving");
     ExplicitProblemInterface::solve(get_solution_vector());
 }
@@ -123,7 +123,7 @@ ExplicitFELinearProblem::solve()
 void
 ExplicitFELinearProblem::compute_solution_vector_local()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary_local(get_time(), loc_sln);
@@ -132,21 +132,21 @@ ExplicitFELinearProblem::compute_solution_vector_local()
 void
 ExplicitFELinearProblem::set_up_callbacks()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::set_up_callbacks();
 }
 
 void
 ExplicitFELinearProblem::set_up_time_scheme()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::set_up_time_scheme();
 }
 
 void
 ExplicitFELinearProblem::set_up_monitors()
 {
-    _F_;
+    CALL_STACK_MSG();
     FENonlinearProblem::set_up_monitors();
     ExplicitProblemInterface::set_up_monitors();
 }
@@ -154,14 +154,14 @@ ExplicitFELinearProblem::set_up_monitors()
 PetscErrorCode
 ExplicitFELinearProblem::compute_rhs_local(Real time, const Vector & x, Vector & F)
 {
-    _F_;
+    CALL_STACK_MSG();
     return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, x, F, this);
 }
 
 void
 ExplicitFELinearProblem::post_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitProblemInterface::post_step();
     update_aux_vector();
     compute_postprocessors();
@@ -174,7 +174,7 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
                                             ResidualFunc * f1,
                                             const std::string & region)
 {
-    _F_;
+    CALL_STACK_MSG();
     // see PetscDSSetRHSResidual for explanation
     Int part = 100;
 

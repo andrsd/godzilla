@@ -25,20 +25,20 @@ Output::Output(const Parameters & params) :
     on_mask(),
     interval(is_param_valid("interval") ? get_param<Int>("interval") : 1)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 Output::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     set_up_exec();
 }
 
 void
 Output::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (is_param_valid("interval") && ((this->on_mask & ExecuteOn::TIMESTEP) == 0))
         log_warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
 }
@@ -46,28 +46,28 @@ Output::check()
 void
 Output::set_exec_mask(ExecuteOn mask)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->on_mask = mask;
 }
 
 Problem *
 Output::get_problem() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->problem;
 }
 
 ExecuteOn
 Output::get_exec_mask() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->on_mask;
 }
 
 void
 Output::set_up_exec()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (is_param_valid("on")) {
         const auto & on = get_param<std::vector<std::string>>("on");
         if (!on.empty()) {
@@ -99,7 +99,7 @@ Output::set_up_exec()
 bool
 Output::should_output(ExecuteOn::ExecuteOnFlag flag)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->on_mask & flag) {
         if (flag == ExecuteOn::TIMESTEP)
             return (this->problem->get_step_num() % this->interval) == 0;

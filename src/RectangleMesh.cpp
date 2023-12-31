@@ -36,7 +36,7 @@ RectangleMesh::RectangleMesh(const Parameters & parameters) :
     simplex(get_param<bool>("simplex") ? PETSC_TRUE : PETSC_FALSE),
     interpolate(PETSC_TRUE)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->xmax <= this->xmin)
         log_error("Parameter 'xmax' must be larger than 'xmin'.");
     if (this->ymax <= this->ymin)
@@ -46,49 +46,49 @@ RectangleMesh::RectangleMesh(const Parameters & parameters) :
 Real
 RectangleMesh::get_x_min() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->xmin;
 }
 
 Real
 RectangleMesh::get_x_max() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->xmax;
 }
 
 Int
 RectangleMesh::get_nx() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->nx;
 }
 
 Real
 RectangleMesh::get_y_min() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ymin;
 }
 
 Real
 RectangleMesh::get_y_max() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ymax;
 }
 
 Int
 RectangleMesh::get_ny() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ny;
 }
 
 void
 RectangleMesh::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     std::array<Real, 2> lower = { this->xmin, this->ymin };
     std::array<Real, 2> upper = { this->xmax, this->ymax };
     std::array<Int, 2> faces = { this->nx, this->ny };

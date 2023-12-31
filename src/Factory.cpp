@@ -9,7 +9,7 @@ namespace godzilla {
 void
 Factory::destroy()
 {
-    _F_;
+    CALL_STACK_MSG();
     while (!objects.empty()) {
         delete objects.front();
         objects.pop_front();

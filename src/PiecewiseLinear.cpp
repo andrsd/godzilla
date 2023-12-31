@@ -29,20 +29,20 @@ PiecewiseLinear::PiecewiseLinear(const Parameters & params) :
     Function(params),
     linpol(get_param<std::vector<Real>>("x"), get_param<std::vector<Real>>("y"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 PiecewiseLinear::register_callback(mu::Parser & parser)
 {
-    _F_;
+    CALL_STACK_MSG();
     parser.DefineFunUserData(get_name(), piecewise_linear_function_eval, this);
 }
 
 void
 PiecewiseLinear::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     Function::check();
     try {
         this->linpol.check();
@@ -55,7 +55,7 @@ PiecewiseLinear::check()
 Real
 PiecewiseLinear::evaluate(Real x)
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->linpol.sample(x);
 }
 

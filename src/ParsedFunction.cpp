@@ -43,7 +43,7 @@ ParsedFunction::ParsedFunction(const Parameters & params) :
     function(get_param<std::vector<std::string>>("function")),
     constants(get_param<std::map<std::string, Real>>("constants"))
 {
-    _F_;
+    CALL_STACK_MSG();
     this->evalr.create(this->function);
     for (const auto & it : constants)
         this->evalr.define_constant(it.first, it.second);
@@ -52,21 +52,21 @@ ParsedFunction::ParsedFunction(const Parameters & params) :
 PetscFunc *
 ParsedFunction::get_function()
 {
-    _F_;
+    CALL_STACK_MSG();
     return parsed_function;
 }
 
 void *
 ParsedFunction::get_context()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this;
 }
 
 void
 ParsedFunction::register_callback(mu::Parser & parser)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->function.size() == 1)
         parser.DefineFunUserData(get_name(), parsed_function_eval, this);
 }
@@ -74,7 +74,7 @@ ParsedFunction::register_callback(mu::Parser & parser)
 void
 ParsedFunction::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
-    _F_;
+    CALL_STACK_MSG();
     this->evalr.evaluate(dim, time, x, nc, u);
 }
 

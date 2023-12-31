@@ -27,14 +27,14 @@ CSVOutput::CSVOutput(const Parameters & params) : FileOutput(params), f(nullptr)
 
 CSVOutput::~CSVOutput()
 {
-    _F_;
+    CALL_STACK_MSG();
     close_file();
 }
 
 void
 CSVOutput::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FileOutput::create();
 
     this->pps_names = get_problem()->get_postprocessor_names();
@@ -46,14 +46,14 @@ CSVOutput::create()
 std::string
 CSVOutput::get_file_ext() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return "csv";
 }
 
 void
 CSVOutput::output_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->pps_names.empty())
         return;
 
@@ -69,7 +69,7 @@ CSVOutput::output_step()
 void
 CSVOutput::open_file()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->f = fopen(get_file_name().c_str(), "w");
     if (this->f == nullptr)
         log_error("Unable to open '{}' for writing: {}.", get_file_name(), strerror(errno));
@@ -78,7 +78,7 @@ CSVOutput::open_file()
 void
 CSVOutput::write_header()
 {
-    _F_;
+    CALL_STACK_MSG();
     fmt::print(this->f, "time");
     for (auto & name : this->pps_names)
         fmt::print(this->f, ",{}", name);
@@ -88,7 +88,7 @@ CSVOutput::write_header()
 void
 CSVOutput::write_values(Real time)
 {
-    _F_;
+    CALL_STACK_MSG();
     fmt::print(this->f, "{:g}", time);
     for (auto & name : this->pps_names) {
         auto * pps = get_problem()->get_postprocessor(name);
@@ -101,7 +101,7 @@ CSVOutput::write_values(Real time)
 void
 CSVOutput::close_file()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->f != nullptr) {
         fclose(this->f);
         this->f = nullptr;

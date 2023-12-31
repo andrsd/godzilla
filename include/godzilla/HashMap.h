@@ -454,7 +454,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::create(Int n)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (n == 0) {
         this->flags = nullptr;
         this->keys = nullptr;
@@ -473,7 +473,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::destroy()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->keys != nullptr) {
         free((void *) this->keys);
         free(this->flags);
@@ -489,7 +489,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::reset()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->keys != nullptr) {
         free(this->keys);
         free(this->flags);
@@ -510,7 +510,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::clear()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->flags) {
         memset(this->flags, 0xaa, fsize(this->n_buckets) * sizeof(khint32_t));
         this->size = this->n_occupied = 0;
@@ -521,7 +521,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 int
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::resize(Int nb)
 {
-    _F_;
+    CALL_STACK_MSG();
     /* This function uses 0.25*n_buckets bytes of working space instead of
      * [sizeof(key_t+val_t)+.25]*n_buckets. */
     khint32_t * new_flags = nullptr;
@@ -616,7 +616,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 Int
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_size() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return (Int) this->size;
 }
 
@@ -624,7 +624,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 Int
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_capacity() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return (Int) this->n_buckets;
 }
 
@@ -632,7 +632,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 bool
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::has(const KEY & key)
 {
-    _F_;
+    CALL_STACK_MSG();
     khiter_t iter = kh_get(key);
     return (iter != kh_end());
 }
@@ -641,7 +641,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 const VAL &
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get(const KEY & key) const
 {
-    _F_;
+    CALL_STACK_MSG();
     khiter_t iter = kh_get(key);
     if (iter != kh_end())
         return this->vals[iter];
@@ -653,7 +653,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 VAL &
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::set(const KEY & key)
 {
-    _F_;
+    CALL_STACK_MSG();
     int ret;
     khiter_t iter = kh_put(key, &ret);
     if (ret >= 0)
@@ -666,7 +666,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 void
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::del(const KEY & key)
 {
-    _F_;
+    CALL_STACK_MSG();
     khiter_t iter = kh_get(key);
     kh_del(iter);
 }
@@ -675,7 +675,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 bool
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::query_set(const KEY & key, const VAL & val)
 {
-    _F_;
+    CALL_STACK_MSG();
     int ret;
     khiter_t iter = kh_put(key, &ret);
     assert(ret >= 0);
@@ -687,7 +687,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 bool
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::query_del(const KEY & key)
 {
-    _F_;
+    CALL_STACK_MSG();
     khiter_t iter = kh_get(key);
     if (iter != kh_end()) {
         kh_del(iter);
@@ -701,7 +701,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 typename HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::Iterator
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::find(const KEY & key)
 {
-    _F_;
+    CALL_STACK_MSG();
     khint_t iter = kh_get(key);
     return Iterator(this, iter);
 }
@@ -710,7 +710,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 typename HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::Iterator
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::put(const KEY & key)
 {
-    _F_;
+    CALL_STACK_MSG();
     int ret;
     khint_t iter = kh_put(key, &ret);
     assert(ret >= 0);
@@ -721,7 +721,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 std::vector<KEY>
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_keys(Int off)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::vector<KEY> keys;
     keys.resize((std::size_t) get_size());
     Int pos = off;
@@ -736,7 +736,7 @@ template <class KEY, class VAL, class HASH_FN, class HASH_EQUAL>
 std::vector<VAL>
 HashMap<KEY, VAL, HASH_FN, HASH_EQUAL>::get_vals(Int off)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::vector<VAL> vals;
     vals.resize((std::size_t) get_size());
     Int pos = off;

@@ -14,14 +14,14 @@ Quadrature::Quadrature(PetscQuadrature q) : quad(q) {}
 void
 Quadrature::create(MPI_Comm comm)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscQuadratureCreate(comm, &this->quad));
 }
 
 void
 Quadrature::destroy()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscQuadratureDestroy(&this->quad));
     this->quad = nullptr;
 }
@@ -29,14 +29,14 @@ Quadrature::destroy()
 void
 Quadrature::duplicate(Quadrature & r)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscQuadratureDuplicate(this->quad, &r.quad));
 }
 
 Int
 Quadrature::get_dim() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Int dim;
     PETSC_CHECK(PetscQuadratureGetData(this->quad, &dim, nullptr, nullptr, nullptr, nullptr));
     return dim;
@@ -45,7 +45,7 @@ Quadrature::get_dim() const
 Int
 Quadrature::get_num_components() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Int nc;
     PETSC_CHECK(PetscQuadratureGetNumComponents(this->quad, &nc));
     return nc;
@@ -54,7 +54,7 @@ Quadrature::get_num_components() const
 Int
 Quadrature::get_order() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Int order;
     PETSC_CHECK(PetscQuadratureGetOrder(this->quad, &order));
     return order;
@@ -63,7 +63,7 @@ Quadrature::get_order() const
 bool
 Quadrature::equal(const Quadrature & q) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscBool eq;
     PETSC_CHECK(PetscQuadratureEqual(this->quad, q.quad, &eq));
     return eq == PETSC_TRUE;
@@ -71,14 +71,14 @@ Quadrature::equal(const Quadrature & q) const
 
 Quadrature::operator PetscQuadrature() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->quad;
 }
 
 Quadrature
 Quadrature::create_gauss_tensor(Int dim, Int n_comp, Int n_points, Real a, Real b)
 {
-    _F_;
+    CALL_STACK_MSG();
     Quadrature q;
     PETSC_CHECK(PetscDTGaussTensorQuadrature(dim, n_comp, n_points, a, b, &q.quad));
     return q;

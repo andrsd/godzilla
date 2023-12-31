@@ -26,7 +26,7 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
     Postprocessor(params),
     fepi(dynamic_cast<const FEProblemInterface *>(get_problem()))
 {
-    _F_;
+    CALL_STACK_MSG();
     const auto & fn_map = get_param<std::map<std::string, std::vector<std::string>>>("functions");
 
     if (this->fepi != nullptr) {
@@ -50,7 +50,7 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
 void
 L2FieldDiff::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto field_names = this->fepi->get_field_names();
     auto n_fields = field_names.size();
 
@@ -73,7 +73,7 @@ L2FieldDiff::create()
 void
 L2FieldDiff::compute()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n_fields = this->funcs.size();
     std::vector<PetscFunc *> pfns(n_fields, nullptr);
     std::vector<void *> ctxs(n_fields, nullptr);
@@ -103,7 +103,7 @@ L2FieldDiff::compute()
 Real
 L2FieldDiff::get_value()
 {
-    _F_;
+    CALL_STACK_MSG();
     return 0;
 }
 

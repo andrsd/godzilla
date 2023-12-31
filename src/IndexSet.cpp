@@ -62,42 +62,42 @@ IndexSet::~IndexSet() {}
 const Int *
 IndexSet::data() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->indices;
 }
 
 Int
 IndexSet::operator[](Int i) const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->indices[i];
 }
 
 Int
 IndexSet::operator()(Int i) const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->indices[i];
 }
 
 void
 IndexSet::create(MPI_Comm comm)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(ISCreate(comm, &this->is));
 }
 
 void
 IndexSet::destroy()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(ISDestroy(&this->is));
 }
 
 void
 IndexSet::restore_indices()
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->is != nullptr);
     PETSC_CHECK(ISRestoreIndices(this->is, &this->indices));
 }
@@ -105,28 +105,28 @@ IndexSet::restore_indices()
 void
 IndexSet::get_point_range(Int & start, Int & end, const Int *& points) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(ISGetPointRange(this->is, &start, &end, &points));
 }
 
 void
 IndexSet::restore_point_range(Int start, Int end, const Int * points) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(ISRestorePointRange(this->is, &start, &end, &points));
 }
 
 void
 IndexSet::get_point_subrange(Int start, Int end, const Int * points) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(ISGetPointSubrange(this->is, start, end, points));
 }
 
 Int
 IndexSet::get_size() const
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->is != nullptr);
     Int n;
     PETSC_CHECK(ISGetSize(this->is, &n));
@@ -136,7 +136,7 @@ IndexSet::get_size() const
 Int
 IndexSet::get_local_size() const
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->is != nullptr);
     Int n;
     PETSC_CHECK(ISGetLocalSize(this->is, &n));
@@ -146,7 +146,7 @@ IndexSet::get_local_size() const
 void
 IndexSet::get_indices()
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->is != nullptr);
     PETSC_CHECK(ISGetIndices(this->is, &this->indices));
 }
@@ -154,7 +154,7 @@ IndexSet::get_indices()
 std::vector<Int>
 IndexSet::to_std_vector()
 {
-    _F_;
+    CALL_STACK_MSG();
     std::vector<Int> idxs;
     Int n = get_size();
     idxs.assign(this->indices, this->indices + n);
@@ -164,7 +164,7 @@ IndexSet::to_std_vector()
 IndexSet
 IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx)
 {
-    _F_;
+    CALL_STACK_MSG();
     IS is;
     PETSC_CHECK(ISCreateGeneral(comm, idx.size(), idx.data(), PETSC_COPY_VALUES, &is));
     return IndexSet(is);
@@ -173,7 +173,7 @@ IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx)
 PetscObjectId
 IndexSet::get_id() const
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscObjectId id;
     PETSC_CHECK(PetscObjectGetId((PetscObject) this->is, &id));
     return id;
@@ -182,14 +182,14 @@ IndexSet::get_id() const
 void
 IndexSet::inc_ref()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(PetscObjectReference((PetscObject) this->is));
 }
 
 bool
 IndexSet::sorted() const
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscBool res;
     PETSC_CHECK(ISSorted(this->is, &res));
     return res == PETSC_TRUE;
@@ -198,40 +198,40 @@ IndexSet::sorted() const
 void
 IndexSet::sort() const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(ISSort(this->is));
 }
 
 void
 IndexSet::sort_remove_dups() const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(ISSortRemoveDups(this->is));
 }
 
 IndexSet::operator IS() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->is;
 }
 
 IndexSet::operator IS *()
 {
-    _F_;
+    CALL_STACK_MSG();
     return &(this->is);
 }
 
 bool
 IndexSet::empty() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->is == nullptr;
 }
 
 IndexSet
 IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!is2.empty() && !is1.empty()) {
         PetscObjectId is2id = is2.get_id();
         char compose_str[33] = { 0 };
@@ -255,7 +255,7 @@ IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
 IndexSet
 IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
 {
-    _F_;
+    CALL_STACK_MSG();
     IS is;
     ISIntersect(is1, is2, &is);
     return IndexSet(is);
@@ -264,14 +264,14 @@ IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
 IndexSet::Iterator
 IndexSet::begin()
 {
-    _F_;
+    CALL_STACK_MSG();
     return Iterator(*this, 0);
 }
 
 IndexSet::Iterator
 IndexSet::end()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto n = get_local_size();
     return Iterator(*this, n);
 }

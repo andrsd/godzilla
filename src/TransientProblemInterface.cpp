@@ -16,7 +16,7 @@ namespace godzilla {
 PetscErrorCode
 __transient_pre_step(TS ts)
 {
-    _F_;
+    CALL_STACK_MSG();
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
@@ -27,7 +27,7 @@ __transient_pre_step(TS ts)
 PetscErrorCode
 __transient_post_step(TS ts)
 {
-    _F_;
+    CALL_STACK_MSG();
     void * ctx;
     TSGetApplicationContext(ts, &ctx);
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
@@ -38,7 +38,7 @@ __transient_post_step(TS ts)
 PetscErrorCode
 __transient_monitor(TS, Int stepi, Real time, Vec x, void * ctx)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     tpi->ts_monitor_callback(stepi, time, x);
     return 0;
@@ -69,20 +69,20 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     time(0.),
     step_num(0)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
 }
 
 TransientProblemInterface::~TransientProblemInterface()
 {
-    _F_;
+    CALL_STACK_MSG();
     TSDestroy(&this->ts);
 }
 
 Problem *
 TransientProblemInterface::get_problem()
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->problem;
 }
 
@@ -97,28 +97,28 @@ TransientProblemInterface::get_snes() const
 void
 TransientProblemInterface::set_time_stepping_adaptor(TimeSteppingAdaptor * adaptor)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->ts_adaptor = adaptor;
 }
 
 TimeSteppingAdaptor *
 TransientProblemInterface::get_time_stepping_adaptor() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ts_adaptor;
 }
 
 TS
 TransientProblemInterface::get_ts() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ts;
 }
 
 const std::string &
 TransientProblemInterface::get_scheme() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->scheme;
 }
 
@@ -133,7 +133,7 @@ TransientProblemInterface::get_solution() const
 Real
 TransientProblemInterface::get_time_step() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Real dt;
     PETSC_CHECK(TSGetTimeStep(this->ts, &dt));
     return dt;
@@ -142,21 +142,21 @@ TransientProblemInterface::get_time_step() const
 void
 TransientProblemInterface::set_time_step(Real dt) const
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSSetTimeStep(this->ts, dt));
 }
 
 void
 TransientProblemInterface::set_max_time(Real time)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSSetMaxTime(this->ts, time));
 }
 
 Real
 TransientProblemInterface::get_max_time() const
 {
-    _F_;
+    CALL_STACK_MSG();
     Real time;
     PETSC_CHECK(TSGetMaxTime(this->ts, &time));
     return time;
@@ -165,21 +165,21 @@ TransientProblemInterface::get_max_time() const
 Real
 TransientProblemInterface::get_time() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->time;
 }
 
 Int
 TransientProblemInterface::get_step_number() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->step_num;
 }
 
 void
 TransientProblemInterface::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     assert(this->problem != nullptr);
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
     PETSC_CHECK(TSSetApplicationContext(this->ts, this));
@@ -188,7 +188,7 @@ TransientProblemInterface::init()
 void
 TransientProblemInterface::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     set_up_time_scheme();
     PETSC_CHECK(TSSetTime(this->ts, this->start_time));
     if (this->tpi_params.is_param_valid("end_time"))
@@ -205,7 +205,7 @@ TransientProblemInterface::create()
 void
 TransientProblemInterface::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->tpi_params.is_param_valid("end_time") && this->tpi_params.is_param_valid("num_steps"))
         this->problem->log_error(
             "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
@@ -217,7 +217,7 @@ TransientProblemInterface::check()
 void
 TransientProblemInterface::set_up_monitors()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSSetPreStep(this->ts, __transient_pre_step));
     PETSC_CHECK(TSSetPostStep(this->ts, __transient_post_step));
     PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, nullptr));
@@ -226,13 +226,13 @@ TransientProblemInterface::set_up_monitors()
 void
 TransientProblemInterface::pre_step()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 TransientProblemInterface::post_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSGetTime(this->ts, &this->time));
     PETSC_CHECK(TSGetStepNumber(this->ts, &this->step_num));
     Vector sln = get_solution();
@@ -242,7 +242,7 @@ TransientProblemInterface::post_step()
 void
 TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
 {
-    _F_;
+    CALL_STACK_MSG();
     Real dt = get_time_step();
     this->problem->lprint(6, "{} Time {:f} dt = {:f}", stepi, t, dt);
 }
@@ -250,14 +250,14 @@ TransientProblemInterface::ts_monitor_callback(Int stepi, Real t, Vec x)
 void
 TransientProblemInterface::solve(Vector & x)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSSolve(this->ts, x));
 }
 
 TSConvergedReason
 TransientProblemInterface::get_converged_reason() const
 {
-    _F_;
+    CALL_STACK_MSG();
     TSConvergedReason reason;
     PETSC_CHECK(TSGetConvergedReason(this->ts, &reason));
     return reason;
@@ -266,21 +266,21 @@ TransientProblemInterface::get_converged_reason() const
 void
 TransientProblemInterface::set_converged_reason(TSConvergedReason reason)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSSetConvergedReason(this->ts, reason));
 }
 
 bool
 TransientProblemInterface::converged() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return get_converged_reason() > 0;
 }
 
 void
 TransientProblemInterface::set_scheme(TimeScheme scheme)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (scheme == TimeScheme::BEULER)
         PETSC_CHECK(TSSetType(this->ts, TSBEULER));
     else if (scheme == TimeScheme::CN)
@@ -308,7 +308,7 @@ TransientProblemInterface::set_scheme(TimeScheme scheme)
 void
 TransientProblemInterface::set_scheme(const char * scheme_name)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSSetType(this->ts, scheme_name));
 }
 

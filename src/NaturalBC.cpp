@@ -23,13 +23,13 @@ NaturalBC::NaturalBC(const Parameters & params) :
     fid(-1),
     fepi(dynamic_cast<FEProblemInterface *>(get_discrete_problem_interface()))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 NaturalBC::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     assert(dpi != nullptr);
 
@@ -54,14 +54,14 @@ NaturalBC::create()
 Int
 NaturalBC::get_field_id() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->fid;
 }
 
 void
 NaturalBC::set_up()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     for (auto & bnd : get_boundary())
         dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components(), this);
@@ -70,7 +70,7 @@ NaturalBC::set_up()
 void
 NaturalBC::add_residual_block(BndResidualFunc * f0, BndResidualFunc * f1)
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & bnd : get_boundary())
         this->fepi->add_boundary_residual_block(this->fid, f0, f1, bnd);
 }
@@ -82,7 +82,7 @@ NaturalBC::add_jacobian_block(Int gid,
                               BndJacobianFunc * g2,
                               BndJacobianFunc * g3)
 {
-    _F_;
+    CALL_STACK_MSG();
     for (auto & bnd : get_boundary())
         this->fepi->add_boundary_jacobian_block(this->fid, gid, g0, g1, g2, g3, bnd);
 }

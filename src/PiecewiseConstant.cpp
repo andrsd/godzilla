@@ -36,20 +36,20 @@ PiecewiseConstant::PiecewiseConstant(const Parameters & params) :
     x(get_param<std::vector<Real>>("x")),
     y(get_param<std::vector<Real>>("y"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 PiecewiseConstant::register_callback(mu::Parser & parser)
 {
-    _F_;
+    CALL_STACK_MSG();
     parser.DefineFunUserData(get_name(), piecewise_constant_function_eval, this);
 }
 
 void
 PiecewiseConstant::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto cont = get_param<std::string>("continuity");
     if (validation::in(cont, { "left", "right" })) {
         std::string cont_lc = utils::to_lower(cont);
@@ -65,7 +65,7 @@ PiecewiseConstant::create()
 void
 PiecewiseConstant::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     Function::check();
 
     if (this->x.size() + 1 != this->y.size())
@@ -87,7 +87,7 @@ PiecewiseConstant::check()
 Real
 PiecewiseConstant::evaluate(Real x)
 {
-    _F_;
+    CALL_STACK_MSG();
     switch (this->continuity) {
     case RIGHT:
         return eval_right_cont(x);
@@ -99,7 +99,7 @@ PiecewiseConstant::evaluate(Real x)
 Real
 PiecewiseConstant::eval_right_cont(Real x)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::size_t sz = this->x.size();
     if (x < this->x[0])
         return this->y[0];
@@ -126,7 +126,7 @@ PiecewiseConstant::eval_right_cont(Real x)
 Real
 PiecewiseConstant::eval_left_cont(Real x)
 {
-    _F_;
+    CALL_STACK_MSG();
     std::size_t sz = this->x.size();
     if (x <= this->x[0])
         return this->y[0];

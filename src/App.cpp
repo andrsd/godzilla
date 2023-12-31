@@ -30,12 +30,12 @@ App::App(const mpi::Communicator & comm,
     yml(nullptr),
     problem(nullptr)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 App::~App()
 {
-    _F_;
+    CALL_STACK_MSG();
     delete this->yml;
     delete this->logger;
     this->factory.destroy();
@@ -44,14 +44,14 @@ App::~App()
 const std::string &
 App::get_name() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->name;
 }
 
 const std::string &
 App::get_version() const
 {
-    _F_;
+    CALL_STACK_MSG();
     static const std::string ver(GODZILLA_VERSION);
     return ver;
 }
@@ -59,7 +59,7 @@ App::get_version() const
 Logger *
 App::get_logger() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->logger;
 }
 
@@ -72,14 +72,14 @@ App::get_factory()
 Problem *
 App::get_problem() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->problem;
 }
 
 void
 App::set_problem(Problem * problem)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->problem = problem;
 }
 
@@ -103,7 +103,7 @@ App::create_command_line_options()
 cxxopts::ParseResult
 App::parse_command_line()
 {
-    _F_;
+    CALL_STACK_MSG();
     try {
         return this->cmdln_opts.parse(this->argc, this->argv);
     }
@@ -117,21 +117,21 @@ App::parse_command_line()
 const unsigned int &
 App::get_verbosity_level() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->verbosity_level;
 }
 
 void
 App::set_verbosity_level(unsigned int level)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->verbosity_level = level;
 }
 
 const std::string &
 App::get_input_file_name() const
 {
-    _F_;
+    CALL_STACK_MSG();
     static std::string empty_file_name;
     if (this->yml != nullptr)
         return this->yml->get_file_name();
@@ -142,7 +142,7 @@ App::get_input_file_name() const
 const mpi::Communicator &
 App::get_comm() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->mpi_comm;
 }
 
@@ -155,7 +155,7 @@ App::get_command_line_opts()
 void
 App::set_input_file(InputFile * input_file)
 {
-    _F_;
+    CALL_STACK_MSG();
     this->yml = input_file;
 }
 
@@ -168,7 +168,7 @@ App::get_parameters(const std::string & class_name)
 void
 App::process_command_line(const cxxopts::ParseResult & result)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (result.count("help")) {
         fmt::print("{}", this->cmdln_opts.help());
     }
@@ -191,14 +191,14 @@ App::process_command_line(const cxxopts::ParseResult & result)
 InputFile *
 App::create_input_file()
 {
-    _F_;
+    CALL_STACK_MSG();
     return new GYMLFile(this);
 }
 
 void
 App::run()
 {
-    _F_;
+    CALL_STACK_MSG();
     this->create_command_line_options();
     auto result = parse_command_line();
     process_command_line(result);
@@ -207,7 +207,7 @@ App::run()
 void
 App::run_input_file(const std::string & input_file_name)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (utils::path_exists(input_file_name)) {
         auto input_file = create_input_file();
         set_input_file(input_file);
@@ -227,7 +227,7 @@ App::run_input_file(const std::string & input_file_name)
 void
 App::build_from_yml(const std::string & file_name)
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->yml->parse(file_name)) {
         this->yml->build();
         this->problem = this->yml->get_problem();
@@ -237,7 +237,7 @@ App::build_from_yml(const std::string & file_name)
 bool
 App::check_integrity()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Checking integrity");
     if (this->yml)
         this->yml->check();
@@ -252,7 +252,7 @@ App::check_integrity()
 void
 App::run_problem()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Running");
     assert(this->problem != nullptr);
     this->problem->run();

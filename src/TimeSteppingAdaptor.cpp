@@ -26,7 +26,7 @@ TimeSteppingAdaptor::TimeSteppingAdaptor(const Parameters & params) :
     dt_min(get_param<Real>("dt_min")),
     dt_max(get_param<Real>("dt_max"))
 {
-    _F_;
+    CALL_STACK_MSG();
     if (this->tpi)
         PETSC_CHECK(TSGetAdapt(this->tpi->get_ts(), &this->ts_adapt));
 }
@@ -34,49 +34,49 @@ TimeSteppingAdaptor::TimeSteppingAdaptor(const Parameters & params) :
 TSAdapt
 TimeSteppingAdaptor::get_ts_adapt() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->ts_adapt;
 }
 
 Real
 TimeSteppingAdaptor::get_dt_min() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->dt_min;
 }
 
 Real
 TimeSteppingAdaptor::get_dt_max() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->dt_max;
 }
 
 void
 TimeSteppingAdaptor::set_type(const char * type)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSAdaptSetType(this->ts_adapt, type));
 }
 
 Problem *
 TimeSteppingAdaptor::get_problem() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->problem;
 }
 
 void
 TimeSteppingAdaptor::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSAdaptSetStepLimits(this->ts_adapt, this->dt_min, this->dt_max));
 }
 
 void
 TimeSteppingAdaptor::set_always_accept(bool flag)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(TSAdaptSetAlwaysAccept(this->ts_adapt, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 

@@ -80,7 +80,7 @@ public:
     void
     create() override
     {
-        _F_;
+        CALL_STACK_MSG();
         compute_face_normals();
         compute_nodal_normals();
     }
@@ -88,7 +88,7 @@ public:
     void
     destroy() override
     {
-        _F_;
+        CALL_STACK_MSG();
         free();
     }
 };

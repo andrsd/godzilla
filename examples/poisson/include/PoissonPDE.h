@@ -13,7 +13,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         f[0] = -this->ffn(0);
     }
 
@@ -33,7 +33,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         for (PetscInt d = 0; d < this->dim; ++d)
             f[d] = this->u_x(d);
     }
@@ -50,7 +50,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         for (PetscInt d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;
     }

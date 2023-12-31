@@ -18,7 +18,7 @@ namespace godzilla {
 static PetscErrorCode
 __fep_compute_boundary(DM, Vec x, void * user)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * fep = static_cast<FENonlinearProblem *>(user);
     Vector vec_x(x);
     fep->compute_boundary(vec_x);
@@ -28,7 +28,7 @@ __fep_compute_boundary(DM, Vec x, void * user)
 static PetscErrorCode
 __fep_compute_residual(DM, Vec x, Vec F, void * user)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * fep = static_cast<FENonlinearProblem *>(user);
     Vector vec_x(x);
     Vector vec_F(F);
@@ -39,7 +39,7 @@ __fep_compute_residual(DM, Vec x, Vec F, void * user)
 static PetscErrorCode
 __fep_compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * user)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * fep = static_cast<FENonlinearProblem *>(user);
     Vector vec_x(x);
     Matrix mat_J(J);
@@ -61,13 +61,13 @@ FENonlinearProblem::FENonlinearProblem(const Parameters & parameters) :
     NonlinearProblem(parameters),
     FEProblemInterface(this, parameters)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 FENonlinearProblem::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FEProblemInterface::create();
     NonlinearProblem::create();
 }
@@ -75,7 +75,7 @@ FENonlinearProblem::create()
 void
 FENonlinearProblem::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     NonlinearProblem::init();
     FEProblemInterface::init();
 }
@@ -83,7 +83,7 @@ FENonlinearProblem::init()
 void
 FENonlinearProblem::set_up_callbacks()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = get_dm();
     PETSC_CHECK(DMSNESSetBoundaryLocal(dm, __fep_compute_boundary, this));
     PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
@@ -94,7 +94,7 @@ FENonlinearProblem::set_up_callbacks()
 void
 FENonlinearProblem::set_up_initial_guess()
 {
-    _F_;
+    CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
     FEProblemInterface::set_up_initial_guess();
 }
@@ -102,7 +102,7 @@ FENonlinearProblem::set_up_initial_guess()
 void
 FENonlinearProblem::allocate_objects()
 {
-    _F_;
+    CALL_STACK_MSG();
     NonlinearProblem::allocate_objects();
     FEProblemInterface::allocate_objects();
 }
@@ -110,7 +110,7 @@ FENonlinearProblem::allocate_objects()
 PetscErrorCode
 FENonlinearProblem::compute_boundary(Vector & x)
 {
-    _F_;
+    CALL_STACK_MSG();
     PETSC_CHECK(DMPlexInsertBoundaryValues(get_dm(),
                                            PETSC_TRUE,
                                            x,
@@ -124,7 +124,7 @@ FENonlinearProblem::compute_boundary(Vector & x)
 PetscErrorCode
 FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
-    _F_;
+    CALL_STACK_MSG();
     // this is based on DMSNESComputeResidual()
     IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
@@ -158,7 +158,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
                                               Real t,
                                               Vector & loc_f)
 {
-    _F_;
+    CALL_STACK_MSG();
     DM dm_aux = nullptr;
     PetscDS ds_aux = nullptr;
     PetscBool is_implicit = (loc_x_t || time == PETSC_MIN_REAL) ? PETSC_TRUE : PETSC_FALSE;
@@ -387,7 +387,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
 PetscErrorCode
 FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f)
 {
-    _F_;
+    CALL_STACK_MSG();
 
     PetscDS prob;
     PetscCall(DMGetDS(dm, &prob));
@@ -455,7 +455,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                                          DMField coord_field,
                                                          const IndexSet & facets)
 {
-    _F_;
+    CALL_STACK_MSG();
     DM plex = nullptr, plex_aux = nullptr;
     DMEnclosureType enc_aux;
     PetscDS prob, prob_aux = nullptr;
@@ -611,7 +611,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
 PetscErrorCode
 FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
-    _F_;
+    CALL_STACK_MSG();
     // based on DMPlexSNESComputeJacobianFEM and DMSNESComputeJacobianAction
     IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
@@ -653,7 +653,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
                                               Matrix & J,
                                               Matrix & Jp)
 {
-    _F_;
+    CALL_STACK_MSG();
     Int n_cells = cell_is.get_local_size();
     Int c_start, c_end;
     const Int * cells;
@@ -916,7 +916,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
                                                   Mat J,
                                                   Mat Jp)
 {
-    _F_;
+    CALL_STACK_MSG();
     PetscDS prob;
     PetscCall(DMGetDS(dm, &prob));
     auto depth_label = get_unstr_mesh()->get_depth_label();
@@ -986,7 +986,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                                          DMField coord_field,
                                                          const IndexSet & facets)
 {
-    _F_;
+    CALL_STACK_MSG();
     DM plex = nullptr;
     PetscCall(DMConvert(dm, DMPLEX, &plex));
     PetscBool transform;
@@ -1177,7 +1177,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
 void
 FENonlinearProblem::on_initial()
 {
-    _F_;
+    CALL_STACK_MSG();
     NonlinearProblem::on_initial();
     compute_aux_fields();
 }
@@ -1185,7 +1185,7 @@ FENonlinearProblem::on_initial()
 void
 FENonlinearProblem::compute_solution_vector_local()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary(loc_sln);

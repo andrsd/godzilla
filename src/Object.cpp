@@ -25,73 +25,73 @@ Object::Object(const Parameters & parameters) :
     type(get_param<std::string>("_type")),
     name(get_param<std::string>("_name"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 Object::~Object()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 const std::string &
 Object::get_type() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->type;
 }
 
 const std::string &
 Object::get_name() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->name;
 }
 
 const Parameters &
 Object::get_parameters() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->pars;
 }
 
 bool
 Object::is_param_valid(const std::string & par_name) const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->pars.is_param_valid(par_name);
 }
 
 App *
 Object::get_app() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->app;
 }
 
 const mpi::Communicator &
 Object::get_comm() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->app->get_comm();
 }
 
 int
 Object::get_processor_id() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return this->app->get_comm().rank();
 }
 
 void
 Object::create()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 Object::check()
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 } // namespace godzilla

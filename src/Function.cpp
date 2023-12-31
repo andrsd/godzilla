@@ -16,7 +16,7 @@ Function::parameters()
 
 Function::Function(const Parameters & params) : Object(params)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 } // namespace godzilla

@@ -19,7 +19,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         f[0] = -this->ffn(0);
     }
 
@@ -39,7 +39,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         for (PetscInt d = 0; d < this->dim; ++d)
             f[d] = -this->T_x(d);
     }
@@ -65,13 +65,13 @@ HeatEquationExplicit::HeatEquationExplicit(const Parameters & parameters) :
     ExplicitFELinearProblem(parameters),
     order(get_param<PetscInt>("order"))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 HeatEquationExplicit::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     ExplicitFELinearProblem::create();
     create_mass_matrix();
 }
@@ -79,7 +79,7 @@ HeatEquationExplicit::create()
 void
 HeatEquationExplicit::set_up_fields()
 {
-    _F_;
+    CALL_STACK_MSG();
     temp_id = add_fe("temp", 1, this->order);
     ffn_aux_id = add_aux_fe("forcing_fn", 1, this->order);
 }
@@ -87,6 +87,6 @@ HeatEquationExplicit::set_up_fields()
 void
 HeatEquationExplicit::set_up_weak_form()
 {
-    _F_;
+    CALL_STACK_MSG();
     add_residual_block(temp_id, new Residual0(this), new Residual1(this));
 }

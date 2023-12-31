@@ -18,7 +18,7 @@ namespace godzilla {
 static PetscErrorCode
 __tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
@@ -30,7 +30,7 @@ __tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
 static PetscErrorCode
 __tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * user)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
@@ -43,7 +43,7 @@ __tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, 
 static PetscErrorCode
 _tsfep_compute_boundary(DM, Real time, Vec x, Vec x_t, void * user)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
@@ -67,34 +67,34 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & params
     TransientProblemInterface(this, params),
     scheme(get_param<std::string>("scheme"))
 {
-    _F_;
+    CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
 }
 
 ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
 {
-    _F_;
+    CALL_STACK_MSG();
     set_snes(nullptr);
 }
 
 Real
 ImplicitFENonlinearProblem::get_time() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return TransientProblemInterface::get_time();
 }
 
 Int
 ImplicitFENonlinearProblem::get_step_num() const
 {
-    _F_;
+    CALL_STACK_MSG();
     return TransientProblemInterface::get_step_number();
 }
 
 void
 ImplicitFENonlinearProblem::init()
 {
-    _F_;
+    CALL_STACK_MSG();
     TransientProblemInterface::init();
     auto snes = TransientProblemInterface::get_snes();
     NonlinearProblem::set_snes(snes);
@@ -104,7 +104,7 @@ ImplicitFENonlinearProblem::init()
 void
 ImplicitFENonlinearProblem::create()
 {
-    _F_;
+    CALL_STACK_MSG();
     FENonlinearProblem::create();
     TransientProblemInterface::create();
 }
@@ -112,7 +112,7 @@ ImplicitFENonlinearProblem::create()
 void
 ImplicitFENonlinearProblem::check()
 {
-    _F_;
+    CALL_STACK_MSG();
     FENonlinearProblem::check();
     TransientProblemInterface::check();
 
@@ -123,14 +123,14 @@ ImplicitFENonlinearProblem::check()
 bool
 ImplicitFENonlinearProblem::converged()
 {
-    _F_;
+    CALL_STACK_MSG();
     return TransientProblemInterface::converged();
 }
 
 void
 ImplicitFENonlinearProblem::solve()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Solving");
     TransientProblemInterface::solve(get_solution_vector());
 }
@@ -138,7 +138,7 @@ ImplicitFENonlinearProblem::solve()
 void
 ImplicitFENonlinearProblem::set_up_callbacks()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto dm = get_dm();
     PETSC_CHECK(DMTSSetBoundaryLocal(dm, _tsfep_compute_boundary, this));
     PETSC_CHECK(DMTSSetIFunctionLocal(dm, __tsfep_compute_ifunction, this));
@@ -148,7 +148,7 @@ ImplicitFENonlinearProblem::set_up_callbacks()
 void
 ImplicitFENonlinearProblem::set_up_time_scheme()
 {
-    _F_;
+    CALL_STACK_MSG();
     std::string name = utils::to_lower(this->scheme);
     std::map<std::string, TimeScheme> scheme_map = { { "beuler", TimeScheme::BEULER },
                                                      { "cn", TimeScheme::CN } };
@@ -158,7 +158,7 @@ ImplicitFENonlinearProblem::set_up_time_scheme()
 void
 ImplicitFENonlinearProblem::set_up_monitors()
 {
-    _F_;
+    CALL_STACK_MSG();
     FENonlinearProblem::set_up_monitors();
     TransientProblemInterface::set_up_monitors();
 }
@@ -166,7 +166,7 @@ ImplicitFENonlinearProblem::set_up_monitors()
 void
 ImplicitFENonlinearProblem::compute_solution_vector_local()
 {
-    _F_;
+    CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
     compute_boundary(get_time(), loc_sln, Vector());
@@ -179,7 +179,7 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
                                               Vector & F)
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
-    _F_;
+    CALL_STACK_MSG();
     IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
     for (auto & res_key : get_weak_form()->get_residual_keys()) {
@@ -211,7 +211,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
 {
     // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
     // DMPlexTSComputeIJacobianFEM()
-    _F_;
+    CALL_STACK_MSG();
     IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
     Jp.zero();
@@ -238,14 +238,14 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
 PetscErrorCode
 ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const Vector & X_t)
 {
-    _F_;
+    CALL_STACK_MSG();
     return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
 }
 
 void
 ImplicitFENonlinearProblem::post_step()
 {
-    _F_;
+    CALL_STACK_MSG();
     TransientProblemInterface::post_step();
     update_aux_vector();
     compute_postprocessors();

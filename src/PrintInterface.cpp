@@ -43,7 +43,7 @@ PrintInterface::PrintInterface(const Object * obj) :
     verbosity_level(obj->get_app()->get_verbosity_level()),
     prefix(obj->get_name())
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 PrintInterface::PrintInterface(const App * app) :
@@ -52,7 +52,7 @@ PrintInterface::PrintInterface(const App * app) :
     verbosity_level(app->get_verbosity_level()),
     prefix(app->get_name())
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 PrintInterface::PrintInterface(const mpi::Communicator & comm,
@@ -62,7 +62,7 @@ PrintInterface::PrintInterface(const mpi::Communicator & comm,
     verbosity_level(verbosity_level),
     prefix(std::move(prefix))
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 } // namespace godzilla

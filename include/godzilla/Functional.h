@@ -82,7 +82,7 @@ protected:
     const T &
     get_value(const std::string & name)
     {
-        _F_;
+        CALL_STACK_MSG();
         auto val_name = get_value_name(name);
         this->depends_on.insert(val_name);
         return get_fe_problem()->get_value<T>(val_name);

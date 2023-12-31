@@ -23,7 +23,7 @@ public:
     void
     evaluate(PetscScalar f[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         f[0] = htc(0) * (T(0) - T_infinity(0));
     }
 
@@ -40,7 +40,7 @@ public:
     void
     evaluate(PetscScalar g[]) const override
     {
-        _F_;
+        CALL_STACK_MSG();
         g[0] = htc(0);
     }
 
@@ -61,7 +61,7 @@ ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const Parameters & params) :
     NaturalBC(params),
     components({ 0 })
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 const std::vector<PetscInt> &
@@ -73,7 +73,7 @@ ConvectiveHeatFluxBC::get_components() const
 void
 ConvectiveHeatFluxBC::set_up_weak_form()
 {
-    _F_;
+    CALL_STACK_MSG();
     add_residual_block(new Residual0(this), nullptr);
     add_jacobian_block(get_field_id(), new Jacobian0(this), nullptr, nullptr, nullptr);
 }

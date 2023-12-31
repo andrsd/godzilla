@@ -23,13 +23,13 @@ namespace godzilla {
 
 GYMLFile::GYMLFile(App * app) : InputFile(app)
 {
-    _F_;
+    CALL_STACK_MSG();
 }
 
 void
 GYMLFile::build()
 {
-    _F_;
+    CALL_STACK_MSG();
     lprint(9, "Allocating objects");
     build_mesh();
     build_problem();
@@ -46,7 +46,7 @@ GYMLFile::build()
 void
 GYMLFile::build_functions()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!get_root()["functions"])
         return;
 
@@ -65,7 +65,7 @@ GYMLFile::build_functions()
 void
 GYMLFile::build_problem_adapt()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (get_problem()) {
         auto problem_node = get_block(get_root(), "problem");
         if (problem_node["ts_adapt"])
@@ -76,7 +76,7 @@ GYMLFile::build_problem_adapt()
 void
 GYMLFile::build_ts_adapt(const Block & problem_node)
 {
-    _F_;
+    CALL_STACK_MSG();
     auto * tpi = dynamic_cast<TransientProblemInterface *>(get_problem());
     if (tpi != nullptr) {
         auto ts_adapt_node = get_block(problem_node, "ts_adapt");
@@ -95,7 +95,7 @@ GYMLFile::build_ts_adapt(const Block & problem_node)
 void
 GYMLFile::build_partitioner()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!get_mesh())
         return;
 
@@ -120,7 +120,7 @@ GYMLFile::build_partitioner()
 void
 GYMLFile::build_auxiliary_fields()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!get_root()["auxs"])
         return;
 
@@ -147,7 +147,7 @@ GYMLFile::build_auxiliary_fields()
 void
 GYMLFile::build_initial_conditions()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!get_root()["ics"])
         return;
 
@@ -172,7 +172,7 @@ GYMLFile::build_initial_conditions()
 void
 GYMLFile::build_boundary_conditions()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!get_root()["bcs"])
         return;
 
@@ -197,7 +197,7 @@ GYMLFile::build_boundary_conditions()
 void
 GYMLFile::build_postprocessors()
 {
-    _F_;
+    CALL_STACK_MSG();
     if (!get_root()["pps"])
         return;
 
