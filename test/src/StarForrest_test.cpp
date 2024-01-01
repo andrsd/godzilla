@@ -5,13 +5,38 @@
 using namespace godzilla;
 using namespace testing;
 
-TEST(StarForestTest, ctor_empty)
+TEST(StarForestTest, graph_empty)
 {
     TestApp app;
 
-    StarForest sf;
-    EXPECT_EQ(static_cast<PetscSF>(sf), nullptr);
+    StarForest::Graph g;
+    EXPECT_EQ(g.get_num_roots(), 0);
+    EXPECT_EQ(g.get_num_leaves(), 0);
+    EXPECT_EQ(g.get_leaves(), nullptr);
+    EXPECT_EQ(g.get_remote_leaves(), nullptr);
 }
+
+TEST(StarForestTest, graph)
+{
+    TestApp app;
+
+    Int n_roots = 1;
+    Int n_leaves = 2;
+    std::vector<Int> leaves = { 2, 3 };
+    std::vector<StarForest::Node> remote_leaves(2);
+    remote_leaves[0].rank = 0;
+    remote_leaves[0].index = 0;
+    remote_leaves[1].rank = 0;
+    remote_leaves[1].index = 1;
+    StarForest::Graph g(n_roots, n_leaves, leaves.data(), remote_leaves.data());
+    EXPECT_EQ(g.get_num_roots(), 1);
+    EXPECT_EQ(g.get_num_leaves(), 2);
+    EXPECT_TRUE(g.get_leaves() != nullptr);
+    EXPECT_TRUE(g.get_remote_leaves() != nullptr);
+    EXPECT_EQ(g.find_leaf(3), 1);
+}
+
+//
 
 TEST(StarForestTest, test)
 {
