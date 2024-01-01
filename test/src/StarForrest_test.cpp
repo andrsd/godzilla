@@ -31,6 +31,7 @@ TEST(StarForestTest, test)
 
     auto leaves_arr = graph.get_leaves();
     EXPECT_EQ(leaves_arr, nullptr);
+    EXPECT_FALSE(static_cast<bool>(graph));
 
     auto remote_leaves_arr = graph.get_remote_leaves();
     EXPECT_EQ(remote_leaves_arr[0].rank, 0);
