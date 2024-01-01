@@ -4,6 +4,7 @@
 #include "godzilla/StarForest.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
+#include <cassert>
 
 namespace godzilla {
 
@@ -52,6 +53,7 @@ Int
 StarForest::Graph::find_leaf(Int point) const
 {
     CALL_STACK_MSG();
+    assert(this->leaves != nullptr);
     Int idx;
     PETSC_CHECK(PetscFindInt(point, this->n_leaves, this->leaves, &idx));
     return idx;
