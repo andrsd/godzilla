@@ -30,7 +30,7 @@ public:
         ///
         Int find_leaf(Int point) const;
 
-        /// Test of graph is empty
+        /// Test if graph is empty
         operator bool() const;
 
     private:
