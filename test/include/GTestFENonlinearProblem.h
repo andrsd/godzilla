@@ -37,6 +37,12 @@ public:
         return DiscreteProblemInterface::get_boundary_conditions();
     }
 
+    const std::vector<EssentialBC *> &
+    get_essential_bcs() const
+    {
+        return DiscreteProblemInterface::get_essential_bcs();
+    }
+
 protected:
     void set_up_fields() override;
     void set_up_weak_form() override;

@@ -206,6 +206,10 @@ TEST_F(FENonlinearProblemTest, solve)
     EXPECT_EQ(bcs.size(), 1);
     EXPECT_EQ(bcs[0]->get_type(), "DirichletBC");
 
+    auto ess_bcs = prob->get_essential_bcs();
+    ASSERT_EQ(ess_bcs.size(), 1);
+    EXPECT_EQ(bcs[0]->get_type(), "DirichletBC");
+
     prob->solve();
 
     bool conv = prob->converged();
