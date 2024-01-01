@@ -72,6 +72,7 @@ TestTSAdaptor::create()
 {
     TimeSteppingAdaptor::create();
     set_type(TS_ADAPT_TEST);
+    set_always_accept(true);
 }
 
 void
