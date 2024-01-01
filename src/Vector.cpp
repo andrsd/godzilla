@@ -3,6 +3,7 @@
 
 #include "godzilla/Vector.h"
 #include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include <cassert>
 
@@ -216,7 +217,7 @@ Vector::set_sizes(Int n, Int N)
 {
     CALL_STACK_MSG();
     if (n == PETSC_DECIDE && N == PETSC_DECIDE)
-        error(
+        throw Exception(
             "Calling Vector::set_sizes with n = PETSC_DECIDE and N = PETSC_DECIDE is not allowed.");
     PETSC_CHECK(VecSetSizes(this->vec, n, N));
 }

@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "godzilla/Registry.h"
 #include "godzilla/App.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -25,5 +26,5 @@ TEST(RegistryTest, exists)
 TEST(RegistryTest, get)
 {
     auto registry = Registry::instance();
-    EXPECT_DEATH(auto entry = registry.get("ASDF"), "Class 'ASDF' is not registered.");
+    EXPECT_THROW_MSG(auto entry = registry.get("ASDF"), "Class 'ASDF' is not registered.");
 }

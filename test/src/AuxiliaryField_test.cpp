@@ -4,6 +4,7 @@
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/ConstantAuxiliaryField.h"
 #include "FENonlinearProblem_test.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -231,8 +232,8 @@ TEST_F(AuxiliaryFieldTest, name_already_taken)
     ConstantAuxiliaryField aux(params);
     prob->add_auxiliary_field(&aux);
 
-    EXPECT_DEATH(prob->add_auxiliary_field(&aux),
-                 "Cannot add auxiliary object 'aux'. Name already taken.");
+    EXPECT_THROW_MSG(prob->add_auxiliary_field(&aux),
+                     "Cannot add auxiliary object 'aux'. Name already taken.");
 }
 
 TEST_F(AuxiliaryFieldTest, get_value)

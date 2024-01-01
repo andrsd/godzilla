@@ -12,6 +12,7 @@
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/NaturalBC.h"
 #include "godzilla/EssentialBC.h"
+#include "godzilla/Exception.h"
 #include <set>
 #include <cassert>
 
@@ -67,7 +68,7 @@ DiscreteProblemInterface::add_initial_condition(InitialCondition * ic)
         this->ics_by_name[name] = ic;
     }
     else
-        error("Cannot add initial condition object '{}'. Name already taken.", name);
+        throw Exception("Cannot add initial condition object '{}'. Name already taken.", name);
 }
 
 bool
@@ -113,7 +114,7 @@ DiscreteProblemInterface::add_auxiliary_field(AuxiliaryField * aux)
         this->auxs_by_name[name] = aux;
     }
     else
-        error("Cannot add auxiliary object '{}'. Name already taken.", name);
+        throw Exception("Cannot add auxiliary object '{}'. Name already taken.", name);
 }
 
 bool

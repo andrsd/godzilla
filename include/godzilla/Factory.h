@@ -7,7 +7,7 @@
 #include <ctime>
 #include "godzilla/Object.h"
 #include "godzilla/Registry.h"
-#include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 
 #define COMBINE_NAMES1(X, Y) X##Y
 #define COMBINE_NAMES(X, Y) COMBINE_NAMES1(X, Y)
@@ -57,7 +57,7 @@ public:
         parameters.set<std::string>("_name") = name;
         T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
         if (object == nullptr)
-            error("Instantiation of object '{}:[{}]' failed.", name, class_name);
+            throw Exception("Instantiation of object '{}:[{}]' failed.", name, class_name);
         this->objects.push_back(object);
         return object;
     }

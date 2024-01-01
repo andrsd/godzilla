@@ -2,7 +2,7 @@
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/DenseMatrixSymm.h"
 #include "godzilla/DenseVector.h"
-#include "godzilla/Types.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -434,7 +434,7 @@ TEST(DenseMatrixDeathTest, inv2_singular)
     auto m = DenseMatrix<Real, 2>();
     m.set_row(0, { 1, 2 });
     m.set_row(1, { 2, 4 });
-    EXPECT_DEATH(m.inv(), "Inverting of a matrix failed: matrix is singular.");
+    EXPECT_THROW_MSG(m.inv(), "Inverting of a matrix failed: matrix is singular.");
 }
 
 TEST(DenseMatrixTest, inv3)
@@ -461,7 +461,7 @@ TEST(DenseMatrixDeathTest, inv3_singular)
     m.set_row(0, { 1, 2, 3 });
     m.set_row(1, { 2, 4, 6 });
     m.set_row(2, { 1, 1, 1 });
-    EXPECT_DEATH(m.inv(), "Inverting of a matrix failed: matrix is singular.");
+    EXPECT_THROW_MSG(m.inv(), "Inverting of a matrix failed: matrix is singular.");
 }
 
 TEST(DenseMatrixDeathTest, inv4)

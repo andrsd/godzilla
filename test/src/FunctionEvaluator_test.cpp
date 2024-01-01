@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "godzilla/FunctionEvaluator.h"
 #include "godzilla/Function.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -29,9 +30,8 @@ TEST(FunctionEvaluatorTest, error)
     FunctionEvaluator e;
     e.create("a");
     Real x[] = { 1 };
-    EXPECT_DEATH(
-        e.evaluate(1, 0., x),
-        "\\[ERROR\\] Function evaluator failed: Unexpected token \"a\" found at position 0.");
+    EXPECT_THROW_MSG(e.evaluate(1, 0., x),
+                     "Function evaluator failed: Unexpected token \"a\" found at position 0.");
 }
 
 TEST(FunctionEvaluatorTest, define_constant)
@@ -50,6 +50,5 @@ TEST(FunctionEvaluatorTest, evaluate_error)
     e.create("");
     Real x[] = { 0. };
     Real u[] = { 0. };
-    EXPECT_DEATH(e.evaluate(1, 0., x, 1, u),
-                 "\\[ERROR\\] Function evaluator failed: Expression is empty.");
+    EXPECT_THROW_MSG(e.evaluate(1, 0., x, 1, u), "Function evaluator failed: Expression is empty.");
 }

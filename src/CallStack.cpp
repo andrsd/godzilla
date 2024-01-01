@@ -87,6 +87,18 @@ CallStack::remove(Msg * msg)
     }
 }
 
+int
+CallStack::get_size() const
+{
+    return this->size;
+}
+
+CallStack::Msg *
+CallStack::at(int idx) const
+{
+    return this->stack[idx];
+}
+
 void
 CallStack::initialize()
 {

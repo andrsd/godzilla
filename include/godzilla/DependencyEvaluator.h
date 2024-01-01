@@ -4,7 +4,7 @@
 #pragma once
 
 #include <map>
-#include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/DependencyGraph.h"
 
@@ -127,7 +127,7 @@ DependencyEvaluator::declare_value(const std::string & val_name)
     }
     else {
         if (it->second->is_declared())
-            error("Trying to declare an already existing value '{}'.", val_name);
+            throw Exception("Trying to declare an already existing value '{}'.", val_name);
         else {
             auto val = dynamic_cast<Value<T> *>(const_cast<ValueBase *>(it->second));
             return val->set();
@@ -163,7 +163,7 @@ DependencyEvaluator::create_functional(const std::string & name, const Parameter
         this->functionals[name] = fnl;
     }
     else
-        error("Functional with name '{}' already exists.", name);
+        throw Exception("Functional with name '{}' already exists.", name);
 }
 
 } // namespace godzilla

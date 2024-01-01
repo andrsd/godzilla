@@ -5,6 +5,7 @@
 
 #include <map>
 #include "godzilla/Object.h"
+#include "godzilla/Exception.h"
 
 namespace godzilla {
 
@@ -77,7 +78,7 @@ public:
     {
         auto it = this->classes.find(class_name);
         if (it == this->classes.end())
-            error("Class '{}' is not registered.", class_name);
+            throw Exception("Class '{}' is not registered.", class_name);
         return it->second;
     }
 

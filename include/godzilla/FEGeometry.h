@@ -5,6 +5,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
+#include "godzilla/Exception.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Array1D.h"
@@ -208,7 +209,7 @@ get_local_vertex_index(const std::vector<Int> & conn, Int vertex)
     for (std::size_t i = 0; i < conn.size(); i++)
         if (conn[i] == vertex)
             return i;
-    error("Vertex {} is not part of the connectivity array.", vertex);
+    throw Exception("Vertex {} is not part of the connectivity array.", vertex);
 }
 
 /// Get local face index

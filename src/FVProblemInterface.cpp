@@ -9,6 +9,7 @@
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/Logger.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Exception.h"
 #include <set>
 #include <cassert>
 
@@ -111,7 +112,7 @@ FVProblemInterface::get_field_name(Int fid) const
             return empty_name;
     }
     else
-        error("Field with ID = '{}' does not exist.", fid);
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -125,7 +126,7 @@ FVProblemInterface::get_field_num_components(Int fid) const
         return n_comps;
     }
     else
-        error("Field with ID = '{}' does not exist.", fid);
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -187,10 +188,10 @@ FVProblemInterface::set_field_component_name(Int fid, Int component, const std::
             it->second.component_names[component] = name;
         }
         else
-            error("Unable to set component name for single-component field");
+            throw Exception("Unable to set component name for single-component field");
     }
     else
-        error("Field with ID = '{}' does not exist.", fid);
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -219,7 +220,7 @@ FVProblemInterface::get_aux_field_name(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.name;
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -230,7 +231,7 @@ FVProblemInterface::get_aux_field_num_components(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.nc;
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -241,7 +242,7 @@ FVProblemInterface::get_aux_field_id(const std::string & name) const
     if (it != this->aux_fields_by_name.end())
         return it->second;
     else
-        error("Auxiliary field '{}' does not exist. Typo?", name);
+        throw Exception("Auxiliary field '{}' does not exist. Typo?", name);
 }
 
 bool
@@ -268,7 +269,7 @@ FVProblemInterface::get_aux_field_order(Int fid) const
     if (it != this->aux_fields.end())
         return it->second.k;
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 std::string
@@ -286,7 +287,7 @@ FVProblemInterface::get_aux_field_component_name(Int fid, Int component) const
         }
     }
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 void
@@ -300,10 +301,10 @@ FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
             it->second.component_names[component] = name;
         }
         else
-            error("Unable to set component name for single-component field");
+            throw Exception("Unable to set component name for single-component field");
     }
     else
-        error("Auxiliary field with ID = '{}' does not exist.", fid);
+        throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
 void
@@ -322,7 +323,7 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc)
         this->fields_by_name[name] = id;
     }
     else
-        error("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
+        throw Exception("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
 }
 
 Int
@@ -352,7 +353,9 @@ FVProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
         this->aux_fe[id] = nullptr;
     }
     else
-        error("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.", name, id);
+        throw Exception("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
+                        name,
+                        id);
 }
 
 void
@@ -423,7 +426,7 @@ FVProblemInterface::add_boundary_essential(const std::string & name,
                                            void * context)
 {
     CALL_STACK_MSG();
-    error("Essential BCs are not supported for FV problems");
+    throw Exception("Essential BCs are not supported for FV problems");
 }
 
 void
@@ -434,7 +437,7 @@ FVProblemInterface::add_boundary_natural(const std::string & name,
                                          void * context)
 {
     CALL_STACK_MSG();
-    error("Natural BCs are not supported for FV problems");
+    throw Exception("Natural BCs are not supported for FV problems");
 }
 
 } // namespace godzilla

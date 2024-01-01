@@ -31,7 +31,7 @@ DependencyEvaluator::get_functional(const std::string & name) const
     if (it != this->functionals.end())
         return *it->second;
     else
-        error("No functional with name '{}' found. Typo?", name);
+        throw Exception("No functional with name '{}' found. Typo?", name);
 }
 
 std::map<std::string, const ValueFunctional *>
@@ -46,7 +46,7 @@ DependencyEvaluator::get_suppliers() const
             if (suppliers.find(s) == suppliers.end())
                 suppliers[s] = fnl;
             else
-                error("Value '{}' is being supplied multiple times.", s);
+                throw Exception("Value '{}' is being supplied multiple times.", s);
         }
     }
     return suppliers;
@@ -66,7 +66,7 @@ DependencyEvaluator::build_dependecy_graph(
             if (jt != suppliers.end())
                 graph.add_edge(fnl, jt->second);
             else
-                error("Did not find any functional which would supply '{}'.", dep);
+                throw Exception("Did not find any functional which would supply '{}'.", dep);
         }
     }
     return graph;

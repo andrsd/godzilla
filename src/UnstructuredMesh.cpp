@@ -5,6 +5,7 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/IndexSet.h"
+#include "godzilla/Exception.h"
 #include "petscdmplex.h"
 
 namespace godzilla {
@@ -381,7 +382,7 @@ UnstructuredMesh::get_face_set_name(Int id) const
     if (it != this->face_set_names.end())
         return it->second;
     else
-        error("Face set ID '{}' does not exist.", id);
+        throw Exception("Face set ID '{}' does not exist.", id);
 }
 
 void
@@ -406,7 +407,7 @@ UnstructuredMesh::get_cell_set_name(Int id) const
     if (it != this->cell_set_names.end())
         return it->second;
     else
-        error("Cell set ID '{}' does not exist.", id);
+        throw Exception("Cell set ID '{}' does not exist.", id);
 }
 
 Int
@@ -417,7 +418,7 @@ UnstructuredMesh::get_cell_set_id(const std::string & name) const
     if (it != this->cell_set_ids.end())
         return it->second;
     else
-        error("Cell set '{}' does not exist.", name);
+        throw Exception("Cell set '{}' does not exist.", name);
 }
 
 Int

@@ -2,6 +2,7 @@
 #include "godzilla/Factory.h"
 #include "godzilla/App.h"
 #include "godzilla/RectangleMesh.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -42,6 +43,6 @@ TEST(FactoryTest, create_wrong_type)
     Parameters * params = factory.get_parameters("LineMesh");
     params->set<App *>("_app") = &app;
     params->set<Int>("nx") = 1;
-    EXPECT_DEATH(factory.create<RectangleMesh>("LineMesh", "name", params),
-                 "\\[ERROR\\] Instantiation of object 'name:\\[LineMesh\\]' failed\\.");
+    EXPECT_THROW_MSG(factory.create<RectangleMesh>("LineMesh", "name", params),
+                     "Instantiation of object 'name:[LineMesh]' failed.");
 }

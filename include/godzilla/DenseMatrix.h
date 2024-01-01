@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include <cassert>
 #include <vector>
@@ -635,7 +636,7 @@ DenseMatrix<Real, 2>::inv() const
 {
     Real det = this->det();
     if (det == 0.)
-        error("Inverting of a matrix failed: matrix is singular.");
+        throw Exception("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 2> inv;
     inv.values[0] = this->values[3];
@@ -652,7 +653,7 @@ DenseMatrix<Real, 3>::inv() const
 {
     Real det = this->det();
     if (det == 0.)
-        error("Inverting of a matrix failed: matrix is singular.");
+        throw Exception("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 3> inv;
     inv(0, 0) = (this->values[4] * this->values[8] - this->values[5] * this->values[7]);

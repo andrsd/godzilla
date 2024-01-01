@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "ExceptionTestMacros.h"
 #include "yaml-cpp/yaml.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/PiecewiseLinear.h"
@@ -120,7 +121,7 @@ TEST_F(GYMLFileTest, build_empty)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "\\[ERROR\\] Missing 'mesh' block.");
+    EXPECT_THROW_MSG(file.build(), "Missing 'mesh' block.");
 }
 
 TEST_F(GYMLFileTest, build_mesh_no_type)
@@ -131,7 +132,7 @@ TEST_F(GYMLFileTest, build_mesh_no_type)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_no_type.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "\\[ERROR\\] mesh: No 'type' specified.");
+    EXPECT_THROW_MSG(file.build(), "mesh: No 'type' specified.");
 }
 
 TEST_F(GYMLFileTest, build_mesh_unreg_type)
@@ -142,7 +143,7 @@ TEST_F(GYMLFileTest, build_mesh_unreg_type)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_unreg_type.yml");
 
     file.parse(file_name);
-    EXPECT_DEATH(file.build(), "\\[ERROR\\] mesh: Type 'ASDF' is not a registered object.");
+    EXPECT_THROW_MSG(file.build(), "mesh: Type 'ASDF' is not a registered object.");
 }
 
 TEST_F(GYMLFileTest, build_missing_req_param)

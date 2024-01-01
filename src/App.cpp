@@ -7,6 +7,7 @@
 #include "godzilla/Problem.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 #include "godzilla/Utils.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/Logger.h"
@@ -220,8 +221,9 @@ App::run_input_file(const std::string & input_file_name)
             godzilla::internal::terminate();
     }
     else
-        error("Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
-              input_file_name);
+        throw Exception(
+            "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
+            input_file_name);
 }
 
 void

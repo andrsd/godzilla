@@ -7,7 +7,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 
 namespace godzilla {
 
@@ -105,7 +105,7 @@ public:
     get(const std::string & name) const
     {
         if (!this->has<T>(name))
-            error("No parameter '{}' found.", name);
+            throw Exception("No parameter '{}' found.", name);
 
         auto it = this->params.find(name);
         return dynamic_cast<Parameter<T> *>(it->second)->get();

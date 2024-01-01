@@ -5,6 +5,7 @@
 #include "godzilla/ExplicitFVLinearProblem.h"
 #include "godzilla/Parameters.h"
 #include "TestApp.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -168,11 +169,11 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
 
     EXPECT_EQ(prob.get_field_name(0), "u");
-    EXPECT_DEATH(prob.get_field_name(65536), "\\[ERROR\\] Field with ID = '65536' does not exist.");
+    EXPECT_THROW_MSG(prob.get_field_name(65536), "Field with ID = '65536' does not exist.");
 
     EXPECT_EQ(prob.get_field_num_components(0), 1);
-    EXPECT_DEATH(prob.get_field_num_components(65536),
-                 "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
+    EXPECT_THROW_MSG(prob.get_field_num_components(65536),
+                     "Field with ID = '65536' does not exist.");
 
     EXPECT_EQ(prob.get_field_id("u"), 0);
     EXPECT_EQ(prob.get_field_id("nonexistent"), 0);
@@ -191,22 +192,22 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_DEATH(prob.get_field_component_name(65536, 0),
                  "\\[ERROR\\] Multiple-field problems are not implemented");
 
-    EXPECT_DEATH(prob.set_field_component_name(0, 0, "x"),
-                 "\\[ERROR\\] Unable to set component name for single-component field");
+    EXPECT_THROW_MSG(prob.set_field_component_name(0, 0, "x"),
+                     "Unable to set component name for single-component field");
 
     EXPECT_EQ(prob.get_num_aux_fields(), 2);
     EXPECT_THAT(prob.get_aux_field_names(), ElementsAre("a0", "a1"));
     EXPECT_TRUE(prob.get_aux_field_name(0) == "a0");
     EXPECT_TRUE(prob.get_aux_field_name(1) == "a1");
-    EXPECT_DEATH(prob.get_aux_field_name(99), "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(prob.get_aux_field_name(99), "Auxiliary field with ID = '99' does not exist.");
     EXPECT_EQ(prob.get_aux_field_num_components(0), 1);
     EXPECT_EQ(prob.get_aux_field_num_components(1), 2);
-    EXPECT_DEATH(prob.get_aux_field_num_components(99),
-                 "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(prob.get_aux_field_num_components(99),
+                     "Auxiliary field with ID = '99' does not exist.");
     EXPECT_EQ(prob.get_aux_field_id("a0"), 0);
     EXPECT_EQ(prob.get_aux_field_id("a1"), 1);
-    EXPECT_DEATH(prob.get_aux_field_id("non-existent"),
-                 "Auxiliary field 'non-existent' does not exist. Typo?");
+    EXPECT_THROW_MSG(prob.get_aux_field_id("non-existent"),
+                     "Auxiliary field 'non-existent' does not exist. Typo?");
     EXPECT_TRUE(prob.has_aux_field_by_id(0));
     EXPECT_TRUE(prob.has_aux_field_by_id(1));
     EXPECT_FALSE(prob.has_aux_field_by_id(99));
@@ -215,23 +216,24 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_FALSE(prob.has_aux_field_by_name("non-existent"));
     EXPECT_EQ(prob.get_aux_field_order(0), 0);
     EXPECT_EQ(prob.get_aux_field_order(1), 0);
-    EXPECT_DEATH(prob.get_aux_field_order(99), "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(prob.get_aux_field_order(99),
+                     "Auxiliary field with ID = '99' does not exist.");
     EXPECT_TRUE(prob.get_aux_field_component_name(0, 1) == "");
     EXPECT_TRUE(prob.get_aux_field_component_name(1, 0) == "0");
-    EXPECT_DEATH(prob.get_aux_field_component_name(99, 0),
-                 "Auxiliary field with ID = '99' does not exist.");
-    EXPECT_DEATH(prob.set_aux_field_component_name(0, 0, "C"),
-                 "Unable to set component name for single-component field");
+    EXPECT_THROW_MSG(prob.get_aux_field_component_name(99, 0),
+                     "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(prob.set_aux_field_component_name(0, 0, "C"),
+                     "Unable to set component name for single-component field");
     prob.set_aux_field_component_name(1, 1, "Y");
     EXPECT_TRUE(prob.get_aux_field_component_name(1, 1) == "Y");
-    EXPECT_DEATH(prob.set_aux_field_component_name(99, 0, "A"),
-                 "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(prob.set_aux_field_component_name(99, 0, "A"),
+                     "Auxiliary field with ID = '99' does not exist.");
 
     Label label;
-    EXPECT_DEATH(prob.add_boundary_essential("", "", -1, {}, nullptr, nullptr, nullptr),
-                 "\\[ERROR\\] Essential BCs are not supported for FV problems");
-    EXPECT_DEATH(prob.add_boundary_natural("", "", -1, {}, nullptr),
-                 "\\[ERROR\\] Natural BCs are not supported for FV problems");
+    EXPECT_THROW_MSG(prob.add_boundary_essential("", "", -1, {}, nullptr, nullptr, nullptr),
+                     "Essential BCs are not supported for FV problems");
+    EXPECT_THROW_MSG(prob.add_boundary_natural("", "", -1, {}, nullptr),
+                     "Natural BCs are not supported for FV problems");
 }
 
 TEST(ExplicitFVLinearProblemTest, fields)
@@ -256,13 +258,13 @@ TEST(ExplicitFVLinearProblemTest, fields)
     prob.add_field(1, "vec", 3);
     EXPECT_EQ(prob.get_field_id("vec"), 0);
 
-    EXPECT_DEATH(prob.add_field(1, "dup", 1),
-                 "\\[ERROR\\] Cannot add field 'dup' with ID = 1. ID already exists\\.");
+    EXPECT_THROW_MSG(prob.add_field(1, "dup", 1),
+                     "Cannot add field 'dup' with ID = 1. ID already exists.");
     prob.set_field_component_name(1, 0, "x");
     prob.set_field_component_name(1, 1, "y");
     prob.set_field_component_name(1, 2, "z");
-    EXPECT_DEATH(prob.set_field_component_name(65536, 0, "A"),
-                 "\\[ERROR\\] Field with ID = '65536' does not exist\\.");
+    EXPECT_THROW_MSG(prob.set_field_component_name(65536, 0, "A"),
+                     "Field with ID = '65536' does not exist.");
 
     mesh.create();
     prob.create();
