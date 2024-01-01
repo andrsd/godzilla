@@ -71,12 +71,6 @@ UnstructuredMesh::~UnstructuredMesh()
 }
 
 void
-UnstructuredMesh::create()
-{
-    CALL_STACK_MSG();
-}
-
-void
 UnstructuredMesh::lprint_mesh_info()
 {
     CALL_STACK_MSG();

@@ -545,3 +545,23 @@ TEST(UnstructuredMesh, mark_boundary_faces)
     EXPECT_THAT(facets_idxs, ElementsAre(6, 8, 9, 10));
     facets.restore_indices();
 }
+
+TEST(UnstructuredMesh, point_star_forrest)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+
+    Parameters params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+    mesh.create();
+
+    StarForest sf;
+    sf.create(comm);
+
+    mesh.set_point_star_forest(sf);
+    EXPECT_EQ(static_cast<PetscSF>(mesh.get_point_star_forest()), static_cast<PetscSF>(sf));
+
+    sf.destroy();
+}
