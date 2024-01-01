@@ -90,8 +90,6 @@ public:
     TSConvergedReason get_converged_reason() const;
 
 protected:
-    /// Get `Problem`
-    Problem * get_problem();
     /// Get underlying SNES object
     SNES get_snes() const;
     /// Get time

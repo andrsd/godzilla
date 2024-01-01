@@ -79,13 +79,6 @@ TransientProblemInterface::~TransientProblemInterface()
     TSDestroy(&this->ts);
 }
 
-Problem *
-TransientProblemInterface::get_problem()
-{
-    CALL_STACK_MSG();
-    return this->problem;
-}
-
 SNES
 TransientProblemInterface::get_snes() const
 {
