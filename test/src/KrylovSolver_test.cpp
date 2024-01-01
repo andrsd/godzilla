@@ -250,3 +250,17 @@ TEST(KrylovSolver, set_opers_rhs_c_version)
 
     ks.destroy();
 }
+
+TEST(KrylovSolver, ctor_ksp)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+
+    KSP ksp;
+    KSPCreate(comm, &ksp);
+
+    KrylovSolver ks(ksp);
+    EXPECT_EQ(static_cast<KSP>(ks), ksp);
+
+    KSPDestroy(&ksp);
+}
