@@ -143,8 +143,6 @@ public:
     explicit UnstructuredMesh(const Parameters & parameters);
     ~UnstructuredMesh() override;
 
-    void create() override;
-
     /// Build from a list of vertices for each cell (common mesh generator output)
     ///
     /// @param dim The topological dimension of the mesh
