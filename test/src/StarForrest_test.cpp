@@ -5,6 +5,14 @@
 using namespace godzilla;
 using namespace testing;
 
+TEST(StarForestTest, ctor_empty)
+{
+    TestApp app;
+
+    StarForest sf;
+    EXPECT_EQ(static_cast<PetscSF>(sf), nullptr);
+}
+
 TEST(StarForestTest, test)
 {
     TestApp app;
