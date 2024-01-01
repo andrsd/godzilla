@@ -45,6 +45,12 @@ TEST_F(AuxiliaryFieldTest, api)
         {
             return AuxiliaryField::get_mesh();
         }
+
+        Problem *
+        get_prblm() const
+        {
+            return AuxiliaryField::get_problem();
+        }
     };
 
     mesh->create();
@@ -67,6 +73,7 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux.get_func(), nullptr);
     EXPECT_EQ(aux.get_context(), &aux);
     EXPECT_EQ(aux.get_msh(), this->mesh);
+    EXPECT_EQ(aux.get_prblm(), prob);
 
     EXPECT_TRUE(prob->has_aux("aux"));
     EXPECT_FALSE(prob->has_aux("no-aux"));
