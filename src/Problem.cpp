@@ -11,6 +11,23 @@
 
 namespace godzilla {
 
+Problem::FieldDecomposition::FieldDecomposition(Int n) : field_name(n), is(n) {}
+
+Int
+Problem::FieldDecomposition::get_num_fields() const
+{
+    return this->field_name.size();
+}
+
+void
+Problem::FieldDecomposition::destroy()
+{
+    for (auto & e : this->is)
+        e.destroy();
+    this->field_name.clear();
+    this->is.clear();
+}
+
 Parameters
 Problem::parameters()
 {
@@ -289,6 +306,26 @@ void
 Problem::set_default_output_on(ExecuteOn flags)
 {
     this->default_output_on = flags;
+}
+
+Problem::FieldDecomposition
+Problem::create_field_decomposition()
+{
+    CALL_STACK_MSG();
+    Int n;
+    char ** field_names;
+    IS * is;
+    PETSC_CHECK(DMCreateFieldDecomposition(get_dm(), &n, &field_names, &is, nullptr));
+    FieldDecomposition decomp(n);
+    for (PetscInt i = 0; i < n; i++) {
+        decomp.field_name[i] = field_names[i];
+        decomp.is[i] = IndexSet(is[i]);
+    }
+    for (PetscInt i = 0; i < n; i++)
+        PetscFree(field_names[i]);
+    PetscFree(field_names);
+    PetscFree(is);
+    return decomp;
 }
 
 } // namespace godzilla
