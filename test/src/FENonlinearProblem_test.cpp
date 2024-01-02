@@ -389,3 +389,40 @@ TEST_F(FENonlinearProblemTest, natural_riemann_bcs_not_supported)
     EXPECT_THROW_MSG(prob->add_boundary_natural_riemann("", "", -1, {}, nullptr, nullptr, nullptr),
                      "Natural Riemann BCs are not supported for FE problems");
 }
+
+TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
+{
+    TestApp app;
+
+    Parameters * mesh_pars = app.get_parameters("LineMesh");
+    mesh_pars->set<Int>("nx") = 2;
+    auto mesh = app.build_object<LineMesh>("LineMesh", "mesh", mesh_pars);
+
+    Parameters * prob_pars = app.get_parameters("GTest2FieldsFENonlinearProblem");
+    prob_pars->set<Mesh *>("_mesh") = mesh;
+    auto prob =
+        app.build_object<FENonlinearProblem>("GTest2FieldsFENonlinearProblem", "prob", prob_pars);
+
+    mesh->create();
+    prob->create();
+
+    auto fdecomp = prob->create_field_decomposition();
+    ASSERT_EQ(fdecomp.get_num_fields(), 2);
+    EXPECT_EQ(fdecomp.field_name[0], "Q1");
+    EXPECT_EQ(fdecomp.field_name[1], "Q1");
+
+    fdecomp.is[0].get_indices();
+    auto idx0 = fdecomp.is[0].to_std_vector();
+    EXPECT_THAT(idx0, ElementsAre(0, 2, 4));
+    fdecomp.is[0].restore_indices();
+
+    fdecomp.is[1].get_indices();
+    auto idx1 = fdecomp.is[1].to_std_vector();
+    EXPECT_THAT(idx1, ElementsAre(1, 3, 5));
+    fdecomp.is[1].restore_indices();
+
+    fdecomp.destroy();
+    EXPECT_EQ(fdecomp.get_num_fields(), 0);
+    EXPECT_EQ(fdecomp.field_name.size(), 0);
+    EXPECT_EQ(fdecomp.is.size(), 0);
+}

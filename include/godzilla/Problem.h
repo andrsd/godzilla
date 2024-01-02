@@ -9,6 +9,7 @@
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
 #include "godzilla/ExecuteFlags.h"
+#include "godzilla/IndexSet.h"
 #include "petscdm.h"
 #include "petscpartitioner.h"
 
@@ -24,6 +25,19 @@ class Section;
 ///
 class Problem : public Object, public PrintInterface {
 public:
+    struct FieldDecomposition {
+        /// Field names
+        std::vector<std::string> field_name;
+        /// Global indices for each field
+        std::vector<IndexSet> is;
+
+        FieldDecomposition(Int n = 0);
+
+        Int get_num_fields() const;
+
+        void destroy();
+    };
+
     explicit Problem(const Parameters & parameters);
     virtual ~Problem();
 
@@ -135,6 +149,9 @@ public:
 
     /// Set default execute on flags
     void set_default_output_on(ExecuteOn flags);
+
+    /// Create field decomposition
+    FieldDecomposition create_field_decomposition();
 
 protected:
     /// Allocate objects
