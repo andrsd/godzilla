@@ -209,6 +209,13 @@ IndexSet::sort_remove_dups() const
     PETSC_CHECK(ISSortRemoveDups(this->is));
 }
 
+void
+IndexSet::view(PetscViewer viewer) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISView(this->is, viewer));
+}
+
 IndexSet::operator IS() const
 {
     CALL_STACK_MSG();

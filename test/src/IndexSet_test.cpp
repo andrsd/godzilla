@@ -152,3 +152,17 @@ TEST(IndexSetTest, iters)
         ;
     EXPECT_TRUE(iter == is.end());
 }
+
+TEST(IndexSetTest, view)
+{
+    testing::internal::CaptureStdout();
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 5, 8, 10 });
+    is.view();
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, HasSubstr("Number of indices in set 4"));
+    EXPECT_THAT(out, HasSubstr("0 1"));
+    EXPECT_THAT(out, HasSubstr("1 5"));
+    EXPECT_THAT(out, HasSubstr("2 8"));
+    EXPECT_THAT(out, HasSubstr("3 10"));
+}

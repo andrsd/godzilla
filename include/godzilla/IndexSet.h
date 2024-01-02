@@ -99,6 +99,11 @@ public:
     /// Sort the indices of the index set, removing duplicates.
     void sort_remove_dups() const;
 
+    /// View the index set
+    ///
+    /// @param viewer The PETSc viewer
+    void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
+
     /// Begin iterator for range-based for-loops
     Iterator begin();
 
