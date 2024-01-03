@@ -15,6 +15,22 @@ Terminal::Color Terminal::Color::cyan("\33[36m");
 Terminal::Color Terminal::Color::white("\33[37m");
 Terminal::Color Terminal::Color::normal("\33[39m");
 
+Terminal::Color::Color(const char * aclr)
+{
+    if (has_colors())
+        this->str = std::string(aclr);
+}
+
+Terminal::Color::operator const std::string &() const
+{
+    return this->str;
+}
+
+Terminal::Color::operator const char *() const
+{
+    return this->str.c_str();
+}
+
 bool
 Terminal::has_colors()
 {

@@ -19,21 +19,9 @@ public:
     ///
     /// @param aclr Control characters representing the color
     struct Color {
-        explicit Color(const char * aclr)
-        {
-            if (has_colors())
-                this->str = std::string(aclr);
-        }
-
-        operator const std::string &() const // NOLINT(google-explicit-constructor)
-        {
-            return this->str;
-        }
-
-        operator const char *() const // NOLINT(google-explicit-constructor)
-        {
-            return this->str.c_str();
-        }
+        explicit Color(const char * aclr);
+        operator const std::string &() const; // NOLINT(google-explicit-constructor)
+        operator const char *() const; // NOLINT(google-explicit-constructor)
 
     private:
         std::string str;
