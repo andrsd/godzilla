@@ -18,6 +18,8 @@ public:
     Matrix();
     Matrix(Mat mat);
 
+    std::string get_type() const;
+
     void set_name(const std::string & name);
 
     void create(MPI_Comm comm);

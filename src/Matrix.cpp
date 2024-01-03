@@ -10,6 +10,15 @@ Matrix::Matrix() : mat(nullptr) {}
 
 Matrix::Matrix(Mat mat) : mat(mat) {}
 
+std::string
+Matrix::get_type() const
+{
+    CALL_STACK_MSG();
+    MatType type;
+    PETSC_CHECK(MatGetType(this->mat, &type));
+    return { type };
+}
+
 void
 Matrix::set_name(const std::string & name)
 {
