@@ -161,6 +161,7 @@ TEST(MatrixTest, create_seq_aij_2)
 {
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, { 1, 2 });
     EXPECT_EQ(m.get_n_cols(), 2);
+    EXPECT_EQ(m.get_type(), MATSEQAIJ);
     m.destroy();
 }
 
