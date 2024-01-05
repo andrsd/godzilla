@@ -3,6 +3,7 @@
 #include "godzilla/Matrix.h"
 #include "godzilla/Vector.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/PCHypre.h"
 #include "TestApp.h"
 
 using namespace godzilla;
@@ -263,4 +264,15 @@ TEST(KrylovSolver, ctor_ksp)
     EXPECT_EQ(static_cast<KSP>(ks), ksp);
 
     KSPDestroy(&ksp);
+}
+
+TEST(KrylovSolver, set_pc_type)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+    KrylovSolver ks;
+    ks.create(comm);
+    Preconditioner pc = ks.set_pc_type<PCHypre>();
+    EXPECT_EQ(pc.get_type(), PCHYPRE);
+    ks.destroy();
 }

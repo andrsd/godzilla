@@ -6,6 +6,7 @@
 #include "godzilla/Problem.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
+#include "godzilla/Preconditioner.h"
 #include "petscsnes.h"
 
 namespace godzilla {
@@ -70,12 +71,14 @@ protected:
     void ksp_monitor_callback(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
-    /// Method for setting preconditioning
-    virtual void set_up_preconditioning();
+    /// Method for creating a preconditioner
+    virtual Preconditioner create_preconditioner(PC pc);
     /// Solve the problem
     virtual void solve();
 
 private:
+    void set_up_preconditioning();
+
     /// SNES object
     SNES snes;
     /// KSP object
@@ -86,6 +89,8 @@ private:
     Matrix J;
     /// Converged reason
     SNESConvergedReason converged_reason;
+    /// Preconditioner
+    Preconditioner precond;
 
     /// The type of line search to be used
     std::string line_search_type;

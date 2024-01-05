@@ -26,6 +26,7 @@ LinearProblem::parameters()
 
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
+    precond(nullptr),
     lin_rel_tol(get_param<Real>("lin_rel_tol")),
     lin_abs_tol(get_param<Real>("lin_abs_tol")),
     lin_max_iter(get_param<Int>("lin_max_iter"))
@@ -138,6 +139,15 @@ void
 LinearProblem::set_up_preconditioning()
 {
     CALL_STACK_MSG();
+    auto pc = this->ks.get_pc();
+    this->precond = create_preconditioner(pc);
+}
+
+Preconditioner
+LinearProblem::create_preconditioner(PC pc)
+{
+    CALL_STACK_MSG();
+    return Preconditioner(pc);
 }
 
 void

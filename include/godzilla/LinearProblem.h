@@ -7,7 +7,7 @@
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
 #include "godzilla/KrylovSolver.h"
-#include "petscksp.h"
+#include "godzilla/Preconditioner.h"
 
 namespace godzilla {
 
@@ -43,16 +43,20 @@ protected:
     virtual void set_up_solver_parameters();
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
-    /// Method for setting preconditioning
-    virtual void set_up_preconditioning();
+    /// Method for creating a preconditioner
+    virtual Preconditioner create_preconditioner(PC pc);
     /// Solve the problem
     virtual void solve();
 
 private:
+    void set_up_preconditioning();
+
     /// KSP object
     KrylovSolver ks;
     /// The right-hand side vector
     Vector b;
+    /// Preconditioner
+    Preconditioner precond;
 
     /// Relative convergence tolerance for the linear solver
     Real lin_rel_tol;

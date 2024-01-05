@@ -7,6 +7,7 @@
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/ConstantInitialCondition.h"
 #include "godzilla/DirichletBC.h"
+#include "godzilla/PCFactor.h"
 
 using namespace godzilla;
 
@@ -23,7 +24,7 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
     void set_up_solve_type() override;
-    void set_up_preconditioning() override;
+    Preconditioner create_preconditioner(PC pc) override;
 
     const Int iu;
 };
@@ -106,13 +107,12 @@ GTestFENonlinearProblemJFNK::set_up_solve_type()
     set_use_matrix_free(true, false);
 }
 
-void
-GTestFENonlinearProblemJFNK::set_up_preconditioning()
+Preconditioner
+GTestFENonlinearProblemJFNK::create_preconditioner(PC pc)
 {
-    auto ksp = get_ksp();
-    PC pc;
-    PETSC_CHECK(KSPGetPC(ksp, &pc));
-    PETSC_CHECK(PCSetType(pc, PCILU));
+    PCFactor p(pc);
+    p.set_type(PCFactor::ILU);
+    return p;
 }
 
 void

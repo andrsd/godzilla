@@ -4,6 +4,10 @@
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/PCFieldSplit.h"
+#include "godzilla/PCJacobi.h"
+#include "godzilla/PCFactor.h"
+#include "godzilla/PCComposite.h"
 #include <cassert>
 #include "petscsys.h"
 
@@ -332,58 +336,39 @@ NSIncompressibleProblem::set_up_field_null_space(DM dm)
     // PETSC_CHECK(MatNullSpaceDestroy(&nsp));
 }
 
-void
-NSIncompressibleProblem::set_up_preconditioning()
+Preconditioner
+NSIncompressibleProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
 
-    auto ksp = get_ksp();
-    PC pc;
-    PETSC_CHECK(KSPGetPC(ksp, &pc));
+    PCFieldSplit fsplit(pc);
+    fsplit.set_type(PCFieldSplit::SCHUR);
+    fsplit.set_schur_fact_type(PCFieldSplit::SCHUR_FACT_FULL);
 
-    PETSC_CHECK(PCSetType(pc, PCFIELDSPLIT));
-    PETSC_CHECK(PCFieldSplitSetType(pc, PC_COMPOSITE_SCHUR));
-    PETSC_CHECK(PCFieldSplitSetSchurFactType(pc, PC_FIELDSPLIT_SCHUR_FACT_FULL));
-    PetscInt n_fields;
-    char ** field_names;
-    IS * is;
-    PETSC_CHECK(DMCreateFieldIS(get_dm(), &n_fields, &field_names, &is));
-
+    auto fdecomp = create_field_decomposition();
     // attach null space to the pressure field
     MatNullSpace nsp;
     PETSC_CHECK(MatNullSpaceCreate(get_comm(), PETSC_TRUE, 0, nullptr, &nsp));
-    PETSC_CHECK(PetscObjectCompose((PetscObject) is[1], "nullspace", (PetscObject) nsp));
+    PETSC_CHECK(
+        PetscObjectCompose((PetscObject) (IS) fdecomp.is[1], "nullspace", (PetscObject) nsp));
     PETSC_CHECK(MatNullSpaceDestroy(&nsp));
+    // TODO: fdecomp.is[1].attach_null_space("nullspace");
+    for (PetscInt i = 0; i < fdecomp.get_num_fields(); i++)
+        fsplit.set_is(fdecomp.field_name[i], fdecomp.is[i]);
+    fdecomp.destroy();
 
-    for (PetscInt i = 0; i < n_fields; i++)
-        PETSC_CHECK(PCFieldSplitSetIS(pc, field_names[i], is[i]));
-    for (PetscInt i = 0; i < n_fields; i++) {
-        PetscFree(field_names[i]);
-        PETSC_CHECK(ISDestroy(is + i));
-    }
-    PetscFree(field_names);
-    PetscFree(is);
     auto J = get_jacobian();
-    PETSC_CHECK(PCSetOperators(pc, J, J));
-    PETSC_CHECK(PCSetUp(pc));
+    fsplit.set_operators(J, J);
+    fsplit.set_up();
 
-    PetscInt n;
-    KSP * sub_ksp;
-    PETSC_CHECK(PCFieldSplitGetSubKSP(pc, &n, &sub_ksp));
-    assert(n == 2);
+    auto sub_ksp = fsplit.get_sub_ksp();
 
-    PC pc_vel;
-    PETSC_CHECK(KSPGetPC(sub_ksp[velocity_id], &pc_vel));
-    PETSC_CHECK(PCSetType(pc_vel, PCLU));
+    auto precond_vel = sub_ksp[velocity_id].set_pc_type<PCFactor>();
+    precond_vel.set_type(PCFactor::LU);
 
-    PETSC_CHECK(KSPSetTolerances(sub_ksp[pressure_id],
-                                 1.0e-10,
-                                 PETSC_DEFAULT,
-                                 PETSC_DEFAULT,
-                                 PETSC_DEFAULT));
-    PC pc_press;
-    PETSC_CHECK(KSPGetPC(sub_ksp[pressure_id], &pc_press));
-    PETSC_CHECK(PCSetType(pc_press, PCJACOBI));
+    auto & ksp_press = sub_ksp[pressure_id];
+    ksp_press.set_tolerances(1.0e-10, PETSC_DEFAULT, PETSC_DEFAULT, PETSC_DEFAULT);
+    auto precond_press = ksp_press.set_pc_type<PCJacobi>();
 
-    PetscFree(sub_ksp);
+    return fsplit;
 }

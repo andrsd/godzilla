@@ -162,6 +162,17 @@ public:
     /// typecast operator so we can use our class directly with PETSc API
     operator KSP() const;
 
+    /// Set preconditioner type
+    ///
+    /// @tparam PCTYPE C++ class of a Preconditioner type
+    /// @return Preconditioner class
+    template <class PCTYPE>
+    PCTYPE
+    set_pc_type() const
+    {
+        return PCTYPE(get_pc());
+    }
+
 private:
     /// PETSc object
     KSP ksp;
