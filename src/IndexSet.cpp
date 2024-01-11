@@ -100,6 +100,7 @@ IndexSet::restore_indices()
     CALL_STACK_MSG();
     assert(this->is != nullptr);
     PETSC_CHECK(ISRestoreIndices(this->is, &this->indices));
+    this->indices = nullptr;
 }
 
 void
