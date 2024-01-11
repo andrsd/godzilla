@@ -3,6 +3,7 @@
 
 #include "godzilla/IndexSet.h"
 #include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include <cassert>
 
@@ -10,13 +11,11 @@ namespace godzilla {
 
 IndexSet::Iterator::Iterator(IndexSet & is, Int idx) : is(is), idx(idx)
 {
-    this->is.get_indices();
+    if (this->is.data() == nullptr)
+        throw Exception("Must call IndexSet::get_indices() first.");
 }
 
-IndexSet::Iterator::~Iterator()
-{
-    this->is.restore_indices();
-}
+IndexSet::Iterator::~Iterator() {}
 
 const IndexSet::Iterator::value_type &
 IndexSet::Iterator::operator*() const
