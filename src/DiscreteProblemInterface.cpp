@@ -150,6 +150,13 @@ DiscreteProblemInterface::get_solution_vector_local() const
     return this->sln;
 }
 
+Vector &
+DiscreteProblemInterface::get_solution_vector_local()
+{
+    CALL_STACK_MSG();
+    return this->sln;
+}
+
 const std::vector<BoundaryCondition *> &
 DiscreteProblemInterface::get_boundary_conditions() const
 {

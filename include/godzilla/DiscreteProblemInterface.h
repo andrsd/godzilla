@@ -227,6 +227,11 @@ public:
     /// @return Local solution vector
     const Vector & get_solution_vector_local() const;
 
+    /// Get local solution vector
+    ///
+    /// @return Local solution vector
+    Vector & get_solution_vector_local();
+
     /// Get local auxiliary solution vector
     ///
     /// @return Local auxiliary solution vector
