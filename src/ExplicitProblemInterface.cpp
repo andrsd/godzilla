@@ -65,6 +65,13 @@ ExplicitProblemInterface::get_lumped_mass_matrix() const
     return this->M_lumped_inv;
 }
 
+Vector &
+ExplicitProblemInterface::get_lumped_mass_matrix()
+{
+    CALL_STACK_MSG();
+    return this->M_lumped_inv;
+}
+
 void
 ExplicitProblemInterface::check()
 {
