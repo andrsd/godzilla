@@ -525,6 +525,13 @@ DiscreteProblemInterface::get_aux_solution_vector_local() const
     return this->a;
 }
 
+Vector &
+DiscreteProblemInterface::get_aux_solution_vector_local()
+{
+    CALL_STACK_MSG();
+    return this->a;
+}
+
 void
 DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                        const std::string & name,
