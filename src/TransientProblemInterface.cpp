@@ -82,6 +82,7 @@ TransientProblemInterface::~TransientProblemInterface()
 SNES
 TransientProblemInterface::get_snes() const
 {
+    CALL_STACK_MSG();
     SNES snes;
     PETSC_CHECK(TSGetSNES(this->ts, &snes));
     return snes;
@@ -118,6 +119,7 @@ TransientProblemInterface::get_scheme() const
 Vector
 TransientProblemInterface::get_solution() const
 {
+    CALL_STACK_MSG();
     Vec sln;
     PETSC_CHECK(TSGetSolution(this->ts, &sln));
     return { sln };
