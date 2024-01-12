@@ -70,6 +70,7 @@ TEST(IndexSetTest, sort)
     EXPECT_THAT(idx, ElementsAreArray({ 1, 3, 5, 8 }));
     is.restore_indices();
     EXPECT_EQ(is.sorted(), true);
+    is.destroy();
 }
 
 TEST(IndexSetTest, sort_remove_dups)
@@ -82,6 +83,7 @@ TEST(IndexSetTest, sort_remove_dups)
     EXPECT_THAT(idx, ElementsAreArray({ 1, 3, 5, 8 }));
     is.restore_indices();
     EXPECT_EQ(is.sorted(), true);
+    is.destroy();
 }
 
 TEST(IndexSetTest, intersect_caching)
@@ -105,6 +107,7 @@ TEST(IndexSetTest, intersect_caching_empty)
     IndexSet is2;
     IndexSet isect = IndexSet::intersect_caching(is1, is2);
     EXPECT_TRUE(isect.empty());
+    isect.destroy();
 }
 
 TEST(IndexSetTest, intersect)
@@ -126,31 +129,39 @@ TEST(IndexSetTest, range)
 {
     TestApp app;
     auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    is.get_indices();
     std::vector<Int> vals;
     for (auto & i : is)
         vals.push_back(i);
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
+    is.restore_indices();
+    is.destroy();
 }
 
 TEST(IndexSetTest, for_loop)
 {
     TestApp app;
     auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    is.get_indices();
     std::vector<Int> vals;
     for (auto i = is.begin(); i != is.end(); i++)
         vals.push_back(*i);
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
+    is.restore_indices();
+    is.destroy();
 }
 
 TEST(IndexSetTest, iters)
 {
     TestApp app;
     auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
-
+    is.get_indices();
     auto iter = is.begin();
     for (int i = 0; i < 6; i++, iter++)
         ;
     EXPECT_TRUE(iter == is.end());
+    is.restore_indices();
+    is.destroy();
 }
 
 TEST(IndexSetTest, view)
@@ -165,4 +176,5 @@ TEST(IndexSetTest, view)
     EXPECT_THAT(out, HasSubstr("1 5"));
     EXPECT_THAT(out, HasSubstr("2 8"));
     EXPECT_THAT(out, HasSubstr("3 10"));
+    is.destroy();
 }
