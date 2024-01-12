@@ -227,10 +227,20 @@ public:
     /// @return Local solution vector
     const Vector & get_solution_vector_local() const;
 
+    /// Get local solution vector
+    ///
+    /// @return Local solution vector
+    Vector & get_solution_vector_local();
+
     /// Get local auxiliary solution vector
     ///
     /// @return Local auxiliary solution vector
     const Vector & get_aux_solution_vector_local() const;
+
+    /// Get local auxiliary solution vector
+    ///
+    /// @return Local auxiliary solution vector
+    Vector & get_aux_solution_vector_local();
 
     void add_boundary(DMBoundaryConditionType type,
                       const std::string & name,

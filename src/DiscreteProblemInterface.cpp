@@ -150,6 +150,13 @@ DiscreteProblemInterface::get_solution_vector_local() const
     return this->sln;
 }
 
+Vector &
+DiscreteProblemInterface::get_solution_vector_local()
+{
+    CALL_STACK_MSG();
+    return this->sln;
+}
+
 const std::vector<BoundaryCondition *> &
 DiscreteProblemInterface::get_boundary_conditions() const
 {
@@ -520,6 +527,13 @@ DiscreteProblemInterface::get_aux_field_dof(Int point, Int fid) const
 
 const Vector &
 DiscreteProblemInterface::get_aux_solution_vector_local() const
+{
+    CALL_STACK_MSG();
+    return this->a;
+}
+
+Vector &
+DiscreteProblemInterface::get_aux_solution_vector_local()
 {
     CALL_STACK_MSG();
     return this->a;

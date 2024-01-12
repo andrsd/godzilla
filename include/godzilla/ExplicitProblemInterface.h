@@ -23,6 +23,8 @@ public:
 
     const Vector & get_lumped_mass_matrix() const;
 
+    Vector & get_lumped_mass_matrix();
+
     virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 
 protected:
