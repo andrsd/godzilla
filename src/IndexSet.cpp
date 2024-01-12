@@ -69,6 +69,7 @@ Int
 IndexSet::operator[](Int i) const
 {
     CALL_STACK_MSG();
+    assert(this->indices != nullptr);
     return this->indices[i];
 }
 
@@ -76,6 +77,7 @@ Int
 IndexSet::operator()(Int i) const
 {
     CALL_STACK_MSG();
+    assert(this->indices != nullptr);
     return this->indices[i];
 }
 
@@ -90,22 +92,27 @@ void
 IndexSet::destroy()
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PETSC_CHECK(ISDestroy(&this->is));
+    this->is = nullptr;
 }
 
 void
 IndexSet::restore_indices()
 {
     CALL_STACK_MSG();
-    assert(this->is != nullptr);
-    PETSC_CHECK(ISRestoreIndices(this->is, &this->indices));
-    this->indices = nullptr;
+    if (this->indices != nullptr) {
+        assert(this->is != nullptr);
+        PETSC_CHECK(ISRestoreIndices(this->is, &this->indices));
+        this->indices = nullptr;
+    }
 }
 
 void
 IndexSet::get_point_range(Int & start, Int & end, const Int *& points) const
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PETSC_CHECK(ISGetPointRange(this->is, &start, &end, &points));
 }
 
@@ -113,6 +120,7 @@ void
 IndexSet::restore_point_range(Int start, Int end, const Int * points) const
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PETSC_CHECK(ISRestorePointRange(this->is, &start, &end, &points));
 }
 
@@ -120,6 +128,7 @@ void
 IndexSet::get_point_subrange(Int start, Int end, const Int * points) const
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PETSC_CHECK(ISGetPointSubrange(this->is, start, end, points));
 }
 
@@ -174,6 +183,7 @@ PetscObjectId
 IndexSet::get_id() const
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PetscObjectId id;
     PETSC_CHECK(PetscObjectGetId((PetscObject) this->is, &id));
     return id;
@@ -183,6 +193,7 @@ void
 IndexSet::inc_ref()
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PETSC_CHECK(PetscObjectReference((PetscObject) this->is));
 }
 
@@ -190,6 +201,7 @@ bool
 IndexSet::sorted() const
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PetscBool res;
     PETSC_CHECK(ISSorted(this->is, &res));
     return res == PETSC_TRUE;
@@ -199,6 +211,7 @@ void
 IndexSet::sort() const
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PETSC_CHECK(ISSort(this->is));
 }
 
@@ -206,6 +219,7 @@ void
 IndexSet::sort_remove_dups() const
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PETSC_CHECK(ISSortRemoveDups(this->is));
 }
 
@@ -213,6 +227,7 @@ void
 IndexSet::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
+    assert(this->is != nullptr);
     PETSC_CHECK(ISView(this->is, viewer));
 }
 

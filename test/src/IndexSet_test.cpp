@@ -107,7 +107,6 @@ TEST(IndexSetTest, intersect_caching_empty)
     IndexSet is2;
     IndexSet isect = IndexSet::intersect_caching(is1, is2);
     EXPECT_TRUE(isect.empty());
-    isect.destroy();
 }
 
 TEST(IndexSetTest, intersect)
