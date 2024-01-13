@@ -55,6 +55,14 @@ Vector::set_name(const std::string & name)
 }
 
 void
+Vector::assemble()
+{
+    CALL_STACK_MSG();
+    assembly_begin();
+    assembly_end();
+}
+
+void
 Vector::assembly_begin()
 {
     CALL_STACK_MSG();

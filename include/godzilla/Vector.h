@@ -23,6 +23,8 @@ public:
 
     void set_up();
 
+    /// Convenience function that does `assembly_begin()` and `assembly_end()`
+    void assemble();
     void assembly_begin();
     void assembly_end();
 

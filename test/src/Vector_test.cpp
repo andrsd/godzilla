@@ -14,6 +14,13 @@ TEST(VectorTest, assembly)
     v.destroy();
 }
 
+TEST(VectorTest, assemble)
+{
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    v.assemble();
+    v.destroy();
+}
+
 TEST(VectorTest, set_up)
 {
     Vector v(MPI_COMM_WORLD);
