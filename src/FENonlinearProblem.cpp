@@ -898,12 +898,9 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     PetscCallMPI(
         MPI_Allreduce(&ass_op, &gass_op, 1, MPIU_BOOL, MPI_LOR, PetscObjectComm((PetscObject) dm)));
 
-    if (has_jac & has_prec) {
-        J.assembly_begin();
-        J.assembly_end();
-    }
-    Jp.assembly_begin();
-    Jp.assembly_end();
+    if (has_jac & has_prec)
+        J.assemble();
+    Jp.assemble();
     return 0;
 }
 

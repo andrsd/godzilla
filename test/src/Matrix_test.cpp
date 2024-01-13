@@ -25,8 +25,7 @@ TEST(MatrixTest, assembly)
 {
     // TODO: this should really be tested with MPI (n_proc > 1)
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
-    m.assembly_begin();
-    m.assembly_end();
+    m.assemble();
     m.destroy();
 }
 
@@ -57,9 +56,7 @@ TEST(MatrixTest, set_value)
     m.set_value(0, 1, 2.);
     m.set_value(1, 0, 3.);
     m.set_value(1, 1, 4.);
-
-    m.assembly_begin();
-    m.assembly_end();
+    m.assemble();
 
     EXPECT_DOUBLE_EQ(m(0, 0), 1.);
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
@@ -76,10 +73,7 @@ TEST(MatrixTest, set_value_local)
     m.set_value_local(0, 1, 2.);
     m.set_value_local(1, 0, 3.);
     m.set_value_local(1, 1, 4.);
-
-    m.assembly_begin();
-    m.assembly_end();
-
+    m.assemble();
     EXPECT_DOUBLE_EQ(m(0, 0), 1.);
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
@@ -95,8 +89,7 @@ TEST(MatrixTest, set_values)
     std::vector<Int> cols = { 0, 1 };
     std::vector<Scalar> vals = { 1, 2, 3, 4 };
     m.set_values(rows, cols, vals);
-    m.assembly_begin();
-    m.assembly_end();
+    m.assemble();
     EXPECT_DOUBLE_EQ(m(0, 0), 1.);
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
@@ -113,8 +106,7 @@ TEST(MatrixTest, set_values_dense)
     vals.set_row(0, { 1, 2 });
     vals.set_row(1, { 3, 4 });
     m.set_values(rows, cols, vals);
-    m.assembly_begin();
-    m.assembly_end();
+    m.assemble();
     EXPECT_DOUBLE_EQ(m(0, 0), 1.);
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
@@ -127,8 +119,7 @@ TEST(MatrixTest, mult)
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
     m.set_value(0, 0, 1.);
     m.set_value(1, 1, 1.);
-    m.assembly_begin();
-    m.assembly_end();
+    m.assemble();
 
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
     x.set_values({ 0, 1 }, { 3, 5 });
@@ -149,8 +140,7 @@ TEST(MatrixTest, zero)
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
     m.set_value_local(0, 0, 1.);
     m.set_value_local(1, 1, 4.);
-    m.assembly_begin();
-    m.assembly_end();
+    m.assemble();
 
     m.zero();
     EXPECT_DOUBLE_EQ(m(0, 0), 0.);
@@ -172,8 +162,7 @@ TEST(MatrixTest, view)
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
     m.set_value_local(0, 0, 1.);
     m.set_value_local(1, 1, 4.);
-    m.assembly_begin();
-    m.assembly_end();
+    m.assemble();
     m.view();
 
     auto output = testing::internal::GetCapturedStdout();
