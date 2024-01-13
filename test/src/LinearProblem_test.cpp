@@ -117,10 +117,7 @@ G1DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_value(0, 2);
     b.set_value(1, 3);
-
-    b.assembly_begin();
-    b.assembly_end();
-
+    b.assemble();
     return 0;
 }
 
@@ -166,10 +163,7 @@ PetscErrorCode
 G2DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_values({ 0, 1, 2, 3 }, { 2, 3, 5, 8 });
-
-    b.assembly_begin();
-    b.assembly_end();
-
+    b.assemble();
     return 0;
 }
 
@@ -215,10 +209,7 @@ PetscErrorCode
 G3DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_values({ 0, 1, 2, 3, 4, 5, 6, 7 }, { 2, 3, 5, 8, 13, 21, 34, 55 });
-
-    b.assembly_begin();
-    b.assembly_end();
-
+    b.assemble();
     return 0;
 }
 

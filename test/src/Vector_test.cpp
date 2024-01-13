@@ -421,8 +421,7 @@ TEST(VectorTest, view)
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 2);
     v.set_value_local(0, 1.);
     v.set_value_local(1, 4.);
-    v.assembly_begin();
-    v.assembly_end();
+    v.assemble();
     v.view();
 
     auto output = testing::internal::GetCapturedStdout();
