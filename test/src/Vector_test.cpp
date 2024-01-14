@@ -322,6 +322,30 @@ TEST(VectorTest, waxpy)
     w.destroy();
 }
 
+TEST(VectorTest, maxpy)
+{
+    Vector v1 = Vector::create_seq(MPI_COMM_WORLD, 2);
+    v1.set_value(0, 2.);
+    v1.set_value(1, 5.);
+
+    Vector v2 = Vector::create_seq(MPI_COMM_WORLD, 2);
+    v2.set_value(0, 3.);
+    v2.set_value(1, 4.);
+
+    Vector w = Vector::create_seq(MPI_COMM_WORLD, 2);
+    w.zero();
+    std::vector<Scalar> alpha = { 2, -1 };
+    std::vector<Vector> x = { v1, v2 };
+    w.maxpy(alpha, x);
+
+    EXPECT_DOUBLE_EQ(w(0), 1.);
+    EXPECT_DOUBLE_EQ(w(1), 6.);
+
+    v1.destroy();
+    v2.destroy();
+    w.destroy();
+}
+
 TEST(VectorTest, pointwise_min)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
