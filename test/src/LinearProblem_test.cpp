@@ -117,10 +117,7 @@ G1DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_value(0, 2);
     b.set_value(1, 3);
-
-    b.assembly_begin();
-    b.assembly_end();
-
+    b.assemble();
     return 0;
 }
 
@@ -129,10 +126,7 @@ G1DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
     A.set_value(0, 0, 1.);
     A.set_value(1, 1, 1.);
-
-    A.assembly_begin();
-    A.assembly_end();
-
+    A.assemble();
     return 0;
 }
 
@@ -166,10 +160,7 @@ PetscErrorCode
 G2DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_values({ 0, 1, 2, 3 }, { 2, 3, 5, 8 });
-
-    b.assembly_begin();
-    b.assembly_end();
-
+    b.assemble();
     return 0;
 }
 
@@ -178,10 +169,7 @@ G2DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
     for (Int i = 0; i < 4; i++)
         A.set_value(i, i, 1.);
-
-    A.assembly_begin();
-    A.assembly_end();
-
+    A.assemble();
     return 0;
 }
 
@@ -215,10 +203,7 @@ PetscErrorCode
 G3DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_values({ 0, 1, 2, 3, 4, 5, 6, 7 }, { 2, 3, 5, 8, 13, 21, 34, 55 });
-
-    b.assembly_begin();
-    b.assembly_end();
-
+    b.assemble();
     return 0;
 }
 
@@ -227,9 +212,6 @@ G3DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
     for (Int i = 0; i < 8; i++)
         A.set_value(i, i, 1.);
-
-    A.assembly_begin();
-    A.assembly_end();
-
+    A.assemble();
     return 0;
 }
