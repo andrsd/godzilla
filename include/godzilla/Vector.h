@@ -75,6 +75,14 @@ public:
     /// @param y Second vector
     void waxpy(Scalar alpha, const Vector & x, const Vector & y);
 
+    /// Computes `this = this + \sum_i alpha[i] x[i]`
+    ///
+    /// Length of `alpha` and `x` must be the same
+    ///
+    /// @param alpha Array of scalars
+    /// @param x Array of vectors
+    void maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
+
     void reciprocal();
 
     void set(Scalar alpha);
