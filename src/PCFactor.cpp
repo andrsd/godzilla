@@ -32,7 +32,7 @@ PCFactor::set_type(Type type)
 }
 
 PCFactor::Type
-PCFactor::get_type()
+PCFactor::get_type() const
 {
     CALL_STACK_MSG();
     const char * name;
