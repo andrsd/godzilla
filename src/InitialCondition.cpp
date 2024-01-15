@@ -86,8 +86,8 @@ InitialCondition::get_function()
     return initial_condition_function;
 }
 
-void *
-InitialCondition::get_context()
+const void *
+InitialCondition::get_context() const
 {
     CALL_STACK_MSG();
     return this;
