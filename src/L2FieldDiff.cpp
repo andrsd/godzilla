@@ -84,7 +84,7 @@ L2FieldDiff::compute()
         ParsedFunction * pfn = it.second;
 
         pfns[fid] = pfn->get_function();
-        ctxs[fid] = pfn->get_context();
+        ctxs[fid] = const_cast<void *>(pfn->get_context());
     }
 
     auto * problem = get_problem();

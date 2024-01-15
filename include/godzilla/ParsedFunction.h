@@ -34,7 +34,7 @@ public:
     virtual PetscFunc * get_function();
 
     /// Get the pointer to the context that will be passed into PETSc API
-    virtual void * get_context();
+    virtual const void * get_context() const;
 
 private:
     /// Text representation of the function to evaluate (one per component)
