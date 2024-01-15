@@ -33,7 +33,7 @@ public:
 
     /// Gets the type of composite preconditioner
     ///
-    Type get_type();
+    Type get_type() const;
 
     /// Adds another PC to the composite PC.
     ///

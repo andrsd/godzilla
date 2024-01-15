@@ -34,7 +34,7 @@ PCComposite::set_type(Type type)
 }
 
 PCComposite::Type
-PCComposite::get_type()
+PCComposite::get_type() const
 {
     CALL_STACK_MSG();
     PCCompositeType type;
