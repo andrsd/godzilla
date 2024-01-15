@@ -219,7 +219,7 @@ DiscreteProblemInterface::create_ds()
 }
 
 PetscDS
-DiscreteProblemInterface::get_ds()
+DiscreteProblemInterface::get_ds() const
 {
     CALL_STACK_MSG();
     return this->ds;
