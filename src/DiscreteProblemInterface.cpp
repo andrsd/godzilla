@@ -219,7 +219,7 @@ DiscreteProblemInterface::create_ds()
 }
 
 PetscDS
-DiscreteProblemInterface::get_ds()
+DiscreteProblemInterface::get_ds() const
 {
     CALL_STACK_MSG();
     return this->ds;
@@ -389,7 +389,7 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
         func[fid] = aux->get_func();
-        ctxs[fid] = aux->get_context();
+        ctxs[fid] = const_cast<void *>(aux->get_context());
     }
 
     PETSC_CHECK(DMProjectFunctionLocal(dm,
@@ -414,7 +414,7 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
         func[fid] = aux->get_func();
-        ctxs[fid] = aux->get_context();
+        ctxs[fid] = const_cast<void *>(aux->get_context());
     }
 
     auto ids = label.get_value_index_set();
@@ -487,7 +487,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
     for (auto & ic : this->ics) {
         Int fid = ic->get_field_id();
         ic_funcs[fid] = ic->get_function();
-        ic_ctxs[fid] = ic->get_context();
+        ic_ctxs[fid] = const_cast<void *>(ic->get_context());
     }
 
     PETSC_CHECK(DMProjectFunction(this->unstr_mesh->get_dm(),

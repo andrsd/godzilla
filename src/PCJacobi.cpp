@@ -34,7 +34,7 @@ PCJacobi::set_type(Type type)
 }
 
 PCJacobi::Type
-PCJacobi::get_type()
+PCJacobi::get_type() const
 {
     CALL_STACK_MSG();
     PCJacobiType type;

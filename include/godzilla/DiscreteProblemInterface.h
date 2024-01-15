@@ -323,7 +323,7 @@ protected:
     /// Create underlying PetscDS object
     void create_ds();
     /// Get underlying PetscDS object
-    PetscDS get_ds();
+    PetscDS get_ds() const;
     /// Set up discrete system
     virtual void set_up_ds() = 0;
 

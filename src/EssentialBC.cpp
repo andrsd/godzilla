@@ -100,8 +100,8 @@ EssentialBC::get_function_t()
     return essential_boundary_condition_function_t;
 }
 
-void *
-EssentialBC::get_context()
+const void *
+EssentialBC::get_context() const
 {
     CALL_STACK_MSG();
     return this;

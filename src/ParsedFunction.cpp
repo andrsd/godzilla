@@ -56,8 +56,8 @@ ParsedFunction::get_function()
     return parsed_function;
 }
 
-void *
-ParsedFunction::get_context()
+const void *
+ParsedFunction::get_context() const
 {
     CALL_STACK_MSG();
     return this;

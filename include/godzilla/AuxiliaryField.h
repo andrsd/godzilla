@@ -41,7 +41,7 @@ public:
 
     [[nodiscard]] virtual PetscFunc * get_func() const = 0;
 
-    virtual void * get_context();
+    virtual const void * get_context() const;
 
     virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
 

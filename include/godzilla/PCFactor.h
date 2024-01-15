@@ -78,7 +78,7 @@ public:
     /// Get the precoditioner type
     ///
     /// @return Preconditioner type
-    Type get_type();
+    Type get_type() const;
 
     /// Determines if all diagonal matrix entries are treated as level 0 fill even if there is no
     /// non-zero location
