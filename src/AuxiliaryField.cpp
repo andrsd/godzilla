@@ -93,8 +93,8 @@ AuxiliaryField::get_field_id() const
         return this->dpi->get_aux_field_id(this->get_name());
 }
 
-void *
-AuxiliaryField::get_context()
+const void *
+AuxiliaryField::get_context() const
 {
     CALL_STACK_MSG();
     return this;
