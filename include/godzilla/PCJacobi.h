@@ -32,7 +32,7 @@ public:
     /// Gets how the diagonal matrix is produced for the preconditioner
     ///
     /// @return How the diagonal matrix is produced
-    Type get_type();
+    Type get_type() const;
 
     /// Determines if the preconditioner checks for zero diagonal terms
     ///
