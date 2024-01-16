@@ -42,6 +42,9 @@ public:
     /// Clear any previously set candidate schemes
     void clear_candidates();
 
+    /// Get the list of candidate orders of accuracy and cost
+    ///
+    /// @return List of candidates
     std::vector<Candidate> get_candidates() const;
 
     /// Checks whether to accept a stage, (e.g. reject and change time step size if nonlinear
