@@ -45,10 +45,24 @@ has_suffix(const std::string & str, const std::string & suffix)
 }
 
 bool
+ends_with(const std::string & str, const std::string & end)
+{
+    CALL_STACK_MSG();
+    return has_suffix(str, end);
+}
+
+bool
 has_prefix(const std::string & str, const std::string & prefix)
 {
     CALL_STACK_MSG();
     return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
+}
+
+bool
+starts_with(const std::string & str, const std::string & start)
+{
+    CALL_STACK_MSG();
+    return has_prefix(str, start);
 }
 
 std::string
