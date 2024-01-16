@@ -32,7 +32,7 @@ public:
     /// @param cost Relative measure of the amount of work required for the candidate scheme
     /// @param inuse Indicates that this scheme is the one currently in use, this flag can only be
     /// set for one scheme
-    void candidate_add(const std::string & name,
+    void add_candidate(const std::string & name,
                        Int order,
                        Int stage_order,
                        Real ccfl,
@@ -40,8 +40,11 @@ public:
                        bool inuse);
 
     /// Clear any previously set candidate schemes
-    void candidates_clear();
+    void clear_candidates();
 
+    /// Get the list of candidate orders of accuracy and cost
+    ///
+    /// @return List of candidates
     std::vector<Candidate> get_candidates() const;
 
     /// Checks whether to accept a stage, (e.g. reject and change time step size if nonlinear

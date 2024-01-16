@@ -13,7 +13,7 @@ TimeStepAdapt::TimeStepAdapt() : tsadapt(nullptr) {}
 TimeStepAdapt::TimeStepAdapt(TSAdapt tsadapt) : tsadapt(tsadapt) {}
 
 void
-TimeStepAdapt::candidate_add(const std::string & name,
+TimeStepAdapt::add_candidate(const std::string & name,
                              Int order,
                              Int stage_order,
                              Real ccfl,
@@ -31,7 +31,7 @@ TimeStepAdapt::candidate_add(const std::string & name,
 }
 
 void
-TimeStepAdapt::candidates_clear()
+TimeStepAdapt::clear_candidates()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSAdaptCandidatesClear(this->tsadapt));
