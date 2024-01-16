@@ -55,8 +55,8 @@ TEST(TimeStepAdapt, test)
     EXPECT_DOUBLE_EQ(hmax, 5.123);
 
     adapt.set_type(TimeStepAdapt::BASIC);
-    adapt.candidate_add(TSADAPTBASIC, 1, 1, 0.5, 1., true);
-    adapt.candidate_add(TSADAPTBASIC, 1, 1, 0.25, 2., false);
+    adapt.add_candidate(TSADAPTBASIC, 1, 1, 0.5, 1., true);
+    adapt.add_candidate(TSADAPTBASIC, 1, 1, 0.25, 2., false);
 
     auto candidates = adapt.get_candidates();
     ASSERT_EQ(candidates.size(), 2);
