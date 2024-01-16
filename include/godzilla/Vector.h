@@ -83,6 +83,15 @@ public:
     /// @param x Array of vectors
     void maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
 
+    /// Computes `this = alpha * x + beta * y + gamma * this`
+    ///
+    /// @param alpha First scalar
+    /// @param beta Second scalar
+    /// @param gamma Third scalar
+    /// @param x First vector
+    /// @param y Second vector
+    void axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y);
+
     void reciprocal();
 
     void set(Scalar alpha);

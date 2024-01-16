@@ -213,6 +213,13 @@ Vector::maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x)
 }
 
 void
+Vector::axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAXPBYPCZ(this->vec, alpha, beta, gamma, x, y));
+}
+
+void
 Vector::reciprocal()
 {
     CALL_STACK_MSG();
