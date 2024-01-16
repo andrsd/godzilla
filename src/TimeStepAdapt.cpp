@@ -31,7 +31,7 @@ TimeStepAdapt::add_candidate(const std::string & name,
 }
 
 void
-TimeStepAdapt::candidates_clear()
+TimeStepAdapt::clear_candidates()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSAdaptCandidatesClear(this->tsadapt));

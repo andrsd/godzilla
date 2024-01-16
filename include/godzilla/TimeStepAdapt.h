@@ -40,7 +40,7 @@ public:
                        bool inuse);
 
     /// Clear any previously set candidate schemes
-    void candidates_clear();
+    void clear_candidates();
 
     std::vector<Candidate> get_candidates() const;
 

@@ -79,7 +79,7 @@ TEST(TimeStepAdapt, test)
     EXPECT_DOUBLE_EQ(next_h, 0.5);
     EXPECT_TRUE(accept);
 
-    adapt.candidates_clear();
+    adapt.clear_candidates();
 
     // NOTE: for code coverage, needs a check
     adapt.reset();
