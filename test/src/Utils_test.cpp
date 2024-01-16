@@ -20,11 +20,25 @@ TEST(UtilsTest, has_suffix)
     EXPECT_FALSE(utils::has_suffix("asdf", "as"));
 }
 
+TEST(UtilsTest, ends_with)
+{
+    EXPECT_TRUE(utils::ends_with("asdf", "df"));
+    EXPECT_FALSE(utils::ends_with("asdf", "long_string"));
+    EXPECT_FALSE(utils::ends_with("asdf", "as"));
+}
+
 TEST(UtilsTest, has_prefix)
 {
     EXPECT_TRUE(utils::has_prefix("asdf", "as"));
     EXPECT_FALSE(utils::has_prefix("asdf", "long_string"));
     EXPECT_FALSE(utils::has_prefix("asdf", "df"));
+}
+
+TEST(UtilsTest, starts_with)
+{
+    EXPECT_TRUE(utils::starts_with("asdf", "as"));
+    EXPECT_FALSE(utils::starts_with("asdf", "long_string"));
+    EXPECT_FALSE(utils::starts_with("asdf", "df"));
 }
 
 TEST(UtilsTest, map_keys)
