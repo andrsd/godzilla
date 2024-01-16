@@ -346,6 +346,29 @@ TEST(VectorTest, maxpy)
     w.destroy();
 }
 
+TEST(VectorTest, axpbypcz)
+{
+    Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
+    x.set_values({ 0, 1 }, { 2., 5. });
+
+    Vector y = Vector::create_seq(MPI_COMM_WORLD, 2);
+    y.set_values({ 0, 1 }, { 3., 4. });
+
+    Vector w = Vector::create_seq(MPI_COMM_WORLD, 2);
+    w.set_values({ 0, 1 }, { 1., 1. });
+    Real alpha = 2.;
+    Real beta = 3.;
+    Real gamma = 4;
+    w.axpbypcz(alpha, beta, gamma, x, y);
+
+    EXPECT_DOUBLE_EQ(w(0), 17.);
+    EXPECT_DOUBLE_EQ(w(1), 26.);
+
+    x.destroy();
+    y.destroy();
+    w.destroy();
+}
+
 TEST(VectorTest, pointwise_min)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
