@@ -18,6 +18,12 @@ include(GNUInstallDirs)
 include(${CMAKE_SOURCE_DIR}/cmake/CodeCoverage.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/Sanitization.cmake)
 
+set(BuildValues "Release;Debug;RelWithDebInfo;MinSizeRel")
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
+endif()
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${BuildValues})
+
 option(GODZILLA_WITH_MPI "Build with MPI support" YES)
 option(GODZILLA_WITH_PERF_LOG "Build with performance logging" NO)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
