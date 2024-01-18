@@ -74,6 +74,7 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux.get_context(), &aux);
     EXPECT_EQ(aux.get_msh(), this->mesh);
     EXPECT_EQ(aux.get_prblm(), prob);
+    EXPECT_EQ(aux.get_dimension(), 1);
 
     EXPECT_TRUE(prob->has_aux("aux"));
     EXPECT_FALSE(prob->has_aux("no-aux"));

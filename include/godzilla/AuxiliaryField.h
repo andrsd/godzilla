@@ -23,6 +23,11 @@ public:
 
     void create() override;
 
+    /// Get the spatial dimension of the problem this field is part of
+    ///
+    /// @return Spatial dimension of the problem
+    Int get_dimension() const;
+
     [[nodiscard]] virtual Int get_block_id() const;
 
     [[nodiscard]] virtual const Label & get_label() const;
