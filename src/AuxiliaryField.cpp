@@ -32,6 +32,8 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
     block_id(-1)
 {
     CALL_STACK_MSG();
+    if (this->field.length() == 0)
+        this->field = this->get_name();
 }
 
 UnstructuredMesh *
@@ -94,10 +96,13 @@ Int
 AuxiliaryField::get_field_id() const
 {
     CALL_STACK_MSG();
-    if (this->field.length() > 0)
-        return this->dpi->get_aux_field_id(this->field);
-    else
-        return this->dpi->get_aux_field_id(this->get_name());
+    return this->dpi->get_aux_field_id(this->field);
+}
+
+const std::string &
+AuxiliaryField::get_field() const
+{
+    return this->field;
 }
 
 const void *

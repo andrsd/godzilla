@@ -28,16 +28,30 @@ public:
     /// @return Spatial dimension of the problem
     Int get_dimension() const;
 
-    [[nodiscard]] virtual Int get_block_id() const;
+    /// Get block ID this field is defined on
+    ///
+    /// @return Block ID
+    Int get_block_id() const;
 
-    [[nodiscard]] virtual const Label & get_label() const;
+    /// Get the `Label` this field is defined on
+    ///
+    /// @return Reference to a `Label`
+    const Label & get_label() const;
 
-    [[nodiscard]] virtual const std::string & get_region() const;
+    /// Get the region name this field is defined on
+    ///
+    /// @return The region name
+    const std::string & get_region() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    [[nodiscard]] virtual Int get_field_id() const;
+    Int get_field_id() const;
+
+    /// Get field name
+    ///
+    /// @return The field name
+    const std::string & get_field() const;
 
     /// Get the number of constrained components
     ///
@@ -75,7 +89,7 @@ private:
     UnstructuredMesh * mesh;
 
     /// Field name
-    const std::string & field;
+    std::string field;
 
     /// Region name this auxiliary field is defined on
     const std::string & region;
