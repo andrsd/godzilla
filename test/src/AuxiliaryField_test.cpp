@@ -69,11 +69,13 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux.get_label(), nullptr);
     EXPECT_EQ(aux.get_region(), "rgn");
     EXPECT_EQ(aux.get_block_id(), -1);
+    EXPECT_EQ(aux.get_field(), "fld");
     EXPECT_EQ(aux.get_field_id(), 0);
     EXPECT_EQ(aux.get_func(), nullptr);
     EXPECT_EQ(aux.get_context(), &aux);
     EXPECT_EQ(aux.get_msh(), this->mesh);
     EXPECT_EQ(aux.get_prblm(), prob);
+    EXPECT_EQ(aux.get_dimension(), 1);
 
     EXPECT_TRUE(prob->has_aux("aux"));
     EXPECT_FALSE(prob->has_aux("no-aux"));
@@ -81,16 +83,11 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(prob->get_aux("no-aux"), nullptr);
 }
 
-TEST_F(AuxiliaryFieldTest, non_existent_id)
+TEST_F(AuxiliaryFieldTest, non_existent_field)
 {
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        Int
-        get_field_id() const override
-        {
-            return 1;
-        }
         Int
         get_num_components() const override
         {
@@ -125,8 +122,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_id)
     app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("Auxiliary field 'aux' is set on auxiliary field with ID '1', "
-                                   "but such ID does not exist."));
+                testing::HasSubstr("Auxiliary field 'aux' does not exist."));
 }
 
 TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
@@ -134,11 +130,6 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        Int
-        get_field_id() const override
-        {
-            return 0;
-        }
         Int
         get_num_components() const override
         {
@@ -159,7 +150,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
 
     testing::internal::CaptureStderr();
 
-    prob->set_aux_fe(0, "aux1", 1, 1);
+    prob->set_aux_fe(0, "aux", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -183,11 +174,6 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
         Int
-        get_field_id() const override
-        {
-            return 0;
-        }
-        Int
         get_num_components() const override
         {
             return 1;
@@ -207,7 +193,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
     testing::internal::CaptureStderr();
 
-    prob->set_aux_fe(0, "aux1", 1, 1);
+    prob->set_aux_fe(0, "aux", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -249,11 +235,6 @@ TEST_F(AuxiliaryFieldTest, get_value)
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
         Int
-        get_field_id() const override
-        {
-            return 0;
-        }
-        Int
         get_num_components() const override
         {
             return 1;
@@ -272,7 +253,7 @@ TEST_F(AuxiliaryFieldTest, get_value)
 
     mesh->create();
 
-    prob->set_aux_fe(0, "aux1", 1, 1);
+    prob->set_aux_fe(0, "aux", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -295,11 +276,6 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
         Int
-        get_field_id() const override
-        {
-            return 0;
-        }
-        Int
         get_num_components() const override
         {
             return 3;
@@ -320,7 +296,7 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
 
     mesh->create();
 
-    prob->set_aux_fe(0, "aux1", 1, 1);
+    prob->set_aux_fe(0, "aux", 1, 1);
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
