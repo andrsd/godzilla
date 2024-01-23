@@ -14,6 +14,9 @@ public:
     struct Iterator {
         using iterator_category = std::forward_iterator_tag;
         using value_type = Int;
+        using difference_type = Int;
+        using pointer = Int *;
+        using reference = Int &;
 
         explicit Iterator(IndexSet & is, Int idx);
         ~Iterator();
