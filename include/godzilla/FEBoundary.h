@@ -42,6 +42,7 @@ public:
         facets(facets)
     {
         CALL_STACK_MSG();
+        this->facets.sort();
     }
 
     UnstructuredMesh *
@@ -178,11 +179,9 @@ inline void
 BoundaryInfo<TRI3, 2, 3>::correct_nodal_normals()
 {
     CALL_STACK_MSG();
-    std::set<Int> facet_set;
     std::map<Int, Int> idx_of;
     for (Int i = 0; i < this->facets.get_local_size(); i++) {
         idx_of.insert(std::pair<Int, Int>(this->facets[i], i));
-        facet_set.insert(this->facets[i]);
     }
 
     for (Int i = 0; i < this->vertices.get_local_size(); i++) {
@@ -193,8 +192,8 @@ BoundaryInfo<TRI3, 2, 3>::correct_nodal_normals()
         std::sort(support.begin(), support.end());
         std::set_intersection(support.begin(),
                               support.end(),
-                              facet_set.begin(),
-                              facet_set.end(),
+                              this->facets.begin(),
+                              this->facets.end(),
                               std::back_inserter(common_edges));
         if (common_edges.size() == 1) {
             Int face_normal_idx = idx_of[common_edges[0]];
