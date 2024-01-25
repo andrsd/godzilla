@@ -17,7 +17,6 @@ public:
     explicit FileMesh(const Parameters & parameters);
 
     void create() override;
-    void check() override;
 
     /// Return file name
     ///

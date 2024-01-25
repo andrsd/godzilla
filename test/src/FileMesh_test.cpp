@@ -16,7 +16,7 @@ TEST(FileMesh, check)
     mesh_pars.set<std::string>("file") =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
     FileMesh mesh(mesh_pars);
-    mesh.check();
+    mesh.create();
 
     ASSERT_FALSE(app.check_integrity());
     auto out = testing::internal::GetCapturedStderr();
