@@ -33,12 +33,6 @@ Output::create()
 {
     CALL_STACK_MSG();
     set_up_exec();
-}
-
-void
-Output::check()
-{
-    CALL_STACK_MSG();
     if (is_param_valid("interval") && ((this->on_mask & ExecuteOn::TIMESTEP) == 0))
         log_warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
 }
