@@ -13,6 +13,8 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
+REGISTER_OBJECT(FileMesh);
+
 Parameters
 FileMesh::parameters()
 {
@@ -60,18 +62,11 @@ FileMesh::create()
         create_from_gmsh();
         break;
     default:
-        break;
+        log_error("Unknown mesh format");
+        return;
     }
     set_up();
     lprint_mesh_info();
-}
-
-void
-FileMesh::check()
-{
-    CALL_STACK_MSG();
-    if (this->file_format == UNKNOWN)
-        log_error("Unknown mesh format");
 }
 
 void
@@ -129,7 +124,7 @@ FileMesh::detect_file_format()
     CALL_STACK_MSG();
     if (utils::has_suffix(this->file_name, ".exo") || utils::has_suffix(this->file_name, ".e"))
         this->file_format = EXODUSII;
-    else if (utils::has_suffix(this->file_name, ".gmsh"))
+    else if (utils::has_suffix(this->file_name, ".msh"))
         this->file_format = GMSH;
 }
 
