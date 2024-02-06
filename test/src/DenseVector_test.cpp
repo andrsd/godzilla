@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
+#include "godzilla/DenseMatrixSymm.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -183,6 +184,15 @@ TEST(DenseVectorTest, op_mult_mat)
     EXPECT_EQ(x(0), 8.);
     EXPECT_EQ(x(1), -5.);
     EXPECT_EQ(x(2), 1.);
+}
+
+TEST(DenseVectorTest, op_mult_mat_symm)
+{
+    DenseVector<Real, 2> a({ 2., 3. });
+    DenseMatrixSymm<Real, 2> b({ 4., 2., -3. });
+    DenseVector<Real, 2> x = a * b;
+    EXPECT_EQ(x(0), 14.);
+    EXPECT_EQ(x(1), -5.);
 }
 
 TEST(DenseVectorTest, op_mult_vecvec)
