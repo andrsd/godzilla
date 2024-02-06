@@ -11,6 +11,8 @@ namespace godzilla {
 
 template <typename T, Int ROWS, Int COLS>
 class DenseMatrix;
+template <typename T, Int ROWS>
+class DenseMatrixSymm;
 
 /// Dense vector with `N` entries
 ///
@@ -294,6 +296,19 @@ public:
     {
         DenseVector<T, M> res;
         for (Int j = 0; j < M; j++) {
+            T prod = 0;
+            for (Int i = 0; i < N; i++)
+                prod += get(i) * a(i, j);
+            res(j) = prod;
+        }
+        return res;
+    }
+
+    DenseVector<T, N>
+    operator*(const DenseMatrixSymm<T, N> & a) const
+    {
+        DenseVector<T, N> res;
+        for (Int j = 0; j < N; j++) {
             T prod = 0;
             for (Int i = 0; i < N; i++)
                 prod += get(i) * a(i, j);
