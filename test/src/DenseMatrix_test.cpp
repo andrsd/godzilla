@@ -354,10 +354,14 @@ fail_to_create_symm()
     auto m = DenseMatrix<Real, 3>::create_symm({ 2 });
 }
 
+#ifndef NDEBUG
+
 TEST(DenseMatrixDeathTest, create_symm_not_enough_vals)
 {
     EXPECT_DEATH(fail_to_create_symm(), "Assertion.+failed");
 }
+
+#endif
 
 TEST(DenseMatrixTest, create_diagonal)
 {

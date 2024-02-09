@@ -49,6 +49,8 @@ fn1(int i, const std::string & s)
 
 } // namespace unit_test
 
+#ifndef NDEBUG
+
 TEST(CallStackTest, dump)
 {
     testing::internal::CaptureStderr();
@@ -60,6 +62,8 @@ TEST(CallStackTest, dump)
     EXPECT_THAT(err, HasSubstr("  #1: fn2()"));
     EXPECT_THAT(err, HasSubstr("  #2: fn1(i=1, s='string')"));
 }
+
+#endif
 
 TEST(CallStackTest, stack)
 {
