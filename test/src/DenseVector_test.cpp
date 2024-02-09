@@ -237,6 +237,8 @@ TEST(DenseVectorTest, op_mult_scalar_post)
     EXPECT_EQ(b(2), 12.);
 }
 
+#ifndef NDEBUG
+
 TEST(DenseVectorDeathTest, set_out_of_range)
 {
     DenseVector<Real, 3> a({ 2., 3., 4. });
@@ -249,6 +251,8 @@ TEST(DenseVectorDeathTest, get_out_of_range)
     const DenseVector<Real, 3> & ca = a;
     EXPECT_DEATH({ auto r = ca(4); }, "Assertion.+failed");
 }
+
+#endif
 
 TEST(DenseVectorTest, tensor_prod)
 {
