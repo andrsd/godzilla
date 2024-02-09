@@ -38,7 +38,7 @@ find_package(PETSc 3.17 REQUIRED)
 if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environment variable PETSC_DIR to point to your PETSc installation.")
 endif()
-find_package(exodusIIcpp 1.7 REQUIRED)
+find_package(exodusIIcpp 1.8 REQUIRED)
 
 if (GODZILLA_BUILD_TESTS)
     FetchContent_Declare(

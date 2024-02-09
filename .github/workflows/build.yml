@@ -48,7 +48,7 @@ jobs:
             petsc==${{ matrix.petsc }} \
             fmt==9.1.0 \
             yaml-cpp=0.7.0 \
-            exodusIIcpp==1.7 \
+            exodusIIcpp==1.8 \
             lcov
 
       - name: Configure

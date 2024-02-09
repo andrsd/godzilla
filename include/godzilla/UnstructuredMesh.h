@@ -309,12 +309,6 @@ public:
     /// @return Number of face sets
     [[nodiscard]] Int get_num_face_sets() const;
 
-    /// Set face set name
-    ///
-    /// @param id The ID of the face set
-    /// @param name The name of the face set
-    void set_face_set_name(Int id, const std::string & name);
-
     /// Check if mesh has a label corresponding to a face set name
     ///
     /// @param name The name of the face set
@@ -367,9 +361,13 @@ protected:
 
     void create_cell_set(Int id, const std::string & name);
 
+    void set_cell_set_name(Int id, const std::string & name);
+
     void create_face_set_labels(const std::map<Int, std::string> & names);
 
     void create_face_set(Int id, const std::string & name);
+
+    void set_face_set_name(Int id, const std::string & name);
 
 private:
     /// Mesh partitioner
