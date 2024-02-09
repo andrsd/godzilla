@@ -389,6 +389,12 @@ UnstructuredMesh::create_cell_set(Int id, const std::string & name)
     if (!cell_set.empty())
         label.set_stratum(id, cell_set);
     cell_set.destroy();
+}
+
+void
+UnstructuredMesh::set_cell_set_name(Int id, const std::string & name)
+{
+    CALL_STACK_MSG();
     this->cell_set_names[id] = name;
     this->cell_set_ids[name] = id;
 }
