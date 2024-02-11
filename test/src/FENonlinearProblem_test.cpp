@@ -38,7 +38,7 @@ public:
 
 } // namespace
 
-REGISTER_OBJECT(GTest2CompIC);
+// REGISTER_OBJECT(GTest2CompIC);
 
 TEST_F(FENonlinearProblemTest, fields)
 {

@@ -1,7 +1,7 @@
 #include "GTest2FieldsFENonlinearProblem.h"
 #include "godzilla/Godzilla.h"
 
-REGISTER_OBJECT(GTest2FieldsFENonlinearProblem);
+// REGISTER_OBJECT(GTest2FieldsFENonlinearProblem);
 
 GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const Parameters & params) :
     GTestFENonlinearProblem(params),

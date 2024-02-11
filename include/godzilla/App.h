@@ -179,6 +179,17 @@ private:
 
     /// Factory for building objects
     Factory factory;
+
+public:
+    /// Get the instance of registry
+    ///
+    /// @return Instance of the Registry class
+    static Registry & get_registry();
+
+    static void registerObjects(Registry & registry);
+
+private:
+    static Registry registry;
 };
 
 template <typename T>

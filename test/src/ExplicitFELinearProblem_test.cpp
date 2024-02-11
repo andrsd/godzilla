@@ -91,7 +91,7 @@ TestExplicitFELinearProblem::set_up_weak_form()
 
 } // namespace
 
-REGISTER_OBJECT(TestExplicitFELinearProblem);
+// REGISTER_OBJECT(TestExplicitFELinearProblem);
 
 TEST(ExplicitFELinearProblemTest, test_mass_matrix)
 {

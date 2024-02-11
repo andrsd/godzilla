@@ -13,7 +13,7 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(NSIncompressibleProblem);
+// REGISTER_OBJECT(NSIncompressibleProblem);
 
 namespace {
 

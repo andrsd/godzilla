@@ -80,7 +80,7 @@ protected:
     const Int & dim;
 };
 
-REGISTER_OBJECT(GTestFENonlinearProblemJFNK);
+// REGISTER_OBJECT(GTestFENonlinearProblemJFNK);
 
 GTestFENonlinearProblemJFNK::GTestFENonlinearProblemJFNK(const Parameters & params) :
     FENonlinearProblem(params),

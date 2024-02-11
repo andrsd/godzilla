@@ -29,7 +29,8 @@ App::App(const mpi::Communicator & comm,
     cmdln_opts(name),
     verbosity_level(1),
     yml(nullptr),
-    problem(nullptr)
+    problem(nullptr),
+    factory(App::get_registry())
 {
     CALL_STACK_MSG();
 }
@@ -258,6 +259,18 @@ App::run_problem()
     lprint(9, "Running");
     assert(this->problem != nullptr);
     this->problem->run();
+}
+
+Registry &
+App::get_registry()
+{
+    return registry;
+}
+
+void
+App::registerObjects(Registry & r)
+{
+    //    r.add<classname>(#classname);
 }
 
 } // namespace godzilla

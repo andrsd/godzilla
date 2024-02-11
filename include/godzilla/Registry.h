@@ -41,21 +41,15 @@ private:
     };
 
 public:
-    /// Get the instance of registry
-    ///
-    /// @return Instance of the Registry class
-    static Registry & instance();
-
     /// Register an object
     ///
     /// @param class_name Name of the object to register
     template <typename T>
-    char
-    reg(const std::string & class_name)
+    void
+    add(const std::string & class_name)
     {
         Entry entry = { &build_obj<T>, &call_parameters<T> };
         this->classes[class_name] = entry;
-        return '\0';
     }
 
     /// Check if class is registered
@@ -74,7 +68,7 @@ public:
     /// @param class_name Name of the class
     /// @return Registry entry
     const Entry &
-    get(const std::string & class_name)
+    get(const std::string & class_name) const
     {
         auto it = this->classes.find(class_name);
         if (it == this->classes.end())

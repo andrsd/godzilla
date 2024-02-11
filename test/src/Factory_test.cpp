@@ -13,7 +13,7 @@ public:
     explicit TestObject(const Parameters & parameters) : Object(parameters) {}
 };
 
-REGISTER_OBJECT(TestObject);
+// REGISTER_OBJECT(TestObject);
 
 } // namespace
 

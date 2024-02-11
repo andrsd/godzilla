@@ -6,7 +6,7 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(ConvectiveHeatFluxBC);
+// REGISTER_OBJECT(ConvectiveHeatFluxBC);
 
 namespace {
 

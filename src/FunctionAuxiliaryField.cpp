@@ -8,7 +8,7 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(FunctionAuxiliaryField);
+// REGISTER_OBJECT(FunctionAuxiliaryField);
 
 static PetscErrorCode
 function_auxiliary_field(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)

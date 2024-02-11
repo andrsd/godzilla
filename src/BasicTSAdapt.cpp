@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(BasicTSAdapt);
+// REGISTER_OBJECT(BasicTSAdapt);
 
 Parameters
 BasicTSAdapt::parameters()

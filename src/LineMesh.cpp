@@ -10,7 +10,7 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(LineMesh);
+// REGISTER_OBJECT(LineMesh);
 
 Parameters
 LineMesh::parameters()

@@ -6,7 +6,7 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(BurgersEquation);
+// REGISTER_OBJECT(BurgersEquation);
 
 namespace {
 

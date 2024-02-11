@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(RectangleMesh);
+// REGISTER_OBJECT(RectangleMesh);
 
 Parameters
 RectangleMesh::parameters()

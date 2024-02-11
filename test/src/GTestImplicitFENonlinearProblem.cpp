@@ -5,7 +5,7 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(GTestImplicitFENonlinearProblem);
+// REGISTER_OBJECT(GTestImplicitFENonlinearProblem);
 
 namespace {
 

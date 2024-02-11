@@ -22,7 +22,7 @@ public:
 
 } // namespace
 
-REGISTER_OBJECT(MockProblem);
+// REGISTER_OBJECT(MockProblem);
 
 TEST_F(GodzillaAppTest, run_input)
 {

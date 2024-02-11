@@ -2,7 +2,7 @@
 #include "godzilla/CallStack.h"
 #include "OutflowBC.h"
 
-REGISTER_OBJECT(OutflowBC);
+// REGISTER_OBJECT(OutflowBC);
 
 Parameters
 OutflowBC::parameters()

@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(PiecewiseLinear);
+// REGISTER_OBJECT(PiecewiseLinear);
 
 static double
 piecewise_linear_function_eval(void * ctx, double x)

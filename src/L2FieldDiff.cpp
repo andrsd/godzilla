@@ -12,7 +12,7 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(L2FieldDiff);
+// REGISTER_OBJECT(L2FieldDiff);
 
 Parameters
 L2FieldDiff::parameters()

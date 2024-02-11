@@ -54,7 +54,7 @@ public:
 
 } // namespace
 
-REGISTER_OBJECT(GTestProblem);
+// REGISTER_OBJECT(GTestProblem);
 
 Parameters
 GTestProblem::parameters()

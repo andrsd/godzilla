@@ -53,7 +53,7 @@ public:
 
 } // namespace
 
-REGISTER_OBJECT(TestTSAdaptor);
+// REGISTER_OBJECT(TestTSAdaptor);
 
 Parameters
 TestTSAdaptor::parameters()
@@ -131,7 +131,7 @@ protected:
     void ts_monitor_callback(Int stepi, Real time, Vec x) override;
 };
 
-REGISTER_OBJECT(TestTSProblem);
+// REGISTER_OBJECT(TestTSProblem);
 
 TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonlinearProblem(params)
 {

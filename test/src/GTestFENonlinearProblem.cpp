@@ -3,7 +3,7 @@
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/Godzilla.h"
 
-REGISTER_OBJECT(GTestFENonlinearProblem);
+// REGISTER_OBJECT(GTestFENonlinearProblem);
 
 namespace {
 

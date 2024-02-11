@@ -28,7 +28,7 @@ protected:
 
 } // namespace
 
-REGISTER_OBJECT(G1DTestNonlinearProblem);
+// REGISTER_OBJECT(G1DTestNonlinearProblem);
 
 G1DTestNonlinearProblem::G1DTestNonlinearProblem(const Parameters & params) :
     NonlinearProblem(params),

@@ -7,7 +7,7 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(DirichletBC);
+// REGISTER_OBJECT(DirichletBC);
 
 Parameters
 DirichletBC::parameters()
