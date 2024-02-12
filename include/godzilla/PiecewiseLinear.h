@@ -4,9 +4,11 @@
 #pragma once
 
 #include "godzilla/Function.h"
-#include "godzilla/LinearInterpolation.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
+
+class LinearInterpolation;
 
 /// User-defined piecewise linear function
 ///
@@ -15,8 +17,7 @@ namespace godzilla {
 class PiecewiseLinear : public Function {
 public:
     explicit PiecewiseLinear(const Parameters & params);
-
-    void check() override;
+    ~PiecewiseLinear() override;
 
     void register_callback(mu::Parser & parser) override;
 
@@ -25,7 +26,7 @@ public:
 
 private:
     /// Linear interpolation object used for function evaluation
-    LinearInterpolation linpol;
+    LinearInterpolation * linpol;
 
 public:
     static Parameters parameters();

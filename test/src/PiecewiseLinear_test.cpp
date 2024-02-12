@@ -23,7 +23,7 @@ TEST(PiecewiseLinearTest, eval)
     EXPECT_EQ(parser.Eval(), 3.);
 }
 
-TEST(PiecewiseLinearTest, check)
+TEST(PiecewiseLinearTest, inconsistent_data_sizes)
 {
     testing::internal::CaptureStderr();
 
@@ -35,7 +35,6 @@ TEST(PiecewiseLinearTest, check)
     params.set<std::vector<Real>>("x") = { 1., 2. };
     params.set<std::vector<Real>>("y") = { 3., 1., 2. };
     PiecewiseLinear obj(params);
-    obj.check();
 
     app.check_integrity();
     EXPECT_THAT(

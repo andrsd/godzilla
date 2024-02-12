@@ -19,7 +19,6 @@ public:
     ~NonlinearProblem() override;
 
     void create() override;
-    void check() override;
     void run() override;
 
     /// Get underlying KSP

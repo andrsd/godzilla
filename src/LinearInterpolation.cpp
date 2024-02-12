@@ -18,20 +18,6 @@ LinearInterpolation::LinearInterpolation(const std::vector<Real> & ax,
     y(ay)
 {
     CALL_STACK_MSG();
-}
-
-void
-LinearInterpolation::create(const std::vector<Real> & x, const std::vector<Real> & y)
-{
-    CALL_STACK_MSG();
-    this->x = x;
-    this->y = y;
-}
-
-void
-LinearInterpolation::check() const
-{
-    CALL_STACK_MSG();
     if (this->x.size() != this->y.size())
         throw std::domain_error(fmt::format("Size of 'x' ({}) does not match size of 'y' ({}).",
                                             this->x.size(),
@@ -48,6 +34,14 @@ LinearInterpolation::check() const
                     fmt::format("Values in 'x' must be increasing. Failed at index '{}'.", i + 1));
         }
     }
+}
+
+void
+LinearInterpolation::create(const std::vector<Real> & x, const std::vector<Real> & y)
+{
+    CALL_STACK_MSG();
+    this->x = x;
+    this->y = y;
 }
 
 Real

@@ -97,14 +97,6 @@ ExplicitFELinearProblem::create()
     ExplicitProblemInterface::create();
 }
 
-void
-ExplicitFELinearProblem::check()
-{
-    CALL_STACK_MSG();
-    FENonlinearProblem::check();
-    ExplicitProblemInterface::check();
-}
-
 bool
 ExplicitFELinearProblem::converged()
 {

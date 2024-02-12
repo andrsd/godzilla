@@ -105,8 +105,6 @@ TEST(MeshPartitioningOutputTest, no_dm)
     params.set<Problem *>("_problem") = &prob;
     MeshPartitioningOutput out(params);
 
-    out.check();
-
     app.check_integrity();
 
     EXPECT_THAT(

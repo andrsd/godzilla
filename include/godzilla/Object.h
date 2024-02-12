@@ -57,9 +57,6 @@ public:
     /// Called to construct the object
     virtual void create();
 
-    /// Called to check object's integrity
-    virtual void check();
-
 private:
     /// Parameters of this object
     const Parameters & pars;

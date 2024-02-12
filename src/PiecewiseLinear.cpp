@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/PiecewiseLinear.h"
+#include "godzilla/LinearInterpolation.h"
 #include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 
@@ -25,11 +26,21 @@ PiecewiseLinear::parameters()
     return params;
 }
 
-PiecewiseLinear::PiecewiseLinear(const Parameters & params) :
-    Function(params),
-    linpol(get_param<std::vector<Real>>("x"), get_param<std::vector<Real>>("y"))
+PiecewiseLinear::PiecewiseLinear(const Parameters & params) : Function(params), linpol(nullptr)
 {
     CALL_STACK_MSG();
+    try {
+        this->linpol = new LinearInterpolation(get_param<std::vector<Real>>("x"),
+                                               get_param<std::vector<Real>>("y"));
+    }
+    catch (std::exception & e) {
+        log_error(e.what());
+    }
+}
+
+PiecewiseLinear::~PiecewiseLinear()
+{
+    delete this->linpol;
 }
 
 void
@@ -39,24 +50,11 @@ PiecewiseLinear::register_callback(mu::Parser & parser)
     parser.DefineFunUserData(get_name(), piecewise_linear_function_eval, this);
 }
 
-void
-PiecewiseLinear::check()
-{
-    CALL_STACK_MSG();
-    Function::check();
-    try {
-        this->linpol.check();
-    }
-    catch (std::exception & e) {
-        log_error(e.what());
-    }
-}
-
 Real
 PiecewiseLinear::evaluate(Real x)
 {
     CALL_STACK_MSG();
-    return this->linpol.sample(x);
+    return this->linpol->sample(x);
 }
 
 } // namespace godzilla

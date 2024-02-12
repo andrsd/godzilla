@@ -35,7 +35,6 @@ TEST(PiecewiseConstantTest, left_cont_eval)
     params.set<std::vector<Real>>("y") = { 3., 0., -1., 2. };
     PiecewiseConstant obj(params);
     obj.create();
-    obj.check();
 
     EXPECT_EQ(obj.evaluate(0.), 3.);
     EXPECT_EQ(obj.evaluate(1.), 3.);
@@ -58,7 +57,6 @@ TEST(PiecewiseConstantTest, right_cont_eval)
     params.set<std::vector<Real>>("y") = { 3., 0., -1., 2. };
     PiecewiseConstant obj(params);
     obj.create();
-    obj.check();
 
     EXPECT_EQ(obj.evaluate(0.), 3.);
     EXPECT_EQ(obj.evaluate(1.), 0.);
@@ -82,7 +80,6 @@ TEST(PiecewiseConstantTest, err_incorrect_point_count)
     params.set<std::vector<Real>>("y") = { 3., 1. };
     PiecewiseConstant obj(params);
     obj.create();
-    obj.check();
 
     app.check_integrity();
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
@@ -102,7 +99,6 @@ TEST(PiecewiseConstantTest, err_no_points)
     params.set<std::vector<Real>>("y") = { 1. };
     PiecewiseConstant obj(params);
     obj.create();
-    obj.check();
 
     app.check_integrity();
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
@@ -122,7 +118,6 @@ TEST(PiecewiseConstantTest, err_not_monotonic)
     params.set<std::vector<Real>>("y") = { 1., 2., 3. };
     PiecewiseConstant obj(params);
     obj.create();
-    obj.check();
 
     app.check_integrity();
     EXPECT_THAT(
@@ -144,7 +139,6 @@ TEST(PiecewiseConstantTest, err_cont)
     params.set<std::vector<Real>>("y") = { 1., 2. };
     PiecewiseConstant obj(params);
     obj.create();
-    obj.check();
 
     app.check_integrity();
     EXPECT_THAT(testing::internal::GetCapturedStderr(),

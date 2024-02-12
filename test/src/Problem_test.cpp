@@ -49,8 +49,6 @@ TEST(ProblemTest, add_pp)
         {
             return 0;
         }
-
-        MOCK_METHOD(void, check, ());
     };
 
     class TestFunction : public Function {
@@ -61,8 +59,6 @@ TEST(ProblemTest, add_pp)
         register_callback(mu::Parser & parser) override
         {
         }
-
-        MOCK_METHOD(void, check, ());
     };
 
     class TestOutput : public Output {
@@ -105,10 +101,6 @@ TEST(ProblemTest, add_pp)
     TestOutput out(out_params);
     out.create();
     problem.add_output(&out);
-
-    EXPECT_CALL(fn, check);
-    EXPECT_CALL(pp, check);
-    problem.check();
 
     EXPECT_EQ(problem.get_postprocessor("pp"), &pp);
     EXPECT_EQ(problem.get_postprocessor("asdf"), nullptr);

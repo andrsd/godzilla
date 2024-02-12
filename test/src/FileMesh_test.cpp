@@ -5,7 +5,7 @@
 using namespace godzilla;
 using namespace testing;
 
-TEST(FileMesh, check)
+TEST(FileMesh, unknown_mesh_format)
 {
     testing::internal::CaptureStderr();
 

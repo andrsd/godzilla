@@ -18,7 +18,6 @@ public:
     Real get_time() const override;
     Int get_step_num() const override;
     void create() override;
-    void check() override;
     bool converged() override;
     void solve() override;
     void compute_solution_vector_local() override;

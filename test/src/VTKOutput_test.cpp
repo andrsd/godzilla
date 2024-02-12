@@ -112,7 +112,6 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
     mesh.create();
     prob.create();
 
-    out.check();
     this->app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
@@ -124,7 +123,6 @@ TEST_F(VTKOutputTest, output_1d_step)
     auto out = build_output("out");
     create();
 
-    out->check();
     this->app->check_integrity();
 
     this->prob->solve();

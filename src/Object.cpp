@@ -88,10 +88,4 @@ Object::create()
     CALL_STACK_MSG();
 }
 
-void
-Object::check()
-{
-    CALL_STACK_MSG();
-}
-
 } // namespace godzilla

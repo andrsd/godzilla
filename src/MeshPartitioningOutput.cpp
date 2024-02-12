@@ -23,13 +23,6 @@ MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & params) : File
 {
     CALL_STACK_MSG();
     set_file_base("part");
-}
-
-void
-MeshPartitioningOutput::check()
-{
-    CALL_STACK_MSG();
-    FileOutput::check();
     auto dm = get_problem()->get_dm();
     if (dm == nullptr)
         log_error("Mesh partitioning output works only with problems that provide DM.");

@@ -36,6 +36,9 @@ ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem * problem,
     TransientProblemInterface(problem, params),
     nl_problem(problem)
 {
+    if (!validation::in(get_scheme(), { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
+        this->nl_problem->log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "
+                                    "'ssp-rk-3', 'rk-2' or 'heun'.");
 }
 
 ExplicitProblemInterface::~ExplicitProblemInterface()
@@ -70,17 +73,6 @@ ExplicitProblemInterface::get_lumped_mass_matrix()
 {
     CALL_STACK_MSG();
     return this->M_lumped_inv;
-}
-
-void
-ExplicitProblemInterface::check()
-{
-    CALL_STACK_MSG();
-    TransientProblemInterface::check();
-    auto prob = this->nl_problem;
-    if (!validation::in(get_scheme(), { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
-        prob->log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', 'ssp-rk-3', "
-                        "'rk-2' or 'heun'.");
 }
 
 void

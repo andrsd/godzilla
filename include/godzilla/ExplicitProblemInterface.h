@@ -28,7 +28,6 @@ public:
     virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 
 protected:
-    void check();
     void set_up_callbacks();
     void set_up_time_scheme();
     void allocate_mass_matrix();

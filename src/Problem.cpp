@@ -70,19 +70,6 @@ Problem::get_solution_vector()
 }
 
 void
-Problem::check()
-{
-    CALL_STACK_MSG();
-    for (auto & f : this->functions)
-        f->check();
-    for (auto & pp : this->pps)
-        pp.second->check();
-    for (auto & out : this->outputs) {
-        out->check();
-    }
-}
-
-void
 Problem::create()
 {
     CALL_STACK_MSG();

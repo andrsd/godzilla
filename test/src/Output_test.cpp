@@ -119,7 +119,6 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
     MockOutput out(pars);
 
     out.create();
-    out.check();
 
     app->check_integrity();
 

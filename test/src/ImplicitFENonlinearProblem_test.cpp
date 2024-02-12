@@ -74,7 +74,6 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 
     mesh->create();
     prob->create();
-    prob->check();
 
     this->app->check_integrity();
 
@@ -101,7 +100,6 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
 
     mesh->create();
     prob->create();
-    prob->check();
 
     this->app->check_integrity();
 
@@ -128,7 +126,6 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
 
     mesh->create();
     prob->create();
-    prob->check();
 
     this->app->check_integrity();
 
@@ -167,7 +164,10 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 
     TS ts = prob->get_ts();
     TSType type;
-    std::vector<std::string> schemes = { "beuler", "cn", };
+    std::vector<std::string> schemes = {
+        "beuler",
+        "cn",
+    };
     std::vector<TSType> types = { TSBEULER, TSCN };
     for (std::size_t i = 0; i < schemes.size(); i++) {
         prob->set_scheme(types[i]);

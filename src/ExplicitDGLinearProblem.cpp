@@ -60,14 +60,6 @@ ExplicitDGLinearProblem::create()
     ExplicitProblemInterface::create();
 }
 
-void
-ExplicitDGLinearProblem::check()
-{
-    CALL_STACK_MSG();
-    NonlinearProblem::check();
-    ExplicitProblemInterface::check();
-}
-
 bool
 ExplicitDGLinearProblem::converged()
 {

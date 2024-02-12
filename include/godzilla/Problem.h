@@ -41,8 +41,6 @@ public:
     explicit Problem(const Parameters & parameters);
     virtual ~Problem();
 
-    void check() override;
-
     /// Build the problem to solve
     void create() override;
     /// Run the problem
