@@ -7,20 +7,24 @@
 
 namespace godzilla {
 
-Parameters
-Mesh::parameters()
-{
-    Parameters params = Object::parameters();
-    return params;
-}
+Mesh::Mesh() : dm(nullptr) {}
 
-Mesh::Mesh(const Parameters & parameters) : Object(parameters), PrintInterface(this), dm(nullptr) {}
+Mesh::Mesh(DM dm) : dm(dm) {}
 
 Mesh::~Mesh()
 {
     CALL_STACK_MSG();
     if (this->dm)
         PETSC_CHECK(DMDestroy(&this->dm));
+}
+
+mpi::Communicator
+Mesh::get_comm() const
+{
+    CALL_STACK_MSG();
+    MPI_Comm comm;
+    PETSC_CHECK(PetscObjectGetComm((PetscObject) this->dm, &comm));
+    return { comm };
 }
 
 DM

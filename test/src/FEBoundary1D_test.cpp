@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/MeshObject.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEVolumes.h"
 #include "godzilla/FEShapeFns.h"
@@ -22,41 +23,47 @@ points_from_label(const Label & label)
 
 namespace {
 
-class TestMesh1D : public godzilla::UnstructuredMesh {
+class TestMesh1D : public MeshObject {
 public:
-    explicit TestMesh1D(const godzilla::Parameters & parameters) : UnstructuredMesh(parameters) {}
+    explicit TestMesh1D(const godzilla::Parameters & parameters) : MeshObject(parameters) {}
 
-    void
-    create() override
+    Mesh *
+    create_mesh() override
     {
-        const PetscInt DIM = 1;
-        const PetscInt N_ELEM_NODES = 2;
+        const Int DIM = 1;
+        const Int N_ELEM_NODES = 2;
         std::vector<Int> cells = { 0, 1, 1, 2 };
         std::vector<Real> coords = { 0, 0.4, 1 };
-        build_from_cell_list(DIM, N_ELEM_NODES, cells, DIM, coords, true);
+        auto m = UnstructuredMesh::build_from_cell_list(get_comm(),
+                                                            DIM,
+                                                            N_ELEM_NODES,
+                                                            cells,
+                                                            DIM,
+                                                            coords,
+                                                            true);
 
         // create "side sets"
-        auto face_sets = create_label("Face Sets");
+        auto face_sets = m->create_label("Face Sets");
 
-        create_side_set(face_sets, 1, { 2 }, "left");
-        create_side_set(face_sets, 2, { 4 }, "right");
+        create_side_set(m, face_sets, 1, { 2 }, "left");
+        create_side_set(m, face_sets, 2, { 4 }, "right");
 
         std::map<Int, std::string> face_set_names;
         face_set_names[1] = "left";
         face_set_names[2] = "right";
-        create_face_set_labels(face_set_names);
+        m->create_face_set_labels(face_set_names);
         for (auto it : face_set_names)
-            set_face_set_name(it.first, it.second);
+            m->set_face_set_name(it.first, it.second);
 
-        set_up();
+        return m;
     }
 
     void
-    create_side_set(Label & face_sets, Int id, const std::vector<Int> & faces, const char * name)
+    create_side_set(UnstructuredMesh * mesh, Label & face_sets, Int id, const std::vector<Int> & faces, const char * name)
     {
         for (auto & f : faces) {
             face_sets.set_value(f, id);
-            PETSC_CHECK(DMSetLabelValue(get_dm(), name, f, id));
+            PETSC_CHECK(DMSetLabelValue(mesh->get_dm(), name, f, id));
         }
     }
 
@@ -92,7 +99,7 @@ public:
 Parameters
 TestMesh1D::parameters()
 {
-    Parameters params = UnstructuredMesh::parameters();
+    Parameters params = MeshObject::parameters();
     return params;
 }
 
@@ -107,14 +114,16 @@ TEST(FEBoundaryTest, nodal_normals_1d)
     TestMesh1D mesh(mesh_pars);
     mesh.create();
 
-    auto coords = fe::coordinates<1>(mesh);
-    auto connect = fe::connectivity<1, 2>(mesh);
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+
+    auto coords = fe::coordinates<1>(*m);
+    auto connect = fe::connectivity<1, 2>(*m);
     auto fe_volume = fe::calc_volumes<EDGE2, 1>(coords, connect);
     auto grad_phi = fe::calc_grad_shape<EDGE2, 1>(coords, connect, fe_volume);
 
     {
-        IndexSet bnd_facets = points_from_label(mesh.get_label("left"));
-        TestBoundary1D bnd(&mesh, &grad_phi, bnd_facets);
+        IndexSet bnd_facets = points_from_label(m->get_label("left"));
+        TestBoundary1D bnd(m, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), -1);
@@ -123,8 +132,8 @@ TEST(FEBoundaryTest, nodal_normals_1d)
     }
 
     {
-        IndexSet bnd_facets = points_from_label(mesh.get_label("right"));
-        TestBoundary1D bnd(&mesh, &grad_phi, bnd_facets);
+        IndexSet bnd_facets = points_from_label(m->get_label("right"));
+        TestBoundary1D bnd(m, &grad_phi, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), 1);

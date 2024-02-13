@@ -4,21 +4,26 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include "godzilla/Object.h"
-#include "godzilla/PrintInterface.h"
 #include "godzilla/Label.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Section.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include "petscdm.h"
+
+namespace mpi = mpicpp_lite;
 
 namespace godzilla {
 
 /// Base class for meshes
 ///
-class Mesh : public Object, public PrintInterface {
+class Mesh {
 public:
-    explicit Mesh(const Parameters & parameters);
+    Mesh();
+    explicit Mesh(DM dm);
     virtual ~Mesh();
+
+    /// Get the MPI comm this object works on
+    mpi::Communicator get_comm() const;
 
     /// Get the underlying DM object
     ///
@@ -101,9 +106,6 @@ protected:
 private:
     /// DM object
     DM dm;
-
-public:
-    static Parameters parameters();
 };
 
 } // namespace godzilla

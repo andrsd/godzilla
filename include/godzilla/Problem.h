@@ -15,6 +15,7 @@
 
 namespace godzilla {
 
+class MeshObject;
 class Mesh;
 class Function;
 class Postprocessor;
@@ -161,7 +162,7 @@ protected:
 
 private:
     /// Mesh
-    Mesh * mesh;
+    MeshObject * mesh;
 
     /// The solution vector
     Vector x;

@@ -46,7 +46,10 @@ void
 LinearProblem::create()
 {
     CALL_STACK_MSG();
-    get_mesh()->distribute();
+    {
+        TIMED_EVENT(9, "MeshDistribution", "Distributing");
+        get_mesh()->distribute();
+    }
     init();
     allocate_objects();
     set_up_matrix_properties();

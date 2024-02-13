@@ -3,6 +3,7 @@
 
 #include "godzilla/Godzilla.h"
 #include "godzilla/RectangleMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "petscdmplex.h"
 #include <array>
@@ -14,7 +15,7 @@ REGISTER_OBJECT(RectangleMesh);
 Parameters
 RectangleMesh::parameters()
 {
-    Parameters params = UnstructuredMesh::parameters();
+    Parameters params = MeshObject::parameters();
     params.add_param<Real>("xmin", 0., "Minimum in the x direction");
     params.add_param<Real>("xmax", 1., "Maximum in the x direction");
     params.add_param<Real>("ymin", 0., "Minimum in the y direction");
@@ -26,7 +27,7 @@ RectangleMesh::parameters()
 }
 
 RectangleMesh::RectangleMesh(const Parameters & parameters) :
-    UnstructuredMesh(parameters),
+    MeshObject(parameters),
     xmin(get_param<Real>("xmin")),
     xmax(get_param<Real>("xmax")),
     ymin(get_param<Real>("ymin")),
@@ -85,8 +86,8 @@ RectangleMesh::get_ny() const
     return this->ny;
 }
 
-void
-RectangleMesh::create()
+godzilla::Mesh *
+RectangleMesh::create_mesh()
 {
     CALL_STACK_MSG();
     std::array<Real, 2> lower = { this->xmin, this->ymin };
@@ -107,21 +108,20 @@ RectangleMesh::create()
                                     periodicity.data(),
                                     this->interpolate,
                                     &dm));
-    set_dm(dm);
+    auto * mesh = new UnstructuredMesh(dm);
 
-    remove_label("marker");
+    mesh->remove_label("marker");
     // create user-friendly names for sides
     std::map<Int, std::string> face_set_names;
     face_set_names[1] = "bottom";
     face_set_names[2] = "right";
     face_set_names[3] = "top";
     face_set_names[4] = "left";
-    create_face_set_labels(face_set_names);
+    mesh->create_face_set_labels(face_set_names);
     for (auto it : face_set_names)
-        set_face_set_name(it.first, it.second);
+        mesh->set_face_set_name(it.first, it.second);
 
-    set_up();
-    lprint_mesh_info();
+    return mesh;
 }
 
 } // namespace godzilla

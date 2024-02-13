@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "godzilla/RectangleMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
 #include "petsc.h"
 
@@ -30,9 +31,10 @@ TEST(RectangleMeshTest, api)
     EXPECT_EQ(mesh.get_ny(), 8);
 
     mesh.create();
-    auto dm = mesh.get_dm();
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto dm = m->get_dm();
 
-    EXPECT_EQ(mesh.get_dimension(), 2);
+    EXPECT_EQ(m->get_dimension(), 2);
 
     Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);

@@ -3,6 +3,7 @@
 #include "FENonlinearProblem_test.h"
 #include "LinearProblem_test.h"
 #include "godzilla/ExodusIIOutput.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/LineMesh.h"
 #include "petsc.h"
 
@@ -19,7 +20,7 @@ TEST(ExodusIIOutputTest, get_file_ext)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
@@ -42,7 +43,7 @@ TEST(ExodusIIOutputTest, create)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
@@ -67,7 +68,7 @@ TEST(ExodusIIOutputTest, non_existent_var)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
@@ -89,22 +90,29 @@ TEST(ExodusIIOutputTest, non_existent_var)
 
 TEST(ExodusIIOutputTest, fe_check)
 {
-    class TestMesh : public Mesh {
+    class EmptyMesh : public Mesh {
     public:
-        explicit TestMesh(const Parameters & params) : Mesh(params) {}
-
-        void
-        create() override
+        EmptyMesh(mpi::Communicator comm) : Mesh()
         {
             DM dm;
-            DMCreate(get_comm(), &dm);
+            DMCreate(comm, &dm);
             set_dm(dm);
         }
 
-    protected:
         void
         distribute() override
         {
+        }
+    };
+
+    class TestMesh : public MeshObject {
+    public:
+        explicit TestMesh(const Parameters & params) : MeshObject(params) {}
+
+        Mesh *
+        create_mesh() override
+        {
+            return new EmptyMesh(get_comm());
         }
     };
 
@@ -131,19 +139,20 @@ TEST(ExodusIIOutputTest, fe_check)
 
     TestApp app;
 
-    Parameters mesh_pars = Mesh::parameters();
+    Parameters mesh_pars = MeshObject::parameters();
     mesh_pars.set<App *>("_app") = &app;
     TestMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestLinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     TestLinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
     params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     ExodusIIOutput out(params);
+    prob.add_output(&out);
 
     mesh.create();
     prob.create();
@@ -166,13 +175,14 @@ TEST(ExodusIIOutputTest, output)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
     params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
     ExodusIIOutput out(params);
+    prob.add_output(&out);
 
     mesh.create();
     prob.create();
@@ -193,7 +203,7 @@ TEST(ExodusIIOutputTest, set_file_name)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();
@@ -218,7 +228,7 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = ExodusIIOutput::parameters();

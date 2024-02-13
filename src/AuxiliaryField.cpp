@@ -25,7 +25,7 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     dpi(get_param<DiscreteProblemInterface *>("_dpi")),
-    mesh(dpi->get_unstr_mesh()),
+    mesh(nullptr),
     field(get_param<std::string>("field")),
     region(get_param<std::string>("region")),
     fid(-1),
@@ -61,6 +61,7 @@ void
 AuxiliaryField::create()
 {
     CALL_STACK_MSG();
+    this->mesh = this->dpi->get_unstr_mesh();
     if (this->region.length() > 0) {
         if (this->mesh->has_label(this->region)) {
             this->label = this->mesh->get_label(this->region);

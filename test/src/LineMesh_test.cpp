@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/LineMesh.h"
 #include "petsc.h"
@@ -24,9 +25,11 @@ TEST(LineMeshTest, api)
     EXPECT_EQ(mesh.get_nx(), 10);
 
     mesh.create();
-    auto dm = mesh.get_dm();
 
-    EXPECT_EQ(mesh.get_dimension(), 1);
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto dm = m->get_dm();
+
+    EXPECT_EQ(m->get_dimension(), 1);
 
     Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
@@ -76,8 +79,9 @@ TEST(LineMeshTest, distribute)
     LineMesh mesh(params);
     mesh.create();
 
+    auto m = mesh.get_mesh<Mesh>();
     PetscBool distr;
-    DMPlexIsDistributed(mesh.get_dm(), &distr);
+    DMPlexIsDistributed(m->get_dm(), &distr);
     if (sz > 1)
         EXPECT_EQ(distr, 1);
     else

@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "LinearProblem_test.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/VTKOutput.h"
@@ -26,7 +27,7 @@ protected:
         {
             const std::string class_name = "G1DTestLinearProblem";
             Parameters * params = this->app->get_parameters(class_name);
-            params->set<Mesh *>("_mesh") = mesh;
+            params->set<MeshObject *>("_mesh_obj") = mesh;
             this->prob =
                 this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
         }
@@ -66,23 +67,29 @@ TEST_F(VTKOutputTest, get_file_ext)
 
 TEST_F(VTKOutputTest, wrong_mesh_type)
 {
-    class TestMesh : public Mesh {
+    class MeshDA1D : public Mesh {
     public:
-        explicit TestMesh(const Parameters & params) : Mesh(params) {}
-
-        void
-        create() override
+        MeshDA1D(mpi::Communicator comm) : Mesh()
         {
             DM dm;
-            DMDACreate1d(get_comm(), DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &dm);
+            DMDACreate1d(comm, DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &dm);
             set_dm(dm);
-            set_up();
         }
 
-    protected:
         void
         distribute() override
         {
+        }
+    };
+
+    class TestMesh : public MeshObject {
+    public:
+        explicit TestMesh(const Parameters & params) : MeshObject(params) {}
+
+        Mesh *
+        create_mesh() override
+        {
+            return new MeshDA1D(get_comm());
         }
     };
 
@@ -100,7 +107,7 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
 
     Parameters prob_pars = TestProblem::parameters();
     prob_pars.set<App *>("_app") = this->app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem prob(prob_pars);
 
     Parameters pars = VTKOutput::parameters();

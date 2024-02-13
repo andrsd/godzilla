@@ -3,20 +3,20 @@
 
 #pragma once
 
-#include "godzilla/UnstructuredMesh.h"
+#include "godzilla/MeshObject.h"
 
 namespace godzilla {
 
+class UnstructuredMesh;
+
 /// Mesh loaded from a file
 ///
-class FileMesh : public UnstructuredMesh {
+class FileMesh : public MeshObject {
 protected:
     enum FileFormat { UNKNOWN, EXODUSII, GMSH } file_format;
 
 public:
     explicit FileMesh(const Parameters & parameters);
-
-    void create() override;
 
     /// Return file name
     ///
@@ -25,11 +25,12 @@ public:
 
 protected:
     void set_file_format(FileFormat fmt);
+    Mesh * create_mesh() override;
 
 private:
     void detect_file_format();
-    void create_from_exodus();
-    void create_from_gmsh();
+    UnstructuredMesh * create_from_exodus();
+    UnstructuredMesh * create_from_gmsh();
 
     /// File name with the mesh
     std::string file_name;

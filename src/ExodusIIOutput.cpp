@@ -99,7 +99,7 @@ Parameters
 ExodusIIOutput::parameters()
 {
     Parameters params = FileOutput::parameters();
-    params.add_private_param<UnstructuredMesh *>("_mesh", nullptr);
+    params.add_private_param<MeshObject *>("_mesh_obj", nullptr);
     params.add_param<std::vector<std::string>>(
         "variables",
         "List of variables to be stored. If not specified, all variables will be stored.");
@@ -113,8 +113,7 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     variable_names(get_param<std::vector<std::string>>("variables")),
     dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem())),
     dgpi(dynamic_cast<DGProblemInterface *>(get_problem())),
-    mesh(get_problem() ? dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh())
-                       : get_param<UnstructuredMesh *>("_mesh")),
+    mesh(nullptr),
     exo(nullptr),
     step_num(1),
     mesh_stored(false)
@@ -125,8 +124,6 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     else
         this->cont = true;
 
-    if (this->mesh == nullptr)
-        log_error("ExodusII output can be only used with unstructured meshes.");
 }
 
 ExodusIIOutput::~ExodusIIOutput()
@@ -148,6 +145,11 @@ ExodusIIOutput::create()
 {
     CALL_STACK_MSG();
     FileOutput::create();
+
+    this->mesh = get_problem() ? dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh())
+                               : get_param<UnstructuredMesh *>("_mesh");
+    if (this->mesh == nullptr)
+        log_error("ExodusII output can be only used with unstructured meshes.");
 
     if (this->dpi) {
         auto flds = this->dpi->get_field_names();

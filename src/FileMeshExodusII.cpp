@@ -2,6 +2,8 @@
 //  SPDX-License-Identifier: MIT
 
 #include "godzilla/FileMesh.h"
+#include "godzilla/UnstructuredMesh.h"
+#include "godzilla/Types.h"
 #include "exodusIIcpp/exodusIIcpp.h"
 #include "petscdm.h"
 #include "petsc/private/dmimpl.h"
@@ -33,7 +35,7 @@ get_cell_type(const std::string & elem_type)
 
 // This is a rewrite of `DMPlexCreateExodus` from PETSc (`plexexdosuii.c`) using exodusIIcpp
 // and C++ constructs. Plus, it adds some godzilla-specific stuff like mapping names to labels, etc.
-void
+godzilla::UnstructuredMesh *
 FileMesh::create_from_exodus()
 {
     CALL_STACK_MSG();
@@ -44,6 +46,7 @@ FileMesh::create_from_exodus()
     DM dm = nullptr;
     PETSC_CHECK(DMCreate(comm, &dm));
     PETSC_CHECK(DMSetType(dm, DMPLEX));
+    auto m = new UnstructuredMesh(dm);
 
     try {
         Int dim = 0;
@@ -112,7 +115,7 @@ FileMesh::create_from_exodus()
                 PETSC_CHECK(DMCreateLabel(dm, name.c_str()));
                 DMLabel block_label;
                 PETSC_CHECK(DMGetLabel(dm, name.c_str(), &block_label));
-                set_cell_set_name(id, name);
+                m->set_cell_set_name(id, name);
 
                 auto n_blk_elems = eb.get_num_elements();
                 auto n_elem_nodes = eb.get_num_nodes_per_element();
@@ -143,10 +146,8 @@ FileMesh::create_from_exodus()
 
         PETSC_CHECK(DMPlexSymmetrize(dm));
         PETSC_CHECK(DMPlexStratify(dm));
-        DM idm;
-        PETSC_CHECK(DMPlexInterpolate(dm, &idm));
-        PETSC_CHECK(DMDestroy(&dm));
-        dm = idm;
+        m->interpolate();
+        dm = m->get_dm();
 
         // TODO: create vertex sets
 
@@ -211,7 +212,7 @@ FileMesh::create_from_exodus()
                 PETSC_CHECK(DMCreateLabel(dm, name.c_str()));
                 DMLabel face_set_label;
                 PETSC_CHECK(DMGetLabel(dm, name.c_str(), &face_set_label));
-                set_face_set_name(id, name);
+                m->set_face_set_name(id, name);
 
                 std::vector<int> node_count_list;
                 std::vector<int> node_list;
@@ -254,5 +255,5 @@ FileMesh::create_from_exodus()
         log_error(fmt::format(e.what()));
     }
 
-    set_dm(dm);
+    return m;
 }

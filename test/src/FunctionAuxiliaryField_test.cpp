@@ -17,7 +17,7 @@ TEST(FunctionAuxiliaryFieldTest, create)
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
 
     Parameters aux_params = FunctionAuxiliaryField::parameters();
@@ -56,7 +56,7 @@ TEST(FunctionAuxiliaryFieldTest, evaluate)
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
 
     Parameters aux_params = FunctionAuxiliaryField::parameters();

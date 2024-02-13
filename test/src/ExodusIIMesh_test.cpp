@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/ExodusIIMesh.h"
 #include "godzilla/Parameters.h"
 #include "ExceptionTestMacros.h"
@@ -23,9 +24,10 @@ TEST(ExodusIIMeshTest, api)
     EXPECT_EQ(mesh.get_file_name(), file_name);
 
     mesh.create();
-    auto dm = mesh.get_dm();
+    auto m = mesh.get_mesh<Mesh>();
+    auto dm = m->get_dm();
 
-    EXPECT_EQ(mesh.get_dimension(), 2);
+    EXPECT_EQ(m->get_dimension(), 2);
 
     Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
@@ -36,9 +38,9 @@ TEST(ExodusIIMeshTest, api)
     EXPECT_EQ(gmax[1], 1);
 
     Vec coords;
-    DMGetCoordinates(dm, &coords);
+    PETSC_CHECK(DMGetCoordinates(dm, &coords));
     Int n;
-    VecGetSize(coords, &n);
+    PETSC_CHECK(VecGetSize(coords, &n));
     EXPECT_EQ(n, 18);
 }
 
@@ -53,13 +55,14 @@ TEST(ExodusIIMeshTest, two_block)
     ExodusIIMesh mesh(params);
     mesh.create();
 
-    EXPECT_EQ(mesh.get_cell_set_name(0), "0");
-    EXPECT_EQ(mesh.get_cell_set_name(1), "1");
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    EXPECT_EQ(m->get_cell_set_name(0), "0");
+    EXPECT_EQ(m->get_cell_set_name(1), "1");
 
-    EXPECT_EQ(mesh.get_cell_set_id("0"), 0);
-    EXPECT_EQ(mesh.get_cell_set_id("1"), 1);
+    EXPECT_EQ(m->get_cell_set_id("0"), 0);
+    EXPECT_EQ(m->get_cell_set_id("1"), 1);
 
-    auto cell_sets = mesh.get_cell_sets();
+    auto cell_sets = m->get_cell_sets();
     EXPECT_THAT(cell_sets, ElementsAre(Pair(0, "0"), Pair(1, "1")));
 }
 
@@ -74,8 +77,9 @@ TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
     ExodusIIMesh mesh(params);
     mesh.create();
 
-    EXPECT_THROW_MSG(mesh.get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
-    EXPECT_THROW_MSG(mesh.get_cell_set_id("1234"), "Cell set '1234' does not exist.");
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    EXPECT_THROW_MSG(m->get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(m->get_cell_set_id("1234"), "Cell set '1234' does not exist.");
 }
 
 TEST(ExodusIIMeshTest, nonexitent_file)

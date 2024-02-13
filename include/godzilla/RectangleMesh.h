@@ -3,17 +3,17 @@
 
 #pragma once
 
-#include "godzilla/UnstructuredMesh.h"
+#include "godzilla/MeshObject.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
 
 /// 2D rectangular mesh
 ///
-class RectangleMesh : public UnstructuredMesh {
+class RectangleMesh : public MeshObject {
 public:
     explicit RectangleMesh(const Parameters & parameters);
 
-    void create() override;
     ///
     [[nodiscard]] Real get_x_min() const;
     [[nodiscard]] Real get_x_max() const;
@@ -24,6 +24,9 @@ public:
     [[nodiscard]] Real get_y_max() const;
     /// Get the number of mesh points in y direction
     [[nodiscard]] Int get_ny() const;
+
+protected:
+    Mesh * create_mesh() override;
 
 private:
     /// Minimum in the x direction

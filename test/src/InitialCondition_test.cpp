@@ -11,13 +11,6 @@ namespace {
 
 class InitialConditionTest : public FENonlinearProblemTest {
 public:
-    //    void
-    //    SetUp() override
-    //    {
-    //        FENonlinearProblemTest::SetUp();
-    //    }
-    //
-    //    const Int ia;
 };
 
 class InitialCondition2FieldTest : public FENonlinear2FieldProblemTest {

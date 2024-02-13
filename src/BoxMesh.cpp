@@ -3,6 +3,7 @@
 
 #include "godzilla/Godzilla.h"
 #include "godzilla/BoxMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "petscdmplex.h"
 #include <array>
@@ -14,7 +15,7 @@ REGISTER_OBJECT(BoxMesh);
 Parameters
 BoxMesh::parameters()
 {
-    Parameters params = UnstructuredMesh::parameters();
+    Parameters params = MeshObject::parameters();
     params.add_param<Real>("xmin", 0., "Minimum in the x direction");
     params.add_param<Real>("xmax", 1., "Maximum in the x direction");
     params.add_param<Real>("ymin", 0., "Minimum in the y direction");
@@ -29,7 +30,7 @@ BoxMesh::parameters()
 }
 
 BoxMesh::BoxMesh(const Parameters & parameters) :
-    UnstructuredMesh(parameters),
+    MeshObject(parameters),
     xmin(get_param<Real>("xmin")),
     xmax(get_param<Real>("xmax")),
     ymin(get_param<Real>("ymin")),
@@ -114,8 +115,8 @@ BoxMesh::get_nz() const
     return this->nz;
 }
 
-void
-BoxMesh::create()
+Mesh *
+BoxMesh::create_mesh()
 {
     CALL_STACK_MSG();
     std::array<Real, 3> lower = { this->xmin, this->ymin, this->zmin };
@@ -137,9 +138,9 @@ BoxMesh::create()
                                     periodicity.data(),
                                     this->interpolate,
                                     &dm));
-    set_dm(dm);
+    auto * mesh = new UnstructuredMesh(dm);
 
-    remove_label("marker");
+    mesh->remove_label("marker");
     // create user-friendly names for sides
     std::map<Int, std::string> face_set_names;
     face_set_names[1] = "back";
@@ -148,12 +149,11 @@ BoxMesh::create()
     face_set_names[4] = "top";
     face_set_names[5] = "right";
     face_set_names[6] = "left";
-    create_face_set_labels(face_set_names);
+    mesh->create_face_set_labels(face_set_names);
     for (auto it : face_set_names)
-        set_face_set_name(it.first, it.second);
+        mesh->set_face_set_name(it.first, it.second);
 
-    set_up();
-    lprint_mesh_info();
+    return mesh;
 }
 
 } // namespace godzilla

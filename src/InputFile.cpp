@@ -4,6 +4,7 @@
 #include "godzilla/InputFile.h"
 #include "godzilla/App.h"
 #include "godzilla/Factory.h"
+#include "godzilla/MeshObject.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Output.h"
@@ -96,7 +97,10 @@ Mesh *
 InputFile::get_mesh() const
 {
     CALL_STACK_MSG();
-    return this->mesh;
+    if (this->mesh)
+        return this->mesh->get_mesh<Mesh>();
+    else
+        return nullptr;
 }
 
 Problem *
@@ -152,7 +156,7 @@ InputFile::build_mesh()
     auto node = get_block(this->root, "mesh");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
-    this->mesh = this->app->build_object<Mesh>(class_name, "mesh", params);
+    this->mesh = this->app->build_object<MeshObject>(class_name, "mesh", params);
     add_object(this->mesh);
 }
 
@@ -164,7 +168,7 @@ InputFile::build_problem()
     auto node = get_block(this->root, "problem");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
-    params->set<Mesh *>("_mesh") = this->mesh;
+    params->set<MeshObject *>("_mesh_obj") = this->mesh;
     this->problem = this->app->build_object<Problem>(class_name, "problem", params);
     add_object(this->problem);
 }
