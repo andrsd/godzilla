@@ -244,6 +244,12 @@ public:
     /// @return Vertices recursively expanded from input points
     IndexSet get_cone_recursive_vertices(IndexSet points) const;
 
+    /// Set the number of in-edges for this point in the DAG
+    ///
+    /// @param point The point, which must lie in the chart set with `set_chart`
+    /// @param size The cone size for point `p`
+    void set_cone_size(Int point, Int size);
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner

@@ -268,6 +268,14 @@ UnstructuredMesh::get_cone_recursive_vertices(IndexSet points) const
 }
 
 void
+UnstructuredMesh::set_cone_size(Int point, Int size)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSetConeSize(get_dm(), point, size));
+}
+
+
+void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
     CALL_STACK_MSG();
