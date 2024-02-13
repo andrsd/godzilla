@@ -96,6 +96,7 @@ public:
 
     void set(Scalar alpha);
     void set_sizes(Int n, Int N = PETSC_DECIDE);
+    void set_block_size(Int bs);
     void set_type(VecType method);
 
     void set_value(Int row, Scalar value, InsertMode mode = INSERT_VALUES);
