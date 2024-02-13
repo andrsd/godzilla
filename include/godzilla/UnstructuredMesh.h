@@ -311,6 +311,12 @@ public:
     /// @param name Cell set name
     void set_cell_set_name(Int id, const std::string & name);
 
+    /// Set the polytope type of a given cell
+    ///
+    /// @param cell The cell
+    /// @param cell_type The polytope type of the cell
+    void set_cell_type(Int cell, DMPolytopeType cell_type);
+
     /// Get face set name
     ///
     /// @param id The ID of the face set

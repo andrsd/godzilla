@@ -414,6 +414,13 @@ UnstructuredMesh::set_cell_set_name(Int id, const std::string & name)
     this->cell_set_ids[name] = id;
 }
 
+void
+UnstructuredMesh::set_cell_type(Int cell, DMPolytopeType cell_type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSetCellType(get_dm(), cell, cell_type));
+}
+
 const std::string &
 UnstructuredMesh::get_cell_set_name(Int id) const
 {
