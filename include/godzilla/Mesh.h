@@ -35,6 +35,11 @@ public:
     /// @return Mesh spatial dimension
     [[nodiscard]] Int get_dimension() const;
 
+    /// Set the topological dimension of the mesh
+    ///
+    /// @param dim The topological dimension
+    void set_dimension(Int dim);
+
     /// Distribute mesh over processes
     virtual void distribute() = 0;
 

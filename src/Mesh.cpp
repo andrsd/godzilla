@@ -43,6 +43,13 @@ Mesh::get_dimension() const
     return dim;
 }
 
+void
+Mesh::set_dimension(Int dim)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetDimension(this->dm, dim));
+}
+
 bool
 Mesh::has_label(const std::string & name) const
 {
