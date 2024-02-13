@@ -646,5 +646,12 @@ UnstructuredMesh::symmetrize()
     PETSC_CHECK(DMPlexSymmetrize(get_dm()));
 }
 
+void
+UnstructuredMesh::stratify()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexStratify(get_dm()));
+}
+
 
 } // namespace godzilla

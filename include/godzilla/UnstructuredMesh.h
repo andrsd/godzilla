@@ -396,6 +396,8 @@ public:
     void symmetrize();
 
     /// Computes the strata for all points in the mesh
+    void stratify();
+
 private:
     /// Mesh partitioner
     Partitioner partitioner;
