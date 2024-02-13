@@ -398,6 +398,12 @@ public:
     /// Computes the strata for all points in the mesh
     void stratify();
 
+    /// Get an array for the join of the set of points
+    ///
+    /// @param points The input points
+    /// @return The points in the join
+    std::vector<Int> get_full_join(const std::vector<Int> & points);
+
 private:
     /// Mesh partitioner
     Partitioner partitioner;

@@ -653,5 +653,28 @@ UnstructuredMesh::stratify()
     PETSC_CHECK(DMPlexStratify(get_dm()));
 }
 
+std::vector<Int>
+UnstructuredMesh::get_full_join(const std::vector<Int> & points)
+{
+    PetscInt n_covered_points;
+    const PetscInt * covered_points;
+    PETSC_CHECK(DMPlexGetFullJoin(get_dm(),
+                                  points.size(),
+                                  points.data(),
+                                  &n_covered_points,
+                                  &covered_points));
+
+    std::vector<Int> out_points(n_covered_points);
+    for (Int i = 0; i < n_covered_points; i++)
+        out_points[i] = covered_points[i];
+
+    PETSC_CHECK(DMPlexRestoreJoin(get_dm(),
+                                  points.size(),
+                                  points.data(),
+                                  &n_covered_points,
+                                  &covered_points));
+
+    return out_points;
+}
 
 } // namespace godzilla
