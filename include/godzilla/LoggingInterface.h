@@ -33,6 +33,14 @@ public:
         this->logger->warning(this->prefix, format, std::forward<T>(args)...);
     }
 
+    /// Log a deprecated message
+    template <typename... T>
+    void
+    deprecated(fmt::format_string<T...> message)
+    {
+        this->logger->warning(this->prefix, message);
+    }
+
 private:
     /// Logger object
     Logger * logger;
