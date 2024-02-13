@@ -274,6 +274,12 @@ UnstructuredMesh::set_cone_size(Int point, Int size)
     PETSC_CHECK(DMPlexSetConeSize(get_dm(), point, size));
 }
 
+void
+UnstructuredMesh::set_cone(Int point, const std::vector<Int> & cone)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSetCone(get_dm(), point, cone.data()));
+}
 
 void
 UnstructuredMesh::set_partitioner_type(const std::string & type)

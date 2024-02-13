@@ -250,6 +250,13 @@ public:
     /// @param size The cone size for point `p`
     void set_cone_size(Int point, Int size);
 
+    /// Set the points on the in-edges for this point in the DAG; that is these are the points that
+    /// cover the specific point
+    ///
+    /// @param point The point, which must lie in the chart set with `set_chart`
+    /// @param cone An array of points which are on the in-edges for point `p`
+    void set_cone(Int point, const std::vector<Int> & cone);
+
     /// Set partitioner type
     ///
     /// @param type Type of the partitioner
