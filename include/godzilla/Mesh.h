@@ -92,6 +92,11 @@ public:
     /// @param dim The embedding dimension
     void set_coordinate_dim(Int dim);
 
+    /// Sets a local vector, including ghost points, that holds the coordinates
+    ///
+    /// @param c coordinate vector
+    void set_coordinates_local(const Vector & c);
+
     /// Sets up the data structures inside the `DM` object
     void set_up();
 

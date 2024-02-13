@@ -129,6 +129,13 @@ Mesh::set_coordinate_dim(Int dim)
 }
 
 void
+Mesh::set_coordinates_local(const Vector & c)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetCoordinatesLocal(this->dm, c));
+}
+
+void
 Mesh::set_up()
 {
     CALL_STACK_MSG();
