@@ -207,6 +207,12 @@ public:
     /// @return Range of mesh points
     Range get_chart() const;
 
+    /// Set the interval for all mesh points `[start, end)`
+    ///
+    /// @param start The first mesh point
+    /// @param end The upper bound for mesh points
+    void set_chart(Int start, Int end);
+
     /// Get cell type
     ///
     /// @param cell Cell index

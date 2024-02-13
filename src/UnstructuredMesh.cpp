@@ -189,6 +189,13 @@ UnstructuredMesh::get_chart() const
     return Range(start, end);
 }
 
+void
+UnstructuredMesh::set_chart(Int start, Int end)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSetChart(get_dm(), start, end));
+}
+
 DMPolytopeType
 UnstructuredMesh::get_cell_type(Int el) const
 {
