@@ -122,6 +122,13 @@ Mesh::get_coordinate_section() const
 }
 
 void
+Mesh::set_coordinate_dim(Int dim)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetCoordinateDim(this->dm, dim));
+}
+
+void
 Mesh::set_up()
 {
     CALL_STACK_MSG();

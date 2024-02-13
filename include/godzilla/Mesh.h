@@ -87,6 +87,11 @@ public:
     /// @return Local section from the coordinate `DM`
     Section get_coordinate_section() const;
 
+    /// Set the dimension of the embedding space for coordinate values
+    ///
+    /// @param dim The embedding dimension
+    void set_coordinate_dim(Int dim);
+
     /// Sets up the data structures inside the `DM` object
     void set_up();
 
