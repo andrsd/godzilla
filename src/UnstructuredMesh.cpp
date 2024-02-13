@@ -639,4 +639,12 @@ UnstructuredMesh::interpolate()
     set_dm(idm);
 }
 
+void
+UnstructuredMesh::symmetrize()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSymmetrize(get_dm()));
+}
+
+
 } // namespace godzilla

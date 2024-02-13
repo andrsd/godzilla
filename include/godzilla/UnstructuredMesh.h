@@ -392,6 +392,10 @@ public:
     /// Take in a cell-vertex mesh and return one with all intermediate faces, edges, etc.
     void interpolate();
 
+    /// Create support (out-edge) information from cone (in-edge) information
+    void symmetrize();
+
+    /// Computes the strata for all points in the mesh
 private:
     /// Mesh partitioner
     Partitioner partitioner;
