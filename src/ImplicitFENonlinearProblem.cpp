@@ -69,6 +69,8 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & params
 {
     CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
+    if (!validation::in(this->scheme, { "beuler", "cn" }))
+        log_error("The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }
 
 ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
@@ -107,17 +109,6 @@ ImplicitFENonlinearProblem::create()
     CALL_STACK_MSG();
     FENonlinearProblem::create();
     TransientProblemInterface::create();
-}
-
-void
-ImplicitFENonlinearProblem::check()
-{
-    CALL_STACK_MSG();
-    FENonlinearProblem::check();
-    TransientProblemInterface::check();
-
-    if (!validation::in(this->scheme, { "beuler", "cn" }))
-        log_error("The 'scheme' parameter can be either 'beuler' or 'cn'.");
 }
 
 bool

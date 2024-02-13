@@ -71,6 +71,12 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
+    if (this->tpi_params.is_param_valid("end_time") && this->tpi_params.is_param_valid("num_steps"))
+        this->problem->log_error(
+            "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
+    if (!this->tpi_params.is_param_valid("end_time") &&
+        !this->tpi_params.is_param_valid("num_steps"))
+        this->problem->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 TransientProblemInterface::~TransientProblemInterface()
@@ -195,18 +201,6 @@ TransientProblemInterface::create()
     PETSC_CHECK(TSSetExactFinalTime(this->ts, TS_EXACTFINALTIME_MATCHSTEP));
     if (this->ts_adaptor)
         this->ts_adaptor->create();
-}
-
-void
-TransientProblemInterface::check()
-{
-    CALL_STACK_MSG();
-    if (this->tpi_params.is_param_valid("end_time") && this->tpi_params.is_param_valid("num_steps"))
-        this->problem->log_error(
-            "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
-    if (!this->tpi_params.is_param_valid("end_time") &&
-        !this->tpi_params.is_param_valid("num_steps"))
-        this->problem->log_error("You must provide either 'end_time' or 'num_steps' parameter.");
 }
 
 void

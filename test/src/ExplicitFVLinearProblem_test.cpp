@@ -348,7 +348,6 @@ TEST(ExplicitFVLinearProblemTest, solve)
 
     mesh.create();
     prob.create();
-    prob.check();
 
     prob.run();
 
@@ -427,8 +426,6 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
 
     mesh.create();
     prob.create();
-
-    prob.check();
 
     app.check_integrity();
 

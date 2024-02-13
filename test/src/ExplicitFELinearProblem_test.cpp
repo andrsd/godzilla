@@ -210,7 +210,6 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     mesh.create();
     prob.create();
-    prob.check();
 
     prob.run();
 
@@ -271,7 +270,6 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
 
     mesh.create();
     prob.create_w_lumped_mass_matrix();
-    prob.check();
 
     prob.run();
 
@@ -357,7 +355,6 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
 
     mesh->create();
     prob->create();
-    prob->check();
 
     app.check_integrity();
 

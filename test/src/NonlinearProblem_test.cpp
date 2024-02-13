@@ -271,8 +271,6 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     MockNonlinearProblem prob(prob_pars);
     prob.create();
 
-    prob.check();
-
     app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),

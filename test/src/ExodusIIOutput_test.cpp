@@ -80,34 +80,11 @@ TEST(ExodusIIOutputTest, non_existent_var)
     mesh.create();
     prob.create();
 
-    out.check();
     app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
                     "Variable 'asdf' specified in 'variables' parameter does not exist. Typo?"));
-}
-
-TEST(ExodusIIOutputTest, check)
-{
-    TestApp app;
-
-    auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
-    LineMesh mesh(mesh_pars);
-
-    auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
-    GTestFENonlinearProblem prob(prob_pars);
-
-    Parameters params = ExodusIIOutput::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
-    ExodusIIOutput out(params);
-
-    out.check();
 }
 
 TEST(ExodusIIOutputTest, fe_check)
@@ -171,7 +148,6 @@ TEST(ExodusIIOutputTest, fe_check)
     mesh.create();
     prob.create();
 
-    out.check();
     app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
@@ -201,7 +177,6 @@ TEST(ExodusIIOutputTest, output)
     mesh.create();
     prob.create();
 
-    out.check();
     app.check_integrity();
 
     out.output_step();

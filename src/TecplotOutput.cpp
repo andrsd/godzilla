@@ -93,6 +93,10 @@ TecplotOutput::TecplotOutput(const Parameters & params) :
     element_id_var_index(-1)
 {
     CALL_STACK_MSG();
+    if (this->dpi == nullptr)
+        log_error("Tecplot output can be only used with finite element problems.");
+    if (this->mesh == nullptr)
+        log_error("Tecplot output can be only used with unstructured meshes.");
 }
 
 TecplotOutput::~TecplotOutput()
@@ -177,17 +181,6 @@ TecplotOutput::create()
         else
             this->nodal_aux_var_fids.push_back(fid);
     }
-}
-
-void
-TecplotOutput::check()
-{
-    CALL_STACK_MSG();
-    FileOutput::check();
-    if (this->dpi == nullptr)
-        log_error("Tecplot output can be only used with finite element problems.");
-    if (this->mesh == nullptr)
-        log_error("Tecplot output can be only used with unstructured meshes.");
 }
 
 void

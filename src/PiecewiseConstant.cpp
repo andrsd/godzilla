@@ -37,6 +37,20 @@ PiecewiseConstant::PiecewiseConstant(const Parameters & params) :
     y(get_param<std::vector<Real>>("y"))
 {
     CALL_STACK_MSG();
+    if (this->x.size() + 1 != this->y.size())
+        log_error("Size of 'x' ({}) does not match size of 'y' ({}).",
+                  this->x.size(),
+                  this->y.size());
+
+    if (this->x.size() == 0)
+        log_error("Size of 'x' is {}. It must be 1 or more.", this->x.size());
+    else {
+        // check monotonicity
+        for (std::size_t i = 0; i < this->x.size() - 1; i++) {
+            if (this->x[i] >= this->x[i + 1])
+                log_error("Values in 'x' must be increasing. Failed at index '{}'.", i + 1);
+        }
+    }
 }
 
 void
@@ -60,28 +74,6 @@ PiecewiseConstant::create()
     }
     else
         log_error("The 'continuity' parameter can be either 'left' or 'right'.");
-}
-
-void
-PiecewiseConstant::check()
-{
-    CALL_STACK_MSG();
-    Function::check();
-
-    if (this->x.size() + 1 != this->y.size())
-        log_error("Size of 'x' ({}) does not match size of 'y' ({}).",
-                  this->x.size(),
-                  this->y.size());
-
-    if (this->x.size() == 0)
-        log_error("Size of 'x' is {}. It must be 1 or more.", this->x.size());
-    else {
-        // check monotonicity
-        for (std::size_t i = 0; i < this->x.size() - 1; i++) {
-            if (this->x[i] >= this->x[i + 1])
-                log_error("Values in 'x' must be increasing. Failed at index '{}'.", i + 1);
-        }
-    }
 }
 
 Real

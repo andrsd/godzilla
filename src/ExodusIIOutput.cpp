@@ -124,6 +124,9 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
         this->discont = true;
     else
         this->cont = true;
+
+    if (this->mesh == nullptr)
+        log_error("ExodusII output can be only used with unstructured meshes.");
 }
 
 ExodusIIOutput::~ExodusIIOutput()
@@ -175,15 +178,6 @@ ExodusIIOutput::create()
             }
         }
     }
-}
-
-void
-ExodusIIOutput::check()
-{
-    CALL_STACK_MSG();
-    FileOutput::check();
-    if (this->mesh == nullptr)
-        log_error("ExodusII output can be only used with unstructured meshes.");
 }
 
 void

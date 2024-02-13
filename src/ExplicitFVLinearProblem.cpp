@@ -63,14 +63,6 @@ ExplicitFVLinearProblem::create()
     ExplicitProblemInterface::create();
 }
 
-void
-ExplicitFVLinearProblem::check()
-{
-    CALL_STACK_MSG();
-    NonlinearProblem::check();
-    ExplicitProblemInterface::check();
-}
-
 bool
 ExplicitFVLinearProblem::converged()
 {

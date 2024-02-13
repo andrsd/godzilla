@@ -119,8 +119,6 @@ void
 InputFile::check()
 {
     CALL_STACK_MSG();
-    for (auto & obj : this->objs)
-        obj->check();
     check_unused_blocks();
 }
 

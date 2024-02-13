@@ -96,7 +96,10 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
 {
     CALL_STACK_MSG();
     set_default_output_on(ExecuteOn::FINAL);
-    line_search_type = utils::to_lower(line_search_type);
+    this->line_search_type = utils::to_lower(line_search_type);
+    if (!validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }))
+        log_error("The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
+                  "or 'shell'.");
 }
 
 NonlinearProblem::~NonlinearProblem()
@@ -132,16 +135,6 @@ NonlinearProblem::create()
     set_up_solve_type();
 
     Problem::create();
-}
-
-void
-NonlinearProblem::check()
-{
-    CALL_STACK_MSG();
-    Problem::check();
-    if (!validation::in(this->line_search_type, { "bt", "basic", "l2", "cp", "nleqerr", "shell" }))
-        log_error("The 'line_search' parameter can be either 'bt', 'basic', 'l2', 'cp', 'nleqerr' "
-                  "or 'shell'.");
 }
 
 SNES

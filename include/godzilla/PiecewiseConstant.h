@@ -18,8 +18,6 @@ public:
 
     void create() override;
 
-    void check() override;
-
     void register_callback(mu::Parser & parser) override;
 
     /// Evaluate this function at point 'x'

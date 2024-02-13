@@ -100,8 +100,6 @@ protected:
     virtual void init();
     /// Create
     virtual void create();
-    /// Check
-    virtual void check();
     /// Set up monitors
     virtual void set_up_monitors();
     /// Set up time integration scheme
