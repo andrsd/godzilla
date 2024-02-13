@@ -21,6 +21,7 @@ ExodusIIMesh::ExodusIIMesh(const Parameters & parameters) : FileMesh(parameters)
 {
     CALL_STACK_MSG();
     set_file_format(EXODUSII);
+    deprecated("Use `FileMesh` instead.");
 }
 
 } // namespace godzilla
