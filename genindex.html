@@ -200,8 +200,6 @@
 </li>
       <li><a href="devel/classes/box-mesh.html#_CPPv4N8godzilla7BoxMesh7BoxMeshERK10Parameters">godzilla::BoxMesh::BoxMesh (C++ function)</a>
 </li>
-      <li><a href="devel/classes/box-mesh.html#_CPPv4N8godzilla7BoxMesh6createEv">godzilla::BoxMesh::create (C++ function)</a>
-</li>
       <li><a href="devel/classes/box-mesh.html#_CPPv4NK8godzilla7BoxMesh6get_nxEv">godzilla::BoxMesh::get_nx (C++ function)</a>
 </li>
       <li><a href="devel/classes/box-mesh.html#_CPPv4NK8godzilla7BoxMesh6get_nyEv">godzilla::BoxMesh::get_ny (C++ function)</a>
@@ -588,8 +586,6 @@
 </li>
       <li><a href="devel/classes/input-file.html#_CPPv4N8godzilla9InputFile5buildEv">godzilla::InputFile::build (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="devel/classes/input-file.html#_CPPv4N8godzilla9InputFile5checkEv">godzilla::InputFile::check (C++ function)</a>
 </li>
       <li><a href="devel/classes/input-file.html#_CPPv4N8godzilla9InputFile14create_objectsEv">godzilla::InputFile::create_objects (C++ function)</a>
@@ -604,6 +600,8 @@
 </li>
       <li><a href="devel/classes/input-file.html#_CPPv4N8godzilla9InputFile5parseERKNSt6stringE">godzilla::InputFile::parse (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="devel/classes/call-stack.html#_CPPv4N8godzilla8internal9CallStackE">godzilla::internal::CallStack (C++ class)</a>
 </li>
       <li><a href="devel/classes/call-stack.html#_CPPv4N8godzilla8internal9CallStack3addEP3Msg">godzilla::internal::CallStack::add (C++ function)</a>
@@ -650,8 +648,6 @@
 </li>
       <li><a href="devel/classes/line-mesh.html#_CPPv4N8godzilla8LineMeshE">godzilla::LineMesh (C++ class)</a>
 </li>
-      <li><a href="devel/classes/line-mesh.html#_CPPv4N8godzilla8LineMesh6createEv">godzilla::LineMesh::create (C++ function)</a>
-</li>
       <li><a href="devel/classes/line-mesh.html#_CPPv4NK8godzilla8LineMesh6get_nxEv">godzilla::LineMesh::get_nx (C++ function)</a>
 </li>
       <li><a href="devel/classes/line-mesh.html#_CPPv4NK8godzilla8LineMesh9get_x_maxEv">godzilla::LineMesh::get_x_max (C++ function)</a>
@@ -680,6 +676,8 @@
 </li>
       <li><a href="devel/classes/mesh.html#_CPPv4N8godzilla4Mesh10distributeEv">godzilla::Mesh::distribute (C++ function)</a>
 </li>
+      <li><a href="devel/classes/mesh.html#_CPPv4NK8godzilla4Mesh8get_commEv">godzilla::Mesh::get_comm (C++ function)</a>
+</li>
       <li><a href="devel/classes/mesh.html#_CPPv4NK8godzilla4Mesh17get_coordinate_dmEv">godzilla::Mesh::get_coordinate_dm (C++ function)</a>
 </li>
       <li><a href="devel/classes/mesh.html#_CPPv4NK8godzilla4Mesh22get_coordinate_sectionEv">godzilla::Mesh::get_coordinate_section (C++ function)</a>
@@ -697,6 +695,12 @@
       <li><a href="devel/classes/mesh.html#_CPPv4NK8godzilla4Mesh9has_labelERKNSt6stringE">godzilla::Mesh::has_label (C++ function)</a>
 </li>
       <li><a href="devel/classes/mesh.html#_CPPv4N8godzilla4Mesh12remove_labelERKNSt6stringE">godzilla::Mesh::remove_label (C++ function)</a>
+</li>
+      <li><a href="devel/classes/mesh.html#_CPPv4N8godzilla4Mesh18set_coordinate_dimE3Int">godzilla::Mesh::set_coordinate_dim (C++ function)</a>
+</li>
+      <li><a href="devel/classes/mesh.html#_CPPv4N8godzilla4Mesh21set_coordinates_localERK6Vector">godzilla::Mesh::set_coordinates_local (C++ function)</a>
+</li>
+      <li><a href="devel/classes/mesh.html#_CPPv4N8godzilla4Mesh13set_dimensionE3Int">godzilla::Mesh::set_dimension (C++ function)</a>
 </li>
       <li><a href="devel/classes/mesh.html#_CPPv4N8godzilla4Mesh15set_label_valueEPKc3Int3Int">godzilla::Mesh::set_label_value (C++ function)</a>
 </li>
@@ -898,8 +902,6 @@
 </li>
       <li><a href="devel/classes/rectangle-mesh.html#_CPPv4N8godzilla13RectangleMeshE">godzilla::RectangleMesh (C++ class)</a>
 </li>
-      <li><a href="devel/classes/rectangle-mesh.html#_CPPv4N8godzilla13RectangleMesh6createEv">godzilla::RectangleMesh::create (C++ function)</a>
-</li>
       <li><a href="devel/classes/rectangle-mesh.html#_CPPv4NK8godzilla13RectangleMesh6get_nxEv">godzilla::RectangleMesh::get_nx (C++ function)</a>
 </li>
       <li><a href="devel/classes/rectangle-mesh.html#_CPPv4NK8godzilla13RectangleMesh6get_nyEv">godzilla::RectangleMesh::get_ny (C++ function)</a>
@@ -944,13 +946,17 @@
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMeshE">godzilla::UnstructuredMesh (C++ class)</a>
 </li>
-      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh20build_from_cell_listE3Int3IntRKNSt6vectorI3IntEE3IntRKNSt6vectorI4RealEEb">godzilla::UnstructuredMesh::build_from_cell_list (C++ function)</a>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh20build_from_cell_listERKN3mpi12CommunicatorE3Int3IntRKNSt6vectorI3IntEE3IntRKNSt6vectorI4RealEEb">godzilla::UnstructuredMesh::build_from_cell_list (C++ function)</a>
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh22common_cells_by_vertexEv">godzilla::UnstructuredMesh::common_cells_by_vertex (C++ function)</a>
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4NK8godzilla16UnstructuredMesh21compute_cell_geometryE3IntP4RealA_4RealA_4Real">godzilla::UnstructuredMesh::compute_cell_geometry (C++ function)</a>
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh21construct_ghost_cellsEv">godzilla::UnstructuredMesh::construct_ghost_cells (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh15create_cell_setE3IntRKNSt6stringE">godzilla::UnstructuredMesh::create_cell_set (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh15create_face_setE3IntRKNSt6stringE">godzilla::UnstructuredMesh::create_face_set (C++ function)</a>
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh10distributeEv">godzilla::UnstructuredMesh::distribute (C++ function)</a>
 </li>
@@ -984,6 +990,8 @@
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4NK8godzilla16UnstructuredMesh17get_face_set_nameE3Int">godzilla::UnstructuredMesh::get_face_set_name (C++ function)</a>
 </li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh13get_full_joinERKNSt6vectorI3IntEE">godzilla::UnstructuredMesh::get_full_join (C++ function)</a>
+</li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4NK8godzilla16UnstructuredMesh20get_ghost_cell_rangeEv">godzilla::UnstructuredMesh::get_ghost_cell_range (C++ function)</a>
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4NK8godzilla16UnstructuredMesh17get_num_all_cellsEv">godzilla::UnstructuredMesh::get_num_all_cells (C++ function)</a>
@@ -1010,6 +1018,8 @@
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4NK8godzilla16UnstructuredMesh12has_face_setERKNSt6stringE">godzilla::UnstructuredMesh::has_face_set (C++ function)</a>
 </li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh11interpolateEv">godzilla::UnstructuredMesh::interpolate (C++ function)</a>
+</li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4NK8godzilla16UnstructuredMesh10is_simplexEv">godzilla::UnstructuredMesh::is_simplex (C++ function)</a>
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh8IteratorE">godzilla::UnstructuredMesh::Iterator (C++ struct)</a>
@@ -1030,9 +1040,25 @@
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4NK8godzilla16UnstructuredMesh5Range4sizeEv">godzilla::UnstructuredMesh::Range::size (C++ function)</a>
 </li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh17set_cell_set_nameE3IntRKNSt6stringE">godzilla::UnstructuredMesh::set_cell_set_name (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh13set_cell_typeE3Int14DMPolytopeType">godzilla::UnstructuredMesh::set_cell_type (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh9set_chartE3Int3Int">godzilla::UnstructuredMesh::set_chart (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh8set_coneE3IntRKNSt6vectorI3IntEE">godzilla::UnstructuredMesh::set_cone (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh13set_cone_sizeE3Int3Int">godzilla::UnstructuredMesh::set_cone_size (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh17set_face_set_nameE3IntRKNSt6stringE">godzilla::UnstructuredMesh::set_face_set_name (C++ function)</a>
+</li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh21set_partition_overlapE3Int">godzilla::UnstructuredMesh::set_partition_overlap (C++ function)</a>
 </li>
       <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh20set_partitioner_typeERKNSt6stringE">godzilla::UnstructuredMesh::set_partitioner_type (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh8stratifyEv">godzilla::UnstructuredMesh::stratify (C++ function)</a>
+</li>
+      <li><a href="devel/classes/unstructured-mesh.html#_CPPv4N8godzilla16UnstructuredMesh10symmetrizeEv">godzilla::UnstructuredMesh::symmetrize (C++ function)</a>
 </li>
       <li><a href="devel/classes/vtk-output.html#_CPPv4N8godzilla9VTKOutputE">godzilla::VTKOutput (C++ class)</a>
 </li>
