@@ -1,5 +1,6 @@
 #pragma once
 
+#include "impl/Environment.h"
 #include "impl/Communicator.h"
 #include "impl/Datatype.h"
 #include "impl/Enums.h"

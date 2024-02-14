@@ -29,4 +29,4 @@ inline Request::Request() {}
 
 inline Request::Request(const MPI_Request & r) : request(r) {}
 
-} // namespace mpi
+} // namespace mpicpp_lite

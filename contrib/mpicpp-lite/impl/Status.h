@@ -30,6 +30,13 @@ public:
     /// @return Error code
     int error() const;
 
+    /// Gets the number of "top level" elements
+    ///
+    /// @tparam T datatype of each receive buffer element
+    /// @return The number of "top level" elements
+    template <typename T>
+    int get_count() const;
+
     /// Type cast operators so we can pass this class directly into the MPI API
     operator MPI_Status *() { return &this->status; }
 
@@ -57,6 +64,15 @@ inline int
 Status::error() const
 {
     return this->status.MPI_ERROR;
+}
+
+template <typename T>
+inline int
+Status::get_count() const
+{
+    int n;
+    MPI_Get_count(&this->status, get_mpi_datatype<T>(), &n);
+    return n;
 }
 
 } // namespace mpicpp_lite
