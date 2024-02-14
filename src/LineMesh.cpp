@@ -3,6 +3,7 @@
 
 #include "godzilla/Godzilla.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "petscdm.h"
 #include "petscdmplex.h"
@@ -15,7 +16,7 @@ REGISTER_OBJECT(LineMesh);
 Parameters
 LineMesh::parameters()
 {
-    Parameters params = UnstructuredMesh::parameters();
+    Parameters params = MeshObject::parameters();
     params.add_param<Real>("xmin", 0., "Minimum in the x direction");
     params.add_param<Real>("xmax", 1., "Maximum in the x direction");
     params.add_required_param<Int>("nx", "Number of mesh points in the x direction");
@@ -23,7 +24,7 @@ LineMesh::parameters()
 }
 
 LineMesh::LineMesh(const Parameters & parameters) :
-    UnstructuredMesh(parameters),
+    MeshObject(parameters),
     xmin(get_param<Real>("xmin")),
     xmax(get_param<Real>("xmax")),
     nx(get_param<Int>("nx")),
@@ -55,8 +56,8 @@ LineMesh::get_nx() const
     return this->nx;
 }
 
-void
-LineMesh::create()
+Mesh *
+LineMesh::create_mesh()
 {
     CALL_STACK_MSG();
     std::array<Real, 1> lower = { this->xmin };
@@ -74,19 +75,18 @@ LineMesh::create()
                                     periodicity.data(),
                                     this->interpolate,
                                     &dm));
-    set_dm(dm);
+    auto mesh = new UnstructuredMesh(dm);
 
-    remove_label("marker");
+    mesh->remove_label("marker");
     // create user-friendly names for sides
     std::map<Int, std::string> face_set_names;
     face_set_names[1] = "left";
     face_set_names[2] = "right";
-    create_face_set_labels(face_set_names);
+    mesh->create_face_set_labels(face_set_names);
     for (auto it : face_set_names)
-        set_face_set_name(it.first, it.second);
+        mesh->set_face_set_name(it.first, it.second);
 
-    set_up();
-    lprint_mesh_info();
+    return mesh;
 }
 
 } // namespace godzilla

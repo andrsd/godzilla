@@ -23,9 +23,6 @@ VTKOutput::parameters()
 VTKOutput::VTKOutput(const Parameters & params) : FileOutput(params), viewer(nullptr)
 {
     CALL_STACK_MSG();
-    const auto * mesh = dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh());
-    if (mesh == nullptr)
-        log_error("VTK output works only with unstructured meshes.");
 }
 
 VTKOutput::~VTKOutput()
@@ -45,6 +42,10 @@ void
 VTKOutput::create()
 {
     CALL_STACK_MSG();
+    const auto * mesh = dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh());
+    if (mesh == nullptr)
+        log_error("VTK output works only with unstructured meshes.");
+
     FileOutput::create();
 
     PETSC_CHECK(PetscViewerCreate(get_comm(), &this->viewer));

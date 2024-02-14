@@ -48,15 +48,19 @@ get_polytope_type_str(DMPolytopeType elem_type)
     }
 }
 
-Parameters
-UnstructuredMesh::parameters()
+UnstructuredMesh::UnstructuredMesh(const mpi::Communicator & comm) :
+    Mesh(nullptr),
+    partition_overlap(0),
+    common_cells_by_vtx_computed(false)
 {
-    Parameters params = Mesh::parameters();
-    return params;
+    DM dm;
+    PETSC_CHECK(DMCreate(comm, &dm));
+    PETSC_CHECK(DMSetType(dm, DMPLEX));
+    set_dm(dm);
 }
 
-UnstructuredMesh::UnstructuredMesh(const Parameters & parameters) :
-    Mesh(parameters),
+UnstructuredMesh::UnstructuredMesh(DM dm) :
+    Mesh(dm),
     partition_overlap(0),
     common_cells_by_vtx_computed(false)
 {
@@ -68,15 +72,6 @@ UnstructuredMesh::~UnstructuredMesh()
 {
     CALL_STACK_MSG();
     this->partitioner.destroy();
-}
-
-void
-UnstructuredMesh::lprint_mesh_info()
-{
-    CALL_STACK_MSG();
-    lprint(9, "Information:");
-    lprint(9, "- vertices: {}", get_num_vertices());
-    lprint(9, "- elements: {}", get_num_cells());
 }
 
 Label
@@ -194,6 +189,13 @@ UnstructuredMesh::get_chart() const
     return Range(start, end);
 }
 
+void
+UnstructuredMesh::set_chart(Int start, Int end)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSetChart(get_dm(), start, end));
+}
+
 DMPolytopeType
 UnstructuredMesh::get_cell_type(Int el) const
 {
@@ -266,6 +268,20 @@ UnstructuredMesh::get_cone_recursive_vertices(IndexSet points) const
 }
 
 void
+UnstructuredMesh::set_cone_size(Int point, Int size)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSetConeSize(get_dm(), point, size));
+}
+
+void
+UnstructuredMesh::set_cone(Int point, const std::vector<Int> & cone)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSetCone(get_dm(), point, cone.data()));
+}
+
+void
 UnstructuredMesh::set_partitioner_type(const std::string & type)
 {
     CALL_STACK_MSG();
@@ -290,7 +306,6 @@ void
 UnstructuredMesh::distribute()
 {
     CALL_STACK_MSG();
-    TIMED_EVENT(9, "MeshDistribution", "Distributing");
     this->partitioner.set_up();
 
     PETSC_CHECK(DMPlexSetPartitioner(get_dm(), this->partitioner));
@@ -397,6 +412,13 @@ UnstructuredMesh::set_cell_set_name(Int id, const std::string & name)
     CALL_STACK_MSG();
     this->cell_set_names[id] = name;
     this->cell_set_ids[name] = id;
+}
+
+void
+UnstructuredMesh::set_cell_type(Int cell, DMPolytopeType cell_type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSetCellType(get_dm(), cell, cell_type));
 }
 
 const std::string &
@@ -568,8 +590,9 @@ UnstructuredMesh::mark_boundary_faces(Int val, Label & label)
     PETSC_CHECK(DMPlexMarkBoundaryFaces(get_dm(), val, label));
 }
 
-void
-UnstructuredMesh::build_from_cell_list(Int dim,
+UnstructuredMesh *
+UnstructuredMesh::build_from_cell_list(const mpi::Communicator & comm,
+                                       Int dim,
                                        Int n_corners,
                                        const std::vector<Int> & cells,
                                        Int space_dim,
@@ -578,7 +601,7 @@ UnstructuredMesh::build_from_cell_list(Int dim,
 {
     CALL_STACK_MSG();
     DM dm;
-    PETSC_CHECK(DMPlexCreateFromCellListPetsc(get_comm(),
+    PETSC_CHECK(DMPlexCreateFromCellListPetsc(comm,
                                               dim,
                                               cells.size() / n_corners,
                                               vertices.size() / space_dim,
@@ -588,7 +611,7 @@ UnstructuredMesh::build_from_cell_list(Int dim,
                                               space_dim,
                                               vertices.data(),
                                               &dm));
-    set_dm(dm);
+    return new UnstructuredMesh(dm);
 }
 
 StarForest
@@ -605,6 +628,53 @@ UnstructuredMesh::set_point_star_forest(const StarForest & sf)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMSetPointSF(get_dm(), sf));
+}
+
+void
+UnstructuredMesh::interpolate()
+{
+    CALL_STACK_MSG();
+    DM idm;
+    PETSC_CHECK(DMPlexInterpolate(get_dm(), &idm));
+    set_dm(idm);
+}
+
+void
+UnstructuredMesh::symmetrize()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexSymmetrize(get_dm()));
+}
+
+void
+UnstructuredMesh::stratify()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexStratify(get_dm()));
+}
+
+std::vector<Int>
+UnstructuredMesh::get_full_join(const std::vector<Int> & points)
+{
+    PetscInt n_covered_points;
+    const PetscInt * covered_points;
+    PETSC_CHECK(DMPlexGetFullJoin(get_dm(),
+                                  points.size(),
+                                  points.data(),
+                                  &n_covered_points,
+                                  &covered_points));
+
+    std::vector<Int> out_points(n_covered_points);
+    for (Int i = 0; i < n_covered_points; i++)
+        out_points[i] = covered_points[i];
+
+    PETSC_CHECK(DMPlexRestoreJoin(get_dm(),
+                                  points.size(),
+                                  points.data(),
+                                  &n_covered_points,
+                                  &covered_points));
+
+    return out_points;
 }
 
 } // namespace godzilla

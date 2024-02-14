@@ -3,17 +3,16 @@
 
 #pragma once
 
-#include "godzilla/UnstructuredMesh.h"
+#include "godzilla/MeshObject.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
 
 /// 1D line
 ///
-class LineMesh : public UnstructuredMesh {
+class LineMesh : public MeshObject {
 public:
     explicit LineMesh(const Parameters & parameters);
-
-    void create() override;
 
     /// Get the lower bound in x-direction
     ///
@@ -29,6 +28,9 @@ public:
     ///
     /// @return Number of divisions in the x-direction
     [[nodiscard]] Int get_nx() const;
+
+protected:
+    Mesh * create_mesh() override;
 
 private:
     /// Minimum in the x direction

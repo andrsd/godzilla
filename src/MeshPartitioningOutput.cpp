@@ -23,9 +23,6 @@ MeshPartitioningOutput::MeshPartitioningOutput(const Parameters & params) : File
 {
     CALL_STACK_MSG();
     set_file_base("part");
-    auto dm = get_problem()->get_dm();
-    if (dm == nullptr)
-        log_error("Mesh partitioning output works only with problems that provide DM.");
 }
 
 std::string
@@ -42,6 +39,7 @@ MeshPartitioningOutput::output_step()
     PetscViewer viewer;
     PETSC_CHECK(PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 
+    assert(get_problem()->get_dm() != nullptr);
     DM dmp;
     PETSC_CHECK(DMClone(get_problem()->get_dm(), &dmp));
 

@@ -77,7 +77,7 @@ TEST(NaturalRiemannBCTest, api)
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;

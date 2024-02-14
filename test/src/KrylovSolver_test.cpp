@@ -2,6 +2,7 @@
 #include "godzilla/KrylovSolver.h"
 #include "godzilla/Matrix.h"
 #include "godzilla/Vector.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/PCHypre.h"
 #include "TestApp.h"
@@ -158,7 +159,8 @@ TEST(KrylovSolver, set_opers_rhs)
     LineMesh mesh(mesh_pars);
     mesh.create();
 
-    auto dm = mesh.get_dm();
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto dm = m->get_dm();
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };
@@ -226,7 +228,8 @@ TEST(KrylovSolver, set_opers_rhs_c_version)
     LineMesh mesh(mesh_pars);
     mesh.create();
 
-    auto dm = mesh.get_dm();
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto dm = m->get_dm();
     DMSetNumFields(dm, 1);
     Int nc[1] = { 1 };
     Int n_dofs[2] = { 1, 0 };

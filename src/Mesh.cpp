@@ -7,20 +7,24 @@
 
 namespace godzilla {
 
-Parameters
-Mesh::parameters()
-{
-    Parameters params = Object::parameters();
-    return params;
-}
+Mesh::Mesh() : dm(nullptr) {}
 
-Mesh::Mesh(const Parameters & parameters) : Object(parameters), PrintInterface(this), dm(nullptr) {}
+Mesh::Mesh(DM dm) : dm(dm) {}
 
 Mesh::~Mesh()
 {
     CALL_STACK_MSG();
     if (this->dm)
         PETSC_CHECK(DMDestroy(&this->dm));
+}
+
+mpi::Communicator
+Mesh::get_comm() const
+{
+    CALL_STACK_MSG();
+    MPI_Comm comm;
+    PETSC_CHECK(PetscObjectGetComm((PetscObject) this->dm, &comm));
+    return { comm };
 }
 
 DM
@@ -37,6 +41,13 @@ Mesh::get_dimension() const
     Int dim;
     PETSC_CHECK(DMGetDimension(this->dm, &dim));
     return dim;
+}
+
+void
+Mesh::set_dimension(Int dim)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetDimension(this->dm, dim));
 }
 
 bool
@@ -108,6 +119,20 @@ Mesh::get_coordinate_section() const
     PetscSection section;
     PETSC_CHECK(DMGetCoordinateSection(this->dm, &section));
     return { section };
+}
+
+void
+Mesh::set_coordinate_dim(Int dim)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetCoordinateDim(this->dm, dim));
+}
+
+void
+Mesh::set_coordinates_local(const Vector & c)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetCoordinatesLocal(this->dm, c));
 }
 
 void

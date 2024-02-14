@@ -18,7 +18,7 @@ TEST(FunctionICTest, api)
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_pars);
 
     Parameters params = FunctionInitialCondition::parameters();

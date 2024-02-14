@@ -2,6 +2,7 @@
 #include "GodzillaApp_test.h"
 #include "LinearProblem_test.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/MeshPartitioningOutput.h"
 #include "petsc.h"
@@ -11,11 +12,22 @@ namespace {
 
 class EmptyMesh : public Mesh {
 public:
-    explicit EmptyMesh(const Parameters & params) : Mesh(params) {}
+    EmptyMesh() : Mesh() {}
 
     void
     distribute() override
     {
+    }
+};
+
+class EmptyMeshObject : public MeshObject {
+public:
+    explicit EmptyMeshObject(const Parameters & params) : MeshObject(params) {}
+
+    Mesh *
+    create_mesh() override
+    {
+        return new EmptyMesh();
     }
 };
 
@@ -34,7 +46,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     G1DTestLinearProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
@@ -58,7 +70,7 @@ TEST(MeshPartitioningOutputTest, output)
 
     Parameters prob_params = G1DTestLinearProblem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     G1DTestLinearProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
@@ -83,31 +95,4 @@ TEST(MeshPartitioningOutputTest, output)
     EXPECT_NEAR(l2_norm, 0, 1e-10);
     VecDestroy(&p);
     PetscViewerDestroy(&viewer);
-}
-
-TEST(MeshPartitioningOutputTest, no_dm)
-{
-    testing::internal::CaptureStderr();
-
-    TestApp app;
-
-    Parameters mesh_params = EmptyMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    EmptyMesh mesh(mesh_params);
-
-    Parameters prob_params = G1DTestLinearProblem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
-    G1DTestLinearProblem prob(prob_params);
-
-    Parameters params = MeshPartitioningOutput::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
-    MeshPartitioningOutput out(params);
-
-    app.check_integrity();
-
-    EXPECT_THAT(
-        testing::internal::GetCapturedStderr(),
-        testing::HasSubstr("Mesh partitioning output works only with problems that provide DM."));
 }

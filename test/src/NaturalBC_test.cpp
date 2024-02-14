@@ -22,7 +22,7 @@ TEST(NaturalBCTest, api)
 
     Parameters prob_params = GTestFENonlinearProblem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
@@ -121,7 +121,7 @@ TEST(NaturalBCTest, fe)
 
     Parameters prob_params = GTest2FieldsFENonlinearProblem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     GTest2FieldsFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
@@ -146,7 +146,8 @@ TEST(NaturalBCTest, fe)
     //
     Int field = bc.get_field_id();
     WeakForm * wf = prob.get_weak_form();
-    auto label = mesh.get_label("left");
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto label = m->get_label("left");
     auto ids = label.get_values();
 
     const auto & f0 = wf->get(WeakForm::BND_F0, label, ids[0], field, 0);
@@ -171,7 +172,7 @@ TEST(NaturalBCTest, non_existing_field)
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -204,7 +205,7 @@ TEST(NaturalBCTest, field_param_not_specified)
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 

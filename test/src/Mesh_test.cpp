@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "godzilla/UnstructuredMesh.h"
+#include "godzilla/MeshObject.h"
 #include "godzilla/Parameters.h"
 #include "petsc.h"
 
@@ -9,12 +10,12 @@ using namespace testing;
 
 namespace {
 
-class TestMesh : public Mesh {
+class TestMesh : public MeshObject {
 public:
-    explicit TestMesh(const Parameters & params) : Mesh(params) {}
+    explicit TestMesh(const Parameters & params) : MeshObject(params) {}
 
-    void
-    create() override
+    Mesh *
+    create_mesh() override
     {
         Real lower[1] = { -1 };
         Real upper[1] = { 1 };
@@ -31,13 +32,7 @@ public:
                                         periodicity,
                                         PETSC_TRUE,
                                         &dm));
-        set_dm(dm);
-        set_up();
-    }
-
-    void
-    distribute() override
-    {
+        return new UnstructuredMesh(dm);
     }
 };
 
@@ -53,14 +48,15 @@ TEST(MeshTest, get_coordinates)
     TestMesh mesh(params);
     mesh.create();
 
-    Vector coords = mesh.get_coordinates();
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    Vector coords = m->get_coordinates();
     EXPECT_EQ(coords(0), -1.);
     EXPECT_EQ(coords(1), 0.);
     EXPECT_EQ(coords(2), 1.);
 
     DM cdm;
-    DMGetCoordinateDM(mesh.get_dm(), &cdm);
-    EXPECT_EQ(mesh.get_coordinate_dm(), cdm);
+    DMGetCoordinateDM(m->get_dm(), &cdm);
+    EXPECT_EQ(m->get_coordinate_dm(), cdm);
 }
 
 TEST(MeshTest, get_coordinates_local)
@@ -73,7 +69,8 @@ TEST(MeshTest, get_coordinates_local)
     TestMesh mesh(params);
     mesh.create();
 
-    Vector coords = mesh.get_coordinates_local();
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    Vector coords = m->get_coordinates_local();
     EXPECT_EQ(coords(0), -1.);
     EXPECT_EQ(coords(1), 0.);
     EXPECT_EQ(coords(2), 1.);
@@ -89,7 +86,8 @@ TEST(MeshTest, get_coordinates_section)
     TestMesh mesh(params);
     mesh.create();
 
-    auto section = mesh.get_coordinate_section();
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto section = m->get_coordinate_section();
     EXPECT_EQ(section.get_offset(2), 0);
     EXPECT_EQ(section.get_offset(3), 1);
     EXPECT_EQ(section.get_offset(4), 2);
@@ -105,8 +103,9 @@ TEST(MeshTest, remove_label)
     TestMesh mesh(params);
     mesh.create();
 
-    mesh.remove_label("marker");
-    EXPECT_FALSE(mesh.has_label("marker"));
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    m->remove_label("marker");
+    EXPECT_FALSE(m->has_label("marker"));
 }
 
 TEST(MeshTest, set_label_value)
@@ -119,8 +118,9 @@ TEST(MeshTest, set_label_value)
     TestMesh mesh(params);
     mesh.create();
 
-    auto bnd = mesh.create_label("bnd");
-    mesh.set_label_value("bnd", 0, 1001);
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto bnd = m->create_label("bnd");
+    m->set_label_value("bnd", 0, 1001);
 
     EXPECT_EQ(bnd.get_value(0), 1001);
 }
@@ -135,8 +135,9 @@ TEST(MeshTest, clear_label_value)
     TestMesh mesh(params);
     mesh.create();
 
-    auto bnd = mesh.create_label("bnd");
-    mesh.set_label_value("bnd", 0, 1001);
-    mesh.clear_label_value("bnd", 0, 1001);
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto bnd = m->create_label("bnd");
+    m->set_label_value("bnd", 0, 1001);
+    m->clear_label_value("bnd", 0, 1001);
     EXPECT_EQ(bnd.get_value(0), -1);
 }

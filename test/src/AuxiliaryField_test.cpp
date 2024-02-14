@@ -21,10 +21,6 @@ TEST_F(AuxiliaryFieldTest, api)
     class TestAuxFld : public AuxiliaryField {
     public:
         explicit TestAuxFld(const Parameters & params) : AuxiliaryField(params) {}
-        void
-        create() override
-        {
-        }
         Int
         get_num_components() const override
         {
@@ -65,6 +61,7 @@ TEST_F(AuxiliaryFieldTest, api)
     params.set<std::string>("region") = "rgn";
     TestAuxFld aux(params);
     prob->add_auxiliary_field(&aux);
+    prob->create();
 
     EXPECT_EQ(aux.get_label(), nullptr);
     EXPECT_EQ(aux.get_region(), "rgn");
@@ -73,7 +70,7 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux.get_field_id(), 0);
     EXPECT_EQ(aux.get_func(), nullptr);
     EXPECT_EQ(aux.get_context(), &aux);
-    EXPECT_EQ(aux.get_msh(), this->mesh);
+    EXPECT_EQ(aux.get_msh(), this->mesh->get_mesh<Mesh>());
     EXPECT_EQ(aux.get_prblm(), prob);
     EXPECT_EQ(aux.get_dimension(), 1);
 

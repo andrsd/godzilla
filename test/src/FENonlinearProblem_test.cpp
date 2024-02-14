@@ -276,29 +276,22 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
         TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
     } app;
 
-    Mesh * mesh;
-    {
-        const std::string class_name = "LineMesh";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Int>("nx") = 2;
-        mesh = app.build_object<Mesh>(class_name, "mesh", params);
-    }
-    FENonlinearProblem * prob;
-    {
-        const std::string class_name = "GTest2FieldsFENonlinearProblem";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Mesh *>("_mesh") = mesh;
-        prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
-    }
-    {
-        const std::string class_name = "ConstantInitialCondition";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::string>("field") = "u";
-        params->set<std::vector<Real>>("value") = { 0.1 };
-        auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
-        prob->add_initial_condition(ic);
-    }
+    Parameters * mesh_params = app.get_parameters("LineMesh");
+    mesh_params->set<Int>("nx") = 2;
+    auto mesh = app.build_object<MeshObject>("LineMesh", "mesh", mesh_params);
+
+    Parameters * prob_params = app.get_parameters("GTest2FieldsFENonlinearProblem");
+    prob_params->set<MeshObject *>("_mesh_obj") = mesh;
+    auto prob =
+        app.build_object<FENonlinearProblem>("GTest2FieldsFENonlinearProblem", "prob", prob_params);
+
+    Parameters * ic1_params = app.get_parameters("ConstantInitialCondition");
+    ic1_params->set<DiscreteProblemInterface *>("_dpi") = prob;
+    ic1_params->set<std::string>("field") = "u";
+    ic1_params->set<std::vector<Real>>("value") = { 0.1 };
+    auto ic1 = app.build_object<InitialCondition>("ConstantInitialCondition", "ic1", ic1_params);
+    prob->add_initial_condition(ic1);
+
     const std::string class_name = "ConstantInitialCondition";
     Parameters * params = app.get_parameters(class_name);
     params->set<DiscreteProblemInterface *>("_dpi") = prob;
@@ -325,31 +318,21 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
         TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
     } app;
 
-    UnstructuredMesh * mesh;
-    FENonlinearProblem * prob;
+    Parameters * mesh_params = app.get_parameters("LineMesh");
+    mesh_params->set<Int>("nx") = 2;
+    auto mesh = app.build_object<LineMesh>("LineMesh", "mesh", mesh_params);
 
-    {
-        const std::string class_name = "LineMesh";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Int>("nx") = 2;
-        mesh = app.build_object<LineMesh>(class_name, "mesh", params);
-    }
-    {
-        const std::string class_name = "GTest2FieldsFENonlinearProblem";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Mesh *>("_mesh") = mesh;
-        prob = app.build_object<FENonlinearProblem>(class_name, "prob", params);
-    }
+    Parameters * prob_params = app.get_parameters("GTest2FieldsFENonlinearProblem");
+    prob_params->set<MeshObject *>("_mesh_obj") = mesh;
+    auto prob =
+        app.build_object<FENonlinearProblem>("GTest2FieldsFENonlinearProblem", "prob", prob_params);
 
-    {
-        const std::string class_name = "ConstantInitialCondition";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::vector<Real>>("value") = { 0.1 };
-        params->set<std::string>("field") = "u";
-        auto ic = app.build_object<InitialCondition>(class_name, "ic1", params);
-        prob->add_initial_condition(ic);
-    }
+    Parameters * ic_params = app.get_parameters("ConstantInitialCondition");
+    ic_params->set<DiscreteProblemInterface *>("_dpi") = prob;
+    ic_params->set<std::vector<Real>>("value") = { 0.1 };
+    ic_params->set<std::string>("field") = "u";
+    auto ic = app.build_object<InitialCondition>("ConstantInitialCondition", "ic1", ic_params);
+    prob->add_initial_condition(ic);
 
     mesh->create();
     prob->create();
@@ -399,7 +382,7 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
     auto mesh = app.build_object<LineMesh>("LineMesh", "mesh", mesh_pars);
 
     Parameters * prob_pars = app.get_parameters("GTest2FieldsFENonlinearProblem");
-    prob_pars->set<Mesh *>("_mesh") = mesh;
+    prob_pars->set<MeshObject *>("_mesh_obj") = mesh;
     auto prob =
         app.build_object<FENonlinearProblem>("GTest2FieldsFENonlinearProblem", "prob", prob_pars);
 

@@ -10,10 +10,11 @@
 #include "godzilla/Partitioner.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/StarForest.h"
+#include <map>
 
 namespace godzilla {
 
-/// Base class for unstructured meshes
+/// Unstructured mesh (wrapper around DMPLEX + extra stuff)
 ///
 class UnstructuredMesh : public Mesh {
 public:
@@ -140,28 +141,9 @@ public:
 
     //
 
-    explicit UnstructuredMesh(const Parameters & parameters);
+    explicit UnstructuredMesh(const mpi::Communicator & comm);
+    explicit UnstructuredMesh(DM dm);
     ~UnstructuredMesh() override;
-
-    /// Build from a list of vertices for each cell (common mesh generator output)
-    ///
-    /// @param dim The topological dimension of the mesh
-    /// @param n_corners The number of vertices for each cell
-    /// @param cells An array of the vertices for each cell - must be a multiple of `n_corners`
-    /// @param space_dim The spatial dimension used for coordinates
-    /// @param vertices An array of the coordinates of each vertex - must be a multiple of
-    ///                 `space_dim`
-    /// @param interpolate Flag indicating that intermediate mesh entities (faces, edges) should be
-    ///                    created automatically
-    ///
-    /// NOTES:
-    /// - only process 0 takes in the input
-    void build_from_cell_list(Int dim,
-                              Int n_corners,
-                              const std::vector<Int> & cells,
-                              Int space_dim,
-                              const std::vector<Real> & vertices,
-                              bool interpolate);
 
     /// Get the `Label` recording the depth of each point
     ///
@@ -225,6 +207,12 @@ public:
     /// @return Range of mesh points
     Range get_chart() const;
 
+    /// Set the interval for all mesh points `[start, end)`
+    ///
+    /// @param start The first mesh point
+    /// @param end The upper bound for mesh points
+    void set_chart(Int start, Int end);
+
     /// Get cell type
     ///
     /// @param cell Cell index
@@ -255,6 +243,19 @@ public:
     /// @param points IndexSet of points with must lie in the chart
     /// @return Vertices recursively expanded from input points
     IndexSet get_cone_recursive_vertices(IndexSet points) const;
+
+    /// Set the number of in-edges for this point in the DAG
+    ///
+    /// @param point The point, which must lie in the chart set with `set_chart`
+    /// @param size The cone size for point `p`
+    void set_cone_size(Int point, Int size);
+
+    /// Set the points on the in-edges for this point in the DAG; that is these are the points that
+    /// cover the specific point
+    ///
+    /// @param point The point, which must lie in the chart set with `set_chart`
+    /// @param cone An array of points which are on the in-edges for point `p`
+    void set_cone(Int point, const std::vector<Int> & cone);
 
     /// Set partitioner type
     ///
@@ -298,6 +299,24 @@ public:
     /// @return Cell sets
     const std::map<Int, std::string> & get_cell_sets() const;
 
+    /// Create cell set. Takes the ID and creates a label with `name` corresponding to the ID.
+    ///
+    /// @param id Cell set ID
+    /// @param name Name of the cell set to create
+    void create_cell_set(Int id, const std::string & name);
+
+    /// Create an entry in cell set name map
+    ///
+    /// @param id Cell set ID
+    /// @param name Cell set name
+    void set_cell_set_name(Int id, const std::string & name);
+
+    /// Set the polytope type of a given cell
+    ///
+    /// @param cell The cell
+    /// @param cell_type The polytope type of the cell
+    void set_cell_type(Int cell, DMPolytopeType cell_type);
+
     /// Get face set name
     ///
     /// @param id The ID of the face set
@@ -320,6 +339,20 @@ public:
     /// @param name The name of the face set
     /// @return Label associated with face set name
     [[nodiscard]] Label get_face_set_label(const std::string & name) const;
+
+    void create_face_set_labels(const std::map<Int, std::string> & names);
+
+    /// Create face set. Takes the ID and creates a label with `name` corresponding to the ID.
+    ///
+    /// @param id Face set ID
+    /// @param name Name of the face set to create
+    void create_face_set(Int id, const std::string & name);
+
+    /// Create an entry in face set name map
+    ///
+    /// @param id Face set ID
+    /// @param name Face set name
+    void set_face_set_name(Int id, const std::string & name);
 
     /// Get number of vertex sets
     ///
@@ -356,18 +389,20 @@ public:
 
     void set_point_star_forest(const StarForest & sf);
 
-protected:
-    void lprint_mesh_info();
+    /// Take in a cell-vertex mesh and return one with all intermediate faces, edges, etc.
+    void interpolate();
 
-    void create_cell_set(Int id, const std::string & name);
+    /// Create support (out-edge) information from cone (in-edge) information
+    void symmetrize();
 
-    void set_cell_set_name(Int id, const std::string & name);
+    /// Computes the strata for all points in the mesh
+    void stratify();
 
-    void create_face_set_labels(const std::map<Int, std::string> & names);
-
-    void create_face_set(Int id, const std::string & name);
-
-    void set_face_set_name(Int id, const std::string & name);
+    /// Get an array for the join of the set of points
+    ///
+    /// @param points The input points
+    /// @return The points in the join
+    std::vector<Int> get_full_join(const std::vector<Int> & points);
 
 private:
     /// Mesh partitioner
@@ -394,9 +429,29 @@ private:
     bool common_cells_by_vtx_computed;
 
 public:
-    static Parameters parameters();
-
     static int get_num_cell_nodes(DMPolytopeType cell_type);
+
+    /// Build from a list of vertices for each cell (common mesh generator output)
+    ///
+    /// @param comm MPI communicator
+    /// @param dim The topological dimension of the mesh
+    /// @param n_corners The number of vertices for each cell
+    /// @param cells An array of the vertices for each cell - must be a multiple of `n_corners`
+    /// @param space_dim The spatial dimension used for coordinates
+    /// @param vertices An array of the coordinates of each vertex - must be a multiple of
+    ///                 `space_dim`
+    /// @param interpolate Flag indicating that intermediate mesh entities (faces, edges) should be
+    ///                    created automatically
+    ///
+    /// NOTES:
+    /// - only process 0 takes in the input
+    static UnstructuredMesh * build_from_cell_list(const mpi::Communicator & comm,
+                                                   Int dim,
+                                                   Int n_corners,
+                                                   const std::vector<Int> & cells,
+                                                   Int space_dim,
+                                                   const std::vector<Real> & vertices,
+                                                   bool interpolate);
 };
 
 /// Get string representation of a polytope type

@@ -17,7 +17,7 @@ TEST(TimeStepAdapt, test)
     LineMesh mesh(mesh_pars);
 
     auto prob_param = GTestImplicitFENonlinearProblem::parameters();
-    prob_param.set<Mesh *>("_mesh") = &mesh;
+    prob_param.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_param.set<godzilla::App *>("_app") = &app;
     prob_param.set<Real>("start_time") = 0.;
     prob_param.set<Real>("end_time") = 20;

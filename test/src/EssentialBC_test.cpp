@@ -42,7 +42,7 @@ TEST(EssentialBCTest, api)
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -87,7 +87,7 @@ TEST(EssentialBCTest, non_existing_field)
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
@@ -120,7 +120,7 @@ TEST(EssentialBCTest, field_param_not_specified)
 
     Parameters prob_pars = GTest2FieldsFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     GTest2FieldsFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 

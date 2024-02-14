@@ -4,21 +4,26 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include "godzilla/Object.h"
-#include "godzilla/PrintInterface.h"
 #include "godzilla/Label.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Section.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include "petscdm.h"
+
+namespace mpi = mpicpp_lite;
 
 namespace godzilla {
 
 /// Base class for meshes
 ///
-class Mesh : public Object, public PrintInterface {
+class Mesh {
 public:
-    explicit Mesh(const Parameters & parameters);
+    Mesh();
+    explicit Mesh(DM dm);
     virtual ~Mesh();
+
+    /// Get the MPI comm this object works on
+    mpi::Communicator get_comm() const;
 
     /// Get the underlying DM object
     ///
@@ -29,6 +34,11 @@ public:
     ///
     /// @return Mesh spatial dimension
     [[nodiscard]] Int get_dimension() const;
+
+    /// Set the topological dimension of the mesh
+    ///
+    /// @param dim The topological dimension
+    void set_dimension(Int dim);
 
     /// Distribute mesh over processes
     virtual void distribute() = 0;
@@ -77,6 +87,16 @@ public:
     /// @return Local section from the coordinate `DM`
     Section get_coordinate_section() const;
 
+    /// Set the dimension of the embedding space for coordinate values
+    ///
+    /// @param dim The embedding dimension
+    void set_coordinate_dim(Int dim);
+
+    /// Sets a local vector, including ghost points, that holds the coordinates
+    ///
+    /// @param c coordinate vector
+    void set_coordinates_local(const Vector & c);
+
     /// Sets up the data structures inside the `DM` object
     void set_up();
 
@@ -101,9 +121,6 @@ protected:
 private:
     /// DM object
     DM dm;
-
-public:
-    static Parameters parameters();
 };
 
 } // namespace godzilla

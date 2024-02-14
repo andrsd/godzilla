@@ -2,6 +2,8 @@
 //  SPDX-License-Identifier: MIT
 
 #include "godzilla/FileMesh.h"
+#include "godzilla/UnstructuredMesh.h"
+#include "godzilla/Types.h"
 #include "exodusIIcpp/exodusIIcpp.h"
 #include "petscdm.h"
 #include "petsc/private/dmimpl.h"
@@ -33,7 +35,7 @@ get_cell_type(const std::string & elem_type)
 
 // This is a rewrite of `DMPlexCreateExodus` from PETSc (`plexexdosuii.c`) using exodusIIcpp
 // and C++ constructs. Plus, it adds some godzilla-specific stuff like mapping names to labels, etc.
-void
+godzilla::UnstructuredMesh *
 FileMesh::create_from_exodus()
 {
     CALL_STACK_MSG();
@@ -41,9 +43,7 @@ FileMesh::create_from_exodus()
     auto comm = get_comm();
     auto rank = comm.rank();
 
-    DM dm = nullptr;
-    PETSC_CHECK(DMCreate(comm, &dm));
-    PETSC_CHECK(DMSetType(dm, DMPLEX));
+    auto m = new UnstructuredMesh(comm);
 
     try {
         Int dim = 0;
@@ -60,9 +60,9 @@ FileMesh::create_from_exodus()
             n_cells = f.get_num_elements();
             n_vertices = f.get_num_nodes();
             n_side_sets = f.get_num_side_sets();
-            PETSC_CHECK(DMPlexSetChart(dm, 0, n_cells + n_vertices));
+            m->set_chart(0, n_cells + n_vertices);
             // We do not want this label automatically computed, instead we compute it here
-            PETSC_CHECK(DMCreateLabel(dm, "celltype"));
+            m->create_label("celltype");
 
             f.read_blocks();
             int n_elem_blocks = f.get_num_element_blocks();
@@ -88,18 +88,17 @@ FileMesh::create_from_exodus()
                 auto eb = f.get_element_block(blk_idx);
                 DMPolytopeType ct = ::get_cell_type(eb.get_element_type());
                 for (int j = 0; j < eb.get_num_elements(); ++j, ++cell) {
-                    PETSC_CHECK(DMPlexSetConeSize(dm, cell, eb.get_num_nodes_per_element()));
-                    PETSC_CHECK(DMPlexSetCellType(dm, cell, ct));
+                    m->set_cone_size(cell, eb.get_num_nodes_per_element());
+                    m->set_cell_type(cell, ct);
                 }
             }
             for (Int vertex = n_cells; vertex < n_cells + n_vertices; ++vertex)
-                PETSC_CHECK(DMPlexSetCellType(dm, vertex, DM_POLYTOPE_POINT));
-            PETSC_CHECK(DMSetUp(dm));
+                m->set_cell_type(vertex, DM_POLYTOPE_POINT);
+            m->set_up();
 
             // process element blocks
-            PETSC_CHECK(DMCreateLabel(dm, "Cell Sets"));
-            DMLabel cell_sets;
-            PETSC_CHECK(DMGetLabel(dm, "Cell Sets", &cell_sets));
+            m->create_label("Cell Sets");
+            auto cell_sets = m->get_label("Cell Sets");
 
             for (Int i = 0, cell = 0; i < n_elem_blocks; ++i) {
                 int blk_idx = cs_order[i];
@@ -109,10 +108,9 @@ FileMesh::create_from_exodus()
                 if (name.empty())
                     name = fmt::format("{}", id);
 
-                PETSC_CHECK(DMCreateLabel(dm, name.c_str()));
-                DMLabel block_label;
-                PETSC_CHECK(DMGetLabel(dm, name.c_str(), &block_label));
-                set_cell_set_name(id, name);
+                m->create_label(name);
+                auto block_label = m->get_label(name);
+                m->set_cell_set_name(id, name);
 
                 auto n_blk_elems = eb.get_num_elements();
                 auto n_elem_nodes = eb.get_num_nodes_per_element();
@@ -123,12 +121,11 @@ FileMesh::create_from_exodus()
                 for (Int j = 0, vertex = 0; j < n_blk_elems; ++j, ++cell) {
                     for (Int k = 0; k < n_elem_nodes; ++k, ++vertex)
                         cone[k] = connect[vertex] + n_cells - 1;
-                    DMPolytopeType ct;
-                    PETSC_CHECK(DMPlexGetCellType(dm, cell, &ct));
+                    DMPolytopeType ct = m->get_cell_type(cell);
                     PETSC_CHECK(DMPlexInvertCell(ct, cone.data()));
-                    PETSC_CHECK(DMPlexSetCone(dm, cell, cone.data()));
-                    PETSC_CHECK(DMLabelSetValue(cell_sets, cell, id));
-                    PETSC_CHECK(DMLabelSetValue(block_label, cell, id));
+                    m->set_cone(cell, cone);
+                    cell_sets.set_value(cell, id);
+                    block_label.set_value(cell, id);
                 }
             }
         }
@@ -136,41 +133,36 @@ FileMesh::create_from_exodus()
         // broadcast dimensions to all ranks
         Int ints[] = { dim, dim_embed };
         comm.broadcast(ints, 2, 0);
-        PETSC_CHECK(DMSetDimension(dm, ints[0]));
-        PETSC_CHECK(DMSetCoordinateDim(dm, ints[1]));
+        m->set_dimension(ints[0]);
+        m->set_coordinate_dim(ints[1]);
         dim = ints[0];
         dim_embed = ints[1];
 
-        PETSC_CHECK(DMPlexSymmetrize(dm));
-        PETSC_CHECK(DMPlexStratify(dm));
-        DM idm;
-        PETSC_CHECK(DMPlexInterpolate(dm, &idm));
-        PETSC_CHECK(DMDestroy(&dm));
-        dm = idm;
+        m->symmetrize();
+        m->stratify();
+        m->interpolate();
 
         // TODO: create vertex sets
 
         // Read coordinates
-        PetscSection coord_section;
-        Vec coordinates;
-        Scalar * coords;
-        Int coord_size;
-        PETSC_CHECK(DMGetCoordinateSection(dm, &coord_section));
-        PETSC_CHECK(PetscSectionSetNumFields(coord_section, 1));
-        PETSC_CHECK(PetscSectionSetFieldComponents(coord_section, 0, dim_embed));
-        PETSC_CHECK(PetscSectionSetChart(coord_section, n_cells, n_cells + n_vertices));
+        auto coord_section = m->get_coordinate_section();
+        coord_section.set_num_fields(1);
+        coord_section.set_num_field_components(0, dim_embed);
+        coord_section.set_chart(n_cells, n_cells + n_vertices);
+
         for (Int vertex = n_cells; vertex < n_cells + n_vertices; ++vertex) {
-            PETSC_CHECK(PetscSectionSetDof(coord_section, vertex, dim_embed));
-            PETSC_CHECK(PetscSectionSetFieldDof(coord_section, vertex, 0, dim_embed));
+            coord_section.set_dof(vertex, dim_embed);
+            coord_section.set_field_dof(vertex, 0, dim_embed);
         }
-        PETSC_CHECK(PetscSectionSetUp(coord_section));
-        PETSC_CHECK(PetscSectionGetStorageSize(coord_section, &coord_size));
-        PETSC_CHECK(VecCreate(comm, &coordinates));
-        PETSC_CHECK(PetscObjectSetName((PetscObject) coordinates, "coordinates"));
-        PETSC_CHECK(VecSetSizes(coordinates, coord_size, PETSC_DETERMINE));
-        PETSC_CHECK(VecSetBlockSize(coordinates, dim_embed));
-        PETSC_CHECK(VecSetType(coordinates, VECSTANDARD));
-        PETSC_CHECK(VecGetArray(coordinates, &coords));
+        coord_section.set_up();
+        auto coord_size = coord_section.get_storage_size();
+
+        Vector coordinates(comm);
+        coordinates.set_name("coordinates");
+        coordinates.set_sizes(coord_size, PETSC_DETERMINE);
+        coordinates.set_block_size(dim_embed);
+        coordinates.set_type(VECSTANDARD);
+        Scalar * coords = coordinates.get_array();
         if (rank == 0) {
             f.read_coords();
             if (dim_embed > 0) {
@@ -189,15 +181,14 @@ FileMesh::create_from_exodus()
                     coords[i * dim_embed + 2] = z[i];
             }
         }
-        PETSC_CHECK(VecRestoreArray(coordinates, &coords));
-        PETSC_CHECK(DMSetCoordinatesLocal(dm, coordinates));
-        PETSC_CHECK(VecDestroy(&coordinates));
+        coordinates.restore_array(coords);
+        m->set_coordinates_local(coordinates);
+        coordinates.destroy();
 
         // Create side set labels
         if ((rank == 0) && (n_side_sets > 0)) {
-            PETSC_CHECK(DMCreateLabel(dm, "Face Sets"));
-            DMLabel face_sets;
-            PETSC_CHECK(DMGetLabel(dm, "Face Sets", &face_sets));
+            m->create_label("Face Sets");
+            auto face_sets = m->get_label("Face Sets");
 
             f.read_side_sets();
             auto & side_sets = f.get_side_sets();
@@ -208,10 +199,9 @@ FileMesh::create_from_exodus()
                 if (name.empty())
                     name = fmt::format("{}", id);
 
-                PETSC_CHECK(DMCreateLabel(dm, name.c_str()));
-                DMLabel face_set_label;
-                PETSC_CHECK(DMGetLabel(dm, name.c_str(), &face_set_label));
-                set_face_set_name(id, name);
+                m->create_label(name);
+                auto face_set_label = m->get_label(name);
+                m->set_face_set_name(id, name);
 
                 std::vector<int> node_count_list;
                 std::vector<int> node_list;
@@ -227,22 +217,20 @@ FileMesh::create_from_exodus()
                             fmt::format("ExodusII side cannot have more than {} vertices.",
                                         MAX_FACE_VERTICES));
 
-                    Int face_nodes[MAX_FACE_VERTICES];
+                    std::vector<Int> face_nodes(MAX_FACE_VERTICES);
                     for (Int l = 0; l < face_size; ++l, ++k)
                         face_nodes[l] = node_list[k] + n_cells - 1;
 
-                    Int n_faces;
-                    const Int * faces = nullptr;
-                    PETSC_CHECK(DMPlexGetFullJoin(dm, face_size, face_nodes, &n_faces, &faces));
-                    if (n_faces != 1)
+                    auto faces = m->get_full_join(face_nodes);
+                    if (faces.size() != 1)
                         throw Exception(
                             fmt::format("Invalid ExodusII side {} in set {} maps to {} faces.",
                                         j,
                                         i,
-                                        n_faces));
-                    PETSC_CHECK(DMLabelSetValue(face_sets, faces[0], id));
-                    PETSC_CHECK(DMLabelSetValue(face_set_label, faces[0], id));
-                    PETSC_CHECK(DMPlexRestoreJoin(dm, face_size, face_nodes, &n_faces, &faces));
+                                        faces.size()));
+
+                    face_sets.set_value(faces[0], id);
+                    face_set_label.set_value(faces[0], id);
                 }
             }
         }
@@ -254,5 +242,5 @@ FileMesh::create_from_exodus()
         log_error(fmt::format(e.what()));
     }
 
-    set_dm(dm);
+    return m;
 }

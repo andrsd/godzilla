@@ -99,7 +99,7 @@ TEST(NonlinearProblemTest, initial_guess)
 
     Parameters prob_pars = G1DTestNonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     G1DTestNonlinearProblem prob(prob_pars);
     prob.create();
     prob.call_initial_guess();
@@ -122,7 +122,7 @@ TEST(NonlinearProblemTest, solve)
 
     Parameters prob_pars = G1DTestNonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     G1DTestNonlinearProblem prob(prob_pars);
 
     prob.create();
@@ -159,7 +159,7 @@ TEST(NonlinearProblemTest, compute_callbacks)
 
     Parameters prob_pars = NonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     NonlinearProblem prob(prob_pars);
 
     Vector x;
@@ -198,7 +198,7 @@ TEST(NonlinearProblemTest, run)
 
     Parameters prob_pars = NonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     MockNonlinearProblem prob(prob_pars);
 
     EXPECT_CALL(prob, set_up_initial_guess);
@@ -233,7 +233,7 @@ TEST(NonlinearProblemTest, line_search_type)
     for (auto & lst : ls_type) {
         Parameters prob_pars = NonlinearProblem::parameters();
         prob_pars.set<App *>("_app") = &app;
-        prob_pars.set<Mesh *>("_mesh") = &mesh;
+        prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
         prob_pars.set<std::string>("line_search") = lst;
         MockNonlinearProblem prob(prob_pars);
         prob.create();
@@ -266,7 +266,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
 
     Parameters prob_pars = NonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<std::string>("line_search") = "asdf";
     MockNonlinearProblem prob(prob_pars);
     prob.create();

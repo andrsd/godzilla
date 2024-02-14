@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/Mesh.h"
 #include "godzilla/BoxMesh.h"
 #include "godzilla/Parameters.h"
 #include "petsc.h"
@@ -37,10 +38,11 @@ TEST(BoxMeshTest, api)
     EXPECT_EQ(mesh.get_nz(), 7);
 
     mesh.create();
-    auto dm = mesh.get_dm();
 
-    EXPECT_EQ(mesh.get_dimension(), 3);
+    auto m = mesh.get_mesh<Mesh>();
+    EXPECT_EQ(m->get_dimension(), 3);
 
+    auto dm = m->get_dm();
     Real gmin[4], gmax[4];
     DMGetBoundingBox(dm, gmin, gmax);
     EXPECT_EQ(gmin[0], 1);

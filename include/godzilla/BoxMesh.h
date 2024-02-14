@@ -3,18 +3,17 @@
 
 #pragma once
 
-#include "godzilla/UnstructuredMesh.h"
+#include "godzilla/MeshObject.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
 
 /// 3D box mesh
 ///
-class BoxMesh : public UnstructuredMesh {
+class BoxMesh : public MeshObject {
 public:
     /// Constructor for building the object via Factory
     explicit BoxMesh(const Parameters & parameters);
-
-    void create() override;
 
     /// Get lower limit in x-direction
     Real get_x_min() const;
@@ -42,6 +41,9 @@ public:
 
     /// Get the number of mesh points in z direction
     Int get_nz() const;
+
+protected:
+    Mesh * create_mesh() override;
 
 private:
     /// Minimum in the x direction

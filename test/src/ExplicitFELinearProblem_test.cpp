@@ -104,7 +104,7 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -155,7 +155,7 @@ TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -184,7 +184,7 @@ TEST(ExplicitFELinearProblemTest, solve)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -244,7 +244,7 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -304,7 +304,7 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -345,7 +345,7 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
     {
         const std::string class_name = "TestExplicitFELinearProblem";
         Parameters * params = app.get_parameters(class_name);
-        params->set<Mesh *>("_mesh") = mesh;
+        params->set<MeshObject *>("_mesh_obj") = mesh;
         params->set<Real>("start_time") = 0.;
         params->set<Real>("end_time") = 20;
         params->set<Real>("dt") = 5;
@@ -374,7 +374,7 @@ TEST(ExplicitFELinearProblemTest, allocate_mass_matrix)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;
@@ -401,7 +401,7 @@ TEST(ExplicitFELinearProblemTest, allocate_lumped_mass_matrix)
 
     Parameters prob_pars = TestExplicitFELinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<Mesh *>("_mesh") = &mesh;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     prob_pars.set<Real>("start_time") = 0.;
     prob_pars.set<Real>("end_time") = 1e-3;
     prob_pars.set<Real>("dt") = 1e-3;

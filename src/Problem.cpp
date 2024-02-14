@@ -3,6 +3,7 @@
 
 #include "godzilla/Problem.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/MeshObject.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/Function.h"
 #include "godzilla/Postprocessor.h"
@@ -32,14 +33,14 @@ Parameters
 Problem::parameters()
 {
     Parameters params = Object::parameters();
-    params.add_private_param<Mesh *>("_mesh", nullptr);
+    params.add_private_param<MeshObject *>("_mesh_obj", nullptr);
     return params;
 }
 
 Problem::Problem(const Parameters & parameters) :
     Object(parameters),
     PrintInterface(this),
-    mesh(get_param<Mesh *>("_mesh")),
+    mesh(get_param<MeshObject *>("_mesh_obj")),
     default_output_on()
 {
 }
@@ -53,7 +54,7 @@ DM
 Problem::get_dm() const
 {
     CALL_STACK_MSG();
-    return this->mesh->get_dm();
+    return get_mesh()->get_dm();
 }
 
 const Vector &
@@ -92,14 +93,14 @@ Mesh *
 Problem::get_mesh() const
 {
     CALL_STACK_MSG();
-    return this->mesh;
+    return this->mesh->get_mesh<Mesh>();
 }
 
 Int
 Problem::get_dimension() const
 {
     CALL_STACK_MSG();
-    return this->mesh->get_dimension();
+    return get_mesh()->get_dimension();
 }
 
 Real

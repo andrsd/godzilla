@@ -362,9 +362,9 @@ void
 FVProblemInterface::create()
 {
     CALL_STACK_MSG();
-    get_unstr_mesh()->construct_ghost_cells();
     set_up_fields();
     DiscreteProblemInterface::create();
+    get_unstr_mesh()->construct_ghost_cells();
 }
 
 void

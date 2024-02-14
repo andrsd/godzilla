@@ -5,6 +5,7 @@
 #include "fmt/printf.h"
 #include "godzilla/Init.h"
 #include "godzilla/App.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/ExodusIIMesh.h"
 #include "godzilla/ExodusIIOutput.h"
 
@@ -20,7 +21,7 @@ public:
 
 protected:
     void create_command_line_options() override;
-    UnstructuredMesh * load_mesh(const std::string & file_name);
+    MeshObject * load_mesh(const std::string & file_name);
     void partition_mesh_file(const std::string & mesh_file_name);
     void save_partition(UnstructuredMesh * mesh, const std::string & file_name);
 };
@@ -61,13 +62,13 @@ MeshPartApp::create_command_line_options()
     opts.positional_help("<mesh-file>");
 }
 
-UnstructuredMesh *
+MeshObject *
 MeshPartApp::load_mesh(const std::string & file_name)
 {
     auto pars = ExodusIIMesh::parameters();
     pars.set<App *>("_app") = this;
     pars.set<std::string>("file") = file_name;
-    UnstructuredMesh * mesh = new ExodusIIMesh(pars);
+    auto mesh = new ExodusIIMesh(pars);
     mesh->create();
     return mesh;
 }
@@ -75,7 +76,8 @@ MeshPartApp::load_mesh(const std::string & file_name)
 void
 MeshPartApp::partition_mesh_file(const std::string & mesh_file_name)
 {
-    auto mesh = load_mesh(mesh_file_name);
+    auto mesh_obj = load_mesh(mesh_file_name);
+    auto mesh = mesh_obj->get_mesh<UnstructuredMesh>();
     mesh->distribute();
 
     std::string out_file_name = fmt::format("out");

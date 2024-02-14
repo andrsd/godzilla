@@ -251,6 +251,13 @@ Vector::set_sizes(Int n, Int N)
 }
 
 void
+Vector::set_block_size(Int bs)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecSetBlockSize(this->vec, bs));
+}
+
+void
 Vector::set_type(VecType method)
 {
     CALL_STACK_MSG();

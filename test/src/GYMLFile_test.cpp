@@ -172,10 +172,10 @@ TEST_F(GYMLFileTest, mesh_partitioner)
 
     file.parse(file_name);
     file.build();
+    file.create_objects();
 
     auto mesh = file.get_mesh();
     EXPECT_NE(mesh, nullptr);
-    mesh->create();
 
     auto dm = mesh->get_dm();
     PetscBool distr;
@@ -195,9 +195,7 @@ TEST_F(GYMLFileTest, build)
 
     EXPECT_TRUE(file.parse(file_name));
     file.build();
-
-    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
-    EXPECT_NE(mesh, nullptr);
+    file.create_objects();
 
     auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
@@ -249,9 +247,6 @@ TEST_F(GYMLFileTest, build_vec_as_scalars)
     file.parse(file_name);
     file.build();
 
-    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
-    EXPECT_NE(mesh, nullptr);
-
     auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
 }
@@ -283,9 +278,6 @@ TEST_F(GYMLFileTest, build_fe)
     file.parse(file_name);
     file.build();
 
-    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
-    EXPECT_NE(mesh, nullptr);
-
     auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
 }
@@ -299,9 +291,6 @@ TEST_F(GYMLFileTest, simple_fe_pps)
 
     file.parse(file_name);
     file.build();
-
-    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
-    EXPECT_NE(mesh, nullptr);
 
     auto problem = file.get_problem();
     EXPECT_NE(problem, nullptr);
@@ -320,9 +309,6 @@ TEST_F(GYMLFileTest, build_fe_w_aux)
 
     file.parse(file_name);
     file.build();
-
-    auto mesh = dynamic_cast<LineMesh *>(file.get_mesh());
-    EXPECT_NE(mesh, nullptr);
 
     auto problem = dynamic_cast<FEProblemInterface *>(file.get_problem());
     EXPECT_NE(problem, nullptr);

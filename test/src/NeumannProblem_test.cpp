@@ -179,7 +179,7 @@ TEST(NeumannProblemTest, solve)
 
     Parameters prob_params = TestNeumannProblem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     TestNeumannProblem prob(prob_params);
     app.set_problem(&prob);
 

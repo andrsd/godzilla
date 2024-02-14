@@ -4,6 +4,7 @@
 #include "godzilla/Godzilla.h"
 #include "godzilla/App.h"
 #include "godzilla/FileMesh.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
 #include <filesystem>
@@ -17,13 +18,13 @@ REGISTER_OBJECT(FileMesh);
 Parameters
 FileMesh::parameters()
 {
-    Parameters params = UnstructuredMesh::parameters();
+    Parameters params = MeshObject::parameters();
     params.add_required_param<std::string>("file", "The name of the file.");
     return params;
 }
 
 FileMesh::FileMesh(const Parameters & parameters) :
-    UnstructuredMesh(parameters),
+    MeshObject(parameters),
     file_format(UNKNOWN)
 {
     CALL_STACK_MSG();
@@ -49,33 +50,29 @@ FileMesh::get_file_name() const
     return this->file_name;
 }
 
-void
-FileMesh::create()
+godzilla::Mesh *
+FileMesh::create_mesh()
 {
     CALL_STACK_MSG();
-    switch (this->file_format) {
-    case EXODUSII:
-        create_from_exodus();
-        break;
-    case GMSH:
-        create_from_gmsh();
-        break;
-    default:
+    if (this->file_format == EXODUSII)
+        return create_from_exodus();
+    else if (this->file_format == GMSH)
+        return create_from_gmsh();
+    else {
         log_error("Unknown mesh format");
-        return;
+        return nullptr;
     }
-    set_up();
-    lprint_mesh_info();
 }
 
-void
+godzilla::UnstructuredMesh *
 FileMesh::create_from_gmsh()
 {
     CALL_STACK_MSG();
     PetscOptionsSetValue(nullptr, "-dm_plex_gmsh_use_regions", nullptr);
     DM dm;
     PETSC_CHECK(DMPlexCreateGmshFromFile(get_comm(), get_file_name().c_str(), PETSC_TRUE, &dm));
-    set_dm(dm);
+    auto m = new UnstructuredMesh(dm);
+    return m;
 }
 
 void

@@ -14,6 +14,7 @@ namespace godzilla {
 class App;
 class Factory;
 class Object;
+class MeshObject;
 class Mesh;
 class Problem;
 class Function;
@@ -144,7 +145,7 @@ private:
     /// Root node of the YML file
     Block root;
     /// Mesh object
-    Mesh * mesh;
+    MeshObject * mesh;
     /// Problem object
     Problem * problem;
     /// List of all objects built from the input file

@@ -1,10 +1,12 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/Mesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Function.h"
 #include "godzilla/Output.h"
 #include "godzilla/Postprocessor.h"
+#include "godzilla/Section.h"
 
 using namespace godzilla;
 
@@ -75,7 +77,7 @@ TEST(ProblemTest, add_pp)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem problem(prob_params);
 
     Parameters pp_params = Postprocessor::parameters();
@@ -122,12 +124,13 @@ TEST(ProblemTest, local_vec)
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
     mesh.create();
+    auto m  = mesh.get_mesh<Mesh>();
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem problem(prob_params);
-    problem.set_local_section(create_section(mesh.get_dm()));
+    problem.set_local_section(create_section(m->get_dm()));
 
     Vector loc_vec = problem.get_local_vector();
     EXPECT_EQ(loc_vec.get_size(), 3);
@@ -150,9 +153,11 @@ TEST(ProblemTest, global_vec)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem problem(prob_params);
-    problem.set_local_section(create_section(mesh.get_dm()));
+
+    auto m = mesh.get_mesh<Mesh>();
+    problem.set_local_section(create_section(m->get_dm()));
 
     Vector glob_vec = problem.get_global_vector();
     EXPECT_EQ(glob_vec.get_size(), 3);
@@ -175,10 +180,12 @@ TEST(ProblemTest, create_matrix)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem problem(prob_params);
     problem.create();
-    problem.set_local_section(create_section(mesh.get_dm()));
+
+    auto m = mesh.get_mesh<Mesh>();
+    problem.set_local_section(create_section(m->get_dm()));
 
     Matrix mat = problem.create_matrix();
     EXPECT_EQ(mat.get_n_rows(), 3);
@@ -198,11 +205,12 @@ TEST(UnstructuredMeshTest, get_local_section)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem problem(prob_params);
     problem.create();
 
-    auto dm = mesh.get_dm();
+    auto m = mesh.get_mesh<Mesh>();
+    auto dm = m->get_dm();
     Section s = create_section(dm);
     problem.set_local_section(s);
 
@@ -225,11 +233,12 @@ TEST(UnstructuredMeshTest, get_global_section)
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<App *>("_app") = &app;
-    prob_params.set<Mesh *>("_mesh") = &mesh;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem problem(prob_params);
     problem.create();
 
-    auto dm = mesh.get_dm();
+    auto m = mesh.get_mesh<Mesh>();
+    auto dm = m->get_dm();
     Section s = create_section(dm);
     problem.set_local_section(s);
     problem.set_global_section(s);
