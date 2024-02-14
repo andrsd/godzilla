@@ -165,4 +165,11 @@ Mesh::clear_label_value(const char * name, Int point, Int value)
     PETSC_CHECK(DMClearLabelValue(this->dm, name, point, value));
 }
 
+void
+Mesh::view(PetscViewer viewer)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMView(this->dm, viewer));
+}
+
 } // namespace godzilla

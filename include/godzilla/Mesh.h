@@ -114,6 +114,11 @@ public:
     /// @param value The label value for this point
     void clear_label_value(const char * name, Int point, Int value);
 
+    /// View the underlying DM
+    ///
+    /// @param viewer Viewer
+    void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD);
+
 protected:
     /// Set the DM
     void set_dm(DM dm);
