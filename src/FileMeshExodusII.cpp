@@ -217,7 +217,7 @@ FileMesh::create_from_exodus()
                             fmt::format("ExodusII side cannot have more than {} vertices.",
                                         MAX_FACE_VERTICES));
 
-                    std::vector<Int> face_nodes(MAX_FACE_VERTICES);
+                    std::vector<Int> face_nodes(face_size);
                     for (Int l = 0; l < face_size; ++l, ++k)
                         face_nodes[l] = node_list[k] + n_cells - 1;
 
