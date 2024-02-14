@@ -75,11 +75,6 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
             DMDACreate1d(comm, DM_BOUNDARY_NONE, 1, 1, 1, nullptr, &dm);
             set_dm(dm);
         }
-
-        void
-        distribute() override
-        {
-        }
     };
 
     class TestMesh : public MeshObject {

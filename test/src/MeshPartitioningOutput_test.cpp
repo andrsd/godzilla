@@ -13,11 +13,6 @@ namespace {
 class EmptyMesh : public Mesh {
 public:
     EmptyMesh() : Mesh() {}
-
-    void
-    distribute() override
-    {
-    }
 };
 
 class EmptyMeshObject : public MeshObject {

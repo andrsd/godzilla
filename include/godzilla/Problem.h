@@ -10,8 +10,8 @@
 #include "godzilla/Matrix.h"
 #include "godzilla/ExecuteFlags.h"
 #include "godzilla/IndexSet.h"
+#include "godzilla/Partitioner.h"
 #include "petscdm.h"
-#include "petscpartitioner.h"
 
 namespace godzilla {
 
@@ -152,6 +152,26 @@ public:
     /// Create field decomposition
     FieldDecomposition create_field_decomposition();
 
+    /// Get the partitioner associated with this problem
+    ///
+    /// @return Partitioner
+    const Partitioner & get_partitioner();
+
+    /// Set partitioner type
+    ///
+    /// @param type Type of the partitioner
+    void set_partitioner_type(const std::string & type);
+
+    /// Set partitioner overlap
+    ///
+    /// @param type Type of the partitioner
+    void set_partition_overlap(Int overlap);
+
+    /// Get partition overlap
+    ///
+    /// @return Partition overlap
+    Int get_partition_overlap();
+
 protected:
     /// Allocate objects
     virtual void allocate_objects();
@@ -163,6 +183,12 @@ protected:
 private:
     /// Mesh
     MeshObject * mesh;
+
+    /// Mesh partitioner
+    Partitioner partitioner;
+
+    /// Partition overlap for mesh partitioning
+    Int partition_overlap;
 
     /// The solution vector
     Vector x;

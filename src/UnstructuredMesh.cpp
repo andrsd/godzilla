@@ -6,6 +6,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Partitioner.h"
 #include "petscdmplex.h"
 
 namespace godzilla {
@@ -50,7 +51,6 @@ get_polytope_type_str(DMPolytopeType elem_type)
 
 UnstructuredMesh::UnstructuredMesh(const mpi::Communicator & comm) :
     Mesh(nullptr),
-    partition_overlap(0),
     common_cells_by_vtx_computed(false)
 {
     DM dm;
@@ -59,19 +59,14 @@ UnstructuredMesh::UnstructuredMesh(const mpi::Communicator & comm) :
     set_dm(dm);
 }
 
-UnstructuredMesh::UnstructuredMesh(DM dm) :
-    Mesh(dm),
-    partition_overlap(0),
-    common_cells_by_vtx_computed(false)
+UnstructuredMesh::UnstructuredMesh(DM dm) : Mesh(dm), common_cells_by_vtx_computed(false)
 {
     CALL_STACK_MSG();
-    this->partitioner.create(get_comm());
 }
 
 UnstructuredMesh::~UnstructuredMesh()
 {
     CALL_STACK_MSG();
-    this->partitioner.destroy();
 }
 
 Label
@@ -282,36 +277,18 @@ UnstructuredMesh::set_cone(Int point, const std::vector<Int> & cone)
 }
 
 void
-UnstructuredMesh::set_partitioner_type(const std::string & type)
+UnstructuredMesh::set_partitioner(const Partitioner & part)
 {
-    CALL_STACK_MSG();
-    this->partitioner.set_type(type);
-}
-
-Int
-UnstructuredMesh::get_partition_overlap()
-{
-    CALL_STACK_MSG();
-    return this->partition_overlap;
+    PETSC_CHECK(DMPlexSetPartitioner(get_dm(), part));
 }
 
 void
-UnstructuredMesh::set_partition_overlap(Int overlap)
+UnstructuredMesh::distribute(Int overlap)
 {
     CALL_STACK_MSG();
-    this->partition_overlap = overlap;
-}
-
-void
-UnstructuredMesh::distribute()
-{
-    CALL_STACK_MSG();
-    this->partitioner.set_up();
-
-    PETSC_CHECK(DMPlexSetPartitioner(get_dm(), this->partitioner));
 
     DM dm_dist = nullptr;
-    PETSC_CHECK(DMPlexDistribute(get_dm(), this->partition_overlap, nullptr, &dm_dist));
+    PETSC_CHECK(DMPlexDistribute(get_dm(), overlap, nullptr, &dm_dist));
     if (dm_dist)
         set_dm(dm_dist);
 }

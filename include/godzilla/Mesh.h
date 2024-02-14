@@ -40,9 +40,6 @@ public:
     /// @param dim The topological dimension
     void set_dimension(Int dim);
 
-    /// Distribute mesh over processes
-    virtual void distribute() = 0;
-
     /// Check if mesh has label with a name
     ///
     /// @param name The name of the label

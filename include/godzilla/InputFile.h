@@ -50,8 +50,8 @@ public:
     /// build the simulation objects
     virtual void build() = 0;
 
-    /// Get the mesh specified in the input file
-    Mesh * get_mesh() const;
+    /// Get the mesh object specified in the input file
+    MeshObject * get_mesh_object() const;
 
     /// Get the problem specified in the input file
     Problem * get_problem() const;
@@ -145,7 +145,7 @@ private:
     /// Root node of the YML file
     Block root;
     /// Mesh object
-    MeshObject * mesh;
+    MeshObject * mesh_obj;
     /// Problem object
     Problem * problem;
     /// List of all objects built from the input file

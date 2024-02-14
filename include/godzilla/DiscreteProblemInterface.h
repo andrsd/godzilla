@@ -316,6 +316,8 @@ protected:
     const std::vector<EssentialBC *> & get_essential_bcs() const;
     /// Get list of all natural boundary conditions
     const std::vector<NaturalBC *> & get_natural_bcs() const;
+    /// Distribute the problem among processors for parallel execution
+    void distribute();
 
     virtual void init();
     virtual void create();

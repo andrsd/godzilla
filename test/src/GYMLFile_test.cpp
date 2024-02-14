@@ -174,7 +174,7 @@ TEST_F(GYMLFileTest, mesh_partitioner)
     file.build();
     file.create_objects();
 
-    auto mesh = file.get_mesh();
+    auto mesh = file.get_mesh_object()->get_mesh<Mesh>();
     EXPECT_NE(mesh, nullptr);
 
     auto dm = mesh->get_dm();
