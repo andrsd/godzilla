@@ -51,6 +51,7 @@ FileMesh::create_from_exodus()
         Int n_cells = 0;
         Int n_vertices = 0;
         Int n_side_sets = 0;
+        std::map<Int, std::string> cell_set_names;
 
         exodusIIcpp::File f;
         if (rank == 0) {
@@ -60,10 +61,15 @@ FileMesh::create_from_exodus()
             n_cells = f.get_num_elements();
             n_vertices = f.get_num_nodes();
             n_side_sets = f.get_num_side_sets();
-            m->set_chart(0, n_cells + n_vertices);
-            // We do not want this label automatically computed, instead we compute it here
-            m->create_label("celltype");
+        }
+        m->set_chart(0, n_cells + n_vertices);
+        // We do not want this label automatically computed, instead we compute it here
+        m->create_label("celltype");
+        // Create Cell/Face Sets labels on all processes
+        m->create_label("Cell Sets");
+        m->create_label("Face Sets");
 
+        if (rank == 0) {
             f.read_blocks();
             int n_elem_blocks = f.get_num_element_blocks();
             std::vector<int> cs_order(n_elem_blocks);
@@ -97,7 +103,6 @@ FileMesh::create_from_exodus()
             m->set_up();
 
             // process element blocks
-            m->create_label("Cell Sets");
             auto cell_sets = m->get_label("Cell Sets");
 
             for (Int i = 0, cell = 0; i < n_elem_blocks; ++i) {
@@ -110,7 +115,7 @@ FileMesh::create_from_exodus()
 
                 m->create_label(name);
                 auto block_label = m->get_label(name);
-                m->set_cell_set_name(id, name);
+                cell_set_names[id] = name;
 
                 auto n_blk_elems = eb.get_num_elements();
                 auto n_elem_nodes = eb.get_num_nodes_per_element();
@@ -129,6 +134,9 @@ FileMesh::create_from_exodus()
                 }
             }
         }
+        comm.broadcast(cell_set_names, 0);
+        for (const auto & [id, name] : cell_set_names)
+            m->set_cell_set_name(id, name);
 
         // broadcast dimensions to all ranks
         Int ints[] = { dim, dim_embed };
@@ -186,8 +194,8 @@ FileMesh::create_from_exodus()
         coordinates.destroy();
 
         // Create side set labels
+        std::map<Int, std::string> side_set_names;
         if ((rank == 0) && (n_side_sets > 0)) {
-            m->create_label("Face Sets");
             auto face_sets = m->get_label("Face Sets");
 
             f.read_side_sets();
@@ -201,7 +209,7 @@ FileMesh::create_from_exodus()
 
                 m->create_label(name);
                 auto face_set_label = m->get_label(name);
-                m->set_face_set_name(id, name);
+                side_set_names[id] = name;
 
                 std::vector<int> node_count_list;
                 std::vector<int> node_list;
@@ -234,6 +242,9 @@ FileMesh::create_from_exodus()
                 }
             }
         }
+        comm.broadcast(side_set_names, 0);
+        for (const auto & [id, name] : side_set_names)
+            m->set_face_set_name(id, name);
     }
     catch (exodusIIcpp::Exception & e) {
         log_error(fmt::format(e.what()));
