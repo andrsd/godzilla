@@ -11,6 +11,9 @@ class Group {
 public:
     enum ComparisonResult { IDENTICAL = MPI_IDENT, SIMILAR = MPI_SIMILAR, UNEQUAL = MPI_UNEQUAL };
 
+    /// Create an empty group
+    Group();
+
     /// Create group from an `MPI_Group`
     ///
     /// @param group `MPI_Group` used to initialize this object
@@ -47,7 +50,7 @@ public:
     /// @param in_rank Rank in this group
     /// @param out_group Destination group
     /// @return Rank in destination group, or `UNDEFINED` when no correspondence exists
-    int translate_rank(int in_rank, const Group & out_group);
+    int translate_rank(int in_rank, const Group & out_group) const;
 
     /// Translates the ranks of processes in one group to those in another group
     ///
@@ -55,7 +58,8 @@ public:
     /// @param out_group Destination group
     /// @return Array of corresponding ranks in destination group, `UNDEFINED` when no
     ///         correspondence exists
-    std::vector<int> translate_ranks(const std::vector<int> & in_ranks, const Group & out_group);
+    std::vector<int> translate_ranks(const std::vector<int> & in_ranks,
+                                     const Group & out_group) const;
 
     /// Type cast operator so we can pass this class directly into MPI calls
     operator const MPI_Group &() const { return this->group; }
@@ -93,6 +97,8 @@ public:
 private:
     MPI_Group group;
 };
+
+inline Group::Group() {}
 
 inline Group::Group(const MPI_Group & group) : group(group) {}
 
@@ -136,7 +142,7 @@ Group::size() const
 }
 
 inline int
-Group::translate_rank(int in_rank, const Group & out_group)
+Group::translate_rank(int in_rank, const Group & out_group) const
 {
     int out_rank;
     MPI_CHECK(MPI_Group_translate_ranks(this->group, 1, &in_rank, out_group, &out_rank));
@@ -144,7 +150,7 @@ Group::translate_rank(int in_rank, const Group & out_group)
 }
 
 inline std::vector<int>
-Group::translate_ranks(const std::vector<int> & in_ranks, const Group & out_group)
+Group::translate_ranks(const std::vector<int> & in_ranks, const Group & out_group) const
 {
     int n = in_ranks.size();
     std::vector<int> ranks2(n);
