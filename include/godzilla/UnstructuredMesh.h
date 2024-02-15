@@ -7,12 +7,13 @@
 #include "godzilla/IndexSet.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Section.h"
-#include "godzilla/Partitioner.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/StarForest.h"
 #include <map>
 
 namespace godzilla {
+
+class Partitioner;
 
 /// Unstructured mesh (wrapper around DMPLEX + extra stuff)
 ///
@@ -257,21 +258,6 @@ public:
     /// @param cone An array of points which are on the in-edges for point `p`
     void set_cone(Int point, const std::vector<Int> & cone);
 
-    /// Set partitioner type
-    ///
-    /// @param type Type of the partitioner
-    virtual void set_partitioner_type(const std::string & type);
-
-    /// Get partition overlap
-    ///
-    /// @return Partition overlap
-    Int get_partition_overlap();
-
-    /// Set partitioner type
-    ///
-    /// @param type Type of the partitioner
-    virtual void set_partition_overlap(Int overlap);
-
     /// Is the first cell in the mesh a simplex?
     ///
     /// @return true if cell is a simplex, otherwise false
@@ -359,7 +345,15 @@ public:
     /// @return Number of vertex sets
     [[nodiscard]] Int get_num_vertex_sets() const;
 
-    void distribute() override;
+    /// Set the mesh partitioner
+    ///
+    /// @param part The partitioner
+    void set_partitioner(const Partitioner & part);
+
+    /// Distributes the mesh and any associated sections
+    ///
+    /// @param overlap The overlap of partitions
+    void distribute(Int overlap);
 
     /// Construct ghost cells which connect to every boundary face
     ///
@@ -405,12 +399,6 @@ public:
     std::vector<Int> get_full_join(const std::vector<Int> & points);
 
 private:
-    /// Mesh partitioner
-    Partitioner partitioner;
-
-    /// Partition overlap for mesh partitioning
-    Int partition_overlap;
-
     /// Cell set names
     std::map<Int, std::string> cell_set_names;
 

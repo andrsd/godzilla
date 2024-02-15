@@ -51,7 +51,7 @@ InputFile::InputFile(App * app) :
     PrintInterface(app),
     LoggingInterface(app->get_logger()),
     app(app),
-    mesh(nullptr),
+    mesh_obj(nullptr),
     problem(nullptr)
 {
     CALL_STACK_MSG();
@@ -93,14 +93,11 @@ InputFile::parse(const std::string & file_name)
     }
 }
 
-Mesh *
-InputFile::get_mesh() const
+MeshObject *
+InputFile::get_mesh_object() const
 {
     CALL_STACK_MSG();
-    if (this->mesh)
-        return this->mesh->get_mesh<Mesh>();
-    else
-        return nullptr;
+    return this->mesh_obj;
 }
 
 Problem *
@@ -156,8 +153,8 @@ InputFile::build_mesh()
     auto node = get_block(this->root, "mesh");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
-    this->mesh = this->app->build_object<MeshObject>(class_name, "mesh", params);
-    add_object(this->mesh);
+    this->mesh_obj = this->app->build_object<MeshObject>(class_name, "mesh", params);
+    add_object(this->mesh_obj);
 }
 
 void
@@ -168,7 +165,7 @@ InputFile::build_problem()
     auto node = get_block(this->root, "problem");
     Parameters * params = build_params(node);
     const auto & class_name = params->get<std::string>("_type");
-    params->set<MeshObject *>("_mesh_obj") = this->mesh;
+    params->set<MeshObject *>("_mesh_obj") = this->mesh_obj;
     this->problem = this->app->build_object<Problem>(class_name, "problem", params);
     add_object(this->problem);
 }

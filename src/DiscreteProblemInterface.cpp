@@ -179,6 +179,19 @@ DiscreteProblemInterface::get_natural_bcs() const
 }
 
 void
+DiscreteProblemInterface::distribute()
+{
+    CALL_STACK_MSG();
+    auto part = this->problem->get_partitioner();
+    part.set_up();
+
+    // cannot use `get_unstr_mesh`, since this may be called before the `create` calls
+    auto unstr_mesh = dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh());
+    unstr_mesh->set_partitioner(part);
+    unstr_mesh->distribute(this->problem->get_partition_overlap());
+}
+
+void
 DiscreteProblemInterface::init()
 {
     CALL_STACK_MSG();

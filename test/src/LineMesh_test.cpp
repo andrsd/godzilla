@@ -62,28 +62,3 @@ TEST(LineMeshTest, incorrect_dims)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("line_mesh: Parameter 'xmax' must be larger than 'xmin'."));
 }
-
-TEST(LineMeshTest, distribute)
-{
-    PetscMPIInt sz;
-    MPI_Comm_size(PETSC_COMM_WORLD, &sz);
-
-    TestApp app;
-
-    Parameters params = LineMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "line_mesh";
-    params.set<Real>("xmin") = 0;
-    params.set<Real>("xmax") = 1;
-    params.set<Int>("nx") = 4;
-    LineMesh mesh(params);
-    mesh.create();
-
-    auto m = mesh.get_mesh<Mesh>();
-    PetscBool distr;
-    DMPlexIsDistributed(m->get_dm(), &distr);
-    if (sz > 1)
-        EXPECT_EQ(distr, 1);
-    else
-        EXPECT_EQ(distr, 0);
-}

@@ -78,7 +78,7 @@ MeshPartApp::partition_mesh_file(const std::string & mesh_file_name)
 {
     auto mesh_obj = load_mesh(mesh_file_name);
     auto mesh = mesh_obj->get_mesh<UnstructuredMesh>();
-    mesh->distribute();
+    mesh->distribute(0);
 
     std::string out_file_name = fmt::format("out");
     save_partition(mesh, out_file_name);

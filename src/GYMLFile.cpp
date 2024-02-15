@@ -96,11 +96,8 @@ void
 GYMLFile::build_partitioner()
 {
     CALL_STACK_MSG();
-    if (!get_mesh())
-        return;
-
-    auto * unstr_mesh = dynamic_cast<UnstructuredMesh *>(get_mesh());
-    if (!unstr_mesh)
+    auto prob = get_problem();
+    if (!prob)
         return;
 
     if (!get_root()["partitioner"])
@@ -110,11 +107,11 @@ GYMLFile::build_partitioner()
     auto part_node = get_block(get_root(), "partitioner");
     auto name = part_node["name"];
     if (name)
-        unstr_mesh->set_partitioner_type(name.as<std::string>());
+        prob->set_partitioner_type(name.as<std::string>());
 
     auto overlap = part_node["overlap"];
     if (overlap)
-        unstr_mesh->set_partition_overlap(overlap.as<Int>());
+        prob->set_partition_overlap(overlap.as<Int>());
 }
 
 void

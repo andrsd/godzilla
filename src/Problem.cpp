@@ -41,13 +41,17 @@ Problem::Problem(const Parameters & parameters) :
     Object(parameters),
     PrintInterface(this),
     mesh(get_param<MeshObject *>("_mesh_obj")),
+    partitioner(nullptr),
+    partition_overlap(0),
     default_output_on()
 {
+    this->partitioner.create(get_comm());
 }
 
 Problem::~Problem()
 {
     this->x.destroy();
+    this->partitioner.destroy();
 }
 
 DM
@@ -74,6 +78,7 @@ void
 Problem::create()
 {
     CALL_STACK_MSG();
+    this->partitioner.create(get_comm());
     for (auto & f : this->functions)
         f->create();
     for (auto & pp : this->pps)
@@ -314,6 +319,34 @@ Problem::create_field_decomposition()
     PetscFree(field_names);
     PetscFree(is);
     return decomp;
+}
+
+const Partitioner &
+Problem::get_partitioner()
+{
+    CALL_STACK_MSG();
+    return this->partitioner;
+}
+
+void
+Problem::set_partitioner_type(const std::string & type)
+{
+    CALL_STACK_MSG();
+    this->partitioner.set_type(type);
+}
+
+Int
+Problem::get_partition_overlap()
+{
+    CALL_STACK_MSG();
+    return this->partition_overlap;
+}
+
+void
+Problem::set_partition_overlap(Int overlap)
+{
+    CALL_STACK_MSG();
+    this->partition_overlap = overlap;
 }
 
 } // namespace godzilla

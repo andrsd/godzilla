@@ -112,13 +112,10 @@ TEST(UnstructuredMeshTest, api)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->set_partition_overlap(1);
 
     EXPECT_EQ(m->get_num_vertices(), 3);
     EXPECT_EQ(m->get_num_faces(), 3);
     EXPECT_EQ(m->get_num_cells(), 2);
-
-    EXPECT_EQ(m->get_partition_overlap(), 1);
 
     EXPECT_TRUE(m->is_simplex());
 }
@@ -134,14 +131,11 @@ TEST(UnstructuredMeshTest, api_ghosted)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->set_partition_overlap(1);
     m->construct_ghost_cells();
 
     EXPECT_EQ(m->get_num_vertices(), 3);
     EXPECT_EQ(m->get_num_cells(), 2);
     EXPECT_EQ(m->get_num_all_cells(), 4);
-
-    EXPECT_EQ(m->get_partition_overlap(), 1);
 
     EXPECT_TRUE(m->is_simplex());
 
@@ -255,7 +249,6 @@ TEST(UnstructuredMeshTest, ranges)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    m->set_partition_overlap(1);
     m->construct_ghost_cells();
 
     EXPECT_EQ(*m->vertex_begin(), 12);

@@ -98,11 +98,6 @@ TEST(ExodusIIOutputTest, fe_check)
             DMCreate(comm, &dm);
             set_dm(dm);
         }
-
-        void
-        distribute() override
-        {
-        }
     };
 
     class TestMesh : public MeshObject {
