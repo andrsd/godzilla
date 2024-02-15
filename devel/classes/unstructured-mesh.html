@@ -125,9 +125,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh27get_cone_recursive_verticesE8IndexSet"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cone_recursive_vertices()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh13set_cone_sizeE3Int3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cone_size()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh8set_coneE3IntRKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cone()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh20set_partitioner_typeERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_partitioner_type()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh21get_partition_overlapEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_partition_overlap()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh21set_partition_overlapE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_partition_overlap()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh10is_simplexEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::is_simplex()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_cell_set_nameE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cell_set_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh15get_cell_set_idERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cell_set_id()</span></code></a></li>
@@ -143,7 +140,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh15create_face_setE3IntRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_face_set()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh17set_face_set_nameE3IntRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_face_set_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh19get_num_vertex_setsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_num_vertex_sets()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh10distributeEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::distribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh15set_partitionerERK11Partitioner"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_partitioner()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh10distributeE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::distribute()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh21construct_ghost_cellsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::construct_ghost_cells()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh21compute_cell_geometryE3IntP4RealA_4RealA_4Real"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::compute_cell_geometry()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh22common_cells_by_vertexEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::common_cells_by_vertex()</span></code></a></li>
@@ -454,39 +452,6 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh20set_partitioner_typeERKNSt6stringE">
-<span id="_CPPv3N8godzilla16UnstructuredMesh20set_partitioner_typeERKNSt6stringE"></span><span id="_CPPv2N8godzilla16UnstructuredMesh20set_partitioner_typeERKNSt6stringE"></span><span id="godzilla::UnstructuredMesh::set_partitioner_type__ssCR"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a74fd693a8c04230b437c21a3fed69ba6"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_partitioner_type</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh20set_partitioner_typeERKNSt6stringE" title="Link to this definition"></a><br /></dt>
-<dd><p>Set partitioner type. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>type</strong> – Type of the partitioner </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh21get_partition_overlapEv">
-<span id="_CPPv3N8godzilla16UnstructuredMesh21get_partition_overlapEv"></span><span id="_CPPv2N8godzilla16UnstructuredMesh21get_partition_overlapEv"></span><span id="godzilla::UnstructuredMesh::get_partition_overlap"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a351993376bece4d25fe0c1e7acfe050a"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_partition_overlap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh21get_partition_overlapEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get partition overlap. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Partition overlap </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh21set_partition_overlapE3Int">
-<span id="_CPPv3N8godzilla16UnstructuredMesh21set_partition_overlapE3Int"></span><span id="_CPPv2N8godzilla16UnstructuredMesh21set_partition_overlapE3Int"></span><span id="godzilla::UnstructuredMesh::set_partition_overlap__Int"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1aaafea0946c02f7429fcdc682f321d940"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_partition_overlap</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">overlap</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh21set_partition_overlapE3Int" title="Link to this definition"></a><br /></dt>
-<dd><p>Set partitioner type. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>type</strong> – Type of the partitioner </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh10is_simplexEv">
 <span id="_CPPv3NK8godzilla16UnstructuredMesh10is_simplexEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh10is_simplexEv"></span><span id="godzilla::UnstructuredMesh::is_simplexC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1adf9000dc0c6dbd3e1f5423800687ace6"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_simplex</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh10is_simplexEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Is the first cell in the mesh a simplex? </p>
@@ -684,9 +649,25 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh10distributeEv">
-<span id="_CPPv3N8godzilla16UnstructuredMesh10distributeEv"></span><span id="_CPPv2N8godzilla16UnstructuredMesh10distributeEv"></span><span id="godzilla::UnstructuredMesh::distribute"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a1e8d9099f82795630d28454b3c38c0cf"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">distribute</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh10distributeEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Distribute mesh over processes. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh15set_partitionerERK11Partitioner">
+<span id="_CPPv3N8godzilla16UnstructuredMesh15set_partitionerERK11Partitioner"></span><span id="_CPPv2N8godzilla16UnstructuredMesh15set_partitionerERK11Partitioner"></span><span id="godzilla::UnstructuredMesh::set_partitioner__PartitionerCR"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1ad1a848b1de686e7f6ad459a46106d621"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_partitioner</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Partitioner</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">part</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh15set_partitionerERK11Partitioner" title="Link to this definition"></a><br /></dt>
+<dd><p>Set the mesh partitioner. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>part</strong> – The partitioner </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh10distributeE3Int">
+<span id="_CPPv3N8godzilla16UnstructuredMesh10distributeE3Int"></span><span id="_CPPv2N8godzilla16UnstructuredMesh10distributeE3Int"></span><span id="godzilla::UnstructuredMesh::distribute__Int"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1abacd391275a5bcf7c3007aed18f6bb90"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">distribute</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">overlap</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh10distributeE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Distributes the mesh and any associated sections. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>overlap</strong> – The overlap of partitions </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
