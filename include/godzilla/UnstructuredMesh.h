@@ -314,6 +314,11 @@ public:
     /// @return Number of face sets
     [[nodiscard]] Int get_num_face_sets() const;
 
+    /// Get face sets
+    ///
+    /// @return Face sets
+    const std::map<Int, std::string> & get_face_sets() const;
+
     /// Check if mesh has a label corresponding to a face set name
     ///
     /// @param name The name of the face set

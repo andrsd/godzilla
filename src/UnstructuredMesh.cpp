@@ -445,6 +445,13 @@ UnstructuredMesh::get_num_face_sets() const
     return n_face_sets;
 }
 
+const std::map<Int, std::string> &
+UnstructuredMesh::get_face_sets() const
+{
+    CALL_STACK_MSG();
+    return this->face_set_names;
+}
+
 Int
 UnstructuredMesh::get_num_vertex_sets() const
 {
