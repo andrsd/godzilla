@@ -342,6 +342,8 @@ protected:
 
     /// Set up boundary conditions
     virtual void set_up_boundary_conditions();
+    /// Check existence of boundaries used by BCs
+    bool check_bcs_boundaries();
 
     DM get_dm_aux() const;
 

@@ -460,11 +460,10 @@ DiscreteProblemInterface::compute_aux_fields()
     }
 }
 
-void
-DiscreteProblemInterface::set_up_boundary_conditions()
+bool
+DiscreteProblemInterface::check_bcs_boundaries()
 {
     CALL_STACK_MSG();
-    /// TODO: refactor this into a method
     bool no_errors = true;
     for (auto & bc : this->bcs) {
         auto boundaries = bc->get_boundary();
@@ -479,7 +478,14 @@ DiscreteProblemInterface::set_up_boundary_conditions()
             }
         }
     }
+    return no_errors;
+}
 
+void
+DiscreteProblemInterface::set_up_boundary_conditions()
+{
+    CALL_STACK_MSG();
+    bool no_errors = check_bcs_boundaries();
     if (no_errors)
         for (auto & bc : this->bcs)
             bc->set_up();
