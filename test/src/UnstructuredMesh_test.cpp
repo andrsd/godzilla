@@ -576,3 +576,41 @@ TEST(UnstructuredMesh, point_star_forrest)
 
     sf.destroy();
 }
+
+TEST(UnstructuredMesh, face_sets)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    EXPECT_EQ(m->get_num_face_sets(), 6);
+    EXPECT_THAT(m->get_face_sets(),
+                ElementsAre(Pair(1, "back"),
+                            Pair(2, "front"),
+                            Pair(3, "bottom"),
+                            Pair(4, "top"),
+                            Pair(5, "right"),
+                            Pair(6, "left")));
+
+    EXPECT_EQ(m->get_face_set_name(1), "back");
+    EXPECT_EQ(m->get_face_set_name(2), "front");
+    EXPECT_EQ(m->get_face_set_name(3), "bottom");
+    EXPECT_EQ(m->get_face_set_name(4), "top");
+    EXPECT_EQ(m->get_face_set_name(5), "right");
+    EXPECT_EQ(m->get_face_set_name(6), "left");
+
+    EXPECT_TRUE(m->has_face_set("back"));
+    EXPECT_TRUE(m->has_face_set("front"));
+    EXPECT_TRUE(m->has_face_set("bottom"));
+    EXPECT_TRUE(m->has_face_set("top"));
+    EXPECT_TRUE(m->has_face_set("right"));
+    EXPECT_TRUE(m->has_face_set("left"));
+}
