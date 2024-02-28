@@ -558,6 +558,22 @@ mat_col(const DenseVector<DenseVector<T, M>, N> & a)
     return res;
 }
 
+/// Convert a DenseVector<T, N> into a column matrix
+///
+/// @tparam T Data type
+/// @tparam N Number of columns
+/// @param a Input vector
+/// @return Column matrix with values of `a`
+template <typename T, Int N>
+inline DenseMatrix<T, 1, N>
+mat_col(const DenseVector<T, N> & a)
+{
+    DenseMatrix<T, 1, N> res;
+    for (Int i = 0; i < N; i++)
+        res(0, i) = a(i);
+    return res;
+}
+
 /// Transpose DenseVector<DenseVector<T>>
 ///
 /// @tparam T Data type

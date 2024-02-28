@@ -382,6 +382,20 @@ TEST(DenseVectorTest, mat_col)
     EXPECT_EQ(m(2, 1), 2.);
 }
 
+TEST(DenseVectorTest, mat_col_scalar)
+{
+    DenseVector<Real, 3> A;
+    A(0) = -2;
+    A(1) = 5;
+    A(2) = 3;
+
+    auto m = mat_col(A);
+
+    EXPECT_EQ(m(0, 0), -2.);
+    EXPECT_EQ(m(0, 1), 5.);
+    EXPECT_EQ(m(0, 2), 3.);
+}
+
 TEST(DenseVectorTest, min)
 {
     DenseVector<Real, 3> a({ 5, -2, 10 });
