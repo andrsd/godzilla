@@ -540,6 +540,16 @@ mat_row(const DenseVector<DenseVector<T, M>, N> & a)
     return res;
 }
 
+template <typename T, Int N>
+inline DenseMatrix<T, N, 1>
+mat_row(const DenseVector<T, N> & a)
+{
+    DenseMatrix<T, N, 1> res;
+    for (Int i = 0; i < N; i++)
+        res(i, 0) = a(i);
+    return res;
+}
+
 /// Convert DenseVector<DenseVector, M>, N> into a DenseMatrix<M, N>
 ///
 /// @tparam T Data type
