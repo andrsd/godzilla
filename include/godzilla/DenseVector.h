@@ -540,6 +540,16 @@ mat_row(const DenseVector<DenseVector<T, M>, N> & a)
     return res;
 }
 
+template <typename T, Int N>
+inline DenseMatrix<T, N, 1>
+mat_row(const DenseVector<T, N> & a)
+{
+    DenseMatrix<T, N, 1> res;
+    for (Int i = 0; i < N; i++)
+        res(i, 0) = a(i);
+    return res;
+}
+
 /// Convert DenseVector<DenseVector, M>, N> into a DenseMatrix<M, N>
 ///
 /// @tparam T Data type
@@ -555,6 +565,22 @@ mat_col(const DenseVector<DenseVector<T, M>, N> & a)
     for (Int i = 0; i < N; i++)
         for (Int j = 0; j < M; j++)
             res(j, i) = a(i)(j);
+    return res;
+}
+
+/// Convert a DenseVector<T, N> into a column matrix
+///
+/// @tparam T Data type
+/// @tparam N Number of columns
+/// @param a Input vector
+/// @return Column matrix with values of `a`
+template <typename T, Int N>
+inline DenseMatrix<T, 1, N>
+mat_col(const DenseVector<T, N> & a)
+{
+    DenseMatrix<T, 1, N> res;
+    for (Int i = 0; i < N; i++)
+        res(0, i) = a(i);
     return res;
 }
 
