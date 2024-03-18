@@ -37,7 +37,7 @@ __ksp_monitor(KSP, Int it, Real rnorm, void * ctx)
 {
     CALL_STACK_MSG();
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    problem->ksp_monitor_callback(it, rnorm);
+    problem->ksp_monitor(it, rnorm);
     return 0;
 }
 
@@ -46,7 +46,7 @@ __snes_monitor(SNES, Int it, Real norm, void * ctx)
 {
     CALL_STACK_MSG();
     auto * problem = static_cast<NonlinearProblem *>(ctx);
-    problem->snes_monitor_callback(it, norm);
+    problem->snes_monitor(it, norm);
     return 0;
 }
 
@@ -273,14 +273,14 @@ NonlinearProblem::set_up_solver_parameters()
 }
 
 void
-NonlinearProblem::snes_monitor_callback(Int it, Real norm)
+NonlinearProblem::snes_monitor(Int it, Real norm)
 {
     CALL_STACK_MSG();
     lprint(7, "{} Non-linear residual: {:e}", it, norm);
 }
 
 void
-NonlinearProblem::ksp_monitor_callback(Int it, Real rnorm)
+NonlinearProblem::ksp_monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
     lprint(8, "    {} Linear residual: {:e}", it, rnorm);

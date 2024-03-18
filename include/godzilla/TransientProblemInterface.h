@@ -108,8 +108,8 @@ protected:
     virtual void pre_step();
     /// Called after the time step is done solving
     virtual void post_step();
-    /// TS monitor callback
-    virtual void ts_monitor_callback(Int stepi, Real time, Vec x);
+    /// TS monitor
+    virtual void ts_monitor(Int stepi, Real time, Vec x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`

@@ -65,9 +65,9 @@ protected:
     /// Set up solver parameters
     virtual void set_up_solver_parameters();
     /// SNES monitor
-    void snes_monitor_callback(Int it, Real norm);
+    void snes_monitor(Int it, Real norm);
     /// KSP monitor
-    void ksp_monitor_callback(Int it, Real rnorm);
+    void ksp_monitor(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for creating a preconditioner

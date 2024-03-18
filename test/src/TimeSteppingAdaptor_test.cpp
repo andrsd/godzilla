@@ -128,7 +128,7 @@ public:
     std::vector<Real> dts;
 
 protected:
-    void ts_monitor_callback(Int stepi, Real time, Vec x) override;
+    void ts_monitor(Int stepi, Real time, Vec x) override;
 };
 
 REGISTER_OBJECT(TestTSProblem);
@@ -139,7 +139,7 @@ TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonline
 }
 
 void
-TestTSProblem::ts_monitor_callback(Int stepi, Real time, Vec x)
+TestTSProblem::ts_monitor(Int stepi, Real time, Vec x)
 {
     Real dt = get_time_step();
     this->dts[stepi] = dt;
