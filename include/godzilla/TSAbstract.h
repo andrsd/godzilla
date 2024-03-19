@@ -18,7 +18,7 @@ public:
     virtual ~TSAbstract() = default;
     virtual void destroy() = 0;
     virtual void reset() = 0;
-    virtual void set_up() = 0;
+    virtual void set_up();
     virtual void step() = 0;
     virtual void evaluate_step(Int order, Vector & X, bool * done) = 0;
     virtual void rollback() = 0;
