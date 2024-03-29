@@ -33,13 +33,13 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PUBLIC
+        PUBLIC
         fmt::fmt
-        yaml-cpp::yaml-cpp
     PRIVATE
         ${PETSC_LIBRARY}
         muParser
         exodusIIcpp::exodusIIcpp
+        yaml-cpp::yaml-cpp
 )
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
