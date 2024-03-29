@@ -35,7 +35,7 @@ target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
         fmt::fmt
-        yaml-cpp
+        yaml-cpp::yaml-cpp
     PRIVATE
         ${PETSC_LIBRARY}
         muParser

@@ -30,7 +30,7 @@ jobs:
             mpich-mpicxx \
             fmt==9.1.0 \
             petsc==3.19.4 \
-            yaml-cpp==0.7.0 \
+            yaml-cpp==0.8.0 \
             exodusIIcpp==1.8
 
       - name: Configure
@@ -87,7 +87,7 @@ jobs:
             mpich-mpicxx \
             fmt==9.1.0 \
             petsc==3.19.4 \
-            yaml-cpp==0.7.0 \
+            yaml-cpp==0.8.0 \
             exodusIIcpp==1.8
 
       - name: Configure
