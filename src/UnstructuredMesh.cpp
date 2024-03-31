@@ -131,7 +131,11 @@ UnstructuredMesh::get_cell_range() const
     Int first, last;
     PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), 0, &first, &last));
     Int gc_first, gc_last;
+#if PETSC_VERSION_GE(3, 20, 0)
+    PETSC_CHECK(DMPlexGetCellTypeStratum(get_dm(), DM_POLYTOPE_FV_GHOST, &gc_first, &gc_last));
+#else
     PETSC_CHECK(DMPlexGetGhostCellStratum(get_dm(), &gc_first, &gc_last));
+#endif
     if (gc_first != -1)
         last = gc_first;
     return { first, last };
@@ -151,7 +155,11 @@ UnstructuredMesh::get_ghost_cell_range() const
 {
     CALL_STACK_MSG();
     Int first, last;
+#if PETSC_VERSION_GE(3, 20, 0)
+    PETSC_CHECK(DMPlexGetCellTypeStratum(get_dm(), DM_POLYTOPE_FV_GHOST, &first, &last));
+#else
     PETSC_CHECK(DMPlexGetGhostCellStratum(get_dm(), &first, &last));
+#endif
     return { first, last };
 }
 

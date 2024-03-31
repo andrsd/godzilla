@@ -80,7 +80,7 @@ TEST(PerfLogTest, stage)
     }
 
     PerfLog::Stage stage("stage1");
-    #if PETSC_VERSION_GE(3, 18, 0)
+    #if (PETSC_VERSION_GE(3, 18, 0)) && (PETSC_VERSION_LT(3, 20, 0))
     EXPECT_EQ(stage.get_id(), 2);
     #else
     EXPECT_EQ(stage.get_id(), 1);
