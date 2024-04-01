@@ -27,6 +27,9 @@ jobs:
           - os: ubuntu-22.04
             python-version: '3.9'
             petsc: 3.19.4
+          - os: ubuntu-22.04
+            python-version: '3.9'
+            petsc: 3.20.6
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up miniconda
