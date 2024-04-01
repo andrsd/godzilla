@@ -28,12 +28,12 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PUBLIC
+    PRIVATE
+        yaml-cpp::yaml-cpp
         godzilla
+        ${PETSC_LIBRARY}
         gtest_main
         gmock_main
-    PRIVATE
-        ${PETSC_LIBRARY}
 )
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)

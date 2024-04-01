@@ -30,7 +30,7 @@ option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
 find_package(fmt 8.0 REQUIRED)
-find_package(yaml-cpp 0.7 REQUIRED)
+find_package(yaml-cpp 0.8 REQUIRED)
 if (GODZILLA_WITH_MPI)
     find_package(MPI REQUIRED)
 endif()
@@ -38,7 +38,7 @@ find_package(PETSc 3.17 REQUIRED)
 if (NOT ${PETSC_FOUND})
     message(STATUS "Try to set environment variable PETSC_DIR to point to your PETSc installation.")
 endif()
-find_package(exodusIIcpp 1.8 REQUIRED)
+find_package(exodusIIcpp 1.9 REQUIRED)
 
 if (GODZILLA_BUILD_TESTS)
     FetchContent_Declare(

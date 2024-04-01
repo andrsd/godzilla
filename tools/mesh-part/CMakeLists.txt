@@ -22,10 +22,10 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PUBLIC
-        godzilla
     PRIVATE
+        godzilla
         ${PETSC_LIBRARY}
+        fmt::fmt
 )
 if(GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
