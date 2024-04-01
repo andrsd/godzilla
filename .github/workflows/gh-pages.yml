@@ -41,7 +41,7 @@ jobs:
             fmt==9.1.0 \
             petsc==3.19.4 \
             yaml-cpp==0.8.0 \
-            exodusIIcpp==1.8
+            exodusIIcpp==1.9
 
       - name: Build doco
         run: |
