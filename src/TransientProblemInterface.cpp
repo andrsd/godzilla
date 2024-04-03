@@ -253,6 +253,14 @@ TransientProblemInterface::get_converged_reason() const
 }
 
 void
+TransientProblemInterface::set_time(Real t)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(TSSetTime(this->ts, t));
+    this->time = t;
+}
+
+void
 TransientProblemInterface::set_converged_reason(TSConvergedReason reason)
 {
     CALL_STACK_MSG();

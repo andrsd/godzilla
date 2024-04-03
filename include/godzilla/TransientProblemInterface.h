@@ -89,6 +89,11 @@ public:
     /// @return Converged reason
     TSConvergedReason get_converged_reason() const;
 
+    /// Set simulation time
+    ///
+    /// @param t New simulation time
+    void set_time(Real t);
+
 protected:
     /// Get underlying SNES object
     SNES get_snes() const;
