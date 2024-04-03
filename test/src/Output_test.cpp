@@ -1,13 +1,13 @@
-#include "gtest/gtest.h"
+#include "gmock/gmock.h"
 #include "godzilla/App.h"
-#include "FENonlinearProblem_test.h"
+#include "ImplicitFENonlinearProblem_test.h"
 #include "godzilla/Output.h"
 
 using namespace godzilla;
 
 namespace {
 
-class OutputTest : public FENonlinearProblemTest {
+class OutputTest : public ImplicitFENonlinearProblemTest {
 public:
 };
 
@@ -26,8 +26,8 @@ public:
 TEST_F(OutputTest, exec_masks_1)
 {
     Parameters pars = Output::parameters();
-    pars.set<App *>("_app") = app;
-    pars.set<Problem *>("_problem") = prob;
+    pars.set<App *>("_app") = this->app;
+    pars.set<Problem *>("_problem") = this->prob;
     pars.set<std::vector<std::string>>("on") = { "none" };
     MockOutput out(pars);
     out.create();
@@ -40,8 +40,8 @@ TEST_F(OutputTest, exec_masks_1)
 TEST_F(OutputTest, exec_masks_2)
 {
     Parameters pars = Output::parameters();
-    pars.set<App *>("_app") = app;
-    pars.set<Problem *>("_problem") = prob;
+    pars.set<App *>("_app") = this->app;
+    pars.set<Problem *>("_problem") = this->prob;
     pars.set<std::vector<std::string>>("on") = { "final" };
     MockOutput out(pars);
     out.create();
@@ -55,8 +55,8 @@ TEST_F(OutputTest, exec_masks_2)
 TEST_F(OutputTest, exec_masks_3)
 {
     Parameters pars = Output::parameters();
-    pars.set<App *>("_app") = app;
-    pars.set<Problem *>("_problem") = prob;
+    pars.set<App *>("_app") = this->app;
+    pars.set<Problem *>("_problem") = this->prob;
     pars.set<std::vector<std::string>>("on") = { "final", "initial", "timestep" };
     MockOutput out(pars);
     out.create();
@@ -65,9 +65,13 @@ TEST_F(OutputTest, exec_masks_3)
     EXPECT_TRUE(out.get_exec_mask() & ExecuteOn::INITIAL);
     EXPECT_TRUE(out.get_exec_mask() & ExecuteOn::TIMESTEP);
 
-    EXPECT_TRUE(out.should_output(ExecuteOn::FINAL));
+    this->prob->set_time(0.);
     EXPECT_TRUE(out.should_output(ExecuteOn::INITIAL));
+    this->prob->set_time(0.1);
     EXPECT_TRUE(out.should_output(ExecuteOn::TIMESTEP));
+    EXPECT_FALSE(out.should_output(ExecuteOn::TIMESTEP));
+    this->prob->set_time(0.2);
+    EXPECT_TRUE(out.should_output(ExecuteOn::FINAL));
 }
 
 TEST_F(OutputTest, empty_on)
