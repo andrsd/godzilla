@@ -58,6 +58,9 @@ private:
     ///
     Int interval;
 
+    /// Last simulation time when output happened
+    Real last_output_time;
+
 public:
     static Parameters parameters();
 };

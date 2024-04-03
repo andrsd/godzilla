@@ -8,24 +8,37 @@
 
 class ImplicitFENonlinearProblemTest : public GodzillaAppTest {
 public:
-    MeshObject *
-    gMesh1d()
+    void
+    SetUp() override
     {
-        const std::string class_name = "LineMesh";
-        Parameters * params = this->app->get_parameters(class_name);
-        params->set<Int>("nx") = 2;
-        return this->app->build_object<MeshObject>(class_name, "mesh", params);
+        GodzillaAppTest::SetUp();
+
+        {
+            const std::string class_name = "LineMesh";
+            Parameters * params = this->app->get_parameters(class_name);
+            params->set<Int>("nx") = 2;
+            this->mesh = this->app->build_object<MeshObject>(class_name, "mesh", params);
+        }
+        {
+            const std::string class_name = "GTestImplicitFENonlinearProblem";
+            Parameters * params = this->app->get_parameters(class_name);
+            params->set<MeshObject *>("_mesh_obj") = mesh;
+            params->set<Real>("start_time") = 0.;
+            params->set<Real>("end_time") = 20;
+            params->set<Real>("dt") = 5;
+            this->prob = this->app->build_object<GTestImplicitFENonlinearProblem>(class_name,
+                                                                                  "prob",
+                                                                                  params);
+        }
+        this->app->set_problem(this->prob);
     }
 
-    GTestImplicitFENonlinearProblem *
-    gProblem1d(MeshObject * mesh)
+    void
+    TearDown() override
     {
-        const std::string class_name = "GTestImplicitFENonlinearProblem";
-        Parameters * params = this->app->get_parameters(class_name);
-        params->set<MeshObject *>("_mesh_obj") = mesh;
-        params->set<Real>("start_time") = 0.;
-        params->set<Real>("end_time") = 20;
-        params->set<Real>("dt") = 5;
-        return this->app->build_object<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
+        GodzillaAppTest::TearDown();
     }
+
+    MeshObject * mesh;
+    GTestImplicitFENonlinearProblem * prob;
 };

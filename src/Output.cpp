@@ -23,7 +23,8 @@ Output::Output(const Parameters & params) :
     PrintInterface(this),
     problem(get_param<Problem *>("_problem")),
     on_mask(),
-    interval(is_param_valid("interval") ? get_param<Int>("interval") : 1)
+    interval(is_param_valid("interval") ? get_param<Int>("interval") : 1),
+    last_output_time(std::nan(""))
 {
     CALL_STACK_MSG();
 }
@@ -95,10 +96,20 @@ Output::should_output(ExecuteOn::ExecuteOnFlag flag)
 {
     CALL_STACK_MSG();
     if (this->on_mask & flag) {
+        bool should;
         if (flag == ExecuteOn::TIMESTEP)
-            return (this->problem->get_step_num() % this->interval) == 0;
+            should = (this->problem->get_step_num() % this->interval) == 0;
         else
+            should = true;
+
+        constexpr Real TIME_TOL = 1e-12;
+        if (should && (std::isnan(this->last_output_time) ||
+                       std::abs(this->last_output_time - this->problem->get_time()) > TIME_TOL)) {
+            this->last_output_time = this->problem->get_time();
             return true;
+        }
+        else
+            return false;
     }
     else
         return false;
