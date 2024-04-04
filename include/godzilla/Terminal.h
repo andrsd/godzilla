@@ -43,6 +43,10 @@ public:
     /// @return true if terminal supports colors
     static bool has_colors();
 
+    /// Set the terminal to use colors
+    static void set_colors(bool state);
+
+private:
     /// Number of colors supported by the terminal
     static unsigned int num_colors;
 };

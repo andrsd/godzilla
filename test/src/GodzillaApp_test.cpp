@@ -64,7 +64,7 @@ TEST_F(GodzillaAppTest, no_colors)
     App app(comm, "godzilla", argc, argv);
 
     app.run();
-    EXPECT_EQ(Terminal::num_colors, 1);
+    EXPECT_FALSE(Terminal::has_colors());
 }
 
 TEST_F(GodzillaAppTest, verbose)

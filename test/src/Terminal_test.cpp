@@ -5,26 +5,27 @@ using namespace godzilla;
 
 TEST(TerminalTest, colors)
 {
-    unsigned int nc = Terminal::num_colors;
+    Terminal::set_colors(true);
+    EXPECT_TRUE(Terminal::has_colors());
 
-    Terminal::num_colors = 256;
-    EXPECT_EQ(Terminal::has_colors(), true);
-
-    Terminal::num_colors = 1;
-    EXPECT_EQ(Terminal::has_colors(), false);
-
-    Terminal::Color blk("\33[30m");
-    EXPECT_STREQ(blk, "");
-
-    // restore
-    Terminal::num_colors = nc;
+    Terminal::set_colors(false);
+    EXPECT_FALSE(Terminal::has_colors());
 }
 
-TEST(TerminalTest, ostream_operator)
+TEST(TerminalTest, ostream_operator_w_colors)
 {
+    Terminal::set_colors(true);
     std::ostringstream oss;
     oss << Terminal::Color::red;
     EXPECT_STREQ(oss.str().c_str(), Terminal::Color::red);
+}
+
+TEST(TerminalTest, ostream_operator_wo_colors)
+{
+    Terminal::set_colors(false);
+    std::ostringstream oss;
+    oss << Terminal::Color::red;
+    EXPECT_STREQ(oss.str().c_str(), "");
 }
 
 TEST(TerminalTest, string_operator)

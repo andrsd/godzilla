@@ -177,7 +177,7 @@ App::process_command_line(const cxxopts::ParseResult & result)
         fmt::print("{}, version {}\n", get_name(), get_version());
     else {
         if (result.count("no-colors"))
-            Terminal::num_colors = 1;
+            Terminal::set_colors(false);
 
         if (result.count("verbose"))
             set_verbosity_level(result["verbose"].as<unsigned int>());
