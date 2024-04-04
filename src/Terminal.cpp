@@ -15,11 +15,7 @@ Terminal::Color Terminal::Color::cyan("\33[36m");
 Terminal::Color Terminal::Color::white("\33[37m");
 Terminal::Color Terminal::Color::normal("\33[39m");
 
-Terminal::Color::Color(const char * aclr)
-{
-    if (has_colors())
-        this->str = std::string(aclr);
-}
+Terminal::Color::Color(const char * aclr) : str(aclr) {}
 
 Terminal::Color::operator const std::string &() const
 {
@@ -37,6 +33,15 @@ Terminal::has_colors()
     return num_colors > 1;
 }
 
+void
+Terminal::set_colors(bool state)
+{
+    if (state)
+        num_colors = 256;
+    else
+        num_colors = 1;
+}
+
 unsigned int Terminal::num_colors = 256;
 
 } // namespace godzilla
@@ -44,6 +49,7 @@ unsigned int Terminal::num_colors = 256;
 std::ostream &
 operator<<(std::ostream & os, const godzilla::Terminal::Color & clr)
 {
-    os << static_cast<const char *>(clr);
+    if (godzilla::Terminal::has_colors())
+        os << static_cast<const char *>(clr);
     return os;
 }
