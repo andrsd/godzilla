@@ -7,8 +7,6 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(GmshMesh);
-
 Parameters
 GmshMesh::parameters()
 {

@@ -5,11 +5,20 @@
 
 namespace godzilla {
 
-Registry &
-Registry::instance()
+bool
+Registry::exists(const std::string & class_name) const
 {
-    static Registry registry;
-    return registry;
+    auto it = this->classes.find(class_name);
+    return it != this->classes.end();
+}
+
+const Registry::Entry &
+Registry::get(const std::string & class_name) const
+{
+    auto it = this->classes.find(class_name);
+    if (it == this->classes.end())
+        throw Exception("Class '{}' is not registered.", class_name);
+    return it->second;
 }
 
 } // namespace godzilla

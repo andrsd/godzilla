@@ -54,6 +54,15 @@ protected:
 
 class LinearProblemTest : public GodzillaAppTest {
 protected:
+    void
+    SetUp() override
+    {
+        GodzillaAppTest::SetUp();
+        this->app->get_registry().add<G1DTestLinearProblem>("G1DTestLinearProblem");
+        this->app->get_registry().add<G2DTestLinearProblem>("G2DTestLinearProblem");
+        this->app->get_registry().add<G3DTestLinearProblem>("G3DTestLinearProblem");
+    }
+
     MeshObject *
     gMesh1d()
     {

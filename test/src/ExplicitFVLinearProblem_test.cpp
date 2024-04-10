@@ -141,8 +141,6 @@ protected:
 
 } // namespace
 
-REGISTER_OBJECT(TestExplicitFVLinearProblem);
-
 TEST(ExplicitFVLinearProblemTest, api)
 {
     TestApp app;

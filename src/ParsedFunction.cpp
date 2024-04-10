@@ -7,8 +7,6 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(ParsedFunction);
-
 static double
 parsed_function_eval(void * ctx, double t, double x, double y, double z)
 {

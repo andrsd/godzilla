@@ -16,15 +16,15 @@ public:
 
 TEST(RegistryTest, exists)
 {
-    auto registry = Registry::instance();
+    Registry registry;
     EXPECT_FALSE(registry.exists("ASDF"));
 
-    registry.reg<ASDF>("ASDF");
+    registry.add<ASDF>("ASDF");
     EXPECT_TRUE(registry.exists("ASDF"));
 }
 
 TEST(RegistryTest, get)
 {
-    auto registry = Registry::instance();
+    Registry registry;
     EXPECT_THROW_MSG(auto entry = registry.get("ASDF"), "Class 'ASDF' is not registered.");
 }

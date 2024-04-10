@@ -7,6 +7,8 @@
 #include "godzilla/Object.h"
 #include "godzilla/Exception.h"
 
+#define REGISTER_OBJECT(registry, classname) registry.add<classname>(#classname)
+
 namespace godzilla {
 
 using ObjectPtr = Object *;
@@ -41,48 +43,30 @@ private:
     };
 
 public:
-    /// Get the instance of registry
-    ///
-    /// @return Instance of the Registry class
-    static Registry & instance();
-
     /// Register an object
     ///
     /// @param class_name Name of the object to register
     template <typename T>
-    char
-    reg(const std::string & class_name)
+    void
+    add(const std::string & class_name)
     {
         Entry entry = { &build_obj<T>, &call_parameters<T> };
         this->classes[class_name] = entry;
-        return '\0';
     }
 
     /// Check if class is registered
     ///
     /// @param class_name Class name to check
     /// @return `true` is class is registered, `false` otherwise
-    bool
-    exists(const std::string & class_name) const
-    {
-        auto it = this->classes.find(class_name);
-        return it != this->classes.end();
-    }
+    bool exists(const std::string & class_name) const;
 
     /// Find registry entry for a given class
     ///
     /// @param class_name Name of the class
     /// @return Registry entry
-    const Entry &
-    get(const std::string & class_name)
-    {
-        auto it = this->classes.find(class_name);
-        if (it == this->classes.end())
-            throw Exception("Class '{}' is not registered.", class_name);
-        return it->second;
-    }
+    const Entry & get(const std::string & class_name) const;
 
-private:
+public:
     Registry() = default;
 
 private:

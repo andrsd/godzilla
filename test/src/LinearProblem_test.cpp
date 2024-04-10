@@ -9,12 +9,6 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(G1DTestLinearProblem);
-REGISTER_OBJECT(G2DTestLinearProblem);
-REGISTER_OBJECT(G3DTestLinearProblem);
-
-//
-
 TEST_F(LinearProblemTest, solve)
 {
     auto mesh = gMesh1d();

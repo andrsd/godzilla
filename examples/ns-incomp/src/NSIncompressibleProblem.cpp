@@ -13,8 +13,6 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(NSIncompressibleProblem);
-
 namespace {
 
 class ResidualVeloc0 : public ResidualFunc {

@@ -5,8 +5,6 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(GTestImplicitFENonlinearProblem);
-
 namespace {
 
 class F0 : public ResidualFunc {

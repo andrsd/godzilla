@@ -29,8 +29,25 @@ public:
         const std::string & name = "",
         int argc = 0,
         const char * const * argv = nullptr);
+
+    /// Build and application object
+    ///
+    /// @param comm MPI communicator
+    /// @param registry Registry with classes that will be used by the application
+    /// @param name Name of the application
+    /// @param argc Number of command line arguments
+    /// @param argv Command line arguments
+    App(const mpi::Communicator & comm,
+        const Registry & registry,
+        const std::string & name = "",
+        int argc = 0,
+        const char * const * argv = nullptr);
+
     virtual ~App();
 
+    /// Get logger associated with the application
+    ///
+    /// @return Logger
     Logger * get_logger() const;
 
     /// Get Application name
@@ -179,6 +196,17 @@ private:
 
     /// Factory for building objects
     Factory factory;
+
+public:
+    /// Get the instance of registry
+    ///
+    /// @return Instance of the Registry class
+    static Registry & get_registry();
+
+    static void registerObjects(Registry & registry);
+
+private:
+    static Registry registry;
 };
 
 template <typename T>

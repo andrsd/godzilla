@@ -9,8 +9,6 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(PiecewiseConstant);
-
 static double
 piecewise_constant_function_eval(void * ctx, double x)
 {

@@ -9,8 +9,6 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(ConstantAuxiliaryField);
-
 static PetscErrorCode
 constant_auxiliary_field(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {

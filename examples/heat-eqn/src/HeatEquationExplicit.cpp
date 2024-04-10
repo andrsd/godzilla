@@ -51,8 +51,6 @@ protected:
 
 } // namespace
 
-REGISTER_OBJECT(HeatEquationExplicit);
-
 Parameters
 HeatEquationExplicit::parameters()
 {

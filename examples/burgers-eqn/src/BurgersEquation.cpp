@@ -6,8 +6,6 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(BurgersEquation);
-
 namespace {
 
 class F1 : public ResidualFunc {

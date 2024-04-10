@@ -12,6 +12,8 @@ public:
     SetUp() override
     {
         GodzillaAppTest::SetUp();
+        this->app->get_registry().add<GTestImplicitFENonlinearProblem>(
+            "GTestImplicitFENonlinearProblem");
 
         {
             const std::string class_name = "LineMesh";

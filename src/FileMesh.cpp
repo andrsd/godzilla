@@ -13,8 +13,6 @@ namespace fs = std::filesystem;
 
 namespace godzilla {
 
-REGISTER_OBJECT(FileMesh);
-
 Parameters
 FileMesh::parameters()
 {

@@ -6,8 +6,6 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(ConvectiveHeatFluxBC);
-
 namespace {
 
 class Residual0 : public BndResidualFunc {
