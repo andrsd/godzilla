@@ -67,8 +67,6 @@ get_elem_node_ordering(DMPolytopeType elem_type)
 
 } // namespace
 
-REGISTER_OBJECT(TecplotOutput);
-
 Parameters
 TecplotOutput::parameters()
 {

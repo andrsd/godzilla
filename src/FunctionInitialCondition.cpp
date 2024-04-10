@@ -7,8 +7,6 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(FunctionInitialCondition);
-
 Parameters
 FunctionInitialCondition::parameters()
 {

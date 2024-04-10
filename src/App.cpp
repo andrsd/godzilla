@@ -16,6 +16,8 @@
 
 namespace godzilla {
 
+Registry App::registry;
+
 App::App(const mpi::Communicator & comm,
          const std::string & name,
          int argc,
@@ -29,7 +31,28 @@ App::App(const mpi::Communicator & comm,
     cmdln_opts(name),
     verbosity_level(1),
     yml(nullptr),
-    problem(nullptr)
+    problem(nullptr),
+    factory(App::get_registry())
+{
+    CALL_STACK_MSG();
+}
+
+App::App(const mpi::Communicator & comm,
+         const Registry & registry,
+         const std::string & name,
+         int argc,
+         const char * const * argv) :
+    PrintInterface(comm, this->verbosity_level, name),
+    name(name),
+    mpi_comm(comm),
+    logger(new Logger()),
+    argc(argc),
+    argv(argv),
+    cmdln_opts(name),
+    verbosity_level(1),
+    yml(nullptr),
+    problem(nullptr),
+    factory(registry)
 {
     CALL_STACK_MSG();
 }
@@ -258,6 +281,12 @@ App::run_problem()
     lprint(9, "Running");
     assert(this->problem != nullptr);
     this->problem->run();
+}
+
+Registry &
+App::get_registry()
+{
+    return registry;
 }
 
 } // namespace godzilla

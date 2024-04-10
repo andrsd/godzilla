@@ -9,17 +9,6 @@
 #include "godzilla/Registry.h"
 #include "godzilla/Exception.h"
 
-#define COMBINE_NAMES1(X, Y) X##Y
-#define COMBINE_NAMES(X, Y) COMBINE_NAMES1(X, Y)
-
-#define REGISTER_OBJECT(classname)                                                     \
-    static char COMBINE_NAMES(dummyvar_for_registering_obj_##classname, __COUNTER__) = \
-        godzilla::Registry::instance().reg<classname>(#classname)
-
-#define REGISTER_OBJECT_ALIAS(classname, alias)                                        \
-    static char COMBINE_NAMES(dummyvar_for_registering_obj_##classname, __COUNTER__) = \
-        godzilla::Registry::instance().reg<classname>(#alias)
-
 namespace godzilla {
 
 class Parameters;
@@ -28,6 +17,8 @@ class Parameters;
 ///
 class Factory {
 public:
+    explicit Factory(const Registry & registry);
+
     /// Get valid parameters for the object
     ///
     /// @param class_name Name of the object whose parameter we are requesting
@@ -35,8 +26,7 @@ public:
     Parameters *
     get_parameters(const std::string & class_name)
     {
-        auto registry = Registry::instance();
-        auto entry = registry.get(class_name);
+        auto entry = this->registry.get(class_name);
         auto pars = new Parameters((*entry.params_ptr)());
         this->params.push_back(pars);
         return pars;
@@ -51,8 +41,7 @@ public:
     T *
     create(const std::string & class_name, const std::string & name, Parameters & parameters)
     {
-        auto registry = Registry::instance();
-        auto entry = registry.get(class_name);
+        auto entry = this->registry.get(class_name);
         parameters.set<std::string>("_type") = class_name;
         parameters.set<std::string>("_name") = name;
         T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
@@ -81,13 +70,15 @@ public:
     bool
     is_registered(const std::string & class_name) const
     {
-        return Registry::instance().exists(class_name);
+        return this->registry.exists(class_name);
     }
 
     /// Destroy all object build by this factory
     void destroy();
 
 private:
+    /// Registry supplying information about objects that can be build
+    const Registry & registry;
     /// All objects built by this factory
     std::list<Object *> objects;
     /// All Parameters objects built by this factory

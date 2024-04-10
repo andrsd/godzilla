@@ -8,8 +8,6 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(RZSymmetry);
-
 Parameters
 RZSymmetry::parameters()
 {

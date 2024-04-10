@@ -93,8 +93,6 @@ ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type)
     }
 }
 
-REGISTER_OBJECT(ExodusIIOutput);
-
 Parameters
 ExodusIIOutput::parameters()
 {

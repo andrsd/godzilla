@@ -10,8 +10,6 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(BoxMesh);
-
 Parameters
 BoxMesh::parameters()
 {

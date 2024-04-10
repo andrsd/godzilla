@@ -9,8 +9,6 @@
 
 namespace godzilla {
 
-REGISTER_OBJECT(L2Diff);
-
 static PetscErrorCode
 l2_diff_eval(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {

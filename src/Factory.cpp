@@ -6,6 +6,8 @@
 
 namespace godzilla {
 
+Factory::Factory(const Registry & registry) : registry(registry) {}
+
 void
 Factory::destroy()
 {
