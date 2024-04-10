@@ -5,8 +5,6 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(AdvectionEquation);
-
 Parameters
 AdvectionEquation::parameters()
 {

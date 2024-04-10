@@ -89,8 +89,6 @@ protected:
 
 } // namespace
 
-REGISTER_OBJECT(HeatEquationProblem);
-
 Parameters
 HeatEquationProblem::parameters()
 {

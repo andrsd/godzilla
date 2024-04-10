@@ -7,8 +7,6 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(PoissonEquation);
-
 Parameters
 PoissonEquation::parameters()
 {
