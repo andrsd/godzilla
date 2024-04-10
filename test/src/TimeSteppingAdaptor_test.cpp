@@ -2,6 +2,7 @@
 #include "godzilla/Factory.h"
 #include "TestApp.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/DirichletBC.h"
 #include "GTestImplicitFENonlinearProblem.h"
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/TimeSteppingAdaptor.h"
@@ -52,8 +53,6 @@ public:
 };
 
 } // namespace
-
-REGISTER_OBJECT(TestTSAdaptor);
 
 Parameters
 TestTSAdaptor::parameters()
@@ -131,8 +130,6 @@ protected:
     void ts_monitor(Int stepi, Real time, Vec x) override;
 };
 
-REGISTER_OBJECT(TestTSProblem);
-
 TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonlinearProblem(params)
 {
     this->dts.resize(5);
@@ -151,31 +148,26 @@ TEST(TimeSteppingAdaptor, api)
 {
     TestApp app;
 
-    LineMesh * mesh;
-    {
-        const std::string class_name = "LineMesh";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Int>("nx") = 2;
-        mesh = app.build_object<LineMesh>(class_name, "mesh", params);
-    }
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
 
-    TestTSProblem * prob;
-    {
-        const std::string class_name = "TestTSProblem";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<MeshObject *>("_mesh_obj") = mesh;
-        params->set<Real>("start_time") = 0.;
-        params->set<Real>("end_time") = 1;
-        params->set<Real>("dt") = 0.1;
-        prob = app.build_object<TestTSProblem>(class_name, "prob", params);
-    }
-    app.set_problem(prob);
-    mesh->create();
-    prob->create();
+    auto prob_pars = TestTSProblem::parameters();
+    prob_pars.set<App *>("_app") = &app;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1;
+    prob_pars.set<Real>("dt") = 0.1;
+    TestTSProblem prob(prob_pars);
 
-    Parameters params = TimeSteppingAdaptor::parameters();
+    app.set_problem(&prob);
+    mesh.create();
+    prob.create();
+
+    auto params = TimeSteppingAdaptor::parameters();
     params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = prob;
+    params.set<Problem *>("_problem") = &prob;
     params.set<Real>("dt_min") = 1e-3;
     params.set<Real>("dt_max") = 1e3;
     TimeSteppingAdaptor adaptor(params);
@@ -191,48 +183,39 @@ TEST(TimeSteppingAdaptor, choose)
     TestApp app;
     PETSC_CHECK(TSAdaptRegister(TS_ADAPT_TEST, TSAdaptCreate_test));
 
-    LineMesh * mesh;
-    {
-        const std::string class_name = "LineMesh";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Int>("nx") = 2;
-        mesh = app.build_object<LineMesh>(class_name, "mesh", params);
-    }
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
 
-    TestTSProblem * prob;
-    {
-        const std::string class_name = "TestTSProblem";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<MeshObject *>("_mesh_obj") = mesh;
-        params->set<Real>("start_time") = 0.;
-        params->set<Real>("end_time") = 1;
-        params->set<Real>("dt") = 0.1;
-        prob = app.build_object<TestTSProblem>(class_name, "prob", params);
-    }
-    app.set_problem(prob);
+    auto prob_pars = TestTSProblem::parameters();
+    prob_pars.set<App *>("_app") = &app;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1;
+    prob_pars.set<Real>("dt") = 0.1;
+    TestTSProblem prob(prob_pars);
 
-    {
-        const std::string class_name = "DirichletBC";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<std::vector<std::string>>("boundary") = { "marker" };
-        params->set<std::vector<std::string>>("value") = { "x*x" };
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        auto bc = app.build_object<BoundaryCondition>(class_name, "bc", params);
-        prob->add_boundary_condition(bc);
-    }
+    app.set_problem(&prob);
 
-    {
-        const std::string class_name = "TestTSAdaptor";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Problem *>("_problem") = prob;
-        auto * ts_adaptor = app.build_object<TestTSAdaptor>(class_name, "ts_adapt", params);
-        prob->set_time_stepping_adaptor(ts_adaptor);
-    }
+    auto bc_pars = DirichletBC::parameters();
+    bc_pars.set<App *>("_app") = &app;
+    bc_pars.set<std::vector<std::string>>("boundary") = { "marker" };
+    bc_pars.set<std::vector<std::string>>("value") = { "x*x" };
+    bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
+    DirichletBC bc(bc_pars);
+    prob.add_boundary_condition(&bc);
 
-    mesh->create();
-    prob->create();
+    auto tsa_pars = TestTSAdaptor::parameters();
+    tsa_pars.set<App *>("_app") = &app;
+    tsa_pars.set<Problem *>("_problem") = &prob;
+    TestTSAdaptor ts_adaptor(tsa_pars);
+    prob.set_time_stepping_adaptor(&ts_adaptor);
 
-    prob->run();
+    mesh.create();
+    prob.create();
 
-    EXPECT_THAT(prob->dts, testing::ElementsAre(0.1, 0.2, 0.3, 0.4, 0.));
+    prob.run();
+
+    EXPECT_THAT(prob.dts, testing::ElementsAre(0.1, 0.2, 0.3, 0.4, 0.));
 }

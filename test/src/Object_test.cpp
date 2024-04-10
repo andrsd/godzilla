@@ -5,12 +5,11 @@
 
 using namespace godzilla;
 
-REGISTER_OBJECT(Object);
-
 TEST(ObjectTest, api)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app(comm, "test");
+    app.get_registry().add<Object>("Object");
 
     Parameters params = Object::parameters();
     auto obj = app.build_object<Object>("Object", "name", params);

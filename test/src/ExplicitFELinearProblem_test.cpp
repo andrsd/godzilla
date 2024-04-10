@@ -91,8 +91,6 @@ TestExplicitFELinearProblem::set_up_weak_form()
 
 } // namespace
 
-REGISTER_OBJECT(TestExplicitFELinearProblem);
-
 TEST(ExplicitFELinearProblemTest, test_mass_matrix)
 {
     TestApp app;
@@ -332,29 +330,23 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
     testing::internal::CaptureStderr();
 
     TestApp app;
-    LineMesh * mesh;
-    TestExplicitFELinearProblem * prob;
 
-    {
-        const std::string class_name = "LineMesh";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Int>("nx") = 2;
-        mesh = app.build_object<LineMesh>(class_name, "mesh", params);
-    }
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
 
-    {
-        const std::string class_name = "TestExplicitFELinearProblem";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<MeshObject *>("_mesh_obj") = mesh;
-        params->set<Real>("start_time") = 0.;
-        params->set<Real>("end_time") = 20;
-        params->set<Real>("dt") = 5;
-        params->set<std::string>("scheme") = "asdf";
-        prob = app.build_object<TestExplicitFELinearProblem>(class_name, "prob", params);
-    }
+    Parameters prob_pars = TestExplicitFELinearProblem::parameters();
+    prob_pars.set<App *>("_app") = &app;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 20;
+    prob_pars.set<Real>("dt") = 5;
+    prob_pars.set<std::string>("scheme") = "asdf";
+    TestExplicitFELinearProblem prob(prob_pars);
 
-    mesh->create();
-    prob->create();
+    mesh.create();
+    prob.create();
 
     app.check_integrity();
 

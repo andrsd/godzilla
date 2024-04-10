@@ -16,6 +16,7 @@ public:
     SetUp() override
     {
         GodzillaAppTest::SetUp();
+        App::get_registry().add<GTestFENonlinearProblem>("GTestFENonlinearProblem");
 
         {
             const std::string class_name = "LineMesh";
@@ -49,6 +50,7 @@ public:
     SetUp() override
     {
         GodzillaAppTest::SetUp();
+        App::get_registry().add<GTest2FieldsFENonlinearProblem>("GTest2FieldsFENonlinearProblem");
 
         {
             const std::string class_name = "LineMesh";

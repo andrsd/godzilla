@@ -8,6 +8,7 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/ConstantInitialCondition.h"
+#include "godzilla/DirichletBC.h"
 #include "godzilla/BoundaryCondition.h"
 #include "ExceptionTestMacros.h"
 #include "petscvec.h"
@@ -37,8 +38,6 @@ public:
 };
 
 } // namespace
-
-REGISTER_OBJECT(GTest2CompIC);
 
 TEST_F(FENonlinearProblemTest, fields)
 {
@@ -178,44 +177,38 @@ TEST_F(FENonlinearProblemTest, zero_initial_guess)
 
 TEST_F(FENonlinearProblemTest, solve)
 {
-    InitialCondition * ic = nullptr;
-    {
-        const std::string class_name = "ConstantInitialCondition";
-        Parameters * params = this->app->get_parameters(class_name);
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::vector<Real>>("value") = { 0.1 };
-        ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
-        prob->add_initial_condition(ic);
-    }
+    Parameters ic_pars = ConstantInitialCondition::parameters();
+    ic_pars.set<App *>("_app") = this->app;
+    ic_pars.set<DiscreteProblemInterface *>("_dpi") = this->prob;
+    ic_pars.set<std::vector<Real>>("value") = { 0.1 };
+    ConstantInitialCondition ic(ic_pars);
+    this->prob->add_initial_condition(&ic);
 
-    {
-        const std::string class_name = "DirichletBC";
-        Parameters * params = this->app->get_parameters(class_name);
-        params->set<App *>("_app") = this->app;
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::vector<std::string>>("boundary") = { "left", "right" };
-        params->set<std::vector<std::string>>("value") = { "x*x" };
-        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
-        prob->add_boundary_condition(bc);
-    }
+    auto params = DirichletBC::parameters();
+    params.set<App *>("_app") = this->app;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
+    params.set<std::vector<std::string>>("boundary") = { "left", "right" };
+    params.set<std::vector<std::string>>("value") = { "x*x" };
+    DirichletBC bc(params);
+    this->prob->add_boundary_condition(&bc);
 
-    mesh->create();
-    prob->create();
+    this->mesh->create();
+    this->prob->create();
 
-    auto bcs = prob->get_boundary_conditions();
+    auto bcs = this->prob->get_boundary_conditions();
     EXPECT_EQ(bcs.size(), 1);
-    EXPECT_EQ(bcs[0]->get_type(), "DirichletBC");
+    EXPECT_EQ(bcs[0], &bc);
 
-    auto ess_bcs = prob->get_essential_bcs();
+    auto ess_bcs = this->prob->get_essential_bcs();
     ASSERT_EQ(ess_bcs.size(), 1);
-    EXPECT_EQ(bcs[0]->get_type(), "DirichletBC");
+    EXPECT_EQ(bcs[0], &bc);
 
-    prob->solve();
+    this->prob->solve();
 
-    bool conv = prob->converged();
+    bool conv = this->prob->converged();
     EXPECT_EQ(conv, true);
 
-    auto x = prob->get_solution_vector();
+    auto x = this->prob->get_solution_vector();
     Int ni = 1;
     Int ix[1] = { 0 };
     Scalar xx[1];
@@ -225,18 +218,16 @@ TEST_F(FENonlinearProblemTest, solve)
 
 TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
-    {
-        const std::string class_name = "DirichletBC";
-        Parameters * params = this->app->get_parameters(class_name);
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::vector<std::string>>("boundary") = { "marker" };
-        params->set<std::vector<std::string>>("value") = { "x*x" };
-        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc", params);
-        prob->add_boundary_condition(bc);
-    }
+    auto params = DirichletBC::parameters();
+    params.set<App *>("_app") = this->app;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
+    params.set<std::vector<std::string>>("boundary") = { "marker" };
+    params.set<std::vector<std::string>>("value") = { "x*x" };
+    DirichletBC bc(params);
+    this->prob->add_boundary_condition(&bc);
 
-    mesh->create();
-    prob->create();
+    this->mesh->create();
+    this->prob->create();
 
     auto x = prob->get_solution_vector();
     Int ni = 1;
@@ -250,15 +241,15 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 {
     testing::internal::CaptureStderr();
 
-    {
-        const std::string class_name = "GTest2CompIC";
-        Parameters * params = this->app->get_parameters(class_name);
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        auto ic = this->app->build_object<InitialCondition>(class_name, "ic", params);
-        prob->add_initial_condition(ic);
-    }
-    mesh->create();
-    prob->create();
+    auto params = GTest2CompIC::parameters();
+    params.set<std::string>("_name") = "ic";
+    params.set<App *>("_app") = this->app;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
+    GTest2CompIC ic(params);
+    this->prob->add_initial_condition(&ic);
+
+    this->mesh->create();
+    this->prob->create();
     this->app->check_integrity();
 
     EXPECT_THAT(
@@ -271,36 +262,37 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
 {
     testing::internal::CaptureStderr();
 
-    class TestApp : public App {
-    public:
-        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
-    } app;
+    TestApp app;
 
-    Parameters * mesh_params = app.get_parameters("LineMesh");
-    mesh_params->set<Int>("nx") = 2;
-    auto mesh = app.build_object<MeshObject>("LineMesh", "mesh", mesh_params);
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
 
-    Parameters * prob_params = app.get_parameters("GTest2FieldsFENonlinearProblem");
-    prob_params->set<MeshObject *>("_mesh_obj") = mesh;
-    auto prob =
-        app.build_object<FENonlinearProblem>("GTest2FieldsFENonlinearProblem", "prob", prob_params);
+    auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    GTest2FieldsFENonlinearProblem prob(prob_params);
 
-    Parameters * ic1_params = app.get_parameters("ConstantInitialCondition");
-    ic1_params->set<DiscreteProblemInterface *>("_dpi") = prob;
-    ic1_params->set<std::string>("field") = "u";
-    ic1_params->set<std::vector<Real>>("value") = { 0.1 };
-    auto ic1 = app.build_object<InitialCondition>("ConstantInitialCondition", "ic1", ic1_params);
-    prob->add_initial_condition(ic1);
+    auto ic1_params = ConstantInitialCondition::parameters();
+    ic1_params.set<std::string>("_name") = "ic1";
+    ic1_params.set<App *>("_app") = &app;
+    ic1_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
+    ic1_params.set<std::string>("field") = "u";
+    ic1_params.set<std::vector<Real>>("value") = { 0.1 };
+    ConstantInitialCondition ic1(ic1_params);
+    prob.add_initial_condition(&ic1);
 
-    const std::string class_name = "ConstantInitialCondition";
-    Parameters * params = app.get_parameters(class_name);
-    params->set<DiscreteProblemInterface *>("_dpi") = prob;
-    params->set<std::string>("field") = "u";
-    params->set<std::vector<Real>>("value") = { 0.2 };
-    auto ic = app.build_object<InitialCondition>(class_name, "ic2", params);
-    prob->add_initial_condition(ic);
-    mesh->create();
-    prob->create();
+    auto params = ConstantInitialCondition::parameters();
+    params.set<std::string>("_name") = "ic2";
+    params.set<App *>("_app") = &app;
+    params.set<DiscreteProblemInterface *>("_dpi") = &prob;
+    params.set<std::string>("field") = "u";
+    params.set<std::vector<Real>>("value") = { 0.2 };
+    ConstantInitialCondition ic(params);
+    prob.add_initial_condition(&ic);
+    mesh.create();
+    prob.create();
     app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
@@ -313,29 +305,27 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 {
     testing::internal::CaptureStderr();
 
-    class TestApp : public App {
-    public:
-        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "godzilla") {}
-    } app;
+    class TestApp app;
 
-    Parameters * mesh_params = app.get_parameters("LineMesh");
-    mesh_params->set<Int>("nx") = 2;
-    auto mesh = app.build_object<LineMesh>("LineMesh", "mesh", mesh_params);
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
 
-    Parameters * prob_params = app.get_parameters("GTest2FieldsFENonlinearProblem");
-    prob_params->set<MeshObject *>("_mesh_obj") = mesh;
-    auto prob =
-        app.build_object<FENonlinearProblem>("GTest2FieldsFENonlinearProblem", "prob", prob_params);
+    auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    GTest2FieldsFENonlinearProblem prob(prob_params);
 
     Parameters * ic_params = app.get_parameters("ConstantInitialCondition");
-    ic_params->set<DiscreteProblemInterface *>("_dpi") = prob;
+    ic_params->set<DiscreteProblemInterface *>("_dpi") = &prob;
     ic_params->set<std::vector<Real>>("value") = { 0.1 };
     ic_params->set<std::string>("field") = "u";
     auto ic = app.build_object<InitialCondition>("ConstantInitialCondition", "ic1", ic_params);
-    prob->add_initial_condition(ic);
+    prob.add_initial_condition(ic);
 
-    mesh->create();
-    prob->create();
+    mesh.create();
+    prob.create();
     app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
@@ -346,18 +336,17 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 {
     testing::internal::CaptureStderr();
 
-    {
-        const std::string class_name = "DirichletBC";
-        Parameters * params = this->app->get_parameters(class_name);
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::vector<std::string>>("boundary") = { "asdf" };
-        params->set<std::vector<std::string>>("value") = { "0.1" };
-        auto bc = this->app->build_object<BoundaryCondition>(class_name, "bc1", params);
-        prob->add_boundary_condition(bc);
-    }
+    auto params = DirichletBC::parameters();
+    params.set<std::string>("_name") = "bc1";
+    params.set<App *>("_app") = this->app;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
+    params.set<std::vector<std::string>>("boundary") = { "asdf" };
+    params.set<std::vector<std::string>>("value") = { "0.1" };
+    DirichletBC bc(params);
+    this->prob->add_boundary_condition(&bc);
 
-    mesh->create();
-    prob->create();
+    this->mesh->create();
+    this->prob->create();
     this->app->check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
@@ -369,27 +358,29 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 TEST_F(FENonlinearProblemTest, natural_riemann_bcs_not_supported)
 {
     Label label;
-    EXPECT_THROW_MSG(prob->add_boundary_natural_riemann("", "", -1, {}, nullptr, nullptr, nullptr),
-                     "Natural Riemann BCs are not supported for FE problems");
+    EXPECT_THROW_MSG(
+        this->prob->add_boundary_natural_riemann("", "", -1, {}, nullptr, nullptr, nullptr),
+        "Natural Riemann BCs are not supported for FE problems");
 }
 
 TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
 {
     TestApp app;
 
-    Parameters * mesh_pars = app.get_parameters("LineMesh");
-    mesh_pars->set<Int>("nx") = 2;
-    auto mesh = app.build_object<LineMesh>("LineMesh", "mesh", mesh_pars);
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
 
-    Parameters * prob_pars = app.get_parameters("GTest2FieldsFENonlinearProblem");
-    prob_pars->set<MeshObject *>("_mesh_obj") = mesh;
-    auto prob =
-        app.build_object<FENonlinearProblem>("GTest2FieldsFENonlinearProblem", "prob", prob_pars);
+    auto prob_params = GTest2FieldsFENonlinearProblem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    GTest2FieldsFENonlinearProblem prob(prob_params);
 
-    mesh->create();
-    prob->create();
+    mesh.create();
+    prob.create();
 
-    auto fdecomp = prob->create_field_decomposition();
+    auto fdecomp = prob.create_field_decomposition();
     ASSERT_EQ(fdecomp.get_num_fields(), 2);
     EXPECT_EQ(fdecomp.field_name[0], "Q1");
     EXPECT_EQ(fdecomp.field_name[1], "Q1");

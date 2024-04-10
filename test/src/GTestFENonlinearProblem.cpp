@@ -3,8 +3,6 @@
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/Godzilla.h"
 
-REGISTER_OBJECT(GTestFENonlinearProblem);
-
 namespace {
 
 class F0 : public ResidualFunc {

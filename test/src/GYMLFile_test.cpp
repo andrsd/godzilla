@@ -54,8 +54,6 @@ public:
 
 } // namespace
 
-REGISTER_OBJECT(GTestProblem);
-
 Parameters
 GTestProblem::parameters()
 {
@@ -82,6 +80,13 @@ GTestProblem::parameters()
 
 class GYMLFileTest : public GodzillaAppTest {
 protected:
+    void
+    SetUp() override
+    {
+        GodzillaAppTest::SetUp();
+        this->app->get_registry().add<GTestProblem>("GTestProblem");
+    }
+
     MockGYMLFile *
     gymlFile()
     {

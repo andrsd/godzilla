@@ -16,6 +16,7 @@ protected:
     SetUp() override
     {
         GodzillaAppTest::SetUp();
+        this->app->get_registry().add<G1DTestLinearProblem>("G1DTestLinearProblem");
 
         {
             const std::string class_name = "LineMesh";

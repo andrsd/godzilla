@@ -11,34 +11,29 @@ TEST(BasicTSAdapt, api)
 {
     TestApp app;
 
-    LineMesh * mesh;
-    {
-        const std::string class_name = "LineMesh";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<Int>("nx") = 2;
-        mesh = app.build_object<LineMesh>(class_name, "mesh", params);
-    }
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_pars);
 
-    GTestImplicitFENonlinearProblem * prob;
-    {
-        const std::string class_name = "GTestImplicitFENonlinearProblem";
-        Parameters * params = app.get_parameters(class_name);
-        params->set<MeshObject *>("_mesh_obj") = mesh;
-        params->set<Real>("start_time") = 0.;
-        params->set<Real>("end_time") = 1;
-        params->set<Real>("dt") = 0.1;
-        prob = app.build_object<GTestImplicitFENonlinearProblem>(class_name, "prob", params);
-    }
-    app.set_problem(prob);
+    auto prob_pars = GTestImplicitFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app") = &app;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    prob_pars.set<Real>("start_time") = 0.;
+    prob_pars.set<Real>("end_time") = 1;
+    prob_pars.set<Real>("dt") = 0.1;
+    GTestImplicitFENonlinearProblem prob(prob_pars);
+
+    app.set_problem(&prob);
 
     Parameters params = BasicTSAdapt::parameters();
     params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = prob;
+    params.set<Problem *>("_problem") = &prob;
     BasicTSAdapt adaptor(params);
-    prob->set_time_stepping_adaptor(&adaptor);
+    prob.set_time_stepping_adaptor(&adaptor);
 
-    mesh->create();
-    prob->create();
+    mesh.create();
+    prob.create();
 
     TSAdapt ts_adapt = adaptor.get_ts_adapt();
     TSAdaptType type;
