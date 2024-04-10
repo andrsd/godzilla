@@ -60,6 +60,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">App</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla3AppE"><code class="docutils literal notranslate"><span class="pre">App</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorERKNSt6stringEiPPCKc"><code class="docutils literal notranslate"><span class="pre">App::App()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorERK8RegistryRKNSt6stringEiPPCKc"><code class="docutils literal notranslate"><span class="pre">App::App()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App10get_loggerEv"><code class="docutils literal notranslate"><span class="pre">App::get_logger()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App8get_nameEv"><code class="docutils literal notranslate"><span class="pre">App::get_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App11get_versionEv"><code class="docutils literal notranslate"><span class="pre">App::get_version()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App11get_factoryEv"><code class="docutils literal notranslate"><span class="pre">App::get_factory()</span></code></a></li>
@@ -74,6 +76,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla3App8get_commEv"><code class="docutils literal notranslate"><span class="pre">App::get_comm()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App14get_parametersERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">App::get_parameters()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0EN8godzilla3App12build_objectEP1TRKNSt6stringERKNSt6stringER10Parameters"><code class="docutils literal notranslate"><span class="pre">App::build_object()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla3App12get_registryEv"><code class="docutils literal notranslate"><span class="pre">App::get_registry()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -168,6 +171,34 @@
 <li><p><strong>argc</strong> – Number of command line arguments </p></li>
 <li><p><strong>argv</strong> – Command line arguments </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorERK8RegistryRKNSt6stringEiPPCKc">
+<span id="_CPPv3N8godzilla3App3AppERKN3mpi12CommunicatorERK8RegistryRKNSt6stringEiPPCKc"></span><span id="_CPPv2N8godzilla3App3AppERKN3mpi12CommunicatorERK8RegistryRKNSt6stringEiPPCKc"></span><span id="godzilla::App::App__mpi::CommunicatorCR.RegistryCR.ssCR.i.cCPCP"></span><span class="target" id="classgodzilla_1_1_app_1a20b9e5f2588624d10cdd780265b7b49e"></span><span class="sig-name descname"><span class="n"><span class="pre">App</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">mpi</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Communicator</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comm</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Registry</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">registry</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;&quot;</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argc</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">argv</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">nullptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App3AppERKN3mpi12CommunicatorERK8RegistryRKNSt6stringEiPPCKc" title="Link to this definition"></a><br /></dt>
+<dd><p>Build and application object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>comm</strong> – MPI communicator </p></li>
+<li><p><strong>registry</strong> – Registry with classes that will be used by the application </p></li>
+<li><p><strong>name</strong> – Name of the application </p></li>
+<li><p><strong>argc</strong> – Number of command line arguments </p></li>
+<li><p><strong>argv</strong> – Command line arguments </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla3App10get_loggerEv">
+<span id="_CPPv3NK8godzilla3App10get_loggerEv"></span><span id="_CPPv2NK8godzilla3App10get_loggerEv"></span><span id="godzilla::App::get_loggerC"></span><span class="target" id="classgodzilla_1_1_app_1a2fe6a5f1857393daea28026db880720a"></span><a class="reference internal" href="logger.html#_CPPv4N8godzilla6LoggerE" title="godzilla::Logger"><span class="n"><span class="pre">Logger</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_logger</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla3App10get_loggerEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get logger associated with the application. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="logger.html#classgodzilla_1_1_logger"><span class="std std-ref">Logger</span></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -328,6 +359,20 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The constructed object </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla3App12get_registryEv">
+<span id="_CPPv3N8godzilla3App12get_registryEv"></span><span id="_CPPv2N8godzilla3App12get_registryEv"></span><span id="godzilla::App::get_registry"></span><span class="target" id="classgodzilla_1_1_app_1aa8bf3905802be5cc39149d9abaae2ba7"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">Registry</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_registry</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla3App12get_registryEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the instance of registry. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Instance of the Registry class </p>
 </dd>
 </dl>
 </dd></dl>
