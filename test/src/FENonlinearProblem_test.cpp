@@ -400,3 +400,20 @@ TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
     EXPECT_EQ(fdecomp.field_name.size(), 0);
     EXPECT_EQ(fdecomp.is.size(), 0);
 }
+
+TEST_F(FENonlinearProblemTest, steady_state_output)
+{
+    auto params = DirichletBC::parameters();
+    params.set<App *>("_app") = this->app;
+    params.set<DiscreteProblemInterface *>("_dpi") = prob;
+    params.set<std::vector<std::string>>("boundary") = { "left", "right" };
+    params.set<std::vector<std::string>>("value") = { "x*x" };
+    DirichletBC bc(params);
+    this->prob->add_boundary_condition(&bc);
+
+    this->mesh->create();
+    this->prob->create();
+    EXPECT_DOUBLE_EQ(this->prob->get_time(), 0.);
+    this->prob->run();
+    EXPECT_DOUBLE_EQ(this->prob->get_time(), 1.);
+}
