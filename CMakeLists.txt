@@ -78,12 +78,6 @@ install(
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
 
-install(
-    FILES
-        ${PROJECT_SOURCE_DIR}/cmake/TesterExodusII.cmake
-    DESTINATION ${CMAKE_ROOT}/Modules
-)
-
 # Tests
 
 if (GODZILLA_BUILD_TESTS)
