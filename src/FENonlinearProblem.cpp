@@ -59,7 +59,8 @@ FENonlinearProblem::parameters()
 
 FENonlinearProblem::FENonlinearProblem(const Parameters & parameters) :
     NonlinearProblem(parameters),
-    FEProblemInterface(this, parameters)
+    FEProblemInterface(this, parameters),
+    state(INITIAL)
 {
     CALL_STACK_MSG();
 }
@@ -1175,8 +1176,27 @@ void
 FENonlinearProblem::on_initial()
 {
     CALL_STACK_MSG();
+    this->state = INITIAL;
     NonlinearProblem::on_initial();
     compute_aux_fields();
+}
+
+void
+FENonlinearProblem::on_final()
+{
+    CALL_STACK_MSG();
+    this->state = FINAL;
+    NonlinearProblem::on_final();
+}
+
+Real
+FENonlinearProblem::get_time() const
+{
+    CALL_STACK_MSG();
+    if (this->state == INITIAL)
+        return 0.;
+    else
+        return 1.;
 }
 
 void

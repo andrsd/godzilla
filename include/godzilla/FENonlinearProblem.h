@@ -26,6 +26,7 @@ public:
     /// Method for computing boundary values
     virtual PetscErrorCode compute_boundary(Vector & x);
 
+    Real get_time() const override;
     void compute_solution_vector_local() override;
 
 protected:
@@ -34,6 +35,7 @@ protected:
     void set_up_initial_guess() override;
     void allocate_objects() override;
     void on_initial() override;
+    void on_final() override;
 
     virtual PetscErrorCode compute_residual_internal(DM dm,
                                                      PetscFormKey key,
@@ -82,6 +84,12 @@ protected:
                                                         Mat Jp,
                                                         DMField coord_field,
                                                         const IndexSet & facets);
+
+private:
+    enum State {
+        INITIAL,
+        FINAL
+    } state;
 
 public:
     static Parameters parameters();
