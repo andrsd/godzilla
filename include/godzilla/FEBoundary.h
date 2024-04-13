@@ -53,6 +53,17 @@ public:
 
 protected:
     void
+    create_vertex_index_set()
+    {
+        CALL_STACK_MSG();
+        if (this->vertices.empty()) {
+            this->vertices = this->mesh->get_cone_recursive_vertices(this->facets);
+            this->vertices.sort_remove_dups();
+            this->vertices.get_indices();
+        }
+    }
+
+    void
     compute_face_normals()
     {
         CALL_STACK_MSG();
@@ -70,10 +81,7 @@ protected:
     void
     compute_nodal_normals()
     {
-        this->vertices = this->mesh->get_cone_recursive_vertices(this->facets);
-        this->vertices.sort_remove_dups();
         if (!this->vertices.empty()) {
-            this->vertices.get_indices();
             Int n = this->vertices.get_local_size();
             this->nodal_normal.create(n);
             calc_nodal_normals();
