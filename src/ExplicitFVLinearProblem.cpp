@@ -22,7 +22,7 @@ ExplicitFVLinearProblem::ExplicitFVLinearProblem(const Parameters & params) :
     ExplicitProblemInterface(this, params)
 {
     CALL_STACK_MSG();
-    set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
+    set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
 }
 
 ExplicitFVLinearProblem::~ExplicitFVLinearProblem()
@@ -139,7 +139,7 @@ ExplicitFVLinearProblem::post_step()
     TransientProblemInterface::post_step();
     update_aux_vector();
     compute_postprocessors();
-    output(ExecuteOn::TIMESTEP);
+    output(EXECUTE_ON_TIMESTEP);
 }
 
 } // namespace godzilla

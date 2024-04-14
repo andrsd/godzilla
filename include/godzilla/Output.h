@@ -6,7 +6,6 @@
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Types.h"
-#include "godzilla/ExecuteFlags.h"
 
 namespace godzilla {
 
@@ -34,7 +33,7 @@ public:
     ///
     /// @param mask Bit mask specifying the occasion, see ON_XYZ below
     /// @return `true` if output should happen, otherwise `false`
-    virtual bool should_output(ExecuteOn::ExecuteOnFlag mask);
+    virtual bool should_output(ExecuteOnFlag mask);
 
     /// Output a step of a simulation
     virtual void output_step() = 0;

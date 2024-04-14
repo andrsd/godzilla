@@ -32,7 +32,7 @@ LinearProblem::LinearProblem(const Parameters & parameters) :
     lin_max_iter(get_param<Int>("lin_max_iter"))
 {
     CALL_STACK_MSG();
-    set_default_output_on(ExecuteOn::FINAL);
+    set_default_output_on(EXECUTE_ON_FINAL);
 }
 
 LinearProblem::~LinearProblem()

@@ -34,7 +34,7 @@ Output::create()
 {
     CALL_STACK_MSG();
     set_up_exec();
-    if (is_param_valid("interval") && ((this->on_mask & ExecuteOn::TIMESTEP) == 0))
+    if (is_param_valid("interval") && ((this->on_mask & EXECUTE_ON_TIMESTEP) == 0))
         log_warning("Parameter 'interval' was specified, but 'on' is missing 'timestep'.");
 }
 
@@ -71,11 +71,11 @@ Output::set_up_exec()
             for (auto & s : on) {
                 std::string ls = utils::to_lower(s);
                 if (ls == "initial")
-                    mask |= ExecuteOn::INITIAL;
+                    mask |= EXECUTE_ON_INITIAL;
                 else if (ls == "timestep")
-                    mask |= ExecuteOn::TIMESTEP;
+                    mask |= EXECUTE_ON_TIMESTEP;
                 else if (ls == "final")
-                    mask |= ExecuteOn::FINAL;
+                    mask |= EXECUTE_ON_FINAL;
                 else if (ls == "none")
                     none = true;
             }
@@ -92,12 +92,12 @@ Output::set_up_exec()
 }
 
 bool
-Output::should_output(ExecuteOn::ExecuteOnFlag flag)
+Output::should_output(ExecuteOnFlag flag)
 {
     CALL_STACK_MSG();
     if (this->on_mask & flag) {
         bool should;
-        if (flag == ExecuteOn::TIMESTEP)
+        if (flag == EXECUTE_ON_TIMESTEP)
             should = (this->problem->get_step_num() % this->interval) == 0;
         else
             should = true;

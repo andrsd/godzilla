@@ -180,7 +180,7 @@ Problem::get_postprocessor_names() const
 }
 
 void
-Problem::output(ExecuteOn::ExecuteOnFlag flag)
+Problem::output(ExecuteOnFlag flag)
 {
     CALL_STACK_MSG();
     for (auto & o : this->outputs)
@@ -193,7 +193,7 @@ Problem::on_initial()
 {
     CALL_STACK_MSG();
     compute_postprocessors();
-    output(ExecuteOn::INITIAL);
+    output(EXECUTE_ON_INITIAL);
 }
 
 void
@@ -201,7 +201,7 @@ Problem::on_final()
 {
     CALL_STACK_MSG();
     compute_postprocessors();
-    output(ExecuteOn::FINAL);
+    output(EXECUTE_ON_FINAL);
 }
 
 Vector
