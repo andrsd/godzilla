@@ -112,7 +112,7 @@ TEST(ProblemTest, add_pp)
     EXPECT_EQ(pps_names[0], "pp");
 
     EXPECT_CALL(out, output_step);
-    problem.output(ExecuteOn::INITIAL);
+    problem.output(EXECUTE_ON_INITIAL);
 }
 
 TEST(ProblemTest, local_vec)
@@ -124,7 +124,7 @@ TEST(ProblemTest, local_vec)
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
     mesh.create();
-    auto m  = mesh.get_mesh<Mesh>();
+    auto m = mesh.get_mesh<Mesh>();
 
     Parameters prob_params = Problem::parameters();
     prob_params.set<App *>("_app") = &app;

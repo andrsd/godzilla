@@ -4,6 +4,7 @@
 #pragma once
 
 #include "petsc.h"
+#include "godzilla/Flags.h"
 
 namespace godzilla {
 
@@ -92,6 +93,14 @@ get_num_element_nodes(ElementType type)
         return 8;
     }
 }
+
+enum ExecuteOnFlag : unsigned int {
+    EXECUTE_ON_INITIAL = 0x1,
+    EXECUTE_ON_TIMESTEP = 0x2,
+    EXECUTE_ON_FINAL = 0x4
+};
+
+using ExecuteOn = Flags<ExecuteOnFlag>;
 
 } // namespace godzilla
 

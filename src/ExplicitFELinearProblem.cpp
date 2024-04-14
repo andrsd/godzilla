@@ -47,7 +47,7 @@ ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & params) :
     ExplicitProblemInterface(this, params)
 {
     CALL_STACK_MSG();
-    set_default_output_on(ExecuteOn::INITIAL | ExecuteOn::TIMESTEP);
+    set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
 }
 
 ExplicitFELinearProblem::~ExplicitFELinearProblem()
@@ -157,7 +157,7 @@ ExplicitFELinearProblem::post_step()
     ExplicitProblemInterface::post_step();
     update_aux_vector();
     compute_postprocessors();
-    output(ExecuteOn::TIMESTEP);
+    output(EXECUTE_ON_TIMESTEP);
 }
 
 void

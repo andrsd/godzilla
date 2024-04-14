@@ -8,7 +8,6 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
-#include "godzilla/ExecuteFlags.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Partitioner.h"
 #include "petscdm.h"
@@ -103,7 +102,7 @@ public:
     /// Output
     ///
     /// @param mask Bit mask for an output event, see `Output` for valid options.
-    virtual void output(ExecuteOn::ExecuteOnFlag flag);
+    virtual void output(ExecuteOnFlag flag);
 
     /// Creates a local vector from a DM object
     ///
