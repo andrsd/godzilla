@@ -8,6 +8,7 @@
 #include "godzilla/Array1D.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
+#include "godzilla/UnstructuredMesh.h"
 
 namespace godzilla {
 
@@ -122,6 +123,27 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
     Array1D<Real> fe_volume(connect.get_size());
     calc_volumes<ELEM_TYPE, DIM, N_ELEM_NODES>(coords, connect, fe_volume);
     return fe_volume;
+}
+
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+Array1D<Real>
+calc_volumes(const UnstructuredMesh & mesh)
+{
+    CALL_STACK_MSG();
+    Int n_elems = mesh.get_num_cells();
+    Array1D<Real> vols(n_elems);
+    auto dm = mesh.get_coordinate_dm();
+    auto vec = mesh.get_coordinates_local();
+    PetscSection section;
+    PETSC_CHECK(DMGetLocalSection(dm, &section));
+    DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> elem_coord;
+    Int sz = DIM * N_ELEM_NODES;
+    for (godzilla::Int ie = 0; ie < n_elems; ie++) {
+        Real * data = elem_coord(0).data();
+        PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, ie, &sz, &data));
+        vols(ie) = fe::volume<ELEM_TYPE, DIM>(elem_coord);
+    }
+    return vols;
 }
 
 //
