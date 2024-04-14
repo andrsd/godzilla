@@ -3,6 +3,7 @@
 #include "godzilla/DenseVector.h"
 
 using namespace godzilla;
+using namespace testing;
 
 TEST(Array1DTest, create)
 {
@@ -182,4 +183,17 @@ TEST(Array1DTest, add)
     EXPECT_EQ(x(7), 8.);
 
     x.destroy();
+}
+
+TEST(Array1DTest, range_ops)
+{
+    Array1D<Real> arr(8);
+    arr.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
+
+    std::vector<Real> vals;
+    for (auto & v : arr)
+        vals.push_back(v);
+    EXPECT_THAT(vals, ElementsAre(2, 3, 1, -2, 0, 6, 10, 8));
+
+    arr.destroy();
 }
