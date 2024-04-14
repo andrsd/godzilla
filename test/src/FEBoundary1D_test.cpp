@@ -35,12 +35,12 @@ public:
         std::vector<Int> cells = { 0, 1, 1, 2 };
         std::vector<Real> coords = { 0, 0.4, 1 };
         auto m = UnstructuredMesh::build_from_cell_list(get_comm(),
-                                                            DIM,
-                                                            N_ELEM_NODES,
-                                                            cells,
-                                                            DIM,
-                                                            coords,
-                                                            true);
+                                                        DIM,
+                                                        N_ELEM_NODES,
+                                                        cells,
+                                                        DIM,
+                                                        coords,
+                                                        true);
 
         // create "side sets"
         auto face_sets = m->create_label("Face Sets");
@@ -59,7 +59,11 @@ public:
     }
 
     void
-    create_side_set(UnstructuredMesh * mesh, Label & face_sets, Int id, const std::vector<Int> & faces, const char * name)
+    create_side_set(UnstructuredMesh * mesh,
+                    Label & face_sets,
+                    Int id,
+                    const std::vector<Int> & faces,
+                    const char * name)
     {
         for (auto & f : faces) {
             face_sets.set_value(f, id);
@@ -85,6 +89,7 @@ public:
     {
         CALL_STACK_MSG();
         compute_face_normals();
+        create_vertex_index_set();
         compute_nodal_normals();
     }
 

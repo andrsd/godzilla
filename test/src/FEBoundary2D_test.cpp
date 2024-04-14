@@ -92,6 +92,7 @@ public:
     {
         CALL_STACK_MSG();
         compute_face_normals();
+        create_vertex_index_set();
         compute_nodal_normals();
     }
 
