@@ -15,6 +15,56 @@ class DenseVector;
 template <typename T>
 class Array1D {
 public:
+    struct Iterator {
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using pointer = T *;
+        using reference = T &;
+
+        explicit Iterator(const Array1D & arr, Int idx) : arr(arr), idx(idx) {}
+
+        const value_type &
+        operator*() const
+        {
+            return *(this->arr.data + this->idx);
+        }
+
+        /// Prefix increment
+        Iterator &
+        operator++()
+        {
+            this->idx++;
+            return *this;
+        }
+
+        /// Postfix increment
+        Iterator
+        operator++(int)
+        {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        friend bool
+        operator==(const Iterator & a, const Iterator & b)
+        {
+            return (&a.arr == &b.arr) && (a.idx == b.idx);
+        };
+
+        friend bool
+        operator!=(const Iterator & a, const Iterator & b)
+        {
+            return (&a.arr != &b.arr) || (a.idx != b.idx);
+        };
+
+    private:
+        /// IndexSet to iterate over
+        const Array1D & arr;
+        /// Index pointing to the `is`
+        Int idx;
+    };
+
     /// Create an empty array
     Array1D() : n(-1), data(nullptr) {}
 
@@ -217,6 +267,18 @@ public:
     get_data() const
     {
         return this->data;
+    }
+
+    Iterator
+    begin()
+    {
+        return Iterator(*this, 0);
+    }
+
+    Iterator
+    end()
+    {
+        return Iterator(*this, this->n);
     }
 
 private:
