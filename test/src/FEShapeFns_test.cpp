@@ -31,7 +31,7 @@ TEST(FEShapeFns, grad_shape_tri3)
     EXPECT_DOUBLE_EQ(grads(2, 1), 1);
 }
 
-TEST(FEShapeFns, calc_grad_shape)
+TEST(FEShapeFns, calc_grad_shape_2d)
 {
     const ElementType ELEM_TYPE = TRI3;
     const int DIM = 2;
@@ -51,8 +51,54 @@ TEST(FEShapeFns, calc_grad_shape)
     volumes.create(n_elems);
     fe::calc_volumes<ELEM_TYPE, DIM>(coords, connect, volumes);
     auto grad_sh = fe::calc_grad_shape<ELEM_TYPE, DIM>(coords, connect, volumes);
+
+    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 0), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 1), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 1), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(2, 0), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(2, 1), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 0), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 1), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 1), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(2, 0), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(2, 1), 0);
+
     grad_sh.destroy();
     volumes.destroy();
     connect.destroy();
     coords.destroy();
+}
+
+TEST(FEShapeFns, calc_grad_shape_2d_petsc)
+{
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    const ElementType ELEM_TYPE = TRI3;
+    const int DIM = 2;
+    const int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE);
+
+    std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
+    std::vector<Real> coords = { 0, 0, 1, 0, 0, 1, 1, 1 };
+    auto mesh =
+        UnstructuredMesh::build_from_cell_list(comm, DIM, N_ELEM_NODES, cells, DIM, coords, true);
+    auto volumes = fe::calc_volumes<ELEM_TYPE, DIM>(*mesh);
+    auto grad_sh = fe::calc_grad_shape<ELEM_TYPE, DIM>(*mesh, volumes);
+
+    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 0), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 1), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 1), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(2, 0), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(2, 1), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 0), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 1), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 1), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(2, 0), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(2, 1), 0);
+
+    grad_sh.destroy();
+    volumes.destroy();
 }

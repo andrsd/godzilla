@@ -90,6 +90,27 @@ calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
     return grad_shfns;
 }
 
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+inline Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>>
+calc_grad_shape(const UnstructuredMesh & mesh, const Array1D<Real> & volumes)
+{
+    CALL_STACK_MSG();
+    Int n_elems = mesh.get_num_cells();
+    Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> grad_shfns(n_elems);
+    auto dm = mesh.get_coordinate_dm();
+    auto vec = mesh.get_coordinates_local();
+    auto section = mesh.get_coordinate_section();
+    DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> elem_coord;
+    Int sz = DIM * N_ELEM_NODES;
+    for (godzilla::Int ie = 0; ie < n_elems; ie++) {
+        Real * data = elem_coord(0).data();
+        PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, ie, &sz, &data));
+        auto volume = volumes(ie);
+        grad_shfns(ie) = grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
+    }
+    return grad_shfns;
+}
+
 } // namespace fe
 
 } // namespace godzilla
