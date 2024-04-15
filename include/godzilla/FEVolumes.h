@@ -134,8 +134,7 @@ calc_volumes(const UnstructuredMesh & mesh)
     Array1D<Real> vols(n_elems);
     auto dm = mesh.get_coordinate_dm();
     auto vec = mesh.get_coordinates_local();
-    PetscSection section;
-    PETSC_CHECK(DMGetLocalSection(dm, &section));
+    auto section = mesh.get_coordinate_section();
     DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> elem_coord;
     Int sz = DIM * N_ELEM_NODES;
     for (godzilla::Int ie = 0; ie < n_elems; ie++) {
