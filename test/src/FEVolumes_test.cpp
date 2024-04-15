@@ -72,6 +72,47 @@ TEST(FEVolumesTest, calc_volumes)
     fe_volume.destroy();
 }
 
+TEST(FEVolumesTest, calc_volumes_1d_petsc)
+{
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    const Int DIM = 1;
+    const Int N_ELEM_NODES = 2;
+    std::vector<Int> cells = { 0, 1, 1, 2, 2, 3 };
+    std::vector<Real> coords = { 0, 1, 1.5, 3 };
+    auto mesh =
+        UnstructuredMesh::build_from_cell_list(comm, DIM, N_ELEM_NODES, cells, DIM, coords, true);
+
+    auto volumes = fe::calc_volumes<EDGE2, 1>(*mesh);
+
+    EXPECT_DOUBLE_EQ(volumes(0), 1.);
+    EXPECT_DOUBLE_EQ(volumes(1), 0.5);
+    EXPECT_DOUBLE_EQ(volumes(2), 1.5);
+
+    volumes.destroy();
+}
+
+TEST(FEVolumesTest, calc_volumes_2d_petsc)
+{
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    const Int DIM = 2;
+    const Int N_ELEM_NODES = 3;
+    std::vector<Int> cells = { 0, 1, 4, 1, 2, 4, 2, 3, 4, 3, 0, 4 };
+    std::vector<Real> coords = { 0, 0, 1, 0, 1, 1, 0, 1, 0.4, 0.2 };
+    auto mesh =
+        UnstructuredMesh::build_from_cell_list(comm, DIM, N_ELEM_NODES, cells, DIM, coords, true);
+
+    auto volumes = fe::calc_volumes<TRI3, 2>(*mesh);
+
+    EXPECT_DOUBLE_EQ(volumes(0), 0.1);
+    EXPECT_DOUBLE_EQ(volumes(1), 0.3);
+    EXPECT_DOUBLE_EQ(volumes(2), 0.4);
+    EXPECT_DOUBLE_EQ(volumes(3), 0.2);
+
+    volumes.destroy();
+}
+
 TEST(FEVolumesTest, face_area_edge2)
 {
     DenseMatrix<Real, 1, 1> coords;
