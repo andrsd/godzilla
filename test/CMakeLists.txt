@@ -13,6 +13,7 @@ target_sanitization(${PROJECT_NAME})
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         -DGODZILLA_UNIT_TESTS_ROOT="${GODZILLA_UNIT_TESTS_ROOT}"
+    -DGODZILLA_UNIT_TESTS_BINARY_DIR="${PROJECT_BINARY_DIR}"
 )
 
 target_include_directories(
@@ -32,6 +33,7 @@ target_link_libraries(
         yaml-cpp::yaml-cpp
         godzilla
         ${PETSC_LIBRARY}
+        ${CMAKE_DL_LIBS}
         gtest_main
         gmock_main
 )
@@ -50,3 +52,5 @@ if(GODZILLA_CODE_COVERAGE)
             ENVIRONMENT LLVM_PROFILE_FILE=${PROJECT_NAME}.profraw
     )
 endif()
+
+add_subdirectory(ext)
