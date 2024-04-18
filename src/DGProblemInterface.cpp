@@ -275,17 +275,17 @@ DGProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 }
 
 Int
-DGProblemInterface::add_fe(const std::string & name, Int nc, Int k)
+DGProblemInterface::add_fe(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->fields);
     Int id = get_next_id(keys);
-    set_fe(id, name, nc, k);
+    set_fe(id, name, nc, k, block);
     return id;
 }
 
 void
-DGProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
+DGProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     if (k != 1)
@@ -293,7 +293,7 @@ DGProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
 
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
-        FieldInfo fi(name, id, nc, k);
+        FieldInfo fi(name, id, nc, k, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (unsigned int i = 0; i < nc; i++)
@@ -307,23 +307,23 @@ DGProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
 }
 
 Int
-DGProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k)
+DGProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
     Int id = get_next_id(keys);
-    set_aux_fe(id, name, nc, k);
+    set_aux_fe(id, name, nc, k, block);
     return id;
 }
 
 void
-DGProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
+DGProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
         auto dim = get_problem()->get_dimension();
-        FieldInfo fi(name, id, nc, k);
+        FieldInfo fi(name, id, nc, k, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (unsigned int i = 0; i < nc; i++)
