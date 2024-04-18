@@ -13,18 +13,6 @@ class GTestProblem : public ImplicitFENonlinearProblem {
 public:
     explicit GTestProblem(const Parameters & params) : ImplicitFENonlinearProblem(params) {}
 
-    MOCK_METHOD(const Int &, get_spatial_dimension, (), (const));
-    MOCK_METHOD(const FieldValue &, get_field_value, (const std::string & field_name), (const));
-    MOCK_METHOD(const FieldGradient &,
-                get_field_gradient,
-                (const std::string & field_name),
-                (const));
-    MOCK_METHOD(const FieldValue &, get_field_dot, (const std::string & field_name), (const));
-    MOCK_METHOD(const Real &, get_time_shift, (), (const));
-    MOCK_METHOD(const Real &, get_assembly_time, (), (const));
-    MOCK_METHOD(const Normal &, get_normal, (), (const));
-    MOCK_METHOD(const Point &, get_xyz, (), (const));
-
 protected:
     void
     set_up_fields() override
@@ -85,17 +73,6 @@ TEST(JacobianFuncTest, test)
     GTestProblem prob(prob_pars);
 
     prob.create();
-
-    Int dim;
-    EXPECT_CALL(prob, get_spatial_dimension()).Times(1).WillOnce(ReturnRef(dim));
-    FieldValue val(1);
-    EXPECT_CALL(prob, get_field_value(_)).Times(1).WillOnce(ReturnRef(val));
-    FieldGradient grad(1, 1);
-    EXPECT_CALL(prob, get_field_gradient(_)).Times(1).WillOnce(ReturnRef(grad));
-    Real time;
-    EXPECT_CALL(prob, get_assembly_time()).Times(1).WillOnce(ReturnRef(time));
-    Real time_shift;
-    EXPECT_CALL(prob, get_time_shift()).Times(1).WillOnce(ReturnRef(time_shift));
 
     TestJ jac(&prob);
 }

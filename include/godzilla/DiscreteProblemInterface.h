@@ -171,41 +171,41 @@ public:
     /// Add initial condition
     ///
     /// @param ic Initial condition object to add
-    virtual void add_initial_condition(InitialCondition * ic);
+    void add_initial_condition(InitialCondition * ic);
 
     /// Check if we have an initial condition object with a specified name
     ///
     /// @param name The name of the object
     /// @return True if the object exists, otherwise false
-    virtual bool has_initial_condition(const std::string & name) const;
+    bool has_initial_condition(const std::string & name) const;
 
     /// Get initial condition object with a specified name
     ///
     /// @param name The name of the object
     /// @return Pointer to the initial condition object
-    virtual InitialCondition * get_initial_condition(const std::string & name) const;
+    InitialCondition * get_initial_condition(const std::string & name) const;
 
     /// Add essential boundary condition
     ///
     /// @param bc Boundary condition object to add
-    virtual void add_boundary_condition(BoundaryCondition * bc);
+    void add_boundary_condition(BoundaryCondition * bc);
 
     /// Add auxiliary field
     ///
     /// @param aux Auxiliary field object to add
-    virtual void add_auxiliary_field(AuxiliaryField * aux);
+    void add_auxiliary_field(AuxiliaryField * aux);
 
     /// Check if we have an auxiliary object with a specified name
     ///
     /// @param name The name of the object
     /// @return True if the object exists, otherwise false
-    virtual bool has_aux(const std::string & name) const;
+    bool has_aux(const std::string & name) const;
 
     /// Get auxiliary object with a specified name
     ///
     /// @param name The name of the object
     /// @return Pointer to the auxiliary object
-    virtual AuxiliaryField * get_aux(const std::string & name) const;
+    AuxiliaryField * get_aux(const std::string & name) const;
 
     /// Return the offset into an array or local Vec for the dof associated with the given point
     ///

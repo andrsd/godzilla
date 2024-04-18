@@ -63,7 +63,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    virtual Int add_fe(const std::string & name, Int nc, Int k);
+    Int add_fe(const std::string & name, Int nc, Int k);
 
     /// Set a volumetric field
     ///
@@ -71,7 +71,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void set_fe(Int id, const std::string & name, Int nc, Int k);
+    void set_fe(Int id, const std::string & name, Int nc, Int k);
 
     /// Adds a volumetric auxiliary field
     ///
@@ -79,7 +79,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    virtual Int add_aux_fe(const std::string & name, Int nc, Int k);
+    Int add_aux_fe(const std::string & name, Int nc, Int k);
 
     /// Set a volumetric auxiliary field
     ///
@@ -87,23 +87,23 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
+    void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
 
-    virtual const Int & get_spatial_dimension() const;
+    const Int & get_spatial_dimension() const;
 
-    virtual const FieldValue & get_field_value(const std::string & field_name) const;
+    const FieldValue & get_field_value(const std::string & field_name) const;
 
-    virtual const FieldGradient & get_field_gradient(const std::string & field_name) const;
+    const FieldGradient & get_field_gradient(const std::string & field_name) const;
 
-    virtual const FieldValue & get_field_dot(const std::string & field_name) const;
+    const FieldValue & get_field_dot(const std::string & field_name) const;
 
-    virtual const Real & get_time_shift() const;
+    const Real & get_time_shift() const;
 
-    virtual const Real & get_assembly_time() const;
+    const Real & get_assembly_time() const;
 
-    virtual const Normal & get_normal() const;
+    const Normal & get_normal() const;
 
-    virtual const Point & get_xyz() const;
+    const Point & get_xyz() const;
 
     /// Add residual statement for a field variable
     ///

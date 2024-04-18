@@ -45,7 +45,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void add_field(Int id, const std::string & name, Int nc);
+    void add_field(Int id, const std::string & name, Int nc);
 
     /// Adds a volumetric auxiliary field
     ///
@@ -53,7 +53,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    virtual Int add_aux_fe(const std::string & name, Int nc, Int k);
+    Int add_aux_fe(const std::string & name, Int nc, Int k);
 
     /// Set a volumetric auxiliary field
     ///
@@ -61,7 +61,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    virtual void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
+    void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
 
     /// Method to compute flux across an edge
     ///
