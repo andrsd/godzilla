@@ -194,7 +194,7 @@ TEST(ProblemTest, create_matrix)
     mat.destroy();
 }
 
-TEST(UnstructuredMeshTest, get_local_section)
+TEST(ProblemTest, get_local_section)
 {
     TestApp app;
 
@@ -222,7 +222,7 @@ TEST(UnstructuredMeshTest, get_local_section)
     EXPECT_EQ(congruent, PETSC_TRUE);
 }
 
-TEST(UnstructuredMeshTest, get_global_section)
+TEST(ProblemTest, get_global_section)
 {
     TestApp app;
 
