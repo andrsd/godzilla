@@ -349,4 +349,40 @@ Problem::set_partition_overlap(Int overlap)
     this->partition_overlap = overlap;
 }
 
+Int
+Problem::get_num_auxiliary_vec() const
+{
+    CALL_STACK_MSG();
+    Int n;
+    PETSC_CHECK(DMGetNumAuxiliaryVec(get_dm(), &n));
+    return n;
+}
+
+Vector
+Problem::get_auxiliary_vec(const Label & label, Int value, Int part) const
+{
+    CALL_STACK_MSG();
+    Vec vec;
+    PETSC_CHECK(DMGetAuxiliaryVec(get_dm(), label, value, part, &vec));
+    return { vec };
+}
+
+void
+Problem::set_auxiliary_vec(const Label & label, Int value, Int part, const Vector & vec)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetAuxiliaryVec(get_dm(), label, value, part, vec));
+}
+
+void
+Problem::clear_auxiliary_vec()
+{
+#if PETSC_VERSION_GE(3, 21, 0)
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMClearAuxiliaryVec(get_dm()));
+#else
+    throw Exception("You need PETSC 3.21+ for `Problem::clear_auxiliary_vec()`");
+#endif
+}
+
 } // namespace godzilla
