@@ -10,6 +10,7 @@
 #include "godzilla/Matrix.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Partitioner.h"
+#include "godzilla/Label.h"
 #include "petscdm.h"
 
 namespace godzilla {
@@ -170,6 +171,30 @@ public:
     ///
     /// @return Partition overlap
     Int get_partition_overlap();
+
+    /// Get the number of auxiliary vectors
+    ///
+    /// @return The number of auxiliary data vectors
+    Int get_num_auxiliary_vec() const;
+
+    /// Get the auxiliary vector for region specified by the given label, value, and equation part
+    ///
+    /// @param label The `Label`
+    /// @param value The label value indicating the region
+    /// @param part The equation part, or 0 if unused
+    /// @return The `Vector` holding auxiliary field data
+    Vector get_auxiliary_vec(const Label & label, Int value, Int part = 0) const;
+
+    /// Set an auxiliary vector for region specified by the given label, value, and equation part
+    ///
+    /// @param label The `Label`
+    /// @param value The label value indicating the region
+    /// @param part The equation part, or 0 if unused
+    /// @param vec The `Vector` holding auxiliary field data
+    void set_auxiliary_vec(const Label & label, Int value, Int part, const Vector & vec);
+
+    /// Destroys the auxiliary vector information and creates a new empty one
+    void clear_auxiliary_vec();
 
 protected:
     /// Allocate objects

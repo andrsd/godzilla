@@ -7,6 +7,7 @@
 #include "godzilla/Output.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Section.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -248,4 +249,62 @@ TEST(UnstructuredMeshTest, get_global_section)
     PetscBool congruent = PETSC_FALSE;
     PetscSectionCompare(s, ls, &congruent);
     EXPECT_EQ(congruent, PETSC_TRUE);
+}
+
+TEST(ProblemTest, aux_vecs)
+{
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_params);
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    TestProblem problem(prob_params);
+    app.set_problem(&problem);
+
+    mesh.create();
+    problem.create();
+
+    auto aux_0 = Vector::create_seq(app.get_comm(), 1);
+    problem.set_auxiliary_vec(Label(), 0, 0, aux_0);
+    auto aux_1 = Vector::create_seq(app.get_comm(), 3);
+    problem.set_auxiliary_vec(Label(), 0, 1, aux_1);
+
+    EXPECT_EQ(problem.get_num_auxiliary_vec(), 2);
+
+    auto a0 = problem.get_auxiliary_vec(Label(), 0, 0);
+    EXPECT_EQ(a0.get_size(), 1);
+
+    auto a1 = problem.get_auxiliary_vec(Label(), 0, 1);
+    EXPECT_EQ(a1.get_size(), 3);
+}
+
+TEST(ProblemTest, aux_vecs_clear)
+{
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_params);
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    TestProblem problem(prob_params);
+    app.set_problem(&problem);
+
+    mesh.create();
+    problem.create();
+
+#if PETSC_VERSION_GE(3, 21, 0)
+#else
+    EXPECT_THROW_MSG(
+        { problem.clear_auxiliary_vec(); },
+        "You need PETSC 3.21+ for `Problem::clear_auxiliary_vec()`");
+#endif
 }
