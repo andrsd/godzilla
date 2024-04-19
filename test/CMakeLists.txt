@@ -13,13 +13,12 @@ target_sanitization(${PROJECT_NAME})
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
         -DGODZILLA_UNIT_TESTS_ROOT="${GODZILLA_UNIT_TESTS_ROOT}"
-    -DGODZILLA_UNIT_TESTS_BINARY_DIR="${PROJECT_BINARY_DIR}"
+        -DGODZILLA_UNIT_TESTS_BINARY_DIR="${PROJECT_BINARY_DIR}"
 )
 
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC
-        ${PROJECT_SOURCE_DIR}/include
         ${CMAKE_BINARY_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
