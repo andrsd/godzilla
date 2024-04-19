@@ -45,15 +45,17 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void add_field(Int id, const std::string & name, Int nc);
+    /// @param block The label this field is restricted to
+    void add_field(Int id, const std::string & name, Int nc, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
+    /// @param block The label this field is restricted to
     /// @return ID of the new field
-    Int add_aux_fe(const std::string & name, Int nc, Int k);
+    Int add_aux_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -61,7 +63,8 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
+    /// @param block The label this field is restricted to
+    void set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Method to compute flux across an edge
     ///
@@ -117,7 +120,7 @@ private:
         Int id;
 
         /// Mesh support
-        DMLabel block;
+        Label block;
 
         /// The number of components
         Int nc;
@@ -128,10 +131,10 @@ private:
         /// Component names
         std::vector<std::string> component_names;
 
-        FieldInfo(const std::string & name, Int id, Int nc, Int k) :
+        FieldInfo(const std::string & name, Int id, Int nc, Int k, const Label & block) :
             name(name),
             id(id),
-            block(nullptr),
+            block(block),
             nc(nc),
             k(k)
         {

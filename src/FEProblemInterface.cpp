@@ -362,23 +362,23 @@ FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 }
 
 Int
-FEProblemInterface::add_fe(const std::string & name, Int nc, Int k)
+FEProblemInterface::add_fe(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->fields);
     Int id = get_next_id(keys);
-    set_fe(id, name, nc, k);
+    set_fe(id, name, nc, k, block);
     return id;
 }
 
 void
-FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
+FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
         auto dim = get_problem()->get_dimension();
-        FieldInfo fi(name, id, nc, k, dim);
+        FieldInfo fi(name, id, nc, k, dim, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (unsigned int i = 0; i < nc; i++)
@@ -392,23 +392,23 @@ FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k)
 }
 
 Int
-FEProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k)
+FEProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
     Int id = get_next_id(keys);
-    set_aux_fe(id, name, nc, k);
+    set_aux_fe(id, name, nc, k, block);
     return id;
 }
 
 void
-FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k)
+FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
         auto dim = get_problem()->get_dimension();
-        FieldInfo fi(name, id, nc, k, dim);
+        FieldInfo fi(name, id, nc, k, dim, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (unsigned int i = 0; i < nc; i++)

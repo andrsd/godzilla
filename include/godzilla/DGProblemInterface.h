@@ -44,7 +44,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    Int add_fe(const std::string & name, Int nc, Int k);
+    Int add_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric field
     ///
@@ -52,7 +52,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_fe(Int id, const std::string & name, Int nc, Int k);
+    void set_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
@@ -60,7 +60,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    Int add_aux_fe(const std::string & name, Int nc, Int k);
+    Int add_aux_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -68,7 +68,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
+    void set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Get field degree of freedom
     ///
@@ -134,7 +134,7 @@ private:
         /// Field number
         Int id;
         /// Mesh support
-        DMLabel block;
+        Label block;
         /// The number of components
         Int nc;
         /// The degree k of the space
@@ -142,10 +142,10 @@ private:
         /// Component names
         std::vector<std::string> component_names;
 
-        FieldInfo(const std::string & name, Int id, Int nc, Int k) :
+        FieldInfo(const std::string & name, Int id, Int nc, Int k, const Label & block) :
             name(name),
             id(id),
-            block(nullptr),
+            block(block),
             nc(nc),
             k(k)
         {

@@ -62,8 +62,9 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
+    /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    Int add_fe(const std::string & name, Int nc, Int k);
+    Int add_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric field
     ///
@@ -71,15 +72,17 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_fe(Int id, const std::string & name, Int nc, Int k);
+    /// @param block The mesh region this field is restricted to
+    void set_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
+    /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    Int add_aux_fe(const std::string & name, Int nc, Int k);
+    Int add_aux_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -87,7 +90,8 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_aux_fe(Int id, const std::string & name, Int nc, Int k);
+    /// @param block The mesh region this field is restricted to
+    void set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     const Int & get_spatial_dimension() const;
 
@@ -340,39 +344,30 @@ private:
     struct FieldInfo {
         /// The name of the field
         std::string name;
-
         /// Field number
         Int id;
-
         /// FE object
         PetscFE fe;
-
         /// Mesh support
-        DMLabel block;
-
+        Label block;
         /// The number of components
         Int nc;
-
         /// The degree k of the space
         Int k;
-
         /// Component names
         std::vector<std::string> component_names;
-
         /// Values (used during assembling)
         FieldValue values;
-
         /// Gradient (used during assembling)
         FieldGradient derivs;
-
         /// Time derivative (used during assembling)
         FieldValue dots;
 
-        FieldInfo(const std::string & name, Int id, Int nc, Int k, Int dim) :
+        FieldInfo(const std::string & name, Int id, Int nc, Int k, Int dim, const Label & block) :
             name(name),
             id(id),
             fe(nullptr),
-            block(nullptr),
+            block(block),
             nc(nc),
             k(k),
             values(nc),
