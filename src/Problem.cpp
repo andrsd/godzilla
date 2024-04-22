@@ -90,8 +90,8 @@ Problem::create()
 void
 Problem::allocate_objects()
 {
-    this->x = create_global_vector();
-    this->x.set_name("sln");
+    CALL_STACK_MSG();
+    set_solution_vector(create_global_vector());
 }
 
 Mesh *
@@ -202,6 +202,14 @@ Problem::on_final()
     CALL_STACK_MSG();
     compute_postprocessors();
     output(EXECUTE_ON_FINAL);
+}
+
+void
+Problem::set_solution_vector(const Vector & x)
+{
+    CALL_STACK_MSG();
+    this->x = x;
+    this->x.set_name("sln");
 }
 
 Vector
