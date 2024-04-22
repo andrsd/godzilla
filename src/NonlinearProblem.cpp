@@ -168,6 +168,14 @@ NonlinearProblem::set_residual_vector(const Vector & f)
     this->r.set_name("res");
 }
 
+void
+NonlinearProblem::set_jacobian_matrix(const Matrix & J)
+{
+    CALL_STACK_MSG();
+    this->J = J;
+    this->J.set_name("Jac");
+}
+
 KSP
 NonlinearProblem::get_ksp() const
 {
@@ -210,9 +218,7 @@ NonlinearProblem::allocate_objects()
     CALL_STACK_MSG();
     Problem::allocate_objects();
     set_residual_vector(get_solution_vector().duplicate());
-
-    this->J = create_matrix();
-    this->J.set_name("Jac");
+    set_jacobian_matrix(create_matrix());
 }
 
 void

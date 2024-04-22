@@ -50,6 +50,8 @@ protected:
                                void * ctx);
     /// Set residual vector
     void set_residual_vector(const Vector & f);
+    /// Set Jacobian matrix
+    void set_jacobian_matrix(const Matrix & J);
     /// Initialize the problem
     virtual void init();
     /// Set up initial guess
