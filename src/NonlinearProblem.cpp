@@ -160,6 +160,14 @@ NonlinearProblem::set_jacobian_function(
     PETSC_CHECK(SNESSetJacobian(this->snes, this->J, this->J, jacobian_func, ctx));
 }
 
+void
+NonlinearProblem::set_residual_vector(const Vector & f)
+{
+    CALL_STACK_MSG();
+    this->r = f;
+    this->r.set_name("res");
+}
+
 KSP
 NonlinearProblem::get_ksp() const
 {
@@ -201,9 +209,7 @@ NonlinearProblem::allocate_objects()
 {
     CALL_STACK_MSG();
     Problem::allocate_objects();
-
-    this->r = get_solution_vector().duplicate();
-    this->r.set_name("res");
+    set_residual_vector(get_solution_vector().duplicate());
 
     this->J = create_matrix();
     this->J.set_name("Jac");

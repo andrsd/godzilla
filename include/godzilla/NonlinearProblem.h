@@ -48,6 +48,8 @@ protected:
     /// Set Jacobian evaluation function
     void set_jacobian_function(PetscErrorCode (*jacobian_func)(SNES, Vec, Mat, Mat, void *),
                                void * ctx);
+    /// Set residual vector
+    void set_residual_vector(const Vector & f);
     /// Initialize the problem
     virtual void init();
     /// Set up initial guess
