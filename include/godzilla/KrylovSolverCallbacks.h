@@ -9,7 +9,7 @@
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
 
-namespace godzilla {
+namespace godzilla::internal {
 
 // Machinery for KSPMonitor
 
@@ -90,4 +90,4 @@ private:
     PetscErrorCode (T::*method)(Matrix &, Matrix &);
 };
 
-} // namespace godzilla
+} // namespace godzilla::internal

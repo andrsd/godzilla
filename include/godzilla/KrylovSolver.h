@@ -91,7 +91,7 @@ public:
     void
     set_compute_rhs(T * instance, PetscErrorCode (T::*callback)(Vector &))
     {
-        this->compute_rhs_method = new KSPComputeRhsMethod<T>(instance, callback);
+        this->compute_rhs_method = new internal::KSPComputeRhsMethod<T>(instance, callback);
         PETSC_CHECK(KSPSetComputeRHS(this->ksp, compute_rhs, this->compute_rhs_method));
     }
 
@@ -111,7 +111,8 @@ public:
     void
     set_compute_operators(T * instance, PetscErrorCode (T::*callback)(Matrix &, Matrix &))
     {
-        this->compute_operators_method = new KSPComputeOperatorsMethod<T>(instance, callback);
+        this->compute_operators_method =
+            new internal::KSPComputeOperatorsMethod<T>(instance, callback);
         PETSC_CHECK(
             KSPSetComputeOperators(this->ksp, compute_operators, this->compute_operators_method));
     }
@@ -137,7 +138,7 @@ public:
     void
     monitor_set(T * instance, PetscErrorCode (T::*callback)(Int, Real))
     {
-        this->monitor_method = new KSPMonitorMethod<T>(instance, callback);
+        this->monitor_method = new internal::KSPMonitorMethod<T>(instance, callback);
         PETSC_CHECK(KSPMonitorSet(this->ksp, monitor, this->monitor_method, monitor_destroy));
     }
 
@@ -177,11 +178,11 @@ private:
     /// PETSc object
     KSP ksp;
     /// Method for monitoring the solve
-    KSPMonitorMethodAbstract * monitor_method;
+    internal::KSPMonitorMethodAbstract * monitor_method;
     /// Method for computing RHS
-    KSPComputeRhsMethodAbstract * compute_rhs_method;
+    internal::KSPComputeRhsMethodAbstract * compute_rhs_method;
     /// Method for computing operators
-    KSPComputeOperatorsMethodAbstract * compute_operators_method;
+    internal::KSPComputeOperatorsMethodAbstract * compute_operators_method;
 
 public:
     static PetscErrorCode compute_operators(KSP, Mat A, Mat B, void * ctx);
