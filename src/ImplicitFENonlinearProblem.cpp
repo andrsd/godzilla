@@ -76,7 +76,6 @@ ImplicitFENonlinearProblem::ImplicitFENonlinearProblem(const Parameters & params
 ImplicitFENonlinearProblem::~ImplicitFENonlinearProblem()
 {
     CALL_STACK_MSG();
-    set_snes(nullptr);
 }
 
 Real

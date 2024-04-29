@@ -27,7 +27,6 @@ ExplicitFVLinearProblem::ExplicitFVLinearProblem(const Parameters & params) :
 
 ExplicitFVLinearProblem::~ExplicitFVLinearProblem()
 {
-    set_snes(nullptr);
 }
 
 Real

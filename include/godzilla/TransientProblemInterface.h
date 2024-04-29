@@ -6,6 +6,7 @@
 #include "petscts.h"
 #include "godzilla/Types.h"
 #include "godzilla/Vector.h"
+#include "godzilla/SNESolver.h"
 
 namespace godzilla {
 
@@ -95,8 +96,8 @@ public:
     void set_time(Real t);
 
 protected:
-    /// Get underlying SNES object
-    SNES get_snes() const;
+    /// Get underlying non-linear solver
+    SNESolver get_snes() const;
     /// Get time
     Real get_time() const;
     /// Get step number

@@ -7,7 +7,7 @@
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
 #include "godzilla/Preconditioner.h"
-#include "petscsnes.h"
+#include "godzilla/SNESolver.h"
 
 namespace godzilla {
 
@@ -22,7 +22,7 @@ public:
     void run() override;
 
     /// Get underlying KSP
-    KSP get_ksp() const;
+    KrylovSolver get_ksp() const;
     /// Set KSP operators
     void set_ksp_operators(const Matrix & A, const Matrix & B);
     /// Get Jacobian matrix
@@ -41,13 +41,10 @@ public:
     void set_use_matrix_free(bool mf_operator, bool mf);
 
 protected:
-    /// Get underlying SNES
-    SNES get_snes() const;
-    /// Set SNES object for this non-linear problem
-    void set_snes(SNES snes);
-    /// Set Jacobian evaluation function
-    void set_jacobian_function(PetscErrorCode (*jacobian_func)(SNES, Vec, Mat, Mat, void *),
-                               void * ctx);
+    /// Get underlying non-linear solver
+    SNESolver get_snes() const;
+    /// Set non-linear solver
+    void set_snes(const SNESolver & snes);
     /// Set residual vector
     void set_residual_vector(const Vector & f);
     /// Set Jacobian matrix
@@ -69,9 +66,9 @@ protected:
     /// Set up solver parameters
     virtual void set_up_solver_parameters();
     /// SNES monitor
-    void snes_monitor(Int it, Real norm);
+    PetscErrorCode snes_monitor(Int it, Real norm);
     /// KSP monitor
-    void ksp_monitor(Int it, Real rnorm);
+    PetscErrorCode ksp_monitor(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for creating a preconditioner
@@ -82,16 +79,16 @@ protected:
 private:
     void set_up_preconditioning();
 
-    /// SNES object
-    SNES snes;
-    /// KSP object
-    KSP ksp;
+    /// Nonlinear solver
+    SNESolver snes;
+    /// Linear solver
+    KrylovSolver ksp;
     /// The residual vector
     Vector r;
     /// Jacobian matrix
     Matrix J;
     /// Converged reason
-    SNESConvergedReason converged_reason;
+    SNESolver::ConvergedReason converged_reason;
     /// Preconditioner
     Preconditioner precond;
 
@@ -114,9 +111,6 @@ private:
 
 public:
     static Parameters parameters();
-
-    friend PetscErrorCode __ksp_monitor(KSP ksp, Int it, Real rnorm, void * ctx);
-    friend PetscErrorCode __snes_monitor(SNES snes, Int it, Real norm, void * ctx);
 };
 
 } // namespace godzilla

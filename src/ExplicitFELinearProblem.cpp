@@ -53,7 +53,6 @@ ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & params) :
 ExplicitFELinearProblem::~ExplicitFELinearProblem()
 {
     CALL_STACK_MSG();
-    set_snes(nullptr);
 }
 
 Real

@@ -27,7 +27,6 @@ ExplicitDGLinearProblem::ExplicitDGLinearProblem(const Parameters & params) :
 
 ExplicitDGLinearProblem::~ExplicitDGLinearProblem()
 {
-    set_snes(nullptr);
 }
 
 Real
