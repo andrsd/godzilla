@@ -203,6 +203,8 @@ protected:
     virtual void on_initial();
     /// Called after solve has successfully finished
     virtual void on_final();
+    /// Set solution vector
+    void set_solution_vector(const Vector & x);
 
 private:
     /// Mesh
