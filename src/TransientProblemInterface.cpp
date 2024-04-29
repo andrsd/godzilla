@@ -10,6 +10,7 @@
 #include "godzilla/Output.h"
 #include <cassert>
 #include "petsc/private/tsimpl.h"
+#include "godzilla/SNESolver.h"
 
 namespace godzilla {
 
@@ -85,13 +86,13 @@ TransientProblemInterface::~TransientProblemInterface()
     TSDestroy(&this->ts);
 }
 
-SNES
+SNESolver
 TransientProblemInterface::get_snes() const
 {
     CALL_STACK_MSG();
     SNES snes;
     PETSC_CHECK(TSGetSNES(this->ts, &snes));
-    return snes;
+    return SNESolver(snes);
 }
 
 void

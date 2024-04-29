@@ -212,7 +212,7 @@ TEST(NonlinearProblemTest, line_search_type)
     public:
         explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
 
-        SNES
+        SNESolver
         get_snes()
         {
             return NonlinearProblem::get_snes();
