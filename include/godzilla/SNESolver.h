@@ -34,6 +34,23 @@ public:
         DIVERGED_TR_DELTA = SNES_DIVERGED_TR_DELTA,
     };
 
+    /// Wrapper around SNESLineSearch
+    class LineSearch {
+    public:
+        enum LineSearchType { BASIC, L2, CP, NLEQERR, SHELL, BT };
+
+        LineSearch(SNESLineSearch ls);
+
+        void set_type(LineSearchType type);
+
+        void set_from_options();
+
+        operator SNESLineSearch() const;
+
+    private:
+        SNESLineSearch ls;
+    };
+
     /// Construct empty non-linear solver
     SNESolver();
 
@@ -47,6 +64,10 @@ public:
     void destroy();
 
     KrylovSolver get_ksp() const;
+
+    LineSearch get_line_search() const;
+
+    void set_line_search(LineSearch ls);
 
     /// Sets the DM that may be used by some nonlinear solvers or their underlying preconditioners
     ///
@@ -89,11 +110,10 @@ public:
     /// @param Jp The matrix to be used in constructing the preconditioner, usually the same as `J`.
     /// @param callback Jacobian evaluation routine
     /// @param ctx User-defined context for private data for the Jacobian evaluation routine
-    void
-    set_jacobian(Matrix & J,
-                 Matrix & Jp,
-                 PetscErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
-                 void * ctx = nullptr);
+    void set_jacobian(Matrix & J,
+                      Matrix & Jp,
+                      PetscErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
+                      void * ctx = nullptr);
 
     /// Sets the function to compute Jacobian as well as the location to store the matrix.
     ///
@@ -115,8 +135,8 @@ public:
             SNESSetJacobian(this->snes, J, Jp, compute_jacobian, this->compute_jacobian_method));
     }
 
-    /// Indicates that the solver should use matrix-free finite difference matrix-vector products to apply
-    /// the Jacobian.
+    /// Indicates that the solver should use matrix-free finite difference matrix-vector products to
+    /// apply the Jacobian.
     ///
     /// @param mf_operator Use matrix-free only for the `J` used by `set_jacobian`, this means the
     /// user provided `Jp` will continue to be used

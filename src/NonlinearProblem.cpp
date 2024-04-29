@@ -172,22 +172,21 @@ void
 NonlinearProblem::set_up_line_search()
 {
     CALL_STACK_MSG();
-    SNESLineSearch line_search;
-    PETSC_CHECK(SNESGetLineSearch(this->snes, &line_search));
+    auto ls = this->snes.get_line_search();
     if (this->line_search_type == "basic")
-        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHBASIC));
+        ls.set_type(SNESolver::LineSearch::BASIC);
     else if (this->line_search_type == "l2")
-        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHL2));
+        ls.set_type(SNESolver::LineSearch::L2);
     else if (this->line_search_type == "cp")
-        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHCP));
+        ls.set_type(SNESolver::LineSearch::CP);
     else if (this->line_search_type == "nleqerr")
-        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHNLEQERR));
+        ls.set_type(SNESolver::LineSearch::NLEQERR);
     else if (this->line_search_type == "shell")
-        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHSHELL));
+        ls.set_type(SNESolver::LineSearch::SHELL);
     else
-        PETSC_CHECK(SNESLineSearchSetType(line_search, SNESLINESEARCHBT));
-    PETSC_CHECK(SNESSetLineSearch(this->snes, line_search));
-    PETSC_CHECK(SNESLineSearchSetFromOptions(line_search));
+        ls.set_type(SNESolver::LineSearch::BT);
+    this->snes.set_line_search(ls);
+    ls.set_from_options();
 }
 
 void

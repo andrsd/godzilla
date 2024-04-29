@@ -5,6 +5,55 @@
 
 namespace godzilla {
 
+SNESolver::LineSearch::LineSearch(SNESLineSearch ls) : ls(ls) {}
+
+void
+SNESolver::LineSearch::set_type(LineSearchType type)
+{
+    CALL_STACK_MSG();
+    switch (type) {
+    case BASIC:
+        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHBASIC));
+        return;
+
+    case L2:
+        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHL2));
+        return;
+
+    case CP:
+        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHCP));
+        return;
+
+    case NLEQERR:
+        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHNLEQERR));
+        return;
+
+    case SHELL:
+        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHSHELL));
+        return;
+
+    case BT:
+        PETSC_CHECK(SNESLineSearchSetType(this->ls, SNESLINESEARCHBT));
+        return;
+    }
+}
+
+void
+SNESolver::LineSearch::set_from_options()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(SNESLineSearchSetFromOptions(this->ls));
+}
+
+SNESolver::LineSearch::operator SNESLineSearch() const
+{
+    CALL_STACK_MSG();
+    return this->ls;
+}
+
+
+//
+
 PetscErrorCode
 SNESolver::compute_residual(SNES, Vec x, Vec f, void * ctx)
 {
@@ -82,6 +131,22 @@ SNESolver::get_ksp() const
     KSP ksp;
     PETSC_CHECK(SNESGetKSP(this->snes, &ksp));
     return KrylovSolver(ksp);
+}
+
+SNESolver::LineSearch
+SNESolver::get_line_search() const
+{
+    CALL_STACK_MSG();
+    SNESLineSearch ls;
+    PETSC_CHECK(SNESGetLineSearch(this->snes, &ls));
+    return LineSearch(ls);
+}
+
+void
+SNESolver::set_line_search(SNESolver::LineSearch ls)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(SNESSetLineSearch(this->snes, ls));
 }
 
 void
