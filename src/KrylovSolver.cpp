@@ -13,7 +13,7 @@ PetscErrorCode
 KrylovSolver::compute_operators(KSP, Mat A, Mat B, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<KSPComputeOperatorsMethodAbstract *>(ctx);
+    auto * method = static_cast<internal::KSPComputeOperatorsMethodAbstract *>(ctx);
     Matrix mat_A(A);
     Matrix mat_B(B);
     return method->invoke(mat_A, mat_B);
@@ -23,7 +23,7 @@ PetscErrorCode
 KrylovSolver::compute_rhs(KSP, Vec b, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<KSPComputeRhsMethodAbstract *>(ctx);
+    auto * method = static_cast<internal::KSPComputeRhsMethodAbstract *>(ctx);
     Vector vec_b(b);
     return method->invoke(vec_b);
 }
@@ -31,14 +31,14 @@ KrylovSolver::compute_rhs(KSP, Vec b, void * ctx)
 PetscErrorCode
 KrylovSolver::monitor(KSP, Int it, Real rnorm, void * ctx)
 {
-    auto * method = static_cast<KSPMonitorMethodAbstract *>(ctx);
+    auto * method = static_cast<internal::KSPMonitorMethodAbstract *>(ctx);
     return method->invoke(it, rnorm);
 }
 
 PetscErrorCode
 KrylovSolver::monitor_destroy(void ** ctx)
 {
-    auto * method = static_cast<KSPMonitorMethodAbstract *>(*ctx);
+    auto * method = static_cast<internal::KSPMonitorMethodAbstract *>(*ctx);
     delete method;
     return 0;
 }
