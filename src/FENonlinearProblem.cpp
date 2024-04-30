@@ -89,7 +89,6 @@ FENonlinearProblem::set_up_callbacks()
     PETSC_CHECK(DMSNESSetBoundaryLocal(dm, __fep_compute_boundary, this));
     PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
     PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
-    // FIXME: NonlinearProblem::set_jacobian_function(nullptr, nullptr);
 }
 
 void
