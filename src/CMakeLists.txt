@@ -33,7 +33,7 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-        PUBLIC
+    PUBLIC
         fmt::fmt
     PRIVATE
         ${PETSC_LIBRARY}
