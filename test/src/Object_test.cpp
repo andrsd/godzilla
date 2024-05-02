@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
+#include "TestApp.h"
 #include "godzilla/Factory.h"
-#include "godzilla/App.h"
 #include "godzilla/Object.h"
 
 using namespace godzilla;
@@ -8,7 +8,7 @@ using namespace godzilla;
 TEST(ObjectTest, api)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, "test");
+    TestApp app;
     app.get_registry().add<Object>("Object");
 
     Parameters params = Object::parameters();

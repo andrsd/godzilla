@@ -26,8 +26,6 @@ App::App(const mpi::Communicator & comm,
     name(name),
     mpi_comm(comm),
     logger(new Logger()),
-    argc(argc),
-    argv(argv),
     cmdln_opts(name),
     verbosity_level(1),
     yml(nullptr),
@@ -35,6 +33,25 @@ App::App(const mpi::Communicator & comm,
     factory(App::get_registry())
 {
     CALL_STACK_MSG();
+    this->args.resize(argc);
+    for (int i = 0; i < argc; i++)
+        this->args.push_back(std::string(argv[i]));
+}
+
+App::App(const mpi::Communicator & comm,
+         const std::string & name,
+         const std::vector<std::string> & args) :
+    PrintInterface(comm, this->verbosity_level, name),
+    name(name),
+    mpi_comm(comm),
+    logger(new Logger()),
+    args(args),
+    cmdln_opts(name),
+    verbosity_level(1),
+    yml(nullptr),
+    problem(nullptr),
+    factory(App::get_registry())
+{
 }
 
 App::App(const mpi::Communicator & comm,
@@ -46,8 +63,27 @@ App::App(const mpi::Communicator & comm,
     name(name),
     mpi_comm(comm),
     logger(new Logger()),
-    argc(argc),
-    argv(argv),
+    cmdln_opts(name),
+    verbosity_level(1),
+    yml(nullptr),
+    problem(nullptr),
+    factory(registry)
+{
+    CALL_STACK_MSG();
+    this->args.resize(argc);
+    for (int i = 0; i < argc; i++)
+        this->args.push_back(std::string(argv[i]));
+}
+
+App::App(const mpi::Communicator & comm,
+         const Registry & registry,
+         const std::string & name,
+         const std::vector<std::string> & args) :
+    PrintInterface(comm, this->verbosity_level, name),
+    name(name),
+    mpi_comm(comm),
+    logger(new Logger()),
+    args(args),
     cmdln_opts(name),
     verbosity_level(1),
     yml(nullptr),
@@ -129,7 +165,14 @@ App::parse_command_line()
 {
     CALL_STACK_MSG();
     try {
-        return this->cmdln_opts.parse(this->argc, this->argv);
+        auto argc = this->args.size();
+        std::vector<const char *> argv;
+        argv.reserve(argc + 2);
+        argv.push_back(get_name().c_str());
+        for (auto & a : this->args)
+            argv.push_back(a.c_str());
+        argv.push_back(nullptr);
+        return this->cmdln_opts.parse(argc + 1, argv.data());
     }
     catch (const cxxopts::exceptions::exception & e) {
         fmt::print(stderr, "Error: {}\n", e.what());

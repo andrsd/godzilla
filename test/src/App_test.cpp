@@ -3,9 +3,12 @@
 #include "godzilla/Mesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/GYMLFile.h"
+#include "godzilla/LineMesh.h"
 #include "ExceptionTestMacros.h"
+#include <filesystem>
 
 using namespace godzilla;
+namespace fs = std::filesystem;
 
 namespace {
 
@@ -20,52 +23,61 @@ public:
     MOCK_METHOD(const Vector &, get_solution_vector, (), (const));
 };
 
+class TestProblem : public Problem {
+public:
+    explicit TestProblem(const Parameters & params) : Problem(params) {}
+
+    void
+    create() override
+    {
+    }
+    void
+    run() override
+    {
+    }
+};
+
 } // namespace
 
-TEST_F(GodzillaAppTest, run_input)
+TEST(AppTest, run_input)
 {
-    int argc = 3;
-    const char * argv[] = { "godzilla",
-                            "-i",
-                            GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml",
-                            nullptr };
+    fs::path input_file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "simple-test.yml";
+    std::vector<std::string> args = { "-i", input_file.string() };
+
+    godzilla::Registry reg;
+    REGISTER_OBJECT(reg, LineMesh);
+    REGISTER_OBJECT(reg, TestProblem);
 
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, "godzilla", argc, argv);
+    App app(comm, reg, "godzilla", args);
     app.run();
 
-    EXPECT_EQ(app.get_input_file_name(), GODZILLA_UNIT_TESTS_ROOT "/assets/simple.yml");
+    EXPECT_EQ(app.get_input_file_name(), GODZILLA_UNIT_TESTS_ROOT "/assets/simple-test.yml");
 
     // TODO: build a MockGodzillaApp and make sure methods get called
 }
 
-TEST_F(GodzillaAppTest, run_input_non_existent_file)
+TEST(AppTest, run_input_non_existent_file)
 {
-    int argc = 3;
-    const char * argv[] = { "godzilla",
-                            "-i",
-                            GODZILLA_UNIT_TESTS_ROOT "/assets/non_existent_file.yml",
-                            nullptr };
+    fs::path input_file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "non_existent_file.yml";
+    std::vector<std::string> args = { "-i", input_file.string() };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, "godzilla", argc, argv);
+    App app(comm, "godzilla", args);
 
     EXPECT_THAT_THROW_MSG(app.run(), ::testing::HasSubstr("Unable to open"));
 }
 
-TEST_F(GodzillaAppTest, no_colors)
+TEST(AppTest, no_colors)
 {
-    int argc = 2;
-    const char * argv[] = { "godzilla", "--no-colors", nullptr };
-
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, "godzilla", argc, argv);
+    App app(comm, "godzilla", { "--no-colors" });
 
     app.run();
     EXPECT_FALSE(Terminal::has_colors());
 }
 
-TEST_F(GodzillaAppTest, verbose)
+TEST(AppTest, verbose)
 {
     int argc = 3;
     const char * argv[] = { "godzilla", "--verbose", "2", nullptr };
@@ -77,7 +89,7 @@ TEST_F(GodzillaAppTest, verbose)
     EXPECT_EQ(app.get_verbosity_level(), 2);
 }
 
-TEST_F(GodzillaAppTest, check_integrity)
+TEST(AppTest, check_integrity)
 {
     testing::internal::CaptureStderr();
     TestApp app;
@@ -90,11 +102,11 @@ TEST_F(GodzillaAppTest, check_integrity)
     EXPECT_THAT(out, testing::HasSubstr("1 error(s) found"));
 }
 
-TEST_F(GodzillaAppTest, command_line_opt)
+TEST(AppTest, command_line_opt)
 {
     class TestApp : public App {
     public:
-        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "test_godzilla_app") {}
+        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "test_godzilla_app", {}) {}
 
         cxxopts::Options &
         get_command_line_opts()
@@ -107,7 +119,7 @@ TEST_F(GodzillaAppTest, command_line_opt)
     EXPECT_THAT(cmd_ln_opts.help(), testing::HasSubstr("test_godzilla_app"));
 }
 
-TEST_F(GodzillaAppTest, unknown_command_line_switch)
+TEST(AppTest, unknown_command_line_switch)
 {
     int argc = 2;
     const char * argv[] = { "godzilla", "--asdf", nullptr };
@@ -118,7 +130,7 @@ TEST_F(GodzillaAppTest, unknown_command_line_switch)
     EXPECT_DEATH(app.run(), "Error: Option ‘asdf’ does not exist");
 }
 
-TEST_F(GodzillaAppTest, help)
+TEST(AppTest, help)
 {
     testing::internal::CaptureStdout();
 
@@ -135,15 +147,12 @@ TEST_F(GodzillaAppTest, help)
     EXPECT_THAT(out, testing::HasSubstr("godzilla [OPTION...]"));
 }
 
-TEST_F(GodzillaAppTest, version)
+TEST(AppTest, version)
 {
     testing::internal::CaptureStdout();
 
-    int argc = 2;
-    const char * argv[] = { "godzilla", "--version", nullptr };
-
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, "godzilla", argc, argv);
+    App app(comm, "godzilla", { "--version" });
 
     app.run();
 

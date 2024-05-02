@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
+#include "TestApp.h"
 #include "godzilla/Factory.h"
-#include "godzilla/App.h"
 #include "godzilla/ConstantInitialCondition.h"
 
 using namespace godzilla;
@@ -8,7 +8,7 @@ using namespace godzilla;
 TEST(ConstantICTest, api)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, "test");
+    TestApp app;
 
     Parameters params = ConstantInitialCondition::parameters();
     params.set<App *>("_app") = &app;
