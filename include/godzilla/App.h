@@ -19,7 +19,7 @@ class Logger;
 
 class App : public PrintInterface {
 public:
-    /// Build and application object
+    /// Build an application object
     ///
     /// @param comm MPI communicator
     /// @param name Name of the application
@@ -30,7 +30,7 @@ public:
         int argc = 0,
         const char * const * argv = nullptr);
 
-    /// Build and application object
+    /// Build an application object
     ///
     /// @param comm MPI communicator
     /// @param registry Registry with classes that will be used by the application
