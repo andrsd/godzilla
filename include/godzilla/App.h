@@ -26,9 +26,18 @@ public:
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
     App(const mpi::Communicator & comm,
-        const std::string & name = "",
-        int argc = 0,
-        const char * const * argv = nullptr);
+        const std::string & name,
+        int argc,
+        const char * const * argv);
+
+    /// Build an application
+    ///
+    /// @param comm MPI communicator
+    /// @param name Name of the application
+    /// @param args Command line arguments (without the executable name as first argument)
+    App(const mpi::Communicator & comm,
+        const std::string & name,
+        const std::vector<std::string> & args);
 
     /// Build an application object
     ///
@@ -39,9 +48,20 @@ public:
     /// @param argv Command line arguments
     App(const mpi::Communicator & comm,
         const Registry & registry,
-        const std::string & name = "",
-        int argc = 0,
-        const char * const * argv = nullptr);
+        const std::string & name,
+        int argc,
+        const char * const * argv);
+
+    /// Build an application object
+    ///
+    /// @param comm MPI communicator
+    /// @param registry Registry with classes that will be used by the application
+    /// @param name Name of the application
+    /// @param args Command line arguments (without the executable name as first argument)
+    App(const mpi::Communicator & comm,
+        const Registry & registry,
+        const std::string & name,
+        const std::vector<std::string> & args);
 
     virtual ~App();
 
@@ -176,11 +196,8 @@ private:
     /// Log with errors and/or warnings
     Logger * logger;
 
-    /// The number of command line arguments
-    int argc;
-
-    /// The command line arguments
-    const char * const * argv;
+    /// Command line arguments
+    std::vector<std::string> args;
 
     /// Command line options
     cxxopts::Options cmdln_opts;

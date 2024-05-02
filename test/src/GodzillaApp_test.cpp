@@ -94,7 +94,7 @@ TEST_F(GodzillaAppTest, command_line_opt)
 {
     class TestApp : public App {
     public:
-        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "test_godzilla_app") {}
+        TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), "test_godzilla_app", {}) {}
 
         cxxopts::Options &
         get_command_line_opts()

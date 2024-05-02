@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
-#include "godzilla/Factory.h"
+#include "TestApp.h"
 #include "godzilla/App.h"
+#include "godzilla/Factory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/RectangleMesh.h"
 #include "ExceptionTestMacros.h"
@@ -21,8 +22,7 @@ TEST(FactoryTest, get_parameters)
     godzilla::Registry reg;
     reg.add<TestObject>("TestObject");
 
-    mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, "test");
+    TestApp app;
 
     Factory factory(reg);
     auto params = factory.get_parameters("TestObject");
@@ -45,8 +45,7 @@ TEST(FactoryTest, create_wrong_type)
     reg.add<TestObject>("TestObject");
     reg.add<LineMesh>("LineMesh");
 
-    mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, "test");
+    TestApp app;
     Factory factory(reg);
     Parameters * params = factory.get_parameters("LineMesh");
     params->set<App *>("_app") = &app;
@@ -60,7 +59,7 @@ TEST(FactoryTest, create_non_existent)
     godzilla::Registry reg;
 
     mpi::Communicator comm(MPI_COMM_WORLD);
-    App app(comm, reg, "test");
+    App app(comm, reg, "test", {});
 
     Factory factory(reg);
     EXPECT_THROW_MSG(
