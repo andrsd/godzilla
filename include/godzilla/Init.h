@@ -9,7 +9,15 @@ namespace godzilla {
 
 class Init {
 public:
+    /// Initialize runtime environment
+    Init();
+
+    /// Initialize runtime environment
+    ///
+    /// @param argc Number of arguments
+    /// @param argv Arguments
     Init(int argc, char * argv[]);
+
     virtual ~Init();
 };
 
