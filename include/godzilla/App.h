@@ -90,6 +90,17 @@ public:
     /// @return Get problem this application is representing
     Problem * get_problem() const;
 
+    /// Get pointer to the `Problem`-derived class in this application
+    ///
+    /// @return The problem this application is solving
+    template <typename T>
+    T *
+    get_problem() const
+    {
+        CALL_STACK_MSG();
+        return dynamic_cast<T *>(this->problem);
+    }
+
     void set_problem(Problem * problem);
 
     /// Parse command line arguments
