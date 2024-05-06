@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include <type_traits>
+#include <initializer_list>
+
 namespace godzilla {
 
 /// Template for creating a type that can do a bit-wise OR on values defined as enum
