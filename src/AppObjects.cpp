@@ -5,6 +5,7 @@
 #include "godzilla/BasicTSAdapt.h"
 #include "godzilla/BoxMesh.h"
 #include "godzilla/ConstantAuxiliaryField.h"
+#include "godzilla/ConstantFunction.h"
 #include "godzilla/ConstantInitialCondition.h"
 #include "godzilla/CSVOutput.h"
 #include "godzilla/DirichletBC.h"
@@ -33,6 +34,7 @@ App::registerObjects(Registry & r)
     REGISTER_OBJECT(r, BasicTSAdapt);
     REGISTER_OBJECT(r, BoxMesh);
     REGISTER_OBJECT(r, ConstantAuxiliaryField);
+    REGISTER_OBJECT(r, ConstantFunction);
     REGISTER_OBJECT(r, ConstantInitialCondition);
     REGISTER_OBJECT(r, CSVOutput);
     REGISTER_OBJECT(r, DirichletBC);
