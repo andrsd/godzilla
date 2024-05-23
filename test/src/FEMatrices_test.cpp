@@ -61,10 +61,10 @@ TEST(FEMatricesTest, mass_rz_edge2)
 {
     DenseVector<Real, 2> rad_n({ 1., 3. });
     auto m = fe::matrix::mass_rz<EDGE2>(2, rad_n);
-    EXPECT_EQ(m(0, 0), 12.);
-    EXPECT_EQ(m(0, 1), 8.);
-    EXPECT_EQ(m(1, 0), 8.);
-    EXPECT_EQ(m(1, 1), 20.);
+    EXPECT_EQ(m(0, 0), 6.);
+    EXPECT_EQ(m(0, 1), 4.);
+    EXPECT_EQ(m(1, 0), 4.);
+    EXPECT_EQ(m(1, 1), 10.);
 }
 
 TEST(FEMatricesTest, mass_rz_tri3)
@@ -130,10 +130,10 @@ TEST(FEMatricesTest, mass_lumped_rz_edge2)
 {
     DenseVector<Real, 2> rad_n({ 1, 2 });
     auto m = fe::matrix::mass_lumped_rz<EDGE2>(rad_n);
-    EXPECT_EQ(m(0, 0), 16.);
+    EXPECT_EQ(m(0, 0), 8.);
     EXPECT_EQ(m(0, 1), 0.);
     EXPECT_EQ(m(1, 0), 0.);
-    EXPECT_EQ(m(1, 1), 20.);
+    EXPECT_EQ(m(1, 1), 10.);
 }
 
 TEST(FEMatricesTest, mass_lumped_rz_tri3)
@@ -227,7 +227,7 @@ TEST(FEMatricesTest, mass_surface_rz_edge2)
 {
     DenseVector<Real, 1> rad_n({ 10. });
     auto m = fe::matrix::mass_surface_rz<EDGE2>(rad_n);
-    EXPECT_EQ(m(0, 0), 1.);
+    EXPECT_EQ(m(0, 0), 10.);
 }
 
 TEST(FEMatricesTest, mass_surface_rz_tri3)
