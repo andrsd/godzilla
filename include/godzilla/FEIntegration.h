@@ -40,6 +40,20 @@ integration_coeff<TRI3, 1>()
 
 template <>
 inline Real
+integration_coeff<TRI3, 2>()
+{
+    return 1. / 6.;
+}
+
+template <>
+inline Real
+integration_coeff<TRI3, 3>()
+{
+    return 1. / 10.;
+}
+
+template <>
+inline Real
 integration_coeff<TET4, 1>()
 {
     return 1. / 4.;
@@ -69,9 +83,51 @@ integration_coeff<EDGE2, 1, 1>()
 
 template <>
 inline Real
+integration_coeff<EDGE2, 1, 2>()
+{
+    return 1. / 12.;
+}
+
+template <>
+inline Real
+integration_coeff<EDGE2, 2, 1>()
+{
+    return integration_coeff<EDGE2, 1, 2>();
+}
+
+template <>
+inline Real
 integration_coeff<TRI3, 1, 1>()
 {
     return 1. / 12.;
+}
+
+template <>
+inline Real
+integration_coeff<TRI3, 1, 2>()
+{
+    return 1. / 30.;
+}
+
+template <>
+inline Real
+integration_coeff<TRI3, 1, 3>()
+{
+    return 1. / 60.;
+}
+
+template <>
+inline Real
+integration_coeff<TRI3, 2, 1>()
+{
+    return integration_coeff<TRI3, 1, 2>();
+}
+
+template <>
+inline Real
+integration_coeff<TRI3, 3, 1>()
+{
+    return integration_coeff<TRI3, 1, 3>();
 }
 
 template <>
@@ -100,29 +156,6 @@ inline Real
 integration_coeff<TET4, 0, 0>()
 {
     return 1.;
-}
-
-// Tri-linear forms
-
-/// Get coefficient for exact integration of a tri-linear form
-///
-/// @tparam ELEM_TYPE Element type
-/// @tparam N1 Order of the 1st shape function
-/// @tparam N2 Order of the 2nd shape function
-/// @tparam N3 Order of the 3nd shape function
-/// @return
-template <ElementType ELEM_TYPE, Int N1, Int N2, Int N3>
-inline Real
-integration_coeff()
-{
-    error("Integration coefficient for '{}' is not implemented", get_element_type_str(ELEM_TYPE));
-}
-
-template <>
-inline Real
-integration_coeff<TRI3, 1, 1, 1>()
-{
-    return 1. / 60.;
 }
 
 // Surface linear forms

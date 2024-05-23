@@ -90,9 +90,9 @@ inline DenseMatrixSymm<Real, 2>
 mass_rz<EDGE2>(Real rad_e, const DenseVector<Real, 2> & rad_n)
 {
     DenseMatrixSymm<Real, 2> m;
-    m(0, 0) = (4 * rad_e + 4. * rad_n(0));
-    m(0, 1) = (4 * rad_e);
-    m(1, 1) = (4 * rad_e + 4. * rad_n(1));
+    m(0, 0) = (2 * rad_e + 2. * rad_n(0));
+    m(0, 1) = (2 * rad_e);
+    m(1, 1) = (2 * rad_e + 2. * rad_n(1));
     return m;
 }
 
@@ -174,8 +174,8 @@ mass_lumped_rz<EDGE2>(const DenseVector<Real, 2> & rad_n)
 {
     DenseMatrixSymm<Real, 2> m;
     m.zero();
-    m(0, 0) = 8. * rad_n(0) + 4. * rad_n(1);
-    m(1, 1) = 4. * rad_n(0) + 8. * rad_n(1);
+    m(0, 0) = 4. * rad_n(0) + 2. * rad_n(1);
+    m(1, 1) = 2. * rad_n(0) + 4. * rad_n(1);
     return m;
 }
 
@@ -294,7 +294,7 @@ inline DenseMatrixSymm<Real, 1>
 mass_surface_rz<EDGE2, 1>(const DenseVector<Real, 1> & radius)
 {
     DenseMatrixSymm<Real, 1> m;
-    m(0, 0) = 1.;
+    m(0, 0) = radius(0);
     return m;
 }
 
