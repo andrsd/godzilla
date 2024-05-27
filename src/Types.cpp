@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/Types.h"
+#include "godzilla/Exception.h"
 
 namespace godzilla {
 
@@ -19,6 +20,8 @@ get_element_type_str(const ElementType & type)
         return "TET4";
     case HEX8:
         return "HEX8";
+    default:
+        throw InternalError("Unsupported element type");
     }
 }
 

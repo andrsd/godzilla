@@ -38,4 +38,14 @@ private:
     std::vector<std::string> call_stack;
 };
 
+/// Exception for internal errors
+class InternalError : public Exception {
+public:
+    template <typename... T>
+    InternalError(fmt::format_string<T...> fmt, T... args) :
+        Exception("Internal error: {}", fmt::format(fmt, std::forward<T>(args)...))
+    {
+    }
+};
+
 } // namespace godzilla
