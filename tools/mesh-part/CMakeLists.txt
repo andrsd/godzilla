@@ -28,7 +28,7 @@ target_link_libraries(
         fmt::fmt
 )
 if(GODZILLA_WITH_MPI)
-    target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_CXX)
+    target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_C)
 endif()
 
 install(TARGETS mesh-part DESTINATION bin)
