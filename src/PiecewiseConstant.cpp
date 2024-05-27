@@ -83,6 +83,8 @@ PiecewiseConstant::evaluate(Real x)
         return eval_right_cont(x);
     case LEFT:
         return eval_left_cont(x);
+    default:
+        throw InternalError("Unknown continuity type");
     }
 }
 

@@ -112,6 +112,8 @@ TecplotOutput::get_file_ext() const
         return { "plt" };
     case ASCII:
         return { "dat" };
+    default:
+        throw InternalError("Unknown tecplot format");
     }
 }
 

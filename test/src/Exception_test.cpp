@@ -40,3 +40,11 @@ TEST(Exception, call_stack)
         EXPECT_EQ(cs.at(1), "fn1");
     }
 }
+
+//
+
+TEST(InternalError, test)
+{
+    InternalError e("text");
+    EXPECT_STREQ(e.what(), "Internal error: text");
+}
