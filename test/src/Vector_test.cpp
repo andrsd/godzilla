@@ -256,6 +256,7 @@ TEST(VectorTest, max)
     v.destroy();
 }
 
+#if PETSC_VERSION_LT(3, 20, 0)
 TEST(VectorTest, chop)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 2);
@@ -266,6 +267,20 @@ TEST(VectorTest, chop)
     EXPECT_DOUBLE_EQ(v(1), 4.);
     v.destroy();
 }
+#endif
+
+#if PETSC_VERSION_GE(3, 20, 0)
+TEST(VectorTest, filter)
+{
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 2);
+    v.set_value(0, 3.);
+    v.set_value(1, 4.);
+    v.filter(3.5);
+    EXPECT_DOUBLE_EQ(v(0), 0.);
+    EXPECT_DOUBLE_EQ(v(1), 4.);
+    v.destroy();
+}
+#endif
 
 TEST(VectorTest, axpy)
 {
