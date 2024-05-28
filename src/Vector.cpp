@@ -178,6 +178,15 @@ Vector::chop(Real tol)
     PETSC_CHECK(VecChop(this->vec, tol));
 }
 
+#if PETSC_VERSION_GE(3, 20, 0)
+void
+Vector::filter(Real tol)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecFilter(this->vec, tol));
+}
+#endif
+
 void
 Vector::axpy(Scalar alpha, const Vector & x)
 {

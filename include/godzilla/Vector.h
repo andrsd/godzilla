@@ -54,7 +54,19 @@ public:
     void shift(Scalar shift);
     Scalar min() const;
     Scalar max() const;
+#if PETSC_VERSION_LT(3, 20, 0)
     void chop(Real tol);
+#else
+    [[deprecated("Use filter() instead")]] void chop(Real tol);
+#endif
+
+#if PETSC_VERSION_GE(3, 20, 0)
+    /// Set all values in the vector with an absolute value less than or equal to the tolerance to
+    /// zero
+    ///
+    /// @param tol The zero tolerance
+    void filter(Real tol);
+#endif
 
     /// Computes `this[i] = alpha x[i] + this[i]`
     ///
