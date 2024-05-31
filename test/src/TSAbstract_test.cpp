@@ -1,36 +1,14 @@
 #include "gmock/gmock.h"
 #include "godzilla/TSAbstract.h"
+#include "godzilla/LineMesh.h"
+#include "godzilla/FENonlinearProblem.h"
+#include "godzilla/TransientProblemInterface.h"
 #include "TestApp.h"
 
 using namespace godzilla;
 using namespace testing;
 
 namespace {
-
-bool compute_rhs_called = false;
-bool pre_stage_called = false;
-bool post_stage_called = false;
-
-PetscErrorCode
-compute_rhs(TS, Real time, Vec x, Vec F, void * ctx)
-{
-    compute_rhs_called = true;
-    return 0;
-}
-
-PetscErrorCode
-pre_stage(TS, Real time)
-{
-    pre_stage_called = true;
-    return 0;
-}
-
-PetscErrorCode
-post_stage(TS, Real time, Int i, Vec * x)
-{
-    post_stage_called = true;
-    return 0;
-}
 
 class TestTSScheme : public TSAbstract {
 public:
@@ -61,6 +39,98 @@ register_scheme()
     return true;
 }
 
+class GTestProblem : public Problem, public TransientProblemInterface {
+public:
+    explicit GTestProblem(const Parameters & params) :
+        Problem(params),
+        TransientProblemInterface(this, params)
+    {
+    }
+
+    void
+    create() override
+    {
+        Problem::create();
+        TransientProblemInterface::init();
+        set_up_time_scheme();
+    }
+
+    void
+    run() override
+    {
+        auto comm = get_comm();
+        auto ts = get_ts();
+        auto scheme = static_cast<TestTSScheme *>(ts->data);
+
+        Vector x = Vector::create_seq(comm, 3);
+        TSSetSolution(ts, x);
+        TSSetMaxSteps(ts, 1);
+
+        TSReset(ts);
+        TSStep(ts);
+        PetscBool done;
+        TSEvaluateStep(ts, 1, x, &done);
+        TSRollBack(ts);
+        TSView(ts, PETSC_VIEWER_STDOUT_SELF);
+
+        scheme->pre_stage(1.0);
+
+        auto stage_vecs = scheme->get_stage_vectors();
+        scheme->post_stage(1.0, 0, stage_vecs);
+
+        scheme->set_cfl_time_local(12.34);
+
+        auto U = Vector::create_seq(comm, 3);
+        auto y = Vector::create_seq(comm, 3);
+        scheme->compute_rhs_function(0., U, y);
+    }
+
+    void
+    set_up_time_scheme() override
+    {
+        set_scheme(TestTSScheme::name);
+    }
+
+    void
+    pre_stage(Real stage_time) override
+    {
+        pre_stage_called = true;
+    }
+
+    void
+    post_stage(Real stage_time, Int stage_index, const std::vector<Vector> & Y) override
+    {
+        post_stage_called = true;
+    }
+
+    PetscErrorCode
+    compute_rhs(Real time, const Vector & vec_x, Vector & vec_F) override
+    {
+        compute_rhs_called = true;
+        return 0;
+    }
+
+public:
+    static Parameters parameters();
+
+    static bool compute_rhs_called;
+    static bool pre_stage_called;
+    static bool post_stage_called;
+};
+
+bool GTestProblem::compute_rhs_called = false;
+bool GTestProblem::pre_stage_called = false;
+bool GTestProblem::post_stage_called = false;
+
+Parameters
+GTestProblem::parameters()
+{
+    Parameters params = Problem::parameters();
+    params += TransientProblemInterface::parameters();
+    params.add_param<std::string>("scheme", "test-ts", "");
+    return params;
+}
+
 } // namespace
 
 TEST(TSAbstract, test)
@@ -70,15 +140,23 @@ TEST(TSAbstract, test)
     testing::internal::CaptureStdout();
 
     TestApp app;
-    auto comm = app.get_comm();
 
-    TS ts;
-    TSCreate(comm, &ts);
+    auto pars_mesh = LineMesh::parameters();
+    pars_mesh.set<godzilla::App *>("_app") = &app;
+    pars_mesh.set<Int>("nx") = 2;
+    LineMesh mesh(pars_mesh);
 
-    TSSetType(ts, TestTSScheme::name.c_str());
+    auto pars_prob = GTestProblem::parameters();
+    pars_prob.set<godzilla::App *>("_app") = &app;
+    pars_prob.set<MeshObject *>("_mesh_obj") = &mesh;
+    pars_prob.set<Int>("num_steps") = 1;
+    GTestProblem prob(pars_prob);
 
+    mesh.create();
+    prob.create();
+
+    auto ts = prob.get_ts();
     auto scheme = static_cast<TestTSScheme *>(ts->data);
-    const auto c_scheme = static_cast<const TestTSScheme *>(ts->data);
     EXPECT_CALL(*scheme, reset).Times(3);
     EXPECT_CALL(*scheme, step);
     EXPECT_CALL(*scheme, evaluate_step);
@@ -86,45 +164,21 @@ TEST(TSAbstract, test)
     EXPECT_CALL(*scheme, view);
     EXPECT_CALL(*scheme, destroy);
 
-    Vector x = Vector::create_seq(comm, 3);
-    TSSetSolution(ts, x);
-    TSSetMaxSteps(ts, 1);
-    TSSetRHSFunction(ts, x, compute_rhs, nullptr);
-    TSSetPreStage(ts, pre_stage);
-    TSSetPostStage(ts, post_stage);
+    prob.run();
 
-    TSSetUp(ts);
-    EXPECT_EQ(scheme->get_vec_sol(), x);
-
-    TSReset(ts);
-    TSStep(ts);
-    PetscBool done;
-    TSEvaluateStep(ts, 1, x, &done);
-    TSRollBack(ts);
-    TSView(ts, PETSC_VIEWER_STDOUT_SELF);
-
+    const auto c_scheme = static_cast<const TestTSScheme *>(ts->data);
     auto stage_vecs = scheme->get_stage_vectors();
     auto c_stage_vecs = c_scheme->get_stage_vectors();
     EXPECT_EQ(stage_vecs.size(), 0);
     EXPECT_EQ(c_stage_vecs.size(), 0);
 
-    scheme->pre_stage(1.0);
-    EXPECT_TRUE(pre_stage_called);
-
-    scheme->post_stage(1.0, 0, stage_vecs);
-    EXPECT_TRUE(post_stage_called);
-
-    scheme->set_cfl_time_local(12.34);
     PetscReal cfl;
     TSGetCFLTime(ts, &cfl);
     EXPECT_DOUBLE_EQ(cfl, 12.34);
 
-    auto U = Vector::create_seq(comm, 3);
-    auto y = Vector::create_seq(comm, 3);
-    scheme->compute_rhs_function(0., U, y);
-    EXPECT_TRUE(compute_rhs_called);
-
-    TSDestroy(&ts);
+    EXPECT_TRUE(GTestProblem::pre_stage_called);
+    EXPECT_TRUE(GTestProblem::post_stage_called);
+    EXPECT_TRUE(GTestProblem::compute_rhs_called);
 
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, HasSubstr("type: test-ts"));

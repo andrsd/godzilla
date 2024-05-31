@@ -5,6 +5,8 @@
 #include "godzilla/Error.h"
 #include "godzilla/Vector.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Exception.h"
+#include "godzilla/TransientProblemInterface.h"
 #include "petscerror.h"
 
 namespace godzilla {
@@ -22,6 +24,12 @@ TSAbstract::TSAbstract(TS ts) :
     status(TS_STEP_INCOMPLETE),
     reason(ts->reason)
 {
+    CALL_STACK_MSG();
+    void * ctx;
+    PETSC_CHECK(TSGetApplicationContext(this->ts, &ctx));
+    this->tpi = static_cast<TransientProblemInterface *>(ctx);
+    if (this->tpi == nullptr)
+        throw InternalError("TS context is nullptr");
 }
 
 const std::vector<Vector> &
@@ -42,17 +50,14 @@ void
 TSAbstract::pre_stage(Real time)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSPreStage(this->ts, time));
+    this->tpi->pre_stage(time);
 }
 
 void
 TSAbstract::post_stage(Real stage_time, Int stage_index, const std::vector<Vector> & Y)
 {
     CALL_STACK_MSG();
-    std::vector<Vec> vecs(Y.size());
-    for (Int i = 0; i < Y.size(); i++)
-        vecs[i] = (Vec) Y[i];
-    PETSC_CHECK(TSPostStage(this->ts, stage_time, stage_index, vecs.data()));
+    this->tpi->post_stage(stage_time, stage_index, Y);
 }
 
 void
@@ -70,10 +75,10 @@ TSAbstract::set_cfl_time_local(Real cfl)
 }
 
 void
-TSAbstract::compute_rhs_function(godzilla::Real t, const godzilla::Vector & U, godzilla::Vector & y)
+TSAbstract::compute_rhs_function(Real t, const Vector & U, Vector & y)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSComputeRHSFunction(this->ts, t, U, y));
+    this->tpi->compute_rhs(t, U, y);
 }
 
 //
