@@ -10,6 +10,35 @@
 
 namespace godzilla {
 
+namespace internal {
+
+/// Abstract "method" for calling TS Monitor
+struct TSMonitorMethodAbstract {
+    virtual ~TSMonitorMethodAbstract() = default;
+    virtual ErrorCode invoke(Int it, Real rnorm, const Vector & x) = 0;
+};
+
+template <typename T>
+struct TSMonitorMethod : public TSMonitorMethodAbstract {
+    TSMonitorMethod(T * instance, ErrorCode (T::*method)(Int, Real, const Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Int it, Real rnorm, const Vector & x) override
+    {
+        return ((*this->instance).*method)(it, rnorm, x);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Int, Real, const Vector &);
+};
+
+} // namespace internal
+
 class Problem;
 class Parameters;
 class TimeSteppingAdaptor;
@@ -134,8 +163,8 @@ protected:
     virtual void set_up_monitors();
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
-    /// TS monitor
-    virtual void ts_monitor(Int stepi, Real time, Vec x);
+    /// Default TS monitor
+    ErrorCode default_monitor(Int stepi, Real time, const Vector & x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
@@ -147,9 +176,28 @@ protected:
     /// Set time-stepping scheme
     void set_scheme(const std::string & scheme_name);
 
+    /// Sets an *additional* member function to be called at every iteration to monitor the
+    /// residual/error etc.
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real, const Vector &))
+    {
+        this->monitor_method = new internal::TSMonitorMethod<T>(instance, method);
+        PETSC_CHECK(TSMonitorSet(this->ts, monitor, this->monitor_method, monitor_destroy));
+    }
+
+    /// Clears all the monitors that have been set on a time-stepping object.
+    void monitor_cancel();
+
 private:
     /// PETSc TS object
     TS ts;
+    /// Method for monitoring the solve
+    internal::TSMonitorMethodAbstract * monitor_method;
     /// Problem this interface is part of
     Problem * problem;
     /// Parameters
@@ -172,7 +220,9 @@ private:
 public:
     static Parameters parameters();
 
-    friend ErrorCode __transient_monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
+private:
+    static ErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
+    static ErrorCode monitor_destroy(void ** ctx);
 };
 
 } // namespace godzilla
