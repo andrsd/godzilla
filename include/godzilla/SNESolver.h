@@ -4,7 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include "godzilla/SNESolverCallbacks.h"
+#include "godzilla/SNESolverDelegates.h"
 #include "godzilla/KrylovSolver.h"
 
 namespace godzilla {
