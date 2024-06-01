@@ -37,11 +37,19 @@ __transient_post_step(TS ts)
 }
 
 PetscErrorCode
-__transient_monitor(TS, Int stepi, Real time, Vec x, void * ctx)
+TransientProblemInterface::monitor(TS, Int stepi, Real time, Vec x, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * tpi = static_cast<TransientProblemInterface *>(ctx);
-    tpi->ts_monitor(stepi, time, x);
+    auto * method = static_cast<internal::TSMonitorMethodAbstract *>(ctx);
+    Vector vec_x(x);
+    return method->invoke(stepi, time, vec_x);
+}
+
+PetscErrorCode
+TransientProblemInterface::monitor_destroy(void ** ctx)
+{
+    auto * method = static_cast<internal::TSMonitorMethodAbstract *>(*ctx);
+    delete method;
     return 0;
 }
 
@@ -59,6 +67,7 @@ TransientProblemInterface::parameters()
 
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     ts(nullptr),
+    monitor_method(nullptr),
     scheme(params.get<std::string>("scheme")),
     problem(problem),
     tpi_params(params),
@@ -210,7 +219,7 @@ TransientProblemInterface::set_up_monitors()
     CALL_STACK_MSG();
     PETSC_CHECK(TSSetPreStep(this->ts, __transient_pre_step));
     PETSC_CHECK(TSSetPostStep(this->ts, __transient_post_step));
-    PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, nullptr));
+    monitor_set(this, &TransientProblemInterface::monitor);
 }
 
 void
@@ -229,12 +238,13 @@ TransientProblemInterface::post_step()
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
 }
 
-void
-TransientProblemInterface::ts_monitor(Int stepi, Real time, Vec x)
+PetscErrorCode
+TransientProblemInterface::monitor(Int stepi, Real time, const Vector & x)
 {
     CALL_STACK_MSG();
     Real dt = get_time_step();
     this->problem->lprint(6, "{} Time {:f} dt = {:f}", stepi, time, dt);
+    return 0;
 }
 
 void

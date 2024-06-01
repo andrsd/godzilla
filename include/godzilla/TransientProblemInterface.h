@@ -7,6 +7,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Vector.h"
 #include "godzilla/SNESolver.h"
+#include "godzilla/TSDelegates.h"
 
 namespace godzilla {
 
@@ -138,7 +139,7 @@ protected:
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
     /// TS monitor
-    virtual void ts_monitor(Int stepi, Real time, Vec x);
+    PetscErrorCode monitor(Int stepi, Real time, const Vector & x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
@@ -150,9 +151,25 @@ protected:
     /// Set time-stepping scheme
     void set_scheme(const std::string & scheme_name);
 
+    /// Sets an *additional* member function to be called at every iteration to monitor the
+    /// residual/error etc.
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    monitor_set(T * instance, PetscErrorCode (T::*method)(Int, Real, const Vector &))
+    {
+        this->monitor_method = new internal::TSMonitorMethod<T>(instance, method);
+        PETSC_CHECK(TSMonitorSet(this->ts, monitor, this->monitor_method, monitor_destroy));
+    }
+
 private:
     /// PETSc TS object
     TS ts;
+    /// Method for monitoring the solve
+    internal::TSMonitorMethodAbstract * monitor_method;
     /// Time stepping scheme
     const std::string & scheme;
     /// Problem this interface is part of
@@ -177,7 +194,9 @@ private:
 public:
     static Parameters parameters();
 
-    friend PetscErrorCode __transient_monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
+private:
+    static PetscErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
+    static PetscErrorCode monitor_destroy(void ** ctx);
 };
 
 } // namespace godzilla
