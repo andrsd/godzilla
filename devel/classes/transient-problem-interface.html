@@ -124,6 +124,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface20set_converged_reasonE17TSConvergedReason"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::set_converged_reason()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla25TransientProblemInterface20get_converged_reasonEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::get_converged_reason()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface8set_timeE4Real"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::set_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface8pre_stepEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::pre_step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface9post_stepEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::post_step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface9pre_stageE4Real"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::pre_stage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface10post_stageE4Real3IntRKNSt6vectorI6VectorEE"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::post_stage()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface11compute_rhsE4RealRK6VectorR6Vector"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::compute_rhs()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -329,6 +334,62 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>t</strong> – New simulation time </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface8pre_stepEv">
+<span id="_CPPv3N8godzilla25TransientProblemInterface8pre_stepEv"></span><span id="_CPPv2N8godzilla25TransientProblemInterface8pre_stepEv"></span><span id="godzilla::TransientProblemInterface::pre_step"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a1b8cf857eb5611cc2f89e4b286633b41"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pre_step</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface8pre_stepEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Called before the time step solve. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface9post_stepEv">
+<span id="_CPPv3N8godzilla25TransientProblemInterface9post_stepEv"></span><span id="_CPPv2N8godzilla25TransientProblemInterface9post_stepEv"></span><span id="godzilla::TransientProblemInterface::post_step"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a8289a9a54185bbac171a7ad75e77d5aa"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">post_step</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface9post_stepEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Called after the time step is done solving. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface9pre_stageE4Real">
+<span id="_CPPv3N8godzilla25TransientProblemInterface9pre_stageE4Real"></span><span id="_CPPv2N8godzilla25TransientProblemInterface9pre_stageE4Real"></span><span id="godzilla::TransientProblemInterface::pre_stage__Real"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1af5765bc681705a5c8eb7745e96a0b4a3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pre_stage</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stage_time</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface9pre_stageE4Real" title="Link to this definition"></a><br /></dt>
+<dd><p>Runs the user-defined pre-stage function. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stage_time</strong> – The absolute time of the current stage </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface10post_stageE4Real3IntRKNSt6vectorI6VectorEE">
+<span id="_CPPv3N8godzilla25TransientProblemInterface10post_stageE4Real3IntRKNSt6vectorI6VectorEE"></span><span id="_CPPv2N8godzilla25TransientProblemInterface10post_stageE4Real3IntRKNSt6vectorI6VectorEE"></span><span id="godzilla::TransientProblemInterface::post_stage__Real.Int.std::vector:Vector:CR"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a886a6cd64de073a3ed3f848114895a7c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">post_stage</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stage_time</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stage_index</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Vector</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">Y</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface10post_stageE4Real3IntRKNSt6vectorI6VectorEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Runs the user-defined post-stage function. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stage_time</strong> – The absolute time of the current stage </p></li>
+<li><p><strong>stage_index</strong> – Stage number </p></li>
+<li><p><strong>Y</strong> – Array of vectors (of size = total number of stages) with the stage solutions </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface11compute_rhsE4RealRK6VectorR6Vector">
+<span id="_CPPv3N8godzilla25TransientProblemInterface11compute_rhsE4RealRK6VectorR6Vector"></span><span id="_CPPv2N8godzilla25TransientProblemInterface11compute_rhsE4RealRK6VectorR6Vector"></span><span id="godzilla::TransientProblemInterface::compute_rhs__Real.VectorCR.VectorR"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a95eead15bd7854c9144f2471ca323052"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscErrorCode</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_rhs</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">F</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface11compute_rhsE4RealRK6VectorR6Vector" title="Link to this definition"></a><br /></dt>
+<dd><p>Compute right-hand side. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> – Current time </p></li>
+<li><p><strong>x</strong> – Solution at time <code class="docutils literal notranslate"><span class="pre">time</span></code></p></li>
+<li><p><strong>F</strong> – Right-hand side vector </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>PETSc error code </p>
 </dd>
 </dl>
 </dd></dl>
