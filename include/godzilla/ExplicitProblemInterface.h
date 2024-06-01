@@ -25,11 +25,11 @@ public:
 
     Vector & get_lumped_mass_matrix();
 
-    virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+    PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F) override;
 
 protected:
     void set_up_callbacks();
-    void set_up_time_scheme();
+    void set_up_time_scheme() override;
     void allocate_mass_matrix();
     void allocate_lumped_mass_matrix();
     void create_mass_matrix();

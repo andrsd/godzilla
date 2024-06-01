@@ -12,6 +12,8 @@
 
 namespace godzilla {
 
+class TransientProblemInterface;
+
 class TSAbstract {
 public:
     explicit TSAbstract(TS ts);
@@ -55,6 +57,8 @@ public:
 protected:
     /// PETSc TS object
     TS ts;
+    /// Transient problem
+    TransientProblemInterface * tpi;
     /// Time stepping adaptivity
     TimeStepAdapt adapt;
     /// Current time increment

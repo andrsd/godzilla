@@ -262,6 +262,24 @@ TransientProblemInterface::set_time(Real t)
 }
 
 void
+TransientProblemInterface::pre_stage(Real stage_time)
+{
+}
+
+void
+TransientProblemInterface::post_stage(Real stage_time,
+                                      Int stage_index,
+                                      const std::vector<Vector> & Y)
+{
+}
+
+PetscErrorCode
+TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
+{
+    return 0;
+}
+
+void
 TransientProblemInterface::set_converged_reason(TSConvergedReason reason)
 {
     CALL_STACK_MSG();

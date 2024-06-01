@@ -11,6 +11,7 @@
 namespace godzilla {
 
 class Problem;
+class Parameters;
 class TimeSteppingAdaptor;
 
 /// Interface for transient simulations
@@ -95,6 +96,32 @@ public:
     /// @param t New simulation time
     void set_time(Real t);
 
+    /// Called before the time step solve
+    virtual void pre_step();
+
+    /// Called after the time step is done solving
+    virtual void post_step();
+
+    /// Runs the user-defined pre-stage function
+    ///
+    /// @param stage_time The absolute time of the current stage
+    virtual void pre_stage(Real stage_time);
+
+    /// Runs the user-defined post-stage function
+    ///
+    /// @param stage_time The absolute time of the current stage
+    /// @param stage_index Stage number
+    /// @param Y Array of vectors (of size = total number of stages) with the stage solutions
+    virtual void post_stage(Real stage_time, Int stage_index, const std::vector<Vector> & Y);
+
+    /// Compute right-hand side
+    ///
+    /// @param time Current time
+    /// @param x Solution at time `time`
+    /// @param F Right-hand side vector
+    /// @return PETSc error code
+    virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+
 protected:
     /// Get underlying non-linear solver
     SNESolver get_snes() const;
@@ -110,10 +137,6 @@ protected:
     virtual void set_up_monitors();
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
-    /// Called before the time step solve
-    virtual void pre_step();
-    /// Called after the time step is done solving
-    virtual void post_step();
     /// TS monitor
     virtual void ts_monitor(Int stepi, Real time, Vec x);
     /// Check if problem converged
@@ -154,8 +177,6 @@ private:
 public:
     static Parameters parameters();
 
-    friend PetscErrorCode __transient_pre_step(TS ts);
-    friend PetscErrorCode __transient_post_step(TS ts);
     friend PetscErrorCode __transient_monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
 };
 
