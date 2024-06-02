@@ -20,8 +20,6 @@ public:
     Int get_step_num() const override;
     void compute_solution_vector_local() override;
 
-    virtual PetscErrorCode compute_boundary(Real time, const Vector & X, const Vector & X_t);
-
 protected:
     void init() override;
     void set_up_callbacks() override;
@@ -29,6 +27,7 @@ protected:
     void set_up_monitors() override;
     void post_step() override;
 
+    PetscErrorCode compute_boundary(Real time, const Vector & X, const Vector & X_t);
     PetscErrorCode compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
     PetscErrorCode compute_ijacobian(Real time,
                                      const Vector & X,

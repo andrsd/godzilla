@@ -213,6 +213,19 @@ protected:
                                           this->compute_ijacobian_local_method));
     }
 
+    template <class T>
+    void
+    set_boundary_local(T * instance,
+                       PetscErrorCode (T::*method)(Real, const Vector &, const Vector &))
+    {
+        this->compute_boundary_local_method =
+            new internal::TSComputeBoundaryMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetBoundaryLocal(dm,
+                                         TransientProblemInterface::compute_boundary,
+                                         this->compute_boundary_local_method));
+    }
+
 private:
     /// PETSc TS object
     TS ts;
@@ -223,6 +236,8 @@ private:
     /// Method to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t) is the function provided by
     /// `set_ifunction_local`
     internal::TSComputeIJacobianMethodAbstract * compute_ijacobian_local_method;
+    /// Method for essential boundary data for a local implicit function evaluation.
+    internal::TSComputeBoundaryMethodAbstract * compute_boundary_local_method;
     /// with set_i Method for monitoring the solve
     internal::TSMonitorMethodAbstract * monitor_method;
     /// Time stepping scheme
@@ -258,6 +273,7 @@ private:
     static PetscErrorCode compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
     static PetscErrorCode
     compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * context);
+    static PetscErrorCode compute_boundary(DM, Real time, Vec x, Vec x_t, void * context);
 };
 
 } // namespace godzilla

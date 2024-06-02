@@ -15,19 +15,6 @@
 
 namespace godzilla {
 
-static PetscErrorCode
-_tsfep_compute_boundary(DM, Real time, Vec x, Vec x_t, void * user)
-{
-    CALL_STACK_MSG();
-    auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    Vector vec_x(x);
-    Vector vec_x_t(x_t);
-    fep->compute_boundary(time, vec_x, vec_x_t);
-    return 0;
-}
-
-///
-
 Parameters
 ImplicitFENonlinearProblem::parameters()
 {
@@ -104,8 +91,7 @@ void
 ImplicitFENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    auto dm = get_dm();
-    PETSC_CHECK(DMTSSetBoundaryLocal(dm, _tsfep_compute_boundary, this));
+    set_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary);
     set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction);
     set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian);
 }

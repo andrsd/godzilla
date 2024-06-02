@@ -129,4 +129,32 @@ private:
     PetscErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &);
 };
 
+// Machinery for compute TSComputeBoundary
+
+/// Abstract "method" for calling TSComputeBoundary
+struct TSComputeBoundaryMethodAbstract {
+    virtual ~TSComputeBoundaryMethodAbstract() = default;
+    virtual PetscErrorCode invoke(Real time, const Vector & x, const Vector & x_t) = 0;
+};
+
+template <typename T>
+struct TSComputeBoundaryMethod : public TSComputeBoundaryMethodAbstract {
+    TSComputeBoundaryMethod(T * instance,
+                            PetscErrorCode (T::*method)(Real, const Vector &, const Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    PetscErrorCode
+    invoke(Real time, const Vector & x, const Vector & x_t) override
+    {
+        return ((*this->instance).*method)(time, x, x_t);
+    }
+
+private:
+    T * instance;
+    PetscErrorCode (T::*method)(Real, const Vector &, const Vector &);
+};
+
 } // namespace godzilla::internal
