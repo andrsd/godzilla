@@ -159,6 +159,8 @@ protected:
     virtual void init();
     /// Create
     virtual void create();
+    /// Set up callbacks
+    void set_up_callbacks();
     /// Set up monitors
     virtual void set_up_monitors();
     /// Set up time integration scheme
@@ -221,6 +223,8 @@ public:
     static Parameters parameters();
 
 private:
+    static ErrorCode pre_step(TS ts);
+    static ErrorCode post_step(TS ts);
     static ErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
     static ErrorCode monitor_destroy(void ** ctx);
 };

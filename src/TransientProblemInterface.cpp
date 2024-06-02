@@ -15,7 +15,7 @@
 namespace godzilla {
 
 ErrorCode
-__transient_pre_step(TS ts)
+TransientProblemInterface::pre_step(TS ts)
 {
     CALL_STACK_MSG();
     void * ctx;
@@ -26,7 +26,7 @@ __transient_pre_step(TS ts)
 }
 
 ErrorCode
-__transient_post_step(TS ts)
+TransientProblemInterface::post_step(TS ts)
 {
     CALL_STACK_MSG();
     void * ctx;
@@ -206,11 +206,17 @@ TransientProblemInterface::create()
 }
 
 void
+TransientProblemInterface::set_up_callbacks()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(TSSetPreStep(this->ts, TransientProblemInterface::pre_step));
+    PETSC_CHECK(TSSetPostStep(this->ts, TransientProblemInterface::post_step));
+}
+
+void
 TransientProblemInterface::set_up_monitors()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetPreStep(this->ts, __transient_pre_step));
-    PETSC_CHECK(TSSetPostStep(this->ts, __transient_post_step));
     monitor_set(this, &TransientProblemInterface::default_monitor);
 }
 

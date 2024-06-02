@@ -88,6 +88,7 @@ void
 ExplicitProblemInterface::set_up_callbacks()
 {
     CALL_STACK_MSG();
+    TransientProblemInterface::set_up_callbacks();
     auto dm = this->nl_problem->get_dm();
     PETSC_CHECK(DMTSSetRHSFunction(dm, godzilla::compute_rhs, this));
 }

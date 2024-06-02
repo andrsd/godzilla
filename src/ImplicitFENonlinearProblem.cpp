@@ -129,6 +129,7 @@ void
 ImplicitFENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
+    TransientProblemInterface::set_up_callbacks();
     auto dm = get_dm();
     PETSC_CHECK(DMTSSetBoundaryLocal(dm, _tsfep_compute_boundary, this));
     PETSC_CHECK(DMTSSetIFunctionLocal(dm, __tsfep_compute_ifunction, this));
