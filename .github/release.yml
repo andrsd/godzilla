@@ -9,6 +9,9 @@ changelog:
     - title: Fixed Problems
       labels:
         - bug-fix
+    - title: API Changes
+      labels:
+        - api-change
     - title: Other Changes
       labels:
         - "*"
