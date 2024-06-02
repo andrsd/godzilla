@@ -8,6 +8,7 @@
 #include "godzilla/Vector.h"
 #include "godzilla/SNESolver.h"
 #include "godzilla/TSDelegates.h"
+#include "godzilla/Problem.h"
 
 namespace godzilla {
 
@@ -115,13 +116,13 @@ public:
     /// @param Y Array of vectors (of size = total number of stages) with the stage solutions
     virtual void post_stage(Real stage_time, Int stage_index, const std::vector<Vector> & Y);
 
-    /// Compute right-hand side
-    ///
-    /// @param time Current time
-    /// @param x Solution at time `time`
-    /// @param F Right-hand side vector
-    /// @return PETSc error code
-    virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+    //    /// Compute right-hand side
+    //    ///
+    //    /// @param time Current time
+    //    /// @param x Solution at time `time`
+    //    /// @param F Right-hand side vector
+    //    /// @return PETSc error code
+    //    PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 
 protected:
     /// Get underlying non-linear solver
@@ -165,9 +166,28 @@ protected:
         PETSC_CHECK(TSMonitorSet(this->ts, monitor, this->monitor_method, monitor_destroy));
     }
 
+    /// Sets the routine for evaluating the function, where U_t = G(t,u).
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    set_rhs_function(T * instance,
+                     PetscErrorCode (T::*method)(Real time, const Vector & x, Vector & F))
+    {
+        this->compute_rhs_method = new internal::TSComputeRhsMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetRHSFunction(dm,
+                                       TransientProblemInterface::compute_rhs,
+                                       this->compute_rhs_method));
+    }
+
 private:
     /// PETSc TS object
     TS ts;
+    /// Method for computing right-hand side
+    internal::TSComputeRhsMethodAbstract * compute_rhs_method;
     /// Method for monitoring the solve
     internal::TSMonitorMethodAbstract * monitor_method;
     /// Time stepping scheme
@@ -199,6 +219,7 @@ private:
     static PetscErrorCode post_step(TS ts);
     static PetscErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
     static PetscErrorCode monitor_destroy(void ** ctx);
+    static PetscErrorCode compute_rhs(TS, Real time, Vec x, Vec F, void * ctx);
 };
 
 } // namespace godzilla

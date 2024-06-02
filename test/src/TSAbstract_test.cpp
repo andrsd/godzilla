@@ -103,12 +103,12 @@ public:
         post_stage_called = true;
     }
 
-    PetscErrorCode
-    compute_rhs(Real time, const Vector & vec_x, Vector & vec_F) override
-    {
-        compute_rhs_called = true;
-        return 0;
-    }
+    //    PetscErrorCode
+    //    compute_rhs(Real time, const Vector & vec_x, Vector & vec_F) override
+    //    {
+    //        compute_rhs_called = true;
+    //        return 0;
+    //    }
 
 public:
     static Parameters parameters();

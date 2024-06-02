@@ -25,8 +25,6 @@ public:
 
     Vector & get_lumped_mass_matrix();
 
-    PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F) override;
-
 protected:
     void set_up_callbacks();
     void set_up_time_scheme() override;
@@ -38,6 +36,8 @@ protected:
     virtual PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) = 0;
 
 private:
+    PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+
     /// Nonlinear problem
     NonlinearProblem * nl_problem;
     /// Mass matrix

@@ -53,6 +53,16 @@ TransientProblemInterface::monitor_destroy(void ** ctx)
     return 0;
 }
 
+PetscErrorCode
+TransientProblemInterface::compute_rhs(TS, Real time, Vec x, Vec F, void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeRhsMethodAbstract *>(ctx);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    return method->invoke(time, vec_x, vec_F);
+}
+
 Parameters
 TransientProblemInterface::parameters()
 {
@@ -67,6 +77,7 @@ TransientProblemInterface::parameters()
 
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     ts(nullptr),
+    compute_rhs_method(nullptr),
     monitor_method(nullptr),
     scheme(params.get<std::string>("scheme")),
     problem(problem),
@@ -289,11 +300,11 @@ TransientProblemInterface::post_stage(Real stage_time,
 {
 }
 
-PetscErrorCode
-TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
-{
-    return 0;
-}
+// PetscErrorCode
+// TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
+//{
+//     return 0;
+// }
 
 void
 TransientProblemInterface::set_converged_reason(TSConvergedReason reason)
