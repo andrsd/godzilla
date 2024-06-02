@@ -74,6 +74,26 @@ TransientProblemInterface::compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec 
     return method->invoke(time, vec_x, vec_x_t, vec_F);
 }
 
+ErrorCode
+TransientProblemInterface::compute_ijacobian(DM,
+                                             Real time,
+                                             Vec x,
+                                             Vec x_t,
+                                             Real x_t_shift,
+                                             Mat J,
+                                             Mat Jp,
+                                             void * contex)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeIJacobianMethodAbstract *>(contex);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    Matrix mat_J(J);
+    Matrix mat_Jp(Jp);
+    method->invoke(time, vec_x, vec_x_t, x_t_shift, mat_J, mat_Jp);
+    return 0;
+}
+
 Parameters
 TransientProblemInterface::parameters()
 {
@@ -90,6 +110,7 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     ts(nullptr),
     compute_rhs_method(nullptr),
     compute_ifunction_local_method(nullptr),
+    compute_ijacobian_local_method(nullptr),
     monitor_method(nullptr),
     problem(problem),
     tpi_params(params),

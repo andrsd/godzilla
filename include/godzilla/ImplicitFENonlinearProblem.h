@@ -20,12 +20,6 @@ public:
     Int get_step_num() const override;
     void compute_solution_vector_local() override;
 
-    virtual ErrorCode compute_ijacobian(Real time,
-                                        const Vector & X,
-                                        const Vector & X_t,
-                                        Real x_t_shift,
-                                        Matrix & J,
-                                        Matrix & Jp);
     virtual ErrorCode compute_boundary(Real time, const Vector & X, const Vector & X_t);
 
 protected:
@@ -36,6 +30,12 @@ protected:
     void post_step() override;
 
     ErrorCode compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
+    ErrorCode compute_ijacobian(Real time,
+                                     const Vector & X,
+                                     const Vector & X_t,
+                                     Real x_t_shift,
+                                     Matrix & J,
+                                     Matrix & Jp);
 
 private:
     /// Time stepping scheme

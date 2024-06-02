@@ -90,6 +90,39 @@ private:
     ErrorCode (T::*method)(Real, const Vector &, const Vector &, Vector &);
 };
 
+/// Abstract "method" for calling compute_ijacobian
+struct TSComputeIJacobianMethodAbstract {
+    virtual ~TSComputeIJacobianMethodAbstract() = default;
+    virtual ErrorCode invoke(Real time,
+                             const Vector & X,
+                             const Vector & X_t,
+                             Real x_t_shift,
+                             Matrix & J,
+                             Matrix & Jp) = 0;
+};
+
+template <typename T>
+struct TSComputeIJacobianMethod : public TSComputeIJacobianMethodAbstract {
+    TSComputeIJacobianMethod(
+        T * instance,
+        ErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Real time, const Vector & x, const Vector & x_t, Real x_t_shift, Matrix & J, Matrix & Jp)
+        override
+    {
+        return ((*this->instance).*method)(time, x, x_t, x_t_shift, J, Jp);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &);
+};
+
 } // namespace internal
 
 class Problem;
@@ -278,6 +311,20 @@ protected:
                                           this->compute_ifunction_local_method));
     }
 
+    template <class T>
+    void
+    set_ijacobian_local(
+        T * instance,
+        ErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
+    {
+        this->compute_ijacobian_local_method =
+            new internal::TSComputeIJacobianMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetIJacobianLocal(dm,
+                                          TransientProblemInterface::compute_ijacobian,
+                                          this->compute_ijacobian_local_method));
+    }
+
 private:
     /// PETSc TS object
     TS ts;
@@ -285,7 +332,10 @@ private:
     internal::TSComputeRhsMethodAbstract * compute_rhs_method;
     /// Method for computing F(t,U,U_t) where F() = 0
     internal::TSComputeIFunctionMethodAbstract * compute_ifunction_local_method;
-    /// Method for monitoring the solve
+    /// Method to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t) is the function provided by
+    /// `set_ifunction_local`
+    internal::TSComputeIJacobianMethodAbstract * compute_ijacobian_local_method;
+    /// with set_i Method for monitoring the solve
     internal::TSMonitorMethodAbstract * monitor_method;
     /// Problem this interface is part of
     Problem * problem;
@@ -316,6 +366,8 @@ private:
     static ErrorCode monitor_destroy(void ** ctx);
     static ErrorCode compute_rhs(TS, Real time, Vec x, Vec F, void * ctx);
     static ErrorCode compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
+    static ErrorCode
+    compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * context);
 };
 
 } // namespace godzilla
