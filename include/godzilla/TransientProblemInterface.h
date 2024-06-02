@@ -195,6 +195,8 @@ public:
     static Parameters parameters();
 
 private:
+    static PetscErrorCode pre_step(TS ts);
+    static PetscErrorCode post_step(TS ts);
     static PetscErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
     static PetscErrorCode monitor_destroy(void ** ctx);
 };
