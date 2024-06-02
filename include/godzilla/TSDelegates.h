@@ -90,4 +90,43 @@ private:
     PetscErrorCode (T::*method)(Real, const Vector &, const Vector &, Vector &);
 };
 
+// Machinery for compute IJacobian
+
+/// Abstract "method" for calling ComputeIJacobianMethod
+struct TSComputeIJacobianMethodAbstract {
+    virtual ~TSComputeIJacobianMethodAbstract() = default;
+    virtual PetscErrorCode invoke(Real time,
+                                  const Vector & X,
+                                  const Vector & X_t,
+                                  Real x_t_shift,
+                                  Matrix & J,
+                                  Matrix & Jp) = 0;
+};
+
+template <typename T>
+struct TSComputeIJacobianMethod : public TSComputeIJacobianMethodAbstract {
+    TSComputeIJacobianMethod(T * instance,
+                             PetscErrorCode (T::*method)(Real,
+                                                         const Vector &,
+                                                         const Vector &,
+                                                         Real,
+                                                         Matrix &,
+                                                         Matrix &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    PetscErrorCode
+    invoke(Real time, const Vector & x, const Vector & x_t, Real x_t_shift, Matrix & J, Matrix & Jp)
+        override
+    {
+        return ((*this->instance).*method)(time, x, x_t, x_t_shift, J, Jp);
+    }
+
+private:
+    T * instance;
+    PetscErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &);
+};
+
 } // namespace godzilla::internal

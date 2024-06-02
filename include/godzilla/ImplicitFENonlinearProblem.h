@@ -20,12 +20,6 @@ public:
     Int get_step_num() const override;
     void compute_solution_vector_local() override;
 
-    virtual PetscErrorCode compute_ijacobian(Real time,
-                                             const Vector & X,
-                                             const Vector & X_t,
-                                             Real x_t_shift,
-                                             Matrix & J,
-                                             Matrix & Jp);
     virtual PetscErrorCode compute_boundary(Real time, const Vector & X, const Vector & X_t);
 
 protected:
@@ -36,7 +30,13 @@ protected:
     void post_step() override;
 
     PetscErrorCode compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
-    
+    PetscErrorCode compute_ijacobian(Real time,
+                                     const Vector & X,
+                                     const Vector & X_t,
+                                     Real x_t_shift,
+                                     Matrix & J,
+                                     Matrix & Jp);
+
 private:
     /// Time stepping scheme
     const std::string & scheme;
