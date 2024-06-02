@@ -9,7 +9,6 @@
 #include "godzilla/LoggingInterface.h"
 #include "godzilla/Output.h"
 #include "godzilla/SNESolver.h"
-#include "petsc/private/tsimpl.h"
 #include <cassert>
 
 namespace godzilla {
@@ -94,6 +93,19 @@ TransientProblemInterface::compute_ijacobian(DM,
     return 0;
 }
 
+ErrorCode
+TransientProblemInterface::compute_boundary(DM, Real time, Vec x, Vec x_t, void * context)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeBoundaryMethodAbstract *>(context);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    method->invoke(time, vec_x, vec_x_t);
+    return 0;
+}
+
+//
+
 Parameters
 TransientProblemInterface::parameters()
 {
@@ -111,6 +123,7 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     compute_rhs_method(nullptr),
     compute_ifunction_local_method(nullptr),
     compute_ijacobian_local_method(nullptr),
+    compute_boundary_local_method(nullptr),
     monitor_method(nullptr),
     problem(problem),
     tpi_params(params),
