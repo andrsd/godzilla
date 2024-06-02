@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/FVDelegates.h"
 
 namespace godzilla {
 
@@ -110,6 +111,33 @@ protected:
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
+    /// Set Riemann solver for the given field
+    ///
+    /// @tparam T C++ class type
+    /// @param field Field ID
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    set_riemann_solver(Int field,
+                       T * instance,
+                       PetscErrorCode (T::*method)(Int,
+                                                   Int,
+                                                   const Real[],
+                                                   const Real[],
+                                                   const Scalar[],
+                                                   const Scalar[],
+                                                   Int,
+                                                   const Scalar[],
+                                                   Scalar[]))
+    {
+        auto fvcfm = new internal::FVComputeFluxMethod<T>(instance, method);
+        auto ds = get_ds();
+        PETSC_CHECK(PetscDSSetRiemannSolver(ds, field, FVProblemInterface::compute_flux));
+        PETSC_CHECK(PetscDSSetContext(ds, field, fvcfm));
+        this->compute_flux_methods[field] = fvcfm;
+    }
+
 private:
     /// Field information
     struct FieldInfo {
@@ -168,7 +196,20 @@ private:
 
     std::map<Int, PetscFE> aux_fe;
 
+    std::map<Int, internal::FVComputeFluxMethodAbstract *> compute_flux_methods;
+
     static const std::string empty_name;
+
+    static void compute_flux(Int dim,
+                             Int nf,
+                             const Real x[],
+                             const Real n[],
+                             const Scalar uL[],
+                             const Scalar uR[],
+                             Int n_consts,
+                             const Scalar constants[],
+                             Scalar flux[],
+                             void * ctx);
 };
 
 } // namespace godzilla
