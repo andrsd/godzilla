@@ -63,6 +63,33 @@ private:
     ErrorCode (T::*method)(Real, const Vector &, Vector &);
 };
 
+/// Abstract "method" for calling compute_ifunction
+struct TSComputeIFunctionMethodAbstract {
+    virtual ~TSComputeIFunctionMethodAbstract() = default;
+    virtual ErrorCode invoke(Real time, const Vector & x, const Vector & x_t, Vector & F) = 0;
+};
+
+template <typename T>
+struct TSComputeIFunctionMethod : public TSComputeIFunctionMethodAbstract {
+    TSComputeIFunctionMethod(
+        T * instance,
+        ErrorCode (T::*method)(Real, const Vector &, const Vector &, Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Real time, const Vector & x, const Vector & x_t, Vector & F) override
+    {
+        return ((*this->instance).*method)(time, x, x_t, F);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Real, const Vector &, const Vector &, Vector &);
+};
+
 } // namespace internal
 
 class Problem;
@@ -237,11 +264,27 @@ protected:
                                        this->compute_rhs_method));
     }
 
+    template <class T>
+    void
+    set_ifunction_local(
+        T * instance,
+        ErrorCode (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
+    {
+        this->compute_ifunction_local_method =
+            new internal::TSComputeIFunctionMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetIFunctionLocal(dm,
+                                          TransientProblemInterface::compute_ifunction,
+                                          this->compute_ifunction_local_method));
+    }
+
 private:
     /// PETSc TS object
     TS ts;
     /// Method for computing right-hand side
     internal::TSComputeRhsMethodAbstract * compute_rhs_method;
+    /// Method for computing F(t,U,U_t) where F() = 0
+    internal::TSComputeIFunctionMethodAbstract * compute_ifunction_local_method;
     /// Method for monitoring the solve
     internal::TSMonitorMethodAbstract * monitor_method;
     /// Problem this interface is part of
@@ -272,6 +315,7 @@ private:
     static ErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
     static ErrorCode monitor_destroy(void ** ctx);
     static ErrorCode compute_rhs(TS, Real time, Vec x, Vec F, void * ctx);
+    static ErrorCode compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
 };
 
 } // namespace godzilla

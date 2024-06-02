@@ -63,6 +63,17 @@ TransientProblemInterface::compute_rhs(TS, Real time, Vec x, Vec F, void * ctx)
     return method->invoke(time, vec_x, vec_F);
 }
 
+ErrorCode
+TransientProblemInterface::compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * contex)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeIFunctionMethodAbstract *>(contex);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    Vector vec_F(F);
+    return method->invoke(time, vec_x, vec_x_t, vec_F);
+}
+
 Parameters
 TransientProblemInterface::parameters()
 {
@@ -78,6 +89,7 @@ TransientProblemInterface::parameters()
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     ts(nullptr),
     compute_rhs_method(nullptr),
+    compute_ifunction_local_method(nullptr),
     monitor_method(nullptr),
     problem(problem),
     tpi_params(params),

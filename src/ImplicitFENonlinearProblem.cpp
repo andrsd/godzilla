@@ -16,18 +16,6 @@
 namespace godzilla {
 
 static ErrorCode
-__tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
-{
-    CALL_STACK_MSG();
-    auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    Vector vec_x(x);
-    Vector vec_x_t(x_t);
-    Vector vec_F(F);
-    fep->compute_ifunction(time, vec_x, vec_x_t, vec_F);
-    return 0;
-}
-
-static ErrorCode
 __tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * user)
 {
     CALL_STACK_MSG();
@@ -132,7 +120,7 @@ ImplicitFENonlinearProblem::set_up_callbacks()
     TransientProblemInterface::set_up_callbacks();
     auto dm = get_dm();
     PETSC_CHECK(DMTSSetBoundaryLocal(dm, _tsfep_compute_boundary, this));
-    PETSC_CHECK(DMTSSetIFunctionLocal(dm, __tsfep_compute_ifunction, this));
+    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction);
     PETSC_CHECK(DMTSSetIJacobianLocal(dm, __tsfep_compute_ijacobian, this));
 }
 
