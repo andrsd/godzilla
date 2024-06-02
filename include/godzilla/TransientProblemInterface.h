@@ -132,11 +132,13 @@ protected:
     /// Get step number
     Int get_step_number() const;
     /// Initialize
-    virtual void init();
+    void init();
     /// Create
-    virtual void create();
+    void create();
+    ///
+    void set_up_callbacks();
     /// Set up monitors
-    virtual void set_up_monitors();
+    void set_up_monitors();
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
     /// TS monitor
@@ -144,9 +146,9 @@ protected:
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
-    virtual bool converged() const;
+    bool converged() const;
     /// Solve
-    virtual void solve(Vector & x);
+    void solve(Vector & x);
     /// Set time-stepping scheme
     void set_scheme(TimeScheme scheme);
     /// Set time-stepping scheme
