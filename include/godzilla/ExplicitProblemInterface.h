@@ -17,6 +17,9 @@ public:
     explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & params);
     ~ExplicitProblemInterface();
 
+    /// Get the name of time stepping scheme
+    std::string get_scheme() const;
+
     const Matrix & get_mass_matrix() const;
 
     Matrix & get_mass_matrix();
@@ -44,6 +47,8 @@ private:
     Matrix M;
     /// Inverse of the lumped mass matrix
     Vector M_lumped_inv;
+    /// Time stepping scheme
+    const std::string & scheme;
 
 public:
     static Parameters parameters();

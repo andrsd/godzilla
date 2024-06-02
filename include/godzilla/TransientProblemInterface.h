@@ -54,9 +54,6 @@ public:
     /// @return PETSc TS object
     TS get_ts() const;
 
-    /// Get the name of time stepping scheme
-    const std::string & get_scheme() const;
-
     Vector get_solution() const;
 
     /// Get the current timestep size
@@ -153,8 +150,6 @@ protected:
 private:
     /// PETSc TS object
     TS ts;
-    /// Time stepping scheme
-    const std::string & scheme;
     /// Problem this interface is part of
     Problem * problem;
     /// Parameters

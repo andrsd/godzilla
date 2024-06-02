@@ -34,9 +34,10 @@ ExplicitProblemInterface::parameters()
 ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem * problem,
                                                    const Parameters & params) :
     TransientProblemInterface(problem, params),
-    nl_problem(problem)
+    nl_problem(problem),
+    scheme(params.get<std::string>("scheme"))
 {
-    if (!validation::in(get_scheme(), { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
+    if (!validation::in(this->scheme, { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" }))
         this->nl_problem->log_error("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "
                                     "'ssp-rk-3', 'rk-2' or 'heun'.");
 }
@@ -45,6 +46,13 @@ ExplicitProblemInterface::~ExplicitProblemInterface()
 {
     this->M.destroy();
     this->M_lumped_inv.destroy();
+}
+
+std::string
+ExplicitProblemInterface::get_scheme() const
+{
+    CALL_STACK_MSG();
+    return this->scheme;
 }
 
 const Matrix &
@@ -87,7 +95,7 @@ void
 ExplicitProblemInterface::set_up_time_scheme()
 {
     CALL_STACK_MSG();
-    std::string name = utils::to_lower(get_scheme());
+    std::string name = utils::to_lower(this->scheme);
     std::map<std::string, TimeScheme> scheme_map = { { "euler", TimeScheme::EULER },
                                                      { "ssp-rk-2", TimeScheme::SSP_RK_2 },
                                                      { "ssp-rk-3", TimeScheme::SSP_RK_3 },
