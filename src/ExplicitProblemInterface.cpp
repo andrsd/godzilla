@@ -9,19 +9,6 @@
 
 namespace godzilla {
 
-namespace {
-ErrorCode
-compute_rhs(TS, Real time, Vec x, Vec F, void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * epi = static_cast<ExplicitProblemInterface *>(ctx);
-    Vector vec_x(x);
-    Vector vec_F(F);
-    return epi->compute_rhs(time, vec_x, vec_F);
-}
-
-} // namespace
-
 Parameters
 ExplicitProblemInterface::parameters()
 {
@@ -89,8 +76,7 @@ ExplicitProblemInterface::set_up_callbacks()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
-    auto dm = this->nl_problem->get_dm();
-    PETSC_CHECK(DMTSSetRHSFunction(dm, godzilla::compute_rhs, this));
+    set_rhs_function(this, &ExplicitProblemInterface::compute_rhs);
 }
 
 void

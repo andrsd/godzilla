@@ -28,8 +28,6 @@ public:
 
     Vector & get_lumped_mass_matrix();
 
-    ErrorCode compute_rhs(Real time, const Vector & x, Vector & F) override;
-
 protected:
     void set_up_callbacks();
     void set_up_time_scheme() override;
@@ -41,6 +39,8 @@ protected:
     virtual ErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) = 0;
 
 private:
+    ErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+
     /// Nonlinear problem
     NonlinearProblem * nl_problem;
     /// Mass matrix

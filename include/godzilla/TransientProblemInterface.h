@@ -7,6 +7,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Vector.h"
 #include "godzilla/SNESolver.h"
+#include "godzilla/Problem.h"
 
 namespace godzilla {
 
@@ -35,6 +36,31 @@ struct TSMonitorMethod : public TSMonitorMethodAbstract {
 private:
     T * instance;
     ErrorCode (T::*method)(Int, Real, const Vector &);
+};
+
+/// Abstract "method" for calling TSComputeRhsMethod
+struct TSComputeRhsMethodAbstract {
+    virtual ~TSComputeRhsMethodAbstract() = default;
+    virtual ErrorCode invoke(Real time, const Vector & x, Vector & F) = 0;
+};
+
+template <typename T>
+struct TSComputeRhsMethod : public TSComputeRhsMethodAbstract {
+    TSComputeRhsMethod(T * instance, ErrorCode (T::*method)(Real, const Vector &, Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Real time, const Vector & x, Vector & F) override
+    {
+        return ((*this->instance).*method)(time, x, F);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Real, const Vector &, Vector &);
 };
 
 } // namespace internal
@@ -146,7 +172,7 @@ public:
     /// @param x Solution at time `time`
     /// @param F Right-hand side vector
     /// @return PETSc error code
-    virtual ErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+    ErrorCode compute_rhs_function(Real time, const Vector & x, Vector & F);
 
 protected:
     /// Get underlying non-linear solver
@@ -195,9 +221,27 @@ protected:
     /// Clears all the monitors that have been set on a time-stepping object.
     void monitor_cancel();
 
+    /// Sets the routine for evaluating the function, where U_t = G(t,u).
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    set_rhs_function(T * instance, ErrorCode (T::*method)(Real time, const Vector & x, Vector & F))
+    {
+        this->compute_rhs_method = new internal::TSComputeRhsMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetRHSFunction(dm,
+                                       TransientProblemInterface::compute_rhs,
+                                       this->compute_rhs_method));
+    }
+
 private:
     /// PETSc TS object
     TS ts;
+    /// Method for computing right-hand side
+    internal::TSComputeRhsMethodAbstract * compute_rhs_method;
     /// Method for monitoring the solve
     internal::TSMonitorMethodAbstract * monitor_method;
     /// Problem this interface is part of
@@ -227,6 +271,7 @@ private:
     static ErrorCode post_step(TS ts);
     static ErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
     static ErrorCode monitor_destroy(void ** ctx);
+    static ErrorCode compute_rhs(TS, Real time, Vec x, Vec F, void * ctx);
 };
 
 } // namespace godzilla

@@ -53,6 +53,16 @@ TransientProblemInterface::monitor_destroy(void ** ctx)
     return 0;
 }
 
+ErrorCode
+TransientProblemInterface::compute_rhs(TS, Real time, Vec x, Vec F, void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeRhsMethodAbstract *>(ctx);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    return method->invoke(time, vec_x, vec_F);
+}
+
 Parameters
 TransientProblemInterface::parameters()
 {
@@ -67,6 +77,7 @@ TransientProblemInterface::parameters()
 
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     ts(nullptr),
+    compute_rhs_method(nullptr),
     monitor_method(nullptr),
     problem(problem),
     tpi_params(params),
@@ -282,9 +293,13 @@ TransientProblemInterface::post_stage(Real stage_time,
 }
 
 ErrorCode
-TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
+TransientProblemInterface::compute_rhs_function(Real time, const Vector & x, Vector & F)
 {
-    return 0;
+    CALL_STACK_MSG();
+    if (this->compute_rhs_method)
+        return this->compute_rhs_method->invoke(time, x, F);
+    else
+        return 0;
 }
 
 void
