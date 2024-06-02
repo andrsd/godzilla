@@ -110,21 +110,17 @@ public:
     }
 
     PetscErrorCode
-    compute_flux(Int dim,
-                 Int nf,
-                 const Real x[],
+    compute_flux(const Real x[],
                  const Real n[],
-                 const Scalar uL[],
-                 const Scalar uR[],
-                 Int n_consts,
-                 const Scalar constants[],
-                 Scalar flux[]) override
+                 const Scalar u_l[],
+                 const Scalar u_r[],
+                 Scalar flux[])
     {
         CALL_STACK_MSG();
         Real wind[] = { 0.5 };
         Real wn = 0;
         wn += wind[0] * n[0];
-        flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
+        flux[0] = (wn > 0 ? u_l[0] : u_r[0]) * wn;
         return 0;
     }
 
@@ -136,6 +132,12 @@ protected:
 
         add_aux_fe("a0", 1, 0);
         add_aux_fe("a1", 2, 0);
+    }
+
+    void
+    set_up_weak_form() override
+    {
+        set_riemann_solver(0, this, &TestExplicitFVLinearProblem::compute_flux);
     }
 };
 

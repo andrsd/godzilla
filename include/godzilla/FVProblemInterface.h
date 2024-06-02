@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/FVDelegates.h"
 
 namespace godzilla {
 
@@ -66,28 +67,6 @@ public:
     /// @param block The label this field is restricted to
     void set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
-    /// Method to compute flux across an edge
-    ///
-    /// @param dim[in] Spatial dimension
-    /// @param nf[in] Number of fields
-    /// @param x[in] Edge centroid
-    /// @param n[in] Normal
-    /// @param uL[in] Solution on the "left" side
-    /// @param uR[in] Solution on the "right" side
-    /// @param n_consts[in] Number of constants
-    /// @param constants[in] Constants
-    /// @param flux[out] Computed flux
-    /// @return PETSc error code, zero means success
-    virtual PetscErrorCode compute_flux(PetscInt dim,
-                                        PetscInt nf,
-                                        const PetscReal x[],
-                                        const PetscReal n[],
-                                        const PetscScalar uL[],
-                                        const PetscScalar uR[],
-                                        PetscInt n_consts,
-                                        const PetscScalar constants[],
-                                        PetscScalar flux[]) = 0;
-
 protected:
     void init() override;
     void create() override;
@@ -109,6 +88,32 @@ protected:
 
     /// Set up field variables
     virtual void set_up_fields() = 0;
+
+    /// Setup weak form terms
+    virtual void set_up_weak_form() = 0;
+
+    /// Set Riemann solver for the given field
+    ///
+    /// @tparam T C++ class type
+    /// @param field Field ID
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    set_riemann_solver(Int field,
+                       T * instance,
+                       PetscErrorCode (T::*method)(const Real[],
+                                                   const Real[],
+                                                   const Scalar[],
+                                                   const Scalar[],
+                                                   Scalar[]))
+    {
+        auto fvcfm = new internal::FVComputeFluxMethod<T>(instance, method);
+        auto ds = get_ds();
+        PETSC_CHECK(PetscDSSetRiemannSolver(ds, field, FVProblemInterface::compute_flux));
+        PETSC_CHECK(PetscDSSetContext(ds, field, fvcfm));
+        this->compute_flux_methods[field] = fvcfm;
+    }
 
 private:
     /// Field information
@@ -168,7 +173,20 @@ private:
 
     std::map<Int, PetscFE> aux_fe;
 
+    std::map<Int, internal::FVComputeFluxMethodAbstract *> compute_flux_methods;
+
     static const std::string empty_name;
+
+    static void compute_flux(Int dim,
+                             Int nf,
+                             const Real x[],
+                             const Real n[],
+                             const Scalar uL[],
+                             const Scalar uR[],
+                             Int n_consts,
+                             const Scalar constants[],
+                             Scalar flux[],
+                             void * ctx);
 };
 
 } // namespace godzilla

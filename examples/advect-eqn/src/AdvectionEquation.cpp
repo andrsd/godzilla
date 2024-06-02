@@ -33,21 +33,24 @@ AdvectionEquation::set_up_fields()
     add_field(0, "u", 1);
 }
 
-PetscErrorCode
-AdvectionEquation::compute_flux(PetscInt,
-                                PetscInt,
-                                const PetscReal[],
-                                const PetscReal n[],
-                                const PetscScalar uL[],
-                                const PetscScalar uR[],
-                                PetscInt,
-                                const PetscScalar[],
-                                PetscScalar flux[])
+void
+AdvectionEquation::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    PetscReal wind[] = { 0.5 };
-    PetscReal wn = 0;
+    set_riemann_solver(0, this, &AdvectionEquation::compute_flux);
+}
+
+PetscErrorCode
+AdvectionEquation::compute_flux(const Real[],
+                                const Real n[],
+                                const Scalar u_l[],
+                                const Scalar u_r[],
+                                Scalar flux[])
+{
+    CALL_STACK_MSG();
+    Real wind[] = { 0.5 };
+    Real wn = 0;
     wn += wind[0] * n[0];
-    flux[0] = (wn > 0 ? uL[0] : uR[0]) * wn;
+    flux[0] = (wn > 0 ? u_l[0] : u_r[0]) * wn;
     return 0;
 }

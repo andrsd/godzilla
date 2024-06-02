@@ -10,31 +10,26 @@
 #include "godzilla/Logger.h"
 #include "godzilla/Utils.h"
 #include "godzilla/Exception.h"
-#include <set>
 #include <cassert>
 
 namespace godzilla {
 
-namespace {
-
 void
-compute_flux(Int dim,
-             Int nf,
-             const Real x[],
-             const Real n[],
-             const Scalar uL[],
-             const Scalar uR[],
-             Int n_consts,
-             const Scalar constants[],
-             Scalar flux[],
-             void * ctx)
+FVProblemInterface::compute_flux(Int dim,
+                                 Int nf,
+                                 const Real x[],
+                                 const Real n[],
+                                 const Scalar u_l[],
+                                 const Scalar u_r[],
+                                 Int n_consts,
+                                 const Scalar constants[],
+                                 Scalar flux[],
+                                 void * ctx)
 {
     CALL_STACK_MSG();
-    auto * fvpi = static_cast<FVProblemInterface *>(ctx);
-    fvpi->compute_flux(dim, nf, x, n, uL, uR, n_consts, constants, flux);
+    auto * method = static_cast<internal::FVComputeFluxMethodAbstract *>(ctx);
+    method->invoke(x, n, u_l, u_r, flux);
 }
-
-} // namespace
 
 const std::string FVProblemInterface::empty_name;
 
@@ -401,9 +396,7 @@ FVProblemInterface::set_up_ds()
     PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm));
     create_ds();
 
-    auto ds = get_ds();
-    PETSC_CHECK(PetscDSSetRiemannSolver(ds, 0, godzilla::compute_flux));
-    PETSC_CHECK(PetscDSSetContext(ds, 0, this));
+    set_up_weak_form();
 }
 
 void
