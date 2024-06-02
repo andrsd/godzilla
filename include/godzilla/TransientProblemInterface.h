@@ -185,11 +185,27 @@ protected:
                                        this->compute_rhs_method));
     }
 
+    template <class T>
+    void
+    set_ifunction_local(
+        T * instance,
+        PetscErrorCode (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
+    {
+        this->compute_ifunction_local_method =
+            new internal::TSComputeIFunctionMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetIFunctionLocal(dm,
+                                          TransientProblemInterface::compute_ifunction,
+                                          this->compute_ifunction_local_method));
+    }
+
 private:
     /// PETSc TS object
     TS ts;
     /// Method for computing right-hand side
     internal::TSComputeRhsMethodAbstract * compute_rhs_method;
+    /// Method for computing F(t,U,U_t) where F() = 0
+    internal::TSComputeIFunctionMethodAbstract * compute_ifunction_local_method;
     /// Method for monitoring the solve
     internal::TSMonitorMethodAbstract * monitor_method;
     /// Time stepping scheme
@@ -222,6 +238,7 @@ private:
     static PetscErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
     static PetscErrorCode monitor_destroy(void ** ctx);
     static PetscErrorCode compute_rhs(TS, Real time, Vec x, Vec F, void * ctx);
+    static PetscErrorCode compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
 };
 
 } // namespace godzilla

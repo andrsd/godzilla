@@ -61,4 +61,33 @@ private:
     PetscErrorCode (T::*method)(Real, const Vector &, Vector &);
 };
 
+// Machinery for compute IFunction
+
+/// Abstract "method" for calling ComputeIFunctionMethod
+struct TSComputeIFunctionMethodAbstract {
+    virtual ~TSComputeIFunctionMethodAbstract() = default;
+    virtual PetscErrorCode invoke(Real time, const Vector & x, const Vector & x_t, Vector & F) = 0;
+};
+
+template <typename T>
+struct TSComputeIFunctionMethod : public TSComputeIFunctionMethodAbstract {
+    TSComputeIFunctionMethod(
+        T * instance,
+        PetscErrorCode (T::*method)(Real, const Vector &, const Vector &, Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    PetscErrorCode
+    invoke(Real time, const Vector & x, const Vector & x_t, Vector & F) override
+    {
+        return ((*this->instance).*method)(time, x, x_t, F);
+    }
+
+private:
+    T * instance;
+    PetscErrorCode (T::*method)(Real, const Vector &, const Vector &, Vector &);
+};
+
 } // namespace godzilla::internal
