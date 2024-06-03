@@ -503,7 +503,7 @@ FEProblemInterface::set_up_quadrature()
 }
 
 void
-FEProblemInterface::set_up_aux_fields()
+FEProblemInterface::create_aux_fields()
 {
     CALL_STACK_MSG();
     auto dm_aux = get_dm_aux();

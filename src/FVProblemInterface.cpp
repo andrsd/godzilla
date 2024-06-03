@@ -400,8 +400,9 @@ FVProblemInterface::set_up_ds()
 }
 
 void
-FVProblemInterface::set_up_aux_fields()
+FVProblemInterface::create_aux_fields()
 {
+    CALL_STACK_MSG();
     auto dm_aux = get_dm_aux();
     for (auto & it : this->aux_fields) {
         FieldInfo & fi = it.second;
