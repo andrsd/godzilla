@@ -11,18 +11,23 @@ public:
     AdvectionEquation(const Parameters & parameters);
     void create() override;
 
-    PetscErrorCode compute_flux(PetscInt dim,
-                                PetscInt nf,
-                                const PetscReal x[],
-                                const PetscReal n[],
-                                const PetscScalar uL[],
-                                const PetscScalar uR[],
-                                PetscInt n_consts,
-                                const PetscScalar constants[],
-                                PetscScalar flux[]) override;
-
 protected:
     void set_up_fields() override;
+    void set_up_weak_form() override;
+
+    /// Method to compute flux across an edge
+    ///
+    /// @param x[in] Edge centroid
+    /// @param n[in] Normal
+    /// @param u_l[in] Solution on the "left" side
+    /// @param u_r[in] Solution on the "right" side
+    /// @param flux[out] Computed flux
+    /// @return PETSc error code, zero means success
+    PetscErrorCode compute_flux(const Real x[],
+                                const Real n[],
+                                const Scalar u_l[],
+                                const Scalar u_r[],
+                                Scalar flux[]);
 
 public:
     static Parameters parameters();
