@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-PetscErrorCode
+ErrorCode
 KrylovSolver::compute_operators(KSP, Mat A, Mat B, void * ctx)
 {
     CALL_STACK_MSG();
@@ -19,7 +19,7 @@ KrylovSolver::compute_operators(KSP, Mat A, Mat B, void * ctx)
     return method->invoke(mat_A, mat_B);
 }
 
-PetscErrorCode
+ErrorCode
 KrylovSolver::compute_rhs(KSP, Vec b, void * ctx)
 {
     CALL_STACK_MSG();
@@ -28,14 +28,14 @@ KrylovSolver::compute_rhs(KSP, Vec b, void * ctx)
     return method->invoke(vec_b);
 }
 
-PetscErrorCode
+ErrorCode
 KrylovSolver::monitor(KSP, Int it, Real rnorm, void * ctx)
 {
     auto * method = static_cast<internal::KSPMonitorMethodAbstract *>(ctx);
     return method->invoke(it, rnorm);
 }
 
-PetscErrorCode
+ErrorCode
 KrylovSolver::monitor_destroy(void ** ctx)
 {
     auto * method = static_cast<internal::KSPMonitorMethodAbstract *>(*ctx);
@@ -110,14 +110,14 @@ KrylovSolver::set_tolerances(Real rel_tol, Real abs_tol, Real div_tol, Int max_i
 }
 
 void
-KrylovSolver::set_compute_rhs(PetscErrorCode (*func)(KSP ksp, Vec b, void * ctx), void * ctx)
+KrylovSolver::set_compute_rhs(ErrorCode (*func)(KSP ksp, Vec b, void * ctx), void * ctx)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(KSPSetComputeRHS(this->ksp, func, ctx));
 }
 
 void
-KrylovSolver::set_compute_operators(PetscErrorCode (*func)(KSP ksp, Mat A, Mat B, void * ctx),
+KrylovSolver::set_compute_operators(ErrorCode (*func)(KSP ksp, Mat A, Mat B, void * ctx),
                                     void * ctx)
 {
     CALL_STACK_MSG();
@@ -125,10 +125,9 @@ KrylovSolver::set_compute_operators(PetscErrorCode (*func)(KSP ksp, Mat A, Mat B
 }
 
 void
-KrylovSolver::monitor_set(
-    PetscErrorCode (*monitor)(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx),
-    void * ctx,
-    PetscErrorCode (*monitordestroy)(void ** ctx))
+KrylovSolver::monitor_set(ErrorCode (*monitor)(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx),
+                          void * ctx,
+                          ErrorCode (*monitordestroy)(void ** ctx))
 {
     CALL_STACK_MSG();
     PETSC_CHECK(KSPMonitorSet(this->ksp, monitor, ctx, monitordestroy));

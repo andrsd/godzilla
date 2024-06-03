@@ -117,7 +117,7 @@ public:
     /// @param x Solution at time `time`
     /// @param F Right-hand side vector
     /// @return PETSc error code
-    virtual PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+    virtual ErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
 
 protected:
     /// Get underlying non-linear solver
@@ -172,7 +172,7 @@ private:
 public:
     static Parameters parameters();
 
-    friend PetscErrorCode __transient_monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
+    friend ErrorCode __transient_monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
 };
 
 } // namespace godzilla

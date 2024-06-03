@@ -85,7 +85,7 @@ TSAbstract::compute_rhs_function(Real t, const Vector & U, Vector & y)
 
 namespace internal {
 
-PetscErrorCode
+ErrorCode
 TSReset_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -94,7 +94,7 @@ TSReset_GodzillaTS(TS ts)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 TSDestroy_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -105,7 +105,7 @@ TSDestroy_GodzillaTS(TS ts)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 TSView_GodzillaTS(TS ts, PetscViewer viewer)
 {
     CALL_STACK_MSG();
@@ -114,7 +114,7 @@ TSView_GodzillaTS(TS ts, PetscViewer viewer)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 TSSetUp_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -123,7 +123,7 @@ TSSetUp_GodzillaTS(TS ts)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 TSRollBack_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -132,7 +132,7 @@ TSRollBack_GodzillaTS(TS ts)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 TSStep_GodzillaTS(TS ts)
 {
     CALL_STACK_MSG();
@@ -141,7 +141,7 @@ TSStep_GodzillaTS(TS ts)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 TSEvaluateStep_GodzillaTS(TS ts, PetscInt order, Vec X, PetscBool * done)
 {
     CALL_STACK_MSG();

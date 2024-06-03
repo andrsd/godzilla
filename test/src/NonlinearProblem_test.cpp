@@ -19,8 +19,8 @@ public:
     void create() override;
     void call_initial_guess();
     void solve() override;
-    PetscErrorCode compute_residual(const Vector & x, Vector & f) override;
-    PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
+    ErrorCode compute_residual(const Vector & x, Vector & f) override;
+    ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
 
 protected:
     PetscSection s;
@@ -63,7 +63,7 @@ G1DTestNonlinearProblem::solve()
     NonlinearProblem::solve();
 }
 
-PetscErrorCode
+ErrorCode
 G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
     std::vector<Int> ix = { 0, 1 };
@@ -74,7 +74,7 @@ G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 G1DTestNonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
     J.set_value(0, 0, 1.);

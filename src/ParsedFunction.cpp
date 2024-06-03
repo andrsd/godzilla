@@ -17,7 +17,7 @@ parsed_function_eval(void * ctx, double t, double x, double y, double z)
     return u[0];
 }
 
-static PetscErrorCode
+static ErrorCode
 parsed_function(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     auto * fn = static_cast<ParsedFunction *>(ctx);

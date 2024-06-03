@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-static PetscErrorCode
+static ErrorCode
 l2_diff_eval(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     auto * l2_diff = static_cast<L2Diff *>(ctx);

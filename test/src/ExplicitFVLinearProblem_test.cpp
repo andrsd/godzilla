@@ -109,7 +109,7 @@ public:
         ExplicitFVLinearProblem::add_boundary_natural(name, boundary, field, components, context);
     }
 
-    PetscErrorCode
+    ErrorCode
     compute_flux(const Real x[],
                  const Real n[],
                  const Scalar u_l[],

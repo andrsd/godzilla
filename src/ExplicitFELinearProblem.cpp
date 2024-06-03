@@ -142,7 +142,7 @@ ExplicitFELinearProblem::set_up_monitors()
     ExplicitProblemInterface::set_up_monitors();
 }
 
-PetscErrorCode
+ErrorCode
 ExplicitFELinearProblem::compute_rhs_local(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();

@@ -86,18 +86,18 @@ protected:
 
 namespace internal {
 
-PetscErrorCode TSReset_GodzillaTS(TS ts);
-PetscErrorCode TSDestroy_GodzillaTS(TS ts);
-PetscErrorCode TSView_GodzillaTS(TS ts, PetscViewer viewer);
-PetscErrorCode TSSetUp_GodzillaTS(TS ts);
-PetscErrorCode TSRollBack_GodzillaTS(TS ts);
-PetscErrorCode TSStep_GodzillaTS(TS ts);
-PetscErrorCode TSEvaluateStep_GodzillaTS(TS ts, PetscInt order, Vec X, PetscBool * done);
+ErrorCode TSReset_GodzillaTS(TS ts);
+ErrorCode TSDestroy_GodzillaTS(TS ts);
+ErrorCode TSView_GodzillaTS(TS ts, PetscViewer viewer);
+ErrorCode TSSetUp_GodzillaTS(TS ts);
+ErrorCode TSRollBack_GodzillaTS(TS ts);
+ErrorCode TSStep_GodzillaTS(TS ts);
+ErrorCode TSEvaluateStep_GodzillaTS(TS ts, PetscInt order, Vec X, PetscBool * done);
 
 } // namespace internal
 
 template <class T>
-PetscErrorCode
+ErrorCode
 create(TS ts)
 {
     ts->ops->reset = internal::TSReset_GodzillaTS;

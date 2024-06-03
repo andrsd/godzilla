@@ -23,11 +23,11 @@ protected:
     /// @param u_r[in] Solution on the "right" side
     /// @param flux[out] Computed flux
     /// @return PETSc error code, zero means success
-    PetscErrorCode compute_flux(const Real x[],
-                                const Real n[],
-                                const Scalar u_l[],
-                                const Scalar u_r[],
-                                Scalar flux[]);
+    ErrorCode compute_flux(const Real x[],
+                           const Real n[],
+                           const Scalar u_l[],
+                           const Scalar u_r[],
+                           Scalar flux[]);
 
 public:
     static Parameters parameters();

@@ -10,7 +10,7 @@
 
 namespace godzilla {
 
-static PetscErrorCode
+static ErrorCode
 essential_boundary_condition_function(Int dim,
                                       Real time,
                                       const Real x[],
@@ -25,7 +25,7 @@ essential_boundary_condition_function(Int dim,
     return 0;
 }
 
-static PetscErrorCode
+static ErrorCode
 essential_boundary_condition_function_t(Int dim,
                                         Real time,
                                         const Real x[],

@@ -83,9 +83,8 @@ public:
     /// @param r Vector to store function values
     /// @param callback Function evaluation routine
     /// @param ctx User-defined context for private data for the function evaluation routine
-    void set_function(Vector & r,
-                      PetscErrorCode (*callback)(SNES, Vec, Vec, void *),
-                      void * ctx = nullptr);
+    void
+    set_function(Vector & r, ErrorCode (*callback)(SNES, Vec, Vec, void *), void * ctx = nullptr);
 
     /// Sets the function evaluation routine and function vector for use by the SNES routines in
     /// solving systems of nonlinear equations.
@@ -96,7 +95,7 @@ public:
     /// @param callback Member function in class T to compute function values
     template <class T>
     void
-    set_function(Vector & r, T * instance, PetscErrorCode (T::*callback)(const Vector &, Vector &))
+    set_function(Vector & r, T * instance, ErrorCode (T::*callback)(const Vector &, Vector &))
     {
         this->compute_residual_method =
             new internal::SNESComputeResidualMethod<T>(instance, callback);
@@ -112,7 +111,7 @@ public:
     /// @param ctx User-defined context for private data for the Jacobian evaluation routine
     void set_jacobian(Matrix & J,
                       Matrix & Jp,
-                      PetscErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
+                      ErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
                       void * ctx = nullptr);
 
     /// Sets the function to compute Jacobian as well as the location to store the matrix.
@@ -127,7 +126,7 @@ public:
     set_jacobian(Matrix & J,
                  Matrix & Jp,
                  T * instance,
-                 PetscErrorCode (T::*callback)(const Vector &, Matrix &, Matrix &))
+                 ErrorCode (T::*callback)(const Vector &, Matrix &, Matrix &))
     {
         this->compute_jacobian_method =
             new internal::SNESComputeJacobianMethod<T>(instance, callback);
@@ -163,9 +162,9 @@ public:
     /// @param ctx Context for private data for the monitor routine (use `nullptr` if no context
     /// is needed)
     /// @param monitordestroy Routine that frees monitor context (may be `nullptr`)
-    void monitor_set(PetscErrorCode (*monitor)(SNES, PetscInt, PetscReal, void *),
+    void monitor_set(ErrorCode (*monitor)(SNES, PetscInt, PetscReal, void *),
                      void * ctx = nullptr,
-                     PetscErrorCode (*monitordestroy)(void ** ctx) = nullptr);
+                     ErrorCode (*monitordestroy)(void ** ctx) = nullptr);
 
     /// Sets an *additional* member function that is to be used at every iteration of the nonlinear
     /// solver residual/error etc.
@@ -175,7 +174,7 @@ public:
     /// @param callback Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, PetscErrorCode (T::*callback)(Int, Real))
+    monitor_set(T * instance, ErrorCode (T::*callback)(Int, Real))
     {
         this->monitor_method = new internal::SNESMonitorMethod<T>(instance, callback);
         PETSC_CHECK(SNESMonitorSet(this->snes, monitor, this->monitor_method, monitor_destroy));
@@ -211,10 +210,10 @@ private:
     internal::SNESComputeJacobianMethodAbstract * compute_jacobian_method;
 
 public:
-    static PetscErrorCode compute_residual(SNES, Vec, Vec, void *);
-    static PetscErrorCode compute_jacobian(SNES, Vec, Mat, Mat, void *);
-    static PetscErrorCode monitor(SNES, Int, Real, void *);
-    static PetscErrorCode monitor_destroy(void ** ctx);
+    static ErrorCode compute_residual(SNES, Vec, Vec, void *);
+    static ErrorCode compute_jacobian(SNES, Vec, Mat, Mat, void *);
+    static ErrorCode monitor(SNES, Int, Real, void *);
+    static ErrorCode monitor_destroy(void ** ctx);
 };
 
 } // namespace godzilla

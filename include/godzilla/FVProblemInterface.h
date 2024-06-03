@@ -103,11 +103,11 @@ protected:
     void
     set_riemann_solver(Int field,
                        T * instance,
-                       PetscErrorCode (T::*method)(const Real[],
-                                                   const Real[],
-                                                   const Scalar[],
-                                                   const Scalar[],
-                                                   Scalar[]))
+                       ErrorCode (T::*method)(const Real[],
+                                              const Real[],
+                                              const Scalar[],
+                                              const Scalar[],
+                                              Scalar[]))
     {
         auto fvcfm = new internal::FVComputeFluxMethod<T>(instance, method);
         auto ds = get_ds();

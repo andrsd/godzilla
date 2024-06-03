@@ -15,7 +15,7 @@
 
 namespace godzilla {
 
-static PetscErrorCode
+static ErrorCode
 __fep_compute_boundary(DM, Vec x, void * user)
 {
     CALL_STACK_MSG();
@@ -25,7 +25,7 @@ __fep_compute_boundary(DM, Vec x, void * user)
     return 0;
 }
 
-static PetscErrorCode
+static ErrorCode
 __fep_compute_residual(DM, Vec x, Vec F, void * user)
 {
     CALL_STACK_MSG();
@@ -36,7 +36,7 @@ __fep_compute_residual(DM, Vec x, Vec F, void * user)
     return 0;
 }
 
-static PetscErrorCode
+static ErrorCode
 __fep_compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * user)
 {
     CALL_STACK_MSG();
@@ -107,7 +107,7 @@ FENonlinearProblem::allocate_objects()
     FEProblemInterface::allocate_objects();
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_boundary(Vector & x)
 {
     CALL_STACK_MSG();
@@ -121,7 +121,7 @@ FENonlinearProblem::compute_boundary(Vector & x)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
     CALL_STACK_MSG();
@@ -148,7 +148,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_residual_internal(DM dm,
                                               PetscFormKey key,
                                               const IndexSet & cell_is,
@@ -384,7 +384,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f)
 {
     CALL_STACK_MSG();
@@ -445,7 +445,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                                          Real t,
                                                          PetscFormKey key,
@@ -608,7 +608,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
     CALL_STACK_MSG();
@@ -642,7 +642,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_jacobian_internal(DM dm,
                                               PetscFormKey key,
                                               const IndexSet & cell_is,
@@ -904,7 +904,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
                                                   Vec X_loc,
                                                   Vec X_t_loc,
@@ -968,7 +968,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
                                                          Real t,
                                                          const Label & label,

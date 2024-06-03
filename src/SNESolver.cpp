@@ -51,10 +51,9 @@ SNESolver::LineSearch::operator SNESLineSearch() const
     return this->ls;
 }
 
-
 //
 
-PetscErrorCode
+ErrorCode
 SNESolver::compute_residual(SNES, Vec x, Vec f, void * ctx)
 {
     CALL_STACK_MSG();
@@ -64,7 +63,7 @@ SNESolver::compute_residual(SNES, Vec x, Vec f, void * ctx)
     return method->invoke(vec_x, vec_f);
 }
 
-PetscErrorCode
+ErrorCode
 SNESolver::compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     CALL_STACK_MSG();
@@ -75,7 +74,7 @@ SNESolver::compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
     return method->invoke(vec_x, mat_J, mat_Jp);
 }
 
-PetscErrorCode
+ErrorCode
 SNESolver::monitor(SNES, Int it, Real rnorm, void * ctx)
 {
     CALL_STACK_MSG();
@@ -83,7 +82,7 @@ SNESolver::monitor(SNES, Int it, Real rnorm, void * ctx)
     return method->invoke(it, rnorm);
 }
 
-PetscErrorCode
+ErrorCode
 SNESolver::monitor_destroy(void ** ctx)
 {
     auto * method = static_cast<internal::SNESMonitorMethodAbstract *>(*ctx);
@@ -164,7 +163,7 @@ SNESolver::set_from_options()
 }
 
 void
-SNESolver::set_function(Vector & r, PetscErrorCode (*callback)(SNES, Vec, Vec, void *), void * ctx)
+SNESolver::set_function(Vector & r, ErrorCode (*callback)(SNES, Vec, Vec, void *), void * ctx)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(SNESSetFunction(this->snes, r, callback, ctx));
@@ -173,7 +172,7 @@ SNESolver::set_function(Vector & r, PetscErrorCode (*callback)(SNES, Vec, Vec, v
 void
 SNESolver::set_jacobian(Matrix & J,
                         Matrix & Jp,
-                        PetscErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
+                        ErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
                         void * ctx)
 {
     CALL_STACK_MSG();

@@ -28,7 +28,7 @@ public:
 
     Vector & get_lumped_mass_matrix();
 
-    PetscErrorCode compute_rhs(Real time, const Vector & x, Vector & F) override;
+    ErrorCode compute_rhs(Real time, const Vector & x, Vector & F) override;
 
 protected:
     void set_up_callbacks();
@@ -37,8 +37,8 @@ protected:
     void allocate_lumped_mass_matrix();
     void create_mass_matrix();
     void create_mass_matrix_lumped();
-    virtual PetscErrorCode compute_boundary_local(Real time, Vector & x);
-    virtual PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) = 0;
+    virtual ErrorCode compute_boundary_local(Real time, Vector & x);
+    virtual ErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) = 0;
 
 private:
     /// Nonlinear problem

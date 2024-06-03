@@ -9,7 +9,7 @@
 namespace godzilla {
 
 namespace {
-PetscErrorCode
+ErrorCode
 compute_rhs(TS, Real time, Vec x, Vec F, void * ctx)
 {
     CALL_STACK_MSG();
@@ -140,7 +140,7 @@ ExplicitProblemInterface::create_mass_matrix_lumped()
     this->M_lumped_inv.reciprocal();
 }
 
-PetscErrorCode
+ErrorCode
 ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
@@ -165,7 +165,7 @@ ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 ExplicitProblemInterface::compute_boundary_local(Real time, Vector & x)
 {
     CALL_STACK_MSG();

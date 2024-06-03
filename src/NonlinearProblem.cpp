@@ -228,7 +228,7 @@ NonlinearProblem::set_up_solver_parameters()
     this->ksp.set_from_options();
 }
 
-PetscErrorCode
+ErrorCode
 NonlinearProblem::snes_monitor(Int it, Real norm)
 {
     CALL_STACK_MSG();
@@ -236,7 +236,7 @@ NonlinearProblem::snes_monitor(Int it, Real norm)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 NonlinearProblem::ksp_monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
@@ -303,14 +303,14 @@ NonlinearProblem::solve()
     this->converged_reason = this->snes.get_converged_reason();
 }
 
-PetscErrorCode
+ErrorCode
 NonlinearProblem::compute_residual(const Vector &, Vector &)
 {
     CALL_STACK_MSG();
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 NonlinearProblem::compute_jacobian(const Vector &, Matrix &, Matrix &)
 {
     CALL_STACK_MSG();
