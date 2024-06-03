@@ -5,7 +5,7 @@
 
 #include "petscksp.h"
 #include "godzilla/Types.h"
-#include "godzilla/KrylovSolverCallbacks.h"
+#include "godzilla/KrylovSolverDelegates.h"
 
 namespace godzilla {
 
