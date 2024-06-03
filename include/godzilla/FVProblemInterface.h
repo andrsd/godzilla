@@ -84,7 +84,7 @@ protected:
                               const std::vector<Int> & components,
                               void * context) override;
 
-    void set_up_aux_fields() override;
+    void create_aux_fields() override;
 
     /// Set up field variables
     virtual void set_up_fields() = 0;

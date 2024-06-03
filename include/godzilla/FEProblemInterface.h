@@ -281,7 +281,7 @@ protected:
 
     virtual void set_up_field_null_space(DM dm);
 
-    void set_up_aux_fields() override;
+    void create_aux_fields() override;
 
     /// Setup volumetric weak form terms
     virtual void set_up_weak_form() = 0;

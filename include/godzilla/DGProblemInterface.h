@@ -124,7 +124,7 @@ protected:
                                       PetscNaturalRiemannBCFunc * fn_t,
                                       void * context) override;
 
-    void set_up_aux_fields() override;
+    void create_aux_fields() override;
 
 private:
     /// Field information

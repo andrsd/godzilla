@@ -501,7 +501,7 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
 }
 
 void
-DGProblemInterface::set_up_aux_fields()
+DGProblemInterface::create_aux_fields()
 {
     CALL_STACK_MSG();
     auto comm = get_problem()->get_comm();

@@ -343,7 +343,7 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
 
     PETSC_CHECK(DMClone(dm, &this->dm_aux));
 
-    set_up_aux_fields();
+    create_aux_fields();
 
     PETSC_CHECK(DMCreateDS(this->dm_aux));
 
