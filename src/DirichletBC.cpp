@@ -55,14 +55,14 @@ void
 DirichletBC::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
     CALL_STACK_MSG();
-    evaluate_func(dim, time, x, nc, u);
+    evaluate_func(time, x, nc, u);
 }
 
 void
 DirichletBC::evaluate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
     CALL_STACK_MSG();
-    evaluate_func_t(dim, time, x, nc, u);
+    evaluate_func_t(time, x, nc, u);
 }
 
 } // namespace godzilla

@@ -29,6 +29,7 @@ FunctionInterface::valid_params_t()
 
 FunctionInterface::FunctionInterface(const Parameters & params) :
     fi_app(params.get<App *>("_app")),
+    problem(nullptr),
     expression(params.get<std::vector<std::string>>("value")),
     expression_t(params.has<std::vector<std::string>>("value_t")
                      ? params.get<std::vector<std::string>>("value_t")
@@ -45,15 +46,16 @@ FunctionInterface::create()
     this->evalr.create(this->expression);
     this->evalr_t.create(this->expression_t);
 
-    assert(this->fi_app != nullptr);
-    Problem * p = this->fi_app->get_problem();
-    if (p) {
-        const auto & funcs = p->get_functions();
+    this->problem = this->fi_app != nullptr ? this->fi_app->get_problem() : nullptr;
+    if (this->problem) {
+        const auto & funcs = this->problem->get_functions();
         for (auto & f : funcs) {
             this->evalr.register_function(f);
             this->evalr_t.register_function(f);
         }
     }
+    else
+        throw Exception("No `Problem` associated with the function");
 }
 
 unsigned int
@@ -69,17 +71,17 @@ FunctionInterface::has_time_expression() const
 }
 
 bool
-FunctionInterface::evaluate_func(Int dim, Real time, const Real x[], Int nc, Real u[])
+FunctionInterface::evaluate_func(Real time, const Real x[], Int nc, Real u[])
 {
     CALL_STACK_MSG();
-    return this->evalr.evaluate(dim, time, x, nc, u);
+    return this->evalr.evaluate(this->problem->get_dimension(), time, x, nc, u);
 }
 
 bool
-FunctionInterface::evaluate_func_t(Int dim, Real time, const Real x[], Int nc, Real u[])
+FunctionInterface::evaluate_func_t(Real time, const Real x[], Int nc, Real u[])
 {
     CALL_STACK_MSG();
-    return this->evalr_t.evaluate(dim, time, x, nc, u);
+    return this->evalr_t.evaluate(this->problem->get_dimension(), time, x, nc, u);
 }
 
 } // namespace godzilla

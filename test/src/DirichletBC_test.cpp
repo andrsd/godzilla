@@ -2,6 +2,7 @@
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/Factory.h"
+#include "godzilla/BoxMesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/DirichletBC.h"
 #include "godzilla/PiecewiseLinear.h"
@@ -12,10 +13,12 @@ TEST(DirichletBCTest, api)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
+    Parameters mesh_pars = BoxMesh::parameters();
     mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
-    LineMesh mesh(mesh_pars);
+    mesh_pars.set<Int>("ny") = 2;
+    mesh_pars.set<Int>("nz") = 2;
+    BoxMesh mesh(mesh_pars);
 
     Parameters prob_pars = GTestFENonlinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
@@ -37,16 +40,15 @@ TEST(DirichletBCTest, api)
     const auto & components = obj.get_components();
     EXPECT_EQ(components.size(), 1);
 
-    Int dim = 3;
     Real time = 2.5;
     Real x[] = { 3, 5, 7 };
     Int Nc = 1;
     Scalar u[] = { 0 };
 
-    obj.evaluate(dim, time, x, Nc, u);
+    obj.evaluate(0, time, x, Nc, u);
     EXPECT_EQ(u[0], 37.5);
 
-    obj.evaluate_t(dim, time, x, Nc, u);
+    obj.evaluate_t(0, time, x, Nc, u);
     EXPECT_EQ(u[0], 1.);
 }
 
@@ -83,12 +85,11 @@ TEST(DirichletBCTest, with_user_defined_fn)
     problem.create();
     bc->create();
 
-    Int dim = 1;
     Real time = 0;
     Real x[] = { 0.5 };
     Int Nc = 1;
     Scalar u[] = { 0 };
-    bc->evaluate(dim, time, x, Nc, u);
+    bc->evaluate(0, time, x, Nc, u);
 
     EXPECT_EQ(u[0], 1.5);
 }
