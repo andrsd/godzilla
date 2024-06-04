@@ -275,7 +275,7 @@ DGProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 }
 
 Int
-DGProblemInterface::add_fe(const std::string & name, Int nc, Int k, const Label & block)
+DGProblemInterface::add_field(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->fields);
