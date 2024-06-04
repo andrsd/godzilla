@@ -102,7 +102,7 @@ TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
     mesh->create();
-    prob->set_aux_fe(0, "aux_one", 1, 1);
+    prob->set_aux_field(0, "aux_one", 1, 1);
     prob->add_aux_field("aux_two", 2, 1);
     prob->create();
 
@@ -138,8 +138,8 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
     mesh->create();
-    prob->set_aux_fe(0, "first", 1, 1);
-    EXPECT_THROW_MSG(prob->set_aux_fe(0, "second", 1, 1),
+    prob->set_aux_field(0, "first", 1, 1);
+    EXPECT_THROW_MSG(prob->set_aux_field(0, "second", 1, 1),
                      "Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
 }
 
