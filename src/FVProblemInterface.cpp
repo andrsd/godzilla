@@ -327,12 +327,16 @@ FVProblemInterface::add_aux_field(const std::string & name, Int nc, Int k, const
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
     Int id = get_next_id(keys);
-    set_aux_fe(id, name, nc, k, block);
+    set_aux_field(id, name, nc, k, block);
     return id;
 }
 
 void
-FVProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block)
+FVProblemInterface::set_aux_field(Int id,
+                                  const std::string & name,
+                                  Int nc,
+                                  Int k,
+                                  const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);

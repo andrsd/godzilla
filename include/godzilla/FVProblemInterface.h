@@ -65,7 +65,8 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @param block The label this field is restricted to
-    void set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
+    void
+    set_aux_field(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
 protected:
     void init() override;
