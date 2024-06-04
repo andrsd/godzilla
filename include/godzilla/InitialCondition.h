@@ -19,24 +19,34 @@ public:
     explicit InitialCondition(const Parameters & params);
 
     void create() override;
+
+    /// Get problem spatial dimension
+    ///
+    /// @return Spatial dimension
+    Int get_dimension() const;
+
+    /// Get field name
+    ///
+    /// @return The field name
     virtual const std::string & get_field_name() const;
+
+    /// Get the ID of the field this boundary condition operates on
+    ///
+    /// @return ID of the field
     [[nodiscard]] virtual Int get_field_id() const;
+
+    /// Get the number of constrained components
+    ///
+    /// @return The number of constrained components
     [[nodiscard]] virtual Int get_num_components() const = 0;
-
-    /// Get pointer to the C function that will be passed into PETSc API
-    virtual PetscFunc * get_function();
-
-    /// Get the pointer to the context that will be passed into PETSc API
-    virtual const void * get_context() const;
 
     /// Evaluate the initial condition
     ///
-    /// @param dim The spatial dimension
     /// @param time The time at which to sample
     /// @param x The coordinates
     /// @param nc The number of components
     /// @param u  The output field values
-    virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
+    virtual void evaluate(Real time, const Real x[], Scalar u[]) = 0;
 
 private:
     /// Discrete problem this object is part of

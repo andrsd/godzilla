@@ -9,16 +9,6 @@
 
 namespace godzilla {
 
-static ErrorCode
-initial_condition_function(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * ic = static_cast<InitialCondition *>(ctx);
-    assert(ic != nullptr);
-    ic->evaluate(dim, time, x, Nc, u);
-    return 0;
-}
-
 Parameters
 InitialCondition::parameters()
 {
@@ -79,18 +69,12 @@ InitialCondition::get_field_id() const
     return this->fid;
 }
 
-PetscFunc *
-InitialCondition::get_function()
+Int
+InitialCondition::get_dimension() const
 {
     CALL_STACK_MSG();
-    return initial_condition_function;
+    return this->dpi->get_problem()->get_dimension();
 }
 
-const void *
-InitialCondition::get_context() const
-{
-    CALL_STACK_MSG();
-    return this;
-}
 
 } // namespace godzilla
