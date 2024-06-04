@@ -392,7 +392,7 @@ FEProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, c
 }
 
 Int
-FEProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k, const Label & block)
+FEProblemInterface::add_aux_field(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);

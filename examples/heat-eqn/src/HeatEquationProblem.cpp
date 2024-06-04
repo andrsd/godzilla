@@ -110,9 +110,9 @@ HeatEquationProblem::set_up_fields()
     CALL_STACK_MSG();
     temp_id = add_field("temp", 1, this->p_order);
 
-    q_ppp_id = add_aux_fe("q_ppp", 1, 0);
-    htc_aux_id = add_aux_fe("htc", 1, this->p_order);
-    T_ambient_aux_id = add_aux_fe("T_ambient", 1, this->p_order);
+    q_ppp_id = add_aux_field("q_ppp", 1, 0);
+    htc_aux_id = add_aux_field("htc", 1, this->p_order);
+    T_ambient_aux_id = add_aux_field("T_ambient", 1, this->p_order);
 }
 
 void

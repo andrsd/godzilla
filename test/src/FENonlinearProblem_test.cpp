@@ -45,7 +45,7 @@ TEST_F(FENonlinearProblemTest, fields)
 
     prob->set_field(1, "vec", 3, 1);
 
-    Int aux_fld1_idx = prob->add_aux_fe("aux_fld1", 2, 1);
+    Int aux_fld1_idx = prob->add_aux_field("aux_fld1", 2, 1);
 
     prob->create();
 
@@ -103,7 +103,7 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
     mesh->create();
     prob->set_aux_fe(0, "aux_one", 1, 1);
-    prob->add_aux_fe("aux_two", 2, 1);
+    prob->add_aux_field("aux_two", 2, 1);
     prob->create();
 
     EXPECT_EQ(prob->get_aux_field_name(0), "aux_one");

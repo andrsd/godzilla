@@ -79,7 +79,7 @@ HeatEquationExplicit::set_up_fields()
 {
     CALL_STACK_MSG();
     temp_id = add_field("temp", 1, this->order);
-    ffn_aux_id = add_aux_fe("forcing_fn", 1, this->order);
+    ffn_aux_id = add_aux_field("forcing_fn", 1, this->order);
 }
 
 void

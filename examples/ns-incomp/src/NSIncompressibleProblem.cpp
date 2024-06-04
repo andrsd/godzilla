@@ -296,7 +296,7 @@ NSIncompressibleProblem::set_up_fields()
         set_field_component_name(velocity_id, i, comp_name[i]);
     pressure_id = add_field("pressure", 1, 1);
 
-    ffn_aid = add_aux_fe("ffn", dim, 2);
+    ffn_aid = add_aux_field("ffn", dim, 2);
 }
 
 void
