@@ -17,7 +17,7 @@ protected:
     void
     set_up_fields() override
     {
-        set_fe(0, "u", 1, 1);
+        set_field(0, "u", 1, 1);
     }
 
     void

@@ -90,7 +90,7 @@ void
 GTestFENonlinearProblem::set_up_fields()
 {
     Int order = 1;
-    set_fe(this->iu, "u", 1, order);
+    set_field(this->iu, "u", 1, order);
 }
 
 void

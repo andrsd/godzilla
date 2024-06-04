@@ -43,7 +43,7 @@ TEST_F(FENonlinearProblemTest, fields)
 {
     mesh->create();
 
-    prob->set_fe(1, "vec", 3, 1);
+    prob->set_field(1, "vec", 3, 1);
 
     Int aux_fld1_idx = prob->add_aux_fe("aux_fld1", 2, 1);
 
@@ -94,8 +94,8 @@ TEST_F(FENonlinearProblemTest, fields)
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
     mesh->create();
-    prob->set_fe(0, "first", 1, 1);
-    EXPECT_THROW_MSG(prob->set_fe(0, "second", 1, 1),
+    prob->set_field(0, "first", 1, 1);
+    EXPECT_THROW_MSG(prob->set_field(0, "second", 1, 1),
                      "Cannot add field 'second' with ID = 0. ID already exists.");
 }
 

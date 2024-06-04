@@ -17,7 +17,7 @@ TEST(ResidualFuncTest, test)
         void
         set_up_fields() override
         {
-            set_fe(0, "u", 1, 1);
+            set_field(0, "u", 1, 1);
         }
 
         void
@@ -83,7 +83,7 @@ TEST(ResidualFuncTest, test_vals)
         void
         set_up_fields() override
         {
-            set_fe(0, "u", 1, 1);
+            set_field(0, "u", 1, 1);
         }
 
         void
