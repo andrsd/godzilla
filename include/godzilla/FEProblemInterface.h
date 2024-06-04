@@ -64,7 +64,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    Int add_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
+    Int add_field(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric field
     ///

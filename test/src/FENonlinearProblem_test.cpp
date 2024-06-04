@@ -79,7 +79,7 @@ TEST_F(FENonlinearProblemTest, fields)
     EXPECT_THROW_MSG(prob->set_field_component_name(65536, 0, "x"),
                      "Field with ID = '65536' does not exist.");
 
-    Int fld2_idx = prob->add_fe("fld2", 3, 1);
+    Int fld2_idx = prob->add_field("fld2", 3, 1);
     EXPECT_EQ(fld2_idx, 2);
 
     EXPECT_EQ(prob->get_field_dof(4, 0), 8);

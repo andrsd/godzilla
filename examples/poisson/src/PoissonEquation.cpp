@@ -28,7 +28,7 @@ void
 PoissonEquation::set_up_fields()
 {
     CALL_STACK_MSG();
-    this->iu = add_fe("u", 1, this->p_order);
+    this->iu = add_field("u", 1, this->p_order);
     this->affn = add_aux_fe("forcing_fn", 1, this->p_order);
 }
 
