@@ -60,7 +60,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    Int add_aux_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
+    Int add_aux_field(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
