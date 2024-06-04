@@ -28,7 +28,7 @@ TEST(FunctionAuxiliaryFieldTest, create)
     FunctionAuxiliaryField aux(aux_params);
 
     mesh.create();
-    prob.set_aux_fe(0, "aux1", 1, 1);
+    prob.set_aux_field(0, "aux1", 1, 1);
     prob.add_auxiliary_field(&aux);
     prob.create();
 
@@ -67,7 +67,7 @@ TEST(FunctionAuxiliaryFieldTest, evaluate)
     FunctionAuxiliaryField aux(aux_params);
 
     mesh.create();
-    prob.set_aux_fe(0, "aux1", 1, 1);
+    prob.set_aux_field(0, "aux1", 1, 1);
     prob.add_auxiliary_field(&aux);
     prob.create();
 

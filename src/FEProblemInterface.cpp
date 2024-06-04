@@ -362,17 +362,17 @@ FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 }
 
 Int
-FEProblemInterface::add_fe(const std::string & name, Int nc, Int k, const Label & block)
+FEProblemInterface::add_field(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->fields);
     Int id = get_next_id(keys);
-    set_fe(id, name, nc, k, block);
+    set_field(id, name, nc, k, block);
     return id;
 }
 
 void
-FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k, const Label & block)
+FEProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->fields.find(id);
@@ -392,17 +392,21 @@ FEProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k, cons
 }
 
 Int
-FEProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k, const Label & block)
+FEProblemInterface::add_aux_field(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
     Int id = get_next_id(keys);
-    set_aux_fe(id, name, nc, k, block);
+    set_aux_field(id, name, nc, k, block);
     return id;
 }
 
 void
-FEProblemInterface::set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block)
+FEProblemInterface::set_aux_field(Int id,
+                                  const std::string & name,
+                                  Int nc,
+                                  Int k,
+                                  const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);

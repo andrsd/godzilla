@@ -102,7 +102,7 @@ GTestImplicitFENonlinearProblem::set_up_fields()
 {
     CALL_STACK_MSG();
     Int order = 1;
-    set_fe(this->iu, "u", 1, order);
+    set_field(this->iu, "u", 1, order);
 }
 
 void

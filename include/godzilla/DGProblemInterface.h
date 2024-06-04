@@ -44,7 +44,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    Int add_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
+    Int add_field(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric field
     ///
@@ -52,7 +52,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
+    void set_field(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
@@ -60,7 +60,7 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @return ID of the new field
-    Int add_aux_fe(const std::string & name, Int nc, Int k, const Label & block = Label());
+    Int add_aux_field(const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -68,7 +68,8 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
+    void
+    set_aux_field(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Get field degree of freedom
     ///

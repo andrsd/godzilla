@@ -89,7 +89,7 @@ GTestFENonlinearProblemJFNK::GTestFENonlinearProblemJFNK(const Parameters & para
 void
 GTestFENonlinearProblemJFNK::set_up_fields()
 {
-    set_fe(this->iu, "u", 1, 1);
+    set_field(this->iu, "u", 1, 1);
 }
 
 void

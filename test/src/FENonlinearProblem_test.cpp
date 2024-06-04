@@ -43,9 +43,9 @@ TEST_F(FENonlinearProblemTest, fields)
 {
     mesh->create();
 
-    prob->set_fe(1, "vec", 3, 1);
+    prob->set_field(1, "vec", 3, 1);
 
-    Int aux_fld1_idx = prob->add_aux_fe("aux_fld1", 2, 1);
+    Int aux_fld1_idx = prob->add_aux_field("aux_fld1", 2, 1);
 
     prob->create();
 
@@ -79,7 +79,7 @@ TEST_F(FENonlinearProblemTest, fields)
     EXPECT_THROW_MSG(prob->set_field_component_name(65536, 0, "x"),
                      "Field with ID = '65536' does not exist.");
 
-    Int fld2_idx = prob->add_fe("fld2", 3, 1);
+    Int fld2_idx = prob->add_field("fld2", 3, 1);
     EXPECT_EQ(fld2_idx, 2);
 
     EXPECT_EQ(prob->get_field_dof(4, 0), 8);
@@ -94,16 +94,16 @@ TEST_F(FENonlinearProblemTest, fields)
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
     mesh->create();
-    prob->set_fe(0, "first", 1, 1);
-    EXPECT_THROW_MSG(prob->set_fe(0, "second", 1, 1),
+    prob->set_field(0, "first", 1, 1);
+    EXPECT_THROW_MSG(prob->set_field(0, "second", 1, 1),
                      "Cannot add field 'second' with ID = 0. ID already exists.");
 }
 
 TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
     mesh->create();
-    prob->set_aux_fe(0, "aux_one", 1, 1);
-    prob->add_aux_fe("aux_two", 2, 1);
+    prob->set_aux_field(0, "aux_one", 1, 1);
+    prob->add_aux_field("aux_two", 2, 1);
     prob->create();
 
     EXPECT_EQ(prob->get_aux_field_name(0), "aux_one");
@@ -138,8 +138,8 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
     mesh->create();
-    prob->set_aux_fe(0, "first", 1, 1);
-    EXPECT_THROW_MSG(prob->set_aux_fe(0, "second", 1, 1),
+    prob->set_aux_field(0, "first", 1, 1);
+    EXPECT_THROW_MSG(prob->set_aux_field(0, "second", 1, 1),
                      "Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
 }
 
