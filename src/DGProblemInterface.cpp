@@ -280,12 +280,12 @@ DGProblemInterface::add_field(const std::string & name, Int nc, Int k, const Lab
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->fields);
     Int id = get_next_id(keys);
-    set_fe(id, name, nc, k, block);
+    set_field(id, name, nc, k, block);
     return id;
 }
 
 void
-DGProblemInterface::set_fe(Int id, const std::string & name, Int nc, Int k, const Label & block)
+DGProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     if (k != 1)

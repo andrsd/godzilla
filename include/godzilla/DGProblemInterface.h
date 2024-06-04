@@ -52,7 +52,7 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
+    void set_field(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
