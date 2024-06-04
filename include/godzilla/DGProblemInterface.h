@@ -68,7 +68,8 @@ public:
     /// @param name The name of the field
     /// @param nc The number of components
     /// @param k The degree k of the space
-    void set_aux_fe(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
+    void
+    set_aux_field(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
     /// Get field degree of freedom
     ///
