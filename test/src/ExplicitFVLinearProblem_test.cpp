@@ -130,8 +130,8 @@ protected:
     {
         add_field(0, "u", 1);
 
-        add_aux_fe("a0", 1, 0);
-        add_aux_fe("a1", 2, 0);
+        add_aux_field("a0", 1, 0);
+        add_aux_field("a1", 2, 0);
     }
 
     void

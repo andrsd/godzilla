@@ -322,7 +322,7 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc, const La
 }
 
 Int
-FVProblemInterface::add_aux_fe(const std::string & name, Int nc, Int k, const Label & block)
+FVProblemInterface::add_aux_field(const std::string & name, Int nc, Int k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
