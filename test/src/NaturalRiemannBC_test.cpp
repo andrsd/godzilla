@@ -55,7 +55,7 @@ protected:
         set_riemann_solver(0, this, &TestExplicitFVLinearProblem::compute_flux);
     }
 
-    PetscErrorCode
+    ErrorCode
     compute_flux(const PetscReal x[],
                  const PetscReal n[],
                  const PetscScalar u_l[],

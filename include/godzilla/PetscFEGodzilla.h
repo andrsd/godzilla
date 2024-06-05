@@ -18,13 +18,13 @@ namespace internal {
 /// @param qorder Quadrature order
 /// @param fem Created PetscFE object
 /// @return PETSC error code
-PetscErrorCode create_lagrange_petscfe(MPI_Comm comm,
-                                       Int dim,
-                                       Int Nc,
-                                       PetscBool is_simplex,
-                                       Int k,
-                                       Int qorder,
-                                       PetscFE * fem);
+ErrorCode create_lagrange_petscfe(MPI_Comm comm,
+                                  Int dim,
+                                  Int Nc,
+                                  PetscBool is_simplex,
+                                  Int k,
+                                  Int qorder,
+                                  PetscFE * fem);
 
 } // namespace internal
 } // namespace godzilla

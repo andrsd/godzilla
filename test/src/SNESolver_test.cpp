@@ -6,7 +6,7 @@ using namespace godzilla;
 
 namespace {
 
-PetscErrorCode
+ErrorCode
 compute_f(SNES, Vec x, Vec f, void *)
 {
     Vector X(x);
@@ -19,7 +19,7 @@ compute_f(SNES, Vec x, Vec f, void *)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 compute_jacobian(SNES, Vec, Mat j, Mat, void *)
 {
     Matrix J(j);
@@ -33,7 +33,7 @@ compute_jacobian(SNES, Vec, Mat j, Mat, void *)
 
 class TestNLProblem {
 public:
-    PetscErrorCode
+    ErrorCode
     compute_f(const Vector & x, Vector & f)
     {
         std::vector<Int> ix = { 0, 1 };
@@ -44,7 +44,7 @@ public:
         return 0;
     }
 
-    PetscErrorCode
+    ErrorCode
     compute_jacobian(const Vector &, Matrix & J, Matrix &)
     {
         J.set_value(0, 0, 1.);
@@ -54,7 +54,7 @@ public:
     }
 };
 
-}
+} // namespace
 
 TEST(SNESolverTest, solver_cls)
 {
@@ -75,7 +75,7 @@ TEST(SNESolverTest, solver_cls)
     snes.solve(x);
 
     std::vector<Real> vals(2);
-    x.get_values({0, 1}, vals);
+    x.get_values({ 0, 1 }, vals);
 
     EXPECT_DOUBLE_EQ(vals[0], 2.);
     EXPECT_DOUBLE_EQ(vals[1], 3.);
@@ -102,7 +102,7 @@ TEST(SNESolverTest, solver_fns)
     snes.solve(x);
 
     std::vector<Real> vals(2);
-    x.get_values({0, 1}, vals);
+    x.get_values({ 0, 1 }, vals);
 
     EXPECT_DOUBLE_EQ(vals[0], 2.);
     EXPECT_DOUBLE_EQ(vals[1], 3.);

@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-static PetscErrorCode
+static ErrorCode
 initial_condition_function(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx)
 {
     CALL_STACK_MSG();

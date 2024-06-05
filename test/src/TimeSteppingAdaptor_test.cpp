@@ -12,17 +12,17 @@ using namespace godzilla;
 
 static const char * TS_ADAPT_TEST = "test";
 
-static PetscErrorCode __ts_adapt_choose(TSAdapt adapt,
-                                        TS ts,
-                                        Real h,
-                                        Int * next_sc,
-                                        Real * next_h,
-                                        PetscBool * accept,
-                                        Real * wlte,
-                                        Real * wltea,
-                                        Real * wlter);
+static ErrorCode __ts_adapt_choose(TSAdapt adapt,
+                                   TS ts,
+                                   Real h,
+                                   Int * next_sc,
+                                   Real * next_h,
+                                   PetscBool * accept,
+                                   Real * wlte,
+                                   Real * wltea,
+                                   Real * wlter);
 
-PETSC_EXTERN PetscErrorCode
+PETSC_EXTERN ErrorCode
 TSAdaptCreate_test(TSAdapt adapt)
 {
     adapt->ops->choose = __ts_adapt_choose;
@@ -98,7 +98,7 @@ TestTSAdaptor::choose(Real h,
     *wlter = -1;
 }
 
-static PetscErrorCode
+static ErrorCode
 __ts_adapt_choose(TSAdapt adapt,
                   TS ts,
                   Real h,

@@ -103,7 +103,7 @@ public:
         post_stage_called = true;
     }
 
-    PetscErrorCode
+    ErrorCode
     compute_rhs(Real time, const Vector & vec_x, Vector & vec_F) override
     {
         compute_rhs_called = true;

@@ -104,7 +104,7 @@ LinearProblem::set_up_solver_parameters()
                             this->lin_max_iter);
 }
 
-PetscErrorCode
+ErrorCode
 LinearProblem::monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
@@ -156,14 +156,14 @@ LinearProblem::solve()
     this->ks.solve(this->b, get_solution_vector());
 }
 
-PetscErrorCode
+ErrorCode
 LinearProblem::compute_rhs(Vector &)
 {
     CALL_STACK_MSG();
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 LinearProblem::compute_operators(Matrix &, Matrix &)
 {
     CALL_STACK_MSG();

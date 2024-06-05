@@ -31,7 +31,7 @@ protected:
                             ResidualFunc * f0,
                             ResidualFunc * f1,
                             const std::string & region = "") override;
-    PetscErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) override;
+    ErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) override;
     void post_step() override;
 
 public:

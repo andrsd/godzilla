@@ -13,8 +13,8 @@ public:
     virtual ~G1DTestLinearProblem();
     virtual void create() override;
     virtual void solve() override;
-    virtual PetscErrorCode compute_rhs(Vector & b) override;
-    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
+    virtual ErrorCode compute_rhs(Vector & b) override;
+    virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
     Section s;
@@ -28,8 +28,8 @@ public:
     virtual ~G2DTestLinearProblem();
     virtual void create() override;
     virtual void solve() override;
-    virtual PetscErrorCode compute_rhs(Vector & b) override;
-    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
+    virtual ErrorCode compute_rhs(Vector & b) override;
+    virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
     Section s;
@@ -43,8 +43,8 @@ public:
     virtual ~G3DTestLinearProblem();
     virtual void create() override;
     virtual void solve() override;
-    virtual PetscErrorCode compute_rhs(Vector & b) override;
-    virtual PetscErrorCode compute_operators(Matrix & A, Matrix & B) override;
+    virtual ErrorCode compute_rhs(Vector & b) override;
+    virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
     Section s;

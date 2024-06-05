@@ -30,9 +30,9 @@ public:
     /// true if solve converged, otherwise false
     virtual bool converged();
     /// Method to compute residual. Called from the PETsc callback
-    virtual PetscErrorCode compute_residual(const Vector & x, Vector & f);
+    virtual ErrorCode compute_residual(const Vector & x, Vector & f);
     /// Method to compute Jacobian. Called from the PETsc callback
-    virtual PetscErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
+    virtual ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
 
     /// Use matrix free finite difference matrix vector products to apply the Jacobian
     ///
@@ -66,9 +66,9 @@ protected:
     /// Set up solver parameters
     virtual void set_up_solver_parameters();
     /// SNES monitor
-    PetscErrorCode snes_monitor(Int it, Real norm);
+    ErrorCode snes_monitor(Int it, Real norm);
     /// KSP monitor
-    PetscErrorCode ksp_monitor(Int it, Real rnorm);
+    ErrorCode ksp_monitor(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for creating a preconditioner

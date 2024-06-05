@@ -25,9 +25,7 @@ ExplicitFVLinearProblem::ExplicitFVLinearProblem(const Parameters & params) :
     set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
 }
 
-ExplicitFVLinearProblem::~ExplicitFVLinearProblem()
-{
-}
+ExplicitFVLinearProblem::~ExplicitFVLinearProblem() {}
 
 Real
 ExplicitFVLinearProblem::get_time() const
@@ -124,7 +122,7 @@ ExplicitFVLinearProblem::set_up_monitors()
     ExplicitProblemInterface::set_up_monitors();
 }
 
-PetscErrorCode
+ErrorCode
 ExplicitFVLinearProblem::compute_rhs_local(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();

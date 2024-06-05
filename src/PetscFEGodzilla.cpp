@@ -10,7 +10,7 @@
 namespace godzilla {
 namespace internal {
 
-static PetscErrorCode
+static ErrorCode
 integrate_residual(PetscDS ds,
                    PetscFormKey key,
                    Int ne,
@@ -26,20 +26,20 @@ integrate_residual(PetscDS ds,
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, key.field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    PetscErrorCode err = fepi->integrate_residual(ds,
-                                                  key,
-                                                  ne,
-                                                  cgeom,
-                                                  coefficients,
-                                                  coefficients_t,
-                                                  ds_aux,
-                                                  coefficients_aux,
-                                                  t,
-                                                  elem_vec);
+    ErrorCode err = fepi->integrate_residual(ds,
+                                             key,
+                                             ne,
+                                             cgeom,
+                                             coefficients,
+                                             coefficients_t,
+                                             ds_aux,
+                                             coefficients_aux,
+                                             t,
+                                             elem_vec);
     return err;
 }
 
-static PetscErrorCode
+static ErrorCode
 integrate_bd_residual(PetscDS ds,
                       PetscWeakForm /*wf*/,
                       PetscFormKey key,
@@ -56,20 +56,20 @@ integrate_bd_residual(PetscDS ds,
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, key.field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    PetscErrorCode err = fepi->integrate_bnd_residual(ds,
-                                                      key,
-                                                      ne,
-                                                      fgeom,
-                                                      coefficients,
-                                                      coefficients_t,
-                                                      ds_aux,
-                                                      coefficients_aux,
-                                                      t,
-                                                      elem_vec);
+    ErrorCode err = fepi->integrate_bnd_residual(ds,
+                                                 key,
+                                                 ne,
+                                                 fgeom,
+                                                 coefficients,
+                                                 coefficients_t,
+                                                 ds_aux,
+                                                 coefficients_aux,
+                                                 t,
+                                                 elem_vec);
     return err;
 }
 
-PetscErrorCode
+ErrorCode
 integrate_jacobian(PetscDS ds,
                    PetscFEJacobianType jtype,
                    PetscFormKey key,
@@ -90,22 +90,22 @@ integrate_jacobian(PetscDS ds,
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    PetscErrorCode err = fepi->integrate_jacobian(ds,
-                                                  jtype,
-                                                  key,
-                                                  ne,
-                                                  cgeom,
-                                                  coefficients,
-                                                  coefficients_t,
-                                                  ds_aux,
-                                                  coefficients_aux,
-                                                  t,
-                                                  u_tshift,
-                                                  elem_mat);
+    ErrorCode err = fepi->integrate_jacobian(ds,
+                                             jtype,
+                                             key,
+                                             ne,
+                                             cgeom,
+                                             coefficients,
+                                             coefficients_t,
+                                             ds_aux,
+                                             coefficients_aux,
+                                             t,
+                                             u_tshift,
+                                             elem_mat);
     return err;
 }
 
-static PetscErrorCode
+static ErrorCode
 integrate_bd_jacobian(PetscDS ds,
                       PetscWeakForm /*wf*/,
                       PetscFormKey key,
@@ -126,21 +126,21 @@ integrate_bd_jacobian(PetscDS ds,
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    PetscErrorCode err = fepi->integrate_bnd_jacobian(ds,
-                                                      key,
-                                                      ne,
-                                                      fgeom,
-                                                      coefficients,
-                                                      coefficients_t,
-                                                      ds_aux,
-                                                      coefficients_aux,
-                                                      t,
-                                                      u_tshift,
-                                                      elem_mat);
+    ErrorCode err = fepi->integrate_bnd_jacobian(ds,
+                                                 key,
+                                                 ne,
+                                                 fgeom,
+                                                 coefficients,
+                                                 coefficients_t,
+                                                 ds_aux,
+                                                 coefficients_aux,
+                                                 t,
+                                                 u_tshift,
+                                                 elem_mat);
     return err;
 }
 
-PetscErrorCode
+ErrorCode
 create_lagrange_petscfe(MPI_Comm comm,
                         Int dim,
                         Int nc,

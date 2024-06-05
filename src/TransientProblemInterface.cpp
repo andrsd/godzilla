@@ -14,7 +14,7 @@
 
 namespace godzilla {
 
-PetscErrorCode
+ErrorCode
 __transient_pre_step(TS ts)
 {
     CALL_STACK_MSG();
@@ -25,7 +25,7 @@ __transient_pre_step(TS ts)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 __transient_post_step(TS ts)
 {
     CALL_STACK_MSG();
@@ -36,7 +36,7 @@ __transient_post_step(TS ts)
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 __transient_monitor(TS, Int stepi, Real time, Vec x, void * ctx)
 {
     CALL_STACK_MSG();
@@ -265,7 +265,7 @@ TransientProblemInterface::post_stage(Real stage_time,
 {
 }
 
-PetscErrorCode
+ErrorCode
 TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     return 0;

@@ -848,7 +848,7 @@ FEProblemInterface::add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
     this->wf->add(kind, label, val, fid, gid, part, g);
 }
 
-PetscErrorCode
+ErrorCode
 FEProblemInterface::integrate_residual(PetscDS ds,
                                        PetscFormKey key,
                                        Int n_elems,
@@ -990,7 +990,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FEProblemInterface::integrate_bnd_residual(PetscDS ds,
                                            PetscFormKey key,
                                            Int n_elems,
@@ -1144,7 +1144,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FEProblemInterface::integrate_jacobian(PetscDS ds,
                                        PetscFEJacobianType jtype,
                                        PetscFormKey key,
@@ -1374,7 +1374,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
                                            PetscFormKey key,
                                            Int n_elems,

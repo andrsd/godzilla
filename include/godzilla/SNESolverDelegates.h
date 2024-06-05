@@ -14,18 +14,18 @@ namespace godzilla::internal {
 /// Abstract "method" for calling SNES Monitor
 struct SNESMonitorMethodAbstract {
     virtual ~SNESMonitorMethodAbstract() = default;
-    virtual PetscErrorCode invoke(Int it, Real rnorm) = 0;
+    virtual ErrorCode invoke(Int it, Real rnorm) = 0;
 };
 
 template <typename T>
 struct SNESMonitorMethod : public SNESMonitorMethodAbstract {
-    SNESMonitorMethod(T * instance, PetscErrorCode (T::*monitor)(Int, Real)) :
+    SNESMonitorMethod(T * instance, ErrorCode (T::*monitor)(Int, Real)) :
         instance(instance),
         monitor(monitor)
     {
     }
 
-    PetscErrorCode
+    ErrorCode
     invoke(Int it, Real rnorm) override
     {
         return ((*this->instance).*monitor)(it, rnorm);
@@ -33,25 +33,25 @@ struct SNESMonitorMethod : public SNESMonitorMethodAbstract {
 
 private:
     T * instance;
-    PetscErrorCode (T::*monitor)(Int, Real);
+    ErrorCode (T::*monitor)(Int, Real);
 };
 
 // Machinery for SNESComputeResidual
 
 /// Abstract "method" for calling SNES compute residual
 struct SNESComputeResidualMethodAbstract {
-    virtual PetscErrorCode invoke(const Vector & x, Vector & f) = 0;
+    virtual ErrorCode invoke(const Vector & x, Vector & f) = 0;
 };
 
 template <typename T>
 struct SNESComputeResidualMethod : public SNESComputeResidualMethodAbstract {
-    SNESComputeResidualMethod(T * instance, PetscErrorCode (T::*method)(const Vector &, Vector &)) :
+    SNESComputeResidualMethod(T * instance, ErrorCode (T::*method)(const Vector &, Vector &)) :
         instance(instance),
         method(method)
     {
     }
 
-    PetscErrorCode
+    ErrorCode
     invoke(const Vector & x, Vector & f) override
     {
         return ((*this->instance).*method)(x, f);
@@ -59,26 +59,26 @@ struct SNESComputeResidualMethod : public SNESComputeResidualMethodAbstract {
 
 private:
     T * instance;
-    PetscErrorCode (T::*method)(const Vector & x, Vector & f);
+    ErrorCode (T::*method)(const Vector & x, Vector & f);
 };
 
 // Machinery for SNESComputeJacobian
 
 /// Abstract "method" for calling SNES compute jacobian
 struct SNESComputeJacobianMethodAbstract {
-    virtual PetscErrorCode invoke(const Vector & x, Matrix & J, Matrix & Jp) = 0;
+    virtual ErrorCode invoke(const Vector & x, Matrix & J, Matrix & Jp) = 0;
 };
 
 template <typename T>
 struct SNESComputeJacobianMethod : public SNESComputeJacobianMethodAbstract {
     SNESComputeJacobianMethod(T * instance,
-                              PetscErrorCode (T::*method)(const Vector &, Matrix &, Matrix &)) :
+                              ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &)) :
         instance(instance),
         method(method)
     {
     }
 
-    PetscErrorCode
+    ErrorCode
     invoke(const Vector & x, Matrix & J, Matrix & Jp) override
     {
         return ((*this->instance).*method)(x, J, Jp);
@@ -86,7 +86,7 @@ struct SNESComputeJacobianMethod : public SNESComputeJacobianMethodAbstract {
 
 private:
     T * instance;
-    PetscErrorCode (T::*method)(const Vector &, Matrix &, Matrix &);
+    ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &);
 };
 
 } // namespace godzilla::internal

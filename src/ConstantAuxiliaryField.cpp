@@ -9,7 +9,7 @@
 
 namespace godzilla {
 
-static PetscErrorCode
+static ErrorCode
 constant_auxiliary_field(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
     auto * aux_fld = static_cast<ConstantAuxiliaryField *>(ctx);

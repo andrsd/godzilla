@@ -15,7 +15,7 @@
 
 namespace godzilla {
 
-static PetscErrorCode
+static ErrorCode
 __tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
 {
     CALL_STACK_MSG();
@@ -27,7 +27,7 @@ __tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
     return 0;
 }
 
-static PetscErrorCode
+static ErrorCode
 __tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * user)
 {
     CALL_STACK_MSG();
@@ -40,7 +40,7 @@ __tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, 
     return 0;
 }
 
-static PetscErrorCode
+static ErrorCode
 _tsfep_compute_boundary(DM, Real time, Vec x, Vec x_t, void * user)
 {
     CALL_STACK_MSG();
@@ -162,7 +162,7 @@ ImplicitFENonlinearProblem::compute_solution_vector_local()
     compute_boundary(get_time(), loc_sln, Vector());
 }
 
-PetscErrorCode
+ErrorCode
 ImplicitFENonlinearProblem::compute_ifunction(Real time,
                                               const Vector & X,
                                               const Vector & X_t,
@@ -191,7 +191,7 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 ImplicitFENonlinearProblem::compute_ijacobian(Real time,
                                               const Vector & X,
                                               const Vector & X_t,
@@ -225,7 +225,7 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
     return 0;
 }
 
-PetscErrorCode
+ErrorCode
 ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const Vector & X_t)
 {
     CALL_STACK_MSG();

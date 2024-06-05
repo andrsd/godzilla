@@ -11,7 +11,7 @@
 
 namespace godzilla {
 
-static PetscErrorCode
+static ErrorCode
 natural_riemann_boundary_condition_function(Real time,
                                             const Real * c,
                                             const Real * n,

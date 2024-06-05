@@ -89,7 +89,7 @@ TEST(KrylovSolver, set_monitor)
 {
     class TestSolver {
     public:
-        PetscErrorCode
+        ErrorCode
         monitor(Int it, Real rnorm)
         {
             this->norms.push_back(rnorm);
@@ -130,7 +130,7 @@ TEST(KrylovSolver, set_opers_rhs)
 {
     class TestSystem {
     public:
-        PetscErrorCode
+        ErrorCode
         compute_rhs(Vector & b)
         {
             b.set_value(0, 6);
@@ -138,7 +138,7 @@ TEST(KrylovSolver, set_opers_rhs)
             return 0;
         }
 
-        PetscErrorCode
+        ErrorCode
         compute_operators(Matrix & A, Matrix & B)
         {
             A.set_value(0, 0, 2);
@@ -190,7 +190,7 @@ TEST(KrylovSolver, set_opers_rhs_c_version)
 
     class TestSystem {
     public:
-        static PetscErrorCode
+        static ErrorCode
         compute_rhs(KSP ksp, Vec b, void * ctx)
         {
             VecSetValue(b, 0, 6, INSERT_VALUES);
@@ -198,7 +198,7 @@ TEST(KrylovSolver, set_opers_rhs_c_version)
             return 0;
         }
 
-        static PetscErrorCode
+        static ErrorCode
         compute_operators(KSP ksp, Mat A, Mat B, void * ctx)
         {
             MatSetValue(A, 0, 0, 2., INSERT_VALUES);
@@ -208,7 +208,7 @@ TEST(KrylovSolver, set_opers_rhs_c_version)
             return 0;
         }
 
-        static PetscErrorCode
+        static ErrorCode
         monitor(KSP, Int it, Real rnorm, void * ctx)
         {
             auto norms = static_cast<std::vector<Real> *>(ctx);

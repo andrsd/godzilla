@@ -40,7 +40,7 @@ AdvectionEquation::set_up_weak_form()
     set_riemann_solver(0, this, &AdvectionEquation::compute_flux);
 }
 
-PetscErrorCode
+ErrorCode
 AdvectionEquation::compute_flux(const Real[],
                                 const Real n[],
                                 const Scalar u_l[],

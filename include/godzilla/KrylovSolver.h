@@ -80,7 +80,7 @@ public:
     ///
     /// @param func Function to compute the right hand side
     /// @param ctx Optional context
-    void set_compute_rhs(PetscErrorCode (*func)(KSP ksp, Vec b, void * ctx), void * ctx = nullptr);
+    void set_compute_rhs(ErrorCode (*func)(KSP ksp, Vec b, void * ctx), void * ctx = nullptr);
 
     /// Set member function to compute the right hand side of the linear system
     ///
@@ -89,7 +89,7 @@ public:
     /// @param callback Member function in class T
     template <class T>
     void
-    set_compute_rhs(T * instance, PetscErrorCode (T::*callback)(Vector &))
+    set_compute_rhs(T * instance, ErrorCode (T::*callback)(Vector &))
     {
         this->compute_rhs_method = new internal::KSPComputeRhsMethod<T>(instance, callback);
         PETSC_CHECK(KSPSetComputeRHS(this->ksp, compute_rhs, this->compute_rhs_method));
@@ -99,7 +99,7 @@ public:
     ///
     /// @param func Function to compute the operators
     /// @param ctx Optional context
-    void set_compute_operators(PetscErrorCode (*func)(KSP ksp, Mat A, Mat B, void * ctx),
+    void set_compute_operators(ErrorCode (*func)(KSP ksp, Mat A, Mat B, void * ctx),
                                void * ctx = nullptr);
 
     /// Set member function to compute operators of the linear system
@@ -109,7 +109,7 @@ public:
     /// @param callback Member function in class T
     template <class T>
     void
-    set_compute_operators(T * instance, PetscErrorCode (T::*callback)(Matrix &, Matrix &))
+    set_compute_operators(T * instance, ErrorCode (T::*callback)(Matrix &, Matrix &))
     {
         this->compute_operators_method =
             new internal::KSPComputeOperatorsMethod<T>(instance, callback);
@@ -124,9 +124,9 @@ public:
     /// @param ctx Context for private data for the monitor routine (use `nullptr` if no context is
     /// needed)
     /// @param monitordestroy Routine that frees monitor context (may be `nullptr`)
-    void monitor_set(PetscErrorCode (*monitor)(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx),
+    void monitor_set(ErrorCode (*monitor)(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx),
                      void * ctx = nullptr,
-                     PetscErrorCode (*monitordestroy)(void ** ctx) = nullptr);
+                     ErrorCode (*monitordestroy)(void ** ctx) = nullptr);
 
     /// Sets an *additional* member function to be called at every iteration to monitor the
     /// residual/error etc.
@@ -136,7 +136,7 @@ public:
     /// @param callback Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, PetscErrorCode (T::*callback)(Int, Real))
+    monitor_set(T * instance, ErrorCode (T::*callback)(Int, Real))
     {
         this->monitor_method = new internal::KSPMonitorMethod<T>(instance, callback);
         PETSC_CHECK(KSPMonitorSet(this->ksp, monitor, this->monitor_method, monitor_destroy));
@@ -185,10 +185,10 @@ private:
     internal::KSPComputeOperatorsMethodAbstract * compute_operators_method;
 
 public:
-    static PetscErrorCode compute_operators(KSP, Mat A, Mat B, void * ctx);
-    static PetscErrorCode compute_rhs(KSP, Vec b, void * ctx);
-    static PetscErrorCode monitor(KSP, Int it, Real rnorm, void * ctx);
-    static PetscErrorCode monitor_destroy(void ** ctx);
+    static ErrorCode compute_operators(KSP, Mat A, Mat B, void * ctx);
+    static ErrorCode compute_rhs(KSP, Vec b, void * ctx);
+    static ErrorCode monitor(KSP, Int it, Real rnorm, void * ctx);
+    static ErrorCode monitor_destroy(void ** ctx);
 };
 
 } // namespace godzilla
