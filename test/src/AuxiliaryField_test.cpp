@@ -26,13 +26,8 @@ TEST_F(AuxiliaryFieldTest, api)
         {
             return 1;
         }
-        PetscFunc *
-        get_func() const override
-        {
-            return nullptr;
-        }
         void
-        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        evaluate(Real time, const Real x[], Scalar u[]) override
         {
         }
 
@@ -68,8 +63,6 @@ TEST_F(AuxiliaryFieldTest, api)
     EXPECT_EQ(aux.get_block_id(), -1);
     EXPECT_EQ(aux.get_field(), "fld");
     EXPECT_EQ(aux.get_field_id(), 0);
-    EXPECT_EQ(aux.get_func(), nullptr);
-    EXPECT_EQ(aux.get_context(), &aux);
     EXPECT_EQ(aux.get_msh(), this->mesh->get_mesh<Mesh>());
     EXPECT_EQ(aux.get_prblm(), prob);
     EXPECT_EQ(aux.get_dimension(), 1);
@@ -90,13 +83,8 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
         {
             return 2;
         }
-        PetscFunc *
-        get_func() const override
-        {
-            return nullptr;
-        }
         void
-        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        evaluate(Real time, const Real x[], Scalar u[]) override
         {
         }
     };
@@ -132,13 +120,8 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
         {
             return 2;
         }
-        PetscFunc *
-        get_func() const override
-        {
-            return nullptr;
-        }
         void
-        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        evaluate(Real time, const Real x[], Scalar u[]) override
         {
         }
     };
@@ -175,13 +158,8 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
         {
             return 1;
         }
-        PetscFunc *
-        get_func() const override
-        {
-            return nullptr;
-        }
         void
-        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        evaluate(Real time, const Real x[], Scalar u[]) override
         {
         }
     };
@@ -236,13 +214,8 @@ TEST_F(AuxiliaryFieldTest, get_value)
         {
             return 1;
         }
-        PetscFunc *
-        get_func() const override
-        {
-            return nullptr;
-        }
         void
-        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        evaluate(Real time, const Real x[], Scalar u[]) override
         {
             u[0] = time * (x[0] + 1234);
         }
@@ -277,13 +250,8 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
         {
             return 3;
         }
-        PetscFunc *
-        get_func() const override
-        {
-            return nullptr;
-        }
         void
-        evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+        evaluate(Real time, const Real x[], Scalar u[]) override
         {
             u[0] = x[0] + 2;
             u[1] = time;

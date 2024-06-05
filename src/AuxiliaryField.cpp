@@ -106,11 +106,4 @@ AuxiliaryField::get_field() const
     return this->field;
 }
 
-const void *
-AuxiliaryField::get_context() const
-{
-    CALL_STACK_MSG();
-    return this;
-}
-
 } // namespace godzilla
