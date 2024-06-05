@@ -4,8 +4,10 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include "godzilla/SNESolverDelegates.h"
 #include "godzilla/KrylovSolver.h"
+#include "godzilla/Vector.h"
+#include "godzilla/Matrix.h"
+#include "petscsnes.h"
 
 namespace godzilla {
 

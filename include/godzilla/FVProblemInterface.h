@@ -4,7 +4,6 @@
 #pragma once
 
 #include "godzilla/DiscreteProblemInterface.h"
-#include "godzilla/FVDelegates.h"
 
 namespace godzilla {
 

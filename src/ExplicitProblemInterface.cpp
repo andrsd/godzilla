@@ -5,6 +5,7 @@
 #include "godzilla/Problem.h"
 #include "godzilla/Validation.h"
 #include "godzilla/Utils.h"
+#include "petscdmplex.h"
 
 namespace godzilla {
 

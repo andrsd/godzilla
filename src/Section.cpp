@@ -4,6 +4,7 @@
 #include "godzilla/Section.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
+#include "petscdmplex.h"
 
 namespace godzilla {
 

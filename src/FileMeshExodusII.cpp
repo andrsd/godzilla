@@ -7,6 +7,7 @@
 #include "exodusIIcpp/exodusIIcpp.h"
 #include "petscdm.h"
 #include "petsc/private/dmimpl.h"
+#include "petscdmplex.h"
 
 using namespace godzilla;
 
