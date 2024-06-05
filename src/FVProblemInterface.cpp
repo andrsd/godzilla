@@ -414,28 +414,4 @@ FVProblemInterface::create_aux_fields()
     }
 }
 
-void
-FVProblemInterface::add_boundary_essential(const std::string & name,
-                                           const std::string & boundary,
-                                           Int field,
-                                           const std::vector<Int> & components,
-                                           PetscFunc * fn,
-                                           PetscFunc * fn_t,
-                                           void * context)
-{
-    CALL_STACK_MSG();
-    throw Exception("Essential BCs are not supported for FV problems");
-}
-
-void
-FVProblemInterface::add_boundary_natural(const std::string & name,
-                                         const std::string & boundary,
-                                         Int field,
-                                         const std::vector<Int> & components,
-                                         void * context)
-{
-    CALL_STACK_MSG();
-    throw Exception("Natural BCs are not supported for FV problems");
-}
-
 } // namespace godzilla

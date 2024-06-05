@@ -1823,17 +1823,4 @@ FEProblemInterface::evaluate_field_jets(PetscDS ds,
     }
 }
 
-void
-FEProblemInterface::add_boundary_natural_riemann(const std::string & name,
-                                                 const std::string & boundary,
-                                                 Int field,
-                                                 const std::vector<Int> & components,
-                                                 PetscNaturalRiemannBCFunc * fn,
-                                                 PetscNaturalRiemannBCFunc * fn_t,
-                                                 void * context)
-{
-    CALL_STACK_MSG();
-    throw Exception("Natural Riemann BCs are not supported for FE problems");
-}
-
 } // namespace godzilla

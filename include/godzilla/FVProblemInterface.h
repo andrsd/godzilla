@@ -72,18 +72,6 @@ protected:
     void init() override;
     void create() override;
     void set_up_ds() override;
-    void add_boundary_essential(const std::string & name,
-                                const std::string & boundary,
-                                Int field,
-                                const std::vector<Int> & components,
-                                PetscFunc * fn,
-                                PetscFunc * fn_t,
-                                void * context) override;
-    void add_boundary_natural(const std::string & name,
-                              const std::string & boundary,
-                              Int field,
-                              const std::vector<Int> & components,
-                              void * context) override;
 
     void create_aux_fields() override;
 

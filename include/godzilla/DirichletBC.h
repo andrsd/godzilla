@@ -16,10 +16,10 @@ public:
     explicit DirichletBC(const Parameters & params);
 
     void create() override;
+    void set_up() override;
     const std::vector<Int> & get_components() const override;
-    PetscFunc * get_function_t() override;
-    void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override;
-    void evaluate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override;
+    void evaluate(Real time, const Real x[], Scalar u[]) override;
+    void evaluate_t(Real time, const Real x[], Scalar u[]) override;
 
 private:
     std::vector<Int> components;

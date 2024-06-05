@@ -42,13 +42,12 @@ TEST(DirichletBCTest, api)
 
     Real time = 2.5;
     Real x[] = { 3, 5, 7 };
-    Int Nc = 1;
     Scalar u[] = { 0 };
 
-    obj.evaluate(0, time, x, Nc, u);
+    obj.evaluate(time, x, u);
     EXPECT_EQ(u[0], 37.5);
 
-    obj.evaluate_t(0, time, x, Nc, u);
+    obj.evaluate_t(time, x, u);
     EXPECT_EQ(u[0], 1.);
 }
 
@@ -87,9 +86,8 @@ TEST(DirichletBCTest, with_user_defined_fn)
 
     Real time = 0;
     Real x[] = { 0.5 };
-    Int Nc = 1;
     Scalar u[] = { 0 };
-    bc->evaluate(0, time, x, Nc, u);
+    bc->evaluate(time, x, u);
 
     EXPECT_EQ(u[0], 1.5);
 }

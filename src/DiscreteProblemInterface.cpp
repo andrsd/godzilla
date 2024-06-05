@@ -13,7 +13,6 @@
 #include "godzilla/NaturalBC.h"
 #include "godzilla/EssentialBC.h"
 #include "godzilla/Exception.h"
-#include "godzilla/FunctionDelegate.h"
 #include <set>
 #include <cassert>
 
@@ -29,6 +28,48 @@ function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void *
 }
 
 } // namespace internal
+
+ErrorCode
+DiscreteProblemInterface::essential_bc_function(Int dim,
+                                                Real time,
+                                                const Real x[],
+                                                Int nc,
+                                                Scalar u[],
+                                                void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::EssentialBCFunctionMethodAbstract *>(ctx);
+    method->invoke(dim, time, x, nc, u);
+    return 0;
+}
+
+ErrorCode
+DiscreteProblemInterface::essential_bc_function_t(Int dim,
+                                                  Real time,
+                                                  const Real x[],
+                                                  Int nc,
+                                                  Scalar u[],
+                                                  void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::EssentialBCFunctionMethodAbstract *>(ctx);
+    method->invoke_t(dim, time, x, nc, u);
+    return 0;
+}
+
+ErrorCode
+DiscreteProblemInterface::natural_riemann_bc_function(Real time,
+                                                      const Real * c,
+                                                      const Real * n,
+                                                      const Scalar * xI,
+                                                      Scalar * xG,
+                                                      void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::NaturalRiemannBCFunctionMethodAbstract *>(ctx);
+    method->invoke(time, c, n, xI, xG);
+    return 0;
+}
 
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
@@ -605,59 +646,14 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
 }
 
 void
-DiscreteProblemInterface::add_boundary_essential(const std::string & name,
-                                                 const std::string & boundary,
-                                                 Int field,
-                                                 const std::vector<Int> & components,
-                                                 PetscFunc * fn,
-                                                 PetscFunc * fn_t,
-                                                 void * context)
-{
-    auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto ids = label.get_values();
-    add_boundary(DM_BC_ESSENTIAL,
-                 name,
-                 label,
-                 ids,
-                 field,
-                 components,
-                 reinterpret_cast<void (*)()>(fn),
-                 reinterpret_cast<void (*)()>(fn_t),
-                 context);
-}
-
-void
 DiscreteProblemInterface::add_boundary_natural(const std::string & name,
                                                const std::string & boundary,
                                                Int field,
-                                               const std::vector<Int> & components,
-                                               void * context)
+                                               const std::vector<Int> & components)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
     auto ids = label.get_values();
-    add_boundary(DM_BC_NATURAL, name, label, ids, field, components, nullptr, nullptr, context);
-}
-
-void
-DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
-                                                       const std::string & boundary,
-                                                       Int field,
-                                                       const std::vector<Int> & components,
-                                                       PetscNaturalRiemannBCFunc * fn,
-                                                       PetscNaturalRiemannBCFunc * fn_t,
-                                                       void * context)
-{
-    auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto ids = label.get_values();
-    add_boundary(DM_BC_NATURAL_RIEMANN,
-                 name,
-                 label,
-                 ids,
-                 field,
-                 components,
-                 reinterpret_cast<void (*)()>(fn),
-                 reinterpret_cast<void (*)()>(fn_t),
-                 context);
+    add_boundary(DM_BC_NATURAL, name, label, ids, field, components, nullptr, nullptr, nullptr);
 }
 
 void

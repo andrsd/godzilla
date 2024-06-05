@@ -11,21 +11,6 @@
 
 namespace godzilla {
 
-static ErrorCode
-natural_riemann_boundary_condition_function(Real time,
-                                            const Real * c,
-                                            const Real * n,
-                                            const Scalar * xI,
-                                            Scalar * xG,
-                                            void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * bc = static_cast<NaturalRiemannBC *>(ctx);
-    assert(bc != nullptr);
-    bc->evaluate(time, c, n, xI, xG);
-    return 0;
-}
-
 Parameters
 NaturalRiemannBC::parameters()
 {
@@ -68,9 +53,8 @@ NaturalRiemannBC::set_up()
                                           bnd,
                                           get_field_id(),
                                           get_components(),
-                                          natural_riemann_boundary_condition_function,
-                                          nullptr,
-                                          this);
+                                          this,
+                                          &NaturalRiemannBC::evaluate);
 }
 
 } // namespace godzilla
