@@ -281,13 +281,30 @@ public:
                               const std::string & boundary,
                               Int field,
                               const std::vector<Int> & components);
-    virtual void add_boundary_natural_riemann(const std::string & name,
-                                              const std::string & boundary,
-                                              Int field,
-                                              const std::vector<Int> & components,
-                                              PetscNaturalRiemannBCFunc * fn,
-                                              PetscNaturalRiemannBCFunc * fn_t,
-                                              void * context);
+
+    template <class T>
+    void
+    add_boundary_natural_riemann(
+        const std::string & name,
+        const std::string & boundary,
+        Int field,
+        const std::vector<Int> & components,
+        T * instance,
+        void (T::*method)(Real, const Real *, const Real *, const Scalar *, Scalar *))
+    {
+        auto label = this->unstr_mesh->get_face_set_label(boundary);
+        auto ids = label.get_values();
+        auto delegate = new internal::NaturalRiemannBCFunctionMethod<T>(instance, method);
+        add_boundary(DM_BC_NATURAL_RIEMANN,
+                     name,
+                     label,
+                     ids,
+                     field,
+                     components,
+                     reinterpret_cast<void (*)()>(natural_riemann_bc_function),
+                     nullptr,
+                     delegate);
+    }
 
     template <Int N>
     void set_closure(const Vector & v,
@@ -454,6 +471,13 @@ private:
     essential_bc_function(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
     static ErrorCode
     essential_bc_function_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
+
+    static ErrorCode natural_riemann_bc_function(Real time,
+                                                 const Real * c,
+                                                 const Real * n,
+                                                 const Scalar * xI,
+                                                 Scalar * xG,
+                                                 void * ctx);
 };
 
 template <Int N>

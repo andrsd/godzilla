@@ -355,14 +355,6 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
                     "in the mesh."));
 }
 
-TEST_F(FENonlinearProblemTest, natural_riemann_bcs_not_supported)
-{
-    Label label;
-    EXPECT_THROW_MSG(
-        this->prob->add_boundary_natural_riemann("", "", -1, {}, nullptr, nullptr, nullptr),
-        "Natural Riemann BCs are not supported for FE problems");
-}
-
 TEST(TwoFieldFENonlinearProblemTest, field_decomposition)
 {
     TestApp app;

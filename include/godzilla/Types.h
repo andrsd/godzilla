@@ -54,13 +54,6 @@ typedef void PetscFieldFunc(Int dim,
 
 typedef ErrorCode PetscFunc(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx);
 
-typedef ErrorCode PetscNaturalRiemannBCFunc(Real time,
-                                            const Real * c,
-                                            const Real * n,
-                                            const Scalar * xI,
-                                            Scalar * xG,
-                                            void * ctx);
-
 //
 
 enum CoordinateType { CARTESIAN, SPHERICAL, AXISYMMETRIC };

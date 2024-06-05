@@ -91,4 +91,34 @@ private:
     void (T::*method_t)(Real, const Real[], Scalar[]);
 };
 
+// Machinery for NaturalRiemannBC function
+
+struct NaturalRiemannBCFunctionMethodAbstract {
+    virtual ~NaturalRiemannBCFunctionMethodAbstract() = default;
+    virtual ErrorCode
+    invoke(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) = 0;
+};
+
+template <typename T>
+struct NaturalRiemannBCFunctionMethod : public NaturalRiemannBCFunctionMethodAbstract {
+    NaturalRiemannBCFunctionMethod(
+        T * instance,
+        void (T::*method)(Real, const Real *, const Real *, const Scalar *, Scalar *)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG) override
+    {
+        ((*this->instance).*method)(time, c, n, xI, xG);
+        return 0;
+    }
+
+private:
+    T * instance;
+    void (T::*method)(Real, const Real *, const Real *, const Scalar *, Scalar *);
+};
+
 } // namespace godzilla::internal

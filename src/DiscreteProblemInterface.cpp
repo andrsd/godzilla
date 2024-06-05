@@ -57,6 +57,20 @@ DiscreteProblemInterface::essential_bc_function_t(Int dim,
     return 0;
 }
 
+ErrorCode
+DiscreteProblemInterface::natural_riemann_bc_function(Real time,
+                                                      const Real * c,
+                                                      const Real * n,
+                                                      const Scalar * xI,
+                                                      Scalar * xG,
+                                                      void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::NaturalRiemannBCFunctionMethodAbstract *>(ctx);
+    method->invoke(time, c, n, xI, xG);
+    return 0;
+}
+
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
     unstr_mesh(nullptr),
@@ -640,28 +654,6 @@ DiscreteProblemInterface::add_boundary_natural(const std::string & name,
     auto label = this->unstr_mesh->get_face_set_label(boundary);
     auto ids = label.get_values();
     add_boundary(DM_BC_NATURAL, name, label, ids, field, components, nullptr, nullptr, nullptr);
-}
-
-void
-DiscreteProblemInterface::add_boundary_natural_riemann(const std::string & name,
-                                                       const std::string & boundary,
-                                                       Int field,
-                                                       const std::vector<Int> & components,
-                                                       PetscNaturalRiemannBCFunc * fn,
-                                                       PetscNaturalRiemannBCFunc * fn_t,
-                                                       void * context)
-{
-    auto label = this->unstr_mesh->get_face_set_label(boundary);
-    auto ids = label.get_values();
-    add_boundary(DM_BC_NATURAL_RIEMANN,
-                 name,
-                 label,
-                 ids,
-                 field,
-                 components,
-                 reinterpret_cast<void (*)()>(fn),
-                 reinterpret_cast<void (*)()>(fn_t),
-                 context);
 }
 
 void

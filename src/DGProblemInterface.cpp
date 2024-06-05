@@ -543,17 +543,4 @@ DGProblemInterface::set_up_assembly_data_aux()
     // do nothing
 }
 
-void
-DGProblemInterface::add_boundary_natural_riemann(const std::string & name,
-                                                 const std::string & boundary,
-                                                 Int field,
-                                                 const std::vector<Int> & components,
-                                                 PetscNaturalRiemannBCFunc * fn,
-                                                 PetscNaturalRiemannBCFunc * fn_t,
-                                                 void * context)
-{
-    CALL_STACK_MSG();
-    throw Exception("Natural Riemann BCs are not supported for DG problems");
-}
-
 } // namespace godzilla
