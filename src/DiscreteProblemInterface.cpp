@@ -635,12 +635,11 @@ void
 DiscreteProblemInterface::add_boundary_natural(const std::string & name,
                                                const std::string & boundary,
                                                Int field,
-                                               const std::vector<Int> & components,
-                                               void * context)
+                                               const std::vector<Int> & components)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
     auto ids = label.get_values();
-    add_boundary(DM_BC_NATURAL, name, label, ids, field, components, nullptr, nullptr, context);
+    add_boundary(DM_BC_NATURAL, name, label, ids, field, components, nullptr, nullptr, nullptr);
 }
 
 void

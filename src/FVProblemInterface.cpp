@@ -414,15 +414,4 @@ FVProblemInterface::create_aux_fields()
     }
 }
 
-void
-FVProblemInterface::add_boundary_natural(const std::string & name,
-                                         const std::string & boundary,
-                                         Int field,
-                                         const std::vector<Int> & components,
-                                         void * context)
-{
-    CALL_STACK_MSG();
-    throw Exception("Natural BCs are not supported for FV problems");
-}
-
 } // namespace godzilla

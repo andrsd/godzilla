@@ -277,11 +277,10 @@ public:
                      delegate);
     }
 
-    virtual void add_boundary_natural(const std::string & name,
-                                      const std::string & boundary,
-                                      Int field,
-                                      const std::vector<Int> & components,
-                                      void * context);
+    void add_boundary_natural(const std::string & name,
+                              const std::string & boundary,
+                              Int field,
+                              const std::vector<Int> & components);
     virtual void add_boundary_natural_riemann(const std::string & name,
                                               const std::string & boundary,
                                               Int field,

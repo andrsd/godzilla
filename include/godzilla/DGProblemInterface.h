@@ -105,11 +105,6 @@ protected:
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
-    void add_boundary_natural(const std::string & name,
-                              const std::string & boundary,
-                              Int field,
-                              const std::vector<Int> & components,
-                              void * context) override;
     void add_boundary_natural_riemann(const std::string & name,
                                       const std::string & boundary,
                                       Int field,

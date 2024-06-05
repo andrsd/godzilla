@@ -81,16 +81,6 @@ public:
         ExplicitFVLinearProblem::set_up_time_scheme();
     }
 
-    void
-    add_boundary_natural(const std::string & name,
-                         const std::string & boundary,
-                         Int field,
-                         const std::vector<Int> & components,
-                         void * context) override
-    {
-        ExplicitFVLinearProblem::add_boundary_natural(name, boundary, field, components, context);
-    }
-
     ErrorCode
     compute_flux(const Real x[],
                  const Real n[],
@@ -210,9 +200,6 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_TRUE(prob.get_aux_field_component_name(1, 1) == "Y");
     EXPECT_THROW_MSG(prob.set_aux_field_component_name(99, 0, "A"),
                      "Auxiliary field with ID = '99' does not exist.");
-
-    EXPECT_THROW_MSG(prob.add_boundary_natural("", "", -1, {}, nullptr),
-                     "Natural BCs are not supported for FV problems");
 }
 
 TEST(ExplicitFVLinearProblemTest, fields)
