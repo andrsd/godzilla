@@ -408,8 +408,9 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
 
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
-        func[fid] = aux->get_func();
-        ctxs[fid] = const_cast<void *>(aux->get_context());
+        auto method = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
+        func[fid] = internal::function_delegate;
+        ctxs[fid] = method;
     }
 
     PETSC_CHECK(DMProjectFunctionLocal(dm,
@@ -418,6 +419,9 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
                                        ctxs.data(),
                                        INSERT_ALL_VALUES,
                                        a));
+
+    for (auto & ctx : ctxs)
+        delete static_cast<internal::FunctionMethodAbstract *>(ctx);
 }
 
 void
@@ -433,8 +437,9 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
 
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
-        func[fid] = aux->get_func();
-        ctxs[fid] = const_cast<void *>(aux->get_context());
+        auto method = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
+        func[fid] = internal::function_delegate;
+        ctxs[fid] = method;
     }
 
     auto ids = label.get_value_index_set();
@@ -452,6 +457,9 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
                                             a));
     ids.restore_indices();
     ids.destroy();
+
+    for (auto & ctx : ctxs)
+        delete static_cast<internal::FunctionMethodAbstract *>(ctx);
 }
 
 void

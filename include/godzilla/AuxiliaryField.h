@@ -58,11 +58,7 @@ public:
     /// @return The number of constrained components
     [[nodiscard]] virtual Int get_num_components() const = 0;
 
-    [[nodiscard]] virtual PetscFunc * get_func() const = 0;
-
-    virtual const void * get_context() const;
-
-    virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
+    virtual void evaluate(Real time, const Real x[], Scalar u[]) = 0;
 
     template <Int DIM>
     Real get_value(Real time, const DenseVector<Real, DIM> & x);
@@ -112,7 +108,7 @@ inline Real
 AuxiliaryField::get_value(Real time, const DenseVector<Real, DIM> & x)
 {
     Real val;
-    evaluate(DIM, time, x.data(), 1, &val);
+    evaluate(time, x.data(), &val);
     return val;
 }
 
@@ -121,7 +117,7 @@ inline DenseVector<Real, N>
 AuxiliaryField::get_vector_value(Real time, const DenseVector<Real, DIM> & x)
 {
     DenseVector<Real, N> val;
-    evaluate(DIM, time, x.data(), N, val.data());
+    evaluate(time, x.data(), val.data());
     return val;
 }
 

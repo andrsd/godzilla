@@ -8,14 +8,6 @@
 
 namespace godzilla {
 
-static ErrorCode
-function_auxiliary_field(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
-{
-    auto * func = static_cast<FunctionAuxiliaryField *>(ctx);
-    func->evaluate(dim, time, x, nc, u);
-    return 0;
-}
-
 Parameters
 FunctionAuxiliaryField::parameters()
 {
@@ -46,18 +38,11 @@ FunctionAuxiliaryField::get_num_components() const
     return FunctionInterface::get_num_components();
 }
 
-PetscFunc *
-FunctionAuxiliaryField::get_func() const
-{
-    CALL_STACK_MSG();
-    return function_auxiliary_field;
-}
-
 void
-FunctionAuxiliaryField::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
+FunctionAuxiliaryField::evaluate(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    evaluate_func(time, x, nc, u);
+    evaluate_func(time, x, get_num_components(), u);
 }
 
 } // namespace godzilla

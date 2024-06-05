@@ -15,8 +15,7 @@ public:
     explicit ConstantAuxiliaryField(const Parameters & params);
 
     [[nodiscard]] Int get_num_components() const override;
-    [[nodiscard]] PetscFunc * get_func() const override;
-    void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override;
+    void evaluate(Real time, const Real x[], Scalar u[]) override;
 
 private:
     /// Values (one per component)

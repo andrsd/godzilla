@@ -35,4 +35,24 @@ private:
     void (T::*method)(Real, const Real[], Scalar[]);
 };
 
+template <typename T>
+struct AuxFunctionMethod : public FunctionMethodAbstract {
+    AuxFunctionMethod(T * instance, void (T::*method)(Real, const Real[], Scalar[])) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+    {
+        ((*this->instance).*method)(time, x, u);
+        return 0;
+    }
+
+private:
+    T * instance;
+    void (T::*method)(Real, const Real[], Scalar[]);
+};
+
 } // namespace godzilla::internal
