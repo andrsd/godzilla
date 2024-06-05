@@ -7,7 +7,6 @@ using namespace godzilla;
 
 TEST(ConstantICTest, api)
 {
-    mpi::Communicator comm(MPI_COMM_WORLD);
     TestApp app;
 
     Parameters params = ConstantInitialCondition::parameters();
@@ -18,12 +17,10 @@ TEST(ConstantICTest, api)
     EXPECT_EQ(obj.get_field_id(), -1);
     EXPECT_EQ(obj.get_num_components(), 3);
 
-    Int dim = 2;
     Real time = 0.;
     Real x[] = { 0 };
-    Int Nc = 3;
     Scalar u[] = { 0, 0, 0 };
-    obj.evaluate(dim, time, x, Nc, u);
+    obj.evaluate(time, x, u);
 
     EXPECT_EQ(u[0], 3);
     EXPECT_EQ(u[1], 4);

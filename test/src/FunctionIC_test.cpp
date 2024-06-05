@@ -39,9 +39,8 @@ TEST(FunctionICTest, api)
 
     Real time = 2.;
     Real x[] = { 1, 2, 3 };
-    Int Nc = 1;
     Scalar u[] = { 0 };
-    obj.evaluate(0, time, x, Nc, u);
+    obj.evaluate(time, x, u);
 
     EXPECT_EQ(u[0], 12);
 }

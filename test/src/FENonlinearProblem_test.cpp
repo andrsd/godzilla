@@ -30,7 +30,7 @@ public:
     }
 
     void
-    evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[]) override
+    evaluate(Real time, const Real x[], Scalar u[]) override
     {
         u[0] = 0.;
         u[1] = 10.;

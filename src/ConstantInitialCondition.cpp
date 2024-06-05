@@ -31,10 +31,10 @@ ConstantInitialCondition::get_num_components() const
 }
 
 void
-ConstantInitialCondition::evaluate(Int dim, Real time, const Real x[], Int Nc, Scalar u[])
+ConstantInitialCondition::evaluate(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    for (Int i = 0; i < Nc; i++)
+    for (Int i = 0; i < this->values.size(); i++)
         u[i] = this->values[i];
 }
 

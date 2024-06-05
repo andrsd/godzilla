@@ -37,10 +37,10 @@ FunctionInitialCondition::get_num_components() const
 }
 
 void
-FunctionInitialCondition::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
+FunctionInitialCondition::evaluate(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    evaluate_func(time, x, nc, u);
+    evaluate_func(time, x, get_num_components(), u);
 }
 
 } // namespace godzilla

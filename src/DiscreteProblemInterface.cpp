@@ -13,10 +13,22 @@
 #include "godzilla/NaturalBC.h"
 #include "godzilla/EssentialBC.h"
 #include "godzilla/Exception.h"
+#include "godzilla/FunctionDelegate.h"
 #include <set>
 #include <cassert>
 
 namespace godzilla {
+
+namespace internal {
+
+ErrorCode
+function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
+{
+    auto * method = static_cast<FunctionMethodAbstract *>(ctx);
+    return method->invoke(dim, time, x, nc, u);
+}
+
+} // namespace internal
 
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
@@ -496,20 +508,24 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
 {
     CALL_STACK_MSG();
     auto n_ics = this->ics.size();
-    PetscFunc * ic_funcs[n_ics];
-    void * ic_ctxs[n_ics];
+    std::vector<PetscFunc *> funcs(n_ics);
+    std::vector<void *> ctxs(n_ics);
     for (auto & ic : this->ics) {
         Int fid = ic->get_field_id();
-        ic_funcs[fid] = ic->get_function();
-        ic_ctxs[fid] = const_cast<void *>(ic->get_context());
+        auto method = new internal::ICFunctionMethod(ic, &InitialCondition::evaluate);
+        funcs[fid] = internal::function_delegate;
+        ctxs[fid] = method;
     }
 
     PETSC_CHECK(DMProjectFunction(this->unstr_mesh->get_dm(),
                                   this->problem->get_time(),
-                                  ic_funcs,
-                                  ic_ctxs,
+                                  funcs.data(),
+                                  ctxs.data(),
                                   INSERT_VALUES,
                                   this->problem->get_solution_vector()));
+
+    for (auto & ctx : ctxs)
+        delete static_cast<internal::FunctionMethodAbstract *>(ctx);
 }
 
 void

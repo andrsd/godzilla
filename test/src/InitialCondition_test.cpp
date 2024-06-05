@@ -26,7 +26,13 @@ public:
     {
         return 1.;
     }
-    MOCK_METHOD(void, evaluate, (Int, Real, const Real x[], Int Nc, Scalar u[]), ());
+    MOCK_METHOD(void, evaluate, (Real, const Real x[], Scalar u[]), ());
+
+    Int
+    get_dimension() const
+    {
+        return InitialCondition::get_dimension();
+    }
 };
 
 class TestInitialCondition : public InitialCondition {
@@ -40,7 +46,7 @@ public:
     }
 
     void
-    evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+    evaluate(Real time, const Real x[], Scalar u[]) override
     {
         u[0] = time * (x[0] + 10);
     }
@@ -57,7 +63,7 @@ public:
     }
 
     void
-    evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+    evaluate(Real time, const Real x[], Scalar u[]) override
     {
         u[0] = time * (x[0] + 5);
         u[1] = (x[0] + time);
@@ -75,12 +81,6 @@ TEST_F(InitialConditionTest, api)
     MockInitialCondition ic(params);
 
     EXPECT_EQ(ic.get_field_id(), -1);
-
-    Real x[1] = { 0. };
-    Real u[1] = { 0. };
-    EXPECT_CALL(ic, evaluate);
-    PetscFunc * fn = ic.get_function();
-    EXPECT_EQ((*fn)(1, 0., x, 1, u, &ic), 0);
 }
 
 TEST_F(InitialConditionTest, test)
@@ -110,6 +110,7 @@ TEST_F(InitialConditionTest, test)
     this->app->check_integrity();
 
     EXPECT_EQ(ic.get_field_id(), 0);
+    EXPECT_EQ(ic.get_dimension(), 1);
 
     EXPECT_TRUE(this->prob->has_initial_condition("obj"));
     EXPECT_EQ(this->prob->get_initial_condition("obj"), &ic);
