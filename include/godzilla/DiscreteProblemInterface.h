@@ -13,6 +13,7 @@
 #include "godzilla/Section.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/DenseMatrixSymm.h"
+#include "godzilla/FunctionDelegate.h"
 
 namespace godzilla {
 
@@ -252,13 +253,30 @@ public:
                       void (*bc_fn_t)(void),
                       void * context);
 
-    virtual void add_boundary_essential(const std::string & name,
-                                        const std::string & boundary,
-                                        Int field,
-                                        const std::vector<Int> & components,
-                                        PetscFunc * fn,
-                                        PetscFunc * fn_t,
-                                        void * context);
+    template <class T>
+    void
+    add_boundary_essential(const std::string & name,
+                           const std::string & boundary,
+                           Int field,
+                           const std::vector<Int> & components,
+                           T * instance,
+                           void (T::*method)(Real, const Real[], Scalar[]),
+                           void (T::*method_t)(Real, const Real[], Scalar[]))
+    {
+        auto label = this->unstr_mesh->get_face_set_label(boundary);
+        auto ids = label.get_values();
+        auto delegate = new internal::EssentialBCFunctionMethod<T>(instance, method, method_t);
+        add_boundary(DM_BC_ESSENTIAL,
+                     name,
+                     label,
+                     ids,
+                     field,
+                     components,
+                     reinterpret_cast<void (*)()>(essential_bc_function),
+                     method_t ? reinterpret_cast<void (*)()>(essential_bc_function_t) : nullptr,
+                     delegate);
+    }
+
     virtual void add_boundary_natural(const std::string & name,
                                       const std::string & boundary,
                                       Int field,
@@ -431,6 +449,12 @@ private:
 
     /// Vector for auxiliary fields
     Vector a;
+
+private:
+    static ErrorCode
+    essential_bc_function(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
+    static ErrorCode
+    essential_bc_function_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
 };
 
 template <Int N>

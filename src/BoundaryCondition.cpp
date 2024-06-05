@@ -35,6 +35,13 @@ BoundaryCondition::get_problem() const
     return this->dpi->get_problem();
 }
 
+Int
+BoundaryCondition::get_dimension() const
+{
+    CALL_STACK_MSG();
+    return get_problem()->get_dimension();
+}
+
 const std::vector<std::string> &
 BoundaryCondition::get_boundary() const
 {

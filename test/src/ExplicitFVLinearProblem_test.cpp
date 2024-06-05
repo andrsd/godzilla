@@ -82,24 +82,6 @@ public:
     }
 
     void
-    add_boundary_essential(const std::string & name,
-                           const std::string & boundary,
-                           Int field,
-                           const std::vector<Int> & components,
-                           PetscFunc * fn,
-                           PetscFunc * fn_t,
-                           void * context) override
-    {
-        ExplicitFVLinearProblem::add_boundary_essential(name,
-                                                        boundary,
-                                                        field,
-                                                        components,
-                                                        fn,
-                                                        fn_t,
-                                                        context);
-    }
-
-    void
     add_boundary_natural(const std::string & name,
                          const std::string & boundary,
                          Int field,
@@ -229,9 +211,6 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_THROW_MSG(prob.set_aux_field_component_name(99, 0, "A"),
                      "Auxiliary field with ID = '99' does not exist.");
 
-    Label label;
-    EXPECT_THROW_MSG(prob.add_boundary_essential("", "", -1, {}, nullptr, nullptr, nullptr),
-                     "Essential BCs are not supported for FV problems");
     EXPECT_THROW_MSG(prob.add_boundary_natural("", "", -1, {}, nullptr),
                      "Natural BCs are not supported for FV problems");
 }

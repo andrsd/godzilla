@@ -55,4 +55,40 @@ private:
     void (T::*method)(Real, const Real[], Scalar[]);
 };
 
+/// Abstract "method" for calling EssentialBC functions
+struct EssentialBCFunctionMethodAbstract : public FunctionMethodAbstract {
+    virtual ErrorCode invoke_t(Int dim, Real time, const Real x[], Int nc, Scalar u[]) = 0;
+};
+
+template <typename T>
+struct EssentialBCFunctionMethod : public EssentialBCFunctionMethodAbstract {
+    EssentialBCFunctionMethod(T * instance,
+                              void (T::*method)(Real, const Real[], Scalar[]),
+                              void (T::*method_t)(Real, const Real[], Scalar[])) :
+        instance(instance),
+        method(method),
+        method_t(method_t)
+    {
+    }
+
+    ErrorCode
+    invoke(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+    {
+        ((*this->instance).*method)(time, x, u);
+        return 0;
+    }
+
+    ErrorCode
+    invoke_t(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
+    {
+        ((*this->instance).*method_t)(time, x, u);
+        return 0;
+    }
+
+private:
+    T * instance;
+    void (T::*method)(Real, const Real[], Scalar[]);
+    void (T::*method_t)(Real, const Real[], Scalar[]);
+};
+
 } // namespace godzilla::internal

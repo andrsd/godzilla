@@ -16,8 +16,8 @@ class TestEssentialBC : public EssentialBC {
 public:
     explicit TestEssentialBC(const Parameters & pars) : EssentialBC(pars), components({ 0 }) {}
 
-    MOCK_METHOD(void, evaluate, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
-    MOCK_METHOD(void, evaluate_t, (Int dim, Real time, const Real x[], Int nc, Scalar u[]));
+    MOCK_METHOD(void, evaluate, (Real time, const Real x[], Scalar u[]));
+    MOCK_METHOD(void, evaluate_t, (Real time, const Real x[], Scalar u[]));
 
     const std::vector<Int> &
     get_components() const override
@@ -58,19 +58,6 @@ TEST(EssentialBCTest, api)
     const auto & comps = bc.get_components();
     EXPECT_EQ(comps.size(), 1);
     EXPECT_EQ(comps[0], 0);
-
-    Real x[] = { 3 };
-    Scalar u[] = { 0 };
-
-    EXPECT_CALL(bc, evaluate);
-    PetscFunc * fn = bc.get_function();
-    (*fn)(1, 0, x, 1, u, &bc);
-
-    EXPECT_CALL(bc, evaluate_t);
-    PetscFunc * fn_t = bc.get_function_t();
-    (*fn_t)(1, 0, x, 1, u, &bc);
-
-    EXPECT_EQ(bc.get_context(), &bc);
     EXPECT_EQ(bc.get_field_id(), 0);
 }
 

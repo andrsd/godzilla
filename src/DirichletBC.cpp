@@ -4,6 +4,7 @@
 #include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/DirichletBC.h"
+#include "godzilla/DiscreteProblemInterface.h"
 
 namespace godzilla {
 
@@ -41,28 +42,33 @@ DirichletBC::get_components() const
     return this->components;
 }
 
-PetscFunc *
-DirichletBC::get_function_t()
+void
+DirichletBC::evaluate(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    if (has_time_expression())
-        return EssentialBC::get_function_t();
-    else
-        return nullptr;
+    evaluate_func(time, x, get_num_components(), u);
 }
 
 void
-DirichletBC::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
+DirichletBC::evaluate_t(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    evaluate_func(time, x, nc, u);
+    evaluate_func_t(time, x, get_num_components(), u);
 }
 
 void
-DirichletBC::evaluate_t(Int dim, Real time, const Real x[], Int nc, Scalar u[])
+DirichletBC::set_up()
 {
     CALL_STACK_MSG();
-    evaluate_func_t(time, x, nc, u);
+    auto dpi = get_discrete_problem_interface();
+    for (auto & bnd : get_boundary())
+        dpi->add_boundary_essential(get_name(),
+                                    bnd,
+                                    get_field_id(),
+                                    get_components(),
+                                    this,
+                                    &DirichletBC::evaluate,
+                                    has_time_expression() ? &DirichletBC::evaluate_t : nullptr);
 }
 
 } // namespace godzilla

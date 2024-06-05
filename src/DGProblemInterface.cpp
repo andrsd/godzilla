@@ -544,19 +544,6 @@ DGProblemInterface::set_up_assembly_data_aux()
 }
 
 void
-DGProblemInterface::add_boundary_essential(const std::string & name,
-                                           const std::string & boundary,
-                                           Int field,
-                                           const std::vector<Int> & components,
-                                           PetscFunc * fn,
-                                           PetscFunc * fn_t,
-                                           void * context)
-{
-    CALL_STACK_MSG();
-    // do nothing
-}
-
-void
 DGProblemInterface::add_boundary_natural(const std::string & name,
                                          const std::string & boundary,
                                          Int field,

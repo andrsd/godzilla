@@ -10,36 +10,6 @@
 
 namespace godzilla {
 
-static ErrorCode
-essential_boundary_condition_function(Int dim,
-                                      Real time,
-                                      const Real x[],
-                                      Int nc,
-                                      Scalar u[],
-                                      void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * bc = static_cast<EssentialBC *>(ctx);
-    assert(bc != nullptr);
-    bc->evaluate(dim, time, x, nc, u);
-    return 0;
-}
-
-static ErrorCode
-essential_boundary_condition_function_t(Int dim,
-                                        Real time,
-                                        const Real x[],
-                                        Int nc,
-                                        Scalar u[],
-                                        void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * bc = static_cast<EssentialBC *>(ctx);
-    assert(bc != nullptr);
-    bc->evaluate_t(dim, time, x, nc, u);
-    return 0;
-}
-
 Parameters
 EssentialBC::parameters()
 {
@@ -86,27 +56,6 @@ EssentialBC::get_field_id() const
     return this->fid;
 }
 
-PetscFunc *
-EssentialBC::get_function()
-{
-    CALL_STACK_MSG();
-    return essential_boundary_condition_function;
-}
-
-PetscFunc *
-EssentialBC::get_function_t()
-{
-    CALL_STACK_MSG();
-    return essential_boundary_condition_function_t;
-}
-
-const void *
-EssentialBC::get_context() const
-{
-    CALL_STACK_MSG();
-    return this;
-}
-
 void
 EssentialBC::set_up()
 {
@@ -117,9 +66,9 @@ EssentialBC::set_up()
                                     bnd,
                                     get_field_id(),
                                     get_components(),
-                                    get_function(),
-                                    get_function_t(),
-                                    this);
+                                    this,
+                                    &EssentialBC::evaluate,
+                                    &EssentialBC::evaluate_t);
 }
 
 } // namespace godzilla

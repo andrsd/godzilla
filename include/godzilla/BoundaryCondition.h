@@ -20,6 +20,11 @@ public:
     explicit BoundaryCondition(const Parameters & params);
     ~BoundaryCondition() override = default;
 
+    /// Get problem spatial dimension
+    ///
+    /// @return Spatial dimension
+    Int get_dimension() const;
+
     /// Get the boundary name this BC is active on
     ///
     /// @return The boundary name
