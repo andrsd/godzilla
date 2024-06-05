@@ -12,7 +12,7 @@ namespace godzilla {
 class StarForest {
 public:
     /// Alias for PetscSFNode
-    typedef PetscSFNode Node;
+    using Node = PetscSFNode;
 
     class Graph {
     public:

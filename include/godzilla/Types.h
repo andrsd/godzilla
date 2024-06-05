@@ -8,10 +8,10 @@
 
 namespace godzilla {
 
-typedef PetscInt Int;
-typedef PetscReal Real;
-typedef PetscScalar Scalar;
-typedef PetscErrorCode ErrorCode;
+using Int = PetscInt;
+using Real = PetscReal;
+using Scalar = PetscScalar;
+using ErrorCode = PetscErrorCode;
 
 typedef ErrorCode PetscFunc(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx);
 

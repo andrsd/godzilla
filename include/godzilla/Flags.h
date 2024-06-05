@@ -28,7 +28,7 @@ class Flags {
 public:
     static_assert(std::is_enum<ENUM>::value, "Flags is only usable on enumeration types.");
 
-    typedef ENUM enum_type;
+    using enum_type = ENUM;
 
     constexpr inline Flags() noexcept : mask(0) {}
 
