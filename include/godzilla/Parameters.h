@@ -190,10 +190,10 @@ public:
     }
 
     /// Parameter map iterator.
-    typedef std::map<std::string, Parameters::Value *>::iterator iterator;
+    using iterator = std::map<std::string, Parameters::Value *>::iterator;
 
     /// Constant parameter map iterator.
-    typedef std::map<std::string, Parameters::Value *>::const_iterator const_iterator;
+    using const_iterator = std::map<std::string, Parameters::Value *>::const_iterator;
 
     /// Iterator pointing to the beginning of the set of parameters.
     Parameters::iterator
