@@ -86,9 +86,11 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">InitialCondition</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla16InitialConditionE"><code class="docutils literal notranslate"><span class="pre">InitialCondition</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16InitialCondition6createEv"><code class="docutils literal notranslate"><span class="pre">InitialCondition::create()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16InitialCondition12get_functionEv"><code class="docutils literal notranslate"><span class="pre">InitialCondition::get_function()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16InitialCondition11get_contextEv"><code class="docutils literal notranslate"><span class="pre">InitialCondition::get_context()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16InitialCondition8evaluateE3Int4RealA_K4Real3IntA_6Scalar"><code class="docutils literal notranslate"><span class="pre">InitialCondition::evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16InitialCondition13get_dimensionEv"><code class="docutils literal notranslate"><span class="pre">InitialCondition::get_dimension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16InitialCondition14get_field_nameEv"><code class="docutils literal notranslate"><span class="pre">InitialCondition::get_field_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16InitialCondition12get_field_idEv"><code class="docutils literal notranslate"><span class="pre">InitialCondition::get_field_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16InitialCondition18get_num_componentsEv"><code class="docutils literal notranslate"><span class="pre">InitialCondition::get_num_components()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16InitialCondition8evaluateE4RealA_K4RealA_6Scalar"><code class="docutils literal notranslate"><span class="pre">InitialCondition::evaluate()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -154,25 +156,56 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16InitialCondition12get_functionEv">
-<span id="_CPPv3N8godzilla16InitialCondition12get_functionEv"></span><span id="_CPPv2N8godzilla16InitialCondition12get_functionEv"></span><span id="godzilla::InitialCondition::get_function"></span><span class="target" id="classgodzilla_1_1_initial_condition_1aaf83157ce1e4f51dc17145b9337578ca"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscFunc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_function</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16InitialCondition12get_functionEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get pointer to the C function that will be passed into PETSc API. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16InitialCondition13get_dimensionEv">
+<span id="_CPPv3NK8godzilla16InitialCondition13get_dimensionEv"></span><span id="_CPPv2NK8godzilla16InitialCondition13get_dimensionEv"></span><span id="godzilla::InitialCondition::get_dimensionC"></span><span class="target" id="classgodzilla_1_1_initial_condition_1add7c99c5fb53e20db05df8d9ae616857"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_dimension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16InitialCondition13get_dimensionEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get problem spatial dimension. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Spatial dimension </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16InitialCondition11get_contextEv">
-<span id="_CPPv3NK8godzilla16InitialCondition11get_contextEv"></span><span id="_CPPv2NK8godzilla16InitialCondition11get_contextEv"></span><span id="godzilla::InitialCondition::get_contextC"></span><span class="target" id="classgodzilla_1_1_initial_condition_1a2c06d962bbf3baf0e53db1e9bbc5c5e8"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_context</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16InitialCondition11get_contextEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get the pointer to the context that will be passed into PETSc API. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16InitialCondition14get_field_nameEv">
+<span id="_CPPv3NK8godzilla16InitialCondition14get_field_nameEv"></span><span id="_CPPv2NK8godzilla16InitialCondition14get_field_nameEv"></span><span id="godzilla::InitialCondition::get_field_nameC"></span><span class="target" id="classgodzilla_1_1_initial_condition_1a5a306e6a7fa55909654ebce729f44054"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_field_name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16InitialCondition14get_field_nameEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get field name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The field name </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16InitialCondition8evaluateE3Int4RealA_K4Real3IntA_6Scalar">
-<span id="_CPPv3N8godzilla16InitialCondition8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla16InitialCondition8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::InitialCondition::evaluate__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_initial_condition_1a499b9b59ddd360f3cd061bfe2ccef033"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla16InitialCondition8evaluateE3Int4RealA_K4Real3IntA_6Scalar" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16InitialCondition12get_field_idEv">
+<span id="_CPPv3NK8godzilla16InitialCondition12get_field_idEv"></span><span id="_CPPv2NK8godzilla16InitialCondition12get_field_idEv"></span><span id="godzilla::InitialCondition::get_field_idC"></span><span class="target" id="classgodzilla_1_1_initial_condition_1af6e0455a4028e66ee825592a596cf07a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_field_id</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16InitialCondition12get_field_idEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the ID of the field this boundary condition operates on. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ID of the field </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16InitialCondition18get_num_componentsEv">
+<span id="_CPPv3NK8godzilla16InitialCondition18get_num_componentsEv"></span><span id="_CPPv2NK8godzilla16InitialCondition18get_num_componentsEv"></span><span id="godzilla::InitialCondition::get_num_componentsC"></span><span class="target" id="classgodzilla_1_1_initial_condition_1ad69143d1d5389a8b8c6c4d575f334be2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16InitialCondition18get_num_componentsEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get the number of constrained components. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of constrained components </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16InitialCondition8evaluateE4RealA_K4RealA_6Scalar">
+<span id="_CPPv3N8godzilla16InitialCondition8evaluateE4RealA_K4RealA_6Scalar"></span><span id="_CPPv2N8godzilla16InitialCondition8evaluateE4RealA_K4RealA_6Scalar"></span><span id="godzilla::InitialCondition::evaluate__Real.RealCA.ScalarA"></span><span class="target" id="classgodzilla_1_1_initial_condition_1a84b1110efbea361bc6e1835eb3d19c1c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N8godzilla16InitialCondition8evaluateE4RealA_K4RealA_6Scalar" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate the initial condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dim</strong> – The spatial dimension </p></li>
 <li><p><strong>time</strong> – The time at which to sample </p></li>
 <li><p><strong>x</strong> – The coordinates </p></li>
 <li><p><strong>nc</strong> – The number of components </p></li>
