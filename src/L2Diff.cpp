@@ -65,7 +65,7 @@ void
 L2Diff::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
 {
     CALL_STACK_MSG();
-    evaluate_func(dim, time, x, nc, u);
+    evaluate_func(time, x, nc, u);
 }
 
 } // namespace godzilla

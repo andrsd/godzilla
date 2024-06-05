@@ -10,6 +10,7 @@
 namespace godzilla {
 
 class App;
+class Problem;
 
 /// Interface for parsed function
 ///
@@ -33,26 +34,26 @@ public:
     /// Evaluate parsed function
     ///
     /// @return 'true' if evaluation was successful, `false` otherwise
-    /// @param dim Spatial dimension of the evaluated function
     /// @param time Time of the time-dependent function
     /// @param x Spatial coordinate where we evaluate the function (has size of `dim`)
     /// @param nc Number of components
     /// @param u The result of evaluation (one per component)
-    bool evaluate_func(Int dim, Real time, const Real x[], Int nc, Real u[]);
+    bool evaluate_func(Real time, const Real x[], Int nc, Real u[]);
 
     /// Evaluate parsed time derivative function
     ///
     /// @return 'true' if evaluation was successful, `false` otherwise
-    /// @param dim Spatial dimension of the evaluated function
     /// @param time Time of the time-dependent function
     /// @param x Spatial coordinate where we evaluate the function (has size of `dim`)
     /// @param nc Number of components
     /// @param u The result of evaluation (one per component)
-    bool evaluate_func_t(Int dim, Real time, const Real x[], Int nc, Real u[]);
+    bool evaluate_func_t(Real time, const Real x[], Int nc, Real u[]);
 
 private:
     /// Application
     const App * fi_app;
+    /// Problem
+    const Problem * problem;
     /// Function expressions
     const std::vector<std::string> & expression;
     /// Time derivatives of `expression`
