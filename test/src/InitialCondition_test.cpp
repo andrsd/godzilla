@@ -27,12 +27,6 @@ public:
         return 1.;
     }
     MOCK_METHOD(void, evaluate, (Real, const Real x[], Scalar u[]), ());
-
-    Int
-    get_dimension() const
-    {
-        return InitialCondition::get_dimension();
-    }
 };
 
 class TestInitialCondition : public InitialCondition {
