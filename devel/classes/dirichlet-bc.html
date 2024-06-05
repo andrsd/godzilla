@@ -66,10 +66,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">DirichletBC</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBCE"><code class="docutils literal notranslate"><span class="pre">DirichletBC</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC6createEv"><code class="docutils literal notranslate"><span class="pre">DirichletBC::create()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC6set_upEv"><code class="docutils literal notranslate"><span class="pre">DirichletBC::set_up()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla11DirichletBC14get_componentsEv"><code class="docutils literal notranslate"><span class="pre">DirichletBC::get_components()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC14get_function_tEv"><code class="docutils literal notranslate"><span class="pre">DirichletBC::get_function_t()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"><code class="docutils literal notranslate"><span class="pre">DirichletBC::evaluate()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"><code class="docutils literal notranslate"><span class="pre">DirichletBC::evaluate_t()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC8evaluateE4RealA_K4RealA_6Scalar"><code class="docutils literal notranslate"><span class="pre">DirichletBC::evaluate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla11DirichletBC10evaluate_tE4RealA_K4RealA_6Scalar"><code class="docutils literal notranslate"><span class="pre">DirichletBC::evaluate_t()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -155,6 +155,12 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC6set_upEv">
+<span id="_CPPv3N8godzilla11DirichletBC6set_upEv"></span><span id="_CPPv2N8godzilla11DirichletBC6set_upEv"></span><span id="godzilla::DirichletBC::set_up"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1aa02ac53e6b2566ad81f2cbe50a37a26a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_up</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC6set_upEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Set up this boundary condition. </p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla11DirichletBC14get_componentsEv">
 <span id="_CPPv3NK8godzilla11DirichletBC14get_componentsEv"></span><span id="_CPPv2NK8godzilla11DirichletBC14get_componentsEv"></span><span id="godzilla::DirichletBC::get_componentsC"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1a424b2faf17008af02757f6192c3adcd7"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_components</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla11DirichletBC14get_componentsEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get the component numbers this boundary condition is constraining. </p>
@@ -166,22 +172,14 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC14get_function_tEv">
-<span id="_CPPv3N8godzilla11DirichletBC14get_function_tEv"></span><span id="_CPPv2N8godzilla11DirichletBC14get_function_tEv"></span><span id="godzilla::DirichletBC::get_function_t"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1a8b8f4f2896afa60cb391b55432473081"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="n"><span class="pre">PetscFunc</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_function_t</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC14get_function_tEv" title="Link to this definition"></a><br /></dt>
-<dd><p>Get pointer to the C function that will be passed into PETSc API for time derivatives. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar">
-<span id="_CPPv3N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::DirichletBC::evaluate__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1ad2bb1fc85d94d0c597817648dc747d9a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC8evaluateE3Int4RealA_K4Real3IntA_6Scalar" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC8evaluateE4RealA_K4RealA_6Scalar">
+<span id="_CPPv3N8godzilla11DirichletBC8evaluateE4RealA_K4RealA_6Scalar"></span><span id="_CPPv2N8godzilla11DirichletBC8evaluateE4RealA_K4RealA_6Scalar"></span><span id="godzilla::DirichletBC::evaluate__Real.RealCA.ScalarA"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1abef0084e3a481a06975ca2412c93e2b2"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC8evaluateE4RealA_K4RealA_6Scalar" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate the boundary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dim</strong> – The spatial dimension </p></li>
 <li><p><strong>time</strong> – The time at which to sample </p></li>
 <li><p><strong>x</strong> – The coordinates </p></li>
-<li><p><strong>Nc</strong> – The number of components </p></li>
 <li><p><strong>u</strong> – The output field values </p></li>
 </ul>
 </dd>
@@ -189,16 +187,14 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar">
-<span id="_CPPv3N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="_CPPv2N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar"></span><span id="godzilla::DirichletBC::evaluate_t__Int.Real.RealCA.Int.ScalarA"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1afcdf7b44a5f7509aa5e7e3c650964767"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nc</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC10evaluate_tE3Int4RealA_K4Real3IntA_6Scalar" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla11DirichletBC10evaluate_tE4RealA_K4RealA_6Scalar">
+<span id="_CPPv3N8godzilla11DirichletBC10evaluate_tE4RealA_K4RealA_6Scalar"></span><span id="_CPPv2N8godzilla11DirichletBC10evaluate_tE4RealA_K4RealA_6Scalar"></span><span id="godzilla::DirichletBC::evaluate_t__Real.RealCA.ScalarA"></span><span class="target" id="classgodzilla_1_1_dirichlet_b_c_1a0c03018e7773be9375ca44ed3cedc4bb"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">evaluate_t</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">time</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">x</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span>, <span class="n"><span class="pre">Scalar</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">u</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla11DirichletBC10evaluate_tE4RealA_K4RealA_6Scalar" title="Link to this definition"></a><br /></dt>
 <dd><p>Evaluate time derivative of the boundary condition. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dim</strong> – The spatial dimension </p></li>
 <li><p><strong>time</strong> – The time at which to sample </p></li>
 <li><p><strong>x</strong> – The coordinates </p></li>
-<li><p><strong>Nc</strong> – The number of components </p></li>
 <li><p><strong>u</strong> – The output field values </p></li>
 </ul>
 </dd>

@@ -61,6 +61,7 @@
 <li class="toctree-l1"><a class="reference internal" href="auxiliary-field.html">AuxiliaryField</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">BoundaryCondition</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla17BoundaryConditionE"><code class="docutils literal notranslate"><span class="pre">BoundaryCondition</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla17BoundaryCondition13get_dimensionEv"><code class="docutils literal notranslate"><span class="pre">BoundaryCondition::get_dimension()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla17BoundaryCondition12get_boundaryEv"><code class="docutils literal notranslate"><span class="pre">BoundaryCondition::get_boundary()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla17BoundaryCondition30get_discrete_problem_interfaceEv"><code class="docutils literal notranslate"><span class="pre">BoundaryCondition::get_discrete_problem_interface()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla17BoundaryCondition6set_upEv"><code class="docutils literal notranslate"><span class="pre">BoundaryCondition::set_up()</span></code></a></li>
@@ -147,6 +148,17 @@
 <p>Subclassed by <a class="reference internal" href="essential-bc.html#classgodzilla_1_1_essential_b_c"><span class="std std-ref">godzilla::EssentialBC</span></a>, <a class="reference internal" href="natural-bc.html#classgodzilla_1_1_natural_b_c"><span class="std std-ref">godzilla::NaturalBC</span></a>, <a class="reference internal" href="natural-riemann-bc.html#classgodzilla_1_1_natural_riemann_b_c"><span class="std std-ref">godzilla::NaturalRiemannBC</span></a></p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla17BoundaryCondition13get_dimensionEv">
+<span id="_CPPv3NK8godzilla17BoundaryCondition13get_dimensionEv"></span><span id="_CPPv2NK8godzilla17BoundaryCondition13get_dimensionEv"></span><span id="godzilla::BoundaryCondition::get_dimensionC"></span><span class="target" id="classgodzilla_1_1_boundary_condition_1a131a8490680a00028c2ff78b82cbb658"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_dimension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla17BoundaryCondition13get_dimensionEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get problem spatial dimension. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Spatial dimension </p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla17BoundaryCondition12get_boundaryEv">
 <span id="_CPPv3NK8godzilla17BoundaryCondition12get_boundaryEv"></span><span id="_CPPv2NK8godzilla17BoundaryCondition12get_boundaryEv"></span><span id="godzilla::BoundaryCondition::get_boundaryC"></span><span class="target" id="classgodzilla_1_1_boundary_condition_1aeceb2b8c442cab61fff944607643ec81"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_boundary</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla17BoundaryCondition12get_boundaryEv" title="Link to this definition"></a><br /></dt>
