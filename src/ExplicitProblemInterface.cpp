@@ -156,7 +156,7 @@ ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
     PETSC_CHECK(DMLocalToGlobal(dm, loc_F, ADD_VALUES, F));
     if ((Vec) this->M_lumped_inv == nullptr) {
         auto ksp = this->nl_problem->get_ksp();
-        PETSC_CHECK(KSPSolve(ksp, F, F));
+        ksp.solve(F);
     }
     else
         Vector::pointwise_mult(F, this->M_lumped_inv, F);
