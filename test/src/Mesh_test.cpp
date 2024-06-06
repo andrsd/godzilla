@@ -141,3 +141,23 @@ TEST(MeshTest, clear_label_value)
     m->clear_label_value("bnd", 0, 1001);
     EXPECT_EQ(bnd.get_value(0), -1);
 }
+
+TEST(MeshTest, view)
+{
+    testing::internal::CaptureStdout();
+
+    TestApp app;
+
+    Parameters params = TestMesh::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestMesh mesh(params);
+    mesh.create();
+
+    auto m = mesh.create_mesh();
+    m->view();
+
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, HasSubstr("DM Object:"));
+    EXPECT_THAT(out, HasSubstr("type: plex"));
+}

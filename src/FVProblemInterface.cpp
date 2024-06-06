@@ -47,6 +47,8 @@ FVProblemInterface::~FVProblemInterface()
         auto & fe = kv.second;
         PetscFEDestroy(&fe);
     }
+    for (auto & [id, delegate] : this->compute_flux_methods)
+        delete delegate;
 }
 
 void

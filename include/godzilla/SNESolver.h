@@ -40,6 +40,7 @@ private:
 
 /// Abstract "method" for calling compute residual
 struct SNESComputeResidualMethodAbstract {
+    virtual ~SNESComputeResidualMethodAbstract() = default;
     virtual ErrorCode invoke(const Vector & x, Vector & f) = 0;
 };
 
@@ -64,6 +65,7 @@ private:
 
 /// Abstract "method" for calling compute Jacobian
 struct SNESComputeJacobianMethodAbstract {
+    virtual ~SNESComputeJacobianMethodAbstract() = default;
     virtual ErrorCode invoke(const Vector & x, Matrix & J, Matrix & Jp) = 0;
 };
 
@@ -133,6 +135,7 @@ public:
 
     /// Construct empty non-linear solver
     SNESolver();
+    ~SNESolver();
 
     /// Construct a non-linear solver from a PETSc SNES object
     explicit SNESolver(SNES snes);

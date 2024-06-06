@@ -100,28 +100,10 @@ public:
         /// Get the first index in the range
         ///
         /// @return First index in the range
-        [[deprecated("Use first() instead")]] Int
-        get_first() const
-        {
-            return first_idx;
-        }
-
-        /// Get the first index in the range
-        ///
-        /// @return First index in the range
         Int
         first() const
         {
             return first_idx;
-        }
-
-        /// Get the last index (not included) in the range
-        ///
-        /// @return Last index (not included) in the range
-        [[deprecated("Use last() instead")]] Int
-        get_last() const
-        {
-            return last_idx;
         }
 
         /// Get the last index (not included) in the range

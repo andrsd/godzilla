@@ -59,6 +59,12 @@ KrylovSolver::KrylovSolver(KSP ksp) :
 {
 }
 
+KrylovSolver::~KrylovSolver()
+{
+    delete this->compute_rhs_method;
+    delete this->compute_operators_method;
+}
+
 void
 KrylovSolver::create(MPI_Comm comm)
 {

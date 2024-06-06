@@ -41,6 +41,7 @@ private:
 
 /// Abstract "method" for calling KSP compute RHS
 struct KSPComputeRhsMethodAbstract {
+    virtual ~KSPComputeRhsMethodAbstract() = default;
     virtual ErrorCode invoke(Vector & b) = 0;
 };
 
@@ -65,6 +66,7 @@ private:
 
 /// Abstract "method" for calling KSP compute operators
 struct KSPComputeOperatorsMethodAbstract {
+    virtual ~KSPComputeOperatorsMethodAbstract() = default;
     virtual ErrorCode invoke(Matrix & A, Matrix & B) = 0;
 };
 
@@ -110,6 +112,7 @@ public:
 
     /// Construct empty Krylov solver
     KrylovSolver();
+    ~KrylovSolver();
 
     /// Construct a Krylov solver from a PETSc KSP object
     explicit KrylovSolver(KSP ksp);

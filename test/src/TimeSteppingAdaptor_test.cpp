@@ -133,6 +133,7 @@ protected:
 TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonlinearProblem(params)
 {
     this->dts.resize(5);
+    monitor_cancel();
     monitor_set(this, &TestTSProblem::ts_monitor);
 }
 

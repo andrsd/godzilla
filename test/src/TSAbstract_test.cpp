@@ -95,12 +95,14 @@ public:
     void
     pre_stage(Real stage_time) override
     {
+        TransientProblemInterface::pre_stage(stage_time);
         pre_stage_called = true;
     }
 
     void
     post_stage(Real stage_time, Int stage_index, const std::vector<Vector> & Y) override
     {
+        TransientProblemInterface::post_stage(stage_time, stage_index, Y);
         post_stage_called = true;
     }
 
