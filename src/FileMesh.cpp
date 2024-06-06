@@ -7,6 +7,7 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
+#include "petscdmplex.h"
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -21,9 +22,7 @@ FileMesh::parameters()
     return params;
 }
 
-FileMesh::FileMesh(const Parameters & parameters) :
-    MeshObject(parameters),
-    file_format(UNKNOWN)
+FileMesh::FileMesh(const Parameters & parameters) : MeshObject(parameters), file_format(UNKNOWN)
 {
     CALL_STACK_MSG();
 

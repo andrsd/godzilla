@@ -6,6 +6,7 @@
 #include "godzilla/MeshPartitioningOutput.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
+#include "petscdmplex.h"
 #include "petscviewerhdf5.h"
 
 namespace godzilla {

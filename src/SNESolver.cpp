@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/SNESolver.h"
+#include "godzilla/CallStack.h"
 
 namespace godzilla {
 

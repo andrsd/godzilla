@@ -14,6 +14,8 @@
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/DenseMatrixSymm.h"
 #include "godzilla/FunctionDelegate.h"
+#include "godzilla/EssentialBC.h"
+#include "godzilla/NaturalRiemannBC.h"
 
 namespace godzilla {
 

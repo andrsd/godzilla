@@ -4,9 +4,47 @@
 #pragma once
 
 #include "godzilla/DiscreteProblemInterface.h"
-#include "godzilla/FVDelegates.h"
 
 namespace godzilla {
+
+namespace internal {
+
+/// Abstract "method" for calling compute flux
+struct FVComputeFluxMethodAbstract {
+    virtual ~FVComputeFluxMethodAbstract() = default;
+    virtual ErrorCode invoke(const Real x[],
+                             const Real n[],
+                             const Scalar u_l[],
+                             const Scalar u_r[],
+                             Scalar flux[]) = 0;
+};
+
+template <typename T>
+struct FVComputeFluxMethod : public FVComputeFluxMethodAbstract {
+    FVComputeFluxMethod(T * instance,
+                        ErrorCode (T::*method)(const Real[],
+                                               const Real[],
+                                               const Scalar[],
+                                               const Scalar[],
+                                               Scalar[])) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(const Real x[], const Real n[], const Scalar u_l[], const Scalar u_r[], Scalar flux[])
+        override
+    {
+        return ((*this->instance).*method)(x, n, u_l, u_r, flux);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]);
+};
+
+} // namespace internal
 
 class AuxiliaryField;
 

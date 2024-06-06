@@ -5,6 +5,7 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
+#include "petscts.h"
 
 namespace godzilla {
 

@@ -11,7 +11,6 @@
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/NaturalBC.h"
-#include "godzilla/EssentialBC.h"
 #include "godzilla/Exception.h"
 #include <set>
 #include <cassert>
