@@ -29,10 +29,6 @@ public:
     const Matrix & get_jacobian() const;
     /// true if solve converged, otherwise false
     virtual bool converged();
-    /// Method to compute residual. Called from the PETsc callback
-    virtual ErrorCode compute_residual(const Vector & x, Vector & f);
-    /// Method to compute Jacobian. Called from the PETsc callback
-    virtual ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
 
     /// Use matrix free finite difference matrix vector products to apply the Jacobian
     ///
@@ -65,6 +61,20 @@ protected:
     virtual void set_up_solve_type();
     /// Set up solver parameters
     virtual void set_up_solver_parameters();
+    /// Set the function evaluation routine
+    template <class T>
+    void
+    set_function(T * instance, ErrorCode (T::*callback)(const Vector &, Vector &))
+    {
+        this->snes.set_function(this->r, instance, callback);
+    }
+    /// Set the function to compute Jacobian
+    template <class T>
+    void
+    set_jacobian(T * instance, ErrorCode (T::*callback)(const Vector &, Matrix &, Matrix &))
+    {
+        this->snes.set_jacobian(this->J, this->J, instance, callback);
+    }
     /// SNES monitor
     ErrorCode snes_monitor(Int it, Real norm);
     /// KSP monitor

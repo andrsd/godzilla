@@ -353,8 +353,8 @@ protected:
 
     template <class T>
     void
-    set_boundary_local(T * instance,
-                       PetscErrorCode (T::*method)(Real, const Vector &, const Vector &))
+    set_time_boundary_local(T * instance,
+                            PetscErrorCode (T::*method)(Real, const Vector &, const Vector &))
     {
         this->compute_boundary_local_method =
             new internal::TSComputeBoundaryMethod<T>(instance, method);
