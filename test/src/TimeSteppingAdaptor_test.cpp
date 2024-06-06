@@ -127,19 +127,21 @@ public:
     std::vector<Real> dts;
 
 protected:
-    void ts_monitor(Int stepi, Real time, Vec x) override;
+    ErrorCode ts_monitor(Int stepi, Real time, const Vector & x);
 };
 
 TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonlinearProblem(params)
 {
     this->dts.resize(5);
+    monitor_set(this, &TestTSProblem::ts_monitor);
 }
 
-void
-TestTSProblem::ts_monitor(Int stepi, Real time, Vec x)
+ErrorCode
+TestTSProblem::ts_monitor(Int stepi, Real time, const Vector & x)
 {
     Real dt = get_time_step();
     this->dts[stepi] = dt;
+    return 0;
 }
 
 ///

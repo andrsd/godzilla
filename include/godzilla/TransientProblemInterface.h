@@ -7,8 +7,149 @@
 #include "godzilla/Types.h"
 #include "godzilla/Vector.h"
 #include "godzilla/SNESolver.h"
+#include "godzilla/Problem.h"
 
 namespace godzilla {
+
+namespace internal {
+
+/// Abstract "method" for calling TS Monitor
+struct TSMonitorMethodAbstract {
+    virtual ~TSMonitorMethodAbstract() = default;
+    virtual ErrorCode invoke(Int it, Real rnorm, const Vector & x) = 0;
+};
+
+template <typename T>
+struct TSMonitorMethod : public TSMonitorMethodAbstract {
+    TSMonitorMethod(T * instance, ErrorCode (T::*method)(Int, Real, const Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Int it, Real rnorm, const Vector & x) override
+    {
+        return ((*this->instance).*method)(it, rnorm, x);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Int, Real, const Vector &);
+};
+
+/// Abstract "method" for calling TSComputeRhsMethod
+struct TSComputeRhsMethodAbstract {
+    virtual ~TSComputeRhsMethodAbstract() = default;
+    virtual ErrorCode invoke(Real time, const Vector & x, Vector & F) = 0;
+};
+
+template <typename T>
+struct TSComputeRhsMethod : public TSComputeRhsMethodAbstract {
+    TSComputeRhsMethod(T * instance, ErrorCode (T::*method)(Real, const Vector &, Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Real time, const Vector & x, Vector & F) override
+    {
+        return ((*this->instance).*method)(time, x, F);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Real, const Vector &, Vector &);
+};
+
+/// Abstract "method" for calling compute_ifunction
+struct TSComputeIFunctionMethodAbstract {
+    virtual ~TSComputeIFunctionMethodAbstract() = default;
+    virtual ErrorCode invoke(Real time, const Vector & x, const Vector & x_t, Vector & F) = 0;
+};
+
+template <typename T>
+struct TSComputeIFunctionMethod : public TSComputeIFunctionMethodAbstract {
+    TSComputeIFunctionMethod(
+        T * instance,
+        ErrorCode (T::*method)(Real, const Vector &, const Vector &, Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Real time, const Vector & x, const Vector & x_t, Vector & F) override
+    {
+        return ((*this->instance).*method)(time, x, x_t, F);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Real, const Vector &, const Vector &, Vector &);
+};
+
+/// Abstract "method" for calling compute_ijacobian
+struct TSComputeIJacobianMethodAbstract {
+    virtual ~TSComputeIJacobianMethodAbstract() = default;
+    virtual ErrorCode invoke(Real time,
+                             const Vector & X,
+                             const Vector & X_t,
+                             Real x_t_shift,
+                             Matrix & J,
+                             Matrix & Jp) = 0;
+};
+
+template <typename T>
+struct TSComputeIJacobianMethod : public TSComputeIJacobianMethodAbstract {
+    TSComputeIJacobianMethod(
+        T * instance,
+        ErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Real time, const Vector & x, const Vector & x_t, Real x_t_shift, Matrix & J, Matrix & Jp)
+        override
+    {
+        return ((*this->instance).*method)(time, x, x_t, x_t_shift, J, Jp);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &);
+};
+
+/// Abstract "method" for calling compute_boundary
+struct TSComputeBoundaryMethodAbstract {
+    virtual ~TSComputeBoundaryMethodAbstract() = default;
+    virtual ErrorCode invoke(Real time, const Vector & x, const Vector & x_t) = 0;
+};
+
+template <typename T>
+struct TSComputeBoundaryMethod : public TSComputeBoundaryMethodAbstract {
+    TSComputeBoundaryMethod(T * instance,
+                            ErrorCode (T::*method)(Real, const Vector &, const Vector &)) :
+        instance(instance),
+        method(method)
+    {
+    }
+
+    ErrorCode
+    invoke(Real time, const Vector & x, const Vector & x_t) override
+    {
+        return ((*this->instance).*method)(time, x, x_t);
+    }
+
+private:
+    T * instance;
+    ErrorCode (T::*method)(Real, const Vector &, const Vector &);
+};
+
+} // namespace internal
 
 class Problem;
 class Parameters;
@@ -117,7 +258,7 @@ public:
     /// @param x Solution at time `time`
     /// @param F Right-hand side vector
     /// @return PETSc error code
-    virtual ErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+    ErrorCode compute_rhs_function(Real time, const Vector & x, Vector & F);
 
 protected:
     /// Get underlying non-linear solver
@@ -127,29 +268,116 @@ protected:
     /// Get step number
     Int get_step_number() const;
     /// Initialize
-    virtual void init();
+    void init();
     /// Create
-    virtual void create();
+    void create();
+    /// Set up callbacks
+    void set_up_callbacks();
     /// Set up monitors
-    virtual void set_up_monitors();
+    void set_up_monitors();
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
-    /// TS monitor
-    virtual void ts_monitor(Int stepi, Real time, Vec x);
+    /// Default TS monitor
+    ErrorCode default_monitor(Int stepi, Real time, const Vector & x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
-    virtual bool converged() const;
+    bool converged() const;
     /// Solve
-    virtual void solve(Vector & x);
+    void solve(Vector & x);
     /// Set time-stepping scheme
     void set_scheme(TimeScheme scheme);
     /// Set time-stepping scheme
     void set_scheme(const std::string & scheme_name);
 
+    /// Sets an *additional* member function to be called at every iteration to monitor the
+    /// residual/error etc.
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real, const Vector &))
+    {
+        this->monitor_method = new internal::TSMonitorMethod<T>(instance, method);
+        PETSC_CHECK(TSMonitorSet(this->ts, monitor, this->monitor_method, monitor_destroy));
+    }
+
+    /// Clears all the monitors that have been set on a time-stepping object.
+    void monitor_cancel();
+
+    /// Sets the routine for evaluating the function, where U_t = G(t,u).
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    set_rhs_function(T * instance, ErrorCode (T::*method)(Real time, const Vector & x, Vector & F))
+    {
+        this->compute_rhs_method = new internal::TSComputeRhsMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetRHSFunction(dm,
+                                       TransientProblemInterface::compute_rhs,
+                                       this->compute_rhs_method));
+    }
+
+    template <class T>
+    void
+    set_ifunction_local(
+        T * instance,
+        ErrorCode (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
+    {
+        this->compute_ifunction_local_method =
+            new internal::TSComputeIFunctionMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetIFunctionLocal(dm,
+                                          TransientProblemInterface::compute_ifunction,
+                                          this->compute_ifunction_local_method));
+    }
+
+    template <class T>
+    void
+    set_ijacobian_local(
+        T * instance,
+        ErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
+    {
+        this->compute_ijacobian_local_method =
+            new internal::TSComputeIJacobianMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetIJacobianLocal(dm,
+                                          TransientProblemInterface::compute_ijacobian,
+                                          this->compute_ijacobian_local_method));
+    }
+
+    template <class T>
+    void
+    set_boundary_local(T * instance,
+                       PetscErrorCode (T::*method)(Real, const Vector &, const Vector &))
+    {
+        this->compute_boundary_local_method =
+            new internal::TSComputeBoundaryMethod<T>(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetBoundaryLocal(dm,
+                                         TransientProblemInterface::compute_boundary,
+                                         this->compute_boundary_local_method));
+    }
+
 private:
     /// PETSc TS object
     TS ts;
+    /// Method for computing right-hand side
+    internal::TSComputeRhsMethodAbstract * compute_rhs_method;
+    /// Method for computing F(t,U,U_t) where F() = 0
+    internal::TSComputeIFunctionMethodAbstract * compute_ifunction_local_method;
+    /// Method to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t) is the function provided by
+    /// `set_ifunction_local`
+    internal::TSComputeIJacobianMethodAbstract * compute_ijacobian_local_method;
+    /// Method for essential boundary data for a local implicit function evaluation.
+    internal::TSComputeBoundaryMethodAbstract * compute_boundary_local_method;
+    /// with set_i Method for monitoring the solve
+    internal::TSMonitorMethodAbstract * monitor_method;
     /// Problem this interface is part of
     Problem * problem;
     /// Parameters
@@ -172,7 +400,16 @@ private:
 public:
     static Parameters parameters();
 
-    friend ErrorCode __transient_monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
+private:
+    static ErrorCode pre_step(TS ts);
+    static ErrorCode post_step(TS ts);
+    static ErrorCode monitor(TS ts, Int stepi, Real time, Vec x, void * ctx);
+    static ErrorCode monitor_destroy(void ** ctx);
+    static ErrorCode compute_rhs(TS, Real time, Vec x, Vec F, void * ctx);
+    static ErrorCode compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
+    static ErrorCode
+    compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * context);
+    static ErrorCode compute_boundary(DM, Real time, Vec x, Vec x_t, void * context);
 };
 
 } // namespace godzilla

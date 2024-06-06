@@ -78,7 +78,7 @@ void
 TSAbstract::compute_rhs_function(Real t, const Vector & U, Vector & y)
 {
     CALL_STACK_MSG();
-    this->tpi->compute_rhs(t, U, y);
+    this->tpi->compute_rhs_function(t, U, y);
 }
 
 //

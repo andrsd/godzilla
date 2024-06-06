@@ -15,44 +15,6 @@
 
 namespace godzilla {
 
-static ErrorCode
-__tsfep_compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * user)
-{
-    CALL_STACK_MSG();
-    auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    Vector vec_x(x);
-    Vector vec_x_t(x_t);
-    Vector vec_F(F);
-    fep->compute_ifunction(time, vec_x, vec_x_t, vec_F);
-    return 0;
-}
-
-static ErrorCode
-__tsfep_compute_ijacobian(DM, Real time, Vec x, Vec x_t, Real x_t_shift, Mat J, Mat Jp, void * user)
-{
-    CALL_STACK_MSG();
-    auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    Vector vec_x(x);
-    Vector vec_x_t(x_t);
-    Matrix mat_J(J);
-    Matrix mat_Jp(Jp);
-    fep->compute_ijacobian(time, vec_x, vec_x_t, x_t_shift, mat_J, mat_Jp);
-    return 0;
-}
-
-static ErrorCode
-_tsfep_compute_boundary(DM, Real time, Vec x, Vec x_t, void * user)
-{
-    CALL_STACK_MSG();
-    auto * fep = static_cast<ImplicitFENonlinearProblem *>(user);
-    Vector vec_x(x);
-    Vector vec_x_t(x_t);
-    fep->compute_boundary(time, vec_x, vec_x_t);
-    return 0;
-}
-
-///
-
 Parameters
 ImplicitFENonlinearProblem::parameters()
 {
@@ -129,10 +91,10 @@ void
 ImplicitFENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    auto dm = get_dm();
-    PETSC_CHECK(DMTSSetBoundaryLocal(dm, _tsfep_compute_boundary, this));
-    PETSC_CHECK(DMTSSetIFunctionLocal(dm, __tsfep_compute_ifunction, this));
-    PETSC_CHECK(DMTSSetIJacobianLocal(dm, __tsfep_compute_ijacobian, this));
+    TransientProblemInterface::set_up_callbacks();
+    set_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary);
+    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction);
+    set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian);
 }
 
 void

@@ -53,6 +53,7 @@ public:
         Problem::create();
         TransientProblemInterface::init();
         set_up_time_scheme();
+        set_rhs_function(this, &GTestProblem::compute_rhs);
     }
 
     void
@@ -104,7 +105,7 @@ public:
     }
 
     ErrorCode
-    compute_rhs(Real time, const Vector & vec_x, Vector & vec_F) override
+    compute_rhs(Real time, const Vector & vec_x, Vector & vec_F)
     {
         compute_rhs_called = true;
         return 0;

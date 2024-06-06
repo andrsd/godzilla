@@ -8,14 +8,13 @@
 #include "godzilla/TransientProblemInterface.h"
 #include "godzilla/LoggingInterface.h"
 #include "godzilla/Output.h"
-#include <cassert>
-#include "petsc/private/tsimpl.h"
 #include "godzilla/SNESolver.h"
+#include <cassert>
 
 namespace godzilla {
 
 ErrorCode
-__transient_pre_step(TS ts)
+TransientProblemInterface::pre_step(TS ts)
 {
     CALL_STACK_MSG();
     void * ctx;
@@ -26,7 +25,7 @@ __transient_pre_step(TS ts)
 }
 
 ErrorCode
-__transient_post_step(TS ts)
+TransientProblemInterface::post_step(TS ts)
 {
     CALL_STACK_MSG();
     void * ctx;
@@ -37,13 +36,75 @@ __transient_post_step(TS ts)
 }
 
 ErrorCode
-__transient_monitor(TS, Int stepi, Real time, Vec x, void * ctx)
+TransientProblemInterface::monitor(TS, Int stepi, Real time, Vec x, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * tpi = static_cast<TransientProblemInterface *>(ctx);
-    tpi->ts_monitor(stepi, time, x);
+    auto * method = static_cast<internal::TSMonitorMethodAbstract *>(ctx);
+    Vector vec_x(x);
+    return method->invoke(stepi, time, vec_x);
+}
+
+ErrorCode
+TransientProblemInterface::monitor_destroy(void ** ctx)
+{
+    auto * method = static_cast<internal::TSMonitorMethodAbstract *>(*ctx);
+    delete method;
     return 0;
 }
+
+ErrorCode
+TransientProblemInterface::compute_rhs(TS, Real time, Vec x, Vec F, void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeRhsMethodAbstract *>(ctx);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    return method->invoke(time, vec_x, vec_F);
+}
+
+ErrorCode
+TransientProblemInterface::compute_ifunction(DM, Real time, Vec x, Vec x_t, Vec F, void * contex)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeIFunctionMethodAbstract *>(contex);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    Vector vec_F(F);
+    return method->invoke(time, vec_x, vec_x_t, vec_F);
+}
+
+ErrorCode
+TransientProblemInterface::compute_ijacobian(DM,
+                                             Real time,
+                                             Vec x,
+                                             Vec x_t,
+                                             Real x_t_shift,
+                                             Mat J,
+                                             Mat Jp,
+                                             void * contex)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeIJacobianMethodAbstract *>(contex);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    Matrix mat_J(J);
+    Matrix mat_Jp(Jp);
+    method->invoke(time, vec_x, vec_x_t, x_t_shift, mat_J, mat_Jp);
+    return 0;
+}
+
+ErrorCode
+TransientProblemInterface::compute_boundary(DM, Real time, Vec x, Vec x_t, void * context)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<internal::TSComputeBoundaryMethodAbstract *>(context);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    method->invoke(time, vec_x, vec_x_t);
+    return 0;
+}
+
+//
 
 Parameters
 TransientProblemInterface::parameters()
@@ -59,6 +120,11 @@ TransientProblemInterface::parameters()
 
 TransientProblemInterface::TransientProblemInterface(Problem * problem, const Parameters & params) :
     ts(nullptr),
+    compute_rhs_method(nullptr),
+    compute_ifunction_local_method(nullptr),
+    compute_ijacobian_local_method(nullptr),
+    compute_boundary_local_method(nullptr),
+    monitor_method(nullptr),
     problem(problem),
     tpi_params(params),
     ts_adaptor(nullptr),
@@ -197,12 +263,18 @@ TransientProblemInterface::create()
 }
 
 void
+TransientProblemInterface::set_up_callbacks()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(TSSetPreStep(this->ts, TransientProblemInterface::pre_step));
+    PETSC_CHECK(TSSetPostStep(this->ts, TransientProblemInterface::post_step));
+}
+
+void
 TransientProblemInterface::set_up_monitors()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetPreStep(this->ts, __transient_pre_step));
-    PETSC_CHECK(TSSetPostStep(this->ts, __transient_post_step));
-    PETSC_CHECK(TSMonitorSet(this->ts, __transient_monitor, this, nullptr));
+    monitor_set(this, &TransientProblemInterface::default_monitor);
 }
 
 void
@@ -221,12 +293,13 @@ TransientProblemInterface::post_step()
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
 }
 
-void
-TransientProblemInterface::ts_monitor(Int stepi, Real time, Vec x)
+ErrorCode
+TransientProblemInterface::default_monitor(Int stepi, Real time, const Vector & x)
 {
     CALL_STACK_MSG();
     Real dt = get_time_step();
     this->problem->lprint(6, "{} Time {:f} dt = {:f}", stepi, time, dt);
+    return 0;
 }
 
 void
@@ -266,9 +339,13 @@ TransientProblemInterface::post_stage(Real stage_time,
 }
 
 ErrorCode
-TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
+TransientProblemInterface::compute_rhs_function(Real time, const Vector & x, Vector & F)
 {
-    return 0;
+    CALL_STACK_MSG();
+    if (this->compute_rhs_method)
+        return this->compute_rhs_method->invoke(time, x, F);
+    else
+        return 0;
 }
 
 void
@@ -318,6 +395,13 @@ TransientProblemInterface::set_scheme(const std::string & scheme_name)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSSetType(this->ts, scheme_name.c_str()));
+}
+
+void
+TransientProblemInterface::monitor_cancel()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(TSMonitorCancel(this->ts));
 }
 
 } // namespace godzilla
