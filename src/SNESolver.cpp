@@ -107,6 +107,12 @@ SNESolver::SNESolver(SNES snes) :
 {
 }
 
+SNESolver::~SNESolver()
+{
+    delete this->compute_residual_method;
+    delete this->compute_jacobian_method;
+}
+
 void
 SNESolver::create(MPI_Comm comm)
 {

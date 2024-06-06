@@ -149,6 +149,10 @@ TransientProblemInterface::~TransientProblemInterface()
 {
     CALL_STACK_MSG();
     TSDestroy(&this->ts);
+    delete this->compute_rhs_method;
+    delete this->compute_ifunction_local_method;
+    delete this->compute_ijacobian_local_method;
+    delete this->compute_boundary_local_method;
 }
 
 SNESolver
