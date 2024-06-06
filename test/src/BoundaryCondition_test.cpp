@@ -37,13 +37,18 @@ public:
 
 TEST_F(BoundaryConditionTest, api)
 {
+    this->mesh->create();
+    this->prob->create();
+
     Parameters params = BoundaryCondition::parameters();
     params.set<App *>("_app") = this->app;
     params.set<DiscreteProblemInterface *>("_dpi") = this->prob;
     params.set<std::string>("_name") = "obj";
     params.set<std::vector<std::string>>("boundary") = { "side1" };
     MockBoundaryCondition bc(params);
+    bc.create();
 
     EXPECT_THAT(bc.get_boundary(), ElementsAre("side1"));
     EXPECT_THAT(bc.get_prob(), this->prob);
+    EXPECT_THAT(bc.get_dimension(), 1);
 }
