@@ -405,6 +405,13 @@ TEST(ExplicitFELinearProblemTest, allocate_lumped_mass_matrix)
     prob.create();
 
     prob.allocate_lumped_mass_matrix();
-    auto M = prob.get_lumped_mass_matrix();
-    EXPECT_NE(M, nullptr);
+    {
+        auto M = prob.get_lumped_mass_matrix();
+        EXPECT_NE(M, nullptr);
+    }
+    {
+        const auto & c_prob = prob;
+        auto M = c_prob.get_lumped_mass_matrix();
+        EXPECT_NE(M, nullptr);
+    }
 }
