@@ -17,17 +17,6 @@
 
 namespace godzilla {
 
-namespace internal {
-
-ErrorCode
-function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
-{
-    auto * method = static_cast<FunctionMethodAbstract *>(ctx);
-    return method->invoke(dim, time, x, nc, u);
-}
-
-} // namespace internal
-
 ErrorCode
 DiscreteProblemInterface::essential_bc_function(Int dim,
                                                 Real time,
@@ -449,7 +438,7 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
         auto method = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
-        func[fid] = internal::function_delegate;
+        func[fid] = internal::invoke_function_method;
         ctxs[fid] = method;
     }
 
@@ -478,7 +467,7 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
         auto method = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
-        func[fid] = internal::function_delegate;
+        func[fid] = internal::invoke_function_method;
         ctxs[fid] = method;
     }
 
@@ -561,7 +550,7 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
     for (auto & ic : this->ics) {
         Int fid = ic->get_field_id();
         auto method = new internal::ICFunctionMethod(ic, &InitialCondition::evaluate);
-        funcs[fid] = internal::function_delegate;
+        funcs[fid] = internal::invoke_function_method;
         ctxs[fid] = method;
     }
 
