@@ -15,37 +15,34 @@
 
 namespace godzilla {
 
-static ErrorCode
-__fep_compute_boundary(DM, Vec x, void * user)
+ErrorCode
+FENonlinearProblem::compute_boundary(DM, Vec x, void * context)
 {
     CALL_STACK_MSG();
-    auto * fep = static_cast<FENonlinearProblem *>(user);
+    auto * delegate = static_cast<internal::ComputeBoundaryMethodAbstract *>(context);
     Vector vec_x(x);
-    fep->compute_boundary(vec_x);
-    return 0;
+    return delegate->invoke(vec_x);
 }
 
-static ErrorCode
-__fep_compute_residual(DM, Vec x, Vec F, void * user)
+ErrorCode
+FENonlinearProblem::compute_residual(DM, Vec x, Vec F, void * context)
 {
     CALL_STACK_MSG();
-    auto * fep = static_cast<FENonlinearProblem *>(user);
+    auto * delegate = static_cast<internal::ComputeResidualMethodAbstract *>(context);
     Vector vec_x(x);
     Vector vec_F(F);
-    fep->compute_residual(vec_x, vec_F);
-    return 0;
+    return delegate->invoke(vec_x, vec_F);
 }
 
-static ErrorCode
-__fep_compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * user)
+ErrorCode
+FENonlinearProblem::compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * context)
 {
     CALL_STACK_MSG();
-    auto * fep = static_cast<FENonlinearProblem *>(user);
+    auto * delegate = static_cast<internal::ComputeJacobianMethodAbstract *>(context);
     Vector vec_x(x);
     Matrix mat_J(J);
     Matrix mat_Jp(Jp);
-    fep->compute_jacobian(vec_x, mat_J, mat_Jp);
-    return 0;
+    return delegate->invoke(vec_x, mat_J, mat_Jp);
 }
 
 ///
@@ -60,9 +57,20 @@ FENonlinearProblem::parameters()
 FENonlinearProblem::FENonlinearProblem(const Parameters & parameters) :
     NonlinearProblem(parameters),
     FEProblemInterface(this, parameters),
-    state(INITIAL)
+    state(INITIAL),
+    compute_boundary_delegate(nullptr),
+    compute_residual_delegate(nullptr),
+    compute_jacobian_delegate(nullptr)
 {
     CALL_STACK_MSG();
+}
+
+FENonlinearProblem::~FENonlinearProblem()
+{
+    CALL_STACK_MSG();
+    delete this->compute_boundary_delegate;
+    delete this->compute_residual_delegate;
+    delete this->compute_jacobian_delegate;
 }
 
 void
@@ -85,10 +93,9 @@ void
 FENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    auto dm = get_dm();
-    PETSC_CHECK(DMSNESSetBoundaryLocal(dm, __fep_compute_boundary, this));
-    PETSC_CHECK(DMSNESSetFunctionLocal(dm, __fep_compute_residual, this));
-    PETSC_CHECK(DMSNESSetJacobianLocal(dm, __fep_compute_jacobian, this));
+    set_boundary_local(this, &FENonlinearProblem::compute_boundary);
+    set_function_local(this, &FENonlinearProblem::compute_residual);
+    set_jacobian_local(this, &FENonlinearProblem::compute_jacobian);
 }
 
 void

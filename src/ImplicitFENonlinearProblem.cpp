@@ -92,7 +92,7 @@ ImplicitFENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
-    set_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary);
+    set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary);
     set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction);
     set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian);
 }

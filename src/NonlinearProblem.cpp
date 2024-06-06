@@ -193,8 +193,6 @@ void
 NonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    this->snes.set_function(this->r, this, &NonlinearProblem::compute_residual);
-    this->snes.set_jacobian(this->J, this->J, this, &NonlinearProblem::compute_jacobian);
 }
 
 void
@@ -301,20 +299,6 @@ NonlinearProblem::solve()
     lprint(9, "Solving");
     this->snes.solve(get_solution_vector());
     this->converged_reason = this->snes.get_converged_reason();
-}
-
-ErrorCode
-NonlinearProblem::compute_residual(const Vector &, Vector &)
-{
-    CALL_STACK_MSG();
-    return 0;
-}
-
-ErrorCode
-NonlinearProblem::compute_jacobian(const Vector &, Matrix &, Matrix &)
-{
-    CALL_STACK_MSG();
-    return 0;
 }
 
 } // namespace godzilla

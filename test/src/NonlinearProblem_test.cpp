@@ -19,10 +19,10 @@ public:
     void create() override;
     void call_initial_guess();
     void solve() override;
-    ErrorCode compute_residual(const Vector & x, Vector & f) override;
-    ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
 
 protected:
+    ErrorCode compute_residual(const Vector & x, Vector & f);
+    ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
     PetscSection s;
 };
 
@@ -49,6 +49,8 @@ G1DTestNonlinearProblem::create()
     DMPlexCreateSection(dm, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
     DMSetLocalSection(dm, this->s);
     NonlinearProblem::create();
+    set_function(this, &G1DTestNonlinearProblem::compute_residual);
+    set_jacobian(this, &G1DTestNonlinearProblem::compute_jacobian);
 }
 
 void
@@ -144,28 +146,6 @@ TEST(NonlinearProblemTest, solve)
     EXPECT_EQ(J(0, 1), 0.);
     EXPECT_EQ(J(1, 0), 0.);
     EXPECT_EQ(J(1, 1), 1.);
-}
-
-TEST(NonlinearProblemTest, compute_callbacks)
-{
-    TestApp app;
-
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 1;
-    LineMesh mesh(mesh_pars);
-
-    Parameters prob_pars = NonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    NonlinearProblem prob(prob_pars);
-
-    Vector x;
-    Vector F;
-    EXPECT_EQ(prob.compute_residual(x, F), 0);
-
-    Matrix J;
-    EXPECT_EQ(prob.compute_jacobian(x, J, J), 0);
 }
 
 TEST(NonlinearProblemTest, run)
