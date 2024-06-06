@@ -23,26 +23,16 @@ TEST_F(LinearProblemTest, solve)
     {
         // extract the solution and make sure it is [2, 3]
         auto x = prob->get_solution_vector();
-        Int ni = 2;
-        Int ix[2] = { 0, 1 };
-        Scalar xx[2];
-        VecGetValues(x, ni, ix, xx);
-
-        EXPECT_DOUBLE_EQ(xx[0], 2.);
-        EXPECT_DOUBLE_EQ(xx[1], 3.);
+        EXPECT_DOUBLE_EQ(x(0), 2.);
+        EXPECT_DOUBLE_EQ(x(1), 3.);
     }
 
     // Const-version
     {
         const Problem * cprob = prob;
         const Vector & x = cprob->get_solution_vector();
-        Int ni = 2;
-        Int ix[2] = { 0, 1 };
-        Scalar xx[2];
-        VecGetValues(x, ni, ix, xx);
-
-        EXPECT_DOUBLE_EQ(xx[0], 2.);
-        EXPECT_DOUBLE_EQ(xx[1], 3.);
+        EXPECT_DOUBLE_EQ(x(0), 2.);
+        EXPECT_DOUBLE_EQ(x(1), 3.);
     }
 }
 

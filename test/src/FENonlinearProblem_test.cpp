@@ -209,11 +209,7 @@ TEST_F(FENonlinearProblemTest, solve)
     EXPECT_EQ(conv, true);
 
     auto x = this->prob->get_solution_vector();
-    Int ni = 1;
-    Int ix[1] = { 0 };
-    Scalar xx[1];
-    VecGetValues(x, ni, ix, xx);
-    EXPECT_DOUBLE_EQ(xx[0], 0.25);
+    EXPECT_DOUBLE_EQ(x(0), 0.25);
 }
 
 TEST_F(FENonlinearProblemTest, solve_no_ic)
@@ -230,11 +226,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
     this->prob->create();
 
     auto x = prob->get_solution_vector();
-    Int ni = 1;
-    Int ix[1] = { 0 };
-    Scalar xx[1];
-    VecGetValues(x, ni, ix, xx);
-    EXPECT_DOUBLE_EQ(xx[0], 0.);
+    EXPECT_DOUBLE_EQ(x(0), 0.);
 }
 
 TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
