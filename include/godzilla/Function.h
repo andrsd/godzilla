@@ -4,9 +4,12 @@
 #pragma once
 
 #include "godzilla/Object.h"
+#include "godzilla/Types.h"
 #include "muParser/muParser.h"
 
 namespace godzilla {
+
+class Problem;
 
 /// Base class for function objects
 ///
@@ -18,6 +21,11 @@ public:
     ///
     /// @param parser The mu::Parser object we register this function with
     virtual void register_callback(mu::Parser & parser) = 0;
+
+    /// Get problem spatial dimension
+    ///
+    /// @return Spatial dimension
+    Int get_dimension() const;
 
 public:
     static Parameters parameters();

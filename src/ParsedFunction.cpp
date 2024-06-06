@@ -11,18 +11,10 @@ static double
 parsed_function_eval(void * ctx, double t, double x, double y, double z)
 {
     auto * fn = static_cast<ParsedFunction *>(ctx);
-    Real u[1] = { 0. };
-    Real coord[3] = { x, y, z };
-    fn->evaluate(3, t, coord, 1, u);
+    std::vector<Real> u(1);
+    std::array<Real, 3> coord = { x, y, z };
+    fn->evaluate(t, coord.data(), u.data());
     return u[0];
-}
-
-static ErrorCode
-parsed_function(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
-{
-    auto * fn = static_cast<ParsedFunction *>(ctx);
-    fn->evaluate(dim, time, x, nc, u);
-    return 0;
 }
 
 Parameters
@@ -47,20 +39,6 @@ ParsedFunction::ParsedFunction(const Parameters & params) :
         this->evalr.define_constant(it.first, it.second);
 }
 
-PetscFunc *
-ParsedFunction::get_function()
-{
-    CALL_STACK_MSG();
-    return parsed_function;
-}
-
-const void *
-ParsedFunction::get_context() const
-{
-    CALL_STACK_MSG();
-    return this;
-}
-
 void
 ParsedFunction::register_callback(mu::Parser & parser)
 {
@@ -70,10 +48,10 @@ ParsedFunction::register_callback(mu::Parser & parser)
 }
 
 void
-ParsedFunction::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
+ParsedFunction::evaluate(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    this->evalr.evaluate(dim, time, x, nc, u);
+    this->evalr.evaluate(get_dimension(), time, x, this->function.size(), u);
 }
 
 } // namespace godzilla

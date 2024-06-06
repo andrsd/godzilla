@@ -5,6 +5,7 @@
 
 #include "godzilla/Postprocessor.h"
 #include "godzilla/FunctionInterface.h"
+#include "godzilla/FunctionDelegate.h"
 
 namespace godzilla {
 
@@ -20,12 +21,10 @@ public:
 
     /// Evaluate the function 'u'
     ///
-    /// @param dim The spatial dimension
     /// @param time The time at which to sample
     /// @param x The coordinates
-    /// @param Nc The number of components
     /// @param u  The output field values
-    void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]);
+    void evaluate(Real time, const Real x[], Scalar u[]);
 
 private:
     /// Computed L_2 error

@@ -9,14 +9,6 @@
 
 namespace godzilla {
 
-static ErrorCode
-l2_diff_eval(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
-{
-    auto * l2_diff = static_cast<L2Diff *>(ctx);
-    l2_diff->evaluate(dim, time, x, nc, u);
-    return 0;
-}
-
 Parameters
 L2Diff::parameters()
 {
@@ -44,14 +36,16 @@ L2Diff::compute()
 {
     CALL_STACK_MSG();
     auto problem = get_problem();
-    std::vector<PetscFunc *> funcs(1, l2_diff_eval);
-    std::vector<void *> ctxs(1, this);
+    auto * delegate = new internal::FunctionMethod(this, &L2Diff::evaluate);
+    std::vector<PetscFunc *> funcs(1, internal::invoke_function_method);
+    std::vector<void *> ctxs(1, delegate);
     PETSC_CHECK(DMComputeL2Diff(problem->get_dm(),
                                 problem->get_time(),
                                 funcs.data(),
                                 ctxs.data(),
                                 problem->get_solution_vector(),
                                 &this->l2_diff));
+    delete delegate;
 }
 
 Real
@@ -62,10 +56,10 @@ L2Diff::get_value()
 }
 
 void
-L2Diff::evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[])
+L2Diff::evaluate(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    evaluate_func(time, x, nc, u);
+    evaluate_func(time, x, FunctionInterface::get_num_components(), u);
 }
 
 } // namespace godzilla

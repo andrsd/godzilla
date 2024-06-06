@@ -9,6 +9,7 @@
 #include "godzilla/ParsedFunction.h"
 #include "godzilla/Types.h"
 #include "godzilla/App.h"
+#include "godzilla/FunctionDelegate.h"
 
 namespace godzilla {
 
@@ -74,28 +75,28 @@ L2FieldDiff::compute()
     CALL_STACK_MSG();
     auto n_fields = this->funcs.size();
     std::vector<PetscFunc *> pfns(n_fields, nullptr);
-    std::vector<void *> ctxs(n_fields, nullptr);
+    std::vector<internal::FunctionMethodAbstract *> delegates(n_fields, nullptr);
     std::vector<Real> diff(n_fields, 0.);
 
     for (const auto & it : this->funcs) {
         Int fid = this->fepi->get_field_id(it.first);
         ParsedFunction * pfn = it.second;
-
-        pfns[fid] = pfn->get_function();
-        ctxs[fid] = const_cast<void *>(pfn->get_context());
+        pfns[fid] = internal::invoke_function_method;
+        delegates[fid] = new internal::FunctionMethod(pfn, &ParsedFunction::evaluate);
     }
 
     auto * problem = get_problem();
     PETSC_CHECK(DMComputeL2FieldDiff(problem->get_dm(),
                                      problem->get_time(),
                                      pfns.data(),
-                                     ctxs.data(),
+                                     reinterpret_cast<void **>(delegates.data()),
                                      problem->get_solution_vector(),
                                      diff.data()));
 
-    for (Int i = 0; i < n_fields; i++) {
-        this->l2_diff[i] = diff[i];
-    }
+    this->l2_diff = diff;
+
+    for (auto & d : delegates)
+        delete d;
 }
 
 Real

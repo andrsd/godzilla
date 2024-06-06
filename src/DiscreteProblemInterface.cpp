@@ -17,17 +17,6 @@
 
 namespace godzilla {
 
-namespace internal {
-
-ErrorCode
-function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
-{
-    auto * method = static_cast<FunctionMethodAbstract *>(ctx);
-    return method->invoke(dim, time, x, nc, u);
-}
-
-} // namespace internal
-
 ErrorCode
 DiscreteProblemInterface::essential_bc_function(Int dim,
                                                 Real time,
@@ -444,24 +433,23 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
     CALL_STACK_MSG();
     auto n_auxs = get_num_aux_fields();
     std::vector<PetscFunc *> func(n_auxs, nullptr);
-    std::vector<void *> ctxs(n_auxs, nullptr);
+    std::vector<internal::FunctionMethodAbstract *> delegates(n_auxs, nullptr);
 
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
-        auto method = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
-        func[fid] = internal::function_delegate;
-        ctxs[fid] = method;
+        func[fid] = internal::invoke_function_method;
+        delegates[fid] = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
     }
 
     PETSC_CHECK(DMProjectFunctionLocal(dm,
                                        get_problem()->get_time(),
                                        func.data(),
-                                       ctxs.data(),
+                                       reinterpret_cast<void **>(delegates.data()),
                                        INSERT_ALL_VALUES,
                                        a));
 
-    for (auto & ctx : ctxs)
-        delete static_cast<internal::FunctionMethodAbstract *>(ctx);
+    for (auto & d : delegates)
+        delete d;
 }
 
 void
@@ -473,13 +461,12 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
     CALL_STACK_MSG();
     auto n_auxs = get_num_aux_fields();
     std::vector<PetscFunc *> func(n_auxs, nullptr);
-    std::vector<void *> ctxs(n_auxs, nullptr);
+    std::vector<internal::FunctionMethodAbstract *> delegates(n_auxs, nullptr);
 
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
-        auto method = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
-        func[fid] = internal::function_delegate;
-        ctxs[fid] = method;
+        func[fid] = internal::invoke_function_method;
+        delegates[fid] = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
     }
 
     auto ids = label.get_value_index_set();
@@ -492,14 +479,14 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
                                             PETSC_DETERMINE,
                                             nullptr,
                                             func.data(),
-                                            ctxs.data(),
+                                            reinterpret_cast<void **>(delegates.data()),
                                             INSERT_ALL_VALUES,
                                             a));
     ids.restore_indices();
     ids.destroy();
 
-    for (auto & ctx : ctxs)
-        delete static_cast<internal::FunctionMethodAbstract *>(ctx);
+    for (auto & d : delegates)
+        delete d;
 }
 
 void
@@ -557,23 +544,22 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
     CALL_STACK_MSG();
     auto n_ics = this->ics.size();
     std::vector<PetscFunc *> funcs(n_ics);
-    std::vector<void *> ctxs(n_ics);
+    std::vector<internal::FunctionMethodAbstract *> delegates(n_ics);
     for (auto & ic : this->ics) {
         Int fid = ic->get_field_id();
-        auto method = new internal::ICFunctionMethod(ic, &InitialCondition::evaluate);
-        funcs[fid] = internal::function_delegate;
-        ctxs[fid] = method;
+        funcs[fid] = internal::invoke_function_method;
+        delegates[fid] = new internal::ICFunctionMethod(ic, &InitialCondition::evaluate);
     }
 
     PETSC_CHECK(DMProjectFunction(this->unstr_mesh->get_dm(),
                                   this->problem->get_time(),
                                   funcs.data(),
-                                  ctxs.data(),
+                                  reinterpret_cast<void **>(delegates.data()),
                                   INSERT_VALUES,
                                   this->problem->get_solution_vector()));
 
-    for (auto & ctx : ctxs)
-        delete static_cast<internal::FunctionMethodAbstract *>(ctx);
+    for (auto & d : delegates)
+        delete d;
 }
 
 void
