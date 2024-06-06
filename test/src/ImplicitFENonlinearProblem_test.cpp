@@ -42,12 +42,21 @@ TEST_F(ImplicitFENonlinearProblemTest, run)
     x.restore_array_read(xx);
 
     this->prob->compute_solution_vector_local();
-    auto lx = this->prob->get_solution_vector_local();
-    auto lxx = lx.get_array_read();
-    EXPECT_NEAR(lxx[0], 0., 1e-7);
-    EXPECT_NEAR(lxx[1], 0.5, 1e-7);
-    EXPECT_NEAR(lxx[2], 1., 1e-7);
-    lx.restore_array_read(lxx);
+    {
+        auto lx = this->prob->get_solution_vector_local();
+        auto lxx = lx.get_array_read();
+        EXPECT_NEAR(lxx[0], 0., 1e-7);
+        EXPECT_NEAR(lxx[1], 0.5, 1e-7);
+        EXPECT_NEAR(lxx[2], 1., 1e-7);
+        lx.restore_array_read(lxx);
+    }
+    {
+        const auto * c_prob = this->prob;
+        auto lx = c_prob->get_solution_vector_local();
+        EXPECT_NEAR(lx(0), 0., 1e-7);
+        EXPECT_NEAR(lx(1), 0.5, 1e-7);
+        EXPECT_NEAR(lx(2), 1., 1e-7);
+    }
 }
 
 TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
