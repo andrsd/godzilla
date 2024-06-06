@@ -1,32 +1,30 @@
 #include "gmock/gmock.h"
 #include "godzilla/Godzilla.h"
 #include "GodzillaApp_test.h"
+#include "GTestFENonlinearProblem.h"
+#include "godzilla/RectangleMesh.h"
 #include "godzilla/ParsedFunction.h"
 
 using namespace godzilla;
 
-TEST(ParsedFunctionTest, fn_eval)
-{
-    TestApp app;
-
-    Parameters params = ParsedFunction::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "fn1";
-    params.set<std::vector<std::string>>("function") = { "3421" };
-    ParsedFunction obj(params);
-
-    PetscFunc * fn = obj.get_function();
-    EXPECT_EQ(obj.get_context(), &obj);
-
-    Real x[] = { 2. };
-    Real u[] = { 0. };
-    EXPECT_EQ((*fn)(1, 0., x, 1, u, &obj), 0);
-    EXPECT_DOUBLE_EQ(u[0], 3421.);
-}
-
 TEST(ParsedFunctionTest, eval)
 {
     TestApp app;
+
+    Parameters mesh_params = RectangleMesh::parameters();
+    mesh_params.set<App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    mesh_params.set<Int>("ny") = 1;
+    RectangleMesh mesh(mesh_params);
+
+    Parameters prob_params = GTestFENonlinearProblem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    GTestFENonlinearProblem prob(prob_params);
+    app.set_problem(&prob);
+
+    mesh.create();
+    prob.create();
 
     std::map<std::string, Real> consts;
     consts["Re"] = 100;
@@ -40,13 +38,28 @@ TEST(ParsedFunctionTest, eval)
 
     Real x[] = { 2., 3. };
     Real u[] = { 0. };
-    obj.evaluate(2, 0.5, x, 1, u);
-    EXPECT_EQ(105.5, u[0]);
+    obj.evaluate(0.5, x, u);
+    EXPECT_EQ(u[0], 105.5);
 }
 
 TEST(ParsedFunctionTest, multi_eval)
 {
     TestApp app;
+
+    Parameters mesh_params = RectangleMesh::parameters();
+    mesh_params.set<App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    mesh_params.set<Int>("ny") = 1;
+    RectangleMesh mesh(mesh_params);
+
+    Parameters prob_params = GTestFENonlinearProblem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    GTestFENonlinearProblem prob(prob_params);
+    app.set_problem(&prob);
+
+    mesh.create();
+    prob.create();
 
     Parameters params = ParsedFunction::parameters();
     params.set<App *>("_app") = &app;
@@ -56,35 +69,7 @@ TEST(ParsedFunctionTest, multi_eval)
 
     Real x[] = { 2., 3. };
     Real u[] = { 0., 0. };
-    obj.evaluate(2, 0.5, x, 2, u);
-    EXPECT_EQ(3., u[0]);
-    EXPECT_EQ(4., u[1]);
-}
-
-TEST(ParsedFunctionTest, eval_via_parser)
-{
-    TestApp app;
-
-    Parameters params = ParsedFunction::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "exact_fn";
-    params.set<std::vector<std::string>>("function") = { "t + x + y + z" };
-    ParsedFunction obj(params);
-
-    mu::Parser parser;
-    obj.register_callback(parser);
-
-    parser.SetExpr("exact_fn(t, x, y, z)");
-
-    Real time = 1;
-    Real xx[3] = { 2, 3, 4 };
-    parser.DefineVar("t", &time);
-    parser.DefineVar("x", &(xx[0]));
-    parser.DefineVar("y", &(xx[1]));
-    parser.DefineVar("z", &(xx[2]));
-
-    int n_num;
-    mu::value_type * val = parser.Eval(n_num);
-    EXPECT_EQ(1, n_num);
-    EXPECT_DOUBLE_EQ(10., val[0]);
+    obj.evaluate(0.5, x, u);
+    EXPECT_EQ(u[0], 3.);
+    EXPECT_EQ(u[1], 4.);
 }

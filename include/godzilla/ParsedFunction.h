@@ -23,18 +23,10 @@ public:
 
     /// Evaluate the function
     ///
-    /// @param dim The spatial dimension
     /// @param time The time at which to sample
     /// @param x The coordinates
-    /// @param nc The number of components
     /// @param u The computed values
-    virtual void evaluate(Int dim, Real time, const Real x[], Int nc, Scalar u[]);
-
-    /// Get pointer to the C function that will be passed into PETSc API
-    virtual PetscFunc * get_function();
-
-    /// Get the pointer to the context that will be passed into PETSc API
-    virtual const void * get_context() const;
+    virtual void evaluate(Real time, const Real x[], Scalar u[]);
 
 private:
     /// Text representation of the function to evaluate (one per component)
