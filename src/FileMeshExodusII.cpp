@@ -16,13 +16,14 @@ namespace {
 DMPolytopeType
 get_cell_type(const std::string & elem_type)
 {
-    if (elem_type == "EDGE2")
+    if (elem_type == "EDGE2" || elem_type == "BAR2" || elem_type == "BEAM" || elem_type == "BEAM2")
         return DM_POLYTOPE_SEGMENT;
-    else if (elem_type == "TRI" || elem_type == "TRI3")
+    else if (elem_type == "TRI" || elem_type == "TRIANGLE" || elem_type == "TRI3")
         return DM_POLYTOPE_TRIANGLE;
-    else if (elem_type == "QUAD" || elem_type == "QUAD4" || elem_type == "SHELL4")
+    else if (elem_type == "QUAD" || elem_type == "QUAD4" || elem_type == "SHELL" ||
+             elem_type == "SHELL4")
         return DM_POLYTOPE_QUADRILATERAL;
-    else if (elem_type == "TETRA" || elem_type == "TET4")
+    else if (elem_type == "TETRA" || elem_type == "TET4" || elem_type == "TETRA4")
         return DM_POLYTOPE_TETRAHEDRON;
     else if (elem_type == "WEDGE")
         return DM_POLYTOPE_TRI_PRISM;
@@ -34,7 +35,7 @@ get_cell_type(const std::string & elem_type)
 
 } // namespace
 
-// This is a rewrite of `DMPlexCreateExodus` from PETSc (`plexexdosuii.c`) using exodusIIcpp
+// This is a rewrite of `DMPlexCreateExodus` from PETSc (`plexexodusii.c`) using exodusIIcpp
 // and C++ constructs. Plus, it adds some godzilla-specific stuff like mapping names to labels, etc.
 godzilla::UnstructuredMesh *
 FileMesh::create_from_exodus()
