@@ -47,6 +47,13 @@ FileMesh::get_file_name() const
     return this->file_name;
 }
 
+FileMesh::FileFormat
+FileMesh::get_file_format() const
+{
+    CALL_STACK_MSG();
+    return this->file_format;
+}
+
 godzilla::Mesh *
 FileMesh::create_mesh()
 {
