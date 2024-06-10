@@ -12,16 +12,20 @@ class UnstructuredMesh;
 /// Mesh loaded from a file
 ///
 class FileMesh : public MeshObject {
-protected:
+public:
     enum FileFormat { UNKNOWN, EXODUSII, GMSH } file_format;
 
-public:
     explicit FileMesh(const Parameters & parameters);
 
     /// Return file name
     ///
     /// @return Name of the file
     [[nodiscard]] const std::string & get_file_name() const;
+
+    /// Get mesh file format
+    ///
+    /// @return Mesh file format
+    FileFormat get_file_format() const;
 
 protected:
     void set_file_format(FileFormat fmt);
