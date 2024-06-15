@@ -78,7 +78,7 @@ install(
 )
 
 install(
-    FILES ${CMAKE_BINARY_DIR}/godzilla/GodzillaConfig.h
+    FILES ${CMAKE_BINARY_DIR}/godzilla/Config.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
 )
 

@@ -11,7 +11,7 @@
 #include "godzilla/Utils.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/Logger.h"
-#include "godzilla/GodzillaConfig.h"
+#include "godzilla/Config.h"
 #include <cassert>
 
 namespace godzilla {
