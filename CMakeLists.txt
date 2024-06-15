@@ -61,7 +61,7 @@ if (GODZILLA_BUILD_TESTS)
     )
 endif ()
 
-# Godzilla
+# godzilla
 
 add_subdirectory(contrib/muParser)
 add_subdirectory(src)

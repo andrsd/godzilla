@@ -50,13 +50,13 @@ endif()
 # install
 
 configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/cmake/GodzillaConfig.cmake.in
-    GodzillaConfig.cmake
+    ${PROJECT_SOURCE_DIR}/cmake/godzilla-config.cmake.in
+    godzilla-config.cmake
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
     NO_SET_AND_CHECK_MACRO
 )
 write_basic_package_version_file(
-    GodzillaConfigVersion.cmake
+    godzilla-config-version.cmake
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
@@ -96,14 +96,14 @@ install(
 
 install(
     EXPORT GodzillaTargets
-    FILE GodzillaTargets.cmake
+    FILE godzilla-targets.cmake
     NAMESPACE godzilla::
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
 )
 
 install(
     FILES
-        "${CMAKE_CURRENT_BINARY_DIR}/GodzillaConfig.cmake"
-        "${CMAKE_CURRENT_BINARY_DIR}/GodzillaConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/godzilla-config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/godzilla-config-version.cmake"
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/godzilla
 )
