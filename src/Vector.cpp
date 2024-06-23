@@ -195,6 +195,13 @@ Vector::axpy(Scalar alpha, const Vector & x)
 }
 
 void
+Vector::axpby(Scalar alpha, Scalar beta, const Vector & x)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAXPBY(this->vec, alpha, beta, x));
+}
+
+void
 Vector::aypx(Scalar beta, const Vector & x)
 {
     CALL_STACK_MSG();

@@ -74,6 +74,13 @@ public:
     /// @param x Vetor to scale by `alpha`
     void axpy(Scalar alpha, const Vector & x);
 
+    /// Computes `this[i] = alpha x[i] + beta y[i]`
+    ///
+    /// @param alpha Scalar
+    /// @param beta Scalar
+    /// @param x Vector sclaed by `alpha`
+    void axpby(Scalar alpha, Scalar beta, const Vector & x);
+
     /// Computes `this[i] = x[i] + beta * this[i]`
     ///
     /// @param beta Scalar

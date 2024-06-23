@@ -299,6 +299,23 @@ TEST(VectorTest, axpy)
     y.destroy();
 }
 
+TEST(VectorTest, axpby)
+{
+    Vector y = Vector::create_seq(MPI_COMM_WORLD, 2);
+    y.set_value(0, 3.);
+    y.set_value(1, 4.);
+
+    Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
+    x.set_value(0, 2.);
+    x.set_value(1, 5.);
+
+    y.axpby(3., 4., x);
+    EXPECT_DOUBLE_EQ(y(0), 18.);
+    EXPECT_DOUBLE_EQ(y(1), 31.);
+    x.destroy();
+    y.destroy();
+}
+
 TEST(VectorTest, aypx)
 {
     Vector y = Vector::create_seq(MPI_COMM_WORLD, 2);
