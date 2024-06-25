@@ -74,14 +74,30 @@ bool
 FunctionInterface::evaluate_func(Real time, const Real x[], Int nc, Real u[])
 {
     CALL_STACK_MSG();
-    return this->evalr.evaluate(this->problem->get_dimension(), time, x, nc, u);
+    double t = time;
+    auto dim = this->problem->get_dimension();
+    std::vector<double> xx(dim);
+    for (int i = 0; i < dim; i++)
+        xx[i] = x[i];
+    std::vector<double> uu(nc);
+    for (int i = 0; i < nc; i++)
+        uu[i] = u[i];
+    return this->evalr.evaluate(this->problem->get_dimension(), t, xx.data(), nc, uu.data());
 }
 
 bool
 FunctionInterface::evaluate_func_t(Real time, const Real x[], Int nc, Real u[])
 {
     CALL_STACK_MSG();
-    return this->evalr_t.evaluate(this->problem->get_dimension(), time, x, nc, u);
+    double t = time;
+    auto dim = this->problem->get_dimension();
+    std::vector<double> xx(dim);
+    for (int i = 0; i < dim; i++)
+        xx[i] = x[i];
+    std::vector<double> uu(nc);
+    for (int i = 0; i < nc; i++)
+        uu[i] = u[i];
+    return this->evalr_t.evaluate(this->problem->get_dimension(), t, xx.data(), nc, uu.data());
 }
 
 } // namespace godzilla

@@ -254,7 +254,7 @@ InputFile::set_parameter_from_yml(Parameters * params,
         if (param_type == utils::type_name<std::string>())
             params->set<std::string>(param_name) = val.as<std::string>();
         else if (param_type == utils::type_name<Real>())
-            params->set<Real>(param_name) = val.as<double>();
+            params->set<Real>(param_name) = val.as<Real>();
         else if (param_type == utils::type_name<Int>())
             params->set<Int>(param_name) = val.as<Int>();
         else if (param_type == utils::type_name<int>())
@@ -263,7 +263,7 @@ InputFile::set_parameter_from_yml(Parameters * params,
             params->set<unsigned int>(param_name) = val.as<unsigned int>();
         // vector values
         else if (param_type == utils::type_name<std::vector<Real>>())
-            params->set<std::vector<Real>>(param_name) = read_vector_value<double>(param_name, val);
+            params->set<std::vector<Real>>(param_name) = read_vector_value<Real>(param_name, val);
         else if (param_type == utils::type_name<std::vector<Int>>())
             params->set<std::vector<Int>>(param_name) = read_vector_value<Int>(param_name, val);
         else if (param_type == utils::type_name<std::vector<int>>())

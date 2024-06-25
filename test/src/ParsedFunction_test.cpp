@@ -104,9 +104,9 @@ TEST(ParsedFunctionTest, eval_via_parser)
 
     parser.SetExpr("exact_fn(t, x, y, z)");
 
-    Real time = 1;
-    Real xx[2] = { 2, 3 };
-    Real zero = 0.;
+    double time = 1;
+    double xx[2] = { 2, 3 };
+    double zero = 0.;
     parser.DefineVar("t", &time);
     parser.DefineVar("x", &(xx[0]));
     parser.DefineVar("y", &(xx[1]));

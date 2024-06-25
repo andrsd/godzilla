@@ -12,7 +12,7 @@ parsed_function_eval(void * ctx, double t, double x, double y, double z)
 {
     auto * fn = static_cast<ParsedFunction *>(ctx);
     std::vector<Real> u(1);
-    std::array<Real, 3> coord = { x, y, z };
+    std::array<Real, 3> coord = { (Real) x, (Real) y, (Real) z };
     fn->evaluate(t, coord.data(), u.data());
     return u[0];
 }
@@ -51,7 +51,16 @@ void
 ParsedFunction::evaluate(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    this->evalr.evaluate(get_dimension(), time, x, this->function.size(), u);
+    double t = time;
+    auto dim = get_dimension();
+    std::vector<double> xx(dim);
+    for (int i = 0; i < dim; i++)
+        xx[i] = x[i];
+    int nc = this->function.size();
+    std::vector<double> uu(nc);
+    for (int i = 0; i < nc; i++)
+        uu[i] = u[i];
+    this->evalr.evaluate(dim, t, xx.data(), nc, uu.data());
 }
 
 } // namespace godzilla

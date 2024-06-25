@@ -46,11 +46,11 @@ FunctionEvaluator::register_function(Function * fn)
 }
 
 Real
-FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
+FunctionEvaluator::evaluate(int dim, double time, const double x[])
 {
     CALL_STACK_MSG();
-    auto * xx = const_cast<Real *>(x);
-    Real zero = 0.;
+    auto * xx = const_cast<double *>(x);
+    double zero = 0.;
     try {
         this->parser.DefineVar("t", &time);
         this->parser.DefineVar("x", &(xx[0]));
@@ -70,11 +70,11 @@ FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
 }
 
 bool
-FunctionEvaluator::evaluate(Int dim, Real time, const Real x[], Int nc, Real u[])
+FunctionEvaluator::evaluate(int dim, double time, const double x[], int nc, double u[])
 {
     CALL_STACK_MSG();
-    auto * xx = const_cast<Real *>(x);
-    Real zero = 0.;
+    auto * xx = const_cast<double *>(x);
+    double zero = 0.;
     try {
         this->parser.DefineVar("t", &time);
         this->parser.DefineVar("x", &(xx[0]));
