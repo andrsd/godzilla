@@ -105,6 +105,16 @@ public:
     /// @param mask Bit mask for an output event, see `Output` for valid options.
     virtual void output(ExecuteOnFlag flag);
 
+    /// Gets the type of vector created with `create_local_vector` and `create_global_vector`
+    ///
+    /// @return The vector type
+    std::string get_vector_type() const;
+
+    /// Sets the type of vector to be created with `create_local_vector` and `create_global_vector`
+    ///
+    /// @param type The vector type, for example `VECSTANDARD`, `VECCUDA`, or `VECVIENNACL`
+    void set_vector_type(const std::string & type);
+
     /// Creates a local vector from a DM object
     ///
     /// @return New local vector
@@ -130,6 +140,16 @@ public:
     Vector get_global_vector() const;
 
     void restore_global_vector(const Vector & vec) const;
+
+    /// Gets the type of matrix that would be created with `create_matrix`
+    ///
+    /// @return The matrix type
+    std::string get_matrix_type() const;
+
+    /// Sets the type of matrix created with `create_matrix`
+    ///
+    /// @param type the matrix type, for example `MATMPIAIJ`
+    void set_matrix_type(const std::string & type);
 
     /// Get an empty matrix for a `DM`
     Matrix create_matrix() const;
@@ -197,6 +217,8 @@ public:
     void clear_auxiliary_vec();
 
 protected:
+    /// Set vector/matrix types
+    virtual void set_up_types();
     /// Allocate objects
     virtual void allocate_objects();
     /// Called before solving starts
