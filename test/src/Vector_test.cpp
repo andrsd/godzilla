@@ -2,8 +2,10 @@
 #include "godzilla/Vector.h"
 #include "godzilla/PerfLog.h"
 #include "ExceptionTestMacros.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 
 using namespace godzilla;
+namespace mpi = mpicpp_lite;
 
 TEST(VectorTest, assembly)
 {
@@ -41,6 +43,14 @@ TEST(VectorTest, set_sizes)
         v.set_sizes(PETSC_DECIDE, PETSC_DECIDE),
         "Calling Vector::set_sizes with n = PETSC_DECIDE and N = PETSC_DECIDE is not allowed.");
     v.destroy();
+}
+
+TEST(VectorTest, get_type)
+{
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    Vector v = Vector::create_seq(comm, 10);
+    if (comm.size() == 1)
+        EXPECT_EQ(v.get_type(), "seq");
 }
 
 TEST(VectorTest, get_size)

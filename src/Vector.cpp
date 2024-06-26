@@ -76,6 +76,15 @@ Vector::assembly_end()
     PETSC_CHECK(VecAssemblyEnd(this->vec));
 }
 
+std::string
+Vector::get_type() const
+{
+    CALL_STACK_MSG();
+    VecType type;
+    PETSC_CHECK(VecGetType(this->vec, &type));
+    return std::string(type);
+}
+
 Int
 Vector::get_size() const
 {
