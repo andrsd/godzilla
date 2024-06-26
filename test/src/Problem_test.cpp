@@ -191,6 +191,7 @@ TEST(ProblemTest, create_matrix)
     Matrix mat = problem.create_matrix();
     EXPECT_EQ(mat.get_n_rows(), 3);
     EXPECT_EQ(mat.get_n_cols(), 3);
+
     mat.destroy();
 }
 
@@ -307,4 +308,23 @@ TEST(ProblemTest, aux_vecs_clear)
         { problem.clear_auxiliary_vec(); },
         "You need PETSC 3.21+ for `Problem::clear_auxiliary_vec()`");
 #endif
+}
+
+TEST(ProblemTest, mat_vec_types)
+{
+    TestApp app;
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 2;
+    LineMesh mesh(mesh_params);
+    mesh.create();
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    TestProblem problem(prob_params);
+
+    EXPECT_EQ(problem.get_vector_type(), VECSTANDARD);
+    EXPECT_EQ(problem.get_matrix_type(), MATAIJ);
 }

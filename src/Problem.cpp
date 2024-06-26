@@ -74,6 +74,22 @@ Problem::get_solution_vector()
     return this->x;
 }
 
+std::string
+Problem::get_vector_type() const
+{
+    CALL_STACK_MSG();
+    VecType type;
+    PETSC_CHECK(DMGetVecType(get_dm(), &type));
+    return std::string { type };
+}
+
+void
+Problem::set_vector_type(const std::string & type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetVecType(get_dm(), type.c_str()));
+}
+
 void
 Problem::create()
 {
@@ -85,6 +101,13 @@ Problem::create()
         pp.second->create();
     for (auto & out : this->outputs)
         out->create();
+}
+
+void
+Problem::set_up_types()
+{
+    CALL_STACK_MSG();
+    // do nothing, i.e. use PETSc defaults
 }
 
 void
@@ -262,6 +285,22 @@ Problem::restore_global_vector(const Vector & vec) const
     CALL_STACK_MSG();
     Vec v = vec;
     PETSC_CHECK(DMRestoreGlobalVector(get_dm(), &v));
+}
+
+std::string
+Problem::get_matrix_type() const
+{
+    CALL_STACK_MSG();
+    MatType type;
+    PETSC_CHECK(DMGetMatType(get_dm(), &type));
+    return std::string { type };
+}
+
+void
+Problem::set_matrix_type(const std::string & type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetMatType(get_dm(), type.c_str()));
 }
 
 Matrix
