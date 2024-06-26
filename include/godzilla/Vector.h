@@ -28,6 +28,11 @@ public:
     void assembly_begin();
     void assembly_end();
 
+    /// Get the vector type name
+    ///
+    /// @return The vector type
+    std::string get_type() const;
+
     Scalar * get_array();
     const Scalar * get_array_read() const;
     void restore_array(Scalar * arr);
