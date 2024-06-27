@@ -2,20 +2,24 @@
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEShapeFns.h"
 #include "ExceptionTestMacros.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 
 using namespace godzilla;
 using namespace testing;
+namespace mpi = mpicpp_lite;
 
 TEST(FEGeometryTest, common_elements_by_node)
 {
-    Array1D<DenseVector<Int, 2>> connect(3);
-    connect(0) = DenseVector<Int, 2>({ 0, 1 });
-    connect(1) = DenseVector<Int, 2>({ 1, 2 });
-    connect(2) = DenseVector<Int, 2>({ 2, 3 });
+    mpi::Communicator comm;
+    UnstructuredMesh mesh = *UnstructuredMesh::build_from_cell_list(comm,
+                                                                    1,
+                                                                    2,
+                                                                    { 0, 1, 1, 2, 2, 3 },
+                                                                    1,
+                                                                    { 0., 0.1, 0.2, 0.3 },
+                                                                    true);
 
-    Array1D<std::vector<Int>> nelcom;
-    nelcom.create(4);
-    fe::common_elements_by_node(connect, nelcom);
+    auto nelcom = fe::common_elements_by_node<2>(mesh);
 
     EXPECT_THAT(nelcom(0), UnorderedElementsAre(0));
     EXPECT_THAT(nelcom(1), UnorderedElementsAre(0, 1));
@@ -23,7 +27,6 @@ TEST(FEGeometryTest, common_elements_by_node)
     EXPECT_THAT(nelcom(3), UnorderedElementsAre(2));
 
     nelcom.destroy();
-    connect.destroy();
 }
 
 TEST(FEGeometryTest, normal_edge2)
