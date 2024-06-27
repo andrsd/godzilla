@@ -57,17 +57,26 @@ connectivity(const UnstructuredMesh & mesh)
     return connect;
 }
 
+/// Compute node-element connectivity
+///
+/// @param mesh Unstructured mesh
+/// @return Array describing which elements are connected to which nodes
+///        Indexing: array[node_id][el0, el1, ... ].
+///        Nodes and cells are using zero-based indexing
 template <Int N_ELEM_NODES>
-void
-common_elements_by_node(const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
-                        Array1D<std::vector<Int>> & nelcom)
+inline Array1D<std::vector<Int>>
+common_elements_by_node(const UnstructuredMesh & mesh)
 {
     CALL_STACK_MSG();
-    for (Int ei = 0; ei < connect.get_size(); ei++) {
-        const auto & node_ids = connect(ei);
+    auto n_all_cells = mesh.get_num_all_cells();
+    auto n_nodes = mesh.get_num_vertices();
+    Array1D<std::vector<Int>> nelcom(n_nodes);
+    for (auto & cell : mesh.get_cell_range()) {
+        const auto & node_ids = mesh.get_connectivity(cell);
         for (Int j = 0; j < N_ELEM_NODES; j++)
-            nelcom(node_ids(j)).push_back(ei);
+            nelcom(node_ids[j] - n_all_cells).push_back(cell);
     }
+    return nelcom;
 }
 
 // Normals
