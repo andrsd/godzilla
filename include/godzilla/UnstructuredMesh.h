@@ -354,6 +354,12 @@ public:
     /// @param normal The cell normal, if appropriate
     void compute_cell_geometry(Int cell, Real * vol, Real centroid[], Real normal[]) const;
 
+    /// Compute the volume for a given cell
+    ///
+    /// @param cell The cell
+    /// @return The cell volume
+    Real compute_cell_volume(Int cell) const;
+
     /// Compute a map of cells common to a vertex
     ///
     /// @return A mapping [vertex index -> list of cell indices]
