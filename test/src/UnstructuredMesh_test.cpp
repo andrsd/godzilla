@@ -346,6 +346,8 @@ TEST(UnstructuredMesh, compute_cell_geometry)
         EXPECT_DOUBLE_EQ(centroid[0], 0.25);
         EXPECT_DOUBLE_EQ(centroid[1], 0.5);
         EXPECT_DOUBLE_EQ(centroid[2], 0.5);
+
+        EXPECT_DOUBLE_EQ(m->compute_cell_volume(0), 0.5);
     }
     {
         Real vol;
@@ -354,6 +356,8 @@ TEST(UnstructuredMesh, compute_cell_geometry)
         EXPECT_DOUBLE_EQ(centroid[0], 0.75);
         EXPECT_DOUBLE_EQ(centroid[1], 0.5);
         EXPECT_DOUBLE_EQ(centroid[2], 0.5);
+
+        EXPECT_DOUBLE_EQ(m->compute_cell_volume(1), 0.5);
     }
 
     {
@@ -368,6 +372,8 @@ TEST(UnstructuredMesh, compute_cell_geometry)
         EXPECT_DOUBLE_EQ(normal[0], 1.);
         EXPECT_DOUBLE_EQ(normal[1], 0.);
         EXPECT_DOUBLE_EQ(normal[2], 0.);
+
+        EXPECT_DOUBLE_EQ(m->compute_cell_volume(14), 1.);
     }
     {
         Real vol;
@@ -381,6 +387,8 @@ TEST(UnstructuredMesh, compute_cell_geometry)
         EXPECT_DOUBLE_EQ(normal[0], 1.);
         EXPECT_DOUBLE_EQ(normal[1], 0.);
         EXPECT_DOUBLE_EQ(normal[2], 0.);
+
+        EXPECT_DOUBLE_EQ(m->compute_cell_volume(16), 1.);
     }
 }
 

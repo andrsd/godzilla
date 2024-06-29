@@ -485,6 +485,15 @@ UnstructuredMesh::compute_cell_geometry(Int cell, Real * vol, Real centroid[], R
     PETSC_CHECK(DMPlexComputeCellGeometryFVM(get_dm(), cell, vol, centroid, normal));
 }
 
+Real
+UnstructuredMesh::compute_cell_volume(Int cell) const
+{
+    CALL_STACK_MSG();
+    Real volume;
+    PETSC_CHECK(DMPlexComputeCellGeometryFVM(get_dm(), cell, &volume, nullptr, nullptr));
+    return volume;
+}
+
 int
 UnstructuredMesh::get_num_cell_nodes(DMPolytopeType elem_type)
 {
