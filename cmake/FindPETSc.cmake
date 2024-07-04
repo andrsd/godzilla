@@ -49,6 +49,7 @@ if (PETSC_HAVE_OPENCL)
     list(APPEND PETSC_INCLUDE_DIRS ${OpenCL_INCLUDE_DIR})
     list(APPEND PETSC_LIBRARIES ${OpenCL_LIBRARY})
 endif()
+check_symbol_exists(PETSC_HAVE_HYPRE "${PETSC_INCLUDE_DIR}/petscconf.h" PETSC_HAVE_HYPRE)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
