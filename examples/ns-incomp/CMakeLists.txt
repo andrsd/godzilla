@@ -17,14 +17,14 @@ target_include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
     PRIVATE
-        ${PETSC_INCLUDE_DIR}
+        ${PETSC_INCLUDE_DIRS}
 )
 
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
         godzilla
-        ${PETSC_LIBRARY}
+        ${PETSC_LIBRARIES}
 )
 
 if (GODZILLA_BUILD_TESTS)
