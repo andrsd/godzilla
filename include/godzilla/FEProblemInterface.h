@@ -369,19 +369,7 @@ private:
         {
         }
 
-        FieldInfo(const FieldInfo & other) :
-            name(other.name),
-            id(other.id),
-            fe(other.fe),
-            block(other.block),
-            nc(other.nc),
-            k(other.k),
-            component_names(other.component_names),
-            values(other.values),
-            derivs(other.derivs),
-            dots(other.dots)
-        {
-        }
+        FieldInfo(const FieldInfo & other) = default;
     };
 
     /// Fields in the problem
