@@ -18,30 +18,30 @@
 namespace godzilla {
 
 ErrorCode
-DiscreteProblemInterface::essential_bc_function(Int dim,
-                                                Real time,
-                                                const Real x[],
-                                                Int nc,
-                                                Scalar u[],
-                                                void * ctx)
+DiscreteProblemInterface::invoke_essential_bc_delegate(Int dim,
+                                                       Real time,
+                                                       const Real x[],
+                                                       Int nc,
+                                                       Scalar u[],
+                                                       void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::EssentialBCFunctionMethodAbstract *>(ctx);
-    method->invoke(dim, time, x, nc, u);
+    auto * method = static_cast<EssentialBCDelegate *>(ctx);
+    method->invoke(time, x, u);
     return 0;
 }
 
 ErrorCode
-DiscreteProblemInterface::essential_bc_function_t(Int dim,
-                                                  Real time,
-                                                  const Real x[],
-                                                  Int nc,
-                                                  Scalar u[],
-                                                  void * ctx)
+DiscreteProblemInterface::invoke_essential_bc_delegate_t(Int dim,
+                                                         Real time,
+                                                         const Real x[],
+                                                         Int nc,
+                                                         Scalar u[],
+                                                         void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::EssentialBCFunctionMethodAbstract *>(ctx);
-    method->invoke_t(dim, time, x, nc, u);
+    auto * method = static_cast<EssentialBCDelegate *>(ctx);
+    method->invoke_t(time, x, u);
     return 0;
 }
 
@@ -76,6 +76,8 @@ DiscreteProblemInterface::~DiscreteProblemInterface()
     this->a.destroy();
     DMDestroy(&this->dm_aux);
     for (auto & d : this->natural_riemann_bc_delegates)
+        delete d;
+    for (auto & d : this->essential_bc_delegates)
         delete d;
 }
 

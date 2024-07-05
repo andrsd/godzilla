@@ -34,6 +34,29 @@ private:
     using NaturalRiemannBCDelegate =
         Delegate<void(Real, const Real *, const Real *, const Scalar *, Scalar *)>;
 
+    class EssentialBCDelegate : public Delegate<void(Real, const Real *, Scalar *)> {
+    public:
+        template <typename T>
+        EssentialBCDelegate(T * t,
+                            void (T::*method)(Real, const Real *, Scalar *),
+                            void (T::*method_t)(Real, const Real *, Scalar *)) :
+            Delegate<void(Real, const Real *, Scalar *)>(t, method)
+        {
+            this->fn_t = [=](Real time, const Real x[], Scalar u[]) {
+                return (t->*method_t)(time, x, u);
+            };
+        }
+
+        void
+        invoke_t(Real time, const Real x[], Scalar u[])
+        {
+            return this->fn_t(time, x, u);
+        }
+
+    private:
+        std::function<void(Real, const Real *, Scalar *)> fn_t;
+    };
+
 public:
     DiscreteProblemInterface(Problem * problem, const Parameters & params);
     virtual ~DiscreteProblemInterface();
@@ -271,15 +294,17 @@ public:
     {
         auto label = this->unstr_mesh->get_face_set_label(boundary);
         auto ids = label.get_values();
-        auto delegate = new internal::EssentialBCFunctionMethod<T>(instance, method, method_t);
+        auto delegate = new EssentialBCDelegate(instance, method, method_t);
+        this->essential_bc_delegates.push_back(delegate);
         add_boundary(DM_BC_ESSENTIAL,
                      name,
                      label,
                      ids,
                      field,
                      components,
-                     reinterpret_cast<void (*)()>(essential_bc_function),
-                     method_t ? reinterpret_cast<void (*)()>(essential_bc_function_t) : nullptr,
+                     reinterpret_cast<void (*)()>(invoke_essential_bc_delegate),
+                     method_t ? reinterpret_cast<void (*)()>(invoke_essential_bc_delegate_t)
+                              : nullptr,
                      delegate);
     }
 
@@ -446,6 +471,9 @@ private:
     /// List of essential boundary conditions
     std::vector<EssentialBC *> essential_bcs;
 
+    /// List of delegates for essential BC
+    std::vector<EssentialBCDelegate *> essential_bc_delegates;
+
     /// List of natural boundary conditions
     std::vector<NaturalBC *> natural_bcs;
 
@@ -477,10 +505,18 @@ private:
     Vector a;
 
 private:
-    static ErrorCode
-    essential_bc_function(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
-    static ErrorCode
-    essential_bc_function_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
+    static ErrorCode invoke_essential_bc_delegate(Int dim,
+                                                  Real time,
+                                                  const Real x[],
+                                                  Int nc,
+                                                  Scalar u[],
+                                                  void * ctx);
+    static ErrorCode invoke_essential_bc_delegate_t(Int dim,
+                                                    Real time,
+                                                    const Real x[],
+                                                    Int nc,
+                                                    Scalar u[],
+                                                    void * ctx);
     static ErrorCode invoke_natural_riemann_bc_delegate(Real time,
                                                         const Real * c,
                                                         const Real * n,
