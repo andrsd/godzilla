@@ -27,7 +27,7 @@ FVProblemInterface::compute_flux(Int dim,
                                  void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::FVComputeFluxMethodAbstract *>(ctx);
+    auto * method = static_cast<ComputeFluxDelegate *>(ctx);
     method->invoke(x, n, u_l, u_r, flux);
 }
 
@@ -47,8 +47,6 @@ FVProblemInterface::~FVProblemInterface()
         auto & fe = kv.second;
         PetscFEDestroy(&fe);
     }
-    for (auto & [id, delegate] : this->compute_flux_methods)
-        delete delegate;
 }
 
 void

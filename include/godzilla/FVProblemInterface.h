@@ -3,45 +3,10 @@
 
 #pragma once
 
+#include "godzilla/Delegate.h"
 #include "godzilla/DiscreteProblemInterface.h"
 
 namespace godzilla {
-
-namespace internal {
-
-/// Abstract "method" for calling compute flux
-struct FVComputeFluxMethodAbstract {
-    virtual ~FVComputeFluxMethodAbstract() = default;
-    virtual void invoke(const Real x[],
-                        const Real n[],
-                        const Scalar u_l[],
-                        const Scalar u_r[],
-                        Scalar flux[]) = 0;
-};
-
-template <typename T>
-struct FVComputeFluxMethod : public FVComputeFluxMethodAbstract {
-    FVComputeFluxMethod(
-        T * instance,
-        void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[])) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    void
-    invoke(const Real x[], const Real n[], const Scalar u_l[], const Scalar u_r[], Scalar flux[])
-        override
-    {
-        return ((*this->instance).*method)(x, n, u_l, u_r, flux);
-    }
-
-private:
-    T * instance;
-    void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]);
-};
-
-} // namespace internal
 
 class AuxiliaryField;
 
@@ -50,6 +15,9 @@ class AuxiliaryField;
 /// Any problem using PetscFV should inherit from this for unified API
 class FVProblemInterface : public DiscreteProblemInterface {
 public:
+    using ComputeFluxDelegate =
+        Delegate<void(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[])>;
+
     FVProblemInterface(Problem * problem, const Parameters & params);
     ~FVProblemInterface() override;
 
@@ -129,11 +97,10 @@ protected:
         T * instance,
         void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]))
     {
-        auto fvcfm = new internal::FVComputeFluxMethod<T>(instance, method);
+        this->compute_flux_methods[field].bind(instance, method);
         auto ds = get_ds();
         PETSC_CHECK(PetscDSSetRiemannSolver(ds, field, FVProblemInterface::compute_flux));
-        PETSC_CHECK(PetscDSSetContext(ds, field, fvcfm));
-        this->compute_flux_methods[field] = fvcfm;
+        PETSC_CHECK(PetscDSSetContext(ds, field, &this->compute_flux_methods[field]));
     }
 
 private:
@@ -194,7 +161,7 @@ private:
 
     std::map<Int, PetscFE> aux_fe;
 
-    std::map<Int, internal::FVComputeFluxMethodAbstract *> compute_flux_methods;
+    std::map<Int, ComputeFluxDelegate> compute_flux_methods;
 
     static const std::string empty_name;
 
