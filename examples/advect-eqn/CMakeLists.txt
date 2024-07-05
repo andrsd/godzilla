@@ -22,7 +22,7 @@ target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
         godzilla
-        ${PETSC_LIBRARY}
+        ${PETSC_LIBRARIES}
 )
 
 if (GODZILLA_BUILD_TESTS)

@@ -23,7 +23,7 @@ target_include_directories(
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
     PRIVATE
-        ${PETSC_INCLUDE_DIR}
+        ${PETSC_INCLUDE_DIRS}
 )
 
 target_link_libraries(
@@ -31,7 +31,7 @@ target_link_libraries(
     PRIVATE
         yaml-cpp::yaml-cpp
         godzilla
-        ${PETSC_LIBRARY}
+        ${PETSC_LIBRARIES}
         ${CMAKE_DL_LIBS}
         gtest_main
         gmock_main

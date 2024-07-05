@@ -2,9 +2,11 @@
 #
 # Once done this will define
 #  PETSC_FOUND - System has PETSc
-#  PETSC_INCLUDE_DIR - The PETSc include directory
-#  PETSC_LIBRARY - The PETSc library
+#  PETSC_INCLUDE_DIRS - The PETSc include directory
+#  PETSC_LIBRARIES - The PETSc library
 #  PETSC_VERSION - The PETSc version
+
+include(CheckSymbolExists)
 
 find_path(
     PETSC_INCLUDE_DIR
@@ -36,6 +38,16 @@ if (PETSCVERSION_H)
     string(REGEX MATCH "define[ ]+PETSC_VERSION_SUBMINOR[ ]+([0-9]+)" TMP "${PETSC_VERSION_FILE}")
     set(PETSC_VERSION_PATCH ${CMAKE_MATCH_1})
     set(PETSC_VERSION "${PETSC_VERSION_MAJOR}.${PETSC_VERSION_MINOR}.${PETSC_VERSION_PATCH}")
+endif()
+
+set(PETSC_INCLUDE_DIRS ${PETSC_INCLUDE_DIR})
+set(PETSC_LIBRARIES ${PETSC_LIBRARY})
+
+check_symbol_exists(PETSC_HAVE_OPENCL "${PETSC_INCLUDE_DIR}/petscconf.h" PETSC_HAVE_OPENCL)
+if (PETSC_HAVE_OPENCL)
+    find_package(OpenCL REQUIRED)
+    list(APPEND PETSC_INCLUDE_DIRS ${OpenCL_INCLUDE_DIR})
+    list(APPEND PETSC_LIBRARIES ${OpenCL_LIBRARY})
 endif()
 
 include(FindPackageHandleStandardArgs)

@@ -26,7 +26,7 @@ target_include_directories(
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
         $<INSTALL_INTERFACE:include>
     PRIVATE
-        ${PETSC_INCLUDE_DIR}
+        ${PETSC_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
 )
@@ -36,7 +36,7 @@ target_link_libraries(
     PUBLIC
         fmt::fmt
     PRIVATE
-        ${PETSC_LIBRARY}
+        ${PETSC_LIBRARIES}
         muParser
         exodusIIcpp::exodusIIcpp
         yaml-cpp::yaml-cpp
