@@ -410,7 +410,7 @@ private:
         /// the multiplier a for dF/dU_t
         Real u_t_shift;
 
-        AssemblyData(Int dim);
+        explicit AssemblyData(Int dim);
     } * asmbl;
 
     /// Functionals that must be evaluated before the weak form residual functionals
