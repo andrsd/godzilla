@@ -55,20 +55,21 @@ SNESolver::LineSearch::operator SNESLineSearch() const
 //
 
 ErrorCode
-SNESolver::compute_residual(SNES, Vec x, Vec f, void * ctx)
+SNESolver::invoke_compute_residual_delegate(SNES, Vec x, Vec f, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::SNESComputeResidualMethodAbstract *>(ctx);
+    auto * method = static_cast<Delegate<ErrorCode(const Vector & x, Vector & f)> *>(ctx);
     Vector vec_x(x);
     Vector vec_f(f);
     return method->invoke(vec_x, vec_f);
 }
 
 ErrorCode
-SNESolver::compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
+SNESolver::invoke_compute_jacobian_delegate(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::SNESComputeJacobianMethodAbstract *>(ctx);
+    auto * method =
+        static_cast<Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> *>(ctx);
     Vector vec_x(x);
     Matrix mat_J(J);
     Matrix mat_Jp(Jp);
@@ -76,42 +77,18 @@ SNESolver::compute_jacobian(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 }
 
 ErrorCode
-SNESolver::monitor(SNES, Int it, Real rnorm, void * ctx)
+SNESolver::invoke_monitor_delegate(SNES, Int it, Real rnorm, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::SNESMonitorMethodAbstract *>(ctx);
+    auto * method = static_cast<Delegate<ErrorCode(Int it, Real rnorm)> *>(ctx);
     return method->invoke(it, rnorm);
 }
 
-ErrorCode
-SNESolver::monitor_destroy(void ** ctx)
-{
-    auto * method = static_cast<internal::SNESMonitorMethodAbstract *>(*ctx);
-    delete method;
-    return 0;
-}
+SNESolver::SNESolver() : snes(nullptr) {}
 
-SNESolver::SNESolver() :
-    snes(nullptr),
-    monitor_method(nullptr),
-    compute_residual_method(nullptr),
-    compute_jacobian_method(nullptr)
-{
-}
+SNESolver::SNESolver(SNES snes) : snes(snes) {}
 
-SNESolver::SNESolver(SNES snes) :
-    snes(snes),
-    monitor_method(nullptr),
-    compute_residual_method(nullptr),
-    compute_jacobian_method(nullptr)
-{
-}
-
-SNESolver::~SNESolver()
-{
-    delete this->compute_residual_method;
-    delete this->compute_jacobian_method;
-}
+SNESolver::~SNESolver() {}
 
 void
 SNESolver::create(MPI_Comm comm)

@@ -7,89 +7,10 @@
 #include "godzilla/KrylovSolver.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
+#include "godzilla/Delegate.h"
 #include "petscsnes.h"
 
 namespace godzilla {
-
-namespace internal {
-
-/// Abstract "method" for calling monitor
-struct SNESMonitorMethodAbstract {
-    virtual ~SNESMonitorMethodAbstract() = default;
-    virtual ErrorCode invoke(Int it, Real rnorm) = 0;
-};
-
-template <typename T>
-struct SNESMonitorMethod : public SNESMonitorMethodAbstract {
-    SNESMonitorMethod(T * instance, ErrorCode (T::*monitor)(Int, Real)) :
-        instance(instance),
-        monitor(monitor)
-    {
-    }
-
-    ErrorCode
-    invoke(Int it, Real rnorm) override
-    {
-        return ((*this->instance).*monitor)(it, rnorm);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*monitor)(Int, Real);
-};
-
-/// Abstract "method" for calling compute residual
-struct SNESComputeResidualMethodAbstract {
-    virtual ~SNESComputeResidualMethodAbstract() = default;
-    virtual ErrorCode invoke(const Vector & x, Vector & f) = 0;
-};
-
-template <typename T>
-struct SNESComputeResidualMethod : public SNESComputeResidualMethodAbstract {
-    SNESComputeResidualMethod(T * instance, ErrorCode (T::*method)(const Vector &, Vector &)) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    ErrorCode
-    invoke(const Vector & x, Vector & f) override
-    {
-        return ((*this->instance).*method)(x, f);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*method)(const Vector & x, Vector & f);
-};
-
-/// Abstract "method" for calling compute Jacobian
-struct SNESComputeJacobianMethodAbstract {
-    virtual ~SNESComputeJacobianMethodAbstract() = default;
-    virtual ErrorCode invoke(const Vector & x, Matrix & J, Matrix & Jp) = 0;
-};
-
-template <typename T>
-struct SNESComputeJacobianMethod : public SNESComputeJacobianMethodAbstract {
-    SNESComputeJacobianMethod(T * instance,
-                              ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &)) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    ErrorCode
-    invoke(const Vector & x, Matrix & J, Matrix & Jp) override
-    {
-        return ((*this->instance).*method)(x, J, Jp);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &);
-};
-
-} // namespace internal
 
 /// Wrapper around SNES
 class SNESolver {
@@ -175,15 +96,16 @@ public:
     /// @tparam T C++ class type
     /// @param r Vector to store function values
     /// @param instance Instance of class T
-    /// @param callback Member function in class T to compute function values
+    /// @param method Member function in class T to compute function values
     template <class T>
     void
-    set_function(Vector & r, T * instance, ErrorCode (T::*callback)(const Vector &, Vector &))
+    set_function(Vector & r, T * instance, ErrorCode (T::*method)(const Vector &, Vector &))
     {
-        this->compute_residual_method =
-            new internal::SNESComputeResidualMethod<T>(instance, callback);
-        PETSC_CHECK(
-            SNESSetFunction(this->snes, r, compute_residual, this->compute_residual_method));
+        this->compute_residual_method.bind(instance, method);
+        PETSC_CHECK(SNESSetFunction(this->snes,
+                                    r,
+                                    invoke_compute_residual_delegate,
+                                    &this->compute_residual_method));
     }
 
     /// Sets the function to compute Jacobian as well as the location to store the matrix.
@@ -203,18 +125,20 @@ public:
     /// @param J The matrix that defines the (approximate) Jacobian
     /// @param Jp The matrix to be used in constructing the preconditioner, usually the same as `J`.
     /// @param instance Instance of class T
-    /// @param callback Member function in class T to compute the Jacobian
+    /// @param method Member function in class T to compute the Jacobian
     template <class T>
     void
     set_jacobian(Matrix & J,
                  Matrix & Jp,
                  T * instance,
-                 ErrorCode (T::*callback)(const Vector &, Matrix &, Matrix &))
+                 ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &))
     {
-        this->compute_jacobian_method =
-            new internal::SNESComputeJacobianMethod<T>(instance, callback);
-        PETSC_CHECK(
-            SNESSetJacobian(this->snes, J, Jp, compute_jacobian, this->compute_jacobian_method));
+        this->compute_jacobian_method.bind(instance, method);
+        PETSC_CHECK(SNESSetJacobian(this->snes,
+                                    J,
+                                    Jp,
+                                    invoke_compute_jacobian_delegate,
+                                    &this->compute_jacobian_method));
     }
 
     /// Indicates that the solver should use matrix-free finite difference matrix-vector products to
@@ -254,13 +178,14 @@ public:
     ///
     /// @tparam T C++ class type
     /// @param instance Instance of class T
-    /// @param callback Member function in class T
+    /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, ErrorCode (T::*callback)(Int, Real))
+    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real))
     {
-        this->monitor_method = new internal::SNESMonitorMethod<T>(instance, callback);
-        PETSC_CHECK(SNESMonitorSet(this->snes, monitor, this->monitor_method, monitor_destroy));
+        this->monitor_method.bind(instance, method);
+        PETSC_CHECK(
+            SNESMonitorSet(this->snes, invoke_monitor_delegate, &this->monitor_method, nullptr));
     }
 
     /// Solves a nonlinear system F(x) = b.
@@ -286,17 +211,16 @@ private:
     /// PETSc object
     SNES snes;
     /// Method for monitoring the solve
-    internal::SNESMonitorMethodAbstract * monitor_method;
+    Delegate<ErrorCode(Int it, Real rnorm)> monitor_method;
     /// Method for computing residual
-    internal::SNESComputeResidualMethodAbstract * compute_residual_method;
+    Delegate<ErrorCode(const Vector & x, Vector & f)> compute_residual_method;
     /// Method for computing Jacobian
-    internal::SNESComputeJacobianMethodAbstract * compute_jacobian_method;
+    Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
 
 public:
-    static ErrorCode compute_residual(SNES, Vec, Vec, void *);
-    static ErrorCode compute_jacobian(SNES, Vec, Mat, Mat, void *);
-    static ErrorCode monitor(SNES, Int, Real, void *);
-    static ErrorCode monitor_destroy(void ** ctx);
+    static ErrorCode invoke_compute_residual_delegate(SNES, Vec, Vec, void *);
+    static ErrorCode invoke_compute_jacobian_delegate(SNES, Vec, Mat, Mat, void *);
+    static ErrorCode invoke_monitor_delegate(SNES, Int, Real, void *);
 };
 
 } // namespace godzilla
