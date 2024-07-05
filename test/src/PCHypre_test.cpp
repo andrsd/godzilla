@@ -1,11 +1,14 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "ExceptionTestMacros.h"
 #include "godzilla/PCHypre.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
 
 using namespace godzilla;
 using namespace testing;
+
+#ifdef PETSC_HAVE_HYPRE
 
 TEST(PCHypre, ctor_pc)
 {
@@ -51,7 +54,7 @@ TEST(PCHypre, set_type)
     }
 }
 
-#if PETSC_VERSION_GE(3, 18, 0)
+    #if PETSC_VERSION_GE(3, 18, 0)
 TEST(PCHypre, ams_set_interior_nodes)
 {
     testing::internal::CaptureStdout();
@@ -70,7 +73,7 @@ TEST(PCHypre, ams_set_interior_nodes)
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("compatible subspace projection frequency 0"));
 }
-#endif
+    #endif
 
 TEST(PCHypre, set_alpha_poisson_matrix)
 {
@@ -175,3 +178,15 @@ TEST(PCHypre, set_edge_constant_vectors_3d)
     pc.set_edge_constant_vectors(v0, v1, v2);
     pc.destroy();
 }
+
+#else
+
+TEST(PCHypre, ctor_pc)
+{
+    TestApp app;
+    Preconditioner pc;
+    pc.create(app.get_comm());
+    EXPECT_THROW_MSG({ PCHypre(pc); }, "PETSc was not built with HYPRE.");
+}
+
+#endif

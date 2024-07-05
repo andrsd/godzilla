@@ -20,6 +20,10 @@ set_target_properties(
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC -DGODZILLA_WITH_PERF_LOG)
 
+if (PETSC_HAVE_HYPRE)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE -DPETSC_HAVE_HYPRE)
+endif()
+
 target_include_directories(
     ${PROJECT_NAME}
     PUBLIC

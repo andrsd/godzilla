@@ -4,7 +4,7 @@
 #include "godzilla/Vector.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/LineMesh.h"
-#include "godzilla/PCHypre.h"
+#include "godzilla/PCJacobi.h"
 #include "TestApp.h"
 
 using namespace godzilla;
@@ -275,7 +275,7 @@ TEST(KrylovSolver, set_pc_type)
     auto comm = app.get_comm();
     KrylovSolver ks;
     ks.create(comm);
-    Preconditioner pc = ks.set_pc_type<PCHypre>();
-    EXPECT_EQ(pc.get_type(), PCHYPRE);
+    Preconditioner pc = ks.set_pc_type<PCJacobi>();
+    EXPECT_EQ(pc.get_type(), PCJACOBI);
     ks.destroy();
 }
