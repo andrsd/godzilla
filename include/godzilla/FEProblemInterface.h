@@ -199,55 +199,55 @@ public:
                                       Int part = 0);
 
     /// Integrate residual
-    virtual ErrorCode integrate_residual(PetscDS ds,
-                                         PetscFormKey key,
-                                         Int n_elems,
-                                         PetscFEGeom * cell_geom,
-                                         const Scalar coefficients[],
-                                         const Scalar coefficients_t[],
-                                         PetscDS ds_aux,
-                                         const Scalar coefficients_aux[],
-                                         Real t,
-                                         Scalar elem_vec[]);
+    ErrorCode integrate_residual(PetscDS ds,
+                                 PetscFormKey key,
+                                 Int n_elems,
+                                 PetscFEGeom * cell_geom,
+                                 const Scalar coefficients[],
+                                 const Scalar coefficients_t[],
+                                 PetscDS ds_aux,
+                                 const Scalar coefficients_aux[],
+                                 Real t,
+                                 Scalar elem_vec[]);
 
     /// Integrate residual over a boundary
-    virtual ErrorCode integrate_bnd_residual(PetscDS ds,
-                                             PetscFormKey key,
-                                             Int n_elems,
-                                             PetscFEGeom * face_geom,
-                                             const Scalar coefficients[],
-                                             const Scalar coefficients_t[],
-                                             PetscDS ds_aux,
-                                             const Scalar coefficients_aux[],
-                                             Real t,
-                                             Scalar elem_vec[]);
+    ErrorCode integrate_bnd_residual(PetscDS ds,
+                                     PetscFormKey key,
+                                     Int n_elems,
+                                     PetscFEGeom * face_geom,
+                                     const Scalar coefficients[],
+                                     const Scalar coefficients_t[],
+                                     PetscDS ds_aux,
+                                     const Scalar coefficients_aux[],
+                                     Real t,
+                                     Scalar elem_vec[]);
 
     /// Integrate Jacobian
-    virtual ErrorCode integrate_jacobian(PetscDS ds,
-                                         PetscFEJacobianType jtype,
-                                         PetscFormKey key,
-                                         Int n_elems,
-                                         PetscFEGeom * cell_geom,
-                                         const Scalar coefficients[],
-                                         const Scalar coefficients_t[],
-                                         PetscDS ds_aux,
-                                         const Scalar coefficients_aux[],
-                                         Real t,
-                                         Real u_tshift,
-                                         Scalar elem_mat[]);
+    ErrorCode integrate_jacobian(PetscDS ds,
+                                 PetscFEJacobianType jtype,
+                                 PetscFormKey key,
+                                 Int n_elems,
+                                 PetscFEGeom * cell_geom,
+                                 const Scalar coefficients[],
+                                 const Scalar coefficients_t[],
+                                 PetscDS ds_aux,
+                                 const Scalar coefficients_aux[],
+                                 Real t,
+                                 Real u_tshift,
+                                 Scalar elem_mat[]);
 
     // Integrate Jacobian over a boundary
-    virtual ErrorCode integrate_bnd_jacobian(PetscDS ds,
-                                             PetscFormKey key,
-                                             Int n_elems,
-                                             PetscFEGeom * face_geom,
-                                             const Scalar coefficients[],
-                                             const Scalar coefficients_t[],
-                                             PetscDS ds_aux,
-                                             const Scalar coefficients_aux[],
-                                             Real t,
-                                             Real u_tshift,
-                                             Scalar elem_mat[]);
+    ErrorCode integrate_bnd_jacobian(PetscDS ds,
+                                     PetscFormKey key,
+                                     Int n_elems,
+                                     PetscFEGeom * face_geom,
+                                     const Scalar coefficients[],
+                                     const Scalar coefficients_t[],
+                                     PetscDS ds_aux,
+                                     const Scalar coefficients_aux[],
+                                     Real t,
+                                     Real u_tshift,
+                                     Scalar elem_mat[]);
 
 protected:
     const std::map<Int, FieldInfo> & get_fields() const;
