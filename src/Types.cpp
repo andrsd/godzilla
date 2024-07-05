@@ -6,6 +6,18 @@
 
 namespace godzilla {
 
+namespace internal {
+
+ErrorCode
+invoke_function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
+{
+    auto * method = static_cast<FunctionDelegate *>(ctx);
+    method->invoke(time, x, u);
+    return 0;
+}
+
+} // namespace internal
+
 std::string
 get_element_type_str(const ElementType & type)
 {

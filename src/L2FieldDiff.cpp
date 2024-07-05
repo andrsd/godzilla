@@ -9,7 +9,6 @@
 #include "godzilla/ParsedFunction.h"
 #include "godzilla/Types.h"
 #include "godzilla/App.h"
-#include "godzilla/FunctionDelegate.h"
 
 namespace godzilla {
 

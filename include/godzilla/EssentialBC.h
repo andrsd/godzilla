@@ -5,7 +5,6 @@
 
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/Types.h"
-#include "godzilla/FunctionDelegate.h"
 
 namespace godzilla {
 

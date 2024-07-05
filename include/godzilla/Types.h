@@ -5,6 +5,7 @@
 
 #include "petsc.h"
 #include "godzilla/Flags.h"
+#include "godzilla/Delegate.h"
 
 namespace godzilla {
 
@@ -14,6 +15,15 @@ using Scalar = PetscScalar;
 using ErrorCode = PetscErrorCode;
 
 typedef ErrorCode PetscFunc(Int dim, Real time, const Real x[], Int Nc, Scalar u[], void * ctx);
+
+using FunctionDelegate = Delegate<void(Real, const Real[], Scalar[])>;
+
+namespace internal {
+
+ErrorCode
+invoke_function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
+
+} // namespace internal
 
 //
 

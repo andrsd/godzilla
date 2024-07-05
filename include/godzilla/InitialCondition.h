@@ -7,7 +7,6 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Types.h"
 #include "godzilla/DenseVector.h"
-#include "godzilla/FunctionDelegate.h"
 
 namespace godzilla {
 
