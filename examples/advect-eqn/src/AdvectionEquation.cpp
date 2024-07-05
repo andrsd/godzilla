@@ -40,7 +40,7 @@ AdvectionEquation::set_up_weak_form()
     set_riemann_solver(0, this, &AdvectionEquation::compute_flux);
 }
 
-ErrorCode
+void
 AdvectionEquation::compute_flux(const Real[],
                                 const Real n[],
                                 const Scalar u_l[],
@@ -52,5 +52,4 @@ AdvectionEquation::compute_flux(const Real[],
     Real wn = 0;
     wn += wind[0] * n[0];
     flux[0] = (wn > 0 ? u_l[0] : u_r[0]) * wn;
-    return 0;
 }

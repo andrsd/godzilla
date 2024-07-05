@@ -12,27 +12,24 @@ namespace internal {
 /// Abstract "method" for calling compute flux
 struct FVComputeFluxMethodAbstract {
     virtual ~FVComputeFluxMethodAbstract() = default;
-    virtual ErrorCode invoke(const Real x[],
-                             const Real n[],
-                             const Scalar u_l[],
-                             const Scalar u_r[],
-                             Scalar flux[]) = 0;
+    virtual void invoke(const Real x[],
+                        const Real n[],
+                        const Scalar u_l[],
+                        const Scalar u_r[],
+                        Scalar flux[]) = 0;
 };
 
 template <typename T>
 struct FVComputeFluxMethod : public FVComputeFluxMethodAbstract {
-    FVComputeFluxMethod(T * instance,
-                        ErrorCode (T::*method)(const Real[],
-                                               const Real[],
-                                               const Scalar[],
-                                               const Scalar[],
-                                               Scalar[])) :
+    FVComputeFluxMethod(
+        T * instance,
+        void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[])) :
         instance(instance),
         method(method)
     {
     }
 
-    ErrorCode
+    void
     invoke(const Real x[], const Real n[], const Scalar u_l[], const Scalar u_r[], Scalar flux[])
         override
     {
@@ -41,7 +38,7 @@ struct FVComputeFluxMethod : public FVComputeFluxMethodAbstract {
 
 private:
     T * instance;
-    ErrorCode (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]);
+    void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]);
 };
 
 } // namespace internal
@@ -127,13 +124,10 @@ protected:
     /// @param method Member function in class T
     template <class T>
     void
-    set_riemann_solver(Int field,
-                       T * instance,
-                       ErrorCode (T::*method)(const Real[],
-                                              const Real[],
-                                              const Scalar[],
-                                              const Scalar[],
-                                              Scalar[]))
+    set_riemann_solver(
+        Int field,
+        T * instance,
+        void (T::*method)(const Real[], const Real[], const Scalar[], const Scalar[], Scalar[]))
     {
         auto fvcfm = new internal::FVComputeFluxMethod<T>(instance, method);
         auto ds = get_ds();
