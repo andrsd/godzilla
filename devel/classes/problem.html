@@ -117,10 +117,14 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem23get_postprocessor_namesEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_postprocessor_names()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem22compute_postprocessorsEv"><code class="docutils literal notranslate"><span class="pre">Problem::compute_postprocessors()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem6outputE13ExecuteOnFlag"><code class="docutils literal notranslate"><span class="pre">Problem::output()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15get_vector_typeEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_vector_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem15set_vector_typeERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Problem::set_vector_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem19create_local_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::create_local_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem16get_local_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_local_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem20create_global_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::create_global_vector()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem17get_global_vectorEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_global_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15get_matrix_typeEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_matrix_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem15set_matrix_typeERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Problem::set_matrix_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem13create_matrixEv"><code class="docutils literal notranslate"><span class="pre">Problem::create_matrix()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem17get_local_sectionEv"><code class="docutils literal notranslate"><span class="pre">Problem::get_local_section()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem17set_local_sectionERK7Section"><code class="docutils literal notranslate"><span class="pre">Problem::set_local_section()</span></code></a></li>
@@ -329,6 +333,28 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem15get_vector_typeEv">
+<span id="_CPPv3NK8godzilla7Problem15get_vector_typeEv"></span><span id="_CPPv2NK8godzilla7Problem15get_vector_typeEv"></span><span id="godzilla::Problem::get_vector_typeC"></span><span class="target" id="classgodzilla_1_1_problem_1aa4e00dd4d390357ebb0f3cfbd8e7a142"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_vector_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem15get_vector_typeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets the type of vector created with <code class="docutils literal notranslate"><span class="pre">create_local_vector</span></code> and <code class="docutils literal notranslate"><span class="pre">create_global_vector</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The vector type </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem15set_vector_typeERKNSt6stringE">
+<span id="_CPPv3N8godzilla7Problem15set_vector_typeERKNSt6stringE"></span><span id="_CPPv2N8godzilla7Problem15set_vector_typeERKNSt6stringE"></span><span id="godzilla::Problem::set_vector_type__ssCR"></span><span class="target" id="classgodzilla_1_1_problem_1a845ab0cb537a829461ce36ecce720b8f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_vector_type</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem15set_vector_typeERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the type of vector to be created with <code class="docutils literal notranslate"><span class="pre">create_local_vector</span></code> and <code class="docutils literal notranslate"><span class="pre">create_global_vector</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> – The vector type, for example <code class="docutils literal notranslate"><span class="pre">VECSTANDARD</span></code>, <code class="docutils literal notranslate"><span class="pre">VECCUDA</span></code>, or <code class="docutils literal notranslate"><span class="pre">VECVIENNACL</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem19create_local_vectorEv">
 <span id="_CPPv3NK8godzilla7Problem19create_local_vectorEv"></span><span id="_CPPv2NK8godzilla7Problem19create_local_vectorEv"></span><span id="godzilla::Problem::create_local_vectorC"></span><span class="target" id="classgodzilla_1_1_problem_1ac6797e423652beca09fdc8ded8f4638d"></span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_local_vector</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem19create_local_vectorEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Creates a local vector from a DM object. </p>
@@ -370,6 +396,28 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Global vector </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem15get_matrix_typeEv">
+<span id="_CPPv3NK8godzilla7Problem15get_matrix_typeEv"></span><span id="_CPPv2NK8godzilla7Problem15get_matrix_typeEv"></span><span id="godzilla::Problem::get_matrix_typeC"></span><span class="target" id="classgodzilla_1_1_problem_1a2b6f11645e9142485693013281d7a03c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_matrix_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem15get_matrix_typeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets the type of matrix that would be created with <code class="docutils literal notranslate"><span class="pre">create_matrix</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The matrix type </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem15set_matrix_typeERKNSt6stringE">
+<span id="_CPPv3N8godzilla7Problem15set_matrix_typeERKNSt6stringE"></span><span id="_CPPv2N8godzilla7Problem15set_matrix_typeERKNSt6stringE"></span><span id="godzilla::Problem::set_matrix_type__ssCR"></span><span class="target" id="classgodzilla_1_1_problem_1a4c7601f5b7436d9c7d81d1a93b6ec518"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_matrix_type</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem15set_matrix_typeERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the type of matrix created with <code class="docutils literal notranslate"><span class="pre">create_matrix</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> – the matrix type, for example <code class="docutils literal notranslate"><span class="pre">MATMPIAIJ</span></code></p>
 </dd>
 </dl>
 </dd></dl>
