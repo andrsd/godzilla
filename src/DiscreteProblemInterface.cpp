@@ -46,15 +46,15 @@ DiscreteProblemInterface::essential_bc_function_t(Int dim,
 }
 
 ErrorCode
-DiscreteProblemInterface::natural_riemann_bc_function(Real time,
-                                                      const Real * c,
-                                                      const Real * n,
-                                                      const Scalar * xI,
-                                                      Scalar * xG,
-                                                      void * ctx)
+DiscreteProblemInterface::invoke_natural_riemann_bc_delegate(Real time,
+                                                             const Real * c,
+                                                             const Real * n,
+                                                             const Scalar * xI,
+                                                             Scalar * xG,
+                                                             void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::NaturalRiemannBCFunctionMethodAbstract *>(ctx);
+    auto * method = static_cast<NaturalRiemannBCDelegate *>(ctx);
     method->invoke(time, c, n, xI, xG);
     return 0;
 }
@@ -75,6 +75,8 @@ DiscreteProblemInterface::~DiscreteProblemInterface()
     this->sln.destroy();
     this->a.destroy();
     DMDestroy(&this->dm_aux);
+    for (auto & d : this->natural_riemann_bc_delegates)
+        delete d;
 }
 
 Problem *

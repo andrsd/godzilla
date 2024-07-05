@@ -30,6 +30,10 @@ class NaturalBC;
 /// Interface for discrete problems
 ///
 class DiscreteProblemInterface {
+private:
+    using NaturalRiemannBCDelegate =
+        Delegate<void(Real, const Real *, const Real *, const Scalar *, Scalar *)>;
+
 public:
     DiscreteProblemInterface(Problem * problem, const Parameters & params);
     virtual ~DiscreteProblemInterface();
@@ -296,14 +300,15 @@ public:
     {
         auto label = this->unstr_mesh->get_face_set_label(boundary);
         auto ids = label.get_values();
-        auto delegate = new internal::NaturalRiemannBCFunctionMethod<T>(instance, method);
+        auto delegate = new NaturalRiemannBCDelegate(instance, method);
+        this->natural_riemann_bc_delegates.push_back(delegate);
         add_boundary(DM_BC_NATURAL_RIEMANN,
                      name,
                      label,
                      ids,
                      field,
                      components,
-                     reinterpret_cast<void (*)()>(natural_riemann_bc_function),
+                     reinterpret_cast<void (*)()>(invoke_natural_riemann_bc_delegate),
                      nullptr,
                      delegate);
     }
@@ -444,6 +449,9 @@ private:
     /// List of natural boundary conditions
     std::vector<NaturalBC *> natural_bcs;
 
+    /// List of delegates for natural Riemann BC
+    std::vector<NaturalRiemannBCDelegate *> natural_riemann_bc_delegates;
+
     /// List of auxiliary field objects
     std::vector<AuxiliaryField *> auxs;
 
@@ -473,13 +481,12 @@ private:
     essential_bc_function(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
     static ErrorCode
     essential_bc_function_t(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx);
-
-    static ErrorCode natural_riemann_bc_function(Real time,
-                                                 const Real * c,
-                                                 const Real * n,
-                                                 const Scalar * xI,
-                                                 Scalar * xG,
-                                                 void * ctx);
+    static ErrorCode invoke_natural_riemann_bc_delegate(Real time,
+                                                        const Real * c,
+                                                        const Real * n,
+                                                        const Scalar * xI,
+                                                        Scalar * xG,
+                                                        void * ctx);
 };
 
 template <Int N>
