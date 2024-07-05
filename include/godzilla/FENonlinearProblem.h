@@ -4,90 +4,11 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/Delegate.h"
 #include "godzilla/NonlinearProblem.h"
 #include "godzilla/FEProblemInterface.h"
 
 namespace godzilla {
-
-namespace internal {
-
-/// Delegate for calling compute_boundary
-struct ComputeBoundaryMethodAbstract {
-    virtual ~ComputeBoundaryMethodAbstract() = default;
-    virtual ErrorCode invoke(Vector & x) = 0;
-};
-
-template <typename T>
-struct ComputeBoundaryMethod : public ComputeBoundaryMethodAbstract {
-    ComputeBoundaryMethod(T * instance, ErrorCode (T::*method)(Vector &)) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    ErrorCode
-    invoke(Vector & x) override
-    {
-        return ((*this->instance).*method)(x);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*method)(Vector &);
-};
-
-/// Delegate for calling compute_residual
-struct ComputeResidualMethodAbstract {
-    virtual ~ComputeResidualMethodAbstract() = default;
-    virtual ErrorCode invoke(const Vector & x, Vector & f) = 0;
-};
-
-template <typename T>
-struct ComputeResidualMethod : public ComputeResidualMethodAbstract {
-    ComputeResidualMethod(T * instance, ErrorCode (T::*method)(const Vector &, Vector &)) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    ErrorCode
-    invoke(const Vector & x, Vector & f) override
-    {
-        return ((*this->instance).*method)(x, f);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*method)(const Vector &, Vector &);
-};
-
-/// Delegate for calling compute_jacobian
-struct ComputeJacobianMethodAbstract {
-    virtual ~ComputeJacobianMethodAbstract() = default;
-    virtual ErrorCode invoke(const Vector & x, Matrix & J, Matrix & Jp) = 0;
-};
-
-template <typename T>
-struct ComputeJacobianMethod : public ComputeJacobianMethodAbstract {
-    ComputeJacobianMethod(T * instance,
-                          ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &)) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    ErrorCode
-    invoke(const Vector & x, Matrix & J, Matrix & Jp) override
-    {
-        return ((*this->instance).*method)(x, J, Jp);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &);
-};
-
-} // namespace internal
 
 class ResidualFunc;
 class JacobianFunc;
@@ -97,7 +18,6 @@ class IndexSet;
 class FENonlinearProblem : public NonlinearProblem, public FEProblemInterface {
 public:
     explicit FENonlinearProblem(const Parameters & parameters);
-    ~FENonlinearProblem() override;
 
     void create() override;
     Real get_time() const override;
@@ -117,10 +37,10 @@ protected:
     void
     set_boundary_local(T * instance, ErrorCode (T::*method)(Vector &))
     {
-        this->compute_boundary_delegate = new internal::ComputeBoundaryMethod<T>(instance, method);
+        this->compute_boundary_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetBoundaryLocal(get_dm(),
-                                           FENonlinearProblem::compute_boundary,
-                                           this->compute_boundary_delegate));
+                                           invoke_compute_boundary_delegate,
+                                           &this->compute_boundary_delegate));
     }
 
     /// Set a local residual evaluation function. This function is called with local vector
@@ -129,10 +49,10 @@ protected:
     void
     set_function_local(T * instance, ErrorCode (T::*method)(const Vector &, Vector &))
     {
-        this->compute_residual_delegate = new internal::ComputeResidualMethod<T>(instance, method);
+        this->compute_residual_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetFunctionLocal(get_dm(),
-                                           FENonlinearProblem::compute_residual,
-                                           this->compute_residual_delegate));
+                                           invoke_compute_residual_delegate,
+                                           &this->compute_residual_delegate));
     }
 
     /// Set a local Jacobian evaluation function
@@ -140,10 +60,10 @@ protected:
     void
     set_jacobian_local(T * instance, ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &))
     {
-        this->compute_jacobian_delegate = new internal::ComputeJacobianMethod<T>(instance, method);
+        this->compute_jacobian_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetJacobianLocal(get_dm(),
-                                           FENonlinearProblem::compute_jacobian,
-                                           this->compute_jacobian_delegate));
+                                           invoke_compute_jacobian_delegate,
+                                           &this->compute_jacobian_delegate));
     }
 
     ErrorCode compute_boundary(Vector & x);
@@ -201,19 +121,19 @@ protected:
 private:
     enum State { INITIAL, FINAL } state;
     /// Delegate for compute_boundary
-    internal::ComputeBoundaryMethodAbstract * compute_boundary_delegate;
+    Delegate<ErrorCode(Vector &)> compute_boundary_delegate;
     /// Delegate for compute_residual
-    internal::ComputeResidualMethodAbstract * compute_residual_delegate;
+    Delegate<ErrorCode(const Vector &, Vector &)> compute_residual_delegate;
     /// Delegate for compute_jacobian
-    internal::ComputeJacobianMethodAbstract * compute_jacobian_delegate;
+    Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_delegate;
 
 public:
     static Parameters parameters();
 
 private:
-    static ErrorCode compute_boundary(DM dm, Vec x, void * context);
-    static ErrorCode compute_residual(DM, Vec x, Vec F, void * context);
-    static ErrorCode compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * context);
+    static ErrorCode invoke_compute_boundary_delegate(DM dm, Vec x, void * context);
+    static ErrorCode invoke_compute_residual_delegate(DM, Vec x, Vec F, void * context);
+    static ErrorCode invoke_compute_jacobian_delegate(DM, Vec x, Mat J, Mat Jp, void * context);
 };
 
 } // namespace godzilla

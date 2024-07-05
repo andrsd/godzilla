@@ -16,29 +16,30 @@
 namespace godzilla {
 
 ErrorCode
-FENonlinearProblem::compute_boundary(DM, Vec x, void * context)
+FENonlinearProblem::invoke_compute_boundary_delegate(DM, Vec x, void * context)
 {
     CALL_STACK_MSG();
-    auto * delegate = static_cast<internal::ComputeBoundaryMethodAbstract *>(context);
+    auto * delegate = static_cast<Delegate<ErrorCode(Vector &)> *>(context);
     Vector vec_x(x);
     return delegate->invoke(vec_x);
 }
 
 ErrorCode
-FENonlinearProblem::compute_residual(DM, Vec x, Vec F, void * context)
+FENonlinearProblem::invoke_compute_residual_delegate(DM, Vec x, Vec F, void * context)
 {
     CALL_STACK_MSG();
-    auto * delegate = static_cast<internal::ComputeResidualMethodAbstract *>(context);
+    auto * delegate = static_cast<Delegate<ErrorCode(const Vector &, Vector &)> *>(context);
     Vector vec_x(x);
     Vector vec_F(F);
     return delegate->invoke(vec_x, vec_F);
 }
 
 ErrorCode
-FENonlinearProblem::compute_jacobian(DM, Vec x, Mat J, Mat Jp, void * context)
+FENonlinearProblem::invoke_compute_jacobian_delegate(DM, Vec x, Mat J, Mat Jp, void * context)
 {
     CALL_STACK_MSG();
-    auto * delegate = static_cast<internal::ComputeJacobianMethodAbstract *>(context);
+    auto * delegate =
+        static_cast<Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> *>(context);
     Vector vec_x(x);
     Matrix mat_J(J);
     Matrix mat_Jp(Jp);
@@ -57,20 +58,9 @@ FENonlinearProblem::parameters()
 FENonlinearProblem::FENonlinearProblem(const Parameters & parameters) :
     NonlinearProblem(parameters),
     FEProblemInterface(this, parameters),
-    state(INITIAL),
-    compute_boundary_delegate(nullptr),
-    compute_residual_delegate(nullptr),
-    compute_jacobian_delegate(nullptr)
+    state(INITIAL)
 {
     CALL_STACK_MSG();
-}
-
-FENonlinearProblem::~FENonlinearProblem()
-{
-    CALL_STACK_MSG();
-    delete this->compute_boundary_delegate;
-    delete this->compute_residual_delegate;
-    delete this->compute_jacobian_delegate;
 }
 
 void
