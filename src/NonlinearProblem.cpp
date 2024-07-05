@@ -81,6 +81,7 @@ void
 NonlinearProblem::create()
 {
     CALL_STACK_MSG();
+    set_up_types();
     init();
     allocate_objects();
     set_up_matrix_properties();
