@@ -2,14 +2,16 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/FunctionDelegate.h"
+#include <iostream>
 
 namespace godzilla::internal {
 
 ErrorCode
-invoke_function_method(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
+invoke_function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[], void * ctx)
 {
-    auto * method = static_cast<FunctionMethodAbstract *>(ctx);
-    return method->invoke(dim, time, x, nc, u);
+    auto * method = static_cast<FunctionDelegate *>(ctx);
+    method->invoke(time, x, u);
+    return 0;
 }
 
 } // namespace godzilla::internal

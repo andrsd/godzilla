@@ -6,6 +6,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Types.h"
+#include "godzilla/Delegate.h"
 
 namespace godzilla {
 
@@ -36,16 +37,15 @@ L2Diff::compute()
 {
     CALL_STACK_MSG();
     auto problem = get_problem();
-    auto * delegate = new internal::FunctionMethod(this, &L2Diff::evaluate);
-    std::vector<PetscFunc *> funcs(1, internal::invoke_function_method);
-    std::vector<void *> ctxs(1, delegate);
+    FunctionDelegate delegate(this, &L2Diff::evaluate);
+    std::vector<PetscFunc *> funcs(1, internal::invoke_function_delegate);
+    std::vector<void *> ctxs(1, &delegate);
     PETSC_CHECK(DMComputeL2Diff(problem->get_dm(),
                                 problem->get_time(),
                                 funcs.data(),
                                 ctxs.data(),
                                 problem->get_solution_vector(),
                                 &this->l2_diff));
-    delete delegate;
 }
 
 Real

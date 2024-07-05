@@ -27,7 +27,7 @@ private:
     const FEProblemInterface * fepi;
 
     /// Parsed functions associated with each field
-    std::map<std::string, ParsedFunction *> funcs;
+    std::map<std::string, ParsedFunction *> parsed_fns;
 
     /// Computed L_2 errors
     std::vector<Real> l2_diff;
