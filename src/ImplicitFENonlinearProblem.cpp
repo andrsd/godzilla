@@ -183,11 +183,11 @@ ImplicitFENonlinearProblem::compute_ijacobian_local(Real time,
     }
 }
 
-ErrorCode
+void
 ImplicitFENonlinearProblem::compute_boundary_local(Real time, const Vector & x, const Vector & x_t)
 {
     CALL_STACK_MSG();
-    return DMPlexTSComputeBoundary(get_dm(), time, x, x_t, this);
+    PETSC_CHECK(DMPlexTSComputeBoundary(get_dm(), time, x, x_t, this));
 }
 
 void

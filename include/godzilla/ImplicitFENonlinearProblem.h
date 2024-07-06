@@ -32,8 +32,7 @@ protected:
     /// @param time The time
     /// @param x Local solution
     /// @param x_t Local solution time derivative
-    /// @return Error code
-    ErrorCode compute_boundary_local(Real time, const Vector & x, const Vector & x_t);
+    void compute_boundary_local(Real time, const Vector & x, const Vector & x_t);
 
     /// Form the local residual `f` from the local input `x`
     ///

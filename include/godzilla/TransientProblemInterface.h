@@ -228,8 +228,7 @@ protected:
 
     template <class T>
     void
-    set_time_boundary_local(T * instance,
-                            PetscErrorCode (T::*method)(Real, const Vector &, const Vector &))
+    set_time_boundary_local(T * instance, void (T::*method)(Real, const Vector &, const Vector &))
     {
         this->compute_boundary_local_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -258,8 +257,7 @@ private:
                   Matrix & Jp)>
         compute_ijacobian_local_method;
     /// Method for essential boundary data for a local implicit function evaluation.
-    Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t)>
-        compute_boundary_local_method;
+    Delegate<void(Real time, const Vector & x, const Vector & x_t)> compute_boundary_local_method;
     /// with set_i Method for monitoring the solve
     Delegate<ErrorCode(Int it, Real rnorm, const Vector & x)> monitor_method;
     /// Problem this interface is part of

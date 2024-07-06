@@ -35,7 +35,7 @@ protected:
     void allocate_lumped_mass_matrix();
     void create_mass_matrix();
     void create_mass_matrix_lumped();
-    virtual ErrorCode compute_boundary_local(Real time, Vector & x);
+    void compute_boundary_local(Real time, Vector & x);
     virtual ErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) = 0;
 
 private:
