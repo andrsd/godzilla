@@ -92,7 +92,7 @@ ImplicitFENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
-    set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary);
+    set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary_local);
     set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction);
     set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian);
 }
@@ -121,7 +121,7 @@ ImplicitFENonlinearProblem::compute_solution_vector_local()
     CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
-    compute_boundary(get_time(), loc_sln, Vector());
+    compute_boundary_local(get_time(), loc_sln, Vector());
 }
 
 ErrorCode
@@ -188,10 +188,10 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
 }
 
 ErrorCode
-ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const Vector & X_t)
+ImplicitFENonlinearProblem::compute_boundary_local(Real time, const Vector & x, const Vector & x_t)
 {
     CALL_STACK_MSG();
-    return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
+    return DMPlexTSComputeBoundary(get_dm(), time, x, x_t, this);
 }
 
 void

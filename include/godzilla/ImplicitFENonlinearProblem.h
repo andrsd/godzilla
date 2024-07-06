@@ -27,7 +27,13 @@ protected:
     void set_up_monitors() override;
     void post_step() override;
 
-    ErrorCode compute_boundary(Real time, const Vector & X, const Vector & X_t);
+    /// Insert the essential boundary values into the local vector and the time derivative vector
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    /// @return Error code
+    ErrorCode compute_boundary_local(Real time, const Vector & x, const Vector & x_t);
     ErrorCode compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
     ErrorCode compute_ijacobian(Real time,
                                 const Vector & X,
