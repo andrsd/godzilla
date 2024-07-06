@@ -58,7 +58,7 @@ protected:
     /// Set a local Jacobian evaluation function
     template <class T>
     void
-    set_jacobian_local(T * instance, ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &))
+    set_jacobian_local(T * instance, void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
         this->compute_jacobian_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetJacobianLocal(get_dm(),
@@ -87,36 +87,36 @@ protected:
                                               DMField coord_field,
                                               const IndexSet & facets);
 
-    ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
-    ErrorCode compute_jacobian_internal(DM dm,
-                                        PetscFormKey key,
-                                        const IndexSet & cell_is,
-                                        Real t,
-                                        Real x_t_shift,
-                                        const Vector & X,
-                                        const Vector & X_t,
-                                        Matrix & J,
-                                        Matrix & Jp);
-    ErrorCode compute_bnd_jacobian_internal(DM dm,
-                                            Vec X_loc,
-                                            Vec X_t_loc,
-                                            Real t,
-                                            Real x_t_shift,
-                                            Mat J,
-                                            Mat Jp);
-    ErrorCode compute_bnd_jacobian_single_internal(DM dm,
-                                                   Real t,
-                                                   const Label & label,
-                                                   Int n_values,
-                                                   const Int values[],
-                                                   Int field_i,
-                                                   Vec X_loc,
-                                                   Vec X_t_loc,
-                                                   Real x_t_shift,
-                                                   Mat J,
-                                                   Mat Jp,
-                                                   DMField coord_field,
-                                                   const IndexSet & facets);
+    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
+    void compute_jacobian_internal(DM dm,
+                                   PetscFormKey key,
+                                   const IndexSet & cell_is,
+                                   Real t,
+                                   Real x_t_shift,
+                                   const Vector & X,
+                                   const Vector & X_t,
+                                   Matrix & J,
+                                   Matrix & Jp);
+    void compute_bnd_jacobian_internal(DM dm,
+                                       Vec X_loc,
+                                       Vec X_t_loc,
+                                       Real t,
+                                       Real x_t_shift,
+                                       Mat J,
+                                       Mat Jp);
+    void compute_bnd_jacobian_single_internal(DM dm,
+                                              Real t,
+                                              const Label & label,
+                                              Int n_values,
+                                              const Int values[],
+                                              Int field_i,
+                                              Vec X_loc,
+                                              Vec X_t_loc,
+                                              Real x_t_shift,
+                                              Mat J,
+                                              Mat Jp,
+                                              DMField coord_field,
+                                              const IndexSet & facets);
 
 private:
     enum State { INITIAL, FINAL } state;
@@ -125,7 +125,7 @@ private:
     /// Delegate for compute_residual
     Delegate<void(const Vector &, Vector &)> compute_residual_delegate;
     /// Delegate for compute_jacobian
-    Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_delegate;
+    Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_delegate;
 
 public:
     static Parameters parameters();

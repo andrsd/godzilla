@@ -23,9 +23,10 @@ ErrorCode
 KrylovSolver::invoke_compute_rhs_delegate(KSP, Vec b, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Vector & b)> *>(ctx);
+    auto * method = static_cast<Delegate<void(Vector & b)> *>(ctx);
     Vector vec_b(b);
-    return method->invoke(vec_b);
+    method->invoke(vec_b);
+    return 0;
 }
 
 ErrorCode

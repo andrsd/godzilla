@@ -157,11 +157,10 @@ LinearProblem::solve()
     this->ks.solve(this->b, get_solution_vector());
 }
 
-ErrorCode
+void
 LinearProblem::compute_rhs(Vector &)
 {
     CALL_STACK_MSG();
-    return 0;
 }
 
 ErrorCode

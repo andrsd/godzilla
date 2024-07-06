@@ -13,7 +13,7 @@ public:
     virtual ~G1DTestLinearProblem();
     virtual void create() override;
     virtual void solve() override;
-    virtual ErrorCode compute_rhs(Vector & b) override;
+    virtual void compute_rhs(Vector & b) override;
     virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
@@ -28,7 +28,7 @@ public:
     virtual ~G2DTestLinearProblem();
     virtual void create() override;
     virtual void solve() override;
-    virtual ErrorCode compute_rhs(Vector & b) override;
+    virtual void compute_rhs(Vector & b) override;
     virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
@@ -43,7 +43,7 @@ public:
     virtual ~G3DTestLinearProblem();
     virtual void create() override;
     virtual void solve() override;
-    virtual ErrorCode compute_rhs(Vector & b) override;
+    virtual void compute_rhs(Vector & b) override;
     virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
 
 protected:

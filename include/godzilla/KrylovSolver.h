@@ -90,7 +90,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    set_compute_rhs(T * instance, ErrorCode (T::*method)(Vector &))
+    set_compute_rhs(T * instance, void (T::*method)(Vector &))
     {
         this->compute_rhs_method.bind(instance, method);
         PETSC_CHECK(
@@ -183,7 +183,7 @@ private:
     /// Method for monitoring the solve
     Delegate<ErrorCode(Int it, Real rnorm)> monitor_method;
     /// Method for computing RHS
-    Delegate<ErrorCode(Vector & b)> compute_rhs_method;
+    Delegate<void(Vector & b)> compute_rhs_method;
     /// Method for computing operators
     Delegate<ErrorCode(Matrix & A, Matrix & B)> compute_operators_method;
 

@@ -130,12 +130,11 @@ TEST(KrylovSolver, set_opers_rhs)
 {
     class TestSystem {
     public:
-        ErrorCode
+        void
         compute_rhs(Vector & b)
         {
             b.set_value(0, 6);
             b.set_value(1, 12);
-            return 0;
         }
 
         ErrorCode
