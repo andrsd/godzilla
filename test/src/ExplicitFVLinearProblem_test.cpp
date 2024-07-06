@@ -81,7 +81,7 @@ public:
         ExplicitFVLinearProblem::set_up_time_scheme();
     }
 
-    ErrorCode
+    void
     compute_flux(const Real x[],
                  const Real n[],
                  const Scalar u_l[],
@@ -93,7 +93,6 @@ public:
         Real wn = 0;
         wn += wind[0] * n[0];
         flux[0] = (wn > 0 ? u_l[0] : u_r[0]) * wn;
-        return 0;
     }
 
 protected:

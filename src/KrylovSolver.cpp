@@ -10,60 +10,34 @@
 namespace godzilla {
 
 ErrorCode
-KrylovSolver::compute_operators(KSP, Mat A, Mat B, void * ctx)
+KrylovSolver::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::KSPComputeOperatorsMethodAbstract *>(ctx);
+    auto * method = static_cast<Delegate<ErrorCode(Matrix & A, Matrix & B)> *>(ctx);
     Matrix mat_A(A);
     Matrix mat_B(B);
     return method->invoke(mat_A, mat_B);
 }
 
 ErrorCode
-KrylovSolver::compute_rhs(KSP, Vec b, void * ctx)
+KrylovSolver::invoke_compute_rhs_delegate(KSP, Vec b, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::KSPComputeRhsMethodAbstract *>(ctx);
+    auto * method = static_cast<Delegate<ErrorCode(Vector & b)> *>(ctx);
     Vector vec_b(b);
     return method->invoke(vec_b);
 }
 
 ErrorCode
-KrylovSolver::monitor(KSP, Int it, Real rnorm, void * ctx)
+KrylovSolver::invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx)
 {
-    auto * method = static_cast<internal::KSPMonitorMethodAbstract *>(ctx);
+    auto * method = static_cast<Delegate<ErrorCode(Int it, Real rnorm)> *>(ctx);
     return method->invoke(it, rnorm);
 }
 
-ErrorCode
-KrylovSolver::monitor_destroy(void ** ctx)
-{
-    auto * method = static_cast<internal::KSPMonitorMethodAbstract *>(*ctx);
-    delete method;
-    return 0;
-}
+KrylovSolver::KrylovSolver() : ksp(nullptr) {}
 
-KrylovSolver::KrylovSolver() :
-    ksp(nullptr),
-    monitor_method(nullptr),
-    compute_rhs_method(nullptr),
-    compute_operators_method(nullptr)
-{
-}
-
-KrylovSolver::KrylovSolver(KSP ksp) :
-    ksp(ksp),
-    monitor_method(nullptr),
-    compute_rhs_method(nullptr),
-    compute_operators_method(nullptr)
-{
-}
-
-KrylovSolver::~KrylovSolver()
-{
-    delete this->compute_rhs_method;
-    delete this->compute_operators_method;
-}
+KrylovSolver::KrylovSolver(KSP ksp) : ksp(ksp) {}
 
 void
 KrylovSolver::create(MPI_Comm comm)

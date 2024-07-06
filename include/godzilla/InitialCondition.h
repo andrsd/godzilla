@@ -7,33 +7,8 @@
 #include "godzilla/PrintInterface.h"
 #include "godzilla/Types.h"
 #include "godzilla/DenseVector.h"
-#include "godzilla/FunctionDelegate.h"
 
 namespace godzilla {
-
-namespace internal {
-
-template <typename T>
-struct ICFunctionMethod : public FunctionMethodAbstract {
-    ICFunctionMethod(T * instance, void (T::*method)(Real, const Real[], Scalar[])) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    ErrorCode
-    invoke(Int dim, Real time, const Real x[], Int nc, Scalar u[]) override
-    {
-        ((*this->instance).*method)(time, x, u);
-        return 0;
-    }
-
-private:
-    T * instance;
-    void (T::*method)(Real, const Real[], Scalar[]);
-};
-
-} // namespace internal
 
 class DiscreteProblemInterface;
 

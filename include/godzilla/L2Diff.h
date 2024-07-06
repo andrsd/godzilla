@@ -5,7 +5,6 @@
 
 #include "godzilla/Postprocessor.h"
 #include "godzilla/FunctionInterface.h"
-#include "godzilla/FunctionDelegate.h"
 
 namespace godzilla {
 

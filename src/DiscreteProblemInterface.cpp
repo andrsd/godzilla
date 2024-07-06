@@ -18,43 +18,43 @@
 namespace godzilla {
 
 ErrorCode
-DiscreteProblemInterface::essential_bc_function(Int dim,
-                                                Real time,
-                                                const Real x[],
-                                                Int nc,
-                                                Scalar u[],
-                                                void * ctx)
+DiscreteProblemInterface::invoke_essential_bc_delegate(Int dim,
+                                                       Real time,
+                                                       const Real x[],
+                                                       Int nc,
+                                                       Scalar u[],
+                                                       void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::EssentialBCFunctionMethodAbstract *>(ctx);
-    method->invoke(dim, time, x, nc, u);
+    auto * method = static_cast<EssentialBCDelegate *>(ctx);
+    method->invoke(time, x, u);
     return 0;
 }
 
 ErrorCode
-DiscreteProblemInterface::essential_bc_function_t(Int dim,
-                                                  Real time,
-                                                  const Real x[],
-                                                  Int nc,
-                                                  Scalar u[],
-                                                  void * ctx)
+DiscreteProblemInterface::invoke_essential_bc_delegate_t(Int dim,
+                                                         Real time,
+                                                         const Real x[],
+                                                         Int nc,
+                                                         Scalar u[],
+                                                         void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::EssentialBCFunctionMethodAbstract *>(ctx);
-    method->invoke_t(dim, time, x, nc, u);
+    auto * method = static_cast<EssentialBCDelegate *>(ctx);
+    method->invoke_t(time, x, u);
     return 0;
 }
 
 ErrorCode
-DiscreteProblemInterface::natural_riemann_bc_function(Real time,
-                                                      const Real * c,
-                                                      const Real * n,
-                                                      const Scalar * xI,
-                                                      Scalar * xG,
-                                                      void * ctx)
+DiscreteProblemInterface::invoke_natural_riemann_bc_delegate(Real time,
+                                                             const Real * c,
+                                                             const Real * n,
+                                                             const Scalar * xI,
+                                                             Scalar * xG,
+                                                             void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<internal::NaturalRiemannBCFunctionMethodAbstract *>(ctx);
+    auto * method = static_cast<NaturalRiemannBCDelegate *>(ctx);
     method->invoke(time, c, n, xI, xG);
     return 0;
 }
@@ -75,6 +75,10 @@ DiscreteProblemInterface::~DiscreteProblemInterface()
     this->sln.destroy();
     this->a.destroy();
     DMDestroy(&this->dm_aux);
+    for (auto & d : this->natural_riemann_bc_delegates)
+        delete d;
+    for (auto & d : this->essential_bc_delegates)
+        delete d;
 }
 
 Problem *
@@ -432,24 +436,26 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
 {
     CALL_STACK_MSG();
     auto n_auxs = get_num_aux_fields();
-    std::vector<PetscFunc *> func(n_auxs, nullptr);
-    std::vector<internal::FunctionMethodAbstract *> delegates(n_auxs, nullptr);
-
+    std::vector<PetscFunc *> funcs(n_auxs, nullptr);
+    std::vector<FunctionDelegate> delegates(n_auxs);
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
-        func[fid] = internal::invoke_function_method;
-        delegates[fid] = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
+        funcs[fid] = internal::invoke_function_delegate;
+        delegates[fid].bind(aux, &AuxiliaryField::evaluate);
     }
-
+    std::vector<void *> contexts;
+    for (auto & d : delegates) {
+        if (d)
+            contexts.push_back(&d);
+        else
+            contexts.push_back(nullptr);
+    }
     PETSC_CHECK(DMProjectFunctionLocal(dm,
                                        get_problem()->get_time(),
-                                       func.data(),
-                                       reinterpret_cast<void **>(delegates.data()),
+                                       funcs.data(),
+                                       contexts.data(),
                                        INSERT_ALL_VALUES,
                                        a));
-
-    for (auto & d : delegates)
-        delete d;
 }
 
 void
@@ -460,15 +466,20 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
 {
     CALL_STACK_MSG();
     auto n_auxs = get_num_aux_fields();
-    std::vector<PetscFunc *> func(n_auxs, nullptr);
-    std::vector<internal::FunctionMethodAbstract *> delegates(n_auxs, nullptr);
-
+    std::vector<PetscFunc *> funcs(n_auxs, nullptr);
+    std::vector<FunctionDelegate> delegates(n_auxs);
     for (const auto & aux : auxs) {
         Int fid = aux->get_field_id();
-        func[fid] = internal::invoke_function_method;
-        delegates[fid] = new internal::AuxFunctionMethod(aux, &AuxiliaryField::evaluate);
+        funcs[fid] = internal::invoke_function_delegate;
+        delegates[fid].bind(aux, &AuxiliaryField::evaluate);
     }
-
+    std::vector<void *> contexts;
+    for (auto & d : delegates) {
+        if (d)
+            contexts.push_back(&d);
+        else
+            contexts.push_back(nullptr);
+    }
     auto ids = label.get_value_index_set();
     ids.get_indices();
     PETSC_CHECK(DMProjectFunctionLabelLocal(dm,
@@ -478,15 +489,12 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
                                             ids.data(),
                                             PETSC_DETERMINE,
                                             nullptr,
-                                            func.data(),
-                                            reinterpret_cast<void **>(delegates.data()),
+                                            funcs.data(),
+                                            contexts.data(),
                                             INSERT_ALL_VALUES,
                                             a));
     ids.restore_indices();
     ids.destroy();
-
-    for (auto & d : delegates)
-        delete d;
 }
 
 void
@@ -544,22 +552,25 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
     CALL_STACK_MSG();
     auto n_ics = this->ics.size();
     std::vector<PetscFunc *> funcs(n_ics);
-    std::vector<internal::FunctionMethodAbstract *> delegates(n_ics);
+    std::vector<FunctionDelegate> delegates(n_ics);
     for (auto & ic : this->ics) {
         Int fid = ic->get_field_id();
-        funcs[fid] = internal::invoke_function_method;
-        delegates[fid] = new internal::ICFunctionMethod(ic, &InitialCondition::evaluate);
+        funcs[fid] = internal::invoke_function_delegate;
+        delegates[fid].bind(ic, &InitialCondition::evaluate);
     }
-
+    std::vector<void *> contexts;
+    for (auto & d : delegates) {
+        if (d)
+            contexts.push_back(&d);
+        else
+            contexts.push_back(nullptr);
+    }
     PETSC_CHECK(DMProjectFunction(this->unstr_mesh->get_dm(),
                                   this->problem->get_time(),
                                   funcs.data(),
-                                  reinterpret_cast<void **>(delegates.data()),
+                                  contexts.data(),
                                   INSERT_VALUES,
                                   this->problem->get_solution_vector()));
-
-    for (auto & d : delegates)
-        delete d;
 }
 
 void

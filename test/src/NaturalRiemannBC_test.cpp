@@ -55,14 +55,13 @@ protected:
         set_riemann_solver(0, this, &TestExplicitFVLinearProblem::compute_flux);
     }
 
-    ErrorCode
+    void
     compute_flux(const PetscReal x[],
                  const PetscReal n[],
                  const PetscScalar u_l[],
                  const PetscScalar u_r[],
                  PetscScalar flux[])
     {
-        return 0;
     }
 };
 

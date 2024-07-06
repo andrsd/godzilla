@@ -6,90 +6,12 @@
 #include "petscksp.h"
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
+#include "godzilla/Delegate.h"
 
 namespace godzilla {
 
 class Matrix;
 class Vector;
-
-namespace internal {
-
-/// Abstract "method" for calling KSP monitor
-struct KSPMonitorMethodAbstract {
-    virtual ~KSPMonitorMethodAbstract() = default;
-    virtual ErrorCode invoke(Int it, Real rnorm) = 0;
-};
-
-template <typename T>
-struct KSPMonitorMethod : public KSPMonitorMethodAbstract {
-    KSPMonitorMethod(T * instance, ErrorCode (T::*monitor)(Int, Real)) :
-        instance(instance),
-        monitor(monitor)
-    {
-    }
-
-    ErrorCode
-    invoke(Int it, Real rnorm) override
-    {
-        return ((*this->instance).*monitor)(it, rnorm);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*monitor)(Int, Real);
-};
-
-/// Abstract "method" for calling KSP compute RHS
-struct KSPComputeRhsMethodAbstract {
-    virtual ~KSPComputeRhsMethodAbstract() = default;
-    virtual ErrorCode invoke(Vector & b) = 0;
-};
-
-template <typename T>
-struct KSPComputeRhsMethod : public KSPComputeRhsMethodAbstract {
-    KSPComputeRhsMethod(T * instance, ErrorCode (T::*method)(Vector & b)) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    ErrorCode
-    invoke(Vector & b) override
-    {
-        return ((*this->instance).*method)(b);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*method)(Vector &);
-};
-
-/// Abstract "method" for calling KSP compute operators
-struct KSPComputeOperatorsMethodAbstract {
-    virtual ~KSPComputeOperatorsMethodAbstract() = default;
-    virtual ErrorCode invoke(Matrix & A, Matrix & B) = 0;
-};
-
-template <typename T>
-struct KSPComputeOperatorsMethod : public KSPComputeOperatorsMethodAbstract {
-    KSPComputeOperatorsMethod(T * instance, ErrorCode (T::*method)(Matrix &, Matrix &)) :
-        instance(instance),
-        method(method)
-    {
-    }
-
-    ErrorCode
-    invoke(Matrix & A, Matrix & B) override
-    {
-        return ((*this->instance).*method)(A, B);
-    }
-
-private:
-    T * instance;
-    ErrorCode (T::*method)(Matrix &, Matrix &);
-};
-
-} // namespace internal
 
 /// Wrapper around KSP
 class KrylovSolver {
@@ -112,7 +34,6 @@ public:
 
     /// Construct empty Krylov solver
     KrylovSolver();
-    ~KrylovSolver();
 
     /// Construct a Krylov solver from a PETSc KSP object
     explicit KrylovSolver(KSP ksp);
@@ -166,13 +87,14 @@ public:
     ///
     /// @tparam T C++ class type
     /// @param instance Instance of class T
-    /// @param callback Member function in class T
+    /// @param method Member function in class T
     template <class T>
     void
-    set_compute_rhs(T * instance, ErrorCode (T::*callback)(Vector &))
+    set_compute_rhs(T * instance, ErrorCode (T::*method)(Vector &))
     {
-        this->compute_rhs_method = new internal::KSPComputeRhsMethod<T>(instance, callback);
-        PETSC_CHECK(KSPSetComputeRHS(this->ksp, compute_rhs, this->compute_rhs_method));
+        this->compute_rhs_method.bind(instance, method);
+        PETSC_CHECK(
+            KSPSetComputeRHS(this->ksp, invoke_compute_rhs_delegate, &this->compute_rhs_method));
     }
 
     /// Set routine to compute the linear operators
@@ -186,15 +108,15 @@ public:
     ///
     /// @tparam T C++ class type
     /// @param instance Instance of class T
-    /// @param callback Member function in class T
+    /// @param method Member function in class T
     template <class T>
     void
-    set_compute_operators(T * instance, ErrorCode (T::*callback)(Matrix &, Matrix &))
+    set_compute_operators(T * instance, ErrorCode (T::*method)(Matrix &, Matrix &))
     {
-        this->compute_operators_method =
-            new internal::KSPComputeOperatorsMethod<T>(instance, callback);
-        PETSC_CHECK(
-            KSPSetComputeOperators(this->ksp, compute_operators, this->compute_operators_method));
+        this->compute_operators_method.bind(instance, method);
+        PETSC_CHECK(KSPSetComputeOperators(this->ksp,
+                                           invoke_compute_operators_delegate,
+                                           &this->compute_operators_method));
     }
 
     /// Sets an *additional* function to be called at every iteration to monitor the residual/error
@@ -213,13 +135,14 @@ public:
     ///
     /// @tparam T C++ class type
     /// @param instance Instance of class T
-    /// @param callback Member function in class T
+    /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, ErrorCode (T::*callback)(Int, Real))
+    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real))
     {
-        this->monitor_method = new internal::KSPMonitorMethod<T>(instance, callback);
-        PETSC_CHECK(KSPMonitorSet(this->ksp, monitor, this->monitor_method, monitor_destroy));
+        this->monitor_method.bind(instance, method);
+        PETSC_CHECK(
+            KSPMonitorSet(this->ksp, invoke_monitor_delegate, &this->monitor_method, nullptr));
     }
 
     /// Solve a linear system
@@ -258,17 +181,16 @@ private:
     /// PETSc object
     KSP ksp;
     /// Method for monitoring the solve
-    internal::KSPMonitorMethodAbstract * monitor_method;
+    Delegate<ErrorCode(Int it, Real rnorm)> monitor_method;
     /// Method for computing RHS
-    internal::KSPComputeRhsMethodAbstract * compute_rhs_method;
+    Delegate<ErrorCode(Vector & b)> compute_rhs_method;
     /// Method for computing operators
-    internal::KSPComputeOperatorsMethodAbstract * compute_operators_method;
+    Delegate<ErrorCode(Matrix & A, Matrix & B)> compute_operators_method;
 
 public:
-    static ErrorCode compute_operators(KSP, Mat A, Mat B, void * ctx);
-    static ErrorCode compute_rhs(KSP, Vec b, void * ctx);
-    static ErrorCode monitor(KSP, Int it, Real rnorm, void * ctx);
-    static ErrorCode monitor_destroy(void ** ctx);
+    static ErrorCode invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx);
+    static ErrorCode invoke_compute_rhs_delegate(KSP, Vec b, void * ctx);
+    static ErrorCode invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx);
 };
 
 } // namespace godzilla
