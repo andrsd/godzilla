@@ -80,8 +80,9 @@ ErrorCode
 SNESolver::invoke_monitor_delegate(SNES, Int it, Real rnorm, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Int it, Real rnorm)> *>(ctx);
-    return method->invoke(it, rnorm);
+    auto * method = static_cast<Delegate<void(Int it, Real rnorm)> *>(ctx);
+    method->invoke(it, rnorm);
+    return 0;
 }
 
 SNESolver::SNESolver() : snes(nullptr) {}

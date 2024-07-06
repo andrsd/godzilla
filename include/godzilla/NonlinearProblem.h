@@ -76,7 +76,7 @@ protected:
         this->snes.set_jacobian(this->J, this->J, instance, callback);
     }
     /// SNES monitor
-    ErrorCode snes_monitor(Int it, Real norm);
+    void snes_monitor(Int it, Real norm);
     /// KSP monitor
     void ksp_monitor(Int it, Real rnorm);
     /// Method for setting matrix properties

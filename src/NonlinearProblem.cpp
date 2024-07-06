@@ -227,12 +227,11 @@ NonlinearProblem::set_up_solver_parameters()
     this->ksp.set_from_options();
 }
 
-ErrorCode
+void
 NonlinearProblem::snes_monitor(Int it, Real norm)
 {
     CALL_STACK_MSG();
     lprint(7, "{} Non-linear residual: {:e}", it, norm);
-    return 0;
 }
 
 void

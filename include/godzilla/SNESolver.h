@@ -181,7 +181,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real))
+    monitor_set(T * instance, void (T::*method)(Int, Real))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
@@ -211,7 +211,7 @@ private:
     /// PETSc object
     SNES snes;
     /// Method for monitoring the solve
-    Delegate<ErrorCode(Int it, Real rnorm)> monitor_method;
+    Delegate<void(Int it, Real rnorm)> monitor_method;
     /// Method for computing residual
     Delegate<ErrorCode(const Vector & x, Vector & f)> compute_residual_method;
     /// Method for computing Jacobian
