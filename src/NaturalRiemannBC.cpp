@@ -18,7 +18,7 @@ NaturalRiemannBC::parameters()
     return params;
 }
 
-NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryCondition(params)
+NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) : BoundaryCondition(params), fid(-1)
 {
     CALL_STACK_MSG();
 }

@@ -11,7 +11,7 @@ namespace godzilla {
 
 Vector::Vector() : vec(nullptr) {}
 
-Vector::Vector(MPI_Comm comm)
+Vector::Vector(MPI_Comm comm) : vec(nullptr)
 {
     CALL_STACK_MSG();
     create(comm);
