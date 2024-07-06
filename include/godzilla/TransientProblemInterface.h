@@ -226,7 +226,7 @@ protected:
 
     template <class T>
     void
-    set_time_boundary_local(T * instance, void (T::*method)(Real, const Vector &, const Vector &))
+    set_time_boundary_local(T * instance, void (T::*method)(Real, Vector &, Vector &))
     {
         this->compute_boundary_local_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -234,6 +234,19 @@ protected:
                                          invoke_compute_boundary_delegate,
                                          &this->compute_boundary_local_method));
     }
+
+    /// Insert the essential boundary values into the local vector
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    void compute_boundary_local(Real time, Vector & x);
+
+    /// Insert the essential boundary values into the local vector and the time derivative vector
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    void compute_boundary_local(Real time, Vector & x, Vector & x_t);
 
 private:
     /// PETSc TS object
@@ -255,7 +268,7 @@ private:
                   Matrix & Jp)>
         compute_ijacobian_local_method;
     /// Method for essential boundary data for a local implicit function evaluation.
-    Delegate<void(Real time, const Vector & x, const Vector & x_t)> compute_boundary_local_method;
+    Delegate<void(Real time, Vector & x, Vector & x_t)> compute_boundary_local_method;
     /// with set_i Method for monitoring the solve
     Delegate<ErrorCode(Int it, Real rnorm, const Vector & x)> monitor_method;
     /// Problem this interface is part of

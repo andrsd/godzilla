@@ -10,7 +10,6 @@
 #include "godzilla/Validation.h"
 #include "godzilla/Utils.h"
 #include "godzilla/IndexSet.h"
-#include "petscts.h"
 #include <petsc/private/tsimpl.h>
 
 namespace godzilla {
@@ -121,7 +120,7 @@ ImplicitFENonlinearProblem::compute_solution_vector_local()
     CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
-    compute_boundary_local(get_time(), loc_sln, Vector());
+    TransientProblemInterface::compute_boundary_local(get_time(), loc_sln);
 }
 
 void
@@ -184,10 +183,10 @@ ImplicitFENonlinearProblem::compute_ijacobian_local(Real time,
 }
 
 void
-ImplicitFENonlinearProblem::compute_boundary_local(Real time, const Vector & x, const Vector & x_t)
+ImplicitFENonlinearProblem::compute_boundary_local(Real time, Vector & x, Vector & x_t)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMPlexTSComputeBoundary(get_dm(), time, x, x_t, this));
+    TransientProblemInterface::compute_boundary_local(time, x, x_t);
 }
 
 void

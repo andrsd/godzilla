@@ -152,12 +152,4 @@ ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
     this->nl_problem->restore_local_vector(loc_F);
 }
 
-void
-ExplicitProblemInterface::compute_boundary_local(Real time, Vector & x)
-{
-    CALL_STACK_MSG();
-    auto dm = this->nl_problem->get_dm();
-    PETSC_CHECK(DMPlexTSComputeBoundary(dm, time, x, nullptr, this));
-}
-
 } // namespace godzilla

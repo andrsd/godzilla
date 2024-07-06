@@ -35,7 +35,6 @@ protected:
     void allocate_lumped_mass_matrix();
     void create_mass_matrix();
     void create_mass_matrix_lumped();
-    void compute_boundary_local(Real time, Vector & x);
 
 private:
     /// Form the global residual 'F' from the global input 'x' using pointwise functions specified

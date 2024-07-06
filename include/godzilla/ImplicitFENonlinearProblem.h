@@ -27,13 +27,6 @@ protected:
     void set_up_monitors() override;
     void post_step() override;
 
-    /// Insert the essential boundary values into the local vector and the time derivative vector
-    ///
-    /// @param time The time
-    /// @param x Local solution
-    /// @param x_t Local solution time derivative
-    void compute_boundary_local(Real time, const Vector & x, const Vector & x_t);
-
     /// Form the local residual `f` from the local input `x`
     ///
     /// @param time The time
@@ -60,6 +53,13 @@ protected:
                                  Matrix & Jp);
 
 private:
+    /// Insert the essential boundary values into the local vector and the time derivative vector
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    void compute_boundary_local(Real time, Vector & x, Vector & x_t);
+
     /// Time stepping scheme
     const std::string & scheme;
 
