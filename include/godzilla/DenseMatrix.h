@@ -485,13 +485,14 @@ public:
         return mult(x);
     }
 
-    void
+    DenseMatrix<Real, ROWS> &
     operator=(const DenseMatrixSymm<Real, ROWS> & m)
     {
         assert(COLS == ROWS);
         for (Int i = 0; i < ROWS; i++)
             for (Int j = 0; j < COLS; j++)
                 set(i, j) = m(i, j);
+        return *this;
     }
 
     /// Get access to the underlying data
