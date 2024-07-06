@@ -118,8 +118,7 @@ public:
     /// @param time Current time
     /// @param x Solution at time `time`
     /// @param F Right-hand side vector
-    /// @return PETSc error code
-    ErrorCode compute_rhs_function(Real time, const Vector & x, Vector & F);
+    void compute_rhs_function(Real time, const Vector & x, Vector & F);
 
 protected:
     /// Get underlying non-linear solver
@@ -176,7 +175,7 @@ protected:
     /// @param method Member function in class T
     template <class T>
     void
-    set_rhs_function(T * instance, ErrorCode (T::*method)(Real time, const Vector & x, Vector & F))
+    set_rhs_function(T * instance, void (T::*method)(Real time, const Vector & x, Vector & F))
     {
         this->compute_rhs_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -240,7 +239,7 @@ private:
     /// PETSc TS object
     TS ts;
     /// Method for computing right-hand side
-    Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> compute_rhs_method;
+    Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_method;
     /// Method for computing right-hand side
     Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_local_method;
     /// Method for computing F(t,U,U_t) where F() = 0

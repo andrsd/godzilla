@@ -48,11 +48,11 @@ ErrorCode
 TransientProblemInterface::invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec F, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method =
-        static_cast<Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> *>(ctx);
+    auto * method = static_cast<Delegate<void(Real time, const Vector & x, Vector & F)> *>(ctx);
     Vector vec_x(x);
     Vector vec_F(F);
-    return method->invoke(time, vec_x, vec_F);
+    method->invoke(time, vec_x, vec_F);
+    return 0;
 }
 
 ErrorCode
@@ -360,14 +360,12 @@ TransientProblemInterface::post_stage(Real stage_time,
 {
 }
 
-ErrorCode
+void
 TransientProblemInterface::compute_rhs_function(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
     if (this->compute_rhs_method)
-        return this->compute_rhs_method.invoke(time, x, F);
-    else
-        return 0;
+        this->compute_rhs_method.invoke(time, x, F);
 }
 
 void

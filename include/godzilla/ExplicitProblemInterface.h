@@ -38,7 +38,12 @@ protected:
     void compute_boundary_local(Real time, Vector & x);
 
 private:
-    ErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+    /// Form the global residual 'F' from the global input 'x' using pointwise functions specified
+    /// by the user
+    /// @param time The time
+    /// @param x Global solution
+    /// @param F Global output vector
+    void compute_rhs(Real time, const Vector & x, Vector & F);
 
     /// Form the local residual 'F' from the local input 'x' using pointwise functions specified by
     /// the user
