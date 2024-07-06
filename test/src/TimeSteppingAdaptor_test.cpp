@@ -129,7 +129,7 @@ public:
 protected:
     void set_up_monitors() override;
 
-    ErrorCode ts_monitor(Int stepi, Real time, const Vector & x);
+    void ts_monitor(Int stepi, Real time, const Vector & x);
 };
 
 TestTSProblem::TestTSProblem(const Parameters & params) : GTestImplicitFENonlinearProblem(params)
@@ -144,12 +144,11 @@ TestTSProblem::set_up_monitors()
     monitor_set(this, &TestTSProblem::ts_monitor);
 }
 
-ErrorCode
+void
 TestTSProblem::ts_monitor(Int stepi, Real time, const Vector & x)
 {
     Real dt = get_time_step();
     this->dts[stepi] = dt;
-    return 0;
 }
 
 ///

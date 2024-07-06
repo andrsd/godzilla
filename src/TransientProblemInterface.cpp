@@ -39,9 +39,10 @@ ErrorCode
 TransientProblemInterface::invoke_monitor_delegate(TS, Int stepi, Real time, Vec x, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Int it, Real rnorm, const Vector & x)> *>(ctx);
+    auto * method = static_cast<Delegate<void(Int it, Real rnorm, const Vector & x)> *>(ctx);
     Vector vec_x(x);
-    return method->invoke(stepi, time, vec_x);
+    method->invoke(stepi, time, vec_x);
+    return 0;
 }
 
 ErrorCode
@@ -315,13 +316,12 @@ TransientProblemInterface::post_step()
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
 }
 
-ErrorCode
+void
 TransientProblemInterface::default_monitor(Int stepi, Real time, const Vector & x)
 {
     CALL_STACK_MSG();
     Real dt = get_time_step();
     this->problem->lprint(6, "{} Time {:f} dt = {:f}", stepi, time, dt);
-    return 0;
 }
 
 void

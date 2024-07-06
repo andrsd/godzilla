@@ -138,7 +138,7 @@ protected:
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
     /// Default TS monitor
-    ErrorCode default_monitor(Int stepi, Real time, const Vector & x);
+    void default_monitor(Int stepi, Real time, const Vector & x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
@@ -158,7 +158,7 @@ protected:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real, const Vector &))
+    monitor_set(T * instance, void (T::*method)(Int, Real, const Vector &))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
@@ -270,7 +270,7 @@ private:
     /// Method for essential boundary data for a local implicit function evaluation.
     Delegate<void(Real time, Vector & x, Vector & x_t)> compute_boundary_local_method;
     /// with set_i Method for monitoring the solve
-    Delegate<ErrorCode(Int it, Real rnorm, const Vector & x)> monitor_method;
+    Delegate<void(Int it, Real rnorm, const Vector & x)> monitor_method;
     /// Problem this interface is part of
     Problem * problem;
     /// Parameters
