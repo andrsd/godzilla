@@ -40,7 +40,7 @@ PiecewiseConstant::PiecewiseConstant(const Parameters & params) :
                   this->x.size(),
                   this->y.size());
 
-    if (this->x.size() == 0)
+    if (this->x.empty())
         log_error("Size of 'x' is {}. It must be 1 or more.", this->x.size());
     else {
         // check monotonicity

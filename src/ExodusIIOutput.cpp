@@ -121,7 +121,6 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
         this->discont = true;
     else
         this->cont = true;
-
 }
 
 ExodusIIOutput::~ExodusIIOutput()
@@ -537,7 +536,7 @@ ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
         for (Int c = 0; c < nc; c++) {
             std::string comp_name = this->dpi->get_field_component_name(fid, c);
             std::string s;
-            if (comp_name.length() == 0)
+            if (comp_name.empty())
                 s = fmt::format("{}_{}", name, c);
             else
                 s = fmt::format("{}", comp_name);
@@ -558,7 +557,7 @@ ExodusIIOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
         for (Int c = 0; c < nc; c++) {
             std::string comp_name = this->dpi->get_aux_field_component_name(fid, c);
             std::string s;
-            if (comp_name.length() == 0)
+            if (comp_name.empty())
                 s = fmt::format("{}_{}", name, c);
             else
                 s = fmt::format("{}", comp_name);

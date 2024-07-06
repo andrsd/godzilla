@@ -30,7 +30,7 @@ FileOutput::create()
 {
     CALL_STACK_MSG();
     Output::create();
-    if (this->file_base.length() == 0) {
+    if (this->file_base.empty()) {
         std::filesystem::path input_file_name(get_app()->get_input_file_name());
         this->file_base = input_file_name.stem().u8string();
     }
