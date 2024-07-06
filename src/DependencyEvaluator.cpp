@@ -6,8 +6,6 @@
 
 namespace godzilla {
 
-DependencyEvaluator::DependencyEvaluator() {}
-
 DependencyEvaluator::~DependencyEvaluator()
 {
     for (auto & kv : this->values)

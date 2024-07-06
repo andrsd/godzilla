@@ -22,8 +22,6 @@ Vector::Vector(Vec vec) : vec(vec)
     CALL_STACK_MSG();
 }
 
-Vector::~Vector() {}
-
 void
 Vector::create(MPI_Comm comm)
 {

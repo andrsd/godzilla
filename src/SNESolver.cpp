@@ -88,8 +88,6 @@ SNESolver::SNESolver() : snes(nullptr) {}
 
 SNESolver::SNESolver(SNES snes) : snes(snes) {}
 
-SNESolver::~SNESolver() {}
-
 void
 SNESolver::create(MPI_Comm comm)
 {

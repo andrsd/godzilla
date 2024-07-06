@@ -26,7 +26,7 @@ class DenseMatrixSymm;
 template <typename T, Int ROWS, Int COLS = ROWS>
 class DenseMatrix {
 public:
-    DenseMatrix() {};
+    DenseMatrix() = default;
 
     DenseMatrix(const DenseMatrixSymm<Real, ROWS> & m)
     {

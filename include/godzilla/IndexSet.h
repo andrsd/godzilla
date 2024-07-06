@@ -19,7 +19,7 @@ public:
         using reference = Int &;
 
         explicit Iterator(IndexSet & is, Int idx);
-        ~Iterator();
+        ~Iterator() = default;
 
         const value_type & operator*() const;
 
@@ -42,7 +42,7 @@ public:
 
     IndexSet();
     explicit IndexSet(IS is);
-    ~IndexSet();
+    ~IndexSet() = default;
 
     void create(MPI_Comm comm);
     void destroy();

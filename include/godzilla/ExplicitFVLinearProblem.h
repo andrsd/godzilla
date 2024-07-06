@@ -15,7 +15,6 @@ class ExplicitFVLinearProblem :
     public ExplicitProblemInterface {
 public:
     explicit ExplicitFVLinearProblem(const Parameters & params);
-    ~ExplicitFVLinearProblem() override;
 
     void create() override;
     bool converged() override;

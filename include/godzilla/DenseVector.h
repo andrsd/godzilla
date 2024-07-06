@@ -22,7 +22,7 @@ template <typename T, Int N>
 class DenseVector {
 public:
     /// Create empty vector
-    DenseVector() {}
+    DenseVector() = default;
 
     /// Create vector from a std::vector
     ///

@@ -15,7 +15,6 @@ public:
     Vector();
     Vector(MPI_Comm comm);
     Vector(Vec vec);
-    virtual ~Vector();
 
     void create(MPI_Comm comm);
     void destroy();

@@ -64,7 +64,7 @@ class DependencyEvaluator {
     };
 
 public:
-    DependencyEvaluator();
+    DependencyEvaluator() = default;
     virtual ~DependencyEvaluator();
 
     /// Get all functionals

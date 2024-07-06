@@ -29,7 +29,7 @@ private:
     static const Int N = DIM * (1 + DIM) / 2;
 
 public:
-    DenseMatrixSymm() {};
+    DenseMatrixSymm() = default;
 
     /// Create matrix from values
     ///

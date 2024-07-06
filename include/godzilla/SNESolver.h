@@ -56,7 +56,7 @@ public:
 
     /// Construct empty non-linear solver
     SNESolver();
-    ~SNESolver();
+    ~SNESolver() = default;
 
     /// Construct a non-linear solver from a PETSc SNES object
     explicit SNESolver(SNES snes);
