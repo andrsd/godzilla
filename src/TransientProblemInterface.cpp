@@ -56,6 +56,21 @@ TransientProblemInterface::invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec
 }
 
 ErrorCode
+TransientProblemInterface::invoke_compute_rhs_local_delegate(DM,
+                                                             Real time,
+                                                             Vec x,
+                                                             Vec F,
+                                                             void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method =
+        static_cast<Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> *>(ctx);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    return method->invoke(time, vec_x, vec_F);
+}
+
+ErrorCode
 TransientProblemInterface::invoke_compute_ifunction_delegate(DM,
                                                              Real time,
                                                              Vec x,

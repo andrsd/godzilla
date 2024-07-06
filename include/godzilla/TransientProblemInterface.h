@@ -183,6 +183,23 @@ protected:
         PETSC_CHECK(DMTSSetRHSFunction(dm, invoke_compute_rhs_delegate, &this->compute_rhs_method));
     }
 
+    /// Set a local rhs function evaluation function
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    set_rhs_function_local(T * instance,
+                           ErrorCode (T::*method)(Real time, const Vector & x, Vector & F))
+    {
+        this->compute_rhs_local_method.bind(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetRHSFunctionLocal(dm,
+                                            invoke_compute_rhs_local_delegate,
+                                            &this->compute_rhs_local_method));
+    }
+
     template <class T>
     void
     set_ifunction_local(
@@ -226,6 +243,8 @@ private:
     TS ts;
     /// Method for computing right-hand side
     Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> compute_rhs_method;
+    /// Method for computing right-hand side
+    Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> compute_rhs_local_method;
     /// Method for computing F(t,U,U_t) where F() = 0
     Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)>
         compute_ifunction_local_method;
@@ -270,6 +289,7 @@ private:
     static ErrorCode invoke_post_step(TS ts);
     static ErrorCode invoke_monitor_delegate(TS ts, Int stepi, Real time, Vec x, void * ctx);
     static ErrorCode invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec F, void * ctx);
+    static ErrorCode invoke_compute_rhs_local_delegate(DM, Real time, Vec x, Vec F, void * ctx);
     static ErrorCode
     invoke_compute_ifunction_delegate(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
     static ErrorCode invoke_compute_ijacobian_delegate(DM,
