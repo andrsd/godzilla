@@ -111,7 +111,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    set_compute_operators(T * instance, ErrorCode (T::*method)(Matrix &, Matrix &))
+    set_compute_operators(T * instance, void (T::*method)(Matrix &, Matrix &))
     {
         this->compute_operators_method.bind(instance, method);
         PETSC_CHECK(KSPSetComputeOperators(this->ksp,
@@ -185,7 +185,7 @@ private:
     /// Method for computing RHS
     Delegate<void(Vector & b)> compute_rhs_method;
     /// Method for computing operators
-    Delegate<ErrorCode(Matrix & A, Matrix & B)> compute_operators_method;
+    Delegate<void(Matrix & A, Matrix & B)> compute_operators_method;
 
 public:
     static ErrorCode invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx);

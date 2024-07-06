@@ -137,13 +137,12 @@ TEST(KrylovSolver, set_opers_rhs)
             b.set_value(1, 12);
         }
 
-        ErrorCode
+        void
         compute_operators(Matrix & A, Matrix & B)
         {
             A.set_value(0, 0, 2);
             A.set_value(1, 1, 3);
             A.assemble();
-            return 0;
         }
     };
 

@@ -163,11 +163,10 @@ LinearProblem::compute_rhs(Vector &)
     CALL_STACK_MSG();
 }
 
-ErrorCode
+void
 LinearProblem::compute_operators(Matrix &, Matrix &)
 {
     CALL_STACK_MSG();
-    return 0;
 }
 
 } // namespace godzilla

@@ -13,10 +13,11 @@ ErrorCode
 KrylovSolver::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Matrix & A, Matrix & B)> *>(ctx);
+    auto * method = static_cast<Delegate<void(Matrix & A, Matrix & B)> *>(ctx);
     Matrix mat_A(A);
     Matrix mat_B(B);
-    return method->invoke(mat_A, mat_B);
+    method->invoke(mat_A, mat_B);
+    return 0;
 }
 
 ErrorCode

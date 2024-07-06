@@ -14,7 +14,7 @@ public:
     virtual void create() override;
     virtual void solve() override;
     virtual void compute_rhs(Vector & b) override;
-    virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
+    virtual void compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
     Section s;
@@ -29,7 +29,7 @@ public:
     virtual void create() override;
     virtual void solve() override;
     virtual void compute_rhs(Vector & b) override;
-    virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
+    virtual void compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
     Section s;
@@ -44,7 +44,7 @@ public:
     virtual void create() override;
     virtual void solve() override;
     virtual void compute_rhs(Vector & b) override;
-    virtual ErrorCode compute_operators(Matrix & A, Matrix & B) override;
+    virtual void compute_operators(Matrix & A, Matrix & B) override;
 
 protected:
     Section s;
