@@ -35,12 +35,22 @@ protected:
     /// @return Error code
     ErrorCode compute_boundary_local(Real time, const Vector & x, const Vector & x_t);
     ErrorCode compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
-    ErrorCode compute_ijacobian(Real time,
-                                const Vector & X,
-                                const Vector & X_t,
-                                Real x_t_shift,
-                                Matrix & J,
-                                Matrix & Jp);
+
+    /// Form the Jacobian `J` from the local input `x`
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    /// @param x_t_shift The multiplicative parameter for dF/du_t
+    /// @param J The Jacobian
+    /// @param Jp An additional approximation for the Jacobian to be used to compute the
+    ///           preconditioner
+    void compute_ijacobian_local(Real time,
+                                 const Vector & x,
+                                 const Vector & x_t,
+                                 Real x_t_shift,
+                                 Matrix & J,
+                                 Matrix & Jp);
 
 private:
     /// Time stepping scheme

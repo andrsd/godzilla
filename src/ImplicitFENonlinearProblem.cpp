@@ -94,7 +94,7 @@ ImplicitFENonlinearProblem::set_up_callbacks()
     TransientProblemInterface::set_up_callbacks();
     set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary_local);
     set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction);
-    set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian);
+    set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian_local);
 }
 
 void
@@ -153,13 +153,13 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
     return 0;
 }
 
-ErrorCode
-ImplicitFENonlinearProblem::compute_ijacobian(Real time,
-                                              const Vector & X,
-                                              const Vector & X_t,
-                                              Real x_t_shift,
-                                              Matrix & J,
-                                              Matrix & Jp)
+void
+ImplicitFENonlinearProblem::compute_ijacobian_local(Real time,
+                                                    const Vector & x,
+                                                    const Vector & x_t,
+                                                    Real x_t_shift,
+                                                    Matrix & J,
+                                                    Matrix & Jp)
 {
     // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
     // DMPlexTSComputeIJacobianFEM()
@@ -180,11 +180,9 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_jacobian_internal(get_dm(), jac_key, cells, time, x_t_shift, X, X_t, J, Jp);
+        compute_jacobian_internal(get_dm(), jac_key, cells, time, x_t_shift, x, x_t, J, Jp);
         cells.destroy();
     }
-
-    return 0;
 }
 
 ErrorCode

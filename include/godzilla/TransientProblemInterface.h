@@ -200,7 +200,7 @@ protected:
     void
     set_ijacobian_local(
         T * instance,
-        ErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
+        void (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
     {
         this->compute_ijacobian_local_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -231,12 +231,12 @@ private:
         compute_ifunction_local_method;
     /// Method to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t) is the function provided by
     /// `set_ifunction_local`
-    Delegate<ErrorCode(Real time,
-                       const Vector & X,
-                       const Vector & X_t,
-                       Real x_t_shift,
-                       Matrix & J,
-                       Matrix & Jp)>
+    Delegate<void(Real time,
+                  const Vector & X,
+                  const Vector & X_t,
+                  Real x_t_shift,
+                  Matrix & J,
+                  Matrix & Jp)>
         compute_ijacobian_local_method;
     /// Method for essential boundary data for a local implicit function evaluation.
     Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t)>

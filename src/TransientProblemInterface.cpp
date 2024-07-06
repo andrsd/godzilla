@@ -83,12 +83,12 @@ TransientProblemInterface::invoke_compute_ijacobian_delegate(DM,
                                                              void * contex)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Real time,
-                                                   const Vector & X,
-                                                   const Vector & X_t,
-                                                   Real x_t_shift,
-                                                   Matrix & J,
-                                                   Matrix & Jp)> *>(contex);
+    auto * method = static_cast<Delegate<void(Real time,
+                                              const Vector & X,
+                                              const Vector & X_t,
+                                              Real x_t_shift,
+                                              Matrix & J,
+                                              Matrix & Jp)> *>(contex);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
     Matrix mat_J(J);
