@@ -22,11 +22,11 @@ public:
     void run() override;
 
     /// Get underlying KSP
-    KrylovSolver get_ksp() const;
+    [[nodiscard]] KrylovSolver get_ksp() const;
     /// Set KSP operators
     void set_ksp_operators(const Matrix & A, const Matrix & B);
     /// Get Jacobian matrix
-    const Matrix & get_jacobian() const;
+    [[nodiscard]] const Matrix & get_jacobian() const;
     /// true if solve converged, otherwise false
     virtual bool converged();
 
@@ -38,7 +38,7 @@ public:
 
 protected:
     /// Get underlying non-linear solver
-    SNESolver get_snes() const;
+    [[nodiscard]] SNESolver get_snes() const;
     /// Set non-linear solver
     void set_snes(const SNESolver & snes);
     /// Set residual vector

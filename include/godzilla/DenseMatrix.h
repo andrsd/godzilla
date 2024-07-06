@@ -39,7 +39,7 @@ public:
     /// Get the number of rows
     ///
     /// @return The number of rows
-    int
+    [[nodiscard]] int
     get_num_rows() const
     {
         return ROWS;
@@ -48,7 +48,7 @@ public:
     /// Get the number of columns
     ///
     /// @return The number of columns
-    int
+    [[nodiscard]] int
     get_num_cols() const
     {
         return COLS;
@@ -296,7 +296,7 @@ public:
     }
 
     /// Compute determinant of the matrix
-    Real
+    [[nodiscard]] Real
     det() const
     {
         error("Determinant is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
@@ -581,7 +581,7 @@ private:
     /// @param row Row number
     /// @param col Column number
     /// @return Offset into the `data` array that contains the entry at position (row, col)
-    Int
+    [[nodiscard]] Int
     idx(Int row, Int col) const
     {
         return row * COLS + col;

@@ -26,7 +26,7 @@ public:
     virtual void rollback() = 0;
     virtual void view(PetscViewer viewer) = 0;
 
-    const std::vector<Vector> & get_stage_vectors() const;
+    [[nodiscard]] const std::vector<Vector> & get_stage_vectors() const;
     std::vector<Vector> & get_stage_vectors();
 
     /// Runs the user-defined pre-stage function set using

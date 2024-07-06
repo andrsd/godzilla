@@ -140,10 +140,10 @@ public:
     int resize(Int nb);
 
     /// Get the number of entries in a hash table
-    Int get_size() const;
+    [[nodiscard]] Int get_size() const;
 
     /// Get the current size of the array in the hash table
-    Int get_capacity() const;
+    [[nodiscard]] Int get_capacity() const;
 
     /// Query for a key in the hash table
     bool has(const KEY & key);
@@ -243,7 +243,7 @@ private:
         flag[i >> 4] |= 1U << ((i & 0xfU) << 1);
     }
 
-    inline khint_t
+    [[nodiscard]] inline khint_t
     fsize(khint_t m) const
     {
         return m < 16 ? 1 : m >> 4;
@@ -361,19 +361,19 @@ private:
         }
     }
 
-    inline khiter_t
+    [[nodiscard]] inline khiter_t
     kh_begin() const
     {
         return 0;
     }
 
-    inline khiter_t
+    [[nodiscard]] inline khiter_t
     kh_end() const
     {
         return this->n_buckets;
     }
 
-    inline bool
+    [[nodiscard]] inline bool
     kh_exist(khint_t x) const
     {
         return !iseither(this->flags, x);

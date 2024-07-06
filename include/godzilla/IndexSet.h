@@ -87,14 +87,14 @@ public:
     operator IS() const;
     operator IS *();
 
-    bool empty() const;
+    [[nodiscard]] bool empty() const;
 
-    PetscObjectId get_id() const;
+    [[nodiscard]] PetscObjectId get_id() const;
 
     /// Checks the indices to determine whether they have been sorted
     ///
     /// @return `true` is index set is sorted
-    bool sorted() const;
+    [[nodiscard]] bool sorted() const;
 
     /// Sort the indices of the index set
     void sort() const;

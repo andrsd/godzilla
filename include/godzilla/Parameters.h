@@ -26,10 +26,10 @@ protected:
         virtual ~Value() = default;
 
         /// Return the type of this value as a string
-        virtual std::string type() const = 0;
+        [[nodiscard]] virtual std::string type() const = 0;
 
         /// Create a copy of this value
-        virtual Value * copy() const = 0;
+        [[nodiscard]] virtual Value * copy() const = 0;
 
         /// Is required
         bool required;
@@ -61,13 +61,13 @@ protected:
             return this->value;
         }
 
-        inline std::string
+        [[nodiscard]] inline std::string
         type() const override
         {
             return std::string(typeid(T).name());
         }
 
-        Value *
+        [[nodiscard]] Value *
         copy() const override
         {
             auto * copy = new Parameter<T>;
@@ -87,7 +87,7 @@ protected:
 public:
     /// Check if parameter exist
     template <typename T>
-    bool
+    [[nodiscard]] bool
     has(const std::string & name) const
     {
         auto it = this->params.find(name);
@@ -150,7 +150,7 @@ public:
     ///@}
 
     /// Returns a boolean indicating whether the specified parameter is required or not
-    bool
+    [[nodiscard]] bool
     is_param_required(const std::string & name) const
     {
         return this->params.count(name) > 0 && this->params.at(name)->required;
@@ -159,27 +159,27 @@ public:
     /// This method returns parameters that have been initialized in one fashion or another,
     /// i.e. The value was supplied as a default argument or read and properly converted from
     /// the input file
-    bool
+    [[nodiscard]] bool
     is_param_valid(const std::string & name) const
     {
         return this->params.count(name) > 0 && this->params.at(name)->valid;
     }
 
-    bool
+    [[nodiscard]] bool
     is_private(const std::string & name) const
     {
         return this->params.count(name) > 0 && this->params.at(name)->is_private;
     }
 
     ///
-    std::string
+    [[nodiscard]] std::string
     type(const std::string & name) const
     {
         return this->params.at(name)->type();
     }
 
     ///
-    std::string
+    [[nodiscard]] std::string
     get_doc_string(const std::string & name) const
     {
         auto it = this->params.find(name);
@@ -203,7 +203,7 @@ public:
     }
 
     /// Iterator pointing to the beginning of the set of parameters.
-    Parameters::const_iterator
+    [[nodiscard]] Parameters::const_iterator
     begin() const
     {
         return this->params.begin();
@@ -217,7 +217,7 @@ public:
     }
 
     /// Iterator pointing to the end of the set of parameters
-    Parameters::const_iterator
+    [[nodiscard]] Parameters::const_iterator
     end() const
     {
         return this->params.end();

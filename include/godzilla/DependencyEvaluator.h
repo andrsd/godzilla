@@ -30,7 +30,7 @@ class DependencyEvaluator {
             this->declared = true;
         }
 
-        bool
+        [[nodiscard]] bool
         is_declared() const
         {
             return this->declared;
@@ -70,7 +70,7 @@ public:
     /// Get all functionals
     ///
     /// @return List of all functionals
-    const std::map<std::string, const ValueFunctional *> & get_functionals() const;
+    [[nodiscard]] const std::map<std::string, const ValueFunctional *> & get_functionals() const;
 
     /// Create a functional
     ///
@@ -84,7 +84,7 @@ public:
     ///
     /// @param name The name of the functional
     /// @return Reference to the functional
-    virtual const ValueFunctional & get_functional(const std::string & name) const;
+    [[nodiscard]] virtual const ValueFunctional & get_functional(const std::string & name) const;
 
     /// Declare a value with a name
     ///
@@ -102,7 +102,7 @@ public:
     template <typename T>
     const T & get_value(const std::string & val_name);
 
-    std::map<std::string, const ValueFunctional *> get_suppliers() const;
+    [[nodiscard]] std::map<std::string, const ValueFunctional *> get_suppliers() const;
 
     DependencyGraph<const Functional *>
     build_dependecy_graph(const std::map<std::string, const ValueFunctional *> & suppliers);

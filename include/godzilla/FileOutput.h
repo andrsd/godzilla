@@ -19,7 +19,7 @@ public:
     /// Get the file name with the output file produced by this outputter
     ///
     /// @return The file name with the output
-    std::string get_file_name() const;
+    [[nodiscard]] std::string get_file_name() const;
 
     /// Set file base
     ///

@@ -119,10 +119,10 @@ public:
     void remove(Msg * msg);
 
     /// Get size of the call stack
-    int get_size() const;
+    [[nodiscard]] int get_size() const;
 
     /// Get item at position `idx`
-    Msg * at(int idx) const;
+    [[nodiscard]] Msg * at(int idx) const;
 
 private:
     /// The object storing call stack objects

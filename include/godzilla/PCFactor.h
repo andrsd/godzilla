@@ -78,41 +78,41 @@ public:
     /// Get the precoditioner type
     ///
     /// @return Preconditioner type
-    Type get_type() const;
+    [[nodiscard]] Type get_type() const;
 
     /// Determines if all diagonal matrix entries are treated as level 0 fill even if there is no
     /// non-zero location
     ///
     /// @return `true` if all diagonal matrix entries are treated as level 0, `false` otherwise
-    bool get_allow_diagonal_fill() const;
+    [[nodiscard]] bool get_allow_diagonal_fill() const;
 
     /// Gets the number of levels of fill to use
     ///
     /// @return Number of levels of fill
-    Int get_levels() const;
+    [[nodiscard]] Int get_levels() const;
 
     /// Gets the solver package that is used to perform the factorization
     ///
     /// @return The solver package that is used to perform the factorization
-    MatSolverType get_mat_solver_type() const;
+    [[nodiscard]] MatSolverType get_mat_solver_type() const;
 
     /// Gets the tolerance used to define a zero pivot
     ///
     /// @return How much to shift the diagonal entry
-    Real get_shift_amount() const;
+    [[nodiscard]] Real get_shift_amount() const;
 
     /// Gets the type of shift, if any, done when a zero pivot is detected
-    MatShiftType get_shift_type() const;
+    [[nodiscard]] MatShiftType get_shift_type() const;
 
     /// Determines if an in-place factorization is being used
     ///
     /// @return `true` if an in-place factorization is being used, `false` otherwise
-    bool get_use_in_place() const;
+    [[nodiscard]] bool get_use_in_place() const;
 
     /// Gets the tolerance used to define a zero pivot
     ///
     /// @return The tolerance that defines a zero pivot
-    Real get_zero_pivot() const;
+    [[nodiscard]] Real get_zero_pivot() const;
 
     /// Reorders rows/columns of matrix to remove zeros from diagonal
     ///

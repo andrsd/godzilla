@@ -61,64 +61,64 @@ public:
     virtual ~DiscreteProblemInterface();
 
     /// Get unstructured mesh associated with this problem
-    UnstructuredMesh * get_unstr_mesh() const;
+    [[nodiscard]] UnstructuredMesh * get_unstr_mesh() const;
 
     /// Get problem
     ///
     /// @return Problem this interface is part of
-    Problem * get_problem() const;
+    [[nodiscard]] Problem * get_problem() const;
 
     /// Get number of fields
     ///
     /// @return The number of fields
-    virtual Int get_num_fields() const = 0;
+    [[nodiscard]] virtual Int get_num_fields() const = 0;
 
     /// Get list of all field names
     ///
     /// @return List of field names
-    virtual std::vector<std::string> get_field_names() const = 0;
+    [[nodiscard]] virtual std::vector<std::string> get_field_names() const = 0;
 
     /// Get field name
     ///
     /// @param fid Field ID
-    virtual const std::string & get_field_name(Int fid) const = 0;
+    [[nodiscard]] virtual const std::string & get_field_name(Int fid) const = 0;
 
     /// Get number of field components
     ///
     /// @param fid Field ID
     /// @return Number of components
-    virtual Int get_field_num_components(Int fid) const = 0;
+    [[nodiscard]] virtual Int get_field_num_components(Int fid) const = 0;
 
     /// Get field ID
     ///
     /// @param name Field name
     /// @param Field ID
-    virtual Int get_field_id(const std::string & name) const = 0;
+    [[nodiscard]] virtual Int get_field_id(const std::string & name) const = 0;
 
     /// Do we have field with specified ID
     ///
     /// @param fid The ID of the field
     /// @return True if the field exists, otherwise False
-    virtual bool has_field_by_id(Int fid) const = 0;
+    [[nodiscard]] virtual bool has_field_by_id(Int fid) const = 0;
 
     /// Do we have field with specified name
     ///
     /// @param name The name of the field
     /// @return True if the field exists, otherwise False
-    virtual bool has_field_by_name(const std::string & name) const = 0;
+    [[nodiscard]] virtual bool has_field_by_name(const std::string & name) const = 0;
 
     /// Get field order
     ///
     /// @param fid Field ID
     /// @return Field order
-    virtual Int get_field_order(Int fid) const = 0;
+    [[nodiscard]] virtual Int get_field_order(Int fid) const = 0;
 
     /// Get component name of a field
     ///
     /// @param fid Field ID
     /// @param component Component index
     /// @return Component name
-    virtual std::string get_field_component_name(Int fid, Int component) const = 0;
+    [[nodiscard]] virtual std::string get_field_component_name(Int fid, Int component) const = 0;
 
     /// Set the name of a component of afield variable
     ///
@@ -130,55 +130,56 @@ public:
     /// Get number of auxiliary fields
     ///
     /// @return The number of auxiliary fields
-    virtual Int get_num_aux_fields() const = 0;
+    [[nodiscard]] virtual Int get_num_aux_fields() const = 0;
 
     /// Get all auxiliary field names
     ///
     /// @return All auxiliary field names
-    virtual std::vector<std::string> get_aux_field_names() const = 0;
+    [[nodiscard]] virtual std::vector<std::string> get_aux_field_names() const = 0;
 
     /// Get auxiliary field name
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field name
-    virtual const std::string & get_aux_field_name(Int fid) const = 0;
+    [[nodiscard]] virtual const std::string & get_aux_field_name(Int fid) const = 0;
 
     /// Get number of auxiliary field components
     ///
     /// @param fid Auxiliary field ID
     /// @return Number of components
-    virtual Int get_aux_field_num_components(Int fid) const = 0;
+    [[nodiscard]] virtual Int get_aux_field_num_components(Int fid) const = 0;
 
     /// Get auxiliary field ID
     ///
     /// @param name Auxiliary field name
     /// @return Auxiliary field ID
-    virtual Int get_aux_field_id(const std::string & name) const = 0;
+    [[nodiscard]] virtual Int get_aux_field_id(const std::string & name) const = 0;
 
     /// Do we have auxiliary field with specified ID
     ///
     /// @param fid The ID of the auxiliary field
     /// @return True if the auxiliary field exists, otherwise False
-    virtual bool has_aux_field_by_id(Int fid) const = 0;
+    [[nodiscard]] virtual bool has_aux_field_by_id(Int fid) const = 0;
 
     /// Do we have auxiliary field with specified name
     ///
     /// @param name The name of the auxiliary field
     /// @return True if the auxiliary field exists, otherwise False
-    virtual bool has_aux_field_by_name(const std::string & name) const = 0;
+    [[nodiscard]] virtual bool has_aux_field_by_name(const std::string & name) const = 0;
 
     /// Get auxiliary field order
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field order
-    virtual Int get_aux_field_order(Int fid) const = 0;
+    [[nodiscard]] virtual Int get_aux_field_order(Int fid) const = 0;
 
     /// Get component name of an auxiliary field
     ///
     /// @param fid Auxiliary field ID
     /// @param component Component index
     /// @return Component name
-    virtual std::string get_aux_field_component_name(Int fid, Int component) const = 0;
+    [[nodiscard]] virtual std::string get_aux_field_component_name(Int fid,
+                                                                   Int component) const = 0;
 
     /// Set the name of a component of an auxiliary field variable
     ///
@@ -206,13 +207,13 @@ public:
     ///
     /// @param name The name of the object
     /// @return True if the object exists, otherwise false
-    bool has_initial_condition(const std::string & name) const;
+    [[nodiscard]] bool has_initial_condition(const std::string & name) const;
 
     /// Get initial condition object with a specified name
     ///
     /// @param name The name of the object
     /// @return Pointer to the initial condition object
-    InitialCondition * get_initial_condition(const std::string & name) const;
+    [[nodiscard]] InitialCondition * get_initial_condition(const std::string & name) const;
 
     /// Add essential boundary condition
     ///
@@ -228,20 +229,20 @@ public:
     ///
     /// @param name The name of the object
     /// @return True if the object exists, otherwise false
-    bool has_aux(const std::string & name) const;
+    [[nodiscard]] bool has_aux(const std::string & name) const;
 
     /// Get auxiliary object with a specified name
     ///
     /// @param name The name of the object
     /// @return Pointer to the auxiliary object
-    AuxiliaryField * get_aux(const std::string & name) const;
+    [[nodiscard]] AuxiliaryField * get_aux(const std::string & name) const;
 
     /// Return the offset into an array or local Vec for the dof associated with the given point
     ///
     /// @param point Point
     /// @param fid Field ID
     /// @return The offset
-    Int get_field_dof(Int point, Int fid) const;
+    [[nodiscard]] Int get_field_dof(Int point, Int fid) const;
 
     /// Return the offset into an array of local auxiliary Vec for the dof associated with the given
     /// point
@@ -249,12 +250,12 @@ public:
     /// @param point Point
     /// @param fid Field ID
     /// @return The offset
-    Int get_aux_field_dof(Int point, Int fid) const;
+    [[nodiscard]] Int get_aux_field_dof(Int point, Int fid) const;
 
     /// Get local solution vector
     ///
     /// @return Local solution vector
-    const Vector & get_solution_vector_local() const;
+    [[nodiscard]] const Vector & get_solution_vector_local() const;
 
     /// Get local solution vector
     ///
@@ -264,7 +265,7 @@ public:
     /// Get local auxiliary solution vector
     ///
     /// @return Local auxiliary solution vector
-    const Vector & get_aux_solution_vector_local() const;
+    [[nodiscard]] const Vector & get_aux_solution_vector_local() const;
 
     /// Get local auxiliary solution vector
     ///
@@ -376,11 +377,11 @@ public:
 
 protected:
     /// Get list of all boundary conditions
-    const std::vector<BoundaryCondition *> & get_boundary_conditions() const;
+    [[nodiscard]] const std::vector<BoundaryCondition *> & get_boundary_conditions() const;
     /// Get list of all essential boundary conditions
-    const std::vector<EssentialBC *> & get_essential_bcs() const;
+    [[nodiscard]] const std::vector<EssentialBC *> & get_essential_bcs() const;
     /// Get list of all natural boundary conditions
-    const std::vector<NaturalBC *> & get_natural_bcs() const;
+    [[nodiscard]] const std::vector<NaturalBC *> & get_natural_bcs() const;
     /// Distribute the problem among processors for parallel execution
     void distribute();
 
@@ -390,7 +391,7 @@ protected:
     /// Create underlying PetscDS object
     void create_ds();
     /// Get underlying PetscDS object
-    PetscDS get_ds() const;
+    [[nodiscard]] PetscDS get_ds() const;
     /// Set up discrete system
     virtual void set_up_ds() = 0;
 
@@ -410,11 +411,11 @@ protected:
     /// Check existence of boundaries used by BCs
     bool check_bcs_boundaries();
 
-    DM get_dm_aux() const;
+    [[nodiscard]] DM get_dm_aux() const;
 
-    PetscDS get_ds_aux() const;
+    [[nodiscard]] PetscDS get_ds_aux() const;
 
-    Section get_local_section_aux() const;
+    [[nodiscard]] Section get_local_section_aux() const;
 
     void set_local_section_aux(const Section & section);
 
@@ -437,7 +438,7 @@ protected:
     /// Update auxiliary vector
     virtual void update_aux_vector();
 
-    Int get_next_id(const std::vector<Int> & ids) const;
+    [[nodiscard]] Int get_next_id(const std::vector<Int> & ids) const;
 
 private:
     /// Problem this interface is part of

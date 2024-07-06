@@ -64,34 +64,34 @@ public:
         Int idx;
     };
 
-    Iterator vertex_begin() const;
-    Iterator vertex_end() const;
+    [[nodiscard]] Iterator vertex_begin() const;
+    [[nodiscard]] Iterator vertex_end() const;
 
-    Iterator face_begin() const;
-    Iterator face_end() const;
+    [[nodiscard]] Iterator face_begin() const;
+    [[nodiscard]] Iterator face_end() const;
 
-    Iterator cell_begin() const;
-    Iterator cell_end() const;
+    [[nodiscard]] Iterator cell_begin() const;
+    [[nodiscard]] Iterator cell_end() const;
 
     /// Contiguous range of indices
     struct Range {
         Range() : first_idx(-1), last_idx(-1) {}
         Range(Int first, Int last) : first_idx(first), last_idx(last) {}
 
-        Iterator
+        [[nodiscard]] Iterator
         begin() const
         {
             return Iterator(this->first_idx);
         }
 
-        Iterator
+        [[nodiscard]] Iterator
         end() const
         {
             return Iterator(this->last_idx);
         }
 
         /// Get the number of indices in the range
-        Int
+        [[nodiscard]] Int
         size() const
         {
             return last_idx - first_idx;
@@ -100,7 +100,7 @@ public:
         /// Get the first index in the range
         ///
         /// @return First index in the range
-        Int
+        [[nodiscard]] Int
         first() const
         {
             return first_idx;
@@ -109,7 +109,7 @@ public:
         /// Get the last index (not included) in the range
         ///
         /// @return Last index (not included) in the range
-        Int
+        [[nodiscard]] Int
         last() const
         {
             return last_idx;
@@ -131,7 +131,7 @@ public:
     /// Get the `Label` recording the depth of each point
     ///
     /// @return The `Label` recording point depth
-    Label get_depth_label() const;
+    [[nodiscard]] Label get_depth_label() const;
 
     /// Return the number of mesh vertices
     [[nodiscard]] virtual Int get_num_vertices() const;
@@ -139,7 +139,7 @@ public:
     /// Get range of vertex indices
     ///
     /// @return Range of vertex indices
-    Range get_vertex_range() const;
+    [[nodiscard]] Range get_vertex_range() const;
 
     /// Return the number of mesh faces
     [[nodiscard]] virtual Int get_num_faces() const;
@@ -147,7 +147,7 @@ public:
     /// Get range of face indices
     ///
     /// @return Range of face indices
-    Range get_face_range() const;
+    [[nodiscard]] Range get_face_range() const;
 
     /// Return the number of mesh cells (interior)
     ///
@@ -162,22 +162,22 @@ public:
     /// Get range of cell indices (interior only)
     ///
     /// @return Range of cell indices
-    Range get_cell_range() const;
+    [[nodiscard]] Range get_cell_range() const;
 
     /// Get range of all cell indices (interior + ghosted)
     ///
     /// @param Range of all cell indices (interior + ghosted)
-    Range get_all_cell_range() const;
+    [[nodiscard]] Range get_all_cell_range() const;
 
     /// Get range of ghost cell indices
     ///
     /// @param Range of ghost cell indices
-    Range get_ghost_cell_range() const;
+    [[nodiscard]] Range get_ghost_cell_range() const;
 
     /// Get index set with all cells
     ///
     /// @return Index set with all cells
-    IndexSet get_all_cells() const;
+    [[nodiscard]] IndexSet get_all_cells() const;
 
     /// Return the interval for all mesh points [start, end)
     ///
@@ -188,7 +188,7 @@ public:
     /// Return the interval for all mesh points [start, end)
     ///
     /// @return Range of mesh points
-    Range get_chart() const;
+    [[nodiscard]] Range get_chart() const;
 
     /// Set the interval for all mesh points `[start, end)`
     ///
@@ -206,26 +206,26 @@ public:
     ///
     /// @param point Point with must lie in the chart
     /// @return Point connectivity
-    std::vector<Int> get_connectivity(Int point) const;
+    [[nodiscard]] std::vector<Int> get_connectivity(Int point) const;
 
     /// Return the points on the out-edges for this point
     ///
     /// @param point Point with must lie in the chart
     /// @return Points which are on the out-edges for point `p`
-    std::vector<Int> get_support(Int point) const;
+    [[nodiscard]] std::vector<Int> get_support(Int point) const;
 
     /// Return the points on the in-edges for this point
     ///
     /// @param point Point with must lie in the chart
     /// @return Points which are on the out-edges for point `p`
-    std::vector<Int> get_cone(Int point) const;
+    [[nodiscard]] std::vector<Int> get_cone(Int point) const;
 
     /// Expand each given point into its cone points and do that recursively until we end up just
     /// with vertices.
     ///
     /// @param points IndexSet of points with must lie in the chart
     /// @return Vertices recursively expanded from input points
-    IndexSet get_cone_recursive_vertices(IndexSet points) const;
+    [[nodiscard]] IndexSet get_cone_recursive_vertices(IndexSet points) const;
 
     /// Set the number of in-edges for this point in the DAG
     ///
@@ -249,13 +249,13 @@ public:
     ///
     /// @param id The ID of the cell set
     /// @return Cell set name
-    const std::string & get_cell_set_name(Int id) const;
+    [[nodiscard]] const std::string & get_cell_set_name(Int id) const;
 
     /// Get cell set ID
     ///
     /// @param name The name of a cell sel
     /// @return Cell set ID
-    Int get_cell_set_id(const std::string & name) const;
+    [[nodiscard]] Int get_cell_set_id(const std::string & name) const;
 
     /// Get number of cell sets
     ///
@@ -265,7 +265,7 @@ public:
     /// Get cell sets
     ///
     /// @return Cell sets
-    const std::map<Int, std::string> & get_cell_sets() const;
+    [[nodiscard]] const std::map<Int, std::string> & get_cell_sets() const;
 
     /// Create cell set. Takes the ID and creates a label with `name` corresponding to the ID.
     ///
@@ -289,7 +289,7 @@ public:
     ///
     /// @param id The ID of the face set
     /// @return Facet name
-    const std::string & get_face_set_name(Int id) const;
+    [[nodiscard]] const std::string & get_face_set_name(Int id) const;
 
     /// Get number of face sets
     ///
@@ -299,7 +299,7 @@ public:
     /// Get face sets
     ///
     /// @return Face sets
-    const std::map<Int, std::string> & get_face_sets() const;
+    [[nodiscard]] const std::map<Int, std::string> & get_face_sets() const;
 
     /// Check if mesh has a label corresponding to a face set name
     ///
@@ -358,7 +358,7 @@ public:
     ///
     /// @param cell The cell
     /// @return The cell volume
-    Real compute_cell_volume(Int cell) const;
+    [[nodiscard]] Real compute_cell_volume(Int cell) const;
 
     /// Compute a map of cells common to a vertex
     ///
@@ -372,7 +372,7 @@ public:
     void mark_boundary_faces(Int val, Label & label);
 
     /// Get the encoding of the parallel section point overlap
-    StarForest get_point_star_forest() const;
+    [[nodiscard]] StarForest get_point_star_forest() const;
 
     void set_point_star_forest(const StarForest & sf);
 

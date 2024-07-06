@@ -33,29 +33,29 @@ public:
     FEProblemInterface(Problem * problem, const Parameters & params);
     ~FEProblemInterface() override;
 
-    Int get_num_fields() const override;
-    std::vector<std::string> get_field_names() const override;
-    const std::string & get_field_name(Int fid) const override;
-    Int get_field_num_components(Int fid) const override;
-    Int get_field_id(const std::string & name) const override;
-    bool has_field_by_id(Int fid) const override;
-    bool has_field_by_name(const std::string & name) const override;
-    Int get_field_order(Int fid) const override;
-    std::string get_field_component_name(Int fid, Int component) const override;
+    [[nodiscard]] Int get_num_fields() const override;
+    [[nodiscard]] std::vector<std::string> get_field_names() const override;
+    [[nodiscard]] const std::string & get_field_name(Int fid) const override;
+    [[nodiscard]] Int get_field_num_components(Int fid) const override;
+    [[nodiscard]] Int get_field_id(const std::string & name) const override;
+    [[nodiscard]] bool has_field_by_id(Int fid) const override;
+    [[nodiscard]] bool has_field_by_name(const std::string & name) const override;
+    [[nodiscard]] Int get_field_order(Int fid) const override;
+    [[nodiscard]] std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    Int get_num_aux_fields() const override;
-    std::vector<std::string> get_aux_field_names() const override;
-    const std::string & get_aux_field_name(Int fid) const override;
-    Int get_aux_field_num_components(Int fid) const override;
-    Int get_aux_field_id(const std::string & name) const override;
-    bool has_aux_field_by_id(Int fid) const override;
-    bool has_aux_field_by_name(const std::string & name) const override;
-    Int get_aux_field_order(Int fid) const override;
-    std::string get_aux_field_component_name(Int fid, Int component) const override;
+    [[nodiscard]] Int get_num_aux_fields() const override;
+    [[nodiscard]] std::vector<std::string> get_aux_field_names() const override;
+    [[nodiscard]] const std::string & get_aux_field_name(Int fid) const override;
+    [[nodiscard]] Int get_aux_field_num_components(Int fid) const override;
+    [[nodiscard]] Int get_aux_field_id(const std::string & name) const override;
+    [[nodiscard]] bool has_aux_field_by_id(Int fid) const override;
+    [[nodiscard]] bool has_aux_field_by_name(const std::string & name) const override;
+    [[nodiscard]] Int get_aux_field_order(Int fid) const override;
+    [[nodiscard]] std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    virtual WeakForm * get_weak_form() const;
+    [[nodiscard]] virtual WeakForm * get_weak_form() const;
 
     /// Adds a volumetric field
     ///
@@ -94,21 +94,21 @@ public:
     void
     set_aux_field(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
 
-    const Int & get_spatial_dimension() const;
+    [[nodiscard]] const Int & get_spatial_dimension() const;
 
-    const FieldValue & get_field_value(const std::string & field_name) const;
+    [[nodiscard]] const FieldValue & get_field_value(const std::string & field_name) const;
 
-    const FieldGradient & get_field_gradient(const std::string & field_name) const;
+    [[nodiscard]] const FieldGradient & get_field_gradient(const std::string & field_name) const;
 
-    const FieldValue & get_field_dot(const std::string & field_name) const;
+    [[nodiscard]] const FieldValue & get_field_dot(const std::string & field_name) const;
 
-    const Real & get_time_shift() const;
+    [[nodiscard]] const Real & get_time_shift() const;
 
-    const Real & get_assembly_time() const;
+    [[nodiscard]] const Real & get_assembly_time() const;
 
-    const Normal & get_normal() const;
+    [[nodiscard]] const Normal & get_normal() const;
 
-    const Point & get_xyz() const;
+    [[nodiscard]] const Point & get_xyz() const;
 
     /// Add residual statement for a field variable
     ///
@@ -250,7 +250,7 @@ public:
                                      Scalar elem_mat[]);
 
 protected:
-    const std::map<Int, FieldInfo> & get_fields() const;
+    [[nodiscard]] const std::map<Int, FieldInfo> & get_fields() const;
 
     void create() override;
     void init() override;

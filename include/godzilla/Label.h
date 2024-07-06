@@ -29,7 +29,7 @@ public:
     /// Test if the label is "null"
     ///
     /// @return `true` is the label is null, `false` otherwise
-    bool is_null() const;
+    [[nodiscard]] bool is_null() const;
 
     /// Set the default value returned by `get_value()` if a point has not been explicitly given a
     /// value. When a label is created, it is initialized to -1.
@@ -41,29 +41,29 @@ public:
     /// value. When a label is created, it is initialized to -1.
     ///
     /// @return The default value
-    Int get_default_value() const;
+    [[nodiscard]] Int get_default_value() const;
 
     /// Get the number of values that the label takes
     ///
     /// @return The number of values
-    Int get_num_values() const;
+    [[nodiscard]] Int get_num_values() const;
 
     /// Return the value a label assigns to a point
     ///
     /// @param point The point
     /// @return The value associated with the point. If value is not set, return the label’s default
     /// value
-    Int get_value(Int point) const;
+    [[nodiscard]] Int get_value(Int point) const;
 
     /// Get an IndexSet of all values that the Label takes
     ///
     /// @return IndexSet with all label values
-    IndexSet get_value_index_set() const;
+    [[nodiscard]] IndexSet get_value_index_set() const;
 
     /// Get all values that the `Label` takes
     ///
     /// @return `std::vector` with all label values
-    std::vector<Int> get_values() const;
+    [[nodiscard]] std::vector<Int> get_values() const;
 
     void set_value(Int point, Int value);
 
@@ -71,13 +71,13 @@ public:
     ///
     /// @param value The stratum value
     /// @return Size of the stratum
-    Int get_stratum_size(Int value) const;
+    [[nodiscard]] Int get_stratum_size(Int value) const;
 
     /// Get an IndexSet with the stratum points
     ///
     /// @param value The stratum value
     /// @return The stratum points
-    IndexSet get_stratum(Int value) const;
+    [[nodiscard]] IndexSet get_stratum(Int value) const;
 
     /// Set the stratum points using an IndexSet
     ///

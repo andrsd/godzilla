@@ -50,19 +50,19 @@ public:
     /// Get residual keys
     ///
     /// FIXME: needs a better name
-    std::vector<PetscFormKey> get_residual_keys() const;
+    [[nodiscard]] std::vector<PetscFormKey> get_residual_keys() const;
 
     /// Get Jacobian keys
     ///
     /// FIXME: needs a better name
-    std::vector<PetscFormKey> get_jacobian_keys() const;
+    [[nodiscard]] std::vector<PetscFormKey> get_jacobian_keys() const;
 
     /// Get residual forms
-    const std::vector<ResidualFunc *> &
+    [[nodiscard]] const std::vector<ResidualFunc *> &
     get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
-    const std::vector<JacobianFunc *> &
+    [[nodiscard]] const std::vector<JacobianFunc *> &
     get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const;
 
     /// Add a residual form
@@ -95,12 +95,12 @@ public:
     /// Query if Jacobian statement is set
     ///
     /// @return `true` if weak form for Jacobian statement is set, otherwise `false`
-    bool has_jacobian() const;
+    [[nodiscard]] bool has_jacobian() const;
 
     /// Query if Jacobian preconditioner statement is set
     ///
     /// @return `true` if weak form for Jacobian preconditioner statement is set, otherwise `false`
-    bool has_jacobian_preconditioner() const;
+    [[nodiscard]] bool has_jacobian_preconditioner() const;
 
     /// Get field ID for the combination of fields `f` and `g`
     ///

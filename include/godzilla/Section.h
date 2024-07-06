@@ -55,12 +55,12 @@ public:
     /// Returns the flag for dof ordering
     ///
     /// @return `true` if it is point major, `false` if it is field major
-    bool get_point_major() const;
+    [[nodiscard]] bool get_point_major() const;
 
     /// Return the maximum number of degrees of freedom on any point in the Section
     ///
     /// @return The maximum dof
-    Int get_max_dof() const;
+    [[nodiscard]] Int get_max_dof() const;
 
     /// Sets the number of fields in the Section
     ///
@@ -70,7 +70,7 @@ public:
     /// Returns the number of fields in Section
     ///
     /// @return The number of fields defined, or 0 if none were defined
-    Int get_num_fields() const;
+    [[nodiscard]] Int get_num_fields() const;
 
     /// Adds to the total number of degrees of freedom associated with a given point
     ///
@@ -88,13 +88,13 @@ public:
     ///
     /// @param point The point
     /// @return The number of dof
-    Int get_dof(Int point) const;
+    [[nodiscard]] Int get_dof(Int point) const;
 
     /// Get the Section associated with a single field
     ///
     /// @param field The field number
     /// @return The `Section` for the given field, note the chart of the section is not set
-    Section get_field(Int field) const;
+    [[nodiscard]] Section get_field(Int field) const;
 
     /// Sets the number of field components for the given field
     ///
@@ -106,7 +106,7 @@ public:
     ///
     /// @param field The field number
     /// @return The number of field components
-    Int get_num_field_components(Int field) const;
+    [[nodiscard]] Int get_num_field_components(Int field) const;
 
     /// Increment the number of constrained degrees of freedom associated with a given field on a
     /// point
@@ -128,7 +128,7 @@ public:
     /// @param point The point
     /// @param field The field
     /// @return The number of dof which are fixed by constraints
-    Int get_field_constraint_dof(Int point, Int field) const;
+    [[nodiscard]] Int get_field_constraint_dof(Int point, Int field) const;
 
     /// Adds a number of degrees of freedom associated with a field on a given point
     ///
@@ -149,7 +149,7 @@ public:
     /// @param point The point
     /// @param field The field
     /// @return The number of dof
-    Int get_field_dof(Int point, Int field) const;
+    [[nodiscard]] Int get_field_dof(Int point, Int field) const;
 
     /// Sets the name of a field in the Section
     ///
@@ -161,13 +161,13 @@ public:
     ///
     /// @param field The field number
     /// @return The field name
-    std::string get_field_name(Int field) const;
+    [[nodiscard]] std::string get_field_name(Int field) const;
 
     /// Return the offset into an array or `Vector` for the dof associated with the given point
     ///
     /// @param point The point
     /// @return The offset
-    Int get_offset(Int point) const;
+    [[nodiscard]] Int get_offset(Int point) const;
 
     /// Return the full range of offsets [`start`, `end`) for the Section
     ///
@@ -181,7 +181,7 @@ public:
     /// @param point The point
     /// @param field The field
     /// @return The offset
-    Int get_field_offset(Int point, Int field) const;
+    [[nodiscard]] Int get_field_offset(Int point, Int field) const;
 
     /// Return the offset for the first field dof associated with the given point relative to the
     /// offset for that point for the unnamed default field’s first dof
@@ -189,18 +189,18 @@ public:
     /// @param point The point
     /// @param field The field
     /// @return The offset
-    Int get_field_point_offset(Int point, Int field) const;
+    [[nodiscard]] Int get_field_point_offset(Int point, Int field) const;
 
     /// Return the size of an array or local Vector capable of holding all the degrees of freedom
     /// defined in a Section
     ///
     /// @return The size of an array which can hold all the dofs
-    Int get_storage_size() const;
+    [[nodiscard]] Int get_storage_size() const;
 
     /// Determine whether the Section has constrained dofs
     ///
     /// @return `true` if the section has constrained dofs, `false` otherwise
-    bool has_constraints() const;
+    [[nodiscard]] bool has_constraints() const;
 
     /// Sets the name of a field component in the Section
     ///
@@ -214,7 +214,7 @@ public:
     /// @param field The field number
     /// @param comp The component number
     /// @return The component name
-    std::string get_component_name(Int field, Int comp) const;
+    [[nodiscard]] std::string get_component_name(Int field, Int comp) const;
 
     /// Increment the number of constrained degrees of freedom associated with a given point
     ///
@@ -232,7 +232,7 @@ public:
     ///
     /// @param point The point
     /// @return The number of dof which are fixed by constraints
-    Int get_constraint_dof(Int point) const;
+    [[nodiscard]] Int get_constraint_dof(Int point) const;
 
     /// Set the point dof numbers, in [0, dof), which are constrained
     ///
@@ -244,7 +244,7 @@ public:
     ///
     /// @param point The point
     /// @return The constrained dofs
-    const Int * get_constraint_indices(Int point) const;
+    [[nodiscard]] const Int * get_constraint_indices(Int point) const;
 
     /// Set the field dof numbers, in [0, fdof), which are constrained
     ///
@@ -258,7 +258,7 @@ public:
     /// @param point The point
     /// @param field The field number
     /// @return The constrained dofs sorted in ascending order
-    const Int * get_field_constraint_indices(Int point, Int field) const;
+    [[nodiscard]] const Int * get_field_constraint_indices(Int point, Int field) const;
 
     operator const PetscSection &() const { return this->section; }
 

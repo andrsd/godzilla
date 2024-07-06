@@ -25,7 +25,7 @@ public:
     /// Get mesh file format
     ///
     /// @return Mesh file format
-    FileFormat get_file_format() const;
+    [[nodiscard]] FileFormat get_file_format() const;
 
 protected:
     void set_file_format(FileFormat fmt);

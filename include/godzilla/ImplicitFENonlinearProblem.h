@@ -16,8 +16,8 @@ public:
     void create() override;
     bool converged() override;
     void solve() override;
-    Real get_time() const override;
-    Int get_step_num() const override;
+    [[nodiscard]] Real get_time() const override;
+    [[nodiscard]] Int get_step_num() const override;
     void compute_solution_vector_local() override;
 
 protected:
@@ -30,11 +30,11 @@ protected:
     ErrorCode compute_boundary(Real time, const Vector & X, const Vector & X_t);
     ErrorCode compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
     ErrorCode compute_ijacobian(Real time,
-                                     const Vector & X,
-                                     const Vector & X_t,
-                                     Real x_t_shift,
-                                     Matrix & J,
-                                     Matrix & Jp);
+                                const Vector & X,
+                                const Vector & X_t,
+                                Real x_t_shift,
+                                Matrix & J,
+                                Matrix & Jp);
 
 private:
     /// Time stepping scheme

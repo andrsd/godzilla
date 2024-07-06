@@ -19,16 +19,16 @@ public:
         Graph();
         Graph(Int n_roots, Int n_leaves, const Int * leaves, const Node * remote_leaves);
 
-        Int get_num_roots() const;
+        [[nodiscard]] Int get_num_roots() const;
 
-        Int get_num_leaves() const;
+        [[nodiscard]] Int get_num_leaves() const;
 
-        const Int * get_leaves() const;
+        [[nodiscard]] const Int * get_leaves() const;
 
-        const Node * get_remote_leaves() const;
+        [[nodiscard]] const Node * get_remote_leaves() const;
 
         ///
-        Int find_leaf(Int point) const;
+        [[nodiscard]] Int find_leaf(Int point) const;
 
         /// Test if graph is empty
         operator bool() const;
@@ -56,7 +56,7 @@ public:
     void set_up();
 
     /// Get the graph specifying a parallel star forest
-    Graph get_graph() const;
+    [[nodiscard]] Graph get_graph() const;
 
     /// Set a parallel star forest
     void set_graph(Int n_roots,

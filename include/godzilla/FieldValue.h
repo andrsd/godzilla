@@ -23,7 +23,7 @@ public:
         this->data = new_data;
     }
 
-    T *
+    [[nodiscard]] T *
     get() const
     {
         return this->data;

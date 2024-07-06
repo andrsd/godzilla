@@ -27,24 +27,24 @@ public:
     /// Get the spatial dimension
     ///
     /// @return The spatial dimension
-    Int get_dim() const;
+    [[nodiscard]] Int get_dim() const;
 
     /// Get number of components
     ///
     /// @return the number of components
-    Int get_num_components() const;
+    [[nodiscard]] Int get_num_components() const;
 
     /// Get order
     ///
     /// @return The order of the quadrature, i.e. the highest degree polynomial that is exactly
     /// integrated
-    Int get_order() const;
+    [[nodiscard]] Int get_order() const;
 
     /// Determine whether two quadratures are equivalent
     ///
     /// @param q Quadrature to compare to
     /// @return `true` if quadratures are the same, `false` otherwise
-    bool equal(const Quadrature & q) const;
+    [[nodiscard]] bool equal(const Quadrature & q) const;
 
     explicit operator PetscQuadrature() const;
 
