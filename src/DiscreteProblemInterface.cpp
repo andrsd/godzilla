@@ -621,8 +621,8 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                        const std::vector<Int> & ids,
                                        Int field,
                                        const std::vector<Int> & components,
-                                       void (*bc_fn)(void),
-                                       void (*bc_fn_t)(void),
+                                       void (*bc_fn)(),
+                                       void (*bc_fn_t)(),
                                        void * context)
 {
     CALL_STACK_MSG();
