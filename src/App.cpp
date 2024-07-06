@@ -35,7 +35,7 @@ App::App(const mpi::Communicator & comm,
     CALL_STACK_MSG();
     this->args.resize(argc);
     for (int i = 0; i < argc; i++)
-        this->args.push_back(std::string(argv[i]));
+        this->args.emplace_back(argv[i]);
 }
 
 App::App(const mpi::Communicator & comm,
@@ -72,7 +72,7 @@ App::App(const mpi::Communicator & comm,
     CALL_STACK_MSG();
     this->args.resize(argc);
     for (int i = 0; i < argc; i++)
-        this->args.push_back(std::string(argv[i]));
+        this->args.emplace_back(argv[i]);
 }
 
 App::App(const mpi::Communicator & comm,
