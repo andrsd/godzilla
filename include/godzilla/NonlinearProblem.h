@@ -78,7 +78,7 @@ protected:
     /// SNES monitor
     ErrorCode snes_monitor(Int it, Real norm);
     /// KSP monitor
-    ErrorCode ksp_monitor(Int it, Real rnorm);
+    void ksp_monitor(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for creating a preconditioner

@@ -138,7 +138,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real))
+    monitor_set(T * instance, void (T::*method)(Int, Real))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
@@ -181,7 +181,7 @@ private:
     /// PETSc object
     KSP ksp;
     /// Method for monitoring the solve
-    Delegate<ErrorCode(Int it, Real rnorm)> monitor_method;
+    Delegate<void(Int it, Real rnorm)> monitor_method;
     /// Method for computing RHS
     Delegate<void(Vector & b)> compute_rhs_method;
     /// Method for computing operators

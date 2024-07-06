@@ -33,8 +33,9 @@ KrylovSolver::invoke_compute_rhs_delegate(KSP, Vec b, void * ctx)
 ErrorCode
 KrylovSolver::invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx)
 {
-    auto * method = static_cast<Delegate<ErrorCode(Int it, Real rnorm)> *>(ctx);
-    return method->invoke(it, rnorm);
+    auto * method = static_cast<Delegate<void(Int it, Real rnorm)> *>(ctx);
+    method->invoke(it, rnorm);
+    return 0;
 }
 
 KrylovSolver::KrylovSolver() : ksp(nullptr) {}

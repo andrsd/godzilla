@@ -89,11 +89,10 @@ TEST(KrylovSolver, set_monitor)
 {
     class TestSolver {
     public:
-        ErrorCode
+        void
         monitor(Int it, Real rnorm)
         {
             this->norms.push_back(rnorm);
-            return 0;
         }
 
         std::vector<Real> norms;

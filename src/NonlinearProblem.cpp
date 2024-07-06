@@ -235,12 +235,11 @@ NonlinearProblem::snes_monitor(Int it, Real norm)
     return 0;
 }
 
-ErrorCode
+void
 NonlinearProblem::ksp_monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
     lprint(8, "    {} Linear residual: {:e}", it, rnorm);
-    return 0;
 }
 
 void

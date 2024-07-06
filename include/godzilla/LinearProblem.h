@@ -28,7 +28,7 @@ public:
     /// Method to compute operators. Called from the PETsc callback
     virtual void compute_operators(Matrix & A, Matrix & B);
     /// Monitor callback
-    ErrorCode monitor(Int it, Real rnorm);
+    void monitor(Int it, Real rnorm);
 
 protected:
     /// Initialize the problem

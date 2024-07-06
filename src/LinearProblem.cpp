@@ -105,12 +105,11 @@ LinearProblem::set_up_solver_parameters()
                             this->lin_max_iter);
 }
 
-ErrorCode
+void
 LinearProblem::monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
     lprint(8, "{} Linear residual: {:e}", it, rnorm);
-    return 0;
 }
 
 bool
