@@ -131,7 +131,7 @@ public:
     set_jacobian(Matrix & J,
                  Matrix & Jp,
                  T * instance,
-                 ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &))
+                 void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
         this->compute_jacobian_method.bind(instance, method);
         PETSC_CHECK(SNESSetJacobian(this->snes,
@@ -215,7 +215,7 @@ private:
     /// Method for computing residual
     Delegate<void(const Vector & x, Vector & f)> compute_residual_method;
     /// Method for computing Jacobian
-    Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
+    Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
 
 public:
     static ErrorCode invoke_compute_residual_delegate(SNES, Vec, Vec, void *);

@@ -71,7 +71,7 @@ protected:
     /// Set the function to compute Jacobian
     template <class T>
     void
-    set_jacobian(T * instance, ErrorCode (T::*callback)(const Vector &, Matrix &, Matrix &))
+    set_jacobian(T * instance, void (T::*callback)(const Vector &, Matrix &, Matrix &))
     {
         this->snes.set_jacobian(this->J, this->J, instance, callback);
     }

@@ -22,7 +22,7 @@ public:
 
 protected:
     void compute_residual(const Vector & x, Vector & f);
-    ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
+    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
     PetscSection s;
 };
 
@@ -75,13 +75,12 @@ G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
     f.assemble();
 }
 
-ErrorCode
+void
 G1DTestNonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
     J.set_value(0, 0, 1.);
     J.set_value(1, 1, 1.);
     J.assemble();
-    return 0;
 }
 
 //

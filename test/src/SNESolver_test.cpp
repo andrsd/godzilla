@@ -43,13 +43,12 @@ public:
         f.assemble();
     }
 
-    ErrorCode
+    void
     compute_jacobian(const Vector &, Matrix & J, Matrix &)
     {
         J.set_value(0, 0, 1.);
         J.set_value(1, 1, 1.);
         J.assemble();
-        return 0;
     }
 };
 
