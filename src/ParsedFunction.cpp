@@ -51,7 +51,7 @@ void
 ParsedFunction::evaluate(Real time, const Real x[], Scalar u[])
 {
     CALL_STACK_MSG();
-    this->evalr.evaluate(get_dimension(), time, x, this->function.size(), u);
+    this->evalr.evaluate(get_dimension(), time, x, static_cast<Int>(this->function.size()), u);
 }
 
 } // namespace godzilla

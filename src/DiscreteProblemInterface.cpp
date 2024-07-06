@@ -293,7 +293,7 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
     if (n_ics == 0)
         return;
 
-    Int n_fields = field_comps.size();
+    auto n_fields = field_comps.size();
     if (n_ics == n_fields) {
         std::map<Int, InitialCondition *> ics_by_fields;
         for (auto & ic : ics) {
