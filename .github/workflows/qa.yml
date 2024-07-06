@@ -98,7 +98,7 @@ jobs:
             -DGODZILLA_BUILD_TESTS=YES
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
 
@@ -106,7 +106,7 @@ jobs:
         run: make -C ${{ github.workspace }}/build
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
 
   codacy-security-scan:
     permissions:
@@ -130,7 +130,7 @@ jobs:
           max-allowed-issues: 2147483647
 
       - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
 
