@@ -30,8 +30,10 @@ protected:
     void set_up_initial_guess() override;
     void set_up_time_scheme() override;
     void set_up_monitors() override;
-    ErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) override;
     void post_step() override;
+
+private:
+    void compute_rhs_local(Real time, const Vector & x, Vector & F) override;
 
 public:
     static Parameters parameters();

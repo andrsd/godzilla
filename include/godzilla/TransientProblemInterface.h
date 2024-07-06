@@ -190,8 +190,7 @@ protected:
     /// @param method Member function in class T
     template <class T>
     void
-    set_rhs_function_local(T * instance,
-                           ErrorCode (T::*method)(Real time, const Vector & x, Vector & F))
+    set_rhs_function_local(T * instance, void (T::*method)(Real time, const Vector & x, Vector & F))
     {
         this->compute_rhs_local_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -243,7 +242,7 @@ private:
     /// Method for computing right-hand side
     Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> compute_rhs_method;
     /// Method for computing right-hand side
-    Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> compute_rhs_local_method;
+    Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_local_method;
     /// Method for computing F(t,U,U_t) where F() = 0
     Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)>
         compute_ifunction_local_method;

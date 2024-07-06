@@ -31,8 +31,10 @@ protected:
                             ResidualFunc * f0,
                             ResidualFunc * f1,
                             const std::string & region = "") override;
-    ErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) override;
     void post_step() override;
+
+private:
+    void compute_rhs_local(Real time, const Vector & x, Vector & F) override;
 
 public:
     static Parameters parameters();

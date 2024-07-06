@@ -120,11 +120,11 @@ ExplicitFVLinearProblem::set_up_monitors()
     ExplicitProblemInterface::set_up_monitors();
 }
 
-ErrorCode
+void
 ExplicitFVLinearProblem::compute_rhs_local(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
-    return DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this);
+    PETSC_CHECK(DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this));
 }
 
 void
