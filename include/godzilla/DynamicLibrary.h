@@ -119,7 +119,7 @@ public:
 
 private:
     /// Get extension file path
-    std::string get_ext_file_path() const;
+    [[nodiscard]] std::string get_ext_file_path() const;
 
     /// Extension file name
     std::string file_name;

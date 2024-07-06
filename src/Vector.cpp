@@ -11,7 +11,7 @@ namespace godzilla {
 
 Vector::Vector() : vec(nullptr) {}
 
-Vector::Vector(MPI_Comm comm)
+Vector::Vector(MPI_Comm comm) : vec(nullptr)
 {
     CALL_STACK_MSG();
     create(comm);
@@ -21,8 +21,6 @@ Vector::Vector(Vec vec) : vec(vec)
 {
     CALL_STACK_MSG();
 }
-
-Vector::~Vector() {}
 
 void
 Vector::create(MPI_Comm comm)
@@ -229,9 +227,9 @@ Vector::maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x)
 {
     CALL_STACK_MSG();
     if (alpha.size() == x.size()) {
-        Int n = alpha.size();
+        auto n = alpha.size();
         std::vector<Vec> xx(n);
-        for (Int i = 0; i < n; i++)
+        for (std::size_t i = 0; i < n; i++)
             xx[i] = (Vec) x[i];
         PETSC_CHECK(VecMAXPY(this->vec, n, alpha.data(), xx.data()));
     }

@@ -9,7 +9,6 @@ using namespace godzilla;
 class PoissonEquation : public FENonlinearProblem {
 public:
     PoissonEquation(const Parameters & parameters);
-    ~PoissonEquation() override;
 
 protected:
     void set_up_fields() override;

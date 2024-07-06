@@ -22,8 +22,6 @@ PoissonEquation::PoissonEquation(const Parameters & parameters) :
     CALL_STACK_MSG();
 }
 
-PoissonEquation::~PoissonEquation() {}
-
 void
 PoissonEquation::set_up_fields()
 {

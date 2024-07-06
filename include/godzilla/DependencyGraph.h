@@ -15,7 +15,7 @@ namespace godzilla {
 template <typename T>
 class DependencyGraph {
 public:
-    DependencyGraph() {}
+    DependencyGraph() = default;
 
     /// Add node into the graph.
     ///

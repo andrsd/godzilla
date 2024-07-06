@@ -22,7 +22,7 @@ template <typename T, Int N>
 class DenseVector {
 public:
     /// Create empty vector
-    DenseVector() {}
+    DenseVector() = default;
 
     /// Create vector from a std::vector
     ///
@@ -37,7 +37,7 @@ public:
     ///
     /// @param i Index
     /// @return Entry at location (i)
-    const T &
+    [[nodiscard]] const T &
     get(Int i) const
     {
         assert((i >= 0) && (i < N));
@@ -126,7 +126,7 @@ public:
     /// Compute average from vector entries
     ///
     /// @return Average of vector entries
-    Real
+    [[nodiscard]] Real
     avg() const
     {
         Real res = 0.;
@@ -139,7 +139,7 @@ public:
     ///
     /// @param a Dotted vector
     /// @return Dot product
-    T
+    [[nodiscard]] T
     dot(const DenseVector<T, N> & a) const
     {
         T dot = 0.;
@@ -148,7 +148,7 @@ public:
         return dot;
     }
 
-    DenseVector<Real, N>
+    [[nodiscard]] DenseVector<Real, N>
     cross(const DenseVector<Real, N> &) const
     {
         error("Cross product in {} dimensions is not unique.", N);
@@ -168,7 +168,7 @@ public:
     /// Sum all vector elements, i.e \Sum_i vec[i]
     ///
     /// @return Sum of all elements
-    T
+    [[nodiscard]] T
     sum() const
     {
         T sum = 0.;
@@ -180,7 +180,7 @@ public:
     /// Compute vector magnitude, i.e. sqrt(\Sum_i vec[i]^2)
     ///
     /// @return Vector magnitude
-    T
+    [[nodiscard]] T
     magnitude() const
     {
         T sum = 0.;
@@ -193,7 +193,7 @@ public:
     ///
     /// @param b Second vector
     /// @return Vector with entries this[i]*b[i]
-    DenseVector<T, N>
+    [[nodiscard]] DenseVector<T, N>
     pointwise_mult(const DenseVector<T, N> & b) const
     {
         DenseVector<T, N> res;
@@ -206,7 +206,7 @@ public:
     ///
     /// @param b Second vector
     /// @return Vector with entries this[i]/b[i]
-    DenseVector<T, N>
+    [[nodiscard]] DenseVector<T, N>
     pointwise_div(const DenseVector<T, N> & b) const
     {
         DenseVector<T, N> res;
@@ -218,7 +218,7 @@ public:
     /// Find the minimum value of the elements
     ///
     /// @return The minimum value of the elements
-    T
+    [[nodiscard]] T
     min() const
     {
         T res = std::numeric_limits<T>::max();
@@ -231,7 +231,7 @@ public:
     /// Find the minimum value of the elements
     ///
     /// @return The minimum value of the elements
-    T
+    [[nodiscard]] T
     max() const
     {
         T res = std::numeric_limits<T>::min();

@@ -18,24 +18,24 @@ public:
 
     [[nodiscard]] Int get_num_fields() const override;
     [[nodiscard]] std::vector<std::string> get_field_names() const override;
-    const std::string & get_field_name(Int fid) const override;
-    Int get_field_num_components(Int fid) const override;
+    [[nodiscard]] const std::string & get_field_name(Int fid) const override;
+    [[nodiscard]] Int get_field_num_components(Int fid) const override;
     [[nodiscard]] Int get_field_id(const std::string & name) const override;
     [[nodiscard]] bool has_field_by_id(Int fid) const override;
     [[nodiscard]] bool has_field_by_name(const std::string & name) const override;
-    Int get_field_order(Int fid) const override;
-    std::string get_field_component_name(Int fid, Int component) const override;
+    [[nodiscard]] Int get_field_order(Int fid) const override;
+    [[nodiscard]] std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    Int get_num_aux_fields() const override;
-    std::vector<std::string> get_aux_field_names() const override;
-    const std::string & get_aux_field_name(Int fid) const override;
-    Int get_aux_field_num_components(Int fid) const override;
-    Int get_aux_field_id(const std::string & name) const override;
-    bool has_aux_field_by_id(Int fid) const override;
-    bool has_aux_field_by_name(const std::string & name) const override;
-    Int get_aux_field_order(Int fid) const override;
-    std::string get_aux_field_component_name(Int fid, Int component) const override;
+    [[nodiscard]] Int get_num_aux_fields() const override;
+    [[nodiscard]] std::vector<std::string> get_aux_field_names() const override;
+    [[nodiscard]] const std::string & get_aux_field_name(Int fid) const override;
+    [[nodiscard]] Int get_aux_field_num_components(Int fid) const override;
+    [[nodiscard]] Int get_aux_field_id(const std::string & name) const override;
+    [[nodiscard]] bool has_aux_field_by_id(Int fid) const override;
+    [[nodiscard]] bool has_aux_field_by_name(const std::string & name) const override;
+    [[nodiscard]] Int get_aux_field_order(Int fid) const override;
+    [[nodiscard]] std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
     /// Adds a volumetric field
@@ -78,7 +78,7 @@ public:
     /// @param comp Component
     /// @param fid Field ID
     /// @return Degree of freedom
-    Int get_field_dof(Int elem, Int local_node, Int comp, Int fid) const;
+    [[nodiscard]] Int get_field_dof(Int elem, Int local_node, Int comp, Int fid) const;
 
     /// Get auxiliary field degree of freedom
     ///
@@ -87,10 +87,10 @@ public:
     /// @param comp Component
     /// @param fid Auxiliary field ID
     /// @return Degree of freedom
-    Int get_aux_field_dof(Int elem, Int local_node, Int comp, Int fid) const;
+    [[nodiscard]] Int get_aux_field_dof(Int elem, Int local_node, Int comp, Int fid) const;
 
 protected:
-    Int get_num_nodes_per_elem(Int c) const;
+    [[nodiscard]] Int get_num_nodes_per_elem(Int c) const;
 
     void init() override;
     void create() override;
@@ -132,15 +132,7 @@ private:
         {
         }
 
-        FieldInfo(const FieldInfo & other) :
-            name(other.name),
-            id(other.id),
-            block(other.block),
-            nc(other.nc),
-            k(other.k),
-            component_names(other.component_names)
-        {
-        }
+        FieldInfo(const FieldInfo & other) = default;
     };
 
     /// Fields in the problem

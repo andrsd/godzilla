@@ -39,7 +39,7 @@ NaturalBC::create()
     }
     else if (field_names.size() > 1) {
         const auto & field_name = get_param<std::string>("field");
-        if (field_name.length() > 0) {
+        if (!field_name.empty()) {
             if (dpi->has_field_by_name(field_name))
                 this->fid = dpi->get_field_id(field_name);
             else

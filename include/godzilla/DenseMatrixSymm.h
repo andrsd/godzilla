@@ -29,20 +29,20 @@ private:
     static const Int N = DIM * (1 + DIM) / 2;
 
 public:
-    DenseMatrixSymm() {};
+    DenseMatrixSymm() = default;
 
     /// Create matrix from values
     ///
     /// @param vals Values in column major format
     DenseMatrixSymm(const std::vector<Real> & vals) { set_values(vals); };
 
-    int
+    [[nodiscard]] int
     get_num_rows() const
     {
         return DIM;
     }
 
-    int
+    [[nodiscard]] int
     get_num_cols() const
     {
         return DIM;
@@ -195,7 +195,7 @@ public:
     }
 
     /// Compute determinant of the matrix
-    Real
+    [[nodiscard]] Real
     det() const
     {
         error("Determinant is not implemented for {}x{} matrices, yet.", DIM, DIM);
@@ -386,7 +386,7 @@ protected:
     }
 
 private:
-    inline Int
+    [[nodiscard]] inline Int
     idx(Int row, Int col) const
     {
         if (col < row)

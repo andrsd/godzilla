@@ -293,7 +293,7 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
     if (n_ics == 0)
         return;
 
-    Int n_fields = field_comps.size();
+    auto n_fields = field_comps.size();
     if (n_ics == n_fields) {
         std::map<Int, InitialCondition *> ics_by_fields;
         for (auto & ic : ics) {
@@ -505,7 +505,7 @@ DiscreteProblemInterface::compute_aux_fields()
         const std::string & region_name = it.first;
         const std::vector<AuxiliaryField *> & auxs = it.second;
         Label label;
-        if (region_name.length() > 0)
+        if (!region_name.empty())
             label = get_unstr_mesh()->get_label(region_name);
 
         if (label.is_null())
@@ -621,8 +621,8 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                        const std::vector<Int> & ids,
                                        Int field,
                                        const std::vector<Int> & components,
-                                       void (*bc_fn)(void),
-                                       void (*bc_fn_t)(void),
+                                       void (*bc_fn)(),
+                                       void (*bc_fn_t)(),
                                        void * context)
 {
     CALL_STACK_MSG();
@@ -634,7 +634,7 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                    ids.data(),
                                    field,
                                    components.size(),
-                                   components.size() == 0 ? nullptr : components.data(),
+                                   components.empty() ? nullptr : components.data(),
                                    bc_fn,
                                    bc_fn_t,
                                    context,

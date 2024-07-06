@@ -15,8 +15,6 @@ IndexSet::Iterator::Iterator(IndexSet & is, Int idx) : is(is), idx(idx)
         throw Exception("Must call IndexSet::get_indices() first.");
 }
 
-IndexSet::Iterator::~Iterator() {}
-
 const IndexSet::Iterator::value_type &
 IndexSet::Iterator::operator*() const
 {
@@ -55,8 +53,6 @@ operator!=(const IndexSet::Iterator & a, const IndexSet::Iterator & b)
 IndexSet::IndexSet() : is(nullptr), indices(nullptr) {}
 
 IndexSet::IndexSet(IS is) : is(is), indices(nullptr) {}
-
-IndexSet::~IndexSet() {}
 
 const Int *
 IndexSet::data() const

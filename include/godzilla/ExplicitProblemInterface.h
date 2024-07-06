@@ -15,16 +15,16 @@ namespace godzilla {
 class ExplicitProblemInterface : public TransientProblemInterface {
 public:
     explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & params);
-    ~ExplicitProblemInterface();
+    ~ExplicitProblemInterface() override;
 
     /// Get the name of time stepping scheme
-    std::string get_scheme() const;
+    [[nodiscard]] std::string get_scheme() const;
 
-    const Matrix & get_mass_matrix() const;
+    [[nodiscard]] const Matrix & get_mass_matrix() const;
 
     Matrix & get_mass_matrix();
 
-    const Vector & get_lumped_mass_matrix() const;
+    [[nodiscard]] const Vector & get_lumped_mass_matrix() const;
 
     Vector & get_lumped_mass_matrix();
 

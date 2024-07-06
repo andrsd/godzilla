@@ -23,12 +23,12 @@ public:
     /// Get problem spatial dimension
     ///
     /// @return Spatial dimension
-    Int get_dimension() const;
+    [[nodiscard]] Int get_dimension() const;
 
     /// Get field name
     ///
     /// @return The field name
-    virtual const std::string & get_field_name() const;
+    [[nodiscard]] virtual const std::string & get_field_name() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///

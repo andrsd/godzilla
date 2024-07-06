@@ -16,31 +16,31 @@ public:
     explicit BoxMesh(const Parameters & parameters);
 
     /// Get lower limit in x-direction
-    Real get_x_min() const;
+    [[nodiscard]] Real get_x_min() const;
 
     /// Get upper limit in x-direction
-    Real get_x_max() const;
+    [[nodiscard]] Real get_x_max() const;
 
     /// Get the number of mesh points in x direction
-    Int get_nx() const;
+    [[nodiscard]] Int get_nx() const;
 
     /// Get lower limit in y-direction
-    Real get_y_min() const;
+    [[nodiscard]] Real get_y_min() const;
 
     /// Get upper limit in y-direction
-    Real get_y_max() const;
+    [[nodiscard]] Real get_y_max() const;
 
     /// Get the number of mesh points in y-direction
-    Int get_ny() const;
+    [[nodiscard]] Int get_ny() const;
 
     /// Get lower limit in z-direction
-    Real get_z_min() const;
+    [[nodiscard]] Real get_z_min() const;
 
     /// Get upper limit in z-direction
-    Real get_z_max() const;
+    [[nodiscard]] Real get_z_max() const;
 
     /// Get the number of mesh points in z direction
-    Int get_nz() const;
+    [[nodiscard]] Int get_nz() const;
 
 protected:
     Mesh * create_mesh() override;

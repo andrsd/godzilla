@@ -13,7 +13,7 @@ class Delegate;
 template <typename R, typename... ARGS>
 class Delegate<R(ARGS...)> {
 public:
-    Delegate() {}
+    Delegate() = default;
 
     template <typename T>
     Delegate(T * t, R (T::*method)(ARGS...))

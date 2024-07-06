@@ -22,7 +22,7 @@ public:
     /// Get post-processor names
     ///
     /// @return Post-processor names
-    const std::vector<std::string> &
+    [[nodiscard]] const std::vector<std::string> &
     get_pps_names() const
     {
         return pps_names;

@@ -352,7 +352,7 @@ TEST(DenseMatrixSymmTest, det4)
     //    m.set_row(2, { 0, 1, 0, 2 });
     //    m.set_row(3, { 1, -2, -3, 2 });
     //    EXPECT_EQ(m.det(), 21.);
-    EXPECT_DEATH(m.det(), "Determinant is not implemented for 4x4 matrices, yet.");
+    EXPECT_DEATH({ auto d = m.det(); }, "Determinant is not implemented for 4x4 matrices, yet.");
 }
 
 TEST(DenseMatrixSymmTest, transpose3)

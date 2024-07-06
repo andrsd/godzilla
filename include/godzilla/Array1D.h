@@ -87,7 +87,7 @@ public:
     /// Get number of entries in the array
     ///
     /// @return Number of entries in the array
-    Int
+    [[nodiscard]] Int
     get_size() const
     {
         return this->n;
@@ -97,7 +97,7 @@ public:
     ///
     /// @param i Index fo the entry
     /// @return Entry at the `ith` location
-    const T &
+    [[nodiscard]] const T &
     get(Int i) const
     {
         assert(this->data != nullptr);
@@ -234,7 +234,7 @@ public:
     ///
     /// @param a Vector to multiply with
     /// @return Dot product
-    T
+    [[nodiscard]] T
     dot(const Array1D<T> & a) const
     {
         error("Dot product not implemented");
@@ -263,7 +263,7 @@ public:
     //
 
     // Do your best to avoid abusing this API
-    T *
+    [[nodiscard]] T *
     get_data() const
     {
         return this->data;

@@ -50,7 +50,7 @@ protected:
     /// Get problem this time adaptor is part of
     ///
     /// @return Problem this time adaptor is part of
-    Problem * get_problem() const;
+    [[nodiscard]] Problem * get_problem() const;
 
 private:
     /// Problem this adaptor is part of

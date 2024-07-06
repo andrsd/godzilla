@@ -72,57 +72,57 @@ public:
     /// Gets the type of the field split preconditioner
     ///
     /// @return Type of the preconditioner
-    Type get_type() const;
+    [[nodiscard]] Type get_type() const;
 
     /// Returns flag indicating whether `DMCreateFieldDecomposition()` should be used to define the
     /// splits, whenever possible.
-    bool get_dm_splits() const;
+    [[nodiscard]] bool get_dm_splits() const;
 
     /// Returns flag indicating whether this preconditioner will attempt to automatically determine
     /// fields based on zero diagonal entries.
-    bool get_detect_saddle_point() const;
+    [[nodiscard]] bool get_detect_saddle_point() const;
 
     /// Get the flag indicating whether to extract diagonal blocks from `Amat` (rather than `Pmat`)
     /// to build the sub-matrices associated with each split. Where
     /// `KSPSetOperators(ksp, Amat, Pmat)` was used to supply the operators.
-    bool get_diag_use_amat() const;
+    [[nodiscard]] bool get_diag_use_amat() const;
 
     /// Retrieves the elements for a split as an IndexSet
     ///
     /// @param split_name Name of the split
     /// @return The `IndexSet` that defines the elements in this split
-    IndexSet get_is(const std::string & split_name) const;
+    [[nodiscard]] IndexSet get_is(const std::string & split_name) const;
 
     /// Retrieves the elements for a given split as an IS
     ///
     /// @param index Index of the split
     /// @return The index set that defines the elements in this split
-    IndexSet get_is_by_index(Int index) const;
+    [[nodiscard]] IndexSet get_is_by_index(Int index) const;
 
     /// Get the flag indicating whether to extract off-diagonal blocks from `Amat` (rather than
     /// `Pmat`) to build the sub-matrices associated with each split. Where
     /// `KSPSetOperators(ksp, Amat, Pmat)` was used to supply the operators.
-    bool get_off_diag_use_amat() const;
+    [[nodiscard]] bool get_off_diag_use_amat() const;
 
     /// Gets all matrix blocks for the Schur complement
-    SchurBlocks get_schur_blocks() const;
+    [[nodiscard]] SchurBlocks get_schur_blocks() const;
 
     /// For Schur complement fieldsplit, determine how the Schur complement will be preconditioned.
-    SchurPC get_schur_pre() const;
+    [[nodiscard]] SchurPC get_schur_pre() const;
 
     /// Gets the `KrylovSolver`s for all splits
-    std::vector<KrylovSolver> get_sub_ksp() const;
+    [[nodiscard]] std::vector<KrylovSolver> get_sub_ksp() const;
 
     /// Extract the MATSCHURCOMPLEMENT object used by this PCFIELDSPLIT in case it needs to be
     /// configured separately
     ///
     /// @return The Schur complement matrix
-    Matrix schur_get_s() const;
+    [[nodiscard]] Matrix schur_get_s() const;
 
     /// Gets the KSP contexts used inside the Schur complement based PCFIELDSPLIT
     ///
     /// @return The array of `KrylovSolver`s
-    std::vector<KrylovSolver> schur_get_sub_ksp() const;
+    [[nodiscard]] std::vector<KrylovSolver> schur_get_sub_ksp() const;
 
     /// Restore the `MATSCHURCOMPLEMENT` matrix used by this preconditioner
     ///

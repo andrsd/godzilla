@@ -23,7 +23,7 @@ public:
     /// Get problem spatial dimension
     ///
     /// @return Spatial dimension
-    Int get_dimension() const;
+    [[nodiscard]] Int get_dimension() const;
 
     /// Get the boundary name this BC is active on
     ///
@@ -40,7 +40,7 @@ public:
 
 protected:
     /// Get problem this auxiliary field is part of
-    Problem * get_problem() const;
+    [[nodiscard]] Problem * get_problem() const;
 
 private:
     /// Discrete problem this object is part of

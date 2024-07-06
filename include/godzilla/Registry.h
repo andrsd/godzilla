@@ -58,13 +58,13 @@ public:
     ///
     /// @param class_name Class name to check
     /// @return `true` is class is registered, `false` otherwise
-    bool exists(const std::string & class_name) const;
+    [[nodiscard]] bool exists(const std::string & class_name) const;
 
     /// Find registry entry for a given class
     ///
     /// @param class_name Name of the class
     /// @return Registry entry
-    const Entry & get(const std::string & class_name) const;
+    [[nodiscard]] const Entry & get(const std::string & class_name) const;
 
 public:
     Registry() = default;

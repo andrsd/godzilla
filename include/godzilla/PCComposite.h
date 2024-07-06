@@ -33,7 +33,7 @@ public:
 
     /// Gets the type of composite preconditioner
     ///
-    Type get_type() const;
+    [[nodiscard]] Type get_type() const;
 
     /// Adds another PC to the composite PC.
     ///
@@ -43,13 +43,13 @@ public:
     /// Gets the number of PC objects in the composite PC
     ///
     /// @return The number of sub PCs
-    Int get_number_pc() const;
+    [[nodiscard]] Int get_number_pc() const;
 
     /// Gets one of the PC objects in the composite PC
     ///
     /// @param n The number of the PC requested
     /// @return The PC requested
-    Preconditioner get_pc(Int n) const;
+    [[nodiscard]] Preconditioner get_pc(Int n) const;
 
     /// Sets alpha for the special composite preconditioner
     void special_set_alpha(Scalar alpha);

@@ -347,7 +347,7 @@ DGProblemInterface::get_num_nodes_per_elem(Int c) const
 {
     auto unstr_mesh = get_unstr_mesh();
     auto ct = unstr_mesh->get_cell_type(c);
-    auto n_nodes = unstr_mesh->get_num_cell_nodes(ct);
+    auto n_nodes = UnstructuredMesh::get_num_cell_nodes(ct);
     return n_nodes;
 }
 
@@ -356,7 +356,7 @@ DGProblemInterface::get_field_dof(Int elem, Int local_node, Int comp, Int fid) c
 {
     CALL_STACK_MSG();
     auto section = get_problem()->get_local_section();
-    Int offset = section.get_field_offset(elem, fid);
+    auto offset = section.get_field_offset(elem, fid);
     // FIXME: works only for order = 1
     offset += (comp * get_num_nodes_per_elem(elem)) + local_node;
     return offset;
@@ -366,7 +366,7 @@ Int
 DGProblemInterface::get_aux_field_dof(Int elem, Int local_node, Int comp, Int fid) const
 {
     CALL_STACK_MSG();
-    Int offset = get_local_section_aux().get_field_offset(elem, fid);
+    auto offset = get_local_section_aux().get_field_offset(elem, fid);
     // FIXME: works only for order = 1
     offset += (comp * get_num_nodes_per_elem(elem)) + local_node;
     return offset;
@@ -397,7 +397,7 @@ DGProblemInterface::create_section()
     PETSC_CHECK(DMSetNumFields(dm, 1));
     Section section;
     section.create(comm);
-    section.set_num_fields(this->fields.size());
+    section.set_num_fields(get_num_fields());
     for (auto & it : this->fields) {
         auto & fi = it.second;
         section.set_num_field_components(fi.id, fi.nc);
@@ -428,11 +428,11 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
     auto unstr_mesh = get_unstr_mesh();
 
     auto depth_label = unstr_mesh->get_depth_label();
-    Int dim = unstr_mesh->get_dimension();
+    auto dim = unstr_mesh->get_dimension();
     IndexSet all_facets = depth_label.get_stratum(dim - 1);
 
     for (auto & bnd : get_essential_bcs()) {
-        Int n_ced_dofs = bnd->get_components().size();
+        auto n_ced_dofs = (Int) bnd->get_components().size();
         auto fid = bnd->get_field_id();
 
         auto & bnd_names = bnd->get_boundary();
@@ -485,7 +485,7 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
                     auto econn = unstr_mesh->get_connectivity(support[0]);
 
                     auto cell_id = support[0];
-                    auto n_nodes_per_elem = econn.size();
+                    auto n_nodes_per_elem = (Int) econn.size();
                     std::vector<Int> indices;
                     for (Int j = 0; j < fconn.size(); j++) {
                         auto local_node_idx = fe::get_local_vertex_index(econn, fconn[j]);
@@ -511,7 +511,7 @@ DGProblemInterface::create_aux_fields()
     auto comm = get_problem()->get_comm();
     Section section_aux;
     section_aux.create(comm);
-    section_aux.set_num_fields(this->aux_fields.size());
+    section_aux.set_num_fields(get_num_aux_fields());
     for (auto & it : this->aux_fields) {
         auto & fi = it.second;
         section_aux.set_num_field_components(fi.id, fi.nc);
@@ -522,11 +522,11 @@ DGProblemInterface::create_aux_fields()
     section_aux.set_chart(cell_range.first(), cell_range.last());
     for (Int c = cell_range.first(); c < cell_range.last(); c++) {
         auto n_nodes = get_num_nodes_per_elem(c);
-        int n_dofs = 0;
+        Int n_dofs = 0;
         for (auto & it : this->aux_fields) {
             auto & fi = it.second;
             // FIXME: this works for order = 1
-            Int n_field_dofs = fi.nc * n_nodes;
+            auto n_field_dofs = fi.nc * n_nodes;
             section_aux.set_field_dof(c, fi.id, n_field_dofs);
             n_dofs += n_field_dofs;
         }

@@ -34,42 +34,42 @@ public:
 
         FieldDecomposition(Int n = 0);
 
-        Int get_num_fields() const;
+        [[nodiscard]] Int get_num_fields() const;
 
         void destroy();
     };
 
     explicit Problem(const Parameters & parameters);
-    virtual ~Problem();
+    ~Problem() override;
 
     /// Build the problem to solve
     void create() override;
     /// Run the problem
     virtual void run() = 0;
     /// Provide DM for this problem
-    DM get_dm() const;
+    [[nodiscard]] DM get_dm() const;
     /// Return solution vector
-    const Vector & get_solution_vector() const;
+    [[nodiscard]] const Vector & get_solution_vector() const;
     Vector & get_solution_vector();
     /// Get mesh this problem is using
-    virtual Mesh * get_mesh() const;
+    [[nodiscard]] virtual Mesh * get_mesh() const;
     /// Get problem spatial dimension
-    virtual Int get_dimension() const;
+    [[nodiscard]] virtual Int get_dimension() const;
 
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
     /// @return Simulation time
-    virtual Real get_time() const;
+    [[nodiscard]] virtual Real get_time() const;
 
     /// Get time step number
     ///
     /// @return Time step number
-    virtual Int get_step_num() const;
+    [[nodiscard]] virtual Int get_step_num() const;
 
     /// Get list of functions
     ///
     /// @return List of functions
-    const std::vector<Function *> & get_functions() const;
+    [[nodiscard]] const std::vector<Function *> & get_functions() const;
 
     /// Add a function object
     ///
@@ -90,12 +90,12 @@ public:
     ///
     /// @param name The name of the postprocessor
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
-    virtual Postprocessor * get_postprocessor(const std::string & name) const;
+    [[nodiscard]] virtual Postprocessor * get_postprocessor(const std::string & name) const;
 
     /// Get postprocessor names
     ///
     /// @return List of postprocessor names
-    virtual const std::vector<std::string> & get_postprocessor_names() const;
+    [[nodiscard]] virtual const std::vector<std::string> & get_postprocessor_names() const;
 
     /// Compute all postprocessors
     virtual void compute_postprocessors();
@@ -108,7 +108,7 @@ public:
     /// Gets the type of vector created with `create_local_vector` and `create_global_vector`
     ///
     /// @return The vector type
-    std::string get_vector_type() const;
+    [[nodiscard]] std::string get_vector_type() const;
 
     /// Sets the type of vector to be created with `create_local_vector` and `create_global_vector`
     ///
@@ -118,13 +118,13 @@ public:
     /// Creates a local vector from a DM object
     ///
     /// @return New local vector
-    Vector create_local_vector() const;
+    [[nodiscard]] Vector create_local_vector() const;
 
     /// Get a vector that may be used with the DM local routines. This vector has spaces for the
     /// ghost values.
     ///
     /// @return Local vector
-    Vector get_local_vector() const;
+    [[nodiscard]] Vector get_local_vector() const;
 
     void restore_local_vector(const Vector & vec) const;
 
@@ -132,19 +132,19 @@ public:
     /// duplicate values shared between MPI ranks, that is it has no ghost locations.
     ///
     /// @return New global vector
-    Vector create_global_vector() const;
+    [[nodiscard]] Vector create_global_vector() const;
 
     /// Get a vector that may be used with the DM global routines
     ///
     /// @return Global vector
-    Vector get_global_vector() const;
+    [[nodiscard]] Vector get_global_vector() const;
 
     void restore_global_vector(const Vector & vec) const;
 
     /// Gets the type of matrix that would be created with `create_matrix`
     ///
     /// @return The matrix type
-    std::string get_matrix_type() const;
+    [[nodiscard]] std::string get_matrix_type() const;
 
     /// Sets the type of matrix created with `create_matrix`
     ///
@@ -152,16 +152,16 @@ public:
     void set_matrix_type(const std::string & type);
 
     /// Get an empty matrix for a `DM`
-    Matrix create_matrix() const;
+    [[nodiscard]] Matrix create_matrix() const;
 
     /// Get the Section encoding the local data layout for the DM
-    Section get_local_section() const;
+    [[nodiscard]] Section get_local_section() const;
 
     /// Set the `Section` encoding the local data layout for the `DM`.
     void set_local_section(const Section & section) const;
 
     /// Get the Section encoding the global data layout for the DM
-    Section get_global_section() const;
+    [[nodiscard]] Section get_global_section() const;
 
     /// Set the `Section` encoding the global data layout for the `DM`.
     void set_global_section(const Section & section) const;
@@ -195,7 +195,7 @@ public:
     /// Get the number of auxiliary vectors
     ///
     /// @return The number of auxiliary data vectors
-    Int get_num_auxiliary_vec() const;
+    [[nodiscard]] Int get_num_auxiliary_vec() const;
 
     /// Get the auxiliary vector for region specified by the given label, value, and equation part
     ///
@@ -203,7 +203,7 @@ public:
     /// @param value The label value indicating the region
     /// @param part The equation part, or 0 if unused
     /// @return The `Vector` holding auxiliary field data
-    Vector get_auxiliary_vec(const Label & label, Int value, Int part = 0) const;
+    [[nodiscard]] Vector get_auxiliary_vec(const Label & label, Int value, Int part = 0) const;
 
     /// Set an auxiliary vector for region specified by the given label, value, and equation part
     ///

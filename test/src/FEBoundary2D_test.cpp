@@ -44,7 +44,8 @@ public:
                                                         true);
 
         // create "side sets"
-        auto face_sets = m->create_label("Face Sets");
+        m->create_label("Face Sets");
+        auto face_sets = m->get_label("Face Sets");
 
         create_side_set(m, face_sets, 1, { 8 }, "left");
         create_side_set(m, face_sets, 2, { 6 }, "bottom");

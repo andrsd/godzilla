@@ -335,7 +335,8 @@ UnstructuredMesh::create_face_set(Int id, const std::string & name)
     Label face_sets_label = get_label("Face Sets");
     IndexSet is = face_sets_label.get_stratum(id);
     if (!is.empty()) {
-        Label label = create_label(name);
+        create_label(name);
+        Label label = get_label(name);
         label.set_stratum(id, is);
     }
     is.destroy();
@@ -385,7 +386,8 @@ UnstructuredMesh::create_cell_set(Int id, const std::string & name)
     CALL_STACK_MSG();
     auto cell_sets_label = get_label("Cell Sets");
     auto cell_set = cell_sets_label.get_stratum(id);
-    auto label = create_label(name);
+    create_label(name);
+    auto label = get_label(name);
     if (!cell_set.empty())
         label.set_stratum(id, cell_set);
     cell_set.destroy();

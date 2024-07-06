@@ -16,7 +16,7 @@ public:
     /// Get value names provided by this functional
     ///
     /// @return List of value names provided by this functional
-    const std::set<std::string> & get_provided_values() const;
+    [[nodiscard]] const std::set<std::string> & get_provided_values() const;
 
     /// Evaluate this functional
     virtual void evaluate() const = 0;

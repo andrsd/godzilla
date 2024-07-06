@@ -155,7 +155,9 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_THROW_MSG(m->get_face_set_name(1234), "Face set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(
+        { auto n = m->get_face_set_name(1234); },
+        "Face set ID '1234' does not exist.");
 }
 
 TEST(UnstructuredMeshTest, nonexistent_cell_set)
@@ -169,7 +171,9 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_THROW_MSG(m->get_cell_set_name(1234), "Cell set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(
+        { auto n = m->get_cell_set_name(1234); },
+        "Cell set ID '1234' does not exist.");
 }
 
 TEST(UnstructuredMeshTest, get_connectivity)
@@ -541,7 +545,8 @@ TEST(UnstructuredMesh, mark_boundary_faces)
             std::vector<Real> vertices = { 0, 0, 1, 0, 0, 1, 1, 1 };
             auto m =
                 UnstructuredMesh::build_from_cell_list(get_comm(), 2, 3, cells, 2, vertices, true);
-            auto face_sets = m->create_label("face sets");
+            m->create_label("face sets");
+            auto face_sets = m->get_label("face sets");
             m->mark_boundary_faces(10, face_sets);
             return m;
         }

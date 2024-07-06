@@ -17,7 +17,7 @@ Problem::FieldDecomposition::FieldDecomposition(Int n) : field_name(n), is(n) {}
 Int
 Problem::FieldDecomposition::get_num_fields() const
 {
-    return this->field_name.size();
+    return static_cast<Int>(this->field_name.size());
 }
 
 void

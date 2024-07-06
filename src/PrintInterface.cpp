@@ -58,6 +58,7 @@ PrintInterface::PrintInterface(const App * app) :
 PrintInterface::PrintInterface(const mpi::Communicator & comm,
                                const unsigned int & verbosity_level,
                                std::string prefix) :
+    pi_app(nullptr),
     proc_id(comm.rank()),
     verbosity_level(verbosity_level),
     prefix(std::move(prefix))

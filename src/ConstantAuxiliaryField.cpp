@@ -23,7 +23,7 @@ ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & params) :
     values(params.get<std::vector<Real>>("value"))
 {
     CALL_STACK_MSG();
-    assert(this->values.size() >= 1);
+    assert(!this->values.empty());
 }
 
 Int

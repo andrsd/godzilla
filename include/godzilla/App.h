@@ -68,17 +68,17 @@ public:
     /// Get logger associated with the application
     ///
     /// @return Logger
-    Logger * get_logger() const;
+    [[nodiscard]] Logger * get_logger() const;
 
     /// Get Application name
     ///
     /// @return Application name
-    const std::string & get_name() const;
+    [[nodiscard]] const std::string & get_name() const;
 
     /// Get application version
     ///
     /// @return The application version as a string
-    virtual const std::string & get_version() const;
+    [[nodiscard]] virtual const std::string & get_version() const;
 
     /// Get the factory for building objects
     ///
@@ -88,7 +88,7 @@ public:
     /// Get pointer to the `Problem` class in this application
     ///
     /// @return Get problem this application is representing
-    Problem * get_problem() const;
+    [[nodiscard]] Problem * get_problem() const;
 
     /// Get pointer to the `Problem`-derived class in this application
     ///
@@ -124,7 +124,7 @@ public:
     /// Get level of verbosity
     ///
     /// @return The verbosity level
-    const unsigned int & get_verbosity_level() const;
+    [[nodiscard]] const unsigned int & get_verbosity_level() const;
 
     /// Set verbosity level
     ///
@@ -134,12 +134,12 @@ public:
     /// Get the input file name
     ///
     /// @return The input file name
-    const std::string & get_input_file_name() const;
+    [[nodiscard]] const std::string & get_input_file_name() const;
 
     /// Get MPI communicator
     ///
     /// @return MPI communicator
-    const mpi::Communicator & get_comm() const;
+    [[nodiscard]] const mpi::Communicator & get_comm() const;
 
     /// Get parameters for a class
     ///

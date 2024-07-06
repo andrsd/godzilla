@@ -15,7 +15,6 @@ public:
     Vector();
     Vector(MPI_Comm comm);
     Vector(Vec vec);
-    virtual ~Vector();
 
     void create(MPI_Comm comm);
     void destroy();
@@ -31,24 +30,24 @@ public:
     /// Get the vector type name
     ///
     /// @return The vector type
-    std::string get_type() const;
+    [[nodiscard]] std::string get_type() const;
 
     Scalar * get_array();
-    const Scalar * get_array_read() const;
+    [[nodiscard]] const Scalar * get_array_read() const;
     void restore_array(Scalar * arr);
     void restore_array_read(const Scalar * arr) const;
 
     /// Returns the global number of elements of the vector
-    Int get_size() const;
+    [[nodiscard]] Int get_size() const;
     /// Returns the local number of elements of the vector
-    Int get_local_size() const;
+    [[nodiscard]] Int get_local_size() const;
     void get_values(const std::vector<Int> & idx, std::vector<Scalar> & y) const;
 
     void abs();
-    Scalar dot(const Vector & y) const;
+    [[nodiscard]] Scalar dot(const Vector & y) const;
     void scale(Scalar alpha);
     void duplicate(Vector & b) const;
-    Vector duplicate() const;
+    [[nodiscard]] Vector duplicate() const;
 
     /// Copy this vector into `y`
     ///
@@ -57,8 +56,8 @@ public:
 
     void normalize();
     void shift(Scalar shift);
-    Scalar min() const;
-    Scalar max() const;
+    [[nodiscard]] Scalar min() const;
+    [[nodiscard]] Scalar max() const;
 #if PETSC_VERSION_LT(3, 20, 0)
     void chop(Real tol);
 #else
@@ -132,7 +131,7 @@ public:
                           const std::vector<Scalar> & y,
                           InsertMode mode = INSERT_VALUES);
 
-    Scalar sum() const;
+    [[nodiscard]] Scalar sum() const;
 
     void zero();
 

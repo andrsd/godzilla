@@ -119,7 +119,8 @@ TEST(MeshTest, set_label_value)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto bnd = m->create_label("bnd");
+    m->create_label("bnd");
+    auto bnd = m->get_label("bnd");
     m->set_label_value("bnd", 0, 1001);
 
     EXPECT_EQ(bnd.get_value(0), 1001);
@@ -136,7 +137,8 @@ TEST(MeshTest, clear_label_value)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto bnd = m->create_label("bnd");
+    m->create_label("bnd");
+    auto bnd = m->get_label("bnd");
     m->set_label_value("bnd", 0, 1001);
     m->clear_label_value("bnd", 0, 1001);
     EXPECT_EQ(bnd.get_value(0), -1);

@@ -56,7 +56,7 @@ public:
 
     /// Construct empty non-linear solver
     SNESolver();
-    ~SNESolver();
+    ~SNESolver() = default;
 
     /// Construct a non-linear solver from a PETSc SNES object
     explicit SNESolver(SNES snes);
@@ -67,9 +67,9 @@ public:
     /// Destroy the solver
     void destroy();
 
-    KrylovSolver get_ksp() const;
+    [[nodiscard]] KrylovSolver get_ksp() const;
 
-    LineSearch get_line_search() const;
+    [[nodiscard]] LineSearch get_line_search() const;
 
     void set_line_search(LineSearch ls);
 
@@ -202,7 +202,7 @@ public:
     /// Gets the reason the KSP iteration was stopped
     ///
     /// @return
-    ConvergedReason get_converged_reason() const;
+    [[nodiscard]] ConvergedReason get_converged_reason() const;
 
     /// typecast operator so we can use our class directly with PETSc API
     operator SNES() const;

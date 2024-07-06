@@ -23,12 +23,12 @@ public:
     virtual ~Mesh();
 
     /// Get the MPI comm this object works on
-    mpi::Communicator get_comm() const;
+    [[nodiscard]] mpi::Communicator get_comm() const;
 
     /// Get the underlying DM object
     ///
     /// @return Underlying PETSc DM
-    DM get_dm() const;
+    [[nodiscard]] DM get_dm() const;
 
     /// Get the mesh spatial dimension
     ///
@@ -55,8 +55,7 @@ public:
     /// Create label
     ///
     /// @param name Label name
-    /// @return Created label
-    Label create_label(const std::string & name) const;
+    void create_label(const std::string & name) const;
 
     /// Remove label with given name
     ///
@@ -67,22 +66,22 @@ public:
     /// coordinates
     ///
     /// @return coordinate `DM`
-    DM get_coordinate_dm() const;
+    [[nodiscard]] DM get_coordinate_dm() const;
 
     /// Get a global vector with the coordinates associated with this mesh
     ///
     /// @return Global coordinate vector
-    Vector get_coordinates() const;
+    [[nodiscard]] Vector get_coordinates() const;
 
     /// Get a local vector with the coordinates associated with this mesh
     ///
     /// @return Coordinate vector
-    Vector get_coordinates_local() const;
+    [[nodiscard]] Vector get_coordinates_local() const;
 
     /// Retrieve the layout of coordinate values over the mesh.
     ///
     /// @return Local section from the coordinate `DM`
-    Section get_coordinate_section() const;
+    [[nodiscard]] Section get_coordinate_section() const;
 
     /// Set the dimension of the embedding space for coordinate values
     ///

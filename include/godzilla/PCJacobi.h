@@ -32,18 +32,18 @@ public:
     /// Gets how the diagonal matrix is produced for the preconditioner
     ///
     /// @return How the diagonal matrix is produced
-    Type get_type() const;
+    [[nodiscard]] Type get_type() const;
 
     /// Determines if the preconditioner checks for zero diagonal terms
     ///
     /// @return `true` if check is on, `false` otherwise
-    bool get_fix_diagonal() const;
+    [[nodiscard]] bool get_fix_diagonal() const;
 
     /// Determines if the preconditioner uses the absolute values of the diagonal divisors in
     /// the preconditioner
     ///
     /// @return `true` if checking is on, `false` otherwise
-    bool get_use_abs() const;
+    [[nodiscard]] bool get_use_abs() const;
 
     /// Check for zero values on the diagonal and replace them with 1.0
     ///

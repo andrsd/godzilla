@@ -26,7 +26,7 @@ class DenseMatrixSymm;
 template <typename T, Int ROWS, Int COLS = ROWS>
 class DenseMatrix {
 public:
-    DenseMatrix() {};
+    DenseMatrix() = default;
 
     DenseMatrix(const DenseMatrixSymm<Real, ROWS> & m)
     {
@@ -39,7 +39,7 @@ public:
     /// Get the number of rows
     ///
     /// @return The number of rows
-    int
+    [[nodiscard]] int
     get_num_rows() const
     {
         return ROWS;
@@ -48,7 +48,7 @@ public:
     /// Get the number of columns
     ///
     /// @return The number of columns
-    int
+    [[nodiscard]] int
     get_num_cols() const
     {
         return COLS;
@@ -296,7 +296,7 @@ public:
     }
 
     /// Compute determinant of the matrix
-    Real
+    [[nodiscard]] Real
     det() const
     {
         error("Determinant is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
@@ -485,13 +485,14 @@ public:
         return mult(x);
     }
 
-    void
+    DenseMatrix<Real, ROWS> &
     operator=(const DenseMatrixSymm<Real, ROWS> & m)
     {
         assert(COLS == ROWS);
         for (Int i = 0; i < ROWS; i++)
             for (Int j = 0; j < COLS; j++)
                 set(i, j) = m(i, j);
+        return *this;
     }
 
     /// Get access to the underlying data
@@ -581,7 +582,7 @@ private:
     /// @param row Row number
     /// @param col Column number
     /// @return Offset into the `data` array that contains the entry at position (row, col)
-    Int
+    [[nodiscard]] Int
     idx(Int row, Int col) const
     {
         return row * COLS + col;
