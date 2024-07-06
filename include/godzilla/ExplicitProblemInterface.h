@@ -15,7 +15,7 @@ namespace godzilla {
 class ExplicitProblemInterface : public TransientProblemInterface {
 public:
     explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & params);
-    ~ExplicitProblemInterface();
+    ~ExplicitProblemInterface() override;
 
     /// Get the name of time stepping scheme
     [[nodiscard]] std::string get_scheme() const;

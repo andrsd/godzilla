@@ -40,7 +40,7 @@ public:
     };
 
     explicit Problem(const Parameters & parameters);
-    virtual ~Problem();
+    ~Problem() override;
 
     /// Build the problem to solve
     void create() override;
