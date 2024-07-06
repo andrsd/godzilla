@@ -347,7 +347,7 @@ DGProblemInterface::get_num_nodes_per_elem(Int c) const
 {
     auto unstr_mesh = get_unstr_mesh();
     auto ct = unstr_mesh->get_cell_type(c);
-    auto n_nodes = unstr_mesh->get_num_cell_nodes(ct);
+    auto n_nodes = UnstructuredMesh::get_num_cell_nodes(ct);
     return n_nodes;
 }
 
