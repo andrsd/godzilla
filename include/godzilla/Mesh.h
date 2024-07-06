@@ -55,8 +55,7 @@ public:
     /// Create label
     ///
     /// @param name Label name
-    /// @return Created label
-    [[nodiscard]] Label create_label(const std::string & name) const;
+    void create_label(const std::string & name) const;
 
     /// Remove label with given name
     ///

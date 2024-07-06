@@ -545,7 +545,8 @@ TEST(UnstructuredMesh, mark_boundary_faces)
             std::vector<Real> vertices = { 0, 0, 1, 0, 0, 1, 1, 1 };
             auto m =
                 UnstructuredMesh::build_from_cell_list(get_comm(), 2, 3, cells, 2, vertices, true);
-            auto face_sets = m->create_label("face sets");
+            m->create_label("face sets");
+            auto face_sets = m->get_label("face sets");
             m->mark_boundary_faces(10, face_sets);
             return m;
         }

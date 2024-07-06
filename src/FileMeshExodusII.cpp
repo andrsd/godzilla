@@ -66,10 +66,10 @@ FileMesh::create_from_exodus()
         }
         m->set_chart(0, n_cells + n_vertices);
         // We do not want this label automatically computed, instead we compute it here
-        auto celltypes = m->create_label("celltype");
+        m->create_label("celltype");
         // Create Cell/Face Sets labels on all processes
-        auto cell_sets = m->create_label("Cell Sets");
-        auto face_sets = m->create_label("Face Sets");
+        m->create_label("Cell Sets");
+        m->create_label("Face Sets");
 
         if (rank == 0) {
             f.read_blocks();
@@ -105,6 +105,8 @@ FileMesh::create_from_exodus()
             m->set_up();
 
             // process element blocks
+            auto cell_sets = m->get_label("Cell Sets");
+
             for (Int i = 0, cell = 0; i < n_elem_blocks; ++i) {
                 int blk_idx = cs_order[i];
                 auto & eb = f.get_element_block(blk_idx);
@@ -113,7 +115,8 @@ FileMesh::create_from_exodus()
                 if (name.empty())
                     name = fmt::format("{}", id);
 
-                auto block_label = m->create_label(name);
+                m->create_label(name);
+                auto block_label = m->get_label(name);
                 cell_set_names[id] = name;
 
                 auto n_blk_elems = eb.get_num_elements();
@@ -195,6 +198,8 @@ FileMesh::create_from_exodus()
         // Create side set labels
         std::map<Int, std::string> side_set_names;
         if ((rank == 0) && (n_side_sets > 0)) {
+            auto face_sets = m->get_label("Face Sets");
+
             f.read_side_sets();
             auto & side_sets = f.get_side_sets();
             for (int i = 0; i < n_side_sets; ++i) {
@@ -204,7 +209,8 @@ FileMesh::create_from_exodus()
                 if (name.empty())
                     name = fmt::format("{}", id);
 
-                auto face_set_label = m->create_label(name);
+                m->create_label(name);
+                auto face_set_label = m->get_label(name);
                 side_set_names[id] = name;
 
                 std::vector<int> node_count_list;
