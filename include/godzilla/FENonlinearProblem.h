@@ -47,7 +47,7 @@ protected:
     /// containing the local vector information PLUS ghost point information.
     template <class T>
     void
-    set_function_local(T * instance, ErrorCode (T::*method)(const Vector &, Vector &))
+    set_function_local(T * instance, void (T::*method)(const Vector &, Vector &))
     {
         this->compute_residual_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetFunctionLocal(get_dm(),
@@ -68,24 +68,24 @@ protected:
 
     void compute_boundary(Vector & x);
 
-    ErrorCode compute_residual(const Vector & x, Vector & f);
-    ErrorCode compute_residual_internal(DM dm,
-                                        PetscFormKey key,
-                                        const IndexSet & cells,
-                                        Real time,
-                                        const Vector & loc_x,
-                                        const Vector & loc_x_t,
-                                        Real t,
-                                        Vector & loc_f);
-    ErrorCode compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f);
-    ErrorCode compute_bnd_residual_single_internal(DM dm,
-                                                   Real t,
-                                                   PetscFormKey key,
-                                                   Vec loc_x,
-                                                   Vec loc_x_t,
-                                                   Vec loc_f,
-                                                   DMField coord_field,
-                                                   const IndexSet & facets);
+    void compute_residual(const Vector & x, Vector & f);
+    void compute_residual_internal(DM dm,
+                                   PetscFormKey key,
+                                   const IndexSet & cells,
+                                   Real time,
+                                   const Vector & loc_x,
+                                   const Vector & loc_x_t,
+                                   Real t,
+                                   Vector & loc_f);
+    void compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f);
+    void compute_bnd_residual_single_internal(DM dm,
+                                              Real t,
+                                              PetscFormKey key,
+                                              Vec loc_x,
+                                              Vec loc_x_t,
+                                              Vec loc_f,
+                                              DMField coord_field,
+                                              const IndexSet & facets);
 
     ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
     ErrorCode compute_jacobian_internal(DM dm,
@@ -123,7 +123,7 @@ private:
     /// Delegate for compute_boundary
     Delegate<void(Vector &)> compute_boundary_delegate;
     /// Delegate for compute_residual
-    Delegate<ErrorCode(const Vector &, Vector &)> compute_residual_delegate;
+    Delegate<void(const Vector &, Vector &)> compute_residual_delegate;
     /// Delegate for compute_jacobian
     Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_delegate;
 
