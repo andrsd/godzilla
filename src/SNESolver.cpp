@@ -58,10 +58,11 @@ ErrorCode
 SNESolver::invoke_compute_residual_delegate(SNES, Vec x, Vec f, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(const Vector & x, Vector & f)> *>(ctx);
+    auto * method = static_cast<Delegate<void(const Vector & x, Vector & f)> *>(ctx);
     Vector vec_x(x);
     Vector vec_f(f);
-    return method->invoke(vec_x, vec_f);
+    method->invoke(vec_x, vec_f);
+    return 0;
 }
 
 ErrorCode

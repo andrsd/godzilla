@@ -99,7 +99,7 @@ public:
     /// @param method Member function in class T to compute function values
     template <class T>
     void
-    set_function(Vector & r, T * instance, ErrorCode (T::*method)(const Vector &, Vector &))
+    set_function(Vector & r, T * instance, void (T::*method)(const Vector &, Vector &))
     {
         this->compute_residual_method.bind(instance, method);
         PETSC_CHECK(SNESSetFunction(this->snes,
@@ -213,7 +213,7 @@ private:
     /// Method for monitoring the solve
     Delegate<void(Int it, Real rnorm)> monitor_method;
     /// Method for computing residual
-    Delegate<ErrorCode(const Vector & x, Vector & f)> compute_residual_method;
+    Delegate<void(const Vector & x, Vector & f)> compute_residual_method;
     /// Method for computing Jacobian
     Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
 

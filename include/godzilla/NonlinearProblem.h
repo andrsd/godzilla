@@ -64,7 +64,7 @@ protected:
     /// Set the function evaluation routine
     template <class T>
     void
-    set_function(T * instance, ErrorCode (T::*callback)(const Vector &, Vector &))
+    set_function(T * instance, void (T::*callback)(const Vector &, Vector &))
     {
         this->snes.set_function(this->r, instance, callback);
     }

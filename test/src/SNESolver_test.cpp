@@ -33,7 +33,7 @@ compute_jacobian(SNES, Vec, Mat j, Mat, void *)
 
 class TestNLProblem {
 public:
-    ErrorCode
+    void
     compute_f(const Vector & x, Vector & f)
     {
         std::vector<Int> ix = { 0, 1 };
@@ -41,7 +41,6 @@ public:
         x.get_values(ix, y);
         f.set_values({ 0, 1 }, { y[0] - 2, y[1] - 3 });
         f.assemble();
-        return 0;
     }
 
     ErrorCode
