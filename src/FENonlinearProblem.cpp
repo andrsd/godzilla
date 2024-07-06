@@ -19,9 +19,10 @@ ErrorCode
 FENonlinearProblem::invoke_compute_boundary_delegate(DM, Vec x, void * context)
 {
     CALL_STACK_MSG();
-    auto * delegate = static_cast<Delegate<ErrorCode(Vector &)> *>(context);
+    auto * delegate = static_cast<Delegate<void(Vector &)> *>(context);
     Vector vec_x(x);
-    return delegate->invoke(vec_x);
+    delegate->invoke(vec_x);
+    return 0;
 }
 
 ErrorCode
@@ -104,7 +105,7 @@ FENonlinearProblem::allocate_objects()
     FEProblemInterface::allocate_objects();
 }
 
-ErrorCode
+void
 FENonlinearProblem::compute_boundary(Vector & x)
 {
     CALL_STACK_MSG();
@@ -115,7 +116,6 @@ FENonlinearProblem::compute_boundary(Vector & x)
                                            nullptr,
                                            nullptr,
                                            nullptr));
-    return 0;
 }
 
 ErrorCode

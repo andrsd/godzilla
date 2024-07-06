@@ -35,7 +35,7 @@ protected:
     /// vector
     template <class T>
     void
-    set_boundary_local(T * instance, ErrorCode (T::*method)(Vector &))
+    set_boundary_local(T * instance, void (T::*method)(Vector &))
     {
         this->compute_boundary_delegate.bind(instance, method);
         PETSC_CHECK(DMSNESSetBoundaryLocal(get_dm(),
@@ -66,7 +66,7 @@ protected:
                                            &this->compute_jacobian_delegate));
     }
 
-    ErrorCode compute_boundary(Vector & x);
+    void compute_boundary(Vector & x);
 
     ErrorCode compute_residual(const Vector & x, Vector & f);
     ErrorCode compute_residual_internal(DM dm,
@@ -121,7 +121,7 @@ protected:
 private:
     enum State { INITIAL, FINAL } state;
     /// Delegate for compute_boundary
-    Delegate<ErrorCode(Vector &)> compute_boundary_delegate;
+    Delegate<void(Vector &)> compute_boundary_delegate;
     /// Delegate for compute_residual
     Delegate<ErrorCode(const Vector &, Vector &)> compute_residual_delegate;
     /// Delegate for compute_jacobian
