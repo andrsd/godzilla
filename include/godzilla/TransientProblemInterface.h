@@ -187,7 +187,7 @@ protected:
     void
     set_ifunction_local(
         T * instance,
-        ErrorCode (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
+        void (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
     {
         this->compute_ifunction_local_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -227,7 +227,7 @@ private:
     /// Method for computing right-hand side
     Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> compute_rhs_method;
     /// Method for computing F(t,U,U_t) where F() = 0
-    Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t, Vector & F)>
+    Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)>
         compute_ifunction_local_method;
     /// Method to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t) is the function provided by
     /// `set_ifunction_local`

@@ -34,7 +34,15 @@ protected:
     /// @param x_t Local solution time derivative
     /// @return Error code
     ErrorCode compute_boundary_local(Real time, const Vector & x, const Vector & x_t);
-    ErrorCode compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
+
+    /// Form the local residual `f` from the local input `x`
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    /// @param F Local residual vector
+    /// @return Error code
+    void compute_ifunction_local(Real time, const Vector & x, const Vector & x_t, Vector & F);
 
     /// Form the Jacobian `J` from the local input `x`
     ///

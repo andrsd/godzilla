@@ -64,12 +64,14 @@ TransientProblemInterface::invoke_compute_ifunction_delegate(DM,
                                                              void * contex)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<
-        Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t, Vector & F)> *>(contex);
+    auto * method =
+        static_cast<Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)> *>(
+            contex);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
     Vector vec_F(F);
-    return method->invoke(time, vec_x, vec_x_t, vec_F);
+    method->invoke(time, vec_x, vec_x_t, vec_F);
+    return 0;
 }
 
 ErrorCode

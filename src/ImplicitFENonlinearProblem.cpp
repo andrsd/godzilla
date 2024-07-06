@@ -93,7 +93,7 @@ ImplicitFENonlinearProblem::set_up_callbacks()
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
     set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary_local);
-    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction);
+    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction_local);
     set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian_local);
 }
 
@@ -124,11 +124,11 @@ ImplicitFENonlinearProblem::compute_solution_vector_local()
     compute_boundary_local(get_time(), loc_sln, Vector());
 }
 
-ErrorCode
-ImplicitFENonlinearProblem::compute_ifunction(Real time,
-                                              const Vector & X,
-                                              const Vector & X_t,
-                                              Vector & F)
+void
+ImplicitFENonlinearProblem::compute_ifunction_local(Real time,
+                                                    const Vector & x,
+                                                    const Vector & x_t,
+                                                    Vector & F)
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
     CALL_STACK_MSG();
@@ -146,11 +146,9 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_residual_internal(get_dm(), res_key, cells, time, X, X_t, time, F);
+        compute_residual_internal(get_dm(), res_key, cells, time, x, x_t, time, F);
         cells.destroy();
     }
-
-    return 0;
 }
 
 void
