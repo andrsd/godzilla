@@ -263,22 +263,24 @@ protected:
     /// Set up discretization system
     void set_up_ds() override;
 
-    virtual void set_up_assembly_data();
-    virtual void set_up_assembly_data_aux();
+    void set_up_assembly_data();
+    void set_up_assembly_data_aux();
 
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
     /// Set up quadrature
-    virtual void set_up_quadrature();
+    void set_up_quadrature();
 
     virtual void set_up_field_null_space(DM dm);
 
     void create_aux_fields() override;
 
-    virtual void sort_functionals();
+    void sort_functionals();
+
     void
     sort_residual_functionals(const std::map<std::string, const ValueFunctional *> & suppliers);
+
     void
     sort_jacobian_functionals(const std::map<std::string, const ValueFunctional *> & suppliers);
 

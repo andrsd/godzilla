@@ -100,7 +100,7 @@ protected:
     void set_up_section_constraint_dofs(Section & section);
     void set_up_section_constraint_indicies(Section & section);
 
-    virtual void set_up_assembly_data_aux();
+    void set_up_assembly_data_aux();
 
     /// Set up field variables
     virtual void set_up_fields() = 0;

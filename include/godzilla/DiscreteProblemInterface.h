@@ -392,8 +392,6 @@ protected:
     void create_ds();
     /// Get underlying PetscDS object
     [[nodiscard]] PetscDS get_ds() const;
-    /// Set up discrete system
-    virtual void set_up_ds() = 0;
 
     /// Check initial conditions
     void check_initial_conditions(const std::vector<InitialCondition *> & ics,
@@ -444,6 +442,9 @@ protected:
     virtual void set_up_weak_form() = 0;
 
 private:
+    /// Set up discrete system
+    virtual void set_up_ds() = 0;
+
     /// Problem this interface is part of
     Problem * problem;
 
