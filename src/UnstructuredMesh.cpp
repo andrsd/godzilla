@@ -659,8 +659,8 @@ UnstructuredMesh::stratify()
 std::vector<Int>
 UnstructuredMesh::get_full_join(const std::vector<Int> & points)
 {
-    PetscInt n_covered_points;
-    const PetscInt * covered_points;
+    Int n_covered_points;
+    const Int * covered_points;
     PETSC_CHECK(DMPlexGetFullJoin(get_dm(),
                                   points.size(),
                                   points.data(),

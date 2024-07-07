@@ -357,11 +357,11 @@ Problem::create_field_decomposition()
     IS * is;
     PETSC_CHECK(DMCreateFieldDecomposition(get_dm(), &n, &field_names, &is, nullptr));
     FieldDecomposition decomp(n);
-    for (PetscInt i = 0; i < n; i++) {
+    for (Int i = 0; i < n; i++) {
         decomp.field_name[i] = field_names[i];
         decomp.is[i] = IndexSet(is[i]);
     }
-    for (PetscInt i = 0; i < n; i++)
+    for (Int i = 0; i < n; i++)
         PetscFree(field_names[i]);
     PetscFree(field_names);
     PetscFree(is);
