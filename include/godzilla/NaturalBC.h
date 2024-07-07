@@ -6,6 +6,10 @@
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/Types.h"
 #include "godzilla/Label.h"
+#include "godzilla/WeakForm.h"
+#include "godzilla/FEProblemInterface.h"
+#include "godzilla/BndResidualFunc.h"
+#include "godzilla/BndJacobianFunc.h"
 
 namespace godzilla {
 
@@ -37,9 +41,13 @@ public:
 protected:
     /// Set residual statement for the boundary integral
     ///
-    /// @param f0 Integrand for the test function term
-    /// @param f1 Integrand for the test function gradient term
-    void add_residual_block(BndResidualFunc * f0, BndResidualFunc * f1);
+    /// @param res_func Integrand
+    template <WeakForm::ResidualKind KIND>
+    void
+    add_residual_block(BndResidualFunc * res_func)
+    {
+        throw Exception("Unsupported boundary residual functional kind");
+    }
 
     /// Set Jacobian statement for the boundary integral
     ///
@@ -48,11 +56,12 @@ protected:
     /// @param g1 Integrand for the test function and basis function gradient term
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
-    void add_jacobian_block(Int gid,
-                            BndJacobianFunc * g0,
-                            BndJacobianFunc * g1,
-                            BndJacobianFunc * g2,
-                            BndJacobianFunc * g3);
+    template <WeakForm::JacobianKind KIND>
+    void
+    add_jacobian_block(Int gid, BndJacobianFunc * jac_func)
+    {
+        throw Exception("Unsupported boundary jacobian functional kind");
+    }
 
 private:
     /// Field ID this boundary condition is attached to
@@ -64,5 +73,81 @@ private:
 public:
     static Parameters parameters();
 };
+
+/// Set residual statement for the boundary integral
+///
+/// @param res_func Integrand for the test function term
+template <>
+inline void
+NaturalBC::add_residual_block<WeakForm::BND_F0>(BndResidualFunc * res_func)
+{
+    CALL_STACK_MSG();
+    for (auto & bnd : get_boundary())
+        this->fepi->add_residual_block<WeakForm::BND_F0>(this->fid, res_func, bnd);
+}
+
+/// Set residual statement for the boundary integral
+///
+/// @param res_func Integrand for the test function gradient term
+template <>
+inline void
+NaturalBC::add_residual_block<WeakForm::BND_F1>(BndResidualFunc * res_func)
+{
+    CALL_STACK_MSG();
+    for (auto & bnd : get_boundary())
+        this->fepi->add_residual_block<WeakForm::BND_F1>(this->fid, res_func, bnd);
+}
+
+/// Set Jacobian statement for the boundary integral
+///
+/// @param gid Field ID
+/// @param jac_func Integrand for the test and basis function term
+template <>
+inline void
+NaturalBC::add_jacobian_block<WeakForm::BND_G0>(Int gid, BndJacobianFunc * jac_func)
+{
+    CALL_STACK_MSG();
+    for (auto & bnd : get_boundary())
+        this->fepi->add_jacobian_block<WeakForm::BND_G0>(this->fid, gid, jac_func, bnd);
+}
+
+/// Set Jacobian statement for the boundary integral
+///
+/// @param gid Field ID
+/// @param jac_func Integrand for the test function and basis function gradient term
+template <>
+inline void
+NaturalBC::add_jacobian_block<WeakForm::BND_G1>(Int gid, BndJacobianFunc * jac_func)
+{
+    CALL_STACK_MSG();
+    for (auto & bnd : get_boundary())
+        this->fepi->add_jacobian_block<WeakForm::BND_G1>(this->fid, gid, jac_func, bnd);
+}
+
+/// Set Jacobian statement for the boundary integral
+///
+/// @param gid Field ID
+/// @param jac_func Integrand for the test function gradient and basis function term
+template <>
+inline void
+NaturalBC::add_jacobian_block<WeakForm::BND_G2>(Int gid, BndJacobianFunc * jac_func)
+{
+    CALL_STACK_MSG();
+    for (auto & bnd : get_boundary())
+        this->fepi->add_jacobian_block<WeakForm::BND_G2>(this->fid, gid, jac_func, bnd);
+}
+
+/// Set Jacobian statement for the boundary integral
+///
+/// @param gid Field ID
+/// @param jac_func Integrand for the test function gradient and basis function gradient term
+template <>
+inline void
+NaturalBC::add_jacobian_block<WeakForm::BND_G3>(Int gid, BndJacobianFunc * jac_func)
+{
+    CALL_STACK_MSG();
+    for (auto & bnd : get_boundary())
+        this->fepi->add_jacobian_block<WeakForm::BND_G3>(this->fid, gid, jac_func, bnd);
+}
 
 } // namespace godzilla

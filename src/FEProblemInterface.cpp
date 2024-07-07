@@ -708,144 +708,72 @@ FEProblemInterface::sort_functionals()
 }
 
 void
-FEProblemInterface::add_residual_block(Int field_id,
-                                       ResidualFunc * f0,
-                                       ResidualFunc * f1,
-                                       const std::string & region)
+FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
+                                                 Int fid,
+                                                 ResidualFunc * res_fn,
+                                                 const std::string & region)
 {
     CALL_STACK_MSG();
     if (region.empty()) {
-        add_weak_form_residual_block(WeakForm::F0, field_id, f0);
-        add_weak_form_residual_block(WeakForm::F1, field_id, f1);
+        this->wf->add(kind, Label(), 0, fid, 0, res_fn);
     }
     else {
         auto label = get_unstr_mesh()->get_label(region);
         auto ids = label.get_values();
-        for (auto & val : ids) {
-            add_weak_form_residual_block(WeakForm::F0, field_id, f0, label, val, 0);
-            add_weak_form_residual_block(WeakForm::F1, field_id, f1, label, val, 0);
-        }
+        for (auto & val : ids)
+            this->wf->add(kind, label, val, fid, 0, res_fn);
     }
 }
 
 void
-FEProblemInterface::add_boundary_residual_block(Int field_id,
-                                                ResidualFunc * f0,
-                                                ResidualFunc * f1,
-                                                const std::string & boundary)
+FEProblemInterface::add_weak_form_bnd_residual_block(WeakForm::ResidualKind kind,
+                                                     Int fid,
+                                                     ResidualFunc * res_fn,
+                                                     const std::string & boundary)
 {
     CALL_STACK_MSG();
-    assert(!boundary.empty());
+    if (boundary.empty())
+        throw Exception("Boundary was not specified");
 
     auto label = get_unstr_mesh()->get_label(boundary);
     auto ids = label.get_values();
-    for (auto & val : ids) {
-        add_weak_form_residual_block(WeakForm::BND_F0, field_id, f0, label, val, 0);
-        add_weak_form_residual_block(WeakForm::BND_F1, field_id, f1, label, val, 0);
-    }
-}
-
-void
-FEProblemInterface::add_jacobian_block(Int fid,
-                                       Int gid,
-                                       JacobianFunc * g0,
-                                       JacobianFunc * g1,
-                                       JacobianFunc * g2,
-                                       JacobianFunc * g3,
-                                       const std::string & region)
-{
-    CALL_STACK_MSG();
-    if (region.empty()) {
-        add_weak_form_jacobian_block(WeakForm::G0, fid, gid, g0);
-        add_weak_form_jacobian_block(WeakForm::G1, fid, gid, g1);
-        add_weak_form_jacobian_block(WeakForm::G2, fid, gid, g2);
-        add_weak_form_jacobian_block(WeakForm::G3, fid, gid, g3);
-    }
-    else {
-        auto label = get_unstr_mesh()->get_label(region);
-        auto ids = label.get_values();
-        for (auto & val : ids) {
-            add_weak_form_jacobian_block(WeakForm::G0, fid, gid, g0, label, val, 0);
-            add_weak_form_jacobian_block(WeakForm::G1, fid, gid, g1, label, val, 0);
-            add_weak_form_jacobian_block(WeakForm::G2, fid, gid, g2, label, val, 0);
-            add_weak_form_jacobian_block(WeakForm::G3, fid, gid, g3, label, val, 0);
-        }
-    }
-}
-
-void
-FEProblemInterface::add_jacobian_preconditioner_block(Int fid,
-                                                      Int gid,
-                                                      JacobianFunc * g0,
-                                                      JacobianFunc * g1,
-                                                      JacobianFunc * g2,
-                                                      JacobianFunc * g3,
-                                                      const std::string & region)
-{
-    CALL_STACK_MSG();
-    if (region.empty()) {
-        add_weak_form_jacobian_block(WeakForm::GP0, fid, gid, g0);
-        add_weak_form_jacobian_block(WeakForm::GP1, fid, gid, g1);
-        add_weak_form_jacobian_block(WeakForm::GP2, fid, gid, g2);
-        add_weak_form_jacobian_block(WeakForm::GP3, fid, gid, g3);
-    }
-    else {
-        auto label = get_unstr_mesh()->get_label(region);
-        auto ids = label.get_values();
-        for (auto & val : ids) {
-            add_weak_form_jacobian_block(WeakForm::GP0, fid, gid, g0, label, val, 0);
-            add_weak_form_jacobian_block(WeakForm::GP1, fid, gid, g1, label, val, 0);
-            add_weak_form_jacobian_block(WeakForm::GP2, fid, gid, g2, label, val, 0);
-            add_weak_form_jacobian_block(WeakForm::GP3, fid, gid, g3, label, val, 0);
-        }
-    }
-}
-
-void
-FEProblemInterface::add_boundary_jacobian_block(Int fid,
-                                                Int gid,
-                                                JacobianFunc * g0,
-                                                JacobianFunc * g1,
-                                                JacobianFunc * g2,
-                                                JacobianFunc * g3,
-                                                const std::string & region)
-{
-    CALL_STACK_MSG();
-    assert(!region.empty());
-
-    auto label = get_unstr_mesh()->get_label(region);
-    auto ids = label.get_values();
-    for (auto & val : ids) {
-        add_weak_form_jacobian_block(WeakForm::BND_G0, fid, gid, g0, label, val, 0);
-        add_weak_form_jacobian_block(WeakForm::BND_G1, fid, gid, g1, label, val, 0);
-        add_weak_form_jacobian_block(WeakForm::BND_G2, fid, gid, g2, label, val, 0);
-        add_weak_form_jacobian_block(WeakForm::BND_G3, fid, gid, g3, label, val, 0);
-    }
-}
-
-void
-FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
-                                                 Int field_id,
-                                                 ResidualFunc * f,
-                                                 const Label & label,
-                                                 Int val,
-                                                 Int part)
-{
-    CALL_STACK_MSG();
-    this->wf->add(kind, label, val, field_id, part, f);
+    for (auto & val : ids)
+        this->wf->add(kind, label, val, fid, 0, res_fn);
 }
 
 void
 FEProblemInterface::add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
                                                  Int fid,
                                                  Int gid,
-                                                 JacobianFunc * g,
-                                                 const Label & label,
-                                                 Int val,
-                                                 Int part)
+                                                 JacobianFunc * jac_fn,
+                                                 const std::string & region)
 {
     CALL_STACK_MSG();
-    this->wf->add(kind, label, val, fid, gid, part, g);
+    if (region.empty())
+        this->wf->add(kind, Label(), 0, fid, gid, 0, jac_fn);
+    else {
+        auto label = get_unstr_mesh()->get_label(region);
+        auto ids = label.get_values();
+        for (auto & val : ids)
+            this->wf->add(kind, label, val, fid, gid, 0, jac_fn);
+    }
+}
+
+void
+FEProblemInterface::add_weak_form_bnd_jacobian_block(WeakForm::JacobianKind kind,
+                                                     Int fid,
+                                                     Int gid,
+                                                     JacobianFunc * jac_fn,
+                                                     const std::string & boundary)
+{
+    CALL_STACK_MSG();
+    if (boundary.empty())
+        throw Exception("Boundary was not specified");
+
+    auto label = get_unstr_mesh()->get_label(boundary);
+    auto ids = label.get_values();
+    for (auto & val : ids)
+        this->wf->add(kind, label, val, fid, gid, 0, jac_fn);
 }
 
 ErrorCode

@@ -119,11 +119,9 @@ void
 HeatEquationProblem::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(temp_id, new Residual0(this), new Residual1(this));
-    add_jacobian_block(temp_id,
-                       temp_id,
-                       new Jacobian0(this),
-                       nullptr,
-                       nullptr,
-                       new Jacobian3(this));
+    add_residual_block<WeakForm::F0>(temp_id, new Residual0(this));
+    add_residual_block<WeakForm::F1>(temp_id, new Residual1(this));
+
+    add_jacobian_block<WeakForm::G0>(temp_id, temp_id, new Jacobian0(this));
+    add_jacobian_block<WeakForm::G3>(temp_id, temp_id, new Jacobian3(this));
 }

@@ -113,90 +113,27 @@ public:
     /// Add residual statement for a field variable
     ///
     /// @param fid Field ID
-    /// @param f0 Integrand for the test function term
-    /// @param f1 Integrand for the test function gradient term
+    /// @param res_func Integrand
     /// @param region Region name where this residual statement is active
-    virtual void add_residual_block(Int fid,
-                                    ResidualFunc * f0,
-                                    ResidualFunc * f1,
-                                    const std::string & region = "");
-
-    /// Add boundary residual statement for a field variable
-    ///
-    /// @param fid Field ID
-    /// @param f0 Integrand for the test function term
-    /// @param f1 Integrand for the test function gradient term
-    /// @param boundary Boundary name where this residual statement is active
-    virtual void add_boundary_residual_block(Int fid,
-                                             ResidualFunc * f0,
-                                             ResidualFunc * f1,
-                                             const std::string & boundary);
+    template <WeakForm::ResidualKind KIND>
+    void
+    add_residual_block(Int fid, ResidualFunc * res_fn, const std::string & region = "")
+    {
+        throw Exception("Unsupported residual functional kind");
+    }
 
     /// Add Jacobian statement for a field variable
     ///
     /// @param fid Test field number
     /// @param gid Field number
-    /// @param g0 Integrand for the test and basis function term
-    /// @param g1 Integrand for the test function and basis function gradient term
-    /// @param g2 Integrand for the test function gradient and basis function term
-    /// @param g3 Integrand for the test function gradient and basis function gradient term
+    /// @param jac_fn Integrand
     /// @param region Region name where this Jacobian statement is active
-    virtual void add_jacobian_block(Int fid,
-                                    Int gid,
-                                    JacobianFunc * g0,
-                                    JacobianFunc * g1,
-                                    JacobianFunc * g2,
-                                    JacobianFunc * g3,
-                                    const std::string & region = "");
-
-    /// Add Jacobian preconditioner statement for a field variable
-    ///
-    /// @param fid Test field number
-    /// @param gid Field number
-    /// @param g0 Integrand for the test and basis function term
-    /// @param g1 Integrand for the test function and basis function gradient term
-    /// @param g2 Integrand for the test function gradient and basis function term
-    /// @param g3 Integrand for the test function gradient and basis function gradient term
-    /// @param region Region name where this Jacobian statement is active
-    virtual void add_jacobian_preconditioner_block(Int fid,
-                                                   Int gid,
-                                                   JacobianFunc * g0,
-                                                   JacobianFunc * g1,
-                                                   JacobianFunc * g2,
-                                                   JacobianFunc * g3,
-                                                   const std::string & region = "");
-
-    /// Add boundary Jacobian statement for a field variable
-    ///
-    /// @param fid Test field number
-    /// @param gid Field number
-    /// @param g0 Integrand for the test and basis function term
-    /// @param g1 Integrand for the test function and basis function gradient term
-    /// @param g2 Integrand for the test function gradient and basis function term
-    /// @param g3 Integrand for the test function gradient and basis function gradient term
-    /// @param boundary Boundary name where this Jacobian statement is active
-    virtual void add_boundary_jacobian_block(Int fid,
-                                             Int gid,
-                                             JacobianFunc * g0,
-                                             JacobianFunc * g1,
-                                             JacobianFunc * g2,
-                                             JacobianFunc * g3,
-                                             const std::string & boundary);
-
-    void add_weak_form_residual_block(WeakForm::ResidualKind kind,
-                                      Int field_id,
-                                      ResidualFunc * f,
-                                      const Label & label = Label(),
-                                      Int val = 0,
-                                      Int part = 0);
-
-    void add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
-                                      Int fid,
-                                      Int gid,
-                                      JacobianFunc * g,
-                                      const Label & label = Label(),
-                                      Int val = 0,
-                                      Int part = 0);
+    template <WeakForm::JacobianKind KIND>
+    void
+    add_jacobian_block(Int fid, Int gid, JacobianFunc * jac_fn, const std::string & region = "")
+    {
+        throw Exception("Unsupported residual functional kind");
+    }
 
     /// Integrate residual
     ErrorCode integrate_residual(PetscDS ds,
@@ -329,6 +266,28 @@ protected:
                              Scalar u_t[]);
 
 private:
+    void add_weak_form_residual_block(WeakForm::ResidualKind kind,
+                                      Int fid,
+                                      ResidualFunc * res_fn,
+                                      const std::string & region);
+
+    void add_weak_form_bnd_residual_block(WeakForm::ResidualKind kind,
+                                          Int fid,
+                                          ResidualFunc * res_fn,
+                                          const std::string & region);
+
+    void add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
+                                      Int fid,
+                                      Int gid,
+                                      JacobianFunc * jac_fn,
+                                      const std::string & region);
+
+    void add_weak_form_bnd_jacobian_block(WeakForm::JacobianKind kind,
+                                          Int fid,
+                                          Int gid,
+                                          JacobianFunc * jac_fn,
+                                          const std::string & boundary);
+
     /// Quadrature order
     Int qorder;
 
@@ -419,5 +378,203 @@ private:
     /// associated with the PetscFormKey are evaluated
     std::map<PetscFormKey, std::vector<const ValueFunctional *>> sorted_jac_functionals;
 };
+
+/// Add residual statement for a field variable
+///
+/// @param fid Field ID
+/// @param res_fn Integrand for the test function term
+/// @param region Region name where this residual statement is active
+template <>
+inline void
+FEProblemInterface::add_residual_block<WeakForm::F0>(Int fid,
+                                                     ResidualFunc * res_fn,
+                                                     const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_residual_block(WeakForm::F0, fid, res_fn, region);
+}
+
+/// Add residual statement for a field variable
+///
+/// @param fid Field ID
+/// @param res_fn Integrand for the test function gradient term
+/// @param region Region name where this residual statement is active
+template <>
+inline void
+FEProblemInterface::add_residual_block<WeakForm::F1>(Int fid,
+                                                     ResidualFunc * res_fn,
+                                                     const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_residual_block(WeakForm::F1, fid, res_fn, region);
+}
+
+/// Add boundary residual statement for a field variable
+///
+/// @param fid Field ID
+/// @param res_fn Integrand for the test function term
+/// @param region Boundary name where this residual statement is active
+template <>
+inline void
+FEProblemInterface::add_residual_block<WeakForm::BND_F0>(Int fid,
+                                                         ResidualFunc * res_fn,
+                                                         const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_bnd_residual_block(WeakForm::BND_F0, fid, res_fn, region);
+}
+
+/// Add boundary residual statement for a field variable
+///
+/// @param fid Field ID
+/// @param res_fn Integrand for the test function gradient term
+/// @param region Boundary name where this residual statement is active
+template <>
+inline void
+FEProblemInterface::add_residual_block<WeakForm::BND_F1>(Int fid,
+                                                         ResidualFunc * res_fn,
+                                                         const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_bnd_residual_block(WeakForm::BND_F1, fid, res_fn, region);
+}
+
+// Jacobian blocks
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::G0>(Int fid,
+                                                     Int gid,
+                                                     JacobianFunc * jac_fn,
+                                                     const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_jacobian_block(WeakForm::G0, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::G1>(Int fid,
+                                                     Int gid,
+                                                     JacobianFunc * jac_fn,
+                                                     const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_jacobian_block(WeakForm::G1, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::G2>(Int fid,
+                                                     Int gid,
+                                                     JacobianFunc * jac_fn,
+                                                     const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_jacobian_block(WeakForm::G2, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::G3>(Int fid,
+                                                     Int gid,
+                                                     JacobianFunc * jac_fn,
+                                                     const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_jacobian_block(WeakForm::G3, fid, gid, jac_fn, region);
+}
+
+// Preconditioner blocks
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::GP0>(Int fid,
+                                                      Int gid,
+                                                      JacobianFunc * jac_fn,
+                                                      const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_jacobian_block(WeakForm::GP0, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::GP1>(Int fid,
+                                                      Int gid,
+                                                      JacobianFunc * jac_fn,
+                                                      const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_jacobian_block(WeakForm::GP1, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::GP2>(Int fid,
+                                                      Int gid,
+                                                      JacobianFunc * jac_fn,
+                                                      const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_jacobian_block(WeakForm::GP2, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::GP3>(Int fid,
+                                                      Int gid,
+                                                      JacobianFunc * jac_fn,
+                                                      const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_jacobian_block(WeakForm::GP3, fid, gid, jac_fn, region);
+}
+
+// Boundary jacobian blocks
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::BND_G0>(Int fid,
+                                                         Int gid,
+                                                         JacobianFunc * jac_fn,
+                                                         const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_bnd_jacobian_block(WeakForm::BND_G0, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::BND_G1>(Int fid,
+                                                         Int gid,
+                                                         JacobianFunc * jac_fn,
+                                                         const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_bnd_jacobian_block(WeakForm::BND_G1, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::BND_G2>(Int fid,
+                                                         Int gid,
+                                                         JacobianFunc * jac_fn,
+                                                         const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_bnd_jacobian_block(WeakForm::BND_G2, fid, gid, jac_fn, region);
+}
+
+template <>
+inline void
+FEProblemInterface::add_jacobian_block<WeakForm::BND_G3>(Int fid,
+                                                         Int gid,
+                                                         JacobianFunc * jac_fn,
+                                                         const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_bnd_jacobian_block(WeakForm::BND_G3, fid, gid, jac_fn, region);
+}
 
 } // namespace godzilla

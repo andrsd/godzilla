@@ -100,8 +100,8 @@ public:
     void
     set_up_weak_form() override
     {
-        add_residual_block(new TestNatF0(this), nullptr);
-        add_jacobian_block(get_field_id(), new TestNatG0(this), nullptr, nullptr, nullptr);
+        add_residual_block<WeakForm::BND_F0>(new TestNatF0(this));
+        add_jacobian_block<WeakForm::BND_G0>(get_field_id(), new TestNatG0(this));
     }
 
 protected:

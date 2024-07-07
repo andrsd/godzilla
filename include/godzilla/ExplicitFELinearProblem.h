@@ -26,17 +26,55 @@ protected:
     void init() override;
     void set_up_callbacks() override;
     void set_up_monitors() override;
-    void add_residual_block(Int field_id,
-                            ResidualFunc * f0,
-                            ResidualFunc * f1,
-                            const std::string & region = "") override;
     void post_step() override;
+
+    template <WeakForm::ResidualKind KIND>
+    void
+    add_residual_block(Int fid, ResidualFunc * res_fn, const std::string & region = "")
+    {
+        throw Exception("Unsupported residual functional kind");
+    }
 
 private:
     void compute_rhs_local(Real time, const Vector & x, Vector & F) override;
 
+    void add_weak_form_residual_block(WeakForm::ResidualKind kind,
+                                      Int fid,
+                                      ResidualFunc * res_fn,
+                                      const std::string & region);
+
 public:
     static Parameters parameters();
 };
+
+/// Add residual statement for a field variable
+///
+/// @param fid Field ID
+/// @param res_fn Integrand for the test function term
+/// @param region Region name where this residual statement is active
+template <>
+inline void
+ExplicitFELinearProblem::add_residual_block<WeakForm::F0>(Int fid,
+                                                          ResidualFunc * res_fn,
+                                                          const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_residual_block(WeakForm::F0, fid, res_fn, region);
+}
+
+/// Add residual statement for a field variable
+///
+/// @param fid Field ID
+/// @param res_fn Integrand for the test function gradient term
+/// @param region Region name where this residual statement is active
+template <>
+inline void
+ExplicitFELinearProblem::add_residual_block<WeakForm::F1>(Int fid,
+                                                          ResidualFunc * res_fn,
+                                                          const std::string & region)
+{
+    CALL_STACK_MSG();
+    add_weak_form_residual_block(WeakForm::F1, fid, res_fn, region);
+}
 
 } // namespace godzilla

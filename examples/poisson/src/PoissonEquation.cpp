@@ -34,6 +34,8 @@ void
 PoissonEquation::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(this->iu, new Residual0(this), new Residual1(this));
-    add_jacobian_block(this->iu, this->iu, nullptr, nullptr, nullptr, new Jacobian3(this));
+    add_residual_block<WeakForm::F0>(this->iu, new Residual0(this));
+    add_residual_block<WeakForm::F1>(this->iu, new Residual1(this));
+
+    add_jacobian_block<WeakForm::G3>(this->iu, this->iu, new Jacobian3(this));
 }

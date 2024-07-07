@@ -86,5 +86,6 @@ void
 HeatEquationExplicit::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(temp_id, new Residual0(this), new Residual1(this));
+    add_residual_block<WeakForm::F0>(temp_id, new Residual0(this));
+    add_residual_block<WeakForm::F1>(temp_id, new Residual1(this));
 }

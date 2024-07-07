@@ -4,9 +4,6 @@
 #include "godzilla/NaturalBC.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/App.h"
-#include "godzilla/FEProblemInterface.h"
-#include "godzilla/BndResidualFunc.h"
-#include "godzilla/BndJacobianFunc.h"
 
 namespace godzilla {
 
@@ -65,26 +62,6 @@ NaturalBC::set_up()
     auto dpi = get_discrete_problem_interface();
     for (auto & bnd : get_boundary())
         dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components());
-}
-
-void
-NaturalBC::add_residual_block(BndResidualFunc * f0, BndResidualFunc * f1)
-{
-    CALL_STACK_MSG();
-    for (auto & bnd : get_boundary())
-        this->fepi->add_boundary_residual_block(this->fid, f0, f1, bnd);
-}
-
-void
-NaturalBC::add_jacobian_block(Int gid,
-                              BndJacobianFunc * g0,
-                              BndJacobianFunc * g1,
-                              BndJacobianFunc * g2,
-                              BndJacobianFunc * g3)
-{
-    CALL_STACK_MSG();
-    for (auto & bnd : get_boundary())
-        this->fepi->add_boundary_jacobian_block(this->fid, gid, g0, g1, g2, g3, bnd);
 }
 
 } // namespace godzilla

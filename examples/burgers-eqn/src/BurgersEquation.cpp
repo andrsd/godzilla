@@ -76,5 +76,5 @@ void
 BurgersEquation::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(u_id, nullptr, new F1(this));
+    add_residual_block<WeakForm::F1>(u_id, new F1(this));
 }

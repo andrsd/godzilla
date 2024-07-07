@@ -79,7 +79,7 @@ ExplicitFELinearProblem::init()
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
     for (Int i = 0; i < get_num_fields(); i++)
-        add_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
+        add_jacobian_block<WeakForm::G0>(i, i, new G0Identity(this));
 
     auto ds = get_ds();
     for (auto & f : get_fields()) {
@@ -157,26 +157,23 @@ ExplicitFELinearProblem::post_step()
 }
 
 void
-ExplicitFELinearProblem::add_residual_block(Int field_id,
-                                            ResidualFunc * f0,
-                                            ResidualFunc * f1,
-                                            const std::string & region)
+ExplicitFELinearProblem::add_weak_form_residual_block(WeakForm::ResidualKind kind,
+                                                      Int fid,
+                                                      ResidualFunc * res_fn,
+                                                      const std::string & region)
 {
     CALL_STACK_MSG();
-    // see PetscDSSetRHSResidual for explanation
+    // see PetscDSSetRHSResidual
     Int part = 100;
 
     if (region.empty()) {
-        add_weak_form_residual_block(WeakForm::F0, field_id, f0, Label(), 0, part);
-        add_weak_form_residual_block(WeakForm::F1, field_id, f1, Label(), 0, part);
+        get_weak_form()->add(kind, Label(), 0, fid, part, res_fn);
     }
     else {
-        auto label = get_mesh()->get_label(region);
+        auto label = get_unstr_mesh()->get_label(region);
         auto ids = label.get_values();
-        for (auto & val : ids) {
-            add_weak_form_residual_block(WeakForm::F0, field_id, f0, label, val, part);
-            add_weak_form_residual_block(WeakForm::F1, field_id, f1, label, val, part);
-        }
+        for (auto & val : ids)
+            get_weak_form()->add(kind, label, val, fid, part, res_fn);
     }
 }
 

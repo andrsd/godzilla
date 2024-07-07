@@ -93,8 +93,9 @@ GTestFENonlinearProblemJFNK::set_up_fields()
 void
 GTestFENonlinearProblemJFNK::set_up_weak_form()
 {
-    add_residual_block(this->iu, new F0(this), new F1(this));
-    add_jacobian_preconditioner_block(this->iu, this->iu, nullptr, nullptr, nullptr, new G3(this));
+    add_residual_block<WeakForm::F0>(this->iu, new F0(this));
+    add_residual_block<WeakForm::F1>(this->iu, new F1(this));
+    add_jacobian_block<WeakForm::GP3>(this->iu, this->iu, new G3(this));
 }
 
 void

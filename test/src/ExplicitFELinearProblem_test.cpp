@@ -80,7 +80,7 @@ protected:
 void
 TestExplicitFELinearProblem::set_up_weak_form()
 {
-    add_residual_block(0, nullptr, new TestF1(this));
+    add_residual_block<WeakForm::F1>(0, new TestF1(this));
 }
 
 } // namespace

@@ -303,17 +303,16 @@ void
 NSIncompressibleProblem::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(velocity_id, new ResidualVeloc0(this), new ResidualVeloc1(this));
-    add_residual_block(pressure_id, new ResidualPress0(this), new ResidualPress1(this));
+    add_residual_block<WeakForm::F0>(velocity_id, new ResidualVeloc0(this));
+    add_residual_block<WeakForm::F1>(velocity_id, new ResidualVeloc1(this));
+    add_residual_block<WeakForm::F0>(pressure_id, new ResidualPress0(this));
+    add_residual_block<WeakForm::F1>(pressure_id, new ResidualPress1(this));
 
-    add_jacobian_block(velocity_id,
-                       velocity_id,
-                       new JacobianVV0(this),
-                       new JacobianVV1(this),
-                       nullptr,
-                       new JacobianVV3(this));
-    add_jacobian_block(velocity_id, pressure_id, nullptr, nullptr, new JacobianVP2(this), nullptr);
-    add_jacobian_block(pressure_id, velocity_id, nullptr, new JacobianPV1(this), nullptr, nullptr);
+    add_jacobian_block<WeakForm::G0>(velocity_id, velocity_id, new JacobianVV0(this));
+    add_jacobian_block<WeakForm::G1>(velocity_id, velocity_id, new JacobianVV1(this));
+    add_jacobian_block<WeakForm::G3>(velocity_id, velocity_id, new JacobianVV3(this));
+    add_jacobian_block<WeakForm::G2>(velocity_id, pressure_id, new JacobianVP2(this));
+    add_jacobian_block<WeakForm::G1>(pressure_id, velocity_id, new JacobianPV1(this));
 }
 
 void

@@ -72,6 +72,6 @@ void
 ConvectiveHeatFluxBC::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(new Residual0(this), nullptr);
-    add_jacobian_block(get_field_id(), new Jacobian0(this), nullptr, nullptr, nullptr);
+    add_residual_block<WeakForm::BND_F0>(new Residual0(this));
+    add_jacobian_block<WeakForm::BND_G0>(get_field_id(), new Jacobian0(this));
 }
