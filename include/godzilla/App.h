@@ -181,9 +181,6 @@ protected:
     ///
     virtual void create_command_line_options();
 
-    /// Create an input file instance
-    virtual InputFile * create_input_file();
-
     /// Build application objects from an input file
     ///
     /// @param file_name The input file name
@@ -198,6 +195,9 @@ protected:
     void run_problem();
 
 private:
+    /// Create an input file instance
+    virtual InputFile * create_input_file();
+
     /// Application name
     std::string name;
 
