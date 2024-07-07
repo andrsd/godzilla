@@ -147,23 +147,6 @@ SNESolver::set_from_options()
 }
 
 void
-SNESolver::set_function(Vector & r, ErrorCode (*callback)(SNES, Vec, Vec, void *), void * ctx)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetFunction(this->snes, r, callback, ctx));
-}
-
-void
-SNESolver::set_jacobian(Matrix & J,
-                        Matrix & Jp,
-                        ErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
-                        void * ctx)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetJacobian(this->snes, J, Jp, callback, ctx));
-}
-
-void
 SNESolver::set_use_matrix_free(bool mf_operator, bool mf)
 {
     CALL_STACK_MSG();
