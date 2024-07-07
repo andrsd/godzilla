@@ -93,30 +93,6 @@ KrylovSolver::set_tolerances(Real rel_tol, Real abs_tol, Real div_tol, Int max_i
 }
 
 void
-KrylovSolver::set_compute_rhs(ErrorCode (*func)(KSP ksp, Vec b, void * ctx), void * ctx)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetComputeRHS(this->ksp, func, ctx));
-}
-
-void
-KrylovSolver::set_compute_operators(ErrorCode (*func)(KSP ksp, Mat A, Mat B, void * ctx),
-                                    void * ctx)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetComputeOperators(this->ksp, func, ctx));
-}
-
-void
-KrylovSolver::monitor_set(ErrorCode (*monitor)(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx),
-                          void * ctx,
-                          ErrorCode (*monitordestroy)(void ** ctx))
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(KSPMonitorSet(this->ksp, monitor, ctx, monitordestroy));
-}
-
-void
 KrylovSolver::solve(Vector & x) const
 {
     CALL_STACK_MSG();
