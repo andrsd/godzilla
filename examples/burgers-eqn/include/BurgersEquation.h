@@ -11,14 +11,14 @@ public:
     explicit BurgersEquation(const Parameters & parameters);
     void create() override;
 
-    const PetscReal & get_viscosity() const;
+    const Real & get_viscosity() const;
 
 protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
 
     Int u_id;
-    const PetscReal & viscosity;
+    const Real & viscosity;
 
 public:
     static Parameters parameters();

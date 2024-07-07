@@ -6,13 +6,13 @@ Parameters
 InflowBC::parameters()
 {
     Parameters params = NaturalRiemannBC::parameters();
-    params.add_required_param<PetscReal>("vel", "Inlet velocity");
+    params.add_required_param<Real>("vel", "Inlet velocity");
     return params;
 }
 
 InflowBC::InflowBC(const Parameters & params) :
     NaturalRiemannBC(params),
-    inlet_vel(get_param<PetscReal>("vel")),
+    inlet_vel(get_param<Real>("vel")),
     components({ 0 })
 {
     CALL_STACK_MSG();
@@ -26,9 +26,9 @@ InflowBC::get_components() const
 }
 
 void
-InflowBC::evaluate(PetscReal time,
-                   const PetscReal * c,
-                   const PetscReal * n,
+InflowBC::evaluate(Real time,
+                   const Real * c,
+                   const Real * n,
                    const PetscScalar * xI,
                    PetscScalar * xG)
 {

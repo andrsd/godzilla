@@ -22,9 +22,9 @@ OutflowBC::get_components() const
 }
 
 void
-OutflowBC::evaluate(PetscReal time,
-                    const PetscReal * c,
-                    const PetscReal * n,
+OutflowBC::evaluate(Real time,
+                    const Real * c,
+                    const Real * n,
                     const PetscScalar * xI,
                     PetscScalar * xG)
 {

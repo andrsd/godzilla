@@ -66,7 +66,7 @@ public:
     }
 
 protected:
-    const PetscReal & T_t_shift;
+    const Real & T_t_shift;
 };
 
 class Jacobian3 : public JacobianFunc {

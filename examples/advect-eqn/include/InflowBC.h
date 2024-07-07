@@ -11,15 +11,15 @@ public:
     InflowBC(const Parameters & params);
 
     const std::vector<Int> & get_components() const override;
-    void evaluate(PetscReal time,
-                  const PetscReal * c,
-                  const PetscReal * n,
+    void evaluate(Real time,
+                  const Real * c,
+                  const Real * n,
                   const PetscScalar * xI,
                   PetscScalar * xG) override;
 
 protected:
     /// Inlet velocity
-    const PetscReal & inlet_vel;
+    const Real & inlet_vel;
     std::vector<Int> components;
 
 public:

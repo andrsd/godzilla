@@ -157,7 +157,7 @@ public:
 protected:
     const Int & dim;
     const FieldGradient & vel_x;
-    const PetscReal & u_t_shift;
+    const Real & u_t_shift;
 };
 
 class JacobianVV1 : public JacobianFunc {
@@ -257,7 +257,7 @@ public:
 protected:
     const Int & n_comp;
     const Int & dim;
-    const PetscReal & Re;
+    const Real & Re;
 };
 
 } // namespace
@@ -266,18 +266,18 @@ Parameters
 NSIncompressibleProblem::parameters()
 {
     Parameters params = ImplicitFENonlinearProblem::parameters();
-    params.add_required_param<PetscReal>("Re", "Reynolds number");
+    params.add_required_param<Real>("Re", "Reynolds number");
     return params;
 }
 
 NSIncompressibleProblem::NSIncompressibleProblem(const Parameters & parameters) :
     ImplicitFENonlinearProblem(parameters),
-    Re(get_param<PetscReal>("Re"))
+    Re(get_param<Real>("Re"))
 {
     CALL_STACK_MSG();
 }
 
-const PetscReal &
+const Real &
 NSIncompressibleProblem::get_reynolds_number() const
 {
     CALL_STACK_MSG();
