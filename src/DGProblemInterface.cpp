@@ -537,6 +537,11 @@ DGProblemInterface::create_aux_fields()
 }
 
 void
+DGProblemInterface::set_up_weak_form()
+{
+}
+
+void
 DGProblemInterface::set_up_assembly_data_aux()
 {
     CALL_STACK_MSG();

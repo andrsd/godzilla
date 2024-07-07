@@ -55,7 +55,7 @@ public:
     [[nodiscard]] std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    [[nodiscard]] virtual WeakForm * get_weak_form() const;
+    [[nodiscard]] WeakForm * get_weak_form() const;
 
     /// Adds a volumetric field
     ///
@@ -275,9 +275,6 @@ protected:
     virtual void set_up_field_null_space(DM dm);
 
     void create_aux_fields() override;
-
-    /// Setup volumetric weak form terms
-    virtual void set_up_weak_form() = 0;
 
     virtual void sort_functionals();
     void

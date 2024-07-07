@@ -81,9 +81,6 @@ protected:
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
-    /// Setup weak form terms
-    virtual void set_up_weak_form() = 0;
-
     /// Set Riemann solver for the given field
     ///
     /// @tparam T C++ class type

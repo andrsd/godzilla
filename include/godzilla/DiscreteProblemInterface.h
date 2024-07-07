@@ -440,6 +440,9 @@ protected:
 
     [[nodiscard]] Int get_next_id(const std::vector<Int> & ids) const;
 
+    /// Setup weak form terms
+    virtual void set_up_weak_form() = 0;
+
 private:
     /// Problem this interface is part of
     Problem * problem;

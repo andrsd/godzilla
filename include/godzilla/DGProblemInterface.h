@@ -107,6 +107,8 @@ protected:
 
     void create_aux_fields() override;
 
+    void set_up_weak_form() override;
+
 private:
     /// Field information
     struct FieldInfo {
