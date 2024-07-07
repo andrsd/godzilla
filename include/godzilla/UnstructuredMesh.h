@@ -134,7 +134,7 @@ public:
     [[nodiscard]] Label get_depth_label() const;
 
     /// Return the number of mesh vertices
-    [[nodiscard]] virtual Int get_num_vertices() const;
+    [[nodiscard]] Int get_num_vertices() const;
 
     /// Get range of vertex indices
     ///
@@ -142,7 +142,7 @@ public:
     [[nodiscard]] Range get_vertex_range() const;
 
     /// Return the number of mesh faces
-    [[nodiscard]] virtual Int get_num_faces() const;
+    [[nodiscard]] Int get_num_faces() const;
 
     /// Get range of face indices
     ///
@@ -152,12 +152,12 @@ public:
     /// Return the number of mesh cells (interior)
     ///
     /// @return Number of mesh cells (interior)
-    [[nodiscard]] virtual Int get_num_cells() const;
+    [[nodiscard]] Int get_num_cells() const;
 
     /// Return the number of all mesh cells (interior + ghosted)
     ///
     /// @return Number of all mesh cells (interior + ghosted)
-    [[nodiscard]] virtual Int get_num_all_cells() const;
+    [[nodiscard]] Int get_num_all_cells() const;
 
     /// Get range of cell indices (interior only)
     ///
@@ -200,7 +200,7 @@ public:
     ///
     /// @param cell Cell index
     /// @return Cell type
-    [[nodiscard]] virtual DMPolytopeType get_cell_type(Int cell) const;
+    [[nodiscard]] DMPolytopeType get_cell_type(Int cell) const;
 
     /// Get connectivity
     ///
@@ -243,7 +243,7 @@ public:
     /// Is the first cell in the mesh a simplex?
     ///
     /// @return true if cell is a simplex, otherwise false
-    [[nodiscard]] virtual bool is_simplex() const;
+    [[nodiscard]] bool is_simplex() const;
 
     /// Get cell set name
     ///
@@ -344,7 +344,7 @@ public:
 
     /// Construct ghost cells which connect to every boundary face
     ///
-    virtual void construct_ghost_cells();
+    void construct_ghost_cells();
 
     /// Compute the volume for a given cell
     ///
