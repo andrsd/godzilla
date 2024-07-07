@@ -34,12 +34,12 @@ public:
     evaluate(PetscScalar f[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             f[d] = this->u_x(d);
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldGradient & u_x;
 };
 
@@ -51,10 +51,10 @@ public:
     evaluate(PetscScalar g[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };

@@ -8,12 +8,12 @@ class ConvectiveHeatFluxBC : public NaturalBC {
 public:
     ConvectiveHeatFluxBC(const Parameters & params);
 
-    const std::vector<PetscInt> & get_components() const override;
+    const std::vector<Int> & get_components() const override;
 
 protected:
     void set_up_weak_form() override;
 
-    std::vector<PetscInt> components;
+    std::vector<Int> components;
 
 public:
     static Parameters parameters();

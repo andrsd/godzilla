@@ -62,7 +62,7 @@ ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const Parameters & params) :
     CALL_STACK_MSG();
 }
 
-const std::vector<PetscInt> &
+const std::vector<Int> &
 ConvectiveHeatFluxBC::get_components() const
 {
     return this->components;

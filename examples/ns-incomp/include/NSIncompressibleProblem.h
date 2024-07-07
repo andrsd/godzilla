@@ -19,9 +19,9 @@ protected:
     void set_up_field_null_space(DM dm) override;
     Preconditioner create_preconditioner(PC pc) override;
 
-    PetscInt velocity_id;
-    PetscInt pressure_id;
-    PetscInt ffn_aid;
+    Int velocity_id;
+    Int pressure_id;
+    Int ffn_aid;
     /// Reynolds number
     const PetscReal & Re;
 

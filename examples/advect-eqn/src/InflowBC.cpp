@@ -18,7 +18,7 @@ InflowBC::InflowBC(const Parameters & params) :
     CALL_STACK_MSG();
 }
 
-const std::vector<PetscInt> &
+const std::vector<Int> &
 InflowBC::get_components() const
 {
     CALL_STACK_MSG();

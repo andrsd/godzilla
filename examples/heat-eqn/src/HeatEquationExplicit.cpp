@@ -40,12 +40,12 @@ public:
     evaluate(PetscScalar f[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             f[d] = -this->T_x(d);
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldGradient & T_x;
 };
 
@@ -55,13 +55,13 @@ Parameters
 HeatEquationExplicit::parameters()
 {
     Parameters params = ExplicitFELinearProblem::parameters();
-    params.add_param<PetscInt>("order", 1, "Polynomial order of the FE space");
+    params.add_param<Int>("order", 1, "Polynomial order of the FE space");
     return params;
 }
 
 HeatEquationExplicit::HeatEquationExplicit(const Parameters & parameters) :
     ExplicitFELinearProblem(parameters),
-    order(get_param<PetscInt>("order"))
+    order(get_param<Int>("order"))
 {
     CALL_STACK_MSG();
 }

@@ -14,7 +14,7 @@ OutflowBC::OutflowBC(const Parameters & params) : NaturalRiemannBC(params), comp
     CALL_STACK_MSG();
 }
 
-const std::vector<PetscInt> &
+const std::vector<Int> &
 OutflowBC::get_components() const
 {
     CALL_STACK_MSG();

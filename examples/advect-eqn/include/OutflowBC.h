@@ -10,7 +10,7 @@ class OutflowBC : public NaturalRiemannBC {
 public:
     OutflowBC(const Parameters & params);
 
-    const std::vector<PetscInt> & get_components() const override;
+    const std::vector<Int> & get_components() const override;
     void evaluate(PetscReal time,
                   const PetscReal * c,
                   const PetscReal * n,
@@ -18,7 +18,7 @@ public:
                   PetscScalar * xG) override;
 
 protected:
-    std::vector<PetscInt> components;
+    std::vector<Int> components;
 
 public:
     static Parameters parameters();
