@@ -29,7 +29,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         for (Int c = 0; c < this->n_comp; ++c) {
@@ -64,7 +64,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         for (Int comp = 0; comp < this->n_comp; ++comp) {
@@ -80,7 +80,7 @@ protected:
     const Int & dim;
     const FieldGradient & vel_x;
     const FieldValue & press;
-    const PetscScalar & Re;
+    const Scalar & Re;
 };
 
 class ResidualPress0 : public ResidualFunc {
@@ -93,7 +93,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         f[0] = 0.0;
@@ -115,7 +115,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         for (Int d = 0; d < this->dim; ++d)
@@ -137,7 +137,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         Int nc_i = this->dim;
@@ -170,7 +170,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         Int nc_i = this->dim;
@@ -201,7 +201,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         for (Int d = 0; d < this->dim; ++d)
@@ -221,7 +221,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         for (Int d = 0; d < this->dim; ++d)
@@ -243,7 +243,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         for (Int comp_i = 0; comp_i < this->n_comp; ++comp_i) {

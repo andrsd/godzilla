@@ -22,11 +22,7 @@ OutflowBC::get_components() const
 }
 
 void
-OutflowBC::evaluate(Real time,
-                    const Real * c,
-                    const Real * n,
-                    const PetscScalar * xI,
-                    PetscScalar * xG)
+OutflowBC::evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG)
 {
     CALL_STACK_MSG();
     xG[0] = xI[0];

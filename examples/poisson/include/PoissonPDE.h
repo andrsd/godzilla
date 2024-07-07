@@ -11,7 +11,7 @@ public:
     Residual0(FEProblemInterface * fepi) : ResidualFunc(fepi), ffn(get_field_value("forcing_fn")) {}
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         f[0] = -this->ffn(0);
@@ -31,7 +31,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         for (Int d = 0; d < this->dim; ++d)
@@ -48,7 +48,7 @@ public:
     Jacobian3(FEProblemInterface * fepi) : JacobianFunc(fepi), dim(get_spatial_dimension()) {}
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         for (Int d = 0; d < this->dim; ++d)

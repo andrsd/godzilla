@@ -19,7 +19,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         f[0] = this->T_t(0) - this->q_ppp(0);
@@ -40,7 +40,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         for (Int d = 0; d < this->dim; ++d)
@@ -59,7 +59,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         g[0] = this->T_t_shift * 1.0;
@@ -76,7 +76,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         for (Int d = 0; d < this->dim; ++d)

@@ -26,11 +26,7 @@ InflowBC::get_components() const
 }
 
 void
-InflowBC::evaluate(Real time,
-                   const Real * c,
-                   const Real * n,
-                   const PetscScalar * xI,
-                   PetscScalar * xG)
+InflowBC::evaluate(Real time, const Real * c, const Real * n, const Scalar * xI, Scalar * xG)
 {
     CALL_STACK_MSG();
     xG[0] = this->inlet_vel;
