@@ -36,13 +36,6 @@ ExplicitProblemInterface::~ExplicitProblemInterface()
     this->M_lumped_inv.destroy();
 }
 
-std::string
-ExplicitProblemInterface::get_scheme() const
-{
-    CALL_STACK_MSG();
-    return this->scheme;
-}
-
 const Matrix &
 ExplicitProblemInterface::get_mass_matrix() const
 {

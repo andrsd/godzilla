@@ -154,17 +154,14 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
     this->mesh->create();
     this->prob->create();
 
-    TS ts = this->prob->get_ts();
-    TSType type;
-    std::vector<std::string> schemes = {
-        "beuler",
-        "cn",
+    std::vector<TransientProblemInterface::TimeScheme> schemes = {
+        TransientProblemInterface::TimeScheme::BEULER,
+        TransientProblemInterface::TimeScheme::CN,
     };
     std::vector<TSType> types = { TSBEULER, TSCN };
-    for (std::size_t i = 0; i < schemes.size(); i++) {
-        prob->set_scheme(types[i]);
-        TSGetType(ts, &type);
-        EXPECT_STREQ(type, types[i]);
+    for (std::size_t i = 0; i < types.size(); i++) {
+        prob->set_scheme(schemes[i]);
+        EXPECT_EQ(prob->get_scheme(), types[i]);
     }
 }
 

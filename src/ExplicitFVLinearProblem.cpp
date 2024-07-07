@@ -106,13 +106,6 @@ ExplicitFVLinearProblem::set_up_initial_guess()
 }
 
 void
-ExplicitFVLinearProblem::set_up_time_scheme()
-{
-    CALL_STACK_MSG();
-    ExplicitProblemInterface::set_up_time_scheme();
-}
-
-void
 ExplicitFVLinearProblem::set_up_monitors()
 {
     CALL_STACK_MSG();

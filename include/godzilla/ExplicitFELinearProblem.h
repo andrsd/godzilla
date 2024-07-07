@@ -25,7 +25,6 @@ public:
 protected:
     void init() override;
     void set_up_callbacks() override;
-    void set_up_time_scheme() override;
     void set_up_monitors() override;
     void add_residual_block(Int field_id,
                             ResidualFunc * f0,

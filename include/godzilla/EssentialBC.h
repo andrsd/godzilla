@@ -15,11 +15,12 @@ public:
     explicit EssentialBC(const Parameters & params);
 
     void create() override;
+    void set_up() override;
 
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    [[nodiscard]] virtual Int get_field_id() const;
+    [[nodiscard]] Int get_field_id() const;
 
     /// Get the component numbers this boundary condition is constraining
     ///
@@ -39,8 +40,6 @@ public:
     /// @param x The coordinates
     /// @param u  The output field values
     virtual void evaluate_t(Real time, const Real x[], Scalar u[]) = 0;
-
-    void set_up() override;
 
 private:
     /// Field ID this boundary condition is attached to

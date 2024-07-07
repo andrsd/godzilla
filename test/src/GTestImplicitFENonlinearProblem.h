@@ -10,12 +10,6 @@ public:
     explicit GTestImplicitFENonlinearProblem(const Parameters & params);
     void set_up_initial_guess() override;
 
-    void
-    set_scheme(const char * scheme)
-    {
-        ImplicitFENonlinearProblem::set_scheme(scheme);
-    }
-
 protected:
     void set_up_fields() override;
     void set_up_weak_form() override;

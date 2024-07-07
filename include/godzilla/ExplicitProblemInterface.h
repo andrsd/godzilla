@@ -17,9 +17,6 @@ public:
     explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & params);
     ~ExplicitProblemInterface() override;
 
-    /// Get the name of time stepping scheme
-    [[nodiscard]] std::string get_scheme() const;
-
     [[nodiscard]] const Matrix & get_mass_matrix() const;
 
     Matrix & get_mass_matrix();
@@ -30,13 +27,14 @@ public:
 
 protected:
     void set_up_callbacks();
-    void set_up_time_scheme() override;
     void allocate_mass_matrix();
     void allocate_lumped_mass_matrix();
     void create_mass_matrix();
     void create_mass_matrix_lumped();
 
 private:
+    void set_up_time_scheme() override;
+
     /// Form the global residual 'F' from the global input 'x' using pointwise functions specified
     /// by the user
     /// @param time The time

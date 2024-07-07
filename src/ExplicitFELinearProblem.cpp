@@ -128,13 +128,6 @@ ExplicitFELinearProblem::set_up_callbacks()
 }
 
 void
-ExplicitFELinearProblem::set_up_time_scheme()
-{
-    CALL_STACK_MSG();
-    ExplicitProblemInterface::set_up_time_scheme();
-}
-
-void
 ExplicitFELinearProblem::set_up_monitors()
 {
     CALL_STACK_MSG();

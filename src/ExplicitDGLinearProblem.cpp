@@ -25,9 +25,7 @@ ExplicitDGLinearProblem::ExplicitDGLinearProblem(const Parameters & params) :
     set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
 }
 
-ExplicitDGLinearProblem::~ExplicitDGLinearProblem()
-{
-}
+ExplicitDGLinearProblem::~ExplicitDGLinearProblem() {}
 
 Real
 ExplicitDGLinearProblem::get_time() const
@@ -107,13 +105,6 @@ ExplicitDGLinearProblem::set_up_initial_guess()
     CALL_STACK_MSG();
     TIMED_EVENT(9, "InitialGuess", "Setting initial guess");
     DiscreteProblemInterface::set_up_initial_guess();
-}
-
-void
-ExplicitDGLinearProblem::set_up_time_scheme()
-{
-    CALL_STACK_MSG();
-    ExplicitProblemInterface::set_up_time_scheme();
 }
 
 void

@@ -84,7 +84,7 @@ public:
     ///
     /// @param name The name of the functional
     /// @return Reference to the functional
-    [[nodiscard]] virtual const ValueFunctional & get_functional(const std::string & name) const;
+    [[nodiscard]] const ValueFunctional & get_functional(const std::string & name) const;
 
     /// Declare a value with a name
     ///

@@ -416,6 +416,15 @@ TransientProblemInterface::set_scheme(const std::string & scheme_name)
     PETSC_CHECK(TSSetType(this->ts, scheme_name.c_str()));
 }
 
+std::string
+TransientProblemInterface::get_scheme() const
+{
+    CALL_STACK_MSG();
+    TSType type;
+    TSGetType(this->ts, &type);
+    return { type };
+}
+
 void
 TransientProblemInterface::monitor_cancel()
 {

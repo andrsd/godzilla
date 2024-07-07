@@ -28,12 +28,12 @@ public:
     /// Get field name
     ///
     /// @return The field name
-    [[nodiscard]] virtual const std::string & get_field_name() const;
+    [[nodiscard]] const std::string & get_field_name() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    [[nodiscard]] virtual Int get_field_id() const;
+    [[nodiscard]] Int get_field_id() const;
 
     /// Get the number of constrained components
     ///
@@ -44,7 +44,6 @@ public:
     ///
     /// @param time The time at which to sample
     /// @param x The coordinates
-    /// @param nc The number of components
     /// @param u  The output field values
     virtual void evaluate(Real time, const Real x[], Scalar u[]) = 0;
 

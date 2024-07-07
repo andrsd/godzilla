@@ -55,7 +55,7 @@ public:
     [[nodiscard]] std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    [[nodiscard]] virtual WeakForm * get_weak_form() const;
+    [[nodiscard]] WeakForm * get_weak_form() const;
 
     /// Adds a volumetric field
     ///
@@ -263,25 +263,24 @@ protected:
     /// Set up discretization system
     void set_up_ds() override;
 
-    virtual void set_up_assembly_data();
-    virtual void set_up_assembly_data_aux();
+    void set_up_assembly_data();
+    void set_up_assembly_data_aux();
 
     /// Set up field variables
     virtual void set_up_fields() = 0;
 
     /// Set up quadrature
-    virtual void set_up_quadrature();
+    void set_up_quadrature();
 
     virtual void set_up_field_null_space(DM dm);
 
     void create_aux_fields() override;
 
-    /// Setup volumetric weak form terms
-    virtual void set_up_weak_form() = 0;
+    void sort_functionals();
 
-    virtual void sort_functionals();
     void
     sort_residual_functionals(const std::map<std::string, const ValueFunctional *> & suppliers);
+
     void
     sort_jacobian_functionals(const std::map<std::string, const ValueFunctional *> & suppliers);
 

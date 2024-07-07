@@ -266,7 +266,7 @@ void
 App::run()
 {
     CALL_STACK_MSG();
-    this->create_command_line_options();
+    create_command_line_options();
     auto result = parse_command_line();
     process_command_line(result);
 }
