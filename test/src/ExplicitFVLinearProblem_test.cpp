@@ -76,12 +76,6 @@ public:
     }
 
     void
-    set_up_time_scheme() override
-    {
-        ExplicitFVLinearProblem::set_up_time_scheme();
-    }
-
-    void
     compute_flux(const Real x[],
                  const Real n[],
                  const Scalar u_l[],
@@ -368,15 +362,17 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
     mesh.create();
     prob.create();
 
-    TS ts = prob.get_ts();
-    TSType type;
-    std::vector<std::string> schemes = { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" };
+    std::vector<TransientProblemInterface::TimeScheme> schemes = {
+        TransientProblemInterface::TimeScheme::EULER,
+        TransientProblemInterface::TimeScheme::SSP_RK_2,
+        TransientProblemInterface::TimeScheme::SSP_RK_3,
+        TransientProblemInterface::TimeScheme::RK_2,
+        TransientProblemInterface::TimeScheme::HEUN
+    };
     std::vector<TSType> types = { TSEULER, TSSSP, TSSSP, TSRK, TSRK };
     for (std::size_t i = 0; i < schemes.size(); i++) {
-        prob_pars.set<std::string>("scheme") = schemes[i];
-        prob.set_up_time_scheme();
-        TSGetType(ts, &type);
-        EXPECT_STREQ(type, types[i]);
+        prob.set_scheme(schemes[i]);
+        EXPECT_EQ(prob.get_scheme(), types[i]);
     }
 }
 

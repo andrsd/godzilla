@@ -90,6 +90,15 @@ public:
     /// @return Converged reason
     [[nodiscard]] TSConvergedReason get_converged_reason() const;
 
+    /// Set time-stepping scheme
+    void set_scheme(TimeScheme scheme);
+
+    /// Set time-stepping scheme
+    void set_scheme(const std::string & scheme_name);
+
+    /// Get the name of time stepping scheme
+    [[nodiscard]] std::string get_scheme() const;
+
     /// Set simulation time
     ///
     /// @param t New simulation time
@@ -135,8 +144,6 @@ protected:
     void set_up_callbacks();
     /// Set up monitors
     void set_up_monitors();
-    /// Set up time integration scheme
-    virtual void set_up_time_scheme() = 0;
     /// Default TS monitor
     void default_monitor(Int stepi, Real time, const Vector & x);
     /// Check if problem converged
@@ -145,10 +152,6 @@ protected:
     [[nodiscard]] bool converged() const;
     /// Solve
     void solve(Vector & x);
-    /// Set time-stepping scheme
-    void set_scheme(TimeScheme scheme);
-    /// Set time-stepping scheme
-    void set_scheme(const std::string & scheme_name);
 
     /// Sets an *additional* member function to be called at every iteration to monitor the
     /// residual/error etc.
@@ -249,6 +252,9 @@ protected:
     void compute_boundary_local(Real time, Vector & x, Vector & x_t);
 
 private:
+    /// Set up time integration scheme
+    virtual void set_up_time_scheme() = 0;
+
     /// PETSc TS object
     TS ts;
     /// Method for computing right-hand side
