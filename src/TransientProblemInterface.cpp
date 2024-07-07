@@ -124,8 +124,7 @@ TransientProblemInterface::invoke_compute_boundary_delegate(DM,
 {
     CALL_STACK_MSG();
     auto * method =
-        static_cast<Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t)> *>(
-            context);
+        static_cast<Delegate<void(Real time, const Vector & x, const Vector & x_t)> *>(context);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
     method->invoke(time, vec_x, vec_x_t);
