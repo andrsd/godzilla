@@ -44,13 +44,13 @@ public:
     ///
     /// @param name The name of the label
     /// @return true if label exists, otherwise false
-    [[nodiscard]] virtual bool has_label(const std::string & name) const;
+    [[nodiscard]] bool has_label(const std::string & name) const;
 
     /// Get label associated with a name
     ///
     /// @param name Label name
     /// @return Label associated with the `name`
-    [[nodiscard]] virtual Label get_label(const std::string & name) const;
+    [[nodiscard]] Label get_label(const std::string & name) const;
 
     /// Create label
     ///
