@@ -118,8 +118,7 @@ public:
     /// @param time Current time
     /// @param x Solution at time `time`
     /// @param F Right-hand side vector
-    /// @return PETSc error code
-    ErrorCode compute_rhs_function(Real time, const Vector & x, Vector & F);
+    void compute_rhs_function(Real time, const Vector & x, Vector & F);
 
 protected:
     /// Get underlying non-linear solver
@@ -139,7 +138,7 @@ protected:
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
     /// Default TS monitor
-    ErrorCode default_monitor(Int stepi, Real time, const Vector & x);
+    void default_monitor(Int stepi, Real time, const Vector & x);
     /// Check if problem converged
     ///
     /// @return `true` if solve converged, otherwise `false`
@@ -159,7 +158,7 @@ protected:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real, const Vector &))
+    monitor_set(T * instance, void (T::*method)(Int, Real, const Vector &))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
@@ -176,18 +175,34 @@ protected:
     /// @param method Member function in class T
     template <class T>
     void
-    set_rhs_function(T * instance, ErrorCode (T::*method)(Real time, const Vector & x, Vector & F))
+    set_rhs_function(T * instance, void (T::*method)(Real time, const Vector & x, Vector & F))
     {
         this->compute_rhs_method.bind(instance, method);
         auto dm = this->problem->get_dm();
         PETSC_CHECK(DMTSSetRHSFunction(dm, invoke_compute_rhs_delegate, &this->compute_rhs_method));
     }
 
+    /// Set a local rhs function evaluation function
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    set_rhs_function_local(T * instance, void (T::*method)(Real time, const Vector & x, Vector & F))
+    {
+        this->compute_rhs_local_method.bind(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetRHSFunctionLocal(dm,
+                                            invoke_compute_rhs_local_delegate,
+                                            &this->compute_rhs_local_method));
+    }
+
     template <class T>
     void
     set_ifunction_local(
         T * instance,
-        ErrorCode (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
+        void (T::*method)(Real time, const Vector & x, const Vector & x_t, Vector & F))
     {
         this->compute_ifunction_local_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -200,7 +215,7 @@ protected:
     void
     set_ijacobian_local(
         T * instance,
-        ErrorCode (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
+        void (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
     {
         this->compute_ijacobian_local_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -211,8 +226,7 @@ protected:
 
     template <class T>
     void
-    set_time_boundary_local(T * instance,
-                            PetscErrorCode (T::*method)(Real, const Vector &, const Vector &))
+    set_time_boundary_local(T * instance, void (T::*method)(Real, Vector &, Vector &))
     {
         this->compute_boundary_local_method.bind(instance, method);
         auto dm = this->problem->get_dm();
@@ -221,28 +235,42 @@ protected:
                                          &this->compute_boundary_local_method));
     }
 
+    /// Insert the essential boundary values into the local vector
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    void compute_boundary_local(Real time, Vector & x);
+
+    /// Insert the essential boundary values into the local vector and the time derivative vector
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    void compute_boundary_local(Real time, Vector & x, Vector & x_t);
+
 private:
     /// PETSc TS object
     TS ts;
     /// Method for computing right-hand side
-    Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> compute_rhs_method;
+    Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_method;
+    /// Method for computing right-hand side
+    Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_local_method;
     /// Method for computing F(t,U,U_t) where F() = 0
-    Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t, Vector & F)>
+    Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)>
         compute_ifunction_local_method;
     /// Method to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t) is the function provided by
     /// `set_ifunction_local`
-    Delegate<ErrorCode(Real time,
-                       const Vector & X,
-                       const Vector & X_t,
-                       Real x_t_shift,
-                       Matrix & J,
-                       Matrix & Jp)>
+    Delegate<void(Real time,
+                  const Vector & X,
+                  const Vector & X_t,
+                  Real x_t_shift,
+                  Matrix & J,
+                  Matrix & Jp)>
         compute_ijacobian_local_method;
     /// Method for essential boundary data for a local implicit function evaluation.
-    Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t)>
-        compute_boundary_local_method;
+    Delegate<void(Real time, Vector & x, Vector & x_t)> compute_boundary_local_method;
     /// with set_i Method for monitoring the solve
-    Delegate<ErrorCode(Int it, Real rnorm, const Vector & x)> monitor_method;
+    Delegate<void(Int it, Real rnorm, const Vector & x)> monitor_method;
     /// Problem this interface is part of
     Problem * problem;
     /// Parameters
@@ -270,6 +298,7 @@ private:
     static ErrorCode invoke_post_step(TS ts);
     static ErrorCode invoke_monitor_delegate(TS ts, Int stepi, Real time, Vec x, void * ctx);
     static ErrorCode invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec F, void * ctx);
+    static ErrorCode invoke_compute_rhs_local_delegate(DM, Real time, Vec x, Vec F, void * ctx);
     static ErrorCode
     invoke_compute_ifunction_delegate(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
     static ErrorCode invoke_compute_ijacobian_delegate(DM,

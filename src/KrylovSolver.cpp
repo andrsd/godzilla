@@ -13,26 +13,29 @@ ErrorCode
 KrylovSolver::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Matrix & A, Matrix & B)> *>(ctx);
+    auto * method = static_cast<Delegate<void(Matrix & A, Matrix & B)> *>(ctx);
     Matrix mat_A(A);
     Matrix mat_B(B);
-    return method->invoke(mat_A, mat_B);
+    method->invoke(mat_A, mat_B);
+    return 0;
 }
 
 ErrorCode
 KrylovSolver::invoke_compute_rhs_delegate(KSP, Vec b, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Vector & b)> *>(ctx);
+    auto * method = static_cast<Delegate<void(Vector & b)> *>(ctx);
     Vector vec_b(b);
-    return method->invoke(vec_b);
+    method->invoke(vec_b);
+    return 0;
 }
 
 ErrorCode
 KrylovSolver::invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx)
 {
-    auto * method = static_cast<Delegate<ErrorCode(Int it, Real rnorm)> *>(ctx);
-    return method->invoke(it, rnorm);
+    auto * method = static_cast<Delegate<void(Int it, Real rnorm)> *>(ctx);
+    method->invoke(it, rnorm);
+    return 0;
 }
 
 KrylovSolver::KrylovSolver() : ksp(nullptr) {}
@@ -87,30 +90,6 @@ KrylovSolver::set_tolerances(Real rel_tol, Real abs_tol, Real div_tol, Int max_i
 {
     CALL_STACK_MSG();
     PETSC_CHECK(KSPSetTolerances(this->ksp, rel_tol, abs_tol, div_tol, max_its));
-}
-
-void
-KrylovSolver::set_compute_rhs(ErrorCode (*func)(KSP ksp, Vec b, void * ctx), void * ctx)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetComputeRHS(this->ksp, func, ctx));
-}
-
-void
-KrylovSolver::set_compute_operators(ErrorCode (*func)(KSP ksp, Mat A, Mat B, void * ctx),
-                                    void * ctx)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(KSPSetComputeOperators(this->ksp, func, ctx));
-}
-
-void
-KrylovSolver::monitor_set(ErrorCode (*monitor)(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx),
-                          void * ctx,
-                          ErrorCode (*monitordestroy)(void ** ctx))
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(KSPMonitorSet(this->ksp, monitor, ctx, monitordestroy));
 }
 
 void

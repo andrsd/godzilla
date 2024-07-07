@@ -24,11 +24,11 @@ public:
     /// true if solve converged, otherwise false
     virtual bool converged();
     /// Method to compute right-hand side. Called from the PETsc callback
-    virtual ErrorCode compute_rhs(Vector & b);
+    virtual void compute_rhs(Vector & b);
     /// Method to compute operators. Called from the PETsc callback
-    virtual ErrorCode compute_operators(Matrix & A, Matrix & B);
+    virtual void compute_operators(Matrix & A, Matrix & B);
     /// Monitor callback
-    ErrorCode monitor(Int it, Real rnorm);
+    void monitor(Int it, Real rnorm);
 
 protected:
     /// Initialize the problem

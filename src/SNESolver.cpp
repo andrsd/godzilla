@@ -58,30 +58,32 @@ ErrorCode
 SNESolver::invoke_compute_residual_delegate(SNES, Vec x, Vec f, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(const Vector & x, Vector & f)> *>(ctx);
+    auto * method = static_cast<Delegate<void(const Vector & x, Vector & f)> *>(ctx);
     Vector vec_x(x);
     Vector vec_f(f);
-    return method->invoke(vec_x, vec_f);
+    method->invoke(vec_x, vec_f);
+    return 0;
 }
 
 ErrorCode
 SNESolver::invoke_compute_jacobian_delegate(SNES, Vec x, Mat J, Mat Jp, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method =
-        static_cast<Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> *>(ctx);
+    auto * method = static_cast<Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> *>(ctx);
     Vector vec_x(x);
     Matrix mat_J(J);
     Matrix mat_Jp(Jp);
-    return method->invoke(vec_x, mat_J, mat_Jp);
+    method->invoke(vec_x, mat_J, mat_Jp);
+    return 0;
 }
 
 ErrorCode
 SNESolver::invoke_monitor_delegate(SNES, Int it, Real rnorm, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Int it, Real rnorm)> *>(ctx);
-    return method->invoke(it, rnorm);
+    auto * method = static_cast<Delegate<void(Int it, Real rnorm)> *>(ctx);
+    method->invoke(it, rnorm);
+    return 0;
 }
 
 SNESolver::SNESolver() : snes(nullptr) {}
@@ -142,23 +144,6 @@ SNESolver::set_from_options()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(SNESSetFromOptions(this->snes));
-}
-
-void
-SNESolver::set_function(Vector & r, ErrorCode (*callback)(SNES, Vec, Vec, void *), void * ctx)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetFunction(this->snes, r, callback, ctx));
-}
-
-void
-SNESolver::set_jacobian(Matrix & J,
-                        Matrix & Jp,
-                        ErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
-                        void * ctx)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(SNESSetJacobian(this->snes, J, Jp, callback, ctx));
 }
 
 void

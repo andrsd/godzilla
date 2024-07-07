@@ -65,9 +65,9 @@ TEST_F(LinearProblemTest, run)
     prob.run();
 
     Vector b;
-    EXPECT_EQ(prob.compute_rhs(b), 0);
+    prob.compute_rhs(b);
     Matrix A;
-    EXPECT_EQ(prob.compute_operators(A, A), 0);
+    prob.compute_operators(A, A);
 }
 
 // 1D
@@ -96,22 +96,20 @@ G1DTestLinearProblem::solve()
     LinearProblem::solve();
 }
 
-ErrorCode
+void
 G1DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_value(0, 2);
     b.set_value(1, 3);
     b.assemble();
-    return 0;
 }
 
-ErrorCode
+void
 G1DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
     A.set_value(0, 0, 1.);
     A.set_value(1, 1, 1.);
     A.assemble();
-    return 0;
 }
 
 // 2D
@@ -140,21 +138,19 @@ G2DTestLinearProblem::solve()
     LinearProblem::solve();
 }
 
-ErrorCode
+void
 G2DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_values({ 0, 1, 2, 3 }, { 2, 3, 5, 8 });
     b.assemble();
-    return 0;
 }
 
-ErrorCode
+void
 G2DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
     for (Int i = 0; i < 4; i++)
         A.set_value(i, i, 1.);
     A.assemble();
-    return 0;
 }
 
 // 3D
@@ -183,19 +179,17 @@ G3DTestLinearProblem::solve()
     LinearProblem::solve();
 }
 
-ErrorCode
+void
 G3DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_values({ 0, 1, 2, 3, 4, 5, 6, 7 }, { 2, 3, 5, 8, 13, 21, 34, 55 });
     b.assemble();
-    return 0;
 }
 
-ErrorCode
+void
 G3DTestLinearProblem::compute_operators(Matrix & A, Matrix & B)
 {
     for (Int i = 0; i < 8; i++)
         A.set_value(i, i, 1.);
     A.assemble();
-    return 0;
 }

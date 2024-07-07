@@ -27,16 +27,39 @@ protected:
     void set_up_monitors() override;
     void post_step() override;
 
-    ErrorCode compute_boundary(Real time, const Vector & X, const Vector & X_t);
-    ErrorCode compute_ifunction(Real time, const Vector & X, const Vector & X_t, Vector & F);
-    ErrorCode compute_ijacobian(Real time,
-                                const Vector & X,
-                                const Vector & X_t,
-                                Real x_t_shift,
-                                Matrix & J,
-                                Matrix & Jp);
+    /// Form the local residual `f` from the local input `x`
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    /// @param F Local residual vector
+    /// @return Error code
+    void compute_ifunction_local(Real time, const Vector & x, const Vector & x_t, Vector & F);
+
+    /// Form the Jacobian `J` from the local input `x`
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    /// @param x_t_shift The multiplicative parameter for dF/du_t
+    /// @param J The Jacobian
+    /// @param Jp An additional approximation for the Jacobian to be used to compute the
+    ///           preconditioner
+    void compute_ijacobian_local(Real time,
+                                 const Vector & x,
+                                 const Vector & x_t,
+                                 Real x_t_shift,
+                                 Matrix & J,
+                                 Matrix & Jp);
 
 private:
+    /// Insert the essential boundary values into the local vector and the time derivative vector
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param x_t Local solution time derivative
+    void compute_boundary_local(Real time, Vector & x, Vector & x_t);
+
     /// Time stepping scheme
     const std::string & scheme;
 

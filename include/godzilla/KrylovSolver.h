@@ -77,12 +77,6 @@ public:
     /// @param max_its Maximum number of iterations to use
     void set_tolerances(Real rel_tol, Real abs_tol, Real div_tol, Int max_its);
 
-    /// Set routine to compute the right hand side of the linear system
-    ///
-    /// @param func Function to compute the right hand side
-    /// @param ctx Optional context
-    void set_compute_rhs(ErrorCode (*func)(KSP ksp, Vec b, void * ctx), void * ctx = nullptr);
-
     /// Set member function to compute the right hand side of the linear system
     ///
     /// @tparam T C++ class type
@@ -90,19 +84,12 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    set_compute_rhs(T * instance, ErrorCode (T::*method)(Vector &))
+    set_compute_rhs(T * instance, void (T::*method)(Vector &))
     {
         this->compute_rhs_method.bind(instance, method);
         PETSC_CHECK(
             KSPSetComputeRHS(this->ksp, invoke_compute_rhs_delegate, &this->compute_rhs_method));
     }
-
-    /// Set routine to compute the linear operators
-    ///
-    /// @param func Function to compute the operators
-    /// @param ctx Optional context
-    void set_compute_operators(ErrorCode (*func)(KSP ksp, Mat A, Mat B, void * ctx),
-                               void * ctx = nullptr);
 
     /// Set member function to compute operators of the linear system
     ///
@@ -111,24 +98,13 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    set_compute_operators(T * instance, ErrorCode (T::*method)(Matrix &, Matrix &))
+    set_compute_operators(T * instance, void (T::*method)(Matrix &, Matrix &))
     {
         this->compute_operators_method.bind(instance, method);
         PETSC_CHECK(KSPSetComputeOperators(this->ksp,
                                            invoke_compute_operators_delegate,
                                            &this->compute_operators_method));
     }
-
-    /// Sets an *additional* function to be called at every iteration to monitor the residual/error
-    /// etc.
-    ///
-    /// @param monitor Pointer to function (if this is `nullptr`, it turns off monitoring)
-    /// @param ctx Context for private data for the monitor routine (use `nullptr` if no context is
-    /// needed)
-    /// @param monitordestroy Routine that frees monitor context (may be `nullptr`)
-    void monitor_set(ErrorCode (*monitor)(KSP ksp, PetscInt it, PetscReal rnorm, void * ctx),
-                     void * ctx = nullptr,
-                     ErrorCode (*monitordestroy)(void ** ctx) = nullptr);
 
     /// Sets an *additional* member function to be called at every iteration to monitor the
     /// residual/error etc.
@@ -138,7 +114,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real))
+    monitor_set(T * instance, void (T::*method)(Int, Real))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
@@ -181,11 +157,11 @@ private:
     /// PETSc object
     KSP ksp;
     /// Method for monitoring the solve
-    Delegate<ErrorCode(Int it, Real rnorm)> monitor_method;
+    Delegate<void(Int it, Real rnorm)> monitor_method;
     /// Method for computing RHS
-    Delegate<ErrorCode(Vector & b)> compute_rhs_method;
+    Delegate<void(Vector & b)> compute_rhs_method;
     /// Method for computing operators
-    Delegate<ErrorCode(Matrix & A, Matrix & B)> compute_operators_method;
+    Delegate<void(Matrix & A, Matrix & B)> compute_operators_method;
 
 public:
     static ErrorCode invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx);

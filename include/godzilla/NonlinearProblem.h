@@ -64,21 +64,21 @@ protected:
     /// Set the function evaluation routine
     template <class T>
     void
-    set_function(T * instance, ErrorCode (T::*callback)(const Vector &, Vector &))
+    set_function(T * instance, void (T::*callback)(const Vector &, Vector &))
     {
         this->snes.set_function(this->r, instance, callback);
     }
     /// Set the function to compute Jacobian
     template <class T>
     void
-    set_jacobian(T * instance, ErrorCode (T::*callback)(const Vector &, Matrix &, Matrix &))
+    set_jacobian(T * instance, void (T::*callback)(const Vector &, Matrix &, Matrix &))
     {
         this->snes.set_jacobian(this->J, this->J, instance, callback);
     }
     /// SNES monitor
-    ErrorCode snes_monitor(Int it, Real norm);
+    void snes_monitor(Int it, Real norm);
     /// KSP monitor
-    ErrorCode ksp_monitor(Int it, Real rnorm);
+    void ksp_monitor(Int it, Real rnorm);
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
     /// Method for creating a preconditioner

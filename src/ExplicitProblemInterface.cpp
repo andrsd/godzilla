@@ -128,7 +128,7 @@ ExplicitProblemInterface::create_mass_matrix_lumped()
     this->M_lumped_inv.reciprocal();
 }
 
-ErrorCode
+void
 ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
@@ -150,15 +150,6 @@ ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
         Vector::pointwise_mult(F, this->M_lumped_inv, F);
     this->nl_problem->restore_local_vector(loc_x);
     this->nl_problem->restore_local_vector(loc_F);
-    return 0;
-}
-
-ErrorCode
-ExplicitProblemInterface::compute_boundary_local(Real time, Vector & x)
-{
-    CALL_STACK_MSG();
-    auto dm = this->nl_problem->get_dm();
-    return DMPlexTSComputeBoundary(dm, time, x, nullptr, this);
 }
 
 } // namespace godzilla

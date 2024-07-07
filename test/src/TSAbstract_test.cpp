@@ -106,11 +106,10 @@ public:
         post_stage_called = true;
     }
 
-    ErrorCode
+    void
     compute_rhs(Real time, const Vector & vec_x, Vector & vec_F)
     {
         compute_rhs_called = true;
-        return 0;
     }
 
 public:

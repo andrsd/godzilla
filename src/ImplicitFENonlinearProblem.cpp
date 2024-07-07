@@ -10,7 +10,6 @@
 #include "godzilla/Validation.h"
 #include "godzilla/Utils.h"
 #include "godzilla/IndexSet.h"
-#include "petscts.h"
 #include <petsc/private/tsimpl.h>
 
 namespace godzilla {
@@ -92,9 +91,9 @@ ImplicitFENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
-    set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary);
-    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction);
-    set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian);
+    set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary_local);
+    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction_local);
+    set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian_local);
 }
 
 void
@@ -121,14 +120,14 @@ ImplicitFENonlinearProblem::compute_solution_vector_local()
     CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
-    compute_boundary(get_time(), loc_sln, Vector());
+    TransientProblemInterface::compute_boundary_local(get_time(), loc_sln);
 }
 
-ErrorCode
-ImplicitFENonlinearProblem::compute_ifunction(Real time,
-                                              const Vector & X,
-                                              const Vector & X_t,
-                                              Vector & F)
+void
+ImplicitFENonlinearProblem::compute_ifunction_local(Real time,
+                                                    const Vector & x,
+                                                    const Vector & x_t,
+                                                    Vector & F)
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
     CALL_STACK_MSG();
@@ -146,20 +145,18 @@ ImplicitFENonlinearProblem::compute_ifunction(Real time,
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_residual_internal(get_dm(), res_key, cells, time, X, X_t, time, F);
+        compute_residual_internal(get_dm(), res_key, cells, time, x, x_t, time, F);
         cells.destroy();
     }
-
-    return 0;
 }
 
-ErrorCode
-ImplicitFENonlinearProblem::compute_ijacobian(Real time,
-                                              const Vector & X,
-                                              const Vector & X_t,
-                                              Real x_t_shift,
-                                              Matrix & J,
-                                              Matrix & Jp)
+void
+ImplicitFENonlinearProblem::compute_ijacobian_local(Real time,
+                                                    const Vector & x,
+                                                    const Vector & x_t,
+                                                    Real x_t_shift,
+                                                    Matrix & J,
+                                                    Matrix & Jp)
 {
     // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
     // DMPlexTSComputeIJacobianFEM()
@@ -180,18 +177,16 @@ ImplicitFENonlinearProblem::compute_ijacobian(Real time,
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_jacobian_internal(get_dm(), jac_key, cells, time, x_t_shift, X, X_t, J, Jp);
+        compute_jacobian_internal(get_dm(), jac_key, cells, time, x_t_shift, x, x_t, J, Jp);
         cells.destroy();
     }
-
-    return 0;
 }
 
-ErrorCode
-ImplicitFENonlinearProblem::compute_boundary(Real time, const Vector & X, const Vector & X_t)
+void
+ImplicitFENonlinearProblem::compute_boundary_local(Real time, Vector & x, Vector & x_t)
 {
     CALL_STACK_MSG();
-    return DMPlexTSComputeBoundary(get_dm(), time, X, X_t, this);
+    TransientProblemInterface::compute_boundary_local(time, x, x_t);
 }
 
 void

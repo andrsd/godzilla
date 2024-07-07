@@ -142,11 +142,11 @@ ExplicitFELinearProblem::set_up_monitors()
     ExplicitProblemInterface::set_up_monitors();
 }
 
-ErrorCode
+void
 ExplicitFELinearProblem::compute_rhs_local(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
-    return DMPlexTSComputeRHSFunctionFEM(get_dm(), time, x, F, this);
+    PETSC_CHECK(DMPlexTSComputeRHSFunctionFEM(get_dm(), time, x, F, this));
 }
 
 void

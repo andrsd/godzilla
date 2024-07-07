@@ -35,11 +35,22 @@ protected:
     void allocate_lumped_mass_matrix();
     void create_mass_matrix();
     void create_mass_matrix_lumped();
-    virtual ErrorCode compute_boundary_local(Real time, Vector & x);
-    virtual ErrorCode compute_rhs_local(Real time, const Vector & x, Vector & F) = 0;
 
 private:
-    ErrorCode compute_rhs(Real time, const Vector & x, Vector & F);
+    /// Form the global residual 'F' from the global input 'x' using pointwise functions specified
+    /// by the user
+    /// @param time The time
+    /// @param x Global solution
+    /// @param F Global output vector
+    void compute_rhs(Real time, const Vector & x, Vector & F);
+
+    /// Form the local residual 'F' from the local input 'x' using pointwise functions specified by
+    /// the user
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    /// @param F Local output vector
+    virtual void compute_rhs_local(Real time, const Vector & x, Vector & F) = 0;
 
     /// Nonlinear problem
     NonlinearProblem * nl_problem;

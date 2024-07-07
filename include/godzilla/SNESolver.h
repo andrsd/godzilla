@@ -84,22 +84,13 @@ public:
     /// Sets the function evaluation routine and function vector for use by the SNES routines in
     /// solving systems of nonlinear equations.
     ///
-    /// @param r Vector to store function values
-    /// @param callback Function evaluation routine
-    /// @param ctx User-defined context for private data for the function evaluation routine
-    void
-    set_function(Vector & r, ErrorCode (*callback)(SNES, Vec, Vec, void *), void * ctx = nullptr);
-
-    /// Sets the function evaluation routine and function vector for use by the SNES routines in
-    /// solving systems of nonlinear equations.
-    ///
     /// @tparam T C++ class type
     /// @param r Vector to store function values
     /// @param instance Instance of class T
     /// @param method Member function in class T to compute function values
     template <class T>
     void
-    set_function(Vector & r, T * instance, ErrorCode (T::*method)(const Vector &, Vector &))
+    set_function(Vector & r, T * instance, void (T::*method)(const Vector &, Vector &))
     {
         this->compute_residual_method.bind(instance, method);
         PETSC_CHECK(SNESSetFunction(this->snes,
@@ -107,17 +98,6 @@ public:
                                     invoke_compute_residual_delegate,
                                     &this->compute_residual_method));
     }
-
-    /// Sets the function to compute Jacobian as well as the location to store the matrix.
-    ///
-    /// @param J The matrix that defines the (approximate) Jacobian
-    /// @param Jp The matrix to be used in constructing the preconditioner, usually the same as `J`.
-    /// @param callback Jacobian evaluation routine
-    /// @param ctx User-defined context for private data for the Jacobian evaluation routine
-    void set_jacobian(Matrix & J,
-                      Matrix & Jp,
-                      ErrorCode (*callback)(SNES, Vec, Mat, Mat, void *),
-                      void * ctx = nullptr);
 
     /// Sets the function to compute Jacobian as well as the location to store the matrix.
     ///
@@ -131,7 +111,7 @@ public:
     set_jacobian(Matrix & J,
                  Matrix & Jp,
                  T * instance,
-                 ErrorCode (T::*method)(const Vector &, Matrix &, Matrix &))
+                 void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
         this->compute_jacobian_method.bind(instance, method);
         PETSC_CHECK(SNESSetJacobian(this->snes,
@@ -162,17 +142,6 @@ public:
     /// @param maxf Maximum number of function evaluations (-1 indicates no limit), default 1000
     void set_tolerances(Real abs_tol, Real rtol, Real stol, Int max_it, Int maxf);
 
-    /// Sets an *additional* function that is to be used at every iteration of the nonlinear
-    /// solver to display the iteration’s progress. etc.
-    ///
-    /// @param monitor Pointer to function (if this is `nullptr`, it turns off monitoring)
-    /// @param ctx Context for private data for the monitor routine (use `nullptr` if no context
-    /// is needed)
-    /// @param monitordestroy Routine that frees monitor context (may be `nullptr`)
-    void monitor_set(ErrorCode (*monitor)(SNES, PetscInt, PetscReal, void *),
-                     void * ctx = nullptr,
-                     ErrorCode (*monitordestroy)(void ** ctx) = nullptr);
-
     /// Sets an *additional* member function that is to be used at every iteration of the nonlinear
     /// solver residual/error etc.
     ///
@@ -181,7 +150,7 @@ public:
     /// @param method Member function in class T
     template <class T>
     void
-    monitor_set(T * instance, ErrorCode (T::*method)(Int, Real))
+    monitor_set(T * instance, void (T::*method)(Int, Real))
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
@@ -211,11 +180,11 @@ private:
     /// PETSc object
     SNES snes;
     /// Method for monitoring the solve
-    Delegate<ErrorCode(Int it, Real rnorm)> monitor_method;
+    Delegate<void(Int it, Real rnorm)> monitor_method;
     /// Method for computing residual
-    Delegate<ErrorCode(const Vector & x, Vector & f)> compute_residual_method;
+    Delegate<void(const Vector & x, Vector & f)> compute_residual_method;
     /// Method for computing Jacobian
-    Delegate<ErrorCode(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
+    Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> compute_jacobian_method;
 
 public:
     static ErrorCode invoke_compute_residual_delegate(SNES, Vec, Vec, void *);

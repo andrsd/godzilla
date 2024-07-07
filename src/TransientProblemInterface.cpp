@@ -39,20 +39,36 @@ ErrorCode
 TransientProblemInterface::invoke_monitor_delegate(TS, Int stepi, Real time, Vec x, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Int it, Real rnorm, const Vector & x)> *>(ctx);
+    auto * method = static_cast<Delegate<void(Int it, Real rnorm, const Vector & x)> *>(ctx);
     Vector vec_x(x);
-    return method->invoke(stepi, time, vec_x);
+    method->invoke(stepi, time, vec_x);
+    return 0;
 }
 
 ErrorCode
 TransientProblemInterface::invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec F, void * ctx)
 {
     CALL_STACK_MSG();
-    auto * method =
-        static_cast<Delegate<ErrorCode(Real time, const Vector & x, Vector & F)> *>(ctx);
+    auto * method = static_cast<Delegate<void(Real time, const Vector & x, Vector & F)> *>(ctx);
     Vector vec_x(x);
     Vector vec_F(F);
-    return method->invoke(time, vec_x, vec_F);
+    method->invoke(time, vec_x, vec_F);
+    return 0;
+}
+
+ErrorCode
+TransientProblemInterface::invoke_compute_rhs_local_delegate(DM,
+                                                             Real time,
+                                                             Vec x,
+                                                             Vec F,
+                                                             void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<Delegate<void(Real time, const Vector & x, Vector & F)> *>(ctx);
+    Vector vec_x(x);
+    Vector vec_F(F);
+    method->invoke(time, vec_x, vec_F);
+    return 0;
 }
 
 ErrorCode
@@ -64,12 +80,14 @@ TransientProblemInterface::invoke_compute_ifunction_delegate(DM,
                                                              void * contex)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<
-        Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t, Vector & F)> *>(contex);
+    auto * method =
+        static_cast<Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)> *>(
+            contex);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
     Vector vec_F(F);
-    return method->invoke(time, vec_x, vec_x_t, vec_F);
+    method->invoke(time, vec_x, vec_x_t, vec_F);
+    return 0;
 }
 
 ErrorCode
@@ -83,12 +101,12 @@ TransientProblemInterface::invoke_compute_ijacobian_delegate(DM,
                                                              void * contex)
 {
     CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<ErrorCode(Real time,
-                                                   const Vector & X,
-                                                   const Vector & X_t,
-                                                   Real x_t_shift,
-                                                   Matrix & J,
-                                                   Matrix & Jp)> *>(contex);
+    auto * method = static_cast<Delegate<void(Real time,
+                                              const Vector & X,
+                                              const Vector & X_t,
+                                              Real x_t_shift,
+                                              Matrix & J,
+                                              Matrix & Jp)> *>(contex);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
     Matrix mat_J(J);
@@ -106,8 +124,7 @@ TransientProblemInterface::invoke_compute_boundary_delegate(DM,
 {
     CALL_STACK_MSG();
     auto * method =
-        static_cast<Delegate<ErrorCode(Real time, const Vector & x, const Vector & x_t)> *>(
-            context);
+        static_cast<Delegate<void(Real time, const Vector & x, const Vector & x_t)> *>(context);
     Vector vec_x(x);
     Vector vec_x_t(x_t);
     method->invoke(time, vec_x, vec_x_t);
@@ -298,13 +315,12 @@ TransientProblemInterface::post_step()
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
 }
 
-ErrorCode
+void
 TransientProblemInterface::default_monitor(Int stepi, Real time, const Vector & x)
 {
     CALL_STACK_MSG();
     Real dt = get_time_step();
     this->problem->lprint(6, "{} Time {:f} dt = {:f}", stepi, time, dt);
-    return 0;
 }
 
 void
@@ -343,14 +359,12 @@ TransientProblemInterface::post_stage(Real stage_time,
 {
 }
 
-ErrorCode
+void
 TransientProblemInterface::compute_rhs_function(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
     if (this->compute_rhs_method)
-        return this->compute_rhs_method.invoke(time, x, F);
-    else
-        return 0;
+        this->compute_rhs_method.invoke(time, x, F);
 }
 
 void
@@ -407,6 +421,22 @@ TransientProblemInterface::monitor_cancel()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSMonitorCancel(this->ts));
+}
+
+void
+TransientProblemInterface::compute_boundary_local(Real time, Vector & x)
+{
+    CALL_STACK_MSG();
+    auto dm = this->problem->get_dm();
+    PETSC_CHECK(DMPlexTSComputeBoundary(dm, time, x, nullptr, this));
+}
+
+void
+TransientProblemInterface::compute_boundary_local(Real time, Vector & x, Vector & x_t)
+{
+    CALL_STACK_MSG();
+    auto dm = this->problem->get_dm();
+    PETSC_CHECK(DMPlexTSComputeBoundary(dm, time, x, x_t, this));
 }
 
 } // namespace godzilla

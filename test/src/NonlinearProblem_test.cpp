@@ -21,8 +21,8 @@ public:
     void solve() override;
 
 protected:
-    ErrorCode compute_residual(const Vector & x, Vector & f);
-    ErrorCode compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
+    void compute_residual(const Vector & x, Vector & f);
+    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
     PetscSection s;
 };
 
@@ -65,7 +65,7 @@ G1DTestNonlinearProblem::solve()
     NonlinearProblem::solve();
 }
 
-ErrorCode
+void
 G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
 {
     std::vector<Int> ix = { 0, 1 };
@@ -73,16 +73,14 @@ G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
     x.get_values(ix, y);
     f.set_values({ 0, 1 }, { y[0] - 2, y[1] - 3 });
     f.assemble();
-    return 0;
 }
 
-ErrorCode
+void
 G1DTestNonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 {
     J.set_value(0, 0, 1.);
     J.set_value(1, 1, 1.);
     J.assemble();
-    return 0;
 }
 
 //

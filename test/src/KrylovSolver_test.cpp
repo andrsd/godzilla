@@ -89,11 +89,10 @@ TEST(KrylovSolver, set_monitor)
 {
     class TestSolver {
     public:
-        ErrorCode
+        void
         monitor(Int it, Real rnorm)
         {
             this->norms.push_back(rnorm);
-            return 0;
         }
 
         std::vector<Real> norms;
@@ -130,21 +129,19 @@ TEST(KrylovSolver, set_opers_rhs)
 {
     class TestSystem {
     public:
-        ErrorCode
+        void
         compute_rhs(Vector & b)
         {
             b.set_value(0, 6);
             b.set_value(1, 12);
-            return 0;
         }
 
-        ErrorCode
+        void
         compute_operators(Matrix & A, Matrix & B)
         {
             A.set_value(0, 0, 2);
             A.set_value(1, 1, 3);
             A.assemble();
-            return 0;
         }
     };
 
@@ -180,77 +177,6 @@ TEST(KrylovSolver, set_opers_rhs)
 
     EXPECT_DOUBLE_EQ(b(0), 3);
     EXPECT_DOUBLE_EQ(b(1), 4);
-
-    ks.destroy();
-}
-
-TEST(KrylovSolver, set_opers_rhs_c_version)
-{
-    std::vector<Real> norms;
-
-    class TestSystem {
-    public:
-        static ErrorCode
-        compute_rhs(KSP ksp, Vec b, void * ctx)
-        {
-            VecSetValue(b, 0, 6, INSERT_VALUES);
-            VecSetValue(b, 1, 12, INSERT_VALUES);
-            return 0;
-        }
-
-        static ErrorCode
-        compute_operators(KSP ksp, Mat A, Mat B, void * ctx)
-        {
-            MatSetValue(A, 0, 0, 2., INSERT_VALUES);
-            MatSetValue(A, 1, 1, 3., INSERT_VALUES);
-            MatAssemblyBegin(A, MAT_FINAL_ASSEMBLY);
-            MatAssemblyEnd(A, MAT_FINAL_ASSEMBLY);
-            return 0;
-        }
-
-        static ErrorCode
-        monitor(KSP, Int it, Real rnorm, void * ctx)
-        {
-            auto norms = static_cast<std::vector<Real> *>(ctx);
-            (*norms).push_back(rnorm);
-            return 0;
-        }
-    };
-
-    TestApp app;
-    auto comm = app.get_comm();
-
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
-    mesh_pars.set<Real>("xmin") = 0;
-    mesh_pars.set<Real>("xmax") = 1;
-    mesh_pars.set<Int>("nx") = 1;
-    LineMesh mesh(mesh_pars);
-    mesh.create();
-
-    auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto dm = m->get_dm();
-    DMSetNumFields(dm, 1);
-    Int nc[1] = { 1 };
-    Int n_dofs[2] = { 1, 0 };
-    auto s = Section::create(dm, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
-    DMSetLocalSection(dm, s);
-
-    TestSystem sys;
-
-    KrylovSolver ks;
-    ks.create(comm);
-    ks.set_dm(dm);
-    ks.set_compute_operators(TestSystem::compute_operators);
-    ks.set_compute_rhs(&TestSystem::compute_rhs);
-    ks.monitor_set(TestSystem::monitor, &norms);
-
-    Vector b = Vector::create_seq(comm, 2);
-    ks.solve(b);
-
-    EXPECT_DOUBLE_EQ(b(0), 3);
-    EXPECT_DOUBLE_EQ(b(1), 4);
-    EXPECT_THAT(norms, ElementsAre(DoubleEq(5.), DoubleNear(1.1e-15, 1e-14)));
 
     ks.destroy();
 }
