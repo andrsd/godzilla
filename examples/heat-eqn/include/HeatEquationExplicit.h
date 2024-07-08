@@ -17,10 +17,10 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
 
-    PetscInt temp_id;
-    PetscInt ffn_aux_id;
+    Int temp_id;
+    Int ffn_aux_id;
     /// Polynomial order of the FE space
-    PetscInt order;
+    Int order;
 
 public:
     static Parameters parameters();

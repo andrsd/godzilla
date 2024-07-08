@@ -121,7 +121,7 @@ std::vector<KrylovSolver>
 PCFieldSplit::get_sub_ksp() const
 {
     CALL_STACK_MSG();
-    PetscInt n;
+    Int n;
     KSP * subksp;
     PETSC_CHECK(PCFieldSplitGetSubKSP(this->pc, &n, &subksp));
     std::vector<KrylovSolver> sks(n);
@@ -144,7 +144,7 @@ std::vector<KrylovSolver>
 PCFieldSplit::schur_get_sub_ksp() const
 {
     CALL_STACK_MSG();
-    PetscInt n;
+    Int n;
     KSP * subksp;
     PETSC_CHECK(PCFieldSplitSchurGetSubKSP(this->pc, &n, &subksp));
     std::vector<KrylovSolver> sks(n);

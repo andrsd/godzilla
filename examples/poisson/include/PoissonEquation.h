@@ -15,11 +15,11 @@ protected:
     void set_up_weak_form() override;
 
     /// Polynomial order of the FE space
-    PetscInt p_order;
+    Int p_order;
     /// ID for the "u" field
-    PetscInt iu;
+    Int iu;
     /// ID for the forcing function field
-    PetscInt affn;
+    Int affn;
 
 public:
     static Parameters parameters();

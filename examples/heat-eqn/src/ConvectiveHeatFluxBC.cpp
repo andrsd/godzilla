@@ -19,7 +19,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         f[0] = htc(0) * (T(0) - T_infinity(0));
@@ -36,7 +36,7 @@ public:
     explicit Jacobian0(const NaturalBC * nbc) : BndJacobianFunc(nbc), htc(get_field_value("htc")) {}
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         g[0] = htc(0);
@@ -62,7 +62,7 @@ ConvectiveHeatFluxBC::ConvectiveHeatFluxBC(const Parameters & params) :
     CALL_STACK_MSG();
 }
 
-const std::vector<PetscInt> &
+const std::vector<Int> &
 ConvectiveHeatFluxBC::get_components() const
 {
     return this->components;

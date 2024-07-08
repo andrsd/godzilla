@@ -11,13 +11,13 @@ Parameters
 PoissonEquation::parameters()
 {
     Parameters params = FENonlinearProblem::parameters();
-    params.add_param<PetscInt>("p_order", 1., "Polynomial order of the FE space.");
+    params.add_param<Int>("p_order", 1., "Polynomial order of the FE space.");
     return params;
 }
 
 PoissonEquation::PoissonEquation(const Parameters & parameters) :
     FENonlinearProblem(parameters),
-    p_order(get_param<PetscInt>("p_order"))
+    p_order(get_param<Int>("p_order"))
 {
     CALL_STACK_MSG();
 }

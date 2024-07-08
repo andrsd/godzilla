@@ -196,7 +196,7 @@ TEST(PCFieldSplit, schur)
     fs.set_dm_splits(true);
     EXPECT_TRUE(fs.get_dm_splits());
     std::vector<std::string> fld_name = { "split0", "split1" };
-    for (PetscInt i = 0; i < fdecomp.get_num_fields(); i++)
+    for (Int i = 0; i < fdecomp.get_num_fields(); i++)
         fs.set_is(fld_name[i], fdecomp.is[i]);
 
     auto is0 = fs.get_is("split0");

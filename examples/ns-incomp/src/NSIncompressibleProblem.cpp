@@ -29,13 +29,13 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt c = 0; c < this->n_comp; ++c) {
+        for (Int c = 0; c < this->n_comp; ++c) {
             f[c] = this->vel_t(c);
 
-            for (PetscInt d = 0; d < this->dim; ++d)
+            for (Int d = 0; d < this->dim; ++d)
                 f[c] += this->vel(d) * this->vel_x(c * this->dim + d);
 
             f[c] -= this->ffn(c);
@@ -43,8 +43,8 @@ public:
     }
 
 protected:
-    const PetscInt & n_comp;
-    const PetscInt & dim;
+    const Int & n_comp;
+    const Int & dim;
     const FieldValue & vel;
     const FieldValue & vel_t;
     const FieldGradient & vel_x;
@@ -64,11 +64,11 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt comp = 0; comp < this->n_comp; ++comp) {
-            for (PetscInt d = 0; d < this->dim; ++d) {
+        for (Int comp = 0; comp < this->n_comp; ++comp) {
+            for (Int d = 0; d < this->dim; ++d) {
                 f[comp * this->dim + d] = 1.0 / this->Re * this->vel_x(comp * this->dim + d);
             }
             f[comp * this->dim + comp] -= this->press(0);
@@ -76,11 +76,11 @@ public:
     }
 
 protected:
-    const PetscInt & n_comp;
-    const PetscInt & dim;
+    const Int & n_comp;
+    const Int & dim;
     const FieldGradient & vel_x;
     const FieldValue & press;
-    const PetscScalar & Re;
+    const Scalar & Re;
 };
 
 class ResidualPress0 : public ResidualFunc {
@@ -93,16 +93,16 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         f[0] = 0.0;
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             f[0] += this->vel_x(d * this->dim + d);
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldGradient & vel_x;
 };
 
@@ -115,15 +115,15 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             f[d] = 0.0;
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 class JacobianVV0 : public JacobianFunc {
@@ -137,27 +137,27 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
-        PetscInt nc_i = this->dim;
-        PetscInt nc_j = this->dim;
+        Int nc_i = this->dim;
+        Int nc_j = this->dim;
 
-        for (PetscInt d = 0; d < this->dim; ++d) {
+        for (Int d = 0; d < this->dim; ++d) {
             g[d * this->dim + d] = this->u_t_shift;
         }
 
-        for (PetscInt fc = 0; fc < nc_i; ++fc) {
-            for (PetscInt gc = 0; gc < nc_j; ++gc) {
+        for (Int fc = 0; fc < nc_i; ++fc) {
+            for (Int gc = 0; gc < nc_j; ++gc) {
                 g[fc * nc_j + gc] += this->vel_x(fc * nc_j + gc);
             }
         }
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldGradient & vel_x;
-    const PetscReal & u_t_shift;
+    const Real & u_t_shift;
 };
 
 class JacobianVV1 : public JacobianFunc {
@@ -170,15 +170,15 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
-        PetscInt nc_i = this->dim;
-        PetscInt nc_j = this->dim;
+        Int nc_i = this->dim;
+        Int nc_j = this->dim;
 
-        for (PetscInt fc = 0; fc < nc_i; ++fc) {
-            for (PetscInt gc = 0; gc < nc_j; ++gc) {
-                for (PetscInt dg = 0; dg < this->dim; ++dg) {
+        for (Int fc = 0; fc < nc_i; ++fc) {
+            for (Int gc = 0; gc < nc_j; ++gc) {
+                for (Int dg = 0; dg < this->dim; ++dg) {
                     // kronecker delta
                     if (fc == gc)
                         g[(fc * nc_j + gc) * this->dim + dg] += this->vel(dg);
@@ -188,7 +188,7 @@ public:
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldValue & vel;
 };
 
@@ -201,15 +201,15 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 class JacobianVP2 : public JacobianFunc {
@@ -221,15 +221,15 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = -1.0;
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 class JacobianVV3 : public JacobianFunc {
@@ -243,11 +243,11 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt comp_i = 0; comp_i < this->n_comp; ++comp_i) {
-            for (PetscInt d = 0; d < this->dim; ++d) {
+        for (Int comp_i = 0; comp_i < this->n_comp; ++comp_i) {
+            for (Int d = 0; d < this->dim; ++d) {
                 g[((comp_i * this->n_comp + comp_i) * this->dim + d) * this->dim + d] =
                     1.0 / this->Re;
             }
@@ -255,9 +255,9 @@ public:
     }
 
 protected:
-    const PetscInt & n_comp;
-    const PetscInt & dim;
-    const PetscReal & Re;
+    const Int & n_comp;
+    const Int & dim;
+    const Real & Re;
 };
 
 } // namespace
@@ -266,18 +266,18 @@ Parameters
 NSIncompressibleProblem::parameters()
 {
     Parameters params = ImplicitFENonlinearProblem::parameters();
-    params.add_required_param<PetscReal>("Re", "Reynolds number");
+    params.add_required_param<Real>("Re", "Reynolds number");
     return params;
 }
 
 NSIncompressibleProblem::NSIncompressibleProblem(const Parameters & parameters) :
     ImplicitFENonlinearProblem(parameters),
-    Re(get_param<PetscReal>("Re"))
+    Re(get_param<Real>("Re"))
 {
     CALL_STACK_MSG();
 }
 
-const PetscReal &
+const Real &
 NSIncompressibleProblem::get_reynolds_number() const
 {
     CALL_STACK_MSG();
@@ -290,7 +290,7 @@ NSIncompressibleProblem::set_up_fields()
     CALL_STACK_MSG();
     const char * comp_name[] = { "velocity_x", "velocity_y", "velocity_z" };
 
-    PetscInt dim = this->get_dimension();
+    Int dim = this->get_dimension();
     velocity_id = add_field("velocity", dim, 2);
     for (unsigned int i = 0; i < dim; i++)
         set_field_component_name(velocity_id, i, comp_name[i]);
@@ -351,7 +351,7 @@ NSIncompressibleProblem::create_preconditioner(PC pc)
         PetscObjectCompose((PetscObject) (IS) fdecomp.is[1], "nullspace", (PetscObject) nsp));
     PETSC_CHECK(MatNullSpaceDestroy(&nsp));
     // TODO: fdecomp.is[1].attach_null_space("nullspace");
-    for (PetscInt i = 0; i < fdecomp.get_num_fields(); i++)
+    for (Int i = 0; i < fdecomp.get_num_fields(); i++)
         fsplit.set_is(fdecomp.field_name[i], fdecomp.is[i]);
     fdecomp.destroy();
 

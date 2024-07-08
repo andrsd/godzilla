@@ -14,12 +14,12 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
 
-    PetscInt temp_id;
-    PetscInt q_ppp_id;
-    PetscInt htc_aux_id;
-    PetscInt T_ambient_aux_id;
+    Int temp_id;
+    Int q_ppp_id;
+    Int htc_aux_id;
+    Int T_ambient_aux_id;
     /// Polynomial order of the FE space
-    const PetscInt & p_order;
+    const Int & p_order;
 
 public:
     static Parameters parameters();

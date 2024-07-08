@@ -19,7 +19,7 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
         f[0] = this->T_t(0) - this->q_ppp(0);
@@ -40,15 +40,15 @@ public:
     }
 
     void
-    evaluate(PetscScalar f[]) const override
+    evaluate(Scalar f[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             f[d] = this->T_x(d);
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
     const FieldGradient & T_x;
 };
 
@@ -59,14 +59,14 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
         g[0] = this->T_t_shift * 1.0;
     }
 
 protected:
-    const PetscReal & T_t_shift;
+    const Real & T_t_shift;
 };
 
 class Jacobian3 : public JacobianFunc {
@@ -76,15 +76,15 @@ public:
     }
 
     void
-    evaluate(PetscScalar g[]) const override
+    evaluate(Scalar g[]) const override
     {
         CALL_STACK_MSG();
-        for (PetscInt d = 0; d < this->dim; ++d)
+        for (Int d = 0; d < this->dim; ++d)
             g[d * this->dim + d] = 1.0;
     }
 
 protected:
-    const PetscInt & dim;
+    const Int & dim;
 };
 
 } // namespace
@@ -93,13 +93,13 @@ Parameters
 HeatEquationProblem::parameters()
 {
     Parameters params = ImplicitFENonlinearProblem::parameters();
-    params.add_param<PetscInt>("p_order", 1, "Polynomial order of FE space");
+    params.add_param<Int>("p_order", 1, "Polynomial order of FE space");
     return params;
 }
 
 HeatEquationProblem::HeatEquationProblem(const Parameters & parameters) :
     ImplicitFENonlinearProblem(parameters),
-    p_order(get_param<PetscInt>("p_order"))
+    p_order(get_param<Int>("p_order"))
 {
     CALL_STACK_MSG();
 }

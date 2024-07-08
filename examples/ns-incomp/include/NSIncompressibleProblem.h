@@ -10,7 +10,7 @@ class NSIncompressibleProblem : public ImplicitFENonlinearProblem {
 public:
     explicit NSIncompressibleProblem(const Parameters & parameters);
 
-    const PetscReal & get_reynolds_number() const;
+    const Real & get_reynolds_number() const;
 
 protected:
     void set_up_fields() override;
@@ -19,11 +19,11 @@ protected:
     void set_up_field_null_space(DM dm) override;
     Preconditioner create_preconditioner(PC pc) override;
 
-    PetscInt velocity_id;
-    PetscInt pressure_id;
-    PetscInt ffn_aid;
+    Int velocity_id;
+    Int pressure_id;
+    Int ffn_aid;
     /// Reynolds number
-    const PetscReal & Re;
+    const Real & Re;
 
 public:
     static Parameters parameters();
