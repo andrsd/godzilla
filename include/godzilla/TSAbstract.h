@@ -52,7 +52,7 @@ public:
     /// @param t Current time
     /// @param U State vector
     /// @param y Right-hand side
-    void compute_rhs_function(Real t, const Vector & U, Vector & y);
+    void compute_rhs(Real t, const Vector & U, Vector & y);
 
 protected:
     /// PETSc TS object

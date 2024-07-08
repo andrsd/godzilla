@@ -57,21 +57,6 @@ TransientProblemInterface::invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec
 }
 
 ErrorCode
-TransientProblemInterface::invoke_compute_rhs_local_delegate(DM,
-                                                             Real time,
-                                                             Vec x,
-                                                             Vec F,
-                                                             void * ctx)
-{
-    CALL_STACK_MSG();
-    auto * method = static_cast<Delegate<void(Real time, const Vector & x, Vector & F)> *>(ctx);
-    Vector vec_x(x);
-    Vector vec_F(F);
-    method->invoke(time, vec_x, vec_F);
-    return 0;
-}
-
-ErrorCode
 TransientProblemInterface::invoke_compute_ifunction_delegate(DM,
                                                              Real time,
                                                              Vec x,
@@ -112,22 +97,6 @@ TransientProblemInterface::invoke_compute_ijacobian_delegate(DM,
     Matrix mat_J(J);
     Matrix mat_Jp(Jp);
     method->invoke(time, vec_x, vec_x_t, x_t_shift, mat_J, mat_Jp);
-    return 0;
-}
-
-ErrorCode
-TransientProblemInterface::invoke_compute_boundary_delegate(DM,
-                                                            Real time,
-                                                            Vec x,
-                                                            Vec x_t,
-                                                            void * context)
-{
-    CALL_STACK_MSG();
-    auto * method =
-        static_cast<Delegate<void(Real time, const Vector & x, const Vector & x_t)> *>(context);
-    Vector vec_x(x);
-    Vector vec_x_t(x_t);
-    method->invoke(time, vec_x, vec_x_t);
     return 0;
 }
 
@@ -360,11 +329,11 @@ TransientProblemInterface::post_stage(Real stage_time,
 }
 
 void
-TransientProblemInterface::compute_rhs_function(Real time, const Vector & x, Vector & F)
+TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
     if (this->compute_rhs_method)
-        this->compute_rhs_method.invoke(time, x, F);
+        this->compute_rhs_method(time, x, F);
 }
 
 void
@@ -438,14 +407,6 @@ TransientProblemInterface::compute_boundary_local(Real time, Vector & x)
     CALL_STACK_MSG();
     auto dm = this->problem->get_dm();
     PETSC_CHECK(DMPlexTSComputeBoundary(dm, time, x, nullptr, this));
-}
-
-void
-TransientProblemInterface::compute_boundary_local(Real time, Vector & x, Vector & x_t)
-{
-    CALL_STACK_MSG();
-    auto dm = this->problem->get_dm();
-    PETSC_CHECK(DMPlexTSComputeBoundary(dm, time, x, x_t, this));
 }
 
 } // namespace godzilla

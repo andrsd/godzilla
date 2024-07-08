@@ -75,10 +75,10 @@ TSAbstract::set_cfl_time_local(Real cfl)
 }
 
 void
-TSAbstract::compute_rhs_function(Real t, const Vector & U, Vector & y)
+TSAbstract::compute_rhs(Real t, const Vector & U, Vector & y)
 {
     CALL_STACK_MSG();
-    this->tpi->compute_rhs_function(t, U, y);
+    this->tpi->compute_rhs(t, U, y);
 }
 
 //

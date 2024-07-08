@@ -83,7 +83,7 @@ public:
 
         auto U = Vector::create_seq(comm, 3);
         auto y = Vector::create_seq(comm, 3);
-        scheme->compute_rhs_function(0., U, y);
+        scheme->compute_rhs(0., U, y);
     }
 
     void

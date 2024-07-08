@@ -27,6 +27,17 @@ protected:
     void set_up_monitors() override;
     void post_step() override;
 
+    template <class T>
+    void
+    set_time_boundary_local(T * instance, void (T::*method)(Real, Vector &, Vector &))
+    {
+        this->compute_boundary_local_method.bind(instance, method);
+        PETSC_CHECK(DMTSSetBoundaryLocal(get_dm(),
+                                         invoke_compute_boundary_delegate,
+                                         &this->compute_boundary_local_method));
+    }
+
+private:
     /// Form the local residual `f` from the local input `x`
     ///
     /// @param time The time
@@ -34,7 +45,7 @@ protected:
     /// @param x_t Local solution time derivative
     /// @param F Local residual vector
     /// @return Error code
-    void compute_ifunction_local(Real time, const Vector & x, const Vector & x_t, Vector & F);
+    void compute_ifunction_fem(Real time, const Vector & x, const Vector & x_t, Vector & F);
 
     /// Form the Jacobian `J` from the local input `x`
     ///
@@ -45,26 +56,31 @@ protected:
     /// @param J The Jacobian
     /// @param Jp An additional approximation for the Jacobian to be used to compute the
     ///           preconditioner
-    void compute_ijacobian_local(Real time,
-                                 const Vector & x,
-                                 const Vector & x_t,
-                                 Real x_t_shift,
-                                 Matrix & J,
-                                 Matrix & Jp);
+    void compute_ijacobian_fem(Real time,
+                               const Vector & x,
+                               const Vector & x_t,
+                               Real x_t_shift,
+                               Matrix & J,
+                               Matrix & Jp);
 
-private:
     /// Insert the essential boundary values into the local vector and the time derivative vector
     ///
     /// @param time The time
     /// @param x Local solution
     /// @param x_t Local solution time derivative
-    void compute_boundary_local(Real time, Vector & x, Vector & x_t);
+    void compute_boundary_fem(Real time, Vector & x, Vector & x_t);
 
     /// Time stepping scheme
     const std::string & scheme;
+    /// Method for essential boundary data for a local implicit function evaluation.
+    Delegate<void(Real time, Vector & x, Vector & x_t)> compute_boundary_local_method;
 
 public:
     static Parameters parameters();
+
+private:
+    static ErrorCode
+    invoke_compute_boundary_delegate(DM, Real time, Vec x, Vec x_t, void * context);
 };
 
 } // namespace godzilla

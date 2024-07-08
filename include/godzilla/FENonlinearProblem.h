@@ -68,7 +68,6 @@ protected:
 
     void compute_boundary(Vector & x);
 
-    void compute_residual(const Vector & x, Vector & f);
     void compute_residual_internal(DM dm,
                                    PetscFormKey key,
                                    const IndexSet & cells,
@@ -87,7 +86,6 @@ protected:
                                               DMField coord_field,
                                               const IndexSet & facets);
 
-    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
     void compute_jacobian_internal(DM dm,
                                    PetscFormKey key,
                                    const IndexSet & cell_is,
@@ -119,6 +117,9 @@ protected:
                                               const IndexSet & facets);
 
 private:
+    void compute_residual(const Vector & x, Vector & f);
+    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
+
     enum State { INITIAL, FINAL } state;
     /// Delegate for compute_boundary
     Delegate<void(Vector &)> compute_boundary_delegate;
