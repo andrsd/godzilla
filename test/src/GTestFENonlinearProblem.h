@@ -11,7 +11,6 @@ public:
 
     PetscDS get_ds();
     void set_up_initial_guess() override;
-    void solve() override;
 
     const std::vector<BoundaryCondition *> &
     get_boundary_conditions() const

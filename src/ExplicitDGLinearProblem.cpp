@@ -60,19 +60,23 @@ ExplicitDGLinearProblem::create()
     ExplicitProblemInterface::create();
 }
 
+void
+ExplicitDGLinearProblem::run()
+{
+    CALL_STACK_MSG();
+    set_up_initial_guess();
+    on_initial();
+    lprint(9, "Solving");
+    TransientProblemInterface::solve(get_solution_vector());
+    if (converged())
+        on_final();
+}
+
 bool
 ExplicitDGLinearProblem::converged()
 {
     CALL_STACK_MSG();
-    return ExplicitProblemInterface::converged();
-}
-
-void
-ExplicitDGLinearProblem::solve()
-{
-    CALL_STACK_MSG();
-    lprint(9, "Solving");
-    ExplicitProblemInterface::solve(get_solution_vector());
+    return TransientProblemInterface::get_converged_reason() > 0;
 }
 
 void
@@ -123,6 +127,16 @@ ExplicitDGLinearProblem::post_step()
     update_aux_vector();
     compute_postprocessors();
     output(EXECUTE_ON_TIMESTEP);
+}
+
+void
+ExplicitDGLinearProblem::compute_residual(const Vector & x, Vector & f)
+{
+}
+
+void
+ExplicitDGLinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
+{
 }
 
 } // namespace godzilla

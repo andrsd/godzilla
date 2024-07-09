@@ -11,7 +11,7 @@
 
 namespace godzilla {
 
-/// PETSc non-linear problem
+/// Nonlinear problem
 ///
 class NonlinearProblem : public Problem {
 public:
@@ -23,12 +23,15 @@ public:
 
     /// Get underlying KSP
     [[nodiscard]] KrylovSolver get_ksp() const;
+
     /// Set KSP operators
     void set_ksp_operators(const Matrix & A, const Matrix & B);
+
     /// Get Jacobian matrix
     [[nodiscard]] const Matrix & get_jacobian() const;
+
     /// true if solve converged, otherwise false
-    virtual bool converged();
+    bool converged();
 
     /// Use matrix free finite difference matrix vector products to apply the Jacobian
     ///
@@ -39,69 +42,68 @@ public:
 protected:
     /// Get underlying non-linear solver
     [[nodiscard]] SNESolver get_snes() const;
+
     /// Set non-linear solver
     void set_snes(const SNESolver & snes);
+
     /// Set residual vector
     void set_residual_vector(const Vector & f);
+
     /// Set Jacobian matrix
     void set_jacobian_matrix(const Matrix & J);
+
     /// Initialize the problem
     virtual void init();
+
     /// Set up initial guess
     virtual void set_up_initial_guess();
+
     /// Allocate Jacobian/residual objects
     void allocate_objects() override;
-    /// Set up line search
-    virtual void set_up_line_search();
+
     /// Set up computation of residual and Jacobian callbacks
     virtual void set_up_callbacks();
+
     /// Set up monitors
     virtual void set_up_monitors();
+
     /// Set up solve type
     virtual void set_up_solve_type();
-    /// Set up solver parameters
-    virtual void set_up_solver_parameters();
-    /// Set the function evaluation routine
-    template <class T>
-    void
-    set_function(T * instance, void (T::*callback)(const Vector &, Vector &))
-    {
-        this->snes.set_function(this->r, instance, callback);
-    }
-    /// Set the function to compute Jacobian
-    template <class T>
-    void
-    set_jacobian(T * instance, void (T::*callback)(const Vector &, Matrix &, Matrix &))
-    {
-        this->snes.set_jacobian(this->J, this->J, instance, callback);
-    }
+
     /// SNES monitor
     void snes_monitor(Int it, Real norm);
+
     /// KSP monitor
     void ksp_monitor(Int it, Real rnorm);
-    /// Method for setting matrix properties
-    virtual void set_up_matrix_properties();
-    /// Method for creating a preconditioner
-    virtual Preconditioner create_preconditioner(PC pc);
-    /// Solve the problem
-    virtual void solve();
 
 private:
-    void set_up_preconditioning();
+    /// Set up line search
+    virtual void set_up_line_search();
+
+    /// Set up solver parameters
+    virtual void set_up_solver_parameters();
+
+    /// Method for creating a preconditioner
+    virtual Preconditioner create_preconditioner(PC pc);
+
+    /// Method for setting matrix properties
+    virtual void set_up_matrix_properties();
+
+    virtual void compute_residual(const Vector & x, Vector & f) = 0;
+    virtual void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) = 0;
 
     /// Nonlinear solver
     SNESolver snes;
     /// Linear solver
     KrylovSolver ksp;
-    /// The residual vector
+    /// Residual vector
     Vector r;
     /// Jacobian matrix
     Matrix J;
     /// Converged reason
     SNESolver::ConvergedReason converged_reason;
     /// Preconditioner
-    Preconditioner precond;
-
+    Preconditioner pc;
     /// The type of line search to be used
     std::string line_search_type;
     /// Relative convergence tolerance for the non-linear solver

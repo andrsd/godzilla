@@ -15,7 +15,7 @@ TEST_F(LinearProblemTest, solve)
     mesh->create();
     auto prob = gProblem1d(mesh);
     prob->create();
-    prob->solve();
+    prob->run();
 
     bool conv = prob->converged();
     EXPECT_EQ(conv, true);

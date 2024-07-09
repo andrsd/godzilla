@@ -343,13 +343,6 @@ TransientProblemInterface::set_converged_reason(TSConvergedReason reason)
     PETSC_CHECK(TSSetConvergedReason(this->ts, reason));
 }
 
-bool
-TransientProblemInterface::converged() const
-{
-    CALL_STACK_MSG();
-    return get_converged_reason() > 0;
-}
-
 void
 TransientProblemInterface::set_scheme(TimeScheme scheme)
 {

@@ -85,14 +85,12 @@ NonlinearProblem::create()
     init();
     allocate_objects();
     set_up_matrix_properties();
-    set_up_preconditioning();
-
+    this->pc = create_preconditioner(this->ksp.get_pc());
     set_up_solver_parameters();
     set_up_line_search();
     set_up_monitors();
     set_up_callbacks();
     set_up_solve_type();
-
     Problem::create();
 }
 
@@ -194,6 +192,8 @@ void
 NonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
+    this->snes.set_function(this->r, this, &NonlinearProblem::compute_residual);
+    this->snes.set_jacobian(this->J, this->J, this, &NonlinearProblem::compute_jacobian);
 }
 
 void
@@ -265,7 +265,9 @@ NonlinearProblem::run()
     CALL_STACK_MSG();
     set_up_initial_guess();
     on_initial();
-    solve();
+    lprint(9, "Solving");
+    this->snes.solve(get_solution_vector());
+    this->converged_reason = this->snes.get_converged_reason();
     if (converged())
         on_final();
 }
@@ -276,28 +278,11 @@ NonlinearProblem::set_up_matrix_properties()
     CALL_STACK_MSG();
 }
 
-void
-NonlinearProblem::set_up_preconditioning()
-{
-    CALL_STACK_MSG();
-    auto pc = this->ksp.get_pc();
-    this->precond = create_preconditioner(pc);
-}
-
 Preconditioner
 NonlinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
     return Preconditioner(pc);
-}
-
-void
-NonlinearProblem::solve()
-{
-    CALL_STACK_MSG();
-    lprint(9, "Solving");
-    this->snes.solve(get_solution_vector());
-    this->converged_reason = this->snes.get_converged_reason();
 }
 
 } // namespace godzilla

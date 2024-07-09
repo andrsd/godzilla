@@ -58,19 +58,23 @@ ExplicitFVLinearProblem::create()
     ExplicitProblemInterface::create();
 }
 
+void
+ExplicitFVLinearProblem::run()
+{
+    CALL_STACK_MSG();
+    set_up_initial_guess();
+    on_initial();
+    lprint(9, "Solving");
+    TransientProblemInterface::solve(get_solution_vector());
+    if (converged())
+        on_final();
+}
+
 bool
 ExplicitFVLinearProblem::converged()
 {
     CALL_STACK_MSG();
-    return ExplicitProblemInterface::converged();
-}
-
-void
-ExplicitFVLinearProblem::solve()
-{
-    CALL_STACK_MSG();
-    lprint(9, "Solving");
-    ExplicitProblemInterface::solve(get_solution_vector());
+    return TransientProblemInterface::get_converged_reason() > 0;
 }
 
 void
@@ -118,6 +122,16 @@ ExplicitFVLinearProblem::compute_rhs_local(Real time, const Vector & x, Vector &
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this));
+}
+
+void
+ExplicitFVLinearProblem::compute_residual(const Vector & x, Vector & f)
+{
+}
+
+void
+ExplicitFVLinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
+{
 }
 
 void

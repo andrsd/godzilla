@@ -20,9 +20,6 @@ public:
     void create() override;
     void run() override;
 
-    /// Solve the problem
-    void solve();
-
     /// true if solve converged, otherwise false
     bool converged();
 

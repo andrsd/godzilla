@@ -133,7 +133,7 @@ TEST_F(VTKOutputTest, output_1d_step)
 
     this->app->check_integrity();
 
-    this->prob->solve();
+    this->prob->run();
     EXPECT_EQ(this->prob->converged(), true);
     out->output_step();
 }

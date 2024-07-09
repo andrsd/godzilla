@@ -68,12 +68,6 @@ GTestFENonlinearProblem::set_up_initial_guess()
     FENonlinearProblem::set_up_initial_guess();
 }
 
-void
-GTestFENonlinearProblem::solve()
-{
-    FENonlinearProblem::solve();
-}
-
 PetscDS
 GTestFENonlinearProblem::get_ds()
 {

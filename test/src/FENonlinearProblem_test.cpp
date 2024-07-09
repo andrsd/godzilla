@@ -217,7 +217,7 @@ TEST_F(FENonlinearProblemTest, solve)
     ASSERT_EQ(ess_bcs.size(), 1);
     EXPECT_EQ(bcs[0], &bc);
 
-    this->prob->solve();
+    this->prob->run();
 
     bool conv = this->prob->converged();
     EXPECT_EQ(conv, true);

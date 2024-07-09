@@ -119,7 +119,7 @@ void
 LinearProblem::run()
 {
     CALL_STACK_MSG();
-    solve();
+    this->ks.solve(this->b, get_solution_vector());
     if (converged())
         on_final();
 }
@@ -135,13 +135,6 @@ LinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
     return Preconditioner(pc);
-}
-
-void
-LinearProblem::solve()
-{
-    CALL_STACK_MSG();
-    this->ks.solve(this->b, get_solution_vector());
 }
 
 } // namespace godzilla

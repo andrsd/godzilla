@@ -92,15 +92,19 @@ bool
 ImplicitFENonlinearProblem::converged()
 {
     CALL_STACK_MSG();
-    return TransientProblemInterface::converged();
+    return TransientProblemInterface::get_converged_reason() > 0;
 }
 
 void
-ImplicitFENonlinearProblem::solve()
+ImplicitFENonlinearProblem::run()
 {
     CALL_STACK_MSG();
+    set_up_initial_guess();
+    on_initial();
     lprint(9, "Solving");
     TransientProblemInterface::solve(get_solution_vector());
+    if (converged())
+        on_final();
 }
 
 void

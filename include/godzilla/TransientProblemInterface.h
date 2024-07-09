@@ -146,10 +146,7 @@ protected:
     void set_up_monitors();
     /// Default TS monitor
     void default_monitor(Int stepi, Real time, const Vector & x);
-    /// Check if problem converged
-    ///
-    /// @return `true` if solve converged, otherwise `false`
-    [[nodiscard]] bool converged() const;
+
     /// Solve
     void solve(Vector & x);
 

@@ -47,7 +47,7 @@ TEST(L2DiffTest, compute)
     mesh.create();
     prob.create();
 
-    prob.solve();
+    prob.run();
     prob.compute_postprocessors();
 
     Real l2_err = ps.get_value();
