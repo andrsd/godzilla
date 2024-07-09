@@ -132,20 +132,24 @@ public:
 protected:
     /// Get underlying non-linear solver
     [[nodiscard]] SNESolver get_snes() const;
+
     /// Get time
     [[nodiscard]] Real get_time() const;
+
     /// Get step number
     [[nodiscard]] Int get_step_number() const;
+
     /// Initialize
     void init();
+
     /// Create
     void create();
+
     /// Set up callbacks
     void set_up_callbacks();
+
     /// Set up monitors
     void set_up_monitors();
-    /// Default TS monitor
-    void default_monitor(Int stepi, Real time, const Vector & x);
 
     /// Solve
     void solve(Vector & x);
@@ -215,6 +219,9 @@ protected:
     virtual void compute_boundary_local(Real time, Vector & x);
 
 private:
+    /// Monitor
+    virtual void monitor(Int stepi, Real time, const Vector & x);
+
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
 

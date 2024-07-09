@@ -71,10 +71,10 @@ protected:
     virtual void set_up_solve_type();
 
     /// SNES monitor
-    void snes_monitor(Int it, Real norm);
+    virtual void snes_monitor(Int it, Real norm);
 
     /// KSP monitor
-    void ksp_monitor(Int it, Real rnorm);
+    virtual void ksp_monitor(Int it, Real rnorm);
 
 private:
     /// Set up line search

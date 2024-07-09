@@ -265,7 +265,7 @@ void
 TransientProblemInterface::set_up_monitors()
 {
     CALL_STACK_MSG();
-    monitor_set(this, &TransientProblemInterface::default_monitor);
+    monitor_set(this, &TransientProblemInterface::monitor);
 }
 
 void
@@ -285,7 +285,7 @@ TransientProblemInterface::post_step()
 }
 
 void
-TransientProblemInterface::default_monitor(Int stepi, Real time, const Vector & x)
+TransientProblemInterface::monitor(Int stepi, Real time, const Vector & x)
 {
     CALL_STACK_MSG();
     Real dt = get_time_step();
@@ -392,6 +392,7 @@ TransientProblemInterface::monitor_cancel()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSMonitorCancel(this->ts));
+    this->monitor_method.reset();
 }
 
 void

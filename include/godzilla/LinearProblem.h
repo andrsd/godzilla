@@ -52,7 +52,7 @@ private:
     virtual void compute_operators(Matrix & A, Matrix & B) = 0;
 
     /// Monitor callback
-    void monitor(Int it, Real rnorm);
+    virtual void monitor(Int it, Real rnorm);
 
     /// KSP object
     KrylovSolver ks;

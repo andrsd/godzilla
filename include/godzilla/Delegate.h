@@ -44,6 +44,12 @@ public:
         return this->fn(args...);
     }
 
+    void
+    reset()
+    {
+        this->fn = nullptr;
+    }
+
     /// Check whether delegates is callable
     operator bool() const { return static_cast<bool>(this->fn); }
 
