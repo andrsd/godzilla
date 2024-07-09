@@ -26,7 +26,7 @@ LinearProblem::parameters()
 
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
-    precond(nullptr),
+    pc(nullptr),
     lin_rel_tol(get_param<Real>("lin_rel_tol")),
     lin_abs_tol(get_param<Real>("lin_abs_tol")),
     lin_max_iter(get_param<Int>("lin_max_iter"))
@@ -50,14 +50,11 @@ LinearProblem::create()
     init();
     allocate_objects();
     set_up_matrix_properties();
-    set_up_preconditioning();
-
+    this->pc = create_preconditioner(this->ks.get_pc());
     set_up_solver_parameters();
     set_up_monitors();
     set_up_callbacks();
-
     Problem::create();
-
     this->ks.set_from_options();
 }
 
@@ -75,7 +72,6 @@ LinearProblem::allocate_objects()
 {
     CALL_STACK_MSG();
     Problem::allocate_objects();
-
     this->b = get_solution_vector().duplicate();
     this->b.set_name("rhs");
 }
@@ -134,14 +130,6 @@ LinearProblem::set_up_matrix_properties()
     CALL_STACK_MSG();
 }
 
-void
-LinearProblem::set_up_preconditioning()
-{
-    CALL_STACK_MSG();
-    auto pc = this->ks.get_pc();
-    this->precond = create_preconditioner(pc);
-}
-
 Preconditioner
 LinearProblem::create_preconditioner(PC pc)
 {
@@ -154,18 +142,6 @@ LinearProblem::solve()
 {
     CALL_STACK_MSG();
     this->ks.solve(this->b, get_solution_vector());
-}
-
-void
-LinearProblem::compute_rhs(Vector &)
-{
-    CALL_STACK_MSG();
-}
-
-void
-LinearProblem::compute_operators(Matrix &, Matrix &)
-{
-    CALL_STACK_MSG();
 }
 
 } // namespace godzilla

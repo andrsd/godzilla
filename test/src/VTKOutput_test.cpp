@@ -92,6 +92,11 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
     class TestProblem : public LinearProblem {
     public:
         explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
+        void
+        compute_rhs(Vector & b) override
+        {
+        }
+        void compute_operators(Matrix & A, Matrix & B) override {};
     };
 
     testing::internal::CaptureStderr();
