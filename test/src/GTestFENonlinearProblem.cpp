@@ -81,12 +81,6 @@ GTestFENonlinearProblem::get_ds()
 }
 
 void
-GTestFENonlinearProblem::compute_postprocessors()
-{
-    FENonlinearProblem::compute_postprocessors();
-}
-
-void
 GTestFENonlinearProblem::set_up_fields()
 {
     Int order = 1;
