@@ -20,12 +20,6 @@ public:
     MOCK_METHOD(void, rollback, ());
     MOCK_METHOD(void, view, (PetscViewer viewer));
 
-    const Vector &
-    get_vec_sol()
-    {
-        return this->vec_sol;
-    }
-
 public:
     static const std::string name;
 };
