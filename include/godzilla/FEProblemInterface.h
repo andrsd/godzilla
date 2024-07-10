@@ -270,7 +270,7 @@ protected:
     virtual void set_up_fields() = 0;
 
     /// Set up quadrature
-    void set_up_quadrature();
+    virtual void set_up_quadrature();
 
     virtual void set_up_field_null_space(DM dm);
 
