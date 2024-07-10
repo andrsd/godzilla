@@ -248,14 +248,23 @@ NonlinearProblem::set_ksp_operators(const Matrix & A, const Matrix & B)
     this->ksp.set_operators(A, B);
 }
 
+void
+NonlinearProblem::solve()
+{
+    CALL_STACK_MSG();
+    lprint(9, "Solving");
+    this->snes.solve(get_solution_vector());
+}
+
 bool
 NonlinearProblem::converged()
 {
     CALL_STACK_MSG();
-    bool conv = (this->converged_reason == SNESolver::CONVERGED_FNORM_ABS) ||
-                (this->converged_reason == SNESolver::CONVERGED_FNORM_RELATIVE) ||
-                (this->converged_reason == SNESolver::CONVERGED_SNORM_RELATIVE) ||
-                (this->converged_reason == SNESolver::CONVERGED_ITS);
+    auto reason = this->snes.get_converged_reason();
+    bool conv = (reason == SNESolver::CONVERGED_FNORM_ABS) ||
+                (reason == SNESolver::CONVERGED_FNORM_RELATIVE) ||
+                (reason == SNESolver::CONVERGED_SNORM_RELATIVE) ||
+                (reason == SNESolver::CONVERGED_ITS);
     return conv;
 }
 
@@ -265,9 +274,7 @@ NonlinearProblem::run()
     CALL_STACK_MSG();
     set_up_initial_guess();
     on_initial();
-    lprint(9, "Solving");
-    this->snes.solve(get_solution_vector());
-    this->converged_reason = this->snes.get_converged_reason();
+    solve();
     if (converged())
         on_final();
 }
