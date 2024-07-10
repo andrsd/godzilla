@@ -18,11 +18,10 @@ public:
     ~G1DTestNonlinearProblem() override;
     void create() override;
     void call_initial_guess();
-    void solve() override;
 
 protected:
-    void compute_residual(const Vector & x, Vector & f);
-    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
+    void compute_residual(const Vector & x, Vector & f) override;
+    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
     PetscSection s;
 };
 
@@ -49,20 +48,12 @@ G1DTestNonlinearProblem::create()
     DMPlexCreateSection(dm, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &this->s);
     DMSetLocalSection(dm, this->s);
     NonlinearProblem::create();
-    set_function(this, &G1DTestNonlinearProblem::compute_residual);
-    set_jacobian(this, &G1DTestNonlinearProblem::compute_jacobian);
 }
 
 void
 G1DTestNonlinearProblem::call_initial_guess()
 {
     NonlinearProblem::set_up_initial_guess();
-}
-
-void
-G1DTestNonlinearProblem::solve()
-{
-    NonlinearProblem::solve();
 }
 
 void
@@ -124,7 +115,7 @@ TEST(NonlinearProblemTest, solve)
     G1DTestNonlinearProblem prob(prob_pars);
 
     prob.create();
-    prob.solve();
+    prob.run();
 
     bool conv = prob.converged();
     EXPECT_EQ(conv, true);
@@ -147,15 +138,9 @@ TEST(NonlinearProblemTest, run)
         explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
 
         MOCK_METHOD(void, set_up_initial_guess, ());
-        MOCK_METHOD(void, solve, ());
         MOCK_METHOD(void, on_initial, ());
-        MOCK_METHOD(void, on_final, ());
-
-        bool
-        converged() override
-        {
-            return true;
-        }
+        MOCK_METHOD(void, compute_residual, (const Vector & x, Vector & f));
+        MOCK_METHOD(void, compute_jacobian, (const Vector & x, Matrix & J, Matrix & Jp));
     };
 
     TestApp app;
@@ -170,11 +155,11 @@ TEST(NonlinearProblemTest, run)
     prob_pars.set<App *>("_app") = &app;
     prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     MockNonlinearProblem prob(prob_pars);
+    prob.create();
 
     EXPECT_CALL(prob, set_up_initial_guess);
-    EXPECT_CALL(prob, solve);
     EXPECT_CALL(prob, on_initial);
-    EXPECT_CALL(prob, on_final);
+    EXPECT_CALL(prob, compute_residual);
     prob.run();
 }
 
@@ -188,6 +173,16 @@ TEST(NonlinearProblemTest, line_search_type)
         get_snes()
         {
             return NonlinearProblem::get_snes();
+        }
+
+        void
+        compute_residual(const Vector & x, Vector & F) override
+        {
+        }
+
+        void
+        compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override
+        {
         }
     };
 
@@ -224,6 +219,16 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     class MockNonlinearProblem : public NonlinearProblem {
     public:
         explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
+
+        void
+        compute_residual(const Vector & x, Vector & f) override
+        {
+        }
+
+        void
+        compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override
+        {
+        }
     };
 
     TestApp app;

@@ -12,7 +12,6 @@ public:
     G1DTestLinearProblem(const Parameters & params);
     virtual ~G1DTestLinearProblem();
     virtual void create() override;
-    virtual void solve() override;
     virtual void compute_rhs(Vector & b) override;
     virtual void compute_operators(Matrix & A, Matrix & B) override;
 
@@ -27,7 +26,6 @@ public:
     G2DTestLinearProblem(const Parameters & params);
     virtual ~G2DTestLinearProblem();
     virtual void create() override;
-    virtual void solve() override;
     virtual void compute_rhs(Vector & b) override;
     virtual void compute_operators(Matrix & A, Matrix & B) override;
 
@@ -42,7 +40,6 @@ public:
     G3DTestLinearProblem(const Parameters & params);
     virtual ~G3DTestLinearProblem();
     virtual void create() override;
-    virtual void solve() override;
     virtual void compute_rhs(Vector & b) override;
     virtual void compute_operators(Matrix & A, Matrix & B) override;
 

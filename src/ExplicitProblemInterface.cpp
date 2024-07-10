@@ -69,7 +69,7 @@ ExplicitProblemInterface::set_up_callbacks()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
-    set_rhs_function(this, &ExplicitProblemInterface::compute_rhs);
+    set_rhs_function(this, &ExplicitProblemInterface::compute_rhs_function);
 }
 
 void
@@ -122,7 +122,7 @@ ExplicitProblemInterface::create_mass_matrix_lumped()
 }
 
 void
-ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
+ExplicitProblemInterface::compute_rhs_function(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
@@ -143,6 +143,11 @@ ExplicitProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
         Vector::pointwise_mult(F, this->M_lumped_inv, F);
     this->nl_problem->restore_local_vector(loc_x);
     this->nl_problem->restore_local_vector(loc_F);
+}
+
+void
+ExplicitProblemInterface::compute_rhs_local(Real time, const Vector & x, Vector & F)
+{
 }
 
 } // namespace godzilla

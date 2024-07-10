@@ -20,12 +20,6 @@ public:
     MOCK_METHOD(void, rollback, ());
     MOCK_METHOD(void, view, (PetscViewer viewer));
 
-    const Vector &
-    get_vec_sol()
-    {
-        return this->vec_sol;
-    }
-
 public:
     static const std::string name;
 };
@@ -83,7 +77,7 @@ public:
 
         auto U = Vector::create_seq(comm, 3);
         auto y = Vector::create_seq(comm, 3);
-        scheme->compute_rhs_function(0., U, y);
+        scheme->compute_rhs(0., U, y);
     }
 
     void

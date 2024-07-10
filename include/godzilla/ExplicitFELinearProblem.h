@@ -18,8 +18,8 @@ public:
     [[nodiscard]] Real get_time() const override;
     [[nodiscard]] Int get_step_num() const override;
     void create() override;
-    bool converged() override;
-    void solve() override;
+    void run() override;
+    bool converged();
     void compute_solution_vector_local() override;
 
 protected:

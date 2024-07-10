@@ -26,6 +26,24 @@ public:
     virtual void rollback() = 0;
     virtual void view(PetscViewer viewer) = 0;
 
+    void set_status(TSStepStatus status);
+    TSStepStatus get_status() const;
+
+    Real get_time_step() const;
+    void set_time_step(Real h);
+
+    Real get_ptime() const;
+    void advance_ptime(Real h);
+
+    Real get_ptime_prev() const;
+
+    Real get_max_reject() const;
+
+    Int get_steps() const;
+
+    const Vector & get_solution_vector() const;
+    Vector & get_solution_vector();
+
     [[nodiscard]] const std::vector<Vector> & get_stage_vectors() const;
     std::vector<Vector> & get_stage_vectors();
 
@@ -52,9 +70,19 @@ public:
     /// @param t Current time
     /// @param U State vector
     /// @param y Right-hand side
-    void compute_rhs_function(Real t, const Vector & U, Vector & y);
+    void compute_rhs(Real t, const Vector & U, Vector & y);
 
 protected:
+    TS get_ts();
+
+    TimeStepAdapt & get_adapt();
+
+    TSConvergedReason get_reason() const;
+    void set_reason(TSConvergedReason reason);
+
+    void inc_reject();
+
+private:
     /// PETSc TS object
     TS ts;
     /// Transient problem

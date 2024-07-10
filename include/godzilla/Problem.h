@@ -44,15 +44,20 @@ public:
 
     /// Build the problem to solve
     void create() override;
+
     /// Run the problem
     virtual void run() = 0;
+
     /// Provide DM for this problem
     [[nodiscard]] DM get_dm() const;
+
     /// Return solution vector
     [[nodiscard]] const Vector & get_solution_vector() const;
     Vector & get_solution_vector();
+
     /// Get mesh this problem is using
     [[nodiscard]] virtual Mesh * get_mesh() const;
+
     /// Get problem spatial dimension
     [[nodiscard]] virtual Int get_dimension() const;
 
@@ -74,36 +79,36 @@ public:
     /// Add a function object
     ///
     /// @param fn Function object to add
-    virtual void add_function(Function * fn);
+    void add_function(Function * fn);
 
     /// Add and output object
     ///
     /// @param output Output object to add
-    virtual void add_output(Output * output);
+    void add_output(Output * output);
 
     /// Add a postprocessor object
     ///
     /// @param pp Postprocessor object to add
-    virtual void add_postprocessor(Postprocessor * pp);
+    void add_postprocessor(Postprocessor * pp);
 
     /// Get postprocessor by name
     ///
     /// @param name The name of the postprocessor
     /// @return Pointer to the postprocessor with name 'name' if it exists, otherwise `nullptr`
-    [[nodiscard]] virtual Postprocessor * get_postprocessor(const std::string & name) const;
+    [[nodiscard]] Postprocessor * get_postprocessor(const std::string & name) const;
 
     /// Get postprocessor names
     ///
     /// @return List of postprocessor names
-    [[nodiscard]] virtual const std::vector<std::string> & get_postprocessor_names() const;
+    [[nodiscard]] const std::vector<std::string> & get_postprocessor_names() const;
 
     /// Compute all postprocessors
-    virtual void compute_postprocessors();
+    void compute_postprocessors();
 
     /// Output
     ///
     /// @param mask Bit mask for an output event, see `Output` for valid options.
-    virtual void output(ExecuteOnFlag flag);
+    void output(ExecuteOnFlag flag);
 
     /// Gets the type of vector created with `create_local_vector` and `create_global_vector`
     ///
@@ -219,12 +224,16 @@ public:
 protected:
     /// Set vector/matrix types
     virtual void set_up_types();
+
     /// Allocate objects
     virtual void allocate_objects();
+
     /// Called before solving starts
     virtual void on_initial();
+
     /// Called after solve has successfully finished
     virtual void on_final();
+
     /// Set solution vector
     void set_solution_vector(const Vector & x);
 
@@ -253,8 +262,7 @@ private:
     /// List of postprocessor objects
     std::map<std::string, Postprocessor *> pps;
 
-    /// List of
-    /// postprocessor names
+    /// List of postprocessor names
     std::vector<std::string> pps_names;
 
 public:

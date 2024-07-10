@@ -71,10 +71,10 @@ TEST(TimeStepAdapt, test)
     EXPECT_DOUBLE_EQ(candidates[1].cost, 2.);
 
     auto X = prob.get_solution();
-    auto accept_stage = adapt.check_stage(ts, 0., X);
+    auto accept_stage = adapt.check_stage(0., X);
     EXPECT_TRUE(accept_stage);
 
-    auto [next_sc, next_h, accept] = adapt.choose(ts, 0.5);
+    auto [next_sc, next_h, accept] = adapt.choose(0.5);
     EXPECT_EQ(next_sc, 0);
     EXPECT_DOUBLE_EQ(next_h, 0.5);
     EXPECT_TRUE(accept);

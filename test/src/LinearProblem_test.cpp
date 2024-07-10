@@ -15,7 +15,7 @@ TEST_F(LinearProblemTest, solve)
     mesh->create();
     auto prob = gProblem1d(mesh);
     prob->create();
-    prob->solve();
+    prob->run();
 
     bool conv = prob->converged();
     EXPECT_EQ(conv, true);
@@ -42,14 +42,8 @@ TEST_F(LinearProblemTest, run)
     public:
         explicit MockLinearProblem(const Parameters & params) : LinearProblem(params) {}
 
-        MOCK_METHOD(void, solve, ());
-        MOCK_METHOD(void, on_final, ());
-
-        bool
-        converged() override
-        {
-            return true;
-        }
+        MOCK_METHOD(void, compute_rhs, (Vector & b));
+        MOCK_METHOD(void, compute_operators, (Matrix & A, Matrix & B));
     };
 
     auto mesh = gMesh1d();
@@ -60,14 +54,10 @@ TEST_F(LinearProblemTest, run)
     prob_pars.set<MeshObject *>("_mesh_obj") = mesh;
     MockLinearProblem prob(prob_pars);
 
-    EXPECT_CALL(prob, solve);
-    EXPECT_CALL(prob, on_final);
+    prob.create();
+    EXPECT_CALL(prob, compute_rhs);
+    EXPECT_CALL(prob, compute_operators);
     prob.run();
-
-    Vector b;
-    prob.compute_rhs(b);
-    Matrix A;
-    prob.compute_operators(A, A);
 }
 
 // 1D
@@ -88,12 +78,6 @@ G1DTestLinearProblem::create()
     this->s = Section::create(get_dm(), nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
     set_local_section(this->s);
     LinearProblem::create();
-}
-
-void
-G1DTestLinearProblem::solve()
-{
-    LinearProblem::solve();
 }
 
 void
@@ -133,12 +117,6 @@ G2DTestLinearProblem::create()
 }
 
 void
-G2DTestLinearProblem::solve()
-{
-    LinearProblem::solve();
-}
-
-void
 G2DTestLinearProblem::compute_rhs(Vector & b)
 {
     b.set_values({ 0, 1, 2, 3 }, { 2, 3, 5, 8 });
@@ -171,12 +149,6 @@ G3DTestLinearProblem::create()
     this->s = Section::create(get_dm(), nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr);
     set_local_section(this->s);
     LinearProblem::create();
-}
-
-void
-G3DTestLinearProblem::solve()
-{
-    LinearProblem::solve();
 }
 
 void

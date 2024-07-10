@@ -11,53 +11,55 @@
 
 namespace godzilla {
 
-/// PETSc Linear problem
+/// Linear problem
 ///
 class LinearProblem : public Problem {
 public:
     explicit LinearProblem(const Parameters & parameters);
     ~LinearProblem() override;
-
     void create() override;
     void run() override;
 
     /// true if solve converged, otherwise false
-    virtual bool converged();
-    /// Method to compute right-hand side. Called from the PETsc callback
-    virtual void compute_rhs(Vector & b);
-    /// Method to compute operators. Called from the PETsc callback
-    virtual void compute_operators(Matrix & A, Matrix & B);
-    /// Monitor callback
-    void monitor(Int it, Real rnorm);
-
-protected:
-    /// Initialize the problem
-    virtual void init();
-    /// Allocate Jacobian/residual objects
-    void allocate_objects() override;
-    /// Setup computation of residual and Jacobian callbacks
-    virtual void set_up_callbacks();
-    /// Setup monitors
-    virtual void set_up_monitors();
-    /// Setup solver parameters
-    virtual void set_up_solver_parameters();
-    /// Method for setting matrix properties
-    virtual void set_up_matrix_properties();
-    /// Method for creating a preconditioner
-    virtual Preconditioner create_preconditioner(PC pc);
-    /// Solve the problem
-    virtual void solve();
+    bool converged();
 
 private:
-    void set_up_preconditioning();
+    /// Initialize the problem
+    virtual void init();
+
+    /// Allocate Jacobian/residual objects
+    void allocate_objects() override;
+
+    /// Setup computation of residual and Jacobian callbacks
+    virtual void set_up_callbacks();
+
+    /// Setup monitors
+    virtual void set_up_monitors();
+
+    /// Setup solver parameters
+    virtual void set_up_solver_parameters();
+
+    /// Method for setting matrix properties
+    virtual void set_up_matrix_properties();
+
+    /// Method for creating a preconditioner
+    virtual Preconditioner create_preconditioner(PC pc);
+
+    /// Method to compute right-hand side
+    virtual void compute_rhs(Vector & b) = 0;
+
+    /// Method to compute operators
+    virtual void compute_operators(Matrix & A, Matrix & B) = 0;
+
+    /// Monitor callback
+    virtual void monitor(Int it, Real rnorm);
 
     /// KSP object
     KrylovSolver ks;
     /// The right-hand side vector
     Vector b;
     /// Preconditioner
-    Preconditioner precond;
-
+    Preconditioner pc;
     /// Relative convergence tolerance for the linear solver
     Real lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver

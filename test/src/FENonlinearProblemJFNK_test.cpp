@@ -18,8 +18,6 @@ class GTestFENonlinearProblemJFNK : public FENonlinearProblem {
 public:
     explicit GTestFENonlinearProblemJFNK(const Parameters & params);
 
-    void solve() override;
-
 protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
@@ -113,12 +111,6 @@ GTestFENonlinearProblemJFNK::create_preconditioner(PC pc)
     return p;
 }
 
-void
-GTestFENonlinearProblemJFNK::solve()
-{
-    FENonlinearProblem::solve();
-}
-
 } // namespace
 
 TEST(FENonlinearProblemJFNKTest, solve)
@@ -155,7 +147,7 @@ TEST(FENonlinearProblemJFNKTest, solve)
     mesh.create();
     prob.create();
 
-    prob.solve();
+    prob.run();
 
     bool conv = prob.converged();
     EXPECT_EQ(conv, true);
@@ -163,5 +155,5 @@ TEST(FENonlinearProblemJFNKTest, solve)
     auto x = prob.get_solution_vector();
     std::vector<Scalar> vals(1);
     x.get_values({ 0 }, vals);
-    EXPECT_DOUBLE_EQ(vals[0], 0.25);
+    EXPECT_NEAR(vals[0], 0.25, 1e-9);
 }

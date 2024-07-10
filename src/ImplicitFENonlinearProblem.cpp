@@ -14,6 +14,23 @@
 
 namespace godzilla {
 
+ErrorCode
+ImplicitFENonlinearProblem::invoke_compute_boundary_delegate(DM,
+                                                             Real time,
+                                                             Vec x,
+                                                             Vec x_t,
+                                                             void * context)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<Delegate<void(Real time, Vector & x, Vector & x_t)> *>(context);
+    Vector vec_x(x);
+    Vector vec_x_t(x_t);
+    method->invoke(time, vec_x, vec_x_t);
+    return 0;
+}
+
+//
+
 Parameters
 ImplicitFENonlinearProblem::parameters()
 {
@@ -75,15 +92,19 @@ bool
 ImplicitFENonlinearProblem::converged()
 {
     CALL_STACK_MSG();
-    return TransientProblemInterface::converged();
+    return TransientProblemInterface::get_converged_reason() > 0;
 }
 
 void
-ImplicitFENonlinearProblem::solve()
+ImplicitFENonlinearProblem::run()
 {
     CALL_STACK_MSG();
+    set_up_initial_guess();
+    on_initial();
     lprint(9, "Solving");
     TransientProblemInterface::solve(get_solution_vector());
+    if (converged())
+        on_final();
 }
 
 void
@@ -91,9 +112,9 @@ ImplicitFENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::set_up_callbacks();
-    set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary_local);
-    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction_local);
-    set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian_local);
+    set_time_boundary_local(this, &ImplicitFENonlinearProblem::compute_boundary_fem);
+    set_ifunction_local(this, &ImplicitFENonlinearProblem::compute_ifunction_fem);
+    set_ijacobian_local(this, &ImplicitFENonlinearProblem::compute_ijacobian_fem);
 }
 
 void
@@ -120,14 +141,14 @@ ImplicitFENonlinearProblem::compute_solution_vector_local()
     CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
-    TransientProblemInterface::compute_boundary_local(get_time(), loc_sln);
+    compute_boundary_local(get_time(), loc_sln);
 }
 
 void
-ImplicitFENonlinearProblem::compute_ifunction_local(Real time,
-                                                    const Vector & x,
-                                                    const Vector & x_t,
-                                                    Vector & F)
+ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
+                                                  const Vector & x,
+                                                  const Vector & x_t,
+                                                  Vector & F)
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
     CALL_STACK_MSG();
@@ -151,12 +172,12 @@ ImplicitFENonlinearProblem::compute_ifunction_local(Real time,
 }
 
 void
-ImplicitFENonlinearProblem::compute_ijacobian_local(Real time,
-                                                    const Vector & x,
-                                                    const Vector & x_t,
-                                                    Real x_t_shift,
-                                                    Matrix & J,
-                                                    Matrix & Jp)
+ImplicitFENonlinearProblem::compute_ijacobian_fem(Real time,
+                                                  const Vector & x,
+                                                  const Vector & x_t,
+                                                  Real x_t_shift,
+                                                  Matrix & J,
+                                                  Matrix & Jp)
 {
     // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
     // DMPlexTSComputeIJacobianFEM()
@@ -183,10 +204,11 @@ ImplicitFENonlinearProblem::compute_ijacobian_local(Real time,
 }
 
 void
-ImplicitFENonlinearProblem::compute_boundary_local(Real time, Vector & x, Vector & x_t)
+ImplicitFENonlinearProblem::compute_boundary_fem(Real time, Vector & x, Vector & x_t)
 {
     CALL_STACK_MSG();
-    TransientProblemInterface::compute_boundary_local(time, x, x_t);
+    auto dm = get_dm();
+    PETSC_CHECK(DMPlexTSComputeBoundary(dm, time, x, x_t, this));
 }
 
 void

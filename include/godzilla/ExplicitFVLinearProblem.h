@@ -17,8 +17,8 @@ public:
     explicit ExplicitFVLinearProblem(const Parameters & params);
 
     void create() override;
-    bool converged() override;
-    void solve() override;
+    void run() override;
+    bool converged();
     [[nodiscard]] Real get_time() const override;
     [[nodiscard]] Int get_step_num() const override;
     void compute_solution_vector_local() override;
@@ -33,6 +33,8 @@ protected:
 
 private:
     void compute_rhs_local(Real time, const Vector & x, Vector & F) override;
+    void compute_residual(const Vector & x, Vector & f) final;
+    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) final;
 
 public:
     static Parameters parameters();

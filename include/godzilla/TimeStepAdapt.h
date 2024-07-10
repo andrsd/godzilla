@@ -21,7 +21,7 @@ public:
     };
 
     TimeStepAdapt();
-    explicit TimeStepAdapt(TSAdapt tsadapt);
+    TimeStepAdapt(TS ts, TSAdapt tsadapt);
 
     /// Add a candidate scheme for the adaptive controller to select from
     ///
@@ -54,7 +54,7 @@ public:
     /// @param t Current simulation time
     /// @param Y Current solution vector
     /// @return `true` to accept the stage, `false` to reject
-    bool check_stage(TS ts, Real t, const Vector & Y) const;
+    bool check_stage(Real t, const Vector & Y) const;
 
     /// Choose which method and step size to use for the next step
     ///
@@ -65,7 +65,7 @@ public:
     /// - next_h: step size to use for the next step
     /// - accept: `true` to accept the current step, `false` to repeat the current step with the
     ///   new step size
-    std::tuple<Int, Real, bool> choose(TS ts, Real h);
+    std::tuple<Int, Real, bool> choose(Real h);
 
     /// Gets the admissible decrease/increase factor in step size in the time step adapter
     ///
@@ -152,6 +152,7 @@ public:
     void set_type(Type type);
 
 private:
+    TS ts;
     TSAdapt tsadapt;
 
 public:

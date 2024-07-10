@@ -10,7 +10,7 @@ namespace godzilla {
 
 TimeStepAdapt::TimeStepAdapt() : tsadapt(nullptr) {}
 
-TimeStepAdapt::TimeStepAdapt(TSAdapt tsadapt) : tsadapt(tsadapt) {}
+TimeStepAdapt::TimeStepAdapt(TS ts, TSAdapt tsadapt) : ts(ts), tsadapt(tsadapt) {}
 
 void
 TimeStepAdapt::add_candidate(const std::string & name,
@@ -58,22 +58,22 @@ TimeStepAdapt::get_candidates() const
 }
 
 bool
-TimeStepAdapt::check_stage(TS ts, Real t, const Vector & Y) const
+TimeStepAdapt::check_stage(Real t, const Vector & Y) const
 {
     CALL_STACK_MSG();
     PetscBool accept;
-    PETSC_CHECK(TSAdaptCheckStage(this->tsadapt, ts, t, Y, &accept));
+    PETSC_CHECK(TSAdaptCheckStage(this->tsadapt, this->ts, t, Y, &accept));
     return accept == PETSC_TRUE;
 }
 
 std::tuple<Int, Real, bool>
-TimeStepAdapt::choose(TS ts, Real h)
+TimeStepAdapt::choose(Real h)
 {
     CALL_STACK_MSG();
     Int next_sc;
     Real next_h;
     PetscBool accept;
-    PETSC_CHECK(TSAdaptChoose(this->tsadapt, ts, h, &next_sc, &next_h, &accept));
+    PETSC_CHECK(TSAdaptChoose(this->tsadapt, this->ts, h, &next_sc, &next_h, &accept));
     return { next_sc, next_h, accept == PETSC_TRUE };
 }
 
@@ -213,7 +213,7 @@ TimeStepAdapt::from_ts(TS ts)
     CALL_STACK_MSG();
     TSAdapt adapt;
     PETSC_CHECK(TSGetAdapt(ts, &adapt));
-    return TimeStepAdapt(adapt);
+    return TimeStepAdapt(ts, adapt);
 }
 
 } // namespace godzilla

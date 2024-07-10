@@ -10,9 +10,7 @@ public:
     explicit GTestFENonlinearProblem(const Parameters & params);
 
     PetscDS get_ds();
-    void compute_postprocessors() override;
     void set_up_initial_guess() override;
-    void solve() override;
 
     const std::vector<BoundaryCondition *> &
     get_boundary_conditions() const

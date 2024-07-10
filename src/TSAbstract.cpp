@@ -32,6 +32,83 @@ TSAbstract::TSAbstract(TS ts) :
         throw InternalError("TS context is nullptr");
 }
 
+void
+TSAbstract::set_status(TSStepStatus status)
+{
+    CALL_STACK_MSG();
+    this->status = status;
+}
+
+TSStepStatus
+TSAbstract::get_status() const
+{
+    CALL_STACK_MSG();
+    return this->status;
+}
+
+Real
+TSAbstract::get_time_step() const
+{
+    CALL_STACK_MSG();
+    return this->time_step;
+}
+
+void
+TSAbstract::set_time_step(Real h)
+{
+    CALL_STACK_MSG();
+    this->time_step = h;
+}
+
+Real
+TSAbstract::get_ptime() const
+{
+    CALL_STACK_MSG();
+    return this->ptime;
+}
+
+void
+TSAbstract::advance_ptime(Real h)
+{
+    CALL_STACK_MSG();
+    this->ptime += h;
+}
+
+Real
+TSAbstract::get_ptime_prev() const
+{
+    CALL_STACK_MSG();
+    return this->ptime_prev;
+}
+
+Real
+TSAbstract::get_max_reject() const
+{
+    CALL_STACK_MSG();
+    return this->max_reject;
+}
+
+Int
+TSAbstract::get_steps() const
+{
+    CALL_STACK_MSG();
+    return this->steps;
+}
+
+const Vector &
+TSAbstract::get_solution_vector() const
+{
+    CALL_STACK_MSG();
+    return this->vec_sol;
+}
+
+Vector &
+TSAbstract::get_solution_vector()
+{
+    CALL_STACK_MSG();
+    return this->vec_sol;
+}
+
 const std::vector<Vector> &
 TSAbstract::get_stage_vectors() const
 {
@@ -75,10 +152,45 @@ TSAbstract::set_cfl_time_local(Real cfl)
 }
 
 void
-TSAbstract::compute_rhs_function(Real t, const Vector & U, Vector & y)
+TSAbstract::compute_rhs(Real t, const Vector & U, Vector & y)
 {
     CALL_STACK_MSG();
-    this->tpi->compute_rhs_function(t, U, y);
+    this->tpi->compute_rhs(t, U, y);
+}
+
+TS
+TSAbstract::get_ts()
+{
+    CALL_STACK_MSG();
+    return this->ts;
+}
+
+TimeStepAdapt &
+TSAbstract::get_adapt()
+{
+    CALL_STACK_MSG();
+    return this->adapt;
+}
+
+TSConvergedReason
+TSAbstract::get_reason() const
+{
+    CALL_STACK_MSG();
+    return this->reason;
+}
+
+void
+TSAbstract::set_reason(TSConvergedReason reason)
+{
+    CALL_STACK_MSG();
+    this->reason = reason;
+}
+
+void
+TSAbstract::inc_reject()
+{
+    CALL_STACK_MSG();
+    this->reject++;
 }
 
 //
