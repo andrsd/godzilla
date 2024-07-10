@@ -66,8 +66,6 @@ protected:
                                            &this->compute_jacobian_delegate));
     }
 
-    void compute_boundary(Vector & x);
-
     void compute_residual_internal(DM dm,
                                    PetscFormKey key,
                                    const IndexSet & cells,
@@ -119,6 +117,7 @@ protected:
 private:
     void compute_residual(const Vector & x, Vector & f) override;
     void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
+    virtual void compute_boundary(Vector & x);
 
     enum State { INITIAL, FINAL } state;
     /// Delegate for compute_boundary

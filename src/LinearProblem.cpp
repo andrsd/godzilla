@@ -108,6 +108,14 @@ LinearProblem::monitor(Int it, Real rnorm)
     lprint(8, "{} Linear residual: {:e}", it, rnorm);
 }
 
+void
+LinearProblem::solve()
+{
+    CALL_STACK_MSG();
+    lprint(9, "Solving");
+    this->ks.solve(this->b, get_solution_vector());
+}
+
 bool
 LinearProblem::converged()
 {
@@ -119,7 +127,7 @@ void
 LinearProblem::run()
 {
     CALL_STACK_MSG();
-    this->ks.solve(this->b, get_solution_vector());
+    solve();
     if (converged())
         on_final();
 }

@@ -54,6 +54,8 @@ private:
     /// Monitor callback
     virtual void monitor(Int it, Real rnorm);
 
+    void solve();
+
     /// KSP object
     KrylovSolver ks;
     /// The right-hand side vector

@@ -76,6 +76,8 @@ protected:
     /// KSP monitor
     virtual void ksp_monitor(Int it, Real rnorm);
 
+    void solve();
+
 private:
     /// Set up line search
     virtual void set_up_line_search();
