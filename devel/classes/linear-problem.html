@@ -92,9 +92,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem6createEv"><code class="docutils literal notranslate"><span class="pre">LinearProblem::create()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem3runEv"><code class="docutils literal notranslate"><span class="pre">LinearProblem::run()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem9convergedEv"><code class="docutils literal notranslate"><span class="pre">LinearProblem::converged()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem11compute_rhsER6Vector"><code class="docutils literal notranslate"><span class="pre">LinearProblem::compute_rhs()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix"><code class="docutils literal notranslate"><span class="pre">LinearProblem::compute_operators()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem7monitorE3Int4Real"><code class="docutils literal notranslate"><span class="pre">LinearProblem::monitor()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -145,7 +142,7 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblemE">
 <span id="_CPPv3N8godzilla13LinearProblemE"></span><span id="_CPPv2N8godzilla13LinearProblemE"></span><span id="godzilla::LinearProblem"></span><span class="target" id="classgodzilla_1_1_linear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="problem.html#_CPPv4N8godzilla7ProblemE" title="godzilla::Problem"><span class="n"><span class="pre">Problem</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblemE" title="Link to this definition"></a><br /></dt>
-<dd><p>PETSc Linear problem. </p>
+<dd><p>Linear problem. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
@@ -162,26 +159,8 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblem9convergedEv">
-<span id="_CPPv3N8godzilla13LinearProblem9convergedEv"></span><span id="_CPPv2N8godzilla13LinearProblem9convergedEv"></span><span id="godzilla::LinearProblem::converged"></span><span class="target" id="classgodzilla_1_1_linear_problem_1aa61f889d53332d910b7ee6b578140352"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">converged</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem9convergedEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla13LinearProblem9convergedEv"></span><span id="_CPPv2N8godzilla13LinearProblem9convergedEv"></span><span id="godzilla::LinearProblem::converged"></span><span class="target" id="classgodzilla_1_1_linear_problem_1aa61f889d53332d910b7ee6b578140352"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">converged</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem9convergedEv" title="Link to this definition"></a><br /></dt>
 <dd><p>true if solve converged, otherwise false </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblem11compute_rhsER6Vector">
-<span id="_CPPv3N8godzilla13LinearProblem11compute_rhsER6Vector"></span><span id="_CPPv2N8godzilla13LinearProblem11compute_rhsER6Vector"></span><span id="godzilla::LinearProblem::compute_rhs__VectorR"></span><span class="target" id="classgodzilla_1_1_linear_problem_1a10ac190f4fca51458a0ac2c5183ba3fc"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_rhs</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem11compute_rhsER6Vector" title="Link to this definition"></a><br /></dt>
-<dd><p>Method to compute right-hand side. Called from the PETsc callback. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix">
-<span id="_CPPv3N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix"></span><span id="_CPPv2N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix"></span><span id="godzilla::LinearProblem::compute_operators__MatrixR.MatrixR"></span><span class="target" id="classgodzilla_1_1_linear_problem_1a77d052df799fa01695d3f54cd53dc794"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compute_operators</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">A</span></span>, <span class="n"><span class="pre">Matrix</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">B</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem17compute_operatorsER6MatrixR6Matrix" title="Link to this definition"></a><br /></dt>
-<dd><p>Method to compute operators. Called from the PETsc callback. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblem7monitorE3Int4Real">
-<span id="_CPPv3N8godzilla13LinearProblem7monitorE3Int4Real"></span><span id="_CPPv2N8godzilla13LinearProblem7monitorE3Int4Real"></span><span id="godzilla::LinearProblem::monitor__Int.Real"></span><span class="target" id="classgodzilla_1_1_linear_problem_1ad147eb8444f89385f431ae256674b641"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">monitor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">it</span></span>, <span class="n"><span class="pre">Real</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rnorm</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem7monitorE3Int4Real" title="Link to this definition"></a><br /></dt>
-<dd><p>Monitor callback. </p>
 </dd></dl>
 
 </div>
