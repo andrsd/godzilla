@@ -314,8 +314,17 @@ public:
     /// Compute transpose
     ///
     /// @return Transposed matrix
-    DenseMatrix<Real, COLS, ROWS>
+    [[deprecated("Use transpose() instead")]] DenseMatrix<Real, COLS, ROWS>
     trans() const
+    {
+        return transpose();
+    }
+
+    /// Compute transpose
+    ///
+    /// @return Transposed matrix
+    DenseMatrix<Real, COLS, ROWS>
+    transpose() const
     {
         DenseMatrix<Real, COLS, ROWS> tr;
         for (Int i = 0; i < ROWS; i++)
@@ -323,7 +332,6 @@ public:
                 tr(j, i) = get(i, j);
         return tr;
     }
-
     /// Get diagonal of the matrix as a DenseVector
     ///
     /// @return Matrix diagonal as a vector

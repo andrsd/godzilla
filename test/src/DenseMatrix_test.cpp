@@ -480,7 +480,7 @@ TEST(DenseMatrixTest, transpose3)
     m.set_row(0, { 2, -3, 4 });
     m.set_row(1, { -5, 6, -7 });
     m.set_row(2, { 8, -1, -2 });
-    auto tr = m.trans();
+    auto tr = m.transpose();
     EXPECT_EQ(tr(0, 0), 2.);
     EXPECT_EQ(tr(0, 1), -5.);
     EXPECT_EQ(tr(0, 2), 8.);
