@@ -12,7 +12,7 @@ TEST(FEShapeFns, grad_shape_egde2)
     Real volume = fe::volume<EDGE2>(coords);
     auto grads = fe::grad_shape<EDGE2, 1>(coords, volume);
     EXPECT_DOUBLE_EQ(grads(0, 0), -0.5);
-    EXPECT_DOUBLE_EQ(grads(1, 0), 0.5);
+    EXPECT_DOUBLE_EQ(grads(0, 1), 0.5);
 }
 
 TEST(FEShapeFns, grad_shape_tri3)
@@ -24,11 +24,11 @@ TEST(FEShapeFns, grad_shape_tri3)
     Real volume = fe::volume<TRI3>(coords);
     auto grads = fe::grad_shape<TRI3, 2>(coords, volume);
     EXPECT_DOUBLE_EQ(grads(0, 0), -1);
-    EXPECT_DOUBLE_EQ(grads(0, 1), -1);
-    EXPECT_DOUBLE_EQ(grads(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grads(1, 0), -1);
+    EXPECT_DOUBLE_EQ(grads(0, 1), 1);
     EXPECT_DOUBLE_EQ(grads(1, 1), 0);
-    EXPECT_DOUBLE_EQ(grads(2, 0), 0);
-    EXPECT_DOUBLE_EQ(grads(2, 1), 1);
+    EXPECT_DOUBLE_EQ(grads(0, 2), 0);
+    EXPECT_DOUBLE_EQ(grads(1, 2), 1);
 }
 
 TEST(FEShapeFns, calc_grad_shape_2d)
@@ -53,17 +53,17 @@ TEST(FEShapeFns, calc_grad_shape_2d)
     auto grad_sh = fe::calc_grad_shape<ELEM_TYPE, DIM>(coords, connect, volumes);
 
     EXPECT_DOUBLE_EQ(grad_sh(0)(0, 0), -1);
-    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 1), -1);
-    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 0), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 1), 1);
     EXPECT_DOUBLE_EQ(grad_sh(0)(1, 1), 0);
-    EXPECT_DOUBLE_EQ(grad_sh(0)(2, 0), 0);
-    EXPECT_DOUBLE_EQ(grad_sh(0)(2, 1), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 2), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 2), 1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(0, 0), 0);
-    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 1), -1);
-    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 0), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 1), 1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(1, 1), 1);
-    EXPECT_DOUBLE_EQ(grad_sh(1)(2, 0), -1);
-    EXPECT_DOUBLE_EQ(grad_sh(1)(2, 1), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 2), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 2), 0);
 
     grad_sh.destroy();
     volumes.destroy();
@@ -87,17 +87,17 @@ TEST(FEShapeFns, calc_grad_shape_2d_petsc)
     auto grad_sh = fe::calc_grad_shape<ELEM_TYPE, DIM>(*mesh, volumes);
 
     EXPECT_DOUBLE_EQ(grad_sh(0)(0, 0), -1);
-    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 1), -1);
-    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 0), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 1), 1);
     EXPECT_DOUBLE_EQ(grad_sh(0)(1, 1), 0);
-    EXPECT_DOUBLE_EQ(grad_sh(0)(2, 0), 0);
-    EXPECT_DOUBLE_EQ(grad_sh(0)(2, 1), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(0, 2), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(0)(1, 2), 1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(0, 0), 0);
-    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 1), -1);
-    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 0), 1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 0), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 1), 1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(1, 1), 1);
-    EXPECT_DOUBLE_EQ(grad_sh(1)(2, 0), -1);
-    EXPECT_DOUBLE_EQ(grad_sh(1)(2, 1), 0);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(0, 2), -1);
+    EXPECT_DOUBLE_EQ(grad_sh(1)(1, 2), 0);
 
     grad_sh.destroy();
     volumes.destroy();

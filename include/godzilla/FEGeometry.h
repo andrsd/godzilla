@@ -83,7 +83,7 @@ common_elements_by_node(const UnstructuredMesh & mesh)
 
 template <ElementType ELEM_TYPE, Int DIM>
 inline DenseVector<Real, DIM>
-normal(Real volume, Real edge_len, const DenseMatrix<Real, 1, DIM> & grad)
+normal(Real volume, Real edge_len, const DenseVector<Real, DIM> & grad)
 {
     CALL_STACK_MSG();
     error("Computation of a normal for element '{}' in {} dimensions is not implemented.",
@@ -93,24 +93,24 @@ normal(Real volume, Real edge_len, const DenseMatrix<Real, 1, DIM> & grad)
 
 template <>
 inline DenseVector<Real, 1>
-normal<EDGE2, 1>(Real volume, Real edge_len, const DenseMatrix<Real, 1, 1> & grad)
+normal<EDGE2, 1>(Real volume, Real edge_len, const DenseVector<Real, 1> & grad)
 {
-    return DenseVector<Real, 1>({ -volume * grad });
+    return -volume * grad;
 }
 
 template <>
 inline DenseVector<Real, 2>
-normal<TRI3, 2>(Real volume, Real edge_len, const DenseMatrix<Real, 1, 2> & grad)
+normal<TRI3, 2>(Real volume, Real edge_len, const DenseVector<Real, 2> & grad)
 {
     auto c = -2. * volume / edge_len;
-    return DenseVector<Real, 2>({ c * grad(0, 0), c * grad(0, 1) });
+    return c * grad;
 }
 
 // Element lengths
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 inline Real
-element_length(const DenseMatrix<Real, N_ELEM_NODES, DIM> & grad_phi)
+element_length(const DenseMatrix<Real, DIM, N_ELEM_NODES> & grad_phi)
 {
     CALL_STACK_MSG();
     error("Computation of a element length for '{}' in {} dimensions is not implemented.",
@@ -120,20 +120,20 @@ element_length(const DenseMatrix<Real, N_ELEM_NODES, DIM> & grad_phi)
 
 template <>
 inline Real
-element_length<EDGE2, 1, 2>(const DenseMatrix<Real, 2, 1> & grad_phi)
+element_length<EDGE2, 1, 2>(const DenseMatrix<Real, 1, 2> & grad_phi)
 {
     auto h1 = 1. / std::abs(grad_phi(0, 0));
-    auto h2 = 1. / std::abs(grad_phi(1, 0));
+    auto h2 = 1. / std::abs(grad_phi(0, 1));
     return std::min({ h1, h2 });
 }
 
 template <>
 inline Real
-element_length<TRI3, 2, 3>(const DenseMatrix<Real, 3, 2> & grad_phi)
+element_length<TRI3, 2, 3>(const DenseMatrix<Real, 2, 3> & grad_phi)
 {
     Real h[3];
     for (int i = 0; i < 3; i++) {
-        DenseVector<Real, 2> v(transpose(grad_phi.row(i)));
+        DenseVector<Real, 2> v(grad_phi.column(i));
         h[i] = 1. / v.magnitude();
     }
     return std::min({ h[0], h[1], h[2] });
@@ -142,7 +142,7 @@ element_length<TRI3, 2, 3>(const DenseMatrix<Real, 3, 2> & grad_phi)
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 Array1D<Real>
 calc_element_length(const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
-                    const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> & grad_phi)
+                    const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_phi)
 {
     CALL_STACK_MSG();
     Array1D<Real> elem_lengths(connect.get_size());

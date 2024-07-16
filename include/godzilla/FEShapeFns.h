@@ -6,7 +6,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
 #include "godzilla/Array1D.h"
-#include "godzilla/Array2D.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
 
@@ -17,14 +17,14 @@ namespace fe {
 /// Compute gradients of shape functions
 ///
 /// @tparam ELEM_TYPE Element type
-/// @tparam DIM Spatial dimension
-/// @tparam N_ELEM_NODES Number of nodes
+/// @tparam D Spatial dimension
+/// @tparam N Number of nodes
 /// @param coords Element coordinates
 /// @param volume Element volume
 /// @return Vector of gradients of shape functions associated with element nodes
-template <ElementType ELEM_TYPE, int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
-inline DenseMatrix<Real, N_ELEM_NODES, DIM>
-grad_shape(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords, Real volume)
+template <ElementType ELEM_TYPE, int D, Int N = get_num_element_nodes(ELEM_TYPE)>
+inline DenseMatrix<Real, D, N>
+grad_shape(const DenseVector<DenseVector<Real, D>, N> & coords, Real volume)
 {
     error("Calculation of shape function gradients is not implemented for element '{}' yet.",
           get_element_type_str(ELEM_TYPE));
@@ -32,20 +32,20 @@ grad_shape(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords, Rea
 
 /// Compute gradients of shape functions of EDGE2 in 1-D
 template <>
-inline DenseMatrix<Real, 2, 1>
+inline DenseMatrix<Real, 1, 2>
 grad_shape<EDGE2, 1>(const DenseVector<DenseVector<Real, 1>, 2> & coords, Real volume)
 {
     CALL_STACK_MSG();
     Real c = 1 / volume;
-    DenseMatrix<Real, 2, 1> grads;
+    DenseMatrix<Real, 1, 2> grads;
     grads(0, 0) = -c;
-    grads(1, 0) = c;
+    grads(0, 1) = c;
     return grads;
 }
 
 /// Compute gradients of shape functions of TRI3 in 2-D
 template <>
-inline DenseMatrix<Real, 3, 2>
+inline DenseMatrix<Real, 2, 3>
 grad_shape<TRI3, 2>(const DenseVector<DenseVector<Real, 2>, 3> & coords, Real volume)
 {
     CALL_STACK_MSG();
@@ -70,17 +70,17 @@ grad_shape<TRI3, 2>(const DenseVector<DenseVector<Real, 2>, 3> & coords, Real vo
     grads.set_row(0, { c * (y21 - y31), c * (x31 - x21) });
     grads.set_row(1, { c * y31, -c * x31 });
     grads.set_row(2, { -c * y21, c * x21 });
-    return grads;
+    return transpose(grads);
 }
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
-inline Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>>
+inline Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>>
 calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
                 const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
                 const Array1D<Real> & volumes)
 {
     CALL_STACK_MSG();
-    Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> grad_shfns(connect.get_size());
+    Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_shfns(connect.get_size());
     for (godzilla::Int ie = 0; ie < connect.get_size(); ie++) {
         auto idx = connect.get(ie);
         auto elem_coord = coords.get_values(idx);
@@ -91,12 +91,12 @@ calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
 }
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
-inline Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>>
+inline Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>>
 calc_grad_shape(const UnstructuredMesh & mesh, const Array1D<Real> & volumes)
 {
     CALL_STACK_MSG();
     Int n_elems = mesh.get_num_cells();
-    Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> grad_shfns(n_elems);
+    Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_shfns(n_elems);
     auto dm = mesh.get_coordinate_dm();
     auto vec = mesh.get_coordinates_local();
     auto section = mesh.get_coordinate_section();

@@ -38,11 +38,11 @@ TEST(FEGeometryTest, normal_edge2)
     coords(1) = DenseVector<Real, 1>({ 2 });
     auto grad = fe::grad_shape<EDGE2, 1>(coords, volume);
     {
-        auto n = fe::normal<EDGE2>(volume, 0, grad.row(1));
+        auto n = fe::normal<EDGE2>(volume, 0, DenseVector<Real, 1>(grad.column(1)));
         EXPECT_DOUBLE_EQ(n(0), -1);
     }
     {
-        auto n = fe::normal<EDGE2>(volume, 0., grad.row(0));
+        auto n = fe::normal<EDGE2>(volume, 0., DenseVector<Real, 1>(grad.column(0)));
         EXPECT_DOUBLE_EQ(n(0), 1);
     }
 }
@@ -57,19 +57,19 @@ TEST(FEGeometryTest, normal_tri3)
     auto grad = fe::grad_shape<TRI3, 2>(coords, volume);
     {
         Real edge_len = 1.;
-        auto n = fe::normal<TRI3>(volume, edge_len, grad.row(1));
+        auto n = fe::normal<TRI3>(volume, edge_len, DenseVector<Real, 2>(grad.column(1)));
         EXPECT_DOUBLE_EQ(n(0), -1.);
         EXPECT_DOUBLE_EQ(n(1), 0.);
     }
     {
         Real edge_len = 1.;
-        auto n = fe::normal<TRI3>(volume, edge_len, grad.row(2));
+        auto n = fe::normal<TRI3>(volume, edge_len, DenseVector<Real, 2>(grad.column(2)));
         EXPECT_DOUBLE_EQ(n(0), 0.);
         EXPECT_DOUBLE_EQ(n(1), -1.);
     }
     {
         Real edge_len = std::sqrt(2.);
-        auto n = fe::normal<TRI3>(volume, edge_len, grad.row(0));
+        auto n = fe::normal<TRI3>(volume, edge_len, DenseVector<Real, 2>(grad.column(0)));
         EXPECT_DOUBLE_EQ(n(0), 1. / std::sqrt(2.));
         EXPECT_DOUBLE_EQ(n(1), 1. / std::sqrt(2.));
     }
@@ -77,7 +77,7 @@ TEST(FEGeometryTest, normal_tri3)
 
 TEST(FEGeometryTest, normal_hex8)
 {
-    DenseMatrix<Real, 1, 10> grad;
+    DenseVector<Real, 10> grad;
     EXPECT_DEATH(
         (fe::normal<EDGE2, 10>(1., 1., grad)),
         "Computation of a normal for element 'EDGE2' in 10 dimensions is not implemented.");
