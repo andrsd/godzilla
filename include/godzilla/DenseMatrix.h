@@ -305,8 +305,17 @@ public:
     /// Compute inverse of this matrix
     ///
     /// @return Inverse of this matrix
-    DenseMatrix<Real, COLS>
+    [[deprecated("Use inverse() instead")]] DenseMatrix<Real, COLS>
     inv() const
+    {
+        inverse();
+    }
+
+    /// Compute inverse of this matrix
+    ///
+    /// @return Inverse of this matrix
+    DenseMatrix<Real, COLS>
+    inverse() const
     {
         error("Inverse is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
     }
@@ -624,7 +633,7 @@ DenseMatrix<Real, 3>::det() const
 
 template <>
 inline DenseMatrix<Real, 1>
-DenseMatrix<Real, 1>::inv() const
+DenseMatrix<Real, 1>::inverse() const
 {
     DenseMatrix<Real, 1> inv;
     inv(0, 0) = 1. / this->values[0];
@@ -633,7 +642,7 @@ DenseMatrix<Real, 1>::inv() const
 
 template <>
 inline DenseMatrix<Real, 2>
-DenseMatrix<Real, 2>::inv() const
+DenseMatrix<Real, 2>::inverse() const
 {
     Real det = this->det();
     if (det == 0.)
@@ -650,7 +659,7 @@ DenseMatrix<Real, 2>::inv() const
 
 template <>
 inline DenseMatrix<Real, 3>
-DenseMatrix<Real, 3>::inv() const
+DenseMatrix<Real, 3>::inverse() const
 {
     Real det = this->det();
     if (det == 0.)
