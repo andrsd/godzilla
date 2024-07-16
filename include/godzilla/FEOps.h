@@ -37,10 +37,10 @@ linear_combination(const DenseVector<Real, N_VALS> & a, const DenseVector<T, N_V
 /// @param grad_phi Gradient of test functions
 /// @return Computed gradient
 template <Int D, Int N_VALS>
-inline DenseVector<Real, D>
+inline DenseMatrix<Real, 1, D>
 gradient(const DenseVector<Real, N_VALS> & vals, const DenseMatrix<Real, N_VALS, D> & grad_phi)
 {
-    return vals * grad_phi;
+    return transpose(vals) * grad_phi;
 }
 
 /// Compute gradient of a vector-valued quantity

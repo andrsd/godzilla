@@ -28,9 +28,9 @@ TEST(FEOpsTest, gradient_scalar)
     grad_phi.set_row(1, { 2, 1, 0 });
 
     auto grad_a = fe::gradient(a, grad_phi);
-    EXPECT_EQ(grad_a(0), 4.);
-    EXPECT_EQ(grad_a(1), 5.);
-    EXPECT_EQ(grad_a(2), -4.);
+    EXPECT_EQ(grad_a(0, 0), 4.);
+    EXPECT_EQ(grad_a(0, 1), 5.);
+    EXPECT_EQ(grad_a(0, 2), -4.);
 }
 
 TEST(FEOpsTest, gradient_vector)

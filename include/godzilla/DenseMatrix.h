@@ -71,12 +71,12 @@ public:
     ///
     /// @param idx Index of the column
     /// @return Column as a DenseVector
-    DenseVector<T, ROWS>
+    DenseMatrix<T, ROWS, 1>
     column(Int idx) const
     {
-        DenseVector<T, ROWS> col;
+        DenseMatrix<T, ROWS, 1> col;
         for (Int row = 0; row < ROWS; row++)
-            col(row) = get(row, idx);
+            col(row, 0) = get(row, idx);
         return col;
     }
 
@@ -84,12 +84,12 @@ public:
     ///
     /// @param idx Index of the column
     /// @return Column as a DenseVector
-    DenseVector<T, COLS>
+    DenseMatrix<T, 1, COLS>
     row(Int idx) const
     {
-        DenseVector<T, COLS> row;
+        DenseMatrix<T, 1, COLS> row;
         for (Int col = 0; col < COLS; col++)
-            row(col) = get(idx, col);
+            row(0, col) = get(idx, col);
         return row;
     }
 
@@ -142,6 +142,21 @@ public:
     {
         for (Int i = 0; i < COLS; i++)
             set(row, i) = vals(i);
+    }
+
+    void
+    set_row(Int row, const DenseMatrix<T, 1, COLS> & vals)
+    {
+        for (Int i = 0; i < COLS; i++)
+            set(row, i) = vals(0, i);
+    }
+
+    void
+    set_col(Int col, const std::vector<T> & vals)
+    {
+        assert(vals.size() == ROWS);
+        for (Int i = 0; i < ROWS; i++)
+            set(i, col) = vals[i];
     }
 
     /// Set a matrix column at once
@@ -274,22 +289,6 @@ public:
                 for (Int k = 0; k < COLS; k++)
                     prod += get(i, k) * x(k, j);
                 res(i, j) = prod;
-            }
-        }
-        return res;
-    }
-
-    template <Int M>
-    DenseVector<DenseVector<T, M>, ROWS>
-    mult(const DenseVector<DenseVector<T, M>, COLS> & x) const
-    {
-        DenseVector<DenseVector<T, M>, ROWS> res;
-        for (Int i = 0; i < ROWS; i++) {
-            for (Int j = 0; j < M; j++) {
-                T prod = 0.;
-                for (Int k = 0; k < COLS; k++)
-                    prod += get(i, k) * x(k)(j);
-                res(i)(j) = prod;
             }
         }
         return res;
@@ -495,13 +494,6 @@ public:
         return mult(x);
     }
 
-    template <Int M>
-    DenseVector<DenseVector<T, M>, ROWS>
-    operator*(const DenseVector<DenseVector<T, M>, COLS> & x) const
-    {
-        return mult(x);
-    }
-
     DenseMatrix<Real, ROWS> &
     operator=(const DenseMatrixSymm<Real, ROWS> & m)
     {
@@ -685,6 +677,24 @@ DenseMatrix<Real, 3>::inverse() const
     inv(2, 2) = (this->values[0] * this->values[4] - this->values[1] * this->values[3]);
     inv.scale(1. / det);
     return inv;
+}
+
+/// Transpose DenseMatrix<T, M, N>
+///
+/// @tparam T Data type
+/// @tparam N Number of rows in the input "matrix", but number of columns in the resulting matrix
+/// @tparam M Number of columns in the input "matrix", but number of rows in the resulting matrix
+/// @param a Input "matrix"
+/// @return Transposed version of DenseMatrix<T> with values from `a`
+template <typename T, Int N, Int M>
+inline DenseMatrix<T, N, M>
+transpose(const DenseMatrix<T, M, N> & a)
+{
+    DenseMatrix<T, N, M> res;
+    for (Int i = 0; i < N; i++)
+        for (Int j = 0; j < M; j++)
+            res(i, j) = a(j, i);
+    return res;
 }
 
 //

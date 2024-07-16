@@ -5,12 +5,11 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
+#include "godzilla/DenseMatrix.h"
 #include <cassert>
 
 namespace godzilla {
 
-template <typename T, Int ROWS, Int COLS>
-class DenseMatrix;
 template <typename T, Int ROWS>
 class DenseMatrixSymm;
 
@@ -19,7 +18,7 @@ class DenseMatrixSymm;
 /// @tparam T Data type of matrix entries
 /// @tparam N Number of entries
 template <typename T, Int N>
-class DenseVector {
+class DenseVector : public DenseMatrix<T, N, 1> {
 public:
     /// Create empty vector
     DenseVector() = default;
@@ -30,7 +29,13 @@ public:
     explicit DenseVector(const std::vector<T> & a)
     {
         for (Int i = 0; i < N; i++)
-            this->values[i] = a[i];
+            set(i) = a[i];
+    }
+
+    explicit DenseVector(const DenseMatrix<T, N, 1> & a)
+    {
+        for (Int i = 0; i < N; i++)
+            set(i) = a(i, 0);
     }
 
     /// Get an entry at location (i) for reading
@@ -41,7 +46,7 @@ public:
     get(Int i) const
     {
         assert((i >= 0) && (i < N));
-        return this->values[i];
+        return DenseMatrix<T, N, 1>::get(i, 0);
     }
 
     /// Get an entry at location (i) for writing
@@ -52,34 +57,7 @@ public:
     set(Int i)
     {
         assert((i >= 0) && (i < N));
-        return this->values[i];
-    }
-
-    /// Multiply all entries by a scalar `alpha`, i.e. vec[i] = alpha * vec[i]
-    ///
-    /// @param alpha Scalar value to multiply entries with
-    void
-    scale(Real alpha)
-    {
-        for (Int i = 0; i < N; i++)
-            this->values[i] *= alpha;
-    }
-
-    /// Set all vector elements to zero, i.e. vec[i] = 0.
-    void
-    zero()
-    {
-        zero_impl(std::is_fundamental<T>());
-    }
-
-    /// Set `alpha` into all vector elements, i.e. vec[i] = alpha
-    ///
-    /// @param alpha Constant to set into vector elements
-    void
-    set_values(const T & alpha)
-    {
-        for (Int i = 0; i < N; i++)
-            this->values[i] = alpha;
+        return DenseMatrix<T, N, 1>::set(i, 0);
     }
 
     /// Add `a` to this vector, i.e. vec[i] += a[i]
@@ -89,7 +67,7 @@ public:
     add(const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; i++)
-            this->values[i] += a(i);
+            set(i) += a(i);
     }
 
     /// Add `a` to each element of this vector, i.e. vec[i] += a
@@ -99,7 +77,7 @@ public:
     add(T a)
     {
         for (Int i = 0; i < N; i++)
-            this->values[i] += a;
+            set(i) += a;
     }
 
     /// Subtract `a` from this vector, i.e. vec[i] -= a[i]
@@ -109,7 +87,7 @@ public:
     subtract(const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; i++)
-            this->values[i] -= a(i);
+            set(i) -= a(i);
     }
 
     /// Normalize this vector
@@ -119,7 +97,7 @@ public:
         T mag = magnitude();
         if (mag > 0) {
             for (Int i = 0; i < N; i++)
-                this->values[i] /= mag;
+                set(i) /= mag;
         }
     }
 
@@ -131,21 +109,8 @@ public:
     {
         Real res = 0.;
         for (Int i = 0; i < N; i++)
-            res += this->values[i];
+            res += get(i);
         return res / N;
-    }
-
-    /// Compute dot product, i.e. \Sum_i vec[i] * a[i]
-    ///
-    /// @param a Dotted vector
-    /// @return Dot product
-    [[nodiscard]] T
-    dot(const DenseVector<T, N> & a) const
-    {
-        T dot = 0.;
-        for (Int i = 0; i < N; i++)
-            dot += this->values[i] * a(i);
-        return dot;
     }
 
     [[nodiscard]] DenseVector<Real, N>
@@ -173,7 +138,7 @@ public:
     {
         T sum = 0.;
         for (Int i = 0; i < N; i++)
-            sum += this->values[i];
+            sum += get(i);
         return sum;
     }
 
@@ -185,7 +150,7 @@ public:
     {
         T sum = 0.;
         for (Int i = 0; i < N; i++)
-            sum += this->values[i] * this->values[i];
+            sum += get(i) * get(i);
         return std::sqrt(sum);
     }
 
@@ -291,46 +256,14 @@ public:
     }
 
     template <Int M>
-    DenseVector<T, M>
-    operator*(const DenseMatrix<T, N, M> & a) const
+    DenseMatrix<T, N, M>
+    operator*(const DenseMatrix<T, 1, M> & a) const
     {
-        DenseVector<T, M> res;
-        for (Int j = 0; j < M; j++) {
-            T prod = 0;
-            for (Int i = 0; i < N; i++)
-                prod += get(i) * a(i, j);
-            res(j) = prod;
-        }
+        DenseMatrix<T, N, M> res;
+        for (Int i = 0; i < M; i++)
+            for (Int j = 0; j < N; j++)
+                res(j, i) = get(j) * a(0, i);
         return res;
-    }
-
-    DenseVector<T, N>
-    operator*(const DenseMatrixSymm<T, N> & a) const
-    {
-        DenseVector<T, N> res;
-        for (Int j = 0; j < N; j++) {
-            T prod = 0;
-            for (Int i = 0; i < N; i++)
-                prod += get(i) * a(i, j);
-            res(j) = prod;
-        }
-        return res;
-    }
-
-    template <Int M>
-    DenseVector<T, M>
-    operator*(const DenseVector<DenseVector<T, N>, M> & a) const
-    {
-        DenseVector<T, M> res;
-        for (Int j = 0; j < M; j++)
-            res(j) = *this * a(j);
-        return res;
-    }
-
-    T
-    operator*(const DenseVector<T, N> & a) const
-    {
-        return this->dot(a);
     }
 
     DenseVector<T, N>
@@ -365,47 +298,6 @@ public:
             set(i) -= a(i);
         return *this;
     }
-
-    [[deprecated("Use data() instead")]] T *
-    get_data()
-    {
-        return &this->values[0];
-    }
-
-    [[deprecated("Use data() instead")]] const T *
-    get_data() const
-    {
-        return &this->values[0];
-    }
-
-    T *
-    data()
-    {
-        return &this->values[0];
-    }
-
-    const T *
-    data() const
-    {
-        return &this->values[0];
-    }
-
-protected:
-    void
-    zero_impl(std::true_type)
-    {
-        set_values(0);
-    }
-
-    void
-    zero_impl(std::false_type)
-    {
-        for (Int i = 0; i < N; i++)
-            this->values[i].zero();
-    }
-
-private:
-    T values[N];
 };
 
 /// Compute dot product of 2 vectors
@@ -422,6 +314,40 @@ dot(const DenseVector<T, N> & a, const DenseVector<T, N> & b)
     T dot = 0.;
     for (Int i = 0; i < N; i++)
         dot += a(i) * b(i);
+    return dot;
+}
+
+/// Compute dot product of 2 vectors
+///
+/// @tparam T Data type
+/// @tparam N Size of the vector
+/// @param a First vector
+/// @param b Second vector
+/// @return Dot product
+template <typename T, Int N>
+inline T
+dot(const DenseMatrix<T, 1, N> & a, const DenseVector<T, N> & b)
+{
+    T dot = 0.;
+    for (Int i = 0; i < N; i++)
+        dot += a(0, i) * b(i);
+    return dot;
+}
+
+/// Compute dot product of 2 vectors
+///
+/// @tparam T Data type
+/// @tparam N Size of the vector
+/// @param a First vector
+/// @param b Second vector
+/// @return Dot product
+template <typename T, Int N>
+inline T
+dot(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, N, 1> & b)
+{
+    T dot = 0.;
+    for (Int i = 0; i < N; i++)
+        dot += a(0, i) * b(i, 0);
     return dot;
 }
 
@@ -540,16 +466,6 @@ mat_row(const DenseVector<DenseVector<T, M>, N> & a)
     return res;
 }
 
-template <typename T, Int N>
-inline DenseMatrix<T, N, 1>
-mat_row(const DenseVector<T, N> & a)
-{
-    DenseMatrix<T, N, 1> res;
-    for (Int i = 0; i < N; i++)
-        res(i, 0) = a(i);
-    return res;
-}
-
 /// Convert DenseVector<DenseVector, M>, N> into a DenseMatrix<M, N>
 ///
 /// @tparam T Data type
@@ -565,40 +481,6 @@ mat_col(const DenseVector<DenseVector<T, M>, N> & a)
     for (Int i = 0; i < N; i++)
         for (Int j = 0; j < M; j++)
             res(j, i) = a(i)(j);
-    return res;
-}
-
-/// Convert a DenseVector<T, N> into a column matrix
-///
-/// @tparam T Data type
-/// @tparam N Number of columns
-/// @param a Input vector
-/// @return Column matrix with values of `a`
-template <typename T, Int N>
-inline DenseMatrix<T, 1, N>
-mat_col(const DenseVector<T, N> & a)
-{
-    DenseMatrix<T, 1, N> res;
-    for (Int i = 0; i < N; i++)
-        res(0, i) = a(i);
-    return res;
-}
-
-/// Transpose DenseVector<DenseVector<T>>
-///
-/// @tparam T Data type
-/// @tparam N Number of rows in the input "matrix", but number of columns in the resulting matrix
-/// @tparam M Number of columns in the input "matrix", but number of rows in the resulting matrix
-/// @param a Input "matrix"
-/// @return Transposed version of DenseVector<DenseVector<T>> with values from `a`
-template <typename T, Int N, Int M>
-inline DenseVector<DenseVector<T, N>, M>
-transpose(const DenseVector<DenseVector<T, M>, N> & a)
-{
-    DenseVector<DenseVector<T, N>, M> res;
-    for (Int i = 0; i < N; i++)
-        for (Int j = 0; j < M; j++)
-            res(j)(i) = a(i)(j);
     return res;
 }
 

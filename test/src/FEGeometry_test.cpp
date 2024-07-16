@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "godzilla/DenseMatrix.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEShapeFns.h"
 #include "ExceptionTestMacros.h"
@@ -76,7 +77,7 @@ TEST(FEGeometryTest, normal_tri3)
 
 TEST(FEGeometryTest, normal_hex8)
 {
-    DenseVector<Real, 10> grad;
+    DenseMatrix<Real, 1, 10> grad;
     EXPECT_DEATH(
         (fe::normal<EDGE2, 10>(1., 1., grad)),
         "Computation of a normal for element 'EDGE2' in 10 dimensions is not implemented.");

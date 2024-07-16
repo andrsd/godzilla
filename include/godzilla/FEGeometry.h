@@ -83,7 +83,7 @@ common_elements_by_node(const UnstructuredMesh & mesh)
 
 template <ElementType ELEM_TYPE, Int DIM>
 inline DenseVector<Real, DIM>
-normal(Real volume, Real edge_len, const DenseVector<Real, DIM> & grad)
+normal(Real volume, Real edge_len, const DenseMatrix<Real, 1, DIM> & grad)
 {
     CALL_STACK_MSG();
     error("Computation of a normal for element '{}' in {} dimensions is not implemented.",
@@ -93,16 +93,17 @@ normal(Real volume, Real edge_len, const DenseVector<Real, DIM> & grad)
 
 template <>
 inline DenseVector<Real, 1>
-normal<EDGE2, 1>(Real volume, Real edge_len, const DenseVector<Real, 1> & grad)
+normal<EDGE2, 1>(Real volume, Real edge_len, const DenseMatrix<Real, 1, 1> & grad)
 {
-    return -volume * grad;
+    return DenseVector<Real, 1>({ -volume * grad });
 }
 
 template <>
 inline DenseVector<Real, 2>
-normal<TRI3, 2>(Real volume, Real edge_len, const DenseVector<Real, 2> & grad)
+normal<TRI3, 2>(Real volume, Real edge_len, const DenseMatrix<Real, 1, 2> & grad)
 {
-    return -2. * volume / edge_len * grad;
+    auto c = -2. * volume / edge_len;
+    return DenseVector<Real, 2>({ c * grad(0, 0), c * grad(0, 1) });
 }
 
 // Element lengths
@@ -130,10 +131,12 @@ template <>
 inline Real
 element_length<TRI3, 2, 3>(const DenseMatrix<Real, 3, 2> & grad_phi)
 {
-    auto h1 = 1. / grad_phi.row(0).magnitude();
-    auto h2 = 1. / grad_phi.row(1).magnitude();
-    auto h3 = 1. / grad_phi.row(2).magnitude();
-    return std::min({ h1, h2, h3 });
+    Real h[3];
+    for (int i = 0; i < 3; i++) {
+        DenseVector<Real, 2> v(transpose(grad_phi.row(i)));
+        h[i] = 1. / v.magnitude();
+    }
+    return std::min({ h[0], h[1], h[2] });
 }
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>

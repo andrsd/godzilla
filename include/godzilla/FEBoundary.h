@@ -152,7 +152,8 @@ private:
                 this->mesh->compute_cell_geometry(cell, &vol, nullptr, nullptr);
                 auto connect = this->mesh->get_connectivity(cell);
                 auto lnne = utils::index_of(connect, vertex);
-                auto inc = vol * (*this->grad_phi)(cell).row(lnne);
+                auto inc =
+                    DenseVector<Real, DIM>(transpose(vol * (*this->grad_phi)(cell).row(lnne)));
                 sum += inc;
             }
             auto mag = sum.magnitude();

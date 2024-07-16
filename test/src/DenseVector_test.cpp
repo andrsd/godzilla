@@ -99,12 +99,28 @@ TEST(DenseVectorTest, op_subtract)
     EXPECT_EQ(c(2), 5.);
 }
 
-TEST(DenseVectorTest, dot)
+TEST(DenseVectorTest, dot_vec_vec)
 {
     DenseVector<Real, 3> a({ 2., 3., 4. });
     DenseVector<Real, 3> b({ 4., 2., -1. });
-    Real dot = a.dot(b);
-    EXPECT_EQ(dot, 10.);
+    EXPECT_EQ(dot(a, b), 10.);
+}
+
+TEST(DenseVectorTest, dot_row_vec)
+{
+    DenseMatrix<Real, 1, 3> a;
+    a.set_row(0, { 2., 3., 4. });
+    DenseVector<Real, 3> b({ 4., 2., -1. });
+    EXPECT_EQ(dot(a, b), 10.);
+}
+
+TEST(DenseVectorTest, dot_row_col)
+{
+    DenseMatrix<Real, 1, 3> a;
+    a.set_row(0, { 2., 3., 4. });
+    DenseMatrix<Real, 3, 1> b;
+    b.set_col(0, { 4., 2., -1. });
+    EXPECT_EQ(dot(a, b), 10.);
 }
 
 TEST(DenseVectorTest, dot_glob)
@@ -174,51 +190,6 @@ TEST(DenseVectorTest, pointwise_div_glob)
     EXPECT_EQ(res(2), -4.);
 }
 
-TEST(DenseVectorTest, op_mult_mat)
-{
-    DenseVector<Real, 2> a({ 2., 3. });
-    DenseMatrix<Real, 2, 3> b;
-    b.set_row(0, { 4., 2., -1. });
-    b.set_row(1, { 0., -3., 1. });
-    DenseVector<Real, 3> x = a * b;
-    EXPECT_EQ(x(0), 8.);
-    EXPECT_EQ(x(1), -5.);
-    EXPECT_EQ(x(2), 1.);
-}
-
-TEST(DenseVectorTest, op_mult_mat_symm)
-{
-    DenseVector<Real, 2> a({ 2., 3. });
-    DenseMatrixSymm<Real, 2> b({ 4., 2., -3. });
-    DenseVector<Real, 2> x = a * b;
-    EXPECT_EQ(x(0), 14.);
-    EXPECT_EQ(x(1), -5.);
-}
-
-TEST(DenseVectorTest, op_mult_vecvec)
-{
-    DenseVector<Real, 2> a({ 2., 3. });
-    DenseVector<DenseVector<Real, 2>, 3> b;
-    b(0)(0) = 4.;
-    b(0)(1) = 0.;
-    b(1)(0) = 2.;
-    b(1)(1) = -3.;
-    b(2)(0) = -1.;
-    b(2)(1) = 1.;
-    DenseVector<Real, 3> x = a * b;
-    EXPECT_EQ(x(0), 8.);
-    EXPECT_EQ(x(1), -5.);
-    EXPECT_EQ(x(2), 1.);
-}
-
-TEST(DenseVectorTest, op_mult_vec)
-{
-    DenseVector<Real, 3> a({ 2., 3., 4. });
-    DenseVector<Real, 3> b({ 4., 2., -1. });
-    Real dot = a * b;
-    EXPECT_EQ(dot, 10.);
-}
-
 TEST(DenseVectorTest, op_mult_scalar)
 {
     DenseVector<Real, 3> a({ 2., 3., 4. });
@@ -235,6 +206,20 @@ TEST(DenseVectorTest, op_mult_scalar_post)
     EXPECT_EQ(b(0), 6.);
     EXPECT_EQ(b(1), 9.);
     EXPECT_EQ(b(2), 12.);
+}
+
+TEST(DenseVectorTest, op_mult_row_mat)
+{
+    DenseVector<Real, 3> a({ 1, 2, 3 });
+    DenseMatrix<Real, 1, 2> b;
+    b.set_row(0, { 5, 7 });
+    auto prod = a * b;
+    EXPECT_DOUBLE_EQ(prod(0, 0), 5.);
+    EXPECT_DOUBLE_EQ(prod(1, 0), 10.);
+    EXPECT_DOUBLE_EQ(prod(2, 0), 15.);
+    EXPECT_DOUBLE_EQ(prod(0, 1), 7.);
+    EXPECT_DOUBLE_EQ(prod(1, 1), 14.);
+    EXPECT_DOUBLE_EQ(prod(2, 1), 21.);
 }
 
 #ifndef NDEBUG
@@ -343,73 +328,6 @@ TEST(DenseVectorTest, op_unary_minus)
     EXPECT_EQ(b(2), -3.);
 }
 
-TEST(DenseVectorTest, mat_row)
-{
-    DenseVector<DenseVector<Real, 3>, 2> A;
-    A(0)(0) = -2;
-    A(0)(1) = 5;
-    A(0)(2) = 3;
-    A(1)(0) = 1;
-    A(1)(1) = -1;
-    A(1)(2) = 2;
-
-    DenseMatrix<Real, 2, 3> m = mat_row(A);
-    EXPECT_EQ(m(0, 0), -2.);
-    EXPECT_EQ(m(0, 1), 5.);
-    EXPECT_EQ(m(0, 2), 3.);
-    EXPECT_EQ(m(1, 0), 1.);
-    EXPECT_EQ(m(1, 1), -1.);
-    EXPECT_EQ(m(1, 2), 2.);
-}
-
-TEST(DenseVectorTest, mat_row_scalar)
-{
-    DenseVector<Real, 3> A;
-    A(0) = -2;
-    A(1) = 5;
-    A(2) = 3;
-
-    auto m = mat_row(A);
-
-    EXPECT_EQ(m(0, 0), -2.);
-    EXPECT_EQ(m(1, 0), 5.);
-    EXPECT_EQ(m(2, 0), 3.);
-}
-
-TEST(DenseVectorTest, mat_col)
-{
-    DenseVector<DenseVector<Real, 3>, 2> A;
-    A(0)(0) = -2;
-    A(0)(1) = 5;
-    A(0)(2) = 3;
-    A(1)(0) = 1;
-    A(1)(1) = -1;
-    A(1)(2) = 2;
-
-    DenseMatrix<Real, 3, 2> m = mat_col(A);
-
-    EXPECT_EQ(m(0, 0), -2.);
-    EXPECT_EQ(m(0, 1), 1.);
-    EXPECT_EQ(m(1, 0), 5.);
-    EXPECT_EQ(m(1, 1), -1.);
-    EXPECT_EQ(m(2, 0), 3.);
-    EXPECT_EQ(m(2, 1), 2.);
-}
-
-TEST(DenseVectorTest, mat_col_scalar)
-{
-    DenseVector<Real, 3> A;
-    A(0) = -2;
-    A(1) = 5;
-    A(2) = 3;
-
-    auto m = mat_col(A);
-
-    EXPECT_EQ(m(0, 0), -2.);
-    EXPECT_EQ(m(0, 1), 5.);
-    EXPECT_EQ(m(0, 2), 3.);
-}
-
 TEST(DenseVectorTest, min)
 {
     DenseVector<Real, 3> a({ 5, -2, 10 });
@@ -420,25 +338,6 @@ TEST(DenseVectorTest, max)
 {
     DenseVector<Real, 3> a({ 5, -2, 10 });
     EXPECT_EQ(a.max(), 10);
-}
-
-TEST(DenseVectorTest, transpose)
-{
-    DenseVector<DenseVector<Real, 3>, 2> A;
-    A(0)(0) = -2;
-    A(0)(1) = 5;
-    A(0)(2) = 3;
-    A(1)(0) = 1;
-    A(1)(1) = -1;
-    A(1)(2) = 2;
-
-    DenseVector<DenseVector<Real, 2>, 3> m = transpose(A);
-    EXPECT_EQ(m(0)(0), -2.);
-    EXPECT_EQ(m(0)(1), 1.);
-    EXPECT_EQ(m(1)(0), 5.);
-    EXPECT_EQ(m(1)(1), -1.);
-    EXPECT_EQ(m(2)(0), 3.);
-    EXPECT_EQ(m(2)(1), 2.);
 }
 
 TEST(DenseVectorTest, abs)
