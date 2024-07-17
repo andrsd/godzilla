@@ -321,20 +321,20 @@ dot(const DenseMatrix<T, 1, N> & a, const DenseVector<T, N> & b)
     return dot;
 }
 
-/// Compute dot product of 2 vectors
+/// Compute dot product of 2 row-vectors
 ///
 /// @tparam T Data type
-/// @tparam N Size of the vector
-/// @param a First vector
-/// @param b Second vector
+/// @tparam N Size of the row-vector
+/// @param a First row-vector
+/// @param b Second row-vector
 /// @return Dot product
 template <typename T, Int N>
 inline T
-dot(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, N, 1> & b)
+dot(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, 1, N> & b)
 {
     T dot = 0.;
     for (Int i = 0; i < N; i++)
-        dot += a(0, i) * b(i, 0);
+        dot += a(0, i) * b(0, i);
     return dot;
 }
 

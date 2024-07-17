@@ -114,12 +114,12 @@ TEST(DenseVectorTest, dot_row_vec)
     EXPECT_EQ(dot(a, b), 10.);
 }
 
-TEST(DenseVectorTest, dot_row_col)
+TEST(DenseVectorTest, dot_row_row)
 {
     DenseMatrix<Real, 1, 3> a;
     a.set_row(0, { 2., 3., 4. });
-    DenseMatrix<Real, 3, 1> b;
-    b.set_col(0, { 4., 2., -1. });
+    DenseMatrix<Real, 1, 3> b;
+    b.set_row(0, { 4., 2., -1. });
     EXPECT_EQ(dot(a, b), 10.);
 }
 
