@@ -146,26 +146,28 @@ TEST(DenseVectorTest, magnitude)
     EXPECT_EQ(mag, 5.);
 }
 
-TEST(DenseVectorTest, pointwise_mult)
+TEST(DenseVectorTest, pointwise_mult_vec)
 {
     const Int N = 3;
     DenseVector<Real, N> a({ 2., 3., 4. });
     DenseVector<Real, N> b({ 4., 2., -1. });
-    DenseVector<Real, N> res = a.pointwise_mult(b);
+    DenseVector<Real, N> res = pointwise_mult(a, b);
     EXPECT_EQ(res(0), 8.);
     EXPECT_EQ(res(1), 6.);
     EXPECT_EQ(res(2), -4.);
 }
 
-TEST(DenseVectorTest, pointwise_mult_glob)
+TEST(DenseVectorTest, pointwise_mult_row)
 {
     const Int N = 3;
-    DenseVector<Real, N> a({ 2., 3., 4. });
-    DenseVector<Real, N> b({ 4., 2., -1. });
-    DenseVector<Real, N> res = pointwise_mult<Real, N>(a, b);
-    EXPECT_EQ(res(0), 8.);
-    EXPECT_EQ(res(1), 6.);
-    EXPECT_EQ(res(2), -4.);
+    DenseMatrix<Real, 1, N> a;
+    a.set_row(0, { 2., 3., 4. });
+    DenseMatrix<Real, 1, N> b;
+    b.set_row(0, { 4., 2., -1. });
+    DenseMatrix<Real, 1, N> res = pointwise_mult(a, b);
+    EXPECT_EQ(res(0, 0), 8.);
+    EXPECT_EQ(res(0, 1), 6.);
+    EXPECT_EQ(res(0, 2), -4.);
 }
 
 TEST(DenseVectorTest, pointwise_div)
