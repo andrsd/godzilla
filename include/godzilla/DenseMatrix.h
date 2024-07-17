@@ -294,24 +294,6 @@ public:
         return res;
     }
 
-    /// Compute inverse of this matrix
-    ///
-    /// @return Inverse of this matrix
-    [[deprecated("Use inverse() instead")]] DenseMatrix<Real, COLS>
-    inv() const
-    {
-        inverse();
-    }
-
-    /// Compute inverse of this matrix
-    ///
-    /// @return Inverse of this matrix
-    DenseMatrix<Real, COLS>
-    inverse() const
-    {
-        error("Inverse is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
-    }
-
     /// Compute transpose
     ///
     /// @return Transposed matrix
@@ -633,50 +615,62 @@ determinant(const DenseMatrix<T, 3, 3> & mat)
 
 // Inversion
 
+/// Compute inverse of this matrix
+///
+/// @return Inverse of this matrix
+template <typename T, Int N>
+inline
+DenseMatrix<T, N>
+inverse(const DenseMatrix<T, N> & mat)
+{
+    error("Inverse is not implemented for {}x{} matrices, yet.", N, N);
+}
+
+
 template <>
 inline DenseMatrix<Real, 1>
-DenseMatrix<Real, 1>::inverse() const
+inverse(const DenseMatrix<Real, 1> & mat)
 {
     DenseMatrix<Real, 1> inv;
-    inv(0, 0) = 1. / this->values[0];
+    inv(0, 0) = 1. / mat.data()[0];
     return inv;
 }
 
 template <>
 inline DenseMatrix<Real, 2>
-DenseMatrix<Real, 2>::inverse() const
+inverse(const DenseMatrix<Real, 2> & mat)
 {
-    Real det = determinant(*this);
+    Real det = determinant(mat);
     if (det == 0.)
         throw Exception("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 2> inv;
-    inv.values[0] = this->values[3];
-    inv.values[1] = -this->values[1];
-    inv.values[2] = -this->values[2];
-    inv.values[3] = this->values[0];
+    inv.data()[0] =  mat.data()[3];
+    inv.data()[1] = -mat.data()[1];
+    inv.data()[2] = -mat.data()[2];
+    inv.data()[3] =  mat.data()[0];
     inv.scale(1. / det);
     return inv;
 }
 
 template <>
 inline DenseMatrix<Real, 3>
-DenseMatrix<Real, 3>::inverse() const
+inverse(const DenseMatrix<Real, 3> & mat)
 {
-    Real det = determinant(*this);
+    Real det = determinant(mat);
     if (det == 0.)
         throw Exception("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 3> inv;
-    inv(0, 0) = (this->values[4] * this->values[8] - this->values[5] * this->values[7]);
-    inv(1, 0) = -(this->values[3] * this->values[8] - this->values[5] * this->values[6]);
-    inv(2, 0) = (this->values[3] * this->values[7] - this->values[4] * this->values[6]);
-    inv(0, 1) = -(this->values[1] * this->values[8] - this->values[2] * this->values[7]);
-    inv(1, 1) = (this->values[0] * this->values[8] - this->values[2] * this->values[6]);
-    inv(2, 1) = -(this->values[0] * this->values[7] - this->values[1] * this->values[6]);
-    inv(0, 2) = (this->values[1] * this->values[5] - this->values[2] * this->values[4]);
-    inv(1, 2) = -(this->values[0] * this->values[5] - this->values[2] * this->values[3]);
-    inv(2, 2) = (this->values[0] * this->values[4] - this->values[1] * this->values[3]);
+    inv(0, 0) =  (mat.data()[4] * mat.data()[8] - mat.data()[5] * mat.data()[7]);
+    inv(1, 0) = -(mat.data()[3] * mat.data()[8] - mat.data()[5] * mat.data()[6]);
+    inv(2, 0) =  (mat.data()[3] * mat.data()[7] - mat.data()[4] * mat.data()[6]);
+    inv(0, 1) = -(mat.data()[1] * mat.data()[8] - mat.data()[2] * mat.data()[7]);
+    inv(1, 1) =  (mat.data()[0] * mat.data()[8] - mat.data()[2] * mat.data()[6]);
+    inv(2, 1) = -(mat.data()[0] * mat.data()[7] - mat.data()[1] * mat.data()[6]);
+    inv(0, 2) =  (mat.data()[1] * mat.data()[5] - mat.data()[2] * mat.data()[4]);
+    inv(1, 2) = -(mat.data()[0] * mat.data()[5] - mat.data()[2] * mat.data()[3]);
+    inv(2, 2) =  (mat.data()[0] * mat.data()[4] - mat.data()[1] * mat.data()[3]);
     inv.scale(1. / det);
     return inv;
 }

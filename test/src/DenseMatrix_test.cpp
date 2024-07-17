@@ -417,7 +417,7 @@ TEST(DenseMatrixTest, inv1)
 {
     auto m = DenseMatrix<Real, 1>();
     m(0, 0) = 2.;
-    auto inv = m.inverse();
+    auto inv = inverse(m);
     EXPECT_EQ(inv(0, 0), 1. / 2.);
 }
 
@@ -426,7 +426,7 @@ TEST(DenseMatrixTest, inv2)
     auto m = DenseMatrix<Real, 2>();
     m.set_row(0, { 2, 3 });
     m.set_row(1, { 4, 5 });
-    auto inv = m.inverse();
+    auto inv = inverse(m);
     EXPECT_EQ(inv(0, 0), -5. / 2);
     EXPECT_EQ(inv(0, 1), 3. / 2.);
     EXPECT_EQ(inv(1, 0), 2.);
@@ -438,7 +438,7 @@ TEST(DenseMatrixDeathTest, inv2_singular)
     auto m = DenseMatrix<Real, 2>();
     m.set_row(0, { 1, 2 });
     m.set_row(1, { 2, 4 });
-    EXPECT_THROW_MSG(m.inverse(), "Inverting of a matrix failed: matrix is singular.");
+    EXPECT_THROW_MSG(inverse(m), "Inverting of a matrix failed: matrix is singular.");
 }
 
 TEST(DenseMatrixTest, inv3)
@@ -447,7 +447,7 @@ TEST(DenseMatrixTest, inv3)
     m.set_row(0, { 2, -3, 4 });
     m.set_row(1, { -5, 6, -7 });
     m.set_row(2, { 8, -1, -2 });
-    auto inv = m.inverse();
+    auto inv = inverse(m);
     EXPECT_DOUBLE_EQ(inv(0, 0), 19. / 12.);
     EXPECT_DOUBLE_EQ(inv(0, 1), 5. / 6.);
     EXPECT_DOUBLE_EQ(inv(0, 2), 1. / 4.);
@@ -465,13 +465,13 @@ TEST(DenseMatrixDeathTest, inv3_singular)
     m.set_row(0, { 1, 2, 3 });
     m.set_row(1, { 2, 4, 6 });
     m.set_row(2, { 1, 1, 1 });
-    EXPECT_THROW_MSG(m.inverse(), "Inverting of a matrix failed: matrix is singular.");
+    EXPECT_THROW_MSG(inverse(m), "Inverting of a matrix failed: matrix is singular.");
 }
 
 TEST(DenseMatrixDeathTest, inv4)
 {
     auto m = DenseMatrix<Real, 4>();
-    EXPECT_DEATH(m.inverse(), "Inverse is not implemented for 4x4 matrices, yet.");
+    EXPECT_DEATH(inverse(m), "Inverse is not implemented for 4x4 matrices, yet.");
 }
 
 TEST(DenseMatrixTest, transpose3)
