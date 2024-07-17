@@ -382,7 +382,7 @@ TEST(DenseMatrixTest, det1)
 {
     auto m = DenseMatrix<Real, 1>();
     m(0, 0) = 2.;
-    EXPECT_EQ(m.det(), 2.);
+    EXPECT_EQ(determinant(m), 2.);
 }
 
 TEST(DenseMatrixTest, det2)
@@ -390,7 +390,7 @@ TEST(DenseMatrixTest, det2)
     auto m = DenseMatrix<Real, 2>();
     m.set_row(0, { 2, 3 });
     m.set_row(1, { 4, 5 });
-    EXPECT_EQ(m.det(), -2.);
+    EXPECT_EQ(determinant(m), -2.);
 }
 
 TEST(DenseMatrixTest, det3)
@@ -399,7 +399,7 @@ TEST(DenseMatrixTest, det3)
     m.set_row(0, { 2, -3, 4 });
     m.set_row(1, { -5, 6, 7 });
     m.set_row(2, { 8, 9, -1 });
-    EXPECT_EQ(m.det(), -663.);
+    EXPECT_EQ(determinant(m), -663.);
 }
 
 TEST(DenseMatrixTest, det4)
@@ -410,7 +410,7 @@ TEST(DenseMatrixTest, det4)
     m.set_row(2, { 0, 1, 0, 2 });
     m.set_row(3, { 1, -2, -3, 2 });
     //    EXPECT_EQ(m.det(), 21.);
-    EXPECT_DEATH({ auto d = m.det(); }, "Determinant is not implemented for 4x4 matrices, yet.");
+    EXPECT_DEATH({ auto d = determinant(m); }, "Determinant is not implemented for 4x4 matrices, yet.");
 }
 
 TEST(DenseMatrixTest, inv1)

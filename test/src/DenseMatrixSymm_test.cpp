@@ -298,21 +298,21 @@ TEST(DenseMatrixSymmTest, det1)
 {
     auto m = DenseMatrixSymm<Real, 1>();
     m(0, 0) = 2.;
-    EXPECT_EQ(m.det(), 2.);
+    EXPECT_EQ(determinant(m), 2.);
 }
 
 TEST(DenseMatrixSymmTest, det2)
 {
     auto m = DenseMatrixSymm<Real, 2>();
     m.set_values({ 2, 3, 4 });
-    EXPECT_EQ(m.det(), -1.);
+    EXPECT_EQ(determinant(m), -1.);
 }
 
 TEST(DenseMatrixSymmTest, det3)
 {
     auto m = DenseMatrixSymm<Real, 3>();
     m.set_values({ 2, -3, 6, 4, 7, -1 });
-    EXPECT_EQ(m.det(), -365.);
+    EXPECT_EQ(determinant(m), -365.);
 }
 
 TEST(DenseMatrixSymmTest, det4)
@@ -324,7 +324,7 @@ TEST(DenseMatrixSymmTest, det4)
     //    m.set_row(2, { 0, 1, 0, 2 });
     //    m.set_row(3, { 1, -2, -3, 2 });
     //    EXPECT_EQ(m.det(), 21.);
-    EXPECT_DEATH({ auto d = m.det(); }, "Determinant is not implemented for 4x4 matrices, yet.");
+    EXPECT_DEATH({ auto d = determinant(m); }, "Determinant is not implemented for 4x4 matrices, yet.");
 }
 
 TEST(DenseMatrixSymmTest, transpose3)

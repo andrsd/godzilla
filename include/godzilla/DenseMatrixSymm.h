@@ -178,13 +178,6 @@ public:
         return res;
     }
 
-    /// Compute determinant of the matrix
-    [[nodiscard]] Real
-    det() const
-    {
-        error("Determinant is not implemented for {}x{} matrices, yet.", DIM, DIM);
-    }
-
     /// Compute transpose
     ///
     /// @return Transposed matrix
@@ -378,30 +371,39 @@ private:
 
 // Determinant computation for small matrices
 
-template <>
-inline Real
-DenseMatrixSymm<Real, 1>::det() const
+template <typename T, Int N>
+inline T
+determinant(const DenseMatrixSymm<T, N> & mat)
 {
-    return this->values[0];
+    error("Determinant is not implemented for {}x{} matrices, yet.", N, N);
 }
 
-template <>
-inline Real
-DenseMatrixSymm<Real, 2>::det() const
+template <typename T>
+inline T
+determinant(const DenseMatrixSymm<T, 1> & mat)
 {
-    return this->values[0] * this->values[2] - this->values[1] * this->values[1];
+    return mat.data()[0];
 }
 
-template <>
-inline Real
-DenseMatrixSymm<Real, 3>::det() const
+template <typename T>
+inline T
+determinant(const DenseMatrixSymm<T, 2> & mat)
 {
-    return this->values[0] * this->values[2] * this->values[5] +
-           this->values[1] * this->values[4] * this->values[3] +
-           this->values[1] * this->values[4] * this->values[3] -
-           (this->values[3] * this->values[2] * this->values[3] +
-            this->values[0] * this->values[4] * this->values[4] +
-            this->values[1] * this->values[1] * this->values[5]);
+    const T * values = mat.data();
+    return values[0] * values[2] - values[1] * values[1];
+}
+
+template <typename T>
+inline T
+determinant(const DenseMatrixSymm<T, 3> & mat)
+{
+    const T * values = mat.data();
+    return values[0] * values[2] * values[5] +
+           values[1] * values[4] * values[3] +
+           values[1] * values[4] * values[3] -
+           (values[3] * values[2] * values[3] +
+            values[0] * values[4] * values[4] +
+            values[1] * values[1] * values[5]);
 }
 
 //

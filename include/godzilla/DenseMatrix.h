@@ -294,13 +294,6 @@ public:
         return res;
     }
 
-    /// Compute determinant of the matrix
-    [[nodiscard]] Real
-    det() const
-    {
-        error("Determinant is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
-    }
-
     /// Compute inverse of this matrix
     ///
     /// @return Inverse of this matrix
@@ -603,30 +596,39 @@ private:
 
 // ---
 
-template <>
-inline Real
-DenseMatrix<Real, 1>::det() const
+template <typename T, Int N>
+inline T
+determinant(const DenseMatrix<T, N, N> & mat)
 {
-    return this->values[0];
+    error("Determinant is not implemented for {}x{} matrices, yet.", N, N);
 }
 
-template <>
-inline Real
-DenseMatrix<Real, 2>::det() const
+template <typename T>
+inline T
+determinant(const DenseMatrix<T, 1, 1> & mat)
 {
-    return this->values[0] * this->values[3] - this->values[2] * this->values[1];
+    return mat.data()[0];
 }
 
-template <>
-inline Real
-DenseMatrix<Real, 3>::det() const
+template <typename T>
+inline T
+determinant(const DenseMatrix<T, 2, 2> & mat)
 {
-    return this->values[0] * this->values[4] * this->values[8] +
-           this->values[3] * this->values[7] * this->values[2] +
-           this->values[1] * this->values[5] * this->values[6] -
-           (this->values[6] * this->values[4] * this->values[2] +
-            this->values[1] * this->values[3] * this->values[8] +
-            this->values[5] * this->values[7] * this->values[0]);
+    const T * values = mat.data();
+    return values[0] * values[3] - values[2] * values[1];
+}
+
+template <typename T>
+inline T
+determinant(const DenseMatrix<T, 3, 3> & mat)
+{
+    const T * values = mat.data();
+    return values[0] * values[4] * values[8] +
+           values[3] * values[7] * values[2] +
+           values[1] * values[5] * values[6] -
+           (values[6] * values[4] * values[2] +
+            values[1] * values[3] * values[8] +
+            values[5] * values[7] * values[0]);
 }
 
 // Inversion
@@ -644,7 +646,7 @@ template <>
 inline DenseMatrix<Real, 2>
 DenseMatrix<Real, 2>::inverse() const
 {
-    Real det = this->det();
+    Real det = determinant(*this);
     if (det == 0.)
         throw Exception("Inverting of a matrix failed: matrix is singular.");
 
@@ -661,7 +663,7 @@ template <>
 inline DenseMatrix<Real, 3>
 DenseMatrix<Real, 3>::inverse() const
 {
-    Real det = this->det();
+    Real det = determinant(*this);
     if (det == 0.)
         throw Exception("Inverting of a matrix failed: matrix is singular.");
 
