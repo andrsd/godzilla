@@ -287,20 +287,20 @@ public:
     }
 };
 
-/// Compute dot product of 2 vectors
+/// Compute dot product of 2 column-vectors
 ///
 /// @tparam T Data type
 /// @tparam N Size of the vector
-/// @param a First vector
-/// @param b Second vector
+/// @param a First column-vector
+/// @param b Second column-vector
 /// @return Dot product
 template <typename T, Int N>
 inline T
-dot(const DenseVector<T, N> & a, const DenseVector<T, N> & b)
+dot(const DenseMatrix<T, N, 1> & a, const DenseMatrix<T, N, 1> & b)
 {
     T dot = 0.;
     for (Int i = 0; i < N; i++)
-        dot += a(i) * b(i);
+        dot += a(i, 0) * b(i, 0);
     return dot;
 }
 
@@ -308,16 +308,16 @@ dot(const DenseVector<T, N> & a, const DenseVector<T, N> & b)
 ///
 /// @tparam T Data type
 /// @tparam N Size of the vector
-/// @param a First vector
-/// @param b Second vector
+/// @param a First row-vector
+/// @param b Second column-vector
 /// @return Dot product
 template <typename T, Int N>
 inline T
-dot(const DenseMatrix<T, 1, N> & a, const DenseVector<T, N> & b)
+dot(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, N, 1> & b)
 {
     T dot = 0.;
     for (Int i = 0; i < N; i++)
-        dot += a(0, i) * b(i);
+        dot += a(0, i) * b(i, 0);
     return dot;
 }
 
@@ -336,6 +336,17 @@ dot(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, 1, N> & b)
     for (Int i = 0; i < N; i++)
         dot += a(0, i) * b(0, i);
     return dot;
+}
+
+/// Dot product of 2 "scalars"
+///
+/// NOTE: This exists to avoid ambiguity between DenseMatrix<T, N, 1> and DenseMatrix<T, 1, N> for N
+/// = 1
+template <typename T>
+inline T
+dot(const DenseMatrix<T, 1, 1> & a, const DenseMatrix<T, 1, 1> & b)
+{
+    return a(0, 0) * b(0, 0);
 }
 
 /// Pointwise multiplication of 2 column-vectors
