@@ -143,19 +143,6 @@ public:
         return std::sqrt(sum);
     }
 
-    /// Point-wise division of this vector with another one
-    ///
-    /// @param b Second vector
-    /// @return Vector with entries this[i]/b[i]
-    [[nodiscard]] DenseVector<T, N>
-    pointwise_div(const DenseVector<T, N> & b) const
-    {
-        DenseVector<T, N> res;
-        for (Int i = 0; i < N; i++)
-            res(i) = get(i) / b(i);
-        return res;
-    }
-
     /// Find the minimum value of the elements
     ///
     /// @return The minimum value of the elements
@@ -372,20 +359,37 @@ pointwise_mult(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, 1, N> & b)
     return res;
 }
 
-/// Pointwise division of 2 vectors
+/// Pointwise division of 2 column-vectors
 ///
 /// @tparam T Data type
 /// @tparam N Size of the vector
-/// @param a First vector
-/// @param b Second vector
-/// @return Vector with vec[i] = a[i] / b[i]
+/// @param a First column-vector
+/// @param b Second column-vector
+/// @return Column-vector with vec[i] = a[i] / b[i]
 template <typename T, Int N>
-inline DenseVector<T, N>
-pointwise_div(const DenseVector<T, N> & a, const DenseVector<T, N> & b)
+inline DenseMatrix<T, N, 1>
+pointwise_div(const DenseMatrix<T, N, 1> & a, const DenseMatrix<T, N, 1> & b)
 {
-    DenseVector<T, N> res;
+    DenseMatrix<T, N, 1> res;
     for (Int i = 0; i < N; i++)
-        res(i) = a(i) / b(i);
+        res(i, 0) = a(i, 0) / b(i, 0);
+    return res;
+}
+
+/// Pointwise division of 2 row-vectors
+///
+/// @tparam T Data type
+/// @tparam N Size of the vector
+/// @param a First row-vector
+/// @param b Second row-vector
+/// @return Row-vector with vec[i] = a[i] / b[i]
+template <typename T, Int N>
+inline DenseMatrix<T, 1, N>
+pointwise_div(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, 1, N> & b)
+{
+    DenseMatrix<T, 1, N> res;
+    for (Int i = 0; i < N; i++)
+        res(0, i) = a(0, i) / b(0, i);
     return res;
 }
 

@@ -170,18 +170,7 @@ TEST(DenseVectorTest, pointwise_mult_row)
     EXPECT_EQ(res(0, 2), -4.);
 }
 
-TEST(DenseVectorTest, pointwise_div)
-{
-    const Int N = 3;
-    DenseVector<Real, N> a({ 2., 6., 4. });
-    DenseVector<Real, N> b({ 4., 2., -1. });
-    DenseVector<Real, N> res = a.pointwise_div(b);
-    EXPECT_EQ(res(0), 0.5);
-    EXPECT_EQ(res(1), 3.);
-    EXPECT_EQ(res(2), -4.);
-}
-
-TEST(DenseVectorTest, pointwise_div_glob)
+TEST(DenseVectorTest, pointwise_div_col_col)
 {
     const Int N = 3;
     DenseVector<Real, N> a({ 2., 6., 4. });
@@ -190,6 +179,19 @@ TEST(DenseVectorTest, pointwise_div_glob)
     EXPECT_EQ(res(0), 0.5);
     EXPECT_EQ(res(1), 3.);
     EXPECT_EQ(res(2), -4.);
+}
+
+TEST(DenseVectorTest, pointwise_div_row_row)
+{
+    const Int N = 3;
+    DenseMatrix<Real, 1, N> a;
+    a.set_row(0, { 2., 6., 4. });
+    DenseMatrix<Real, 1, N> b;
+    b.set_row(0, { 4., 2., -1. });
+    auto res = pointwise_div(a, b);
+    EXPECT_EQ(res(0, 0), 0.5);
+    EXPECT_EQ(res(0, 1), 3.);
+    EXPECT_EQ(res(0, 2), -4.);
 }
 
 TEST(DenseVectorTest, op_mult_scalar)
