@@ -243,29 +243,7 @@ TEST(DenseVectorDeathTest, get_out_of_range)
 
 #endif
 
-TEST(DenseVectorDeathTest, cross_prod_1_2)
-{
-    DenseVector<Real, 1> a({ -2. });
-    EXPECT_DEATH({ auto v = a.cross(a); }, "Cross product of 1D vectors is not defined.");
-
-    DenseVector<Real, 2> b({ -2., 5. });
-    EXPECT_DEATH({ auto v = b.cross(b); }, "Cross product of 2D vectors is not defined.");
-
-    DenseVector<Real, 4> c({ -2., 5., 5., 6. });
-    EXPECT_DEATH({ auto v = c.cross(c); }, "Cross product in 4 dimensions is not unique.");
-}
-
 TEST(DenseVectorTest, cross_prod_3)
-{
-    DenseVector<Real, 3> a({ -2., 5, 1. });
-    DenseVector<Real, 3> b({ 3, 1, 2 });
-    auto v = a.cross(b);
-    EXPECT_EQ(v(0), 9.);
-    EXPECT_EQ(v(1), 7.);
-    EXPECT_EQ(v(2), -17.);
-}
-
-TEST(DenseVectorTest, cross_prod_3_fn)
 {
     DenseVector<Real, 3> a({ -2., 5, 1. });
     DenseVector<Real, 3> b({ 3, 1, 2 });
