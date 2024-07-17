@@ -241,19 +241,6 @@ TEST(DenseVectorDeathTest, get_out_of_range)
 
 #endif
 
-TEST(DenseVectorTest, tensor_prod)
-{
-    DenseVector<Real, 3> a({ -2., 5., 1. });
-    DenseVector<Real, 2> b({ 3, 1 });
-    auto m = a.tensor_prod(b);
-    EXPECT_EQ(m(0, 0), -6.);
-    EXPECT_EQ(m(0, 1), -2.);
-    EXPECT_EQ(m(1, 0), 15.);
-    EXPECT_EQ(m(1, 1), 5.);
-    EXPECT_EQ(m(2, 0), 3.);
-    EXPECT_EQ(m(2, 1), 1.);
-}
-
 TEST(DenseVectorDeathTest, cross_prod_1_2)
 {
     DenseVector<Real, 1> a({ -2. });
@@ -373,9 +360,11 @@ TEST(DenseVectorTest, out)
 
 TEST(DenseVectorTest, tensor_product)
 {
-    DenseVector<Real, 3> a({ 1, 2, 3 });
-    DenseVector<Real, 2> b({ 5, 7 });
-    auto prod = tensor_product(a, b);
+    DenseMatrix<Real, 3, 1> a;
+    a.set_col(0, { 1, 2, 3 });
+    DenseMatrix<Real, 1, 2> b;
+    b.set_row(0, { 5, 7 });
+    auto prod = a * b;
     EXPECT_DOUBLE_EQ(prod(0, 0), 5.);
     EXPECT_DOUBLE_EQ(prod(1, 0), 10.);
     EXPECT_DOUBLE_EQ(prod(2, 0), 15.);

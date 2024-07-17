@@ -119,17 +119,6 @@ public:
         error("Cross product in {} dimensions is not unique.", N);
     }
 
-    template <Int M>
-    DenseMatrix<Real, N, M>
-    tensor_prod(const DenseVector<Real, M> & a) const
-    {
-        DenseMatrix<Real, N, M> res;
-        for (Int i = 0; i < N; i++)
-            for (Int j = 0; j < M; j++)
-                res(i, j) = get(i) * a(j);
-        return res;
-    }
-
     /// Sum all vector elements, i.e \Sum_i vec[i]
     ///
     /// @return Sum of all elements
@@ -450,17 +439,6 @@ cross_product(const DenseVector<Real, 3> & a, const DenseVector<Real, 3> & b)
     res(1) = -(a(0) * b(2) - a(2) * b(0));
     res(2) = a(0) * b(1) - a(1) * b(0);
     return res;
-}
-
-template <typename T, Int M, Int N>
-inline DenseMatrix<T, M, N>
-tensor_product(const DenseVector<T, M> & a, const DenseVector<T, N> & b)
-{
-    DenseMatrix<T, M, N> prod;
-    for (Int i = 0; i < M; i++)
-        for (Int j = 0; j < N; j++)
-            prod(i, j) = a(i) * b(j);
-    return prod;
 }
 
 /// Convert DenseVector<DenseVector, M>, N> into a DenseMatrix<N, M>
