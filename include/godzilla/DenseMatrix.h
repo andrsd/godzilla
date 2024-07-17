@@ -71,12 +71,12 @@ public:
     ///
     /// @param idx Index of the column
     /// @return Column as a DenseVector
-    DenseVector<T, ROWS>
+    DenseMatrix<T, ROWS, 1>
     column(Int idx) const
     {
-        DenseVector<T, ROWS> col;
+        DenseMatrix<T, ROWS, 1> col;
         for (Int row = 0; row < ROWS; row++)
-            col(row) = get(row, idx);
+            col(row, 0) = get(row, idx);
         return col;
     }
 
@@ -84,12 +84,12 @@ public:
     ///
     /// @param idx Index of the column
     /// @return Column as a DenseVector
-    DenseVector<T, COLS>
+    DenseMatrix<T, 1, COLS>
     row(Int idx) const
     {
-        DenseVector<T, COLS> row;
+        DenseMatrix<T, 1, COLS> row;
         for (Int col = 0; col < COLS; col++)
-            row(col) = get(idx, col);
+            row(0, col) = get(idx, col);
         return row;
     }
 
@@ -142,6 +142,21 @@ public:
     {
         for (Int i = 0; i < COLS; i++)
             set(row, i) = vals(i);
+    }
+
+    void
+    set_row(Int row, const DenseMatrix<T, 1, COLS> & vals)
+    {
+        for (Int i = 0; i < COLS; i++)
+            set(row, i) = vals(0, i);
+    }
+
+    void
+    set_col(Int col, const std::vector<T> & vals)
+    {
+        assert(vals.size() == ROWS);
+        for (Int i = 0; i < ROWS; i++)
+            set(i, col) = vals[i];
     }
 
     /// Set a matrix column at once
@@ -277,47 +292,6 @@ public:
             }
         }
         return res;
-    }
-
-    template <Int M>
-    DenseVector<DenseVector<T, M>, ROWS>
-    mult(const DenseVector<DenseVector<T, M>, COLS> & x) const
-    {
-        DenseVector<DenseVector<T, M>, ROWS> res;
-        for (Int i = 0; i < ROWS; i++) {
-            for (Int j = 0; j < M; j++) {
-                T prod = 0.;
-                for (Int k = 0; k < COLS; k++)
-                    prod += get(i, k) * x(k)(j);
-                res(i)(j) = prod;
-            }
-        }
-        return res;
-    }
-
-    /// Compute determinant of the matrix
-    [[nodiscard]] Real
-    det() const
-    {
-        error("Determinant is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
-    }
-
-    /// Compute inverse of this matrix
-    ///
-    /// @return Inverse of this matrix
-    [[deprecated("Use inverse() instead")]] DenseMatrix<Real, COLS>
-    inv() const
-    {
-        inverse();
-    }
-
-    /// Compute inverse of this matrix
-    ///
-    /// @return Inverse of this matrix
-    DenseMatrix<Real, COLS>
-    inverse() const
-    {
-        error("Inverse is not implemented for {}x{} matrices, yet.", ROWS, ROWS);
     }
 
     /// Compute transpose
@@ -495,13 +469,6 @@ public:
         return mult(x);
     }
 
-    template <Int M>
-    DenseVector<DenseVector<T, M>, ROWS>
-    operator*(const DenseVector<DenseVector<T, M>, COLS> & x) const
-    {
-        return mult(x);
-    }
-
     DenseMatrix<Real, ROWS> &
     operator=(const DenseMatrixSymm<Real, ROWS> & m)
     {
@@ -611,80 +578,119 @@ private:
 
 // ---
 
-template <>
-inline Real
-DenseMatrix<Real, 1>::det() const
+template <typename T, Int N>
+inline T
+determinant(const DenseMatrix<T, N, N> & mat)
 {
-    return this->values[0];
+    error("Determinant is not implemented for {}x{} matrices, yet.", N, N);
 }
 
-template <>
-inline Real
-DenseMatrix<Real, 2>::det() const
+template <typename T>
+inline T
+determinant(const DenseMatrix<T, 1, 1> & mat)
 {
-    return this->values[0] * this->values[3] - this->values[2] * this->values[1];
+    return mat.data()[0];
 }
 
-template <>
-inline Real
-DenseMatrix<Real, 3>::det() const
+template <typename T>
+inline T
+determinant(const DenseMatrix<T, 2, 2> & mat)
 {
-    return this->values[0] * this->values[4] * this->values[8] +
-           this->values[3] * this->values[7] * this->values[2] +
-           this->values[1] * this->values[5] * this->values[6] -
-           (this->values[6] * this->values[4] * this->values[2] +
-            this->values[1] * this->values[3] * this->values[8] +
-            this->values[5] * this->values[7] * this->values[0]);
+    const T * values = mat.data();
+    return values[0] * values[3] - values[2] * values[1];
+}
+
+template <typename T>
+inline T
+determinant(const DenseMatrix<T, 3, 3> & mat)
+{
+    const T * values = mat.data();
+    return values[0] * values[4] * values[8] +
+           values[3] * values[7] * values[2] +
+           values[1] * values[5] * values[6] -
+           (values[6] * values[4] * values[2] +
+            values[1] * values[3] * values[8] +
+            values[5] * values[7] * values[0]);
 }
 
 // Inversion
 
+/// Compute inverse of this matrix
+///
+/// @return Inverse of this matrix
+template <typename T, Int N>
+inline
+DenseMatrix<T, N>
+inverse(const DenseMatrix<T, N> & mat)
+{
+    error("Inverse is not implemented for {}x{} matrices, yet.", N, N);
+}
+
+
 template <>
 inline DenseMatrix<Real, 1>
-DenseMatrix<Real, 1>::inverse() const
+inverse(const DenseMatrix<Real, 1> & mat)
 {
     DenseMatrix<Real, 1> inv;
-    inv(0, 0) = 1. / this->values[0];
+    inv(0, 0) = 1. / mat.data()[0];
     return inv;
 }
 
 template <>
 inline DenseMatrix<Real, 2>
-DenseMatrix<Real, 2>::inverse() const
+inverse(const DenseMatrix<Real, 2> & mat)
 {
-    Real det = this->det();
+    Real det = determinant(mat);
     if (det == 0.)
         throw Exception("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 2> inv;
-    inv.values[0] = this->values[3];
-    inv.values[1] = -this->values[1];
-    inv.values[2] = -this->values[2];
-    inv.values[3] = this->values[0];
+    inv.data()[0] =  mat.data()[3];
+    inv.data()[1] = -mat.data()[1];
+    inv.data()[2] = -mat.data()[2];
+    inv.data()[3] =  mat.data()[0];
     inv.scale(1. / det);
     return inv;
 }
 
 template <>
 inline DenseMatrix<Real, 3>
-DenseMatrix<Real, 3>::inverse() const
+inverse(const DenseMatrix<Real, 3> & mat)
 {
-    Real det = this->det();
+    Real det = determinant(mat);
     if (det == 0.)
         throw Exception("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 3> inv;
-    inv(0, 0) = (this->values[4] * this->values[8] - this->values[5] * this->values[7]);
-    inv(1, 0) = -(this->values[3] * this->values[8] - this->values[5] * this->values[6]);
-    inv(2, 0) = (this->values[3] * this->values[7] - this->values[4] * this->values[6]);
-    inv(0, 1) = -(this->values[1] * this->values[8] - this->values[2] * this->values[7]);
-    inv(1, 1) = (this->values[0] * this->values[8] - this->values[2] * this->values[6]);
-    inv(2, 1) = -(this->values[0] * this->values[7] - this->values[1] * this->values[6]);
-    inv(0, 2) = (this->values[1] * this->values[5] - this->values[2] * this->values[4]);
-    inv(1, 2) = -(this->values[0] * this->values[5] - this->values[2] * this->values[3]);
-    inv(2, 2) = (this->values[0] * this->values[4] - this->values[1] * this->values[3]);
+    inv(0, 0) =  (mat.data()[4] * mat.data()[8] - mat.data()[5] * mat.data()[7]);
+    inv(1, 0) = -(mat.data()[3] * mat.data()[8] - mat.data()[5] * mat.data()[6]);
+    inv(2, 0) =  (mat.data()[3] * mat.data()[7] - mat.data()[4] * mat.data()[6]);
+    inv(0, 1) = -(mat.data()[1] * mat.data()[8] - mat.data()[2] * mat.data()[7]);
+    inv(1, 1) =  (mat.data()[0] * mat.data()[8] - mat.data()[2] * mat.data()[6]);
+    inv(2, 1) = -(mat.data()[0] * mat.data()[7] - mat.data()[1] * mat.data()[6]);
+    inv(0, 2) =  (mat.data()[1] * mat.data()[5] - mat.data()[2] * mat.data()[4]);
+    inv(1, 2) = -(mat.data()[0] * mat.data()[5] - mat.data()[2] * mat.data()[3]);
+    inv(2, 2) =  (mat.data()[0] * mat.data()[4] - mat.data()[1] * mat.data()[3]);
     inv.scale(1. / det);
     return inv;
+}
+
+/// Transpose DenseMatrix<T, M, N>
+///
+/// @tparam T Data type
+/// @tparam N Number of rows in the input "matrix", but number of columns in the resulting matrix
+/// @tparam M Number of columns in the input "matrix", but number of rows in the resulting matrix
+/// @param a Input "matrix"
+/// @return Transposed version of DenseMatrix<T> with values from `a`
+template <typename T, Int N, Int M>
+inline DenseMatrix<T, N, M>
+transpose(const DenseMatrix<T, M, N> & a)
+{
+    DenseMatrix<T, N, M> res;
+    for (Int i = 0; i < N; i++)
+        for (Int j = 0; j < M; j++)
+            res(i, j) = a(j, i);
+    return res;
 }
 
 //

@@ -248,34 +248,6 @@ TEST(DenseMatrixSymmTest, op_mult_vec)
     EXPECT_EQ(res(2), 7.);
 }
 
-TEST(DenseMatrixSymmTest, op_mult_vec_vec)
-{
-    auto a = DenseMatrixSymm<Real, 3>();
-    a(0, 0) = 2;
-    a(0, 1) = -3;
-    a(0, 2) = 4;
-    a(1, 1) = 6;
-    a(1, 2) = -7;
-    a(2, 2) = 5;
-    auto b = DenseVector<DenseVector<Real, 4>, 3>();
-    b(0) = DenseVector<Real, 4>({ -1, 0, 2, 3 });
-    b(1) = DenseVector<Real, 4>({ -5, 1, -2, 1 });
-    b(2) = DenseVector<Real, 4>({ -4, 2, 0, 1 });
-    auto m = a * b;
-    EXPECT_EQ(m(0)(0), -3.);
-    EXPECT_EQ(m(0)(1), 5.);
-    EXPECT_EQ(m(0)(2), 10.);
-    EXPECT_EQ(m(0)(3), 7.);
-    EXPECT_EQ(m(1)(0), 1.);
-    EXPECT_EQ(m(1)(1), -8.);
-    EXPECT_EQ(m(1)(2), -18.);
-    EXPECT_EQ(m(1)(3), -10.);
-    EXPECT_EQ(m(2)(0), 11.);
-    EXPECT_EQ(m(2)(1), 3.);
-    EXPECT_EQ(m(2)(2), 22.);
-    EXPECT_EQ(m(2)(3), 10.);
-}
-
 TEST(DenseMatrixSymmTest, op_mult_mat_symm)
 {
     auto a = DenseMatrixSymm<Real, 3>();
@@ -326,21 +298,21 @@ TEST(DenseMatrixSymmTest, det1)
 {
     auto m = DenseMatrixSymm<Real, 1>();
     m(0, 0) = 2.;
-    EXPECT_EQ(m.det(), 2.);
+    EXPECT_EQ(determinant(m), 2.);
 }
 
 TEST(DenseMatrixSymmTest, det2)
 {
     auto m = DenseMatrixSymm<Real, 2>();
     m.set_values({ 2, 3, 4 });
-    EXPECT_EQ(m.det(), -1.);
+    EXPECT_EQ(determinant(m), -1.);
 }
 
 TEST(DenseMatrixSymmTest, det3)
 {
     auto m = DenseMatrixSymm<Real, 3>();
     m.set_values({ 2, -3, 6, 4, 7, -1 });
-    EXPECT_EQ(m.det(), -365.);
+    EXPECT_EQ(determinant(m), -365.);
 }
 
 TEST(DenseMatrixSymmTest, det4)
@@ -352,7 +324,7 @@ TEST(DenseMatrixSymmTest, det4)
     //    m.set_row(2, { 0, 1, 0, 2 });
     //    m.set_row(3, { 1, -2, -3, 2 });
     //    EXPECT_EQ(m.det(), 21.);
-    EXPECT_DEATH({ auto d = m.det(); }, "Determinant is not implemented for 4x4 matrices, yet.");
+    EXPECT_DEATH({ auto d = determinant(m); }, "Determinant is not implemented for 4x4 matrices, yet.");
 }
 
 TEST(DenseMatrixSymmTest, transpose3)

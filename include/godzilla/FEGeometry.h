@@ -102,14 +102,15 @@ template <>
 inline DenseVector<Real, 2>
 normal<TRI3, 2>(Real volume, Real edge_len, const DenseVector<Real, 2> & grad)
 {
-    return -2. * volume / edge_len * grad;
+    auto c = -2. * volume / edge_len;
+    return c * grad;
 }
 
 // Element lengths
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 inline Real
-element_length(const DenseMatrix<Real, N_ELEM_NODES, DIM> & grad_phi)
+element_length(const DenseMatrix<Real, DIM, N_ELEM_NODES> & grad_phi)
 {
     CALL_STACK_MSG();
     error("Computation of a element length for '{}' in {} dimensions is not implemented.",
@@ -119,27 +120,29 @@ element_length(const DenseMatrix<Real, N_ELEM_NODES, DIM> & grad_phi)
 
 template <>
 inline Real
-element_length<EDGE2, 1, 2>(const DenseMatrix<Real, 2, 1> & grad_phi)
+element_length<EDGE2, 1, 2>(const DenseMatrix<Real, 1, 2> & grad_phi)
 {
     auto h1 = 1. / std::abs(grad_phi(0, 0));
-    auto h2 = 1. / std::abs(grad_phi(1, 0));
+    auto h2 = 1. / std::abs(grad_phi(0, 1));
     return std::min({ h1, h2 });
 }
 
 template <>
 inline Real
-element_length<TRI3, 2, 3>(const DenseMatrix<Real, 3, 2> & grad_phi)
+element_length<TRI3, 2, 3>(const DenseMatrix<Real, 2, 3> & grad_phi)
 {
-    auto h1 = 1. / grad_phi.row(0).magnitude();
-    auto h2 = 1. / grad_phi.row(1).magnitude();
-    auto h3 = 1. / grad_phi.row(2).magnitude();
-    return std::min({ h1, h2, h3 });
+    Real h[3];
+    for (int i = 0; i < 3; i++) {
+        DenseVector<Real, 2> v(grad_phi.column(i));
+        h[i] = 1. / v.magnitude();
+    }
+    return std::min({ h[0], h[1], h[2] });
 }
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 Array1D<Real>
 calc_element_length(const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
-                    const Array1D<DenseMatrix<Real, N_ELEM_NODES, DIM>> & grad_phi)
+                    const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_phi)
 {
     CALL_STACK_MSG();
     Array1D<Real> elem_lengths(connect.get_size());

@@ -38,55 +38,24 @@ linear_combination(const DenseVector<Real, N_VALS> & a, const DenseVector<T, N_V
 /// @return Computed gradient
 template <Int D, Int N_VALS>
 inline DenseVector<Real, D>
-gradient(const DenseVector<Real, N_VALS> & vals, const DenseMatrix<Real, N_VALS, D> & grad_phi)
+gradient(const DenseVector<Real, N_VALS> & vals, const DenseMatrix<Real, D, N_VALS> & grad_phi)
 {
-    return vals * grad_phi;
+    return grad_phi * vals;
 }
 
 /// Compute gradient of a vector-valued quantity
 ///
-/// @tparam N_COMPS Number of vector component
+/// @tparam C Number of vector component
 /// @tparam D Spatial dimension
-/// @tparam N_VALS Number of values per element
+/// @tparam N Number of values per element
 /// @param vals Values
 /// @param grad_phi Gradient of test functions
 /// @return Computed gradient
-template <Int N_COMPS, Int D, Int N_VALS>
-inline DenseMatrix<Real, D, N_COMPS>
-gradient(const DenseVector<DenseVector<Real, N_COMPS>, N_VALS> & vals,
-         const DenseMatrix<Real, N_VALS, D> & grad_phi)
+template <Int C, Int D, Int N>
+inline DenseMatrix<Real, D, C>
+gradient(const DenseMatrix<Real, N, C> & vals, const DenseMatrix<Real, D, N> & grad_phi)
 {
-    DenseMatrix<Real, D, N_COMPS> grad;
-    grad.set_values(0.);
-    for (Int i = 0; i < D; i++) {
-        for (Int j = 0; j < N_COMPS; j++)
-            for (Int k = 0; k < N_VALS; k++)
-                grad(i, j) += vals(k)(j) * grad_phi(k, i);
-    }
-    return grad;
-}
-
-/// Compute gradient of a vector-valued quantity
-///
-/// @tparam N_COMPS Number of vector component
-/// @tparam D Spatial dimension
-/// @tparam N_VALS Number of values per element
-/// @param vals Values
-/// @param grad_phi Gradient of test functions
-/// @return Computed gradient
-template <Int N_COMPS, Int D, Int N_VALS>
-inline DenseMatrix<Real, D, N_COMPS>
-gradient(const DenseMatrix<Real, N_VALS, N_COMPS> & vals,
-         const DenseMatrix<Real, N_VALS, D> & grad_phi)
-{
-    DenseMatrix<Real, D, N_COMPS> grad;
-    grad.set_values(0.);
-    for (Int i = 0; i < D; i++) {
-        for (Int j = 0; j < N_COMPS; j++)
-            for (Int k = 0; k < N_VALS; k++)
-                grad(i, j) += vals(k, j) * grad_phi(k, i);
-    }
-    return grad;
+    return grad_phi * vals;
 }
 
 } // namespace fe

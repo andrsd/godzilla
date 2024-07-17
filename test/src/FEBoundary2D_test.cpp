@@ -82,7 +82,7 @@ public:
 class TestBoundary2D : public fe::BoundaryInfo<TRI3, 2, 3> {
 public:
     TestBoundary2D(UnstructuredMesh * mesh,
-                   const Array1D<DenseMatrix<Real, 3, 2>> * grad_phi,
+                   const Array1D<DenseMatrix<Real, 2, 3>> * grad_phi,
                    const IndexSet & facets) :
         fe::BoundaryInfo<TRI3, 2, 3>(mesh, grad_phi, facets)
     {

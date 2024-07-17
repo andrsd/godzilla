@@ -79,7 +79,7 @@ public:
 class TestBoundary1D : public fe::BoundaryInfo<EDGE2, 1, 2> {
 public:
     TestBoundary1D(UnstructuredMesh * mesh,
-                   const Array1D<DenseMatrix<Real, 2, 1>> * grad_phi,
+                   const Array1D<DenseMatrix<Real, 1, 2>> * grad_phi,
                    const IndexSet & facets) :
         fe::BoundaryInfo<EDGE2, 1, 2>(mesh, grad_phi, facets)
     {

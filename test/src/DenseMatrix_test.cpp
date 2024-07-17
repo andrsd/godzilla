@@ -382,7 +382,7 @@ TEST(DenseMatrixTest, det1)
 {
     auto m = DenseMatrix<Real, 1>();
     m(0, 0) = 2.;
-    EXPECT_EQ(m.det(), 2.);
+    EXPECT_EQ(determinant(m), 2.);
 }
 
 TEST(DenseMatrixTest, det2)
@@ -390,7 +390,7 @@ TEST(DenseMatrixTest, det2)
     auto m = DenseMatrix<Real, 2>();
     m.set_row(0, { 2, 3 });
     m.set_row(1, { 4, 5 });
-    EXPECT_EQ(m.det(), -2.);
+    EXPECT_EQ(determinant(m), -2.);
 }
 
 TEST(DenseMatrixTest, det3)
@@ -399,7 +399,7 @@ TEST(DenseMatrixTest, det3)
     m.set_row(0, { 2, -3, 4 });
     m.set_row(1, { -5, 6, 7 });
     m.set_row(2, { 8, 9, -1 });
-    EXPECT_EQ(m.det(), -663.);
+    EXPECT_EQ(determinant(m), -663.);
 }
 
 TEST(DenseMatrixTest, det4)
@@ -410,14 +410,14 @@ TEST(DenseMatrixTest, det4)
     m.set_row(2, { 0, 1, 0, 2 });
     m.set_row(3, { 1, -2, -3, 2 });
     //    EXPECT_EQ(m.det(), 21.);
-    EXPECT_DEATH({ auto d = m.det(); }, "Determinant is not implemented for 4x4 matrices, yet.");
+    EXPECT_DEATH({ auto d = determinant(m); }, "Determinant is not implemented for 4x4 matrices, yet.");
 }
 
 TEST(DenseMatrixTest, inv1)
 {
     auto m = DenseMatrix<Real, 1>();
     m(0, 0) = 2.;
-    auto inv = m.inverse();
+    auto inv = inverse(m);
     EXPECT_EQ(inv(0, 0), 1. / 2.);
 }
 
@@ -426,7 +426,7 @@ TEST(DenseMatrixTest, inv2)
     auto m = DenseMatrix<Real, 2>();
     m.set_row(0, { 2, 3 });
     m.set_row(1, { 4, 5 });
-    auto inv = m.inverse();
+    auto inv = inverse(m);
     EXPECT_EQ(inv(0, 0), -5. / 2);
     EXPECT_EQ(inv(0, 1), 3. / 2.);
     EXPECT_EQ(inv(1, 0), 2.);
@@ -438,7 +438,7 @@ TEST(DenseMatrixDeathTest, inv2_singular)
     auto m = DenseMatrix<Real, 2>();
     m.set_row(0, { 1, 2 });
     m.set_row(1, { 2, 4 });
-    EXPECT_THROW_MSG(m.inverse(), "Inverting of a matrix failed: matrix is singular.");
+    EXPECT_THROW_MSG(inverse(m), "Inverting of a matrix failed: matrix is singular.");
 }
 
 TEST(DenseMatrixTest, inv3)
@@ -447,7 +447,7 @@ TEST(DenseMatrixTest, inv3)
     m.set_row(0, { 2, -3, 4 });
     m.set_row(1, { -5, 6, -7 });
     m.set_row(2, { 8, -1, -2 });
-    auto inv = m.inverse();
+    auto inv = inverse(m);
     EXPECT_DOUBLE_EQ(inv(0, 0), 19. / 12.);
     EXPECT_DOUBLE_EQ(inv(0, 1), 5. / 6.);
     EXPECT_DOUBLE_EQ(inv(0, 2), 1. / 4.);
@@ -465,13 +465,13 @@ TEST(DenseMatrixDeathTest, inv3_singular)
     m.set_row(0, { 1, 2, 3 });
     m.set_row(1, { 2, 4, 6 });
     m.set_row(2, { 1, 1, 1 });
-    EXPECT_THROW_MSG(m.inverse(), "Inverting of a matrix failed: matrix is singular.");
+    EXPECT_THROW_MSG(inverse(m), "Inverting of a matrix failed: matrix is singular.");
 }
 
 TEST(DenseMatrixDeathTest, inv4)
 {
     auto m = DenseMatrix<Real, 4>();
-    EXPECT_DEATH(m.inverse(), "Inverse is not implemented for 4x4 matrices, yet.");
+    EXPECT_DEATH(inverse(m), "Inverse is not implemented for 4x4 matrices, yet.");
 }
 
 TEST(DenseMatrixTest, transpose3)
@@ -510,26 +510,6 @@ TEST(DenseMatrixTest, mult_mat)
     EXPECT_EQ(m(1, 1), -8.);
     EXPECT_EQ(m(1, 2), -22.);
     EXPECT_EQ(m(1, 3), -16.);
-}
-
-TEST(DenseMatrixTest, mult_vec_vec)
-{
-    auto a = DenseMatrix<Real, 2, 3>();
-    a.set_row(0, { 2, -3, 4 });
-    a.set_row(1, { -5, 6, -7 });
-    auto b = DenseVector<DenseVector<Real, 4>, 3>();
-    b(0) = DenseVector<Real, 4>({ -1, 0, 2, 3 });
-    b(1) = DenseVector<Real, 4>({ -5, 1, -2, 1 });
-    b(2) = DenseVector<Real, 4>({ -4, 2, 0, 1 });
-    auto m = a * b;
-    EXPECT_EQ(m(0)(0), -3.);
-    EXPECT_EQ(m(0)(1), 5.);
-    EXPECT_EQ(m(0)(2), 10.);
-    EXPECT_EQ(m(0)(3), 7.);
-    EXPECT_EQ(m(1)(0), 3.);
-    EXPECT_EQ(m(1)(1), -8.);
-    EXPECT_EQ(m(1)(2), -22.);
-    EXPECT_EQ(m(1)(3), -16.);
 }
 
 TEST(DenseMatrixTest, copy_ctor)
@@ -588,17 +568,17 @@ TEST(DenseMatrixTest, column)
     m.set_row(1, { 3, -1, -2 });
     m.set_row(2, { 0, -3, 4 });
 
-    DenseVector<Real, 3> c0 = m.column(0);
+    DenseVector<Real, 3> c0(m.column(0));
     EXPECT_EQ(c0(0), 2.);
     EXPECT_EQ(c0(1), 3.);
     EXPECT_EQ(c0(2), 0.);
 
-    DenseVector<Real, 3> c1 = m.column(1);
+    DenseVector<Real, 3> c1(m.column(1));
     EXPECT_EQ(c1(0), 1.);
     EXPECT_EQ(c1(1), -1.);
     EXPECT_EQ(c1(2), -3.);
 
-    DenseVector<Real, 3> c2 = m.column(2);
+    DenseVector<Real, 3> c2(m.column(2));
     EXPECT_EQ(c2(0), 5.);
     EXPECT_EQ(c2(1), -2.);
     EXPECT_EQ(c2(2), 4.);
@@ -611,20 +591,20 @@ TEST(DenseMatrixTest, row)
     m.set_row(1, { 3, -1, -2 });
     m.set_row(2, { 0, -3, 4 });
 
-    DenseVector<Real, 3> r0 = m.row(0);
-    EXPECT_EQ(r0(0), 2.);
-    EXPECT_EQ(r0(1), 1.);
-    EXPECT_EQ(r0(2), 5.);
+    auto r0 = m.row(0);
+    EXPECT_EQ(r0(0, 0), 2.);
+    EXPECT_EQ(r0(0, 1), 1.);
+    EXPECT_EQ(r0(0, 2), 5.);
 
-    DenseVector<Real, 3> r1 = m.row(1);
-    EXPECT_EQ(r1(0), 3.);
-    EXPECT_EQ(r1(1), -1.);
-    EXPECT_EQ(r1(2), -2.);
+    auto r1 = m.row(1);
+    EXPECT_EQ(r1(0, 0), 3.);
+    EXPECT_EQ(r1(0, 1), -1.);
+    EXPECT_EQ(r1(0, 2), -2.);
 
-    DenseVector<Real, 3> r2 = m.row(2);
-    EXPECT_EQ(r2(0), 0.);
-    EXPECT_EQ(r2(1), -3.);
-    EXPECT_EQ(r2(2), 4.);
+    auto r2 = m.row(2);
+    EXPECT_EQ(r2(0, 0), 0.);
+    EXPECT_EQ(r2(0, 1), -3.);
+    EXPECT_EQ(r2(0, 2), 4.);
 }
 
 TEST(DenseMatrixTest, diagonal)
@@ -702,4 +682,23 @@ TEST(DenseMatrixTest, out)
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, HasSubstr("(1, 2, 3)"));
     EXPECT_THAT(out, HasSubstr("(6, 5, 4)"));
+}
+
+TEST(DenseMatrixTest, transpose)
+{
+    DenseMatrix<Real, 2, 3> A;
+    A(0, 0) = -2;
+    A(0, 1) = 5;
+    A(0, 2) = 3;
+    A(1, 0) = 1;
+    A(1, 1) = -1;
+    A(1, 2) = 2;
+
+    auto m = transpose(A);
+    EXPECT_EQ(m(0, 0), -2.);
+    EXPECT_EQ(m(0, 1), 1.);
+    EXPECT_EQ(m(1, 0), 5.);
+    EXPECT_EQ(m(1, 1), -1.);
+    EXPECT_EQ(m(2, 0), 3.);
+    EXPECT_EQ(m(2, 1), 2.);
 }
