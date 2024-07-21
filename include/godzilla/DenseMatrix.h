@@ -7,12 +7,16 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include <cassert>
+#include <initializer_list>
 #include <vector>
 
 namespace godzilla {
 
 template <typename T, Int N>
 class DenseVector;
+
+template <typename T>
+using DynDenseVector = DenseVector<T, -1>;
 
 template <typename T, Int N>
 class DenseMatrixSymm;
@@ -719,6 +723,568 @@ operator<<(std::ostream & os, const DenseMatrix<T, M, N> & obj)
         os << ")" << std::endl;
     }
     return os;
+}
+
+// Dynamic dense maatrix
+
+template <typename T>
+using DynDenseMatrix = DenseMatrix<T, -1, -1>;
+
+/// Dense matrix with `ROWS` rows and `COLS` columns
+///
+/// Entries are stored in row-major format
+/// @tparam T Data type of matrix entries
+/// @tparam ROWS Number of rows
+/// @tparam COLS Number of columns
+template <typename T>
+class DenseMatrix<T, -1, -1> {
+public:
+    DenseMatrix<T, -1, -1>() : rows(0), cols(0), values(nullptr) {}
+
+    DenseMatrix<T, -1, -1>(Int rows, Int cols) : rows(rows), cols(cols), values(new T[rows * cols])
+    {
+    }
+
+    DenseMatrix<T, -1, -1>(Int rows, Int cols, const T & val) :
+        rows(rows),
+        cols(cols),
+        values(new T[rows * cols])
+    {
+        set_values(val);
+    }
+
+    DenseMatrix(const DenseMatrix & other) :
+        rows(other.rows),
+        cols(other.cols),
+        values(new T[rows * cols])
+    {
+        for (Int i = 0; i < rows * cols; i++)
+            this->values[i] = other.values[i];
+    }
+
+    ~DenseMatrix() { delete[] this->values; }
+
+    /// Get the number of rows
+    ///
+    /// @return The number of rows
+    [[nodiscard]] Int
+    get_num_rows() const
+    {
+        return this->rows;
+    }
+
+    /// Get the number of columns
+    ///
+    /// @return The number of columns
+    [[nodiscard]] Int
+    get_num_cols() const
+    {
+        return this->cols;
+    }
+
+    /// Get entry at specified location for reading
+    ///
+    /// @param i Row number
+    /// @param j Column number
+    /// @return Entry at the specified location
+    const T &
+    get(Int i, Int j) const
+    {
+        if (((i >= 0) && (i < this->rows)) && ((j >= 0) && (j < this->cols)))
+            return this->values[idx(i, j)];
+        else
+            throw Exception("Index ({}, {}) is out of matrix dimensions ({}, {})",
+                            i,
+                            j,
+                            this->rows,
+                            this->cols);
+    }
+
+    /// Obtain a column from the matrix
+    ///
+    /// @param idx Index of the column
+    /// @return Column as a DenseVector
+    DynDenseMatrix<T>
+    column(Int idx) const
+    {
+        DynDenseMatrix<T> col(this->rows, 1);
+        for (Int i = 0; i < this->rows; i++)
+            col(i, 0) = get(i, idx);
+        return col;
+    }
+
+    /// Obtain a column from the matrix
+    ///
+    /// @param idx Index of the column
+    /// @return Column as a DenseVector
+    DynDenseMatrix<T>
+    row(Int idx) const
+    {
+        DynDenseMatrix<T> row(1, this->cols);
+        for (Int j = 0; j < this->cols; j++)
+            row(0, j) = get(idx, j);
+        return row;
+    }
+
+    /// Resize the matrix
+    ///
+    /// @param m Number of rows
+    /// @param n Number of columns
+    void
+    resize(Int m, Int n)
+    {
+        if (this->values != nullptr)
+            delete this->values;
+        this->values = new T[m * n];
+        this->rows = m;
+        this->cols = n;
+    }
+
+    /// Get entry at specified location for writing
+    ///
+    /// @param i Row number
+    /// @param j Column number
+    /// @return Entry at the specified location
+    T &
+    set(Int i, Int j)
+    {
+        if (((i >= 0) && (i < this->rows)) && ((j >= 0) && (j < this->cols)))
+            return this->values[idx(i, j)];
+        else
+            throw Exception("Index ({}, {}) is out of matrix dimensions ({}, {})",
+                            i,
+                            j,
+                            this->rows,
+                            this->cols);
+    }
+
+    /// Set value at a specified location
+    ///
+    /// @param i Row number
+    /// @param j Column number
+    /// @param val Value to set at position (i, j)
+    void
+    set(Int i, Int j, const T & val)
+    {
+        if (((i >= 0) && (i < this->rows)) && ((j >= 0) && (j < this->cols)))
+            this->values[idx(i, j)] = val;
+        else
+            throw Exception("Index ({}, {}) is out of matrix dimensions ({}, {})",
+                            i,
+                            j,
+                            this->rows,
+                            this->cols);
+    }
+
+    /// Set a matrix row at once
+    ///
+    /// This is a convenience method
+    /// @param row Row number
+    /// @param vals Values of the row. `vals` must have `columns` values.
+    void
+    set_row(Int row, std::initializer_list<T> vals)
+    {
+        if (vals.size() == this->cols) {
+            for (Int i = 0; i < this->cols; i++)
+                set(row, i) = std::data(vals)[i];
+        }
+        else
+            throw Exception("Number of values ({}) must match the number of columns ({})",
+                            vals.size(),
+                            this->cols);
+    }
+
+    /// Set a matrix row at once
+    ///
+    /// This is a convenience method
+    /// @param row Row number
+    /// @param vals Values of the row
+    void
+    set_row(Int row, const DynDenseVector<T> & vals)
+    {
+        if (vals.size() == this->cols) {
+            for (Int i = 0; i < this->cols; i++)
+                set(row, i) = vals(i);
+        }
+        else
+            throw Exception("Number of values ({}) must match the number of rows ({})",
+                            vals.size(),
+                            this->rows);
+    }
+
+    void
+    set_row(Int row, const DynDenseMatrix<T> & vals)
+    {
+        if (vals->get_num_rows() == 1) {
+            if (vals->size() == this->cols) {
+                for (Int i = 0; i < this->cols; i++)
+                    set(row, i) = vals(0, i);
+            }
+            else
+                throw Exception("Number of values ({}) must match the number of columns ({})",
+                                vals->get_num_cols(),
+                                this->cols);
+        }
+        else
+            throw Exception("Row matrix must have just one row");
+    }
+
+    void
+    set_col(Int col, std::initializer_list<T> vals)
+    {
+        if (vals.size() == this->rows) {
+            for (Int i = 0; i < this->rows; i++)
+                set(i, col) = std::data(vals)[i];
+        }
+        else
+            throw Exception("Number of values ({}) must match the number of rows ({})",
+                            vals.size(),
+                            this->rows);
+    }
+
+    void
+    set_col(Int col, const std::vector<T> & vals)
+    {
+        if (vals.size() == this->rows) {
+            for (Int i = 0; i < this->rows; i++)
+                set(i, col) = vals[i];
+        }
+        else
+            throw Exception("Number of values ({}) must match the number of rows ({})",
+                            vals.size(),
+                            this->rows);
+    }
+
+    /// Set all matrix entries to zero, i.e. mat[i,j] = 0.
+    void
+    zero()
+    {
+        zero_impl(std::is_fundamental<T>());
+    }
+
+    /// Set `alpha` into all matrix entries, i.e. mat[i, j] = alpha
+    ///
+    /// @param alpha Value to set into matrix entries
+    void
+    set_values(const T & alpha)
+    {
+        for (Int i = 0; i < this->rows * this->cols; i++)
+            this->values[i] = alpha;
+    }
+
+    /// Multiply all entries by a scalar value
+    ///
+    /// @param alpha Value to multiple the matrix entries with
+    void
+    scale(Real alpha)
+    {
+        for (Int i = 0; i < this->rows; i++)
+            for (Int j = 0; j < this->cols; j++)
+                set(i, j) *= alpha;
+    }
+
+    /// Add matrix `x` to this matrix
+    ///
+    /// @param x Matrix to add
+    void
+    add(const DynDenseMatrix<T> & x)
+    {
+        if ((this->rows == x.rows) && (this->cols == x.cols)) {
+            for (Int i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++)
+                    set(i, j) += x.get(i, j);
+        }
+        else
+            throw Exception("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
+                            this->rows,
+                            this->cols,
+                            x.rows,
+                            x.cols);
+    }
+
+    /// Subtract matrix `x` from this matrix
+    ///
+    /// @param x Matrix to subtract
+    void
+    subtract(const DynDenseMatrix<T> & x)
+    {
+        if ((this->rows == x.rows) && (this->cols == x.cols)) {
+            for (Int i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++)
+                    set(i, j) -= x.get(i, j);
+        }
+        else
+            throw Exception("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
+                            this->rows,
+                            this->cols,
+                            x.rows,
+                            x.cols);
+    }
+
+    /// Multiply the matrix by a vector
+    ///
+    /// Vector size must be equal to the number of columns
+    /// @param x Vector to multiply by
+    /// @return Resulting vector
+    DynDenseVector<T>
+    mult(const DynDenseVector<T> & x) const
+    {
+        if (this->cols == x.size()) {
+            DynDenseVector<T> res(this->rows);
+            for (Int i = 0; i < this->rows; i++) {
+                T prod = 0.;
+                for (Int j = 0; j < this->cols; j++)
+                    prod += get(i, j) * x(j);
+                res(i) = prod;
+            }
+            return res;
+        }
+        throw Exception("Number of columns ({}) must match the vector size ({})",
+                        this->cols,
+                        x.size());
+    }
+
+    DynDenseMatrix<T>
+    mult(const DynDenseMatrix<T> & x) const
+    {
+        if (this->cols == x.rows) {
+            DynDenseMatrix<T> res(this->rows, x.cols);
+            for (Int i = 0; i < this->rows; i++) {
+                for (Int j = 0; j < x.cols; j++) {
+                    T prod = 0.;
+                    for (Int k = 0; k < this->cols; k++)
+                        prod += get(i, k) * x(k, j);
+                    res(i, j) = prod;
+                }
+            }
+            return res;
+        }
+        else
+            throw Exception("Number of columns ({}) must match number of rows ({})",
+                            this->cols,
+                            x.rows);
+    }
+
+    /// Get diagonal of the matrix as a DynDenseVector
+    ///
+    /// @return Matrix diagonal as a vector
+    DynDenseVector<T>
+    diagonal() const
+    {
+        if (this->rows == this->cols) {
+            DynDenseVector<T> diag(this->rows);
+            for (Int i = 0; i < this->cols; i++)
+                diag(i) = get(i, i);
+            return diag;
+        }
+        else
+            throw Exception("Diagonal can be obtained only for square matrices");
+    }
+
+    // operators
+
+    /// Get a value at position (i, j) for reading
+    ///
+    /// @param i Row number
+    /// @param j Col number
+    /// @return Value at the position (i, j)
+    const T &
+    operator()(Int i, Int j) const
+    {
+        return get(i, j);
+    }
+
+    /// Get a value at position (i, j) for writing
+    ///
+    /// @param i Row number
+    /// @param j Col number
+    /// @return Value at position (i, j)
+    T &
+    operator()(Int i, Int j)
+    {
+        return set(i, j);
+    }
+
+    DynDenseMatrix<T>
+    operator-() const
+    {
+        DynDenseMatrix<T> res(this->rows, this->cols);
+        for (Int i = 0; i < this->rows * this->cols; i++)
+            res.values[i] = -this->values[i];
+        return res;
+    }
+
+    /// Add matrix `a` to this matrix and return the result
+    ///
+    /// @param a Matrix to add
+    /// @return Resulting matrix
+    DynDenseMatrix<T>
+    operator+(const DynDenseMatrix<T> & a) const
+    {
+        if ((a.rows == this->rows) && (a.cols == this->cols)) {
+            DynDenseMatrix<T> res(this->rows, this->cols);
+            for (Int i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++)
+                    res(i, j) = this->get(i, j) + a.get(i, j);
+            return res;
+        }
+        else
+            throw Exception("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                            this->rows,
+                            a.rows,
+                            this->cols,
+                            a.cols);
+    }
+
+    /// Add matrix to this matrix
+    ///
+    /// @param a Matrix to add
+    /// @return Resulting matrix, i.e. `this + a`
+    DynDenseMatrix<T> &
+    operator+=(const DynDenseMatrix<T> & a)
+    {
+        if ((a.rows == this->rows) && (a.cols == this->cols)) {
+            for (Int i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++)
+                    set(i, j) += a.get(i, j);
+            return *this;
+        }
+        else
+            throw Exception("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                            this->rows,
+                            a.rows,
+                            this->cols,
+                            a.cols);
+    }
+
+    /// Subtract matrix `a` from this matrix and return the result
+    ///
+    /// @param a Matrix to subtract
+    /// @return Resulting matrix
+    DynDenseMatrix<T>
+    operator-(const DynDenseMatrix<T> & a) const
+    {
+        if ((a.rows == this->rows) && (a.cols == this->cols)) {
+            DynDenseMatrix<T> res(this->rows, this->cols);
+            for (Int i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++)
+                    res(i, j) = this->get(i, j) - a.get(i, j);
+            return res;
+        }
+        else
+            throw Exception("Number of rows and columns must match (rows: {} != {}, cols {} != {})",
+                            this->rows,
+                            a.rows,
+                            this->cols,
+                            a.cols);
+    }
+
+    /// Multiply this matrix with a scalar value
+    ///
+    /// @param alpha Value to multiply with
+    /// @return Resulting matrix
+    DynDenseMatrix<T>
+    operator*(Real alpha) const
+    {
+        DynDenseMatrix<T> m(*this);
+        m.scale(alpha);
+        return m;
+    }
+
+    /// Multiply this matrix with a vector
+    ///
+    /// @param rhs Vector to multiply with
+    /// @return Resulting vector
+    DynDenseVector<T>
+    operator*(const DynDenseVector<T> & rhs) const
+    {
+        return mult(rhs);
+    }
+
+    DynDenseMatrix<T>
+    operator*(const DynDenseMatrix<T> & x) const
+    {
+        return mult(x);
+    }
+
+    /// Get access to the underlying data
+    ///
+    /// WARNING: Avoid using this API as much as you can
+    /// @return Pointer to the underlying matrix entries
+    T *
+    data()
+    {
+        return this->values;
+    }
+
+    /// Get access to the underlying data
+    ///
+    /// WARNING: Avoid using this API as much as you can
+    /// @return Pointer to the underlying matrix entries
+    const T *
+    data() const
+    {
+        return this->values;
+    }
+
+    static DynDenseMatrix<T>
+    create_diagonal(const std::vector<T> & vals)
+    {
+        DynDenseMatrix<T> res(vals.size(), vals.size());
+        res.zero();
+        for (Int i = 0; i < vals.size(); i++)
+            res(i, i) = vals[i];
+        return res;
+    }
+
+protected:
+    void
+    zero_impl(std::true_type)
+    {
+        set_values(0);
+    }
+
+    void
+    zero_impl(std::false_type)
+    {
+        for (Int i = 0; i < this->rows * this->cols; i++)
+            this->values[i].zero();
+    }
+
+private:
+    /// Mapping function from (row, col) to the offset into the internal array that stores the
+    /// matrix entries
+    ///
+    /// @param i Row number
+    /// @param j Column number
+    /// @return Offset into the `values` array that contains the entry at position (row, col)
+    [[nodiscard]] Int
+    idx(Int i, Int j) const
+    {
+        return i * this->cols + j;
+    }
+
+    /// Number of rows
+    Int rows;
+    /// Number of columns
+    Int cols;
+    /// Array that stores the matrix entries
+    T * values;
+};
+
+/// Compute transpose
+///
+/// @param mat Matrix to transpose
+/// @return Transposed matrix
+template <typename T>
+inline DynDenseMatrix<T>
+transpose(const DynDenseMatrix<T> & mat)
+{
+    DynDenseMatrix<T> tr(mat.get_num_cols(), mat.get_num_rows());
+    for (Int i = 0; i < mat.get_num_rows(); i++)
+        for (Int j = 0; j < mat.get_num_cols(); j++)
+            tr(j, i) = mat(i, j);
+    return tr;
 }
 
 } // namespace godzilla
