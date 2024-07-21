@@ -28,7 +28,7 @@ class DenseMatrix {
 public:
     DenseMatrix() = default;
 
-    DenseMatrix(const DenseMatrixSymm<Real, ROWS> & m)
+    DenseMatrix(const DenseMatrixSymm<T, ROWS> & m)
     {
         assert(COLS == ROWS);
         for (Int i = 0; i < ROWS; i++)
@@ -165,7 +165,7 @@ public:
     /// @param col Column number
     /// @param vals Values of the column
     void
-    set_col(Int col, const DenseVector<Real, ROWS> & vals)
+    set_col(Int col, const DenseVector<T, ROWS> & vals)
     {
         for (Int i = 0; i < ROWS; i++)
             set(i, col) = vals(i);
@@ -297,7 +297,7 @@ public:
     /// Compute transpose
     ///
     /// @return Transposed matrix
-    [[deprecated("Use transpose() instead")]] DenseMatrix<Real, COLS, ROWS>
+    [[deprecated("Use transpose() instead")]] DenseMatrix<T, COLS, ROWS>
     trans() const
     {
         return transpose();
@@ -306,23 +306,24 @@ public:
     /// Compute transpose
     ///
     /// @return Transposed matrix
-    DenseMatrix<Real, COLS, ROWS>
+    DenseMatrix<T, COLS, ROWS>
     transpose() const
     {
-        DenseMatrix<Real, COLS, ROWS> tr;
+        DenseMatrix<T, COLS, ROWS> tr;
         for (Int i = 0; i < ROWS; i++)
             for (Int j = 0; j < COLS; j++)
                 tr(j, i) = get(i, j);
         return tr;
     }
+
     /// Get diagonal of the matrix as a DenseVector
     ///
     /// @return Matrix diagonal as a vector
-    DenseVector<Real, COLS>
+    DenseVector<T, COLS>
     diagonal() const
     {
         assert(ROWS == COLS);
-        DenseVector<Real, COLS> diag;
+        DenseVector<T, COLS> diag;
         for (Int i = 0; i < COLS; i++)
             diag(i) = get(i, i);
         return diag;
@@ -469,8 +470,8 @@ public:
         return mult(x);
     }
 
-    DenseMatrix<Real, ROWS> &
-    operator=(const DenseMatrixSymm<Real, ROWS> & m)
+    DenseMatrix<T, ROWS> &
+    operator=(const DenseMatrixSymm<T, ROWS> & m)
     {
         assert(COLS == ROWS);
         for (Int i = 0; i < ROWS; i++)
@@ -560,12 +561,12 @@ protected:
     }
 
 private:
-    /// Mapping function from (col, row) to the offset into the internal array that stores the
+    /// Mapping function from (row, col) to the offset into the internal array that stores the
     /// matrix entries
     ///
     /// @param row Row number
     /// @param col Column number
-    /// @return Offset into the `data` array that contains the entry at position (row, col)
+    /// @return Offset into the `values` array that contains the entry at position (row, col)
     [[nodiscard]] Int
     idx(Int row, Int col) const
     {
@@ -605,11 +606,9 @@ inline T
 determinant(const DenseMatrix<T, 3, 3> & mat)
 {
     const T * values = mat.data();
-    return values[0] * values[4] * values[8] +
-           values[3] * values[7] * values[2] +
+    return values[0] * values[4] * values[8] + values[3] * values[7] * values[2] +
            values[1] * values[5] * values[6] -
-           (values[6] * values[4] * values[2] +
-            values[1] * values[3] * values[8] +
+           (values[6] * values[4] * values[2] + values[1] * values[3] * values[8] +
             values[5] * values[7] * values[0]);
 }
 
@@ -619,13 +618,11 @@ determinant(const DenseMatrix<T, 3, 3> & mat)
 ///
 /// @return Inverse of this matrix
 template <typename T, Int N>
-inline
-DenseMatrix<T, N>
+inline DenseMatrix<T, N>
 inverse(const DenseMatrix<T, N> & mat)
 {
     error("Inverse is not implemented for {}x{} matrices, yet.", N, N);
 }
-
 
 template <>
 inline DenseMatrix<Real, 1>
@@ -645,10 +642,10 @@ inverse(const DenseMatrix<Real, 2> & mat)
         throw Exception("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 2> inv;
-    inv.data()[0] =  mat.data()[3];
+    inv.data()[0] = mat.data()[3];
     inv.data()[1] = -mat.data()[1];
     inv.data()[2] = -mat.data()[2];
-    inv.data()[3] =  mat.data()[0];
+    inv.data()[3] = mat.data()[0];
     inv.scale(1. / det);
     return inv;
 }
@@ -662,15 +659,15 @@ inverse(const DenseMatrix<Real, 3> & mat)
         throw Exception("Inverting of a matrix failed: matrix is singular.");
 
     DenseMatrix<Real, 3> inv;
-    inv(0, 0) =  (mat.data()[4] * mat.data()[8] - mat.data()[5] * mat.data()[7]);
+    inv(0, 0) = (mat.data()[4] * mat.data()[8] - mat.data()[5] * mat.data()[7]);
     inv(1, 0) = -(mat.data()[3] * mat.data()[8] - mat.data()[5] * mat.data()[6]);
-    inv(2, 0) =  (mat.data()[3] * mat.data()[7] - mat.data()[4] * mat.data()[6]);
+    inv(2, 0) = (mat.data()[3] * mat.data()[7] - mat.data()[4] * mat.data()[6]);
     inv(0, 1) = -(mat.data()[1] * mat.data()[8] - mat.data()[2] * mat.data()[7]);
-    inv(1, 1) =  (mat.data()[0] * mat.data()[8] - mat.data()[2] * mat.data()[6]);
+    inv(1, 1) = (mat.data()[0] * mat.data()[8] - mat.data()[2] * mat.data()[6]);
     inv(2, 1) = -(mat.data()[0] * mat.data()[7] - mat.data()[1] * mat.data()[6]);
-    inv(0, 2) =  (mat.data()[1] * mat.data()[5] - mat.data()[2] * mat.data()[4]);
+    inv(0, 2) = (mat.data()[1] * mat.data()[5] - mat.data()[2] * mat.data()[4]);
     inv(1, 2) = -(mat.data()[0] * mat.data()[5] - mat.data()[2] * mat.data()[3]);
-    inv(2, 2) =  (mat.data()[0] * mat.data()[4] - mat.data()[1] * mat.data()[3]);
+    inv(2, 2) = (mat.data()[0] * mat.data()[4] - mat.data()[1] * mat.data()[3]);
     inv.scale(1. / det);
     return inv;
 }
