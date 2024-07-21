@@ -28,7 +28,7 @@ class DenseMatrix {
 public:
     DenseMatrix() = default;
 
-    DenseMatrix(const DenseMatrixSymm<Real, ROWS> & m)
+    DenseMatrix(const DenseMatrixSymm<T, ROWS> & m)
     {
         assert(COLS == ROWS);
         for (Int i = 0; i < ROWS; i++)
@@ -165,7 +165,7 @@ public:
     /// @param col Column number
     /// @param vals Values of the column
     void
-    set_col(Int col, const DenseVector<Real, ROWS> & vals)
+    set_col(Int col, const DenseVector<T, ROWS> & vals)
     {
         for (Int i = 0; i < ROWS; i++)
             set(i, col) = vals(i);
@@ -297,7 +297,7 @@ public:
     /// Compute transpose
     ///
     /// @return Transposed matrix
-    [[deprecated("Use transpose() instead")]] DenseMatrix<Real, COLS, ROWS>
+    [[deprecated("Use transpose() instead")]] DenseMatrix<T, COLS, ROWS>
     trans() const
     {
         return transpose();
@@ -306,23 +306,24 @@ public:
     /// Compute transpose
     ///
     /// @return Transposed matrix
-    DenseMatrix<Real, COLS, ROWS>
+    DenseMatrix<T, COLS, ROWS>
     transpose() const
     {
-        DenseMatrix<Real, COLS, ROWS> tr;
+        DenseMatrix<T, COLS, ROWS> tr;
         for (Int i = 0; i < ROWS; i++)
             for (Int j = 0; j < COLS; j++)
                 tr(j, i) = get(i, j);
         return tr;
     }
+
     /// Get diagonal of the matrix as a DenseVector
     ///
     /// @return Matrix diagonal as a vector
-    DenseVector<Real, COLS>
+    DenseVector<T, COLS>
     diagonal() const
     {
         assert(ROWS == COLS);
-        DenseVector<Real, COLS> diag;
+        DenseVector<T, COLS> diag;
         for (Int i = 0; i < COLS; i++)
             diag(i) = get(i, i);
         return diag;
@@ -469,8 +470,8 @@ public:
         return mult(x);
     }
 
-    DenseMatrix<Real, ROWS> &
-    operator=(const DenseMatrixSymm<Real, ROWS> & m)
+    DenseMatrix<T, ROWS> &
+    operator=(const DenseMatrixSymm<T, ROWS> & m)
     {
         assert(COLS == ROWS);
         for (Int i = 0; i < ROWS; i++)
