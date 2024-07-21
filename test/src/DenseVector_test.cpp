@@ -123,13 +123,13 @@ TEST(DenseVectorTest, dot_row_row)
     EXPECT_EQ(dot(a, b), 10.);
 }
 
-TEST(DenseVectorTest, dot_glob)
+TEST(DenseVectorTest, dot_1x1)
 {
-    const Int N = 3;
-    DenseVector<Real, N> a({ 2., 3., 4. });
-    DenseVector<Real, N> b({ 4., 2., -1. });
-    Real dot_prod = dot<Real, N>(a, b);
-    EXPECT_EQ(dot_prod, 10.);
+    DenseMatrix<Real, 1, 1> a;
+    a(0, 0) = 2.;
+    DenseMatrix<Real, 1, 1> b;
+    b(0, 0) = 3.;
+    EXPECT_EQ(dot(a, b), 6.);
 }
 
 TEST(DenseVectorTest, sum)
