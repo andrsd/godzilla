@@ -7,6 +7,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include <cassert>
+#include <initializer_list>
 #include <vector>
 
 namespace godzilla {
@@ -781,7 +782,7 @@ public:
     const T &
     get(Int i, Int j) const
     {
-        if (((i >= 0) && (i < this->rows)) && ((j >= 0) && (j < this->COLS)))
+        if (((i >= 0) && (i < this->rows)) && ((j >= 0) && (j < this->cols)))
             return this->values[idx(i, j)];
         else
             throw Exception("Index ({}, {}) is out of matrix dimensions ({}, {})",
@@ -873,11 +874,11 @@ public:
     /// @param row Row number
     /// @param vals Values of the row. `vals` must have `columns` values.
     void
-    set_row(Int row, const std::vector<T> & vals)
+    set_row(Int row, std::initializer_list<T> vals)
     {
         if (vals.size() == this->cols) {
             for (Int i = 0; i < this->cols; i++)
-                set(row, i) = vals[i];
+                set(row, i) = std::data(vals)[i];
         }
         else
             throw Exception("Number of values ({}) must match the number of columns ({})",
@@ -906,14 +907,14 @@ public:
     void
     set_row(Int row, const DynDenseMatrix<T> & vals)
     {
-        if (vals->rows == 1) {
-            if (vals->cols == this->cols) {
+        if (vals->get_num_rows() == 1) {
+            if (vals->size() == this->cols) {
                 for (Int i = 0; i < this->cols; i++)
                     set(row, i) = vals(0, i);
             }
             else
                 throw Exception("Number of values ({}) must match the number of columns ({})",
-                                vals->cols,
+                                vals->get_num_cols(),
                                 this->cols);
         }
         else
@@ -921,11 +922,11 @@ public:
     }
 
     void
-    set_col(Int col, const std::vector<T> & vals)
+    set_col(Int col, std::initializer_list<T> vals)
     {
         if (vals.size() == this->rows) {
             for (Int i = 0; i < this->rows; i++)
-                set(i, col) = vals[i];
+                set(i, col) = std::data(vals)[i];
         }
         else
             throw Exception("Number of values ({}) must match the number of rows ({})",
@@ -939,7 +940,7 @@ public:
     /// @param col Column number
     /// @param vals Values of the column
     // void
-    // set_col(Int col, const DenseVector<Real, ROWS> & vals)
+    // set_col(Int col, const DenseVector<T, ROWS> & vals)
     // {
     //     for (Int i = 0; i < ROWS; i++)
     //         set(i, col) = vals(i);
@@ -1043,7 +1044,7 @@ public:
     DynDenseVector<T>
     mult(const DynDenseVector<T> & x) const
     {
-        if (this->cols == x.rows) {
+        if (this->cols == x.size()) {
             DynDenseVector<T> res(this->rows);
             for (Int i = 0; i < this->rows; i++) {
                 T prod = 0.;
@@ -1055,7 +1056,7 @@ public:
         }
         throw Exception("Number of columns ({}) must match the vector size ({})",
                         this->cols,
-                        x.rows);
+                        x.size());
     }
 
     DynDenseMatrix<T>
@@ -1094,31 +1095,21 @@ public:
     //     return res;
     // }
 
-    /// Compute transpose
-    ///
-    /// @return Transposed matrix
-    DynDenseMatrix<Real>
-    transpose() const
-    {
-        DynDenseMatrix<Real> tr(this->cols, this->rows);
-        for (Int i = 0; i < this->rows; i++)
-            for (Int j = 0; j < this->cols; j++)
-                tr(j, i) = get(i, j);
-        return tr;
-    }
-
-    /// Get diagonal of the matrix as a DenseVector
+    /// Get diagonal of the matrix as a DynDenseVector
     ///
     /// @return Matrix diagonal as a vector
-    // DenseVector<Real, COLS>
-    // diagonal() const
-    // {
-    //     assert(ROWS == this->cols);
-    //     DenseVector<Real, COLS> diag;
-    //     for (Int i = 0; i < this->cols; i++)
-    //         diag(i) = get(i, i);
-    //     return diag;
-    // }
+    DynDenseVector<T>
+    diagonal() const
+    {
+        if (this->rows == this->cols) {
+            DynDenseVector<T> diag(this->rows);
+            for (Int i = 0; i < this->cols; i++)
+                diag(i) = get(i, i);
+            return diag;
+        }
+        else
+            throw Exception("Diagonal can be obtained only for square matrices");
+    }
 
     // operators
 
@@ -1266,11 +1257,11 @@ public:
     ///
     /// @param rhs Vector to multiply with
     /// @return Resulting vector
-    // DenseVector<T, ROWS>
-    // operator*(const DenseVector<T, COLS> & rhs) const
-    // {
-    //     return mult(rhs);
-    // }
+    DynDenseVector<T>
+    operator*(const DynDenseVector<T> & rhs) const
+    {
+        return mult(rhs);
+    }
 
     DynDenseMatrix<T>
     operator*(const DynDenseMatrix<T> & x) const
@@ -1284,8 +1275,8 @@ public:
     //     return mult(x);
     // }
 
-    // DenseMatrix<Real, ROWS> &
-    // operator=(const DynDenseMatrixSymm<Real, ROWS> & m)
+    // DenseMatrix<T, ROWS> &
+    // operator=(const DynDenseMatrixSymm<T, ROWS> & m)
     // {
     //     assert(COLS == ROWS);
     //     for (Int i = 0; i < this->rows; i++)
@@ -1320,7 +1311,7 @@ public:
         DynDenseMatrix<T> res(vals.size(), vals.size());
         res.zero();
         for (Int i = 0; i < vals.size(); i++)
-            res(i, i) = vals(i);
+            res(i, i) = vals[i];
         return res;
     }
 
@@ -1358,5 +1349,20 @@ private:
     /// Array that stores the matrix entries
     T * values;
 };
+
+/// Compute transpose
+///
+/// @param mat Matrix to transpose
+/// @return Transposed matrix
+template <typename T>
+inline DynDenseMatrix<T>
+transpose(const DynDenseMatrix<T> & mat)
+{
+    DynDenseMatrix<T> tr(mat.get_num_cols(), mat.get_num_rows());
+    for (Int i = 0; i < mat.get_num_rows(); i++)
+        for (Int j = 0; j < mat.get_num_cols(); j++)
+            tr(j, i) = mat(i, j);
+    return tr;
+}
 
 } // namespace godzilla
