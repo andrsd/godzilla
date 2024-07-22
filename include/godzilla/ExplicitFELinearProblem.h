@@ -8,7 +8,7 @@
 
 namespace godzilla {
 
-class ResidualFunc;
+class AbstractResidualFunctional;
 
 class ExplicitFELinearProblem : public FENonlinearProblem, public ExplicitProblemInterface {
 public:
@@ -30,7 +30,9 @@ protected:
 
     template <WeakForm::ResidualKind KIND>
     void
-    add_residual_block(Int fid, ResidualFunc * res_fn, const std::string & region = "")
+    add_residual_block(Int fid,
+                       AbstractResidualFunctional * res_fn,
+                       const std::string & region = "")
     {
         throw Exception("Unsupported residual functional kind");
     }
@@ -40,7 +42,7 @@ private:
 
     void add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                       Int fid,
-                                      ResidualFunc * res_fn,
+                                      AbstractResidualFunctional * res_fn,
                                       const std::string & region);
 
 public:
@@ -55,7 +57,7 @@ public:
 template <>
 inline void
 ExplicitFELinearProblem::add_residual_block<WeakForm::F0>(Int fid,
-                                                          ResidualFunc * res_fn,
+                                                          AbstractResidualFunctional * res_fn,
                                                           const std::string & region)
 {
     CALL_STACK_MSG();
@@ -70,7 +72,7 @@ ExplicitFELinearProblem::add_residual_block<WeakForm::F0>(Int fid,
 template <>
 inline void
 ExplicitFELinearProblem::add_residual_block<WeakForm::F1>(Int fid,
-                                                          ResidualFunc * res_fn,
+                                                          AbstractResidualFunctional * res_fn,
                                                           const std::string & region)
 {
     CALL_STACK_MSG();

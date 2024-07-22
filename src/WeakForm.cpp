@@ -91,7 +91,7 @@ WeakForm::get_jacobian_keys() const
     return v;
 }
 
-const std::vector<ResidualFunc *> &
+const std::vector<AbstractResidualFunctional *> &
 WeakForm::get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const
 {
     CALL_STACK_MSG();
@@ -129,7 +129,7 @@ WeakForm::add(ResidualKind kind,
               Int value,
               Int f,
               Int part,
-              ResidualFunc * func)
+              AbstractResidualFunctional * func)
 {
     CALL_STACK_MSG();
     if (func != nullptr) {

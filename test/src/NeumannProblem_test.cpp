@@ -1,9 +1,10 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/DenseMatrix.h"
 #include "godzilla/FENonlinearProblem.h"
-#include "godzilla/LineMesh.h"
 #include "godzilla/RectangleMesh.h"
 #include "godzilla/NaturalBC.h"
+#include "godzilla/Types.h"
 #include "godzilla/WeakForm.h"
 #include "godzilla/BndResidualFunc.h"
 #include "godzilla/BndJacobianFunc.h"
@@ -24,7 +25,7 @@ protected:
     const Int iu;
 };
 
-class F0 : public ResidualFunc {
+class F0 : public ResidualFunc<WeakForm::F0> {
 public:
     explicit F0(TestNeumannProblem * prob) :
         ResidualFunc(prob),
@@ -33,10 +34,12 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
-        f[0] = this->u(0) + 2.0 - this->x(0) * this->x(0);
+        DynDenseVector<Scalar> f(1);
+        f(0) = this->u(0) + 2.0 - this->x(0) * this->x(0);
+        return f;
     }
 
 protected:
@@ -44,7 +47,7 @@ protected:
     const Point & x;
 };
 
-class F1 : public ResidualFunc {
+class F1 : public ResidualFunc<WeakForm::F1> {
 public:
     explicit F1(TestNeumannProblem * prob) :
         ResidualFunc(prob),
@@ -53,11 +56,13 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseMatrix<Scalar>
+    evaluate() const override
     {
+        DynDenseMatrix<Scalar> f(this->dim, 1);
         for (Int d = 0; d < this->dim; ++d)
-            f[d] = this->u_x(d);
+            f(d, 0) = this->u_x(d);
+        return f;
     }
 
 protected:
@@ -113,14 +118,16 @@ TestNeumannProblem::set_up_weak_form()
     add_jacobian_block<WeakForm::G3>(this->iu, this->iu, new G3(this));
 }
 
-class BndF0 : public BndResidualFunc {
+class BndF0 : public BndResidualFunc<WeakForm::F0> {
 public:
     explicit BndF0(const NaturalBC * bc) : BndResidualFunc(bc), n(get_normal()), x(get_xyz()) {}
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
-        f[0] = -2. * this->x(0) * n(0);
+        DynDenseVector<Scalar> f(1);
+        f(0) = -2. * this->x(0) * n(0);
+        return f;
     }
 
 protected:

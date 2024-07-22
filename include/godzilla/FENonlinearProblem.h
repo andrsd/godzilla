@@ -10,8 +10,6 @@
 
 namespace godzilla {
 
-class ResidualFunc;
-class JacobianFunc;
 class IndexSet;
 
 /// Non-linear problem that arises from a finite element discretization using the PetscFE system

@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "godzilla/Godzilla.h"
 #include "TestApp.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/FENonlinearProblem.h"
@@ -8,6 +7,7 @@
 #include "godzilla/ConstantInitialCondition.h"
 #include "godzilla/DirichletBC.h"
 #include "godzilla/PCFactor.h"
+#include "godzilla/WeakForm.h"
 
 using namespace godzilla;
 
@@ -27,18 +27,20 @@ protected:
     const Int iu;
 };
 
-class F0 : public ResidualFunc {
+class F0 : public ResidualFunc<WeakForm::F0> {
 public:
     explicit F0(GTestFENonlinearProblemJFNK * prob) : ResidualFunc(prob) {}
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
-        f[0] = 2.0;
+        DynDenseVector<Scalar> f(1);
+        f(0) = 2.0;
+        return f;
     }
 };
 
-class F1 : public ResidualFunc {
+class F1 : public ResidualFunc<WeakForm::F1> {
 public:
     explicit F1(GTestFENonlinearProblemJFNK * prob) :
         ResidualFunc(prob),
@@ -47,11 +49,13 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseMatrix<Scalar>
+    evaluate() const override
     {
+        DynDenseMatrix<Scalar> f(this->dim, 1);
         for (Int d = 0; d < this->dim; ++d)
-            f[d] = this->u_x(d);
+            f(d, 0) = this->u_x(d);
+        return f;
     }
 
 protected:

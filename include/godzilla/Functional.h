@@ -11,7 +11,9 @@
 
 namespace godzilla {
 
-class FEProblemInterface;
+class Point;
+class FieldValue;
+class FieldGradient;
 
 class Functional {
 public:

@@ -5,7 +5,8 @@
 
 namespace godzilla {
 
-ResidualFunc::ResidualFunc(FEProblemInterface * fepi, const std::string & region) :
+AbstractResidualFunctional::AbstractResidualFunctional(FEProblemInterface * fepi,
+                                                       const std::string & region) :
     Functional(fepi, region)
 {
 }

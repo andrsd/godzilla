@@ -2,8 +2,10 @@
 #include "TestApp.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
+#include "godzilla/DenseMatrix.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/NaturalBC.h"
+#include "godzilla/Types.h"
 #include "godzilla/WeakForm.h"
 #include "godzilla/BndResidualFunc.h"
 #include "godzilla/BndJacobianFunc.h"
@@ -62,14 +64,16 @@ TEST(NaturalBCTest, api)
 
 namespace {
 
-class TestNatF0 : public BndResidualFunc {
+class TestNatF0 : public BndResidualFunc<WeakForm::F0> {
 public:
     explicit TestNatF0(const NaturalBC * bc) : BndResidualFunc(bc), u(get_field_value("u")) {}
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
-        f[0] = 100 * this->u(0);
+        DynDenseVector<Scalar> f(1);
+        f(0) = 100 * this->u(0);
+        return f;
     }
 
 protected:

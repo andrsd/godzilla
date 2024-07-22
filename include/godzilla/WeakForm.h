@@ -8,11 +8,10 @@
 #include <array>
 #include <map>
 #include <vector>
-#include "petsc.h"
 
 namespace godzilla {
 
-class ResidualFunc;
+class AbstractResidualFunctional;
 class JacobianFunc;
 
 /// Weak formulation
@@ -58,7 +57,7 @@ public:
     [[nodiscard]] std::vector<PetscFormKey> get_jacobian_keys() const;
 
     /// Get residual forms
-    [[nodiscard]] const std::vector<ResidualFunc *> &
+    [[nodiscard]] const std::vector<AbstractResidualFunctional *> &
     get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
@@ -73,7 +72,12 @@ public:
     /// @param f Field ID
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric residual form
-    void add(ResidualKind kind, const Label & label, Int val, Int f, Int part, ResidualFunc * func);
+    void add(ResidualKind kind,
+             const Label & label,
+             Int val,
+             Int f,
+             Int part,
+             AbstractResidualFunctional * func);
 
     /// Add a Jacobian form
     ///
@@ -114,10 +118,11 @@ private:
     Int n_fields;
 
     /// All residual forms
-    std::array<std::map<PetscFormKey, std::vector<ResidualFunc *>>, PETSC_NUM_WF> res_forms;
+    std::array<std::map<PetscFormKey, std::vector<AbstractResidualFunctional *>>, PETSC_NUM_WF>
+        res_forms;
 
     /// Empty array for residual forms
-    std::vector<ResidualFunc *> empty_res_forms;
+    std::vector<AbstractResidualFunctional *> empty_res_forms;
 
     /// All Jacobian forms
     std::array<std::map<PetscFormKey, std::vector<JacobianFunc *>>, PETSC_NUM_WF> jac_forms;

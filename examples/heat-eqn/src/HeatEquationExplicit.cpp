@@ -1,14 +1,15 @@
-#include "godzilla/Godzilla.h"
-#include "godzilla/FunctionInterface.h"
+#include "godzilla/DenseMatrix.h"
 #include "HeatEquationExplicit.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Types.h"
+#include "godzilla/WeakForm.h"
 
 using namespace godzilla;
 
 namespace {
 
-class Residual0 : public ResidualFunc {
+class Residual0 : public ResidualFunc<WeakForm::F0> {
 public:
     explicit Residual0(FEProblemInterface * fepi) :
         ResidualFunc(fepi),
@@ -16,18 +17,20 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
         CALL_STACK_MSG();
-        f[0] = -this->ffn(0);
+        DynDenseVector<Scalar> f(1);
+        f(0) = -this->ffn(0);
+        return f;
     }
 
 protected:
     const FieldValue & ffn;
 };
 
-class Residual1 : public ResidualFunc {
+class Residual1 : public ResidualFunc<WeakForm::F1> {
 public:
     explicit Residual1(FEProblemInterface * fepi) :
         ResidualFunc(fepi),
@@ -36,12 +39,14 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseMatrix<Scalar>
+    evaluate() const override
     {
         CALL_STACK_MSG();
+        DynDenseMatrix<Scalar> f;
         for (Int d = 0; d < this->dim; ++d)
-            f[d] = -this->T_x(d);
+            f(d, 0) = -this->T_x(d);
+        return f;
     }
 
 protected:

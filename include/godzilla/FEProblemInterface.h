@@ -19,7 +19,9 @@
 namespace godzilla {
 
 class Problem;
+template <WeakForm::ResidualKind>
 class ResidualFunc;
+class AbstractResidualFunctional;
 class JacobianFunc;
 class ValueFunctional;
 
@@ -117,7 +119,9 @@ public:
     /// @param region Region name where this residual statement is active
     template <WeakForm::ResidualKind KIND>
     void
-    add_residual_block(Int fid, ResidualFunc * res_fn, const std::string & region = "")
+    add_residual_block(Int fid,
+                       AbstractResidualFunctional * res_fn,
+                       const std::string & region = "")
     {
         throw Exception("Unsupported residual functional kind");
     }
@@ -268,12 +272,12 @@ protected:
 private:
     void add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                       Int fid,
-                                      ResidualFunc * res_fn,
+                                      AbstractResidualFunctional * res_fn,
                                       const std::string & region);
 
     void add_weak_form_bnd_residual_block(WeakForm::ResidualKind kind,
                                           Int fid,
-                                          ResidualFunc * res_fn,
+                                          AbstractResidualFunctional * res_fn,
                                           const std::string & region);
 
     void add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
@@ -387,7 +391,7 @@ private:
 template <>
 inline void
 FEProblemInterface::add_residual_block<WeakForm::F0>(Int fid,
-                                                     ResidualFunc * res_fn,
+                                                     AbstractResidualFunctional * res_fn,
                                                      const std::string & region)
 {
     CALL_STACK_MSG();
@@ -402,7 +406,7 @@ FEProblemInterface::add_residual_block<WeakForm::F0>(Int fid,
 template <>
 inline void
 FEProblemInterface::add_residual_block<WeakForm::F1>(Int fid,
-                                                     ResidualFunc * res_fn,
+                                                     AbstractResidualFunctional * res_fn,
                                                      const std::string & region)
 {
     CALL_STACK_MSG();
@@ -417,7 +421,7 @@ FEProblemInterface::add_residual_block<WeakForm::F1>(Int fid,
 template <>
 inline void
 FEProblemInterface::add_residual_block<WeakForm::BND_F0>(Int fid,
-                                                         ResidualFunc * res_fn,
+                                                         AbstractResidualFunctional * res_fn,
                                                          const std::string & region)
 {
     CALL_STACK_MSG();
@@ -432,7 +436,7 @@ FEProblemInterface::add_residual_block<WeakForm::BND_F0>(Int fid,
 template <>
 inline void
 FEProblemInterface::add_residual_block<WeakForm::BND_F1>(Int fid,
-                                                         ResidualFunc * res_fn,
+                                                         AbstractResidualFunctional * res_fn,
                                                          const std::string & region)
 {
     CALL_STACK_MSG();

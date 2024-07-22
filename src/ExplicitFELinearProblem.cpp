@@ -159,7 +159,7 @@ ExplicitFELinearProblem::post_step()
 void
 ExplicitFELinearProblem::add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                                       Int fid,
-                                                      ResidualFunc * res_fn,
+                                                      AbstractResidualFunctional * res_fn,
                                                       const std::string & region)
 {
     CALL_STACK_MSG();

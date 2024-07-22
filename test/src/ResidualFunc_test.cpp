@@ -1,8 +1,11 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/DenseMatrix.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/ImplicitFENonlinearProblem.h"
 #include "godzilla/ResidualFunc.h"
+#include "godzilla/Types.h"
+#include "godzilla/WeakForm.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -26,7 +29,7 @@ TEST(ResidualFuncTest, test)
         }
     };
 
-    class TestF : public ResidualFunc {
+    class TestF : public ResidualFunc<WeakForm::F0> {
     public:
         explicit TestF(GTestProblem * prob) :
             ResidualFunc(prob),
@@ -38,10 +41,12 @@ TEST(ResidualFuncTest, test)
         {
         }
 
-        void
-        evaluate(Scalar f[]) const override
+        DynDenseVector<Scalar>
+        evaluate() const override
         {
-            f[0] = 0.;
+            DynDenseVector<Scalar> f(1);
+            f(0) = 0.;
+            return f;
         }
 
     protected:
@@ -92,7 +97,7 @@ TEST(ResidualFuncTest, test_vals)
         }
     };
 
-    class TestF : public ResidualFunc {
+    class TestF : public ResidualFunc<WeakForm::F0> {
     public:
         explicit TestF(GTestProblem * prob) :
             ResidualFunc(prob),
@@ -104,14 +109,16 @@ TEST(ResidualFuncTest, test_vals)
         {
         }
 
-        void
-        evaluate(Scalar f[]) const override
+        DynDenseVector<Scalar>
+        evaluate() const override
         {
-            f[0] = dim;
-            f[1] = u(0);
-            f[2] = u_x(0);
-            f[3] = u_t(0);
-            f[4] = t;
+            DynDenseVector<Scalar> f(5);
+            f(0) = dim;
+            f(1) = u(0);
+            f(2) = u_x(0);
+            f(3) = u_t(0);
+            f(4) = t;
+            return f;
         }
 
     protected:
@@ -142,7 +149,7 @@ TEST(ResidualFuncTest, test_vals)
 
     TestF res(&prob);
     Scalar vals[5];
-    res.evaluate(vals);
+    res.evaluate2(vals);
     EXPECT_DOUBLE_EQ(vals[0], 1);
     EXPECT_DOUBLE_EQ(vals[4], 0.);
 }

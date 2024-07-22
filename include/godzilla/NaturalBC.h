@@ -5,7 +5,6 @@
 
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/Types.h"
-#include "godzilla/Label.h"
 #include "godzilla/WeakForm.h"
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/BndResidualFunc.h"
@@ -14,7 +13,7 @@
 namespace godzilla {
 
 class FEProblemInterface;
-class BndResidualFunc;
+class AbstractBndResidualFunc;
 class BndJacobianFunc;
 
 /// Base class for natural boundary conditions
@@ -44,7 +43,7 @@ protected:
     /// @param res_func Integrand
     template <WeakForm::ResidualKind KIND>
     void
-    add_residual_block(BndResidualFunc * res_func)
+    add_residual_block(AbstractBndResidualFunc * res_func)
     {
         throw Exception("Unsupported boundary residual functional kind");
     }
@@ -79,7 +78,7 @@ public:
 /// @param res_func Integrand for the test function term
 template <>
 inline void
-NaturalBC::add_residual_block<WeakForm::BND_F0>(BndResidualFunc * res_func)
+NaturalBC::add_residual_block<WeakForm::BND_F0>(AbstractBndResidualFunc * res_func)
 {
     CALL_STACK_MSG();
     for (auto & bnd : get_boundary())
@@ -91,7 +90,7 @@ NaturalBC::add_residual_block<WeakForm::BND_F0>(BndResidualFunc * res_func)
 /// @param res_func Integrand for the test function gradient term
 template <>
 inline void
-NaturalBC::add_residual_block<WeakForm::BND_F1>(BndResidualFunc * res_func)
+NaturalBC::add_residual_block<WeakForm::BND_F1>(AbstractBndResidualFunc * res_func)
 {
     CALL_STACK_MSG();
     for (auto & bnd : get_boundary())

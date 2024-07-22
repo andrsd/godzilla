@@ -1,14 +1,15 @@
-#include "godzilla/Godzilla.h"
-#include "godzilla/FunctionInterface.h"
+#include "godzilla/DenseMatrix.h"
 #include "BurgersEquation.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Types.h"
+#include "godzilla/WeakForm.h"
 
 using namespace godzilla;
 
 namespace {
 
-class F1 : public ResidualFunc {
+class F1 : public ResidualFunc<WeakForm::F1> {
 public:
     explicit F1(BurgersEquation * prob) :
         ResidualFunc(prob),
@@ -18,11 +19,13 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseMatrix<Scalar>
+    evaluate() const override
     {
         CALL_STACK_MSG();
-        f[0] = -this->visc * this->u_x(0) + 0.5 * this->u(0) * this->u(0);
+        DynDenseMatrix<Scalar> f(1, 1);
+        f(0, 0) = -this->visc * this->u_x(0) + 0.5 * this->u(0) * this->u(0);
+        return f;
     }
 
 protected:

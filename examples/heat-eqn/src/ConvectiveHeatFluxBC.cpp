@@ -1,14 +1,16 @@
-#include "godzilla/Godzilla.h"
+#include "godzilla/DenseMatrix.h"
 #include "ConvectiveHeatFluxBC.h"
 #include "godzilla/BndResidualFunc.h"
 #include "godzilla/BndJacobianFunc.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Types.h"
+#include "godzilla/WeakForm.h"
 
 using namespace godzilla;
 
 namespace {
 
-class Residual0 : public BndResidualFunc {
+class Residual0 : public BndResidualFunc<WeakForm::F0> {
 public:
     explicit Residual0(const NaturalBC * nbc) :
         BndResidualFunc(nbc),
@@ -18,11 +20,13 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
         CALL_STACK_MSG();
-        f[0] = htc(0) * (T(0) - T_infinity(0));
+        DynDenseVector<Scalar> f(1);
+        f(0) = htc(0) * (T(0) - T_infinity(0));
+        return f;
     }
 
 protected:

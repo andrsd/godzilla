@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/DenseMatrix.h"
 #include "godzilla/LineMesh.h"
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/ResidualFunc.h"
@@ -31,25 +32,29 @@ protected:
     std::vector<Int> comps;
 };
 
-class TestF : public ResidualFunc {
+class TestF : public ResidualFunc<WeakForm::F0> {
 public:
     explicit TestF(GTestFENonlinearProblem * prob) : ResidualFunc(prob) {}
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
-        f[0] = 0.;
+        DynDenseVector<Scalar> f;
+        f(0) = 0.;
+        return f;
     }
 };
 
-class BndTestF : public BndResidualFunc {
+class BndTestF : public BndResidualFunc<WeakForm::F0> {
 public:
     explicit BndTestF(TestBC * bc) : BndResidualFunc(bc) {}
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
-        f[0] = 0.;
+        DynDenseVector<Scalar> f;
+        f(0) = 0.;
+        return f;
     }
 };
 

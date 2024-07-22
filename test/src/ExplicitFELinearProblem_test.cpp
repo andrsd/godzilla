@@ -1,13 +1,11 @@
 #include "gmock/gmock.h"
-#include "godzilla/Factory.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/DirichletBC.h"
 #include "godzilla/ExplicitFELinearProblem.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/Parameters.h"
-#include "godzilla/Output.h"
 #include "TestApp.h"
-#include "petsc.h"
+#include "godzilla/WeakForm.h"
 
 using namespace godzilla;
 
@@ -56,7 +54,7 @@ protected:
     void set_up_weak_form() override;
 };
 
-class TestF1 : public ResidualFunc {
+class TestF1 : public ResidualFunc<WeakForm::F1> {
 public:
     explicit TestF1(TestExplicitFELinearProblem * prob) :
         ResidualFunc(prob),
@@ -65,11 +63,13 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseMatrix<Scalar>
+    evaluate() const override
     {
+        DynDenseMatrix<Scalar> f(1, 1);
         Real visc = 1.;
-        f[0] = -visc * this->u_x(0) + 0.5 * this->u(0) * this->u(0);
+        f(0, 0) = -visc * this->u_x(0) + 0.5 * this->u(0) * this->u(0);
+        return f;
     }
 
 protected:

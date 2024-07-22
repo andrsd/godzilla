@@ -634,8 +634,8 @@ FEProblemInterface::sort_residual_functionals(
             auto f0_fnls = this->wf->get(WeakForm::F0, lbl, k.value, f, k.part);
             auto f1_fnls = this->wf->get(WeakForm::F1, lbl, k.value, f, k.part);
 
-            add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
-            add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
+            add_functionals<AbstractResidualFunctional *>(graph, suppliers, f0_fnls);
+            add_functionals<AbstractResidualFunctional *>(graph, suppliers, f1_fnls);
 
             std::vector<const Functional *> fnls;
             fnls.insert(fnls.end(), f0_fnls.begin(), f0_fnls.end());
@@ -710,7 +710,7 @@ FEProblemInterface::sort_functionals()
 void
 FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                                  Int fid,
-                                                 ResidualFunc * res_fn,
+                                                 AbstractResidualFunctional * res_fn,
                                                  const std::string & region)
 {
     CALL_STACK_MSG();
@@ -728,7 +728,7 @@ FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
 void
 FEProblemInterface::add_weak_form_bnd_residual_block(WeakForm::ResidualKind kind,
                                                      Int fid,
-                                                     ResidualFunc * res_fn,
+                                                     AbstractResidualFunctional * res_fn,
                                                      const std::string & boundary)
 {
     CALL_STACK_MSG();
@@ -890,11 +890,11 @@ FEProblemInterface::integrate_residual(PetscDS ds,
             for (auto & f : this->sorted_res_functionals[key])
                 f->evaluate();
             for (auto & func : f0_res_fns)
-                func->evaluate(&f0[q * T[field]->Nc]);
+                func->evaluate2(&f0[q * T[field]->Nc]);
             for (Int c = 0; c < T[field]->Nc; ++c)
                 f0[q * T[field]->Nc + c] *= w;
             for (auto & func : f1_res_fns)
-                func->evaluate(&f1[q * T[field]->Nc * this->asmbl->dim]);
+                func->evaluate2(&f1[q * T[field]->Nc * this->asmbl->dim]);
             for (Int c = 0; c < T[field]->Nc; ++c)
                 for (Int d = 0; d < this->asmbl->dim; ++d)
                     f1[(q * T[field]->Nc + c) * this->asmbl->dim + d] *= w;
@@ -1046,11 +1046,11 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
             for (auto & f : this->sorted_res_functionals[key])
                 f->evaluate();
             for (auto & func : f0_res_fns)
-                func->evaluate(&f0[q * n_comp_i]);
+                func->evaluate2(&f0[q * n_comp_i]);
             for (Int c = 0; c < n_comp_i; ++c)
                 f0[q * n_comp_i + c] *= w;
             for (auto & func : f1_res_fns)
-                func->evaluate(&f1[q * n_comp_i * this->asmbl->dim]);
+                func->evaluate2(&f1[q * n_comp_i * this->asmbl->dim]);
             for (Int c = 0; c < n_comp_i; ++c)
                 for (Int d = 0; d < this->asmbl->dim; ++d)
                     f1[(q * n_comp_i + c) * this->asmbl->dim + d] *= w;

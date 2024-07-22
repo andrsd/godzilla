@@ -1,13 +1,15 @@
+#include "godzilla/DenseMatrix.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/CallStack.h"
 #include "ImplicitFENonlinearProblem_test.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
 namespace {
 
-class F0 : public ResidualFunc {
+class F0 : public ResidualFunc<WeakForm::F0> {
 public:
     explicit F0(GTestImplicitFENonlinearProblem * prob) :
         ResidualFunc(prob),
@@ -15,17 +17,19 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
-        f[0] = this->u_t(0);
+        DynDenseVector<Scalar> f;
+        f(0) = this->u_t(0);
+        return f;
     }
 
 protected:
     const FieldValue & u_t;
 };
 
-class F1 : public ResidualFunc {
+class F1 : public ResidualFunc<WeakForm::F1> {
 public:
     explicit F1(GTestImplicitFENonlinearProblem * prob) :
         ResidualFunc(prob),
@@ -34,11 +38,13 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseMatrix<Scalar>
+    evaluate() const override
     {
+        DynDenseMatrix<Scalar> f(this->dim, 1);
         for (Int d = 0; d < this->dim; ++d)
-            f[d] = this->u_x(d);
+            f(d, 0) = this->u_x(d);
+        return f;
     }
 
 protected:

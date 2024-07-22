@@ -1,5 +1,4 @@
-#include "godzilla/Godzilla.h"
-#include "godzilla/FunctionInterface.h"
+#include "godzilla/DenseMatrix.h"
 #include "NSIncompressibleProblem.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
@@ -7,15 +6,15 @@
 #include "godzilla/PCFieldSplit.h"
 #include "godzilla/PCJacobi.h"
 #include "godzilla/PCFactor.h"
-#include "godzilla/PCComposite.h"
 #include <cassert>
+#include "godzilla/Types.h"
 #include "petscsys.h"
 
 using namespace godzilla;
 
 namespace {
 
-class ResidualVeloc0 : public ResidualFunc {
+class ResidualVeloc0 : public ResidualFunc<WeakForm::F0> {
 public:
     explicit ResidualVeloc0(NSIncompressibleProblem * prob) :
         ResidualFunc(prob),
@@ -28,18 +27,20 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
         CALL_STACK_MSG();
+        DynDenseVector<Scalar> f(this->n_comp);
         for (Int c = 0; c < this->n_comp; ++c) {
-            f[c] = this->vel_t(c);
+            f(c) = this->vel_t(c);
 
             for (Int d = 0; d < this->dim; ++d)
-                f[c] += this->vel(d) * this->vel_x(c * this->dim + d);
+                f(c) += this->vel(d) * this->vel_x(c * this->dim + d);
 
-            f[c] -= this->ffn(c);
+            f(c) -= this->ffn(c);
         }
+        return f;
     }
 
 protected:
@@ -51,7 +52,7 @@ protected:
     const FieldValue & ffn;
 };
 
-class ResidualVeloc1 : public ResidualFunc {
+class ResidualVeloc1 : public ResidualFunc<WeakForm::F1> {
 public:
     explicit ResidualVeloc1(NSIncompressibleProblem * prob) :
         ResidualFunc(prob),
@@ -63,16 +64,18 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseMatrix<Scalar>
+    evaluate() const override
     {
         CALL_STACK_MSG();
+        DynDenseMatrix<Scalar> f(this->dim, this->n_comp);
         for (Int comp = 0; comp < this->n_comp; ++comp) {
             for (Int d = 0; d < this->dim; ++d) {
-                f[comp * this->dim + d] = 1.0 / this->Re * this->vel_x(comp * this->dim + d);
+                f(d, comp) = 1.0 / this->Re * this->vel_x(comp * this->dim + d);
             }
-            f[comp * this->dim + comp] -= this->press(0);
+            f(comp, comp) -= this->press(0);
         }
+        return f;
     }
 
 protected:
@@ -83,7 +86,7 @@ protected:
     const Scalar & Re;
 };
 
-class ResidualPress0 : public ResidualFunc {
+class ResidualPress0 : public ResidualFunc<WeakForm::F0> {
 public:
     explicit ResidualPress0(NSIncompressibleProblem * prob) :
         ResidualFunc(prob),
@@ -92,13 +95,15 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
         CALL_STACK_MSG();
-        f[0] = 0.0;
+        DynDenseVector<Scalar> f(1);
+        f(0) = 0.0;
         for (Int d = 0; d < this->dim; ++d)
-            f[0] += this->vel_x(d * this->dim + d);
+            f(0) += this->vel_x(d * this->dim + d);
+        return f;
     }
 
 protected:
@@ -106,7 +111,7 @@ protected:
     const FieldGradient & vel_x;
 };
 
-class ResidualPress1 : public ResidualFunc {
+class ResidualPress1 : public ResidualFunc<WeakForm::F1> {
 public:
     explicit ResidualPress1(NSIncompressibleProblem * prob) :
         ResidualFunc(prob),
@@ -114,12 +119,14 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseMatrix<Scalar>
+    evaluate() const override
     {
         CALL_STACK_MSG();
+        DynDenseMatrix<Scalar> f(this->dim, 1);
         for (Int d = 0; d < this->dim; ++d)
-            f[d] = 0.0;
+            f(d, 0) = 0.0;
+        return f;
     }
 
 protected:

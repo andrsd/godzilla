@@ -4,6 +4,7 @@
 #include "godzilla/ImplicitFENonlinearProblem.h"
 #include "godzilla/NaturalBC.h"
 #include "godzilla/BndResidualFunc.h"
+#include "godzilla/WeakForm.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -46,7 +47,7 @@ protected:
     }
 };
 
-class TestF : public BndResidualFunc {
+class TestF : public BndResidualFunc<WeakForm::F0> {
 public:
     explicit TestF(const TestBC * bc) :
         BndResidualFunc(bc),
@@ -60,10 +61,12 @@ public:
     {
     }
 
-    void
-    evaluate(Scalar f[]) const override
+    DynDenseVector<Scalar>
+    evaluate() const override
     {
-        f[0] = 0.;
+        DynDenseVector<Scalar> f(1);
+        f(0) = 0.;
+        return f;
     }
 
 protected:
