@@ -155,9 +155,8 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_THROW_MSG(
-        { auto n = m->get_face_set_name(1234); },
-        "Face set ID '1234' does not exist.");
+    EXPECT_THROW_MSG({ auto n = m->get_face_set_name(1234); },
+                     "Face set ID '1234' does not exist.");
 }
 
 TEST(UnstructuredMeshTest, nonexistent_cell_set)
@@ -171,9 +170,8 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_THROW_MSG(
-        { auto n = m->get_cell_set_name(1234); },
-        "Cell set ID '1234' does not exist.");
+    EXPECT_THROW_MSG({ auto n = m->get_cell_set_name(1234); },
+                     "Cell set ID '1234' does not exist.");
 }
 
 TEST(UnstructuredMeshTest, get_connectivity)
@@ -431,14 +429,9 @@ TEST(UnstructuredMesh, get_chart)
     mesh.create();
     auto m = mesh.get_mesh<UnstructuredMesh>();
 
-    Int start, end;
-    m->get_chart(start, end);
-    EXPECT_EQ(start, 0);
-    EXPECT_EQ(end, 45);
-
-    auto range = m->get_chart();
-    EXPECT_EQ(range.first(), 0);
-    EXPECT_EQ(range.last(), 45);
+    auto chart = m->get_chart();
+    EXPECT_EQ(chart.first(), 0);
+    EXPECT_EQ(chart.last(), 45);
 }
 
 TEST(UnstructuredMesh, common_cells_by_vertex)
