@@ -754,7 +754,7 @@ void
 ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, const Int * cells)
 {
     CALL_STACK_MSG();
-    UnstructuredMesh::Range elem_range;
+    Range elem_range;
     if (cells == nullptr) {
         elem_range = this->mesh->get_cell_range();
         n_elems_in_block = elem_range.size();

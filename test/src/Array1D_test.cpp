@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/Array1D.h"
 #include "godzilla/DenseVector.h"
+#include "godzilla/Range.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -9,6 +10,14 @@ TEST(Array1DTest, create)
 {
     Array1D<Real> arr;
     arr.create(10);
+    EXPECT_EQ(arr.get_size(), 10);
+    arr.destroy();
+}
+
+TEST(Array1DTest, create_rng)
+{
+    Array1D<Real> arr;
+    arr.create(godzilla::Range(5, 15));
     EXPECT_EQ(arr.get_size(), 10);
     arr.destroy();
 }

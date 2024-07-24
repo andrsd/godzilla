@@ -5,6 +5,7 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
+#include "godzilla/Range.h"
 #include <cassert>
 
 namespace godzilla {
@@ -66,12 +67,12 @@ public:
     };
 
     /// Create an empty array
-    Array1D() : n(-1), data(nullptr) {}
+    Array1D() : n(0), data(nullptr) {}
 
     /// Create an array with specified number of entries
     ///
     /// @param size Number of entries in the array
-    explicit Array1D(Int size) : n(size), data(new T[size]) { MEM_CHECK(this->data); }
+    explicit Array1D(Int size) : n(size), data(new T[size]), range(0, size) {}
 
     /// Allocate memory for the array with specified number of entries
     ///
@@ -79,9 +80,18 @@ public:
     void
     create(Int size)
     {
+        this->range = Range(0, size);
         this->n = size;
         this->data = new T[size];
-        MEM_CHECK(this->data);
+    }
+
+    void
+    create(const Range & rng)
+    {
+        this->range = rng;
+        auto size = rng.last() - rng.first();
+        this->n = size;
+        this->data = new T[size];
     }
 
     /// Get number of entries in the array
@@ -101,8 +111,9 @@ public:
     get(Int i) const
     {
         assert(this->data != nullptr);
-        assert((i >= 0) && (i < this->n));
-        return this->data[i];
+        assert((i >= this->range.first()) && (i < this->range.last()));
+        auto idx = i - this->range.first();
+        return this->data[idx];
     }
 
     /// Get the entry at a specified location for writing
@@ -113,8 +124,9 @@ public:
     set(Int i)
     {
         assert(this->data != nullptr);
-        assert((i >= 0) && (i < this->n));
-        return this->data[i];
+        assert((i >= this->range.first()) && (i < this->range.last()));
+        auto idx = i - this->range.first();
+        return this->data[idx];
     }
 
     /// Set all entries in the array to zero
@@ -132,7 +144,7 @@ public:
     {
         delete[] this->data;
         this->data = nullptr;
-        this->n = -1;
+        this->n = 0;
     }
 
     /// Get values from specified indices
@@ -286,6 +298,8 @@ private:
     Int n;
     /// Array containing the values
     T * data;
+    /// Range of valid indices
+    Range range;
 };
 
 template <>
