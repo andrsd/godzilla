@@ -123,13 +123,13 @@ TEST(DenseVectorTest, dot_row_row)
     EXPECT_EQ(dot(a, b), 10.);
 }
 
-TEST(DenseVectorTest, dot_glob)
+TEST(DenseVectorTest, dot_1x1)
 {
-    const Int N = 3;
-    DenseVector<Real, N> a({ 2., 3., 4. });
-    DenseVector<Real, N> b({ 4., 2., -1. });
-    Real dot_prod = dot<Real, N>(a, b);
-    EXPECT_EQ(dot_prod, 10.);
+    DenseMatrix<Real, 1, 1> a;
+    a(0, 0) = 2.;
+    DenseMatrix<Real, 1, 1> b;
+    b(0, 0) = 3.;
+    EXPECT_EQ(dot(a, b), 6.);
 }
 
 TEST(DenseVectorTest, sum)
@@ -251,6 +251,34 @@ TEST(DenseVectorTest, cross_prod_3)
     EXPECT_EQ(v(0), 9.);
     EXPECT_EQ(v(1), 7.);
     EXPECT_EQ(v(2), -17.);
+}
+
+TEST(DenseVectorTest, mat_row)
+{
+    DenseVector<DenseVector<Real, 3>, 2> a;
+    a(0) = DenseVector<Real, 3>({ 1, 2, 3 });
+    a(1) = DenseVector<Real, 3>({ -3, -4, -5 });
+    auto mat = mat_row(a);
+    EXPECT_DOUBLE_EQ(mat(0, 0), 1.);
+    EXPECT_DOUBLE_EQ(mat(0, 1), 2.);
+    EXPECT_DOUBLE_EQ(mat(0, 2), 3.);
+    EXPECT_DOUBLE_EQ(mat(1, 0), -3.);
+    EXPECT_DOUBLE_EQ(mat(1, 1), -4.);
+    EXPECT_DOUBLE_EQ(mat(1, 2), -5.);
+}
+
+TEST(DenseVectorTest, mat_col)
+{
+    DenseVector<DenseVector<Real, 3>, 2> a;
+    a(0) = DenseVector<Real, 3>({ 1, 2, 3 });
+    a(1) = DenseVector<Real, 3>({ -3, -4, -5 });
+    auto mat = mat_col(a);
+    EXPECT_DOUBLE_EQ(mat(0, 0), 1.);
+    EXPECT_DOUBLE_EQ(mat(0, 1), -3.);
+    EXPECT_DOUBLE_EQ(mat(1, 0), 2.);
+    EXPECT_DOUBLE_EQ(mat(1, 1), -4.);
+    EXPECT_DOUBLE_EQ(mat(2, 0), 3.);
+    EXPECT_DOUBLE_EQ(mat(2, 1), -5.);
 }
 
 TEST(DenseVectorTest, avg)
