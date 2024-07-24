@@ -85,7 +85,7 @@ UnstructuredMesh::get_num_vertices() const
     return get_vertex_range().size();
 }
 
-UnstructuredMesh::Range
+Range
 UnstructuredMesh::get_vertex_range() const
 {
     CALL_STACK_MSG();
@@ -101,7 +101,7 @@ UnstructuredMesh::get_num_faces() const
     return get_face_range().size();
 }
 
-UnstructuredMesh::Range
+Range
 UnstructuredMesh::get_face_range() const
 {
     CALL_STACK_MSG();
@@ -124,7 +124,7 @@ UnstructuredMesh::get_num_all_cells() const
     return get_all_cell_range().size();
 }
 
-UnstructuredMesh::Range
+Range
 UnstructuredMesh::get_cell_range() const
 {
     CALL_STACK_MSG();
@@ -141,7 +141,7 @@ UnstructuredMesh::get_cell_range() const
     return { first, last };
 }
 
-UnstructuredMesh::Range
+Range
 UnstructuredMesh::get_all_cell_range() const
 {
     CALL_STACK_MSG();
@@ -150,7 +150,7 @@ UnstructuredMesh::get_all_cell_range() const
     return { first, last };
 }
 
-UnstructuredMesh::Range
+Range
 UnstructuredMesh::get_ghost_cell_range() const
 {
     CALL_STACK_MSG();
@@ -176,7 +176,7 @@ UnstructuredMesh::get_all_cells() const
     return IndexSet(cell_is);
 }
 
-UnstructuredMesh::Range
+Range
 UnstructuredMesh::get_chart() const
 {
     CALL_STACK_MSG();
@@ -508,60 +508,6 @@ UnstructuredMesh::get_num_cell_nodes(DMPolytopeType elem_type)
     default:
         error("Unsupported type '{}'.", get_polytope_type_str(elem_type));
     }
-}
-
-UnstructuredMesh::Iterator
-UnstructuredMesh::vertex_begin() const
-{
-    CALL_STACK_MSG();
-    Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), get_dimension(), &idx, nullptr));
-    return Iterator(idx);
-}
-
-UnstructuredMesh::Iterator
-UnstructuredMesh::vertex_end() const
-{
-    CALL_STACK_MSG();
-    Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), get_dimension(), nullptr, &idx));
-    return Iterator(idx);
-}
-
-UnstructuredMesh::Iterator
-UnstructuredMesh::face_begin() const
-{
-    CALL_STACK_MSG();
-    Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), 1, &idx, nullptr));
-    return Iterator(idx);
-}
-
-UnstructuredMesh::Iterator
-UnstructuredMesh::face_end() const
-{
-    CALL_STACK_MSG();
-    Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), 1, nullptr, &idx));
-    return Iterator(idx);
-}
-
-UnstructuredMesh::Iterator
-UnstructuredMesh::cell_begin() const
-{
-    CALL_STACK_MSG();
-    Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), 0, &idx, nullptr));
-    return Iterator(idx);
-}
-
-UnstructuredMesh::Iterator
-UnstructuredMesh::cell_end() const
-{
-    CALL_STACK_MSG();
-    Int idx;
-    PETSC_CHECK(DMPlexGetHeightStratum(get_dm(), 0, nullptr, &idx));
-    return Iterator(idx);
 }
 
 const std::map<Int, std::vector<Int>> &

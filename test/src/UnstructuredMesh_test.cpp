@@ -253,22 +253,13 @@ TEST(UnstructuredMeshTest, ranges)
     auto m = mesh.get_mesh<UnstructuredMesh>();
     m->construct_ghost_cells();
 
-    EXPECT_EQ(*m->vertex_begin(), 12);
-    EXPECT_EQ(*m->vertex_end(), 24);
-
     auto vtx_range = m->get_vertex_range();
     EXPECT_EQ(vtx_range.first(), 12);
     EXPECT_EQ(vtx_range.last(), 24);
 
-    EXPECT_EQ(*m->face_begin(), 24);
-    EXPECT_EQ(*m->face_end(), 35);
-
     auto face_range = m->get_face_range();
     EXPECT_EQ(face_range.first(), 24);
     EXPECT_EQ(face_range.last(), 35);
-
-    EXPECT_EQ(*m->cell_begin(), 0);
-    EXPECT_EQ(*m->cell_end(), 12);
 
     auto cell_range = m->get_cell_range();
     EXPECT_EQ(cell_range.first(), 0);
@@ -277,11 +268,6 @@ TEST(UnstructuredMeshTest, ranges)
     auto all_cell_range = m->get_all_cell_range();
     EXPECT_EQ(all_cell_range.first(), 0);
     EXPECT_EQ(all_cell_range.last(), 12);
-
-    auto it = m->cell_begin();
-    for (Int i = 0; i < 12; i++)
-        it++;
-    EXPECT_TRUE(it == m->cell_end());
 }
 
 TEST(UnstructuredMeshTest, polytope_type_str)
