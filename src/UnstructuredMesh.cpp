@@ -176,13 +176,6 @@ UnstructuredMesh::get_all_cells() const
     return IndexSet(cell_is);
 }
 
-void
-UnstructuredMesh::get_chart(Int & start, Int & end) const
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(DMPlexGetChart(get_dm(), &start, &end));
-}
-
 UnstructuredMesh::Range
 UnstructuredMesh::get_chart() const
 {
