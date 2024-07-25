@@ -2,6 +2,7 @@
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEShapeFns.h"
+#include "godzilla/FEVolumes.h"
 #include "ExceptionTestMacros.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 
@@ -104,6 +105,25 @@ TEST(FEGeometryTest, element_length_tri3)
     auto grad = fe::grad_shape<TRI3, 2>(coords, volume);
     auto len = fe::element_length<TRI3, 2, 3>(grad);
     EXPECT_DOUBLE_EQ(len, 1. / std::sqrt(2.));
+}
+
+TEST(FEGeometryTest, calc_element_length)
+{
+    mpi::Communicator comm(MPI_COMM_WORLD);
+
+    const ElementType ELEM_TYPE = TRI3;
+    const int DIM = 2;
+    const int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE);
+
+    std::vector<Int> cells = { 0, 1, 2, 2, 1, 3 };
+    std::vector<Real> coords = { 0, 0, 0.8, 0., 0., 0.6, 1, 0.6 };
+    auto mesh =
+        UnstructuredMesh::build_from_cell_list(comm, DIM, N_ELEM_NODES, cells, DIM, coords, true);
+    auto volumes = fe::calc_volumes<ELEM_TYPE, DIM>(*mesh);
+    auto grad_sh = fe::calc_grad_shape<ELEM_TYPE, DIM>(*mesh, volumes);
+    auto hel = fe::calc_element_length<ELEM_TYPE, DIM>(grad_sh);
+    EXPECT_DOUBLE_EQ(hel(0), 0.48);
+    EXPECT_DOUBLE_EQ(hel(1), 0.6);
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_edge2)
