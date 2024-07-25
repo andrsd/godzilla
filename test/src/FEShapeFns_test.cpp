@@ -6,9 +6,9 @@ using namespace godzilla;
 
 TEST(FEShapeFns, grad_shape_egde2)
 {
-    DenseVector<DenseVector<Real, 1>, 2> coords;
-    coords(0) = DenseVector<Real, 1>({ 1. });
-    coords(1) = DenseVector<Real, 1>({ 3. });
+    DenseMatrix<Real, 2, 1> coords;
+    coords.set_row(0, { 1. });
+    coords.set_row(1, { 3. });
     Real volume = fe::volume<EDGE2>(coords);
     auto grads = fe::grad_shape<EDGE2, 1>(coords, volume);
     EXPECT_DOUBLE_EQ(grads(0, 0), -0.5);
@@ -17,10 +17,10 @@ TEST(FEShapeFns, grad_shape_egde2)
 
 TEST(FEShapeFns, grad_shape_tri3)
 {
-    DenseVector<DenseVector<Real, 2>, 3> coords;
-    coords(0) = DenseVector<Real, 2>({ 0, 0. });
-    coords(1) = DenseVector<Real, 2>({ 1, 0. });
-    coords(2) = DenseVector<Real, 2>({ 0, 1. });
+    DenseMatrix<Real, 3, 2> coords;
+    coords.set_row(0, { 0, 0. });
+    coords.set_row(1, { 1, 0. });
+    coords.set_row(2, { 0, 1. });
     Real volume = fe::volume<TRI3>(coords);
     auto grads = fe::grad_shape<TRI3, 2>(coords, volume);
     EXPECT_DOUBLE_EQ(grads(0, 0), -1);
