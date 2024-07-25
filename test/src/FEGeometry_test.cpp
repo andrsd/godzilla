@@ -33,9 +33,9 @@ TEST(FEGeometryTest, common_elements_by_node)
 TEST(FEGeometryTest, normal_edge2)
 {
     Real volume = 2.;
-    DenseVector<DenseVector<Real, 1>, 2> coords;
-    coords(0) = DenseVector<Real, 1>({ 0 });
-    coords(1) = DenseVector<Real, 1>({ 2 });
+    DenseMatrix<Real, 2, 1> coords;
+    coords.set_row(0, { 0 });
+    coords.set_row(1, { 2 });
     auto grad = fe::grad_shape<EDGE2, 1>(coords, volume);
     {
         auto n = fe::normal<EDGE2>(volume, 0, DenseVector<Real, 1>(grad.column(1)));
@@ -50,10 +50,10 @@ TEST(FEGeometryTest, normal_edge2)
 TEST(FEGeometryTest, normal_tri3)
 {
     Real volume = 0.5;
-    DenseVector<DenseVector<Real, 2>, 3> coords;
-    coords(0) = DenseVector<Real, 2>({ 0, 0 });
-    coords(1) = DenseVector<Real, 2>({ 1, 0 });
-    coords(2) = DenseVector<Real, 2>({ 0, 1 });
+    DenseMatrix<Real, 3, 2> coords;
+    coords.set_row(0, { 0, 0 });
+    coords.set_row(1, { 1, 0 });
+    coords.set_row(2, { 0, 1 });
     auto grad = fe::grad_shape<TRI3, 2>(coords, volume);
     {
         Real edge_len = 1.;
@@ -86,9 +86,9 @@ TEST(FEGeometryTest, normal_hex8)
 TEST(FEGeometryTest, element_length_edge2)
 {
     Real volume = 2.;
-    DenseVector<DenseVector<Real, 1>, 2> coords;
-    coords(0) = DenseVector<Real, 1>({ 0 });
-    coords(1) = DenseVector<Real, 1>({ 2 });
+    DenseMatrix<Real, 2, 1> coords;
+    coords.set_row(0, { 0 });
+    coords.set_row(1, { 2 });
     auto grad = fe::grad_shape<EDGE2, 1>(coords, volume);
     auto len = fe::element_length<EDGE2, 1, 2>(grad);
     EXPECT_DOUBLE_EQ(len, 2.);
@@ -97,10 +97,10 @@ TEST(FEGeometryTest, element_length_edge2)
 TEST(FEGeometryTest, element_length_tri3)
 {
     Real volume = 0.5;
-    DenseVector<DenseVector<Real, 2>, 3> coords;
-    coords(0) = DenseVector<Real, 2>({ 0, 0 });
-    coords(1) = DenseVector<Real, 2>({ 1, 0 });
-    coords(2) = DenseVector<Real, 2>({ 0, 1 });
+    DenseMatrix<Real, 3, 2> coords;
+    coords.set_row(0, { 0, 0 });
+    coords.set_row(1, { 1, 0 });
+    coords.set_row(2, { 0, 1 });
     auto grad = fe::grad_shape<TRI3, 2>(coords, volume);
     auto len = fe::element_length<TRI3, 2, 3>(grad);
     EXPECT_DOUBLE_EQ(len, 1. / std::sqrt(2.));

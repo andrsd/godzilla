@@ -5,36 +5,36 @@ using namespace godzilla;
 
 TEST(FEVolumesTest, volume_edge2)
 {
-    DenseVector<DenseVector<Real, 1>, 2> coords;
-    coords(0) = DenseVector<Real, 1>({ 1. });
-    coords(1) = DenseVector<Real, 1>({ 3. });
+    DenseMatrix<Real, 2, 1> coords;
+    coords.set_row(0, { 1. });
+    coords.set_row(1, { 3. });
     EXPECT_EQ(fe::volume<EDGE2>(coords), 2.);
 }
 
 TEST(FEVolumesTest, volume_edge2_2d)
 {
-    DenseVector<DenseVector<Real, 2>, 2> coords;
-    coords(0) = DenseVector<Real, 2>({ 4., 9. });
-    coords(1) = DenseVector<Real, 2>({ 1., 5. });
+    DenseMatrix<Real, 2, 2> coords;
+    coords.set_row(0, { 4., 9. });
+    coords.set_row(1, { 1., 5. });
     EXPECT_EQ(fe::volume<EDGE2>(coords), 5.);
 }
 
 TEST(FEVolumesTest, volume_tri3)
 {
-    DenseVector<DenseVector<Real, 2>, 3> coords;
-    coords(0) = DenseVector<Real, 2>({ 0., 0. });
-    coords(1) = DenseVector<Real, 2>({ 1., 0. });
-    coords(2) = DenseVector<Real, 2>({ 0., 1. });
+    DenseMatrix<Real, 3, 2> coords;
+    coords.set_row(0, { 0., 0. });
+    coords.set_row(1, { 1., 0. });
+    coords.set_row(2, { 0., 1. });
     EXPECT_EQ(fe::volume<TRI3>(coords), 0.5);
 }
 
 TEST(FEVolumesTest, volume_tet4)
 {
-    DenseVector<DenseVector<Real, 3>, 4> coords;
-    coords(0) = DenseVector<Real, 3>({ 0., 0., 0 });
-    coords(1) = DenseVector<Real, 3>({ 1., 0., 0 });
-    coords(2) = DenseVector<Real, 3>({ 0., 1., 0. });
-    coords(3) = DenseVector<Real, 3>({ 0., 0., 1. });
+    DenseMatrix<Real, 4, 3> coords;
+    coords.set_row(0, { 0., 0., 0 });
+    coords.set_row(1, { 1., 0., 0 });
+    coords.set_row(2, { 0., 1., 0. });
+    coords.set_row(3, { 0., 0., 1. });
     EXPECT_EQ(fe::volume<TET4>(coords), 1. / 6.);
 }
 

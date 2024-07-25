@@ -16,7 +16,7 @@ namespace fe {
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 Real
-volume(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords)
+volume(const DenseMatrix<Real, N_ELEM_NODES, DIM> & coords)
 {
     CALL_STACK_MSG();
     error("Volume calculation for {} in {} dimensions is not implemented.",
@@ -27,37 +27,37 @@ volume(const DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> & coords)
 /// Compute volume of a EDGE2 in 1D
 template <>
 inline Real
-volume<EDGE2, 1>(const DenseVector<DenseVector<Real, 1>, 2> & coords)
+volume<EDGE2, 1>(const DenseMatrix<Real, 2, 1> & coords)
 {
-    Real vol = std::abs(coords(0)(0) - coords(1)(0));
+    Real vol = std::abs(coords(0, 0) - coords(1, 0));
     return vol;
 }
 
 /// Compute volume of a EDGE2 in 2D
 template <>
 inline Real
-volume<EDGE2, 2>(const DenseVector<DenseVector<Real, 2>, 2> & coords)
+volume<EDGE2, 2>(const DenseMatrix<Real, 2, 2> & coords)
 {
     DenseVector<Real, 2> v;
-    v(0) = coords(0)(0) - coords(1)(0);
-    v(1) = coords(0)(1) - coords(1)(1);
+    v(0) = coords(0, 0) - coords(1, 0);
+    v(1) = coords(0, 1) - coords(1, 1);
     return v.magnitude();
 }
 
 /// Compute volume of a TRI3 in 2D
 template <>
 inline Real
-volume<TRI3, 2>(const DenseVector<DenseVector<Real, 2>, 3> & coords)
+volume<TRI3, 2>(const DenseMatrix<Real, 3, 2> & coords)
 {
     // Element volume = half the determinant of the coordinate Jacobian
-    Real X1 = coords(0)(0);
-    Real Y1 = coords(0)(1);
+    Real X1 = coords(0, 0);
+    Real Y1 = coords(0, 1);
 
-    Real X2 = coords(1)(0);
-    Real Y2 = coords(1)(1);
+    Real X2 = coords(1, 0);
+    Real Y2 = coords(1, 1);
 
-    Real X3 = coords(2)(0);
-    Real Y3 = coords(2)(1);
+    Real X3 = coords(2, 0);
+    Real Y3 = coords(2, 1);
 
     return 0.5 * (X2 * Y3 - X3 * Y2 - X1 * (Y3 - Y2) + Y1 * (X3 - X2));
 }
@@ -65,23 +65,23 @@ volume<TRI3, 2>(const DenseVector<DenseVector<Real, 2>, 3> & coords)
 /// Compute volume of a TET4 in 3D
 template <>
 inline Real
-volume<TET4, 3>(const DenseVector<DenseVector<Real, 3>, 4> & coords)
+volume<TET4, 3>(const DenseMatrix<Real, 4, 3> & coords)
 {
-    Real x1 = coords(0)(0);
-    Real y1 = coords(0)(1);
-    Real z1 = coords(0)(2);
+    Real x1 = coords(0, 0);
+    Real y1 = coords(0, 1);
+    Real z1 = coords(0, 2);
 
-    Real x2 = coords(1)(0);
-    Real y2 = coords(1)(1);
-    Real z2 = coords(1)(2);
+    Real x2 = coords(1, 0);
+    Real y2 = coords(1, 1);
+    Real z2 = coords(1, 2);
 
-    Real x3 = coords(2)(0);
-    Real y3 = coords(2)(1);
-    Real z3 = coords(2)(2);
+    Real x3 = coords(2, 0);
+    Real y3 = coords(2, 1);
+    Real z3 = coords(2, 2);
 
-    Real x4 = coords(3)(0);
-    Real y4 = coords(3)(1);
-    Real z4 = coords(3)(2);
+    Real x4 = coords(3, 0);
+    Real y4 = coords(3, 1);
+    Real z4 = coords(3, 2);
 
     DenseVector<Real, 3> v0({ x2 - x1, y2 - y1, z2 - z1 });
     DenseVector<Real, 3> v1({ x3 - x1, y3 - y1, z3 - z1 });
@@ -109,7 +109,7 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
 
     for (godzilla::Int ie = 0; ie < connect.get_size(); ie++) {
         auto idx = connect(ie);
-        auto elem_coord = coords.get_values(idx);
+        auto elem_coord = mat_row(coords.get_values(idx));
         fe_volume(ie) = volume<ELEM_TYPE, DIM>(elem_coord);
     }
 }
@@ -135,10 +135,10 @@ calc_volumes(const UnstructuredMesh & mesh)
     auto dm = mesh.get_coordinate_dm();
     auto vec = mesh.get_coordinates_local();
     auto section = mesh.get_coordinate_section();
-    DenseVector<DenseVector<Real, DIM>, N_ELEM_NODES> elem_coord;
+    DenseMatrix<Real, N_ELEM_NODES, DIM> elem_coord;
     Int sz = DIM * N_ELEM_NODES;
     for (godzilla::Int ie = 0; ie < n_elems; ie++) {
-        Real * data = elem_coord(0).data();
+        Real * data = elem_coord.data();
         PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, ie, &sz, &data));
         vols(ie) = fe::volume<ELEM_TYPE, DIM>(elem_coord);
     }
