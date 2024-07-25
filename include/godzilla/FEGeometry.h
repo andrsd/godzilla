@@ -141,12 +141,11 @@ element_length<TRI3, 2, 3>(const DenseMatrix<Real, 2, 3> & grad_phi)
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 Array1D<Real>
-calc_element_length(const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect,
-                    const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_phi)
+calc_element_length(const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_phi)
 {
     CALL_STACK_MSG();
-    Array1D<Real> elem_lengths(connect.get_size());
-    for (godzilla::Int ie = 0; ie < connect.get_size(); ie++)
+    Array1D<Real> elem_lengths(grad_phi.get_size());
+    for (Int ie = 0; ie < grad_phi.get_size(); ie++)
         elem_lengths(ie) = element_length<ELEM_TYPE, DIM>(grad_phi(ie));
     return elem_lengths;
 }
