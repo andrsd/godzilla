@@ -3,8 +3,6 @@
 #include "ExceptionTestMacros.h"
 #include <time.h>
 
-#ifdef GODZILLA_WITH_PERF_LOG
-
 using namespace godzilla;
 
 TEST(PerfLogTest, event)
@@ -12,7 +10,6 @@ TEST(PerfLogTest, event)
     const std::string event1_name = "event1";
     const std::string event2_name = "event2";
 
-    perf_log::register_event(event1_name);
     auto event2_id = perf_log::register_event(event2_name);
 
     for (int i = 0; i < 2; i++) {
@@ -83,11 +80,11 @@ TEST(PerfLogTest, stage)
     }
 
     perf_log::Stage stage("stage1");
-    #if (PETSC_VERSION_GE(3, 18, 0)) && (PETSC_VERSION_LT(3, 20, 0))
+#if (PETSC_VERSION_GE(3, 18, 0)) && (PETSC_VERSION_LT(3, 20, 0))
     EXPECT_EQ(stage.get_id(), 2);
-    #else
+#else
     EXPECT_EQ(stage.get_id(), 1);
-    #endif
+#endif
 
     perf_log::EventInfo info1 = perf_log::get_event_info(event_name, stage_name);
     EXPECT_DOUBLE_EQ(info1.get_flops(), 3.);
@@ -118,5 +115,3 @@ TEST(PerfLogTest, is_event_registered)
     perf_log::register_event("event3");
     EXPECT_TRUE(perf_log::is_event_registered("event3"));
 }
-
-#endif

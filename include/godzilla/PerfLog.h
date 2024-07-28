@@ -3,23 +3,14 @@
 
 #pragma once
 
-#include "godzilla/Label.h"
 #include "petsclog.h"
 #include <map>
 
-#ifdef GODZILLA_WITH_PERF_LOG
-    #define GODZILLA_PERF_LOG_REGISTER_EVENT(name) perf_log::register_event(name);
-    #define GODZILLA_PERF_LOG_EVENT(name) perf_log::ScopedEvent __event__(name);
+#define GODZILLA_PERF_LOG_REGISTER_EVENT(name) perf_log::register_event(name);
+#define GODZILLA_PERF_LOG_EVENT(name) perf_log::ScopedEvent __event__(name);
 
-    #define GODZILLA_PERF_LOG_REGISTER_STAGE(name) perf_log::register_stage(name);
-    #define GODZILLA_PERF_LOG_STAGE(name) perf_log::Stage __stage__(name);
-#else
-    #define GODZILLA_PERF_LOG_REGISTER_EVENT(name)
-    #define GODZILLA_PERF_LOG_EVENT(name)
-
-    #define GODZILLA_PERF_LOG_REGISTER_STAGE(name)
-    #define GODZILLA_PERF_LOG_STAGE(name)
-#endif
+#define GODZILLA_PERF_LOG_REGISTER_STAGE(name) perf_log::register_stage(name);
+#define GODZILLA_PERF_LOG_STAGE(name) perf_log::Stage __stage__(name);
 
 namespace godzilla::perf_log {
 

@@ -19,7 +19,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            python-version: '3.9'
+            python-version: "3.9"
             petsc: 3.20.6
     runs-on: ${{ matrix.os }}
     steps:
@@ -49,7 +49,6 @@ jobs:
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
             -DCMAKE_BUILD_TYPE=Debug \
-            -DGODZILLA_WITH_PERF_LOG=YES \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
             -DGODZILLA_CODE_COVERAGE=YES

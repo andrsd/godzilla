@@ -23,7 +23,6 @@ endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${BuildValues})
 
 option(GODZILLA_WITH_MPI "Build with MPI support" YES)
-option(GODZILLA_WITH_PERF_LOG "Build with performance logging" NO)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
