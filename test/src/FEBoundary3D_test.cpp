@@ -127,8 +127,8 @@ TEST(FEBoundaryTest, nodal_normals_3d)
 
     auto coords = fe::coordinates<3>(mesh);
     auto connect = fe::connectivity<3, 4>(mesh);
-    auto fe_volume = fe::calc_volumes<TET4, 3>(coords, connect);
-    auto grad_phi = fe::calc_grad_shape<TET4, 3>(coords, connect, fe_volume);
+    auto fe_volume = fe::calc_volumes<TET4, 3>(mesh);
+    auto grad_phi = fe::calc_grad_shape<TET4, 3>(mesh, fe_volume);
 
     {
         auto label = mesh.get_label("left");

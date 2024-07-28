@@ -124,10 +124,8 @@ TEST(FEBoundaryTest, nodal_normals_2d)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto coords = fe::coordinates<2>(*m);
-    auto connect = fe::connectivity<2, 3>(*m);
-    auto fe_volume = fe::calc_volumes<TRI3, 2>(coords, connect);
-    auto grad_phi = fe::calc_grad_shape<TRI3, 2>(coords, connect, fe_volume);
+    auto fe_volume = fe::calc_volumes<TRI3, 2>(*m);
+    auto grad_phi = fe::calc_grad_shape<TRI3, 2>(*m, fe_volume);
 
     {
         auto label = m->get_label("left");

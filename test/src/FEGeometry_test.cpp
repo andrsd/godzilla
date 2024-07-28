@@ -10,6 +10,45 @@ using namespace godzilla;
 using namespace testing;
 namespace mpi = mpicpp_lite;
 
+TEST(FEGeometryTest, coordinates)
+{
+    mpi::Communicator comm;
+    UnstructuredMesh mesh = *UnstructuredMesh::build_from_cell_list(comm,
+                                                                    1,
+                                                                    2,
+                                                                    { 0, 1, 1, 2, 2, 3 },
+                                                                    1,
+                                                                    { 0., 0.1, 0.2, 0.3 },
+                                                                    true);
+
+    auto coords = fe::coordinates<1>(mesh);
+    ASSERT_EQ(coords.get_size(), 4);
+    EXPECT_DOUBLE_EQ(coords(3)(0), 0.);
+    EXPECT_DOUBLE_EQ(coords(4)(0), 0.1);
+    EXPECT_DOUBLE_EQ(coords(5)(0), 0.2);
+    EXPECT_DOUBLE_EQ(coords(6)(0), 0.3);
+}
+
+TEST(FEGeometryTest, connectivity)
+{
+    mpi::Communicator comm;
+    UnstructuredMesh mesh = *UnstructuredMesh::build_from_cell_list(comm,
+                                                                    1,
+                                                                    2,
+                                                                    { 0, 1, 1, 2, 2, 3 },
+                                                                    1,
+                                                                    { 0., 0.1, 0.2, 0.3 },
+                                                                    true);
+    auto connect = fe::connectivity<1, 2>(mesh);
+    ASSERT_EQ(connect.get_size(), 3);
+    EXPECT_EQ(connect(0)(0), 3);
+    EXPECT_EQ(connect(0)(1), 4);
+    EXPECT_EQ(connect(1)(0), 4);
+    EXPECT_EQ(connect(1)(1), 5);
+    EXPECT_EQ(connect(2)(0), 5);
+    EXPECT_EQ(connect(2)(1), 6);
+}
+
 TEST(FEGeometryTest, common_elements_by_node)
 {
     mpi::Communicator comm;
