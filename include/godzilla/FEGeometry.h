@@ -27,15 +27,17 @@ template <Int DIM>
 Array1D<DenseVector<Real, DIM>>
 coordinates(const UnstructuredMesh & mesh)
 {
-    Array1D<DenseVector<Real, DIM>> coords(mesh.get_num_vertices());
-    Vector vc = mesh.get_coordinates_local();
     auto vtx_range = mesh.get_vertex_range();
+    Array1D<DenseVector<Real, DIM>> coords;
+    coords.create(vtx_range);
+    Vector vc = mesh.get_coordinates_local();
     Scalar * coord_vals = vc.get_array();
-    for (Int n = 0, j = 0; n < vtx_range.size(); n++) {
+    Int j = 0;
+    for (auto & vtx : vtx_range) {
         DenseVector<Real, DIM> c;
         for (Int i = 0; i < DIM; i++, j++)
             c(i) = coord_vals[j];
-        coords(n) = c;
+        coords(vtx) = c;
     }
     vc.restore_array(coord_vals);
     return coords;
@@ -47,12 +49,11 @@ connectivity(const UnstructuredMesh & mesh)
 {
     CALL_STACK_MSG();
     auto n_cells = mesh.get_num_cells();
-    auto n_all_cells = mesh.get_num_all_cells();
     Array1D<DenseVector<Int, N_ELEM_NODES>> connect(n_cells);
     for (auto elem_id : mesh.get_cell_range()) {
         auto cell_conn = mesh.get_connectivity(elem_id);
         for (Int i = 0; i < N_ELEM_NODES; i++)
-            connect(elem_id)(i) = cell_conn[i] - n_all_cells;
+            connect(elem_id)(i) = cell_conn[i];
     }
     return connect;
 }

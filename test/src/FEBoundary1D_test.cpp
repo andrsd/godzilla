@@ -121,11 +121,8 @@ TEST(FEBoundaryTest, nodal_normals_1d)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-
-    auto coords = fe::coordinates<1>(*m);
-    auto connect = fe::connectivity<1, 2>(*m);
-    auto fe_volume = fe::calc_volumes<EDGE2, 1>(coords, connect);
-    auto grad_phi = fe::calc_grad_shape<EDGE2, 1>(coords, connect, fe_volume);
+    auto fe_volume = fe::calc_volumes<EDGE2, 1>(*m);
+    auto grad_phi = fe::calc_grad_shape<EDGE2, 1>(*m, fe_volume);
 
     {
         IndexSet bnd_facets = points_from_label(m->get_label("left"));
