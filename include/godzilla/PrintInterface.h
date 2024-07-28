@@ -42,7 +42,7 @@ public:
     private:
         const PrintInterface * pi;
         unsigned int level;
-        PerfLog::Event * event;
+        perf_log::Event * event;
         PetscLogDouble start_time;
     };
 
