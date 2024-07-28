@@ -13,9 +13,7 @@ Init::Init()
     int argc = 0;
     char ** argv = { nullptr };
     PetscInitialize(&argc, &argv, nullptr, nullptr);
-#ifdef GODZILLA_WITH_PERF_LOG
-    PerfLog::init();
-#endif
+    perf_log::init();
     // get rid of PETSc error handler
     PetscPopSignalHandler();
     PetscPopErrorHandler();
@@ -25,9 +23,7 @@ Init::Init()
 Init::Init(int argc, char * argv[])
 {
     PetscInitialize(&argc, &argv, nullptr, nullptr);
-#ifdef GODZILLA_WITH_PERF_LOG
-    PerfLog::init();
-#endif
+    perf_log::init();
     // get rid of PETSc error handler
     PetscPopSignalHandler();
     PetscPopErrorHandler();

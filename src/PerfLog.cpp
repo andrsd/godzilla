@@ -4,32 +4,32 @@
 #include "godzilla/PerfLog.h"
 #include "godzilla/Exception.h"
 
-namespace godzilla {
+namespace godzilla::perf_log {
 
 void
-PerfLog::init()
+init()
 {
     PetscLogDefaultBegin();
 }
 
 bool
-PerfLog::is_event_registered(const char * name)
+is_event_registered(const char * name)
 {
-    PetscLogEvent event_id;
+    EventID event_id;
     PetscLogEventGetId(name, &event_id);
     return (event_id != -1);
 }
 
 bool
-PerfLog::is_event_registered(const std::string & name)
+is_event_registered(const std::string & name)
 {
-    return PerfLog::is_event_registered(name.c_str());
+    return is_event_registered(name.c_str());
 }
 
-PetscLogEvent
-PerfLog::register_event(const char * name)
+EventID
+register_event(const char * name)
 {
-    PetscLogEvent event_id;
+    EventID event_id;
     PetscLogEventGetId(name, &event_id);
     if (event_id == -1) {
         PetscLogEventRegister(name, 0, &event_id);
@@ -39,16 +39,16 @@ PerfLog::register_event(const char * name)
         throw Exception("PerfLog event '{}' is already registered.", name);
 }
 
-PetscLogEvent
-PerfLog::register_event(const std::string & name)
+EventID
+register_event(const std::string & name)
 {
-    return PerfLog::register_event(name.c_str());
+    return register_event(name.c_str());
 }
 
-PetscLogEvent
-PerfLog::get_event_id(const char * name)
+EventID
+get_event_id(const char * name)
 {
-    PetscLogEvent event_id;
+    EventID event_id;
     PetscLogEventGetId(name, &event_id);
     if (event_id != -1)
         return event_id;
@@ -56,16 +56,16 @@ PerfLog::get_event_id(const char * name)
         throw Exception("Event '{}' was not registered.", name);
 }
 
-PetscLogEvent
-PerfLog::get_event_id(const std::string & name)
+EventID
+get_event_id(const std::string & name)
 {
-    return PerfLog::get_event_id(name.c_str());
+    return get_event_id(name.c_str());
 }
 
-PetscLogStage
-PerfLog::register_stage(const char * name)
+StageID
+register_stage(const char * name)
 {
-    PetscLogStage stage_id;
+    StageID stage_id;
     PetscLogStageGetId(name, &stage_id);
     if (stage_id == -1) {
         PetscLogStageRegister(name, &stage_id);
@@ -75,16 +75,16 @@ PerfLog::register_stage(const char * name)
         throw Exception("PerfLog stage '{}' is already registered.", name);
 }
 
-PetscLogStage
-PerfLog::register_stage(const std::string & name)
+StageID
+register_stage(const std::string & name)
 {
-    return PerfLog::register_stage(name.c_str());
+    return register_stage(name.c_str());
 }
 
-PetscLogStage
-PerfLog::get_stage_id(const char * name)
+StageID
+get_stage_id(const char * name)
 {
-    PetscLogEvent stage_id;
+    EventID stage_id;
     PetscLogStageGetId(name, &stage_id);
     if (stage_id != -1)
         return stage_id;
@@ -92,24 +92,29 @@ PerfLog::get_stage_id(const char * name)
         throw Exception("Stage '{}' was not registered.", name);
 }
 
-PetscLogStage
-PerfLog::get_stage_id(const std::string & name)
+StageID
+get_stage_id(const std::string & name)
 {
-    return PerfLog::get_stage_id(name.c_str());
+    return get_stage_id(name.c_str());
 }
 
-PerfLog::EventInfo
-PerfLog::get_event_info(const std::string & event_name, const std::string & stage_name)
+void
+log_flops(LogDouble n)
 {
-    PetscLogEvent event_id = PerfLog::get_event_id(event_name.c_str());
-    PetscLogStage stage_id =
-        stage_name.empty() ? PETSC_DETERMINE : PerfLog::get_stage_id(stage_name.c_str());
+    PetscLogFlops(n);
+}
+
+EventInfo
+get_event_info(const std::string & event_name, const std::string & stage_name)
+{
+    EventID event_id = get_event_id(event_name.c_str());
+    StageID stage_id = stage_name.empty() ? PETSC_DETERMINE : get_stage_id(stage_name.c_str());
     EventInfo info(event_id, stage_id);
     return info;
 }
 
-PerfLog::EventInfo
-PerfLog::get_event_info(PetscLogEvent event_id, PetscLogStage stage_id)
+EventInfo
+get_event_info(EventID event_id, StageID stage_id)
 {
     EventInfo info(event_id, stage_id);
     return info;
@@ -117,89 +122,109 @@ PerfLog::get_event_info(PetscLogEvent event_id, PetscLogStage stage_id)
 
 // Event
 
-PerfLog::Event::Event(const char * name) : id(PerfLog::get_event_id(name))
+Event::Event(const char * name) : id(id_from_name(name)) {}
+
+Event::Event(const std::string & name) : id(id_from_name(name.c_str())) {}
+
+Event::Event(EventID id) : id(id) {}
+
+Event::~Event() {}
+
+void
+Event::begin()
 {
     PetscLogEventBegin(this->id, 0, 0, 0, 0);
 }
 
-PerfLog::Event::Event(const std::string & name) : id(PerfLog::get_event_id(name.c_str()))
-{
-    PetscLogEventBegin(this->id, 0, 0, 0, 0);
-}
-
-PerfLog::Event::Event(PetscLogEvent id) : id(id)
-{
-    PetscLogEventBegin(this->id, 0, 0, 0, 0);
-}
-
-PerfLog::Event::~Event()
+void
+Event::end()
 {
     PetscLogEventEnd(this->id, 0, 0, 0, 0);
 }
 
-PetscLogEvent
-PerfLog::Event::get_id() const
+EventID
+Event::get_id() const
 {
     return this->id;
 }
 
-void
-PerfLog::Event::log_flops(PetscLogDouble n)
+EventID
+Event::id_from_name(const char * name)
 {
-    PetscLogFlops(n);
+    if (is_event_registered(name))
+        return get_event_id(name);
+    else
+        return register_event(name);
 }
 
 // Stage
 
-PerfLog::Stage::Stage(const char * name) : id(PerfLog::get_stage_id(name))
+Stage::Stage(const char * name) : id(get_stage_id(name))
 {
     PetscLogStagePush(this->id);
 }
 
-PerfLog::Stage::Stage(const std::string & name) : id(PerfLog::get_stage_id(name))
+Stage::Stage(const std::string & name) : id(get_stage_id(name))
 {
     PetscLogStagePush(this->id);
 }
 
-PerfLog::Stage::Stage(PetscLogEvent id) : id(id)
+Stage::Stage(EventID id) : id(id)
 {
     PetscLogStagePush(this->id);
 }
 
-PerfLog::Stage::~Stage()
+Stage::~Stage()
 {
     PetscLogStagePop();
 }
 
-PetscLogStage
-PerfLog::Stage::get_id() const
+StageID
+Stage::get_id() const
 {
     return this->id;
 }
 
 // Event info
 
-PerfLog::EventInfo::EventInfo(PetscLogEvent event_id, PetscLogStage stage_id) : info()
+EventInfo::EventInfo(EventID event_id, StageID stage_id) : info()
 {
     PetscLogEventGetPerfInfo(stage_id, event_id, &this->info);
 }
 
-PetscLogDouble
-PerfLog::EventInfo::get_flops() const
+LogDouble
+EventInfo::flops() const
 {
     return this->info.flops;
 }
 
-PetscLogDouble
-PerfLog::EventInfo::get_time() const
+LogDouble
+EventInfo::time() const
 {
     return this->info.time;
 }
 
 int
-PerfLog::EventInfo::get_num_calls() const
+EventInfo::num_calls() const
 {
     return this->info.count;
 }
 
-} // namespace godzilla
+// ScopedEvent
+
+ScopedEvent::ScopedEvent(const char * name) : Event(name)
+{
+    begin();
+}
+
+ScopedEvent::ScopedEvent(const std::string & name) : Event(name)
+{
+    begin();
+}
+
+ScopedEvent::~ScopedEvent()
+{
+    end();
+}
+
+} // namespace godzilla::perf_log

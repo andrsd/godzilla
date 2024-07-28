@@ -42,7 +42,7 @@ public:
     private:
         const PrintInterface * pi;
         unsigned int level;
-        PerfLog::Event * event;
+        perf_log::Event * event;
         PetscLogDouble start_time;
     };
 
@@ -88,11 +88,8 @@ private:
     const std::string prefix;
 };
 
-#ifdef GODZILLA_WITH_PERF_LOG
-    #define TIMED_EVENT(level, event_name, ...) \
-        auto __timed_event_obj =                \
-            PrintInterface::TimedEvent::create(this, level, event_name, __VA_ARGS__)
-#else
-    #define TIMED_EVENT(level, event_name, ...) lprint(level, __VA_ARGS__)
-#endif
+#define TIMED_EVENT(level, event_name, ...) \
+    auto __timed_event_obj =                \
+        PrintInterface::TimedEvent::create(this, level, event_name, __VA_ARGS__)
+
 } // namespace godzilla

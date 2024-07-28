@@ -36,7 +36,6 @@ jobs:
       - name: Configure
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
-            -DGODZILLA_WITH_PERF_LOG=YES \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=on
@@ -44,10 +43,10 @@ jobs:
       - uses: cpp-linter/cpp-linter-action@v2
         with:
           style: file
-          tidy-checks: ''
+          tidy-checks: ""
           version: 14
           lines-changed-only: true
-          ignore: 'contrib'
+          ignore: "contrib"
           step-summary: true
           database: build
 
@@ -66,7 +65,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'cpp' ]
+        language: ["cpp"]
 
     steps:
       - name: Set up miniconda
@@ -93,7 +92,6 @@ jobs:
       - name: Configure
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
-            -DGODZILLA_WITH_PERF_LOG=YES \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES
 
