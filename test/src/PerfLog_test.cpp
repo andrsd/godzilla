@@ -17,16 +17,18 @@ TEST(PerfLogTest, event)
 
     for (int i = 0; i < 2; i++) {
         struct timespec remaining, request = { 0, 50000000 };
-        perf_log::Event event(event1_name);
-        event.log_flops(4.);
+        perf_log::ScopedEvent event(event1_name);
+        perf_log::log_flops(4.);
         nanosleep(&request, &remaining);
     }
 
     {
-        struct timespec remaining, request = { 0, 200000000 };
         perf_log::Event ev2(event2_id);
-        ev2.log_flops(16.);
+        struct timespec remaining, request = { 0, 200000000 };
+        ev2.begin();
+        perf_log::log_flops(16.);
         nanosleep(&request, &remaining);
+        ev2.end();
     }
 
     perf_log::EventInfo info1 = perf_log::get_event_info(event1_name);
@@ -67,16 +69,16 @@ TEST(PerfLogTest, stage)
     for (int i = 0; i < 3; i++) {
         struct timespec remaining, request = { 0, 50000000 };
         perf_log::Stage stage(stage_name);
-        perf_log::Event ev(event_name);
-        ev.log_flops(1.);
+        perf_log::ScopedEvent ev(event_name);
+        perf_log::log_flops(1.);
         nanosleep(&request, &remaining);
     }
 
     {
         struct timespec remaining, request = { 0, 100000000 };
         perf_log::Stage stage2(stage2_id);
-        perf_log::Event ev("event");
-        ev.log_flops(2.);
+        perf_log::ScopedEvent ev("event");
+        perf_log::log_flops(2.);
         nanosleep(&request, &remaining);
     }
 

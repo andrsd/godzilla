@@ -3,12 +3,13 @@
 
 #pragma once
 
+#include "godzilla/Label.h"
 #include "petsclog.h"
 #include <map>
 
 #ifdef GODZILLA_WITH_PERF_LOG
     #define GODZILLA_PERF_LOG_REGISTER_EVENT(name) perf_log::register_event(name);
-    #define GODZILLA_PERF_LOG_EVENT(name) perf_log::Event __event__(name);
+    #define GODZILLA_PERF_LOG_EVENT(name) perf_log::ScopedEvent __event__(name);
 
     #define GODZILLA_PERF_LOG_REGISTER_STAGE(name) perf_log::register_stage(name);
     #define GODZILLA_PERF_LOG_STAGE(name) perf_log::Stage __stage__(name);
@@ -59,6 +60,9 @@ StageID register_stage(const std::string & name);
 /// @return Stage ID
 StageID get_stage_id(const char * name);
 StageID get_stage_id(const std::string & name);
+
+/// Adds floating point operations to the global counter.
+void log_flops(LogDouble n);
 
 /// Performance logging stage
 ///
@@ -134,7 +138,7 @@ class Event {
 public:
     /// Construct a performance logging event
     ///
-    /// @param name Name of the event. Must be registered in PerfLog class.
+    /// @param name Name of the event
     explicit Event(const char * name);
     explicit Event(const std::string & name);
 
@@ -148,17 +152,36 @@ public:
     /// This will finish logging the event
     virtual ~Event();
 
+    /// Log the beginning of the event
+    void begin();
+
+    /// Log the end of the event.
+    void end();
+
     /// Get ID of this event
     ///
     /// @return ID of this event
     [[nodiscard]] EventID get_id() const;
 
-    /// Log number of FLOPS
-    void log_flops(LogDouble n);
-
 private:
+    /// Get event ID from event name
+    EventID id_from_name(const char * name);
+
     /// Event ID
     EventID id;
+};
+
+/// Scoped event for performance logging
+///
+/// Event start at the construction time and ends at the destruction time
+class ScopedEvent : public Event {
+public:
+    /// Construct a scoped performance logging event
+    ///
+    /// @param name Name of the event
+    explicit ScopedEvent(const char * name);
+    explicit ScopedEvent(const std::string & name);
+    virtual ~ScopedEvent();
 };
 
 } // namespace godzilla::perf_log

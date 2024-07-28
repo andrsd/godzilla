@@ -98,6 +98,12 @@ get_stage_id(const std::string & name)
     return get_stage_id(name.c_str());
 }
 
+void
+log_flops(LogDouble n)
+{
+    PetscLogFlops(n);
+}
+
 EventInfo
 get_event_info(const std::string & event_name, const std::string & stage_name)
 {
@@ -116,22 +122,22 @@ get_event_info(EventID event_id, StageID stage_id)
 
 // Event
 
-Event::Event(const char * name) : id(get_event_id(name))
+Event::Event(const char * name) : id(id_from_name(name)) {}
+
+Event::Event(const std::string & name) : id(id_from_name(name.c_str())) {}
+
+Event::Event(EventID id) : id(id) {}
+
+Event::~Event() {}
+
+void
+Event::begin()
 {
     PetscLogEventBegin(this->id, 0, 0, 0, 0);
 }
 
-Event::Event(const std::string & name) : id(get_event_id(name.c_str()))
-{
-    PetscLogEventBegin(this->id, 0, 0, 0, 0);
-}
-
-Event::Event(EventID id) : id(id)
-{
-    PetscLogEventBegin(this->id, 0, 0, 0, 0);
-}
-
-Event::~Event()
+void
+Event::end()
 {
     PetscLogEventEnd(this->id, 0, 0, 0, 0);
 }
@@ -142,10 +148,13 @@ Event::get_id() const
     return this->id;
 }
 
-void
-Event::log_flops(LogDouble n)
+EventID
+Event::id_from_name(const char * name)
 {
-    PetscLogFlops(n);
+    if (is_event_registered(name))
+        return get_event_id(name);
+    else
+        return register_event(name);
 }
 
 // Stage
@@ -199,6 +208,23 @@ int
 EventInfo::get_num_calls() const
 {
     return this->info.count;
+}
+
+// ScopedEvent
+
+ScopedEvent::ScopedEvent(const char * name) : Event(name)
+{
+    begin();
+}
+
+ScopedEvent::ScopedEvent(const std::string & name) : Event(name)
+{
+    begin();
+}
+
+ScopedEvent::~ScopedEvent()
+{
+    end();
 }
 
 } // namespace godzilla::perf_log
