@@ -29,13 +29,13 @@ TEST(PerfLogTest, event)
     }
 
     perf_log::EventInfo info1 = perf_log::get_event_info(event1_name);
-    EXPECT_DOUBLE_EQ(info1.get_flops(), 8.);
-    EXPECT_EQ(info1.get_num_calls(), 2);
-    EXPECT_NEAR(info1.get_time(), 0.1, 0.3);
+    EXPECT_DOUBLE_EQ(info1.flops(), 8.);
+    EXPECT_EQ(info1.num_calls(), 2);
+    EXPECT_NEAR(info1.time(), 0.1, 0.3);
 
     perf_log::EventInfo info2 = perf_log::get_event_info(event2_id);
-    EXPECT_DOUBLE_EQ(info2.get_flops(), 16.);
-    EXPECT_EQ(info2.get_num_calls(), 1);
+    EXPECT_DOUBLE_EQ(info2.flops(), 16.);
+    EXPECT_EQ(info2.num_calls(), 1);
 }
 
 TEST(PerfLogTest, error_existing_event)
@@ -87,13 +87,13 @@ TEST(PerfLogTest, stage)
 #endif
 
     perf_log::EventInfo info1 = perf_log::get_event_info(event_name, stage_name);
-    EXPECT_DOUBLE_EQ(info1.get_flops(), 3.);
-    EXPECT_EQ(info1.get_num_calls(), 3);
+    EXPECT_DOUBLE_EQ(info1.flops(), 3.);
+    EXPECT_EQ(info1.num_calls(), 3);
 
     perf_log::Event ev(event_name);
     perf_log::EventInfo info2 = perf_log::get_event_info(ev.get_id(), stage2_id);
-    EXPECT_DOUBLE_EQ(info2.get_flops(), 2.);
-    EXPECT_EQ(info2.get_num_calls(), 1);
+    EXPECT_DOUBLE_EQ(info2.flops(), 2.);
+    EXPECT_EQ(info2.num_calls(), 1);
 }
 
 TEST(PerfLogTest, error_existing_stage)

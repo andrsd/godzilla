@@ -92,17 +92,17 @@ public:
     /// Get the number of FLOPS
     ///
     /// @return Number of FLOPS
-    [[nodiscard]] LogDouble get_flops() const;
+    [[nodiscard]] LogDouble flops() const;
 
     /// Get total time spent on this event
     ///
     /// @return The total time spent on this event
-    [[nodiscard]] LogDouble get_time() const;
+    [[nodiscard]] LogDouble time() const;
 
     /// Get number of times this event was called
     ///
     /// @return Number of times this event was called
-    [[nodiscard]] int get_num_calls() const;
+    [[nodiscard]] int num_calls() const;
 
 private:
     /// Event information collected by PETSc

@@ -193,19 +193,19 @@ EventInfo::EventInfo(EventID event_id, StageID stage_id) : info()
 }
 
 LogDouble
-EventInfo::get_flops() const
+EventInfo::flops() const
 {
     return this->info.flops;
 }
 
 LogDouble
-EventInfo::get_time() const
+EventInfo::time() const
 {
     return this->info.time;
 }
 
 int
-EventInfo::get_num_calls() const
+EventInfo::num_calls() const
 {
     return this->info.count;
 }
