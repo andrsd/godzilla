@@ -26,6 +26,10 @@ namespace godzilla {
 ///
 class PerfLog {
 public:
+    using EventID = PetscLogEvent;
+    using StageID = PetscLogStage;
+    using LogDouble = PetscLogDouble;
+
     /// Initialize performance logging
     static void init();
 
@@ -36,29 +40,29 @@ public:
     ///
     /// @param name Event name
     /// @return Event ID
-    static PetscLogEvent register_event(const char * name);
-    static PetscLogEvent register_event(const std::string & name);
+    static EventID register_event(const char * name);
+    static EventID register_event(const std::string & name);
 
     /// Get event ID
     ///
     /// @param name Event name
     /// @return Event ID
-    static PetscLogEvent get_event_id(const char * name);
-    static PetscLogEvent get_event_id(const std::string & name);
+    static EventID get_event_id(const char * name);
+    static EventID get_event_id(const std::string & name);
 
     /// Register a logging stage
     ///
     /// @param name Stage name
     /// @return
-    static PetscLogStage register_stage(const char * name);
-    static PetscLogStage register_stage(const std::string & name);
+    static StageID register_stage(const char * name);
+    static StageID register_stage(const std::string & name);
 
     /// Get stage ID
     ///
     /// @param name Stage name
     /// @return Stage ID
-    static PetscLogStage get_stage_id(const char * name);
-    static PetscLogStage get_stage_id(const std::string & name);
+    static StageID get_stage_id(const char * name);
+    static StageID get_stage_id(const std::string & name);
 
     /// Performance logging stage
     ///
@@ -73,7 +77,7 @@ public:
         /// Construct a performance logging stage from stage ID
         ///
         /// @param id ID of an stage previously registered in PerfLog class.
-        explicit Stage(PetscLogStage id);
+        explicit Stage(StageID id);
 
         /// Destroy a stage
         ///
@@ -83,26 +87,26 @@ public:
         /// Get ID of this stage
         ///
         /// @return ID of this stage
-        [[nodiscard]] PetscLogStage get_id() const;
+        [[nodiscard]] StageID get_id() const;
 
     private:
         /// Event ID
-        PetscLogStage id;
+        StageID id;
     };
 
     class EventInfo {
     public:
-        EventInfo(PetscLogEvent event_id, PetscLogStage stage_id);
+        EventInfo(EventID event_id, StageID stage_id);
 
         /// Get the number of FLOPS
         ///
         /// @return Number of FLOPS
-        [[nodiscard]] PetscLogDouble get_flops() const;
+        [[nodiscard]] LogDouble get_flops() const;
 
         /// Get total time spent on this event
         ///
         /// @return The total time spent on this event
-        [[nodiscard]] PetscLogDouble get_time() const;
+        [[nodiscard]] LogDouble get_time() const;
 
         /// Get number of times this event was called
         ///
@@ -127,8 +131,7 @@ public:
     /// @param event_id Event ID (registered via PerfLog)
     /// @param stage_id Stage ID (registered via PerfLog)
     /// @return Event information
-    static EventInfo get_event_info(PetscLogEvent event_id,
-                                    PetscLogStage stage_id = PETSC_DETERMINE);
+    static EventInfo get_event_info(EventID event_id, StageID stage_id = PETSC_DETERMINE);
 
     /// Event for performance logging
     ///
@@ -143,7 +146,7 @@ public:
         /// Construct a performance logging event from event ID
         ///
         /// @param id ID of an event previously registered in PerfLog class.
-        explicit Event(PetscLogEvent id);
+        explicit Event(EventID id);
 
         /// Destroy an event
         ///
@@ -153,14 +156,14 @@ public:
         /// Get ID of this event
         ///
         /// @return ID of this event
-        [[nodiscard]] PetscLogEvent get_id() const;
+        [[nodiscard]] EventID get_id() const;
 
         /// Log number of FLOPS
-        void log_flops(PetscLogDouble n);
+        void log_flops(LogDouble n);
 
     private:
         /// Event ID
-        PetscLogEvent id;
+        EventID id;
     };
 };
 
