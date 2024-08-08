@@ -3,7 +3,6 @@
 #include "godzilla/Mesh.h"
 #include "godzilla/BoxMesh.h"
 #include "godzilla/Parameters.h"
-#include "petsc.h"
 
 using namespace godzilla;
 

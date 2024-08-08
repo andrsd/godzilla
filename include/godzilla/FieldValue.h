@@ -3,9 +3,8 @@
 
 #pragma once
 
-#include "petsc.h"
-#include <cassert>
 #include "godzilla/Types.h"
+#include <cassert>
 
 namespace godzilla {
 

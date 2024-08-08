@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "petsc.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/FunctionEvaluator.h"
 

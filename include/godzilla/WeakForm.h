@@ -5,10 +5,35 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Label.h"
+#include "petscdstypes.h"
 #include <array>
 #include <map>
 #include <vector>
-#include "petsc.h"
+
+namespace std {
+
+template <>
+struct less<PetscFormKey> {
+    bool
+    operator()(const PetscFormKey & lhs, const PetscFormKey & rhs) const
+    {
+        if (lhs.label == rhs.label) {
+            if (lhs.value == rhs.value) {
+                if (lhs.field == rhs.field) {
+                    return lhs.part < rhs.part;
+                }
+                else
+                    return lhs.field < rhs.field;
+            }
+            else
+                return lhs.value < rhs.value;
+        }
+        else
+            return lhs.label < rhs.label;
+    }
+};
+
+} // namespace std
 
 namespace godzilla {
 

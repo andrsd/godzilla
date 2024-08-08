@@ -96,13 +96,4 @@ private:
     unsigned int mask;
 };
 
-template <typename ENUM>
-constexpr inline Flags<ENUM>
-operator|(ENUM one, ENUM two)
-{
-    Flags<ENUM> flags(one);
-    flags |= two;
-    return flags;
-}
-
 } // namespace godzilla

@@ -5,8 +5,8 @@
 #include "godzilla/LineMesh.h"
 #include "godzilla/NonlinearProblem.h"
 #include "godzilla/Output.h"
-#include "petsc.h"
 #include "petscvec.h"
+#include "petscdmplex.h"
 
 using namespace godzilla;
 

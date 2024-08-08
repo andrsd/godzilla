@@ -9,6 +9,7 @@
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/UnstructuredMesh.h"
+#include "petscdmplex.h"
 
 namespace godzilla {
 

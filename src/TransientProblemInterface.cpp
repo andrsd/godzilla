@@ -9,6 +9,8 @@
 #include "godzilla/LoggingInterface.h"
 #include "godzilla/Output.h"
 #include "godzilla/SNESolver.h"
+#include "petscdmplex.h"
+#include "petscts.h"
 #include <cassert>
 
 namespace godzilla {

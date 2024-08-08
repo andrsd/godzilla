@@ -4,7 +4,6 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/LineMesh.h"
-#include "petsc.h"
 
 using namespace godzilla;
 
