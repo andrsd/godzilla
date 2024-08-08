@@ -4,7 +4,6 @@
 #pragma once
 
 #include "muParser/muParser.h"
-#include "petsc.h"
 #include "godzilla/Types.h"
 
 namespace godzilla {

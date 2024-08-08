@@ -3,9 +3,10 @@
 
 #pragma once
 
-#include "petscsection.h"
-#include "petscviewer.h"
 #include "godzilla/Types.h"
+#include "petscsection.h"
+#include "petscdm.h"
+#include "petscviewer.h"
 #include <vector>
 
 namespace godzilla {

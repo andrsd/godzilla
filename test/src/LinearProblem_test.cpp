@@ -4,7 +4,6 @@
 #include "LinearProblem_test.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/Output.h"
-#include "petsc.h"
 #include "petscmat.h"
 
 using namespace godzilla;

@@ -4,7 +4,7 @@
 #include "godzilla/MeshObject.h"
 #include "godzilla/Parameters.h"
 #include "ExceptionTestMacros.h"
-#include "petsc.h"
+#include "petscdmplex.h"
 
 using namespace godzilla;
 using namespace testing;

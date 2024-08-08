@@ -8,7 +8,6 @@
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
-#include "petsc.h"
 
 class FENonlinearProblemTest : public GodzillaAppTest {
 public:

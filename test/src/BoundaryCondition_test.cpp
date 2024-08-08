@@ -2,7 +2,6 @@
 #include "FENonlinearProblem_test.h"
 #include "godzilla/BoundaryCondition.h"
 #include "godzilla/Parameters.h"
-#include "petsc.h"
 
 using namespace godzilla;
 using namespace testing;

@@ -1,11 +1,11 @@
 // SPDX-FileCopyrightText: 2022 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include <petsc/private/petscfeimpl.h>
-#include "petscfe.h"
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/Error.h"
 #include "godzilla/CallStack.h"
+#include <petsc/private/petscfeimpl.h>
+#include "petscfe.h"
 
 namespace godzilla {
 namespace {

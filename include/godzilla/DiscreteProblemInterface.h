@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "petscds.h"
 #include "godzilla/Types.h"
 #include "godzilla/Label.h"
 #include "godzilla/UnstructuredMesh.h"
@@ -15,6 +14,8 @@
 #include "godzilla/DenseMatrixSymm.h"
 #include "godzilla/EssentialBC.h"
 #include "godzilla/NaturalRiemannBC.h"
+#include "petscds.h"
+#include "petscdmplex.h"
 
 namespace godzilla {
 

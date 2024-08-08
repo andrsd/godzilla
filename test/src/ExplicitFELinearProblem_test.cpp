@@ -7,7 +7,6 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/Output.h"
 #include "TestApp.h"
-#include "petsc.h"
 
 using namespace godzilla;
 

@@ -3,11 +3,6 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-#include <map>
-#include "petsc.h"
-#include "petscfe.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/DependencyEvaluator.h"
@@ -15,6 +10,10 @@
 #include "godzilla/Error.h"
 #include "godzilla/Types.h"
 #include "godzilla/WeakForm.h"
+#include "petscfe.h"
+#include <string>
+#include <vector>
+#include <map>
 
 namespace godzilla {
 

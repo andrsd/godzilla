@@ -5,7 +5,6 @@
 #include "godzilla/ExodusIIOutput.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/LineMesh.h"
-#include "petsc.h"
 
 using namespace godzilla;
 

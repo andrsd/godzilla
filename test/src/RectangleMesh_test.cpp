@@ -3,7 +3,6 @@
 #include "godzilla/RectangleMesh.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Parameters.h"
-#include "petsc.h"
 
 using namespace godzilla;
 

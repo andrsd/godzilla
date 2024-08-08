@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "petsc.h"
-
 namespace godzilla {
 namespace internal {
 

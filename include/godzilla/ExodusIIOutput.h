@@ -5,6 +5,7 @@
 
 #include "godzilla/FileOutput.h"
 #include "godzilla/Types.h"
+#include "petscdmtypes.h"
 
 namespace exodusIIcpp {
 class File;

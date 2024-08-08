@@ -5,7 +5,7 @@
 #include "godzilla/LineMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/VTKOutput.h"
-#include "petsc.h"
+#include "petscdmda.h"
 #include "petscviewer.h"
 
 namespace {
