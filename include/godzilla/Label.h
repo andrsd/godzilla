@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "petscdmlabel.h"
 #include "godzilla/Types.h"
 #include "godzilla/IndexSet.h"
+#include "petscdmlabel.h"
 
 namespace godzilla {
 

@@ -4,7 +4,8 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include "petsc.h"
+#include "petscis.h"
+#include "petscviewer.h"
 #include <vector>
 
 namespace godzilla {

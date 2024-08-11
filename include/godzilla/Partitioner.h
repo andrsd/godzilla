@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "petscpartitioner.h"
 #include "godzilla/Types.h"
 #include "godzilla/Section.h"
 #include "godzilla/IndexSet.h"
+#include "petscpartitioner.h"
 
 namespace godzilla {
 

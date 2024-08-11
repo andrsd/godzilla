@@ -2,7 +2,6 @@
 
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
-#include "petsc.h"
 
 using namespace godzilla;
 

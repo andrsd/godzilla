@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "petsc.h"
 #include "godzilla/Flags.h"
 #include "godzilla/Delegate.h"
+#include "petscsystypes.h"
 
 namespace godzilla {
 
@@ -67,28 +67,3 @@ enum ExecuteOnFlag : unsigned int {
 using ExecuteOn = Flags<ExecuteOnFlag>;
 
 } // namespace godzilla
-
-namespace std {
-
-template <>
-struct less<PetscFormKey> {
-    bool
-    operator()(const PetscFormKey & lhs, const PetscFormKey & rhs) const
-    {
-        if (lhs.label == rhs.label) {
-            if (lhs.value == rhs.value) {
-                if (lhs.field == rhs.field) {
-                    return lhs.part < rhs.part;
-                }
-                else
-                    return lhs.field < rhs.field;
-            }
-            else
-                return lhs.value < rhs.value;
-        }
-        else
-            return lhs.label < rhs.label;
-    }
-};
-
-} // namespace std

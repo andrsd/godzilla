@@ -5,7 +5,6 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/MeshPartitioningOutput.h"
-#include "petsc.h"
 #include "petscviewerhdf5.h"
 
 namespace {

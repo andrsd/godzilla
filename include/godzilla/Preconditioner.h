@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "petscpc.h"
 #include "godzilla/Matrix.h"
+#include "petscpc.h"
 
 namespace godzilla {
 

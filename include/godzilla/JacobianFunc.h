@@ -6,7 +6,6 @@
 #include "godzilla/Functional.h"
 #include "godzilla/FieldValue.h"
 #include <string>
-#include "petsc.h"
 
 namespace godzilla {
 
