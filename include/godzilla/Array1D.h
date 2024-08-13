@@ -209,16 +209,6 @@ public:
             set(idx(i)) = a(i);
     }
 
-    /// Multiply all entries in the array by a value
-    ///
-    /// @param alpha Value to multiply all entries with
-    void
-    scale(Real alpha) const
-    {
-        for (Int i = 0; i < this->n; i++)
-            this->data[i] *= alpha;
-    }
-
     /// Add values to specified locations
     ///
     /// @tparam N Size of the index and value array
@@ -230,26 +220,6 @@ public:
     {
         for (Int i = 0; i < N; i++)
             set(idx(i)) += a(i);
-    }
-
-    /// Add alpha * x to this vector
-    ///
-    /// @param alpha Scalar value
-    /// @param x Vector to add
-    void
-    axpy(Real alpha, const Array1D<T> & x) const
-    {
-        error("AXPY not implemented");
-    }
-
-    /// Compute dot product of (this * `a`)
-    ///
-    /// @param a Vector to multiply with
-    /// @return Dot product
-    [[nodiscard]] T
-    dot(const Array1D<T> & a) const
-    {
-        error("Dot product not implemented");
     }
 
     // operators
@@ -264,12 +234,6 @@ public:
     operator()(Int i)
     {
         return set(i);
-    }
-
-    T
-    operator*(const Array1D<T> & a) const
-    {
-        return dot(a);
     }
 
     //
@@ -301,24 +265,6 @@ private:
     /// Range of valid indices
     Range range;
 };
-
-template <>
-inline void
-Array1D<Real>::axpy(Real alpha, const Array1D<Real> & x) const
-{
-    for (Int i = 0; i < this->n; i++)
-        this->data[i] = alpha * x(i) + this->data[i];
-}
-
-template <>
-inline Real
-Array1D<Real>::dot(const Array1D<Real> & a) const
-{
-    Real res = 0;
-    for (Int i = 0; i < this->n; i++)
-        res += get(i) * a(i);
-    return res;
-}
 
 template <>
 inline void
