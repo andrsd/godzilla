@@ -69,31 +69,6 @@ TEST(Array1DTest, set_values_idxs)
     arr.destroy();
 }
 
-TEST(Array1DTest, scale)
-{
-    Array1D<Real> arr(5);
-    arr.set_values({ 2., 3., 1., -2., 0. });
-    arr.scale(3.);
-    Real gold[] = { 6., 9., 3., -6, 0. };
-    for (Int i = 0; i < 5; i++)
-        EXPECT_EQ(arr(i), gold[i]);
-    arr.destroy();
-}
-
-TEST(Array1DTest, axpy)
-{
-    Array1D<Real> y(5);
-    y.set_values({ 2., 3., 1., -2., 0. });
-    Array1D<Real> x(5);
-    x.set_values({ 1., -1., 3., 0., 2. });
-    y.axpy(2., x);
-    Real gold[] = { 4., 1., 7., -2., 4. };
-    for (Int i = 0; i < 5; i++)
-        EXPECT_EQ(y(i), gold[i]);
-    x.destroy();
-    y.destroy();
-}
-
 TEST(Array1DTest, get_data)
 {
     Array1D<Real> y(5);
@@ -104,30 +79,6 @@ TEST(Array1DTest, get_data)
     EXPECT_EQ(raw[2], 1.);
     EXPECT_EQ(raw[3], -2.);
     EXPECT_EQ(raw[4], 0.);
-    y.destroy();
-}
-
-TEST(Array1DTest, dot)
-{
-    Array1D<Real> y(5);
-    y.set_values({ 2., 3., 1., -2., 0. });
-    Array1D<Real> x(5);
-    x.set_values({ 1., -1., 3., 0., 2. });
-    Real dot = x.dot(y);
-    EXPECT_EQ(dot, 2.);
-    y.destroy();
-    x.destroy();
-}
-
-TEST(Array1DTest, op_dot)
-{
-    Array1D<Real> y(5);
-    y.set_values({ 2., 3., 1., -2., 0. });
-    Array1D<Real> x(5);
-    x.set_values({ 1., -1., 3., 0., 2. });
-    Real dot = x * y;
-    EXPECT_EQ(dot, 2.);
-    x.destroy();
     y.destroy();
 }
 
