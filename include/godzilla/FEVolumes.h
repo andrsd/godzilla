@@ -51,16 +51,16 @@ inline Real
 volume<TRI3, 2>(const DenseMatrix<Real, 3, 2> & coords)
 {
     // Element volume = half the determinant of the coordinate Jacobian
-    Real X1 = coords(0, 0);
-    Real Y1 = coords(0, 1);
+    auto x1 = coords(0, 0);
+    auto y1 = coords(0, 1);
 
-    Real X2 = coords(1, 0);
-    Real Y2 = coords(1, 1);
+    auto x2 = coords(1, 0);
+    auto y2 = coords(1, 1);
 
-    Real X3 = coords(2, 0);
-    Real Y3 = coords(2, 1);
+    auto x3 = coords(2, 0);
+    auto y3 = coords(2, 1);
 
-    return 0.5 * (X2 * Y3 - X3 * Y2 - X1 * (Y3 - Y2) + Y1 * (X3 - X2));
+    return 0.5 * (x2 * y3 - x3 * y2 - x1 * (y3 - y2) + y1 * (x3 - x2));
 }
 
 /// Compute volume of a TET4 in 3D
@@ -68,21 +68,21 @@ template <>
 inline Real
 volume<TET4, 3>(const DenseMatrix<Real, 4, 3> & coords)
 {
-    Real x1 = coords(0, 0);
-    Real y1 = coords(0, 1);
-    Real z1 = coords(0, 2);
+    auto x1 = coords(0, 0);
+    auto y1 = coords(0, 1);
+    auto z1 = coords(0, 2);
 
-    Real x2 = coords(1, 0);
-    Real y2 = coords(1, 1);
-    Real z2 = coords(1, 2);
+    auto x2 = coords(1, 0);
+    auto y2 = coords(1, 1);
+    auto z2 = coords(1, 2);
 
-    Real x3 = coords(2, 0);
-    Real y3 = coords(2, 1);
-    Real z3 = coords(2, 2);
+    auto x3 = coords(2, 0);
+    auto y3 = coords(2, 1);
+    auto z3 = coords(2, 2);
 
-    Real x4 = coords(3, 0);
-    Real y4 = coords(3, 1);
-    Real z4 = coords(3, 2);
+    auto x4 = coords(3, 0);
+    auto y4 = coords(3, 1);
+    auto z4 = coords(3, 2);
 
     DenseVector<Real, 3> v0({ x2 - x1, y2 - y1, z2 - z1 });
     DenseVector<Real, 3> v1({ x3 - x1, y3 - y1, z3 - z1 });
