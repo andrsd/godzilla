@@ -57,16 +57,11 @@ grad_shape<TRI3, 2>(const DenseMatrix<Real, 3, 2> & coords, Real volume)
     auto y2 = coords(1, 1);
     auto y3 = coords(2, 1);
 
-    Real x31 = x3 - x1;
-    Real x21 = x2 - x1;
-    Real y31 = y3 - y1;
-    Real y21 = y2 - y1;
-
-    Real c = 0.5 / volume;
     DenseMatrix<Real, 2, 3> grads;
-    grads.set_col(0, { c * (y21 - y31), c * (x31 - x21) });
-    grads.set_col(1, { c * y31, -c * x31 });
-    grads.set_col(2, { -c * y21, c * x21 });
+    grads.set_col(0, { (y2 - y3), (x3 - x2) });
+    grads.set_col(1, { (y3 - y1), (x1 - x3) });
+    grads.set_col(2, { (y1 - y2), (x2 - x1) });
+    grads.scale(0.5 / volume);
     return grads;
 }
 
