@@ -63,57 +63,51 @@ protected:
     MeshObject *
     gMesh1d()
     {
-        const std::string class_name = "LineMesh";
-        Parameters * params = this->app->get_parameters(class_name);
+        Parameters * params = this->app->get_parameters("LineMesh");
         params->set<Int>("nx") = 1;
-        return this->app->build_object<MeshObject>(class_name, "mesh", params);
+        return this->app->build_object<MeshObject>("mesh", params);
     }
 
     MeshObject *
     gMesh2d()
     {
-        const std::string class_name = "RectangleMesh";
-        Parameters * params = this->app->get_parameters(class_name);
+        Parameters * params = this->app->get_parameters("RectangleMesh");
         params->set<Int>("nx") = 1;
         params->set<Int>("ny") = 1;
-        return this->app->build_object<MeshObject>(class_name, "mesh", params);
+        return this->app->build_object<MeshObject>("mesh", params);
     }
 
     MeshObject *
     gMesh3d()
     {
-        const std::string class_name = "BoxMesh";
-        Parameters * params = this->app->get_parameters(class_name);
+        Parameters * params = this->app->get_parameters("BoxMesh");
         params->set<Int>("nx") = 1;
         params->set<Int>("ny") = 1;
         params->set<Int>("nz") = 1;
-        return this->app->build_object<MeshObject>(class_name, "mesh", params);
+        return this->app->build_object<MeshObject>("mesh", params);
     }
 
     G1DTestLinearProblem *
     gProblem1d(MeshObject * mesh)
     {
-        const std::string class_name = "G1DTestLinearProblem";
-        Parameters * params = this->app->get_parameters(class_name);
+        Parameters * params = this->app->get_parameters("G1DTestLinearProblem");
         params->set<MeshObject *>("_mesh_obj") = mesh;
-        return this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
+        return this->app->build_object<G1DTestLinearProblem>("problem", params);
     }
 
     G2DTestLinearProblem *
     gProblem2d(MeshObject * mesh)
     {
-        const std::string class_name = "G2DTestLinearProblem";
-        Parameters * params = this->app->get_parameters(class_name);
+        Parameters * params = this->app->get_parameters("G2DTestLinearProblem");
         params->set<MeshObject *>("_mesh_obj") = mesh;
-        return this->app->build_object<G2DTestLinearProblem>(class_name, "problem", params);
+        return this->app->build_object<G2DTestLinearProblem>("problem", params);
     }
 
     G3DTestLinearProblem *
     gProblem3d(MeshObject * mesh)
     {
-        const std::string class_name = "G3DTestLinearProblem";
-        Parameters * params = this->app->get_parameters(class_name);
+        Parameters * params = this->app->get_parameters("G3DTestLinearProblem");
         params->set<MeshObject *>("_mesh_obj") = mesh;
-        return this->app->build_object<G3DTestLinearProblem>(class_name, "problem", params);
+        return this->app->build_object<G3DTestLinearProblem>("problem", params);
     }
 };

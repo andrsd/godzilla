@@ -18,17 +18,14 @@ public:
         App::get_registry().add<GTestFENonlinearProblem>("GTestFENonlinearProblem");
 
         {
-            const std::string class_name = "LineMesh";
-            Parameters * params = this->app->get_parameters(class_name);
+            Parameters * params = this->app->get_parameters("LineMesh");
             params->set<Int>("nx") = 2;
-            this->mesh = this->app->build_object<MeshObject>(class_name, "mesh", params);
+            this->mesh = this->app->build_object<MeshObject>("mesh", params);
         }
         {
-            const std::string class_name = "GTestFENonlinearProblem";
-            Parameters * params = this->app->get_parameters(class_name);
+            Parameters * params = this->app->get_parameters("GTestFENonlinearProblem");
             params->set<MeshObject *>("_mesh_obj") = this->mesh;
-            this->prob =
-                this->app->build_object<GTestFENonlinearProblem>(class_name, "prob", params);
+            this->prob = this->app->build_object<GTestFENonlinearProblem>("prob", params);
         }
         this->app->set_problem(this->prob);
     }
@@ -52,17 +49,14 @@ public:
         App::get_registry().add<GTest2FieldsFENonlinearProblem>("GTest2FieldsFENonlinearProblem");
 
         {
-            const std::string class_name = "LineMesh";
-            Parameters * params = this->app->get_parameters(class_name);
+            Parameters * params = this->app->get_parameters("LineMesh");
             params->set<Int>("nx") = 2;
-            this->mesh = this->app->build_object<MeshObject>(class_name, "mesh", params);
+            this->mesh = this->app->build_object<MeshObject>("mesh", params);
         }
         {
-            const std::string class_name = "GTest2FieldsFENonlinearProblem";
-            Parameters * params = this->app->get_parameters(class_name);
+            Parameters * params = this->app->get_parameters("GTest2FieldsFENonlinearProblem");
             params->set<MeshObject *>("_mesh_obj") = this->mesh;
-            this->prob =
-                this->app->build_object<GTest2FieldsFENonlinearProblem>(class_name, "prob", params);
+            this->prob = this->app->build_object<GTest2FieldsFENonlinearProblem>("prob", params);
         }
         this->app->set_problem(this->prob);
     }

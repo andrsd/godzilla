@@ -152,8 +152,7 @@ InputFile::build_mesh()
     lprint(9, "- mesh");
     auto node = get_block(this->root, "mesh");
     Parameters * params = build_params(node);
-    const auto & class_name = params->get<std::string>("_type");
-    this->mesh_obj = this->app->build_object<MeshObject>(class_name, "mesh", params);
+    this->mesh_obj = this->app->build_object<MeshObject>("mesh", params);
     add_object(this->mesh_obj);
 }
 
@@ -164,9 +163,8 @@ InputFile::build_problem()
     lprint(9, "- problem");
     auto node = get_block(this->root, "problem");
     Parameters * params = build_params(node);
-    const auto & class_name = params->get<std::string>("_type");
     params->set<MeshObject *>("_mesh_obj") = this->mesh_obj;
-    this->problem = this->app->build_object<Problem>(class_name, "problem", params);
+    this->problem = this->app->build_object<Problem>("problem", params);
     add_object(this->problem);
 }
 
@@ -182,9 +180,8 @@ InputFile::build_outputs()
     for (const auto & it : output_block.values()) {
         Block blk = get_block(output_block, it.first.as<std::string>());
         Parameters * params = build_params(blk);
-        const auto & class_name = params->get<std::string>("_type");
         params->set<Problem *>("_problem") = this->problem;
-        auto output = this->app->build_object<Output>(class_name, blk.name(), params);
+        auto output = this->app->build_object<Output>(blk.name(), params);
         assert(this->problem != nullptr);
         this->problem->add_output(output);
     }
@@ -224,7 +221,6 @@ InputFile::build_params(const Block & block)
     unused_param_names.erase("type");
 
     Parameters * params = this->app->get_parameters(class_name);
-    params->set<std::string>("_type") = class_name;
     params->set<std::string>("_name") = block.name();
     params->set<App *>("_app") = this->app;
 

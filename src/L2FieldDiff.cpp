@@ -32,12 +32,11 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
             const auto & field_name = it.first;
             std::string nm = get_name() + "_" + field_name;
 
-            const std::string class_name = "ParsedFunction";
-            Parameters * fn_pars = get_app()->get_parameters(class_name);
+            Parameters * fn_pars = get_app()->get_parameters("ParsedFunction");
             fn_pars->set<App *>("_app") = get_app();
             fn_pars->set<Problem *>("_problem") = get_problem();
             fn_pars->set<std::vector<std::string>>("function") = it.second;
-            auto * pfn = get_app()->build_object<ParsedFunction>(class_name, nm, fn_pars);
+            auto * pfn = get_app()->build_object<ParsedFunction>(nm, fn_pars);
 
             get_problem()->add_function(pfn);
             this->parsed_fns[field_name] = pfn;

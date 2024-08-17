@@ -152,19 +152,14 @@ public:
     /// This is convenience API for building object with having the `_app` parameter set to this
     /// application object.
     ///
-    /// @param class_name C++ class name of the object to build
     /// @param obj_name Name of the object
     /// @param parameters Input parameters
     /// @return The constructed object
     template <typename T>
-    T * build_object(const std::string & class_name,
-                     const std::string & obj_name,
-                     Parameters & parameters);
+    T * build_object(const std::string & obj_name, Parameters & parameters);
 
     template <typename T>
-    T * build_object(const std::string & class_name,
-                     const std::string & obj_name,
-                     Parameters * parameters);
+    T * build_object(const std::string & obj_name, Parameters * parameters);
 
 protected:
     /// Get command line options
@@ -239,22 +234,18 @@ private:
 
 template <typename T>
 T *
-App::build_object(const std::string & class_name,
-                  const std::string & obj_name,
-                  Parameters & parameters)
+App::build_object(const std::string & obj_name, Parameters & parameters)
 {
     parameters.set<App *>("_app") = this;
-    return this->factory.create<T>(class_name, obj_name, parameters);
+    return this->factory.create<T>(obj_name, parameters);
 }
 
 template <typename T>
 T *
-App::build_object(const std::string & class_name,
-                  const std::string & obj_name,
-                  Parameters * parameters)
+App::build_object(const std::string & obj_name, Parameters * parameters)
 {
     parameters->set<App *>("_app") = this;
-    return this->factory.create<T>(class_name, obj_name, parameters);
+    return this->factory.create<T>(obj_name, parameters);
 }
 
 } // namespace godzilla

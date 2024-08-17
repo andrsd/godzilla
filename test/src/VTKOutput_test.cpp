@@ -19,18 +19,15 @@ protected:
         this->app->get_registry().add<G1DTestLinearProblem>("G1DTestLinearProblem");
 
         {
-            const std::string class_name = "LineMesh";
-            Parameters * params = this->app->get_parameters(class_name);
+            Parameters * params = this->app->get_parameters("LineMesh");
             params->set<Int>("nx") = 1;
-            this->mesh = this->app->build_object<LineMesh>(class_name, "mesh", params);
+            this->mesh = this->app->build_object<LineMesh>("mesh", params);
         }
 
         {
-            const std::string class_name = "G1DTestLinearProblem";
-            Parameters * params = this->app->get_parameters(class_name);
+            Parameters * params = this->app->get_parameters("G1DTestLinearProblem");
             params->set<MeshObject *>("_mesh_obj") = mesh;
-            this->prob =
-                this->app->build_object<G1DTestLinearProblem>(class_name, "problem", params);
+            this->prob = this->app->build_object<G1DTestLinearProblem>("problem", params);
         }
     }
 
@@ -44,12 +41,11 @@ protected:
     VTKOutput *
     build_output(const std::string & file_name = "")
     {
-        const std::string class_name = "VTKOutput";
-        Parameters * params = this->app->get_parameters(class_name);
+        Parameters * params = this->app->get_parameters("VTKOutput");
         params->set<Problem *>("_problem") = this->prob;
         if (file_name.length() > 0)
             params->set<std::string>("file") = file_name;
-        VTKOutput * out = this->app->build_object<VTKOutput>(class_name, "out", params);
+        VTKOutput * out = this->app->build_object<VTKOutput>("out", params);
         this->prob->add_output(out);
         return out;
     }

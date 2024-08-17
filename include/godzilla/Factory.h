@@ -28,6 +28,7 @@ public:
     {
         auto entry = this->registry.get(class_name);
         auto pars = new Parameters((*entry.params_ptr)());
+        pars->set<std::string>("_type") = class_name;
         this->params.push_back(pars);
         return pars;
     }
@@ -39,10 +40,10 @@ public:
     /// @return The created object
     template <typename T>
     T *
-    create(const std::string & class_name, const std::string & name, Parameters & parameters)
+    create(const std::string & name, Parameters & parameters)
     {
+        auto class_name = parameters.set<std::string>("_type");
         auto entry = this->registry.get(class_name);
-        parameters.set<std::string>("_type") = class_name;
         parameters.set<std::string>("_name") = name;
         T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
         if (object == nullptr)
@@ -58,9 +59,9 @@ public:
     /// @return The created object
     template <typename T>
     T *
-    create(const std::string & class_name, const std::string & name, Parameters * parameters)
+    create(const std::string & name, Parameters * parameters)
     {
-        return create<T>(class_name, name, *parameters);
+        return create<T>(name, *parameters);
     }
 
     /// Check if class is registered
