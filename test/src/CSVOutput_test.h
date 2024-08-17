@@ -9,10 +9,9 @@ protected:
     CSVOutput *
     build_output(const std::string & file_name)
     {
-        const std::string class_name = "CSVOutput";
-        Parameters * params = this->app->get_parameters(class_name);
+        Parameters * params = this->app->get_parameters("CSVOutput");
         params->set<Problem *>("_problem") = this->prob;
         params->set<std::string>("file") = file_name;
-        return this->app->build_object<CSVOutput>(class_name, "out", params);
+        return this->app->build_object<CSVOutput>("out", params);
     }
 };

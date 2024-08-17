@@ -12,10 +12,10 @@ TEST(ObjectTest, api)
     app.get_registry().add<Object>("Object");
 
     Parameters params = Object::parameters();
-    auto obj = app.build_object<Object>("Object", "name", params);
+    params.set<std::string>("_type") = "Object";
+    auto obj = app.build_object<Object>("name", params);
 
     EXPECT_EQ(obj->get_name(), "name");
-    EXPECT_EQ(obj->get_type(), "Object");
 
     const auto & p = obj->get_parameters();
 

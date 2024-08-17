@@ -66,19 +66,18 @@ TEST(DirichletBCTest, with_user_defined_fn)
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
-    std::string class_name = "PiecewiseLinear";
-    Parameters * fn_pars = app.get_parameters(class_name);
+    Parameters * fn_pars = app.get_parameters("PiecewiseLinear");
     fn_pars->set<App *>("_app") = &app;
     fn_pars->set<std::vector<Real>>("x") = { 0., 1. };
     fn_pars->set<std::vector<Real>>("y") = { 1., 2. };
-    Function * fn = app.build_object<PiecewiseLinear>(class_name, "ipol", fn_pars);
+    Function * fn = app.build_object<PiecewiseLinear>("ipol", fn_pars);
     problem.add_function(fn);
 
     Parameters * bc_pars = app.get_parameters("DirichletBC");
     bc_pars->set<App *>("_app") = &app;
     bc_pars->set<DiscreteProblemInterface *>("_dpi") = &problem;
     bc_pars->set<std::vector<std::string>>("value") = { "ipol(x)" };
-    DirichletBC * bc = app.build_object<DirichletBC>("DirichletBC", "name", bc_pars);
+    DirichletBC * bc = app.build_object<DirichletBC>("name", bc_pars);
 
     mesh.create();
     problem.create();

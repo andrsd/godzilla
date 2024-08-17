@@ -168,12 +168,11 @@ TEST(PCFieldSplit, schur)
 
     Parameters * mesh_pars = app.get_parameters("LineMesh");
     mesh_pars->set<Int>("nx") = 2;
-    auto mesh = app.build_object<LineMesh>("LineMesh", "mesh", mesh_pars);
+    auto mesh = app.build_object<LineMesh>("mesh", mesh_pars);
 
     Parameters * prob_pars = app.get_parameters("GTest2FieldsFENonlinearProblem");
     prob_pars->set<MeshObject *>("_mesh_obj") = mesh;
-    auto prob =
-        app.build_object<FENonlinearProblem>("GTest2FieldsFENonlinearProblem", "prob", prob_pars);
+    auto prob = app.build_object<FENonlinearProblem>("prob", prob_pars);
 
     mesh->create();
     prob->create();
