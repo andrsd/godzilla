@@ -20,6 +20,7 @@ PrintInterface::TimedEvent::TimedEvent(const PrintInterface * pi,
     if (!perf_log::is_event_registered(evt_name))
         perf_log::register_event(evt_name);
     this->event = new perf_log::Event(evt_name);
+    this->event->begin();
     this->start_time = perf_log::get_event_info(evt_name).time();
     if (level <= this->pi->verbosity_level && this->pi->proc_id == 0) {
         fmt::print("{}... ", text);
@@ -28,6 +29,7 @@ PrintInterface::TimedEvent::TimedEvent(const PrintInterface * pi,
 
 PrintInterface::TimedEvent::~TimedEvent()
 {
+    this->event->end();
     auto event_id = this->event->get_id();
     delete this->event;
 
