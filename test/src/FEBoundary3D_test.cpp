@@ -82,10 +82,8 @@ public:
 
 class TestBoundary3D : public fe::BoundaryInfo<TET4, 3, 4> {
 public:
-    TestBoundary3D(UnstructuredMesh * mesh,
-                   const Array1D<DenseMatrix<Real, 3, 4>> * grad_phi,
-                   const IndexSet & facets) :
-        fe::BoundaryInfo<TET4, 3, 4>(mesh, grad_phi, facets)
+    TestBoundary3D(UnstructuredMesh * mesh, const IndexSet & facets) :
+        fe::BoundaryInfo<TET4, 3, 4>(mesh, facets)
     {
     }
 
@@ -128,12 +126,11 @@ TEST(FEBoundaryTest, nodal_normals_3d)
     auto coords = fe::coordinates<3>(mesh);
     auto connect = fe::connectivity<3, 4>(mesh);
     auto fe_volume = fe::calc_volumes<TET4, 3>(mesh);
-    auto grad_phi = fe::calc_grad_shape<TET4, 3>(mesh, fe_volume);
 
     {
         auto label = mesh.get_label("left");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        TestBoundary3D bnd(&mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
@@ -143,7 +140,7 @@ TEST(FEBoundaryTest, nodal_normals_3d)
     {
         auto label = mesh.get_label("front");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        TestBoundary3D bnd(&mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0.57735026918962584);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0.57735026918962584);
@@ -153,7 +150,7 @@ TEST(FEBoundaryTest, nodal_normals_3d)
     {
         auto label = mesh.get_label("bottom");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        TestBoundary3D bnd(&mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
@@ -163,7 +160,7 @@ TEST(FEBoundaryTest, nodal_normals_3d)
     {
         auto label = mesh.get_label("slanted");
         IndexSet bnd_facets = points_from_label(label);
-        TestBoundary3D bnd(&mesh, &grad_phi, bnd_facets);
+        TestBoundary3D bnd(&mesh, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);

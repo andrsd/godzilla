@@ -85,6 +85,11 @@ public:
     {
     }
 
+    TestBoundary1D(UnstructuredMesh * mesh, const IndexSet & facets) :
+        fe::BoundaryInfo<EDGE2, 1, 2>(mesh, facets)
+    {
+    }
+
     void
     create() override
     {
@@ -136,7 +141,7 @@ TEST(FEBoundaryTest, nodal_normals_1d)
 
     {
         IndexSet bnd_facets = points_from_label(m->get_label("right"));
-        TestBoundary1D bnd(m, &grad_phi, bnd_facets);
+        TestBoundary1D bnd(m, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 1);
         EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), 1);
