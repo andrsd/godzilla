@@ -13,6 +13,7 @@
 #include "godzilla/Array2D.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEVolumes.h"
+#include "godzilla/FEShapeFns.h"
 #include "godzilla/Utils.h"
 #include <set>
 #include <vector>
@@ -39,6 +40,15 @@ public:
                  const IndexSet & facets) :
         mesh(mesh),
         grad_phi(grad_phi),
+        facets(facets)
+    {
+        CALL_STACK_MSG();
+        this->facets.sort();
+    }
+
+    BoundaryInfo(UnstructuredMesh * mesh, const IndexSet & facets) :
+        mesh(mesh),
+        grad_phi(nullptr),
         facets(facets)
     {
         CALL_STACK_MSG();
@@ -107,6 +117,23 @@ protected:
     }
 
 private:
+    inline DenseMatrix<Real, DIM, N_ELEM_NODES>
+    calc_grad_shape(Int cell, Real volume) const
+    {
+        if (this->grad_phi)
+            return (*this->grad_phi)(cell);
+        else {
+            auto dm = this->mesh->get_coordinate_dm();
+            auto vec = this->mesh->get_coordinates_local();
+            auto section = this->mesh->get_coordinate_section();
+            DenseMatrix<Real, N_ELEM_NODES, DIM> elem_coord;
+            Int sz = DIM * N_ELEM_NODES;
+            Real * data = elem_coord.data();
+            PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, cell, &sz, &data));
+            return fe::grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
+        }
+    }
+
     /// Compute face normals
     void
     calc_face_normals()
@@ -116,12 +143,11 @@ private:
             auto face_conn = this->mesh->get_connectivity(this->facets(i));
             auto support = this->mesh->get_support(this->facets(i));
             Int ie = support[0];
-            Real volume;
-            this->mesh->compute_cell_geometry(ie, &volume, nullptr, nullptr);
+            Real volume = this->mesh->compute_cell_volume(ie);
             auto elem_conn = this->mesh->get_connectivity(ie);
             Int local_idx = get_local_face_index(elem_conn, face_conn);
             auto edge_length = this->length(i);
-            auto grad = DenseVector<Real, DIM>((*this->grad_phi)(ie).column(local_idx));
+            auto grad = DenseVector<Real, DIM>(calc_grad_shape(ie, volume).column(local_idx));
             this->normal(i) = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
         }
     }
@@ -130,11 +156,8 @@ private:
     calc_face_length()
     {
         CALL_STACK_MSG();
-        for (Int i = 0; i < this->facets.get_local_size(); i++) {
-            Real A;
-            this->mesh->compute_cell_geometry(this->facets(i), &A, nullptr, nullptr);
-            this->length(i) = A;
-        }
+        for (Int i = 0; i < this->facets.get_local_size(); i++)
+            this->length(i) = this->mesh->compute_cell_volume(this->facets(i));
     }
 
     /// Compute nodal normals
@@ -148,11 +171,11 @@ private:
             DenseVector<Real, DIM> sum;
             sum.zero();
             for (auto & cell : comm_cells[vertex]) {
-                Real vol;
-                this->mesh->compute_cell_geometry(cell, &vol, nullptr, nullptr);
+                Real volume = this->mesh->compute_cell_volume(cell);
                 auto connect = this->mesh->get_connectivity(cell);
                 auto lnne = utils::index_of(connect, vertex);
-                auto inc = DenseVector<Real, DIM>(vol * (*this->grad_phi)(cell).column(lnne));
+                auto inc =
+                    DenseVector<Real, DIM>(volume * calc_grad_shape(cell, volume).column(lnne));
                 sum += inc;
             }
             auto mag = sum.magnitude();
