@@ -2,33 +2,32 @@
 #
 # Once done this will define
 #  PETSC_FOUND - System has PETSc
-#  PETSC_INCLUDE_DIRS - The PETSc include directory
-#  PETSC_LIBRARIES - The PETSc library
+#  PETSC_INCLUDE_DIR - The PETSc include directory
+#  PETSC_LIBRARY - The PETSc library
 #  PETSC_VERSION - The PETSc version
 
 include(CheckSymbolExists)
 
-find_path(
-    PETSC_INCLUDE_DIR
-        petsc.h
+find_package(PkgConfig)
+pkg_check_modules(PC_PETSC QUIET PETSc)
+
+find_path(PETSC_INCLUDE_DIR
+    NAMES petsc.h
     PATHS
-        $ENV{PETSC_DIR}/include
+        ${PC_PETSC_INCLUDE_DIRS}
 )
 
-find_library(
-    PETSC_LIBRARY
-        petsc
+find_library(PETSC_LIBRARY
+    NAMES petsc
     PATHS
-        $ENV{PETSC_DIR}/$ENV{PETSC_ARCH}/lib
-        $ENV{PETSC_DIR}/lib
+        ${PC_PETSC_LIBRARY_DIRS}
 )
 
 set(PETSC_VERSION "unknown")
 find_file(PETSCVERSION_H petscversion.h
     PATHS
-        $ENV{PETSC_DIR}/include
+        ${PC_PETSC_INCLUDE_DIRS}
 )
-mark_as_advanced(PETSCVERSION_H)
 if (PETSCVERSION_H)
     file(READ ${PETSCVERSION_H} PETSC_VERSION_FILE)
     string(REGEX MATCH "define[ ]+PETSC_VERSION_MAJOR[ ]+([0-9]+)" TMP "${PETSC_VERSION_FILE}")
@@ -40,20 +39,33 @@ if (PETSCVERSION_H)
     set(PETSC_VERSION "${PETSC_VERSION_MAJOR}.${PETSC_VERSION_MINOR}.${PETSC_VERSION_PATCH}")
 endif()
 
-set(PETSC_INCLUDE_DIRS ${PETSC_INCLUDE_DIR})
-set(PETSC_LIBRARIES ${PETSC_LIBRARY})
-
-check_symbol_exists(PETSC_HAVE_OPENCL "${PETSC_INCLUDE_DIR}/petscconf.h" PETSC_HAVE_OPENCL)
+set(PETSCCONF_H "${PETSC_INCLUDE_DIR}/petscconf.h")
+check_symbol_exists(PETSC_HAVE_OPENCL ${PETSCCONF_H} PETSC_HAVE_OPENCL)
 if (PETSC_HAVE_OPENCL)
     find_package(OpenCL REQUIRED)
-    list(APPEND PETSC_INCLUDE_DIRS ${OpenCL_INCLUDE_DIR})
-    list(APPEND PETSC_LIBRARIES ${OpenCL_LIBRARY})
 endif()
-check_symbol_exists(PETSC_HAVE_HYPRE "${PETSC_INCLUDE_DIR}/petscconf.h" PETSC_HAVE_HYPRE)
+check_symbol_exists(PETSC_HAVE_HYPRE ${PETSCCONF_H} PETSC_HAVE_HYPRE)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
     PETSc
+    FOUND_VAR PETSC_FOUND
     REQUIRED_VARS PETSC_LIBRARY PETSC_INCLUDE_DIR
     VERSION_VAR PETSC_VERSION
+)
+
+if (PETSC_FOUND AND NOT TARGET PETSc::petsc)
+    add_library(PETSc::petsc UNKNOWN IMPORTED)
+    set_target_properties(PETSc::petsc
+        PROPERTIES
+            IMPORTED_LOCATION "${PETSC_LIBRARY}"
+            INTERFACE_COMPILE_OPTIONS "${PC_PETSC_CFLAGS_OTHER}"
+            INTERFACE_INCLUDE_DIRECTORIES "${PETSC_INCLUDE_DIR}"
+    )
+endif()
+
+mark_as_advanced(
+    PETSC_INCLUDE_DIR
+    PETSC_LIBRARY
+    PETSCVERSION_H
 )
