@@ -16,15 +16,13 @@ target_include_directories(
         ${CMAKE_BINARY_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
-    PRIVATE
-        ${PETSC_INCLUDE_DIRS}
 )
 
 target_link_libraries(
     ${PROJECT_NAME}
     PRIVATE
         godzilla
-        ${PETSC_LIBRARIES}
+        PETSc::petsc
         fmt::fmt
 )
 if(GODZILLA_WITH_MPI)
