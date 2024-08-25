@@ -5,29 +5,15 @@
 #include "godzilla/CallStack.h"
 #include <set>
 
-namespace godzilla {
-
-struct Key {
-    DMLabel label;
-    Int value;
-    Int part;
-};
-
-} // namespace godzilla
-
 namespace std {
 
 template <>
-struct less<godzilla::Key> {
+struct less<godzilla::WeakForm::Region> {
     bool
-    operator()(const godzilla::Key & lhs, const godzilla::Key & rhs) const
+    operator()(const godzilla::WeakForm::Region & lhs, const godzilla::WeakForm::Region & rhs) const
     {
-        if (lhs.label == rhs.label) {
-            if (lhs.value == rhs.value)
-                return lhs.part < rhs.part;
-            else
-                return lhs.value < rhs.value;
-        }
+        if (lhs.label == rhs.label)
+            return lhs.value < rhs.value;
         else
             return lhs.label < rhs.label;
     }
@@ -43,51 +29,43 @@ WeakForm::WeakForm() :
 {
 }
 
-std::vector<PetscFormKey>
-WeakForm::get_residual_keys() const
+std::vector<WeakForm::Region>
+WeakForm::get_residual_regions() const
 {
     CALL_STACK_MSG();
-    std::set<Key> unique;
+    std::set<Region> unique;
     std::array<ResidualKind, 2> res_kind = { F0, F1 };
     for (const auto & r : res_kind) {
         const auto & forms = this->res_forms[r];
         for (const auto & it : forms) {
             const auto & form_key = it.first;
-            Key k = { form_key.label, form_key.value, form_key.part };
+            Region k = { form_key.label, form_key.value };
             unique.insert(k);
         }
     }
 
-    std::vector<PetscFormKey> v;
-    for (auto & k : unique) {
-        PetscFormKey fk = { k.label, k.value, 0, k.part };
-        v.push_back(fk);
-    }
-
+    std::vector<Region> v;
+    v.assign(unique.begin(), unique.end());
     return v;
 }
 
-std::vector<PetscFormKey>
-WeakForm::get_jacobian_keys() const
+std::vector<WeakForm::Region>
+WeakForm::get_jacobian_regions() const
 {
     CALL_STACK_MSG();
-    std::set<Key> unique;
+    std::set<Region> unique;
     std::array<JacobianKind, 8> jacmap = { G0, G1, G2, G3, GP0, GP1, GP2, GP3 };
     for (const auto & r : jacmap) {
         const auto & forms = this->jac_forms[r];
         for (const auto & it : forms) {
             const auto & form_key = it.first;
-            Key k = { form_key.label, form_key.value, form_key.part };
+            Region k = { form_key.label, form_key.value };
             unique.insert(k);
         }
     }
 
-    std::vector<PetscFormKey> v;
-    for (auto & k : unique) {
-        PetscFormKey fk = { k.label, k.value, 0, k.part };
-        v.push_back(fk);
-    }
-
+    std::vector<Region> v;
+    v.assign(unique.begin(), unique.end());
     return v;
 }
 
@@ -133,7 +111,7 @@ WeakForm::add(ResidualKind kind,
 {
     CALL_STACK_MSG();
     if (func != nullptr) {
-        PetscFormKey key;
+        Key key;
         key.label = label;
         key.value = value;
         key.field = f;
@@ -153,7 +131,7 @@ WeakForm::add(JacobianKind kind,
 {
     CALL_STACK_MSG();
     if (func != nullptr) {
-        PetscFormKey key;
+        Key key;
         key.label = label;
         key.value = val;
         key.field = get_jac_key(f, g);

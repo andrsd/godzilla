@@ -19,9 +19,8 @@ struct less<PetscFormKey> {
     {
         if (lhs.label == rhs.label) {
             if (lhs.value == rhs.value) {
-                if (lhs.field == rhs.field) {
+                if (lhs.field == rhs.field)
                     return lhs.part < rhs.part;
-                }
                 else
                     return lhs.field < rhs.field;
             }
@@ -44,6 +43,17 @@ class JacobianFunc;
 ///
 class WeakForm {
 public:
+    using Key = PetscFormKey;
+
+    /// Region of the mesh where parts of a weak form can be specified
+    struct Region {
+        DMLabel label;
+        Int value;
+
+        Region() : label(nullptr), value(0) {}
+        Region(DMLabel label, Int value) : label(label), value(value) {}
+    };
+
     enum ResidualKind {
         F0 = PETSC_WF_F0,
         F1 = PETSC_WF_F1,
@@ -72,21 +82,34 @@ public:
 
     WeakForm();
 
-    /// Get residual keys
+    /// Get mesh regions where residual parts are defined
     ///
-    /// FIXME: needs a better name
-    [[nodiscard]] std::vector<PetscFormKey> get_residual_keys() const;
+    /// @return Regions where residual parts are defined
+    [[nodiscard]] std::vector<Region> get_residual_regions() const;
 
-    /// Get Jacobian keys
+    /// Get mesh regions where Jacobian parts are defined
     ///
-    /// FIXME: needs a better name
-    [[nodiscard]] std::vector<PetscFormKey> get_jacobian_keys() const;
+    /// @return Regions where Jacobian parts are defined
+    [[nodiscard]] std::vector<Region> get_jacobian_regions() const;
 
     /// Get residual forms
+    ///
+    /// @param kind The kind of the residual weak form
+    /// @param label Label associated with the mesh region
+    /// @param val Value associated with the mesh region
+    /// @param f Field ID
+    /// @param part Weak form part
     [[nodiscard]] const std::vector<ResidualFunc *> &
     get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
+    ///
+    /// @param kind The kind of the Jacobian weak form
+    /// @param label Label associated with the mesh region
+    /// @param val Value associated with the mesh region
+    /// @param f Field ID for test function
+    /// @param g Field ID for base function
+    /// @param part Weak form part
     [[nodiscard]] const std::vector<JacobianFunc *> &
     get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const;
 
@@ -131,7 +154,7 @@ public:
     ///
     /// @param f Field `f` ID
     /// @param g Field `g` ID
-    /// @return Field ID used in `PetscFormKey`
+    /// @return Field ID used in `Key`
     [[nodiscard]] Int get_jac_key(Int f, Int g) const;
 
 private:
@@ -139,13 +162,13 @@ private:
     Int n_fields;
 
     /// All residual forms
-    std::array<std::map<PetscFormKey, std::vector<ResidualFunc *>>, PETSC_NUM_WF> res_forms;
+    std::array<std::map<Key, std::vector<ResidualFunc *>>, PETSC_NUM_WF> res_forms;
 
     /// Empty array for residual forms
     std::vector<ResidualFunc *> empty_res_forms;
 
     /// All Jacobian forms
-    std::array<std::map<PetscFormKey, std::vector<JacobianFunc *>>, PETSC_NUM_WF> jac_forms;
+    std::array<std::map<Key, std::vector<JacobianFunc *>>, PETSC_NUM_WF> jac_forms;
 
     /// Empty array for Jacobian forms
     std::vector<JacobianFunc *> empty_jac_forms;

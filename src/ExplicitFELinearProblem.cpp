@@ -163,8 +163,10 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
                                             const std::string & region)
 {
     CALL_STACK_MSG();
-    // see PetscDSSetRHSResidual for explanation
-    Int part = 100;
+    // `DMPlexTSComputeRHSFunctionFEM` which does the integration sets `PetscFormKey key.part =
+    // 100`, so we need to match that since our keys are ulitmately used internanly by PETSc. See
+    // also `PetscDSSetRHSResidual` where the `part` is set to `100` as well.
+    const Int part = 100;
 
     if (region.empty()) {
         add_weak_form_residual_block(WeakForm::F0, field_id, f0, Label(), 0, part);

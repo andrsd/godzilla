@@ -1,14 +1,10 @@
 // SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
-#include "godzilla/AuxiliaryField.h"
 #include "godzilla/NaturalBC.h"
-#include "godzilla/App.h"
-#include "godzilla/Logger.h"
 #include "godzilla/PetscFEGodzilla.h"
 #include "godzilla/WeakForm.h"
 #include "godzilla/ResidualFunc.h"
@@ -17,8 +13,8 @@
 #include "godzilla/Utils.h"
 #include "godzilla/DependencyGraph.h"
 #include "godzilla/Exception.h"
+#include "petsc/private/petscfeimpl.h"
 #include <cassert>
-#include <petsc/private/petscfeimpl.h>
 
 namespace godzilla {
 
@@ -627,12 +623,11 @@ FEProblemInterface::sort_residual_functionals(
     CALL_STACK_MSG();
     auto graph = build_dependecy_graph(suppliers);
     this->sorted_res_functionals.clear();
-    auto res_keys = this->wf->get_residual_keys();
-    for (auto & k : res_keys) {
+    for (auto & region : this->wf->get_residual_regions()) {
         for (Int f = 0; f < get_num_fields(); f++) {
-            Label lbl(k.label);
-            auto f0_fnls = this->wf->get(WeakForm::F0, lbl, k.value, f, k.part);
-            auto f1_fnls = this->wf->get(WeakForm::F1, lbl, k.value, f, k.part);
+            Label lbl(region.label);
+            auto f0_fnls = this->wf->get(WeakForm::F0, lbl, region.value, f, 0);
+            auto f1_fnls = this->wf->get(WeakForm::F1, lbl, region.value, f, 0);
 
             add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
             add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
@@ -642,8 +637,11 @@ FEProblemInterface::sort_residual_functionals(
             fnls.insert(fnls.end(), f1_fnls.begin(), f1_fnls.end());
             auto sv = graph.bfs(fnls);
 
-            PetscFormKey pwfk = k;
+            PetscFormKey pwfk;
+            pwfk.label = region.label;
+            pwfk.value = region.value;
             pwfk.field = f;
+            pwfk.part = 0;
             // bfs gives back a sorted vector, but in reverse order, so
             // we reverse the vector here to get the order of evaluation
             for (auto it = sv.rbegin(); it != sv.rend(); it++) {
@@ -662,15 +660,14 @@ FEProblemInterface::sort_jacobian_functionals(
     CALL_STACK_MSG();
     auto graph = build_dependecy_graph(suppliers);
     this->sorted_jac_functionals.clear();
-    auto jac_keys = this->wf->get_jacobian_keys();
-    for (auto & k : jac_keys) {
+    for (auto & region : this->wf->get_jacobian_regions()) {
         for (Int f = 0; f < get_num_fields(); f++) {
             for (Int g = 0; g < get_num_fields(); g++) {
-                Label lbl(k.label);
-                auto g0_fnls = this->wf->get(WeakForm::G0, lbl, k.value, f, g, k.part);
-                auto g1_fnls = this->wf->get(WeakForm::G1, lbl, k.value, f, g, k.part);
-                auto g2_fnls = this->wf->get(WeakForm::G2, lbl, k.value, f, g, k.part);
-                auto g3_fnls = this->wf->get(WeakForm::G3, lbl, k.value, f, g, k.part);
+                Label lbl(region.label);
+                auto g0_fnls = this->wf->get(WeakForm::G0, lbl, region.value, f, g, 0);
+                auto g1_fnls = this->wf->get(WeakForm::G1, lbl, region.value, f, g, 0);
+                auto g2_fnls = this->wf->get(WeakForm::G2, lbl, region.value, f, g, 0);
+                auto g3_fnls = this->wf->get(WeakForm::G3, lbl, region.value, f, g, 0);
 
                 add_functionals<JacobianFunc *>(graph, suppliers, g0_fnls);
                 add_functionals<JacobianFunc *>(graph, suppliers, g1_fnls);
@@ -684,14 +681,17 @@ FEProblemInterface::sort_jacobian_functionals(
                 fnls.insert(fnls.end(), g3_fnls.begin(), g3_fnls.end());
                 auto sv = graph.bfs(fnls);
 
-                PetscFormKey pwfk = k;
-                pwfk.field = this->wf->get_jac_key(f, g);
+                WeakForm::Key key;
+                key.label = region.label;
+                key.value = region.value;
+                key.part = 0;
+                key.field = this->wf->get_jac_key(f, g);
                 // bfs gives back a sorted vector, but in reverse order, so
                 // we reverse the vector here to get the order of evaluation
                 for (auto it = sv.rbegin(); it != sv.rend(); it++) {
                     auto ofnl = dynamic_cast<const ValueFunctional *>(*it);
                     if (ofnl)
-                        this->sorted_jac_functionals[pwfk].push_back(ofnl);
+                        this->sorted_jac_functionals[key].push_back(ofnl);
                 }
             }
         }
@@ -850,7 +850,7 @@ FEProblemInterface::add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
 
 ErrorCode
 FEProblemInterface::integrate_residual(PetscDS ds,
-                                       PetscFormKey key,
+                                       const WeakForm::Key & key,
                                        Int n_elems,
                                        PetscFEGeom * cell_geom,
                                        const Scalar coefficients[],
@@ -992,7 +992,7 @@ FEProblemInterface::integrate_residual(PetscDS ds,
 
 ErrorCode
 FEProblemInterface::integrate_bnd_residual(PetscDS ds,
-                                           PetscFormKey key,
+                                           WeakForm::Key key,
                                            Int n_elems,
                                            PetscFEGeom * face_geom,
                                            const Scalar coefficients[],
@@ -1147,7 +1147,7 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
 ErrorCode
 FEProblemInterface::integrate_jacobian(PetscDS ds,
                                        PetscFEJacobianType jtype,
-                                       PetscFormKey key,
+                                       WeakForm::Key key,
                                        Int n_elems,
                                        PetscFEGeom * cell_geom,
                                        const Scalar coefficients[],
@@ -1376,7 +1376,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
 
 ErrorCode
 FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
-                                           PetscFormKey key,
+                                           WeakForm::Key key,
                                            Int n_elems,
                                            PetscFEGeom * face_geom,
                                            const Scalar coefficients[],

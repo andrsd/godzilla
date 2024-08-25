@@ -199,7 +199,7 @@ public:
 
     /// Integrate residual
     ErrorCode integrate_residual(PetscDS ds,
-                                 PetscFormKey key,
+                                 const WeakForm::Key & key,
                                  Int n_elems,
                                  PetscFEGeom * cell_geom,
                                  const Scalar coefficients[],
@@ -211,7 +211,7 @@ public:
 
     /// Integrate residual over a boundary
     ErrorCode integrate_bnd_residual(PetscDS ds,
-                                     PetscFormKey key,
+                                     WeakForm::Key key,
                                      Int n_elems,
                                      PetscFEGeom * face_geom,
                                      const Scalar coefficients[],
@@ -224,7 +224,7 @@ public:
     /// Integrate Jacobian
     ErrorCode integrate_jacobian(PetscDS ds,
                                  PetscFEJacobianType jtype,
-                                 PetscFormKey key,
+                                 WeakForm::Key key,
                                  Int n_elems,
                                  PetscFEGeom * cell_geom,
                                  const Scalar coefficients[],
@@ -237,7 +237,7 @@ public:
 
     // Integrate Jacobian over a boundary
     ErrorCode integrate_bnd_jacobian(PetscDS ds,
-                                     PetscFormKey key,
+                                     WeakForm::Key key,
                                      Int n_elems,
                                      PetscFEGeom * face_geom,
                                      const Scalar coefficients[],
@@ -412,11 +412,11 @@ private:
     } * asmbl;
 
     /// Functionals that must be evaluated before the weak form residual functionals
-    /// associated with the PetscFormKey are evaluated
-    std::map<PetscFormKey, std::vector<const ValueFunctional *>> sorted_res_functionals;
+    /// associated with the WeakForm::Key are evaluated
+    std::map<WeakForm::Key, std::vector<const ValueFunctional *>> sorted_res_functionals;
     /// Functionals that must be evaluated before the weak form Jacobian functionals
-    /// associated with the PetscFormKey are evaluated
-    std::map<PetscFormKey, std::vector<const ValueFunctional *>> sorted_jac_functionals;
+    /// associated with the WeakForm::Key are evaluated
+    std::map<WeakForm::Key, std::vector<const ValueFunctional *>> sorted_jac_functionals;
 };
 
 } // namespace godzilla

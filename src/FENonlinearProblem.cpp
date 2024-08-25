@@ -6,12 +6,10 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/WeakForm.h"
-#include "godzilla/ResidualFunc.h"
-#include "godzilla/JacobianFunc.h"
 #include "petscdm.h"
-#include <petscds.h>
-#include <petsc/private/dmimpl.h>
-#include <petsc/private/dmpleximpl.h>
+#include "petscds.h"
+#include "petsc/private/dmimpl.h"
+#include "petsc/private/dmpleximpl.h"
 
 namespace godzilla {
 
@@ -127,19 +125,19 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
     // this is based on DMSNESComputeResidual()
     IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
-    for (auto & res_key : get_weak_form()->get_residual_keys()) {
+    for (auto & region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
-        if (res_key.label == nullptr) {
+        if (region.label == nullptr) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(res_key.label);
-            IndexSet points = l.get_stratum(res_key.value);
+            Label l(region.label);
+            IndexSet points = l.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_residual_internal(get_dm(), res_key, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
+        compute_residual_internal(get_dm(), region, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
         cells.destroy();
     }
 
@@ -148,7 +146,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
 
 void
 FENonlinearProblem::compute_residual_internal(DM dm,
-                                              PetscFormKey key,
+                                              const WeakForm::Region & region,
                                               const IndexSet & cell_is,
                                               Real time,
                                               const Vector & loc_x,
@@ -189,7 +187,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     Int tot_dim;
     PETSC_CHECK(PetscDSGetTotalDimension(ds, &tot_dim));
     Vec loc_a;
-    PETSC_CHECK(DMGetAuxiliaryVec(dm, key.label, key.value, key.part, &loc_a));
+    PETSC_CHECK(DMGetAuxiliaryVec(dm, region.label, region.value, 0, &loc_a));
     if (loc_a) {
         Int subcell;
         PETSC_CHECK(VecGetDM(loc_a, &dm_aux));
@@ -268,6 +266,10 @@ FENonlinearProblem::compute_residual_internal(DM dm,
             PetscClassId id;
             PETSC_CHECK(PetscObjectGetClassId(obj, &id));
             if (id == PETSCFE_CLASSID) {
+                PetscFormKey key;
+                key.label = region.label;
+                key.value = region.value;
+                key.part = 0;
                 key.field = f;
 
                 PetscFE fe = (PetscFE) obj;
@@ -396,7 +398,6 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
         DMLabel label;
         const Int * values;
         Int field, n_values;
-        PetscFormKey key;
 
         PETSC_CHECK(PetscDSGetBoundary(prob,
                                        bd,
@@ -422,6 +423,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
         DMField coord_field = nullptr;
         PETSC_CHECK(DMGetCoordinateField(dm, &coord_field));
         for (Int v = 0; v < n_values; ++v) {
+            PetscFormKey key;
             key.label = label;
             key.value = values[v];
             key.field = field;
@@ -442,7 +444,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
 void
 FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                                          Real t,
-                                                         PetscFormKey key,
+                                                         WeakForm::Key key,
                                                          Vec loc_x,
                                                          Vec loc_x_t,
                                                          Vec loc_f,
@@ -617,19 +619,19 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
         J.zero();
     Jp.zero();
 
-    for (auto & jac_key : wf->get_jacobian_keys()) {
+    for (auto & region : wf->get_jacobian_regions()) {
         IndexSet cells;
-        if (!jac_key.label) {
+        if (!region.label) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(jac_key.label);
-            auto points = l.get_stratum(jac_key.value);
+            Label l(region.label);
+            auto points = l.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_jacobian_internal(get_dm(), jac_key, cells, 0.0, 0.0, x, Vector(), J, Jp);
+        compute_jacobian_internal(get_dm(), region, cells, 0.0, 0.0, x, Vector(), J, Jp);
         cells.destroy();
     }
 
@@ -638,7 +640,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 
 void
 FENonlinearProblem::compute_jacobian_internal(DM dm,
-                                              PetscFormKey key,
+                                              const WeakForm::Region & region,
                                               const IndexSet & cell_is,
                                               Real t,
                                               Real x_t_shift,
@@ -680,7 +682,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         has_prec = PETSC_FALSE;
 
     Vec A;
-    PETSC_CHECK(DMGetAuxiliaryVec(dm, key.label, key.value, key.part, &A));
+    PETSC_CHECK(DMGetAuxiliaryVec(dm, region.label, region.value, 0, &A));
     DM dm_aux = nullptr;
     DMEnclosureType enc_aux;
     PetscDS prob_aux = nullptr;
@@ -776,6 +778,10 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         PetscFEGeom * rem_geom = nullptr;
         PETSC_CHECK(PetscFEGeomGetChunk(cgeom_fem, offset, n_cells, &rem_geom));
         for (Int field_j = 0; field_j < n_fields; ++field_j) {
+            PetscFormKey key;
+            key.label = region.label;
+            key.value = region.value;
+            key.part = 0;
             key.field = field_i * n_fields + field_j;
             if (has_jac) {
                 PETSC_CHECK(PetscFEIntegrateJacobian(prob,
