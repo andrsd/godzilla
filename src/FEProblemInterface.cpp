@@ -625,9 +625,8 @@ FEProblemInterface::sort_residual_functionals(
     this->sorted_res_functionals.clear();
     for (auto & region : this->wf->get_residual_regions()) {
         for (Int f = 0; f < get_num_fields(); f++) {
-            Label lbl(region.label);
-            auto f0_fnls = this->wf->get(WeakForm::F0, lbl, region.value, f, 0);
-            auto f1_fnls = this->wf->get(WeakForm::F1, lbl, region.value, f, 0);
+            auto f0_fnls = this->wf->get(WeakForm::F0, region.label, region.value, f, 0);
+            auto f1_fnls = this->wf->get(WeakForm::F1, region.label, region.value, f, 0);
 
             add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
             add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
@@ -663,11 +662,10 @@ FEProblemInterface::sort_jacobian_functionals(
     for (auto & region : this->wf->get_jacobian_regions()) {
         for (Int f = 0; f < get_num_fields(); f++) {
             for (Int g = 0; g < get_num_fields(); g++) {
-                Label lbl(region.label);
-                auto g0_fnls = this->wf->get(WeakForm::G0, lbl, region.value, f, g, 0);
-                auto g1_fnls = this->wf->get(WeakForm::G1, lbl, region.value, f, g, 0);
-                auto g2_fnls = this->wf->get(WeakForm::G2, lbl, region.value, f, g, 0);
-                auto g3_fnls = this->wf->get(WeakForm::G3, lbl, region.value, f, g, 0);
+                auto g0_fnls = this->wf->get(WeakForm::G0, region.label, region.value, f, g, 0);
+                auto g1_fnls = this->wf->get(WeakForm::G1, region.label, region.value, f, g, 0);
+                auto g2_fnls = this->wf->get(WeakForm::G2, region.label, region.value, f, g, 0);
+                auto g3_fnls = this->wf->get(WeakForm::G3, region.label, region.value, f, g, 0);
 
                 add_functionals<JacobianFunc *>(graph, suppliers, g0_fnls);
                 add_functionals<JacobianFunc *>(graph, suppliers, g1_fnls);

@@ -156,13 +156,12 @@ ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
 
     for (auto & region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
-        if (region.label == nullptr) {
+        if (region.label.is_null()) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(region.label);
-            auto points = l.get_stratum(region.value);
+            auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
@@ -188,13 +187,12 @@ ImplicitFENonlinearProblem::compute_ijacobian_fem(Real time,
 
     for (auto & region : get_weak_form()->get_jacobian_regions()) {
         IndexSet cells;
-        if (!region.label) {
+        if (region.label.is_null()) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(region.label);
-            auto points = l.get_stratum(region.value);
+            auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }

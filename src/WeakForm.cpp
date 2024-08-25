@@ -12,10 +12,10 @@ struct less<godzilla::WeakForm::Region> {
     bool
     operator()(const godzilla::WeakForm::Region & lhs, const godzilla::WeakForm::Region & rhs) const
     {
-        if (lhs.label == rhs.label)
+        if ((DMLabel) lhs.label == (DMLabel) rhs.label)
             return lhs.value < rhs.value;
         else
-            return lhs.label < rhs.label;
+            return (DMLabel) lhs.label < (DMLabel) rhs.label;
     }
 };
 
@@ -40,7 +40,7 @@ WeakForm::get_residual_regions() const
         for (const auto & it : forms) {
             const auto & form_key = it.first;
             Region k = { form_key.label, form_key.value };
-            unique.insert(k);
+            unique.emplace(k);
         }
     }
 
@@ -60,7 +60,7 @@ WeakForm::get_jacobian_regions() const
         for (const auto & it : forms) {
             const auto & form_key = it.first;
             Region k = { form_key.label, form_key.value };
-            unique.insert(k);
+            unique.emplace(k);
         }
     }
 

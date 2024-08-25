@@ -127,13 +127,12 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
 
     for (auto & region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
-        if (region.label == nullptr) {
+        if (region.label.is_null()) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(region.label);
-            IndexSet points = l.get_stratum(region.value);
+            IndexSet points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
@@ -621,13 +620,12 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 
     for (auto & region : wf->get_jacobian_regions()) {
         IndexSet cells;
-        if (!region.label) {
+        if (region.label.is_null()) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(region.label);
-            auto points = l.get_stratum(region.value);
+            auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }

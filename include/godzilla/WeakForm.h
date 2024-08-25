@@ -47,10 +47,11 @@ public:
 
     /// Region of the mesh where parts of a weak form can be specified
     struct Region {
-        DMLabel label;
+        Label label;
         Int value;
 
         Region() : label(nullptr), value(0) {}
+        Region(const Label & label, Int value) : label(label), value(value) {}
         Region(DMLabel label, Int value) : label(label), value(value) {}
     };
 
