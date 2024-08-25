@@ -67,7 +67,7 @@ protected:
     }
 
     void compute_residual_internal(DM dm,
-                                   PetscFormKey key,
+                                   const WeakForm::Region & region,
                                    const IndexSet & cells,
                                    Real time,
                                    const Vector & loc_x,
@@ -77,7 +77,7 @@ protected:
     void compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f);
     void compute_bnd_residual_single_internal(DM dm,
                                               Real t,
-                                              PetscFormKey key,
+                                              const WeakForm::Key & key,
                                               Vec loc_x,
                                               Vec loc_x_t,
                                               Vec loc_f,
@@ -85,7 +85,7 @@ protected:
                                               const IndexSet & facets);
 
     void compute_jacobian_internal(DM dm,
-                                   PetscFormKey key,
+                                   const WeakForm::Region & region,
                                    const IndexSet & cell_is,
                                    Real t,
                                    Real x_t_shift,

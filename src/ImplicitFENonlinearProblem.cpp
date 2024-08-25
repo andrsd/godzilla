@@ -154,19 +154,18 @@ ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
     CALL_STACK_MSG();
     IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
-    for (auto & res_key : get_weak_form()->get_residual_keys()) {
+    for (auto & region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
-        if (res_key.label == nullptr) {
+        if (region.label.is_null()) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(res_key.label);
-            auto points = l.get_stratum(res_key.value);
+            auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_residual_internal(get_dm(), res_key, cells, time, x, x_t, time, F);
+        compute_residual_internal(get_dm(), region, cells, time, x, x_t, time, F);
         cells.destroy();
     }
 }
@@ -186,19 +185,18 @@ ImplicitFENonlinearProblem::compute_ijacobian_fem(Real time,
 
     Jp.zero();
 
-    for (auto & jac_key : get_weak_form()->get_jacobian_keys()) {
+    for (auto & region : get_weak_form()->get_jacobian_regions()) {
         IndexSet cells;
-        if (!jac_key.label) {
+        if (region.label.is_null()) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(jac_key.label);
-            auto points = l.get_stratum(jac_key.value);
+            auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_jacobian_internal(get_dm(), jac_key, cells, time, x_t_shift, x, x_t, J, Jp);
+        compute_jacobian_internal(get_dm(), region, cells, time, x_t_shift, x, x_t, J, Jp);
         cells.destroy();
     }
 }

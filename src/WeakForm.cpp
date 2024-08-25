@@ -7,87 +7,45 @@
 
 namespace godzilla {
 
-struct Key {
-    DMLabel label;
-    Int value;
-    Int part;
-};
+WeakForm::WeakForm() {}
 
-} // namespace godzilla
-
-namespace std {
-
-template <>
-struct less<godzilla::Key> {
-    bool
-    operator()(const godzilla::Key & lhs, const godzilla::Key & rhs) const
-    {
-        if (lhs.label == rhs.label) {
-            if (lhs.value == rhs.value)
-                return lhs.part < rhs.part;
-            else
-                return lhs.value < rhs.value;
-        }
-        else
-            return lhs.label < rhs.label;
-    }
-};
-
-} // namespace std
-
-namespace godzilla {
-
-WeakForm::WeakForm() :
-    // FIXME: this should be either called something else or set to a correct value
-    n_fields(100)
-{
-}
-
-std::vector<PetscFormKey>
-WeakForm::get_residual_keys() const
+std::vector<WeakForm::Region>
+WeakForm::get_residual_regions() const
 {
     CALL_STACK_MSG();
-    std::set<Key> unique;
+    std::set<Region> unique;
     std::array<ResidualKind, 2> res_kind = { F0, F1 };
     for (const auto & r : res_kind) {
         const auto & forms = this->res_forms[r];
         for (const auto & it : forms) {
             const auto & form_key = it.first;
-            Key k = { form_key.label, form_key.value, form_key.part };
-            unique.insert(k);
+            Region k(form_key.label, form_key.value, form_key.part);
+            unique.emplace(k);
         }
     }
 
-    std::vector<PetscFormKey> v;
-    for (auto & k : unique) {
-        PetscFormKey fk = { k.label, k.value, 0, k.part };
-        v.push_back(fk);
-    }
-
+    std::vector<Region> v;
+    v.assign(unique.begin(), unique.end());
     return v;
 }
 
-std::vector<PetscFormKey>
-WeakForm::get_jacobian_keys() const
+std::vector<WeakForm::Region>
+WeakForm::get_jacobian_regions() const
 {
     CALL_STACK_MSG();
-    std::set<Key> unique;
+    std::set<Region> unique;
     std::array<JacobianKind, 8> jacmap = { G0, G1, G2, G3, GP0, GP1, GP2, GP3 };
     for (const auto & r : jacmap) {
         const auto & forms = this->jac_forms[r];
         for (const auto & it : forms) {
             const auto & form_key = it.first;
-            Key k = { form_key.label, form_key.value, form_key.part };
-            unique.insert(k);
+            Region k(form_key.label, form_key.value, form_key.part);
+            unique.emplace(k);
         }
     }
 
-    std::vector<PetscFormKey> v;
-    for (auto & k : unique) {
-        PetscFormKey fk = { k.label, k.value, 0, k.part };
-        v.push_back(fk);
-    }
-
+    std::vector<Region> v;
+    v.assign(unique.begin(), unique.end());
     return v;
 }
 
@@ -95,11 +53,7 @@ const std::vector<ResidualFunc *> &
 WeakForm::get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const
 {
     CALL_STACK_MSG();
-    PetscFormKey key;
-    key.label = label;
-    key.value = val;
-    key.field = f;
-    key.part = part;
+    Key key(label, val, f, part);
     const auto & it = this->res_forms[kind].find(key);
     if (it != this->res_forms[kind].end())
         return it->second;
@@ -111,11 +65,7 @@ const std::vector<JacobianFunc *> &
 WeakForm::get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const
 {
     CALL_STACK_MSG();
-    PetscFormKey key;
-    key.label = label;
-    key.value = val;
-    key.field = get_jac_key(f, g);
-    key.part = part;
+    Key key(label, val, f, g, part);
     const auto & it = this->jac_forms[kind].find(key);
     if (it != this->jac_forms[kind].end())
         return it->second;
@@ -133,11 +83,7 @@ WeakForm::add(ResidualKind kind,
 {
     CALL_STACK_MSG();
     if (func != nullptr) {
-        PetscFormKey key;
-        key.label = label;
-        key.value = value;
-        key.field = f;
-        key.part = part;
+        Key key(label, value, f, part);
         this->res_forms[kind][key].push_back(func);
     }
 }
@@ -153,20 +99,9 @@ WeakForm::add(JacobianKind kind,
 {
     CALL_STACK_MSG();
     if (func != nullptr) {
-        PetscFormKey key;
-        key.label = label;
-        key.value = val;
-        key.field = get_jac_key(f, g);
-        key.part = part;
+        Key key(label, val, f, g, part);
         this->jac_forms[kind][key].push_back(func);
     }
-}
-
-Int
-WeakForm::get_jac_key(Int f, Int g) const
-{
-    CALL_STACK_MSG();
-    return f * this->n_fields + g;
 }
 
 bool

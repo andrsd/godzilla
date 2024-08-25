@@ -6,12 +6,10 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/WeakForm.h"
-#include "godzilla/ResidualFunc.h"
-#include "godzilla/JacobianFunc.h"
 #include "petscdm.h"
-#include <petscds.h>
-#include <petsc/private/dmimpl.h>
-#include <petsc/private/dmpleximpl.h>
+#include "petscds.h"
+#include "petsc/private/dmimpl.h"
+#include "petsc/private/dmpleximpl.h"
 
 namespace godzilla {
 
@@ -127,19 +125,18 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
     // this is based on DMSNESComputeResidual()
     IndexSet all_cells = get_unstr_mesh()->get_all_cells();
 
-    for (auto & res_key : get_weak_form()->get_residual_keys()) {
+    for (auto & region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
-        if (res_key.label == nullptr) {
+        if (region.label.is_null()) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(res_key.label);
-            IndexSet points = l.get_stratum(res_key.value);
+            IndexSet points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_residual_internal(get_dm(), res_key, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
+        compute_residual_internal(get_dm(), region, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
         cells.destroy();
     }
 
@@ -148,7 +145,7 @@ FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
 
 void
 FENonlinearProblem::compute_residual_internal(DM dm,
-                                              PetscFormKey key,
+                                              const WeakForm::Region & region,
                                               const IndexSet & cell_is,
                                               Real time,
                                               const Vector & loc_x,
@@ -189,7 +186,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
     Int tot_dim;
     PETSC_CHECK(PetscDSGetTotalDimension(ds, &tot_dim));
     Vec loc_a;
-    PETSC_CHECK(DMGetAuxiliaryVec(dm, key.label, key.value, key.part, &loc_a));
+    PETSC_CHECK(DMGetAuxiliaryVec(dm, region.label, region.value, 0, &loc_a));
     if (loc_a) {
         Int subcell;
         PETSC_CHECK(VecGetDM(loc_a, &dm_aux));
@@ -268,7 +265,7 @@ FENonlinearProblem::compute_residual_internal(DM dm,
             PetscClassId id;
             PETSC_CHECK(PetscObjectGetClassId(obj, &id));
             if (id == PETSCFE_CLASSID) {
-                key.field = f;
+                WeakForm::Key key(region, f, 0);
 
                 PetscFE fe = (PetscFE) obj;
                 PetscFEGeom * geom = affine_geom ? affine_geom : geoms[f];
@@ -291,27 +288,18 @@ FENonlinearProblem::compute_residual_internal(DM dm,
                 /* Integrate FE residual to get elemVec (need fields at quadrature points) */
                 PetscFEGeom * chunk_geom = nullptr;
                 PETSC_CHECK(PetscFEGeomGetChunk(geom, 0, offset, &chunk_geom));
-                PETSC_CHECK(PetscFEIntegrateResidual(ds,
-                                                     key,
-                                                     n_elems,
-                                                     chunk_geom,
-                                                     u,
-                                                     u_t,
-                                                     ds_aux,
-                                                     a,
-                                                     t,
-                                                     elem_vec));
+                integrate_residual(ds, key, n_elems, chunk_geom, u, u_t, ds_aux, a, t, elem_vec);
                 PETSC_CHECK(PetscFEGeomGetChunk(geom, offset, n_chunk_cells, &chunk_geom));
-                PETSC_CHECK(PetscFEIntegrateResidual(ds,
-                                                     key,
-                                                     n_remdr,
-                                                     chunk_geom,
-                                                     &u[offset * tot_dim],
-                                                     u_t ? &u_t[offset * tot_dim] : nullptr,
-                                                     ds_aux,
-                                                     &a[offset * tot_dim_aux],
-                                                     t,
-                                                     &elem_vec[offset * tot_dim]));
+                integrate_residual(ds,
+                                   key,
+                                   n_remdr,
+                                   chunk_geom,
+                                   &u[offset * tot_dim],
+                                   u_t ? &u_t[offset * tot_dim] : nullptr,
+                                   ds_aux,
+                                   &a[offset * tot_dim_aux],
+                                   t,
+                                   &elem_vec[offset * tot_dim]);
                 PETSC_CHECK(PetscFEGeomRestoreChunk(geom, offset, n_chunk_cells, &chunk_geom));
             }
             else
@@ -396,7 +384,6 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
         DMLabel label;
         const Int * values;
         Int field, n_values;
-        PetscFormKey key;
 
         PETSC_CHECK(PetscDSGetBoundary(prob,
                                        bd,
@@ -422,10 +409,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
         DMField coord_field = nullptr;
         PETSC_CHECK(DMGetCoordinateField(dm, &coord_field));
         for (Int v = 0; v < n_values; ++v) {
-            key.label = label;
-            key.value = values[v];
-            key.field = field;
-            key.part = 0;
+            WeakForm::Key key(label, values[v], field, 0);
             compute_bnd_residual_single_internal(dm,
                                                  t,
                                                  key,
@@ -442,7 +426,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
 void
 FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
                                                          Real t,
-                                                         PetscFormKey key,
+                                                         const WeakForm::Key & key,
                                                          Vec loc_x,
                                                          Vec loc_x_t,
                                                          Vec loc_f,
@@ -473,8 +457,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         PETSC_CHECK(DMGetLocalSection(plex_aux, &section_aux));
     }
 
-    Label l(key.label);
-    auto points = l.get_stratum(key.value);
+    auto points = key.label.get_stratum(key.value);
     if (!points.empty()) {
         PetscQuadrature q_geom = nullptr;
 
@@ -556,30 +539,19 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
         Int offset = n_faces - n_remdr;
         PetscFEGeom * chunk_geom = nullptr;
         PETSC_CHECK(PetscFEGeomGetChunk(fgeom, 0, offset, &chunk_geom));
-        PETSC_CHECK(PetscFEIntegrateBdResidual(prob,
-                                               nullptr,
-                                               key,
-                                               n_elems,
-                                               chunk_geom,
-                                               u,
-                                               u_t,
-                                               prob_aux,
-                                               a,
-                                               t,
-                                               elem_vec));
+        integrate_bnd_residual(prob, key, n_elems, chunk_geom, u, u_t, prob_aux, a, t, elem_vec);
         PETSC_CHECK(PetscFEGeomRestoreChunk(fgeom, 0, offset, &chunk_geom));
         PETSC_CHECK(PetscFEGeomGetChunk(fgeom, offset, n_faces, &chunk_geom));
-        PETSC_CHECK(PetscFEIntegrateBdResidual(prob,
-                                               nullptr,
-                                               key,
-                                               n_remdr,
-                                               chunk_geom,
-                                               &u[offset * tot_dim],
-                                               u_t ? &u_t[offset * tot_dim] : nullptr,
-                                               prob_aux,
-                                               a ? &a[offset * tot_dim_aux] : nullptr,
-                                               t,
-                                               &elem_vec[offset * tot_dim]));
+        integrate_bnd_residual(prob,
+                               key,
+                               n_remdr,
+                               chunk_geom,
+                               &u[offset * tot_dim],
+                               u_t ? &u_t[offset * tot_dim] : nullptr,
+                               prob_aux,
+                               a ? &a[offset * tot_dim_aux] : nullptr,
+                               t,
+                               &elem_vec[offset * tot_dim]);
         PETSC_CHECK(PetscFEGeomRestoreChunk(fgeom, offset, n_faces, &chunk_geom));
 
         for (Int face = 0; face < n_faces; ++face) {
@@ -617,19 +589,18 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
         J.zero();
     Jp.zero();
 
-    for (auto & jac_key : wf->get_jacobian_keys()) {
+    for (auto & region : wf->get_jacobian_regions()) {
         IndexSet cells;
-        if (!jac_key.label) {
+        if (region.label.is_null()) {
             all_cells.inc_ref();
             cells = all_cells;
         }
         else {
-            Label l(jac_key.label);
-            auto points = l.get_stratum(jac_key.value);
+            auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
             points.destroy();
         }
-        compute_jacobian_internal(get_dm(), jac_key, cells, 0.0, 0.0, x, Vector(), J, Jp);
+        compute_jacobian_internal(get_dm(), region, cells, 0.0, 0.0, x, Vector(), J, Jp);
         cells.destroy();
     }
 
@@ -638,7 +609,7 @@ FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
 
 void
 FENonlinearProblem::compute_jacobian_internal(DM dm,
-                                              PetscFormKey key,
+                                              const WeakForm::Region & region,
                                               const IndexSet & cell_is,
                                               Real t,
                                               Real x_t_shift,
@@ -680,7 +651,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         has_prec = PETSC_FALSE;
 
     Vec A;
-    PETSC_CHECK(DMGetAuxiliaryVec(dm, key.label, key.value, key.part, &A));
+    PETSC_CHECK(DMGetAuxiliaryVec(dm, region.label, region.value, 0, &A));
     DM dm_aux = nullptr;
     DMEnclosureType enc_aux;
     PetscDS prob_aux = nullptr;
@@ -776,58 +747,58 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         PetscFEGeom * rem_geom = nullptr;
         PETSC_CHECK(PetscFEGeomGetChunk(cgeom_fem, offset, n_cells, &rem_geom));
         for (Int field_j = 0; field_j < n_fields; ++field_j) {
-            key.field = field_i * n_fields + field_j;
+            WeakForm::Key key(region, field_i, field_j);
             if (has_jac) {
-                PETSC_CHECK(PetscFEIntegrateJacobian(prob,
-                                                     PETSCFE_JACOBIAN,
-                                                     key,
-                                                     n_elems,
-                                                     chunk_geom,
-                                                     u,
-                                                     u_t,
-                                                     prob_aux,
-                                                     a,
-                                                     t,
-                                                     x_t_shift,
-                                                     elem_mat));
-                PETSC_CHECK(PetscFEIntegrateJacobian(prob,
-                                                     PETSCFE_JACOBIAN,
-                                                     key,
-                                                     n_remdr,
-                                                     rem_geom,
-                                                     &u[offset * tot_dim],
-                                                     u_t ? &u_t[offset * tot_dim] : nullptr,
-                                                     prob_aux,
-                                                     &a[offset * tot_dim_aux],
-                                                     t,
-                                                     x_t_shift,
-                                                     &elem_mat[offset * tot_dim * tot_dim]));
+                integrate_jacobian(prob,
+                                   PETSCFE_JACOBIAN,
+                                   key,
+                                   n_elems,
+                                   chunk_geom,
+                                   u,
+                                   u_t,
+                                   prob_aux,
+                                   a,
+                                   t,
+                                   x_t_shift,
+                                   elem_mat);
+                integrate_jacobian(prob,
+                                   PETSCFE_JACOBIAN,
+                                   key,
+                                   n_remdr,
+                                   rem_geom,
+                                   &u[offset * tot_dim],
+                                   u_t ? &u_t[offset * tot_dim] : nullptr,
+                                   prob_aux,
+                                   &a[offset * tot_dim_aux],
+                                   t,
+                                   x_t_shift,
+                                   &elem_mat[offset * tot_dim * tot_dim]);
             }
             if (has_prec) {
-                PETSC_CHECK(PetscFEIntegrateJacobian(prob,
-                                                     PETSCFE_JACOBIAN_PRE,
-                                                     key,
-                                                     n_elems,
-                                                     chunk_geom,
-                                                     u,
-                                                     u_t,
-                                                     prob_aux,
-                                                     a,
-                                                     t,
-                                                     x_t_shift,
-                                                     elem_mat_P));
-                PETSC_CHECK(PetscFEIntegrateJacobian(prob,
-                                                     PETSCFE_JACOBIAN_PRE,
-                                                     key,
-                                                     n_remdr,
-                                                     rem_geom,
-                                                     &u[offset * tot_dim],
-                                                     u_t ? &u_t[offset * tot_dim] : nullptr,
-                                                     prob_aux,
-                                                     &a[offset * tot_dim_aux],
-                                                     t,
-                                                     x_t_shift,
-                                                     &elem_mat_P[offset * tot_dim * tot_dim]));
+                integrate_jacobian(prob,
+                                   PETSCFE_JACOBIAN_PRE,
+                                   key,
+                                   n_elems,
+                                   chunk_geom,
+                                   u,
+                                   u_t,
+                                   prob_aux,
+                                   a,
+                                   t,
+                                   x_t_shift,
+                                   elem_mat_P);
+                integrate_jacobian(prob,
+                                   PETSCFE_JACOBIAN_PRE,
+                                   key,
+                                   n_remdr,
+                                   rem_geom,
+                                   &u[offset * tot_dim],
+                                   u_t ? &u_t[offset * tot_dim] : nullptr,
+                                   prob_aux,
+                                   &a[offset * tot_dim_aux],
+                                   t,
+                                   x_t_shift,
+                                   &elem_mat_P[offset * tot_dim * tot_dim]);
             }
         }
         PETSC_CHECK(PetscFEGeomRestoreChunk(cgeom_fem, offset, n_cells, &rem_geom));
@@ -1012,10 +983,6 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
     PetscSection global_section;
     PETSC_CHECK(DMGetGlobalSection(dm, &global_section));
     for (Int v = 0; v < n_values; ++v) {
-        PetscFormKey key;
-        key.label = label;
-        key.value = values[v];
-        key.part = 0;
         auto points = label.get_stratum(values[v]);
         if (points.empty())
             continue; /* No points with that id on this process */
@@ -1096,35 +1063,33 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
         PetscFEGeom * chunk_geom = nullptr;
         PETSC_CHECK(PetscFEGeomGetChunk(fgeom, 0, offset, &chunk_geom));
         for (Int field_j = 0; field_j < n_fields; ++field_j) {
-            key.field = field_i * n_fields + field_j;
-            PETSC_CHECK(PetscFEIntegrateBdJacobian(prob,
-                                                   nullptr,
-                                                   key,
-                                                   n_elems,
-                                                   chunk_geom,
-                                                   u,
-                                                   u_t,
-                                                   prob_aux,
-                                                   a,
-                                                   t,
-                                                   x_t_shift,
-                                                   elem_mat));
+            WeakForm::Key key(label, values[v], field_i, field_j, 0);
+            integrate_bnd_jacobian(prob,
+                                   key,
+                                   n_elems,
+                                   chunk_geom,
+                                   u,
+                                   u_t,
+                                   prob_aux,
+                                   a,
+                                   t,
+                                   x_t_shift,
+                                   elem_mat);
         }
         PETSC_CHECK(PetscFEGeomGetChunk(fgeom, offset, n_faces, &chunk_geom));
         for (Int fieldJ = 0; fieldJ < n_fields; ++fieldJ) {
-            key.field = field_i * n_fields + fieldJ;
-            PETSC_CHECK(PetscFEIntegrateBdJacobian(prob,
-                                                   nullptr,
-                                                   key,
-                                                   n_remdr,
-                                                   chunk_geom,
-                                                   &u[offset * tot_dim],
-                                                   u_t ? &u_t[offset * tot_dim] : nullptr,
-                                                   prob_aux,
-                                                   a ? &a[offset * tot_dim_aux] : nullptr,
-                                                   t,
-                                                   x_t_shift,
-                                                   &elem_mat[offset * tot_dim * tot_dim]));
+            WeakForm::Key key(label, values[v], field_i, fieldJ, 0);
+            integrate_bnd_jacobian(prob,
+                                   key,
+                                   n_remdr,
+                                   chunk_geom,
+                                   &u[offset * tot_dim],
+                                   u_t ? &u_t[offset * tot_dim] : nullptr,
+                                   prob_aux,
+                                   a ? &a[offset * tot_dim_aux] : nullptr,
+                                   t,
+                                   x_t_shift,
+                                   &elem_mat[offset * tot_dim * tot_dim]);
         }
         PETSC_CHECK(PetscFEGeomRestoreChunk(fgeom, offset, n_faces, &chunk_geom));
 
