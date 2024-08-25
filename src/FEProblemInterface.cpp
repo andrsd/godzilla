@@ -636,17 +636,13 @@ FEProblemInterface::sort_residual_functionals(
             fnls.insert(fnls.end(), f1_fnls.begin(), f1_fnls.end());
             auto sv = graph.bfs(fnls);
 
-            PetscFormKey pwfk;
-            pwfk.label = region.label;
-            pwfk.value = region.value;
-            pwfk.field = f;
-            pwfk.part = 0;
+            WeakForm::Key key(region, f, 0);
             // bfs gives back a sorted vector, but in reverse order, so
             // we reverse the vector here to get the order of evaluation
             for (auto it = sv.rbegin(); it != sv.rend(); it++) {
                 auto ofnl = dynamic_cast<const ValueFunctional *>(*it);
                 if (ofnl)
-                    this->sorted_res_functionals[pwfk].push_back(ofnl);
+                    this->sorted_res_functionals[key].push_back(ofnl);
             }
         }
     }
@@ -679,11 +675,7 @@ FEProblemInterface::sort_jacobian_functionals(
                 fnls.insert(fnls.end(), g3_fnls.begin(), g3_fnls.end());
                 auto sv = graph.bfs(fnls);
 
-                WeakForm::Key key;
-                key.label = region.label;
-                key.value = region.value;
-                key.part = 0;
-                key.field = this->wf->get_jac_key(f, g);
+                WeakForm::Key key(region, f, g, 0);
                 // bfs gives back a sorted vector, but in reverse order, so
                 // we reverse the vector here to get the order of evaluation
                 for (auto it = sv.rbegin(); it != sv.rend(); it++) {
@@ -846,7 +838,7 @@ FEProblemInterface::add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
     this->wf->add(kind, label, val, fid, gid, part, g);
 }
 
-ErrorCode
+void
 FEProblemInterface::integrate_residual(PetscDS ds,
                                        const WeakForm::Key & key,
                                        Int n_elems,
@@ -860,11 +852,10 @@ FEProblemInterface::integrate_residual(PetscDS ds,
 {
     CALL_STACK_MSG();
     Int field = key.field;
-    Label lbl(key.label);
-    const auto & f0_res_fns = this->wf->get(WeakForm::F0, lbl, key.value, field, key.part);
-    const auto & f1_res_fns = this->wf->get(WeakForm::F1, lbl, key.value, field, key.part);
+    const auto & f0_res_fns = this->wf->get(WeakForm::F0, key.label, key.value, field, key.part);
+    const auto & f1_res_fns = this->wf->get(WeakForm::F1, key.label, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
-        return 0;
+        return;
 
     PetscFE & fe = this->fields.at(field).fe;
 
@@ -887,13 +878,11 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     if (ds_aux) {
         PETSC_CHECK(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
         PETSC_CHECK(PetscDSGetTabulation(ds_aux, &T_aux));
-        PetscCheck(T[0]->Np == T_aux[0]->Np,
-                   PETSC_COMM_SELF,
-                   PETSC_ERR_ARG_WRONG,
-                   "Number of tabulation points %" PetscInt_FMT " != %" PetscInt_FMT
-                   " number of auxiliary tabulation points",
-                   T[0]->Np,
-                   T_aux[0]->Np);
+        if (T[0]->Np != T_aux[0]->Np)
+            throw Exception(
+                "Number of tabulation points {} != {} number of auxiliary tabulation points",
+                T[0]->Np,
+                T_aux[0]->Np);
     }
 
     // FIXME: quad should be a member variable
@@ -902,19 +891,12 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     Int q_dim, q_n_comp, q_n_pts;
     const Real *q_points, *q_weights;
     PETSC_CHECK(PetscQuadratureGetData(quad, &q_dim, &q_n_comp, &q_n_pts, &q_points, &q_weights));
-    PetscCheck(q_n_comp == 1,
-               PETSC_COMM_SELF,
-               PETSC_ERR_SUP,
-               "Only supports scalar quadrature, not %" PetscInt_FMT " components",
-               q_n_comp);
+    if (q_n_comp != 1)
+        throw Exception("Only supports scalar quadrature, not {} components", q_n_comp);
 
     Int dim_embed = cell_geom->dimEmbed;
-    PetscCheck(cell_geom->dim == q_dim,
-               PETSC_COMM_SELF,
-               PETSC_ERR_ARG_INCOMP,
-               "FEGeom dim %" PetscInt_FMT " != %" PetscInt_FMT " quadrature dim",
-               cell_geom->dim,
-               q_dim);
+    if (cell_geom->dim != q_dim)
+        throw Exception("FEGeom dim {} != {} quadrature dim", cell_geom->dim, q_dim);
 
     Int n_fields = get_num_fields();
     Int n_fields_aux = get_num_aux_fields();
@@ -984,13 +966,11 @@ FEProblemInterface::integrate_residual(PetscDS ds,
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
     }
-
-    return 0;
 }
 
-ErrorCode
+void
 FEProblemInterface::integrate_bnd_residual(PetscDS ds,
-                                           WeakForm::Key key,
+                                           const WeakForm::Key & key,
                                            Int n_elems,
                                            PetscFEGeom * face_geom,
                                            const Scalar coefficients[],
@@ -1002,11 +982,12 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
 {
     CALL_STACK_MSG();
     Int field = key.field;
-    Label lbl(key.label);
-    const auto & f0_res_fns = this->wf->get(WeakForm::BND_F0, lbl, key.value, field, key.part);
-    const auto & f1_res_fns = this->wf->get(WeakForm::BND_F1, lbl, key.value, field, key.part);
+    const auto & f0_res_fns =
+        this->wf->get(WeakForm::BND_F0, key.label, key.value, field, key.part);
+    const auto & f1_res_fns =
+        this->wf->get(WeakForm::BND_F1, key.label, key.value, field, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
-        return 0;
+        return;
 
     PetscFE & fe = this->fields.at(field).fe;
 
@@ -1038,13 +1019,11 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
         else
             PETSC_CHECK(PetscDSGetFaceTabulation(ds_aux, &T_face_aux));
 
-        PetscCheck(T_face[0]->Np == T_face_aux[0]->Np,
-                   PETSC_COMM_SELF,
-                   PETSC_ERR_ARG_WRONG,
-                   "Number of tabulation points %" PetscInt_FMT " != %" PetscInt_FMT
-                   " number of auxiliary tabulation points",
-                   T_face[0]->Np,
-                   T_face_aux[0]->Np);
+        if (T_face[0]->Np != T_face_aux[0]->Np)
+            throw Exception(
+                "Number of tabulation points {} != {} number of auxiliary tabulation points",
+                T_face[0]->Np,
+                T_face_aux[0]->Np);
     }
 
     Int n_comp_i = T_face[field]->Nc;
@@ -1055,22 +1034,15 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
     Int q_dim, q_n_comp, q_n_pts;
     const Real *q_points, *q_weights;
     PETSC_CHECK(PetscQuadratureGetData(quad, &q_dim, &q_n_comp, &q_n_pts, &q_points, &q_weights));
-    PetscCheck(q_n_comp == 1,
-               PETSC_COMM_SELF,
-               PETSC_ERR_SUP,
-               "Only supports scalar quadrature, not %" PetscInt_FMT " components",
-               q_n_comp);
+    if (q_n_comp != 1)
+        throw Exception("Only supports scalar quadrature, not {} components", q_n_comp);
 
     Int dim_embed = face_geom->dimEmbed;
     /* TODO FIX THIS */
     face_geom->dim = this->asmbl->dim - 1;
 
-    PetscCheck(face_geom->dim == q_dim,
-               PETSC_COMM_SELF,
-               PETSC_ERR_ARG_INCOMP,
-               "FEGeom dim %" PetscInt_FMT " != %" PetscInt_FMT " quadrature dim",
-               face_geom->dim,
-               q_dim);
+    if (face_geom->dim != q_dim)
+        throw Exception("FEGeom dim {} != {} quadrature dim", face_geom->dim, q_dim);
 
     Int n_fields = get_num_fields();
     Int n_fields_aux = get_num_aux_fields();
@@ -1138,14 +1110,12 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
         c_offset += tot_dim;
         c_offset_aux += tot_dim_aux;
     }
-
-    return 0;
 }
 
-ErrorCode
+void
 FEProblemInterface::integrate_jacobian(PetscDS ds,
                                        PetscFEJacobianType jtype,
-                                       WeakForm::Key key,
+                                       const WeakForm::Key & key,
                                        Int n_elems,
                                        PetscFEGeom * cell_geom,
                                        const Scalar coefficients[],
@@ -1160,8 +1130,8 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     Int n_fields = get_num_fields();
     Int n_fields_aux = get_num_aux_fields();
 
-    Int field_i = key.field / n_fields;
-    Int field_j = key.field % n_fields;
+    Int field_i = key.jac.field_i;
+    Int field_j = key.jac.field_j;
 
     WeakForm::JacobianKind kind0, kind1, kind2, kind3;
     switch (jtype) {
@@ -1185,13 +1155,16 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         break;
     }
 
-    Label lbl(key.label);
-    const auto & g0_jac_fns = this->wf->get(kind0, lbl, key.value, field_i, field_j, key.part);
-    const auto & g1_jac_fns = this->wf->get(kind1, lbl, key.value, field_i, field_j, key.part);
-    const auto & g2_jac_fns = this->wf->get(kind2, lbl, key.value, field_i, field_j, key.part);
-    const auto & g3_jac_fns = this->wf->get(kind3, lbl, key.value, field_i, field_j, key.part);
+    const auto & g0_jac_fns =
+        this->wf->get(kind0, key.label, key.value, field_i, field_j, key.part);
+    const auto & g1_jac_fns =
+        this->wf->get(kind1, key.label, key.value, field_i, field_j, key.part);
+    const auto & g2_jac_fns =
+        this->wf->get(kind2, key.label, key.value, field_i, field_j, key.part);
+    const auto & g3_jac_fns =
+        this->wf->get(kind3, key.label, key.value, field_i, field_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
-        return 0;
+        return;
 
     PetscFE & fe_i = this->fields.at(field_i).fe;
     PetscFE & fe_j = this->fields.at(field_j).fe;
@@ -1221,13 +1194,11 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     if (ds_aux) {
         PETSC_CHECK(PetscDSGetTotalDimension(ds_aux, &tot_dim_aux));
         PETSC_CHECK(PetscDSGetTabulation(ds_aux, &T_aux));
-        PetscCheck(T[0]->Np == T_aux[0]->Np,
-                   PETSC_COMM_SELF,
-                   PETSC_ERR_ARG_WRONG,
-                   "Number of tabulation points %" PetscInt_FMT " != %" PetscInt_FMT
-                   " number of auxiliary tabulation points",
-                   T[0]->Np,
-                   T_aux[0]->Np);
+        if (T[0]->Np != T_aux[0]->Np)
+            throw Exception(
+                "Number of tabulation points {} != {} number of auxiliary tabulation points",
+                T[0]->Np,
+                T_aux[0]->Np);
     }
 
     Int n_pts = cell_geom->numPoints;
@@ -1246,11 +1217,8 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     const Real *q_points, *q_weights;
     PETSC_CHECK(
         PetscQuadratureGetData(quad, nullptr, &q_n_comp, &q_n_points, &q_points, &q_weights));
-    PetscCheck(q_n_comp == 1,
-               PETSC_COMM_SELF,
-               PETSC_ERR_SUP,
-               "Only supports scalar quadrature, not %" PetscInt_FMT " components",
-               q_n_comp);
+    if (q_n_comp != 1)
+        throw Exception("Only supports scalar quadrature, not {} components", q_n_comp);
 
     // Offset into elem_mat[] for element e
     Int e_offset = 0;
@@ -1368,13 +1336,11 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         c_offset_aux += tot_dim_aux;
         e_offset += PetscSqr(tot_dim);
     }
-
-    return 0;
 }
 
-ErrorCode
+void
 FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
-                                           WeakForm::Key key,
+                                           const WeakForm::Key & key,
                                            Int n_elems,
                                            PetscFEGeom * face_geom,
                                            const Scalar coefficients[],
@@ -1389,20 +1355,19 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     Int n_fields = get_num_fields();
     Int n_fields_aux = get_num_aux_fields();
 
-    Int field_i = key.field / n_fields;
-    Int field_j = key.field % n_fields;
+    Int field_i = key.jac.field_i;
+    Int field_j = key.jac.field_j;
 
-    Label lbl(key.label);
     const auto & g0_jac_fns =
-        this->wf->get(WeakForm::BND_G0, lbl, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G0, key.label, key.value, field_i, field_j, key.part);
     const auto & g1_jac_fns =
-        this->wf->get(WeakForm::BND_G1, lbl, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G1, key.label, key.value, field_i, field_j, key.part);
     const auto & g2_jac_fns =
-        this->wf->get(WeakForm::BND_G2, lbl, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G2, key.label, key.value, field_i, field_j, key.part);
     const auto & g3_jac_fns =
-        this->wf->get(WeakForm::BND_G3, lbl, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G3, key.label, key.value, field_i, field_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
-        return 0;
+        return;
 
     PetscFE & fe_i = this->fields.at(field_i).fe;
     PetscFE & fe_j = this->fields.at(field_j).fe;
@@ -1450,11 +1415,8 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     const Real *q_points, *q_weights;
     PETSC_CHECK(
         PetscQuadratureGetData(quad, nullptr, &q_n_comp, &q_n_points, &q_points, &q_weights));
-    PetscCheck(q_n_comp == 1,
-               PETSC_COMM_SELF,
-               PETSC_ERR_SUP,
-               "Only supports scalar quadrature, not %" PetscInt_FMT " components",
-               q_n_comp);
+    if (q_n_comp != 1)
+        throw Exception("Only supports scalar quadrature, not {} components", q_n_comp);
 
     // Offset into elem_mat[] for element e
     Int e_offset = 0;
@@ -1592,8 +1554,6 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
         c_offset_aux += tot_dim_aux;
         e_offset += PetscSqr(tot_dim);
     }
-
-    return 0;
 }
 
 // This is a copy of petsc/fe.c, PetscFEUpdateElementVec_Internal

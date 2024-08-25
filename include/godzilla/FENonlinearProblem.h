@@ -77,7 +77,7 @@ protected:
     void compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t, Real t, Vec loc_f);
     void compute_bnd_residual_single_internal(DM dm,
                                               Real t,
-                                              PetscFormKey key,
+                                              const WeakForm::Key & key,
                                               Vec loc_x,
                                               Vec loc_x_t,
                                               Vec loc_f,

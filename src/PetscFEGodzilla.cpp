@@ -4,7 +4,8 @@
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/Error.h"
 #include "godzilla/CallStack.h"
-#include <petsc/private/petscfeimpl.h>
+#include "godzilla/WeakForm.h"
+#include "petsc/private/petscfeimpl.h"
 #include "petscfe.h"
 
 namespace godzilla {
@@ -23,19 +24,21 @@ integrate_residual(PetscDS ds,
                    Scalar elem_vec[])
 {
     CALL_STACK_MSG();
+    WeakForm::Key wfk(key);
     void * ctx;
-    PETSC_CHECK(PetscDSGetContext(ds, key.field, &ctx));
+    PETSC_CHECK(PetscDSGetContext(ds, wfk.field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    return fepi->integrate_residual(ds,
-                                    key,
-                                    ne,
-                                    cgeom,
-                                    coefficients,
-                                    coefficients_t,
-                                    ds_aux,
-                                    coefficients_aux,
-                                    t,
-                                    elem_vec);
+    fepi->integrate_residual(ds,
+                             wfk,
+                             ne,
+                             cgeom,
+                             coefficients,
+                             coefficients_t,
+                             ds_aux,
+                             coefficients_aux,
+                             t,
+                             elem_vec);
+    return 0;
 }
 
 ErrorCode
@@ -52,19 +55,21 @@ integrate_bd_residual(PetscDS ds,
                       Scalar elem_vec[])
 {
     CALL_STACK_MSG();
+    WeakForm::Key wfk(key);
     void * ctx;
-    PETSC_CHECK(PetscDSGetContext(ds, key.field, &ctx));
+    PETSC_CHECK(PetscDSGetContext(ds, wfk.field, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    return fepi->integrate_bnd_residual(ds,
-                                        key,
-                                        ne,
-                                        fgeom,
-                                        coefficients,
-                                        coefficients_t,
-                                        ds_aux,
-                                        coefficients_aux,
-                                        t,
-                                        elem_vec);
+    fepi->integrate_bnd_residual(ds,
+                                 wfk,
+                                 ne,
+                                 fgeom,
+                                 coefficients,
+                                 coefficients_t,
+                                 ds_aux,
+                                 coefficients_aux,
+                                 t,
+                                 elem_vec);
+    return 0;
 }
 
 ErrorCode
@@ -82,24 +87,24 @@ integrate_jacobian(PetscDS ds,
                    Scalar elem_mat[])
 {
     CALL_STACK_MSG();
-    Int n_fields;
-    PETSC_CHECK(PetscDSGetNumFields(ds, &n_fields));
-    Int field_i = key.field / n_fields;
+    WeakForm::Key wfk(key);
+    auto field_i = wfk.jac.field_i;
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    return fepi->integrate_jacobian(ds,
-                                    jtype,
-                                    key,
-                                    ne,
-                                    cgeom,
-                                    coefficients,
-                                    coefficients_t,
-                                    ds_aux,
-                                    coefficients_aux,
-                                    t,
-                                    u_tshift,
-                                    elem_mat);
+    fepi->integrate_jacobian(ds,
+                             jtype,
+                             wfk,
+                             ne,
+                             cgeom,
+                             coefficients,
+                             coefficients_t,
+                             ds_aux,
+                             coefficients_aux,
+                             t,
+                             u_tshift,
+                             elem_mat);
+    return 0;
 }
 
 ErrorCode
@@ -117,23 +122,23 @@ integrate_bd_jacobian(PetscDS ds,
                       Scalar elem_mat[])
 {
     CALL_STACK_MSG();
-    Int n_fields;
-    PETSC_CHECK(PetscDSGetNumFields(ds, &n_fields));
-    Int field_i = key.field / n_fields;
+    WeakForm::Key wfk(key);
+    auto field_i = wfk.jac.field_i;
     void * ctx;
     PETSC_CHECK(PetscDSGetContext(ds, field_i, &ctx));
     auto * fepi = static_cast<godzilla::FEProblemInterface *>(ctx);
-    return fepi->integrate_bnd_jacobian(ds,
-                                        key,
-                                        ne,
-                                        fgeom,
-                                        coefficients,
-                                        coefficients_t,
-                                        ds_aux,
-                                        coefficients_aux,
-                                        t,
-                                        u_tshift,
-                                        elem_mat);
+    fepi->integrate_bnd_jacobian(ds,
+                                 wfk,
+                                 ne,
+                                 fgeom,
+                                 coefficients,
+                                 coefficients_t,
+                                 ds_aux,
+                                 coefficients_aux,
+                                 t,
+                                 u_tshift,
+                                 elem_mat);
+    return 0;
 }
 
 } // namespace

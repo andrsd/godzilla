@@ -10,30 +10,6 @@
 #include <map>
 #include <vector>
 
-namespace std {
-
-template <>
-struct less<PetscFormKey> {
-    bool
-    operator()(const PetscFormKey & lhs, const PetscFormKey & rhs) const
-    {
-        if (lhs.label == rhs.label) {
-            if (lhs.value == rhs.value) {
-                if (lhs.field == rhs.field)
-                    return lhs.part < rhs.part;
-                else
-                    return lhs.field < rhs.field;
-            }
-            else
-                return lhs.value < rhs.value;
-        }
-        else
-            return lhs.label < rhs.label;
-    }
-};
-
-} // namespace std
-
 namespace godzilla {
 
 class ResidualFunc;
@@ -43,8 +19,6 @@ class JacobianFunc;
 ///
 class WeakForm {
 public:
-    using Key = PetscFormKey;
-
     /// Region of the mesh where parts of a weak form can be specified
     struct Region {
         Label label;
@@ -53,6 +27,104 @@ public:
         Region() : label(nullptr), value(0) {}
         Region(const Label & label, Int value) : label(label), value(value) {}
         Region(DMLabel label, Int value) : label(label), value(value) {}
+
+        bool
+        operator<(const Region & other) const
+        {
+            if ((DMLabel) this->label == (DMLabel) other.label)
+                return this->value < other.value;
+            else
+                return (DMLabel) this->label < (DMLabel) other.label;
+        }
+    };
+
+    struct JacobianFieldID {
+#if defined(PETSC_USE_64BIT_INDICES)
+        unsigned field_i : 32;
+        unsigned field_j : 32;
+#else
+        unsigned field_i : 16;
+        unsigned field_j : 16;
+#endif
+    };
+
+    struct Key {
+        Label label;
+        Int value;
+        union {
+            Int field;
+            JacobianFieldID jac;
+        };
+        Int part;
+
+        Key(const PetscFormKey & pkey) :
+            label(pkey.label),
+            value(pkey.value),
+            field(pkey.field),
+            part(pkey.part)
+        {
+        }
+
+        Key(const Region & region, Int field, Int part) :
+            label(region.label),
+            value(region.value),
+            field(field),
+            part(part)
+        {
+        }
+
+        Key(const Region & region, Int field_i, Int field_j, Int part) :
+            label(region.label),
+            value(region.value),
+            part(part)
+        {
+            this->jac.field_i = field_i;
+            this->jac.field_j = field_j;
+        }
+
+        Key(DMLabel label, Int value, Int field, Int part) :
+            label(label),
+            value(value),
+            field(field),
+            part(part)
+        {
+        }
+
+        Key(DMLabel label, Int value, Int field_i, Int field_j, Int part) :
+            label(label),
+            value(value),
+            part(part)
+        {
+            this->jac.field_i = field_i;
+            this->jac.field_j = field_j;
+        }
+
+        operator PetscFormKey() const
+        {
+            PetscFormKey key;
+            key.label = this->label;
+            key.value = this->value;
+            key.field = this->field;
+            key.part = this->part;
+            return key;
+        }
+
+        bool
+        operator<(const Key & other) const
+        {
+            if ((DMLabel) this->label == (DMLabel) other.label) {
+                if (this->value == other.value) {
+                    if (this->field == other.field)
+                        return this->part < other.part;
+                    else
+                        return this->field < other.field;
+                }
+                else
+                    return this->value < other.value;
+            }
+            else
+                return (DMLabel) this->label < (DMLabel) other.label;
+        }
     };
 
     enum ResidualKind {
@@ -151,17 +223,7 @@ public:
     /// @return `true` if weak form for Jacobian preconditioner statement is set, otherwise `false`
     [[nodiscard]] bool has_jacobian_preconditioner() const;
 
-    /// Get field ID for the combination of fields `f` and `g`
-    ///
-    /// @param f Field `f` ID
-    /// @param g Field `g` ID
-    /// @return Field ID used in `Key`
-    [[nodiscard]] Int get_jac_key(Int f, Int g) const;
-
 private:
-    /// Number of fields
-    Int n_fields;
-
     /// All residual forms
     std::array<std::map<Key, std::vector<ResidualFunc *>>, PETSC_NUM_WF> res_forms;
 
