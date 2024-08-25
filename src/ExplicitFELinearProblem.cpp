@@ -143,7 +143,7 @@ void
 ExplicitFELinearProblem::compute_rhs_local(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMPlexTSComputeRHSFunctionFEM(get_dm(), time, x, F, this));
+    compute_rhs_function_fem(time, x, F);
 }
 
 void
@@ -163,9 +163,10 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
                                             const std::string & region)
 {
     CALL_STACK_MSG();
-    // `DMPlexTSComputeRHSFunctionFEM` which does the integration sets `PetscFormKey key.part =
-    // 100`, so we need to match that since our keys are ulitmately used internanly by PETSc. See
-    // also `PetscDSSetRHSResidual` where the `part` is set to `100` as well.
+    // `compute_rhs_function_fem` which does the integration sets `Region::part = 100`. This matches
+    // what PETSc does internally, so we do this as well in case we get inside PETSc.
+    // See also `PetscDSSetRHSResidual` where the `part` is set to `100` as well which matches what
+    // this function does
     const Int part = 100;
 
     if (region.empty()) {
@@ -179,6 +180,32 @@ ExplicitFELinearProblem::add_residual_block(Int field_id,
             add_weak_form_residual_block(WeakForm::F0, field_id, f0, label, val, part);
             add_weak_form_residual_block(WeakForm::F1, field_id, f1, label, val, part);
         }
+    }
+}
+
+void
+ExplicitFELinearProblem::compute_rhs_function_fem(Real time, const Vector & loc_x, Vector & loc_g)
+{
+    // this is based on DMPlexTSComputeRHSFunctionFEM()
+    CALL_STACK_MSG();
+    IndexSet all_cells = get_unstr_mesh()->get_all_cells();
+
+    for (auto region : get_weak_form()->get_residual_regions()) {
+        IndexSet cells;
+        region.value = 0;
+        region.part = 100;
+        if (region.label.is_null()) {
+            all_cells.inc_ref();
+            cells = all_cells;
+        }
+        else {
+            region.value = 1;
+            auto points = region.label.get_stratum(region.value);
+            cells = IndexSet::intersect_caching(all_cells, points);
+            points.destroy();
+        }
+        compute_residual_internal(get_dm(), region, cells, time, loc_x, nullptr, time, loc_g);
+        cells.destroy();
     }
 }
 

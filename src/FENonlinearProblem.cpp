@@ -747,7 +747,7 @@ FENonlinearProblem::compute_jacobian_internal(DM dm,
         PetscFEGeom * rem_geom = nullptr;
         PETSC_CHECK(PetscFEGeomGetChunk(cgeom_fem, offset, n_cells, &rem_geom));
         for (Int field_j = 0; field_j < n_fields; ++field_j) {
-            WeakForm::Key key(region, field_i, field_j, 0);
+            WeakForm::Key key(region, field_i, field_j);
             if (has_jac) {
                 integrate_jacobian(prob,
                                    PETSCFE_JACOBIAN,

@@ -19,7 +19,7 @@ WeakForm::get_residual_regions() const
         const auto & forms = this->res_forms[r];
         for (const auto & it : forms) {
             const auto & form_key = it.first;
-            Region k = { form_key.label, form_key.value };
+            Region k(form_key.label, form_key.value, form_key.part);
             unique.emplace(k);
         }
     }
@@ -39,7 +39,7 @@ WeakForm::get_jacobian_regions() const
         const auto & forms = this->jac_forms[r];
         for (const auto & it : forms) {
             const auto & form_key = it.first;
-            Region k = { form_key.label, form_key.value };
+            Region k(form_key.label, form_key.value, form_key.part);
             unique.emplace(k);
         }
     }

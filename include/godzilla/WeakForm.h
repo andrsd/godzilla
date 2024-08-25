@@ -23,16 +23,20 @@ public:
     struct Region {
         Label label;
         Int value;
+        Int part;
 
-        Region() : label(nullptr), value(0) {}
-        Region(const Label & label, Int value) : label(label), value(value) {}
-        Region(DMLabel label, Int value) : label(label), value(value) {}
+        Region() : label(nullptr), value(0), part(0) {}
+        Region(const Label & label, Int value, Int part) : label(label), value(value), part(0) {}
+        Region(DMLabel label, Int value, Int part) : label(label), value(value), part(0) {}
 
         bool
         operator<(const Region & other) const
         {
             if ((DMLabel) this->label == (DMLabel) other.label)
-                return this->value < other.value;
+                if (this->value == other.value)
+                    return this->part < other.part;
+                else
+                    return this->value < other.value;
             else
                 return (DMLabel) this->label < (DMLabel) other.label;
         }
@@ -65,18 +69,18 @@ public:
         {
         }
 
-        Key(const Region & region, Int field, Int part) :
+        Key(const Region & region, Int field) :
             label(region.label),
             value(region.value),
             field(field),
-            part(part)
+            part(region.part)
         {
         }
 
-        Key(const Region & region, Int field_i, Int field_j, Int part) :
+        Key(const Region & region, Int field_i, Int field_j) :
             label(region.label),
             value(region.value),
-            part(part)
+            part(region.part)
         {
             this->jac.field_i = field_i;
             this->jac.field_j = field_j;

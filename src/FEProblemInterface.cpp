@@ -5,7 +5,6 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/NaturalBC.h"
-#include "godzilla/PetscFEGodzilla.h"
 #include "godzilla/WeakForm.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
@@ -436,13 +435,7 @@ FEProblemInterface::create_fe(FieldInfo & fi)
     auto comm = get_unstr_mesh()->get_comm();
     Int dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_unstr_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
-    PETSC_CHECK(internal::create_lagrange_petscfe(comm,
-                                                  dim,
-                                                  fi.nc,
-                                                  is_simplex,
-                                                  fi.k,
-                                                  this->qorder,
-                                                  &fi.fe));
+    PETSC_CHECK(PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe));
 }
 
 void
@@ -675,7 +668,7 @@ FEProblemInterface::sort_jacobian_functionals(
                 fnls.insert(fnls.end(), g3_fnls.begin(), g3_fnls.end());
                 auto sv = graph.bfs(fnls);
 
-                WeakForm::Key key(region, f, g, 0);
+                WeakForm::Key key(region, f, g);
                 // bfs gives back a sorted vector, but in reverse order, so
                 // we reverse the vector here to get the order of evaluation
                 for (auto it = sv.rbegin(); it != sv.rend(); it++) {
