@@ -10,7 +10,6 @@
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/Array1D.h"
-#include "godzilla/Array2D.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEVolumes.h"
 #include "godzilla/FEShapeFns.h"

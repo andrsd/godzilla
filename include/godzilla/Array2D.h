@@ -19,10 +19,7 @@ public:
     ///
     /// @param rows Number of rows
     /// @param cols Number of columns
-    Array2D(Int rows, Int cols) : n_rows(rows), n_cols(cols), data(new T[rows * cols])
-    {
-        MEM_CHECK(this->data);
-    }
+    Array2D(Int rows, Int cols) : n_rows(rows), n_cols(cols), data(new T[rows * cols]) {}
 
     /// Get number of rows
     ///
@@ -52,7 +49,6 @@ public:
         this->n_rows = rows;
         this->n_cols = cols;
         this->data = new T[rows * cols];
-        MEM_CHECK(this->data);
     }
 
     /// Set all entiries to zero
@@ -74,6 +70,34 @@ public:
         this->data = nullptr;
     }
 
+    /// Get entry at specified location for reading
+    ///
+    /// @param row Row number
+    /// @param col Column number
+    /// @return Entry at the specified location
+    const T &
+    get(Int row, Int col) const
+    {
+        assert(this->data != nullptr);
+        assert((row >= 0) && (row < this->n_rows));
+        assert((col >= 0) && (col < this->n_cols));
+        return this->data[idx(row, col)];
+    }
+
+    /// Get entry at specified location for writing
+    ///
+    /// @param row Row number
+    /// @param col Column number
+    /// @return Entry at the specified location
+    T &
+    set(Int row, Int col)
+    {
+        assert(this->data != nullptr);
+        assert((row >= 0) && (row < this->n_rows));
+        assert((col >= 0) && (col < this->n_cols));
+        return this->data[idx(row, col)];
+    }
+
     /// Get an entry from a location for reading
     ///
     /// @param row Row number
@@ -82,10 +106,7 @@ public:
     const T &
     operator()(Int row, Int col) const
     {
-        assert(this->data != nullptr);
-        assert((row >= 0) && (row < this->n_rows));
-        assert((col >= 0) && (col < this->n_cols));
-        return this->data[col * this->n_rows + row];
+        return get(row, col);
     }
 
     /// Get an entry from a location for writing
@@ -96,13 +117,22 @@ public:
     T &
     operator()(Int row, Int col)
     {
-        assert(this->data != nullptr);
-        assert((row >= 0) && (row < this->n_rows));
-        assert((col >= 0) && (col < this->n_cols));
-        return this->data[col * this->n_rows + row];
+        return set(row, col);
     }
 
 private:
+    /// Mapping function from (row, col) to the offset into the internal array that stores the
+    /// matrix entries
+    ///
+    /// @param row Row number
+    /// @param col Column number
+    /// @return Offset into the `values` array that contains the entry at position (row, col)
+    [[nodiscard]] Int
+    idx(Int row, Int col) const
+    {
+        return row * this->n_cols + col;
+    }
+
     /// Number of rows
     Int n_rows;
     /// Number of columns
