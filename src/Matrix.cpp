@@ -156,6 +156,13 @@ Matrix::zero()
     PETSC_CHECK(MatZeroEntries(this->mat));
 }
 
+void
+Matrix::scale(Scalar a)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatScale(this->mat, a));
+}
+
 Scalar
 Matrix::operator()(Int row, Int col) const
 {

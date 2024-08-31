@@ -170,3 +170,15 @@ TEST(MatrixTest, view)
     EXPECT_THAT(output, testing::HasSubstr("row 0: (0, 1.)"));
     EXPECT_THAT(output, testing::HasSubstr("row 1: (1, 4.)"));
 }
+
+TEST(MatrixTest, scale)
+{
+    Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
+    m.set_value_local(0, 0, 1.);
+    m.set_value_local(1, 1, 4.);
+    m.assemble();
+
+    m.scale(4.);
+    EXPECT_DOUBLE_EQ(m(0, 0), 4.);
+    EXPECT_DOUBLE_EQ(m(1, 1), 16.);
+}
