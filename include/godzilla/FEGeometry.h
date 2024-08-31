@@ -9,7 +9,6 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Array1D.h"
-#include "godzilla/Array2D.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
 #include <set>
