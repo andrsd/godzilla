@@ -115,6 +115,11 @@ public:
     /// @param viewer Viewer
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD);
 
+    /// Gets an array containing the MPI ranks of all the process' neighbors
+    ///
+    /// @return Array of all neighboring ranks
+    std::vector<int> get_neighbors() const;
+
 protected:
     /// Set the DM
     void set_dm(DM dm);
