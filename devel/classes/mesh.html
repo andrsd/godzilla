@@ -109,6 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh15set_label_valueEPKc3Int3Int"><code class="docutils literal notranslate"><span class="pre">Mesh::set_label_value()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh17clear_label_valueEPKc3Int3Int"><code class="docutils literal notranslate"><span class="pre">Mesh::clear_label_value()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla4Mesh4viewE11PetscViewer"><code class="docutils literal notranslate"><span class="pre">Mesh::view()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla4Mesh13get_neighborsEv"><code class="docutils literal notranslate"><span class="pre">Mesh::get_neighbors()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -359,6 +360,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>viewer</strong> – Viewer </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla4Mesh13get_neighborsEv">
+<span id="_CPPv3NK8godzilla4Mesh13get_neighborsEv"></span><span id="_CPPv2NK8godzilla4Mesh13get_neighborsEv"></span><span id="godzilla::Mesh::get_neighborsC"></span><span class="target" id="classgodzilla_1_1_mesh_1aba757910808ab86e31aeb03867f17ef8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_neighbors</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla4Mesh13get_neighborsEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets an array containing the MPI ranks of all the process’ neighbors. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Array of all neighboring ranks </p>
 </dd>
 </dl>
 </dd></dl>
