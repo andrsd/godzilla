@@ -170,4 +170,16 @@ Mesh::view(PetscViewer viewer)
     PETSC_CHECK(DMView(this->dm, viewer));
 }
 
+std::vector<int>
+Mesh::get_neighbors() const
+{
+    Int n;
+    const PetscMPIInt * ranks;
+    PETSC_CHECK(DMGetNeighbors(this->dm, &n, &ranks));
+    std::vector<int> res(n);
+    for (Int i = 0; i < n; i++)
+        res[i] = ranks[i];
+    return res;
+}
+
 } // namespace godzilla

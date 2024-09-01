@@ -163,3 +163,20 @@ TEST(MeshTest, view)
     EXPECT_THAT(out, HasSubstr("DM Object:"));
     EXPECT_THAT(out, HasSubstr("type: plex"));
 }
+
+TEST(MeshTest, get_neighbors)
+{
+    TestApp app;
+
+    Parameters params = TestMesh::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestMesh mesh(params);
+    mesh.create();
+    auto m = mesh.create_mesh();
+
+    if (app.get_comm().size() == 1) {
+        auto neighbors = m->get_neighbors();
+        EXPECT_TRUE(neighbors.empty());
+    }
+}
