@@ -834,7 +834,7 @@ public:
     resize(Int m, Int n)
     {
         if (this->values != nullptr)
-            delete this->values;
+            delete[] this->values;
         this->values = new T[m * n];
         this->rows = m;
         this->cols = n;
