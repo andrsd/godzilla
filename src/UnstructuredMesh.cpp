@@ -619,4 +619,20 @@ UnstructuredMesh::get_full_join(const std::vector<Int> & points)
     return out_points;
 }
 
+std::vector<Real>
+UnstructuredMesh::get_vertex_coordinates(Int pt) const
+{
+    Real * data;
+    auto dm_coord = get_coordinate_dm();
+    auto coord_vec = get_coordinates_local();
+    auto coord_array = coord_vec.get_array_read();
+    PETSC_CHECK(DMPlexPointLocalRead(dm_coord, pt, coord_array, &data));
+    coord_vec.restore_array_read(coord_array);
+    auto dim = get_dimension();
+    std::vector<Real> coord(dim);
+    for (Int i = 0; i < dim; i++)
+        coord[i] = data[i];
+    return coord;
+}
+
 } // namespace godzilla
