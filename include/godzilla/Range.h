@@ -102,4 +102,23 @@ private:
     Int last_idx;
 };
 
+/// Create a range from `start` to `end`
+///
+/// @param start First element
+/// @param end Last elements (excluded)
+inline Range
+make_range(Int start, Int end)
+{
+    return Range(start, end);
+}
+
+/// Create a range from 0 to `end`
+///
+/// @param end Last elements (excluded)
+inline Range
+make_range(Int end)
+{
+    return Range(0, end);
+}
+
 } // namespace godzilla
