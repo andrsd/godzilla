@@ -23,7 +23,7 @@ public:
     /// true if solve converged, otherwise false
     bool converged();
 
-private:
+protected:
     /// Initialize the problem
     virtual void init();
 
@@ -56,6 +56,7 @@ private:
 
     void solve();
 
+private:
     /// KSP object
     KrylovSolver ks;
     /// The right-hand side vector
