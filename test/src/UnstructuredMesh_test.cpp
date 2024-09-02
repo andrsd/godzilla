@@ -606,3 +606,30 @@ TEST(UnstructuredMesh, face_sets)
     EXPECT_TRUE(m->has_face_set("right"));
     EXPECT_TRUE(m->has_face_set("left"));
 }
+
+TEST(UnstructuredMesh, get_coordinates)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto coord0 = m->get_vertex_coordinates(2);
+    EXPECT_EQ(coord0.size(), 3);
+    EXPECT_DOUBLE_EQ(coord0[0], 0.);
+    EXPECT_DOUBLE_EQ(coord0[1], 0.);
+    EXPECT_DOUBLE_EQ(coord0[2], 0.);
+
+    auto coord1 = m->get_vertex_coordinates(3);
+    EXPECT_EQ(coord1.size(), 3);
+    EXPECT_DOUBLE_EQ(coord1[0], 0.5);
+    EXPECT_DOUBLE_EQ(coord1[1], 0.);
+    EXPECT_DOUBLE_EQ(coord1[2], 0.);
+}
