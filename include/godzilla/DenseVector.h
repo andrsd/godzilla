@@ -3,8 +3,8 @@
 
 #pragma once
 
+#include "godzilla/Exception.h"
 #include "godzilla/Types.h"
-#include "godzilla/Error.h"
 #include "godzilla/DenseMatrix.h"
 #include <cassert>
 
@@ -464,6 +464,412 @@ operator<<(std::ostream & os, const DenseVector<T, N> & obj)
     }
     os << ")";
     return os;
+}
+
+// Dynamic dense vector
+
+template <typename T>
+using DynDenseVector = DenseVector<T, -1>;
+
+template <typename T>
+class DenseVector<T, -1> : public DynDenseMatrix<T> {
+public:
+    DenseVector<T, -1>() : DynDenseMatrix<T>() {}
+
+    explicit DenseVector<T, -1>(Int rows) : DynDenseMatrix<T>(rows, 1) {}
+
+    DenseVector<T, -1>(Int rows, const T & val) : DynDenseMatrix<T>(rows, 1, val) {}
+
+    DenseVector(const DenseVector & other) : DynDenseMatrix<T>(other) {}
+
+    /// Get an entry at location (i) for reading
+    ///
+    /// @param i Index
+    /// @return Entry at location (i)
+    [[nodiscard]] const T &
+    get(Int i) const
+    {
+        if ((i >= 0) && (i < size()))
+            return DynDenseMatrix<T>::get(i, 0);
+        else
+            throw Exception("Index ({}) is out of vector dimension ({})", i, size());
+    }
+
+    /// Get entry at specified location for writing
+    ///
+    /// @param i Row number
+    /// @return Entry at the specified location
+    T &
+    set(Int i)
+    {
+        if ((i >= 0) && (i < size()))
+            return DynDenseMatrix<T>::set(i, 0);
+        else
+            throw Exception("Index ({}) is out of vector dimension ({})", i, size());
+    }
+
+    /// Resize the vector
+    ///
+    /// @param n New size of the vector
+    void
+    resize(Int n)
+    {
+        DynDenseMatrix<T>::resize(n, 1);
+    }
+
+    /// Multiply all entries by a scalar value
+    ///
+    /// @param alpha Value to multiple the vector entries with
+    void
+    scale(Real alpha)
+    {
+        DynDenseMatrix<T>::scale(alpha);
+    }
+
+    /// Add `a` to this vector, i.e. vec[i] += a[i]
+    ///
+    /// @param a Vector to add
+    void
+    add(const DynDenseVector<T> & a)
+    {
+        if (a.size() == size()) {
+            for (Int i = 0; i < size(); i++)
+                set(i) += a(i);
+        }
+        else
+            throw Exception("Size of the operand ({}) must match the vector size ({})",
+                            a.size(),
+                            size());
+    }
+
+    /// Add `a` to each element of this vector, i.e. vec[i] += a
+    ///
+    /// @param a Value to add
+    void
+    add(T a)
+    {
+        for (Int i = 0; i < size(); i++)
+            set(i) += a;
+    }
+
+    /// Subtract `a` from this vector, i.e. vec[i] -= a[i]
+    ///
+    /// @param a Vector to subtract
+    void
+    subtract(const DynDenseVector<T> & a)
+    {
+        if (a.size() == size()) {
+            for (Int i = 0; i < size(); i++)
+                set(i) -= a(i);
+        }
+        else
+            throw Exception("Size of the operand ({}) must match the vector size ({})",
+                            a.size(),
+                            size());
+    }
+
+    /// Normalize this vector
+    void
+    normalize()
+    {
+        T mag = magnitude();
+        if (mag > 0) {
+            for (Int i = 0; i < size(); i++)
+                set(i) /= mag;
+        }
+    }
+
+    /// Compute average from vector entries
+    ///
+    /// @return Average of vector entries
+    [[nodiscard]] Real
+    avg() const
+    {
+        Real res = 0.;
+        for (Int i = 0; i < size(); i++)
+            res += get(i);
+        return res / size();
+    }
+
+    /// Sum all vector elements, i.e \Sum_i vec[i]
+    ///
+    /// @return Sum of all elements
+    [[nodiscard]] T
+    sum() const
+    {
+        T sum = 0.;
+        for (Int i = 0; i < size(); i++)
+            sum += get(i);
+        return sum;
+    }
+
+    /// Compute vector magnitude, i.e. sqrt(\Sum_i vec[i]^2)
+    ///
+    /// @return Vector magnitude
+    [[nodiscard]] T
+    magnitude() const
+    {
+        T sum = 0.;
+        for (Int i = 0; i < size(); i++)
+            sum += get(i) * get(i);
+        return std::sqrt(sum);
+    }
+
+    /// Find the minimum value of the elements
+    ///
+    /// @return The minimum value of the elements
+    [[nodiscard]] T
+    min() const
+    {
+        T res = std::numeric_limits<T>::max();
+        for (Int i = 0; i < size(); i++)
+            if (get(i) < res)
+                res = get(i);
+        return res;
+    }
+
+    /// Find the minimum value of the elements
+    ///
+    /// @return The minimum value of the elements
+    [[nodiscard]] T
+    max() const
+    {
+        T res = std::numeric_limits<T>::min();
+        for (Int i = 0; i < size(); i++)
+            if (get(i) > res)
+                res = get(i);
+        return res;
+    }
+
+    /// Replaces every element in a vector with its absolute value
+    void
+    abs()
+    {
+        for (Int i = 0; i < size(); i++)
+            set(i) = std::abs(get(i));
+    }
+
+    /// Set all vector entries to zero
+    void
+    zero()
+    {
+        DynDenseMatrix<T>::zero();
+    }
+
+    /// Set `alpha` into all entries, i.e. vec[i] = alpha
+    ///
+    /// @param alpha Value to set into vector entries
+    void
+    set_values(const T & alpha)
+    {
+        DynDenseMatrix<T>::set_values(alpha);
+    }
+
+    void
+    set_values(const std::vector<T> & vals)
+    {
+        DynDenseMatrix<T>::set_col(0, vals);
+    }
+
+    /// Get the size of the vector
+    ///
+    /// @return Size of the vector
+    Int
+    size() const
+    {
+        return this->get_num_rows();
+    }
+
+    // Operators
+
+    const T &
+    operator()(Int i) const
+    {
+        return get(i);
+    }
+
+    T &
+    operator()(Int i)
+    {
+        return set(i);
+    }
+
+    DynDenseVector<T>
+    operator+(const DynDenseVector<T> & a) const
+    {
+        if (size() == a.size()) {
+            DynDenseVector<T> res(a.size());
+            for (Int i = 0; i < size(); i++)
+                res(i) = get(i) + a(i);
+            return res;
+        }
+        else
+            throw Exception("Size of the operand ({}) must match the vector size ({})",
+                            a.size(),
+                            size());
+    }
+
+    DynDenseVector<T>
+    operator-() const
+    {
+        DynDenseVector<T> res(size());
+        for (Int i = 0; i < size(); i++)
+            res(i) = -get(i);
+        return res;
+    }
+
+    DynDenseVector<T>
+    operator-(const DynDenseVector<T> & a) const
+    {
+        if (size() == a.size()) {
+            DynDenseVector<T> res(size());
+            for (Int i = 0; i < size(); i++)
+                res(i) = get(i) - a(i);
+            return res;
+        }
+        else
+            throw Exception("Size of the operand ({}) must match the vector size ({})",
+                            a.size(),
+                            size());
+    }
+
+    DynDenseVector<T>
+    operator*(Real alpha) const
+    {
+        DynDenseVector<T> res(size());
+        for (Int i = 0; i < size(); i++)
+            res(i) = alpha * get(i);
+        return res;
+    }
+
+    DynDenseVector<T> &
+    operator+=(const DynDenseVector<T> & a)
+    {
+        if (size() == a.size()) {
+            for (Int i = 0; i < size(); i++)
+                set(i) += a(i);
+            return *this;
+        }
+        throw Exception("Size of the operand ({}) must match the vector size ({})",
+                        a.size(),
+                        size());
+    }
+
+    DynDenseVector<T> &
+    operator+=(const T & a)
+    {
+        for (Int i = 0; i < size(); i++)
+            set(i) += a;
+        return *this;
+    }
+
+    DynDenseVector<T> &
+    operator-=(const DynDenseVector<T> & a)
+    {
+        if (size() == a.size()) {
+            for (Int i = 0; i < size(); i++)
+                set(i) -= a(i);
+            return *this;
+        }
+        throw Exception("Size of the operand ({}) must match the vector size ({})",
+                        a.size(),
+                        size());
+    }
+};
+
+/// Compute dot product of 2 column-vectors
+///
+/// @tparam T Data type
+/// @param a First column-vector
+/// @param b Second column-vector
+/// @return Dot product
+template <typename T>
+inline T
+dot(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
+{
+    if (a.size() == b.size()) {
+        T dot = 0.;
+        for (Int i = 0; i < a.size(); i++)
+            dot += a(i) * b(i);
+        return dot;
+    }
+    else
+        throw Exception("Size of vector a ({}) must match size of vector b ({})",
+                        a.size(),
+                        b.size());
+}
+
+/// Pointwise multiplication of 2 column-vectors
+///
+/// @tparam T Data type
+/// @param a First column-vector
+/// @param b Second column-vector
+/// @return column-vector with vec[i] = a[i] * b[i]
+template <typename T>
+inline DynDenseVector<T>
+pointwise_mult(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
+{
+    if (a.size() == b.size()) {
+        DynDenseVector<T> res(a.size());
+        for (Int i = 0; i < a.size(); i++)
+            res(i) = a(i) * b(i);
+        return res;
+    }
+    else
+        throw Exception("Size of vector a ({}) must match size of vector b ({})",
+                        a.size(),
+                        b.size());
+}
+
+/// Pointwise division of 2 column-vectors
+///
+/// @tparam T Data type
+/// @param a First column-vector
+/// @param b Second column-vector
+/// @return Column-vector with vec[i] = a[i] / b[i]
+template <typename T>
+inline DynDenseVector<T>
+pointwise_div(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
+{
+    if (a.size() == b.size()) {
+        DynDenseVector<T> res(a.size());
+        for (Int i = 0; i < a.size(); i++)
+            res(i) = a(i) / b(i);
+        return res;
+    }
+    else
+        throw Exception("Size of vector a ({}) must match size of vector b ({})",
+                        a.size(),
+                        b.size());
+}
+
+template <typename T>
+inline DynDenseVector<T>
+operator*(Real alpha, const DynDenseVector<T> & a)
+{
+    DynDenseVector<T> res(a.size());
+    for (Int i = 0; i < a.size(); i++)
+        res(i) = alpha * a(i);
+    return res;
+}
+
+/// Compute cross product from 2 vectors
+///
+/// @param a First vector
+/// @param b Second vector
+/// @return Resulting vector \f$ a x b\f$
+inline DynDenseVector<Real>
+cross_product(const DynDenseVector<Real> & a, const DynDenseVector<Real> & b)
+{
+    if ((a.size() == 3) && (b.size() == 3)) {
+        DynDenseVector<Real> res(3);
+        res(0) = a(1) * b(2) - a(2) * b(1);
+        res(1) = -(a(0) * b(2) - a(2) * b(0));
+        res(2) = a(0) * b(1) - a(1) * b(0);
+        return res;
+    }
+    else
+        throw Exception("Cross-product id defined only for vectors of dimension 3");
 }
 
 } // namespace godzilla
