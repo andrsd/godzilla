@@ -58,6 +58,11 @@ public:
 
     void zero();
 
+    /// Scales all elements of a matrix by a given number.
+    ///
+    /// @param a The scaling value
+    void scale(Scalar a);
+
     Scalar operator()(Int row, Int col) const;
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
