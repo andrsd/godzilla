@@ -1287,4 +1287,20 @@ transpose(const DynDenseMatrix<T> & mat)
     return tr;
 }
 
+template <typename T>
+std::ostream &
+operator<<(std::ostream & os, const DynDenseMatrix<T> & obj)
+{
+    for (Int i = 0; i < obj.get_num_rows(); i++) {
+        os << "(";
+        for (Int j = 0; j < obj.get_num_cols(); j++) {
+            os << obj(i, j);
+            if (j < obj.get_num_cols() - 1)
+                os << ", ";
+        }
+        os << ")" << std::endl;
+    }
+    return os;
+}
+
 } // namespace godzilla

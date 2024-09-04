@@ -673,3 +673,16 @@ TEST(DynDenseVectorTest, resize)
     v.resize(3);
     EXPECT_EQ(v.size(), 3);
 }
+
+TEST(DynDenseVectorTest, out)
+{
+    testing::internal::CaptureStdout();
+
+    DynDenseVector<Real> v(3);
+    v.set_values({ 1, 2, 3 });
+
+    std::cout << v;
+
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, HasSubstr("(1, 2, 3)"));
+}

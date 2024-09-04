@@ -1017,3 +1017,18 @@ TEST(DynDenseMatrixTest, set_col)
     EXPECT_EQ(m(1, 1), 5.);
     EXPECT_EQ(m(2, 1), 4.);
 }
+
+TEST(DynDenseMatrixTest, out)
+{
+    testing::internal::CaptureStdout();
+
+    DynDenseMatrix<Real> m(2, 3);
+    m.set_row(0, { 1, 2, 3 });
+    m.set_row(1, { 6, 5, 4 });
+
+    std::cout << m;
+
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, HasSubstr("(1, 2, 3)"));
+    EXPECT_THAT(out, HasSubstr("(6, 5, 4)"));
+}

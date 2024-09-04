@@ -872,4 +872,18 @@ cross_product(const DynDenseVector<Real> & a, const DynDenseVector<Real> & b)
         throw Exception("Cross-product id defined only for vectors of dimension 3");
 }
 
+template <typename T>
+std::ostream &
+operator<<(std::ostream & os, const DynDenseVector<T> & obj)
+{
+    os << "(";
+    for (Int i = 0; i < obj.size(); i++) {
+        os << obj(i);
+        if (i < obj.size() - 1)
+            os << ", ";
+    }
+    os << ")";
+    return os;
+}
+
 } // namespace godzilla
