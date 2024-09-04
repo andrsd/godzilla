@@ -153,6 +153,12 @@ public:
         return PCTYPE(get_pc());
     }
 
+    /// Tells the iterative solver that the initial guess is nonzero; otherwise KSP assumes the
+    /// initial guess is to be zero (and thus zeros it out before solving).
+    ///
+    /// @param flag `true` indicates the guess is non-zero, `false` indicates the guess is zero
+    void set_initial_guess_nonzero(bool flag);
+
 private:
     /// PETSc object
     KSP ksp;
