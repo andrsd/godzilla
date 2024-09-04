@@ -149,6 +149,13 @@ public:
 
     static Vector create_seq(MPI_Comm comm, Int n);
 
+    /// Creates a parallel vector.
+    ///
+    /// @param comm the MPI communicator to use
+    /// @param n Local vector length (or PETSC_DECIDE to have calculated if N is given)
+    /// @param N global vector length (or PETSC_DETERMINE to have calculated if n is given)
+    static Vector create_mpi(MPI_Comm comm, Int n, Int N);
+
     static void pointwise_min(const Vector & w, const Vector & x, const Vector & y);
     static void pointwise_max(const Vector & w, const Vector & x, const Vector & y);
     static void pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
