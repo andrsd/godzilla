@@ -159,6 +159,9 @@ public:
     /// @param flag `true` indicates the guess is non-zero, `false` indicates the guess is zero
     void set_initial_guess_nonzero(bool flag);
 
+    /// Sets up the internal data structures for the later use of an iterative solver.
+    void set_up();
+
 private:
     /// PETSc object
     KSP ksp;

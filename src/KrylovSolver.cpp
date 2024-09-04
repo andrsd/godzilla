@@ -137,4 +137,11 @@ KrylovSolver::set_initial_guess_nonzero(bool flag)
     PETSC_CHECK(KSPSetInitialGuessNonzero(this->ksp, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
+void
+KrylovSolver::set_up()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(KSPSetUp(this->ksp));
+}
+
 } // namespace godzilla
