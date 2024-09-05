@@ -130,4 +130,11 @@ KrylovSolver::operator KSP() const
     return this->ksp;
 }
 
+void
+KrylovSolver::set_initial_guess_nonzero(bool flag)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(KSPSetInitialGuessNonzero(this->ksp, flag ? PETSC_TRUE : PETSC_FALSE));
+}
+
 } // namespace godzilla
