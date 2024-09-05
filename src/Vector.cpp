@@ -6,6 +6,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include <cassert>
+#include <petscvec.h>
 
 namespace godzilla {
 
@@ -440,6 +441,22 @@ Vector::set_option(VecOption op, bool flag)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(VecSetOption(this->vec, op, flag ? PETSC_TRUE : PETSC_FALSE));
+}
+
+Vector
+Vector::get_sub_vector(const IndexSet & is)
+{
+    CALL_STACK_MSG();
+    Vec y;
+    PETSC_CHECK(VecGetSubVector(this->vec, is, &y));
+    return Vector(y);
+}
+
+void
+Vector::restore_sub_vector(const IndexSet & is, Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecRestoreSubVector(this->vec, is, &y.vec));
 }
 
 } // namespace godzilla

@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "godzilla/IndexSet.h"
 #include "godzilla/Vector.h"
 #include "godzilla/PerfLog.h"
 #include "ExceptionTestMacros.h"
@@ -527,4 +528,16 @@ TEST(VectorTest, reciprocal)
     EXPECT_DOUBLE_EQ(v(0), 1. / 2.);
     EXPECT_DOUBLE_EQ(v(1), 1. / 3.);
     EXPECT_DOUBLE_EQ(v(2), 1. / 4.);
+}
+
+TEST(VectorTest, sub_vector)
+{
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 5);
+    v.set_values({ 0, 1, 2, 3, 4 }, { 2, 4, 6, 8, 10 });
+    auto is = IndexSet::create_general(MPI_COMM_WORLD, { 0, 1, 3 });
+    auto y = v.get_sub_vector(is);
+    EXPECT_DOUBLE_EQ(y(0), 2.);
+    EXPECT_DOUBLE_EQ(y(1), 4.);
+    EXPECT_DOUBLE_EQ(y(2), 8.);
+    v.restore_sub_vector(is, y);
 }
