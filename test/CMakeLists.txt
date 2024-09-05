@@ -30,6 +30,7 @@ target_link_libraries(
         yaml-cpp::yaml-cpp
         godzilla
         PETSc::petsc
+        mpicpp-lite::mpicpp-lite
         ${CMAKE_DL_LIBS}
         gtest_main
         gmock_main
