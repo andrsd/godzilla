@@ -426,4 +426,11 @@ Vector::pointwise_divide(const Vector & w, const Vector & x, const Vector & y)
     PETSC_CHECK(VecPointwiseDivide(w, x, y));
 }
 
+void
+Vector::set_option(VecOption op, bool flag)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecSetOption(this->vec, op, flag ? PETSC_TRUE : PETSC_FALSE));
+}
+
 } // namespace godzilla

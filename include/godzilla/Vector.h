@@ -131,6 +131,12 @@ public:
                           const std::vector<Scalar> & y,
                           InsertMode mode = INSERT_VALUES);
 
+    /// Sets an option for controlling a vector’s behavior.
+    ///
+    /// @param op The option
+    /// @param flag Turn the option on or off
+    void set_option(VecOption op, bool flag);
+
     [[nodiscard]] Scalar sum() const;
 
     void zero();
