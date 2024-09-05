@@ -121,6 +121,17 @@ public:
             KSPMonitorSet(this->ksp, invoke_monitor_delegate, &this->monitor_method, nullptr));
     }
 
+    template <class T>
+    void
+    set_convergence_test(T * instance, ConvergedReason (T::*method)(Int, Real))
+    {
+        this->convergence_test_method.bind(instance, method);
+        PETSC_CHECK(KSPSetConvergenceTest(this->ksp,
+                                          invoke_convergence_test_delegate,
+                                          &this->convergence_test_method,
+                                          nullptr));
+    }
+
     /// Solve a linear system
     ///
     /// @param b The right-hand-side vector
@@ -171,11 +182,18 @@ private:
     Delegate<void(Vector & b)> compute_rhs_method;
     /// Method for computing operators
     Delegate<void(Matrix & A, Matrix & B)> compute_operators_method;
+    /// Method for determining covergence
+    Delegate<ConvergedReason(Int it, Real rnorm)> convergence_test_method;
 
 public:
     static ErrorCode invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * ctx);
     static ErrorCode invoke_compute_rhs_delegate(KSP, Vec b, void * ctx);
     static ErrorCode invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx);
+    static ErrorCode invoke_convergence_test_delegate(KSP,
+                                                      Int it,
+                                                      Real rnorm,
+                                                      KSPConvergedReason * reason,
+                                                      void * ctx);
 };
 
 } // namespace godzilla
