@@ -38,6 +38,19 @@ KrylovSolver::invoke_monitor_delegate(KSP, Int it, Real rnorm, void * ctx)
     return 0;
 }
 
+ErrorCode
+KrylovSolver::invoke_convergence_test_delegate(KSP,
+                                               Int it,
+                                               Real rnorm,
+                                               KSPConvergedReason * reason,
+                                               void * ctx)
+{
+    auto * method = static_cast<Delegate<ConvergedReason(Int it, Real rnorm)> *>(ctx);
+    auto conv_reason = method->invoke(it, rnorm);
+    *reason = (KSPConvergedReason) conv_reason;
+    return 0;
+}
+
 KrylovSolver::KrylovSolver() : ksp(nullptr) {}
 
 KrylovSolver::KrylovSolver(KSP ksp) : ksp(ksp) {}
