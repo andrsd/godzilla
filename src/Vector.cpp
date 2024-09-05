@@ -398,6 +398,15 @@ Vector::create_seq(MPI_Comm comm, Int n)
     return v;
 }
 
+Vector
+Vector::create_mpi(MPI_Comm comm, Int n, Int N)
+{
+    CALL_STACK_MSG();
+    Vector v(comm);
+    PETSC_CHECK(VecCreateMPI(comm, n, N, &v.vec));
+    return v;
+}
+
 void
 Vector::pointwise_min(const Vector & w, const Vector & x, const Vector & y)
 {
