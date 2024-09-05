@@ -174,6 +174,11 @@ public:
     /// Sets up the internal data structures for the later use of an iterative solver.
     void set_up();
 
+    /// Builds the KSP data structure for a particular KSPType
+    ///
+    /// @param type A krylov method
+    void set_type(const char * type);
+
 private:
     /// PETSc object
     KSP ksp;

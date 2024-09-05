@@ -157,4 +157,11 @@ KrylovSolver::set_up()
     PETSC_CHECK(KSPSetUp(this->ksp));
 }
 
+void
+KrylovSolver::set_type(const char * type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(KSPSetType(this->ksp, type));
+}
+
 } // namespace godzilla
