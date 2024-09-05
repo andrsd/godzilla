@@ -167,11 +167,11 @@ IndexSet::to_std_vector()
 }
 
 IndexSet
-IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx)
+IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx, CopyMode copy_mode)
 {
     CALL_STACK_MSG();
     IS is;
-    PETSC_CHECK(ISCreateGeneral(comm, idx.size(), idx.data(), PETSC_COPY_VALUES, &is));
+    PETSC_CHECK(ISCreateGeneral(comm, idx.size(), idx.data(), (PetscCopyMode) copy_mode, &is));
     return IndexSet(is);
 }
 

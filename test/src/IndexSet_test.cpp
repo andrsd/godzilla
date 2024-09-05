@@ -18,7 +18,8 @@ TEST(IndexSetTest, create)
 TEST(IndexSetTest, data)
 {
     TestApp app;
-    IndexSet is = IndexSet::create_general(app.get_comm(), { 3, 5, 1, 8 });
+    std::vector<Int> idxs = { 3, 5, 1, 8 };
+    IndexSet is = IndexSet::create_general(app.get_comm(), idxs, USE_POINTER);
     is.get_indices();
     auto data = is.data();
     EXPECT_THAT(data[0], 3);
