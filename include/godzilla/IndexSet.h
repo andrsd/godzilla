@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Enums.h"
 #include "godzilla/Types.h"
 #include "petscis.h"
 #include "petscviewer.h"
@@ -119,7 +120,7 @@ private:
     const Int * indices;
 
 public:
-    static IndexSet create_general(MPI_Comm comm, const std::vector<Int> & idx);
+    static IndexSet create_general(MPI_Comm comm, const std::vector<Int> & idx, CopyMode copy_mode = COPY_VALUES);
     static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);
     static IndexSet intersect(const IndexSet & is1, const IndexSet & is2);
 };
