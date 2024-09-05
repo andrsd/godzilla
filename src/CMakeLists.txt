@@ -41,6 +41,7 @@ target_link_libraries(
         muParser
         exodusIIcpp::exodusIIcpp
         yaml-cpp::yaml-cpp
+        mpicpp-lite::mpicpp-lite
 )
 if (GODZILLA_WITH_MPI)
     target_include_directories(${PROJECT_NAME} PRIVATE ${MPI_C_INCLUDE_DIRS})
@@ -87,12 +88,6 @@ install(
     DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/cxxopts
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
     FILES_MATCHING PATTERN "*.hpp"
-)
-
-install(
-    DIRECTORY ${CMAKE_SOURCE_DIR}/contrib/mpicpp-lite
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
-    FILES_MATCHING PATTERN "*.h"
 )
 
 install(

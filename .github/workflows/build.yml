@@ -39,6 +39,7 @@ jobs:
             cmake \
             make \
             mpich-mpicxx \
+            mpicpp-lite==1.3 \
             petsc==${{ matrix.petsc }} \
             fmt==9.1.0 \
             yaml-cpp=0.8.0 \
