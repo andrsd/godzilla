@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/IndexSet.h"
 #include "godzilla/Types.h"
 #include "mpi.h"
 #include "petscvec.h"
@@ -140,6 +141,17 @@ public:
     [[nodiscard]] Scalar sum() const;
 
     void zero();
+
+    /// Gets a vector representing part of this vector
+    ///
+    /// @param is Index set representing portion of X to extract
+    Vector get_sub_vector(const IndexSet & is);
+
+    /// Restores a subvector extracted by `get_sub_vector`
+    ///
+    /// @param is Index set representing the subset of X
+    /// @param y Subvector being restored
+    void restore_sub_vector(const IndexSet & is, Vector & y);
 
     Scalar operator()(Int idx) const;
 
