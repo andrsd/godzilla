@@ -165,6 +165,12 @@ public:
         return PCTYPE(get_pc());
     }
 
+    /// Sets the preconditioning side
+    ///
+    /// @param side The preconditioning side, where side is one of `PC_LEFT`, `PC_RIGHT`,
+    ///        `PC_SYMMETRIC`
+    void set_pc_side(PCSide side);
+
     /// Tells the iterative solver that the initial guess is nonzero; otherwise KSP assumes the
     /// initial guess is to be zero (and thus zeros it out before solving).
     ///
