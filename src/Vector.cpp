@@ -155,6 +155,13 @@ Vector::copy(Vector & y) const
 }
 
 void
+Vector::assign(const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecCopy(y.vec, this->vec));
+}
+
+void
 Vector::normalize()
 {
     CALL_STACK_MSG();
