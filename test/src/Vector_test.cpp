@@ -116,6 +116,21 @@ TEST(VectorTest, set_values_local)
     v.destroy();
 }
 
+TEST(VectorTest, assign)
+{
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    v.set_value(0, 1.);
+    v.set_value(1, 3.);
+    v.set_value(2, 7.);
+    Vector dup = v.duplicate();
+    dup.assign(v);
+    EXPECT_DOUBLE_EQ(dup(0), 1.);
+    EXPECT_DOUBLE_EQ(dup(1), 3.);
+    EXPECT_DOUBLE_EQ(dup(2), 7.);
+    dup.destroy();
+    v.destroy();
+}
+
 TEST(VectorTest, duplicate)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);

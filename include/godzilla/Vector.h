@@ -55,6 +55,11 @@ public:
     /// @param y Vector to copy our values into
     void copy(Vector & y) const;
 
+    /// Assign values of y into this vector
+    ///
+    /// @param y Vector with values to be assined into this vector
+    void assign(const Vector & y);
+
     void normalize();
     void shift(Scalar shift);
     [[nodiscard]] Scalar min() const;
