@@ -116,7 +116,7 @@ TestMesh1D::parameters()
 
 } // namespace
 
-TEST(FEBoundaryTest, nodal_normals_1d)
+TEST(FEBoundaryTest, normals_1d)
 {
     TestApp app;
 

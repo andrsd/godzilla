@@ -41,7 +41,8 @@ public:
                  const IndexSet & facets) :
         mesh(mesh),
         grad_phi(grad_phi),
-        facets(facets)
+        facets(facets),
+        area(length)
     {
         CALL_STACK_MSG();
         this->facets.sort();
@@ -50,7 +51,8 @@ public:
     BoundaryInfo(UnstructuredMesh * mesh, const IndexSet & facets) :
         mesh(mesh),
         grad_phi(nullptr),
-        facets(facets)
+        facets(facets),
+        area(length)
     {
         CALL_STACK_MSG();
         this->facets.sort();
@@ -201,6 +203,8 @@ public:
     IndexSet facets;
     /// Boundary face length
     Array1D<Real> length;
+    /// Boundary face area
+    Array1D<Real> & area;
     /// Boundary face unit outward normal
     Array1D<DenseVector<Real, DIM>> normal;
     /// IndexSet with boundary vertices

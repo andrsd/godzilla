@@ -83,7 +83,7 @@ common_elements_by_node(const UnstructuredMesh & mesh)
 
 template <ElementType ELEM_TYPE, Int DIM>
 inline DenseVector<Real, DIM>
-normal(Real volume, Real edge_len, const DenseVector<Real, DIM> & grad)
+normal(Real volume, Real face_volume, const DenseVector<Real, DIM> & grad)
 {
     CALL_STACK_MSG();
     throw NotImplementedException(
@@ -94,16 +94,24 @@ normal(Real volume, Real edge_len, const DenseVector<Real, DIM> & grad)
 
 template <>
 inline DenseVector<Real, 1>
-normal<EDGE2, 1>(Real volume, Real edge_len, const DenseVector<Real, 1> & grad)
+normal<EDGE2, 1>(Real volume, Real face_volume, const DenseVector<Real, 1> & grad)
 {
     return -volume * grad;
 }
 
 template <>
 inline DenseVector<Real, 2>
-normal<TRI3, 2>(Real volume, Real edge_len, const DenseVector<Real, 2> & grad)
+normal<TRI3, 2>(Real volume, Real face_volume, const DenseVector<Real, 2> & grad)
 {
-    auto c = -2. * volume / edge_len;
+    auto c = -2. * volume / face_volume;
+    return c * grad;
+}
+
+template <>
+inline DenseVector<Real, 3>
+normal<TET4, 3>(Real volume, Real face_volume, const DenseVector<Real, 3> & grad)
+{
+    auto c = -3. * volume / face_volume;
     return c * grad;
 }
 
