@@ -48,4 +48,18 @@ public:
     }
 };
 
+/// Exception for "not implemented"
+class NotImplementedException : public Exception {
+public:
+    template <typename... T>
+    NotImplementedException() : Exception("Not implemented")
+    {
+    }
+
+    template <typename... T>
+    NotImplementedException(fmt::format_string<T...> fmt, T... args) : Exception(fmt, args...)
+    {
+    }
+};
+
 } // namespace godzilla

@@ -86,9 +86,10 @@ inline DenseVector<Real, DIM>
 normal(Real volume, Real edge_len, const DenseVector<Real, DIM> & grad)
 {
     CALL_STACK_MSG();
-    error("Computation of a normal for element '{}' in {} dimensions is not implemented.",
-          get_element_type_str(ELEM_TYPE),
-          DIM);
+    throw NotImplementedException(
+        "Computation of a normal for element '{}' in {} dimensions is not implemented",
+        get_element_type_str(ELEM_TYPE),
+        DIM);
 }
 
 template <>
@@ -113,9 +114,10 @@ inline Real
 element_length(const DenseMatrix<Real, DIM, N_ELEM_NODES> & grad_phi)
 {
     CALL_STACK_MSG();
-    error("Computation of a element length for '{}' in {} dimensions is not implemented.",
-          get_element_type_str(ELEM_TYPE),
-          DIM);
+    throw NotImplementedException(
+        "Computation of a element length for '{}' in {} dimensions is not implemented",
+        get_element_type_str(ELEM_TYPE),
+        DIM);
 }
 
 template <>
@@ -156,7 +158,7 @@ template <CoordinateType COORD_TYPE, Int DIM>
 inline Array1D<Real>
 calc_nodal_radius(Array1D<DenseVector<Real, DIM>> & coords)
 {
-    error("Radius computation is not implemented in {} dimensions.", DIM);
+    throw NotImplementedException("Radius computation is not implemented in {} dimensions", DIM);
 }
 
 template <>

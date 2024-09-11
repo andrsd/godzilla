@@ -410,8 +410,8 @@ TEST(DenseMatrixTest, det4)
     m.set_row(2, { 0, 1, 0, 2 });
     m.set_row(3, { 1, -2, -3, 2 });
     //    EXPECT_EQ(m.det(), 21.);
-    EXPECT_DEATH({ auto d = determinant(m); },
-                 "Determinant is not implemented for 4x4 matrices, yet.");
+    EXPECT_THROW_MSG({ auto d = determinant(m); },
+                     "Determinant is not implemented for 4x4 matrices, yet");
 }
 
 TEST(DenseMatrixTest, inv1)
@@ -472,7 +472,7 @@ TEST(DenseMatrixDeathTest, inv3_singular)
 TEST(DenseMatrixDeathTest, inv4)
 {
     auto m = DenseMatrix<Real, 4>();
-    EXPECT_DEATH(inverse(m), "Inverse is not implemented for 4x4 matrices, yet.");
+    EXPECT_THROW_MSG(inverse(m), "Inverse is not implemented for 4x4 matrices, yet");
 }
 
 TEST(DenseMatrixTest, transpose3)

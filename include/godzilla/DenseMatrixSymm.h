@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include <cassert>
 #include <vector>
@@ -375,7 +376,7 @@ template <typename T, Int N>
 inline T
 determinant(const DenseMatrixSymm<T, N> & mat)
 {
-    error("Determinant is not implemented for {}x{} matrices, yet.", N, N);
+    throw NotImplementedException("Determinant is not implemented for {}x{} matrices, yet", N, N);
 }
 
 template <typename T>
@@ -398,12 +399,14 @@ inline T
 determinant(const DenseMatrixSymm<T, 3> & mat)
 {
     const T * values = mat.data();
+    // clang-format off
     return values[0] * values[2] * values[5] +
            values[1] * values[4] * values[3] +
            values[1] * values[4] * values[3] -
            (values[3] * values[2] * values[3] +
             values[0] * values[4] * values[4] +
             values[1] * values[1] * values[5]);
+    // clang-format on
 }
 
 //

@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/FEVolumes.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -136,6 +137,6 @@ TEST(FEVolumesTest, face_area_tet4)
     coords.set_row(0, { 0., 0., 0. });
     coords.set_row(1, { 1., 0., 0. });
     coords.set_row(2, { 0., 1., 0. });
-    EXPECT_DEATH(fe::face_area<TET4>(coords),
-                 "Face area calculation for TET4 in 3 dimensions is not implemented.");
+    EXPECT_THROW_MSG(fe::face_area<TET4>(coords),
+                     "Face area calculation for TET4 in 3 dimensions is not implemented");
 }
