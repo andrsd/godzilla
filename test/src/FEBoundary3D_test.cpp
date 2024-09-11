@@ -144,6 +144,16 @@ TEST(FEBoundaryTest, normals_3d)
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
 
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), -1);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(2), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(0), -1);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(2), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(0), -1);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(2), 0);
+
         EXPECT_DOUBLE_EQ(bnd.length(0), 0.5);
         bnd.destroy();
     }
@@ -155,6 +165,16 @@ TEST(FEBoundaryTest, normals_3d)
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
+
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(1), -1);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(2), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(1), -1);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(2), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(1), -1);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(2), 0);
 
         EXPECT_DOUBLE_EQ(bnd.area(0), 0.5);
         bnd.destroy();
@@ -168,6 +188,16 @@ TEST(FEBoundaryTest, normals_3d)
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), -1);
 
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(2), -1);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(2), -1);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(2), -1);
+
         EXPECT_DOUBLE_EQ(bnd.area(0), 0.5);
         bnd.destroy();
     }
@@ -179,6 +209,16 @@ TEST(FEBoundaryTest, normals_3d)
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0.57735026918962584);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0.57735026918962584);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0.57735026918962584);
+
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(0), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(1), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(0)(2), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(0), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(1), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(1)(2), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(0), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(1), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.nodal_normal(2)(2), 0.57735026918962584);
 
         EXPECT_DOUBLE_EQ(bnd.area(0), 0.5 * std::sqrt(3));
         bnd.destroy();

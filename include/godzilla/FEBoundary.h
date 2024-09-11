@@ -241,6 +241,73 @@ BoundaryInfo<TRI3, 2, 3>::correct_nodal_normals()
     }
 }
 
+template <>
+inline void
+BoundaryInfo<TET4, 3, 4>::correct_nodal_normals()
+{
+    CALL_STACK_MSG();
+    // Mapping from vertex number to local vertex number (0..num_of_vertices)
+    std::map<Int, Int> idx_of_vertex;
+    for (auto & i : make_range(this->vertices.get_local_size()))
+        idx_of_vertex.insert(std::make_pair(this->vertices[i], i));
+    // Mapping from facet number to local facet number (0..num_of_facets)
+    std::map<Int, Int> idx_of_face;
+    for (auto & i : make_range(this->facets.get_local_size()))
+        idx_of_face.insert(std::make_pair(this->facets[i], i));
+
+    // Number of faces connected to an edge
+    // If edge has only 1 connected face it is an boundary edge
+    std::map<Int, Int> edge_bnd;
+    for (auto & i : make_range(this->facets.get_local_size())) {
+        auto facet = this->facets[i];
+        auto face_edges = this->mesh->get_cone(facet);
+        for (auto edge : face_edges)
+            edge_bnd[edge]++;
+    }
+    // Number of boundary edges per vertex. Vertices with 2 boundary edges are boundary vertices
+    // and we have to correct normals at those locations
+    std::map<Int, Int> vertex_bnd_edges;
+    for (auto & i : make_range(this->facets.get_local_size())) {
+        auto facet = this->facets[i];
+        auto face_edges = this->mesh->get_cone(facet);
+        for (auto edge : face_edges) {
+            if (edge_bnd[edge] == 1) {
+                auto vtxs = this->mesh->get_cone(edge);
+                for (auto & v : vtxs)
+                    vertex_bnd_edges[v]++;
+            }
+        }
+    }
+    // Find facets connected to a boundary vertices
+    std::map<Int, std::set<Int>> vertex_facets;
+    for (auto & i : make_range(this->facets.get_local_size())) {
+        auto facet = this->facets[i];
+        std::set<Int> face_vtxs;
+        auto face_edges = this->mesh->get_cone(facet);
+        for (auto edge : face_edges) {
+            auto vtxs = this->mesh->get_cone(edge);
+            for (auto & v : vtxs)
+                face_vtxs.insert(v);
+        }
+        for (auto & v : face_vtxs)
+            if (vertex_bnd_edges[v] == 2)
+                vertex_facets[v].insert(facet);
+    }
+    // A normal at a boundary vertex will be computed as an average of face normals from connected
+    // facets
+    for (auto & [vtx, connected_facets] : vertex_facets) {
+        DenseVector<Real, 3> normal({ 0, 0, 0 });
+        for (auto & face : connected_facets) {
+            Int face_normal_idx = idx_of_face[face];
+            normal += this->normal(face_normal_idx);
+        }
+        normal.scale(1. / connected_facets.size());
+        normal.normalize();
+        auto vtx_idx = idx_of_vertex[vtx];
+        this->nodal_normal(vtx_idx) = normal;
+    }
+}
+
 } // namespace fe
 
 } // namespace godzilla
