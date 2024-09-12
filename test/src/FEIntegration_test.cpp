@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/FEIntegration.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -25,10 +26,10 @@ TEST(FEIntegrationTest, tri3)
 
 TEST(FEIntegrationTest, quad4)
 {
-    EXPECT_DEATH((fe::integration_coeff<QUAD4, 1>()),
-                 "Integration coefficient for 'QUAD4' is not implemented");
-    EXPECT_DEATH((fe::integration_coeff<QUAD4, 1, 1>()),
-                 "Integration coefficient for 'QUAD4' is not implemented");
+    EXPECT_THROW_MSG((fe::integration_coeff<QUAD4, 1>()),
+                     "Integration coefficient for 'QUAD4' is not implemented");
+    EXPECT_THROW_MSG((fe::integration_coeff<QUAD4, 1, 1>()),
+                     "Integration coefficient for 'QUAD4' is not implemented");
 }
 
 TEST(FEIntegrationTest, tet4)
@@ -43,11 +44,11 @@ TEST(FEIntegrationTest, tet4)
 
 TEST(FEIntegrationTest, hex8)
 {
-    EXPECT_DEATH((fe::integration_coeff<HEX8, 1>()),
-                 "Integration coefficient for 'HEX8' is not implemented");
-    EXPECT_DEATH((fe::integration_coeff<HEX8, 1, 1>()),
-                 "Integration coefficient for 'HEX8' is not implemented");
+    EXPECT_THROW_MSG((fe::integration_coeff<HEX8, 1>()),
+                     "Integration coefficient for 'HEX8' is not implemented");
+    EXPECT_THROW_MSG((fe::integration_coeff<HEX8, 1, 1>()),
+                     "Integration coefficient for 'HEX8' is not implemented");
 
-    EXPECT_DEATH((fe::surface_integration_coeff<HEX8, 1, 1>()),
-                 "Surface integration coefficient for 'HEX8' is not implemented");
+    EXPECT_THROW_MSG((fe::surface_integration_coeff<HEX8, 1, 1>()),
+                     "Surface integration coefficient for 'HEX8' is not implemented");
 }

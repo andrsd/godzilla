@@ -156,7 +156,7 @@ FVProblemInterface::get_field_order(Int fid) const
     if (fid == 0)
         return 0;
     else
-        error("Multiple-field problems are not implemented");
+        throw NotImplementedException("Multiple-field problems are not implemented");
 }
 
 std::string
@@ -169,7 +169,7 @@ FVProblemInterface::get_field_component_name(Int fid, Int component) const
         return { name };
     }
     else
-        error("Multiple-field problems are not implemented");
+        throw NotImplementedException("Multiple-field problems are not implemented");
 }
 
 void

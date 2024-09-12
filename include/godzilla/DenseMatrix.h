@@ -587,7 +587,7 @@ template <typename T, Int N>
 inline T
 determinant(const DenseMatrix<T, N, N> & mat)
 {
-    error("Determinant is not implemented for {}x{} matrices, yet.", N, N);
+    throw NotImplementedException("Determinant is not implemented for {}x{} matrices, yet", N, N);
 }
 
 template <typename T>
@@ -625,7 +625,7 @@ template <typename T, Int N>
 inline DenseMatrix<T, N>
 inverse(const DenseMatrix<T, N> & mat)
 {
-    error("Inverse is not implemented for {}x{} matrices, yet.", N, N);
+    throw NotImplementedException("Inverse is not implemented for {}x{} matrices, yet", N, N);
 }
 
 template <>

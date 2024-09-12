@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/FEMatrices.h"
+#include "ExceptionTestMacros.h"
 
 using namespace godzilla;
 
@@ -28,7 +29,7 @@ TEST(FEMatricesTest, mass_tri3)
 
 TEST(FEMatricesTest, mass_quad4)
 {
-    EXPECT_DEATH(fe::matrix::mass<QUAD4>(), "Mass matrix in not implemented for QUAD4");
+    EXPECT_THROW_MSG((fe::matrix::mass<QUAD4>()), "Mass matrix is not implemented for QUAD4");
 }
 
 TEST(FEMatricesTest, mass_tet4)
@@ -54,7 +55,7 @@ TEST(FEMatricesTest, mass_tet4)
 
 TEST(FEMatricesTest, mass_hex8)
 {
-    EXPECT_DEATH(fe::matrix::mass<HEX8>(), "Mass matrix in not implemented for HEX8");
+    EXPECT_THROW_MSG(fe::matrix::mass<HEX8>(), "Mass matrix is not implemented for HEX8");
 }
 
 TEST(FEMatricesTest, mass_rz_edge2)
@@ -176,7 +177,8 @@ TEST(FEMatricesTest, stiffness_tri3)
 
 TEST(FEMatricesTest, stiffness_quad4)
 {
-    EXPECT_DEATH(fe::matrix::stiffness<QUAD4>(), "Stiffness matrix in not implemented for QUAD4");
+    EXPECT_THROW_MSG(fe::matrix::stiffness<QUAD4>(),
+                     "Stiffness matrix is not implemented for QUAD4");
 }
 
 TEST(FEMatricesTest, stiffness_tet4)
@@ -205,7 +207,7 @@ TEST(FEMatricesTest, stiffness_tet4)
 
 TEST(FEMatricesTest, stiffness_hex8)
 {
-    EXPECT_DEATH(fe::matrix::stiffness<HEX8>(), "Stiffness matrix in not implemented for HEX8");
+    EXPECT_THROW_MSG(fe::matrix::stiffness<HEX8>(), "Stiffness matrix is not implemented for HEX8");
 }
 
 TEST(FEMatricesTest, mass_surface_edge2)

@@ -5,6 +5,7 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 
 namespace godzilla {
 
@@ -21,7 +22,8 @@ template <ElementType ELEM_TYPE, Int N1>
 inline Real
 integration_coeff()
 {
-    error("Integration coefficient for '{}' is not implemented", get_element_type_str(ELEM_TYPE));
+    throw NotImplementedException("Integration coefficient for '{}' is not implemented",
+                                  get_element_type_str(ELEM_TYPE));
 }
 
 template <>
@@ -71,7 +73,8 @@ template <ElementType ELEM_TYPE, Int N1, Int N2>
 inline Real
 integration_coeff()
 {
-    error("Integration coefficient for '{}' is not implemented", get_element_type_str(ELEM_TYPE));
+    throw NotImplementedException("Integration coefficient for '{}' is not implemented",
+                                  get_element_type_str(ELEM_TYPE));
 }
 
 template <>
@@ -170,8 +173,8 @@ template <ElementType ELEM_TYPE, Int N1, Int N2>
 inline Real
 surface_integration_coeff()
 {
-    error("Surface integration coefficient for '{}' is not implemented",
-          get_element_type_str(ELEM_TYPE));
+    throw NotImplementedException("Surface integration coefficient for '{}' is not implemented",
+                                  get_element_type_str(ELEM_TYPE));
 }
 
 template <>

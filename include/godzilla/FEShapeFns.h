@@ -27,8 +27,9 @@ template <ElementType ELEM_TYPE, int D, Int N = get_num_element_nodes(ELEM_TYPE)
 inline DenseMatrix<Real, D, N>
 grad_shape(const DenseMatrix<Real, N, D> & coords, Real volume)
 {
-    error("Calculation of shape function gradients is not implemented for element '{}' yet.",
-          get_element_type_str(ELEM_TYPE));
+    throw NotImplementedException(
+        "Calculation of shape function gradients is not implemented for element '{}' yet",
+        get_element_type_str(ELEM_TYPE));
 }
 
 /// Compute gradients of shape functions of EDGE2 in 1-D

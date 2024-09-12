@@ -123,7 +123,7 @@ DGProblemInterface::get_field_order(Int fid) const
     if (fid == 0)
         return 0;
     else
-        error("Multiple-field problems are not implemented");
+        throw NotImplementedException("Multiple-field problems are not implemented");
 }
 
 std::string
