@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: "${{ matrix.os }}, py-${{ matrix.python-version }}, petsc-${{ matrix.petsc }}"
+    name: "${{ matrix.os }}, ${{ matrix.build }}, py-${{ matrix.python-version }}, petsc-${{ matrix.petsc }}"
     defaults:
       run:
         shell: bash -el {0}
@@ -21,6 +21,11 @@ jobs:
           - os: ubuntu-22.04
             python-version: "3.9"
             petsc: 3.20.6
+            build: Debug
+          - os: ubuntu-22.04
+            python-version: "3.9"
+            petsc: 3.20.6
+            build: Release
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up miniconda
@@ -49,7 +54,7 @@ jobs:
       - name: Configure
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
-            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build }} \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
             -DGODZILLA_CODE_COVERAGE=YES
@@ -66,7 +71,7 @@ jobs:
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ matrix.os }}-petsc-${{ matrix.petsc }}
+          name: coverage-${{ matrix.os }}-${{ matrix.build }}-petsc-${{ matrix.petsc }}
           path: ${{ github.workspace }}/build/coverage.info
 
   upload-to-codecov:

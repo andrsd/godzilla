@@ -802,28 +802,38 @@ public:
 
     /// Obtain a column from the matrix
     ///
-    /// @param idx Index of the column
+    /// @param col Index of the column
     /// @return Column as a DenseVector
     DynDenseMatrix<T>
-    column(Int idx) const
+    column(Int col) const
     {
-        DynDenseMatrix<T> col(this->rows, 1);
+        DynDenseMatrix<T> res(this->rows, 1);
+#ifdef NDEBUG
+        for (Int idx = col, i = 0; i < this->rows; i++, idx += this->cols)
+            res.data(i) = data(idx);
+#else
         for (Int i = 0; i < this->rows; i++)
-            col(i, 0) = get(i, idx);
-        return col;
+            res(i, 0) = get(i, col);
+#endif
+        return res;
     }
 
     /// Obtain a column from the matrix
     ///
-    /// @param idx Index of the column
+    /// @param row Index of the column
     /// @return Column as a DenseVector
     DynDenseMatrix<T>
-    row(Int idx) const
+    row(Int row) const
     {
-        DynDenseMatrix<T> row(1, this->cols);
+        DynDenseMatrix<T> res(1, this->cols);
+#ifdef NDEBUG
+        for (Int idx = row * this->cols, i = 0; i < this->cols; i++, idx++)
+            res.data(i) = data(idx);
+#else
         for (Int j = 0; j < this->cols; j++)
-            row(0, j) = get(idx, j);
-        return row;
+            res(0, j) = get(row, j);
+#endif
+        return res;
     }
 
     /// Resize the matrix
@@ -885,8 +895,13 @@ public:
     set_row(Int row, std::initializer_list<T> vals)
     {
         if (vals.size() == this->cols) {
+#ifdef NDEBUG
+            for (Int idx = row * this->cols, i = 0; i < this->cols; i++, idx++)
+                data(idx) = std::data(vals)[i];
+#else
             for (Int i = 0; i < this->cols; i++)
                 set(row, i) = std::data(vals)[i];
+#endif
         }
         else
             throw Exception("Number of values ({}) must match the number of columns ({})",
@@ -903,8 +918,13 @@ public:
     set_row(Int row, const DynDenseVector<T> & vals)
     {
         if (vals.size() == this->cols) {
+#ifdef NDEBUG
+            for (Int idx = row * this->cols, i = 0; i < this->cols; i++, idx++)
+                data(idx) = vals(i);
+#else
             for (Int i = 0; i < this->cols; i++)
                 set(row, i) = vals(i);
+#endif
         }
         else
             throw Exception("Number of values ({}) must match the number of rows ({})",
@@ -915,14 +935,19 @@ public:
     void
     set_row(Int row, const DynDenseMatrix<T> & vals)
     {
-        if (vals->get_num_rows() == 1) {
-            if (vals->size() == this->cols) {
+        if (vals.get_num_rows() == 1) {
+            if (vals.get_num_cols() == this->cols) {
+#ifdef NDEBUG
+                for (Int idx = row * this->cols, i = 0; i < this->cols; i++, idx++)
+                    data(idx) = vals.data(i);
+#else
                 for (Int i = 0; i < this->cols; i++)
                     set(row, i) = vals(0, i);
+#endif
             }
             else
                 throw Exception("Number of values ({}) must match the number of columns ({})",
-                                vals->get_num_cols(),
+                                vals.get_num_cols(),
                                 this->cols);
         }
         else
@@ -933,8 +958,13 @@ public:
     set_col(Int col, std::initializer_list<T> vals)
     {
         if (vals.size() == this->rows) {
+#ifdef NDEBUG
+            for (Int idx = col, i = 0; i < this->rows; i++, idx += this->cols)
+                data(idx) = std::data(vals)[i];
+#else
             for (Int i = 0; i < this->rows; i++)
                 set(i, col) = std::data(vals)[i];
+#endif
         }
         else
             throw Exception("Number of values ({}) must match the number of rows ({})",
@@ -946,8 +976,13 @@ public:
     set_col(Int col, const std::vector<T> & vals)
     {
         if (vals.size() == this->rows) {
+#ifdef NDEBUG
+            for (Int idx = col, i = 0; i < this->rows; i++, idx += this->cols)
+                data(idx) = vals[i];
+#else
             for (Int i = 0; i < this->rows; i++)
                 set(i, col) = vals[i];
+#endif
         }
         else
             throw Exception("Number of values ({}) must match the number of rows ({})",
@@ -978,9 +1013,15 @@ public:
     void
     scale(Real alpha)
     {
+#ifdef NDEBUG
+        for (Int idx = 0, i = 0; i < this->rows; i++)
+            for (Int j = 0; j < this->cols; j++, idx++)
+                this->data(idx) *= alpha;
+#else
         for (Int i = 0; i < this->rows; i++)
             for (Int j = 0; j < this->cols; j++)
                 set(i, j) *= alpha;
+#endif
     }
 
     /// Add matrix `x` to this matrix
@@ -990,9 +1031,15 @@ public:
     add(const DynDenseMatrix<T> & x)
     {
         if ((this->rows == x.rows) && (this->cols == x.cols)) {
+#ifdef NDEBUG
+            for (Int idx = 0, i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++, idx++)
+                    this->data(idx) += x.data(idx);
+#else
             for (Int i = 0; i < this->rows; i++)
                 for (Int j = 0; j < this->cols; j++)
                     set(i, j) += x.get(i, j);
+#endif
         }
         else
             throw Exception("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
@@ -1009,9 +1056,15 @@ public:
     subtract(const DynDenseMatrix<T> & x)
     {
         if ((this->rows == x.rows) && (this->cols == x.cols)) {
+#ifdef NDEBUG
+            for (Int idx = 0, i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++, idx++)
+                    this->data(idx) -= x.data(idx);
+#else
             for (Int i = 0; i < this->rows; i++)
                 for (Int j = 0; j < this->cols; j++)
                     set(i, j) -= x.get(i, j);
+#endif
         }
         else
             throw Exception("Matrix dimensions ({}, {}) must match the operand dimensions({}, {})",
@@ -1031,12 +1084,21 @@ public:
     {
         if (this->cols == x.size()) {
             DynDenseVector<T> res(this->rows);
+#ifdef NDEBUG
+            for (Int idx = 0, i = 0; i < this->rows; i++) {
+                T prod = 0.;
+                for (Int j = 0; j < this->cols; j++, idx++)
+                    prod += data(idx) * x(j);
+                res(i) = prod;
+            }
+#else
             for (Int i = 0; i < this->rows; i++) {
                 T prod = 0.;
                 for (Int j = 0; j < this->cols; j++)
                     prod += get(i, j) * x(j);
                 res(i) = prod;
             }
+#endif
             return res;
         }
         throw Exception("Number of columns ({}) must match the vector size ({})",
@@ -1049,6 +1111,16 @@ public:
     {
         if (this->cols == x.rows) {
             DynDenseMatrix<T> res(this->rows, x.cols);
+#ifdef NDEBUG
+            for (Int i = 0; i < x.cols; i++) {
+                for (Int idx = 0, res_idx = i, j = 0; j < this->rows; j++, res_idx += x.cols) {
+                    T prod = 0.;
+                    for (Int x_idx = i, k = 0; k < this->cols; k++, idx++, x_idx += x.cols)
+                        prod += data(idx) * x.data(x_idx);
+                    res.data(res_idx) = prod;
+                }
+            }
+#else
             for (Int i = 0; i < this->rows; i++) {
                 for (Int j = 0; j < x.cols; j++) {
                     T prod = 0.;
@@ -1057,6 +1129,7 @@ public:
                     res(i, j) = prod;
                 }
             }
+#endif
             return res;
         }
         else
@@ -1073,12 +1146,36 @@ public:
     {
         if (this->rows == this->cols) {
             DynDenseVector<T> diag(this->rows);
+#ifdef NDEBUG
+            for (Int idx = 0, i = 0; i < this->rows; i++, idx += this->cols + 1)
+                diag.data(i) = this->data(idx);
+#else
             for (Int i = 0; i < this->cols; i++)
                 diag(i) = get(i, i);
+#endif
             return diag;
         }
         else
             throw Exception("Diagonal can be obtained only for square matrices");
+    }
+
+    /// Transpose the matrix
+    ///
+    /// @return Transposed matrix
+    DynDenseMatrix<T>
+    transposed() const
+    {
+        DynDenseMatrix<T> tr(this->cols, this->rows);
+#ifdef NDEBUG
+        for (Int idx = 0, i = 0; i < this->rows; i++)
+            for (Int tr_idx = i, j = 0; j < this->cols; j++, idx++, tr_idx += this->cols)
+                tr.data(tr_idx) = data(idx);
+#else
+        for (Int i = 0; i < this->rows; i++)
+            for (Int j = 0; j < this->cols; j++)
+                tr(j, i) = get(i, j);
+#endif
+        return tr;
     }
 
     // operators
@@ -1109,8 +1206,14 @@ public:
     operator-() const
     {
         DynDenseMatrix<T> res(this->rows, this->cols);
+#ifdef NDEBUG
+        for (Int idx = 0, i = 0; i < this->rows; i++)
+            for (Int j = 0; j < this->cols; j++, idx++)
+                res.data(idx) = -this->data(idx);
+#else
         for (Int i = 0; i < this->rows * this->cols; i++)
             res.values[i] = -this->values[i];
+#endif
         return res;
     }
 
@@ -1123,9 +1226,15 @@ public:
     {
         if ((a.rows == this->rows) && (a.cols == this->cols)) {
             DynDenseMatrix<T> res(this->rows, this->cols);
+#ifdef NDEBUG
+            for (Int idx = 0, i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++, idx++)
+                    res.data(idx) = this->data(idx) + a.data(idx);
+#else
             for (Int i = 0; i < this->rows; i++)
                 for (Int j = 0; j < this->cols; j++)
                     res(i, j) = this->get(i, j) + a.get(i, j);
+#endif
             return res;
         }
         else
@@ -1144,9 +1253,15 @@ public:
     operator+=(const DynDenseMatrix<T> & a)
     {
         if ((a.rows == this->rows) && (a.cols == this->cols)) {
+#ifdef NDEBUG
+            for (Int idx = 0, i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++, idx++)
+                    this->data(idx) += a.data(idx);
+#else
             for (Int i = 0; i < this->rows; i++)
                 for (Int j = 0; j < this->cols; j++)
                     set(i, j) += a.get(i, j);
+#endif
             return *this;
         }
         else
@@ -1166,9 +1281,15 @@ public:
     {
         if ((a.rows == this->rows) && (a.cols == this->cols)) {
             DynDenseMatrix<T> res(this->rows, this->cols);
+#ifdef NDEBUG
+            for (Int idx = 0, i = 0; i < this->rows; i++)
+                for (Int j = 0; j < this->cols; j++, idx++)
+                    res.data(idx) = this->data(idx) - a.data(idx);
+#else
             for (Int i = 0; i < this->rows; i++)
                 for (Int j = 0; j < this->cols; j++)
                     res(i, j) = this->get(i, j) - a.get(i, j);
+#endif
             return res;
         }
         else
@@ -1232,8 +1353,13 @@ public:
     {
         DynDenseMatrix<T> res(vals.size(), vals.size());
         res.zero();
+#ifdef NDEBUG
+        for (Int idx = 0, i = 0; i < vals.size(); i++, idx += res.cols + 1)
+            res.data(idx) = vals[i];
+#else
         for (Int i = 0; i < vals.size(); i++)
             res(i, i) = vals[i];
+#endif
         return res;
     }
 
@@ -1264,6 +1390,18 @@ private:
         return i * this->cols + j;
     }
 
+    T &
+    data(Int idx)
+    {
+        return this->values[idx];
+    }
+
+    T
+    data(Int idx) const
+    {
+        return this->values[idx];
+    }
+
     /// Number of rows
     Int rows;
     /// Number of columns
@@ -1280,11 +1418,7 @@ template <typename T>
 inline DynDenseMatrix<T>
 transpose(const DynDenseMatrix<T> & mat)
 {
-    DynDenseMatrix<T> tr(mat.get_num_cols(), mat.get_num_rows());
-    for (Int i = 0; i < mat.get_num_rows(); i++)
-        for (Int j = 0; j < mat.get_num_cols(); j++)
-            tr(j, i) = mat(i, j);
-    return tr;
+    return mat.transposed();
 }
 
 template <typename T>
