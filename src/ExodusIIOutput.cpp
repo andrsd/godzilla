@@ -22,19 +22,19 @@ namespace godzilla {
 const int ExodusIIOutput::SINGLE_BLK_ID = 0;
 
 const char *
-ExodusIIOutput::get_elem_type(DMPolytopeType elem_type)
+ExodusIIOutput::get_elem_type(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
     switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
+    case PolytopeType::SEGMENT:
         return "BAR2";
-    case DM_POLYTOPE_TRIANGLE:
+    case PolytopeType::TRIANGLE:
         return "TRI3";
-    case DM_POLYTOPE_QUADRILATERAL:
+    case PolytopeType::QUADRILATERAL:
         return "QUAD4";
-    case DM_POLYTOPE_TETRAHEDRON:
+    case PolytopeType::TETRAHEDRON:
         return "TET4";
-    case DM_POLYTOPE_HEXAHEDRON:
+    case PolytopeType::HEXAHEDRON:
         return "HEX8";
     default:
         error("Unsupported type.");
@@ -42,7 +42,7 @@ ExodusIIOutput::get_elem_type(DMPolytopeType elem_type)
 }
 
 const Int *
-ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type)
+ExodusIIOutput::get_elem_node_ordering(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
     static const Int seg_ordering[] = { 0, 1 };
@@ -52,15 +52,15 @@ ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type)
     static const Int hex_ordering[] = { 0, 3, 2, 1, 4, 5, 6, 7, 8 };
 
     switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
+    case PolytopeType::SEGMENT:
         return seg_ordering;
-    case DM_POLYTOPE_TRIANGLE:
+    case PolytopeType::TRIANGLE:
         return tri_ordering;
-    case DM_POLYTOPE_QUADRILATERAL:
+    case PolytopeType::QUADRILATERAL:
         return quad_ordering;
-    case DM_POLYTOPE_TETRAHEDRON:
+    case PolytopeType::TETRAHEDRON:
         return tet_ordering;
-    case DM_POLYTOPE_HEXAHEDRON:
+    case PolytopeType::HEXAHEDRON:
         return hex_ordering;
     default:
         error("Unsupported type.");
@@ -68,7 +68,7 @@ ExodusIIOutput::get_elem_node_ordering(DMPolytopeType elem_type)
 }
 
 const Int *
-ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type)
+ExodusIIOutput::get_elem_side_ordering(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
     static const Int seg_ordering[] = { 1, 2 };
@@ -78,15 +78,15 @@ ExodusIIOutput::get_elem_side_ordering(DMPolytopeType elem_type)
     static const Int hex_ordering[] = { 5, 6, 1, 3, 2, 4 };
 
     switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
+    case PolytopeType::SEGMENT:
         return seg_ordering;
-    case DM_POLYTOPE_TRIANGLE:
+    case PolytopeType::TRIANGLE:
         return tri_ordering;
-    case DM_POLYTOPE_QUADRILATERAL:
+    case PolytopeType::QUADRILATERAL:
         return quad_ordering;
-    case DM_POLYTOPE_TETRAHEDRON:
+    case PolytopeType::TETRAHEDRON:
         return tet_ordering;
-    case DM_POLYTOPE_HEXAHEDRON:
+    case PolytopeType::HEXAHEDRON:
         return hex_ordering;
     default:
         error("Unsupported type.");
@@ -410,7 +410,7 @@ ExodusIIOutput::write_elements()
         Int dim = this->mesh->get_dimension();
         IndexSet cells = depth_label.get_stratum(dim);
         cells.get_indices();
-        DMPolytopeType polytope_type = this->mesh->get_cell_type(cells[0]);
+        auto polytope_type = this->mesh->get_cell_type(cells[0]);
         auto n_elems = this->mesh->get_num_cells();
         if (this->cont)
             write_block_connectivity_continuous(SINGLE_BLK_ID,
@@ -492,7 +492,7 @@ ExodusIIOutput::write_face_sets()
                 DMPlexGetTransitiveClosure(dm, faces[i], PETSC_FALSE, &num_points, &points));
 
             Int el = points[2];
-            DMPolytopeType polytope_type = this->mesh->get_cell_type(el);
+            auto polytope_type = this->mesh->get_cell_type(el);
             const Int * side_ordering = get_elem_side_ordering(polytope_type);
             elem_list[i] = (int) (el + 1);
 
@@ -839,7 +839,7 @@ ExodusIIOutput::write_info()
 
 void
 ExodusIIOutput::write_block_connectivity_continuous(int blk_id,
-                                                    DMPolytopeType polytope_type,
+                                                    PolytopeType polytope_type,
                                                     Int n_elems_in_block,
                                                     const Int * cells)
 {
@@ -867,7 +867,7 @@ ExodusIIOutput::write_block_connectivity_continuous(int blk_id,
 
 void
 ExodusIIOutput::write_block_connectivity_discontinuous(int blk_id,
-                                                       DMPolytopeType polytope_type,
+                                                       PolytopeType polytope_type,
                                                        Int n_elems_in_block,
                                                        const Int * cells)
 {

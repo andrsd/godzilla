@@ -8,41 +8,42 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Partitioner.h"
 #include "petscdmplex.h"
+#include <petscdmtypes.h>
 
 namespace godzilla {
 
 const char *
-get_polytope_type_str(DMPolytopeType elem_type)
+get_polytope_type_str(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
     switch (elem_type) {
-    case DM_POLYTOPE_POINT:
+    case PolytopeType::POINT:
         return "POINT";
-    case DM_POLYTOPE_SEGMENT:
+    case PolytopeType::SEGMENT:
         return "SEGMENT";
-    case DM_POLYTOPE_POINT_PRISM_TENSOR:
+    case PolytopeType::POINT_PRISM_TENSOR:
         return "POINT_PRISM_TENSOR";
-    case DM_POLYTOPE_TRIANGLE:
+    case PolytopeType::TRIANGLE:
         return "TRIANGLE";
-    case DM_POLYTOPE_QUADRILATERAL:
+    case PolytopeType::QUADRILATERAL:
         return "QUADRILATERAL";
-    case DM_POLYTOPE_SEG_PRISM_TENSOR:
+    case PolytopeType::SEG_PRISM_TENSOR:
         return "SEG_PRISM_TENSOR";
-    case DM_POLYTOPE_TETRAHEDRON:
+    case PolytopeType::TETRAHEDRON:
         return "TETRAHEDRON";
-    case DM_POLYTOPE_HEXAHEDRON:
+    case PolytopeType::HEXAHEDRON:
         return "HEXAHEDRON";
-    case DM_POLYTOPE_TRI_PRISM:
+    case PolytopeType::TRI_PRISM:
         return "TRI_PRISM";
-    case DM_POLYTOPE_TRI_PRISM_TENSOR:
+    case PolytopeType::TRI_PRISM_TENSOR:
         return "TRI_PRISM_TENSOR";
-    case DM_POLYTOPE_QUAD_PRISM_TENSOR:
+    case PolytopeType::QUAD_PRISM_TENSOR:
         return "QUAD_PRISM_TENSOR";
-    case DM_POLYTOPE_PYRAMID:
+    case PolytopeType::PYRAMID:
         return "PYRAMID";
-    case DM_POLYTOPE_FV_GHOST:
+    case PolytopeType::FV_GHOST:
         return "FV_GHOST";
-    case DM_POLYTOPE_INTERIOR_GHOST:
+    case PolytopeType::INTERIOR_GHOST:
         return "INTERIOR_GHOST";
     default:
         return "UNKNOWN";
@@ -192,13 +193,13 @@ UnstructuredMesh::set_chart(Int start, Int end)
     PETSC_CHECK(DMPlexSetChart(get_dm(), start, end));
 }
 
-DMPolytopeType
+PolytopeType
 UnstructuredMesh::get_cell_type(Int el) const
 {
     CALL_STACK_MSG();
     DMPolytopeType polytope_type;
     PETSC_CHECK(DMPlexGetCellType(get_dm(), el, &polytope_type));
-    return polytope_type;
+    return static_cast<PolytopeType>(polytope_type);
 }
 
 std::vector<Int>
@@ -208,7 +209,6 @@ UnstructuredMesh::get_connectivity(Int point) const
     Int closure_size;
     Int * closure = nullptr;
     PETSC_CHECK(DMPlexGetTransitiveClosure(get_dm(), point, PETSC_TRUE, &closure_size, &closure));
-
     auto polytope_type = get_cell_type(point);
     Int n_elem_nodes = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     std::vector<Int> elem_connect;
@@ -395,10 +395,10 @@ UnstructuredMesh::set_cell_set_name(Int id, const std::string & name)
 }
 
 void
-UnstructuredMesh::set_cell_type(Int cell, DMPolytopeType cell_type)
+UnstructuredMesh::set_cell_type(Int cell, PolytopeType cell_type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMPlexSetCellType(get_dm(), cell, cell_type));
+    PETSC_CHECK(DMPlexSetCellType(get_dm(), cell, (DMPolytopeType) cell_type));
 }
 
 const std::string &
@@ -490,20 +490,20 @@ UnstructuredMesh::compute_cell_volume(Int cell) const
 }
 
 int
-UnstructuredMesh::get_num_cell_nodes(DMPolytopeType elem_type)
+UnstructuredMesh::get_num_cell_nodes(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
     switch (elem_type) {
-    case DM_POLYTOPE_POINT:
+    case PolytopeType::POINT:
         return 1;
-    case DM_POLYTOPE_SEGMENT:
+    case PolytopeType::SEGMENT:
         return 2;
-    case DM_POLYTOPE_TRIANGLE:
+    case PolytopeType::TRIANGLE:
         return 3;
-    case DM_POLYTOPE_QUADRILATERAL:
-    case DM_POLYTOPE_TETRAHEDRON:
+    case PolytopeType::QUADRILATERAL:
+    case PolytopeType::TETRAHEDRON:
         return 4;
-    case DM_POLYTOPE_HEXAHEDRON:
+    case PolytopeType::HEXAHEDRON:
         return 8;
     default:
         error("Unsupported type '{}'.", get_polytope_type_str(elem_type));
@@ -633,6 +633,20 @@ UnstructuredMesh::get_vertex_coordinates(Int pt) const
     for (Int i = 0; i < dim; i++)
         coord[i] = data[i];
     return coord;
+}
+
+Int
+UnstructuredMesh::get_polytope_dim(PolytopeType type)
+{
+    CALL_STACK_MSG();
+    return DMPolytopeTypeGetDim((DMPolytopeType) type);
+}
+
+void
+UnstructuredMesh::invert_cell(PolytopeType type, std::vector<Int> & cone)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexInvertCell((DMPolytopeType) type, cone.data()));
 }
 
 } // namespace godzilla

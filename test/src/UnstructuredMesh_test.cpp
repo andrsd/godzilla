@@ -227,14 +227,14 @@ TEST(UnstructuredMeshTest, get_connectivity)
 
 TEST(UnstructuredMeshTest, get_num_cell_nodes)
 {
-    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_POINT), 1);
-    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_SEGMENT), 2);
-    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_TRIANGLE), 3);
-    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_QUADRILATERAL), 4);
-    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_TETRAHEDRON), 4);
-    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_HEXAHEDRON), 8);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::POINT), 1);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::SEGMENT), 2);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::TRIANGLE), 3);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::QUADRILATERAL), 4);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::TETRAHEDRON), 4);
+    EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::HEXAHEDRON), 8);
 
-    EXPECT_DEATH(UnstructuredMesh::get_num_cell_nodes(DM_POLYTOPE_PYRAMID), "Unsupported type.");
+    EXPECT_DEATH(UnstructuredMesh::get_num_cell_nodes(PolytopeType::PYRAMID), "Unsupported type.");
 }
 
 TEST(UnstructuredMeshTest, ranges)
@@ -272,21 +272,21 @@ TEST(UnstructuredMeshTest, ranges)
 
 TEST(UnstructuredMeshTest, polytope_type_str)
 {
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_POINT), "POINT");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_SEGMENT), "SEGMENT");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_POINT_PRISM_TENSOR), "POINT_PRISM_TENSOR");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_TRIANGLE), "TRIANGLE");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_QUADRILATERAL), "QUADRILATERAL");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_SEG_PRISM_TENSOR), "SEG_PRISM_TENSOR");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_TETRAHEDRON), "TETRAHEDRON");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_HEXAHEDRON), "HEXAHEDRON");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_TRI_PRISM), "TRI_PRISM");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_TRI_PRISM_TENSOR), "TRI_PRISM_TENSOR");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_QUAD_PRISM_TENSOR), "QUAD_PRISM_TENSOR");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_PYRAMID), "PYRAMID");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_FV_GHOST), "FV_GHOST");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_INTERIOR_GHOST), "INTERIOR_GHOST");
-    EXPECT_STREQ(get_polytope_type_str(DM_POLYTOPE_UNKNOWN), "UNKNOWN");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::POINT), "POINT");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::SEGMENT), "SEGMENT");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::POINT_PRISM_TENSOR), "POINT_PRISM_TENSOR");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::TRIANGLE), "TRIANGLE");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::QUADRILATERAL), "QUADRILATERAL");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::SEG_PRISM_TENSOR), "SEG_PRISM_TENSOR");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::TETRAHEDRON), "TETRAHEDRON");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::HEXAHEDRON), "HEXAHEDRON");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::TRI_PRISM), "TRI_PRISM");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::TRI_PRISM_TENSOR), "TRI_PRISM_TENSOR");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::QUAD_PRISM_TENSOR), "QUAD_PRISM_TENSOR");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::PYRAMID), "PYRAMID");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::FV_GHOST), "FV_GHOST");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::INTERIOR_GHOST), "INTERIOR_GHOST");
+    EXPECT_STREQ(get_polytope_type_str(PolytopeType::UNKNOWN), "UNKNOWN");
 }
 
 TEST(UnstructuredMesh, get_cone_recursive_vertices)

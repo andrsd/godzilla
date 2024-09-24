@@ -19,19 +19,19 @@ namespace godzilla {
 namespace {
 
 const char *
-get_zone_type(DMPolytopeType elem_type)
+get_zone_type(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
     switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
+    case PolytopeType::SEGMENT:
         return "FELINESEG";
-    case DM_POLYTOPE_TRIANGLE:
+    case PolytopeType::TRIANGLE:
         return "FETRIANGLE";
-    case DM_POLYTOPE_QUADRILATERAL:
+    case PolytopeType::QUADRILATERAL:
         return "FEQUADRILATERAL";
-    case DM_POLYTOPE_TETRAHEDRON:
+    case PolytopeType::TETRAHEDRON:
         return "FETETRAHEDRON";
-    case DM_POLYTOPE_HEXAHEDRON:
+    case PolytopeType::HEXAHEDRON:
         return "FEBRICK";
     default:
         error("Unsupported type.");
@@ -39,7 +39,7 @@ get_zone_type(DMPolytopeType elem_type)
 }
 
 const Int *
-get_elem_node_ordering(DMPolytopeType elem_type)
+get_elem_node_ordering(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
 
@@ -50,15 +50,15 @@ get_elem_node_ordering(DMPolytopeType elem_type)
     static const Int hex_ordering[] = { 0, 3, 2, 1, 4, 5, 6, 7, 8 };
 
     switch (elem_type) {
-    case DM_POLYTOPE_SEGMENT:
+    case PolytopeType::SEGMENT:
         return seg_ordering;
-    case DM_POLYTOPE_TRIANGLE:
+    case PolytopeType::TRIANGLE:
         return tri_ordering;
-    case DM_POLYTOPE_QUADRILATERAL:
+    case PolytopeType::QUADRILATERAL:
         return quad_ordering;
-    case DM_POLYTOPE_TETRAHEDRON:
+    case PolytopeType::TETRAHEDRON:
         return tet_ordering;
-    case DM_POLYTOPE_HEXAHEDRON:
+    case PolytopeType::HEXAHEDRON:
         return hex_ordering;
     default:
         error("Unsupported type.");
@@ -335,7 +335,7 @@ TecplotOutput::write_zone_ascii()
     // FIXME: allow output for cell sets
     auto cell_range = this->mesh->get_cell_range();
     auto n_cells_in_block = this->mesh->get_num_cells();
-    DMPolytopeType polytope_type = this->mesh->get_cell_type(cell_range.first());
+    auto polytope_type = this->mesh->get_cell_type(cell_range.first());
     const char * zone_type = get_zone_type(polytope_type);
     Int n_nodes = this->mesh->get_num_vertices();
 
