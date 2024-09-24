@@ -13,22 +13,22 @@ using namespace godzilla;
 
 namespace {
 
-DMPolytopeType
+PolytopeType
 get_cell_type(const std::string & elem_type)
 {
     if (elem_type == "EDGE2" || elem_type == "BAR2" || elem_type == "BEAM" || elem_type == "BEAM2")
-        return DM_POLYTOPE_SEGMENT;
+        return PolytopeType::SEGMENT;
     else if (elem_type == "TRI" || elem_type == "TRIANGLE" || elem_type == "TRI3")
-        return DM_POLYTOPE_TRIANGLE;
+        return PolytopeType::TRIANGLE;
     else if (elem_type == "QUAD" || elem_type == "QUAD4" || elem_type == "SHELL" ||
              elem_type == "SHELL4")
-        return DM_POLYTOPE_QUADRILATERAL;
+        return PolytopeType::QUADRILATERAL;
     else if (elem_type == "TETRA" || elem_type == "TET4" || elem_type == "TETRA4")
-        return DM_POLYTOPE_TETRAHEDRON;
+        return PolytopeType::TETRAHEDRON;
     else if (elem_type == "WEDGE")
-        return DM_POLYTOPE_TRI_PRISM;
+        return PolytopeType::TRI_PRISM;
     else if (elem_type == "HEX" || elem_type == "HEX8" || elem_type == "HEXAHEDRON")
-        return DM_POLYTOPE_HEXAHEDRON;
+        return PolytopeType::HEXAHEDRON;
     else
         throw Exception(fmt::format("Unrecognized element type {}", elem_type));
 }
@@ -78,9 +78,9 @@ FileMesh::create_from_exodus()
             int num_hybrid = 0;
             for (int i = 0; i < n_elem_blocks; i++) {
                 auto eb = f.get_element_block(i);
-                DMPolytopeType ct = ::get_cell_type(eb.get_element_type());
-                dim = std::max(dim, DMPolytopeTypeGetDim(ct));
-                if (ct == DM_POLYTOPE_TRI_PRISM) {
+                auto ct = ::get_cell_type(eb.get_element_type());
+                dim = std::max(dim, UnstructuredMesh::get_polytope_dim(ct));
+                if (ct == PolytopeType::TRI_PRISM) {
                     cs_order[i] = i;
                     ++num_hybrid;
                 }
@@ -94,14 +94,14 @@ FileMesh::create_from_exodus()
             for (Int i = 0, cell = 0; i < n_elem_blocks; ++i) {
                 int blk_idx = cs_order[i];
                 auto eb = f.get_element_block(blk_idx);
-                DMPolytopeType ct = ::get_cell_type(eb.get_element_type());
+                auto ct = ::get_cell_type(eb.get_element_type());
                 for (int j = 0; j < eb.get_num_elements(); ++j, ++cell) {
                     m->set_cone_size(cell, eb.get_num_nodes_per_element());
                     m->set_cell_type(cell, ct);
                 }
             }
             for (Int vertex = n_cells; vertex < n_cells + n_vertices; ++vertex)
-                m->set_cell_type(vertex, DM_POLYTOPE_POINT);
+                m->set_cell_type(vertex, PolytopeType::POINT);
             m->set_up();
 
             // process element blocks
@@ -128,8 +128,8 @@ FileMesh::create_from_exodus()
                 for (Int j = 0, vertex = 0; j < n_blk_elems; ++j, ++cell) {
                     for (Int k = 0; k < n_elem_nodes; ++k, ++vertex)
                         cone[k] = connect[vertex] + n_cells - 1;
-                    DMPolytopeType ct = m->get_cell_type(cell);
-                    PETSC_CHECK(DMPlexInvertCell(ct, cone.data()));
+                    auto ct = m->get_cell_type(cell);
+                    UnstructuredMesh::invert_cell(ct, cone);
                     m->set_cone(cell, cone);
                     cell_sets.set_value(cell, id);
                     block_label.set_value(cell, id);

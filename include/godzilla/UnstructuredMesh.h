@@ -11,10 +11,29 @@
 #include "godzilla/DenseVector.h"
 #include "godzilla/StarForest.h"
 #include <map>
+#include <petscdmtypes.h>
 
 namespace godzilla {
 
 class Partitioner;
+
+enum class PolytopeType {
+    POINT = DM_POLYTOPE_POINT,
+    SEGMENT = DM_POLYTOPE_SEGMENT,
+    POINT_PRISM_TENSOR = DM_POLYTOPE_POINT_PRISM_TENSOR,
+    TRIANGLE = DM_POLYTOPE_TRIANGLE,
+    QUADRILATERAL = DM_POLYTOPE_QUADRILATERAL,
+    SEG_PRISM_TENSOR = DM_POLYTOPE_SEG_PRISM_TENSOR,
+    TETRAHEDRON = DM_POLYTOPE_TETRAHEDRON,
+    HEXAHEDRON = DM_POLYTOPE_HEXAHEDRON,
+    PYRAMID = DM_POLYTOPE_PYRAMID,
+    TRI_PRISM = DM_POLYTOPE_TRI_PRISM,
+    TRI_PRISM_TENSOR = DM_POLYTOPE_TRI_PRISM_TENSOR,
+    QUAD_PRISM_TENSOR = DM_POLYTOPE_QUAD_PRISM_TENSOR,
+    FV_GHOST = DM_POLYTOPE_FV_GHOST,
+    INTERIOR_GHOST = DM_POLYTOPE_INTERIOR_GHOST,
+    UNKNOWN = DM_POLYTOPE_UNKNOWN
+};
 
 /// Unstructured mesh (wrapper around DMPLEX + extra stuff)
 ///
@@ -90,7 +109,7 @@ public:
     ///
     /// @param cell Cell index
     /// @return Cell type
-    [[nodiscard]] DMPolytopeType get_cell_type(Int cell) const;
+    [[nodiscard]] PolytopeType get_cell_type(Int cell) const;
 
     /// Get connectivity
     ///
@@ -173,7 +192,7 @@ public:
     ///
     /// @param cell The cell
     /// @param cell_type The polytope type of the cell
-    void set_cell_type(Int cell, DMPolytopeType cell_type);
+    void set_cell_type(Int cell, PolytopeType cell_type);
 
     /// Get face set name
     ///
@@ -305,7 +324,7 @@ private:
     bool common_cells_by_vtx_computed;
 
 public:
-    static int get_num_cell_nodes(DMPolytopeType cell_type);
+    static int get_num_cell_nodes(PolytopeType cell_type);
 
     /// Build from a list of vertices for each cell (common mesh generator output)
     ///
@@ -328,12 +347,23 @@ public:
                                                    Int space_dim,
                                                    const std::vector<Real> & vertices,
                                                    bool interpolate);
+
+    /// Get polytope dimension
+    ///
+    /// @param type Cell type
+    static Int get_polytope_dim(PolytopeType type);
+
+    /// Flips cell orientations since DMPLEX stores some of them internally with outward normals.
+    ///
+    /// @param type Cell type
+    /// @param cone Cone to invert
+    static void invert_cell(PolytopeType type, std::vector<Int> & cone);
 };
 
 /// Get string representation of a polytope type
 ///
 /// @param cell_type Cell type
 /// @return String describing the polytope type
-const char * get_polytope_type_str(DMPolytopeType cell_type);
+const char * get_polytope_type_str(PolytopeType cell_type);
 
 } // namespace godzilla

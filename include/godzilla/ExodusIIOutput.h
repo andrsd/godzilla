@@ -5,7 +5,7 @@
 
 #include "godzilla/FileOutput.h"
 #include "godzilla/Types.h"
-#include "petscdmtypes.h"
+#include "godzilla/UnstructuredMesh.h"
 
 namespace exodusIIcpp {
 class File;
@@ -15,7 +15,6 @@ namespace godzilla {
 
 class DiscreteProblemInterface;
 class DGProblemInterface;
-class UnstructuredMesh;
 
 /// ExodusII output
 ///
@@ -63,11 +62,11 @@ protected:
     write_block_elem_variables(int blk_id, Int n_elems_in_block = 0, const Int * cells = nullptr);
     void write_global_variables();
     void write_block_connectivity_continuous(int blk_id,
-                                             DMPolytopeType polytope_type,
+                                             PolytopeType polytope_type,
                                              Int n_elems_in_block,
                                              const Int * cells);
     void write_block_connectivity_discontinuous(int blk_id,
-                                                DMPolytopeType polytope_type,
+                                                PolytopeType polytope_type,
                                                 Int n_elems_in_block,
                                                 const Int * /*cells*/);
     int get_num_nodes_per_element();
@@ -110,9 +109,9 @@ private:
 public:
     static Parameters parameters();
 
-    static const char * get_elem_type(DMPolytopeType elem_type);
-    static const Int * get_elem_node_ordering(DMPolytopeType elem_type);
-    static const Int * get_elem_side_ordering(DMPolytopeType elem_type);
+    static const char * get_elem_type(PolytopeType elem_type);
+    static const Int * get_elem_node_ordering(PolytopeType elem_type);
+    static const Int * get_elem_side_ordering(PolytopeType elem_type);
 };
 
 } // namespace godzilla
