@@ -131,7 +131,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh13get_cell_setsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cell_sets()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh15create_cell_setE3IntRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_cell_set()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh17set_cell_set_nameE3IntRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cell_set_name()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh13set_cell_typeE3Int14DMPolytopeType"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cell_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh13set_cell_typeE3Int12PolytopeType"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cell_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_face_set_nameE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_face_set_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_num_face_setsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_num_face_sets()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh13get_face_setsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_face_sets()</span></code></a></li>
@@ -154,6 +154,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh13get_full_joinERKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_full_join()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh22get_vertex_coordinatesE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_vertex_coordinates()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh20build_from_cell_listERKN3mpi12CommunicatorE3Int3IntRKNSt6vectorI3IntEE3IntRKNSt6vectorI4RealEEb"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::build_from_cell_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh16get_polytope_dimE12PolytopeType"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_polytope_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh11invert_cellE12PolytopeTypeRNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::invert_cell()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -330,7 +332,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh13get_cell_typeE3Int">
-<span id="_CPPv3NK8godzilla16UnstructuredMesh13get_cell_typeE3Int"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh13get_cell_typeE3Int"></span><span id="godzilla::UnstructuredMesh::get_cell_type__IntC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a245abdb8d357910f70bb2435d381696b"></span><span class="n"><span class="pre">DMPolytopeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_cell_type</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cell</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh13get_cell_typeE3Int" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla16UnstructuredMesh13get_cell_typeE3Int"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh13get_cell_typeE3Int"></span><span id="godzilla::UnstructuredMesh::get_cell_type__IntC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1af01386663f795665e5d47a1f39089128"></span><span class="n"><span class="pre">PolytopeType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_cell_type</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cell</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh13get_cell_typeE3Int" title="Link to this definition"></a><br /></dt>
 <dd><p>Get cell type. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -517,8 +519,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh13set_cell_typeE3Int14DMPolytopeType">
-<span id="_CPPv3N8godzilla16UnstructuredMesh13set_cell_typeE3Int14DMPolytopeType"></span><span id="_CPPv2N8godzilla16UnstructuredMesh13set_cell_typeE3Int14DMPolytopeType"></span><span id="godzilla::UnstructuredMesh::set_cell_type__Int.DMPolytopeType"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1ab8d498c7ff4796ba738294551b80045a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_cell_type</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cell</span></span>, <span class="n"><span class="pre">DMPolytopeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cell_type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh13set_cell_typeE3Int14DMPolytopeType" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh13set_cell_typeE3Int12PolytopeType">
+<span id="_CPPv3N8godzilla16UnstructuredMesh13set_cell_typeE3Int12PolytopeType"></span><span id="_CPPv2N8godzilla16UnstructuredMesh13set_cell_typeE3Int12PolytopeType"></span><span id="godzilla::UnstructuredMesh::set_cell_type__Int.PolytopeType"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1ae092b6061e8089689c3065fcc6aa1d5f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_cell_type</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cell</span></span>, <span class="n"><span class="pre">PolytopeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cell_type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh13set_cell_typeE3Int12PolytopeType" title="Link to this definition"></a><br /></dt>
 <dd><p>Set the polytope type of a given cell. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -788,6 +790,31 @@ NOTES:<ul class="simple">
 <li><p><strong>space_dim</strong> – The spatial dimension used for coordinates </p></li>
 <li><p><strong>vertices</strong> – An array of the coordinates of each vertex - must be a multiple of <code class="docutils literal notranslate"><span class="pre">space_dim</span></code></p></li>
 <li><p><strong>interpolate</strong> – Flag indicating that intermediate mesh entities (faces, edges) should be created automatically</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh16get_polytope_dimE12PolytopeType">
+<span id="_CPPv3N8godzilla16UnstructuredMesh16get_polytope_dimE12PolytopeType"></span><span id="_CPPv2N8godzilla16UnstructuredMesh16get_polytope_dimE12PolytopeType"></span><span id="godzilla::UnstructuredMesh::get_polytope_dim__PolytopeType"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1ae59f8154acf76d71e4e3340f93d9075e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_polytope_dim</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PolytopeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh16get_polytope_dimE12PolytopeType" title="Link to this definition"></a><br /></dt>
+<dd><p>Get polytope dimension. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> – Cell type </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh11invert_cellE12PolytopeTypeRNSt6vectorI3IntEE">
+<span id="_CPPv3N8godzilla16UnstructuredMesh11invert_cellE12PolytopeTypeRNSt6vectorI3IntEE"></span><span id="_CPPv2N8godzilla16UnstructuredMesh11invert_cellE12PolytopeTypeRNSt6vectorI3IntEE"></span><span id="godzilla::UnstructuredMesh::invert_cell__PolytopeType.std::vector:Int:R"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a175cea48a343c91ca06089f11cf65942"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">invert_cell</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PolytopeType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cone</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh11invert_cellE12PolytopeTypeRNSt6vectorI3IntEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Flips cell orientations since DMPLEX stores some of them internally with outward normals. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – Cell type </p></li>
+<li><p><strong>cone</strong> – Cone to invert </p></li>
 </ul>
 </dd>
 </dl>
