@@ -123,6 +123,12 @@ public:
     /// @return Points which are on the out-edges for point `p`
     [[nodiscard]] std::vector<Int> get_support(Int point) const;
 
+    /// Return the number of out-edges for this point in the DAG
+    ///
+    /// @param point Point with must lie in the chart
+    /// @return The support size for `point`
+    [[nodiscard]] Int get_support_size(Int point) const;
+
     /// Return the points on the in-edges for this point
     ///
     /// @param point Point with must lie in the chart
