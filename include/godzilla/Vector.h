@@ -150,13 +150,13 @@ public:
     /// Gets a vector representing part of this vector
     ///
     /// @param is Index set representing portion of X to extract
-    Vector get_sub_vector(const IndexSet & is);
+    Vector get_sub_vector(const IndexSet & is) const;
 
     /// Restores a subvector extracted by `get_sub_vector`
     ///
     /// @param is Index set representing the subset of X
     /// @param y Subvector being restored
-    void restore_sub_vector(const IndexSet & is, Vector & y);
+    void restore_sub_vector(const IndexSet & is, Vector & y) const;
 
     Scalar operator()(Int idx) const;
 

@@ -451,7 +451,7 @@ Vector::set_option(VecOption op, bool flag)
 }
 
 Vector
-Vector::get_sub_vector(const IndexSet & is)
+Vector::get_sub_vector(const IndexSet & is) const
 {
     CALL_STACK_MSG();
     Vec y;
@@ -460,7 +460,7 @@ Vector::get_sub_vector(const IndexSet & is)
 }
 
 void
-Vector::restore_sub_vector(const IndexSet & is, Vector & y)
+Vector::restore_sub_vector(const IndexSet & is, Vector & y) const
 {
     CALL_STACK_MSG();
     PETSC_CHECK(VecRestoreSubVector(this->vec, is, &y.vec));
