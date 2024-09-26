@@ -239,6 +239,15 @@ UnstructuredMesh::get_support(Int point) const
     return v;
 }
 
+Int
+UnstructuredMesh::get_support_size(Int point) const
+{
+    CALL_STACK_MSG();
+    Int n;
+    PETSC_CHECK(DMPlexGetSupportSize(get_dm(), point, &n));
+    return n;
+}
+
 std::vector<Int>
 UnstructuredMesh::get_cone(Int point) const
 {

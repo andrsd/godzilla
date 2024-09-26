@@ -195,15 +195,18 @@ TEST(UnstructuredMeshTest, get_connectivity)
     auto support2 = m->get_support(2);
     EXPECT_EQ(support2.size(), 1);
     EXPECT_EQ(support2[0], 0);
+    EXPECT_EQ(m->get_support_size(2), 1);
 
     auto support3 = m->get_support(3);
     EXPECT_EQ(support3.size(), 2);
     EXPECT_EQ(support3[0], 0);
     EXPECT_EQ(support3[1], 1);
+    EXPECT_EQ(m->get_support_size(3), 2);
 
     auto support4 = m->get_support(4);
     EXPECT_EQ(support4.size(), 1);
     EXPECT_EQ(support4[0], 1);
+    EXPECT_EQ(m->get_support_size(4), 1);
 
     auto cone0 = m->get_cone(0);
     EXPECT_EQ(cone0.size(), 2);
