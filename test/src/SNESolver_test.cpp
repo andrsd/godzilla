@@ -71,3 +71,17 @@ TEST(SNESolverTest, mat_create_mf)
     auto m = snes.mat_create_mf();
     EXPECT_EQ(m.get_type(), "mffd");
 }
+
+TEST(SNESolverTest, type)
+{
+    TestApp app;
+    TestNLProblem prob;
+    auto comm = app.get_comm();
+
+    SNESolver snes;
+    snes.create(comm);
+
+    snes.set_type("newtontr");
+
+    EXPECT_EQ(snes.get_type(), "newtontr");
+}

@@ -78,6 +78,16 @@ public:
     /// @param dm The `DM`
     void set_dm(DM dm);
 
+    /// Sets the method for the nonlinear solver.
+    ///
+    /// @param A known method
+    void set_type(SNESType type);
+
+    /// Gets the SNES method type (as a string).
+    ///
+    /// @return SNES method
+    std::string get_type() const;
+
     /// Sets non-linear solver options from the options database
     void set_from_options();
 

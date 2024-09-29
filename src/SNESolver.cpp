@@ -140,6 +140,22 @@ SNESolver::set_dm(DM dm)
 }
 
 void
+SNESolver::set_type(SNESType type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(SNESSetType(this->snes, type));
+}
+
+std::string
+SNESolver::get_type() const
+{
+    CALL_STACK_MSG();
+    SNESType type;
+    PETSC_CHECK(SNESGetType(this->snes, &type));
+    return std::string(type);
+}
+
+void
 SNESolver::set_from_options()
 {
     CALL_STACK_MSG();
