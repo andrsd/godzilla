@@ -466,4 +466,13 @@ Vector::restore_sub_vector(const IndexSet & is, Vector & y) const
     PETSC_CHECK(VecRestoreSubVector(this->vec, is, &y.vec));
 }
 
+Real
+Vector::norm(NormType type) const
+{
+    CALL_STACK_MSG();
+    Real val;
+    PETSC_CHECK(VecNorm(this->vec, type, &val));
+    return val;
+}
+
 } // namespace godzilla

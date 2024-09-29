@@ -60,6 +60,12 @@ public:
     /// @param y Vector with values to be assined into this vector
     void assign(const Vector & y);
 
+    /// Computes the vector norm
+    ///
+    /// @param type The type of the norm requested
+    /// @return The norm
+    Real norm(NormType type) const;
+
     void normalize();
     void shift(Scalar shift);
     [[nodiscard]] Scalar min() const;

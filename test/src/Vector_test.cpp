@@ -556,3 +556,12 @@ TEST(VectorTest, sub_vector)
     EXPECT_DOUBLE_EQ(y(2), 8.);
     v.restore_sub_vector(is, y);
 }
+
+TEST(VectorTest, norm)
+{
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 2);
+    v.set_values({ 0, 1 }, { 3, 4 });
+    auto norm = v.norm(NORM_2);
+    EXPECT_DOUBLE_EQ(norm, 5.);
+    v.destroy();
+}
