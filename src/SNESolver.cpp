@@ -185,6 +185,15 @@ SNESolver::get_converged_reason() const
     return static_cast<ConvergedReason>(reason);
 }
 
+Matrix
+SNESolver::mat_create_mf() const
+{
+    CALL_STACK_MSG();
+    Mat mat;
+    PETSC_CHECK(MatCreateSNESMF(this->snes, &mat));
+    return { mat };
+}
+
 SNESolver::operator SNES() const
 {
     CALL_STACK_MSG();

@@ -55,3 +55,19 @@ TEST(SNESolverTest, solver_cls)
 
     snes.destroy();
 }
+
+TEST(SNESolverTest, mat_create_mf)
+{
+    TestApp app;
+    TestNLProblem prob;
+    auto comm = app.get_comm();
+
+    SNESolver snes;
+    snes.create(comm);
+
+    Vector r = Vector::create_seq(comm, 2);
+    snes.set_function(r, &prob, &TestNLProblem::compute_f);
+
+    auto m = snes.mat_create_mf();
+    EXPECT_EQ(m.get_type(), "mffd");
+}

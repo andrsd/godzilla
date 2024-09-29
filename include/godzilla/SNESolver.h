@@ -173,6 +173,11 @@ public:
     /// @return
     [[nodiscard]] ConvergedReason get_converged_reason() const;
 
+    /// Creates a finite differencing based matrix-free matrix context for use with a SNES solver.
+    ///
+    /// @return The matrix-free matrix which is of type `MATMFFD`
+    Matrix mat_create_mf() const;
+
     /// typecast operator so we can use our class directly with PETSc API
     operator SNES() const;
 
