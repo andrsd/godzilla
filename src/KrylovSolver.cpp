@@ -106,6 +106,13 @@ KrylovSolver::set_tolerances(Real rel_tol, Real abs_tol, Real div_tol, Int max_i
 }
 
 void
+KrylovSolver::get_tolerances(Real * rel_tol, Real * abs_tol, Real * div_tol, Int * max_its) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(KSPGetTolerances(this->ksp, rel_tol, abs_tol, div_tol, max_its));
+}
+
+void
 KrylovSolver::solve(Vector & x) const
 {
     CALL_STACK_MSG();

@@ -10,6 +10,28 @@
 using namespace godzilla;
 using namespace testing;
 
+TEST(KrylovSolver, tolerances)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+    KrylovSolver ks;
+    ks.create(comm);
+
+    Real rel_tol = 1.4567e-5;
+    Real abs_tol = 5.432e-25;
+    Real div_tol = 1.234e4;
+    Int max_its = 4321;
+    ks.set_tolerances(rel_tol, abs_tol, div_tol, max_its);
+
+    ks.get_tolerances(&rel_tol, &abs_tol, &div_tol, &max_its);
+    EXPECT_DOUBLE_EQ(rel_tol, 1.4567e-5);
+    EXPECT_DOUBLE_EQ(abs_tol, 5.432e-25);
+    EXPECT_DOUBLE_EQ(div_tol, 1.234e4);
+    EXPECT_EQ(max_its, 4321);
+
+    ks.destroy();
+}
+
 TEST(KrylovSolver, solve)
 {
     TestApp app;
