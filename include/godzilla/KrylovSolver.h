@@ -87,6 +87,13 @@ public:
     /// @param max_its The maximum number of iterations
     void get_tolerances(Real * rel_tol, Real * abs_tol, Real * div_tol, Int * max_its) const;
 
+    /// Gets the relative, absolute, divergence, and maximum iteration tolerances used by the
+    /// default KSP convergence tests.
+    ///
+    /// @return A tuple containing the relative, absolute, divergence, and maximum number of
+    /// iterations
+    std::tuple<Real, Real, Real, Int> get_tolerances() const;
+
     /// Set member function to compute the right hand side of the linear system
     ///
     /// @tparam T C++ class type

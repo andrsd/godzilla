@@ -23,11 +23,31 @@ TEST(KrylovSolver, tolerances)
     Int max_its = 4321;
     ks.set_tolerances(rel_tol, abs_tol, div_tol, max_its);
 
-    ks.get_tolerances(&rel_tol, &abs_tol, &div_tol, &max_its);
-    EXPECT_DOUBLE_EQ(rel_tol, 1.4567e-5);
-    EXPECT_DOUBLE_EQ(abs_tol, 5.432e-25);
-    EXPECT_DOUBLE_EQ(div_tol, 1.234e4);
-    EXPECT_EQ(max_its, 4321);
+    {
+        Real rtol, atol, dtol;
+        Int mits;
+        ks.get_tolerances(&rtol, &atol, &dtol, &mits);
+        EXPECT_DOUBLE_EQ(rtol, 1.4567e-5);
+        EXPECT_DOUBLE_EQ(atol, 5.432e-25);
+        EXPECT_DOUBLE_EQ(dtol, 1.234e4);
+        EXPECT_EQ(mits, 4321);
+    }
+
+    {
+        auto [rtol, atol, dtol, mits] = ks.get_tolerances();
+        EXPECT_DOUBLE_EQ(rtol, 1.4567e-5);
+        EXPECT_DOUBLE_EQ(atol, 5.432e-25);
+        EXPECT_DOUBLE_EQ(dtol, 1.234e4);
+        EXPECT_EQ(mits, 4321);
+    }
+
+    {
+        Real rtol;
+        Int mits;
+        std::tie(rtol, std::ignore, std::ignore, mits) = ks.get_tolerances();
+        EXPECT_DOUBLE_EQ(rtol, 1.4567e-5);
+        EXPECT_EQ(mits, 4321);
+    }
 
     ks.destroy();
 }

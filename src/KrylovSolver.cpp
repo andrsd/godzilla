@@ -112,6 +112,16 @@ KrylovSolver::get_tolerances(Real * rel_tol, Real * abs_tol, Real * div_tol, Int
     PETSC_CHECK(KSPGetTolerances(this->ksp, rel_tol, abs_tol, div_tol, max_its));
 }
 
+std::tuple<Real, Real, Real, Int>
+KrylovSolver::get_tolerances() const
+{
+    CALL_STACK_MSG();
+    Real rel_tol, abs_tol, div_tol;
+    Int max_its;
+    PETSC_CHECK(KSPGetTolerances(this->ksp, &rel_tol, &abs_tol, &div_tol, &max_its));
+    return std::make_tuple(rel_tol, abs_tol, div_tol, max_its);
+}
+
 void
 KrylovSolver::solve(Vector & x) const
 {
