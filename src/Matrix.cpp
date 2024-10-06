@@ -3,6 +3,7 @@
 
 #include "godzilla/Matrix.h"
 #include "godzilla/Error.h"
+#include "godzilla/ShellMatrix.h"
 
 namespace godzilla {
 
@@ -199,6 +200,14 @@ Matrix::create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz
     Matrix mat;
     PETSC_CHECK(MatCreateSeqAIJ(comm, m, n, 0, nnz.data(), &mat.mat));
     return mat;
+}
+
+ShellMatrix
+Matrix::create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N)
+{
+    Mat mat;
+    PETSC_CHECK(MatCreateShell(comm, m, n, M, N, nullptr, &mat));
+    return ShellMatrix(mat);
 }
 
 } // namespace godzilla
