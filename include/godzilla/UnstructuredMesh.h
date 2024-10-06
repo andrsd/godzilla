@@ -135,6 +135,12 @@ public:
     /// @return Points which are on the out-edges for point `p`
     [[nodiscard]] std::vector<Int> get_cone(Int point) const;
 
+    /// Return the number of in-edges for this point in the DAG
+    ///
+    /// @param point The point, which must lie in the chart set with `set_chart`
+    /// @return The cone size for `point`
+    [[nodiscard]] Int get_cone_size(Int point) const;
+
     /// Expand each given point into its cone points and do that recursively until we end up just
     /// with vertices.
     ///

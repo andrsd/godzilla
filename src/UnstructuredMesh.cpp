@@ -252,8 +252,7 @@ std::vector<Int>
 UnstructuredMesh::get_cone(Int point) const
 {
     CALL_STACK_MSG();
-    Int n;
-    PETSC_CHECK(DMPlexGetConeSize(get_dm(), point, &n));
+    Int n = get_cone_size(point);
     const Int * cone;
     PETSC_CHECK(DMPlexGetCone(get_dm(), point, &cone));
     std::vector<Int> v;
@@ -261,6 +260,15 @@ UnstructuredMesh::get_cone(Int point) const
     for (Int i = 0; i < n; i++)
         v[i] = cone[i];
     return v;
+}
+
+Int
+UnstructuredMesh::get_cone_size(Int point) const
+{
+    CALL_STACK_MSG();
+    Int n;
+    PETSC_CHECK(DMPlexGetConeSize(get_dm(), point, &n));
+    return n;
 }
 
 IndexSet
