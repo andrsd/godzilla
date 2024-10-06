@@ -122,6 +122,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh11get_supportE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_support()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh16get_support_sizeE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_support_size()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh8get_coneE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh13get_cone_sizeE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cone_size()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh27get_cone_recursive_verticesE8IndexSet"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cone_recursive_vertices()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh13set_cone_sizeE3Int3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cone_size()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh8set_coneE3IntRKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_cone()</span></code></a></li>
@@ -397,6 +398,20 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Points which are on the out-edges for point <code class="docutils literal notranslate"><span class="pre">p</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh13get_cone_sizeE3Int">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh13get_cone_sizeE3Int"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh13get_cone_sizeE3Int"></span><span id="godzilla::UnstructuredMesh::get_cone_size__IntC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a2ca51ceebd85a8c8c361eb2d626853fd"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_cone_size</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">point</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh13get_cone_sizeE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Return the number of in-edges for this point in the DAG. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>point</strong> – The point, which must lie in the chart set with <code class="docutils literal notranslate"><span class="pre">set_chart</span></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The cone size for <code class="docutils literal notranslate"><span class="pre">point</span></code></p>
 </dd>
 </dl>
 </dd></dl>
