@@ -13,6 +13,8 @@
 
 namespace godzilla {
 
+class ShellMatrix;
+
 class Matrix {
 public:
     Matrix();
@@ -71,9 +73,12 @@ public:
 
     static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, Int nz);
     static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz);
+    static ShellMatrix create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N);
 
 private:
     Mat mat;
+
+    friend class ShellMatrix;
 };
 
 template <Int N>
