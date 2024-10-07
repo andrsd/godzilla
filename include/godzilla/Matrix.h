@@ -22,6 +22,11 @@ public:
 
     [[nodiscard]] std::string get_type() const;
 
+    /// Builds matrix object for a particular matrix type
+    ///
+    /// @param type The matrix type
+    void set_type(const char * type);
+
     void set_name(const std::string & name);
 
     void create(MPI_Comm comm);

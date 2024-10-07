@@ -21,6 +21,13 @@ Matrix::get_type() const
 }
 
 void
+Matrix::set_type(const char * type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatSetType(this->mat, type));
+}
+
+void
 Matrix::set_name(const std::string & name)
 {
     CALL_STACK_MSG();
