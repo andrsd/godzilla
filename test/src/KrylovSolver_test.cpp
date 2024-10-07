@@ -10,6 +10,48 @@
 using namespace godzilla;
 using namespace testing;
 
+TEST(KrylovSolver, tolerances)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+    KrylovSolver ks;
+    ks.create(comm);
+
+    Real rel_tol = 1.4567e-5;
+    Real abs_tol = 5.432e-25;
+    Real div_tol = 1.234e4;
+    Int max_its = 4321;
+    ks.set_tolerances(rel_tol, abs_tol, div_tol, max_its);
+
+    {
+        Real rtol, atol, dtol;
+        Int mits;
+        ks.get_tolerances(&rtol, &atol, &dtol, &mits);
+        EXPECT_DOUBLE_EQ(rtol, 1.4567e-5);
+        EXPECT_DOUBLE_EQ(atol, 5.432e-25);
+        EXPECT_DOUBLE_EQ(dtol, 1.234e4);
+        EXPECT_EQ(mits, 4321);
+    }
+
+    {
+        auto [rtol, atol, dtol, mits] = ks.get_tolerances();
+        EXPECT_DOUBLE_EQ(rtol, 1.4567e-5);
+        EXPECT_DOUBLE_EQ(atol, 5.432e-25);
+        EXPECT_DOUBLE_EQ(dtol, 1.234e4);
+        EXPECT_EQ(mits, 4321);
+    }
+
+    {
+        Real rtol;
+        Int mits;
+        std::tie(rtol, std::ignore, std::ignore, mits) = ks.get_tolerances();
+        EXPECT_DOUBLE_EQ(rtol, 1.4567e-5);
+        EXPECT_EQ(mits, 4321);
+    }
+
+    ks.destroy();
+}
+
 TEST(KrylovSolver, solve)
 {
     TestApp app;
