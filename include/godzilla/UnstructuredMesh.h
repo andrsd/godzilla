@@ -169,6 +169,12 @@ public:
     /// @param cone An array of points which are on the in-edges for point `p`
     void set_cone(Int point, const std::vector<Int> & cone);
 
+    /// Get the depth of a given point
+    ///
+    /// @param point The point
+    /// @retrun The depth of the point
+    Int get_point_depth(Int point) const;
+
     /// Is the first cell in the mesh a simplex?
     ///
     /// @return true if cell is a simplex, otherwise false

@@ -307,6 +307,15 @@ UnstructuredMesh::set_cone(Int point, const std::vector<Int> & cone)
     PETSC_CHECK(DMPlexSetCone(get_dm(), point, cone.data()));
 }
 
+Int
+UnstructuredMesh::get_point_depth(Int point) const
+{
+    CALL_STACK_MSG();
+    Int depth;
+    PETSC_CHECK(DMPlexGetPointDepth(get_dm(), point, &depth));
+    return depth;
+}
+
 void
 UnstructuredMesh::set_partitioner(const Partitioner & part)
 {

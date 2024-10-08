@@ -660,3 +660,27 @@ TEST(UnstructuredMesh, get_cell_numbering)
         EXPECT_EQ(gids[i], i);
     global_is.restore_indices();
 }
+
+TEST(UnstructuredMesh, get_point_depth)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 1;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    EXPECT_EQ(m->get_point_depth(0), 3);
+
+    EXPECT_EQ(m->get_point_depth(13), 2);
+
+    EXPECT_EQ(m->get_point_depth(15), 1);
+
+    EXPECT_EQ(m->get_point_depth(1), 0);
+    EXPECT_EQ(m->get_point_depth(3), 0);
+}
