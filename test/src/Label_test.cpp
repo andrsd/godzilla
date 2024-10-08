@@ -117,6 +117,21 @@ TEST(Label, get_stratum)
     is.destroy();
 }
 
+TEST(Label, get_stratum_bounds)
+{
+    TestApp app;
+    Label l;
+    l.create(app.get_comm(), "name");
+    l.set_value(1, 101);
+    l.set_value(3, 101);
+    l.set_value(4, 101);
+    l.set_value(7, 101);
+    auto [first, last] = l.get_stratum_bounds(101);
+    EXPECT_EQ(first, 1);
+    EXPECT_EQ(last, 8);
+    l.destroy();
+}
+
 TEST(Label, view)
 {
     testing::internal::CaptureStdout();

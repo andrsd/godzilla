@@ -73,6 +73,12 @@ public:
     /// @return Size of the stratum
     [[nodiscard]] Int get_stratum_size(Int value) const;
 
+    /// Get the largest and smallest point of a stratum
+    ///
+    /// @param value The stratum value
+    /// @return Tuple with the smallest and largest point of the stratum
+    [[nodiscard]] std::tuple<Int, Int> get_stratum_bounds(Int value) const;
+
     /// Get an IndexSet with the stratum points
     ///
     /// @param value The stratum value

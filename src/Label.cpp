@@ -117,6 +117,15 @@ Label::get_stratum_size(Int value) const
     return n;
 }
 
+std::tuple<Int, Int>
+Label::get_stratum_bounds(Int value) const
+{
+    CALL_STACK_MSG();
+    Int start, end;
+    PETSC_CHECK(DMLabelGetStratumBounds(this->label, value, &start, &end));
+    return std::make_tuple(start, end);
+}
+
 IndexSet
 Label::get_stratum(Int value) const
 {
