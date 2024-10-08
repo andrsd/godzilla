@@ -354,6 +354,12 @@ public:
     /// facets owned by other processors with 0.
     void create_my_facets_label();
 
+    /// Check if cell is owned by this process
+    ///
+    /// @param cell The cell to check
+    /// @return `true` if the cell is owned by this process, `false` otherwise
+    [[nodiscard]] bool is_my_cell(Int cell) const;
+
 private:
     /// Cell set names
     std::map<Int, std::string> cell_set_names;

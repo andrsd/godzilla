@@ -763,4 +763,13 @@ UnstructuredMesh::create_my_facets_label()
     }
 }
 
+bool
+UnstructuredMesh::is_my_cell(Int cell) const
+{
+    CALL_STACK_MSG();
+    auto my_cells = get_label("my_cells");
+    assert(my_cells);
+    return my_cells.get_value(cell) == 1;
+}
+
 } // namespace godzilla
