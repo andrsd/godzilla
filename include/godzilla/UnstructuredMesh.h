@@ -263,6 +263,11 @@ public:
     /// @param overlap The overlap of partitions
     void distribute(Int overlap);
 
+    /// Find out whether this mesh is distributed
+    ///
+    /// @return `true` if the mesh is distributed, `false` otherwise
+    bool is_distributed() const;
+
     /// Construct ghost cells which connect to every boundary face
     ///
     void construct_ghost_cells();

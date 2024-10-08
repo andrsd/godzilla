@@ -118,6 +118,8 @@ TEST(UnstructuredMeshTest, api)
     EXPECT_EQ(m->get_num_cells(), 2);
 
     EXPECT_TRUE(m->is_simplex());
+
+    EXPECT_FALSE(m->is_distributed());
 }
 
 TEST(UnstructuredMeshTest, api_ghosted)
