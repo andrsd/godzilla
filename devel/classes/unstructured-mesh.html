@@ -118,6 +118,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh9get_chartEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_chart()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh9set_chartE3Int3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_chart()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh13get_cell_typeE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cell_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh20create_closure_indexEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_closure_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh20create_closure_indexERK7Section"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_closure_index()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh16get_connectivityE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_connectivity()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh11get_supportE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_support()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh16get_support_sizeE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_support_size()</span></code></a></li>
@@ -144,6 +146,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh19get_num_vertex_setsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_num_vertex_sets()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh15set_partitionerERK11Partitioner"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_partitioner()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh10distributeE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::distribute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh14is_distributedEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::is_distributed()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh21construct_ghost_cellsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::construct_ghost_cells()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh21compute_cell_geometryE3IntP4RealA_4RealA_4Real"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::compute_cell_geometry()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh19compute_cell_volumeE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::compute_cell_volume()</span></code></a></li>
@@ -343,6 +346,23 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Cell type </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh20create_closure_indexEv">
+<span id="_CPPv3N8godzilla16UnstructuredMesh20create_closure_indexEv"></span><span id="_CPPv2N8godzilla16UnstructuredMesh20create_closure_indexEv"></span><span id="godzilla::UnstructuredMesh::create_closure_index"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a85c824bdb977ac1bb748dc1f8bf55dee"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_closure_index</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh20create_closure_indexEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Calculate an index for the default section. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh20create_closure_indexERK7Section">
+<span id="_CPPv3N8godzilla16UnstructuredMesh20create_closure_indexERK7Section"></span><span id="_CPPv2N8godzilla16UnstructuredMesh20create_closure_indexERK7Section"></span><span id="godzilla::UnstructuredMesh::create_closure_index__SectionCR"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a36b12de7bf0f44d06c093e4fc0475db4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_closure_index</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Section</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">section</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh20create_closure_indexERK7Section" title="Link to this definition"></a><br /></dt>
+<dd><p>Calculate an index for the given Section for the closure operation. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>section</strong> – The section describing the layout in the local vector </p>
 </dd>
 </dl>
 </dd></dl>
@@ -685,6 +705,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>overlap</strong> – The overlap of partitions </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh14is_distributedEv">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh14is_distributedEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh14is_distributedEv"></span><span id="godzilla::UnstructuredMesh::is_distributedC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1ad045f077a6dd8dda906c1d85f0bf99c4"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_distributed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh14is_distributedEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Find out whether this mesh is distributed. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the mesh is distributed, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
 </dd>
 </dl>
 </dd></dl>
