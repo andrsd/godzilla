@@ -345,6 +345,10 @@ public:
     /// cells owned by other processors with 0.
     void create_my_cells_label();
 
+    /// Create a label named "my_facets" that marks all facets owned by this processor with 1 and
+    /// facets owned by other processors with 0.
+    void create_my_facets_label();
+
 private:
     /// Cell set names
     std::map<Int, std::string> cell_set_names;

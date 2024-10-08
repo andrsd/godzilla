@@ -729,4 +729,27 @@ UnstructuredMesh::create_my_cells_label()
     }
 }
 
+void
+UnstructuredMesh::create_my_facets_label()
+{
+    CALL_STACK_MSG();
+    auto sf = get_point_star_forest();
+    auto graph = sf.get_graph();
+    create_label("my_facets");
+    auto label = get_label("my_facets");
+    if (graph) {
+        for (auto & facet : get_face_range()) {
+            auto idx = graph.find_leaf(facet);
+            if (idx >= 0)
+                label.set_value(facet, 0);
+            else
+                label.set_value(facet, 1);
+        }
+    }
+    else {
+        for (auto & cell : get_face_range())
+            label.set_value(cell, 1);
+    }
+}
+
 } // namespace godzilla
