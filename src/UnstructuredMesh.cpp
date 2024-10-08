@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/IndexSet.h"
@@ -200,6 +199,20 @@ UnstructuredMesh::get_cell_type(Int el) const
     DMPolytopeType polytope_type;
     PETSC_CHECK(DMPlexGetCellType(get_dm(), el, &polytope_type));
     return static_cast<PolytopeType>(polytope_type);
+}
+
+void
+UnstructuredMesh::create_closure_index()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexCreateClosureIndex(get_dm(), nullptr));
+}
+
+void
+UnstructuredMesh::create_closure_index(const Section & section)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMPlexCreateClosureIndex(get_dm(), section));
 }
 
 std::vector<Int>

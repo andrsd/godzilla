@@ -111,6 +111,14 @@ public:
     /// @return Cell type
     [[nodiscard]] PolytopeType get_cell_type(Int cell) const;
 
+    /// Calculate an index for the default section
+    void create_closure_index();
+
+    /// Calculate an index for the given Section for the closure operation
+    ///
+    /// @param section The section describing the layout in the local vector
+    void create_closure_index(const Section & section);
+
     /// Get connectivity
     ///
     /// @param point Point with must lie in the chart
