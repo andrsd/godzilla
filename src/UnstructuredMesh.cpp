@@ -666,4 +666,13 @@ UnstructuredMesh::invert_cell(PolytopeType type, std::vector<Int> & cone)
     PETSC_CHECK(DMPlexInvertCell((DMPolytopeType) type, cone.data()));
 }
 
+IndexSet
+UnstructuredMesh::get_cell_numbering() const
+{
+    CALL_STACK_MSG();
+    IS is;
+    PETSC_CHECK(DMPlexGetCellNumbering(get_dm(), &is));
+    return IndexSet(is);
+}
+
 } // namespace godzilla

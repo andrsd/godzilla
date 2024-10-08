@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
+#include "godzilla/LineMesh.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/MeshObject.h"
 #include "godzilla/Parameters.h"
@@ -635,4 +636,25 @@ TEST(UnstructuredMesh, get_coordinates)
     EXPECT_DOUBLE_EQ(coord1[0], 0.5);
     EXPECT_DOUBLE_EQ(coord1[1], 0.);
     EXPECT_DOUBLE_EQ(coord1[2], 0.);
+}
+
+TEST(UnstructuredMesh, get_cell_numbering)
+{
+    TestApp app;
+
+    Parameters params = LineMesh::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 10;
+    LineMesh mesh(params);
+    mesh.create();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    m->distribute(1);
+    auto global_is = m->get_cell_numbering();
+    global_is.get_indices();
+    auto gids = global_is.data();
+    for (auto i = 0; i < 10; i++)
+        EXPECT_EQ(gids[i], i);
+    global_is.restore_indices();
 }

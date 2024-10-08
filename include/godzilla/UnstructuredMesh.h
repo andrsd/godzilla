@@ -317,6 +317,11 @@ public:
     /// @return Vector with dimension components containing vertex coordinates
     std::vector<Real> get_vertex_coordinates(Int pt) const;
 
+    /// Get a global cell numbering for all cells on this process
+    ///
+    /// @return Global cell numbers on this process
+    IndexSet get_cell_numbering() const;
+
 private:
     /// Cell set names
     std::map<Int, std::string> cell_set_names;
