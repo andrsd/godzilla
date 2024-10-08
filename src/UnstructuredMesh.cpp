@@ -151,6 +151,17 @@ UnstructuredMesh::get_all_cell_range() const
 }
 
 Range
+UnstructuredMesh::get_my_cell_range() const
+{
+    CALL_STACK_MSG();
+    // Note: this works becuase with overlap > 1, the cells owned by a process are numbered
+    // consecutively, and cells that are in the overlap follows (also with consecutive numbering).
+    auto my_cells = get_label("my_cells");
+    auto [first, last] = my_cells.get_stratum_bounds(1);
+    return { first, last };
+}
+
+Range
 UnstructuredMesh::get_ghost_cell_range() const
 {
     CALL_STACK_MSG();

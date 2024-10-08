@@ -84,6 +84,11 @@ public:
     /// @param Range of all cell indices (interior + ghosted)
     [[nodiscard]] Range get_all_cell_range() const;
 
+    /// Get range of cell indices owned by this processor (must call `create_my_cells_label` first)
+    ///
+    /// @return Range of cell indices
+    [[nodiscard]] Range get_my_cell_range() const;
+
     /// Get range of ghost cell indices
     ///
     /// @param Range of ghost cell indices
