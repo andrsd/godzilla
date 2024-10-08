@@ -155,6 +155,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh8stratifyEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::stratify()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh13get_full_joinERKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_full_join()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh22get_vertex_coordinatesE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_vertex_coordinates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh18get_cell_numberingEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cell_numbering()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh20build_from_cell_listERKN3mpi12CommunicatorE3Int3IntRKNSt6vectorI3IntEE3IntRKNSt6vectorI4RealEEb"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::build_from_cell_list()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh16get_polytope_dimE12PolytopeType"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_polytope_dim()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh11invert_cellE12PolytopeTypeRNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::invert_cell()</span></code></a></li>
@@ -794,6 +795,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Vector with dimension components containing vertex coordinates </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh18get_cell_numberingEv">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh18get_cell_numberingEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh18get_cell_numberingEv"></span><span id="godzilla::UnstructuredMesh::get_cell_numberingC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a92528463360c66cd3ac5930e55ee7c13"></span><span class="n"><span class="pre">IndexSet</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_cell_numbering</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh18get_cell_numberingEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get a global cell numbering for all cells on this process. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Global cell numbers on this process </p>
 </dd>
 </dl>
 </dd></dl>
