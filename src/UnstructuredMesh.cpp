@@ -8,7 +8,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Partitioner.h"
 #include "petscdmplex.h"
-#include <petscdmtypes.h>
+#include "petscdmtypes.h"
 
 namespace godzilla {
 
@@ -309,6 +309,15 @@ UnstructuredMesh::distribute(Int overlap)
     PETSC_CHECK(DMPlexDistribute(get_dm(), overlap, nullptr, &dm_dist));
     if (dm_dist)
         set_dm(dm_dist);
+}
+
+bool
+UnstructuredMesh::is_distributed() const
+{
+    CALL_STACK_MSG();
+    PetscBool flag;
+    PETSC_CHECK(DMPlexIsDistributed(get_dm(), &flag));
+    return flag == PETSC_TRUE;
 }
 
 bool
