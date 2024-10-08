@@ -113,6 +113,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_num_all_cellsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_num_all_cells()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh14get_cell_rangeEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cell_range()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh18get_all_cell_rangeEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_all_cell_range()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_my_cell_rangeEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_my_cell_range()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh20get_ghost_cell_rangeEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_ghost_cell_range()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh13get_all_cellsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_all_cells()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh9get_chartEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_chart()</span></code></a></li>
@@ -160,6 +161,9 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh13get_full_joinERKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_full_join()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh22get_vertex_coordinatesE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_vertex_coordinates()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh18get_cell_numberingEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_cell_numbering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh21create_my_cells_labelEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_my_cells_label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh22create_my_facets_labelEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_my_facets_label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh10is_my_cellE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::is_my_cell()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh20build_from_cell_listERKN3mpi12CommunicatorE3Int3IntRKNSt6vectorI3IntEE3IntRKNSt6vectorI4RealEEb"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::build_from_cell_list()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh16get_polytope_dimE12PolytopeType"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_polytope_dim()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh11invert_cellE12PolytopeTypeRNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::invert_cell()</span></code></a></li>
@@ -286,6 +290,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>Range</strong> – of all cell indices (interior + ghosted) </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh17get_my_cell_rangeEv">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh17get_my_cell_rangeEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh17get_my_cell_rangeEv"></span><span id="godzilla::UnstructuredMesh::get_my_cell_rangeC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1acfbeae3b0a8505b4be3e69d052a451a1"></span><span class="n"><span class="pre">Range</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_my_cell_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh17get_my_cell_rangeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get range of cell indices owned by this processor (must call <code class="docutils literal notranslate"><span class="pre">create_my_cells_label</span></code> first) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Range of cell indices </p>
 </dd>
 </dl>
 </dd></dl>
@@ -849,6 +864,32 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Global cell numbers on this process </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh21create_my_cells_labelEv">
+<span id="_CPPv3N8godzilla16UnstructuredMesh21create_my_cells_labelEv"></span><span id="_CPPv2N8godzilla16UnstructuredMesh21create_my_cells_labelEv"></span><span id="godzilla::UnstructuredMesh::create_my_cells_label"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a801ac0f41910b3f2f86f0a6647d2a611"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_my_cells_label</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh21create_my_cells_labelEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Create a label named “my_cells” that marks all cells owned by this processor with 1 and cells owned by other processors with 0. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh22create_my_facets_labelEv">
+<span id="_CPPv3N8godzilla16UnstructuredMesh22create_my_facets_labelEv"></span><span id="_CPPv2N8godzilla16UnstructuredMesh22create_my_facets_labelEv"></span><span id="godzilla::UnstructuredMesh::create_my_facets_label"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a3a2081085501fa008aef7ce61a7f1962"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_my_facets_label</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh22create_my_facets_labelEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Create a label named “my_facets” that marks all facets owned by this processor with 1 and facets owned by other processors with 0. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh10is_my_cellE3Int">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh10is_my_cellE3Int"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh10is_my_cellE3Int"></span><span id="godzilla::UnstructuredMesh::is_my_cell__IntC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1acd2b9bbaea5469f9492bb3e95d535089"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_my_cell</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cell</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh10is_my_cellE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Check if cell is owned by this process. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cell</strong> – The cell to check </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">true</span></code> if the cell is owned by this process, <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise </p>
 </dd>
 </dl>
 </dd></dl>
