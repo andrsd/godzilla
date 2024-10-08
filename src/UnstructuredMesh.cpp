@@ -151,6 +151,17 @@ UnstructuredMesh::get_all_cell_range() const
 }
 
 Range
+UnstructuredMesh::get_my_cell_range() const
+{
+    CALL_STACK_MSG();
+    // Note: this works becuase with overlap > 1, the cells owned by a process are numbered
+    // consecutively, and cells that are in the overlap follows (also with consecutive numbering).
+    auto my_cells = get_label("my_cells");
+    auto [first, last] = my_cells.get_stratum_bounds(1);
+    return { first, last };
+}
+
+Range
 UnstructuredMesh::get_ghost_cell_range() const
 {
     CALL_STACK_MSG();
@@ -704,6 +715,61 @@ UnstructuredMesh::get_cell_numbering() const
     IS is;
     PETSC_CHECK(DMPlexGetCellNumbering(get_dm(), &is));
     return IndexSet(is);
+}
+
+void
+UnstructuredMesh::create_my_cells_label()
+{
+    CALL_STACK_MSG();
+    create_label("my_cells");
+    auto label = get_label("my_cells");
+    auto sf = get_point_star_forest();
+    auto graph = sf.get_graph();
+    if (graph) {
+        for (auto & cell : get_cell_range()) {
+            auto idx = graph.find_leaf(cell);
+            if (idx >= 0)
+                label.set_value(cell, 0);
+            else
+                label.set_value(cell, 1);
+        }
+    }
+    else {
+        for (auto & cell : get_cell_range())
+            label.set_value(cell, 1);
+    }
+}
+
+void
+UnstructuredMesh::create_my_facets_label()
+{
+    CALL_STACK_MSG();
+    auto sf = get_point_star_forest();
+    auto graph = sf.get_graph();
+    create_label("my_facets");
+    auto label = get_label("my_facets");
+    if (graph) {
+        for (auto & facet : get_face_range()) {
+            auto idx = graph.find_leaf(facet);
+            if (idx >= 0)
+                label.set_value(facet, 0);
+            else
+                label.set_value(facet, 1);
+        }
+    }
+    else {
+        for (auto & cell : get_face_range())
+            label.set_value(cell, 1);
+    }
+}
+
+bool
+UnstructuredMesh::is_my_cell(Int cell) const
+{
+    CALL_STACK_MSG();
+    auto my_cells = get_label("my_cells");
+    assert(my_cells);
+    return my_cells.get_value(cell) == 1;
 }
 
 } // namespace godzilla

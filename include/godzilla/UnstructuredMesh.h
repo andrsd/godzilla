@@ -84,6 +84,11 @@ public:
     /// @param Range of all cell indices (interior + ghosted)
     [[nodiscard]] Range get_all_cell_range() const;
 
+    /// Get range of cell indices owned by this processor (must call `create_my_cells_label` first)
+    ///
+    /// @return Range of cell indices
+    [[nodiscard]] Range get_my_cell_range() const;
+
     /// Get range of ghost cell indices
     ///
     /// @param Range of ghost cell indices
@@ -340,6 +345,20 @@ public:
     ///
     /// @return Global cell numbers on this process
     IndexSet get_cell_numbering() const;
+
+    /// Create a label named "my_cells" that marks all cells owned by this processor with 1 and
+    /// cells owned by other processors with 0.
+    void create_my_cells_label();
+
+    /// Create a label named "my_facets" that marks all facets owned by this processor with 1 and
+    /// facets owned by other processors with 0.
+    void create_my_facets_label();
+
+    /// Check if cell is owned by this process
+    ///
+    /// @param cell The cell to check
+    /// @return `true` if the cell is owned by this process, `false` otherwise
+    [[nodiscard]] bool is_my_cell(Int cell) const;
 
 private:
     /// Cell set names
