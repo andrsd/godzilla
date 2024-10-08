@@ -341,6 +341,10 @@ public:
     /// @return Global cell numbers on this process
     IndexSet get_cell_numbering() const;
 
+    /// Create a label named "my_cells" that marks all cells owned by this processor with 1 and
+    /// cells owned by other processors with 0.
+    void create_my_cells_label();
+
 private:
     /// Cell set names
     std::map<Int, std::string> cell_set_names;

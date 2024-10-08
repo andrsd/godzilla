@@ -706,4 +706,27 @@ UnstructuredMesh::get_cell_numbering() const
     return IndexSet(is);
 }
 
+void
+UnstructuredMesh::create_my_cells_label()
+{
+    CALL_STACK_MSG();
+    create_label("my_cells");
+    auto label = get_label("my_cells");
+    auto sf = get_point_star_forest();
+    auto graph = sf.get_graph();
+    if (graph) {
+        for (auto & cell : get_cell_range()) {
+            auto idx = graph.find_leaf(cell);
+            if (idx >= 0)
+                label.set_value(cell, 0);
+            else
+                label.set_value(cell, 1);
+        }
+    }
+    else {
+        for (auto & cell : get_cell_range())
+            label.set_value(cell, 1);
+    }
+}
+
 } // namespace godzilla
