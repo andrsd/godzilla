@@ -42,11 +42,25 @@ StarForest::Graph::get_leaves() const
     return this->leaves;
 }
 
+Int
+StarForest::Graph::get_leaf(Int idx) const
+{
+    CALL_STACK_MSG();
+    return this->leaves[idx];
+}
+
 const StarForest::Node *
 StarForest::Graph::get_remote_leaves() const
 {
     CALL_STACK_MSG();
     return this->remote_leaves;
+}
+
+const StarForest::Node &
+StarForest::Graph::get_remote_leaf(Int idx) const
+{
+    CALL_STACK_MSG();
+    return this->remote_leaves[idx];
 }
 
 Int

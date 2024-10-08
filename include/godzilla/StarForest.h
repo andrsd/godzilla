@@ -25,7 +25,19 @@ public:
 
         [[nodiscard]] const Int * get_leaves() const;
 
+        /// Get leaf at index `idx`
+        ///
+        /// @param idx Index of the leaf
+        /// @return Leaf at index `idx`
+        [[nodiscard]] Int get_leaf(Int idx) const;
+
         [[nodiscard]] const Node * get_remote_leaves() const;
+
+        /// Get remote leaf at index `idx`
+        ///
+        /// @param idx Index of the remote leaf
+        /// @return Remote leaf at index `idx`
+        [[nodiscard]] const Node & get_remote_leaf(Int idx) const;
 
         ///
         [[nodiscard]] Int find_leaf(Int point) const;
