@@ -34,6 +34,11 @@ TEST(StarForestTest, graph)
     EXPECT_TRUE(g.get_leaves() != nullptr);
     EXPECT_TRUE(g.get_remote_leaves() != nullptr);
     EXPECT_EQ(g.find_leaf(3), 1);
+
+    EXPECT_EQ(g.get_leaf(1), 3);
+
+    EXPECT_EQ(g.get_remote_leaf(1).rank, 0);
+    EXPECT_EQ(g.get_remote_leaf(1).index, 1);
 }
 
 //
