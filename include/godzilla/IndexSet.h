@@ -11,6 +11,8 @@
 
 namespace godzilla {
 
+/// `IndexSet`s are objects used to do efficient indexing into other data structures such as
+/// `Vector` and `Matrix`
 class IndexSet {
 public:
     struct Iterator {
@@ -46,10 +48,16 @@ public:
     explicit IndexSet(IS is);
     ~IndexSet() = default;
 
+    /// Creates an index set object
+    ///
+    /// @param comm The MPI communicator
     void create(MPI_Comm comm);
+
+    /// Destroys an index set
     void destroy();
 
     void get_indices();
+
     void restore_indices();
 
     /// Returns a description of the points in an IndexSet suitable for traversal
@@ -73,10 +81,20 @@ public:
     /// @param points The indices for the entire range, from `get_point_range`
     void get_point_subrange(Int start, Int end, const Int * points) const;
 
+    /// Returns the global length of an index set.
+    ///
+    /// @return The global size of the index set
     [[nodiscard]] Int get_size() const;
+
+    /// Returns the local (processor) length of an index set.
+    ///
+    /// @return The local size of the index set
     [[nodiscard]] Int get_local_size() const;
+
     [[nodiscard]] const Int * data() const;
+
     Int operator[](Int i) const;
+
     Int operator()(Int i) const;
 
     /// Convert indices from this index set into std::vector
@@ -84,13 +102,23 @@ public:
     /// @return std::vector containing the indices
     std::vector<Int> to_std_vector();
 
+    /// Increase reference of this object
     void inc_ref();
 
+    /// Convert this object to a PETSc object so it can be passed directly into PETSc API
     operator IS() const;
+
+    /// Convert this object to a PETSc object so it can be passed directly into PETSc API
     operator IS *();
 
+    /// Checks if the IndexSet is empty
+    ///
+    /// @return `true` if the index set is empty, `false` otherwise
     [[nodiscard]] bool empty() const;
 
+    /// Returns the PETSc ID of the index set
+    ///
+    /// @return The PETSc ID
     [[nodiscard]] PetscObjectId get_id() const;
 
     /// Checks the indices to determine whether they have been sorted
@@ -120,8 +148,21 @@ private:
     const Int * indices;
 
 public:
-    static IndexSet create_general(MPI_Comm comm, const std::vector<Int> & idx, CopyMode copy_mode = COPY_VALUES);
+    /// Creates a data structure for an index set containing a list of integers.
+    ///
+    /// @param comm The MPI communicator
+    /// @param idx The length of the index set
+    /// @param copy_mode The copy mode see, `CopyMode` for details
+    static IndexSet
+    create_general(MPI_Comm comm, const std::vector<Int> & idx, CopyMode copy_mode = COPY_VALUES);
+
     static IndexSet intersect_caching(const IndexSet & is1, const IndexSet & is2);
+
+    /// Computes the intersection of two index sets, by sorting and comparing.
+    ///
+    /// @param is1 The first index set
+    /// @param is2 The second index set
+    /// @return The sorted intersection of `is1` and `is2`
     static IndexSet intersect(const IndexSet & is1, const IndexSet & is2);
 };
 
