@@ -326,7 +326,6 @@ DGProblemInterface::set_aux_field(Int id,
     CALL_STACK_MSG();
     auto it = this->aux_fields.find(id);
     if (it == this->aux_fields.end()) {
-        auto dim = get_problem()->get_dimension();
         FieldInfo fi(name, id, nc, k, block);
         if (nc > 1) {
             fi.component_names.resize(nc);

@@ -72,7 +72,6 @@ void
 Mesh::create_label(const std::string & name) const
 {
     CALL_STACK_MSG();
-    DMLabel label;
     PETSC_CHECK(DMCreateLabel(this->dm, name.c_str()));
 }
 

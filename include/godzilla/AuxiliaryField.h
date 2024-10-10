@@ -90,9 +90,6 @@ private:
     /// Region name this auxiliary field is defined on
     const std::string & region;
 
-    /// Field ID
-    Int fid;
-
     /// Block here the auxiliary field lives
     Label label;
 

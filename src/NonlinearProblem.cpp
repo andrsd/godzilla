@@ -45,7 +45,6 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     Problem(parameters),
     snes(),
     ksp(),
-    converged_reason(SNESolver::CONVERGED_ITERATING),
     line_search_type(get_param<std::string>("line_search")),
     nl_rel_tol(get_param<Real>("nl_rel_tol")),
     nl_abs_tol(get_param<Real>("nl_abs_tol")),

@@ -102,8 +102,6 @@ private:
     Vector r;
     /// Jacobian matrix
     Matrix J;
-    /// Converged reason
-    SNESolver::ConvergedReason converged_reason;
     /// Preconditioner
     Preconditioner pc;
     /// The type of line search to be used
