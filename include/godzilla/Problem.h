@@ -221,6 +221,13 @@ public:
     /// Destroys the auxiliary vector information and creates a new empty one
     void clear_auxiliary_vec();
 
+    /// Returns an IndexSet containing a Section that encapsulates a subproblem defined by
+    /// a subset of the fields in a Section in the problem.
+    ///
+    /// @param fields The field numbers of the selected fields
+    /// @return The global indices for the subproblem
+    IndexSet create_section_subis(const std::vector<Int> & fields) const;
+
 protected:
     /// Set vector/matrix types
     virtual void set_up_types();
