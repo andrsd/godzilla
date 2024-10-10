@@ -182,3 +182,23 @@ TEST(MatrixTest, scale)
     EXPECT_DOUBLE_EQ(m(0, 0), 4.);
     EXPECT_DOUBLE_EQ(m(1, 1), 16.);
 }
+
+TEST(MatrixTest, transpose)
+{
+    Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 3, 3, { 3, 1, 2 });
+    m.set_value_local(0, 0, 1.);
+    m.set_value_local(0, 1, 2.);
+    m.set_value_local(0, 2, 3.);
+    m.set_value_local(1, 1, 4.);
+    m.set_value_local(2, 0, 5.);
+    m.set_value_local(2, 2, 6.);
+    m.assemble();
+
+    m.transpose();
+    EXPECT_DOUBLE_EQ(m(0, 0), 1.);
+    EXPECT_DOUBLE_EQ(m(1, 0), 2.);
+    EXPECT_DOUBLE_EQ(m(2, 0), 3.);
+    EXPECT_DOUBLE_EQ(m(1, 1), 4.);
+    EXPECT_DOUBLE_EQ(m(0, 2), 5.);
+    EXPECT_DOUBLE_EQ(m(2, 2), 6.);
+}
