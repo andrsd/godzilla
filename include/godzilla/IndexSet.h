@@ -48,6 +48,11 @@ public:
     explicit IndexSet(IS is);
     ~IndexSet() = default;
 
+    /// Replace the content of this index set with the content of another index set
+    ///
+    /// @param src The index set to copy from
+    void assign(const IndexSet & src);
+
     /// Creates an index set object
     ///
     /// @param comm The MPI communicator
@@ -55,6 +60,11 @@ public:
 
     /// Destroys an index set
     void destroy();
+
+    /// Creates a duplicate copy of an index set
+    ///
+    /// @return The copy of the index set
+    [[nodiscard]] IndexSet duplicate() const;
 
     void get_indices();
 
@@ -121,6 +131,11 @@ public:
     /// @return The PETSc ID
     [[nodiscard]] PetscObjectId get_id() const;
 
+    /// Shift all indices by given offset
+    ///
+    /// @param offset The offset to shift the indices by
+    void shift(Int offset);
+
     /// Checks the indices to determine whether they have been sorted
     ///
     /// @return `true` is index set is sorted
@@ -164,6 +179,12 @@ public:
     /// @param is2 The second index set
     /// @return The sorted intersection of `is1` and `is2`
     static IndexSet intersect(const IndexSet & is1, const IndexSet & is2);
+
+    /// Copies an index set
+    ///
+    /// @param src The index set to copy from
+    /// @param dest The index set to copy to
+    static void copy(const IndexSet & src, IndexSet & dest);
 };
 
 } // namespace godzilla

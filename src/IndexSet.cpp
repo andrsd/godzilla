@@ -148,6 +148,15 @@ IndexSet::get_local_size() const
     return n;
 }
 
+IndexSet
+IndexSet::duplicate() const
+{
+    CALL_STACK_MSG();
+    IS new_is;
+    PETSC_CHECK(ISDuplicate(this->is, &new_is));
+    return IndexSet(new_is);
+}
+
 void
 IndexSet::get_indices()
 {
@@ -246,6 +255,20 @@ IndexSet::empty() const
     return this->is == nullptr;
 }
 
+void
+IndexSet::shift(Int offset)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISShift(this->is, offset, this->is));
+}
+
+void
+IndexSet::assign(const IndexSet & src)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISCopy(src, this->is));
+}
+
 IndexSet
 IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
 {
@@ -277,6 +300,13 @@ IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
     IS is;
     ISIntersect(is1, is2, &is);
     return IndexSet(is);
+}
+
+void
+IndexSet::copy(const IndexSet & src, IndexSet & dest)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISCopy(src, dest));
 }
 
 IndexSet::Iterator
