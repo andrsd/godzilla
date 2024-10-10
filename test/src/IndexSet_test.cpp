@@ -178,3 +178,16 @@ TEST(IndexSetTest, view)
     EXPECT_THAT(out, HasSubstr("3 10"));
     is.destroy();
 }
+
+TEST(IndexSetTest, duplicate)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto dup = is.duplicate();
+    dup.get_indices();
+    auto vals = dup.to_std_vector();
+    EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
+    dup.restore_indices();
+    dup.destroy();
+    is.destroy();
+}

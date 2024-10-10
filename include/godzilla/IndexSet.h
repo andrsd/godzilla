@@ -56,6 +56,11 @@ public:
     /// Destroys an index set
     void destroy();
 
+    /// Creates a duplicate copy of an index set
+    ///
+    /// @return The copy of the index set
+    [[nodiscard]] IndexSet duplicate() const;
+
     void get_indices();
 
     void restore_indices();

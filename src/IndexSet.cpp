@@ -148,6 +148,15 @@ IndexSet::get_local_size() const
     return n;
 }
 
+IndexSet
+IndexSet::duplicate() const
+{
+    CALL_STACK_MSG();
+    IS new_is;
+    PETSC_CHECK(ISDuplicate(this->is, &new_is));
+    return IndexSet(new_is);
+}
+
 void
 IndexSet::get_indices()
 {
