@@ -432,4 +432,25 @@ Problem::clear_auxiliary_vec()
 #endif
 }
 
+IndexSet
+Problem::create_section_subis(const std::vector<Int> & fields) const
+{
+    CALL_STACK_MSG();
+#if PETSC_VERSION_GE(3, 21, 0)
+    IS is;
+    PETSC_CHECK(DMCreateSectionSubDM(get_dm(),
+                                     fields.size(),
+                                     fields.data(),
+                                     PETSC_DECIDE,
+                                     nullptr,
+                                     &is,
+                                     nullptr));
+    return IndexSet(is);
+#else
+    IS is;
+    PETSC_CHECK(DMCreateSectionSubDM(get_dm(), fields.size(), fields.data(), &is, nullptr));
+    return IndexSet(is);
+#endif
+}
+
 } // namespace godzilla
