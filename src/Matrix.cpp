@@ -171,6 +171,13 @@ Matrix::scale(Scalar a)
     PETSC_CHECK(MatScale(this->mat, a));
 }
 
+void
+Matrix::transpose()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatTranspose(this->mat, MAT_INPLACE_MATRIX, &this->mat));
+}
+
 Scalar
 Matrix::operator()(Int row, Int col) const
 {

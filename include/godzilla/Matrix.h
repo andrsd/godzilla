@@ -70,6 +70,9 @@ public:
     /// @param a The scaling value
     void scale(Scalar a);
 
+    /// Computes an in-place transpose of a matrix
+    void transpose();
+
     Scalar operator()(Int row, Int col) const;
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
