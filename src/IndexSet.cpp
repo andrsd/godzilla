@@ -262,6 +262,13 @@ IndexSet::shift(Int offset)
     PETSC_CHECK(ISShift(this->is, offset, this->is));
 }
 
+void
+IndexSet::assign(const IndexSet & src)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISCopy(src, this->is));
+}
+
 IndexSet
 IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
 {
@@ -293,6 +300,13 @@ IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
     IS is;
     ISIntersect(is1, is2, &is);
     return IndexSet(is);
+}
+
+void
+IndexSet::copy(const IndexSet & src, IndexSet & dest)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISCopy(src, dest));
 }
 
 IndexSet::Iterator

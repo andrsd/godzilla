@@ -203,3 +203,31 @@ TEST(IndexSetTest, shift)
     is.restore_indices();
     is.destroy();
 }
+
+TEST(IndexSetTest, assign)
+{
+    TestApp app;
+    auto src = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto dest = IndexSet::create_general(app.get_comm(), { 0, 0, 0, 0, 0, 0 });
+    dest.assign(src);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
+    dest.restore_indices();
+    dest.destroy();
+    src.destroy();
+}
+
+TEST(IndexSetTest, copy)
+{
+    TestApp app;
+    auto src = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto dest = IndexSet::create_general(app.get_comm(), { 0, 0, 0, 0, 0, 0 });
+    IndexSet::copy(src, dest);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
+    dest.restore_indices();
+    dest.destroy();
+    src.destroy();
+}
