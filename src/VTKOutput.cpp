@@ -9,8 +9,6 @@
 
 namespace godzilla {
 
-static const int MAX_PATH = 1024;
-
 Parameters
 VTKOutput::parameters()
 {

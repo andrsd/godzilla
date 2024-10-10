@@ -65,8 +65,8 @@ public:
     }
 
 protected:
-    double & c;
     const double & b;
+    double & c;
 };
 
 } // namespace

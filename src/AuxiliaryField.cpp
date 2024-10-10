@@ -28,7 +28,6 @@ AuxiliaryField::AuxiliaryField(const Parameters & params) :
     mesh(nullptr),
     field(get_param<std::string>("field")),
     region(get_param<std::string>("region")),
-    fid(-1),
     block_id(-1)
 {
     CALL_STACK_MSG();
