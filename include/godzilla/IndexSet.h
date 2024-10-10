@@ -126,6 +126,11 @@ public:
     /// @return The PETSc ID
     [[nodiscard]] PetscObjectId get_id() const;
 
+    /// Shift all indices by given offset
+    ///
+    /// @param offset The offset to shift the indices by
+    void shift(Int offset);
+
     /// Checks the indices to determine whether they have been sorted
     ///
     /// @return `true` is index set is sorted

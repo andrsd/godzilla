@@ -255,6 +255,13 @@ IndexSet::empty() const
     return this->is == nullptr;
 }
 
+void
+IndexSet::shift(Int offset)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISShift(this->is, offset, this->is));
+}
+
 IndexSet
 IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
 {
