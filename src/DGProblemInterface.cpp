@@ -120,10 +120,11 @@ Int
 DGProblemInterface::get_field_order(Int fid) const
 {
     CALL_STACK_MSG();
-    if (fid == 0)
-        return 0;
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end())
+        return it->second.k;
     else
-        throw NotImplementedException("Multiple-field problems are not implemented");
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 std::string
