@@ -448,4 +448,13 @@ IndexSet::set_type(const std::string & type)
     PETSC_CHECK(ISSetType(this->is, type.c_str()));
 }
 
+IndexSet
+IndexSet::sum(const IndexSet & is1, const IndexSet & is2)
+{
+    CALL_STACK_MSG();
+    IS out;
+    PETSC_CHECK(ISSum(is1, is2, &out));
+    return IndexSet(out);
+}
+
 } // namespace godzilla

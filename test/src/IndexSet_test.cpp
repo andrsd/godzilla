@@ -371,3 +371,21 @@ TEST(IndexSetTest, set_type)
     EXPECT_EQ(is.get_type(), ISGENERAL);
     is.destroy();
 }
+
+TEST(IndexSetTest, sum)
+{
+    TestApp app;
+    if (app.get_comm().size() != 1)
+        return;
+
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 7, 9 });
+    auto dest = IndexSet::sum(is1, is2);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, UnorderedElementsAre(1, 3, 4, 5, 7, 8, 9, 10));
+    dest.restore_indices();
+    dest.destroy();
+    is2.destroy();
+    is1.destroy();
+}

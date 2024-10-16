@@ -267,6 +267,13 @@ public:
     /// @param is2 The second index set
     /// @return The union of `is1` and `is2`
     static IndexSet expand(const IndexSet & is1, const IndexSet & is2);
+
+    /// Computes the sum (union) of two index sets.
+    ///
+    /// @param is1 The first index set
+    /// @param is2 The second index set
+    /// @return The sum of `is1` and `is2`
+    static IndexSet sum(const IndexSet & is1, const IndexSet & is2);
 };
 
 } // namespace godzilla
