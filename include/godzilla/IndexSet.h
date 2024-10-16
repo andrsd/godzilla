@@ -58,6 +58,14 @@ public:
     /// @param comm The MPI communicator
     void create(MPI_Comm comm);
 
+    /// Generates the complement index set. That is all indices that are NOT in the given set.
+    ///
+    /// @param nmin The first index desired in the local part of the complement
+    /// @param nmax The largest index desired in the local part of the complement (note that all
+    ///             indices in this indexs set must be greater or equal to `nmin` and less than
+    ///             `nmax`)
+    IndexSet complement(Int nmin, Int nmax) const;
+
     /// Destroys an index set
     void destroy();
 

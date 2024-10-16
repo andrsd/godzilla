@@ -324,4 +324,13 @@ IndexSet::end()
     return Iterator(*this, n);
 }
 
+IndexSet
+IndexSet::complement(Int nmin, Int nmax) const
+{
+    CALL_STACK_MSG();
+    IS out;
+    PETSC_CHECK(ISComplement(this->is, nmin, nmax, &out));
+    return IndexSet(out);
+}
+
 } // namespace godzilla

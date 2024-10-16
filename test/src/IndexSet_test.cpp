@@ -231,3 +231,16 @@ TEST(IndexSetTest, copy)
     dest.destroy();
     src.destroy();
 }
+
+TEST(IndexSetTest, complement)
+{
+    TestApp app;
+    auto src = IndexSet::create_general(app.get_comm(), { 4, 5, 6 });
+    auto dest = src.complement(1, 10);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, ElementsAre(1, 2, 3, 7, 8, 9));
+    dest.restore_indices();
+    dest.destroy();
+    src.destroy();
+}
