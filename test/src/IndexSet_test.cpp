@@ -231,3 +231,161 @@ TEST(IndexSetTest, copy)
     dest.destroy();
     src.destroy();
 }
+
+TEST(IndexSetTest, complement)
+{
+    TestApp app;
+    auto src = IndexSet::create_general(app.get_comm(), { 4, 5, 6 });
+    auto dest = src.complement(1, 10);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, ElementsAre(1, 2, 3, 7, 8, 9));
+    dest.restore_indices();
+    dest.destroy();
+    src.destroy();
+}
+
+TEST(IndexSetTest, concatenate)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 2, 6, 7, 9 });
+    auto dest = IndexSet::concatenate(app.get_comm(), { is1, is2 });
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10, 2, 6, 7, 9));
+    dest.restore_indices();
+    dest.destroy();
+    is1.destroy();
+    is2.destroy();
+}
+
+TEST(IndexSetTest, difference)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 8 });
+    auto dest = IndexSet::difference(is1, is2);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, ElementsAre(1, 4, 10));
+    dest.restore_indices();
+    dest.destroy();
+    is1.destroy();
+    is2.destroy();
+}
+
+TEST(IndexSetTest, equal)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is3 = IndexSet::create_general(app.get_comm(), { 4, 5, 1, 8, 10, 3 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 8 });
+    EXPECT_TRUE(is1.equal(is3));
+    EXPECT_FALSE(is1.equal(is2));
+    is1.destroy();
+    is2.destroy();
+    is3.destroy();
+}
+
+TEST(IndexSetTest, equal_unsorted)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto dup = is1.duplicate();
+    auto is2 = IndexSet::create_general(app.get_comm(), { 4, 5, 1, 8, 10, 3 });
+    EXPECT_TRUE(is1.equal_unsorted(dup));
+    EXPECT_FALSE(is1.equal_unsorted(is2));
+    is1.destroy();
+    is2.destroy();
+    dup.destroy();
+}
+
+TEST(IndexSetTest, expand)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 7, 9 });
+    auto dest = IndexSet::expand(is1, is2);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, UnorderedElementsAre(1, 3, 4, 5, 7, 8, 9, 10));
+    dest.restore_indices();
+    is2.destroy();
+    is1.destroy();
+    dest.destroy();
+}
+
+TEST(IndexSetTest, get_min_max)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto [min, max] = is.get_min_max();
+    EXPECT_EQ(min, 1);
+    EXPECT_EQ(max, 10);
+    is.destroy();
+}
+
+TEST(IndexSetTest, get_type)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    EXPECT_EQ(is.get_type(), ISGENERAL);
+}
+
+TEST(IndexSetTest, identity)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    EXPECT_FALSE(is.identity());
+    is.set_identity();
+    EXPECT_TRUE(is.identity());
+    is.destroy();
+}
+
+TEST(IndexSetTest, locate)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    EXPECT_EQ(is.locate(4), 2);
+    EXPECT_TRUE(is.locate(7) < 0);
+    is.destroy();
+}
+
+TEST(IndexSetTest, permutation)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    EXPECT_FALSE(is.permutation());
+    is.set_permutation();
+    EXPECT_TRUE(is.permutation());
+    is.destroy();
+}
+
+TEST(IndexSetTest, set_type)
+{
+    TestApp app;
+    IndexSet is;
+    is.create(app.get_comm());
+    is.set_type(ISGENERAL);
+    EXPECT_EQ(is.get_type(), ISGENERAL);
+    is.destroy();
+}
+
+TEST(IndexSetTest, sum)
+{
+    TestApp app;
+    if (app.get_comm().size() != 1)
+        return;
+
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 7, 9 });
+    auto dest = IndexSet::sum(is1, is2);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, UnorderedElementsAre(1, 3, 4, 5, 7, 8, 9, 10));
+    dest.restore_indices();
+    dest.destroy();
+    is2.destroy();
+    is1.destroy();
+}

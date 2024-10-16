@@ -58,6 +58,14 @@ public:
     /// @param comm The MPI communicator
     void create(MPI_Comm comm);
 
+    /// Generates the complement index set. That is all indices that are NOT in the given set.
+    ///
+    /// @param nmin The first index desired in the local part of the complement
+    /// @param nmax The largest index desired in the local part of the complement (note that all
+    ///             indices in this indexs set must be greater or equal to `nmin` and less than
+    ///             `nmax`)
+    IndexSet complement(Int nmin, Int nmax) const;
+
     /// Destroys an index set
     void destroy();
 
@@ -66,7 +74,27 @@ public:
     /// @return The copy of the index set
     [[nodiscard]] IndexSet duplicate() const;
 
+    /// Compares if this index set has the same set of indices as the `other`
+    ///
+    /// @param other The index set to compare with
+    /// @return `true` if the index sets are equal, `false` otherwise
+    [[nodiscard]] bool equal(const IndexSet & other) const;
+
+    /// Compares if this index set has the same set of indices as the `other`
+    ///
+    /// @param other The index set to compare with
+    /// @return `true` if the index sets are equal, `false` otherwise
+    ///
+    /// @note This routine does NOT sort the contents of the index sets before the comparison is
+    /// made, i.e., the order of indices is important.
+    [[nodiscard]] bool equal_unsorted(const IndexSet & other) const;
+
     void get_indices();
+
+    /// Gets the index set type name
+    ///
+    /// @return The type name
+    [[nodiscard]] std::string get_type() const;
 
     void restore_indices();
 
@@ -91,6 +119,11 @@ public:
     /// @param points The indices for the entire range, from `get_point_range`
     void get_point_subrange(Int start, Int end, const Int * points) const;
 
+    /// Gets the minimum and maximum values
+    ///
+    /// @return A tuple containing the minimum and maximum values
+    [[nodiscard]] std::tuple<Int, Int> get_min_max() const;
+
     /// Returns the global length of an index set.
     ///
     /// @return The global size of the index set
@@ -103,6 +136,13 @@ public:
 
     [[nodiscard]] const Int * data() const;
 
+    /// Determine the location of an index within the local component of an index set
+    ///
+    /// @param key The index to locate
+    /// @return if >= 0, a location within the index set that is equal to the key, otherwise the key
+    ///         is not in the index set
+    [[nodiscard]] Int locate(Int key) const;
+
     Int operator[](Int i) const;
 
     Int operator()(Int i) const;
@@ -111,6 +151,27 @@ public:
     ///
     /// @return std::vector containing the indices
     std::vector<Int> to_std_vector();
+
+    /// Determines whether index set is the identity mapping.
+    ///
+    /// @return `true` if the index set is the identity mapping, `false` otherwise
+    [[nodiscard]] bool identity() const;
+
+    /// Sets the index set to be the identity mapping.
+    void set_identity();
+
+    /// Determines whether index set is a permutation.
+    ///
+    /// @return `true` if the index set is a permutation, `false` otherwise
+    [[nodiscard]] bool permutation() const;
+
+    /// Informs the index set that it is a permutation.
+    void set_permutation();
+
+    /// Builds a index set, for a particular type
+    ///
+    /// @param type The type of index set to build
+    void set_type(const std::string & type);
 
     /// Increase reference of this object
     void inc_ref();
@@ -185,6 +246,34 @@ public:
     /// @param src The index set to copy from
     /// @param dest The index set to copy to
     static void copy(const IndexSet & src, IndexSet & dest);
+
+    /// Forms a new IS by locally concatenating the indices from an IS list without reordering.
+    ///
+    /// @param comm The MPI communicator
+    /// @param is_list The list of index sets to concatenate
+    /// @return The concatenated index set
+    static IndexSet concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list);
+
+    /// Computes the difference between two index sets.
+    ///
+    /// @param is1 The first index set, to have items removed from it
+    /// @param is2 Index values to be removed
+    /// @return The difference between `is1` and `is2`
+    static IndexSet difference(const IndexSet & is1, const IndexSet & is2);
+
+    /// Computes the union of two index sets, by concatenating 2 lists and removing duplicates.
+    ///
+    /// @param is1 The first index set
+    /// @param is2 The second index set
+    /// @return The union of `is1` and `is2`
+    static IndexSet expand(const IndexSet & is1, const IndexSet & is2);
+
+    /// Computes the sum (union) of two index sets.
+    ///
+    /// @param is1 The first index set
+    /// @param is2 The second index set
+    /// @return The sum of `is1` and `is2`
+    static IndexSet sum(const IndexSet & is1, const IndexSet & is2);
 };
 
 } // namespace godzilla

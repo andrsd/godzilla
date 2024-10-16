@@ -6,6 +6,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include <cassert>
+#include <petscis.h>
 
 namespace godzilla {
 
@@ -322,6 +323,138 @@ IndexSet::end()
     CALL_STACK_MSG();
     auto n = get_local_size();
     return Iterator(*this, n);
+}
+
+IndexSet
+IndexSet::complement(Int nmin, Int nmax) const
+{
+    CALL_STACK_MSG();
+    IS out;
+    PETSC_CHECK(ISComplement(this->is, nmin, nmax, &out));
+    return IndexSet(out);
+}
+
+IndexSet
+IndexSet::concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list)
+{
+    CALL_STACK_MSG();
+    IS out;
+    std::vector<IS> is_vec(is_list.size());
+    for (size_t i = 0; i < is_list.size(); i++)
+        is_vec[i] = is_list[i];
+    PETSC_CHECK(ISConcatenate(comm, is_vec.size(), is_vec.data(), &out));
+    return IndexSet(out);
+}
+
+IndexSet
+IndexSet::difference(const IndexSet & is1, const IndexSet & is2)
+{
+    CALL_STACK_MSG();
+    IS out;
+    PETSC_CHECK(ISDifference(is1, is2, &out));
+    return IndexSet(out);
+}
+
+bool
+IndexSet::equal(const IndexSet & other) const
+{
+    CALL_STACK_MSG();
+    PetscBool res;
+    PETSC_CHECK(ISEqual(this->is, other, &res));
+    return res == PETSC_TRUE;
+}
+
+bool
+IndexSet::equal_unsorted(const IndexSet & other) const
+{
+    CALL_STACK_MSG();
+    PetscBool res;
+    PETSC_CHECK(ISEqualUnsorted(this->is, other, &res));
+    return res == PETSC_TRUE;
+}
+
+IndexSet
+IndexSet::expand(const IndexSet & is1, const IndexSet & is2)
+{
+    CALL_STACK_MSG();
+    IS out;
+    PETSC_CHECK(ISExpand(is1, is2, &out));
+    return IndexSet(out);
+}
+
+std::tuple<Int, Int>
+IndexSet::get_min_max() const
+{
+    CALL_STACK_MSG();
+    PetscInt min, max;
+    PETSC_CHECK(ISGetMinMax(this->is, &min, &max));
+    return std::make_tuple(min, max);
+}
+
+std::string
+IndexSet::get_type() const
+{
+    CALL_STACK_MSG();
+    ISType type;
+    PETSC_CHECK(ISGetType(this->is, &type));
+    return std::string(type);
+}
+
+void
+IndexSet::set_identity()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISSetIdentity(this->is));
+}
+
+bool
+IndexSet::identity() const
+{
+    CALL_STACK_MSG();
+    PetscBool res;
+    PETSC_CHECK(ISIdentity(this->is, &res));
+    return res == PETSC_TRUE;
+}
+
+Int
+IndexSet::locate(Int key) const
+{
+    CALL_STACK_MSG();
+    PetscInt idx;
+    PETSC_CHECK(ISLocate(this->is, key, &idx));
+    return idx;
+}
+
+void
+IndexSet::set_permutation()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISSetPermutation(this->is));
+}
+
+bool
+IndexSet::permutation() const
+{
+    CALL_STACK_MSG();
+    PetscBool res;
+    PETSC_CHECK(ISPermutation(this->is, &res));
+    return res == PETSC_TRUE;
+}
+
+void
+IndexSet::set_type(const std::string & type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISSetType(this->is, type.c_str()));
+}
+
+IndexSet
+IndexSet::sum(const IndexSet & is1, const IndexSet & is2)
+{
+    CALL_STACK_MSG();
+    IS out;
+    PETSC_CHECK(ISSum(is1, is2, &out));
+    return IndexSet(out);
 }
 
 } // namespace godzilla
