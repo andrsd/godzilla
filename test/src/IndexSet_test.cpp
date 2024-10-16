@@ -325,3 +325,10 @@ TEST(IndexSetTest, get_min_max)
     EXPECT_EQ(max, 10);
     is.destroy();
 }
+
+TEST(IndexSetTest, get_type)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    EXPECT_EQ(is.get_type(), ISGENERAL);
+}

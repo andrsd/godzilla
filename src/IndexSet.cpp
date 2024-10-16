@@ -6,6 +6,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include <cassert>
+#include <petscis.h>
 
 namespace godzilla {
 
@@ -388,6 +389,15 @@ IndexSet::get_min_max() const
     PetscInt min, max;
     PETSC_CHECK(ISGetMinMax(this->is, &min, &max));
     return std::make_tuple(min, max);
+}
+
+std::string
+IndexSet::get_type() const
+{
+    CALL_STACK_MSG();
+    ISType type;
+    PETSC_CHECK(ISGetType(this->is, &type));
+    return std::string(type);
 }
 
 } // namespace godzilla

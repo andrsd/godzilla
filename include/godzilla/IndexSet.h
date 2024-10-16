@@ -91,6 +91,11 @@ public:
 
     void get_indices();
 
+    /// Gets the index set type name
+    ///
+    /// @return The type name
+    [[nodiscard]] std::string get_type() const;
+
     void restore_indices();
 
     /// Returns a description of the points in an IndexSet suitable for traversal
