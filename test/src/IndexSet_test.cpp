@@ -274,3 +274,16 @@ TEST(IndexSetTest, difference)
     is1.destroy();
     is2.destroy();
 }
+
+TEST(IndexSetTest, equal)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is3 = IndexSet::create_general(app.get_comm(), { 4, 5, 1, 8, 10, 3 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 8 });
+    EXPECT_TRUE(is1.equal(is3));
+    EXPECT_FALSE(is1.equal(is2));
+    is1.destroy();
+    is2.destroy();
+    is3.destroy();
+}

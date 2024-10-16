@@ -354,4 +354,13 @@ IndexSet::difference(const IndexSet & is1, const IndexSet & is2)
     return IndexSet(out);
 }
 
+bool
+IndexSet::equal(const IndexSet & other) const
+{
+    CALL_STACK_MSG();
+    PetscBool res;
+    PETSC_CHECK(ISEqual(this->is, other, &res));
+    return res == PETSC_TRUE;
+}
+
 } // namespace godzilla

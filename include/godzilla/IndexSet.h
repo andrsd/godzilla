@@ -74,6 +74,12 @@ public:
     /// @return The copy of the index set
     [[nodiscard]] IndexSet duplicate() const;
 
+    /// Compares if this index set has the same set of indices as the `other`
+    ///
+    /// @param other The index set to compare with
+    /// @return `true` if the index sets are equal, `false` otherwise
+    [[nodiscard]] bool equal(const IndexSet & other) const;
+
     void get_indices();
 
     void restore_indices();
