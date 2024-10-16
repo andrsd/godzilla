@@ -361,3 +361,13 @@ TEST(IndexSetTest, permutation)
     EXPECT_TRUE(is.permutation());
     is.destroy();
 }
+
+TEST(IndexSetTest, set_type)
+{
+    TestApp app;
+    IndexSet is;
+    is.create(app.get_comm());
+    is.set_type(ISGENERAL);
+    EXPECT_EQ(is.get_type(), ISGENERAL);
+    is.destroy();
+}

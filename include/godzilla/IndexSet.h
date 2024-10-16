@@ -168,6 +168,11 @@ public:
     /// Informs the index set that it is a permutation.
     void set_permutation();
 
+    /// Builds a index set, for a particular type
+    ///
+    /// @param type The type of index set to build
+    void set_type(const std::string & type);
+
     /// Increase reference of this object
     void inc_ref();
 

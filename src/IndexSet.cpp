@@ -441,4 +441,11 @@ IndexSet::permutation() const
     return res == PETSC_TRUE;
 }
 
+void
+IndexSet::set_type(const std::string & type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISSetType(this->is, type.c_str()));
+}
+
 } // namespace godzilla
