@@ -145,6 +145,14 @@ public:
     /// @return std::vector containing the indices
     std::vector<Int> to_std_vector();
 
+    /// Determines whether index set is the identity mapping.
+    ///
+    /// @return `true` if the index set is the identity mapping, `false` otherwise
+    [[nodiscard]] bool identity() const;
+
+    /// Sets the index set to be the identity mapping.
+    void set_identity();
+
     /// Increase reference of this object
     void inc_ref();
 

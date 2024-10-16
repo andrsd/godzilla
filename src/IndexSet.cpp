@@ -400,4 +400,20 @@ IndexSet::get_type() const
     return std::string(type);
 }
 
+void
+IndexSet::set_identity()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISSetIdentity(this->is));
+}
+
+bool
+IndexSet::identity() const
+{
+    CALL_STACK_MSG();
+    PetscBool res;
+    PETSC_CHECK(ISIdentity(this->is, &res));
+    return res == PETSC_TRUE;
+}
+
 } // namespace godzilla

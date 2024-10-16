@@ -332,3 +332,13 @@ TEST(IndexSetTest, get_type)
     auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
     EXPECT_EQ(is.get_type(), ISGENERAL);
 }
+
+TEST(IndexSetTest, identity)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    EXPECT_FALSE(is.identity());
+    is.set_identity();
+    EXPECT_TRUE(is.identity());
+    is.destroy();
+}
