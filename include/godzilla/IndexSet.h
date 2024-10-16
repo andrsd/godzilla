@@ -200,6 +200,13 @@ public:
     /// @param is_list The list of index sets to concatenate
     /// @return The concatenated index set
     static IndexSet concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list);
+
+    /// Computes the difference between two index sets.
+    ///
+    /// @param is1 The first index set, to have items removed from it
+    /// @param is2 Index values to be removed
+    /// @return The difference between `is1` and `is2`
+    static IndexSet difference(const IndexSet & is1, const IndexSet & is2);
 };
 
 } // namespace godzilla

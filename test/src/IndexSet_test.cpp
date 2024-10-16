@@ -259,3 +259,18 @@ TEST(IndexSetTest, concatenate)
     is1.destroy();
     is2.destroy();
 }
+
+TEST(IndexSetTest, difference)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 8 });
+    auto dest = IndexSet::difference(is1, is2);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, ElementsAre(1, 4, 10));
+    dest.restore_indices();
+    dest.destroy();
+    is1.destroy();
+    is2.destroy();
+}

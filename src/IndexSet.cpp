@@ -345,4 +345,13 @@ IndexSet::concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list)
     return IndexSet(out);
 }
 
+IndexSet
+IndexSet::difference(const IndexSet & is1, const IndexSet & is2)
+{
+    CALL_STACK_MSG();
+    IS out;
+    PETSC_CHECK(ISDifference(is1, is2, &out));
+    return IndexSet(out);
+}
+
 } // namespace godzilla
