@@ -193,6 +193,13 @@ public:
     /// @param src The index set to copy from
     /// @param dest The index set to copy to
     static void copy(const IndexSet & src, IndexSet & dest);
+
+    /// Forms a new IS by locally concatenating the indices from an IS list without reordering.
+    ///
+    /// @param comm The MPI communicator
+    /// @param is_list The list of index sets to concatenate
+    /// @return The concatenated index set
+    static IndexSet concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list);
 };
 
 } // namespace godzilla
