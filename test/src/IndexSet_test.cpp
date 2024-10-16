@@ -342,3 +342,12 @@ TEST(IndexSetTest, identity)
     EXPECT_TRUE(is.identity());
     is.destroy();
 }
+
+TEST(IndexSetTest, locate)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    EXPECT_EQ(is.locate(4), 2);
+    EXPECT_TRUE(is.locate(7) < 0);
+    is.destroy();
+}

@@ -136,6 +136,13 @@ public:
 
     [[nodiscard]] const Int * data() const;
 
+    /// Determine the location of an index within the local component of an index set
+    ///
+    /// @param key The index to locate
+    /// @return if >= 0, a location within the index set that is equal to the key, otherwise the key
+    ///         is not in the index set
+    [[nodiscard]] Int locate(Int key) const;
+
     Int operator[](Int i) const;
 
     Int operator()(Int i) const;

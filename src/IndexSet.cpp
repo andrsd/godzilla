@@ -416,4 +416,13 @@ IndexSet::identity() const
     return res == PETSC_TRUE;
 }
 
+Int
+IndexSet::locate(Int key) const
+{
+    CALL_STACK_MSG();
+    PetscInt idx;
+    PETSC_CHECK(ISLocate(this->is, key, &idx));
+    return idx;
+}
+
 } // namespace godzilla
