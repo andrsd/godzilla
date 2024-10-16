@@ -300,3 +300,18 @@ TEST(IndexSetTest, equal_unsorted)
     is2.destroy();
     dup.destroy();
 }
+
+TEST(IndexSetTest, expand)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 7, 9 });
+    auto dest = IndexSet::expand(is1, is2);
+    dest.get_indices();
+    auto vals = dest.to_std_vector();
+    EXPECT_THAT(vals, UnorderedElementsAre(1, 3, 4, 5, 7, 8, 9, 10));
+    dest.restore_indices();
+    is2.destroy();
+    is1.destroy();
+    dest.destroy();
+}

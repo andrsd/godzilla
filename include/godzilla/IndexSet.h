@@ -222,6 +222,13 @@ public:
     /// @param is2 Index values to be removed
     /// @return The difference between `is1` and `is2`
     static IndexSet difference(const IndexSet & is1, const IndexSet & is2);
+
+    /// Computes the union of two index sets, by concatenating 2 lists and removing duplicates.
+    ///
+    /// @param is1 The first index set
+    /// @param is2 The second index set
+    /// @return The union of `is1` and `is2`
+    static IndexSet expand(const IndexSet & is1, const IndexSet & is2);
 };
 
 } // namespace godzilla

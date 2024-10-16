@@ -372,4 +372,13 @@ IndexSet::equal_unsorted(const IndexSet & other) const
     return res == PETSC_TRUE;
 }
 
+IndexSet
+IndexSet::expand(const IndexSet & is1, const IndexSet & is2)
+{
+    CALL_STACK_MSG();
+    IS out;
+    PETSC_CHECK(ISExpand(is1, is2, &out));
+    return IndexSet(out);
+}
+
 } // namespace godzilla
