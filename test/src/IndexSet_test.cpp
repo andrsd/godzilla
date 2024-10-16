@@ -315,3 +315,13 @@ TEST(IndexSetTest, expand)
     is1.destroy();
     dest.destroy();
 }
+
+TEST(IndexSetTest, get_min_max)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto [min, max] = is.get_min_max();
+    EXPECT_EQ(min, 1);
+    EXPECT_EQ(max, 10);
+    is.destroy();
+}

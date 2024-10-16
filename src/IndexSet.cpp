@@ -381,4 +381,13 @@ IndexSet::expand(const IndexSet & is1, const IndexSet & is2)
     return IndexSet(out);
 }
 
+std::tuple<Int, Int>
+IndexSet::get_min_max() const
+{
+    CALL_STACK_MSG();
+    PetscInt min, max;
+    PETSC_CHECK(ISGetMinMax(this->is, &min, &max));
+    return std::make_tuple(min, max);
+}
+
 } // namespace godzilla

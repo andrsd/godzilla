@@ -114,6 +114,11 @@ public:
     /// @param points The indices for the entire range, from `get_point_range`
     void get_point_subrange(Int start, Int end, const Int * points) const;
 
+    /// Gets the minimum and maximum values
+    ///
+    /// @return A tuple containing the minimum and maximum values
+    [[nodiscard]] std::tuple<Int, Int> get_min_max() const;
+
     /// Returns the global length of an index set.
     ///
     /// @return The global size of the index set
