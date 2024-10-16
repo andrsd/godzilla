@@ -363,4 +363,13 @@ IndexSet::equal(const IndexSet & other) const
     return res == PETSC_TRUE;
 }
 
+bool
+IndexSet::equal_unsorted(const IndexSet & other) const
+{
+    CALL_STACK_MSG();
+    PetscBool res;
+    PETSC_CHECK(ISEqualUnsorted(this->is, other, &res));
+    return res == PETSC_TRUE;
+}
+
 } // namespace godzilla

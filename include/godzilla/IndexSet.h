@@ -80,6 +80,15 @@ public:
     /// @return `true` if the index sets are equal, `false` otherwise
     [[nodiscard]] bool equal(const IndexSet & other) const;
 
+    /// Compares if this index set has the same set of indices as the `other`
+    ///
+    /// @param other The index set to compare with
+    /// @return `true` if the index sets are equal, `false` otherwise
+    ///
+    /// @note This routine does NOT sort the contents of the index sets before the comparison is
+    /// made, i.e., the order of indices is important.
+    [[nodiscard]] bool equal_unsorted(const IndexSet & other) const;
+
     void get_indices();
 
     void restore_indices();

@@ -287,3 +287,16 @@ TEST(IndexSetTest, equal)
     is2.destroy();
     is3.destroy();
 }
+
+TEST(IndexSetTest, equal_unsorted)
+{
+    TestApp app;
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    auto dup = is1.duplicate();
+    auto is2 = IndexSet::create_general(app.get_comm(), { 4, 5, 1, 8, 10, 3 });
+    EXPECT_TRUE(is1.equal_unsorted(dup));
+    EXPECT_FALSE(is1.equal_unsorted(is2));
+    is1.destroy();
+    is2.destroy();
+    dup.destroy();
+}
