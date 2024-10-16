@@ -160,6 +160,14 @@ public:
     /// Sets the index set to be the identity mapping.
     void set_identity();
 
+    /// Determines whether index set is a permutation.
+    ///
+    /// @return `true` if the index set is a permutation, `false` otherwise
+    [[nodiscard]] bool permutation() const;
+
+    /// Informs the index set that it is a permutation.
+    void set_permutation();
+
     /// Increase reference of this object
     void inc_ref();
 

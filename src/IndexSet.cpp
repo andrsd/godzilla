@@ -425,4 +425,20 @@ IndexSet::locate(Int key) const
     return idx;
 }
 
+void
+IndexSet::set_permutation()
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(ISSetPermutation(this->is));
+}
+
+bool
+IndexSet::permutation() const
+{
+    CALL_STACK_MSG();
+    PetscBool res;
+    PETSC_CHECK(ISPermutation(this->is, &res));
+    return res == PETSC_TRUE;
+}
+
 } // namespace godzilla

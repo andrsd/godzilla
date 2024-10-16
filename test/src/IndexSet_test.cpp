@@ -351,3 +351,13 @@ TEST(IndexSetTest, locate)
     EXPECT_TRUE(is.locate(7) < 0);
     is.destroy();
 }
+
+TEST(IndexSetTest, permutation)
+{
+    TestApp app;
+    auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    EXPECT_FALSE(is.permutation());
+    is.set_permutation();
+    EXPECT_TRUE(is.permutation());
+    is.destroy();
+}
