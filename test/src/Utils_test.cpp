@@ -1,7 +1,9 @@
 #include "gmock/gmock.h"
+#include "godzilla/Range.h"
 #include "godzilla/Utils.h"
 
 using namespace godzilla;
+using namespace testing;
 
 TEST(UtilsTest, to_lower)
 {
@@ -79,4 +81,49 @@ TEST(UtilsTest, index_of)
     EXPECT_EQ(utils::index_of(vals, 8), 2);
 
     EXPECT_THROW({ utils::index_of(vals, 1); }, std::runtime_error);
+}
+
+TEST(UtilsTest, enumerate_stdvec)
+{
+    std::vector<int> v = { 10, 11, 12, 14, 15 };
+
+    std::vector<int> indices;
+    std::vector<int> values;
+    for (const auto & [i, value] : enumerate(v)) {
+        indices.push_back(i);
+        values.push_back(value);
+    }
+
+    EXPECT_THAT(indices, ElementsAre(0, 1, 2, 3, 4));
+    EXPECT_THAT(values, ElementsAre(10, 11, 12, 14, 15));
+}
+
+TEST(UtilsTest, enumerate_range)
+{
+    godzilla::Range r(10, 16);
+    std::vector<int> indices;
+    std::vector<int> values;
+    for (const auto & [i, value] : enumerate(r)) {
+        indices.push_back(i);
+        values.push_back(value);
+    }
+
+    EXPECT_THAT(indices, ElementsAre(0, 1, 2, 3, 4, 5));
+    EXPECT_THAT(values, ElementsAre(10, 11, 12, 13, 14, 15));
+}
+
+TEST(UtilsTest, enumerate_const_stdvec)
+{
+    std::vector<int> v = { 10, 11, 12, 14, 15 };
+    const auto & cv = v;
+
+    std::vector<int> indices;
+    std::vector<int> values;
+    for (const auto & [i, value] : enumerate(cv)) {
+        indices.push_back(i);
+        values.push_back(value);
+    }
+
+    EXPECT_THAT(indices, ElementsAre(0, 1, 2, 3, 4));
+    EXPECT_THAT(values, ElementsAre(10, 11, 12, 14, 15));
 }

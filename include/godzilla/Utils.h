@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <typeinfo>
+#include <utility>
 #include <petsclog.h>
 #include "fmt/printf.h"
 
@@ -118,4 +119,64 @@ index_of(const std::vector<T> & array, T value)
 }
 
 } // namespace utils
+
+/// Enumerate for iterable containters
+///
+/// Use like this:
+/// ```
+/// std::vector<int> v = { 10, 11, 12, 14, 15 };
+/// for (const auto & [i, value] : godzilla::enumerate(v))
+///     std::cout << i << " " << value << std::endl;
+/// ```
+template <typename ITERABLE>
+auto
+enumerate(ITERABLE && iterable)
+{
+    using std::begin;
+    using std::end;
+    using Iterator = decltype(begin(iterable));
+
+    struct Enumerator {
+        Iterator iter;
+        size_t index;
+
+        bool
+        operator!=(const Enumerator & other) const
+        {
+            return iter != other.iter;
+        }
+
+        void
+        operator++()
+        {
+            ++iter;
+            ++index;
+        }
+
+        auto
+        operator*() const
+        {
+            return std::make_pair(index, *iter);
+        }
+    };
+
+    struct IterableWrapper {
+        ITERABLE & iterable;
+
+        auto
+        begin()
+        {
+            return Enumerator { std::begin(iterable), 0 };
+        }
+
+        auto
+        end()
+        {
+            return Enumerator { std::end(iterable), 0 };
+        }
+    };
+
+    return IterableWrapper { iterable };
+}
+
 } // namespace godzilla
