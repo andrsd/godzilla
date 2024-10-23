@@ -1422,6 +1422,16 @@ transpose(const DynDenseMatrix<T> & mat)
 }
 
 template <typename T>
+inline DynDenseMatrix<T>
+operator*(Real alpha, const DynDenseMatrix<T> & a)
+{
+    DynDenseMatrix<T> res(a.get_num_rows(), a.get_num_cols());
+    for (Int i = 0; i < a.get_num_rows() * a.get_num_cols(); i++)
+        res.data()[i] = alpha * a.data()[i];
+    return res;
+}
+
+template <typename T>
 std::ostream &
 operator<<(std::ostream & os, const DynDenseMatrix<T> & obj)
 {
