@@ -918,6 +918,26 @@ TEST(DynDenseMatrixTest, op_mult_scalar)
     EXPECT_EQ(res(2, 2), -2.);
 }
 
+TEST(DynDenseMatrixTest, op_mult_scalar_pre)
+{
+    DynDenseMatrix<Real> m(3, 3);
+    m.set_row(0, { 2, 1, 0 });
+    m.set_row(1, { 1, 2, -1 });
+    m.set_row(2, { 0, -1, 2 });
+    auto res = 3. * m;
+    EXPECT_EQ(res.get_num_cols(), 3);
+    EXPECT_EQ(res.get_num_rows(), 3);
+    EXPECT_EQ(res(0, 0), 6.);
+    EXPECT_EQ(res(0, 1), 3.);
+    EXPECT_EQ(res(0, 2), 0.);
+    EXPECT_EQ(res(1, 0), 3.);
+    EXPECT_EQ(res(1, 1), 6.);
+    EXPECT_EQ(res(1, 2), -3.);
+    EXPECT_EQ(res(2, 0), 0.);
+    EXPECT_EQ(res(2, 1), -3.);
+    EXPECT_EQ(res(2, 2), 6.);
+}
+
 TEST(DynDenseMatrixTest, op_mult)
 {
     DynDenseMatrix<Real> m(3, 3);
