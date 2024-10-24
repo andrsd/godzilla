@@ -1087,3 +1087,20 @@ TEST(DynDenseMatrixTest, out)
     EXPECT_THAT(out, HasSubstr("(1, 2, 3)"));
     EXPECT_THAT(out, HasSubstr("(6, 5, 4)"));
 }
+
+TEST(DynDenseMatrixTest, assign)
+{
+    DynDenseMatrix<Real> m(2, 3);
+    m.set_row(0, { 1, 2, 3 });
+    m.set_row(1, { 6, 5, 4 });
+    DynDenseMatrix<Real> b(2, 3);
+    b = m;
+    EXPECT_EQ(m.get_num_rows(), 2);
+    EXPECT_EQ(m.get_num_cols(), 3);
+    EXPECT_DOUBLE_EQ(b(0, 0), 1.);
+    EXPECT_DOUBLE_EQ(b(0, 1), 2.);
+    EXPECT_DOUBLE_EQ(b(0, 2), 3.);
+    EXPECT_DOUBLE_EQ(b(1, 0), 6.);
+    EXPECT_DOUBLE_EQ(b(1, 1), 5.);
+    EXPECT_DOUBLE_EQ(b(1, 2), 4.);
+}
