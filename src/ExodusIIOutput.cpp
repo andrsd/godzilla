@@ -697,12 +697,12 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
             for (Int c = 0; c < nc; c++, exo_var_id++) {
                 for (Int lni = 0; lni < n_nodes_per_elem; lni++) {
                     Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
-                    Int offset = dgpi->get_field_dof(cid, lni, c, fid);
+                    Int offset = dgpi->get_field_dof(cid, lni, fid);
                     this->exo->write_partial_nodal_var(this->step_num,
                                                        exo_var_id,
                                                        1,
                                                        exo_idx,
-                                                       sln_vals[offset]);
+                                                       sln_vals[offset + c]);
                 }
             }
         }
@@ -712,12 +712,12 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
                 for (Int c = 0; c < nc; c++, exo_var_id++) {
                     for (Int lni = 0; lni < n_nodes_per_elem; lni++) {
                         Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
-                        Int offset = dgpi->get_aux_field_dof(cid, lni, c, fid);
+                        Int offset = dgpi->get_aux_field_dof(cid, lni, fid);
                         this->exo->write_partial_nodal_var(this->step_num,
                                                            exo_var_id,
                                                            1,
                                                            exo_idx,
-                                                           aux_sln_vals[offset]);
+                                                           aux_sln_vals[offset + c]);
                     }
                 }
             }

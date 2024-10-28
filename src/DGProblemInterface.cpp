@@ -352,23 +352,25 @@ DGProblemInterface::get_num_nodes_per_elem(Int c) const
 }
 
 Int
-DGProblemInterface::get_field_dof(Int elem, Int local_node, Int comp, Int fid) const
+DGProblemInterface::get_field_dof(Int elem, Int local_node, Int fid) const
 {
     CALL_STACK_MSG();
     auto section = get_problem()->get_local_section();
     auto offset = section.get_field_offset(elem, fid);
     // FIXME: works only for order = 1
-    offset += (comp * get_num_nodes_per_elem(elem)) + local_node;
+    auto n_comps = get_field_num_components(fid);
+    offset += n_comps * local_node;
     return offset;
 }
 
 Int
-DGProblemInterface::get_aux_field_dof(Int elem, Int local_node, Int comp, Int fid) const
+DGProblemInterface::get_aux_field_dof(Int elem, Int local_node, Int fid) const
 {
     CALL_STACK_MSG();
     auto offset = get_local_section_aux().get_field_offset(elem, fid);
     // FIXME: works only for order = 1
-    offset += (comp * get_num_nodes_per_elem(elem)) + local_node;
+    auto n_comps = get_aux_field_num_components(fid);
+    offset += n_comps * local_node;
     return offset;
 }
 

@@ -75,19 +75,17 @@ public:
     ///
     /// @param elem Element ID
     /// @param local_node Local node index
-    /// @param comp Component
     /// @param fid Field ID
     /// @return Degree of freedom
-    [[nodiscard]] Int get_field_dof(Int elem, Int local_node, Int comp, Int fid) const;
+    [[nodiscard]] Int get_field_dof(Int elem, Int local_node, Int fid) const;
 
     /// Get auxiliary field degree of freedom
     ///
     /// @param elem Element ID
     /// @param local_node Local node index
-    /// @param comp Component
     /// @param fid Auxiliary field ID
     /// @return Degree of freedom
-    [[nodiscard]] Int get_aux_field_dof(Int elem, Int local_node, Int comp, Int fid) const;
+    [[nodiscard]] Int get_aux_field_dof(Int elem, Int local_node, Int fid) const;
 
 protected:
     [[nodiscard]] Int get_num_nodes_per_elem(Int c) const;
