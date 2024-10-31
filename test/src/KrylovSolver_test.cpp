@@ -247,3 +247,31 @@ TEST(KrylovSolver, set_pc_type)
     EXPECT_EQ(pc.get_type(), PCJACOBI);
     ks.destroy();
 }
+
+TEST(KrylovSolver, get_rhs)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+    KrylovSolver ks;
+    ks.create(comm);
+
+    Matrix m = Matrix::create_seq_aij(comm, 2, 2, 1);
+    m.set_value(0, 0, 2);
+    m.set_value(1, 1, 3);
+    m.assemble();
+    ks.set_operators(m, m);
+
+    Vector b = Vector::create_seq(comm, 2);
+    b.set_value(0, 6);
+    b.set_value(1, 12);
+    b.set_up();
+
+    Vector x = b.duplicate();
+    ks.solve(b, x);
+
+    auto rhs = ks.get_rhs();
+    EXPECT_DOUBLE_EQ(rhs(0), 6.);
+    EXPECT_DOUBLE_EQ(rhs(1), 12.);
+
+    ks.destroy();
+}
