@@ -114,6 +114,25 @@ TEST(MatrixTest, set_values_dense)
     m.destroy();
 }
 
+TEST(MatrixTest, set_values_dyn_dense)
+{
+    Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 3, 2);
+    DynDenseVector<Int> rows(2);
+    rows.set_values({ 0, 1});
+    DynDenseVector<Int> cols(2);
+    cols.set_values({ 0, 2 });
+    DynDenseMatrix<Scalar> vals(2, 2);
+    vals.set_row(0, { 1, 2 });
+    vals.set_row(1, { 3, 4 });
+    m.set_values(rows, cols, vals);
+    m.assemble();
+    EXPECT_DOUBLE_EQ(m(0, 0), 1.);
+    EXPECT_DOUBLE_EQ(m(0, 2), 2.);
+    EXPECT_DOUBLE_EQ(m(1, 0), 3.);
+    EXPECT_DOUBLE_EQ(m(1, 2), 4.);
+    m.destroy();
+}
+
 TEST(MatrixTest, mult)
 {
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);

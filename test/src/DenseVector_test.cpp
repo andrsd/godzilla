@@ -392,6 +392,7 @@ TEST(DynDenseVectorTest, ctor_empty)
 TEST(DynDenseVectorTest, ctor)
 {
     DynDenseVector<Real> v(3);
+    EXPECT_EQ(v.size(), 3);
     for (Int i = 0; i < 3; i++)
         v(i) = 10. + (Real) i;
     for (Int i = 0; i < 3; i++)

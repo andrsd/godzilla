@@ -60,6 +60,11 @@ public:
                     const DenseMatrix<Scalar, N, N> & vals,
                     InsertMode mode = INSERT_VALUES);
 
+    void set_values(const DynDenseVector<Int> & row_idxs,
+                    const DynDenseVector<Int> & col_idxs,
+                    const DynDenseMatrix<Scalar> & vals,
+                    InsertMode mode = INSERT_VALUES);
+
     /// Computes the matrix-vector product, y = Ax
     void mult(const Vector & x, Vector & y);
 

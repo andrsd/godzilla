@@ -150,6 +150,21 @@ Matrix::set_values(const std::vector<Int> & row_idxs,
                              mode));
 }
 
+void Matrix::set_values(const DynDenseVector<Int> & row_idxs,
+                const DynDenseVector<Int> & col_idxs,
+                const DynDenseMatrix<Scalar> & vals,
+                InsertMode mode)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatSetValues(this->mat,
+                             (Int) row_idxs.size(),
+                             row_idxs.data(),
+                             (Int) col_idxs.size(),
+                             col_idxs.data(),
+                             vals.data(),
+                             mode));
+}
+
 void
 Matrix::mult(const Vector & x, Vector & y)
 {
