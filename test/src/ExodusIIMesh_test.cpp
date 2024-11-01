@@ -77,9 +77,10 @@ TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_THROW_MSG({ auto & name = m->get_cell_set_name(1234); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto & name = m->get_cell_set_name(1234); },
                      "Cell set ID '1234' does not exist.");
-    EXPECT_THROW_MSG({ auto id = m->get_cell_set_id("1234"); }, "Cell set '1234' does not exist.");
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto id = m->get_cell_set_id("1234"); },
+                     "Cell set '1234' does not exist.");
 }
 
 TEST(ExodusIIMeshTest, nonexitent_file)

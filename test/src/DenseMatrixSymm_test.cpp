@@ -325,7 +325,7 @@ TEST(DenseMatrixSymmTest, det4)
     //    m.set_row(2, { 0, 1, 0, 2 });
     //    m.set_row(3, { 1, -2, -3, 2 });
     //    EXPECT_EQ(m.det(), 21.);
-    EXPECT_THROW_MSG({ auto d = determinant(m); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto d = determinant(m); },
                      "Determinant is not implemented for 4x4 matrices, yet");
 }
 

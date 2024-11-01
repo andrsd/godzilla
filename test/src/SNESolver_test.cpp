@@ -75,7 +75,6 @@ TEST(SNESolverTest, mat_create_mf)
 TEST(SNESolverTest, type)
 {
     TestApp app;
-    TestNLProblem prob;
     auto comm = app.get_comm();
 
     SNESolver snes;

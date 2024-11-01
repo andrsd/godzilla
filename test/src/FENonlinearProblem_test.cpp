@@ -56,16 +56,16 @@ TEST_F(FENonlinearProblemTest, fields)
 
     EXPECT_THROW_MSG({ auto n = prob->get_field_name(65536); },
                      "Field with ID = '65536' does not exist.");
-    EXPECT_THROW_MSG({ auto id = prob->get_field_id("nonexistent"); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto id = prob->get_field_id("nonexistent"); },
                      "Field 'nonexistent' does not exist. Typo?");
     EXPECT_EQ(prob->has_field_by_id(65536), false);
     EXPECT_EQ(prob->has_field_by_name("nonexistent"), false);
 
     EXPECT_EQ(prob->get_field_order(0), 1);
-    EXPECT_THROW_MSG({ auto o = prob->get_field_order(65536); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto o = prob->get_field_order(65536); },
                      "Field with ID = '65536' does not exist.");
 
-    EXPECT_THROW_MSG({ auto nc = prob->get_field_num_components(65536); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto nc = prob->get_field_num_components(65536); },
                      "Field with ID = '65536' does not exist.");
 
     EXPECT_EQ(prob->get_field_component_name(0, 0).compare(""), 0);
@@ -125,13 +125,13 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 
     EXPECT_THROW_MSG({ auto n = prob->get_aux_field_name(2); },
                      "Auxiliary field with ID = '2' does not exist.");
-    EXPECT_THROW_MSG({ auto nc = prob->get_aux_field_num_components(2); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto nc = prob->get_aux_field_num_components(2); },
                      "Auxiliary field with ID = '2' does not exist.");
-    EXPECT_THROW_MSG({ auto id = prob->get_aux_field_id("aux_none"); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto id = prob->get_aux_field_id("aux_none"); },
                      "Auxiliary field 'aux_none' does not exist. Typo?");
     EXPECT_EQ(prob->has_aux_field_by_id(2), false);
     EXPECT_EQ(prob->has_aux_field_by_name("aux_none"), false);
-    EXPECT_THROW_MSG({ auto o = prob->get_aux_field_order(2); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto o = prob->get_aux_field_order(2); },
                      "Auxiliary field with ID = '2' does not exist.");
     EXPECT_THROW_MSG(prob->set_aux_field_component_name(0, 1, "C"),
                      "Unable to set component name for single-component field");

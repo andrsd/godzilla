@@ -26,5 +26,6 @@ TEST(RegistryTest, exists)
 TEST(RegistryTest, get)
 {
     Registry registry;
-    EXPECT_THROW_MSG(auto entry = registry.get("ASDF"), "Class 'ASDF' is not registered.");
+    EXPECT_THROW_MSG([[maybe_unused]] auto entry = registry.get("ASDF"),
+                     "Class 'ASDF' is not registered.");
 }
