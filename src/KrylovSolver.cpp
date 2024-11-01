@@ -91,6 +91,24 @@ KrylovSolver::set_operator(const Matrix & A) const
     PETSC_CHECK(KSPSetOperators(this->ksp, A, A));
 }
 
+Matrix
+KrylovSolver::get_operator() const
+{
+    CALL_STACK_MSG();
+    Mat A;
+    PETSC_CHECK(KSPGetOperators(this->ksp, &A, nullptr));
+    return Matrix(A);
+}
+
+std::tuple<Matrix, Matrix>
+KrylovSolver::get_operators() const
+{
+    CALL_STACK_MSG();
+    Mat A, B;
+    PETSC_CHECK(KSPGetOperators(this->ksp, &A, &B));
+    return std::make_tuple(Matrix(A), Matrix(B));
+}
+
 void
 KrylovSolver::set_from_options()
 {
