@@ -7,6 +7,7 @@
 #include "godzilla/Error.h"
 #include "godzilla/Delegate.h"
 #include "petscksp.h"
+#include <tuple>
 
 namespace godzilla {
 
@@ -62,6 +63,18 @@ public:
     ///
     /// @param A The matrix that defines the linear system
     void set_operator(const Matrix & A) const;
+
+    /// Gets the matrix associated with the linear system
+    ///
+    /// @return The matrix associated with the linear system
+    Matrix get_operator() const;
+
+    /// Gets the matrix associated with the linear system and a (possibly) different one used to
+    /// construct the preconditioner
+    ///
+    /// @return A tuple containing the matrix associated with the linear system and the matrix used
+    ///           to construct the preconditioner
+    std::tuple<Matrix, Matrix> get_operators() const;
 
     /// Sets KSP options from the options database
     void set_from_options();

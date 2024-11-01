@@ -275,3 +275,68 @@ TEST(KrylovSolver, get_rhs)
 
     ks.destroy();
 }
+
+TEST(KrylovSolver, get_operator)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+    KrylovSolver ks;
+    ks.create(comm);
+
+    Matrix m = Matrix::create_seq_aij(comm, 2, 2, 1);
+    m.set_value(0, 0, 2);
+    m.set_value(1, 1, 3);
+    m.assemble();
+    ks.set_operators(m, m);
+
+    Vector b = Vector::create_seq(comm, 2);
+    b.set_value(0, 6);
+    b.set_value(1, 12);
+    b.set_up();
+
+    Vector x = b.duplicate();
+    ks.solve(b, x);
+
+    auto A = ks.get_operator();
+    EXPECT_DOUBLE_EQ(A(0, 0), 2.);
+    EXPECT_DOUBLE_EQ(A(1, 1), 3.);
+
+    ks.destroy();
+}
+
+TEST(KrylovSolver, get_operators)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+    KrylovSolver ks;
+    ks.create(comm);
+
+    Matrix m = Matrix::create_seq_aij(comm, 2, 2, 1);
+    m.set_value(0, 0, 2);
+    m.set_value(1, 1, 3);
+    m.assemble();
+
+    Matrix p = Matrix::create_seq_aij(comm, 2, 2, 1);
+    p.set_value(0, 0, 1);
+    p.set_value(1, 1, 1.1);
+    p.assemble();
+
+    ks.set_operators(m, p);
+
+    Vector b = Vector::create_seq(comm, 2);
+    b.set_value(0, 6);
+    b.set_value(1, 12);
+    b.set_up();
+
+    Vector x = b.duplicate();
+    ks.solve(b, x);
+
+    auto [A, P] = ks.get_operators();
+    EXPECT_DOUBLE_EQ(A(0, 0), 2.);
+    EXPECT_DOUBLE_EQ(A(1, 1), 3.);
+
+    EXPECT_DOUBLE_EQ(P(0, 0), 1.);
+    EXPECT_DOUBLE_EQ(P(1, 1), 1.1);
+
+    ks.destroy();
+}
