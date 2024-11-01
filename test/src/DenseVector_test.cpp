@@ -238,7 +238,7 @@ TEST(DenseVectorDeathTest, get_out_of_range)
 {
     DenseVector<Real, 3> a({ 2., 3., 4. });
     const DenseVector<Real, 3> & ca = a;
-    EXPECT_DEATH({ auto r = ca(4); }, "Assertion.+failed");
+    EXPECT_DEATH({ [[maybe_unused]] auto r = ca(4); }, "Assertion.+failed");
 }
 
 #endif

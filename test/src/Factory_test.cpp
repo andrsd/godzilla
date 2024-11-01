@@ -62,6 +62,6 @@ TEST(FactoryTest, create_non_existent)
     App app(comm, reg, "test", {});
 
     Factory factory(reg);
-    EXPECT_THROW_MSG({ auto params = factory.get_parameters("TestObject"); },
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto params = factory.get_parameters("TestObject"); },
                      "Class 'TestObject' is not registered.");
 }

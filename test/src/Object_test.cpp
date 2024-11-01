@@ -17,7 +17,7 @@ TEST(ObjectTest, api)
 
     EXPECT_EQ(obj->get_name(), "name");
 
-    const auto & p = obj->get_parameters();
+    [[maybe_unused]] const auto & p = obj->get_parameters();
 
     EXPECT_TRUE(obj->is_param_valid("_name"));
 

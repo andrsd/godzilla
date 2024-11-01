@@ -308,7 +308,6 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    auto depth_label = m->get_depth_label();
     auto left = m->get_label("left");
     IndexSet left_facet = points_from_label(left);
     IndexSet left_points = m->get_cone_recursive_vertices(left_facet);

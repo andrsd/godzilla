@@ -54,9 +54,8 @@ TEST(DynamicLibraryTest, non_existing_symbol)
     DynamicLibrary dll("ext");
     dll.load();
 
-    EXPECT_THAT_THROW_MSG(
-        { auto fn = dll.get_symbol<void()>("non-existing-fn"); },
-        HasSubstr("Unable to locate 'non-existing-fn' in libext"));
+    EXPECT_THAT_THROW_MSG({ [[maybe_unused]] auto fn = dll.get_symbol<void()>("non-existing-fn"); },
+                          HasSubstr("Unable to locate 'non-existing-fn' in libext"));
 }
 
 TEST(DynamicLibraryTest, invalid_name)

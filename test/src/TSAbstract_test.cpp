@@ -132,6 +132,7 @@ GTestProblem::parameters()
 TEST(TSAbstract, test)
 {
     static bool dummy = register_scheme();
+    EXPECT_TRUE(dummy);
 
     testing::internal::CaptureStdout();
 

@@ -138,9 +138,8 @@ TEST(DependencyEvaluator, get_non_existent_functional)
     mesh.create();
     prob.create();
 
-    EXPECT_THROW_MSG(
-        { auto & f = prob.get_functional("asdf"); },
-        "No functional with name 'asdf' found. Typo?");
+    EXPECT_THROW_MSG({ [[maybe_unused]] auto & f = prob.get_functional("asdf"); },
+                     "No functional with name 'asdf' found. Typo?");
 }
 
 TEST(DependencyEvaluator, eval)
