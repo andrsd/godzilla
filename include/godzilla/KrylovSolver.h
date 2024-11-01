@@ -87,6 +87,11 @@ public:
     /// @param max_its The maximum number of iterations
     void get_tolerances(Real * rel_tol, Real * abs_tol, Real * div_tol, Int * max_its) const;
 
+    /// Gets the right-hand-side vector for the linear system to be solved
+    ///
+    /// @return The right-hand-side vector
+    Vector get_rhs() const;
+
     /// Gets the relative, absolute, divergence, and maximum iteration tolerances used by the
     /// default KSP convergence tests.
     ///

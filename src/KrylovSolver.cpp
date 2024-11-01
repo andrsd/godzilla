@@ -188,4 +188,13 @@ KrylovSolver::set_pc_side(PCSide side)
     PETSC_CHECK(KSPSetPCSide(this->ksp, side));
 }
 
+Vector
+KrylovSolver::get_rhs() const
+{
+    CALL_STACK_MSG();
+    Vec rhs;
+    PETSC_CHECK(KSPGetRhs(this->ksp, &rhs));
+    return Vector(rhs);
+}
+
 } // namespace godzilla
