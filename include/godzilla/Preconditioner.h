@@ -51,6 +51,12 @@ public:
     /// @param viewer Viewer
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
+    /// Applies the preconditioner to a vector
+    ///
+    /// @param x Input vector
+    /// @param y Output vector
+    void apply(const Vector & x, Vector & y) const;
+
     operator PC() const;
 
 protected:
