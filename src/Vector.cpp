@@ -475,4 +475,11 @@ Vector::norm(NormType type) const
     return val;
 }
 
+void
+Vector::copy(const IndexSet & is, ScatterMode mode, Vector & reduced)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecISCopy(this->vec, is, mode, reduced));
+}
+
 } // namespace godzilla

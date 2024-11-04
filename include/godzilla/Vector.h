@@ -55,6 +55,13 @@ public:
     /// @param y Vector to copy our values into
     void copy(Vector & y) const;
 
+    /// Copies between a reduced vector and the appropriate elements of a full-space vector.
+    ///
+    /// @param is Index set for the reduced space
+    /// @param mode Direction of copying (SCATTER_FORWARD or SCATTER_REVERSE)
+    /// @param reduced Reduced-space vector
+    void copy(const IndexSet & is, ScatterMode mode, Vector & reduced);
+
     /// Assign values of y into this vector
     ///
     /// @param y Vector with values to be assined into this vector
