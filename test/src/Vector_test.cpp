@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include <petscvec.h>
 #include "godzilla/IndexSet.h"
 #include "godzilla/Vector.h"
 #include "godzilla/PerfLog.h"
@@ -564,4 +565,28 @@ TEST(VectorTest, norm)
     auto norm = v.norm(NORM_2);
     EXPECT_DOUBLE_EQ(norm, 5.);
     v.destroy();
+}
+
+TEST(VectorTest, copy_is)
+{
+    auto full = Vector::create_seq(MPI_COMM_WORLD, 5);
+    full.set_values({ 0, 1, 2, 3, 4 }, { 1, 2, 3, 4, 5 });
+
+    auto reduced = Vector::create_seq(MPI_COMM_WORLD, 3);
+    reduced.zero();
+    auto is = IndexSet::create_general(MPI_COMM_WORLD, { 0, 2, 3 });
+    full.copy(is, SCATTER_REVERSE, reduced);
+
+    EXPECT_DOUBLE_EQ(reduced(0), 1.);
+    EXPECT_DOUBLE_EQ(reduced(1), 3.);
+    EXPECT_DOUBLE_EQ(reduced(2), 4.);
+
+    reduced.set_values({ 0, 1, 2 }, { -1, -3, -4 });
+    full.copy(is, SCATTER_FORWARD, reduced);
+
+    EXPECT_DOUBLE_EQ(full(0), -1.);
+    EXPECT_DOUBLE_EQ(full(1), 2.);
+    EXPECT_DOUBLE_EQ(full(2), -3.);
+    EXPECT_DOUBLE_EQ(full(3), -4.);
+    EXPECT_DOUBLE_EQ(full(4), 5.);
 }
