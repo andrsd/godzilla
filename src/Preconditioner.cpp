@@ -82,4 +82,11 @@ Preconditioner::operator PC() const
     return this->pc;
 }
 
+void
+Preconditioner::apply(const Vector & x, Vector & y) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(PCApply(this->pc, x, y));
+}
+
 } // namespace godzilla
