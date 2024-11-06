@@ -72,6 +72,7 @@ TEST_F(LinearProblemTest, solve_rhs)
     Parameters prob_pars = LinearProblem::parameters();
     prob_pars.set<App *>("_app") = this->app;
     prob_pars.set<MeshObject *>("_mesh_obj") = mesh;
+    prob_pars.set<std::string>("ksp_type") = KSPCG;
     CustomLinearProblem prob(prob_pars);
 
     prob.create();
