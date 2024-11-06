@@ -31,7 +31,18 @@ public:
         CONVERGED_CG_CONSTRAINED = KSP_CONVERGED_CG_CONSTRAINED,
 #endif
         CONVERGED_STEP_LENGTH = KSP_CONVERGED_STEP_LENGTH,
-        CONVERGED_HAPPY_BREAKDOWN = KSP_CONVERGED_HAPPY_BREAKDOWN
+        CONVERGED_HAPPY_BREAKDOWN = KSP_CONVERGED_HAPPY_BREAKDOWN,
+        // diverged reasons
+        DIVERGED_NULL = KSP_DIVERGED_NULL,
+        DIVERGED_ITS = KSP_DIVERGED_ITS,
+        DIVERGED_DTOL = KSP_DIVERGED_DTOL,
+        DIVERGED_BREAKDOWN = KSP_DIVERGED_BREAKDOWN,
+        DIVERGED_BREAKDOWN_BICG = KSP_DIVERGED_BREAKDOWN_BICG,
+        DIVERGED_NONSYMMETRIC = KSP_DIVERGED_NONSYMMETRIC,
+        DIVERGED_INDEFINITE_PC = KSP_DIVERGED_INDEFINITE_PC,
+        DIVERGED_NANORINF = KSP_DIVERGED_NANORINF,
+        DIVERGED_INDEFINITE_MAT = KSP_DIVERGED_INDEFINITE_MAT,
+        DIVERGED_PC_FAILED = KSP_DIVERGED_PC_FAILED
     };
 
     /// Construct empty Krylov solver
@@ -240,6 +251,12 @@ public:
                                                       Real rnorm,
                                                       KSPConvergedReason * reason,
                                                       void * ctx);
+
+    /// Get the converged reason string
+    ///
+    /// @param reason The converged reason
+    /// @return The string representation of the converged reason
+    static std::string converged_reason_str(ConvergedReason reason);
 };
 
 } // namespace godzilla
