@@ -251,6 +251,12 @@ public:
                                                       Real rnorm,
                                                       KSPConvergedReason * reason,
                                                       void * ctx);
+
+    /// Get the converged reason string
+    ///
+    /// @param reason The converged reason
+    /// @return The string representation of the converged reason
+    static std::string converged_reason_str(ConvergedReason reason);
 };
 
 } // namespace godzilla

@@ -340,3 +340,10 @@ TEST(KrylovSolver, get_operators)
 
     ks.destroy();
 }
+
+TEST(KrylovSolver, converged_reason_str)
+{
+    EXPECT_EQ(KrylovSolver::converged_reason_str(KrylovSolver::CONVERGED_ITS),
+              "maximum iterations");
+    EXPECT_EQ(KrylovSolver::converged_reason_str(KrylovSolver::DIVERGED_NULL), "null");
+}
