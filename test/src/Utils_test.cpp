@@ -127,3 +127,13 @@ TEST(UtilsTest, enumerate_const_stdvec)
     EXPECT_THAT(indices, ElementsAre(0, 1, 2, 3, 4));
     EXPECT_THAT(values, ElementsAre(10, 11, 12, 14, 15));
 }
+
+TEST(UtilsTest, human_number)
+{
+    EXPECT_EQ(utils::human_number(1), "1");
+    EXPECT_EQ(utils::human_number(999), "999");
+    EXPECT_EQ(utils::human_number(1000), "1,000");
+    EXPECT_EQ(utils::human_number(999999), "999,999");
+    EXPECT_EQ(utils::human_number(1000000), "1,000,000");
+    EXPECT_EQ(utils::human_number(1000000000ll), "1,000,000,000");
+}
