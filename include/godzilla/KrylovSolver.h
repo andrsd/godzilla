@@ -230,6 +230,11 @@ public:
     /// @param type A krylov method
     void set_type(const char * type);
 
+    /// View the KSP object
+    ///
+    /// @param viewer PETSc viewer
+    void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
+
 private:
     /// PETSc object
     KSP ksp;
