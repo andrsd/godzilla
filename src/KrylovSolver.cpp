@@ -215,6 +215,13 @@ KrylovSolver::get_rhs() const
     return Vector(rhs);
 }
 
+void
+KrylovSolver::view(PetscViewer viewer) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(KSPView(this->ksp, viewer));
+}
+
 std::string
 KrylovSolver::converged_reason_str(ConvergedReason reason)
 {

@@ -347,3 +347,17 @@ TEST(KrylovSolver, converged_reason_str)
               "maximum iterations");
     EXPECT_EQ(KrylovSolver::converged_reason_str(KrylovSolver::DIVERGED_NULL), "null");
 }
+
+TEST(KrylovSolver, view)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+    KrylovSolver ks;
+    ks.create(comm);
+    ks.set_type(KSPCG);
+
+    testing::internal::CaptureStdout();
+    ks.view();
+    auto out = testing::internal::GetCapturedStdout();
+    EXPECT_THAT(out, HasSubstr("type: cg"));
+}
