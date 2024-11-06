@@ -56,11 +56,39 @@ protected:
 
     void solve();
 
+    /// Solve the linear problem
+    ///
+    /// @param b Right-hand side
+    /// @param x Solution
+    void solve(const Vector & b, Vector & x);
+
+    /// Set KSP matrix evaluation function
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T to compute the operators
+    template <class T>
+    void
+    set_compute_operators(T * instance, void (T::*method)(Matrix &, Matrix &))
+    {
+        this->compute_operators_delegate.bind(instance, method);
+        PETSC_CHECK(DMKSPSetComputeOperators(get_dm(),
+                                             invoke_compute_operators_delegate,
+                                             &this->compute_operators_delegate));
+    }
+
+    template <class T>
+    void
+    set_compute_rhs(T * instance, void (T::*method)(Vector &))
+    {
+        this->compute_rhs_delegate.bind(instance, method);
+        PETSC_CHECK(
+            DMKSPSetComputeRHS(get_dm(), invoke_compute_rhs_delegate, &this->compute_rhs_delegate));
+    }
+
 private:
     /// KSP object
     KrylovSolver ks;
-    /// The right-hand side vector
-    Vector b;
     /// Preconditioner
     Preconditioner pc;
     /// Relative convergence tolerance for the linear solver
@@ -69,9 +97,17 @@ private:
     Real lin_abs_tol;
     /// Maximum number of iterations for the linear solver
     Int lin_max_iter;
+    /// Delegate for the compute_operators method
+    Delegate<void(Matrix &, Matrix &)> compute_operators_delegate;
+    /// Delegate for the compute_operators method
+    Delegate<void(Vector &)> compute_rhs_delegate;
 
 public:
     static Parameters parameters();
+
+private:
+    static ErrorCode invoke_compute_operators_delegate(KSP, Mat, Mat, void *);
+    static ErrorCode invoke_compute_rhs_delegate(KSP, Vec, void *);
 };
 
 } // namespace godzilla

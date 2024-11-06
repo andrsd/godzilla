@@ -3,10 +3,29 @@
 
 #include "godzilla/LinearProblem.h"
 #include "godzilla/CallStack.h"
-#include "godzilla/Mesh.h"
-#include "godzilla/Output.h"
 
 namespace godzilla {
+
+ErrorCode
+LinearProblem::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * context)
+{
+    CALL_STACK_MSG();
+    auto * delegate = static_cast<Delegate<void(Matrix &, Matrix &)> *>(context);
+    Matrix mat_A(A);
+    Matrix mat_B(B);
+    delegate->invoke(mat_A, mat_B);
+    return 0;
+}
+
+ErrorCode
+LinearProblem::invoke_compute_rhs_delegate(KSP, Vec b, void * context)
+{
+    CALL_STACK_MSG();
+    auto * delegate = static_cast<Delegate<void(Vector &)> *>(context);
+    Vector vec_b(b);
+    delegate->invoke(vec_b);
+    return 0;
+}
 
 Parameters
 LinearProblem::parameters()
@@ -39,7 +58,6 @@ LinearProblem::~LinearProblem()
 {
     CALL_STACK_MSG();
     this->ks.destroy();
-    this->b.destroy();
 }
 
 void
@@ -72,8 +90,6 @@ LinearProblem::allocate_objects()
 {
     CALL_STACK_MSG();
     Problem::allocate_objects();
-    this->b = get_solution_vector().duplicate();
-    this->b.set_name("rhs");
 }
 
 void
@@ -113,7 +129,15 @@ LinearProblem::solve()
 {
     CALL_STACK_MSG();
     lprint(9, "Solving");
-    this->ks.solve(this->b, get_solution_vector());
+    this->ks.solve(get_solution_vector());
+}
+
+void
+LinearProblem::solve(const Vector & b, Vector & x)
+{
+    CALL_STACK_MSG();
+    lprint(9, "Solving");
+    this->ks.solve(b, x);
 }
 
 bool
