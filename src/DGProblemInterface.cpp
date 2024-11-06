@@ -387,6 +387,7 @@ DGProblemInterface::set_up_ds()
 {
     CALL_STACK_MSG();
     create_section();
+    PETSC_CHECK(DMSetAdjacency(get_unstr_mesh()->get_dm(), 0, PETSC_TRUE, PETSC_FALSE));
 }
 
 void
