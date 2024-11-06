@@ -6,6 +6,7 @@
 #include "godzilla/Mesh.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Utils.h"
 
 namespace godzilla {
 
@@ -46,8 +47,8 @@ MeshObject::lprint_mesh_info()
     if (get_mesh<UnstructuredMesh>()) {
         auto um = get_mesh<UnstructuredMesh>();
         lprint(9, "Information:");
-        lprint(9, "- vertices: {}", um->get_num_vertices());
-        lprint(9, "- elements: {}", um->get_num_cells());
+        lprint(9, "- vertices: {}", utils::human_number(um->get_num_vertices()));
+        lprint(9, "- elements: {}", utils::human_number(um->get_num_cells()));
     }
 }
 
