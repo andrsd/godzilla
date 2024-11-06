@@ -91,6 +91,8 @@ private:
     KrylovSolver ks;
     /// Preconditioner
     Preconditioner pc;
+    /// KSP type
+    std::string ksp_type;
     /// Relative convergence tolerance for the linear solver
     Real lin_rel_tol;
     /// Absolute convergence tolerance for the linear solver
