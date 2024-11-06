@@ -4,6 +4,7 @@
 #include "LinearProblem_test.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/Output.h"
+#include "godzilla/Vector.h"
 #include "petscmat.h"
 
 using namespace godzilla;
@@ -33,6 +34,51 @@ TEST_F(LinearProblemTest, solve)
         EXPECT_DOUBLE_EQ(x(0), 2.);
         EXPECT_DOUBLE_EQ(x(1), 3.);
     }
+}
+
+TEST_F(LinearProblemTest, solve_rhs)
+{
+    class CustomLinearProblem : public G1DTestLinearProblem {
+    public:
+        explicit CustomLinearProblem(const Parameters & params) : G1DTestLinearProblem(params) {}
+
+        void
+        compute_operators(Matrix & A, Matrix & B) override
+        {
+            A.set_value(0, 0, 2.);
+            A.set_value(1, 1, 3.);
+            A.assemble();
+        }
+
+        void
+        set_up_callbacks() override
+        {
+            set_compute_operators(this, &CustomLinearProblem::compute_operators);
+        }
+
+        void
+        run() override
+        {
+            auto rhs = get_global_vector();
+            rhs.set_values({ 0, 1 }, { 20, 33 });
+            solve(rhs, get_solution_vector());
+            restore_global_vector(rhs);
+        }
+    };
+
+    auto mesh = gMesh1d();
+    mesh->create();
+
+    Parameters prob_pars = LinearProblem::parameters();
+    prob_pars.set<App *>("_app") = this->app;
+    prob_pars.set<MeshObject *>("_mesh_obj") = mesh;
+    CustomLinearProblem prob(prob_pars);
+
+    prob.create();
+    prob.run();
+    auto sln = prob.get_solution_vector();
+    EXPECT_NEAR(sln(0), 10, 1e-10);
+    EXPECT_NEAR(sln(1), 11, 1e-10);
 }
 
 TEST_F(LinearProblemTest, run)
