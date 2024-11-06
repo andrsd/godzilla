@@ -98,6 +98,23 @@ map_values(const std::map<T, U> & m)
 /// @return Formatted string with human readable time
 std::string human_time(PetscLogDouble time);
 
+/// Provide human readable number
+///
+/// @param number Number to format
+/// @return Formatted string with human readable number
+template <typename T>
+std::string
+human_number(T number)
+{
+    auto num_str = std::to_string(number);
+    int insert_position = num_str.length() - 3;
+    while (insert_position > 0) {
+        num_str.insert(insert_position, ",");
+        insert_position -= 3;
+    }
+    return num_str;
+}
+
 /// Get index of an value in a std::vector
 ///
 /// @tparam T Type
