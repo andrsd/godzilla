@@ -117,6 +117,35 @@ TEST(VectorTest, set_values_local)
     v.destroy();
 }
 
+TEST(VectorTest, set_values_local_dense)
+{
+    // TODO: this should be tested with MPI n_proc > 1
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    DenseVector<Int, 3> idx({ 0, 1, 2 });
+    DenseVector<Scalar, 3> vals({ 3, 5, 9 });
+
+    v.set_values_local(idx, vals);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+    v.destroy();
+}
+
+TEST(VectorTest, set_values_local_dyn_dense)
+{
+    // TODO: this should be tested with MPI n_proc > 1
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    DynDenseVector<Int> idx(3);
+    idx.set_values({ 0, 1, 2 });
+    DynDenseVector<Scalar> vals(3);
+    vals.set_values({ 3, 5, 9 });
+
+    v.set_values_local(idx, vals);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+    v.destroy();
+}
 TEST(VectorTest, assign)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);

@@ -5,6 +5,7 @@
 
 #include "godzilla/IndexSet.h"
 #include "godzilla/Types.h"
+#include "godzilla/DenseVector.h"
 #include "mpi.h"
 #include "petscvec.h"
 #include <vector>
@@ -146,8 +147,37 @@ public:
     void set_values(const std::vector<Int> & ix,
                     const std::vector<Scalar> & y,
                     InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a vector, using a local ordering of the
+    /// nodes.
+    ///
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
     void set_values_local(const std::vector<Int> & ix,
                           const std::vector<Scalar> & y,
+                          InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a vector, using a local ordering of the
+    /// nodes.
+    ///
+    /// @tparam N Number of elements in the vectors
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
+    template <Int N>
+    void set_values_local(const DenseVector<Int, N> & ix,
+                          const DenseVector<Scalar, N> & y,
+                          InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a vector, using a local ordering of the
+    /// nodes.
+    ///
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
+    void set_values_local(const DynDenseVector<Int> & ix,
+                          const DynDenseVector<Scalar> & y,
                           InsertMode mode = INSERT_VALUES);
 
     /// Sets an option for controlling a vector’s behavior.
@@ -194,5 +224,15 @@ public:
 private:
     Vec vec;
 };
+
+template <Int N>
+inline void
+Vector::set_values_local(const DenseVector<Int, N> & ix,
+                         const DenseVector<Scalar, N> & y,
+                         InsertMode mode)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecSetValuesLocal(this->vec, N, ix.data(), y.data(), mode));
+}
 
 } // namespace godzilla
