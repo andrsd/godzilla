@@ -65,6 +65,43 @@ public:
                     const DynDenseMatrix<Scalar> & vals,
                     InsertMode mode = INSERT_VALUES);
 
+    /// Inserts or adds values into certain locations of a matrix, using a local numbering of the
+    /// rows and columns.
+    ///
+    /// @param row_idxs The row local indices
+    /// @param col_idxs The column local indices
+    /// @param vals The values to insert
+    /// @param mode The insertion mode
+    void set_values_local(const std::vector<Int> & row_idxs,
+                          const std::vector<Int> & col_idxs,
+                          const std::vector<Scalar> & vals,
+                          InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a matrix, using a local numbering of the
+    /// rows and columns.
+    ///
+    /// @param row_idxs The row local indices
+    /// @param col_idxs The column local indices
+    /// @param vals The values to insert
+    /// @param mode The insertion mode
+    template <Int N>
+    void set_values_local(const DenseVector<Int, N> & row_idxs,
+                          const DenseVector<Int, N> & col_idxs,
+                          const DenseMatrix<Scalar, N, N> & vals,
+                          InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a matrix, using a local numbering of the
+    /// rows and columns.
+    ///
+    /// @param row_idxs The row local indices
+    /// @param col_idxs The column local indices
+    /// @param vals The values to insert
+    /// @param mode The insertion mode
+    void set_values_local(const DynDenseVector<Int> & row_idxs,
+                          const DynDenseVector<Int> & col_idxs,
+                          const DynDenseMatrix<Scalar> & vals,
+                          InsertMode mode = INSERT_VALUES);
+
     /// Computes the matrix-vector product, y = Ax
     void mult(const Vector & x, Vector & y);
 
@@ -103,6 +140,18 @@ Matrix::set_values(const DenseVector<Int, N> & row_idxs,
 {
     CALL_STACK_MSG();
     PETSC_CHECK(MatSetValues(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
+}
+
+template <Int N>
+inline void
+Matrix::set_values_local(const DenseVector<Int, N> & row_idxs,
+                         const DenseVector<Int, N> & col_idxs,
+                         const DenseMatrix<Scalar, N, N> & vals,
+                         InsertMode mode)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(
+        MatSetValuesLocal(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
 }
 
 } // namespace godzilla
