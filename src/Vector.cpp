@@ -327,6 +327,16 @@ Vector::set_values_local(const std::vector<Int> & ix,
     PETSC_CHECK(VecSetValuesLocal(this->vec, ix.size(), ix.data(), y.data(), mode));
 }
 
+void
+Vector::set_values_local(const DynDenseVector<Int> & ix,
+                         const DynDenseVector<Scalar> & y,
+                         InsertMode mode)
+{
+    CALL_STACK_MSG();
+    assert(ix.size() == y.size());
+    PETSC_CHECK(VecSetValuesLocal(this->vec, ix.size(), ix.data(), y.data(), mode));
+}
+
 Scalar
 Vector::sum() const
 {
