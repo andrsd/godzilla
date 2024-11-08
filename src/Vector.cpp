@@ -318,6 +318,16 @@ Vector::set_values(const std::vector<Int> & ix, const std::vector<Scalar> & y, I
 }
 
 void
+Vector::set_values(const DynDenseVector<Int> & ix,
+                   const DynDenseVector<Scalar> & y,
+                   InsertMode mode)
+{
+    CALL_STACK_MSG();
+    assert(ix.size() == y.size());
+    PETSC_CHECK(VecSetValues(this->vec, ix.size(), ix.data(), y.data(), mode));
+}
+
+void
 Vector::set_values_local(const std::vector<Int> & ix,
                          const std::vector<Scalar> & y,
                          InsertMode mode)

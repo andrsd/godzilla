@@ -144,8 +144,33 @@ public:
 
     void set_value(Int row, Scalar value, InsertMode mode = INSERT_VALUES);
     void set_value_local(Int row, Scalar value, InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a vector
+    ///
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
     void set_values(const std::vector<Int> & ix,
                     const std::vector<Scalar> & y,
+                    InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a vector
+    ///
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
+    template <Int N>
+    void set_values(const DenseVector<Int, N> & ix,
+                    const DenseVector<Scalar, N> & y,
+                    InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a vector
+    ///
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
+    void set_values(const DynDenseVector<Int> & ix,
+                    const DynDenseVector<Scalar> & y,
                     InsertMode mode = INSERT_VALUES);
 
     /// Inserts or adds values into certain locations of a vector, using a local ordering of the
@@ -224,6 +249,16 @@ public:
 private:
     Vec vec;
 };
+
+template <Int N>
+inline void
+Vector::set_values(const DenseVector<Int, N> & ix,
+                   const DenseVector<Scalar, N> & y,
+                   InsertMode mode)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecSetValues(this->vec, N, ix.data(), y.data(), mode));
+}
 
 template <Int N>
 inline void

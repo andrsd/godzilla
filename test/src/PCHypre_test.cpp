@@ -155,9 +155,9 @@ TEST(PCHypre, set_edge_constant_vectors_2d)
     pc.create(comm);
     pc.set_type(PCHypre::AMS);
     auto v0 = Vector::create_seq(comm, 2);
-    v0.set_values({ 0, 1 }, { 1, 0 });
+    v0.set_values(std::vector<Int>({ 0, 1 }), { 1, 0 });
     auto v1 = Vector::create_seq(comm, 2);
-    v1.set_values({ 0, 1 }, { 0, 1 });
+    v1.set_values(std::vector<Int>({ 0, 1 }), { 0, 1 });
     pc.set_edge_constant_vectors(v0, v1);
     pc.destroy();
 }

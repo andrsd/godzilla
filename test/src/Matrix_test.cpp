@@ -118,7 +118,7 @@ TEST(MatrixTest, set_values_dyn_dense)
 {
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 3, 2);
     DynDenseVector<Int> rows(2);
-    rows.set_values({ 0, 1});
+    rows.set_values({ 0, 1 });
     DynDenseVector<Int> cols(2);
     cols.set_values({ 0, 2 });
     DynDenseMatrix<Scalar> vals(2, 2);
@@ -192,7 +192,7 @@ TEST(MatrixTest, mult)
     m.assemble();
 
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    x.set_values({ 0, 1 }, { 3, 5 });
+    x.set_values(std::vector<Int>({ 0, 1 }), { 3, 5 });
 
     Vector y;
     x.duplicate(y);
