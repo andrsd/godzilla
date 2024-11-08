@@ -62,7 +62,7 @@ G1DTestNonlinearProblem::compute_residual(const Vector & x, Vector & f)
     std::vector<Int> ix = { 0, 1 };
     std::vector<Scalar> y(2);
     x.get_values(ix, y);
-    f.set_values({ 0, 1 }, { y[0] - 2, y[1] - 3 });
+    f.set_values(std::vector<Int>({ 0, 1 }), { y[0] - 2, y[1] - 3 });
     f.assemble();
 }
 

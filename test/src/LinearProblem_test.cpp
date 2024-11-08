@@ -60,7 +60,7 @@ TEST_F(LinearProblemTest, solve_rhs)
         run() override
         {
             auto rhs = get_global_vector();
-            rhs.set_values({ 0, 1 }, { 20, 33 });
+            rhs.set_values(std::vector<Int>({ 0, 1 }), { 20, 33 });
             solve(rhs, get_solution_vector());
             restore_global_vector(rhs);
         }

@@ -106,6 +106,36 @@ TEST(VectorTest, set_values)
     v.destroy();
 }
 
+TEST(VectorTest, set_values_dense)
+{
+    // TODO: this should be tested with MPI n_proc > 1
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    DenseVector<Int, 3> idx({ 0, 1, 2 });
+    DenseVector<Scalar, 3> vals({ 3, 5, 9 });
+
+    v.set_values(idx, vals);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+    v.destroy();
+}
+
+TEST(VectorTest, set_values_dyn_dense)
+{
+    // TODO: this should be tested with MPI n_proc > 1
+    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
+    DynDenseVector<Int> idx(3);
+    idx.set_values({ 0, 1, 2 });
+    DynDenseVector<Scalar> vals(3);
+    vals.set_values({ 3, 5, 9 });
+
+    v.set_values(idx, vals);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+    v.destroy();
+}
+
 TEST(VectorTest, set_values_local)
 {
     // TODO: this should be tested with MPI n_proc > 1
@@ -146,6 +176,7 @@ TEST(VectorTest, set_values_local_dyn_dense)
     EXPECT_DOUBLE_EQ(v(2), 9.);
     v.destroy();
 }
+
 TEST(VectorTest, assign)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
@@ -437,13 +468,13 @@ TEST(VectorTest, maxpy)
 TEST(VectorTest, axpbypcz)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    x.set_values({ 0, 1 }, { 2., 5. });
+    x.set_values(std::vector<Int>({ 0, 1 }), { 2., 5. });
 
     Vector y = Vector::create_seq(MPI_COMM_WORLD, 2);
-    y.set_values({ 0, 1 }, { 3., 4. });
+    y.set_values(std::vector<Int>({ 0, 1 }), { 3., 4. });
 
     Vector w = Vector::create_seq(MPI_COMM_WORLD, 2);
-    w.set_values({ 0, 1 }, { 1., 1. });
+    w.set_values(std::vector<Int>({ 0, 1 }), { 1., 1. });
     Real alpha = 2.;
     Real beta = 3.;
     Real gamma = 4;
@@ -590,7 +621,7 @@ TEST(VectorTest, sub_vector)
 TEST(VectorTest, norm)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 2);
-    v.set_values({ 0, 1 }, { 3, 4 });
+    v.set_values(std::vector<Int>({ 0, 1 }), { 3, 4 });
     auto norm = v.norm(NORM_2);
     EXPECT_DOUBLE_EQ(norm, 5.);
     v.destroy();
