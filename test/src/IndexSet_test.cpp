@@ -138,6 +138,18 @@ TEST(IndexSetTest, range)
     is.destroy();
 }
 
+TEST(IndexSetTest, range_over_null_set)
+{
+    TestApp app;
+    IndexSet is;
+    is.create(app.get_comm());
+    std::vector<Int> vals;
+    for (auto & i : is)
+        vals.push_back(i);
+    EXPECT_THAT(vals, ElementsAre());
+    is.destroy();
+}
+
 TEST(IndexSetTest, for_loop)
 {
     TestApp app;

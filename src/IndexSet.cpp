@@ -10,11 +10,7 @@
 
 namespace godzilla {
 
-IndexSet::Iterator::Iterator(IndexSet & is, Int idx) : is(is), idx(idx)
-{
-    if (this->is.data() == nullptr)
-        throw Exception("Must call IndexSet::get_indices() first.");
-}
+IndexSet::Iterator::Iterator(IndexSet & is, Int idx) : is(is), idx(idx) {}
 
 const IndexSet::Iterator::value_type &
 IndexSet::Iterator::operator*() const
@@ -162,8 +158,8 @@ void
 IndexSet::get_indices()
 {
     CALL_STACK_MSG();
-    assert(this->is != nullptr);
-    PETSC_CHECK(ISGetIndices(this->is, &this->indices));
+    if (this->is != nullptr)
+        PETSC_CHECK(ISGetIndices(this->is, &this->indices));
 }
 
 std::vector<Int>
@@ -171,8 +167,10 @@ IndexSet::to_std_vector()
 {
     CALL_STACK_MSG();
     std::vector<Int> idxs;
-    Int n = get_size();
-    idxs.assign(this->indices, this->indices + n);
+    if (this->indices != nullptr) {
+        Int n = get_size();
+        idxs.assign(this->indices, this->indices + n);
+    }
     return idxs;
 }
 
@@ -314,15 +312,22 @@ IndexSet::Iterator
 IndexSet::begin()
 {
     CALL_STACK_MSG();
-    return Iterator(*this, 0);
+    if (this->is == nullptr || this->indices == nullptr)
+        return Iterator(*this, -1);
+    else
+        return Iterator(*this, 0);
 }
 
 IndexSet::Iterator
 IndexSet::end()
 {
     CALL_STACK_MSG();
-    auto n = get_local_size();
-    return Iterator(*this, n);
+    if (this->is == nullptr || this->indices == nullptr)
+        return Iterator(*this, -1);
+    else {
+        auto n = get_local_size();
+        return Iterator(*this, n);
+    }
 }
 
 IndexSet
@@ -455,6 +460,11 @@ IndexSet::sum(const IndexSet & is1, const IndexSet & is2)
     IS out;
     PETSC_CHECK(ISSum(is1, is2, &out));
     return IndexSet(out);
+}
+
+IndexSet::operator bool() const
+{
+    return this->is != nullptr;
 }
 
 } // namespace godzilla
