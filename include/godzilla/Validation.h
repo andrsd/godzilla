@@ -3,9 +3,13 @@
 
 #pragma once
 
+#include "godzilla/Exception.h"
 #include "godzilla/Utils.h"
+#include <sys/types.h>
+#include <initializer_list>
 #include <vector>
 #include <string>
+#include <type_traits>
 
 namespace godzilla {
 namespace validation {
@@ -42,6 +46,24 @@ in<const char *>(const char * value, const std::vector<const char *> & options)
     return std::any_of(options.cbegin(), options.cend(), [v](const std::string & o) {
         return v == utils::to_lower(o);
     });
+}
+
+/// Check that `value` is within range
+///
+/// @param value Value to test
+/// @param range Range to test against
+/// @return `true` if `value` is within range, `false` otherwise
+template <typename T, typename U>
+inline bool
+in_range(T value, std::initializer_list<U> range)
+{
+    static_assert(std::is_convertible<T, U>::value, "T must be convertible to U");
+    if (range.size() != 2)
+        throw Exception("Range must have exactly two elements.");
+    auto it = range.begin();
+    U lo = *it;
+    U hi = *(++it);
+    return value >= lo && value <= hi;
 }
 
 } // namespace validation
