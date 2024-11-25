@@ -51,7 +51,7 @@ public:
     /// @return `true` if quadratures are the same, `false` otherwise
     [[nodiscard]] bool equal(const Quadrature & q) const;
 
-    explicit operator PetscQuadrature() const;
+    operator PetscQuadrature() const;
 
     /// Create a tensor-product Gauss quadrature
     ///
