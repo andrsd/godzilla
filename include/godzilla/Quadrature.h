@@ -34,6 +34,11 @@ public:
     /// @return the number of components
     [[nodiscard]] Int get_num_components() const;
 
+    /// The number of quadrature points
+    ///
+    /// @return The number of quadrature points
+    [[nodiscard]] Int get_num_points() const;
+
     /// Get order
     ///
     /// @return The order of the quadrature, i.e. the highest degree polynomial that is exactly

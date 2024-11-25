@@ -52,6 +52,15 @@ Quadrature::get_num_components() const
 }
 
 Int
+Quadrature::get_num_points() const
+{
+    CALL_STACK_MSG();
+    Int n_points;
+    PETSC_CHECK(PetscQuadratureGetData(this->quad, nullptr, nullptr, &n_points, nullptr, nullptr));
+    return n_points;
+}
+
+Int
 Quadrature::get_order() const
 {
     CALL_STACK_MSG();
