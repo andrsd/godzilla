@@ -34,6 +34,21 @@ public:
     /// @return the number of components
     [[nodiscard]] Int get_num_components() const;
 
+    /// The number of quadrature points
+    ///
+    /// @return The number of quadrature points
+    [[nodiscard]] Int get_num_points() const;
+
+    /// Get quadrature point weights
+    ///
+    /// @return Array of quadrature point weights
+    [[nodiscard]] const Real * get_weights() const;
+
+    /// Get quadrature points
+    ///
+    /// @return Array of quadrature points
+    [[nodiscard]] const Real * get_points() const;
+
     /// Get order
     ///
     /// @return The order of the quadrature, i.e. the highest degree polynomial that is exactly
@@ -46,7 +61,7 @@ public:
     /// @return `true` if quadratures are the same, `false` otherwise
     [[nodiscard]] bool equal(const Quadrature & q) const;
 
-    explicit operator PetscQuadrature() const;
+    operator PetscQuadrature() const;
 
     /// Create a tensor-product Gauss quadrature
     ///

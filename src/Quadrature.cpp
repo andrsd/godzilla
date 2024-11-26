@@ -52,6 +52,33 @@ Quadrature::get_num_components() const
 }
 
 Int
+Quadrature::get_num_points() const
+{
+    CALL_STACK_MSG();
+    Int n_points;
+    PETSC_CHECK(PetscQuadratureGetData(this->quad, nullptr, nullptr, &n_points, nullptr, nullptr));
+    return n_points;
+}
+
+const Real *
+Quadrature::get_weights() const
+{
+    CALL_STACK_MSG();
+    const Real * weights;
+    PETSC_CHECK(PetscQuadratureGetData(this->quad, nullptr, nullptr, nullptr, nullptr, &weights));
+    return weights;
+}
+
+const Real *
+Quadrature::get_points() const
+{
+    CALL_STACK_MSG();
+    const Real * points;
+    PETSC_CHECK(PetscQuadratureGetData(this->quad, nullptr, nullptr, nullptr, &points, nullptr));
+    return points;
+}
+
+Int
 Quadrature::get_order() const
 {
     CALL_STACK_MSG();
