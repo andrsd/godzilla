@@ -89,6 +89,7 @@ public:
 
 protected:
     [[nodiscard]] Int get_num_nodes_per_elem(Int c) const;
+    [[nodiscard]] PetscFE get_fe(Int fid) const;
 
     void init() override;
     void create() override;
@@ -108,12 +109,17 @@ protected:
     void set_up_weak_form() override;
 
 private:
+    /// Quadrature order
+    Int qorder;
+
     /// Field information
     struct FieldInfo {
         /// The name of the field
         std::string name;
         /// Field number
         Int id;
+        /// FE object
+        PetscFE fe;
         /// Mesh support
         Label block;
         /// The number of components
@@ -126,6 +132,7 @@ private:
         FieldInfo(const std::string & name, Int id, Int nc, Int k, const Label & block) :
             name(name),
             id(id),
+            fe(nullptr),
             block(block),
             nc(nc),
             k(k)
@@ -134,6 +141,8 @@ private:
 
         FieldInfo(const FieldInfo & other) = default;
     };
+
+    void create_fe(FieldInfo & fi);
 
     /// Fields in the problem
     std::map<Int, FieldInfo> fields;

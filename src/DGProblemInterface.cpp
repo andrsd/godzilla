@@ -19,7 +19,8 @@ namespace godzilla {
 const std::string DGProblemInterface::empty_name;
 
 DGProblemInterface::DGProblemInterface(Problem * problem, const Parameters & params) :
-    DiscreteProblemInterface(problem, params)
+    DiscreteProblemInterface(problem, params),
+    qorder(PETSC_DETERMINE)
 {
     CALL_STACK_MSG();
 }
@@ -37,6 +38,8 @@ void
 DGProblemInterface::init()
 {
     CALL_STACK_MSG();
+    for (auto & it : this->fields)
+        create_fe(it.second);
     DiscreteProblemInterface::init();
 
     auto dm = get_unstr_mesh()->get_dm();
@@ -114,6 +117,18 @@ DGProblemInterface::has_field_by_name(const std::string & name) const
     CALL_STACK_MSG();
     const auto & it = this->fields_by_name.find(name);
     return it != this->fields_by_name.end();
+}
+
+PetscFE
+DGProblemInterface::get_fe(Int fid) const
+{
+    const auto & it = this->fields.find(fid);
+    if (it != this->fields.end()) {
+        const FieldInfo & fi = it->second;
+        return fi.fe;
+    }
+    else
+        throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
 Int
@@ -549,6 +564,16 @@ DGProblemInterface::set_up_assembly_data_aux()
 {
     CALL_STACK_MSG();
     // do nothing
+}
+
+void
+DGProblemInterface::create_fe(FieldInfo & fi)
+{
+    CALL_STACK_MSG();
+    auto comm = get_unstr_mesh()->get_comm();
+    Int dim = get_problem()->get_dimension();
+    PetscBool is_simplex = get_unstr_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
+    PETSC_CHECK(PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe));
 }
 
 } // namespace godzilla

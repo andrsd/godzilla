@@ -248,6 +248,7 @@ public:
 
 protected:
     [[nodiscard]] const std::map<Int, FieldInfo> & get_fields() const;
+    [[nodiscard]] PetscFE get_fe(Int fid) const;
 
     void create() override;
     void init() override;
