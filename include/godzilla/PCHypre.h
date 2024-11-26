@@ -29,7 +29,7 @@ public:
     /// Gets which HYPRE preconditioner is used
     ///
     /// @return HYPRE preconditioner type
-    [[nodiscard]] Type get_type() const;
+    Type get_type() const;
 
     /// Set the list of interior nodes to a zero-conductivity region for PCHYPRE of type `AMS`
     ///

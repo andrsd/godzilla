@@ -24,7 +24,7 @@ protected:
     /// Get the multiplier a for dF/dU_t
     ///
     /// @return The multiplier a for dF/dU_t
-    [[nodiscard]] const Real & get_time_shift() const;
+    const Real & get_time_shift() const;
 };
 
 } // namespace godzilla

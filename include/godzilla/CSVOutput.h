@@ -16,13 +16,13 @@ public:
     ~CSVOutput() override;
 
     void create() override;
-    [[nodiscard]] std::string get_file_ext() const override;
+    std::string get_file_ext() const override;
     void output_step() override;
 
     /// Get post-processor names
     ///
     /// @return Post-processor names
-    [[nodiscard]] const std::vector<std::string> &
+    const std::vector<std::string> &
     get_pps_names() const
     {
         return pps_names;

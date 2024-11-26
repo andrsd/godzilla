@@ -27,7 +27,7 @@ public:
     /// Get execution mask
     ///
     /// @return execution mask
-    [[nodiscard]] ExecuteOn get_exec_mask() const;
+    ExecuteOn get_exec_mask() const;
 
     /// Should output happen at a specified occasion
     ///
@@ -42,7 +42,7 @@ protected:
     /// Get problem
     ///
     /// @return Problem this output is part of
-    [[nodiscard]] Problem * get_problem() const;
+    Problem * get_problem() const;
 
     /// Set up the execution mask
     void set_up_exec();

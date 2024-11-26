@@ -17,11 +17,11 @@ public:
     explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & params);
     ~ExplicitProblemInterface() override;
 
-    [[nodiscard]] const Matrix & get_mass_matrix() const;
+    const Matrix & get_mass_matrix() const;
 
     Matrix & get_mass_matrix();
 
-    [[nodiscard]] const Vector & get_lumped_mass_matrix() const;
+    const Vector & get_lumped_mass_matrix() const;
 
     Vector & get_lumped_mass_matrix();
 

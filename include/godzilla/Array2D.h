@@ -127,7 +127,7 @@ private:
     /// @param row Row number
     /// @param col Column number
     /// @return Offset into the `values` array that contains the entry at position (row, col)
-    [[nodiscard]] Int
+    Int
     idx(Int row, Int col) const
     {
         return row * this->n_cols + col;

@@ -17,7 +17,7 @@ class ConstantInitialCondition : public InitialCondition {
 public:
     explicit ConstantInitialCondition(const Parameters & params);
 
-    [[nodiscard]] Int get_num_components() const override;
+    Int get_num_components() const override;
 
     void evaluate(Real time, const Real x[], Scalar u[]) override;
 

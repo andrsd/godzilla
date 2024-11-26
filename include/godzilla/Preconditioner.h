@@ -31,7 +31,7 @@ public:
     /// Gets the preconditioner type (as a string)
     ///
     /// @return name of preconditioner method
-    [[nodiscard]] std::string get_type() const;
+    std::string get_type() const;
 
     /// Resets the preconditioner and removes any allocated Vectors and Matrices
     void reset();

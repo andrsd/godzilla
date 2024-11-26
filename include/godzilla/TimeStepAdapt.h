@@ -45,7 +45,7 @@ public:
     /// Get the list of candidate orders of accuracy and cost
     ///
     /// @return List of candidates
-    [[nodiscard]] std::vector<Candidate> get_candidates() const;
+    std::vector<Candidate> get_candidates() const;
 
     /// Checks whether to accept a stage, (e.g. reject and change time step size if nonlinear
     /// solve fails or solution vector is infeasible)
@@ -72,37 +72,37 @@ public:
     /// @return [low, high]
     /// - low: admissible decrease factor,
     /// - high: admissible increase factor
-    [[nodiscard]] std::tuple<Real, Real> get_clip() const;
+    std::tuple<Real, Real> get_clip() const;
 
     /// Get error estimation threshold. Solution components below this threshold value will not be
     /// considered when computing error norms for time step adaptivity (in absolute value).
     ///
     /// @return Threshold for solution components that are ignored during error estimation
-    [[nodiscard]] Real get_max_ignore() const;
+    Real get_max_ignore() const;
 
     /// Get safety factors for time step adapter
     ///
     /// @return [safety, reject_safety]
     /// - safety: safety factor relative to target error/stability goal
     /// - reject_safety: extra safety factor to apply if the last step was rejected
-    [[nodiscard]] std::tuple<Real, Real> get_safety() const;
+    std::tuple<Real, Real> get_safety() const;
 
     /// Gets the admissible decrease/increase factor in step size
     ///
     /// @return Scale factor
-    [[nodiscard]] Real get_scale_solve_failed() const;
+    Real get_scale_solve_failed() const;
 
     /// Get the minimum and maximum step sizes to be considered by the time step controller
     ///
     /// @return [hmin, hmax]
     /// - hmin: minimum time step
     /// - hmax: maximum time step
-    [[nodiscard]] std::tuple<Real, Real> get_step_limits() const;
+    std::tuple<Real, Real> get_step_limits() const;
 
     /// Get the adapter method type (as a string)
     ///
     /// @return The name of adapter method
-    [[nodiscard]] std::string get_type() const;
+    std::string get_type() const;
 
     /// Reset the time stepper to its defaults
     void reset();

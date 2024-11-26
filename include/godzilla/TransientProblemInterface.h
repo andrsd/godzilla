@@ -49,19 +49,19 @@ public:
     /// Get time stepping adaptor
     ///
     /// @return Time stepping adaptor
-    [[nodiscard]] TimeSteppingAdaptor * get_time_stepping_adaptor() const;
+    TimeSteppingAdaptor * get_time_stepping_adaptor() const;
 
     /// Get TS object
     ///
     /// @return PETSc TS object
-    [[nodiscard]] TS get_ts() const;
+    TS get_ts() const;
 
-    [[nodiscard]] Vector get_solution() const;
+    Vector get_solution() const;
 
     /// Get the current timestep size
     ///
     /// @return the current timestep size
-    [[nodiscard]] Real get_time_step() const;
+    Real get_time_step() const;
 
     /// Allows one to reset the timestep at any time, useful for simple pseudo-timestepping codes.
     ///
@@ -76,7 +76,7 @@ public:
     /// Gets the maximum (or final) time for time-stepping
     ///
     /// @return Final time to step to
-    [[nodiscard]] Real get_max_time() const;
+    Real get_max_time() const;
 
     /// Sets the reason for handling the convergence
     ///
@@ -88,7 +88,7 @@ public:
     /// NOTE: Can only be called after the call to solve() is complete.
     ///
     /// @return Converged reason
-    [[nodiscard]] TSConvergedReason get_converged_reason() const;
+    TSConvergedReason get_converged_reason() const;
 
     /// Set time-stepping scheme
     void set_scheme(TimeScheme scheme);
@@ -97,7 +97,7 @@ public:
     void set_scheme(const std::string & scheme_name);
 
     /// Get the name of time stepping scheme
-    [[nodiscard]] std::string get_scheme() const;
+    std::string get_scheme() const;
 
     /// Set simulation time
     ///
@@ -131,13 +131,13 @@ public:
 
 protected:
     /// Get underlying non-linear solver
-    [[nodiscard]] SNESolver get_snes() const;
+    SNESolver get_snes() const;
 
     /// Get time
-    [[nodiscard]] Real get_time() const;
+    Real get_time() const;
 
     /// Get step number
-    [[nodiscard]] Int get_step_number() const;
+    Int get_step_number() const;
 
     /// Initialize
     void init();

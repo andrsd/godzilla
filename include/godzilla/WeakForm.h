@@ -162,12 +162,12 @@ public:
     /// Get mesh regions where residual parts are defined
     ///
     /// @return Regions where residual parts are defined
-    [[nodiscard]] std::vector<Region> get_residual_regions() const;
+    std::vector<Region> get_residual_regions() const;
 
     /// Get mesh regions where Jacobian parts are defined
     ///
     /// @return Regions where Jacobian parts are defined
-    [[nodiscard]] std::vector<Region> get_jacobian_regions() const;
+    std::vector<Region> get_jacobian_regions() const;
 
     /// Get residual forms
     ///
@@ -176,7 +176,7 @@ public:
     /// @param val Value associated with the mesh region
     /// @param f Field ID
     /// @param part Weak form part
-    [[nodiscard]] const std::vector<ResidualFunc *> &
+    const std::vector<ResidualFunc *> &
     get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const;
 
     /// Get Jacobian forms
@@ -187,7 +187,7 @@ public:
     /// @param f Field ID for test function
     /// @param g Field ID for base function
     /// @param part Weak form part
-    [[nodiscard]] const std::vector<JacobianFunc *> &
+    const std::vector<JacobianFunc *> &
     get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const;
 
     /// Add a residual form
@@ -220,12 +220,12 @@ public:
     /// Query if Jacobian statement is set
     ///
     /// @return `true` if weak form for Jacobian statement is set, otherwise `false`
-    [[nodiscard]] bool has_jacobian() const;
+    bool has_jacobian() const;
 
     /// Query if Jacobian preconditioner statement is set
     ///
     /// @return `true` if weak form for Jacobian preconditioner statement is set, otherwise `false`
-    [[nodiscard]] bool has_jacobian_preconditioner() const;
+    bool has_jacobian_preconditioner() const;
 
 private:
     /// All residual forms

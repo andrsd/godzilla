@@ -22,7 +22,7 @@ public:
     explicit TecplotOutput(const Parameters & params);
     ~TecplotOutput() override;
 
-    [[nodiscard]] std::string get_file_ext() const override;
+    std::string get_file_ext() const override;
     void create() override;
     void output_step() override;
 

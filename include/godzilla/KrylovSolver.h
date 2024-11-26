@@ -192,9 +192,9 @@ public:
     /// Gets the reason the KSP iteration was stopped
     ///
     /// @return
-    [[nodiscard]] ConvergedReason get_converged_reason() const;
+    ConvergedReason get_converged_reason() const;
 
-    [[nodiscard]] PC get_pc() const;
+    PC get_pc() const;
 
     /// typecast operator so we can use our class directly with PETSc API
     operator KSP() const;

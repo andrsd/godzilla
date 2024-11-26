@@ -97,7 +97,7 @@ public:
     /// Get number of entries in the array
     ///
     /// @return Number of entries in the array
-    [[nodiscard]] Int
+    Int
     get_size() const
     {
         return this->n;
@@ -107,7 +107,7 @@ public:
     ///
     /// @param i Index fo the entry
     /// @return Entry at the `ith` location
-    [[nodiscard]] const T &
+    const T &
     get(Int i) const
     {
         assert(this->data != nullptr);
@@ -239,7 +239,7 @@ public:
     //
 
     // Do your best to avoid abusing this API
-    [[nodiscard]] T *
+    T *
     get_data() const
     {
         return this->data;

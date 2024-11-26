@@ -72,13 +72,13 @@ public:
     /// Creates a duplicate copy of an index set
     ///
     /// @return The copy of the index set
-    [[nodiscard]] IndexSet duplicate() const;
+    IndexSet duplicate() const;
 
     /// Compares if this index set has the same set of indices as the `other`
     ///
     /// @param other The index set to compare with
     /// @return `true` if the index sets are equal, `false` otherwise
-    [[nodiscard]] bool equal(const IndexSet & other) const;
+    bool equal(const IndexSet & other) const;
 
     /// Compares if this index set has the same set of indices as the `other`
     ///
@@ -87,14 +87,14 @@ public:
     ///
     /// @note This routine does NOT sort the contents of the index sets before the comparison is
     /// made, i.e., the order of indices is important.
-    [[nodiscard]] bool equal_unsorted(const IndexSet & other) const;
+    bool equal_unsorted(const IndexSet & other) const;
 
     void get_indices();
 
     /// Gets the index set type name
     ///
     /// @return The type name
-    [[nodiscard]] std::string get_type() const;
+    std::string get_type() const;
 
     void restore_indices();
 
@@ -122,26 +122,26 @@ public:
     /// Gets the minimum and maximum values
     ///
     /// @return A tuple containing the minimum and maximum values
-    [[nodiscard]] std::tuple<Int, Int> get_min_max() const;
+    std::tuple<Int, Int> get_min_max() const;
 
     /// Returns the global length of an index set.
     ///
     /// @return The global size of the index set
-    [[nodiscard]] Int get_size() const;
+    Int get_size() const;
 
     /// Returns the local (processor) length of an index set.
     ///
     /// @return The local size of the index set
-    [[nodiscard]] Int get_local_size() const;
+    Int get_local_size() const;
 
-    [[nodiscard]] const Int * data() const;
+    const Int * data() const;
 
     /// Determine the location of an index within the local component of an index set
     ///
     /// @param key The index to locate
     /// @return if >= 0, a location within the index set that is equal to the key, otherwise the key
     ///         is not in the index set
-    [[nodiscard]] Int locate(Int key) const;
+    Int locate(Int key) const;
 
     Int operator[](Int i) const;
 
@@ -157,7 +157,7 @@ public:
     /// Determines whether index set is the identity mapping.
     ///
     /// @return `true` if the index set is the identity mapping, `false` otherwise
-    [[nodiscard]] bool identity() const;
+    bool identity() const;
 
     /// Sets the index set to be the identity mapping.
     void set_identity();
@@ -165,7 +165,7 @@ public:
     /// Determines whether index set is a permutation.
     ///
     /// @return `true` if the index set is a permutation, `false` otherwise
-    [[nodiscard]] bool permutation() const;
+    bool permutation() const;
 
     /// Informs the index set that it is a permutation.
     void set_permutation();
@@ -187,12 +187,12 @@ public:
     /// Checks if the IndexSet is empty
     ///
     /// @return `true` if the index set is empty, `false` otherwise
-    [[nodiscard]] bool empty() const;
+    bool empty() const;
 
     /// Returns the PETSc ID of the index set
     ///
     /// @return The PETSc ID
-    [[nodiscard]] PetscObjectId get_id() const;
+    PetscObjectId get_id() const;
 
     /// Shift all indices by given offset
     ///
@@ -202,7 +202,7 @@ public:
     /// Checks the indices to determine whether they have been sorted
     ///
     /// @return `true` is index set is sorted
-    [[nodiscard]] bool sorted() const;
+    bool sorted() const;
 
     /// Sort the indices of the index set
     void sort() const;

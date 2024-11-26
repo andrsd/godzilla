@@ -20,7 +20,7 @@ public:
     explicit FENonlinearProblem(const Parameters & parameters);
 
     void create() override;
-    [[nodiscard]] Real get_time() const override;
+    Real get_time() const override;
     void compute_solution_vector_local() override;
 
 protected:

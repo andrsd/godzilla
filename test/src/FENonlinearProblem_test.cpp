@@ -23,7 +23,7 @@ class GTest2CompIC : public InitialCondition {
 public:
     explicit GTest2CompIC(const Parameters & params) : InitialCondition(params) {}
 
-    [[nodiscard]] Int
+    Int
     get_num_components() const override
     {
         return 2;

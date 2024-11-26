@@ -67,9 +67,9 @@ public:
     /// Destroy the solver
     void destroy();
 
-    [[nodiscard]] KrylovSolver get_ksp() const;
+    KrylovSolver get_ksp() const;
 
-    [[nodiscard]] LineSearch get_line_search() const;
+    LineSearch get_line_search() const;
 
     void set_line_search(LineSearch ls);
 
@@ -181,7 +181,7 @@ public:
     /// Gets the reason the KSP iteration was stopped
     ///
     /// @return
-    [[nodiscard]] ConvergedReason get_converged_reason() const;
+    ConvergedReason get_converged_reason() const;
 
     /// Creates a finite differencing based matrix-free matrix context for use with a SNES solver.
     ///

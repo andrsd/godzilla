@@ -34,7 +34,7 @@ public:
     explicit ExodusIIOutput(const Parameters & params);
     ~ExodusIIOutput() override;
 
-    [[nodiscard]] std::string get_file_ext() const override;
+    std::string get_file_ext() const override;
     void create() override;
     void output_mesh();
     void output_step() override;

@@ -17,17 +17,17 @@ public:
     /// Get the lower bound in x-direction
     ///
     /// @return Lower bound in x-direction
-    [[nodiscard]] Real get_x_min() const;
+    Real get_x_min() const;
 
     /// Get the upper bound in x-direction
     ///
     /// @return Upper bound in x-direction
-    [[nodiscard]] Real get_x_max() const;
+    Real get_x_max() const;
 
     /// Get the number of divisions in the x-direction
     ///
     /// @return Number of divisions in the x-direction
-    [[nodiscard]] Int get_nx() const;
+    Int get_nx() const;
 
 protected:
     Mesh * create_mesh() override;

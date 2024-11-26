@@ -24,15 +24,15 @@ public:
 
     /// Get the type of this object.
     /// @return the name of the type of this object
-    [[nodiscard]] const std::string & get_type() const;
+    const std::string & get_type() const;
 
     /// Get the name of the object
     /// @return The name of the object
-    [[nodiscard]] const std::string & get_name() const;
+    const std::string & get_name() const;
 
     /// Get the parameters of the object
     /// @return The parameters of the object
-    [[nodiscard]] const Parameters & get_parameters() const;
+    const Parameters & get_parameters() const;
 
     /// Retrieve a parameter for the object
     /// @param par_name The name of the parameter
@@ -42,17 +42,17 @@ public:
 
     /// Test if the supplied parameter is valid
     /// @param par_name The name of the parameter to test
-    [[nodiscard]] bool is_param_valid(const std::string & par_name) const;
+    bool is_param_valid(const std::string & par_name) const;
 
     /// Get the App this object is associated with
 
-    [[nodiscard]] App * get_app() const;
+    App * get_app() const;
 
     /// Get the MPI comm this object works on
-    [[nodiscard]] const mpi::Communicator & get_comm() const;
+    const mpi::Communicator & get_comm() const;
 
     /// Get processor ID (aka MPI rank) this object is running at
-    [[nodiscard]] int get_processor_id() const;
+    int get_processor_id() const;
 
     /// Called to construct the object
     virtual void create();

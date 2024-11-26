@@ -15,15 +15,15 @@ public:
     explicit RectangleMesh(const Parameters & parameters);
 
     ///
-    [[nodiscard]] Real get_x_min() const;
-    [[nodiscard]] Real get_x_max() const;
+    Real get_x_min() const;
+    Real get_x_max() const;
     /// Get the number of mesh points in x direction
-    [[nodiscard]] Int get_nx() const;
+    Int get_nx() const;
     ///
-    [[nodiscard]] Real get_y_min() const;
-    [[nodiscard]] Real get_y_max() const;
+    Real get_y_min() const;
+    Real get_y_max() const;
     /// Get the number of mesh points in y direction
-    [[nodiscard]] Int get_ny() const;
+    Int get_ny() const;
 
 protected:
     Mesh * create_mesh() override;

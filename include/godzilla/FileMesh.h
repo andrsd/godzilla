@@ -20,12 +20,12 @@ public:
     /// Return file name
     ///
     /// @return Name of the file
-    [[nodiscard]] const std::string & get_file_name() const;
+    const std::string & get_file_name() const;
 
     /// Get mesh file format
     ///
     /// @return Mesh file format
-    [[nodiscard]] FileFormat get_file_format() const;
+    FileFormat get_file_format() const;
 
 protected:
     void set_file_format(FileFormat fmt);

@@ -42,7 +42,7 @@ public:
     ///
     /// @param i Index
     /// @return Entry at location (i)
-    [[nodiscard]] const T &
+    const T &
     get(Int i) const
     {
         assert((i >= 0) && (i < N));
@@ -104,7 +104,7 @@ public:
     /// Compute average from vector entries
     ///
     /// @return Average of vector entries
-    [[nodiscard]] Real
+    Real
     avg() const
     {
         Real res = 0.;
@@ -116,7 +116,7 @@ public:
     /// Sum all vector elements, i.e \Sum_i vec[i]
     ///
     /// @return Sum of all elements
-    [[nodiscard]] T
+    T
     sum() const
     {
         T sum = 0.;
@@ -128,7 +128,7 @@ public:
     /// Compute vector magnitude, i.e. sqrt(\Sum_i vec[i]^2)
     ///
     /// @return Vector magnitude
-    [[nodiscard]] T
+    T
     magnitude() const
     {
         T sum = 0.;
@@ -140,7 +140,7 @@ public:
     /// Find the minimum value of the elements
     ///
     /// @return The minimum value of the elements
-    [[nodiscard]] T
+    T
     min() const
     {
         T res = std::numeric_limits<T>::max();
@@ -153,7 +153,7 @@ public:
     /// Find the minimum value of the elements
     ///
     /// @return The minimum value of the elements
-    [[nodiscard]] T
+    T
     max() const
     {
         T res = std::numeric_limits<T>::min();
@@ -486,7 +486,7 @@ public:
     ///
     /// @param i Index
     /// @return Entry at location (i)
-    [[nodiscard]] const T &
+    const T &
     get(Int i) const
     {
         if ((i >= 0) && (i < size()))
@@ -582,7 +582,7 @@ public:
     /// Compute average from vector entries
     ///
     /// @return Average of vector entries
-    [[nodiscard]] Real
+    Real
     avg() const
     {
         Real res = 0.;
@@ -594,7 +594,7 @@ public:
     /// Sum all vector elements, i.e \Sum_i vec[i]
     ///
     /// @return Sum of all elements
-    [[nodiscard]] T
+    T
     sum() const
     {
         T sum = 0.;
@@ -606,7 +606,7 @@ public:
     /// Compute vector magnitude, i.e. sqrt(\Sum_i vec[i]^2)
     ///
     /// @return Vector magnitude
-    [[nodiscard]] T
+    T
     magnitude() const
     {
         T sum = 0.;
@@ -618,7 +618,7 @@ public:
     /// Find the minimum value of the elements
     ///
     /// @return The minimum value of the elements
-    [[nodiscard]] T
+    T
     min() const
     {
         T res = std::numeric_limits<T>::max();
@@ -631,7 +631,7 @@ public:
     /// Find the minimum value of the elements
     ///
     /// @return The minimum value of the elements
-    [[nodiscard]] T
+    T
     max() const
     {
         T res = std::numeric_limits<T>::min();

@@ -44,7 +44,7 @@ public:
     const Vector & get_solution_vector() const;
     Vector & get_solution_vector();
 
-    [[nodiscard]] const std::vector<Vector> & get_stage_vectors() const;
+    const std::vector<Vector> & get_stage_vectors() const;
     std::vector<Vector> & get_stage_vectors();
 
     /// Runs the user-defined pre-stage function set using

@@ -16,26 +16,26 @@ public:
     DGProblemInterface(Problem * problem, const Parameters & params);
     ~DGProblemInterface() override;
 
-    [[nodiscard]] Int get_num_fields() const override;
-    [[nodiscard]] std::vector<std::string> get_field_names() const override;
-    [[nodiscard]] const std::string & get_field_name(Int fid) const override;
-    [[nodiscard]] Int get_field_num_components(Int fid) const override;
-    [[nodiscard]] Int get_field_id(const std::string & name) const override;
-    [[nodiscard]] bool has_field_by_id(Int fid) const override;
-    [[nodiscard]] bool has_field_by_name(const std::string & name) const override;
-    [[nodiscard]] Int get_field_order(Int fid) const override;
-    [[nodiscard]] std::string get_field_component_name(Int fid, Int component) const override;
+    Int get_num_fields() const override;
+    std::vector<std::string> get_field_names() const override;
+    const std::string & get_field_name(Int fid) const override;
+    Int get_field_num_components(Int fid) const override;
+    Int get_field_id(const std::string & name) const override;
+    bool has_field_by_id(Int fid) const override;
+    bool has_field_by_name(const std::string & name) const override;
+    Int get_field_order(Int fid) const override;
+    std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
 
-    [[nodiscard]] Int get_num_aux_fields() const override;
-    [[nodiscard]] std::vector<std::string> get_aux_field_names() const override;
-    [[nodiscard]] const std::string & get_aux_field_name(Int fid) const override;
-    [[nodiscard]] Int get_aux_field_num_components(Int fid) const override;
-    [[nodiscard]] Int get_aux_field_id(const std::string & name) const override;
-    [[nodiscard]] bool has_aux_field_by_id(Int fid) const override;
-    [[nodiscard]] bool has_aux_field_by_name(const std::string & name) const override;
-    [[nodiscard]] Int get_aux_field_order(Int fid) const override;
-    [[nodiscard]] std::string get_aux_field_component_name(Int fid, Int component) const override;
+    Int get_num_aux_fields() const override;
+    std::vector<std::string> get_aux_field_names() const override;
+    const std::string & get_aux_field_name(Int fid) const override;
+    Int get_aux_field_num_components(Int fid) const override;
+    Int get_aux_field_id(const std::string & name) const override;
+    bool has_aux_field_by_id(Int fid) const override;
+    bool has_aux_field_by_name(const std::string & name) const override;
+    Int get_aux_field_order(Int fid) const override;
+    std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
     /// Adds a volumetric field
@@ -77,7 +77,7 @@ public:
     /// @param local_node Local node index
     /// @param fid Field ID
     /// @return Degree of freedom
-    [[nodiscard]] Int get_field_dof(Int elem, Int local_node, Int fid) const;
+    Int get_field_dof(Int elem, Int local_node, Int fid) const;
 
     /// Get auxiliary field degree of freedom
     ///
@@ -85,11 +85,11 @@ public:
     /// @param local_node Local node index
     /// @param fid Auxiliary field ID
     /// @return Degree of freedom
-    [[nodiscard]] Int get_aux_field_dof(Int elem, Int local_node, Int fid) const;
+    Int get_aux_field_dof(Int elem, Int local_node, Int fid) const;
 
 protected:
-    [[nodiscard]] Int get_num_nodes_per_elem(Int c) const;
-    [[nodiscard]] PetscFE get_fe(Int fid) const;
+    Int get_num_nodes_per_elem(Int c) const;
+    PetscFE get_fe(Int fid) const;
 
     void init() override;
     void create() override;

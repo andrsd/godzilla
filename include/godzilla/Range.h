@@ -58,20 +58,20 @@ public:
     Range() : first_idx(-1), last_idx(-1) {}
     Range(Int first, Int last) : first_idx(first), last_idx(last) {}
 
-    [[nodiscard]] Iterator
+    Iterator
     begin() const
     {
         return Iterator(this->first_idx);
     }
 
-    [[nodiscard]] Iterator
+    Iterator
     end() const
     {
         return Iterator(this->last_idx);
     }
 
     /// Get the number of indices in the range
-    [[nodiscard]] Int
+    Int
     size() const
     {
         return last_idx - first_idx;
@@ -80,7 +80,7 @@ public:
     /// Get the first index in the range
     ///
     /// @return First index in the range
-    [[nodiscard]] Int
+    Int
     first() const
     {
         return first_idx;
@@ -89,7 +89,7 @@ public:
     /// Get the last index (not included) in the range
     ///
     /// @return Last index (not included) in the range
-    [[nodiscard]] Int
+    Int
     last() const
     {
         return last_idx;

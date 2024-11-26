@@ -54,7 +54,7 @@ public:
         this->facets.sort();
     }
 
-    [[nodiscard]] UnstructuredMesh *
+    UnstructuredMesh *
     get_mesh() const
     {
         return this->mesh;
