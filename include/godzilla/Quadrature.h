@@ -44,6 +44,11 @@ public:
     /// @return Array of quadrature point weights
     [[nodiscard]] const Real * get_weights() const;
 
+    /// Get quadrature points
+    ///
+    /// @return Array of quadrature points
+    [[nodiscard]] const Real * get_points() const;
+
     /// Get order
     ///
     /// @return The order of the quadrature, i.e. the highest degree polynomial that is exactly

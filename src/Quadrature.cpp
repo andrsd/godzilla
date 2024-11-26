@@ -69,6 +69,15 @@ Quadrature::get_weights() const
     return weights;
 }
 
+const Real *
+Quadrature::get_points() const
+{
+    CALL_STACK_MSG();
+    const Real * points;
+    PETSC_CHECK(PetscQuadratureGetData(this->quad, nullptr, nullptr, nullptr, &points, nullptr));
+    return points;
+}
+
 Int
 Quadrature::get_order() const
 {
