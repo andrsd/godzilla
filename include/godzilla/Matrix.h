@@ -20,7 +20,7 @@ public:
     Matrix();
     Matrix(Mat mat);
 
-    [[nodiscard]] std::string get_type() const;
+    std::string get_type() const;
 
     /// Builds matrix object for a particular matrix type
     ///
@@ -39,10 +39,10 @@ public:
     void assemble(MatAssemblyType type = MAT_FINAL_ASSEMBLY);
 
     void get_size(Int & m, Int & n) const;
-    [[nodiscard]] Int get_n_rows() const;
-    [[nodiscard]] Int get_n_cols() const;
+    Int get_n_rows() const;
+    Int get_n_cols() const;
 
-    [[nodiscard]] Scalar get_value(Int row, Int col) const;
+    Scalar get_value(Int row, Int col) const;
 
     void set_sizes(Int m, Int n, Int M = PETSC_DECIDE, Int N = PETSC_DECIDE);
 

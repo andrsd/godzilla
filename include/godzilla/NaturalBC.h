@@ -24,12 +24,12 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    [[nodiscard]] Int get_field_id() const;
+    Int get_field_id() const;
 
     /// Get the component numbers this boundary condition is constraining
     ///
     /// @return Vector of component numbers
-    [[nodiscard]] virtual const std::vector<Int> & get_components() const = 0;
+    virtual const std::vector<Int> & get_components() const = 0;
 
     /// Set up the weak form for the boundary integral of this boundary condition
     virtual void set_up_weak_form() = 0;

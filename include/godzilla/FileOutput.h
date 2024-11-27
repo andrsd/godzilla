@@ -19,7 +19,7 @@ public:
     /// Get the file name with the output file produced by this outputter
     ///
     /// @return The file name with the output
-    [[nodiscard]] std::string get_file_name() const;
+    std::string get_file_name() const;
 
     /// Set file base
     ///
@@ -34,7 +34,7 @@ public:
     /// Get file extension
     ///
     /// @return File extension
-    [[nodiscard]] virtual std::string get_file_ext() const = 0;
+    virtual std::string get_file_ext() const = 0;
 
 private:
     /// The file base of the output file

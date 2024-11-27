@@ -17,10 +17,10 @@ public:
     void destroy();
 
     void get_interval(Scalar & low, Scalar & high) const;
-    [[nodiscard]] unsigned long get_seed() const;
-    [[nodiscard]] std::string get_type() const;
-    [[nodiscard]] Scalar get_value() const;
-    [[nodiscard]] Real get_value_real() const;
+    unsigned long get_seed() const;
+    std::string get_type() const;
+    Scalar get_value() const;
+    Real get_value_real() const;
     void get_values(std::vector<Scalar> & vals) const;
     void get_values_real(std::vector<Real> & vals) const;
 

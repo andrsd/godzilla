@@ -62,17 +62,17 @@ public:
     /// Get the number of logged errors/warnings
     ///
     /// @return Number of logger errors/warnings
-    [[nodiscard]] std::size_t get_num_entries() const;
+    std::size_t get_num_entries() const;
 
     /// Get the number of errors
     ///
     /// @return Number of errors
-    [[nodiscard]] std::size_t get_num_errors() const;
+    std::size_t get_num_errors() const;
 
     /// Get the number of warnings
     ///
     /// @return Number of warnings
-    [[nodiscard]] std::size_t get_num_warnings() const;
+    std::size_t get_num_warnings() const;
 
     /// Print logged errors and warnings
     void print() const;

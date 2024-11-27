@@ -20,7 +20,7 @@ public:
     void destroy();
 
     void set_type(const std::string & type);
-    [[nodiscard]] std::string get_type() const;
+    std::string get_type() const;
 
     void reset();
     void set_up();

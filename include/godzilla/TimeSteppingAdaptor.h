@@ -23,17 +23,17 @@ public:
     /// Get TSAdapt object
     ///
     /// @return PETSc TSAdapt object
-    [[nodiscard]] TSAdapt get_ts_adapt() const;
+    TSAdapt get_ts_adapt() const;
 
     /// Get minimum time step size
     ///
     /// @return Minimum time step size
-    [[nodiscard]] Real get_dt_min() const;
+    Real get_dt_min() const;
 
     /// Get maximum time step size
     ///
     /// @return Maximum time step size
-    [[nodiscard]] Real get_dt_max() const;
+    Real get_dt_max() const;
 
     /// Set time adaptor type
     ///
@@ -50,7 +50,7 @@ protected:
     /// Get problem this time adaptor is part of
     ///
     /// @return Problem this time adaptor is part of
-    [[nodiscard]] Problem * get_problem() const;
+    Problem * get_problem() const;
 
 private:
     /// Problem this adaptor is part of

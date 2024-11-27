@@ -27,39 +27,39 @@ public:
     /// Get the spatial dimension
     ///
     /// @return The spatial dimension
-    [[nodiscard]] Int get_dim() const;
+    Int get_dim() const;
 
     /// Get number of components
     ///
     /// @return the number of components
-    [[nodiscard]] Int get_num_components() const;
+    Int get_num_components() const;
 
     /// The number of quadrature points
     ///
     /// @return The number of quadrature points
-    [[nodiscard]] Int get_num_points() const;
+    Int get_num_points() const;
 
     /// Get quadrature point weights
     ///
     /// @return Array of quadrature point weights
-    [[nodiscard]] const Real * get_weights() const;
+    const Real * get_weights() const;
 
     /// Get quadrature points
     ///
     /// @return Array of quadrature points
-    [[nodiscard]] const Real * get_points() const;
+    const Real * get_points() const;
 
     /// Get order
     ///
     /// @return The order of the quadrature, i.e. the highest degree polynomial that is exactly
     /// integrated
-    [[nodiscard]] Int get_order() const;
+    Int get_order() const;
 
     /// Determine whether two quadratures are equivalent
     ///
     /// @param q Quadrature to compare to
     /// @return `true` if quadratures are the same, `false` otherwise
-    [[nodiscard]] bool equal(const Quadrature & q) const;
+    bool equal(const Quadrature & q) const;
 
     operator PetscQuadrature() const;
 

@@ -25,7 +25,7 @@ public:
     /// Get problem spatial dimension
     ///
     /// @return Spatial dimension
-    [[nodiscard]] Int get_dimension() const;
+    Int get_dimension() const;
 
 public:
     static Parameters parameters();

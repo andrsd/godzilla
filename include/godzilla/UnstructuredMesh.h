@@ -46,63 +46,63 @@ public:
     /// Get the `Label` recording the depth of each point
     ///
     /// @return The `Label` recording point depth
-    [[nodiscard]] Label get_depth_label() const;
+    Label get_depth_label() const;
 
     /// Return the number of mesh vertices
-    [[nodiscard]] Int get_num_vertices() const;
+    Int get_num_vertices() const;
 
     /// Get range of vertex indices
     ///
     /// @return Range of vertex indices
-    [[nodiscard]] Range get_vertex_range() const;
+    Range get_vertex_range() const;
 
     /// Return the number of mesh faces
-    [[nodiscard]] Int get_num_faces() const;
+    Int get_num_faces() const;
 
     /// Get range of face indices
     ///
     /// @return Range of face indices
-    [[nodiscard]] Range get_face_range() const;
+    Range get_face_range() const;
 
     /// Return the number of mesh cells (interior)
     ///
     /// @return Number of mesh cells (interior)
-    [[nodiscard]] Int get_num_cells() const;
+    Int get_num_cells() const;
 
     /// Return the number of all mesh cells (interior + ghosted)
     ///
     /// @return Number of all mesh cells (interior + ghosted)
-    [[nodiscard]] Int get_num_all_cells() const;
+    Int get_num_all_cells() const;
 
     /// Get range of cell indices (interior only)
     ///
     /// @return Range of cell indices
-    [[nodiscard]] Range get_cell_range() const;
+    Range get_cell_range() const;
 
     /// Get range of all cell indices (interior + ghosted)
     ///
     /// @param Range of all cell indices (interior + ghosted)
-    [[nodiscard]] Range get_all_cell_range() const;
+    Range get_all_cell_range() const;
 
     /// Get range of cell indices owned by this processor (must call `create_my_cells_label` first)
     ///
     /// @return Range of cell indices
-    [[nodiscard]] Range get_my_cell_range() const;
+    Range get_my_cell_range() const;
 
     /// Get range of ghost cell indices
     ///
     /// @param Range of ghost cell indices
-    [[nodiscard]] Range get_ghost_cell_range() const;
+    Range get_ghost_cell_range() const;
 
     /// Get index set with all cells
     ///
     /// @return Index set with all cells
-    [[nodiscard]] IndexSet get_all_cells() const;
+    IndexSet get_all_cells() const;
 
     /// Return the interval for all mesh points [start, end)
     ///
     /// @return Range of mesh points
-    [[nodiscard]] Range get_chart() const;
+    Range get_chart() const;
 
     /// Set the interval for all mesh points `[start, end)`
     ///
@@ -114,7 +114,7 @@ public:
     ///
     /// @param cell Cell index
     /// @return Cell type
-    [[nodiscard]] PolytopeType get_cell_type(Int cell) const;
+    PolytopeType get_cell_type(Int cell) const;
 
     /// Calculate an index for the default section
     void create_closure_index();
@@ -128,38 +128,38 @@ public:
     ///
     /// @param point Point with must lie in the chart
     /// @return Point connectivity
-    [[nodiscard]] std::vector<Int> get_connectivity(Int point) const;
+    std::vector<Int> get_connectivity(Int point) const;
 
     /// Return the points on the out-edges for this point
     ///
     /// @param point Point with must lie in the chart
     /// @return Points which are on the out-edges for point `p`
-    [[nodiscard]] std::vector<Int> get_support(Int point) const;
+    std::vector<Int> get_support(Int point) const;
 
     /// Return the number of out-edges for this point in the DAG
     ///
     /// @param point Point with must lie in the chart
     /// @return The support size for `point`
-    [[nodiscard]] Int get_support_size(Int point) const;
+    Int get_support_size(Int point) const;
 
     /// Return the points on the in-edges for this point
     ///
     /// @param point Point with must lie in the chart
     /// @return Points which are on the out-edges for point `p`
-    [[nodiscard]] std::vector<Int> get_cone(Int point) const;
+    std::vector<Int> get_cone(Int point) const;
 
     /// Return the number of in-edges for this point in the DAG
     ///
     /// @param point The point, which must lie in the chart set with `set_chart`
     /// @return The cone size for `point`
-    [[nodiscard]] Int get_cone_size(Int point) const;
+    Int get_cone_size(Int point) const;
 
     /// Expand each given point into its cone points and do that recursively until we end up just
     /// with vertices.
     ///
     /// @param points IndexSet of points with must lie in the chart
     /// @return Vertices recursively expanded from input points
-    [[nodiscard]] IndexSet get_cone_recursive_vertices(IndexSet points) const;
+    IndexSet get_cone_recursive_vertices(IndexSet points) const;
 
     /// Set the number of in-edges for this point in the DAG
     ///
@@ -183,29 +183,29 @@ public:
     /// Is the first cell in the mesh a simplex?
     ///
     /// @return true if cell is a simplex, otherwise false
-    [[nodiscard]] bool is_simplex() const;
+    bool is_simplex() const;
 
     /// Get cell set name
     ///
     /// @param id The ID of the cell set
     /// @return Cell set name
-    [[nodiscard]] const std::string & get_cell_set_name(Int id) const;
+    const std::string & get_cell_set_name(Int id) const;
 
     /// Get cell set ID
     ///
     /// @param name The name of a cell sel
     /// @return Cell set ID
-    [[nodiscard]] Int get_cell_set_id(const std::string & name) const;
+    Int get_cell_set_id(const std::string & name) const;
 
     /// Get number of cell sets
     ///
     /// @return Number of cell sets
-    [[nodiscard]] Int get_num_cell_sets() const;
+    Int get_num_cell_sets() const;
 
     /// Get cell sets
     ///
     /// @return Cell sets
-    [[nodiscard]] const std::map<Int, std::string> & get_cell_sets() const;
+    const std::map<Int, std::string> & get_cell_sets() const;
 
     /// Create cell set. Takes the ID and creates a label with `name` corresponding to the ID.
     ///
@@ -229,29 +229,29 @@ public:
     ///
     /// @param id The ID of the face set
     /// @return Facet name
-    [[nodiscard]] const std::string & get_face_set_name(Int id) const;
+    const std::string & get_face_set_name(Int id) const;
 
     /// Get number of face sets
     ///
     /// @return Number of face sets
-    [[nodiscard]] Int get_num_face_sets() const;
+    Int get_num_face_sets() const;
 
     /// Get face sets
     ///
     /// @return Face sets
-    [[nodiscard]] const std::map<Int, std::string> & get_face_sets() const;
+    const std::map<Int, std::string> & get_face_sets() const;
 
     /// Check if mesh has a label corresponding to a face set name
     ///
     /// @param name The name of the face set
     /// @return true if label exists, false otherwise
-    [[nodiscard]] bool has_face_set(const std::string & name) const;
+    bool has_face_set(const std::string & name) const;
 
     /// Get label corresponding to a face set name
     ///
     /// @param name The name of the face set
     /// @return Label associated with face set name
-    [[nodiscard]] Label get_face_set_label(const std::string & name) const;
+    Label get_face_set_label(const std::string & name) const;
 
     void create_face_set_labels(const std::map<Int, std::string> & names);
 
@@ -270,7 +270,7 @@ public:
     /// Get number of vertex sets
     ///
     /// @return Number of vertex sets
-    [[nodiscard]] Int get_num_vertex_sets() const;
+    Int get_num_vertex_sets() const;
 
     /// Set the mesh partitioner
     ///
@@ -303,7 +303,7 @@ public:
     ///
     /// @param cell The cell
     /// @return The cell volume
-    [[nodiscard]] Real compute_cell_volume(Int cell) const;
+    Real compute_cell_volume(Int cell) const;
 
     /// Compute a map of cells common to a vertex
     ///
@@ -317,7 +317,7 @@ public:
     void mark_boundary_faces(Int val, Label & label);
 
     /// Get the encoding of the parallel section point overlap
-    [[nodiscard]] StarForest get_point_star_forest() const;
+    StarForest get_point_star_forest() const;
 
     void set_point_star_forest(const StarForest & sf);
 
@@ -358,7 +358,7 @@ public:
     ///
     /// @param cell The cell to check
     /// @return `true` if the cell is owned by this process, `false` otherwise
-    [[nodiscard]] bool is_my_cell(Int cell) const;
+    bool is_my_cell(Int cell) const;
 
 private:
     /// Cell set names

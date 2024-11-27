@@ -23,17 +23,17 @@ public:
     virtual ~Mesh();
 
     /// Get the MPI comm this object works on
-    [[nodiscard]] mpi::Communicator get_comm() const;
+    mpi::Communicator get_comm() const;
 
     /// Get the underlying DM object
     ///
     /// @return Underlying PETSc DM
-    [[nodiscard]] DM get_dm() const;
+    DM get_dm() const;
 
     /// Get the mesh spatial dimension
     ///
     /// @return Mesh spatial dimension
-    [[nodiscard]] Int get_dimension() const;
+    Int get_dimension() const;
 
     /// Set the topological dimension of the mesh
     ///
@@ -44,13 +44,13 @@ public:
     ///
     /// @param name The name of the label
     /// @return true if label exists, otherwise false
-    [[nodiscard]] bool has_label(const std::string & name) const;
+    bool has_label(const std::string & name) const;
 
     /// Get label associated with a name
     ///
     /// @param name Label name
     /// @return Label associated with the `name`
-    [[nodiscard]] Label get_label(const std::string & name) const;
+    Label get_label(const std::string & name) const;
 
     /// Create label
     ///
@@ -66,22 +66,22 @@ public:
     /// coordinates
     ///
     /// @return coordinate `DM`
-    [[nodiscard]] DM get_coordinate_dm() const;
+    DM get_coordinate_dm() const;
 
     /// Get a global vector with the coordinates associated with this mesh
     ///
     /// @return Global coordinate vector
-    [[nodiscard]] Vector get_coordinates() const;
+    Vector get_coordinates() const;
 
     /// Get a local vector with the coordinates associated with this mesh
     ///
     /// @return Coordinate vector
-    [[nodiscard]] Vector get_coordinates_local() const;
+    Vector get_coordinates_local() const;
 
     /// Retrieve the layout of coordinate values over the mesh.
     ///
     /// @return Local section from the coordinate `DM`
-    [[nodiscard]] Section get_coordinate_section() const;
+    Section get_coordinate_section() const;
 
     /// Set the dimension of the embedding space for coordinate values
     ///

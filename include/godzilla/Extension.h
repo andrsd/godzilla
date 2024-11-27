@@ -20,7 +20,7 @@ public:
     /// Get extension name
     ///
     /// @return Extension name
-    [[nodiscard]] const std::string & get_name() const;
+    const std::string & get_name() const;
 
 private:
     /// Extension name

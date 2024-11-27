@@ -23,10 +23,10 @@ public:
     }
 
     /// Get the exception message
-    [[nodiscard]] const char * what() const noexcept override;
+    const char * what() const noexcept override;
 
     /// Get the call stack from the time the exception occured
-    [[nodiscard]] const std::vector<std::string> & get_call_stack() const;
+    const std::vector<std::string> & get_call_stack() const;
 
 private:
     /// Store call stack

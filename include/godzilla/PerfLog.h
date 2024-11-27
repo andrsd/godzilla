@@ -78,7 +78,7 @@ public:
     /// Get ID of this stage
     ///
     /// @return ID of this stage
-    [[nodiscard]] StageID get_id() const;
+    StageID get_id() const;
 
 private:
     /// Event ID
@@ -92,17 +92,17 @@ public:
     /// Get the number of FLOPS
     ///
     /// @return Number of FLOPS
-    [[nodiscard]] LogDouble flops() const;
+    LogDouble flops() const;
 
     /// Get total time spent on this event
     ///
     /// @return The total time spent on this event
-    [[nodiscard]] LogDouble time() const;
+    LogDouble time() const;
 
     /// Get number of times this event was called
     ///
     /// @return Number of times this event was called
-    [[nodiscard]] int num_calls() const;
+    int num_calls() const;
 
 private:
     /// Event information collected by PETSc
@@ -152,7 +152,7 @@ public:
     /// Get ID of this event
     ///
     /// @return ID of this event
-    [[nodiscard]] EventID get_id() const;
+    EventID get_id() const;
 
 private:
     /// Get event ID from event name

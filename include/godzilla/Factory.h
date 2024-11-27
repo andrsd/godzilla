@@ -68,7 +68,7 @@ public:
     ///
     /// @param class_name Class name to check
     /// @return `true` if class name is known, `false` otherwise
-    [[nodiscard]] bool
+    bool
     is_registered(const std::string & class_name) const
     {
         return this->registry.exists(class_name);

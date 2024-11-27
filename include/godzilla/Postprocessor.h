@@ -29,7 +29,7 @@ public:
     /// Get problem this post-processor is part of
     ///
     /// @return Problem this postprocessor is part of
-    [[nodiscard]] Problem * get_problem() const;
+    Problem * get_problem() const;
 
 private:
     /// Problem this object is part of

@@ -21,7 +21,7 @@ public:
     {
     }
 
-    [[nodiscard]] const std::vector<Int> &
+    const std::vector<Int> &
     get_components() const override
     {
         return this->components;

@@ -21,14 +21,14 @@ public:
     /// Get value names this functional depends on
     ///
     /// @return List of value names this functional depends on
-    [[nodiscard]] const std::set<std::string> & get_dependent_values() const;
+    const std::set<std::string> & get_dependent_values() const;
 
     /// Get region where this function is defined
     ///
     /// @return Region name where this functional is defined
-    [[nodiscard]] const std::string & get_region() const;
+    const std::string & get_region() const;
 
-    [[nodiscard]] const std::string
+    const std::string
     get_value_name(const std::string & val_name) const
     {
         return this->region.empty() ? val_name : val_name + "@" + this->region;
@@ -38,40 +38,40 @@ protected:
     /// Get pointer to FEProblemInterface
     ///
     /// @return Pointer to FEProblemInterface
-    [[nodiscard]] FEProblemInterface * get_fe_problem() const;
+    FEProblemInterface * get_fe_problem() const;
 
     /// Get spatial dimension
     ///
     /// @return Spatial dimension
-    [[nodiscard]] const Int & get_spatial_dimension() const;
+    const Int & get_spatial_dimension() const;
 
     /// Get physical coordinates
     ///
     /// @return Physical coordinates
-    [[nodiscard]] const Point & get_xyz() const;
+    const Point & get_xyz() const;
 
     /// Get values of a field
     ///
     /// @param field_name The name of the field
     /// @return Reference to a class that contains the field values
-    [[nodiscard]] const FieldValue & get_field_value(const std::string & field_name) const;
+    const FieldValue & get_field_value(const std::string & field_name) const;
 
     /// Get values of a gradient of a field
     ///
     /// @param field_name The name of the field
     /// @return Pointer to array that contains the field gradient values
-    [[nodiscard]] const FieldGradient & get_field_gradient(const std::string & field_name) const;
+    const FieldGradient & get_field_gradient(const std::string & field_name) const;
 
     /// Get values of a time derivative of a field
     ///
     /// @param field_name The name of the field
     /// @return Reference to a class that contains the field time derivative values
-    [[nodiscard]] const FieldValue & get_field_dot(const std::string & field_name) const;
+    const FieldValue & get_field_dot(const std::string & field_name) const;
 
     /// Get time at which the function is evaluated
     ///
     /// @return Time at which is the function evaluated
-    [[nodiscard]] const Real & get_time() const;
+    const Real & get_time() const;
 
     /// Get value specified by a name
     ///

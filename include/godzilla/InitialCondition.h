@@ -23,22 +23,22 @@ public:
     /// Get problem spatial dimension
     ///
     /// @return Spatial dimension
-    [[nodiscard]] Int get_dimension() const;
+    Int get_dimension() const;
 
     /// Get field name
     ///
     /// @return The field name
-    [[nodiscard]] const std::string & get_field_name() const;
+    const std::string & get_field_name() const;
 
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    [[nodiscard]] Int get_field_id() const;
+    Int get_field_id() const;
 
     /// Get the number of constrained components
     ///
     /// @return The number of constrained components
-    [[nodiscard]] virtual Int get_num_components() const = 0;
+    virtual Int get_num_components() const = 0;
 
     /// Evaluate the initial condition
     ///

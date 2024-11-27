@@ -16,8 +16,8 @@ public:
     void create() override;
     void run() override;
     bool converged();
-    [[nodiscard]] Real get_time() const override;
-    [[nodiscard]] Int get_step_num() const override;
+    Real get_time() const override;
+    Int get_step_num() const override;
     void compute_solution_vector_local() override;
 
 protected:

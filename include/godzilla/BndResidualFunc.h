@@ -20,7 +20,7 @@ protected:
     /// Get normal
     ///
     /// @return Outward normal
-    [[nodiscard]] const Normal & get_normal() const;
+    const Normal & get_normal() const;
 };
 
 } // namespace godzilla

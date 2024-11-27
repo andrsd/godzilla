@@ -37,13 +37,13 @@ public:
     /// @param vals Values in column major format
     DenseMatrixSymm(const std::vector<Real> & vals) { set_values(vals); };
 
-    [[nodiscard]] int
+    int
     get_num_rows() const
     {
         return DIM;
     }
 
-    [[nodiscard]] int
+    int
     get_num_cols() const
     {
         return DIM;
@@ -357,7 +357,7 @@ protected:
     }
 
 private:
-    [[nodiscard]] inline Int
+    inline Int
     idx(Int row, Int col) const
     {
         if (col < row)

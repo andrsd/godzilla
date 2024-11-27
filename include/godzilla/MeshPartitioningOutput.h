@@ -13,7 +13,7 @@ class MeshPartitioningOutput : public FileOutput {
 public:
     explicit MeshPartitioningOutput(const Parameters & params);
 
-    [[nodiscard]] std::string get_file_ext() const override;
+    std::string get_file_ext() const override;
     void output_step() override;
 
 public:
