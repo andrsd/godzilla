@@ -187,6 +187,19 @@ UnstructuredMesh::get_all_cells() const
     return IndexSet(cell_is);
 }
 
+IndexSet
+UnstructuredMesh::get_facets() const
+{
+    CALL_STACK_MSG();
+    Int depth;
+    PETSC_CHECK(DMPlexGetDepth(get_dm(), &depth));
+    IS face_is;
+    PETSC_CHECK(DMGetStratumIS(get_dm(), "dim", depth - 1, &face_is));
+    if (!face_is)
+        PETSC_CHECK(DMGetStratumIS(get_dm(), "depth", depth - 1, &face_is));
+    return IndexSet(face_is);
+}
+
 Range
 UnstructuredMesh::get_chart() const
 {
