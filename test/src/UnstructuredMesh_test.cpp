@@ -683,3 +683,29 @@ TEST(UnstructuredMesh, get_point_depth)
     EXPECT_EQ(m->get_point_depth(1), 0);
     EXPECT_EQ(m->get_point_depth(3), 0);
 }
+
+TEST(UnstructuredMeshTest, index_sets)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    params.set<Int>("nx") = 2;
+    params.set<Int>("ny") = 1;
+    params.set<Int>("nz") = 1;
+    TestUnstructuredMesh3D mesh(params);
+    mesh.create();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+
+    auto cell_is = m->get_all_cells();
+    cell_is.get_indices();
+    EXPECT_THAT(cell_is.to_std_vector(), ElementsAre(0, 1));
+    cell_is.restore_indices();
+
+    auto face_is = m->get_facets();
+    face_is.get_indices();
+    EXPECT_THAT(face_is.to_std_vector(), ElementsAre(14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24));
+    face_is.restore_indices();
+}

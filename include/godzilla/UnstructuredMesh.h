@@ -99,6 +99,11 @@ public:
     /// @return Index set with all cells
     IndexSet get_all_cells() const;
 
+    /// Get index set with facets
+    ///
+    /// @return Index set with facets
+    IndexSet get_facets() const;
+
     /// Return the interval for all mesh points [start, end)
     ///
     /// @return Range of mesh points
