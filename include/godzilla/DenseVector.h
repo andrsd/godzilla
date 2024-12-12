@@ -450,6 +450,22 @@ mat_col(const DenseVector<DenseVector<T, M>, N> & a)
     return res;
 }
 
+/// Compute magnitude of a vector
+///
+/// @tparam T Data type
+/// @tparam N Number of elements in the vector
+/// @param vec Vector
+/// @return Magnitude of the vector
+template <typename T, Int N>
+T
+magnitude(const DenseVector<T, N> & vec)
+{
+    T sum = 0.;
+    for (Int i = 0; i < N; i++)
+        sum += vec(i) * vec(i);
+    return std::sqrt(sum);
+}
+
 // Output
 
 template <typename T, Int N>

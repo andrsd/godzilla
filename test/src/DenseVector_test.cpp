@@ -146,6 +146,13 @@ TEST(DenseVectorTest, magnitude)
     EXPECT_EQ(mag, 5.);
 }
 
+TEST(DenseVectorTest, magnitude_vec)
+{
+    DenseVector<Real, 2> v({ 3., 4. });
+    Real mag = magnitude(v);
+    EXPECT_EQ(mag, 5.);
+}
+
 TEST(DenseVectorTest, pointwise_mult_vec)
 {
     const Int N = 3;
