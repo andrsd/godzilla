@@ -4,6 +4,7 @@
 #include "godzilla/Section.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
+#include "godzilla/Range.h"
 #include "petscdmplex.h"
 
 namespace godzilla {
@@ -46,6 +47,13 @@ Section::set_chart(Int start, Int end)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(PetscSectionSetChart(this->section, start, end));
+}
+
+void
+Section::set_chart(const Range & range)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(PetscSectionSetChart(this->section, range.first(), range.last()));
 }
 
 void

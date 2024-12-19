@@ -11,6 +11,8 @@
 
 namespace godzilla {
 
+class Range;
+
 class Section {
 public:
     Section();
@@ -36,6 +38,12 @@ public:
     /// @param start The first point
     /// @param end One past the last point
     void set_chart(Int start, Int end);
+
+    /// Sets the range [start, end) in which points (indices) lie for this Section on this MPI
+    /// process
+    ///
+    /// @param range The range
+    void set_chart(const Range & range);
 
     /// Returns the range [start, end) in which points (indices) lie for this Section on this MPI
     /// process
