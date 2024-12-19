@@ -101,6 +101,23 @@ public:
         }
     }
 
+    /// Compute normalized version of this vector
+    ///
+    /// @return This vector normalized
+    DenseVector<T, N>
+    normalized() const
+    {
+        DenseVector<T, N> res;
+        T mag = magnitude();
+        if (mag > 0) {
+            for (Int i = 0; i < N; i++)
+                res(i) = get(i) / mag;
+        }
+        else
+            res.zero();
+        return res;
+    }
+
     /// Compute average from vector entries
     ///
     /// @return Average of vector entries
@@ -593,6 +610,23 @@ public:
             for (Int i = 0; i < size(); i++)
                 set(i) /= mag;
         }
+    }
+
+    /// Compute normalized version of this vector
+    ///
+    /// @return This vector normalized
+    DenseVector<T, -1>
+    normalized() const
+    {
+        DenseVector<T, -1> res(size());
+        T mag = magnitude();
+        if (mag > 0) {
+            for (Int i = 0; i < size(); i++)
+                res(i) = get(i) / mag;
+        }
+        else
+            res.zero();
+        return res;
     }
 
     /// Compute average from vector entries
