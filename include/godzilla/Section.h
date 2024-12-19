@@ -52,6 +52,12 @@ public:
     /// @param end One past the last point
     void get_chart(Int & start, Int & end) const;
 
+    /// Returns the range [start, end) in which points (indices) lie for this Section on this MPI
+    /// process
+    ///
+    /// @return The range
+    Range get_chart() const;
+
     /// Calculate offsets based upon the number of degrees of freedom for each point in preparation
     /// for use of the Section
     void set_up();
