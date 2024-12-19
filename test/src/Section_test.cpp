@@ -20,10 +20,9 @@ TEST(SectionTest, dofs)
 
     EXPECT_EQ(s.get_num_fields(), 2);
 
-    Int start, end;
-    s.get_chart(start, end);
-    EXPECT_EQ(start, 0);
-    EXPECT_EQ(end, 10);
+    auto rng = s.get_chart();
+    EXPECT_EQ(rng.first(), 0);
+    EXPECT_EQ(rng.last(), 10);
 
     for (Int pt = 0; pt < 10; pt++) {
         EXPECT_EQ(s.get_dof(pt), 4);

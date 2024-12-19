@@ -63,6 +63,15 @@ Section::get_chart(Int & start, Int & end) const
     PETSC_CHECK(PetscSectionGetChart(this->section, &start, &end));
 }
 
+Range
+Section::get_chart() const
+{
+    CALL_STACK_MSG();
+    Int start, end;
+    PETSC_CHECK(PetscSectionGetChart(this->section, &start, &end));
+    return { start, end };
+}
+
 void
 Section::set_up()
 {
