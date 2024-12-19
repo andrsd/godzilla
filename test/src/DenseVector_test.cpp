@@ -361,6 +361,14 @@ TEST(DenseVectorTest, normalize)
     EXPECT_EQ(v(1), 4. / 5.);
 }
 
+TEST(DenseVectorTest, normalized)
+{
+    DenseVector<Real, 2> v({ 3., 4. });
+    auto n = v.normalized();
+    EXPECT_EQ(n(0), 3. / 5.);
+    EXPECT_EQ(n(1), 4. / 5.);
+}
+
 TEST(DenseVectorTest, out)
 {
     testing::internal::CaptureStdout();
@@ -672,6 +680,15 @@ TEST(DynDenseVectorTest, normalize)
     v.normalize();
     EXPECT_EQ(v(0), 3. / 5.);
     EXPECT_EQ(v(1), 4. / 5.);
+}
+
+TEST(DynDenseVectorTest, normalized)
+{
+    DynDenseVector<Real> v(2);
+    v.set_values({ 3., 4. });
+    auto n = v.normalized();
+    EXPECT_EQ(n(0), 3. / 5.);
+    EXPECT_EQ(n(1), 4. / 5.);
 }
 
 TEST(DynDenseVectorTest, resize)
