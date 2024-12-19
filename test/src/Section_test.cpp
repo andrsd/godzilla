@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/Section.h"
+#include "godzilla/Range.h"
 
 using namespace godzilla;
 
@@ -8,7 +9,7 @@ TEST(SectionTest, dofs)
     Section s;
     s.create(MPI_COMM_WORLD);
     s.set_num_fields(2);
-    s.set_chart(0, 10);
+    s.set_chart(make_range(10));
     for (Int i = 0; i < 10; i++) {
         s.set_dof(i, 4);
         s.set_field_dof(i, 0, 1);
