@@ -147,6 +147,17 @@ public:
 
     /// Inserts or adds values into certain locations of a vector
     ///
+    /// @param n Number of elements to insert
+    /// @param ix Indices where to add/insert
+    /// @param y Values
+    /// @param mode Insertion mode
+    void set_values(Int n,
+                    const Int * ix,
+                    const Scalar * y,
+                    InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a vector
+    ///
     /// @param ix Indices where to add/insert
     /// @param y Values
     /// @param mode Insertion mode
