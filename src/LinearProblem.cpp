@@ -3,6 +3,7 @@
 
 #include "godzilla/LinearProblem.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/KrylovSolver.h"
 
 namespace godzilla {
 
@@ -62,11 +63,19 @@ LinearProblem::~LinearProblem()
     this->ks.destroy();
 }
 
+const std::string &
+LinearProblem::get_ksp_type() const
+{
+    CALL_STACK_MSG();
+    return this->ksp_type;
+}
+
 void
 LinearProblem::create()
 {
     CALL_STACK_MSG();
     set_up_types();
+    this->ks = create_krylov_solver();
     init();
     allocate_objects();
     set_up_matrix_properties();
@@ -78,14 +87,22 @@ LinearProblem::create()
     this->ks.set_from_options();
 }
 
+KrylovSolver
+LinearProblem::create_krylov_solver()
+{
+    CALL_STACK_MSG();
+    KrylovSolver krylov_solver;
+    krylov_solver.create(get_comm());
+    krylov_solver.set_type(this->ksp_type);
+    krylov_solver.set_dm(get_dm());
+    PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
+    return krylov_solver;
+}
+
 void
 LinearProblem::init()
 {
     CALL_STACK_MSG();
-    this->ks.create(get_comm());
-    this->ks.set_type(this->ksp_type.c_str());
-    this->ks.set_dm(get_dm());
-    PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
 }
 
 void
@@ -99,8 +116,6 @@ void
 LinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    this->ks.set_compute_rhs(this, &LinearProblem::compute_rhs);
-    this->ks.set_compute_operators(this, &LinearProblem::compute_operators);
 }
 
 void
@@ -135,14 +150,6 @@ LinearProblem::solve()
     this->ks.solve(get_solution_vector());
 }
 
-void
-LinearProblem::solve(const Vector & b, Vector & x)
-{
-    CALL_STACK_MSG();
-    lprint(9, "Solving");
-    this->ks.solve(b, x);
-}
-
 bool
 LinearProblem::converged()
 {
@@ -154,9 +161,11 @@ void
 LinearProblem::run()
 {
     CALL_STACK_MSG();
+    pre_solve();
     solve();
     if (converged())
         on_final();
+    post_solve();
 }
 
 void
@@ -170,6 +179,18 @@ LinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
     return Preconditioner(pc);
+}
+
+void
+LinearProblem::pre_solve()
+{
+    CALL_STACK_MSG();
+}
+
+void
+LinearProblem::post_solve()
+{
+    CALL_STACK_MSG();
 }
 
 } // namespace godzilla

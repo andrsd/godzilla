@@ -1,68 +1,23 @@
 #include "gmock/gmock.h"
-#include "GodzillaApp_test.h"
-#include "LinearProblem_test.h"
-#include "godzilla/UnstructuredMesh.h"
+#include "TestApp.h"
+#include "godzilla/Mesh.h"
 #include "godzilla/LineMesh.h"
-#include "godzilla/Problem.h"
+#include "godzilla/LinearProblem.h"
 #include "godzilla/VTKOutput.h"
 #include "petscdmda.h"
-#include "petscviewer.h"
+
+using namespace godzilla;
 
 namespace {
 
-class VTKOutputTest : public GodzillaAppTest {
-protected:
-    void
-    SetUp() override
-    {
-        GodzillaAppTest::SetUp();
-        this->app->get_registry().add<G1DTestLinearProblem>("G1DTestLinearProblem");
-
-        {
-            Parameters * params = this->app->get_parameters("LineMesh");
-            params->set<Int>("nx") = 1;
-            this->mesh = this->app->build_object<LineMesh>("mesh", params);
-        }
-
-        {
-            Parameters * params = this->app->get_parameters("G1DTestLinearProblem");
-            params->set<MeshObject *>("_mesh_obj") = mesh;
-            this->prob = this->app->build_object<G1DTestLinearProblem>("problem", params);
-        }
-    }
-
-    void
-    create()
-    {
-        this->mesh->create();
-        this->prob->create();
-    }
-
-    VTKOutput *
-    build_output(const std::string & file_name = "")
-    {
-        Parameters * params = this->app->get_parameters("VTKOutput");
-        params->set<Problem *>("_problem") = this->prob;
-        if (file_name.length() > 0)
-            params->set<std::string>("file") = file_name;
-        VTKOutput * out = this->app->build_object<VTKOutput>("out", params);
-        this->prob->add_output(out);
-        return out;
-    }
-
-    LineMesh * mesh;
-    G1DTestLinearProblem * prob;
+class TestProblem : public LinearProblem {
+public:
+    explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
 };
 
 } // namespace
 
-TEST_F(VTKOutputTest, get_file_ext)
-{
-    auto out = build_output("out");
-    EXPECT_EQ(out->get_file_ext(), "vtk");
-}
-
-TEST_F(VTKOutputTest, wrong_mesh_type)
+TEST(VTKOutputTest, wrong_mesh_type)
 {
     class MeshDA1D : public Mesh {
     public:
@@ -85,30 +40,22 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
         }
     };
 
-    class TestProblem : public LinearProblem {
-    public:
-        explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
-        void
-        compute_rhs(Vector & b) override
-        {
-        }
-        void compute_operators(Matrix & A, Matrix & B) override {};
-    };
+    TestApp app;
 
     testing::internal::CaptureStderr();
 
     Parameters mesh_pars = TestMesh::parameters();
-    mesh_pars.set<App *>("_app") = this->app;
+    mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 1;
     TestMesh mesh(mesh_pars);
 
     Parameters prob_pars = TestProblem::parameters();
-    prob_pars.set<App *>("_app") = this->app;
+    prob_pars.set<App *>("_app") = &app;
     prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem prob(prob_pars);
 
     Parameters pars = VTKOutput::parameters();
-    pars.set<App *>("_app") = this->app;
+    pars.set<App *>("_app") = &app;
     pars.set<Problem *>("_problem") = &prob;
     VTKOutput out(pars);
     prob.add_output(&out);
@@ -116,20 +63,35 @@ TEST_F(VTKOutputTest, wrong_mesh_type)
     mesh.create();
     prob.create();
 
-    this->app->check_integrity();
+    app.check_integrity();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("VTK output works only with unstructured meshes."));
 }
 
-TEST_F(VTKOutputTest, output_1d_step)
+TEST(VTKOutputTest, test)
 {
-    auto out = build_output("out");
-    create();
+    TestApp app;
 
-    this->app->check_integrity();
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 1;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
 
-    this->prob->run();
-    EXPECT_EQ(this->prob->converged(), true);
-    out->output_step();
+    Parameters prob_pars = TestProblem::parameters();
+    prob_pars.set<App *>("_app") = &app;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    TestProblem prob(prob_pars);
+
+    Parameters pars = VTKOutput::parameters();
+    pars.set<App *>("_app") = &app;
+    pars.set<Problem *>("_problem") = &prob;
+    VTKOutput out(pars);
+
+    prob.add_output(&out);
+    prob.create();
+
+    EXPECT_EQ(out.get_file_ext(), "vtk");
+    out.output_step();
 }

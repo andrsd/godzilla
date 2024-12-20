@@ -230,6 +230,11 @@ public:
     /// @param type A krylov method
     void set_type(const char * type);
 
+    /// Builds the KSP data structure for a particular KSPType
+    ///
+    /// @param type A krylov method
+    void set_type(const std::string & type);
+
     /// View the KSP object
     ///
     /// @param viewer PETSc viewer
