@@ -135,6 +135,18 @@ Matrix::set_value_local(Int row, Int col, Scalar val, InsertMode mode)
 }
 
 void
+Matrix::set_values(Int n,
+                   const Int * row_idxs,
+                   Int m,
+                   const Int * col_idxs,
+                   const Scalar * vals,
+                   InsertMode mode)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatSetValues(this->mat, n, row_idxs, m, col_idxs, vals, mode));
+}
+
+void
 Matrix::set_values(const std::vector<Int> & row_idxs,
                    const std::vector<Int> & col_idxs,
                    const std::vector<Scalar> & vals,
@@ -164,6 +176,18 @@ Matrix::set_values(const DynDenseVector<Int> & row_idxs,
                              col_idxs.data(),
                              vals.data(),
                              mode));
+}
+
+void
+Matrix::set_values_local(Int n,
+                         const Int * row_idxs,
+                         Int m,
+                         const Int * col_idxs,
+                         const Scalar * vals,
+                         InsertMode mode)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatSetValuesLocal(this->mat, n, row_idxs, m, col_idxs, vals, mode));
 }
 
 void
