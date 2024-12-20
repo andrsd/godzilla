@@ -49,6 +49,13 @@ public:
     void set_value(Int row, Int col, Scalar val, InsertMode mode = INSERT_VALUES);
     void set_value_local(Int row, Int col, Scalar val, InsertMode mode = INSERT_VALUES);
 
+    void set_values(Int n,
+                    const Int * row_idxs,
+                    Int m,
+                    const Int * col_idxs,
+                    const Scalar * vals,
+                    InsertMode mode = INSERT_VALUES);
+
     void set_values(const std::vector<Int> & row_idxs,
                     const std::vector<Int> & col_idxs,
                     const std::vector<Scalar> & vals,
@@ -64,6 +71,22 @@ public:
                     const DynDenseVector<Int> & col_idxs,
                     const DynDenseMatrix<Scalar> & vals,
                     InsertMode mode = INSERT_VALUES);
+
+    /// Inserts or adds values into certain locations of a matrix, using a local numbering of the
+    /// rows and columns.
+    ///
+    /// @param n Number of rows
+    /// @param row_idxs The row local indices
+    /// @param m Number of columns
+    /// @param col_idxs The column local indices
+    /// @param vals The values to insert (row-major format)
+    /// @param mode The insertion mode
+    void set_values_local(Int n,
+                          const Int * row_idxs,
+                          Int m,
+                          const Int * col_idxs,
+                          const Scalar * vals,
+                          InsertMode mode = INSERT_VALUES);
 
     /// Inserts or adds values into certain locations of a matrix, using a local numbering of the
     /// rows and columns.
