@@ -24,6 +24,11 @@ public:
     bool converged();
 
 protected:
+    /// Get KSP type
+    const std::string & get_ksp_type() const;
+
+    virtual KrylovSolver create_krylov_solver();
+
     /// Initialize the problem
     virtual void init();
 
@@ -45,22 +50,8 @@ protected:
     /// Method for creating a preconditioner
     virtual Preconditioner create_preconditioner(PC pc);
 
-    /// Method to compute right-hand side
-    virtual void compute_rhs(Vector & b) = 0;
-
-    /// Method to compute operators
-    virtual void compute_operators(Matrix & A, Matrix & B) = 0;
-
     /// Monitor callback
     virtual void monitor(Int it, Real rnorm);
-
-    void solve();
-
-    /// Solve the linear problem
-    ///
-    /// @param b Right-hand side
-    /// @param x Solution
-    void solve(const Vector & b, Vector & x);
 
     /// Set KSP matrix evaluation function
     ///
@@ -87,6 +78,15 @@ protected:
     }
 
 private:
+    /// Called before the solve
+    virtual void pre_solve();
+
+    /// Solve the linear problem
+    virtual void solve();
+
+    /// Called after the solve
+    virtual void post_solve();
+
     /// KSP object
     KrylovSolver ks;
     /// Preconditioner

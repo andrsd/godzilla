@@ -200,6 +200,13 @@ KrylovSolver::set_type(const char * type)
 }
 
 void
+KrylovSolver::set_type(const std::string & type)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(KSPSetType(this->ksp, type.c_str()));
+}
+
+void
 KrylovSolver::set_pc_side(PCSide side)
 {
     CALL_STACK_MSG();

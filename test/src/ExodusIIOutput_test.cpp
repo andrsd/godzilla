@@ -1,9 +1,7 @@
 #include "gmock/gmock.h"
-#include "GodzillaApp_test.h"
-#include "FENonlinearProblem_test.h"
-#include "LinearProblem_test.h"
+#include "TestApp.h"
+#include "GTestFENonlinearProblem.h"
 #include "godzilla/ExodusIIOutput.h"
-#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/LineMesh.h"
 
 using namespace godzilla;

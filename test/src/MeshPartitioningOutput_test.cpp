@@ -1,11 +1,12 @@
 #include "gmock/gmock.h"
-#include "GodzillaApp_test.h"
-#include "LinearProblem_test.h"
+#include "TestApp.h"
+#include "godzilla/Mesh.h"
 #include "godzilla/LineMesh.h"
-#include "godzilla/UnstructuredMesh.h"
-#include "godzilla/Problem.h"
+#include "godzilla/LinearProblem.h"
 #include "godzilla/MeshPartitioningOutput.h"
 #include "petscviewerhdf5.h"
+
+using namespace godzilla;
 
 namespace {
 
@@ -25,6 +26,11 @@ public:
     }
 };
 
+class TestProblem : public LinearProblem {
+public:
+    explicit TestProblem(const Parameters & params) : LinearProblem(params) {}
+};
+
 } // namespace
 
 TEST(MeshPartitioningOutputTest, get_file_ext)
@@ -38,10 +44,10 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     mesh_params.set<Int>("nx") = 4;
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = G1DTestLinearProblem::parameters();
+    Parameters prob_params = TestProblem::parameters();
     prob_params.set<App *>("_app") = &app;
     prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
-    G1DTestLinearProblem prob(prob_params);
+    TestProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
     params.set<App *>("_app") = &app;
@@ -62,10 +68,10 @@ TEST(MeshPartitioningOutputTest, output)
     mesh_params.set<Int>("nx") = 4;
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = G1DTestLinearProblem::parameters();
+    Parameters prob_params = TestProblem::parameters();
     prob_params.set<App *>("_app") = &app;
     prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
-    G1DTestLinearProblem prob(prob_params);
+    TestProblem prob(prob_params);
 
     Parameters params = MeshPartitioningOutput::parameters();
     params.set<App *>("_app") = &app;
