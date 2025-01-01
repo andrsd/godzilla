@@ -76,6 +76,8 @@ FVProblemInterface::init()
 
         PETSC_CHECK(DMCopyDisc(dm, cdm));
         PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
+        if (cdm)
+            PETSC_CHECK(DMLocalizeCoordinates(cdm));
     }
 }
 
@@ -364,6 +366,7 @@ FVProblemInterface::create()
     set_up_fields();
     DiscreteProblemInterface::create();
     get_unstr_mesh()->construct_ghost_cells();
+    get_unstr_mesh()->localize_coordinates();
 }
 
 void

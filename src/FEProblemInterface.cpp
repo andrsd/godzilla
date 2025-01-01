@@ -89,6 +89,7 @@ FEProblemInterface::create()
     this->asmbl = new AssemblyData(dim);
     set_up_fields();
     DiscreteProblemInterface::create();
+    get_unstr_mesh()->localize_coordinates();
 }
 
 void
@@ -112,6 +113,8 @@ FEProblemInterface::init()
 
         PETSC_CHECK(DMCopyDisc(dm, cdm));
         PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
+        if (cdm)
+            PETSC_CHECK(DMLocalizeCoordinates(cdm));
     }
 
     set_up_assembly_data_aux();

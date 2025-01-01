@@ -133,6 +133,13 @@ Mesh::set_coordinates_local(const Vector & c)
 }
 
 void
+Mesh::localize_coordinates() const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMLocalizeCoordinates(this->dm));
+}
+
+void
 Mesh::set_up()
 {
     CALL_STACK_MSG();

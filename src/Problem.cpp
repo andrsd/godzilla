@@ -438,18 +438,36 @@ Problem::create_section_subis(const std::vector<Int> & fields) const
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
     IS is;
-    PETSC_CHECK(DMCreateSectionSubDM(get_dm(),
-                                     fields.size(),
-                                     fields.data(),
-                                     PETSC_DECIDE,
-                                     nullptr,
-                                     &is,
-                                     nullptr));
+    PETSC_CHECK(
+        DMCreateSectionSubDM(get_dm(), fields.size(), fields.data(), NULL, NULL, &is, NULL));
     return IndexSet(is);
 #else
     IS is;
-    PETSC_CHECK(DMCreateSectionSubDM(get_dm(), fields.size(), fields.data(), &is, nullptr));
+    PETSC_CHECK(DMCreateSectionSubDM(get_dm(), fields.size(), fields.data(), &is, NULL));
     return IndexSet(is);
+#endif
+}
+
+IndexSet
+Problem::create_section_subis(const std::vector<Int> & fields,
+                              const std::vector<Int> & n_comps,
+                              const std::vector<Int> & comps) const
+{
+    CALL_STACK_MSG();
+#if PETSC_VERSION_GE(3, 21, 0)
+    assert(fields.size() == n_comps.size());
+    IS is;
+    PETSC_CHECK(DMCreateSectionSubDM(get_dm(),
+                                     fields.size(),
+                                     fields.data(),
+                                     n_comps.data(),
+                                     comps.data(),
+                                     &is,
+                                     NULL));
+    return IndexSet(is);
+#else
+    throw Exception(
+        "PETSc 3.21+ is needed for Problem::create_section_subis with component support");
 #endif
 }
 
