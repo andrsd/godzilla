@@ -6,6 +6,7 @@
 #include "godzilla/Parameters.h"
 #include "TestApp.h"
 #include "ExceptionTestMacros.h"
+#include "godzilla/UnstructuredMesh.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -128,6 +129,26 @@ TEST(ExplicitFVLinearProblemTest, api)
     app.set_problem(&prob);
 
     mesh.create();
+
+    auto * umesh = mesh.get_mesh<UnstructuredMesh>();
+    std::cerr << "umesh = " << umesh << std::endl;
+    auto dm = umesh->get_dm();
+    std::cerr << "dm = " << dm << std::endl;
+
+    Int cdim;
+    DMGetCoordinateDim(dm, &cdim);
+    std::cerr << "cdim = " << cdim << std::endl;
+
+    Int cell = 0;
+    PetscInt coordSize;
+    PetscBool isDG;
+    const PetscScalar * array;
+    PetscScalar * coords = NULL;
+    PETSC_CHECK(DMPlexGetCellCoordinates(dm, cell, &isDG, &coordSize, &array, &coords));
+    std::cerr << "cdim = " << cdim << ", coordSize = " << coordSize << std::endl;
+
+    DMPlexRestoreCellCoordinates(dm, cell, &isDG, &coordSize, &array, &coords);
+
     prob.create();
 
     EXPECT_EQ(prob.get_num_fields(), 1);
