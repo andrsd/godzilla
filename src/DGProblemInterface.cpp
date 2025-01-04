@@ -49,6 +49,8 @@ DGProblemInterface::init()
 
         PETSC_CHECK(DMCopyDisc(dm, cdm));
         PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
+        if (cdm)
+            PETSC_CHECK(DMLocalizeCoordinates(cdm));
     }
 }
 
@@ -395,6 +397,7 @@ DGProblemInterface::create()
     CALL_STACK_MSG();
     set_up_fields();
     DiscreteProblemInterface::create();
+    get_unstr_mesh()->localize_coordinates();
 }
 
 void

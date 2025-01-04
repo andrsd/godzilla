@@ -93,6 +93,9 @@ public:
     /// @param c coordinate vector
     void set_coordinates_local(const Vector & c);
 
+    /// If a mesh is periodic, create local coordinates for cells having periodic faces
+    void localize_coordinates() const;
+
     /// Sets up the data structures inside the `DM` object
     void set_up();
 

@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/LineMesh.h"
+#include "godzilla/RectangleMesh.h"
 #include "godzilla/NaturalRiemannBC.h"
 #include "godzilla/ExplicitFVLinearProblem.h"
 #include "godzilla/Parameters.h"
@@ -112,10 +113,19 @@ TEST(ExplicitFVLinearProblemTest, api)
 {
     TestApp app;
 
+#if PETSC_VERSION_GE(3, 21, 0)
+    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
+    Parameters mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<Int>("ny") = 1;
+    RectangleMesh mesh(mesh_pars);
+#else
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
+#endif
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
@@ -201,10 +211,19 @@ TEST(ExplicitFVLinearProblemTest, fields)
 {
     TestApp app;
 
+#if PETSC_VERSION_GE(3, 21, 0)
+    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
+    Parameters mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<Int>("ny") = 1;
+    RectangleMesh mesh(mesh_pars);
+#else
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
+#endif
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
@@ -244,10 +263,20 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
 {
     TestApp app;
 
+#if PETSC_VERSION_GE(3, 21, 0)
+    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
+    Parameters mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 3;
+    mesh_pars.set<Int>("ny") = 1;
+    mesh_pars.set<Real>("ymax") = 3.;
+    RectangleMesh mesh(mesh_pars);
+#else
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 3;
     LineMesh mesh(mesh_pars);
+#endif
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
@@ -276,6 +305,9 @@ TEST(ExplicitFVLinearProblemTest, solve)
 {
     TestApp app;
 
+#if PETSC_VERSION_GE(3, 21, 0)
+    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
+#else
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
@@ -330,16 +362,26 @@ TEST(ExplicitFVLinearProblemTest, solve)
     EXPECT_NEAR(lx[2], 0., 1e-15);
     EXPECT_NEAR(lx[3], 0., 1e-15);
     loc_sln.restore_array_read(lx);
+#endif
 }
 
 TEST(ExplicitFVLinearProblemTest, set_schemes)
 {
     TestApp app;
 
+#if PETSC_VERSION_GE(3, 21, 0)
+    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
+    Parameters mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<Int>("ny") = 1;
+    RectangleMesh mesh(mesh_pars);
+#else
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
+#endif
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
@@ -373,10 +415,19 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
 
     TestApp app;
 
+#if PETSC_VERSION_GE(3, 21, 0)
+    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
+    Parameters mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<Int>("ny") = 1;
+    RectangleMesh mesh(mesh_pars);
+#else
     Parameters mesh_pars = LineMesh::parameters();
     mesh_pars.set<App *>("_app") = &app;
     mesh_pars.set<Int>("nx") = 2;
     LineMesh mesh(mesh_pars);
+#endif
 
     Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
     prob_pars.set<App *>("_app") = &app;
