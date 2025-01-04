@@ -190,7 +190,7 @@ void
 Vector::chop(Real tol)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecChop(this->vec, tol));
+    PETSC_CHECK(VecFilter(this->vec, tol));
 }
 
 #if PETSC_VERSION_GE(3, 20, 0)
