@@ -141,6 +141,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem17set_auxiliary_vecERK5Label3Int3IntRK6Vector"><code class="docutils literal notranslate"><span class="pre">Problem::set_auxiliary_vec()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem19clear_auxiliary_vecEv"><code class="docutils literal notranslate"><span class="pre">Problem::clear_auxiliary_vec()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">Problem::create_section_subis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEERKNSt6vectorI3IntEERKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">Problem::create_section_subis()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecompositionE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition10field_nameE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::field_name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition2isE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::is</span></code></a></li>
@@ -567,6 +568,24 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>fields</strong> – The field numbers of the selected fields </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The global indices for the subproblem </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEERKNSt6vectorI3IntEERKNSt6vectorI3IntEE">
+<span id="_CPPv3NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEERKNSt6vectorI3IntEERKNSt6vectorI3IntEE"></span><span id="_CPPv2NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEERKNSt6vectorI3IntEERKNSt6vectorI3IntEE"></span><span id="godzilla::Problem::create_section_subis__std::vector:Int:CR.std::vector:Int:CR.std::vector:Int:CRC"></span><span class="target" id="classgodzilla_1_1_problem_1aafd48cbcb3aabe508237ea149b5c6f33"></span><span class="n"><span class="pre">IndexSet</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_section_subis</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fields</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">n_comps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">comps</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEERKNSt6vectorI3IntEERKNSt6vectorI3IntEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns an IndexSet containing a Section that encapsulates a subproblem defined by a subset of the fields and components in a Section in the problem. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fields</strong> – The field numbers of the selected fields </p></li>
+<li><p><strong>n_comps</strong> – The number of components from each field to incorporate into the subproblem </p></li>
+<li><p><strong>comps</strong> – The component numbers of the selected fields </p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The global indices for the subproblem </p>
