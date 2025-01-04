@@ -11,7 +11,7 @@ jobs:
     defaults:
       run:
         shell: bash -el {0}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Set up miniconda
         uses: conda-incubator/setup-miniconda@v3
@@ -114,7 +114,7 @@ jobs:
       security-events: write
       actions: read
     name: Codacy Security Scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -139,7 +139,7 @@ jobs:
     defaults:
       run:
         shell: bash -el {0}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
 
