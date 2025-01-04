@@ -10,16 +10,8 @@ if(GODZILLA_CODE_COVERAGE)
     set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_CLEAN_FILES "${COVERAGE_INFO}")
 
     if(CMAKE_C_COMPILER_ID MATCHES "(Apple)?[Cc]lang" OR CMAKE_CXX_COMPILER_ID MATCHES "(Apple)?[Cc]lang")
-        find_program(
-            LLVM_COV_PATH
-            NAMES
-                llvm-cov
-        )
-        find_program(
-            LLVM_PROFDATA_PATH
-            NAMES
-                llvm-profdata
-        )
+        find_program(LLVM_COV_PATH NAMES llvm-cov)
+        find_program(LLVM_PROFDATA_PATH NAMES llvm-profdata)
         mark_as_advanced(FORCE
             LLVM_COV_PATH
             LLVM_PROFDATA_PATH
