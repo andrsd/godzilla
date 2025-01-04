@@ -76,6 +76,8 @@ FVProblemInterface::init()
 
         PETSC_CHECK(DMCopyDisc(dm, cdm));
         PETSC_CHECK(DMGetCoarseDM(cdm, &cdm));
+        if (cdm)
+            PETSC_CHECK(DMLocalizeCoordinates(cdm));
     }
 }
 
@@ -364,6 +366,12 @@ FVProblemInterface::create()
     set_up_fields();
     DiscreteProblemInterface::create();
     get_unstr_mesh()->construct_ghost_cells();
+    get_unstr_mesh()->localize_coordinates();
+
+#if PETSC_VERSION_GE(3, 21, 0)
+    if (get_unstr_mesh()->get_dimension() == 1)
+        throw Exception("FV in 1D is not possible due to a bug in PETSc. Use PETSc 3.20 instead.");
+#endif
 }
 
 void

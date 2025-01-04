@@ -4,6 +4,7 @@
 #include "godzilla/Partitioner.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
+#include "godzilla/Exception.h"
 
 using namespace godzilla;
 
@@ -87,6 +88,18 @@ Partitioner::partition(Int n_parts,
                        IndexSet & partition)
 {
     CALL_STACK_MSG();
+#if PETSC_VERSION_GE(3, 21, 0)
+    PETSC_CHECK(PetscPartitionerPartition(this->part,
+                                          n_parts,
+                                          n_vertices,
+                                          start,
+                                          adjacency,
+                                          vertex_section,
+                                          NULL,
+                                          target_section,
+                                          part_section,
+                                          partition));
+#else
     PETSC_CHECK(PetscPartitionerPartition(this->part,
                                           n_parts,
                                           n_vertices,
@@ -96,6 +109,35 @@ Partitioner::partition(Int n_parts,
                                           target_section,
                                           part_section,
                                           partition));
+#endif
+}
+
+void
+Partitioner::partition(Int n_parts,
+                       Int n_vertices,
+                       Int start[],
+                       Int adjacency[],
+                       const Section & vertex_section,
+                       const Section & edge_section,
+                       const Section & target_section,
+                       Section & part_section,
+                       IndexSet & partition)
+{
+    CALL_STACK_MSG();
+#if PETSC_VERSION_GE(3, 21, 0)
+    PETSC_CHECK(PetscPartitionerPartition(this->part,
+                                          n_parts,
+                                          n_vertices,
+                                          start,
+                                          adjacency,
+                                          vertex_section,
+                                          edge_section,
+                                          target_section,
+                                          part_section,
+                                          partition));
+#else
+    throw Exception("PETSc 3.21+ is needed for Partitioner::partition with edge_section parameter");
+#endif
 }
 
 Partitioner::operator PetscPartitioner() const

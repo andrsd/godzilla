@@ -228,6 +228,17 @@ public:
     /// @return The global indices for the subproblem
     IndexSet create_section_subis(const std::vector<Int> & fields) const;
 
+    /// Returns an IndexSet containing a Section that encapsulates a subproblem defined by
+    /// a subset of the fields and components in a Section in the problem.
+    ///
+    /// @param fields The field numbers of the selected fields
+    /// @param n_comps The number of components from each field to incorporate into the subproblem
+    /// @param comps The component numbers of the selected fields
+    /// @return The global indices for the subproblem
+    IndexSet create_section_subis(const std::vector<Int> & fields,
+                                  const std::vector<Int> & n_comps,
+                                  const std::vector<Int> & comps) const;
+
 protected:
     /// Set vector/matrix types
     virtual void set_up_types();

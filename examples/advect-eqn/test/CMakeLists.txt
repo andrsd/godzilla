@@ -1,5 +1,7 @@
 include(TesterExodusII)
 
+if(${PETSC_VERSION} VERSION_LESS "3.21.0")
+
 add_test_exodiff(
     NAME   advect
     BIN    ${PROJECT_NAME}
@@ -8,3 +10,5 @@ add_test_exodiff(
     GOLD   ${PROJECT_SOURCE_DIR}/test/gold/1d.exo
     ARGS   -Floor 1e-16
 )
+
+endif()

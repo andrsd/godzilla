@@ -33,6 +33,15 @@ public:
                    const Section & target_section,
                    Section & partSection,
                    IndexSet & partition);
+    void partition(Int n_parts,
+                   Int n_vertices,
+                   Int start[],
+                   Int adjacency[],
+                   const Section & vertex_section,
+                   const Section & edge_section,
+                   const Section & target_section,
+                   Section & partSection,
+                   IndexSet & partition);
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
