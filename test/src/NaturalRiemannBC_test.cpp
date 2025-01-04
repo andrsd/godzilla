@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include <gtest/gtest.h>
 #include "godzilla/LineMesh.h"
 #include "godzilla/NaturalRiemannBC.h"
 #include "godzilla/ExplicitFVLinearProblem.h"
@@ -93,8 +94,13 @@ TEST(NaturalRiemannBCTest, api)
     prob.add_boundary_condition(&bc);
 
     mesh.create();
+
+#if PETSC_VERSION_GE(3, 21, 0)
+    EXPECT_THROW(prob.create(), Exception);
+#else
     prob.create();
 
     EXPECT_THAT(bc.get_components(), ElementsAre(0));
     EXPECT_EQ(bc.get_field_id(), 0);
+#endif
 }
