@@ -67,7 +67,19 @@ jobs:
         run: make -C ${{ github.workspace }}/build
 
       - name: Run tests
-        run: make -C ${{ github.workspace }}/build test ARGS='-V'
+        run: |
+          echo "### Test results" >> $GITHUB_STEP_SUMMARY
+          ctest --test-dir ${{ github.workspace }}/build -O test.log
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          awk 's;/^\[HANDLER_OUTPUT\]/{s=1}' test.log >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload test result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.os }}-${{ matrix.build }}-petsc-${{ matrix.petsc }}
+          path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
 
       - name: Generate code coverage
         run: make -C ${{ github.workspace }}/build coverage
