@@ -134,14 +134,4 @@ ExplicitDGLinearProblem::post_step()
     output(EXECUTE_ON_TIMESTEP);
 }
 
-void
-ExplicitDGLinearProblem::compute_residual(const Vector & x, Vector & f)
-{
-}
-
-void
-ExplicitDGLinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
-{
-}
-
 } // namespace godzilla

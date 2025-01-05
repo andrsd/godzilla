@@ -20,8 +20,10 @@ public:
     void call_initial_guess();
 
 protected:
-    void compute_residual(const Vector & x, Vector & f) override;
-    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
+    void set_up_callbacks() override;
+    void compute_residual(const Vector & x, Vector & f);
+    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
+
     PetscSection s;
 };
 
@@ -54,6 +56,13 @@ void
 G1DTestNonlinearProblem::call_initial_guess()
 {
     NonlinearProblem::set_up_initial_guess();
+}
+
+void
+G1DTestNonlinearProblem::set_up_callbacks()
+{
+    set_function(this, &G1DTestNonlinearProblem::compute_residual);
+    set_jacobian(this, &G1DTestNonlinearProblem::compute_jacobian);
 }
 
 void
@@ -139,8 +148,29 @@ TEST(NonlinearProblemTest, run)
 
         MOCK_METHOD(void, set_up_initial_guess, ());
         MOCK_METHOD(void, on_initial, ());
-        MOCK_METHOD(void, compute_residual, (const Vector & x, Vector & f));
-        MOCK_METHOD(void, compute_jacobian, (const Vector & x, Matrix & J, Matrix & Jp));
+
+        void
+        compute_residual(const Vector & x, Vector & f)
+        {
+            f.zero();
+            this->compute_residual_called = true;
+        }
+
+        void
+        compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
+        {
+            this->compute_jacobian_called = true;
+        }
+
+        void
+        set_up_callbacks()
+        {
+            set_function(this, &MockNonlinearProblem::compute_residual);
+            set_jacobian(this, &MockNonlinearProblem::compute_jacobian);
+        }
+
+        bool compute_residual_called = false;
+        bool compute_jacobian_called = false;
     };
 
     TestApp app;
@@ -159,8 +189,9 @@ TEST(NonlinearProblemTest, run)
 
     EXPECT_CALL(prob, set_up_initial_guess);
     EXPECT_CALL(prob, on_initial);
-    EXPECT_CALL(prob, compute_residual);
     prob.run();
+    EXPECT_TRUE(prob.compute_residual_called);
+    EXPECT_FALSE(prob.compute_jacobian_called);
 }
 
 TEST(NonlinearProblemTest, line_search_type)
@@ -173,16 +204,6 @@ TEST(NonlinearProblemTest, line_search_type)
         get_snes()
         {
             return NonlinearProblem::get_snes();
-        }
-
-        void
-        compute_residual(const Vector & x, Vector & F) override
-        {
-        }
-
-        void
-        compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override
-        {
         }
     };
 
@@ -219,16 +240,6 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     class MockNonlinearProblem : public NonlinearProblem {
     public:
         explicit MockNonlinearProblem(const Parameters & params) : NonlinearProblem(params) {}
-
-        void
-        compute_residual(const Vector & x, Vector & f) override
-        {
-        }
-
-        void
-        compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override
-        {
-        }
     };
 
     TestApp app;

@@ -130,16 +130,6 @@ ExplicitFVLinearProblem::compute_rhs_local(Real time, const Vector & x, Vector &
 }
 
 void
-ExplicitFVLinearProblem::compute_residual(const Vector & x, Vector & f)
-{
-}
-
-void
-ExplicitFVLinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
-{
-}
-
-void
 ExplicitFVLinearProblem::post_step()
 {
     CALL_STACK_MSG();

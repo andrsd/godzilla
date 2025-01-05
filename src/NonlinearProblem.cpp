@@ -198,8 +198,6 @@ void
 NonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    this->snes.set_function(this->r, this, &NonlinearProblem::compute_residual);
-    this->snes.set_jacobian(this->J, this->J, this, &NonlinearProblem::compute_jacobian);
 }
 
 void
