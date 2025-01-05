@@ -41,13 +41,18 @@ ExplicitDGLinearProblem::get_step_num() const
     return ExplicitProblemInterface::get_step_number();
 }
 
+SNESolver
+ExplicitDGLinearProblem::create_sne_solver()
+{
+    return ExplicitProblemInterface::get_snes();
+}
+
 void
 ExplicitDGLinearProblem::init()
 {
     CALL_STACK_MSG();
     ExplicitProblemInterface::init();
-    auto snes = ExplicitProblemInterface::get_snes();
-    NonlinearProblem::set_snes(snes);
+    NonlinearProblem::init();
     DGProblemInterface::init();
 }
 
@@ -127,16 +132,6 @@ ExplicitDGLinearProblem::post_step()
     update_aux_vector();
     compute_postprocessors();
     output(EXECUTE_ON_TIMESTEP);
-}
-
-void
-ExplicitDGLinearProblem::compute_residual(const Vector & x, Vector & f)
-{
-}
-
-void
-ExplicitDGLinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
-{
 }
 
 } // namespace godzilla

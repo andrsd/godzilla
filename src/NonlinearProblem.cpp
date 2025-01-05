@@ -131,15 +131,22 @@ NonlinearProblem::get_ksp() const
     return this->ksp;
 }
 
+SNESolver
+NonlinearProblem::create_sne_solver()
+{
+    CALL_STACK_MSG();
+    SNESolver snes;
+    snes.create(get_comm());
+    snes.set_dm(get_dm());
+    PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
+    return snes;
+}
+
 void
 NonlinearProblem::init()
 {
     CALL_STACK_MSG();
-    DM dm = get_dm();
-    this->snes.create(get_comm());
-    this->snes.set_dm(dm);
-    PETSC_CHECK(DMSetApplicationContext(dm, this));
-    set_snes(this->snes);
+    set_snes(create_sne_solver());
 }
 
 void
@@ -191,8 +198,6 @@ void
 NonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    this->snes.set_function(this->r, this, &NonlinearProblem::compute_residual);
-    this->snes.set_jacobian(this->J, this->J, this, &NonlinearProblem::compute_jacobian);
 }
 
 void

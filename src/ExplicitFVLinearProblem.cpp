@@ -39,13 +39,18 @@ ExplicitFVLinearProblem::get_step_num() const
     return ExplicitProblemInterface::get_step_number();
 }
 
+SNESolver
+ExplicitFVLinearProblem::create_sne_solver()
+{
+    return ExplicitProblemInterface::get_snes();
+}
+
 void
 ExplicitFVLinearProblem::init()
 {
     CALL_STACK_MSG();
     ExplicitProblemInterface::init();
-    auto snes = ExplicitProblemInterface::get_snes();
-    NonlinearProblem::set_snes(snes);
+    NonlinearProblem::init();
     FVProblemInterface::init();
 }
 
@@ -122,16 +127,6 @@ ExplicitFVLinearProblem::compute_rhs_local(Real time, const Vector & x, Vector &
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMPlexTSComputeRHSFunctionFVM(get_dm(), time, x, F, this));
-}
-
-void
-ExplicitFVLinearProblem::compute_residual(const Vector & x, Vector & f)
-{
-}
-
-void
-ExplicitFVLinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
-{
 }
 
 void

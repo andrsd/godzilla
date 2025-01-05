@@ -78,7 +78,34 @@ protected:
 
     void solve();
 
+    /// Set residual evaluation function
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T to compute residual
+    template <class T>
+    void
+    set_function(T * instance, void (T::*method)(const Vector &, Vector &))
+    {
+        this->snes.set_function(this->r, instance, method);
+    }
+
+    /// Set Jacobian evaluation function
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of class T
+    /// @param method Member function in class T to compute Jacobian
+    template <class T>
+    void
+    set_jacobian(T * instance, void (T::*method)(const Vector &, Matrix &, Matrix &))
+    {
+        this->snes.set_jacobian(this->J, this->J, instance, method);
+    }
+
 private:
+    /// Create a SNESolver
+    virtual SNESolver create_sne_solver();
+
     /// Set up line search
     virtual void set_up_line_search();
 
@@ -90,9 +117,6 @@ private:
 
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
-
-    virtual void compute_residual(const Vector & x, Vector & f) = 0;
-    virtual void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) = 0;
 
     /// Nonlinear solver
     SNESolver snes;

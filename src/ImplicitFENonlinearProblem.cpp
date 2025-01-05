@@ -70,14 +70,18 @@ ImplicitFENonlinearProblem::get_step_num() const
     return TransientProblemInterface::get_step_number();
 }
 
+SNESolver
+ImplicitFENonlinearProblem::create_sne_solver()
+{
+    return TransientProblemInterface::get_snes();
+}
+
 void
 ImplicitFENonlinearProblem::init()
 {
     CALL_STACK_MSG();
     TransientProblemInterface::init();
-    auto snes = TransientProblemInterface::get_snes();
-    NonlinearProblem::set_snes(snes);
-    FEProblemInterface::init();
+    FENonlinearProblem::init();
 }
 
 void

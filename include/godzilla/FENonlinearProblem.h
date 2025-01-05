@@ -115,8 +115,8 @@ protected:
                                               const IndexSet & facets);
 
 private:
-    void compute_residual(const Vector & x, Vector & f) override;
-    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) override;
+    void compute_residual(const Vector & x, Vector & f);
+    void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp);
     virtual void compute_boundary(Vector & x);
 
     enum State { INITIAL, FINAL } state;
