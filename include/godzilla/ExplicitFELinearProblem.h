@@ -33,6 +33,7 @@ protected:
     void post_step() override;
 
 private:
+    SNESolver create_sne_solver() override;
     void compute_rhs_local(Real time, const Vector & x, Vector & F) override;
     void compute_rhs_function_fem(Real time, const Vector & loc_x, Vector & loc_g);
 

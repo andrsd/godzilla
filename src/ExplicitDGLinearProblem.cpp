@@ -41,13 +41,18 @@ ExplicitDGLinearProblem::get_step_num() const
     return ExplicitProblemInterface::get_step_number();
 }
 
+SNESolver
+ExplicitDGLinearProblem::create_sne_solver()
+{
+    return ExplicitProblemInterface::get_snes();
+}
+
 void
 ExplicitDGLinearProblem::init()
 {
     CALL_STACK_MSG();
     ExplicitProblemInterface::init();
-    auto snes = ExplicitProblemInterface::get_snes();
-    NonlinearProblem::set_snes(snes);
+    NonlinearProblem::init();
     DGProblemInterface::init();
 }
 

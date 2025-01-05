@@ -33,6 +33,7 @@ protected:
     void post_step() override;
 
 private:
+    SNESolver create_sne_solver() override;
     void compute_residual(const Vector & x, Vector & f) final;
     void compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp) final;
 

@@ -69,13 +69,18 @@ ExplicitFELinearProblem::get_step_num() const
     return ExplicitProblemInterface::get_step_number();
 }
 
+SNESolver
+ExplicitFELinearProblem::create_sne_solver()
+{
+    return ExplicitProblemInterface::get_snes();
+}
+
 void
 ExplicitFELinearProblem::init()
 {
     CALL_STACK_MSG();
     ExplicitProblemInterface::init();
-    auto snes = ExplicitProblemInterface::get_snes();
-    NonlinearProblem::set_snes(snes);
+    NonlinearProblem::init();
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
     for (Int i = 0; i < get_num_fields(); i++)

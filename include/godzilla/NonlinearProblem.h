@@ -79,6 +79,9 @@ protected:
     void solve();
 
 private:
+    /// Create a SNESolver
+    virtual SNESolver create_sne_solver();
+
     /// Set up line search
     virtual void set_up_line_search();
 

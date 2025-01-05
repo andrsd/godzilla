@@ -38,6 +38,8 @@ protected:
     }
 
 private:
+    SNESolver create_sne_solver() override;
+
     /// Form the local residual `f` from the local input `x`
     ///
     /// @param time The time
