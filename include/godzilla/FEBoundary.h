@@ -24,6 +24,8 @@ namespace fe {
 
 class BoundaryInfoAbstract {
 public:
+    virtual ~BoundaryInfoAbstract() = default;
+
     /// Create boundary info
     virtual void create() = 0;
 
