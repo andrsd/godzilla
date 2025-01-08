@@ -84,9 +84,9 @@ void
 FENonlinearProblem::set_up_callbacks()
 {
     CALL_STACK_MSG();
-    set_boundary_local(this, &FENonlinearProblem::compute_boundary);
-    set_function_local(this, &FENonlinearProblem::compute_residual);
-    set_jacobian_local(this, &FENonlinearProblem::compute_jacobian);
+    set_boundary_local(this, &FENonlinearProblem::compute_boundary_local);
+    set_function_local(this, &FENonlinearProblem::compute_residual_local);
+    set_jacobian_local(this, &FENonlinearProblem::compute_jacobian_local);
 }
 
 void
@@ -106,7 +106,7 @@ FENonlinearProblem::allocate_objects()
 }
 
 void
-FENonlinearProblem::compute_boundary(Vector & x)
+FENonlinearProblem::compute_boundary_local(Vector & x)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMPlexInsertBoundaryValues(get_dm(),
@@ -119,7 +119,7 @@ FENonlinearProblem::compute_boundary(Vector & x)
 }
 
 void
-FENonlinearProblem::compute_residual(const Vector & x, Vector & f)
+FENonlinearProblem::compute_residual_local(const Vector & x, Vector & f)
 {
     CALL_STACK_MSG();
     // this is based on DMSNESComputeResidual()
@@ -576,7 +576,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
 }
 
 void
-FENonlinearProblem::compute_jacobian(const Vector & x, Matrix & J, Matrix & Jp)
+FENonlinearProblem::compute_jacobian_local(const Vector & x, Matrix & J, Matrix & Jp)
 {
     CALL_STACK_MSG();
     // based on DMPlexSNESComputeJacobianFEM and DMSNESComputeJacobianAction
@@ -1159,7 +1159,7 @@ FENonlinearProblem::compute_solution_vector_local()
     CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
     PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
-    compute_boundary(loc_sln);
+    this->compute_boundary_delegate.invoke(loc_sln);
 }
 
 } // namespace godzilla
