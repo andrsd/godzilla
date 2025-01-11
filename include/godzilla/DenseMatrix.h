@@ -618,6 +618,41 @@ determinant(const DenseMatrix<T, 3, 3> & mat)
 
 // Inversion
 
+/// Compute LU decomposition of a matrix
+///
+/// @param A Matrix to decompose
+/// @return Tuple of matrices L and U
+template <typename T, Int N>
+inline std::tuple<DenseMatrix<T, N, N>, DenseMatrix<T, N, N>>
+lu_decomposition(const DenseMatrix<T, N, N> & A)
+{
+    CALL_STACK_MSG();
+    DenseMatrix<T, N, N> L, U;
+    for (Int i = 0; i < N; ++i) {
+        for (Int j = 0; j < N; ++j) {
+            if (i <= j) {
+                U(i, j) = A(i, j);
+                for (Int k = 0; k < i; ++k)
+                    U(i, j) -= L(i, k) * U(k, j);
+
+                if (i == j)
+                    L(i, j) = 1;
+                else
+                    L(i, j) = 0;
+            }
+            else {
+                L(i, j) = A(i, j);
+                for (Int k = 0; k < j; ++k)
+                    L(i, j) -= L(i, k) * U(k, j);
+
+                L(i, j) /= U(j, j);
+                U(i, j) = 0;
+            }
+        }
+    }
+    return { L, U };
+}
+
 /// Compute inverse of this matrix
 ///
 /// @return Inverse of this matrix

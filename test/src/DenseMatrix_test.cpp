@@ -414,6 +414,26 @@ TEST(DenseMatrixTest, det4)
                      "Determinant is not implemented for 4x4 matrices, yet");
 }
 
+TEST(DenseMatrixTest, lu_decomp)
+{
+    DenseMatrix<Real, 3> A;
+    A.set_row(0, { 4, 3, 0 });
+    A.set_row(1, { 3, 4, -1 });
+    A.set_row(2, { 0, -1, 4 });
+
+    auto [L, U] = lu_decomposition(A);
+    auto B = L * U;
+    EXPECT_EQ(B(0, 0), 4.);
+    EXPECT_EQ(B(0, 1), 3.);
+    EXPECT_EQ(B(0, 2), 0.);
+    EXPECT_EQ(B(1, 0), 3.);
+    EXPECT_EQ(B(1, 1), 4.);
+    EXPECT_EQ(B(1, 2), -1.);
+    EXPECT_EQ(B(2, 0), 0.);
+    EXPECT_EQ(B(2, 1), -1.);
+    EXPECT_EQ(B(2, 2), 4.);
+}
+
 TEST(DenseMatrixTest, inv1)
 {
     auto m = DenseMatrix<Real, 1>();
