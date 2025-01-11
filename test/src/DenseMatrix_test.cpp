@@ -489,10 +489,31 @@ TEST(DenseMatrixDeathTest, inv3_singular)
     EXPECT_THROW_MSG(inverse(m), "Inverting of a matrix failed: matrix is singular.");
 }
 
-TEST(DenseMatrixDeathTest, inv4)
+TEST(DenseMatrixTest, inv4)
 {
-    auto m = DenseMatrix<Real, 4>();
-    EXPECT_THROW_MSG(inverse(m), "Inverse is not implemented for 4x4 matrices, yet");
+    DenseMatrix<Real, 4> m;
+    m.set_row(0, { 5, 2, 1, 1 });
+    m.set_row(1, { 1, 6, 2, 1 });
+    m.set_row(2, { 3, 1, 7, 1 });
+    m.set_row(3, { 1, 1, 1, 4 });
+    auto m_inv = inverse(m);
+    auto I = m * m_inv;
+    EXPECT_NEAR(I(0, 0), 1., 1e-8);
+    EXPECT_NEAR(I(0, 1), 0., 1e-8);
+    EXPECT_NEAR(I(0, 2), 0., 1e-8);
+    EXPECT_NEAR(I(0, 3), 0., 1e-8);
+    EXPECT_NEAR(I(1, 0), 0., 1e-8);
+    EXPECT_NEAR(I(1, 1), 1., 1e-8);
+    EXPECT_NEAR(I(1, 2), 0., 1e-8);
+    EXPECT_NEAR(I(1, 3), 0., 1e-8);
+    EXPECT_NEAR(I(2, 0), 0., 1e-8);
+    EXPECT_NEAR(I(2, 1), 0., 1e-8);
+    EXPECT_NEAR(I(2, 2), 1., 1e-8);
+    EXPECT_NEAR(I(2, 3), 0., 1e-8);
+    EXPECT_NEAR(I(3, 0), 0., 1e-8);
+    EXPECT_NEAR(I(3, 1), 0., 1e-8);
+    EXPECT_NEAR(I(3, 2), 0., 1e-8);
+    EXPECT_NEAR(I(3, 3), 1., 1e-8);
 }
 
 TEST(DenseMatrixTest, transpose3)

@@ -653,14 +653,53 @@ lu_decomposition(const DenseMatrix<T, N, N> & A)
     return { L, U };
 }
 
+template <Int N>
+DenseVector<Real, N>
+solve_lower(const DenseMatrix<Real, N> & L, const DenseVector<Real, N> & b)
+{
+    DenseVector<Real, N> x;
+    for (Int i = 0; i < N; i++) {
+        x(i) = b(i);
+        for (Int j = 0; j < i; j++)
+            x(i) -= L(i, j) * x(j);
+        x(i) /= L(i, i);
+    }
+    return x;
+}
+
+template <Int N>
+DenseVector<Real, N>
+solve_upper(const DenseMatrix<Real, N> & U, const DenseVector<Real, N> & b)
+{
+    DenseVector<Real, N> x;
+    for (Int i = N - 1; i >= 0; i--) {
+        x(i) = b(i);
+        for (Int j = i + 1; j < N; j++)
+            x(i) -= U(i, j) * x(j);
+        x(i) /= U(i, i);
+    }
+    return x;
+}
+
 /// Compute inverse of this matrix
 ///
-/// @return Inverse of this matrix
-template <typename T, Int N>
-inline DenseMatrix<T, N>
-inverse(const DenseMatrix<T, N> & mat)
+/// @param mat Matrix to invert
+/// @return Inverted matrix
+template <Int N>
+inline DenseMatrix<Real, N>
+inverse(const DenseMatrix<Real, N> & mat)
 {
-    throw NotImplementedException("Inverse is not implemented for {}x{} matrices, yet", N, N);
+    DenseMatrix<Real, N> inv;
+    auto [L, U] = lu_decomposition(mat);
+    DenseVector<Real, N> e;
+    for (int i = 0; i < N; ++i) {
+        e.zero();
+        e(i) = 1.;
+        auto y = solve_lower(L, e);
+        auto x = solve_upper(U, y);
+        inv.set_col(i, x);
+    }
+    return inv;
 }
 
 template <>
