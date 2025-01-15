@@ -21,7 +21,6 @@ public:
     };
 
     TimeStepAdapt();
-    TimeStepAdapt(TS ts, TSAdapt tsadapt);
 
     /// Add a candidate scheme for the adaptive controller to select from
     ///
@@ -152,6 +151,8 @@ public:
     void set_type(Type type);
 
 private:
+    TimeStepAdapt(TS ts, TSAdapt tsadapt);
+
     TS ts;
     TSAdapt tsadapt;
 
