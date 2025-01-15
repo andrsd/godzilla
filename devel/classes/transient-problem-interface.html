@@ -131,6 +131,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface9pre_stageE4Real"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::pre_stage()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface10post_stageE4Real3IntRKNSt6vectorI6VectorEE"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::post_stage()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface11compute_rhsE4RealRK6VectorR6Vector"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::compute_rhs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0EN8godzilla25TransientProblemInterface16get_time_stepperER1Tv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::get_time_stepper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface16get_time_stepperEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::get_time_stepper()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -401,6 +403,39 @@
 <li><p><strong>x</strong> – Solution at time <code class="docutils literal notranslate"><span class="pre">time</span></code></p></li>
 <li><p><strong>F</strong> – Right-hand side vector </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN8godzilla25TransientProblemInterface16get_time_stepperER1Tv">
+<span id="_CPPv3I0EN8godzilla25TransientProblemInterface16get_time_stepperEv"></span><span id="_CPPv2I0EN8godzilla25TransientProblemInterface16get_time_stepperEv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a7c7287b5019ce1f51a2ed26d3cad3d01"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN8godzilla25TransientProblemInterface16get_time_stepperER1Tv" title="godzilla::TransientProblemInterface::get_time_stepper::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_time_stepper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN8godzilla25TransientProblemInterface16get_time_stepperER1Tv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get a reference to the time stepper. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This won’t work with internal PETSc time steppers </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – Godzilla time stepper that inherits from <code class="docutils literal notranslate"><span class="pre">TSAbstract</span></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Reference to the time stepper </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface16get_time_stepperEv">
+<span id="_CPPv3N8godzilla25TransientProblemInterface16get_time_stepperEv"></span><span id="_CPPv2N8godzilla25TransientProblemInterface16get_time_stepperEv"></span><span id="godzilla::TransientProblemInterface::get_time_stepper"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a0e3bfb798c62330cb0df8958beff4897"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">TSAbstract</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_time_stepper</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface16get_time_stepperEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get a reference to the time stepper. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This won’t work with internal PETSc time steppers, only with godzilla-registred ones. </p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Reference to the (abstract) time stepper </p>
 </dd>
 </dl>
 </dd></dl>
