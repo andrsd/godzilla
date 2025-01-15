@@ -8,7 +8,9 @@
 #include "godzilla/Delegate.h"
 #include "godzilla/SNESolver.h"
 #include "godzilla/Problem.h"
+#include "godzilla/TSAbstract.h"
 #include "petscts.h"
+#include "petsc/private/tsimpl.h"
 
 namespace godzilla {
 
@@ -128,6 +130,30 @@ public:
     /// @param x Solution at time `time`
     /// @param F Right-hand side vector
     void compute_rhs(Real time, const Vector & x, Vector & F);
+
+    /// Get a reference to the time stepper
+    ///
+    /// @tparam T Godzilla time stepper that inherits from `TSAbstract`
+    /// @return Reference to the time stepper
+    /// @note This won't work with internal PETSc time steppers
+    template <class T>
+    T &
+    get_time_stepper()
+    {
+        CALL_STACK_MSG();
+        return const_cast<T &>(*static_cast<T *>(this->ts->data));
+    }
+
+    /// Get a reference to the time stepper
+    ///
+    /// @return Reference to the (abstract) time stepper
+    /// @note This won't work with internal PETSc time steppers, only with godzilla-registred ones.
+    TSAbstract &
+    get_time_stepper()
+    {
+        CALL_STACK_MSG();
+        return *static_cast<TSAbstract *>(this->ts->data);
+    }
 
 protected:
     /// Get underlying non-linear solver
