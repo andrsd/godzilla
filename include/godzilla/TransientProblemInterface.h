@@ -17,6 +17,7 @@ namespace godzilla {
 class Problem;
 class Parameters;
 class TimeSteppingAdaptor;
+class TimeStepAdapt;
 
 /// Interface for transient simulations
 ///
@@ -155,6 +156,16 @@ public:
         return *static_cast<TSAbstract *>(this->ts->data);
     }
 
+    /// Get time step adaptivity
+    ///
+    /// @return Time step adaptivity object
+    const TimeStepAdapt & get_time_step_adapt() const;
+
+    /// Get time step adaptivity
+    ///
+    /// @return Time step adaptivity object
+    TimeStepAdapt & get_time_step_adapt();
+
 protected:
     /// Get underlying non-linear solver
     SNESolver get_snes() const;
@@ -253,6 +264,8 @@ private:
 
     /// PETSc TS object
     TS ts;
+    /// Time step adapt object
+    TimeStepAdapt time_step_adapt;
     /// Method for monitoring the solve
     Delegate<void(Int it, Real rnorm, const Vector & x)> monitor_method;
     /// Method for computing right-hand side

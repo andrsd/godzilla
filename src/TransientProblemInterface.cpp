@@ -4,6 +4,7 @@
 #include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"
+#include "godzilla/TimeStepAdapt.h"
 #include "godzilla/TimeSteppingAdaptor.h"
 #include "godzilla/TransientProblemInterface.h"
 #include "godzilla/LoggingInterface.h"
@@ -129,6 +130,8 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
+    this->time_step_adapt = TimeStepAdapt::from_ts(this->ts);
+
     if (this->tpi_params.is_param_valid("end_time") && this->tpi_params.is_param_valid("num_steps"))
         this->problem->log_error(
             "Cannot provide 'end_time' and 'num_steps' together. Specify one or the other.");
@@ -226,6 +229,20 @@ TransientProblemInterface::get_step_number() const
 {
     CALL_STACK_MSG();
     return this->step_num;
+}
+
+const TimeStepAdapt &
+TransientProblemInterface::get_time_step_adapt() const
+{
+    CALL_STACK_MSG();
+    return this->time_step_adapt;
+}
+
+TimeStepAdapt &
+TransientProblemInterface::get_time_step_adapt()
+{
+    CALL_STACK_MSG();
+    return this->time_step_adapt;
 }
 
 void

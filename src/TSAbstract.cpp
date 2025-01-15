@@ -172,6 +172,13 @@ TSAbstract::get_adapt()
     return this->adapt;
 }
 
+const TimeStepAdapt &
+TSAbstract::get_adapt() const
+{
+    CALL_STACK_MSG();
+    return this->adapt;
+}
+
 TSConvergedReason
 TSAbstract::get_reason() const
 {

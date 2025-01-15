@@ -75,7 +75,11 @@ public:
 protected:
     TS get_ts();
 
+    /// Get time step adaptor
+    ///
+    /// @return Time step adaptor
     TimeStepAdapt & get_adapt();
+    const TimeStepAdapt & get_adapt() const;
 
     TSConvergedReason get_reason() const;
     void set_reason(TSConvergedReason reason);
