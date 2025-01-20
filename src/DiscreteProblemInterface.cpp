@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2022 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
+#include "godzilla/MeshObject.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/App.h"
@@ -12,6 +13,7 @@
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/NaturalBC.h"
 #include "godzilla/Exception.h"
+#include "godzilla/UnstructuredMesh.h"
 #include <set>
 #include <cassert>
 
@@ -61,6 +63,7 @@ DiscreteProblemInterface::invoke_natural_riemann_bc_delegate(Real time,
 
 DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Parameters & params) :
     problem(problem),
+    mesh_obj(params.get<MeshObject *>("_mesh_obj")),
     unstr_mesh(nullptr),
     logger(params.get<App *>("_app")->get_logger()),
     ds(nullptr),
@@ -182,7 +185,7 @@ DiscreteProblemInterface::get_aux(const std::string & name) const
 }
 
 UnstructuredMesh *
-DiscreteProblemInterface::get_unstr_mesh() const
+DiscreteProblemInterface::get_mesh() const
 {
     CALL_STACK_MSG();
     return this->unstr_mesh;
@@ -230,10 +233,11 @@ DiscreteProblemInterface::distribute()
     auto part = this->problem->get_partitioner();
     part.set_up();
 
-    // cannot use `get_unstr_mesh`, since this may be called before the `create` calls
-    auto unstr_mesh = dynamic_cast<UnstructuredMesh *>(this->problem->get_mesh());
-    unstr_mesh->set_partitioner(part);
-    unstr_mesh->distribute(this->problem->get_partition_overlap());
+    // cannot use `get_mesh`, since this may be called before the `create` calls
+    auto mesh = this->mesh_obj->get_mesh<UnstructuredMesh>();
+    assert(mesh != nullptr);
+    mesh->set_partitioner(part);
+    mesh->distribute(this->problem->get_partition_overlap());
 }
 
 void
@@ -250,7 +254,7 @@ DiscreteProblemInterface::create()
 {
     CALL_STACK_MSG();
     assert(this->problem != nullptr);
-    this->unstr_mesh = dynamic_cast<UnstructuredMesh *>(problem->get_mesh());
+    this->unstr_mesh = this->mesh_obj->get_mesh<UnstructuredMesh>();
     assert(this->unstr_mesh != nullptr);
 
     for (auto & ic : this->all_ics)
@@ -506,7 +510,7 @@ DiscreteProblemInterface::compute_aux_fields()
         const std::vector<AuxiliaryField *> & auxs = it.second;
         Label label;
         if (!region_name.empty())
-            label = get_unstr_mesh()->get_label(region_name);
+            label = get_mesh()->get_label(region_name);
 
         if (label.is_null())
             compute_global_aux_fields(this->dm_aux, auxs, this->a);

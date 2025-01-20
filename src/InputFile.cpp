@@ -181,6 +181,7 @@ InputFile::build_outputs()
         Block blk = get_block(output_block, it.first.as<std::string>());
         Parameters * params = build_params(blk);
         params->set<Problem *>("_problem") = this->problem;
+        params->set<MeshObject *>("_mesh_obj") = this->mesh_obj;
         auto output = this->app->build_object<Output>(blk.name(), params);
         assert(this->problem != nullptr);
         this->problem->add_output(output);

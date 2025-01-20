@@ -55,9 +55,9 @@ FVProblemInterface::init()
     CALL_STACK_MSG();
     DiscreteProblemInterface::init();
 
-    auto comm = get_unstr_mesh()->get_comm();
+    auto comm = get_mesh()->get_comm();
     Int dim = get_problem()->get_dimension();
-    PetscBool is_simplex = get_unstr_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
+    PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     for (auto & it : this->aux_fields) {
         auto fi = it.second;
         PETSC_CHECK(PetscFECreateLagrange(comm,
@@ -69,7 +69,7 @@ FVProblemInterface::init()
                                           &this->aux_fe.at(fi.id)));
     }
 
-    auto dm = get_unstr_mesh()->get_dm();
+    auto dm = get_mesh()->get_dm();
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -365,11 +365,11 @@ FVProblemInterface::create()
     CALL_STACK_MSG();
     set_up_fields();
     DiscreteProblemInterface::create();
-    get_unstr_mesh()->construct_ghost_cells();
-    get_unstr_mesh()->localize_coordinates();
+    get_mesh()->construct_ghost_cells();
+    get_mesh()->localize_coordinates();
 
 #if PETSC_VERSION_GE(3, 21, 0)
-    if (get_unstr_mesh()->get_dimension() == 1)
+    if (get_mesh()->get_dimension() == 1)
         throw Exception("FV in 1D is not possible due to a bug in PETSc. Use PETSc 3.20 instead.");
 #endif
 }
@@ -378,7 +378,7 @@ void
 FVProblemInterface::set_up_ds()
 {
     CALL_STACK_MSG();
-    auto comm = get_unstr_mesh()->get_comm();
+    auto comm = get_mesh()->get_comm();
 
     PETSC_CHECK(PetscFVCreate(comm, &this->fvm));
     PETSC_CHECK(PetscFVSetType(this->fvm, PETSCFVUPWIND));
@@ -388,7 +388,7 @@ FVProblemInterface::set_up_ds()
         n_comps += it.second.nc;
     PETSC_CHECK(PetscFVSetNumComponents(this->fvm, n_comps));
 
-    PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, get_unstr_mesh()->get_dimension()));
+    PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, get_mesh()->get_dimension()));
 
     for (Int id = 0, c = 0; id < this->fields.size(); id++) {
         const FieldInfo & fi = this->fields.at(id);
@@ -404,7 +404,7 @@ FVProblemInterface::set_up_ds()
         c += fi.nc;
     }
 
-    auto dm = get_unstr_mesh()->get_dm();
+    auto dm = get_mesh()->get_dm();
     PETSC_CHECK(DMAddField(dm, nullptr, (PetscObject) this->fvm));
     create_ds();
 

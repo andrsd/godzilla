@@ -60,7 +60,7 @@ void
 AuxiliaryField::create()
 {
     CALL_STACK_MSG();
-    this->mesh = this->dpi->get_unstr_mesh();
+    this->mesh = this->dpi->get_mesh();
     if (!this->region.empty()) {
         if (this->mesh->has_label(this->region)) {
             this->label = this->mesh->get_label(this->region);

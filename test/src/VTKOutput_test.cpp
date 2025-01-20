@@ -57,6 +57,7 @@ TEST(VTKOutputTest, wrong_mesh_type)
     Parameters pars = VTKOutput::parameters();
     pars.set<App *>("_app") = &app;
     pars.set<Problem *>("_problem") = &prob;
+    pars.set<MeshObject *>("_mesh_obj") = &mesh;
     VTKOutput out(pars);
     prob.add_output(&out);
 
@@ -87,6 +88,7 @@ TEST(VTKOutputTest, test)
     Parameters pars = VTKOutput::parameters();
     pars.set<App *>("_app") = &app;
     pars.set<Problem *>("_problem") = &prob;
+    pars.set<MeshObject *>("_mesh_obj") = &mesh;
     VTKOutput out(pars);
 
     prob.add_output(&out);

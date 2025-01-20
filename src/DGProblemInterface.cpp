@@ -42,7 +42,7 @@ DGProblemInterface::init()
         create_fe(it.second);
     DiscreteProblemInterface::init();
 
-    auto dm = get_unstr_mesh()->get_dm();
+    auto dm = get_mesh()->get_dm();
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -362,7 +362,7 @@ DGProblemInterface::set_aux_field(Int id,
 Int
 DGProblemInterface::get_num_nodes_per_elem(Int c) const
 {
-    auto unstr_mesh = get_unstr_mesh();
+    auto unstr_mesh = get_mesh();
     auto ct = unstr_mesh->get_cell_type(c);
     auto n_nodes = UnstructuredMesh::get_num_cell_nodes(ct);
     return n_nodes;
@@ -397,7 +397,7 @@ DGProblemInterface::create()
     CALL_STACK_MSG();
     set_up_fields();
     DiscreteProblemInterface::create();
-    get_unstr_mesh()->localize_coordinates();
+    get_mesh()->localize_coordinates();
 }
 
 void
@@ -405,7 +405,7 @@ DGProblemInterface::set_up_ds()
 {
     CALL_STACK_MSG();
     create_section();
-    PETSC_CHECK(DMSetAdjacency(get_unstr_mesh()->get_dm(), 0, PETSC_TRUE, PETSC_FALSE));
+    PETSC_CHECK(DMSetAdjacency(get_mesh()->get_dm(), 0, PETSC_TRUE, PETSC_FALSE));
 }
 
 void
@@ -413,7 +413,7 @@ DGProblemInterface::create_section()
 {
     CALL_STACK_MSG();
     auto comm = get_problem()->get_comm();
-    auto unstr_mesh = get_unstr_mesh();
+    auto unstr_mesh = get_mesh();
     auto dm = unstr_mesh->get_dm();
     PETSC_CHECK(DMSetNumFields(dm, 1));
     Section section;
@@ -446,7 +446,7 @@ void
 DGProblemInterface::set_up_section_constraint_dofs(Section & section)
 {
     CALL_STACK_MSG();
-    auto unstr_mesh = get_unstr_mesh();
+    auto unstr_mesh = get_mesh();
 
     auto depth_label = unstr_mesh->get_depth_label();
     auto dim = unstr_mesh->get_dimension();
@@ -481,7 +481,7 @@ void
 DGProblemInterface::set_up_section_constraint_indicies(Section & section)
 {
     CALL_STACK_MSG();
-    auto unstr_mesh = get_unstr_mesh();
+    auto unstr_mesh = get_mesh();
 
     auto depth_label = unstr_mesh->get_depth_label();
     Int dim = unstr_mesh->get_dimension();
@@ -538,7 +538,7 @@ DGProblemInterface::create_aux_fields()
         section_aux.set_num_field_components(fi.id, fi.nc);
     }
 
-    auto unstr_mesh = get_unstr_mesh();
+    auto unstr_mesh = get_mesh();
     auto cell_range = unstr_mesh->get_cell_range();
     section_aux.set_chart(cell_range.first(), cell_range.last());
     for (Int c = cell_range.first(); c < cell_range.last(); c++) {
@@ -573,9 +573,9 @@ void
 DGProblemInterface::create_fe(FieldInfo & fi)
 {
     CALL_STACK_MSG();
-    auto comm = get_unstr_mesh()->get_comm();
+    auto comm = get_mesh()->get_comm();
     Int dim = get_problem()->get_dimension();
-    PetscBool is_simplex = get_unstr_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
+    PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe));
 }
 
