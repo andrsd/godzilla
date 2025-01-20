@@ -58,7 +58,10 @@ DM
 Problem::get_dm() const
 {
     CALL_STACK_MSG();
-    return get_mesh()->get_dm();
+    assert(this->mesh != nullptr);
+    auto m = this->mesh->get_mesh<Mesh>();
+    assert(m != nullptr);
+    return m->get_dm();
 }
 
 const Vector &
@@ -117,18 +120,13 @@ Problem::allocate_objects()
     set_solution_vector(create_global_vector());
 }
 
-Mesh *
-Problem::get_mesh() const
-{
-    CALL_STACK_MSG();
-    return this->mesh->get_mesh<Mesh>();
-}
-
 Int
 Problem::get_dimension() const
 {
     CALL_STACK_MSG();
-    return get_mesh()->get_dimension();
+    Int dim;
+    PETSC_CHECK(DMGetDimension(get_dm(), &dim));
+    return dim;
 }
 
 Real

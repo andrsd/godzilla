@@ -143,6 +143,7 @@ TEST(ExodusIIOutputTest, fe_check)
     Parameters params = ExodusIIOutput::parameters();
     params.set<App *>("_app") = &app;
     params.set<Problem *>("_problem") = &prob;
+    params.set<MeshObject *>("_mesh_obj") = &mesh;
     ExodusIIOutput out(params);
     prob.add_output(&out);
 

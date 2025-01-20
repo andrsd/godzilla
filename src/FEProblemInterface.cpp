@@ -89,7 +89,7 @@ FEProblemInterface::create()
     this->asmbl = new AssemblyData(dim);
     set_up_fields();
     DiscreteProblemInterface::create();
-    get_unstr_mesh()->localize_coordinates();
+    get_mesh()->localize_coordinates();
 }
 
 void
@@ -105,7 +105,7 @@ FEProblemInterface::init()
 
     DiscreteProblemInterface::init();
 
-    auto dm = get_unstr_mesh()->get_dm();
+    auto dm = get_mesh()->get_dm();
     DM cdm = dm;
     while (cdm) {
         set_up_auxiliary_dm(cdm);
@@ -447,9 +447,9 @@ void
 FEProblemInterface::create_fe(FieldInfo & fi)
 {
     CALL_STACK_MSG();
-    auto comm = get_unstr_mesh()->get_comm();
+    auto comm = get_mesh()->get_comm();
     Int dim = get_problem()->get_dimension();
-    PetscBool is_simplex = get_unstr_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
+    PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe));
 }
 
@@ -457,7 +457,7 @@ void
 FEProblemInterface::set_up_ds()
 {
     CALL_STACK_MSG();
-    auto dm = get_unstr_mesh()->get_dm();
+    auto dm = get_mesh()->get_dm();
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
         PETSC_CHECK(DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe));
@@ -717,7 +717,7 @@ FEProblemInterface::add_residual_block(Int field_id,
         add_weak_form_residual_block(WeakForm::F1, field_id, f1);
     }
     else {
-        auto label = get_unstr_mesh()->get_label(region);
+        auto label = get_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_residual_block(WeakForm::F0, field_id, f0, label, val, 0);
@@ -735,7 +735,7 @@ FEProblemInterface::add_boundary_residual_block(Int field_id,
     CALL_STACK_MSG();
     assert(!boundary.empty());
 
-    auto label = get_unstr_mesh()->get_label(boundary);
+    auto label = get_mesh()->get_label(boundary);
     auto ids = label.get_values();
     for (auto & val : ids) {
         add_weak_form_residual_block(WeakForm::BND_F0, field_id, f0, label, val, 0);
@@ -760,7 +760,7 @@ FEProblemInterface::add_jacobian_block(Int fid,
         add_weak_form_jacobian_block(WeakForm::G3, fid, gid, g3);
     }
     else {
-        auto label = get_unstr_mesh()->get_label(region);
+        auto label = get_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_jacobian_block(WeakForm::G0, fid, gid, g0, label, val, 0);
@@ -788,7 +788,7 @@ FEProblemInterface::add_jacobian_preconditioner_block(Int fid,
         add_weak_form_jacobian_block(WeakForm::GP3, fid, gid, g3);
     }
     else {
-        auto label = get_unstr_mesh()->get_label(region);
+        auto label = get_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
             add_weak_form_jacobian_block(WeakForm::GP0, fid, gid, g0, label, val, 0);
@@ -811,7 +811,7 @@ FEProblemInterface::add_boundary_jacobian_block(Int fid,
     CALL_STACK_MSG();
     assert(!region.empty());
 
-    auto label = get_unstr_mesh()->get_label(region);
+    auto label = get_mesh()->get_label(region);
     auto ids = label.get_values();
     for (auto & val : ids) {
         add_weak_form_jacobian_block(WeakForm::BND_G0, fid, gid, g0, label, val, 0);

@@ -55,9 +55,6 @@ public:
     const Vector & get_solution_vector() const;
     Vector & get_solution_vector();
 
-    /// Get mesh this problem is using
-    virtual Mesh * get_mesh() const;
-
     /// Get problem spatial dimension
     Int get_dimension() const;
 

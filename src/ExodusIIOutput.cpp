@@ -12,6 +12,7 @@
 #include "godzilla/Postprocessor.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Exception.h"
+#include "godzilla/MeshObject.h"
 #include "exodusIIcpp/exodusIIcpp.h"
 #include "fmt/format.h"
 #include "fmt/chrono.h"
@@ -143,8 +144,8 @@ ExodusIIOutput::create()
     CALL_STACK_MSG();
     FileOutput::create();
 
-    this->mesh = get_problem() ? dynamic_cast<UnstructuredMesh *>(get_problem()->get_mesh())
-                               : get_param<UnstructuredMesh *>("_mesh");
+    this->mesh = this->dpi ? this->dpi->get_mesh()
+                           : get_param<MeshObject *>("_mesh_obj")->get_mesh<UnstructuredMesh>();
     if (this->mesh == nullptr)
         log_error("ExodusII output can be only used with unstructured meshes.");
 

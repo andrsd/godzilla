@@ -156,7 +156,7 @@ ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
 {
     // this is based on DMSNESComputeResidual() and DMPlexTSComputeIFunctionFEM()
     CALL_STACK_MSG();
-    IndexSet all_cells = get_unstr_mesh()->get_all_cells();
+    auto all_cells = get_mesh()->get_all_cells();
 
     for (auto & region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
@@ -185,7 +185,7 @@ ImplicitFENonlinearProblem::compute_ijacobian_fem(Real time,
     // this is based on DMPlexSNESComputeJacobianFEM(), DMSNESComputeJacobianAction() and
     // DMPlexTSComputeIJacobianFEM()
     CALL_STACK_MSG();
-    IndexSet all_cells = get_unstr_mesh()->get_all_cells();
+    auto all_cells = get_mesh()->get_all_cells();
 
     Jp.zero();
 

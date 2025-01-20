@@ -193,7 +193,7 @@ ExplicitFELinearProblem::compute_rhs_function_fem(Real time, const Vector & loc_
 {
     // this is based on DMPlexTSComputeRHSFunctionFEM()
     CALL_STACK_MSG();
-    IndexSet all_cells = get_unstr_mesh()->get_all_cells();
+    auto all_cells = get_mesh()->get_all_cells();
 
     for (auto region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
