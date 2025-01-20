@@ -59,7 +59,7 @@ public:
     virtual Mesh * get_mesh() const;
 
     /// Get problem spatial dimension
-    virtual Int get_dimension() const;
+    Int get_dimension() const;
 
     /// Get simulation time. For steady-state simulations, time is always 0
     ///
