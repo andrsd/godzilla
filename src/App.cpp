@@ -283,8 +283,6 @@ App::run_input_file(const std::string & input_file_name)
             this->yml->create_objects();
         if (check_integrity())
             run_problem();
-        else
-            godzilla::internal::terminate();
     }
     else
         throw Exception(
