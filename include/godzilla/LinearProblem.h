@@ -20,6 +20,9 @@ public:
     void create() override;
     void run() override;
 
+    /// Solve the linear problem
+    void solve();
+
     /// true if solve converged, otherwise false
     bool converged();
 
@@ -80,9 +83,6 @@ protected:
 private:
     /// Called before the solve
     virtual void pre_solve();
-
-    /// Solve the linear problem
-    virtual void solve();
 
     /// Called after the solve
     virtual void post_solve();

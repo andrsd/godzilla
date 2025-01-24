@@ -39,6 +39,9 @@ public:
     /// @param mf use matrix-free for both the A and P matrices
     void set_use_matrix_free(bool mf_operator, bool mf);
 
+    /// Solve the problem
+    void solve();
+
 protected:
     /// Get underlying non-linear solver
     SNESolver get_snes() const;
@@ -75,8 +78,6 @@ protected:
 
     /// KSP monitor
     virtual void ksp_monitor(Int it, Real rnorm);
-
-    void solve();
 
     /// Set residual evaluation function
     ///
