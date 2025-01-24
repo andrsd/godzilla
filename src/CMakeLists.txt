@@ -36,12 +36,12 @@ target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC
         fmt::fmt
+        mpicpp-lite::mpicpp-lite
     PRIVATE
         PETSc::petsc
         muParser
         exodusIIcpp::exodusIIcpp
         yaml-cpp::yaml-cpp
-        mpicpp-lite::mpicpp-lite
 )
 if (GODZILLA_WITH_MPI)
     target_include_directories(${PROJECT_NAME} PRIVATE ${MPI_C_INCLUDE_DIRS})
