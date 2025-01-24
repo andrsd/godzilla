@@ -276,11 +276,13 @@ void
 NonlinearProblem::run()
 {
     CALL_STACK_MSG();
+    pre_solve();
     set_up_initial_guess();
     on_initial();
     solve();
     if (converged())
         on_final();
+    post_solve();
 }
 
 void
@@ -294,6 +296,18 @@ NonlinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
     return Preconditioner(pc);
+}
+
+void
+NonlinearProblem::pre_solve()
+{
+    CALL_STACK_MSG();
+}
+
+void
+NonlinearProblem::post_solve()
+{
+    CALL_STACK_MSG();
 }
 
 } // namespace godzilla

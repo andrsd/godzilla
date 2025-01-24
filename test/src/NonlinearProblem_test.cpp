@@ -148,6 +148,8 @@ TEST(NonlinearProblemTest, run)
 
         MOCK_METHOD(void, set_up_initial_guess, ());
         MOCK_METHOD(void, on_initial, ());
+        MOCK_METHOD(void, pre_solve, ());
+        MOCK_METHOD(void, post_solve, ());
 
         void
         compute_residual(const Vector & x, Vector & f)
@@ -189,6 +191,8 @@ TEST(NonlinearProblemTest, run)
 
     EXPECT_CALL(prob, set_up_initial_guess);
     EXPECT_CALL(prob, on_initial);
+    EXPECT_CALL(prob, pre_solve).Times(1);
+    EXPECT_CALL(prob, post_solve).Times(1);
     prob.run();
     EXPECT_TRUE(prob.compute_residual_called);
     EXPECT_FALSE(prob.compute_jacobian_called);
