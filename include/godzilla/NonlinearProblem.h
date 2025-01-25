@@ -119,6 +119,12 @@ private:
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
 
+    /// Called before the solve
+    virtual void pre_solve();
+
+    /// Called after the solve
+    virtual void post_solve();
+
     /// Nonlinear solver
     SNESolver snes;
     /// Linear solver
