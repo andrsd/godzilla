@@ -31,6 +31,7 @@ target_link_libraries(
         godzilla
         PETSc::petsc
         mpicpp-lite::mpicpp-lite
+        h5pp::h5pp
         ${CMAKE_DL_LIBS}
         gtest_main
         gmock_main

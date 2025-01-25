@@ -19,4 +19,13 @@ enum CopyMode {
     USE_POINTER = PETSC_USE_POINTER,
 };
 
+enum class FileAccess {
+    /// Open the file for reading
+    READ,
+    /// Open the file for writing
+    WRITE,
+    /// Create a new file
+    CREATE
+};
+
 } // namespace godzilla

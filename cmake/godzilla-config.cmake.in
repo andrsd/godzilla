@@ -8,6 +8,7 @@ include(CMakeFindDependencyMacro)
 
 find_dependency(fmt)
 find_dependency(mpicpp-lite)
+find_dependency(h5pp)
 
 find_library(GODZILLA_LIBRARY NAMES godzilla HINTS ${PACKAGE_PREFIX_DIR}/lib NO_DEFAULT_PATH)
 find_path(GODZILLA_INCLUDE_DIR Godzilla.h HINTS ${PACKAGE_PREFIX_DIR}/include/godzilla)
