@@ -37,6 +37,7 @@ target_link_libraries(
     PUBLIC
         fmt::fmt
         mpicpp-lite::mpicpp-lite
+        h5pp::h5pp
     PRIVATE
         PETSc::petsc
         muParser

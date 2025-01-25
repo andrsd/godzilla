@@ -34,6 +34,7 @@ endif()
 find_package(PETSc 3.20 REQUIRED)
 find_package(exodusIIcpp 2.0 REQUIRED)
 find_package(mpicpp-lite 1.3 REQUIRED)
+find_package(h5pp REQUIRED)
 
 if (GODZILLA_BUILD_TESTS)
     FetchContent_Declare(

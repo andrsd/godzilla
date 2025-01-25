@@ -49,6 +49,7 @@ jobs:
             make \
             mpich-mpicxx \
             mpicpp-lite==1.3 \
+            h5pp==1.11.* \
             petsc==${{ matrix.petsc }} \
             fmt==9.1.0 \
             yaml-cpp=0.8.0 \
