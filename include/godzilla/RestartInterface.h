@@ -7,12 +7,22 @@
 
 namespace godzilla {
 
+class RestartFile;
+
+/// Interface for objects that can be restarted
 class RestartInterface {
 public:
-    RestartInterface();
+    RestartInterface() = default;
 
-    virtual void write_restart_file() = 0;
-    virtual void read_restart_file() = 0;
+    /// Write restart file
+    ///
+    /// @param file File to write restart data to
+    virtual void write_restart_file(RestartFile & file) const = 0;
+
+    /// Read restart file
+    ///
+    /// @param file File to read restart data from
+    virtual void read_restart_file(const RestartFile & file) = 0;
 };
 
 } // namespace godzilla

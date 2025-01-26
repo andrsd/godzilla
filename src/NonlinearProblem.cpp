@@ -4,7 +4,7 @@
 #include "godzilla/NonlinearProblem.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
-#include "godzilla/Mesh.h"
+#include "godzilla/RestartFile.h"
 #include "godzilla/Output.h"
 #include "godzilla/Validation.h"
 #include "petscds.h"
@@ -308,6 +308,22 @@ void
 NonlinearProblem::post_solve()
 {
     CALL_STACK_MSG();
+}
+
+void
+NonlinearProblem::write_restart_file(RestartFile & file) const
+{
+    CALL_STACK_MSG();
+    const auto & sln = get_solution_vector();
+    file.write(get_name(), "sln", sln);
+}
+
+void
+NonlinearProblem::read_restart_file(const RestartFile & file)
+{
+    CALL_STACK_MSG();
+    auto & sln = get_solution_vector();
+    file.read(get_name(), "sln", sln);
 }
 
 } // namespace godzilla
