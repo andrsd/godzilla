@@ -11,6 +11,8 @@
 
 namespace godzilla {
 
+class Vector;
+
 /// Class for handling restart files
 class RestartFile {
 public:
@@ -128,5 +130,13 @@ RestartFile::read(const std::string & app_name, const std::string & path, T & da
 {
     this->read<T>(get_full_path(app_name, path), data);
 }
+
+// Specializations for our datatypes go below
+
+template <>
+void RestartFile::write<Vector>(const std::string & path, const Vector & data);
+
+template <>
+void RestartFile::read<Vector>(const std::string & path, Vector & data) const;
 
 } // namespace godzilla
