@@ -94,6 +94,6 @@ TEST(VTKOutputTest, test)
     prob.add_output(&out);
     prob.create();
 
-    EXPECT_EQ(out.get_file_ext(), "vtk");
+    EXPECT_EQ(out.get_file_name(), ".vtk");
     out.output_step();
 }

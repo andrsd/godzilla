@@ -13,8 +13,10 @@ class MeshPartitioningOutput : public FileOutput {
 public:
     explicit MeshPartitioningOutput(const Parameters & params);
 
-    std::string get_file_ext() const override;
     void output_step() override;
+
+private:
+    std::string get_file_ext() const override;
 
 public:
     static Parameters parameters();
