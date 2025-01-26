@@ -29,7 +29,7 @@ public:
     /// @param path Path to the data
     /// @return Data read from the file
     template <typename T>
-    T read(const std::string & path);
+    T read(const std::string & path) const;
 
     /// Get the name of the file
     ///
@@ -59,7 +59,7 @@ RestartFile::write(const std::string & path, const T & data)
 
 template <typename T>
 T
-RestartFile::read(const std::string & path)
+RestartFile::read(const std::string & path) const
 {
     try {
         return this->h5f.template readDataset<T>(path);
