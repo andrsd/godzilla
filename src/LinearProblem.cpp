@@ -4,6 +4,8 @@
 #include "godzilla/LinearProblem.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/KrylovSolver.h"
+#include "godzilla/RestartFile.h"
+#include "godzilla/RestartInterface.h"
 
 namespace godzilla {
 
@@ -47,6 +49,7 @@ LinearProblem::parameters()
 
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
+    RestartInterface(),
     pc(nullptr),
     ksp_type(get_param<std::string>("ksp_type")),
     lin_rel_tol(get_param<Real>("lin_rel_tol")),
@@ -191,6 +194,22 @@ void
 LinearProblem::post_solve()
 {
     CALL_STACK_MSG();
+}
+
+void
+LinearProblem::write_restart_file(RestartFile & file) const
+{
+    CALL_STACK_MSG();
+    const auto & sln = get_solution_vector();
+    file.write(get_name(), "sln", sln);
+}
+
+void
+LinearProblem::read_restart_file(const RestartFile & file)
+{
+    CALL_STACK_MSG();
+    auto & sln = get_solution_vector();
+    file.read(get_name(), "sln", sln);
 }
 
 } // namespace godzilla
