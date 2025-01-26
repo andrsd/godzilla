@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Problem.h"
+#include "godzilla/RestartInterface.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Matrix.h"
 #include "godzilla/Preconditioner.h"
@@ -13,13 +14,15 @@ namespace godzilla {
 
 /// Nonlinear problem
 ///
-class NonlinearProblem : public Problem {
+class NonlinearProblem : public Problem, public RestartInterface {
 public:
     explicit NonlinearProblem(const Parameters & parameters);
     ~NonlinearProblem() override;
 
     void create() override;
     void run() override;
+    void write_restart_file(RestartFile & file) const override;
+    void read_restart_file(const RestartFile & file) override;
 
     /// Get underlying KSP
     KrylovSolver get_ksp() const;

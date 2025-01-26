@@ -1,10 +1,9 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
-#include "godzilla/Factory.h"
-#include "godzilla/Mesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/NonlinearProblem.h"
-#include "godzilla/Output.h"
+#include "godzilla/RestartOutput.h"
+#include "godzilla/RestartFile.h"
 #include "petscvec.h"
 #include "petscdmplex.h"
 
@@ -266,4 +265,38 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("The 'line_search' parameter can be either 'bt', 'basic', 'l2', "
                                    "'cp', 'nleqerr' or 'shell'."));
+}
+
+TEST(NonlinearProblemTest, restart_file)
+{
+    TestApp app;
+
+    Parameters mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app") = &app;
+    mesh_pars.set<Int>("nx") = 1;
+    LineMesh mesh(mesh_pars);
+    mesh.create();
+
+    Parameters prob_pars = G1DTestNonlinearProblem::parameters();
+    prob_pars.set<App *>("_app") = &app;
+    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    G1DTestNonlinearProblem prob(prob_pars);
+
+    auto ro_pars = RestartOutput::parameters();
+    ro_pars.set<App *>("_app") = &app;
+    ro_pars.set<Problem *>("_problem") = &prob;
+    ro_pars.set<std::string>("file") = "nl";
+    RestartOutput ro(ro_pars);
+    prob.add_output(&ro);
+
+    prob.create();
+    prob.run();
+
+    {
+        RestartFile f("nl.restart.h5", FileAccess::READ);
+        auto v = Vector::create_seq(app.get_comm(), 2);
+        f.read<Vector>("sln", v);
+        EXPECT_NEAR(v(0), 2, 1e-10);
+        EXPECT_NEAR(v(1), 3, 1e-10);
+    }
 }
