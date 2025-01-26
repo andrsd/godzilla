@@ -3,6 +3,7 @@
 
 #include "godzilla/RestartFile.h"
 #include "godzilla/Enums.h"
+#include "fmt/format.h"
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -41,6 +42,12 @@ std::string
 RestartFile::file_path() const
 {
     return this->h5f.getFilePath();
+}
+
+std::string
+RestartFile::get_full_path(const std::string & app_name, const std::string & path) const
+{
+    return fmt::format("{}/{}", app_name, path);
 }
 
 } // namespace godzilla

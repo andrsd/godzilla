@@ -14,6 +14,10 @@ namespace godzilla {
 /// Class for handling restart files
 class RestartFile {
 public:
+    /// Restart file
+    ///
+    /// @param file_name Name of the file
+    /// @param faccess Access mode
     RestartFile(const std::string & file_name, FileAccess faccess);
     ~RestartFile() = default;
 
@@ -24,12 +28,28 @@ public:
     template <typename T>
     void write(const std::string & path, const T & data);
 
+    template <typename T>
+    void write(const std::string app_name, const std::string & path, const T & data);
+
+    /// Read data from the file
+    ///
+    /// @param path Path to the data
+    /// @param data Variable to store the data read from the file
+    template <typename T>
+    void read(const std::string & path, T & data) const;
+
+    template <typename T>
+    void read(const std::string & app_name, const std::string & path, T & data) const;
+
     /// Read data from the file
     ///
     /// @param path Path to the data
     /// @return Data read from the file
     template <typename T>
     T read(const std::string & path) const;
+
+    template <typename T>
+    T read(const std::string & app_name, const std::string & path) const;
 
     /// Get the name of the file
     ///
@@ -40,6 +60,13 @@ public:
     ///
     /// @return The path of the file
     [[nodiscard]] std::string file_path() const;
+
+protected:
+    /// Get the full "path" to the data inside HDF5 file
+    ///
+    /// @param app_name Name of the application
+    /// @param path Path to the data
+    std::string get_full_path(const std::string & app_name, const std::string & path) const;
 
 private:
     h5pp::File h5f;
@@ -58,6 +85,13 @@ RestartFile::write(const std::string & path, const T & data)
 }
 
 template <typename T>
+void
+RestartFile::write(const std::string app_name, const std::string & path, const T & data)
+{
+    this->write<T>(get_full_path(app_name, path), data);
+}
+
+template <typename T>
 T
 RestartFile::read(const std::string & path) const
 {
@@ -67,6 +101,32 @@ RestartFile::read(const std::string & path) const
     catch (std::exception & e) {
         throw Exception("Error reading '{}' from {}: {}", path, this->file_name(), e.what());
     }
+}
+
+template <typename T>
+void
+RestartFile::read(const std::string & path, T & data) const
+{
+    try {
+        this->h5f.template readDataset<T>(data, path);
+    }
+    catch (std::exception & e) {
+        throw Exception("Error reading '{}' from {}: {}", path, this->file_name(), e.what());
+    }
+}
+
+template <typename T>
+T
+RestartFile::read(const std::string & app_name, const std::string & path) const
+{
+    return this->read<T>(get_full_path(app_name, path));
+}
+
+template <typename T>
+void
+RestartFile::read(const std::string & app_name, const std::string & path, T & data) const
+{
+    this->read<T>(get_full_path(app_name, path), data);
 }
 
 } // namespace godzilla

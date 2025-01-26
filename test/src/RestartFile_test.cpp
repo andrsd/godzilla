@@ -27,14 +27,12 @@ RestartFile::write<TestStruct>(const std::string & path, const TestStruct & data
 }
 
 template <>
-TestStruct
-RestartFile::read<TestStruct>(const std::string & path)
+void
+RestartFile::read<TestStruct>(const std::string & path, TestStruct & data) const
 {
-    TestStruct data;
-    data.i = read<int>(path + "/integer");
-    data.f = read<float>(path + "/float");
-    data.str = read<std::string>(path + "/string");
-    return data;
+    read<int>(path + "/integer", data.i);
+    read<float>(path + "/float", data.f);
+    read<std::string>(path + "/string", data.str);
 }
 
 } // namespace godzilla
@@ -62,7 +60,8 @@ TEST(RestartFileTest, read_write)
         EXPECT_EQ(f.read<float>("group1/float"), 1876.);
         EXPECT_EQ(f.read<std::string>("group1/string"), "hello");
 
-        auto data = f.read<TestStruct>("group2/my_data");
+        TestStruct data;
+        f.read<TestStruct>("group2/my_data", data);
         EXPECT_EQ(data.i, -5);
         EXPECT_FLOAT_EQ(data.f, -3.56);
         EXPECT_EQ(data.str, "world");
