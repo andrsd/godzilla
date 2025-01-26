@@ -31,12 +31,12 @@ public:
     /// @param stepi Step number
     void set_sequence_file_base(unsigned int stepi);
 
+private:
     /// Get file extension
     ///
     /// @return File extension
     virtual std::string get_file_ext() const = 0;
 
-private:
     /// The file base of the output file
     std::string file_base;
 

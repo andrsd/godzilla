@@ -23,11 +23,12 @@ public:
     explicit VTKOutput(const Parameters & params);
     ~VTKOutput() override;
 
-    std::string get_file_ext() const override;
     void create() override;
     void output_step() override;
 
 private:
+    std::string get_file_ext() const override;
+
     /// Viewer for the output
     PetscViewer viewer;
 

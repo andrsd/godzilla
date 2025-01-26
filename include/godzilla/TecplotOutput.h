@@ -22,7 +22,6 @@ public:
     explicit TecplotOutput(const Parameters & params);
     ~TecplotOutput() override;
 
-    std::string get_file_ext() const override;
     void create() override;
     void output_step() override;
 
@@ -50,6 +49,8 @@ protected:
 
 private:
     enum Format { BINARY, ASCII } format;
+
+    std::string get_file_ext() const override;
 
     /// FE problem interface (convenience pointer)
     DiscreteProblemInterface * dpi;

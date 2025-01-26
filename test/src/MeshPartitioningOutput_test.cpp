@@ -54,7 +54,7 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
     params.set<Problem *>("_problem") = &prob;
     MeshPartitioningOutput out(params);
 
-    EXPECT_EQ(out.get_file_ext(), "h5");
+    EXPECT_EQ(out.get_file_name(), "part.h5");
 }
 
 TEST(MeshPartitioningOutputTest, output)

@@ -34,7 +34,6 @@ public:
     explicit ExodusIIOutput(const Parameters & params);
     ~ExodusIIOutput() override;
 
-    std::string get_file_ext() const override;
     void create() override;
     void output_mesh();
     void output_step() override;
@@ -72,6 +71,8 @@ protected:
     int get_num_nodes_per_element();
 
 private:
+    std::string get_file_ext() const override;
+
     bool cont;
     bool discont;
     /// Variable names to be stored

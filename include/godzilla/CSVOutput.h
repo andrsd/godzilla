@@ -16,7 +16,6 @@ public:
     ~CSVOutput() override;
 
     void create() override;
-    std::string get_file_ext() const override;
     void output_step() override;
 
     /// Get post-processor names
@@ -35,6 +34,8 @@ protected:
     void close_file();
 
 private:
+    std::string get_file_ext() const override;
+
     /// Output file
     std::FILE * f;
 
