@@ -91,6 +91,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblemE"><code class="docutils literal notranslate"><span class="pre">LinearProblem</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem6createEv"><code class="docutils literal notranslate"><span class="pre">LinearProblem::create()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem3runEv"><code class="docutils literal notranslate"><span class="pre">LinearProblem::run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla13LinearProblem18write_restart_fileER11RestartFile"><code class="docutils literal notranslate"><span class="pre">LinearProblem::write_restart_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem17read_restart_fileERK11RestartFile"><code class="docutils literal notranslate"><span class="pre">LinearProblem::read_restart_file()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem5solveEv"><code class="docutils literal notranslate"><span class="pre">LinearProblem::solve()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla13LinearProblem9convergedEv"><code class="docutils literal notranslate"><span class="pre">LinearProblem::converged()</span></code></a></li>
 </ul>
@@ -142,7 +144,7 @@
 <h1>LinearProblem<a class="headerlink" href="#linearproblem" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblemE">
-<span id="_CPPv3N8godzilla13LinearProblemE"></span><span id="_CPPv2N8godzilla13LinearProblemE"></span><span id="godzilla::LinearProblem"></span><span class="target" id="classgodzilla_1_1_linear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="problem.html#_CPPv4N8godzilla7ProblemE" title="godzilla::Problem"><span class="n"><span class="pre">Problem</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblemE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla13LinearProblemE"></span><span id="_CPPv2N8godzilla13LinearProblemE"></span><span id="godzilla::LinearProblem"></span><span class="target" id="classgodzilla_1_1_linear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="problem.html#_CPPv4N8godzilla7ProblemE" title="godzilla::Problem"><span class="n"><span class="pre">Problem</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">RestartInterface</span></span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblemE" title="Link to this definition"></a><br /></dt>
 <dd><p>Linear problem. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
@@ -156,6 +158,28 @@
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblem3runEv">
 <span id="_CPPv3N8godzilla13LinearProblem3runEv"></span><span id="_CPPv2N8godzilla13LinearProblem3runEv"></span><span id="godzilla::LinearProblem::run"></span><span class="target" id="classgodzilla_1_1_linear_problem_1ad4a11778893ba6aa7995157a2df682b3"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem3runEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Run the problem. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla13LinearProblem18write_restart_fileER11RestartFile">
+<span id="_CPPv3NK8godzilla13LinearProblem18write_restart_fileER11RestartFile"></span><span id="_CPPv2NK8godzilla13LinearProblem18write_restart_fileER11RestartFile"></span><span id="godzilla::LinearProblem::write_restart_file__RestartFileRC"></span><span class="target" id="classgodzilla_1_1_linear_problem_1a45dc66e02f2dcfc180a13ac50f7e3e87"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_restart_file</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">RestartFile</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla13LinearProblem18write_restart_fileER11RestartFile" title="Link to this definition"></a><br /></dt>
+<dd><p>Write restart file. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – File to write restart data to </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla13LinearProblem17read_restart_fileERK11RestartFile">
+<span id="_CPPv3N8godzilla13LinearProblem17read_restart_fileERK11RestartFile"></span><span id="_CPPv2N8godzilla13LinearProblem17read_restart_fileERK11RestartFile"></span><span id="godzilla::LinearProblem::read_restart_file__RestartFileCR"></span><span class="target" id="classgodzilla_1_1_linear_problem_1a5920e64d6bd8d1623fc6bf47013bec11"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_restart_file</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">RestartFile</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla13LinearProblem17read_restart_fileERK11RestartFile" title="Link to this definition"></a><br /></dt>
+<dd><p>Read restart file. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – File to read restart data from </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">

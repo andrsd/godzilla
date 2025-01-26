@@ -96,6 +96,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblemE"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem6createEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::create()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem3runEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem18write_restart_fileER11RestartFile"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::write_restart_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem17read_restart_fileERK11RestartFile"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::read_restart_file()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem7get_kspEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::get_ksp()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::set_ksp_operators()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem12get_jacobianEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::get_jacobian()</span></code></a></li>
@@ -146,7 +148,7 @@
 <h1>NonlinearProblem<a class="headerlink" href="#nonlinearproblem" title="Link to this heading"></a></h1>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblemE">
-<span id="_CPPv3N8godzilla16NonlinearProblemE"></span><span id="_CPPv2N8godzilla16NonlinearProblemE"></span><span id="godzilla::NonlinearProblem"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NonlinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="problem.html#_CPPv4N8godzilla7ProblemE" title="godzilla::Problem"><span class="n"><span class="pre">Problem</span></span></a><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblemE" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3N8godzilla16NonlinearProblemE"></span><span id="_CPPv2N8godzilla16NonlinearProblemE"></span><span id="godzilla::NonlinearProblem"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NonlinearProblem</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="problem.html#_CPPv4N8godzilla7ProblemE" title="godzilla::Problem"><span class="n"><span class="pre">Problem</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">RestartInterface</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblemE" title="Link to this definition"></a><br /></dt>
 <dd><p>Nonlinear problem. </p>
 <p>Subclassed by godzilla::ExplicitDGLinearProblem, <a class="reference internal" href="explicit-fv-linear-problem.html#classgodzilla_1_1_explicit_f_v_linear_problem"><span class="std std-ref">godzilla::ExplicitFVLinearProblem</span></a>, <a class="reference internal" href="fe-nonlinear-problem.html#classgodzilla_1_1_f_e_nonlinear_problem"><span class="std std-ref">godzilla::FENonlinearProblem</span></a></p>
 <div class="breathe-sectiondef docutils container">
@@ -161,6 +163,28 @@
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem3runEv">
 <span id="_CPPv3N8godzilla16NonlinearProblem3runEv"></span><span id="_CPPv2N8godzilla16NonlinearProblem3runEv"></span><span id="godzilla::NonlinearProblem::run"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1aaba3f486ea63dbd7087aa6e72c05f2e0"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem3runEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Run the problem. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16NonlinearProblem18write_restart_fileER11RestartFile">
+<span id="_CPPv3NK8godzilla16NonlinearProblem18write_restart_fileER11RestartFile"></span><span id="_CPPv2NK8godzilla16NonlinearProblem18write_restart_fileER11RestartFile"></span><span id="godzilla::NonlinearProblem::write_restart_file__RestartFileRC"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a79789eb7e69f8545d34724fada48a540"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_restart_file</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">RestartFile</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16NonlinearProblem18write_restart_fileER11RestartFile" title="Link to this definition"></a><br /></dt>
+<dd><p>Write restart file. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – File to write restart data to </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16NonlinearProblem17read_restart_fileERK11RestartFile">
+<span id="_CPPv3N8godzilla16NonlinearProblem17read_restart_fileERK11RestartFile"></span><span id="_CPPv2N8godzilla16NonlinearProblem17read_restart_fileERK11RestartFile"></span><span id="godzilla::NonlinearProblem::read_restart_file__RestartFileCR"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a1c17dbf62c054b69b079c7c1f324a8b1"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_restart_file</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">RestartFile</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">file</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">override</span></span><a class="headerlink" href="#_CPPv4N8godzilla16NonlinearProblem17read_restart_fileERK11RestartFile" title="Link to this definition"></a><br /></dt>
+<dd><p>Read restart file. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> – File to read restart data from </p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
