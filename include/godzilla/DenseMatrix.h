@@ -1079,6 +1079,24 @@ public:
                             this->rows);
     }
 
+    void
+    set_col(Int col, const DynDenseVector<T> & vals)
+    {
+        if (vals.size() == this->rows) {
+#ifdef NDEBUG
+            for (Int idx = col, i = 0; i < this->rows; i++, idx += this->cols)
+                data(idx) = vals(i);
+#else
+            for (Int i = 0; i < this->rows; i++)
+                set(i, col) = vals(i);
+#endif
+        }
+        else
+            throw Exception("Number of values ({}) must match the number of rows ({})",
+                            vals.size(),
+                            this->rows);
+    }
+
     /// Set all matrix entries to zero, i.e. mat[i,j] = 0.
     void
     zero()
