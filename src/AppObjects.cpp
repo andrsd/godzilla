@@ -23,6 +23,7 @@
 #include "godzilla/PiecewiseLinear.h"
 #include "godzilla/RectangleMesh.h"
 #include "godzilla/RZSymmetry.h"
+#include "godzilla/RestartOutput.h"
 #include "godzilla/TecplotOutput.h"
 #include "godzilla/VTKOutput.h"
 
@@ -52,6 +53,7 @@ App::registerObjects(Registry & r)
     REGISTER_OBJECT(r, PiecewiseConstant);
     REGISTER_OBJECT(r, PiecewiseLinear);
     REGISTER_OBJECT(r, RectangleMesh);
+    REGISTER_OBJECT(r, RestartOutput);
     REGISTER_OBJECT(r, RZSymmetry);
     REGISTER_OBJECT(r, TecplotOutput);
     REGISTER_OBJECT(r, VTKOutput);
