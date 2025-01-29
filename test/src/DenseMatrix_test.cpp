@@ -1103,9 +1103,21 @@ TEST(DynDenseMatrixTest, set_col)
     EXPECT_EQ(m(2, 1), 4.);
 }
 
-TEST(DynDenseMatrixTest, set_col_dense_vec)
+TEST(DynDenseMatrixTest, set_col_std_vec)
 {
     std::vector<Real> col0 = { 2, 1, 7 };
+
+    DynDenseMatrix<Real> m(3, 3);
+    m.set_col(1, col0);
+    EXPECT_EQ(m(0, 1), 2.);
+    EXPECT_EQ(m(1, 1), 1.);
+    EXPECT_EQ(m(2, 1), 7.);
+}
+
+TEST(DynDenseMatrixTest, set_col_dense_vec)
+{
+    DynDenseVector<Real> col0(3);
+    col0.set_values({ 2, 1, 7 });
 
     DynDenseMatrix<Real> m(3, 3);
     m.set_col(1, col0);
