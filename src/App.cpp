@@ -153,6 +153,8 @@ App::create_command_line_options()
                                 "Input file to execute",
                                 cxxopts::value<std::string>(),
                                 "");
+    this->cmdln_opts
+        .add_option("", "", "restart-from", "Restart file name", cxxopts::value<std::string>(), "");
     this->cmdln_opts.add_option("", "v", "version", "Show the version", cxxopts::value<bool>(), "");
     this->cmdln_opts
         .add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
@@ -206,6 +208,13 @@ App::get_input_file_name() const
         return empty_file_name;
 }
 
+const std::string &
+App::get_restart_file_name() const
+{
+    CALL_STACK_MSG();
+    return this->restart_file_name;
+}
+
 const mpi::Communicator &
 App::get_comm() const
 {
@@ -247,6 +256,9 @@ App::process_command_line(const cxxopts::ParseResult & result)
 
         if (result.count("verbose"))
             set_verbosity_level(result["verbose"].as<unsigned int>());
+
+        if (result.count("restart-from"))
+            this->restart_file_name = result["restart-from"].as<std::string>();
 
         if (result.count("input-file")) {
             auto input_file_name = result["input-file"].as<std::string>();
