@@ -136,6 +136,11 @@ public:
     /// @return The input file name
     const std::string & get_input_file_name() const;
 
+    /// Get restart file name
+    ///
+    /// @return The restart file name
+    const std::string & get_restart_file_name() const;
+
     /// Get MPI communicator
     ///
     /// @return MPI communicator
@@ -210,6 +215,9 @@ private:
 
     /// Verbosity level
     unsigned int verbosity_level;
+
+    /// Restart file name
+    std::string restart_file_name;
 
     /// YML file with application objects
     InputFile * yml;
