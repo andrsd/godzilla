@@ -37,6 +37,7 @@ void
 RestartOutput::output_step()
 {
     CALL_STACK_MSG();
+    TIMED_EVENT(9, "RestartOutput", "Writing restart file: {}", get_file_name());
     RestartFile file(get_file_name(), FileAccess::WRITE);
     this->ri->write_restart_file(file);
 }
