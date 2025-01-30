@@ -579,6 +579,78 @@ private:
 
     /// Array that stores the matrix entries
     T values[ROWS * COLS];
+
+public:
+    static DenseVector<T, ROWS>
+    solve_lower(const DenseMatrix<T, ROWS> & L, const DenseVector<T, ROWS> & b)
+    {
+        DenseVector<T, ROWS> x;
+        for (Int i = 0; i < ROWS; i++) {
+            x(i) = b(i);
+            for (Int j = 0; j < i; j++)
+                x(i) -= L(i, j) * x(j);
+            x(i) /= L(i, i);
+        }
+        return x;
+    }
+
+    static DenseVector<T, ROWS>
+    solve_upper(const DenseMatrix<T, ROWS> & U, const DenseVector<T, ROWS> & b)
+    {
+        DenseVector<T, ROWS> x;
+        for (Int i = ROWS - 1; i >= 0; i--) {
+            x(i) = b(i);
+            for (Int j = i + 1; j < ROWS; j++)
+                x(i) -= U(i, j) * x(j);
+            x(i) /= U(i, i);
+        }
+        return x;
+    }
+
+    static std::tuple<DenseMatrix<T, ROWS, ROWS>, DenseMatrix<T, ROWS, ROWS>>
+    lu_decomposition(const DenseMatrix<T, ROWS, ROWS> & A)
+    {
+        DenseMatrix<T, ROWS, ROWS> L, U;
+        for (Int i = 0; i < ROWS; ++i) {
+            for (Int j = 0; j < ROWS; ++j) {
+                if (i <= j) {
+                    U(i, j) = A(i, j);
+                    for (Int k = 0; k < i; ++k)
+                        U(i, j) -= L(i, k) * U(k, j);
+
+                    if (i == j)
+                        L(i, j) = 1;
+                    else
+                        L(i, j) = 0;
+                }
+                else {
+                    L(i, j) = A(i, j);
+                    for (Int k = 0; k < j; ++k)
+                        L(i, j) -= L(i, k) * U(k, j);
+
+                    L(i, j) /= U(j, j);
+                    U(i, j) = 0;
+                }
+            }
+        }
+        return { L, U };
+    }
+
+    static DenseMatrix<T, ROWS>
+    inverse(const DenseMatrix<T, ROWS> & mat)
+    {
+        DenseMatrix<T, ROWS> inv;
+        auto [L, U] = lu_decomposition(mat);
+        DenseVector<T, ROWS> e;
+        for (int i = 0; i < ROWS; ++i) {
+            e.zero();
+            e(i) = 1.;
+            auto y = solve_lower(L, e);
+            auto x = solve_upper(U, y);
+            inv.set_col(i, x);
+        }
+        return inv;
+    }
 };
 
 // ---
@@ -614,140 +686,6 @@ determinant(const DenseMatrix<T, 3, 3> & mat)
            values[1] * values[5] * values[6] -
            (values[6] * values[4] * values[2] + values[1] * values[3] * values[8] +
             values[5] * values[7] * values[0]);
-}
-
-// Inversion
-
-/// Compute LU decomposition of a matrix
-///
-/// @param A Matrix to decompose
-/// @return Tuple of matrices L and U
-template <typename T, Int N>
-inline std::tuple<DenseMatrix<T, N, N>, DenseMatrix<T, N, N>>
-lu_decomposition(const DenseMatrix<T, N, N> & A)
-{
-    CALL_STACK_MSG();
-    DenseMatrix<T, N, N> L, U;
-    for (Int i = 0; i < N; ++i) {
-        for (Int j = 0; j < N; ++j) {
-            if (i <= j) {
-                U(i, j) = A(i, j);
-                for (Int k = 0; k < i; ++k)
-                    U(i, j) -= L(i, k) * U(k, j);
-
-                if (i == j)
-                    L(i, j) = 1;
-                else
-                    L(i, j) = 0;
-            }
-            else {
-                L(i, j) = A(i, j);
-                for (Int k = 0; k < j; ++k)
-                    L(i, j) -= L(i, k) * U(k, j);
-
-                L(i, j) /= U(j, j);
-                U(i, j) = 0;
-            }
-        }
-    }
-    return { L, U };
-}
-
-template <Int N>
-DenseVector<Real, N>
-solve_lower(const DenseMatrix<Real, N> & L, const DenseVector<Real, N> & b)
-{
-    DenseVector<Real, N> x;
-    for (Int i = 0; i < N; i++) {
-        x(i) = b(i);
-        for (Int j = 0; j < i; j++)
-            x(i) -= L(i, j) * x(j);
-        x(i) /= L(i, i);
-    }
-    return x;
-}
-
-template <Int N>
-DenseVector<Real, N>
-solve_upper(const DenseMatrix<Real, N> & U, const DenseVector<Real, N> & b)
-{
-    DenseVector<Real, N> x;
-    for (Int i = N - 1; i >= 0; i--) {
-        x(i) = b(i);
-        for (Int j = i + 1; j < N; j++)
-            x(i) -= U(i, j) * x(j);
-        x(i) /= U(i, i);
-    }
-    return x;
-}
-
-/// Compute inverse of this matrix
-///
-/// @param mat Matrix to invert
-/// @return Inverted matrix
-template <Int N>
-inline DenseMatrix<Real, N>
-inverse(const DenseMatrix<Real, N> & mat)
-{
-    DenseMatrix<Real, N> inv;
-    auto [L, U] = lu_decomposition(mat);
-    DenseVector<Real, N> e;
-    for (int i = 0; i < N; ++i) {
-        e.zero();
-        e(i) = 1.;
-        auto y = solve_lower(L, e);
-        auto x = solve_upper(U, y);
-        inv.set_col(i, x);
-    }
-    return inv;
-}
-
-template <>
-inline DenseMatrix<Real, 1>
-inverse(const DenseMatrix<Real, 1> & mat)
-{
-    DenseMatrix<Real, 1> inv;
-    inv(0, 0) = 1. / mat.data()[0];
-    return inv;
-}
-
-template <>
-inline DenseMatrix<Real, 2>
-inverse(const DenseMatrix<Real, 2> & mat)
-{
-    Real det = determinant(mat);
-    if (det == 0.)
-        throw Exception("Inverting of a matrix failed: matrix is singular.");
-
-    DenseMatrix<Real, 2> inv;
-    inv.data()[0] = mat.data()[3];
-    inv.data()[1] = -mat.data()[1];
-    inv.data()[2] = -mat.data()[2];
-    inv.data()[3] = mat.data()[0];
-    inv.scale(1. / det);
-    return inv;
-}
-
-template <>
-inline DenseMatrix<Real, 3>
-inverse(const DenseMatrix<Real, 3> & mat)
-{
-    Real det = determinant(mat);
-    if (det == 0.)
-        throw Exception("Inverting of a matrix failed: matrix is singular.");
-
-    DenseMatrix<Real, 3> inv;
-    inv(0, 0) = (mat.data()[4] * mat.data()[8] - mat.data()[5] * mat.data()[7]);
-    inv(1, 0) = -(mat.data()[3] * mat.data()[8] - mat.data()[5] * mat.data()[6]);
-    inv(2, 0) = (mat.data()[3] * mat.data()[7] - mat.data()[4] * mat.data()[6]);
-    inv(0, 1) = -(mat.data()[1] * mat.data()[8] - mat.data()[2] * mat.data()[7]);
-    inv(1, 1) = (mat.data()[0] * mat.data()[8] - mat.data()[2] * mat.data()[6]);
-    inv(2, 1) = -(mat.data()[0] * mat.data()[7] - mat.data()[1] * mat.data()[6]);
-    inv(0, 2) = (mat.data()[1] * mat.data()[5] - mat.data()[2] * mat.data()[4]);
-    inv(1, 2) = -(mat.data()[0] * mat.data()[5] - mat.data()[2] * mat.data()[3]);
-    inv(2, 2) = (mat.data()[0] * mat.data()[4] - mat.data()[1] * mat.data()[3]);
-    inv.scale(1. / det);
-    return inv;
 }
 
 /// Transpose DenseMatrix<T, M, N>
@@ -1515,6 +1453,84 @@ private:
     Int cols;
     /// Array that stores the matrix entries
     T * values;
+
+public:
+    static DenseVector<T, -1>
+    solve_lower(const DenseMatrix<T, -1> & L, const DenseVector<T, -1> & b)
+    {
+        auto n = b.get_num_rows();
+        DenseVector<T, -1> x(n);
+        for (Int i = 0; i < n; i++) {
+            x(i) = b(i);
+            for (Int j = 0; j < i; j++)
+                x(i) -= L(i, j) * x(j);
+            x(i) /= L(i, i);
+        }
+        return x;
+    }
+
+    static DenseVector<T, -1>
+    solve_upper(const DenseMatrix<T, -1> & U, const DenseVector<T, -1> & b)
+    {
+        auto n = b.get_num_rows();
+        DenseVector<T, -1> x(n);
+        for (Int i = n - 1; i >= 0; i--) {
+            x(i) = b(i);
+            for (Int j = i + 1; j < n; j++)
+                x(i) -= U(i, j) * x(j);
+            x(i) /= U(i, i);
+        }
+        return x;
+    }
+
+    static std::tuple<DenseMatrix<T, -1, -1>, DenseMatrix<T, -1, -1>>
+    lu_decomposition(const DynDenseMatrix<T> & A)
+    {
+        auto n = A.get_num_rows();
+        DynDenseMatrix<T> L(n, n), U(n, n);
+        for (Int i = 0; i < n; ++i) {
+            for (Int j = 0; j < n; ++j) {
+                if (i <= j) {
+                    U(i, j) = A(i, j);
+                    for (Int k = 0; k < i; ++k)
+                        U(i, j) -= L(i, k) * U(k, j);
+
+                    if (i == j)
+                        L(i, j) = 1;
+                    else
+                        L(i, j) = 0;
+                }
+                else {
+                    L(i, j) = A(i, j);
+                    for (Int k = 0; k < j; ++k)
+                        L(i, j) -= L(i, k) * U(k, j);
+
+                    L(i, j) /= U(j, j);
+                    U(i, j) = 0;
+                }
+            }
+        }
+        return { L, U };
+    }
+
+    static DenseMatrix<T, -1>
+    inverse(const DenseMatrix<T, -1> & mat)
+    {
+        if (mat.get_num_rows() != mat.get_num_cols())
+            throw Exception("Matrix must be square to be inverted");
+        auto n = mat.get_num_rows();
+        DynDenseMatrix<T> inv(n, n);
+        auto [L, U] = lu_decomposition(mat);
+        DenseVector<T, -1> e(n);
+        for (Int i = 0; i < n; ++i) {
+            e.zero();
+            e(i) = 1.;
+            auto y = solve_lower(L, e);
+            auto x = solve_upper(U, y);
+            inv.set_col(i, x);
+        }
+        return inv;
+    }
 };
 
 /// Compute transpose
@@ -1552,6 +1568,76 @@ operator<<(std::ostream & os, const DynDenseMatrix<T> & obj)
         os << ")" << std::endl;
     }
     return os;
+}
+
+/// Compute LU decomposition of a matrix
+///
+/// @param A Matrix to decompose
+/// @return Tuple of matrices L and U
+template <Int N>
+inline std::tuple<DenseMatrix<Real, N, N>, DenseMatrix<Real, N, N>>
+lu_decomposition(const DenseMatrix<Real, N> & A)
+{
+    return DenseMatrix<Real, N>::lu_decomposition(A);
+}
+
+/// Compute inverse of this matrix
+///
+/// @param mat Matrix to invert
+/// @return Inverted matrix
+template <Int N>
+inline DenseMatrix<Real, N>
+inverse(const DenseMatrix<Real, N> & mat)
+{
+    return DenseMatrix<Real, N>::inverse(mat);
+}
+
+template <>
+inline DenseMatrix<Real, 1>
+inverse(const DenseMatrix<Real, 1> & mat)
+{
+    DenseMatrix<Real, 1> inv;
+    inv(0, 0) = 1. / mat.data()[0];
+    return inv;
+}
+
+template <>
+inline DenseMatrix<Real, 2>
+inverse(const DenseMatrix<Real, 2> & mat)
+{
+    Real det = determinant(mat);
+    if (det == 0.)
+        throw Exception("Inverting of a matrix failed: matrix is singular.");
+
+    DenseMatrix<Real, 2> inv;
+    inv.data()[0] = mat.data()[3];
+    inv.data()[1] = -mat.data()[1];
+    inv.data()[2] = -mat.data()[2];
+    inv.data()[3] = mat.data()[0];
+    inv.scale(1. / det);
+    return inv;
+}
+
+template <>
+inline DenseMatrix<Real, 3>
+inverse(const DenseMatrix<Real, 3> & mat)
+{
+    Real det = determinant(mat);
+    if (det == 0.)
+        throw Exception("Inverting of a matrix failed: matrix is singular.");
+
+    DenseMatrix<Real, 3> inv;
+    inv(0, 0) = (mat.data()[4] * mat.data()[8] - mat.data()[5] * mat.data()[7]);
+    inv(1, 0) = -(mat.data()[3] * mat.data()[8] - mat.data()[5] * mat.data()[6]);
+    inv(2, 0) = (mat.data()[3] * mat.data()[7] - mat.data()[4] * mat.data()[6]);
+    inv(0, 1) = -(mat.data()[1] * mat.data()[8] - mat.data()[2] * mat.data()[7]);
+    inv(1, 1) = (mat.data()[0] * mat.data()[8] - mat.data()[2] * mat.data()[6]);
+    inv(2, 1) = -(mat.data()[0] * mat.data()[7] - mat.data()[1] * mat.data()[6]);
+    inv(0, 2) = (mat.data()[1] * mat.data()[5] - mat.data()[2] * mat.data()[4]);
+    inv(1, 2) = -(mat.data()[0] * mat.data()[5] - mat.data()[2] * mat.data()[3]);
+    inv(2, 2) = (mat.data()[0] * mat.data()[4] - mat.data()[1] * mat.data()[3]);
+    inv.scale(1. / det);
+    return inv;
 }
 
 } // namespace godzilla

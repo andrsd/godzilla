@@ -1174,3 +1174,50 @@ TEST(DynDenseMatrixTest, assign_into_empty)
     EXPECT_DOUBLE_EQ(b(1, 1), 5.);
     EXPECT_DOUBLE_EQ(b(1, 2), 4.);
 }
+
+TEST(DynDenseMatrixTest, lu_decomp)
+{
+    DynDenseMatrix<Real> A(3, 3);
+    A.set_row(0, { 4, 3, 0 });
+    A.set_row(1, { 3, 4, -1 });
+    A.set_row(2, { 0, -1, 4 });
+
+    auto [L, U] = lu_decomposition(A);
+    auto B = L * U;
+    EXPECT_EQ(B(0, 0), 4.);
+    EXPECT_EQ(B(0, 1), 3.);
+    EXPECT_EQ(B(0, 2), 0.);
+    EXPECT_EQ(B(1, 0), 3.);
+    EXPECT_EQ(B(1, 1), 4.);
+    EXPECT_EQ(B(1, 2), -1.);
+    EXPECT_EQ(B(2, 0), 0.);
+    EXPECT_EQ(B(2, 1), -1.);
+    EXPECT_EQ(B(2, 2), 4.);
+}
+
+TEST(DynDenseMatrixTest, inv)
+{
+    DynDenseMatrix<Real> m(4, 4);
+    m.set_row(0, { 5, 2, 1, 1 });
+    m.set_row(1, { 1, 6, 2, 1 });
+    m.set_row(2, { 3, 1, 7, 1 });
+    m.set_row(3, { 1, 1, 1, 4 });
+    auto m_inv = inverse(m);
+    auto I = m * m_inv;
+    EXPECT_NEAR(I(0, 0), 1., 1e-8);
+    EXPECT_NEAR(I(0, 1), 0., 1e-8);
+    EXPECT_NEAR(I(0, 2), 0., 1e-8);
+    EXPECT_NEAR(I(0, 3), 0., 1e-8);
+    EXPECT_NEAR(I(1, 0), 0., 1e-8);
+    EXPECT_NEAR(I(1, 1), 1., 1e-8);
+    EXPECT_NEAR(I(1, 2), 0., 1e-8);
+    EXPECT_NEAR(I(1, 3), 0., 1e-8);
+    EXPECT_NEAR(I(2, 0), 0., 1e-8);
+    EXPECT_NEAR(I(2, 1), 0., 1e-8);
+    EXPECT_NEAR(I(2, 2), 1., 1e-8);
+    EXPECT_NEAR(I(2, 3), 0., 1e-8);
+    EXPECT_NEAR(I(3, 0), 0., 1e-8);
+    EXPECT_NEAR(I(3, 1), 0., 1e-8);
+    EXPECT_NEAR(I(3, 2), 0., 1e-8);
+    EXPECT_NEAR(I(3, 3), 1., 1e-8);
+}
