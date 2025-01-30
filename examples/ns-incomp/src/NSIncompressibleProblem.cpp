@@ -1,10 +1,10 @@
 #include "godzilla/Godzilla.h"
 #include "godzilla/FunctionInterface.h"
 #include "NSIncompressibleProblem.h"
+#include "godzilla/PCFieldSplit.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/CallStack.h"
-#include "godzilla/PCFieldSplit.h"
 #include "godzilla/PCJacobi.h"
 #include "godzilla/PCFactor.h"
 #include "godzilla/PCComposite.h"
@@ -334,14 +334,14 @@ NSIncompressibleProblem::set_up_field_null_space(DM dm)
     // PETSC_CHECK(MatNullSpaceDestroy(&nsp));
 }
 
-Preconditioner
+void
 NSIncompressibleProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
 
-    PCFieldSplit fsplit(pc);
-    fsplit.set_type(PCFieldSplit::SCHUR);
-    fsplit.set_schur_fact_type(PCFieldSplit::SCHUR_FACT_FULL);
+    this->fsplit = PCFieldSplit(pc);
+    this->fsplit.set_type(PCFieldSplit::SCHUR);
+    this->fsplit.set_schur_fact_type(PCFieldSplit::SCHUR_FACT_FULL);
 
     auto fdecomp = create_field_decomposition();
     // attach null space to the pressure field
@@ -356,10 +356,10 @@ NSIncompressibleProblem::create_preconditioner(PC pc)
     fdecomp.destroy();
 
     auto J = get_jacobian();
-    fsplit.set_operators(J, J);
-    fsplit.set_up();
+    this->fsplit.set_operators(J, J);
+    this->fsplit.set_up();
 
-    auto sub_ksp = fsplit.get_sub_ksp();
+    auto sub_ksp = this->fsplit.get_sub_ksp();
 
     auto precond_vel = sub_ksp[velocity_id].set_pc_type<PCFactor>();
     precond_vel.set_type(PCFactor::LU);
@@ -367,6 +367,4 @@ NSIncompressibleProblem::create_preconditioner(PC pc)
     auto & ksp_press = sub_ksp[pressure_id];
     ksp_press.set_tolerances(1.0e-10, PETSC_DEFAULT, PETSC_DEFAULT, PETSC_DEFAULT);
     auto precond_press = ksp_press.set_pc_type<PCJacobi>();
-
-    return fsplit;
 }

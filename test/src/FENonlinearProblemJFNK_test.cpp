@@ -22,9 +22,11 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
     void set_up_solve_type() override;
-    Preconditioner create_preconditioner(PC pc) override;
+    void create_preconditioner(PC pc) override;
 
     const Int iu;
+
+    PCFactor p;
 };
 
 class F0 : public ResidualFunc {
@@ -103,12 +105,11 @@ GTestFENonlinearProblemJFNK::set_up_solve_type()
     set_use_matrix_free(true, false);
 }
 
-Preconditioner
+void
 GTestFENonlinearProblemJFNK::create_preconditioner(PC pc)
 {
-    PCFactor p(pc);
-    p.set_type(PCFactor::ILU);
-    return p;
+    this->p = PCFactor(pc);
+    this->p.set_type(PCFactor::ILU);
 }
 
 } // namespace

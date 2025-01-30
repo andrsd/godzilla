@@ -117,7 +117,7 @@ private:
     virtual void set_up_solver_parameters();
 
     /// Method for creating a preconditioner
-    virtual Preconditioner create_preconditioner(PC pc);
+    virtual void create_preconditioner(PC pc);
 
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
@@ -137,7 +137,7 @@ private:
     /// Jacobian matrix
     Matrix J;
     /// Preconditioner
-    Preconditioner pc;
+    Preconditioner pcond;
     /// The type of line search to be used
     std::string line_search_type;
     /// Relative convergence tolerance for the non-linear solver

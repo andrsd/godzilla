@@ -50,7 +50,6 @@ LinearProblem::parameters()
 LinearProblem::LinearProblem(const Parameters & parameters) :
     Problem(parameters),
     RestartInterface(),
-    pc(nullptr),
     ksp_type(get_param<std::string>("ksp_type")),
     lin_rel_tol(get_param<Real>("lin_rel_tol")),
     lin_abs_tol(get_param<Real>("lin_abs_tol")),
@@ -82,7 +81,7 @@ LinearProblem::create()
     init();
     allocate_objects();
     set_up_matrix_properties();
-    this->pc = create_preconditioner(this->ks.get_pc());
+    create_preconditioner(this->ks.get_pc());
     set_up_solver_parameters();
     set_up_monitors();
     set_up_callbacks();
@@ -177,11 +176,11 @@ LinearProblem::set_up_matrix_properties()
     CALL_STACK_MSG();
 }
 
-Preconditioner
+void
 LinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
-    return Preconditioner(pc);
+    this->pcond = Preconditioner(pc);
 }
 
 void
