@@ -84,7 +84,7 @@ NonlinearProblem::create()
     init();
     allocate_objects();
     set_up_matrix_properties();
-    this->pc = create_preconditioner(this->ksp.get_pc());
+    create_preconditioner(this->ksp.get_pc());
     set_up_solver_parameters();
     set_up_line_search();
     set_up_monitors();
@@ -291,11 +291,11 @@ NonlinearProblem::set_up_matrix_properties()
     CALL_STACK_MSG();
 }
 
-Preconditioner
+void
 NonlinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
-    return Preconditioner(pc);
+    this->pcond = Preconditioner(pc);
 }
 
 void

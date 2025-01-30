@@ -54,7 +54,7 @@ protected:
     virtual void set_up_matrix_properties();
 
     /// Method for creating a preconditioner
-    virtual Preconditioner create_preconditioner(PC pc);
+    virtual void create_preconditioner(PC pc);
 
     /// Monitor callback
     virtual void monitor(Int it, Real rnorm);
@@ -93,7 +93,7 @@ private:
     /// KSP object
     KrylovSolver ks;
     /// Preconditioner
-    Preconditioner pc;
+    Preconditioner pcond;
     /// KSP type
     std::string ksp_type;
     /// Relative convergence tolerance for the linear solver
