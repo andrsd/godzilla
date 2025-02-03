@@ -22,6 +22,16 @@ public:
 
     TimeStepAdapt();
 
+    /// Get TS object
+    ///
+    /// @return PETSc TS object
+    TS get_ts() const;
+
+    /// Get TSAdapt
+    ///
+    /// @return PETSc TSAdapt object
+    TSAdapt get_ts_adapt() const;
+
     /// Add a candidate scheme for the adaptive controller to select from
     ///
     /// @param name Name of the candidate scheme to add
