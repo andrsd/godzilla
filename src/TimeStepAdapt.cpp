@@ -12,6 +12,20 @@ TimeStepAdapt::TimeStepAdapt() : tsadapt(nullptr) {}
 
 TimeStepAdapt::TimeStepAdapt(TS ts, TSAdapt tsadapt) : ts(ts), tsadapt(tsadapt) {}
 
+TS
+TimeStepAdapt::get_ts() const
+{
+    CALL_STACK_MSG();
+    return this->ts;
+}
+
+TSAdapt
+TimeStepAdapt::get_ts_adapt() const
+{
+    CALL_STACK_MSG();
+    return this->tsadapt;
+}
+
 void
 TimeStepAdapt::add_candidate(const std::string & name,
                              Int order,
