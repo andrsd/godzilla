@@ -125,7 +125,7 @@ PCFieldSplit::get_sub_ksp() const
     KSP * subksp;
     PETSC_CHECK(PCFieldSplitGetSubKSP(this->pc, &n, &subksp));
     std::vector<KrylovSolver> sks(n);
-    for (Int i = 0; i < n; i++)
+    for (Int i = 0; i < n; ++i)
         sks[i] = KrylovSolver(subksp[i]);
     PetscFree(subksp);
     return sks;
@@ -148,7 +148,7 @@ PCFieldSplit::schur_get_sub_ksp() const
     KSP * subksp;
     PETSC_CHECK(PCFieldSplitSchurGetSubKSP(this->pc, &n, &subksp));
     std::vector<KrylovSolver> sks(n);
-    for (Int i = 0; i < n; i++)
+    for (Int i = 0; i < n; ++i)
         sks[i] = KrylovSolver(subksp[i]);
     PetscFree(subksp);
     return sks;

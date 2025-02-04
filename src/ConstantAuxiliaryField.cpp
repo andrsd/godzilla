@@ -37,7 +37,7 @@ void
 ConstantAuxiliaryField::evaluate(Real, const Real[], Scalar u[])
 {
     CALL_STACK_MSG();
-    for (Int c = 0; c < this->values.size(); c++)
+    for (Int c = 0; c < this->values.size(); ++c)
         u[c] = this->values[c];
 }
 

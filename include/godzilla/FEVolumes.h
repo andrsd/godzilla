@@ -108,7 +108,7 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
     CALL_STACK_MSG();
     assert(connect.get_size() == fe_volume.get_size());
 
-    for (godzilla::Int ie = 0; ie < connect.get_size(); ie++) {
+    for (godzilla::Int ie = 0; ie < connect.get_size(); ++ie) {
         auto idx = connect(ie);
         auto elem_coord = mat_row(coords.get_values(idx));
         fe_volume(ie) = volume<ELEM_TYPE, DIM>(elem_coord);
@@ -138,7 +138,7 @@ calc_volumes(const UnstructuredMesh & mesh)
     auto section = mesh.get_coordinate_section();
     DenseMatrix<Real, N_ELEM_NODES, DIM> elem_coord;
     Int sz = DIM * N_ELEM_NODES;
-    for (godzilla::Int ie = 0; ie < n_elems; ie++) {
+    for (godzilla::Int ie = 0; ie < n_elems; ++ie) {
         Real * data = elem_coord.data();
         PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, ie, &sz, &data));
         vols(ie) = fe::volume<ELEM_TYPE, DIM>(elem_coord);

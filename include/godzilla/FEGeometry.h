@@ -34,7 +34,7 @@ coordinates(const UnstructuredMesh & mesh)
     Int j = 0;
     for (auto & vtx : vtx_range) {
         DenseVector<Real, DIM> c;
-        for (Int i = 0; i < DIM; i++, j++)
+        for (Int i = 0; i < DIM; ++i, ++j)
             c(i) = coord_vals[j];
         coords(vtx) = c;
     }
@@ -51,7 +51,7 @@ connectivity(const UnstructuredMesh & mesh)
     Array1D<DenseVector<Int, N_ELEM_NODES>> connect(n_cells);
     for (auto elem_id : mesh.get_cell_range()) {
         auto cell_conn = mesh.get_connectivity(elem_id);
-        for (Int i = 0; i < N_ELEM_NODES; i++)
+        for (Int i = 0; i < N_ELEM_NODES; ++i)
             connect(elem_id)(i) = cell_conn[i];
     }
     return connect;
@@ -73,7 +73,7 @@ common_elements_by_node(const UnstructuredMesh & mesh)
     Array1D<std::vector<Int>> nelcom(n_nodes);
     for (auto & cell : mesh.get_cell_range()) {
         const auto & node_ids = mesh.get_connectivity(cell);
-        for (Int j = 0; j < N_ELEM_NODES; j++)
+        for (Int j = 0; j < N_ELEM_NODES; ++j)
             nelcom(node_ids[j] - n_all_cells).push_back(cell);
     }
     return nelcom;
@@ -134,7 +134,7 @@ inline Real
 element_length<TRI3, 2, 3>(const DenseMatrix<Real, 2, 3> & grad_phi)
 {
     Real h[3];
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; ++i) {
         DenseVector<Real, 2> v(grad_phi.column(i));
         h[i] = 1. / v.magnitude();
     }
@@ -147,7 +147,7 @@ calc_element_length(const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_p
 {
     CALL_STACK_MSG();
     Array1D<Real> elem_lengths(grad_phi.get_size());
-    for (Int ie = 0; ie < grad_phi.get_size(); ie++)
+    for (Int ie = 0; ie < grad_phi.get_size(); ++ie)
         elem_lengths(ie) = element_length<ELEM_TYPE, DIM>(grad_phi(ie));
     return elem_lengths;
 }
@@ -168,7 +168,7 @@ calc_nodal_radius<CARTESIAN, 1>(Array1D<DenseVector<Real, 1>> & coords)
     CALL_STACK_MSG();
     auto n = coords.get_size();
     Array1D<Real> rad(n);
-    for (Int in = 0; in < n; in++)
+    for (Int in = 0; in < n; ++in)
         rad(in) = 1.;
     return rad;
 }
@@ -180,7 +180,7 @@ calc_nodal_radius<CARTESIAN, 2>(Array1D<DenseVector<Real, 2>> & coords)
     CALL_STACK_MSG();
     auto n = coords.get_size();
     Array1D<Real> rad(n);
-    for (Int in = 0; in < n; in++)
+    for (Int in = 0; in < n; ++in)
         rad(in) = 1.;
     return rad;
 }
@@ -192,7 +192,7 @@ calc_nodal_radius<CARTESIAN, 3>(Array1D<DenseVector<Real, 3>> & coords)
     CALL_STACK_MSG();
     auto n = coords.get_size();
     Array1D<Real> rad(n);
-    for (Int in = 0; in < n; in++)
+    for (Int in = 0; in < n; ++in)
         rad(in) = 1.;
     return rad;
 }
@@ -205,7 +205,7 @@ calc_nodal_radius<AXISYMMETRIC, 2>(Array1D<DenseVector<Real, 2>> & coords)
     CALL_STACK_MSG();
     auto n = coords.get_size();
     Array1D<Real> rad(n);
-    for (Int in = 0; in < n; in++)
+    for (Int in = 0; in < n; ++in)
         rad(in) = coords(in)(1);
     return rad;
 }
@@ -219,7 +219,7 @@ inline Int
 get_local_vertex_index(const std::vector<Int> & conn, Int vertex)
 {
     CALL_STACK_MSG();
-    for (std::size_t i = 0; i < conn.size(); i++)
+    for (std::size_t i = 0; i < conn.size(); ++i)
         if (conn[i] == vertex)
             return i;
     throw Exception("Vertex {} is not part of the connectivity array.", vertex);

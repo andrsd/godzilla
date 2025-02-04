@@ -9,9 +9,9 @@ using namespace testing;
 TEST(DenseVectorTest, ctor)
 {
     DenseVector<Real, 3> v;
-    for (Int i = 0; i < 3; i++)
+    for (Int i = 0; i < 3; ++i)
         v(i) = 10. + (Real) i;
-    for (Int i = 0; i < 3; i++)
+    for (Int i = 0; i < 3; ++i)
         EXPECT_DOUBLE_EQ(v(i), 10 + i);
 }
 
@@ -408,16 +408,16 @@ TEST(DynDenseVectorTest, ctor)
 {
     DynDenseVector<Real> v(3);
     EXPECT_DOUBLE_EQ(v.size(), 3);
-    for (Int i = 0; i < 3; i++)
+    for (Int i = 0; i < 3; ++i)
         v(i) = 10. + (Real) i;
-    for (Int i = 0; i < 3; i++)
+    for (Int i = 0; i < 3; ++i)
         EXPECT_DOUBLE_EQ(v(i), 10 + i);
 }
 
 TEST(DynDenseVectorTest, ctor_init)
 {
     DynDenseVector<Real> v(3, 123.);
-    for (Int i = 0; i < 3; i++)
+    for (Int i = 0; i < 3; ++i)
         EXPECT_DOUBLE_EQ(v(i), 123.);
 }
 

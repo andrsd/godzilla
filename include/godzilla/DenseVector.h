@@ -28,13 +28,13 @@ public:
     /// @param a Values to initialize the vector with
     explicit DenseVector(const std::vector<T> & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) = a[i];
     }
 
     DenseVector(const DenseMatrix<T, N, 1> & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) = a(i, 0);
     }
 
@@ -66,7 +66,7 @@ public:
     void
     add(const DenseVector<T, N> & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) += a(i);
     }
 
@@ -76,7 +76,7 @@ public:
     void
     add(T a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) += a;
     }
 
@@ -86,7 +86,7 @@ public:
     void
     subtract(const DenseVector<T, N> & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) -= a(i);
     }
 
@@ -96,7 +96,7 @@ public:
     {
         T mag = magnitude();
         if (mag > 0) {
-            for (Int i = 0; i < N; i++)
+            for (Int i = 0; i < N; ++i)
                 set(i) /= mag;
         }
     }
@@ -110,7 +110,7 @@ public:
         DenseVector<T, N> res;
         T mag = magnitude();
         if (mag > 0) {
-            for (Int i = 0; i < N; i++)
+            for (Int i = 0; i < N; ++i)
                 res(i) = get(i) / mag;
         }
         else
@@ -125,7 +125,7 @@ public:
     avg() const
     {
         Real res = 0.;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res += get(i);
         return res / N;
     }
@@ -137,7 +137,7 @@ public:
     sum() const
     {
         T sum = 0.;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             sum += get(i);
         return sum;
     }
@@ -149,7 +149,7 @@ public:
     magnitude() const
     {
         T sum = 0.;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             sum += get(i) * get(i);
         return std::sqrt(sum);
     }
@@ -161,7 +161,7 @@ public:
     min() const
     {
         T res = std::numeric_limits<T>::max();
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             if (get(i) < res)
                 res = get(i);
         return res;
@@ -174,7 +174,7 @@ public:
     max() const
     {
         T res = std::numeric_limits<T>::min();
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             if (get(i) > res)
                 res = get(i);
         return res;
@@ -184,7 +184,7 @@ public:
     void
     abs()
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) = std::abs(get(i));
     }
 
@@ -206,7 +206,7 @@ public:
     operator+(const DenseVector<T, N> & a) const
     {
         DenseVector<T, N> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res(i) = get(i) + a(i);
         return res;
     }
@@ -215,7 +215,7 @@ public:
     operator-() const
     {
         DenseVector<T, N> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res(i) = -get(i);
         return res;
     }
@@ -224,7 +224,7 @@ public:
     operator-(const DenseVector<T, N> & a) const
     {
         DenseVector<T, N> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res(i) = get(i) - a(i);
         return res;
     }
@@ -234,8 +234,8 @@ public:
     operator*(const DenseMatrix<T, 1, M> & a) const
     {
         DenseMatrix<T, N, M> res;
-        for (Int i = 0; i < M; i++)
-            for (Int j = 0; j < N; j++)
+        for (Int i = 0; i < M; ++i)
+            for (Int j = 0; j < N; ++j)
                 res(j, i) = get(j) * a(0, i);
         return res;
     }
@@ -244,7 +244,7 @@ public:
     operator*(Real alpha) const
     {
         DenseVector<T, N> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res(i) = alpha * get(i);
         return res;
     }
@@ -252,7 +252,7 @@ public:
     DenseVector<T, N> &
     operator+=(const DenseVector<T, N> & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) += a(i);
         return *this;
     }
@@ -260,7 +260,7 @@ public:
     DenseVector<T, N> &
     operator+=(const T & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) += a;
         return *this;
     }
@@ -268,7 +268,7 @@ public:
     DenseVector<T, N> &
     operator-=(const DenseVector<T, N> & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(i) -= a(i);
         return *this;
     }
@@ -286,7 +286,7 @@ inline T
 dot(const DenseMatrix<T, N, 1> & a, const DenseMatrix<T, N, 1> & b)
 {
     T dot = 0.;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         dot += a(i, 0) * b(i, 0);
     return dot;
 }
@@ -303,7 +303,7 @@ inline T
 dot(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, N, 1> & b)
 {
     T dot = 0.;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         dot += a(0, i) * b(i, 0);
     return dot;
 }
@@ -320,7 +320,7 @@ inline T
 dot(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, 1, N> & b)
 {
     T dot = 0.;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         dot += a(0, i) * b(0, i);
     return dot;
 }
@@ -348,7 +348,7 @@ inline DenseMatrix<T, N, 1>
 pointwise_mult(const DenseMatrix<T, N, 1> & a, const DenseMatrix<T, N, 1> & b)
 {
     DenseMatrix<T, N, 1> res;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         res(i, 0) = a(i, 0) * b(i, 0);
     return res;
 }
@@ -365,7 +365,7 @@ inline DenseMatrix<T, 1, N>
 pointwise_mult(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, 1, N> & b)
 {
     DenseMatrix<T, 1, N> res;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         res(0, i) = a(0, i) * b(0, i);
     return res;
 }
@@ -382,7 +382,7 @@ inline DenseMatrix<T, N, 1>
 pointwise_div(const DenseMatrix<T, N, 1> & a, const DenseMatrix<T, N, 1> & b)
 {
     DenseMatrix<T, N, 1> res;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         res(i, 0) = a(i, 0) / b(i, 0);
     return res;
 }
@@ -399,7 +399,7 @@ inline DenseMatrix<T, 1, N>
 pointwise_div(const DenseMatrix<T, 1, N> & a, const DenseMatrix<T, 1, N> & b)
 {
     DenseMatrix<T, 1, N> res;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         res(0, i) = a(0, i) / b(0, i);
     return res;
 }
@@ -409,7 +409,7 @@ inline DenseVector<T, N>
 operator*(Real alpha, const DenseVector<T, N> & a)
 {
     DenseVector<T, N> res;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         res(i) = alpha * a(i);
     return res;
 }
@@ -443,8 +443,8 @@ inline DenseMatrix<T, N, M>
 mat_row(const DenseVector<DenseVector<T, M>, N> & a)
 {
     DenseMatrix<T, N, M> res;
-    for (Int i = 0; i < N; i++)
-        for (Int j = 0; j < M; j++)
+    for (Int i = 0; i < N; ++i)
+        for (Int j = 0; j < M; ++j)
             res(i, j) = a(i)(j);
     return res;
 }
@@ -461,8 +461,8 @@ inline DenseMatrix<T, M, N>
 mat_col(const DenseVector<DenseVector<T, M>, N> & a)
 {
     DenseMatrix<T, M, N> res;
-    for (Int i = 0; i < N; i++)
-        for (Int j = 0; j < M; j++)
+    for (Int i = 0; i < N; ++i)
+        for (Int j = 0; j < M; ++j)
             res(j, i) = a(i)(j);
     return res;
 }
@@ -478,7 +478,7 @@ T
 magnitude(const DenseVector<T, N> & vec)
 {
     T sum = 0.;
-    for (Int i = 0; i < N; i++)
+    for (Int i = 0; i < N; ++i)
         sum += vec(i) * vec(i);
     return std::sqrt(sum);
 }
@@ -490,7 +490,7 @@ std::ostream &
 operator<<(std::ostream & os, const DenseVector<T, N> & obj)
 {
     os << "(";
-    for (Int i = 0; i < N; i++) {
+    for (Int i = 0; i < N; ++i) {
         os << obj(i);
         if (i < N - 1)
             os << ", ";
@@ -566,7 +566,7 @@ public:
     add(const DynDenseVector<T> & a)
     {
         if (a.size() == size()) {
-            for (Int i = 0; i < size(); i++)
+            for (Int i = 0; i < size(); ++i)
                 set(i) += a(i);
         }
         else
@@ -581,7 +581,7 @@ public:
     void
     add(T a)
     {
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             set(i) += a;
     }
 
@@ -592,7 +592,7 @@ public:
     subtract(const DynDenseVector<T> & a)
     {
         if (a.size() == size()) {
-            for (Int i = 0; i < size(); i++)
+            for (Int i = 0; i < size(); ++i)
                 set(i) -= a(i);
         }
         else
@@ -607,7 +607,7 @@ public:
     {
         T mag = magnitude();
         if (mag > 0) {
-            for (Int i = 0; i < size(); i++)
+            for (Int i = 0; i < size(); ++i)
                 set(i) /= mag;
         }
     }
@@ -621,7 +621,7 @@ public:
         DenseVector<T, -1> res(size());
         T mag = magnitude();
         if (mag > 0) {
-            for (Int i = 0; i < size(); i++)
+            for (Int i = 0; i < size(); ++i)
                 res(i) = get(i) / mag;
         }
         else
@@ -636,7 +636,7 @@ public:
     avg() const
     {
         Real res = 0.;
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             res += get(i);
         return res / size();
     }
@@ -648,7 +648,7 @@ public:
     sum() const
     {
         T sum = 0.;
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             sum += get(i);
         return sum;
     }
@@ -660,7 +660,7 @@ public:
     magnitude() const
     {
         T sum = 0.;
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             sum += get(i) * get(i);
         return std::sqrt(sum);
     }
@@ -672,7 +672,7 @@ public:
     min() const
     {
         T res = std::numeric_limits<T>::max();
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             if (get(i) < res)
                 res = get(i);
         return res;
@@ -685,7 +685,7 @@ public:
     max() const
     {
         T res = std::numeric_limits<T>::min();
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             if (get(i) > res)
                 res = get(i);
         return res;
@@ -695,7 +695,7 @@ public:
     void
     abs()
     {
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             set(i) = std::abs(get(i));
     }
 
@@ -749,7 +749,7 @@ public:
     {
         if (size() == a.size()) {
             DynDenseVector<T> res(a.size());
-            for (Int i = 0; i < size(); i++)
+            for (Int i = 0; i < size(); ++i)
                 res(i) = get(i) + a(i);
             return res;
         }
@@ -763,7 +763,7 @@ public:
     operator-() const
     {
         DynDenseVector<T> res(size());
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             res(i) = -get(i);
         return res;
     }
@@ -773,7 +773,7 @@ public:
     {
         if (size() == a.size()) {
             DynDenseVector<T> res(size());
-            for (Int i = 0; i < size(); i++)
+            for (Int i = 0; i < size(); ++i)
                 res(i) = get(i) - a(i);
             return res;
         }
@@ -787,7 +787,7 @@ public:
     operator*(Real alpha) const
     {
         DynDenseVector<T> res(size());
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             res(i) = alpha * get(i);
         return res;
     }
@@ -796,7 +796,7 @@ public:
     operator+=(const DynDenseVector<T> & a)
     {
         if (size() == a.size()) {
-            for (Int i = 0; i < size(); i++)
+            for (Int i = 0; i < size(); ++i)
                 set(i) += a(i);
             return *this;
         }
@@ -808,7 +808,7 @@ public:
     DynDenseVector<T> &
     operator+=(const T & a)
     {
-        for (Int i = 0; i < size(); i++)
+        for (Int i = 0; i < size(); ++i)
             set(i) += a;
         return *this;
     }
@@ -817,7 +817,7 @@ public:
     operator-=(const DynDenseVector<T> & a)
     {
         if (size() == a.size()) {
-            for (Int i = 0; i < size(); i++)
+            for (Int i = 0; i < size(); ++i)
                 set(i) -= a(i);
             return *this;
         }
@@ -839,7 +839,7 @@ dot(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
 {
     if (a.size() == b.size()) {
         T dot = 0.;
-        for (Int i = 0; i < a.size(); i++)
+        for (Int i = 0; i < a.size(); ++i)
             dot += a(i) * b(i);
         return dot;
     }
@@ -861,7 +861,7 @@ pointwise_mult(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
 {
     if (a.size() == b.size()) {
         DynDenseVector<T> res(a.size());
-        for (Int i = 0; i < a.size(); i++)
+        for (Int i = 0; i < a.size(); ++i)
             res(i) = a(i) * b(i);
         return res;
     }
@@ -883,7 +883,7 @@ pointwise_div(const DynDenseVector<T> & a, const DynDenseVector<T> & b)
 {
     if (a.size() == b.size()) {
         DynDenseVector<T> res(a.size());
-        for (Int i = 0; i < a.size(); i++)
+        for (Int i = 0; i < a.size(); ++i)
             res(i) = a(i) / b(i);
         return res;
     }
@@ -898,7 +898,7 @@ inline DynDenseVector<T>
 operator*(Real alpha, const DynDenseVector<T> & a)
 {
     DynDenseVector<T> res(a.size());
-    for (Int i = 0; i < a.size(); i++)
+    for (Int i = 0; i < a.size(); ++i)
         res(i) = alpha * a(i);
     return res;
 }
@@ -927,7 +927,7 @@ std::ostream &
 operator<<(std::ostream & os, const DynDenseVector<T> & obj)
 {
     os << "(";
-    for (Int i = 0; i < obj.size(); i++) {
+    for (Int i = 0; i < obj.size(); ++i) {
         os << obj(i);
         if (i < obj.size() - 1)
             os << ", ";

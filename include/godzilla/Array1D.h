@@ -34,7 +34,7 @@ public:
         Iterator &
         operator++()
         {
-            this->idx++;
+            ++this->idx;
             return *this;
         }
 
@@ -134,7 +134,7 @@ public:
     zero()
     {
         assert(this->data != nullptr);
-        for (Int i = 0; i < this->n; i++)
+        for (Int i = 0; i < this->n; ++i)
             this->data[i].zero();
     }
 
@@ -157,7 +157,7 @@ public:
     get_values(DenseVector<Int, N> idx) const
     {
         DenseVector<T, N> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res(i) = get(idx(i));
         return res;
     }
@@ -168,7 +168,7 @@ public:
     {
         assert(N == idx.size());
         DenseVector<T, N> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res(i) = get(idx[i]);
         return res;
     }
@@ -180,7 +180,7 @@ public:
     set_values(const T & val)
     {
         assert(this->data != nullptr);
-        for (Int i = 0; i < this->n; i++)
+        for (Int i = 0; i < this->n; ++i)
             this->data[i] = val;
     }
 
@@ -192,7 +192,7 @@ public:
     {
         assert(this->data != nullptr);
         assert(this->n == vals.size());
-        for (Int i = 0; i < this->n; i++)
+        for (Int i = 0; i < this->n; ++i)
             this->data[i] = vals[i];
     }
 
@@ -205,7 +205,7 @@ public:
     void
     set_values(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(idx(i)) = a(i);
     }
 
@@ -218,7 +218,7 @@ public:
     void
     add(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             set(idx(i)) += a(i);
     }
 
@@ -271,7 +271,7 @@ inline void
 Array1D<Real>::zero()
 {
     assert(this->data != nullptr);
-    for (Int i = 0; i < this->n; i++)
+    for (Int i = 0; i < this->n; ++i)
         this->data[i] = 0.;
 }
 
@@ -282,7 +282,7 @@ std::ostream &
 operator<<(std::ostream & os, const Array1D<T> & obj)
 {
     os << "(";
-    for (Int i = 0; i < obj.get_size(); i++) {
+    for (Int i = 0; i < obj.get_size(); ++i) {
         os << obj(i);
         if (i < obj.get_size() - 1)
             os << ", ";

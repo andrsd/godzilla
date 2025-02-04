@@ -26,11 +26,11 @@ TEST(Array1DTest, const_op)
 {
     Array1D<Real> arr;
     arr.create(10);
-    for (Int i = 0; i < 10; i++)
+    for (Int i = 0; i < 10; ++i)
         arr(i) = i;
 
     const Array1D<Real> & ca = arr;
-    for (Int i = 0; i < 10; i++)
+    for (Int i = 0; i < 10; ++i)
         EXPECT_EQ(ca(i), i);
 
     arr.destroy();
@@ -39,10 +39,10 @@ TEST(Array1DTest, const_op)
 TEST(Array1DTest, zero)
 {
     Array1D<Real> arr(10);
-    for (Int i = 0; i < 10; i++)
+    for (Int i = 0; i < 10; ++i)
         arr(i) = i;
     arr.zero();
-    for (Int i = 0; i < 10; i++)
+    for (Int i = 0; i < 10; ++i)
         EXPECT_EQ(arr(i), 0.);
     arr.destroy();
 }
@@ -51,7 +51,7 @@ TEST(Array1DTest, set_values)
 {
     Array1D<Real> arr(10);
     arr.set_values(1234);
-    for (Int i = 0; i < 10; i++)
+    for (Int i = 0; i < 10; ++i)
         EXPECT_EQ(arr(i), 1234.);
     arr.destroy();
 }

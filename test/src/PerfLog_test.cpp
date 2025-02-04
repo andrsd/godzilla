@@ -12,7 +12,7 @@ TEST(PerfLogTest, event)
 
     auto event2_id = perf_log::register_event(event2_name);
 
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; ++i) {
         struct timespec remaining, request = { 0, 50000000 };
         perf_log::ScopedEvent event(event1_name);
         perf_log::log_flops(4.);
@@ -63,7 +63,7 @@ TEST(PerfLogTest, stage)
     perf_log::register_stage(stage_name);
     PetscLogStage stage2_id = perf_log::register_stage("stage2");
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; ++i) {
         struct timespec remaining, request = { 0, 50000000 };
         perf_log::Stage stage(stage_name);
         perf_log::ScopedEvent ev(event_name);

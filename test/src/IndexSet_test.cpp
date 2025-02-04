@@ -156,7 +156,7 @@ TEST(IndexSetTest, for_loop)
     auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
     is.get_indices();
     std::vector<Int> vals;
-    for (auto i = is.begin(); i != is.end(); i++)
+    for (auto i = is.begin(); i != is.end(); ++i)
         vals.push_back(*i);
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
     is.restore_indices();
@@ -169,7 +169,7 @@ TEST(IndexSetTest, iters)
     auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
     is.get_indices();
     auto iter = is.begin();
-    for (int i = 0; i < 6; i++, iter++)
+    for (int i = 0; i < 6; ++i, ++iter)
         ;
     EXPECT_TRUE(iter == is.end());
     is.restore_indices();

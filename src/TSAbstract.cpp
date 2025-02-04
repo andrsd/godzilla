@@ -197,7 +197,7 @@ void
 TSAbstract::inc_reject()
 {
     CALL_STACK_MSG();
-    this->reject++;
+    ++this->reject;
 }
 
 //

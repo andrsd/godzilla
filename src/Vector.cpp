@@ -237,7 +237,7 @@ Vector::maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x)
     if (alpha.size() == x.size()) {
         auto n = alpha.size();
         std::vector<Vec> xx(n);
-        for (std::size_t i = 0; i < n; i++)
+        for (std::size_t i = 0; i < n; ++i)
             xx[i] = (Vec) x[i];
         PETSC_CHECK(VecMAXPY(this->vec, n, alpha.data(), xx.data()));
     }

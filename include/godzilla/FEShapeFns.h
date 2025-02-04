@@ -122,7 +122,7 @@ calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
 {
     CALL_STACK_MSG();
     Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_shfns(connect.get_size());
-    for (Int ie = 0; ie < connect.get_size(); ie++) {
+    for (Int ie = 0; ie < connect.get_size(); ++ie) {
         auto idx = connect.get(ie);
         auto elem_coord = mat_row(coords.get_values(idx));
         auto volume = volumes(ie);
@@ -143,7 +143,7 @@ calc_grad_shape(const UnstructuredMesh & mesh, const Array1D<Real> & volumes)
     auto section = mesh.get_coordinate_section();
     DenseMatrix<Real, N_ELEM_NODES, DIM> elem_coord;
     Int sz = DIM * N_ELEM_NODES;
-    for (Int ie = 0; ie < n_elems; ie++) {
+    for (Int ie = 0; ie < n_elems; ++ie) {
         Real * data = elem_coord.data();
         PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, ie, &sz, &data));
         auto volume = volumes(ie);

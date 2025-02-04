@@ -26,7 +26,7 @@ public:
         Iterator &
         operator++()
         {
-            this->idx++;
+            ++this->idx;
             return *this;
         }
 

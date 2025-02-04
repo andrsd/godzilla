@@ -56,7 +56,7 @@ public:
     zero()
     {
         assert(this->data != nullptr);
-        for (Int i = 0; i < this->n_rows * this->n_cols; i++)
+        for (Int i = 0; i < this->n_rows * this->n_cols; ++i)
             this->data[i] = 0;
     }
 

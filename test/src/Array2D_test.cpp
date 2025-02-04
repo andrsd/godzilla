@@ -16,12 +16,12 @@ TEST(Array2DTest, zero)
 {
     Array2D<Real> arr;
     arr.create(2, 5);
-    for (Int i = 0; i < 2; i++)
-        for (Int j = 0; j < 5; j++)
+    for (Int i = 0; i < 2; ++i)
+        for (Int j = 0; j < 5; ++j)
             arr(i, j) = 1.;
     arr.zero();
-    for (Int i = 0; i < 2; i++)
-        for (Int j = 0; j < 5; j++)
+    for (Int i = 0; i < 2; ++i)
+        for (Int j = 0; j < 5; ++j)
             EXPECT_EQ(arr(i, j), 0.);
     arr.destroy();
 }

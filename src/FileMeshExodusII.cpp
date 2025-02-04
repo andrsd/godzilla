@@ -76,7 +76,7 @@ FileMesh::create_from_exodus()
             int n_elem_blocks = f.get_num_element_blocks();
             std::vector<int> cs_order(n_elem_blocks);
             int num_hybrid = 0;
-            for (int i = 0; i < n_elem_blocks; i++) {
+            for (int i = 0; i < n_elem_blocks; ++i) {
                 auto eb = f.get_element_block(i);
                 auto ct = ::get_cell_type(eb.get_element_type());
                 dim = std::max(dim, UnstructuredMesh::get_polytope_dim(ct));

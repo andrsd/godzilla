@@ -10,7 +10,7 @@ void
 Exception::store_call_stack()
 {
     auto & cs = internal::get_callstack();
-    for (int n = 0, i = cs.get_size() - 1; i >= 0; i--, n++) {
+    for (int n = 0, i = cs.get_size() - 1; i >= 0; --i, ++n) {
         auto m = cs.at(i);
         this->call_stack.push_back(m->msg);
     }

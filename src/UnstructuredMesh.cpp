@@ -250,7 +250,7 @@ UnstructuredMesh::get_connectivity(Int point) const
     Int n_elem_nodes = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     std::vector<Int> elem_connect;
     elem_connect.resize(n_elem_nodes);
-    for (Int k = 0; k < n_elem_nodes; k++) {
+    for (Int k = 0; k < n_elem_nodes; ++k) {
         Int l = 2 * (closure_size - n_elem_nodes + k);
         elem_connect[k] = closure[l];
     }
@@ -271,7 +271,7 @@ UnstructuredMesh::get_support(Int point) const
     PETSC_CHECK(DMPlexGetSupport(get_dm(), point, &support));
     std::vector<Int> v;
     v.resize(n_support);
-    for (Int i = 0; i < n_support; i++)
+    for (Int i = 0; i < n_support; ++i)
         v[i] = support[i];
     return v;
 }
@@ -294,7 +294,7 @@ UnstructuredMesh::get_cone(Int point) const
     PETSC_CHECK(DMPlexGetCone(get_dm(), point, &cone));
     std::vector<Int> v;
     v.resize(n);
-    for (Int i = 0; i < n; i++)
+    for (Int i = 0; i < n; ++i)
         v[i] = cone[i];
     return v;
 }
@@ -384,7 +384,7 @@ UnstructuredMesh::create_face_set_labels(const std::map<Int, std::string> & name
         Int n_fs = fs_label.get_num_values();
         IndexSet fs_ids = fs_label.get_value_index_set();
         fs_ids.get_indices();
-        for (Int i = 0; i < n_fs; i++) {
+        for (Int i = 0; i < n_fs; ++i) {
             Int id = fs_ids[i];
             create_face_set(id, names.at(id));
         }
@@ -679,7 +679,7 @@ UnstructuredMesh::get_full_join(const std::vector<Int> & points)
                                   &covered_points));
 
     std::vector<Int> out_points(n_covered_points);
-    for (Int i = 0; i < n_covered_points; i++)
+    for (Int i = 0; i < n_covered_points; ++i)
         out_points[i] = covered_points[i];
 
     PETSC_CHECK(DMPlexRestoreJoin(get_dm(),
@@ -702,7 +702,7 @@ UnstructuredMesh::get_vertex_coordinates(Int pt) const
     coord_vec.restore_array_read(coord_array);
     auto dim = get_dimension();
     std::vector<Real> coord(dim);
-    for (Int i = 0; i < dim; i++)
+    for (Int i = 0; i < dim; ++i)
         coord[i] = data[i];
     return coord;
 }

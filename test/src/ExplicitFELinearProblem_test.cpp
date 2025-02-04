@@ -307,7 +307,7 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
 
     std::vector<std::string> schemes = { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" };
     std::vector<TSType> types = { TSEULER, TSSSP, TSSSP, TSRK, TSRK };
-    for (std::size_t i = 0; i < schemes.size(); i++) {
+    for (std::size_t i = 0; i < schemes.size(); ++i) {
         prob.set_scheme(types[i]);
         EXPECT_EQ(prob.get_scheme(), types[i]);
     }

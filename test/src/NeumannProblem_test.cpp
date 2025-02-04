@@ -205,7 +205,7 @@ TEST(NeumannProblemTest, solve)
     auto x = prob.get_solution_vector();
     EXPECT_EQ(x.get_size(), sln.size());
     auto * xx = x.get_array();
-    for (Int i = 0; i < x.get_size(); i++)
+    for (Int i = 0; i < x.get_size(); ++i)
         EXPECT_NEAR(xx[i], sln[i], 1e-14);
     x.restore_array(xx);
 }
