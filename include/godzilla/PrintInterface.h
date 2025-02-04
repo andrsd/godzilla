@@ -53,13 +53,6 @@ public:
                    const unsigned int & verbosity_level,
                    std::string prefix);
 
-    template <typename... T>
-    [[deprecated("Use lprint() instead")]] void
-    lprintf(unsigned int level, fmt::format_string<T...> format, T... args) const
-    {
-        lprint(level, format, std::forward<T>(args)...);
-    }
-
     /// Print a message on a terminal
     ///
     /// @param level Verbosity level. If application verbose level is higher than this number, the
