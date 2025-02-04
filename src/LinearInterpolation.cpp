@@ -28,7 +28,7 @@ LinearInterpolation::LinearInterpolation(const std::vector<Real> & ax,
             fmt::format("Size of 'x' is {}. It must be 2 or more.", this->x.size()));
     else {
         // check monotonicity
-        for (std::size_t i = 0; i < this->x.size() - 1; i++) {
+        for (std::size_t i = 0; i < this->x.size() - 1; ++i) {
             if (this->x[i] >= this->x[i + 1])
                 throw std::domain_error(
                     fmt::format("Values in 'x' must be increasing. Failed at index '{}'.", i + 1));

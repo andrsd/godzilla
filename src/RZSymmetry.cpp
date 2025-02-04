@@ -53,18 +53,18 @@ RZSymmetry::get_value(Real time, const DenseVector<Real, 2> & x)
 
     const Int dim = 2;
     Real a_sqr = 0.;
-    for (Int i = 0; i < dim; i++)
+    for (Int i = 0; i < dim; ++i)
         a_sqr += a[i] * a[i];
 
     Real dot = 0.;
-    for (Int i = 0; i < dim; i++)
+    for (Int i = 0; i < dim; ++i)
         dot += a[i] * this->axis[i];
 
     Real b_sqr = 0.;
-    for (Int i = 0; i < dim; i++)
+    for (Int i = 0; i < dim; ++i)
         b_sqr += this->axis[i] * this->axis[i];
 
     return std::sqrt(a_sqr - dot * dot / b_sqr);
 }
 
-} // namespace amnis
+} // namespace godzilla

@@ -49,7 +49,7 @@ MeshPartitioningOutput::output_step()
     PetscSection s;
     Int nc[1] = { 1 };
     Int n_dofs[dim + 1];
-    for (Int i = 0; i < dim + 1; i++)
+    for (Int i = 0; i < dim + 1; ++i)
         if (i == dim)
             n_dofs[i] = 1;
         else

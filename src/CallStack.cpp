@@ -58,7 +58,7 @@ CallStack::dump()
 {
     if (this->size > 0) {
         PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "Call stack:\n");
-        for (int n = 0, i = this->size - 1; i >= 0; i--, n++) {
+        for (int n = 0, i = this->size - 1; i >= 0; --i, ++n) {
             Msg * m = this->stack[i];
             PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "  #%d: %s\n", n, m->msg.c_str());
         }
@@ -73,7 +73,7 @@ CallStack::add(Msg * msg)
     // add this object to the call stack
     if (this->size < CallStack::MAX_SIZE) {
         this->stack[this->size] = msg;
-        this->size++;
+        ++this->size;
     }
 }
 
@@ -82,7 +82,7 @@ CallStack::remove(Msg * msg)
 {
     // remove the object only if it is on the top of the call stack
     if (this->size > 0 && this->stack[this->size - 1] == msg) {
-        this->size--;
+        --this->size;
         this->stack[this->size] = nullptr;
     }
 }

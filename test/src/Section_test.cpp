@@ -10,7 +10,7 @@ TEST(SectionTest, dofs)
     s.create(MPI_COMM_WORLD);
     s.set_num_fields(2);
     s.set_chart(make_range(10));
-    for (Int i = 0; i < 10; i++) {
+    for (Int i = 0; i < 10; ++i) {
         s.set_dof(i, 4);
         s.set_field_dof(i, 0, 1);
         s.set_field_dof(i, 1, 2);
@@ -24,7 +24,7 @@ TEST(SectionTest, dofs)
     EXPECT_EQ(rng.first(), 0);
     EXPECT_EQ(rng.last(), 10);
 
-    for (Int pt = 0; pt < 10; pt++) {
+    for (Int pt = 0; pt < 10; ++pt) {
         EXPECT_EQ(s.get_dof(pt), 4);
         EXPECT_EQ(s.get_field_dof(pt, 0), 1);
         EXPECT_EQ(s.get_field_dof(pt, 1), 3);
@@ -54,7 +54,7 @@ TEST(SectionTest, get_max_dof)
     s.set_num_fields(1);
     s.set_chart(0, 3);
     Int dofs[] = { 5, 3, 1 };
-    for (Int i = 0; i < 3; i++)
+    for (Int i = 0; i < 3; ++i)
         s.set_dof(i, dofs[i]);
     s.set_up();
     EXPECT_EQ(s.get_max_dof(), 5);

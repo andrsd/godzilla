@@ -18,7 +18,7 @@ TEST(HashMap, clear)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 13; i++)
+    for (Int i = 0; i < 13; ++i)
         h.set(i + 1) = 100 + i;
     h.clear();
     EXPECT_EQ(h.get_size(), 0);
@@ -39,7 +39,7 @@ TEST(HashMap, get_size)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 13; i++)
+    for (Int i = 0; i < 13; ++i)
         h.set(i + 1) = 100 + i;
     EXPECT_EQ(h.get_size(), 13);
     h.destroy();
@@ -57,9 +57,9 @@ TEST(HashMap, has)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         h.set(i + 1) = 100 + i;
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         EXPECT_TRUE(h.has(i + 1));
     h.destroy();
 }
@@ -68,9 +68,9 @@ TEST(HashMap, get_set)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         h.set(i + 1) = 100 + i;
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         EXPECT_EQ(h.get(i + 1), 100 + i);
     h.destroy();
 }
@@ -79,7 +79,7 @@ TEST(HashMap, del)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         h.set(i + 1) = 100 + i;
     h.del(3);
     EXPECT_FALSE(h.has(3));
@@ -90,9 +90,9 @@ TEST(HashMap, query_set)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         EXPECT_TRUE(h.query_set(i + 1, 100 + i));
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         EXPECT_FALSE(h.query_set(i + 1, 100 + i));
     h.destroy();
 }
@@ -101,11 +101,11 @@ TEST(HashMap, query_del)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         h.set(i + 1) = 100 + i;
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         EXPECT_TRUE(h.query_del(i + 1));
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         EXPECT_FALSE(h.query_del(i + 1));
     h.destroy();
 }
@@ -114,7 +114,7 @@ TEST(HashMap, find)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         h.set(i + 1) = 100 + i;
     EXPECT_FALSE(h.find(1) == h.end());
     EXPECT_FALSE(h.find(2) == h.end());
@@ -129,7 +129,7 @@ TEST(HashMap, put)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         h.put(i + 1);
 
     EXPECT_TRUE(h.has(1));
@@ -143,7 +143,7 @@ TEST(HashMap, get_keys)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         h.set(i + 1) = 100 + i;
 
     std::vector<Int> keys = h.get_keys();
@@ -154,7 +154,7 @@ TEST(HashMap, get_vals)
 {
     HashMap<Int, Int> h;
     h.create();
-    for (Int i = 0; i < 5; i++)
+    for (Int i = 0; i < 5; ++i)
         h.set(i + 1) = 100 + i;
 
     std::vector<Int> keys = h.get_vals();

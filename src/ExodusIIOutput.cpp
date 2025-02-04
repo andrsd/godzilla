@@ -213,7 +213,7 @@ ExodusIIOutput::output_step()
     }
 
     write_variables();
-    this->step_num++;
+    ++this->step_num;
 }
 
 void
@@ -304,7 +304,7 @@ ExodusIIOutput::write_coords_continuous(int exo_dim)
         y.resize(n_nodes);
     if (exo_dim >= 3)
         z.resize(n_nodes);
-    for (Int i = 0; i < n_nodes; i++) {
+    for (Int i = 0; i < n_nodes; ++i) {
         x[i] = xyz[i * dim + 0];
         if (dim >= 2)
             y[i] = xyz[i * dim + 1];
@@ -348,7 +348,7 @@ ExodusIIOutput::write_coords_discontinuous(int exo_dim)
     Int i = 0;
     for (auto & cid : this->mesh->get_cell_range()) {
         auto conn = this->mesh->get_connectivity(cid);
-        for (Int j = 0; j < conn.size(); j++, i++) {
+        for (Int j = 0; j < conn.size(); ++j, ++i) {
             Int ni = conn[j] - n_all_cells;
             x[i] = xyz[ni * dim + 0];
             if (dim >= 2)
@@ -449,7 +449,7 @@ ExodusIIOutput::write_node_sets()
         vertices.get_indices();
         Int n_nodes_in_set = vertices.get_size();
         std::vector<int> node_set(n_nodes_in_set);
-        for (Int j = 0; j < n_nodes_in_set; j++)
+        for (Int j = 0; j < n_nodes_in_set; ++j)
             node_set[j] = (int) (vertices[j] - n_elems_in_block + 1);
         this->exo->write_node_set(vertex_set_idx[i], node_set);
 
@@ -534,7 +534,7 @@ ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
     if (nc == 1)
         var_names.push_back(name);
     else {
-        for (Int c = 0; c < nc; c++) {
+        for (Int c = 0; c < nc; ++c) {
             std::string comp_name = this->dpi->get_field_component_name(fid, c);
             std::string s;
             if (comp_name.empty())
@@ -555,7 +555,7 @@ ExodusIIOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
     if (nc == 1)
         var_names.push_back(name);
     else {
-        for (Int c = 0; c < nc; c++) {
+        for (Int c = 0; c < nc; ++c) {
             std::string comp_name = this->dpi->get_aux_field_component_name(fid, c);
             std::string s;
             if (comp_name.empty())
@@ -649,7 +649,7 @@ ExodusIIOutput::write_nodal_variables_continuous()
         for (auto fid : this->nodal_var_fids) {
             Int offset = this->dpi->get_field_dof(n, fid);
             Int nc = this->dpi->get_field_num_components(fid);
-            for (Int c = 0; c < nc; c++, exo_var_id++) {
+            for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                 int exo_idx = (int) (n - n_all_elems + 1);
                 this->exo->write_partial_nodal_var(this->step_num,
                                                    exo_var_id,
@@ -662,7 +662,7 @@ ExodusIIOutput::write_nodal_variables_continuous()
             for (auto fid : this->nodal_aux_var_fids) {
                 Int offset = this->dpi->get_aux_field_dof(n, fid);
                 Int nc = this->dpi->get_aux_field_num_components(fid);
-                for (Int c = 0; c < nc; c++, exo_var_id++) {
+                for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     int exo_idx = (int) (n - n_all_elems + 1);
                     this->exo->write_partial_nodal_var(this->step_num,
                                                        exo_var_id,
@@ -695,8 +695,8 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
         int exo_var_id = 1;
         for (auto fid : this->nodal_var_fids) {
             Int nc = dgpi->get_field_num_components(fid);
-            for (Int c = 0; c < nc; c++, exo_var_id++) {
-                for (Int lni = 0; lni < n_nodes_per_elem; lni++) {
+            for (Int c = 0; c < nc; ++c, ++exo_var_id) {
+                for (Int lni = 0; lni < n_nodes_per_elem; ++lni) {
                     Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
                     Int offset = dgpi->get_field_dof(cid, lni, fid);
                     this->exo->write_partial_nodal_var(this->step_num,
@@ -710,8 +710,8 @@ ExodusIIOutput::write_nodal_variables_discontinuous()
         if (aux_sln_vals) {
             for (auto fid : this->nodal_aux_var_fids) {
                 Int nc = dgpi->get_aux_field_num_components(fid);
-                for (Int c = 0; c < nc; c++, exo_var_id++) {
-                    for (Int lni = 0; lni < n_nodes_per_elem; lni++) {
+                for (Int c = 0; c < nc; ++c, ++exo_var_id) {
+                    for (Int lni = 0; lni < n_nodes_per_elem; ++lni) {
                         Int exo_idx = (cid * n_nodes_per_elem + lni) + 1;
                         Int offset = dgpi->get_aux_field_dof(cid, lni, fid);
                         this->exo->write_partial_nodal_var(this->step_num,
@@ -767,7 +767,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
     auto aux_sln = this->dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
 
-    for (Int i = 0; i < n_elems_in_block; i++) {
+    for (Int i = 0; i < n_elems_in_block; ++i) {
         Int elem_id;
         if (cells == nullptr)
             elem_id = elem_range.first() + i;
@@ -778,7 +778,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
         for (auto & fid : this->elem_var_fids) {
             Int offset = this->dpi->get_field_dof(elem_id, fid);
             Int nc = this->dpi->get_field_num_components(fid);
-            for (Int c = 0; c < nc; c++, exo_var_id++) {
+            for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                 int exo_idx = (int) (i + 1);
                 this->exo->write_partial_elem_var(this->step_num,
                                                   exo_var_id,
@@ -791,7 +791,7 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
             for (auto & fid : this->elem_aux_var_fids) {
                 Int offset = this->dpi->get_aux_field_dof(elem_id, fid);
                 Int nc = this->dpi->get_aux_field_num_components(fid);
-                for (Int c = 0; c < nc; c++, exo_var_id++) {
+                for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     int exo_idx = (int) (i + 1);
                     this->exo->write_partial_elem_var(this->step_num,
                                                       exo_var_id,
@@ -818,7 +818,7 @@ ExodusIIOutput::write_global_variables()
         Postprocessor * pp = get_problem()->get_postprocessor(name);
         Real val = pp->get_value();
         this->exo->write_global_var(this->step_num, exo_var_id, val);
-        exo_var_id++;
+        ++exo_var_id;
     }
 }
 
@@ -850,12 +850,12 @@ ExodusIIOutput::write_block_connectivity_continuous(int blk_id,
     int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     const Int * ordering = get_elem_node_ordering(polytope_type);
     std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
-    for (Int i = 0, j = 0; i < n_elems_in_block; i++) {
+    for (Int i = 0, j = 0; i < n_elems_in_block; ++i) {
         Int elem_id = cells[i];
         Int closure_size;
         Int * closure = nullptr;
         PETSC_CHECK(DMPlexGetTransitiveClosure(dm, elem_id, PETSC_TRUE, &closure_size, &closure));
-        for (Int k = 0; k < n_nodes_per_elem; k++, j++) {
+        for (Int k = 0; k < n_nodes_per_elem; ++k, ++j) {
             Int l = 2 * (closure_size - n_nodes_per_elem + ordering[k]);
             connect[j] = (int) (closure[l] - n_all_elems + 1);
         }
@@ -875,9 +875,9 @@ ExodusIIOutput::write_block_connectivity_discontinuous(int blk_id,
     const char * elem_type = get_elem_type(polytope_type);
     int n_nodes_per_elem = UnstructuredMesh::get_num_cell_nodes(polytope_type);
     std::vector<int> connect((std::size_t) n_elems_in_block * n_nodes_per_elem);
-    for (Int i = 0, j = 0; i < n_elems_in_block; i++) {
+    for (Int i = 0, j = 0; i < n_elems_in_block; ++i) {
         auto cell_id = cells[i];
-        for (Int k = 0; k < n_nodes_per_elem; k++, j++)
+        for (Int k = 0; k < n_nodes_per_elem; ++k, ++j)
             connect[j] = (int) (cell_id * n_nodes_per_elem + k + 1);
     }
     this->exo->write_block(blk_id, elem_type, n_elems_in_block, connect);

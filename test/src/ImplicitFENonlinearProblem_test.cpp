@@ -151,7 +151,7 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
         TransientProblemInterface::TimeScheme::CN,
     };
     std::vector<TSType> types = { TSBEULER, TSCN };
-    for (std::size_t i = 0; i < types.size(); i++) {
+    for (std::size_t i = 0; i < types.size(); ++i) {
         prob->set_scheme(schemes[i]);
         EXPECT_EQ(prob->get_scheme(), types[i]);
     }

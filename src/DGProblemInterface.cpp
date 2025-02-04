@@ -314,7 +314,7 @@ DGProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, c
         FieldInfo fi(name, id, nc, k, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
-            for (unsigned int i = 0; i < nc; i++)
+            for (unsigned int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields.emplace(id, fi);
@@ -347,7 +347,7 @@ DGProblemInterface::set_aux_field(Int id,
         FieldInfo fi(name, id, nc, k, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
-            for (unsigned int i = 0; i < nc; i++)
+            for (unsigned int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->aux_fields.emplace(id, fi);
@@ -425,7 +425,7 @@ DGProblemInterface::create_section()
     }
     auto cell_range = unstr_mesh->get_cell_range();
     section.set_chart(cell_range.first(), cell_range.last());
-    for (Int c = cell_range.first(); c < cell_range.last(); c++) {
+    for (Int c = cell_range.first(); c < cell_range.last(); ++c) {
         auto n_nodes = get_num_nodes_per_elem(c);
         Int n_dofs = 0;
         for (auto & it : this->fields) {
@@ -463,7 +463,7 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
             IndexSet points = label.get_stratum(ids[0]);
             if (!points.empty()) {
                 IndexSet facets = IndexSet::intersect(all_facets, points);
-                for (Int i = 0; i < facets.get_local_size(); i++) {
+                for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
                     auto support = unstr_mesh->get_support(facet);
                     assert(support.size() == 1);
@@ -498,7 +498,7 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
             IndexSet points = label.get_stratum(ids[0]);
             if (!points.empty()) {
                 IndexSet facets = IndexSet::intersect(all_facets, points);
-                for (Int i = 0; i < facets.get_local_size(); i++) {
+                for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
                     auto support = unstr_mesh->get_support(facet);
                     assert(support.size() == 1);
@@ -508,9 +508,9 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
                     auto cell_id = support[0];
                     auto n_nodes_per_elem = (Int) econn.size();
                     std::vector<Int> indices;
-                    for (Int j = 0; j < fconn.size(); j++) {
+                    for (Int j = 0; j < fconn.size(); ++j) {
                         auto local_node_idx = fe::get_local_vertex_index(econn, fconn[j]);
-                        for (Int k = 0; k < components.size(); k++) {
+                        for (Int k = 0; k < components.size(); ++k) {
                             auto c = components[k];
                             indices.push_back((c * n_nodes_per_elem) + local_node_idx);
                         }
@@ -541,7 +541,7 @@ DGProblemInterface::create_aux_fields()
     auto unstr_mesh = get_mesh();
     auto cell_range = unstr_mesh->get_cell_range();
     section_aux.set_chart(cell_range.first(), cell_range.last());
-    for (Int c = cell_range.first(); c < cell_range.last(); c++) {
+    for (Int c = cell_range.first(); c < cell_range.last(); ++c) {
         auto n_nodes = get_num_nodes_per_elem(c);
         Int n_dofs = 0;
         for (auto & it : this->aux_fields) {

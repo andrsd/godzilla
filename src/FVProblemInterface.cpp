@@ -313,7 +313,7 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc, const La
         FieldInfo fi(name, id, nc, 0, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
-            for (Int i = 0; i < nc; i++)
+            for (Int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields.emplace(id, fi);
@@ -346,7 +346,7 @@ FVProblemInterface::set_aux_field(Int id,
         FieldInfo fi(name, id, nc, k, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
-            for (unsigned int i = 0; i < nc; i++)
+            for (unsigned int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->aux_fields.emplace(id, fi);
@@ -390,13 +390,13 @@ FVProblemInterface::set_up_ds()
 
     PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, get_mesh()->get_dimension()));
 
-    for (Int id = 0, c = 0; id < this->fields.size(); id++) {
+    for (Int id = 0, c = 0; id < this->fields.size(); ++id) {
         const FieldInfo & fi = this->fields.at(id);
         if (fi.nc == 1) {
             PETSC_CHECK(PetscFVSetComponentName(this->fvm, c, fi.name.c_str()));
         }
         else {
-            for (Int i = 0; i < fi.nc; i++) {
+            for (Int i = 0; i < fi.nc; ++i) {
                 std::string name = fmt::format("{}_{}", fi.name, fi.component_names[i]);
                 PETSC_CHECK(PetscFVSetComponentName(this->fvm, c + i, name.c_str()));
             }

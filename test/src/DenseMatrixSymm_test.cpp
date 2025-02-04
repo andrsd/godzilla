@@ -97,8 +97,8 @@ TEST(DenseMatrixSymmTest, set_values_1)
 {
     DenseMatrixSymm<Real, 3> m;
     m.set_values(2.);
-    for (Int i = 0; i < 3; i++)
-        for (Int j = 0; j < 3; j++)
+    for (Int i = 0; i < 3; ++i)
+        for (Int j = 0; j < 3; ++j)
             EXPECT_EQ(m(i, j), 2.);
 }
 

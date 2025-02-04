@@ -655,7 +655,7 @@ TEST(UnstructuredMesh, get_cell_numbering)
     auto global_is = m->get_cell_numbering();
     global_is.get_indices();
     auto gids = global_is.data();
-    for (auto i = 0; i < 10; i++)
+    for (auto i = 0; i < 10; ++i)
         EXPECT_EQ(gids[i], i);
     global_is.restore_indices();
 }

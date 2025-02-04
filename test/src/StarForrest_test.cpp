@@ -53,7 +53,7 @@ TEST(StarForestTest, test)
     Int n_leaves = 1;
     Int n_roots = 1;
     std::vector<Int> ilocal(n_leaves);
-    for (Int i = 0; i < n_leaves; i++)
+    for (Int i = 0; i < n_leaves; ++i)
         ilocal[i] = i;
 
     std::vector<StarForest::Node> iremote(n_leaves);
@@ -86,7 +86,7 @@ TEST(StarForestTest, reset)
     Int n_leaves = 1;
     Int n_roots = 1;
     std::vector<Int> ilocal(n_leaves);
-    for (Int i = 0; i < n_leaves; i++)
+    for (Int i = 0; i < n_leaves; ++i)
         ilocal[i] = i;
     std::vector<StarForest::Node> iremote(n_leaves);
     iremote[0].rank = 0;
@@ -109,7 +109,7 @@ TEST(StarForestTest, view)
     Int n_leaves = 1;
     Int n_roots = 1;
     std::vector<Int> ilocal(n_leaves);
-    for (Int i = 0; i < n_leaves; i++)
+    for (Int i = 0; i < n_leaves; ++i)
         ilocal[i] = i;
     std::vector<StarForest::Node> iremote(n_leaves);
     iremote[0].rank = 0;

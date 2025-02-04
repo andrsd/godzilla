@@ -83,7 +83,7 @@ ExplicitFELinearProblem::init()
     NonlinearProblem::init();
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
-    for (Int i = 0; i < get_num_fields(); i++)
+    for (Int i = 0; i < get_num_fields(); ++i)
         add_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
 
     auto ds = get_ds();

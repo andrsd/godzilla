@@ -140,7 +140,7 @@ private:
     calc_face_normals()
     {
         CALL_STACK_MSG();
-        for (Int i = 0; i < this->facets.get_local_size(); i++) {
+        for (Int i = 0; i < this->facets.get_local_size(); ++i) {
             auto face_conn = this->mesh->get_connectivity(this->facets(i));
             auto support = this->mesh->get_support(this->facets(i));
             Int ie = support[0];
@@ -157,7 +157,7 @@ private:
     calc_face_length()
     {
         CALL_STACK_MSG();
-        for (Int i = 0; i < this->facets.get_local_size(); i++)
+        for (Int i = 0; i < this->facets.get_local_size(); ++i)
             this->length(i) = this->mesh->compute_cell_volume(this->facets(i));
     }
 
@@ -167,7 +167,7 @@ private:
     {
         CALL_STACK_MSG();
         auto comm_cells = this->mesh->common_cells_by_vertex();
-        for (Int i = 0; i < this->vertices.get_local_size(); i++) {
+        for (Int i = 0; i < this->vertices.get_local_size(); ++i) {
             Int vertex = this->vertices(i);
             DenseVector<Real, DIM> sum;
             sum.zero();
@@ -215,11 +215,11 @@ BoundaryInfo<TRI3, 2, 3>::correct_nodal_normals()
 {
     CALL_STACK_MSG();
     std::map<Int, Int> idx_of;
-    for (Int i = 0; i < this->facets.get_local_size(); i++) {
+    for (Int i = 0; i < this->facets.get_local_size(); ++i) {
         idx_of.insert(std::pair<Int, Int>(this->facets[i], i));
     }
 
-    for (Int i = 0; i < this->vertices.get_local_size(); i++) {
+    for (Int i = 0; i < this->vertices.get_local_size(); ++i) {
         Int vertex = this->vertices(i);
         auto support = this->mesh->get_support(vertex);
 

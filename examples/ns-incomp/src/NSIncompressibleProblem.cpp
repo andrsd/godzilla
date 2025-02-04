@@ -292,7 +292,7 @@ NSIncompressibleProblem::set_up_fields()
 
     Int dim = this->get_dimension();
     velocity_id = add_field("velocity", dim, 2);
-    for (unsigned int i = 0; i < dim; i++)
+    for (unsigned int i = 0; i < dim; ++i)
         set_field_component_name(velocity_id, i, comp_name[i]);
     pressure_id = add_field("pressure", 1, 1);
 
@@ -351,7 +351,7 @@ NSIncompressibleProblem::create_preconditioner(PC pc)
         PetscObjectCompose((PetscObject) (IS) fdecomp.is[1], "nullspace", (PetscObject) nsp));
     PETSC_CHECK(MatNullSpaceDestroy(&nsp));
     // TODO: fdecomp.is[1].attach_null_space("nullspace");
-    for (Int i = 0; i < fdecomp.get_num_fields(); i++)
+    for (Int i = 0; i < fdecomp.get_num_fields(); ++i)
         fsplit.set_is(fdecomp.field_name[i], fdecomp.is[i]);
     fdecomp.destroy();
 

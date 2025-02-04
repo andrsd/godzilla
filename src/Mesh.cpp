@@ -183,7 +183,7 @@ Mesh::get_neighbors() const
     const PetscMPIInt * ranks;
     PETSC_CHECK(DMGetNeighbors(this->dm, &n, &ranks));
     std::vector<int> res(n);
-    for (Int i = 0; i < n; i++)
+    for (Int i = 0; i < n; ++i)
         res[i] = ranks[i];
     return res;
 }

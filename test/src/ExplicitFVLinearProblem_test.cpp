@@ -403,7 +403,7 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
         TransientProblemInterface::TimeScheme::HEUN
     };
     std::vector<TSType> types = { TSEULER, TSSSP, TSSSP, TSRK, TSRK };
-    for (std::size_t i = 0; i < schemes.size(); i++) {
+    for (std::size_t i = 0; i < schemes.size(); ++i) {
         prob.set_scheme(schemes[i]);
         EXPECT_EQ(prob.get_scheme(), types[i]);
     }

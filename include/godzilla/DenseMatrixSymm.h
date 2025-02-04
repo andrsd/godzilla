@@ -86,7 +86,7 @@ public:
     void
     set_values(const T & alpha)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             this->values[i] = alpha;
     }
 
@@ -97,7 +97,7 @@ public:
     set_values(const std::vector<Real> & vals)
     {
         assert(vals.size() == N);
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             this->values[i] = vals[i];
     }
 
@@ -107,7 +107,7 @@ public:
     void
     scale(Real alpha)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             this->values[i] *= alpha;
     }
 
@@ -117,7 +117,7 @@ public:
     void
     add(const DenseMatrixSymm<T, DIM> & x)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             this->values[i] += x.values[i];
     }
 
@@ -127,7 +127,7 @@ public:
     void
     subtract(const DenseMatrixSymm<T, DIM> & x)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             this->values[i] -= x.values[i];
     }
 
@@ -139,9 +139,9 @@ public:
     mult(const DenseVector<T, DIM> & x) const
     {
         DenseVector<T, DIM> res;
-        for (Int i = 0; i < DIM; i++) {
+        for (Int i = 0; i < DIM; ++i) {
             T prod = 0.;
-            for (Int j = 0; j < DIM; j++)
+            for (Int j = 0; j < DIM; ++j)
                 prod += get(i, j) * x(j);
             res(i) = prod;
         }
@@ -152,10 +152,10 @@ public:
     mult(const DenseMatrixSymm<T, DIM> & x) const
     {
         DenseMatrix<T, DIM, DIM> res;
-        for (Int i = 0; i < DIM; i++) {
-            for (Int j = 0; j < DIM; j++) {
+        for (Int i = 0; i < DIM; ++i) {
+            for (Int j = 0; j < DIM; ++j) {
                 T prod = 0.;
-                for (Int k = 0; k < DIM; k++)
+                for (Int k = 0; k < DIM; ++k)
                     prod += get(i, k) * x(k, j);
                 res(i, j) = prod;
             }
@@ -168,10 +168,10 @@ public:
     mult(const DenseMatrix<T, DIM, M> & x) const
     {
         DenseMatrix<T, DIM, M> res;
-        for (Int i = 0; i < DIM; i++) {
-            for (Int j = 0; j < M; j++) {
+        for (Int i = 0; i < DIM; ++i) {
+            for (Int j = 0; j < M; ++j) {
                 T prod = 0.;
-                for (Int k = 0; k < DIM; k++)
+                for (Int k = 0; k < DIM; ++k)
                     prod += get(i, k) * x(k, j);
                 res(i, j) = prod;
             }
@@ -195,7 +195,7 @@ public:
     diagonal() const
     {
         DenseVector<Real, DIM> diag;
-        for (Int i = 0; i < DIM; i++)
+        for (Int i = 0; i < DIM; ++i)
             diag(i) = get(i, i);
         return diag;
     }
@@ -218,7 +218,7 @@ public:
     operator-() const
     {
         DenseMatrixSymm<T, DIM> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res.values[i] = -this->values[i];
         return res;
     }
@@ -231,7 +231,7 @@ public:
     operator+(const DenseMatrixSymm<T, DIM> & a) const
     {
         DenseMatrixSymm<T, DIM> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res.values[i] = this->values[i] + a.values[i];
         return res;
     }
@@ -244,8 +244,8 @@ public:
     operator+(const DenseMatrix<T, DIM, DIM> & a) const
     {
         DenseMatrix<T, DIM, DIM> res;
-        for (Int i = 0; i < DIM; i++)
-            for (Int j = 0; j < DIM; j++)
+        for (Int i = 0; i < DIM; ++i)
+            for (Int j = 0; j < DIM; ++j)
                 res(i, j) = get(i, j) + a(i, j);
         return res;
     }
@@ -258,7 +258,7 @@ public:
     operator-(const DenseMatrixSymm<T, DIM> & a) const
     {
         DenseMatrixSymm<T, DIM> res;
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             res.values[i] = this->values[i] - a.values[i];
         return res;
     }
@@ -271,8 +271,8 @@ public:
     operator-(const DenseMatrix<T, DIM, DIM> & a) const
     {
         DenseMatrix<T, DIM, DIM> res;
-        for (Int i = 0; i < DIM; i++)
-            for (Int j = 0; j < DIM; j++)
+        for (Int i = 0; i < DIM; ++i)
+            for (Int j = 0; j < DIM; ++j)
                 res(i, j) = get(i, j) - a(i, j);
         return res;
     }
@@ -337,7 +337,7 @@ public:
     {
         DenseMatrixSymm<T, DIM> res;
         res.zero();
-        for (Int i = 0; i < DIM; i++)
+        for (Int i = 0; i < DIM; ++i)
             res(i, i) = vals(i);
         return res;
     }
@@ -352,7 +352,7 @@ protected:
     void
     zero_impl(std::false_type)
     {
-        for (Int i = 0; i < N; i++)
+        for (Int i = 0; i < N; ++i)
             this->values[i].zero();
     }
 
@@ -416,8 +416,8 @@ inline DenseMatrixSymm<T, N>
 operator*(Real alpha, const DenseMatrixSymm<T, N> & a)
 {
     DenseMatrixSymm<T, N> res;
-    for (Int i = 0; i < N; i++)
-        for (Int j = i; j < N; j++)
+    for (Int i = 0; i < N; ++i)
+        for (Int j = i; j < N; ++j)
             res(i, j) = alpha * a(i, j);
     return res;
 }
@@ -428,9 +428,9 @@ template <typename T, Int N>
 std::ostream &
 operator<<(std::ostream & os, const DenseMatrixSymm<T, N> & obj)
 {
-    for (Int i = 0; i < N; i++) {
+    for (Int i = 0; i < N; ++i) {
         os << "(";
-        for (Int j = 0; j < N; j++) {
+        for (Int j = 0; j < N; ++j) {
             os << obj(i, j);
             if (j < N - 1)
                 os << ", ";

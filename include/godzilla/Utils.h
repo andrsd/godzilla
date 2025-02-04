@@ -129,7 +129,7 @@ template <typename T>
 std::size_t
 index_of(const std::vector<T> & array, T value)
 {
-    for (std::size_t i = 0; i < array.size(); i++)
+    for (std::size_t i = 0; i < array.size(); ++i)
         if (array[i] == value)
             return i;
     throw std::runtime_error(fmt::format("Did not find {} in array", value));

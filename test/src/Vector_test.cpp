@@ -78,7 +78,7 @@ TEST(VectorTest, set)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 10);
     v.set(21.);
-    for (Int i = 0; i < 10; i++)
+    for (Int i = 0; i < 10; ++i)
         EXPECT_DOUBLE_EQ(v(i), 21.);
     v.destroy();
 }

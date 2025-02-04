@@ -35,8 +35,8 @@ public:
     DenseMatrix(const DenseMatrixSymm<T, ROWS> & m)
     {
         assert(COLS == ROWS);
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 set(i, j) = m(i, j);
     }
 
@@ -79,7 +79,7 @@ public:
     column(Int idx) const
     {
         DenseMatrix<T, ROWS, 1> col;
-        for (Int row = 0; row < ROWS; row++)
+        for (Int row = 0; row < ROWS; ++row)
             col(row, 0) = get(row, idx);
         return col;
     }
@@ -92,7 +92,7 @@ public:
     row(Int idx) const
     {
         DenseMatrix<T, 1, COLS> row;
-        for (Int col = 0; col < COLS; col++)
+        for (Int col = 0; col < COLS; ++col)
             row(0, col) = get(idx, col);
         return row;
     }
@@ -132,7 +132,7 @@ public:
     set_row(Int row, const std::vector<T> & vals)
     {
         assert(vals.size() == COLS);
-        for (Int i = 0; i < COLS; i++)
+        for (Int i = 0; i < COLS; ++i)
             set(row, i) = vals[i];
     }
 
@@ -144,14 +144,14 @@ public:
     void
     set_row(Int row, const DenseVector<T, COLS> & vals)
     {
-        for (Int i = 0; i < COLS; i++)
+        for (Int i = 0; i < COLS; ++i)
             set(row, i) = vals(i);
     }
 
     void
     set_row(Int row, const DenseMatrix<T, 1, COLS> & vals)
     {
-        for (Int i = 0; i < COLS; i++)
+        for (Int i = 0; i < COLS; ++i)
             set(row, i) = vals(0, i);
     }
 
@@ -159,7 +159,7 @@ public:
     set_col(Int col, const std::vector<T> & vals)
     {
         assert(vals.size() == ROWS);
-        for (Int i = 0; i < ROWS; i++)
+        for (Int i = 0; i < ROWS; ++i)
             set(i, col) = vals[i];
     }
 
@@ -171,7 +171,7 @@ public:
     void
     set_col(Int col, const DenseVector<T, ROWS> & vals)
     {
-        for (Int i = 0; i < ROWS; i++)
+        for (Int i = 0; i < ROWS; ++i)
             set(i, col) = vals(i);
     }
 
@@ -188,7 +188,7 @@ public:
     void
     set_values(const T & alpha)
     {
-        for (Int i = 0; i < ROWS * COLS; i++)
+        for (Int i = 0; i < ROWS * COLS; ++i)
             this->values[i] = alpha;
     }
 
@@ -198,8 +198,8 @@ public:
     void
     scale(Real alpha)
     {
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 set(i, j) *= alpha;
     }
 
@@ -209,8 +209,8 @@ public:
     void
     add(const DenseMatrix<T, ROWS, COLS> & x)
     {
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 set(i, j) += x.get(i, j);
     }
 
@@ -221,8 +221,8 @@ public:
     add(const DenseMatrixSymm<T, ROWS> & x)
     {
         assert(ROWS == COLS);
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 set(i, j) += x.get(i, j);
     }
 
@@ -232,8 +232,8 @@ public:
     void
     subtract(const DenseMatrix<T, ROWS, COLS> & x)
     {
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 set(i, j) -= x.get(i, j);
     }
 
@@ -244,8 +244,8 @@ public:
     subtract(const DenseMatrixSymm<T, ROWS> & x)
     {
         assert(ROWS == COLS);
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 set(i, j) -= x.get(i, j);
     }
 
@@ -258,9 +258,9 @@ public:
     mult(const DenseVector<T, COLS> & x) const
     {
         DenseVector<T, ROWS> res;
-        for (Int i = 0; i < ROWS; i++) {
+        for (Int i = 0; i < ROWS; ++i) {
             T prod = 0.;
-            for (Int j = 0; j < COLS; j++)
+            for (Int j = 0; j < COLS; ++j)
                 prod += get(i, j) * x(j);
             res(i) = prod;
         }
@@ -272,10 +272,10 @@ public:
     mult(const DenseMatrix<T, COLS, ROWS2> & x) const
     {
         DenseMatrix<T, ROWS, ROWS2> res;
-        for (Int i = 0; i < ROWS; i++) {
-            for (Int j = 0; j < ROWS2; j++) {
+        for (Int i = 0; i < ROWS; ++i) {
+            for (Int j = 0; j < ROWS2; ++j) {
                 T prod = 0.;
-                for (Int k = 0; k < COLS; k++)
+                for (Int k = 0; k < COLS; ++k)
                     prod += get(i, k) * x(k, j);
                 res(i, j) = prod;
             }
@@ -287,10 +287,10 @@ public:
     mult(const DenseMatrixSymm<T, COLS> & x) const
     {
         DenseMatrix<T, ROWS, COLS> res;
-        for (Int i = 0; i < ROWS; i++) {
-            for (Int j = 0; j < COLS; j++) {
+        for (Int i = 0; i < ROWS; ++i) {
+            for (Int j = 0; j < COLS; ++j) {
                 T prod = 0.;
-                for (Int k = 0; k < COLS; k++)
+                for (Int k = 0; k < COLS; ++k)
                     prod += get(i, k) * x(k, j);
                 res(i, j) = prod;
             }
@@ -314,8 +314,8 @@ public:
     transpose() const
     {
         DenseMatrix<T, COLS, ROWS> tr;
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 tr(j, i) = get(i, j);
         return tr;
     }
@@ -328,7 +328,7 @@ public:
     {
         assert(ROWS == COLS);
         DenseVector<T, COLS> diag;
-        for (Int i = 0; i < COLS; i++)
+        for (Int i = 0; i < COLS; ++i)
             diag(i) = get(i, i);
         return diag;
     }
@@ -361,7 +361,7 @@ public:
     operator-() const
     {
         DenseMatrix<T, ROWS, COLS> res;
-        for (Int i = 0; i < ROWS * COLS; i++)
+        for (Int i = 0; i < ROWS * COLS; ++i)
             res.values[i] = -this->values[i];
         return res;
     }
@@ -374,8 +374,8 @@ public:
     operator+(const DenseMatrix<T, ROWS, COLS> & a) const
     {
         DenseMatrix<T, ROWS, COLS> res;
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 res(i, j) = this->get(i, j) + a.get(i, j);
         return res;
     }
@@ -390,8 +390,8 @@ public:
     {
         assert(ROWS == COLS);
         DenseMatrix<T, ROWS> res;
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 res(i, j) = this->get(i, j) + a.get(i, j);
         return res;
     }
@@ -403,8 +403,8 @@ public:
     DenseMatrix<T, ROWS, COLS> &
     operator+=(const DenseMatrix<T, ROWS, COLS> & a)
     {
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 set(i, j) += a.get(i, j);
         return *this;
     }
@@ -417,8 +417,8 @@ public:
     operator-(const DenseMatrix<T, ROWS, COLS> & a) const
     {
         DenseMatrix<T, ROWS, COLS> res;
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 res(i, j) = this->get(i, j) - a.get(i, j);
         return res;
     }
@@ -433,8 +433,8 @@ public:
     {
         assert(ROWS == COLS);
         DenseMatrix<T, ROWS> res;
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 res(i, j) = this->get(i, j) - a.get(i, j);
         return res;
     }
@@ -478,8 +478,8 @@ public:
     operator=(const DenseMatrixSymm<T, ROWS> & m)
     {
         assert(COLS == ROWS);
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < COLS; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < COLS; ++j)
                 set(i, j) = m(i, j);
         return *this;
     }
@@ -530,12 +530,12 @@ public:
         assert(vals.size() == (ROWS * (ROWS + 1) / 2));
         DenseMatrix<T, ROWS, ROWS> res;
         // store upper triangular
-        for (Int i = 0, k = 0; i < ROWS; i++)
-            for (Int j = i; j < ROWS; j++, k++)
+        for (Int i = 0, k = 0; i < ROWS; ++i)
+            for (Int j = i; j < ROWS; ++j, ++k)
                 res(i, j) = vals[k];
         // create lower triangular
-        for (Int i = 0; i < ROWS; i++)
-            for (Int j = 0; j < i; j++)
+        for (Int i = 0; i < ROWS; ++i)
+            for (Int j = 0; j < i; ++j)
                 res(i, j) = res(j, i);
         return res;
     }
@@ -545,7 +545,7 @@ public:
     {
         DenseMatrix<T, ROWS, ROWS> res;
         res.zero();
-        for (Int i = 0; i < ROWS; i++)
+        for (Int i = 0; i < ROWS; ++i)
             res(i, i) = vals(i);
         return res;
     }
@@ -560,7 +560,7 @@ protected:
     void
     zero_impl(std::false_type)
     {
-        for (Int i = 0; i < ROWS * COLS; i++)
+        for (Int i = 0; i < ROWS * COLS; ++i)
             this->values[i].zero();
     }
 
@@ -585,9 +585,9 @@ public:
     solve_lower(const DenseMatrix<T, ROWS> & L, const DenseVector<T, ROWS> & b)
     {
         DenseVector<T, ROWS> x;
-        for (Int i = 0; i < ROWS; i++) {
+        for (Int i = 0; i < ROWS; ++i) {
             x(i) = b(i);
-            for (Int j = 0; j < i; j++)
+            for (Int j = 0; j < i; ++j)
                 x(i) -= L(i, j) * x(j);
             x(i) /= L(i, i);
         }
@@ -598,9 +598,9 @@ public:
     solve_upper(const DenseMatrix<T, ROWS> & U, const DenseVector<T, ROWS> & b)
     {
         DenseVector<T, ROWS> x;
-        for (Int i = ROWS - 1; i >= 0; i--) {
+        for (Int i = ROWS - 1; i >= 0; --i) {
             x(i) = b(i);
-            for (Int j = i + 1; j < ROWS; j++)
+            for (Int j = i + 1; j < ROWS; ++j)
                 x(i) -= U(i, j) * x(j);
             x(i) /= U(i, i);
         }
@@ -700,8 +700,8 @@ inline DenseMatrix<T, N, M>
 transpose(const DenseMatrix<T, M, N> & a)
 {
     DenseMatrix<T, N, M> res;
-    for (Int i = 0; i < N; i++)
-        for (Int j = 0; j < M; j++)
+    for (Int i = 0; i < N; ++i)
+        for (Int j = 0; j < M; ++j)
             res(i, j) = a(j, i);
     return res;
 }
@@ -713,8 +713,8 @@ inline DenseMatrix<T, M, N>
 operator*(Real alpha, const DenseMatrix<T, M, N> & a)
 {
     DenseMatrix<T, M, N> res;
-    for (Int i = 0; i < M; i++)
-        for (Int j = 0; j < N; j++)
+    for (Int i = 0; i < M; ++i)
+        for (Int j = 0; j < N; ++j)
             res(i, j) = alpha * a(i, j);
     return res;
 }
@@ -725,9 +725,9 @@ template <typename T, Int M, Int N>
 std::ostream &
 operator<<(std::ostream & os, const DenseMatrix<T, M, N> & obj)
 {
-    for (Int i = 0; i < M; i++) {
+    for (Int i = 0; i < M; ++i) {
         os << "(";
-        for (Int j = 0; j < N; j++) {
+        for (Int j = 0; j < N; ++j) {
             os << obj(i, j);
             if (j < N - 1)
                 os << ", ";
@@ -770,7 +770,7 @@ public:
         cols(other.cols),
         values(new T[rows * cols])
     {
-        for (Int i = 0; i < rows * cols; i++)
+        for (Int i = 0; i < rows * cols; ++i)
             this->values[i] = other.values[i];
     }
 
@@ -785,7 +785,7 @@ public:
             this->values = new T[rows * cols];
         }
         if ((this->rows == other.rows) && (this->cols == other.cols)) {
-            for (Int i = 0; i < rows * cols; i++)
+            for (Int i = 0; i < rows * cols; ++i)
                 this->values[i] = other.values[i];
         }
         return *this;
@@ -836,10 +836,10 @@ public:
     {
         DynDenseMatrix<T> res(this->rows, 1);
 #ifdef NDEBUG
-        for (Int idx = col, i = 0; i < this->rows; i++, idx += this->cols)
+        for (Int idx = col, i = 0; i < this->rows; ++i, idx += this->cols)
             res.data(i) = data(idx);
 #else
-        for (Int i = 0; i < this->rows; i++)
+        for (Int i = 0; i < this->rows; ++i)
             res(i, 0) = get(i, col);
 #endif
         return res;
@@ -854,10 +854,10 @@ public:
     {
         DynDenseMatrix<T> res(1, this->cols);
 #ifdef NDEBUG
-        for (Int idx = row * this->cols, i = 0; i < this->cols; i++, idx++)
+        for (Int idx = row * this->cols, i = 0; i < this->cols; ++i, ++idx)
             res.data(i) = data(idx);
 #else
-        for (Int j = 0; j < this->cols; j++)
+        for (Int j = 0; j < this->cols; ++j)
             res(0, j) = get(row, j);
 #endif
         return res;
@@ -923,10 +923,10 @@ public:
     {
         if (vals.size() == this->cols) {
 #ifdef NDEBUG
-            for (Int idx = row * this->cols, i = 0; i < this->cols; i++, idx++)
+            for (Int idx = row * this->cols, i = 0; i < this->cols; ++i, ++idx)
                 data(idx) = std::data(vals)[i];
 #else
-            for (Int i = 0; i < this->cols; i++)
+            for (Int i = 0; i < this->cols; ++i)
                 set(row, i) = std::data(vals)[i];
 #endif
         }
@@ -946,10 +946,10 @@ public:
     {
         if (vals.size() == this->cols) {
 #ifdef NDEBUG
-            for (Int idx = row * this->cols, i = 0; i < this->cols; i++, idx++)
+            for (Int idx = row * this->cols, i = 0; i < this->cols; ++i, ++idx)
                 data(idx) = vals(i);
 #else
-            for (Int i = 0; i < this->cols; i++)
+            for (Int i = 0; i < this->cols; ++i)
                 set(row, i) = vals(i);
 #endif
         }
@@ -965,10 +965,10 @@ public:
         if (vals.get_num_rows() == 1) {
             if (vals.get_num_cols() == this->cols) {
 #ifdef NDEBUG
-                for (Int idx = row * this->cols, i = 0; i < this->cols; i++, idx++)
+                for (Int idx = row * this->cols, i = 0; i < this->cols; ++i, ++idx)
                     data(idx) = vals.data(i);
 #else
-                for (Int i = 0; i < this->cols; i++)
+                for (Int i = 0; i < this->cols; ++i)
                     set(row, i) = vals(0, i);
 #endif
             }
@@ -986,10 +986,10 @@ public:
     {
         if (vals.size() == this->rows) {
 #ifdef NDEBUG
-            for (Int idx = col, i = 0; i < this->rows; i++, idx += this->cols)
+            for (Int idx = col, i = 0; i < this->rows; ++i, idx += this->cols)
                 data(idx) = std::data(vals)[i];
 #else
-            for (Int i = 0; i < this->rows; i++)
+            for (Int i = 0; i < this->rows; ++i)
                 set(i, col) = std::data(vals)[i];
 #endif
         }
@@ -1004,10 +1004,10 @@ public:
     {
         if (vals.size() == this->rows) {
 #ifdef NDEBUG
-            for (Int idx = col, i = 0; i < this->rows; i++, idx += this->cols)
+            for (Int idx = col, i = 0; i < this->rows; ++i, idx += this->cols)
                 data(idx) = vals[i];
 #else
-            for (Int i = 0; i < this->rows; i++)
+            for (Int i = 0; i < this->rows; ++i)
                 set(i, col) = vals[i];
 #endif
         }
@@ -1022,10 +1022,10 @@ public:
     {
         if (vals.size() == this->rows) {
 #ifdef NDEBUG
-            for (Int idx = col, i = 0; i < this->rows; i++, idx += this->cols)
+            for (Int idx = col, i = 0; i < this->rows; ++i, idx += this->cols)
                 data(idx) = vals(i);
 #else
-            for (Int i = 0; i < this->rows; i++)
+            for (Int i = 0; i < this->rows; ++i)
                 set(i, col) = vals(i);
 #endif
         }
@@ -1048,7 +1048,7 @@ public:
     void
     set_values(const T & alpha)
     {
-        for (Int i = 0; i < this->rows * this->cols; i++)
+        for (Int i = 0; i < this->rows * this->cols; ++i)
             this->values[i] = alpha;
     }
 
@@ -1059,12 +1059,12 @@ public:
     scale(Real alpha)
     {
 #ifdef NDEBUG
-        for (Int idx = 0, i = 0; i < this->rows; i++)
-            for (Int j = 0; j < this->cols; j++, idx++)
+        for (Int idx = 0, i = 0; i < this->rows; ++i)
+            for (Int j = 0; j < this->cols; ++j, ++idx)
                 this->data(idx) *= alpha;
 #else
-        for (Int i = 0; i < this->rows; i++)
-            for (Int j = 0; j < this->cols; j++)
+        for (Int i = 0; i < this->rows; ++i)
+            for (Int j = 0; j < this->cols; ++j)
                 set(i, j) *= alpha;
 #endif
     }
@@ -1077,12 +1077,12 @@ public:
     {
         if ((this->rows == x.rows) && (this->cols == x.cols)) {
 #ifdef NDEBUG
-            for (Int idx = 0, i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++, idx++)
+            for (Int idx = 0, i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j, ++idx)
                     this->data(idx) += x.data(idx);
 #else
-            for (Int i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++)
+            for (Int i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j)
                     set(i, j) += x.get(i, j);
 #endif
         }
@@ -1102,12 +1102,12 @@ public:
     {
         if ((this->rows == x.rows) && (this->cols == x.cols)) {
 #ifdef NDEBUG
-            for (Int idx = 0, i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++, idx++)
+            for (Int idx = 0, i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j, ++idx)
                     this->data(idx) -= x.data(idx);
 #else
-            for (Int i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++)
+            for (Int i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j)
                     set(i, j) -= x.get(i, j);
 #endif
         }
@@ -1130,16 +1130,16 @@ public:
         if (this->cols == x.size()) {
             DynDenseVector<T> res(this->rows);
 #ifdef NDEBUG
-            for (Int idx = 0, i = 0; i < this->rows; i++) {
+            for (Int idx = 0, i = 0; i < this->rows; ++i) {
                 T prod = 0.;
-                for (Int j = 0; j < this->cols; j++, idx++)
+                for (Int j = 0; j < this->cols; ++j, ++idx)
                     prod += data(idx) * x(j);
                 res(i) = prod;
             }
 #else
-            for (Int i = 0; i < this->rows; i++) {
+            for (Int i = 0; i < this->rows; ++i) {
                 T prod = 0.;
-                for (Int j = 0; j < this->cols; j++)
+                for (Int j = 0; j < this->cols; ++j)
                     prod += get(i, j) * x(j);
                 res(i) = prod;
             }
@@ -1157,19 +1157,19 @@ public:
         if (this->cols == x.rows) {
             DynDenseMatrix<T> res(this->rows, x.cols);
 #ifdef NDEBUG
-            for (Int i = 0; i < x.cols; i++) {
-                for (Int idx = 0, res_idx = i, j = 0; j < this->rows; j++, res_idx += x.cols) {
+            for (Int i = 0; i < x.cols; ++i) {
+                for (Int idx = 0, res_idx = i, j = 0; j < this->rows; ++j, res_idx += x.cols) {
                     T prod = 0.;
-                    for (Int x_idx = i, k = 0; k < this->cols; k++, idx++, x_idx += x.cols)
+                    for (Int x_idx = i, k = 0; k < this->cols; ++k, ++idx, x_idx += x.cols)
                         prod += data(idx) * x.data(x_idx);
                     res.data(res_idx) = prod;
                 }
             }
 #else
-            for (Int i = 0; i < this->rows; i++) {
-                for (Int j = 0; j < x.cols; j++) {
+            for (Int i = 0; i < this->rows; ++i) {
+                for (Int j = 0; j < x.cols; ++j) {
                     T prod = 0.;
-                    for (Int k = 0; k < this->cols; k++)
+                    for (Int k = 0; k < this->cols; ++k)
                         prod += get(i, k) * x(k, j);
                     res(i, j) = prod;
                 }
@@ -1192,10 +1192,10 @@ public:
         if (this->rows == this->cols) {
             DynDenseVector<T> diag(this->rows);
 #ifdef NDEBUG
-            for (Int idx = 0, i = 0; i < this->rows; i++, idx += this->cols + 1)
+            for (Int idx = 0, i = 0; i < this->rows; ++i, idx += this->cols + 1)
                 diag.data(i) = this->data(idx);
 #else
-            for (Int i = 0; i < this->cols; i++)
+            for (Int i = 0; i < this->cols; ++i)
                 diag(i) = get(i, i);
 #endif
             return diag;
@@ -1212,12 +1212,12 @@ public:
     {
         DynDenseMatrix<T> tr(this->cols, this->rows);
 #ifdef NDEBUG
-        for (Int idx = 0, i = 0; i < this->rows; i++)
-            for (Int tr_idx = i, j = 0; j < this->cols; j++, idx++, tr_idx += this->cols)
+        for (Int idx = 0, i = 0; i < this->rows; ++i)
+            for (Int tr_idx = i, j = 0; j < this->cols; ++j, ++idx, tr_idx += this->cols)
                 tr.data(tr_idx) = data(idx);
 #else
-        for (Int i = 0; i < this->rows; i++)
-            for (Int j = 0; j < this->cols; j++)
+        for (Int i = 0; i < this->rows; ++i)
+            for (Int j = 0; j < this->cols; ++j)
                 tr(j, i) = get(i, j);
 #endif
         return tr;
@@ -1252,11 +1252,11 @@ public:
     {
         DynDenseMatrix<T> res(this->rows, this->cols);
 #ifdef NDEBUG
-        for (Int idx = 0, i = 0; i < this->rows; i++)
-            for (Int j = 0; j < this->cols; j++, idx++)
+        for (Int idx = 0, i = 0; i < this->rows; ++i)
+            for (Int j = 0; j < this->cols; ++j, ++idx)
                 res.data(idx) = -this->data(idx);
 #else
-        for (Int i = 0; i < this->rows * this->cols; i++)
+        for (Int i = 0; i < this->rows * this->cols; ++i)
             res.values[i] = -this->values[i];
 #endif
         return res;
@@ -1272,12 +1272,12 @@ public:
         if ((a.rows == this->rows) && (a.cols == this->cols)) {
             DynDenseMatrix<T> res(this->rows, this->cols);
 #ifdef NDEBUG
-            for (Int idx = 0, i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++, idx++)
+            for (Int idx = 0, i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j, ++idx)
                     res.data(idx) = this->data(idx) + a.data(idx);
 #else
-            for (Int i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++)
+            for (Int i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j)
                     res(i, j) = this->get(i, j) + a.get(i, j);
 #endif
             return res;
@@ -1299,12 +1299,12 @@ public:
     {
         if ((a.rows == this->rows) && (a.cols == this->cols)) {
 #ifdef NDEBUG
-            for (Int idx = 0, i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++, idx++)
+            for (Int idx = 0, i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j, ++idx)
                     this->data(idx) += a.data(idx);
 #else
-            for (Int i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++)
+            for (Int i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j)
                     set(i, j) += a.get(i, j);
 #endif
             return *this;
@@ -1327,12 +1327,12 @@ public:
         if ((a.rows == this->rows) && (a.cols == this->cols)) {
             DynDenseMatrix<T> res(this->rows, this->cols);
 #ifdef NDEBUG
-            for (Int idx = 0, i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++, idx++)
+            for (Int idx = 0, i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j, ++idx)
                     res.data(idx) = this->data(idx) - a.data(idx);
 #else
-            for (Int i = 0; i < this->rows; i++)
-                for (Int j = 0; j < this->cols; j++)
+            for (Int i = 0; i < this->rows; ++i)
+                for (Int j = 0; j < this->cols; ++j)
                     res(i, j) = this->get(i, j) - a.get(i, j);
 #endif
             return res;
@@ -1399,10 +1399,10 @@ public:
         DynDenseMatrix<T> res(vals.size(), vals.size());
         res.zero();
 #ifdef NDEBUG
-        for (Int idx = 0, i = 0; i < vals.size(); i++, idx += res.cols + 1)
+        for (Int idx = 0, i = 0; i < vals.size(); ++i, idx += res.cols + 1)
             res.data(idx) = vals[i];
 #else
-        for (Int i = 0; i < vals.size(); i++)
+        for (Int i = 0; i < vals.size(); ++i)
             res(i, i) = vals[i];
 #endif
         return res;
@@ -1418,7 +1418,7 @@ protected:
     void
     zero_impl(std::false_type)
     {
-        for (Int i = 0; i < this->rows * this->cols; i++)
+        for (Int i = 0; i < this->rows * this->cols; ++i)
             this->values[i].zero();
     }
 
@@ -1460,9 +1460,9 @@ public:
     {
         auto n = b.get_num_rows();
         DenseVector<T, -1> x(n);
-        for (Int i = 0; i < n; i++) {
+        for (Int i = 0; i < n; ++i) {
             x(i) = b(i);
-            for (Int j = 0; j < i; j++)
+            for (Int j = 0; j < i; ++j)
                 x(i) -= L(i, j) * x(j);
             x(i) /= L(i, i);
         }
@@ -1474,9 +1474,9 @@ public:
     {
         auto n = b.get_num_rows();
         DenseVector<T, -1> x(n);
-        for (Int i = n - 1; i >= 0; i--) {
+        for (Int i = n - 1; i >= 0; --i) {
             x(i) = b(i);
-            for (Int j = i + 1; j < n; j++)
+            for (Int j = i + 1; j < n; ++j)
                 x(i) -= U(i, j) * x(j);
             x(i) /= U(i, i);
         }
@@ -1549,7 +1549,7 @@ inline DynDenseMatrix<T>
 operator*(Real alpha, const DynDenseMatrix<T> & a)
 {
     DynDenseMatrix<T> res(a.get_num_rows(), a.get_num_cols());
-    for (Int i = 0; i < a.get_num_rows() * a.get_num_cols(); i++)
+    for (Int i = 0; i < a.get_num_rows() * a.get_num_cols(); ++i)
         res.data()[i] = alpha * a.data()[i];
     return res;
 }
@@ -1558,9 +1558,9 @@ template <typename T>
 std::ostream &
 operator<<(std::ostream & os, const DynDenseMatrix<T> & obj)
 {
-    for (Int i = 0; i < obj.get_num_rows(); i++) {
+    for (Int i = 0; i < obj.get_num_rows(); ++i) {
         os << "(";
-        for (Int j = 0; j < obj.get_num_cols(); j++) {
+        for (Int j = 0; j < obj.get_num_cols(); ++j) {
             os << obj(i, j);
             if (j < obj.get_num_cols() - 1)
                 os << ", ";

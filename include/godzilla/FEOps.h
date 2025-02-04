@@ -24,7 +24,7 @@ linear_combination(const DenseVector<Real, N_VALS> & a, const DenseVector<T, N_V
 {
     T res;
     res.set_values(0.);
-    for (Int i = 0; i < N_VALS; i++)
+    for (Int i = 0; i < N_VALS; ++i)
         res += a(i) * b(i);
     return res;
 }

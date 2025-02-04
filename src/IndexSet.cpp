@@ -21,7 +21,7 @@ IndexSet::Iterator::operator*() const
 IndexSet::Iterator &
 IndexSet::Iterator::operator++()
 {
-    this->idx++;
+    ++this->idx;
     return *this;
 }
 
@@ -345,7 +345,7 @@ IndexSet::concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list)
     CALL_STACK_MSG();
     IS out;
     std::vector<IS> is_vec(is_list.size());
-    for (size_t i = 0; i < is_list.size(); i++)
+    for (size_t i = 0; i < is_list.size(); ++i)
         is_vec[i] = is_list[i];
     PETSC_CHECK(ISConcatenate(comm, is_vec.size(), is_vec.data(), &out));
     return IndexSet(out);

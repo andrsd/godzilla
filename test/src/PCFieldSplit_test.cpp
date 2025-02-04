@@ -184,7 +184,7 @@ TEST(PCFieldSplit, schur)
     KSPGetPC(ksp, &pc);
 
     Matrix pre = Matrix::create_seq_aij(comm, 3, 3, 1);
-    for (Int i = 0; i < 3; i++)
+    for (Int i = 0; i < 3; ++i)
         pre.set_value(i, i, 2.);
     pre.assemble();
 
@@ -195,7 +195,7 @@ TEST(PCFieldSplit, schur)
     fs.set_dm_splits(true);
     EXPECT_TRUE(fs.get_dm_splits());
     std::vector<std::string> fld_name = { "split0", "split1" };
-    for (Int i = 0; i < fdecomp.get_num_fields(); i++)
+    for (Int i = 0; i < fdecomp.get_num_fields(); ++i)
         fs.set_is(fld_name[i], fdecomp.is[i]);
 
     auto is0 = fs.get_is("split0");
@@ -241,7 +241,7 @@ TEST(PCFieldSplit, schur)
 
     auto schur_pc = fs.get_schur_pre();
     EXPECT_EQ(schur_pc.type, PCFieldSplit::SCHUR_PRE_USER);
-    for (Int i = 0; i < 3; i++)
+    for (Int i = 0; i < 3; ++i)
         EXPECT_DOUBLE_EQ(schur_pc.matrix.get_value(i, i), 2.);
 
     auto s = fs.schur_get_s();

@@ -62,7 +62,7 @@ TimeStepAdapt::get_candidates() const
     const Real * cost;
     PETSC_CHECK(TSAdaptCandidatesGet(this->tsadapt, &n, &order, &stage_order, &ccfl, &cost));
     std::vector<TimeStepAdapt::Candidate> candidates(n);
-    for (Int i = 0; i < n; i++) {
+    for (Int i = 0; i < n; ++i) {
         candidates[i].order = order[i];
         candidates[i].stage_order = stage_order[i];
         candidates[i].ccfl = ccfl[i];

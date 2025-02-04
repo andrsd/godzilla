@@ -39,7 +39,7 @@ public:
     {
         std::string str = format_msg("[ERROR]", prefix, format, std::forward<T>(args)...);
         this->entries.push_back({ ERROR, str });
-        this->num_errors++;
+        ++this->num_errors;
     }
 
     /// Log a warning
@@ -56,7 +56,7 @@ public:
     {
         std::string str = format_msg("[WARNING]", prefix, format, std::forward<T>(args)...);
         this->entries.push_back({ WARNING, str });
-        this->num_warnings++;
+        ++this->num_warnings;
     }
 
     /// Get the number of logged errors/warnings

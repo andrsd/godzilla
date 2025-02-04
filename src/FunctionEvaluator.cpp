@@ -90,7 +90,7 @@ FunctionEvaluator::evaluate(Int dim, Real time, const Real x[], Int nc, Real u[]
         int n_num;
         mu::value_type * val = this->parser.Eval(n_num);
         assert(nc == n_num);
-        for (int i = 0; i < n_num; i++)
+        for (int i = 0; i < n_num; ++i)
             u[i] = val[i];
         return true;
     }

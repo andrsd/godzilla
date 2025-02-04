@@ -44,7 +44,7 @@ PiecewiseConstant::PiecewiseConstant(const Parameters & params) :
         log_error("Size of 'x' is {}. It must be 1 or more.", this->x.size());
     else {
         // check monotonicity
-        for (std::size_t i = 0; i < this->x.size() - 1; i++) {
+        for (std::size_t i = 0; i < this->x.size() - 1; ++i) {
             if (this->x[i] >= this->x[i + 1])
                 log_error("Values in 'x' must be increasing. Failed at index '{}'.", i + 1);
         }

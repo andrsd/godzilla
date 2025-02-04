@@ -200,7 +200,7 @@ TecplotOutput::output_step()
     }
 
     write_zone();
-    this->n_zones++;
+    ++this->n_zones;
 }
 
 void
@@ -291,7 +291,7 @@ TecplotOutput::write_header_ascii()
 
     std::vector<std::string> dts;
     std::vector<std::string> var_names;
-    for (Int i = 0; i < dim; i++) {
+    for (Int i = 0; i < dim; ++i) {
         var_names.push_back(coord_names[i]);
         dts.emplace_back("DOUBLE");
     }
@@ -374,8 +374,8 @@ TecplotOutput::write_coordinates_ascii()
     auto coord = this->mesh->get_coordinates_local();
     auto xyz = coord.get_array_read();
     auto n_coords = coord.get_size() / dim;
-    for (Int d = 0; d < dim; d++) {
-        for (Int i = 0; i < n_coords; i++) {
+    for (Int d = 0; d < dim; ++d) {
+        for (Int i = 0; i < n_coords; ++i) {
             write_line(fmt::format(" {:f}", xyz[i * dim + d]));
             if ((i + 1) % 10 == 0)
                 write_line("\n");
@@ -420,7 +420,7 @@ TecplotOutput::write_connectivity_ascii()
         auto polytope_type = this->mesh->get_cell_type(cell_id);
         const Int * ordering = get_elem_node_ordering(polytope_type);
         auto cell_connect = this->mesh->get_connectivity(cell_id);
-        for (Int k = 0; k < cell_connect.size(); k++)
+        for (Int k = 0; k < cell_connect.size(); ++k)
             write_line(fmt::format(" {}", cell_connect[ordering[k]] - n_all_elems + 1));
         write_line("\n");
     }
@@ -442,7 +442,7 @@ TecplotOutput::write_nodal_field_variable_values_ascii()
     const Scalar * sln_vals = sln.get_array_read();
     for (auto fid : this->nodal_var_fids) {
         Int nc = this->dpi->get_field_num_components(fid);
-        for (Int c = 0; c < nc; c++) {
+        for (Int c = 0; c < nc; ++c) {
             for (auto n : this->mesh->get_vertex_range()) {
                 Int offset = this->dpi->get_field_dof(n, fid);
                 write_line(fmt::format(" {:f}", sln_vals[offset + c]));
@@ -457,7 +457,7 @@ TecplotOutput::write_nodal_field_variable_values_ascii()
     if (aux_sln_vals) {
         for (auto fid : this->nodal_aux_var_fids) {
             Int nc = this->dpi->get_aux_field_num_components(fid);
-            for (Int c = 0; c < nc; c++) {
+            for (Int c = 0; c < nc; ++c) {
                 for (auto n : this->mesh->get_vertex_range()) {
                     Int offset = this->dpi->get_aux_field_dof(n, fid);
                     write_line(fmt::format(" {:f}", aux_sln_vals[offset + c]));

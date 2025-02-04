@@ -23,7 +23,7 @@ DirichletBC::DirichletBC(const Parameters & params) :
     components(get_num_components(), 0)
 {
     CALL_STACK_MSG();
-    for (Int i = 0; i < get_num_components(); i++)
+    for (Int i = 0; i < get_num_components(); ++i)
         this->components[i] = i;
 }
 

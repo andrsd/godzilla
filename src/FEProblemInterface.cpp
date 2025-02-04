@@ -391,7 +391,7 @@ FEProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, c
         FieldInfo fi(name, id, nc, k, dim, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
-            for (unsigned int i = 0; i < nc; i++)
+            for (unsigned int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields.emplace(id, fi);
@@ -425,7 +425,7 @@ FEProblemInterface::set_aux_field(Int id,
         FieldInfo fi(name, id, nc, k, dim, block);
         if (nc > 1) {
             fi.component_names.resize(nc);
-            for (unsigned int i = 0; i < nc; i++)
+            for (unsigned int i = 0; i < nc; ++i)
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->aux_fields.emplace(id, fi);
@@ -632,7 +632,7 @@ FEProblemInterface::sort_residual_functionals(
     auto graph = build_dependecy_graph(suppliers);
     this->sorted_res_functionals.clear();
     for (auto & region : this->wf->get_residual_regions()) {
-        for (Int f = 0; f < get_num_fields(); f++) {
+        for (Int f = 0; f < get_num_fields(); ++f) {
             auto f0_fnls = this->wf->get(WeakForm::F0, region.label, region.value, f, 0);
             auto f1_fnls = this->wf->get(WeakForm::F1, region.label, region.value, f, 0);
 
@@ -647,7 +647,7 @@ FEProblemInterface::sort_residual_functionals(
             WeakForm::Key key(region, f, 0);
             // bfs gives back a sorted vector, but in reverse order, so
             // we reverse the vector here to get the order of evaluation
-            for (auto it = sv.rbegin(); it != sv.rend(); it++) {
+            for (auto it = sv.rbegin(); it != sv.rend(); ++it) {
                 auto ofnl = dynamic_cast<const ValueFunctional *>(*it);
                 if (ofnl)
                     this->sorted_res_functionals[key].push_back(ofnl);
@@ -664,8 +664,8 @@ FEProblemInterface::sort_jacobian_functionals(
     auto graph = build_dependecy_graph(suppliers);
     this->sorted_jac_functionals.clear();
     for (auto & region : this->wf->get_jacobian_regions()) {
-        for (Int f = 0; f < get_num_fields(); f++) {
-            for (Int g = 0; g < get_num_fields(); g++) {
+        for (Int f = 0; f < get_num_fields(); ++f) {
+            for (Int g = 0; g < get_num_fields(); ++g) {
                 auto g0_fnls = this->wf->get(WeakForm::G0, region.label, region.value, f, g, 0);
                 auto g1_fnls = this->wf->get(WeakForm::G1, region.label, region.value, f, g, 0);
                 auto g2_fnls = this->wf->get(WeakForm::G2, region.label, region.value, f, g, 0);
@@ -686,7 +686,7 @@ FEProblemInterface::sort_jacobian_functionals(
                 WeakForm::Key key(region, f, g);
                 // bfs gives back a sorted vector, but in reverse order, so
                 // we reverse the vector here to get the order of evaluation
-                for (auto it = sv.rbegin(); it != sv.rend(); it++) {
+                for (auto it = sv.rbegin(); it != sv.rend(); ++it) {
                     auto ofnl = dynamic_cast<const ValueFunctional *>(*it);
                     if (ofnl)
                         this->sorted_jac_functionals[key].push_back(ofnl);
