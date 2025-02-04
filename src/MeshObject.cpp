@@ -46,9 +46,9 @@ MeshObject::lprint_mesh_info()
     CALL_STACK_MSG();
     if (get_mesh<UnstructuredMesh>()) {
         auto um = get_mesh<UnstructuredMesh>();
-        lprint(9, "Information:");
-        lprint(9, "- vertices: {}", utils::human_number(um->get_num_vertices()));
-        lprint(9, "- elements: {}", utils::human_number(um->get_num_cells()));
+        lprintln(9, "Information:");
+        lprintln(9, "- vertices: {}", utils::human_number(um->get_num_vertices()));
+        lprintln(9, "- elements: {}", utils::human_number(um->get_num_cells()));
     }
 }
 

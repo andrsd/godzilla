@@ -141,14 +141,14 @@ void
 LinearProblem::monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
-    lprint(8, "{} Linear residual: {:e}", it, rnorm);
+    lprintln(8, "{} Linear residual: {:e}", it, rnorm);
 }
 
 void
 LinearProblem::solve()
 {
     CALL_STACK_MSG();
-    lprint(9, "Solving");
+    lprintln(9, "Solving");
     this->ks.solve(get_solution_vector());
 }
 

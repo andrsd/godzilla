@@ -105,7 +105,7 @@ ImplicitFENonlinearProblem::run()
     CALL_STACK_MSG();
     set_up_initial_guess();
     on_initial();
-    lprint(9, "Solving");
+    lprintln(9, "Solving");
     TransientProblemInterface::solve(get_solution_vector());
     if (converged())
         on_final();

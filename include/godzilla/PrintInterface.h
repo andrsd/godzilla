@@ -61,7 +61,7 @@ public:
     /// @param ... Arguments specifying data to print
     template <typename... T>
     void
-    lprint(unsigned int level, fmt::format_string<T...> format, T... args) const
+    lprintln(unsigned int level, fmt::format_string<T...> format, T... args) const
     {
         if (level <= this->verbosity_level && this->proc_id == 0) {
             fmt::print(stdout, "{}: ", this->prefix);

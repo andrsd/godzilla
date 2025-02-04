@@ -235,14 +235,14 @@ void
 NonlinearProblem::snes_monitor(Int it, Real norm)
 {
     CALL_STACK_MSG();
-    lprint(7, "{} Non-linear residual: {:e}", it, norm);
+    lprintln(7, "{} Non-linear residual: {:e}", it, norm);
 }
 
 void
 NonlinearProblem::ksp_monitor(Int it, Real rnorm)
 {
     CALL_STACK_MSG();
-    lprint(8, "    {} Linear residual: {:e}", it, rnorm);
+    lprintln(8, "    {} Linear residual: {:e}", it, rnorm);
 }
 
 void
@@ -256,7 +256,7 @@ void
 NonlinearProblem::solve()
 {
     CALL_STACK_MSG();
-    lprint(9, "Solving");
+    lprintln(9, "Solving");
     this->snes.solve(get_solution_vector());
 }
 

@@ -30,7 +30,7 @@ void
 GYMLFile::build()
 {
     CALL_STACK_MSG();
-    lprint(9, "Allocating objects");
+    lprintln(9, "Allocating objects");
     build_mesh();
     build_problem();
     build_problem_adapt();
@@ -50,7 +50,7 @@ GYMLFile::build_functions()
     if (!get_root()["functions"])
         return;
 
-    lprint(9, "- functions");
+    lprintln(9, "- functions");
     auto funcs_block = get_block(get_root(), "functions");
     for (const auto & it : funcs_block.values()) {
         Block blk = get_block(funcs_block, it.first.as<std::string>());
@@ -100,7 +100,7 @@ GYMLFile::build_partitioner()
     if (!get_root()["partitioner"])
         return;
 
-    lprint(9, "- partitioner");
+    lprintln(9, "- partitioner");
     auto part_node = get_block(get_root(), "partitioner");
     auto name = part_node["name"];
     if (name)
@@ -118,7 +118,7 @@ GYMLFile::build_auxiliary_fields()
     if (!get_root()["auxs"])
         return;
 
-    lprint(9, "- auxiliary fields");
+    lprintln(9, "- auxiliary fields");
     auto auxs_node = get_block(get_root(), "auxs");
     auto * fepi = dynamic_cast<FEProblemInterface *>(get_problem());
     auto * fvpi = dynamic_cast<FVProblemInterface *>(get_problem());
@@ -144,7 +144,7 @@ GYMLFile::build_initial_conditions()
     if (!get_root()["ics"])
         return;
 
-    lprint(9, "- initial conditions");
+    lprintln(9, "- initial conditions");
     auto ics_node = get_block(get_root(), "ics");
     auto * dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
     if (dpi == nullptr)
@@ -168,7 +168,7 @@ GYMLFile::build_boundary_conditions()
     if (!get_root()["bcs"])
         return;
 
-    lprint(9, "- boundary conditions");
+    lprintln(9, "- boundary conditions");
     auto bcs_node = get_block(get_root(), "bcs");
     auto * dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
     if (dpi == nullptr)
@@ -192,7 +192,7 @@ GYMLFile::build_postprocessors()
     if (!get_root()["pps"])
         return;
 
-    lprint(9, "- post-processors");
+    lprintln(9, "- post-processors");
     auto pps_node = get_block(get_root(), "pps");
     for (const auto & it : pps_node.values()) {
         Block blk = get_block(pps_node, it.first.as<std::string>());
