@@ -307,7 +307,7 @@ TransientProblemInterface::monitor(Int stepi, Real time, const Vector & x)
 {
     CALL_STACK_MSG();
     Real dt = get_time_step();
-    this->problem->lprint(6, "{} Time {:f} dt = {:f}", stepi, time, dt);
+    this->problem->lprintln(6, "{} Time {:f} dt = {:f}", stepi, time, dt);
 }
 
 void

@@ -31,7 +31,7 @@ TEST(PrintInterfaceTest, lprint)
         void
         create() override
         {
-            lprint(0, "Print");
+            lprintln(0, "Print");
         }
     };
 

@@ -316,7 +316,7 @@ bool
 App::check_integrity()
 {
     CALL_STACK_MSG();
-    lprint(9, "Checking integrity");
+    lprintln(9, "Checking integrity");
     if (this->yml)
         this->yml->check();
     if (this->logger->get_num_entries() > 0) {
@@ -331,7 +331,7 @@ void
 App::run_problem()
 {
     CALL_STACK_MSG();
-    lprint(9, "Running");
+    lprintln(9, "Running");
     assert(this->problem != nullptr);
     this->problem->run();
 }
