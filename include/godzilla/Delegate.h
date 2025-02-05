@@ -32,6 +32,15 @@ public:
         };
     }
 
+    template <typename T>
+    void
+    bind(T * t, R (T::*method)(ARGS...) const)
+    {
+        this->fn = [=](ARGS... args) {
+            return (t->*method)(args...);
+        };
+    }
+
     R
     operator()(ARGS... args)
     {

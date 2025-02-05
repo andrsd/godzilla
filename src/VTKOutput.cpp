@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/VTKOutput.h"
 #include "godzilla/UnstructuredMesh.h"
@@ -62,7 +61,6 @@ VTKOutput::output_step()
     set_sequence_file_base(problem->get_step_num());
     PETSC_CHECK(PetscViewerFileSetName(this->viewer, get_file_name().c_str()));
 
-    TIMED_EVENT(9, "VTKOutput", "Output to file: {}", get_file_name());
     auto dm = problem->get_dm();
     PETSC_CHECK(DMView(dm, this->viewer));
     auto vec = problem->get_solution_vector();

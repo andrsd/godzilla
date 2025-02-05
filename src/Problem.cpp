@@ -8,6 +8,7 @@
 #include "godzilla/Function.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Output.h"
+#include "godzilla/FileOutput.h"
 #include "godzilla/Section.h"
 
 namespace godzilla {
@@ -45,6 +46,7 @@ Problem::Problem(const Parameters & parameters) :
     partition_overlap(0),
     default_output_on()
 {
+    set_output_monitor(this, &Problem::output_monitor);
     this->partitioner.create(get_comm());
 }
 
@@ -164,6 +166,9 @@ Problem::add_output(Output * output)
     if (!output->is_param_valid("on"))
         output->set_exec_mask(this->default_output_on);
     this->outputs.push_back(output);
+    auto fo = dynamic_cast<FileOutput *>(output);
+    if (fo)
+        this->file_outputs.push_back(fo);
 }
 
 void
@@ -204,9 +209,12 @@ void
 Problem::output(ExecuteOnFlag flag)
 {
     CALL_STACK_MSG();
-    for (auto & o : this->outputs)
-        if (o->should_output(flag))
+    for (auto & o : this->file_outputs)
+        if (o->should_output(flag)) {
+            if (this->output_monitor_delegate)
+                this->output_monitor_delegate(o->get_file_name());
             o->output_step();
+        }
 }
 
 void
@@ -467,6 +475,12 @@ Problem::create_section_subis(const std::vector<Int> & fields,
     throw Exception(
         "PETSc 3.21+ is needed for Problem::create_section_subis with component support");
 #endif
+}
+
+void
+Problem::output_monitor(const std::string & file_name) const
+{
+    lprintln(9, "Output to file: {}", file_name);
 }
 
 } // namespace godzilla

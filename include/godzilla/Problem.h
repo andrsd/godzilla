@@ -20,6 +20,7 @@ class Mesh;
 class Function;
 class Postprocessor;
 class Output;
+class FileOutput;
 class Section;
 
 /// Problem
@@ -236,6 +237,18 @@ public:
                                   const std::vector<Int> & n_comps,
                                   const std::vector<Int> & comps) const;
 
+    /// Set output monitor
+    ///
+    /// @tparam T C++ class type
+    /// @param instance Instance of the class
+    /// @param monitor Member function in class T
+    template <class T>
+    void
+    set_output_monitor(T * instance, void (T::*method)(const std::string &) const)
+    {
+        this->output_monitor_delegate.bind(instance, method);
+    }
+
 protected:
     /// Set vector/matrix types
     virtual void set_up_types();
@@ -253,6 +266,11 @@ protected:
     void set_solution_vector(const Vector & x);
 
 private:
+    /// Output monitor
+    ///
+    /// @param file_name Name of the output file
+    void output_monitor(const std::string & file_name) const;
+
     /// Mesh
     MeshObject * mesh;
 
@@ -270,6 +288,7 @@ private:
 
     /// List of output objects
     std::vector<Output *> outputs;
+    std::vector<FileOutput *> file_outputs;
 
     /// Default output execute mask
     ExecuteOn default_output_on;
@@ -279,6 +298,9 @@ private:
 
     /// List of postprocessor names
     std::vector<std::string> pps_names;
+
+    /// Output monitor
+    Delegate<void(const std::string &)> output_monitor_delegate;
 
 public:
     static Parameters parameters();
