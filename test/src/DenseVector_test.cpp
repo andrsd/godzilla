@@ -32,6 +32,14 @@ TEST(DenseVectorTest, ctor_std_array)
     EXPECT_DOUBLE_EQ(v(2), 4.);
 }
 
+TEST(DenseVectorTest, ctor_init)
+{
+    DenseVector<Real, 3> v { 2., 3., 4. };
+    EXPECT_DOUBLE_EQ(v(0), 2.);
+    EXPECT_DOUBLE_EQ(v(1), 3.);
+    EXPECT_DOUBLE_EQ(v(2), 4.);
+}
+
 TEST(DenseVectorTest, assign_std_array)
 {
     DenseVector<Real, 3> v;
