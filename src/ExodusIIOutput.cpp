@@ -184,9 +184,6 @@ void
 ExodusIIOutput::output_mesh()
 {
     CALL_STACK_MSG();
-    // We only have fixed meshes, so no need to deal with a sequence of files
-    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", get_file_name());
-
     if (this->exo == nullptr)
         open_file();
 
@@ -200,9 +197,6 @@ void
 ExodusIIOutput::output_step()
 {
     CALL_STACK_MSG();
-    // We only have fixed meshes, so no need to deal with a sequence of files
-    TIMED_EVENT(9, "ExodusIIOutput", "Output to file: {}", get_file_name());
-
     if (this->exo == nullptr)
         open_file();
 

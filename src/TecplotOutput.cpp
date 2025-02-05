@@ -187,9 +187,6 @@ void
 TecplotOutput::output_step()
 {
     CALL_STACK_MSG();
-    // We only have fixed meshes, so no need to deal with a sequence of files
-    TIMED_EVENT(9, "TecplotOutput", "Output to file: {}", get_file_name());
-
     if (this->file == nullptr)
         open_file();
 

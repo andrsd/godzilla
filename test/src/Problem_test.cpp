@@ -4,7 +4,7 @@
 #include "godzilla/LineMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Function.h"
-#include "godzilla/Output.h"
+#include "godzilla/FileOutput.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Section.h"
 #include "ExceptionTestMacros.h"
@@ -64,41 +64,48 @@ TEST(ProblemTest, add_pp)
         }
     };
 
-    class TestOutput : public Output {
+    class TestOutput : public FileOutput {
     public:
-        explicit TestOutput(const Parameters & params) : Output(params) {}
+        explicit TestOutput(const Parameters & params) : FileOutput(params) {}
 
         MOCK_METHOD(void, output_step, ());
+
+        std::string
+        get_file_ext() const override
+        {
+            return "none";
+        }
     };
 
-    Parameters mesh_params = LineMesh::parameters();
+    auto mesh_params = LineMesh::parameters();
     mesh_params.set<App *>("_app") = &app;
     mesh_params.set<Int>("nx") = 2;
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = Problem::parameters();
+    auto prob_params = Problem::parameters();
     prob_params.set<App *>("_app") = &app;
     prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
     TestProblem problem(prob_params);
 
-    Parameters pp_params = Postprocessor::parameters();
+    auto pp_params = Postprocessor::parameters();
     pp_params.set<App *>("_app") = &app;
     pp_params.set<Problem *>("_problem") = &problem;
     pp_params.set<std::string>("_name") = "pp";
     TestPostprocessor pp(pp_params);
     problem.add_postprocessor(&pp);
 
-    Parameters fn_params = Function::parameters();
+    auto fn_params = Function::parameters();
     fn_params.set<App *>("_app") = &app;
     fn_params.set<Problem *>("_problem") = &problem;
     fn_params.set<std::string>("_name") = "fn";
     TestFunction fn(fn_params);
     problem.add_function(&fn);
 
-    Parameters out_params = Function::parameters();
+    auto out_params = FileOutput::parameters();
     out_params.set<App *>("_app") = &app;
     out_params.set<Problem *>("_problem") = &problem;
     out_params.set<std::string>("_name") = "out";
+    out_params.set<std::string>("file") = "file";
     out_params.set<std::vector<std::string>>("on") = { "initial" };
     out_params.set<Int>("interval") = 1;
     TestOutput out(out_params);
@@ -304,9 +311,8 @@ TEST(ProblemTest, aux_vecs_clear)
 
 #if PETSC_VERSION_GE(3, 21, 0)
 #else
-    EXPECT_THROW_MSG(
-        { problem.clear_auxiliary_vec(); },
-        "You need PETSC 3.21+ for `Problem::clear_auxiliary_vec()`");
+    EXPECT_THROW_MSG({ problem.clear_auxiliary_vec(); },
+                     "You need PETSC 3.21+ for `Problem::clear_auxiliary_vec()`");
 #endif
 }
 
