@@ -190,6 +190,15 @@ public:
 
     // Operators
 
+    template <Int M = N, typename std::enable_if<(M > 0), int>::type = 0>
+    DenseVector<T, N>
+    operator=(std::array<T, N> vals)
+    {
+        for (Int i = 0; i < N; ++i)
+            set(i) = vals[i];
+        return *this;
+    }
+
     const T &
     operator()(Int i) const
     {
