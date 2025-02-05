@@ -8,6 +8,7 @@
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/Utils.h"
 #include <cassert>
+#include <initializer_list>
 #include <type_traits>
 
 namespace godzilla {
@@ -38,6 +39,13 @@ public:
     {
         for (Int i = 0; i < N; ++i)
             set(i) = a(i, 0);
+    }
+
+    template <Int M = N, typename std::enable_if<(M > 0), int>::type = 0>
+    explicit DenseVector(std::initializer_list<T> init)
+    {
+        for (const auto & [i, v] : enumerate(init))
+            set(i) = v;
     }
 
     template <Int M = N, typename std::enable_if<(M > 0), int>::type = 0>
