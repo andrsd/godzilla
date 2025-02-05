@@ -17,6 +17,15 @@ TEST(DenseVectorTest, ctor)
 
 TEST(DenseVectorTest, ctor_std_vector)
 {
+    std::vector<Real> a = { 2., 3., 4. };
+    DenseVector<Real, 3> v(a);
+    EXPECT_DOUBLE_EQ(v(0), 2.);
+    EXPECT_DOUBLE_EQ(v(1), 3.);
+    EXPECT_DOUBLE_EQ(v(2), 4.);
+}
+
+TEST(DenseVectorTest, ctor_std_array)
+{
     DenseVector<Real, 3> v({ 2., 3., 4. });
     EXPECT_DOUBLE_EQ(v(0), 2.);
     EXPECT_DOUBLE_EQ(v(1), 3.);
