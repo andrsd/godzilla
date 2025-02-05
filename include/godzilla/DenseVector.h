@@ -6,7 +6,9 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include "godzilla/DenseMatrix.h"
+#include "godzilla/Utils.h"
 #include <cassert>
+#include <type_traits>
 
 namespace godzilla {
 
@@ -36,6 +38,13 @@ public:
     {
         for (Int i = 0; i < N; ++i)
             set(i) = a(i, 0);
+    }
+
+    template <Int M = N, typename std::enable_if<(M > 0), int>::type = 0>
+    explicit DenseVector(const std::array<T, M> & init)
+    {
+        for (Int i = 0; i < N; ++i)
+            set(i) = init(i);
     }
 
     /// Get an entry at location (i) for reading
