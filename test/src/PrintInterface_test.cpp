@@ -18,7 +18,7 @@ TEST(PrintInterfaceTest, error)
     EXPECT_DEATH(app.test(), "\\[ERROR\\] Error");
 }
 
-TEST(PrintInterfaceTest, lprintf)
+TEST(PrintInterfaceTest, lprint)
 {
     testing::internal::CaptureStdout();
 
