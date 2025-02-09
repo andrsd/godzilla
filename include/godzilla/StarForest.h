@@ -4,8 +4,12 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/Error.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include "petscsf.h"
 #include <vector>
+
+namespace mpi = mpicpp_lite;
 
 namespace godzilla {
 
@@ -75,6 +79,56 @@ public:
                    Int n_leaves,
                    const std::vector<Int> & ilocal,
                    const std::vector<Node> & iremote) const;
+
+    /// Begin pointwise broadcast with root value being reduced to leaf value, to be concluded with
+    /// call to `broadcast_end`
+    ///
+    /// @tparam T Type of the value to broadcast
+    /// @tparam Op Operation to use for reduction
+    /// @param root Value to broadcast
+    /// @param leaf Value to be reduced with values from each leaf’s respective root
+    template <typename T, typename Op>
+    void
+    broadcast_begin(const T & root, T & leaf, Op) const
+    {
+        auto dtype = mpi::mpi_datatype<T>();
+        auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
+        PETSC_CHECK(PetscSFBcastBegin(sf, dtype, &root, &leaf, mpi_op));
+    }
+
+    template <typename T, typename Op>
+    void
+    broadcast_begin(const std::vector<T> & root, std::vector<T> & leaf, Op) const
+    {
+        auto dtype = mpi::mpi_datatype<T>();
+        auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
+        PETSC_CHECK(PetscSFBcastBegin(sf, dtype, root.data(), leaf.data(), mpi_op));
+    }
+
+    /// End a broadcast and reduce operation started with `broadcast_begin`
+    ///
+    /// @tparam T Type of the value to broadcast
+    /// @tparam Op Operation to use for reduction
+    /// @param root Value to broadcast
+    /// @param leaf Value to be reduced with values from each leaf’s respective root
+    /// @param op Operation to use for reduction
+    template <typename T, typename Op>
+    void
+    broadcast_end(const T & root, T & leaf, Op) const
+    {
+        auto dtype = mpi::mpi_datatype<T>();
+        auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
+        PETSC_CHECK(PetscSFBcastEnd(sf, dtype, &root, &leaf, mpi_op));
+    }
+
+    template <typename T, typename Op>
+    void
+    broadcast_end(const std::vector<T> & root, std::vector<T> & leaf, Op) const
+    {
+        auto dtype = mpi::mpi_datatype<T>();
+        auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
+        PETSC_CHECK(PetscSFBcastEnd(sf, dtype, root.data(), leaf.data(), mpi_op));
+    }
 
     /// View a star forrest
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
