@@ -1213,7 +1213,7 @@ public:
         DynDenseMatrix<T> tr(this->cols, this->rows);
 #ifdef NDEBUG
         for (Int idx = 0, i = 0; i < this->rows; ++i)
-            for (Int tr_idx = i, j = 0; j < this->cols; ++j, ++idx, tr_idx += this->cols)
+            for (Int tr_idx = i, j = 0; j < this->cols; ++j, ++idx, tr_idx += this->rows)
                 tr.data(tr_idx) = data(idx);
 #else
         for (Int i = 0; i < this->rows; ++i)
