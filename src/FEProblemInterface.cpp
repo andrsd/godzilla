@@ -72,6 +72,7 @@ FEProblemInterface::~FEProblemInterface()
     }
 
     delete this->asmbl;
+    delete this->wf;
 }
 
 const std::map<Int, FEProblemInterface::FieldInfo> &
