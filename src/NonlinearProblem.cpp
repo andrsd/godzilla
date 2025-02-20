@@ -52,7 +52,8 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
     nl_max_iter(get_param<Int>("nl_max_iter")),
     lin_rel_tol(get_param<Real>("lin_rel_tol")),
     lin_abs_tol(get_param<Real>("lin_abs_tol")),
-    lin_max_iter(get_param<Int>("lin_max_iter"))
+    lin_max_iter(get_param<Int>("lin_max_iter")),
+    my_snes(false)
 {
     CALL_STACK_MSG();
     set_default_output_on(EXECUTE_ON_FINAL);
@@ -65,6 +66,8 @@ NonlinearProblem::NonlinearProblem(const Parameters & parameters) :
 NonlinearProblem::~NonlinearProblem()
 {
     CALL_STACK_MSG();
+    if (this->my_snes)
+        this->snes.destroy();
     this->r.destroy();
     this->J.destroy();
 }
@@ -139,6 +142,7 @@ NonlinearProblem::create_sne_solver()
     snes.create(get_comm());
     snes.set_dm(get_dm());
     PETSC_CHECK(DMSetApplicationContext(get_dm(), this));
+    this->my_snes = true;
     return snes;
 }
 
