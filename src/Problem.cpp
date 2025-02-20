@@ -99,7 +99,6 @@ void
 Problem::create()
 {
     CALL_STACK_MSG();
-    this->partitioner.create(get_comm());
     for (auto & f : this->functions)
         f->create();
     for (auto & pp : this->pps)
