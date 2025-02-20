@@ -749,72 +749,88 @@ TEST(DenseMatrixTest, transpose)
 
 TEST(DynDenseMatrixTest, ctor_init)
 {
-    DynDenseMatrix<Real> m(2, 2, 123.);
+    DynDenseMatrix<Real> m(2, 3, 123.);
     EXPECT_EQ(m(0, 0), 123.);
     EXPECT_EQ(m(0, 1), 123.);
+    EXPECT_EQ(m(0, 2), 123.);
     EXPECT_EQ(m(1, 0), 123.);
     EXPECT_EQ(m(1, 1), 123.);
+    EXPECT_EQ(m(1, 2), 123.);
 }
 
 TEST(DynDenseMatrixTest, zero)
 {
-    DynDenseMatrix<Real> m(2, 2);
+    DynDenseMatrix<Real> m(2, 3);
     m.set(0, 0) = 1.;
     m.set(0, 1) = -2.;
+    m.set(0, 2) = 3.;
     m.set(1, 0) = 2.;
     m.set(1, 1) = -1.;
+    m.set(1, 2) = 5;
     m.zero();
 
     EXPECT_EQ(m(0, 0), 0.);
     EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), 0.);
     EXPECT_EQ(m(1, 0), 0.);
     EXPECT_EQ(m(1, 1), 0.);
+    EXPECT_EQ(m(1, 2), 0.);
 }
 
 TEST(DynDenseMatrixTest, set)
 {
-    DynDenseMatrix<Real> m(2, 2);
+    DynDenseMatrix<Real> m(2, 3);
     m.set(0, 0) = 1.;
     m.set(0, 1) = 0.;
+    m.set(0, 2) = -1.;
     m.set(1, 0) = 2.;
     m.set(1, 1) = -1.;
+    m.set(1, 2) = 3.;
 
     EXPECT_EQ(m(0, 0), 1.);
     EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), -1.);
     EXPECT_EQ(m(1, 0), 2.);
     EXPECT_EQ(m(1, 1), -1.);
+    EXPECT_EQ(m(1, 2), 3.);
 }
 
 TEST(DynDenseMatrixTest, set2)
 {
-    DynDenseMatrix<Real> m(2, 2);
+    DynDenseMatrix<Real> m(2, 3);
     m.set(0, 0, 1.);
     m.set(0, 1, 0.);
+    m.set(0, 2, -1.);
     m.set(1, 0, 2.);
-    m.set(1, 1, -1);
+    m.set(1, 1, -1.);
+    m.set(1, 2, 3.);
 
     EXPECT_EQ(m(0, 0), 1.);
     EXPECT_EQ(m(0, 1), 0.);
+    EXPECT_EQ(m(0, 2), -1.);
     EXPECT_EQ(m(1, 0), 2.);
     EXPECT_EQ(m(1, 1), -1.);
+    EXPECT_EQ(m(1, 2), 3.);
 }
 
 TEST(DynDenseMatrixTest, set_values)
 {
-    DynDenseMatrix<Real> m(2, 2);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_values(3.);
     EXPECT_EQ(m(0, 0), 3.);
     EXPECT_EQ(m(0, 1), 3.);
+    EXPECT_EQ(m(0, 2), 3.);
     EXPECT_EQ(m(1, 0), 3.);
     EXPECT_EQ(m(1, 1), 3.);
+    EXPECT_EQ(m(1, 2), 3.);
 }
 
 TEST(DynDenseMatrixTest, scale)
 {
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_row(0, { 2, 1, 0 });
     m.set_row(1, { 1, 2, -1 });
-    m.set_row(2, { 0, -1, 2 });
+
     m.scale(3.);
     EXPECT_EQ(m(0, 0), 6.);
     EXPECT_EQ(m(0, 1), 3.);
@@ -822,81 +838,87 @@ TEST(DynDenseMatrixTest, scale)
     EXPECT_EQ(m(1, 0), 3.);
     EXPECT_EQ(m(1, 1), 6.);
     EXPECT_EQ(m(1, 2), -3.);
-    EXPECT_EQ(m(2, 0), 0.);
-    EXPECT_EQ(m(2, 1), -3.);
-    EXPECT_EQ(m(2, 2), 6.);
 }
 
 TEST(DynDenseMatrixTest, mult)
 {
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_row(0, { 1, 1, 0 });
     m.set_row(1, { 1, 1, 1 });
-    m.set_row(2, { 0, 1, 1 });
     DynDenseVector<Real> v(3);
     v.set_values({ 2., 3., 4. });
 
     auto res = m.mult(v);
     EXPECT_EQ(res(0), 5.);
     EXPECT_EQ(res(1), 9.);
-    EXPECT_EQ(res(2), 7.);
 }
 
 TEST(DynDenseMatrixTest, op_unary_minus)
 {
-    DynDenseMatrix<Real> m(2, 2);
+    DynDenseMatrix<Real> m(2, 3);
     m.set(0, 0) = 1.;
     m.set(0, 1) = -2.;
+    m.set(0, 2) = 3.;
     m.set(1, 0) = 2.;
     m.set(1, 1) = 0.;
+    m.set(1, 2) = -4.;
+
     auto n = -m;
     EXPECT_EQ(n(0, 0), -1.);
     EXPECT_EQ(n(0, 1), 2.);
+    EXPECT_EQ(n(0, 2), -3.);
     EXPECT_EQ(n(1, 0), -2.);
     EXPECT_EQ(n(1, 1), 0.);
+    EXPECT_EQ(n(1, 2), 4.);
 }
 
 TEST(DynDenseMatrixTest, add)
 {
-    DynDenseMatrix<Real> m(2, 2);
-    m.set_row(0, { 1., -2. });
-    m.set_row(1, { 2., 0. });
-    DynDenseMatrix<Real> n(2, 2);
-    n.set_row(0, { 1., -1. });
-    n.set_row(1, { 0., -3. });
+    DynDenseMatrix<Real> m(2, 3);
+    m.set_row(0, { 1., -2., 3. });
+    m.set_row(1, { 2., 0., 4. });
+
+    DynDenseMatrix<Real> n(2, 3);
+    n.set_row(0, { 1., -1., 0. });
+    n.set_row(1, { 0., -3., 2. });
+
     m.add(n);
     EXPECT_EQ(m(0, 0), 2.);
     EXPECT_EQ(m(0, 1), -3.);
+    EXPECT_EQ(m(0, 2), 3.);
     EXPECT_EQ(m(1, 0), 2.);
     EXPECT_EQ(m(1, 1), -3.);
+    EXPECT_EQ(m(1, 2), 6.);
 }
 
 TEST(DynDenseMatrixTest, op_add)
 {
-    DynDenseMatrix<Real> m(2, 2);
-    m.set_row(0, { 1., -2. });
-    m.set_row(1, { 2., 0. });
-    DynDenseMatrix<Real> n(2, 2);
-    n.set_row(0, { 1., -1. });
-    n.set_row(1, { 0., -3. });
+    DynDenseMatrix<Real> m(2, 3);
+    m.set_row(0, { 1., -2., 3. });
+    m.set_row(1, { 2., 0., 4. });
+
+    DynDenseMatrix<Real> n(2, 3);
+    n.set_row(0, { 1., -1., 0. });
+    n.set_row(1, { 0., -3., 2. });
+
     auto o = m + n;
     EXPECT_EQ(o(0, 0), 2.);
     EXPECT_EQ(o(0, 1), -3.);
+    EXPECT_EQ(o(0, 2), 3.);
     EXPECT_EQ(o(1, 0), 2.);
     EXPECT_EQ(o(1, 1), -3.);
+    EXPECT_EQ(o(1, 2), 6.);
 }
 
 TEST(DynDenseMatrixTest, op_inc_mat)
 {
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_row(0, { 1, 1, 0 });
     m.set_row(1, { 1, 1, 1 });
-    m.set_row(2, { 0, 1, 1 });
 
-    DynDenseMatrix<Real> n(3, 3);
+    DynDenseMatrix<Real> n(2, 3);
     n.set_row(0, { 2, -1, 1 });
     n.set_row(1, { 1, -3, 4 });
-    n.set_row(2, { -1, -1, -2 });
 
     m += n;
     EXPECT_EQ(m(0, 0), 3.);
@@ -905,47 +927,47 @@ TEST(DynDenseMatrixTest, op_inc_mat)
     EXPECT_EQ(m(1, 0), 2.);
     EXPECT_EQ(m(1, 1), -2.);
     EXPECT_EQ(m(1, 2), 5.);
-    EXPECT_EQ(m(2, 0), -1.);
-    EXPECT_EQ(m(2, 1), 0.);
-    EXPECT_EQ(m(2, 2), -1.);
 }
 
 TEST(DynDenseMatrixTest, subtract)
 {
-    DynDenseMatrix<Real> m(2, 2);
-    m.set_row(0, { 1., -2. });
-    m.set_row(1, { 2., 0. });
-    DynDenseMatrix<Real> n(2, 2);
-    n.set_row(0, { 1., -1. });
-    n.set_row(1, { 0., -3. });
+    DynDenseMatrix<Real> m(2, 3);
+    m.set_row(0, { 1., -2., 3. });
+    m.set_row(1, { 2., 0., -1. });
+    DynDenseMatrix<Real> n(2, 3);
+    n.set_row(0, { 1., -1., 0. });
+    n.set_row(1, { 0., -3., 4. });
     m.subtract(n);
     EXPECT_EQ(m(0, 0), 0.);
     EXPECT_EQ(m(0, 1), -1.);
+    EXPECT_EQ(m(0, 2), 3.);
     EXPECT_EQ(m(1, 0), 2.);
     EXPECT_EQ(m(1, 1), 3.);
+    EXPECT_EQ(m(1, 2), -5.);
 }
 
 TEST(DynDenseMatrixTest, op_subtract)
 {
-    DynDenseMatrix<Real> m(2, 2);
-    m.set_row(0, { 1., -2. });
-    m.set_row(1, { 2., 0. });
-    DynDenseMatrix<Real> n(2, 2);
-    n.set_row(0, { 1., -1. });
-    n.set_row(1, { 0., -3. });
+    DynDenseMatrix<Real> m(2, 3);
+    m.set_row(0, { 1., -2., 3. });
+    m.set_row(1, { 2., 0., -1. });
+    DynDenseMatrix<Real> n(2, 3);
+    n.set_row(0, { 1., -1., 0. });
+    n.set_row(1, { 0., -3., 4. });
     auto o = m - n;
     EXPECT_EQ(o(0, 0), 0.);
     EXPECT_EQ(o(0, 1), -1.);
+    EXPECT_EQ(o(0, 2), 3.);
     EXPECT_EQ(o(1, 0), 2.);
     EXPECT_EQ(o(1, 1), 3.);
+    EXPECT_EQ(o(1, 2), -5.);
 }
 
 TEST(DynDenseMatrixTest, op_mult_scalar)
 {
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_row(0, { 2, 1, 0 });
     m.set_row(1, { -1, -2, 4 });
-    m.set_row(2, { 0, 3, -1 });
 
     auto res = m * 2.;
     EXPECT_EQ(res(0, 0), 4.);
@@ -954,44 +976,35 @@ TEST(DynDenseMatrixTest, op_mult_scalar)
     EXPECT_EQ(res(1, 0), -2.);
     EXPECT_EQ(res(1, 1), -4.);
     EXPECT_EQ(res(1, 2), 8.);
-    EXPECT_EQ(res(2, 0), 0.);
-    EXPECT_EQ(res(2, 1), 6.);
-    EXPECT_EQ(res(2, 2), -2.);
 }
 
 TEST(DynDenseMatrixTest, op_mult_scalar_pre)
 {
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_row(0, { 2, 1, 0 });
     m.set_row(1, { 1, 2, -1 });
-    m.set_row(2, { 0, -1, 2 });
     auto res = 3. * m;
     EXPECT_EQ(res.get_num_cols(), 3);
-    EXPECT_EQ(res.get_num_rows(), 3);
+    EXPECT_EQ(res.get_num_rows(), 2);
     EXPECT_EQ(res(0, 0), 6.);
     EXPECT_EQ(res(0, 1), 3.);
     EXPECT_EQ(res(0, 2), 0.);
     EXPECT_EQ(res(1, 0), 3.);
     EXPECT_EQ(res(1, 1), 6.);
     EXPECT_EQ(res(1, 2), -3.);
-    EXPECT_EQ(res(2, 0), 0.);
-    EXPECT_EQ(res(2, 1), -3.);
-    EXPECT_EQ(res(2, 2), 6.);
 }
 
 TEST(DynDenseMatrixTest, op_mult)
 {
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_row(0, { 1, 1, 0 });
     m.set_row(1, { 1, 1, 1 });
-    m.set_row(2, { 0, 1, 1 });
     DynDenseVector<Real> v(3);
     v.set_values({ 2., 3., 4. });
 
     auto res = m * v;
     EXPECT_EQ(res(0), 5.);
     EXPECT_EQ(res(1), 9.);
-    EXPECT_EQ(res(2), 7.);
 }
 
 TEST(DynDenseMatrixTest, create_diagonal)
@@ -1010,10 +1023,10 @@ TEST(DynDenseMatrixTest, create_diagonal)
 
 TEST(DynDenseMatrixTest, transpose3)
 {
-    DynDenseMatrix<Real> m(3, 3);
-    m.set_row(0, { 2, -3, 4 });
-    m.set_row(1, { -5, 6, -7 });
-    m.set_row(2, { 8, -1, -2 });
+    DynDenseMatrix<Real> m(3, 4);
+    m.set_row(0, { 2, -3, 4, 8 });
+    m.set_row(1, { -5, 6, -7, -1 });
+    m.set_row(2, { 8, -1, -2, 3 });
     auto tr = transpose(m);
     EXPECT_EQ(tr(0, 0), 2.);
     EXPECT_EQ(tr(0, 1), -5.);
@@ -1024,6 +1037,9 @@ TEST(DynDenseMatrixTest, transpose3)
     EXPECT_EQ(tr(2, 0), 4.);
     EXPECT_EQ(tr(2, 1), -7.);
     EXPECT_EQ(tr(2, 2), -2.);
+    EXPECT_EQ(tr(3, 0), 8.);
+    EXPECT_EQ(tr(3, 1), -1.);
+    EXPECT_EQ(tr(3, 2), 3.);
 }
 
 TEST(DynDenseMatrixTest, mult_mat)
@@ -1068,7 +1084,7 @@ TEST(DynDenseMatrixTest, set_row_dense_vec)
     DynDenseVector<Real> row0(3);
     row0.set_values({ 2, 1, 7 });
 
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_row(0, row0);
     EXPECT_EQ(m(0, 0), 2.);
     EXPECT_EQ(m(0, 1), 1.);
@@ -1080,7 +1096,7 @@ TEST(DynDenseMatrixTest, set_row_dense_mat)
     DynDenseMatrix<Real> row0(1, 3);
     row0.set_row(0, { 2, 1, 7 });
 
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(2, 3);
     m.set_row(0, row0);
     EXPECT_EQ(m(0, 0), 2.);
     EXPECT_EQ(m(0, 1), 1.);
@@ -1107,7 +1123,7 @@ TEST(DynDenseMatrixTest, set_col_std_vec)
 {
     std::vector<Real> col0 = { 2, 1, 7 };
 
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(3, 2);
     m.set_col(1, col0);
     EXPECT_EQ(m(0, 1), 2.);
     EXPECT_EQ(m(1, 1), 1.);
@@ -1119,7 +1135,7 @@ TEST(DynDenseMatrixTest, set_col_dense_vec)
     DynDenseVector<Real> col0(3);
     col0.set_values({ 2, 1, 7 });
 
-    DynDenseMatrix<Real> m(3, 3);
+    DynDenseMatrix<Real> m(3, 2);
     m.set_col(1, col0);
     EXPECT_EQ(m(0, 1), 2.);
     EXPECT_EQ(m(1, 1), 1.);
