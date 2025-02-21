@@ -109,6 +109,12 @@ protected:
     void set_up_weak_form() override;
 
 private:
+    /// Local section
+    Section section;
+
+    /// Local section for auxiliary fields
+    Section section_aux;
+
     /// Quadrature order
     Int qorder;
 

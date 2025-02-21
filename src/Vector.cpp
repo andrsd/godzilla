@@ -428,18 +428,18 @@ Vector
 Vector::create_seq(MPI_Comm comm, Int n)
 {
     CALL_STACK_MSG();
-    Vector v(comm);
-    PETSC_CHECK(VecCreateSeq(comm, n, &v.vec));
-    return v;
+    Vec v;
+    PETSC_CHECK(VecCreateSeq(comm, n, &v));
+    return Vector(v);
 }
 
 Vector
 Vector::create_mpi(MPI_Comm comm, Int n, Int N)
 {
     CALL_STACK_MSG();
-    Vector v(comm);
-    PETSC_CHECK(VecCreateMPI(comm, n, N, &v.vec));
-    return v;
+    Vec v;
+    PETSC_CHECK(VecCreateMPI(comm, n, N, &v));
+    return Vector(v);
 }
 
 void

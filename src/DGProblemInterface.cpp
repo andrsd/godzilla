@@ -28,10 +28,15 @@ DGProblemInterface::DGProblemInterface(Problem * problem, const Parameters & par
 DGProblemInterface::~DGProblemInterface()
 {
     CALL_STACK_MSG();
+    for (auto & [id, info] : this->fields) {
+        PetscFEDestroy(&info.fe);
+    }
     for (auto & kv : this->aux_fe) {
         auto & fe = kv.second;
         PetscFEDestroy(&fe);
     }
+    this->section.destroy();
+    this->section_aux.destroy();
 }
 
 void
@@ -372,8 +377,7 @@ Int
 DGProblemInterface::get_field_dof(Int elem, Int local_node, Int fid) const
 {
     CALL_STACK_MSG();
-    auto section = get_problem()->get_local_section();
-    auto offset = section.get_field_offset(elem, fid);
+    auto offset = this->section.get_field_offset(elem, fid);
     // FIXME: works only for order = 1
     auto n_comps = get_field_num_components(fid);
     offset += n_comps * local_node;
@@ -416,30 +420,29 @@ DGProblemInterface::create_section()
     auto unstr_mesh = get_mesh();
     auto dm = unstr_mesh->get_dm();
     PETSC_CHECK(DMSetNumFields(dm, 1));
-    Section section;
-    section.create(comm);
-    section.set_num_fields(get_num_fields());
+    this->section.create(comm);
+    this->section.set_num_fields(get_num_fields());
     for (auto & it : this->fields) {
         auto & fi = it.second;
-        section.set_num_field_components(fi.id, fi.nc);
+        this->section.set_num_field_components(fi.id, fi.nc);
     }
     auto cell_range = unstr_mesh->get_cell_range();
-    section.set_chart(cell_range.first(), cell_range.last());
+    this->section.set_chart(cell_range.first(), cell_range.last());
     for (Int c = cell_range.first(); c < cell_range.last(); ++c) {
         auto n_nodes = get_num_nodes_per_elem(c);
         Int n_dofs = 0;
         for (auto & it : this->fields) {
             auto & fi = it.second;
             auto n_field_dofs = fi.nc * n_nodes; // FIXME: work for only order = 1
-            section.set_field_dof(c, fi.id, n_field_dofs);
+            this->section.set_field_dof(c, fi.id, n_field_dofs);
             n_dofs += n_field_dofs;
         }
-        section.set_dof(c, n_dofs);
+        this->section.set_dof(c, n_dofs);
     }
-    set_up_section_constraint_dofs(section);
-    section.set_up();
-    set_up_section_constraint_indicies(section);
-    get_problem()->set_local_section(section);
+    set_up_section_constraint_dofs(this->section);
+    this->section.set_up();
+    set_up_section_constraint_indicies(this->section);
+    get_problem()->set_local_section(this->section);
 }
 
 void
@@ -530,17 +533,16 @@ DGProblemInterface::create_aux_fields()
 {
     CALL_STACK_MSG();
     auto comm = get_problem()->get_comm();
-    Section section_aux;
-    section_aux.create(comm);
-    section_aux.set_num_fields(get_num_aux_fields());
+    this->section_aux.create(comm);
+    this->section_aux.set_num_fields(get_num_aux_fields());
     for (auto & it : this->aux_fields) {
         auto & fi = it.second;
-        section_aux.set_num_field_components(fi.id, fi.nc);
+        this->section_aux.set_num_field_components(fi.id, fi.nc);
     }
 
     auto unstr_mesh = get_mesh();
     auto cell_range = unstr_mesh->get_cell_range();
-    section_aux.set_chart(cell_range.first(), cell_range.last());
+    this->section_aux.set_chart(cell_range.first(), cell_range.last());
     for (Int c = cell_range.first(); c < cell_range.last(); ++c) {
         auto n_nodes = get_num_nodes_per_elem(c);
         Int n_dofs = 0;
@@ -548,13 +550,13 @@ DGProblemInterface::create_aux_fields()
             auto & fi = it.second;
             // FIXME: this works for order = 1
             auto n_field_dofs = fi.nc * n_nodes;
-            section_aux.set_field_dof(c, fi.id, n_field_dofs);
+            this->section_aux.set_field_dof(c, fi.id, n_field_dofs);
             n_dofs += n_field_dofs;
         }
-        section_aux.set_dof(c, n_dofs);
+        this->section_aux.set_dof(c, n_dofs);
     }
-    section_aux.set_up();
-    PETSC_CHECK(DMSetLocalSection(get_dm_aux(), section_aux));
+    this->section_aux.set_up();
+    PETSC_CHECK(DMSetLocalSection(get_dm_aux(), this->section_aux));
 }
 
 void

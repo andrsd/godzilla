@@ -274,18 +274,18 @@ Matrix
 Matrix::create_seq_aij(MPI_Comm comm, Int m, Int n, Int nz)
 {
     CALL_STACK_MSG();
-    Matrix mat;
-    PETSC_CHECK(MatCreateSeqAIJ(comm, m, n, nz, nullptr, &mat.mat));
-    return mat;
+    Mat mat;
+    PETSC_CHECK(MatCreateSeqAIJ(comm, m, n, nz, nullptr, &mat));
+    return Matrix(mat);
 }
 
 Matrix
 Matrix::create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz)
 {
     CALL_STACK_MSG();
-    Matrix mat;
-    PETSC_CHECK(MatCreateSeqAIJ(comm, m, n, 0, nnz.data(), &mat.mat));
-    return mat;
+    Mat mat;
+    PETSC_CHECK(MatCreateSeqAIJ(comm, m, n, 0, nnz.data(), &mat));
+    return Matrix(mat);
 }
 
 ShellMatrix
