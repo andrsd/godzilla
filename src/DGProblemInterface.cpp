@@ -28,10 +28,17 @@ DGProblemInterface::DGProblemInterface(Problem * problem, const Parameters & par
 DGProblemInterface::~DGProblemInterface()
 {
     CALL_STACK_MSG();
+    for (auto & [id, info] : this->fields) {
+        PetscFEDestroy(&info.fe);
+    }
     for (auto & kv : this->aux_fe) {
         auto & fe = kv.second;
         PetscFEDestroy(&fe);
     }
+    get_problem()->get_local_section().destroy();
+    PetscSection sec_aux;
+    PETSC_CHECK(DMGetLocalSection(get_dm_aux(), &sec_aux));
+    PETSC_CHECK(PetscSectionDestroy(&sec_aux));
 }
 
 void
