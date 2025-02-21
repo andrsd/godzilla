@@ -36,6 +36,7 @@ DGProblemInterface::~DGProblemInterface()
         PetscFEDestroy(&fe);
     }
     this->section.destroy();
+    this->section_aux.destroy();
 }
 
 void
@@ -532,17 +533,16 @@ DGProblemInterface::create_aux_fields()
 {
     CALL_STACK_MSG();
     auto comm = get_problem()->get_comm();
-    Section section_aux;
-    section_aux.create(comm);
-    section_aux.set_num_fields(get_num_aux_fields());
+    this->section_aux.create(comm);
+    this->section_aux.set_num_fields(get_num_aux_fields());
     for (auto & it : this->aux_fields) {
         auto & fi = it.second;
-        section_aux.set_num_field_components(fi.id, fi.nc);
+        this->section_aux.set_num_field_components(fi.id, fi.nc);
     }
 
     auto unstr_mesh = get_mesh();
     auto cell_range = unstr_mesh->get_cell_range();
-    section_aux.set_chart(cell_range.first(), cell_range.last());
+    this->section_aux.set_chart(cell_range.first(), cell_range.last());
     for (Int c = cell_range.first(); c < cell_range.last(); ++c) {
         auto n_nodes = get_num_nodes_per_elem(c);
         Int n_dofs = 0;
@@ -550,13 +550,13 @@ DGProblemInterface::create_aux_fields()
             auto & fi = it.second;
             // FIXME: this works for order = 1
             auto n_field_dofs = fi.nc * n_nodes;
-            section_aux.set_field_dof(c, fi.id, n_field_dofs);
+            this->section_aux.set_field_dof(c, fi.id, n_field_dofs);
             n_dofs += n_field_dofs;
         }
-        section_aux.set_dof(c, n_dofs);
+        this->section_aux.set_dof(c, n_dofs);
     }
-    section_aux.set_up();
-    PETSC_CHECK(DMSetLocalSection(get_dm_aux(), section_aux));
+    this->section_aux.set_up();
+    PETSC_CHECK(DMSetLocalSection(get_dm_aux(), this->section_aux));
 }
 
 void

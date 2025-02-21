@@ -112,6 +112,9 @@ private:
     /// Local section
     Section section;
 
+    /// Local section for auxiliary fields
+    Section section_aux;
+
     /// Quadrature order
     Int qorder;
 
