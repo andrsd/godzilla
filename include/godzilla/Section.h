@@ -279,6 +279,8 @@ public:
 
     operator PetscSection &() { return this->section; }
 
+    operator bool() const { return this->section != nullptr; }
+
     static Section create(DM dm,
                           const Int n_comp[],
                           const Int n_dof[],
