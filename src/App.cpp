@@ -16,7 +16,7 @@
 
 namespace godzilla {
 
-Registry App::registry;
+Registry registry;
 
 App::App(const mpi::Communicator & comm,
          const std::string & name,
@@ -25,43 +25,7 @@ App::App(const mpi::Communicator & comm,
     PrintInterface(comm, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
-    logger(new Logger()),
-    cmdln_opts(name),
-    verbosity_level(1),
-    yml(nullptr),
-    problem(nullptr),
-    factory(App::get_registry())
-{
-    CALL_STACK_MSG();
-    this->args.resize(argc);
-    for (int i = 0; i < argc; ++i)
-        this->args.emplace_back(argv[i]);
-}
-
-App::App(const mpi::Communicator & comm,
-         const std::string & name,
-         const std::vector<std::string> & args) :
-    PrintInterface(comm, this->verbosity_level, name),
-    name(name),
-    mpi_comm(comm),
-    logger(new Logger()),
-    args(args),
-    cmdln_opts(name),
-    verbosity_level(1),
-    yml(nullptr),
-    problem(nullptr),
-    factory(App::get_registry())
-{
-}
-
-App::App(const mpi::Communicator & comm,
-         const Registry & registry,
-         const std::string & name,
-         int argc,
-         const char * const * argv) :
-    PrintInterface(comm, this->verbosity_level, name),
-    name(name),
-    mpi_comm(comm),
+    registry(godzilla::registry),
     logger(new Logger()),
     cmdln_opts(name),
     verbosity_level(1),
@@ -76,12 +40,52 @@ App::App(const mpi::Communicator & comm,
 }
 
 App::App(const mpi::Communicator & comm,
-         const Registry & registry,
          const std::string & name,
          const std::vector<std::string> & args) :
     PrintInterface(comm, this->verbosity_level, name),
     name(name),
     mpi_comm(comm),
+    registry(godzilla::registry),
+    logger(new Logger()),
+    args(args),
+    cmdln_opts(name),
+    verbosity_level(1),
+    yml(nullptr),
+    problem(nullptr),
+    factory(registry)
+{
+}
+
+App::App(const mpi::Communicator & comm,
+         Registry & registry,
+         const std::string & name,
+         int argc,
+         const char * const * argv) :
+    PrintInterface(comm, this->verbosity_level, name),
+    name(name),
+    mpi_comm(comm),
+    registry(registry),
+    logger(new Logger()),
+    cmdln_opts(name),
+    verbosity_level(1),
+    yml(nullptr),
+    problem(nullptr),
+    factory(registry)
+{
+    CALL_STACK_MSG();
+    this->args.resize(argc);
+    for (int i = 0; i < argc; ++i)
+        this->args.emplace_back(argv[i]);
+}
+
+App::App(const mpi::Communicator & comm,
+         Registry & registry,
+         const std::string & name,
+         const std::vector<std::string> & args) :
+    PrintInterface(comm, this->verbosity_level, name),
+    name(name),
+    mpi_comm(comm),
+    registry(registry),
     logger(new Logger()),
     args(args),
     cmdln_opts(name),
@@ -339,7 +343,7 @@ App::run_problem()
 Registry &
 App::get_registry()
 {
-    return registry;
+    return this->registry;
 }
 
 } // namespace godzilla
