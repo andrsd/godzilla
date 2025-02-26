@@ -43,6 +43,24 @@ private:
     };
 
 public:
+    struct ObjectDescription {
+        struct Parameter {
+            /// Parameter name
+            std::string name;
+            /// Parameter type
+            std::string type;
+            /// Parameter description
+            std::string description;
+            /// Is parameter required
+            bool required;
+        };
+
+        /// Object name
+        std::string name;
+        /// Object parameters
+        std::vector<Parameter> parameters;
+    };
+
     /// Register an object
     ///
     /// @param class_name Name of the object to register
@@ -65,6 +83,9 @@ public:
     /// @param class_name Name of the class
     /// @return Registry entry
     const Entry & get(const std::string & class_name) const;
+
+    /// Get object description
+    std::vector<ObjectDescription> get_object_description() const;
 
 public:
     Registry() = default;

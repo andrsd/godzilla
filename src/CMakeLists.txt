@@ -18,6 +18,8 @@ set_target_properties(
         SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE HAVE_CXXABI_H)
+
 if (PETSC_HAVE_HYPRE)
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DPETSC_HAVE_HYPRE)
 endif()

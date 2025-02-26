@@ -14,6 +14,35 @@
 #include "godzilla/Config.h"
 #include <cassert>
 
+namespace YAML {
+
+Emitter &
+operator<<(Emitter & out, const godzilla::Registry::ObjectDescription::Parameter & param)
+{
+    out << BeginMap;
+    out << Key << "name" << Value << param.name;
+    out << Key << "type" << Value << param.type;
+    out << Key << "description" << Value << param.description;
+    out << Key << "required" << Value << param.required;
+    out << EndMap;
+    return out;
+}
+
+Emitter &
+operator<<(Emitter & out, const godzilla::Registry::ObjectDescription & obj)
+{
+    out << BeginMap;
+    out << Key << "name" << Value << obj.name;
+    out << Key << "parameters" << Value << BeginSeq;
+    for (const auto & param : obj.parameters)
+        out << param;
+    out << EndSeq;
+    out << EndMap;
+    return out;
+}
+
+} // namespace YAML
+
 namespace godzilla {
 
 Registry registry;
@@ -164,6 +193,12 @@ App::create_command_line_options()
         .add_option("", "", "verbose", "Verbosity level", cxxopts::value<unsigned int>(), "");
     this->cmdln_opts
         .add_option("", "", "no-colors", "Do not use terminal colors", cxxopts::value<bool>(), "");
+    this->cmdln_opts.add_option("",
+                                "",
+                                "export-parameters",
+                                "Export parameters for all registered objects into a YAML file",
+                                cxxopts::value<bool>(),
+                                "");
 }
 
 cxxopts::ParseResult
@@ -268,6 +303,9 @@ App::process_command_line(const cxxopts::ParseResult & result)
             auto input_file_name = result["input-file"].as<std::string>();
             run_input_file(input_file_name);
         }
+
+        if (result.count("export-parameters"))
+            export_parameters_yaml();
     }
 }
 
@@ -304,6 +342,21 @@ App::run_input_file(const std::string & input_file_name)
         throw Exception(
             "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
             input_file_name);
+}
+
+void
+App::export_parameters_yaml() const
+{
+    CALL_STACK_MSG();
+    auto objs = this->registry.get_object_description();
+    YAML::Emitter yaml;
+    yaml << YAML::BeginMap;
+    yaml << YAML::Key << "classes" << YAML::Value << YAML::BeginSeq;
+    for (auto & o : objs)
+        yaml << o;
+    yaml << YAML::EndSeq;
+    yaml << YAML::EndMap;
+    std::cout << yaml.c_str() << std::endl;
 }
 
 void

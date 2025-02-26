@@ -6,6 +6,9 @@
 #include <sys/stat.h>
 #include <chrono>
 #include <fmt/printf.h>
+#ifdef HAVE_CXXABI_H
+    #include <cxxabi.h>
+#endif
 
 namespace godzilla {
 namespace utils {
@@ -90,6 +93,21 @@ human_time(PetscLogDouble time)
         tm += fmt::format("s");
     }
     return tm.substr(1);
+}
+
+std::string
+demangle(const std::string & mangled_name)
+{
+#ifdef HAVE_CXXABI_H
+    int status = -1;
+    std::unique_ptr<char, void (*)(void *)> res {
+        abi::__cxa_demangle(mangled_name.c_str(), nullptr, nullptr, &status),
+        std::free
+    };
+    return (status == 0) ? res.get() : mangled_name;
+#else
+    return mangled_name;
+#endif
 }
 
 } // namespace utils

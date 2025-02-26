@@ -199,6 +199,9 @@ protected:
     /// Run the problem build via `build_from_yml`
     void run_problem();
 
+    /// Export parameters into a YAML format
+    void export_parameters_yaml() const;
+
 private:
     /// Create an input file instance
     virtual InputFile * create_input_file();
