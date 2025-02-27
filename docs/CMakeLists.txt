@@ -63,3 +63,10 @@ else()
         )
     endif()
 endif()
+
+# parameter dumper
+add_executable(param-dumper bin/param_dumper.cpp)
+target_include_directories(param-dumper PRIVATE
+    ${PROJECT_SOURCE_DIR}/contrib
+)
+target_link_libraries(param-dumper godzilla)
