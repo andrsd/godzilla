@@ -1,5 +1,10 @@
-FunctionIC
-==========
+FunctionInitialCondition
+========================
 
-.. doxygenclass:: godzilla::FunctionIC
+Parameters
+----------
+
+.. parameters:: FunctionInitialCondition
+
+.. doxygenclass:: godzilla::FunctionInitialCondition
    :members:
