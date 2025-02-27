@@ -47,7 +47,7 @@ public:
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
     App(const mpi::Communicator & comm,
-        const Registry & registry,
+        Registry & registry,
         const std::string & name,
         int argc,
         const char * const * argv);
@@ -59,7 +59,7 @@ public:
     /// @param name Name of the application
     /// @param args Command line arguments (without the executable name as first argument)
     App(const mpi::Communicator & comm,
-        const Registry & registry,
+        Registry & registry,
         const std::string & name,
         const std::vector<std::string> & args);
 
@@ -79,6 +79,11 @@ public:
     ///
     /// @return The application version as a string
     virtual const std::string & get_version() const;
+
+    /// Get the instance of registry
+    ///
+    /// @return Instance of the Registry class
+    Registry & get_registry();
 
     /// Get the factory for building objects
     ///
@@ -204,6 +209,9 @@ private:
     /// MPI communicator
     mpi::Communicator mpi_comm;
 
+    /// Registry
+    Registry & registry;
+
     /// Log with errors and/or warnings
     Logger * logger;
 
@@ -229,15 +237,7 @@ private:
     Factory factory;
 
 public:
-    /// Get the instance of registry
-    ///
-    /// @return Instance of the Registry class
-    static Registry & get_registry();
-
     static void registerObjects(Registry & registry);
-
-private:
-    static Registry registry;
 };
 
 template <typename T>

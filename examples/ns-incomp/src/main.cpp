@@ -2,6 +2,8 @@
 #include "godzilla/Init.h"
 #include "NSIncompressibleProblem.h"
 
+godzilla::Registry registry;
+
 void
 registerObjects(godzilla::Registry & r)
 {
@@ -15,9 +17,9 @@ main(int argc, char * argv[])
     try {
         godzilla::mpi::Communicator comm(MPI_COMM_WORLD);
         godzilla::Init init(argc, argv);
-        registerObjects(godzilla::App::get_registry());
+        registerObjects(registry);
 
-        godzilla::App app(comm, "ns-incomp", argc, argv);
+        godzilla::App app(comm, registry, "ns-incomp", argc, argv);
         app.run();
 
         return 0;
