@@ -135,6 +135,12 @@ index_of(const std::vector<T> & array, T value)
     throw std::runtime_error(fmt::format("Did not find {} in array", value));
 }
 
+/// Demangle type name
+///
+/// @param mangled_name Mangled name
+/// @return Demangled name
+std::string demangle(const std::string & mangled_name);
+
 } // namespace utils
 
 /// Enumerate for iterable containters

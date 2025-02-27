@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include "godzilla/Exception.h"
+#include "godzilla/Utils.h"
 
 namespace godzilla {
 
@@ -64,7 +65,7 @@ protected:
         inline std::string
         type() const override
         {
-            return std::string(typeid(T).name());
+            return typeid(T).name();
         }
 
         Value *
