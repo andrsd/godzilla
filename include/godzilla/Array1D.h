@@ -240,6 +240,12 @@ public:
 
     // Do your best to avoid abusing this API
     T *
+    get_data()
+    {
+        return this->data;
+    }
+
+    const T *
     get_data() const
     {
         return this->data;
