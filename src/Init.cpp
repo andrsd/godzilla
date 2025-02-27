@@ -17,6 +17,8 @@ Init::Init()
     // get rid of PETSc error handler
     PetscPopSignalHandler();
     PetscPopErrorHandler();
+    //
+    PetscOptionsSetValue(NULL, "-options_left", "no");
     internal::CallStack::initialize();
 }
 
@@ -27,6 +29,8 @@ Init::Init(int argc, char * argv[])
     // get rid of PETSc error handler
     PetscPopSignalHandler();
     PetscPopErrorHandler();
+    //
+    PetscOptionsSetValue(NULL, "-options_left", "no");
     internal::CallStack::initialize();
 }
 
