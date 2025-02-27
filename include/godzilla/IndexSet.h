@@ -148,6 +148,7 @@ public:
     Int operator()(Int i) const;
 
     operator bool() const;
+    operator bool();
 
     /// Convert indices from this index set into std::vector
     ///

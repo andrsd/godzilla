@@ -467,4 +467,9 @@ IndexSet::operator bool() const
     return this->is != nullptr;
 }
 
+IndexSet::operator bool()
+{
+    return this->is != nullptr;
+}
+
 } // namespace godzilla
