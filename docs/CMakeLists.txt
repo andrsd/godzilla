@@ -26,6 +26,7 @@ if (DOXYGEN_FOUND AND NOT ${SPHINX_BUILD} STREQUAL SPHINX_BUILD-NOTFOUND)
         DEPENDS
             ${PROJECT_BINARY_DIR}/docs/conf.py
             ${PROJECT_BINARY_DIR}/docs/xml/index.xml
+            ${PROJECT_BINARY_DIR}/docs/parameters.yaml
             ${RST_FILES}
     )
 
@@ -37,6 +38,15 @@ if (DOXYGEN_FOUND AND NOT ${SPHINX_BUILD} STREQUAL SPHINX_BUILD-NOTFOUND)
         DEPENDS
             ${PROJECT_BINARY_DIR}/docs/Doxyfile
             ${HEADER_FILES}
+    )
+
+    add_custom_command(
+        OUTPUT
+            ${PROJECT_BINARY_DIR}/docs/parameters.yaml
+        COMMAND
+            param-dumper > ${PROJECT_BINARY_DIR}/docs/parameters.yaml
+        DEPENDS
+            param-dumper
     )
 else()
     add_custom_target(doc)
@@ -63,3 +73,10 @@ else()
         )
     endif()
 endif()
+
+# parameter dumper
+add_executable(param-dumper bin/param_dumper.cpp)
+target_include_directories(param-dumper PRIVATE
+    ${PROJECT_SOURCE_DIR}/contrib
+)
+target_link_libraries(param-dumper godzilla)
