@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-include(CheckIncludeFile)
+include(CheckIncludeFileCXX)
 include(FetchContent)
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
@@ -37,7 +37,7 @@ find_package(exodusIIcpp 2.0 REQUIRED)
 find_package(mpicpp-lite 1.5 REQUIRED)
 find_package(h5pp REQUIRED)
 
-check_include_file(cxxabi.h HAVE_CXXABI_H)
+check_include_file_cxx(cxxabi.h HAVE_CXXABI_H)
 
 if (GODZILLA_BUILD_TESTS)
     FetchContent_Declare(
