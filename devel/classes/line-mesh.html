@@ -66,18 +66,18 @@
 <li class="toctree-l1"><a class="reference internal" href="dirichlet-bc.html">DirichletBC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="discrete-problem-interface.html">DiscreteProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="essential-bc.html">EssentialBC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="exodusii-mesh.html">ExodusIIMesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exodusii-output.html">ExodusIIOutput</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-fe-linear-problem.html">ExplicitFELinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="explicit-fv-linear-problem.html">ExplicitFVLinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="factory.html">Factory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fe-nonlinear-problem.html">FENonlinearProblem</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fe-problem-interface.html">FEProblemInterface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="file-mesh.html">FileMesh</a></li>
 <li class="toctree-l1"><a class="reference internal" href="file-output.html">FileOutput</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function.html">Function</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function-auxiliary-field.html">FunctionAuxiliaryField</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function-evaluator.html">FunctionEvaluator</a></li>
-<li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionIC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="function-ic.html">FunctionInitialCondition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="function-interface.html">FunctionInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fv-problem-interface.html">FVProblemInterface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gyml-file.html">GYMLFile</a></li>
@@ -86,10 +86,13 @@
 <li class="toctree-l1"><a class="reference internal" href="initial-condition.html">InitialCondition</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input-file.html">InputFile</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">LineMesh</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#_CPPv4N8godzilla8LineMeshE"><code class="docutils literal notranslate"><span class="pre">LineMesh</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8LineMesh9get_x_minEv"><code class="docutils literal notranslate"><span class="pre">LineMesh::get_x_min()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8LineMesh9get_x_maxEv"><code class="docutils literal notranslate"><span class="pre">LineMesh::get_x_max()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla8LineMesh6get_nxEv"><code class="docutils literal notranslate"><span class="pre">LineMesh::get_nx()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla8LineMeshE"><code class="docutils literal notranslate"><span class="pre">LineMesh</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK8godzilla8LineMesh9get_x_minEv"><code class="docutils literal notranslate"><span class="pre">LineMesh::get_x_min()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK8godzilla8LineMesh9get_x_maxEv"><code class="docutils literal notranslate"><span class="pre">LineMesh::get_x_max()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#_CPPv4NK8godzilla8LineMesh6get_nxEv"><code class="docutils literal notranslate"><span class="pre">LineMesh::get_nx()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -139,6 +142,19 @@
              
   <section id="linemesh">
 <h1>LineMesh<a class="headerlink" href="#linemesh" title="Link to this heading"></a></h1>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<ul>
+<li><strong>Required:</strong><ul class="simple">
+<li><p><strong>nx (Integer) - </strong>Number of mesh points in the x direction</p></li>
+</ul>
+</li>
+<li><strong>Optional:</strong><ul class="simple">
+<li><p><strong>xmax (Real) - </strong>Maximum in the x direction</p></li>
+<li><p><strong>xmin (Real) - </strong>Minimum in the x direction</p></li>
+</ul>
+</li>
+</ul>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N8godzilla8LineMeshE">
 <span id="_CPPv3N8godzilla8LineMeshE"></span><span id="_CPPv2N8godzilla8LineMeshE"></span><span id="godzilla::LineMesh"></span><span class="target" id="classgodzilla_1_1_line_mesh"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LineMesh</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">godzilla</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MeshObject</span></span><a class="headerlink" href="#_CPPv4N8godzilla8LineMeshE" title="Link to this definition"></a><br /></dt>
@@ -181,6 +197,7 @@
 </div>
 </dd></dl>
 
+</section>
 </section>
 
 
