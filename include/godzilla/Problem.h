@@ -249,6 +249,13 @@ public:
         this->output_monitor_delegate.bind(instance, method);
     }
 
+    /// Set the flags for determining variable influence
+    ///
+    /// @param field Field number
+    /// @param use_cone Flag for variable influence starting with the cone operation
+    /// @param use_closure Flag for variable influence using transitive closure
+    void set_adjacency(Int field, bool use_cone, bool use_closure);
+
 protected:
     /// Set vector/matrix types
     virtual void set_up_types();

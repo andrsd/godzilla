@@ -482,4 +482,14 @@ Problem::output_monitor(const std::string & file_name) const
     lprintln(9, "Output to file: {}", file_name);
 }
 
+void
+Problem::set_adjacency(Int field, bool use_cone, bool use_closure)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMSetAdjacency(get_dm(),
+                               field,
+                               use_cone ? PETSC_TRUE : PETSC_FALSE,
+                               use_closure ? PETSC_TRUE : PETSC_FALSE));
+}
+
 } // namespace godzilla
