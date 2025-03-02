@@ -69,6 +69,15 @@ UnstructuredMesh::~UnstructuredMesh()
     CALL_STACK_MSG();
 }
 
+UnstructuredMesh
+UnstructuredMesh::clone() const
+{
+    CALL_STACK_MSG();
+    DM dm;
+    PETSC_CHECK(DMClone(get_dm(), &dm));
+    return UnstructuredMesh(dm);
+}
+
 Label
 UnstructuredMesh::get_depth_label() const
 {
