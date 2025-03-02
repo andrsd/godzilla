@@ -142,6 +142,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">Problem::create_section_subis()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEERKNSt6vectorI3IntEERKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">Problem::create_section_subis()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0EN8godzilla7Problem18set_output_monitorEvP1TM1TKFvRKNSt6stringEE"><code class="docutils literal notranslate"><span class="pre">Problem::set_output_monitor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem13set_adjacencyE3Intbb"><code class="docutils literal notranslate"><span class="pre">Problem::set_adjacency()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecompositionE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition10field_nameE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::field_name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition2isE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::is</span></code></a></li>
@@ -599,6 +600,21 @@
 <dd class="field-even"><ul class="simple">
 <li><p><strong>instance</strong> – Instance of the class </p></li>
 <li><p><strong>monitor</strong> – Member function in class T </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla7Problem13set_adjacencyE3Intbb">
+<span id="_CPPv3N8godzilla7Problem13set_adjacencyE3Intbb"></span><span id="_CPPv2N8godzilla7Problem13set_adjacencyE3Intbb"></span><span id="godzilla::Problem::set_adjacency__Int.b.b"></span><span class="target" id="classgodzilla_1_1_problem_1a4228ff93386f58980bb3466d33950cba"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_adjacency</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">field</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">use_cone</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">use_closure</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla7Problem13set_adjacencyE3Intbb" title="Link to this definition"></a><br /></dt>
+<dd><p>Set the flags for determining variable influence. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>field</strong> – Field number </p></li>
+<li><p><strong>use_cone</strong> – Flag for variable influence starting with the cone operation </p></li>
+<li><p><strong>use_closure</strong> – Flag for variable influence using transitive closure </p></li>
 </ul>
 </dd>
 </dl>
