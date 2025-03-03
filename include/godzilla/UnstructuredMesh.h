@@ -43,6 +43,8 @@ public:
     explicit UnstructuredMesh(DM dm);
     ~UnstructuredMesh() override;
 
+    UnstructuredMesh clone() const;
+
     /// Get the `Label` recording the depth of each point
     ///
     /// @return The `Label` recording point depth

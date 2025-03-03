@@ -709,3 +709,23 @@ TEST(UnstructuredMeshTest, index_sets)
     EXPECT_THAT(face_is.to_std_vector(), ElementsAre(14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24));
     face_is.restore_indices();
 }
+
+TEST(UnstructuredMeshTest, clone)
+{
+    TestApp app;
+
+    Parameters params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app") = &app;
+    params.set<std::string>("_name") = "obj";
+    TestUnstructuredMesh mesh(params);
+
+    mesh.create();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    auto clone = m->clone();
+
+    EXPECT_EQ(clone.get_num_vertices(), 3);
+    EXPECT_EQ(clone.get_num_faces(), 3);
+    EXPECT_EQ(clone.get_num_cells(), 2);
+    EXPECT_TRUE(clone.is_simplex());
+}
