@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include "TestApp.h"
 #include "godzilla/Section.h"
 #include "godzilla/Range.h"
 
@@ -312,4 +313,22 @@ TEST(SectionTest, view)
     auto output = testing::internal::GetCapturedStdout();
     EXPECT_THAT(output, testing::HasSubstr("(   0) dim  2 offset   0"));
     EXPECT_THAT(output, testing::HasSubstr("(   1) dim  3 offset   2"));
+}
+
+TEST(SectionTest, oper_bool)
+{
+    TestApp app;
+
+    Section sect;
+    const auto & csect = sect;
+    EXPECT_FALSE(sect);
+    EXPECT_FALSE(csect);
+
+    sect.create(MPI_COMM_WORLD);
+    EXPECT_TRUE(sect);
+    EXPECT_TRUE(csect);
+
+    sect.destroy();
+    EXPECT_FALSE(sect);
+    EXPECT_FALSE(csect);
 }

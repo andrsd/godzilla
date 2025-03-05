@@ -101,6 +101,7 @@ public:
 
     /// Typecast operator to determine if label is null or not
     operator bool() const;
+    operator bool();
 
 private:
     DMLabel label;
