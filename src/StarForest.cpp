@@ -78,6 +78,11 @@ StarForest::Graph::operator bool() const
     return this->leaves != nullptr;
 }
 
+StarForest::Graph::operator bool()
+{
+    return this->leaves != nullptr;
+}
+
 // ---
 
 StarForest::StarForest() : sf(nullptr) {}

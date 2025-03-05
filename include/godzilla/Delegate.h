@@ -61,6 +61,7 @@ public:
 
     /// Check whether delegates is callable
     operator bool() const { return static_cast<bool>(this->fn); }
+    operator bool() { return static_cast<bool>(this->fn); }
 
 private:
     std::function<R(ARGS...)> fn;

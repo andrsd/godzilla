@@ -48,6 +48,7 @@ public:
 
         /// Test if graph is empty
         operator bool() const;
+        operator bool();
 
     private:
         Int n_roots, n_leaves;

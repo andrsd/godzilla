@@ -161,4 +161,10 @@ Label::operator bool() const
     return !is_null();
 }
 
+Label::operator bool()
+{
+    CALL_STACK_MSG();
+    return !is_null();
+}
+
 } // namespace godzilla

@@ -401,3 +401,24 @@ TEST(IndexSetTest, sum)
     is2.destroy();
     is1.destroy();
 }
+
+TEST(IndexSetTest, oper_bool)
+{
+    TestApp app;
+    if (app.get_comm().size() != 1)
+        return;
+
+    IndexSet empty;
+    const auto & cempty = empty;
+    EXPECT_FALSE(empty);
+    EXPECT_FALSE(cempty);
+
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    const auto cis1 = &is1;
+    EXPECT_TRUE(is1);
+    EXPECT_TRUE(cis1);
+
+    is1.destroy();
+    EXPECT_FALSE(empty);
+    EXPECT_FALSE(cempty);
+}

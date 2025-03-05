@@ -125,3 +125,21 @@ TEST(StarForestTest, view)
     EXPECT_THAT(out, HasSubstr("[0] 0 <- (0,0)"));
     EXPECT_THAT(out, HasSubstr("MultiSF sort=rank-order"));
 }
+
+TEST(StarForestTest, oper_bool)
+{
+    TestApp app;
+
+    StarForest sf;
+    const auto & csf = sf;
+    EXPECT_FALSE(sf);
+    EXPECT_FALSE(csf);
+
+    sf.create(app.get_comm());
+    EXPECT_TRUE(sf);
+    EXPECT_TRUE(csf);
+
+    sf.destroy();
+    EXPECT_FALSE(sf);
+    EXPECT_FALSE(csf);
+}

@@ -152,3 +152,22 @@ TEST(Label, view)
     EXPECT_THAT(output, testing::HasSubstr("[0]: 4 (102)"));
     EXPECT_THAT(output, testing::HasSubstr("[0]: 7 (103)"));
 }
+
+TEST(Label, oper_bool)
+{
+    TestApp app;
+
+    Label lbl;
+    const auto & clbl = lbl;
+
+    EXPECT_FALSE(lbl);
+    EXPECT_FALSE(clbl);
+
+    lbl.create(app.get_comm(), "name");
+    EXPECT_TRUE(lbl);
+    EXPECT_TRUE(clbl);
+
+    lbl.destroy();
+    EXPECT_FALSE(lbl);
+    EXPECT_FALSE(clbl);
+}

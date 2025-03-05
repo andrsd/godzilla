@@ -101,6 +101,7 @@ public:
     HashEqual(Int a, Int b) { this->equal = (a == b); }
 
     operator bool() const { return this->equal; }
+    operator bool() { return this->equal; }
 
 private:
     bool equal;
