@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/Matrix.h"
+#include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
 #include "godzilla/ShellMatrix.h"
 
@@ -248,6 +249,13 @@ Matrix::transpose()
 {
     CALL_STACK_MSG();
     PETSC_CHECK(MatTranspose(this->mat, MAT_INPLACE_MATRIX, &this->mat));
+}
+
+void
+Matrix::set_option(Option option, bool flag)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatSetOption(this->mat, (MatOption) option, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 Scalar

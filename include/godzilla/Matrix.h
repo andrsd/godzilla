@@ -17,6 +17,23 @@ class ShellMatrix;
 
 class Matrix {
 public:
+    enum Option {
+        SPD = MAT_SPD,
+        SYMMETRIC = MAT_SYMMETRIC,
+        HERMITIAN = MAT_HERMITIAN,
+        STRUCTURALLY_SYMMETRIC = MAT_STRUCTURALLY_SYMMETRIC,
+        SYMMETRY_ETERNAL = MAT_SYMMETRY_ETERNAL,
+        STRUCTURAL_SYMMETRY_ETERNAL = MAT_STRUCTURAL_SYMMETRY_ETERNAL,
+        SPD_ETERNAL = MAT_SPD_ETERNAL,
+        //
+        NEW_NONZERO_LOCATIONS = MAT_NEW_NONZERO_LOCATIONS,
+        FORCE_DIAGONAL_ENTRIES = MAT_FORCE_DIAGONAL_ENTRIES,
+        NEW_NONZERO_LOCATION_ERR = MAT_NEW_NONZERO_LOCATION_ERR,
+        USE_HASH_TABLE = MAT_USE_HASH_TABLE,
+        NO_OFF_PROC_ENTRIES = MAT_NO_OFF_PROC_ENTRIES,
+        SUBSET_OFF_PROC_ENTRIES = MAT_SUBSET_OFF_PROC_ENTRIES,
+    };
+
     Matrix();
     Matrix(Mat mat);
 
@@ -137,6 +154,12 @@ public:
 
     /// Computes an in-place transpose of a matrix
     void transpose();
+
+    /// Sets a parameter option for a matrix.
+    ///
+    /// @param option The option to set
+    /// @param flag The value of the option
+    void set_option(Option option, bool flag);
 
     Scalar operator()(Int row, Int col) const;
 
