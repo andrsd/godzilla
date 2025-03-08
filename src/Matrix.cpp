@@ -258,6 +258,13 @@ Matrix::set_option(Option option, bool flag)
     PETSC_CHECK(MatSetOption(this->mat, (MatOption) option, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
+void
+Matrix::set_block_size(Int bs)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(MatSetBlockSize(this->mat, bs));
+}
+
 Scalar
 Matrix::operator()(Int row, Int col) const
 {
