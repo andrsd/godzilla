@@ -161,6 +161,11 @@ public:
     /// @param flag The value of the option
     void set_option(Option option, bool flag);
 
+    /// Sets the matrix block size.
+    ///
+    /// @param bs The block size
+    void set_block_size(Int bs);
+
     Scalar operator()(Int row, Int col) const;
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
