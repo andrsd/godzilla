@@ -79,6 +79,13 @@ NonlinearProblem::get_jacobian() const
     return this->J;
 }
 
+Matrix &
+NonlinearProblem::get_jacobian()
+{
+    CALL_STACK_MSG();
+    return this->J;
+}
+
 void
 NonlinearProblem::create()
 {

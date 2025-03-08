@@ -33,6 +33,8 @@ public:
     /// Get Jacobian matrix
     const Matrix & get_jacobian() const;
 
+    Matrix & get_jacobian();
+
     /// true if solve converged, otherwise false
     bool converged();
 
