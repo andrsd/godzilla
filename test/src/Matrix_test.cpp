@@ -302,3 +302,22 @@ TEST(MatrixTest, transpose)
     EXPECT_DOUBLE_EQ(m(0, 2), 5.);
     EXPECT_DOUBLE_EQ(m(2, 2), 6.);
 }
+
+TEST(MatrixTest, is_symmetric)
+{
+    auto symm = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 2);
+    symm.set_value_local(0, 0, 1.);
+    symm.set_value_local(0, 1, 2.);
+    symm.set_value_local(1, 0, 2.);
+    symm.set_value_local(1, 1, 3.);
+    symm.assemble();
+    EXPECT_TRUE(symm.is_symmetric(0.));
+
+    auto not_symm = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 2);
+    not_symm.set_value_local(0, 0, 1.);
+    not_symm.set_value_local(0, 1, 2.);
+    not_symm.set_value_local(1, 0, 3.);
+    not_symm.set_value_local(1, 1, 4.);
+    not_symm.assemble();
+    EXPECT_FALSE(not_symm.is_symmetric(0.));
+}

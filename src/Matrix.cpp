@@ -265,6 +265,15 @@ Matrix::set_block_size(Int bs)
     PETSC_CHECK(MatSetBlockSize(this->mat, bs));
 }
 
+bool
+Matrix::is_symmetric(Real tol) const
+{
+    CALL_STACK_MSG();
+    PetscBool is_sym;
+    PETSC_CHECK(MatIsSymmetric(this->mat, tol, &is_sym));
+    return is_sym;
+}
+
 Scalar
 Matrix::operator()(Int row, Int col) const
 {

@@ -166,6 +166,13 @@ public:
     /// @param bs The block size
     void set_block_size(Int bs);
 
+    /// Test whether a matrix is symmetric
+    ///
+    /// @param tol difference between value and its transpose less than this amount counts as equal
+    ///        (use 0.0 for exact transpose)
+    /// @return `true` if the matrix is symmetric, `false` otherwise
+    bool is_symmetric(Real tol) const;
+
     Scalar operator()(Int row, Int col) const;
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
