@@ -130,11 +130,11 @@ ExplicitProblemInterface::compute_rhs_function(Real time, const Vector & x, Vect
     Vector loc_F = this->nl_problem->get_local_vector();
     loc_x.zero();
     compute_boundary_local(time, loc_x);
-    PETSC_CHECK(DMGlobalToLocal(dm, x, INSERT_VALUES, loc_x));
+    this->nl_problem->global_to_local(x, INSERT_VALUES, loc_x);
     loc_F.zero();
     compute_rhs_local(time, loc_x, loc_F);
     F.zero();
-    PETSC_CHECK(DMLocalToGlobal(dm, loc_F, ADD_VALUES, F));
+    this->nl_problem->local_to_global(loc_F, ADD_VALUES, F);
     if ((Vec) this->M_lumped_inv == nullptr) {
         auto ksp = this->nl_problem->get_ksp();
         ksp.solve(F);
