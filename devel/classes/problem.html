@@ -143,6 +143,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem20create_section_subisERKNSt6vectorI3IntEERKNSt6vectorI3IntEERKNSt6vectorI3IntEE"><code class="docutils literal notranslate"><span class="pre">Problem::create_section_subis()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4I0EN8godzilla7Problem18set_output_monitorEvP1TM1TKFvRKNSt6stringEE"><code class="docutils literal notranslate"><span class="pre">Problem::set_output_monitor()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem13set_adjacencyE3Intbb"><code class="docutils literal notranslate"><span class="pre">Problem::set_adjacency()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15local_to_globalERK6Vector10InsertModeR6Vector"><code class="docutils literal notranslate"><span class="pre">Problem::local_to_global()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla7Problem15global_to_localERK6Vector10InsertModeR6Vector"><code class="docutils literal notranslate"><span class="pre">Problem::global_to_local()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecompositionE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition10field_nameE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::field_name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#_CPPv4N8godzilla7Problem18FieldDecomposition2isE"><code class="docutils literal notranslate"><span class="pre">Problem::FieldDecomposition::is</span></code></a></li>
@@ -615,6 +617,36 @@
 <li><p><strong>field</strong> – Field number </p></li>
 <li><p><strong>use_cone</strong> – Flag for variable influence starting with the cone operation </p></li>
 <li><p><strong>use_closure</strong> – Flag for variable influence using transitive closure </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem15local_to_globalERK6Vector10InsertModeR6Vector">
+<span id="_CPPv3NK8godzilla7Problem15local_to_globalERK6Vector10InsertModeR6Vector"></span><span id="_CPPv2NK8godzilla7Problem15local_to_globalERK6Vector10InsertModeR6Vector"></span><span id="godzilla::Problem::local_to_global__VectorCR.InsertMode.VectorRC"></span><span class="target" id="classgodzilla_1_1_problem_1a23a28dc7d4b9e6584209f78bacddf694"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">local_to_global</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">l</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span>, <span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">g</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem15local_to_globalERK6Vector10InsertModeR6Vector" title="Link to this definition"></a><br /></dt>
+<dd><p>Updates global vector from local vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>l</strong> – Local vector </p></li>
+<li><p><strong>mode</strong> – Insert mode </p></li>
+<li><p><strong>g</strong> – Global vector </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla7Problem15global_to_localERK6Vector10InsertModeR6Vector">
+<span id="_CPPv3NK8godzilla7Problem15global_to_localERK6Vector10InsertModeR6Vector"></span><span id="_CPPv2NK8godzilla7Problem15global_to_localERK6Vector10InsertModeR6Vector"></span><span id="godzilla::Problem::global_to_local__VectorCR.InsertMode.VectorRC"></span><span class="target" id="classgodzilla_1_1_problem_1ac6d81f1986c4523dd246432793798623"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_to_local</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">g</span></span>, <span class="n"><span class="pre">InsertMode</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mode</span></span>, <span class="n"><span class="pre">Vector</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla7Problem15global_to_localERK6Vector10InsertModeR6Vector" title="Link to this definition"></a><br /></dt>
+<dd><p>Updates local vector from global vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>g</strong> – Global vector </p></li>
+<li><p><strong>mode</strong> – Insert mode </p></li>
+<li><p><strong>l</strong> – Local vector </p></li>
 </ul>
 </dd>
 </dl>
