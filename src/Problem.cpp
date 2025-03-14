@@ -492,4 +492,18 @@ Problem::set_adjacency(Int field, bool use_cone, bool use_closure)
                                use_closure ? PETSC_TRUE : PETSC_FALSE));
 }
 
+void
+Problem::local_to_global(const Vector & l, InsertMode mode, Vector & g) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMLocalToGlobal(get_dm(), l, mode, g));
+}
+
+void
+Problem::global_to_local(const Vector & g, InsertMode mode, Vector & l) const
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMGlobalToLocal(get_dm(), g, mode, l));
+}
+
 } // namespace godzilla

@@ -256,6 +256,20 @@ public:
     /// @param use_closure Flag for variable influence using transitive closure
     void set_adjacency(Int field, bool use_cone, bool use_closure);
 
+    /// Updates global vector from local vector
+    ///
+    /// @param l Local vector
+    /// @param mode Insert mode
+    /// @param g Global vector
+    void local_to_global(const Vector & l, InsertMode mode, Vector & g) const;
+
+    /// Updates local vector from global vector
+    ///
+    /// @param g Global vector
+    /// @param mode Insert mode
+    /// @param l Local vector
+    void global_to_local(const Vector & g, InsertMode mode, Vector & l) const;
+
 protected:
     /// Set vector/matrix types
     virtual void set_up_types();

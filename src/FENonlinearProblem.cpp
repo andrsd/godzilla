@@ -1158,7 +1158,7 @@ FENonlinearProblem::compute_solution_vector_local()
 {
     CALL_STACK_MSG();
     auto loc_sln = get_solution_vector_local();
-    PETSC_CHECK(DMGlobalToLocal(get_dm(), get_solution_vector(), INSERT_VALUES, loc_sln));
+    global_to_local(get_solution_vector(), INSERT_VALUES, loc_sln);
     this->compute_boundary_delegate.invoke(loc_sln);
 }
 
