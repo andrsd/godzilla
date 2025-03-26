@@ -42,8 +42,7 @@ PrintInterface::TimedEvent::~TimedEvent()
 PrintInterface::PrintInterface(const Object * obj) :
     pi_app(obj->get_app()),
     proc_id(obj->get_processor_id()),
-    verbosity_level(obj->get_app()->get_verbosity_level()),
-    prefix(obj->get_name())
+    verbosity_level(obj->get_app()->get_verbosity_level())
 {
     CALL_STACK_MSG();
 }
@@ -51,8 +50,7 @@ PrintInterface::PrintInterface(const Object * obj) :
 PrintInterface::PrintInterface(const App * app) :
     pi_app(app),
     proc_id(app->get_comm().rank()),
-    verbosity_level(app->get_verbosity_level()),
-    prefix(app->get_name())
+    verbosity_level(app->get_verbosity_level())
 {
     CALL_STACK_MSG();
 }
@@ -62,8 +60,7 @@ PrintInterface::PrintInterface(const mpi::Communicator & comm,
                                std::string prefix) :
     pi_app(nullptr),
     proc_id(comm.rank()),
-    verbosity_level(verbosity_level),
-    prefix(std::move(prefix))
+    verbosity_level(verbosity_level)
 {
     CALL_STACK_MSG();
 }

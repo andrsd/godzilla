@@ -62,11 +62,24 @@ public:
     /// @param ... Arguments specifying data to print
     template <typename... T>
     void
+    lprint(unsigned int level, fmt::format_string<T...> format, T... args) const
+    {
+        if (level <= this->verbosity_level && this->proc_id == 0)
+            print_msg(stdout, format, std::forward<T>(args)...);
+    }
+
+    /// Print a message on a terminal and go to the next line
+    ///
+    /// @param level Verbosity level. If application verbose level is higher than this number, the
+    ///              message will be printed.
+    /// @param format String specifying how to interpret the data
+    /// @param ... Arguments specifying data to print
+    template <typename... T>
+    void
     lprintln(unsigned int level, fmt::format_string<T...> format, T... args) const
     {
         if (level <= this->verbosity_level && this->proc_id == 0) {
-            fmt::print(stdout, "{}: ", this->prefix);
-            fmt::print(stdout, format, std::forward<T>(args)...);
+            print_msg(stdout, format, std::forward<T>(args)...);
             fmt::print(stdout, "\n");
         }
     }
@@ -86,23 +99,28 @@ public:
              T... args) const
     {
         if (level <= this->verbosity_level && this->proc_id == 0) {
-            fmt::print(stdout, "{}: ", this->prefix);
             fmt::print(stdout, "{}", clr);
-            fmt::print(stdout, format, std::forward<T>(args)...);
+            print_msg(stdout, format, std::forward<T>(args)...);
             fmt::print(stdout, "{}", Terminal::Color::normal);
             fmt::print(stdout, "\n");
         }
     }
 
 private:
+    template <typename... T>
+    void
+    print_msg(std::FILE * f, fmt::format_string<T...> format, T... args) const
+    {
+        auto str = fmt::format(format, std::forward<T>(args)...);
+        fmt::print(f, str);
+    }
+
     /// Application
     const App * pi_app;
     /// Processor ID
     int proc_id;
     /// Verbosity level
     const unsigned int & verbosity_level;
-    /// Prefix to print
-    const std::string prefix;
 };
 
 #define TIMED_EVENT(level, event_name, ...) \
