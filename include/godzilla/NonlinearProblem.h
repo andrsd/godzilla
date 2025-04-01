@@ -45,13 +45,13 @@ public:
     void set_use_matrix_free(bool mf_operator, bool mf);
 
     /// Called before the solve
-    void pre_solve();
+    virtual void pre_solve();
 
     /// Solve the problem
     void solve();
 
     /// Called after the solve
-    void post_solve();
+    virtual void post_solve();
 
 protected:
     /// Get underlying non-linear solver
