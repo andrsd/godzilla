@@ -146,7 +146,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh18get_face_set_labelERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_face_set_label()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh15create_face_setE3IntRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_face_set()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh17set_face_set_nameE3IntRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_face_set_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh19get_vertex_set_nameE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_vertex_set_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh19get_num_vertex_setsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_num_vertex_sets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh15get_vertex_setsEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_vertex_sets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh14has_vertex_setERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::has_vertex_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh20get_vertex_set_labelERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::get_vertex_set_label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh17create_vertex_setE3IntRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::create_vertex_set()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh19set_vertex_set_nameE3IntRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_vertex_set_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh15set_partitionerERK11Partitioner"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::set_partitioner()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16UnstructuredMesh10distributeE3Int"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::distribute()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16UnstructuredMesh14is_distributedEv"><code class="docutils literal notranslate"><span class="pre">UnstructuredMesh::is_distributed()</span></code></a></li>
@@ -716,12 +722,94 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh19get_vertex_set_nameE3Int">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh19get_vertex_set_nameE3Int"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh19get_vertex_set_nameE3Int"></span><span id="godzilla::UnstructuredMesh::get_vertex_set_name__IntC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a28a4467fdc87a26844aa2463dc405085"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_vertex_set_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh19get_vertex_set_nameE3Int" title="Link to this definition"></a><br /></dt>
+<dd><p>Get vertex set name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – The ID of the vertex set </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Vertex set name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh19get_num_vertex_setsEv">
 <span id="_CPPv3NK8godzilla16UnstructuredMesh19get_num_vertex_setsEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh19get_num_vertex_setsEv"></span><span id="godzilla::UnstructuredMesh::get_num_vertex_setsC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a98772edab1385eb0db94fcac866f8255"></span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_num_vertex_sets</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh19get_num_vertex_setsEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get number of vertex sets. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Number of vertex sets </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh15get_vertex_setsEv">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh15get_vertex_setsEv"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh15get_vertex_setsEv"></span><span id="godzilla::UnstructuredMesh::get_vertex_setsC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a6779e3eeeb867897d6218aa5c8359349"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_vertex_sets</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh15get_vertex_setsEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get vertex sets. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Vertex sets </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh14has_vertex_setERKNSt6stringE">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh14has_vertex_setERKNSt6stringE"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh14has_vertex_setERKNSt6stringE"></span><span id="godzilla::UnstructuredMesh::has_vertex_set__ssCRC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1abf7e64adac523bb9445528fcb3a0a438"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_vertex_set</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh14has_vertex_setERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Check if mesh has a label corresponding to a vertex set name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of the vertex set </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>true if label exists, false otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16UnstructuredMesh20get_vertex_set_labelERKNSt6stringE">
+<span id="_CPPv3NK8godzilla16UnstructuredMesh20get_vertex_set_labelERKNSt6stringE"></span><span id="_CPPv2NK8godzilla16UnstructuredMesh20get_vertex_set_labelERKNSt6stringE"></span><span id="godzilla::UnstructuredMesh::get_vertex_set_label__ssCRC"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a01e53b8c65d4ede7c5f6512e8bf968b1"></span><span class="n"><span class="pre">Label</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_vertex_set_label</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16UnstructuredMesh20get_vertex_set_labelERKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Get label corresponding to a vertex set name. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of the face set </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Label associated with face set name </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh17create_vertex_setE3IntRKNSt6stringE">
+<span id="_CPPv3N8godzilla16UnstructuredMesh17create_vertex_setE3IntRKNSt6stringE"></span><span id="_CPPv2N8godzilla16UnstructuredMesh17create_vertex_setE3IntRKNSt6stringE"></span><span id="godzilla::UnstructuredMesh::create_vertex_set__Int.ssCR"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1aacf5e384b28423bde54675abb60c4b36"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_vertex_set</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh17create_vertex_setE3IntRKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Create vertex set. </p>
+<p>Takes the ID and creates a label with <code class="docutils literal notranslate"><span class="pre">name</span></code> corresponding to the ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – Vertex set ID </p></li>
+<li><p><strong>name</strong> – Name of the vertex set to create </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla16UnstructuredMesh19set_vertex_set_nameE3IntRKNSt6stringE">
+<span id="_CPPv3N8godzilla16UnstructuredMesh19set_vertex_set_nameE3IntRKNSt6stringE"></span><span id="_CPPv2N8godzilla16UnstructuredMesh19set_vertex_set_nameE3IntRKNSt6stringE"></span><span id="godzilla::UnstructuredMesh::set_vertex_set_name__Int.ssCR"></span><span class="target" id="classgodzilla_1_1_unstructured_mesh_1a17aebe59da103d02f669b91beffcdaec"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_vertex_set_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla16UnstructuredMesh19set_vertex_set_nameE3IntRKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Create an entry in vertex set name map. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> – Vertex set ID </p></li>
+<li><p><strong>name</strong> – Vertex set name </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
