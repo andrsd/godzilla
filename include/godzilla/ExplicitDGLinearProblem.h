@@ -19,6 +19,7 @@ public:
 
     void create() override;
     void run() override;
+    void solve();
     bool converged();
     Real get_time() const override;
     Int get_step_num() const override;

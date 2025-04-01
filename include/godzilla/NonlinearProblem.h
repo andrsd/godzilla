@@ -44,8 +44,14 @@ public:
     /// @param mf use matrix-free for both the A and P matrices
     void set_use_matrix_free(bool mf_operator, bool mf);
 
+    /// Called before the solve
+    void pre_solve();
+
     /// Solve the problem
     void solve();
+
+    /// Called after the solve
+    void post_solve();
 
 protected:
     /// Get underlying non-linear solver
@@ -123,12 +129,6 @@ private:
 
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();
-
-    /// Called before the solve
-    virtual void pre_solve();
-
-    /// Called after the solve
-    virtual void post_solve();
 
     /// Nonlinear solver
     SNESolver snes;

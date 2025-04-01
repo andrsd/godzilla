@@ -23,8 +23,14 @@ public:
     void write_restart_file(RestartFile & file) const override;
     void read_restart_file(const RestartFile & file) override;
 
+    /// Call before `solve()`
+    void pre_solve();
+
     /// Solve the linear problem
     void solve();
+
+    /// Call after `solve()`
+    void post_solve();
 
     /// true if solve converged, otherwise false
     bool converged();
@@ -84,12 +90,6 @@ protected:
     }
 
 private:
-    /// Called before the solve
-    virtual void pre_solve();
-
-    /// Called after the solve
-    virtual void post_solve();
-
     /// KSP object
     KrylovSolver ks;
     /// Preconditioner

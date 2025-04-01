@@ -64,13 +64,20 @@ ExplicitFVLinearProblem::create()
 }
 
 void
+ExplicitFVLinearProblem::solve()
+{
+    CALL_STACK_MSG();
+    lprintln(9, "Solving");
+    TransientProblemInterface::solve(get_solution_vector());
+}
+
+void
 ExplicitFVLinearProblem::run()
 {
     CALL_STACK_MSG();
-    set_up_initial_guess();
-    on_initial();
-    lprintln(9, "Solving");
-    TransientProblemInterface::solve(get_solution_vector());
+    pre_solve();
+    solve();
+    post_solve();
     if (converged())
         on_final();
 }

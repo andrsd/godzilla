@@ -14,6 +14,7 @@ public:
     ~ImplicitFENonlinearProblem() override;
 
     void create() override;
+    void solve();
     void run() override;
     bool converged();
     Real get_time() const override;

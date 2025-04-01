@@ -165,9 +165,9 @@ LinearProblem::run()
     CALL_STACK_MSG();
     pre_solve();
     solve();
+    post_solve();
     if (converged())
         on_final();
-    post_solve();
 }
 
 void
