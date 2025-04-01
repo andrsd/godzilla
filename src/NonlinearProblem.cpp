@@ -288,12 +288,10 @@ NonlinearProblem::run()
 {
     CALL_STACK_MSG();
     pre_solve();
-    set_up_initial_guess();
-    on_initial();
     solve();
+    post_solve();
     if (converged())
         on_final();
-    post_solve();
 }
 
 void
@@ -313,6 +311,8 @@ void
 NonlinearProblem::pre_solve()
 {
     CALL_STACK_MSG();
+    set_up_initial_guess();
+    on_initial();
 }
 
 void
