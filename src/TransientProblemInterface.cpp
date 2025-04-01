@@ -1,14 +1,12 @@
 // SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"
 #include "godzilla/TimeStepAdapt.h"
 #include "godzilla/TimeSteppingAdaptor.h"
 #include "godzilla/TransientProblemInterface.h"
 #include "godzilla/LoggingInterface.h"
-#include "godzilla/Output.h"
 #include "godzilla/SNESolver.h"
 #include "petscdmplex.h"
 #include <cassert>

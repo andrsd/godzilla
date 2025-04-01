@@ -5,9 +5,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
 #include "godzilla/RestartFile.h"
-#include "godzilla/Output.h"
 #include "godzilla/Validation.h"
-#include "petscds.h"
 
 namespace godzilla {
 
