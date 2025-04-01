@@ -274,10 +274,47 @@ public:
     /// @param name Face set name
     void set_face_set_name(Int id, const std::string & name);
 
+    /// Get vertex set name
+    ///
+    /// @param id The ID of the vertex set
+    /// @return Vertex set name
+    const std::string & get_vertex_set_name(Int id) const;
+
     /// Get number of vertex sets
     ///
     /// @return Number of vertex sets
     Int get_num_vertex_sets() const;
+
+    /// Get vertex sets
+    ///
+    /// @return Vertex sets
+    const std::map<Int, std::string> & get_vertex_sets() const;
+
+    /// Check if mesh has a label corresponding to a vertex set name
+    ///
+    /// @param name The name of the vertex set
+    /// @return true if label exists, false otherwise
+    bool has_vertex_set(const std::string & name) const;
+
+    /// Get label corresponding to a vertex set name
+    ///
+    /// @param name The name of the face set
+    /// @return Label associated with face set name
+    Label get_vertex_set_label(const std::string & name) const;
+
+    void create_vertex_set_labels(const std::map<Int, std::string> & names);
+
+    /// Create vertex set. Takes the ID and creates a label with `name` corresponding to the ID.
+    ///
+    /// @param id Vertex set ID
+    /// @param name Name of the vertex set to create
+    void create_vertex_set(Int id, const std::string & name);
+
+    /// Create an entry in vertex set name map
+    ///
+    /// @param id Vertex set ID
+    /// @param name Vertex set name
+    void set_vertex_set_name(Int id, const std::string & name);
 
     /// Set the mesh partitioner
     ///
@@ -370,15 +407,18 @@ public:
 private:
     /// Cell set names
     std::map<Int, std::string> cell_set_names;
-
     /// Cell set IDs
     std::map<std::string, Int> cell_set_ids;
 
     /// Face set names
     std::map<Int, std::string> face_set_names;
-
     /// Face set IDs
     std::map<std::string, Int> face_set_ids;
+
+    /// Vertex set names
+    std::map<Int, std::string> vertex_set_names;
+    /// Vertex set IDs
+    std::map<std::string, Int> vertex_set_ids;
 
     /// Cells common to a vertex
     std::map<Int, std::vector<Int>> common_cells_by_vtx;

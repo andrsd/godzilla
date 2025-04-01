@@ -527,7 +527,8 @@ DiscreteProblemInterface::check_bcs_boundaries()
     for (auto & bc : this->bcs) {
         auto boundaries = bc->get_boundary();
         for (auto & bnd_name : boundaries) {
-            bool exists = this->unstr_mesh->has_face_set(bnd_name);
+            bool exists = this->unstr_mesh->has_face_set(bnd_name) ||
+                          this->unstr_mesh->has_vertex_set(bnd_name);
             if (!exists) {
                 no_errors = false;
                 this->logger->error("Boundary condition '{}' is set on boundary '{}' which does "

@@ -536,6 +536,17 @@ UnstructuredMesh::get_face_sets() const
     return this->face_set_names;
 }
 
+const std::string &
+UnstructuredMesh::get_vertex_set_name(Int id) const
+{
+    CALL_STACK_MSG();
+    const auto & it = this->vertex_set_names.find(id);
+    if (it != this->vertex_set_names.end())
+        return it->second;
+    else
+        throw Exception("Vertex set ID '{}' does not exist.", id);
+}
+
 Int
 UnstructuredMesh::get_num_vertex_sets() const
 {
@@ -543,6 +554,72 @@ UnstructuredMesh::get_num_vertex_sets() const
     Int n_vertex_sets;
     PETSC_CHECK(DMGetLabelSize(get_dm(), "Vertex Sets", &n_vertex_sets));
     return n_vertex_sets;
+}
+
+const std::map<Int, std::string> &
+UnstructuredMesh::get_vertex_sets() const
+{
+    CALL_STACK_MSG();
+    return this->vertex_set_names;
+}
+
+bool
+UnstructuredMesh::has_vertex_set(const std::string & name) const
+{
+    CALL_STACK_MSG();
+    const auto & it = this->vertex_set_ids.find(name);
+    return it != this->vertex_set_ids.end();
+}
+
+Label
+UnstructuredMesh::get_vertex_set_label(const std::string & name) const
+{
+    CALL_STACK_MSG();
+    const auto & it = this->vertex_set_ids.find(name);
+    if (it != this->vertex_set_ids.end())
+        return get_label(name);
+    else
+        return Label();
+}
+
+void
+UnstructuredMesh::create_vertex_set_labels(const std::map<Int, std::string> & names)
+{
+    CALL_STACK_MSG();
+    auto vs_label = get_label("Vertex Sets");
+    if (vs_label) {
+        auto n_vs = vs_label.get_num_values();
+        auto vs_ids = vs_label.get_value_index_set();
+        vs_ids.get_indices();
+        for (Int i = 0; i < n_vs; ++i) {
+            Int id = vs_ids[i];
+            create_vertex_set(id, names.at(id));
+        }
+        vs_ids.restore_indices();
+        vs_ids.destroy();
+    }
+}
+
+void
+UnstructuredMesh::create_vertex_set(Int id, const std::string & name)
+{
+    CALL_STACK_MSG();
+    auto vertex_sets_label = get_label("Vertex Sets");
+    auto is = vertex_sets_label.get_stratum(id);
+    if (!is.empty()) {
+        create_label(name);
+        auto label = get_label(name);
+        label.set_stratum(id, is);
+    }
+    is.destroy();
+}
+
+void
+UnstructuredMesh::set_vertex_set_name(Int id, const std::string & name)
+{
+    CALL_STACK_MSG();
+    this->vertex_set_names[id] = name;
+    this->vertex_set_ids[name] = id;
 }
 
 void

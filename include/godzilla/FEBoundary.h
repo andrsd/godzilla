@@ -308,6 +308,47 @@ BoundaryInfo<TET4, 3, 4>::correct_nodal_normals()
     }
 }
 
+///
+
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+class EssentialBoundaryInfo : public BoundaryInfoAbstract {
+public:
+    EssentialBoundaryInfo(UnstructuredMesh * mesh, const IndexSet & vertices) :
+        mesh(mesh),
+        vertices(vertices)
+    {
+        CALL_STACK_MSG();
+    }
+
+    UnstructuredMesh *
+    get_mesh() const
+    {
+        return this->mesh;
+    }
+
+    void
+    create() override
+    {
+        CALL_STACK_MSG();
+        this->vertices.get_indices();
+    }
+
+    void
+    destroy() override
+    {
+        CALL_STACK_MSG();
+        this->vertices.restore_indices();
+    }
+
+private:
+    /// Mesh
+    UnstructuredMesh * mesh;
+
+public:
+    /// IndexSet with boundary vertices
+    IndexSet vertices;
+};
+
 } // namespace fe
 
 } // namespace godzilla

@@ -431,11 +431,16 @@ ExodusIIOutput::write_node_sets()
     if (!this->mesh->has_label("Vertex Sets"))
         return;
 
+    std::vector<std::string> ns_names;
+
+    auto vertex_sets_label = this->mesh->get_label("Vertex Sets");
+
+    Int n_node_sets = this->mesh->get_num_vertex_sets();
+    ns_names.resize(n_node_sets);
+
     auto elem_range = this->mesh->get_cell_range();
     Int n_elems_in_block = elem_range.size();
 
-    Int n_node_sets = this->mesh->get_num_vertex_sets();
-    auto vertex_sets_label = this->mesh->get_label("Vertex Sets");
     auto vertex_set_idx = vertex_sets_label.get_value_index_set();
     vertex_set_idx.get_indices();
     for (Int i = 0; i < n_node_sets; ++i) {
@@ -447,13 +452,15 @@ ExodusIIOutput::write_node_sets()
             node_set[j] = (int) (vertices[j] - n_elems_in_block + 1);
         this->exo->write_node_set(vertex_set_idx[i], node_set);
 
-        // TODO: set the node set name
+        ns_names[i] = this->mesh->get_vertex_set_name(vertex_set_idx[i]);
 
         vertices.restore_indices();
         vertices.destroy();
     }
     vertex_set_idx.restore_indices();
     vertex_set_idx.destroy();
+
+    this->exo->write_node_set_names(ns_names);
 }
 
 void

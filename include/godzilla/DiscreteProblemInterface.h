@@ -293,7 +293,13 @@ public:
                            void (T::*method)(Real, const Real[], Scalar[]),
                            void (T::*method_t)(Real, const Real[], Scalar[]))
     {
-        auto label = this->unstr_mesh->get_face_set_label(boundary);
+        Label label;
+        if (this->unstr_mesh->has_face_set(boundary))
+            label = this->unstr_mesh->get_face_set_label(boundary);
+        else if (this->unstr_mesh->has_vertex_set(boundary))
+            label = this->unstr_mesh->get_vertex_set_label(boundary);
+        else
+            throw Exception("Boundary '{}' does not exist.", boundary);
         auto ids = label.get_values();
         auto delegate = new EssentialBCDelegate(instance, method, method_t);
         this->essential_bc_delegates.push_back(delegate);
