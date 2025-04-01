@@ -125,7 +125,6 @@ void
 ExplicitProblemInterface::compute_rhs_function(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
-    auto dm = this->nl_problem->get_dm();
     Vector loc_x = this->nl_problem->get_local_vector();
     Vector loc_F = this->nl_problem->get_local_vector();
     loc_x.zero();
