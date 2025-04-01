@@ -11,7 +11,6 @@
 #include "godzilla/IndexSet.h"
 #include "godzilla/Partitioner.h"
 #include "godzilla/Label.h"
-#include "petscdm.h"
 
 namespace godzilla {
 

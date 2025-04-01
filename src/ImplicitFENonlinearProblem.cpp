@@ -1,12 +1,10 @@
 // SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/ImplicitFENonlinearProblem.h"
 #include "godzilla/WeakForm.h"
-#include "godzilla/Output.h"
 #include "godzilla/Validation.h"
 #include "godzilla/Utils.h"
 #include "godzilla/IndexSet.h"
