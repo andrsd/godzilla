@@ -95,7 +95,7 @@ public:
 
 public:
     /// Build the call stack object with defined size
-    explicit CallStack();
+    CallStack();
 
     /// Dump the call stack objects to standard error
     void dump();
