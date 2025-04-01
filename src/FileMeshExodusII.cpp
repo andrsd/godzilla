@@ -53,6 +53,7 @@ FileMesh::create_from_exodus()
         Int n_cells = 0;
         Int n_vertices = 0;
         Int n_side_sets = 0;
+        Int n_node_sets = 0;
         std::map<Int, std::string> cell_set_names;
 
         exodusIIcpp::File f;
@@ -63,13 +64,15 @@ FileMesh::create_from_exodus()
             n_cells = f.get_num_elements();
             n_vertices = f.get_num_nodes();
             n_side_sets = f.get_num_side_sets();
+            n_node_sets = f.get_num_node_sets();
         }
         m->set_chart(0, n_cells + n_vertices);
         // We do not want this label automatically computed, instead we compute it here
         m->create_label("celltype");
-        // Create Cell/Face Sets labels on all processes
+        // Create Cell/Face/Vertex Sets labels on all processes
         m->create_label("Cell Sets");
         m->create_label("Face Sets");
+        m->create_label("Vertex Sets");
 
         if (rank == 0) {
             f.read_blocks();
@@ -152,7 +155,32 @@ FileMesh::create_from_exodus()
         m->stratify();
         m->interpolate();
 
-        // TODO: create vertex sets
+        // create vertex sets
+        std::map<Int, std::string> node_set_names;
+        if (rank == 0 && (n_node_sets > 0)) {
+            auto vertex_sets = m->get_label("Vertex Sets");
+            f.read_node_sets();
+            for (auto & node_set : f.get_node_sets()) {
+                auto id = node_set.get_id();
+                auto name = node_set.get_name();
+                if (name.empty())
+                    name = fmt::format("{}", id);
+
+                m->create_label(name);
+                auto vertex_set_label = m->get_label(name);
+                node_set_names[id] = name;
+
+                for (int v = 0; v < node_set.get_size(); ++v) {
+                    auto node = node_set.get_node_id(v);
+                    auto vertex = node + n_cells - 1;
+                    vertex_sets.set_value(vertex, id);
+                    vertex_set_label.set_value(vertex, id);
+                }
+            }
+        }
+        comm.broadcast(node_set_names, 0);
+        for (const auto & [id, name] : node_set_names)
+            m->set_vertex_set_name(id, name);
 
         // Read coordinates
         auto coord_section = m->get_coordinate_section();
