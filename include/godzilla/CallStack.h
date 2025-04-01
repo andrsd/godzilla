@@ -12,19 +12,7 @@ namespace internal {
 #if defined(NDEBUG)
     // In Release builds these macros do nothing
     #define CALL_STACK_MSG(...)
-    #define _F_
 #else
-/// Place at the beginning of a method/function
-///
-/// @code
-/// void Class::method()
-/// {
-///   _F_;
-///  ...your code here...
-/// }
-/// @endcode
-    #define _F_ godzilla::internal::CallStack::Msg __call_stack_msg(__PRETTY_FUNCTION__)
-
     #define CALL_STK_MSG0() godzilla::internal::CallStack::Msg __call_stack_msg(__PRETTY_FUNCTION__)
     #define CALL_STK_MSG1(fmt) godzilla::internal::CallStack::Msg __call_stack_msg(fmt)
     #define CALL_STK_MSG2(fmt, p1) godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1)
