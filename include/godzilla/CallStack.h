@@ -13,26 +13,31 @@ namespace internal {
     // In Release builds these macros do nothing
     #define CALL_STACK_MSG(...)
 #else
-    #define CALL_STK_MSG0() godzilla::internal::CallStack::Msg __call_stack_msg(__PRETTY_FUNCTION__)
-    #define CALL_STK_MSG1(fmt) godzilla::internal::CallStack::Msg __call_stack_msg(fmt)
-    #define CALL_STK_MSG2(fmt, p1) godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1)
+    // clang-format off
+    #define CALL_STK_MSG0() \
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__PRETTY_FUNCTION__)
+    #define CALL_STK_MSG1(fmt) \
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt)
+    #define CALL_STK_MSG2(fmt, p1) \
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1)
     #define CALL_STK_MSG3(fmt, p1, p2) \
-        godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1, p2)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2)
     #define CALL_STK_MSG4(fmt, p1, p2, p3) \
-        godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1, p2, p3)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3)
     #define CALL_STK_MSG5(fmt, p1, p2, p3, p4) \
-        godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1, p2, p3, p4)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4)
     #define CALL_STK_MSG6(fmt, p1, p2, p3, p4, p5) \
-        godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1, p2, p3, p4, p5)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5)
     #define CALL_STK_MSG7(fmt, p1, p2, p3, p4, p5, p6) \
-        godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1, p2, p3, p4, p5, p6)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5, p6)
     #define CALL_STK_MSG8(fmt, p1, p2, p3, p4, p5, p6, p7) \
-        godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1, p2, p3, p4, p5, p6, p7)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5, p6, p7)
     #define CALL_STK_MSG9(fmt, p1, p2, p3, p4, p5, p6, p7, p8) \
-        godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1, p2, p3, p4, p5, p6, p7, p8)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5, p6, p7, p8)
     #define CALL_STK_MSG10(fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9) \
-        godzilla::internal::CallStack::Msg __call_stack_msg(fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9)
     #define GET_CALL_STK_MACRO(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, NAME, ...) NAME
+// clang-format on
 
 /// Place at the beginning of a method/function
 ///
