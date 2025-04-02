@@ -257,7 +257,7 @@ protected:
 
 private:
     /// Monitor
-    virtual void monitor(Int stepi, Real time, const Vector & x);
+    void monitor(Int stepi, Real time, const Vector & x);
 
     /// Set up time integration scheme
     virtual void set_up_time_scheme() = 0;
