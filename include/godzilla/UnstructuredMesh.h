@@ -443,10 +443,4 @@ public:
     static void invert_cell(PolytopeType type, std::vector<Int> & cone);
 };
 
-/// Get string representation of a polytope type
-///
-/// @param cell_type Cell type
-/// @return String describing the polytope type
-const char * get_polytope_type_str(PolytopeType cell_type);
-
 } // namespace godzilla
