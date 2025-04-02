@@ -1,6 +1,7 @@
 #include <gmock/gmock.h>
 #include "godzilla/Convert.h"
 #include "godzilla/Enums.h"
+#include "godzilla/KrylovSolver.h"
 
 using namespace godzilla;
 
@@ -21,4 +22,10 @@ TEST(ConvertTest, polytope_type)
     EXPECT_EQ(conv::to_str(PolytopeType::FV_GHOST), "FV_GHOST");
     EXPECT_EQ(conv::to_str(PolytopeType::INTERIOR_GHOST), "INTERIOR_GHOST");
     EXPECT_EQ(conv::to_str(PolytopeType::UNKNOWN), "UNKNOWN");
+}
+
+TEST(ConvertTest, converged_reason)
+{
+    EXPECT_EQ(conv::to_str(KrylovSolver::CONVERGED_ITS), "maximum iterations");
+    EXPECT_EQ(conv::to_str(KrylovSolver::DIVERGED_NULL), "null");
 }
