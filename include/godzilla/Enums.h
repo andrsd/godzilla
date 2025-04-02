@@ -3,7 +3,8 @@
 
 #pragma once
 
-#include "petscsystypes.h"
+#include "petscsys.h"
+#include "petscdmtypes.h"
 
 namespace godzilla {
 
@@ -26,6 +27,54 @@ enum class FileAccess {
     WRITE,
     /// Create a new file
     CREATE
+};
+
+/// Coordinate system type
+enum CoordinateType {
+    /// Cartesian coordinates
+    CARTESIAN,
+    /// Spherical coordinates
+    SPHERICAL,
+    /// Cylindrical coordinates
+    AXISYMMETRIC
+};
+
+/// Element tyoe
+enum ElementType {
+    /// 2-node edge element
+    EDGE2,
+    /// 3-node triangle element
+    TRI3,
+    /// 4-node quadrilateral element
+    QUAD4,
+    /// 4-node tetrahedral element
+    TET4,
+    /// 8-node hexahedral element
+    HEX8
+};
+
+enum ExecuteOnFlag : unsigned int {
+    EXECUTE_ON_INITIAL = 0x1,
+    EXECUTE_ON_TIMESTEP = 0x2,
+    EXECUTE_ON_FINAL = 0x4
+};
+
+enum class PolytopeType {
+    POINT = DM_POLYTOPE_POINT,
+    SEGMENT = DM_POLYTOPE_SEGMENT,
+    POINT_PRISM_TENSOR = DM_POLYTOPE_POINT_PRISM_TENSOR,
+    TRIANGLE = DM_POLYTOPE_TRIANGLE,
+    QUADRILATERAL = DM_POLYTOPE_QUADRILATERAL,
+    SEG_PRISM_TENSOR = DM_POLYTOPE_SEG_PRISM_TENSOR,
+    TETRAHEDRON = DM_POLYTOPE_TETRAHEDRON,
+    HEXAHEDRON = DM_POLYTOPE_HEXAHEDRON,
+    PYRAMID = DM_POLYTOPE_PYRAMID,
+    TRI_PRISM = DM_POLYTOPE_TRI_PRISM,
+    TRI_PRISM_TENSOR = DM_POLYTOPE_TRI_PRISM_TENSOR,
+    QUAD_PRISM_TENSOR = DM_POLYTOPE_QUAD_PRISM_TENSOR,
+    FV_GHOST = DM_POLYTOPE_FV_GHOST,
+    INTERIOR_GHOST = DM_POLYTOPE_INTERIOR_GHOST,
+    UNKNOWN = DM_POLYTOPE_UNKNOWN
 };
 
 } // namespace godzilla

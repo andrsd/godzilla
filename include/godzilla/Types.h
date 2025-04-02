@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Enums.h"
 #include "godzilla/Flags.h"
 #include "godzilla/Delegate.h"
 #include "petscsystypes.h"
@@ -26,10 +27,6 @@ invoke_function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[],
 } // namespace internal
 
 //
-
-enum CoordinateType { CARTESIAN, SPHERICAL, AXISYMMETRIC };
-
-enum ElementType { EDGE2, TRI3, QUAD4, TET4, HEX8 };
 
 /// Return the text representation of an element type
 ///
@@ -57,12 +54,6 @@ get_num_element_nodes(ElementType type)
         return 8;
     }
 }
-
-enum ExecuteOnFlag : unsigned int {
-    EXECUTE_ON_INITIAL = 0x1,
-    EXECUTE_ON_TIMESTEP = 0x2,
-    EXECUTE_ON_FINAL = 0x4
-};
 
 using ExecuteOn = Flags<ExecuteOnFlag>;
 
