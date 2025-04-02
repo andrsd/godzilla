@@ -24,6 +24,15 @@ TEST(ConvertTest, polytope_type)
     EXPECT_EQ(conv::to_str(PolytopeType::UNKNOWN), "UNKNOWN");
 }
 
+TEST(ConvertTest, element_type)
+{
+    EXPECT_EQ(conv::to_str(EDGE2), "EDGE2");
+    EXPECT_EQ(conv::to_str(TRI3), "TRI3");
+    EXPECT_EQ(conv::to_str(QUAD4), "QUAD4");
+    EXPECT_EQ(conv::to_str(TET4), "TET4");
+    EXPECT_EQ(conv::to_str(HEX8), "HEX8");
+}
+
 TEST(ConvertTest, converged_reason)
 {
     EXPECT_EQ(conv::to_str(KrylovSolver::CONVERGED_ITS), "maximum iterations");

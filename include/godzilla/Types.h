@@ -28,12 +28,6 @@ invoke_function_delegate(Int dim, Real time, const Real x[], Int nc, Scalar u[],
 
 //
 
-/// Return the text representation of an element type
-///
-/// @param type Element type
-/// @return Text representation of an element type
-std::string get_element_type_str(const ElementType & type);
-
 /// Return number of nodes given FE type
 ///
 /// @param type Element type

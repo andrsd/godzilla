@@ -5,6 +5,7 @@
 #include "godzilla/Enums.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/KrylovSolver.h"
+#include "godzilla/Exception.h"
 
 namespace godzilla {
 namespace conv {
@@ -45,6 +46,26 @@ to_str(PolytopeType elem_type)
         return "INTERIOR_GHOST";
     default:
         return "UNKNOWN";
+    }
+}
+
+template <>
+std::string
+to_str(const ElementType type)
+{
+    switch (type) {
+    case EDGE2:
+        return "EDGE2";
+    case TRI3:
+        return "TRI3";
+    case QUAD4:
+        return "QUAD4";
+    case TET4:
+        return "TET4";
+    case HEX8:
+        return "HEX8";
+    default:
+        throw InternalError("Unsupported element type");
     }
 }
 

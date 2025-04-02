@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/Convert.h"
 #include "godzilla/Error.h"
 #include "godzilla/Exception.h"
 
@@ -23,7 +24,7 @@ inline Real
 integration_coeff()
 {
     throw NotImplementedException("Integration coefficient for '{}' is not implemented",
-                                  get_element_type_str(ELEM_TYPE));
+                                  conv::to_str(ELEM_TYPE));
 }
 
 template <>
@@ -74,7 +75,7 @@ inline Real
 integration_coeff()
 {
     throw NotImplementedException("Integration coefficient for '{}' is not implemented",
-                                  get_element_type_str(ELEM_TYPE));
+                                  conv::to_str(ELEM_TYPE));
 }
 
 template <>
@@ -174,7 +175,7 @@ inline Real
 surface_integration_coeff()
 {
     throw NotImplementedException("Surface integration coefficient for '{}' is not implemented",
-                                  get_element_type_str(ELEM_TYPE));
+                                  conv::to_str(ELEM_TYPE));
 }
 
 template <>

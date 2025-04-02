@@ -5,6 +5,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
+#include "godzilla/Convert.h"
 #include "godzilla/Array1D.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/DenseVector.h"
@@ -29,7 +30,7 @@ grad_shape(const DenseMatrix<Real, N, D> & coords, Real volume)
 {
     throw NotImplementedException(
         "Calculation of shape function gradients is not implemented for element '{}' yet",
-        get_element_type_str(ELEM_TYPE));
+        conv::to_str(ELEM_TYPE));
 }
 
 /// Compute gradients of shape functions of EDGE2 in 1-D

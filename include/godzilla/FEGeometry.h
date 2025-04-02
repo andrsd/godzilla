@@ -5,6 +5,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
+#include "godzilla/Convert.h"
 #include "godzilla/Exception.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Vector.h"
@@ -88,7 +89,7 @@ normal(Real volume, Real face_volume, const DenseVector<Real, DIM> & grad)
     CALL_STACK_MSG();
     throw NotImplementedException(
         "Computation of a normal for element '{}' in {} dimensions is not implemented",
-        get_element_type_str(ELEM_TYPE),
+        conv::to_str(ELEM_TYPE),
         DIM);
 }
 
@@ -124,7 +125,7 @@ element_length(const DenseMatrix<Real, DIM, N_ELEM_NODES> & grad_phi)
     CALL_STACK_MSG();
     throw NotImplementedException(
         "Computation of a element length for '{}' in {} dimensions is not implemented",
-        get_element_type_str(ELEM_TYPE),
+        conv::to_str(ELEM_TYPE),
         DIM);
 }
 
