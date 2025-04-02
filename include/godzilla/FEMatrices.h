@@ -5,6 +5,7 @@
 
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
+#include "godzilla/Convert.h"
 #include "godzilla/Error.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
@@ -27,8 +28,7 @@ template <ElementType ETYPE, Int N_ELEM_NODES = get_num_element_nodes(ETYPE)>
 inline DenseMatrixSymm<Real, N_ELEM_NODES>
 mass()
 {
-    throw NotImplementedException("Mass matrix is not implemented for {}",
-                                  get_element_type_str(ETYPE));
+    throw NotImplementedException("Mass matrix is not implemented for {}", conv::to_str(ETYPE));
 }
 
 /// Local mass matrix for EDGE2 in 1D
@@ -84,7 +84,7 @@ inline DenseMatrixSymm<Real, N_ELEM_NODES>
 mass_rz(Real rad_e, const DenseVector<Real, N_ELEM_NODES> & rad_n)
 {
     throw NotImplementedException("Mass matrix (RZ) is not implemented for {}",
-                                  get_element_type_str(ETYPE));
+                                  conv::to_str(ETYPE));
 }
 
 /// Local mass matrix (RZ) for EDGE2 in 1D
@@ -121,7 +121,7 @@ inline DenseMatrixSymm<Real, N_ELEM_NODES>
 mass_lumped()
 {
     throw NotImplementedException("Lumped mass matrix is not implemented for {}",
-                                  get_element_type_str(ETYPE));
+                                  conv::to_str(ETYPE));
 }
 
 /// Local lumped mass matrix for EDGE2 in 1D
@@ -170,7 +170,7 @@ inline DenseMatrixSymm<Real, N_ELEM_NODES>
 mass_lumped_rz(const DenseVector<Real, N_ELEM_NODES> & rad_n)
 {
     throw NotImplementedException("Mass matrix (RZ) is not implemented for {}",
-                                  get_element_type_str(ETYPE));
+                                  conv::to_str(ETYPE));
 }
 
 template <>
@@ -208,7 +208,7 @@ inline DenseMatrixSymm<Real, N_ELEM_NODES>
 stiffness()
 {
     throw NotImplementedException("Stiffness matrix is not implemented for {}",
-                                  get_element_type_str(ETYPE));
+                                  conv::to_str(ETYPE));
 }
 
 /// Local mass matrix for EDGE2 in 1D

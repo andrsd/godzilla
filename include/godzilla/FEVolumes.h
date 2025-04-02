@@ -5,6 +5,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
+#include "godzilla/Convert.h"
 #include "godzilla/Array1D.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
@@ -21,7 +22,7 @@ volume(const DenseMatrix<Real, N_ELEM_NODES, DIM> & coords)
 {
     CALL_STACK_MSG();
     throw NotImplementedException("Volume calculation for {} in {} dimensions is not implemented",
-                                  get_element_type_str(ELEM_TYPE),
+                                  conv::to_str(ELEM_TYPE),
                                   DIM);
 }
 
@@ -155,7 +156,7 @@ face_area(const DenseMatrix<Real, N_FACE_NODES, DIM> & coords)
     CALL_STACK_MSG();
     throw NotImplementedException(
         "Face area calculation for {} in {} dimensions is not implemented",
-        get_element_type_str(ELEM_TYPE),
+        conv::to_str(ELEM_TYPE),
         DIM);
 }
 

@@ -229,47 +229,4 @@ KrylovSolver::view(PetscViewer viewer) const
     PETSC_CHECK(KSPView(this->ksp, viewer));
 }
 
-std::string
-KrylovSolver::converged_reason_str(ConvergedReason reason)
-{
-    CALL_STACK_MSG();
-    if (reason == ConvergedReason::CONVERGED_ITERATING)
-        return "iterating";
-    else if (reason == ConvergedReason::CONVERGED_RTOL_NORMAL)
-        return "relative tolerance";
-    else if (reason == ConvergedReason::CONVERGED_ATOL_NORMAL)
-        return "absolute tolerance";
-    else if (reason == ConvergedReason::CONVERGED_RTOL)
-        return "relative tolerance";
-    else if (reason == ConvergedReason::CONVERGED_ATOL)
-        return "absolute tolerance";
-    else if (reason == ConvergedReason::CONVERGED_ITS)
-        return "maximum iterations";
-    else if (reason == ConvergedReason::CONVERGED_STEP_LENGTH)
-        return "step length";
-    else if (reason == ConvergedReason::CONVERGED_HAPPY_BREAKDOWN)
-        return "happy breakdown";
-    // Diverged reasons
-    else if (reason == ConvergedReason::DIVERGED_NULL)
-        return "null";
-    else if (reason == ConvergedReason::DIVERGED_ITS)
-        return "maximum iterations";
-    else if (reason == ConvergedReason::DIVERGED_DTOL)
-        return "divergent tolerance";
-    else if (reason == ConvergedReason::DIVERGED_BREAKDOWN)
-        return "breakdown";
-    else if (reason == ConvergedReason::DIVERGED_BREAKDOWN_BICG)
-        return "breakdown (BiCG)";
-    else if (reason == ConvergedReason::DIVERGED_NONSYMMETRIC)
-        return "non-symmetric matrix";
-    else if (reason == ConvergedReason::DIVERGED_INDEFINITE_PC)
-        return "indefinite preconditioner";
-    else if (reason == ConvergedReason::DIVERGED_NANORINF)
-        return "NaN or inf values";
-    else if (reason == ConvergedReason::DIVERGED_INDEFINITE_MAT)
-        return "indefinite matrix";
-    else
-        return "unknown";
-}
-
 } // namespace godzilla

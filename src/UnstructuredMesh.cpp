@@ -6,48 +6,11 @@
 #include "godzilla/IndexSet.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Partitioner.h"
+#include "godzilla/Convert.h"
 #include "petscdmplex.h"
 #include "petscdmtypes.h"
 
 namespace godzilla {
-
-const char *
-get_polytope_type_str(PolytopeType elem_type)
-{
-    CALL_STACK_MSG();
-    switch (elem_type) {
-    case PolytopeType::POINT:
-        return "POINT";
-    case PolytopeType::SEGMENT:
-        return "SEGMENT";
-    case PolytopeType::POINT_PRISM_TENSOR:
-        return "POINT_PRISM_TENSOR";
-    case PolytopeType::TRIANGLE:
-        return "TRIANGLE";
-    case PolytopeType::QUADRILATERAL:
-        return "QUADRILATERAL";
-    case PolytopeType::SEG_PRISM_TENSOR:
-        return "SEG_PRISM_TENSOR";
-    case PolytopeType::TETRAHEDRON:
-        return "TETRAHEDRON";
-    case PolytopeType::HEXAHEDRON:
-        return "HEXAHEDRON";
-    case PolytopeType::TRI_PRISM:
-        return "TRI_PRISM";
-    case PolytopeType::TRI_PRISM_TENSOR:
-        return "TRI_PRISM_TENSOR";
-    case PolytopeType::QUAD_PRISM_TENSOR:
-        return "QUAD_PRISM_TENSOR";
-    case PolytopeType::PYRAMID:
-        return "PYRAMID";
-    case PolytopeType::FV_GHOST:
-        return "FV_GHOST";
-    case PolytopeType::INTERIOR_GHOST:
-        return "INTERIOR_GHOST";
-    default:
-        return "UNKNOWN";
-    }
-}
 
 UnstructuredMesh::UnstructuredMesh(const mpi::Communicator & comm) :
     Mesh(nullptr),
@@ -664,7 +627,7 @@ UnstructuredMesh::get_num_cell_nodes(PolytopeType elem_type)
     case PolytopeType::HEXAHEDRON:
         return 8;
     default:
-        error("Unsupported type '{}'.", get_polytope_type_str(elem_type));
+        error("Unsupported type '{}'.", conv::to_str(elem_type));
     }
 }
 
