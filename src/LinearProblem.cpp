@@ -101,6 +101,13 @@ LinearProblem::create_krylov_solver()
     return krylov_solver;
 }
 
+const KrylovSolver &
+LinearProblem::get_ksp() const
+{
+    CALL_STACK_MSG();
+    return this->ks;
+}
+
 void
 LinearProblem::init()
 {
