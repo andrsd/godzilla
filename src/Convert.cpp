@@ -158,5 +158,26 @@ to_str(SNESolver::ConvergedReason reason)
         return "unknown";
 }
 
+template <>
+std::string
+to_str(SNESolver::LineSearch::LineSearchType type)
+{
+    CALL_STACK_MSG();
+    if (type == SNESolver::LineSearch::BASIC)
+        return "basic";
+    else if (type == SNESolver::LineSearch::L2)
+        return "l2";
+    else if (type == SNESolver::LineSearch::CP)
+        return "cp";
+    else if (type == SNESolver::LineSearch::NLEQERR)
+        return "nleqerr";
+    else if (type == SNESolver::LineSearch::SHELL)
+        return "shell";
+    else if (type == SNESolver::LineSearch::BT)
+        return "bt";
+    else
+        return "unknown";
+}
+
 } // namespace conv
 } // namespace godzilla

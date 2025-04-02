@@ -46,3 +46,13 @@ TEST(ConvertTest, snes_converged_reason)
     EXPECT_EQ(conv::to_str(SNESolver::CONVERGED_ITS), "maximum iterations");
     EXPECT_EQ(conv::to_str(SNESolver::DIVERGED_FUNCTION_DOMAIN), "function domain");
 }
+
+TEST(ConvertTest, snes_line_search)
+{
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::BASIC), "basic");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::L2), "l2");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::CP), "cp");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::NLEQERR), "nleqerr");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::SHELL), "shell");
+    EXPECT_EQ(conv::to_str(SNESolver::LineSearch::BT), "bt");
+}
