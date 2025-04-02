@@ -2,6 +2,7 @@
 #include "godzilla/Convert.h"
 #include "godzilla/Enums.h"
 #include "godzilla/KrylovSolver.h"
+#include "godzilla/SNESolver.h"
 
 using namespace godzilla;
 
@@ -33,8 +34,15 @@ TEST(ConvertTest, element_type)
     EXPECT_EQ(conv::to_str(HEX8), "HEX8");
 }
 
-TEST(ConvertTest, converged_reason)
+TEST(ConvertTest, ksp_converged_reason)
 {
     EXPECT_EQ(conv::to_str(KrylovSolver::CONVERGED_ITS), "maximum iterations");
     EXPECT_EQ(conv::to_str(KrylovSolver::DIVERGED_NULL), "null");
+}
+
+TEST(ConvertTest, snes_converged_reason)
+{
+    EXPECT_EQ(conv::to_str(SNESolver::CONVERGED_FNORM_ABS), "absolute function norm");
+    EXPECT_EQ(conv::to_str(SNESolver::CONVERGED_ITS), "maximum iterations");
+    EXPECT_EQ(conv::to_str(SNESolver::DIVERGED_FUNCTION_DOMAIN), "function domain");
 }

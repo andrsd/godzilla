@@ -5,6 +5,7 @@
 #include "godzilla/Enums.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/KrylovSolver.h"
+#include "godzilla/SNESolver.h"
 #include "godzilla/Exception.h"
 
 namespace godzilla {
@@ -109,6 +110,50 @@ to_str(KrylovSolver::ConvergedReason reason)
         return "NaN or inf values";
     else if (reason == KrylovSolver::ConvergedReason::DIVERGED_INDEFINITE_MAT)
         return "indefinite matrix";
+    else
+        return "unknown";
+}
+
+template <>
+std::string
+to_str(SNESolver::ConvergedReason reason)
+{
+    CALL_STACK_MSG();
+    if (reason == SNESolver::ConvergedReason::CONVERGED_ITERATING)
+        return "iterating";
+    else if (reason == SNESolver::ConvergedReason::CONVERGED_FNORM_ABS)
+        return "absolute function norm";
+    else if (reason == SNESolver::ConvergedReason::CONVERGED_FNORM_RELATIVE)
+        return "relative function norm";
+    else if (reason == SNESolver::ConvergedReason::CONVERGED_SNORM_RELATIVE)
+        return "relative step norm";
+    else if (reason == SNESolver::ConvergedReason::CONVERGED_ITS)
+        return "maximum iterations";
+    else if (reason == SNESolver::ConvergedReason::BREAKOUT_INNER_ITER)
+        return "inner iteration breakout";
+    // Diverged reasons
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_FUNCTION_DOMAIN)
+        return "function domain";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_FUNCTION_COUNT)
+        return "function count";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_LINEAR_SOLVE)
+        return "linear solve";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_FNORM_NAN)
+        return "function norm in NaN";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_MAX_IT)
+        return "maximum iterations";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_LINE_SEARCH)
+        return "line search";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_INNER)
+        return "inner solve failed";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_LOCAL_MIN)
+        return "local minimum";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_DTOL)
+        return "divergence tolerance";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_JACOBIAN_DOMAIN)
+        return "Jacobian domain";
+    else if (reason == SNESolver::ConvergedReason::DIVERGED_TR_DELTA)
+        return "trust region delta";
     else
         return "unknown";
 }
