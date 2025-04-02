@@ -85,10 +85,10 @@ protected:
     virtual void set_up_solve_type();
 
     /// SNES monitor
-    virtual void snes_monitor(Int it, Real norm);
+    void snes_monitor(Int it, Real norm);
 
     /// KSP monitor
-    virtual void ksp_monitor(Int it, Real rnorm);
+    void ksp_monitor(Int it, Real rnorm);
 
     /// Set residual evaluation function
     ///

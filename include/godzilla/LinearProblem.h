@@ -66,7 +66,7 @@ protected:
     virtual void create_preconditioner(PC pc);
 
     /// Monitor callback
-    virtual void monitor(Int it, Real rnorm);
+    void monitor(Int it, Real rnorm);
 
     /// Set KSP matrix evaluation function
     ///
