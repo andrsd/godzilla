@@ -7,6 +7,7 @@
 #include "fmt/printf.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "godzilla/PerfLog.h"
+#include "godzilla/Terminal.h"
 
 namespace godzilla {
 
@@ -66,6 +67,29 @@ public:
         if (level <= this->verbosity_level && this->proc_id == 0) {
             fmt::print(stdout, "{}: ", this->prefix);
             fmt::print(stdout, format, std::forward<T>(args)...);
+            fmt::print(stdout, "\n");
+        }
+    }
+
+    /// Convenience version of lprintln with color (the whole line will be colored)
+    ///
+    /// @param level Verbosity level. If application verbose level is higher than this number, the
+    ///             message will be printed.
+    /// @param clr Color to use
+    /// @param format String specifying how to interpret the data
+    /// @param ... Arguments specifying data to print
+    template <typename... T>
+    void
+    lprintln(unsigned int level,
+             Terminal::Color clr,
+             fmt::format_string<T...> format,
+             T... args) const
+    {
+        if (level <= this->verbosity_level && this->proc_id == 0) {
+            fmt::print(stdout, "{}: ", this->prefix);
+            fmt::print(stdout, "{}", clr);
+            fmt::print(stdout, format, std::forward<T>(args)...);
+            fmt::print(stdout, "{}", Terminal::Color::normal);
             fmt::print(stdout, "\n");
         }
     }
