@@ -51,6 +51,8 @@ jobs:
           ignore: "contrib"
           step-summary: true
           database: build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   analyze:
     name: CodeQL
