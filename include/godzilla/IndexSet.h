@@ -191,7 +191,7 @@ public:
     /// Convert this object to a PETSc object so it can be passed directly into PETSc API
     operator IS *();
 
-    /// Checks if the IndexSet is empty
+    /// Checks if the IndexSet is empty (i.e., has no indices)
     ///
     /// @return `true` if the index set is empty, `false` otherwise
     bool empty() const;

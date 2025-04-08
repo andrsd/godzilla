@@ -458,7 +458,7 @@ FENonlinearProblem::compute_bnd_residual_single_internal(DM dm,
     }
 
     auto points = key.label.get_stratum(key.value);
-    if (!points.empty()) {
+    if (points) {
         PetscQuadrature q_geom = nullptr;
 
         /* TODO: Special cases of ISIntersect where it is quick to check a priori if one is a
@@ -984,7 +984,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
     PETSC_CHECK(DMGetGlobalSection(dm, &global_section));
     for (Int v = 0; v < n_values; ++v) {
         auto points = label.get_stratum(values[v]);
-        if (points.empty())
+        if (!points)
             continue; /* No points with that id on this process */
 
         // TODO: Special cases of ISIntersect where it is quick to check a prior if one is a
