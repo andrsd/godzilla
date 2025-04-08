@@ -90,6 +90,13 @@ IndexSet::destroy()
     this->is = nullptr;
 }
 
+bool
+IndexSet::is_null() const
+{
+    CALL_STACK_MSG();
+    return this->is == nullptr;
+}
+
 void
 IndexSet::restore_indices()
 {
@@ -464,12 +471,12 @@ IndexSet::sum(const IndexSet & is1, const IndexSet & is2)
 
 IndexSet::operator bool() const
 {
-    return this->is != nullptr;
+    return !is_null();
 }
 
 IndexSet::operator bool()
 {
-    return this->is != nullptr;
+    return !is_null();
 }
 
 } // namespace godzilla

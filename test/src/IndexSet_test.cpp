@@ -9,9 +9,12 @@ TEST(IndexSetTest, create)
 {
     TestApp app;
     IndexSet is;
+    EXPECT_TRUE(is.is_null());
     EXPECT_TRUE(is.empty());
     is.create(app.get_comm());
     EXPECT_TRUE((IS) is != nullptr);
+    EXPECT_TRUE(is);
+    EXPECT_FALSE(is.is_null());
     is.destroy();
 }
 
