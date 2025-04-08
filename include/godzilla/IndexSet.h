@@ -69,6 +69,11 @@ public:
     /// Destroys an index set
     void destroy();
 
+    /// Test if the index set is "null"
+    ///
+    /// @return `true` is the label is null, `false` otherwise
+    bool is_null() const;
+
     /// Creates a duplicate copy of an index set
     ///
     /// @return The copy of the index set
@@ -147,6 +152,7 @@ public:
 
     Int operator()(Int i) const;
 
+    /// Typecast operator to determine if label is null or not
     operator bool() const;
     operator bool();
 
@@ -185,7 +191,7 @@ public:
     /// Convert this object to a PETSc object so it can be passed directly into PETSc API
     operator IS *();
 
-    /// Checks if the IndexSet is empty
+    /// Checks if the IndexSet is empty (i.e., has no indices)
     ///
     /// @return `true` if the index set is empty, `false` otherwise
     bool empty() const;

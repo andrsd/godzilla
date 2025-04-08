@@ -90,6 +90,13 @@ IndexSet::destroy()
     this->is = nullptr;
 }
 
+bool
+IndexSet::is_null() const
+{
+    CALL_STACK_MSG();
+    return this->is == nullptr;
+}
+
 void
 IndexSet::restore_indices()
 {
@@ -251,7 +258,8 @@ bool
 IndexSet::empty() const
 {
     CALL_STACK_MSG();
-    return this->is == nullptr;
+    assert(this->is != nullptr);
+    return get_size() == 0;
 }
 
 void
@@ -272,7 +280,7 @@ IndexSet
 IndexSet::intersect_caching(const IndexSet & is1, const IndexSet & is2)
 {
     CALL_STACK_MSG();
-    if (!is2.empty() && !is1.empty()) {
+    if (is2 && is1) {
         PetscObjectId is2id = is2.get_id();
         char compose_str[33] = { 0 };
         PETSC_CHECK(PetscSNPrintf(compose_str, 32, "ISIntersect_Caching_%" PetscInt64_FMT, is2id));
@@ -464,12 +472,12 @@ IndexSet::sum(const IndexSet & is1, const IndexSet & is2)
 
 IndexSet::operator bool() const
 {
-    return this->is != nullptr;
+    return !is_null();
 }
 
 IndexSet::operator bool()
 {
-    return this->is != nullptr;
+    return !is_null();
 }
 
 } // namespace godzilla

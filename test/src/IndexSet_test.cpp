@@ -9,9 +9,11 @@ TEST(IndexSetTest, create)
 {
     TestApp app;
     IndexSet is;
-    EXPECT_TRUE(is.empty());
+    EXPECT_TRUE(is.is_null());
     is.create(app.get_comm());
     EXPECT_TRUE((IS) is != nullptr);
+    EXPECT_TRUE(is);
+    EXPECT_FALSE(is.is_null());
     is.destroy();
 }
 
@@ -107,7 +109,7 @@ TEST(IndexSetTest, intersect_caching_empty)
     IndexSet is1;
     IndexSet is2;
     IndexSet isect = IndexSet::intersect_caching(is1, is2);
-    EXPECT_TRUE(isect.empty());
+    EXPECT_FALSE(isect);
 }
 
 TEST(IndexSetTest, intersect)

@@ -69,7 +69,7 @@ protected:
     create_vertex_index_set()
     {
         CALL_STACK_MSG();
-        if (this->vertices.empty()) {
+        if (!this->vertices) {
             this->vertices = this->mesh->get_cone_recursive_vertices(this->facets);
             this->vertices.sort_remove_dups();
             this->vertices.get_indices();
@@ -80,7 +80,7 @@ protected:
     compute_face_normals()
     {
         CALL_STACK_MSG();
-        if (!this->facets.empty()) {
+        if (this->facets) {
             this->facets.get_indices();
             Int n = this->facets.get_local_size();
             this->length.create(n);
@@ -95,7 +95,7 @@ protected:
     compute_nodal_normals()
     {
         CALL_STACK_MSG();
-        if (!this->vertices.empty()) {
+        if (this->vertices) {
             Int n = this->vertices.get_local_size();
             this->nodal_normal.create(n);
             calc_nodal_normals();
@@ -106,13 +106,13 @@ protected:
     free()
     {
         CALL_STACK_MSG();
-        if (!this->facets.empty()) {
+        if (this->facets) {
             this->facets.restore_indices();
             this->facets.destroy();
             this->length.destroy();
             this->normal.destroy();
         }
-        if (!this->vertices.empty()) {
+        if (this->vertices) {
             this->vertices.restore_indices();
             this->vertices.destroy();
             this->nodal_normal.destroy();

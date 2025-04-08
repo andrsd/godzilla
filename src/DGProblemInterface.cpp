@@ -464,7 +464,7 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
             auto label = unstr_mesh->get_face_set_label(name);
             auto ids = label.get_values();
             IndexSet points = label.get_stratum(ids[0]);
-            if (!points.empty()) {
+            if (points) {
                 IndexSet facets = IndexSet::intersect(all_facets, points);
                 for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
@@ -499,7 +499,7 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
             auto label = unstr_mesh->get_face_set_label(name);
             auto ids = label.get_values();
             IndexSet points = label.get_stratum(ids[0]);
-            if (!points.empty()) {
+            if (points) {
                 IndexSet facets = IndexSet::intersect(all_facets, points);
                 for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
