@@ -240,7 +240,7 @@ private:
     Factory factory;
 
 public:
-    static void registerObjects(Registry & registry);
+    static void register_objects(Registry & registry);
 };
 
 template <typename T>

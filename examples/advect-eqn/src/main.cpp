@@ -8,9 +8,9 @@
 godzilla::Registry registry;
 
 void
-registerObjects(godzilla::Registry & r)
+register_objects(godzilla::Registry & r)
 {
-    godzilla::App::registerObjects(r);
+    godzilla::App::register_objects(r);
     REGISTER_OBJECT(r, AdvectionEquation);
     REGISTER_OBJECT(r, InflowBC);
     REGISTER_OBJECT(r, OutflowBC);
@@ -22,7 +22,7 @@ main(int argc, char * argv[])
     try {
         godzilla::mpi::Communicator comm(MPI_COMM_WORLD);
         godzilla::Init init(argc, argv);
-        registerObjects(registry);
+        register_objects(registry);
 
         godzilla::App app(comm, registry, "advect-eqn", argc, argv);
         app.run();

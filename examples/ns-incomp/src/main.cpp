@@ -5,9 +5,9 @@
 godzilla::Registry registry;
 
 void
-registerObjects(godzilla::Registry & r)
+register_objects(godzilla::Registry & r)
 {
-    godzilla::App::registerObjects(r);
+    godzilla::App::register_objects(r);
     REGISTER_OBJECT(r, NSIncompressibleProblem);
 }
 
@@ -17,7 +17,7 @@ main(int argc, char * argv[])
     try {
         godzilla::mpi::Communicator comm(MPI_COMM_WORLD);
         godzilla::Init init(argc, argv);
-        registerObjects(registry);
+        register_objects(registry);
 
         godzilla::App app(comm, registry, "ns-incomp", argc, argv);
         app.run();

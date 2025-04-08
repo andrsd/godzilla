@@ -5,5 +5,5 @@ Registry registry;
 
 TestApp::TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), ::registry, "godzilla", {})
 {
-    App::registerObjects(::registry);
+    App::register_objects(::registry);
 }
