@@ -18,7 +18,7 @@ public:
     ParamDumperApp(const mpi::Communicator & comm, godzilla::Registry & registry) :
         App(comm, registry, "param_dumper", {})
     {
-        godzilla::App::registerObjects(registry);
+        godzilla::App::register_objects(registry);
     }
 
     void

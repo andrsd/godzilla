@@ -30,7 +30,7 @@
 namespace godzilla {
 
 void
-App::registerObjects(Registry & r)
+App::register_objects(Registry & r)
 {
     REGISTER_OBJECT(r, BasicTSAdapt);
     REGISTER_OBJECT(r, BoxMesh);
