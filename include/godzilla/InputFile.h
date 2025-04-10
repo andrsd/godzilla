@@ -138,6 +138,8 @@ protected:
     Block & get_root();
 
 private:
+    virtual MeshObject * create_mesh_object();
+
     /// Application object
     App * app;
     /// Name of this input file
