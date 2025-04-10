@@ -145,14 +145,21 @@ InputFile::add_object(Object * obj)
     }
 }
 
+MeshObject *
+InputFile::create_mesh_object()
+{
+    CALL_STACK_MSG();
+    auto node = get_block(this->root, "mesh");
+    Parameters * params = build_params(node);
+    return this->app->build_object<MeshObject>("mesh", params);
+}
+
 void
 InputFile::build_mesh()
 {
     CALL_STACK_MSG();
     lprintln(9, "- mesh");
-    auto node = get_block(this->root, "mesh");
-    Parameters * params = build_params(node);
-    this->mesh_obj = this->app->build_object<MeshObject>("mesh", params);
+    this->mesh_obj = create_mesh_object();
     add_object(this->mesh_obj);
 }
 
