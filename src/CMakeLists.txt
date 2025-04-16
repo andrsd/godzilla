@@ -19,6 +19,7 @@ set_target_properties(
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE HAVE_CXXABI_H)
+target_compile_definitions(${PROJECT_NAME} PUBLIC SPDLOG_FMT_EXTERNAL)
 
 if (PETSC_HAVE_HYPRE)
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DPETSC_HAVE_HYPRE)
