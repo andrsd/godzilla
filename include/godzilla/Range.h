@@ -39,6 +39,19 @@ public:
             return tmp;
         }
 
+        Iterator
+        operator+(Int n) const
+        {
+            return Iterator(this->idx + n);
+        }
+
+        Iterator &
+        operator+=(Int n)
+        {
+            this->idx += n;
+            return *this;
+        }
+
         friend bool
         operator==(const Iterator & a, const Iterator & b)
         {
@@ -50,6 +63,24 @@ public:
         {
             return a.idx != b.idx;
         };
+
+        Int
+        operator-(const Iterator & other) const
+        {
+            return this->idx - other.idx;
+        }
+
+        Iterator
+        operator-(Int n) const
+        {
+            return Iterator(this->idx - n);
+        }
+
+        bool
+        operator<(const Iterator & other) const
+        {
+            return this->idx < other.idx;
+        }
 
     private:
         Int idx;

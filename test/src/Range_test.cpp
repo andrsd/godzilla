@@ -18,3 +18,38 @@ TEST(RangeTest, make_range_2)
         arr.push_back(i);
     EXPECT_THAT(arr, testing::ElementsAre(4, 5, 6, 7, 8));
 }
+
+TEST(RangeTest, oper_plus)
+{
+    auto rng = make_range(2, 7);
+    auto n = rng.first() + 2;
+    EXPECT_EQ(n, 4);
+}
+
+TEST(RangeTest, oper_plus_n)
+{
+    auto rng = make_range(2, 7);
+    auto n = rng.first();
+    n += 3;
+    EXPECT_EQ(n, 5);
+}
+
+TEST(RangeTest, oper_minus)
+{
+    auto rng = make_range(2, 7);
+    EXPECT_EQ(rng.last() - rng.first(), 5);
+}
+
+TEST(RangeTest, oper_minus_n)
+{
+    auto rng = make_range(2, 7);
+    auto n = rng.last() - 3;
+    EXPECT_EQ(n, 4);
+}
+
+TEST(RangeTest, oper_less_than)
+{
+    auto rng = make_range(5);
+    EXPECT_TRUE(rng.first() < rng.last());
+    EXPECT_FALSE(rng.last() < rng.first());
+}
