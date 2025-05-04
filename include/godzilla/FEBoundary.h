@@ -340,11 +340,30 @@ public:
         this->vertices.restore_indices();
     }
 
+    /// Get vertex index
+    ///
+    /// @param idx Boundary vertex index (local)
+    /// @return Global vertex index
+    Int
+    vertex(Int ibn) const
+    {
+        CALL_STACK_MSG();
+        return this->vertices(ibn);
+    }
+
+    /// Get the number of boundary vertices
+    ///
+    /// @return Number of boundary vertices
+    Int
+    num_vertices() const
+    {
+        CALL_STACK_MSG();
+        return this->vertices.get_local_size();
+    }
+
 private:
     /// Mesh
     UnstructuredMesh * mesh;
-
-public:
     /// IndexSet with boundary vertices
     IndexSet vertices;
 };
