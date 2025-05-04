@@ -368,6 +368,171 @@ private:
     IndexSet vertices;
 };
 
+/// Natural boundary information
+
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+class NaturalBoundaryInfo : public BoundaryInfoAbstract {
+public:
+    NaturalBoundaryInfo(UnstructuredMesh * mesh,
+                        const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> * grad_phi,
+                        const IndexSet & facets) :
+        mesh(mesh),
+        grad_phi(grad_phi),
+        facets(facets),
+        area(lengths)
+    {
+        CALL_STACK_MSG();
+        this->facets.sort();
+    }
+
+    NaturalBoundaryInfo(UnstructuredMesh * mesh, const IndexSet & facets) :
+        mesh(mesh),
+        grad_phi(nullptr),
+        facets(facets),
+        area(lengths)
+    {
+        CALL_STACK_MSG();
+        this->facets.sort();
+    }
+
+    UnstructuredMesh *
+    get_mesh() const
+    {
+        return this->mesh;
+    }
+
+    /// Get number of boundary facets
+    ///
+    /// @return Number of boundary facets
+    Int
+    num_facets() const
+    {
+        CALL_STACK_MSG();
+        return this->facets.get_local_size();
+    }
+
+    /// Get facet index for a given local boundary facet index
+    ///
+    /// @param ibf Local boundary facet index
+    /// @return Global facet index
+    Int
+    facet(Int ibf) const
+    {
+        CALL_STACK_MSG();
+        return this->facets(ibf);
+    }
+
+    /// Get face normal for a given local boundary facet index
+    ///
+    /// @param ibf Local boundary facet index
+    /// @return Face normal
+    const DenseVector<Real, DIM> &
+    normal(Int ibf) const
+    {
+        CALL_STACK_MSG();
+        return this->normals(ibf);
+    }
+
+    /// Get length/area of a boundary facet
+    /// TODO: I need a better name
+    ///
+    /// @param ibf Local boundary facet index
+    /// @return Length/area of the boundary facet
+    Real
+    facet_length(Int ibf) const
+    {
+        CALL_STACK_MSG();
+        return this->lengths(ibf);
+    }
+
+protected:
+    void
+    compute_face_normals()
+    {
+        CALL_STACK_MSG();
+        if (this->facets) {
+            this->facets.get_indices();
+            Int n = this->facets.get_local_size();
+            this->lengths.create(n);
+            this->normals.create(n);
+
+            calc_facet_lengths();
+            calc_facet_normals();
+        }
+    }
+
+    void
+    free()
+    {
+        CALL_STACK_MSG();
+        if (this->facets) {
+            this->facets.restore_indices();
+            this->facets.destroy();
+            this->lengths.destroy();
+            this->normals.destroy();
+        }
+    }
+
+private:
+    inline DenseMatrix<Real, DIM, N_ELEM_NODES>
+    calc_grad_shape(Int cell, Real volume) const
+    {
+        if (this->grad_phi)
+            return (*this->grad_phi)(cell);
+        else {
+            auto dm = this->mesh->get_coordinate_dm();
+            auto vec = this->mesh->get_coordinates_local();
+            auto section = this->mesh->get_coordinate_section();
+            DenseMatrix<Real, N_ELEM_NODES, DIM> elem_coord;
+            Int sz = DIM * N_ELEM_NODES;
+            Real * data = elem_coord.data();
+            PETSC_CHECK(DMPlexVecGetClosure(dm, section, vec, cell, &sz, &data));
+            return fe::grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);
+        }
+    }
+
+    /// Compute facet normals
+    void
+    calc_facet_normals()
+    {
+        CALL_STACK_MSG();
+        for (Int i = 0; i < this->facets.get_local_size(); ++i) {
+            auto face_conn = this->mesh->get_connectivity(this->facets(i));
+            auto support = this->mesh->get_support(this->facets(i));
+            Int ie = support[0];
+            Real volume = this->mesh->compute_cell_volume(ie);
+            auto elem_conn = this->mesh->get_connectivity(ie);
+            Int local_idx = get_local_face_index(elem_conn, face_conn);
+            auto edge_length = this->lengths(i);
+            auto grad = DenseVector<Real, DIM>(calc_grad_shape(ie, volume).column(local_idx));
+            this->normals(i) = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
+        }
+    }
+
+    /// Compute facet lengths/areas
+    void
+    calc_facet_lengths()
+    {
+        CALL_STACK_MSG();
+        for (Int i = 0; i < this->facets.get_local_size(); ++i)
+            this->lengths(i) = this->mesh->compute_cell_volume(this->facets(i));
+    }
+
+private:
+    /// Mesh
+    UnstructuredMesh * mesh;
+    /// Gradients of shape functions
+    const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> * grad_phi;
+    /// IndexSet with boundary facets
+    IndexSet facets;
+    /// Boundary facet length
+    Array1D<Real> lengths;
+    /// Boundary facet areas
+    Array1D<Real> & area;
+    /// Boundary facet unit outward normal
+    Array1D<DenseVector<Real, DIM>> normals;
+};
+
 } // namespace fe
 
 } // namespace godzilla
