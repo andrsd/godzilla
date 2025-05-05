@@ -22,9 +22,9 @@ namespace godzilla {
 
 namespace fe {
 
-class BoundaryInfoAbstract {
+class AbstractBoundaryInfo {
 public:
-    virtual ~BoundaryInfoAbstract() = default;
+    virtual ~AbstractBoundaryInfo() = default;
 
     /// Create boundary info
     virtual void create() = 0;
@@ -34,7 +34,7 @@ public:
 };
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
-class BoundaryInfo : public BoundaryInfoAbstract {
+class BoundaryInfo : public AbstractBoundaryInfo {
 public:
     BoundaryInfo(UnstructuredMesh * mesh,
                  const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> * grad_phi,
@@ -311,7 +311,7 @@ BoundaryInfo<TET4, 3, 4>::correct_nodal_normals()
 ///
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
-class EssentialBoundaryInfo : public BoundaryInfoAbstract {
+class EssentialBoundaryInfo : public AbstractBoundaryInfo {
 public:
     EssentialBoundaryInfo(UnstructuredMesh * mesh, const IndexSet & vertices) :
         mesh(mesh),
@@ -371,7 +371,7 @@ private:
 /// Natural boundary information
 
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
-class NaturalBoundaryInfo : public BoundaryInfoAbstract {
+class NaturalBoundaryInfo : public AbstractBoundaryInfo {
 public:
     NaturalBoundaryInfo(UnstructuredMesh * mesh,
                         const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> * grad_phi,
