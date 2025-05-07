@@ -22,7 +22,7 @@ public:
         using pointer = Int *;
         using reference = Int &;
 
-        explicit Iterator(IndexSet & is, Int idx);
+        explicit Iterator(IndexSet * is, Int idx);
         ~Iterator() = default;
 
         const value_type & operator*() const;
@@ -39,7 +39,7 @@ public:
 
     private:
         /// IndexSet to iterate over
-        IndexSet & is;
+        IndexSet * is;
         /// Index pointing to the `is`
         Int idx;
     };

@@ -10,12 +10,12 @@
 
 namespace godzilla {
 
-IndexSet::Iterator::Iterator(IndexSet & is, Int idx) : is(is), idx(idx) {}
+IndexSet::Iterator::Iterator(IndexSet * is, Int idx) : is(is), idx(idx) {}
 
 const IndexSet::Iterator::value_type &
 IndexSet::Iterator::operator*() const
 {
-    return this->is.indices[this->idx];
+    return this->is->indices[this->idx];
 }
 
 IndexSet::Iterator &
@@ -321,9 +321,9 @@ IndexSet::begin()
 {
     CALL_STACK_MSG();
     if (this->is == nullptr || this->indices == nullptr)
-        return Iterator(*this, -1);
+        return Iterator(this, -1);
     else
-        return Iterator(*this, 0);
+        return Iterator(this, 0);
 }
 
 IndexSet::Iterator
@@ -331,10 +331,10 @@ IndexSet::end()
 {
     CALL_STACK_MSG();
     if (this->is == nullptr || this->indices == nullptr)
-        return Iterator(*this, -1);
+        return Iterator(this, -1);
     else {
         auto n = get_local_size();
-        return Iterator(*this, n);
+        return Iterator(this, n);
     }
 }
 
