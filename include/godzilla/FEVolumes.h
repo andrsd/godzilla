@@ -107,9 +107,9 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
              Array1D<Real> & fe_volume)
 {
     CALL_STACK_MSG();
-    assert(connect.get_size() == fe_volume.get_size());
+    assert(connect.size() == fe_volume.size());
 
-    for (godzilla::Int ie = 0; ie < connect.get_size(); ++ie) {
+    for (godzilla::Int ie = 0; ie < connect.size(); ++ie) {
         auto idx = connect(ie);
         auto elem_coord = get_values(coords, idx);
         fe_volume(ie) = volume<ELEM_TYPE, DIM>(elem_coord);
@@ -122,7 +122,7 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
              const Array1D<DenseVector<Int, N_ELEM_NODES>> & connect)
 {
     CALL_STACK_MSG();
-    Array1D<Real> fe_volume(connect.get_size());
+    Array1D<Real> fe_volume(connect.size());
     calc_volumes<ELEM_TYPE, DIM, N_ELEM_NODES>(coords, connect, fe_volume);
     return fe_volume;
 }

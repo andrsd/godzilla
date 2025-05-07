@@ -99,8 +99,17 @@ public:
     /// Get number of entries in the array
     ///
     /// @return Number of entries in the array
-    Int
+    [[deprecated("Use size() instead")]] Int
     get_size() const
+    {
+        return this->n;
+    }
+
+    /// Get number of entries in the array
+    ///
+    /// @return Number of entries in the array
+    Int
+    size() const
     {
         return this->n;
     }
@@ -290,9 +299,9 @@ std::ostream &
 operator<<(std::ostream & os, const Array1D<T> & obj)
 {
     os << "(";
-    for (Int i = 0; i < obj.get_size(); ++i) {
+    for (Int i = 0; i < obj.size(); ++i) {
         os << obj(i);
-        if (i < obj.get_size() - 1)
+        if (i < obj.size() - 1)
             os << ", ";
     }
     os << ")";
