@@ -24,12 +24,12 @@ public:
         using pointer = T *;
         using reference = T &;
 
-        explicit Iterator(const Array1D & arr, Int idx) : arr(arr), idx(idx) {}
+        explicit Iterator(const Array1D * arr, Int idx) : arr(arr), idx(idx) {}
 
         const value_type &
         operator*() const
         {
-            return *(this->arr.data + this->idx);
+            return *(this->arr->data + this->idx);
         }
 
         /// Prefix increment
@@ -52,18 +52,18 @@ public:
         friend bool
         operator==(const Iterator & a, const Iterator & b)
         {
-            return (&a.arr == &b.arr) && (a.idx == b.idx);
+            return (a.arr == b.arr) && (a.idx == b.idx);
         };
 
         friend bool
         operator!=(const Iterator & a, const Iterator & b)
         {
-            return (&a.arr != &b.arr) || (a.idx != b.idx);
+            return (a.arr != b.arr) || (a.idx != b.idx);
         };
 
     private:
         /// IndexSet to iterate over
-        const Array1D & arr;
+        const Array1D * arr;
         /// Index pointing to the `is`
         Int idx;
     };
@@ -265,13 +265,13 @@ public:
     Iterator
     begin()
     {
-        return Iterator(*this, 0);
+        return Iterator(this, 0);
     }
 
     Iterator
     end()
     {
-        return Iterator(*this, this->n);
+        return Iterator(this, this->n);
     }
 
 private:
