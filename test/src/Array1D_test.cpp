@@ -50,7 +50,7 @@ TEST(Array1DTest, zero)
 TEST(Array1DTest, set_values)
 {
     Array1D<Real> arr(10);
-    arr.set_values(1234);
+    arr.set(1234);
     for (Int i = 0; i < 10; ++i)
         EXPECT_EQ(arr(i), 1234.);
     arr.destroy();

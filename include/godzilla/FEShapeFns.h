@@ -124,7 +124,7 @@ calc_grad_shape(const Array1D<DenseVector<Real, DIM>> & coords,
     CALL_STACK_MSG();
     Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_shfns(connect.get_size());
     for (Int ie = 0; ie < connect.get_size(); ++ie) {
-        auto idx = connect.get(ie);
+        auto idx = connect[ie];
         auto elem_coord = get_values(coords, idx);
         auto volume = volumes(ie);
         grad_shfns(ie) = grad_shape<ELEM_TYPE, DIM>(elem_coord, volume);

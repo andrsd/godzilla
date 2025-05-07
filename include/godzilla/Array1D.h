@@ -105,32 +105,6 @@ public:
         return this->n;
     }
 
-    /// Get the entry at a specified location for reading
-    ///
-    /// @param i Index fo the entry
-    /// @return Entry at the `ith` location
-    const T &
-    get(Int i) const
-    {
-        assert(this->data != nullptr);
-        assert((i >= this->range.first()) && (i < this->range.last()));
-        auto idx = i - this->range.first();
-        return this->data[idx];
-    }
-
-    /// Get the entry at a specified location for writing
-    ///
-    /// @param i Index fo the entry
-    /// @return Entry at the `ith` location
-    T &
-    set(Int i)
-    {
-        assert(this->data != nullptr);
-        assert((i >= this->range.first()) && (i < this->range.last()));
-        auto idx = i - this->range.first();
-        return this->data[idx];
-    }
-
     /// Set all entries in the array to zero
     void
     zero()
@@ -171,7 +145,7 @@ public:
         assert(N == idx.size());
         DenseVector<T, N> res;
         for (Int i = 0; i < N; ++i)
-            res(i) = get(idx[i]);
+            res(i) = (*this)(idx[i]);
         return res;
     }
 
@@ -179,7 +153,7 @@ public:
     ///
     /// @param val Value to assign
     void
-    set_values(const T & val)
+    set(const T & val)
     {
         assert(this->data != nullptr);
         for (Int i = 0; i < this->n; ++i)
@@ -208,7 +182,7 @@ public:
     set_values(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; ++i)
-            set(idx(i)) = a(i);
+            (*this)(idx(i)) = a(i);
     }
 
     /// Add values to specified locations
@@ -221,7 +195,7 @@ public:
     add(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; ++i)
-            set(idx(i)) += a(i);
+            (*this)(idx(i)) += a(i);
     }
 
     // operators
@@ -229,25 +203,39 @@ public:
     const T &
     operator()(Int i) const
     {
-        return get(i);
+        return (*this)[i];
     }
 
     T &
     operator()(Int i)
     {
-        return set(i);
+        return (*this)[i];
     }
 
+    /// Get the entry at a specified location for reading
+    ///
+    /// @param i Index fo the entry
+    /// @return Entry at the `ith` location
     const T &
     operator[](Int i) const
     {
-        return get(i);
+        assert(this->data != nullptr);
+        assert((i >= this->range.first()) && (i < this->range.last()));
+        auto idx = i - this->range.first();
+        return this->data[idx];
     }
 
+    /// Get the entry at a specified location for writing
+    ///
+    /// @param i Index fo the entry
+    /// @return Entry at the `ith` location
     T &
     operator[](Int i)
     {
-        return set(i);
+        assert(this->data != nullptr);
+        assert((i >= this->range.first()) && (i < this->range.last()));
+        auto idx = i - this->range.first();
+        return this->data[idx];
     }
 
     //
