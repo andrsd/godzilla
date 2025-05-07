@@ -169,18 +169,6 @@ public:
             this->data[i] = val;
     }
 
-    /// Set multiple values into the vector
-    ///
-    /// @param vals Values to set into this vector
-    void
-    set_values(const std::vector<T> & vals)
-    {
-        assert(this->data != nullptr);
-        assert(this->n == vals.size());
-        for (Int i = 0; i < this->n; ++i)
-            this->data[i] = vals[i];
-    }
-
     /// Set multiple values at specified indices
     ///
     /// @tparam N Size of the array
@@ -389,6 +377,19 @@ add_values(Array1D<T> & data, const DenseVector<Int, N> & idx, const DenseVector
 {
     for (Int i = 0; i < N; ++i)
         data[idx(i)] += vals(i);
+}
+
+/// Assign values from `std::vector` into the `Array1D`
+///
+/// @param data Array1D to assign values into
+/// @param vals Values to set into this vector
+template <typename T>
+void
+assign(Array1D<T> & data, const std::vector<T> & vals)
+{
+    assert(data.size() == vals.size());
+    for (Int i = 0; i < data.size(); ++i)
+        data[i] = vals[i];
 }
 
 } // namespace godzilla

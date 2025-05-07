@@ -72,7 +72,7 @@ TEST(Array1DTest, set_values_idxs)
 TEST(Array1DTest, get_data)
 {
     Array1D<Real> y(5);
-    y.set_values({ 2., 3., 1., -2., 0. });
+    assign(y, { 2., 3., 1., -2., 0. });
     Real * raw = y.get_data();
     EXPECT_EQ(raw[0], 2.);
     EXPECT_EQ(raw[1], 3.);
@@ -87,7 +87,7 @@ TEST(Array1DTest, op_to_stream)
     testing::internal::CaptureStdout();
 
     Array1D<Real> x(5);
-    x.set_values({ 1., -1., 3., 0., 2. });
+    assign(x, { 1., -1., 3., 0., 2. });
     std::cout << x;
 
     EXPECT_THAT(testing::internal::GetCapturedStdout(), testing::HasSubstr("(1, -1, 3, 0, 2)"));
@@ -98,7 +98,7 @@ TEST(Array1DTest, op_to_stream)
 TEST(Array1DTest, get_values)
 {
     Array1D<Real> x(8);
-    x.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
+    assign(x, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
     DenseVector<Int, 3> idx({ 1, 6, 3 });
     auto vals = get_values(x, idx);
@@ -113,7 +113,7 @@ TEST(Array1DTest, get_values)
 TEST(Array1DTest, get_values_std_vec)
 {
     Array1D<Real> x(8);
-    x.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
+    assign(x, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
     auto vals = get_values<Real, 3>(x, { 1, 6, 3 });
 
@@ -127,7 +127,7 @@ TEST(Array1DTest, get_values_std_vec)
 TEST(Array1DTest, add)
 {
     Array1D<Real> x(8);
-    x.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
+    assign(x, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
     DenseVector<Int, 3> idx({ 1, 6, 3 });
     DenseVector<Real, 3> dx({ -1, 2, 1 });
@@ -148,7 +148,7 @@ TEST(Array1DTest, add)
 TEST(Array1DTest, range_ops)
 {
     Array1D<Real> arr(8);
-    arr.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
+    assign(arr, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
     std::vector<Real> vals;
     for (auto & v : arr)
