@@ -111,7 +111,7 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
 
     for (godzilla::Int ie = 0; ie < connect.get_size(); ++ie) {
         auto idx = connect(ie);
-        auto elem_coord = mat_row(coords.get_values(idx));
+        auto elem_coord = get_values(coords, idx);
         fe_volume(ie) = volume<ELEM_TYPE, DIM>(elem_coord);
     }
 }

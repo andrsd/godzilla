@@ -12,6 +12,8 @@ namespace godzilla {
 
 template <typename T, Int N>
 class DenseVector;
+template <typename T, Int N, Int M>
+class DenseMatrix;
 
 template <typename T>
 class Array1D {
@@ -153,7 +155,7 @@ public:
     /// @param idx Indices to get the values from
     /// @return Vector with the value from locations specified by `idx`
     template <Int N>
-    DenseVector<T, N>
+    [[deprecated("")]] DenseVector<T, N>
     get_values(DenseVector<Int, N> idx) const
     {
         DenseVector<T, N> res;
@@ -163,7 +165,7 @@ public:
     }
 
     template <Int N>
-    DenseVector<T, N>
+    [[deprecated("")]] DenseVector<T, N>
     get_values(const std::vector<Int> & idx) const
     {
         assert(N == idx.size());
@@ -202,7 +204,7 @@ public:
     /// @param idx Indices where the values are to be set
     /// @param a Values to be set
     template <Int N>
-    void
+    [[deprecated("")]] void
     set_values(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; ++i)
@@ -215,7 +217,7 @@ public:
     /// @param idx Indices to modify
     /// @param a Vector with values to add at locations specified by `idx`
     template <Int N>
-    void
+    [[deprecated("")]] void
     add(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; ++i)
@@ -232,6 +234,18 @@ public:
 
     T &
     operator()(Int i)
+    {
+        return set(i);
+    }
+
+    const T &
+    operator[](Int i) const
+    {
+        return get(i);
+    }
+
+    T &
+    operator[](Int i)
     {
         return set(i);
     }
@@ -295,6 +309,89 @@ operator<<(std::ostream & os, const Array1D<T> & obj)
     }
     os << ")";
     return os;
+}
+
+/// Get values from an array at specified locations
+///
+/// @tparam T C++ type
+/// @tparam N number of values
+/// @param data Array to get data from
+/// @param idx Vector of indices to obtain data from
+/// @return Vector of values from the array
+template <typename T, Int N>
+DenseVector<T, N>
+get_values(const Array1D<T> & data, const DenseVector<Int, N> & idx)
+{
+    DenseVector<T, N> vals;
+    for (Int i = 0; i < N; i++)
+        vals(i) = data[idx(i)];
+    return vals;
+}
+
+/// Get vector-valued entries from an array at specified locations
+///
+/// @tparam T C++ type
+/// @tparam N number of values
+/// @tparam M number of components in the vector
+/// @param data Array to get data from
+/// @param idx Vector of indices to obtain data from
+/// @return Matrix of values from the array (rows are the vector-valued data)
+template <typename T, Int N, Int M>
+DenseMatrix<Real, N, M>
+get_values(const Array1D<DenseVector<T, M>> & data, const DenseVector<Int, N> & idx)
+{
+    DenseMatrix<Real, N, M> vals;
+    for (Int i = 0; i < N; ++i) {
+        for (Int j = 0; j < M; ++j)
+            vals(i, j) = data[idx(i)](j);
+    }
+    return vals;
+}
+
+/// Get values from an array at specified locations
+///
+/// @tparam T C++ type
+/// @tparam N number of values
+/// @param data Array to get data from
+/// @param idx Vector of indices to obtain data from
+/// @return Vector of values from the array
+template <typename T, Int N>
+DenseVector<T, N>
+get_values(const Array1D<T> & data, const std::vector<Int> & idx)
+{
+    assert(N == idx.size());
+    DenseVector<T, N> vals;
+    for (Int i = 0; i < N; ++i)
+        vals(i) = data[idx[i]];
+    return vals;
+}
+
+/// Set multiple values at specified indices
+///
+/// @tparam N Size of the array
+/// @param idx Indices where the values are to be set
+/// @param a Values to be set
+template <typename T, Int N>
+void
+set_values(Array1D<T> & data, const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
+{
+    for (Int i = 0; i < N; ++i)
+        data[idx(i)] = a(i);
+}
+
+/// Add values into the array at specified indices
+///
+/// @tparam T C++ type
+/// @tparam N number of values
+/// @param data akceli vector to add values to
+/// @param idx Vector of indices into `data`
+/// @param vals Vector of values to add to `data`
+template <typename T, Int N>
+void
+add_values(Array1D<T> & data, const DenseVector<Int, N> & idx, const DenseVector<T, N> & vals)
+{
+    for (Int i = 0; i < N; ++i)
+        data[idx(i)] += vals(i);
 }
 
 } // namespace godzilla

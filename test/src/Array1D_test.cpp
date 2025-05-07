@@ -62,7 +62,7 @@ TEST(Array1DTest, set_values_idxs)
     arr.zero();
     DenseVector<Int, 3> idxs({ 1, 4, 2 });
     DenseVector<Real, 3> vals({ 8, 7, 6 });
-    arr.set_values(idxs, vals);
+    set_values(arr, idxs, vals);
     EXPECT_EQ(arr(1), 8);
     EXPECT_EQ(arr(4), 7);
     EXPECT_EQ(arr(2), 6);
@@ -101,7 +101,7 @@ TEST(Array1DTest, get_values)
     x.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
 
     DenseVector<Int, 3> idx({ 1, 6, 3 });
-    auto vals = x.get_values(idx);
+    auto vals = get_values(x, idx);
 
     EXPECT_EQ(vals(0), 3.);
     EXPECT_EQ(vals(1), 10.);
@@ -115,7 +115,7 @@ TEST(Array1DTest, get_values_std_vec)
     Array1D<Real> x(8);
     x.set_values({ 2, 3, 1, -2, 0, 6, 10, 8 });
 
-    auto vals = x.get_values<3>({ 1, 6, 3 });
+    auto vals = get_values<Real, 3>(x, { 1, 6, 3 });
 
     EXPECT_EQ(vals(0), 3.);
     EXPECT_EQ(vals(1), 10.);
@@ -131,7 +131,7 @@ TEST(Array1DTest, add)
 
     DenseVector<Int, 3> idx({ 1, 6, 3 });
     DenseVector<Real, 3> dx({ -1, 2, 1 });
-    x.add(idx, dx);
+    add_values(x, idx, dx);
 
     EXPECT_EQ(x(0), 2.);
     EXPECT_EQ(x(1), 2.);
