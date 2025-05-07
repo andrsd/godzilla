@@ -9,19 +9,6 @@
 
 namespace godzilla {
 
-namespace {
-
-Mat
-create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N, void * ctx)
-{
-    CALL_STACK_MSG();
-    Mat mat;
-    PETSC_CHECK(MatCreateShell(comm, m, n, M, N, ctx, &mat));
-    return mat;
-}
-
-} // namespace
-
 ErrorCode
 ShellMatrix::invoke_matmult_op_delegate(Mat matrix, Vec vector, Vec action)
 {
@@ -60,13 +47,5 @@ ShellMatrix::set_operation(MatOperation op, void (*g)(void))
     CALL_STACK_MSG();
     PETSC_CHECK(MatShellSetOperation(*this, op, g));
 }
-
-// ShellMatrix
-// ShellMatrix::create(MPI_Comm comm, Int m, Int n, Int M, Int N)
-// {
-//     Mat mat;
-//     PETSC_CHECK(MatCreateShell(comm, m, n, M, N, nullptr, &mat));
-//     return ShellMatrix(mat);
-// }
 
 } // namespace godzilla

@@ -12,6 +12,8 @@ namespace godzilla {
 
 template <typename T, Int N>
 class DenseVector;
+template <typename T, Int N, Int M>
+class DenseMatrix;
 
 template <typename T>
 class Array1D {
@@ -22,12 +24,12 @@ public:
         using pointer = T *;
         using reference = T &;
 
-        explicit Iterator(const Array1D & arr, Int idx) : arr(arr), idx(idx) {}
+        explicit Iterator(const Array1D * arr, Int idx) : arr(arr), idx(idx) {}
 
         const value_type &
         operator*() const
         {
-            return *(this->arr.data + this->idx);
+            return *(this->arr->data + this->idx);
         }
 
         /// Prefix increment
@@ -50,18 +52,18 @@ public:
         friend bool
         operator==(const Iterator & a, const Iterator & b)
         {
-            return (&a.arr == &b.arr) && (a.idx == b.idx);
+            return (a.arr == b.arr) && (a.idx == b.idx);
         };
 
         friend bool
         operator!=(const Iterator & a, const Iterator & b)
         {
-            return (&a.arr != &b.arr) || (a.idx != b.idx);
+            return (a.arr != b.arr) || (a.idx != b.idx);
         };
 
     private:
         /// IndexSet to iterate over
-        const Array1D & arr;
+        const Array1D * arr;
         /// Index pointing to the `is`
         Int idx;
     };
@@ -97,36 +99,19 @@ public:
     /// Get number of entries in the array
     ///
     /// @return Number of entries in the array
-    Int
+    [[deprecated("Use size() instead")]] Int
     get_size() const
     {
         return this->n;
     }
 
-    /// Get the entry at a specified location for reading
+    /// Get number of entries in the array
     ///
-    /// @param i Index fo the entry
-    /// @return Entry at the `ith` location
-    const T &
-    get(Int i) const
+    /// @return Number of entries in the array
+    Int
+    size() const
     {
-        assert(this->data != nullptr);
-        assert((i >= this->range.first()) && (i < this->range.last()));
-        auto idx = i - this->range.first();
-        return this->data[idx];
-    }
-
-    /// Get the entry at a specified location for writing
-    ///
-    /// @param i Index fo the entry
-    /// @return Entry at the `ith` location
-    T &
-    set(Int i)
-    {
-        assert(this->data != nullptr);
-        assert((i >= this->range.first()) && (i < this->range.last()));
-        auto idx = i - this->range.first();
-        return this->data[idx];
+        return this->n;
     }
 
     /// Set all entries in the array to zero
@@ -153,7 +138,7 @@ public:
     /// @param idx Indices to get the values from
     /// @return Vector with the value from locations specified by `idx`
     template <Int N>
-    DenseVector<T, N>
+    [[deprecated("")]] DenseVector<T, N>
     get_values(DenseVector<Int, N> idx) const
     {
         DenseVector<T, N> res;
@@ -163,13 +148,13 @@ public:
     }
 
     template <Int N>
-    DenseVector<T, N>
+    [[deprecated("")]] DenseVector<T, N>
     get_values(const std::vector<Int> & idx) const
     {
         assert(N == idx.size());
         DenseVector<T, N> res;
         for (Int i = 0; i < N; ++i)
-            res(i) = get(idx[i]);
+            res(i) = (*this)(idx[i]);
         return res;
     }
 
@@ -177,23 +162,11 @@ public:
     ///
     /// @param val Value to assign
     void
-    set_values(const T & val)
+    set(const T & val)
     {
         assert(this->data != nullptr);
         for (Int i = 0; i < this->n; ++i)
             this->data[i] = val;
-    }
-
-    /// Set multiple values into the vector
-    ///
-    /// @param vals Values to set into this vector
-    void
-    set_values(const std::vector<T> & vals)
-    {
-        assert(this->data != nullptr);
-        assert(this->n == vals.size());
-        for (Int i = 0; i < this->n; ++i)
-            this->data[i] = vals[i];
     }
 
     /// Set multiple values at specified indices
@@ -202,11 +175,11 @@ public:
     /// @param idx Indices where the values are to be set
     /// @param a Values to be set
     template <Int N>
-    void
+    [[deprecated("")]] void
     set_values(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; ++i)
-            set(idx(i)) = a(i);
+            (*this)(idx(i)) = a(i);
     }
 
     /// Add values to specified locations
@@ -215,11 +188,11 @@ public:
     /// @param idx Indices to modify
     /// @param a Vector with values to add at locations specified by `idx`
     template <Int N>
-    void
+    [[deprecated("")]] void
     add(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
     {
         for (Int i = 0; i < N; ++i)
-            set(idx(i)) += a(i);
+            (*this)(idx(i)) += a(i);
     }
 
     // operators
@@ -227,13 +200,39 @@ public:
     const T &
     operator()(Int i) const
     {
-        return get(i);
+        return (*this)[i];
     }
 
     T &
     operator()(Int i)
     {
-        return set(i);
+        return (*this)[i];
+    }
+
+    /// Get the entry at a specified location for reading
+    ///
+    /// @param i Index fo the entry
+    /// @return Entry at the `ith` location
+    const T &
+    operator[](Int i) const
+    {
+        assert(this->data != nullptr);
+        assert((i >= this->range.first()) && (i < this->range.last()));
+        auto idx = i - this->range.first();
+        return this->data[idx];
+    }
+
+    /// Get the entry at a specified location for writing
+    ///
+    /// @param i Index fo the entry
+    /// @return Entry at the `ith` location
+    T &
+    operator[](Int i)
+    {
+        assert(this->data != nullptr);
+        assert((i >= this->range.first()) && (i < this->range.last()));
+        auto idx = i - this->range.first();
+        return this->data[idx];
     }
 
     //
@@ -254,13 +253,13 @@ public:
     Iterator
     begin()
     {
-        return Iterator(*this, 0);
+        return Iterator(this, 0);
     }
 
     Iterator
     end()
     {
-        return Iterator(*this, this->n);
+        return Iterator(this, this->n);
     }
 
 private:
@@ -288,13 +287,109 @@ std::ostream &
 operator<<(std::ostream & os, const Array1D<T> & obj)
 {
     os << "(";
-    for (Int i = 0; i < obj.get_size(); ++i) {
+    for (Int i = 0; i < obj.size(); ++i) {
         os << obj(i);
-        if (i < obj.get_size() - 1)
+        if (i < obj.size() - 1)
             os << ", ";
     }
     os << ")";
     return os;
+}
+
+/// Get values from an array at specified locations
+///
+/// @tparam T C++ type
+/// @tparam N number of values
+/// @param data Array to get data from
+/// @param idx Vector of indices to obtain data from
+/// @return Vector of values from the array
+template <typename T, Int N>
+DenseVector<T, N>
+get_values(const Array1D<T> & data, const DenseVector<Int, N> & idx)
+{
+    DenseVector<T, N> vals;
+    for (Int i = 0; i < N; i++)
+        vals(i) = data[idx(i)];
+    return vals;
+}
+
+/// Get vector-valued entries from an array at specified locations
+///
+/// @tparam T C++ type
+/// @tparam N number of values
+/// @tparam M number of components in the vector
+/// @param data Array to get data from
+/// @param idx Vector of indices to obtain data from
+/// @return Matrix of values from the array (rows are the vector-valued data)
+template <typename T, Int N, Int M>
+DenseMatrix<Real, N, M>
+get_values(const Array1D<DenseVector<T, M>> & data, const DenseVector<Int, N> & idx)
+{
+    DenseMatrix<Real, N, M> vals;
+    for (Int i = 0; i < N; ++i) {
+        for (Int j = 0; j < M; ++j)
+            vals(i, j) = data[idx(i)](j);
+    }
+    return vals;
+}
+
+/// Get values from an array at specified locations
+///
+/// @tparam T C++ type
+/// @tparam N number of values
+/// @param data Array to get data from
+/// @param idx Vector of indices to obtain data from
+/// @return Vector of values from the array
+template <typename T, Int N>
+DenseVector<T, N>
+get_values(const Array1D<T> & data, const std::vector<Int> & idx)
+{
+    assert(N == idx.size());
+    DenseVector<T, N> vals;
+    for (Int i = 0; i < N; ++i)
+        vals(i) = data[idx[i]];
+    return vals;
+}
+
+/// Set multiple values at specified indices
+///
+/// @tparam N Size of the array
+/// @param idx Indices where the values are to be set
+/// @param a Values to be set
+template <typename T, Int N>
+void
+set_values(Array1D<T> & data, const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
+{
+    for (Int i = 0; i < N; ++i)
+        data[idx(i)] = a(i);
+}
+
+/// Add values into the array at specified indices
+///
+/// @tparam T C++ type
+/// @tparam N number of values
+/// @param data akceli vector to add values to
+/// @param idx Vector of indices into `data`
+/// @param vals Vector of values to add to `data`
+template <typename T, Int N>
+void
+add_values(Array1D<T> & data, const DenseVector<Int, N> & idx, const DenseVector<T, N> & vals)
+{
+    for (Int i = 0; i < N; ++i)
+        data[idx(i)] += vals(i);
+}
+
+/// Assign values from `std::vector` into the `Array1D`
+///
+/// @param data Array1D to assign values into
+/// @param vals Values to set into this vector
+template <typename T>
+void
+assign(Array1D<T> & data, const std::vector<T> & vals)
+{
+    assert(data.size() == vals.size());
+    for (Int i = 0; i < data.size(); ++i)
+        data[i] = vals[i];
 }
 
 } // namespace godzilla

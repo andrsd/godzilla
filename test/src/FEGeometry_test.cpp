@@ -22,7 +22,7 @@ TEST(FEGeometryTest, coordinates)
                                                                     true);
 
     auto coords = fe::coordinates<1>(mesh);
-    ASSERT_EQ(coords.get_size(), 4);
+    ASSERT_EQ(coords.size(), 4);
     EXPECT_DOUBLE_EQ(coords(3)(0), 0.);
     EXPECT_DOUBLE_EQ(coords(4)(0), 0.1);
     EXPECT_DOUBLE_EQ(coords(5)(0), 0.2);
@@ -40,7 +40,7 @@ TEST(FEGeometryTest, connectivity)
                                                                     { 0., 0.1, 0.2, 0.3 },
                                                                     true);
     auto connect = fe::connectivity<1, 2>(mesh);
-    ASSERT_EQ(connect.get_size(), 3);
+    ASSERT_EQ(connect.size(), 3);
     EXPECT_EQ(connect(0)(0), 3);
     EXPECT_EQ(connect(0)(1), 4);
     EXPECT_EQ(connect(1)(0), 4);
