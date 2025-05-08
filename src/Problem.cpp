@@ -510,7 +510,7 @@ void
 local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLocalToGlobal(dm, g, mode, l));
+    PETSC_CHECK(DMLocalToGlobal(dm, l, mode, g));
 }
 
 void
