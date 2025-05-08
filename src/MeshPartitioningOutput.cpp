@@ -48,14 +48,22 @@ MeshPartitioningOutput::output_step()
     PETSC_CHECK(DMSetNumFields(dmp, 1));
     PetscSection s;
     Int nc[1] = { 1 };
-    Int n_dofs[dim + 1];
+    std::vector<Int> n_dofs(dim + 1);
     for (Int i = 0; i < dim + 1; ++i)
         if (i == dim)
             n_dofs[i] = 1;
         else
             n_dofs[i] = 0;
-    PETSC_CHECK(
-        DMPlexCreateSection(dmp, nullptr, nc, n_dofs, 0, nullptr, nullptr, nullptr, nullptr, &s));
+    PETSC_CHECK(DMPlexCreateSection(dmp,
+                                    nullptr,
+                                    nc,
+                                    n_dofs.data(),
+                                    0,
+                                    nullptr,
+                                    nullptr,
+                                    nullptr,
+                                    nullptr,
+                                    &s));
     PETSC_CHECK(PetscSectionSetFieldName(s, 0, ""));
     PETSC_CHECK(DMSetLocalSection(dmp, s));
     PETSC_CHECK(DMCreateDS(dmp));

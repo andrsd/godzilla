@@ -139,7 +139,7 @@ ExplicitProblemInterface::compute_rhs_function(Real time, const Vector & x, Vect
         ksp.solve(F);
     }
     else
-        Vector::pointwise_mult(F, this->M_lumped_inv, F);
+        pointwise_mult(F, this->M_lumped_inv, F);
     this->nl_problem->restore_local_vector(loc_x);
     this->nl_problem->restore_local_vector(loc_F);
 }
