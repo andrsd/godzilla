@@ -546,4 +546,11 @@ aypx(Vector & y, Scalar beta, const Vector & x)
     PETSC_CHECK(VecAYPX(y, beta, x));
 }
 
+void
+waxpy(Vector & w, Scalar alpha, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecWAXPY(w, alpha, x, y));
+}
+
 } // namespace godzilla

@@ -429,7 +429,7 @@ TEST(VectorTest, waxpy)
     y.set_value(1, 4.);
 
     Vector w = Vector::create_seq(MPI_COMM_WORLD, 2);
-    w.waxpy(3., x, y);
+    waxpy(w, 3., x, y);
     EXPECT_DOUBLE_EQ(w(0), 9.);
     EXPECT_DOUBLE_EQ(w(1), 19.);
 

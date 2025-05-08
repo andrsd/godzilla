@@ -117,7 +117,7 @@ public:
     /// @param alpha Scalar
     /// @param x First vector multiplied by `alpha`
     /// @param y Second vector
-    void waxpy(Scalar alpha, const Vector & x, const Vector & y);
+    [[deprecated("")]] void waxpy(Scalar alpha, const Vector & x, const Vector & y);
 
     /// Computes `this = this + \sum_i alpha[i] x[i]`
     ///
@@ -312,5 +312,13 @@ void axpby(Vector & y, Scalar alpha, Scalar beta, const Vector & x);
 /// @param x Unscaled vector
 /// @param y Resulting vector
 void aypx(Vector & y, Scalar beta, const Vector & x);
+
+/// Computes `z[i] = alpha * x[i] + y[i]
+///
+/// @param alpha Scalar
+/// @param x First vector multiplied by `alpha`
+/// @param y Second vector
+/// @param w Resulting vector
+void waxpy(Vector & w, Scalar alpha, const Vector & x, const Vector & y);
 
 } // namespace godzilla
