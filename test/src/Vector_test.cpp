@@ -253,8 +253,8 @@ TEST(VectorTest, dot)
     u.set_value(1, 5.);
     u.set_value(2, 2.);
 
-    Scalar dot = v.dot(u);
-    EXPECT_DOUBLE_EQ(dot, 32.);
+    auto dp = dot(v, u);
+    EXPECT_DOUBLE_EQ(dp, 32.);
 
     v.destroy();
     u.destroy();

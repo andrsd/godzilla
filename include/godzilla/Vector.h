@@ -46,7 +46,7 @@ public:
     void get_values(const std::vector<Int> & idx, std::vector<Scalar> & y) const;
 
     void abs();
-    Scalar dot(const Vector & y) const;
+    [[deprecated("")]] Scalar dot(const Vector & y) const;
     void scale(Scalar alpha);
 
     [[deprecated("")]] void duplicate(Vector & b) const;
@@ -278,5 +278,12 @@ Vector::set_values_local(const DenseVector<Int, N> & ix,
     CALL_STACK_MSG();
     PETSC_CHECK(VecSetValuesLocal(this->vec, N, ix.data(), y.data(), mode));
 }
+
+/// Compute vector dot product
+///
+/// @param x First vector
+/// @param y Second vector
+/// @return Dot product
+Scalar dot(const Vector & x, const Vector & y);
 
 } // namespace godzilla

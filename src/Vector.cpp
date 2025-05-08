@@ -509,4 +509,13 @@ Vector::copy(const IndexSet & is, ScatterMode mode, Vector & reduced)
     PETSC_CHECK(VecISCopy(this->vec, is, mode, reduced));
 }
 
+Scalar
+dot(const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    Scalar val;
+    PETSC_CHECK(VecDot(x, y, &val));
+    return val;
+}
+
 } // namespace godzilla
