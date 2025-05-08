@@ -506,4 +506,18 @@ Problem::global_to_local(const Vector & g, InsertMode mode, Vector & l) const
     PETSC_CHECK(DMGlobalToLocal(get_dm(), g, mode, l));
 }
 
+void
+local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMLocalToGlobal(dm, l, mode, g));
+}
+
+void
+global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMGlobalToLocal(dm, g, mode, l));
+}
+
 } // namespace godzilla
