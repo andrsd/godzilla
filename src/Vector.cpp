@@ -566,4 +566,11 @@ maxpy(Vector & y, const std::vector<Scalar> & alpha, const std::vector<Vector> &
     PETSC_CHECK(VecMAXPY(y, n, alpha.data(), xx.data()));
 }
 
+void
+axpbypcz(Vector & z, Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAXPBYPCZ(z, alpha, beta, gamma, x, y));
+}
+
 } // namespace godzilla

@@ -134,7 +134,8 @@ public:
     /// @param gamma Third scalar
     /// @param x First vector
     /// @param y Second vector
-    void axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y);
+    [[deprecated("")]] void
+    axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y);
 
     void reciprocal();
 
@@ -328,5 +329,16 @@ void waxpy(Vector & w, Scalar alpha, const Vector & x, const Vector & y);
 /// @param alpha Array of scalars
 /// @param x Array of vectors
 void maxpy(Vector & y, const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
+
+/// Computes `this = alpha * x + beta * y + gamma * this`
+///
+/// @param alpha First scalar
+/// @param beta Second scalar
+/// @param gamma Third scalar
+/// @param x First vector
+/// @param y Second vector
+/// @param z Resulting vector
+void
+axpbypcz(Vector & z, Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vector & y);
 
 } // namespace godzilla

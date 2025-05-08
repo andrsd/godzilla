@@ -475,7 +475,7 @@ TEST(VectorTest, axpbypcz)
     Real alpha = 2.;
     Real beta = 3.;
     Real gamma = 4;
-    w.axpbypcz(alpha, beta, gamma, x, y);
+    axpbypcz(w, alpha, beta, gamma, x, y);
 
     EXPECT_DOUBLE_EQ(w(0), 17.);
     EXPECT_DOUBLE_EQ(w(1), 26.);
