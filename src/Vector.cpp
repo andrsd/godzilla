@@ -375,7 +375,7 @@ Vector::operator()(Int idx) const
 {
     CALL_STACK_MSG();
     Scalar val;
-    VecGetValues(this->vec, 1, &idx, &val);
+    PETSC_CHECK(VecGetValues(this->vec, 1, &idx, &val));
     return val;
 }
 
