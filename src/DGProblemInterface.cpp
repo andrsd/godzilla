@@ -511,9 +511,9 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
                     auto cell_id = support[0];
                     auto n_nodes_per_elem = (Int) econn.size();
                     std::vector<Int> indices;
-                    for (Int j = 0; j < fconn.size(); ++j) {
+                    for (std::size_t j = 0; j < fconn.size(); ++j) {
                         auto local_node_idx = fe::get_local_vertex_index(econn, fconn[j]);
-                        for (Int k = 0; k < components.size(); ++k) {
+                        for (std::size_t k = 0; k < components.size(); ++k) {
                             auto c = components[k];
                             indices.push_back((c * n_nodes_per_elem) + local_node_idx);
                         }

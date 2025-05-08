@@ -4,6 +4,10 @@ add_library(${PROJECT_NAME} SHARED ${SRCS})
 
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
+target_compile_options(${PROJECT_NAME}
+    PRIVATE
+        $<$<CONFIG:Debug>:-Wall>
+)
 
 set_target_properties(
     ${PROJECT_NAME}
