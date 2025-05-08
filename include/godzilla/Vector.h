@@ -251,10 +251,14 @@ public:
     /// @param N global vector length (or PETSC_DETERMINE to have calculated if n is given)
     static Vector create_mpi(MPI_Comm comm, Int n, Int N);
 
-    static void pointwise_min(const Vector & w, const Vector & x, const Vector & y);
-    static void pointwise_max(const Vector & w, const Vector & x, const Vector & y);
-    static void pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
-    static void pointwise_divide(const Vector & w, const Vector & x, const Vector & y);
+    [[deprecated("")]] static void
+    pointwise_min(const Vector & w, const Vector & x, const Vector & y);
+    [[deprecated("")]] static void
+    pointwise_max(const Vector & w, const Vector & x, const Vector & y);
+    [[deprecated("")]] static void
+    pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
+    [[deprecated("")]] static void
+    pointwise_divide(const Vector & w, const Vector & x, const Vector & y);
 
 private:
     Vec vec;
@@ -340,5 +344,10 @@ void maxpy(Vector & y, const std::vector<Scalar> & alpha, const std::vector<Vect
 /// @param z Resulting vector
 void
 axpbypcz(Vector & z, Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vector & y);
+
+void pointwise_min(const Vector & w, const Vector & x, const Vector & y);
+void pointwise_max(const Vector & w, const Vector & x, const Vector & y);
+void pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
+void pointwise_divide(const Vector & w, const Vector & x, const Vector & y);
 
 } // namespace godzilla

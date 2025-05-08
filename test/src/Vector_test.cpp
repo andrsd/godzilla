@@ -497,7 +497,7 @@ TEST(VectorTest, pointwise_min)
     y.set_value(0, 3.);
     y.set_value(1, 4.);
 
-    Vector::pointwise_min(w, x, y);
+    pointwise_min(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 2.);
     EXPECT_DOUBLE_EQ(w(1), 4.);
 
@@ -518,7 +518,7 @@ TEST(VectorTest, pointwise_max)
     y.set_value(0, 3.);
     y.set_value(1, 4.);
 
-    Vector::pointwise_max(w, x, y);
+    pointwise_max(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 3.);
     EXPECT_DOUBLE_EQ(w(1), 5.);
 
@@ -539,7 +539,7 @@ TEST(VectorTest, pointwise_mult)
     y.set_value(0, 3.);
     y.set_value(1, 4.);
 
-    Vector::pointwise_mult(w, x, y);
+    pointwise_mult(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 6.);
     EXPECT_DOUBLE_EQ(w(1), 20.);
 
@@ -560,7 +560,7 @@ TEST(VectorTest, pointwise_divide)
     y.set_value(0, 2.);
     y.set_value(1, 3.);
 
-    Vector::pointwise_divide(w, x, y);
+    pointwise_divide(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 4.);
     EXPECT_DOUBLE_EQ(w(1), 6.);
 

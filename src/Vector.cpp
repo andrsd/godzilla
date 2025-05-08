@@ -573,4 +573,32 @@ axpbypcz(Vector & z, Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, 
     PETSC_CHECK(VecAXPBYPCZ(z, alpha, beta, gamma, x, y));
 }
 
+void
+pointwise_min(const Vector & w, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecPointwiseMin(w, x, y));
+}
+
+void
+pointwise_max(const Vector & w, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecPointwiseMax(w, x, y));
+}
+
+void
+pointwise_mult(const Vector & w, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecPointwiseMult(w, x, y));
+}
+
+void
+pointwise_divide(const Vector & w, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecPointwiseDivide(w, x, y));
+}
+
 } // namespace godzilla
