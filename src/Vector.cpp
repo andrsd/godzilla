@@ -525,4 +525,11 @@ copy(const Vector & x, Vector & y)
     PETSC_CHECK(VecCopy(x, y));
 }
 
+void
+axpy(Vector & y, Scalar alpha, const Vector & x)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAXPY(y, alpha, x));
+}
+
 } // namespace godzilla

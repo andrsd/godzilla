@@ -96,8 +96,8 @@ public:
     /// Computes `this[i] = alpha x[i] + this[i]`
     ///
     /// @param alpha Scalar
-    /// @param x Vetor to scale by `alpha`
-    void axpy(Scalar alpha, const Vector & x);
+    /// @param x Vector to scale by `alpha`
+    [[deprecated("")]] void axpy(Scalar alpha, const Vector & x);
 
     /// Computes `this[i] = alpha x[i] + beta y[i]`
     ///
@@ -291,5 +291,11 @@ void copy(const Vector & x, Vector & y);
 /// @param y Second vector
 /// @return Dot product
 Scalar dot(const Vector & x, const Vector & y);
+
+/// Computes `y[i] = alpha x[i] + y[i]`
+///
+/// @param alpha Scalar
+/// @param x Vector to scale by `alpha`
+void axpy(Vector & y, Scalar alpha, const Vector & x);
 
 } // namespace godzilla

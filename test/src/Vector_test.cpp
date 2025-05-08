@@ -376,7 +376,7 @@ TEST(VectorTest, axpy)
     x.set_value(0, 2.);
     x.set_value(1, 5.);
 
-    y.axpy(3., x);
+    axpy(y, 3., x);
     EXPECT_DOUBLE_EQ(y(0), 9.);
     EXPECT_DOUBLE_EQ(y(1), 19.);
     x.destroy();
