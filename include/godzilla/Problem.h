@@ -342,6 +342,14 @@ void local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g);
 /// @param l Local vector
 void global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l);
 
+/// Get a vector that may be used with the DM local routines. This vector has spaces for the
+/// ghost values.
+///
+/// @return Local vector
+Vector get_local_vector(DM dm);
+
+void restore_local_vector(DM dm, const Vector & g);
+
 /// Get global vector
 Vector get_global_vector(DM dm);
 
