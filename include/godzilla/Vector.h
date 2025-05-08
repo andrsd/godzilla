@@ -55,7 +55,7 @@ public:
     /// Copy this vector into `y`
     ///
     /// @param y Vector to copy our values into
-    void copy(Vector & y) const;
+    [[deprecated("Message")]] void copy(Vector & y) const;
 
     /// Copies between a reduced vector and the appropriate elements of a full-space vector.
     ///
@@ -278,6 +278,12 @@ Vector::set_values_local(const DenseVector<Int, N> & ix,
     CALL_STACK_MSG();
     PETSC_CHECK(VecSetValuesLocal(this->vec, N, ix.data(), y.data(), mode));
 }
+
+/// Copy vector `x` into `y`
+///
+/// @param x Source vector
+/// @param y Target vector
+void copy(const Vector & x, Vector & y);
 
 /// Compute vector dot product
 ///

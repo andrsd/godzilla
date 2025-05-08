@@ -518,4 +518,11 @@ dot(const Vector & x, const Vector & y)
     return val;
 }
 
+void
+copy(const Vector & x, Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecCopy(x, y));
+}
+
 } // namespace godzilla

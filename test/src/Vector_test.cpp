@@ -211,7 +211,7 @@ TEST(VectorTest, duplicate_ret)
     v.set_value(1, 3.);
     v.set_value(2, 7.);
     Vector dup = v.duplicate();
-    v.copy(dup);
+    copy(v, dup);
     EXPECT_DOUBLE_EQ(dup(0), 1.);
     EXPECT_DOUBLE_EQ(dup(1), 3.);
     EXPECT_DOUBLE_EQ(dup(2), 7.);
