@@ -224,8 +224,7 @@ TEST(MatrixTest, mult)
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
     x.set_values(std::vector<Int>({ 0, 1 }), { 3, 5 });
 
-    Vector y;
-    x.duplicate(y);
+    auto y = x.duplicate();
 
     m.mult(x, y);
 

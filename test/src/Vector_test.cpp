@@ -204,21 +204,6 @@ TEST(VectorTest, assign)
     v.destroy();
 }
 
-TEST(VectorTest, duplicate)
-{
-    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
-    v.set_value(0, 1.);
-    v.set_value(1, 3.);
-    v.set_value(2, 7.);
-    Vector dup;
-    v.duplicate(dup);
-    v.copy(dup);
-    EXPECT_DOUBLE_EQ(dup(0), 1.);
-    EXPECT_DOUBLE_EQ(dup(1), 3.);
-    EXPECT_DOUBLE_EQ(dup(2), 7.);
-    v.destroy();
-}
-
 TEST(VectorTest, duplicate_ret)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
@@ -503,10 +488,8 @@ TEST(VectorTest, axpbypcz)
 TEST(VectorTest, pointwise_min)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    Vector y;
-    x.duplicate(y);
-    Vector w;
-    x.duplicate(w);
+    Vector y = x.duplicate();
+    Vector w = x.duplicate();
 
     x.set_value(0, 2.);
     x.set_value(1, 5.);
@@ -526,10 +509,8 @@ TEST(VectorTest, pointwise_min)
 TEST(VectorTest, pointwise_max)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    Vector y;
-    x.duplicate(y);
-    Vector w;
-    x.duplicate(w);
+    Vector y = x.duplicate();
+    Vector w = x.duplicate();
 
     x.set_value(0, 2.);
     x.set_value(1, 5.);
@@ -549,10 +530,8 @@ TEST(VectorTest, pointwise_max)
 TEST(VectorTest, pointwise_mult)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    Vector y;
-    x.duplicate(y);
-    Vector w;
-    x.duplicate(w);
+    Vector y = x.duplicate();
+    Vector w = x.duplicate();
 
     x.set_value(0, 2.);
     x.set_value(1, 5.);
@@ -572,10 +551,8 @@ TEST(VectorTest, pointwise_mult)
 TEST(VectorTest, pointwise_divide)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    Vector y;
-    x.duplicate(y);
-    Vector w;
-    x.duplicate(w);
+    Vector y = x.duplicate();
+    Vector w = x.duplicate();
 
     x.set_value(0, 8.);
     x.set_value(1, 18.);

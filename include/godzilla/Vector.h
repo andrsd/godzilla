@@ -48,7 +48,8 @@ public:
     void abs();
     Scalar dot(const Vector & y) const;
     void scale(Scalar alpha);
-    void duplicate(Vector & b) const;
+
+    [[deprecated("")]] void duplicate(Vector & b) const;
     Vector duplicate() const;
 
     /// Copy this vector into `y`
@@ -151,10 +152,7 @@ public:
     /// @param ix Indices where to add/insert
     /// @param y Values
     /// @param mode Insertion mode
-    void set_values(Int n,
-                    const Int * ix,
-                    const Scalar * y,
-                    InsertMode mode = INSERT_VALUES);
+    void set_values(Int n, const Int * ix, const Scalar * y, InsertMode mode = INSERT_VALUES);
 
     /// Inserts or adds values into certain locations of a vector
     ///
