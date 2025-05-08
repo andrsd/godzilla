@@ -537,4 +537,22 @@ restore_global_vector(DM dm, const Vector & g)
     PETSC_CHECK(DMRestoreGlobalVector(dm, &glob));
 }
 
+Vector
+create_local_vector(DM dm)
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(DMCreateLocalVector(dm, &v));
+    return { v };
+}
+
+Vector
+create_global_vector(DM dm)
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(DMCreateGlobalVector(dm, &v));
+    return { v };
+}
+
 } // namespace godzilla

@@ -348,4 +348,17 @@ Vector get_global_vector(DM dm);
 /// Restore global vector
 void restore_global_vector(DM dm, const Vector & g);
 
+/// Create local vector
+///
+/// @param dm Data manager
+/// @return New local vector
+Vector create_local_vector(DM dm);
+
+/// Creates a global vector from a DM object. A global vector is a parallel vector that has no
+/// duplicate values shared between MPI ranks, that is it has no ghost locations.
+///
+/// @param dm Data manager
+/// @return New global vector
+Vector create_global_vector(DM dm);
+
 } // namespace godzilla
