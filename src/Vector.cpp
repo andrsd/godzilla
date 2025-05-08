@@ -509,4 +509,96 @@ Vector::copy(const IndexSet & is, ScatterMode mode, Vector & reduced)
     PETSC_CHECK(VecISCopy(this->vec, is, mode, reduced));
 }
 
+Scalar
+dot(const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    Scalar val;
+    PETSC_CHECK(VecDot(x, y, &val));
+    return val;
+}
+
+void
+copy(const Vector & x, Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecCopy(x, y));
+}
+
+void
+axpy(Vector & y, Scalar alpha, const Vector & x)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAXPY(y, alpha, x));
+}
+
+void
+axpby(Vector & y, Scalar alpha, Scalar beta, const Vector & x)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAXPBY(y, alpha, beta, x));
+}
+
+void
+aypx(Vector & y, Scalar beta, const Vector & x)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAYPX(y, beta, x));
+}
+
+void
+waxpy(Vector & w, Scalar alpha, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecWAXPY(w, alpha, x, y));
+}
+
+void
+maxpy(Vector & y, const std::vector<Scalar> & alpha, const std::vector<Vector> & x)
+{
+    CALL_STACK_MSG();
+    assert(alpha.size() == x.size());
+
+    auto n = alpha.size();
+    std::vector<Vec> xx(n);
+    for (std::size_t i = 0; i < n; ++i)
+        xx[i] = (Vec) x[i];
+    PETSC_CHECK(VecMAXPY(y, n, alpha.data(), xx.data()));
+}
+
+void
+axpbypcz(Vector & z, Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAXPBYPCZ(z, alpha, beta, gamma, x, y));
+}
+
+void
+pointwise_min(const Vector & w, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecPointwiseMin(w, x, y));
+}
+
+void
+pointwise_max(const Vector & w, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecPointwiseMax(w, x, y));
+}
+
+void
+pointwise_mult(const Vector & w, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecPointwiseMult(w, x, y));
+}
+
+void
+pointwise_divide(const Vector & w, const Vector & x, const Vector & y)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecPointwiseDivide(w, x, y));
+}
+
 } // namespace godzilla

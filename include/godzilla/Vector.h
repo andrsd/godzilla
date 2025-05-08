@@ -46,15 +46,16 @@ public:
     void get_values(const std::vector<Int> & idx, std::vector<Scalar> & y) const;
 
     void abs();
-    Scalar dot(const Vector & y) const;
+    [[deprecated("")]] Scalar dot(const Vector & y) const;
     void scale(Scalar alpha);
-    void duplicate(Vector & b) const;
+
+    [[deprecated("")]] void duplicate(Vector & b) const;
     Vector duplicate() const;
 
     /// Copy this vector into `y`
     ///
     /// @param y Vector to copy our values into
-    void copy(Vector & y) const;
+    [[deprecated("Message")]] void copy(Vector & y) const;
 
     /// Copies between a reduced vector and the appropriate elements of a full-space vector.
     ///
@@ -95,28 +96,28 @@ public:
     /// Computes `this[i] = alpha x[i] + this[i]`
     ///
     /// @param alpha Scalar
-    /// @param x Vetor to scale by `alpha`
-    void axpy(Scalar alpha, const Vector & x);
+    /// @param x Vector to scale by `alpha`
+    [[deprecated("")]] void axpy(Scalar alpha, const Vector & x);
 
     /// Computes `this[i] = alpha x[i] + beta y[i]`
     ///
     /// @param alpha Scalar
     /// @param beta Scalar
     /// @param x Vector sclaed by `alpha`
-    void axpby(Scalar alpha, Scalar beta, const Vector & x);
+    [[deprecated("")]] void axpby(Scalar alpha, Scalar beta, const Vector & x);
 
     /// Computes `this[i] = x[i] + beta * this[i]`
     ///
     /// @param beta Scalar
     /// @param x Unscaled vector
-    void aypx(Scalar beta, const Vector & x);
+    [[deprecated("")]] void aypx(Scalar beta, const Vector & x);
 
     /// Computes `this[i] = alpha * x[i] + y[i]
     ///
     /// @param alpha Scalar
     /// @param x First vector multiplied by `alpha`
     /// @param y Second vector
-    void waxpy(Scalar alpha, const Vector & x, const Vector & y);
+    [[deprecated("")]] void waxpy(Scalar alpha, const Vector & x, const Vector & y);
 
     /// Computes `this = this + \sum_i alpha[i] x[i]`
     ///
@@ -124,7 +125,7 @@ public:
     ///
     /// @param alpha Array of scalars
     /// @param x Array of vectors
-    void maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
+    [[deprecated("")]] void maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
 
     /// Computes `this = alpha * x + beta * y + gamma * this`
     ///
@@ -133,7 +134,8 @@ public:
     /// @param gamma Third scalar
     /// @param x First vector
     /// @param y Second vector
-    void axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y);
+    [[deprecated("")]] void
+    axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y);
 
     void reciprocal();
 
@@ -151,10 +153,7 @@ public:
     /// @param ix Indices where to add/insert
     /// @param y Values
     /// @param mode Insertion mode
-    void set_values(Int n,
-                    const Int * ix,
-                    const Scalar * y,
-                    InsertMode mode = INSERT_VALUES);
+    void set_values(Int n, const Int * ix, const Scalar * y, InsertMode mode = INSERT_VALUES);
 
     /// Inserts or adds values into certain locations of a vector
     ///
@@ -252,10 +251,14 @@ public:
     /// @param N global vector length (or PETSC_DETERMINE to have calculated if n is given)
     static Vector create_mpi(MPI_Comm comm, Int n, Int N);
 
-    static void pointwise_min(const Vector & w, const Vector & x, const Vector & y);
-    static void pointwise_max(const Vector & w, const Vector & x, const Vector & y);
-    static void pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
-    static void pointwise_divide(const Vector & w, const Vector & x, const Vector & y);
+    [[deprecated("")]] static void
+    pointwise_min(const Vector & w, const Vector & x, const Vector & y);
+    [[deprecated("")]] static void
+    pointwise_max(const Vector & w, const Vector & x, const Vector & y);
+    [[deprecated("")]] static void
+    pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
+    [[deprecated("")]] static void
+    pointwise_divide(const Vector & w, const Vector & x, const Vector & y);
 
 private:
     Vec vec;
@@ -280,5 +283,71 @@ Vector::set_values_local(const DenseVector<Int, N> & ix,
     CALL_STACK_MSG();
     PETSC_CHECK(VecSetValuesLocal(this->vec, N, ix.data(), y.data(), mode));
 }
+
+/// Copy vector `x` into `y`
+///
+/// @param x Source vector
+/// @param y Target vector
+void copy(const Vector & x, Vector & y);
+
+/// Compute vector dot product
+///
+/// @param x First vector
+/// @param y Second vector
+/// @return Dot product
+Scalar dot(const Vector & x, const Vector & y);
+
+/// Computes `y[i] = alpha x[i] + y[i]`
+///
+/// @param alpha Scalar
+/// @param x Vector to scale by `alpha`
+void axpy(Vector & y, Scalar alpha, const Vector & x);
+
+/// Computes `y[i] = alpha x[i] + beta y[i]`
+///
+/// @param alpha Scalar
+/// @param beta Scalar
+/// @param x Vector scaled by `alpha`
+/// @param y Vector accumulated into
+void axpby(Vector & y, Scalar alpha, Scalar beta, const Vector & x);
+
+/// Computes `y[i] = x[i] + beta * y[i]`
+///
+/// @param beta Scalar
+/// @param x Unscaled vector
+/// @param y Resulting vector
+void aypx(Vector & y, Scalar beta, const Vector & x);
+
+/// Computes `z[i] = alpha * x[i] + y[i]
+///
+/// @param alpha Scalar
+/// @param x First vector multiplied by `alpha`
+/// @param y Second vector
+/// @param w Resulting vector
+void waxpy(Vector & w, Scalar alpha, const Vector & x, const Vector & y);
+
+/// Computes `y = y + \sum_i alpha[i] x[i]`
+///
+/// Length of `alpha` and `x` must be the same
+///
+/// @param alpha Array of scalars
+/// @param x Array of vectors
+void maxpy(Vector & y, const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
+
+/// Computes `this = alpha * x + beta * y + gamma * this`
+///
+/// @param alpha First scalar
+/// @param beta Second scalar
+/// @param gamma Third scalar
+/// @param x First vector
+/// @param y Second vector
+/// @param z Resulting vector
+void
+axpbypcz(Vector & z, Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vector & y);
+
+void pointwise_min(const Vector & w, const Vector & x, const Vector & y);
+void pointwise_max(const Vector & w, const Vector & x, const Vector & y);
+void pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
+void pointwise_divide(const Vector & w, const Vector & x, const Vector & y);
 
 } // namespace godzilla

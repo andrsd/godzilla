@@ -204,21 +204,6 @@ TEST(VectorTest, assign)
     v.destroy();
 }
 
-TEST(VectorTest, duplicate)
-{
-    Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
-    v.set_value(0, 1.);
-    v.set_value(1, 3.);
-    v.set_value(2, 7.);
-    Vector dup;
-    v.duplicate(dup);
-    v.copy(dup);
-    EXPECT_DOUBLE_EQ(dup(0), 1.);
-    EXPECT_DOUBLE_EQ(dup(1), 3.);
-    EXPECT_DOUBLE_EQ(dup(2), 7.);
-    v.destroy();
-}
-
 TEST(VectorTest, duplicate_ret)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
@@ -226,7 +211,7 @@ TEST(VectorTest, duplicate_ret)
     v.set_value(1, 3.);
     v.set_value(2, 7.);
     Vector dup = v.duplicate();
-    v.copy(dup);
+    copy(v, dup);
     EXPECT_DOUBLE_EQ(dup(0), 1.);
     EXPECT_DOUBLE_EQ(dup(1), 3.);
     EXPECT_DOUBLE_EQ(dup(2), 7.);
@@ -268,8 +253,8 @@ TEST(VectorTest, dot)
     u.set_value(1, 5.);
     u.set_value(2, 2.);
 
-    Scalar dot = v.dot(u);
-    EXPECT_DOUBLE_EQ(dot, 32.);
+    auto dp = dot(v, u);
+    EXPECT_DOUBLE_EQ(dp, 32.);
 
     v.destroy();
     u.destroy();
@@ -391,7 +376,7 @@ TEST(VectorTest, axpy)
     x.set_value(0, 2.);
     x.set_value(1, 5.);
 
-    y.axpy(3., x);
+    axpy(y, 3., x);
     EXPECT_DOUBLE_EQ(y(0), 9.);
     EXPECT_DOUBLE_EQ(y(1), 19.);
     x.destroy();
@@ -408,7 +393,7 @@ TEST(VectorTest, axpby)
     x.set_value(0, 2.);
     x.set_value(1, 5.);
 
-    y.axpby(3., 4., x);
+    axpby(y, 3., 4., x);
     EXPECT_DOUBLE_EQ(y(0), 18.);
     EXPECT_DOUBLE_EQ(y(1), 31.);
     x.destroy();
@@ -425,7 +410,7 @@ TEST(VectorTest, aypx)
     x.set_value(0, 2.);
     x.set_value(1, 5.);
 
-    y.aypx(3., x);
+    aypx(y, 3., x);
     EXPECT_DOUBLE_EQ(y(0), 11.);
     EXPECT_DOUBLE_EQ(y(1), 17.);
 
@@ -444,7 +429,7 @@ TEST(VectorTest, waxpy)
     y.set_value(1, 4.);
 
     Vector w = Vector::create_seq(MPI_COMM_WORLD, 2);
-    w.waxpy(3., x, y);
+    waxpy(w, 3., x, y);
     EXPECT_DOUBLE_EQ(w(0), 9.);
     EXPECT_DOUBLE_EQ(w(1), 19.);
 
@@ -467,7 +452,7 @@ TEST(VectorTest, maxpy)
     w.zero();
     std::vector<Scalar> alpha = { 2, -1 };
     std::vector<Vector> x = { v1, v2 };
-    w.maxpy(alpha, x);
+    maxpy(w, alpha, x);
 
     EXPECT_DOUBLE_EQ(w(0), 1.);
     EXPECT_DOUBLE_EQ(w(1), 6.);
@@ -490,7 +475,7 @@ TEST(VectorTest, axpbypcz)
     Real alpha = 2.;
     Real beta = 3.;
     Real gamma = 4;
-    w.axpbypcz(alpha, beta, gamma, x, y);
+    axpbypcz(w, alpha, beta, gamma, x, y);
 
     EXPECT_DOUBLE_EQ(w(0), 17.);
     EXPECT_DOUBLE_EQ(w(1), 26.);
@@ -503,10 +488,8 @@ TEST(VectorTest, axpbypcz)
 TEST(VectorTest, pointwise_min)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    Vector y;
-    x.duplicate(y);
-    Vector w;
-    x.duplicate(w);
+    Vector y = x.duplicate();
+    Vector w = x.duplicate();
 
     x.set_value(0, 2.);
     x.set_value(1, 5.);
@@ -514,7 +497,7 @@ TEST(VectorTest, pointwise_min)
     y.set_value(0, 3.);
     y.set_value(1, 4.);
 
-    Vector::pointwise_min(w, x, y);
+    pointwise_min(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 2.);
     EXPECT_DOUBLE_EQ(w(1), 4.);
 
@@ -526,10 +509,8 @@ TEST(VectorTest, pointwise_min)
 TEST(VectorTest, pointwise_max)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    Vector y;
-    x.duplicate(y);
-    Vector w;
-    x.duplicate(w);
+    Vector y = x.duplicate();
+    Vector w = x.duplicate();
 
     x.set_value(0, 2.);
     x.set_value(1, 5.);
@@ -537,7 +518,7 @@ TEST(VectorTest, pointwise_max)
     y.set_value(0, 3.);
     y.set_value(1, 4.);
 
-    Vector::pointwise_max(w, x, y);
+    pointwise_max(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 3.);
     EXPECT_DOUBLE_EQ(w(1), 5.);
 
@@ -549,10 +530,8 @@ TEST(VectorTest, pointwise_max)
 TEST(VectorTest, pointwise_mult)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    Vector y;
-    x.duplicate(y);
-    Vector w;
-    x.duplicate(w);
+    Vector y = x.duplicate();
+    Vector w = x.duplicate();
 
     x.set_value(0, 2.);
     x.set_value(1, 5.);
@@ -560,7 +539,7 @@ TEST(VectorTest, pointwise_mult)
     y.set_value(0, 3.);
     y.set_value(1, 4.);
 
-    Vector::pointwise_mult(w, x, y);
+    pointwise_mult(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 6.);
     EXPECT_DOUBLE_EQ(w(1), 20.);
 
@@ -572,10 +551,8 @@ TEST(VectorTest, pointwise_mult)
 TEST(VectorTest, pointwise_divide)
 {
     Vector x = Vector::create_seq(MPI_COMM_WORLD, 2);
-    Vector y;
-    x.duplicate(y);
-    Vector w;
-    x.duplicate(w);
+    Vector y = x.duplicate();
+    Vector w = x.duplicate();
 
     x.set_value(0, 8.);
     x.set_value(1, 18.);
@@ -583,7 +560,7 @@ TEST(VectorTest, pointwise_divide)
     y.set_value(0, 2.);
     y.set_value(1, 3.);
 
-    Vector::pointwise_divide(w, x, y);
+    pointwise_divide(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 4.);
     EXPECT_DOUBLE_EQ(w(1), 6.);
 
