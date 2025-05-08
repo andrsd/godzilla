@@ -393,7 +393,7 @@ TEST(VectorTest, axpby)
     x.set_value(0, 2.);
     x.set_value(1, 5.);
 
-    y.axpby(3., 4., x);
+    axpby(y, 3., 4., x);
     EXPECT_DOUBLE_EQ(y(0), 18.);
     EXPECT_DOUBLE_EQ(y(1), 31.);
     x.destroy();
