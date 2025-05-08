@@ -326,4 +326,20 @@ public:
     static Parameters parameters();
 };
 
+/// Move values from a local vector to a global one
+///
+/// @param dm Data manager
+/// @param l Local vector
+/// @param mode Operation
+/// @param g Global vector
+void local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g);
+
+/// Move values from a global vector to a local one
+///
+/// @param dm Data manager
+/// @param g Global vector
+/// @param mode Operation
+/// @param l Local vector
+void global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l);
+
 } // namespace godzilla
