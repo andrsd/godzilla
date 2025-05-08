@@ -125,7 +125,7 @@ public:
     ///
     /// @param alpha Array of scalars
     /// @param x Array of vectors
-    void maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
+    [[deprecated("")]] void maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
 
     /// Computes `this = alpha * x + beta * y + gamma * this`
     ///
@@ -320,5 +320,13 @@ void aypx(Vector & y, Scalar beta, const Vector & x);
 /// @param y Second vector
 /// @param w Resulting vector
 void waxpy(Vector & w, Scalar alpha, const Vector & x, const Vector & y);
+
+/// Computes `y = y + \sum_i alpha[i] x[i]`
+///
+/// Length of `alpha` and `x` must be the same
+///
+/// @param alpha Array of scalars
+/// @param x Array of vectors
+void maxpy(Vector & y, const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
 
 } // namespace godzilla

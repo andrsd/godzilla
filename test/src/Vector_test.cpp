@@ -452,7 +452,7 @@ TEST(VectorTest, maxpy)
     w.zero();
     std::vector<Scalar> alpha = { 2, -1 };
     std::vector<Vector> x = { v1, v2 };
-    w.maxpy(alpha, x);
+    maxpy(w, alpha, x);
 
     EXPECT_DOUBLE_EQ(w(0), 1.);
     EXPECT_DOUBLE_EQ(w(1), 6.);

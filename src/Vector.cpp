@@ -553,4 +553,17 @@ waxpy(Vector & w, Scalar alpha, const Vector & x, const Vector & y)
     PETSC_CHECK(VecWAXPY(w, alpha, x, y));
 }
 
+void
+maxpy(Vector & y, const std::vector<Scalar> & alpha, const std::vector<Vector> & x)
+{
+    CALL_STACK_MSG();
+    assert(alpha.size() == x.size());
+
+    auto n = alpha.size();
+    std::vector<Vec> xx(n);
+    for (std::size_t i = 0; i < n; ++i)
+        xx[i] = (Vec) x[i];
+    PETSC_CHECK(VecMAXPY(y, n, alpha.data(), xx.data()));
+}
+
 } // namespace godzilla
