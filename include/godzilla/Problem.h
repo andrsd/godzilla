@@ -342,4 +342,10 @@ void local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g);
 /// @param l Local vector
 void global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l);
 
+/// Get global vector
+Vector get_global_vector(DM dm);
+
+/// Restore global vector
+void restore_global_vector(DM dm, const Vector & g);
+
 } // namespace godzilla

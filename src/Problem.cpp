@@ -520,4 +520,21 @@ global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l)
     PETSC_CHECK(DMGlobalToLocal(dm, g, mode, l));
 }
 
+Vector
+get_global_vector(DM dm)
+{
+    CALL_STACK_MSG();
+    Vec glob;
+    PETSC_CHECK(DMGetGlobalVector(dm, &glob));
+    return Vector(glob);
+}
+
+void
+restore_global_vector(DM dm, const Vector & g)
+{
+    CALL_STACK_MSG();
+    Vec glob = g;
+    PETSC_CHECK(DMRestoreGlobalVector(dm, &glob));
+}
+
 } // namespace godzilla
