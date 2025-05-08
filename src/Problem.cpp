@@ -244,9 +244,7 @@ Vector
 Problem::create_local_vector() const
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMCreateLocalVector(get_dm(), &v));
-    return { v };
+    return godzilla::create_local_vector(get_dm());
 }
 
 Vector
@@ -270,26 +268,21 @@ Vector
 Problem::create_global_vector() const
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMCreateGlobalVector(get_dm(), &v));
-    return { v };
+    return godzilla::create_global_vector(get_dm());
 }
 
 Vector
 Problem::get_global_vector() const
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMGetGlobalVector(get_dm(), &v));
-    return { v };
+    return godzilla::get_global_vector(get_dm());
 }
 
 void
 Problem::restore_global_vector(const Vector & vec) const
 {
     CALL_STACK_MSG();
-    Vec v = vec;
-    PETSC_CHECK(DMRestoreGlobalVector(get_dm(), &v));
+    godzilla::restore_global_vector(get_dm(), vec);
 }
 
 std::string
@@ -496,14 +489,14 @@ void
 Problem::local_to_global(const Vector & l, InsertMode mode, Vector & g) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLocalToGlobal(get_dm(), l, mode, g));
+    godzilla::local_to_global(get_dm(), l, mode, g);
 }
 
 void
 Problem::global_to_local(const Vector & g, InsertMode mode, Vector & l) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMGlobalToLocal(get_dm(), g, mode, l));
+    godzilla::global_to_local(get_dm(), g, mode, l);
 }
 
 void
