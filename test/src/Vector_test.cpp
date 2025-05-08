@@ -410,7 +410,7 @@ TEST(VectorTest, aypx)
     x.set_value(0, 2.);
     x.set_value(1, 5.);
 
-    y.aypx(3., x);
+    aypx(y, 3., x);
     EXPECT_DOUBLE_EQ(y(0), 11.);
     EXPECT_DOUBLE_EQ(y(1), 17.);
 

@@ -110,7 +110,7 @@ public:
     ///
     /// @param beta Scalar
     /// @param x Unscaled vector
-    void aypx(Scalar beta, const Vector & x);
+    [[deprecated("")]] void aypx(Scalar beta, const Vector & x);
 
     /// Computes `this[i] = alpha * x[i] + y[i]
     ///
@@ -305,5 +305,12 @@ void axpy(Vector & y, Scalar alpha, const Vector & x);
 /// @param x Vector scaled by `alpha`
 /// @param y Vector accumulated into
 void axpby(Vector & y, Scalar alpha, Scalar beta, const Vector & x);
+
+/// Computes `y[i] = x[i] + beta * y[i]`
+///
+/// @param beta Scalar
+/// @param x Unscaled vector
+/// @param y Resulting vector
+void aypx(Vector & y, Scalar beta, const Vector & x);
 
 } // namespace godzilla

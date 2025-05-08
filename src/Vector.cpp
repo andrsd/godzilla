@@ -539,4 +539,11 @@ axpby(Vector & y, Scalar alpha, Scalar beta, const Vector & x)
     PETSC_CHECK(VecAXPBY(y, alpha, beta, x));
 }
 
+void
+aypx(Vector & y, Scalar beta, const Vector & x)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(VecAYPX(y, beta, x));
+}
+
 } // namespace godzilla
