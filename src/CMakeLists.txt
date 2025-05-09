@@ -6,7 +6,7 @@ target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
 target_compile_options(${PROJECT_NAME}
     PRIVATE
-        $<$<CONFIG:Debug>:-Wall>
+        $<$<CONFIG:Debug>:-Wall -Werror>
 )
 
 set_target_properties(

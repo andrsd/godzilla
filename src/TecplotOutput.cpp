@@ -417,7 +417,7 @@ TecplotOutput::write_connectivity_ascii()
         auto polytope_type = this->mesh->get_cell_type(cell_id);
         const Int * ordering = get_elem_node_ordering(polytope_type);
         auto cell_connect = this->mesh->get_connectivity(cell_id);
-        for (Int k = 0; k < cell_connect.size(); ++k)
+        for (std::size_t k = 0; k < cell_connect.size(); ++k)
             write_line(fmt::format(" {}", cell_connect[ordering[k]] - n_all_elems + 1));
         write_line("\n");
     }
