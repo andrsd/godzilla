@@ -244,52 +244,41 @@ Vector
 Problem::create_local_vector() const
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMCreateLocalVector(get_dm(), &v));
-    return { v };
+    return godzilla::create_local_vector(get_dm());
 }
 
 Vector
 Problem::get_local_vector() const
 {
-    CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMGetLocalVector(get_dm(), &v));
-    return { v };
+    return godzilla::get_local_vector(get_dm());
 }
 
 void
 Problem::restore_local_vector(const Vector & vec) const
 {
     CALL_STACK_MSG();
-    Vec v = vec;
-    PETSC_CHECK(DMRestoreLocalVector(get_dm(), &v));
+    godzilla::restore_local_vector(get_dm(), vec);
 }
 
 Vector
 Problem::create_global_vector() const
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMCreateGlobalVector(get_dm(), &v));
-    return { v };
+    return godzilla::create_global_vector(get_dm());
 }
 
 Vector
 Problem::get_global_vector() const
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMGetGlobalVector(get_dm(), &v));
-    return { v };
+    return godzilla::get_global_vector(get_dm());
 }
 
 void
 Problem::restore_global_vector(const Vector & vec) const
 {
     CALL_STACK_MSG();
-    Vec v = vec;
-    PETSC_CHECK(DMRestoreGlobalVector(get_dm(), &v));
+    godzilla::restore_global_vector(get_dm(), vec);
 }
 
 std::string
@@ -496,14 +485,80 @@ void
 Problem::local_to_global(const Vector & l, InsertMode mode, Vector & g) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMLocalToGlobal(get_dm(), l, mode, g));
+    godzilla::local_to_global(get_dm(), l, mode, g);
 }
 
 void
 Problem::global_to_local(const Vector & g, InsertMode mode, Vector & l) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(DMGlobalToLocal(get_dm(), g, mode, l));
+    godzilla::global_to_local(get_dm(), g, mode, l);
+}
+
+void
+local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMLocalToGlobal(dm, l, mode, g));
+}
+
+void
+global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMGlobalToLocal(dm, g, mode, l));
+}
+
+Vector
+get_local_vector(DM dm)
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(DMGetLocalVector(dm, &v));
+    return { v };
+}
+
+void
+restore_local_vector(DM dm, const Vector & g)
+{
+    CALL_STACK_MSG();
+    Vec glob = g;
+    PETSC_CHECK(DMRestoreLocalVector(dm, &glob));
+}
+
+Vector
+get_global_vector(DM dm)
+{
+    CALL_STACK_MSG();
+    Vec glob;
+    PETSC_CHECK(DMGetGlobalVector(dm, &glob));
+    return Vector(glob);
+}
+
+void
+restore_global_vector(DM dm, const Vector & g)
+{
+    CALL_STACK_MSG();
+    Vec glob = g;
+    PETSC_CHECK(DMRestoreGlobalVector(dm, &glob));
+}
+
+Vector
+create_local_vector(DM dm)
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(DMCreateLocalVector(dm, &v));
+    return { v };
+}
+
+Vector
+create_global_vector(DM dm)
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(DMCreateGlobalVector(dm, &v));
+    return { v };
 }
 
 } // namespace godzilla

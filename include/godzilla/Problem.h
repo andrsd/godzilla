@@ -326,4 +326,47 @@ public:
     static Parameters parameters();
 };
 
+/// Move values from a local vector to a global one
+///
+/// @param dm Data manager
+/// @param l Local vector
+/// @param mode Operation
+/// @param g Global vector
+void local_to_global(DM dm, const Vector & l, InsertMode mode, Vector & g);
+
+/// Move values from a global vector to a local one
+///
+/// @param dm Data manager
+/// @param g Global vector
+/// @param mode Operation
+/// @param l Local vector
+void global_to_local(DM dm, const Vector & g, InsertMode mode, Vector & l);
+
+/// Get a vector that may be used with the DM local routines. This vector has spaces for the
+/// ghost values.
+///
+/// @return Local vector
+Vector get_local_vector(DM dm);
+
+void restore_local_vector(DM dm, const Vector & g);
+
+/// Get global vector
+Vector get_global_vector(DM dm);
+
+/// Restore global vector
+void restore_global_vector(DM dm, const Vector & g);
+
+/// Create local vector
+///
+/// @param dm Data manager
+/// @return New local vector
+Vector create_local_vector(DM dm);
+
+/// Creates a global vector from a DM object. A global vector is a parallel vector that has no
+/// duplicate values shared between MPI ranks, that is it has no ghost locations.
+///
+/// @param dm Data manager
+/// @return New global vector
+Vector create_global_vector(DM dm);
+
 } // namespace godzilla
