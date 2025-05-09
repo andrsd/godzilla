@@ -339,10 +339,10 @@ ExodusIIOutput::write_coords_discontinuous(int exo_dim)
         z.resize(n_nodes);
 
     auto n_all_cells = this->mesh->get_num_all_cells();
-    Int i = 0;
+    std::size_t i = 0;
     for (auto & cid : this->mesh->get_cell_range()) {
         auto conn = this->mesh->get_connectivity(cid);
-        for (Int j = 0; j < conn.size(); ++j, ++i) {
+        for (std::size_t j = 0; j < conn.size(); ++j, ++i) {
             Int ni = conn[j] - n_all_cells;
             x[i] = xyz[ni * dim + 0];
             if (dim >= 2)

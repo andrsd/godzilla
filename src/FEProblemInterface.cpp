@@ -1156,6 +1156,7 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         kind2 = WeakForm::GP2;
         kind3 = WeakForm::GP3;
         break;
+    default:
     case PETSCFE_JACOBIAN:
         kind0 = WeakForm::G0;
         kind1 = WeakForm::G1;

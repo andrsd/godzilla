@@ -390,7 +390,7 @@ FVProblemInterface::set_up_ds()
 
     PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, get_mesh()->get_dimension()));
 
-    for (Int id = 0, c = 0; id < this->fields.size(); ++id) {
+    for (std::size_t id = 0, c = 0; id < this->fields.size(); ++id) {
         const FieldInfo & fi = this->fields.at(id);
         if (fi.nc == 1) {
             PETSC_CHECK(PetscFVSetComponentName(this->fvm, c, fi.name.c_str()));
