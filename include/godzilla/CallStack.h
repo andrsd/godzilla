@@ -112,16 +112,16 @@ public:
     void remove(Msg * msg);
 
     /// Get size of the call stack
-    int get_size() const;
+    std::size_t get_size() const;
 
     /// Get item at position `idx`
-    Msg * at(int idx) const;
+    Msg * at(std::size_t idx) const;
 
 private:
     /// The object storing call stack objects
     std::array<Msg *, MAX_SIZE> stack;
     /// Actual size of the stack
-    int size;
+    std::size_t size;
 
 public:
     /// Initialize the call stack capability
