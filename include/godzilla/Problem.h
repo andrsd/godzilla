@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
@@ -22,6 +23,8 @@ class Output;
 class FileOutput;
 class Section;
 class StarForest;
+template <typename T>
+class Array1D;
 
 /// Problem
 ///
@@ -385,5 +388,31 @@ Section get_global_section(DM dm);
 ///
 /// @param dm Data manager
 StarForest get_section_star_forest(DM dm);
+
+/// Equivalent of `create_local_vector` but for `Array1D`
+///
+/// @param dm Data manager
+template <typename T>
+Array1D<T>
+create_local_array1d(DM dm)
+{
+    CALL_STACK_MSG();
+    auto section = get_local_section(dm);
+    auto size = section.get_storage_size();
+    return Array1D<T>(size);
+}
+
+/// Equivalent of `create_global_vector` but for `Array1D`
+///
+/// @param dm Data manager
+template <typename T>
+Array1D<T>
+create_global_array1d(DM dm)
+{
+    CALL_STACK_MSG();
+    auto section = get_global_section(dm);
+    auto size = section.get_constrained_storage_size();
+    return Array1D<T>(size);
+}
 
 } // namespace godzilla
