@@ -273,6 +273,15 @@ Section::get_storage_size() const
     return sz;
 }
 
+Int
+Section::get_constrained_storage_size() const
+{
+    CALL_STACK_MSG();
+    Int sz;
+    PETSC_CHECK(PetscSectionGetConstrainedStorageSize(this->section, &sz));
+    return sz;
+}
+
 bool
 Section::has_constraints() const
 {
