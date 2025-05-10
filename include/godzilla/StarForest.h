@@ -94,20 +94,32 @@ public:
     /// @param leaf Value to be reduced with values from each leaf’s respective root
     template <typename T, typename Op>
     void
-    broadcast_begin(const T & root, T & leaf, Op) const
+    broadcast_begin(const T * root, T * leaf, Op) const
     {
         auto dtype = mpi::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFBcastBegin(sf, dtype, &root, &leaf, mpi_op));
+        PETSC_CHECK(PetscSFBcastBegin(sf, dtype, root, leaf, mpi_op));
     }
 
     template <typename T, typename Op>
     void
-    broadcast_begin(const std::vector<T> & root, std::vector<T> & leaf, Op) const
+    broadcast_begin(const T & root, T & leaf, Op op) const
     {
-        auto dtype = mpi::mpi_datatype<T>();
-        auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFBcastBegin(sf, dtype, root.data(), leaf.data(), mpi_op));
+        broadcast_begin(&root, &leaf, op);
+    }
+
+    template <typename T, typename Op>
+    void
+    broadcast_begin(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    {
+        broadcast_begin(root.data(), leaf.data(), op);
+    }
+
+    template <typename T, typename Op>
+    void
+    broadcast_begin(const Array1D<T> & root, Array1D<T> & leaf, Op op) const
+    {
+        broadcast_begin(root.get_data(), leaf.get_data(), op);
     }
 
     /// End a broadcast and reduce operation started with `broadcast_begin`
@@ -119,20 +131,32 @@ public:
     /// @param op Operation to use for reduction
     template <typename T, typename Op>
     void
-    broadcast_end(const T & root, T & leaf, Op) const
+    broadcast_end(const T * root, T * leaf, Op) const
     {
         auto dtype = mpi::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFBcastEnd(sf, dtype, &root, &leaf, mpi_op));
+        PETSC_CHECK(PetscSFBcastEnd(sf, dtype, root, leaf, mpi_op));
     }
 
     template <typename T, typename Op>
     void
-    broadcast_end(const std::vector<T> & root, std::vector<T> & leaf, Op) const
+    broadcast_end(const T & root, T & leaf, Op op) const
     {
-        auto dtype = mpi::mpi_datatype<T>();
-        auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFBcastEnd(sf, dtype, root.data(), leaf.data(), mpi_op));
+        broadcast_end(&root, &leaf, op);
+    }
+
+    template <typename T, typename Op>
+    void
+    broadcast_end(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    {
+        broadcast_end(root.data(), leaf.data(), op);
+    }
+
+    template <typename T, typename Op>
+    void
+    broadcast_end(const Array1D<T> & root, Array1D<T> & leaf, Op op) const
+    {
+        broadcast_end(root.get_data(), leaf.get_data(), op);
     }
 
     template <typename T, typename Op>
