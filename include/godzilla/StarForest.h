@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
 #include "mpicpp-lite/mpicpp-lite.h"
@@ -12,6 +13,9 @@
 namespace mpi = mpicpp_lite;
 
 namespace godzilla {
+
+template <typename T>
+class Array1D;
 
 class StarForest {
 public:
@@ -129,6 +133,74 @@ public:
         auto dtype = mpi::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
         PETSC_CHECK(PetscSFBcastEnd(sf, dtype, root.data(), leaf.data(), mpi_op));
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_begin(const T * root, T * leaf, Op) const
+    {
+        CALL_STACK_MSG();
+        auto dtype = mpicpp_lite::mpi_datatype<T>();
+        auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
+        PETSC_CHECK(PetscSFReduceBegin(this->sf, dtype, root, leaf, mpi_op));
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_begin(const T & root, T & leaf, Op op) const
+    {
+        CALL_STACK_MSG();
+        reduce_begin(&root, &leaf, op);
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_begin(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    {
+        CALL_STACK_MSG();
+        reduce_begin(root.data(), leaf.data(), op);
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_begin(const Array1D<T> & root, Array1D<T> & leaf, Op op) const
+    {
+        CALL_STACK_MSG();
+        reduce_begin(root.get_data(), leaf.get_data(), op);
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_end(const T * root, T * leaf, Op) const
+    {
+        CALL_STACK_MSG();
+        auto dtype = mpicpp_lite::mpi_datatype<T>();
+        auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
+        PETSC_CHECK(PetscSFReduceEnd(this->sf, dtype, root, leaf, mpi_op));
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_end(const T & root, T & leaf, Op op) const
+    {
+        CALL_STACK_MSG();
+        reduce_end(&root, &leaf, op);
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_end(const std::vector<T> & root, std::vector<T> & leaf, Op op) const
+    {
+        CALL_STACK_MSG();
+        reduce_end(root.data(), leaf.data(), op);
+    }
+
+    template <typename T, typename Op>
+    void
+    reduce_end(const Array1D<T> & root, Array1D<T> & leaf, Op op) const
+    {
+        CALL_STACK_MSG();
+        reduce_end(root.get_data(), leaf.get_data(), op);
     }
 
     /// View a star forrest
