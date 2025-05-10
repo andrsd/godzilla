@@ -1,5 +1,7 @@
 #include "gmock/gmock.h"
+#include <petscdm.h>
 #include "GodzillaApp_test.h"
+#include "godzilla/Error.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/Problem.h"
@@ -7,7 +9,11 @@
 #include "godzilla/FileOutput.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/Section.h"
+#include "godzilla/UnstructuredMesh.h"
+#include "godzilla/Array1D.h"
 #include "ExceptionTestMacros.h"
+#include "petscsystypes.h"
+#include "petscfe.h"
 
 using namespace godzilla;
 
@@ -333,4 +339,183 @@ TEST(ProblemTest, mat_vec_types)
 
     EXPECT_EQ(problem.get_vector_type(), VECSTANDARD);
     EXPECT_EQ(problem.get_matrix_type(), MATAIJ);
+}
+
+TEST(ProblemTest, loc_glob_arithmetic_type)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 9;
+    LineMesh mesh(mesh_params);
+    mesh.create();
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    TestProblem problem(prob_params);
+
+    mesh.create();
+    problem.create();
+
+    auto part = problem.get_partitioner();
+    part.set_up();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    m->set_partitioner(part);
+    m->distribute(problem.get_partition_overlap());
+
+    DM dm;
+    PETSC_CHECK(DMClone(problem.get_dm(), &dm));
+    PetscBool simplex = PETSC_TRUE;
+    PetscFE fe;
+    constexpr int DIM = 1;
+    PETSC_CHECK(PetscFECreateLagrange(comm, DIM, 1, simplex, 1, PETSC_DECIDE, &fe));
+    PETSC_CHECK(DMSetField(dm, 0, nullptr, (PetscObject) fe));
+    PETSC_CHECK(DMCreateDS(dm));
+
+    auto l = create_local_array1d<Real>(dm);
+    l.set(comm.rank() + 1);
+    auto g = create_global_array1d<Real>(dm);
+    g.set(0.);
+    local_to_global(dm, l, ADD_VALUES, g);
+    global_to_local(dm, g, INSERT_VALUES, l);
+
+    EXPECT_NEAR(l(0), 1., 1e-10);
+    EXPECT_NEAR(l(1), 1., 1e-10);
+    EXPECT_NEAR(l(2), 1., 1e-10);
+    EXPECT_NEAR(l(3), 1., 1e-10);
+    EXPECT_NEAR(l(4), 1., 1e-10);
+    EXPECT_NEAR(l(5), 1., 1e-10);
+    EXPECT_NEAR(l(6), 1., 1e-10);
+    EXPECT_NEAR(l(7), 1., 1e-10);
+    EXPECT_NEAR(l(8), 1., 1e-10);
+    EXPECT_NEAR(l(9), 1., 1e-10);
+
+    PETSC_CHECK(DMDestroy(&dm));
+}
+
+TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 9;
+    LineMesh mesh(mesh_params);
+    mesh.create();
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    TestProblem problem(prob_params);
+
+    mesh.create();
+    problem.create();
+
+    auto part = problem.get_partitioner();
+    part.set_up();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    m->set_partitioner(part);
+    m->distribute(problem.get_partition_overlap());
+
+    DM dm;
+    PETSC_CHECK(DMClone(problem.get_dm(), &dm));
+    PetscBool simplex = PETSC_TRUE;
+    PetscFE fe;
+    constexpr int DIM = 1;
+    PETSC_CHECK(PetscFECreateLagrange(comm, DIM, 1, simplex, 1, PETSC_DECIDE, &fe));
+    PETSC_CHECK(DMSetField(dm, 0, nullptr, (PetscObject) fe));
+    PETSC_CHECK(DMCreateDS(dm));
+
+    auto l = create_local_array1d<Real>(dm);
+    l.set(comm.rank() + 1);
+    auto g = create_global_array1d<Real>(dm);
+    g.set(0.);
+    local_to_global(dm, l, MAX_VALUES, g);
+    global_to_local(dm, g, INSERT_VALUES, l);
+
+    EXPECT_NEAR(l(0), 1., 1e-10);
+    EXPECT_NEAR(l(1), 1., 1e-10);
+    EXPECT_NEAR(l(2), 1., 1e-10);
+    EXPECT_NEAR(l(3), 1., 1e-10);
+    EXPECT_NEAR(l(4), 1., 1e-10);
+    EXPECT_NEAR(l(5), 1., 1e-10);
+    EXPECT_NEAR(l(6), 1., 1e-10);
+    EXPECT_NEAR(l(7), 1., 1e-10);
+    EXPECT_NEAR(l(8), 1., 1e-10);
+    EXPECT_NEAR(l(9), 1., 1e-10);
+
+    PETSC_CHECK(DMDestroy(&dm));
+}
+
+TEST(ProblemTest, loc_glob_vec_type)
+{
+    TestApp app;
+    auto comm = app.get_comm();
+
+    Parameters mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app") = &app;
+    mesh_params.set<Int>("nx") = 9;
+    LineMesh mesh(mesh_params);
+    mesh.create();
+
+    Parameters prob_params = Problem::parameters();
+    prob_params.set<App *>("_app") = &app;
+    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    TestProblem problem(prob_params);
+
+    mesh.create();
+    problem.create();
+
+    auto part = problem.get_partitioner();
+    part.set_up();
+
+    auto m = mesh.get_mesh<UnstructuredMesh>();
+    m->set_partitioner(part);
+    m->distribute(problem.get_partition_overlap());
+
+    DM dm;
+    PETSC_CHECK(DMClone(problem.get_dm(), &dm));
+    PetscBool simplex = PETSC_TRUE;
+    PetscFE fe;
+    constexpr int DIM = 1;
+    PETSC_CHECK(PetscFECreateLagrange(comm, DIM, 1, simplex, 1, PETSC_DECIDE, &fe));
+    PETSC_CHECK(DMSetField(dm, 0, nullptr, (PetscObject) fe));
+    PETSC_CHECK(DMCreateDS(dm));
+
+    auto l = create_local_array1d<DenseVector<Real, 2>>(dm);
+    double d = 5 * (comm.rank() + 1);
+    l.set(DenseVector<Real, 2>({ d, d + 1. }));
+    auto g = create_global_array1d<DenseVector<Real, 2>>(dm);
+    g.set(DenseVector<Real, 2>({ 0., 0. }));
+    local_to_global(dm, l, ADD_VALUES, g);
+    global_to_local(dm, g, INSERT_VALUES, l);
+
+    EXPECT_NEAR(l(0)(0), 5., 1e-10);
+    EXPECT_NEAR(l(0)(1), 6., 1e-10);
+    EXPECT_NEAR(l(1)(0), 5., 1e-10);
+    EXPECT_NEAR(l(1)(1), 6., 1e-10);
+    EXPECT_NEAR(l(2)(0), 5., 1e-10);
+    EXPECT_NEAR(l(2)(1), 6., 1e-10);
+    EXPECT_NEAR(l(3)(0), 5., 1e-10);
+    EXPECT_NEAR(l(3)(1), 6., 1e-10);
+    EXPECT_NEAR(l(4)(0), 5., 1e-10);
+    EXPECT_NEAR(l(4)(1), 6., 1e-10);
+    EXPECT_NEAR(l(5)(0), 5., 1e-10);
+    EXPECT_NEAR(l(5)(1), 6., 1e-10);
+    EXPECT_NEAR(l(6)(0), 5., 1e-10);
+    EXPECT_NEAR(l(6)(1), 6., 1e-10);
+    EXPECT_NEAR(l(7)(0), 5., 1e-10);
+    EXPECT_NEAR(l(7)(1), 6., 1e-10);
+    EXPECT_NEAR(l(8)(0), 5., 1e-10);
+    EXPECT_NEAR(l(8)(1), 6., 1e-10);
+    EXPECT_NEAR(l(9)(0), 5., 1e-10);
+    EXPECT_NEAR(l(9)(1), 6., 1e-10);
+
+    PETSC_CHECK(DMDestroy(&dm));
 }

@@ -10,7 +10,6 @@
 #include "godzilla/Output.h"
 #include "godzilla/FileOutput.h"
 #include "godzilla/Section.h"
-#include "godzilla/StarForest.h"
 
 namespace godzilla {
 
