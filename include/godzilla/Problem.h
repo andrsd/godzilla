@@ -472,4 +472,10 @@ global_to_local(DM dm, const Array1D<T> & g, InsertMode mode, Array1D<T> & l)
     sf.broadcast_end(g, l, mpi::op::replace<T>());
 }
 
+/// Creates a DM object with the same topology as the original.
+///
+/// @param dm Data manager
+/// @return Cloned data manager
+DM clone(DM dm);
+
 } // namespace godzilla

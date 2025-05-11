@@ -39,8 +39,7 @@ MeshPartitioningOutput::output_step()
     PETSC_CHECK(PetscViewerHDF5Open(get_comm(), get_file_name().c_str(), FILE_MODE_WRITE, &viewer));
 
     assert(get_problem()->get_dm() != nullptr);
-    DM dmp;
-    PETSC_CHECK(DMClone(get_problem()->get_dm(), &dmp));
+    DM dmp = clone(get_problem()->get_dm());
 
     Int dim;
     PETSC_CHECK(DMGetDimension(dmp, &dim));

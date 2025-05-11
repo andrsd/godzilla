@@ -367,8 +367,7 @@ TEST(ProblemTest, loc_glob_arithmetic_type)
     m->set_partitioner(part);
     m->distribute(problem.get_partition_overlap());
 
-    DM dm;
-    PETSC_CHECK(DMClone(problem.get_dm(), &dm));
+    DM dm = clone(problem.get_dm());
     PetscBool simplex = PETSC_TRUE;
     PetscFE fe;
     constexpr int DIM = 1;
@@ -423,8 +422,7 @@ TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
     m->set_partitioner(part);
     m->distribute(problem.get_partition_overlap());
 
-    DM dm;
-    PETSC_CHECK(DMClone(problem.get_dm(), &dm));
+    DM dm = clone(problem.get_dm());
     PetscBool simplex = PETSC_TRUE;
     PetscFE fe;
     constexpr int DIM = 1;
@@ -479,8 +477,7 @@ TEST(ProblemTest, loc_glob_vec_type)
     m->set_partitioner(part);
     m->distribute(problem.get_partition_overlap());
 
-    DM dm;
-    PETSC_CHECK(DMClone(problem.get_dm(), &dm));
+    DM dm = clone(problem.get_dm());
     PetscBool simplex = PETSC_TRUE;
     PetscFE fe;
     constexpr int DIM = 1;
