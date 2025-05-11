@@ -44,6 +44,54 @@ public:
         Int idx;
     };
 
+    struct ConstIterator {
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = Int;
+        using difference_type = Int;
+        using pointer = const Int *;
+        using reference = const Int &;
+
+        explicit ConstIterator(const IndexSet * is, Int idx) : is(is), idx(idx) {}
+        ~ConstIterator() = default;
+
+        const value_type &
+        operator*()
+        {
+            return this->is->indices[this->idx];
+        }
+
+        ConstIterator &
+        operator++()
+        {
+            ++this->idx;
+            return *this;
+        }
+
+        ConstIterator
+        operator++(int)
+        {
+            auto tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        friend bool
+        operator==(const ConstIterator & a, const ConstIterator & b)
+        {
+            return ((IS) a.is == (IS) b.is) && (a.idx == b.idx);
+        }
+
+        friend bool
+        operator!=(const ConstIterator & a, const ConstIterator & b)
+        {
+            return ((IS) a.is != (IS) b.is) || (a.idx != b.idx);
+        }
+
+    private:
+        const IndexSet * is;
+        Int idx;
+    };
+
     IndexSet();
     explicit IndexSet(IS is);
     ~IndexSet() = default;
@@ -224,9 +272,11 @@ public:
 
     /// Begin iterator for range-based for-loops
     Iterator begin();
+    ConstIterator begin() const;
 
     /// End iterator for range-based for-loops
     Iterator end();
+    ConstIterator end() const;
 
 private:
     IS is;
