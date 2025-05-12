@@ -34,7 +34,7 @@ if (GODZILLA_WITH_MPI)
 endif()
 find_package(PETSc 3.20 REQUIRED)
 find_package(exodusIIcpp 2.0 REQUIRED)
-find_package(mpicpp-lite 1.5 REQUIRED)
+find_package(mpicpp-lite 1.7 REQUIRED)
 find_package(h5pp REQUIRED)
 
 check_include_file_cxx(cxxabi.h HAVE_CXXABI_H)
