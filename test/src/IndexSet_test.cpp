@@ -424,3 +424,28 @@ TEST(IndexSetTest, oper_bool)
     EXPECT_FALSE(empty);
     EXPECT_FALSE(cempty);
 }
+
+TEST(IndexSetTest, const_iterator)
+{
+    TestApp app;
+    if (app.get_comm().size() != 1)
+        return;
+
+    auto is1 = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
+    is1.get_indices();
+    const IndexSet & cis1 = is1;
+
+    std::vector<Int> support = { 3, 5 };
+    std::sort(support.begin(), support.end());
+    std::vector<Int> common_edges;
+    std::set_intersection(support.begin(),
+                          support.end(),
+                          cis1.begin(),
+                          cis1.end(),
+                          std::back_inserter(common_edges));
+
+    EXPECT_THAT(common_edges, testing::ElementsAre(3, 5));
+
+    is1.restore_indices();
+    is1.destroy();
+}

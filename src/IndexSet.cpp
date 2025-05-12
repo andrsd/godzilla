@@ -326,6 +326,15 @@ IndexSet::begin()
         return Iterator(this, 0);
 }
 
+IndexSet::ConstIterator
+IndexSet::begin() const
+{
+    if (this->is == nullptr || this->indices == nullptr)
+        return ConstIterator(this, -1);
+    else
+        return ConstIterator(this, 0);
+}
+
 IndexSet::Iterator
 IndexSet::end()
 {
@@ -335,6 +344,18 @@ IndexSet::end()
     else {
         auto n = get_local_size();
         return Iterator(this, n);
+    }
+}
+
+IndexSet::ConstIterator
+IndexSet::end() const
+{
+    CALL_STACK_MSG();
+    if (this->is == nullptr || this->indices == nullptr)
+        return ConstIterator(this, -1);
+    else {
+        auto n = get_local_size();
+        return ConstIterator(this, n);
     }
 }
 
