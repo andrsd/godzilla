@@ -76,6 +76,8 @@ public:
     /// @param size Number of entries in the array
     explicit Array1D(Int size) : n(size), data(new T[size]), range(0, size) {}
 
+    explicit Array1D(const Range & rng) : n(rng.last() - rng.first()), data(new T[n]), range(rng) {}
+
     /// Allocate memory for the array with specified number of entries
     ///
     /// @param size Number of entries in the array
