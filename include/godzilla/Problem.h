@@ -21,6 +21,7 @@ class Postprocessor;
 class Output;
 class FileOutput;
 class Section;
+class StarForest;
 
 /// Problem
 ///
@@ -368,5 +369,21 @@ Vector create_local_vector(DM dm);
 /// @param dm Data manager
 /// @return New global vector
 Vector create_global_vector(DM dm);
+
+/// Get the Section encoding the local data layout for the DM
+///
+/// @param dm Data manager
+Section get_local_section(DM dm);
+
+/// Get the Section encoding the global data layout for the DM
+///
+/// @param dm Data manager
+Section get_global_section(DM dm);
+
+/// Get the PetscSF encoding the parallel dof overlap for the DM. If it has not been set, it is
+/// created from the default PetscSection layouts in the DM.
+///
+/// @param dm Data manager
+StarForest get_section_star_forest(DM dm);
 
 } // namespace godzilla

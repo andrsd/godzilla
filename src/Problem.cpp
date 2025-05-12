@@ -10,6 +10,7 @@
 #include "godzilla/Output.h"
 #include "godzilla/FileOutput.h"
 #include "godzilla/Section.h"
+#include "godzilla/StarForest.h"
 
 namespace godzilla {
 
@@ -559,6 +560,30 @@ create_global_vector(DM dm)
     Vec v;
     PETSC_CHECK(DMCreateGlobalVector(dm, &v));
     return { v };
+}
+
+Section
+get_local_section(DM dm)
+{
+    PetscSection section = nullptr;
+    PETSC_CHECK(DMGetLocalSection(dm, &section));
+    return { section };
+}
+
+Section
+get_global_section(DM dm)
+{
+    PetscSection section = nullptr;
+    PETSC_CHECK(DMGetGlobalSection(dm, &section));
+    return { section };
+}
+
+StarForest
+get_section_star_forest(DM dm)
+{
+    PetscSF sf;
+    PETSC_CHECK(DMGetSectionSF(dm, &sf));
+    return { sf };
 }
 
 } // namespace godzilla
