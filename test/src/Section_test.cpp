@@ -201,6 +201,25 @@ TEST(SectionTest, get_storage_size)
     s.destroy();
 }
 
+TEST(SectionTest, get_ced_storage_size)
+{
+    Section s;
+    s.create(MPI_COMM_WORLD);
+    s.set_chart(0, 3);
+    s.set_dof(0, 1);
+    s.set_constraint_dof(0, 1);
+    s.set_dof(1, 2);
+    s.set_dof(2, 2);
+    s.set_constraint_dof(2, 1);
+    s.add_constraint_dof(2, 1);
+    s.set_up();
+
+    EXPECT_EQ(s.get_storage_size(), 5);
+    EXPECT_EQ(s.get_constrained_storage_size(), 2);
+
+    s.destroy();
+}
+
 TEST(SectionTest, ceds)
 {
     Section s;

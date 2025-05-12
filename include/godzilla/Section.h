@@ -212,6 +212,10 @@ public:
     /// @return The size of an array which can hold all the dofs
     Int get_storage_size() const;
 
+    /// Return the size of an array or local Vec capable of holding all unconstrained degrees of
+    /// freedom in a Section
+    Int get_constrained_storage_size() const;
+
     /// Determine whether the Section has constrained dofs
     ///
     /// @return `true` if the section has constrained dofs, `false` otherwise
