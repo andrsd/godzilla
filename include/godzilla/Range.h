@@ -152,4 +152,11 @@ make_range(Int end)
     return Range(0, end);
 }
 
+inline std::ostream &
+operator<<(std::ostream & os, const Range & obj)
+{
+    os << "[" << obj.first() << ", " << obj.last() << ")";
+    return os;
+}
+
 } // namespace godzilla
