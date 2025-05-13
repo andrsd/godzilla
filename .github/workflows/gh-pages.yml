@@ -33,7 +33,7 @@ jobs:
             cmake \
             make \
             mpich-mpicxx \
-            mpicpp-lite==1.5 \
+            mpicpp-lite==1.7 \
             h5pp==1.11.* \
             doxygen \
             sphinx \
