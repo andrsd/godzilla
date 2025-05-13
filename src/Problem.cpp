@@ -3,6 +3,7 @@
 
 #include "godzilla/Problem.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
 #include "godzilla/MeshObject.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/Function.h"
@@ -10,7 +11,6 @@
 #include "godzilla/Output.h"
 #include "godzilla/FileOutput.h"
 #include "godzilla/Section.h"
-#include "godzilla/StarForest.h"
 
 namespace godzilla {
 
@@ -584,6 +584,15 @@ get_section_star_forest(DM dm)
     PetscSF sf;
     PETSC_CHECK(DMGetSectionSF(dm, &sf));
     return { sf };
+}
+
+DM
+clone(DM dm)
+{
+    CALL_STACK_MSG();
+    DM cln;
+    PETSC_CHECK(DMClone(dm, &cln));
+    return cln;
 }
 
 } // namespace godzilla

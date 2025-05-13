@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
@@ -11,6 +12,7 @@
 #include "godzilla/IndexSet.h"
 #include "godzilla/Partitioner.h"
 #include "godzilla/Label.h"
+#include "godzilla/StarForest.h"
 
 namespace godzilla {
 
@@ -21,7 +23,8 @@ class Postprocessor;
 class Output;
 class FileOutput;
 class Section;
-class StarForest;
+template <typename T>
+class Array1D;
 
 /// Problem
 ///
@@ -385,5 +388,94 @@ Section get_global_section(DM dm);
 ///
 /// @param dm Data manager
 StarForest get_section_star_forest(DM dm);
+
+/// Equivalent of `create_local_vector` but for `Array1D`
+///
+/// @param dm Data manager
+template <typename T>
+Array1D<T>
+create_local_array1d(DM dm)
+{
+    CALL_STACK_MSG();
+    auto section = get_local_section(dm);
+    auto size = section.get_storage_size();
+    return Array1D<T>(size);
+}
+
+/// Equivalent of `create_global_vector` but for `Array1D`
+///
+/// @param dm Data manager
+template <typename T>
+Array1D<T>
+create_global_array1d(DM dm)
+{
+    CALL_STACK_MSG();
+    auto section = get_global_section(dm);
+    auto size = section.get_constrained_storage_size();
+    return Array1D<T>(size);
+}
+
+///
+
+template <typename T, std::enable_if_t<std::is_arithmetic<T>::value, int> = 0>
+void
+local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
+{
+    CALL_STACK_MSG();
+    auto sf = get_section_star_forest(dm);
+    const T * l_array = l.get_data();
+    T * g_array = g.get_data();
+    switch (mode) {
+    case ADD_VALUES:
+        sf.reduce_begin(l_array, g_array, mpi::op::sum<T>());
+        sf.reduce_end(l_array, g_array, mpi::op::sum<T>());
+        break;
+    case MAX_VALUES:
+        sf.reduce_begin(l_array, g_array, mpi::op::max<T>());
+        sf.reduce_end(l_array, g_array, mpi::op::max<T>());
+        break;
+    case MIN_VALUES:
+        sf.reduce_begin(l_array, g_array, mpi::op::min<T>());
+        sf.reduce_end(l_array, g_array, mpi::op::min<T>());
+        break;
+    default:
+        throw Exception("Unknown mode");
+    }
+}
+
+template <typename T, std::enable_if_t<!std::is_arithmetic<T>::value, int> = 0>
+void
+local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
+{
+    CALL_STACK_MSG();
+    auto sf = get_section_star_forest(dm);
+    const T * l_array = l.get_data();
+    T * g_array = g.get_data();
+    switch (mode) {
+    case ADD_VALUES:
+        sf.reduce_begin(l_array, g_array, mpi::op::sum<T>());
+        sf.reduce_end(l_array, g_array, mpi::op::sum<T>());
+        break;
+    default:
+        throw Exception("Unknown mode");
+    }
+}
+
+template <typename T>
+void
+global_to_local(DM dm, const Array1D<T> & g, InsertMode mode, Array1D<T> & l)
+{
+    CALL_STACK_MSG();
+    assert(mode != ADD_VALUES);
+    auto sf = get_section_star_forest(dm);
+    sf.broadcast_begin(g, l, mpi::op::replace<T>());
+    sf.broadcast_end(g, l, mpi::op::replace<T>());
+}
+
+/// Creates a DM object with the same topology as the original.
+///
+/// @param dm Data manager
+/// @return Cloned data manager
+DM clone(DM dm);
 
 } // namespace godzilla

@@ -7,6 +7,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/Utils.h"
+#include "mpicpp-lite/mpicpp-lite.h"
 #include <cassert>
 #include <initializer_list>
 #include <type_traits>
@@ -963,3 +964,63 @@ operator<<(std::ostream & os, const DynDenseVector<T> & obj)
 }
 
 } // namespace godzilla
+
+namespace mpicpp_lite {
+
+template <typename T, godzilla::Int D>
+struct DatatypeTraits<godzilla::DenseVector<T, D>> {
+    static MPI_Datatype
+    get()
+    {
+        return type_contiguous(D, mpi_datatype<T>());
+    }
+};
+
+namespace op {
+
+template <typename T, godzilla::Int D>
+struct sum<godzilla::DenseVector<T, D>> :
+    public UserOp<sum<godzilla::DenseVector<T, D>>, godzilla::DenseVector<T, D>> {
+public:
+    godzilla::DenseVector<T, D>
+    operator()(const godzilla::DenseVector<T, D> & x, const godzilla::DenseVector<T, D> & y) const
+    {
+        return x + y;
+    }
+};
+
+template <typename T, godzilla::Int D>
+struct prod<godzilla::DenseVector<T, D>> :
+    public UserOp<prod<godzilla::DenseVector<T, D>>, godzilla::DenseVector<T, D>> {
+public:
+    godzilla::DenseVector<T, D>
+    operator()(const godzilla::DenseVector<T, D> & x, const godzilla::DenseVector<T, D> & y) const
+    {
+        throw godzilla::Exception("Unable to use DenseVector with mpi::op::prod");
+    }
+};
+
+template <typename T, godzilla::Int D>
+struct max<godzilla::DenseVector<T, D>> :
+    public UserOp<max<godzilla::DenseVector<T, D>>, godzilla::DenseVector<T, D>> {
+public:
+    godzilla::DenseVector<T, D>
+    operator()(const godzilla::DenseVector<T, D> & x, const godzilla::DenseVector<T, D> & y) const
+    {
+        throw godzilla::Exception("Unable to use DenseVector with mpi::op::max");
+    }
+};
+
+template <typename T, godzilla::Int D>
+struct min<godzilla::DenseVector<T, D>> :
+    public UserOp<min<godzilla::DenseVector<T, D>>, godzilla::DenseVector<T, D>> {
+public:
+    godzilla::DenseVector<T, D>
+    operator()(const godzilla::DenseVector<T, D> & x, const godzilla::DenseVector<T, D> & y) const
+    {
+        throw godzilla::Exception("Unable to use DenseVector with mpi::op::min");
+    }
+};
+
+} // namespace op
+} // namespace mpicpp_lite
