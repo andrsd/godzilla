@@ -15,6 +15,11 @@ Terminal::Color Terminal::Color::cyan("\33[36m");
 Terminal::Color Terminal::Color::white("\33[37m");
 Terminal::Color Terminal::Color::normal("\33[39m");
 
+Terminal::Code Terminal::Code::erase_screen("\033[2J");
+Terminal::Code Terminal::Code::erase_line("\033[2K");
+Terminal::Code Terminal::Code::erase_ln_to_cursor("\033[1K");
+Terminal::Code Terminal::Code::erase_ln_from_cursor("\033[0K");
+
 Terminal::Color::Color(const char * aclr) : str(aclr) {}
 
 Terminal::Color::operator const std::string &() const
@@ -23,6 +28,20 @@ Terminal::Color::operator const std::string &() const
 }
 
 Terminal::Color::operator const char *() const
+{
+    return this->str.c_str();
+}
+
+// Terminal::Code
+
+Terminal::Code::Code(const char * code) : str(code) {}
+
+Terminal::Code::operator const std::string &() const
+{
+    return this->str;
+}
+
+Terminal::Code::operator const char *() const
 {
     return this->str.c_str();
 }
@@ -51,5 +70,12 @@ operator<<(std::ostream & os, const godzilla::Terminal::Color & clr)
 {
     if (godzilla::Terminal::has_colors())
         os << static_cast<const char *>(clr);
+    return os;
+}
+
+std::ostream &
+operator<<(std::ostream & os, const godzilla::Terminal::Code & clr)
+{
+    os << static_cast<const char *>(clr);
     return os;
 }
