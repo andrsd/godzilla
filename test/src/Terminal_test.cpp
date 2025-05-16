@@ -52,3 +52,11 @@ TEST(TerminalTest, color_codes)
     EXPECT_STREQ(Terminal::Color::white, "\33[37m");
     EXPECT_STREQ(Terminal::Color::normal, "\33[39m");
 }
+
+TEST(TerminalTest, codes)
+{
+    EXPECT_STREQ(Terminal::Code::erase_screen, "\033[2J");
+    EXPECT_STREQ(Terminal::Code::erase_line, "\033[2K");
+    EXPECT_STREQ(Terminal::Code::erase_ln_to_cursor, "\033[1K");
+    EXPECT_STREQ(Terminal::Code::erase_ln_from_cursor, "\033[0K");
+}

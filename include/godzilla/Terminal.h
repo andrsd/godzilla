@@ -38,6 +38,21 @@ public:
         static Color normal;
     };
 
+    struct Code {
+        explicit Code(const char * code);
+        operator const std::string &() const; // NOLINT(google-explicit-constructor)
+        operator const char *() const; // NOLINT(google-explicit-constructor)
+
+    private:
+        std::string str;
+
+    public:
+        static Code erase_screen;
+        static Code erase_line;
+        static Code erase_ln_to_cursor;
+        static Code erase_ln_from_cursor;
+    };
+
     /// Query if terminal has colors
     ///
     /// @return true if terminal supports colors
@@ -55,3 +70,4 @@ private:
 
 /// Operator to print the color to the terminal
 std::ostream & operator<<(std::ostream & os, const godzilla::Terminal::Color & clr);
+std::ostream & operator<<(std::ostream & os, const godzilla::Terminal::Code & clr);
