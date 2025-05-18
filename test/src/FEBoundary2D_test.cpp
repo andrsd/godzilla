@@ -11,6 +11,8 @@
 using namespace godzilla;
 using namespace testing;
 
+namespace {
+
 class TestBoundary2D : public fe::BoundaryInfo<TRI3, 2, 3> {
 public:
     TestBoundary2D(UnstructuredMesh * mesh,
@@ -41,6 +43,8 @@ public:
         free();
     }
 };
+
+} // namespace
 
 TEST(FEBoundaryTest, normals_2d)
 {

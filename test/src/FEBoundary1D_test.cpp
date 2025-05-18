@@ -10,6 +10,8 @@
 using namespace godzilla;
 using namespace testing;
 
+namespace {
+
 class TestBoundary1D : public fe::BoundaryInfo<EDGE2, 1, 2> {
 public:
     TestBoundary1D(UnstructuredMesh * mesh,
@@ -40,6 +42,8 @@ public:
         free();
     }
 };
+
+} // namespace
 
 TEST(FEBoundaryTest, normals_1d)
 {

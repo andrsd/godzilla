@@ -383,6 +383,7 @@ public:
         area(lengths)
     {
         CALL_STACK_MSG();
+        assert(mesh->get_dimension() == DIM);
         this->facets.sort();
     }
 
@@ -393,7 +394,22 @@ public:
         area(lengths)
     {
         CALL_STACK_MSG();
+        assert(mesh->get_dimension() == DIM);
         this->facets.sort();
+    }
+
+    void
+    create() override
+    {
+        CALL_STACK_MSG();
+        this->compute_face_normals();
+    }
+
+    void
+    destroy() override
+    {
+        CALL_STACK_MSG();
+        this->free();
     }
 
     UnstructuredMesh *
