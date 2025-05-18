@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
+#include "godzilla/UnstructuredMesh.h"
 #include "godzilla/MeshObject.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEVolumes.h"
@@ -9,18 +10,6 @@
 
 using namespace godzilla;
 using namespace testing;
-
-namespace {
-
-IndexSet
-points_from_label(const Label & label)
-{
-    [[maybe_unused]] auto is = label.get_value_index_set();
-    auto ids = label.get_values();
-    return label.get_stratum(ids[0]);
-}
-
-} // namespace
 
 namespace {
 
