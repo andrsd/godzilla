@@ -443,4 +443,17 @@ public:
     static void invert_cell(PolytopeType type, std::vector<Int> & cone);
 };
 
+/// Compute boundary vertices from boundary facets
+///
+/// @param mesh Unstructured mesh
+/// @param facets Boundary facets
+/// @return Boundary vertices
+inline IndexSet
+boundary_vertices(const UnstructuredMesh * mesh, const IndexSet & facets)
+{
+    auto vertices = mesh->get_cone_recursive_vertices(facets);
+    vertices.sort_remove_dups();
+    return vertices;
+}
+
 } // namespace godzilla
