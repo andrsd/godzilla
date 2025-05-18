@@ -40,17 +40,17 @@ Logger::print() const
     for (auto & entry : this->entries) {
         switch (entry.type) {
         case ERROR:
-            fmt::print(stderr, "{}", Terminal::Color::red);
+            fmt::print(stderr, "{}", Terminal::red);
             break;
         case WARNING:
-            fmt::print(stderr, "{}", Terminal::Color::yellow);
+            fmt::print(stderr, "{}", Terminal::yellow);
             break;
         }
         fmt::print(stderr, entry.text);
-        fmt::print(stderr, "{}\n", Terminal::Color::normal);
+        fmt::print(stderr, "{}\n", Terminal::normal);
     }
 
-    fmt::print(stderr, "{}", Terminal::Color::magenta);
+    fmt::print(stderr, "{}", Terminal::magenta);
     if (this->num_errors > 0)
         fmt::print(stderr, "{} error(s)", this->num_errors);
 
@@ -60,7 +60,7 @@ Logger::print() const
 
         fmt::print(stderr, "{} warning(s)", this->num_warnings);
     }
-    fmt::print(stderr, " found.{}\n", Terminal::Color::normal);
+    fmt::print(stderr, " found.{}\n", Terminal::normal);
 }
 
 } // namespace godzilla

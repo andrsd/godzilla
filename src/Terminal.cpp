@@ -5,34 +5,20 @@
 
 namespace godzilla {
 
-Terminal::Color Terminal::Color::black("\33[30m");
-Terminal::Color Terminal::Color::red("\33[31m");
-Terminal::Color Terminal::Color::green("\33[32m");
-Terminal::Color Terminal::Color::yellow("\33[33m");
-Terminal::Color Terminal::Color::blue("\33[34m");
-Terminal::Color Terminal::Color::magenta("\33[35m");
-Terminal::Color Terminal::Color::cyan("\33[36m");
-Terminal::Color Terminal::Color::white("\33[37m");
-Terminal::Color Terminal::Color::normal("\33[39m");
+Terminal::Color Terminal::black("\033[30m");
+Terminal::Color Terminal::red("\033[31m");
+Terminal::Color Terminal::green("\033[32m");
+Terminal::Color Terminal::yellow("\033[33m");
+Terminal::Color Terminal::blue("\033[34m");
+Terminal::Color Terminal::magenta("\033[35m");
+Terminal::Color Terminal::cyan("\033[36m");
+Terminal::Color Terminal::white("\033[37m");
+Terminal::Color Terminal::normal("\033[39m");
 
-Terminal::Code Terminal::Code::erase_screen("\033[2J");
-Terminal::Code Terminal::Code::erase_line("\033[2K");
-Terminal::Code Terminal::Code::erase_ln_to_cursor("\033[1K");
-Terminal::Code Terminal::Code::erase_ln_from_cursor("\033[0K");
-
-Terminal::Color::Color(const char * aclr) : str(aclr) {}
-
-Terminal::Color::operator const std::string &() const
-{
-    return this->str;
-}
-
-Terminal::Color::operator const char *() const
-{
-    return this->str.c_str();
-}
-
-// Terminal::Code
+Terminal::Code Terminal::erase_screen("\033[2J");
+Terminal::Code Terminal::erase_line("\033[2K");
+Terminal::Code Terminal::erase_ln_to_cursor("\033[1K");
+Terminal::Code Terminal::erase_ln_from_cursor("\033[0K");
 
 Terminal::Code::Code(const char * code) : str(code) {}
 
@@ -45,6 +31,10 @@ Terminal::Code::operator const char *() const
 {
     return this->str.c_str();
 }
+
+Terminal::Color::Color(const char * code) : Code(code) {}
+
+// Terminal
 
 bool
 Terminal::has_colors()

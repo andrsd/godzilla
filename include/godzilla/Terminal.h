@@ -12,32 +12,10 @@ namespace godzilla {
 ///
 class Terminal {
 public:
-    /// Terminal color as a class
+    /// Terminal code as a class
     ///
     /// Classes can be namespaced to avoid name collisions with other packages (like googletest)
     /// We can detect that this is being put into a stream and potentially strip it
-    ///
-    /// @param aclr Control characters representing the color
-    struct Color {
-        explicit Color(const char * aclr);
-        operator const std::string &() const; // NOLINT(google-explicit-constructor)
-        operator const char *() const; // NOLINT(google-explicit-constructor)
-
-    private:
-        std::string str;
-
-    public:
-        static Color black;
-        static Color red;
-        static Color green;
-        static Color yellow;
-        static Color blue;
-        static Color magenta;
-        static Color cyan;
-        static Color white;
-        static Color normal;
-    };
-
     struct Code {
         explicit Code(const char * code);
         operator const std::string &() const; // NOLINT(google-explicit-constructor)
@@ -45,14 +23,18 @@ public:
 
     private:
         std::string str;
-
-    public:
-        static Code erase_screen;
-        static Code erase_line;
-        static Code erase_ln_to_cursor;
-        static Code erase_ln_from_cursor;
     };
 
+    /// Terminal color is a special code
+    struct Color : public Code {
+        explicit Color(const char * code);
+    };
+
+private:
+    /// Number of colors supported by the terminal
+    static unsigned int num_colors;
+
+public:
     /// Query if terminal has colors
     ///
     /// @return true if terminal supports colors
@@ -61,9 +43,22 @@ public:
     /// Set the terminal to use colors
     static void set_colors(bool state);
 
-private:
-    /// Number of colors supported by the terminal
-    static unsigned int num_colors;
+    // Colors
+    static Color black;
+    static Color red;
+    static Color green;
+    static Color yellow;
+    static Color blue;
+    static Color magenta;
+    static Color cyan;
+    static Color white;
+    static Color normal;
+
+    // Erase functions
+    static Code erase_screen;
+    static Code erase_line;
+    static Code erase_ln_to_cursor;
+    static Code erase_ln_from_cursor;
 };
 
 } // namespace godzilla

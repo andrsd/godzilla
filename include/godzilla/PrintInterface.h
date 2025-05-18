@@ -101,7 +101,7 @@ public:
         if (level <= this->verbosity_level && this->proc_id == 0) {
             fmt::print(stdout, "{}", clr);
             print_msg(stdout, format, std::forward<T>(args)...);
-            fmt::print(stdout, "{}", Terminal::Color::normal);
+            fmt::print(stdout, "{}", Terminal::normal);
             fmt::print(stdout, "\n");
         }
     }
