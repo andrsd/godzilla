@@ -12,13 +12,6 @@ using namespace testing;
 
 namespace {
 
-IndexSet
-points_from_label(const Label & label)
-{
-    auto ids = label.get_values();
-    return label.get_stratum(ids[0]);
-}
-
 class TestUnstructuredMesh : public MeshObject {
 public:
     explicit TestUnstructuredMesh(const Parameters & params) : MeshObject(params) {}

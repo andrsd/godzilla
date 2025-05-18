@@ -443,4 +443,32 @@ public:
     static void invert_cell(PolytopeType type, std::vector<Int> & cone);
 };
 
+/// Get index set with points for a given label
+///
+/// @param label Label to extract points from
+/// @return IndexSet containing the points
+inline IndexSet
+points_from_label(const Label & label)
+{
+    [[maybe_unused]] auto is = label.get_value_index_set();
+    auto ids = label.get_values();
+    if (ids.size() > 0)
+        return label.get_stratum(ids[0]);
+    else
+        return {};
+}
+
+/// Compute boundary vertices from boundary facets
+///
+/// @param mesh Unstructured mesh
+/// @param facets Boundary facets
+/// @return Boundary vertices
+inline IndexSet
+boundary_vertices(const UnstructuredMesh * mesh, const IndexSet & facets)
+{
+    auto vertices = mesh->get_cone_recursive_vertices(facets);
+    vertices.sort_remove_dups();
+    return vertices;
+}
+
 } // namespace godzilla

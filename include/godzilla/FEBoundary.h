@@ -14,9 +14,9 @@
 #include "godzilla/FEVolumes.h"
 #include "godzilla/FEShapeFns.h"
 #include "godzilla/Utils.h"
+#include "petscdm.h"
 #include <set>
 #include <vector>
-#include "petscdm.h"
 
 namespace godzilla {
 
@@ -317,6 +317,7 @@ public:
         mesh(mesh),
         vertices(vertices)
     {
+        assert(mesh->get_dimension() == DIM);
         CALL_STACK_MSG();
     }
 
@@ -382,6 +383,7 @@ public:
         area(lengths)
     {
         CALL_STACK_MSG();
+        assert(mesh->get_dimension() == DIM);
         this->facets.sort();
     }
 
@@ -392,7 +394,22 @@ public:
         area(lengths)
     {
         CALL_STACK_MSG();
+        assert(mesh->get_dimension() == DIM);
         this->facets.sort();
+    }
+
+    void
+    create() override
+    {
+        CALL_STACK_MSG();
+        this->compute_face_normals();
+    }
+
+    void
+    destroy() override
+    {
+        CALL_STACK_MSG();
+        this->free();
     }
 
     UnstructuredMesh *
