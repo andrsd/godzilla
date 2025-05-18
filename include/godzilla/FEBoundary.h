@@ -14,9 +14,9 @@
 #include "godzilla/FEVolumes.h"
 #include "godzilla/FEShapeFns.h"
 #include "godzilla/Utils.h"
+#include "petscdm.h"
 #include <set>
 #include <vector>
-#include "petscdm.h"
 
 namespace godzilla {
 
@@ -317,6 +317,7 @@ public:
         mesh(mesh),
         vertices(vertices)
     {
+        assert(mesh->get_dimension() == DIM);
         CALL_STACK_MSG();
     }
 
