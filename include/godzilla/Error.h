@@ -18,10 +18,10 @@ template <typename... T>
 void
 error_print(fmt::format_string<T...> format, T... args)
 {
-    fmt::print(stderr, "{}", Terminal::Color::red);
+    fmt::print(stderr, "{}", Terminal::red);
     fmt::print(stderr, "[ERROR] ");
     fmt::print(stderr, format, std::forward<T>(args)...);
-    fmt::print(stderr, "{}", Terminal::Color::normal);
+    fmt::print(stderr, "{}", Terminal::normal);
     fmt::print(stderr, "\n");
 }
 

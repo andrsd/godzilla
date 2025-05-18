@@ -12,51 +12,67 @@ TEST(TerminalTest, colors)
     EXPECT_FALSE(Terminal::has_colors());
 }
 
-TEST(TerminalTest, ostream_operator_w_colors)
+TEST(TerminalTest, ostream_operator_w_colors_color)
 {
     Terminal::set_colors(true);
     std::ostringstream oss;
-    oss << Terminal::Color::red;
-    EXPECT_STREQ(oss.str().c_str(), Terminal::Color::red);
+    oss << Terminal::red;
+    EXPECT_STREQ(oss.str().c_str(), Terminal::red);
 }
 
-TEST(TerminalTest, ostream_operator_wo_colors)
+TEST(TerminalTest, ostream_operator_wo_colors_color)
 {
     Terminal::set_colors(false);
     std::ostringstream oss;
-    oss << Terminal::Color::red;
+    oss << Terminal::red;
     EXPECT_STREQ(oss.str().c_str(), "");
+}
+
+TEST(TerminalTest, ostream_operator_w_colors_code)
+{
+    Terminal::set_colors(true);
+    std::ostringstream oss;
+    oss << Terminal::erase_line;
+    EXPECT_STREQ(oss.str().c_str(), Terminal::erase_line);
+}
+
+TEST(TerminalTest, ostream_operator_wo_colors_code)
+{
+    Terminal::set_colors(false);
+    std::ostringstream oss;
+    oss << Terminal::erase_line;
+    EXPECT_STREQ(oss.str().c_str(), Terminal::erase_line);
 }
 
 TEST(TerminalTest, string_operator)
 {
-    const std::string & r = Terminal::Color::red;
+    const std::string & r = Terminal::red;
     EXPECT_EQ(r, "\33[31m");
 }
 
 TEST(TerminalTest, fmt_formatter)
 {
-    std::string s = fmt::format("{}", Terminal::Color::red);
-    EXPECT_STREQ(s.c_str(), Terminal::Color::red);
+    std::string s = fmt::format("{}", Terminal::red);
+    EXPECT_STREQ(s.c_str(), Terminal::red);
 }
 
 TEST(TerminalTest, color_codes)
 {
-    EXPECT_STREQ(Terminal::Color::black, "\33[30m");
-    EXPECT_STREQ(Terminal::Color::red, "\33[31m");
-    EXPECT_STREQ(Terminal::Color::green, "\33[32m");
-    EXPECT_STREQ(Terminal::Color::yellow, "\33[33m");
-    EXPECT_STREQ(Terminal::Color::blue, "\33[34m");
-    EXPECT_STREQ(Terminal::Color::magenta, "\33[35m");
-    EXPECT_STREQ(Terminal::Color::cyan, "\33[36m");
-    EXPECT_STREQ(Terminal::Color::white, "\33[37m");
-    EXPECT_STREQ(Terminal::Color::normal, "\33[39m");
+    EXPECT_STREQ(Terminal::black, "\33[30m");
+    EXPECT_STREQ(Terminal::red, "\33[31m");
+    EXPECT_STREQ(Terminal::green, "\33[32m");
+    EXPECT_STREQ(Terminal::yellow, "\33[33m");
+    EXPECT_STREQ(Terminal::blue, "\33[34m");
+    EXPECT_STREQ(Terminal::magenta, "\33[35m");
+    EXPECT_STREQ(Terminal::cyan, "\33[36m");
+    EXPECT_STREQ(Terminal::white, "\33[37m");
+    EXPECT_STREQ(Terminal::normal, "\33[39m");
 }
 
 TEST(TerminalTest, codes)
 {
-    EXPECT_STREQ(Terminal::Code::erase_screen, "\033[2J");
-    EXPECT_STREQ(Terminal::Code::erase_line, "\033[2K");
-    EXPECT_STREQ(Terminal::Code::erase_ln_to_cursor, "\033[1K");
-    EXPECT_STREQ(Terminal::Code::erase_ln_from_cursor, "\033[0K");
+    EXPECT_STREQ(Terminal::erase_screen, "\033[2J");
+    EXPECT_STREQ(Terminal::erase_line, "\033[2K");
+    EXPECT_STREQ(Terminal::erase_ln_to_cursor, "\033[1K");
+    EXPECT_STREQ(Terminal::erase_ln_from_cursor, "\033[0K");
 }
