@@ -1,13 +1,11 @@
 // SPDX-FileCopyrightText: 2023 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/App.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/TecplotOutput.h"
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/UnstructuredMesh.h"
-#include "godzilla/Validation.h"
 #include "godzilla/Utils.h"
 #include "godzilla/Exception.h"
 #include <cassert>
@@ -18,21 +16,23 @@ namespace godzilla {
 
 namespace {
 
-const char *
+#ifdef GODZILLA_WITH_TECIOCPP
+
+teciocpp::ZoneType
 get_zone_type(PolytopeType elem_type)
 {
     CALL_STACK_MSG();
     switch (elem_type) {
     case PolytopeType::SEGMENT:
-        return "FELINESEG";
+        return teciocpp::ZoneType::FELINE;
     case PolytopeType::TRIANGLE:
-        return "FETRIANGLE";
+        return teciocpp::ZoneType::FETRIANGLE;
     case PolytopeType::QUADRILATERAL:
-        return "FEQUADRILATERAL";
+        return teciocpp::ZoneType::FEQUADRILATERAL;
     case PolytopeType::TETRAHEDRON:
-        return "FETETRAHEDRON";
+        return teciocpp::ZoneType::FETETRAHEDRON;
     case PolytopeType::HEXAHEDRON:
-        return "FEBRICK";
+        return teciocpp::ZoneType::FEBRICK;
     default:
         error("Unsupported type.");
     }
@@ -65,6 +65,8 @@ get_elem_node_ordering(PolytopeType elem_type)
     }
 }
 
+#endif
+
 } // namespace
 
 Parameters
@@ -74,75 +76,65 @@ TecplotOutput::parameters()
     params.add_param<std::vector<std::string>>(
         "variables",
         "List of variables to be stored. If not specified, all variables will be stored.");
-    params.add_param<std::string>("format", "binary", "Format of the file [binary, ascii]");
     return params;
 }
 
 TecplotOutput::TecplotOutput(const Parameters & params) :
     FileOutput(params),
-    format(BINARY),
-    dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem())),
-    mesh(dpi ? dpi->get_mesh() : nullptr),
-    variable_names(get_param<std::vector<std::string>>("variables")),
+    mesh(nullptr),
+#ifdef GODZILLA_WITH_TECIOCPP
     file(nullptr),
-    header_written(false),
-    n_shared_vars(-1),
-    n_zones(-1),
-    element_id_var_index(-1)
+    n_zones(0),
+#endif
+    variable_names(get_param<std::vector<std::string>>("variables"))
 {
     CALL_STACK_MSG();
-    if (this->dpi == nullptr)
+#ifdef GODZILLA_WITH_TECIOCPP
+    if (get_discrete_problem_interface() == nullptr)
         log_error("Tecplot output can be only used with finite element problems.");
-    if (this->mesh == nullptr)
-        log_error("Tecplot output can be only used with unstructured meshes.");
+#else
+    log_error("Unable to use TecplotOutput, godzilla was not built with teciocpp.");
+#endif
 }
 
 TecplotOutput::~TecplotOutput()
 {
     CALL_STACK_MSG();
-    close_file();
+#ifdef GODZILLA_WITH_TECIOCPP
+    if (this->file)
+        this->file->close();
+#endif
 }
 
 std::string
 TecplotOutput::get_file_ext() const
 {
     CALL_STACK_MSG();
-    switch (this->format) {
-    case BINARY:
-        return { "plt" };
-    case ASCII:
-        return { "dat" };
-    default:
-        throw InternalError("Unknown tecplot format");
-    }
+#ifdef GODZILLA_WITH_TECIOCPP
+    return "szplt";
+#else
+    return {};
+#endif
 }
 
 void
 TecplotOutput::create()
 {
     CALL_STACK_MSG();
+#ifdef GODZILLA_WITH_TECIOCPP
     FileOutput::create();
 
-    assert(this->dpi != nullptr);
+    auto dpi = get_discrete_problem_interface();
+    assert(dpi != nullptr);
     assert(get_problem() != nullptr);
 
-    auto fmt_str = get_param<std::string>("format");
-    if (validation::in(fmt_str, { "binary", "ascii" })) {
-        std::string fmt = utils::to_lower(fmt_str);
-        if (fmt == "binary") {
-            this->format = BINARY;
-            log_error(
-                "Output to a binary format is not implemented yet. Use 'format: ascii' instead.");
-        }
-        else if (fmt == "ascii")
-            this->format = ASCII;
-    }
-    else
-        log_error("The 'format' parameter can be either 'binary' or 'ascii'.");
+    this->mesh = dpi->get_mesh();
+    if (this->mesh == nullptr)
+        log_error("Tecplot output can be only used with unstructured meshes.");
 
     // Get names of all variables that will be stored
-    auto flds = this->dpi->get_field_names();
-    auto aux_flds = this->dpi->get_aux_field_names();
+    auto flds = dpi->get_field_names();
+    auto aux_flds = dpi->get_aux_field_names();
     if (this->variable_names.empty()) {
         this->field_var_names = flds;
         this->aux_field_var_names = aux_flds;
@@ -166,312 +158,234 @@ TecplotOutput::create()
     this->nodal_var_fids.clear();
     this->nodal_aux_var_fids.clear();
     for (auto & name : this->field_var_names) {
-        Int fid = this->dpi->get_field_id(name);
-        Int order = this->dpi->get_field_order(fid);
+        auto fid = dpi->get_field_id(name);
+        auto order = dpi->get_field_order(fid);
         if (order == 0)
             log_error("Elemental fields are not supported yet");
         else
             this->nodal_var_fids.push_back(fid);
     }
     for (auto & name : this->aux_field_var_names) {
-        Int fid = this->dpi->get_aux_field_id(name);
-        Int order = this->dpi->get_aux_field_order(fid);
+        auto fid = dpi->get_aux_field_id(name);
+        auto order = dpi->get_aux_field_order(fid);
         if (order == 0)
             log_error("Auxiliary elemental fields are not supported yet");
         else
             this->nodal_aux_var_fids.push_back(fid);
     }
+
+    assert(this->mesh != nullptr);
+    auto dim = this->mesh->get_dimension();
+    assert(dim >= 1 && dim <= 3);
+    for (Int i = 0; i < dim; ++i)
+        this->shared_vars.push_back(true);
+    int32_t var_idx = dim;
+    for (auto & fid : this->nodal_var_fids) {
+        auto nc = dpi->get_field_num_components(fid);
+        for (Int i = 0; i < nc; ++i) {
+            this->nodal_var_idxs.push_back(++var_idx);
+            this->shared_vars.push_back(false);
+        }
+    }
+    for (auto & fid : this->nodal_aux_var_fids) {
+        auto nc = dpi->get_aux_field_num_components(fid);
+        for (Int i = 0; i < nc; ++i) {
+            this->nodal_aux_var_idxs.push_back(++var_idx);
+            this->shared_vars.push_back(false);
+        }
+    }
+#endif
 }
 
 void
 TecplotOutput::output_step()
 {
     CALL_STACK_MSG();
+#ifdef GODZILLA_WITH_TECIOCPP
     if (this->file == nullptr)
         open_file();
 
-    if (!this->header_written) {
-        write_header();
-        write_dataset_aux_data();
-        this->n_zones = 0;
-    }
-
     write_zone();
     ++this->n_zones;
+#endif
 }
 
 void
 TecplotOutput::open_file()
 {
     CALL_STACK_MSG();
-    const char * mode = this->format == BINARY ? "wb" : "w";
-    this->file = std::fopen(get_file_name().c_str(), mode);
-    if (this->file == nullptr)
+#ifdef GODZILLA_WITH_TECIOCPP
+    try {
+        this->file = new teciocpp::File(get_comm());
+
+        const std::vector<std::string> coord_names = { "x", "y", "z" };
+        auto dim = this->mesh->get_dimension();
+        assert(dim >= 1 && dim <= 3);
+        std::vector<std::string> var_names;
+        for (Int i = 0; i < dim; ++i)
+            var_names.push_back(coord_names[i]);
+        for (auto & fid : this->nodal_var_fids)
+            add_var_names(fid, var_names);
+        for (auto & fid : this->nodal_aux_var_fids)
+            add_aux_var_names(fid, var_names);
+        this->file->create(get_file_name(), "", var_names);
+    }
+    catch (teciocpp::Exception & e) {
         throw Exception("Could not open file '{}' for writing.", get_file_name());
-}
-
-void
-TecplotOutput::close_file()
-{
-    CALL_STACK_MSG();
-    std::fclose(this->file);
-}
-
-void
-TecplotOutput::write_header()
-{
-    CALL_STACK_MSG();
-    switch (this->format) {
-    case BINARY:
-        write_header_binary();
-        break;
-    case ASCII:
-        write_header_ascii();
-        break;
     }
-}
-
-void
-TecplotOutput::write_dataset_aux_data()
-{
-    CALL_STACK_MSG();
-    switch (this->format) {
-    case BINARY:
-        break;
-    case ASCII:
-        write_created_by_ascii();
-        break;
-    }
+#endif
 }
 
 void
 TecplotOutput::write_zone()
 {
     CALL_STACK_MSG();
-    switch (this->format) {
-    case BINARY:
-        write_zone_binary();
-        break;
-    case ASCII:
-        write_zone_ascii();
-        break;
-    }
-}
-
-//
-
-void
-TecplotOutput::write_header_binary()
-{
-    CALL_STACK_MSG();
-}
-
-void
-TecplotOutput::write_zone_binary()
-{
-    CALL_STACK_MSG();
-}
-
-//
-
-void
-TecplotOutput::write_header_ascii()
-{
-    CALL_STACK_MSG();
-    auto title = fmt::format("TITLE = \"{}\"\n", "data");
-    write_line(title);
-
-    write_line("VARIABLES =\n");
-
-    auto dim = this->mesh->get_dimension();
-    std::vector<std::string> coord_names = { "x", "y", "z" };
-
-    std::vector<std::string> dts;
-    std::vector<std::string> var_names;
-    for (Int i = 0; i < dim; ++i) {
-        var_names.push_back(coord_names[i]);
-        dts.emplace_back("DOUBLE");
-    }
-    var_names.emplace_back("Node IDs");
-    dts.emplace_back("LONGINT");
-    var_names.emplace_back("Element IDs");
-    dts.emplace_back("LONGINT");
-    this->element_id_var_index = (Int) var_names.size();
-    this->n_shared_vars = (Int) var_names.size();
-    for (auto & vn : this->field_var_names) {
-        var_names.push_back(vn);
-        dts.emplace_back("DOUBLE");
-    }
-    for (auto & vn : this->aux_field_var_names) {
-        var_names.push_back(vn);
-        dts.emplace_back("DOUBLE");
-    }
-
-    this->datatypes = fmt::format("{}", fmt::join(dts, " "));
-
-    for (auto & vn : var_names)
-        write_line(fmt::format("\"{}\"\n", vn));
-}
-
-void
-TecplotOutput::write_created_by_ascii()
-{
-    CALL_STACK_MSG();
-    auto app = get_app();
-    std::time_t now = std::time(nullptr);
-    std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
-    std::string created_by =
-        fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
-    write_line(fmt::format("DATASETAUXDATA {} = \"{}\"\n", "created_by", created_by));
-}
-
-void
-TecplotOutput::write_zone_ascii()
-{
-    CALL_STACK_MSG();
+#ifdef GODZILLA_WITH_TECIOCPP
     // FIXME: allow output for cell sets
     auto cell_range = this->mesh->get_cell_range();
     auto n_cells_in_block = this->mesh->get_num_cells();
     auto polytope_type = this->mesh->get_cell_type(cell_range.first());
-    const char * zone_type = get_zone_type(polytope_type);
-    Int n_nodes = this->mesh->get_num_vertices();
+    auto n_nodes = this->mesh->get_num_vertices();
 
-    write_line("ZONE\n");
-    write_line(
-        fmt::format(" ZONETYPE={}, Nodes={}, Elements={}\n", zone_type, n_nodes, n_cells_in_block));
-
-    Real time = get_problem()->get_time();
-    write_line(fmt::format(" STRANDID=2, SOLUTIONTIME={}\n", time));
-    write_line(fmt::format(" DATAPACKING=BLOCK\n"));
-    write_line(fmt::format(" VARLOCATION=([{}]=CELLCENTERED)\n", this->element_id_var_index));
-
-    write_line(fmt::format(" DT=({})\n", this->datatypes));
-
-    if (this->n_zones > 0) {
-        write_line(fmt::format(" VARSHARELIST = ([1-{}]=1)\n", this->n_shared_vars));
-        write_line(fmt::format(" CONNECTIVITYSHAREZONE = 1\n"));
-    }
+    auto time = get_problem()->get_time();
 
     if (this->n_zones == 0) {
-        write_coordinates_ascii();
-        write_node_ids_ascii();
-        write_element_ids_ascii();
-        write_field_variable_values_ascii();
-        write_connectivity_ascii();
+        auto zn = this->file->zone_create_fe("",
+                                             get_zone_type(polytope_type),
+                                             n_nodes,
+                                             n_cells_in_block,
+                                             this->value_locations,
+                                             false);
+        write_created_by(zn);
+        this->file->set_unsteady_option(zn, time);
+        write_coordinates(zn);
+        write_field_variable_values(zn);
+        write_connectivity(zn);
     }
-    else
-        write_field_variable_values_ascii();
+    else {
+        auto zn = this->file->zone_create_fe("",
+                                             get_zone_type(polytope_type),
+                                             n_nodes,
+                                             n_cells_in_block,
+                                             this->value_locations,
+                                             true,
+                                             this->shared_vars);
+        this->file->set_unsteady_option(zn, time);
+        write_field_variable_values(zn);
+    }
+
+    this->file->flush({ 1 });
+#endif
 }
 
 void
-TecplotOutput::write_coordinates_ascii()
+TecplotOutput::write_created_by(int32_t zone)
 {
     CALL_STACK_MSG();
+#ifdef GODZILLA_WITH_TECIOCPP
+    auto app = get_app();
+    auto now = std::time(nullptr);
+    auto datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
+    auto created_by =
+        fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
+    this->file->add_aux_data(zone, "created_by", created_by);
+#endif
+}
+
+void
+TecplotOutput::write_coordinates(int32_t zone)
+{
+    CALL_STACK_MSG();
+#ifdef GODZILLA_WITH_TECIOCPP
+    auto rank = get_comm().rank();
+
     auto dim = this->mesh->get_dimension();
-    auto coord = this->mesh->get_coordinates_local();
-    auto xyz = coord.get_array_read();
-    auto n_coords = coord.get_size() / dim;
+    auto coord_vec = this->mesh->get_coordinates_local();
+    auto coord = coord_vec.get_array_read();
+    auto n_coords = coord_vec.get_size() / dim;
+    std::vector<double> xyz(n_coords);
     for (Int d = 0; d < dim; ++d) {
         for (Int i = 0; i < n_coords; ++i) {
-            write_line(fmt::format(" {:f}", xyz[i * dim + d]));
-            if ((i + 1) % 10 == 0)
-                write_line("\n");
+            xyz[i] = coord[i * dim + d];
         }
-        write_line("\n");
+        this->file->zone_var_write(zone, d + 1, rank, xyz);
     }
-    coord.restore_array_read(xyz);
+    coord_vec.restore_array_read(coord);
+#endif
 }
 
 void
-TecplotOutput::write_node_ids_ascii()
+TecplotOutput::write_connectivity(int32_t zone)
 {
     CALL_STACK_MSG();
-    auto n_elems = this->mesh->get_num_cells();
-    for (auto & vertex_id : this->mesh->get_vertex_range()) {
-        auto node_id = vertex_id - n_elems;
-        write_line(fmt::format(" {}", node_id));
-        if ((node_id + 1) % 10 == 0)
-            write_line("\n");
-    }
-    write_line("\n");
-}
-
-void
-TecplotOutput::write_element_ids_ascii()
-{
-    CALL_STACK_MSG();
-    for (auto & elem_id : this->mesh->get_cell_range()) {
-        write_line(fmt::format(" {}", elem_id));
-        if ((elem_id + 1) % 10 == 0)
-            write_line("\n");
-    }
-    write_line("\n");
-}
-
-void
-TecplotOutput::write_connectivity_ascii()
-{
-    CALL_STACK_MSG();
-    Int n_all_elems = this->mesh->get_num_all_cells();
+#ifdef GODZILLA_WITH_TECIOCPP
+    auto rank = get_comm().rank();
+    std::vector<int32_t> connectivity;
+    connectivity.reserve(this->mesh->get_num_vertices());
+    auto n_all_elems = this->mesh->get_num_all_cells();
     for (auto & cell_id : this->mesh->get_cell_range()) {
         auto polytope_type = this->mesh->get_cell_type(cell_id);
-        const Int * ordering = get_elem_node_ordering(polytope_type);
+        auto * ordering = get_elem_node_ordering(polytope_type);
         auto cell_connect = this->mesh->get_connectivity(cell_id);
         for (std::size_t k = 0; k < cell_connect.size(); ++k)
-            write_line(fmt::format(" {}", cell_connect[ordering[k]] - n_all_elems + 1));
-        write_line("\n");
+            connectivity.push_back(cell_connect[ordering[k]] - n_all_elems + 1);
     }
+    this->file->zone_node_map_write(zone, rank, connectivity);
+#endif
 }
 
 void
-TecplotOutput::write_field_variable_values_ascii()
+TecplotOutput::write_field_variable_values(int32_t zone)
 {
     CALL_STACK_MSG();
-    write_nodal_field_variable_values_ascii();
+#ifdef GODZILLA_WITH_TECIOCPP
+    write_nodal_field_variable_values(zone);
+#endif
 }
 
 void
-TecplotOutput::write_nodal_field_variable_values_ascii()
+TecplotOutput::write_nodal_field_variable_values(int32_t zone)
 {
     CALL_STACK_MSG();
-    this->dpi->compute_solution_vector_local();
-    auto sln = this->dpi->get_solution_vector_local();
+#ifdef GODZILLA_WITH_TECIOCPP
+    auto rank = get_comm().rank();
+    auto dpi = get_discrete_problem_interface();
+
+    auto n_nodes = this->mesh->get_num_vertices();
+    auto n_elems = this->mesh->get_num_cells();
+    std::vector<double> vals(n_nodes);
+
+    dpi->compute_solution_vector_local();
+    auto sln = dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
-    for (auto fid : this->nodal_var_fids) {
-        Int nc = this->dpi->get_field_num_components(fid);
-        for (Int c = 0; c < nc; ++c) {
+    for (auto [j, fid] : enumerate(this->nodal_var_fids)) {
+        auto nc = dpi->get_field_num_components(fid);
+        for (Int c = 0; c < nc; ++c, ++j) {
             for (auto n : this->mesh->get_vertex_range()) {
-                Int offset = this->dpi->get_field_dof(n, fid);
-                write_line(fmt::format(" {:f}", sln_vals[offset + c]));
+                auto offset = dpi->get_field_dof(n, fid);
+                vals[n - n_elems] = sln_vals[offset + c];
             }
-            write_line("\n");
+            this->file->zone_var_write(zone, this->nodal_var_idxs[j], rank, vals);
         }
     }
     sln.restore_array_read(sln_vals);
 
-    auto aux_sln = this->dpi->get_aux_solution_vector_local();
+    auto aux_sln = dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
     if (aux_sln_vals) {
-        for (auto fid : this->nodal_aux_var_fids) {
-            Int nc = this->dpi->get_aux_field_num_components(fid);
-            for (Int c = 0; c < nc; ++c) {
+        for (auto [j, fid] : enumerate(this->nodal_aux_var_fids)) {
+            auto nc = dpi->get_aux_field_num_components(fid);
+            for (Int c = 0; c < nc; ++c, ++j) {
                 for (auto n : this->mesh->get_vertex_range()) {
-                    Int offset = this->dpi->get_aux_field_dof(n, fid);
-                    write_line(fmt::format(" {:f}", aux_sln_vals[offset + c]));
+                    auto offset = dpi->get_aux_field_dof(n, fid);
+                    vals[n - n_elems] = sln_vals[offset + c];
                 }
-                write_line("\n");
+                this->file->zone_var_write(zone, this->nodal_aux_var_idxs[j], rank, vals);
             }
         }
         aux_sln.restore_array_read(aux_sln_vals);
     }
-}
-
-void
-TecplotOutput::write_line(const std::string & line)
-{
-    CALL_STACK_MSG();
-    assert(this->file != nullptr);
-    std::fputs(line.c_str(), this->file);
+#endif
 }
 
 } // namespace godzilla

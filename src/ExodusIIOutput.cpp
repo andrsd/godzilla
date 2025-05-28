@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/App.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/ExodusIIOutput.h"
@@ -110,9 +109,7 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     cont(false),
     discont(false),
     variable_names(get_param<std::vector<std::string>>("variables")),
-    dpi(dynamic_cast<DiscreteProblemInterface *>(get_problem())),
     dgpi(dynamic_cast<DGProblemInterface *>(get_problem())),
-    mesh(nullptr),
     exo(nullptr),
     step_num(1),
     mesh_stored(false)
@@ -144,14 +141,16 @@ ExodusIIOutput::create()
     CALL_STACK_MSG();
     FileOutput::create();
 
-    this->mesh = this->dpi ? this->dpi->get_mesh()
-                           : get_param<MeshObject *>("_mesh_obj")->get_mesh<UnstructuredMesh>();
+    auto dpi = get_discrete_problem_interface();
+
+    this->mesh =
+        dpi ? dpi->get_mesh() : get_param<MeshObject *>("_mesh_obj")->get_mesh<UnstructuredMesh>();
     if (this->mesh == nullptr)
         log_error("ExodusII output can be only used with unstructured meshes.");
 
-    if (this->dpi) {
-        auto flds = this->dpi->get_field_names();
-        auto aux_flds = this->dpi->get_aux_field_names();
+    if (dpi) {
+        auto flds = dpi->get_field_names();
+        auto aux_flds = dpi->get_aux_field_names();
         auto & pps = get_problem()->get_postprocessor_names();
 
         if (this->variable_names.empty()) {
@@ -527,52 +526,11 @@ ExodusIIOutput::write_face_sets()
 }
 
 void
-ExodusIIOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
-{
-    CALL_STACK_MSG();
-    const std::string & name = this->dpi->get_field_name(fid);
-    Int nc = this->dpi->get_field_num_components(fid);
-    if (nc == 1)
-        var_names.push_back(name);
-    else {
-        for (Int c = 0; c < nc; ++c) {
-            std::string comp_name = this->dpi->get_field_component_name(fid, c);
-            std::string s;
-            if (comp_name.empty())
-                s = fmt::format("{}_{}", name, c);
-            else
-                s = fmt::format("{}", comp_name);
-            var_names.push_back(s);
-        }
-    }
-}
-
-void
-ExodusIIOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
-{
-    CALL_STACK_MSG();
-    const std::string & name = this->dpi->get_aux_field_name(fid);
-    Int nc = this->dpi->get_aux_field_num_components(fid);
-    if (nc == 1)
-        var_names.push_back(name);
-    else {
-        for (Int c = 0; c < nc; ++c) {
-            std::string comp_name = this->dpi->get_aux_field_component_name(fid, c);
-            std::string s;
-            if (comp_name.empty())
-                s = fmt::format("{}_{}", name, c);
-            else
-                s = fmt::format("{}", comp_name);
-            var_names.push_back(s);
-        }
-    }
-}
-
-void
 ExodusIIOutput::write_all_variable_names()
 {
     CALL_STACK_MSG();
 
+    auto dpi = get_discrete_problem_interface();
     this->nodal_var_fids.clear();
     this->nodal_aux_var_fids.clear();
     this->elem_var_fids.clear();
@@ -580,8 +538,8 @@ ExodusIIOutput::write_all_variable_names()
     std::vector<std::string> nodal_var_names;
     std::vector<std::string> elem_var_names;
     for (auto & name : this->field_var_names) {
-        Int fid = this->dpi->get_field_id(name);
-        Int order = this->dpi->get_field_order(fid);
+        auto fid = dpi->get_field_id(name);
+        auto order = dpi->get_field_order(fid);
         if (order == 0) {
             add_var_names(fid, elem_var_names);
             this->elem_var_fids.push_back(fid);
@@ -592,8 +550,8 @@ ExodusIIOutput::write_all_variable_names()
         }
     }
     for (auto & name : this->aux_field_var_names) {
-        Int fid = this->dpi->get_aux_field_id(name);
-        Int order = this->dpi->get_aux_field_order(fid);
+        auto fid = dpi->get_aux_field_id(name);
+        auto order = dpi->get_aux_field_order(fid);
         if (order == 0) {
             add_aux_var_names(fid, elem_var_names);
             this->elem_aux_var_fids.push_back(fid);
@@ -625,7 +583,8 @@ void
 ExodusIIOutput::write_field_variables()
 {
     CALL_STACK_MSG();
-    this->dpi->compute_solution_vector_local();
+    auto dpi = get_discrete_problem_interface();
+    dpi->compute_solution_vector_local();
     if (this->cont)
         write_nodal_variables_continuous();
     else if (this->discont)
@@ -637,10 +596,12 @@ void
 ExodusIIOutput::write_nodal_variables_continuous()
 {
     CALL_STACK_MSG();
-    auto sln = this->dpi->get_solution_vector_local();
+    auto dpi = get_discrete_problem_interface();
+
+    auto sln = dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
 
-    auto aux_sln = this->dpi->get_aux_solution_vector_local();
+    auto aux_sln = dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
 
     Int n_all_elems = this->mesh->get_num_all_cells();
@@ -648,8 +609,8 @@ ExodusIIOutput::write_nodal_variables_continuous()
     for (auto n : this->mesh->get_vertex_range()) {
         int exo_var_id = 1;
         for (auto fid : this->nodal_var_fids) {
-            Int offset = this->dpi->get_field_dof(n, fid);
-            Int nc = this->dpi->get_field_num_components(fid);
+            auto offset = dpi->get_field_dof(n, fid);
+            auto nc = dpi->get_field_num_components(fid);
             for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                 int exo_idx = (int) (n - n_all_elems + 1);
                 this->exo->write_partial_nodal_var(this->step_num,
@@ -661,8 +622,8 @@ ExodusIIOutput::write_nodal_variables_continuous()
         }
         if (aux_sln_vals) {
             for (auto fid : this->nodal_aux_var_fids) {
-                Int offset = this->dpi->get_aux_field_dof(n, fid);
-                Int nc = this->dpi->get_aux_field_num_components(fid);
+                auto offset = dpi->get_aux_field_dof(n, fid);
+                auto nc = dpi->get_aux_field_num_components(fid);
                 for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     int exo_idx = (int) (n - n_all_elems + 1);
                     this->exo->write_partial_nodal_var(this->step_num,
@@ -756,16 +717,18 @@ void
 ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, const Int * cells)
 {
     CALL_STACK_MSG();
+    auto dpi = get_discrete_problem_interface();
+
     Range elem_range;
     if (cells == nullptr) {
         elem_range = this->mesh->get_cell_range();
         n_elems_in_block = elem_range.size();
     }
 
-    auto sln = this->dpi->get_solution_vector_local();
+    auto sln = dpi->get_solution_vector_local();
     const Scalar * sln_vals = sln.get_array_read();
 
-    auto aux_sln = this->dpi->get_aux_solution_vector_local();
+    auto aux_sln = dpi->get_aux_solution_vector_local();
     const Scalar * aux_sln_vals = (Vec) aux_sln != nullptr ? aux_sln.get_array_read() : nullptr;
 
     for (Int i = 0; i < n_elems_in_block; ++i) {
@@ -777,8 +740,8 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
 
         int exo_var_id = 1;
         for (auto & fid : this->elem_var_fids) {
-            Int offset = this->dpi->get_field_dof(elem_id, fid);
-            Int nc = this->dpi->get_field_num_components(fid);
+            auto offset = dpi->get_field_dof(elem_id, fid);
+            auto nc = dpi->get_field_num_components(fid);
             for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                 int exo_idx = (int) (i + 1);
                 this->exo->write_partial_elem_var(this->step_num,
@@ -790,8 +753,8 @@ ExodusIIOutput::write_block_elem_variables(int blk_id, Int n_elems_in_block, con
         }
         if (aux_sln_vals) {
             for (auto & fid : this->elem_aux_var_fids) {
-                Int offset = this->dpi->get_aux_field_dof(elem_id, fid);
-                Int nc = this->dpi->get_aux_field_num_components(fid);
+                auto offset = dpi->get_aux_field_dof(elem_id, fid);
+                auto nc = dpi->get_aux_field_num_components(fid);
                 for (Int c = 0; c < nc; ++c, ++exo_var_id) {
                     int exo_idx = (int) (i + 1);
                     this->exo->write_partial_elem_var(this->step_num,

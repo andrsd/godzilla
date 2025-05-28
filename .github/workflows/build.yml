@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: "${{ matrix.os }}, ${{ matrix.build }}, py-${{ matrix.python-version }}, petsc-${{ matrix.petsc }}"
+    name: "${{ matrix.os }}, ${{ matrix.build }}, py-${{ matrix.python-version }}, petsc-${{ matrix.petsc }}, teciocpp-${{ matrix.teciocpp }}"
     defaults:
       run:
         shell: bash -el {0}
@@ -22,14 +22,22 @@ jobs:
             python-version: "3.9"
             petsc: 3.20.6
             build: Debug
+            teciocpp: OFF
           - os: ubuntu-22.04
             python-version: "3.9"
             petsc: 3.20.6
             build: Release
+            teciocpp: OFF
           - os: ubuntu-22.04
             python-version: "3.9"
             petsc: 3.21.6
             build: Release
+            teciocpp: OFF
+          - os: ubuntu-22.04
+            python-version: "3.9"
+            petsc: 3.21.6
+            build: Release
+            teciocpp: ON
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up miniconda
@@ -54,12 +62,14 @@ jobs:
             fmt==9.1.0 \
             yaml-cpp=0.8.0 \
             exodusIIcpp==2.0 \
+            teciocpp \
             lcov
 
       - name: Configure
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
             -DCMAKE_BUILD_TYPE=${{ matrix.build }} \
+            -DGODZILLA_WITH_TECIOCPP=${{ matrix.teciocpp }} \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
             -DGODZILLA_CODE_COVERAGE=YES
@@ -79,7 +89,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-${{ matrix.os }}-${{ matrix.build }}-petsc-${{ matrix.petsc }}
+          name: test-results-${{ matrix.os }}-${{ matrix.build }}-petsc-${{ matrix.petsc }}-teciocpp-${{ matrix.teciocpp }}
           path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
 
       - name: Generate code coverage
@@ -88,7 +98,7 @@ jobs:
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-${{ matrix.os }}-${{ matrix.build }}-petsc-${{ matrix.petsc }}
+          name: coverage-${{ matrix.os }}-${{ matrix.build }}-petsc-${{ matrix.petsc }}-teciocpp-${{ matrix.teciocpp }}
           path: ${{ github.workspace }}/build/coverage.info
 
   upload-to-codecov:

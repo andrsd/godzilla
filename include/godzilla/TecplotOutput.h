@@ -4,19 +4,18 @@
 #pragma once
 
 #include "godzilla/FileOutput.h"
+#ifdef GODZILLA_WITH_TECIOCPP
+    #include "teciocpp/teciocpp.h"
+#endif
 
 namespace godzilla {
 
-class DiscreteProblemInterface;
 class UnstructuredMesh;
 
 /// Tecplot output
 ///
-/// This saves the solution into an Tecplot (.plt) file.
+/// This saves the solution into an Tecplot (.szplt) file.
 /// This output works only with finite element problems
-///
-/// References:
-/// [1] https://tecplot.azureedge.net/products/360/current/360_data_format_guide.pdf
 class TecplotOutput : public FileOutput {
 public:
     explicit TecplotOutput(const Parameters & params);
@@ -27,58 +26,42 @@ public:
 
 protected:
     void open_file();
-    void close_file();
-    void write_header();
-    void write_dataset_aux_data();
     void write_zone();
-
-    void write_header_binary();
-    void write_zone_binary();
-
-    void write_header_ascii();
-    void write_created_by_ascii();
-    void write_zone_ascii();
-    void write_coordinates_ascii();
-    void write_node_ids_ascii();
-    void write_element_ids_ascii();
-    void write_connectivity_ascii();
-    void write_field_variable_values_ascii();
-    void write_nodal_field_variable_values_ascii();
-
-    void write_line(const std::string & line);
+    void write_created_by(int32_t zone);
+    void write_coordinates(int32_t zone);
+    void write_connectivity(int32_t zone);
+    void write_field_variable_values(int32_t zone);
+    void write_nodal_field_variable_values(int32_t zone);
 
 private:
-    enum Format { BINARY, ASCII } format;
-
     std::string get_file_ext() const override;
 
-    /// FE problem interface (convenience pointer)
-    DiscreteProblemInterface * dpi;
     /// Unstructured mesh
     UnstructuredMesh * mesh;
-    /// Variable names to be stored
-    const std::vector<std::string> & variable_names;
-
+#ifdef GODZILLA_WITH_TECIOCPP
     /// File to write into
-    std::FILE * file;
-    /// Was header already written to the output file
-    bool header_written;
-    /// Number of shared variables
-    Int n_shared_vars;
+    teciocpp::File * file;
+    /// Variable value locations
+    std::vector<teciocpp::ValueLocation> value_locations;
+    /// Shared variables
+    std::vector<bool> shared_vars;
     /// Number of zones
     Int n_zones;
-    /// Datatypes for variables
-    std::string datatypes;
-    /// Variable index of the "Element IDs" field
-    Int element_id_var_index;
+#endif
+    /// Variable names to be stored
+    const std::vector<std::string> & variable_names;
     /// List of field variable names to output
     std::vector<std::string> field_var_names;
-    /// List of auxiliary field variable names to output
-    std::vector<std::string> aux_field_var_names;
     /// List of nodal variable field IDs
     std::vector<Int> nodal_var_fids;
+    /// List of variable indices
+    std::vector<int32_t> nodal_var_idxs;
+    /// List of auxiliary field variable names to output
+    std::vector<std::string> aux_field_var_names;
     /// List of nodal auxiliary variable field IDs
     std::vector<Int> nodal_aux_var_fids;
+    /// List of auxiliary variable indices
+    std::vector<int32_t> nodal_aux_var_idxs;
 
 public:
     static Parameters parameters();

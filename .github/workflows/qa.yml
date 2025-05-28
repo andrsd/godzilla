@@ -33,11 +33,13 @@ jobs:
             fmt==9.1.0 \
             petsc==3.20.6 \
             yaml-cpp==0.8.0 \
-            exodusIIcpp==2.0
+            exodusIIcpp==2.0 \
+            teciocpp
 
       - name: Configure
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
+            -DGODZILLA_WITH_TECIOCPP=ON \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
             -DCMAKE_EXPORT_COMPILE_COMMANDS=on
@@ -93,11 +95,13 @@ jobs:
             fmt==9.1.0 \
             petsc==3.20.6 \
             yaml-cpp==0.8.0 \
-            exodusIIcpp==2.0
+            exodusIIcpp==2.0 \
+            teciocpp
 
       - name: Configure
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
+            -DGODZILLA_WITH_TECIOCPP=ON \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES
 
