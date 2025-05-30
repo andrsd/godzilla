@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include <petscsystypes.h>
 #include "GodzillaApp_test.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/UnstructuredMesh.h"
@@ -25,6 +26,19 @@ public:
         DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
         DM dm;
+#if PETSC_VERSION_GE(3, 22, 0)
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                        1,
+                                        PETSC_TRUE,
+                                        faces,
+                                        lower,
+                                        upper,
+                                        periodicity,
+                                        PETSC_TRUE,
+                                        0,
+                                        PETSC_FALSE,
+                                        &dm));
+#else
         PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                         1,
                                         PETSC_TRUE,
@@ -34,6 +48,7 @@ public:
                                         periodicity,
                                         PETSC_TRUE,
                                         &dm));
+#endif
         return new UnstructuredMesh(dm);
     }
 };
@@ -59,6 +74,19 @@ public:
                                           DM_BOUNDARY_GHOSTED };
 
         DM dm;
+#if PETSC_VERSION_GE(3, 22, 0)
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                        3,
+                                        PETSC_FALSE,
+                                        faces,
+                                        lower,
+                                        upper,
+                                        periodicity,
+                                        PETSC_TRUE,
+                                        0,
+                                        PETSC_FALSE,
+                                        &dm));
+#else
         PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                         3,
                                         PETSC_FALSE,
@@ -68,6 +96,7 @@ public:
                                         periodicity,
                                         PETSC_TRUE,
                                         &dm));
+#endif
         auto m = new UnstructuredMesh(dm);
 
         // create "side sets"
@@ -151,8 +180,9 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_THROW_MSG({ auto n = m->get_face_set_name(1234); },
-                     "Face set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(
+        { auto n = m->get_face_set_name(1234); },
+        "Face set ID '1234' does not exist.");
 }
 
 TEST(UnstructuredMeshTest, nonexistent_cell_set)
@@ -166,8 +196,9 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_THROW_MSG({ auto n = m->get_cell_set_name(1234); },
-                     "Cell set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(
+        { auto n = m->get_cell_set_name(1234); },
+        "Cell set ID '1234' does not exist.");
 }
 
 TEST(UnstructuredMeshTest, get_connectivity)

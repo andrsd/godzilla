@@ -38,6 +38,11 @@ jobs:
             petsc: 3.21.6
             build: Release
             teciocpp: ON
+          - os: ubuntu-22.04
+            python-version: "3.9"
+            petsc: 3.22.5
+            build: Release
+            teciocpp: ON
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up miniconda

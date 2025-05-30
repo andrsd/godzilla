@@ -330,8 +330,13 @@ TEST(SectionTest, view)
     s.destroy();
 
     auto output = testing::internal::GetCapturedStdout();
+#if PETSC_VERSION_GE(3, 22, 0)
+    EXPECT_THAT(output, testing::HasSubstr("(   0) dof  2 offset   0"));
+    EXPECT_THAT(output, testing::HasSubstr("(   1) dof  3 offset   2"));
+#else
     EXPECT_THAT(output, testing::HasSubstr("(   0) dim  2 offset   0"));
     EXPECT_THAT(output, testing::HasSubstr("(   1) dim  3 offset   2"));
+#endif
 }
 
 TEST(SectionTest, oper_bool)

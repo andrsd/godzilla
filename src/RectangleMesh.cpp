@@ -97,6 +97,19 @@ RectangleMesh::create_mesh()
     };
 
     DM dm;
+#if PETSC_VERSION_GE(3, 22, 0)
+    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                    2,
+                                    this->simplex,
+                                    faces.data(),
+                                    lower.data(),
+                                    upper.data(),
+                                    periodicity.data(),
+                                    this->interpolate,
+                                    0,
+                                    PETSC_FALSE,
+                                    &dm));
+#else
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     2,
                                     this->simplex,
@@ -106,6 +119,7 @@ RectangleMesh::create_mesh()
                                     periodicity.data(),
                                     this->interpolate,
                                     &dm));
+#endif
     auto * mesh = new UnstructuredMesh(dm);
 
     mesh->remove_label("marker");
