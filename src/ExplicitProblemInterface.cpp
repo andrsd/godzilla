@@ -116,7 +116,11 @@ ExplicitProblemInterface::create_mass_matrix_lumped()
     CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
     Vec v;
+#if PETSC_VERSION_GE(3, 22, 0)
+    PETSC_CHECK(DMCreateMassMatrixLumped(dm, NULL, &v));
+#else
     PETSC_CHECK(DMCreateMassMatrixLumped(dm, &v));
+#endif
     this->M_lumped_inv = Vector(v);
     this->M_lumped_inv.reciprocal();
 }

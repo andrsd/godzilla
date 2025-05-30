@@ -23,6 +23,19 @@ public:
         DMBoundaryType periodicity[1] = { DM_BOUNDARY_GHOSTED };
 
         DM dm;
+#if PETSC_VERSION_GE(3, 22, 0)
+        PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                        1,
+                                        PETSC_TRUE,
+                                        faces,
+                                        lower,
+                                        upper,
+                                        periodicity,
+                                        PETSC_TRUE,
+                                        0,
+                                        PETSC_FALSE,
+                                        &dm));
+#else
         PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                         1,
                                         PETSC_TRUE,
@@ -32,6 +45,7 @@ public:
                                         periodicity,
                                         PETSC_TRUE,
                                         &dm));
+#endif
         return new UnstructuredMesh(dm);
     }
 };

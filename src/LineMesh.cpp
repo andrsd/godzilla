@@ -64,6 +64,19 @@ LineMesh::create_mesh()
     std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
 
     DM dm;
+#if PETSC_VERSION_GE(3, 22, 0)
+    PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
+                                    1,
+                                    PETSC_TRUE,
+                                    faces.data(),
+                                    lower.data(),
+                                    upper.data(),
+                                    periodicity.data(),
+                                    this->interpolate,
+                                    0,
+                                    PETSC_FALSE,
+                                    &dm));
+#else
     PETSC_CHECK(DMPlexCreateBoxMesh(get_comm(),
                                     1,
                                     PETSC_TRUE,
@@ -73,6 +86,7 @@ LineMesh::create_mesh()
                                     periodicity.data(),
                                     this->interpolate,
                                     &dm));
+#endif
     auto mesh = new UnstructuredMesh(dm);
 
     mesh->remove_label("marker");

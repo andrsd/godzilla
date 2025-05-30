@@ -19,6 +19,19 @@ TEST(InterpolationTest, test_1d)
     std::array<Int, 1> faces = { 4 };
     std::array<DMBoundaryType, 1> periodicity = { DM_BOUNDARY_GHOSTED };
     DM dm;
+#if PETSC_VERSION_GE(3, 22, 0)
+    PETSC_CHECK(DMPlexCreateBoxMesh(comm,
+                                    1,
+                                    PETSC_TRUE,
+                                    faces.data(),
+                                    lower.data(),
+                                    upper.data(),
+                                    periodicity.data(),
+                                    PETSC_FALSE,
+                                    0,
+                                    PETSC_FALSE,
+                                    &dm));
+#else
     PETSC_CHECK(DMPlexCreateBoxMesh(comm,
                                     1,
                                     PETSC_TRUE,
@@ -28,6 +41,7 @@ TEST(InterpolationTest, test_1d)
                                     periodicity.data(),
                                     PETSC_FALSE,
                                     &dm));
+#endif
     PetscFE fe;
     PETSC_CHECK(PetscFECreateLagrange(comm, dim, 1, PETSC_TRUE, 1, PETSC_DECIDE, &fe));
     PETSC_CHECK(DMSetField(dm, 0, nullptr, (PetscObject) fe));
