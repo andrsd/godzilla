@@ -55,6 +55,10 @@ if (GODZILLA_WITH_MPI)
     target_include_directories(${PROJECT_NAME} PRIVATE ${MPI_C_INCLUDE_DIRS})
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_C)
 endif()
+if (GODZILLA_WITH_TECIOCPP)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC GODZILLA_WITH_TECIOCPP)
+    target_link_libraries(${PROJECT_NAME} PUBLIC teciocpp::teciocpp)
+endif()
 
 
 # install

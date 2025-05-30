@@ -24,6 +24,7 @@ endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${BuildValues})
 
 option(GODZILLA_WITH_MPI "Build with MPI support" YES)
+option(GODZILLA_WITH_TECIOCPP "Build with teciocpp support" NO)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
@@ -36,6 +37,9 @@ find_package(PETSc 3.20 REQUIRED)
 find_package(exodusIIcpp 2.0 REQUIRED)
 find_package(mpicpp-lite 1.7 REQUIRED)
 find_package(h5pp REQUIRED)
+if (GODZILLA_WITH_TECIOCPP)
+    find_package(teciocpp REQUIRED)
+endif()
 
 check_include_file_cxx(cxxabi.h HAVE_CXXABI_H)
 

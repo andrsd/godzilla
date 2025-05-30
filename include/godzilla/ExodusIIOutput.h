@@ -5,7 +5,6 @@
 
 #include "godzilla/FileOutput.h"
 #include "godzilla/Types.h"
-#include "godzilla/UnstructuredMesh.h"
 
 namespace exodusIIcpp {
 class File;
@@ -13,7 +12,7 @@ class File;
 
 namespace godzilla {
 
-class DiscreteProblemInterface;
+class UnstructuredMesh;
 class DGProblemInterface;
 
 /// ExodusII output
@@ -49,8 +48,6 @@ protected:
     void write_elements();
     void write_node_sets();
     void write_face_sets();
-    void add_var_names(Int fid, std::vector<std::string> & var_names);
-    void add_aux_var_names(Int fid, std::vector<std::string> & var_names);
     void write_all_variable_names();
     void write_variables();
     void write_field_variables();
@@ -77,8 +74,6 @@ private:
     bool discont;
     /// Variable names to be stored
     const std::vector<std::string> & variable_names;
-    /// FE problem interface (convenience pointer)
-    DiscreteProblemInterface * dpi;
     /// DG problem interface
     DGProblemInterface * dgpi;
     /// Unstructured mesh
