@@ -5,6 +5,7 @@
 #include "godzilla/Error.h"
 #include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/NestVector.h"
 #include <cassert>
 #include <petscvec.h>
 
@@ -440,6 +441,19 @@ Vector::create_mpi(MPI_Comm comm, Int n, Int N)
     Vec v;
     PETSC_CHECK(VecCreateMPI(comm, n, N, &v));
     return Vector(v);
+}
+
+NestVector
+Vector::create_nest(MPI_Comm comm, const std::vector<Vector> & vecs)
+{
+    CALL_STACK_MSG();
+    std::vector<Vec> vvs;
+    vvs.reserve(vecs.size());
+    for (const auto & v : vecs)
+        vvs.push_back(v);
+    Vec y;
+    PETSC_CHECK(VecCreateNest(comm, vecs.size(), nullptr, vvs.data(), &y));
+    return NestVector(y);
 }
 
 void

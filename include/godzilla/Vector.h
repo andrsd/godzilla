@@ -12,6 +12,8 @@
 
 namespace godzilla {
 
+class NestVector;
+
 class Vector {
 public:
     Vector();
@@ -250,6 +252,12 @@ public:
     /// @param n Local vector length (or PETSC_DECIDE to have calculated if N is given)
     /// @param N global vector length (or PETSC_DETERMINE to have calculated if n is given)
     static Vector create_mpi(MPI_Comm comm, Int n, Int N);
+
+    /// Creates a new vector containing several nested subvectors, each stored separately
+    ///
+    /// @param comm The MPI communicator to use
+    /// @param vecs The subvectors to be nested
+    static NestVector create_nest(MPI_Comm comm, const std::vector<Vector> & vecs);
 
     [[deprecated("")]] static void
     pointwise_min(const Vector & w, const Vector & x, const Vector & y);
