@@ -69,3 +69,35 @@ TEST(NestVector, update)
     v2.destroy();
     nv.destroy();
 }
+
+TEST(NestVector, duplicate)
+{
+    auto v1 = Vector::create_seq(MPI_COMM_WORLD, 3);
+    v1.set_values({ 0, 1, 2 }, { 3, 5, 7 });
+    v1.assemble();
+
+    auto v2 = Vector::create_seq(MPI_COMM_WORLD, 4);
+    v2.set_values({ 0, 1, 2, 3 }, { 2, 4, 6, 8 });
+    v2.assemble();
+
+    auto nv = Vector::create_nest(MPI_COMM_WORLD, { v1, v2 });
+    nv.assemble();
+
+    auto dup = nv.duplicate();
+    copy(nv, dup);
+
+    auto d1 = dup.get_sub_vector(0);
+    std::vector<Real> d1_vals(3);
+    d1.get_values({ 0, 1, 2 }, d1_vals);
+    EXPECT_DOUBLE_EQ(d1_vals[0], 3.);
+    EXPECT_DOUBLE_EQ(d1_vals[1], 5.);
+    EXPECT_DOUBLE_EQ(d1_vals[2], 7.);
+
+    auto d2 = dup.get_sub_vector(1);
+    std::vector<Real> d2_vals(4);
+    d2.get_values({ 0, 1, 2, 3 }, d2_vals);
+    EXPECT_DOUBLE_EQ(d2_vals[0], 2.);
+    EXPECT_DOUBLE_EQ(d2_vals[1], 4.);
+    EXPECT_DOUBLE_EQ(d2_vals[2], 6.);
+    EXPECT_DOUBLE_EQ(d2_vals[3], 8.);
+}
