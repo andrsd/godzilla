@@ -62,4 +62,13 @@ NestVector::set_sub_vectors(const std::vector<Int> & idx, const std::vector<Vect
     PETSC_CHECK(VecNestSetSubVecs(*this, n, idxm, vecs.data()));
 }
 
+NestVector
+NestVector::duplicate() const
+{
+    CALL_STACK_MSG();
+    Vec dup;
+    PETSC_CHECK(VecDuplicate(*this, &dup));
+    return NestVector(dup);
+}
+
 } // namespace godzilla

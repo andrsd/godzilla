@@ -38,6 +38,9 @@ public:
     /// @param idx Indices of component vectors that are to be replaced
     /// @param sx Array of vectors
     void set_sub_vectors(const std::vector<Int> & idx, const std::vector<Vector> & sx);
+
+    /// Duplicate the vector
+    NestVector duplicate() const;
 };
 
 } // namespace godzilla
