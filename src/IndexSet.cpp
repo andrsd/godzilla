@@ -175,7 +175,7 @@ IndexSet::to_std_vector()
     CALL_STACK_MSG();
     std::vector<Int> idxs;
     if (this->indices != nullptr) {
-        Int n = get_size();
+        Int n = get_local_size();
         idxs.assign(this->indices, this->indices + n);
     }
     return idxs;
