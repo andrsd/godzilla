@@ -81,8 +81,8 @@ TecplotOutput::parameters()
 
 TecplotOutput::TecplotOutput(const Parameters & params) :
     FileOutput(params),
-    mesh(nullptr),
 #ifdef GODZILLA_WITH_TECIOCPP
+    mesh(nullptr),
     file(nullptr),
     n_zones(0),
 #endif
