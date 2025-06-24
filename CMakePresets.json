@@ -24,8 +24,8 @@
             "binaryDir": "build-release-dev",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "CMAKE_CXX_FLAGS_DEBUG": "-O3",
-                "CMAKE_C_FLAGS_DEBUG": "-O3",
+                "CMAKE_CXX_FLAGS_RELEASE": "-O3",
+                "CMAKE_C_FLAGS_RELEASE": "-O3",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "NO",
                 "GODZILLA_BUILD_EXAMPLES": "NO",
                 "GODZILLA_BUILD_TESTS": "NO",
