@@ -6,6 +6,8 @@
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
 #include "godzilla/Range.h"
+#include <cstdlib>
+#include <new>
 #include <cassert>
 
 namespace godzilla {
@@ -74,9 +76,14 @@ public:
     /// Create an array with specified number of entries
     ///
     /// @param size Number of entries in the array
-    explicit Array1D(Int size) : n(size), data(new T[size]), range(0, size) {}
+    explicit Array1D(Int size) : n(size), data(alloc_align(size)), range(0, size) {}
 
-    explicit Array1D(const Range & rng) : n(rng.last() - rng.first()), data(new T[n]), range(rng) {}
+    explicit Array1D(const Range & rng) :
+        n(rng.last() - rng.first()),
+        data(alloc_align(n)),
+        range(rng)
+    {
+    }
 
     /// Allocate memory for the array with specified number of entries
     ///
@@ -93,7 +100,7 @@ public:
         this->range = rng;
         auto size = rng.last() - rng.first();
         this->n = size;
-        this->data = new T[size];
+        this->data = alloc_align(size);
     }
 
     /// Get number of entries in the array
@@ -127,8 +134,11 @@ public:
     void
     destroy()
     {
-        delete[] this->data;
-        this->data = nullptr;
+        if (this->data) {
+            constexpr std::size_t ALIGNMENT = alignof(T);
+            ::operator delete[](this->data, std::align_val_t(ALIGNMENT));
+            this->data = nullptr;
+        }
         this->n = 0;
     }
 
@@ -263,6 +273,13 @@ public:
     }
 
 private:
+    T *
+    alloc_align(Int size)
+    {
+        constexpr std::size_t ALIGNMENT = alignof(T);
+        return static_cast<T *>(::operator new[](sizeof(T) * size, std::align_val_t(ALIGNMENT)));
+    }
+
     /// Number of entries in the array
     Int n;
     /// Array containing the values
