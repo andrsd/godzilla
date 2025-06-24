@@ -32,6 +32,23 @@
                 "GODZILLA_CODE_COVERAGE": "NO",
                 "GODZILLA_WITH_MPI": "YES"
             }
+        },
+        {
+            "name": "native",
+            "displayName": "Native",
+            "generator": "Unix Makefiles",
+            "binaryDir": "build-native-dev",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_FLAGS_RELEASE": "-O3 -march=native",
+                "CMAKE_C_FLAGS_RELEASE": "-O3 -march=native",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "NO",
+                "GODZILLA_BUILD_EXAMPLES": "NO",
+                "GODZILLA_BUILD_TESTS": "NO",
+                "GODZILLA_CODE_COVERAGE": "NO",
+                "GODZILLA_WITH_MPI": "YES",
+                "GODZILLA_WITH_TECIOCPP": "YES"
+            }
         }
     ],
     "buildPresets": [
@@ -46,6 +63,12 @@
             "displayName": "Release Build",
             "configurePreset": "release",
             "configuration": "Release"
+        },
+        {
+            "name": "native",
+            "displayName": "Native Build",
+            "configurePreset": "native",
+            "configuration": "Native"
         }
     ]
 }
