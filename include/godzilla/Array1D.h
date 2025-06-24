@@ -84,9 +84,7 @@ public:
     void
     create(Int size)
     {
-        this->range = Range(0, size);
-        this->n = size;
-        this->data = new T[size];
+        create(Range(0, size));
     }
 
     void
