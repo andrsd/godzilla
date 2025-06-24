@@ -36,9 +36,9 @@ protected:
 private:
     std::string get_file_ext() const override;
 
+#ifdef GODZILLA_WITH_TECIOCPP
     /// Unstructured mesh
     UnstructuredMesh * mesh;
-#ifdef GODZILLA_WITH_TECIOCPP
     /// File to write into
     teciocpp::File * file;
     /// Variable value locations
