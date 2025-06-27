@@ -246,6 +246,23 @@ public:
 
     static Vector create_seq(MPI_Comm comm, Int n);
 
+    /// Creates a standard, sequential array-style vector, where the user provides the array space
+    /// to store the vector values.
+    ///
+    /// @param comm MPI communicator
+    /// @param bs Block size
+    /// @param n Vector length
+    /// @param array Memory where the vector elements are to be stored.
+    static Vector create_seq(MPI_Comm comm, Int bs, Int n, const Scalar array[]);
+
+    /// Creates a standard, sequential array-style vector, where the user provides the array space
+    /// to store the vector values.
+    ///
+    /// @param comm MPI communicator
+    /// @param bs Block size
+    /// @param array Memory where the vector elements are to be stored.
+    static Vector create_seq(MPI_Comm comm, Int bs, const std::vector<Scalar> & data);
+
     /// Creates a parallel vector.
     ///
     /// @param comm the MPI communicator to use

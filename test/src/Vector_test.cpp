@@ -639,3 +639,21 @@ TEST(VectorTest, copy_is)
     EXPECT_DOUBLE_EQ(full(3), -4.);
     EXPECT_DOUBLE_EQ(full(4), 5.);
 }
+
+TEST(VectorTest, create_seq_w_array_c_array)
+{
+    Scalar data[] = { 3, 7, 9 };
+    auto v = Vector::create_seq(MPI_COMM_WORLD, 1, 3, data);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 7.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+}
+
+TEST(VectorTest, create_seq_w_array_std_vector)
+{
+    std::vector<Scalar> data = { 3, 5, 7 };
+    auto v = Vector::create_seq(MPI_COMM_WORLD, 1, data);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 7.);
+}
