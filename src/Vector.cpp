@@ -461,6 +461,24 @@ Vector::create_mpi(MPI_Comm comm, Int n, Int N)
     return Vector(v);
 }
 
+Vector
+Vector::create_mpi(MPI_Comm comm, Int bs, Int n, Int N, const Scalar array[])
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(VecCreateMPIWithArray(comm, bs, n, N, array, &v));
+    return Vector(v);
+}
+
+Vector
+Vector::create_mpi(MPI_Comm comm, Int bs, const std::vector<Scalar> & data, Int N)
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(VecCreateMPIWithArray(comm, bs, data.size(), N, data.data(), &v));
+    return Vector(v);
+}
+
 NestVector
 Vector::create_nest(MPI_Comm comm, const std::vector<Vector> & vecs)
 {
