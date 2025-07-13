@@ -165,6 +165,15 @@ public:
     }
 
     void
+    set_col(Int col, std::initializer_list<T> vals)
+    {
+        assert(vals.size() == ROWS);
+        Int i = 0;
+        for (const T & val : vals)
+            set(i++, col) = val;
+    }
+
+    void
     set_col(Int col, const std::vector<T> & vals)
     {
         assert(vals.size() == ROWS);
