@@ -136,6 +136,15 @@ public:
             set(row, i) = vals[i];
     }
 
+    void
+    set_row(Int row, std::initializer_list<T> vals)
+    {
+        assert(static_cast<Int>(vals.size()) == COLS);
+        Int i = 0;
+        for (const T & val : vals)
+            set(row, i++) = val;
+    }
+
     /// Set a matrix row at once
     ///
     /// This is a convenience method
