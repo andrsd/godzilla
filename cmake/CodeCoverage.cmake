@@ -138,6 +138,7 @@ if(GODZILLA_CODE_COVERAGE)
                 --capture
                 --directory ${PROJECT_BINARY_DIR}
                 --output-file ${COVERAGE_INFO}
+                --gcov-tool ${GCOV_PATH}
                 ${EXCLUDE_REGEX}
         )
 

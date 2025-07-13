@@ -74,6 +74,7 @@ jobs:
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build \
             -DCMAKE_BUILD_TYPE=${{ matrix.build }} \
+            -DGCOV_PATH=`which x86_64-conda-linux-gnu-gcov` \
             -DGODZILLA_WITH_TECIOCPP=${{ matrix.teciocpp }} \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
