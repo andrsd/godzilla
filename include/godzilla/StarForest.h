@@ -227,6 +227,91 @@ public:
         reduce_end(root.get_data(), leaf.get_data(), op);
     }
 
+    /// Begin pointwise gather of all leaves into multi-roots, to be completed with `gather_end`
+    ///
+    /// @param leaf Leaf data to gather to roots
+    /// @param root Root buffer to gather into, amount of space per root is equal to its degree
+    template <typename T>
+    void
+    gather_begin(const T * leaf, T * root) const
+    {
+        CALL_STACK_MSG();
+        auto dtype = mpicpp_lite::mpi_datatype<T>();
+        PETSC_CHECK(PetscSFGatherBegin(this->sf, dtype, leaf, root));
+    }
+
+    template <typename T>
+    void
+    gather_begin(const Array1D<T> & leaf, Array1D<T> & root) const
+    {
+        CALL_STACK_MSG();
+        gather_begin(leaf.get_data(), root.get_data());
+    }
+
+    /// End pointwise gather operation that was started with `gather_begin
+    ///
+    /// @param leaf Leaf data to gather to roots
+    /// @param root Root buffer to gather into, amount of space per root is equal to its degree
+    template <typename T>
+    void
+    gather_end(const T * leaf, T * root) const
+    {
+        CALL_STACK_MSG();
+        auto dtype = mpicpp_lite::mpi_datatype<T>();
+        PETSC_CHECK(PetscSFGatherEnd(this->sf, dtype, leaf, root));
+    }
+
+    template <typename T>
+    void
+    gather_end(const Array1D<T> & leaf, Array1D<T> & root) const
+    {
+        CALL_STACK_MSG();
+        gather_end(leaf.get_data(), root.get_data());
+    }
+
+    /// Begin pointwise scatter operation from multi-roots to leaves, to be completed with
+    /// `scatter_end`
+    ///
+    /// @param root Root buffer to send to each leaf, one unit of data per leaf
+    /// @param leaf Leaf data to be updated with personal data from each respective root
+    template <typename T>
+    void
+    scatter_begin(const T * root, T * leaf) const
+    {
+        CALL_STACK_MSG();
+        auto dtype = mpicpp_lite::mpi_datatype<T>();
+        PETSC_CHECK(PetscSFScatterBegin(this->sf, dtype, root, leaf));
+    }
+
+    template <typename T>
+    void
+    scatter_begin(const Array1D<T> & root, Array1D<T> & leaf) const
+    {
+        CALL_STACK_MSG();
+        scatter_begin(root.get_data(), leaf.get_data());
+    }
+
+    /// Ends pointwise scatter operation that was started with `scatter_begin`
+    ///
+    /// @param root Root buffer to send to each leaf, one unit of data per leaf
+    /// @param leaf Leaf data to be update with personal data from each respective root
+    template <typename T>
+    void
+    scatter_end(const T * root, T * leaf) const
+    {
+        CALL_STACK_MSG();
+        auto dtype = mpicpp_lite::mpi_datatype<T>();
+        PETSC_CHECK(PetscSFScatterEnd(this->sf, dtype, root, leaf));
+    }
+
+    template <typename T>
+    void
+    scatter_end(const Array1D<T> & root, Array1D<T> & leaf) const
+    {
+        CALL_STACK_MSG();
+        scatter_end(root.get_data(), leaf.get_data());
+    }
+
     /// View a star forrest
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
