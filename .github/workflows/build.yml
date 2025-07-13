@@ -19,19 +19,19 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            python-version: "3.9"
+            python-version: "3.11"
             petsc: 3.22.5
             build: Debug
             teciocpp: ON
             code-coverage: ON
           - os: ubuntu-22.04
-            python-version: "3.9"
+            python-version: "3.11"
             petsc: 3.22.5
             build: Release
             teciocpp: ON
             code-coverage: OFF
           - os: ubuntu-22.04
-            python-version: "3.9"
+            python-version: "3.11"
             petsc: 3.22.5
             build: Release
             teciocpp: OFF
