@@ -23,16 +23,19 @@ jobs:
             petsc: 3.22.5
             build: Debug
             teciocpp: ON
+            code-coverage: ON
           - os: ubuntu-22.04
             python-version: "3.9"
             petsc: 3.22.5
             build: Release
             teciocpp: ON
+            code-coverage: OFF
           - os: ubuntu-22.04
             python-version: "3.9"
             petsc: 3.22.5
             build: Release
             teciocpp: OFF
+            code-coverage: OFF
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up miniconda
@@ -68,7 +71,7 @@ jobs:
             -DGODZILLA_WITH_TECIOCPP=${{ matrix.teciocpp }} \
             -DGODZILLA_BUILD_EXAMPLES=YES \
             -DGODZILLA_BUILD_TESTS=YES \
-            -DGODZILLA_CODE_COVERAGE=YES
+            -DGODZILLA_CODE_COVERAGE=${{ matrix.code-coverage }}
 
       - name: Build
         run: make -C ${{ github.workspace }}/build
@@ -89,9 +92,11 @@ jobs:
           path: ${{ github.workspace }}/build/Testing/Temporary/LastTest.log
 
       - name: Generate code coverage
+        if: ${{ matrix.code-coverage == 'ON' }}
         run: make -C ${{ github.workspace }}/build coverage
 
       - name: Upload coverage artifact
+        if: ${{ matrix.code-coverage == 'ON' }}
         uses: actions/upload-artifact@v4
         with:
           name: coverage-${{ matrix.os }}-${{ matrix.build }}-petsc-${{ matrix.petsc }}-teciocpp-${{ matrix.teciocpp }}
