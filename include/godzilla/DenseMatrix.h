@@ -751,13 +751,11 @@ using DynDenseMatrix = DenseMatrix<T, -1, -1>;
 template <typename T>
 class DenseMatrix<T, -1, -1> {
 public:
-    DenseMatrix<T, -1, -1>() : rows(0), cols(0), values(nullptr) {}
+    DenseMatrix() : rows(0), cols(0), values(nullptr) {}
 
-    DenseMatrix<T, -1, -1>(Int rows, Int cols) : rows(rows), cols(cols), values(new T[rows * cols])
-    {
-    }
+    DenseMatrix(Int rows, Int cols) : rows(rows), cols(cols), values(new T[rows * cols]) {}
 
-    DenseMatrix<T, -1, -1>(Int rows, Int cols, const T & val) :
+    DenseMatrix(Int rows, Int cols, const T & val) :
         rows(rows),
         cols(cols),
         values(new T[rows * cols])
