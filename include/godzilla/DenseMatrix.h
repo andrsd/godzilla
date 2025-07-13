@@ -136,6 +136,15 @@ public:
             set(row, i) = vals[i];
     }
 
+    void
+    set_row(Int row, std::initializer_list<T> vals)
+    {
+        assert(static_cast<Int>(vals.size()) == COLS);
+        Int i = 0;
+        for (const T & val : vals)
+            set(row, i++) = val;
+    }
+
     /// Set a matrix row at once
     ///
     /// This is a convenience method
@@ -153,6 +162,15 @@ public:
     {
         for (Int i = 0; i < COLS; ++i)
             set(row, i) = vals(0, i);
+    }
+
+    void
+    set_col(Int col, std::initializer_list<T> vals)
+    {
+        assert(vals.size() == ROWS);
+        Int i = 0;
+        for (const T & val : vals)
+            set(i++, col) = val;
     }
 
     void
@@ -751,13 +769,11 @@ using DynDenseMatrix = DenseMatrix<T, -1, -1>;
 template <typename T>
 class DenseMatrix<T, -1, -1> {
 public:
-    DenseMatrix<T, -1, -1>() : rows(0), cols(0), values(nullptr) {}
+    DenseMatrix() : rows(0), cols(0), values(nullptr) {}
 
-    DenseMatrix<T, -1, -1>(Int rows, Int cols) : rows(rows), cols(cols), values(new T[rows * cols])
-    {
-    }
+    DenseMatrix(Int rows, Int cols) : rows(rows), cols(cols), values(new T[rows * cols]) {}
 
-    DenseMatrix<T, -1, -1>(Int rows, Int cols, const T & val) :
+    DenseMatrix(Int rows, Int cols, const T & val) :
         rows(rows),
         cols(cols),
         values(new T[rows * cols])

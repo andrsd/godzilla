@@ -115,7 +115,8 @@ TEST(Array1DTest, get_values_std_vec)
     Array1D<Real> x(8);
     assign(x, { 2, 3, 1, -2, 0, 6, 10, 8 });
 
-    auto vals = get_values<Real, 3>(x, { 1, 6, 3 });
+    std::vector<Int> idx({ 1, 6, 3 });
+    auto vals = get_values<Real, 3>(x, idx);
 
     EXPECT_EQ(vals(0), 3.);
     EXPECT_EQ(vals(1), 10.);

@@ -534,11 +534,11 @@ using DynDenseVector = DenseVector<T, -1>;
 template <typename T>
 class DenseVector<T, -1> : public DynDenseMatrix<T> {
 public:
-    DenseVector<T, -1>() : DynDenseMatrix<T>() {}
+    DenseVector() : DynDenseMatrix<T>() {}
 
-    explicit DenseVector<T, -1>(Int rows) : DynDenseMatrix<T>(rows, 1) {}
+    explicit DenseVector(Int rows) : DynDenseMatrix<T>(rows, 1) {}
 
-    DenseVector<T, -1>(Int rows, const T & val) : DynDenseMatrix<T>(rows, 1, val) {}
+    DenseVector(Int rows, const T & val) : DynDenseMatrix<T>(rows, 1, val) {}
 
     DenseVector(const DenseVector & other) : DynDenseMatrix<T>(other) {}
 
