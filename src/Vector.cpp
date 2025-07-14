@@ -435,11 +435,47 @@ Vector::create_seq(MPI_Comm comm, Int n)
 }
 
 Vector
+Vector::create_seq(MPI_Comm comm, Int bs, Int n, const Scalar array[])
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(VecCreateSeqWithArray(comm, bs, n, array, &v));
+    return Vector(v);
+}
+
+Vector
+Vector::create_seq(MPI_Comm comm, Int bs, const std::vector<Scalar> & data)
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(VecCreateSeqWithArray(comm, bs, data.size(), data.data(), &v));
+    return Vector(v);
+}
+
+Vector
 Vector::create_mpi(MPI_Comm comm, Int n, Int N)
 {
     CALL_STACK_MSG();
     Vec v;
     PETSC_CHECK(VecCreateMPI(comm, n, N, &v));
+    return Vector(v);
+}
+
+Vector
+Vector::create_mpi(MPI_Comm comm, Int bs, Int n, Int N, const Scalar array[])
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(VecCreateMPIWithArray(comm, bs, n, N, array, &v));
+    return Vector(v);
+}
+
+Vector
+Vector::create_mpi(MPI_Comm comm, Int bs, const std::vector<Scalar> & data, Int N)
+{
+    CALL_STACK_MSG();
+    Vec v;
+    PETSC_CHECK(VecCreateMPIWithArray(comm, bs, data.size(), N, data.data(), &v));
     return Vector(v);
 }
 

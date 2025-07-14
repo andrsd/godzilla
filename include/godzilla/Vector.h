@@ -246,12 +246,49 @@ public:
 
     static Vector create_seq(MPI_Comm comm, Int n);
 
+    /// Creates a standard, sequential array-style vector, where the user provides the array space
+    /// to store the vector values.
+    ///
+    /// @param comm MPI communicator
+    /// @param bs Block size
+    /// @param n Vector length
+    /// @param array Memory where the vector elements are to be stored.
+    static Vector create_seq(MPI_Comm comm, Int bs, Int n, const Scalar array[]);
+
+    /// Creates a standard, sequential array-style vector, where the user provides the array space
+    /// to store the vector values.
+    ///
+    /// @param comm MPI communicator
+    /// @param bs Block size
+    /// @param array Memory where the vector elements are to be stored.
+    static Vector create_seq(MPI_Comm comm, Int bs, const std::vector<Scalar> & data);
+
     /// Creates a parallel vector.
     ///
     /// @param comm the MPI communicator to use
     /// @param n Local vector length (or PETSC_DECIDE to have calculated if N is given)
     /// @param N global vector length (or PETSC_DETERMINE to have calculated if n is given)
     static Vector create_mpi(MPI_Comm comm, Int n, Int N);
+
+    /// Creates a parallel, array-style vector, where the user provides the array space to store the
+    /// vector values.
+    ///
+    /// @param comm the MPI communicator to use
+    /// @param bs Block size
+    /// @param n Local vector length, cannot be PETSC_DECIDE
+    /// @param N Global vector length (or PETSC_DETERMINE to have it calculated)
+    /// @param array The user-provided array to store the vector values
+    static Vector create_mpi(MPI_Comm comm, Int bs, Int n, Int N, const Scalar array[]);
+
+    /// Creates a parallel, array-style vector, where the user provides the array space to store the
+    /// vector values.
+    ///
+    /// @param comm the MPI communicator to use
+    /// @param bs Block size
+    /// @param data The user-provided array to store the vector values
+    /// @param N Global vector length (or PETSC_DETERMINE to have it calculated)
+    static Vector
+    create_mpi(MPI_Comm comm, Int bs, const std::vector<Scalar> & data, Int N = PETSC_DETERMINE);
 
     /// Creates a new vector containing several nested subvectors, each stored separately
     ///

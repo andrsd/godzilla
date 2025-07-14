@@ -639,3 +639,104 @@ TEST(VectorTest, copy_is)
     EXPECT_DOUBLE_EQ(full(3), -4.);
     EXPECT_DOUBLE_EQ(full(4), 5.);
 }
+
+TEST(VectorTest, create_seq_w_array_c_array)
+{
+    Scalar data[] = { 3, 7, 9 };
+    auto v = Vector::create_seq(MPI_COMM_WORLD, 1, 3, data);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 7.);
+    EXPECT_DOUBLE_EQ(v(2), 9.);
+}
+
+TEST(VectorTest, create_seq_w_array_std_vector)
+{
+    std::vector<Scalar> data = { 3, 5, 7 };
+    auto v = Vector::create_seq(MPI_COMM_WORLD, 1, data);
+    EXPECT_DOUBLE_EQ(v(0), 3.);
+    EXPECT_DOUBLE_EQ(v(1), 5.);
+    EXPECT_DOUBLE_EQ(v(2), 7.);
+}
+
+TEST(VectorTest, create_mpi_w_array_c_array)
+{
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    if (comm.size() > 2)
+        return;
+
+    Int n = 0;
+    Scalar * data = nullptr;
+    if (comm.rank() == 0) {
+        n = 3;
+        data = new Scalar[n];
+        data[0] = 3;
+        data[1] = 7;
+        data[2] = 9;
+    }
+    else if (comm.rank() == 1) {
+        n = 5;
+        data = new Scalar[n];
+        data[0] = 2;
+        data[1] = 4;
+        data[2] = 6;
+        data[3] = 8;
+        data[4] = 10;
+    }
+
+    auto v = Vector::create_mpi(MPI_COMM_WORLD, 1, n, PETSC_DETERMINE, data);
+
+    if (comm.rank() == 0) {
+        EXPECT_DOUBLE_EQ(v(0), 3.);
+        EXPECT_DOUBLE_EQ(v(1), 7.);
+        EXPECT_DOUBLE_EQ(v(2), 9.);
+    }
+    else if (comm.rank() == 1) {
+        EXPECT_DOUBLE_EQ(v(3), 2.);
+        EXPECT_DOUBLE_EQ(v(4), 4.);
+        EXPECT_DOUBLE_EQ(v(5), 6.);
+        EXPECT_DOUBLE_EQ(v(6), 8.);
+        EXPECT_DOUBLE_EQ(v(7), 10.);
+    }
+
+    comm.barrier();
+}
+
+TEST(VectorTest, create_mpi_w_array_std_vector)
+{
+    mpi::Communicator comm(MPI_COMM_WORLD);
+    if (comm.size() > 2)
+        return;
+
+    std::vector<Scalar> data;
+    if (comm.rank() == 0) {
+        data.resize(3);
+        data[0] = 3;
+        data[1] = 7;
+        data[2] = 9;
+    }
+    else if (comm.rank() == 1) {
+        data.resize(5);
+        data[0] = 2;
+        data[1] = 4;
+        data[2] = 6;
+        data[3] = 8;
+        data[4] = 10;
+    }
+
+    auto v = Vector::create_mpi(MPI_COMM_WORLD, 1, data);
+
+    if (comm.rank() == 0) {
+        EXPECT_DOUBLE_EQ(v(0), 3.);
+        EXPECT_DOUBLE_EQ(v(1), 7.);
+        EXPECT_DOUBLE_EQ(v(2), 9.);
+    }
+    else if (comm.rank() == 1) {
+        EXPECT_DOUBLE_EQ(v(3), 2.);
+        EXPECT_DOUBLE_EQ(v(4), 4.);
+        EXPECT_DOUBLE_EQ(v(5), 6.);
+        EXPECT_DOUBLE_EQ(v(6), 8.);
+        EXPECT_DOUBLE_EQ(v(7), 10.);
+    }
+
+    comm.barrier();
+}
