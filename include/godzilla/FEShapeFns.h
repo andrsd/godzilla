@@ -92,20 +92,20 @@ grad_shape<TET4, 3>(const DenseMatrix<Real, 4, 3> & coords, Real volume)
     auto z4 = coords(3, 2);
 
     DenseMatrix<Real, 3, 4> grads;
-    auto ddx1 = -y2 * z3 + y2 * z4 + y3 * z2 - y3 * z4 - y4 * z2 + y4 * z3;
-    auto ddx2 = y1 * z3 - y1 * z4 - y3 * z1 + y3 * z4 + y4 * z1 - y4 * z3;
-    auto ddx3 = -y1 * z2 + y1 * z4 + y2 * z1 - y2 * z4 - y4 * z1 + y4 * z2;
-    auto ddx4 = y1 * z2 - y1 * z3 - y2 * z1 + y2 * z3 + y3 * z1 - y3 * z2;
+    auto ddx1 = -y1 * z3 + y1 * z4 + y3 * z1 - y3 * z4 - y4 * z1 + y4 * z3;
+    auto ddx2 = y2 * z3 - y2 * z4 - y3 * z2 + y3 * z4 + y4 * z2 - y4 * z3;
+    auto ddx3 = -y2 * z1 + y2 * z4 + y1 * z2 - y1 * z4 - y4 * z2 + y4 * z1;
+    auto ddx4 = y2 * z1 - y2 * z3 - y1 * z2 + y1 * z3 + y3 * z2 - y3 * z1;
 
-    auto ddy1 = x2 * z3 - x2 * z4 - x3 * z2 + x3 * z4 + x4 * z2 - x4 * z3;
-    auto ddy2 = -x1 * z3 + x1 * z4 + x3 * z1 - x3 * z4 - x4 * z1 + x4 * z3;
-    auto ddy3 = x1 * z2 - x1 * z4 - x2 * z1 + x2 * z4 + x4 * z1 - x4 * z2;
-    auto ddy4 = -x1 * z2 + x1 * z3 + x2 * z1 - x2 * z3 - x3 * z1 + x3 * z2;
+    auto ddy1 = x1 * z3 - x1 * z4 - x3 * z1 + x3 * z4 + x4 * z1 - x4 * z3;
+    auto ddy2 = -x2 * z3 + x2 * z4 + x3 * z2 - x3 * z4 - x4 * z2 + x4 * z3;
+    auto ddy3 = x2 * z1 - x2 * z4 - x1 * z2 + x1 * z4 + x4 * z2 - x4 * z1;
+    auto ddy4 = -x2 * z1 + x2 * z3 + x1 * z2 - x1 * z3 - x3 * z2 + x3 * z1;
 
-    auto ddz1 = -x2 * y3 + x2 * y4 + x3 * y2 - x3 * y4 - x4 * y2 + x4 * y3;
-    auto ddz2 = x1 * y3 - x1 * y4 - x3 * y1 + x3 * y4 + x4 * y1 - x4 * y3;
-    auto ddz3 = -x1 * y2 + x1 * y4 + x2 * y1 - x2 * y4 - x4 * y1 + x4 * y2;
-    auto ddz4 = x1 * y2 - x1 * y3 - x2 * y1 + x2 * y3 + x3 * y1 - x3 * y2;
+    auto ddz1 = -x1 * y3 + x1 * y4 + x3 * y1 - x3 * y4 - x4 * y1 + x4 * y3;
+    auto ddz2 = x2 * y3 - x2 * y4 - x3 * y2 + x3 * y4 + x4 * y2 - x4 * y3;
+    auto ddz3 = -x2 * y1 + x2 * y4 + x1 * y2 - x1 * y4 - x4 * y2 + x4 * y1;
+    auto ddz4 = x2 * y1 - x2 * y3 - x1 * y2 + x1 * y3 + x3 * y2 - x3 * y1;
 
     grads.set_col(0, { ddx1, ddy1, ddz1 });
     grads.set_col(1, { ddx2, ddy2, ddz2 });

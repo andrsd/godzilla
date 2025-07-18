@@ -85,11 +85,11 @@ volume<TET4, 3>(const DenseMatrix<Real, 4, 3> & coords)
     auto y4 = coords(3, 1);
     auto z4 = coords(3, 2);
 
-    DenseVector<Real, 3> v0({ x2 - x1, y2 - y1, z2 - z1 });
-    DenseVector<Real, 3> v1({ x3 - x1, y3 - y1, z3 - z1 });
-    DenseVector<Real, 3> v2({ x4 - x1, y4 - y1, z4 - z1 });
+    DenseVector<Real, 3> v0({ x1 - x2, y1 - y2, z1 - z2 });
+    DenseVector<Real, 3> v1({ x3 - x2, y3 - y2, z3 - z2 });
+    DenseVector<Real, 3> v2({ x4 - x2, y4 - y2, z4 - z2 });
 
-    return (1. / 6.) * dot(cross_product(v0, v1), v2);
+    return (1. / 6.) * dot(v0, cross_product(v1, v2));
 }
 
 /// Compute FE volumes

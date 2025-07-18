@@ -34,18 +34,18 @@ TEST(FEShapeFns, grad_shape_tri3)
 TEST(FEShapeFns, grad_shape_tet4)
 {
     DenseMatrix<Real, 4, 3> coords;
-    coords.set_row(0, { 0, 0, 0 });
-    coords.set_row(1, { 1, 0, 0 });
+    coords.set_row(0, { 1, 0, 0 });
+    coords.set_row(1, { 0, 0, 0 });
     coords.set_row(2, { 0, 1, 0 });
     coords.set_row(3, { 0, 0, 1 });
     Real volume = fe::volume<TET4>(coords);
     auto grads = fe::grad_shape<TET4, 3>(coords, volume);
-    EXPECT_DOUBLE_EQ(grads(0, 0), -1);
-    EXPECT_DOUBLE_EQ(grads(1, 0), -1);
-    EXPECT_DOUBLE_EQ(grads(2, 0), -1);
-    EXPECT_DOUBLE_EQ(grads(0, 1), 1);
-    EXPECT_DOUBLE_EQ(grads(1, 1), 0);
-    EXPECT_DOUBLE_EQ(grads(2, 1), 0);
+    EXPECT_DOUBLE_EQ(grads(0, 0), 1);
+    EXPECT_DOUBLE_EQ(grads(1, 0), 0);
+    EXPECT_DOUBLE_EQ(grads(2, 0), 0);
+    EXPECT_DOUBLE_EQ(grads(0, 1), -1);
+    EXPECT_DOUBLE_EQ(grads(1, 1), -1);
+    EXPECT_DOUBLE_EQ(grads(2, 1), -1);
     EXPECT_DOUBLE_EQ(grads(0, 2), 0);
     EXPECT_DOUBLE_EQ(grads(1, 2), 1);
     EXPECT_DOUBLE_EQ(grads(2, 2), 0);

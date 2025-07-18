@@ -16,7 +16,7 @@ TestMesh3D::create_mesh()
 {
     const Int DIM = 3;
     const Int N_ELEM_NODES = 4;
-    std::vector<Int> cells = { 0, 1, 2, 3 };
+    std::vector<Int> cells = { 1, 0, 2, 3 };
     std::vector<Real> coords = { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 };
     auto m = UnstructuredMesh::build_from_cell_list(get_comm(),
                                                     DIM,
