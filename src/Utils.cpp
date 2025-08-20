@@ -3,6 +3,8 @@
 
 #include "godzilla/Utils.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/PrintInterface.h"
+#include "godzilla/Terminal.h"
 #include <sys/stat.h>
 #include <chrono>
 #include <fmt/printf.h>
@@ -111,4 +113,15 @@ demangle(const std::string & mangled_name)
 }
 
 } // namespace utils
+
+void
+print_converged_reason(PrintInterface & pi, bool converged)
+{
+    CALL_STACK_MSG();
+    if (converged)
+        pi.lprintln(8, Terminal::green, "Converged");
+    else
+        pi.lprintln(8, Terminal::red, "Not converged");
+}
+
 } // namespace godzilla
