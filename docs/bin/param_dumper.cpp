@@ -32,7 +32,7 @@ int
 main(int argc, char * argv[])
 {
     try {
-        godzilla::mpi::Communicator comm(MPI_COMM_WORLD);
+        mpi::Communicator comm(MPI_COMM_WORLD);
         godzilla::Init init;
         ParamDumperApp app(comm, registry);
         app.run();

@@ -6,7 +6,6 @@
 #include "godzilla/PerfLog.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "petscsys.h"
-#include <mpicpp-lite/impl/Environment.h>
 
 namespace mpi = mpicpp_lite;
 
