@@ -9,9 +9,9 @@
 #include "godzilla/Factory.h"
 #include "godzilla/PrintInterface.h"
 
-namespace godzilla {
-
 namespace mpi = mpicpp_lite;
+
+namespace godzilla {
 
 class Problem;
 class InputFile;

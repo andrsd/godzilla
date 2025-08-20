@@ -15,7 +15,7 @@ int
 main(int argc, char * argv[])
 {
     try {
-        godzilla::mpi::Communicator comm;
+        mpi::Communicator comm;
         godzilla::Init init(argc, argv);
         register_objects(registry);
 
