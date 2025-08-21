@@ -1,13 +1,10 @@
 #pragma once
 
 #include "gmock/gmock.h"
-#include "godzilla/MeshObject.h"
-#include "godzilla/UnstructuredMesh.h"
-#include "godzilla/FENonlinearProblem.h"
-#include "godzilla/InitialCondition.h"
 #include "GodzillaApp_test.h"
 #include "GTestFENonlinearProblem.h"
 #include "GTest2FieldsFENonlinearProblem.h"
+#include "godzilla/MeshObject.h"
 
 class FENonlinearProblemTest : public GodzillaAppTest {
 public:
