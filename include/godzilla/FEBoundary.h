@@ -321,6 +321,11 @@ public:
         CALL_STACK_MSG();
     }
 
+    ~EssentialBoundaryInfo() override
+    {
+        this->vertices.destroy();
+    }
+
     UnstructuredMesh *
     get_mesh() const
     {
@@ -396,6 +401,11 @@ public:
         CALL_STACK_MSG();
         assert(mesh->get_dimension() == DIM);
         this->facets.sort();
+    }
+
+    ~NaturalBoundaryInfo() override
+    {
+        this->facets.destroy();
     }
 
     void
