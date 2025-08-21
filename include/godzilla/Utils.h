@@ -12,6 +12,9 @@
 #include "fmt/printf.h"
 
 namespace godzilla {
+
+class PrintInterface;
+
 namespace utils {
 
 bool path_exists(const std::string & path);
@@ -201,5 +204,7 @@ enumerate(ITERABLE && iterable)
 
     return IterableWrapper { iterable };
 }
+
+void print_converged_reason(PrintInterface & pi, bool converged);
 
 } // namespace godzilla
