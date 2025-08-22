@@ -30,8 +30,6 @@ TEST(SectionTest, dofs)
         EXPECT_EQ(s.get_field_dof(pt, 0), 1);
         EXPECT_EQ(s.get_field_dof(pt, 1), 3);
     }
-
-    s.destroy();
 }
 
 TEST(SectionTest, field_name)
@@ -45,7 +43,6 @@ TEST(SectionTest, field_name)
     s.set_up();
     EXPECT_EQ(s.get_field_name(0), "fld1");
     EXPECT_EQ(s.get_field_name(1), "fld2");
-    s.destroy();
 }
 
 TEST(SectionTest, get_max_dof)
@@ -59,7 +56,6 @@ TEST(SectionTest, get_max_dof)
         s.set_dof(i, dofs[i]);
     s.set_up();
     EXPECT_EQ(s.get_max_dof(), 5);
-    s.destroy();
 }
 
 TEST(SectionTest, reset)
@@ -76,8 +72,6 @@ TEST(SectionTest, reset)
     s.get_chart(start, end);
     EXPECT_EQ(start, -1);
     EXPECT_EQ(end, -1);
-
-    s.destroy();
 }
 
 TEST(SectionTest, point_major)
@@ -92,8 +86,6 @@ TEST(SectionTest, point_major)
     s.set_up();
 
     EXPECT_TRUE(s.get_point_major());
-
-    s.destroy();
 }
 
 TEST(SectionTest, add_dof)
@@ -109,7 +101,6 @@ TEST(SectionTest, add_dof)
     s.set_up();
     EXPECT_EQ(s.get_dof(0), 11);
     EXPECT_EQ(s.get_dof(1), 21);
-    s.destroy();
 }
 
 TEST(SectionTest, field_components)
@@ -134,7 +125,6 @@ TEST(SectionTest, field_components)
     EXPECT_EQ(s.get_component_name(1, 1), "f1c2");
     EXPECT_EQ(s.get_component_name(1, 2), "f1c3");
     EXPECT_EQ(s.get_component_name(1, 3), "f1c4");
-    s.destroy();
 }
 
 TEST(SectionTest, get_offset)
@@ -152,8 +142,6 @@ TEST(SectionTest, get_offset)
     s.get_offset_range(offst_start, offst_end);
     EXPECT_EQ(offst_start, 0);
     EXPECT_EQ(offst_end, 10);
-
-    s.destroy();
 }
 
 TEST(SectionTest, get_field_offset)
@@ -182,8 +170,6 @@ TEST(SectionTest, get_field_offset)
     EXPECT_EQ(s.get_field_point_offset(0, 1), 1);
     EXPECT_EQ(s.get_field_point_offset(1, 0), 0);
     EXPECT_EQ(s.get_field_point_offset(1, 1), 2);
-
-    s.destroy();
 }
 
 TEST(SectionTest, get_storage_size)
@@ -197,8 +183,6 @@ TEST(SectionTest, get_storage_size)
     s.set_up();
 
     EXPECT_EQ(s.get_storage_size(), 9);
-
-    s.destroy();
 }
 
 TEST(SectionTest, get_ced_storage_size)
@@ -216,8 +200,6 @@ TEST(SectionTest, get_ced_storage_size)
 
     EXPECT_EQ(s.get_storage_size(), 5);
     EXPECT_EQ(s.get_constrained_storage_size(), 2);
-
-    s.destroy();
 }
 
 TEST(SectionTest, ceds)
@@ -246,8 +228,6 @@ TEST(SectionTest, ceds)
     auto idx2 = s.get_constraint_indices(2);
     EXPECT_EQ(idx2[0], 0);
     EXPECT_EQ(idx2[1], 1);
-
-    s.destroy();
 }
 
 TEST(SectionTest, field_ceds)
@@ -284,8 +264,6 @@ TEST(SectionTest, field_ceds)
 
     auto fidx1 = s.get_field_constraint_indices(1, 1);
     EXPECT_EQ(fidx1[0], 0);
-
-    s.destroy();
 }
 
 TEST(SectionTest, get_field)
@@ -327,7 +305,6 @@ TEST(SectionTest, view)
     s.set_dof(1, 3);
     s.set_up();
     s.view();
-    s.destroy();
 
     auto output = testing::internal::GetCapturedStdout();
 #if PETSC_VERSION_GE(3, 22, 0)
@@ -351,8 +328,4 @@ TEST(SectionTest, oper_bool)
     sect.create(MPI_COMM_WORLD);
     EXPECT_TRUE(sect);
     EXPECT_TRUE(csect);
-
-    sect.destroy();
-    EXPECT_FALSE(sect);
-    EXPECT_FALSE(csect);
 }
