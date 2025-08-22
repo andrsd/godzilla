@@ -3,13 +3,14 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/IndexSet.h"
 #include "petscdmlabel.h"
 
 namespace godzilla {
 
-class Label {
+class Label : public PetscObjectWrapper<DMLabel> {
 public:
     Label();
     explicit Label(DMLabel label);
@@ -25,11 +26,6 @@ public:
 
     /// Destroys internal data structures in the underlying DMLabel
     void reset();
-
-    /// Test if the label is "null"
-    ///
-    /// @return `true` is the label is null, `false` otherwise
-    bool is_null() const;
 
     /// Set the default value returned by `get_value()` if a point has not been explicitly given a
     /// value. When a label is created, it is initialized to -1.
@@ -96,15 +92,11 @@ public:
     /// @param viewer The PETSc viewer
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
-    /// typecast operator so we can use our class directly with PETSc API
-    operator DMLabel() const;
+    // /// typecast operator so we can use our class directly with PETSc API
+    // operator DMLabel() const;
 
-    /// Typecast operator to determine if label is null or not
-    operator bool() const;
-    operator bool();
-
-private:
-    DMLabel label;
+    // /// Convert this object to a PETSc object so it can be passed directly into PETSc API
+    // operator DMLabel *();
 };
 
 } // namespace godzilla
