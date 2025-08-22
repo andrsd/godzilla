@@ -16,8 +16,11 @@ ShellMatrix::invoke_matmult_op_delegate(Mat matrix, Vec vector, Vec action)
     ShellMatrix * shell_matrix = nullptr;
     PETSC_CHECK(MatShellGetContext(matrix, &shell_matrix));
     Matrix A(matrix);
+    A.inc_reference();
     Vector x(vector);
+    x.inc_reference();
     Vector y(action);
+    y.inc_reference();
     if (shell_matrix->mult_delegate)
         shell_matrix->mult_delegate.invoke(A, x, y);
     else
@@ -38,7 +41,7 @@ ShellMatrix::create(MPI_Comm comm, Int m, Int n, Int M, Int N)
     CALL_STACK_MSG();
     Mat mat;
     PETSC_CHECK(MatCreateShell(comm, m, n, M, N, this, &mat));
-    this->mat = mat;
+    this->obj = mat;
 }
 
 void

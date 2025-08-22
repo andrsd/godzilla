@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Vector.h"
@@ -15,7 +16,7 @@ namespace godzilla {
 
 class ShellMatrix;
 
-class Matrix {
+class Matrix : public PetscObjectWrapper<Mat> {
 public:
     enum Option {
         SYMMETRIC = MAT_SYMMETRIC,
@@ -55,8 +56,6 @@ public:
     ///
     /// @param type The matrix type
     void set_type(const char * type);
-
-    void set_name(const std::string & name);
 
     void create(MPI_Comm comm);
     void destroy();
@@ -189,15 +188,11 @@ public:
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
-    operator Mat() const;
-
     static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, Int nz);
     static Matrix create_seq_aij(MPI_Comm comm, Int m, Int n, const std::vector<Int> & nnz);
     static ShellMatrix create_shell(MPI_Comm comm, Int m, Int n, Int M, Int N);
 
 private:
-    Mat mat;
-
     friend class ShellMatrix;
 };
 
@@ -209,7 +204,7 @@ Matrix::set_values(const DenseVector<Int, N> & row_idxs,
                    InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValues(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
+    PETSC_CHECK(MatSetValues(this->obj, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
 }
 
 template <Int N>
@@ -221,7 +216,7 @@ Matrix::set_values_local(const DenseVector<Int, N> & row_idxs,
 {
     CALL_STACK_MSG();
     PETSC_CHECK(
-        MatSetValuesLocal(this->mat, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
+        MatSetValuesLocal(this->obj, N, row_idxs.data(), N, col_idxs.data(), vals.data(), mode));
 }
 
 } // namespace godzilla
