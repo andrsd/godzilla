@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/CallStack.h"
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
 #include "mpicpp-lite/mpicpp-lite.h"
@@ -17,7 +18,7 @@ namespace godzilla {
 template <typename T>
 class Array1D;
 
-class StarForest {
+class StarForest : public PetscObjectWrapper<PetscSF> {
 public:
     /// Alias for PetscSFNode
     using Node = PetscSFNode;
@@ -98,7 +99,7 @@ public:
     {
         auto dtype = mpi::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFBcastBegin(sf, dtype, root, leaf, mpi_op));
+        PETSC_CHECK(PetscSFBcastBegin(this->obj, dtype, root, leaf, mpi_op));
     }
 
     template <typename T, typename Op>
@@ -135,7 +136,7 @@ public:
     {
         auto dtype = mpi::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFBcastEnd(sf, dtype, root, leaf, mpi_op));
+        PETSC_CHECK(PetscSFBcastEnd(this->obj, dtype, root, leaf, mpi_op));
     }
 
     template <typename T, typename Op>
@@ -166,7 +167,7 @@ public:
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFReduceBegin(this->sf, dtype, root, leaf, mpi_op));
+        PETSC_CHECK(PetscSFReduceBegin(this->obj, dtype, root, leaf, mpi_op));
     }
 
     template <typename T, typename Op>
@@ -200,7 +201,7 @@ public:
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
         auto mpi_op = mpi::op::provider<T, Op, mpi::op::Operation<Op, T>::is_native::value>::op();
-        PETSC_CHECK(PetscSFReduceEnd(this->sf, dtype, root, leaf, mpi_op));
+        PETSC_CHECK(PetscSFReduceEnd(this->obj, dtype, root, leaf, mpi_op));
     }
 
     template <typename T, typename Op>
@@ -237,7 +238,7 @@ public:
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
-        PETSC_CHECK(PetscSFGatherBegin(this->sf, dtype, leaf, root));
+        PETSC_CHECK(PetscSFGatherBegin(this->obj, dtype, leaf, root));
     }
 
     template <typename T>
@@ -258,7 +259,7 @@ public:
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
-        PETSC_CHECK(PetscSFGatherEnd(this->sf, dtype, leaf, root));
+        PETSC_CHECK(PetscSFGatherEnd(this->obj, dtype, leaf, root));
     }
 
     template <typename T>
@@ -280,7 +281,7 @@ public:
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
-        PETSC_CHECK(PetscSFScatterBegin(this->sf, dtype, root, leaf));
+        PETSC_CHECK(PetscSFScatterBegin(this->obj, dtype, root, leaf));
     }
 
     template <typename T>
@@ -301,7 +302,7 @@ public:
     {
         CALL_STACK_MSG();
         auto dtype = mpicpp_lite::mpi_datatype<T>();
-        PETSC_CHECK(PetscSFScatterEnd(this->sf, dtype, root, leaf));
+        PETSC_CHECK(PetscSFScatterEnd(this->obj, dtype, root, leaf));
     }
 
     template <typename T>
@@ -314,12 +315,6 @@ public:
 
     /// View a star forrest
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
-
-    /// typecast operator so we can use our class directly with PETSc API
-    operator PetscSF() const;
-
-private:
-    PetscSF sf;
 };
 
 } // namespace godzilla
