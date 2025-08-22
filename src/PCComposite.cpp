@@ -30,7 +30,7 @@ void
 PCComposite::set_type(Type type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCCompositeSetType(this->pc, static_cast<PCCompositeType>(type)));
+    PETSC_CHECK(PCCompositeSetType(this->obj, static_cast<PCCompositeType>(type)));
 }
 
 PCComposite::Type
@@ -38,7 +38,7 @@ PCComposite::get_type() const
 {
     CALL_STACK_MSG();
     PCCompositeType type;
-    PETSC_CHECK(PCCompositeGetType(this->pc, &type));
+    PETSC_CHECK(PCCompositeGetType(this->obj, &type));
     return static_cast<Type>(type);
 }
 
@@ -46,7 +46,7 @@ void
 PCComposite::add_pc(const Preconditioner & subpc)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCCompositeAddPC(this->pc, subpc));
+    PETSC_CHECK(PCCompositeAddPC(this->obj, subpc));
 }
 
 Int
@@ -54,7 +54,7 @@ PCComposite::get_number_pc() const
 {
     CALL_STACK_MSG();
     Int num;
-    PETSC_CHECK(PCCompositeGetNumberPC(this->pc, &num));
+    PETSC_CHECK(PCCompositeGetNumberPC(this->obj, &num));
     return num;
 }
 
@@ -62,16 +62,17 @@ Preconditioner
 PCComposite::get_pc(Int n) const
 {
     CALL_STACK_MSG();
-    PC subpc;
-    PETSC_CHECK(PCCompositeGetPC(this->pc, n, &subpc));
-    return Preconditioner(subpc);
+    Preconditioner subpc;
+    PETSC_CHECK(PCCompositeGetPC(this->obj, n, subpc));
+    subpc.inc_reference();
+    return subpc;
 }
 
 void
 PCComposite::special_set_alpha(Scalar alpha)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCCompositeSpecialSetAlpha(this->pc, alpha));
+    PETSC_CHECK(PCCompositeSpecialSetAlpha(this->obj, alpha));
 }
 
 } // namespace godzilla

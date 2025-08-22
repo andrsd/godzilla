@@ -36,7 +36,7 @@ PCFactor::get_type() const
 {
     CALL_STACK_MSG();
     const char * name;
-    PETSC_CHECK(PCGetType(this->pc, &name));
+    PETSC_CHECK(PCGetType(this->obj, &name));
     if (strcmp(name, PCICC) == 0)
         return ICC;
     else if (strcmp(name, PCILU) == 0)
@@ -54,7 +54,7 @@ PCFactor::get_allow_diagonal_fill() const
 {
     CALL_STACK_MSG();
     PetscBool flg;
-    PETSC_CHECK(PCFactorGetAllowDiagonalFill(this->pc, &flg));
+    PETSC_CHECK(PCFactorGetAllowDiagonalFill(this->obj, &flg));
     return flg == PETSC_TRUE;
 }
 
@@ -63,7 +63,7 @@ PCFactor::get_levels() const
 {
     CALL_STACK_MSG();
     Int levels;
-    PETSC_CHECK(PCFactorGetLevels(this->pc, &levels));
+    PETSC_CHECK(PCFactorGetLevels(this->obj, &levels));
     return levels;
 }
 
@@ -72,7 +72,7 @@ PCFactor::get_mat_solver_type() const
 {
     CALL_STACK_MSG();
     ::MatSolverType stype;
-    PETSC_CHECK(PCFactorGetMatSolverType(this->pc, &stype));
+    PETSC_CHECK(PCFactorGetMatSolverType(this->obj, &stype));
     if (strcmp(stype, MATSOLVERSUPERLU) == 0)
         return SUPERLU;
     else if (strcmp(stype, MATSOLVERSUPERLU_DIST) == 0)
@@ -130,7 +130,7 @@ PCFactor::get_shift_amount() const
 {
     CALL_STACK_MSG();
     Real shift;
-    PETSC_CHECK(PCFactorGetShiftAmount(this->pc, &shift));
+    PETSC_CHECK(PCFactorGetShiftAmount(this->obj, &shift));
     return shift;
 }
 
@@ -138,7 +138,7 @@ PCFactor::MatShiftType
 PCFactor::get_shift_type() const
 {
     MatFactorShiftType type;
-    PETSC_CHECK(PCFactorGetShiftType(this->pc, &type));
+    PETSC_CHECK(PCFactorGetShiftType(this->obj, &type));
     return static_cast<MatShiftType>(type);
 }
 
@@ -147,7 +147,7 @@ PCFactor::get_use_in_place() const
 {
     CALL_STACK_MSG();
     PetscBool flg;
-    PETSC_CHECK(PCFactorGetUseInPlace(this->pc, &flg));
+    PETSC_CHECK(PCFactorGetUseInPlace(this->obj, &flg));
     return flg == PETSC_TRUE;
 }
 
@@ -156,7 +156,7 @@ PCFactor::get_zero_pivot() const
 {
     CALL_STACK_MSG();
     Real pivot;
-    PETSC_CHECK(PCFactorGetZeroPivot(this->pc, &pivot));
+    PETSC_CHECK(PCFactorGetZeroPivot(this->obj, &pivot));
     return pivot;
 }
 
@@ -164,42 +164,42 @@ void
 PCFactor::reorder_for_nonzero_diagonal(Real tol)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorReorderForNonzeroDiagonal(this->pc, tol));
+    PETSC_CHECK(PCFactorReorderForNonzeroDiagonal(this->obj, tol));
 }
 
 void
 PCFactor::set_allow_diagonal_fill(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetAllowDiagonalFill(this->pc, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFactorSetAllowDiagonalFill(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 PCFactor::set_column_pivot(Real dt_col)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetColumnPivot(this->pc, dt_col));
+    PETSC_CHECK(PCFactorSetColumnPivot(this->obj, dt_col));
 }
 
 void
 PCFactor::set_drop_tolerance(Real dt, Real dt_col, Int max_row_count)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetDropTolerance(this->pc, dt, dt_col, max_row_count));
+    PETSC_CHECK(PCFactorSetDropTolerance(this->obj, dt, dt_col, max_row_count));
 }
 
 void
 PCFactor::set_fill(Real fill)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetFill(this->pc, fill));
+    PETSC_CHECK(PCFactorSetFill(this->obj, fill));
 }
 
 void
 PCFactor::set_levels(Int levels)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetLevels(this->pc, levels));
+    PETSC_CHECK(PCFactorSetLevels(this->obj, levels));
 }
 
 void
@@ -207,29 +207,29 @@ PCFactor::set_mat_ordering_type(MatOrderingType ordering)
 {
     CALL_STACK_MSG();
     if (ordering == NATURAL)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGNATURAL));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGNATURAL));
     else if (ordering == ND)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGND));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGND));
     else if (ordering == ONE_WD)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERING1WD));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERING1WD));
     else if (ordering == RCM)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGRCM));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGRCM));
     else if (ordering == QMD)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGQMD));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGQMD));
     else if (ordering == ROW_LENGTH)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGROWLENGTH));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGROWLENGTH));
     else if (ordering == WBM)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGWBM));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGWBM));
     else if (ordering == SPECTRAL)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGSPECTRAL));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGSPECTRAL));
     else if (ordering == AMD)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGAMD));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGAMD));
     else if (ordering == METISND)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGMETISND));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGMETISND));
     else if (ordering == NATURAL_OR_ND)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGNATURAL_OR_ND));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGNATURAL_OR_ND));
     else if (ordering == EXTERNAL)
-        PETSC_CHECK(PCFactorSetMatOrderingType(this->pc, MATORDERINGEXTERNAL));
+        PETSC_CHECK(PCFactorSetMatOrderingType(this->obj, MATORDERINGEXTERNAL));
 }
 
 void
@@ -237,109 +237,109 @@ PCFactor::set_mat_solver_type(MatSolverType type)
 {
     CALL_STACK_MSG();
     if (type == SUPERLU)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERSUPERLU));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERSUPERLU));
     else if (type == SUPERLU_DIST)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERSUPERLU_DIST));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERSUPERLU_DIST));
     else if (type == STRUMPACK)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERSTRUMPACK));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERSTRUMPACK));
     else if (type == UMFPACK)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERUMFPACK));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERUMFPACK));
     else if (type == CHOLMOD)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERCHOLMOD));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERCHOLMOD));
     else if (type == KLU)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERKLU));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERKLU));
     else if (type == ELEMENTAL)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERELEMENTAL));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERELEMENTAL));
     else if (type == SCALAPACK)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERSCALAPACK));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERSCALAPACK));
     else if (type == ESSL)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERESSL));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERESSL));
     else if (type == LUSOL)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERLUSOL));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERLUSOL));
     else if (type == MUMPS)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERMUMPS));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERMUMPS));
     else if (type == MKL_PARDISO)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERMKL_PARDISO));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERMKL_PARDISO));
     else if (type == MKL_CPARDISO)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERMKL_CPARDISO));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERMKL_CPARDISO));
     else if (type == PASTIX)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERPASTIX));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERPASTIX));
     else if (type == MATLAB)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERMATLAB));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERMATLAB));
     else if (type == PETSC)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERPETSC));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERPETSC));
     else if (type == BAS)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERBAS));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERBAS));
     else if (type == CUSPARSE)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERCUSPARSE));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERCUSPARSE));
     else if (type == CUDA)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERCUDA));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERCUDA));
 #if PETSC_VERSION_GE(3, 18, 0)
     else if (type == HIPSPARSE)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERHIPSPARSE));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERHIPSPARSE));
     else if (type == HIP)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERHIP));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERHIP));
 #endif
     else if (type == KOKKOS)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERKOKKOS));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERKOKKOS));
     else if (type == SPQR)
-        PETSC_CHECK(PCFactorSetMatSolverType(this->pc, MATSOLVERSPQR));
+        PETSC_CHECK(PCFactorSetMatSolverType(this->obj, MATSOLVERSPQR));
 }
 
 void
 PCFactor::set_pivot_in_blocks(bool pivot)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetPivotInBlocks(this->pc, pivot ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFactorSetPivotInBlocks(this->obj, pivot ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 PCFactor::set_reuse_fill(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetReuseFill(this->pc, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFactorSetReuseFill(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 PCFactor::set_reuse_ordering(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetReuseOrdering(this->pc, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFactorSetReuseOrdering(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 PCFactor::set_shift_amount(Real shift_amount)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetShiftAmount(this->pc, shift_amount));
+    PETSC_CHECK(PCFactorSetShiftAmount(this->obj, shift_amount));
 }
 
 void
 PCFactor::set_shift_type(MatShiftType type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetShiftType(this->pc, static_cast<MatFactorShiftType>(type)));
+    PETSC_CHECK(PCFactorSetShiftType(this->obj, static_cast<MatFactorShiftType>(type)));
 }
 
 void
 PCFactor::set_up_mat_solver_type()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetUpMatSolverType(this->pc));
+    PETSC_CHECK(PCFactorSetUpMatSolverType(this->obj));
 }
 
 void
 PCFactor::set_use_in_place(bool flg)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetUseInPlace(this->pc, flg ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFactorSetUseInPlace(this->obj, flg ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 PCFactor::set_zero_pivot(Real zero)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFactorSetZeroPivot(this->pc, zero));
+    PETSC_CHECK(PCFactorSetZeroPivot(this->obj, zero));
 }
 
 } // namespace godzilla

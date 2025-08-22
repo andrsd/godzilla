@@ -30,7 +30,7 @@ void
 PCJacobi::set_type(Type type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCJacobiSetType(this->pc, static_cast<PCJacobiType>(type)));
+    PETSC_CHECK(PCJacobiSetType(this->obj, static_cast<PCJacobiType>(type)));
 }
 
 PCJacobi::Type
@@ -38,7 +38,7 @@ PCJacobi::get_type() const
 {
     CALL_STACK_MSG();
     PCJacobiType type;
-    PETSC_CHECK(PCJacobiGetType(this->pc, &type));
+    PETSC_CHECK(PCJacobiGetType(this->obj, &type));
     return static_cast<Type>(type);
 }
 
@@ -47,7 +47,7 @@ PCJacobi::get_fix_diagonal() const
 {
     CALL_STACK_MSG();
     PetscBool flag;
-    PETSC_CHECK(PCJacobiGetFixDiagonal(this->pc, &flag));
+    PETSC_CHECK(PCJacobiGetFixDiagonal(this->obj, &flag));
     return flag == PETSC_TRUE;
 }
 
@@ -56,7 +56,7 @@ PCJacobi::get_use_abs() const
 {
     CALL_STACK_MSG();
     PetscBool flag;
-    PETSC_CHECK(PCJacobiGetUseAbs(this->pc, &flag));
+    PETSC_CHECK(PCJacobiGetUseAbs(this->obj, &flag));
     return flag == PETSC_TRUE;
 }
 
@@ -64,14 +64,14 @@ void
 PCJacobi::set_fix_diagonal(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCJacobiSetFixDiagonal(this->pc, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCJacobiSetFixDiagonal(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 PCJacobi::set_use_abs(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCJacobiSetUseAbs(this->pc, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCJacobiSetUseAbs(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 } // namespace godzilla

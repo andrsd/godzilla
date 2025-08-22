@@ -4,12 +4,13 @@
 #pragma once
 
 #include "godzilla/Matrix.h"
+#include "godzilla/PetscObjectWrapper.h"
 #include "petscpc.h"
 
 namespace godzilla {
 
 /// Preconditioner - wrapper around PETSc PC
-class Preconditioner {
+class Preconditioner : public PetscObjectWrapper<PC> {
 public:
     Preconditioner();
     Preconditioner(PC pc);
@@ -56,12 +57,6 @@ public:
     /// @param x Input vector
     /// @param y Output vector
     void apply(const Vector & x, Vector & y) const;
-
-    operator PC() const;
-
-protected:
-    /// PETSc PC object
-    PC pc;
 };
 
 } // namespace godzilla

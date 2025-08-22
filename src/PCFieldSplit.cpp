@@ -30,7 +30,7 @@ void
 PCFieldSplit::set_type(Type type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetType(this->pc, static_cast<PCCompositeType>(type)));
+    PETSC_CHECK(PCFieldSplitSetType(this->obj, static_cast<PCCompositeType>(type)));
 }
 
 PCFieldSplit::Type
@@ -38,7 +38,7 @@ PCFieldSplit::get_type() const
 {
     CALL_STACK_MSG();
     PCCompositeType type;
-    PETSC_CHECK(PCFieldSplitGetType(this->pc, &type));
+    PETSC_CHECK(PCFieldSplitGetType(this->obj, &type));
     return static_cast<Type>(type);
 }
 
@@ -47,7 +47,7 @@ PCFieldSplit::get_dm_splits() const
 {
     CALL_STACK_MSG();
     PetscBool flg;
-    PETSC_CHECK(PCFieldSplitGetDMSplits(this->pc, &flg));
+    PETSC_CHECK(PCFieldSplitGetDMSplits(this->obj, &flg));
     return flg == PETSC_TRUE;
 }
 
@@ -56,7 +56,7 @@ PCFieldSplit::get_detect_saddle_point() const
 {
     CALL_STACK_MSG();
     PetscBool flg;
-    PETSC_CHECK(PCFieldSplitGetDetectSaddlePoint(this->pc, &flg));
+    PETSC_CHECK(PCFieldSplitGetDetectSaddlePoint(this->obj, &flg));
     return flg == PETSC_TRUE;
 }
 
@@ -65,7 +65,7 @@ PCFieldSplit::get_diag_use_amat() const
 {
     CALL_STACK_MSG();
     PetscBool flg;
-    PETSC_CHECK(PCFieldSplitGetDiagUseAmat(this->pc, &flg));
+    PETSC_CHECK(PCFieldSplitGetDiagUseAmat(this->obj, &flg));
     return flg == PETSC_TRUE;
 }
 
@@ -73,18 +73,20 @@ IndexSet
 PCFieldSplit::get_is(const std::string & split_name) const
 {
     CALL_STACK_MSG();
-    IS is;
-    PETSC_CHECK(PCFieldSplitGetIS(this->pc, split_name.c_str(), &is));
-    return IndexSet(is);
+    IndexSet is;
+    PETSC_CHECK(PCFieldSplitGetIS(this->obj, split_name.c_str(), is));
+    is.inc_reference();
+    return is;
 }
 
 IndexSet
 PCFieldSplit::get_is_by_index(Int index) const
 {
     CALL_STACK_MSG();
-    IS is;
-    PETSC_CHECK(PCFieldSplitGetISByIndex(this->pc, index, &is));
-    return IndexSet(is);
+    IndexSet is;
+    PETSC_CHECK(PCFieldSplitGetISByIndex(this->obj, index, is));
+    is.inc_reference();
+    return is;
 }
 
 bool
@@ -92,7 +94,7 @@ PCFieldSplit::get_off_diag_use_amat() const
 {
     CALL_STACK_MSG();
     PetscBool flg;
-    PETSC_CHECK(PCFieldSplitGetOffDiagUseAmat(this->pc, &flg));
+    PETSC_CHECK(PCFieldSplitGetOffDiagUseAmat(this->obj, &flg));
     return flg == PETSC_TRUE;
 }
 
@@ -100,8 +102,12 @@ PCFieldSplit::SchurBlocks
 PCFieldSplit::get_schur_blocks() const
 {
     CALL_STACK_MSG();
-    Mat A00, A01, A10, A11;
-    PETSC_CHECK(PCFieldSplitGetSchurBlocks(this->pc, &A00, &A01, &A10, &A11));
+    Matrix A00, A01, A10, A11;
+    PETSC_CHECK(PCFieldSplitGetSchurBlocks(this->obj, A00, A01, A10, A11));
+    A00.inc_reference();
+    A01.inc_reference();
+    A10.inc_reference();
+    A11.inc_reference();
     SchurBlocks blks(A00, A01, A10, A11);
     return blks;
 }
@@ -111,8 +117,9 @@ PCFieldSplit::get_schur_pre() const
 {
     CALL_STACK_MSG();
     PCFieldSplitSchurPreType ptype;
-    Mat pre;
-    PETSC_CHECK(PCFieldSplitGetSchurPre(this->pc, &ptype, &pre));
+    Matrix pre;
+    PETSC_CHECK(PCFieldSplitGetSchurPre(this->obj, &ptype, pre));
+    pre.inc_reference();
     SchurPC spc(ptype, pre);
     return spc;
 }
@@ -123,10 +130,12 @@ PCFieldSplit::get_sub_ksp() const
     CALL_STACK_MSG();
     Int n;
     KSP * subksp;
-    PETSC_CHECK(PCFieldSplitGetSubKSP(this->pc, &n, &subksp));
+    PETSC_CHECK(PCFieldSplitGetSubKSP(this->obj, &n, &subksp));
     std::vector<KrylovSolver> sks(n);
-    for (Int i = 0; i < n; ++i)
+    for (Int i = 0; i < n; ++i) {
         sks[i] = KrylovSolver(subksp[i]);
+        sks[i].inc_reference();
+    }
     PetscFree(subksp);
     return sks;
 }
@@ -135,9 +144,10 @@ Matrix
 PCFieldSplit::schur_get_s() const
 {
     CALL_STACK_MSG();
-    Mat s;
-    PETSC_CHECK(PCFieldSplitSchurGetS(this->pc, &s));
-    return Matrix(s);
+    Matrix s;
+    PETSC_CHECK(PCFieldSplitSchurGetS(this->obj, s));
+    s.inc_reference();
+    return s;
 }
 
 std::vector<KrylovSolver>
@@ -146,7 +156,7 @@ PCFieldSplit::schur_get_sub_ksp() const
     CALL_STACK_MSG();
     Int n;
     KSP * subksp;
-    PETSC_CHECK(PCFieldSplitSchurGetSubKSP(this->pc, &n, &subksp));
+    PETSC_CHECK(PCFieldSplitSchurGetSubKSP(this->obj, &n, &subksp));
     std::vector<KrylovSolver> sks(n);
     for (Int i = 0; i < n; ++i)
         sks[i] = KrylovSolver(subksp[i]);
@@ -159,35 +169,35 @@ PCFieldSplit::schur_restore_s(const Matrix & s)
 {
     CALL_STACK_MSG();
     Mat m = s;
-    PETSC_CHECK(PCFieldSplitSchurRestoreS(this->pc, &m));
+    PETSC_CHECK(PCFieldSplitSchurRestoreS(this->obj, &m));
 }
 
 void
 PCFieldSplit::set_block_size(Int bs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetBlockSize(this->pc, bs));
+    PETSC_CHECK(PCFieldSplitSetBlockSize(this->obj, bs));
 }
 
 void
 PCFieldSplit::set_dm_splits(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetDMSplits(this->pc, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFieldSplitSetDMSplits(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 PCFieldSplit::set_detect_saddle_point(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetDetectSaddlePoint(this->pc, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFieldSplitSetDetectSaddlePoint(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 PCFieldSplit::set_diag_use_amat(bool flg)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetDiagUseAmat(this->pc, flg ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFieldSplitSetDiagUseAmat(this->obj, flg ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
@@ -196,7 +206,7 @@ PCFieldSplit::set_fields(const std::string & split_name,
                          const std::vector<Int> & fields_col)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetFields(this->pc,
+    PETSC_CHECK(PCFieldSplitSetFields(this->obj,
                                       split_name.c_str(),
                                       fields.size(),
                                       fields.data(),
@@ -207,42 +217,42 @@ void
 PCFieldSplit::set_gkb_delay(Int delay)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetGKBDelay(this->pc, delay));
+    PETSC_CHECK(PCFieldSplitSetGKBDelay(this->obj, delay));
 }
 
 void
 PCFieldSplit::set_gkb_maxit(Int maxit)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetGKBMaxit(this->pc, maxit));
+    PETSC_CHECK(PCFieldSplitSetGKBMaxit(this->obj, maxit));
 }
 
 void
 PCFieldSplit::set_gkb_nu(Real nu)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetGKBNu(this->pc, nu));
+    PETSC_CHECK(PCFieldSplitSetGKBNu(this->obj, nu));
 }
 
 void
 PCFieldSplit::set_gkb_tol(Real tolerance)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetGKBTol(this->pc, tolerance));
+    PETSC_CHECK(PCFieldSplitSetGKBTol(this->obj, tolerance));
 }
 
 void
 PCFieldSplit::set_is(const std::string & split_name, const IndexSet & is)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetIS(this->pc, split_name.c_str(), is));
+    PETSC_CHECK(PCFieldSplitSetIS(this->obj, split_name.c_str(), is));
 }
 
 void
 PCFieldSplit::set_off_diag_use_amat(bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetOffDiagUseAmat(this->pc, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(PCFieldSplitSetOffDiagUseAmat(this->obj, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
@@ -250,7 +260,7 @@ PCFieldSplit::set_schur_fact_type(PCFieldSplit::SchurFactType type)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(
-        PCFieldSplitSetSchurFactType(this->pc, static_cast<PCFieldSplitSchurFactType>(type)));
+        PCFieldSplitSetSchurFactType(this->obj, static_cast<PCFieldSplitSchurFactType>(type)));
 }
 
 void
@@ -258,14 +268,14 @@ PCFieldSplit::set_schur_pre(PCFieldSplit::SchurPreType ptype, const Matrix & pre
 {
     CALL_STACK_MSG();
     PETSC_CHECK(
-        PCFieldSplitSetSchurPre(this->pc, static_cast<PCFieldSplitSchurPreType>(ptype), pre));
+        PCFieldSplitSetSchurPre(this->obj, static_cast<PCFieldSplitSchurPreType>(ptype), pre));
 }
 
 void
 PCFieldSplit::set_schur_scale(Scalar scale)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCFieldSplitSetSchurScale(this->pc, scale));
+    PETSC_CHECK(PCFieldSplitSetSchurScale(this->obj, scale));
 }
 
 } // namespace godzilla
