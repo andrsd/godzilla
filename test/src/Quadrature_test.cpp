@@ -21,7 +21,8 @@ TEST(QuadratureTest, dup)
 
     EXPECT_TRUE(q.equal(r));
 
-    q.destroy();
+    auto s = q.duplicate();
+    EXPECT_TRUE(q.equal(s));
 }
 
 TEST(QuadratureTest, shallow)
