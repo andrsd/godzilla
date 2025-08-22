@@ -8,18 +8,18 @@
 
 using namespace godzilla;
 
-Partitioner::Partitioner() : part(nullptr)
+Partitioner::Partitioner() : PetscObjectWrapper(nullptr)
 {
     CALL_STACK_MSG();
 }
 
-Partitioner::Partitioner(MPI_Comm comm) : part(nullptr)
+Partitioner::Partitioner(MPI_Comm comm) : PetscObjectWrapper(nullptr)
 {
     CALL_STACK_MSG();
     create(comm);
 }
 
-Partitioner::Partitioner(PetscPartitioner p) : part(p)
+Partitioner::Partitioner(PetscPartitioner p) : PetscObjectWrapper(p)
 {
     CALL_STACK_MSG();
 }
@@ -28,23 +28,20 @@ void
 Partitioner::create(MPI_Comm comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerCreate(comm, &this->part));
+    PETSC_CHECK(PetscPartitionerCreate(comm, &this->obj));
 }
 
 void
 Partitioner::destroy()
 {
     CALL_STACK_MSG();
-    if (this->part)
-        PETSC_CHECK(PetscPartitionerDestroy(&this->part));
-    this->part = nullptr;
 }
 
 void
 Partitioner::set_type(const std::string & type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerSetType(this->part, type.c_str()));
+    PETSC_CHECK(PetscPartitionerSetType(this->obj, type.c_str()));
 }
 
 std::string
@@ -52,7 +49,7 @@ Partitioner::get_type() const
 {
     CALL_STACK_MSG();
     PetscPartitionerType name;
-    PETSC_CHECK(PetscPartitionerGetType(this->part, &name));
+    PETSC_CHECK(PetscPartitionerGetType(this->obj, &name));
     return { name };
 }
 
@@ -60,21 +57,21 @@ void
 Partitioner::reset()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerReset(this->part));
+    PETSC_CHECK(PetscPartitionerReset(this->obj));
 }
 
 void
 Partitioner::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerSetUp(this->part));
+    PETSC_CHECK(PetscPartitionerSetUp(this->obj));
 }
 
 void
 Partitioner::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscPartitionerView(this->part, viewer));
+    PETSC_CHECK(PetscPartitionerView(this->obj, viewer));
 }
 
 void
@@ -89,7 +86,7 @@ Partitioner::partition(Int n_parts,
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
-    PETSC_CHECK(PetscPartitionerPartition(this->part,
+    PETSC_CHECK(PetscPartitionerPartition(this->obj,
                                           n_parts,
                                           n_vertices,
                                           start,
@@ -100,7 +97,7 @@ Partitioner::partition(Int n_parts,
                                           part_section,
                                           partition));
 #else
-    PETSC_CHECK(PetscPartitionerPartition(this->part,
+    PETSC_CHECK(PetscPartitionerPartition(this->obj,
                                           n_parts,
                                           n_vertices,
                                           start,
@@ -125,7 +122,7 @@ Partitioner::partition(Int n_parts,
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
-    PETSC_CHECK(PetscPartitionerPartition(this->part,
+    PETSC_CHECK(PetscPartitionerPartition(this->obj,
                                           n_parts,
                                           n_vertices,
                                           start,
@@ -138,10 +135,4 @@ Partitioner::partition(Int n_parts,
 #else
     throw Exception("PETSc 3.21+ is needed for Partitioner::partition with edge_section parameter");
 #endif
-}
-
-Partitioner::operator PetscPartitioner() const
-{
-    CALL_STACK_MSG();
-    return this->part;
 }

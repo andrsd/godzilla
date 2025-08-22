@@ -28,8 +28,8 @@ void
 Partitioning::destroy()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatPartitioningDestroy(&this->matp));
-    this->matp = nullptr;
+    // PETSC_CHECK(MatPartitioningDestroy(&this->matp));
+    // this->matp = nullptr;
 }
 
 std::string
