@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/Error.h"
 #include "godzilla/Delegate.h"
@@ -15,7 +16,7 @@ class Matrix;
 class Vector;
 
 /// Wrapper around KSP
-class KrylovSolver {
+class KrylovSolver : public PetscObjectWrapper<KSP> {
 public:
     enum ConvergedReason {
         CONVERGED_ITERATING = KSP_CONVERGED_ITERATING,
@@ -134,7 +135,7 @@ public:
     {
         this->compute_rhs_method.bind(instance, method);
         PETSC_CHECK(
-            KSPSetComputeRHS(this->ksp, invoke_compute_rhs_delegate, &this->compute_rhs_method));
+            KSPSetComputeRHS(this->obj, invoke_compute_rhs_delegate, &this->compute_rhs_method));
     }
 
     /// Set member function to compute operators of the linear system
@@ -147,7 +148,7 @@ public:
     set_compute_operators(T * instance, void (T::*method)(Matrix &, Matrix &))
     {
         this->compute_operators_method.bind(instance, method);
-        PETSC_CHECK(KSPSetComputeOperators(this->ksp,
+        PETSC_CHECK(KSPSetComputeOperators(this->obj,
                                            invoke_compute_operators_delegate,
                                            &this->compute_operators_method));
     }
@@ -164,7 +165,7 @@ public:
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
-            KSPMonitorSet(this->ksp, invoke_monitor_delegate, &this->monitor_method, nullptr));
+            KSPMonitorSet(this->obj, invoke_monitor_delegate, &this->monitor_method, nullptr));
     }
 
     template <class T>
@@ -172,7 +173,7 @@ public:
     set_convergence_test(T * instance, ConvergedReason (T::*method)(Int, Real))
     {
         this->convergence_test_method.bind(instance, method);
-        PETSC_CHECK(KSPSetConvergenceTest(this->ksp,
+        PETSC_CHECK(KSPSetConvergenceTest(this->obj,
                                           invoke_convergence_test_delegate,
                                           &this->convergence_test_method,
                                           nullptr));
@@ -196,9 +197,6 @@ public:
 
     PC get_pc() const;
 
-    /// typecast operator so we can use our class directly with PETSc API
-    operator KSP() const;
-
     /// Set preconditioner type
     ///
     /// @tparam PCTYPE C++ class of a Preconditioner type
@@ -207,7 +205,9 @@ public:
     PCTYPE
     set_pc_type() const
     {
-        return PCTYPE(get_pc());
+        PCTYPE pc(get_pc());
+        pc.inc_reference();
+        return pc;
     }
 
     /// Sets the preconditioning side
@@ -241,8 +241,6 @@ public:
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
 private:
-    /// PETSc object
-    KSP ksp;
     /// Method for monitoring the solve
     Delegate<void(Int it, Real rnorm)> monitor_method;
     /// Method for computing RHS
