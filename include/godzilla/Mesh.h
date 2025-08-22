@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/Label.h"
 #include "godzilla/Vector.h"
@@ -16,11 +17,10 @@ namespace godzilla {
 
 /// Base class for meshes
 ///
-class Mesh {
+class Mesh : public PetscObjectWrapper<DM> {
 public:
     Mesh();
     explicit Mesh(DM dm);
-    virtual ~Mesh();
 
     /// Get the MPI comm this object works on
     mpi::Communicator get_comm() const;
@@ -126,10 +126,6 @@ public:
 protected:
     /// Set the DM
     void set_dm(DM dm);
-
-private:
-    /// DM object
-    DM dm;
 };
 
 } // namespace godzilla

@@ -22,7 +22,6 @@ class UnstructuredMesh : public Mesh {
 public:
     explicit UnstructuredMesh(const mpi::Communicator & comm);
     explicit UnstructuredMesh(DM dm);
-    ~UnstructuredMesh() override;
 
     UnstructuredMesh clone() const;
 

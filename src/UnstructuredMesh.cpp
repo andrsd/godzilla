@@ -27,11 +27,6 @@ UnstructuredMesh::UnstructuredMesh(DM dm) : Mesh(dm), common_cells_by_vtx_comput
     CALL_STACK_MSG();
 }
 
-UnstructuredMesh::~UnstructuredMesh()
-{
-    CALL_STACK_MSG();
-}
-
 UnstructuredMesh
 UnstructuredMesh::clone() const
 {
@@ -45,9 +40,10 @@ Label
 UnstructuredMesh::get_depth_label() const
 {
     CALL_STACK_MSG();
-    DMLabel depth_label;
-    PETSC_CHECK(DMPlexGetDepthLabel(get_dm(), &depth_label));
-    return Label(depth_label);
+    Label depth_label;
+    PETSC_CHECK(DMPlexGetDepthLabel(get_dm(), depth_label));
+    depth_label.inc_reference();
+    return depth_label;
 }
 
 Int
@@ -152,11 +148,13 @@ UnstructuredMesh::get_all_cells() const
     CALL_STACK_MSG();
     Int depth;
     PETSC_CHECK(DMPlexGetDepth(get_dm(), &depth));
-    IS cell_is;
-    PETSC_CHECK(DMGetStratumIS(get_dm(), "dim", depth, &cell_is));
-    if (!cell_is)
-        PETSC_CHECK(DMGetStratumIS(get_dm(), "depth", depth, &cell_is));
-    return IndexSet(cell_is);
+    IndexSet cell_is;
+    PETSC_CHECK(DMGetStratumIS(get_dm(), "dim", depth, cell_is));
+    if (!cell_is) {
+        PETSC_CHECK(DMGetStratumIS(get_dm(), "depth", depth, cell_is));
+        cell_is.inc_reference();
+    }
+    return cell_is;
 }
 
 IndexSet
@@ -165,11 +163,13 @@ UnstructuredMesh::get_facets() const
     CALL_STACK_MSG();
     Int depth;
     PETSC_CHECK(DMPlexGetDepth(get_dm(), &depth));
-    IS face_is;
-    PETSC_CHECK(DMGetStratumIS(get_dm(), "dim", depth - 1, &face_is));
-    if (!face_is)
-        PETSC_CHECK(DMGetStratumIS(get_dm(), "depth", depth - 1, &face_is));
-    return IndexSet(face_is);
+    IndexSet face_is;
+    PETSC_CHECK(DMGetStratumIS(get_dm(), "dim", depth - 1, face_is));
+    if (!face_is) {
+        PETSC_CHECK(DMGetStratumIS(get_dm(), "depth", depth - 1, face_is));
+        face_is.inc_reference();
+    }
+    return face_is;
 }
 
 Range
@@ -286,6 +286,7 @@ UnstructuredMesh::get_cone_recursive_vertices(IndexSet points) const
     CALL_STACK_MSG();
     IndexSet expanded_points;
     PETSC_CHECK(DMPlexGetConeRecursiveVertices(get_dm(), points, expanded_points));
+    expanded_points.inc_reference();
     return expanded_points;
 }
 
@@ -351,17 +352,16 @@ void
 UnstructuredMesh::create_face_set_labels(const std::map<Int, std::string> & names)
 {
     CALL_STACK_MSG();
-    Label fs_label = get_label("Face Sets");
+    auto fs_label = get_label("Face Sets");
     if (fs_label) {
-        Int n_fs = fs_label.get_num_values();
-        IndexSet fs_ids = fs_label.get_value_index_set();
+        auto n_fs = fs_label.get_num_values();
+        auto fs_ids = fs_label.get_value_index_set();
         fs_ids.get_indices();
         for (Int i = 0; i < n_fs; ++i) {
-            Int id = fs_ids[i];
+            auto id = fs_ids[i];
             create_face_set(id, names.at(id));
         }
         fs_ids.restore_indices();
-        fs_ids.destroy();
     }
 }
 
@@ -369,14 +369,13 @@ void
 UnstructuredMesh::create_face_set(Int id, const std::string & name)
 {
     CALL_STACK_MSG();
-    Label face_sets_label = get_label("Face Sets");
-    IndexSet is = face_sets_label.get_stratum(id);
+    auto face_sets_label = get_label("Face Sets");
+    auto is = face_sets_label.get_stratum(id);
     if (is) {
         create_label(name);
-        Label label = get_label(name);
+        auto label = get_label(name);
         label.set_stratum(id, is);
     }
-    is.destroy();
 }
 
 void
@@ -427,7 +426,6 @@ UnstructuredMesh::create_cell_set(Int id, const std::string & name)
     auto label = get_label(name);
     if (cell_set)
         label.set_stratum(id, cell_set);
-    cell_set.destroy();
 }
 
 void
@@ -559,7 +557,6 @@ UnstructuredMesh::create_vertex_set_labels(const std::map<Int, std::string> & na
             create_vertex_set(id, names.at(id));
         }
         vs_ids.restore_indices();
-        vs_ids.destroy();
     }
 }
 
@@ -574,7 +571,6 @@ UnstructuredMesh::create_vertex_set(Int id, const std::string & name)
         auto label = get_label(name);
         label.set_stratum(id, is);
     }
-    is.destroy();
 }
 
 void
@@ -681,9 +677,10 @@ StarForest
 UnstructuredMesh::get_point_star_forest() const
 {
     CALL_STACK_MSG();
-    PetscSF sf;
-    PETSC_CHECK(DMGetPointSF(get_dm(), &sf));
-    return { sf };
+    StarForest sf;
+    PETSC_CHECK(DMGetPointSF(get_dm(), sf));
+    sf.inc_reference();
+    return sf;
 }
 
 void
@@ -774,9 +771,10 @@ IndexSet
 UnstructuredMesh::get_cell_numbering() const
 {
     CALL_STACK_MSG();
-    IS is;
-    PETSC_CHECK(DMPlexGetCellNumbering(get_dm(), &is));
-    return IndexSet(is);
+    IndexSet is;
+    PETSC_CHECK(DMPlexGetCellNumbering(get_dm(), is));
+    is.inc_reference();
+    return is;
 }
 
 void
