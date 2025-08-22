@@ -15,6 +15,7 @@
 #include "godzilla/FEShapeFns.h"
 #include "godzilla/Utils.h"
 #include "petscdm.h"
+#include <cstdio>
 #include <set>
 #include <vector>
 
@@ -46,6 +47,7 @@ public:
     {
         CALL_STACK_MSG();
         this->facets.sort();
+        fmt::print(stderr, "BoundaryInfo has been deprecated and will be removed in future");
     }
 
     BoundaryInfo(UnstructuredMesh * mesh, const IndexSet & facets) :
@@ -56,6 +58,7 @@ public:
     {
         CALL_STACK_MSG();
         this->facets.sort();
+        fmt::print(stderr, "BoundaryInfo has been deprecated and will be removed in future");
     }
 
     UnstructuredMesh *
