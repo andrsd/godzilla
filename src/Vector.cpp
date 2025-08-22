@@ -11,15 +11,15 @@
 
 namespace godzilla {
 
-Vector::Vector() : vec(nullptr) {}
+Vector::Vector() : PetscObjectWrapper(nullptr) {}
 
-Vector::Vector(MPI_Comm comm) : vec(nullptr)
+Vector::Vector(MPI_Comm comm) : PetscObjectWrapper(nullptr)
 {
     CALL_STACK_MSG();
     create(comm);
 }
 
-Vector::Vector(Vec vec) : vec(vec)
+Vector::Vector(Vec vec) : PetscObjectWrapper(vec)
 {
     CALL_STACK_MSG();
 }
@@ -28,30 +28,20 @@ void
 Vector::create(MPI_Comm comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecCreate(comm, &this->vec));
+    PETSC_CHECK(VecCreate(comm, &this->obj));
 }
 
 void
 Vector::destroy()
 {
     CALL_STACK_MSG();
-    if (this->vec)
-        PETSC_CHECK(VecDestroy(&this->vec));
-    this->vec = nullptr;
 }
 
 void
 Vector::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetUp(this->vec));
-}
-
-void
-Vector::set_name(const std::string & name)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->vec, name.c_str()));
+    PETSC_CHECK(VecSetUp(this->obj));
 }
 
 void
@@ -66,14 +56,14 @@ void
 Vector::assembly_begin()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAssemblyBegin(this->vec));
+    PETSC_CHECK(VecAssemblyBegin(this->obj));
 }
 
 void
 Vector::assembly_end()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAssemblyEnd(this->vec));
+    PETSC_CHECK(VecAssemblyEnd(this->obj));
 }
 
 std::string
@@ -81,7 +71,7 @@ Vector::get_type() const
 {
     CALL_STACK_MSG();
     VecType type;
-    PETSC_CHECK(VecGetType(this->vec, &type));
+    PETSC_CHECK(VecGetType(this->obj, &type));
     return std::string(type);
 }
 
@@ -90,7 +80,7 @@ Vector::get_size() const
 {
     CALL_STACK_MSG();
     Int sz;
-    PETSC_CHECK(VecGetSize(this->vec, &sz));
+    PETSC_CHECK(VecGetSize(this->obj, &sz));
     return sz;
 }
 
@@ -99,7 +89,7 @@ Vector::get_local_size() const
 {
     CALL_STACK_MSG();
     Int sz;
-    PETSC_CHECK(VecGetLocalSize(this->vec, &sz));
+    PETSC_CHECK(VecGetLocalSize(this->obj, &sz));
     return sz;
 }
 
@@ -107,14 +97,14 @@ void
 Vector::get_values(const std::vector<Int> & idx, std::vector<Scalar> & y) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecGetValues(this->vec, (Int) idx.size(), idx.data(), y.data()));
+    PETSC_CHECK(VecGetValues(this->obj, (Int) idx.size(), idx.data(), y.data()));
 }
 
 void
 Vector::abs()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAbs(this->vec));
+    PETSC_CHECK(VecAbs(this->obj));
 }
 
 Scalar
@@ -122,7 +112,7 @@ Vector::dot(const Vector & y) const
 {
     CALL_STACK_MSG();
     Scalar val;
-    PETSC_CHECK(VecDot(this->vec, y.vec, &val));
+    PETSC_CHECK(VecDot(this->obj, y.obj, &val));
     return val;
 }
 
@@ -130,43 +120,43 @@ void
 Vector::scale(Scalar alpha)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecScale(this->vec, alpha));
+    PETSC_CHECK(VecScale(this->obj, alpha));
 }
 
 void
 Vector::duplicate(Vector & b) const
 {
     CALL_STACK_MSG();
-    VecDuplicate(this->vec, &b.vec);
+    VecDuplicate(this->obj, &b.obj);
 }
 
 Vector
 Vector::duplicate() const
 {
-    Vec dup;
-    PETSC_CHECK(VecDuplicate(this->vec, &dup));
-    return { dup };
+    Vector dup;
+    PETSC_CHECK(VecDuplicate(this->obj, dup));
+    return dup;
 }
 
 void
 Vector::copy(Vector & y) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecCopy(this->vec, y.vec));
+    PETSC_CHECK(VecCopy(this->obj, y.obj));
 }
 
 void
 Vector::assign(const Vector & y)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecCopy(y.vec, this->vec));
+    PETSC_CHECK(VecCopy(y.obj, this->obj));
 }
 
 void
 Vector::normalize()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecNormalize(this->vec, nullptr));
+    PETSC_CHECK(VecNormalize(this->obj, nullptr));
 }
 
 Scalar
@@ -174,7 +164,7 @@ Vector::min() const
 {
     CALL_STACK_MSG();
     Scalar val;
-    PETSC_CHECK(VecMin(this->vec, nullptr, &val));
+    PETSC_CHECK(VecMin(this->obj, nullptr, &val));
     return val;
 }
 
@@ -183,7 +173,7 @@ Vector::max() const
 {
     CALL_STACK_MSG();
     Scalar val;
-    PETSC_CHECK(VecMax(this->vec, nullptr, &val));
+    PETSC_CHECK(VecMax(this->obj, nullptr, &val));
     return val;
 }
 
@@ -191,7 +181,7 @@ void
 Vector::chop(Real tol)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecFilter(this->vec, tol));
+    PETSC_CHECK(VecFilter(this->obj, tol));
 }
 
 #if PETSC_VERSION_GE(3, 20, 0)
@@ -199,7 +189,7 @@ void
 Vector::filter(Real tol)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecFilter(this->vec, tol));
+    PETSC_CHECK(VecFilter(this->obj, tol));
 }
 #endif
 
@@ -207,28 +197,28 @@ void
 Vector::axpy(Scalar alpha, const Vector & x)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAXPY(this->vec, alpha, x));
+    PETSC_CHECK(VecAXPY(this->obj, alpha, x));
 }
 
 void
 Vector::axpby(Scalar alpha, Scalar beta, const Vector & x)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAXPBY(this->vec, alpha, beta, x));
+    PETSC_CHECK(VecAXPBY(this->obj, alpha, beta, x));
 }
 
 void
 Vector::aypx(Scalar beta, const Vector & x)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAYPX(this->vec, beta, x));
+    PETSC_CHECK(VecAYPX(this->obj, beta, x));
 }
 
 void
 Vector::waxpy(Scalar alpha, const Vector & x, const Vector & y)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecWAXPY(this->vec, alpha, x, y));
+    PETSC_CHECK(VecWAXPY(this->obj, alpha, x, y));
 }
 
 void
@@ -240,7 +230,7 @@ Vector::maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x)
         std::vector<Vec> xx(n);
         for (std::size_t i = 0; i < n; ++i)
             xx[i] = (Vec) x[i];
-        PETSC_CHECK(VecMAXPY(this->vec, n, alpha.data(), xx.data()));
+        PETSC_CHECK(VecMAXPY(this->obj, n, alpha.data(), xx.data()));
     }
 }
 
@@ -248,28 +238,28 @@ void
 Vector::axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecAXPBYPCZ(this->vec, alpha, beta, gamma, x, y));
+    PETSC_CHECK(VecAXPBYPCZ(this->obj, alpha, beta, gamma, x, y));
 }
 
 void
 Vector::reciprocal()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecReciprocal(this->vec));
+    PETSC_CHECK(VecReciprocal(this->obj));
 }
 
 void
 Vector::shift(Scalar shift)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecShift(this->vec, shift));
+    PETSC_CHECK(VecShift(this->obj, shift));
 }
 
 void
 Vector::set(Scalar alpha)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSet(this->vec, alpha));
+    PETSC_CHECK(VecSet(this->obj, alpha));
 }
 
 void
@@ -279,42 +269,42 @@ Vector::set_sizes(Int n, Int N)
     if (n == PETSC_DECIDE && N == PETSC_DECIDE)
         throw Exception(
             "Calling Vector::set_sizes with n = PETSC_DECIDE and N = PETSC_DECIDE is not allowed.");
-    PETSC_CHECK(VecSetSizes(this->vec, n, N));
+    PETSC_CHECK(VecSetSizes(this->obj, n, N));
 }
 
 void
 Vector::set_block_size(Int bs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetBlockSize(this->vec, bs));
+    PETSC_CHECK(VecSetBlockSize(this->obj, bs));
 }
 
 void
 Vector::set_type(VecType method)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetType(this->vec, method));
+    PETSC_CHECK(VecSetType(this->obj, method));
 }
 
 void
 Vector::set_value(Int row, Scalar value, InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValue(this->vec, row, value, mode));
+    PETSC_CHECK(VecSetValue(this->obj, row, value, mode));
 }
 
 void
 Vector::set_value_local(Int row, Scalar value, InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValueLocal(this->vec, row, value, mode));
+    PETSC_CHECK(VecSetValueLocal(this->obj, row, value, mode));
 }
 
 void
 Vector::set_values(Int n, const Int * ix, const Scalar * y, InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValues(this->vec, n, ix, y, mode));
+    PETSC_CHECK(VecSetValues(this->obj, n, ix, y, mode));
 }
 
 void
@@ -322,7 +312,7 @@ Vector::set_values(const std::vector<Int> & ix, const std::vector<Scalar> & y, I
 {
     CALL_STACK_MSG();
     assert(ix.size() == y.size());
-    PETSC_CHECK(VecSetValues(this->vec, ix.size(), ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
 }
 
 void
@@ -332,7 +322,7 @@ Vector::set_values(const DynDenseVector<Int> & ix,
 {
     CALL_STACK_MSG();
     assert(ix.size() == y.size());
-    PETSC_CHECK(VecSetValues(this->vec, ix.size(), ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
 }
 
 void
@@ -342,7 +332,7 @@ Vector::set_values_local(const std::vector<Int> & ix,
 {
     CALL_STACK_MSG();
     assert(ix.size() == y.size());
-    PETSC_CHECK(VecSetValuesLocal(this->vec, ix.size(), ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
 }
 
 void
@@ -352,7 +342,7 @@ Vector::set_values_local(const DynDenseVector<Int> & ix,
 {
     CALL_STACK_MSG();
     assert(ix.size() == y.size());
-    PETSC_CHECK(VecSetValuesLocal(this->vec, ix.size(), ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
 }
 
 Scalar
@@ -360,7 +350,7 @@ Vector::sum() const
 {
     CALL_STACK_MSG();
     Scalar sum;
-    PETSC_CHECK(VecSum(this->vec, &sum));
+    PETSC_CHECK(VecSum(this->obj, &sum));
     return sum;
 }
 
@@ -368,7 +358,7 @@ void
 Vector::zero()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecZeroEntries(this->vec));
+    PETSC_CHECK(VecZeroEntries(this->obj));
 }
 
 Scalar
@@ -376,7 +366,7 @@ Vector::operator()(Int idx) const
 {
     CALL_STACK_MSG();
     Scalar val;
-    PETSC_CHECK(VecGetValues(this->vec, 1, &idx, &val));
+    PETSC_CHECK(VecGetValues(this->obj, 1, &idx, &val));
     return val;
 }
 
@@ -385,7 +375,7 @@ Vector::get_array()
 {
     CALL_STACK_MSG();
     Scalar * array;
-    PETSC_CHECK(VecGetArray(this->vec, &array));
+    PETSC_CHECK(VecGetArray(this->obj, &array));
     return array;
 }
 
@@ -394,7 +384,7 @@ Vector::get_array_read() const
 {
     CALL_STACK_MSG();
     const Scalar * array;
-    PETSC_CHECK(VecGetArrayRead(this->vec, &array));
+    PETSC_CHECK(VecGetArrayRead(this->obj, &array));
     return array;
 }
 
@@ -402,81 +392,75 @@ void
 Vector::restore_array(Scalar * array)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecRestoreArray(this->vec, &array));
+    PETSC_CHECK(VecRestoreArray(this->obj, &array));
 }
 
 void
 Vector::restore_array_read(const Scalar * array) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecRestoreArrayRead(this->vec, &array));
+    PETSC_CHECK(VecRestoreArrayRead(this->obj, &array));
 }
 
 void
 Vector::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecView(this->vec, viewer));
-}
-
-Vector::operator Vec() const
-{
-    CALL_STACK_MSG();
-    return this->vec;
+    PETSC_CHECK(VecView(this->obj, viewer));
 }
 
 Vector
 Vector::create_seq(MPI_Comm comm, Int n)
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(VecCreateSeq(comm, n, &v));
-    return Vector(v);
+    Vector v;
+    PETSC_CHECK(VecCreateSeq(comm, n, v));
+    return v;
 }
 
 Vector
 Vector::create_seq(MPI_Comm comm, Int bs, Int n, const Scalar array[])
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(VecCreateSeqWithArray(comm, bs, n, array, &v));
-    return Vector(v);
+    Vector v;
+    PETSC_CHECK(VecCreateSeqWithArray(comm, bs, n, array, v));
+    return v;
 }
 
 Vector
 Vector::create_seq(MPI_Comm comm, Int bs, const std::vector<Scalar> & data)
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(VecCreateSeqWithArray(comm, bs, data.size(), data.data(), &v));
-    return Vector(v);
+    Vector v;
+    PETSC_CHECK(VecCreateSeqWithArray(comm, bs, data.size(), data.data(), v));
+    return v;
 }
 
 Vector
 Vector::create_mpi(MPI_Comm comm, Int n, Int N)
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(VecCreateMPI(comm, n, N, &v));
-    return Vector(v);
+    Vector v;
+    PETSC_CHECK(VecCreateMPI(comm, n, N, v));
+    return v;
 }
 
 Vector
 Vector::create_mpi(MPI_Comm comm, Int bs, Int n, Int N, const Scalar array[])
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(VecCreateMPIWithArray(comm, bs, n, N, array, &v));
-    return Vector(v);
+    Vector v;
+    PETSC_CHECK(VecCreateMPIWithArray(comm, bs, n, N, array, v));
+    return v;
 }
 
 Vector
 Vector::create_mpi(MPI_Comm comm, Int bs, const std::vector<Scalar> & data, Int N)
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(VecCreateMPIWithArray(comm, bs, data.size(), N, data.data(), &v));
-    return Vector(v);
+    Vector v;
+    PETSC_CHECK(VecCreateMPIWithArray(comm, bs, data.size(), N, data.data(), v));
+    return v;
 }
 
 NestVector
@@ -487,9 +471,9 @@ Vector::create_nest(MPI_Comm comm, const std::vector<Vector> & vecs)
     vvs.reserve(vecs.size());
     for (const auto & v : vecs)
         vvs.push_back(v);
-    Vec y;
-    PETSC_CHECK(VecCreateNest(comm, vecs.size(), nullptr, vvs.data(), &y));
-    return NestVector(y);
+    NestVector y;
+    PETSC_CHECK(VecCreateNest(comm, vecs.size(), nullptr, vvs.data(), y));
+    return y;
 }
 
 void
@@ -524,23 +508,23 @@ void
 Vector::set_option(VecOption op, bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetOption(this->vec, op, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(VecSetOption(this->obj, op, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 Vector
 Vector::get_sub_vector(const IndexSet & is) const
 {
     CALL_STACK_MSG();
-    Vec y;
-    PETSC_CHECK(VecGetSubVector(this->vec, is, &y));
-    return Vector(y);
+    Vector y;
+    PETSC_CHECK(VecGetSubVector(this->obj, is, y));
+    return y;
 }
 
 void
 Vector::restore_sub_vector(const IndexSet & is, Vector & y) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecRestoreSubVector(this->vec, is, &y.vec));
+    PETSC_CHECK(VecRestoreSubVector(this->obj, is, &y.obj));
 }
 
 Real
@@ -548,7 +532,7 @@ Vector::norm(NormType type) const
 {
     CALL_STACK_MSG();
     Real val;
-    PETSC_CHECK(VecNorm(this->vec, type, &val));
+    PETSC_CHECK(VecNorm(this->obj, type, &val));
     return val;
 }
 
@@ -556,7 +540,7 @@ void
 Vector::copy(const IndexSet & is, ScatterMode mode, Vector & reduced)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecISCopy(this->vec, is, mode, reduced));
+    PETSC_CHECK(VecISCopy(this->obj, is, mode, reduced));
 }
 
 Scalar
