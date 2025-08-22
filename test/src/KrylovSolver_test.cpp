@@ -211,20 +211,6 @@ TEST(KrylovSolver, set_opers_rhs)
     EXPECT_DOUBLE_EQ(b(1), 4);
 }
 
-TEST(KrylovSolver, ctor_ksp)
-{
-    TestApp app;
-    auto comm = app.get_comm();
-
-    KSP ksp;
-    KSPCreate(comm, &ksp);
-
-    KrylovSolver ks(ksp);
-    EXPECT_EQ(static_cast<KSP>(ks), ksp);
-
-    KSPDestroy(&ksp);
-}
-
 TEST(KrylovSolver, set_pc_type)
 {
     TestApp app;

@@ -110,6 +110,7 @@ GTestFENonlinearProblemJFNK::create_preconditioner(PC pc)
 {
     this->p = PCFactor(pc);
     this->p.set_type(PCFactor::ILU);
+    this->p.inc_reference();
 }
 
 } // namespace

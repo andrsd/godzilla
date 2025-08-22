@@ -11,6 +11,7 @@ TEST(PCFactor, ctor_pc)
     Preconditioner pc;
     pc.create(app.get_comm());
     PCFactor factor(pc);
+    factor.inc_reference();
     factor.set_type(PCFactor::ILU);
     EXPECT_EQ(pc.get_type(), PCILU);
 }

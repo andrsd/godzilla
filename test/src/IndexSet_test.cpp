@@ -47,16 +47,6 @@ TEST(IndexSetTest, get_id)
     EXPECT_TRUE(is.get_id() != 0);
 }
 
-TEST(IndexSetTest, DISABLED_inc_ref)
-{
-    TestApp app;
-    auto is = IndexSet::create_general(app.get_comm(), { 1, 2, 3 });
-    is.inc_ref();
-    Int cnt = 0;
-    PetscObjectGetReference((PetscObject) (IS) is, &cnt);
-    EXPECT_EQ(cnt, 2);
-}
-
 TEST(IndexSetTest, sort)
 {
     TestApp app;

@@ -5,7 +5,7 @@ using namespace godzilla;
 
 TEST(QuadratureTest, gauss_tensor)
 {
-    Quadrature q = Quadrature::create_gauss_tensor(2, 1, 2, -1, 1);
+    auto q = Quadrature::create_gauss_tensor(2, 1, 2, -1, 1);
     EXPECT_EQ(q.get_dim(), 2);
     EXPECT_EQ(q.get_num_components(), 1);
     EXPECT_EQ(q.get_order(), 3);
@@ -35,6 +35,4 @@ TEST(QuadratureTest, shallow)
     PetscBool eq;
     PetscQuadratureEqual(pq, (PetscQuadrature) q, &eq);
     EXPECT_TRUE(eq == PETSC_TRUE);
-
-    PetscQuadratureDestroy(&pq);
 }

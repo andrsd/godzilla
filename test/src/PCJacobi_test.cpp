@@ -11,6 +11,7 @@ TEST(PCJacobi, ctor_pc)
     Preconditioner pc;
     pc.create(app.get_comm());
     PCJacobi jacobi(pc);
+    jacobi.inc_reference();
     EXPECT_EQ(pc.get_type(), PCJACOBI);
     pc.destroy();
 }

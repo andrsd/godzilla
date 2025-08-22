@@ -13,6 +13,7 @@ TEST(PCComposite, ctor_pc)
     Preconditioner pc;
     pc.create(app.get_comm());
     PCComposite composite(pc);
+    composite.inc_reference();
     EXPECT_EQ(pc.get_type(), PCCOMPOSITE);
 }
 

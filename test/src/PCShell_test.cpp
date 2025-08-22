@@ -51,6 +51,7 @@ public:
     create_preconditioner(PC pc) override
     {
         this->pcshell = PCShell(pc);
+        this->pcshell.inc_reference();
         this->pcshell.set_apply(this, &CustomLinearProblem::apply_pc);
         this->pcshell.set_apply_transpose(this, &CustomLinearProblem::apply_transpose_pc);
     }

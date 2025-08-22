@@ -57,7 +57,8 @@ public:
         auto ts = get_ts();
         auto scheme = static_cast<TestTSScheme *>(ts->data);
 
-        Vector x = Vector::create_seq(comm, 3);
+        auto x = Vector::create_seq(comm, 3);
+        x.inc_reference();
         TSSetSolution(ts, x);
         TSSetMaxSteps(ts, 1);
 
