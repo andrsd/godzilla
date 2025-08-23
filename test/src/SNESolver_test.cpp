@@ -52,8 +52,6 @@ TEST(SNESolverTest, solver_cls)
 
     EXPECT_DOUBLE_EQ(vals[0], 2.);
     EXPECT_DOUBLE_EQ(vals[1], 3.);
-
-    snes.destroy();
 }
 
 TEST(SNESolverTest, mat_create_mf)

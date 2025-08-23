@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/Section.h"
 #include "godzilla/IndexSet.h"
@@ -10,7 +11,7 @@
 
 namespace godzilla {
 
-class Partitioner {
+class Partitioner : public PetscObjectWrapper<PetscPartitioner> {
 public:
     Partitioner();
     explicit Partitioner(MPI_Comm comm);
@@ -44,11 +45,6 @@ public:
                    IndexSet & partition);
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
-
-    operator PetscPartitioner() const;
-
-private:
-    PetscPartitioner part;
 };
 
 } // namespace godzilla

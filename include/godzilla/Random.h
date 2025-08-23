@@ -3,13 +3,14 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "petscsys.h"
 #include <vector>
 
 namespace godzilla {
 
-class Random {
+class Random : public PetscObjectWrapper<PetscRandom> {
 public:
     Random();
 
@@ -29,9 +30,6 @@ public:
     void set_interval(Scalar low, Scalar high);
     void set_seed(unsigned long seed);
     void set_type(const std::string & type);
-
-private:
-    PetscRandom rng;
 };
 
 } // namespace godzilla

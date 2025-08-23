@@ -74,8 +74,6 @@ TEST(StarForestTest, test)
     auto remote_leaves_arr = graph.get_remote_leaves();
     EXPECT_EQ(remote_leaves_arr[0].rank, 0);
     EXPECT_EQ(remote_leaves_arr[0].index, 0);
-
-    sf.destroy();
 }
 
 TEST(StarForestTest, reset)
@@ -96,7 +94,6 @@ TEST(StarForestTest, reset)
     auto empty = sf.get_graph();
     EXPECT_EQ(empty.get_num_leaves(), -1);
     EXPECT_EQ(empty.get_num_roots(), -1);
-    sf.destroy();
 }
 
 TEST(StarForestTest, view)
@@ -116,7 +113,6 @@ TEST(StarForestTest, view)
     iremote[0].index = 0;
     sf.set_graph(n_roots, n_leaves, ilocal, iremote);
     sf.view();
-    sf.destroy();
 
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, HasSubstr("PetscSF Object: 1 MPI process"));
@@ -138,8 +134,4 @@ TEST(StarForestTest, oper_bool)
     sf.create(app.get_comm());
     EXPECT_TRUE(sf);
     EXPECT_TRUE(csf);
-
-    sf.destroy();
-    EXPECT_FALSE(sf);
-    EXPECT_FALSE(csf);
 }

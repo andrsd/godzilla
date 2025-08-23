@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Enums.h"
 #include "godzilla/Types.h"
 #include "petscis.h"
@@ -13,7 +14,7 @@ namespace godzilla {
 
 /// `IndexSet`s are objects used to do efficient indexing into other data structures such as
 /// `Vector` and `Matrix`
-class IndexSet {
+class IndexSet : public PetscObjectWrapper<IS> {
 public:
     struct Iterator {
         using iterator_category = std::forward_iterator_tag;
@@ -200,10 +201,6 @@ public:
 
     Int operator()(Int i) const;
 
-    /// Typecast operator to determine if label is null or not
-    operator bool() const;
-    operator bool();
-
     /// Convert indices from this index set into std::vector
     ///
     /// @return std::vector containing the indices
@@ -230,24 +227,10 @@ public:
     /// @param type The type of index set to build
     void set_type(const std::string & type);
 
-    /// Increase reference of this object
-    void inc_ref();
-
-    /// Convert this object to a PETSc object so it can be passed directly into PETSc API
-    operator IS() const;
-
-    /// Convert this object to a PETSc object so it can be passed directly into PETSc API
-    operator IS *();
-
     /// Checks if the IndexSet is empty (i.e., has no indices)
     ///
     /// @return `true` if the index set is empty, `false` otherwise
     bool empty() const;
-
-    /// Returns the PETSc ID of the index set
-    ///
-    /// @return The PETSc ID
-    PetscObjectId get_id() const;
 
     /// Shift all indices by given offset
     ///
@@ -279,7 +262,6 @@ public:
     ConstIterator end() const;
 
 private:
-    IS is;
     const Int * indices;
 
 public:

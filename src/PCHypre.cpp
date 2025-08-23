@@ -43,17 +43,17 @@ PCHypre::set_type(Type type)
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
     if (type == EUCLID)
-        PETSC_CHECK(PCHYPRESetType(this->pc, "euclid"));
+        PETSC_CHECK(PCHYPRESetType(this->obj, "euclid"));
     else if (type == PILUT)
-        PETSC_CHECK(PCHYPRESetType(this->pc, "pilut"));
+        PETSC_CHECK(PCHYPRESetType(this->obj, "pilut"));
     else if (type == PARASAILS)
-        PETSC_CHECK(PCHYPRESetType(this->pc, "parasails"));
+        PETSC_CHECK(PCHYPRESetType(this->obj, "parasails"));
     else if (type == BOOMERAMG)
-        PETSC_CHECK(PCHYPRESetType(this->pc, "boomeramg"));
+        PETSC_CHECK(PCHYPRESetType(this->obj, "boomeramg"));
     else if (type == AMS)
-        PETSC_CHECK(PCHYPRESetType(this->pc, "ams"));
+        PETSC_CHECK(PCHYPRESetType(this->obj, "ams"));
     else if (type == ADS)
-        PETSC_CHECK(PCHYPRESetType(this->pc, "ads"));
+        PETSC_CHECK(PCHYPRESetType(this->obj, "ads"));
 #else
     throw Exception("PETSc was not built with HYPRE.");
 #endif
@@ -65,7 +65,7 @@ PCHypre::get_type() const
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
     const char * name;
-    PETSC_CHECK(PCHYPREGetType(this->pc, &name));
+    PETSC_CHECK(PCHYPREGetType(this->obj, &name));
     if (strcmp(name, "euclid") == 0)
         return EUCLID;
     else if (strcmp(name, "pilut") == 0)
@@ -91,7 +91,7 @@ PCHypre::ams_set_interior_nodes(const Vector & interior)
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
     #if PETSC_VERSION_GE(3, 18, 0)
-    PETSC_CHECK(PCHYPREAMSSetInteriorNodes(this->pc, interior));
+    PETSC_CHECK(PCHYPREAMSSetInteriorNodes(this->obj, interior));
     #endif
 #else
     throw Exception("PETSc was not built with HYPRE.");
@@ -103,7 +103,7 @@ PCHypre::set_alpha_poisson_matrix(const Matrix & A)
 {
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
-    PETSC_CHECK(PCHYPRESetAlphaPoissonMatrix(this->pc, A));
+    PETSC_CHECK(PCHYPRESetAlphaPoissonMatrix(this->obj, A));
 #else
     throw Exception("PETSc was not built with HYPRE.");
 #endif
@@ -114,7 +114,7 @@ PCHypre::set_beta_poisson_matrix(const Matrix & A)
 {
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
-    PETSC_CHECK(PCHYPRESetBetaPoissonMatrix(this->pc, A));
+    PETSC_CHECK(PCHYPRESetBetaPoissonMatrix(this->obj, A));
 #else
     throw Exception("PETSc was not built with HYPRE.");
 #endif
@@ -125,7 +125,7 @@ PCHypre::set_discrete_curl(const Matrix & C)
 {
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
-    PETSC_CHECK(PCHYPRESetDiscreteCurl(this->pc, C));
+    PETSC_CHECK(PCHYPRESetDiscreteCurl(this->obj, C));
 #else
     throw Exception("PETSc was not built with HYPRE.");
 #endif
@@ -136,7 +136,7 @@ PCHypre::set_discrete_gradient(const Matrix & G)
 {
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
-    PETSC_CHECK(PCHYPRESetDiscreteGradient(this->pc, G));
+    PETSC_CHECK(PCHYPRESetDiscreteGradient(this->obj, G));
 #else
     throw Exception("PETSc was not built with HYPRE.");
 #endif
@@ -147,7 +147,7 @@ PCHypre::set_edge_constant_vectors(const Vector & oz, const Vector & zo)
 {
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
-    PETSC_CHECK(PCHYPRESetEdgeConstantVectors(this->pc, oz, zo, nullptr));
+    PETSC_CHECK(PCHYPRESetEdgeConstantVectors(this->obj, oz, zo, nullptr));
 #else
     throw Exception("PETSc was not built with HYPRE.");
 #endif
@@ -158,7 +158,7 @@ PCHypre::set_edge_constant_vectors(const Vector & ozz, const Vector & zoz, const
 {
     CALL_STACK_MSG();
 #ifdef PETSC_HAVE_HYPRE
-    PETSC_CHECK(PCHYPRESetEdgeConstantVectors(this->pc, ozz, zoz, zzo));
+    PETSC_CHECK(PCHYPRESetEdgeConstantVectors(this->obj, ozz, zoz, zzo));
 #else
     throw Exception("PETSc was not built with HYPRE.");
 #endif

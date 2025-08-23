@@ -4,6 +4,7 @@
 #include "godzilla/StarForest.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
+#include "godzilla/PetscObjectWrapper.h"
 #include <cassert>
 
 namespace godzilla {
@@ -85,36 +86,35 @@ StarForest::Graph::operator bool()
 
 // ---
 
-StarForest::StarForest() : sf(nullptr) {}
+StarForest::StarForest() : PetscObjectWrapper(nullptr) {}
 
-StarForest::StarForest(PetscSF sf) : sf(sf) {}
+StarForest::StarForest(PetscSF sf) : PetscObjectWrapper(sf) {}
 
 void
 StarForest::create(MPI_Comm comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFCreate(comm, &this->sf));
+    PETSC_CHECK(PetscSFCreate(comm, &this->obj));
 }
 
 void
 StarForest::destroy()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFDestroy(&this->sf));
 }
 
 void
 StarForest::reset()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFReset(this->sf));
+    PETSC_CHECK(PetscSFReset(this->obj));
 }
 
 void
 StarForest::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFSetUp(this->sf));
+    PETSC_CHECK(PetscSFSetUp(this->obj));
 }
 
 StarForest::Graph
@@ -124,7 +124,7 @@ StarForest::get_graph() const
     Int n_roots, n_leaves;
     const Int * leaves;
     const PetscSFNode * remote_leaves;
-    PETSC_CHECK(PetscSFGetGraph(this->sf, &n_roots, &n_leaves, &leaves, &remote_leaves));
+    PETSC_CHECK(PetscSFGetGraph(this->obj, &n_roots, &n_leaves, &leaves, &remote_leaves));
     return Graph(n_roots, n_leaves, leaves, remote_leaves);
 }
 
@@ -135,7 +135,7 @@ StarForest::set_graph(Int n_roots,
                       const std::vector<Node> & iremote) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFSetGraph(this->sf,
+    PETSC_CHECK(PetscSFSetGraph(this->obj,
                                 n_roots,
                                 n_leaves,
                                 const_cast<Int *>(ilocal.data()),
@@ -148,13 +148,7 @@ void
 StarForest::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscSFView(this->sf, viewer));
-}
-
-StarForest::operator PetscSF() const
-{
-    CALL_STACK_MSG();
-    return this->sf;
+    PETSC_CHECK(PetscSFView(this->obj, viewer));
 }
 
 } // namespace godzilla

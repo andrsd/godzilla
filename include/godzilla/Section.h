@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "petscsection.h"
 #include "petscdm.h"
@@ -13,7 +14,7 @@ namespace godzilla {
 
 class Range;
 
-class Section {
+class Section : public PetscObjectWrapper<PetscSection> {
 public:
     Section();
     Section(PetscSection s);
@@ -279,13 +280,6 @@ public:
     /// @return The constrained dofs sorted in ascending order
     const Int * get_field_constraint_indices(Int point, Int field) const;
 
-    operator const PetscSection &() const { return this->section; }
-
-    operator PetscSection &() { return this->section; }
-
-    operator bool() const { return this->section != nullptr; }
-    operator bool() { return this->section != nullptr; }
-
     static Section create(DM dm,
                           const Int n_comp[],
                           const Int n_dof[],
@@ -294,9 +288,6 @@ public:
                           const IS bc_comps[],
                           const IS bc_points[],
                           IS perm);
-
-private:
-    PetscSection section;
 };
 
 } // namespace godzilla

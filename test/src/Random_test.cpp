@@ -28,8 +28,6 @@ TEST(RandomTest, scalar)
     EXPECT_DOUBLE_EQ(rv[0], 74.990198048496381);
     EXPECT_DOUBLE_EQ(rv[1], 9.637165562356742);
     EXPECT_DOUBLE_EQ(rv[2], 87.046522702707563);
-
-    rng.destroy();
 }
 
 TEST(RandomTest, real)
@@ -57,6 +55,4 @@ TEST(RandomTest, real)
     EXPECT_DOUBLE_EQ(rv[0], 74.990198048496381);
     EXPECT_DOUBLE_EQ(rv[1], 9.637165562356742);
     EXPECT_DOUBLE_EQ(rv[2], 87.046522702707563);
-
-    rng.destroy();
 }

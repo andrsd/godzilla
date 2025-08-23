@@ -13,8 +13,8 @@ TEST(PCComposite, ctor_pc)
     Preconditioner pc;
     pc.create(app.get_comm());
     PCComposite composite(pc);
+    composite.inc_reference();
     EXPECT_EQ(pc.get_type(), PCCOMPOSITE);
-    pc.destroy();
 }
 
 TEST(PCComposite, type)
@@ -37,7 +37,6 @@ TEST(PCComposite, type)
         pc.set_type(t);
         EXPECT_EQ(pc.get_type(), t);
         pc.view();
-        pc.destroy();
     }
 
     auto o = testing::internal::GetCapturedStdout();
@@ -68,8 +67,6 @@ TEST(PCComposite, api)
     EXPECT_EQ(sub_pc0.get_type(), PCJACOBI);
     Preconditioner sub_pc1 = composite.get_pc(1);
     EXPECT_EQ(sub_pc1.get_type(), PCICC);
-
-    composite.destroy();
 }
 
 TEST(PCComposite, special_set_alpha)
@@ -81,5 +78,4 @@ TEST(PCComposite, special_set_alpha)
     composite.set_type(PCComposite::SPECIAL);
     composite.special_set_alpha(2.);
     // TODO: how to test this was set?
-    composite.destroy();
 }

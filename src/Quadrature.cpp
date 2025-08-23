@@ -7,30 +7,37 @@
 
 namespace godzilla {
 
-Quadrature::Quadrature() : quad(nullptr) {}
+Quadrature::Quadrature() : PetscObjectWrapper(nullptr) {}
 
-Quadrature::Quadrature(PetscQuadrature q) : quad(q) {}
+Quadrature::Quadrature(PetscQuadrature q) : PetscObjectWrapper(q) {}
 
 void
 Quadrature::create(MPI_Comm comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscQuadratureCreate(comm, &this->quad));
+    PETSC_CHECK(PetscQuadratureCreate(comm, &this->obj));
 }
 
 void
 Quadrature::destroy()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscQuadratureDestroy(&this->quad));
-    this->quad = nullptr;
 }
 
 void
 Quadrature::duplicate(Quadrature & r)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PetscQuadratureDuplicate(this->quad, &r.quad));
+    PETSC_CHECK(PetscQuadratureDuplicate(this->obj, &r.obj));
+}
+
+Quadrature
+Quadrature::duplicate() const
+{
+    CALL_STACK_MSG();
+    Quadrature q;
+    PETSC_CHECK(PetscQuadratureDuplicate(this->obj, q));
+    return q;
 }
 
 Int
@@ -38,7 +45,7 @@ Quadrature::get_dim() const
 {
     CALL_STACK_MSG();
     Int dim;
-    PETSC_CHECK(PetscQuadratureGetData(this->quad, &dim, nullptr, nullptr, nullptr, nullptr));
+    PETSC_CHECK(PetscQuadratureGetData(this->obj, &dim, nullptr, nullptr, nullptr, nullptr));
     return dim;
 }
 
@@ -47,7 +54,7 @@ Quadrature::get_num_components() const
 {
     CALL_STACK_MSG();
     Int nc;
-    PETSC_CHECK(PetscQuadratureGetNumComponents(this->quad, &nc));
+    PETSC_CHECK(PetscQuadratureGetNumComponents(this->obj, &nc));
     return nc;
 }
 
@@ -56,7 +63,7 @@ Quadrature::get_num_points() const
 {
     CALL_STACK_MSG();
     Int n_points;
-    PETSC_CHECK(PetscQuadratureGetData(this->quad, nullptr, nullptr, &n_points, nullptr, nullptr));
+    PETSC_CHECK(PetscQuadratureGetData(this->obj, nullptr, nullptr, &n_points, nullptr, nullptr));
     return n_points;
 }
 
@@ -65,7 +72,7 @@ Quadrature::get_weights() const
 {
     CALL_STACK_MSG();
     const Real * weights;
-    PETSC_CHECK(PetscQuadratureGetData(this->quad, nullptr, nullptr, nullptr, nullptr, &weights));
+    PETSC_CHECK(PetscQuadratureGetData(this->obj, nullptr, nullptr, nullptr, nullptr, &weights));
     return weights;
 }
 
@@ -74,7 +81,7 @@ Quadrature::get_points() const
 {
     CALL_STACK_MSG();
     const Real * points;
-    PETSC_CHECK(PetscQuadratureGetData(this->quad, nullptr, nullptr, nullptr, &points, nullptr));
+    PETSC_CHECK(PetscQuadratureGetData(this->obj, nullptr, nullptr, nullptr, &points, nullptr));
     return points;
 }
 
@@ -83,7 +90,7 @@ Quadrature::get_order() const
 {
     CALL_STACK_MSG();
     Int order;
-    PETSC_CHECK(PetscQuadratureGetOrder(this->quad, &order));
+    PETSC_CHECK(PetscQuadratureGetOrder(this->obj, &order));
     return order;
 }
 
@@ -92,14 +99,8 @@ Quadrature::equal(const Quadrature & q) const
 {
     CALL_STACK_MSG();
     PetscBool eq;
-    PETSC_CHECK(PetscQuadratureEqual(this->quad, q.quad, &eq));
+    PETSC_CHECK(PetscQuadratureEqual(this->obj, q.obj, &eq));
     return eq == PETSC_TRUE;
-}
-
-Quadrature::operator PetscQuadrature() const
-{
-    CALL_STACK_MSG();
-    return this->quad;
 }
 
 Quadrature
@@ -107,7 +108,7 @@ Quadrature::create_gauss_tensor(Int dim, Int n_comp, Int n_points, Real a, Real 
 {
     CALL_STACK_MSG();
     Quadrature q;
-    PETSC_CHECK(PetscDTGaussTensorQuadrature(dim, n_comp, n_points, a, b, &q.quad));
+    PETSC_CHECK(PetscDTGaussTensorQuadrature(dim, n_comp, n_points, a, b, &q.obj));
     return q;
 }
 

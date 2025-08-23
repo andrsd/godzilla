@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "godzilla/KrylovSolver.h"
 #include "godzilla/Vector.h"
@@ -13,7 +14,7 @@
 namespace godzilla {
 
 /// Wrapper around SNES
-class SNESolver {
+class SNESolver : public PetscObjectWrapper<SNES> {
 public:
     enum ConvergedReason {
         CONVERGED_ITERATING = SNES_CONVERGED_ITERATING,
@@ -56,7 +57,7 @@ public:
 
     /// Construct empty non-linear solver
     SNESolver();
-    ~SNESolver() = default;
+    ~SNESolver();
 
     /// Construct a non-linear solver from a PETSc SNES object
     explicit SNESolver(SNES snes);
@@ -103,7 +104,7 @@ public:
     set_function(Vector & r, T * instance, void (T::*method)(const Vector &, Vector &))
     {
         this->compute_residual_method.bind(instance, method);
-        PETSC_CHECK(SNESSetFunction(this->snes,
+        PETSC_CHECK(SNESSetFunction(this->obj,
                                     r,
                                     invoke_compute_residual_delegate,
                                     &this->compute_residual_method));
@@ -124,7 +125,7 @@ public:
                  void (T::*method)(const Vector &, Matrix &, Matrix &))
     {
         this->compute_jacobian_method.bind(instance, method);
-        PETSC_CHECK(SNESSetJacobian(this->snes,
+        PETSC_CHECK(SNESSetJacobian(this->obj,
                                     J,
                                     Jp,
                                     invoke_compute_jacobian_delegate,
@@ -164,7 +165,7 @@ public:
     {
         this->monitor_method.bind(instance, method);
         PETSC_CHECK(
-            SNESMonitorSet(this->snes, invoke_monitor_delegate, &this->monitor_method, nullptr));
+            SNESMonitorSet(this->obj, invoke_monitor_delegate, &this->monitor_method, nullptr));
     }
 
     /// Solves a nonlinear system F(x) = b.
@@ -188,12 +189,7 @@ public:
     /// @return The matrix-free matrix which is of type `MATMFFD`
     Matrix mat_create_mf() const;
 
-    /// typecast operator so we can use our class directly with PETSc API
-    operator SNES() const;
-
 private:
-    /// PETSc object
-    SNES snes;
     /// Method for monitoring the solve
     Delegate<void(Int it, Real rnorm)> monitor_method;
     /// Method for computing residual

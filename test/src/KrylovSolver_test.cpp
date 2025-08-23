@@ -48,8 +48,6 @@ TEST(KrylovSolver, tolerances)
         EXPECT_DOUBLE_EQ(rtol, 1.4567e-5);
         EXPECT_EQ(mits, 4321);
     }
-
-    ks.destroy();
 }
 
 TEST(KrylovSolver, solve)
@@ -75,8 +73,6 @@ TEST(KrylovSolver, solve)
 
     EXPECT_DOUBLE_EQ(x(0), 3);
     EXPECT_DOUBLE_EQ(x(1), 4);
-
-    ks.destroy();
 }
 
 TEST(KrylovSolver, solve_b)
@@ -101,8 +97,6 @@ TEST(KrylovSolver, solve_b)
 
     EXPECT_DOUBLE_EQ(b(0), 3);
     EXPECT_DOUBLE_EQ(b(1), 4);
-
-    ks.destroy();
 }
 
 TEST(KrylovSolver, get_pc)
@@ -113,7 +107,6 @@ TEST(KrylovSolver, get_pc)
     ks.create(comm);
     auto pc = ks.get_pc();
     EXPECT_TRUE(pc != nullptr);
-    ks.destroy();
 }
 
 TEST(KrylovSolver, operator_ksp)
@@ -124,7 +117,6 @@ TEST(KrylovSolver, operator_ksp)
     ks.create(comm);
     KSP ksp = (KSP) ks;
     EXPECT_TRUE(ksp != nullptr);
-    ks.destroy();
 }
 
 TEST(KrylovSolver, set_monitor)
@@ -163,8 +155,6 @@ TEST(KrylovSolver, set_monitor)
     ks.solve(b, x);
 
     EXPECT_THAT(solver.norms, ElementsAre(DoubleEq(5.), DoubleNear(1.1e-15, 1e-14)));
-
-    ks.destroy();
 }
 
 TEST(KrylovSolver, set_opers_rhs)
@@ -219,22 +209,6 @@ TEST(KrylovSolver, set_opers_rhs)
 
     EXPECT_DOUBLE_EQ(b(0), 3);
     EXPECT_DOUBLE_EQ(b(1), 4);
-
-    ks.destroy();
-}
-
-TEST(KrylovSolver, ctor_ksp)
-{
-    TestApp app;
-    auto comm = app.get_comm();
-
-    KSP ksp;
-    KSPCreate(comm, &ksp);
-
-    KrylovSolver ks(ksp);
-    EXPECT_EQ(static_cast<KSP>(ks), ksp);
-
-    KSPDestroy(&ksp);
 }
 
 TEST(KrylovSolver, set_pc_type)
@@ -245,7 +219,6 @@ TEST(KrylovSolver, set_pc_type)
     ks.create(comm);
     Preconditioner pc = ks.set_pc_type<PCJacobi>();
     EXPECT_EQ(pc.get_type(), PCJACOBI);
-    ks.destroy();
 }
 
 TEST(KrylovSolver, get_rhs)
@@ -272,8 +245,6 @@ TEST(KrylovSolver, get_rhs)
     auto rhs = ks.get_rhs();
     EXPECT_DOUBLE_EQ(rhs(0), 6.);
     EXPECT_DOUBLE_EQ(rhs(1), 12.);
-
-    ks.destroy();
 }
 
 TEST(KrylovSolver, get_operator)
@@ -300,8 +271,6 @@ TEST(KrylovSolver, get_operator)
     auto A = ks.get_operator();
     EXPECT_DOUBLE_EQ(A(0, 0), 2.);
     EXPECT_DOUBLE_EQ(A(1, 1), 3.);
-
-    ks.destroy();
 }
 
 TEST(KrylovSolver, get_operators)
@@ -337,8 +306,6 @@ TEST(KrylovSolver, get_operators)
 
     EXPECT_DOUBLE_EQ(P(0, 0), 1.);
     EXPECT_DOUBLE_EQ(P(1, 1), 1.1);
-
-    ks.destroy();
 }
 
 TEST(KrylovSolver, view)

@@ -207,17 +207,15 @@ ExplicitFELinearProblem::compute_rhs_function_fem(Real time, const Vector & loc_
         region.value = 0;
         region.part = 100;
         if (region.label.is_null()) {
-            all_cells.inc_ref();
+            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
             region.value = 1;
             auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
-            points.destroy();
         }
         compute_residual_internal(get_dm(), region, cells, time, loc_x, nullptr, time, loc_g);
-        cells.destroy();
     }
 }
 

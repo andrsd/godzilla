@@ -15,14 +15,12 @@ TEST(VectorTest, assembly)
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
     v.assembly_begin();
     v.assembly_end();
-    v.destroy();
 }
 
 TEST(VectorTest, assemble)
 {
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 3);
     v.assemble();
-    v.destroy();
 }
 
 TEST(VectorTest, set_up)
@@ -44,7 +42,6 @@ TEST(VectorTest, set_sizes)
     EXPECT_THROW_MSG(
         v.set_sizes(PETSC_DECIDE, PETSC_DECIDE),
         "Calling Vector::set_sizes with n = PETSC_DECIDE and N = PETSC_DECIDE is not allowed.");
-    v.destroy();
 }
 
 TEST(VectorTest, get_type)
@@ -60,7 +57,6 @@ TEST(VectorTest, get_size)
     Vector v = Vector::create_seq(MPI_COMM_WORLD, 10);
     EXPECT_EQ(v.get_size(), 10);
     EXPECT_EQ(v.get_local_size(), 10);
-    v.destroy();
 }
 
 TEST(VectorTest, get_values)
@@ -71,7 +67,6 @@ TEST(VectorTest, get_values)
     v.get_values({ 0, 2 }, vals);
     EXPECT_DOUBLE_EQ(vals[0], 3.);
     EXPECT_DOUBLE_EQ(vals[1], 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, set)
@@ -80,7 +75,6 @@ TEST(VectorTest, set)
     v.set(21.);
     for (Int i = 0; i < 10; ++i)
         EXPECT_DOUBLE_EQ(v(i), 21.);
-    v.destroy();
 }
 
 TEST(VectorTest, set_value_local)
@@ -93,7 +87,6 @@ TEST(VectorTest, set_value_local)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, set_values_c)
@@ -105,7 +98,6 @@ TEST(VectorTest, set_values_c)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, set_values)
@@ -115,7 +107,6 @@ TEST(VectorTest, set_values)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, set_values_dense)
@@ -129,7 +120,6 @@ TEST(VectorTest, set_values_dense)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, set_values_dyn_dense)
@@ -145,7 +135,6 @@ TEST(VectorTest, set_values_dyn_dense)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, set_values_local)
@@ -156,7 +145,6 @@ TEST(VectorTest, set_values_local)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, set_values_local_dense)
@@ -170,7 +158,6 @@ TEST(VectorTest, set_values_local_dense)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, set_values_local_dyn_dense)
@@ -186,7 +173,6 @@ TEST(VectorTest, set_values_local_dyn_dense)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 9.);
-    v.destroy();
 }
 
 TEST(VectorTest, assign)
@@ -200,8 +186,6 @@ TEST(VectorTest, assign)
     EXPECT_DOUBLE_EQ(dup(0), 1.);
     EXPECT_DOUBLE_EQ(dup(1), 3.);
     EXPECT_DOUBLE_EQ(dup(2), 7.);
-    dup.destroy();
-    v.destroy();
 }
 
 TEST(VectorTest, duplicate_ret)
@@ -215,7 +199,6 @@ TEST(VectorTest, duplicate_ret)
     EXPECT_DOUBLE_EQ(dup(0), 1.);
     EXPECT_DOUBLE_EQ(dup(1), 3.);
     EXPECT_DOUBLE_EQ(dup(2), 7.);
-    v.destroy();
 }
 
 TEST(VectorTest, sum)
@@ -225,7 +208,6 @@ TEST(VectorTest, sum)
     v.set_value(1, 3.);
     v.set_value(2, 7.);
     EXPECT_DOUBLE_EQ(v.sum(), 11.);
-    v.destroy();
 }
 
 TEST(VectorTest, zero)
@@ -238,7 +220,6 @@ TEST(VectorTest, zero)
     EXPECT_DOUBLE_EQ(v(0), 0.);
     EXPECT_DOUBLE_EQ(v(1), 0.);
     EXPECT_DOUBLE_EQ(v(2), 0.);
-    v.destroy();
 }
 
 TEST(VectorTest, dot)
@@ -255,9 +236,6 @@ TEST(VectorTest, dot)
 
     auto dp = dot(v, u);
     EXPECT_DOUBLE_EQ(dp, 32.);
-
-    v.destroy();
-    u.destroy();
 }
 
 TEST(VectorTest, get_restore_array)
@@ -272,8 +250,6 @@ TEST(VectorTest, get_restore_array)
     EXPECT_EQ(v(0), 3.);
     EXPECT_EQ(v(1), 5.);
     EXPECT_EQ(v(2), 7.);
-
-    v.destroy();
 }
 
 TEST(VectorTest, abs)
@@ -286,7 +262,6 @@ TEST(VectorTest, abs)
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), 5.);
     EXPECT_DOUBLE_EQ(v(2), 7.);
-    v.destroy();
 }
 
 TEST(VectorTest, scale)
@@ -297,7 +272,6 @@ TEST(VectorTest, scale)
     v.scale(-1.);
     EXPECT_DOUBLE_EQ(v(0), 3.);
     EXPECT_DOUBLE_EQ(v(1), -5.);
-    v.destroy();
 }
 
 TEST(VectorTest, normalize)
@@ -308,7 +282,6 @@ TEST(VectorTest, normalize)
     v.normalize();
     EXPECT_DOUBLE_EQ(v(0), 0.6);
     EXPECT_DOUBLE_EQ(v(1), 0.8);
-    v.destroy();
 }
 
 TEST(VectorTest, shift)
@@ -319,7 +292,6 @@ TEST(VectorTest, shift)
     v.shift(1.);
     EXPECT_DOUBLE_EQ(v(0), 4.);
     EXPECT_DOUBLE_EQ(v(1), 5);
-    v.destroy();
 }
 
 TEST(VectorTest, min)
@@ -328,7 +300,6 @@ TEST(VectorTest, min)
     v.set_value(0, 3.);
     v.set_value(1, 4.);
     EXPECT_DOUBLE_EQ(v.min(), 3.);
-    v.destroy();
 }
 
 TEST(VectorTest, max)
@@ -337,7 +308,6 @@ TEST(VectorTest, max)
     v.set_value(0, 3.);
     v.set_value(1, 4.);
     EXPECT_DOUBLE_EQ(v.max(), 4.);
-    v.destroy();
 }
 
 #if PETSC_VERSION_LT(3, 20, 0)
@@ -349,7 +319,6 @@ TEST(VectorTest, chop)
     v.chop(3.5);
     EXPECT_DOUBLE_EQ(v(0), 0.);
     EXPECT_DOUBLE_EQ(v(1), 4.);
-    v.destroy();
 }
 #endif
 
@@ -362,7 +331,6 @@ TEST(VectorTest, filter)
     v.filter(3.5);
     EXPECT_DOUBLE_EQ(v(0), 0.);
     EXPECT_DOUBLE_EQ(v(1), 4.);
-    v.destroy();
 }
 #endif
 
@@ -379,8 +347,6 @@ TEST(VectorTest, axpy)
     axpy(y, 3., x);
     EXPECT_DOUBLE_EQ(y(0), 9.);
     EXPECT_DOUBLE_EQ(y(1), 19.);
-    x.destroy();
-    y.destroy();
 }
 
 TEST(VectorTest, axpby)
@@ -396,8 +362,6 @@ TEST(VectorTest, axpby)
     axpby(y, 3., 4., x);
     EXPECT_DOUBLE_EQ(y(0), 18.);
     EXPECT_DOUBLE_EQ(y(1), 31.);
-    x.destroy();
-    y.destroy();
 }
 
 TEST(VectorTest, aypx)
@@ -413,9 +377,6 @@ TEST(VectorTest, aypx)
     aypx(y, 3., x);
     EXPECT_DOUBLE_EQ(y(0), 11.);
     EXPECT_DOUBLE_EQ(y(1), 17.);
-
-    x.destroy();
-    y.destroy();
 }
 
 TEST(VectorTest, waxpy)
@@ -432,10 +393,6 @@ TEST(VectorTest, waxpy)
     waxpy(w, 3., x, y);
     EXPECT_DOUBLE_EQ(w(0), 9.);
     EXPECT_DOUBLE_EQ(w(1), 19.);
-
-    x.destroy();
-    y.destroy();
-    w.destroy();
 }
 
 TEST(VectorTest, maxpy)
@@ -456,10 +413,6 @@ TEST(VectorTest, maxpy)
 
     EXPECT_DOUBLE_EQ(w(0), 1.);
     EXPECT_DOUBLE_EQ(w(1), 6.);
-
-    v1.destroy();
-    v2.destroy();
-    w.destroy();
 }
 
 TEST(VectorTest, axpbypcz)
@@ -479,10 +432,6 @@ TEST(VectorTest, axpbypcz)
 
     EXPECT_DOUBLE_EQ(w(0), 17.);
     EXPECT_DOUBLE_EQ(w(1), 26.);
-
-    x.destroy();
-    y.destroy();
-    w.destroy();
 }
 
 TEST(VectorTest, pointwise_min)
@@ -500,10 +449,6 @@ TEST(VectorTest, pointwise_min)
     pointwise_min(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 2.);
     EXPECT_DOUBLE_EQ(w(1), 4.);
-
-    x.destroy();
-    y.destroy();
-    w.destroy();
 }
 
 TEST(VectorTest, pointwise_max)
@@ -521,10 +466,6 @@ TEST(VectorTest, pointwise_max)
     pointwise_max(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 3.);
     EXPECT_DOUBLE_EQ(w(1), 5.);
-
-    x.destroy();
-    y.destroy();
-    w.destroy();
 }
 
 TEST(VectorTest, pointwise_mult)
@@ -542,10 +483,6 @@ TEST(VectorTest, pointwise_mult)
     pointwise_mult(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 6.);
     EXPECT_DOUBLE_EQ(w(1), 20.);
-
-    x.destroy();
-    y.destroy();
-    w.destroy();
 }
 
 TEST(VectorTest, pointwise_divide)
@@ -563,10 +500,6 @@ TEST(VectorTest, pointwise_divide)
     pointwise_divide(w, x, y);
     EXPECT_DOUBLE_EQ(w(0), 4.);
     EXPECT_DOUBLE_EQ(w(1), 6.);
-
-    x.destroy();
-    y.destroy();
-    w.destroy();
 }
 
 TEST(VectorTest, view)
@@ -613,7 +546,6 @@ TEST(VectorTest, norm)
     v.set_values(std::vector<Int>({ 0, 1 }), { 3, 4 });
     auto norm = v.norm(NORM_2);
     EXPECT_DOUBLE_EQ(norm, 5.);
-    v.destroy();
 }
 
 TEST(VectorTest, copy_is)
@@ -683,22 +615,26 @@ TEST(VectorTest, create_mpi_w_array_c_array)
         data[4] = 10;
     }
 
-    auto v = Vector::create_mpi(MPI_COMM_WORLD, 1, n, PETSC_DETERMINE, data);
+    {
+        auto v = Vector::create_mpi(MPI_COMM_WORLD, 1, n, PETSC_DETERMINE, data);
 
-    if (comm.rank() == 0) {
-        EXPECT_DOUBLE_EQ(v(0), 3.);
-        EXPECT_DOUBLE_EQ(v(1), 7.);
-        EXPECT_DOUBLE_EQ(v(2), 9.);
-    }
-    else if (comm.rank() == 1) {
-        EXPECT_DOUBLE_EQ(v(3), 2.);
-        EXPECT_DOUBLE_EQ(v(4), 4.);
-        EXPECT_DOUBLE_EQ(v(5), 6.);
-        EXPECT_DOUBLE_EQ(v(6), 8.);
-        EXPECT_DOUBLE_EQ(v(7), 10.);
+        if (comm.rank() == 0) {
+            EXPECT_DOUBLE_EQ(v(0), 3.);
+            EXPECT_DOUBLE_EQ(v(1), 7.);
+            EXPECT_DOUBLE_EQ(v(2), 9.);
+        }
+        else if (comm.rank() == 1) {
+            EXPECT_DOUBLE_EQ(v(3), 2.);
+            EXPECT_DOUBLE_EQ(v(4), 4.);
+            EXPECT_DOUBLE_EQ(v(5), 6.);
+            EXPECT_DOUBLE_EQ(v(6), 8.);
+            EXPECT_DOUBLE_EQ(v(7), 10.);
+        }
+
+        comm.barrier();
     }
 
-    comm.barrier();
+    delete [] data;
 }
 
 TEST(VectorTest, create_mpi_w_array_std_vector)

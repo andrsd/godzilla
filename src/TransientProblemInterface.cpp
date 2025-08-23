@@ -18,7 +18,7 @@ TransientProblemInterface::invoke_pre_step(TS ts)
 {
     CALL_STACK_MSG();
     void * ctx;
-    TSGetApplicationContext(ts, &ctx);
+    PETSC_CHECK(TSGetApplicationContext(ts, &ctx));
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     tpi->pre_step();
     return 0;
@@ -29,7 +29,7 @@ TransientProblemInterface::invoke_post_step(TS ts)
 {
     CALL_STACK_MSG();
     void * ctx;
-    TSGetApplicationContext(ts, &ctx);
+    PETSC_CHECK(TSGetApplicationContext(ts, &ctx));
     auto * tpi = static_cast<TransientProblemInterface *>(ctx);
     tpi->post_step();
     return 0;
@@ -41,6 +41,7 @@ TransientProblemInterface::invoke_monitor_delegate(TS, Int stepi, Real time, Vec
     CALL_STACK_MSG();
     auto * method = static_cast<Delegate<void(Int it, Real rnorm, const Vector & x)> *>(ctx);
     Vector vec_x(x);
+    vec_x.inc_reference();
     method->invoke(stepi, time, vec_x);
     return 0;
 }
@@ -51,7 +52,9 @@ TransientProblemInterface::invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec
     CALL_STACK_MSG();
     auto * method = static_cast<Delegate<void(Real time, const Vector & x, Vector & F)> *>(ctx);
     Vector vec_x(x);
+    vec_x.inc_reference();
     Vector vec_F(F);
+    vec_F.inc_reference();
     method->invoke(time, vec_x, vec_F);
     return 0;
 }
@@ -69,8 +72,11 @@ TransientProblemInterface::invoke_compute_ifunction_delegate(DM,
         static_cast<Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)> *>(
             contex);
     Vector vec_x(x);
+    vec_x.inc_reference();
     Vector vec_x_t(x_t);
+    vec_x_t.inc_reference();
     Vector vec_F(F);
+    vec_F.inc_reference();
     method->invoke(time, vec_x, vec_x_t, vec_F);
     return 0;
 }
@@ -93,9 +99,13 @@ TransientProblemInterface::invoke_compute_ijacobian_delegate(DM,
                                               Matrix & J,
                                               Matrix & Jp)> *>(contex);
     Vector vec_x(x);
+    vec_x.inc_reference();
     Vector vec_x_t(x_t);
+    vec_x_t.inc_reference();
     Matrix mat_J(J);
+    mat_J.inc_reference();
     Matrix mat_Jp(Jp);
+    mat_Jp.inc_reference();
     method->invoke(time, vec_x, vec_x_t, x_t_shift, mat_J, mat_Jp);
     return 0;
 }
@@ -141,16 +151,17 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
 TransientProblemInterface::~TransientProblemInterface()
 {
     CALL_STACK_MSG();
-    TSDestroy(&this->ts);
+    PETSC_CHECK(TSDestroy(&this->ts));
 }
 
 SNESolver
 TransientProblemInterface::get_snes() const
 {
     CALL_STACK_MSG();
-    SNES snes;
-    PETSC_CHECK(TSGetSNES(this->ts, &snes));
-    return SNESolver(snes);
+    SNESolver snes;
+    PETSC_CHECK(TSGetSNES(this->ts, snes));
+    snes.inc_reference();
+    return snes;
 }
 
 void
@@ -178,9 +189,10 @@ Vector
 TransientProblemInterface::get_solution() const
 {
     CALL_STACK_MSG();
-    Vec sln;
-    PETSC_CHECK(TSGetSolution(this->ts, &sln));
-    return { sln };
+    Vector sln;
+    PETSC_CHECK(TSGetSolution(this->ts, sln));
+    sln.inc_reference();
+    return sln;
 }
 
 Real

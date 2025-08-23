@@ -7,7 +7,6 @@ TEST(MatrixTest, create)
 {
     Matrix m;
     m.create(MPI_COMM_WORLD);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_sizes)
@@ -18,7 +17,6 @@ TEST(MatrixTest, set_sizes)
     m.set_up();
     EXPECT_EQ(m.get_n_rows(), 2);
     EXPECT_EQ(m.get_n_cols(), 3);
-    m.destroy();
 }
 
 TEST(MatrixTest, assembly)
@@ -26,7 +24,6 @@ TEST(MatrixTest, assembly)
     // TODO: this should really be tested with MPI (n_proc > 1)
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
     m.assemble();
-    m.destroy();
 }
 
 TEST(MatrixTest, assemble)
@@ -34,7 +31,6 @@ TEST(MatrixTest, assemble)
     // TODO: this should really be tested with MPI (n_proc > 1)
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, 1);
     m.assemble();
-    m.destroy();
 }
 
 TEST(MatrixTest, get_size)
@@ -46,7 +42,6 @@ TEST(MatrixTest, get_size)
     m.get_size(rows, cols);
     EXPECT_EQ(rows, 3);
     EXPECT_EQ(cols, 6);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_value)
@@ -62,8 +57,6 @@ TEST(MatrixTest, set_value)
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
-
-    m.destroy();
 }
 
 TEST(MatrixTest, set_value_local)
@@ -78,8 +71,6 @@ TEST(MatrixTest, set_value_local)
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
-
-    m.destroy();
 }
 
 TEST(MatrixTest, set_values_c)
@@ -94,7 +85,6 @@ TEST(MatrixTest, set_values_c)
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_values)
@@ -109,7 +99,6 @@ TEST(MatrixTest, set_values)
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_values_dense)
@@ -126,7 +115,6 @@ TEST(MatrixTest, set_values_dense)
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_values_dyn_dense)
@@ -145,7 +133,6 @@ TEST(MatrixTest, set_values_dyn_dense)
     EXPECT_DOUBLE_EQ(m(0, 2), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 2), 4.);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_values_local_c)
@@ -160,7 +147,6 @@ TEST(MatrixTest, set_values_local_c)
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_values_local)
@@ -175,7 +161,6 @@ TEST(MatrixTest, set_values_local)
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_values_local_dense)
@@ -192,7 +177,6 @@ TEST(MatrixTest, set_values_local_dense)
     EXPECT_DOUBLE_EQ(m(0, 1), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 1), 4.);
-    m.destroy();
 }
 
 TEST(MatrixTest, set_values_local_dyn_dense)
@@ -211,7 +195,6 @@ TEST(MatrixTest, set_values_local_dyn_dense)
     EXPECT_DOUBLE_EQ(m(0, 2), 2.);
     EXPECT_DOUBLE_EQ(m(1, 0), 3.);
     EXPECT_DOUBLE_EQ(m(1, 2), 4.);
-    m.destroy();
 }
 
 TEST(MatrixTest, mult)
@@ -230,8 +213,6 @@ TEST(MatrixTest, mult)
 
     EXPECT_DOUBLE_EQ(y(0), 3.);
     EXPECT_DOUBLE_EQ(y(1), 5.);
-
-    m.destroy();
 }
 
 TEST(MatrixTest, zero)
@@ -251,7 +232,6 @@ TEST(MatrixTest, create_seq_aij_2)
     Matrix m = Matrix::create_seq_aij(MPI_COMM_WORLD, 2, 2, { 1, 2 });
     EXPECT_EQ(m.get_n_cols(), 2);
     EXPECT_EQ(m.get_type(), MATSEQAIJ);
-    m.destroy();
 }
 
 TEST(MatrixTest, view)

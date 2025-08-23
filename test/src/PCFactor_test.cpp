@@ -11,9 +11,9 @@ TEST(PCFactor, ctor_pc)
     Preconditioner pc;
     pc.create(app.get_comm());
     PCFactor factor(pc);
+    factor.inc_reference();
     factor.set_type(PCFactor::ILU);
     EXPECT_EQ(pc.get_type(), PCILU);
-    pc.destroy();
 }
 
 TEST(PCFactor, type)
@@ -33,7 +33,6 @@ TEST(PCFactor, type)
         pc.set_type(t);
         EXPECT_EQ(pc.get_type(), t);
         pc.view();
-        pc.destroy();
     }
 
     auto o = testing::internal::GetCapturedStdout();
@@ -71,8 +70,6 @@ TEST(PCFactor, api)
 
     pc.set_zero_pivot(0.1);
     EXPECT_DOUBLE_EQ(pc.get_zero_pivot(), 0.1);
-
-    pc.destroy();
 }
 
 TEST(PCFactor, api2)
@@ -104,8 +101,6 @@ TEST(PCFactor, api2)
     pc.set_up_mat_solver_type();
 
     pc.view();
-
-    pc.destroy();
 
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("Reusing fill from past factorization"));

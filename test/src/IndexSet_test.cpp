@@ -14,7 +14,6 @@ TEST(IndexSetTest, create)
     EXPECT_TRUE((IS) is != nullptr);
     EXPECT_TRUE(is);
     EXPECT_FALSE(is.is_null());
-    is.destroy();
 }
 
 TEST(IndexSetTest, data)
@@ -29,7 +28,6 @@ TEST(IndexSetTest, data)
     EXPECT_THAT(data[2], 1);
     EXPECT_THAT(data[3], 8);
     is.restore_indices();
-    is.destroy();
 }
 
 TEST(IndexSetTest, create_general)
@@ -40,7 +38,6 @@ TEST(IndexSetTest, create_general)
     auto idx = is.to_std_vector();
     EXPECT_THAT(idx, UnorderedElementsAre(1, 3, 5, 8));
     is.restore_indices();
-    is.destroy();
 }
 
 TEST(IndexSetTest, get_id)
@@ -48,18 +45,6 @@ TEST(IndexSetTest, get_id)
     TestApp app;
     auto is = IndexSet::create_general(app.get_comm(), { 1, 2, 3 });
     EXPECT_TRUE(is.get_id() != 0);
-    is.destroy();
-}
-
-TEST(IndexSetTest, inc_ref)
-{
-    TestApp app;
-    auto is = IndexSet::create_general(app.get_comm(), { 1, 2, 3 });
-    is.inc_ref();
-    Int cnt = 0;
-    PetscObjectGetReference((PetscObject) (IS) is, &cnt);
-    EXPECT_EQ(cnt, 2);
-    is.destroy();
 }
 
 TEST(IndexSetTest, sort)
@@ -73,7 +58,6 @@ TEST(IndexSetTest, sort)
     EXPECT_THAT(idx, ElementsAreArray({ 1, 3, 5, 8 }));
     is.restore_indices();
     EXPECT_EQ(is.sorted(), true);
-    is.destroy();
 }
 
 TEST(IndexSetTest, sort_remove_dups)
@@ -86,7 +70,6 @@ TEST(IndexSetTest, sort_remove_dups)
     EXPECT_THAT(idx, ElementsAreArray({ 1, 3, 5, 8 }));
     is.restore_indices();
     EXPECT_EQ(is.sorted(), true);
-    is.destroy();
 }
 
 TEST(IndexSetTest, intersect_caching)
@@ -99,8 +82,6 @@ TEST(IndexSetTest, intersect_caching)
     isect.get_indices();
     EXPECT_EQ(isect(0), 3);
     isect.restore_indices();
-    is1.destroy();
-    is2.destroy();
 }
 
 TEST(IndexSetTest, intersect_caching_empty)
@@ -122,9 +103,6 @@ TEST(IndexSetTest, intersect)
     isect.get_indices();
     EXPECT_EQ(isect(0), 3);
     isect.restore_indices();
-    is1.destroy();
-    is2.destroy();
-    isect.destroy();
 }
 
 TEST(IndexSetTest, range)
@@ -137,7 +115,6 @@ TEST(IndexSetTest, range)
         vals.push_back(i);
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
     is.restore_indices();
-    is.destroy();
 }
 
 TEST(IndexSetTest, range_over_null_set)
@@ -149,7 +126,6 @@ TEST(IndexSetTest, range_over_null_set)
     for (auto & i : is)
         vals.push_back(i);
     EXPECT_THAT(vals, ElementsAre());
-    is.destroy();
 }
 
 TEST(IndexSetTest, for_loop)
@@ -162,7 +138,6 @@ TEST(IndexSetTest, for_loop)
         vals.push_back(*i);
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
     is.restore_indices();
-    is.destroy();
 }
 
 TEST(IndexSetTest, iters)
@@ -175,7 +150,6 @@ TEST(IndexSetTest, iters)
         ;
     EXPECT_TRUE(iter == is.end());
     is.restore_indices();
-    is.destroy();
 }
 
 TEST(IndexSetTest, view)
@@ -190,7 +164,6 @@ TEST(IndexSetTest, view)
     EXPECT_THAT(out, HasSubstr("1 5"));
     EXPECT_THAT(out, HasSubstr("2 8"));
     EXPECT_THAT(out, HasSubstr("3 10"));
-    is.destroy();
 }
 
 TEST(IndexSetTest, duplicate)
@@ -202,8 +175,6 @@ TEST(IndexSetTest, duplicate)
     auto vals = dup.to_std_vector();
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
     dup.restore_indices();
-    dup.destroy();
-    is.destroy();
 }
 
 TEST(IndexSetTest, shift)
@@ -215,7 +186,6 @@ TEST(IndexSetTest, shift)
     auto vals = is.to_std_vector();
     EXPECT_THAT(vals, ElementsAre(3, 5, 6, 7, 10, 12));
     is.restore_indices();
-    is.destroy();
 }
 
 TEST(IndexSetTest, assign)
@@ -228,8 +198,6 @@ TEST(IndexSetTest, assign)
     auto vals = dest.to_std_vector();
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
     dest.restore_indices();
-    dest.destroy();
-    src.destroy();
 }
 
 TEST(IndexSetTest, copy)
@@ -242,8 +210,6 @@ TEST(IndexSetTest, copy)
     auto vals = dest.to_std_vector();
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10));
     dest.restore_indices();
-    dest.destroy();
-    src.destroy();
 }
 
 TEST(IndexSetTest, complement)
@@ -255,8 +221,6 @@ TEST(IndexSetTest, complement)
     auto vals = dest.to_std_vector();
     EXPECT_THAT(vals, ElementsAre(1, 2, 3, 7, 8, 9));
     dest.restore_indices();
-    dest.destroy();
-    src.destroy();
 }
 
 TEST(IndexSetTest, concatenate)
@@ -269,9 +233,6 @@ TEST(IndexSetTest, concatenate)
     auto vals = dest.to_std_vector();
     EXPECT_THAT(vals, ElementsAre(1, 3, 4, 5, 8, 10, 2, 6, 7, 9));
     dest.restore_indices();
-    dest.destroy();
-    is1.destroy();
-    is2.destroy();
 }
 
 TEST(IndexSetTest, difference)
@@ -284,9 +245,6 @@ TEST(IndexSetTest, difference)
     auto vals = dest.to_std_vector();
     EXPECT_THAT(vals, ElementsAre(1, 4, 10));
     dest.restore_indices();
-    dest.destroy();
-    is1.destroy();
-    is2.destroy();
 }
 
 TEST(IndexSetTest, equal)
@@ -297,9 +255,6 @@ TEST(IndexSetTest, equal)
     auto is2 = IndexSet::create_general(app.get_comm(), { 3, 5, 8 });
     EXPECT_TRUE(is1.equal(is3));
     EXPECT_FALSE(is1.equal(is2));
-    is1.destroy();
-    is2.destroy();
-    is3.destroy();
 }
 
 TEST(IndexSetTest, equal_unsorted)
@@ -310,9 +265,6 @@ TEST(IndexSetTest, equal_unsorted)
     auto is2 = IndexSet::create_general(app.get_comm(), { 4, 5, 1, 8, 10, 3 });
     EXPECT_TRUE(is1.equal_unsorted(dup));
     EXPECT_FALSE(is1.equal_unsorted(is2));
-    is1.destroy();
-    is2.destroy();
-    dup.destroy();
 }
 
 TEST(IndexSetTest, expand)
@@ -325,9 +277,6 @@ TEST(IndexSetTest, expand)
     auto vals = dest.to_std_vector();
     EXPECT_THAT(vals, UnorderedElementsAre(1, 3, 4, 5, 7, 8, 9, 10));
     dest.restore_indices();
-    is2.destroy();
-    is1.destroy();
-    dest.destroy();
 }
 
 TEST(IndexSetTest, get_min_max)
@@ -337,7 +286,6 @@ TEST(IndexSetTest, get_min_max)
     auto [min, max] = is.get_min_max();
     EXPECT_EQ(min, 1);
     EXPECT_EQ(max, 10);
-    is.destroy();
 }
 
 TEST(IndexSetTest, get_type)
@@ -354,7 +302,6 @@ TEST(IndexSetTest, identity)
     EXPECT_FALSE(is.identity());
     is.set_identity();
     EXPECT_TRUE(is.identity());
-    is.destroy();
 }
 
 TEST(IndexSetTest, locate)
@@ -363,7 +310,6 @@ TEST(IndexSetTest, locate)
     auto is = IndexSet::create_general(app.get_comm(), { 1, 3, 4, 5, 8, 10 });
     EXPECT_EQ(is.locate(4), 2);
     EXPECT_TRUE(is.locate(7) < 0);
-    is.destroy();
 }
 
 TEST(IndexSetTest, permutation)
@@ -373,7 +319,6 @@ TEST(IndexSetTest, permutation)
     EXPECT_FALSE(is.permutation());
     is.set_permutation();
     EXPECT_TRUE(is.permutation());
-    is.destroy();
 }
 
 TEST(IndexSetTest, set_type)
@@ -383,7 +328,6 @@ TEST(IndexSetTest, set_type)
     is.create(app.get_comm());
     is.set_type(ISGENERAL);
     EXPECT_EQ(is.get_type(), ISGENERAL);
-    is.destroy();
 }
 
 TEST(IndexSetTest, sum)
@@ -399,9 +343,6 @@ TEST(IndexSetTest, sum)
     auto vals = dest.to_std_vector();
     EXPECT_THAT(vals, UnorderedElementsAre(1, 3, 4, 5, 7, 8, 9, 10));
     dest.restore_indices();
-    dest.destroy();
-    is2.destroy();
-    is1.destroy();
 }
 
 TEST(IndexSetTest, oper_bool)
@@ -419,10 +360,6 @@ TEST(IndexSetTest, oper_bool)
     const auto cis1 = &is1;
     EXPECT_TRUE(is1);
     EXPECT_TRUE(cis1);
-
-    is1.destroy();
-    EXPECT_FALSE(empty);
-    EXPECT_FALSE(cempty);
 }
 
 TEST(IndexSetTest, const_iterator)
@@ -447,5 +384,4 @@ TEST(IndexSetTest, const_iterator)
     EXPECT_THAT(common_edges, testing::ElementsAre(3, 5));
 
     is1.restore_indices();
-    is1.destroy();
 }

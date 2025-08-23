@@ -15,7 +15,9 @@ PCShell::invoke_apply_delegate(PC pc, Vec in_vec, Vec out_vec)
     PCShell * pcs;
     PETSC_CHECK(PCShellGetContext(pc, &pcs));
     Vector in(in_vec);
+    in.inc_reference();
     Vector out(out_vec);
+    out.inc_reference();
     pcs->apply_method.invoke(in, out);
     return 0;
 }
@@ -27,8 +29,11 @@ PCShell::invoke_apply_ba_delegate(PC pc, PCSide side, Vec in_vec, Vec out_vec, V
     PCShell * pcs;
     PETSC_CHECK(PCShellGetContext(pc, &pcs));
     Vector in(in_vec);
+    in.inc_reference();
     Vector out(out_vec);
+    out.inc_reference();
     Vector x(x_vec);
+    x.inc_reference();
     pcs->apply_ba_method.invoke(side, in, out, x);
     return 0;
 }
@@ -40,7 +45,9 @@ PCShell::invoke_apply_transpose_delegate(PC pc, Vec in_vec, Vec out_vec)
     PCShell * pcs;
     PETSC_CHECK(PCShellGetContext(pc, &pcs));
     Vector in(in_vec);
+    in.inc_reference();
     Vector out(out_vec);
+    out.inc_reference();
     pcs->apply_transpose_method.invoke(in, out);
     return 0;
 }
@@ -86,7 +93,7 @@ PCShell::PCShell(const PCShell & other) :
     destroy_method(other.destroy_method)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCShellSetContext(this->pc, this));
+    PETSC_CHECK(PCShellSetContext(this->obj, this));
 }
 
 PCShell &
@@ -99,7 +106,7 @@ PCShell::operator=(const PCShell & other)
     this->apply_transpose_method = other.apply_transpose_method;
     this->set_up_method = other.set_up_method;
     this->destroy_method = other.destroy_method;
-    PETSC_CHECK(PCShellSetContext(this->pc, this));
+    PETSC_CHECK(PCShellSetContext(this->obj, this));
     return *this;
 }
 
@@ -108,7 +115,7 @@ PCShell::get_name() const
 {
     CALL_STACK_MSG();
     const char * name;
-    PETSC_CHECK(PCShellGetName(this->pc, &name));
+    PETSC_CHECK(PCShellGetName(this->obj, &name));
     return std::string(name);
 }
 
@@ -116,7 +123,7 @@ void
 PCShell::set_name(const std::string & name)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(PCShellSetName(this->pc, name.c_str()));
+    PETSC_CHECK(PCShellSetName(this->obj, name.c_str()));
 }
 
 } // namespace godzilla

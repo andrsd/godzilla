@@ -45,8 +45,8 @@ target_link_libraries(
         fmt::fmt
         mpicpp-lite::mpicpp-lite
         h5pp::h5pp
-    PRIVATE
         PETSc::petsc
+    PRIVATE
         muParser
         exodusIIcpp::exodusIIcpp
         yaml-cpp::yaml-cpp

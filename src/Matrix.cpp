@@ -8,16 +8,16 @@
 
 namespace godzilla {
 
-Matrix::Matrix() : mat(nullptr) {}
+Matrix::Matrix() : PetscObjectWrapper(nullptr) {}
 
-Matrix::Matrix(Mat mat) : mat(mat) {}
+Matrix::Matrix(Mat mat) : PetscObjectWrapper(mat) {}
 
 std::string
 Matrix::get_type() const
 {
     CALL_STACK_MSG();
     MatType type;
-    PETSC_CHECK(MatGetType(this->mat, &type));
+    PETSC_CHECK(MatGetType(this->obj, &type));
     return { type };
 }
 
@@ -25,51 +25,41 @@ void
 Matrix::set_type(const char * type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetType(this->mat, type));
-}
-
-void
-Matrix::set_name(const std::string & name)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(PetscObjectSetName((PetscObject) this->mat, name.c_str()));
+    PETSC_CHECK(MatSetType(this->obj, type));
 }
 
 void
 Matrix::create(MPI_Comm comm)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatCreate(comm, &this->mat));
+    PETSC_CHECK(MatCreate(comm, &this->obj));
 }
 
 void
 Matrix::destroy()
 {
     CALL_STACK_MSG();
-    if (this->mat)
-        PETSC_CHECK(MatDestroy(&this->mat));
-    this->mat = nullptr;
 }
 
 void
 Matrix::set_up()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetUp(this->mat));
+    PETSC_CHECK(MatSetUp(this->obj));
 }
 
 void
 Matrix::assembly_begin(MatAssemblyType type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatAssemblyBegin(this->mat, type));
+    PETSC_CHECK(MatAssemblyBegin(this->obj, type));
 }
 
 void
 Matrix::assembly_end(MatAssemblyType type)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatAssemblyEnd(this->mat, type));
+    PETSC_CHECK(MatAssemblyEnd(this->obj, type));
 }
 
 void
@@ -84,7 +74,7 @@ void
 Matrix::get_size(Int & m, Int & n) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatGetSize(this->mat, &m, &n));
+    PETSC_CHECK(MatGetSize(this->obj, &m, &n));
 }
 
 Int
@@ -92,7 +82,7 @@ Matrix::get_n_rows() const
 {
     CALL_STACK_MSG();
     Int rows;
-    PETSC_CHECK(MatGetSize(this->mat, &rows, nullptr));
+    PETSC_CHECK(MatGetSize(this->obj, &rows, nullptr));
     return rows;
 }
 
@@ -101,7 +91,7 @@ Matrix::get_n_cols() const
 {
     CALL_STACK_MSG();
     Int cols;
-    PETSC_CHECK(MatGetSize(this->mat, nullptr, &cols));
+    PETSC_CHECK(MatGetSize(this->obj, nullptr, &cols));
     return cols;
 }
 
@@ -110,7 +100,7 @@ Matrix::get_value(Int row, Int col) const
 {
     CALL_STACK_MSG();
     Scalar val;
-    PETSC_CHECK(MatGetValue(this->mat, row, col, &val));
+    PETSC_CHECK(MatGetValue(this->obj, row, col, &val));
     return val;
 }
 
@@ -118,21 +108,21 @@ void
 Matrix::set_sizes(Int m, Int n, Int M, Int N)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetSizes(this->mat, m, n, M, N));
+    PETSC_CHECK(MatSetSizes(this->obj, m, n, M, N));
 }
 
 void
 Matrix::set_value(Int row, Int col, Scalar val, InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValue(this->mat, row, col, val, mode));
+    PETSC_CHECK(MatSetValue(this->obj, row, col, val, mode));
 }
 
 void
 Matrix::set_value_local(Int row, Int col, Scalar val, InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValueLocal(this->mat, row, col, val, mode));
+    PETSC_CHECK(MatSetValueLocal(this->obj, row, col, val, mode));
 }
 
 void
@@ -144,7 +134,7 @@ Matrix::set_values(Int n,
                    InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValues(this->mat, n, row_idxs, m, col_idxs, vals, mode));
+    PETSC_CHECK(MatSetValues(this->obj, n, row_idxs, m, col_idxs, vals, mode));
 }
 
 void
@@ -154,7 +144,7 @@ Matrix::set_values(const std::vector<Int> & row_idxs,
                    InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValues(this->mat,
+    PETSC_CHECK(MatSetValues(this->obj,
                              (Int) row_idxs.size(),
                              row_idxs.data(),
                              (Int) col_idxs.size(),
@@ -170,7 +160,7 @@ Matrix::set_values(const DynDenseVector<Int> & row_idxs,
                    InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValues(this->mat,
+    PETSC_CHECK(MatSetValues(this->obj,
                              (Int) row_idxs.size(),
                              row_idxs.data(),
                              (Int) col_idxs.size(),
@@ -188,7 +178,7 @@ Matrix::set_values_local(Int n,
                          InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValuesLocal(this->mat, n, row_idxs, m, col_idxs, vals, mode));
+    PETSC_CHECK(MatSetValuesLocal(this->obj, n, row_idxs, m, col_idxs, vals, mode));
 }
 
 void
@@ -198,7 +188,7 @@ Matrix::set_values_local(const std::vector<Int> & row_idxs,
                          InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValuesLocal(this->mat,
+    PETSC_CHECK(MatSetValuesLocal(this->obj,
                                   (Int) row_idxs.size(),
                                   row_idxs.data(),
                                   (Int) col_idxs.size(),
@@ -214,7 +204,7 @@ Matrix::set_values_local(const DynDenseVector<Int> & row_idxs,
                          InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetValuesLocal(this->mat,
+    PETSC_CHECK(MatSetValuesLocal(this->obj,
                                   (Int) row_idxs.size(),
                                   row_idxs.data(),
                                   (Int) col_idxs.size(),
@@ -227,42 +217,42 @@ void
 Matrix::mult(const Vector & x, Vector & y)
 {
     CALL_STACK_MSG();
-    MatMult(this->mat, x, y);
+    MatMult(this->obj, x, y);
 }
 
 void
 Matrix::zero()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatZeroEntries(this->mat));
+    PETSC_CHECK(MatZeroEntries(this->obj));
 }
 
 void
 Matrix::scale(Scalar a)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatScale(this->mat, a));
+    PETSC_CHECK(MatScale(this->obj, a));
 }
 
 void
 Matrix::transpose()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatTranspose(this->mat, MAT_INPLACE_MATRIX, &this->mat));
+    PETSC_CHECK(MatTranspose(this->obj, MAT_INPLACE_MATRIX, &this->obj));
 }
 
 void
 Matrix::set_option(Option option, bool flag)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetOption(this->mat, (MatOption) option, flag ? PETSC_TRUE : PETSC_FALSE));
+    PETSC_CHECK(MatSetOption(this->obj, (MatOption) option, flag ? PETSC_TRUE : PETSC_FALSE));
 }
 
 void
 Matrix::set_block_size(Int bs)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatSetBlockSize(this->mat, bs));
+    PETSC_CHECK(MatSetBlockSize(this->obj, bs));
 }
 
 bool
@@ -270,7 +260,7 @@ Matrix::is_symmetric(Real tol) const
 {
     CALL_STACK_MSG();
     PetscBool is_sym;
-    PETSC_CHECK(MatIsSymmetric(this->mat, tol, &is_sym));
+    PETSC_CHECK(MatIsSymmetric(this->obj, tol, &is_sym));
     return is_sym;
 }
 
@@ -285,13 +275,7 @@ void
 Matrix::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(MatView(this->mat, viewer));
-}
-
-Matrix::operator Mat() const
-{
-    CALL_STACK_MSG();
-    return this->mat;
+    PETSC_CHECK(MatView(this->obj, viewer));
 }
 
 Matrix

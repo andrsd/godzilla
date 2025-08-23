@@ -44,7 +44,6 @@ public:
     };
 
     explicit Problem(const Parameters & parameters);
-    ~Problem() override;
 
     /// Build the problem to solve
     void create() override;
@@ -217,7 +216,7 @@ public:
     /// @param value The label value indicating the region
     /// @param part The equation part, or 0 if unused
     /// @param vec The `Vector` holding auxiliary field data
-    void set_auxiliary_vec(const Label & label, Int value, Int part, const Vector & vec);
+    void set_auxiliary_vec(const Label & label, Int value, Int part, Vector vec);
 
     /// Destroys the auxiliary vector information and creates a new empty one
     void clear_auxiliary_vec();

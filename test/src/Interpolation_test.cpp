@@ -47,9 +47,8 @@ TEST(InterpolationTest, test_1d)
     PETSC_CHECK(DMSetField(dm, 0, nullptr, (PetscObject) fe));
     PETSC_CHECK(DMCreateDS(dm));
 
-    Vec v_sln;
-    PETSC_CHECK(DMCreateGlobalVector(dm, &v_sln));
-    Vector sln(v_sln);
+    Vector sln;
+    PETSC_CHECK(DMCreateGlobalVector(dm, sln));
     sln.set_values({ 0, 1, 2, 3, 4 }, { 2., 2.5, 3., 3.5, 4. });
     sln.assemble();
 

@@ -16,6 +16,7 @@ TEST(PCHypre, ctor_pc)
     Preconditioner pc;
     pc.create(app.get_comm());
     PCHypre hypre(pc);
+    hypre.inc_reference();
     EXPECT_EQ(pc.get_type(), PCHYPRE);
     pc.destroy();
 }

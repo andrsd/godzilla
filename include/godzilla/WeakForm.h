@@ -26,19 +26,18 @@ public:
         Int part;
 
         Region() : label(nullptr), value(0), part(0) {}
-        Region(const Label & label, Int value, Int part) : label(label), value(value), part(0) {}
-        Region(DMLabel label, Int value, Int part) : label(label), value(value), part(0) {}
+        Region(Label label, Int value, Int part) : label(label), value(value), part(0) {}
 
         bool
         operator<(const Region & other) const
         {
-            if ((DMLabel) this->label == (DMLabel) other.label)
+            if (this->label == other.label)
                 if (this->value == other.value)
                     return this->part < other.part;
                 else
                     return this->value < other.value;
             else
-                return (DMLabel) this->label < (DMLabel) other.label;
+                return this->label < other.label;
         }
     };
 
@@ -86,7 +85,7 @@ public:
             this->jac.field_j = field_j;
         }
 
-        Key(DMLabel label, Int value, Int field, Int part) :
+        Key(Label label, Int value, Int field, Int part) :
             label(label),
             value(value),
             field(field),
@@ -94,7 +93,7 @@ public:
         {
         }
 
-        Key(DMLabel label, Int value, Int field_i, Int field_j, Int part) :
+        Key(Label label, Int value, Int field_i, Int field_j, Int part) :
             label(label),
             value(value),
             part(part)
@@ -116,7 +115,7 @@ public:
         bool
         operator<(const Key & other) const
         {
-            if ((DMLabel) this->label == (DMLabel) other.label) {
+            if (this->label == other.label) {
                 if (this->value == other.value) {
                     if (this->field == other.field)
                         return this->part < other.part;
@@ -127,7 +126,7 @@ public:
                     return this->value < other.value;
             }
             else
-                return (DMLabel) this->label < (DMLabel) other.label;
+                return this->label < other.label;
         }
     };
 

@@ -340,6 +340,7 @@ NSIncompressibleProblem::create_preconditioner(PC pc)
     CALL_STACK_MSG();
 
     this->fsplit = PCFieldSplit(pc);
+    this->fsplit.inc_reference();
     this->fsplit.set_type(PCFieldSplit::SCHUR);
     this->fsplit.set_schur_fact_type(PCFieldSplit::SCHUR_FACT_FULL);
 

@@ -156,8 +156,6 @@ private:
     Real lin_abs_tol;
     /// Maximum number of iterations for the linear solver
     Int lin_max_iter;
-    /// Flag indicating if we build the SNESolver
-    bool my_snes;
 
 public:
     static Parameters parameters();

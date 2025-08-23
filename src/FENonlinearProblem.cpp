@@ -19,6 +19,7 @@ FENonlinearProblem::invoke_compute_boundary_delegate(DM, Vec x, void * context)
     CALL_STACK_MSG();
     auto * delegate = static_cast<Delegate<void(Vector &)> *>(context);
     Vector vec_x(x);
+    vec_x.inc_reference();
     delegate->invoke(vec_x);
     return 0;
 }
@@ -29,7 +30,9 @@ FENonlinearProblem::invoke_compute_residual_delegate(DM, Vec x, Vec F, void * co
     CALL_STACK_MSG();
     auto * delegate = static_cast<Delegate<void(const Vector &, Vector &)> *>(context);
     Vector vec_x(x);
+    vec_x.inc_reference();
     Vector vec_F(F);
+    vec_F.inc_reference();
     delegate->invoke(vec_x, vec_F);
     return 0;
 }
@@ -41,8 +44,11 @@ FENonlinearProblem::invoke_compute_jacobian_delegate(DM, Vec x, Mat J, Mat Jp, v
     auto * delegate =
         static_cast<Delegate<void(const Vector & x, Matrix & J, Matrix & Jp)> *>(context);
     Vector vec_x(x);
+    vec_x.inc_reference();
     Matrix mat_J(J);
+    mat_J.inc_reference();
     Matrix mat_Jp(Jp);
+    mat_Jp.inc_reference();
     delegate->invoke(vec_x, mat_J, mat_Jp);
     return 0;
 }
@@ -128,19 +134,15 @@ FENonlinearProblem::compute_residual_local(const Vector & x, Vector & f)
     for (auto & region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
-            all_cells.inc_ref();
+            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
-            IndexSet points = region.label.get_stratum(region.value);
+            auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
-            points.destroy();
         }
         compute_residual_internal(get_dm(), region, cells, PETSC_MIN_REAL, x, Vector(), 0.0, f);
-        cells.destroy();
     }
-
-    all_cells.destroy();
 }
 
 void
@@ -381,7 +383,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
     PETSC_CHECK(PetscDSGetNumBoundary(prob, &n_bnd));
     for (Int bd = 0; bd < n_bnd; ++bd) {
         DMBoundaryConditionType type;
-        DMLabel label;
+        Label label;
         const Int * values;
         Int field, n_values;
 
@@ -390,7 +392,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
                                        nullptr,
                                        &type,
                                        nullptr,
-                                       &label,
+                                       label,
                                        &n_values,
                                        &values,
                                        &field,
@@ -399,6 +401,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
                                        nullptr,
                                        nullptr,
                                        nullptr));
+        label.inc_reference();
 
         PetscObject obj;
         PETSC_CHECK(PetscDSGetDiscretization(prob, field, &obj));
@@ -420,7 +423,6 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
                                                  facets);
         }
     }
-    facets.destroy();
 }
 
 void
@@ -592,19 +594,15 @@ FENonlinearProblem::compute_jacobian_local(const Vector & x, Matrix & J, Matrix 
     for (auto & region : wf->get_jacobian_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
-            all_cells.inc_ref();
+            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
             auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
-            points.destroy();
         }
         compute_jacobian_internal(get_dm(), region, cells, 0.0, 0.0, x, Vector(), J, Jp);
-        cells.destroy();
     }
-
-    all_cells.destroy();
 }
 
 void
@@ -888,7 +886,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
     PETSC_CHECK(DMGetCoordinateField(dm, &coord_field));
     for (Int bd = 0; bd < n_bnd; ++bd) {
         DMBoundaryConditionType type;
-        DMLabel dm_label;
+        Label label;
         Int n_values;
         const Int * values;
         Int field_i;
@@ -897,7 +895,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
                                        nullptr,
                                        &type,
                                        nullptr,
-                                       &dm_label,
+                                       label,
                                        &n_values,
                                        &values,
                                        &field_i,
@@ -906,13 +904,13 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
                                        nullptr,
                                        nullptr,
                                        nullptr));
+        label.inc_reference();
         PetscObject obj;
         PETSC_CHECK(PetscDSGetDiscretization(prob, field_i, &obj));
         PetscClassId id;
         PETSC_CHECK(PetscObjectGetClassId(obj, &id));
         if ((id != PETSCFE_CLASSID) || (type & DM_BC_ESSENTIAL))
             continue;
-        Label label(dm_label);
         compute_bnd_jacobian_single_internal(dm,
                                              t,
                                              label,
@@ -927,7 +925,6 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
                                              coord_field,
                                              facets);
     }
-    facets.destroy();
 }
 
 void
@@ -989,7 +986,7 @@ FENonlinearProblem::compute_bnd_jacobian_single_internal(DM dm,
 
         // TODO: Special cases of ISIntersect where it is quick to check a prior if one is a
         // superset of the other
-        IndexSet isect = IndexSet::intersect_caching(facets, points);
+        auto isect = IndexSet::intersect_caching(facets, points);
         points.destroy();
         points = isect;
 

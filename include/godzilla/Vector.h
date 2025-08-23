@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/IndexSet.h"
 #include "godzilla/Types.h"
 #include "godzilla/DenseVector.h"
@@ -14,7 +15,7 @@ namespace godzilla {
 
 class NestVector;
 
-class Vector {
+class Vector : public PetscObjectWrapper<Vec> {
 public:
     Vector();
     Vector(MPI_Comm comm);
@@ -22,7 +23,6 @@ public:
 
     void create(MPI_Comm comm);
     void destroy();
-    void set_name(const std::string & name);
 
     void set_up();
 
@@ -242,7 +242,7 @@ public:
 
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
 
-    operator Vec() const;
+    // operator Vec() const;
 
     static Vector create_seq(MPI_Comm comm, Int n);
 
@@ -304,9 +304,6 @@ public:
     pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
     [[deprecated("")]] static void
     pointwise_divide(const Vector & w, const Vector & x, const Vector & y);
-
-private:
-    Vec vec;
 };
 
 template <Int N>
@@ -316,7 +313,7 @@ Vector::set_values(const DenseVector<Int, N> & ix,
                    InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValues(this->vec, N, ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValues(this->obj, N, ix.data(), y.data(), mode));
 }
 
 template <Int N>
@@ -326,7 +323,7 @@ Vector::set_values_local(const DenseVector<Int, N> & ix,
                          InsertMode mode)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(VecSetValuesLocal(this->vec, N, ix.data(), y.data(), mode));
+    PETSC_CHECK(VecSetValuesLocal(this->obj, N, ix.data(), y.data(), mode));
 }
 
 /// Copy vector `x` into `y`

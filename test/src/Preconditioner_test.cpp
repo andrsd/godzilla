@@ -20,7 +20,6 @@ TEST(Preconditioner, type)
     pc.view();
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("type: icc"));
-    pc.destroy();
 }
 
 TEST(Preconditioner, set_up)
@@ -44,8 +43,6 @@ TEST(Preconditioner, set_up)
 
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("linear system matrix = precond matrix:"));
-
-    pc.destroy();
 }
 
 TEST(Preconditioner, reset)
@@ -70,8 +67,6 @@ TEST(Preconditioner, reset)
 
     auto o = testing::internal::GetCapturedStdout();
     EXPECT_THAT(o, HasSubstr("PC has not been set up so information may be incomplete"));
-
-    pc.destroy();
 }
 
 TEST(Preconditioner, oper_pc)
@@ -82,7 +77,6 @@ TEST(Preconditioner, oper_pc)
     pc.create(app.get_comm());
     PCSetType(pc, PCICC);
     EXPECT_EQ(pc.get_type(), PCICC);
-    pc.destroy();
 }
 
 TEST(Preconditioner, apply)

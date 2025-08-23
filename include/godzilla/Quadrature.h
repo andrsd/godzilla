@@ -3,12 +3,13 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Types.h"
 #include "petscdt.h"
 
 namespace godzilla {
 
-class Quadrature {
+class Quadrature : public PetscObjectWrapper<PetscQuadrature> {
 public:
     Quadrature();
     Quadrature(PetscQuadrature quad);
@@ -23,6 +24,9 @@ public:
     ///
     /// @param r New quadrature object with the duplicate
     void duplicate(Quadrature & r);
+
+    /// Duplicate the object
+    Quadrature duplicate() const;
 
     /// Get the spatial dimension
     ///
@@ -61,8 +65,6 @@ public:
     /// @return `true` if quadratures are the same, `false` otherwise
     bool equal(const Quadrature & q) const;
 
-    operator PetscQuadrature() const;
-
     /// Create a tensor-product Gauss quadrature
     ///
     /// @param dim Spatial dimension
@@ -72,9 +74,6 @@ public:
     /// @param b Right end of interval (often `1`)
     /// @return Quadrature object
     static Quadrature create_gauss_tensor(Int dim, Int n_comp, Int n_points, Real a, Real b);
-
-private:
-    PetscQuadrature quad;
 };
 
 } // namespace godzilla
