@@ -330,8 +330,7 @@ App::run_input_file(const std::string & input_file_name)
 {
     CALL_STACK_MSG();
     if (utils::path_exists(input_file_name)) {
-        auto input_file = create_input_file();
-        set_input_file(input_file);
+        this->yml = create_input_file();
         build_from_yml(input_file_name);
         if (this->logger->get_num_errors() == 0)
             this->yml->create_objects();
