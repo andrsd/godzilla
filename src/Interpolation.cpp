@@ -8,11 +8,7 @@ namespace godzilla {
 
 Interpolation::Interpolation() : info(nullptr) {}
 
-Interpolation::~Interpolation()
-{
-    if (this->info != nullptr)
-        destroy();
-}
+Interpolation::~Interpolation() {}
 
 void
 Interpolation::create(MPI_Comm comm)
@@ -23,8 +19,6 @@ Interpolation::create(MPI_Comm comm)
 void
 Interpolation::destroy()
 {
-    PETSC_CHECK(DMInterpolationDestroy(&this->info));
-    this->info = nullptr;
 }
 
 void
@@ -44,9 +38,10 @@ Interpolation::add_points(const std::vector<Real> & points)
 Vector
 Interpolation::get_coordinates() const
 {
-    Vec v;
-    PETSC_CHECK(DMInterpolationGetCoordinates(this->info, &v));
-    return Vector(v);
+    Vector v;
+    PETSC_CHECK(DMInterpolationGetCoordinates(this->info, v));
+    v.inc_reference();
+    return v;
 }
 
 Int
@@ -68,9 +63,10 @@ Interpolation::get_dof() const
 Vector
 Interpolation::get_vector()
 {
-    Vec v;
-    PETSC_CHECK(DMInterpolationGetVector(this->info, &v));
-    return Vector(v);
+    Vector v;
+    PETSC_CHECK(DMInterpolationGetVector(this->info, v));
+    v.inc_reference();
+    return v;
 }
 
 void
