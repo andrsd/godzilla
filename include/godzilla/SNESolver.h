@@ -203,4 +203,6 @@ public:
     static ErrorCode invoke_monitor_delegate(SNES, Int, Real, void *);
 };
 
+void print_converged_reason(PrintInterface & pi, SNESolver::ConvergedReason reason);
+
 } // namespace godzilla
