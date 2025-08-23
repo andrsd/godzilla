@@ -22,7 +22,9 @@ ImplicitFENonlinearProblem::invoke_compute_boundary_delegate(DM,
     CALL_STACK_MSG();
     auto * method = static_cast<Delegate<void(Real time, Vector & x, Vector & x_t)> *>(context);
     Vector vec_x(x);
+    vec_x.inc_reference();
     Vector vec_x_t(x_t);
+    vec_x_t.inc_reference();
     method->invoke(time, vec_x, vec_x_t);
     return 0;
 }
@@ -166,7 +168,7 @@ ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
     for (auto & region : get_weak_form()->get_residual_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
-            all_cells.inc_ref();
+            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
@@ -175,7 +177,6 @@ ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
             points.destroy();
         }
         compute_residual_internal(get_dm(), region, cells, time, x, x_t, time, F);
-        cells.destroy();
     }
 }
 
@@ -197,16 +198,14 @@ ImplicitFENonlinearProblem::compute_ijacobian_fem(Real time,
     for (auto & region : get_weak_form()->get_jacobian_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
-            all_cells.inc_ref();
+            all_cells.inc_reference();
             cells = all_cells;
         }
         else {
             auto points = region.label.get_stratum(region.value);
             cells = IndexSet::intersect_caching(all_cells, points);
-            points.destroy();
         }
         compute_jacobian_internal(get_dm(), region, cells, time, x_t_shift, x, x_t, J, Jp);
-        cells.destroy();
     }
 }
 

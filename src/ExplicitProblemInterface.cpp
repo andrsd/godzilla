@@ -30,12 +30,6 @@ ExplicitProblemInterface::ExplicitProblemInterface(NonlinearProblem * problem,
                                     "'ssp-rk-3', 'rk-2' or 'heun'.");
 }
 
-ExplicitProblemInterface::~ExplicitProblemInterface()
-{
-    this->M.destroy();
-    this->M_lumped_inv.destroy();
-}
-
 const Matrix &
 ExplicitProblemInterface::get_mass_matrix() const
 {
@@ -104,9 +98,7 @@ ExplicitProblemInterface::create_mass_matrix()
 {
     CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
-    Mat m;
-    PETSC_CHECK(DMCreateMassMatrix(dm, dm, &m));
-    this->M = Matrix(m);
+    PETSC_CHECK(DMCreateMassMatrix(dm, dm, this->M));
     this->nl_problem->set_ksp_operators(this->M, this->M);
 }
 
@@ -115,13 +107,11 @@ ExplicitProblemInterface::create_mass_matrix_lumped()
 {
     CALL_STACK_MSG();
     auto dm = this->nl_problem->get_dm();
-    Vec v;
 #if PETSC_VERSION_GE(3, 22, 0)
-    PETSC_CHECK(DMCreateMassMatrixLumped(dm, NULL, &v));
+    PETSC_CHECK(DMCreateMassMatrixLumped(dm, NULL, this->M_lumped_inv));
 #else
-    PETSC_CHECK(DMCreateMassMatrixLumped(dm, &v));
+    PETSC_CHECK(DMCreateMassMatrixLumped(dm, this->M_lumped_inv));
 #endif
-    this->M_lumped_inv = Vector(v);
     this->M_lumped_inv.reciprocal();
 }
 
@@ -129,8 +119,8 @@ void
 ExplicitProblemInterface::compute_rhs_function(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
-    Vector loc_x = this->nl_problem->get_local_vector();
-    Vector loc_F = this->nl_problem->get_local_vector();
+    auto loc_x = this->nl_problem->get_local_vector();
+    auto loc_F = this->nl_problem->get_local_vector();
     loc_x.zero();
     compute_boundary_local(time, loc_x);
     this->nl_problem->global_to_local(x, INSERT_VALUES, loc_x);

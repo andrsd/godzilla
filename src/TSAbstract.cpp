@@ -142,6 +142,7 @@ TSAbstract::set_up()
 {
     CALL_STACK_MSG();
     this->vec_sol = Vector(this->ts->vec_sol);
+    this->vec_sol.inc_reference();
 }
 
 void
@@ -266,6 +267,7 @@ TSEvaluateStep_GodzillaTS(TS ts, PetscInt order, Vec X, PetscBool * done)
     CALL_STACK_MSG();
     auto abstract_ts = static_cast<TSAbstract *>(ts->data);
     Vector vec_x(X);
+    vec_x.inc_reference();
     bool d;
     abstract_ts->evaluate_step(order, vec_x, done ? &d : nullptr);
     if (done)

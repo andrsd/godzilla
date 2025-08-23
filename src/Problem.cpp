@@ -25,8 +25,6 @@ Problem::FieldDecomposition::get_num_fields() const
 void
 Problem::FieldDecomposition::destroy()
 {
-    for (auto & e : this->is)
-        e.destroy();
     this->field_name.clear();
     this->is.clear();
 }
@@ -34,7 +32,7 @@ Problem::FieldDecomposition::destroy()
 Parameters
 Problem::parameters()
 {
-    Parameters params = Object::parameters();
+    auto params = Object::parameters();
     params.add_private_param<MeshObject *>("_mesh_obj", nullptr);
     return params;
 }
@@ -49,12 +47,6 @@ Problem::Problem(const Parameters & parameters) :
 {
     set_output_monitor(this, &Problem::output_monitor);
     this->partitioner.create(get_comm());
-}
-
-Problem::~Problem()
-{
-    this->x.destroy();
-    this->partitioner.destroy();
 }
 
 DM
@@ -302,17 +294,18 @@ Matrix
 Problem::create_matrix() const
 {
     CALL_STACK_MSG();
-    Mat m;
-    PETSC_CHECK(DMCreateMatrix(get_dm(), &m));
-    return { m };
+    Matrix m;
+    PETSC_CHECK(DMCreateMatrix(get_dm(), m));
+    return m;
 }
 
 Section
 Problem::get_local_section() const
 {
-    PetscSection section = nullptr;
-    PETSC_CHECK(DMGetLocalSection(get_dm(), &section));
-    return { section };
+    Section section;
+    PETSC_CHECK(DMGetLocalSection(get_dm(), section));
+    section.inc_reference();
+    return section;
 }
 
 void
@@ -325,9 +318,10 @@ Problem::set_local_section(const Section & section) const
 Section
 Problem::get_global_section() const
 {
-    PetscSection section = nullptr;
-    PETSC_CHECK(DMGetGlobalSection(get_dm(), &section));
-    return { section };
+    Section section;
+    PETSC_CHECK(DMGetGlobalSection(get_dm(), section));
+    section.inc_reference();
+    return section;
 }
 
 void
@@ -355,6 +349,7 @@ Problem::create_field_decomposition()
     for (Int i = 0; i < n; ++i) {
         decomp.field_name[i] = field_names[i];
         decomp.is[i] = IndexSet(is[i]);
+        decomp.is[i].inc_reference();
     }
     for (Int i = 0; i < n; ++i)
         PetscFree(field_names[i]);
@@ -410,9 +405,10 @@ Problem::get_auxiliary_vec(const Label & label, Int value, Int part) const
 }
 
 void
-Problem::set_auxiliary_vec(const Label & label, Int value, Int part, const Vector & vec)
+Problem::set_auxiliary_vec(const Label & label, Int value, Int part, Vector vec)
 {
     CALL_STACK_MSG();
+    vec.inc_reference();
     PETSC_CHECK(DMSetAuxiliaryVec(get_dm(), label, value, part, vec));
 }
 
@@ -432,14 +428,13 @@ Problem::create_section_subis(const std::vector<Int> & fields) const
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
-    IS is;
-    PETSC_CHECK(
-        DMCreateSectionSubDM(get_dm(), fields.size(), fields.data(), NULL, NULL, &is, NULL));
-    return IndexSet(is);
+    IndexSet is;
+    PETSC_CHECK(DMCreateSectionSubDM(get_dm(), fields.size(), fields.data(), NULL, NULL, is, NULL));
+    return is;
 #else
-    IS is;
-    PETSC_CHECK(DMCreateSectionSubDM(get_dm(), fields.size(), fields.data(), &is, NULL));
-    return IndexSet(is);
+    IndexSet is;
+    PETSC_CHECK(DMCreateSectionSubDM(get_dm(), fields.size(), fields.data(), is, NULL));
+    return is;
 #endif
 }
 
@@ -451,15 +446,15 @@ Problem::create_section_subis(const std::vector<Int> & fields,
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
     assert(fields.size() == n_comps.size());
-    IS is;
+    IndexSet is;
     PETSC_CHECK(DMCreateSectionSubDM(get_dm(),
                                      fields.size(),
                                      fields.data(),
                                      n_comps.data(),
                                      comps.data(),
-                                     &is,
+                                     is,
                                      NULL));
-    return IndexSet(is);
+    return is;
 #else
     throw Exception(
         "PETSc 3.21+ is needed for Problem::create_section_subis with component support");
@@ -514,9 +509,10 @@ Vector
 get_local_vector(DM dm)
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMGetLocalVector(dm, &v));
-    return { v };
+    Vector v;
+    PETSC_CHECK(DMGetLocalVector(dm, v));
+    v.inc_reference();
+    return v;
 }
 
 void
@@ -531,9 +527,10 @@ Vector
 get_global_vector(DM dm)
 {
     CALL_STACK_MSG();
-    Vec glob;
-    PETSC_CHECK(DMGetGlobalVector(dm, &glob));
-    return Vector(glob);
+    Vector glob;
+    PETSC_CHECK(DMGetGlobalVector(dm, glob));
+    glob.inc_reference();
+    return glob;
 }
 
 void
@@ -548,42 +545,45 @@ Vector
 create_local_vector(DM dm)
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMCreateLocalVector(dm, &v));
-    return { v };
+    Vector v;
+    PETSC_CHECK(DMCreateLocalVector(dm, v));
+    return v;
 }
 
 Vector
 create_global_vector(DM dm)
 {
     CALL_STACK_MSG();
-    Vec v;
-    PETSC_CHECK(DMCreateGlobalVector(dm, &v));
-    return { v };
+    Vector v;
+    PETSC_CHECK(DMCreateGlobalVector(dm, v));
+    return v;
 }
 
 Section
 get_local_section(DM dm)
 {
-    PetscSection section = nullptr;
-    PETSC_CHECK(DMGetLocalSection(dm, &section));
-    return { section };
+    Section section;
+    PETSC_CHECK(DMGetLocalSection(dm, section));
+    section.inc_reference();
+    return section;
 }
 
 Section
 get_global_section(DM dm)
 {
-    PetscSection section = nullptr;
-    PETSC_CHECK(DMGetGlobalSection(dm, &section));
-    return { section };
+    Section section;
+    PETSC_CHECK(DMGetGlobalSection(dm, section));
+    section.inc_reference();
+    return section;
 }
 
 StarForest
 get_section_star_forest(DM dm)
 {
-    PetscSF sf;
-    PETSC_CHECK(DMGetSectionSF(dm, &sf));
-    return { sf };
+    StarForest sf;
+    PETSC_CHECK(DMGetSectionSF(dm, sf));
+    sf.inc_reference();
+    return sf;
 }
 
 DM

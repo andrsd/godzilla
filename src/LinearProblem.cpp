@@ -15,7 +15,9 @@ LinearProblem::invoke_compute_operators_delegate(KSP, Mat A, Mat B, void * conte
     CALL_STACK_MSG();
     auto * delegate = static_cast<Delegate<void(Matrix &, Matrix &)> *>(context);
     Matrix mat_A(A);
+    mat_A.inc_reference();
     Matrix mat_B(B);
+    mat_B.inc_reference();
     delegate->invoke(mat_A, mat_B);
     return 0;
 }
@@ -26,6 +28,7 @@ LinearProblem::invoke_compute_rhs_delegate(KSP, Vec b, void * context)
     CALL_STACK_MSG();
     auto * delegate = static_cast<Delegate<void(Vector &)> *>(context);
     Vector vec_b(b);
+    vec_b.inc_reference();
     delegate->invoke(vec_b);
     return 0;
 }
@@ -62,7 +65,6 @@ LinearProblem::LinearProblem(const Parameters & parameters) :
 LinearProblem::~LinearProblem()
 {
     CALL_STACK_MSG();
-    this->ks.destroy();
 }
 
 const std::string &
@@ -186,6 +188,7 @@ LinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
     this->pcond = Preconditioner(pc);
+    this->pcond.inc_reference();
 }
 
 void

@@ -15,7 +15,6 @@ namespace godzilla {
 class ExplicitProblemInterface : public TransientProblemInterface {
 public:
     explicit ExplicitProblemInterface(NonlinearProblem * problem, const Parameters & params);
-    ~ExplicitProblemInterface() override;
 
     const Matrix & get_mass_matrix() const;
 

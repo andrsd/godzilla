@@ -75,8 +75,6 @@ DiscreteProblemInterface::DiscreteProblemInterface(Problem * problem, const Para
 DiscreteProblemInterface::~DiscreteProblemInterface()
 {
     CALL_STACK_MSG();
-    this->sln.destroy();
-    this->a.destroy();
     DMDestroy(&this->dm_aux);
     for (auto & d : this->natural_riemann_bc_delegates)
         delete d;
@@ -421,15 +419,14 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
         }
     }
     if (no_errors) {
-        Vec loc_a;
-        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, &loc_a));
-        this->a = Vector(loc_a);
+        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, this->a));
         PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
+        this->a.inc_reference();
 
         PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
-        PetscSection sa;
-        PETSC_CHECK(DMGetLocalSection(this->dm_aux, &sa));
-        set_local_section_aux(Section(sa));
+        Section sa;
+        PETSC_CHECK(DMGetLocalSection(this->dm_aux, sa));
+        set_local_section_aux(sa);
     }
 }
 
@@ -498,7 +495,6 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
                                             INSERT_ALL_VALUES,
                                             a));
     ids.restore_indices();
-    ids.destroy();
 }
 
 void
