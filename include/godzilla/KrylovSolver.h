@@ -12,6 +12,7 @@
 
 namespace godzilla {
 
+class PrintInterface;
 class Matrix;
 class Vector;
 
@@ -260,5 +261,7 @@ public:
                                                       KSPConvergedReason * reason,
                                                       void * ctx);
 };
+
+void print_converged_reason(PrintInterface & pi, KrylovSolver::ConvergedReason reason);
 
 } // namespace godzilla

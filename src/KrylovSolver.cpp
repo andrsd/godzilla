@@ -7,6 +7,8 @@
 #include "godzilla/Matrix.h"
 #include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Vector.h"
+#include "godzilla/PrintInterface.h"
+#include "godzilla/Convert.h"
 
 namespace godzilla {
 
@@ -227,6 +229,16 @@ KrylovSolver::view(PetscViewer viewer) const
 {
     CALL_STACK_MSG();
     PETSC_CHECK(KSPView(this->obj, viewer));
+}
+
+void
+print_converged_reason(PrintInterface & pi, KrylovSolver::ConvergedReason reason)
+{
+    CALL_STACK_MSG();
+    if (reason > 0)
+        pi.lprintln(8, Terminal::green, "Converged: {}", conv::to_str(reason));
+    else
+        pi.lprintln(8, Terminal::red, "Not converged: {}", conv::to_str(reason));
 }
 
 } // namespace godzilla
