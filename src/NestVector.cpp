@@ -23,9 +23,10 @@ Vector
 NestVector::get_sub_vector(Int idx) const
 {
     CALL_STACK_MSG();
-    Vec sx;
-    PETSC_CHECK(VecNestGetSubVec(*this, idx, &sx));
-    return Vector(sx);
+    Vector sx;
+    PETSC_CHECK(VecNestGetSubVec(*this, idx, sx));
+    sx.inc_reference();
+    return sx;
 }
 
 std::vector<Vector>
@@ -37,8 +38,10 @@ NestVector::get_sub_vectors() const
     PETSC_CHECK(VecNestGetSubVecs(*this, &n, &sx));
 
     std::vector<Vector> vecs(n);
-    for (Int i = 0; i < n; ++i)
+    for (Int i = 0; i < n; ++i) {
         vecs[i] = sx[i];
+        vecs[i].inc_reference();
+    }
     return vecs;
 }
 
@@ -66,9 +69,9 @@ NestVector
 NestVector::duplicate() const
 {
     CALL_STACK_MSG();
-    Vec dup;
-    PETSC_CHECK(VecDuplicate(*this, &dup));
-    return NestVector(dup);
+    NestVector dup;
+    PETSC_CHECK(VecDuplicate(*this, dup));
+    return dup;
 }
 
 } // namespace godzilla
