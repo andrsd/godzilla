@@ -349,7 +349,6 @@ Problem::create_field_decomposition()
     for (Int i = 0; i < n; ++i) {
         decomp.field_name[i] = field_names[i];
         decomp.is[i] = IndexSet(is[i]);
-        decomp.is[i].inc_reference();
     }
     for (Int i = 0; i < n; ++i)
         PetscFree(field_names[i]);
