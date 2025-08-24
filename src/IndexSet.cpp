@@ -155,7 +155,6 @@ IndexSet::duplicate() const
     CALL_STACK_MSG();
     IndexSet new_is;
     PETSC_CHECK(ISDuplicate(this->obj, new_is));
-    new_is.inc_reference();
     return new_is;
 }
 
@@ -185,7 +184,6 @@ IndexSet::create_general(MPI_Comm comm, const std::vector<Int> & idx, CopyMode c
     CALL_STACK_MSG();
     IndexSet is;
     PETSC_CHECK(ISCreateGeneral(comm, idx.size(), idx.data(), (PetscCopyMode) copy_mode, is));
-    is.inc_reference();
     return is;
 }
 
@@ -275,7 +273,6 @@ IndexSet::intersect(const IndexSet & is1, const IndexSet & is2)
     CALL_STACK_MSG();
     IndexSet is;
     PETSC_CHECK(ISIntersect(is1, is2, is));
-    is.inc_reference();
     return is;
 }
 
@@ -335,7 +332,6 @@ IndexSet::complement(Int nmin, Int nmax) const
     CALL_STACK_MSG();
     IndexSet out;
     PETSC_CHECK(ISComplement(this->obj, nmin, nmax, out));
-    out.inc_reference();
     return out;
 }
 
@@ -348,7 +344,6 @@ IndexSet::concatenate(MPI_Comm comm, const std::vector<IndexSet> & is_list)
     for (size_t i = 0; i < is_list.size(); ++i)
         is_vec[i] = is_list[i];
     PETSC_CHECK(ISConcatenate(comm, is_vec.size(), is_vec.data(), out));
-    out.inc_reference();
     return out;
 }
 
@@ -358,7 +353,6 @@ IndexSet::difference(const IndexSet & is1, const IndexSet & is2)
     CALL_STACK_MSG();
     IndexSet out;
     PETSC_CHECK(ISDifference(is1, is2, out));
-    out.inc_reference();
     return out;
 }
 
@@ -386,7 +380,6 @@ IndexSet::expand(const IndexSet & is1, const IndexSet & is2)
     CALL_STACK_MSG();
     IndexSet out;
     PETSC_CHECK(ISExpand(is1, is2, out));
-    out.inc_reference();
     return out;
 }
 
@@ -462,7 +455,6 @@ IndexSet::sum(const IndexSet & is1, const IndexSet & is2)
     CALL_STACK_MSG();
     IndexSet out;
     PETSC_CHECK(ISSum(is1, is2, out));
-    out.inc_reference();
     return out;
 }
 
