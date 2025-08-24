@@ -286,7 +286,6 @@ UnstructuredMesh::get_cone_recursive_vertices(IndexSet points) const
     CALL_STACK_MSG();
     IndexSet expanded_points;
     PETSC_CHECK(DMPlexGetConeRecursiveVertices(get_dm(), points, expanded_points));
-    expanded_points.inc_reference();
     return expanded_points;
 }
 
