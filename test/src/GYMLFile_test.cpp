@@ -111,7 +111,7 @@ TEST_F(GYMLFileTest, parse_empty)
     TestGYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/empty.yml");
 
     file.parse(file_name);
     auto yml = file.get_yml();
@@ -123,7 +123,7 @@ TEST_F(GYMLFileTest, build_empty)
     GYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/empty.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/empty.yml");
 
     file.parse(file_name);
     EXPECT_THROW_MSG(file.build(), "Missing 'mesh' block.");
@@ -134,7 +134,7 @@ TEST_F(GYMLFileTest, build_mesh_no_type)
     GYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_no_type.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/mesh_no_type.yml");
 
     file.parse(file_name);
     EXPECT_THROW_MSG(file.build(), "mesh: No 'type' specified.");
@@ -145,7 +145,7 @@ TEST_F(GYMLFileTest, build_mesh_unreg_type)
     GYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_unreg_type.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/mesh_unreg_type.yml");
 
     file.parse(file_name);
     EXPECT_THROW_MSG(file.build(), "mesh: Type 'ASDF' is not a registered object.");
@@ -156,8 +156,8 @@ TEST_F(GYMLFileTest, build_missing_req_param)
     testing::internal::CaptureStderr();
 
     GYMLFile file(this->app);
-    std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_missing_req_param.yml");
+    std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) +
+                            std::string("/assets/yml/mesh_missing_req_param.yml");
     file.parse(file_name);
     file.build();
     this->app->check_integrity();
@@ -173,7 +173,7 @@ TEST_F(GYMLFileTest, mesh_partitioner)
     GYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh_partitioner.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/mesh_partitioner.yml");
 
     file.parse(file_name);
     file.build();
@@ -196,7 +196,7 @@ TEST_F(GYMLFileTest, build)
     GYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/simple.yml");
 
     EXPECT_TRUE(file.parse(file_name));
     file.build();
@@ -231,7 +231,7 @@ TEST_F(GYMLFileTest, funcs)
     } file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/funcs.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/funcs.yml");
 
     file.parse(file_name);
     file.build();
@@ -246,8 +246,8 @@ TEST_F(GYMLFileTest, build_vec_as_scalars)
 {
     GYMLFile file(this->app);
 
-    std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_vec_as_scalars.yml");
+    std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) +
+                            std::string("/assets/yml/simple_vec_as_scalars.yml");
 
     file.parse(file_name);
     file.build();
@@ -262,7 +262,7 @@ TEST_F(GYMLFileTest, wrong_param_type)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/wrong_param_type.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/wrong_param_type.yml");
     file.parse(file_name);
     file.build();
     this->app->check_integrity();
@@ -278,7 +278,7 @@ TEST_F(GYMLFileTest, build_fe)
     GYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/simple_fe.yml");
 
     file.parse(file_name);
     file.build();
@@ -292,7 +292,7 @@ TEST_F(GYMLFileTest, simple_fe_pps)
     GYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe_pps.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/simple_fe_pps.yml");
 
     file.parse(file_name);
     file.build();
@@ -310,7 +310,7 @@ TEST_F(GYMLFileTest, build_fe_w_aux)
     GYMLFile file(this->app);
 
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/simple_fe_w_aux.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/simple_fe_w_aux.yml");
 
     file.parse(file_name);
     file.build();
@@ -326,7 +326,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_ics)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_ics.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/nonfe_with_ics.yml");
     file.parse(file_name);
     file.build();
     this->app->check_integrity();
@@ -342,7 +342,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_bcs)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_bcs.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/nonfe_with_bcs.yml");
     file.parse(file_name);
     file.build();
     this->app->check_integrity();
@@ -358,7 +358,7 @@ TEST_F(GYMLFileTest, nonfe_problem_with_auxs)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/nonfe_with_auxs.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/nonfe_with_auxs.yml");
     file.parse(file_name);
     file.build();
     this->app->check_integrity();
@@ -374,7 +374,7 @@ TEST_F(GYMLFileTest, unused_param)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/unused_param.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/unused_param.yml");
     file.parse(file_name);
     file.build();
     this->app->check_integrity();
@@ -389,7 +389,7 @@ TEST_F(GYMLFileTest, malformed)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/malformed.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/malformed.yml");
     EXPECT_FALSE(file.parse(file_name));
     this->app->check_integrity();
 
@@ -404,7 +404,7 @@ TEST_F(GYMLFileTest, wrong_type_bool)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/wrong_type_bool.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/wrong_type_bool.yml");
     EXPECT_TRUE(file.parse(file_name));
     file.build();
     this->app->check_integrity();
@@ -424,7 +424,7 @@ TEST_F(GYMLFileTest, ts_adapt_with_steady)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/ss_with_ts_adapt.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/ss_with_ts_adapt.yml");
     EXPECT_TRUE(file.parse(file_name));
     file.build();
     this->app->check_integrity();
@@ -440,7 +440,7 @@ TEST_F(GYMLFileTest, unused_block)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/unused_block.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/unused_block.yml");
     EXPECT_TRUE(file.parse(file_name));
     file.build();
     file.check();
@@ -456,7 +456,7 @@ TEST_F(GYMLFileTest, param_not_map)
 
     GYMLFile file(this->app);
     std::string file_name =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/not_map.yml");
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/not_map.yml");
     EXPECT_TRUE(file.parse(file_name));
     file.build();
     this->app->check_integrity();

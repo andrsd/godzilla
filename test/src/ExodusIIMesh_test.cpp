@@ -12,7 +12,8 @@ using testing::Pair;
 TEST(ExodusIIMeshTest, api)
 {
     TestApp app;
-    std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/square.e");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/square.e");
 
     Parameters params = ExodusIIMesh::parameters();
     params.set<App *>("_app") = &app;
@@ -46,7 +47,8 @@ TEST(ExodusIIMeshTest, api)
 TEST(ExodusIIMeshTest, two_block)
 {
     TestApp app;
-    std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/2blk.exo");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/2blk.exo");
     Parameters params = ExodusIIMesh::parameters();
     params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
@@ -68,7 +70,8 @@ TEST(ExodusIIMeshTest, two_block)
 TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
 {
     TestApp app;
-    std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/2blk.exo");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/2blk.exo");
     Parameters params = ExodusIIMesh::parameters();
     params.set<App *>("_app") = &app;
     params.set<std::string>("_name") = "obj";
@@ -77,10 +80,12 @@ TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
     mesh.create();
 
     auto m = mesh.get_mesh<UnstructuredMesh>();
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto & name = m->get_cell_set_name(1234); },
-                     "Cell set ID '1234' does not exist.");
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto id = m->get_cell_set_id("1234"); },
-                     "Cell set '1234' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto & name = m->get_cell_set_name(1234); },
+        "Cell set ID '1234' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto id = m->get_cell_set_id("1234"); },
+        "Cell set '1234' does not exist.");
 }
 
 TEST(ExodusIIMeshTest, nonexitent_file)

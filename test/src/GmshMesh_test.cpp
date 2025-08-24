@@ -9,7 +9,8 @@ using namespace godzilla;
 TEST(GmshMeshTest, api)
 {
     TestApp app;
-    std::string file_name = std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/quad.msh");
+    std::string file_name =
+        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/quad.msh");
 
     Parameters params = GmshMesh::parameters();
     params.set<App *>("_app") = &app;
