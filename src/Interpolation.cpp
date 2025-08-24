@@ -19,6 +19,7 @@ Interpolation::create(MPI_Comm comm)
 void
 Interpolation::destroy()
 {
+    PETSC_CHECK( DMInterpolationDestroy(&this->info));
 }
 
 void
