@@ -149,4 +149,7 @@ TEST(FEBoundaryTest, normals_3d)
         EXPECT_DOUBLE_EQ(bnd.area(0), 0.5 * std::sqrt(3));
         bnd.destroy();
     }
+
+    grad_phi.destroy();
+    fe_volume.destroy();
 }

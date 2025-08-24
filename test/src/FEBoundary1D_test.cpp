@@ -77,4 +77,7 @@ TEST(FEBoundaryTest, normals_1d)
         EXPECT_DOUBLE_EQ(bnd.length(0), 1.);
         bnd.destroy();
     }
+
+    grad_phi.destroy();
+    fe_volume.destroy();
 }
