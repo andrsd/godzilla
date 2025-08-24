@@ -268,7 +268,7 @@ TSEvaluateStep_GodzillaTS(TS ts, PetscInt order, Vec X, PetscBool * done)
     auto abstract_ts = static_cast<TSAbstract *>(ts->data);
     Vector vec_x(X);
     vec_x.inc_reference();
-    bool d;
+    bool d = false;
     abstract_ts->evaluate_step(order, vec_x, done ? &d : nullptr);
     if (done)
         *done = d ? PETSC_TRUE : PETSC_FALSE;

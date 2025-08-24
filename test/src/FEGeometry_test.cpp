@@ -13,33 +13,36 @@ namespace mpi = mpicpp_lite;
 TEST(FEGeometryTest, coordinates)
 {
     mpi::Communicator comm;
-    UnstructuredMesh mesh = *UnstructuredMesh::build_from_cell_list(comm,
-                                                                    1,
-                                                                    2,
-                                                                    { 0, 1, 1, 2, 2, 3 },
-                                                                    1,
-                                                                    { 0., 0.1, 0.2, 0.3 },
-                                                                    true);
+    auto mesh = UnstructuredMesh::build_from_cell_list(comm,
+                                                       1,
+                                                       2,
+                                                       { 0, 1, 1, 2, 2, 3 },
+                                                       1,
+                                                       { 0., 0.1, 0.2, 0.3 },
+                                                       true);
 
-    auto coords = fe::coordinates<1>(mesh);
+    auto coords = fe::coordinates<1>(*mesh);
     ASSERT_EQ(coords.size(), 4);
     EXPECT_DOUBLE_EQ(coords(3)(0), 0.);
     EXPECT_DOUBLE_EQ(coords(4)(0), 0.1);
     EXPECT_DOUBLE_EQ(coords(5)(0), 0.2);
     EXPECT_DOUBLE_EQ(coords(6)(0), 0.3);
+
+    coords.destroy();
+    delete mesh;
 }
 
 TEST(FEGeometryTest, connectivity)
 {
     mpi::Communicator comm;
-    UnstructuredMesh mesh = *UnstructuredMesh::build_from_cell_list(comm,
-                                                                    1,
-                                                                    2,
-                                                                    { 0, 1, 1, 2, 2, 3 },
-                                                                    1,
-                                                                    { 0., 0.1, 0.2, 0.3 },
-                                                                    true);
-    auto connect = fe::connectivity<1, 2>(mesh);
+    auto mesh = UnstructuredMesh::build_from_cell_list(comm,
+                                                       1,
+                                                       2,
+                                                       { 0, 1, 1, 2, 2, 3 },
+                                                       1,
+                                                       { 0., 0.1, 0.2, 0.3 },
+                                                       true);
+    auto connect = fe::connectivity<1, 2>(*mesh);
     ASSERT_EQ(connect.size(), 3);
     EXPECT_EQ(connect(0)(0), 3);
     EXPECT_EQ(connect(0)(1), 4);
@@ -47,20 +50,23 @@ TEST(FEGeometryTest, connectivity)
     EXPECT_EQ(connect(1)(1), 5);
     EXPECT_EQ(connect(2)(0), 5);
     EXPECT_EQ(connect(2)(1), 6);
+
+    connect.destroy();
+    delete mesh;
 }
 
 TEST(FEGeometryTest, common_elements_by_node)
 {
     mpi::Communicator comm;
-    UnstructuredMesh mesh = *UnstructuredMesh::build_from_cell_list(comm,
-                                                                    1,
-                                                                    2,
-                                                                    { 0, 1, 1, 2, 2, 3 },
-                                                                    1,
-                                                                    { 0., 0.1, 0.2, 0.3 },
-                                                                    true);
+    auto mesh = UnstructuredMesh::build_from_cell_list(comm,
+                                                       1,
+                                                       2,
+                                                       { 0, 1, 1, 2, 2, 3 },
+                                                       1,
+                                                       { 0., 0.1, 0.2, 0.3 },
+                                                       true);
 
-    auto nelcom = fe::common_elements_by_node<2>(mesh);
+    auto nelcom = fe::common_elements_by_node<2>(*mesh);
 
     EXPECT_THAT(nelcom(0), UnorderedElementsAre(0));
     EXPECT_THAT(nelcom(1), UnorderedElementsAre(0, 1));
@@ -68,6 +74,7 @@ TEST(FEGeometryTest, common_elements_by_node)
     EXPECT_THAT(nelcom(3), UnorderedElementsAre(2));
 
     nelcom.destroy();
+    delete mesh;
 }
 
 TEST(FEGeometryTest, normal_edge2)
@@ -163,6 +170,11 @@ TEST(FEGeometryTest, calc_element_length)
     auto hel = fe::calc_element_length<ELEM_TYPE, DIM>(grad_sh);
     EXPECT_DOUBLE_EQ(hel(0), 0.48);
     EXPECT_DOUBLE_EQ(hel(1), 0.6);
+
+    hel.destroy();
+    grad_sh.destroy();
+    volumes.destroy();
+    delete mesh;
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_edge2)
@@ -174,6 +186,8 @@ TEST(FEGeometryTest, calc_nodal_radius_xyz_edge2)
     auto rad = fe::calc_nodal_radius<CARTESIAN, 1>(coords);
     EXPECT_DOUBLE_EQ(rad(0), 1.);
     EXPECT_DOUBLE_EQ(rad(1), 1.);
+    rad.destroy();
+    coords.destroy();
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_tri3)
@@ -187,6 +201,8 @@ TEST(FEGeometryTest, calc_nodal_radius_xyz_tri3)
     EXPECT_DOUBLE_EQ(rad(0), 1.);
     EXPECT_DOUBLE_EQ(rad(1), 1.);
     EXPECT_DOUBLE_EQ(rad(2), 1.);
+    rad.destroy();
+    coords.destroy();
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_tet4)
@@ -202,6 +218,8 @@ TEST(FEGeometryTest, calc_nodal_radius_xyz_tet4)
     EXPECT_DOUBLE_EQ(rad(1), 1.);
     EXPECT_DOUBLE_EQ(rad(2), 1.);
     EXPECT_DOUBLE_EQ(rad(3), 1.);
+    rad.destroy();
+    coords.destroy();
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_rz_tri3)
@@ -215,6 +233,8 @@ TEST(FEGeometryTest, calc_nodal_radius_rz_tri3)
     EXPECT_DOUBLE_EQ(rad(0), 0.);
     EXPECT_DOUBLE_EQ(rad(1), 0.);
     EXPECT_DOUBLE_EQ(rad(2), 1.);
+    rad.destroy();
+    coords.destroy();
 }
 
 TEST(FEGeometryTest, get_local_vertex_index)

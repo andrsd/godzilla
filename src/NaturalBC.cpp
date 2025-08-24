@@ -63,8 +63,10 @@ NaturalBC::set_up()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    for (auto & bnd : get_boundary())
-        dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components());
+    for (auto & bnd : get_boundary()) {
+        if (get_field_id() != -1)
+            dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components());
+    }
 }
 
 void

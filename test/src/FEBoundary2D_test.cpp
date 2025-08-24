@@ -122,4 +122,7 @@ TEST(FEBoundaryTest, normals_2d)
 
         bnd.destroy();
     }
+
+    grad_phi.destroy();
+    fe_volume.destroy();
 }

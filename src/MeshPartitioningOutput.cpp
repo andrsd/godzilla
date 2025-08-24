@@ -85,7 +85,9 @@ MeshPartitioningOutput::output_step()
     PETSC_CHECK(VecView(global, viewer));
 
     PETSC_CHECK(DMDestroy(&dmp));
-
+    PETSC_CHECK(VecDestroy(&local));
+    PETSC_CHECK(VecDestroy(&global));
+    PETSC_CHECK(PetscSectionDestroy(&s));
     PETSC_CHECK(PetscViewerDestroy(&viewer));
 }
 

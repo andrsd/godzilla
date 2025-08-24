@@ -8,8 +8,7 @@ namespace godzilla {
 
 Factory::Factory(const Registry & registry) : registry(registry) {}
 
-void
-Factory::destroy()
+Factory::~Factory()
 {
     CALL_STACK_MSG();
     while (!objects.empty()) {
@@ -20,6 +19,11 @@ Factory::destroy()
         delete params.front();
         params.pop_front();
     }
+}
+
+void
+Factory::destroy()
+{
 }
 
 } // namespace godzilla

@@ -18,6 +18,7 @@ class Parameters;
 class Factory {
 public:
     explicit Factory(const Registry & registry);
+    ~Factory();
 
     /// Get valid parameters for the object
     ///
@@ -45,11 +46,15 @@ public:
         auto class_name = parameters.set<std::string>("_type");
         auto entry = this->registry.get(class_name);
         parameters.set<std::string>("_name") = name;
-        T * object = dynamic_cast<T *>(entry.build_ptr(parameters));
-        if (object == nullptr)
+        auto * obj = entry.build_ptr(parameters);
+        if (T * object = dynamic_cast<T *>(obj)) {
+            this->objects.push_back(object);
+            return object;
+        }
+        else {
+            delete obj;
             throw Exception("Instantiation of object '{}:[{}]' failed.", name, class_name);
-        this->objects.push_back(object);
-        return object;
+        }
     }
 
     /// Build an object (must be registered in Registry)

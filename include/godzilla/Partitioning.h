@@ -3,13 +3,14 @@
 
 #pragma once
 
+#include "godzilla/PetscObjectWrapper.h"
 #include "godzilla/Matrix.h"
 #include "godzilla/IndexSet.h"
 #include "petscmat.h"
 
 namespace godzilla {
 
-class Partitioning {
+class Partitioning : PetscObjectWrapper<MatPartitioning> {
 public:
     Partitioning();
     Partitioning(MatPartitioning mp);
@@ -89,12 +90,6 @@ public:
 
     /// Prints the partitioning data structure.
     void view(PetscViewer viewer = PETSC_VIEWER_STDOUT_WORLD) const;
-
-    operator MatPartitioning() const;
-    operator MatPartitioning();
-
-private:
-    MatPartitioning matp;
 
 public:
     static const char * AVERAGE;

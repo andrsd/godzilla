@@ -216,7 +216,6 @@ SNESolver::mat_create_mf() const
     CALL_STACK_MSG();
     Matrix mat;
     PETSC_CHECK(MatCreateSNESMF(this->obj, mat));
-    mat.inc_reference();
     return mat;
 }
 

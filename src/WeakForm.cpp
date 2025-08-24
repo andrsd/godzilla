@@ -2,12 +2,32 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/WeakForm.h"
+#include "godzilla/ResidualFunc.h"
+#include "godzilla/JacobianFunc.h"
 #include "godzilla/CallStack.h"
 #include <set>
 
 namespace godzilla {
 
 WeakForm::WeakForm() {}
+
+WeakForm::~WeakForm()
+{
+    CALL_STACK_MSG();
+    for (auto & m : this->res_forms)
+        for (auto & [k, forms] : m)
+            for (auto & f : forms)
+                delete f;
+    for (auto & f : this->empty_res_forms)
+        delete f;
+
+    for (auto & m : this->jac_forms)
+        for (auto & [k, forms] : m)
+            for (auto & f : forms)
+                delete f;
+    for (auto & f : this->empty_jac_forms)
+        delete f;
+}
 
 std::vector<WeakForm::Region>
 WeakForm::get_residual_regions() const

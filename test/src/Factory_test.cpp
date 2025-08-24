@@ -47,7 +47,7 @@ TEST(FactoryTest, create_wrong_type)
 
     TestApp app;
     Factory factory(reg);
-    Parameters * params = factory.get_parameters("LineMesh");
+    auto * params = factory.get_parameters("LineMesh");
     params->set<App *>("_app") = &app;
     params->set<Int>("nx") = 1;
     EXPECT_THROW_MSG(factory.create<RectangleMesh>("name", params),

@@ -179,6 +179,7 @@ TEST(NaturalBCTest, non_existing_field)
     Parameters params = TestNaturalBC::parameters();
     params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &problem;
+    params.set<std::vector<std::string>>("boundary") = { "left" };
     params.set<std::string>("field") = "asdf";
     TestNaturalBC bc(params);
 
@@ -212,6 +213,7 @@ TEST(NaturalBCTest, field_param_not_specified)
     Parameters params = TestNaturalBC::parameters();
     params.set<App *>("_app") = &app;
     params.set<DiscreteProblemInterface *>("_dpi") = &problem;
+    params.set<std::vector<std::string>>("boundary") = { "left" };
     TestNaturalBC bc(params);
 
     mesh.create();

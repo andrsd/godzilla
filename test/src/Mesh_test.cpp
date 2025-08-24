@@ -176,6 +176,8 @@ TEST(MeshTest, view)
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, HasSubstr("DM Object:"));
     EXPECT_THAT(out, HasSubstr("type: plex"));
+
+    delete m;
 }
 
 TEST(MeshTest, get_neighbors)
@@ -193,4 +195,6 @@ TEST(MeshTest, get_neighbors)
         auto neighbors = m->get_neighbors();
         EXPECT_TRUE(neighbors.empty());
     }
+
+    delete m;
 }

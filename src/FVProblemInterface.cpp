@@ -47,6 +47,7 @@ FVProblemInterface::~FVProblemInterface()
         auto & fe = kv.second;
         PetscFEDestroy(&fe);
     }
+    PETSC_CHECK(PetscFVDestroy(&this->fvm));
 }
 
 void

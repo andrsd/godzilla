@@ -124,8 +124,10 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
 ExodusIIOutput::~ExodusIIOutput()
 {
     CALL_STACK_MSG();
-    if (this->exo)
+    if (this->exo) {
         this->exo->close();
+        delete this->exo;
+    }
 }
 
 std::string

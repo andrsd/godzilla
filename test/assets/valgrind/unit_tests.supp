@@ -1,0 +1,51 @@
+{
+   LineMesh::create_mesh
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:posix_memalign
+   fun:PetscMallocAlign
+   fun:PetscMallocA
+   fun:ISCreate
+   fun:ISCreateStride
+   fun:DMPlexCreateDepthStratum.part.0
+   fun:DMPlexStratify
+   fun:DMPlexCreateFromDAG
+   fun:DMPlexCreateLineMesh_Internal
+   fun:DMPlexCreateBoxMesh_Internal
+   fun:DMPlexCreateBoxMesh
+   fun:_ZN8godzilla8LineMesh11create_meshEv
+}
+{
+   RectangleMesh::create_mesh
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:posix_memalign
+   fun:PetscMallocAlign
+   fun:PetscMallocA
+   fun:ISCreate
+   fun:ISCreateStride
+   fun:DMPlexCreateDepthStratum.part.0
+   fun:DMPlexStratify
+   fun:DMPlexCreateCubeMesh_Internal
+   fun:DMPlexCreateBoxMesh_Internal
+   fun:DMPlexCreateBoxMesh
+   fun:_ZN8godzilla13RectangleMesh11create_meshEv
+   fun:_ZN8godzilla10MeshObject6createEv
+}
+{
+   TestUnstructuredMesh3D::create_mesh
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:posix_memalign
+   fun:PetscMallocAlign
+   fun:PetscMallocA
+   fun:ISCreate
+   fun:ISCreateStride
+   fun:DMPlexCreateDepthStratum.part.0
+   fun:DMPlexStratify
+   fun:DMPlexCreateCubeMesh_Internal
+   fun:DMPlexCreateBoxMesh_Internal
+   fun:DMPlexCreateBoxMesh
+   fun:_ZN12_GLOBAL__N_122TestUnstructuredMesh3D11create_meshEv
+   fun:_ZN8godzilla10MeshObject6createEv
+}

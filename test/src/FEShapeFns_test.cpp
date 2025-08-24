@@ -124,4 +124,5 @@ TEST(FEShapeFns, calc_grad_shape_2d_petsc)
 
     grad_sh.destroy();
     volumes.destroy();
+    delete mesh;
 }

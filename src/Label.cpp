@@ -77,7 +77,6 @@ Label::get_value_index_set() const
     CALL_STACK_MSG();
     IndexSet is;
     PETSC_CHECK(DMLabelGetValueIS(this->obj, is));
-    is.inc_reference();
     return is;
 }
 
@@ -123,7 +122,6 @@ Label::get_stratum(Int value) const
     CALL_STACK_MSG();
     IndexSet is;
     PETSC_CHECK(DMLabelGetStratumIS(this->obj, value, is));
-    is.inc_reference();
     return is;
 }
 
