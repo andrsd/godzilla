@@ -419,13 +419,13 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
         }
     }
     if (no_errors) {
-        PETSC_CHECK(DMCreateLocalVector(this->dm_aux, this->a));
+        this->a = godzilla::create_local_vector(this->dm_aux);
         PETSC_CHECK(DMSetAuxiliaryVec(dm, nullptr, 0, 0, this->a));
-        this->a.inc_reference();
 
         PETSC_CHECK(DMGetDS(this->dm_aux, &this->ds_aux));
         Section sa;
         PETSC_CHECK(DMGetLocalSection(this->dm_aux, sa));
+        sa.inc_reference();
         set_local_section_aux(sa);
     }
 }
