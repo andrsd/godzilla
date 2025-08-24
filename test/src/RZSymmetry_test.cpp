@@ -23,7 +23,6 @@ TEST(RZSymmetryTest, check)
 
     auto params = RZSymmetry::parameters();
     params.set<App *>("_app") = &app;
-    params.set<Problem *>("_dpi") = &prob;
     params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::vector<Real>>("point") = { 0. };
     params.set<std::vector<Real>>("axis") = { 1. };
@@ -57,7 +56,6 @@ TEST(RZSymmetryTest, evaluate)
 
     auto params = RZSymmetry::parameters();
     params.set<App *>("_app") = &app;
-    params.set<Problem *>("_dpi") = &prob;
     params.set<DiscreteProblemInterface *>("_dpi") = &prob;
     params.set<std::vector<Real>>("point") = { 1., 1. };
     params.set<std::vector<Real>>("axis") = { 1., 0. };
