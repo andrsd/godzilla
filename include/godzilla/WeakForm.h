@@ -157,6 +157,7 @@ public:
     };
 
     WeakForm();
+    ~WeakForm();
 
     /// Get mesh regions where residual parts are defined
     ///
