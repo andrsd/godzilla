@@ -18,7 +18,9 @@ EssentialBC::parameters()
     return params;
 }
 
-EssentialBC::EssentialBC(const Parameters & params) : BoundaryCondition(params), fid(-1)
+EssentialBC::EssentialBC(const Parameters & params) :
+    BoundaryCondition(params),
+    fid(INVALID_FIELD_ID)
 
 {
     CALL_STACK_MSG();

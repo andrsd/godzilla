@@ -51,4 +51,8 @@ get_num_element_nodes(ElementType type)
 
 using ExecuteOn = Flags<ExecuteOnFlag>;
 
+// Constants
+
+const Int INVALID_FIELD_ID = -1;
+
 } // namespace godzilla

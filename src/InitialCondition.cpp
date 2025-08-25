@@ -22,7 +22,7 @@ InitialCondition::InitialCondition(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     dpi(get_param<DiscreteProblemInterface *>("_dpi")),
-    fid(-1)
+    fid(INVALID_FIELD_ID)
 {
     CALL_STACK_MSG();
 }
