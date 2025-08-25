@@ -46,7 +46,7 @@ TEST_F(AuxiliaryFieldTest, api)
 
     mesh->create();
 
-    prob->set_aux_field(0, "fld", 1, 1);
+    prob->set_aux_field(0, "fld", 1, Order(1));
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -93,7 +93,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
 
     testing::internal::CaptureStderr();
 
-    prob->set_aux_field(0, "aux1", 1, 1);
+    prob->set_aux_field(0, "aux1", 1, Order(1));
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -130,7 +130,7 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
 
     testing::internal::CaptureStderr();
 
-    prob->set_aux_field(0, "aux", 1, 1);
+    prob->set_aux_field(0, "aux", 1, Order(1));
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -168,7 +168,7 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
     testing::internal::CaptureStderr();
 
-    prob->set_aux_field(0, "aux", 1, 1);
+    prob->set_aux_field(0, "aux", 1, Order(1));
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -190,7 +190,7 @@ TEST_F(AuxiliaryFieldTest, name_already_taken)
 {
     mesh->create();
 
-    prob->set_aux_field(0, "fld", 1, 1);
+    prob->set_aux_field(0, "fld", 1, Order(1));
 
     Parameters params = ConstantAuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -223,7 +223,7 @@ TEST_F(AuxiliaryFieldTest, get_value)
 
     mesh->create();
 
-    prob->set_aux_field(0, "aux", 1, 1);
+    prob->set_aux_field(0, "aux", 1, Order(1));
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;
@@ -261,7 +261,7 @@ TEST_F(AuxiliaryFieldTest, get_vector_value)
 
     mesh->create();
 
-    prob->set_aux_field(0, "aux", 1, 1);
+    prob->set_aux_field(0, "aux", 1, Order(1));
 
     Parameters params = AuxiliaryField::parameters();
     params.set<App *>("_app") = app;

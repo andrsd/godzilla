@@ -138,7 +138,7 @@ DGProblemInterface::get_fe(Int fid) const
         throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
-Int
+Order
 DGProblemInterface::get_field_order(Int fid) const
 {
     CALL_STACK_MSG();
@@ -251,7 +251,7 @@ DGProblemInterface::has_aux_field_by_name(const std::string & name) const
     return it != this->aux_fields_by_name.end();
 }
 
-Int
+Order
 DGProblemInterface::get_aux_field_order(Int fid) const
 {
     CALL_STACK_MSG();
@@ -298,7 +298,7 @@ DGProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 }
 
 Int
-DGProblemInterface::add_field(const std::string & name, Int nc, Int k, const Label & block)
+DGProblemInterface::add_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->fields);
@@ -308,7 +308,11 @@ DGProblemInterface::add_field(const std::string & name, Int nc, Int k, const Lab
 }
 
 void
-DGProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, const Label & block)
+DGProblemInterface::set_field(Int id,
+                              const std::string & name,
+                              Int nc,
+                              Order k,
+                              const Label & block)
 {
     CALL_STACK_MSG();
     if (k != 1)
@@ -330,7 +334,7 @@ DGProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, c
 }
 
 Int
-DGProblemInterface::add_aux_field(const std::string & name, Int nc, Int k, const Label & block)
+DGProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
@@ -343,7 +347,7 @@ void
 DGProblemInterface::set_aux_field(Int id,
                                   const std::string & name,
                                   Int nc,
-                                  Int k,
+                                  Order k,
                                   const Label & block)
 {
     CALL_STACK_MSG();
@@ -578,7 +582,8 @@ DGProblemInterface::create_fe(FieldInfo & fi)
     auto comm = get_mesh()->get_comm();
     Int dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
-    PETSC_CHECK(PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe));
+    PETSC_CHECK(
+        PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k.value(), this->qorder, &fi.fe));
 }
 
 } // namespace godzilla

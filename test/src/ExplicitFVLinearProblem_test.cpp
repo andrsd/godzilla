@@ -96,8 +96,8 @@ protected:
     {
         add_field(0, "u", 1);
 
-        add_aux_field("a0", 1, 0);
-        add_aux_field("a1", 2, 0);
+        add_aux_field("a0", 1, Order(0));
+        add_aux_field("a1", 2, Order(0));
     }
 
     void
@@ -144,12 +144,14 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
 
     EXPECT_EQ(prob.get_field_name(0), "u");
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto & n = prob.get_field_name(65536); },
-                     "Field with ID = '65536' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto & n = prob.get_field_name(65536); },
+        "Field with ID = '65536' does not exist.");
 
     EXPECT_EQ(prob.get_field_num_components(0), 1);
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto id = prob.get_field_num_components(65536); },
-                     "Field with ID = '65536' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto id = prob.get_field_num_components(65536); },
+        "Field with ID = '65536' does not exist.");
 
     EXPECT_EQ(prob.get_field_id("u"), 0);
     EXPECT_EQ(prob.get_field_id("nonexistent"), 0);
@@ -161,12 +163,14 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_FALSE(prob.has_field_by_name("nonexistent"));
 
     EXPECT_EQ(prob.get_field_order(0), 0);
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto o = prob.get_field_order(65536); },
-                     "Multiple-field problems are not implemented");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto o = prob.get_field_order(65536); },
+        "Multiple-field problems are not implemented");
 
     EXPECT_EQ(prob.get_field_component_name(0, 0).compare("u"), 0);
-    EXPECT_THROW_MSG({ auto n = prob.get_field_component_name(65536, 0); },
-                     "Multiple-field problems are not implemented");
+    EXPECT_THROW_MSG(
+        { auto n = prob.get_field_component_name(65536, 0); },
+        "Multiple-field problems are not implemented");
 
     EXPECT_THROW_MSG(prob.set_field_component_name(0, 0, "x"),
                      "Unable to set component name for single-component field");
@@ -175,16 +179,19 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_THAT(prob.get_aux_field_names(), ElementsAre("a0", "a1"));
     EXPECT_TRUE(prob.get_aux_field_name(0) == "a0");
     EXPECT_TRUE(prob.get_aux_field_name(1) == "a1");
-    EXPECT_THROW_MSG({ auto n = prob.get_aux_field_name(99); },
-                     "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(
+        { auto n = prob.get_aux_field_name(99); },
+        "Auxiliary field with ID = '99' does not exist.");
     EXPECT_EQ(prob.get_aux_field_num_components(0), 1);
     EXPECT_EQ(prob.get_aux_field_num_components(1), 2);
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto nc = prob.get_aux_field_num_components(99); },
-                     "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto nc = prob.get_aux_field_num_components(99); },
+        "Auxiliary field with ID = '99' does not exist.");
     EXPECT_EQ(prob.get_aux_field_id("a0"), 0);
     EXPECT_EQ(prob.get_aux_field_id("a1"), 1);
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto id = prob.get_aux_field_id("non-existent"); },
-                     "Auxiliary field 'non-existent' does not exist. Typo?");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto id = prob.get_aux_field_id("non-existent"); },
+        "Auxiliary field 'non-existent' does not exist. Typo?");
     EXPECT_TRUE(prob.has_aux_field_by_id(0));
     EXPECT_TRUE(prob.has_aux_field_by_id(1));
     EXPECT_FALSE(prob.has_aux_field_by_id(99));
@@ -193,12 +200,14 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_FALSE(prob.has_aux_field_by_name("non-existent"));
     EXPECT_EQ(prob.get_aux_field_order(0), 0);
     EXPECT_EQ(prob.get_aux_field_order(1), 0);
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto o = prob.get_aux_field_order(99); },
-                     "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto o = prob.get_aux_field_order(99); },
+        "Auxiliary field with ID = '99' does not exist.");
     EXPECT_TRUE(prob.get_aux_field_component_name(0, 1) == "");
     EXPECT_TRUE(prob.get_aux_field_component_name(1, 0) == "0");
-    EXPECT_THROW_MSG({ auto n = prob.get_aux_field_component_name(99, 0); },
-                     "Auxiliary field with ID = '99' does not exist.");
+    EXPECT_THROW_MSG(
+        { auto n = prob.get_aux_field_component_name(99, 0); },
+        "Auxiliary field with ID = '99' does not exist.");
     EXPECT_THROW_MSG(prob.set_aux_field_component_name(0, 0, "C"),
                      "Unable to set component name for single-component field");
     prob.set_aux_field_component_name(1, 1, "Y");

@@ -55,4 +55,31 @@ using ExecuteOn = Flags<ExecuteOnFlag>;
 
 const Int INVALID_FIELD_ID = -1;
 
+/// Order
+class Order {
+public:
+    explicit constexpr Order(Int order) : num(order) {}
+
+    constexpr Int
+    value() const
+    {
+        return num;
+    }
+
+    constexpr bool
+    operator==(Int other) const
+    {
+        return this->num == other;
+    }
+
+    constexpr bool
+    operator!=(Int other) const
+    {
+        return this->num != other;
+    }
+
+private:
+    Int num;
+};
+
 } // namespace godzilla

@@ -113,7 +113,7 @@ public:
     ///
     /// @param fid Field ID
     /// @return Field order
-    virtual Int get_field_order(Int fid) const = 0;
+    virtual Order get_field_order(Int fid) const = 0;
 
     /// Get component name of a field
     ///
@@ -173,7 +173,7 @@ public:
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field order
-    virtual Int get_aux_field_order(Int fid) const = 0;
+    virtual Order get_aux_field_order(Int fid) const = 0;
 
     /// Get component name of an auxiliary field
     ///
