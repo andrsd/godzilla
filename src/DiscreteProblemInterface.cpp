@@ -300,7 +300,7 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
         std::map<Int, InitialCondition *> ics_by_fields;
         for (auto & ic : ics) {
             Int fid = ic->get_field_id();
-            if (fid == -1)
+            if (fid == INVALID_FIELD_ID)
                 continue;
             const auto & it = ics_by_fields.find(fid);
             if (it == ics_by_fields.end()) {
@@ -669,7 +669,7 @@ DiscreteProblemInterface::get_next_id(const std::vector<Int> & ids) const
     for (Int id = 0; id < std::numeric_limits<Int>::max(); ++id)
         if (s.find(id) == s.end())
             return id;
-    return -1;
+    return INVALID_FIELD_ID;
 }
 
 } // namespace godzilla

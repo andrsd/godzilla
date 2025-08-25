@@ -20,7 +20,7 @@ NaturalBC::parameters()
 
 NaturalBC::NaturalBC(const Parameters & params) :
     BoundaryCondition(params),
-    fid(-1),
+    fid(INVALID_FIELD_ID),
     fepi(dynamic_cast<FEProblemInterface *>(get_discrete_problem_interface()))
 {
     CALL_STACK_MSG();
@@ -64,7 +64,7 @@ NaturalBC::set_up()
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     for (auto & bnd : get_boundary()) {
-        if (get_field_id() != -1)
+        if (get_field_id() != INVALID_FIELD_ID)
             dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components());
     }
 }

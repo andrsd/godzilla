@@ -3,8 +3,12 @@
 
 #include "godzilla/PerfLog.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Types.h"
 
 namespace godzilla::perf_log {
+
+const Int INVALID_EVENT_ID = -1;
+const Int INVALID_STAGE_ID = -1;
 
 void
 init()
@@ -17,7 +21,7 @@ is_event_registered(const char * name)
 {
     EventID event_id;
     PetscLogEventGetId(name, &event_id);
-    return (event_id != -1);
+    return (event_id != INVALID_EVENT_ID);
 }
 
 bool
@@ -31,7 +35,7 @@ register_event(const char * name)
 {
     EventID event_id;
     PetscLogEventGetId(name, &event_id);
-    if (event_id == -1) {
+    if (event_id == INVALID_EVENT_ID) {
         PetscLogEventRegister(name, 0, &event_id);
         return event_id;
     }
@@ -50,7 +54,7 @@ get_event_id(const char * name)
 {
     EventID event_id;
     PetscLogEventGetId(name, &event_id);
-    if (event_id != -1)
+    if (event_id != INVALID_EVENT_ID)
         return event_id;
     else
         throw Exception("Event '{}' was not registered.", name);
@@ -67,7 +71,7 @@ register_stage(const char * name)
 {
     StageID stage_id;
     PetscLogStageGetId(name, &stage_id);
-    if (stage_id == -1) {
+    if (stage_id == INVALID_STAGE_ID) {
         PetscLogStageRegister(name, &stage_id);
         return stage_id;
     }
@@ -86,7 +90,7 @@ get_stage_id(const char * name)
 {
     EventID stage_id;
     PetscLogStageGetId(name, &stage_id);
-    if (stage_id != -1)
+    if (stage_id != INVALID_STAGE_ID)
         return stage_id;
     else
         throw Exception("Stage '{}' was not registered.", name);
