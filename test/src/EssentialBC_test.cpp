@@ -58,7 +58,7 @@ TEST(EssentialBCTest, api)
     const auto & comps = bc.get_components();
     EXPECT_EQ(comps.size(), 1);
     EXPECT_EQ(comps[0], 0);
-    EXPECT_EQ(bc.get_field_id(), 0);
+    EXPECT_EQ(bc.get_field_id(), FieldID(0));
 }
 
 TEST(EssentialBCTest, non_existing_field)

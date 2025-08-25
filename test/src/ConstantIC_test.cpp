@@ -2,6 +2,7 @@
 #include "TestApp.h"
 #include "godzilla/Factory.h"
 #include "godzilla/ConstantInitialCondition.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -14,7 +15,7 @@ TEST(ConstantICTest, api)
     params.set<std::vector<Real>>("value") = { 3, 4, 5 };
     ConstantInitialCondition obj(params);
 
-    EXPECT_EQ(obj.get_field_id(), -1);
+    EXPECT_EQ(obj.get_field_id(), FieldID::INVALID);
     EXPECT_EQ(obj.get_num_components(), 3);
 
     Real time = 0.;

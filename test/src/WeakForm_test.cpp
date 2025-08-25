@@ -97,7 +97,7 @@ TEST(WeakFormTest, test)
     bc_pars.set<std::vector<std::string>>("boundary") = { "left" };
     TestBC bc(bc_pars);
 
-    Int fid = 0;
+    FieldID fid(0);
     WeakForm wf;
     Label label;
     wf.add(WeakForm::F0, label, 0, fid, 0, new TestF(&prob));

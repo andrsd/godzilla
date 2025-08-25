@@ -17,7 +17,7 @@ class G0Identity : public JacobianFunc {
 public:
     explicit G0Identity(ExplicitFELinearProblem * prob) :
         JacobianFunc(prob),
-        n_comp(prob->get_field_num_components(0))
+        n_comp(prob->get_field_num_components(FieldID(0)))
     {
     }
 
@@ -84,12 +84,12 @@ ExplicitFELinearProblem::init()
     FEProblemInterface::init();
     // so that the call to DMTSCreateRHSMassMatrix would form the mass matrix
     for (Int i = 0; i < get_num_fields(); ++i)
-        add_jacobian_block(i, i, new G0Identity(this), nullptr, nullptr, nullptr);
+        add_jacobian_block(FieldID(i), FieldID(i), new G0Identity(this), nullptr, nullptr, nullptr);
 
     auto ds = get_ds();
     for (auto & f : get_fields()) {
-        Int fid = f.second.id;
-        PETSC_CHECK(PetscDSSetImplicit(ds, fid, PETSC_FALSE));
+        auto fid = f.second.id;
+        PETSC_CHECK(PetscDSSetImplicit(ds, fid.value(), PETSC_FALSE));
     }
 }
 
@@ -169,7 +169,7 @@ ExplicitFELinearProblem::post_step()
 }
 
 void
-ExplicitFELinearProblem::add_residual_block(Int field_id,
+ExplicitFELinearProblem::add_residual_block(FieldID field_id,
                                             ResidualFunc * f0,
                                             ResidualFunc * f1,
                                             const std::string & region)

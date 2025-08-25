@@ -20,7 +20,7 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    Int get_field_id() const;
+    FieldID get_field_id() const;
 
     /// Get the component numbers this boundary condition is constraining
     ///
@@ -43,7 +43,7 @@ public:
 
 private:
     /// Field ID this boundary condition is attached to
-    Int fid;
+    FieldID fid;
 
 public:
     static Parameters parameters();

@@ -99,6 +99,10 @@ HeatEquationProblem::parameters()
 
 HeatEquationProblem::HeatEquationProblem(const Parameters & parameters) :
     ImplicitFENonlinearProblem(parameters),
+    temp_id(FieldID::INVALID),
+    q_ppp_id(FieldID::INVALID),
+    htc_aux_id(FieldID::INVALID),
+    T_ambient_aux_id(FieldID::INVALID),
     p_order(get_param<Int>("p_order"))
 {
     CALL_STACK_MSG();
@@ -108,20 +112,20 @@ void
 HeatEquationProblem::set_up_fields()
 {
     CALL_STACK_MSG();
-    temp_id = add_field("temp", 1, this->p_order);
+    this->temp_id = add_field("temp", 1, this->p_order);
 
-    q_ppp_id = add_aux_field("q_ppp", 1, Order(0));
-    htc_aux_id = add_aux_field("htc", 1, this->p_order);
-    T_ambient_aux_id = add_aux_field("T_ambient", 1, this->p_order);
+    this->q_ppp_id = add_aux_field("q_ppp", 1, Order(0));
+    this->htc_aux_id = add_aux_field("htc", 1, this->p_order);
+    this->T_ambient_aux_id = add_aux_field("T_ambient", 1, this->p_order);
 }
 
 void
 HeatEquationProblem::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(temp_id, new Residual0(this), new Residual1(this));
-    add_jacobian_block(temp_id,
-                       temp_id,
+    add_residual_block(this->temp_id, new Residual0(this), new Residual1(this));
+    add_jacobian_block(this->temp_id,
+                       this->temp_id,
                        new Jacobian0(this),
                        nullptr,
                        nullptr,

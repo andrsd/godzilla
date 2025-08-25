@@ -177,7 +177,7 @@ public:
     /// @param f Field ID
     /// @param part Weak form part
     const std::vector<ResidualFunc *> &
-    get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const;
+    get(ResidualKind kind, const Label & label, Int val, FieldID f, Int part) const;
 
     /// Get Jacobian forms
     ///
@@ -188,7 +188,7 @@ public:
     /// @param g Field ID for base function
     /// @param part Weak form part
     const std::vector<JacobianFunc *> &
-    get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const;
+    get(JacobianKind kind, const Label & label, Int val, FieldID f, FieldID g, Int part) const;
 
     /// Add a residual form
     ///
@@ -198,7 +198,8 @@ public:
     /// @param f Field ID
     /// @param part Part
     /// @param func Functional representing a boundary or a volumetric residual form
-    void add(ResidualKind kind, const Label & label, Int val, Int f, Int part, ResidualFunc * func);
+    void
+    add(ResidualKind kind, const Label & label, Int val, FieldID f, Int part, ResidualFunc * func);
 
     /// Add a Jacobian form
     ///
@@ -212,8 +213,8 @@ public:
     void add(JacobianKind kind,
              const Label & label,
              Int val,
-             Int f,
-             Int g,
+             FieldID f,
+             FieldID g,
              Int part,
              JacobianFunc * func);
 

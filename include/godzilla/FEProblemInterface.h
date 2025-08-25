@@ -32,25 +32,26 @@ public:
 
     Int get_num_fields() const override;
     std::vector<std::string> get_field_names() const override;
-    const std::string & get_field_name(Int fid) const override;
-    Int get_field_num_components(Int fid) const override;
-    Int get_field_id(const std::string & name) const override;
-    bool has_field_by_id(Int fid) const override;
+    const std::string & get_field_name(FieldID fid) const override;
+    Int get_field_num_components(FieldID fid) const override;
+    FieldID get_field_id(const std::string & name) const override;
+    bool has_field_by_id(FieldID fid) const override;
     bool has_field_by_name(const std::string & name) const override;
-    Order get_field_order(Int fid) const override;
-    std::string get_field_component_name(Int fid, Int component) const override;
-    void set_field_component_name(Int fid, Int component, const std::string & name) override;
+    Order get_field_order(FieldID fid) const override;
+    std::string get_field_component_name(FieldID fid, Int component) const override;
+    void set_field_component_name(FieldID fid, Int component, const std::string & name) override;
 
     Int get_num_aux_fields() const override;
     std::vector<std::string> get_aux_field_names() const override;
-    const std::string & get_aux_field_name(Int fid) const override;
-    Int get_aux_field_num_components(Int fid) const override;
-    Int get_aux_field_id(const std::string & name) const override;
-    bool has_aux_field_by_id(Int fid) const override;
+    const std::string & get_aux_field_name(FieldID fid) const override;
+    Int get_aux_field_num_components(FieldID fid) const override;
+    FieldID get_aux_field_id(const std::string & name) const override;
+    bool has_aux_field_by_id(FieldID fid) const override;
     bool has_aux_field_by_name(const std::string & name) const override;
-    Order get_aux_field_order(Int fid) const override;
-    std::string get_aux_field_component_name(Int fid, Int component) const override;
-    void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
+    Order get_aux_field_order(FieldID fid) const override;
+    std::string get_aux_field_component_name(FieldID fid, Int component) const override;
+    void
+    set_aux_field_component_name(FieldID fid, Int component, const std::string & name) override;
 
     WeakForm * get_weak_form() const;
 
@@ -61,7 +62,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    Int add_field(const std::string & name, Int nc, Order k, const Label & block = Label());
+    FieldID add_field(const std::string & name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric field
     ///
@@ -71,7 +72,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     void
-    set_field(Int id, const std::string & name, Int nc, Order k, const Label & block = Label());
+    set_field(FieldID id, const std::string & name, Int nc, Order k, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
@@ -80,7 +81,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    Int add_aux_field(const std::string & name, Int nc, Order k, const Label & block = Label());
+    FieldID add_aux_field(const std::string & name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -89,8 +90,11 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
-    void
-    set_aux_field(Int id, const std::string & name, Int nc, Order k, const Label & block = Label());
+    void set_aux_field(FieldID id,
+                       const std::string & name,
+                       Int nc,
+                       Order k,
+                       const Label & block = Label());
 
     const Int & get_spatial_dimension() const;
 
@@ -114,7 +118,7 @@ public:
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
     /// @param region Region name where this residual statement is active
-    virtual void add_residual_block(Int fid,
+    virtual void add_residual_block(FieldID fid,
                                     ResidualFunc * f0,
                                     ResidualFunc * f1,
                                     const std::string & region = "");
@@ -125,7 +129,7 @@ public:
     /// @param f0 Integrand for the test function term
     /// @param f1 Integrand for the test function gradient term
     /// @param boundary Boundary name where this residual statement is active
-    virtual void add_boundary_residual_block(Int fid,
+    virtual void add_boundary_residual_block(FieldID fid,
                                              ResidualFunc * f0,
                                              ResidualFunc * f1,
                                              const std::string & boundary);
@@ -139,8 +143,8 @@ public:
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
     /// @param region Region name where this Jacobian statement is active
-    virtual void add_jacobian_block(Int fid,
-                                    Int gid,
+    virtual void add_jacobian_block(FieldID fid,
+                                    FieldID gid,
                                     JacobianFunc * g0,
                                     JacobianFunc * g1,
                                     JacobianFunc * g2,
@@ -156,8 +160,8 @@ public:
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
     /// @param region Region name where this Jacobian statement is active
-    virtual void add_jacobian_preconditioner_block(Int fid,
-                                                   Int gid,
+    virtual void add_jacobian_preconditioner_block(FieldID fid,
+                                                   FieldID gid,
                                                    JacobianFunc * g0,
                                                    JacobianFunc * g1,
                                                    JacobianFunc * g2,
@@ -173,8 +177,8 @@ public:
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
     /// @param boundary Boundary name where this Jacobian statement is active
-    virtual void add_boundary_jacobian_block(Int fid,
-                                             Int gid,
+    virtual void add_boundary_jacobian_block(FieldID fid,
+                                             FieldID gid,
                                              JacobianFunc * g0,
                                              JacobianFunc * g1,
                                              JacobianFunc * g2,
@@ -182,15 +186,15 @@ public:
                                              const std::string & boundary);
 
     void add_weak_form_residual_block(WeakForm::ResidualKind kind,
-                                      Int field_id,
+                                      FieldID field_id,
                                       ResidualFunc * f,
                                       const Label & label = Label(),
                                       Int val = 0,
                                       Int part = 0);
 
     void add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
-                                      Int fid,
-                                      Int gid,
+                                      FieldID fid,
+                                      FieldID gid,
                                       JacobianFunc * g,
                                       const Label & label = Label(),
                                       Int val = 0,
@@ -248,8 +252,8 @@ public:
                                 Scalar elem_mat[]);
 
 protected:
-    const std::map<Int, FieldInfo> & get_fields() const;
-    PetscFE get_fe(Int fid) const;
+    const std::map<FieldID, FieldInfo> & get_fields() const;
+    PetscFE get_fe(FieldID fid) const;
 
     void create() override;
     void init() override;
@@ -336,7 +340,7 @@ private:
         /// The name of the field
         std::string name;
         /// Field number
-        Int id;
+        FieldID id;
         /// FE object
         PetscFE fe;
         /// Mesh support
@@ -354,7 +358,12 @@ private:
         /// Time derivative (used during assembling)
         FieldValue dots;
 
-        FieldInfo(const std::string & name, Int id, Int nc, Order k, Int dim, const Label & block) :
+        FieldInfo(const std::string & name,
+                  FieldID id,
+                  Int nc,
+                  Order k,
+                  Int dim,
+                  const Label & block) :
             name(name),
             id(id),
             fe(nullptr),
@@ -371,16 +380,16 @@ private:
     };
 
     /// Fields in the problem
-    std::map<Int, FieldInfo> fields;
+    std::map<FieldID, FieldInfo> fields;
 
     /// Map from field name to field ID
-    std::map<std::string, Int> fields_by_name;
+    std::map<std::string, FieldID> fields_by_name;
 
     /// Auxiliary fields in the problem
-    std::map<Int, FieldInfo> aux_fields;
+    std::map<FieldID, FieldInfo> aux_fields;
 
     /// Map from auxiliary field name to auxiliary field ID
-    std::map<std::string, Int> aux_fields_by_name;
+    std::map<std::string, FieldID> aux_fields_by_name;
 
     /// Weak formulation
     WeakForm * wf;

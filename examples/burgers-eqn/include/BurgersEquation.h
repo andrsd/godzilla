@@ -1,6 +1,7 @@
 #pragma once
 
 #include "godzilla/ExplicitFELinearProblem.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -17,7 +18,7 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
 
-    Int u_id;
+    FieldID u_id;
     const Real & viscosity;
 
 public:

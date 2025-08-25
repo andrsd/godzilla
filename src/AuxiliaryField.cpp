@@ -92,7 +92,7 @@ AuxiliaryField::get_label() const
     return this->label;
 }
 
-Int
+FieldID
 AuxiliaryField::get_field_id() const
 {
     CALL_STACK_MSG();

@@ -20,7 +20,7 @@ NaturalRiemannBC::parameters()
 
 NaturalRiemannBC::NaturalRiemannBC(const Parameters & params) :
     BoundaryCondition(params),
-    fid(INVALID_FIELD_ID)
+    fid(FieldID::INVALID)
 {
     CALL_STACK_MSG();
 }
@@ -32,13 +32,12 @@ NaturalRiemannBC::create()
     auto dpi = get_discrete_problem_interface();
     assert(dpi != nullptr);
 
-    std::vector<std::string> field_names = dpi->get_field_names();
-    if (field_names.size() == 1) {
+    auto field_names = dpi->get_field_names();
+    if (field_names.size() == 1)
         this->fid = dpi->get_field_id(field_names[0]);
-    }
 }
 
-Int
+FieldID
 NaturalRiemannBC::get_field_id() const
 {
     CALL_STACK_MSG();

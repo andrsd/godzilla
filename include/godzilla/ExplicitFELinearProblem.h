@@ -27,7 +27,7 @@ protected:
     void init() override;
     void set_up_callbacks() override;
     void set_up_monitors() override;
-    void add_residual_block(Int field_id,
+    void add_residual_block(FieldID field_id,
                             ResidualFunc * f0,
                             ResidualFunc * f1,
                             const std::string & region = "") override;

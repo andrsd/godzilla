@@ -34,7 +34,7 @@ TEST(FunctionICTest, api)
     prob.create();
     obj.create();
 
-    EXPECT_EQ(obj.get_field_id(), 0);
+    EXPECT_EQ(obj.get_field_id(), FieldID(0));
     EXPECT_EQ(obj.get_num_components(), 1);
 
     Real time = 2.;

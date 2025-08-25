@@ -7,6 +7,7 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/Output.h"
 #include "TestApp.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -49,7 +50,7 @@ protected:
     void
     set_up_fields() override
     {
-        set_field(0, "u", 1, Order(1));
+        set_field(FieldID(0), "u", 1, Order(1));
     }
 
     void set_up_weak_form() override;
@@ -79,7 +80,7 @@ protected:
 void
 TestExplicitFELinearProblem::set_up_weak_form()
 {
-    add_residual_block(0, nullptr, new TestF1(this));
+    add_residual_block(FieldID(0), nullptr, new TestF1(this));
 }
 
 } // namespace

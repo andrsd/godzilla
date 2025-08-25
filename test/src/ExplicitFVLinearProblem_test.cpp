@@ -94,7 +94,7 @@ protected:
     void
     set_up_fields() override
     {
-        add_field(0, "u", 1);
+        add_field(FieldID(0), "u", 1);
 
         add_aux_field("a0", 1, Order(0));
         add_aux_field("a1", 2, Order(0));
@@ -103,7 +103,7 @@ protected:
     void
     set_up_weak_form() override
     {
-        set_riemann_solver(0, this, &TestExplicitFVLinearProblem::compute_flux);
+        set_riemann_solver(FieldID(0), this, &TestExplicitFVLinearProblem::compute_flux);
     }
 };
 
@@ -143,76 +143,76 @@ TEST(ExplicitFVLinearProblemTest, api)
     EXPECT_EQ(prob.get_num_fields(), 1);
     EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
 
-    EXPECT_EQ(prob.get_field_name(0), "u");
+    EXPECT_EQ(prob.get_field_name(FieldID(0)), "u");
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto & n = prob.get_field_name(65536); },
+        { [[maybe_unused]] auto & n = prob.get_field_name(FieldID(65536)); },
         "Field with ID = '65536' does not exist.");
 
-    EXPECT_EQ(prob.get_field_num_components(0), 1);
+    EXPECT_EQ(prob.get_field_num_components(FieldID(0)), 1);
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto id = prob.get_field_num_components(65536); },
+        { [[maybe_unused]] auto id = prob.get_field_num_components(FieldID(65536)); },
         "Field with ID = '65536' does not exist.");
 
-    EXPECT_EQ(prob.get_field_id("u"), 0);
-    EXPECT_EQ(prob.get_field_id("nonexistent"), 0);
+    EXPECT_EQ(prob.get_field_id("u"), FieldID(0));
+    EXPECT_EQ(prob.get_field_id("nonexistent"), FieldID(0));
 
-    EXPECT_TRUE(prob.has_field_by_id(0));
-    EXPECT_FALSE(prob.has_field_by_id(65536));
+    EXPECT_TRUE(prob.has_field_by_id(FieldID(0)));
+    EXPECT_FALSE(prob.has_field_by_id(FieldID(65536)));
 
     EXPECT_TRUE(prob.has_field_by_name("u"));
     EXPECT_FALSE(prob.has_field_by_name("nonexistent"));
 
-    EXPECT_EQ(prob.get_field_order(0), 0);
+    EXPECT_EQ(prob.get_field_order(FieldID(0)), 0);
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto o = prob.get_field_order(65536); },
+        { [[maybe_unused]] auto o = prob.get_field_order(FieldID(65536)); },
         "Multiple-field problems are not implemented");
 
-    EXPECT_EQ(prob.get_field_component_name(0, 0).compare("u"), 0);
+    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 0).compare("u"), 0);
     EXPECT_THROW_MSG(
-        { auto n = prob.get_field_component_name(65536, 0); },
+        { auto n = prob.get_field_component_name(FieldID(65536), 0); },
         "Multiple-field problems are not implemented");
 
-    EXPECT_THROW_MSG(prob.set_field_component_name(0, 0, "x"),
+    EXPECT_THROW_MSG(prob.set_field_component_name(FieldID(0), 0, "x"),
                      "Unable to set component name for single-component field");
 
     EXPECT_EQ(prob.get_num_aux_fields(), 2);
     EXPECT_THAT(prob.get_aux_field_names(), ElementsAre("a0", "a1"));
-    EXPECT_TRUE(prob.get_aux_field_name(0) == "a0");
-    EXPECT_TRUE(prob.get_aux_field_name(1) == "a1");
+    EXPECT_TRUE(prob.get_aux_field_name(FieldID(0)) == "a0");
+    EXPECT_TRUE(prob.get_aux_field_name(FieldID(1)) == "a1");
     EXPECT_THROW_MSG(
-        { auto n = prob.get_aux_field_name(99); },
+        { auto n = prob.get_aux_field_name(FieldID(99)); },
         "Auxiliary field with ID = '99' does not exist.");
-    EXPECT_EQ(prob.get_aux_field_num_components(0), 1);
-    EXPECT_EQ(prob.get_aux_field_num_components(1), 2);
+    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(0)), 1);
+    EXPECT_EQ(prob.get_aux_field_num_components(FieldID(1)), 2);
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto nc = prob.get_aux_field_num_components(99); },
+        { [[maybe_unused]] auto nc = prob.get_aux_field_num_components(FieldID(99)); },
         "Auxiliary field with ID = '99' does not exist.");
-    EXPECT_EQ(prob.get_aux_field_id("a0"), 0);
-    EXPECT_EQ(prob.get_aux_field_id("a1"), 1);
+    EXPECT_EQ(prob.get_aux_field_id("a0"), FieldID(0));
+    EXPECT_EQ(prob.get_aux_field_id("a1"), FieldID(1));
     EXPECT_THROW_MSG(
         { [[maybe_unused]] auto id = prob.get_aux_field_id("non-existent"); },
         "Auxiliary field 'non-existent' does not exist. Typo?");
-    EXPECT_TRUE(prob.has_aux_field_by_id(0));
-    EXPECT_TRUE(prob.has_aux_field_by_id(1));
-    EXPECT_FALSE(prob.has_aux_field_by_id(99));
+    EXPECT_TRUE(prob.has_aux_field_by_id(FieldID(0)));
+    EXPECT_TRUE(prob.has_aux_field_by_id(FieldID(1)));
+    EXPECT_FALSE(prob.has_aux_field_by_id(FieldID(99)));
     EXPECT_TRUE(prob.has_aux_field_by_name("a0"));
     EXPECT_TRUE(prob.has_aux_field_by_name("a1"));
     EXPECT_FALSE(prob.has_aux_field_by_name("non-existent"));
-    EXPECT_EQ(prob.get_aux_field_order(0), 0);
-    EXPECT_EQ(prob.get_aux_field_order(1), 0);
+    EXPECT_EQ(prob.get_aux_field_order(FieldID(0)), 0);
+    EXPECT_EQ(prob.get_aux_field_order(FieldID(1)), 0);
     EXPECT_THROW_MSG(
-        { [[maybe_unused]] auto o = prob.get_aux_field_order(99); },
+        { [[maybe_unused]] auto o = prob.get_aux_field_order(FieldID(99)); },
         "Auxiliary field with ID = '99' does not exist.");
-    EXPECT_TRUE(prob.get_aux_field_component_name(0, 1) == "");
-    EXPECT_TRUE(prob.get_aux_field_component_name(1, 0) == "0");
+    EXPECT_TRUE(prob.get_aux_field_component_name(FieldID(0), 1) == "");
+    EXPECT_TRUE(prob.get_aux_field_component_name(FieldID(1), 0) == "0");
     EXPECT_THROW_MSG(
-        { auto n = prob.get_aux_field_component_name(99, 0); },
+        { auto n = prob.get_aux_field_component_name(FieldID(99), 0); },
         "Auxiliary field with ID = '99' does not exist.");
-    EXPECT_THROW_MSG(prob.set_aux_field_component_name(0, 0, "C"),
+    EXPECT_THROW_MSG(prob.set_aux_field_component_name(FieldID(0), 0, "C"),
                      "Unable to set component name for single-component field");
-    prob.set_aux_field_component_name(1, 1, "Y");
-    EXPECT_TRUE(prob.get_aux_field_component_name(1, 1) == "Y");
-    EXPECT_THROW_MSG(prob.set_aux_field_component_name(99, 0, "A"),
+    prob.set_aux_field_component_name(FieldID(1), 1, "Y");
+    EXPECT_TRUE(prob.get_aux_field_component_name(FieldID(1), 1) == "Y");
+    EXPECT_THROW_MSG(prob.set_aux_field_component_name(FieldID(99), 0, "A"),
                      "Auxiliary field with ID = '99' does not exist.");
 }
 
@@ -244,15 +244,15 @@ TEST(ExplicitFVLinearProblemTest, fields)
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    prob.add_field(1, "vec", 3);
-    EXPECT_EQ(prob.get_field_id("vec"), 0);
+    prob.add_field(FieldID(1), "vec", 3);
+    EXPECT_EQ(prob.get_field_id("vec"), FieldID(0));
 
-    EXPECT_THROW_MSG(prob.add_field(1, "dup", 1),
+    EXPECT_THROW_MSG(prob.add_field(FieldID(1), "dup", 1),
                      "Cannot add field 'dup' with ID = 1. ID already exists.");
-    prob.set_field_component_name(1, 0, "x");
-    prob.set_field_component_name(1, 1, "y");
-    prob.set_field_component_name(1, 2, "z");
-    EXPECT_THROW_MSG(prob.set_field_component_name(65536, 0, "A"),
+    prob.set_field_component_name(FieldID(1), 0, "x");
+    prob.set_field_component_name(FieldID(1), 1, "y");
+    prob.set_field_component_name(FieldID(1), 2, "z");
+    EXPECT_THROW_MSG(prob.set_field_component_name(FieldID(65536), 0, "A"),
                      "Field with ID = '65536' does not exist.");
 
     mesh.create();
@@ -261,11 +261,11 @@ TEST(ExplicitFVLinearProblemTest, fields)
     EXPECT_EQ(prob.get_num_fields(), 1);
     EXPECT_THAT(prob.get_field_names(), testing::ElementsAre(""));
 
-    EXPECT_EQ(prob.get_field_component_name(0, 1).compare("vec_x"), 0);
-    EXPECT_EQ(prob.get_field_component_name(0, 2).compare("vec_y"), 0);
-    EXPECT_EQ(prob.get_field_component_name(0, 3).compare("vec_z"), 0);
+    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 1).compare("vec_x"), 0);
+    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 2).compare("vec_y"), 0);
+    EXPECT_EQ(prob.get_field_component_name(FieldID(0), 3).compare("vec_z"), 0);
 
-    EXPECT_EQ(prob.get_field_dof(1, 0), 4);
+    EXPECT_EQ(prob.get_field_dof(1, FieldID(0)), 4);
 }
 
 TEST(ExplicitFVLinearProblemTest, test_mass_matrix)

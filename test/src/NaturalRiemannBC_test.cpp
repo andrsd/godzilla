@@ -47,13 +47,13 @@ protected:
     void
     set_up_fields() override
     {
-        add_field(0, "u", 1);
+        add_field(FieldID(0), "u", 1);
     }
 
     void
     set_up_weak_form() override
     {
-        set_riemann_solver(0, this, &TestExplicitFVLinearProblem::compute_flux);
+        set_riemann_solver(FieldID(0), this, &TestExplicitFVLinearProblem::compute_flux);
     }
 
     void
@@ -101,6 +101,6 @@ TEST(NaturalRiemannBCTest, api)
     prob.create();
 
     EXPECT_THAT(bc.get_components(), ElementsAre(0));
-    EXPECT_EQ(bc.get_field_id(), 0);
+    EXPECT_EQ(bc.get_field_id(), FieldID(0));
 #endif
 }

@@ -37,7 +37,7 @@ protected:
     void
     set_up_fields() override
     {
-        set_field(0, "u", 1, Order(1));
+        set_field(FieldID(0), "u", 1, Order(1));
     }
 
     void

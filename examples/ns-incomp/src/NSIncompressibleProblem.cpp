@@ -9,6 +9,7 @@
 #include "godzilla/PCFactor.h"
 #include "godzilla/PCComposite.h"
 #include <cassert>
+#include "godzilla/Types.h"
 #include "petscsys.h"
 
 using namespace godzilla;
@@ -272,6 +273,9 @@ NSIncompressibleProblem::parameters()
 
 NSIncompressibleProblem::NSIncompressibleProblem(const Parameters & parameters) :
     ImplicitFENonlinearProblem(parameters),
+    velocity_id(FieldID::INVALID),
+    pressure_id(FieldID::INVALID),
+    ffn_aid(FieldID::INVALID),
     Re(get_param<Real>("Re"))
 {
     CALL_STACK_MSG();
@@ -291,29 +295,39 @@ NSIncompressibleProblem::set_up_fields()
     const char * comp_name[] = { "velocity_x", "velocity_y", "velocity_z" };
 
     Int dim = this->get_dimension();
-    velocity_id = add_field("velocity", dim, Order(2));
+    this->velocity_id = add_field("velocity", dim, Order(2));
     for (unsigned int i = 0; i < dim; ++i)
-        set_field_component_name(velocity_id, i, comp_name[i]);
-    pressure_id = add_field("pressure", 1, Order(1));
+        set_field_component_name(this->velocity_id, i, comp_name[i]);
+    this->pressure_id = add_field("pressure", 1, Order(1));
 
-    ffn_aid = add_aux_field("ffn", dim, Order(2));
+    this->ffn_aid = add_aux_field("ffn", dim, Order(2));
 }
 
 void
 NSIncompressibleProblem::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(velocity_id, new ResidualVeloc0(this), new ResidualVeloc1(this));
-    add_residual_block(pressure_id, new ResidualPress0(this), new ResidualPress1(this));
+    add_residual_block(this->velocity_id, new ResidualVeloc0(this), new ResidualVeloc1(this));
+    add_residual_block(this->pressure_id, new ResidualPress0(this), new ResidualPress1(this));
 
-    add_jacobian_block(velocity_id,
-                       velocity_id,
+    add_jacobian_block(this->velocity_id,
+                       this->velocity_id,
                        new JacobianVV0(this),
                        new JacobianVV1(this),
                        nullptr,
                        new JacobianVV3(this));
-    add_jacobian_block(velocity_id, pressure_id, nullptr, nullptr, new JacobianVP2(this), nullptr);
-    add_jacobian_block(pressure_id, velocity_id, nullptr, new JacobianPV1(this), nullptr, nullptr);
+    add_jacobian_block(this->velocity_id,
+                       this->pressure_id,
+                       nullptr,
+                       nullptr,
+                       new JacobianVP2(this),
+                       nullptr);
+    add_jacobian_block(this->pressure_id,
+                       this->velocity_id,
+                       nullptr,
+                       new JacobianPV1(this),
+                       nullptr,
+                       nullptr);
 }
 
 void
@@ -362,10 +376,10 @@ NSIncompressibleProblem::create_preconditioner(PC pc)
 
     auto sub_ksp = this->fsplit.get_sub_ksp();
 
-    auto precond_vel = sub_ksp[velocity_id].set_pc_type<PCFactor>();
+    auto precond_vel = sub_ksp[this->velocity_id.value()].set_pc_type<PCFactor>();
     precond_vel.set_type(PCFactor::LU);
 
-    auto & ksp_press = sub_ksp[pressure_id];
+    auto & ksp_press = sub_ksp[this->pressure_id.value()];
     ksp_press.set_tolerances(1.0e-10, PETSC_DEFAULT, PETSC_DEFAULT, PETSC_DEFAULT);
     auto precond_press = ksp_press.set_pc_type<PCJacobi>();
 }

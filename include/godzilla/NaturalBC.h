@@ -24,7 +24,7 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    Int get_field_id() const;
+    FieldID get_field_id() const;
 
     /// Get the component numbers this boundary condition is constraining
     ///
@@ -48,7 +48,7 @@ protected:
     /// @param g1 Integrand for the test function and basis function gradient term
     /// @param g2 Integrand for the test function gradient and basis function term
     /// @param g3 Integrand for the test function gradient and basis function gradient term
-    void add_jacobian_block(Int gid,
+    void add_jacobian_block(FieldID gid,
                             BndJacobianFunc * g0,
                             BndJacobianFunc * g1,
                             BndJacobianFunc * g2,
@@ -56,7 +56,7 @@ protected:
 
 private:
     /// Field ID this boundary condition is attached to
-    Int fid;
+    FieldID fid;
 
     /// Finite element problem this object is part of
     FEProblemInterface * fepi;

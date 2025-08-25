@@ -13,6 +13,7 @@
 #include "godzilla/AuxiliaryField.h"
 #include "godzilla/NaturalBC.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Types.h"
 #include "godzilla/UnstructuredMesh.h"
 #include <set>
 #include <cassert>
@@ -288,7 +289,7 @@ DiscreteProblemInterface::get_ds() const
 
 void
 DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCondition *> & ics,
-                                                   const std::map<Int, Int> & field_comps)
+                                                   const std::map<FieldID, Int> & field_comps)
 {
     CALL_STACK_MSG();
     auto n_ics = ics.size();
@@ -297,10 +298,10 @@ DiscreteProblemInterface::check_initial_conditions(const std::vector<InitialCond
 
     auto n_fields = field_comps.size();
     if (n_ics == n_fields) {
-        std::map<Int, InitialCondition *> ics_by_fields;
+        std::map<FieldID, InitialCondition *> ics_by_fields;
         for (auto & ic : ics) {
-            Int fid = ic->get_field_id();
-            if (fid == INVALID_FIELD_ID)
+            auto fid = ic->get_field_id();
+            if (fid == FieldID::INVALID)
                 continue;
             const auto & it = ics_by_fields.find(fid);
             if (it == ics_by_fields.end()) {
@@ -339,12 +340,12 @@ DiscreteProblemInterface::set_up_initial_conditions()
             this->ics_aux.push_back(ic);
     }
 
-    std::map<Int, Int> field_comps;
+    std::map<FieldID, Int> field_comps;
     for (auto & name : get_field_names()) {
         auto fid = get_field_id(name);
         field_comps[fid] = get_field_num_components(fid);
     }
-    std::map<Int, Int> aux_field_comps;
+    std::map<FieldID, Int> aux_field_comps;
     for (auto & name : get_aux_field_names()) {
         auto fid = get_aux_field_id(name);
         aux_field_comps[fid] = get_aux_field_num_components(fid);
@@ -397,7 +398,7 @@ DiscreteProblemInterface::set_up_auxiliary_dm(DM dm)
     bool no_errors = true;
     for (auto & aux : this->auxs) {
         try {
-            Int fid = aux->get_field_id();
+            auto fid = aux->get_field_id();
             Int aux_nc = aux->get_num_components();
             Int field_nc = get_aux_field_num_components(fid);
             if (aux_nc == field_nc) {
@@ -440,9 +441,9 @@ DiscreteProblemInterface::compute_global_aux_fields(DM dm,
     std::vector<PetscFunc *> funcs(n_auxs, nullptr);
     std::vector<FunctionDelegate> delegates(n_auxs);
     for (const auto & aux : auxs) {
-        Int fid = aux->get_field_id();
-        funcs[fid] = internal::invoke_function_delegate;
-        delegates[fid].bind(aux, &AuxiliaryField::evaluate);
+        auto fid = aux->get_field_id();
+        funcs[fid.value()] = internal::invoke_function_delegate;
+        delegates[fid.value()].bind(aux, &AuxiliaryField::evaluate);
     }
     std::vector<void *> contexts;
     for (auto & d : delegates) {
@@ -470,9 +471,9 @@ DiscreteProblemInterface::compute_label_aux_fields(DM dm,
     std::vector<PetscFunc *> funcs(n_auxs, nullptr);
     std::vector<FunctionDelegate> delegates(n_auxs);
     for (const auto & aux : auxs) {
-        Int fid = aux->get_field_id();
-        funcs[fid] = internal::invoke_function_delegate;
-        delegates[fid].bind(aux, &AuxiliaryField::evaluate);
+        auto fid = aux->get_field_id();
+        funcs[fid.value()] = internal::invoke_function_delegate;
+        delegates[fid.value()].bind(aux, &AuxiliaryField::evaluate);
     }
     std::vector<void *> contexts;
     for (auto & d : delegates) {
@@ -555,9 +556,9 @@ DiscreteProblemInterface::set_initial_guess_from_ics()
     std::vector<PetscFunc *> funcs(n_ics);
     std::vector<FunctionDelegate> delegates(n_ics);
     for (auto & ic : this->ics) {
-        Int fid = ic->get_field_id();
-        funcs[fid] = internal::invoke_function_delegate;
-        delegates[fid].bind(ic, &InitialCondition::evaluate);
+        auto fid = ic->get_field_id();
+        funcs[fid.value()] = internal::invoke_function_delegate;
+        delegates[fid.value()].bind(ic, &InitialCondition::evaluate);
     }
     std::vector<void *> contexts;
     for (auto & d : delegates) {
@@ -583,21 +584,23 @@ DiscreteProblemInterface::set_up_initial_guess()
 }
 
 Int
-DiscreteProblemInterface::get_field_dof(Int point, Int fid) const
+DiscreteProblemInterface::get_field_dof(Int point, FieldID fid) const
 {
     CALL_STACK_MSG();
     Int offset;
-    PETSC_CHECK(
-        PetscSectionGetFieldOffset(this->problem->get_local_section(), point, fid, &offset));
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->problem->get_local_section(),
+                                           point,
+                                           fid.value(),
+                                           &offset));
     return offset;
 }
 
 Int
-DiscreteProblemInterface::get_aux_field_dof(Int point, Int fid) const
+DiscreteProblemInterface::get_aux_field_dof(Int point, FieldID fid) const
 {
     CALL_STACK_MSG();
     Int offset;
-    PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid, &offset));
+    PETSC_CHECK(PetscSectionGetFieldOffset(this->section_aux, point, fid.value(), &offset));
     return offset;
 }
 
@@ -620,7 +623,7 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                        const std::string & name,
                                        const Label & label,
                                        const std::vector<Int> & ids,
-                                       Int field,
+                                       FieldID field,
                                        const std::vector<Int> & components,
                                        void (*bc_fn)(),
                                        void (*bc_fn_t)(),
@@ -633,7 +636,7 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
                                    label,
                                    ids.size(),
                                    ids.data(),
-                                   field,
+                                   field.value(),
                                    components.size(),
                                    components.empty() ? nullptr : components.data(),
                                    bc_fn,
@@ -645,7 +648,7 @@ DiscreteProblemInterface::add_boundary(DMBoundaryConditionType type,
 void
 DiscreteProblemInterface::add_boundary_natural(const std::string & name,
                                                const std::string & boundary,
-                                               Int field,
+                                               FieldID field,
                                                const std::vector<Int> & components)
 {
     auto label = this->unstr_mesh->get_face_set_label(boundary);
@@ -659,17 +662,17 @@ DiscreteProblemInterface::update_aux_vector()
     CALL_STACK_MSG();
 }
 
-Int
-DiscreteProblemInterface::get_next_id(const std::vector<Int> & ids) const
+FieldID
+DiscreteProblemInterface::get_next_id(const std::vector<FieldID> & ids) const
 {
     CALL_STACK_MSG();
     std::set<Int> s;
     for (auto & id : ids)
-        s.insert(id);
+        s.insert(id.value());
     for (Int id = 0; id < std::numeric_limits<Int>::max(); ++id)
         if (s.find(id) == s.end())
-            return id;
-    return INVALID_FIELD_ID;
+            return FieldID(id);
+    return FieldID::INVALID;
 }
 
 } // namespace godzilla

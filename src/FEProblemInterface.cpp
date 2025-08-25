@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/FEProblemInterface.h"
+#include "godzilla/Types.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/NaturalBC.h"
@@ -12,6 +13,7 @@
 #include "godzilla/Utils.h"
 #include "godzilla/DependencyGraph.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Formatters.h"
 #include "petsc/private/petscfeimpl.h"
 #include <cassert>
 
@@ -75,7 +77,7 @@ FEProblemInterface::~FEProblemInterface()
     delete this->wf;
 }
 
-const std::map<Int, FEProblemInterface::FieldInfo> &
+const std::map<FieldID, FEProblemInterface::FieldInfo> &
 FEProblemInterface::get_fields() const
 {
     CALL_STACK_MSG();
@@ -146,7 +148,7 @@ FEProblemInterface::get_field_names() const
 }
 
 const std::string &
-FEProblemInterface::get_field_name(Int fid) const
+FEProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -157,7 +159,7 @@ FEProblemInterface::get_field_name(Int fid) const
 }
 
 Order
-FEProblemInterface::get_field_order(Int fid) const
+FEProblemInterface::get_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -168,7 +170,7 @@ FEProblemInterface::get_field_order(Int fid) const
 }
 
 Int
-FEProblemInterface::get_field_num_components(Int fid) const
+FEProblemInterface::get_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -178,7 +180,7 @@ FEProblemInterface::get_field_num_components(Int fid) const
         throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
-Int
+FieldID
 FEProblemInterface::get_field_id(const std::string & name) const
 {
     CALL_STACK_MSG();
@@ -197,7 +199,7 @@ FEProblemInterface::get_weak_form() const
 }
 
 bool
-FEProblemInterface::has_field_by_id(Int fid) const
+FEProblemInterface::has_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -213,7 +215,7 @@ FEProblemInterface::has_field_by_name(const std::string & name) const
 }
 
 PetscFE
-FEProblemInterface::get_fe(Int fid) const
+FEProblemInterface::get_fe(FieldID fid) const
 {
     const auto & it = this->fields.find(fid);
     if (it != this->fields.end()) {
@@ -225,7 +227,7 @@ FEProblemInterface::get_fe(Int fid) const
 }
 
 std::string
-FEProblemInterface::get_field_component_name(Int fid, Int component) const
+FEProblemInterface::get_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -243,7 +245,7 @@ FEProblemInterface::get_field_component_name(Int fid, Int component) const
 }
 
 void
-FEProblemInterface::set_field_component_name(Int fid, Int component, const std::string & name)
+FEProblemInterface::set_field_component_name(FieldID fid, Int component, const std::string & name)
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -278,7 +280,7 @@ FEProblemInterface::get_aux_field_names() const
 }
 
 const std::string &
-FEProblemInterface::get_aux_field_name(Int fid) const
+FEProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -289,7 +291,7 @@ FEProblemInterface::get_aux_field_name(Int fid) const
 }
 
 Int
-FEProblemInterface::get_aux_field_num_components(Int fid) const
+FEProblemInterface::get_aux_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -299,7 +301,7 @@ FEProblemInterface::get_aux_field_num_components(Int fid) const
         throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-Int
+FieldID
 FEProblemInterface::get_aux_field_id(const std::string & name) const
 {
     CALL_STACK_MSG();
@@ -311,7 +313,7 @@ FEProblemInterface::get_aux_field_id(const std::string & name) const
 }
 
 bool
-FEProblemInterface::has_aux_field_by_id(Int fid) const
+FEProblemInterface::has_aux_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -327,7 +329,7 @@ FEProblemInterface::has_aux_field_by_name(const std::string & name) const
 }
 
 Order
-FEProblemInterface::get_aux_field_order(Int fid) const
+FEProblemInterface::get_aux_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -338,7 +340,7 @@ FEProblemInterface::get_aux_field_order(Int fid) const
 }
 
 std::string
-FEProblemInterface::get_aux_field_component_name(Int fid, Int component) const
+FEProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -356,7 +358,9 @@ FEProblemInterface::get_aux_field_component_name(Int fid, Int component) const
 }
 
 void
-FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const std::string & name)
+FEProblemInterface::set_aux_field_component_name(FieldID fid,
+                                                 Int component,
+                                                 const std::string & name)
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -372,18 +376,18 @@ FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
         throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-Int
+FieldID
 FEProblemInterface::add_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    std::vector<Int> keys = utils::map_keys(this->fields);
-    Int id = get_next_id(keys);
+    auto keys = utils::map_keys(this->fields);
+    auto id = get_next_id(keys);
     set_field(id, name, nc, k, block);
     return id;
 }
 
 void
-FEProblemInterface::set_field(Int id,
+FEProblemInterface::set_field(FieldID id,
                               const std::string & name,
                               Int nc,
                               Order k,
@@ -400,24 +404,24 @@ FEProblemInterface::set_field(Int id,
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields.emplace(id, fi);
-        this->fields_by_name[name] = id;
+        this->fields_by_name.emplace(name, id);
     }
     else
         throw Exception("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
 }
 
-Int
+FieldID
 FEProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    std::vector<Int> keys = utils::map_keys(this->aux_fields);
-    Int id = get_next_id(keys);
+    auto keys = utils::map_keys(this->aux_fields);
+    auto id = get_next_id(keys);
     set_aux_field(id, name, nc, k, block);
     return id;
 }
 
 void
-FEProblemInterface::set_aux_field(Int id,
+FEProblemInterface::set_aux_field(FieldID id,
                                   const std::string & name,
                                   Int nc,
                                   Order k,
@@ -434,7 +438,7 @@ FEProblemInterface::set_aux_field(Int id,
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->aux_fields.emplace(id, fi);
-        this->aux_fields_by_name[name] = id;
+        this->aux_fields_by_name.emplace(name, id);
     }
     else
         throw Exception("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
@@ -466,13 +470,13 @@ FEProblemInterface::set_up_ds()
     auto dm = get_mesh()->get_dm();
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
-        PETSC_CHECK(DMSetField(dm, fi.id, fi.block, (PetscObject) fi.fe));
+        PETSC_CHECK(DMSetField(dm, fi.id.value(), fi.block, (PetscObject) fi.fe));
     }
     create_ds();
     auto ds = get_ds();
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
-        PETSC_CHECK(PetscDSSetContext(ds, fi.id, this));
+        PETSC_CHECK(PetscDSSetContext(ds, fi.id.value(), this));
     }
 
     set_up_assembly_data();
@@ -490,9 +494,9 @@ FEProblemInterface::set_up_assembly_data()
     PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(ds, &u_offset_x));
     for (auto & it : this->fields) {
         FieldInfo & fi = it.second;
-        fi.values.set(this->asmbl->u + u_offset[fi.id]);
-        fi.derivs.set(this->asmbl->u_x + u_offset_x[fi.id]);
-        fi.dots.set(this->asmbl->u_t + u_offset[fi.id]);
+        fi.values.set(this->asmbl->u + u_offset[fi.id.value()]);
+        fi.derivs.set(this->asmbl->u_x + u_offset_x[fi.id.value()]);
+        fi.dots.set(this->asmbl->u_t + u_offset[fi.id.value()]);
     }
     Real * coord;
     PETSC_CHECK(PetscDSGetWorkspace(ds, &coord, nullptr, nullptr, nullptr, nullptr));
@@ -510,10 +514,8 @@ FEProblemInterface::set_up_quadrature()
         FieldInfo & fi = it->second;
         PETSC_CHECK(PetscFECopyQuadrature(first_fi.fe, fi.fe));
     }
-    for (auto & it : this->aux_fields) {
-        FieldInfo & fi = it.second;
+    for (auto & [id, fi] : this->aux_fields)
         PETSC_CHECK(PetscFECopyQuadrature(first_fi.fe, fi.fe));
-    }
 }
 
 void
@@ -521,10 +523,8 @@ FEProblemInterface::create_aux_fields()
 {
     CALL_STACK_MSG();
     auto dm_aux = get_dm_aux();
-    for (auto & it : this->aux_fields) {
-        FieldInfo & fi = it.second;
-        PETSC_CHECK(DMSetField(dm_aux, fi.id, fi.block, (PetscObject) fi.fe));
-    }
+    for (auto & [_, fi] : this->aux_fields)
+        PETSC_CHECK(DMSetField(dm_aux, fi.id.value(), fi.block, (PetscObject) fi.fe));
 }
 
 void
@@ -539,10 +539,9 @@ FEProblemInterface::set_up_assembly_data_aux()
         PETSC_CHECK(PetscDSGetComponentOffsets(ds_aux, &a_offset));
         PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(ds_aux, &a_offset_x));
 
-        for (auto & it : this->aux_fields) {
-            FieldInfo & fi = it.second;
-            fi.values.set(this->asmbl->a + a_offset[fi.id]);
-            fi.derivs.set(this->asmbl->a_x + a_offset_x[fi.id]);
+        for (auto & [id, fi] : this->aux_fields) {
+            fi.values.set(this->asmbl->a + a_offset[fi.id.value()]);
+            fi.derivs.set(this->asmbl->a_x + a_offset_x[fi.id.value()]);
         }
     }
 }
@@ -559,11 +558,11 @@ FEProblemInterface::get_field_value(const std::string & field_name) const
 {
     CALL_STACK_MSG();
     if (has_field_by_name(field_name)) {
-        Int fid = get_field_id(field_name);
+        auto fid = get_field_id(field_name);
         return this->fields.at(fid).values;
     }
     else if (has_aux_field_by_name(field_name)) {
-        Int fid = get_aux_field_id(field_name);
+        auto fid = get_aux_field_id(field_name);
         return this->aux_fields.at(fid).values;
     }
     else
@@ -575,11 +574,11 @@ FEProblemInterface::get_field_gradient(const std::string & field_name) const
 {
     CALL_STACK_MSG();
     if (has_field_by_name(field_name)) {
-        Int fid = get_field_id(field_name);
+        auto fid = get_field_id(field_name);
         return this->fields.at(fid).derivs;
     }
     else if (has_aux_field_by_name(field_name)) {
-        Int fid = get_aux_field_id(field_name);
+        auto fid = get_aux_field_id(field_name);
         return this->aux_fields.at(fid).derivs;
     }
     else
@@ -591,11 +590,11 @@ FEProblemInterface::get_field_dot(const std::string & field_name) const
 {
     CALL_STACK_MSG();
     if (has_field_by_name(field_name)) {
-        Int fid = get_field_id(field_name);
+        auto fid = get_field_id(field_name);
         return this->fields.at(fid).dots;
     }
     else if (has_aux_field_by_name(field_name)) {
-        Int fid = get_aux_field_id(field_name);
+        auto fid = get_aux_field_id(field_name);
         return this->aux_fields.at(fid).dots;
     }
     else
@@ -639,8 +638,9 @@ FEProblemInterface::sort_residual_functionals(
     this->sorted_res_functionals.clear();
     for (auto & region : this->wf->get_residual_regions()) {
         for (Int f = 0; f < get_num_fields(); ++f) {
-            auto f0_fnls = this->wf->get(WeakForm::F0, region.label, region.value, f, 0);
-            auto f1_fnls = this->wf->get(WeakForm::F1, region.label, region.value, f, 0);
+            FieldID fid(f);
+            auto f0_fnls = this->wf->get(WeakForm::F0, region.label, region.value, fid, 0);
+            auto f1_fnls = this->wf->get(WeakForm::F1, region.label, region.value, fid, 0);
 
             add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
             add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
@@ -671,11 +671,13 @@ FEProblemInterface::sort_jacobian_functionals(
     this->sorted_jac_functionals.clear();
     for (auto & region : this->wf->get_jacobian_regions()) {
         for (Int f = 0; f < get_num_fields(); ++f) {
+            FieldID fid(f);
             for (Int g = 0; g < get_num_fields(); ++g) {
-                auto g0_fnls = this->wf->get(WeakForm::G0, region.label, region.value, f, g, 0);
-                auto g1_fnls = this->wf->get(WeakForm::G1, region.label, region.value, f, g, 0);
-                auto g2_fnls = this->wf->get(WeakForm::G2, region.label, region.value, f, g, 0);
-                auto g3_fnls = this->wf->get(WeakForm::G3, region.label, region.value, f, g, 0);
+                FieldID gid(g);
+                auto g0_fnls = this->wf->get(WeakForm::G0, region.label, region.value, fid, gid, 0);
+                auto g1_fnls = this->wf->get(WeakForm::G1, region.label, region.value, fid, gid, 0);
+                auto g2_fnls = this->wf->get(WeakForm::G2, region.label, region.value, fid, gid, 0);
+                auto g3_fnls = this->wf->get(WeakForm::G3, region.label, region.value, fid, gid, 0);
 
                 add_functionals<JacobianFunc *>(graph, suppliers, g0_fnls);
                 add_functionals<JacobianFunc *>(graph, suppliers, g1_fnls);
@@ -712,28 +714,28 @@ FEProblemInterface::sort_functionals()
 }
 
 void
-FEProblemInterface::add_residual_block(Int field_id,
+FEProblemInterface::add_residual_block(FieldID fid,
                                        ResidualFunc * f0,
                                        ResidualFunc * f1,
                                        const std::string & region)
 {
     CALL_STACK_MSG();
     if (region.empty()) {
-        add_weak_form_residual_block(WeakForm::F0, field_id, f0);
-        add_weak_form_residual_block(WeakForm::F1, field_id, f1);
+        add_weak_form_residual_block(WeakForm::F0, fid, f0);
+        add_weak_form_residual_block(WeakForm::F1, fid, f1);
     }
     else {
         auto label = get_mesh()->get_label(region);
         auto ids = label.get_values();
         for (auto & val : ids) {
-            add_weak_form_residual_block(WeakForm::F0, field_id, f0, label, val, 0);
-            add_weak_form_residual_block(WeakForm::F1, field_id, f1, label, val, 0);
+            add_weak_form_residual_block(WeakForm::F0, fid, f0, label, val, 0);
+            add_weak_form_residual_block(WeakForm::F1, fid, f1, label, val, 0);
         }
     }
 }
 
 void
-FEProblemInterface::add_boundary_residual_block(Int field_id,
+FEProblemInterface::add_boundary_residual_block(FieldID fid,
                                                 ResidualFunc * f0,
                                                 ResidualFunc * f1,
                                                 const std::string & boundary)
@@ -744,14 +746,14 @@ FEProblemInterface::add_boundary_residual_block(Int field_id,
     auto label = get_mesh()->get_label(boundary);
     auto ids = label.get_values();
     for (auto & val : ids) {
-        add_weak_form_residual_block(WeakForm::BND_F0, field_id, f0, label, val, 0);
-        add_weak_form_residual_block(WeakForm::BND_F1, field_id, f1, label, val, 0);
+        add_weak_form_residual_block(WeakForm::BND_F0, fid, f0, label, val, 0);
+        add_weak_form_residual_block(WeakForm::BND_F1, fid, f1, label, val, 0);
     }
 }
 
 void
-FEProblemInterface::add_jacobian_block(Int fid,
-                                       Int gid,
+FEProblemInterface::add_jacobian_block(FieldID fid,
+                                       FieldID gid,
                                        JacobianFunc * g0,
                                        JacobianFunc * g1,
                                        JacobianFunc * g2,
@@ -778,8 +780,8 @@ FEProblemInterface::add_jacobian_block(Int fid,
 }
 
 void
-FEProblemInterface::add_jacobian_preconditioner_block(Int fid,
-                                                      Int gid,
+FEProblemInterface::add_jacobian_preconditioner_block(FieldID fid,
+                                                      FieldID gid,
                                                       JacobianFunc * g0,
                                                       JacobianFunc * g1,
                                                       JacobianFunc * g2,
@@ -806,8 +808,8 @@ FEProblemInterface::add_jacobian_preconditioner_block(Int fid,
 }
 
 void
-FEProblemInterface::add_boundary_jacobian_block(Int fid,
-                                                Int gid,
+FEProblemInterface::add_boundary_jacobian_block(FieldID fid,
+                                                FieldID gid,
                                                 JacobianFunc * g0,
                                                 JacobianFunc * g1,
                                                 JacobianFunc * g2,
@@ -829,20 +831,20 @@ FEProblemInterface::add_boundary_jacobian_block(Int fid,
 
 void
 FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
-                                                 Int field_id,
+                                                 FieldID fid,
                                                  ResidualFunc * f,
                                                  const Label & label,
                                                  Int val,
                                                  Int part)
 {
     CALL_STACK_MSG();
-    this->wf->add(kind, label, val, field_id, part, f);
+    this->wf->add(kind, label, val, fid, part, f);
 }
 
 void
 FEProblemInterface::add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
-                                                 Int fid,
-                                                 Int gid,
+                                                 FieldID fid,
+                                                 FieldID gid,
                                                  JacobianFunc * g,
                                                  const Label & label,
                                                  Int val,
@@ -866,12 +868,13 @@ FEProblemInterface::integrate_residual(PetscDS ds,
 {
     CALL_STACK_MSG();
     Int field = key.field;
-    const auto & f0_res_fns = this->wf->get(WeakForm::F0, key.label, key.value, field, key.part);
-    const auto & f1_res_fns = this->wf->get(WeakForm::F1, key.label, key.value, field, key.part);
+    FieldID fid(field);
+    const auto & f0_res_fns = this->wf->get(WeakForm::F0, key.label, key.value, fid, key.part);
+    const auto & f1_res_fns = this->wf->get(WeakForm::F1, key.label, key.value, fid, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return;
 
-    PetscFE & fe = this->fields.at(field).fe;
+    PetscFE & fe = this->fields.at(fid).fe;
 
     PETSC_CHECK(PetscFEGetSpatialDimension(fe, &this->asmbl->dim));
     this->asmbl->time = t;
@@ -996,14 +999,13 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
 {
     CALL_STACK_MSG();
     Int field = key.field;
-    const auto & f0_res_fns =
-        this->wf->get(WeakForm::BND_F0, key.label, key.value, field, key.part);
-    const auto & f1_res_fns =
-        this->wf->get(WeakForm::BND_F1, key.label, key.value, field, key.part);
+    FieldID fid(field);
+    const auto & f0_res_fns = this->wf->get(WeakForm::BND_F0, key.label, key.value, fid, key.part);
+    const auto & f1_res_fns = this->wf->get(WeakForm::BND_F1, key.label, key.value, fid, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return;
 
-    PetscFE & fe = this->fields.at(field).fe;
+    PetscFE & fe = this->fields.at(fid).fe;
 
     PETSC_CHECK(PetscFEGetSpatialDimension(fe, &this->asmbl->dim));
     this->asmbl->time = t;
@@ -1146,6 +1148,8 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
 
     Int field_i = key.jac.field_i;
     Int field_j = key.jac.field_j;
+    FieldID fid_i(field_i);
+    FieldID fid_j(field_j);
 
     WeakForm::JacobianKind kind0, kind1, kind2, kind3;
     switch (jtype) {
@@ -1170,19 +1174,15 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         break;
     }
 
-    const auto & g0_jac_fns =
-        this->wf->get(kind0, key.label, key.value, field_i, field_j, key.part);
-    const auto & g1_jac_fns =
-        this->wf->get(kind1, key.label, key.value, field_i, field_j, key.part);
-    const auto & g2_jac_fns =
-        this->wf->get(kind2, key.label, key.value, field_i, field_j, key.part);
-    const auto & g3_jac_fns =
-        this->wf->get(kind3, key.label, key.value, field_i, field_j, key.part);
+    const auto & g0_jac_fns = this->wf->get(kind0, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g1_jac_fns = this->wf->get(kind1, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g2_jac_fns = this->wf->get(kind2, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g3_jac_fns = this->wf->get(kind3, key.label, key.value, fid_i, fid_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return;
 
-    PetscFE & fe_i = this->fields.at(field_i).fe;
-    PetscFE & fe_j = this->fields.at(field_j).fe;
+    PetscFE & fe_i = this->fields.at(fid_i).fe;
+    PetscFE & fe_j = this->fields.at(fid_j).fe;
 
     PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &this->asmbl->dim));
     this->asmbl->time = t;
@@ -1372,20 +1372,22 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
 
     Int field_i = key.jac.field_i;
     Int field_j = key.jac.field_j;
+    FieldID fid_i(field_i);
+    FieldID fid_j(field_j);
 
     const auto & g0_jac_fns =
-        this->wf->get(WeakForm::BND_G0, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G0, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g1_jac_fns =
-        this->wf->get(WeakForm::BND_G1, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G1, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g2_jac_fns =
-        this->wf->get(WeakForm::BND_G2, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G2, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g3_jac_fns =
-        this->wf->get(WeakForm::BND_G3, key.label, key.value, field_i, field_j, key.part);
+        this->wf->get(WeakForm::BND_G3, key.label, key.value, fid_i, fid_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return;
 
-    PetscFE & fe_i = this->fields.at(field_i).fe;
-    PetscFE & fe_j = this->fields.at(field_j).fe;
+    PetscFE & fe_i = this->fields.at(fid_i).fe;
+    PetscFE & fe_j = this->fields.at(fid_j).fe;
 
     PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &this->asmbl->dim));
     this->asmbl->time = t;

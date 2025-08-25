@@ -3,6 +3,7 @@
 #include "godzilla/LineMesh.h"
 #include "godzilla/ImplicitFENonlinearProblem.h"
 #include "godzilla/ResidualFunc.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -17,7 +18,7 @@ TEST(ResidualFuncTest, test)
         void
         set_up_fields() override
         {
-            set_field(0, "u", 1, Order(1));
+            set_field(FieldID(0), "u", 1, Order(1));
         }
 
         void
@@ -83,7 +84,7 @@ TEST(ResidualFuncTest, test_vals)
         void
         set_up_fields() override
         {
-            set_field(0, "u", 1, Order(1));
+            set_field(FieldID(0), "u", 1, Order(1));
         }
 
         void

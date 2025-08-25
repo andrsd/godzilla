@@ -17,8 +17,8 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
 
-    Int temp_id;
-    Int ffn_aux_id;
+    FieldID temp_id;
+    FieldID ffn_aux_id;
     /// Polynomial order of the FE space
     Order order;
 

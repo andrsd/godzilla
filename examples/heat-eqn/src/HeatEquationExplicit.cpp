@@ -3,6 +3,7 @@
 #include "HeatEquationExplicit.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -61,6 +62,8 @@ HeatEquationExplicit::parameters()
 
 HeatEquationExplicit::HeatEquationExplicit(const Parameters & parameters) :
     ExplicitFELinearProblem(parameters),
+    temp_id(FieldID::INVALID),
+    ffn_aux_id(FieldID::INVALID),
     order(get_param<Int>("order"))
 {
     CALL_STACK_MSG();

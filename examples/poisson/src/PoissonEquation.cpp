@@ -1,5 +1,6 @@
 #include "godzilla/Godzilla.h"
 #include "godzilla/FunctionInterface.h"
+#include "godzilla/Types.h"
 #include "godzilla/WeakForm.h"
 #include "PoissonEquation.h"
 #include "PoissonPDE.h"
@@ -17,6 +18,8 @@ PoissonEquation::parameters()
 
 PoissonEquation::PoissonEquation(const Parameters & parameters) :
     FENonlinearProblem(parameters),
+    iu(FieldID::INVALID),
+    affn(FieldID::INVALID),
     p_order(get_param<Int>("p_order"))
 {
     CALL_STACK_MSG();
