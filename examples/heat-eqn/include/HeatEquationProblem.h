@@ -19,7 +19,7 @@ protected:
     Int htc_aux_id;
     Int T_ambient_aux_id;
     /// Polynomial order of the FE space
-    const Int & p_order;
+    Order p_order;
 
 public:
     static Parameters parameters();

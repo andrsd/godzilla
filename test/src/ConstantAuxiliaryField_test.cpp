@@ -29,7 +29,7 @@ TEST(ConstantAuxiliaryFieldTest, create)
 
     mesh.create();
     prob.create();
-    prob.set_aux_field(0, "aux1", 1, 1);
+    prob.set_aux_field(0, "aux1", 1, Order(1));
     prob.add_auxiliary_field(&aux);
 
     EXPECT_EQ(aux.get_field_id(), 0);

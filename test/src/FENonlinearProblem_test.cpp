@@ -43,9 +43,9 @@ TEST_F(FENonlinearProblemTest, fields)
 {
     mesh->create();
 
-    prob->set_field(1, "vec", 3, 1);
+    prob->set_field(1, "vec", 3, Order(1));
 
-    Int aux_fld1_idx = prob->add_aux_field("aux_fld1", 2, 1);
+    Int aux_fld1_idx = prob->add_aux_field("aux_fld1", 2, Order(1));
 
     prob->create();
 
@@ -54,19 +54,23 @@ TEST_F(FENonlinearProblemTest, fields)
     EXPECT_EQ(prob->has_field_by_id(0), true);
     EXPECT_EQ(prob->has_field_by_name("u"), true);
 
-    EXPECT_THROW_MSG({ auto n = prob->get_field_name(65536); },
-                     "Field with ID = '65536' does not exist.");
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto id = prob->get_field_id("nonexistent"); },
-                     "Field 'nonexistent' does not exist. Typo?");
+    EXPECT_THROW_MSG(
+        { auto n = prob->get_field_name(65536); },
+        "Field with ID = '65536' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto id = prob->get_field_id("nonexistent"); },
+        "Field 'nonexistent' does not exist. Typo?");
     EXPECT_EQ(prob->has_field_by_id(65536), false);
     EXPECT_EQ(prob->has_field_by_name("nonexistent"), false);
 
     EXPECT_EQ(prob->get_field_order(0), 1);
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto o = prob->get_field_order(65536); },
-                     "Field with ID = '65536' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto o = prob->get_field_order(65536); },
+        "Field with ID = '65536' does not exist.");
 
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto nc = prob->get_field_num_components(65536); },
-                     "Field with ID = '65536' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto nc = prob->get_field_num_components(65536); },
+        "Field with ID = '65536' does not exist.");
 
     EXPECT_EQ(prob->get_field_component_name(0, 0).compare(""), 0);
     EXPECT_EQ(prob->get_field_component_name(1, 0).compare("0"), 0);
@@ -74,14 +78,15 @@ TEST_F(FENonlinearProblemTest, fields)
     EXPECT_EQ(prob->get_field_component_name(1, 2).compare("2"), 0);
     prob->set_field_component_name(1, 0, "x");
     EXPECT_EQ(prob->get_field_component_name(1, 0).compare("x"), 0);
-    EXPECT_THROW_MSG({ auto n = prob->get_field_component_name(65536, 0); },
-                     "Field with ID = '65536' does not exist.");
+    EXPECT_THROW_MSG(
+        { auto n = prob->get_field_component_name(65536, 0); },
+        "Field with ID = '65536' does not exist.");
     EXPECT_THROW_MSG(prob->set_field_component_name(0, 0, "x"),
                      "Unable to set component name for single-component field");
     EXPECT_THROW_MSG(prob->set_field_component_name(65536, 0, "x"),
                      "Field with ID = '65536' does not exist.");
 
-    Int fld2_idx = prob->add_field("fld2", 3, 1);
+    Int fld2_idx = prob->add_field("fld2", 3, Order(1));
     EXPECT_EQ(fld2_idx, 2);
 
     EXPECT_EQ(prob->get_field_dof(4, 0), 8);
@@ -96,16 +101,16 @@ TEST_F(FENonlinearProblemTest, fields)
 TEST_F(FENonlinearProblemTest, add_duplicate_field_id)
 {
     mesh->create();
-    prob->set_field(0, "first", 1, 1);
-    EXPECT_THROW_MSG(prob->set_field(0, "second", 1, 1),
+    prob->set_field(0, "first", 1, Order(1));
+    EXPECT_THROW_MSG(prob->set_field(0, "second", 1, Order(1)),
                      "Cannot add field 'second' with ID = 0. ID already exists.");
 }
 
 TEST_F(FENonlinearProblemTest, get_aux_fields)
 {
     mesh->create();
-    prob->set_aux_field(0, "aux_one", 1, 1);
-    prob->add_aux_field("aux_two", 2, 1);
+    prob->set_aux_field(0, "aux_one", 1, Order(1));
+    prob->add_aux_field("aux_two", 2, Order(1));
     prob->create();
 
     EXPECT_EQ(prob->get_aux_field_name(0), "aux_one");
@@ -120,19 +125,24 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
     EXPECT_TRUE(prob->get_aux_field_component_name(0, 0) == "");
     EXPECT_TRUE(prob->get_aux_field_component_name(1, 0) == "0");
     EXPECT_TRUE(prob->get_aux_field_component_name(1, 1) == "Y");
-    EXPECT_THROW_MSG({ auto n = prob->get_aux_field_component_name(2, 1); },
-                     "Auxiliary field with ID = '2' does not exist.");
+    EXPECT_THROW_MSG(
+        { auto n = prob->get_aux_field_component_name(2, 1); },
+        "Auxiliary field with ID = '2' does not exist.");
 
-    EXPECT_THROW_MSG({ auto n = prob->get_aux_field_name(2); },
-                     "Auxiliary field with ID = '2' does not exist.");
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto nc = prob->get_aux_field_num_components(2); },
-                     "Auxiliary field with ID = '2' does not exist.");
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto id = prob->get_aux_field_id("aux_none"); },
-                     "Auxiliary field 'aux_none' does not exist. Typo?");
+    EXPECT_THROW_MSG(
+        { auto n = prob->get_aux_field_name(2); },
+        "Auxiliary field with ID = '2' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto nc = prob->get_aux_field_num_components(2); },
+        "Auxiliary field with ID = '2' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto id = prob->get_aux_field_id("aux_none"); },
+        "Auxiliary field 'aux_none' does not exist. Typo?");
     EXPECT_EQ(prob->has_aux_field_by_id(2), false);
     EXPECT_EQ(prob->has_aux_field_by_name("aux_none"), false);
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto o = prob->get_aux_field_order(2); },
-                     "Auxiliary field with ID = '2' does not exist.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto o = prob->get_aux_field_order(2); },
+        "Auxiliary field with ID = '2' does not exist.");
     EXPECT_THROW_MSG(prob->set_aux_field_component_name(0, 1, "C"),
                      "Unable to set component name for single-component field");
     EXPECT_THROW_MSG(prob->set_aux_field_component_name(2, 1, "C"),
@@ -142,8 +152,8 @@ TEST_F(FENonlinearProblemTest, get_aux_fields)
 TEST_F(FENonlinearProblemTest, add_duplicate_aux_field_id)
 {
     mesh->create();
-    prob->set_aux_field(0, "first", 1, 1);
-    EXPECT_THROW_MSG(prob->set_aux_field(0, "second", 1, 1),
+    prob->set_aux_field(0, "first", 1, Order(1));
+    EXPECT_THROW_MSG(prob->set_aux_field(0, "second", 1, Order(1)),
                      "Cannot add auxiliary field 'second' with ID = 0. ID is already taken.");
 }
 

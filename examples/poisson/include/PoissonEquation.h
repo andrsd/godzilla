@@ -15,7 +15,7 @@ protected:
     void set_up_weak_form() override;
 
     /// Polynomial order of the FE space
-    Int p_order;
+    Order p_order;
     /// ID for the "u" field
     Int iu;
     /// ID for the forcing function field

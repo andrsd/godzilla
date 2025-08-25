@@ -69,7 +69,7 @@ void
 BurgersEquation::set_up_fields()
 {
     CALL_STACK_MSG();
-    u_id = add_field("u", 1, 1);
+    u_id = add_field("u", 1, Order(1));
 }
 
 void

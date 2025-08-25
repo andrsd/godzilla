@@ -2,6 +2,7 @@
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/CallStack.h"
 #include "ImplicitFENonlinearProblem_test.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -101,8 +102,7 @@ void
 GTestImplicitFENonlinearProblem::set_up_fields()
 {
     CALL_STACK_MSG();
-    Int order = 1;
-    set_field(this->iu, "u", 1, order);
+    set_field(this->iu, "u", 1, Order(1));
 }
 
 void

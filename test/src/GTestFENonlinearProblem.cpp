@@ -77,8 +77,7 @@ GTestFENonlinearProblem::get_ds()
 void
 GTestFENonlinearProblem::set_up_fields()
 {
-    Int order = 1;
-    set_field(this->iu, "u", 1, order);
+    set_field(this->iu, "u", 1, Order(1));
 }
 
 void

@@ -20,7 +20,7 @@ protected:
     Int temp_id;
     Int ffn_aux_id;
     /// Polynomial order of the FE space
-    Int order;
+    Order order;
 
 public:
     static Parameters parameters();

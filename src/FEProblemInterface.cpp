@@ -156,7 +156,7 @@ FEProblemInterface::get_field_name(Int fid) const
         throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
-Int
+Order
 FEProblemInterface::get_field_order(Int fid) const
 {
     CALL_STACK_MSG();
@@ -326,7 +326,7 @@ FEProblemInterface::has_aux_field_by_name(const std::string & name) const
     return it != this->aux_fields_by_name.end();
 }
 
-Int
+Order
 FEProblemInterface::get_aux_field_order(Int fid) const
 {
     CALL_STACK_MSG();
@@ -373,7 +373,7 @@ FEProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 }
 
 Int
-FEProblemInterface::add_field(const std::string & name, Int nc, Int k, const Label & block)
+FEProblemInterface::add_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->fields);
@@ -383,7 +383,11 @@ FEProblemInterface::add_field(const std::string & name, Int nc, Int k, const Lab
 }
 
 void
-FEProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, const Label & block)
+FEProblemInterface::set_field(Int id,
+                              const std::string & name,
+                              Int nc,
+                              Order k,
+                              const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->fields.find(id);
@@ -403,7 +407,7 @@ FEProblemInterface::set_field(Int id, const std::string & name, Int nc, Int k, c
 }
 
 Int
-FEProblemInterface::add_aux_field(const std::string & name, Int nc, Int k, const Label & block)
+FEProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
@@ -416,7 +420,7 @@ void
 FEProblemInterface::set_aux_field(Int id,
                                   const std::string & name,
                                   Int nc,
-                                  Int k,
+                                  Order k,
                                   const Label & block)
 {
     CALL_STACK_MSG();
@@ -451,7 +455,8 @@ FEProblemInterface::create_fe(FieldInfo & fi)
     auto comm = get_mesh()->get_comm();
     Int dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
-    PETSC_CHECK(PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k, this->qorder, &fi.fe));
+    PETSC_CHECK(
+        PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k.value(), this->qorder, &fi.fe));
 }
 
 void

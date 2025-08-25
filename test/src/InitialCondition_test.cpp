@@ -81,7 +81,7 @@ TEST_F(InitialConditionTest, test)
 {
     this->mesh->create();
 
-    this->prob->add_aux_field("a", 1, 1);
+    this->prob->add_aux_field("a", 1, Order(1));
 
     Parameters params = InitialCondition::parameters();
     params.set<App *>("_app") = this->app;

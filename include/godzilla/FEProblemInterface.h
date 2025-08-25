@@ -37,7 +37,7 @@ public:
     Int get_field_id(const std::string & name) const override;
     bool has_field_by_id(Int fid) const override;
     bool has_field_by_name(const std::string & name) const override;
-    Int get_field_order(Int fid) const override;
+    Order get_field_order(Int fid) const override;
     std::string get_field_component_name(Int fid, Int component) const override;
     void set_field_component_name(Int fid, Int component, const std::string & name) override;
 
@@ -48,7 +48,7 @@ public:
     Int get_aux_field_id(const std::string & name) const override;
     bool has_aux_field_by_id(Int fid) const override;
     bool has_aux_field_by_name(const std::string & name) const override;
-    Int get_aux_field_order(Int fid) const override;
+    Order get_aux_field_order(Int fid) const override;
     std::string get_aux_field_component_name(Int fid, Int component) const override;
     void set_aux_field_component_name(Int fid, Int component, const std::string & name) override;
 
@@ -61,7 +61,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    Int add_field(const std::string & name, Int nc, Int k, const Label & block = Label());
+    Int add_field(const std::string & name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric field
     ///
@@ -70,7 +70,8 @@ public:
     /// @param nc The number of components
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
-    void set_field(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
+    void
+    set_field(Int id, const std::string & name, Int nc, Order k, const Label & block = Label());
 
     /// Adds a volumetric auxiliary field
     ///
@@ -79,7 +80,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     /// @return ID of the new field
-    Int add_aux_field(const std::string & name, Int nc, Int k, const Label & block = Label());
+    Int add_aux_field(const std::string & name, Int nc, Order k, const Label & block = Label());
 
     /// Set a volumetric auxiliary field
     ///
@@ -89,7 +90,7 @@ public:
     /// @param k The degree k of the space
     /// @param block The mesh region this field is restricted to
     void
-    set_aux_field(Int id, const std::string & name, Int nc, Int k, const Label & block = Label());
+    set_aux_field(Int id, const std::string & name, Int nc, Order k, const Label & block = Label());
 
     const Int & get_spatial_dimension() const;
 
@@ -343,7 +344,7 @@ private:
         /// The number of components
         Int nc;
         /// The degree k of the space
-        Int k;
+        Order k;
         /// Component names
         std::vector<std::string> component_names;
         /// Values (used during assembling)
@@ -353,7 +354,7 @@ private:
         /// Time derivative (used during assembling)
         FieldValue dots;
 
-        FieldInfo(const std::string & name, Int id, Int nc, Int k, Int dim, const Label & block) :
+        FieldInfo(const std::string & name, Int id, Int nc, Order k, Int dim, const Label & block) :
             name(name),
             id(id),
             fe(nullptr),

@@ -65,7 +65,7 @@ FVProblemInterface::init()
                                           dim,
                                           fi.nc,
                                           is_simplex,
-                                          fi.k,
+                                          fi.k.value(),
                                           PETSC_DETERMINE,
                                           &this->aux_fe.at(fi.id)));
     }
@@ -152,12 +152,12 @@ FVProblemInterface::has_field_by_name(const std::string & name) const
     return it != this->fields_by_name.end();
 }
 
-Int
+Order
 FVProblemInterface::get_field_order(Int fid) const
 {
     CALL_STACK_MSG();
     if (fid == 0)
-        return 0;
+        return Order(0);
     else
         throw NotImplementedException("Multiple-field problems are not implemented");
 }
@@ -259,7 +259,7 @@ FVProblemInterface::has_aux_field_by_name(const std::string & name) const
     return it != this->aux_fields_by_name.end();
 }
 
-Int
+Order
 FVProblemInterface::get_aux_field_order(Int fid) const
 {
     CALL_STACK_MSG();
@@ -311,7 +311,7 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc, const La
     CALL_STACK_MSG();
     auto it = this->fields.find(id);
     if (it == this->fields.end()) {
-        FieldInfo fi(name, id, nc, 0, block);
+        FieldInfo fi(name, id, nc, Order(0), block);
         if (nc > 1) {
             fi.component_names.resize(nc);
             for (Int i = 0; i < nc; ++i)
@@ -325,7 +325,7 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc, const La
 }
 
 Int
-FVProblemInterface::add_aux_field(const std::string & name, Int nc, Int k, const Label & block)
+FVProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
     std::vector<Int> keys = utils::map_keys(this->aux_fields);
@@ -338,7 +338,7 @@ void
 FVProblemInterface::set_aux_field(Int id,
                                   const std::string & name,
                                   Int nc,
-                                  Int k,
+                                  Order k,
                                   const Label & block)
 {
     CALL_STACK_MSG();
