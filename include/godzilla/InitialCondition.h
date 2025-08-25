@@ -33,7 +33,7 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    Int get_field_id() const;
+    FieldID get_field_id() const;
 
     /// Get the number of constrained components
     ///
@@ -55,7 +55,7 @@ private:
     std::string field_name;
 
     /// Field ID this initial condition is attached to
-    Int fid;
+    FieldID fid;
 
 public:
     static Parameters parameters();

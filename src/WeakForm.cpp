@@ -70,10 +70,10 @@ WeakForm::get_jacobian_regions() const
 }
 
 const std::vector<ResidualFunc *> &
-WeakForm::get(ResidualKind kind, const Label & label, Int val, Int f, Int part) const
+WeakForm::get(ResidualKind kind, const Label & label, Int val, FieldID f, Int part) const
 {
     CALL_STACK_MSG();
-    Key key(label, val, f, part);
+    Key key(label, val, f.value(), part);
     const auto & it = this->res_forms[kind].find(key);
     if (it != this->res_forms[kind].end())
         return it->second;
@@ -82,10 +82,10 @@ WeakForm::get(ResidualKind kind, const Label & label, Int val, Int f, Int part) 
 }
 
 const std::vector<JacobianFunc *> &
-WeakForm::get(JacobianKind kind, const Label & label, Int val, Int f, Int g, Int part) const
+WeakForm::get(JacobianKind kind, const Label & label, Int val, FieldID f, FieldID g, Int part) const
 {
     CALL_STACK_MSG();
-    Key key(label, val, f, g, part);
+    Key key(label, val, f.value(), g.value(), part);
     const auto & it = this->jac_forms[kind].find(key);
     if (it != this->jac_forms[kind].end())
         return it->second;
@@ -97,13 +97,13 @@ void
 WeakForm::add(ResidualKind kind,
               const Label & label,
               Int value,
-              Int f,
+              FieldID f,
               Int part,
               ResidualFunc * func)
 {
     CALL_STACK_MSG();
     if (func != nullptr) {
-        Key key(label, value, f, part);
+        Key key(label, value, f.value(), part);
         this->res_forms[kind][key].push_back(func);
     }
 }
@@ -112,14 +112,14 @@ void
 WeakForm::add(JacobianKind kind,
               const Label & label,
               Int val,
-              Int f,
-              Int g,
+              FieldID f,
+              FieldID g,
               Int part,
               JacobianFunc * func)
 {
     CALL_STACK_MSG();
     if (func != nullptr) {
-        Key key(label, val, f, g, part);
+        Key key(label, val, f.value(), g.value(), part);
         this->jac_forms[kind][key].push_back(func);
     }
 }

@@ -76,9 +76,9 @@ L2FieldDiff::compute()
     std::vector<FunctionDelegate> delegates(n_fields);
     std::vector<Real> diff(n_fields, 0.);
     for (const auto & it : this->parsed_fns) {
-        Int fid = this->fepi->get_field_id(it.first);
-        funcs[fid] = internal::invoke_function_delegate;
-        delegates[fid].bind(it.second, &ParsedFunction::evaluate);
+        auto fid = this->fepi->get_field_id(it.first);
+        funcs[fid.value()] = internal::invoke_function_delegate;
+        delegates[fid.value()].bind(it.second, &ParsedFunction::evaluate);
     }
     std::vector<void *> contexts;
     for (auto & d : delegates) {

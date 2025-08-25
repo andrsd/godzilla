@@ -17,9 +17,9 @@ protected:
     /// Polynomial order of the FE space
     Order p_order;
     /// ID for the "u" field
-    Int iu;
+    FieldID iu;
     /// ID for the forcing function field
-    Int affn;
+    FieldID affn;
 
 public:
     static Parameters parameters();

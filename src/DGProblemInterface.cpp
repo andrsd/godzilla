@@ -12,6 +12,7 @@
 #include "godzilla/Utils.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Formatters.h"
 #include <cassert>
 
 namespace godzilla {
@@ -78,7 +79,7 @@ DGProblemInterface::get_field_names() const
 }
 
 const std::string &
-DGProblemInterface::get_field_name(Int fid) const
+DGProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -89,7 +90,7 @@ DGProblemInterface::get_field_name(Int fid) const
 }
 
 Int
-DGProblemInterface::get_field_num_components(Int fid) const
+DGProblemInterface::get_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -99,7 +100,7 @@ DGProblemInterface::get_field_num_components(Int fid) const
         throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
-Int
+FieldID
 DGProblemInterface::get_field_id(const std::string & name) const
 {
     CALL_STACK_MSG();
@@ -111,7 +112,7 @@ DGProblemInterface::get_field_id(const std::string & name) const
 }
 
 bool
-DGProblemInterface::has_field_by_id(Int fid) const
+DGProblemInterface::has_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -127,7 +128,7 @@ DGProblemInterface::has_field_by_name(const std::string & name) const
 }
 
 PetscFE
-DGProblemInterface::get_fe(Int fid) const
+DGProblemInterface::get_fe(FieldID fid) const
 {
     const auto & it = this->fields.find(fid);
     if (it != this->fields.end()) {
@@ -139,7 +140,7 @@ DGProblemInterface::get_fe(Int fid) const
 }
 
 Order
-DGProblemInterface::get_field_order(Int fid) const
+DGProblemInterface::get_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -150,7 +151,7 @@ DGProblemInterface::get_field_order(Int fid) const
 }
 
 std::string
-DGProblemInterface::get_field_component_name(Int fid, Int component) const
+DGProblemInterface::get_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -168,7 +169,7 @@ DGProblemInterface::get_field_component_name(Int fid, Int component) const
 }
 
 void
-DGProblemInterface::set_field_component_name(Int fid, Int component, const std::string & name)
+DGProblemInterface::set_field_component_name(FieldID fid, Int component, const std::string & name)
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -203,7 +204,7 @@ DGProblemInterface::get_aux_field_names() const
 }
 
 const std::string &
-DGProblemInterface::get_aux_field_name(Int fid) const
+DGProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -214,7 +215,7 @@ DGProblemInterface::get_aux_field_name(Int fid) const
 }
 
 Int
-DGProblemInterface::get_aux_field_num_components(Int fid) const
+DGProblemInterface::get_aux_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -224,7 +225,7 @@ DGProblemInterface::get_aux_field_num_components(Int fid) const
         throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-Int
+FieldID
 DGProblemInterface::get_aux_field_id(const std::string & name) const
 {
     CALL_STACK_MSG();
@@ -236,7 +237,7 @@ DGProblemInterface::get_aux_field_id(const std::string & name) const
 }
 
 bool
-DGProblemInterface::has_aux_field_by_id(Int fid) const
+DGProblemInterface::has_aux_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -252,7 +253,7 @@ DGProblemInterface::has_aux_field_by_name(const std::string & name) const
 }
 
 Order
-DGProblemInterface::get_aux_field_order(Int fid) const
+DGProblemInterface::get_aux_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -263,7 +264,7 @@ DGProblemInterface::get_aux_field_order(Int fid) const
 }
 
 std::string
-DGProblemInterface::get_aux_field_component_name(Int fid, Int component) const
+DGProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -281,7 +282,9 @@ DGProblemInterface::get_aux_field_component_name(Int fid, Int component) const
 }
 
 void
-DGProblemInterface::set_aux_field_component_name(Int fid, Int component, const std::string & name)
+DGProblemInterface::set_aux_field_component_name(FieldID fid,
+                                                 Int component,
+                                                 const std::string & name)
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -297,18 +300,18 @@ DGProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
         throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-Int
+FieldID
 DGProblemInterface::add_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    std::vector<Int> keys = utils::map_keys(this->fields);
-    Int id = get_next_id(keys);
+    auto keys = utils::map_keys(this->fields);
+    auto id = get_next_id(keys);
     set_field(id, name, nc, k, block);
     return id;
 }
 
 void
-DGProblemInterface::set_field(Int id,
+DGProblemInterface::set_field(FieldID id,
                               const std::string & name,
                               Int nc,
                               Order k,
@@ -327,24 +330,24 @@ DGProblemInterface::set_field(Int id,
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields.emplace(id, fi);
-        this->fields_by_name[name] = id;
+        this->fields_by_name.emplace(name, id);
     }
     else
         throw Exception("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
 }
 
-Int
+FieldID
 DGProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    std::vector<Int> keys = utils::map_keys(this->aux_fields);
-    Int id = get_next_id(keys);
+    auto keys = utils::map_keys(this->aux_fields);
+    auto id = get_next_id(keys);
     set_aux_field(id, name, nc, k, block);
     return id;
 }
 
 void
-DGProblemInterface::set_aux_field(Int id,
+DGProblemInterface::set_aux_field(FieldID id,
                                   const std::string & name,
                                   Int nc,
                                   Order k,
@@ -360,7 +363,7 @@ DGProblemInterface::set_aux_field(Int id,
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->aux_fields.emplace(id, fi);
-        this->aux_fields_by_name[name] = id;
+        this->aux_fields_by_name.emplace(name, id);
     }
     else
         throw Exception("Cannot add auxiliary field '{}' with ID = {}. ID is already taken.",
@@ -378,10 +381,10 @@ DGProblemInterface::get_num_nodes_per_elem(Int c) const
 }
 
 Int
-DGProblemInterface::get_field_dof(Int elem, Int local_node, Int fid) const
+DGProblemInterface::get_field_dof(Int elem, Int local_node, FieldID fid) const
 {
     CALL_STACK_MSG();
-    auto offset = this->section.get_field_offset(elem, fid);
+    auto offset = this->section.get_field_offset(elem, fid.value());
     // FIXME: works only for order = 1
     auto n_comps = get_field_num_components(fid);
     offset += n_comps * local_node;
@@ -389,10 +392,10 @@ DGProblemInterface::get_field_dof(Int elem, Int local_node, Int fid) const
 }
 
 Int
-DGProblemInterface::get_aux_field_dof(Int elem, Int local_node, Int fid) const
+DGProblemInterface::get_aux_field_dof(Int elem, Int local_node, FieldID fid) const
 {
     CALL_STACK_MSG();
-    auto offset = get_local_section_aux().get_field_offset(elem, fid);
+    auto offset = get_local_section_aux().get_field_offset(elem, fid.value());
     // FIXME: works only for order = 1
     auto n_comps = get_aux_field_num_components(fid);
     offset += n_comps * local_node;
@@ -428,7 +431,7 @@ DGProblemInterface::create_section()
     this->section.set_num_fields(get_num_fields());
     for (auto & it : this->fields) {
         auto & fi = it.second;
-        this->section.set_num_field_components(fi.id, fi.nc);
+        this->section.set_num_field_components(fi.id.value(), fi.nc);
     }
     auto cell_range = unstr_mesh->get_cell_range();
     this->section.set_chart(cell_range.first(), cell_range.last());
@@ -438,7 +441,7 @@ DGProblemInterface::create_section()
         for (auto & it : this->fields) {
             auto & fi = it.second;
             auto n_field_dofs = fi.nc * n_nodes; // FIXME: work for only order = 1
-            this->section.set_field_dof(c, fi.id, n_field_dofs);
+            this->section.set_field_dof(c, fi.id.value(), n_field_dofs);
             n_dofs += n_field_dofs;
         }
         this->section.set_dof(c, n_dofs);
@@ -476,7 +479,7 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
                     assert(support.size() == 1);
                     auto cell_id = support[0];
                     section.add_constraint_dof(cell_id, n_ced_dofs);
-                    section.set_field_constraint_dof(cell_id, fid, n_ced_dofs);
+                    section.set_field_constraint_dof(cell_id, fid.value(), n_ced_dofs);
                 }
                 points.destroy();
             }
@@ -524,7 +527,7 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
                     }
                     // TODO:
                     // section.set_constraint_indices(cell_id, indices);
-                    section.set_field_constraint_indices(cell_id, fid, indices);
+                    section.set_field_constraint_indices(cell_id, fid.value(), indices);
                 }
                 points.destroy();
             }
@@ -541,7 +544,7 @@ DGProblemInterface::create_aux_fields()
     this->section_aux.set_num_fields(get_num_aux_fields());
     for (auto & it : this->aux_fields) {
         auto & fi = it.second;
-        this->section_aux.set_num_field_components(fi.id, fi.nc);
+        this->section_aux.set_num_field_components(fi.id.value(), fi.nc);
     }
 
     auto unstr_mesh = get_mesh();
@@ -554,7 +557,7 @@ DGProblemInterface::create_aux_fields()
             auto & fi = it.second;
             // FIXME: this works for order = 1
             auto n_field_dofs = fi.nc * n_nodes;
-            this->section_aux.set_field_dof(c, fi.id, n_field_dofs);
+            this->section_aux.set_field_dof(c, fi.id.value(), n_field_dofs);
             n_dofs += n_field_dofs;
         }
         this->section_aux.set_dof(c, n_dofs);

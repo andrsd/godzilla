@@ -6,6 +6,7 @@
 #include "godzilla/App.h"
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/Types.h"
 #include <cassert>
 
 namespace godzilla {
@@ -20,7 +21,7 @@ EssentialBC::parameters()
 
 EssentialBC::EssentialBC(const Parameters & params) :
     BoundaryCondition(params),
-    fid(INVALID_FIELD_ID)
+    fid(FieldID::INVALID)
 
 {
     CALL_STACK_MSG();
@@ -51,7 +52,7 @@ EssentialBC::create()
     }
 }
 
-Int
+FieldID
 EssentialBC::get_field_id() const
 {
     CALL_STACK_MSG();

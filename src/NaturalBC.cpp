@@ -7,6 +7,7 @@
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/BndResidualFunc.h"
 #include "godzilla/BndJacobianFunc.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
 
@@ -20,7 +21,7 @@ NaturalBC::parameters()
 
 NaturalBC::NaturalBC(const Parameters & params) :
     BoundaryCondition(params),
-    fid(INVALID_FIELD_ID),
+    fid(FieldID::INVALID),
     fepi(dynamic_cast<FEProblemInterface *>(get_discrete_problem_interface()))
 {
     CALL_STACK_MSG();
@@ -51,7 +52,7 @@ NaturalBC::create()
     }
 }
 
-Int
+FieldID
 NaturalBC::get_field_id() const
 {
     CALL_STACK_MSG();
@@ -64,7 +65,7 @@ NaturalBC::set_up()
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
     for (auto & bnd : get_boundary()) {
-        if (get_field_id() != INVALID_FIELD_ID)
+        if (get_field_id() != FieldID::INVALID)
             dpi->add_boundary_natural(get_name(), bnd, get_field_id(), get_components());
     }
 }
@@ -78,7 +79,7 @@ NaturalBC::add_residual_block(BndResidualFunc * f0, BndResidualFunc * f1)
 }
 
 void
-NaturalBC::add_jacobian_block(Int gid,
+NaturalBC::add_jacobian_block(FieldID gid,
                               BndJacobianFunc * g0,
                               BndJacobianFunc * g1,
                               BndJacobianFunc * g2,

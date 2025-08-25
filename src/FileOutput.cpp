@@ -63,7 +63,7 @@ FileOutput::set_sequence_file_base(unsigned int stepi)
 }
 
 void
-FileOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
+FileOutput::add_var_names(FieldID fid, std::vector<std::string> & var_names)
 {
     CALL_STACK_MSG();
     const std::string & name = this->dpi->get_field_name(fid);
@@ -84,7 +84,7 @@ FileOutput::add_var_names(Int fid, std::vector<std::string> & var_names)
 }
 
 void
-FileOutput::add_aux_var_names(Int fid, std::vector<std::string> & var_names)
+FileOutput::add_aux_var_names(FieldID fid, std::vector<std::string> & var_names)
 {
     CALL_STACK_MSG();
     const std::string & name = this->dpi->get_aux_field_name(fid);

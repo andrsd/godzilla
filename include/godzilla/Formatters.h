@@ -3,10 +3,9 @@
 
 #pragma once
 
+#include "godzilla/Types.h"
 #include <petscsystypes.h>
 #include <fmt/core.h>
-
-namespace godzilla {
 
 template <>
 struct fmt::formatter<InsertMode> {
@@ -43,4 +42,18 @@ struct fmt::formatter<InsertMode> {
     }
 };
 
-} // namespace godzilla
+template <>
+struct fmt::formatter<godzilla::FieldID> {
+    constexpr auto
+    parse(fmt::format_parse_context & ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto
+    format(const godzilla::FieldID & e, FormatContext & ctx) const
+    {
+        return fmt::format_to(ctx.out(), "{}", e.value());
+    }
+};

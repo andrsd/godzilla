@@ -8,6 +8,7 @@
 #include "godzilla/ConstantInitialCondition.h"
 #include "godzilla/DirichletBC.h"
 #include "godzilla/PCFactor.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -24,7 +25,7 @@ protected:
     void set_up_solve_type() override;
     void create_preconditioner(PC pc) override;
 
-    const Int iu;
+    const FieldID iu;
 
     PCFactor p;
 };

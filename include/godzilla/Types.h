@@ -51,10 +51,6 @@ get_num_element_nodes(ElementType type)
 
 using ExecuteOn = Flags<ExecuteOnFlag>;
 
-// Constants
-
-const Int INVALID_FIELD_ID = -1;
-
 /// Order
 class Order {
 public:
@@ -81,5 +77,47 @@ public:
 private:
     Int num;
 };
+
+/// FieldID
+class FieldID {
+public:
+    explicit constexpr FieldID(Int fid) : num(fid) {}
+    ~FieldID() = default;
+    constexpr FieldID(const FieldID &) = default;
+    constexpr FieldID(FieldID &&) noexcept = default;
+    constexpr FieldID & operator=(const FieldID &) = default;
+    constexpr FieldID & operator=(FieldID &&) noexcept = default;
+
+    constexpr Int
+    value() const
+    {
+        return this->num;
+    }
+
+    constexpr bool
+    operator<(FieldID other) const
+    {
+        return this->num < other.num;
+    }
+
+    constexpr bool
+    operator==(FieldID other) const
+    {
+        return this->num == other.num;
+    }
+
+    constexpr bool
+    operator!=(FieldID other) const
+    {
+        return this->num != other.num;
+    }
+
+    static const FieldID INVALID;
+
+private:
+    Int num;
+};
+
+inline constexpr FieldID FieldID::INVALID { -1 };
 
 } // namespace godzilla

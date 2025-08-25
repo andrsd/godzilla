@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/FileOutput.h"
+#include "godzilla/Types.h"
 #ifdef GODZILLA_WITH_TECIOCPP
     #include "teciocpp/teciocpp.h"
 #endif
@@ -53,13 +54,13 @@ private:
     /// List of field variable names to output
     std::vector<std::string> field_var_names;
     /// List of nodal variable field IDs
-    std::vector<Int> nodal_var_fids;
+    std::vector<FieldID> nodal_var_fids;
     /// List of variable indices
     std::vector<int32_t> nodal_var_idxs;
     /// List of auxiliary field variable names to output
     std::vector<std::string> aux_field_var_names;
     /// List of nodal auxiliary variable field IDs
-    std::vector<Int> nodal_aux_var_fids;
+    std::vector<FieldID> nodal_aux_var_fids;
     /// List of auxiliary variable indices
     std::vector<int32_t> nodal_aux_var_idxs;
 

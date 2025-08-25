@@ -4,10 +4,11 @@
 #include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/FVProblemInterface.h"
+#include "godzilla/Types.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
 #include "godzilla/AuxiliaryField.h"
-#include "godzilla/Logger.h"
+#include "godzilla/Formatters.h"
 #include "godzilla/Utils.h"
 #include "godzilla/Exception.h"
 #include <cassert>
@@ -100,12 +101,12 @@ FVProblemInterface::get_field_names() const
 }
 
 const std::string &
-FVProblemInterface::get_field_name(Int fid) const
+FVProblemInterface::get_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
-    if (fid == 0) {
+    if (fid == FieldID(0)) {
         if (this->fields.size() == 1)
-            return this->fields.at(0).name;
+            return this->fields.at(FieldID(0)).name;
         else
             return empty_name;
     }
@@ -114,10 +115,10 @@ FVProblemInterface::get_field_name(Int fid) const
 }
 
 Int
-FVProblemInterface::get_field_num_components(Int fid) const
+FVProblemInterface::get_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
-    if (fid == 0) {
+    if (fid == FieldID(0)) {
         Int n_comps = 0;
         for (auto & it : this->fields)
             n_comps += it.second.nc;
@@ -127,18 +128,18 @@ FVProblemInterface::get_field_num_components(Int fid) const
         throw Exception("Field with ID = '{}' does not exist.", fid);
 }
 
-Int
+FieldID
 FVProblemInterface::get_field_id(const std::string & name) const
 {
     CALL_STACK_MSG();
-    return 0;
+    return FieldID(0);
 }
 
 bool
-FVProblemInterface::has_field_by_id(Int fid) const
+FVProblemInterface::has_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
-    if (fid == 0)
+    if (fid == FieldID(0))
         return true;
     else
         return false;
@@ -153,20 +154,20 @@ FVProblemInterface::has_field_by_name(const std::string & name) const
 }
 
 Order
-FVProblemInterface::get_field_order(Int fid) const
+FVProblemInterface::get_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
-    if (fid == 0)
+    if (fid == FieldID(0))
         return Order(0);
     else
         throw NotImplementedException("Multiple-field problems are not implemented");
 }
 
 std::string
-FVProblemInterface::get_field_component_name(Int fid, Int component) const
+FVProblemInterface::get_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
-    if (fid == 0) {
+    if (fid == FieldID(0)) {
         const char * name;
         PETSC_CHECK(PetscFVGetComponentName(this->fvm, component, &name));
         return { name };
@@ -176,7 +177,7 @@ FVProblemInterface::get_field_component_name(Int fid, Int component) const
 }
 
 void
-FVProblemInterface::set_field_component_name(Int fid, Int component, const std::string & name)
+FVProblemInterface::set_field_component_name(FieldID fid, Int component, const std::string & name)
 {
     CALL_STACK_MSG();
     const auto & it = this->fields.find(fid);
@@ -211,7 +212,7 @@ FVProblemInterface::get_aux_field_names() const
 }
 
 const std::string &
-FVProblemInterface::get_aux_field_name(Int fid) const
+FVProblemInterface::get_aux_field_name(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -222,7 +223,7 @@ FVProblemInterface::get_aux_field_name(Int fid) const
 }
 
 Int
-FVProblemInterface::get_aux_field_num_components(Int fid) const
+FVProblemInterface::get_aux_field_num_components(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -232,7 +233,7 @@ FVProblemInterface::get_aux_field_num_components(Int fid) const
         throw Exception("Auxiliary field with ID = '{}' does not exist.", fid);
 }
 
-Int
+FieldID
 FVProblemInterface::get_aux_field_id(const std::string & name) const
 {
     CALL_STACK_MSG();
@@ -244,7 +245,7 @@ FVProblemInterface::get_aux_field_id(const std::string & name) const
 }
 
 bool
-FVProblemInterface::has_aux_field_by_id(Int fid) const
+FVProblemInterface::has_aux_field_by_id(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -260,7 +261,7 @@ FVProblemInterface::has_aux_field_by_name(const std::string & name) const
 }
 
 Order
-FVProblemInterface::get_aux_field_order(Int fid) const
+FVProblemInterface::get_aux_field_order(FieldID fid) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -271,7 +272,7 @@ FVProblemInterface::get_aux_field_order(Int fid) const
 }
 
 std::string
-FVProblemInterface::get_aux_field_component_name(Int fid, Int component) const
+FVProblemInterface::get_aux_field_component_name(FieldID fid, Int component) const
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -289,7 +290,9 @@ FVProblemInterface::get_aux_field_component_name(Int fid, Int component) const
 }
 
 void
-FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const std::string & name)
+FVProblemInterface::set_aux_field_component_name(FieldID fid,
+                                                 Int component,
+                                                 const std::string & name)
 {
     CALL_STACK_MSG();
     const auto & it = this->aux_fields.find(fid);
@@ -306,7 +309,7 @@ FVProblemInterface::set_aux_field_component_name(Int fid, Int component, const s
 }
 
 void
-FVProblemInterface::add_field(Int id, const std::string & name, Int nc, const Label & block)
+FVProblemInterface::add_field(FieldID id, const std::string & name, Int nc, const Label & block)
 {
     CALL_STACK_MSG();
     auto it = this->fields.find(id);
@@ -318,24 +321,24 @@ FVProblemInterface::add_field(Int id, const std::string & name, Int nc, const La
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->fields.emplace(id, fi);
-        this->fields_by_name[name] = id;
+        this->fields_by_name.emplace(name, id);
     }
     else
         throw Exception("Cannot add field '{}' with ID = {}. ID already exists.", name, id);
 }
 
-Int
+FieldID
 FVProblemInterface::add_aux_field(const std::string & name, Int nc, Order k, const Label & block)
 {
     CALL_STACK_MSG();
-    std::vector<Int> keys = utils::map_keys(this->aux_fields);
-    Int id = get_next_id(keys);
+    auto keys = utils::map_keys(this->aux_fields);
+    auto id = get_next_id(keys);
     set_aux_field(id, name, nc, k, block);
     return id;
 }
 
 void
-FVProblemInterface::set_aux_field(Int id,
+FVProblemInterface::set_aux_field(FieldID id,
                                   const std::string & name,
                                   Int nc,
                                   Order k,
@@ -351,7 +354,7 @@ FVProblemInterface::set_aux_field(Int id,
                 fi.component_names[i] = fmt::format("{:d}", i);
         }
         this->aux_fields.emplace(id, fi);
-        this->aux_fields_by_name[name] = id;
+        this->aux_fields_by_name.emplace(name, id);
         this->aux_fe[id] = nullptr;
     }
     else
@@ -392,7 +395,7 @@ FVProblemInterface::set_up_ds()
     PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, get_mesh()->get_dimension()));
 
     for (std::size_t id = 0, c = 0; id < this->fields.size(); ++id) {
-        const FieldInfo & fi = this->fields.at(id);
+        const FieldInfo & fi = this->fields.at(FieldID(id));
         if (fi.nc == 1) {
             PETSC_CHECK(PetscFVSetComponentName(this->fvm, c, fi.name.c_str()));
         }
@@ -417,10 +420,9 @@ FVProblemInterface::create_aux_fields()
 {
     CALL_STACK_MSG();
     auto dm_aux = get_dm_aux();
-    for (auto & it : this->aux_fields) {
-        FieldInfo & fi = it.second;
-        PETSC_CHECK(DMSetField(dm_aux, fi.id, fi.block, (PetscObject) this->aux_fe.at(fi.id)));
-    }
+    for (auto & [id, fi] : this->aux_fields)
+        PETSC_CHECK(
+            DMSetField(dm_aux, fi.id.value(), fi.block, (PetscObject) this->aux_fe.at(fi.id)));
 }
 
 } // namespace godzilla

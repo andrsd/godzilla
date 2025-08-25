@@ -3,6 +3,7 @@
 #include "godzilla/InitialCondition.h"
 #include "godzilla/Parameters.h"
 #include "ExceptionTestMacros.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -74,7 +75,7 @@ TEST_F(InitialConditionTest, api)
     params.set<std::string>("_name") = "obj";
     MockInitialCondition ic(params);
 
-    EXPECT_EQ(ic.get_field_id(), -1);
+    EXPECT_EQ(ic.get_field_id(), FieldID::INVALID);
 }
 
 TEST_F(InitialConditionTest, test)
@@ -103,7 +104,7 @@ TEST_F(InitialConditionTest, test)
 
     this->app->check_integrity();
 
-    EXPECT_EQ(ic.get_field_id(), 0);
+    EXPECT_EQ(ic.get_field_id(), FieldID(0));
     EXPECT_EQ(ic.get_dimension(), 1);
 
     EXPECT_TRUE(this->prob->has_initial_condition("obj"));
@@ -117,7 +118,7 @@ TEST_F(InitialConditionTest, test)
 
     // aux ICs
 
-    EXPECT_EQ(aux_ic.get_field_id(), 0);
+    EXPECT_EQ(aux_ic.get_field_id(), FieldID(0));
 
     EXPECT_TRUE(this->prob->has_initial_condition("a_ic"));
     EXPECT_EQ(this->prob->get_initial_condition("a_ic"), &aux_ic);

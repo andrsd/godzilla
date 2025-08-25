@@ -21,7 +21,7 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
 
-    const Int iu;
+    const FieldID iu;
 };
 
 class F0 : public ResidualFunc {
@@ -100,8 +100,7 @@ TestNeumannProblem::TestNeumannProblem(const Parameters & params) :
 void
 TestNeumannProblem::set_up_fields()
 {
-    Int order = 2;
-    set_field(this->iu, "u", 1, Order(order));
+    set_field(this->iu, "u", 1, Order(2));
 }
 
 void

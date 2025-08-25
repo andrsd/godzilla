@@ -3,6 +3,7 @@
 #include "BurgersEquation.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -45,6 +46,7 @@ BurgersEquation::parameters()
 
 BurgersEquation::BurgersEquation(const Parameters & parameters) :
     ExplicitFELinearProblem(parameters),
+    u_id(FieldID::INVALID),
     viscosity(get_param<Real>("viscosity"))
 {
     CALL_STACK_MSG();
@@ -69,12 +71,12 @@ void
 BurgersEquation::set_up_fields()
 {
     CALL_STACK_MSG();
-    u_id = add_field("u", 1, Order(1));
+    this->u_id = add_field("u", 1, Order(1));
 }
 
 void
 BurgersEquation::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    add_residual_block(u_id, nullptr, new F1(this));
+    add_residual_block(this->u_id, nullptr, new F1(this));
 }

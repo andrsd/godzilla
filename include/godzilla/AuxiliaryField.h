@@ -46,7 +46,7 @@ public:
     /// Get the ID of the field this boundary condition operates on
     ///
     /// @return ID of the field
-    Int get_field_id() const;
+    FieldID get_field_id() const;
 
     /// Get field name
     ///

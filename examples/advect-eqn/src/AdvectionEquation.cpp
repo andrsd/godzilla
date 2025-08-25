@@ -2,6 +2,7 @@
 #include "godzilla/FunctionInterface.h"
 #include "AdvectionEquation.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -30,14 +31,14 @@ void
 AdvectionEquation::set_up_fields()
 {
     CALL_STACK_MSG();
-    add_field(0, "u", 1);
+    add_field(FieldID(0), "u", 1);
 }
 
 void
 AdvectionEquation::set_up_weak_form()
 {
     CALL_STACK_MSG();
-    set_riemann_solver(0, this, &AdvectionEquation::compute_flux);
+    set_riemann_solver(FieldID(0), this, &AdvectionEquation::compute_flux);
 }
 
 void

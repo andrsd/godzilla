@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GTestFENonlinearProblem.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -13,5 +14,5 @@ protected:
     virtual void set_up_fields() override;
 
     /// ID for the "v" field
-    const Int iv;
+    const FieldID iv;
 };

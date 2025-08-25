@@ -91,13 +91,13 @@ private:
     /// List of global variable names to output
     std::vector<std::string> global_var_names;
     /// List of nodal variable field IDs
-    std::vector<Int> nodal_var_fids;
+    std::vector<FieldID> nodal_var_fids;
     /// List of nodal auxiliary variable field IDs
-    std::vector<Int> nodal_aux_var_fids;
+    std::vector<FieldID> nodal_aux_var_fids;
     /// List of elemental variable field IDs
-    std::vector<Int> elem_var_fids;
+    std::vector<FieldID> elem_var_fids;
     /// List of elemental auxiliary variable field IDs
-    std::vector<Int> elem_aux_var_fids;
+    std::vector<FieldID> elem_aux_var_fids;
 
     /// Block ID used in ExodusII file when there are not cell sets
     static const int SINGLE_BLK_ID;

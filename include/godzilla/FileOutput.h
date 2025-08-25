@@ -35,8 +35,8 @@ public:
     void set_sequence_file_base(unsigned int stepi);
 
 protected:
-    void add_var_names(Int fid, std::vector<std::string> & var_names);
-    void add_aux_var_names(Int fid, std::vector<std::string> & var_names);
+    void add_var_names(FieldID fid, std::vector<std::string> & var_names);
+    void add_aux_var_names(FieldID fid, std::vector<std::string> & var_names);
 
     const DiscreteProblemInterface * get_discrete_problem_interface() const;
     DiscreteProblemInterface * get_discrete_problem_interface();

@@ -83,25 +83,25 @@ public:
     /// Get field name
     ///
     /// @param fid Field ID
-    virtual const std::string & get_field_name(Int fid) const = 0;
+    virtual const std::string & get_field_name(FieldID fid) const = 0;
 
     /// Get number of field components
     ///
     /// @param fid Field ID
     /// @return Number of components
-    virtual Int get_field_num_components(Int fid) const = 0;
+    virtual Int get_field_num_components(FieldID fid) const = 0;
 
     /// Get field ID
     ///
     /// @param name Field name
     /// @param Field ID
-    virtual Int get_field_id(const std::string & name) const = 0;
+    virtual FieldID get_field_id(const std::string & name) const = 0;
 
     /// Do we have field with specified ID
     ///
     /// @param fid The ID of the field
     /// @return True if the field exists, otherwise False
-    virtual bool has_field_by_id(Int fid) const = 0;
+    virtual bool has_field_by_id(FieldID fid) const = 0;
 
     /// Do we have field with specified name
     ///
@@ -113,21 +113,21 @@ public:
     ///
     /// @param fid Field ID
     /// @return Field order
-    virtual Order get_field_order(Int fid) const = 0;
+    virtual Order get_field_order(FieldID fid) const = 0;
 
     /// Get component name of a field
     ///
     /// @param fid Field ID
     /// @param component Component index
     /// @return Component name
-    virtual std::string get_field_component_name(Int fid, Int component) const = 0;
+    virtual std::string get_field_component_name(FieldID fid, Int component) const = 0;
 
     /// Set the name of a component of afield variable
     ///
     /// @param fid Field ID
     /// @param component Component index
     /// @param name Component name
-    virtual void set_field_component_name(Int fid, Int component, const std::string & name) = 0;
+    virtual void set_field_component_name(FieldID fid, Int component, const std::string & name) = 0;
 
     /// Get number of auxiliary fields
     ///
@@ -143,25 +143,25 @@ public:
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field name
-    virtual const std::string & get_aux_field_name(Int fid) const = 0;
+    virtual const std::string & get_aux_field_name(FieldID fid) const = 0;
 
     /// Get number of auxiliary field components
     ///
     /// @param fid Auxiliary field ID
     /// @return Number of components
-    virtual Int get_aux_field_num_components(Int fid) const = 0;
+    virtual Int get_aux_field_num_components(FieldID fid) const = 0;
 
     /// Get auxiliary field ID
     ///
     /// @param name Auxiliary field name
     /// @return Auxiliary field ID
-    virtual Int get_aux_field_id(const std::string & name) const = 0;
+    virtual FieldID get_aux_field_id(const std::string & name) const = 0;
 
     /// Do we have auxiliary field with specified ID
     ///
     /// @param fid The ID of the auxiliary field
     /// @return True if the auxiliary field exists, otherwise False
-    virtual bool has_aux_field_by_id(Int fid) const = 0;
+    virtual bool has_aux_field_by_id(FieldID fid) const = 0;
 
     /// Do we have auxiliary field with specified name
     ///
@@ -173,21 +173,22 @@ public:
     ///
     /// @param fid Auxiliary field ID
     /// @return Auxiliary field order
-    virtual Order get_aux_field_order(Int fid) const = 0;
+    virtual Order get_aux_field_order(FieldID fid) const = 0;
 
     /// Get component name of an auxiliary field
     ///
     /// @param fid Auxiliary field ID
     /// @param component Component index
     /// @return Component name
-    virtual std::string get_aux_field_component_name(Int fid, Int component) const = 0;
+    virtual std::string get_aux_field_component_name(FieldID fid, Int component) const = 0;
 
     /// Set the name of a component of an auxiliary field variable
     ///
     /// @param fid Field ID
     /// @param component Component index
     /// @param name Component name
-    virtual void set_aux_field_component_name(Int fid, Int component, const std::string & name) = 0;
+    virtual void
+    set_aux_field_component_name(FieldID fid, Int component, const std::string & name) = 0;
 
     /// Get list of all initial conditions
     ///
@@ -243,7 +244,7 @@ public:
     /// @param point Point
     /// @param fid Field ID
     /// @return The offset
-    Int get_field_dof(Int point, Int fid) const;
+    Int get_field_dof(Int point, FieldID fid) const;
 
     /// Return the offset into an array of local auxiliary Vec for the dof associated with the given
     /// point
@@ -251,7 +252,7 @@ public:
     /// @param point Point
     /// @param fid Field ID
     /// @return The offset
-    Int get_aux_field_dof(Int point, Int fid) const;
+    Int get_aux_field_dof(Int point, FieldID fid) const;
 
     /// Get local solution vector
     ///
@@ -277,7 +278,7 @@ public:
                       const std::string & name,
                       const Label & label,
                       const std::vector<Int> & ids,
-                      Int field,
+                      FieldID field,
                       const std::vector<Int> & components,
                       void (*bc_fn)(),
                       void (*bc_fn_t)(),
@@ -287,7 +288,7 @@ public:
     void
     add_boundary_essential(const std::string & name,
                            const std::string & boundary,
-                           Int field,
+                           FieldID field,
                            const std::vector<Int> & components,
                            T * instance,
                            void (T::*method)(Real, const Real[], Scalar[]),
@@ -317,7 +318,7 @@ public:
 
     void add_boundary_natural(const std::string & name,
                               const std::string & boundary,
-                              Int field,
+                              FieldID field,
                               const std::vector<Int> & components);
 
     template <class T>
@@ -325,7 +326,7 @@ public:
     add_boundary_natural_riemann(
         const std::string & name,
         const std::string & boundary,
-        Int field,
+        FieldID field,
         const std::vector<Int> & components,
         T * instance,
         void (T::*method)(Real, const Real *, const Real *, const Scalar *, Scalar *))
@@ -377,7 +378,7 @@ public:
 
     /// Return read/write access to a field on a point in local array
     template <typename T>
-    T get_point_local_field_ref(Int point, Int field, Scalar * array) const;
+    T get_point_local_field_ref(Int point, FieldID field, Scalar * array) const;
 
     /// Build local solution vector for this problem
     virtual void compute_solution_vector_local() = 0;
@@ -402,7 +403,7 @@ protected:
 
     /// Check initial conditions
     void check_initial_conditions(const std::vector<InitialCondition *> & ics,
-                                  const std::map<Int, Int> & field_comps);
+                                  const std::map<FieldID, Int> & field_comps);
 
     void set_initial_guess_from_ics();
 
@@ -443,7 +444,7 @@ protected:
     /// Update auxiliary vector
     virtual void update_aux_vector();
 
-    Int get_next_id(const std::vector<Int> & ids) const;
+    FieldID get_next_id(const std::vector<FieldID> & ids) const;
 
     /// Setup weak form terms
     virtual void set_up_weak_form() = 0;
@@ -614,7 +615,7 @@ DiscreteProblemInterface::set_aux_closure(const Vector & v,
 
 template <typename T>
 T
-DiscreteProblemInterface::get_point_local_field_ref(Int point, Int field, Scalar * array) const
+DiscreteProblemInterface::get_point_local_field_ref(Int point, FieldID field, Scalar * array) const
 {
     auto dm = this->unstr_mesh->get_dm();
     T var;

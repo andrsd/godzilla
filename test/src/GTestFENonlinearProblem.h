@@ -29,5 +29,5 @@ protected:
     void set_up_weak_form() override;
 
     /// ID for the "u" field
-    const Int iu;
+    const FieldID iu;
 };

@@ -57,7 +57,7 @@ TEST(NaturalBCTest, api)
 
     std::vector<Int> comps = bc.get_components();
     EXPECT_THAT(comps, testing::ElementsAre(3, 5));
-    EXPECT_EQ(bc.get_field_id(), 0);
+    EXPECT_EQ(bc.get_field_id(), FieldID(0));
 }
 
 namespace {
@@ -134,7 +134,7 @@ TEST(NaturalBCTest, fe)
     TestNaturalBC bc(bc_params);
 
     mesh.create();
-    prob.set_aux_field(0, "aux1", 1, Order(1));
+    prob.set_aux_field(FieldID(0), "aux1", 1, Order(1));
     prob.add_boundary_condition(&bc);
     prob.create();
 
@@ -144,7 +144,7 @@ TEST(NaturalBCTest, fe)
     PetscDSGetNumBoundary(ds, &num_bd);
     EXPECT_EQ(num_bd, 1);
     //
-    Int field = bc.get_field_id();
+    auto field = bc.get_field_id();
     WeakForm * wf = prob.get_weak_form();
     auto m = mesh.get_mesh<UnstructuredMesh>();
     auto label = m->get_label("left");

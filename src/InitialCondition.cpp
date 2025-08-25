@@ -5,6 +5,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/DiscreteProblemInterface.h"
+#include "godzilla/Types.h"
 #include <cassert>
 
 namespace godzilla {
@@ -22,7 +23,7 @@ InitialCondition::InitialCondition(const Parameters & params) :
     Object(params),
     PrintInterface(this),
     dpi(get_param<DiscreteProblemInterface *>("_dpi")),
-    fid(INVALID_FIELD_ID)
+    fid(FieldID::INVALID)
 {
     CALL_STACK_MSG();
 }
@@ -62,7 +63,7 @@ InitialCondition::get_field_name() const
     return this->field_name;
 }
 
-Int
+FieldID
 InitialCondition::get_field_id() const
 {
     CALL_STACK_MSG();
