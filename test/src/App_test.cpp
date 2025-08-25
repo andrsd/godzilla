@@ -41,7 +41,7 @@ public:
 
 TEST(AppTest, run_input)
 {
-    fs::path input_file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "simple-test.yml";
+    fs::path input_file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "yml" / "simple-test.yml";
     std::vector<std::string> args = { "-i", input_file.string() };
 
     godzilla::Registry reg;
@@ -52,14 +52,15 @@ TEST(AppTest, run_input)
     App app(comm, reg, "godzilla", args);
     app.run();
 
-    EXPECT_EQ(app.get_input_file_name(), GODZILLA_UNIT_TESTS_ROOT "/assets/simple-test.yml");
+    EXPECT_EQ(app.get_input_file_name(), GODZILLA_UNIT_TESTS_ROOT "/assets/yml/simple-test.yml");
 
     // TODO: build a MockGodzillaApp and make sure methods get called
 }
 
 TEST(AppTest, run_input_non_existent_file)
 {
-    fs::path input_file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "non_existent_file.yml";
+    fs::path input_file =
+        fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "yml" / "non_existent_file.yml";
     std::vector<std::string> args = { "-i", input_file.string() };
 
     mpi::Communicator comm(MPI_COMM_WORLD);
