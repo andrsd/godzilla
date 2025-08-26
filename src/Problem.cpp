@@ -94,8 +94,8 @@ Problem::create()
     CALL_STACK_MSG();
     for (auto & f : this->functions)
         f->create();
-    for (auto & pp : this->pps)
-        pp.second->create();
+    for (auto & [_, pp] : this->pps)
+        pp->create();
     for (auto & out : this->outputs)
         out->create();
 }
@@ -175,8 +175,8 @@ void
 Problem::compute_postprocessors()
 {
     CALL_STACK_MSG();
-    for (auto & pp : this->pps)
-        pp.second->compute();
+    for (auto & [_, pp] : this->pps)
+        pp->compute();
 }
 
 Postprocessor *

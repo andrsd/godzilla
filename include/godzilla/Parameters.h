@@ -231,11 +231,11 @@ public:
     Parameters &
     operator+=(const Parameters & rhs)
     {
-        for (const auto & rpar : rhs) {
-            auto jt = this->params.find(rpar.first);
+        for (const auto & [name, value] : rhs) {
+            auto jt = this->params.find(name);
             if (jt != this->params.end())
                 delete jt->second;
-            this->params[rpar.first] = rpar.second->copy();
+            this->params[name] = value->copy();
         }
         return *this;
     }
@@ -243,8 +243,8 @@ public:
     void
     clear()
     {
-        for (auto & it : this->params)
-            delete it.second;
+        for (auto & [_, value] : this->params)
+            delete value;
         this->params.clear();
     }
 

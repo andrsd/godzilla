@@ -162,8 +162,8 @@ BoxMesh::create_mesh()
     face_set_names[5] = "right";
     face_set_names[6] = "left";
     mesh->create_face_set_labels(face_set_names);
-    for (auto it : face_set_names)
-        mesh->set_face_set_name(it.first, it.second);
+    for (auto & [id, name] : face_set_names)
+        mesh->set_face_set_name(id, name);
 
     return mesh;
 }

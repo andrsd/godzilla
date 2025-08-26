@@ -29,11 +29,10 @@ DGProblemInterface::DGProblemInterface(Problem * problem, const Parameters & par
 DGProblemInterface::~DGProblemInterface()
 {
     CALL_STACK_MSG();
-    for (auto & [id, info] : this->fields) {
+    for (auto & [_, info] : this->fields) {
         PetscFEDestroy(&info.fe);
     }
-    for (auto & kv : this->aux_fe) {
-        auto & fe = kv.second;
+    for (auto & [_, fe] : this->aux_fe) {
         PetscFEDestroy(&fe);
     }
     this->section.destroy();
@@ -44,8 +43,8 @@ void
 DGProblemInterface::init()
 {
     CALL_STACK_MSG();
-    for (auto & it : this->fields)
-        create_fe(it.second);
+    for (auto & [_, info] : this->fields)
+        create_fe(info);
     DiscreteProblemInterface::init();
 
     auto dm = get_mesh()->get_dm();
@@ -73,8 +72,8 @@ DGProblemInterface::get_field_names() const
     CALL_STACK_MSG();
     std::vector<std::string> infos;
     infos.reserve(this->fields.size());
-    for (const auto & it : this->fields)
-        infos.push_back(it.second.name);
+    for (const auto & [_, info] : this->fields)
+        infos.push_back(info.name);
     return infos;
 }
 
@@ -198,8 +197,8 @@ DGProblemInterface::get_aux_field_names() const
     CALL_STACK_MSG();
     std::vector<std::string> names;
     names.reserve(this->aux_fields.size());
-    for (const auto & it : this->aux_fields)
-        names.push_back(it.second.name);
+    for (const auto & [_, info] : this->aux_fields)
+        names.push_back(info.name);
     return names;
 }
 
@@ -429,8 +428,7 @@ DGProblemInterface::create_section()
     PETSC_CHECK(DMSetNumFields(dm, 1));
     this->section.create(comm);
     this->section.set_num_fields(get_num_fields());
-    for (auto & it : this->fields) {
-        auto & fi = it.second;
+    for (auto & [_, fi] : this->fields) {
         this->section.set_num_field_components(fi.id.value(), fi.nc);
     }
     auto cell_range = unstr_mesh->get_cell_range();
@@ -438,10 +436,9 @@ DGProblemInterface::create_section()
     for (Int c = cell_range.first(); c < cell_range.last(); ++c) {
         auto n_nodes = get_num_nodes_per_elem(c);
         Int n_dofs = 0;
-        for (auto & it : this->fields) {
-            auto & fi = it.second;
-            auto n_field_dofs = fi.nc * n_nodes; // FIXME: work for only order = 1
-            this->section.set_field_dof(c, fi.id.value(), n_field_dofs);
+        for (auto & [_, info] : this->fields) {
+            auto n_field_dofs = info.nc * n_nodes; // FIXME: work for only order = 1
+            this->section.set_field_dof(c, info.id.value(), n_field_dofs);
             n_dofs += n_field_dofs;
         }
         this->section.set_dof(c, n_dofs);
@@ -542,9 +539,8 @@ DGProblemInterface::create_aux_fields()
     auto comm = get_problem()->get_comm();
     this->section_aux.create(comm);
     this->section_aux.set_num_fields(get_num_aux_fields());
-    for (auto & it : this->aux_fields) {
-        auto & fi = it.second;
-        this->section_aux.set_num_field_components(fi.id.value(), fi.nc);
+    for (auto & [_, info] : this->aux_fields) {
+        this->section_aux.set_num_field_components(info.id.value(), info.nc);
     }
 
     auto unstr_mesh = get_mesh();
@@ -553,11 +549,10 @@ DGProblemInterface::create_aux_fields()
     for (Int c = cell_range.first(); c < cell_range.last(); ++c) {
         auto n_nodes = get_num_nodes_per_elem(c);
         Int n_dofs = 0;
-        for (auto & it : this->aux_fields) {
-            auto & fi = it.second;
+        for (auto & [_, info] : this->aux_fields) {
             // FIXME: this works for order = 1
-            auto n_field_dofs = fi.nc * n_nodes;
-            this->section_aux.set_field_dof(c, fi.id.value(), n_field_dofs);
+            auto n_field_dofs = info.nc * n_nodes;
+            this->section_aux.set_field_dof(c, info.id.value(), n_field_dofs);
             n_dofs += n_field_dofs;
         }
         this->section_aux.set_dof(c, n_dofs);

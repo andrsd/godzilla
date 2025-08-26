@@ -64,14 +64,10 @@ FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & par
 FEProblemInterface::~FEProblemInterface()
 {
     CALL_STACK_MSG();
-    for (auto & kv : this->fields) {
-        FieldInfo & fi = kv.second;
-        PetscFEDestroy(&fi.fe);
-    }
-    for (auto & kv : this->aux_fields) {
-        FieldInfo & fi = kv.second;
-        PetscFEDestroy(&fi.fe);
-    }
+    for (auto & [_, info] : this->fields)
+        PetscFEDestroy(&info.fe);
+    for (auto & [_, info] : this->aux_fields)
+        PetscFEDestroy(&info.fe);
 
     delete this->asmbl;
     delete this->wf;
@@ -99,10 +95,10 @@ void
 FEProblemInterface::init()
 {
     CALL_STACK_MSG();
-    for (auto & it : this->fields)
-        create_fe(it.second);
-    for (auto & it : this->aux_fields)
-        create_fe(it.second);
+    for (auto & [_, info] : this->fields)
+        create_fe(info);
+    for (auto & [_, info] : this->aux_fields)
+        create_fe(info);
 
     set_up_quadrature();
 
@@ -141,8 +137,8 @@ FEProblemInterface::get_field_names() const
     CALL_STACK_MSG();
     std::vector<std::string> infos;
     infos.reserve(this->fields.size());
-    for (const auto & it : this->fields)
-        infos.push_back(it.second.name);
+    for (const auto & [_, info] : this->fields)
+        infos.push_back(info.name);
 
     return infos;
 }
@@ -274,8 +270,8 @@ FEProblemInterface::get_aux_field_names() const
     CALL_STACK_MSG();
     std::vector<std::string> names;
     names.reserve(this->aux_fields.size());
-    for (const auto & it : this->aux_fields)
-        names.push_back(it.second.name);
+    for (const auto & [_, info] : this->aux_fields)
+        names.push_back(info.name);
     return names;
 }
 
@@ -468,16 +464,12 @@ FEProblemInterface::set_up_ds()
 {
     CALL_STACK_MSG();
     auto dm = get_mesh()->get_dm();
-    for (auto & it : this->fields) {
-        FieldInfo & fi = it.second;
-        PETSC_CHECK(DMSetField(dm, fi.id.value(), fi.block, (PetscObject) fi.fe));
-    }
+    for (auto & [_, info] : this->fields)
+        PETSC_CHECK(DMSetField(dm, info.id.value(), info.block, (PetscObject) info.fe));
     create_ds();
     auto ds = get_ds();
-    for (auto & it : this->fields) {
-        FieldInfo & fi = it.second;
-        PETSC_CHECK(PetscDSSetContext(ds, fi.id.value(), this));
-    }
+    for (auto & [_, info] : this->fields)
+        PETSC_CHECK(PetscDSSetContext(ds, info.id.value(), this));
 
     set_up_assembly_data();
 }
@@ -492,11 +484,10 @@ FEProblemInterface::set_up_assembly_data()
     Int *u_offset, *u_offset_x;
     PETSC_CHECK(PetscDSGetComponentOffsets(ds, &u_offset));
     PETSC_CHECK(PetscDSGetComponentDerivativeOffsets(ds, &u_offset_x));
-    for (auto & it : this->fields) {
-        FieldInfo & fi = it.second;
-        fi.values.set(this->asmbl->u + u_offset[fi.id.value()]);
-        fi.derivs.set(this->asmbl->u_x + u_offset_x[fi.id.value()]);
-        fi.dots.set(this->asmbl->u_t + u_offset[fi.id.value()]);
+    for (auto & [_, info] : this->fields) {
+        info.values.set(this->asmbl->u + u_offset[info.id.value()]);
+        info.derivs.set(this->asmbl->u_x + u_offset_x[info.id.value()]);
+        info.dots.set(this->asmbl->u_t + u_offset[info.id.value()]);
     }
     Real * coord;
     PETSC_CHECK(PetscDSGetWorkspace(ds, &coord, nullptr, nullptr, nullptr, nullptr));

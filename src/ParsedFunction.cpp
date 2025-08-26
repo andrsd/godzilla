@@ -35,8 +35,8 @@ ParsedFunction::ParsedFunction(const Parameters & params) :
 {
     CALL_STACK_MSG();
     this->evalr.create(this->function);
-    for (const auto & it : constants)
-        this->evalr.define_constant(it.first, it.second);
+    for (const auto & [name, value] : this->constants)
+        this->evalr.define_constant(name, value);
 }
 
 void

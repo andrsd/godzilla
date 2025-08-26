@@ -8,10 +8,10 @@ namespace godzilla {
 
 DependencyEvaluator::~DependencyEvaluator()
 {
-    for (auto & kv : this->values)
-        delete kv.second;
-    for (auto & kv : this->functionals)
-        delete kv.second;
+    for (auto & [_, val] : this->values)
+        delete val;
+    for (auto & [_, fnl] : this->functionals)
+        delete fnl;
 }
 
 const std::map<std::string, const ValueFunctional *> &
@@ -37,8 +37,7 @@ DependencyEvaluator::get_suppliers() const
 {
     CALL_STACK_MSG();
     std::map<std::string, const ValueFunctional *> suppliers;
-    for (auto & it : get_functionals()) {
-        auto fnl = it.second;
+    for (auto & [_, fnl] : get_functionals()) {
         auto provides = fnl->get_provided_values();
         for (auto & s : provides) {
             if (suppliers.find(s) == suppliers.end())
@@ -56,8 +55,7 @@ DependencyEvaluator::build_dependecy_graph(
 {
     CALL_STACK_MSG();
     DependencyGraph<const Functional *> graph;
-    for (auto & it : get_functionals()) {
-        auto fnl = it.second;
+    for (auto & [_, fnl] : get_functionals()) {
         auto depends_on = fnl->get_dependent_values();
         for (auto & dep : depends_on) {
             auto jt = suppliers.find(dep);

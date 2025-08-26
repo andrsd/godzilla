@@ -37,10 +37,9 @@ WeakForm::get_residual_regions() const
     std::array<ResidualKind, 2> res_kind = { F0, F1 };
     for (const auto & r : res_kind) {
         const auto & forms = this->res_forms[r];
-        for (const auto & it : forms) {
-            const auto & form_key = it.first;
-            Region k(form_key.label, form_key.value, form_key.part);
-            unique.emplace(k);
+        for (const auto & [key, _] : forms) {
+            Region region(key.label, key.value, key.part);
+            unique.emplace(region);
         }
     }
 
@@ -57,10 +56,9 @@ WeakForm::get_jacobian_regions() const
     std::array<JacobianKind, 8> jacmap = { G0, G1, G2, G3, GP0, GP1, GP2, GP3 };
     for (const auto & r : jacmap) {
         const auto & forms = this->jac_forms[r];
-        for (const auto & it : forms) {
-            const auto & form_key = it.first;
-            Region k(form_key.label, form_key.value, form_key.part);
-            unique.emplace(k);
+        for (const auto & [key, _] : forms) {
+            Region region(key.label, key.value, key.part);
+            unique.emplace(region);
         }
     }
 

@@ -44,10 +44,8 @@ FVProblemInterface::FVProblemInterface(Problem * problem, const Parameters & par
 FVProblemInterface::~FVProblemInterface()
 {
     CALL_STACK_MSG();
-    for (auto & kv : this->aux_fe) {
-        auto & fe = kv.second;
+    for (auto & [_, fe] : this->aux_fe)
         PetscFEDestroy(&fe);
-    }
     PETSC_CHECK(PetscFVDestroy(&this->fvm));
 }
 
@@ -60,16 +58,14 @@ FVProblemInterface::init()
     auto comm = get_mesh()->get_comm();
     Int dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
-    for (auto & it : this->aux_fields) {
-        auto fi = it.second;
+    for (auto & [_, info] : this->aux_fields)
         PETSC_CHECK(PetscFECreateLagrange(comm,
                                           dim,
-                                          fi.nc,
+                                          info.nc,
                                           is_simplex,
-                                          fi.k.value(),
+                                          info.k.value(),
                                           PETSC_DETERMINE,
-                                          &this->aux_fe.at(fi.id)));
-    }
+                                          &this->aux_fe.at(info.id)));
 
     auto dm = get_mesh()->get_dm();
     DM cdm = dm;
@@ -120,8 +116,8 @@ FVProblemInterface::get_field_num_components(FieldID fid) const
     CALL_STACK_MSG();
     if (fid == FieldID(0)) {
         Int n_comps = 0;
-        for (auto & it : this->fields)
-            n_comps += it.second.nc;
+        for (auto & [_, info] : this->fields)
+            n_comps += info.nc;
         return n_comps;
     }
     else
@@ -206,8 +202,8 @@ FVProblemInterface::get_aux_field_names() const
     CALL_STACK_MSG();
     std::vector<std::string> names;
     names.reserve(this->aux_fields.size());
-    for (const auto & it : this->aux_fields)
-        names.push_back(it.second.name);
+    for (const auto & [_, info] : this->aux_fields)
+        names.push_back(info.name);
     return names;
 }
 
@@ -388,8 +384,8 @@ FVProblemInterface::set_up_ds()
     PETSC_CHECK(PetscFVSetType(this->fvm, PETSCFVUPWIND));
 
     Int n_comps = 0;
-    for (auto & it : this->fields)
-        n_comps += it.second.nc;
+    for (auto & [_, info] : this->fields)
+        n_comps += info.nc;
     PETSC_CHECK(PetscFVSetNumComponents(this->fvm, n_comps));
 
     PETSC_CHECK(PetscFVSetSpatialDimension(this->fvm, get_mesh()->get_dimension()));

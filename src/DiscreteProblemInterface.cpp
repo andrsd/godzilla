@@ -502,9 +502,7 @@ void
 DiscreteProblemInterface::compute_aux_fields()
 {
     CALL_STACK_MSG();
-    for (const auto & it : this->auxs_by_region) {
-        const std::string & region_name = it.first;
-        const std::vector<AuxiliaryField *> & auxs = it.second;
+    for (const auto & [region_name, auxs] : this->auxs_by_region) {
         Label label;
         if (!region_name.empty())
             label = get_mesh()->get_label(region_name);
