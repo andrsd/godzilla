@@ -87,10 +87,8 @@ ExplicitFELinearProblem::init()
         add_jacobian_block(FieldID(i), FieldID(i), new G0Identity(this), nullptr, nullptr, nullptr);
 
     auto ds = get_ds();
-    for (auto & f : get_fields()) {
-        auto fid = f.second.id;
-        PETSC_CHECK(PetscDSSetImplicit(ds, fid.value(), PETSC_FALSE));
-    }
+    for (auto & [_, info] : get_fields())
+        PETSC_CHECK(PetscDSSetImplicit(ds, info.id.value(), PETSC_FALSE));
 }
 
 void

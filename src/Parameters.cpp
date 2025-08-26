@@ -19,8 +19,8 @@ Parameters &
 Parameters::operator=(const Parameters & rhs)
 {
     this->clear();
-    for (const auto & par : rhs)
-        this->params[par.first] = par.second->copy();
+    for (const auto & [name, value] : rhs)
+        this->params[name] = value->copy();
     return *this;
 }
 
