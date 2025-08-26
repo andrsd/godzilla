@@ -13,7 +13,7 @@ namespace godzilla {
 Parameters
 L2Diff::parameters()
 {
-    Parameters params = Postprocessor::parameters();
+    auto params = Postprocessor::parameters();
     params += FunctionInterface::parameters();
     return params;
 }

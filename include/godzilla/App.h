@@ -247,7 +247,7 @@ template <typename T>
 T *
 App::build_object(const std::string & obj_name, Parameters & parameters)
 {
-    parameters.set<App *>("_app") = this;
+    parameters.set<App *>("_app", this);
     return this->factory.create<T>(obj_name, parameters);
 }
 
@@ -255,7 +255,7 @@ template <typename T>
 T *
 App::build_object(const std::string & obj_name, Parameters * parameters)
 {
-    parameters->set<App *>("_app") = this;
+    parameters->set<App *>("_app", this);
     return this->factory.create<T>(obj_name, parameters);
 }
 

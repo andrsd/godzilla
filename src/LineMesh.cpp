@@ -14,10 +14,10 @@ namespace godzilla {
 Parameters
 LineMesh::parameters()
 {
-    Parameters params = MeshObject::parameters();
-    params.add_param<Real>("xmin", 0., "Minimum in the x direction");
-    params.add_param<Real>("xmax", 1., "Maximum in the x direction");
-    params.add_required_param<Int>("nx", "Number of mesh points in the x direction");
+    auto params = MeshObject::parameters();
+    params.add_param<Real>("xmin", 0., "Minimum in the x direction")
+        .add_param<Real>("xmax", 1., "Maximum in the x direction")
+        .add_required_param<Int>("nx", "Number of mesh points in the x direction");
     return params;
 }
 

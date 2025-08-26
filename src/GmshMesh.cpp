@@ -10,7 +10,7 @@ namespace godzilla {
 Parameters
 GmshMesh::parameters()
 {
-    Parameters params = FileMesh::parameters();
+    auto params = FileMesh::parameters();
     return params;
 }
 

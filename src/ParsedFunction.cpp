@@ -20,11 +20,12 @@ parsed_function_eval(void * ctx, double t, double x, double y, double z)
 Parameters
 ParsedFunction::parameters()
 {
-    Parameters params = Function::parameters();
-    params.add_param<std::vector<std::string>>(
-        "function",
-        "Text representation of the function to evaluate (one per component)");
-    params.add_param<std::map<std::string, Real>>("constants", "Constants");
+    auto params = Function::parameters();
+    params
+        .add_param<std::vector<std::string>>(
+            "function",
+            "Text representation of the function to evaluate (one per component)")
+        .add_param<std::map<std::string, Real>>("constants", "Constants");
     return params;
 }
 

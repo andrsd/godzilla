@@ -15,7 +15,7 @@ namespace godzilla {
 Parameters
 CSVOutput::parameters()
 {
-    Parameters params = FileOutput::parameters();
+    auto params = FileOutput::parameters();
     return params;
 }
 

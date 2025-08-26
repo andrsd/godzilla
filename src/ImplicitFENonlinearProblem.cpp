@@ -34,7 +34,7 @@ ImplicitFENonlinearProblem::invoke_compute_boundary_delegate(DM,
 Parameters
 ImplicitFENonlinearProblem::parameters()
 {
-    Parameters params = FENonlinearProblem::parameters();
+    auto params = FENonlinearProblem::parameters();
     params += TransientProblemInterface::parameters();
     params.add_param<std::string>("scheme", "beuler", "Time stepping scheme: [beuler, cn]");
     return params;

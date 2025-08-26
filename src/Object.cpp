@@ -11,9 +11,9 @@ Parameters
 Object::parameters()
 {
     Parameters params;
-    params.add_private_param<App *>("_app", nullptr);
-    params.add_private_param<std::string>("_type", "");
-    params.add_private_param<std::string>("_name", "");
+    params.add_private_param<App *>("_app", nullptr)
+        .add_private_param<std::string>("_type", "")
+        .add_private_param<std::string>("_name", "");
     return params;
 }
 

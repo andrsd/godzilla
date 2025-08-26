@@ -11,10 +11,10 @@ namespace godzilla {
 Parameters
 TimeSteppingAdaptor::parameters()
 {
-    Parameters params = Object::parameters();
-    params.add_private_param<Problem *>("_problem", nullptr);
-    params.add_param<Real>("dt_min", PETSC_DEFAULT, "Minimum time step");
-    params.add_param<Real>("dt_max", PETSC_DEFAULT, "Maximum time step");
+    auto params = Object::parameters();
+    params.add_private_param<Problem *>("_problem", nullptr)
+        .add_param<Real>("dt_min", PETSC_DEFAULT, "Minimum time step")
+        .add_param<Real>("dt_max", PETSC_DEFAULT, "Maximum time step");
     return params;
 }
 

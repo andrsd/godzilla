@@ -11,7 +11,7 @@ namespace godzilla {
 Parameters
 DirichletBC::parameters()
 {
-    Parameters params = EssentialBC::parameters();
+    auto params = EssentialBC::parameters();
     params += FunctionInterface::parameters();
     params += FunctionInterface::valid_params_t();
     return params;

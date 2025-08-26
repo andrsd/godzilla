@@ -13,7 +13,7 @@ namespace godzilla {
 Parameters
 VTKOutput::parameters()
 {
-    Parameters params = FileOutput::parameters();
+    auto params = FileOutput::parameters();
     params.add_private_param<MeshObject *>("_mesh_obj", nullptr);
     return params;
 }

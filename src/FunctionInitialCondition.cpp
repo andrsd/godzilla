@@ -10,7 +10,7 @@ namespace godzilla {
 Parameters
 FunctionInitialCondition::parameters()
 {
-    Parameters params = InitialCondition::parameters();
+    auto params = InitialCondition::parameters();
     params += FunctionInterface::parameters();
     return params;
 }

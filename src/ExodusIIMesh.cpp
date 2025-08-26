@@ -11,7 +11,7 @@ namespace godzilla {
 Parameters
 ExodusIIMesh::parameters()
 {
-    Parameters params = FileMesh::parameters();
+    auto params = FileMesh::parameters();
     return params;
 }
 

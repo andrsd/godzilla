@@ -19,12 +19,10 @@ piecewise_constant_function_eval(void * ctx, double x)
 Parameters
 PiecewiseConstant::parameters()
 {
-    Parameters params = Function::parameters();
-    params.add_required_param<std::vector<Real>>("x", "Independent variable");
-    params.add_required_param<std::vector<Real>>("y", "Dependent variable");
-    params.add_param<std::string>("continuity",
-                                  "right",
-                                  "Continuity of the function: [left, right]");
+    auto params = Function::parameters();
+    params.add_required_param<std::vector<Real>>("x", "Independent variable")
+        .add_required_param<std::vector<Real>>("y", "Dependent variable")
+        .add_param<std::string>("continuity", "right", "Continuity of the function: [left, right]");
     return params;
 }
 

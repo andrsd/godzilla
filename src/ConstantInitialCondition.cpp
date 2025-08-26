@@ -10,7 +10,7 @@ namespace godzilla {
 Parameters
 ConstantInitialCondition::parameters()
 {
-    Parameters params = InitialCondition::parameters();
+    auto params = InitialCondition::parameters();
     params.add_required_param<std::vector<Real>>("value",
                                                  "Constant values for each field component");
     return params;

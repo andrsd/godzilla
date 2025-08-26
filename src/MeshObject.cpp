@@ -13,7 +13,7 @@ namespace godzilla {
 Parameters
 MeshObject::parameters()
 {
-    Parameters params = Object::parameters();
+    auto params = Object::parameters();
     return params;
 }
 

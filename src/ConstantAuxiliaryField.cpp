@@ -12,7 +12,7 @@ namespace godzilla {
 Parameters
 ConstantAuxiliaryField::parameters()
 {
-    Parameters params = AuxiliaryField::parameters();
+    auto params = AuxiliaryField::parameters();
     params.add_required_param<std::vector<Real>>("value",
                                                  "Constant values for each field component");
     return params;

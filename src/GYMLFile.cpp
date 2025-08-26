@@ -79,8 +79,8 @@ GYMLFile::build_ts_adapt(const Block & problem_node)
     auto * tpi = dynamic_cast<TransientProblemInterface *>(get_problem());
     if (tpi != nullptr) {
         auto ts_adapt_node = get_block(problem_node, "ts_adapt");
-        Parameters * params = build_params(ts_adapt_node);
-        params->set<Problem *>("_problem") = get_problem();
+        auto * params = build_params(ts_adapt_node);
+        params->set<Problem *>("_problem", get_problem());
 
         auto * ts_adaptor = get_app()->build_object<TimeSteppingAdaptor>("ts_adapt", params);
         tpi->set_time_stepping_adaptor(ts_adaptor);
@@ -126,8 +126,8 @@ GYMLFile::build_auxiliary_fields()
         auto * dpi = dynamic_cast<DiscreteProblemInterface *>(get_problem());
         for (const auto & it : auxs_node.values()) {
             Block blk = get_block(auxs_node, it.first.as<std::string>());
-            Parameters * params = build_params(blk);
-            params->set<DiscreteProblemInterface *>("_dpi") = dpi;
+            auto * params = build_params(blk);
+            params->set<DiscreteProblemInterface *>("_dpi", dpi);
             auto aux = get_app()->build_object<AuxiliaryField>(blk.name(), params);
             dpi->add_auxiliary_field(aux);
         }
@@ -153,8 +153,8 @@ GYMLFile::build_initial_conditions()
     else {
         for (const auto & it : ics_node.values()) {
             Block blk = get_block(ics_node, it.first.as<std::string>());
-            Parameters * params = build_params(blk);
-            params->set<DiscreteProblemInterface *>("_dpi") = dpi;
+            auto * params = build_params(blk);
+            params->set<DiscreteProblemInterface *>("_dpi", dpi);
             auto ic = get_app()->build_object<InitialCondition>(blk.name(), params);
             dpi->add_initial_condition(ic);
         }
@@ -177,8 +177,8 @@ GYMLFile::build_boundary_conditions()
     else {
         for (const auto & it : bcs_node.values()) {
             Block blk = get_block(bcs_node, it.first.as<std::string>());
-            Parameters * params = build_params(blk);
-            params->set<DiscreteProblemInterface *>("_dpi") = dpi;
+            auto * params = build_params(blk);
+            params->set<DiscreteProblemInterface *>("_dpi", dpi);
             auto bc = get_app()->build_object<BoundaryCondition>(blk.name(), params);
             dpi->add_boundary_condition(bc);
         }
@@ -196,8 +196,8 @@ GYMLFile::build_postprocessors()
     auto pps_node = get_block(get_root(), "pps");
     for (const auto & it : pps_node.values()) {
         Block blk = get_block(pps_node, it.first.as<std::string>());
-        Parameters * params = build_params(blk);
-        params->set<Problem *>("_problem") = get_problem();
+        auto * params = build_params(blk);
+        params->set<Problem *>("_problem", get_problem());
         auto pp = get_app()->build_object<Postprocessor>(blk.name(), params);
         get_problem()->add_postprocessor(pp);
     }

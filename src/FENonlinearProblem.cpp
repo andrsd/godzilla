@@ -58,7 +58,7 @@ FENonlinearProblem::invoke_compute_jacobian_delegate(DM, Vec x, Mat J, Mat Jp, v
 Parameters
 FENonlinearProblem::parameters()
 {
-    Parameters params = NonlinearProblem::parameters();
+    auto params = NonlinearProblem::parameters();
     return params;
 }
 

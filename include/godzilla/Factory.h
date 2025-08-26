@@ -29,7 +29,7 @@ public:
     {
         auto entry = this->registry.get(class_name);
         auto pars = new Parameters((*entry.params_ptr)());
-        pars->set<std::string>("_type") = class_name;
+        pars->set<std::string>("_type", class_name);
         this->params.push_back(pars);
         return pars;
     }
@@ -43,9 +43,9 @@ public:
     T *
     create(const std::string & name, Parameters & parameters)
     {
-        auto class_name = parameters.set<std::string>("_type");
+        auto class_name = parameters.get<std::string>("_type");
         auto entry = this->registry.get(class_name);
-        parameters.set<std::string>("_name") = name;
+        parameters.set<std::string>("_name", name);
         auto * obj = entry.build_ptr(parameters);
         if (T * object = dynamic_cast<T *>(obj)) {
             this->objects.push_back(object);

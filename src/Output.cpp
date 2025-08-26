@@ -11,10 +11,10 @@ namespace godzilla {
 Parameters
 Output::parameters()
 {
-    Parameters params = Object::parameters();
-    params.add_param<std::vector<std::string>>("on", "When output should happen");
-    params.add_param<Int>("interval", "Interval");
-    params.add_private_param<Problem *>("_problem", nullptr);
+    auto params = Object::parameters();
+    params.add_param<std::vector<std::string>>("on", "When output should happen")
+        .add_param<Int>("interval", "Interval")
+        .add_private_param<Problem *>("_problem", nullptr);
     return params;
 }
 

@@ -12,7 +12,7 @@ namespace godzilla {
 Parameters
 Function::parameters()
 {
-    Parameters params = Object::parameters();
+    auto params = Object::parameters();
     return params;
 }
 
