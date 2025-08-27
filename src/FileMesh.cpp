@@ -17,7 +17,7 @@ namespace godzilla {
 Parameters
 FileMesh::parameters()
 {
-    Parameters params = MeshObject::parameters();
+    auto params = MeshObject::parameters();
     params.add_required_param<std::string>("file", "The name of the file.");
     return params;
 }

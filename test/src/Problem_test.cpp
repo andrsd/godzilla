@@ -84,36 +84,36 @@ TEST(ProblemTest, add_pp)
     };
 
     auto mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
 
     auto prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
 
     auto pp_params = Postprocessor::parameters();
-    pp_params.set<App *>("_app") = &app;
-    pp_params.set<Problem *>("_problem") = &problem;
-    pp_params.set<std::string>("_name") = "pp";
+    pp_params.set<App *>("_app", &app);
+    pp_params.set<Problem *>("_problem", &problem);
+    pp_params.set<std::string>("_name", "pp");
     TestPostprocessor pp(pp_params);
     problem.add_postprocessor(&pp);
 
     auto fn_params = Function::parameters();
-    fn_params.set<App *>("_app") = &app;
-    fn_params.set<Problem *>("_problem") = &problem;
-    fn_params.set<std::string>("_name") = "fn";
+    fn_params.set<App *>("_app", &app);
+    fn_params.set<Problem *>("_problem", &problem);
+    fn_params.set<std::string>("_name", "fn");
     TestFunction fn(fn_params);
     problem.add_function(&fn);
 
     auto out_params = FileOutput::parameters();
-    out_params.set<App *>("_app") = &app;
-    out_params.set<Problem *>("_problem") = &problem;
-    out_params.set<std::string>("_name") = "out";
-    out_params.set<std::string>("file") = "file";
-    out_params.set<std::vector<std::string>>("on") = { "initial" };
-    out_params.set<Int>("interval") = 1;
+    out_params.set<App *>("_app", &app);
+    out_params.set<Problem *>("_problem", &problem);
+    out_params.set<std::string>("_name", "out");
+    out_params.set<std::string>("file", "file");
+    out_params.set<std::vector<std::string>>("on", { "initial" });
+    out_params.set<Int>("interval", 1);
     TestOutput out(out_params);
     out.create();
     problem.add_output(&out);
@@ -133,16 +133,16 @@ TEST(ProblemTest, local_vec)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
     mesh.create();
     auto m = mesh.get_mesh<Mesh>();
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
     problem.set_local_section(create_section(m->get_dm()));
 
@@ -159,15 +159,15 @@ TEST(ProblemTest, global_vec)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
     mesh.create();
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
 
     auto m = mesh.get_mesh<Mesh>();
@@ -186,15 +186,15 @@ TEST(ProblemTest, create_matrix)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
     mesh.create();
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
     problem.create();
 
@@ -212,15 +212,15 @@ TEST(ProblemTest, get_local_section)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
     mesh.create();
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
     problem.create();
 
@@ -240,15 +240,15 @@ TEST(ProblemTest, get_global_section)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
     mesh.create();
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
     problem.create();
 
@@ -269,14 +269,14 @@ TEST(ProblemTest, aux_vecs)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
     app.set_problem(&problem);
 
@@ -301,14 +301,14 @@ TEST(ProblemTest, aux_vecs_clear)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
     app.set_problem(&problem);
 
@@ -317,8 +317,9 @@ TEST(ProblemTest, aux_vecs_clear)
 
 #if PETSC_VERSION_GE(3, 21, 0)
 #else
-    EXPECT_THROW_MSG({ problem.clear_auxiliary_vec(); },
-                     "You need PETSC 3.21+ for `Problem::clear_auxiliary_vec()`");
+    EXPECT_THROW_MSG(
+        { problem.clear_auxiliary_vec(); },
+        "You need PETSC 3.21+ for `Problem::clear_auxiliary_vec()`");
 #endif
 }
 
@@ -326,15 +327,15 @@ TEST(ProblemTest, mat_vec_types)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
     mesh.create();
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
 
     EXPECT_EQ(problem.get_vector_type(), VECSTANDARD);
@@ -346,14 +347,14 @@ TEST(ProblemTest, loc_glob_arithmetic_type)
     TestApp app;
     auto comm = app.get_comm();
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 9;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 9);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
 
     mesh.create();
@@ -403,14 +404,14 @@ TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
     TestApp app;
     auto comm = app.get_comm();
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 9;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 9);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
 
     mesh.create();
@@ -460,14 +461,14 @@ TEST(ProblemTest, loc_glob_vec_type)
     TestApp app;
     auto comm = app.get_comm();
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 9;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 9);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = Problem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = Problem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem problem(prob_params);
 
     mesh.create();

@@ -11,23 +11,23 @@ TEST(FunctionICTest, api)
 {
     TestApp app;
 
-    Parameters mesh_pars = BoxMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
-    mesh_pars.set<Int>("ny") = 2;
-    mesh_pars.set<Int>("nz") = 2;
+    auto mesh_pars = BoxMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
+    mesh_pars.set<Int>("ny", 2);
+    mesh_pars.set<Int>("nz", 2);
     BoxMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    Parameters params = FunctionInitialCondition::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
+    auto params = FunctionInitialCondition::parameters();
+    params.set<App *>("_app", &app);
+    params.set<DiscreteProblemInterface *>("_dpi", &prob);
+    params.set<std::vector<std::string>>("value", { "t * (x + y + z)" });
     FunctionInitialCondition obj(params);
 
     mesh.create();

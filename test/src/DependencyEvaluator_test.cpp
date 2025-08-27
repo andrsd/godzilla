@@ -75,21 +75,21 @@ TEST(DependencyEvaluator, create_functional)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
     Parameters params;
-    params.set<FEProblemInterface *>("_fepi") = &prob;
+    params.set<FEProblemInterface *>("_fepi", &prob);
     prob.create_functional<SimpleFnl>("test", params);
 
     const auto & fnl = prob.get_functional("test");
@@ -100,21 +100,21 @@ TEST(DependencyEvaluator, create_existing_functional)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
     Parameters params;
-    params.set<FEProblemInterface *>("_fepi") = &prob;
+    params.set<FEProblemInterface *>("_fepi", &prob);
     prob.create_functional<SimpleFnl>("test", params);
 
     EXPECT_THROW_MSG(prob.create_functional<SimpleFnl>("test", params),
@@ -125,42 +125,43 @@ TEST(DependencyEvaluator, get_non_existent_functional)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto & f = prob.get_functional("asdf"); },
-                     "No functional with name 'asdf' found. Typo?");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto & f = prob.get_functional("asdf"); },
+        "No functional with name 'asdf' found. Typo?");
 }
 
 TEST(DependencyEvaluator, eval)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
     Parameters params;
-    params.set<FEProblemInterface *>("_fepi") = &prob;
+    params.set<FEProblemInterface *>("_fepi", &prob);
     // create NeedAFnl first, so we make sure values can be obtained before they
     // are declared
     prob.create_functional<NeedAFnl>("b", params);
@@ -190,21 +191,21 @@ TEST(DependencyEvaluator, redeclare_a_value)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
     Parameters params;
-    params.set<FEProblemInterface *>("_fepi") = &prob;
+    params.set<FEProblemInterface *>("_fepi", &prob);
     prob.create_functional<SimpleFnl>("b", params);
     EXPECT_THROW_MSG(prob.create_functional<SimpleFnl>("a", params),
                      "Trying to declare an already existing value 'a@region'.");
@@ -214,21 +215,21 @@ TEST(DependencyEvaluator, get_suppliers)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
     Parameters params;
-    params.set<FEProblemInterface *>("_fepi") = &prob;
+    params.set<FEProblemInterface *>("_fepi", &prob);
     prob.create_functional<NeedAFnl>("b", params);
     prob.create_functional<SimpleFnl>("a", params);
     prob.create_functional<NeedBFnl>("c", params);
@@ -248,21 +249,21 @@ TEST(DependencyEvaluator, build_dep_graph)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
     Parameters params;
-    params.set<FEProblemInterface *>("_fepi") = &prob;
+    params.set<FEProblemInterface *>("_fepi", &prob);
     prob.create_functional<NeedAFnl>("b", params);
     prob.create_functional<SimpleFnl>("a", params);
     prob.create_functional<NeedBFnl>("c", params);

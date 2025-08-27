@@ -14,7 +14,7 @@ namespace godzilla {
 Parameters
 EssentialBC::parameters()
 {
-    Parameters params = BoundaryCondition::parameters();
+    auto params = BoundaryCondition::parameters();
     params.add_param<std::string>("field", "", "Field name");
     return params;
 }

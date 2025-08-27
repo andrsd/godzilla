@@ -12,10 +12,10 @@ TEST(GmshMeshTest, api)
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/quad.msh");
 
-    Parameters params = GmshMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<std::string>("file") = file_name;
+    auto params = GmshMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<std::string>("file", file_name);
     GmshMesh mesh(params);
 
     EXPECT_EQ(mesh.get_file_name(), file_name);
@@ -47,10 +47,10 @@ TEST(GmshMeshTest, nonexitent_file)
 
     TestApp app;
 
-    Parameters params = GmshMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<std::string>("file") = "asdf.msh";
+    auto params = GmshMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<std::string>("file", "asdf.msh");
     GmshMesh mesh(params);
 
     app.check_integrity();

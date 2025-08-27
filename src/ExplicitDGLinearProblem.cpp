@@ -11,7 +11,7 @@ namespace godzilla {
 Parameters
 ExplicitDGLinearProblem::parameters()
 {
-    Parameters params = NonlinearProblem::parameters();
+    auto params = NonlinearProblem::parameters();
     params += ExplicitProblemInterface::parameters();
     return params;
 }

@@ -10,18 +10,18 @@ TEST(BoxMeshTest, api)
 {
     TestApp app;
 
-    Parameters params = BoxMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "box_mesh";
-    params.set<Real>("xmin") = 1;
-    params.set<Real>("xmax") = 4;
-    params.set<Int>("nx") = 9;
-    params.set<Real>("ymin") = 2;
-    params.set<Real>("ymax") = 5;
-    params.set<Int>("ny") = 8;
-    params.set<Real>("zmin") = 3;
-    params.set<Real>("zmax") = 6;
-    params.set<Int>("nz") = 7;
+    auto params = BoxMesh::parameters();
+    params.set<App *>("_app", &app)
+        .set<std::string>("_name", "box_mesh")
+        .set<Real>("xmin", 1)
+        .set<Real>("xmax", 4)
+        .set<Int>("nx", 9)
+        .set<Real>("ymin", 2)
+        .set<Real>("ymax", 5)
+        .set<Int>("ny", 8)
+        .set<Real>("zmin", 3)
+        .set<Real>("zmax", 6)
+        .set<Int>("nz", 7);
     BoxMesh mesh(params);
 
     EXPECT_EQ(mesh.get_x_min(), 1);
@@ -66,18 +66,18 @@ TEST(BoxMeshTest, incorrect_dims)
 
     TestApp app;
 
-    Parameters params = BoxMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Real>("xmin") = 4;
-    params.set<Real>("xmax") = 1;
-    params.set<Int>("nx") = 9;
-    params.set<Real>("ymin") = 5;
-    params.set<Real>("ymax") = 2;
-    params.set<Int>("ny") = 8;
-    params.set<Real>("zmin") = 6;
-    params.set<Real>("zmax") = 3;
-    params.set<Int>("nz") = 7;
+    auto params = BoxMesh::parameters();
+    params.set<App *>("_app", &app)
+        .set<std::string>("_name", "obj")
+        .set<Real>("xmin", 4)
+        .set<Real>("xmax", 1)
+        .set<Int>("nx", 9)
+        .set<Real>("ymin", 5)
+        .set<Real>("ymax", 2)
+        .set<Int>("ny", 8)
+        .set<Real>("zmin", 6)
+        .set<Real>("zmax", 3)
+        .set<Int>("nz", 7);
     BoxMesh mesh(params);
 
     app.check_integrity();

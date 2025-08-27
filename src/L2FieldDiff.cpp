@@ -15,7 +15,7 @@ namespace godzilla {
 Parameters
 L2FieldDiff::parameters()
 {
-    Parameters params = Postprocessor::parameters();
+    auto params = Postprocessor::parameters();
     params.add_param<std::map<std::string, std::vector<std::string>>>("functions", "");
     return params;
 }
@@ -31,10 +31,10 @@ L2FieldDiff::L2FieldDiff(const Parameters & params) :
         for (const auto & [field_name, fn_names] : fn_map) {
             std::string nm = get_name() + "_" + field_name;
 
-            Parameters * fn_pars = get_app()->get_parameters("ParsedFunction");
-            fn_pars->set<App *>("_app") = get_app();
-            fn_pars->set<Problem *>("_problem") = get_problem();
-            fn_pars->set<std::vector<std::string>>("function") = fn_names;
+            auto * fn_pars = get_app()->get_parameters("ParsedFunction");
+            fn_pars->set<App *>("_app", get_app());
+            fn_pars->set<Problem *>("_problem", get_problem());
+            fn_pars->set<std::vector<std::string>>("function", fn_names);
             auto * pfn = get_app()->build_object<ParsedFunction>(nm, fn_pars);
 
             get_problem()->add_function(pfn);

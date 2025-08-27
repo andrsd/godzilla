@@ -13,17 +13,17 @@ namespace godzilla {
 Parameters
 BoxMesh::parameters()
 {
-    Parameters params = MeshObject::parameters();
-    params.add_param<Real>("xmin", 0., "Minimum in the x direction");
-    params.add_param<Real>("xmax", 1., "Maximum in the x direction");
-    params.add_param<Real>("ymin", 0., "Minimum in the y direction");
-    params.add_param<Real>("ymax", 1., "Maximum in the y direction");
-    params.add_param<Real>("zmin", 0., "Minimum in the z direction");
-    params.add_param<Real>("zmax", 1., "Maximum in the z direction");
-    params.add_required_param<Int>("nx", "Number of mesh points in the x direction");
-    params.add_required_param<Int>("ny", "Number of mesh points in the y direction");
-    params.add_required_param<Int>("nz", "Number of mesh points in the z direction");
-    params.add_param<bool>("simplex", false, "Generate simplex elements");
+    auto params = MeshObject::parameters();
+    params.add_param<Real>("xmin", 0., "Minimum in the x direction")
+        .add_param<Real>("xmax", 1., "Maximum in the x direction")
+        .add_param<Real>("ymin", 0., "Minimum in the y direction")
+        .add_param<Real>("ymax", 1., "Maximum in the y direction")
+        .add_param<Real>("zmin", 0., "Minimum in the z direction")
+        .add_param<Real>("zmax", 1., "Maximum in the z direction")
+        .add_required_param<Int>("nx", "Number of mesh points in the x direction")
+        .add_required_param<Int>("ny", "Number of mesh points in the y direction")
+        .add_required_param<Int>("nz", "Number of mesh points in the z direction")
+        .add_param<bool>("simplex", false, "Generate simplex elements");
     return params;
 }
 

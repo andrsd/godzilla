@@ -13,24 +13,27 @@ TEST(DirichletBCTest, api)
 {
     TestApp app;
 
-    Parameters mesh_pars = BoxMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
-    mesh_pars.set<Int>("ny") = 2;
-    mesh_pars.set<Int>("nz") = 2;
+    auto mesh_pars = BoxMesh::parameters();
+    // clang-format off
+    mesh_pars
+        .set<App *>("_app", &app)
+        .set<Int>("nx", 2)
+        .set<Int>("ny", 2)
+        .set<Int>("nz", 2);
+    // clang-format on
     BoxMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
-    Parameters params = DirichletBC::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<DiscreteProblemInterface *>("_dpi") = &problem;
-    params.set<std::vector<std::string>>("value") = { "t * (x + y + z)" };
-    params.set<std::vector<std::string>>("value_t") = { "1" };
+    auto params = DirichletBC::parameters();
+    params.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &problem)
+        .set<std::vector<std::string>>("value", { "t * (x + y + z)" })
+        .set<std::vector<std::string>>("value_t", { "1" });
     DirichletBC obj(params);
 
     mesh.create();
@@ -55,38 +58,39 @@ TEST(DirichletBCTest, with_user_defined_fn)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem problem(prob_pars);
     app.set_problem(&problem);
 
-    Parameters * fn_pars = app.get_parameters("PiecewiseLinear");
-    fn_pars->set<App *>("_app") = &app;
-    fn_pars->set<std::vector<Real>>("x") = { 0., 1. };
-    fn_pars->set<std::vector<Real>>("y") = { 1., 2. };
-    Function * fn = app.build_object<PiecewiseLinear>("ipol", fn_pars);
-    problem.add_function(fn);
+    auto fn_pars = PiecewiseLinear::parameters();
+    fn_pars.set<App *>("_app", &app)
+        .set<std::string>("_name", "ipol")
+        .set<std::vector<Real>>("x", { 0., 1. })
+        .set<std::vector<Real>>("y", { 1., 2. });
+    PiecewiseLinear fn(fn_pars);
+    problem.add_function(&fn);
 
-    Parameters * bc_pars = app.get_parameters("DirichletBC");
-    bc_pars->set<App *>("_app") = &app;
-    bc_pars->set<DiscreteProblemInterface *>("_dpi") = &problem;
-    bc_pars->set<std::vector<std::string>>("value") = { "ipol(x)" };
-    DirichletBC * bc = app.build_object<DirichletBC>("name", bc_pars);
+    auto bc_pars = DirichletBC::parameters();
+    bc_pars.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &problem)
+        .set<std::vector<std::string>>("value", { "ipol(x)" });
+    DirichletBC bc(bc_pars);
 
     mesh.create();
     problem.create();
-    bc->create();
+    bc.create();
 
     Real time = 0;
     Real x[] = { 0.5 };
     Scalar u[] = { 0 };
-    bc->evaluate(time, x, u);
+    bc.evaluate(time, x, u);
 
     EXPECT_EQ(u[0], 1.5);
 }

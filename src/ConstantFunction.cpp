@@ -23,7 +23,7 @@ constant_function_eval(void * ctx, double x)
 Parameters
 ConstantFunction::parameters()
 {
-    Parameters params = Function::parameters();
+    auto params = Function::parameters();
     params.add_required_param<Real>("value", "Constant value");
     return params;
 }

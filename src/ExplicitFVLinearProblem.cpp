@@ -9,7 +9,7 @@ namespace godzilla {
 Parameters
 ExplicitFVLinearProblem::parameters()
 {
-    Parameters params = NonlinearProblem::parameters();
+    auto params = NonlinearProblem::parameters();
     params += ExplicitProblemInterface::parameters();
     return params;
 }

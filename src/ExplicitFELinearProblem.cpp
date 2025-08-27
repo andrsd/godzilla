@@ -37,7 +37,7 @@ protected:
 Parameters
 ExplicitFELinearProblem::parameters()
 {
-    Parameters params = FENonlinearProblem::parameters();
+    auto params = FENonlinearProblem::parameters();
     params += ExplicitProblemInterface::parameters();
     return params;
 }

@@ -14,7 +14,7 @@ namespace godzilla {
 Parameters
 MeshPartitioningOutput::parameters()
 {
-    Parameters params = FileOutput::parameters();
+    auto params = FileOutput::parameters();
     return params;
 }
 

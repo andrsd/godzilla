@@ -26,9 +26,9 @@ public:
 TEST_F(OutputTest, exec_masks_1)
 {
     auto pars = Output::parameters();
-    pars.set<App *>("_app") = this->app;
-    pars.set<Problem *>("_problem") = this->prob;
-    pars.set<std::vector<std::string>>("on") = { "none" };
+    pars.set<App *>("_app", this->app);
+    pars.set<Problem *>("_problem", this->prob);
+    pars.set<std::vector<std::string>>("on", { "none" });
     MockOutput out(pars);
     out.create();
 
@@ -40,9 +40,9 @@ TEST_F(OutputTest, exec_masks_1)
 TEST_F(OutputTest, exec_masks_2)
 {
     auto pars = Output::parameters();
-    pars.set<App *>("_app") = this->app;
-    pars.set<Problem *>("_problem") = this->prob;
-    pars.set<std::vector<std::string>>("on") = { "final" };
+    pars.set<App *>("_app", this->app);
+    pars.set<Problem *>("_problem", this->prob);
+    pars.set<std::vector<std::string>>("on", { "final" });
     MockOutput out(pars);
     out.create();
 
@@ -55,9 +55,9 @@ TEST_F(OutputTest, exec_masks_2)
 TEST_F(OutputTest, exec_masks_3)
 {
     auto pars = Output::parameters();
-    pars.set<App *>("_app") = this->app;
-    pars.set<Problem *>("_problem") = this->prob;
-    pars.set<std::vector<std::string>>("on") = { "final", "initial", "timestep" };
+    pars.set<App *>("_app", this->app);
+    pars.set<Problem *>("_problem", this->prob);
+    pars.set<std::vector<std::string>>("on", { "final", "initial", "timestep" });
     MockOutput out(pars);
     out.create();
 
@@ -79,9 +79,9 @@ TEST_F(OutputTest, empty_on)
     testing::internal::CaptureStderr();
 
     auto pars = Output::parameters();
-    pars.set<App *>("_app") = app;
-    pars.set<Problem *>("_problem") = prob;
-    pars.set<std::vector<std::string>>("on") = {};
+    pars.set<App *>("_app", app);
+    pars.set<Problem *>("_problem", prob);
+    pars.set<std::vector<std::string>>("on", {});
     MockOutput out(pars);
 
     out.create();
@@ -98,9 +98,9 @@ TEST_F(OutputTest, none_plus_mask)
     testing::internal::CaptureStderr();
 
     auto pars = Output::parameters();
-    pars.set<App *>("_app") = this->app;
-    pars.set<Problem *>("_problem") = this->prob;
-    pars.set<std::vector<std::string>>("on") = { "none", "final", "timestep" };
+    pars.set<App *>("_app", this->app);
+    pars.set<Problem *>("_problem", this->prob);
+    pars.set<std::vector<std::string>>("on", { "none", "final", "timestep" });
     MockOutput out(pars);
 
     out.create();
@@ -115,11 +115,11 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
 {
     testing::internal::CaptureStderr();
 
-    Parameters pars = Output::parameters();
-    pars.set<App *>("_app") = app;
-    pars.set<Problem *>("_problem") = prob;
-    pars.set<std::vector<std::string>>("on") = { "initial", "final" };
-    pars.set<Int>("interval") = 10;
+    auto pars = Output::parameters();
+    pars.set<App *>("_app", app);
+    pars.set<Problem *>("_problem", prob);
+    pars.set<std::vector<std::string>>("on", { "initial", "final" });
+    pars.set<Int>("interval", 10);
     MockOutput out(pars);
 
     out.create();

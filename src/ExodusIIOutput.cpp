@@ -96,11 +96,11 @@ ExodusIIOutput::get_elem_side_ordering(PolytopeType elem_type)
 Parameters
 ExodusIIOutput::parameters()
 {
-    Parameters params = FileOutput::parameters();
-    params.add_private_param<MeshObject *>("_mesh_obj", nullptr);
-    params.add_param<std::vector<std::string>>(
-        "variables",
-        "List of variables to be stored. If not specified, all variables will be stored.");
+    auto params = FileOutput::parameters();
+    params.add_private_param<MeshObject *>("_mesh_obj", nullptr)
+        .add_param<std::vector<std::string>>(
+            "variables",
+            "List of variables to be stored. If not specified, all variables will be stored.");
     return params;
 }
 

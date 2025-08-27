@@ -35,8 +35,8 @@ TEST(PrintInterfaceTest, lprint)
         }
     };
 
-    Parameters pars = TestObject::parameters();
-    pars.set<App *>("_app") = &app;
+    auto pars = TestObject::parameters();
+    pars.set<App *>("_app", &app);
     TestObject obj(pars);
 
     obj.create();
@@ -60,8 +60,8 @@ TEST(PrintInterfaceTest, timed_event)
         }
     };
 
-    Parameters pars = TestObject::parameters();
-    pars.set<App *>("_app") = &app;
+    auto pars = TestObject::parameters();
+    pars.set<App *>("_app", &app);
     TestObject obj(pars);
 
     obj.create();

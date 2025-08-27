@@ -1,9 +1,22 @@
 #include "gmock/gmock.h"
-#include "GodzillaApp_test.h"
-#include "CSVOutput_test.h"
+#include "FENonlinearProblem_test.h"
+#include "godzilla/Problem.h"
+#include "godzilla/CSVOutput.h"
 #include "godzilla/Postprocessor.h"
 
 namespace {
+
+class CSVOutputTest : public FENonlinearProblemTest {
+protected:
+    CSVOutput *
+    build_output(const std::string & file_name)
+    {
+        auto * params = this->app->get_parameters("CSVOutput");
+        params->set<Problem *>("_problem", this->prob);
+        params->set<std::string>("file", file_name);
+        return this->app->build_object<CSVOutput>("out", params);
+    }
+};
 
 class TestCSVOutput : public CSVOutput {
 public:
@@ -19,10 +32,10 @@ public:
 
 TEST_F(CSVOutputTest, get_file_ext)
 {
-    Parameters params = CSVOutput::parameters();
-    params.set<App *>("_app") = this->app;
-    params.set<Problem *>("_problem") = this->prob;
-    params.set<std::string>("file") = "asdf";
+    auto params = CSVOutput::parameters();
+    params.set<App *>("_app", this->app)
+        .set<Problem *>("_problem", this->prob)
+        .set<std::string>("file", "asdf");
     CSVOutput out(params);
 
     EXPECT_EQ(out.get_file_name(), "asdf.csv");
@@ -30,10 +43,10 @@ TEST_F(CSVOutputTest, get_file_ext)
 
 TEST_F(CSVOutputTest, create)
 {
-    Parameters params = CSVOutput::parameters();
-    params.set<App *>("_app") = this->app;
-    params.set<Problem *>("_problem") = this->prob;
-    params.set<std::string>("file") = "asdf";
+    auto params = CSVOutput::parameters();
+    params.set<App *>("_app", this->app)
+        .set<Problem *>("_problem", this->prob)
+        .set<std::string>("file", "asdf");
     TestCSVOutput out(params);
     prob->add_output(&out);
 
@@ -59,17 +72,17 @@ TEST_F(CSVOutputTest, output)
         }
     };
 
-    Parameters pp_params = Postprocessor::parameters();
-    pp_params.set<std::string>("_name") = "pp";
-    pp_params.set<App *>("_app") = this->app;
-    pp_params.set<Problem *>("_problem") = this->prob;
+    auto pp_params = Postprocessor::parameters();
+    pp_params.set<std::string>("_name", "pp")
+        .set<App *>("_app", this->app)
+        .set<Problem *>("_problem", this->prob);
     TestPostprocessor pp(pp_params);
     this->prob->add_postprocessor(&pp);
 
-    Parameters params = CSVOutput::parameters();
-    params.set<App *>("_app") = this->app;
-    params.set<Problem *>("_problem") = this->prob;
-    params.set<std::string>("file") = "out";
+    auto params = CSVOutput::parameters();
+    params.set<App *>("_app", this->app)
+        .set<Problem *>("_problem", this->prob)
+        .set<std::string>("file", "out");
     TestCSVOutput out(params);
     this->prob->add_output(&out);
 
@@ -99,10 +112,10 @@ TEST_F(CSVOutputTest, output)
 
 TEST_F(CSVOutputTest, set_file_name)
 {
-    Parameters params = CSVOutput::parameters();
-    params.set<App *>("_app") = this->app;
-    params.set<Problem *>("_problem") = this->prob;
-    params.set<std::string>("file") = "asdf";
+    auto params = CSVOutput::parameters();
+    params.set<App *>("_app", this->app)
+        .set<Problem *>("_problem", this->prob)
+        .set<std::string>("file", "asdf");
     CSVOutput out(params);
 
     this->mesh->create();

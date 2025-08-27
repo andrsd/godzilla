@@ -55,7 +55,7 @@ protected:
 Parameters
 HeatEquationExplicit::parameters()
 {
-    Parameters params = ExplicitFELinearProblem::parameters();
+    auto params = ExplicitFELinearProblem::parameters();
     params.add_param<Int>("order", 1, "Polynomial order of the FE space");
     return params;
 }

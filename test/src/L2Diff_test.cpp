@@ -9,35 +9,35 @@ TEST(L2DiffTest, compute)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = GTestFENonlinearProblem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = GTestFENonlinearProblem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_params);
     app.set_problem(&prob);
 
-    Parameters bc_left_params = DirichletBC::parameters();
-    bc_left_params.set<App *>("_app") = &app;
-    bc_left_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_left_params.set<std::vector<std::string>>("value") = { "x*x" };
-    bc_left_params.set<std::vector<std::string>>("boundary") = { "left" };
+    auto bc_left_params = DirichletBC::parameters();
+    bc_left_params.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &prob)
+        .set<std::vector<std::string>>("value", { "x*x" })
+        .set<std::vector<std::string>>("boundary", { "left" });
     DirichletBC bc_left(bc_left_params);
 
-    Parameters bc_right_params = DirichletBC::parameters();
-    bc_right_params.set<App *>("_app") = &app;
-    bc_right_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_right_params.set<std::vector<std::string>>("value") = { "x*x" };
-    bc_right_params.set<std::vector<std::string>>("boundary") = { "right" };
+    auto bc_right_params = DirichletBC::parameters();
+    bc_right_params.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &prob)
+        .set<std::vector<std::string>>("value", { "x*x" })
+        .set<std::vector<std::string>>("boundary", { "right" });
     DirichletBC bc_right(bc_right_params);
 
-    Parameters ps_params = L2Diff::parameters();
-    ps_params.set<App *>("_app") = &app;
-    ps_params.set<Problem *>("_problem") = &prob;
-    ps_params.set<std::vector<std::string>>("value") = { "x*x" };
+    auto ps_params = L2Diff::parameters();
+    ps_params.set<App *>("_app", &app);
+    ps_params.set<Problem *>("_problem", &prob);
+    ps_params.set<std::vector<std::string>>("value", { "x*x" });
     L2Diff ps(ps_params);
 
     prob.add_boundary_condition(&bc_left);

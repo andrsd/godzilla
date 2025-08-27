@@ -12,11 +12,11 @@ Parameters
 RZSymmetry::parameters()
 {
     auto params = Object::parameters();
-    params.add_private_param<DiscreteProblemInterface *>("_dpi", nullptr);
-    params.add_required_param<std::vector<Real>>("axis", "Axis vector");
-    params.add_param<std::vector<Real>>("point",
-                                        std::vector<Real>({ 0, 0 }),
-                                        "Axis point. Default value is the origin.");
+    params.add_private_param<DiscreteProblemInterface *>("_dpi", nullptr)
+        .add_required_param<std::vector<Real>>("axis", "Axis vector")
+        .add_param<std::vector<Real>>("point",
+                                      std::vector<Real>({ 0, 0 }),
+                                      "Axis point. Default value is the origin.");
     return params;
 }
 

@@ -82,25 +82,25 @@ TEST(BndJacobianFuncTest, test)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 20;
-    prob_pars.set<Real>("dt") = 5;
+    auto prob_pars = GTestProblem::parameters();
+    prob_pars.set<App *>("_app", &app)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Real>("start_time", 0.)
+        .set<Real>("end_time", 20)
+        .set<Real>("dt", 5);
     GTestProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    Parameters bc_pars = NaturalBC::parameters();
-    bc_pars.set<App *>("_app") = &app;
-    bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_pars.set<std::string>("field") = "u";
-    bc_pars.set<std::vector<std::string>>("boundary") = { "marker" };
+    auto bc_pars = NaturalBC::parameters();
+    bc_pars.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &prob)
+        .set<std::string>("field", "u")
+        .set<std::vector<std::string>>("boundary", { "marker" });
     TestBC bc(bc_pars);
     prob.add_boundary_condition(&bc);
 

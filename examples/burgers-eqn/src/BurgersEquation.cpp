@@ -39,7 +39,7 @@ protected:
 Parameters
 BurgersEquation::parameters()
 {
-    Parameters params = ExplicitFELinearProblem::parameters();
+    auto params = ExplicitFELinearProblem::parameters();
     params.add_param<Real>("viscosity", "Viscosity");
     return params;
 }

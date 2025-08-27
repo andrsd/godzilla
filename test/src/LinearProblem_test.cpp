@@ -58,16 +58,16 @@ TEST(LinearProblemTest, run)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 1;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 1);
     LineMesh mesh(mesh_pars);
     mesh.create();
 
-    Parameters prob_pars = LinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<std::string>("ksp_type") = KSPCG;
+    auto prob_pars = LinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<std::string>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 
     prob.create();
@@ -88,21 +88,21 @@ TEST(LinearProblemTest, restart_file)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 1;
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 1);
     LineMesh mesh(mesh_pars);
     mesh.create();
 
     auto prob_pars = LinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<std::string>("ksp_type") = KSPCG;
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<std::string>("ksp_type", KSPCG);
     CustomLinearProblem prob(prob_pars);
 
     auto ro_pars = RestartOutput::parameters();
-    ro_pars.set<App *>("_app") = &app;
-    ro_pars.set<Problem *>("_problem") = &prob;
-    ro_pars.set<std::string>("file") = "lp";
+    ro_pars.set<App *>("_app", &app);
+    ro_pars.set<Problem *>("_problem", &prob);
+    ro_pars.set<std::string>("file", "lp");
     RestartOutput ro(ro_pars);
     prob.add_output(&ro);
 

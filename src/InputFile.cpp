@@ -150,7 +150,7 @@ InputFile::create_mesh_object()
 {
     CALL_STACK_MSG();
     auto node = get_block(this->root, "mesh");
-    Parameters * params = build_params(node);
+    auto * params = build_params(node);
     return this->app->build_object<MeshObject>("mesh", params);
 }
 
@@ -169,8 +169,8 @@ InputFile::build_problem()
     CALL_STACK_MSG();
     lprintln(9, "- problem");
     auto node = get_block(this->root, "problem");
-    Parameters * params = build_params(node);
-    params->set<MeshObject *>("_mesh_obj") = this->mesh_obj;
+    auto * params = build_params(node);
+    params->set<MeshObject *>("_mesh_obj", this->mesh_obj);
     this->problem = this->app->build_object<Problem>("problem", params);
     add_object(this->problem);
 }
@@ -186,9 +186,9 @@ InputFile::build_outputs()
     auto output_block = get_block(this->root, "output");
     for (const auto & it : output_block.values()) {
         Block blk = get_block(output_block, it.first.as<std::string>());
-        Parameters * params = build_params(blk);
-        params->set<Problem *>("_problem") = this->problem;
-        params->set<MeshObject *>("_mesh_obj") = this->mesh_obj;
+        auto * params = build_params(blk);
+        params->set<Problem *>("_problem", this->problem);
+        params->set<MeshObject *>("_mesh_obj", this->mesh_obj);
         auto output = this->app->build_object<Output>(blk.name(), params);
         assert(this->problem != nullptr);
         this->problem->add_output(output);
@@ -228,9 +228,9 @@ InputFile::build_params(const Block & block)
         throw Exception("{}: Type '{}' is not a registered object.", block.name(), class_name);
     unused_param_names.erase("type");
 
-    Parameters * params = this->app->get_parameters(class_name);
-    params->set<std::string>("_name") = block.name();
-    params->set<App *>("_app") = this->app;
+    auto * params = this->app->get_parameters(class_name);
+    params->set<std::string>("_name", block.name());
+    params->set<App *>("_app", this->app);
 
     for (auto & kv : *params) {
         const std::string & param_name = kv.first;
@@ -256,35 +256,37 @@ InputFile::set_parameter_from_yml(Parameters * params,
         const std::string & param_type = params->type(param_name);
 
         if (param_type == utils::type_name<std::string>())
-            params->set<std::string>(param_name) = val.as<std::string>();
+            params->set<std::string>(param_name, val.as<std::string>());
         else if (param_type == utils::type_name<Real>())
-            params->set<Real>(param_name) = val.as<double>();
+            params->set<Real>(param_name, val.as<double>());
         else if (param_type == utils::type_name<Int>())
-            params->set<Int>(param_name) = val.as<Int>();
+            params->set<Int>(param_name, val.as<Int>());
         else if (param_type == utils::type_name<int>())
-            params->set<int>(param_name) = val.as<int>();
+            params->set<int>(param_name, val.as<int>());
         else if (param_type == utils::type_name<unsigned int>())
-            params->set<unsigned int>(param_name) = val.as<unsigned int>();
+            params->set<unsigned int>(param_name, val.as<unsigned int>());
         // vector values
         else if (param_type == utils::type_name<std::vector<Real>>())
-            params->set<std::vector<Real>>(param_name) = read_vector_value<double>(param_name, val);
+            params->set<std::vector<Real>>(param_name, read_vector_value<double>(param_name, val));
         else if (param_type == utils::type_name<std::vector<Int>>())
-            params->set<std::vector<Int>>(param_name) = read_vector_value<Int>(param_name, val);
+            params->set<std::vector<Int>>(param_name, read_vector_value<Int>(param_name, val));
         else if (param_type == utils::type_name<std::vector<int>>())
-            params->set<std::vector<int>>(param_name) = read_vector_value<int>(param_name, val);
+            params->set<std::vector<int>>(param_name, read_vector_value<int>(param_name, val));
         else if (param_type == utils::type_name<std::vector<std::string>>())
-            params->set<std::vector<std::string>>(param_name) =
-                read_vector_value<std::string>(param_name, val);
+            params->set<std::vector<std::string>>(param_name,
+                                                  read_vector_value<std::string>(param_name, val));
         // maps
         else if (param_type == utils::type_name<std::map<std::string, std::vector<std::string>>>())
-            params->set<std::map<std::string, std::vector<std::string>>>(param_name) =
-                read_map_value<std::string, std::vector<std::string>>(param_name, val);
+            params->set<std::map<std::string, std::vector<std::string>>>(
+                param_name,
+                read_map_value<std::string, std::vector<std::string>>(param_name, val));
         else if (param_type == utils::type_name<std::map<std::string, Real>>())
-            params->set<std::map<std::string, Real>>(param_name) =
-                read_map_value<std::string, Real>(param_name, val);
+            params->set<std::map<std::string, Real>>(
+                param_name,
+                read_map_value<std::string, Real>(param_name, val));
         // bools
         else if (param_type == utils::type_name<bool>())
-            params->set<bool>(param_name) = read_bool_value(param_name, val);
+            params->set<bool>(param_name, read_bool_value(param_name, val));
         else
             set_app_defined_param(params, param_name, param_type, val);
     }

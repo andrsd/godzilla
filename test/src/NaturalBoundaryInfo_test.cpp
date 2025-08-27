@@ -43,7 +43,7 @@ TEST(NaturalBoundaryTest, test_1d)
     TestApp app;
 
     auto mesh_pars = TestMesh1D::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
+    mesh_pars.set<godzilla::App *>("_app", &app);
     TestMesh1D mesh(mesh_pars);
     mesh.create();
 
@@ -77,7 +77,7 @@ TEST(NaturalBoundaryTest, test_2d)
     TestApp app;
 
     auto mesh_pars = TestMesh2D::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
+    mesh_pars.set<godzilla::App *>("_app", &app);
     TestMesh2D mesh(mesh_pars);
     mesh.create();
 
@@ -112,8 +112,8 @@ TEST(NaturalBoundaryTest, test_3d)
 {
     TestApp app;
 
-    Parameters mesh_pars = TestMesh3D::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
+    auto mesh_pars = TestMesh3D::parameters();
+    mesh_pars.set<godzilla::App *>("_app", &app);
     TestMesh3D mesh(mesh_pars);
     mesh.create();
 

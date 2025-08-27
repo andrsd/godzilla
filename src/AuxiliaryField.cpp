@@ -12,12 +12,10 @@ namespace godzilla {
 Parameters
 AuxiliaryField::parameters()
 {
-    Parameters params = Object::parameters();
-    params.add_private_param<DiscreteProblemInterface *>("_dpi", nullptr);
-    params.add_param<std::string>("field", "", "Name of the field.");
-    params.add_param<std::string>("region",
-                                  "",
-                                  "Label name where this auxiliary field is defined.");
+    auto params = Object::parameters();
+    params.add_private_param<DiscreteProblemInterface *>("_dpi", nullptr)
+        .add_param<std::string>("field", "", "Name of the field.")
+        .add_param<std::string>("region", "", "Label name where this auxiliary field is defined.");
     return params;
 }
 

@@ -9,10 +9,13 @@ TEST(ConstantFunctionTest, fn_parser_eval)
 {
     TestApp app;
 
-    Parameters params = ConstantFunction::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "fn";
-    params.set<Real>("value") = 123.;
+    auto params = ConstantFunction::parameters();
+    // clang-format off
+    params
+        .set<App *>("_app", &app)
+        .set<std::string>("_name", "fn")
+        .set<Real>("value", 123.);
+    // clang-format on
     ConstantFunction obj(params);
     obj.create();
 

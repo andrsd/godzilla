@@ -14,7 +14,7 @@ namespace godzilla {
 Parameters
 NaturalRiemannBC::parameters()
 {
-    Parameters params = BoundaryCondition::parameters();
+    auto params = BoundaryCondition::parameters();
     return params;
 }
 

@@ -5,7 +5,7 @@
 Parameters
 InflowBC::parameters()
 {
-    Parameters params = NaturalRiemannBC::parameters();
+    auto params = NaturalRiemannBC::parameters();
     params.add_required_param<Real>("vel", "Inlet velocity");
     return params;
 }

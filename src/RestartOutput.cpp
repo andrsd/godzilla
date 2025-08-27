@@ -14,7 +14,7 @@ Parameters
 RestartOutput::parameters()
 {
     auto params = FileOutput::parameters();
-    params.set<std::vector<std::string>>("on") = { "final" };
+    params.set<std::vector<std::string>>("on", { "final" });
     return params;
 }
 

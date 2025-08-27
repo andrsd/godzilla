@@ -54,21 +54,21 @@ TEST(ValueFunctional, eval)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     mesh.create();
     prob.create();
 
     Parameters params;
-    params.set<FEProblemInterface *>("_fepi") = &prob;
+    params.set<FEProblemInterface *>("_fepi", &prob);
     prob.create_functional<SimpleFnl>("a", params);
     prob.create_functional<NeedAFnl>("b", params);
 

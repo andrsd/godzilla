@@ -9,7 +9,7 @@ namespace godzilla {
 Parameters
 Postprocessor::parameters()
 {
-    Parameters params = Object::parameters();
+    auto params = Object::parameters();
     params.add_private_param<Problem *>("_problem", nullptr);
     return params;
 }

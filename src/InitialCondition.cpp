@@ -13,9 +13,9 @@ namespace godzilla {
 Parameters
 InitialCondition::parameters()
 {
-    Parameters params = Object::parameters();
-    params.add_param<std::string>("field", "", "Field name");
-    params.add_private_param<DiscreteProblemInterface *>("_dpi", nullptr);
+    auto params = Object::parameters();
+    params.add_param<std::string>("field", "", "Field name")
+        .add_private_param<DiscreteProblemInterface *>("_dpi", nullptr);
     return params;
 }
 

@@ -10,9 +10,9 @@ TEST(ConstantICTest, api)
 {
     TestApp app;
 
-    Parameters params = ConstantInitialCondition::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::vector<Real>>("value") = { 3, 4, 5 };
+    auto params = ConstantInitialCondition::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::vector<Real>>("value", { 3, 4, 5 });
     ConstantInitialCondition obj(params);
 
     EXPECT_EQ(obj.get_field_id(), FieldID::INVALID);

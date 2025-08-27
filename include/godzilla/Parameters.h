@@ -55,14 +55,13 @@ protected:
             return this->value;
         }
 
-        /// @returns A writable reference to the parameter value.
-        T &
-        set()
+        void
+        set(T val)
         {
-            return this->value;
+            this->value = val;
         }
 
-        inline std::string
+        std::string
         type() const override
         {
             return typeid(T).name();
@@ -114,21 +113,22 @@ public:
 
     /// Set parameter
     template <typename T>
-    inline T &
-    set(const std::string & name)
+    inline Parameters &
+    set(const std::string & name, T value)
     {
         if (!this->has<T>(name))
             this->params[name] = new Parameter<T>;
 
         this->params[name]->valid = true;
-        return dynamic_cast<Parameter<T> *>(this->params[name])->set();
+        dynamic_cast<Parameter<T> *>(this->params[name])->set(value);
+        return *this;
     }
 
     /// This method adds a parameter and documentation string to the Parameters
     /// object that will be extracted from the input file.  If the parameter is
     /// missing in the input file, and error will be thrown
     template <typename T>
-    void add_required_param(const std::string & name, const std::string & doc_string);
+    Parameters & add_required_param(const std::string & name, const std::string & doc_string);
 
     ///@{
     /// These methods add an option parameter and a documentation string to the Parameters
@@ -136,9 +136,10 @@ public:
     /// parameter is not found in the input file. The second method will leave the parameter
     /// uninitialized but can be checked with "is_param_valid" before use.
     template <typename T, typename S>
-    void add_param(const std::string & name, const S & value, const std::string & doc_string);
+    Parameters &
+    add_param(const std::string & name, const S & value, const std::string & doc_string);
     template <typename T>
-    void add_param(const std::string & name, const std::string & doc_string);
+    Parameters & add_param(const std::string & name, const std::string & doc_string);
     ///@}
 
     ///@{
@@ -147,7 +148,7 @@ public:
     /// page dump so does not take a documentation string.  The first version of this function takes
     /// an optional default value.
     template <typename T>
-    void add_private_param(const std::string & name, const T & value);
+    Parameters & add_private_param(const std::string & name, const T & value);
     ///@}
 
     /// Returns a boolean indicating whether the specified parameter is required or not
@@ -255,7 +256,7 @@ private:
 };
 
 template <typename T>
-void
+Parameters &
 Parameters::add_required_param(const std::string & name, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
@@ -267,10 +268,11 @@ Parameters::add_required_param(const std::string & name, const std::string & doc
         param->valid = false;
         this->params[name] = param;
     }
+    return *this;
 }
 
 template <typename T>
-void
+Parameters &
 Parameters::add_param(const std::string & name, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
@@ -282,10 +284,11 @@ Parameters::add_param(const std::string & name, const std::string & doc_string)
         param->valid = false;
         this->params[name] = param;
     }
+    return *this;
 }
 
 template <typename T, typename S>
-void
+Parameters &
 Parameters::add_param(const std::string & name, const S & value, const std::string & doc_string)
 {
     if (!this->has<T>(name)) {
@@ -298,10 +301,11 @@ Parameters::add_param(const std::string & name, const S & value, const std::stri
         param->valid = true;
         this->params[name] = param;
     }
+    return *this;
 }
 
 template <typename T>
-void
+Parameters &
 Parameters::add_private_param(const std::string & name, const T & value)
 {
     auto * param = new Parameter<T>;
@@ -311,6 +315,7 @@ Parameters::add_private_param(const std::string & name, const T & value)
     param->set_by_add_param = true;
     param->valid = true;
     this->params[name] = param;
+    return *this;
 }
 
 } // namespace godzilla

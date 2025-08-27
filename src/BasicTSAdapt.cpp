@@ -10,7 +10,7 @@ namespace godzilla {
 Parameters
 BasicTSAdapt::parameters()
 {
-    Parameters params = TimeSteppingAdaptor::parameters();
+    auto params = TimeSteppingAdaptor::parameters();
     return params;
 }
 

@@ -51,7 +51,7 @@ protected:
 Parameters
 ConvectiveHeatFluxBC::parameters()
 {
-    Parameters params = NaturalBC::parameters();
+    auto params = NaturalBC::parameters();
     return params;
 }
 

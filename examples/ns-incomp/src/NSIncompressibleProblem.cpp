@@ -266,7 +266,7 @@ protected:
 Parameters
 NSIncompressibleProblem::parameters()
 {
-    Parameters params = ImplicitFENonlinearProblem::parameters();
+    auto params = ImplicitFENonlinearProblem::parameters();
     params.add_required_param<Real>("Re", "Reynolds number");
     return params;
 }

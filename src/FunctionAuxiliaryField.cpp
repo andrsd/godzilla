@@ -11,7 +11,7 @@ namespace godzilla {
 Parameters
 FunctionAuxiliaryField::parameters()
 {
-    Parameters params = AuxiliaryField::parameters();
+    auto params = AuxiliaryField::parameters();
     params += FunctionInterface::parameters();
     return params;
 }

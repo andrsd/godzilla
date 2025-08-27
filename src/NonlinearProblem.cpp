@@ -12,30 +12,28 @@ namespace godzilla {
 Parameters
 NonlinearProblem::parameters()
 {
-    Parameters params = Problem::parameters();
-    params.add_param<std::string>("line_search", "bt", "The type of line search to be used");
-    params.add_param<Real>("nl_rel_tol",
-                           1e-8,
-                           "Relative convergence tolerance for the non-linear solver");
-    params.add_param<Real>("nl_abs_tol",
-                           1e-15,
-                           "Absolute convergence tolerance for the non-linear solver");
-    params.add_param<Real>(
-        "nl_step_tol",
-        1e-15,
-        "Convergence tolerance in terms of the norm of the change in the solution between steps");
-    params.add_param<Int>("nl_max_iter",
-                          40,
-                          "Maximum number of iterations for the non-linear solver");
-    params.add_param<Real>("lin_rel_tol",
-                           1e-5,
-                           "Relative convergence tolerance for the linear solver");
-    params.add_param<Real>("lin_abs_tol",
-                           1e-50,
-                           "Absolute convergence tolerance for the linear solver");
-    params.add_param<Int>("lin_max_iter",
-                          10000,
-                          "Maximum number of iterations for the linear solver");
+    auto params = Problem::parameters();
+    params.add_param<std::string>("line_search", "bt", "The type of line search to be used")
+        .add_param<Real>("nl_rel_tol",
+                         1e-8,
+                         "Relative convergence tolerance for the non-linear solver")
+        .add_param<Real>("nl_abs_tol",
+                         1e-15,
+                         "Absolute convergence tolerance for the non-linear solver")
+        .add_param<Real>("nl_step_tol",
+                         1e-15,
+                         "Convergence tolerance in terms of the norm of the change in the solution "
+                         "between steps")
+        .add_param<Int>("nl_max_iter", 40, "Maximum number of iterations for the non-linear solver")
+        .add_param<Real>("lin_rel_tol",
+                         1e-5,
+                         "Relative convergence tolerance for the linear solver")
+        .add_param<Real>("lin_abs_tol",
+                         1e-50,
+                         "Absolute convergence tolerance for the linear solver")
+        .add_param<Int>("lin_max_iter",
+                        10000,
+                        "Maximum number of iterations for the linear solver");
     return params;
 }
 

@@ -80,8 +80,8 @@ TEST(ParametersTest, empty_doc_str)
 
 TEST(ParametersTest, set_non_existing_param)
 {
-    Parameters params = Object::parameters();
-    params.set<double>("d") = 1.23;
+    auto params = Object::parameters();
+    params.set<double>("d", 1.23);
 
     EXPECT_EQ(params.get<double>("d"), 1.23);
 }

@@ -11,12 +11,12 @@ TEST(LineMeshTest, api)
 {
     TestApp app;
 
-    Parameters params = LineMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "line_mesh";
-    params.set<Real>("xmin") = 1;
-    params.set<Real>("xmax") = 2;
-    params.set<Int>("nx") = 10;
+    auto params = LineMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "line_mesh");
+    params.set<Real>("xmin", 1);
+    params.set<Real>("xmax", 2);
+    params.set<Int>("nx", 10);
     LineMesh mesh(params);
 
     EXPECT_EQ(mesh.get_x_min(), 1);
@@ -48,12 +48,12 @@ TEST(LineMeshTest, incorrect_dims)
 
     TestApp app;
 
-    Parameters params = LineMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "line_mesh";
-    params.set<Real>("xmin") = 2;
-    params.set<Real>("xmax") = 1;
-    params.set<Int>("nx") = 2;
+    auto params = LineMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "line_mesh");
+    params.set<Real>("xmin", 2);
+    params.set<Real>("xmax", 1);
+    params.set<Int>("nx", 2);
     LineMesh mesh(params);
 
     app.check_integrity();

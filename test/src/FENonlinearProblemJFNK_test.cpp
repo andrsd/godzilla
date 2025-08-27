@@ -120,30 +120,30 @@ TEST(FENonlinearProblemJFNKTest, solve)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<godzilla::App *>("_app") = &app;
-    mesh_params.set<Int>("nx") = 2;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<godzilla::App *>("_app", &app);
+    mesh_params.set<Int>("nx", 2);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = GTestFENonlinearProblemJFNK::parameters();
-    prob_params.set<godzilla::App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = GTestFENonlinearProblemJFNK::parameters();
+    prob_params.set<godzilla::App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblemJFNK prob(prob_params);
     app.set_problem(&prob);
 
-    Parameters ic_params = ConstantInitialCondition::parameters();
-    ic_params.set<godzilla::App *>("_app") = &app;
-    ic_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    ic_params.set<std::vector<Real>>("value") = { 0.1 };
+    auto ic_params = ConstantInitialCondition::parameters();
+    ic_params.set<godzilla::App *>("_app", &app);
+    ic_params.set<DiscreteProblemInterface *>("_dpi", &prob);
+    ic_params.set<std::vector<Real>>("value", { 0.1 });
     ConstantInitialCondition ic(ic_params);
     prob.add_initial_condition(&ic);
 
-    Parameters bc_params = DirichletBC::parameters();
-    bc_params.set<godzilla::App *>("_app") = &app;
-    bc_params.set<App *>("_app") = &app;
-    bc_params.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_params.set<std::vector<std::string>>("boundary") = { "left", "right" };
-    bc_params.set<std::vector<std::string>>("value") = { "x*x" };
+    auto bc_params = DirichletBC::parameters();
+    bc_params.set<godzilla::App *>("_app", &app)
+        .set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &prob)
+        .set<std::vector<std::string>>("boundary", { "left", "right" })
+        .set<std::vector<std::string>>("value", { "x*x" });
     DirichletBC bc(bc_params);
     prob.add_boundary_condition(&bc);
 

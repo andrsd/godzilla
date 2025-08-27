@@ -14,7 +14,7 @@ namespace godzilla {
 Parameters
 FileOutput::parameters()
 {
-    Parameters params = Output::parameters();
+    auto params = Output::parameters();
     params.add_param<std::string>("file", "", "The name of the output file.");
     return params;
 }

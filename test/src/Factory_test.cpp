@@ -26,7 +26,7 @@ TEST(FactoryTest, get_parameters)
 
     Factory factory(reg);
     auto params = factory.get_parameters("TestObject");
-    params->set<App *>("_app") = &app;
+    params->set<App *>("_app", &app);
     factory.create<TestObject>("name", params);
 }
 
@@ -48,8 +48,8 @@ TEST(FactoryTest, create_wrong_type)
     TestApp app;
     Factory factory(reg);
     auto * params = factory.get_parameters("LineMesh");
-    params->set<App *>("_app") = &app;
-    params->set<Int>("nx") = 1;
+    params->set<App *>("_app", &app);
+    params->set<Int>("nx", 1);
     EXPECT_THROW_MSG(factory.create<RectangleMesh>("name", params),
                      "Instantiation of object 'name:[LineMesh]' failed.");
 }
@@ -62,6 +62,7 @@ TEST(FactoryTest, create_non_existent)
     App app(comm, reg, "test", {});
 
     Factory factory(reg);
-    EXPECT_THROW_MSG({ [[maybe_unused]] auto params = factory.get_parameters("TestObject"); },
-                     "Class 'TestObject' is not registered.");
+    EXPECT_THROW_MSG(
+        { [[maybe_unused]] auto params = factory.get_parameters("TestObject"); },
+        "Class 'TestObject' is not registered.");
 }

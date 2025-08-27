@@ -158,16 +158,16 @@ TEST(TimeSteppingAdaptor, api)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = TestTSProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1;
-    prob_pars.set<Real>("dt") = 0.1;
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Real>("start_time", 0.);
+    prob_pars.set<Real>("end_time", 1);
+    prob_pars.set<Real>("dt", 0.1);
     TestTSProblem prob(prob_pars);
 
     app.set_problem(&prob);
@@ -175,10 +175,10 @@ TEST(TimeSteppingAdaptor, api)
     prob.create();
 
     auto params = TimeSteppingAdaptor::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
-    params.set<Real>("dt_min") = 1e-3;
-    params.set<Real>("dt_max") = 1e3;
+    params.set<App *>("_app", &app);
+    params.set<Problem *>("_problem", &prob);
+    params.set<Real>("dt_min", 1e-3);
+    params.set<Real>("dt_max", 1e3);
     TimeSteppingAdaptor adaptor(params);
 
     EXPECT_DOUBLE_EQ(adaptor.get_dt_min(), 1e-3);
@@ -193,31 +193,31 @@ TEST(TimeSteppingAdaptor, choose)
     PETSC_CHECK(TSAdaptRegister(TS_ADAPT_TEST, TSAdaptCreate_test));
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = TestTSProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1;
-    prob_pars.set<Real>("dt") = 0.1;
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Real>("start_time", 0.);
+    prob_pars.set<Real>("end_time", 1);
+    prob_pars.set<Real>("dt", 0.1);
     TestTSProblem prob(prob_pars);
 
     app.set_problem(&prob);
 
     auto bc_pars = DirichletBC::parameters();
-    bc_pars.set<App *>("_app") = &app;
-    bc_pars.set<std::vector<std::string>>("boundary") = { "marker" };
-    bc_pars.set<std::vector<std::string>>("value") = { "x*x" };
-    bc_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
+    bc_pars.set<App *>("_app", &app);
+    bc_pars.set<std::vector<std::string>>("boundary", { "marker" });
+    bc_pars.set<std::vector<std::string>>("value", { "x*x" });
+    bc_pars.set<DiscreteProblemInterface *>("_dpi", &prob);
     DirichletBC bc(bc_pars);
     prob.add_boundary_condition(&bc);
 
     auto tsa_pars = TestTSAdaptor::parameters();
-    tsa_pars.set<App *>("_app") = &app;
-    tsa_pars.set<Problem *>("_problem") = &prob;
+    tsa_pars.set<App *>("_app", &app);
+    tsa_pars.set<Problem *>("_problem", &prob);
     TestTSAdaptor ts_adaptor(tsa_pars);
     prob.set_time_stepping_adaptor(&ts_adaptor);
 

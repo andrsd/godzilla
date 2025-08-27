@@ -12,23 +12,29 @@ TEST(BasicTSAdapt, api)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    // clang-format off
+    mesh_pars
+        .set<App *>("_app", &app)
+        .set<Int>("nx", 2);
+    // clang-format on
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestImplicitFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1;
-    prob_pars.set<Real>("dt") = 0.1;
+    prob_pars.set<App *>("_app", &app)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Real>("start_time", 0.)
+        .set<Real>("end_time", 1)
+        .set<Real>("dt", 0.1);
     GTestImplicitFENonlinearProblem prob(prob_pars);
 
     app.set_problem(&prob);
 
-    Parameters params = BasicTSAdapt::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
+    auto params = BasicTSAdapt::parameters();
+    // clang-format off
+    params
+        .set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob);
+    // clang-format on
     BasicTSAdapt adaptor(params);
     prob.set_time_stepping_adaptor(&adaptor);
 

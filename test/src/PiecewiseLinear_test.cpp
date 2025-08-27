@@ -9,11 +9,11 @@ TEST(PiecewiseLinearTest, eval)
 {
     TestApp app;
 
-    Parameters params = PiecewiseLinear::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "ipol";
-    params.set<std::vector<Real>>("x") = { 1., 2., 3. };
-    params.set<std::vector<Real>>("y") = { 3., 1., 2. };
+    auto params = PiecewiseLinear::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "ipol");
+    params.set<std::vector<Real>>("x", { 1., 2., 3. });
+    params.set<std::vector<Real>>("y", { 3., 1., 2. });
     PiecewiseLinear obj(params);
 
     mu::Parser parser;
@@ -29,11 +29,11 @@ TEST(PiecewiseLinearTest, inconsistent_data_sizes)
 
     TestApp app;
 
-    Parameters params = PiecewiseLinear::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "ipol";
-    params.set<std::vector<Real>>("x") = { 1., 2. };
-    params.set<std::vector<Real>>("y") = { 3., 1., 2. };
+    auto params = PiecewiseLinear::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "ipol");
+    params.set<std::vector<Real>>("x", { 1., 2. });
+    params.set<std::vector<Real>>("y", { 3., 1., 2. });
     PiecewiseLinear obj(params);
 
     app.check_integrity();

@@ -19,12 +19,12 @@ public:
 Parameters
 ASDF::parameters()
 {
-    Parameters params = Object::parameters();
-    params.add_required_param<Int>("required_value", "Required value");
-    params.add_param<Real>("value_with_default", 0., "Some value");
-    params.add_param<bool>("on", false, "On/Off switch");
-    params.add_private_param<bool>("_private_value", false);
-    params.add_required_param<std::string>("str", "Text parameter [-]");
+    auto params = Object::parameters();
+    params.add_required_param<Int>("required_value", "Required value")
+        .add_param<Real>("value_with_default", 0., "Some value")
+        .add_param<bool>("on", false, "On/Off switch")
+        .add_private_param<bool>("_private_value", false)
+        .add_required_param<std::string>("str", "Text parameter [-]");
     return params;
 }
 

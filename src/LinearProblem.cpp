@@ -36,17 +36,17 @@ LinearProblem::invoke_compute_rhs_delegate(KSP, Vec b, void * context)
 Parameters
 LinearProblem::parameters()
 {
-    Parameters params = Problem::parameters();
-    params.add_param<std::string>("ksp_type", "gmres", "KSP type");
-    params.add_param<Real>("lin_rel_tol",
-                           1e-5,
-                           "Relative convergence tolerance for the linear solver");
-    params.add_param<Real>("lin_abs_tol",
-                           1e-50,
-                           "Absolute convergence tolerance for the linear solver");
-    params.add_param<Int>("lin_max_iter",
-                          10000,
-                          "Maximum number of iterations for the linear solver");
+    auto params = Problem::parameters();
+    params.add_param<std::string>("ksp_type", "gmres", "KSP type")
+        .add_param<Real>("lin_rel_tol",
+                         1e-5,
+                         "Relative convergence tolerance for the linear solver")
+        .add_param<Real>("lin_abs_tol",
+                         1e-50,
+                         "Absolute convergence tolerance for the linear solver")
+        .add_param<Int>("lin_max_iter",
+                        10000,
+                        "Maximum number of iterations for the linear solver");
     return params;
 }
 
