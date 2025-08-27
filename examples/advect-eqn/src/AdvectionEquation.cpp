@@ -9,7 +9,7 @@ using namespace godzilla;
 Parameters
 AdvectionEquation::parameters()
 {
-    Parameters params = ExplicitFVLinearProblem::parameters();
+    auto params = ExplicitFVLinearProblem::parameters();
     return params;
 }
 

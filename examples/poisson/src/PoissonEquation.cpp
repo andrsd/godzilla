@@ -11,7 +11,7 @@ using namespace godzilla;
 Parameters
 PoissonEquation::parameters()
 {
-    Parameters params = FENonlinearProblem::parameters();
+    auto params = FENonlinearProblem::parameters();
     params.add_param<Int>("p_order", 1., "Polynomial order of the FE space.");
     return params;
 }

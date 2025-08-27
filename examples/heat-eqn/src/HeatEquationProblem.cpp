@@ -92,7 +92,7 @@ protected:
 Parameters
 HeatEquationProblem::parameters()
 {
-    Parameters params = ImplicitFENonlinearProblem::parameters();
+    auto params = ImplicitFENonlinearProblem::parameters();
     params.add_param<Int>("p_order", 1, "Polynomial order of FE space");
     return params;
 }
