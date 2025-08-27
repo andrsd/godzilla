@@ -1,9 +1,11 @@
 #include "gmock/gmock.h"
+#include "GodzillaApp_test.h"
 #include "ImplicitFENonlinearProblem_test.h"
+#include "godzilla/MeshObject.h"
+#include "godzilla/InitialCondition.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/BoundaryCondition.h"
-#include "godzilla/Output.h"
 
 using namespace godzilla;
 

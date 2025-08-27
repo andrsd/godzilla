@@ -3,9 +3,15 @@ project(godzilla-test)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-file(GLOB SRCS CONFIGURE_DEPENDS src/*.cpp)
+file(GLOB SRCS CONFIGURE_DEPENDS
+    common/*.cpp
+    src/*.cpp
+)
 
-add_executable(${PROJECT_NAME} ${SRCS})
+add_executable(${PROJECT_NAME}
+    ${SRCS}
+    main.cpp
+)
 
 target_code_coverage(${PROJECT_NAME})
 target_sanitization(${PROJECT_NAME})
@@ -22,6 +28,7 @@ target_include_directories(
         ${CMAKE_BINARY_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
+        ${PROJECT_SOURCE_DIR}/common
 )
 
 target_link_libraries(

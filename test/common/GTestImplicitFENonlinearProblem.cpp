@@ -1,8 +1,8 @@
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/CallStack.h"
-#include "ImplicitFENonlinearProblem_test.h"
 #include "godzilla/Types.h"
+#include "GTestImplicitFENonlinearProblem.h"
 
 using namespace godzilla;
 

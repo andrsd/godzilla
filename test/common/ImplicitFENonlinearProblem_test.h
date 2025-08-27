@@ -1,10 +1,8 @@
 #pragma once
 
-#include "godzilla/ImplicitFENonlinearProblem.h"
-#include "godzilla/MeshObject.h"
-#include "godzilla/InitialCondition.h"
 #include "GodzillaApp_test.h"
 #include "GTestImplicitFENonlinearProblem.h"
+#include "godzilla/MeshObject.h"
 
 class ImplicitFENonlinearProblemTest : public GodzillaAppTest {
 public:
