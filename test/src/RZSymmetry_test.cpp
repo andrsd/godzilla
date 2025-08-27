@@ -11,21 +11,21 @@ TEST(RZSymmetryTest, check)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<std::string>("scheme") = "rk-2";
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<std::string>("scheme", "rk-2");
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = RZSymmetry::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    params.set<std::vector<Real>>("point") = { 0. };
-    params.set<std::vector<Real>>("axis") = { 1. };
+    params.set<App *>("_app", &app);
+    params.set<DiscreteProblemInterface *>("_dpi", &prob);
+    params.set<std::vector<Real>>("point", { 0. });
+    params.set<std::vector<Real>>("axis", { 1. });
     RZSymmetry rz(params);
 
     mesh.create();
@@ -45,20 +45,20 @@ TEST(RZSymmetryTest, evaluate)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = GTestFENonlinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = RZSymmetry::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    params.set<std::vector<Real>>("point") = { 1., 1. };
-    params.set<std::vector<Real>>("axis") = { 1., 0. };
+    params.set<App *>("_app", &app);
+    params.set<DiscreteProblemInterface *>("_dpi", &prob);
+    params.set<std::vector<Real>>("point", { 1., 1. });
+    params.set<std::vector<Real>>("axis", { 1., 0. });
     RZSymmetry rz(params);
 
     mesh.create();

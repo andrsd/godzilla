@@ -115,25 +115,25 @@ TEST(ExplicitFVLinearProblemTest, api)
 
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    Parameters mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
-    mesh_pars.set<Int>("ny") = 1;
+    auto mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
+    mesh_pars.set<Int>("ny", 1);
     RectangleMesh mesh(mesh_pars);
 #else
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 #endif
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1e-3;
-    prob_pars.set<Real>("dt") = 1e-3;
-    prob_pars.set<std::string>("scheme") = "euler";
+    auto prob_pars = TestExplicitFVLinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Real>("start_time", 0.)
+        .set<Real>("end_time", 1e-3)
+        .set<Real>("dt", 1e-3)
+        .set<std::string>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -222,25 +222,25 @@ TEST(ExplicitFVLinearProblemTest, fields)
 
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    Parameters mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
-    mesh_pars.set<Int>("ny") = 1;
+    auto mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
+    mesh_pars.set<Int>("ny", 1);
     RectangleMesh mesh(mesh_pars);
 #else
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 #endif
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1e-3;
-    prob_pars.set<Real>("dt") = 1e-3;
-    prob_pars.set<std::string>("scheme") = "euler";
+    auto prob_pars = TestExplicitFVLinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Real>("start_time", 0.)
+        .set<Real>("end_time", 1e-3)
+        .set<Real>("dt", 1e-3)
+        .set<std::string>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -274,26 +274,26 @@ TEST(ExplicitFVLinearProblemTest, test_mass_matrix)
 
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    Parameters mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 3;
-    mesh_pars.set<Int>("ny") = 1;
-    mesh_pars.set<Real>("ymax") = 3.;
+    auto mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 3);
+    mesh_pars.set<Int>("ny", 1);
+    mesh_pars.set<Real>("ymax", 3.);
     RectangleMesh mesh(mesh_pars);
 #else
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 3;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 3);
     LineMesh mesh(mesh_pars);
 #endif
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1e-3;
-    prob_pars.set<Real>("dt") = 1e-3;
-    prob_pars.set<std::string>("scheme") = "euler";
+    auto prob_pars = TestExplicitFVLinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Real>("start_time", 0.)
+        .set<Real>("end_time", 1e-3)
+        .set<Real>("dt", 1e-3)
+        .set<std::string>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -317,34 +317,34 @@ TEST(ExplicitFVLinearProblemTest, solve)
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
 #else
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1e-3;
-    prob_pars.set<Real>("dt") = 1e-3;
-    prob_pars.set<std::string>("scheme") = "euler";
+    auto prob_pars = TestExplicitFVLinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Real>("start_time", 0.)
+        .set<Real>("end_time", 1e-3)
+        .set<Real>("dt", 1e-3)
+        .set<std::string>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
-    Parameters bc_left_pars = TestBC::parameters();
-    bc_left_pars.set<App *>("_app") = &app;
-    bc_left_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_left_pars.set<std::vector<std::string>>("boundary") = { "left" };
-    bc_left_pars.set<bool>("inlet") = true;
+    auto bc_left_pars = TestBC::parameters();
+    bc_left_pars.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &prob)
+        .set<std::vector<std::string>>("boundary", { "left" })
+        .set<bool>("inlet", true);
     TestBC bc_left(bc_left_pars);
     prob.add_boundary_condition(&bc_left);
 
-    Parameters bc_right_pars = TestBC::parameters();
-    bc_right_pars.set<App *>("_app") = &app;
-    bc_right_pars.set<DiscreteProblemInterface *>("_dpi") = &prob;
-    bc_right_pars.set<std::vector<std::string>>("boundary") = { "right" };
-    bc_right_pars.set<bool>("inlet") = false;
+    auto bc_right_pars = TestBC::parameters();
+    bc_right_pars.set<App *>("_app", &app)
+        .set<DiscreteProblemInterface *>("_dpi", &prob)
+        .set<std::vector<std::string>>("boundary", { "right" })
+        .set<bool>("inlet", false);
     TestBC bc_right(bc_right_pars);
     prob.add_boundary_condition(&bc_right);
 
@@ -379,26 +379,26 @@ TEST(ExplicitFVLinearProblemTest, set_schemes)
     TestApp app;
 
 #if PETSC_VERSION_GE(3, 21, 0)
-    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    Parameters mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
-    mesh_pars.set<Int>("ny") = 1;
+    // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, so we use 2D mesh in this test
+    auto mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
+    mesh_pars.set<Int>("ny", 1);
     RectangleMesh mesh(mesh_pars);
 #else
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 #endif
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1e-3;
-    prob_pars.set<Real>("dt") = 1e-3;
-    prob_pars.set<std::string>("scheme") = "euler";
+    auto prob_pars = TestExplicitFVLinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Real>("start_time", 0.)
+        .set<Real>("end_time", 1e-3)
+        .set<Real>("dt", 1e-3)
+        .set<std::string>("scheme", "euler");
     TestExplicitFVLinearProblem prob(prob_pars);
 
     mesh.create();
@@ -426,25 +426,25 @@ TEST(ExplicitFVLinearProblemTest, wrong_schemes)
 
 #if PETSC_VERSION_GE(3, 21, 0)
     // PETSc 3.21.0+ has a bug in forming the mass matrix in 1D, se we use 2D mesh in this test
-    Parameters mesh_pars = RectangleMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
-    mesh_pars.set<Int>("ny") = 1;
+    auto mesh_pars = RectangleMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
+    mesh_pars.set<Int>("ny", 1);
     RectangleMesh mesh(mesh_pars);
 #else
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 #endif
 
-    Parameters prob_pars = TestExplicitFVLinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 1e-3;
-    prob_pars.set<Real>("dt") = 1e-3;
-    prob_pars.set<std::string>("scheme") = "asdf";
+    auto prob_pars = TestExplicitFVLinearProblem::parameters();
+    prob_pars.set<App *>("_app", &app)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<Real>("start_time", 0.)
+        .set<Real>("end_time", 1e-3)
+        .set<Real>("dt", 1e-3)
+        .set<std::string>("scheme", "asdf");
     TestExplicitFVLinearProblem prob(prob_pars);
 
     mesh.create();

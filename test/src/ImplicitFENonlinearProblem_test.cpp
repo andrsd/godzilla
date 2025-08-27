@@ -10,18 +10,18 @@ using namespace godzilla;
 TEST_F(ImplicitFENonlinearProblemTest, run)
 {
     {
-        Parameters * params = this->app->get_parameters("ConstantInitialCondition");
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
-        params->set<std::vector<Real>>("value") = { 0 };
+        auto * params = this->app->get_parameters("ConstantInitialCondition");
+        params->set<DiscreteProblemInterface *>("_dpi", prob);
+        params->set<std::vector<Real>>("value", { 0 });
         auto ic = this->app->build_object<InitialCondition>("ic", params);
         prob->add_initial_condition(ic);
     }
 
     {
-        Parameters * params = this->app->get_parameters("DirichletBC");
-        params->set<std::vector<std::string>>("boundary") = { "left", "right" };
-        params->set<std::vector<std::string>>("value") = { "x*x" };
-        params->set<DiscreteProblemInterface *>("_dpi") = prob;
+        auto * params = this->app->get_parameters("DirichletBC");
+        params->set<std::vector<std::string>>("boundary", { "left", "right" });
+        params->set<std::vector<std::string>>("value", { "x*x" });
+        params->set<DiscreteProblemInterface *>("_dpi", prob);
         auto bc = this->app->build_object<BoundaryCondition>("bc", params);
         prob->add_boundary_condition(bc);
     }
@@ -63,12 +63,12 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
 
     GTestImplicitFENonlinearProblem * prob;
     {
-        Parameters * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-        params->set<MeshObject *>("_mesh_obj") = this->mesh;
-        params->set<Real>("start_time") = 0.;
-        params->set<Real>("end_time") = 20;
-        params->set<Real>("dt") = 5;
-        params->set<std::string>("scheme") = "asdf";
+        auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
+        params->set<MeshObject *>("_mesh_obj", this->mesh);
+        params->set<Real>("start_time", 0.);
+        params->set<Real>("end_time", 20);
+        params->set<Real>("dt", 5);
+        params->set<std::string>("scheme", "asdf");
         prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
     }
 
@@ -85,13 +85,13 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
 {
     testing::internal::CaptureStderr();
 
-    Parameters * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-    params->set<MeshObject *>("_mesh_obj") = this->mesh;
-    params->set<Real>("start_time") = 0.;
-    params->set<Int>("num_steps") = 2;
-    params->set<Real>("end_time") = 20;
-    params->set<Real>("dt") = 5;
-    params->set<std::string>("scheme") = "asdf";
+    auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
+    params->set<MeshObject *>("_mesh_obj", this->mesh);
+    params->set<Real>("start_time", 0.);
+    params->set<Int>("num_steps", 2);
+    params->set<Real>("end_time", 20);
+    params->set<Real>("dt", 5);
+    params->set<std::string>("scheme", "asdf");
     auto prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
 
     this->mesh->create();
@@ -109,11 +109,11 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
 {
     testing::internal::CaptureStderr();
 
-    Parameters * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-    params->set<MeshObject *>("_mesh_obj") = this->mesh;
-    params->set<Real>("start_time") = 0.;
-    params->set<Real>("dt") = 5;
-    params->set<std::string>("scheme") = "asdf";
+    auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
+    params->set<MeshObject *>("_mesh_obj", this->mesh);
+    params->set<Real>("start_time", 0.);
+    params->set<Real>("dt", 5);
+    params->set<std::string>("scheme", "asdf");
     auto prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
 
     this->mesh->create();
@@ -130,16 +130,16 @@ TEST_F(ImplicitFENonlinearProblemTest, set_schemes)
 {
     this->app->set_problem(this->prob);
 
-    Parameters * ic_params = this->app->get_parameters("ConstantInitialCondition");
-    ic_params->set<DiscreteProblemInterface *>("_dpi") = this->prob;
-    ic_params->set<std::vector<Real>>("value") = { 0 };
+    auto * ic_params = this->app->get_parameters("ConstantInitialCondition");
+    ic_params->set<DiscreteProblemInterface *>("_dpi", this->prob);
+    ic_params->set<std::vector<Real>>("value", { 0 });
     auto ic = this->app->build_object<InitialCondition>("ic", ic_params);
     prob->add_initial_condition(ic);
 
-    Parameters * prob_params = this->app->get_parameters("DirichletBC");
-    prob_params->set<std::vector<std::string>>("boundary") = { "left", "right" };
-    prob_params->set<std::vector<std::string>>("value") = { "x*x" };
-    prob_params->set<DiscreteProblemInterface *>("_dpi") = this->prob;
+    auto * prob_params = this->app->get_parameters("DirichletBC");
+    prob_params->set<std::vector<std::string>>("boundary", { "left", "right" });
+    prob_params->set<std::vector<std::string>>("value", { "x*x" });
+    prob_params->set<DiscreteProblemInterface *>("_dpi", this->prob);
     auto bc = this->app->build_object<BoundaryCondition>("bc", prob_params);
     this->prob->add_boundary_condition(bc);
 
@@ -161,16 +161,16 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
 {
     this->app->set_problem(this->prob);
 
-    Parameters * ic_params = this->app->get_parameters("ConstantInitialCondition");
-    ic_params->set<DiscreteProblemInterface *>("_dpi") = this->prob;
-    ic_params->set<std::vector<Real>>("value") = { 0 };
+    auto * ic_params = this->app->get_parameters("ConstantInitialCondition");
+    ic_params->set<DiscreteProblemInterface *>("_dpi", this->prob);
+    ic_params->set<std::vector<Real>>("value", { 0 });
     auto ic = this->app->build_object<InitialCondition>("ic", ic_params);
     this->prob->add_initial_condition(ic);
 
-    Parameters * bc_params = this->app->get_parameters("DirichletBC");
-    bc_params->set<std::vector<std::string>>("boundary") = { "left", "right" };
-    bc_params->set<std::vector<std::string>>("value") = { "x*x" };
-    bc_params->set<DiscreteProblemInterface *>("_dpi") = this->prob;
+    auto * bc_params = this->app->get_parameters("DirichletBC");
+    bc_params->set<std::vector<std::string>>("boundary", { "left", "right" });
+    bc_params->set<std::vector<std::string>>("value", { "x*x" });
+    bc_params->set<DiscreteProblemInterface *>("_dpi", this->prob);
     auto bc = this->app->build_object<BoundaryCondition>("bc", bc_params);
     prob->add_boundary_condition(bc);
 

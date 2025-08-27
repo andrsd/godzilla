@@ -9,10 +9,11 @@ TEST(FileMesh, exoii_file_format)
 {
     TestApp app;
 
-    Parameters mesh_pars = FileMesh::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
-    mesh_pars.set<std::string>("file") =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/2blk.exo");
+    auto mesh_pars = FileMesh::parameters();
+    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<std::string>("file",
+                               std::string(GODZILLA_UNIT_TESTS_ROOT) +
+                                   std::string("/assets/mesh/2blk.exo"));
     FileMesh mesh(mesh_pars);
     mesh.create();
 
@@ -25,10 +26,11 @@ TEST(FileMesh, unknown_mesh_format)
 
     TestApp app;
 
-    Parameters mesh_pars = FileMesh::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
-    mesh_pars.set<std::string>("file") =
-        std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/empty.yml");
+    auto mesh_pars = FileMesh::parameters();
+    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<std::string>("file",
+                               std::string(GODZILLA_UNIT_TESTS_ROOT) +
+                                   std::string("/assets/yml/empty.yml"));
     FileMesh mesh(mesh_pars);
     mesh.create();
 

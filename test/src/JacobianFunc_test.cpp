@@ -58,18 +58,18 @@ TEST(JacobianFuncTest, test)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
     mesh.create();
 
-    Parameters prob_pars = GTestProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_pars.set<Real>("start_time") = 0.;
-    prob_pars.set<Real>("end_time") = 20;
-    prob_pars.set<Real>("dt") = 5;
+    auto prob_pars = GTestProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_pars.set<Real>("start_time", 0.);
+    prob_pars.set<Real>("end_time", 20);
+    prob_pars.set<Real>("dt", 5);
     GTestProblem prob(prob_pars);
 
     prob.create();

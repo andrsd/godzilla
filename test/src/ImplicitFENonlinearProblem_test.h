@@ -16,16 +16,16 @@ public:
             "GTestImplicitFENonlinearProblem");
 
         {
-            Parameters * params = this->app->get_parameters("LineMesh");
-            params->set<Int>("nx") = 2;
+            auto * params = this->app->get_parameters("LineMesh");
+            params->set<Int>("nx", 2);
             this->mesh = this->app->build_object<MeshObject>("mesh", params);
         }
         {
-            Parameters * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
-            params->set<MeshObject *>("_mesh_obj") = mesh;
-            params->set<Real>("start_time") = 0.;
-            params->set<Real>("end_time") = 20;
-            params->set<Real>("dt") = 5;
+            auto * params = this->app->get_parameters("GTestImplicitFENonlinearProblem");
+            params->set<MeshObject *>("_mesh_obj", mesh);
+            params->set<Real>("start_time", 0.);
+            params->set<Real>("end_time", 20);
+            params->set<Real>("dt", 5);
             this->prob = this->app->build_object<GTestImplicitFENonlinearProblem>("prob", params);
         }
         this->app->set_problem(this->prob);

@@ -51,8 +51,8 @@ TEST(FEBoundaryTest, normals_3d)
 {
     TestApp app;
 
-    Parameters mesh_pars = TestMesh3D::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
+    auto mesh_pars = TestMesh3D::parameters();
+    mesh_pars.set<godzilla::App *>("_app", &app);
     TestMesh3D mesh(mesh_pars);
     mesh.create();
 

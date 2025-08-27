@@ -44,20 +44,20 @@ TEST(VTKOutputTest, wrong_mesh_type)
 
     testing::internal::CaptureStderr();
 
-    Parameters mesh_pars = TestMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 1;
+    auto mesh_pars = TestMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 1);
     TestMesh mesh(mesh_pars);
 
-    Parameters prob_pars = TestProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = TestProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem prob(prob_pars);
 
-    Parameters pars = VTKOutput::parameters();
-    pars.set<App *>("_app") = &app;
-    pars.set<Problem *>("_problem") = &prob;
-    pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto pars = VTKOutput::parameters();
+    pars.set<App *>("_app", &app);
+    pars.set<Problem *>("_problem", &prob);
+    pars.set<MeshObject *>("_mesh_obj", &mesh);
     VTKOutput out(pars);
     prob.add_output(&out);
 
@@ -74,21 +74,21 @@ TEST(VTKOutputTest, test)
 {
     TestApp app;
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 1;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 1);
     LineMesh mesh(mesh_pars);
     mesh.create();
 
-    Parameters prob_pars = TestProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_pars = TestProblem::parameters();
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem prob(prob_pars);
 
-    Parameters pars = VTKOutput::parameters();
-    pars.set<App *>("_app") = &app;
-    pars.set<Problem *>("_problem") = &prob;
-    pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto pars = VTKOutput::parameters();
+    pars.set<App *>("_app", &app);
+    pars.set<Problem *>("_problem", &prob);
+    pars.set<MeshObject *>("_mesh_obj", &mesh);
     VTKOutput out(pars);
 
     prob.add_output(&out);

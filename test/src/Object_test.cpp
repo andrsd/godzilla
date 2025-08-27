@@ -11,8 +11,8 @@ TEST(ObjectTest, api)
     TestApp app;
     app.get_registry().add<Object>("Object");
 
-    Parameters params = Object::parameters();
-    params.set<std::string>("_type") = "Object";
+    auto params = Object::parameters();
+    params.set<std::string>("_type", "Object");
     auto obj = app.build_object<Object>("name", params);
 
     EXPECT_EQ(obj->get_name(), "name");

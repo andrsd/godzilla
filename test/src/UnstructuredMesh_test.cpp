@@ -127,9 +127,9 @@ TEST(UnstructuredMeshTest, api)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
+    auto params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
     TestUnstructuredMesh mesh(params);
 
     mesh.create();
@@ -149,9 +149,9 @@ TEST(UnstructuredMeshTest, api_ghosted)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
+    auto params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
     TestUnstructuredMesh mesh(params);
     mesh.create();
 
@@ -173,9 +173,9 @@ TEST(UnstructuredMeshTest, nonexistent_face_set)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
+    auto params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
     TestUnstructuredMesh mesh(params);
     mesh.create();
 
@@ -189,9 +189,9 @@ TEST(UnstructuredMeshTest, nonexistent_cell_set)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
+    auto params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
     TestUnstructuredMesh mesh(params);
     mesh.create();
 
@@ -205,9 +205,9 @@ TEST(UnstructuredMeshTest, get_connectivity)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
+    auto params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
     TestUnstructuredMesh mesh(params);
     mesh.create();
 
@@ -271,12 +271,12 @@ TEST(UnstructuredMeshTest, ranges)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 2);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
 
@@ -304,11 +304,11 @@ TEST(UnstructuredMesh, get_cone_recursive_vertices)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Int>("nx") = 1;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<Int>("nx", 1);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
 
@@ -327,12 +327,12 @@ TEST(UnstructuredMesh, compute_cell_geometry)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 2);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
 
@@ -394,12 +394,12 @@ TEST(UnstructuredMesh, get_face_set_label_nonexistent)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 2);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
     auto m = mesh.get_mesh<UnstructuredMesh>();
@@ -415,12 +415,12 @@ TEST(UnstructuredMesh, get_chart)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 2);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
     auto m = mesh.get_mesh<UnstructuredMesh>();
@@ -434,12 +434,12 @@ TEST(UnstructuredMesh, common_cells_by_vertex)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 2);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
     auto m = mesh.get_mesh<UnstructuredMesh>();
@@ -499,8 +499,8 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
 
     TestApp app;
 
-    Parameters mesh_pars = TestMesh2D::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
+    auto mesh_pars = TestMesh2D::parameters();
+    mesh_pars.set<godzilla::App *>("_app", &app);
     TestMesh2D mesh(mesh_pars);
     mesh.create();
     auto m = mesh.get_mesh<UnstructuredMesh>();
@@ -543,8 +543,8 @@ TEST(UnstructuredMesh, mark_boundary_faces)
 
     TestApp app;
 
-    Parameters mesh_pars = TestMesh2D::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
+    auto mesh_pars = TestMesh2D::parameters();
+    mesh_pars.set<godzilla::App *>("_app", &app);
     TestMesh2D mesh(mesh_pars);
     mesh.create();
     auto m = mesh.get_mesh<UnstructuredMesh>();
@@ -563,9 +563,9 @@ TEST(UnstructuredMesh, point_star_forrest)
     TestApp app;
     auto comm = app.get_comm();
 
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
+    auto params = TestUnstructuredMesh::parameters();
+    params.set<godzilla::App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
     TestUnstructuredMesh mesh(params);
     mesh.create();
     auto m = mesh.get_mesh<UnstructuredMesh>();
@@ -583,12 +583,12 @@ TEST(UnstructuredMesh, face_sets)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 2);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
 
@@ -621,12 +621,12 @@ TEST(UnstructuredMesh, get_coordinates)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 2);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
 
@@ -648,10 +648,10 @@ TEST(UnstructuredMesh, get_cell_numbering)
 {
     TestApp app;
 
-    Parameters params = LineMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 10;
+    auto params = LineMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 10);
     LineMesh mesh(params);
     mesh.create();
 
@@ -669,12 +669,12 @@ TEST(UnstructuredMesh, get_point_depth)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 1;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 1);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
 
@@ -693,12 +693,12 @@ TEST(UnstructuredMeshTest, index_sets)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh3D::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Int>("nx") = 2;
-    params.set<Int>("ny") = 1;
-    params.set<Int>("nz") = 1;
+    auto params = TestUnstructuredMesh3D::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<Int>("nx", 2);
+    params.set<Int>("ny", 1);
+    params.set<Int>("nz", 1);
     TestUnstructuredMesh3D mesh(params);
     mesh.create();
 
@@ -719,9 +719,9 @@ TEST(UnstructuredMeshTest, clone)
 {
     TestApp app;
 
-    Parameters params = TestUnstructuredMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
+    auto params = TestUnstructuredMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
     TestUnstructuredMesh mesh(params);
 
     mesh.create();

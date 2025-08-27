@@ -37,21 +37,21 @@ TEST(MeshPartitioningOutputTest, get_file_ext)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Real>("xmin") = 0;
-    mesh_params.set<Real>("xmax") = 1;
-    mesh_params.set<Int>("nx") = 4;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Real>("xmin", 0);
+    mesh_params.set<Real>("xmax", 1);
+    mesh_params.set<Int>("nx", 4);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = TestProblem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = TestProblem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem prob(prob_params);
 
-    Parameters params = MeshPartitioningOutput::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
+    auto params = MeshPartitioningOutput::parameters();
+    params.set<App *>("_app", &app);
+    params.set<Problem *>("_problem", &prob);
     MeshPartitioningOutput out(params);
 
     EXPECT_EQ(out.get_file_name(), "part.h5");
@@ -61,21 +61,21 @@ TEST(MeshPartitioningOutputTest, output)
 {
     TestApp app;
 
-    Parameters mesh_params = LineMesh::parameters();
-    mesh_params.set<App *>("_app") = &app;
-    mesh_params.set<Real>("xmin") = 0;
-    mesh_params.set<Real>("xmax") = 1;
-    mesh_params.set<Int>("nx") = 4;
+    auto mesh_params = LineMesh::parameters();
+    mesh_params.set<App *>("_app", &app);
+    mesh_params.set<Real>("xmin", 0);
+    mesh_params.set<Real>("xmax", 1);
+    mesh_params.set<Int>("nx", 4);
     LineMesh mesh(mesh_params);
 
-    Parameters prob_params = TestProblem::parameters();
-    prob_params.set<App *>("_app") = &app;
-    prob_params.set<MeshObject *>("_mesh_obj") = &mesh;
+    auto prob_params = TestProblem::parameters();
+    prob_params.set<App *>("_app", &app);
+    prob_params.set<MeshObject *>("_mesh_obj", &mesh);
     TestProblem prob(prob_params);
 
-    Parameters params = MeshPartitioningOutput::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
+    auto params = MeshPartitioningOutput::parameters();
+    params.set<App *>("_app", &app);
+    params.set<Problem *>("_problem", &prob);
     MeshPartitioningOutput out(params);
     prob.add_output(&out);
 

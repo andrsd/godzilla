@@ -13,19 +13,19 @@ TEST(TecplotOutputTest, get_file_ext)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
-    params.set<std::string>("file") = "out";
+    params.set<App *>("_app", &app);
+    params.set<Problem *>("_problem", &prob);
+    params.set<std::string>("file", "out");
     TecplotOutput out(params);
 
     EXPECT_EQ(out.get_file_name(), "out.szplt");
@@ -36,19 +36,19 @@ TEST(TecplotOutputTest, output)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
-    params.set<std::string>("file") = "out";
+    params.set<App *>("_app", &app);
+    params.set<Problem *>("_problem", &prob);
+    params.set<std::string>("file", "out");
     TecplotOutput out(params);
     prob.add_output(&out);
 
@@ -67,19 +67,19 @@ TEST(TecplotOutputTest, test)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
     auto prob_pars = GTestFENonlinearProblem::parameters();
-    prob_pars.set<App *>("_app") = &app;
-    prob_pars.set<MeshObject *>("_mesh_obj") = &mesh;
+    prob_pars.set<App *>("_app", &app);
+    prob_pars.set<MeshObject *>("_mesh_obj", &mesh);
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = TecplotOutput::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<Problem *>("_problem") = &prob;
-    params.set<std::string>("file") = "out";
+    params.set<App *>("_app", &app);
+    params.set<Problem *>("_problem", &prob);
+    params.set<std::string>("file", "out");
     TecplotOutput out(params);
 
     prob.add_output(&out);

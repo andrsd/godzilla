@@ -10,15 +10,15 @@ TEST(RectangleMeshTest, api)
 {
     TestApp app;
 
-    Parameters params = RectangleMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "rect_mesh";
-    params.set<Real>("xmin") = 1;
-    params.set<Real>("xmax") = 3;
-    params.set<Int>("nx") = 9;
-    params.set<Real>("ymin") = 2;
-    params.set<Real>("ymax") = 4;
-    params.set<Int>("ny") = 8;
+    auto params = RectangleMesh::parameters();
+    params.set<App *>("_app", &app)
+        .set<std::string>("_name", "rect_mesh")
+        .set<Real>("xmin", 1)
+        .set<Real>("xmax", 3)
+        .set<Int>("nx", 9)
+        .set<Real>("ymin", 2)
+        .set<Real>("ymax", 4)
+        .set<Int>("ny", 8);
     RectangleMesh mesh(params);
 
     EXPECT_EQ(mesh.get_x_min(), 1);
@@ -56,15 +56,15 @@ TEST(RectangleMeshTest, incorrect_dims)
 
     TestApp app;
 
-    Parameters params = RectangleMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<Real>("xmin") = 2;
-    params.set<Real>("xmax") = 1;
-    params.set<Int>("nx") = 9;
-    params.set<Real>("ymin") = 2;
-    params.set<Real>("ymax") = 1;
-    params.set<Int>("ny") = 8;
+    auto params = RectangleMesh::parameters();
+    params.set<App *>("_app", &app)
+        .set<std::string>("_name", "obj")
+        .set<Real>("xmin", 2)
+        .set<Real>("xmax", 1)
+        .set<Int>("nx", 9)
+        .set<Real>("ymin", 2)
+        .set<Real>("ymax", 1)
+        .set<Int>("ny", 8);
     RectangleMesh mesh(params);
 
     app.check_integrity();

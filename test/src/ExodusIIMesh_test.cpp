@@ -15,10 +15,10 @@ TEST(ExodusIIMeshTest, api)
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/square.e");
 
-    Parameters params = ExodusIIMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<std::string>("file") = file_name;
+    auto params = ExodusIIMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<std::string>("file", file_name);
     ExodusIIMesh mesh(params);
 
     EXPECT_EQ(mesh.get_file_name(), file_name);
@@ -49,10 +49,10 @@ TEST(ExodusIIMeshTest, two_block)
     TestApp app;
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/2blk.exo");
-    Parameters params = ExodusIIMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<std::string>("file") = file_name;
+    auto params = ExodusIIMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<std::string>("file", file_name);
     ExodusIIMesh mesh(params);
     mesh.create();
 
@@ -72,10 +72,10 @@ TEST(ExodusIIMeshTest, two_block_nonexistent_blk)
     TestApp app;
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/mesh/2blk.exo");
-    Parameters params = ExodusIIMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<std::string>("file") = file_name;
+    auto params = ExodusIIMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<std::string>("file", file_name);
     ExodusIIMesh mesh(params);
     mesh.create();
 
@@ -94,10 +94,10 @@ TEST(ExodusIIMeshTest, nonexitent_file)
 
     TestApp app;
 
-    Parameters params = ExodusIIMesh::parameters();
-    params.set<App *>("_app") = &app;
-    params.set<std::string>("_name") = "obj";
-    params.set<std::string>("file") = "asdf.e";
+    auto params = ExodusIIMesh::parameters();
+    params.set<App *>("_app", &app);
+    params.set<std::string>("_name", "obj");
+    params.set<std::string>("file", "asdf.e");
     ExodusIIMesh mesh(params);
 
     app.check_integrity();

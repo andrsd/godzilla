@@ -12,16 +12,16 @@ TEST(TimeStepAdapt, test)
     TestApp app;
 
     auto mesh_pars = LineMesh::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
-    mesh_pars.set<Int>("nx") = 2;
+    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<Int>("nx", 2);
     LineMesh mesh(mesh_pars);
 
     auto prob_param = GTestImplicitFENonlinearProblem::parameters();
-    prob_param.set<MeshObject *>("_mesh_obj") = &mesh;
-    prob_param.set<godzilla::App *>("_app") = &app;
-    prob_param.set<Real>("start_time") = 0.;
-    prob_param.set<Real>("end_time") = 20;
-    prob_param.set<Real>("dt") = 5;
+    prob_param.set<MeshObject *>("_mesh_obj", &mesh);
+    prob_param.set<godzilla::App *>("_app", &app);
+    prob_param.set<Real>("start_time", 0.);
+    prob_param.set<Real>("end_time", 20);
+    prob_param.set<Real>("dt", 5);
     GTestImplicitFENonlinearProblem prob(prob_param);
 
     auto ts = prob.get_ts();

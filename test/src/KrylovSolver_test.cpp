@@ -180,11 +180,11 @@ TEST(KrylovSolver, set_opers_rhs)
     TestApp app;
     auto comm = app.get_comm();
 
-    Parameters mesh_pars = LineMesh::parameters();
-    mesh_pars.set<godzilla::App *>("_app") = &app;
-    mesh_pars.set<Real>("xmin") = 0;
-    mesh_pars.set<Real>("xmax") = 1;
-    mesh_pars.set<Int>("nx") = 1;
+    auto mesh_pars = LineMesh::parameters();
+    mesh_pars.set<godzilla::App *>("_app", &app);
+    mesh_pars.set<Real>("xmin", 0);
+    mesh_pars.set<Real>("xmax", 1);
+    mesh_pars.set<Int>("nx", 1);
     LineMesh mesh(mesh_pars);
     mesh.create();
 
