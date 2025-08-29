@@ -36,12 +36,14 @@ RZSymmetry::create()
     Object::create();
     auto problem = this->dpi->get_problem();
     auto dim = problem->get_dimension();
-    if (dim != 2)
+    if (dim == 2) {
+        if (this->axis.size() != 2)
+            log_error("'axis' parameter must provide 2 components.");
+        if (this->pt.size() != 2)
+            log_error("'point' parameter must provide 2 components.");
+    }
+    else
         log_error("'RZSymmetry' can be used only with 2D problems.");
-    if (this->axis.size() != 2)
-        log_error("'axis' parameter must provide 2 components.");
-    if (this->pt.size() != 2)
-        log_error("'point' parameter must provide 2 components.");
 }
 
 Real
