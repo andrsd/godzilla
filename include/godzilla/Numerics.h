@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include <algorithm>
 #include <cmath>
 
 namespace godzilla {
@@ -31,6 +32,21 @@ T
 sqr(T val)
 {
     return val * val;
+}
+
+/// Minimum
+template <typename T>
+const T &
+min(const T & a, const T & b)
+{
+    return std::min(a, b);
+}
+
+template <class T>
+T
+min(std::initializer_list<T> ilist)
+{
+    return std::min(ilist);
 }
 
 /// Absolute value
