@@ -33,6 +33,8 @@ sighandler(int signo)
 
     sig_name[SIGABRT] = "Abort";
     sig_name[SIGSEGV] = "Segmentation violation";
+    sig_name[SIGBUS] = "Bus error";
+    sig_name[SIGILL] = "Illegal instruction";
 
     PetscFPrintf(PETSC_COMM_WORLD,
                  PETSC_STDERR,
@@ -105,6 +107,8 @@ CallStack::initialize()
     // install our signal handlers
     signal(SIGSEGV, sighandler);
     signal(SIGABRT, sighandler);
+    signal(SIGBUS, sighandler);
+    signal(SIGILL, sighandler);
 }
 
 } // namespace internal
