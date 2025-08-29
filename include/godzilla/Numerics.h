@@ -34,6 +34,21 @@ sqr(T val)
     return val * val;
 }
 
+/// Maximum
+template <typename T>
+const T &
+max(const T & a, const T & b)
+{
+    return std::max(a, b);
+}
+
+template <class T>
+T
+max(std::initializer_list<T> ilist)
+{
+    return std::max(ilist);
+}
+
 /// Minimum
 template <typename T>
 const T &
