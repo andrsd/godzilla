@@ -51,6 +51,84 @@ get_num_element_nodes(ElementType type)
 
 using ExecuteOn = Flags<ExecuteOnFlag>;
 
+/// Dimension
+class Dimension {
+public:
+    enum Value {
+        // Invalid
+        INVALID = -1,
+        ZERO = 0,
+        ONE = 1,
+        TWO = 2,
+        THREE = 3
+    };
+
+    constexpr Dimension() : value(INVALID) {}
+    constexpr explicit Dimension(Value v) : value(v) {}
+
+    constexpr bool
+    is_valid() const
+    {
+        return this->value != INVALID;
+    }
+
+    // Comparison operators
+    constexpr bool
+    operator==(const Dimension & other) const
+    {
+        return this->value == other.value;
+    }
+
+    constexpr bool
+    operator!=(const Dimension & other) const
+    {
+        return !(*this == other);
+    }
+
+    constexpr
+    operator Int() const
+    {
+        return this->value;
+    }
+
+    Value value;
+
+    static constexpr Dimension
+    from_int(Int v)
+    {
+        switch (v) {
+        case 0:
+            return Dimension(ZERO);
+        case 1:
+            return Dimension(ONE);
+        case 2:
+            return Dimension(TWO);
+        case 3:
+            return Dimension(THREE);
+        default:
+            return Dimension(INVALID);
+        }
+    }
+};
+
+// User-defined literal
+constexpr Dimension
+operator""_D(unsigned long long n)
+{
+    switch (n) {
+    case 0:
+        return Dimension(Dimension::ZERO);
+    case 1:
+        return Dimension(Dimension::ONE);
+    case 2:
+        return Dimension(Dimension::TWO);
+    case 3:
+        return Dimension(Dimension::THREE);
+    default:
+        return Dimension();
+    }
+}
+
 /// Order
 class Order {
 public:
