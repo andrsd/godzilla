@@ -5,6 +5,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
+#include "godzilla/Numerics.h"
 #include "godzilla/Convert.h"
 #include "godzilla/Exception.h"
 #include "godzilla/UnstructuredMesh.h"
@@ -133,8 +134,8 @@ template <>
 inline Real
 element_length<EDGE2, 1, 2>(const DenseMatrix<Real, 1, 2> & grad_phi)
 {
-    auto h1 = 1. / std::abs(grad_phi(0, 0));
-    auto h2 = 1. / std::abs(grad_phi(0, 1));
+    auto h1 = 1. / math::abs(grad_phi(0, 0));
+    auto h2 = 1. / math::abs(grad_phi(0, 1));
     return std::min({ h1, h2 });
 }
 

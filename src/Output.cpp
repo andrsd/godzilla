@@ -104,7 +104,7 @@ Output::should_output(ExecuteOnFlag flag)
 
         constexpr Real TIME_TOL = 1e-12;
         if (should && (std::isnan(this->last_output_time) ||
-                       std::abs(this->last_output_time - this->problem->get_time()) > TIME_TOL)) {
+                       math::abs(this->last_output_time - this->problem->get_time()) > TIME_TOL)) {
             this->last_output_time = this->problem->get_time();
             return true;
         }

@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "godzilla/Types.h"
+#include <cmath>
+
 namespace godzilla {
 namespace math {
 
@@ -28,6 +31,13 @@ T
 sqr(T val)
 {
     return val * val;
+}
+
+/// Absolute value
+inline Real
+abs(Real val)
+{
+    return std::abs(val);
 }
 
 } // namespace math
