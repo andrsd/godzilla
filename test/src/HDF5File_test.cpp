@@ -15,10 +15,10 @@ TEST(HDF5FileTest, write_read)
         HDF5File f("file.h5", FileAccess::CREATE);
 
         f.write_attribute<int>("num", 432);
-        f.write_attribute<std::string>("creator", "godzilla");
+        f.write_attribute<String>("creator", "godzilla");
 
         f.write_dataset<int>("answer", 42);
-        f.write_dataset<std::string>("greeting", "hello");
+        f.write_dataset<String>("greeting", "hello");
 
         std::vector<double> darr = { 4., 1., -9., 0. };
         f.write_dataset<std::vector<double>>("darr", darr);
@@ -51,10 +51,10 @@ TEST(HDF5FileTest, write_read)
         HDF5File f("file.h5", FileAccess::READ);
 
         EXPECT_EQ(f.read_attribute<int>("num"), 432);
-        EXPECT_EQ(f.read_attribute<std::string>("creator"), "godzilla");
+        EXPECT_EQ(f.read_attribute<String>("creator"), "godzilla");
 
         EXPECT_EQ(f.read_dataset<int>("answer"), 42);
-        EXPECT_EQ(f.read_dataset<std::string>("greeting"), "hello");
+        EXPECT_EQ(f.read_dataset<String>("greeting"), "hello");
 
         auto darr = f.read_dataset<std::vector<double>>("darr");
         EXPECT_THAT(darr, testing::ElementsAre(4., 1., -9., 0.));

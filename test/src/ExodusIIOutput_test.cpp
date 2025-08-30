@@ -24,7 +24,7 @@ TEST(ExodusIIOutputTest, get_file_ext)
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("app", &app);
     params.set<Problem *>("_problem", &prob);
-    params.set<std::string>("file", "out");
+    params.set<String>("file", "out");
     ExodusIIOutput out(params);
     out.create();
 
@@ -47,7 +47,7 @@ TEST(ExodusIIOutputTest, create)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("file", "out");
+    params.set<String>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
     out->create();
@@ -71,8 +71,8 @@ TEST(ExodusIIOutputTest, non_existent_var)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("file", "out");
-    params.set<std::vector<std::string>>("variables", { "asdf" });
+    params.set<String>("file", "out");
+    params.set<std::vector<String>>("variables", { "asdf" });
     prob.add_output<ExodusIIOutput>(params);
 
     prob.create();
@@ -101,7 +101,7 @@ TEST(ExodusIIOutputTest, output)
 
     auto params = ExodusIIOutput::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("file", "out");
+    params.set<String>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
     prob.create();
@@ -127,7 +127,7 @@ TEST(ExodusIIOutputTest, set_file_name)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("app", &app).set<std::string>("file", "out");
+    params.set<App *>("app", &app).set<String>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
     out->create();
@@ -150,7 +150,7 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("app", &app).set<std::string>("file", "out");
+    params.set<App *>("app", &app).set<String>("file", "out");
     auto out = prob.add_output<ExodusIIOutput>(params);
 
     out->create();

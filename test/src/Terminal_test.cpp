@@ -46,13 +46,13 @@ TEST(TerminalTest, ostream_operator_wo_colors_code)
 
 TEST(TerminalTest, string_operator)
 {
-    const std::string & r = Terminal::red;
+    const String & r = Terminal::red;
     EXPECT_EQ(r, "\33[31m");
 }
 
 TEST(TerminalTest, fmt_formatter)
 {
-    std::string s = fmt::format("{}", Terminal::red);
+    String s = fmt::format("{}", Terminal::red);
     EXPECT_STREQ(s.c_str(), Terminal::red);
 }
 

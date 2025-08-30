@@ -41,7 +41,7 @@ fn2()
 }
 
 void
-fn1(int i, const std::string & s)
+fn1(int i, const String & s)
 {
     CALL_STACK_MSG();
     fn2();

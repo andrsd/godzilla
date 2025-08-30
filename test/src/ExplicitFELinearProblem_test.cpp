@@ -114,7 +114,7 @@ TEST(ExplicitFELinearProblemTest, test_mass_matrix)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -164,7 +164,7 @@ TEST(ExplicitFELinearProblemTest, test_lumped_mass_matrix)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -192,18 +192,18 @@ TEST(ExplicitFELinearProblemTest, solve)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
     auto bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<App *>("app", &app);
-    bc_left_pars.set<std::vector<std::string>>("boundary", { "left" });
+    bc_left_pars.set<std::vector<String>>("boundary", { "left" });
     prob.add_boundary_condition<DirichletBC>(bc_left_pars);
 
     auto bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<App *>("app", &app);
-    bc_right_pars.set<std::vector<std::string>>("boundary", { "right" });
+    bc_right_pars.set<std::vector<String>>("boundary", { "right" });
     prob.add_boundary_condition<DirichletBC>(bc_right_pars);
 
     prob.create();
@@ -245,18 +245,18 @@ TEST(ExplicitFELinearProblemTest, solve_w_lumped_mass_matrix)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
     auto bc_left_pars = DirichletBC::parameters();
     bc_left_pars.set<App *>("app", &app);
-    bc_left_pars.set<std::vector<std::string>>("boundary", { "left" });
+    bc_left_pars.set<std::vector<String>>("boundary", { "left" });
     prob.add_boundary_condition<DirichletBC>(bc_left_pars);
 
     auto bc_right_pars = DirichletBC::parameters();
     bc_right_pars.set<App *>("app", &app);
-    bc_right_pars.set<std::vector<std::string>>("boundary", { "right" });
+    bc_right_pars.set<std::vector<String>>("boundary", { "right" });
     prob.add_boundary_condition<DirichletBC>(bc_right_pars);
 
     prob.create_w_lumped_mass_matrix();
@@ -298,12 +298,12 @@ TEST(ExplicitFELinearProblemTest, set_schemes)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFELinearProblem prob(prob_pars);
 
     prob.create();
 
-    std::vector<std::string> schemes = { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" };
+    std::vector<String> schemes = { "euler", "ssp-rk-2", "ssp-rk-3", "rk-2", "heun" };
     std::vector<TSType> types = { TSEULER, TSSSP, TSSSP, TSRK, TSRK };
     for (std::size_t i = 0; i < schemes.size(); ++i) {
         prob.set_scheme(types[i]);
@@ -328,7 +328,7 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 20)
         .set<Real>("dt", 5)
-        .set<std::string>("scheme", "asdf");
+        .set<String>("scheme", "asdf");
     TestExplicitFELinearProblem prob(prob_pars);
 
     prob.create();
@@ -356,7 +356,7 @@ TEST(ExplicitFELinearProblemTest, allocate_mass_matrix)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 
@@ -382,7 +382,7 @@ TEST(ExplicitFELinearProblemTest, allocate_lumped_mass_matrix)
         .set<Real>("start_time", 0.)
         .set<Real>("end_time", 1e-3)
         .set<Real>("dt", 1e-3)
-        .set<std::string>("scheme", "euler");
+        .set<String>("scheme", "euler");
     TestExplicitFELinearProblem prob(prob_pars);
     app.set_problem(&prob);
 

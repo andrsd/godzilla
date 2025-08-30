@@ -21,7 +21,7 @@ TEST(PCJacobi, type)
     std::vector<PCJacobi::Type> jacobi_types = { PCJacobi::DIAGONAL,
                                                  PCJacobi::ROWMAX,
                                                  PCJacobi::ROWSUM };
-    std::vector<std::string> jacobi_type_str = { "DIAGONAL", "ROWMAX", "ROWSUM" };
+    std::vector<String> jacobi_type_str = { "DIAGONAL", "ROWMAX", "ROWSUM" };
 
     testing::internal::CaptureStdout();
 

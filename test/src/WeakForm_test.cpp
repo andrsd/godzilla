@@ -93,7 +93,7 @@ TEST(WeakFormTest, test)
 
     auto bc_pars = TestBC::parameters();
     bc_pars.set<App *>("app", &app);
-    bc_pars.set<std::vector<std::string>>("boundary", { "left" });
+    bc_pars.set<std::vector<String>>("boundary", { "left" });
     auto bc = prob.add_boundary_condition<TestBC>(bc_pars);
 
     FieldID fid(0);

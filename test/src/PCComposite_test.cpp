@@ -23,10 +23,10 @@ TEST(PCComposite, type)
                                              PCComposite::MULTIPLICATIVE,
                                              PCComposite::SYMMETRIC_MULTIPLICATIVE,
                                              PCComposite::SPECIAL };
-    std::vector<std::string> type_str = { "ADDITIVE",
-                                          "MULTIPLICATIVE",
-                                          "SYMMETRIC_MULTIPLICATIVE",
-                                          "SPECIAL" };
+    std::vector<String> type_str = { "ADDITIVE",
+                                     "MULTIPLICATIVE",
+                                     "SYMMETRIC_MULTIPLICATIVE",
+                                     "SPECIAL" };
 
     testing::internal::CaptureStdout();
 

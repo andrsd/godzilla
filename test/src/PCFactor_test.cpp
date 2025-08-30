@@ -22,7 +22,7 @@ TEST(PCFactor, type)
                                                  PCFactor::ILU,
                                                  PCFactor::LU,
                                                  PCFactor::CHOLESKY };
-    std::vector<std::string> factor_type_str = { PCICC, PCILU, PCLU, PCCHOLESKY };
+    std::vector<String> factor_type_str = { PCICC, PCILU, PCLU, PCCHOLESKY };
 
     testing::internal::CaptureStdout();
 

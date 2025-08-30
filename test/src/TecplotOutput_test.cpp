@@ -26,7 +26,7 @@ TEST(TecplotOutputTest, get_file_ext)
     auto params = TecplotOutput::parameters();
     params.set<App *>("app", &app);
     params.set<Problem *>("_problem", &prob);
-    params.set<std::string>("file", "out");
+    params.set<String>("file", "out");
     TecplotOutput out(params);
 
     prob.create();
@@ -51,7 +51,7 @@ TEST(TecplotOutputTest, output)
 
     auto params = TecplotOutput::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("file", "out");
+    params.set<String>("file", "out");
     auto out = prob.add_output<TecplotOutput>(params);
 
     prob.create();
@@ -82,7 +82,7 @@ TEST(TecplotOutputTest, test)
 
     auto params = TecplotOutput::parameters();
     params.set<App *>("app", &app);
-    params.set<std::string>("file", "out");
+    params.set<String>("file", "out");
     prob.add_output<TecplotOutput>(params);
 
     prob.create();

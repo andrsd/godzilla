@@ -201,7 +201,7 @@ TEST_F(FENonlinearProblemTest, solve)
 
     auto params = DirichletBC::parameters();
     params.set<App *>("app", this->app);
-    params.set<std::vector<std::string>>("boundary", { "left", "right" });
+    params.set<std::vector<String>>("boundary", { "left", "right" });
     auto bc = this->prob->add_boundary_condition<DirichletBC>(params);
     this->prob->create();
 
@@ -226,7 +226,7 @@ TEST_F(FENonlinearProblemTest, solve_no_ic)
 {
     auto params = DirichletBC::parameters();
     params.set<App *>("app", this->app);
-    params.set<std::vector<std::string>>("boundary", { "marker" });
+    params.set<std::vector<String>>("boundary", { "marker" });
     this->prob->add_boundary_condition<DirichletBC>(params);
     this->prob->create();
 
@@ -239,7 +239,7 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
     testing::internal::CaptureStderr();
 
     auto params = GTest2CompIC::parameters();
-    params.set<std::string>("name", "ic");
+    params.set<String>("name", "ic");
     params.set<App *>("app", this->app);
     this->prob->add_initial_condition<GTest2CompIC>(params);
     this->prob->create();
@@ -269,16 +269,16 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
     GTest2FieldsFENonlinearProblem prob(prob_params);
 
     auto ic1_params = ConstantInitialCondition::parameters();
-    ic1_params.set<std::string>("name", "ic1")
+    ic1_params.set<String>("name", "ic1")
         .set<App *>("app", &app)
-        .set<std::string>("field", "u")
+        .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0.1 });
     prob.add_initial_condition<ConstantInitialCondition>(ic1_params);
 
     auto ic2_params = ConstantInitialCondition::parameters();
-    ic2_params.set<std::string>("name", "ic2")
+    ic2_params.set<String>("name", "ic2")
         .set<App *>("app", &app)
-        .set<std::string>("field", "u")
+        .set<String>("field", "u")
         .set<std::vector<Real>>("value", { 0.2 });
     prob.add_initial_condition<ConstantInitialCondition>(ic2_params);
 
@@ -310,9 +310,9 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 
     auto ic_params = ConstantInitialCondition::parameters();
     ic_params.set<App *>("app", &app);
-    ic_params.set<std::string>("name", "ic1");
+    ic_params.set<String>("name", "ic1");
     ic_params.set<std::vector<Real>>("value", { 0.1 });
-    ic_params.set<std::string>("field", "u");
+    ic_params.set<String>("field", "u");
     prob.add_initial_condition<ConstantInitialCondition>(ic_params);
 
     prob.create();
@@ -328,9 +328,9 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
     testing::internal::CaptureStderr();
 
     auto params = DirichletBC::parameters();
-    params.set<std::string>("name", "bc1");
+    params.set<String>("name", "bc1");
     params.set<App *>("app", this->app);
-    params.set<std::vector<std::string>>("boundary", { "asdf" });
+    params.set<std::vector<String>>("boundary", { "asdf" });
     this->prob->add_boundary_condition<DirichletBC>(params);
     this->prob->create();
     EXPECT_FALSE(this->app->check_integrity());
@@ -383,7 +383,7 @@ TEST_F(FENonlinearProblemTest, steady_state_output)
 {
     auto params = DirichletBC::parameters();
     params.set<App *>("app", this->app);
-    params.set<std::vector<std::string>>("boundary", { "left", "right" });
+    params.set<std::vector<String>>("boundary", { "left", "right" });
     this->prob->add_boundary_condition<DirichletBC>(params);
 
     this->prob->create();

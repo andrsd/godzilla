@@ -60,7 +60,7 @@ TEST(EssentialBCTest, test)
 
     auto params = DirichletBC::parameters();
     params.set<App *>("app", &app);
-    params.set<std::vector<std::string>>("boundary", {});
+    params.set<std::vector<String>>("boundary", {});
     auto bc = problem.add_boundary_condition<DirichletBC>(params);
 
     problem.create();
@@ -100,8 +100,8 @@ TEST(EssentialBCTest, non_existing_field)
 
     Parameters params = DirichletBC::parameters();
     params.set<App *>("app", &app)
-        .set<std::string>("field", "asdf")
-        .set<std::vector<std::string>>("boundary", {});
+        .set<String>("field", "asdf")
+        .set<std::vector<String>>("boundary", {});
     problem.add_boundary_condition<DirichletBC>(params);
 
     problem.create();
@@ -132,7 +132,7 @@ TEST(EssentialBCTest, field_param_not_specified)
 
     auto params = DirichletBC::parameters();
     params.set<App *>("app", &app);
-    params.set<std::vector<std::string>>("boundary", {});
+    params.set<std::vector<String>>("boundary", {});
     problem.add_boundary_condition<DirichletBC>(params);
 
     problem.create();

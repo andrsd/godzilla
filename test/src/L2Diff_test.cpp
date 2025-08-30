@@ -50,12 +50,12 @@ TEST(L2DiffTest, compute)
 
     auto bc_left_params = DirichletBC::parameters();
     bc_left_params.set<App *>("app", &app);
-    bc_left_params.set<std::vector<std::string>>("boundary", { "left" });
+    bc_left_params.set<std::vector<String>>("boundary", { "left" });
     prob.add_boundary_condition<DirichletBC>(bc_left_params);
 
     auto bc_right_params = DirichletBC::parameters();
     bc_right_params.set<App *>("app", &app);
-    bc_right_params.set<std::vector<std::string>>("boundary", { "right" });
+    bc_right_params.set<std::vector<String>>("boundary", { "right" });
     prob.add_boundary_condition<DirichletBC>(bc_right_params);
 
     auto ps_params = L2Error::parameters();
