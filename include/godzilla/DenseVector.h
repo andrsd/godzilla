@@ -5,6 +5,7 @@
 
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
+#include "godzilla/Numerics.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/Utils.h"
 #include "mpicpp-lite/mpicpp-lite.h"
@@ -203,7 +204,7 @@ public:
     abs()
     {
         for (Int i = 0; i < N; ++i)
-            set(i) = std::abs(get(i));
+            set(i) = math::abs(get(i));
     }
 
     // Operators
@@ -723,7 +724,7 @@ public:
     abs()
     {
         for (Int i = 0; i < size(); ++i)
-            set(i) = std::abs(get(i));
+            set(i) = math::abs(get(i));
     }
 
     /// Set all vector entries to zero

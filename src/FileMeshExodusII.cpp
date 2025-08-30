@@ -82,7 +82,7 @@ FileMesh::create_from_exodus()
             for (int i = 0; i < n_elem_blocks; ++i) {
                 auto eb = f.get_element_block(i);
                 auto ct = ::get_cell_type(eb.get_element_type());
-                dim = std::max(dim, UnstructuredMesh::get_polytope_dim(ct));
+                dim = math::max(dim, UnstructuredMesh::get_polytope_dim(ct));
                 if (ct == PolytopeType::TRI_PRISM) {
                     cs_order[i] = i;
                     ++num_hybrid;

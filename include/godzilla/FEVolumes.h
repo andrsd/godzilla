@@ -5,6 +5,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
+#include "godzilla/Numerics.h"
 #include "godzilla/Convert.h"
 #include "godzilla/Array1D.h"
 #include "godzilla/DenseVector.h"
@@ -31,7 +32,7 @@ template <>
 inline Real
 volume<EDGE2, 1>(const DenseMatrix<Real, 2, 1> & coords)
 {
-    Real vol = std::abs(coords(0, 0) - coords(1, 0));
+    Real vol = math::abs(coords(0, 0) - coords(1, 0));
     return vol;
 }
 
