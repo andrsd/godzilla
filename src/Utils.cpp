@@ -121,7 +121,8 @@ human_type_name(const std::string & type)
     // clang-format off
     if (type == "std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>" ||
         type == "NSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE" ||
-        type == "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >")
+        type == "std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >" ||
+        type == "N8godzilla6StringE")
         return "String";
     else if (type == "int" || type == "long" || type == "long long")
         return "Integer";
