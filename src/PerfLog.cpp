@@ -3,9 +3,20 @@
 
 #include "godzilla/PerfLog.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Error.h"
 #include "godzilla/Types.h"
+#include <cstring>
+#include <petscsystypes.h>
+#include <petscsys.h>
+#include <iostream>
 
 namespace godzilla::perf_log {
+
+namespace {
+
+std::vector<EventID> my_event_ids;
+
+}
 
 const Int INVALID_EVENT_ID = -1;
 const Int INVALID_STAGE_ID = -1;
@@ -37,6 +48,7 @@ register_event(const char * name)
     PetscLogEventGetId(name, &event_id);
     if (event_id == INVALID_EVENT_ID) {
         PetscLogEventRegister(name, 0, &event_id);
+        my_event_ids.push_back(event_id);
         return event_id;
     }
     else
@@ -132,8 +144,6 @@ Event::Event(const std::string & name) : id(id_from_name(name.c_str())) {}
 
 Event::Event(EventID id) : id(id) {}
 
-Event::~Event() {}
-
 void
 Event::begin()
 {
@@ -152,6 +162,14 @@ Event::get_id() const
     return this->id;
 }
 
+std::string
+Event::name() const
+{
+    const char * nm;
+    PETSC_CHECK(PetscLogEventGetName(id, &nm));
+    return std::string(nm);
+}
+
 EventID
 Event::id_from_name(const char * name)
 {
@@ -159,6 +177,13 @@ Event::id_from_name(const char * name)
         return get_event_id(name);
     else
         return register_event(name);
+}
+
+EventInfo
+Event::info() const
+{
+    EventInfo info(this->id, PETSC_DETERMINE);
+    return info;
 }
 
 // Stage
@@ -196,6 +221,12 @@ EventInfo::EventInfo(EventID event_id, StageID stage_id) : info()
     PetscLogEventGetPerfInfo(stage_id, event_id, &this->info);
 }
 
+bool
+EventInfo::visible() const
+{
+    return this->info.visible == PETSC_TRUE;
+}
+
 LogDouble
 EventInfo::flops() const
 {
@@ -214,6 +245,24 @@ EventInfo::num_calls() const
     return this->info.count;
 }
 
+LogDouble
+EventInfo::num_messages() const
+{
+    return this->info.numMessages;
+}
+
+LogDouble
+EventInfo::messages_length() const
+{
+    return this->info.messageLength;
+}
+
+LogDouble
+EventInfo::num_reductions() const
+{
+    return this->info.numReductions;
+}
+
 // ScopedEvent
 
 ScopedEvent::ScopedEvent(const char * name) : Event(name)
@@ -229,6 +278,12 @@ ScopedEvent::ScopedEvent(const std::string & name) : Event(name)
 ScopedEvent::~ScopedEvent()
 {
     end();
+}
+
+const std::vector<EventID> &
+registered_event_ids()
+{
+    return my_event_ids;
 }
 
 } // namespace godzilla::perf_log

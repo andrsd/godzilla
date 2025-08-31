@@ -5,6 +5,7 @@
 
 #include "petsclog.h"
 #include <map>
+#include <vector>
 
 #define GODZILLA_PERF_LOG_REGISTER_EVENT(name) perf_log::register_event(name);
 #define GODZILLA_PERF_LOG_EVENT(name) perf_log::ScopedEvent __event__(name);
@@ -89,6 +90,9 @@ class EventInfo {
 public:
     EventInfo(EventID event_id, StageID stage_id);
 
+    /// The flag to print info in summary
+    bool visible() const;
+
     /// Get the number of FLOPS
     ///
     /// @return Number of FLOPS
@@ -103,6 +107,15 @@ public:
     ///
     /// @return Number of times this event was called
     int num_calls() const;
+
+    /// The number of messages in this event
+    LogDouble num_messages() const;
+
+    /// The total message lengths in this event
+    LogDouble messages_length() const;
+
+    /// The number of reductions in this event
+    LogDouble num_reductions() const;
 
 private:
     /// Event information collected by PETSc
@@ -141,7 +154,7 @@ public:
     /// Destroy an event
     ///
     /// This will finish logging the event
-    virtual ~Event();
+    virtual ~Event() = default;
 
     /// Log the beginning of the event
     void begin();
@@ -153,6 +166,12 @@ public:
     ///
     /// @return ID of this event
     EventID get_id() const;
+
+    /// Get event name
+    std::string name() const;
+
+    /// Get event info
+    EventInfo info() const;
 
 private:
     /// Get event ID from event name
@@ -174,5 +193,8 @@ public:
     explicit ScopedEvent(const std::string & name);
     virtual ~ScopedEvent();
 };
+
+/// Return list of events registered by the application
+const std::vector<EventID> & registered_event_ids();
 
 } // namespace godzilla::perf_log
