@@ -4,6 +4,7 @@
 #include "godzilla/App.h"
 #include "godzilla/GYMLFile.h"
 #include "godzilla/Mesh.h"
+#include "godzilla/PerfLog.h"
 #include "godzilla/Problem.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
@@ -12,7 +13,10 @@
 #include "godzilla/Terminal.h"
 #include "godzilla/Logger.h"
 #include "godzilla/Config.h"
+#include "yaml-cpp/yaml.h"
+#include "fmt/chrono.h"
 #include <cassert>
+#include <fstream>
 
 namespace YAML {
 
@@ -199,6 +203,12 @@ App::create_command_line_options()
                                 "Export parameters for all registered objects into a YAML file",
                                 cxxopts::value<bool>(),
                                 "");
+    this->cmdln_opts.add_option("",
+                                "",
+                                "perf-log",
+                                "Save performance log into a file",
+                                cxxopts::value<std::string>(),
+                                "");
 }
 
 cxxopts::ParseResult
@@ -299,6 +309,9 @@ App::process_command_line(const cxxopts::ParseResult & result)
         if (result.count("restart-from"))
             this->restart_file_name = result["restart-from"].as<std::string>();
 
+        if (result.count("perf-log"))
+            this->perf_log_file_name = result["perf-log"].as<std::string>();
+
         if (result.count("input-file")) {
             auto input_file_name = result["input-file"].as<std::string>();
             run_input_file(input_file_name);
@@ -320,9 +333,18 @@ void
 App::run()
 {
     CALL_STACK_MSG();
+
+    auto start_time = std::chrono::high_resolution_clock::now();
     create_command_line_options();
     auto result = parse_command_line();
     process_command_line(result);
+    auto end_time = std::chrono::high_resolution_clock::now();
+
+    if (!this->perf_log_file_name.empty()) {
+        std::chrono::duration<double> duration = end_time - start_time;
+        write_perf_log(this->perf_log_file_name, duration);
+        lprintln(9, "Performance log written into: {}", this->perf_log_file_name);
+    }
 }
 
 void
@@ -396,6 +418,112 @@ Registry &
 App::get_registry()
 {
     return this->registry;
+}
+
+void
+App::write_perf_log(const std::string file_name, std::chrono::duration<double> run_time) const
+{
+    CALL_STACK_MSG();
+    auto comm = get_comm();
+
+    auto build_stat_node = [&](double val) {
+        double min, max, tot;
+        comm.all_reduce(val, min, mpi::op::min<double>());
+        comm.all_reduce(val, max, mpi::op::max<double>());
+        comm.all_reduce(val, tot, mpi::op::sum<double>());
+        auto ratio = utils::ratio(max, min);
+        YAML::Node ynode;
+        ynode["max"] = max;
+        ynode["ratio"] = ratio;
+        ynode["avg"] = tot / static_cast<double>(comm.size());
+        return ynode;
+    };
+
+    YAML::Node yperflog;
+    // info section
+    {
+        char version[256];
+        PETSC_CHECK(PetscGetVersion(version, sizeof(version)));
+        char arch[128];
+        PETSC_CHECK(PetscGetArchType(arch, sizeof(arch)));
+        char hostname[128];
+        PETSC_CHECK(PetscGetHostName(hostname, sizeof(hostname)));
+        char username[128];
+        PETSC_CHECK(PetscGetUserName(username, sizeof(username)));
+        char pname[PETSC_MAX_PATH_LEN];
+        PETSC_CHECK(PetscGetProgramName(pname, sizeof(pname)));
+
+        std::time_t now = std::time(nullptr);
+        std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
+
+        YAML::Node yinfo;
+        yinfo["petsc-version"] = std::string(version);
+        yinfo["arch"] = std::string(arch);
+        yinfo["hostname"] = std::string(hostname);
+        yinfo["username"] = std::string(username);
+        yinfo["program-name"] = std::string(pname);
+        yinfo["date"] = datetime;
+
+        yperflog["info"] = yinfo;
+    }
+    // global section
+    {
+        YAML::Node yglobal;
+
+        YAML::Node ytime;
+        yglobal["time"] = build_stat_node(run_time.count());
+
+        yperflog["global"] = yglobal;
+    }
+    // events section
+    {
+        YAML::Node yevents(YAML::NodeType::Sequence);
+
+        auto & event_ids = perf_log::registered_event_ids();
+        for (auto & id : event_ids) {
+            perf_log::Event evt(id);
+            auto nfo = evt.info();
+            YAML::Node yevent;
+            yevent["name"] = evt.name();
+            yevent["calls"] = build_stat_node(nfo.num_calls());
+            yevent["time"] = build_stat_node(nfo.time());
+            yevent["flops"] = build_stat_node(nfo.flops());
+
+            perf_log::LogDouble n_msgs;
+            comm.all_reduce(nfo.num_messages(), n_msgs, mpi::op::sum<perf_log::LogDouble>());
+            perf_log::LogDouble msg_len;
+            comm.all_reduce(nfo.messages_length(), msg_len, mpi::op::sum<perf_log::LogDouble>());
+            perf_log::LogDouble n_reducts;
+            comm.all_reduce(nfo.num_reductions(), n_reducts, mpi::op::sum<perf_log::LogDouble>());
+
+            // see `PetscLogHandlerView_Default_Info` in PETSc
+            n_msgs *= 0.5;
+            msg_len *= 0.5;
+            n_reducts /= comm.size();
+
+            yevent["messages"] = n_msgs;
+            yevent["avg-message-length"] = utils::ratio(msg_len, n_msgs);
+            yevent["reductions"] = n_reducts;
+
+            yevents.push_back(yevent);
+        }
+
+        yperflog["events"] = yevents;
+    }
+
+    if (comm.rank() == 0) {
+        YAML::Node yroot;
+        yroot["perf-log"] = yperflog;
+        YAML::Emitter yaml;
+        yaml << yroot;
+        if (!yaml.good())
+            throw Exception("YAML Emitter error: {}", yaml.GetLastError());
+
+        std::ofstream fout(file_name);
+        fout << yaml.c_str();
+        fout << std::endl;
+        fout.close();
+    }
 }
 
 } // namespace godzilla

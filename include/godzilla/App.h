@@ -8,6 +8,7 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/Factory.h"
 #include "godzilla/PrintInterface.h"
+#include <chrono>
 
 namespace mpi = mpicpp_lite;
 
@@ -202,6 +203,12 @@ protected:
     /// Export parameters into a YAML format
     void export_parameters_yaml() const;
 
+    /// Write performance log
+    ///
+    /// @param file_name File name to write into
+    /// @param run_time Total application run time
+    void write_perf_log(const std::string file_name, std::chrono::duration<double> run_time) const;
+
 private:
     /// Create an input file instance
     virtual InputFile * create_input_file();
@@ -229,6 +236,9 @@ private:
 
     /// Restart file name
     std::string restart_file_name;
+
+    /// Performance log file name
+    std::string perf_log_file_name;
 
     /// YML file with application objects
     InputFile * yml;

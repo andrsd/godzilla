@@ -144,6 +144,21 @@ index_of(const std::vector<T> & array, T value)
 /// @return Demangled name
 std::string demangle(const std::string & mangled_name);
 
+/// Safely compute ratio of 2 numbers (avoiding division by zero)
+///
+/// @param num Numerator
+/// @param den Denominator
+/// @return Computed ratio
+template <typename T>
+T
+ratio(T num, T den)
+{
+    if (den != 0.)
+        return num / den;
+    else
+        return 0.;
+}
+
 } // namespace utils
 
 /// Enumerate for iterable containters
