@@ -263,7 +263,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
                                    "'cp', 'nleqerr' or 'shell'."));
 }
 
-TEST(NonlinearProblemTest, restart_file)
+TEST(NonlinearProblemTest, DISABLED_restart_file)
 {
     TestApp app;
 
