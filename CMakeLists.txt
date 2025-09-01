@@ -5,7 +5,7 @@ project(godzilla
     LANGUAGES C CXX
 )
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
@@ -28,14 +28,14 @@ option(GODZILLA_WITH_TECIOCPP "Build with teciocpp support" NO)
 option(GODZILLA_BUILD_EXAMPLES "Build examples" NO)
 option(GODZILLA_BUILD_TESTS "Build tests" NO)
 
-find_package(fmt 8.0 REQUIRED)
+find_package(fmt 11 REQUIRED)
 find_package(yaml-cpp 0.8 REQUIRED)
 if (GODZILLA_WITH_MPI)
     find_package(MPI REQUIRED)
 endif()
 find_package(PETSc 3.22 REQUIRED)
-find_package(exodusIIcpp 2.0 REQUIRED)
-find_package(mpicpp-lite 1.7 REQUIRED)
+find_package(exodusIIcpp 3 REQUIRED)
+find_package(mpicpp-lite 2 REQUIRED)
 find_package(h5pp REQUIRED)
 if (GODZILLA_WITH_TECIOCPP)
     find_package(teciocpp REQUIRED)

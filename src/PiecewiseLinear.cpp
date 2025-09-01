@@ -32,7 +32,7 @@ PiecewiseLinear::PiecewiseLinear(const Parameters & params) : Function(params), 
                                                get_param<std::vector<Real>>("y"));
     }
     catch (std::exception & e) {
-        log_error(e.what());
+        log_error("{}", e.what());
     }
 }
 

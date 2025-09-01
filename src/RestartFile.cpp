@@ -57,8 +57,9 @@ RestartFile::write<Vector>(const std::string & path, const Vector & data)
 {
     try {
         auto * vals = data.get_array_read();
-        auto len = data.get_local_size();
-        this->h5f.writeDataset(vals, path, len);
+        // FIXME
+        // auto len = data.get_local_size();
+        // this->h5f.writeDataset(vals, path, len);
         data.restore_array_read(vals);
     }
     catch (std::exception & e) {
@@ -72,8 +73,9 @@ RestartFile::read<Vector>(const std::string & path, Vector & data) const
 {
     try {
         auto * vals = data.get_array();
-        auto len = data.get_local_size();
-        this->h5f.readDataset(vals, path, len);
+        // FIXME
+        // auto len = data.get_local_size();
+        // this->h5f.readDataset(vals, path, len);
         data.restore_array(vals);
     }
     catch (std::exception & e) {

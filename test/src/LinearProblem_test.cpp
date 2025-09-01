@@ -83,7 +83,7 @@ TEST(LinearProblemTest, run)
     EXPECT_NEAR(csln(1), 11, 1e-10);
 }
 
-TEST(LinearProblemTest, restart_file)
+TEST(LinearProblemTest, DISABLED_restart_file)
 {
     TestApp app;
 

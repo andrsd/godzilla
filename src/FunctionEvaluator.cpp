@@ -6,6 +6,7 @@
 #include "godzilla/Function.h"
 #include "godzilla/Exception.h"
 #include "fmt/format.h"
+#include "fmt/ranges.h"
 #include <cassert>
 
 namespace godzilla {

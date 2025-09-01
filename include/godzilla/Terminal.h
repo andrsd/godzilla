@@ -66,3 +66,35 @@ public:
 /// Operator to print the color to the terminal
 std::ostream & operator<<(std::ostream & os, const godzilla::Terminal::Color & clr);
 std::ostream & operator<<(std::ostream & os, const godzilla::Terminal::Code & clr);
+
+template <>
+struct fmt::formatter<godzilla::Terminal::Code> {
+    constexpr auto
+    parse(fmt::format_parse_context & ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto
+    format(const godzilla::Terminal::Code & e, FormatContext & ctx) const
+    {
+        return fmt::format_to(ctx.out(), "{}", (const char *) e);
+    }
+};
+
+template <>
+struct fmt::formatter<godzilla::Terminal::Color> {
+    constexpr auto
+    parse(fmt::format_parse_context & ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto
+    format(const godzilla::Terminal::Color & e, FormatContext & ctx) const
+    {
+        return fmt::format_to(ctx.out(), "{}", (const char *) e);
+    }
+};

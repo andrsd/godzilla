@@ -14,6 +14,7 @@
 #include "godzilla/Exception.h"
 #include <cassert>
 #include "fmt/format.h"
+#include "fmt/ranges.h"
 #include "yaml-cpp/node/iterator.h"
 
 namespace godzilla {

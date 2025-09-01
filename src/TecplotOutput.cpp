@@ -285,7 +285,7 @@ TecplotOutput::write_created_by(int32_t zone)
 #ifdef GODZILLA_WITH_TECIOCPP
     auto app = get_app();
     auto now = std::time(nullptr);
-    auto datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
+    auto datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", *std::localtime(&now));
     auto created_by =
         fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
     this->file->add_aux_data(zone, "created_by", created_by);

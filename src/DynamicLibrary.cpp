@@ -26,7 +26,7 @@ DynamicLibrary::load()
     auto ext_file_path = get_ext_file_path();
     this->handle = dlopen(ext_file_path.c_str(), RTLD_NOW);
     if (!this->handle)
-        throw Exception(fmt::format("Unable to load {}: {}", this->file_name, dlerror()));
+        throw Exception("Unable to load {}: {}", this->file_name, dlerror());
     // Clear any existing error
     dlerror();
 }
