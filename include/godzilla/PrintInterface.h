@@ -111,8 +111,7 @@ private:
     void
     print_msg(std::FILE * f, fmt::format_string<T...> format, T... args) const
     {
-        auto str = fmt::format(format, std::forward<T>(args)...);
-        fmt::print(f, str);
+        fmt::print(f, format, std::forward<T>(args)...);
     }
 
     /// Application

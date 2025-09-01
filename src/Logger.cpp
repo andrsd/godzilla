@@ -46,7 +46,7 @@ Logger::print() const
             fmt::print(stderr, "{}", Terminal::yellow);
             break;
         }
-        fmt::print(stderr, entry.text);
+        fmt::print(stderr, "{}", entry.text);
         fmt::print(stderr, "{}\n", Terminal::normal);
     }
 

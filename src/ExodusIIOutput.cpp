@@ -794,7 +794,7 @@ ExodusIIOutput::write_info()
     CALL_STACK_MSG();
     auto app = get_app();
     std::time_t now = std::time(nullptr);
-    std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", fmt::localtime(now));
+    std::string datetime = fmt::format("{:%d %b %Y, %H:%M:%S}", *std::localtime(&now));
     std::string created_by =
         fmt::format("Created by {} {}, on {}", app->get_name(), app->get_version(), datetime);
 

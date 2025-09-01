@@ -30,7 +30,7 @@ get_cell_type(const std::string & elem_type)
     else if (elem_type == "HEX" || elem_type == "HEX8" || elem_type == "HEXAHEDRON")
         return PolytopeType::HEXAHEDRON;
     else
-        throw Exception(fmt::format("Unrecognized element type {}", elem_type));
+        throw Exception("Unrecognized element type {}", elem_type);
 }
 
 } // namespace
@@ -251,9 +251,8 @@ FileMesh::create_from_exodus()
                 for (Int j = 0, k = 0; j < num_side_in_set; ++j) {
                     Int face_size = node_count_list[j];
                     if (face_size > MAX_FACE_VERTICES)
-                        throw Exception(
-                            fmt::format("ExodusII side cannot have more than {} vertices.",
-                                        MAX_FACE_VERTICES));
+                        throw Exception("ExodusII side cannot have more than {} vertices.",
+                                        MAX_FACE_VERTICES);
 
                     std::vector<Int> face_nodes(face_size);
                     for (Int l = 0; l < face_size; ++l, ++k)
@@ -261,11 +260,10 @@ FileMesh::create_from_exodus()
 
                     auto faces = m->get_full_join(face_nodes);
                     if (faces.size() != 1)
-                        throw Exception(
-                            fmt::format("Invalid ExodusII side {} in set {} maps to {} faces.",
+                        throw Exception("Invalid ExodusII side {} in set {} maps to {} faces.",
                                         j,
                                         i,
-                                        faces.size()));
+                                        faces.size());
 
                     face_sets.set_value(faces[0], id);
                     face_set_label.set_value(faces[0], id);
@@ -277,10 +275,10 @@ FileMesh::create_from_exodus()
             m->set_face_set_name(id, name);
     }
     catch (exodusIIcpp::Exception & e) {
-        log_error(fmt::format(e.what()));
+        log_error("exodusIIcpp: {}", e.what());
     }
     catch (godzilla::Exception & e) {
-        log_error(fmt::format(e.what()));
+        log_error("{}", e.what());
     }
 
     return m;
