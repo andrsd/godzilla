@@ -2,4 +2,5 @@
 .DS_Store
 .idea
 .zed
+.vscode
 __pycache__
