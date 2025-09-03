@@ -1,3 +1,0 @@
-#pragma once
-
-#define GODZILLA_VERSION "@godzilla_VERSION@"

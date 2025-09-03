@@ -22,10 +22,13 @@ set_target_properties(
         SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE HAVE_CXXABI_H)
-target_compile_definitions(${PROJECT_NAME} PUBLIC
-    SPDLOG_FMT_EXTERNAL
-    H5PP_USE_SPDLOG
+target_compile_definitions(${PROJECT_NAME}
+    PUBLIC
+        SPDLOG_FMT_EXTERNAL
+        H5PP_USE_SPDLOG
+    PRIVATE
+        HAVE_CXXABI_H
+        GODZILLA_VERSION="${PROJECT_VERSION}"
 )
 
 if (PETSC_HAVE_HYPRE)
@@ -92,11 +95,6 @@ install(
     DIRECTORY ${CMAKE_SOURCE_DIR}/include/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.h"
-)
-
-install(
-    FILES ${CMAKE_BINARY_DIR}/godzilla/Config.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/godzilla
 )
 
 install(
