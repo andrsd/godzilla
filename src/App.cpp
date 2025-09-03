@@ -12,7 +12,6 @@
 #include "godzilla/Utils.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/Logger.h"
-#include "godzilla/Config.h"
 #include "yaml-cpp/yaml.h"
 #include "fmt/chrono.h"
 #include <cassert>

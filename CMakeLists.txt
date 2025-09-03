@@ -99,8 +99,5 @@ if (GODZILLA_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-# Config file
-
-configure_file(include/Config.h.in godzilla/Config.h)
 
 add_subdirectory(docs)
