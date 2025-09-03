@@ -35,7 +35,8 @@ jobs:
             petsc==3.22.* \
             yaml-cpp==0.8.0 \
             exodusIIcpp=3.* \
-            teciocpp
+            teciocpp \
+            gtest
 
       - name: Configure
         run: |
@@ -98,7 +99,8 @@ jobs:
             petsc==3.22.* \
             yaml-cpp==0.8.0 \
             exodusIIcpp=3.* \
-            teciocpp
+            teciocpp \
+            gtest
 
       - name: Configure
         run: |
