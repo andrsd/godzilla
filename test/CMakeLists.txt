@@ -3,6 +3,8 @@ project(godzilla-test)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+find_package(GTest)
+
 file(GLOB SRCS CONFIGURE_DEPENDS
     common/*.cpp
     src/*.cpp
@@ -40,8 +42,7 @@ target_link_libraries(
         mpicpp-lite::mpicpp-lite
         h5pp::h5pp
         ${CMAKE_DL_LIBS}
-        gtest_main
-        gmock_main
+        GTest::gmock_main
 )
 if (GODZILLA_WITH_MPI)
     target_link_libraries(${PROJECT_NAME} PRIVATE MPI::MPI_C)

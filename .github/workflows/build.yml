@@ -62,6 +62,7 @@ jobs:
             yaml-cpp=0.8.0 \
             exodusIIcpp=3.* \
             teciocpp \
+            gtest \
             lcov
 
       - name: Configure
