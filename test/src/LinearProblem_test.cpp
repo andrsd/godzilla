@@ -83,7 +83,7 @@ TEST(LinearProblemTest, run)
     EXPECT_NEAR(csln(1), 11, 1e-10);
 }
 
-TEST(LinearProblemTest, DISABLED_restart_file)
+TEST(LinearProblemTest, restart_file)
 {
     TestApp app;
 
@@ -112,7 +112,7 @@ TEST(LinearProblemTest, DISABLED_restart_file)
     {
         RestartFile f("lp.restart.h5", FileAccess::READ);
         auto v = Vector::create_seq(app.get_comm(), 2);
-        f.read<Vector>("sln", v);
+        f.read<Vector>("/", "sln", v);
         EXPECT_NEAR(v(0), 10, 1e-10);
         EXPECT_NEAR(v(1), 11, 1e-10);
     }

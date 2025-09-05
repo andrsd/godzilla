@@ -9,57 +9,43 @@
 
 namespace fs = std::filesystem;
 
-namespace {
-
-h5pp::FileAccess
-file_access(godzilla::FileAccess fa)
-{
-    if (fa == godzilla::FileAccess::READ)
-        return h5pp::FileAccess::READONLY;
-    else if (fa == godzilla::FileAccess::WRITE)
-        return h5pp::FileAccess::READWRITE;
-    else if (fa == godzilla::FileAccess::CREATE)
-        return h5pp::FileAccess::REPLACE;
-    else
-        throw std::runtime_error("Unknown FileAccess value.");
-}
-
-} // namespace
-
 namespace godzilla {
 
 RestartFile::RestartFile(const std::string & file_name, FileAccess faccess) :
-    h5f(fs::path(file_name), file_access(faccess))
+    h5f(fs::path(file_name), faccess)
 {
 }
 
 std::string
 RestartFile::file_name() const
 {
-    return this->h5f.getFileName();
+    return this->h5f.get_file_name();
 }
 
 std::string
 RestartFile::file_path() const
 {
-    return this->h5f.getFilePath();
+    return this->h5f.get_file_path();
 }
 
 std::string
 RestartFile::get_full_path(const std::string & app_name, const std::string & path) const
 {
-    return fmt::format("{}/{}", app_name, path);
+    if (path == "/")
+        return fmt::format("/{}", app_name, path);
+    else
+        return fmt::format("/{}/{}", app_name, path);
 }
 
 template <>
 void
-RestartFile::write<Vector>(const std::string & path, const Vector & data)
+RestartFile::write<Vector>(const std::string & path, const std::string & name, const Vector & data)
 {
     try {
+        auto group = this->h5f.create_group(path);
         auto * vals = data.get_array_read();
-        // FIXME
-        // auto len = data.get_local_size();
-        // this->h5f.writeDataset(vals, path, len);
+        auto len = data.get_local_size();
+        group.write_dataset(name, len, vals);
         data.restore_array_read(vals);
     }
     catch (std::exception & e) {
@@ -69,13 +55,13 @@ RestartFile::write<Vector>(const std::string & path, const Vector & data)
 
 template <>
 void
-RestartFile::read<Vector>(const std::string & path, Vector & data) const
+RestartFile::read<Vector>(const std::string & path, const std::string & name, Vector & data) const
 {
     try {
+        auto group = this->h5f.open_group(path);
         auto * vals = data.get_array();
-        // FIXME
-        // auto len = data.get_local_size();
-        // this->h5f.readDataset(vals, path, len);
+        auto len = data.get_local_size();
+        group.read_dataset(name, len, vals);
         data.restore_array(vals);
     }
     catch (std::exception & e) {
