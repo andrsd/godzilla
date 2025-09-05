@@ -23,9 +23,6 @@ set_target_properties(
 )
 
 target_compile_definitions(${PROJECT_NAME}
-    PUBLIC
-        SPDLOG_FMT_EXTERNAL
-        H5PP_USE_SPDLOG
     PRIVATE
         HAVE_CXXABI_H
         GODZILLA_VERSION="${PROJECT_VERSION}"
@@ -50,7 +47,7 @@ target_link_libraries(
     PUBLIC
         fmt::fmt
         mpicpp-lite::mpicpp-lite
-        h5pp::h5pp
+        HDF5::HDF5
         PETSc::petsc
     PRIVATE
         muParser

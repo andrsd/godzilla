@@ -5,9 +5,9 @@
 
 #include "godzilla/Enums.h"
 #include "godzilla/Exception.h"
+#include "godzilla/HDF5File.h"
 #include <string>
 #include <algorithm>
-#include "h5pp/h5pp.h"
 
 namespace godzilla {
 
@@ -28,30 +28,36 @@ public:
     /// @param path Path to the data
     /// @param data Data to write
     template <typename T>
-    void write(const std::string & path, const T & data);
+    void write(const std::string & path, const std::string & name, const T & data);
 
     template <typename T>
-    void write(const std::string app_name, const std::string & path, const T & data);
+    void write(const std::string app_name,
+               const std::string & path,
+               const std::string & name,
+               const T & data);
 
     /// Read data from the file
     ///
     /// @param path Path to the data
     /// @param data Variable to store the data read from the file
     template <typename T>
-    void read(const std::string & path, T & data) const;
+    void read(const std::string & path, const std::string & name, T & data) const;
 
     template <typename T>
-    void read(const std::string & app_name, const std::string & path, T & data) const;
+    void read(const std::string & app_name,
+              const std::string & path,
+              const std::string & name,
+              T & data) const;
 
     /// Read data from the file
     ///
     /// @param path Path to the data
     /// @return Data read from the file
     template <typename T>
-    T read(const std::string & path) const;
+    T read(const std::string & path, const std::string & name) const;
 
     template <typename T>
-    T read(const std::string & app_name, const std::string & path) const;
+    T read(const std::string & app_name, const std::string & path, const std::string & name) const;
 
     /// Get the name of the file
     ///
@@ -71,15 +77,16 @@ protected:
     std::string get_full_path(const std::string & app_name, const std::string & path) const;
 
 private:
-    h5pp::File h5f;
+    HDF5File h5f;
 };
 
 template <typename T>
 void
-RestartFile::write(const std::string & path, const T & data)
+RestartFile::write(const std::string & path, const std::string & name, const T & data)
 {
     try {
-        this->h5f.template writeDataset<T>(data, path);
+        auto group = this->h5f.create_group(path);
+        group.template write_dataset<T>(name, data);
     }
     catch (std::exception & e) {
         throw Exception("Error writing '{}' to {}: {}", path, this->file_name(), e.what());
@@ -88,17 +95,23 @@ RestartFile::write(const std::string & path, const T & data)
 
 template <typename T>
 void
-RestartFile::write(const std::string app_name, const std::string & path, const T & data)
+RestartFile::write(const std::string app_name,
+                   const std::string & path,
+                   const std::string & name,
+                   const T & data)
 {
-    this->write<T>(get_full_path(app_name, path), data);
+    this->write<T>(get_full_path(app_name, path), name, data);
 }
 
 template <typename T>
 T
-RestartFile::read(const std::string & path) const
+RestartFile::read(const std::string & path, const std::string & name) const
 {
     try {
-        return this->h5f.template readDataset<T>(path);
+        auto group = this->h5f.open_group(path);
+        T data;
+        group.template read_dataset<T>(name, data);
+        return data;
     }
     catch (std::exception & e) {
         throw Exception("Error reading '{}' from {}: {}", path, this->file_name(), e.what());
@@ -107,10 +120,11 @@ RestartFile::read(const std::string & path) const
 
 template <typename T>
 void
-RestartFile::read(const std::string & path, T & data) const
+RestartFile::read(const std::string & path, const std::string & name, T & data) const
 {
     try {
-        this->h5f.template readDataset<T>(data, path);
+        auto group = this->h5f.open_group(path);
+        group.template read_dataset<T>(name, data);
     }
     catch (std::exception & e) {
         throw Exception("Error reading '{}' from {}: {}", path, this->file_name(), e.what());
@@ -119,24 +133,31 @@ RestartFile::read(const std::string & path, T & data) const
 
 template <typename T>
 T
-RestartFile::read(const std::string & app_name, const std::string & path) const
+RestartFile::read(const std::string & app_name,
+                  const std::string & path,
+                  const std::string & name) const
 {
-    return this->read<T>(get_full_path(app_name, path));
+    return this->read<T>(get_full_path(app_name, path), name);
 }
 
 template <typename T>
 void
-RestartFile::read(const std::string & app_name, const std::string & path, T & data) const
+RestartFile::read(const std::string & app_name,
+                  const std::string & path,
+                  const std::string & name,
+                  T & data) const
 {
-    this->read<T>(get_full_path(app_name, path), data);
+    this->read<T>(get_full_path(app_name, path), name, data);
 }
 
 // Specializations for our datatypes go below
 
 template <>
-void RestartFile::write<Vector>(const std::string & path, const Vector & data);
+void
+RestartFile::write<Vector>(const std::string & path, const std::string & name, const Vector & data);
 
 template <>
-void RestartFile::read<Vector>(const std::string & path, Vector & data) const;
+void
+RestartFile::read<Vector>(const std::string & path, const std::string & name, Vector & data) const;
 
 } // namespace godzilla

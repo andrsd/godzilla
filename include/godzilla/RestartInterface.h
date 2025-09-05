@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <string>
-
 namespace godzilla {
 
 class RestartFile;

@@ -9,7 +9,7 @@ include(CMakeFindDependencyMacro)
 
 find_dependency(fmt 11)
 find_dependency(mpicpp-lite 2)
-find_dependency(h5pp)
+find_dependency(HDF5 1.12 REQUIRED COMPONENTS C)
 if (${GODZILLA_WITH_TECIOCPP})
     find_dependency(teciocpp)
 endif()

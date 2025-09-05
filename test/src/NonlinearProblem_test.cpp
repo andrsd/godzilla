@@ -263,7 +263,7 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
                                    "'cp', 'nleqerr' or 'shell'."));
 }
 
-TEST(NonlinearProblemTest, DISABLED_restart_file)
+TEST(NonlinearProblemTest, restart_file)
 {
     TestApp app;
 
@@ -291,7 +291,7 @@ TEST(NonlinearProblemTest, DISABLED_restart_file)
     {
         RestartFile f("nl.restart.h5", FileAccess::READ);
         auto v = Vector::create_seq(app.get_comm(), 2);
-        f.read<Vector>("sln", v);
+        f.read<Vector>("/", "sln", v);
         EXPECT_NEAR(v(0), 2, 1e-10);
         EXPECT_NEAR(v(1), 3, 1e-10);
     }
