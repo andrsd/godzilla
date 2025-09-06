@@ -616,6 +616,19 @@ HDF5File::Dataset::read(std::string & data) const
     H5Tclose(dtype);
 }
 
+template <>
+inline void
+HDF5File::Dataset::read(bool & data) const
+{
+    auto dtype = H5Dget_type(this->id);
+    int value;
+    auto res = H5Dread(this->id, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value);
+    if (res < 0)
+        throw Exception("Error reading dataset");
+    data = value != 0;
+    H5Tclose(dtype);
+}
+
 template <typename T, typename A>
 inline void
 HDF5File::Dataset::read(std::vector<T, A> & data) const
@@ -713,6 +726,19 @@ HDF5File::Attribute::read(std::string & data) const
         if (res < 0)
             throw Exception("Error reading attribute");
     }
+    H5Tclose(dtype);
+}
+
+template <>
+inline void
+HDF5File::Attribute::read(bool & data) const
+{
+    auto dtype = H5Aget_type(this->id);
+    int value;
+    auto res = H5Aread(this->id, dtype, &value);
+    if (res < 0)
+        throw Exception("Error reading attribute");
+    data = value != 0;
     H5Tclose(dtype);
 }
 
