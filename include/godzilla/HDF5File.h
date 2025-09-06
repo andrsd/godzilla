@@ -182,6 +182,12 @@ class HDF5File {
         template <typename T>
         void read_dataset(const std::string & name, Int n, T data[]);
 
+        Dataset
+        get_dataset(const std::string & name) const
+        {
+            return Dataset::open(this->id, name);
+        }
+
     public:
         static Group
         open(hid_t parent_id, const std::string & name)
