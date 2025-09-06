@@ -8,6 +8,7 @@
 #include "godzilla/Exception.h"
 #include <filesystem>
 #include <string>
+#include <numeric>
 #include <concepts>
 #include <mutex>
 #include <hdf5.h>
@@ -143,6 +144,7 @@ get_datatype<std::string>()
 /// Class for interaction with HDF5 files
 class HDF5File {
     class Dataset;
+    class Attribute;
 
     class Group {
         Group(hid_t id) : id(id) {}
@@ -155,6 +157,10 @@ class HDF5File {
         Group create_group(const std::string & name);
 
         Group open_group(const std::string & name);
+
+        bool has_attribute(const std::string & name) const;
+
+        bool has_dataset(const std::string & name) const;
 
         template <typename T>
         void write_attribute(const std::string & name, const T & value);
@@ -176,6 +182,12 @@ class HDF5File {
 
         template <typename T>
         void read_dataset(const std::string & name, Int n, T data[]);
+
+        Dataset
+        get_dataset(const std::string & name) const
+        {
+            return Dataset::open(this->id, name);
+        }
 
     public:
         static Group
@@ -218,15 +230,15 @@ class HDF5File {
             return H5Sget_simple_extent_ndims(this->id);
         }
 
-        template <int N>
-        std::array<hsize_t, N>
+        std::vector<hsize_t>
         get_simple_extent_dims() const
         {
-            std::array<hsize_t, N> dims;
-            if (H5Sget_simple_extent_dims(this->id, dims.data(), NULL) == 1)
-                return dims;
-            else
+            auto n = get_simple_extent_ndims();
+            std::vector<hsize_t> dims(n);
+            if (H5Sget_simple_extent_dims(this->id, dims.data(), NULL) < 0)
                 throw Exception("Failed to obtain dataspace dimension");
+            else
+                return dims;
         }
 
         const hid_t id;
@@ -265,6 +277,7 @@ class HDF5File {
         }
 
         friend class Dataset;
+        friend class Attribute;
     };
 
     class Dataset {
@@ -295,6 +308,17 @@ class HDF5File {
         get_space() const
         {
             return Dataspace(H5Dget_space(this->id));
+        }
+
+        std::vector<size_t>
+        get_dimensions() const
+        {
+            auto dspace = get_space();
+            auto d = dspace.get_simple_extent_dims();
+            std::vector<size_t> dims(d.size());
+            for (std::size_t i = 0; i < d.size(); ++i)
+                dims[i] = d[i];
+            return dims;
         }
 
         const hid_t id;
@@ -363,8 +387,17 @@ class HDF5File {
         template <typename T>
         void read(T & data) const;
 
+        template <typename T, typename A>
+        void read(std::vector<T, A> & data) const;
+
         template <typename T>
         void write(const T & data);
+
+        Dataspace
+        get_space() const
+        {
+            return Dataspace(H5Aget_space(this->id));
+        }
     };
 
 public:
@@ -374,6 +407,10 @@ public:
     std::string get_file_name() const;
 
     std::string get_file_path() const;
+
+    bool has_attribute(const std::string & name) const;
+
+    bool has_dataset(const std::string & name) const;
 
     template <typename T>
     void write_dataset(const std::string & name, const T & data);
@@ -409,6 +446,24 @@ inline HDF5File::Group::~Group()
     H5Gclose(this->id);
 }
 
+inline bool
+HDF5File::Group::has_attribute(const std::string & name) const
+{
+    auto res = H5Aexists(this->id, name.c_str());
+    if (res < 0)
+        throw Exception("Failed to check attribute");
+    return res > 0;
+}
+
+inline bool
+HDF5File::Group::has_dataset(const std::string & name) const
+{
+    auto res = H5Lexists(this->id, name.c_str(), H5P_DEFAULT);
+    if (res < 0)
+        throw Exception("Failed to check dataset");
+    return res > 0;
+}
+
 inline HDF5File::Group
 HDF5File::Group::create_group(const std::string & name)
 {
@@ -440,7 +495,11 @@ inline T
 HDF5File::Group::read_attribute(const std::string & name) const
 {
     if constexpr (StdVector<T>) {
-        throw Exception("Vector-valued attributes are not supported yet");
+        using V = typename T::value_type;
+        std::vector<V> value;
+        auto attribute = Attribute::open<T>(this->id, name);
+        attribute.template read<V, std::allocator<V>>(value);
+        return value;
     }
     else {
         T value;
@@ -547,6 +606,26 @@ HDF5File::Dataset::read(std::string & data) const
         data = std::string(c_str);
         H5free_memory(c_str);
     }
+    else {
+        size_t size = H5Tget_size(dtype);
+        data.resize(size);
+        auto res = H5Dread(this->id, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
+        if (res < 0)
+            throw Exception("Error reading dataset");
+    }
+    H5Tclose(dtype);
+}
+
+template <>
+inline void
+HDF5File::Dataset::read(bool & data) const
+{
+    auto dtype = H5Dget_type(this->id);
+    int value;
+    auto res = H5Dread(this->id, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value);
+    if (res < 0)
+        throw Exception("Error reading dataset");
+    data = value != 0;
     H5Tclose(dtype);
 }
 
@@ -555,8 +634,9 @@ inline void
 HDF5File::Dataset::read(std::vector<T, A> & data) const
 {
     auto dataspace = get_space();
-    auto dims = dataspace.get_simple_extent_dims<1>();
-    data.resize(dims[0]);
+    auto dims = dataspace.get_simple_extent_dims();
+    auto n = std::accumulate(dims.begin(), dims.end(), 1, std::multiplies());
+    data.resize(n);
     auto res =
         H5Dread(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
     if (res < 0)
@@ -569,7 +649,7 @@ HDF5File::Dataset::read(Int n, T data[])
 {
     auto res = H5Dread(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
     if (res < 0)
-        throw Exception("Error writing dataset");
+        throw Exception("Error reading dataset");
 }
 
 template <typename T>
@@ -639,7 +719,40 @@ HDF5File::Attribute::read(std::string & data) const
         data = std::string(str);
         H5free_memory(str);
     }
+    else {
+        size_t size = H5Tget_size(dtype);
+        data.resize(size);
+        auto res = H5Aread(this->id, dtype, data.data());
+        if (res < 0)
+            throw Exception("Error reading attribute");
+    }
     H5Tclose(dtype);
+}
+
+template <>
+inline void
+HDF5File::Attribute::read(bool & data) const
+{
+    auto dtype = H5Aget_type(this->id);
+    int value;
+    auto res = H5Aread(this->id, dtype, &value);
+    if (res < 0)
+        throw Exception("Error reading attribute");
+    data = value != 0;
+    H5Tclose(dtype);
+}
+
+template <typename T, typename A>
+void
+HDF5File::Attribute::read(std::vector<T, A> & data) const
+{
+    auto dataspace = get_space();
+    auto dims = dataspace.get_simple_extent_dims();
+    auto n = std::accumulate(dims.begin(), dims.end(), 1, std::multiplies());
+    data.resize(n);
+    auto res = H5Aread(this->id, hdf5::get_datatype<T>(), data.data());
+    if (res < 0)
+        throw Exception("Error reading attribute");
 }
 
 template <typename T>
@@ -673,6 +786,24 @@ inline HDF5File::Group
 HDF5File::open_group(const std::string & name) const
 {
     return Group::open(this->id, name);
+}
+
+inline bool
+HDF5File::has_attribute(const std::string & name) const
+{
+    auto res = H5Aexists(this->id, name.c_str());
+    if (res < 0)
+        throw Exception("Failed to check attribute");
+    return res > 0;
+}
+
+inline bool
+HDF5File::has_dataset(const std::string & name) const
+{
+    auto res = H5Lexists(this->id, name.c_str(), H5P_DEFAULT);
+    if (res < 0)
+        throw Exception("Failed to check dataset");
+    return res > 0;
 }
 
 template <typename T>
@@ -744,7 +875,11 @@ inline T
 HDF5File::read_attribute(const std::string & name) const
 {
     if constexpr (StdVector<T>) {
-        throw Exception("Vector-valued attributes are not supported yet");
+        using V = typename T::value_type;
+        std::vector<V> value;
+        auto attribute = Attribute::open<T>(this->id, name);
+        attribute.template read<V, std::allocator<V>>(value);
+        return value;
     }
     else {
         T value;
