@@ -8,6 +8,7 @@
 #include "godzilla/Exception.h"
 #include <filesystem>
 #include <string>
+#include <numeric>
 #include <concepts>
 #include <mutex>
 #include <hdf5.h>
@@ -218,15 +219,15 @@ class HDF5File {
             return H5Sget_simple_extent_ndims(this->id);
         }
 
-        template <int N>
-        std::array<hsize_t, N>
+        std::vector<hsize_t>
         get_simple_extent_dims() const
         {
-            std::array<hsize_t, N> dims;
-            if (H5Sget_simple_extent_dims(this->id, dims.data(), NULL) == 1)
-                return dims;
-            else
+            auto n = get_simple_extent_ndims();
+            std::vector<hsize_t> dims(n);
+            if (H5Sget_simple_extent_dims(this->id, dims.data(), NULL) < 0)
                 throw Exception("Failed to obtain dataspace dimension");
+            else
+                return dims;
         }
 
         const hid_t id;
@@ -555,8 +556,9 @@ inline void
 HDF5File::Dataset::read(std::vector<T, A> & data) const
 {
     auto dataspace = get_space();
-    auto dims = dataspace.get_simple_extent_dims<1>();
-    data.resize(dims[0]);
+    auto dims = dataspace.get_simple_extent_dims();
+    auto n = std::accumulate(dims.begin(), dims.end(), 1, std::multiplies());
+    data.resize(n);
     auto res =
         H5Dread(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
     if (res < 0)
