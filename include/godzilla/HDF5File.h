@@ -548,6 +548,13 @@ HDF5File::Dataset::read(std::string & data) const
         data = std::string(c_str);
         H5free_memory(c_str);
     }
+    else {
+        size_t size = H5Tget_size(dtype);
+        data.resize(size);
+        auto res = H5Dread(this->id, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
+        if (res < 0)
+            throw Exception("Error reading dataset");
+    }
     H5Tclose(dtype);
 }
 
