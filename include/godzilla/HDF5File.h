@@ -302,6 +302,17 @@ class HDF5File {
             return Dataspace(H5Dget_space(this->id));
         }
 
+        std::vector<size_t>
+        get_dimensions() const
+        {
+            auto dspace = get_space();
+            auto d = dspace.get_simple_extent_dims();
+            std::vector<size_t> dims(d.size());
+            for (std::size_t i = 0; i < d.size(); ++i)
+                dims[i] = d[i];
+            return dims;
+        }
+
         const hid_t id;
 
         template <typename T>
