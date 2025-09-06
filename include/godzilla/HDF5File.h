@@ -157,6 +157,10 @@ class HDF5File {
 
         Group open_group(const std::string & name);
 
+        bool has_attribute(const std::string & name) const;
+
+        bool has_dataset(const std::string & name) const;
+
         template <typename T>
         void write_attribute(const std::string & name, const T & value);
 
@@ -408,6 +412,24 @@ private:
 inline HDF5File::Group::~Group()
 {
     H5Gclose(this->id);
+}
+
+inline bool
+HDF5File::Group::has_attribute(const std::string & name) const
+{
+    auto res = H5Aexists(this->id, name.c_str());
+    if (res < 0)
+        throw Exception("Failed to check attribute");
+    return res > 0;
+}
+
+inline bool
+HDF5File::Group::has_dataset(const std::string & name) const
+{
+    auto res = H5Lexists(this->id, name.c_str(), H5P_DEFAULT);
+    if (res < 0)
+        throw Exception("Failed to check dataset");
+    return res > 0;
 }
 
 inline HDF5File::Group
