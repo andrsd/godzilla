@@ -11,13 +11,8 @@
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/Array1D.h"
 #include "godzilla/FEGeometry.h"
-#include "godzilla/FEVolumes.h"
 #include "godzilla/FEShapeFns.h"
-#include "godzilla/Utils.h"
 #include "petscdm.h"
-#include <cstdio>
-#include <set>
-#include <vector>
 
 namespace godzilla {
 
@@ -43,15 +38,13 @@ public:
 template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 class EssentialBoundaryInfo : public AbstractBoundaryInfo {
 public:
-    EssentialBoundaryInfo(UnstructuredMesh * mesh, const IndexSet & vertices) :
+    EssentialBoundaryInfo(UnstructuredMesh * mesh, IndexSet vertices) :
         mesh(mesh),
         vertices(vertices)
     {
         assert(mesh->get_dimension() == DIM);
         CALL_STACK_MSG();
     }
-
-    ~EssentialBoundaryInfo() override { this->vertices.destroy(); }
 
     UnstructuredMesh *
     get_mesh() const
@@ -120,29 +113,25 @@ class NaturalBoundaryInfo : public AbstractBoundaryInfo {
 public:
     NaturalBoundaryInfo(UnstructuredMesh * mesh,
                         const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> * grad_phi,
-                        const IndexSet & facets) :
+                        IndexSet facets) :
         mesh(mesh),
         grad_phi(grad_phi),
-        facets(facets),
-        area(lengths)
+        facets(facets)
     {
         CALL_STACK_MSG();
         assert(mesh->get_dimension() == DIM);
         this->facets.sort();
     }
 
-    NaturalBoundaryInfo(UnstructuredMesh * mesh, const IndexSet & facets) :
+    NaturalBoundaryInfo(UnstructuredMesh * mesh, IndexSet facets) :
         mesh(mesh),
         grad_phi(nullptr),
-        facets(facets),
-        area(lengths)
+        facets(facets)
     {
         CALL_STACK_MSG();
         assert(mesh->get_dimension() == DIM);
         this->facets.sort();
     }
-
-    ~NaturalBoundaryInfo() override { this->facets.destroy(); }
 
     void
     create() override
@@ -311,8 +300,6 @@ private:
     IndexSet facets;
     /// Boundary facet length
     Array1D<Real> lengths;
-    /// Boundary facet areas
-    Array1D<Real> & area;
     /// Boundary facet unit outward normal
     Array1D<DenseVector<Real, DIM>> normals;
 };
