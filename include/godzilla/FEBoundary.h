@@ -23,6 +23,10 @@ namespace godzilla {
 
 namespace fe {
 
+/// Function that can be called from boundary vertex/facet loop
+template <typename F>
+concept BoundaryFunction = std::is_invocable_r_v<void, F, Int, Int>;
+
 class AbstractBoundaryInfo {
 public:
     virtual ~AbstractBoundaryInfo() = default;
@@ -370,6 +374,18 @@ public:
         return this->vertices.get_local_size();
     }
 
+protected:
+    /// Iterate over all boundary vertices
+    template <BoundaryFunction Func>
+    void
+    for_each_vertex(Func fn)
+    {
+        for (auto & ibn : make_range(this->num_vertices())) {
+            auto vertex_idx = this->vertices(ibn);
+            fn(ibn, vertex_idx);
+        }
+    }
+
 private:
     /// Mesh
     UnstructuredMesh * mesh;
@@ -500,6 +516,17 @@ protected:
             this->facets.destroy();
             this->lengths.destroy();
             this->normals.destroy();
+        }
+    }
+
+    /// Iterate over all boundary facets
+    template <BoundaryFunction Func>
+    void
+    for_each_facet(Func fn)
+    {
+        for (auto & ibf : make_range(this->num_facets())) {
+            auto facet = this->facets(ibf);
+            fn(ibf, facet);
         }
     }
 
