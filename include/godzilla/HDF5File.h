@@ -569,7 +569,7 @@ HDF5File::Dataset::read(Int n, T data[])
 {
     auto res = H5Dread(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
     if (res < 0)
-        throw Exception("Error writing dataset");
+        throw Exception("Error reading dataset");
 }
 
 template <typename T>
