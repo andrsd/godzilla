@@ -328,10 +328,7 @@ public:
         CALL_STACK_MSG();
     }
 
-    ~EssentialBoundaryInfo() override
-    {
-        this->vertices.destroy();
-    }
+    ~EssentialBoundaryInfo() override { this->vertices.destroy(); }
 
     UnstructuredMesh *
     get_mesh() const
@@ -422,10 +419,7 @@ public:
         this->facets.sort();
     }
 
-    ~NaturalBoundaryInfo() override
-    {
-        this->facets.destroy();
-    }
+    ~NaturalBoundaryInfo() override { this->facets.destroy(); }
 
     void
     create() override
