@@ -380,6 +380,10 @@ public:
 
     std::string get_file_path() const;
 
+    bool has_attribute(const std::string & name) const;
+
+    bool has_dataset(const std::string & name) const;
+
     template <typename T>
     void write_dataset(const std::string & name, const T & data);
 
@@ -711,6 +715,24 @@ inline HDF5File::Group
 HDF5File::open_group(const std::string & name) const
 {
     return Group::open(this->id, name);
+}
+
+inline bool
+HDF5File::has_attribute(const std::string & name) const
+{
+    auto res = H5Aexists(this->id, name.c_str());
+    if (res < 0)
+        throw Exception("Failed to check attribute");
+    return res > 0;
+}
+
+inline bool
+HDF5File::has_dataset(const std::string & name) const
+{
+    auto res = H5Lexists(this->id, name.c_str(), H5P_DEFAULT);
+    if (res < 0)
+        throw Exception("Failed to check dataset");
+    return res > 0;
 }
 
 template <typename T>
