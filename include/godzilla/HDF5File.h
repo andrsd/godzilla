@@ -641,6 +641,13 @@ HDF5File::Attribute::read(std::string & data) const
         data = std::string(str);
         H5free_memory(str);
     }
+    else {
+        size_t size = H5Tget_size(dtype);
+        data.resize(size);
+        auto res = H5Aread(this->id, dtype, data.data());
+        if (res < 0)
+            throw Exception("Error reading attribute");
+    }
     H5Tclose(dtype);
 }
 
