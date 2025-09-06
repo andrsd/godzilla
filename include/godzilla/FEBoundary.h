@@ -474,12 +474,22 @@ public:
     }
 
     /// Get length/area of a boundary facet
-    /// TODO: I need a better name
     ///
     /// @param ibf Local boundary facet index
     /// @return Length/area of the boundary facet
     Real
     facet_length(Int ibf) const
+    {
+        CALL_STACK_MSG();
+        return this->lengths(ibf);
+    }
+
+    /// Get area of a boundary facet
+    ///
+    /// @param ibf Local boundary facet index
+    /// @return Area of the boundary facet
+    Real
+    facet_area(Int ibf) const
     {
         CALL_STACK_MSG();
         return this->lengths(ibf);
