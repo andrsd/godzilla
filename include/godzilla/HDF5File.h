@@ -144,6 +144,7 @@ get_datatype<std::string>()
 /// Class for interaction with HDF5 files
 class HDF5File {
     class Dataset;
+    class Attribute;
 
     class Group {
         Group(hid_t id) : id(id) {}
@@ -276,6 +277,7 @@ class HDF5File {
         }
 
         friend class Dataset;
+        friend class Attribute;
     };
 
     class Dataset {
@@ -385,8 +387,17 @@ class HDF5File {
         template <typename T>
         void read(T & data) const;
 
+        template <typename T, typename A>
+        void read(std::vector<T, A> & data) const;
+
         template <typename T>
         void write(const T & data);
+
+        Dataspace
+        get_space() const
+        {
+            return Dataspace(H5Aget_space(this->id));
+        }
     };
 
 public:
@@ -484,7 +495,11 @@ inline T
 HDF5File::Group::read_attribute(const std::string & name) const
 {
     if constexpr (StdVector<T>) {
-        throw Exception("Vector-valued attributes are not supported yet");
+        using V = typename T::value_type;
+        std::vector<V> value;
+        auto attribute = Attribute::open<T>(this->id, name);
+        attribute.template read<V, std::allocator<V>>(value);
+        return value;
     }
     else {
         T value;
@@ -701,6 +716,19 @@ HDF5File::Attribute::read(std::string & data) const
     H5Tclose(dtype);
 }
 
+template <typename T, typename A>
+void
+HDF5File::Attribute::read(std::vector<T, A> & data) const
+{
+    auto dataspace = get_space();
+    auto dims = dataspace.get_simple_extent_dims();
+    auto n = std::accumulate(dims.begin(), dims.end(), 1, std::multiplies());
+    data.resize(n);
+    auto res = H5Aread(this->id, hdf5::get_datatype<T>(), data.data());
+    if (res < 0)
+        throw Exception("Error reading attribute");
+}
+
 template <typename T>
 inline void
 HDF5File::Attribute::write(const T & data)
@@ -821,7 +849,11 @@ inline T
 HDF5File::read_attribute(const std::string & name) const
 {
     if constexpr (StdVector<T>) {
-        throw Exception("Vector-valued attributes are not supported yet");
+        using V = typename T::value_type;
+        std::vector<V> value;
+        auto attribute = Attribute::open<T>(this->id, name);
+        attribute.template read<V, std::allocator<V>>(value);
+        return value;
     }
     else {
         T value;
