@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/CallStack.h"
+#include "godzilla/Formatters.h"
 #include "godzilla/Types.h"
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
@@ -438,7 +439,7 @@ local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
         sf.reduce_end(l_array, g_array, mpi::op::min<T>());
         break;
     default:
-        throw Exception("Unknown mode");
+        throw Exception("`local_to_global` called with unsupported mode '{}'", mode);
     }
 }
 
@@ -456,7 +457,7 @@ local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
         sf.reduce_end(l_array, g_array, mpi::op::sum<T>());
         break;
     default:
-        throw Exception("Unknown mode");
+        throw Exception("`local_to_global` called with unsupported mode '{}'", mode);
     }
 }
 
@@ -465,7 +466,9 @@ void
 global_to_local(DM dm, const Array1D<T> & g, InsertMode mode, Array1D<T> & l)
 {
     CALL_STACK_MSG();
-    assert(mode != ADD_VALUES);
+    if (mode == ADD_VALUES)
+        throw Exception("`global_to_local` called with unsupported mode '{}'", mode);
+
     auto sf = get_section_star_forest(dm);
     sf.broadcast_begin(g, l, mpi::op::replace<T>());
     sf.broadcast_end(g, l, mpi::op::replace<T>());
