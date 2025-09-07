@@ -48,16 +48,10 @@ public:
     void get_values(const std::vector<Int> & idx, std::vector<Scalar> & y) const;
 
     void abs();
-    [[deprecated("")]] Scalar dot(const Vector & y) const;
+
     void scale(Scalar alpha);
 
-    [[deprecated("")]] void duplicate(Vector & b) const;
     Vector duplicate() const;
-
-    /// Copy this vector into `y`
-    ///
-    /// @param y Vector to copy our values into
-    [[deprecated("Message")]] void copy(Vector & y) const;
 
     /// Copies between a reduced vector and the appropriate elements of a full-space vector.
     ///
@@ -94,50 +88,6 @@ public:
     /// @param tol The zero tolerance
     void filter(Real tol);
 #endif
-
-    /// Computes `this[i] = alpha x[i] + this[i]`
-    ///
-    /// @param alpha Scalar
-    /// @param x Vector to scale by `alpha`
-    [[deprecated("")]] void axpy(Scalar alpha, const Vector & x);
-
-    /// Computes `this[i] = alpha x[i] + beta y[i]`
-    ///
-    /// @param alpha Scalar
-    /// @param beta Scalar
-    /// @param x Vector sclaed by `alpha`
-    [[deprecated("")]] void axpby(Scalar alpha, Scalar beta, const Vector & x);
-
-    /// Computes `this[i] = x[i] + beta * this[i]`
-    ///
-    /// @param beta Scalar
-    /// @param x Unscaled vector
-    [[deprecated("")]] void aypx(Scalar beta, const Vector & x);
-
-    /// Computes `this[i] = alpha * x[i] + y[i]
-    ///
-    /// @param alpha Scalar
-    /// @param x First vector multiplied by `alpha`
-    /// @param y Second vector
-    [[deprecated("")]] void waxpy(Scalar alpha, const Vector & x, const Vector & y);
-
-    /// Computes `this = this + \sum_i alpha[i] x[i]`
-    ///
-    /// Length of `alpha` and `x` must be the same
-    ///
-    /// @param alpha Array of scalars
-    /// @param x Array of vectors
-    [[deprecated("")]] void maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x);
-
-    /// Computes `this = alpha * x + beta * y + gamma * this`
-    ///
-    /// @param alpha First scalar
-    /// @param beta Second scalar
-    /// @param gamma Third scalar
-    /// @param x First vector
-    /// @param y Second vector
-    [[deprecated("")]] void
-    axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y);
 
     void reciprocal();
 
@@ -295,15 +245,6 @@ public:
     /// @param comm The MPI communicator to use
     /// @param vecs The subvectors to be nested
     static NestVector create_nest(MPI_Comm comm, const std::vector<Vector> & vecs);
-
-    [[deprecated("")]] static void
-    pointwise_min(const Vector & w, const Vector & x, const Vector & y);
-    [[deprecated("")]] static void
-    pointwise_max(const Vector & w, const Vector & x, const Vector & y);
-    [[deprecated("")]] static void
-    pointwise_mult(const Vector & w, const Vector & x, const Vector & y);
-    [[deprecated("")]] static void
-    pointwise_divide(const Vector & w, const Vector & x, const Vector & y);
 };
 
 template <Int N>
