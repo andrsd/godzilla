@@ -319,15 +319,6 @@ public:
     /// Compute transpose
     ///
     /// @return Transposed matrix
-    [[deprecated("Use transpose() instead")]] DenseMatrix<T, COLS, ROWS>
-    trans() const
-    {
-        return transpose();
-    }
-
-    /// Compute transpose
-    ///
-    /// @return Transposed matrix
     DenseMatrix<T, COLS, ROWS>
     transpose() const
     {
@@ -500,26 +491,6 @@ public:
             for (Int j = 0; j < COLS; ++j)
                 set(i, j) = m(i, j);
         return *this;
-    }
-
-    /// Get access to the underlying data
-    ///
-    /// WARNING: Avoid using this API as much as you can
-    /// @return Pointer to the underlying matrix entries
-    [[deprecated("Use data() instead")]] T *
-    get_data()
-    {
-        return &this->values[0];
-    }
-
-    /// Get access to the underlying data
-    ///
-    /// WARNING: Avoid using this API as much as you can
-    /// @return Pointer to the underlying matrix entries
-    [[deprecated("Use data() instead")]] const T *
-    get_data() const
-    {
-        return &this->values[0];
     }
 
     /// Get access to the underlying data
