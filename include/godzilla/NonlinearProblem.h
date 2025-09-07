@@ -125,7 +125,7 @@ private:
     virtual void set_up_solver_parameters();
 
     /// Method for creating a preconditioner
-    virtual void create_preconditioner(PC pc);
+    virtual Preconditioner create_preconditioner(PC pc);
 
     /// Method for setting matrix properties
     virtual void set_up_matrix_properties();

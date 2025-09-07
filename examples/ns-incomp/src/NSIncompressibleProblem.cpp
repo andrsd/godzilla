@@ -2,6 +2,7 @@
 #include "godzilla/FunctionInterface.h"
 #include "NSIncompressibleProblem.h"
 #include "godzilla/PCFieldSplit.h"
+#include "godzilla/Preconditioner.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/CallStack.h"
@@ -348,7 +349,7 @@ NSIncompressibleProblem::set_up_field_null_space(DM dm)
     // PETSC_CHECK(MatNullSpaceDestroy(&nsp));
 }
 
-void
+Preconditioner
 NSIncompressibleProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
@@ -382,4 +383,6 @@ NSIncompressibleProblem::create_preconditioner(PC pc)
     auto & ksp_press = sub_ksp[this->pressure_id.value()];
     ksp_press.set_tolerances(1.0e-10, PETSC_DEFAULT, PETSC_DEFAULT, PETSC_DEFAULT);
     auto precond_press = ksp_press.set_pc_type<PCJacobi>();
+
+    return this->fsplit;
 }

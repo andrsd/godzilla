@@ -2,6 +2,7 @@
 
 #include "godzilla/ImplicitFENonlinearProblem.h"
 #include "godzilla/PCFieldSplit.h"
+#include "godzilla/Preconditioner.h"
 #include "godzilla/Types.h"
 
 using namespace godzilla;
@@ -19,7 +20,7 @@ protected:
     void set_up_weak_form() override;
     void set_up_matrix_properties() override;
     void set_up_field_null_space(DM dm) override;
-    void create_preconditioner(PC pc) override;
+    Preconditioner create_preconditioner(PC pc) override;
 
     FieldID velocity_id;
     FieldID pressure_id;
