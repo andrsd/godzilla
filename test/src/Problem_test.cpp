@@ -393,8 +393,6 @@ TEST(ProblemTest, loc_glob_arithmetic_type)
     EXPECT_NEAR(l(8), 1., 1e-10);
     EXPECT_NEAR(l(9), 1., 1e-10);
 
-    l.destroy();
-    g.destroy();
     PETSC_CHECK(PetscFEDestroy(&fe));
     PETSC_CHECK(DMDestroy(&dm));
 }
@@ -469,9 +467,6 @@ TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
     EXPECT_NEAR(l2(8), 0., 1e-10);
     EXPECT_NEAR(l2(9), 0., 1e-10);
 
-    l1.destroy();
-    l2.destroy();
-    g.destroy();
     PETSC_CHECK(PetscFEDestroy(&fe));
     PETSC_CHECK(DMDestroy(&dm));
 }
@@ -538,8 +533,6 @@ TEST(ProblemTest, loc_glob_vec_type)
     EXPECT_NEAR(l(9)(0), 5., 1e-10);
     EXPECT_NEAR(l(9)(1), 6., 1e-10);
 
-    l.destroy();
-    g.destroy();
     PETSC_CHECK(PetscFEDestroy(&fe));
     PETSC_CHECK(DMDestroy(&dm));
 }

@@ -43,12 +43,9 @@ TEST(FEVolumesTest, calc_volumes)
 {
     const Int N_NODES = 5;
     const Int N_ELEMS = 4;
-    Array1D<DenseVector<Real, 2>> coords;
-    Array1D<DenseVector<Int, 3>> connect;
-    Array1D<godzilla::Real> fe_volume;
-    coords.create(N_NODES);
-    connect.create(N_ELEMS);
-    fe_volume.create(N_ELEMS);
+    Array1D<DenseVector<Real, 2>> coords(N_NODES);
+    Array1D<DenseVector<Int, 3>> connect(N_ELEMS);
+    Array1D<godzilla::Real> fe_volume(N_ELEMS);
 
     coords(0) = DenseVector<Real, 2>({ 0, 0 });
     coords(1) = DenseVector<Real, 2>({ 1, 0 });
@@ -67,10 +64,6 @@ TEST(FEVolumesTest, calc_volumes)
     EXPECT_DOUBLE_EQ(fe_volume(1), 0.3);
     EXPECT_DOUBLE_EQ(fe_volume(2), 0.4);
     EXPECT_DOUBLE_EQ(fe_volume(3), 0.2);
-
-    coords.destroy();
-    connect.destroy();
-    fe_volume.destroy();
 }
 
 TEST(FEVolumesTest, calc_volumes_1d_petsc)
@@ -90,7 +83,6 @@ TEST(FEVolumesTest, calc_volumes_1d_petsc)
     EXPECT_DOUBLE_EQ(volumes(1), 0.5);
     EXPECT_DOUBLE_EQ(volumes(2), 1.5);
 
-    volumes.destroy();
     delete mesh;
 }
 
@@ -112,7 +104,6 @@ TEST(FEVolumesTest, calc_volumes_2d_petsc)
     EXPECT_DOUBLE_EQ(volumes(2), 0.4);
     EXPECT_DOUBLE_EQ(volumes(3), 0.2);
 
-    volumes.destroy();
     delete mesh;
 }
 

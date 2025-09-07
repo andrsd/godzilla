@@ -4,7 +4,6 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include "godzilla/Error.h"
 #include "godzilla/Range.h"
 #include <cassert>
 
@@ -17,6 +16,14 @@ class DenseMatrix;
 
 template <typename T>
 class Array1D {
+private:
+    struct ControlBlock {
+        /// Reference count
+        Int ref_count;
+        /// Number of entries in the data block
+        Int n;
+    };
+
 public:
     struct Iterator {
         using iterator_category = std::forward_iterator_tag;
@@ -62,38 +69,79 @@ public:
         };
 
     private:
-        /// IndexSet to iterate over
+        /// Array to iterate over
         const Array1D * arr;
-        /// Index pointing to the `is`
+        /// Index pointing into the array
         Int idx;
     };
 
     /// Create an empty array
-    Array1D() : n(0), data(nullptr) {}
+    Array1D() : ctrl(nullptr), first(0), data(nullptr) {}
 
     /// Create an array with specified number of entries
     ///
     /// @param size Number of entries in the array
-    explicit Array1D(Int size) : n(size), data(new T[size]), range(0, size) {}
+    explicit Array1D(Int size) : ctrl(new ControlBlock { 1, size }), first(0), data(new T[size]) {}
 
-    explicit Array1D(const Range & rng) : n(rng.last() - rng.first()), data(new T[n]), range(rng) {}
-
-    /// Allocate memory for the array with specified number of entries
+    /// Create an array from a Range
     ///
-    /// @param size Number of entries in the array
-    void
-    create(Int size)
+    /// @param rng Indexing range
+    explicit Array1D(const Range & rng) :
+        ctrl(new ControlBlock { 1, rng.size() }),
+        first(rng.first()),
+        data(new T[rng.size()])
     {
-        create(Range(0, size));
     }
 
-    void
-    create(const Range & rng)
+    ~Array1D() { release(); }
+
+    // Copy constructor
+    Array1D(const Array1D & other) : ctrl(other.ctrl), first(other.first), data(other.data)
     {
-        this->range = rng;
-        auto size = rng.last() - rng.first();
-        this->n = size;
-        this->data = new T[size];
+        if (this->ctrl)
+            ++this->ctrl->ref_count;
+    }
+
+    // Copy assignment
+    Array1D &
+    operator=(const Array1D & other)
+    {
+        if (this != &other) {
+            release();
+            this->ctrl = other.ctrl;
+            this->first = other.first;
+            this->data = other.data;
+            if (this->ctrl)
+                ++this->ctrl->ref_count;
+        }
+        return *this;
+    }
+
+    // Move constructor
+    Array1D(Array1D && other) noexcept :
+        ctrl(std::exchange(other.ctrl, nullptr)),
+        first(std::exchange(other.first, 0)),
+        data(std::exchange(other.data, nullptr))
+    {
+    }
+
+    // Move assignment
+    Array1D &
+    operator=(Array1D && other) noexcept
+    {
+        if (this != &other) {
+            release();
+            this->ctrl = std::exchange(other.ctrl, nullptr);
+            this->first = std::exchange(other.first, 0);
+            this->data = std::exchange(other.data, nullptr);
+        }
+        return *this;
+    }
+
+    explicit
+    operator bool() const
+    {
+        return this->data != nullptr;
     }
 
     /// Get number of entries in the array
@@ -102,7 +150,7 @@ public:
     Int
     size() const
     {
-        return this->n;
+        return this->ctrl ? this->ctrl->n : 0;
     }
 
     /// Set all entries in the array to zero
@@ -110,17 +158,8 @@ public:
     zero()
     {
         assert(this->data != nullptr);
-        for (Int i = 0; i < this->n; ++i)
+        for (Int i = 0; i < this->ctrl->n; ++i)
             this->data[i].zero();
-    }
-
-    /// Free memory allocated by this array
-    void
-    destroy()
-    {
-        delete[] this->data;
-        this->data = nullptr;
-        this->n = 0;
     }
 
     /// Assign a value into all vector entries, i.e. `vec[i] = val`
@@ -130,7 +169,7 @@ public:
     set(const T & val)
     {
         assert(this->data != nullptr);
-        for (Int i = 0; i < this->n; ++i)
+        for (Int i = 0; i < this->ctrl->n; ++i)
             this->data[i] = val;
     }
 
@@ -156,8 +195,8 @@ public:
     operator[](Int i) const
     {
         assert(this->data != nullptr);
-        assert((i >= this->range.first()) && (i < this->range.last()));
-        auto idx = i - this->range.first();
+        assert((i >= this->first) && (i < this->first + this->ctrl->n));
+        auto idx = i - this->first;
         return this->data[idx];
     }
 
@@ -169,8 +208,8 @@ public:
     operator[](Int i)
     {
         assert(this->data != nullptr);
-        assert((i >= this->range.first()) && (i < this->range.last()));
-        auto idx = i - this->range.first();
+        assert((i >= this->first) && (i < this->first + this->ctrl->n));
+        auto idx = i - this->first;
         return this->data[idx];
     }
 
@@ -198,16 +237,25 @@ public:
     Iterator
     end()
     {
-        return Iterator(this, this->n);
+        return Iterator(this, this->ctrl->n);
     }
 
 private:
-    /// Number of entries in the array
-    Int n;
+    void
+    release()
+    {
+        if (this->ctrl && --this->ctrl->ref_count == 0) {
+            delete this->ctrl;
+            delete[] this->data;
+        }
+    }
+
+    /// Control block
+    ControlBlock * ctrl;
+    /// First index
+    Int first;
     /// Array containing the values
     T * data;
-    /// Range of valid indices
-    Range range;
 };
 
 template <>
@@ -215,7 +263,7 @@ inline void
 Array1D<Real>::zero()
 {
     assert(this->data != nullptr);
-    for (Int i = 0; i < this->n; ++i)
+    for (Int i = 0; i < this->ctrl->n; ++i)
         this->data[i] = 0.;
 }
 
