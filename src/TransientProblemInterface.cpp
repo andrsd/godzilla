@@ -327,13 +327,13 @@ TransientProblemInterface::solve(Vector & x)
     PETSC_CHECK(TSSolve(this->ts, x));
 }
 
-TSConvergedReason
+TransientProblemInterface::ConvergedReason
 TransientProblemInterface::get_converged_reason() const
 {
     CALL_STACK_MSG();
     TSConvergedReason reason;
     PETSC_CHECK(TSGetConvergedReason(this->ts, &reason));
-    return reason;
+    return static_cast<ConvergedReason>(reason);
 }
 
 void
@@ -365,10 +365,10 @@ TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 }
 
 void
-TransientProblemInterface::set_converged_reason(TSConvergedReason reason)
+TransientProblemInterface::set_converged_reason(ConvergedReason reason)
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSSetConvergedReason(this->ts, reason));
+    PETSC_CHECK(TSSetConvergedReason(this->ts, static_cast<TSConvergedReason>(reason)));
 }
 
 void
