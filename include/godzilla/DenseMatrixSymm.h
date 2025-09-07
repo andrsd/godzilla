@@ -308,18 +308,6 @@ public:
         return mult(x);
     }
 
-    [[deprecated("Use data() instead")]] T *
-    get_data()
-    {
-        return &this->values[0];
-    }
-
-    [[deprecated("Use data() instead")]] const T *
-    get_data() const
-    {
-        return &this->values[0];
-    }
-
     T *
     data()
     {
