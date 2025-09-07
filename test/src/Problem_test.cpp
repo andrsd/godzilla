@@ -432,25 +432,45 @@ TEST(ProblemTest, loc_glob_arithmetic_type_min_max)
     PETSC_CHECK(DMSetField(dm, 0, nullptr, (PetscObject) fe));
     PETSC_CHECK(DMCreateDS(dm));
 
-    auto l = create_local_array1d<Real>(dm);
-    l.set(comm.rank() + 1);
+    // test max
+    auto l1 = create_local_array1d<Real>(dm);
+    l1.set(comm.rank() + 1);
     auto g = create_global_array1d<Real>(dm);
     g.set(0.);
-    local_to_global(dm, l, MAX_VALUES, g);
-    global_to_local(dm, g, INSERT_VALUES, l);
+    local_to_global(dm, l1, MAX_VALUES, g);
+    global_to_local(dm, g, INSERT_VALUES, l1);
 
-    EXPECT_NEAR(l(0), 1., 1e-10);
-    EXPECT_NEAR(l(1), 1., 1e-10);
-    EXPECT_NEAR(l(2), 1., 1e-10);
-    EXPECT_NEAR(l(3), 1., 1e-10);
-    EXPECT_NEAR(l(4), 1., 1e-10);
-    EXPECT_NEAR(l(5), 1., 1e-10);
-    EXPECT_NEAR(l(6), 1., 1e-10);
-    EXPECT_NEAR(l(7), 1., 1e-10);
-    EXPECT_NEAR(l(8), 1., 1e-10);
-    EXPECT_NEAR(l(9), 1., 1e-10);
+    EXPECT_NEAR(l1(0), 1., 1e-10);
+    EXPECT_NEAR(l1(1), 1., 1e-10);
+    EXPECT_NEAR(l1(2), 1., 1e-10);
+    EXPECT_NEAR(l1(3), 1., 1e-10);
+    EXPECT_NEAR(l1(4), 1., 1e-10);
+    EXPECT_NEAR(l1(5), 1., 1e-10);
+    EXPECT_NEAR(l1(6), 1., 1e-10);
+    EXPECT_NEAR(l1(7), 1., 1e-10);
+    EXPECT_NEAR(l1(8), 1., 1e-10);
+    EXPECT_NEAR(l1(9), 1., 1e-10);
 
-    l.destroy();
+    // test min
+    auto l2 = create_local_array1d<Real>(dm);
+    l2.set(comm.rank());
+    g.set(100.);
+    local_to_global(dm, l2, MIN_VALUES, g);
+    global_to_local(dm, g, INSERT_VALUES, l2);
+
+    EXPECT_NEAR(l2(0), 0., 1e-10);
+    EXPECT_NEAR(l2(1), 0., 1e-10);
+    EXPECT_NEAR(l2(2), 0., 1e-10);
+    EXPECT_NEAR(l2(3), 0., 1e-10);
+    EXPECT_NEAR(l2(4), 0., 1e-10);
+    EXPECT_NEAR(l2(5), 0., 1e-10);
+    EXPECT_NEAR(l2(6), 0., 1e-10);
+    EXPECT_NEAR(l2(7), 0., 1e-10);
+    EXPECT_NEAR(l2(8), 0., 1e-10);
+    EXPECT_NEAR(l2(9), 0., 1e-10);
+
+    l1.destroy();
+    l2.destroy();
     g.destroy();
     PETSC_CHECK(PetscFEDestroy(&fe));
     PETSC_CHECK(DMDestroy(&dm));

@@ -6,7 +6,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Exception.h"
 #include <petscsystypes.h>
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 template <>
 struct fmt::formatter<InsertMode> {
