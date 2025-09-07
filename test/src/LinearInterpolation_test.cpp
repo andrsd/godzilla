@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "godzilla/Godzilla.h"
 #include "godzilla/LinearInterpolation.h"
 
 using namespace godzilla;
@@ -59,20 +58,14 @@ TEST(LinearInterpolationTest, single_point)
 
 TEST(LinearInterpolationTest, unequal_sizes)
 {
-    EXPECT_THAT(
-        []() {
-            LinearInterpolation ipol({ 1, 2 }, { 0, 2, 3 });
-        },
-        testing::ThrowsMessage<std::domain_error>(
-            "Size of 'x' (2) does not match size of 'y' (3)."));
+    EXPECT_THAT([]() { LinearInterpolation ipol({ 1, 2 }, { 0, 2, 3 }); },
+                testing::ThrowsMessage<std::domain_error>(
+                    "Size of 'x' (2) does not match size of 'y' (3)."));
 }
 
 TEST(LinearInterpolationTest, non_increasing)
 {
-    EXPECT_THAT(
-        []() {
-            LinearInterpolation ipol({ 1, 2, 1 }, { 0, 2, 3 });
-        },
-        testing::ThrowsMessage<std::domain_error>(
-            "Values in 'x' must be increasing. Failed at index '2'."));
+    EXPECT_THAT([]() { LinearInterpolation ipol({ 1, 2, 1 }, { 0, 2, 3 }); },
+                testing::ThrowsMessage<std::domain_error>(
+                    "Values in 'x' must be increasing. Failed at index '2'."));
 }

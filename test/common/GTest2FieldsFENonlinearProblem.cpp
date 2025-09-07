@@ -1,5 +1,4 @@
 #include "GTest2FieldsFENonlinearProblem.h"
-#include "godzilla/Godzilla.h"
 
 GTest2FieldsFENonlinearProblem::GTest2FieldsFENonlinearProblem(const Parameters & params) :
     GTestFENonlinearProblem(params),

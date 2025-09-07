@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "godzilla/Godzilla.h"
 #include "TestApp.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/FENonlinearProblem.h"

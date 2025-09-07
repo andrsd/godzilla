@@ -1,5 +1,4 @@
 #include "gmock/gmock.h"
-#include "godzilla/Godzilla.h"
 #include "GodzillaApp_test.h"
 #include "godzilla/ConstantFunction.h"
 

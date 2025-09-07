@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2021 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/App.h"
 #include "godzilla/FileMesh.h"
 #include "godzilla/UnstructuredMesh.h"

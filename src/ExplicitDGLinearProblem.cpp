@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2023 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/ExplicitDGLinearProblem.h"
 #include "godzilla/Output.h"
