@@ -99,15 +99,6 @@ public:
     /// Get number of entries in the array
     ///
     /// @return Number of entries in the array
-    [[deprecated("Use size() instead")]] Int
-    get_size() const
-    {
-        return this->n;
-    }
-
-    /// Get number of entries in the array
-    ///
-    /// @return Number of entries in the array
     Int
     size() const
     {
@@ -132,32 +123,6 @@ public:
         this->n = 0;
     }
 
-    /// Get values from specified indices
-    ///
-    /// @tparam N Size of the index array
-    /// @param idx Indices to get the values from
-    /// @return Vector with the value from locations specified by `idx`
-    template <Int N>
-    [[deprecated("")]] DenseVector<T, N>
-    get_values(DenseVector<Int, N> idx) const
-    {
-        DenseVector<T, N> res;
-        for (Int i = 0; i < N; ++i)
-            res(i) = get(idx(i));
-        return res;
-    }
-
-    template <Int N>
-    [[deprecated("")]] DenseVector<T, N>
-    get_values(const std::vector<Int> & idx) const
-    {
-        assert(N == idx.size());
-        DenseVector<T, N> res;
-        for (Int i = 0; i < N; ++i)
-            res(i) = (*this)(idx[i]);
-        return res;
-    }
-
     /// Assign a value into all vector entries, i.e. `vec[i] = val`
     ///
     /// @param val Value to assign
@@ -167,32 +132,6 @@ public:
         assert(this->data != nullptr);
         for (Int i = 0; i < this->n; ++i)
             this->data[i] = val;
-    }
-
-    /// Set multiple values at specified indices
-    ///
-    /// @tparam N Size of the array
-    /// @param idx Indices where the values are to be set
-    /// @param a Values to be set
-    template <Int N>
-    [[deprecated("")]] void
-    set_values(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
-    {
-        for (Int i = 0; i < N; ++i)
-            (*this)(idx(i)) = a(i);
-    }
-
-    /// Add values to specified locations
-    ///
-    /// @tparam N Size of the index and value array
-    /// @param idx Indices to modify
-    /// @param a Vector with values to add at locations specified by `idx`
-    template <Int N>
-    [[deprecated("")]] void
-    add(const DenseVector<Int, N> & idx, const DenseVector<T, N> & a)
-    {
-        for (Int i = 0; i < N; ++i)
-            (*this)(idx(i)) += a(i);
     }
 
     // operators
