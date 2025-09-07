@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/PiecewiseConstant.h"
-#include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Utils.h"
 #include "godzilla/Validation.h"

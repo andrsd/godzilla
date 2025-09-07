@@ -3,7 +3,6 @@
 
 #include "godzilla/PiecewiseLinear.h"
 #include "godzilla/LinearInterpolation.h"
-#include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 
 namespace godzilla {

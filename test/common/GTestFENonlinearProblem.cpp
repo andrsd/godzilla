@@ -1,7 +1,6 @@
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
-#include "godzilla/Godzilla.h"
 
 namespace {
 

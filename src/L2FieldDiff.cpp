@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2022 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/L2FieldDiff.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"

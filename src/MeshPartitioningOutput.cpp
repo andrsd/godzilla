@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2022 David Andrs <andrsd@gmail.com>
 // SPDX-License-Identifier: MIT
 
-#include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/MeshPartitioningOutput.h"
 #include "godzilla/UnstructuredMesh.h"

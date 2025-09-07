@@ -15,7 +15,7 @@ if (${GODZILLA_WITH_TECIOCPP})
 endif()
 
 find_library(GODZILLA_LIBRARY NAMES godzilla HINTS ${PACKAGE_PREFIX_DIR}/lib NO_DEFAULT_PATH)
-find_path(GODZILLA_INCLUDE_DIR Godzilla.h HINTS ${PACKAGE_PREFIX_DIR}/include/godzilla)
+find_path(GODZILLA_INCLUDE_DIR App.h HINTS ${PACKAGE_PREFIX_DIR}/include/godzilla)
 
 find_package_handle_standard_args(
     godzilla

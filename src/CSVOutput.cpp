@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/CSVOutput.h"
-#include "godzilla/Godzilla.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Postprocessor.h"

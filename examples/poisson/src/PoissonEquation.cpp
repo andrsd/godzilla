@@ -1,4 +1,3 @@
-#include "godzilla/Godzilla.h"
 #include "godzilla/FunctionInterface.h"
 #include "godzilla/Types.h"
 #include "godzilla/WeakForm.h"
