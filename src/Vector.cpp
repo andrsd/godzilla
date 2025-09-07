@@ -107,27 +107,11 @@ Vector::abs()
     PETSC_CHECK(VecAbs(this->obj));
 }
 
-Scalar
-Vector::dot(const Vector & y) const
-{
-    CALL_STACK_MSG();
-    Scalar val;
-    PETSC_CHECK(VecDot(this->obj, y.obj, &val));
-    return val;
-}
-
 void
 Vector::scale(Scalar alpha)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(VecScale(this->obj, alpha));
-}
-
-void
-Vector::duplicate(Vector & b) const
-{
-    CALL_STACK_MSG();
-    VecDuplicate(this->obj, &b.obj);
 }
 
 Vector
@@ -136,13 +120,6 @@ Vector::duplicate() const
     Vector dup;
     PETSC_CHECK(VecDuplicate(this->obj, dup));
     return dup;
-}
-
-void
-Vector::copy(Vector & y) const
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecCopy(this->obj, y.obj));
 }
 
 void
@@ -192,54 +169,6 @@ Vector::filter(Real tol)
     PETSC_CHECK(VecFilter(this->obj, tol));
 }
 #endif
-
-void
-Vector::axpy(Scalar alpha, const Vector & x)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecAXPY(this->obj, alpha, x));
-}
-
-void
-Vector::axpby(Scalar alpha, Scalar beta, const Vector & x)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecAXPBY(this->obj, alpha, beta, x));
-}
-
-void
-Vector::aypx(Scalar beta, const Vector & x)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecAYPX(this->obj, beta, x));
-}
-
-void
-Vector::waxpy(Scalar alpha, const Vector & x, const Vector & y)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecWAXPY(this->obj, alpha, x, y));
-}
-
-void
-Vector::maxpy(const std::vector<Scalar> & alpha, const std::vector<Vector> & x)
-{
-    CALL_STACK_MSG();
-    if (alpha.size() == x.size()) {
-        auto n = alpha.size();
-        std::vector<Vec> xx(n);
-        for (std::size_t i = 0; i < n; ++i)
-            xx[i] = (Vec) x[i];
-        PETSC_CHECK(VecMAXPY(this->obj, n, alpha.data(), xx.data()));
-    }
-}
-
-void
-Vector::axpbypcz(Scalar alpha, Scalar beta, Scalar gamma, const Vector & x, const Vec & y)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecAXPBYPCZ(this->obj, alpha, beta, gamma, x, y));
-}
 
 void
 Vector::reciprocal()
@@ -474,34 +403,6 @@ Vector::create_nest(MPI_Comm comm, const std::vector<Vector> & vecs)
     NestVector y;
     PETSC_CHECK(VecCreateNest(comm, vecs.size(), nullptr, vvs.data(), y));
     return y;
-}
-
-void
-Vector::pointwise_min(const Vector & w, const Vector & x, const Vector & y)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecPointwiseMin(w, x, y));
-}
-
-void
-Vector::pointwise_max(const Vector & w, const Vector & x, const Vector & y)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecPointwiseMax(w, x, y));
-}
-
-void
-Vector::pointwise_mult(const Vector & w, const Vector & x, const Vector & y)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecPointwiseMult(w, x, y));
-}
-
-void
-Vector::pointwise_divide(const Vector & w, const Vector & x, const Vector & y)
-{
-    CALL_STACK_MSG();
-    PETSC_CHECK(VecPointwiseDivide(w, x, y));
 }
 
 void
