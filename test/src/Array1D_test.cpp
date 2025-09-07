@@ -8,32 +8,25 @@ using namespace testing;
 
 TEST(Array1DTest, create)
 {
-    Array1D<Real> arr;
-    arr.create(10);
+    Array1D<Real> arr(10);
     EXPECT_EQ(arr.size(), 10);
-    arr.destroy();
 }
 
 TEST(Array1DTest, create_rng)
 {
-    Array1D<Real> arr;
-    arr.create(godzilla::Range(5, 15));
+    Array1D<Real> arr(godzilla::Range(5, 15));
     EXPECT_EQ(arr.size(), 10);
-    arr.destroy();
 }
 
 TEST(Array1DTest, const_op)
 {
-    Array1D<Real> arr;
-    arr.create(10);
+    Array1D<Real> arr(10);
     for (Int i = 0; i < 10; ++i)
         arr(i) = i;
 
     const Array1D<Real> & ca = arr;
     for (Int i = 0; i < 10; ++i)
         EXPECT_EQ(ca(i), i);
-
-    arr.destroy();
 }
 
 TEST(Array1DTest, zero)
@@ -44,7 +37,6 @@ TEST(Array1DTest, zero)
     arr.zero();
     for (Int i = 0; i < 10; ++i)
         EXPECT_EQ(arr(i), 0.);
-    arr.destroy();
 }
 
 TEST(Array1DTest, set_values)
@@ -53,7 +45,6 @@ TEST(Array1DTest, set_values)
     arr.set(1234);
     for (Int i = 0; i < 10; ++i)
         EXPECT_EQ(arr(i), 1234.);
-    arr.destroy();
 }
 
 TEST(Array1DTest, set_values_idxs)
@@ -66,7 +57,6 @@ TEST(Array1DTest, set_values_idxs)
     EXPECT_EQ(arr(1), 8);
     EXPECT_EQ(arr(4), 7);
     EXPECT_EQ(arr(2), 6);
-    arr.destroy();
 }
 
 TEST(Array1DTest, get_data)
@@ -79,7 +69,6 @@ TEST(Array1DTest, get_data)
     EXPECT_EQ(raw[2], 1.);
     EXPECT_EQ(raw[3], -2.);
     EXPECT_EQ(raw[4], 0.);
-    y.destroy();
 }
 
 TEST(Array1DTest, op_to_stream)
@@ -91,8 +80,6 @@ TEST(Array1DTest, op_to_stream)
     std::cout << x;
 
     EXPECT_THAT(testing::internal::GetCapturedStdout(), testing::HasSubstr("(1, -1, 3, 0, 2)"));
-
-    x.destroy();
 }
 
 TEST(Array1DTest, get_values)
@@ -106,8 +93,6 @@ TEST(Array1DTest, get_values)
     EXPECT_EQ(vals(0), 3.);
     EXPECT_EQ(vals(1), 10.);
     EXPECT_EQ(vals(2), -2.);
-
-    x.destroy();
 }
 
 TEST(Array1DTest, get_values_std_vec)
@@ -121,8 +106,6 @@ TEST(Array1DTest, get_values_std_vec)
     EXPECT_EQ(vals(0), 3.);
     EXPECT_EQ(vals(1), 10.);
     EXPECT_EQ(vals(2), -2.);
-
-    x.destroy();
 }
 
 TEST(Array1DTest, add)
@@ -142,8 +125,6 @@ TEST(Array1DTest, add)
     EXPECT_EQ(x(5), 6.);
     EXPECT_EQ(x(6), 12.);
     EXPECT_EQ(x(7), 8.);
-
-    x.destroy();
 }
 
 TEST(Array1DTest, range_ops)
@@ -155,6 +136,14 @@ TEST(Array1DTest, range_ops)
     for (auto & v : arr)
         vals.push_back(v);
     EXPECT_THAT(vals, ElementsAre(2, 3, 1, -2, 0, 6, 10, 8));
+}
 
-    arr.destroy();
+TEST(Array1DTest, copy)
+{
+    Array1D<Real> arr(8);
+    arr.set(123.);
+    auto copy = arr;
+
+    for (auto i : copy)
+        EXPECT_DOUBLE_EQ(i, 123.);
 }

@@ -112,7 +112,7 @@ template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nod
 class NaturalBoundaryInfo : public AbstractBoundaryInfo {
 public:
     NaturalBoundaryInfo(UnstructuredMesh * mesh,
-                        const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> * grad_phi,
+                        Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_phi,
                         IndexSet facets) :
         mesh(mesh),
         grad_phi(grad_phi),
@@ -123,10 +123,7 @@ public:
         this->facets.sort();
     }
 
-    NaturalBoundaryInfo(UnstructuredMesh * mesh, IndexSet facets) :
-        mesh(mesh),
-        grad_phi(nullptr),
-        facets(facets)
+    NaturalBoundaryInfo(UnstructuredMesh * mesh, IndexSet facets) : mesh(mesh), facets(facets)
     {
         CALL_STACK_MSG();
         assert(mesh->get_dimension() == DIM);
@@ -215,8 +212,8 @@ protected:
         if (this->facets) {
             this->facets.get_indices();
             Int n = this->facets.get_local_size();
-            this->lengths.create(n);
-            this->normals.create(n);
+            this->lengths = Array1D<Real>(n);
+            this->normals = Array1D<DenseVector<Real, DIM>>(n);
 
             calc_facet_lengths();
             calc_facet_normals();
@@ -230,8 +227,6 @@ protected:
         if (this->facets) {
             this->facets.restore_indices();
             this->facets.destroy();
-            this->lengths.destroy();
-            this->normals.destroy();
         }
     }
 
@@ -251,7 +246,7 @@ private:
     calc_grad_shape(Int cell, Real volume) const
     {
         if (this->grad_phi)
-            return (*this->grad_phi)(cell);
+            return this->grad_phi(cell);
         else {
             auto dm = this->mesh->get_coordinate_dm();
             auto vec = this->mesh->get_coordinates_local();
@@ -295,7 +290,7 @@ private:
     /// Mesh
     UnstructuredMesh * mesh;
     /// Gradients of shape functions
-    const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> * grad_phi;
+    Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> grad_phi;
     /// IndexSet with boundary facets
     IndexSet facets;
     /// Boundary facet length

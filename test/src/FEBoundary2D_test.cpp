@@ -26,14 +26,13 @@ public:
     {
         CALL_STACK_MSG();
         EssentialBoundaryInfo::create();
-        this->vals.create(this->num_vertices());
+        this->vals = Array1D<Int>(this->num_vertices());
     }
 
     void
     destroy() override
     {
         CALL_STACK_MSG();
-        this->vals.destroy();
         EssentialBoundaryInfo::destroy();
     }
 
@@ -49,7 +48,7 @@ public:
 class TestNaturalBoundary2D : public fe::NaturalBoundaryInfo<TRI3, 2, 3> {
 public:
     TestNaturalBoundary2D(UnstructuredMesh * mesh,
-                          const Array1D<DenseMatrix<Real, 2, 3>> * grad_phi,
+                          Array1D<DenseMatrix<Real, 2, 3>> grad_phi,
                           const IndexSet & facets) :
         fe::NaturalBoundaryInfo<TRI3, 2, 3>(mesh, grad_phi, facets)
     {
@@ -60,14 +59,13 @@ public:
     {
         CALL_STACK_MSG();
         NaturalBoundaryInfo::create();
-        this->vals.create(this->num_facets());
+        this->vals = Array1D<Int>(this->num_facets());
     }
 
     void
     destroy() override
     {
         CALL_STACK_MSG();
-        this->vals.destroy();
         NaturalBoundaryInfo::destroy();
     }
 
@@ -115,7 +113,7 @@ TEST(FEBoundaryTest, test_2d)
     {
         auto label = m->get_label("bottom");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary2D bnd(m, &grad_phi, bnd_facets);
+        TestNaturalBoundary2D bnd(m, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -134,7 +132,7 @@ TEST(FEBoundaryTest, test_2d)
     {
         auto label = m->get_label("top_right");
         IndexSet bnd_facets = points_from_label(label);
-        TestNaturalBoundary2D bnd(m, &grad_phi, bnd_facets);
+        TestNaturalBoundary2D bnd(m, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -154,7 +152,4 @@ TEST(FEBoundaryTest, test_2d)
 
         bnd.destroy();
     }
-
-    grad_phi.destroy();
-    fe_volume.destroy();
 }

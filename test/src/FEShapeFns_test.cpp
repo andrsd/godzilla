@@ -60,18 +60,15 @@ TEST(FEShapeFns, calc_grad_shape_2d)
     const int DIM = 2;
     const int n_elems = 2;
     const int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE);
-    Array1D<DenseVector<Real, DIM>> coords;
-    coords.create(4);
+    Array1D<DenseVector<Real, DIM>> coords(4);
     coords(0) = DenseVector<Real, DIM>({ 0, 0. });
     coords(1) = DenseVector<Real, DIM>({ 1, 0. });
     coords(2) = DenseVector<Real, DIM>({ 0, 1. });
     coords(3) = DenseVector<Real, DIM>({ 1, 1. });
-    Array1D<DenseVector<Int, N_ELEM_NODES>> connect;
-    connect.create(n_elems);
+    Array1D<DenseVector<Int, N_ELEM_NODES>> connect(n_elems);
     connect(0) = DenseVector<Int, N_ELEM_NODES>({ 0, 1, 2 });
     connect(1) = DenseVector<Int, N_ELEM_NODES>({ 1, 3, 2 });
-    Array1D<Real> volumes;
-    volumes.create(n_elems);
+    Array1D<Real> volumes(n_elems);
     fe::calc_volumes<ELEM_TYPE, DIM>(coords, connect, volumes);
     auto grad_sh = fe::calc_grad_shape<ELEM_TYPE, DIM>(coords, connect, volumes);
 
@@ -87,11 +84,6 @@ TEST(FEShapeFns, calc_grad_shape_2d)
     EXPECT_DOUBLE_EQ(grad_sh(1)(1, 1), 1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(0, 2), -1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(1, 2), 0);
-
-    grad_sh.destroy();
-    volumes.destroy();
-    connect.destroy();
-    coords.destroy();
 }
 
 TEST(FEShapeFns, calc_grad_shape_2d_petsc)
@@ -122,7 +114,5 @@ TEST(FEShapeFns, calc_grad_shape_2d_petsc)
     EXPECT_DOUBLE_EQ(grad_sh(1)(0, 2), -1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(1, 2), 0);
 
-    grad_sh.destroy();
-    volumes.destroy();
     delete mesh;
 }

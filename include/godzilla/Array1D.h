@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/Ptr.h"
 #include "godzilla/Error.h"
 #include "godzilla/Range.h"
 #include <cassert>
@@ -29,7 +30,7 @@ public:
         const value_type &
         operator*() const
         {
-            return *(this->arr->data + this->idx);
+            return (this->arr->data[this->idx]);
         }
 
         /// Prefix increment
@@ -69,14 +70,25 @@ public:
     };
 
     /// Create an empty array
-    Array1D() : n(0), data(nullptr) {}
+    Array1D() : n(0) {}
 
     /// Create an array with specified number of entries
     ///
     /// @param size Number of entries in the array
-    explicit Array1D(Int size) : n(size), data(new T[size]), range(0, size) {}
+    explicit Array1D(Int size) : n(size), data(Ptr<T[]>(new T[size])), range(0, size) {}
 
-    explicit Array1D(const Range & rng) : n(rng.last() - rng.first()), data(new T[n]), range(rng) {}
+    explicit Array1D(const Range & rng) :
+        n(rng.last() - rng.first()),
+        data(Ptr<T[]>(new T[n])),
+        range(rng)
+    {
+    }
+
+    explicit
+    operator bool() const
+    {
+        return !this->data.is_null();
+    }
 
     /// Allocate memory for the array with specified number of entries
     ///
@@ -84,16 +96,13 @@ public:
     void
     create(Int size)
     {
-        create(Range(0, size));
+        static_assert(false);
     }
 
     void
     create(const Range & rng)
     {
-        this->range = rng;
-        auto size = rng.last() - rng.first();
-        this->n = size;
-        this->data = new T[size];
+        static_assert(false);
     }
 
     /// Get number of entries in the array
@@ -109,18 +118,16 @@ public:
     void
     zero()
     {
-        assert(this->data != nullptr);
+        assert(!this->data.is_null());
         for (Int i = 0; i < this->n; ++i)
-            this->data[i].zero();
+            this->data.get()[i].zero();
     }
 
     /// Free memory allocated by this array
     void
     destroy()
     {
-        delete[] this->data;
-        this->data = nullptr;
-        this->n = 0;
+        static_assert(false);
     }
 
     /// Assign a value into all vector entries, i.e. `vec[i] = val`
@@ -129,9 +136,9 @@ public:
     void
     set(const T & val)
     {
-        assert(this->data != nullptr);
+        assert(!this->data.is_null());
         for (Int i = 0; i < this->n; ++i)
-            this->data[i] = val;
+            this->data.get()[i] = val;
     }
 
     // operators
@@ -155,10 +162,10 @@ public:
     const T &
     operator[](Int i) const
     {
-        assert(this->data != nullptr);
+        assert(!this->data.is_null());
         assert((i >= this->range.first()) && (i < this->range.last()));
         auto idx = i - this->range.first();
-        return this->data[idx];
+        return this->data.get()[idx];
     }
 
     /// Get the entry at a specified location for writing
@@ -168,10 +175,10 @@ public:
     T &
     operator[](Int i)
     {
-        assert(this->data != nullptr);
+        assert(!this->data.is_null());
         assert((i >= this->range.first()) && (i < this->range.last()));
         auto idx = i - this->range.first();
-        return this->data[idx];
+        return this->data.get()[idx];
     }
 
     //
@@ -180,13 +187,13 @@ public:
     T *
     get_data()
     {
-        return this->data;
+        return this->data.get();
     }
 
     const T *
     get_data() const
     {
-        return this->data;
+        return this->data.get();
     }
 
     Iterator
@@ -205,7 +212,7 @@ private:
     /// Number of entries in the array
     Int n;
     /// Array containing the values
-    T * data;
+    Ptr<T[]> data;
     /// Range of valid indices
     Range range;
 };
@@ -214,9 +221,9 @@ template <>
 inline void
 Array1D<Real>::zero()
 {
-    assert(this->data != nullptr);
+    assert(!this->data.is_null());
     for (Int i = 0; i < this->n; ++i)
-        this->data[i] = 0.;
+        this->data.get()[i] = 0.;
 }
 
 // Output
