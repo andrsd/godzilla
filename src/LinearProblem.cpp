@@ -83,7 +83,8 @@ LinearProblem::create()
     init();
     allocate_objects();
     set_up_matrix_properties();
-    create_preconditioner(this->ks.get_pc());
+    this->pcond = create_preconditioner(this->ks.get_pc());
+    this->pcond.inc_reference();
     set_up_solver_parameters();
     set_up_monitors();
     set_up_callbacks();
@@ -183,12 +184,11 @@ LinearProblem::set_up_matrix_properties()
     CALL_STACK_MSG();
 }
 
-void
+Preconditioner
 LinearProblem::create_preconditioner(PC pc)
 {
     CALL_STACK_MSG();
-    this->pcond = Preconditioner(pc);
-    this->pcond.inc_reference();
+    return Preconditioner(pc);
 }
 
 void

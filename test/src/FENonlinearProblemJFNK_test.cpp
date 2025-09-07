@@ -3,6 +3,7 @@
 #include "TestApp.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/FENonlinearProblem.h"
+#include "godzilla/Preconditioner.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/ConstantInitialCondition.h"
@@ -23,7 +24,7 @@ protected:
     void set_up_fields() override;
     void set_up_weak_form() override;
     void set_up_solve_type() override;
-    void create_preconditioner(PC pc) override;
+    Preconditioner create_preconditioner(PC pc) override;
 
     const FieldID iu;
 
@@ -106,12 +107,12 @@ GTestFENonlinearProblemJFNK::set_up_solve_type()
     set_use_matrix_free(true, false);
 }
 
-void
+Preconditioner
 GTestFENonlinearProblemJFNK::create_preconditioner(PC pc)
 {
     this->p = PCFactor(pc);
     this->p.set_type(PCFactor::ILU);
-    this->p.inc_reference();
+    return this->p;
 }
 
 } // namespace

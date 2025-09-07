@@ -3,6 +3,7 @@
 #include "godzilla/LineMesh.h"
 #include "godzilla/LinearProblem.h"
 #include "godzilla/PCShell.h"
+#include "godzilla/Preconditioner.h"
 #include "godzilla/Problem.h"
 #include "godzilla/Vector.h"
 
@@ -47,13 +48,13 @@ public:
         set_compute_rhs(this, &CustomLinearProblem::compute_rhs);
     }
 
-    void
+    Preconditioner
     create_preconditioner(PC pc) override
     {
         this->pcshell = PCShell(pc);
-        this->pcshell.inc_reference();
         this->pcshell.set_apply(this, &CustomLinearProblem::apply_pc);
         this->pcshell.set_apply_transpose(this, &CustomLinearProblem::apply_transpose_pc);
+        return this->pcshell;
     }
 
     void

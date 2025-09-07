@@ -63,7 +63,7 @@ protected:
     virtual void set_up_matrix_properties();
 
     /// Method for creating a preconditioner
-    virtual void create_preconditioner(PC pc);
+    virtual Preconditioner create_preconditioner(PC pc);
 
     /// Monitor callback
     void monitor(Int it, Real rnorm);
