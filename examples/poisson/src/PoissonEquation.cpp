@@ -18,9 +18,9 @@ PoissonEquation::parameters()
 
 PoissonEquation::PoissonEquation(const Parameters & parameters) :
     FENonlinearProblem(parameters),
+    p_order(get_param<Int>("p_order")),
     iu(FieldID::INVALID),
-    affn(FieldID::INVALID),
-    p_order(get_param<Int>("p_order"))
+    affn(FieldID::INVALID)
 {
     CALL_STACK_MSG();
 }
