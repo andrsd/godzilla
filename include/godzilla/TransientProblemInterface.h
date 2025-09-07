@@ -23,6 +23,22 @@ class TimeStepAdapt;
 ///
 class TransientProblemInterface {
 public:
+    enum ConvergedReason {
+        CONVERGED_ITERATING = TS_CONVERGED_ITERATING,
+        //
+        CONVERGED_TIME = TS_CONVERGED_TIME,
+        CONVERGED_ITS = TS_CONVERGED_ITS,
+        CONVERGED_USER = TS_CONVERGED_USER,
+        CONVERGED_EVENT = TS_CONVERGED_EVENT,
+        CONVERGED_PSEUDO_FATOL = TS_CONVERGED_PSEUDO_FATOL,
+        CONVERGED_PSEUDO_FRTOL = TS_CONVERGED_PSEUDO_FRTOL,
+        //
+        DIVERGED_NONLINEAR_SOLVE = TS_DIVERGED_NONLINEAR_SOLVE,
+        DIVERGED_STEP_REJECTED = TS_DIVERGED_STEP_REJECTED,
+        FORWARD_DIVERGED_LINEAR_SOLVE = TSFORWARD_DIVERGED_LINEAR_SOLVE,
+        ADJOINT_DIVERGED_LINEAR_SOLVE = TSADJOINT_DIVERGED_LINEAR_SOLVE
+    };
+
     /// Time stepping schemes
     enum class TimeScheme {
         /// Backward Euler
@@ -84,14 +100,14 @@ public:
     /// Sets the reason for handling the convergence
     ///
     /// @param reason Converged reason
-    void set_converged_reason(TSConvergedReason reason);
+    void set_converged_reason(ConvergedReason reason);
 
     /// Gets the reason the time iteration was stopped
     ///
     /// NOTE: Can only be called after the call to solve() is complete.
     ///
     /// @return Converged reason
-    TSConvergedReason get_converged_reason() const;
+    ConvergedReason get_converged_reason() const;
 
     /// Set time-stepping scheme
     void set_scheme(TimeScheme scheme);

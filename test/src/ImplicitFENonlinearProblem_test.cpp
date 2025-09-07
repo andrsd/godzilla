@@ -6,6 +6,7 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/InitialCondition.h"
 #include "godzilla/BoundaryCondition.h"
+#include "godzilla/TransientProblemInterface.h"
 
 using namespace godzilla;
 
@@ -179,6 +180,6 @@ TEST_F(ImplicitFENonlinearProblemTest, converged_reason)
     this->mesh->create();
     this->prob->create();
 
-    this->prob->set_converged_reason(TS_CONVERGED_USER);
-    EXPECT_EQ(this->prob->get_converged_reason(), TS_CONVERGED_USER);
+    this->prob->set_converged_reason(TransientProblemInterface::CONVERGED_USER);
+    EXPECT_EQ(this->prob->get_converged_reason(), TransientProblemInterface::CONVERGED_USER);
 }
