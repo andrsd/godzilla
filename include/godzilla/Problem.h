@@ -417,7 +417,8 @@ create_global_array1d(DM dm)
 
 ///
 
-template <typename T, std::enable_if_t<std::is_arithmetic<T>::value, int> = 0>
+template <typename T>
+    requires std::is_arithmetic_v<T>
 void
 local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
 {
@@ -443,7 +444,8 @@ local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
     }
 }
 
-template <typename T, std::enable_if_t<!std::is_arithmetic<T>::value, int> = 0>
+template <typename T>
+    requires(!std::is_arithmetic_v<T>)
 void
 local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
 {
