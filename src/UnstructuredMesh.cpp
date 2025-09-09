@@ -648,7 +648,7 @@ UnstructuredMesh::mark_boundary_faces(Int val, Label & label)
     PETSC_CHECK(DMPlexMarkBoundaryFaces(get_dm(), val, label));
 }
 
-UnstructuredMesh *
+Qtr<UnstructuredMesh>
 UnstructuredMesh::build_from_cell_list(const mpi::Communicator & comm,
                                        Int dim,
                                        Int n_corners,
@@ -669,7 +669,7 @@ UnstructuredMesh::build_from_cell_list(const mpi::Communicator & comm,
                                               space_dim,
                                               vertices.data(),
                                               &dm));
-    return new UnstructuredMesh(dm);
+    return Qtr<UnstructuredMesh>::alloc(dm);
 }
 
 StarForest

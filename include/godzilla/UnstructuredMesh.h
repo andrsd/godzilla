@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Qtr.h"
 #include "godzilla/Mesh.h"
 #include "godzilla/Range.h"
 #include "godzilla/IndexSet.h"
@@ -422,13 +423,13 @@ public:
     ///
     /// NOTES:
     /// - only process 0 takes in the input
-    static UnstructuredMesh * build_from_cell_list(const mpi::Communicator & comm,
-                                                   Int dim,
-                                                   Int n_corners,
-                                                   const std::vector<Int> & cells,
-                                                   Int space_dim,
-                                                   const std::vector<Real> & vertices,
-                                                   bool interpolate);
+    static Qtr<UnstructuredMesh> build_from_cell_list(const mpi::Communicator & comm,
+                                                      Int dim,
+                                                      Int n_corners,
+                                                      const std::vector<Int> & cells,
+                                                      Int space_dim,
+                                                      const std::vector<Real> & vertices,
+                                                      bool interpolate);
 
     /// Get polytope dimension
     ///

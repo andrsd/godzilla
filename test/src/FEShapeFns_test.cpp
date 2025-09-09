@@ -113,6 +113,4 @@ TEST(FEShapeFns, calc_grad_shape_2d_petsc)
     EXPECT_DOUBLE_EQ(grad_sh(1)(1, 1), 1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(0, 2), -1);
     EXPECT_DOUBLE_EQ(grad_sh(1)(1, 2), 0);
-
-    delete mesh;
 }

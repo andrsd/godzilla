@@ -17,7 +17,7 @@ class TestUnstructuredMesh : public MeshObject {
 public:
     explicit TestUnstructuredMesh(const Parameters & params) : MeshObject(params) {}
 
-    Mesh *
+    Qtr<Mesh>
     create_mesh() override
     {
         Real lower[1] = { -1 };
@@ -49,7 +49,7 @@ public:
                                         PETSC_TRUE,
                                         &dm));
 #endif
-        return new UnstructuredMesh(dm);
+        return Qtr<UnstructuredMesh>::alloc(dm);
     }
 };
 
@@ -63,7 +63,7 @@ public:
     {
     }
 
-    Mesh *
+    Qtr<Mesh>
     create_mesh() override
     {
         Real lower[3] = { 0, 0, 0 };
@@ -97,7 +97,7 @@ public:
                                         PETSC_TRUE,
                                         &dm));
 #endif
-        auto m = new UnstructuredMesh(dm);
+        auto m = Qtr<UnstructuredMesh>::alloc(dm);
 
         // create "side sets"
         std::map<Int, std::string> face_set_names;
@@ -482,7 +482,7 @@ TEST(UnstructuredMesh, build_from_cell_list_2d)
     public:
         explicit TestMesh2D(const godzilla::Parameters & parameters) : MeshObject(parameters) {}
 
-        Mesh *
+        Qtr<Mesh>
         create_mesh() override
         {
             std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
@@ -527,7 +527,7 @@ TEST(UnstructuredMesh, mark_boundary_faces)
     public:
         explicit TestMesh2D(const godzilla::Parameters & parameters) : MeshObject(parameters) {}
 
-        Mesh *
+        Qtr<Mesh>
         create_mesh() override
         {
             std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };

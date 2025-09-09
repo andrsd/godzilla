@@ -53,7 +53,7 @@ FileMesh::get_file_format() const
     return this->file_format;
 }
 
-godzilla::Mesh *
+Qtr<Mesh>
 FileMesh::create_mesh()
 {
     CALL_STACK_MSG();
@@ -67,14 +67,14 @@ FileMesh::create_mesh()
     }
 }
 
-godzilla::UnstructuredMesh *
+Qtr<Mesh>
 FileMesh::create_from_gmsh()
 {
     CALL_STACK_MSG();
     PetscOptionsSetValue(nullptr, "-dm_plex_gmsh_use_regions", nullptr);
     DM dm;
     PETSC_CHECK(DMPlexCreateGmshFromFile(get_comm(), get_file_name().c_str(), PETSC_TRUE, &dm));
-    auto m = new UnstructuredMesh(dm);
+    auto m = Qtr<UnstructuredMesh>::alloc(dm);
     return m;
 }
 

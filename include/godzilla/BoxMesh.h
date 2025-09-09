@@ -43,7 +43,7 @@ public:
     Int get_nz() const;
 
 protected:
-    Mesh * create_mesh() override;
+    Qtr<Mesh> create_mesh() override;
 
 private:
     /// Minimum in the x direction

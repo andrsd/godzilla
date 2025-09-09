@@ -4,10 +4,9 @@
 #pragma once
 
 #include "godzilla/MeshObject.h"
+#include "godzilla/Qtr.h"
 
 namespace godzilla {
-
-class UnstructuredMesh;
 
 /// Mesh loaded from a file
 ///
@@ -29,12 +28,12 @@ public:
 
 protected:
     void set_file_format(FileFormat fmt);
-    Mesh * create_mesh() override;
+    Qtr<Mesh> create_mesh() override;
 
 private:
     void detect_file_format();
-    UnstructuredMesh * create_from_exodus();
-    UnstructuredMesh * create_from_gmsh();
+    Qtr<Mesh> create_from_exodus();
+    Qtr<Mesh> create_from_gmsh();
 
     /// File name with the mesh
     std::string file_name;

@@ -27,8 +27,6 @@ TEST(FEGeometryTest, coordinates)
     EXPECT_DOUBLE_EQ(coords(4)(0), 0.1);
     EXPECT_DOUBLE_EQ(coords(5)(0), 0.2);
     EXPECT_DOUBLE_EQ(coords(6)(0), 0.3);
-
-    delete mesh;
 }
 
 TEST(FEGeometryTest, connectivity)
@@ -49,8 +47,6 @@ TEST(FEGeometryTest, connectivity)
     EXPECT_EQ(connect(1)(1), 5);
     EXPECT_EQ(connect(2)(0), 5);
     EXPECT_EQ(connect(2)(1), 6);
-
-    delete mesh;
 }
 
 TEST(FEGeometryTest, common_elements_by_node)
@@ -70,8 +66,6 @@ TEST(FEGeometryTest, common_elements_by_node)
     EXPECT_THAT(nelcom(1), UnorderedElementsAre(0, 1));
     EXPECT_THAT(nelcom(2), UnorderedElementsAre(1, 2));
     EXPECT_THAT(nelcom(3), UnorderedElementsAre(2));
-
-    delete mesh;
 }
 
 TEST(FEGeometryTest, normal_edge2)
@@ -167,8 +161,6 @@ TEST(FEGeometryTest, calc_element_length)
     auto hel = fe::calc_element_length<ELEM_TYPE, DIM>(grad_sh);
     EXPECT_DOUBLE_EQ(hel(0), 0.48);
     EXPECT_DOUBLE_EQ(hel(1), 0.6);
-
-    delete mesh;
 }
 
 TEST(FEGeometryTest, calc_nodal_radius_xyz_edge2)

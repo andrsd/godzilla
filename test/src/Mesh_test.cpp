@@ -14,7 +14,7 @@ class TestMesh : public MeshObject {
 public:
     explicit TestMesh(const Parameters & params) : MeshObject(params) {}
 
-    Mesh *
+    Qtr<Mesh>
     create_mesh() override
     {
         Real lower[1] = { -1 };
@@ -46,7 +46,7 @@ public:
                                         PETSC_TRUE,
                                         &dm));
 #endif
-        return new UnstructuredMesh(dm);
+        return Qtr<UnstructuredMesh>::alloc(dm);
     }
 };
 
@@ -176,8 +176,6 @@ TEST(MeshTest, view)
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, HasSubstr("DM Object:"));
     EXPECT_THAT(out, HasSubstr("type: plex"));
-
-    delete m;
 }
 
 TEST(MeshTest, get_neighbors)
@@ -195,6 +193,4 @@ TEST(MeshTest, get_neighbors)
         auto neighbors = m->get_neighbors();
         EXPECT_TRUE(neighbors.empty());
     }
-
-    delete m;
 }

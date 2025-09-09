@@ -33,10 +33,10 @@ TEST(VTKOutputTest, wrong_mesh_type)
     public:
         explicit TestMesh(const Parameters & params) : MeshObject(params) {}
 
-        Mesh *
+        Qtr<Mesh>
         create_mesh() override
         {
-            return new MeshDA1D(get_comm());
+            return Qtr<MeshDA1D>::alloc(get_comm());
         }
     };
 

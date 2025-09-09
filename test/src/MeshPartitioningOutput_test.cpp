@@ -19,10 +19,10 @@ class EmptyMeshObject : public MeshObject {
 public:
     explicit EmptyMeshObject(const Parameters & params) : MeshObject(params) {}
 
-    Mesh *
+    Qtr<Mesh>
     create_mesh() override
     {
-        return new EmptyMesh();
+        return Qtr<EmptyMesh>::alloc();
     }
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "godzilla/Qtr.h"
 #include "godzilla/Types.h"
 #include "godzilla/MeshObject.h"
 #include "godzilla/UnstructuredMesh.h"
@@ -9,9 +10,9 @@ class TestMesh1D : public godzilla::MeshObject {
 public:
     explicit TestMesh1D(const godzilla::Parameters & parameters);
 
-    godzilla::Mesh * create_mesh() override;
+    godzilla::Qtr<godzilla::Mesh> create_mesh() override;
 
-    void create_side_set(godzilla::UnstructuredMesh * mesh,
+    void create_side_set(godzilla::Qtr<godzilla::UnstructuredMesh> & mesh,
                          godzilla::Label & face_sets,
                          godzilla::Int id,
                          const std::vector<godzilla::Int> & faces,

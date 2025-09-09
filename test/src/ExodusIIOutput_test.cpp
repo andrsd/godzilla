@@ -101,10 +101,10 @@ TEST(ExodusIIOutputTest, fe_check)
     public:
         explicit TestMesh(const Parameters & params) : MeshObject(params) {}
 
-        Mesh *
+        Qtr<Mesh>
         create_mesh() override
         {
-            return new EmptyMesh(get_comm());
+            return Qtr<EmptyMesh>::alloc(get_comm());
         }
     };
 
