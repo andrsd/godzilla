@@ -26,14 +26,13 @@ public:
     {
         CALL_STACK_MSG();
         EssentialBoundaryInfo::create();
-        this->vals.create(this->num_vertices());
+        this->vals = Array1D<Int>(this->num_vertices());
     }
 
     void
     destroy() override
     {
         CALL_STACK_MSG();
-        this->vals.destroy();
         EssentialBoundaryInfo::destroy();
     }
 
@@ -49,7 +48,7 @@ public:
 class TestNaturalBoundary3D : public fe::NaturalBoundaryInfo<TET4, 3, 4> {
 public:
     TestNaturalBoundary3D(UnstructuredMesh * mesh,
-                          const Array1D<DenseMatrix<Real, 3, 4>> * grad_phi,
+                          Array1D<DenseMatrix<Real, 3, 4>> grad_phi,
                           const IndexSet & facets) :
         fe::NaturalBoundaryInfo<TET4, 3, 4>(mesh, grad_phi, facets)
     {
@@ -60,7 +59,7 @@ public:
     {
         CALL_STACK_MSG();
         NaturalBoundaryInfo::create();
-        this->vals.create(this->num_facets());
+        this->vals = Array1D<Int>(this->num_facets());
     }
 
     void
@@ -68,7 +67,6 @@ public:
     {
         CALL_STACK_MSG();
         NaturalBoundaryInfo::destroy();
-        this->vals.destroy();
     }
 
     void
@@ -115,7 +113,7 @@ TEST(FEBoundaryTest, test_3d)
     {
         auto label = m->get_label("front");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(m, &grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(m, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -134,7 +132,7 @@ TEST(FEBoundaryTest, test_3d)
     {
         auto label = m->get_label("bottom");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(m, &grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(m, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -153,7 +151,7 @@ TEST(FEBoundaryTest, test_3d)
     {
         auto label = m->get_label("slanted");
         auto bnd_facets = points_from_label(label);
-        TestNaturalBoundary3D bnd(m, &grad_phi, bnd_facets);
+        TestNaturalBoundary3D bnd(m, grad_phi, bnd_facets);
         bnd.create();
         bnd.compute();
 
@@ -169,7 +167,4 @@ TEST(FEBoundaryTest, test_3d)
 
         bnd.destroy();
     }
-
-    grad_phi.destroy();
-    fe_volume.destroy();
 }

@@ -29,8 +29,7 @@ Array1D<DenseVector<Real, DIM>>
 coordinates(const UnstructuredMesh & mesh)
 {
     auto vtx_range = mesh.get_vertex_range();
-    Array1D<DenseVector<Real, DIM>> coords;
-    coords.create(vtx_range);
+    Array1D<DenseVector<Real, DIM>> coords(vtx_range);
     Vector vc = mesh.get_coordinates_local();
     Scalar * coord_vals = vc.get_array();
     Int j = 0;
