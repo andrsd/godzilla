@@ -165,14 +165,14 @@ calc_element_length(const Array1D<DenseMatrix<Real, DIM, N_ELEM_NODES>> & grad_p
 
 template <CoordinateType COORD_TYPE, Int DIM>
 inline Array1D<Real>
-calc_nodal_radius(Array1D<DenseVector<Real, DIM>> & coords)
+calc_nodal_radius(const Array1D<DenseVector<Real, DIM>> & coords)
 {
     throw NotImplementedException("Radius computation is not implemented in {} dimensions", DIM);
 }
 
 template <>
 inline Array1D<Real>
-calc_nodal_radius<CARTESIAN, 1>(Array1D<DenseVector<Real, 1>> & coords)
+calc_nodal_radius<CARTESIAN, 1>(const Array1D<DenseVector<Real, 1>> & coords)
 {
     CALL_STACK_MSG();
     auto n = coords.size();
@@ -184,7 +184,7 @@ calc_nodal_radius<CARTESIAN, 1>(Array1D<DenseVector<Real, 1>> & coords)
 
 template <>
 inline Array1D<Real>
-calc_nodal_radius<CARTESIAN, 2>(Array1D<DenseVector<Real, 2>> & coords)
+calc_nodal_radius<CARTESIAN, 2>(const Array1D<DenseVector<Real, 2>> & coords)
 {
     CALL_STACK_MSG();
     auto n = coords.size();
@@ -196,7 +196,7 @@ calc_nodal_radius<CARTESIAN, 2>(Array1D<DenseVector<Real, 2>> & coords)
 
 template <>
 inline Array1D<Real>
-calc_nodal_radius<CARTESIAN, 3>(Array1D<DenseVector<Real, 3>> & coords)
+calc_nodal_radius<CARTESIAN, 3>(const Array1D<DenseVector<Real, 3>> & coords)
 {
     CALL_STACK_MSG();
     auto n = coords.size();
@@ -208,7 +208,7 @@ calc_nodal_radius<CARTESIAN, 3>(Array1D<DenseVector<Real, 3>> & coords)
 
 template <>
 inline Array1D<Real>
-calc_nodal_radius<AXISYMMETRIC, 2>(Array1D<DenseVector<Real, 2>> & coords)
+calc_nodal_radius<AXISYMMETRIC, 2>(const Array1D<DenseVector<Real, 2>> & coords)
 {
     // symmetric around x-axis
     CALL_STACK_MSG();
