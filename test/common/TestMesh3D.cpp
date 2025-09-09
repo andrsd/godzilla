@@ -11,7 +11,7 @@ TestMesh3D::parameters()
 
 TestMesh3D::TestMesh3D(const godzilla::Parameters & parameters) : MeshObject(parameters) {}
 
-Mesh *
+Qtr<Mesh>
 TestMesh3D::create_mesh()
 {
     const Int DIM = 3;
@@ -48,7 +48,7 @@ TestMesh3D::create_mesh()
 }
 
 void
-TestMesh3D::create_side_set(UnstructuredMesh * mesh,
+TestMesh3D::create_side_set(Qtr<UnstructuredMesh> & mesh,
                             Label & face_sets,
                             Int id,
                             const std::vector<Int> & faces,

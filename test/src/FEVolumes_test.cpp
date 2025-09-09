@@ -82,8 +82,6 @@ TEST(FEVolumesTest, calc_volumes_1d_petsc)
     EXPECT_DOUBLE_EQ(volumes(0), 1.);
     EXPECT_DOUBLE_EQ(volumes(1), 0.5);
     EXPECT_DOUBLE_EQ(volumes(2), 1.5);
-
-    delete mesh;
 }
 
 TEST(FEVolumesTest, calc_volumes_2d_petsc)
@@ -103,8 +101,6 @@ TEST(FEVolumesTest, calc_volumes_2d_petsc)
     EXPECT_DOUBLE_EQ(volumes(1), 0.3);
     EXPECT_DOUBLE_EQ(volumes(2), 0.4);
     EXPECT_DOUBLE_EQ(volumes(3), 0.2);
-
-    delete mesh;
 }
 
 TEST(FEVolumesTest, face_area_edge2)

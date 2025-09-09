@@ -11,7 +11,7 @@ TestMesh1D::parameters()
 
 TestMesh1D::TestMesh1D(const Parameters & parameters) : MeshObject(parameters) {}
 
-Mesh *
+Qtr<Mesh>
 TestMesh1D::create_mesh()
 {
     const Int DIM = 1;
@@ -44,7 +44,7 @@ TestMesh1D::create_mesh()
 }
 
 void
-TestMesh1D::create_side_set(UnstructuredMesh * mesh,
+TestMesh1D::create_side_set(Qtr<UnstructuredMesh> & mesh,
                             Label & face_sets,
                             Int id,
                             const std::vector<Int> & faces,

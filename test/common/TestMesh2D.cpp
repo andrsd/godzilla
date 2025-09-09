@@ -11,7 +11,7 @@ TestMesh2D::parameters()
 
 TestMesh2D::TestMesh2D(const Parameters & parameters) : MeshObject(parameters) {}
 
-Mesh *
+Qtr<Mesh>
 TestMesh2D::create_mesh()
 {
     const Int DIM = 2;
@@ -46,7 +46,7 @@ TestMesh2D::create_mesh()
 }
 
 void
-TestMesh2D::create_side_set(UnstructuredMesh * mesh,
+TestMesh2D::create_side_set(Qtr<UnstructuredMesh> & mesh,
                             Label & face_sets,
                             Int id,
                             const std::vector<Int> & faces,

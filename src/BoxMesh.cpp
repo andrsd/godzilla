@@ -112,7 +112,7 @@ BoxMesh::get_nz() const
     return this->nz;
 }
 
-Mesh *
+Qtr<Mesh>
 BoxMesh::create_mesh()
 {
     CALL_STACK_MSG();
@@ -149,7 +149,7 @@ BoxMesh::create_mesh()
                                     this->interpolate,
                                     &dm));
 #endif
-    auto * mesh = new UnstructuredMesh(dm);
+    auto mesh = Qtr<UnstructuredMesh>::alloc(dm);
 
     mesh->remove_label("marker");
     // create user-friendly names for sides

@@ -83,7 +83,7 @@ RectangleMesh::get_ny() const
     return this->ny;
 }
 
-godzilla::Mesh *
+Qtr<Mesh>
 RectangleMesh::create_mesh()
 {
     CALL_STACK_MSG();
@@ -119,7 +119,7 @@ RectangleMesh::create_mesh()
                                     this->interpolate,
                                     &dm));
 #endif
-    auto * mesh = new UnstructuredMesh(dm);
+    auto mesh = Qtr<UnstructuredMesh>::alloc(dm);
 
     mesh->remove_label("marker");
     // create user-friendly names for sides

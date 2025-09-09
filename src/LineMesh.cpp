@@ -53,7 +53,7 @@ LineMesh::get_nx() const
     return this->nx;
 }
 
-Mesh *
+Qtr<Mesh>
 LineMesh::create_mesh()
 {
     CALL_STACK_MSG();
@@ -86,7 +86,7 @@ LineMesh::create_mesh()
                                     this->interpolate,
                                     &dm));
 #endif
-    auto mesh = new UnstructuredMesh(dm);
+    auto mesh = Qtr<UnstructuredMesh>::alloc(dm);
 
     mesh->remove_label("marker");
     // create user-friendly names for sides

@@ -3,12 +3,12 @@
 
 #pragma once
 
+#include "godzilla/Qtr.h"
 #include "godzilla/Object.h"
 #include "godzilla/PrintInterface.h"
+#include "godzilla/Mesh.h"
 
 namespace godzilla {
-
-class Mesh;
 
 /// Base class for objects that create `Mesh`es. These are user-facing objects.
 ///
@@ -16,7 +16,6 @@ class Mesh;
 class MeshObject : public Object, public PrintInterface {
 public:
     explicit MeshObject(const Parameters & parameters);
-    ~MeshObject() override;
 
     void create() override;
 
@@ -24,19 +23,20 @@ public:
     ///
     /// @return Mesh object
     template <class T>
-    T * get_mesh() const
+    T *
+    get_mesh() const
     {
         CALL_STACK_MSG();
-        return dynamic_cast<T *>(this->mesh);
+        return dynamic_cast<T *>(this->mesh.get());
     }
 
 protected:
-    virtual Mesh * create_mesh() = 0;
+    virtual Qtr<Mesh> create_mesh() = 0;
     void lprint_mesh_info();
 
 private:
     /// Mesh object build by us
-    Mesh * mesh;
+    Qtr<Mesh> mesh;
 
 public:
     static Parameters parameters();
