@@ -39,7 +39,7 @@ public:
     /// Gets the spatial dimension for the interpolation context
     ///
     /// @return The spatial dimension
-    Int get_dim() const;
+    Dimension get_dim() const;
 
     /// Gets the number of fields interpolated at a point
     ///
@@ -61,7 +61,7 @@ public:
     /// Sets the spatial dimension for the interpolation context
     ///
     /// @param dim The spatial dimension
-    void set_dim(Int dim);
+    void set_dim(Dimension dim);
 
     /// Sets the number of fields interpolated at a point for the interpolation context
     ///

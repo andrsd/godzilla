@@ -176,7 +176,7 @@ TecplotOutput::create()
 
     assert(this->mesh != nullptr);
     auto dim = this->mesh->get_dimension();
-    assert(dim >= 1 && dim <= 3);
+    assert(dim == 1_D || dim == 2_D || dim == 3_D);
     for (Int i = 0; i < dim; ++i)
         this->shared_vars.push_back(true);
     int32_t var_idx = dim;
@@ -220,7 +220,7 @@ TecplotOutput::open_file()
 
         const std::vector<std::string> coord_names = { "x", "y", "z" };
         auto dim = this->mesh->get_dimension();
-        assert(dim >= 1 && dim <= 3);
+        assert(dim == 1_D || dim == 2_D || dim == 3_D);
         std::vector<std::string> var_names;
         for (Int i = 0; i < dim; ++i)
             var_names.push_back(coord_names[i]);

@@ -456,7 +456,7 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
 
     auto depth_label = unstr_mesh->get_depth_label();
     auto dim = unstr_mesh->get_dimension();
-    IndexSet all_facets = depth_label.get_stratum(dim - 1);
+    auto all_facets = depth_label.get_stratum(dim - 1);
 
     for (auto & bnd : get_essential_bcs()) {
         auto n_ced_dofs = (Int) bnd->get_components().size();
@@ -490,8 +490,8 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
     auto unstr_mesh = get_mesh();
 
     auto depth_label = unstr_mesh->get_depth_label();
-    Int dim = unstr_mesh->get_dimension();
-    IndexSet all_facets = depth_label.get_stratum(dim - 1);
+    auto dim = unstr_mesh->get_dimension();
+    auto all_facets = depth_label.get_stratum(dim - 1);
 
     for (auto & bnd : get_essential_bcs()) {
         auto components = bnd->get_components();
@@ -577,7 +577,7 @@ DGProblemInterface::create_fe(FieldInfo & fi)
 {
     CALL_STACK_MSG();
     auto comm = get_mesh()->get_comm();
-    Int dim = get_problem()->get_dimension();
+    auto dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(
         PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k.value(), this->qorder, &fi.fe));

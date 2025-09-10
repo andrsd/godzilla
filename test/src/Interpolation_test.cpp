@@ -13,7 +13,7 @@ TEST(InterpolationTest, test_1d)
 
     auto comm = app.get_comm();
 
-    Int dim = 1;
+    Dimension dim = 1_D;
     std::array<Real, 1> lower = { 0 };
     std::array<Real, 1> upper = { 1 };
     std::array<Int, 1> faces = { 4 };

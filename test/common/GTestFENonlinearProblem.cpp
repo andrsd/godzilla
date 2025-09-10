@@ -1,6 +1,7 @@
 #include "GTestFENonlinearProblem.h"
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
+#include "godzilla/Types.h"
 
 namespace {
 
@@ -32,7 +33,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
     const FieldGradient & u_x;
 };
 
@@ -50,7 +51,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
 };
 
 } // namespace

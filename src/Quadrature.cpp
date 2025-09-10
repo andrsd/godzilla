@@ -40,13 +40,13 @@ Quadrature::duplicate() const
     return q;
 }
 
-Int
+Dimension
 Quadrature::get_dim() const
 {
     CALL_STACK_MSG();
     Int dim;
     PETSC_CHECK(PetscQuadratureGetData(this->obj, &dim, nullptr, nullptr, nullptr, nullptr));
-    return dim;
+    return Dimension::from_int(dim);
 }
 
 Int
@@ -104,7 +104,7 @@ Quadrature::equal(const Quadrature & q) const
 }
 
 Quadrature
-Quadrature::create_gauss_tensor(Int dim, Int n_comp, Int n_points, Real a, Real b)
+Quadrature::create_gauss_tensor(Dimension dim, Int n_comp, Int n_points, Real a, Real b)
 {
     CALL_STACK_MSG();
     Quadrature q;

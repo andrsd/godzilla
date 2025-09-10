@@ -36,7 +36,7 @@ RZSymmetry::create()
     Object::create();
     auto problem = this->dpi->get_problem();
     auto dim = problem->get_dimension();
-    if (dim == 2) {
+    if (dim == 2_D) {
         if (this->axis.size() != 2)
             log_error("'axis' parameter must provide 2 components.");
         if (this->pt.size() != 2)
@@ -53,7 +53,7 @@ RZSymmetry::get_value(Real time, const DenseVector<Real, 2> & x)
 
     std::vector<Real> a({ x(0) - this->pt[0], x(1) - this->pt[1] });
 
-    const Int dim = 2;
+    constexpr Int dim = 2;
     Real a_sqr = 0.;
     for (Int i = 0; i < dim; ++i)
         a_sqr += a[i] * a[i];

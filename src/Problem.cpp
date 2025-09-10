@@ -11,6 +11,7 @@
 #include "godzilla/Output.h"
 #include "godzilla/FileOutput.h"
 #include "godzilla/Section.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
 
@@ -114,13 +115,13 @@ Problem::allocate_objects()
     set_solution_vector(create_global_vector());
 }
 
-Int
+Dimension
 Problem::get_dimension() const
 {
     CALL_STACK_MSG();
     Int dim;
     PETSC_CHECK(DMGetDimension(get_dm(), &dim));
-    return dim;
+    return Dimension::from_int(dim);
 }
 
 Real

@@ -49,5 +49,5 @@ TEST_F(BoundaryConditionTest, api)
 
     EXPECT_THAT(bc.get_boundary(), ElementsAre("side1"));
     EXPECT_THAT(bc.get_prob(), this->prob);
-    EXPECT_THAT(bc.get_dimension(), 1);
+    EXPECT_THAT(bc.get_dimension(), 1_D);
 }

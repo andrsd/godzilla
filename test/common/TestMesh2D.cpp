@@ -14,15 +14,14 @@ TestMesh2D::TestMesh2D(const Parameters & parameters) : MeshObject(parameters) {
 Qtr<Mesh>
 TestMesh2D::create_mesh()
 {
-    const Int DIM = 2;
     const Int N_ELEM_NODES = 3;
     std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };
     std::vector<Real> coords = { 0, 0, 1, 0, 0, 1, 1, 1 };
     auto m = UnstructuredMesh::build_from_cell_list(get_comm(),
-                                                    DIM,
+                                                    2_D,
                                                     N_ELEM_NODES,
                                                     cells,
-                                                    DIM,
+                                                    2_D,
                                                     coords,
                                                     true);
 

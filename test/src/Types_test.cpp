@@ -16,7 +16,7 @@ TEST(TypesTest, dimension)
 {
     Dimension dim = 1_D;
     EXPECT_TRUE(dim.is_valid());
-    EXPECT_EQ(dim.to_num(), 1);
+    EXPECT_EQ(dim, 1);
 }
 
 TEST(TypesTest, invalid_dimension)

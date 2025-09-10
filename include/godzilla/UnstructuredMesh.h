@@ -7,6 +7,7 @@
 #include "godzilla/Mesh.h"
 #include "godzilla/Range.h"
 #include "godzilla/IndexSet.h"
+#include "godzilla/Types.h"
 #include "godzilla/Vector.h"
 #include "godzilla/Section.h"
 #include "godzilla/DenseVector.h"
@@ -424,10 +425,10 @@ public:
     /// NOTES:
     /// - only process 0 takes in the input
     static Qtr<UnstructuredMesh> build_from_cell_list(const mpi::Communicator & comm,
-                                                      Int dim,
+                                                      Dimension dim,
                                                       Int n_corners,
                                                       const std::vector<Int> & cells,
-                                                      Int space_dim,
+                                                      Dimension space_dim,
                                                       const std::vector<Real> & vertices,
                                                       bool interpolate);
 

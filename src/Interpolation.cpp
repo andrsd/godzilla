@@ -19,7 +19,7 @@ Interpolation::create(MPI_Comm comm)
 void
 Interpolation::destroy()
 {
-    PETSC_CHECK( DMInterpolationDestroy(&this->info));
+    PETSC_CHECK(DMInterpolationDestroy(&this->info));
 }
 
 void
@@ -45,12 +45,12 @@ Interpolation::get_coordinates() const
     return v;
 }
 
-Int
+Dimension
 Interpolation::get_dim() const
 {
     Int dim;
     PETSC_CHECK(DMInterpolationGetDim(this->info, &dim));
-    return dim;
+    return Dimension::from_int(dim);
 }
 
 Int
@@ -78,7 +78,7 @@ Interpolation::restore_vector(Vector & v)
 }
 
 void
-Interpolation::set_dim(Int dim)
+Interpolation::set_dim(Dimension dim)
 {
     PETSC_CHECK(DMInterpolationSetDim(this->info, dim));
 }

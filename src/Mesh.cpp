@@ -3,6 +3,7 @@
 
 #include "godzilla/Mesh.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
 
@@ -26,17 +27,17 @@ Mesh::get_dm() const
     return this->obj;
 }
 
-Int
+Dimension
 Mesh::get_dimension() const
 {
     CALL_STACK_MSG();
     Int dim;
     PETSC_CHECK(DMGetDimension(this->obj, &dim));
-    return dim;
+    return Dimension::from_int(dim);
 }
 
 void
-Mesh::set_dimension(Int dim)
+Mesh::set_dimension(Dimension dim)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMSetDimension(this->obj, dim));
@@ -115,7 +116,7 @@ Mesh::get_coordinate_section() const
 }
 
 void
-Mesh::set_coordinate_dim(Int dim)
+Mesh::set_coordinate_dim(Dimension dim)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMSetCoordinateDim(this->obj, dim));

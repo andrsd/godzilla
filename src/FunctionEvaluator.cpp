@@ -7,6 +7,7 @@
 #include "godzilla/Exception.h"
 #include "fmt/format.h"
 #include "fmt/ranges.h"
+#include "godzilla/Types.h"
 #include <cassert>
 
 namespace godzilla {
@@ -47,7 +48,7 @@ FunctionEvaluator::register_function(Function * fn)
 }
 
 Real
-FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
+FunctionEvaluator::evaluate(Dimension dim, Real time, const Real x[])
 {
     CALL_STACK_MSG();
     auto * xx = const_cast<Real *>(x);
@@ -55,11 +56,11 @@ FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
     try {
         this->parser.DefineVar("t", &time);
         this->parser.DefineVar("x", &(xx[0]));
-        if (dim >= 2)
+        if (dim == 2_D || dim == 3_D)
             this->parser.DefineVar("y", &(xx[1]));
         else
             this->parser.DefineVar("y", &zero);
-        if (dim >= 3)
+        if (dim == 3_D)
             this->parser.DefineVar("z", &(xx[2]));
         else
             this->parser.DefineVar("z", &zero);
@@ -71,7 +72,7 @@ FunctionEvaluator::evaluate(Int dim, Real time, const Real x[])
 }
 
 bool
-FunctionEvaluator::evaluate(Int dim, Real time, const Real x[], Int nc, Real u[])
+FunctionEvaluator::evaluate(Dimension dim, Real time, const Real x[], Int nc, Real u[])
 {
     CALL_STACK_MSG();
     auto * xx = const_cast<Real *>(x);
@@ -79,11 +80,11 @@ FunctionEvaluator::evaluate(Int dim, Real time, const Real x[], Int nc, Real u[]
     try {
         this->parser.DefineVar("t", &time);
         this->parser.DefineVar("x", &(xx[0]));
-        if (dim >= 2)
+        if (dim == 2_D || dim == 3_D)
             this->parser.DefineVar("y", &(xx[1]));
         else
             this->parser.DefineVar("y", &zero);
-        if (dim >= 3)
+        if (dim == 3_D)
             this->parser.DefineVar("z", &(xx[2]));
         else
             this->parser.DefineVar("z", &zero);

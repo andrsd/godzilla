@@ -34,7 +34,7 @@ BoundaryCondition::get_problem() const
     return this->dpi->get_problem();
 }
 
-Int
+Dimension
 BoundaryCondition::get_dimension() const
 {
     CALL_STACK_MSG();

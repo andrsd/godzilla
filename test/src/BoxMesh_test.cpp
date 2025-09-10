@@ -39,7 +39,7 @@ TEST(BoxMeshTest, api)
     mesh.create();
 
     auto m = mesh.get_mesh<Mesh>();
-    EXPECT_EQ(m->get_dimension(), 3);
+    EXPECT_EQ(m->get_dimension(), 3_D);
 
     auto dm = m->get_dm();
     Real gmin[4], gmax[4];

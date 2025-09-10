@@ -377,7 +377,7 @@ FENonlinearProblem::compute_bnd_residual_internal(DM dm, Vec loc_x, Vec loc_x_t,
     PetscDS prob;
     PETSC_CHECK(DMGetDS(dm, &prob));
     auto depth_label = get_mesh()->get_depth_label();
-    Int dim = get_dimension();
+    auto dim = get_dimension();
     auto facets = depth_label.get_stratum(dim - 1);
     Int n_bnd;
     PETSC_CHECK(PetscDSGetNumBoundary(prob, &n_bnd));
@@ -878,7 +878,7 @@ FENonlinearProblem::compute_bnd_jacobian_internal(DM dm,
     PetscDS prob;
     PETSC_CHECK(DMGetDS(dm, &prob));
     auto depth_label = get_mesh()->get_depth_label();
-    Int dim = get_dimension();
+    auto dim = get_dimension();
     auto facets = depth_label.get_stratum(dim - 1);
     Int n_bnd;
     PETSC_CHECK(PetscDSGetNumBoundary(prob, &n_bnd));

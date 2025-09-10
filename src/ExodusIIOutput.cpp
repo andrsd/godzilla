@@ -253,7 +253,7 @@ ExodusIIOutput::write_mesh_continuous()
     int n_node_sets = (int) this->mesh->get_num_vertex_sets();
     int n_side_sets = (int) this->mesh->get_num_face_sets();
 
-    int exo_dim = (int) this->mesh->get_dimension();
+    int exo_dim = this->mesh->get_dimension();
     this->exo->init("", exo_dim, n_nodes, n_elems, n_elem_blk, n_node_sets, n_side_sets);
 
     write_coords_continuous(exo_dim);
@@ -274,7 +274,7 @@ ExodusIIOutput::write_mesh_discontinuous()
     if (n_elem_blk == 0)
         n_elem_blk = 1;
 
-    int exo_dim = (int) this->mesh->get_dimension();
+    int exo_dim = this->mesh->get_dimension();
     this->exo->init("", exo_dim, n_nodes, n_elems, n_elem_blk, 0, 0);
 
     write_coords_discontinuous(exo_dim);
@@ -285,7 +285,7 @@ void
 ExodusIIOutput::write_coords_continuous(int exo_dim)
 {
     CALL_STACK_MSG();
-    int dim = (int) this->mesh->get_dimension();
+    int dim = this->mesh->get_dimension();
     Vector coord = this->mesh->get_coordinates_local();
     Int coord_size = coord.get_size();
     Scalar * xyz = coord.get_array();
@@ -323,7 +323,7 @@ void
 ExodusIIOutput::write_coords_discontinuous(int exo_dim)
 {
     CALL_STACK_MSG();
-    int dim = (int) this->mesh->get_dimension();
+    int dim = this->mesh->get_dimension();
     Vector coord = this->mesh->get_coordinates_local();
     Scalar * xyz = coord.get_array();
 
@@ -403,7 +403,7 @@ ExodusIIOutput::write_elements()
     }
     else {
         auto depth_label = this->mesh->get_depth_label();
-        Int dim = this->mesh->get_dimension();
+        auto dim = this->mesh->get_dimension();
         IndexSet cells = depth_label.get_stratum(dim);
         cells.get_indices();
         auto polytope_type = this->mesh->get_cell_type(cells[0]);

@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/FEVolumes.h"
 #include "ExceptionTestMacros.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -70,7 +71,7 @@ TEST(FEVolumesTest, calc_volumes_1d_petsc)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
 
-    const Int DIM = 1;
+    constexpr Dimension DIM = 1_D;
     const Int N_ELEM_NODES = 2;
     std::vector<Int> cells = { 0, 1, 1, 2, 2, 3 };
     std::vector<Real> coords = { 0, 1, 1.5, 3 };
@@ -88,7 +89,7 @@ TEST(FEVolumesTest, calc_volumes_2d_petsc)
 {
     mpi::Communicator comm(MPI_COMM_WORLD);
 
-    const Int DIM = 2;
+    const Dimension DIM = 2_D;
     const Int N_ELEM_NODES = 3;
     std::vector<Int> cells = { 0, 1, 4, 1, 2, 4, 2, 3, 4, 3, 0, 4 };
     std::vector<Real> coords = { 0, 0, 1, 0, 1, 1, 0, 1, 0.4, 0.2 };

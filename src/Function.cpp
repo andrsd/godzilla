@@ -20,7 +20,7 @@ Function::Function(const Parameters & params) : Object(params)
     CALL_STACK_MSG();
 }
 
-Int
+Dimension
 Function::get_dimension() const
 {
     CALL_STACK_MSG();
