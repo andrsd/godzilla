@@ -42,9 +42,9 @@ public:
     /// @param dim Spatial dimension
     /// @param time Simulation time
     /// @param x Spatial location
-    Real evaluate(Int dim, Real time, const Real x[]);
+    Real evaluate(Dimension dim, Real time, const Real x[]);
 
-    bool evaluate(Int dim, Real time, const Real x[], Int nc, Real u[]);
+    bool evaluate(Dimension dim, Real time, const Real x[], Int nc, Real u[]);
 
 private:
     /// Underlying muParser object

@@ -59,7 +59,7 @@ public:
     ///
     /// @param dim Spatial dimension
     /// @param nc Number of field components
-    explicit FieldGradient(Int dim, Int nc) : LateBindArray<Scalar>(nc * dim) {}
+    explicit FieldGradient(Dimension dim, Int nc) : LateBindArray<Scalar>(nc * dim) {}
 };
 
 /// Used for vector values during assembling (for example normals)
@@ -68,7 +68,7 @@ public:
     /// Constructor
     ///
     /// @param dim Spatial dimension
-    explicit Normal(Int dim) : LateBindArray<Real>(dim) {}
+    explicit Normal(Dimension dim) : LateBindArray<Real>(dim) {}
 };
 
 /// Used for points during assembling (for example physical coordinates)
@@ -77,7 +77,7 @@ public:
     /// Constructor
     ///
     /// @param dim Spatial dimension
-    explicit Point(Int dim) : LateBindArray<Real>(dim) {}
+    explicit Point(Dimension dim) : LateBindArray<Real>(dim) {}
 };
 
 } // namespace godzilla

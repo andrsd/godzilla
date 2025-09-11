@@ -146,8 +146,8 @@ FileMesh::create_from_exodus()
         // broadcast dimensions to all ranks
         Int ints[] = { dim, dim_embed };
         comm.broadcast(ints, 2, 0);
-        m->set_dimension(ints[0]);
-        m->set_coordinate_dim(ints[1]);
+        m->set_dimension(Dimension::from_int(ints[0]));
+        m->set_coordinate_dim(Dimension::from_int(ints[1]));
         dim = ints[0];
         dim_embed = ints[1];
 

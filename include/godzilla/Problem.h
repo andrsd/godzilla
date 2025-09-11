@@ -60,7 +60,7 @@ public:
     Vector & get_solution_vector();
 
     /// Get problem spatial dimension
-    Int get_dimension() const;
+    Dimension get_dimension() const;
 
     /// Get simulation time. For steady-state simulations, time is always 0
     ///

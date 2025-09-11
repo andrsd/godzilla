@@ -23,7 +23,7 @@ public:
     /// Get problem spatial dimension
     ///
     /// @return Spatial dimension
-    Int get_dimension() const;
+    Dimension get_dimension() const;
 
     /// Get the boundary name this BC is active on
     ///

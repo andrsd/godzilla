@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/Functional.h"
+#include "godzilla/Types.h"
 
 namespace godzilla {
 
@@ -32,7 +33,7 @@ Functional::get_fe_problem() const
     return this->fepi;
 }
 
-const Int &
+const Dimension &
 Functional::get_spatial_dimension() const
 {
     CALL_STACK_MSG();

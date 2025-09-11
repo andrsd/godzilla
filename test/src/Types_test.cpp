@@ -11,3 +11,16 @@ TEST(TypesTest, get_num_element_nodes)
     EXPECT_EQ(get_num_element_nodes(TET4), 4);
     EXPECT_EQ(get_num_element_nodes(HEX8), 8);
 }
+
+TEST(TypesTest, dimension)
+{
+    Dimension dim = 1_D;
+    EXPECT_TRUE(dim.is_valid());
+    EXPECT_EQ(dim, 1);
+}
+
+TEST(TypesTest, invalid_dimension)
+{
+    Dimension dim;
+    EXPECT_FALSE(dim.is_valid());
+}

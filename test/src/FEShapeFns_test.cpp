@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "godzilla/FEVolumes.h"
 #include "godzilla/FEShapeFns.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -91,7 +92,7 @@ TEST(FEShapeFns, calc_grad_shape_2d_petsc)
     mpi::Communicator comm(MPI_COMM_WORLD);
 
     const ElementType ELEM_TYPE = TRI3;
-    const int DIM = 2;
+    constexpr Dimension DIM = 2_D;
     const int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE);
 
     std::vector<Int> cells = { 0, 1, 2, 1, 3, 2 };

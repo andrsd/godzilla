@@ -43,7 +43,7 @@ protected:
     /// Get spatial dimension
     ///
     /// @return Spatial dimension
-    const Int & get_spatial_dimension() const;
+    const Dimension & get_spatial_dimension() const;
 
     /// Get physical coordinates
     ///

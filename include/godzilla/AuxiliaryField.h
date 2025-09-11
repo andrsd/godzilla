@@ -26,7 +26,7 @@ public:
     /// Get the spatial dimension of the problem this field is part of
     ///
     /// @return Spatial dimension of the problem
-    Int get_dimension() const;
+    Dimension get_dimension() const;
 
     /// Get block ID this field is defined on
     ///

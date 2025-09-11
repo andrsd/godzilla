@@ -55,7 +55,7 @@ FVProblemInterface::init()
     DiscreteProblemInterface::init();
 
     auto comm = get_mesh()->get_comm();
-    Int dim = get_problem()->get_dimension();
+    auto dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     for (auto & [_, info] : this->aux_fields)
         PETSC_CHECK(PetscFECreateLagrange(comm,
@@ -368,7 +368,7 @@ FVProblemInterface::create()
     get_mesh()->localize_coordinates();
 
 #if PETSC_VERSION_GE(3, 21, 0)
-    if (get_mesh()->get_dimension() == 1)
+    if (get_mesh()->get_dimension() == 1_D)
         throw Exception("FV in 1D is not possible due to a bug in PETSc. Use PETSc 3.20 instead.");
 #endif
 }

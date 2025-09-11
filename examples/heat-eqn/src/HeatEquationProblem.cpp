@@ -3,6 +3,7 @@
 #include "godzilla/ResidualFunc.h"
 #include "godzilla/JacobianFunc.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 
@@ -47,7 +48,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
     const FieldGradient & T_x;
 };
 
@@ -83,7 +84,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
 };
 
 } // namespace

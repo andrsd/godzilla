@@ -58,7 +58,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
     const FieldGradient & u_x;
 };
 
@@ -78,7 +78,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
 };
 
 GTestFENonlinearProblemJFNK::GTestFENonlinearProblemJFNK(const Parameters & params) :

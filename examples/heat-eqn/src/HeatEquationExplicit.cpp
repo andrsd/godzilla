@@ -45,7 +45,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
     const FieldGradient & T_x;
 };
 

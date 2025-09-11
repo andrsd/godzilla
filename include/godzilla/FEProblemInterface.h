@@ -96,7 +96,7 @@ public:
                        Order k,
                        const Label & block = Label());
 
-    const Int & get_spatial_dimension() const;
+    const Dimension & get_spatial_dimension() const;
 
     const FieldValue & get_field_value(const std::string & field_name) const;
 
@@ -362,7 +362,7 @@ private:
                   FieldID id,
                   Int nc,
                   Order k,
-                  Int dim,
+                  Dimension dim,
                   const Label & block) :
             name(name),
             id(id),
@@ -397,7 +397,7 @@ private:
     /// Data used during assembling procedure
     struct AssemblyData {
         /// Spatial dimension
-        Int dim;
+        Dimension dim;
         /// Values of primary variables
         Scalar * u;
         /// Time derivative of primary variable values
@@ -417,7 +417,7 @@ private:
         /// the multiplier a for dF/dU_t
         Real u_t_shift;
 
-        explicit AssemblyData(Int dim);
+        explicit AssemblyData(Dimension dim);
     } * asmbl;
 
     /// Functionals that must be evaluated before the weak form residual functionals

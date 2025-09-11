@@ -4,6 +4,7 @@
 #include "godzilla/ImplicitFENonlinearProblem.h"
 #include "godzilla/NaturalBC.h"
 #include "godzilla/BndJacobianFunc.h"
+#include "godzilla/Types.h"
 
 using namespace godzilla;
 using namespace testing;
@@ -67,7 +68,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
     const FieldValue & u;
     const FieldGradient & u_x;
     const Real & t;

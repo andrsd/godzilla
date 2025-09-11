@@ -47,7 +47,7 @@ AuxiliaryField::get_problem() const
     return this->dpi->get_problem();
 }
 
-Int
+Dimension
 AuxiliaryField::get_dimension() const
 {
     CALL_STACK_MSG();

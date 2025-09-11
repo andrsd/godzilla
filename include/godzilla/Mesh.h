@@ -33,12 +33,12 @@ public:
     /// Get the mesh spatial dimension
     ///
     /// @return Mesh spatial dimension
-    Int get_dimension() const;
+    Dimension get_dimension() const;
 
     /// Set the topological dimension of the mesh
     ///
     /// @param dim The topological dimension
-    void set_dimension(Int dim);
+    void set_dimension(Dimension dim);
 
     /// Check if mesh has label with a name
     ///
@@ -86,7 +86,7 @@ public:
     /// Set the dimension of the embedding space for coordinate values
     ///
     /// @param dim The embedding dimension
-    void set_coordinate_dim(Int dim);
+    void set_coordinate_dim(Dimension dim);
 
     /// Sets a local vector, including ghost points, that holds the coordinates
     ///

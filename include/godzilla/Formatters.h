@@ -60,3 +60,19 @@ struct fmt::formatter<godzilla::FieldID> {
         return fmt::format_to(ctx.out(), "{}", e.value());
     }
 };
+
+template <>
+struct fmt::formatter<godzilla::Dimension> {
+    constexpr auto
+    parse(fmt::format_parse_context & ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto
+    format(const godzilla::Dimension & dim, FormatContext & ctx) const
+    {
+        return fmt::format_to(ctx.out(), "{}", static_cast<godzilla::Int>(dim));
+    }
+};

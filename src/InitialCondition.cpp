@@ -69,7 +69,7 @@ InitialCondition::get_field_id() const
     return this->fid;
 }
 
-Int
+Dimension
 InitialCondition::get_dimension() const
 {
     CALL_STACK_MSG();

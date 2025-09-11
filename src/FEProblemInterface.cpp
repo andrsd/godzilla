@@ -38,7 +38,7 @@ add_functionals(DependencyGraph<const Functional *> & g,
     }
 }
 
-FEProblemInterface::AssemblyData::AssemblyData(Int dim) :
+FEProblemInterface::AssemblyData::AssemblyData(Dimension dim) :
     dim(dim),
     u(nullptr),
     u_t(nullptr),
@@ -453,7 +453,7 @@ FEProblemInterface::create_fe(FieldInfo & fi)
 {
     CALL_STACK_MSG();
     auto comm = get_mesh()->get_comm();
-    Int dim = get_problem()->get_dimension();
+    auto dim = get_problem()->get_dimension();
     PetscBool is_simplex = get_mesh()->is_simplex() ? PETSC_TRUE : PETSC_FALSE;
     PETSC_CHECK(
         PetscFECreateLagrange(comm, dim, fi.nc, is_simplex, fi.k.value(), this->qorder, &fi.fe));
@@ -537,7 +537,7 @@ FEProblemInterface::set_up_assembly_data_aux()
     }
 }
 
-const Int &
+const Dimension &
 FEProblemInterface::get_spatial_dimension() const
 {
     CALL_STACK_MSG();
@@ -867,7 +867,9 @@ FEProblemInterface::integrate_residual(PetscDS ds,
 
     PetscFE & fe = this->fields.at(fid).fe;
 
-    PETSC_CHECK(PetscFEGetSpatialDimension(fe, &this->asmbl->dim));
+    Int fe_dim;
+    PETSC_CHECK(PetscFEGetSpatialDimension(fe, &fe_dim));
+    this->asmbl->dim = Dimension::from_int(fe_dim);
     this->asmbl->time = t;
 
     Scalar *basis_real, *basis_der_real;
@@ -998,7 +1000,9 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
 
     PetscFE & fe = this->fields.at(fid).fe;
 
-    PETSC_CHECK(PetscFEGetSpatialDimension(fe, &this->asmbl->dim));
+    Int fe_dim;
+    PETSC_CHECK(PetscFEGetSpatialDimension(fe, &fe_dim));
+    this->asmbl->dim = Dimension::from_int(fe_dim);
     this->asmbl->time = t;
 
     Scalar *basis_real, *basis_der_real;
@@ -1175,7 +1179,9 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
     PetscFE & fe_i = this->fields.at(fid_i).fe;
     PetscFE & fe_j = this->fields.at(fid_j).fe;
 
-    PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &this->asmbl->dim));
+    Int fe_dim;
+    PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &fe_dim));
+    this->asmbl->dim = Dimension::from_int(fe_dim);
     this->asmbl->time = t;
     this->asmbl->u_t_shift = u_tshift;
 
@@ -1380,7 +1386,9 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     PetscFE & fe_i = this->fields.at(fid_i).fe;
     PetscFE & fe_j = this->fields.at(fid_j).fe;
 
-    PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &this->asmbl->dim));
+    Int fe_dim;
+    PETSC_CHECK(PetscFEGetSpatialDimension(fe_i, &fe_dim));
+    this->asmbl->dim = Dimension::from_int(fe_dim);
     this->asmbl->time = t;
     this->asmbl->u_t_shift = u_tshift;
 

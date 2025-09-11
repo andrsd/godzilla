@@ -46,7 +46,7 @@ TEST(ResidualFuncTest, test)
         }
 
     protected:
-        const Int & dim;
+        const Dimension & dim;
         const FieldValue & u;
         const FieldGradient & u_x;
         const FieldValue & u_t;
@@ -116,7 +116,7 @@ TEST(ResidualFuncTest, test_vals)
         }
 
     protected:
-        const Int & dim;
+        const Dimension & dim;
         const FieldValue & u;
         const FieldGradient & u_x;
         const FieldValue & u_t;

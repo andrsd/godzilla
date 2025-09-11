@@ -12,26 +12,26 @@ using namespace testing;
 
 namespace {
 
-class TestBoundary1D : public fe::EssentialBoundaryInfo<EDGE2, 1, 2> {
+class TestBoundary1D : public fe::EssentialBoundaryInfo<EDGE2, 1_D, 2> {
 public:
     TestBoundary1D(UnstructuredMesh * mesh, const IndexSet & facets) :
-        fe::EssentialBoundaryInfo<EDGE2, 1, 2>(mesh, facets)
+        fe::EssentialBoundaryInfo<EDGE2, 1_D, 2>(mesh, facets)
     {
     }
 };
 
-class TestBoundary2D : public fe::EssentialBoundaryInfo<TRI3, 2, 3> {
+class TestBoundary2D : public fe::EssentialBoundaryInfo<TRI3, 2_D, 3> {
 public:
     TestBoundary2D(UnstructuredMesh * mesh, const IndexSet & facets) :
-        fe::EssentialBoundaryInfo<TRI3, 2, 3>(mesh, facets)
+        fe::EssentialBoundaryInfo<TRI3, 2_D, 3>(mesh, facets)
     {
     }
 };
 
-class TestBoundary3D : public fe::EssentialBoundaryInfo<TET4, 3, 4> {
+class TestBoundary3D : public fe::EssentialBoundaryInfo<TET4, 3_D, 4> {
 public:
     TestBoundary3D(UnstructuredMesh * mesh, const IndexSet & facets) :
-        fe::EssentialBoundaryInfo<TET4, 3, 4>(mesh, facets)
+        fe::EssentialBoundaryInfo<TET4, 3_D, 4>(mesh, facets)
     {
     }
 };

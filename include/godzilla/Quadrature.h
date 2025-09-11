@@ -31,7 +31,7 @@ public:
     /// Get the spatial dimension
     ///
     /// @return The spatial dimension
-    Int get_dim() const;
+    Dimension get_dim() const;
 
     /// Get number of components
     ///
@@ -73,7 +73,7 @@ public:
     /// @param a Left end of interval (often `-1`)
     /// @param b Right end of interval (often `1`)
     /// @return Quadrature object
-    static Quadrature create_gauss_tensor(Int dim, Int n_comp, Int n_points, Real a, Real b);
+    static Quadrature create_gauss_tensor(Dimension dim, Int n_comp, Int n_points, Real a, Real b);
 };
 
 } // namespace godzilla

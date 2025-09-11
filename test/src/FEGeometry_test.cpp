@@ -4,6 +4,7 @@
 #include "godzilla/FEShapeFns.h"
 #include "godzilla/FEVolumes.h"
 #include "ExceptionTestMacros.h"
+#include "godzilla/Types.h"
 #include "mpicpp-lite/mpicpp-lite.h"
 
 using namespace godzilla;
@@ -14,10 +15,10 @@ TEST(FEGeometryTest, coordinates)
 {
     mpi::Communicator comm;
     auto mesh = UnstructuredMesh::build_from_cell_list(comm,
-                                                       1,
+                                                       1_D,
                                                        2,
                                                        { 0, 1, 1, 2, 2, 3 },
-                                                       1,
+                                                       1_D,
                                                        { 0., 0.1, 0.2, 0.3 },
                                                        true);
 
@@ -33,10 +34,10 @@ TEST(FEGeometryTest, connectivity)
 {
     mpi::Communicator comm;
     auto mesh = UnstructuredMesh::build_from_cell_list(comm,
-                                                       1,
+                                                       1_D,
                                                        2,
                                                        { 0, 1, 1, 2, 2, 3 },
-                                                       1,
+                                                       1_D,
                                                        { 0., 0.1, 0.2, 0.3 },
                                                        true);
     auto connect = fe::connectivity<1, 2>(*mesh);
@@ -53,10 +54,10 @@ TEST(FEGeometryTest, common_elements_by_node)
 {
     mpi::Communicator comm;
     auto mesh = UnstructuredMesh::build_from_cell_list(comm,
-                                                       1,
+                                                       1_D,
                                                        2,
                                                        { 0, 1, 1, 2, 2, 3 },
-                                                       1,
+                                                       1_D,
                                                        { 0., 0.1, 0.2, 0.3 },
                                                        true);
 
@@ -149,7 +150,7 @@ TEST(FEGeometryTest, calc_element_length)
     mpi::Communicator comm(MPI_COMM_WORLD);
 
     const ElementType ELEM_TYPE = TRI3;
-    const int DIM = 2;
+    constexpr Dimension DIM = 2_D;
     const int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE);
 
     std::vector<Int> cells = { 0, 1, 2, 2, 1, 3 };

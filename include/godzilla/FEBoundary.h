@@ -35,7 +35,7 @@ public:
 
 /// Essential boundary info
 
-template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+template <ElementType ELEM_TYPE, Dimension DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 class EssentialBoundaryInfo : public AbstractBoundaryInfo {
 public:
     EssentialBoundaryInfo(UnstructuredMesh * mesh, IndexSet vertices) :
@@ -108,7 +108,7 @@ private:
 
 /// Natural boundary information
 
-template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+template <ElementType ELEM_TYPE, Dimension DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
 class NaturalBoundaryInfo : public AbstractBoundaryInfo {
 public:
     NaturalBoundaryInfo(UnstructuredMesh * mesh,

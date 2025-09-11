@@ -44,8 +44,8 @@ public:
     }
 
 protected:
-    const Int & n_comp;
-    const Int & dim;
+    const Int n_comp;
+    const Dimension & dim;
     const FieldValue & vel;
     const FieldValue & vel_t;
     const FieldGradient & vel_x;
@@ -77,8 +77,8 @@ public:
     }
 
 protected:
-    const Int & n_comp;
-    const Int & dim;
+    const Int n_comp;
+    const Dimension & dim;
     const FieldGradient & vel_x;
     const FieldValue & press;
     const Scalar & Re;
@@ -103,7 +103,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
     const FieldGradient & vel_x;
 };
 
@@ -124,7 +124,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
 };
 
 class JacobianVV0 : public JacobianFunc {
@@ -156,7 +156,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
     const FieldGradient & vel_x;
     const Real & u_t_shift;
 };
@@ -189,7 +189,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
     const FieldValue & vel;
 };
 
@@ -210,7 +210,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
 };
 
 class JacobianVP2 : public JacobianFunc {
@@ -230,7 +230,7 @@ public:
     }
 
 protected:
-    const Int & dim;
+    const Dimension & dim;
 };
 
 class JacobianVV3 : public JacobianFunc {
@@ -256,8 +256,8 @@ public:
     }
 
 protected:
-    const Int & n_comp;
-    const Int & dim;
+    const Int n_comp;
+    const Dimension & dim;
     const Real & Re;
 };
 

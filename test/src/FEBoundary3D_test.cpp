@@ -14,10 +14,10 @@ using namespace testing;
 
 namespace {
 
-class TestEssentialBoundary3D : public fe::EssentialBoundaryInfo<TET4, 3, 4> {
+class TestEssentialBoundary3D : public fe::EssentialBoundaryInfo<TET4, 3_D, 4> {
 public:
     TestEssentialBoundary3D(UnstructuredMesh * mesh, const IndexSet & facets) :
-        fe::EssentialBoundaryInfo<TET4, 3, 4>(mesh, facets)
+        fe::EssentialBoundaryInfo<TET4, 3_D, 4>(mesh, facets)
     {
     }
 
@@ -45,12 +45,12 @@ public:
     Array1D<Int> vals;
 };
 
-class TestNaturalBoundary3D : public fe::NaturalBoundaryInfo<TET4, 3, 4> {
+class TestNaturalBoundary3D : public fe::NaturalBoundaryInfo<TET4, 3_D, 4> {
 public:
     TestNaturalBoundary3D(UnstructuredMesh * mesh,
                           Array1D<DenseMatrix<Real, 3, 4>> grad_phi,
                           const IndexSet & facets) :
-        fe::NaturalBoundaryInfo<TET4, 3, 4>(mesh, grad_phi, facets)
+        fe::NaturalBoundaryInfo<TET4, 3_D, 4>(mesh, grad_phi, facets)
     {
     }
 

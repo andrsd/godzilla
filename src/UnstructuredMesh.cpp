@@ -7,6 +7,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Partitioner.h"
 #include "godzilla/Convert.h"
+#include "godzilla/Types.h"
 #include "petscdmplex.h"
 #include "petscdmtypes.h"
 
@@ -650,10 +651,10 @@ UnstructuredMesh::mark_boundary_faces(Int val, Label & label)
 
 Qtr<UnstructuredMesh>
 UnstructuredMesh::build_from_cell_list(const mpi::Communicator & comm,
-                                       Int dim,
+                                       Dimension dim,
                                        Int n_corners,
                                        const std::vector<Int> & cells,
-                                       Int space_dim,
+                                       Dimension space_dim,
                                        const std::vector<Real> & vertices,
                                        bool interpolate)
 {
