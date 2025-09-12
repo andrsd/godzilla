@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/PiecewiseLinear.h"
-#include "godzilla/LinearInterpolation.h"
 #include "godzilla/CallStack.h"
 
 namespace godzilla {
@@ -27,17 +26,12 @@ PiecewiseLinear::PiecewiseLinear(const Parameters & params) : Function(params), 
 {
     CALL_STACK_MSG();
     try {
-        this->linpol = new LinearInterpolation(get_param<std::vector<Real>>("x"),
-                                               get_param<std::vector<Real>>("y"));
+        this->linpol = Qtr<LinearInterpolation>::alloc(get_param<std::vector<Real>>("x"),
+                                                       get_param<std::vector<Real>>("y"));
     }
     catch (std::exception & e) {
         log_error("{}", e.what());
     }
-}
-
-PiecewiseLinear::~PiecewiseLinear()
-{
-    delete this->linpol;
 }
 
 void
