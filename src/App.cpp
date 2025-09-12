@@ -132,7 +132,6 @@ App::App(const mpi::Communicator & comm,
 App::~App()
 {
     CALL_STACK_MSG();
-    delete this->yml;
     delete this->logger;
     this->factory.destroy();
 }
@@ -250,10 +249,10 @@ App::get_input_file_name() const
 {
     CALL_STACK_MSG();
     static std::string empty_file_name;
-    if (this->yml != nullptr)
-        return this->yml->get_file_name();
-    else
+    if (this->yml == nullptr)
         return empty_file_name;
+    else
+        return this->yml->get_file_name();
 }
 
 const std::string &
@@ -274,13 +273,6 @@ cxxopts::Options &
 App::get_command_line_opts()
 {
     return this->cmdln_opts;
-}
-
-void
-App::set_input_file(InputFile * input_file)
-{
-    CALL_STACK_MSG();
-    this->yml = input_file;
 }
 
 Parameters *
@@ -321,11 +313,11 @@ App::process_command_line(const cxxopts::ParseResult & result)
     }
 }
 
-InputFile *
+Qtr<InputFile>
 App::create_input_file()
 {
     CALL_STACK_MSG();
-    return new GYMLFile(this);
+    return Qtr<GYMLFile>::alloc(this);
 }
 
 void
@@ -352,6 +344,8 @@ App::run_input_file(const std::string & input_file_name)
     CALL_STACK_MSG();
     if (utils::path_exists(input_file_name)) {
         this->yml = create_input_file();
+        if (this->yml == nullptr)
+            throw InternalError("App::yaml is null");
         build_from_yml(input_file_name);
         if (this->logger->get_num_errors() == 0)
             this->yml->create_objects();

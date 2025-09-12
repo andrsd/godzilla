@@ -8,6 +8,7 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/Factory.h"
 #include "godzilla/PrintInterface.h"
+#include "godzilla/Qtr.h"
 #include <chrono>
 
 namespace mpi = mpicpp_lite;
@@ -178,11 +179,6 @@ protected:
     /// @return Command line options
     cxxopts::Options & get_command_line_opts();
 
-    /// Set the input file
-    ///
-    /// @param input_file Input file to set
-    void set_input_file(InputFile * input_file);
-
     /// Create command line options
     ///
     virtual void create_command_line_options();
@@ -211,7 +207,7 @@ protected:
 
 private:
     /// Create an input file instance
-    virtual InputFile * create_input_file();
+    virtual Qtr<InputFile> create_input_file();
 
     /// Application name
     std::string name;
@@ -241,7 +237,7 @@ private:
     std::string perf_log_file_name;
 
     /// YML file with application objects
-    InputFile * yml;
+    Qtr<InputFile> yml;
 
     /// Pointer to `Problem`
     Problem * problem;

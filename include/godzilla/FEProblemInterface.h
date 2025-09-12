@@ -8,6 +8,7 @@
 #include "godzilla/FieldValue.h"
 #include "godzilla/Types.h"
 #include "godzilla/WeakForm.h"
+#include "godzilla/Qtr.h"
 #include "petscfe.h"
 #include <string>
 #include <vector>
@@ -53,7 +54,7 @@ public:
     void
     set_aux_field_component_name(FieldID fid, Int component, const std::string & name) override;
 
-    WeakForm * get_weak_form() const;
+    const WeakForm & get_weak_form() const;
 
     /// Adds a volumetric field
     ///
@@ -392,7 +393,7 @@ private:
     std::map<std::string, FieldID> aux_fields_by_name;
 
     /// Weak formulation
-    WeakForm * wf;
+    WeakForm wf;
 
     /// Data used during assembling procedure
     struct AssemblyData {
@@ -418,7 +419,8 @@ private:
         Real u_t_shift;
 
         explicit AssemblyData(Dimension dim);
-    } * asmbl;
+    };
+    Qtr<AssemblyData> asmbl;
 
     /// Functionals that must be evaluated before the weak form residual functionals
     /// associated with the WeakForm::Key are evaluated

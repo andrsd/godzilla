@@ -12,7 +12,6 @@
 #include "godzilla/IndexSet.h"
 #include "godzilla/Exception.h"
 #include "godzilla/MeshObject.h"
-#include "exodusIIcpp/exodusIIcpp.h"
 #include "fmt/format.h"
 #include "fmt/chrono.h"
 #include <set>
@@ -110,7 +109,6 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
     discont(false),
     variable_names(get_param<std::vector<std::string>>("variables")),
     dgpi(dynamic_cast<DGProblemInterface *>(get_problem())),
-    exo(nullptr),
     step_num(1),
     mesh_stored(false)
 {
@@ -124,10 +122,8 @@ ExodusIIOutput::ExodusIIOutput(const Parameters & params) :
 ExodusIIOutput::~ExodusIIOutput()
 {
     CALL_STACK_MSG();
-    if (this->exo) {
+    if (this->exo)
         this->exo->close();
-        delete this->exo;
-    }
 }
 
 std::string
@@ -215,7 +211,7 @@ void
 ExodusIIOutput::open_file()
 {
     CALL_STACK_MSG();
-    this->exo = new exodusIIcpp::File(get_file_name(), exodusIIcpp::FileAccess::WRITE);
+    this->exo = Qtr<exodusIIcpp::File>::alloc(get_file_name(), exodusIIcpp::FileAccess::WRITE);
     if (!this->exo->is_opened())
         throw Exception("Could not open file '{}' for writing.", get_file_name());
 }

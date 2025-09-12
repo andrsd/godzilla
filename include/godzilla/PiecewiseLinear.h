@@ -5,6 +5,8 @@
 
 #include "godzilla/Function.h"
 #include "godzilla/Types.h"
+#include "godzilla/Qtr.h"
+#include "godzilla/LinearInterpolation.h"
 
 namespace godzilla {
 
@@ -17,7 +19,6 @@ class LinearInterpolation;
 class PiecewiseLinear : public Function {
 public:
     explicit PiecewiseLinear(const Parameters & params);
-    ~PiecewiseLinear() override;
 
     void register_callback(mu::Parser & parser) override;
 
@@ -26,7 +27,7 @@ public:
 
 private:
     /// Linear interpolation object used for function evaluation
-    LinearInterpolation * linpol;
+    Qtr<LinearInterpolation> linpol;
 
 public:
     static Parameters parameters();

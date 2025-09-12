@@ -117,6 +117,15 @@ TEST(QtrTest, op_bool)
         FAIL();
 }
 
+TEST(QtrTest, cmp_nullptr)
+{
+    auto q = Qtr<int>::alloc(123);
+    if (q == nullptr)
+        FAIL();
+    else
+        SUCCEED();
+}
+
 TEST(QtrTest, cast)
 {
     auto bd = Qtr<BigData>::alloc(12., 34., 1);

@@ -19,7 +19,7 @@ PrintInterface::TimedEvent::TimedEvent(const PrintInterface * pi,
     std::string evt_name = fmt::format("{}::{}", this->pi->pi_app->get_name(), event_name);
     if (!perf_log::is_event_registered(evt_name))
         perf_log::register_event(evt_name);
-    this->event = new perf_log::Event(evt_name);
+    this->event = Qtr<perf_log::Event>::alloc(evt_name);
     this->event->begin();
     this->start_time = perf_log::get_event_info(evt_name).time();
     if (level <= this->pi->verbosity_level && this->pi->proc_id == 0) {
@@ -31,7 +31,6 @@ PrintInterface::TimedEvent::~TimedEvent()
 {
     this->event->end();
     auto event_id = this->event->get_id();
-    delete this->event;
 
     if (level <= this->pi->verbosity_level && this->pi->proc_id == 0) {
         auto info = perf_log::get_event_info(event_id);

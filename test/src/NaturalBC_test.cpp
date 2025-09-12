@@ -145,16 +145,16 @@ TEST(NaturalBCTest, fe)
     EXPECT_EQ(num_bd, 1);
     //
     auto field = bc.get_field_id();
-    WeakForm * wf = prob.get_weak_form();
+    auto & wf = prob.get_weak_form();
     auto m = mesh.get_mesh<UnstructuredMesh>();
     auto label = m->get_label("left");
     auto ids = label.get_values();
 
-    const auto & f0 = wf->get(WeakForm::BND_F0, label, ids[0], field, 0);
+    const auto & f0 = wf.get(WeakForm::BND_F0, label, ids[0], field, 0);
     EXPECT_EQ(f0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatF0 *>(f0[0]), nullptr);
 
-    const auto & g0 = wf->get(WeakForm::BND_G0, label, ids[0], field, field, 0);
+    const auto & g0 = wf.get(WeakForm::BND_G0, label, ids[0], field, field, 0);
     EXPECT_EQ(g0.size(), 1);
     EXPECT_NE(dynamic_cast<TestNatG0 *>(g0[0]), nullptr);
 }

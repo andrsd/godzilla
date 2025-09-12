@@ -199,7 +199,7 @@ ExplicitFELinearProblem::compute_rhs_function_fem(Real time, const Vector & loc_
     CALL_STACK_MSG();
     auto all_cells = get_mesh()->get_all_cells();
 
-    for (auto region : get_weak_form()->get_residual_regions()) {
+    for (auto region : get_weak_form().get_residual_regions()) {
         IndexSet cells;
         region.value = 0;
         region.part = 100;

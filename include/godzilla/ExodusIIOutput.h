@@ -5,10 +5,8 @@
 
 #include "godzilla/FileOutput.h"
 #include "godzilla/Types.h"
-
-namespace exodusIIcpp {
-class File;
-}
+#include "godzilla/Qtr.h"
+#include "exodusIIcpp/exodusIIcpp.h"
 
 namespace godzilla {
 
@@ -79,7 +77,7 @@ private:
     /// Unstructured mesh
     UnstructuredMesh * mesh;
     /// ExodusII file
-    exodusIIcpp::File * exo;
+    Qtr<exodusIIcpp::File> exo;
     /// Step number
     int step_num;
     /// Flag indicating if we need to store mesh during `output_step`

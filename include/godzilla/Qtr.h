@@ -118,6 +118,20 @@ public:
         return !is_null();
     }
 
+    bool
+    operator==(std::nullptr_t) const noexcept
+    {
+        CALL_STACK_MSG();
+        return is_null();
+    }
+
+    bool
+    operator!=(std::nullptr_t) const noexcept
+    {
+        CALL_STACK_MSG();
+        return !is_null();
+    }
+
     T &
     operator*() const
     {

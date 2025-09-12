@@ -55,9 +55,7 @@ FEProblemInterface::AssemblyData::AssemblyData(Dimension dim) :
 FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
     DependencyEvaluator(),
-    qorder(PETSC_DETERMINE),
-    wf(new WeakForm()),
-    asmbl(nullptr)
+    qorder(PETSC_DETERMINE)
 {
 }
 
@@ -68,9 +66,6 @@ FEProblemInterface::~FEProblemInterface()
         PetscFEDestroy(&info.fe);
     for (auto & [_, info] : this->aux_fields)
         PetscFEDestroy(&info.fe);
-
-    delete this->asmbl;
-    delete this->wf;
 }
 
 const std::map<FieldID, FEProblemInterface::FieldInfo> &
@@ -85,7 +80,7 @@ FEProblemInterface::create()
 {
     CALL_STACK_MSG();
     auto dim = get_problem()->get_dimension();
-    this->asmbl = new AssemblyData(dim);
+    this->asmbl = Qtr<AssemblyData>::alloc(dim);
     set_up_fields();
     DiscreteProblemInterface::create();
     get_mesh()->localize_coordinates();
@@ -187,7 +182,7 @@ FEProblemInterface::get_field_id(const std::string & name) const
         throw Exception("Field '{}' does not exist. Typo?", name);
 }
 
-WeakForm *
+const WeakForm &
 FEProblemInterface::get_weak_form() const
 {
     CALL_STACK_MSG();
@@ -627,11 +622,11 @@ FEProblemInterface::sort_residual_functionals(
     CALL_STACK_MSG();
     auto graph = build_dependecy_graph(suppliers);
     this->sorted_res_functionals.clear();
-    for (auto & region : this->wf->get_residual_regions()) {
+    for (auto & region : this->wf.get_residual_regions()) {
         for (Int f = 0; f < get_num_fields(); ++f) {
             FieldID fid(f);
-            auto f0_fnls = this->wf->get(WeakForm::F0, region.label, region.value, fid, 0);
-            auto f1_fnls = this->wf->get(WeakForm::F1, region.label, region.value, fid, 0);
+            auto f0_fnls = this->wf.get(WeakForm::F0, region.label, region.value, fid, 0);
+            auto f1_fnls = this->wf.get(WeakForm::F1, region.label, region.value, fid, 0);
 
             add_functionals<ResidualFunc *>(graph, suppliers, f0_fnls);
             add_functionals<ResidualFunc *>(graph, suppliers, f1_fnls);
@@ -660,15 +655,15 @@ FEProblemInterface::sort_jacobian_functionals(
     CALL_STACK_MSG();
     auto graph = build_dependecy_graph(suppliers);
     this->sorted_jac_functionals.clear();
-    for (auto & region : this->wf->get_jacobian_regions()) {
+    for (auto & region : this->wf.get_jacobian_regions()) {
         for (Int f = 0; f < get_num_fields(); ++f) {
             FieldID fid(f);
             for (Int g = 0; g < get_num_fields(); ++g) {
                 FieldID gid(g);
-                auto g0_fnls = this->wf->get(WeakForm::G0, region.label, region.value, fid, gid, 0);
-                auto g1_fnls = this->wf->get(WeakForm::G1, region.label, region.value, fid, gid, 0);
-                auto g2_fnls = this->wf->get(WeakForm::G2, region.label, region.value, fid, gid, 0);
-                auto g3_fnls = this->wf->get(WeakForm::G3, region.label, region.value, fid, gid, 0);
+                auto g0_fnls = this->wf.get(WeakForm::G0, region.label, region.value, fid, gid, 0);
+                auto g1_fnls = this->wf.get(WeakForm::G1, region.label, region.value, fid, gid, 0);
+                auto g2_fnls = this->wf.get(WeakForm::G2, region.label, region.value, fid, gid, 0);
+                auto g3_fnls = this->wf.get(WeakForm::G3, region.label, region.value, fid, gid, 0);
 
                 add_functionals<JacobianFunc *>(graph, suppliers, g0_fnls);
                 add_functionals<JacobianFunc *>(graph, suppliers, g1_fnls);
@@ -829,7 +824,7 @@ FEProblemInterface::add_weak_form_residual_block(WeakForm::ResidualKind kind,
                                                  Int part)
 {
     CALL_STACK_MSG();
-    this->wf->add(kind, label, val, fid, part, f);
+    this->wf.add(kind, label, val, fid, part, f);
 }
 
 void
@@ -842,7 +837,7 @@ FEProblemInterface::add_weak_form_jacobian_block(WeakForm::JacobianKind kind,
                                                  Int part)
 {
     CALL_STACK_MSG();
-    this->wf->add(kind, label, val, fid, gid, part, g);
+    this->wf.add(kind, label, val, fid, gid, part, g);
 }
 
 void
@@ -860,8 +855,8 @@ FEProblemInterface::integrate_residual(PetscDS ds,
     CALL_STACK_MSG();
     Int field = key.field;
     FieldID fid(field);
-    const auto & f0_res_fns = this->wf->get(WeakForm::F0, key.label, key.value, fid, key.part);
-    const auto & f1_res_fns = this->wf->get(WeakForm::F1, key.label, key.value, fid, key.part);
+    const auto & f0_res_fns = this->wf.get(WeakForm::F0, key.label, key.value, fid, key.part);
+    const auto & f1_res_fns = this->wf.get(WeakForm::F1, key.label, key.value, fid, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return;
 
@@ -993,8 +988,8 @@ FEProblemInterface::integrate_bnd_residual(PetscDS ds,
     CALL_STACK_MSG();
     Int field = key.field;
     FieldID fid(field);
-    const auto & f0_res_fns = this->wf->get(WeakForm::BND_F0, key.label, key.value, fid, key.part);
-    const auto & f1_res_fns = this->wf->get(WeakForm::BND_F1, key.label, key.value, fid, key.part);
+    const auto & f0_res_fns = this->wf.get(WeakForm::BND_F0, key.label, key.value, fid, key.part);
+    const auto & f1_res_fns = this->wf.get(WeakForm::BND_F1, key.label, key.value, fid, key.part);
     if (f0_res_fns.empty() && f1_res_fns.empty())
         return;
 
@@ -1169,10 +1164,10 @@ FEProblemInterface::integrate_jacobian(PetscDS ds,
         break;
     }
 
-    const auto & g0_jac_fns = this->wf->get(kind0, key.label, key.value, fid_i, fid_j, key.part);
-    const auto & g1_jac_fns = this->wf->get(kind1, key.label, key.value, fid_i, fid_j, key.part);
-    const auto & g2_jac_fns = this->wf->get(kind2, key.label, key.value, fid_i, fid_j, key.part);
-    const auto & g3_jac_fns = this->wf->get(kind3, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g0_jac_fns = this->wf.get(kind0, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g1_jac_fns = this->wf.get(kind1, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g2_jac_fns = this->wf.get(kind2, key.label, key.value, fid_i, fid_j, key.part);
+    const auto & g3_jac_fns = this->wf.get(kind3, key.label, key.value, fid_i, fid_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return;
 
@@ -1373,13 +1368,13 @@ FEProblemInterface::integrate_bnd_jacobian(PetscDS ds,
     FieldID fid_j(field_j);
 
     const auto & g0_jac_fns =
-        this->wf->get(WeakForm::BND_G0, key.label, key.value, fid_i, fid_j, key.part);
+        this->wf.get(WeakForm::BND_G0, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g1_jac_fns =
-        this->wf->get(WeakForm::BND_G1, key.label, key.value, fid_i, fid_j, key.part);
+        this->wf.get(WeakForm::BND_G1, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g2_jac_fns =
-        this->wf->get(WeakForm::BND_G2, key.label, key.value, fid_i, fid_j, key.part);
+        this->wf.get(WeakForm::BND_G2, key.label, key.value, fid_i, fid_j, key.part);
     const auto & g3_jac_fns =
-        this->wf->get(WeakForm::BND_G3, key.label, key.value, fid_i, fid_j, key.part);
+        this->wf.get(WeakForm::BND_G3, key.label, key.value, fid_i, fid_j, key.part);
     if (g0_jac_fns.empty() && g1_jac_fns.empty() && g2_jac_fns.empty() && g3_jac_fns.empty())
         return;
 

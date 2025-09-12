@@ -8,6 +8,7 @@
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "godzilla/PerfLog.h"
 #include "godzilla/Terminal.h"
+#include "godzilla/Qtr.h"
 
 namespace godzilla {
 
@@ -43,7 +44,7 @@ public:
     private:
         const PrintInterface * pi;
         unsigned int level;
-        perf_log::Event * event;
+        Qtr<perf_log::Event> event;
         PetscLogDouble start_time;
     };
 

@@ -165,7 +165,7 @@ ImplicitFENonlinearProblem::compute_ifunction_fem(Real time,
     CALL_STACK_MSG();
     auto all_cells = get_mesh()->get_all_cells();
 
-    for (auto & region : get_weak_form()->get_residual_regions()) {
+    for (auto & region : get_weak_form().get_residual_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
             all_cells.inc_reference();
@@ -195,7 +195,7 @@ ImplicitFENonlinearProblem::compute_ijacobian_fem(Real time,
 
     Jp.zero();
 
-    for (auto & region : get_weak_form()->get_jacobian_regions()) {
+    for (auto & region : get_weak_form().get_jacobian_regions()) {
         IndexSet cells;
         if (region.label.is_null()) {
             all_cells.inc_reference();
