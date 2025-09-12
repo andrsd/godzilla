@@ -92,6 +92,11 @@ public:
     /// @return Factory that builds objects
     Factory & get_factory();
 
+    /// Get input file
+    ///
+    /// @return The input file
+    const InputFile * get_input_file() const;
+
     /// Get pointer to the `Problem` class in this application
     ///
     /// @return Get problem this application is representing

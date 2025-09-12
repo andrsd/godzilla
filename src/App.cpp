@@ -164,6 +164,13 @@ App::get_factory()
     return this->factory;
 }
 
+const InputFile *
+App::get_input_file() const
+{
+    CALL_STACK_MSG();
+    return this->yml.get();
+}
+
 Problem *
 App::get_problem() const
 {
