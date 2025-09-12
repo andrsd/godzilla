@@ -424,20 +424,18 @@ local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
 {
     CALL_STACK_MSG();
     auto sf = get_section_star_forest(dm);
-    const T * l_array = l.get_data();
-    T * g_array = g.get_data();
     switch (mode) {
     case ADD_VALUES:
-        sf.reduce_begin(l_array, g_array, mpi::op::sum<T>());
-        sf.reduce_end(l_array, g_array, mpi::op::sum<T>());
+        sf.reduce_begin(l, g, mpi::op::sum<T>());
+        sf.reduce_end(l, g, mpi::op::sum<T>());
         break;
     case MAX_VALUES:
-        sf.reduce_begin(l_array, g_array, mpi::op::max<T>());
-        sf.reduce_end(l_array, g_array, mpi::op::max<T>());
+        sf.reduce_begin(l, g, mpi::op::max<T>());
+        sf.reduce_end(l, g, mpi::op::max<T>());
         break;
     case MIN_VALUES:
-        sf.reduce_begin(l_array, g_array, mpi::op::min<T>());
-        sf.reduce_end(l_array, g_array, mpi::op::min<T>());
+        sf.reduce_begin(l, g, mpi::op::min<T>());
+        sf.reduce_end(l, g, mpi::op::min<T>());
         break;
     default:
         throw Exception("`local_to_global` called with unsupported mode '{}'", mode);
@@ -451,12 +449,10 @@ local_to_global(DM dm, const Array1D<T> & l, InsertMode mode, Array1D<T> & g)
 {
     CALL_STACK_MSG();
     auto sf = get_section_star_forest(dm);
-    const T * l_array = l.get_data();
-    T * g_array = g.get_data();
     switch (mode) {
     case ADD_VALUES:
-        sf.reduce_begin(l_array, g_array, mpi::op::sum<T>());
-        sf.reduce_end(l_array, g_array, mpi::op::sum<T>());
+        sf.reduce_begin(l, g, mpi::op::sum<T>());
+        sf.reduce_end(l, g, mpi::op::sum<T>());
         break;
     default:
         throw Exception("`local_to_global` called with unsupported mode '{}'", mode);
