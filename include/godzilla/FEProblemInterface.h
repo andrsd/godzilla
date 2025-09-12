@@ -8,6 +8,7 @@
 #include "godzilla/FieldValue.h"
 #include "godzilla/Types.h"
 #include "godzilla/WeakForm.h"
+#include "godzilla/Qtr.h"
 #include "petscfe.h"
 #include <string>
 #include <vector>
@@ -418,7 +419,8 @@ private:
         Real u_t_shift;
 
         explicit AssemblyData(Dimension dim);
-    } * asmbl;
+    };
+    Qtr<AssemblyData> asmbl;
 
     /// Functionals that must be evaluated before the weak form residual functionals
     /// associated with the WeakForm::Key are evaluated

@@ -55,8 +55,7 @@ FEProblemInterface::AssemblyData::AssemblyData(Dimension dim) :
 FEProblemInterface::FEProblemInterface(Problem * problem, const Parameters & params) :
     DiscreteProblemInterface(problem, params),
     DependencyEvaluator(),
-    qorder(PETSC_DETERMINE),
-    asmbl(nullptr)
+    qorder(PETSC_DETERMINE)
 {
 }
 
@@ -67,8 +66,6 @@ FEProblemInterface::~FEProblemInterface()
         PetscFEDestroy(&info.fe);
     for (auto & [_, info] : this->aux_fields)
         PetscFEDestroy(&info.fe);
-
-    delete this->asmbl;
 }
 
 const std::map<FieldID, FEProblemInterface::FieldInfo> &
@@ -83,7 +80,7 @@ FEProblemInterface::create()
 {
     CALL_STACK_MSG();
     auto dim = get_problem()->get_dimension();
-    this->asmbl = new AssemblyData(dim);
+    this->asmbl = Qtr<AssemblyData>::alloc(dim);
     set_up_fields();
     DiscreteProblemInterface::create();
     get_mesh()->localize_coordinates();
