@@ -17,11 +17,11 @@ TEST(CallStackTest, abort)
     EXPECT_EXIT(segfault(), ::ExitedWithCode(254), "Caught signal 11 \\(Segmentation violation\\)");
 }
 
-TEST(CallStackTest, alloc)
+TEST(CallStackTest, new_callstack_is_empty)
 {
     CALL_STACK_MSG();
-    auto * callstack = new godzilla::internal::CallStack();
-    delete callstack;
+    godzilla::internal::CallStack callstack;
+    EXPECT_EQ(callstack.get_size(), 0);
 }
 
 namespace unit_test {
