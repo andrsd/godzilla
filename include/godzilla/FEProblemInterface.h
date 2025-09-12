@@ -53,7 +53,7 @@ public:
     void
     set_aux_field_component_name(FieldID fid, Int component, const std::string & name) override;
 
-    WeakForm * get_weak_form() const;
+    const WeakForm & get_weak_form() const;
 
     /// Adds a volumetric field
     ///
@@ -392,7 +392,7 @@ private:
     std::map<std::string, FieldID> aux_fields_by_name;
 
     /// Weak formulation
-    WeakForm * wf;
+    WeakForm wf;
 
     /// Data used during assembling procedure
     struct AssemblyData {
