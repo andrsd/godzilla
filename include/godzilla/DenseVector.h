@@ -971,11 +971,28 @@ operator<<(std::ostream & os, const DynDenseVector<T> & obj)
 
 namespace mpicpp_lite {
 
+template <>
+inline MPI_Datatype
+mpi_datatype<godzilla::DenseVector<godzilla::Real, 1>>()
+{
+    return mpi_datatype<godzilla::Real>();
+}
+
+template <>
+inline MPI_Datatype
+mpi_datatype<godzilla::DenseVector<godzilla::Int, 1>>()
+{
+    return mpi_datatype<godzilla::Int>();
+}
+
 template <typename T, godzilla::Int D>
 struct DatatypeTraits<godzilla::DenseVector<T, D>> {
     static MPI_Datatype
     get()
     {
+        // D=1 hoses up MPI internally, so we need to prevent the code from compiling.
+        // for D=1, use `mpi_datatype` instead.
+        static_assert(D > 1);
         return type_contiguous(D, mpi_datatype<T>());
     }
 };
