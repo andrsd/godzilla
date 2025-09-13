@@ -35,7 +35,7 @@ TEST(RZSymmetryTest, check_dim)
     rz.create();
 
     testing::internal::CaptureStderr();
-    auto * logger = app.get_logger();
+    auto logger = app.get_logger();
     if (logger->get_num_entries() > 0)
         logger->print();
     auto stdout = testing::internal::GetCapturedStderr();
@@ -72,7 +72,7 @@ TEST(RZSymmetryTest, check_compatible)
     rz.create();
 
     testing::internal::CaptureStderr();
-    auto * logger = app.get_logger();
+    auto logger = app.get_logger();
     if (logger->get_num_entries() > 0)
         logger->print();
     auto stdout = testing::internal::GetCapturedStderr();

@@ -5,6 +5,7 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Qtr.h"
+#include "godzilla/Ptr.h"
 #include "godzilla/Label.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
@@ -464,7 +465,7 @@ private:
     UnstructuredMesh * unstr_mesh;
 
     /// Logger object
-    Logger * logger;
+    Ptr<Logger> logger;
 
     /// Object that manages a discrete system
     PetscDS ds;

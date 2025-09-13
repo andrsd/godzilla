@@ -8,7 +8,9 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/Factory.h"
 #include "godzilla/PrintInterface.h"
+#include "godzilla/Ptr.h"
 #include "godzilla/Qtr.h"
+#include "godzilla/Logger.h"
 #include <chrono>
 
 namespace mpi = mpicpp_lite;
@@ -17,7 +19,6 @@ namespace godzilla {
 
 class Problem;
 class InputFile;
-class Logger;
 
 class App : public PrintInterface {
 public:
@@ -70,7 +71,7 @@ public:
     /// Get logger associated with the application
     ///
     /// @return Logger
-    Logger * get_logger() const;
+    Ptr<Logger> get_logger();
 
     /// Get Application name
     ///
@@ -224,7 +225,7 @@ private:
     Registry & registry;
 
     /// Log with errors and/or warnings
-    Logger * logger;
+    Ptr<Logger> logger;
 
     /// Command line arguments
     std::vector<std::string> args;
