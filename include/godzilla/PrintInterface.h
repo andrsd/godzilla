@@ -52,6 +52,7 @@ public:
     explicit PrintInterface(const Object * obj);
     explicit PrintInterface(const App * app);
     PrintInterface(const mpi::Communicator & comm,
+                   const App * app,
                    const unsigned int & verbosity_level,
                    std::string prefix);
 
