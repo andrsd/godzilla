@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/Qtr.h"
 #include "godzilla/Label.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
@@ -302,8 +303,7 @@ public:
         else
             throw Exception("Boundary '{}' does not exist.", boundary);
         auto ids = label.get_values();
-        auto delegate = new EssentialBCDelegate(instance, method, method_t);
-        this->essential_bc_delegates.push_back(delegate);
+        auto delegate = Qtr<EssentialBCDelegate>::alloc(instance, method, method_t);
         add_boundary(DM_BC_ESSENTIAL,
                      name,
                      label,
@@ -313,7 +313,8 @@ public:
                      reinterpret_cast<void (*)()>(invoke_essential_bc_delegate),
                      method_t ? reinterpret_cast<void (*)()>(invoke_essential_bc_delegate_t)
                               : nullptr,
-                     delegate);
+                     delegate.get());
+        this->essential_bc_delegates.push_back(std::move(delegate));
     }
 
     void add_boundary_natural(const std::string & name,
@@ -333,8 +334,7 @@ public:
     {
         auto label = this->unstr_mesh->get_face_set_label(boundary);
         auto ids = label.get_values();
-        auto delegate = new NaturalRiemannBCDelegate(instance, method);
-        this->natural_riemann_bc_delegates.push_back(delegate);
+        auto delegate = Qtr<NaturalRiemannBCDelegate>::alloc(instance, method);
         add_boundary(DM_BC_NATURAL_RIEMANN,
                      name,
                      label,
@@ -343,7 +343,8 @@ public:
                      components,
                      reinterpret_cast<void (*)()>(invoke_natural_riemann_bc_delegate),
                      nullptr,
-                     delegate);
+                     delegate.get());
+        this->natural_riemann_bc_delegates.push_back(std::move(delegate));
     }
 
     template <Int N>
@@ -487,13 +488,13 @@ private:
     std::vector<EssentialBC *> essential_bcs;
 
     /// List of delegates for essential BC
-    std::vector<EssentialBCDelegate *> essential_bc_delegates;
+    std::vector<Qtr<EssentialBCDelegate>> essential_bc_delegates;
 
     /// List of natural boundary conditions
     std::vector<NaturalBC *> natural_bcs;
 
     /// List of delegates for natural Riemann BC
-    std::vector<NaturalRiemannBCDelegate *> natural_riemann_bc_delegates;
+    std::vector<Qtr<NaturalRiemannBCDelegate>> natural_riemann_bc_delegates;
 
     /// List of auxiliary field objects
     std::vector<AuxiliaryField *> auxs;
