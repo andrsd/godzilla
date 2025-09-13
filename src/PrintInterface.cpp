@@ -5,36 +5,69 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Object.h"
 #include "godzilla/App.h"
+#include "godzilla/PerfLog.h"
+#include "godzilla/Terminal.h"
 #include "godzilla/Utils.h"
+#include <chrono>
 
 namespace godzilla {
+
+namespace {
+
+perf_log::Event
+create_event(const PrintInterface * pi,
+             const std::string & app_name,
+             const std::string & event_name)
+{
+    auto name = fmt::format("{}::{}", app_name, event_name);
+    if (!perf_log::is_event_registered(name))
+        perf_log::register_event(name);
+    return perf_log::Event(name);
+}
+
+} // namespace
 
 PrintInterface::TimedEvent::TimedEvent(const PrintInterface * pi,
                                        unsigned int level,
                                        const std::string & event_name,
                                        const std::string & text) :
     pi(pi),
-    level(level)
+    level(level),
+    event(create_event(pi, pi->pi_app->get_name(), event_name)),
+    text(text)
 {
-    std::string evt_name = fmt::format("{}::{}", this->pi->pi_app->get_name(), event_name);
-    if (!perf_log::is_event_registered(evt_name))
-        perf_log::register_event(evt_name);
-    this->event = Qtr<perf_log::Event>::alloc(evt_name);
-    this->event->begin();
-    this->start_time = perf_log::get_event_info(evt_name).time();
+    this->event.begin();
+    this->start_time = this->event.info().time();
     if (level <= this->pi->verbosity_level && this->pi->proc_id == 0) {
-        fmt::print("{}... ", text);
+        fmt::print("{}...", text);
+
+        this->running = true;
+        this->thread = std::thread([this] {
+            const std::string frames[] = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" };
+            std::size_t i = 0;
+            while (this->running) {
+                fmt::print("\r{}{} {}...", Terminal::erase_line, frames[i++ % 10], this->text);
+                std::this_thread::sleep_for(std::chrono::milliseconds(150));
+            }
+        });
     }
 }
 
 PrintInterface::TimedEvent::~TimedEvent()
 {
-    this->event->end();
-    auto event_id = this->event->get_id();
+    this->event.end();
+
+    this->running = false;
+    if (this->thread.joinable())
+        this->thread.join();
 
     if (level <= this->pi->verbosity_level && this->pi->proc_id == 0) {
+        auto event_id = this->event.get_id();
         auto info = perf_log::get_event_info(event_id);
-        fmt::print("done [{}]\n", utils::human_time(info.time() - this->start_time));
+        fmt::print("\r{}{}... took {}\n",
+                   Terminal::erase_line,
+                   this->text,
+                   utils::human_time(info.time() - this->start_time));
     }
 }
 
