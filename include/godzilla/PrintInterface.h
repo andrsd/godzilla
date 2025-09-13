@@ -8,7 +8,8 @@
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "godzilla/PerfLog.h"
 #include "godzilla/Terminal.h"
-#include "godzilla/Qtr.h"
+#include <thread>
+#include <atomic>
 
 namespace godzilla {
 
@@ -44,14 +45,18 @@ public:
     private:
         const PrintInterface * pi;
         unsigned int level;
-        Qtr<perf_log::Event> event;
+        perf_log::Event event;
         PetscLogDouble start_time;
+        std::string text;
+        std::atomic<bool> running;
+        std::thread thread;
     };
 
 public:
     explicit PrintInterface(const Object * obj);
     explicit PrintInterface(const App * app);
     PrintInterface(const mpi::Communicator & comm,
+                   const App * app,
                    const unsigned int & verbosity_level,
                    std::string prefix);
 

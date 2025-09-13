@@ -1,4 +1,6 @@
 #include "gmock/gmock.h"
+#include <chrono>
+#include <thread>
 #include "GodzillaApp_test.h"
 #include "godzilla/PrintInterface.h"
 
@@ -57,6 +59,7 @@ TEST(PrintInterfaceTest, timed_event)
         create() override
         {
             TIMED_EVENT(0, "Print", "Print {}", "text");
+            std::this_thread::sleep_for(std::chrono::milliseconds(300));
         }
     };
 
@@ -66,5 +69,5 @@ TEST(PrintInterfaceTest, timed_event)
 
     obj.create();
     EXPECT_THAT(testing::internal::GetCapturedStdout(),
-                testing::ContainsRegex("Print text... done \\[.+\\]"));
+                testing::ContainsRegex("Print text... took .+"));
 }
