@@ -77,10 +77,6 @@ DiscreteProblemInterface::~DiscreteProblemInterface()
 {
     CALL_STACK_MSG();
     DMDestroy(&this->dm_aux);
-    for (auto & d : this->natural_riemann_bc_delegates)
-        delete d;
-    for (auto & d : this->essential_bc_delegates)
-        delete d;
 }
 
 Problem *
