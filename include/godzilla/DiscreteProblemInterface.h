@@ -6,6 +6,7 @@
 #include "godzilla/Types.h"
 #include "godzilla/Qtr.h"
 #include "godzilla/Ptr.h"
+#include "godzilla/Qtr.h"
 #include "godzilla/Label.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Problem.h"
