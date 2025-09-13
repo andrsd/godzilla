@@ -61,16 +61,16 @@ TEST(UtilsTest, map_values)
 
 TEST(UtilsTest, human_time)
 {
-    EXPECT_EQ(utils::human_time(0), "0s");
-    EXPECT_EQ(utils::human_time(0.5), "0.500s");
-    EXPECT_EQ(utils::human_time(10), "10s");
+    EXPECT_EQ(utils::human_time(0), "0.00s");
+    EXPECT_EQ(utils::human_time(0.5), "0.50s");
+    EXPECT_EQ(utils::human_time(10), "10.00s");
     EXPECT_EQ(utils::human_time(60), "1m");
-    EXPECT_EQ(utils::human_time(70), "1m 10s");
-    EXPECT_EQ(utils::human_time(70.5), "1m 10.500s");
+    EXPECT_EQ(utils::human_time(70), "1m 10.00s");
+    EXPECT_EQ(utils::human_time(70.5), "1m 10.50s");
     EXPECT_EQ(utils::human_time(3600), "1h");
     EXPECT_EQ(utils::human_time(3720), "1h 2m");
-    EXPECT_EQ(utils::human_time(3725), "1h 2m 5s");
-    EXPECT_EQ(utils::human_time(3725.2), "1h 2m 5.200s");
+    EXPECT_EQ(utils::human_time(3725), "1h 2m 5.00s");
+    EXPECT_EQ(utils::human_time(3725.2), "1h 2m 5.20s");
 }
 
 TEST(UtilsTest, index_of)
