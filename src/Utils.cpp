@@ -80,18 +80,15 @@ human_time(PetscLogDouble time)
     us -= h;
     auto m = duration_cast<minutes>(us);
     us -= m;
-    auto s = duration_cast<seconds>(us);
-    us -= s;
-    auto ms = duration_cast<milliseconds>(us);
+    auto s = duration_cast<milliseconds>(us) / 1000.;
+
     std::string tm;
     if (h.count() > 0)
         tm += fmt::format(" {}h", h.count());
     if (m.count() > 0)
         tm += fmt::format(" {}m", m.count());
     if ((s.count() > 0) || (h.count() == 0 && m.count() == 0)) {
-        tm += fmt::format(" {}", s.count());
-        if (ms.count() > 0)
-            tm += fmt::format(".{}", ms.count());
+        tm += fmt::format(" {:.2f}", s.count());
         tm += fmt::format("s");
     }
     return tm.substr(1);
