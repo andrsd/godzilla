@@ -58,7 +58,7 @@ App::App(const mpi::Communicator & comm,
     name(name),
     mpi_comm(comm),
     registry(godzilla::registry),
-    logger(Ptr<Logger>::alloc()),
+    logger(Qtr<Logger>::alloc()),
     cmdln_opts(name),
     verbosity_level(1),
     yml(nullptr),
@@ -78,7 +78,7 @@ App::App(const mpi::Communicator & comm,
     name(name),
     mpi_comm(comm),
     registry(godzilla::registry),
-    logger(Ptr<Logger>::alloc()),
+    logger(Qtr<Logger>::alloc()),
     args(args),
     cmdln_opts(name),
     verbosity_level(1),
@@ -97,7 +97,7 @@ App::App(const mpi::Communicator & comm,
     name(name),
     mpi_comm(comm),
     registry(registry),
-    logger(Ptr<Logger>::alloc()),
+    logger(Qtr<Logger>::alloc()),
     cmdln_opts(name),
     verbosity_level(1),
     yml(nullptr),
@@ -118,7 +118,7 @@ App::App(const mpi::Communicator & comm,
     name(name),
     mpi_comm(comm),
     registry(registry),
-    logger(Ptr<Logger>::alloc()),
+    logger(Qtr<Logger>::alloc()),
     args(args),
     cmdln_opts(name),
     verbosity_level(1),
@@ -150,11 +150,11 @@ App::get_version() const
     return ver;
 }
 
-Ptr<Logger>
+Logger *
 App::get_logger()
 {
     CALL_STACK_MSG();
-    return this->logger;
+    return this->logger.get();
 }
 
 Factory &
