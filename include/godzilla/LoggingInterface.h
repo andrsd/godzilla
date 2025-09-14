@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "godzilla/Ptr.h"
 #include "godzilla/Logger.h"
 
 namespace godzilla {
@@ -11,7 +12,7 @@ namespace godzilla {
 ///
 class LoggingInterface {
 public:
-    explicit LoggingInterface(Logger * alogger, std::string aprefix = "") :
+    explicit LoggingInterface(Ptr<Logger> alogger, std::string aprefix = "") :
         logger(alogger),
         prefix(std::move(aprefix))
     {
@@ -43,7 +44,7 @@ public:
 
 private:
     /// Logger object
-    Logger * logger;
+    Ptr<Logger> logger;
 
     /// Prefix for each logger line
     std::string prefix;
