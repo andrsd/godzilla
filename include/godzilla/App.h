@@ -8,7 +8,6 @@
 #include "godzilla/Parameters.h"
 #include "godzilla/Factory.h"
 #include "godzilla/PrintInterface.h"
-#include "godzilla/Ptr.h"
 #include "godzilla/Qtr.h"
 #include "godzilla/Logger.h"
 #include <chrono>
@@ -71,7 +70,7 @@ public:
     /// Get logger associated with the application
     ///
     /// @return Logger
-    Ptr<Logger> get_logger();
+    Logger * get_logger();
 
     /// Get Application name
     ///
@@ -225,7 +224,7 @@ private:
     Registry & registry;
 
     /// Log with errors and/or warnings
-    Ptr<Logger> logger;
+    Qtr<Logger> logger;
 
     /// Command line arguments
     std::vector<std::string> args;
