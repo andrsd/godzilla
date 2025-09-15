@@ -264,7 +264,7 @@ TEST(UnstructuredMeshTest, get_num_cell_nodes)
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::TETRAHEDRON), 4);
     EXPECT_EQ(UnstructuredMesh::get_num_cell_nodes(PolytopeType::HEXAHEDRON), 8);
 
-    EXPECT_DEATH(UnstructuredMesh::get_num_cell_nodes(PolytopeType::PYRAMID), "Unsupported type.");
+    EXPECT_THROW(UnstructuredMesh::get_num_cell_nodes(PolytopeType::PYRAMID), Exception);
 }
 
 TEST(UnstructuredMeshTest, ranges)

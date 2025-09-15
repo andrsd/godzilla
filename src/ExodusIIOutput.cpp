@@ -36,7 +36,7 @@ ExodusIIOutput::get_elem_type(PolytopeType elem_type)
     case PolytopeType::HEXAHEDRON:
         return "HEX8";
     default:
-        error("Unsupported type.");
+        throw InternalError("Unsupported type.");
     }
 }
 
@@ -62,7 +62,7 @@ ExodusIIOutput::get_elem_node_ordering(PolytopeType elem_type)
     case PolytopeType::HEXAHEDRON:
         return hex_ordering;
     default:
-        error("Unsupported type.");
+        throw InternalError("Unsupported type.");
     }
 }
 
@@ -88,7 +88,7 @@ ExodusIIOutput::get_elem_side_ordering(PolytopeType elem_type)
     case PolytopeType::HEXAHEDRON:
         return hex_ordering;
     default:
-        error("Unsupported type.");
+        throw InternalError("Unsupported type.");
     }
 }
 
