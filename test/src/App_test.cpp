@@ -128,7 +128,21 @@ TEST(AppTest, unknown_command_line_switch)
     mpi::Communicator comm(MPI_COMM_WORLD);
     App app(comm, "godzilla", argc, argv);
 
-    EXPECT_DEATH(app.run(), "Error: Option ‘asdf’ does not exist");
+    testing::internal::CaptureStdout();
+    testing::internal::CaptureStderr();
+    try {
+        app.run();
+        FAIL();
+    }
+    catch (Exception & e) {
+        SUCCEED();
+    }
+    catch (...) {
+        FAIL();
+    }
+
+    testing::internal::GetCapturedStderr();
+    testing::internal::GetCapturedStdout();
 }
 
 TEST(AppTest, help)

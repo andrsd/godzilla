@@ -45,7 +45,7 @@ mem_check(int line, const char *, const char * file, void * var)
         error_print("");
         error_print("  Location: {}:{}", file, line);
         print_call_stack();
-        terminate();
+        terminate(1);
     }
 }
 
@@ -57,7 +57,7 @@ check_petsc_error(int ierr, const char * file, int line)
         error_print("");
         error_print("  Location: {}:{}", file, line);
         print_call_stack();
-        terminate();
+        terminate(1);
     }
 }
 

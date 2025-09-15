@@ -232,7 +232,7 @@ App::parse_command_line()
     catch (const cxxopts::exceptions::exception & e) {
         fmt::print(stderr, "Error: {}\n", e.what());
         fmt::print(stdout, "{}", this->cmdln_opts.help());
-        internal::terminate(1);
+        throw Exception("");
     }
 }
 

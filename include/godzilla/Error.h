@@ -7,9 +7,6 @@ namespace godzilla {
 
 namespace internal {
 
-/// Terminate the run
-[[noreturn]] void terminate(int status = 1);
-
 void mem_check(int line, const char * func, const char * file, void * var);
 
 void check_petsc_error(int ierr, const char * file, int line);
