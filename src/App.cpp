@@ -348,28 +348,28 @@ void
 App::run_input_file(const std::string & input_file_name)
 {
     CALL_STACK_MSG();
-    if (utils::path_exists(input_file_name)) {
-        this->yml = create_input_file();
-        if (this->yml == nullptr)
-            throw InternalError("App::yaml is null");
-
-        this->yml->parse(input_file_name);
-        this->yml->build();
-        this->problem = this->yml->get_problem();
-
-        if (this->logger->get_num_errors() == 0)
-            this->yml->create_objects();
-        if (check_integrity())
-            run_problem();
-        else {
-            this->logger->print();
-            throw Exception("");
-        }
-    }
-    else
+    if (!utils::path_exists(input_file_name))
         throw Exception(
             "Unable to open '{}' for reading. Make sure it exists and you have read permissions.",
             input_file_name);
+
+    this->yml = create_input_file();
+    if (this->yml == nullptr)
+        throw InternalError("App::yaml is null");
+
+    this->yml->parse(input_file_name);
+    this->yml->build();
+    this->problem = this->yml->get_problem();
+
+    if (this->logger->get_num_errors() == 0)
+        this->yml->create_objects();
+
+    if (!check_integrity()) {
+        this->logger->print();
+        throw Exception("");
+    }
+
+    run_problem();
 }
 
 void
