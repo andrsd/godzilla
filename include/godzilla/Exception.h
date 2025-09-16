@@ -3,11 +3,11 @@
 
 #pragma once
 
+#include "godzilla/CallStack.h"
+#include "fmt/format.h"
 #include <exception>
 #include <string>
 #include <vector>
-#include "fmt/format.h"
-#include "godzilla/CallStack.h"
 
 namespace godzilla {
 

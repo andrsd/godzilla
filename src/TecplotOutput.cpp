@@ -34,7 +34,7 @@ get_zone_type(PolytopeType elem_type)
     case PolytopeType::HEXAHEDRON:
         return teciocpp::ZoneType::FEBRICK;
     default:
-        error("Unsupported type.");
+        throw InternalError("Unsupported type.");
     }
 }
 
@@ -61,7 +61,7 @@ get_elem_node_ordering(PolytopeType elem_type)
     case PolytopeType::HEXAHEDRON:
         return hex_ordering;
     default:
-        error("Unsupported type.");
+        throw InternalError("Unsupported type.");
     }
 }
 

@@ -3,8 +3,9 @@
 
 #include "godzilla/Error.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Terminal.h"
+#include "fmt/core.h"
 #include <cstdio>
-#include "fmt/printf.h"
 #include "mpi.h"
 
 namespace godzilla {
@@ -25,6 +26,17 @@ terminate(int status)
     exit(status);
 }
 
+template <typename... T>
+void
+error_print(fmt::format_string<T...> format, T... args)
+{
+    fmt::print(stderr, "{}", Terminal::red);
+    fmt::print(stderr, "[ERROR] ");
+    fmt::print(stderr, format, std::forward<T>(args)...);
+    fmt::print(stderr, "{}", Terminal::normal);
+    fmt::print(stderr, "\n");
+}
+
 void
 mem_check(int line, const char *, const char * file, void * var)
 {
@@ -33,7 +45,7 @@ mem_check(int line, const char *, const char * file, void * var)
         error_print("");
         error_print("  Location: {}:{}", file, line);
         print_call_stack();
-        terminate();
+        terminate(1);
     }
 }
 
@@ -45,7 +57,7 @@ check_petsc_error(int ierr, const char * file, int line)
         error_print("");
         error_print("  Location: {}:{}", file, line);
         print_call_stack();
-        terminate();
+        terminate(1);
     }
 }
 

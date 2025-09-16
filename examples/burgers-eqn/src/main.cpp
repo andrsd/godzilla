@@ -24,6 +24,10 @@ main(int argc, char * argv[])
 
         return 0;
     }
+    catch (Exception & e) {
+        fmt::println("{}", e.what());
+        return -1;
+    }
     catch (...) {
         return -1;
     }

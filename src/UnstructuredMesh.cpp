@@ -623,7 +623,7 @@ UnstructuredMesh::get_num_cell_nodes(PolytopeType elem_type)
     case PolytopeType::HEXAHEDRON:
         return 8;
     default:
-        error("Unsupported type '{}'.", conv::to_str(elem_type));
+        throw InternalError("Unsupported type '{}'.", conv::to_str(elem_type));
     }
 }
 

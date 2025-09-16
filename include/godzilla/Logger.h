@@ -3,9 +3,10 @@
 
 #pragma once
 
+#include "godzilla/Terminal.h"
+#include "fmt/core.h"
 #include <vector>
 #include <string>
-#include "godzilla/Error.h"
 
 namespace godzilla {
 
