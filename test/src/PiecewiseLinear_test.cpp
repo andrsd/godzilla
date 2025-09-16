@@ -35,7 +35,8 @@ TEST(PiecewiseLinearTest, inconsistent_data_sizes)
     params.set<std::vector<Real>>("y", { 3., 1., 2. });
     PiecewiseLinear obj(params);
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
         testing::HasSubstr("[ERROR] ipol: Size of 'x' (2) does not match size of 'y' (3)."));

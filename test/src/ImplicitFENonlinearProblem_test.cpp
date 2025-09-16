@@ -78,7 +78,8 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_scheme)
     this->mesh->create();
     prob->create();
 
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("prob: The 'scheme' parameter can be either 'beuler' or 'cn'."));
@@ -100,7 +101,8 @@ TEST_F(ImplicitFENonlinearProblemTest, wrong_time_stepping_params)
     this->mesh->create();
     prob->create();
 
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
@@ -122,7 +124,8 @@ TEST_F(ImplicitFENonlinearProblemTest, no_time_stepping_params)
     this->mesh->create();
     prob->create();
 
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),

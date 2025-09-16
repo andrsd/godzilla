@@ -1,6 +1,7 @@
 #include "gmock/gmock.h"
 #include "GodzillaApp_test.h"
 #include "ExceptionTestMacros.h"
+#include "godzilla/Exception.h"
 #include "yaml-cpp/yaml.h"
 #include "godzilla/LineMesh.h"
 #include "godzilla/PiecewiseLinear.h"
@@ -160,7 +161,8 @@ TEST_F(GYMLFileTest, build_missing_req_param)
                             std::string("/assets/yml/mesh_missing_req_param.yml");
     file.parse(file_name);
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("mesh: Missing required parameters:"));
@@ -198,7 +200,7 @@ TEST_F(GYMLFileTest, build)
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/simple.yml");
 
-    EXPECT_TRUE(file.parse(file_name));
+    EXPECT_NO_THROW(file.parse(file_name));
     file.build();
     file.create_objects();
 
@@ -265,7 +267,8 @@ TEST_F(GYMLFileTest, wrong_param_type)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/wrong_param_type.yml");
     file.parse(file_name);
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     auto output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output,
@@ -329,7 +332,8 @@ TEST_F(GYMLFileTest, nonfe_problem_with_ics)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/nonfe_with_ics.yml");
     file.parse(file_name);
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -345,7 +349,8 @@ TEST_F(GYMLFileTest, nonfe_problem_with_bcs)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/nonfe_with_bcs.yml");
     file.parse(file_name);
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -361,7 +366,8 @@ TEST_F(GYMLFileTest, nonfe_problem_with_auxs)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/nonfe_with_auxs.yml");
     file.parse(file_name);
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -377,7 +383,8 @@ TEST_F(GYMLFileTest, unused_param)
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/unused_param.yml");
     file.parse(file_name);
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("mesh: Following parameters were not used: ny"));
@@ -385,17 +392,21 @@ TEST_F(GYMLFileTest, unused_param)
 
 TEST_F(GYMLFileTest, malformed)
 {
-    testing::internal::CaptureStderr();
-
     GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/malformed.yml");
-    EXPECT_FALSE(file.parse(file_name));
-    this->app->check_integrity();
-
-    EXPECT_THAT(testing::internal::GetCapturedStderr(),
-                testing::HasSubstr("Failed to parse the input file: error at line 9, column 7: "
-                                   "end of map flow not found"));
+    try {
+        file.parse(file_name);
+        FAIL();
+    }
+    catch (Exception & e) {
+        EXPECT_THAT(e.what(),
+                    testing::HasSubstr("Failed to parse the input file: error at line 9, column 7: "
+                                       "end of map flow not found"));
+    }
+    catch (...) {
+        FAIL();
+    }
 }
 
 TEST_F(GYMLFileTest, wrong_type_bool)
@@ -405,9 +416,10 @@ TEST_F(GYMLFileTest, wrong_type_bool)
     GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/wrong_type_bool.yml");
-    EXPECT_TRUE(file.parse(file_name));
+    EXPECT_NO_THROW(file.parse(file_name));
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
@@ -425,9 +437,10 @@ TEST_F(GYMLFileTest, ts_adapt_with_steady)
     GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/ss_with_ts_adapt.yml");
-    EXPECT_TRUE(file.parse(file_name));
+    EXPECT_NO_THROW(file.parse(file_name));
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
@@ -441,10 +454,11 @@ TEST_F(GYMLFileTest, unused_block)
     GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/unused_block.yml");
-    EXPECT_TRUE(file.parse(file_name));
+    EXPECT_NO_THROW(file.parse(file_name));
     file.build();
     file.check();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::ContainsRegex("\\[WARNING\\] Unused block 'asdf' in '.+'"));
@@ -457,9 +471,10 @@ TEST_F(GYMLFileTest, param_not_map)
     GYMLFile file(this->app);
     std::string file_name =
         std::string(GODZILLA_UNIT_TESTS_ROOT) + std::string("/assets/yml/not_map.yml");
-    EXPECT_TRUE(file.parse(file_name));
+    EXPECT_NO_THROW(file.parse(file_name));
     file.build();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Parameter 'consts' must be a map."));

@@ -97,6 +97,7 @@ TEST(AppTest, check_integrity)
     app.get_logger()->error("error1");
 
     EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     auto out = testing::internal::GetCapturedStderr();
     EXPECT_THAT(out, testing::HasSubstr("[ERROR] error1"));

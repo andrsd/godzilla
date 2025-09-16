@@ -64,7 +64,8 @@ TEST(VTKOutputTest, wrong_mesh_type)
     mesh.create();
     prob.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("VTK output works only with unstructured meshes."));

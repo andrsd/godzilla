@@ -78,7 +78,8 @@ TEST(ExodusIIOutputTest, non_existent_var)
     mesh.create();
     prob.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -150,7 +151,8 @@ TEST(ExodusIIOutputTest, fe_check)
     mesh.create();
     prob.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::AllOf(testing::HasSubstr(
@@ -180,7 +182,8 @@ TEST(ExodusIIOutputTest, output)
     mesh.create();
     prob.create();
 
-    app.check_integrity();
+    EXPECT_TRUE(app.check_integrity());
+    app.get_logger()->print();
 
     out.output_step();
 }

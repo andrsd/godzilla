@@ -104,7 +104,8 @@ TEST_F(AuxiliaryFieldTest, non_existent_field)
 
     prob->create();
 
-    app->check_integrity();
+    EXPECT_FALSE(app->check_integrity());
+    app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Auxiliary field 'aux' does not exist."));
@@ -141,7 +142,8 @@ TEST_F(AuxiliaryFieldTest, inconsistent_comp_number)
 
     prob->create();
 
-    app->check_integrity();
+    EXPECT_FALSE(app->check_integrity());
+    app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Auxiliary field 'aux' has 2 component(s), but is set on a "
@@ -180,7 +182,8 @@ TEST_F(AuxiliaryFieldTest, non_existent_region)
 
     prob->create();
 
-    app->check_integrity();
+    EXPECT_FALSE(app->check_integrity());
+    app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Region 'asdf' does not exists. Typo?"));

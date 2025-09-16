@@ -78,7 +78,7 @@ InputFile::get_root()
     return this->root;
 }
 
-bool
+void
 InputFile::parse(const std::string & file_name)
 {
     CALL_STACK_MSG();
@@ -86,11 +86,9 @@ InputFile::parse(const std::string & file_name)
     try {
         this->root = { YAML::Node(), YAML::LoadFile(file_name) };
         this->file_name = file_name;
-        return true;
     }
     catch (YAML::ParserException & e) {
-        log_error("Failed to parse the input file: {}", e.what() + 10);
-        return false;
+        throw Exception("Failed to parse the input file: {}", e.what() + 10);
     }
 }
 

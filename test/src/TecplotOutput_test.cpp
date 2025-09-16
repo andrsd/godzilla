@@ -55,7 +55,8 @@ TEST(TecplotOutputTest, output)
     mesh.create();
     prob.create();
 
-    app.check_integrity();
+    EXPECT_TRUE(app.check_integrity());
+    app.get_logger()->print();
 
     out.output_step();
 }
@@ -90,6 +91,7 @@ TEST(TecplotOutputTest, test)
     testing::internal::CaptureStderr();
 
     EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),

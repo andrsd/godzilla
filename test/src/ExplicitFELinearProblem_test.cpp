@@ -337,7 +337,8 @@ TEST(ExplicitFELinearProblemTest, wrong_scheme)
     mesh.create();
     prob.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("The 'scheme' parameter can be either 'euler', 'ssp-rk-2', "

@@ -56,7 +56,8 @@ TEST(LineMeshTest, incorrect_dims)
     params.set<Int>("nx", 2);
     LineMesh mesh(params);
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("line_mesh: Parameter 'xmax' must be larger than 'xmin'."));

@@ -34,7 +34,8 @@ TEST(FileMesh, unknown_mesh_format)
     FileMesh mesh(mesh_pars);
     mesh.create();
 
-    ASSERT_FALSE(app.check_integrity());
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
     auto out = testing::internal::GetCapturedStderr();
     EXPECT_THAT(out, HasSubstr("[ERROR] Unknown mesh format"));
 }
