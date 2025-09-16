@@ -39,7 +39,7 @@ public:
     /// Parse the YML file
     ///
     /// @return `true` if successful, otherwise `false`
-    virtual bool parse(const std::string & file_name);
+    virtual void parse(const std::string & file_name);
 
     /// Create objects
     virtual void create_objects();

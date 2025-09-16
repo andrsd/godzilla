@@ -188,11 +188,6 @@ protected:
     ///
     virtual void create_command_line_options();
 
-    /// Build application objects from an input file
-    ///
-    /// @param file_name The input file name
-    void build_from_yml(const std::string & file_name);
-
     /// Run the input file
     ///
     /// @param input_file_name Input file name

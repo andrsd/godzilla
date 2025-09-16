@@ -352,11 +352,19 @@ App::run_input_file(const std::string & input_file_name)
         this->yml = create_input_file();
         if (this->yml == nullptr)
             throw InternalError("App::yaml is null");
-        build_from_yml(input_file_name);
+
+        this->yml->parse(input_file_name);
+        this->yml->build();
+        this->problem = this->yml->get_problem();
+
         if (this->logger->get_num_errors() == 0)
             this->yml->create_objects();
         if (check_integrity())
             run_problem();
+        else {
+            this->logger->print();
+            throw Exception("");
+        }
     }
     else
         throw Exception(
@@ -379,16 +387,6 @@ App::export_parameters_yaml() const
     std::cout << yaml.c_str() << std::endl;
 }
 
-void
-App::build_from_yml(const std::string & file_name)
-{
-    CALL_STACK_MSG();
-    if (this->yml->parse(file_name)) {
-        this->yml->build();
-        this->problem = this->yml->get_problem();
-    }
-}
-
 bool
 App::check_integrity()
 {
@@ -396,10 +394,8 @@ App::check_integrity()
     lprintln(9, "Checking integrity");
     if (this->yml)
         this->yml->check();
-    if (this->logger->get_num_entries() > 0) {
-        this->logger->print();
+    if (this->logger->get_num_entries() > 0)
         return false;
-    }
     else
         return true;
 }

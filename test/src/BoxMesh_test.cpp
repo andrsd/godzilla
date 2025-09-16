@@ -80,7 +80,8 @@ TEST(BoxMeshTest, incorrect_dims)
         .set<Int>("nz", 7);
     BoxMesh mesh(params);
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     auto output = testing::internal::GetCapturedStderr();
     EXPECT_THAT(output, testing::HasSubstr("obj: Parameter 'xmax' must be larger than 'xmin'."));

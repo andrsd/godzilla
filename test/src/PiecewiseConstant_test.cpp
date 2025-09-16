@@ -80,7 +80,8 @@ TEST(PiecewiseConstantTest, err_incorrect_point_count)
     PiecewiseConstant obj(params);
     obj.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("[ERROR] fn: Size of 'x' (2) does not match size of 'y' (2)."));
 }
@@ -99,7 +100,8 @@ TEST(PiecewiseConstantTest, err_no_points)
     PiecewiseConstant obj(params);
     obj.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("[ERROR] fn: Size of 'x' is 0. It must be 1 or more."));
 }
@@ -118,7 +120,8 @@ TEST(PiecewiseConstantTest, err_not_monotonic)
     PiecewiseConstant obj(params);
     obj.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
         testing::HasSubstr("[ERROR] fn: Values in 'x' must be increasing. Failed at index '1'."));
@@ -139,7 +142,8 @@ TEST(PiecewiseConstantTest, err_cont)
     PiecewiseConstant obj(params);
     obj.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
                     "[ERROR] fn: The 'continuity' parameter can be either 'left' or 'right'."));

@@ -88,7 +88,8 @@ TEST(EssentialBCTest, non_existing_field)
     problem.add_boundary_condition(&bc);
     problem.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 HasSubstr("Field 'asdf' does not exists. Typo?"));
@@ -120,7 +121,8 @@ TEST(EssentialBCTest, field_param_not_specified)
     problem.add_boundary_condition(&bc);
     problem.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),

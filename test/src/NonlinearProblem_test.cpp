@@ -256,7 +256,8 @@ TEST(NonlinearProblemTest, invalid_line_search_type)
     MockNonlinearProblem prob(prob_pars);
     prob.create();
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("The 'line_search' parameter can be either 'bt', 'basic', 'l2', "

@@ -256,7 +256,8 @@ TEST_F(FENonlinearProblemTest, err_ic_comp_mismatch)
 
     this->mesh->create();
     this->prob->create();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
@@ -300,7 +301,8 @@ TEST(TwoFieldFENonlinearProblemTest, err_duplicate_ics)
 
     mesh.create();
     prob.create();
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
@@ -333,7 +335,8 @@ TEST(TwoFieldFENonlinearProblemTest, err_not_enough_ics)
 
     mesh.create();
     prob.create();
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Provided 2 field(s), but 1 initial condition(s)."));
@@ -354,7 +357,8 @@ TEST_F(FENonlinearProblemTest, err_nonexisting_bc_bnd)
 
     this->mesh->create();
     this->prob->create();
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(

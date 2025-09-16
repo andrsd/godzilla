@@ -102,7 +102,8 @@ TEST_F(InitialConditionTest, test)
     this->prob->add_initial_condition(&aux_ic);
     this->prob->create();
 
-    this->app->check_integrity();
+    EXPECT_TRUE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_EQ(ic.get_field_id(), FieldID(0));
     EXPECT_EQ(ic.get_dimension(), 1);
@@ -174,7 +175,8 @@ TEST_F(InitialCondition2FieldTest, no_field_param)
     this->prob->add_initial_condition(&ic);
     this->prob->create();
 
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),
@@ -198,7 +200,8 @@ TEST_F(InitialCondition2FieldTest, non_existing_field)
     this->prob->add_initial_condition(&ic);
     this->prob->create();
 
-    this->app->check_integrity();
+    EXPECT_FALSE(this->app->check_integrity());
+    this->app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("Field 'asdf' does not exists. Typo?"));

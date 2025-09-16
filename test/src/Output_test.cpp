@@ -88,7 +88,8 @@ TEST_F(OutputTest, empty_on)
 
     out.create();
 
-    app->check_integrity();
+    EXPECT_FALSE(app->check_integrity());
+    app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("The 'on' parameter can be either 'none' or a combination of "
@@ -107,7 +108,8 @@ TEST_F(OutputTest, none_plus_mask)
 
     out.create();
 
-    app->check_integrity();
+    EXPECT_FALSE(app->check_integrity());
+    app->get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr("The 'none' execution flag can be used only by itself."));
@@ -126,7 +128,8 @@ TEST_F(OutputTest, interval_with_no_timestep_output)
 
     out.create();
 
-    app->check_integrity();
+    EXPECT_FALSE(app->check_integrity());
+    app->get_logger()->print();
 
     EXPECT_THAT(
         testing::internal::GetCapturedStderr(),

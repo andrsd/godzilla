@@ -53,7 +53,8 @@ TEST(GmshMeshTest, nonexitent_file)
     params.set<std::string>("file", "asdf.msh");
     GmshMesh mesh(params);
 
-    app.check_integrity();
+    EXPECT_FALSE(app.check_integrity());
+    app.get_logger()->print();
 
     EXPECT_THAT(testing::internal::GetCapturedStderr(),
                 testing::HasSubstr(
