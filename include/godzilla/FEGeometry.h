@@ -219,21 +219,6 @@ calc_nodal_radius<AXISYMMETRIC, 2>(const Array1D<DenseVector<Real, 2>> & coords)
     return rad;
 }
 
-/// Get local vertex index
-///
-/// @param conn Element connectivity array
-/// @param vertex Vertex index
-/// @return
-inline Int
-get_local_vertex_index(const std::vector<Int> & conn, Int vertex)
-{
-    CALL_STACK_MSG();
-    for (std::size_t i = 0; i < conn.size(); ++i)
-        if (conn[i] == vertex)
-            return i;
-    throw Exception("Vertex {} is not part of the connectivity array.", vertex);
-}
-
 /// Get local face index
 ///
 /// @param elem_conn Element connectivity array
@@ -254,6 +239,43 @@ get_local_face_index(const std::vector<Int> & elem_conn, const std::vector<Int> 
     assert(diff.size() == 1);
     auto it = std::find(elem_conn.begin(), elem_conn.end(), diff[0]);
     return std::distance(elem_conn.begin(), it);
+}
+
+template <ElementType ELEM_TYPE, Int DIM, Int N_ELEM_NODES = get_num_element_nodes(ELEM_TYPE)>
+inline Int
+get_grad_fn_index(Int facet_idx)
+{
+    throw NotImplementedException(
+        "get_grad_fn_index is not implemented for {} element in {} dimensions",
+        conv::to_str(ELEM_TYPE),
+        DIM);
+}
+
+template <>
+inline Int
+get_grad_fn_index<EDGE2, 1, 2>(Int facet_idx)
+{
+    static std::array<Int, 2> grad_fn_index = { 1, 0 };
+    assert(facet_idx >= 0 && facet_idx < 2);
+    return grad_fn_index[facet_idx];
+}
+
+template <>
+inline Int
+get_grad_fn_index<TRI3, 2, 3>(Int facet_idx)
+{
+    static std::array<Int, 3> grad_fn_index = { 2, 0, 1 };
+    assert(facet_idx >= 0 && facet_idx < 3);
+    return grad_fn_index[facet_idx];
+}
+
+template <>
+inline Int
+get_grad_fn_index<TET4, 3, 4>(Int facet_idx)
+{
+    static std::array<Int, 4> grad_fn_index = { 3, 2, 1, 0 };
+    assert(facet_idx >= 0 && facet_idx < 4);
+    return grad_fn_index[facet_idx];
 }
 
 } // namespace fe

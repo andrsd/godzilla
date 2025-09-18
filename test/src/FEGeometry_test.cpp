@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/DenseMatrix.h"
+#include "godzilla/Enums.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/FEShapeFns.h"
 #include "godzilla/FEVolumes.h"
@@ -212,20 +213,31 @@ TEST(FEGeometryTest, calc_nodal_radius_rz_tri3)
     EXPECT_DOUBLE_EQ(rad(2), 1.);
 }
 
-TEST(FEGeometryTest, get_local_vertex_index)
-{
-    std::vector<Int> elem = { 2, 7, 4 };
-    EXPECT_EQ(fe::get_local_vertex_index(elem, 2), 0);
-    EXPECT_EQ(fe::get_local_vertex_index(elem, 7), 1);
-    EXPECT_EQ(fe::get_local_vertex_index(elem, 4), 2);
-    EXPECT_THROW_MSG(fe::get_local_vertex_index(elem, 0),
-                     "Vertex 0 is not part of the connectivity array.");
-}
-
 TEST(FEGeometryTest, get_local_face_index)
 {
     std::vector<Int> elem = { 2, 4, 7 };
     EXPECT_EQ(fe::get_local_face_index(elem, { 2, 4 }), 2);
     EXPECT_EQ(fe::get_local_face_index(elem, { 4, 7 }), 0);
     EXPECT_EQ(fe::get_local_face_index(elem, { 7, 2 }), 1);
+}
+
+TEST(FEGeometryTest, get_grad_fn_index_edge2)
+{
+    EXPECT_EQ((fe::get_grad_fn_index<EDGE2, 1, 2>(0)), 1);
+    EXPECT_EQ((fe::get_grad_fn_index<EDGE2, 1, 2>(1)), 0);
+}
+
+TEST(FEGeometryTest, get_grad_fn_index_tri3)
+{
+    EXPECT_EQ((fe::get_grad_fn_index<TRI3, 2, 3>(0)), 2);
+    EXPECT_EQ((fe::get_grad_fn_index<TRI3, 2, 3>(1)), 0);
+    EXPECT_EQ((fe::get_grad_fn_index<TRI3, 2, 3>(2)), 1);
+}
+
+TEST(FEGeometryTest, get_grad_fn_index_tet4)
+{
+    EXPECT_EQ((fe::get_grad_fn_index<TET4, 3, 4>(0)), 3);
+    EXPECT_EQ((fe::get_grad_fn_index<TET4, 3, 4>(1)), 2);
+    EXPECT_EQ((fe::get_grad_fn_index<TET4, 3, 4>(2)), 1);
+    EXPECT_EQ((fe::get_grad_fn_index<TET4, 3, 4>(3)), 0);
 }

@@ -265,14 +265,16 @@ private:
     {
         CALL_STACK_MSG();
         for (Int i = 0; i < this->facets.get_local_size(); ++i) {
-            auto face_conn = this->mesh->get_connectivity(this->facets(i));
-            auto support = this->mesh->get_support(this->facets(i));
+            auto facet = this->facets(i);
+            auto face_conn = this->mesh->get_connectivity(facet);
+            auto support = this->mesh->get_support(facet);
             Int ie = support[0];
-            Real volume = this->mesh->compute_cell_volume(ie);
-            auto elem_conn = this->mesh->get_connectivity(ie);
-            Int local_idx = get_local_face_index(elem_conn, face_conn);
+            auto cone = this->mesh->get_cone(ie);
+            auto local_face_idx = utils::index_of(cone, facet);
+            auto grad_fn_idx = fe::get_grad_fn_index<ELEM_TYPE, DIM, N_ELEM_NODES>(local_face_idx);
+            auto volume = this->mesh->compute_cell_volume(ie);
             auto edge_length = this->lengths(i);
-            auto grad = DenseVector<Real, DIM>(calc_grad_shape(ie, volume).column(local_idx));
+            DenseVector<Real, DIM> grad(calc_grad_shape(ie, volume).column(grad_fn_idx));
             this->normals(i) = fe::normal<ELEM_TYPE>(volume, edge_length, grad);
         }
     }
