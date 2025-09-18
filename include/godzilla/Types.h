@@ -198,4 +198,39 @@ private:
 
 inline constexpr FieldID FieldID::INVALID { -1 };
 
+namespace fe {
+
+/// Primary template for a simplex element type selector
+template <Dimension D>
+class SimplexSelector;
+
+template <>
+class SimplexSelector<1_D> {
+public:
+    static constexpr ElementType ELEMENT_TYPE = EDGE2;
+    static constexpr Int N_NODES = 2;
+    static constexpr Int N_FACE_NODES = 1;
+};
+
+template <>
+class SimplexSelector<2_D> {
+public:
+    static constexpr ElementType ELEMENT_TYPE = TRI3;
+    static constexpr Int N_NODES = 3;
+    static constexpr Int N_FACE_NODES = 2;
+};
+
+template <>
+class SimplexSelector<3_D> {
+public:
+    static constexpr ElementType ELEMENT_TYPE = TET4;
+    static constexpr Int N_NODES = 4;
+    static constexpr Int N_FACE_NODES = 3;
+};
+
+template <Dimension D>
+constexpr Int N_NODES = SimplexSelector<D>::N_NODES;
+
+} // namespace fe
+
 } // namespace godzilla
