@@ -125,11 +125,53 @@ TEST(NaturalBoundaryTest, test_3d)
         TestBoundary3D bnd(m, bnd_facets);
         bnd.create();
         EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
-        EXPECT_DOUBLE_EQ(bnd.facet(0), 7);
+        EXPECT_DOUBLE_EQ(bnd.facet(0), 8);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(0), -1);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
         EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
         EXPECT_DOUBLE_EQ(bnd.facet_length(0), 0.5);
+        bnd.destroy();
+    }
+
+    {
+        auto label = m->get_label("bottom");
+        auto bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(m, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
+        EXPECT_DOUBLE_EQ(bnd.facet(0), 5);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), -1);
+        EXPECT_DOUBLE_EQ(bnd.facet_length(0), 0.5);
+        bnd.destroy();
+    }
+
+    {
+        auto label = m->get_label("front");
+        auto bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(m, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
+        EXPECT_DOUBLE_EQ(bnd.facet(0), 6);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), -1);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0);
+        EXPECT_DOUBLE_EQ(bnd.facet_length(0), 0.5);
+        bnd.destroy();
+    }
+
+    {
+        auto label = m->get_label("slanted");
+        auto bnd_facets = points_from_label(label);
+        TestBoundary3D bnd(m, bnd_facets);
+        bnd.create();
+        EXPECT_DOUBLE_EQ(bnd.num_facets(), 1);
+        EXPECT_DOUBLE_EQ(bnd.facet(0), 7);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(0), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(1), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.normal(0)(2), 0.57735026918962584);
+        EXPECT_DOUBLE_EQ(bnd.facet_length(0), 0.5 * std::sqrt(3));
         bnd.destroy();
     }
 }

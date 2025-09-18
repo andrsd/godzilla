@@ -15,7 +15,7 @@ Qtr<Mesh>
 TestMesh3D::create_mesh()
 {
     const Int N_ELEM_NODES = 4;
-    std::vector<Int> cells = { 0, 1, 2, 3 };
+    std::vector<Int> cells = { 1, 0, 2, 3 };
     std::vector<Real> coords = { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1 };
     auto m = UnstructuredMesh::build_from_cell_list(get_comm(),
                                                     3_D,
@@ -31,8 +31,8 @@ TestMesh3D::create_mesh()
 
     create_side_set(m, face_sets, 1, { 6 }, "front");
     create_side_set(m, face_sets, 2, { 5 }, "bottom");
-    create_side_set(m, face_sets, 3, { 7 }, "left");
-    create_side_set(m, face_sets, 4, { 8 }, "slanted");
+    create_side_set(m, face_sets, 3, { 7 }, "slanted");
+    create_side_set(m, face_sets, 4, { 8 }, "left");
 
     std::map<Int, std::string> face_set_names;
     face_set_names[1] = "front";

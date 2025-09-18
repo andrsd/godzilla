@@ -33,8 +33,8 @@ TEST(FEVolumesTest, volume_tri3)
 TEST(FEVolumesTest, volume_tet4)
 {
     DenseMatrix<Real, 4, 3> coords;
-    coords.set_row(0, { 0., 0., 0 });
-    coords.set_row(1, { 1., 0., 0 });
+    coords.set_row(0, { 1., 0., 0 });
+    coords.set_row(1, { 0., 0., 0 });
     coords.set_row(2, { 0., 1., 0. });
     coords.set_row(3, { 0., 0., 1. });
     EXPECT_EQ(fe::volume<TET4>(coords), 1. / 6.);

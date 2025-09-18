@@ -1,6 +1,8 @@
 #include "gmock/gmock.h"
+#include <cstdio>
 #include "TestApp.h"
 #include "TestMesh3D.h"
+#include "godzilla/FileMesh.h"
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/MeshObject.h"
 #include "godzilla/FEGeometry.h"
@@ -163,7 +165,7 @@ TEST(FEBoundaryTest, test_3d)
 
         EXPECT_DOUBLE_EQ(bnd.facet_area(0), 0.5 * std::sqrt(3));
 
-        EXPECT_EQ(bnd.vals(0), 8);
+        EXPECT_EQ(bnd.vals(0), 7);
 
         bnd.destroy();
     }
