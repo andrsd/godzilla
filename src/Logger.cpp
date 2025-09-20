@@ -37,6 +37,9 @@ void
 Logger::print() const
 {
     CALL_STACK_MSG();
+    if (this->num_errors == 0 && this->num_warnings == 0)
+        return;
+
     for (auto & entry : this->entries) {
         switch (entry.type) {
         case ERROR:
