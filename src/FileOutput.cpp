@@ -36,10 +36,19 @@ FileOutput::create()
         std::filesystem::path input_file_name(get_app()->get_input_file_name());
         this->file_base = input_file_name.stem().string();
     }
+
+    this->file_name = create_file_name();
 }
 
 std::string
 FileOutput::get_file_name() const
+{
+    CALL_STACK_MSG();
+    return this->file_name;
+}
+
+std::string
+FileOutput::create_file_name() const
 {
     CALL_STACK_MSG();
     if (get_comm().size() == 1)
@@ -55,11 +64,19 @@ FileOutput::set_file_base(const std::string & file_base)
     this->file_base = file_base;
 }
 
+const std::string &
+FileOutput::get_file_base() const
+{
+    CALL_STACK_MSG();
+    return this->file_base;
+}
+
 void
 FileOutput::set_sequence_file_base(unsigned int stepi)
 {
     CALL_STACK_MSG();
     this->file_base = fmt::format("{}.{}", this->file_base, stepi);
+    this->file_name = create_file_name();
 }
 
 void
