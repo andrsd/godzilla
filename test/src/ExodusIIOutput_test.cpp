@@ -25,6 +25,7 @@ TEST(ExodusIIOutputTest, get_file_ext)
     params.set<Problem *>("_problem", &prob);
     params.set<std::string>("file", "out");
     ExodusIIOutput out(params);
+    out.create();
 
     EXPECT_EQ(out.get_file_name(), "out.exo");
 }

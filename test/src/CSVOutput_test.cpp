@@ -38,6 +38,7 @@ TEST_F(CSVOutputTest, get_file_ext)
         .set<Problem *>("_problem", this->prob)
         .set<std::string>("file", "asdf");
     CSVOutput out(params);
+    out.create();
 
     EXPECT_EQ(out.get_file_name(), "asdf.csv");
 }
@@ -121,6 +122,7 @@ TEST_F(CSVOutputTest, set_file_name)
 
     this->mesh->create();
     this->prob->create();
+    out.create();
 
     EXPECT_EQ(out.get_file_name(), "asdf.csv");
 }

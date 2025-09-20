@@ -28,6 +28,10 @@ TEST(TecplotOutputTest, get_file_ext)
     params.set<std::string>("file", "out");
     TecplotOutput out(params);
 
+    mesh.create();
+    prob.create();
+    out.create();
+
     EXPECT_EQ(out.get_file_name(), "out.szplt");
 }
 
