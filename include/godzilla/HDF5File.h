@@ -522,7 +522,7 @@ HDF5File::Group::write_dataset(const std::string & name, const T & data)
         dataset.template write<V, std::allocator<V>>(data);
     }
     else {
-        auto dataspace = Dataspace::create<T>();
+        auto dataspace = Dataspace::create_scalar();
         auto dataset = Dataset::create<T>(this->id, name, dataspace);
         dataset.template write<T>(data);
     }
