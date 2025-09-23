@@ -25,6 +25,8 @@ concept StdVector = requires {
 
 namespace hdf5 {
 
+static constexpr std::string ROOT_GROUP = "/";
+
 template <typename T>
 hid_t get_datatype();
 
@@ -520,7 +522,7 @@ HDF5File::Group::write_dataset(const std::string & name, const T & data)
         dataset.template write<V, std::allocator<V>>(data);
     }
     else {
-        auto dataspace = Dataspace::create<T>();
+        auto dataspace = Dataspace::create_scalar();
         auto dataset = Dataset::create<T>(this->id, name, dataspace);
         dataset.template write<T>(data);
     }
@@ -810,83 +812,48 @@ template <typename T>
 inline void
 HDF5File::write_dataset(const std::string & name, const T & data)
 {
-    if constexpr (StdVector<T>) {
-        using V = typename T::value_type;
-        auto dataspace = Dataspace::create(data.size());
-        auto dataset = Dataset::create<V>(this->id, name, dataspace);
-        dataset.template write<V, std::allocator<V>>(data);
-    }
-    else {
-        auto dataspace = Dataspace::create<T>();
-        auto dataset = Dataset::create<T>(this->id, name, dataspace);
-        dataset.template write<T>(data);
-    }
+    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    g.template write_dataset<T>(name, data);
 }
 
 template <typename T>
 inline void
 HDF5File::write_dataset(const std::string & name, Int n, const T data[])
 {
-    auto dataspace = Dataspace::create(n);
-    auto dataset = Dataset::create<T>(this->id, name, dataspace);
-    dataset.template write<T>(n, data);
+    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    g.template write_dataset<T>(name, n, data);
 }
 
 template <typename T>
 inline T
 HDF5File::read_dataset(const std::string & name) const
 {
-    T data;
-    auto dataset = Dataset::open(this->id, name);
-    if constexpr (StdVector<T>) {
-        using V = typename T::value_type;
-        dataset.template read<V, std::allocator<V>>(data);
-    }
-    else {
-        dataset.template read<T>(data);
-    }
-    return data;
+    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    return g.template read_dataset<T>(name);
 }
 
 template <typename T>
 inline void
 HDF5File::read_dataset(const std::string & name, Int n, T data[]) const
 {
-    auto dataset = Dataset::open(this->id, name);
-    dataset.template read<T>(n, data);
+    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    return g.template read_dataset<T>(name, n, data);
 }
 
 template <typename T>
 inline void
 HDF5File::write_attribute(const std::string & name, const T & value)
 {
-    if constexpr (StdVector<T>) {
-        throw Exception("Vector-valued attributes are not supported yet");
-    }
-    else {
-        auto dataspace = Dataspace::create_scalar();
-        auto attribute = Attribute::create<T>(this->id, name, dataspace);
-        attribute.template write<T>(value);
-    }
+    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    g.template write_attribute<T>(name, value);
 }
 
 template <typename T>
 inline T
 HDF5File::read_attribute(const std::string & name) const
 {
-    if constexpr (StdVector<T>) {
-        using V = typename T::value_type;
-        std::vector<V> value;
-        auto attribute = Attribute::open<T>(this->id, name);
-        attribute.template read<V, std::allocator<V>>(value);
-        return value;
-    }
-    else {
-        T value;
-        auto attribute = Attribute::open<T>(this->id, name);
-        attribute.template read<T>(value);
-        return value;
-    }
+    auto g = Group::open(this->id, hdf5::ROOT_GROUP);
+    return g.template read_attribute<T>(name);
 }
 
 } // namespace godzilla
