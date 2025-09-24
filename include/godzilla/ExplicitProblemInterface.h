@@ -39,6 +39,12 @@ protected:
     /// @param F Local output vector
     virtual void compute_rhs_local(Real time, const Vector & x, Vector & F);
 
+    /// Insert the essential boundary values into the local vector
+    ///
+    /// @param time The time
+    /// @param x Local solution
+    virtual void compute_boundary_local(Real time, Vector & x);
+
 private:
     void set_up_time_scheme() override;
 

@@ -143,4 +143,12 @@ ExplicitProblemInterface::compute_rhs_local(Real time, const Vector & x, Vector 
 {
 }
 
+void
+ExplicitProblemInterface::compute_boundary_local(Real time, Vector & x)
+{
+    CALL_STACK_MSG();
+    auto dm = this->nl_problem->get_dm();
+    PETSC_CHECK(DMPlexTSComputeBoundary(dm, time, x, nullptr, this));
+}
+
 } // namespace godzilla

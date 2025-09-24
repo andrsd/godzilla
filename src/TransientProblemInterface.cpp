@@ -423,12 +423,4 @@ TransientProblemInterface::monitor_cancel()
     this->monitor_method.reset();
 }
 
-void
-TransientProblemInterface::compute_boundary_local(Real time, Vector & x)
-{
-    CALL_STACK_MSG();
-    auto dm = this->problem->get_dm();
-    PETSC_CHECK(DMPlexTSComputeBoundary(dm, time, x, nullptr, this));
-}
-
 } // namespace godzilla

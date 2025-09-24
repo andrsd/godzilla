@@ -265,12 +265,6 @@ protected:
     /// Clears all the monitors that have been set on a time-stepping object.
     void monitor_cancel();
 
-    /// Insert the essential boundary values into the local vector
-    ///
-    /// @param time The time
-    /// @param x Local solution
-    virtual void compute_boundary_local(Real time, Vector & x);
-
 private:
     /// Monitor
     void monitor(Int stepi, Real time, const Vector & x);
