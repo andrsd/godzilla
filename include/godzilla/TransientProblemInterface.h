@@ -231,9 +231,22 @@ protected:
     void
     set_rhs_function(T * instance, void (T::*method)(Real time, const Vector & x, Vector & F))
     {
-        this->compute_rhs_method.bind(instance, method);
+        this->compute_rhs_function_method.bind(instance, method);
         auto dm = this->problem->get_dm();
-        PETSC_CHECK(DMTSSetRHSFunction(dm, invoke_compute_rhs_delegate, &this->compute_rhs_method));
+        PETSC_CHECK(DMTSSetRHSFunction(dm,
+                                       invoke_compute_rhs_function_delegate,
+                                       &this->compute_rhs_function_method));
+    }
+
+    template <class T>
+    void
+    set_rhs_jacobian(T * instance, void (T::*method)(Real, const Vector &, Matrix &, Matrix &))
+    {
+        this->compute_rhs_jacobian_method.bind(instance, method);
+        auto dm = this->problem->get_dm();
+        PETSC_CHECK(DMTSSetRHSJacobian(dm,
+                                       invoke_compute_rhs_jacobian_delegate,
+                                       &this->compute_rhs_jacobian_method));
     }
 
     template <class T>
@@ -279,7 +292,9 @@ private:
     /// Method for monitoring the solve
     Delegate<void(Int it, Real rnorm, const Vector & x)> monitor_method;
     /// Method for computing right-hand side
-    Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_method;
+    Delegate<void(Real time, const Vector & x, Vector & F)> compute_rhs_function_method;
+    ///
+    Delegate<void(Real, const Vector &, Matrix &, Matrix &)> compute_rhs_jacobian_method;
     /// Method for computing F(t,U,U_t) where F() = 0
     Delegate<void(Real time, const Vector & x, const Vector & x_t, Vector & F)>
         compute_ifunction_local_method;
@@ -318,7 +333,9 @@ private:
     static ErrorCode invoke_pre_step(TS ts);
     static ErrorCode invoke_post_step(TS ts);
     static ErrorCode invoke_monitor_delegate(TS ts, Int stepi, Real time, Vec x, void * ctx);
-    static ErrorCode invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec F, void * ctx);
+    static ErrorCode invoke_compute_rhs_function_delegate(TS, Real time, Vec x, Vec F, void * ctx);
+    static ErrorCode
+    invoke_compute_rhs_jacobian_delegate(TS, Real time, Vec x, Mat A, Mat B, void * ctx);
     static ErrorCode
     invoke_compute_ifunction_delegate(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
     static ErrorCode invoke_compute_ijacobian_delegate(DM,

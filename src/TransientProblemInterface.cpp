@@ -47,7 +47,11 @@ TransientProblemInterface::invoke_monitor_delegate(TS, Int stepi, Real time, Vec
 }
 
 ErrorCode
-TransientProblemInterface::invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec F, void * ctx)
+TransientProblemInterface::invoke_compute_rhs_function_delegate(TS,
+                                                                Real time,
+                                                                Vec x,
+                                                                Vec F,
+                                                                void * ctx)
 {
     CALL_STACK_MSG();
     auto * method = static_cast<Delegate<void(Real time, const Vector & x, Vector & F)> *>(ctx);
@@ -56,6 +60,27 @@ TransientProblemInterface::invoke_compute_rhs_delegate(TS, Real time, Vec x, Vec
     Vector vec_F(F);
     vec_F.inc_reference();
     method->invoke(time, vec_x, vec_F);
+    return 0;
+}
+
+ErrorCode
+TransientProblemInterface::invoke_compute_rhs_jacobian_delegate(TS,
+                                                                Real time,
+                                                                Vec x,
+                                                                Mat A,
+                                                                Mat B,
+                                                                void * ctx)
+{
+    CALL_STACK_MSG();
+    auto * method =
+        static_cast<Delegate<void(Real time, const Vector & x, Matrix & A, Matrix & B)> *>(ctx);
+    Vector vec_x(x);
+    vec_x.inc_reference();
+    Matrix mat_A(A);
+    mat_A.inc_reference();
+    Matrix mat_B(B);
+    mat_B.inc_reference();
+    method->invoke(time, vec_x, mat_A, mat_B);
     return 0;
 }
 
@@ -360,8 +385,8 @@ void
 TransientProblemInterface::compute_rhs(Real time, const Vector & x, Vector & F)
 {
     CALL_STACK_MSG();
-    if (this->compute_rhs_method)
-        this->compute_rhs_method(time, x, F);
+    if (this->compute_rhs_function_method)
+        this->compute_rhs_function_method(time, x, F);
 }
 
 void
