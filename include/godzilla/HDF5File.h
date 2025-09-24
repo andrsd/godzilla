@@ -246,18 +246,6 @@ class HDF5File {
         const hid_t id;
 
     public:
-        template <typename T>
-        static Dataspace
-        create()
-        {
-            const hsize_t dims[1] = { 1 };
-            const hsize_t max_dims[1] = { 1 };
-            auto id = H5Screate_simple(1, dims, max_dims);
-            if (id == H5I_INVALID_HID)
-                throw Exception("Failed to create dataspace");
-            return Dataspace(id);
-        }
-
         static Dataspace
         create(hsize_t n)
         {
@@ -270,7 +258,7 @@ class HDF5File {
         }
 
         static Dataspace
-        create_scalar()
+        create()
         {
             auto id = H5Screate(H5S_SCALAR);
             if (id == H5I_INVALID_HID)
@@ -486,7 +474,7 @@ HDF5File::Group::write_attribute(const std::string & name, const T & value)
         throw Exception("Vector-valued attributes are not supported yet");
     }
     else {
-        auto dataspace = Dataspace::create_scalar();
+        auto dataspace = Dataspace::create();
         auto attribute = Attribute::create<T>(this->id, name, dataspace);
         attribute.template write<T>(value);
     }
@@ -522,7 +510,7 @@ HDF5File::Group::write_dataset(const std::string & name, const T & data)
         dataset.template write<V, std::allocator<V>>(data);
     }
     else {
-        auto dataspace = Dataspace::create_scalar();
+        auto dataspace = Dataspace::create();
         auto dataset = Dataset::create<T>(this->id, name, dataspace);
         dataset.template write<T>(data);
     }
@@ -573,15 +561,6 @@ HDF5File::Group::read_dataset(const std::string & name, Int n, T data[])
 {
     auto dataset = Dataset::open(this->id, name);
     dataset.template read<T>(n, data);
-}
-
-// Dataspace
-
-template <>
-inline HDF5File::Dataspace
-HDF5File::Dataspace::create<std::string>()
-{
-    return Dataspace::create_scalar();
 }
 
 // Dataset
