@@ -30,7 +30,9 @@ public:
     SNESolver & get_snes();
 
     /// Get underlying KSP
-    KrylovSolver get_ksp() const;
+    const KrylovSolver & get_ksp() const;
+
+    KrylovSolver & get_ksp();
 
     /// Set KSP operators
     void set_ksp_operators(const Matrix & A, const Matrix & B);

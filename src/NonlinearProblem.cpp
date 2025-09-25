@@ -125,8 +125,15 @@ NonlinearProblem::set_jacobian_matrix(const Matrix & J)
     this->J.set_name("Jac");
 }
 
-KrylovSolver
+const KrylovSolver &
 NonlinearProblem::get_ksp() const
+{
+    CALL_STACK_MSG();
+    return this->ksp;
+}
+
+KrylovSolver &
+NonlinearProblem::get_ksp()
 {
     CALL_STACK_MSG();
     return this->ksp;
