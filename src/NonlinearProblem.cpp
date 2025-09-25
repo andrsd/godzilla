@@ -95,8 +95,15 @@ NonlinearProblem::create()
     Problem::create();
 }
 
-SNESolver
+const SNESolver &
 NonlinearProblem::get_snes() const
+{
+    CALL_STACK_MSG();
+    return this->snes;
+}
+
+SNESolver &
+NonlinearProblem::get_snes()
 {
     CALL_STACK_MSG();
     return this->snes;

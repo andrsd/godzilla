@@ -24,6 +24,11 @@ public:
     void write_restart_file(RestartFile & file) const override;
     void read_restart_file(const RestartFile & file) override;
 
+    /// Get underlying non-linear solver
+    const SNESolver & get_snes() const;
+
+    SNESolver & get_snes();
+
     /// Get underlying KSP
     KrylovSolver get_ksp() const;
 
@@ -54,9 +59,6 @@ public:
     virtual void post_solve();
 
 protected:
-    /// Get underlying non-linear solver
-    SNESolver get_snes() const;
-
     /// Set residual vector
     void set_residual_vector(const Vector & f);
 
