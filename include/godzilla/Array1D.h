@@ -35,7 +35,7 @@ public:
 
         explicit Iterator(const Array1D * arr, Int idx) : arr(arr), idx(idx) {}
 
-        const value_type &
+        value_type &
         operator*() const
         {
             return *(this->arr->data + this->idx);
@@ -66,6 +66,56 @@ public:
 
         friend bool
         operator!=(const Iterator & a, const Iterator & b)
+        {
+            return (a.arr != b.arr) || (a.idx != b.idx);
+        };
+
+    private:
+        /// Array to iterate over
+        const Array1D * arr;
+        /// Index pointing into the array
+        Int idx;
+    };
+
+    struct ConstIterator {
+        using iterator_category = std::forward_iterator_tag;
+        using value_type = T;
+        using pointer = const T *;
+        using reference = const T &;
+
+        explicit ConstIterator(const Array1D * arr, Int idx) : arr(arr), idx(idx) {}
+
+        const value_type &
+        operator*() const
+        {
+            return *(this->arr->data + this->idx);
+        }
+
+        /// Prefix increment
+        ConstIterator &
+        operator++()
+        {
+            ++this->idx;
+            return *this;
+        }
+
+        /// Postfix increment
+        ConstIterator
+        operator++(int)
+        {
+            Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+
+        friend bool
+        operator==(const ConstIterator & a, const ConstIterator & b)
+        {
+            return (a.arr == b.arr) && (a.idx == b.idx);
+        };
+
+        friend bool
+        operator!=(const ConstIterator & a, const ConstIterator & b)
         {
             return (a.arr != b.arr) || (a.idx != b.idx);
         };
@@ -240,6 +290,18 @@ public:
     end()
     {
         return Iterator(this, this->ctrl->n);
+    }
+
+    ConstIterator
+    begin() const
+    {
+        return ConstIterator(this, 0);
+    }
+
+    ConstIterator
+    end() const
+    {
+        return ConstIterator(this, this->ctrl->n);
     }
 
 private:
