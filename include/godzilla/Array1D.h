@@ -5,6 +5,8 @@
 
 #include "godzilla/Types.h"
 #include "godzilla/Range.h"
+#include "godzilla/Exception.h"
+#include <petscvec.h>
 #include <cassert>
 
 namespace godzilla {
@@ -377,6 +379,37 @@ assign(Array1D<T> & data, const std::vector<T> & vals)
     assert(data.size() == vals.size());
     for (Int i = 0; i < data.size(); ++i)
         data[i] = vals[i];
+}
+
+/// Compute norm
+///
+/// @param vector Vector with values
+/// @param type Norm type
+/// @return Computed norm
+template <FloatingPoint T>
+T
+norm(Array1D<T> & vector, NormType type)
+{
+    T norm = T(0);
+    switch (type) {
+    case NORM_1:
+        for (const auto & val : vector)
+            norm += std::abs(val);
+        return norm;
+
+    case NORM_2:
+        for (const auto & val : vector)
+            norm += val * val;
+        return std::sqrt(norm);
+
+    case NORM_INFINITY:
+        for (const auto & val : vector)
+            norm = std::max(norm, std::abs(val));
+        return norm;
+
+    default:
+        throw NotImplementedException("`norm` not implemented for type {}", static_cast<int>(type));
+    }
 }
 
 } // namespace godzilla

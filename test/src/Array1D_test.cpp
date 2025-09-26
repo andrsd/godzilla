@@ -1,4 +1,5 @@
 #include "gmock/gmock.h"
+#include <petscvec.h>
 #include "godzilla/Array1D.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/Range.h"
@@ -146,4 +147,17 @@ TEST(Array1DTest, copy)
 
     for (auto i : copy)
         EXPECT_DOUBLE_EQ(i, 123.);
+}
+
+TEST(Array1DTest, norm)
+{
+    Array1D<Real> vals(5);
+    assign(vals, { 1, -2, 3, -4, 5 });
+
+    EXPECT_NEAR(norm(vals, NORM_1), 15, 1e-10);
+    EXPECT_NEAR(norm(vals, NORM_2), 7.4161984871, 1e-10);
+    EXPECT_NEAR(norm(vals, NORM_INFINITY), 5, 1e-10);
+
+    EXPECT_THROW(norm(vals, NORM_1_AND_2), NotImplementedException);
+    EXPECT_THROW(norm(vals, NORM_FROBENIUS), NotImplementedException);
 }

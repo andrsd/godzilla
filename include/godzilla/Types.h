@@ -233,4 +233,7 @@ constexpr Int N_NODES = SimplexSelector<D>::N_NODES;
 
 } // namespace fe
 
+template <typename T>
+concept FloatingPoint = std::is_floating_point_v<T>;
+
 } // namespace godzilla
