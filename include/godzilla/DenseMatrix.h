@@ -30,6 +30,8 @@ class DenseMatrixSymm;
 template <typename T, Int ROWS, Int COLS = ROWS>
 class DenseMatrix {
 public:
+    using value_type = T;
+
     DenseMatrix() = default;
 
     DenseMatrix(const DenseMatrixSymm<T, ROWS> & m)
@@ -740,6 +742,8 @@ using DynDenseMatrix = DenseMatrix<T, -1, -1>;
 template <typename T>
 class DenseMatrix<T, -1, -1> {
 public:
+    using value_type = T;
+
     DenseMatrix() : rows(0), cols(0), values(nullptr) {}
 
     DenseMatrix(Int rows, Int cols) : rows(rows), cols(cols), values(new T[rows * cols]) {}

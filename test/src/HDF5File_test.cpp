@@ -1,6 +1,8 @@
 #include "gmock/gmock.h"
 #include "TestApp.h"
 #include "godzilla/HDF5File.h"
+#include "godzilla/DenseVector.h"
+#include "godzilla/DenseMatrix.h"
 #include <array>
 
 using namespace godzilla;
@@ -23,6 +25,16 @@ TEST(HDF5FileTest, write_read)
 
         std::array<int, 6> fib = { 1, 1, 2, 3, 5, 8 };
         f.write_dataset<int>("fibonacci", 6, fib.data());
+
+        DynDenseVector<Real> dvec1(3);
+        dvec1.set_col(0, { 2, -1, 4 });
+        f.write_dataset<DynDenseVector<Real>>("dyn_dense_vec_3", dvec1);
+
+        DynDenseMatrix<Real> dmat1(3, 2);
+        dmat1.set_row(0, { 1, 2 });
+        dmat1.set_row(1, { 3, 4 });
+        dmat1.set_row(2, { 5, 6 });
+        f.write_dataset<DynDenseMatrix<Real>>("dyn_dense_matrix_3x2", dmat1);
 
         auto gr1 = f.create_group("group1");
         gr1.write_attribute<int>("num2", 234);
@@ -50,6 +62,19 @@ TEST(HDF5FileTest, write_read)
         std::array<int, 6> fib;
         f.read_dataset<int>("fibonacci", 6, fib.data());
         EXPECT_THAT(fib, testing::ElementsAre(1, 1, 2, 3, 5, 8));
+
+        auto dvec1 = f.read_dataset<DynDenseVector<Real>>("dyn_dense_vec_3");
+        EXPECT_DOUBLE_EQ(dvec1(0), 2.);
+        EXPECT_DOUBLE_EQ(dvec1(1), -1.);
+        EXPECT_DOUBLE_EQ(dvec1(2), 4.);
+
+        auto dmat1 = f.read_dataset<DynDenseMatrix<Real>>("dyn_dense_matrix_3x2");
+        EXPECT_DOUBLE_EQ(dmat1(0, 0), 1.);
+        EXPECT_DOUBLE_EQ(dmat1(0, 1), 2.);
+        EXPECT_DOUBLE_EQ(dmat1(1, 0), 3.);
+        EXPECT_DOUBLE_EQ(dmat1(1, 1), 4.);
+        EXPECT_DOUBLE_EQ(dmat1(2, 0), 5.);
+        EXPECT_DOUBLE_EQ(dmat1(2, 1), 6.);
 
         auto gr1 = f.open_group("group1");
         EXPECT_EQ(gr1.read_attribute<int>("num2"), 234);
