@@ -7,6 +7,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include <cassert>
+#include <cstring>
 #include <initializer_list>
 #include <vector>
 
@@ -765,7 +766,7 @@ public:
             this->values[i] = other.values[i];
     }
 
-    ~DenseMatrix() { delete[] this->values; }
+    ~DenseMatrix() { release(); }
 
     DenseMatrix<T, -1, -1> &
     operator=(const DenseMatrix<T, -1, -1> & other)
@@ -862,7 +863,7 @@ public:
     resize(Int m, Int n)
     {
         if (this->values != nullptr)
-            delete[] this->values;
+            release();
         this->values = new T[m * n];
         this->rows = m;
         this->cols = n;
@@ -1436,6 +1437,12 @@ private:
     data(Int idx) const
     {
         return this->values[idx];
+    }
+
+    void
+    release()
+    {
+        delete[] this->values;
     }
 
     /// Number of rows
