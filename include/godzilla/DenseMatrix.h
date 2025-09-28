@@ -781,6 +781,21 @@ public:
         return *this;
     }
 
+    DenseMatrix<T, -1, -1> &
+    operator=(DenseMatrix<T, -1, -1> && other)
+    {
+        if (this != &other) {
+            release();
+            this->rows = other.rows;
+            this->cols = other.cols;
+            this->values = other.values;
+            other.values = nullptr;
+            other.rows = 0;
+            other.cols = 0;
+        }
+        return *this;
+    }
+
     /// Get the number of rows
     ///
     /// @return The number of rows
