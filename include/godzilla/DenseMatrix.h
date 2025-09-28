@@ -766,6 +766,13 @@ public:
             this->values[i] = other.values[i];
     }
 
+    DenseMatrix(DenseMatrix && other) : rows(other.rows), cols(other.cols), values(other.values)
+    {
+        other.values = nullptr;
+        other.rows = 0;
+        other.cols = 0;
+    }
+
     ~DenseMatrix() { release(); }
 
     DenseMatrix<T, -1, -1> &
