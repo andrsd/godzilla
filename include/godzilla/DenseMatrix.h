@@ -771,14 +771,12 @@ public:
     DenseMatrix<T, -1, -1> &
     operator=(const DenseMatrix<T, -1, -1> & other)
     {
-        if ((this->rows == 0) && (this->cols == 0)) {
+        if (this != &other) {
+            release();
             this->rows = other.rows;
             this->cols = other.cols;
             this->values = new T[rows * cols];
-        }
-        if ((this->rows == other.rows) && (this->cols == other.cols)) {
-            for (Int i = 0; i < rows * cols; ++i)
-                this->values[i] = other.values[i];
+            std::memcpy(this->values, other.values, rows * cols * sizeof(T));
         }
         return *this;
     }
