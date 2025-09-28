@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "godzilla/DenseMatrix.h"
+#include "godzilla/DenseVector.h"
 #include "godzilla/Enums.h"
 #include "godzilla/Types.h"
 #include "godzilla/Exception.h"
@@ -21,6 +23,18 @@ template <typename T>
 concept StdVector = requires {
     typename T::value_type;
     requires std::same_as<T, std::vector<typename T::value_type, typename T::allocator_type>>;
+};
+
+template <typename T>
+concept IsDynDenseVector = requires {
+    typename T::value_type;
+    requires std::same_as<T, DynDenseVector<typename T::value_type>>;
+};
+
+template <typename T>
+concept IsDynDenseMatrix = requires {
+    typename T::value_type;
+    requires std::same_as<T, DynDenseMatrix<typename T::value_type>>;
 };
 
 namespace hdf5 {
@@ -177,10 +191,22 @@ class HDF5File {
         void write_dataset(const std::string & name, Int n, const T data[]);
 
         template <typename T>
+        void write_dataset(const std::string & name, const DynDenseVector<T> & data);
+
+        template <typename T>
+        void write_dataset(const std::string & name, const DynDenseMatrix<T> & data);
+
+        template <typename T>
         T read_dataset(const std::string & name) const;
 
         template <typename T>
         void read_dataset(const std::string & name, T & data);
+
+        template <typename T>
+        void read_dataset(const std::string & name, DynDenseVector<T> & data);
+
+        template <typename T>
+        void read_dataset(const std::string & name, DynDenseMatrix<T> & data);
 
         template <typename T>
         void read_dataset(const std::string & name, Int n, T data[]);
@@ -258,6 +284,17 @@ class HDF5File {
         }
 
         static Dataspace
+        create(hsize_t m, hsize_t n)
+        {
+            const hsize_t dims[2] = { m, n };
+            const hsize_t max_dims[2] = { m, n };
+            auto id = H5Screate_simple(2, dims, max_dims);
+            if (id == H5I_INVALID_HID)
+                throw Exception("Failed to create dataspace");
+            return Dataspace(id);
+        }
+
+        static Dataspace
         create()
         {
             auto id = H5Screate(H5S_SCALAR);
@@ -282,6 +319,12 @@ class HDF5File {
         template <typename T, typename A>
         void read(std::vector<T, A> & data) const;
 
+        template <typename T, Int N>
+        void read(DynDenseVector<T> & data) const;
+
+        template <typename T, Int N>
+        void read(DynDenseMatrix<T> & data) const;
+
         template <typename T>
         void read(Int n, T data[]);
 
@@ -290,6 +333,12 @@ class HDF5File {
 
         template <typename T, typename A>
         void write(const std::vector<T, A> & data);
+
+        template <typename T, Int N>
+        void write(const DynDenseVector<T> & data);
+
+        template <typename T, Int N>
+        void write(const DynDenseMatrix<T> & data);
 
         template <typename T>
         void write(Int n, const T data[]);
@@ -509,6 +558,18 @@ HDF5File::Group::write_dataset(const std::string & name, const T & data)
         auto dataset = Dataset::create<V>(this->id, name, dataspace);
         dataset.template write<V, std::allocator<V>>(data);
     }
+    else if constexpr (IsDynDenseVector<T>) {
+        using V = typename T::value_type;
+        auto dataspace = Dataspace::create(data.size());
+        auto dataset = Dataset::create<V>(this->id, name, dataspace);
+        dataset.template write<V, -1>(data);
+    }
+    else if constexpr (IsDynDenseMatrix<T>) {
+        using V = typename T::value_type;
+        auto dataspace = Dataspace::create(data.get_num_rows(), data.get_num_cols());
+        auto dataset = Dataset::create<V>(this->id, name, dataspace);
+        dataset.template write<V, -1>(data);
+    }
     else {
         auto dataspace = Dataspace::create();
         auto dataset = Dataset::create<T>(this->id, name, dataspace);
@@ -534,6 +595,14 @@ HDF5File::Group::read_dataset(const std::string & name) const
     if constexpr (StdVector<T>) {
         using V = typename T::value_type;
         dataset.template read<V, std::allocator<V>>(data);
+    }
+    else if constexpr (IsDynDenseVector<T>) {
+        using V = typename T::value_type;
+        dataset.template read<V, -1>(data);
+    }
+    else if constexpr (IsDynDenseMatrix<T>) {
+        using V = typename T::value_type;
+        dataset.template read<V, -1>(data);
     }
     else {
         dataset.template read<T>(data);
@@ -624,6 +693,40 @@ HDF5File::Dataset::read(std::vector<T, A> & data) const
         throw Exception("Failed reading dataset");
 }
 
+template <typename T, Int N>
+inline void
+HDF5File::Dataset::read(DynDenseVector<T> & data) const
+{
+    auto dataspace = get_space();
+    auto dims = dataspace.get_simple_extent_dims();
+    if (dims.size() == 1) {
+        data.resize(dims[0]);
+        auto res =
+            H5Dread(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
+        if (res < 0)
+            throw Exception("Error reading dataset");
+    }
+    else
+        throw Exception("Dataset has {} dimensions. Expected 1.", dims.size());
+}
+
+template <typename T, Int N>
+inline void
+HDF5File::Dataset::read(DynDenseMatrix<T> & data) const
+{
+    auto dataspace = get_space();
+    auto dims = dataspace.get_simple_extent_dims();
+    if (dims.size() == 2) {
+        data.resize(dims[0], dims[1]);
+        auto res =
+            H5Dread(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
+        if (res < 0)
+            throw Exception("Error reading dataset");
+    }
+    else
+        throw Exception("Dataset has {} dimensions. Expected 2.", dims.size());
+}
+
 template <typename T>
 inline void
 HDF5File::Dataset::read(Int n, T data[])
@@ -653,6 +756,26 @@ HDF5File::Dataset::write(const std::string & data)
                         H5S_ALL,
                         H5P_DEFAULT,
                         &c_str);
+    if (res < 0)
+        throw Exception("Error writing dataset");
+}
+
+template <typename T, Int N>
+inline void
+HDF5File::Dataset::write(const DynDenseVector<T> & data)
+{
+    auto res =
+        H5Dwrite(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
+    if (res < 0)
+        throw Exception("Error writing dataset");
+}
+
+template <typename T, Int N>
+inline void
+HDF5File::Dataset::write(const DynDenseMatrix<T> & data)
+{
+    auto res =
+        H5Dwrite(this->id, hdf5::get_datatype<T>(), H5S_ALL, H5S_ALL, H5P_DEFAULT, data.data());
     if (res < 0)
         throw Exception("Error writing dataset");
 }
@@ -816,7 +939,7 @@ inline void
 HDF5File::read_dataset(const std::string & name, Int n, T data[]) const
 {
     auto g = Group::open(this->id, hdf5::ROOT_GROUP);
-    return g.template read_dataset<T>(name, n, data);
+    g.template read_dataset<T>(name, n, data);
 }
 
 template <typename T>

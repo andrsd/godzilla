@@ -25,6 +25,8 @@ class DenseMatrixSymm;
 template <typename T, Int N>
 class DenseVector : public DenseMatrix<T, N, 1> {
 public:
+    using value_type = T;
+
     /// Create empty vector
     DenseVector() = default;
 
@@ -538,6 +540,8 @@ using DynDenseVector = DenseVector<T, -1>;
 template <typename T>
 class DenseVector<T, -1> : public DynDenseMatrix<T> {
 public:
+    using value_type = T;
+
     DenseVector() : DynDenseMatrix<T>() {}
 
     explicit DenseVector(Int rows) : DynDenseMatrix<T>(rows, 1) {}
