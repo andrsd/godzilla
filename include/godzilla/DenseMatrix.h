@@ -7,6 +7,7 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include <cassert>
+#include <cstring>
 #include <initializer_list>
 #include <vector>
 
@@ -765,19 +766,39 @@ public:
             this->values[i] = other.values[i];
     }
 
-    ~DenseMatrix() { delete[] this->values; }
+    DenseMatrix(DenseMatrix && other) : rows(other.rows), cols(other.cols), values(other.values)
+    {
+        other.values = nullptr;
+        other.rows = 0;
+        other.cols = 0;
+    }
+
+    ~DenseMatrix() { release(); }
 
     DenseMatrix<T, -1, -1> &
     operator=(const DenseMatrix<T, -1, -1> & other)
     {
-        if ((this->rows == 0) && (this->cols == 0)) {
+        if (this != &other) {
+            release();
             this->rows = other.rows;
             this->cols = other.cols;
             this->values = new T[rows * cols];
+            std::memcpy(this->values, other.values, rows * cols * sizeof(T));
         }
-        if ((this->rows == other.rows) && (this->cols == other.cols)) {
-            for (Int i = 0; i < rows * cols; ++i)
-                this->values[i] = other.values[i];
+        return *this;
+    }
+
+    DenseMatrix<T, -1, -1> &
+    operator=(DenseMatrix<T, -1, -1> && other)
+    {
+        if (this != &other) {
+            release();
+            this->rows = other.rows;
+            this->cols = other.cols;
+            this->values = other.values;
+            other.values = nullptr;
+            other.rows = 0;
+            other.cols = 0;
         }
         return *this;
     }
@@ -862,7 +883,7 @@ public:
     resize(Int m, Int n)
     {
         if (this->values != nullptr)
-            delete[] this->values;
+            release();
         this->values = new T[m * n];
         this->rows = m;
         this->cols = n;
@@ -1436,6 +1457,12 @@ private:
     data(Int idx) const
     {
         return this->values[idx];
+    }
+
+    void
+    release()
+    {
+        delete[] this->values;
     }
 
     /// Number of rows
