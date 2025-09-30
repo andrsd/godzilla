@@ -28,6 +28,9 @@ public:
     /// Sets the number of grid points in the three dimensional directions
     void set_sizes(Int M, Int N = 0, Int P = 0);
 
+    /// Sets the number of processes in each dimension
+    void set_num_procs(Int m, Int n = 0, Int p = 0);
+
     /// Sets the size of the per-processor overlap.
     ///
     /// @param x Overlap in the x direction

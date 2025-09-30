@@ -3,6 +3,7 @@
 
 #include "godzilla/StructuredMesh.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
 #include <petscdmda.h>
 
 namespace godzilla {
@@ -41,6 +42,13 @@ StructuredMesh::set_stencil_type(DMDAStencilType stype)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(DMDASetStencilType(get_dm(), stype));
+}
+
+void
+StructuredMesh::set_num_procs(Int m, Int n, Int p)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetNumProcs(get_dm(), m, n, p));
 }
 
 void
