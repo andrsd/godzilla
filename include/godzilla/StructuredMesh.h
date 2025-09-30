@@ -25,6 +25,9 @@ public:
     /// Sets the type of the communication stencil
     void set_stencil_type(DMDAStencilType stype);
 
+    /// Sets the width of the communication stencil
+    void set_stencil_width(Int width);
+
     /// Sets the number of grid points in the three dimensional directions
     void set_sizes(Int M, Int N = 0, Int P = 0);
 

@@ -45,6 +45,13 @@ StructuredMesh::set_stencil_type(DMDAStencilType stype)
 }
 
 void
+StructuredMesh::set_stencil_width(Int width)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetStencilWidth(get_dm(), width));
+}
+
+void
 StructuredMesh::set_num_procs(Int m, Int n, Int p)
 {
     CALL_STACK_MSG();
