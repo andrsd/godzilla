@@ -50,6 +50,13 @@ StructuredMesh::set_overlap(Int x, Int y, Int z)
     PETSC_CHECK(DMDASetOverlap(get_dm(), x, y, z));
 }
 
+void
+StructuredMesh::set_sizes(Int M, Int N, Int P)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetSizes(get_dm(), M, N, P));
+}
+
 StructuredMesh
 StructuredMesh::create_1d(const mpi::Communicator comm, DMBoundaryType bx, Int M, Int dof, Int s)
 {
