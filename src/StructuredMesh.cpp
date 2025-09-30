@@ -37,6 +37,13 @@ StructuredMesh::set_boundary_type(DMBoundaryType bx, DMBoundaryType by, DMBounda
 }
 
 void
+StructuredMesh::set_stencil_type(DMDAStencilType stype)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetStencilType(get_dm(), stype));
+}
+
+void
 StructuredMesh::set_overlap(Int x, Int y, Int z)
 {
     CALL_STACK_MSG();

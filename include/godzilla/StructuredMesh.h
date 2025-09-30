@@ -22,6 +22,9 @@ public:
                            DMBoundaryType by = DM_BOUNDARY_NONE,
                            DMBoundaryType bz = DM_BOUNDARY_NONE);
 
+    /// Sets the type of the communication stencil
+    void set_stencil_type(DMDAStencilType stype);
+
     /// Sets the size of the per-processor overlap.
     ///
     /// @param x Overlap in the x direction
