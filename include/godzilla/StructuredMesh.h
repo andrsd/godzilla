@@ -29,6 +29,17 @@ public:
     /// @param s Stencil width
     static StructuredMesh
     create_1d(const mpi::Communicator comm, DMBoundaryType bx, Int M, Int dof, Int s);
+
+    static StructuredMesh create_2d(const mpi::Communicator comm,
+                                    DMBoundaryType bx,
+                                    DMBoundaryType by,
+                                    DMDAStencilType stencil_type,
+                                    Int M,
+                                    Int N,
+                                    Int m,
+                                    Int n,
+                                    Int dof,
+                                    Int s);
 };
 
 } // namespace godzilla

@@ -38,4 +38,22 @@ StructuredMesh::create_1d(const mpi::Communicator comm, DMBoundaryType bx, Int M
     return StructuredMesh(dm);
 }
 
+StructuredMesh
+StructuredMesh::create_2d(const mpi::Communicator comm,
+                          DMBoundaryType bx,
+                          DMBoundaryType by,
+                          DMDAStencilType stencil_type,
+                          Int M,
+                          Int N,
+                          Int m,
+                          Int n,
+                          Int dof,
+                          Int s)
+{
+    CALL_STACK_MSG();
+    DM dm;
+    PETSC_CHECK(DMDACreate2d(comm, bx, by, stencil_type, M, N, m, n, dof, s, NULL, NULL, &dm));
+    return StructuredMesh(dm);
+}
+
 } // namespace godzilla
