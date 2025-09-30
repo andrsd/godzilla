@@ -31,6 +31,9 @@ public:
     /// Sets the number of processes in each dimension
     void set_num_procs(Int m, Int n = 0, Int p = 0);
 
+    /// Sets the number of degrees of freedom per vertex
+    void set_dof(Int n_dofs);
+
     /// Sets the size of the per-processor overlap.
     ///
     /// @param x Overlap in the x direction

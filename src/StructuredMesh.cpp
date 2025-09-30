@@ -52,6 +52,13 @@ StructuredMesh::set_num_procs(Int m, Int n, Int p)
 }
 
 void
+StructuredMesh::set_dof(Int n_dofs)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetDof(get_dm(), n_dofs));
+}
+
+void
 StructuredMesh::set_overlap(Int x, Int y, Int z)
 {
     CALL_STACK_MSG();
