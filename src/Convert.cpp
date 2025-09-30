@@ -137,13 +137,13 @@ to_str(SNESolver::ConvergedReason reason)
     else if (reason == SNESolver::ConvergedReason::DIVERGED_FUNCTION_COUNT)
         return "function count";
     else if (reason == SNESolver::ConvergedReason::DIVERGED_LINEAR_SOLVE)
-        return "linear solve";
+        return "diverged linear solve";
     else if (reason == SNESolver::ConvergedReason::DIVERGED_FNORM_NAN)
         return "function norm in NaN";
     else if (reason == SNESolver::ConvergedReason::DIVERGED_MAX_IT)
         return "maximum iterations";
     else if (reason == SNESolver::ConvergedReason::DIVERGED_LINE_SEARCH)
-        return "line search";
+        return "diverged line search";
     else if (reason == SNESolver::ConvergedReason::DIVERGED_INNER)
         return "inner solve failed";
     else if (reason == SNESolver::ConvergedReason::DIVERGED_LOCAL_MIN)
