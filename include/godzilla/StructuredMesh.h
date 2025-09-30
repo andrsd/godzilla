@@ -17,6 +17,11 @@ public:
     /// @return Clone of this object
     StructuredMesh clone() const;
 
+    ///
+    void set_boundary_type(DMBoundaryType bx,
+                           DMBoundaryType by = DM_BOUNDARY_NONE,
+                           DMBoundaryType bz = DM_BOUNDARY_NONE);
+
     /// Sets the size of the per-processor overlap.
     ///
     /// @param x Overlap in the x direction

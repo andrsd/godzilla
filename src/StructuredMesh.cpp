@@ -30,6 +30,13 @@ StructuredMesh::clone() const
 }
 
 void
+StructuredMesh::set_boundary_type(DMBoundaryType bx, DMBoundaryType by, DMBoundaryType bz)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetBoundaryType(get_dm(), bx, by, bz));
+}
+
+void
 StructuredMesh::set_overlap(Int x, Int y, Int z)
 {
     CALL_STACK_MSG();
