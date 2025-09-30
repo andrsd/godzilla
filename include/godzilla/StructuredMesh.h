@@ -17,6 +17,13 @@ public:
     /// @return Clone of this object
     StructuredMesh clone() const;
 
+    /// Sets the size of the per-processor overlap.
+    ///
+    /// @param x Overlap in the x direction
+    /// @param y Overlap in the y direction
+    /// @param z Overlap in the z direction
+    void set_overlap(Int x, Int y = 0, Int z = 0);
+
 public:
     /// Creates an object that will manage the communication of one-dimensional regular array data
     /// that is distributed across one or more MPI processes.

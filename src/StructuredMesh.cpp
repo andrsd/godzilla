@@ -29,6 +29,13 @@ StructuredMesh::clone() const
     return StructuredMesh(dm);
 }
 
+void
+StructuredMesh::set_overlap(Int x, Int y, Int z)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetOverlap(get_dm(), x, y, z));
+}
+
 StructuredMesh
 StructuredMesh::create_1d(const mpi::Communicator comm, DMBoundaryType bx, Int M, Int dof, Int s)
 {
