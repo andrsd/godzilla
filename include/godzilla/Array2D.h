@@ -84,6 +84,17 @@ public:
         return this->data[idx(row, col)];
     }
 
+    /// Assign a value into all entries
+    ///
+    /// @param val Value to assign
+    void
+    set(const T & val)
+    {
+        assert(this->data != nullptr);
+        for (Int i = 0; i < this->n_rows * this->n_cols; ++i)
+            this->data[i] = val;
+    }
+
     /// Get entry at specified location for writing
     ///
     /// @param row Row number
