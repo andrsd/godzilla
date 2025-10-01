@@ -98,6 +98,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem3runEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::run()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem18write_restart_fileER11RestartFile"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::write_restart_file()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem17read_restart_fileERK11RestartFile"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::read_restart_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem8get_snesEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::get_snes()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem7get_kspEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::get_ksp()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla16NonlinearProblem17set_ksp_operatorsERK6MatrixRK6Matrix"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::set_ksp_operators()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla16NonlinearProblem12get_jacobianEv"><code class="docutils literal notranslate"><span class="pre">NonlinearProblem::get_jacobian()</span></code></a></li>
@@ -190,8 +191,14 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16NonlinearProblem8get_snesEv">
+<span id="_CPPv3NK8godzilla16NonlinearProblem8get_snesEv"></span><span id="_CPPv2NK8godzilla16NonlinearProblem8get_snesEv"></span><span id="godzilla::NonlinearProblem::get_snesC"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1ae0ca6d4f8b7445e6167e4699dab2e44b"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">SNESolver</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_snes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16NonlinearProblem8get_snesEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Get underlying non-linear solver. </p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK8godzilla16NonlinearProblem7get_kspEv">
-<span id="_CPPv3NK8godzilla16NonlinearProblem7get_kspEv"></span><span id="_CPPv2NK8godzilla16NonlinearProblem7get_kspEv"></span><span id="godzilla::NonlinearProblem::get_kspC"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1ab9a5ac7d89ca17cb0a273d1ef12f9a0f"></span><span class="n"><span class="pre">KrylovSolver</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_ksp</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16NonlinearProblem7get_kspEv" title="Link to this definition"></a><br /></dt>
+<span id="_CPPv3NK8godzilla16NonlinearProblem7get_kspEv"></span><span id="_CPPv2NK8godzilla16NonlinearProblem7get_kspEv"></span><span id="godzilla::NonlinearProblem::get_kspC"></span><span class="target" id="classgodzilla_1_1_nonlinear_problem_1a1fbb04a71111862149a06cbff6018021"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">KrylovSolver</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_ksp</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla16NonlinearProblem7get_kspEv" title="Link to this definition"></a><br /></dt>
 <dd><p>Get underlying KSP. </p>
 </dd></dl>
 
