@@ -222,6 +222,34 @@ protected:
             TSMonitorSet(this->ts, invoke_monitor_delegate, &this->monitor_method, nullptr));
     }
 
+    template <class T>
+    void
+    set_rhs_function(Vector & r,
+                     T * instance,
+                     void (T::*method)(Real time, const Vector & x, Vector & F))
+    {
+        this->compute_rhs_function_method.bind(instance, method);
+        PETSC_CHECK(TSSetRHSFunction(this->ts,
+                                     r,
+                                     invoke_compute_rhs_function_delegate,
+                                     &this->compute_rhs_function_method));
+    }
+
+    template <class T>
+    void
+    set_rhs_jacobian(Matrix & J,
+                     Matrix & Jp,
+                     T * instance,
+                     void (T::*method)(Real, const Vector &, Matrix &, Matrix &))
+    {
+        this->compute_rhs_jacobian_method.bind(instance, method);
+        PETSC_CHECK(TSSetRHSJacobian(this->ts,
+                                     J,
+                                     Jp,
+                                     invoke_compute_rhs_jacobian_delegate,
+                                     &this->compute_rhs_jacobian_method));
+    }
+
     /// Sets the routine for evaluating the function, where U_t = G(t,u).
     ///
     /// @tparam T C++ class type
