@@ -57,9 +57,6 @@ protected:
     /// Get underlying non-linear solver
     SNESolver get_snes() const;
 
-    /// Set non-linear solver
-    void set_snes(const SNESolver & snes);
-
     /// Set residual vector
     void set_residual_vector(const Vector & f);
 

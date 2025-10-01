@@ -103,14 +103,6 @@ NonlinearProblem::get_snes() const
 }
 
 void
-NonlinearProblem::set_snes(const SNESolver & snes)
-{
-    CALL_STACK_MSG();
-    this->snes = snes;
-    this->ksp = snes.get_ksp();
-}
-
-void
 NonlinearProblem::set_residual_vector(const Vector & f)
 {
     CALL_STACK_MSG();
@@ -148,7 +140,9 @@ void
 NonlinearProblem::init()
 {
     CALL_STACK_MSG();
-    set_snes(create_sne_solver());
+    this->snes = create_sne_solver();
+    PETSC_CHECK(SNESGetKSP(this->snes, this->ksp));
+    this->ksp.inc_reference();
 }
 
 void
