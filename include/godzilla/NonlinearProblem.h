@@ -24,8 +24,15 @@ public:
     void write_restart_file(RestartFile & file) const override;
     void read_restart_file(const RestartFile & file) override;
 
+    /// Get underlying non-linear solver
+    const SNESolver & get_snes() const;
+
+    SNESolver & get_snes();
+
     /// Get underlying KSP
-    KrylovSolver get_ksp() const;
+    const KrylovSolver & get_ksp() const;
+
+    KrylovSolver & get_ksp();
 
     /// Set KSP operators
     void set_ksp_operators(const Matrix & A, const Matrix & B);
@@ -54,12 +61,6 @@ public:
     virtual void post_solve();
 
 protected:
-    /// Get underlying non-linear solver
-    SNESolver get_snes() const;
-
-    /// Set non-linear solver
-    void set_snes(const SNESolver & snes);
-
     /// Set residual vector
     void set_residual_vector(const Vector & f);
 
