@@ -158,7 +158,6 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     end_time(params.get<Real>("end_time")),
     num_steps(params.get<Int>("num_steps")),
     dt_initial(params.get<Real>("dt")),
-    time(0.),
     step_num(0)
 {
     CALL_STACK_MSG();
@@ -257,7 +256,9 @@ Real
 TransientProblemInterface::get_time() const
 {
     CALL_STACK_MSG();
-    return this->time;
+    Real time;
+    PETSC_CHECK(TSGetTime(this->ts, &time));
+    return time;
 }
 
 Int
@@ -331,7 +332,6 @@ void
 TransientProblemInterface::post_step()
 {
     CALL_STACK_MSG();
-    PETSC_CHECK(TSGetTime(this->ts, &this->time));
     PETSC_CHECK(TSGetStepNumber(this->ts, &this->step_num));
     Vector sln = get_solution();
     PETSC_CHECK(VecCopy(sln, this->problem->get_solution_vector()));
@@ -366,7 +366,6 @@ TransientProblemInterface::set_time(Real t)
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSSetTime(this->ts, t));
-    this->time = t;
 }
 
 void
