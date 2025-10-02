@@ -3,6 +3,7 @@
 
 #include "godzilla/StructuredMesh.h"
 #include "godzilla/CallStack.h"
+#include "godzilla/Error.h"
 #include <petscdmda.h>
 
 namespace godzilla {
@@ -29,12 +30,79 @@ StructuredMesh::clone() const
     return StructuredMesh(dm);
 }
 
+void
+StructuredMesh::set_boundary_type(DMBoundaryType bx, DMBoundaryType by, DMBoundaryType bz)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetBoundaryType(get_dm(), bx, by, bz));
+}
+
+void
+StructuredMesh::set_stencil_type(DMDAStencilType stype)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetStencilType(get_dm(), stype));
+}
+
+void
+StructuredMesh::set_stencil_width(Int width)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetStencilWidth(get_dm(), width));
+}
+
+void
+StructuredMesh::set_num_procs(Int m, Int n, Int p)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetNumProcs(get_dm(), m, n, p));
+}
+
+void
+StructuredMesh::set_dof(Int n_dofs)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetDof(get_dm(), n_dofs));
+}
+
+void
+StructuredMesh::set_overlap(Int x, Int y, Int z)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetOverlap(get_dm(), x, y, z));
+}
+
+void
+StructuredMesh::set_sizes(Int M, Int N, Int P)
+{
+    CALL_STACK_MSG();
+    PETSC_CHECK(DMDASetSizes(get_dm(), M, N, P));
+}
+
 StructuredMesh
 StructuredMesh::create_1d(const mpi::Communicator comm, DMBoundaryType bx, Int M, Int dof, Int s)
 {
     CALL_STACK_MSG();
     DM dm;
     PETSC_CHECK(DMDACreate1d(comm, bx, M, dof, s, NULL, &dm));
+    return StructuredMesh(dm);
+}
+
+StructuredMesh
+StructuredMesh::create_2d(const mpi::Communicator comm,
+                          DMBoundaryType bx,
+                          DMBoundaryType by,
+                          DMDAStencilType stencil_type,
+                          Int M,
+                          Int N,
+                          Int m,
+                          Int n,
+                          Int dof,
+                          Int s)
+{
+    CALL_STACK_MSG();
+    DM dm;
+    PETSC_CHECK(DMDACreate2d(comm, bx, by, stencil_type, M, N, m, n, dof, s, NULL, NULL, &dm));
     return StructuredMesh(dm);
 }
 
