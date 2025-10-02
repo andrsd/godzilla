@@ -85,6 +85,52 @@ TransientProblemInterface::invoke_compute_rhs_jacobian_delegate(TS,
 }
 
 ErrorCode
+TransientProblemInterface::invoke_compute_ifunction_delegate(TS,
+                                                             Real time,
+                                                             Vec x,
+                                                             Vec x_t,
+                                                             Vec F,
+                                                             void * context)
+{
+    auto * method =
+        static_cast<Delegate<void(Real, const Vector &, const Vector &, Vector &)> *>(context);
+    Vector vec_x(x);
+    vec_x.inc_reference();
+    Vector vec_x_t(x_t);
+    vec_x_t.inc_reference();
+    Vector vec_F(F);
+    vec_F.inc_reference();
+    method->invoke(time, vec_x, vec_x_t, vec_F);
+    return 0;
+}
+
+ErrorCode
+TransientProblemInterface::invoke_compute_ijacobian_delegate(TS,
+                                                             Real time,
+                                                             Vec x,
+                                                             Vec x_t,
+                                                             Real x_t_shift,
+                                                             Mat J,
+                                                             Mat Jp,
+                                                             void * context)
+{
+    CALL_STACK_MSG();
+    auto * method = static_cast<
+        Delegate<void(Real time, const Vector &, const Vector &, Real, Matrix &, Matrix &)> *>(
+        context);
+    Vector vec_x(x);
+    vec_x.inc_reference();
+    Vector vec_x_t(x_t);
+    vec_x_t.inc_reference();
+    Matrix mat_J(J);
+    mat_J.inc_reference();
+    Matrix mat_Jp(Jp);
+    mat_Jp.inc_reference();
+    method->invoke(time, vec_x, vec_x_t, x_t_shift, mat_J, mat_Jp);
+    return 0;
+}
+
+ErrorCode
 TransientProblemInterface::invoke_compute_ifunction_delegate(DM,
                                                              Real time,
                                                              Vec x,
