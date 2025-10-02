@@ -349,8 +349,6 @@ private:
     const Int & num_steps;
     /// Initial time step size
     const Real & dt_initial;
-    /// Simulation time
-    Real time;
     /// Time step number
     Int step_num;
 
