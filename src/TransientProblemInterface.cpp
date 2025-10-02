@@ -163,6 +163,7 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
 {
     CALL_STACK_MSG();
     PETSC_CHECK(TSCreate(this->problem->get_comm(), &this->ts));
+    PETSC_CHECK(TSSetApplicationContext(this->ts, this));
     this->time_step_adapt = TimeStepAdapt::from_ts(this->ts);
 
     if (this->tpi_params.is_param_valid("end_time") && this->tpi_params.is_param_valid("num_steps"))
@@ -286,7 +287,6 @@ TransientProblemInterface::init()
     CALL_STACK_MSG();
     assert(this->problem != nullptr);
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
-    PETSC_CHECK(TSSetApplicationContext(this->ts, this));
 }
 
 void
