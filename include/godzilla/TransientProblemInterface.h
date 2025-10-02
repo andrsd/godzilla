@@ -250,6 +250,47 @@ protected:
                                      &this->compute_rhs_jacobian_method));
     }
 
+    /// Set the function to compute F(t,U,U_t) where F() = 0 is the DAE to be solved.
+    ///
+    /// @tparam T C++ class type
+    /// @param r Vector to hold the residual
+    /// @param instance Instance of class T
+    /// @param method The function evaluation routine (member function in class T)
+    template <class T>
+    void
+    set_ifunction(Vector & r,
+                  T * instance,
+                  void (T::*method)(Real, const Vector &, const Vector &, Vector &))
+    {
+        this->compute_ifunction_local_method.bind(instance, method);
+        PETSC_CHECK(TSSetIFunction(this->ts,
+                                   r,
+                                   invoke_compute_ifunction_delegate,
+                                   &this->compute_ifunction_local_method));
+    }
+
+    /// Set the function to compute the matrix dF/dU + a*dF/dU_t where F(t,U,U_t)
+    ///
+    /// @tparam T C++ class type
+    /// @param J (approximate) matrix to store Jacobian entries computed by `method`
+    /// @param Jp Matrix used to compute preconditioner (usually the same as `J`)
+    /// @param instance Instance of class T
+    /// @param method Member function in class T
+    template <class T>
+    void
+    set_ijacobian(Matrix & J,
+                  Matrix & Jp,
+                  T * instance,
+                  void (T::*method)(Real, const Vector &, const Vector &, Real, Matrix &, Matrix &))
+    {
+        this->compute_ijacobian_local_method.bind(instance, method);
+        PETSC_CHECK(TSSetIJacobian(this->ts,
+                                   J,
+                                   Jp,
+                                   invoke_compute_ijacobian_delegate,
+                                   &this->compute_ijacobian_local_method));
+    }
+
     /// Sets the routine for evaluating the function, where U_t = G(t,u).
     ///
     /// @tparam T C++ class type
@@ -362,6 +403,16 @@ private:
     static ErrorCode invoke_compute_rhs_function_delegate(TS, Real time, Vec x, Vec F, void * ctx);
     static ErrorCode
     invoke_compute_rhs_jacobian_delegate(TS, Real time, Vec x, Mat A, Mat B, void * ctx);
+    static ErrorCode
+    invoke_compute_ifunction_delegate(TS, Real time, Vec x, Vec x_t, Vec F, void * context);
+    static ErrorCode invoke_compute_ijacobian_delegate(TS,
+                                                       Real time,
+                                                       Vec x,
+                                                       Vec x_t,
+                                                       Real x_t_shift,
+                                                       Mat J,
+                                                       Mat Jp,
+                                                       void * context);
     static ErrorCode
     invoke_compute_ifunction_delegate(DM, Real time, Vec x, Vec x_t, Vec F, void * context);
     static ErrorCode invoke_compute_ijacobian_delegate(DM,
