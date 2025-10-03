@@ -57,6 +57,11 @@ public:
         SSP_RK_3,
     };
 
+    enum class ProblemType {
+        LINEAR = TS_LINEAR,
+        NONLINEAR = TS_NONLINEAR,
+    };
+
     TransientProblemInterface(Problem * problem, const Parameters & params);
     virtual ~TransientProblemInterface();
 
@@ -122,6 +127,21 @@ public:
     ///
     /// @param t New simulation time
     void set_time(Real t);
+
+    /// Gets the type of problem to be solved
+    ///
+    /// @return Type of the problem
+    ProblemType get_problem_type() const;
+
+    /// Sets the type of problem to be solved
+    ///
+    /// @param type Type of the problem
+    /// ```
+    /// U_t - A U = 0      (linear)
+    /// U_t - A(t) U = 0   (linear)
+    /// F(t,U,U_t) = 0     (nonlinear)
+    /// ```
+    void set_problem_type(ProblemType type);
 
     /// Called before the time step solve
     virtual void pre_step();

@@ -48,6 +48,7 @@ public:
         TransientProblemInterface::init();
         set_up_time_scheme();
         set_rhs_function(this, &GTestProblem::compute_rhs);
+        set_problem_type(ProblemType::LINEAR);
     }
 
     void
@@ -151,6 +152,8 @@ TEST(TSAbstract, test)
 
     mesh.create();
     prob.create();
+
+    EXPECT_EQ(prob.get_problem_type(), TransientProblemInterface::ProblemType::LINEAR);
 
     auto ts = prob.get_ts();
     auto scheme = static_cast<TestTSScheme *>(ts->data);

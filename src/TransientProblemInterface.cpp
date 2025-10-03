@@ -414,6 +414,21 @@ TransientProblemInterface::set_time(Real t)
     PETSC_CHECK(TSSetTime(this->ts, t));
 }
 
+auto
+TransientProblemInterface::get_problem_type() const -> ProblemType
+{
+    CALL_STACK_MSG();
+    TSProblemType tpt;
+    PETSC_CHECK(TSGetProblemType(this->ts, &tpt));
+    return static_cast<ProblemType>(tpt);
+}
+
+void
+TransientProblemInterface::set_problem_type(ProblemType type)
+{
+    PETSC_CHECK(TSSetProblemType(this->ts, static_cast<TSProblemType>(type)));
+}
+
 void
 TransientProblemInterface::pre_stage(Real stage_time)
 {
