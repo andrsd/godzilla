@@ -766,7 +766,10 @@ public:
             this->values[i] = other.values[i];
     }
 
-    DenseMatrix(DenseMatrix && other) : rows(other.rows), cols(other.cols), values(other.values)
+    DenseMatrix(DenseMatrix && other) noexcept :
+        rows(other.rows),
+        cols(other.cols),
+        values(other.values)
     {
         other.values = nullptr;
         other.rows = 0;
@@ -789,7 +792,7 @@ public:
     }
 
     DenseMatrix<T, -1, -1> &
-    operator=(DenseMatrix<T, -1, -1> && other)
+    operator=(DenseMatrix<T, -1, -1> && other) noexcept
     {
         if (this != &other) {
             release();
