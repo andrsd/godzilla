@@ -126,6 +126,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface10set_schemeERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::set_scheme()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla25TransientProblemInterface10get_schemeEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::get_scheme()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface8set_timeE4Real"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::set_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4NK8godzilla25TransientProblemInterface16get_problem_typeEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::get_problem_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface16set_problem_typeE11ProblemType"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::set_problem_type()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface8pre_stepEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::pre_step()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface9post_stepEv"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::post_step()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#_CPPv4N8godzilla25TransientProblemInterface9pre_stageE4Real"><code class="docutils literal notranslate"><span class="pre">TransientProblemInterface::pre_stage()</span></code></a></li>
@@ -352,6 +354,33 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>t</strong> – New simulation time </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8godzilla25TransientProblemInterface16get_problem_typeEv">
+<span id="_CPPv3NK8godzilla25TransientProblemInterface16get_problem_typeEv"></span><span id="_CPPv2NK8godzilla25TransientProblemInterface16get_problem_typeEv"></span><span id="godzilla::TransientProblemInterface::get_problem_typeC"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1ad477cfc64d613d08ec3c3d81cad0da3c"></span><span class="n"><span class="pre">ProblemType</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_problem_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8godzilla25TransientProblemInterface16get_problem_typeEv" title="Link to this definition"></a><br /></dt>
+<dd><p>Gets the type of problem to be solved. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Type of the problem </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8godzilla25TransientProblemInterface16set_problem_typeE11ProblemType">
+<span id="_CPPv3N8godzilla25TransientProblemInterface16set_problem_typeE11ProblemType"></span><span id="_CPPv2N8godzilla25TransientProblemInterface16set_problem_typeE11ProblemType"></span><span id="godzilla::TransientProblemInterface::set_problem_type__ProblemType"></span><span class="target" id="classgodzilla_1_1_transient_problem_interface_1a881ecc6c7fe229570d8becf80822f20c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_problem_type</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ProblemType</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">type</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8godzilla25TransientProblemInterface16set_problem_typeE11ProblemType" title="Link to this definition"></a><br /></dt>
+<dd><p>Sets the type of problem to be solved. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> – Type of the problem <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">U_t</span> <span class="o">-</span> <span class="n">A</span> <span class="n">U</span> <span class="o">=</span> <span class="mi">0</span>      <span class="p">(</span><span class="n">linear</span><span class="p">)</span>
+<span class="n">U_t</span> <span class="o">-</span> <span class="n">A</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="n">U</span> <span class="o">=</span> <span class="mi">0</span>   <span class="p">(</span><span class="n">linear</span><span class="p">)</span>
+<span class="n">F</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">U</span><span class="p">,</span><span class="n">U_t</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span>     <span class="p">(</span><span class="n">nonlinear</span><span class="p">)</span>
+</pre></div>
+</div>
+</p>
 </dd>
 </dl>
 </dd></dl>
