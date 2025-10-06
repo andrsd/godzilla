@@ -5,6 +5,7 @@
 
 #include "godzilla/Exception.h"
 #include <utility>
+#include <iostream>
 
 namespace godzilla {
 
@@ -25,15 +26,22 @@ private:
     ControlBlock * ctrl_;
 
 public:
-    Ptr() : ctrl_(nullptr) {}
+    Ptr() : ctrl_(nullptr) {
+        std::cerr << "default ctor" << std::endl;
+
+    }
 
     // Construct from `nullptr`
-    Ptr(std::nullptr_t) : ctrl_(nullptr) {}
+    Ptr(std::nullptr_t) : ctrl_(nullptr) {
+        std::cerr << "nullptr ctor" << std::endl;
+
+    }
 
     // Cross-type constructor (Ptr<U> -> Ptr<T>)
     template <typename U>
     Ptr(const Ptr<U> & other, T * casted) : ctrl_(nullptr)
     {
+        std::cerr << "cross-type ctor" << std::endl;
         if (casted) {
             this->ctrl_ = reinterpret_cast<ControlBlock *>(other.ctrl_);
             if (this->ctrl_)
@@ -44,6 +52,7 @@ public:
     // Copy constructor
     Ptr(const Ptr & other) : ctrl_(other.ctrl_)
     {
+        std::cerr << "copy-ctor" << std::endl;
         if (this->ctrl_)
             ++this->ctrl_->strong;
     }
@@ -53,10 +62,12 @@ public:
 
     // Converting copy constructor
     template <typename U, typename = std::enable_if_t<std::is_convertible<U *, T *>::value>>
-    Ptr(const Ptr<U> & other) : ctrl_(nullptr)
+    Ptr(const Ptr<U> & other) : ctrl_(reinterpret_cast<ControlBlock *>(other.ctrl_))
     {
-        if (other.ctrl_) {
-            this->ctrl_ = reinterpret_cast<ControlBlock *>(other.ctrl_);
+        std::cerr << "converting copy-ctor:" << ctrl_ << ", " << other.ctrl_ << std::endl;
+        // std::cerr << "converting copy-ctor:" << std::endl;
+        if (this->ctrl_) {
+            // this->ctrl_ = reinterpret_cast<ControlBlock *>(other.ctrl_);
             ++this->ctrl_->strong;
         }
     }
@@ -65,6 +76,7 @@ public:
     Ptr &
     operator=(const Ptr & other)
     {
+        std::cerr << "assign" << std::endl;
         if (this != &other) {
             release();
             this->ctrl_ = other.ctrl_;
@@ -79,9 +91,10 @@ public:
     Ptr &
     operator=(const Ptr<U> & other)
     {
+        std::cerr << "convert assign" << std::endl;
         if (reinterpret_cast<const void *>(this) != reinterpret_cast<const void *>(&other)) {
             release();
-            this->ctrl_ = other.ctrl_;
+            this->ctrl_ = reinterpret_cast<ControlBlock *>(other.ctrl_);
             if (this->ctrl_)
                 ++this->ctrl_->strong;
         }
@@ -92,6 +105,7 @@ public:
     Ptr &
     operator=(std::nullptr_t)
     {
+        std::cerr << "assign nullptr" << std::endl;
         release();
         this->ctrl_ = nullptr;
         return *this;
@@ -101,6 +115,7 @@ public:
     Ptr &
     operator=(Ptr && other) noexcept
     {
+        std::cerr << "move assign" << std::endl;
         if (this != &other) {
             release();
             this->ctrl_ = other.ctrl_;
@@ -222,10 +237,16 @@ private:
     void
     release()
     {
+        std::cerr << "release()" << std::endl;
         if (this->ctrl_ && --this->ctrl_->strong == 0) {
+            std::cerr << "- delete this->ctrl_->ptr" << std::endl;
             delete this->ctrl_->ptr;
-            if (this->ctrl_->weak == 0)
+            this->ctrl_->ptr = nullptr;
+            if (this->ctrl_->weak == 0) {
+                std::cerr << "- delete this->ctrl_" << std::endl;
                 delete this->ctrl_;
+                this->ctrl_ = nullptr;
+            }
         }
     }
 
