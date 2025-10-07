@@ -143,6 +143,8 @@ TEST(UnstructuredMeshTest, api)
     EXPECT_TRUE(m->is_simplex());
 
     EXPECT_FALSE(m->is_distributed());
+
+    EXPECT_EQ(m->get_coordinate_dim(), 1_D);
 }
 
 TEST(UnstructuredMeshTest, api_ghosted)

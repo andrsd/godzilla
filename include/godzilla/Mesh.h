@@ -83,6 +83,9 @@ public:
     /// @return Local section from the coordinate `DM`
     Section get_coordinate_section() const;
 
+    /// Retrieve the dimension of the embedding space for coordinate values.
+    Dimension get_coordinate_dim() const;
+
     /// Set the dimension of the embedding space for coordinate values
     ///
     /// @param dim The embedding dimension

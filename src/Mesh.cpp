@@ -115,6 +115,15 @@ Mesh::get_coordinate_section() const
     return section;
 }
 
+Dimension
+Mesh::get_coordinate_dim() const
+{
+    CALL_STACK_MSG();
+    Int dim;
+    PETSC_CHECK(DMGetCoordinateDim(this->obj, &dim));
+    return Dimension::from_int(dim);
+}
+
 void
 Mesh::set_coordinate_dim(Dimension dim)
 {
