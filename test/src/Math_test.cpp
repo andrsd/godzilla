@@ -33,3 +33,10 @@ TEST(MathTest, abs)
     EXPECT_DOUBLE_EQ(math::abs(4.), 4.);
     EXPECT_DOUBLE_EQ(math::abs(-8.), 8.);
 }
+
+TEST(MathTest, pow)
+{
+    EXPECT_DOUBLE_EQ(math::pow(4., 2), 16.);
+    EXPECT_DOUBLE_EQ(math::pow<2>(7.), 49.);
+    EXPECT_DOUBLE_EQ(math::pow(4., -1), 0.25);
+}

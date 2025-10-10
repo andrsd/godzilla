@@ -71,5 +71,85 @@ abs(Real val)
     return std::abs(val);
 }
 
+template <int N, typename T>
+struct pow_impl {
+    static inline T
+    value(T x)
+    {
+        if (N % 2)
+            return x * pow_impl<N - 1, T>::value(x);
+        T x_n_half = pow_impl<N / 2, T>::value(x);
+        return x_n_half * x_n_half;
+    }
+};
+
+template <typename T>
+struct pow_impl<1, T> {
+    static inline T
+    value(T x)
+    {
+        return x;
+    }
+};
+
+template <typename T>
+struct pow_impl<0, T> {
+    static inline T
+    value(T)
+    {
+        return 1;
+    }
+};
+
+/// Compute `N` power of `x`
+///
+/// @tparam N Exponent (integer)
+/// @param x Operand
+/// @return `x` to the power of `e`
+template <int N, typename T>
+inline T
+pow(T x)
+{
+    return pow_impl<N, T>::value(x);
+}
+
+/// Compute `e` power of `x`
+///
+/// @param x Operand
+/// @param e Exponent (integer)
+/// @return `x` to the power of `e`
+template <typename T>
+inline T
+pow(T x, int e)
+{
+    bool neg = false;
+    T result = 1.0;
+
+    if (e < 0) {
+        neg = true;
+        e = -e;
+    }
+
+    while (e) {
+        // if bit 0 is set multiply the current power of two factor of the exponent
+        if (e & 1)
+            result *= x;
+        // x is incrementally set to consecutive powers of powers of two
+        x *= x;
+        // bit shift the exponent down
+        e >>= 1;
+    }
+
+    return neg ? 1.0 / result : result;
+}
+
+/// Alias for convenience, or potentially for better implementation
+template <typename T, typename EXP>
+inline T
+pow(T x, EXP exp)
+{
+    return std::pow(x, exp);
+}
+
 } // namespace math
 } // namespace godzilla
