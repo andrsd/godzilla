@@ -15,3 +15,21 @@ TEST(MathTest, sqr)
     EXPECT_DOUBLE_EQ(math::sqr(4.), 16.);
     EXPECT_EQ(math::sqr(4), 16);
 }
+
+TEST(MathTest, max)
+{
+    EXPECT_DOUBLE_EQ(math::max(4., 8.), 8.);
+    EXPECT_DOUBLE_EQ(math::max({ -1, 10, 12, 20, -5, 0 }), 20);
+}
+
+TEST(MathTest, min)
+{
+    EXPECT_DOUBLE_EQ(math::min(4., 8.), 4.);
+    EXPECT_DOUBLE_EQ(math::min({ -1, 10, 12, 20, -5, 0 }), -5);
+}
+
+TEST(MathTest, abs)
+{
+    EXPECT_DOUBLE_EQ(math::abs(4.), 4.);
+    EXPECT_DOUBLE_EQ(math::abs(-8.), 8.);
+}
