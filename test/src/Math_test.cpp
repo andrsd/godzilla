@@ -40,3 +40,8 @@ TEST(MathTest, pow)
     EXPECT_DOUBLE_EQ(math::pow<2>(7.), 49.);
     EXPECT_DOUBLE_EQ(math::pow(4., -1), 0.25);
 }
+
+TEST(MathTest, sqrt)
+{
+    EXPECT_DOUBLE_EQ(math::sqrt(16.), 4.);
+}

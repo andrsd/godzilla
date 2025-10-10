@@ -42,6 +42,16 @@ sqr(T val)
     return val * val;
 }
 
+/// Compute the square root of a number.
+///
+/// @param arg The number to compute the square root of.
+template <typename T>
+T
+sqrt(T arg)
+{
+    return std::sqrt(arg);
+}
+
 /// Maximum
 template <typename T>
 const T &
