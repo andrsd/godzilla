@@ -5,7 +5,7 @@
 
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
-#include "godzilla/Numerics.h"
+#include "godzilla/Math.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/Utils.h"
 #include "mpicpp-lite/mpicpp-lite.h"
