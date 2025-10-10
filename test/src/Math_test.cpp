@@ -45,3 +45,21 @@ TEST(MathTest, sqrt)
 {
     EXPECT_DOUBLE_EQ(math::sqrt(16.), 4.);
 }
+
+TEST(MathTest, factorial)
+{
+    EXPECT_DOUBLE_EQ(math::factorial(0), 1.);
+    EXPECT_DOUBLE_EQ(math::factorial(1), 1.);
+    EXPECT_DOUBLE_EQ(math::factorial(2), 2.);
+    EXPECT_DOUBLE_EQ(math::factorial(3), 6.);
+    EXPECT_DOUBLE_EQ(math::factorial(4), 24.);
+    EXPECT_DOUBLE_EQ(math::factorial(5), 120.);
+}
+
+#ifndef NDEBUG
+TEST(MathTest, factorial_undef)
+{
+    EXPECT_DEATH(math::factorial(-1),
+                 testing::HasSubstr("Factorial is defined only for positive numbers"));
+}
+#endif
