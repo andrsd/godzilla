@@ -25,7 +25,8 @@ jobs:
       - name: Install dependencies
         run: |
           conda install \
-            cmake \
+            cmake=3.31.2 \
+            rhash=1.4.3 \
             make \
             mpich-mpicxx \
             mpicpp-lite=2.* \
@@ -88,7 +89,8 @@ jobs:
       - name: Install dependencies
         run: |
           conda install \
-            cmake \
+            cmake=3.31.2 \
+            rhash=1.4.3 \
             make \
             mpich-mpicxx \
             mpicpp-lite=2.* \
