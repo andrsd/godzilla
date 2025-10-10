@@ -6,9 +6,17 @@
 #include "godzilla/Types.h"
 #include <algorithm>
 #include <cmath>
+#include <numbers>
 
 namespace godzilla {
 namespace math {
+
+/// PI
+constexpr Real PI = std::numbers::pi_v<Real>;
+/// Square root of 2
+constexpr Real SQRT2 = std::numbers::sqrt2_v<Real>;
+/// Square root of 3
+constexpr Real SQRT3 = std::numbers::sqrt3_v<Real>;
 
 /// Sign of the argument
 ///
