@@ -6,9 +6,9 @@
 #include "godzilla/Error.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/Types.h"
+#include "godzilla/Assert.h"
 #include "petsc.h"
 #include <type_traits>
-#include <cassert>
 
 namespace godzilla {
 
@@ -98,7 +98,7 @@ public:
     get_id() const
     {
         CALL_STACK_MSG();
-        assert(this->obj != nullptr);
+        assert_true(this->obj != nullptr, "PETSc object is null");
         PetscObjectId id;
         PETSC_CHECK(PetscObjectGetId((PetscObject) this->obj, &id));
         return id;
