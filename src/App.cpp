@@ -12,9 +12,9 @@
 #include "godzilla/Utils.h"
 #include "godzilla/Terminal.h"
 #include "godzilla/Logger.h"
+#include "godzilla/Assert.h"
 #include "yaml-cpp/yaml.h"
 #include "fmt/chrono.h"
-#include <cassert>
 #include <fstream>
 
 namespace YAML {
@@ -405,7 +405,7 @@ App::run_problem()
 {
     CALL_STACK_MSG();
     lprintln(9, "Running");
-    assert(this->problem != nullptr);
+    assert_true(this->problem != nullptr, "Problem is null");
     this->problem->run();
 }
 
