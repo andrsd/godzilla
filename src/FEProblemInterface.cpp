@@ -13,9 +13,8 @@
 #include "godzilla/Utils.h"
 #include "godzilla/DependencyGraph.h"
 #include "godzilla/Exception.h"
-#include "godzilla/Formatters.h"
+#include "godzilla/Assert.h"
 #include "petsc/private/petscfeimpl.h"
-#include <cassert>
 
 namespace godzilla {
 
@@ -227,7 +226,8 @@ FEProblemInterface::get_field_component_name(FieldID fid, Int component) const
         if (fi.nc == 1)
             return { "" };
         else {
-            assert(component < it->second.nc && component < it->second.component_names.size());
+            assert_true(component < it->second.nc && component < it->second.component_names.size(),
+                        "Component index out of bounds");
             return it->second.component_names.at(component);
         }
     }
@@ -242,7 +242,8 @@ FEProblemInterface::set_field_component_name(FieldID fid, Int component, const s
     const auto & it = this->fields.find(fid);
     if (it != this->fields.end()) {
         if (it->second.nc > 1) {
-            assert(component < it->second.nc && component < it->second.component_names.size());
+            assert_true(component < it->second.nc && component < it->second.component_names.size(),
+                        "Component index out of bounds");
             it->second.component_names[component] = name;
         }
         else
@@ -340,7 +341,8 @@ FEProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
         if (fi.nc == 1)
             return { "" };
         else {
-            assert(component < it->second.nc && component < it->second.component_names.size());
+            assert_true(component < it->second.nc && component < it->second.component_names.size(),
+                        "Component index out of bounds");
             return it->second.component_names.at(component);
         }
     }
@@ -357,7 +359,8 @@ FEProblemInterface::set_aux_field_component_name(FieldID fid,
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end()) {
         if (it->second.nc > 1) {
-            assert(component < it->second.nc && component < it->second.component_names.size());
+            assert_true(component < it->second.nc && component < it->second.component_names.size(),
+                        "Component index out of bounds");
             it->second.component_names[component] = name;
         }
         else
@@ -493,7 +496,7 @@ void
 FEProblemInterface::set_up_quadrature()
 {
     CALL_STACK_MSG();
-    assert(!this->fields.empty());
+    assert_true(!this->fields.empty(), "No field specified");
     auto first = this->fields.begin();
     FieldInfo & first_fi = first->second;
     for (auto it = ++first; it != this->fields.end(); ++it) {
@@ -727,7 +730,7 @@ FEProblemInterface::add_boundary_residual_block(FieldID fid,
                                                 const std::string & boundary)
 {
     CALL_STACK_MSG();
-    assert(!boundary.empty());
+    assert_true(!boundary.empty(), "No boundaries defined in the problem");
 
     auto label = get_mesh()->get_label(boundary);
     auto ids = label.get_values();
@@ -803,7 +806,7 @@ FEProblemInterface::add_boundary_jacobian_block(FieldID fid,
                                                 const std::string & region)
 {
     CALL_STACK_MSG();
-    assert(!region.empty());
+    assert_true(!region.empty(), "No regions defined in the problem");
 
     auto label = get_mesh()->get_label(region);
     auto ids = label.get_values();
