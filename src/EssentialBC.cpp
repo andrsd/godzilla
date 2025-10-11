@@ -7,7 +7,7 @@
 #include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Types.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -32,7 +32,7 @@ EssentialBC::create()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    assert(dpi != nullptr);
+    assert_true(dpi != nullptr, "DiscreteProblemInterface is null");
 
     std::vector<std::string> field_names = dpi->get_field_names();
     if (field_names.size() == 1) {
