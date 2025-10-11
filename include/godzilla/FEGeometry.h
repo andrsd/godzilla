@@ -13,6 +13,7 @@
 #include "godzilla/Array1D.h"
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
+#include "godzilla/Assert.h"
 #include <set>
 
 namespace godzilla {
@@ -236,7 +237,7 @@ get_local_face_index(const std::vector<Int> & elem_conn, const std::vector<Int> 
                         fc.begin(),
                         fc.end(),
                         std::inserter(diff, diff.begin()));
-    assert(diff.size() == 1);
+    assert_true(diff.size() == 1, "Element and face connectivity must differ only in one entry");
     auto it = std::find(elem_conn.begin(), elem_conn.end(), diff[0]);
     return std::distance(elem_conn.begin(), it);
 }
@@ -256,7 +257,7 @@ inline Int
 get_grad_fn_index<EDGE2, 1, 2>(Int facet_idx)
 {
     static std::array<Int, 2> grad_fn_index = { 1, 0 };
-    assert(facet_idx >= 0 && facet_idx < 2);
+    assert_true(facet_idx >= 0 && facet_idx < 2, "Facet index out of bound");
     return grad_fn_index[facet_idx];
 }
 
@@ -265,7 +266,7 @@ inline Int
 get_grad_fn_index<TRI3, 2, 3>(Int facet_idx)
 {
     static std::array<Int, 3> grad_fn_index = { 2, 0, 1 };
-    assert(facet_idx >= 0 && facet_idx < 3);
+    assert_true(facet_idx >= 0 && facet_idx < 3, "Facet index out of bound");
     return grad_fn_index[facet_idx];
 }
 
@@ -274,7 +275,7 @@ inline Int
 get_grad_fn_index<TET4, 3, 4>(Int facet_idx)
 {
     static std::array<Int, 4> grad_fn_index = { 3, 2, 1, 0 };
-    assert(facet_idx >= 0 && facet_idx < 4);
+    assert_true(facet_idx >= 0 && facet_idx < 4, "Facet index out of bound");
     return grad_fn_index[facet_idx];
 }
 
