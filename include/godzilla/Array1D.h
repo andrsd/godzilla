@@ -6,8 +6,8 @@
 #include "godzilla/Types.h"
 #include "godzilla/Range.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Assert.h"
 #include <petscvec.h>
-#include <cassert>
 
 namespace godzilla {
 
@@ -209,7 +209,7 @@ public:
     void
     zero()
     {
-        assert(this->data != nullptr);
+        assert_true(this->data != nullptr, "Internal storage is not allocated");
         for (Int i = 0; i < this->ctrl->n; ++i)
             this->data[i].zero();
     }
@@ -220,7 +220,7 @@ public:
     void
     set(const T & val)
     {
-        assert(this->data != nullptr);
+        assert_true(this->data != nullptr, "Internal storage is not allocated");
         for (Int i = 0; i < this->ctrl->n; ++i)
             this->data[i] = val;
     }
@@ -246,8 +246,8 @@ public:
     const T &
     operator[](Int i) const
     {
-        assert(this->data != nullptr);
-        assert((i >= this->first) && (i < this->first + this->ctrl->n));
+        assert_true(this->data != nullptr, "Internal storage is not allocated");
+        assert_true((i >= this->first) && (i < this->first + this->ctrl->n), "Index out of bounds");
         auto idx = i - this->first;
         return this->data[idx];
     }
@@ -259,8 +259,8 @@ public:
     T &
     operator[](Int i)
     {
-        assert(this->data != nullptr);
-        assert((i >= this->first) && (i < this->first + this->ctrl->n));
+        assert_true(this->data != nullptr, "Internal storage is not allocated");
+        assert_true((i >= this->first) && (i < this->first + this->ctrl->n), "Index out of bounds");
         auto idx = i - this->first;
         return this->data[idx];
     }
@@ -326,7 +326,7 @@ template <>
 inline void
 Array1D<Real>::zero()
 {
-    assert(this->data != nullptr);
+    assert_true(this->data != nullptr, "Internal storage is not allocated");
     for (Int i = 0; i < this->ctrl->n; ++i)
         this->data[i] = 0.;
 }
@@ -395,7 +395,8 @@ template <typename T, Int N>
 DenseVector<T, N>
 get_values(const Array1D<T> & data, const std::vector<Int> & idx)
 {
-    assert(N == idx.size());
+    assert_true(N == idx.size(),
+                "Size of `idx` argument does not match the size of the return value");
     DenseVector<T, N> vals;
     for (Int i = 0; i < N; ++i)
         vals(i) = data[idx[i]];
@@ -438,7 +439,8 @@ template <typename T>
 void
 assign(Array1D<T> & data, const std::vector<T> & vals)
 {
-    assert(data.size() == vals.size());
+    assert_true(data.size() == vals.size(),
+                "Number of values to be assigned does not match the size the array");
     for (Int i = 0; i < data.size(); ++i)
         data[i] = vals[i];
 }

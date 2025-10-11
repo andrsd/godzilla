@@ -4,7 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -31,8 +31,8 @@ public:
     T
     operator()(unsigned int idx) const
     {
-        assert(this->data != nullptr);
-        assert(idx < this->size);
+        assert_true(this->data != nullptr, "Array is not bound to data");
+        assert_true(idx < this->size, "Index out of bounds");
         return this->data[idx];
     }
 

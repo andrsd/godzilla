@@ -56,13 +56,16 @@ void
 NestVector::set_sub_vectors(const std::vector<Int> & idx, const std::vector<Vector> & sx)
 {
     CALL_STACK_MSG();
-    assert(idx.size() == sx.size());
-    Int n = idx.size();
-    std::vector<Vec> vecs(n);
-    for (Int i = 0; i < n; ++i)
-        vecs[i] = sx[i];
-    auto idxm = const_cast<Int *>(idx.data());
-    PETSC_CHECK(VecNestSetSubVecs(*this, n, idxm, vecs.data()));
+    if (idx.size() == sx.size()) {
+        Int n = idx.size();
+        std::vector<Vec> vecs(n);
+        for (Int i = 0; i < n; ++i)
+            vecs[i] = sx[i];
+        auto idxm = const_cast<Int *>(idx.data());
+        PETSC_CHECK(VecNestSetSubVecs(*this, n, idxm, vecs.data()));
+    }
+    else
+        throw Exception("Number of indices does not match number of values");
 }
 
 NestVector

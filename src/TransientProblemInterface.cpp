@@ -6,10 +6,9 @@
 #include "godzilla/TimeStepAdapt.h"
 #include "godzilla/TimeSteppingAdaptor.h"
 #include "godzilla/TransientProblemInterface.h"
-#include "godzilla/LoggingInterface.h"
+#include "godzilla/Assert.h"
 #include "godzilla/SNESolver.h"
 #include "petscdmplex.h"
-#include <cassert>
 
 namespace godzilla {
 
@@ -332,7 +331,7 @@ void
 TransientProblemInterface::init()
 {
     CALL_STACK_MSG();
-    assert(this->problem != nullptr);
+    assert_true(this->problem != nullptr, "Problem is null");
     PETSC_CHECK(TSSetDM(this->ts, this->problem->get_dm()));
 }
 

@@ -15,8 +15,8 @@
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
 #include "godzilla/UnstructuredMesh.h"
+#include "godzilla/Assert.h"
 #include <set>
-#include <cassert>
 
 namespace godzilla {
 
@@ -230,7 +230,7 @@ DiscreteProblemInterface::distribute()
 
     // cannot use `get_mesh`, since this may be called before the `create` calls
     auto mesh = this->mesh_obj->get_mesh<UnstructuredMesh>();
-    assert(mesh != nullptr);
+    assert_true(mesh != nullptr, "Mesh is null");
     mesh->set_partitioner(part);
     mesh->distribute(this->problem->get_partition_overlap());
 }
@@ -248,9 +248,9 @@ void
 DiscreteProblemInterface::create()
 {
     CALL_STACK_MSG();
-    assert(this->problem != nullptr);
+    assert_true(this->problem != nullptr, "Problem is null");
     this->unstr_mesh = this->mesh_obj->get_mesh<UnstructuredMesh>();
-    assert(this->unstr_mesh != nullptr);
+    assert_true(this->unstr_mesh != nullptr, "Mesh must be UnstructuredMesh");
 
     for (auto & ic : this->all_ics)
         ic->create();

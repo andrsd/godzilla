@@ -5,7 +5,6 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/App.h"
 #include "godzilla/Problem.h"
-#include <cassert>
 
 namespace godzilla {
 
@@ -36,7 +35,9 @@ FunctionInterface::FunctionInterface(const Parameters & params) :
                      : std::vector<std::string>())
 {
     this->num_comps = this->expression.size();
-    assert(this->num_comps >= 1);
+    // TODO: turn this into `log_error`
+    if (this->num_comps == 0)
+        throw Exception("No components provided");
 }
 
 void

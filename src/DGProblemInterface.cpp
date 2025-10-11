@@ -11,8 +11,8 @@
 #include "godzilla/Utils.h"
 #include "godzilla/FEGeometry.h"
 #include "godzilla/Exception.h"
-#include "godzilla/Formatters.h"
-#include <cassert>
+#include "godzilla/Assert.h"
+#include <utility>
 
 namespace godzilla {
 
@@ -158,7 +158,9 @@ DGProblemInterface::get_field_component_name(FieldID fid, Int component) const
         if (fi.nc == 1)
             return { "" };
         else {
-            assert(component < it->second.nc && component < it->second.component_names.size());
+            assert_true(component < it->second.nc &&
+                            std::cmp_less(component, it->second.component_names.size()),
+                        "Component index out of bounds");
             return it->second.component_names.at(component);
         }
     }
@@ -173,7 +175,9 @@ DGProblemInterface::set_field_component_name(FieldID fid, Int component, const s
     const auto & it = this->fields.find(fid);
     if (it != this->fields.end()) {
         if (it->second.nc > 1) {
-            assert(component < it->second.nc && component < it->second.component_names.size());
+            assert_true(component < it->second.nc &&
+                            std::cmp_less(component, it->second.component_names.size()),
+                        "Component index out of bounds");
             it->second.component_names[component] = name;
         }
         else
@@ -271,7 +275,9 @@ DGProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
         if (fi.nc == 1)
             return { "" };
         else {
-            assert(component < it->second.nc && component < it->second.component_names.size());
+            assert_true(component < it->second.nc &&
+                            std::cmp_less(component, it->second.component_names.size()),
+                        "Component out of bounds");
             return it->second.component_names.at(component);
         }
     }
@@ -288,7 +294,9 @@ DGProblemInterface::set_aux_field_component_name(FieldID fid,
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end()) {
         if (it->second.nc > 1) {
-            assert(component < it->second.nc && component < it->second.component_names.size());
+            assert_true(component < it->second.nc &&
+                            std::cmp_less(component, it->second.component_names.size()),
+                        "Component index out of bounds");
             it->second.component_names[component] = name;
         }
         else
@@ -472,7 +480,8 @@ DGProblemInterface::set_up_section_constraint_dofs(Section & section)
                 for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
                     auto support = unstr_mesh->get_support(facet);
-                    assert(support.size() == 1);
+                    assert_true(support.size() == 1,
+                                "Internal facet cannot be included in a boundary face set");
                     auto cell_id = support[0];
                     section.add_constraint_dof(cell_id, n_ced_dofs);
                     section.set_field_constraint_dof(cell_id, fid.value(), n_ced_dofs);
@@ -507,7 +516,8 @@ DGProblemInterface::set_up_section_constraint_indicies(Section & section)
                 for (Int i = 0; i < facets.get_local_size(); ++i) {
                     auto facet = facets(i);
                     auto support = unstr_mesh->get_support(facet);
-                    assert(support.size() == 1);
+                    assert_true(support.size() == 1,
+                                "Internal facet cannot be included in a boundary face set");
                     auto fconn = unstr_mesh->get_connectivity(facet);
                     auto econn = unstr_mesh->get_connectivity(support[0]);
 

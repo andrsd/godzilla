@@ -12,6 +12,7 @@
 #include "godzilla/FileOutput.h"
 #include "godzilla/Section.h"
 #include "godzilla/Types.h"
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -54,9 +55,9 @@ DM
 Problem::get_dm() const
 {
     CALL_STACK_MSG();
-    assert(this->mesh != nullptr);
+    assert_true(this->mesh != nullptr, "Mesh is null");
     auto m = this->mesh->get_mesh<Mesh>();
-    assert(m != nullptr);
+    assert_true(m != nullptr, "Provided mesh object is not Mesh-derived object");
     return m->get_dm();
 }
 
@@ -445,7 +446,8 @@ Problem::create_section_subis(const std::vector<Int> & fields,
 {
     CALL_STACK_MSG();
 #if PETSC_VERSION_GE(3, 21, 0)
-    assert(fields.size() == n_comps.size());
+    assert_true(fields.size() == n_comps.size(),
+                "Number of fields must match number of components");
     IndexSet is;
     PETSC_CHECK(DMCreateSectionSubDM(get_dm(),
                                      fields.size(),

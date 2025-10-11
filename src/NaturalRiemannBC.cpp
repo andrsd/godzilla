@@ -3,11 +3,8 @@
 
 #include "godzilla/NaturalRiemannBC.h"
 #include "godzilla/CallStack.h"
-#include "godzilla/App.h"
-#include "godzilla/Problem.h"
 #include "godzilla/DiscreteProblemInterface.h"
-#include "godzilla/UnstructuredMesh.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -30,7 +27,7 @@ NaturalRiemannBC::create()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    assert(dpi != nullptr);
+    assert_true(dpi != nullptr, "DiscreteProblemInterface is null");
 
     auto field_names = dpi->get_field_names();
     if (field_names.size() == 1)

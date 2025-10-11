@@ -5,7 +5,7 @@
 #include "godzilla/InitialCondition.h"
 #include "godzilla/DiscreteProblemInterface.h"
 #include "godzilla/Types.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -31,7 +31,7 @@ void
 InitialCondition::create()
 {
     CALL_STACK_MSG();
-    assert(this->dpi != nullptr);
+    assert_true(this->dpi != nullptr, "DiscreteProblemInterface is null");
     auto fld = get_param<std::string>("field");
     if (fld.empty()) {
         std::vector<std::string> field_names = this->dpi->get_field_names();

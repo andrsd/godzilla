@@ -11,6 +11,7 @@
 #include "godzilla/DenseVector.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/UnstructuredMesh.h"
+#include "godzilla/Assert.h"
 #include "petscdmplex.h"
 
 namespace godzilla {
@@ -108,7 +109,8 @@ calc_volumes(const Array1D<DenseVector<Real, DIM>> & coords,
              Array1D<Real> & fe_volume)
 {
     CALL_STACK_MSG();
-    assert(connect.size() == fe_volume.size());
+    assert_true(connect.size() == fe_volume.size(),
+                "Connectivity array size does not match FE volume array size");
 
     for (godzilla::Int ie = 0; ie < connect.size(); ++ie) {
         auto idx = connect(ie);

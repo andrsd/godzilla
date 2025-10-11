@@ -4,10 +4,10 @@
 #pragma once
 
 #include "godzilla/Types.h"
+#include "godzilla/Assert.h"
 #include <algorithm>
 #include <cmath>
 #include <numbers>
-#include <cassert>
 #include <concepts>
 #include <type_traits>
 
@@ -181,7 +181,7 @@ template <typename T>
 inline Real
 factorial(T x)
 {
-    assert(x >= 0 && "Factorial is defined only for positive numbers");
+    assert_true(x >= 0, "Factorial is defined only for positive numbers");
     Real result = 1.0;
     for (Int i = 2; i <= x; ++i)
         result *= i;

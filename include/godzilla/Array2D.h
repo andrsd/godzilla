@@ -4,8 +4,7 @@
 #pragma once
 
 #include "godzilla/Types.h"
-#include "godzilla/Error.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -55,7 +54,7 @@ public:
     void
     zero()
     {
-        assert(this->data != nullptr);
+        assert_true(this->data != nullptr, "Internal data storage is not allocated");
         for (Int i = 0; i < this->n_rows * this->n_cols; ++i)
             this->data[i] = 0;
     }
@@ -78,9 +77,9 @@ public:
     const T &
     get(Int row, Int col) const
     {
-        assert(this->data != nullptr);
-        assert((row >= 0) && (row < this->n_rows));
-        assert((col >= 0) && (col < this->n_cols));
+        assert_true(this->data != nullptr, "Internal data storage is not allocated");
+        assert_true((row >= 0) && (row < this->n_rows), "Row index out of bounds");
+        assert_true((col >= 0) && (col < this->n_cols), "Column index out of bounds");
         return this->data[idx(row, col)];
     }
 
@@ -90,7 +89,7 @@ public:
     void
     set(const T & val)
     {
-        assert(this->data != nullptr);
+        assert_true(this->data != nullptr, "Internal data storage is not allocated");
         for (Int i = 0; i < this->n_rows * this->n_cols; ++i)
             this->data[i] = val;
     }
@@ -103,9 +102,9 @@ public:
     T &
     set(Int row, Int col)
     {
-        assert(this->data != nullptr);
-        assert((row >= 0) && (row < this->n_rows));
-        assert((col >= 0) && (col < this->n_cols));
+        assert_true(this->data != nullptr, "Internal data storage is not allocated");
+        assert_true((row >= 0) && (row < this->n_rows), "Row index out of bounds");
+        assert_true((col >= 0) && (col < this->n_cols), "Column index out of bounds");
         return this->data[idx(row, col)];
     }
 

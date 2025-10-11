@@ -8,8 +8,8 @@
 #include "godzilla/Math.h"
 #include "godzilla/DenseMatrix.h"
 #include "godzilla/Utils.h"
+#include "godzilla/Assert.h"
 #include "mpicpp-lite/mpicpp-lite.h"
-#include <cassert>
 #include <initializer_list>
 #include <type_traits>
 
@@ -68,7 +68,7 @@ public:
     const T &
     get(Int i) const
     {
-        assert((i >= 0) && (i < N));
+        assert_true((i >= 0) && (i < N), "Index out of bounds");
         return DenseMatrix<T, N, 1>::get(i, 0);
     }
 
@@ -79,7 +79,7 @@ public:
     T &
     set(Int i)
     {
-        assert((i >= 0) && (i < N));
+        assert_true((i >= 0) && (i < N), "Index out of bounds");
         return DenseMatrix<T, N, 1>::set(i, 0);
     }
 

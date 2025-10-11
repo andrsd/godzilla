@@ -12,7 +12,7 @@
 #include "godzilla/Validation.h"
 #include "godzilla/Utils.h"
 #include "godzilla/Exception.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 #include "fmt/format.h"
 #include "fmt/ranges.h"
 #include "yaml-cpp/node/iterator.h"
@@ -189,7 +189,7 @@ InputFile::build_outputs()
         params->set<Problem *>("_problem", this->problem);
         params->set<MeshObject *>("_mesh_obj", this->mesh_obj);
         auto output = this->app->build_object<Output>(blk.name(), params);
-        assert(this->problem != nullptr);
+        assert_true(this->problem != nullptr, "Problem is null");
         this->problem->add_output(output);
     }
 }
