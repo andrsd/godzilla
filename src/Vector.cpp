@@ -6,7 +6,6 @@
 #include "godzilla/Exception.h"
 #include "godzilla/CallStack.h"
 #include "godzilla/NestVector.h"
-#include <cassert>
 #include <petscvec.h>
 
 namespace godzilla {
@@ -240,8 +239,10 @@ void
 Vector::set_values(const std::vector<Int> & ix, const std::vector<Scalar> & y, InsertMode mode)
 {
     CALL_STACK_MSG();
-    assert(ix.size() == y.size());
-    PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
+    if (ix.size() == y.size())
+        PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
+    else
+        throw Exception("Number of indices does not match the number of values");
 }
 
 void
@@ -250,8 +251,10 @@ Vector::set_values(const DynDenseVector<Int> & ix,
                    InsertMode mode)
 {
     CALL_STACK_MSG();
-    assert(ix.size() == y.size());
-    PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
+    if (ix.size() == y.size())
+        PETSC_CHECK(VecSetValues(this->obj, ix.size(), ix.data(), y.data(), mode));
+    else
+        throw Exception("Number of indices does not match the number of values");
 }
 
 void
@@ -260,8 +263,10 @@ Vector::set_values_local(const std::vector<Int> & ix,
                          InsertMode mode)
 {
     CALL_STACK_MSG();
-    assert(ix.size() == y.size());
-    PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
+    if (ix.size() == y.size())
+        PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
+    else
+        throw Exception("Number of indices does not match the number of values");
 }
 
 void
@@ -270,8 +275,10 @@ Vector::set_values_local(const DynDenseVector<Int> & ix,
                          InsertMode mode)
 {
     CALL_STACK_MSG();
-    assert(ix.size() == y.size());
-    PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
+    if (ix.size() == y.size())
+        PETSC_CHECK(VecSetValuesLocal(this->obj, ix.size(), ix.data(), y.data(), mode));
+    else
+        throw Exception("Number of indices does not match the number of values");
 }
 
 Scalar
@@ -492,13 +499,15 @@ void
 maxpy(Vector & y, const std::vector<Scalar> & alpha, const std::vector<Vector> & x)
 {
     CALL_STACK_MSG();
-    assert(alpha.size() == x.size());
-
-    auto n = alpha.size();
-    std::vector<Vec> xx(n);
-    for (std::size_t i = 0; i < n; ++i)
-        xx[i] = (Vec) x[i];
-    PETSC_CHECK(VecMAXPY(y, n, alpha.data(), xx.data()));
+    if (alpha.size() == x.size()) {
+        auto n = alpha.size();
+        std::vector<Vec> xx(n);
+        for (std::size_t i = 0; i < n; ++i)
+            xx[i] = (Vec) x[i];
+        PETSC_CHECK(VecMAXPY(y, n, alpha.data(), xx.data()));
+    }
+    else
+        throw Exception("Number of multipliers does not match the number of vectors");
 }
 
 void
