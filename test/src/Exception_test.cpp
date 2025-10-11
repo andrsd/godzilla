@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "godzilla/Exception.h"
+#include "godzilla/CallStack.h"
 
 using namespace godzilla;
 
@@ -20,7 +21,7 @@ namespace {
 void
 raise()
 {
-    internal::CallStack::Msg msg2("fn2");
+    internal::CallStack::Msg msg2(__FILE__, __LINE__, "fn2");
     throw Exception("error");
 }
 
@@ -28,7 +29,7 @@ raise()
 
 TEST(Exception, call_stack)
 {
-    internal::CallStack::Msg msg1("fn1");
+    internal::CallStack::Msg msg1(__FILE__, __LINE__, "fn1");
     try {
         raise();
         FAIL();
@@ -36,8 +37,8 @@ TEST(Exception, call_stack)
     catch (Exception & e) {
         auto & cs = e.get_call_stack();
         EXPECT_EQ(cs.size(), 2);
-        EXPECT_EQ(cs.at(0), "fn2");
-        EXPECT_EQ(cs.at(1), "fn1");
+        EXPECT_THAT(cs.at(0), testing::HasSubstr("fn2"));
+        EXPECT_THAT(cs.at(1), testing::HasSubstr("fn1"));
     }
 }
 

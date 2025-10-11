@@ -11,11 +11,13 @@ namespace internal {
 // global instance of the call stack object
 static CallStack callstack;
 
-// Call Stack Object ////
+// Call Stack Object
 
-CallStack::Msg::Msg(const char * func)
+CallStack::Msg::Msg(const char * loc, int line_no, const char * func)
 {
     this->msg = fmt::format("{}", func);
+    this->location = loc;
+    this->line_no = line_no;
     callstack.add(this);
 }
 
@@ -24,7 +26,7 @@ CallStack::Msg::~Msg()
     callstack.remove(this);
 }
 
-// Signals ////
+// Signals
 
 static void
 sighandler(int signo)
@@ -62,7 +64,13 @@ CallStack::dump()
         PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "Call stack:\n");
         for (int n = 0, i = this->size - 1; i >= 0; --i, ++n) {
             Msg * m = this->stack[i];
-            PetscFPrintf(PETSC_COMM_WORLD, PETSC_STDERR, "  #%d: %s\n", n, m->msg.c_str());
+            PetscFPrintf(PETSC_COMM_WORLD,
+                         PETSC_STDERR,
+                         "  #%d: %s (%s:%d)\n",
+                         n,
+                         m->msg.c_str(),
+                         m->location.c_str(),
+                         m->line_no);
         }
     }
     else

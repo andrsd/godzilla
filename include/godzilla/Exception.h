@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "godzilla/CallStack.h"
 #include "fmt/format.h"
 #include <exception>
 #include <string>
