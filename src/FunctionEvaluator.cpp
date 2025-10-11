@@ -5,10 +5,10 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Function.h"
 #include "godzilla/Exception.h"
+#include "godzilla/Types.h"
+#include "godzilla/Assert.h"
 #include "fmt/format.h"
 #include "fmt/ranges.h"
-#include "godzilla/Types.h"
-#include <cassert>
 
 namespace godzilla {
 
@@ -91,7 +91,8 @@ FunctionEvaluator::evaluate(Dimension dim, Real time, const Real x[], Int nc, Re
 
         int n_num;
         mu::value_type * val = this->parser.Eval(n_num);
-        assert(nc == n_num);
+        assert_true(nc == n_num,
+                    "Number of computed values does not match the number of components specified");
         for (int i = 0; i < n_num; ++i)
             u[i] = val[i];
         return true;
