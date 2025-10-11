@@ -4,6 +4,7 @@
 #pragma once
 
 #include "godzilla/Exception.h"
+#include "godzilla/CallStack.h"
 #include "fmt/format.h"
 #include <filesystem>
 #include <vector>

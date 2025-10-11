@@ -13,30 +13,30 @@ namespace internal {
     // In Release builds these macros do nothing
     #define CALL_STACK_MSG(...)
 #else
-    // clang-format off
+// clang-format off
     #define CALL_STK_MSG0() \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__PRETTY_FUNCTION__)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, __PRETTY_FUNCTION__)
     #define CALL_STK_MSG1(fmt) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt)
     #define CALL_STK_MSG2(fmt, p1) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1)
     #define CALL_STK_MSG3(fmt, p1, p2) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2)
     #define CALL_STK_MSG4(fmt, p1, p2, p3) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3)
     #define CALL_STK_MSG5(fmt, p1, p2, p3, p4) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4)
     #define CALL_STK_MSG6(fmt, p1, p2, p3, p4, p5) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5)
     #define CALL_STK_MSG7(fmt, p1, p2, p3, p4, p5, p6) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5, p6)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6)
     #define CALL_STK_MSG8(fmt, p1, p2, p3, p4, p5, p6, p7) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5, p6, p7)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7)
     #define CALL_STK_MSG9(fmt, p1, p2, p3, p4, p5, p6, p7, p8) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5, p6, p7, p8)
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7, p8)
     #define CALL_STK_MSG10(fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9)
-    #define GET_CALL_STK_MACRO(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, NAME, ...) NAME
+        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9)
+    #define GET_CALL_STK_MACRO(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, NAME, ...) NAME
 // clang-format on
 
 /// Place at the beginning of a method/function
@@ -59,6 +59,7 @@ namespace internal {
 /// @endcode
     #define CALL_STACK_MSG(...)            \
         GET_CALL_STK_MACRO(_0,             \
+                           _1,             \
                            ##__VA_ARGS__,  \
                            CALL_STK_MSG10, \
                            CALL_STK_MSG9,  \
@@ -86,16 +87,22 @@ public:
     struct Msg {
         /// Construct call stack object
         ///
+        /// @param location File name
+        /// @param line_no Line number
         /// @param func Function name
-        Msg(const char * func);
+        Msg(const char * location, int line_no, const char * func);
 
         template <typename... T>
-        Msg(fmt::format_string<T...> format, T... args);
+        Msg(const char * location, int line_no, fmt::format_string<T...> format, T... args);
 
         ~Msg();
 
         /// Message
         std::string msg;
+        /// Location
+        std::string location;
+        /// Line number
+        int line_no;
     };
 
 public:
@@ -136,9 +143,11 @@ public:
 CallStack & get_callstack();
 
 template <typename... T>
-CallStack::Msg::Msg(fmt::format_string<T...> format, T... args)
+CallStack::Msg::Msg(const char * loc, int ln, fmt::format_string<T...> format, T... args)
 {
     this->msg = fmt::format(format, std::forward<T>(args)...);
+    this->location = loc;
+    this->line_no = ln;
     get_callstack().add(this);
 }
 

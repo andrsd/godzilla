@@ -67,8 +67,8 @@ TEST(CallStackTest, dump)
 
 TEST(CallStackTest, stack)
 {
-    godzilla::internal::CallStack::Msg msg1("fn1");
-    godzilla::internal::CallStack::Msg msg2("fn2");
+    godzilla::internal::CallStack::Msg msg1(__FILE__, __LINE__, "fn1");
+    godzilla::internal::CallStack::Msg msg2(__FILE__, __LINE__, "fn2");
 
     auto & cs = godzilla::internal::get_callstack();
     ASSERT_EQ(cs.get_size(), 2);
