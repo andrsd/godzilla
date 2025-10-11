@@ -3,7 +3,7 @@
 
 #include "godzilla/NaturalBC.h"
 #include "godzilla/CallStack.h"
-#include "godzilla/App.h"
+#include "godzilla/Assert.h"
 #include "godzilla/FEProblemInterface.h"
 #include "godzilla/BndResidualFunc.h"
 #include "godzilla/BndJacobianFunc.h"
@@ -32,7 +32,7 @@ NaturalBC::create()
 {
     CALL_STACK_MSG();
     auto dpi = get_discrete_problem_interface();
-    assert(dpi != nullptr);
+    assert_true(dpi != nullptr, "DiscreteProblemInterface is null");
 
     std::vector<std::string> field_names = dpi->get_field_names();
     if (field_names.size() == 1) {
