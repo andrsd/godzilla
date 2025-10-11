@@ -6,7 +6,7 @@
 #include "godzilla/Error.h"
 #include "godzilla/Exception.h"
 #include "godzilla/Types.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 #include <cstring>
 #include <initializer_list>
 #include <vector>
@@ -37,7 +37,8 @@ public:
 
     DenseMatrix(const DenseMatrixSymm<T, ROWS> & m)
     {
-        assert(COLS == ROWS);
+        static_assert(COLS == ROWS,
+                      "Unable to construct rectangular matrix from a symmetric matrix");
         for (Int i = 0; i < ROWS; ++i)
             for (Int j = 0; j < COLS; ++j)
                 set(i, j) = m(i, j);
@@ -69,8 +70,8 @@ public:
     const T &
     get(Int row, Int col) const
     {
-        assert((row >= 0) && (row < ROWS));
-        assert((col >= 0) && (col < COLS));
+        assert_true((row >= 0) && (row < ROWS), "Row index out of bounds");
+        assert_true((col >= 0) && (col < COLS), "Column index out of bounds");
         return this->values[idx(row, col)];
     }
 
@@ -108,8 +109,8 @@ public:
     T &
     set(Int row, Int col)
     {
-        assert((row >= 0) && (row < ROWS));
-        assert((col >= 0) && (col < COLS));
+        assert_true((row >= 0) && (row < ROWS), "Row index out of bounds");
+        assert_true((col >= 0) && (col < COLS), "Column index out of bounds");
         return this->values[idx(row, col)];
     }
 
@@ -121,8 +122,8 @@ public:
     void
     set(Int row, Int col, const T & val)
     {
-        assert((row >= 0) && (row < ROWS));
-        assert((col >= 0) && (col < COLS));
+        assert_true((row >= 0) && (row < ROWS), "Row index out of bounds");
+        assert_true((col >= 0) && (col < COLS), "Column index out of bounds");
         this->values[idx(row, col)] = val;
     }
 
@@ -134,7 +135,8 @@ public:
     void
     set_row(Int row, const std::vector<T> & vals)
     {
-        assert(vals.size() == COLS);
+        assert_true(vals.size() == COLS,
+                    "Number of values to assigned does not match the number of columns");
         for (Int i = 0; i < COLS; ++i)
             set(row, i) = vals[i];
     }
@@ -142,7 +144,8 @@ public:
     void
     set_row(Int row, std::initializer_list<T> vals)
     {
-        assert(static_cast<Int>(vals.size()) == COLS);
+        assert_true(static_cast<Int>(vals.size()) == COLS,
+                    "Number of values to assigned does not match the number of columns");
         Int i = 0;
         for (const T & val : vals)
             set(row, i++) = val;
@@ -170,7 +173,8 @@ public:
     void
     set_col(Int col, std::initializer_list<T> vals)
     {
-        assert(vals.size() == ROWS);
+        assert_true(vals.size() == ROWS,
+                    "Number of values to assigned does not match the number of rows");
         Int i = 0;
         for (const T & val : vals)
             set(i++, col) = val;
@@ -179,7 +183,8 @@ public:
     void
     set_col(Int col, const std::vector<T> & vals)
     {
-        assert(vals.size() == ROWS);
+        assert_true(vals.size() == ROWS,
+                    "Number of values to assigned does not match the number of rows");
         for (Int i = 0; i < ROWS; ++i)
             set(i, col) = vals[i];
     }
@@ -241,7 +246,7 @@ public:
     void
     add(const DenseMatrixSymm<T, ROWS> & x)
     {
-        assert(ROWS == COLS);
+        static_assert(ROWS == COLS, "Unable to add symmetric matrix to a rectangular matrix");
         for (Int i = 0; i < ROWS; ++i)
             for (Int j = 0; j < COLS; ++j)
                 set(i, j) += x.get(i, j);
@@ -264,7 +269,7 @@ public:
     void
     subtract(const DenseMatrixSymm<T, ROWS> & x)
     {
-        assert(ROWS == COLS);
+        static_assert(ROWS == COLS, "Unable to subtract symmetric matrix to a rectangular matrix");
         for (Int i = 0; i < ROWS; ++i)
             for (Int j = 0; j < COLS; ++j)
                 set(i, j) -= x.get(i, j);
@@ -338,7 +343,7 @@ public:
     DenseVector<T, COLS>
     diagonal() const
     {
-        assert(ROWS == COLS);
+        static_assert(ROWS == COLS, "Unable to get diagonal of a rectangular matrix");
         DenseVector<T, COLS> diag;
         for (Int i = 0; i < COLS; ++i)
             diag(i) = get(i, i);
@@ -400,7 +405,7 @@ public:
     DenseMatrix<T, ROWS>
     operator+(const DenseMatrixSymm<T, ROWS> & a) const
     {
-        assert(ROWS == COLS);
+        static_assert(ROWS == COLS, "Unable to add symmetric matrix to a rectangular matrix");
         DenseMatrix<T, ROWS> res;
         for (Int i = 0; i < ROWS; ++i)
             for (Int j = 0; j < COLS; ++j)
@@ -443,7 +448,7 @@ public:
     DenseMatrix<T, ROWS>
     operator-(const DenseMatrixSymm<T, ROWS> & a) const
     {
-        assert(ROWS == COLS);
+        static_assert(ROWS == COLS, "Unable to subtract symmetric matrix to a rectangular matrix");
         DenseMatrix<T, ROWS> res;
         for (Int i = 0; i < ROWS; ++i)
             for (Int j = 0; j < COLS; ++j)
@@ -489,7 +494,7 @@ public:
     DenseMatrix<T, ROWS> &
     operator=(const DenseMatrixSymm<T, ROWS> & m)
     {
-        assert(COLS == ROWS);
+        static_assert(ROWS == COLS, "Unable to assign symmetric matrix to a rectangular matrix");
         for (Int i = 0; i < ROWS; ++i)
             for (Int j = 0; j < COLS; ++j)
                 set(i, j) = m(i, j);
@@ -519,7 +524,8 @@ public:
     static DenseMatrix<T, ROWS, ROWS>
     create_symm(const std::vector<T> & vals)
     {
-        assert(vals.size() == (ROWS * (ROWS + 1) / 2));
+        assert_true(vals.size() == (ROWS * (ROWS + 1) / 2),
+                    "Incorrect number of values to assign into a symmetric matrix");
         DenseMatrix<T, ROWS, ROWS> res;
         // store upper triangular
         for (Int i = 0, k = 0; i < ROWS; ++i)
