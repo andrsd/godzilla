@@ -17,7 +17,7 @@
 #include "godzilla/TimeSteppingAdaptor.h"
 #include "godzilla/Postprocessor.h"
 #include "godzilla/CallStack.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -56,7 +56,7 @@ GYMLFile::build_functions()
         Block blk = get_block(funcs_block, it.first.as<std::string>());
         Parameters * params = build_params(blk);
         auto fn = get_app()->build_object<Function>(blk.name(), params);
-        assert(get_problem() != nullptr);
+        assert_true(get_problem() != nullptr, "Problem is nullptr");
         get_problem()->add_function(fn);
     }
 }
