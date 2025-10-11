@@ -5,7 +5,7 @@
 #include "godzilla/CallStack.h"
 #include "godzilla/Error.h"
 #include "godzilla/PetscObjectWrapper.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 
 namespace godzilla {
 
@@ -68,7 +68,7 @@ Int
 StarForest::Graph::find_leaf(Int point) const
 {
     CALL_STACK_MSG();
-    assert(this->leaves != nullptr);
+    assert_true(this->leaves != nullptr, "Leaves are not allocated");
     Int idx;
     PETSC_CHECK(PetscFindInt(point, this->n_leaves, this->leaves, &idx));
     return idx;
