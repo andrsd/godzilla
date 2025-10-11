@@ -64,11 +64,14 @@ Int
 MeshNetwork::add_sub_network(const std::string & name, std::vector<Int> & edge_list)
 {
     CALL_STACK_MSG();
-    assert(edge_list.size() % 2 == 0);
-    Int n = edge_list.size() / 2;
-    Int num;
-    PETSC_CHECK(DMNetworkAddSubnetwork(this->netw_, NULL, n, edge_list.data(), &num));
-    return num;
+    if (edge_list.size() % 2 == 0) {
+        Int n = edge_list.size() / 2;
+        Int num;
+        PETSC_CHECK(DMNetworkAddSubnetwork(this->netw_, NULL, n, edge_list.data(), &num));
+        return num;
+    }
+    else
+        throw Exception("Edge list size ({}) must be divisible by 2", edge_list.size());
 }
 
 void
