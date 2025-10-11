@@ -3,8 +3,6 @@
 
 #include "godzilla/ConstantAuxiliaryField.h"
 #include "godzilla/CallStack.h"
-#include "godzilla/FEProblemInterface.h"
-#include <cassert>
 
 namespace godzilla {
 
@@ -22,7 +20,8 @@ ConstantAuxiliaryField::ConstantAuxiliaryField(const Parameters & params) :
     values(params.get<std::vector<Real>>("value"))
 {
     CALL_STACK_MSG();
-    assert(!this->values.empty());
+    if (this->values.empty())
+        log_error("No values provided");
 }
 
 Int
