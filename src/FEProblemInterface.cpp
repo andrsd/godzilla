@@ -226,7 +226,8 @@ FEProblemInterface::get_field_component_name(FieldID fid, Int component) const
         if (fi.nc == 1)
             return { "" };
         else {
-            assert_true(component < it->second.nc && component < it->second.component_names.size(),
+            assert_true(component < it->second.nc &&
+                            std::cmp_less(component, it->second.component_names.size()),
                         "Component index out of bounds");
             return it->second.component_names.at(component);
         }
@@ -242,7 +243,8 @@ FEProblemInterface::set_field_component_name(FieldID fid, Int component, const s
     const auto & it = this->fields.find(fid);
     if (it != this->fields.end()) {
         if (it->second.nc > 1) {
-            assert_true(component < it->second.nc && component < it->second.component_names.size(),
+            assert_true(component < it->second.nc &&
+                            std::cmp_less(component, it->second.component_names.size()),
                         "Component index out of bounds");
             it->second.component_names[component] = name;
         }
@@ -341,7 +343,8 @@ FEProblemInterface::get_aux_field_component_name(FieldID fid, Int component) con
         if (fi.nc == 1)
             return { "" };
         else {
-            assert_true(component < it->second.nc && component < it->second.component_names.size(),
+            assert_true(component < it->second.nc &&
+                            std::cmp_less(component, it->second.component_names.size()),
                         "Component index out of bounds");
             return it->second.component_names.at(component);
         }
@@ -359,7 +362,8 @@ FEProblemInterface::set_aux_field_component_name(FieldID fid,
     const auto & it = this->aux_fields.find(fid);
     if (it != this->aux_fields.end()) {
         if (it->second.nc > 1) {
-            assert_true(component < it->second.nc && component < it->second.component_names.size(),
+            assert_true(component < it->second.nc &&
+                            std::cmp_less(component, it->second.component_names.size()),
                         "Component index out of bounds");
             it->second.component_names[component] = name;
         }
