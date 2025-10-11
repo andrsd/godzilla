@@ -2,28 +2,37 @@
 // SPDX-License-Identifier: MIT
 
 #include "godzilla/CallStack.h"
+#include "godzilla/MemoryArena.h"
 #include "petscsys.h"
 #include <csignal>
 
 namespace godzilla {
 namespace internal {
 
+/// Number of bytes reserved per call stack message (both for location and function name)
+constexpr unsigned int MAX_MSG_LEN = 512;
+// Memory area for allocating callstack object strings
+MemoryArena<char> callstack_arena(CallStack::MAX_SIZE * MAX_MSG_LEN);
+// Custom allocator
+MemoryArenaAllocator<char> callstack_alloc(callstack_arena);
 // global instance of the call stack object
 static CallStack callstack;
 
 // Call Stack Object
 
-CallStack::Msg::Msg(const char * loc, int line_no, const char * func)
+CallStack::Msg::Msg(const char * loc, int line_no, const char * func) :
+    marker(callstack_arena.mark()),
+    msg(func, callstack_alloc),
+    location(loc, callstack_alloc),
+    line_no(line_no)
 {
-    this->msg = fmt::format("{}", func);
-    this->location = loc;
-    this->line_no = line_no;
     callstack.add(this);
 }
 
 CallStack::Msg::~Msg()
 {
     callstack.remove(this);
+    callstack_arena.rewind(this->marker);
 }
 
 // Signals

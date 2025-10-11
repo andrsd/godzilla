@@ -3,40 +3,38 @@
 
 #pragma once
 
-#include <array>
+#include "godzilla/MemoryArena.h"
+#include "godzilla/Allocators.h"
 #include "fmt/format.h"
+#include <array>
 
 namespace godzilla {
 namespace internal {
 
-#if defined(NDEBUG)
-    // In Release builds these macros do nothing
-    #define CALL_STACK_MSG(...)
-#else
 // clang-format off
-    #define CALL_STK_MSG0() \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, __PRETTY_FUNCTION__)
-    #define CALL_STK_MSG1(fmt) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt)
-    #define CALL_STK_MSG2(fmt, p1) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1)
-    #define CALL_STK_MSG3(fmt, p1, p2) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2)
-    #define CALL_STK_MSG4(fmt, p1, p2, p3) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3)
-    #define CALL_STK_MSG5(fmt, p1, p2, p3, p4) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4)
-    #define CALL_STK_MSG6(fmt, p1, p2, p3, p4, p5) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5)
-    #define CALL_STK_MSG7(fmt, p1, p2, p3, p4, p5, p6) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6)
-    #define CALL_STK_MSG8(fmt, p1, p2, p3, p4, p5, p6, p7) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7)
-    #define CALL_STK_MSG9(fmt, p1, p2, p3, p4, p5, p6, p7, p8) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7, p8)
-    #define CALL_STK_MSG10(fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9) \
-        godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9)
-    #define GET_CALL_STK_MACRO(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, NAME, ...) NAME
+#define CALL_STK_MSG0() \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, __PRETTY_FUNCTION__)
+#define CALL_STK_MSG1(fmt) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt)
+#define CALL_STK_MSG2(fmt, p1) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1)
+#define CALL_STK_MSG3(fmt, p1, p2) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2)
+#define CALL_STK_MSG4(fmt, p1, p2, p3) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3)
+#define CALL_STK_MSG5(fmt, p1, p2, p3, p4) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4)
+#define CALL_STK_MSG6(fmt, p1, p2, p3, p4, p5) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5)
+#define CALL_STK_MSG7(fmt, p1, p2, p3, p4, p5, p6) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6)
+#define CALL_STK_MSG8(fmt, p1, p2, p3, p4, p5, p6, p7) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7)
+#define CALL_STK_MSG9(fmt, p1, p2, p3, p4, p5, p6, p7, p8) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7, p8)
+#define CALL_STK_MSG10(fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9) \
+    godzilla::internal::CallStack::Msg __call_stack_msg##__COUNTER__(__FILE__, __LINE__, fmt, p1, p2, p3, p4, p5, p6, p7, p8, p9)
+#define GET_CALL_STK_MACRO(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, NAME, ...) NAME
 // clang-format on
 
 /// Place at the beginning of a method/function
@@ -57,23 +55,25 @@ namespace internal {
 ///  ...your code here...
 /// }
 /// @endcode
-    #define CALL_STACK_MSG(...)            \
-        GET_CALL_STK_MACRO(_0,             \
-                           _1,             \
-                           ##__VA_ARGS__,  \
-                           CALL_STK_MSG10, \
-                           CALL_STK_MSG9,  \
-                           CALL_STK_MSG8,  \
-                           CALL_STK_MSG7,  \
-                           CALL_STK_MSG6,  \
-                           CALL_STK_MSG5,  \
-                           CALL_STK_MSG4,  \
-                           CALL_STK_MSG3,  \
-                           CALL_STK_MSG2,  \
-                           CALL_STK_MSG1,  \
-                           CALL_STK_MSG0)  \
-        (__VA_ARGS__)
-#endif
+#define CALL_STACK_MSG(...)            \
+    GET_CALL_STK_MACRO(_0,             \
+                       _1,             \
+                       ##__VA_ARGS__,  \
+                       CALL_STK_MSG10, \
+                       CALL_STK_MSG9,  \
+                       CALL_STK_MSG8,  \
+                       CALL_STK_MSG7,  \
+                       CALL_STK_MSG6,  \
+                       CALL_STK_MSG5,  \
+                       CALL_STK_MSG4,  \
+                       CALL_STK_MSG3,  \
+                       CALL_STK_MSG2,  \
+                       CALL_STK_MSG1,  \
+                       CALL_STK_MSG0)  \
+    (__VA_ARGS__)
+
+extern MemoryArena<char> callstack_arena;
+extern MemoryArenaAllocator<char> callstack_alloc;
 
 /// Call stack object
 ///
@@ -82,6 +82,9 @@ namespace internal {
 class CallStack {
 public:
     static const std::size_t MAX_SIZE = 256;
+
+    /// String that wll be allocated in our dedicated memory arena
+    using String = std::basic_string<char, std::char_traits<char>, MemoryArenaAllocator<char>>;
 
     /// Holds data for one call stack object
     struct Msg {
@@ -97,10 +100,11 @@ public:
 
         ~Msg();
 
+        MemoryArena<char>::Marker marker;
         /// Message
-        std::string msg;
+        String msg;
         /// Location
-        std::string location;
+        String location;
         /// Line number
         int line_no;
     };
@@ -143,11 +147,13 @@ public:
 CallStack & get_callstack();
 
 template <typename... T>
-CallStack::Msg::Msg(const char * loc, int ln, fmt::format_string<T...> format, T... args)
+CallStack::Msg::Msg(const char * loc, int ln, fmt::format_string<T...> format, T... args) :
+    marker(callstack_arena.mark()),
+    msg(fmt::format(format, std::forward<T>(args)...), callstack_alloc),
+    location(loc, callstack_alloc),
+    line_no(ln)
+
 {
-    this->msg = fmt::format(format, std::forward<T>(args)...);
-    this->location = loc;
-    this->line_no = ln;
     get_callstack().add(this);
 }
 
