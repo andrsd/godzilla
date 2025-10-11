@@ -8,7 +8,7 @@
 #include "godzilla/UnstructuredMesh.h"
 #include "godzilla/Utils.h"
 #include "godzilla/Exception.h"
-#include <cassert>
+#include "godzilla/Assert.h"
 #include <set>
 #include <fmt/chrono.h>
 
@@ -125,8 +125,8 @@ TecplotOutput::create()
     FileOutput::create();
 
     auto dpi = get_discrete_problem_interface();
-    assert(dpi != nullptr);
-    assert(get_problem() != nullptr);
+    assert_true(dpi != nullptr, "DiscreteProblemInterface is null");
+    assert_true(get_problem() != nullptr, "Problem is null");
 
     this->mesh = dpi->get_mesh();
     if (this->mesh == nullptr)
@@ -174,9 +174,10 @@ TecplotOutput::create()
             this->nodal_aux_var_fids.push_back(fid);
     }
 
-    assert(this->mesh != nullptr);
+    assert_true(this->mesh != nullptr, "Mesh is null");
     auto dim = this->mesh->get_dimension();
-    assert(dim == 1_D || dim == 2_D || dim == 3_D);
+    assert_true(dim == 1_D || dim == 2_D || dim == 3_D,
+                fmt::format("Unsupported dimension {}", dim));
     for (Int i = 0; i < dim; ++i)
         this->shared_vars.push_back(true);
     int32_t var_idx = dim;
@@ -220,7 +221,8 @@ TecplotOutput::open_file()
 
         const std::vector<std::string> coord_names = { "x", "y", "z" };
         auto dim = this->mesh->get_dimension();
-        assert(dim == 1_D || dim == 2_D || dim == 3_D);
+        assert_true(dim == 1_D || dim == 2_D || dim == 3_D,
+                    fmt::format("Unsupported dimension {}", dim));
         std::vector<std::string> var_names;
         for (Int i = 0; i < dim; ++i)
             var_names.push_back(coord_names[i]);
