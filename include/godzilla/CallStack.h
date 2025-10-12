@@ -95,4 +95,8 @@ public:
 CallStack & get_callstack();
 
 } // namespace internal
+
+/// Print call stack
+void print_call_stack(const std::vector<std::string> & call_stack);
+
 } // namespace godzilla

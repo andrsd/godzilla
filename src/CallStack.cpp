@@ -3,8 +3,10 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/MemoryArena.h"
+#include "godzilla/Utils.h"
 #include "petscsys.h"
 #include <csignal>
+#include <fmt/core.h>
 
 namespace godzilla {
 namespace internal {
@@ -129,4 +131,14 @@ CallStack::initialize()
 }
 
 } // namespace internal
+
+void
+print_call_stack(const std::vector<std::string> & call_stack)
+{
+    fmt::println("Call stack:");
+    for (auto [idx, str] : enumerate(call_stack)) {
+        fmt::println("  #{}: {}", idx, str);
+    }
+}
+
 } // namespace godzilla
