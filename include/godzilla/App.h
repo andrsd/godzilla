@@ -5,6 +5,7 @@
 
 #include "mpicpp-lite/mpicpp-lite.h"
 #include "cxxopts/cxxopts.hpp"
+#include "godzilla/CallStack.h"
 #include "godzilla/Parameters.h"
 #include "godzilla/Factory.h"
 #include "godzilla/PrintInterface.h"
