@@ -12,9 +12,9 @@ namespace internal {
 /// Number of bytes reserved per call stack message (both for location and function name)
 constexpr unsigned int MAX_MSG_LEN = 512;
 // Memory area for allocating callstack object strings
-MemoryArena<char> callstack_arena(CallStack::MAX_SIZE * MAX_MSG_LEN);
+static MemoryArena<char> callstack_arena(CallStack::MAX_SIZE * MAX_MSG_LEN);
 // Custom allocator
-MemoryArenaAllocator<char> callstack_alloc(callstack_arena);
+static MemoryArenaAllocator<char> callstack_alloc(callstack_arena);
 // global instance of the call stack object
 static CallStack callstack;
 

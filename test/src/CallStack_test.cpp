@@ -36,14 +36,14 @@ fn3()
 void
 fn2()
 {
-    CALL_STACK_MSG("fn2()");
+    CALL_STACK_MSG();
     fn3();
 }
 
 void
 fn1(int i, const std::string & s)
 {
-    CALL_STACK_MSG("fn1(i={}, s='{}')", i, s);
+    CALL_STACK_MSG();
     fn2();
 }
 
@@ -57,8 +57,8 @@ TEST(CallStackTest, dump)
     auto err = testing::internal::GetCapturedStderr();
     EXPECT_THAT(err, StartsWith("Call stack:"));
     EXPECT_THAT(err, HasSubstr("  #0: void unit_test::fn3()"));
-    EXPECT_THAT(err, HasSubstr("  #1: fn2()"));
-    EXPECT_THAT(err, HasSubstr("  #2: fn1(i=1, s='string')"));
+    EXPECT_THAT(err, HasSubstr("  #1: void unit_test::fn2()"));
+    EXPECT_THAT(err, HasSubstr("  #2: void unit_test::fn1(int, const std::string&)"));
 }
 
 TEST(CallStackTest, stack)
