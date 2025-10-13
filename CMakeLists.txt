@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(godzilla
-    VERSION 0.8
+    VERSION 0.9
     LANGUAGES C CXX
 )
 
