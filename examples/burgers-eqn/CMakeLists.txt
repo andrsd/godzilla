@@ -20,10 +20,25 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-        PRIVATE
+    PRIVATE
         godzilla
 )
 
 if (GODZILLA_BUILD_TESTS)
-    add_subdirectory(test)
+    add_test(
+        NAME ex-burgers-run
+        COMMAND ${PROJECT_NAME}
+    )
+    add_test(
+        NAME ex-burgers-diff
+        COMMAND
+            exodiff -Floor 1e-16
+                ${PROJECT_BINARY_DIR}/burgers.exo
+                ${PROJECT_SOURCE_DIR}/gold/burgers.exo
+    )
+    set_tests_properties(
+        ex-burgers-diff
+        PROPERTIES
+            DEPENDS ex-burgers-run
+    )
 endif()

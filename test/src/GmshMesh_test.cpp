@@ -48,9 +48,9 @@ TEST(GmshMeshTest, nonexitent_file)
     TestApp app;
 
     auto params = GmshMesh::parameters();
-    params.set<App *>("_app", &app);
-    params.set<std::string>("_name", "obj");
-    params.set<std::string>("file", "asdf.msh");
+    params.set<App *>("_app", &app)
+        .set<std::string>("_name", "obj")
+        .set<std::string>("file", "asdf.msh");
     GmshMesh mesh(params);
 
     EXPECT_FALSE(app.check_integrity());

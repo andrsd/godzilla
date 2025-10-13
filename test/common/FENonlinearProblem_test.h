@@ -12,8 +12,6 @@ public:
     SetUp() override
     {
         GodzillaAppTest::SetUp();
-        // this->app->get_registry().add<GTestFENonlinearProblem>("GTestFENonlinearProblem");
-
         {
             auto * params = this->app->get_parameters("LineMesh");
             params->set<Int>("nx", 2);
@@ -43,8 +41,6 @@ public:
     SetUp() override
     {
         GodzillaAppTest::SetUp();
-        // this->app->get_registry().add<GTest2FieldsFENonlinearProblem>(
-        //     "GTest2FieldsFENonlinearProblem");
 
         {
             auto * params = this->app->get_parameters("LineMesh");

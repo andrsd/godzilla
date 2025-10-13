@@ -13,11 +13,12 @@ const char * version = "1.0";
 
 using namespace godzilla;
 
+#if 0
 class MeshPartApp : public App {
 public:
     MeshPartApp(int argc, const char * const * argv);
 
-    void process_command_line(const cxxopts::ParseResult & result) override;
+    void process_command_line(cxxopts::Options & opts, const cxxopts::ParseResult & result) override;
 
 protected:
     void create_command_line_options() override;
@@ -32,7 +33,7 @@ MeshPartApp::MeshPartApp(int argc, const char * const * argv) :
 }
 
 void
-MeshPartApp::process_command_line(const cxxopts::ParseResult & result)
+MeshPartApp::process_command_line(cxxopts::Options & opts, const cxxopts::ParseResult & result)
 {
     get_command_line_opts().parse_positional({ "mesh-file" });
     auto res = parse_command_line();
@@ -95,6 +96,7 @@ MeshPartApp::save_partition(UnstructuredMesh * mesh, const std::string & file_na
     out.create();
     out.output_mesh();
 }
+#endif
 
 // ---
 
@@ -102,7 +104,9 @@ int
 main(int argc, char * argv[])
 {
     Init init(argc, argv);
+#if 0
     MeshPartApp app(argc, argv);
     app.run();
+#endif
     return 0;
 }

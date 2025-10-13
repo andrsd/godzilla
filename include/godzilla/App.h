@@ -28,19 +28,7 @@ public:
     /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const mpi::Communicator & comm,
-        const std::string & name,
-        int argc,
-        const char * const * argv);
-
-    /// Build an application
-    ///
-    /// @param comm MPI communicator
-    /// @param name Name of the application
-    /// @param args Command line arguments (without the executable name as first argument)
-    App(const mpi::Communicator & comm,
-        const std::string & name,
-        const std::vector<std::string> & args);
+    App(const mpi::Communicator & comm, const std::string & name);
 
     /// Build an application object
     ///
@@ -49,22 +37,7 @@ public:
     /// @param name Name of the application
     /// @param argc Number of command line arguments
     /// @param argv Command line arguments
-    App(const mpi::Communicator & comm,
-        Registry & registry,
-        const std::string & name,
-        int argc,
-        const char * const * argv);
-
-    /// Build an application object
-    ///
-    /// @param comm MPI communicator
-    /// @param registry Registry with classes that will be used by the application
-    /// @param name Name of the application
-    /// @param args Command line arguments (without the executable name as first argument)
-    App(const mpi::Communicator & comm,
-        Registry & registry,
-        const std::string & name,
-        const std::vector<std::string> & args);
+    App(const mpi::Communicator & comm, Registry & registry, const std::string & name);
 
     virtual ~App();
 
@@ -93,11 +66,6 @@ public:
     /// @return Factory that builds objects
     Factory & get_factory();
 
-    /// Get input file
-    ///
-    /// @return The input file
-    const InputFile * get_input_file() const;
-
     /// Get pointer to the `Problem` class in this application
     ///
     /// @return Get problem this application is representing
@@ -116,23 +84,15 @@ public:
 
     void set_problem(Problem * problem);
 
-    /// Parse command line arguments
-    ///
-    /// @return Result of parsing the command line
-    virtual cxxopts::ParseResult parse_command_line();
-
-    /// Process command line
-    ///
-    /// @param result Result from calling `parse_command_line` or `cxxopt::parse`
-    virtual void process_command_line(const cxxopts::ParseResult & result);
-
     /// Check integrity of the application
     ///
     /// @return `true` if the check passed, `false` otherwise
     bool check_integrity();
 
     /// Run the application
-    virtual void run();
+    ///
+    /// @return Exit code
+    virtual int run();
 
     /// Get level of verbosity
     ///
@@ -143,11 +103,6 @@ public:
     ///
     /// @param level Verbosity level
     void set_verbosity_level(unsigned int level);
-
-    /// Get the input file name
-    ///
-    /// @return The input file name
-    const std::string & get_input_file_name() const;
 
     /// Get restart file name
     ///
@@ -180,20 +135,6 @@ public:
     T * build_object(const std::string & obj_name, Parameters * parameters);
 
 protected:
-    /// Get command line options
-    ///
-    /// @return Command line options
-    cxxopts::Options & get_command_line_opts();
-
-    /// Create command line options
-    ///
-    virtual void create_command_line_options();
-
-    /// Run the input file
-    ///
-    /// @param input_file_name Input file name
-    void run_input_file(const std::string & input_file_name);
-
     /// Run the problem build via `build_from_yml`
     void run_problem();
 
@@ -207,9 +148,6 @@ protected:
     void write_perf_log(const std::string file_name, std::chrono::duration<double> run_time) const;
 
 private:
-    /// Create an input file instance
-    virtual Qtr<InputFile> create_input_file();
-
     /// Application name
     std::string name;
 
@@ -222,12 +160,6 @@ private:
     /// Log with errors and/or warnings
     Qtr<Logger> logger;
 
-    /// Command line arguments
-    std::vector<std::string> args;
-
-    /// Command line options
-    cxxopts::Options cmdln_opts;
-
     /// Verbosity level
     unsigned int verbosity_level;
 
@@ -236,9 +168,6 @@ private:
 
     /// Performance log file name
     std::string perf_log_file_name;
-
-    /// YML file with application objects
-    Qtr<InputFile> yml;
 
     /// Pointer to `Problem`
     Problem * problem;

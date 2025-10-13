@@ -55,9 +55,10 @@ TEST(VTKOutputTest, wrong_mesh_type)
     TestProblem prob(prob_pars);
 
     auto pars = VTKOutput::parameters();
-    pars.set<App *>("_app", &app);
-    pars.set<Problem *>("_problem", &prob);
-    pars.set<MeshObject *>("_mesh_obj", &mesh);
+    pars.set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<std::string>("file", "vtk-file");
     VTKOutput out(pars);
     prob.add_output(&out);
 
@@ -87,14 +88,15 @@ TEST(VTKOutputTest, test)
     TestProblem prob(prob_pars);
 
     auto pars = VTKOutput::parameters();
-    pars.set<App *>("_app", &app);
-    pars.set<Problem *>("_problem", &prob);
-    pars.set<MeshObject *>("_mesh_obj", &mesh);
+    pars.set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<std::string>("file", "vtk-file");
     VTKOutput out(pars);
 
     prob.add_output(&out);
     prob.create();
 
-    EXPECT_EQ(out.get_file_name(), ".vtk");
+    EXPECT_EQ(out.get_file_name(), "vtk-file.vtk");
     out.output_step();
 }

@@ -5,7 +5,7 @@
 
 Registry registry;
 
-TestApp::TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), ::registry, "godzilla", {})
+TestApp::TestApp() : App(mpi::Communicator(MPI_COMM_WORLD), ::registry, "godzilla")
 {
     App::register_objects(::registry);
     ::registry.add<GTestFENonlinearProblem>("GTestFENonlinearProblem");

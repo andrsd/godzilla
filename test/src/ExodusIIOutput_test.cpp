@@ -45,8 +45,9 @@ TEST(ExodusIIOutputTest, create)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
+    params.set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob)
+        .set<std::string>("file", "exo-file");
     ExodusIIOutput out(params);
 
     prob.add_output(&out);
@@ -70,9 +71,10 @@ TEST(ExodusIIOutputTest, non_existent_var)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    params.set<std::vector<std::string>>("variables", { "asdf" });
+    params.set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob)
+        .set<std::vector<std::string>>("variables", { "asdf" })
+        .set<std::string>("file", "exo-file");
     ExodusIIOutput out(params);
 
     prob.add_output(&out);
@@ -143,9 +145,10 @@ TEST(ExodusIIOutputTest, fe_check)
     TestLinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    params.set<MeshObject *>("_mesh_obj", &mesh);
+    params.set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob)
+        .set<MeshObject *>("_mesh_obj", &mesh)
+        .set<std::string>("file", "exo-file");
     ExodusIIOutput out(params);
     prob.add_output(&out);
 
@@ -175,8 +178,9 @@ TEST(ExodusIIOutputTest, output)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
+    params.set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob)
+        .set<std::string>("file", "exo-file");
     ExodusIIOutput out(params);
     prob.add_output(&out);
 
@@ -204,9 +208,9 @@ TEST(ExodusIIOutputTest, set_file_name)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    params.set<std::string>("file", "out");
+    params.set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob)
+        .set<std::string>("file", "out");
     ExodusIIOutput out(params);
 
     out.create();
@@ -229,9 +233,9 @@ TEST(ExodusIIOutputTest, set_seq_file_name)
     GTestFENonlinearProblem prob(prob_pars);
 
     auto params = ExodusIIOutput::parameters();
-    params.set<App *>("_app", &app);
-    params.set<Problem *>("_problem", &prob);
-    params.set<std::string>("file", "out");
+    params.set<App *>("_app", &app)
+        .set<Problem *>("_problem", &prob)
+        .set<std::string>("file", "out");
     ExodusIIOutput out(params);
 
     out.create();

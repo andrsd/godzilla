@@ -1,8 +1,7 @@
-#include "PoissonApp.h"
 #include "PoissonEquation.h"
 #include "godzilla/App.h"
 #include "godzilla/Init.h"
-#include "godzilla/LineMesh.h"
+#include "godzilla/BoxMesh.h"
 #include "godzilla/ConstantInitialCondition.h"
 #include "godzilla/DirichletBC.h"
 #include "godzilla/FunctionAuxiliaryField.h"
@@ -15,23 +14,27 @@ main(int argc, char * argv[])
         mpi::Communicator comm(MPI_COMM_WORLD);
         godzilla::Init init(argc, argv);
 
-        PoissonApp app(comm, "poisson", argc, argv);
+        godzilla::App app(comm, "poisson-3d");
         app.set_verbosity_level(9);
-        return app.run();
 
-#if 0
-        auto mesh_pars = LineMesh::parameters();
+        auto mesh_pars = BoxMesh::parameters();
         mesh_pars.set<godzilla::App *>("_app", &app)
             .set<Int>("nx", 2)
+            .set<Int>("ny", 2)
+            .set<Int>("nz", 2)
             .set<Real>("xmin", 0)
-            .set<Real>("xmax", 2);
-        LineMesh lm(mesh_pars);
+            .set<Real>("xmax", 2)
+            .set<Real>("ymin", 0)
+            .set<Real>("ymax", 2)
+            .set<Real>("zmin", 0)
+            .set<Real>("zmax", 2);
+        BoxMesh bm(mesh_pars);
 
         auto prob_pars = PoissonEquation::parameters();
         // clang-format off
         prob_pars
             .set<godzilla::App *>("_app", &app)
-            .set<MeshObject *>("_mesh_obj", &lm);
+            .set<MeshObject *>("_mesh_obj", &bm);
         // clang-format on
         PoissonEquation prob(prob_pars);
         app.set_problem(&prob);
@@ -39,7 +42,7 @@ main(int argc, char * argv[])
         auto aux_pars = FunctionAuxiliaryField::parameters();
         aux_pars.set<godzilla::App *>("_app", &app)
             .set<DiscreteProblemInterface *>("_dpi", &prob)
-            .set<std::vector<std::string>>("value", { "-2" });
+            .set<std::vector<std::string>>("value", { "-6" });
         FunctionAuxiliaryField aux(aux_pars);
         prob.add_auxiliary_field(&aux);
 
@@ -54,24 +57,26 @@ main(int argc, char * argv[])
         auto bc_pars = DirichletBC::parameters();
         bc_pars.set<godzilla::App *>("_app", &app)
             .set<DiscreteProblemInterface *>("_dpi", &prob)
-            .set<std::vector<std::string>>("boundary", { "left", "right" })
-            .set<std::vector<std::string>>("value", { "x*x" });
+            .set<std::vector<std::string>>("boundary",
+                                           { "left", "right", "top", "bottom", "front", "back" })
+            .set<std::vector<std::string>>("value", { "x*x + y*y + z*z" });
         DirichletBC bc(bc_pars);
         prob.add_boundary_condition(&bc);
 
         auto out_pars = ExodusIIOutput::parameters();
         out_pars.set<godzilla::App *>("_app", &app)
             .set<Problem *>("_problem", &prob)
-            .set<MeshObject *>("_mesh_obj", &lm)
-            .set<std::string>("file", "mms-1d")
+            .set<MeshObject *>("_mesh_obj", &bm)
+            .set<std::string>("file", "mms-3d")
             .set<std::vector<std::string>>("variables", { "u" });
         ExodusIIOutput out(out_pars);
         prob.add_output(&out);
 
-        lm.create();
+        bm.create();
         prob.create();
         prob.run();
-#endif
+
+        return 0;
     }
     catch (Exception & e) {
         fmt::println("{}", e.what());

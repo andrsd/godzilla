@@ -1,4 +1,3 @@
-#include "PoissonApp.h"
 #include "PoissonEquation.h"
 #include "godzilla/App.h"
 #include "godzilla/Init.h"
@@ -15,11 +14,9 @@ main(int argc, char * argv[])
         mpi::Communicator comm(MPI_COMM_WORLD);
         godzilla::Init init(argc, argv);
 
-        PoissonApp app(comm, "poisson", argc, argv);
+        godzilla::App app(comm, "poisson-1d");
         app.set_verbosity_level(9);
-        return app.run();
 
-#if 0
         auto mesh_pars = LineMesh::parameters();
         mesh_pars.set<godzilla::App *>("_app", &app)
             .set<Int>("nx", 2)
@@ -71,7 +68,8 @@ main(int argc, char * argv[])
         lm.create();
         prob.create();
         prob.run();
-#endif
+
+        return 0;
     }
     catch (Exception & e) {
         fmt::println("{}", e.what());

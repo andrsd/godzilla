@@ -3,6 +3,7 @@
 
 #include "godzilla/CallStack.h"
 #include "godzilla/FileOutput.h"
+#include "godzilla/Exception.h"
 #include "godzilla/Problem.h"
 #include "godzilla/App.h"
 #include "godzilla/DiscreteProblemInterface.h"
@@ -33,8 +34,9 @@ FileOutput::create()
     CALL_STACK_MSG();
     Output::create();
     if (this->file_base.empty()) {
-        std::filesystem::path input_file_name(get_app()->get_input_file_name());
-        this->file_base = input_file_name.stem().string();
+        throw Exception("FIXME");
+        // std::filesystem::path input_file_name(get_app()->get_input_file_name());
+        // this->file_base = input_file_name.stem().string();
     }
 
     this->file_name = create_file_name();

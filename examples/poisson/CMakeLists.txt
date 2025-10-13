@@ -3,27 +3,31 @@ project(poisson)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-file(GLOB SRCS CONFIGURE_DEPENDS src/*.cpp)
+add_executable(
+    poisson
+        src/PoissonApp.cpp
+        src/PoissonEquation.cpp
+        src/main.cpp
+)
 
-add_executable(${PROJECT_NAME} ${SRCS})
-
-target_sanitization(${PROJECT_NAME})
+target_compile_options(
+    poisson
+    PRIVATE
+        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/include=include
+        -ffile-prefix-map=${CMAKE_SOURCE_DIR}/src=godzilla/src
+        -ffile-prefix-map=${PROJECT_SOURCE_DIR}=${PROJECT_NAME}
+)
 
 target_include_directories(
-    ${PROJECT_NAME}
+    poisson
     PUBLIC
-        ${PROJECT_SOURCE_DIR}/include
         ${CMAKE_BINARY_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/contrib
 )
 
 target_link_libraries(
-    ${PROJECT_NAME}
-        PRIVATE
+    poisson
+    PRIVATE
         godzilla
 )
-
-if (GODZILLA_BUILD_TESTS)
-    add_subdirectory(test)
-endif()

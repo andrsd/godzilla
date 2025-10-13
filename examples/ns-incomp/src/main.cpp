@@ -19,7 +19,7 @@ main(int argc, char * argv[])
         godzilla::Init init(argc, argv);
         register_objects(registry);
 
-        godzilla::App app(comm, registry, "ns-incomp", argc, argv);
+        godzilla::App app(comm, registry, "ns-incomp");
         app.run();
 
         return 0;

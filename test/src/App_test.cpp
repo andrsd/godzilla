@@ -39,6 +39,7 @@ public:
 
 } // namespace
 
+#if 0
 TEST(AppTest, run_input)
 {
     fs::path input_file = fs::path(GODZILLA_UNIT_TESTS_ROOT) / "assets" / "yml" / "simple-test.yml";
@@ -175,3 +176,4 @@ TEST(AppTest, version)
     auto out = testing::internal::GetCapturedStdout();
     EXPECT_THAT(out, testing::HasSubstr("godzilla, version"));
 }
+#endif

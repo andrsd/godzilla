@@ -23,7 +23,7 @@ main(int argc, char * argv[])
         godzilla::Init init(argc, argv);
         register_objects(registry);
 
-        godzilla::App app(comm, registry, "heat-eqn", argc, argv);
+        godzilla::App app(comm, registry, "heat-eqn");
         app.run();
 
         return 0;
