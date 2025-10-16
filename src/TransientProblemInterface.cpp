@@ -199,8 +199,6 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     problem(problem),
     ts_adaptor(nullptr),
     start_time(params.get<Real>("start_time")),
-    // end_time(params.get<Real>("end_time")),
-    // num_steps(params.get<Int>("num_steps")),
     dt_initial(params.get<Real>("dt")),
     step_num(0)
 {
@@ -218,7 +216,7 @@ TransientProblemInterface::TransientProblemInterface(Problem * problem, const Pa
     if (params.is_param_valid("end_time"))
         this->end_time = params.get<Real>("end_time");
     if (params.is_param_valid("num_steps"))
-        this->end_time = params.get<Int>("num_steps");
+        this->num_steps = params.get<Int>("num_steps");
 }
 
 TransientProblemInterface::~TransientProblemInterface()
