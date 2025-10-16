@@ -18,6 +18,7 @@ class TSAbstract {
 public:
     explicit TSAbstract(TS ts);
     virtual ~TSAbstract() = default;
+
     virtual void destroy() = 0;
     virtual void reset() = 0;
     virtual void set_up();

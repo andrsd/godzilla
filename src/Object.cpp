@@ -28,11 +28,6 @@ Object::Object(const Parameters & parameters) :
     CALL_STACK_MSG();
 }
 
-Object::~Object()
-{
-    CALL_STACK_MSG();
-}
-
 const std::string &
 Object::get_type() const
 {

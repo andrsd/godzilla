@@ -20,7 +20,7 @@ class Object : public LoggingInterface {
 public:
     /// Constructor for building the object via Factory
     explicit Object(const Parameters & parameters);
-    virtual ~Object();
+    virtual ~Object() = default;
 
     /// Get the type of this object.
     /// @return the name of the type of this object

@@ -21,7 +21,6 @@ public:
     /// @param file_name Name of the file
     /// @param faccess Access mode
     RestartFile(const std::string & file_name, FileAccess faccess);
-    ~RestartFile() = default;
 
     /// Write data to the file
     ///

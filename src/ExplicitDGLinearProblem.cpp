@@ -24,8 +24,6 @@ ExplicitDGLinearProblem::ExplicitDGLinearProblem(const Parameters & params) :
     set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
 }
 
-ExplicitDGLinearProblem::~ExplicitDGLinearProblem() {}
-
 Real
 ExplicitDGLinearProblem::get_time() const
 {

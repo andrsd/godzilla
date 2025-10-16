@@ -49,11 +49,6 @@ ExplicitFELinearProblem::ExplicitFELinearProblem(const Parameters & params) :
     set_default_output_on(EXECUTE_ON_INITIAL | EXECUTE_ON_TIMESTEP);
 }
 
-ExplicitFELinearProblem::~ExplicitFELinearProblem()
-{
-    CALL_STACK_MSG();
-}
-
 Real
 ExplicitFELinearProblem::get_time() const
 {

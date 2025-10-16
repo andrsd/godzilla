@@ -8,8 +8,6 @@ namespace godzilla {
 
 Interpolation::Interpolation() : info(nullptr) {}
 
-Interpolation::~Interpolation() {}
-
 void
 Interpolation::create(MPI_Comm comm)
 {

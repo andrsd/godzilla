@@ -14,7 +14,6 @@ class Preconditioner : public PetscObjectWrapper<PC> {
 public:
     Preconditioner();
     Preconditioner(PC pc);
-    virtual ~Preconditioner() = default;
 
     /// Creates a preconditioner
     ///
