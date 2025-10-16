@@ -47,31 +47,31 @@ protected:
 
 private:
     /// Minimum in the x direction
-    const Real & xmin;
+    Real xmin;
 
     /// Maximum in the x direction
-    const Real & xmax;
+    Real xmax;
 
     /// Minimum in the y direction
-    const Real & ymin;
+    Real ymin;
 
     /// Maximum in the y direction
-    const Real & ymax;
+    Real ymax;
 
     /// Minimum in the z direction
-    const Real & zmin;
+    Real zmin;
 
     /// Maximum in the z direction
-    const Real & zmax;
+    Real zmax;
 
     /// Number of mesh point in the x direction
-    const Int & nx;
+    Int nx;
 
     /// Number of mesh point in the y direction
-    const Int & ny;
+    Int ny;
 
     /// Number of mesh point in the z direction
-    const Int & nz;
+    Int nz;
 
     /// True for simplices, False for tensor cells
     PetscBool simplex;

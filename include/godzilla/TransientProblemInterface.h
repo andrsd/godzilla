@@ -11,6 +11,7 @@
 #include "godzilla/TSAbstract.h"
 #include "petscts.h"
 #include "petsc/private/tsimpl.h"
+#include <optional>
 
 namespace godzilla {
 
@@ -398,18 +399,16 @@ private:
         compute_ijacobian_local_method;
     /// Problem this interface is part of
     Problem * problem;
-    /// Parameters
-    const Parameters & tpi_params;
     /// Time-stepping adaptor
     TimeSteppingAdaptor * ts_adaptor;
     /// Simulation start time
-    const Real & start_time;
+    Real start_time;
     /// Simulation end time
-    const Real & end_time;
+    std::optional<Real> end_time;
     /// Number of steps
-    const Int & num_steps;
+    std::optional<Int> num_steps;
     /// Initial time step size
-    const Real & dt_initial;
+    Real dt_initial;
     /// Time step number
     Int step_num;
 

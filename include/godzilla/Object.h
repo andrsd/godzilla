@@ -38,7 +38,7 @@ public:
     /// @param par_name The name of the parameter
     /// @return The value of the parameter
     template <typename T>
-    const T & get_param(const std::string & par_name) const;
+    T get_param(const std::string & par_name) const;
 
     /// Test if the supplied parameter is valid
     /// @param par_name The name of the parameter to test
@@ -65,10 +65,10 @@ private:
     App * app;
 
     /// The type of this object
-    const std::string & type;
+    const std::string type;
 
     /// The name of this object
-    const std::string & name;
+    const std::string name;
 
 public:
     /// Method for building Parameters for this class
@@ -76,7 +76,7 @@ public:
 };
 
 template <typename T>
-const T &
+T
 Object::get_param(const std::string & par_name) const
 {
     return this->pars.get<T>(par_name);

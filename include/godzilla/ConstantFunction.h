@@ -22,7 +22,7 @@ public:
 
 private:
     /// Constant value
-    const Real & val;
+    Real val;
 
 public:
     static Parameters parameters();

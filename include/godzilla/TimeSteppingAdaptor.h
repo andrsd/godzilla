@@ -63,10 +63,10 @@ private:
     TSAdapt ts_adapt;
 
     /// Minimum time step
-    const Real & dt_min;
+    Real dt_min;
 
     /// Maximum time step
-    const Real & dt_max;
+    Real dt_max;
 
 public:
     static Parameters parameters();

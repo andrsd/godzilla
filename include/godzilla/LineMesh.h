@@ -34,11 +34,11 @@ protected:
 
 private:
     /// Minimum in the x direction
-    const Real & xmin;
+    Real xmin;
     /// Maximum in the x direction
-    const Real & xmax;
+    Real xmax;
     /// Number of mesh point in the x direction
-    const Int & nx;
+    Int nx;
     /// create intermediate mesh pieces (edges, faces)
     PetscBool interpolate;
 

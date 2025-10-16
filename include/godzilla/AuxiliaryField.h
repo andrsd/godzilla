@@ -88,7 +88,7 @@ private:
     std::string field;
 
     /// Region name this auxiliary field is defined on
-    const std::string & region;
+    const std::string region;
 
     /// Block here the auxiliary field lives
     Label label;
